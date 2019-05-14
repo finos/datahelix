@@ -1,10 +1,11 @@
 package com.scottlogic.deg.generator.inputs;
 
-import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.constraints.Constraint;
-import com.scottlogic.deg.generator.constraints.atomic.*;
-import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.common.constraint.atomic.*;
+import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.RuleInformation;
+import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.constraint.Constraint;
+import com.scottlogic.deg.common.constraint.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import com.scottlogic.deg.profile.v0_1.ConstraintDTO;

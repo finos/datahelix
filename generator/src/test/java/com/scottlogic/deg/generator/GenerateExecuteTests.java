@@ -1,5 +1,7 @@
 package com.scottlogic.deg.generator;
 
+import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;

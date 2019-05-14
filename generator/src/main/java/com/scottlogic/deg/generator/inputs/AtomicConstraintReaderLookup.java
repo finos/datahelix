@@ -1,11 +1,11 @@
 package com.scottlogic.deg.generator.inputs;
 
-import com.scottlogic.deg.generator.constraints.atomic.*;
-import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.common.constraint.atomic.*;
+import com.scottlogic.deg.common.constraint.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.restrictions.ParsedDateGranularity;
-import com.scottlogic.deg.generator.restrictions.ParsedGranularity;
-import com.scottlogic.deg.generator.utils.NumberUtils;
+import com.scottlogic.deg.common.constraint.restriction.ParsedDateGranularity;
+import com.scottlogic.deg.common.constraint.restriction.ParsedGranularity;
+import com.scottlogic.deg.common.NumberUtils;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
 

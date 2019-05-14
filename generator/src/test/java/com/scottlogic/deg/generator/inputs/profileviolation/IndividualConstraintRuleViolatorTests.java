@@ -1,14 +1,16 @@
 package com.scottlogic.deg.generator.inputs.profileviolation;
 
-import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.Rule;
-import com.scottlogic.deg.generator.constraints.Constraint;
-import com.scottlogic.deg.generator.constraints.UnviolatableConstraintException;
-import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.constraints.atomic.IsLessThanConstantConstraint;
-import com.scottlogic.deg.generator.constraints.atomic.ViolatedAtomicConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.*;
-import com.scottlogic.deg.generator.inputs.RuleInformation;
+import com.scottlogic.deg.common.constraint.grammatical.AndConstraint;
+import com.scottlogic.deg.common.constraint.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.common.constraint.grammatical.OrConstraint;
+import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.Rule;
+import com.scottlogic.deg.common.constraint.Constraint;
+import com.scottlogic.deg.common.constraint.UnviolatableConstraintException;
+import com.scottlogic.deg.common.constraint.atomic.AtomicConstraint;
+import com.scottlogic.deg.common.constraint.atomic.IsLessThanConstantConstraint;
+import com.scottlogic.deg.common.constraint.atomic.ViolatedAtomicConstraint;
+import com.scottlogic.deg.common.profile.RuleInformation;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;

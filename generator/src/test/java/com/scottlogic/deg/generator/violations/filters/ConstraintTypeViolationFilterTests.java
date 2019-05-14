@@ -1,8 +1,8 @@
 package com.scottlogic.deg.generator.violations.filters;
 
-import com.scottlogic.deg.generator.constraints.Constraint;
-import com.scottlogic.deg.generator.constraints.atomic.IsGreaterThanConstantConstraint;
-import com.scottlogic.deg.generator.constraints.atomic.IsInSetConstraint;
+import com.scottlogic.deg.common.constraint.Constraint;
+import com.scottlogic.deg.common.constraint.atomic.IsGreaterThanConstantConstraint;
+import com.scottlogic.deg.common.constraint.atomic.IsInSetConstraint;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,12 +1,11 @@
 package com.scottlogic.deg.generator.walker.reductive;
 
-import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FieldValue;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ReductiveState {
 

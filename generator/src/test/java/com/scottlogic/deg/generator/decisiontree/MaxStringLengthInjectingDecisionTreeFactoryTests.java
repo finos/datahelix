@@ -1,10 +1,10 @@
 package com.scottlogic.deg.generator.decisiontree;
 
-import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.Profile;
-import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.constraints.atomic.IsStringShorterThanConstraint;
+import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.Profile;
+import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.constraint.atomic.AtomicConstraint;
+import com.scottlogic.deg.common.constraint.atomic.IsStringShorterThanConstraint;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 

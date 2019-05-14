@@ -1,9 +1,9 @@
 package com.scottlogic.deg.generator.restrictions;
 
+import com.scottlogic.deg.common.constraint.restriction.ParsedGranularity;
+
 import java.math.BigDecimal;
 import java.util.Objects;
-
-import static com.scottlogic.deg.generator.utils.NumberUtils.coerceToBigDecimal;
 
 public class NumericRestrictions {
     public static final int DEFAULT_NUMERIC_SCALE = 20;

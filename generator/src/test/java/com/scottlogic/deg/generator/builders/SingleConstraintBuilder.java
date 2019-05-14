@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.builders;
 
-import com.scottlogic.deg.generator.constraints.Constraint;
+import com.scottlogic.deg.common.constraint.Constraint;
 
 import java.util.List;
 

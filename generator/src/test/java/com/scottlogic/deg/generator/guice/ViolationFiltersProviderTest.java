@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.guice;
 
-import com.scottlogic.deg.generator.constraints.atomic.IsStringShorterThanConstraint;
-import com.scottlogic.deg.generator.constraints.atomic.StringHasLengthConstraint;
+import com.scottlogic.deg.common.constraint.atomic.IsStringShorterThanConstraint;
+import com.scottlogic.deg.common.constraint.atomic.StringHasLengthConstraint;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.violations.filters.ConstraintTypeViolationFilter;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;

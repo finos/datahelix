@@ -1,5 +1,7 @@
 package com.scottlogic.deg.generator.generation.fieldvaluesources.datetime;
 
+import com.scottlogic.deg.common.constraint.restriction.Timescale;
+
 import java.time.OffsetDateTime;
 import java.util.Iterator;
 

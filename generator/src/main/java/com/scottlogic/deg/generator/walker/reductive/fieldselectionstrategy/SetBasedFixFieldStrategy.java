@@ -1,9 +1,8 @@
 package com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy;
 
-import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.Profile;
-import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.constraints.atomic.IsInSetConstraint;
+import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.constraint.atomic.AtomicConstraint;
+import com.scottlogic.deg.common.constraint.atomic.IsInSetConstraint;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 
 import java.util.Collections;

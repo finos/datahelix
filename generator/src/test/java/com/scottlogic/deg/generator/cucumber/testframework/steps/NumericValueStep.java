@@ -8,7 +8,7 @@ import cucumber.api.java.en.When;
 import java.math.BigDecimal;
 import java.util.function.Function;
 
-import static com.scottlogic.deg.generator.utils.NumberUtils.coerceToBigDecimal;
+import static com.scottlogic.deg.common.NumberUtils.coerceToBigDecimal;
 
 public class NumericValueStep {
 

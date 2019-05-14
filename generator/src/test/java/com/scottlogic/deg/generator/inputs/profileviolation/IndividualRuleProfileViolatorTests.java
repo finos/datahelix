@@ -1,13 +1,13 @@
 package com.scottlogic.deg.generator.inputs.profileviolation;
 
-import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.Profile;
-import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.Rule;
-import com.scottlogic.deg.generator.constraints.Constraint;
-import com.scottlogic.deg.generator.constraints.atomic.IsGreaterThanConstantConstraint;
-import com.scottlogic.deg.generator.constraints.atomic.IsLessThanConstantConstraint;
-import com.scottlogic.deg.generator.inputs.RuleInformation;
+import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.Profile;
+import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Rule;
+import com.scottlogic.deg.common.constraint.Constraint;
+import com.scottlogic.deg.common.constraint.atomic.IsGreaterThanConstantConstraint;
+import com.scottlogic.deg.common.constraint.atomic.IsLessThanConstantConstraint;
+import com.scottlogic.deg.common.profile.RuleInformation;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.violations.ViolatedProfile;
 import org.junit.jupiter.api.BeforeEach;

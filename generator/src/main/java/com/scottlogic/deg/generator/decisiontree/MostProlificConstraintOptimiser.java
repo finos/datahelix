@@ -1,9 +1,9 @@
 package com.scottlogic.deg.generator.decisiontree;
 
 import com.scottlogic.deg.generator.FlatMappingSpliterator;
-import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.constraints.atomic.NotConstraint;
-import com.scottlogic.deg.generator.inputs.RuleInformation;
+import com.scottlogic.deg.common.constraint.atomic.AtomicConstraint;
+import com.scottlogic.deg.common.constraint.atomic.NotConstraint;
+import com.scottlogic.deg.common.profile.RuleInformation;
 
 import java.util.*;
 import java.util.function.Function;

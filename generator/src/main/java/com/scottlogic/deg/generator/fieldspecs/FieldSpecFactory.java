@@ -1,9 +1,10 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.constraints.atomic.*;
+import com.scottlogic.deg.common.constraint.atomic.*;
+import com.scottlogic.deg.common.constraint.restriction.Nullness;
 import com.scottlogic.deg.generator.restrictions.*;
-import com.scottlogic.deg.generator.utils.NumberUtils;
+import com.scottlogic.deg.common.NumberUtils;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;

@@ -1,9 +1,6 @@
 package com.scottlogic.deg.generator.violations.filters;
 
-import com.scottlogic.deg.generator.constraints.Constraint;
-
-import java.util.Iterator;
-import java.util.stream.Stream;
+import com.scottlogic.deg.common.constraint.Constraint;
 
 public interface ViolationFilter {
     /**

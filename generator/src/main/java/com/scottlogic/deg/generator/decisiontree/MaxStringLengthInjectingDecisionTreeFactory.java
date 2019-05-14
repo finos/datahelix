@@ -1,10 +1,10 @@
 package com.scottlogic.deg.generator.decisiontree;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.Profile;
-import com.scottlogic.deg.generator.constraints.atomic.IsStringShorterThanConstraint;
+import com.scottlogic.deg.common.profile.Profile;
+import com.scottlogic.deg.common.constraint.atomic.IsStringShorterThanConstraint;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
-import com.scottlogic.deg.generator.inputs.RuleInformation;
+import com.scottlogic.deg.common.profile.RuleInformation;
 
 import java.util.Collections;
 import java.util.Set;

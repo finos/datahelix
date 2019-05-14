@@ -1,17 +1,17 @@
 package com.scottlogic.deg.generator.inputs.profileviolation;
 
-import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.Profile;
-import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.Rule;
+import com.scottlogic.deg.common.constraint.atomic.*;
+import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.Profile;
+import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Rule;
+import com.scottlogic.deg.common.constraint.Constraint;
+import com.scottlogic.deg.common.constraint.grammatical.AndConstraint;
+import com.scottlogic.deg.common.constraint.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.common.constraint.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.builders.*;
-import com.scottlogic.deg.generator.constraints.Constraint;
-import com.scottlogic.deg.generator.constraints.atomic.*;
-import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
-import com.scottlogic.deg.generator.restrictions.ParsedGranularity;
+import com.scottlogic.deg.common.constraint.restriction.ParsedGranularity;
 import com.scottlogic.deg.generator.violations.ViolatedProfile;
 import com.scottlogic.deg.generator.violations.filters.ConstraintTypeViolationFilter;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;

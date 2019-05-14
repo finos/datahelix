@@ -2,14 +2,14 @@ package com.scottlogic.deg.generator.cucumber.testframework.utils;
 
 import com.google.gson.JsonParseException;
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.Profile;
-import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.Rule;
-import com.scottlogic.deg.generator.constraints.Constraint;
+import com.scottlogic.deg.common.profile.Profile;
+import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Rule;
+import com.scottlogic.deg.common.constraint.Constraint;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.MainConstraintReader;
 import com.scottlogic.deg.generator.inputs.ProfileReader;
-import com.scottlogic.deg.generator.inputs.RuleInformation;
+import com.scottlogic.deg.common.profile.RuleInformation;
 
 import java.nio.file.Path;
 import java.util.Collections;

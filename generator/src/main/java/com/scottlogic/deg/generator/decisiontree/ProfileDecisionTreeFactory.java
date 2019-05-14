@@ -1,15 +1,15 @@
 package com.scottlogic.deg.generator.decisiontree;
 
 import com.scottlogic.deg.generator.FlatMappingSpliterator;
-import com.scottlogic.deg.generator.Profile;
-import com.scottlogic.deg.generator.Rule;
-import com.scottlogic.deg.generator.constraints.Constraint;
-import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.constraints.atomic.ViolatedAtomicConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.NegatedGrammaticalConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
+import com.scottlogic.deg.common.profile.Profile;
+import com.scottlogic.deg.common.profile.Rule;
+import com.scottlogic.deg.common.constraint.Constraint;
+import com.scottlogic.deg.common.constraint.atomic.AtomicConstraint;
+import com.scottlogic.deg.common.constraint.atomic.ViolatedAtomicConstraint;
+import com.scottlogic.deg.common.constraint.grammatical.AndConstraint;
+import com.scottlogic.deg.common.constraint.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.common.constraint.grammatical.NegatedGrammaticalConstraint;
+import com.scottlogic.deg.common.constraint.grammatical.OrConstraint;
 
 import java.util.Collection;
 import java.util.Collections;

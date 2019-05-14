@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.decisiontree;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scottlogic.deg.generator.Profile;
+import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.generator.decisiontree.serialisation.DecisionTreeDto;
 import com.scottlogic.deg.generator.decisiontree.serialisation.DecisionTreeMapper;
 import com.scottlogic.deg.generator.decisiontree.testutils.*;

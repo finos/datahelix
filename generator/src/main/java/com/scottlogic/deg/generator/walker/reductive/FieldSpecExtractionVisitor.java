@@ -1,8 +1,8 @@
 package com.scottlogic.deg.generator.walker.reductive;
 
-import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraintsHelper;
+import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.constraint.atomic.AtomicConstraint;
+import com.scottlogic.deg.common.constraint.atomic.AtomicConstraintsHelper;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.visualisation.BaseVisitor;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
@@ -11,7 +11,6 @@ import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class FieldSpecExtractionVisitor extends BaseVisitor {
 

@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.generation.fieldvaluesources.datetime;
 
+import com.scottlogic.deg.common.constraint.restriction.Timescale;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;

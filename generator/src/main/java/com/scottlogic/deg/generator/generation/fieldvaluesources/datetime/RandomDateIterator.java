@@ -1,11 +1,10 @@
 package com.scottlogic.deg.generator.generation.fieldvaluesources.datetime;
 
+import com.scottlogic.deg.common.constraint.restriction.Timescale;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
 import java.time.*;
-import java.time.temporal.ChronoUnit;
 import java.util.Iterator;
-import java.util.function.Function;
 
 class RandomDateIterator implements Iterator<OffsetDateTime> {
     private final OffsetDateTime minDate;

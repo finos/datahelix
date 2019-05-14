@@ -5,3 +5,5 @@
 rootProject.name = 'datahelix'
 include(':profile')
 include(':generator')
+include 'common'
+

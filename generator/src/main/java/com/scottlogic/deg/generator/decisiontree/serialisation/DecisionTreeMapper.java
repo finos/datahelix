@@ -1,11 +1,10 @@
 package com.scottlogic.deg.generator.decisiontree.serialisation;
 
-import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.inputs.RuleInformation;
-import com.scottlogic.deg.generator.constraints.atomic.*;
+import com.scottlogic.deg.common.constraint.atomic.*;
+import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.RuleInformation;
 import com.scottlogic.deg.generator.decisiontree.*;
-import com.scottlogic.deg.profile.v0_1.RuleDTO;
 
 import java.util.*;
 import java.util.stream.Collectors;

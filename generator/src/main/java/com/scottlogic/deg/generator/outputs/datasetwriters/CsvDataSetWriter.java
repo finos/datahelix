@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.outputs.datasetwriters;
 
-import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import org.apache.commons.csv.CSVFormat;

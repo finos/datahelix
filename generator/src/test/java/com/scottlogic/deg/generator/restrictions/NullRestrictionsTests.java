@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.restrictions;
 
+import com.scottlogic.deg.common.constraint.restriction.Nullness;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 

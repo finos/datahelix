@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
+import com.scottlogic.deg.common.constraint.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.restrictions.DataTypeRestrictions;
 import com.scottlogic.deg.generator.restrictions.MergeResult;
 import com.scottlogic.deg.generator.restrictions.NumericRestrictions;
