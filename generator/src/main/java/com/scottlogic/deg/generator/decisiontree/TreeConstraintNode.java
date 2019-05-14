@@ -175,12 +175,11 @@ public final class TreeConstraintNode implements ConstraintNode {
 
     @Override
     public ConstraintNode accept(NodeVisitor visitor){
-        Stream<AtomicConstraint> atomicConstraintStream = getAtomicConstraints().stream().map(a -> a.accept(visitor));
         Stream<DecisionNode> decisionNodeStream = getDecisions().stream().map(d -> d.accept(visitor));
 
         return visitor.visit(
             new TreeConstraintNode(
-                atomicConstraintStream.collect(Collectors.toSet()),
+                new ArrayList<>(atomicConstraints),
                 decisionNodeStream.collect(Collectors.toSet()),
                 nodeMarkings));
     }
