@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.validators;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.scottlogic.deg.generator.Profile;
+import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.generator.commandline.OutputTargetSpecification;
 import com.scottlogic.deg.generator.inputs.validation.Criticality;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;

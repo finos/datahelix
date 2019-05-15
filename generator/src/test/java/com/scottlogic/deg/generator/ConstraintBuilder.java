@@ -1,11 +1,12 @@
 package com.scottlogic.deg.generator;
 
-import com.scottlogic.deg.generator.constraints.*;
-import com.scottlogic.deg.generator.constraints.atomic.IsInSetConstraint;
-import com.scottlogic.deg.generator.constraints.atomic.IsNullConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
-import com.scottlogic.deg.generator.inputs.RuleInformation;
+import com.scottlogic.deg.common.profile.constraints.Constraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsNullConstraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.RuleInformation;
 
 import java.util.*;
 import java.util.stream.Collectors;

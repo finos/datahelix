@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.validators;
 
-import com.scottlogic.deg.generator.Profile;
+import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.utils.FileUtils;
 import com.scottlogic.deg.generator.visualisation.TestVisualisationConfigSource;

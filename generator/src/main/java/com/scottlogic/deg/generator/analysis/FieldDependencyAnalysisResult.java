@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.analysis;
 
-import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.common.profile.Field;
 
 import java.util.Collection;
 import java.util.Map;

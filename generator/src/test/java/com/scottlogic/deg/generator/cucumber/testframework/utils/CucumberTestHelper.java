@@ -5,7 +5,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
-import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.GenerateExecute;
 import com.scottlogic.deg.generator.guice.BaseModule;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
