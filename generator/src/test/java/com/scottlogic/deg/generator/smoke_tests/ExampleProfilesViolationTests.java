@@ -4,7 +4,6 @@ import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.StandardGenerationEngine;
 import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
-import com.scottlogic.deg.generator.cucumber.testframework.utils.CucumberManifestWriter;
 import com.scottlogic.deg.generator.decisiontree.MaxStringLengthInjectingDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
@@ -21,6 +20,7 @@ import com.scottlogic.deg.generator.inputs.profileviolation.IndividualConstraint
 import com.scottlogic.deg.generator.inputs.profileviolation.IndividualRuleProfileViolator;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.formats.DataSetWriter;
+import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.outputs.targets.MultiDatasetOutputTarget;
 import com.scottlogic.deg.generator.outputs.targets.SingleDatasetOutputTarget;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
@@ -43,6 +43,7 @@ import java.util.stream.Collectors;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.IsNot.not;
+import static org.mockito.Mockito.mock;
 
 class ExampleProfilesViolationTests {
 
@@ -128,7 +129,7 @@ class ExampleProfilesViolationTests {
                 ViolationGenerationEngine violationGenerationEngine =
                     new ViolationGenerationEngine(
                         new IndividualRuleProfileViolator(
-                            new CucumberManifestWriter(),
+                            mock(ManifestWriter.class),
                             null,
                             new IndividualConstraintRuleViolator(new ArrayList<>())),
                         standardGenerationEngine);

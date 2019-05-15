@@ -9,7 +9,7 @@ jobs:
     steps:
       - checkout
       # If changing build tools be sure to update GeneratorSetup.md in docs
-      - run: gradle :profile:test :generator:test
+      - run: gradle :profile:test :generator:test :orchestrator:test
       - run:
           name: Save test results
           command: |
@@ -31,7 +31,7 @@ jobs:
     steps:
       - checkout
       # If changing build tools be sure to update GeneratorSetup.md in docs
-      - run: gradle :profile:release :generator:release
+      - run: gradle :profile:release :generator:release :orchestrator:release
       - store-artifacts:
           path: schemas/build/libs
       - store-artifacts:
