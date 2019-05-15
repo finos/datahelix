@@ -125,7 +125,11 @@ class ExampleProfilesViolationTests {
                         new FixFieldStrategyFactory(new FieldDependencyAnalyser()),
                         new PinningCombinationStrategy()),
                     new MaxStringLengthInjectingDecisionTreeFactory(new ProfileDecisionTreeFactory(), 200),
-                    new NoopDataGeneratorMonitor());
+                    new NoopDataGeneratorMonitor(),
+                    new FieldSpecFactory(
+                        new FieldSpecMerger(),
+                        new StringRestrictionsFactory()),
+                    new FieldSpecMerger());
                 ViolationGenerationEngine violationGenerationEngine =
                     new ViolationGenerationEngine(
                         new IndividualRuleProfileViolator(
