@@ -11,19 +11,16 @@ import java.util.ArrayList;
 
 public class ProfileValidatorProvider implements Provider<ProfileValidator> {
     private final GenerationConfigSource configSource;
-    private final ProfileContradictionsValidator contradictionCheckingValidator;
     private final TypingRequiredPerFieldValidator untypedValidator;
     private final GenerationOutputValidator outputValidator;
 
     @Inject
     public ProfileValidatorProvider(
         GenerationConfigSource configSource,
-        ProfileContradictionsValidator contradictionCheckingValidator,
         TypingRequiredPerFieldValidator untypedValidator,
         GenerationOutputValidator outputValidator) {
 
         this.configSource = configSource;
-        this.contradictionCheckingValidator = contradictionCheckingValidator;
         this.untypedValidator = untypedValidator;
         this.outputValidator = outputValidator;
     }
@@ -31,10 +28,6 @@ public class ProfileValidatorProvider implements Provider<ProfileValidator> {
     @Override
     public ProfileValidator get() {
         ArrayList<ProfileValidator> validators = new ArrayList<>();
-
-        if(configSource.getValidateProfile()) {
-            validators.add(contradictionCheckingValidator);
-        }
 
         if(configSource.requireFieldTyping()) {
             validators.add(untypedValidator);

@@ -2,15 +2,14 @@ package com.scottlogic.deg.generator.constraints.atomic;
 
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.inputs.RuleInformation;
-import com.scottlogic.deg.generator.inputs.validation.ProfileVisitor;
-import com.scottlogic.deg.generator.inputs.validation.VisitableProfileElement;
+
 import com.scottlogic.deg.generator.restrictions.ParsedDateGranularity;
 import com.scottlogic.deg.generator.restrictions.ParsedGranularity;
 
 import java.util.Objects;
 import java.util.Set;
 
-public class IsGranularToDateConstraint implements AtomicConstraint, VisitableProfileElement {
+public class IsGranularToDateConstraint implements AtomicConstraint {
     public final Field field;
     private final Set<RuleInformation> rules;
     public final ParsedDateGranularity granularity;
@@ -50,11 +49,6 @@ public class IsGranularToDateConstraint implements AtomicConstraint, VisitablePr
     @Override
     public int hashCode(){
         return Objects.hash(field, granularity);
-    }
-
-    @Override
-    public void accept(ProfileVisitor visitor) {
-        visitor.visit(this);
     }
 
     @Override
