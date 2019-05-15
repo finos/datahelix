@@ -24,8 +24,9 @@ public class ReductiveIterationVisualiser implements IterationVisualiser {
 
     @Inject
     public ReductiveIterationVisualiser(
-        @Named("outputPath") Path outputPath,
+        @Named("config:outputPath") Path outputPath,
         FileUtils fileUtils) {
+
         this.fileUtils = fileUtils;
         boolean outputPathIsADirectory = outputPath != null && outputPath.toFile().isDirectory();
 

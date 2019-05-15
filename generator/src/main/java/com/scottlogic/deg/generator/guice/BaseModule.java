@@ -1,12 +1,14 @@
 package com.scottlogic.deg.generator.guice;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.BindingAnnotation;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
 import com.scottlogic.deg.generator.ConfigSource;
-import com.scottlogic.deg.generator.GenerationEngine;
 import com.scottlogic.deg.generator.commandline.GenerateCommandLine;
+import com.scottlogic.deg.generator.commandline.OutputTargetSpecification;
+import com.scottlogic.deg.generator.commandline.OutputTargetSpecificationImpl;
 import com.scottlogic.deg.generator.commandline.VisualiseCommandLine;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
@@ -24,11 +26,9 @@ import com.scottlogic.deg.generator.inputs.profileviolation.RuleViolator;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 import com.scottlogic.deg.generator.inputs.validation.reporters.SystemOutProfileValidationReporter;
-import com.scottlogic.deg.generator.outputs.datasetwriters.DataSetWriter;
+import com.scottlogic.deg.generator.outputs.formats.OutputFormat;
 import com.scottlogic.deg.generator.outputs.manifest.JsonManifestWriter;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
-import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
-import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.validators.ConfigValidator;
 import com.scottlogic.deg.generator.validators.GenerationConfigValidator;
@@ -62,11 +62,10 @@ public class BaseModule extends AbstractModule {
 
         // Bind providers - used to retrieve implementations based on user input
         bind(DecisionTreeOptimiser.class).toProvider(DecisionTreeOptimiserProvider.class);
-        bind(DataSetWriter.class).toProvider(DataSetWriterProvider.class);
+        bind(OutputFormat.class).toProvider(OutputFormatProvider.class);
         bind(TreePartitioner.class).toProvider(TreePartitioningProvider.class);
         bind(DecisionTreeWalker.class).toProvider(DecisionTreeWalkerProvider.class);
         bind(ProfileValidator.class).toProvider(ProfileValidatorProvider.class);
-        bind(GenerationEngine.class).toProvider(GenerationEngineProvider.class);
         bind(ReductiveDataGeneratorMonitor.class).toProvider(MonitorProvider.class).in(Singleton.class);
         bind(IterationVisualiser.class).toProvider(IterationVisualiserProvider.class);
         bind(RowSpecDataBagGenerator.class).toProvider(RowSpecDataBagSourceFactoryProvider.class);
@@ -80,16 +79,14 @@ public class BaseModule extends AbstractModule {
         bind(DecisionTreeFactory.class).to(MaxStringLengthInjectingDecisionTreeFactory.class);
         bind(ProfileValidationReporter.class).to(SystemOutProfileValidationReporter.class);
         bind(ProfileReader.class).to(JsonProfileReader.class);
-        bind(OutputTarget.class).to(FileOutputTarget.class);
         bind(FieldValueSourceEvaluator.class).to(StandardFieldValueSourceEvaluator.class);
         bind(ProfileViolator.class).to(IndividualRuleProfileViolator.class);
         bind(RuleViolator.class).to(IndividualConstraintRuleViolator.class);
         bind(ConfigValidator.class).to(GenerationConfigValidator.class);
+        bind(OutputTargetSpecification.class).to(OutputTargetSpecificationImpl.class);
 
         bind(new TypeLiteral<List<ViolationFilter>>() {
         }).toProvider(ViolationFiltersProvider.class);
-
-        bind(Path.class).annotatedWith(Names.named("outputPath")).toProvider(OutputPathProvider.class);
 
         bind(VelocityMonitor.class).in(Singleton.class);
         bind(JavaUtilRandomNumberGenerator.class).toInstance(new JavaUtilRandomNumberGenerator(OffsetDateTime.now().getNano()));
@@ -97,12 +94,30 @@ public class BaseModule extends AbstractModule {
     }
 
     private void bindAllCommandLineTypes() {
-        if (this.configSource instanceof GenerateCommandLine) {
-            bind(GenerateCommandLine.class).toInstance((GenerateCommandLine) this.configSource);
-            bind(ConfigSource.class).to(GenerationConfigSource.class);
+        bind(Path.class)
+            .annotatedWith(Names.named("config:outputPath"))
+            .toInstance(configSource.getOutputPath());
+
+        bind(boolean.class)
+            .annotatedWith(Names.named("config:canOverwriteOutputFiles"))
+            .toInstance(configSource.overwriteOutputFiles());
+
+        bind(ConfigSource.class).toInstance(configSource);
+
+        if (this.configSource instanceof GenerationConfigSource) {
+            GenerationConfigSource generationConfigSource = (GenerationConfigSource)configSource;
+            if (generationConfigSource instanceof GenerateCommandLine) {
+                bind(GenerateCommandLine.class).toInstance((GenerateCommandLine)configSource);
+            }
+
+            bind(boolean.class)
+                .annotatedWith(Names.named("config:tracingIsEnabled"))
+                .toInstance(generationConfigSource.isEnableTracing());
+            bind(boolean.class)
+                .annotatedWith(Names.named("config:inViolationMode"))
+                .toInstance(generationConfigSource.shouldViolate());
         } else if (this.configSource instanceof VisualiseCommandLine) {
             bind(VisualiseCommandLine.class).toInstance((VisualiseCommandLine) this.configSource);
-            bind(ConfigSource.class).to(VisualisationConfigSource.class);
         }
     }
 }

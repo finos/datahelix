@@ -8,14 +8,15 @@ import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
-import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
+import com.scottlogic.deg.generator.outputs.formats.DataSetWriter;
+import com.scottlogic.deg.generator.outputs.targets.SingleDatasetOutputTarget;
 
 import java.io.IOException;
 import java.util.stream.Stream;
 
-public class StandardGenerationEngine implements GenerationEngine {
+public class StandardGenerationEngine {
     private final DecisionTreeFactory decisionTreeGenerator;
-    private ReductiveDataGeneratorMonitor monitor;
+    private final ReductiveDataGeneratorMonitor monitor;
     private final DataGenerator dataGenerator;
 
     @Inject
@@ -23,18 +24,32 @@ public class StandardGenerationEngine implements GenerationEngine {
         DataGenerator dataGenerator,
         DecisionTreeFactory decisionTreeGenerator,
         ReductiveDataGeneratorMonitor monitor) {
+
         this.dataGenerator = dataGenerator;
         this.decisionTreeGenerator = decisionTreeGenerator;
         this.monitor = monitor;
     }
 
-    public void generateDataSet(Profile profile, GenerationConfig config, OutputTarget outputTarget) throws IOException {
+    public void generateDataSet(
+        Profile profile,
+        GenerationConfig config,
+        SingleDatasetOutputTarget outputTarget)
+        throws IOException {
+
         final DecisionTree decisionTree = this.decisionTreeGenerator.analyse(profile);
 
         final Stream<GeneratedObject> generatedDataItems =
             this.dataGenerator.generateData(profile, decisionTree, config);
 
-        outputTarget.outputDataset(generatedDataItems, profile.fields);
+        try (DataSetWriter writer = outputTarget.openWriter(profile.fields)) {
+            generatedDataItems.forEach(row -> {
+                try {
+                    writer.writeRow(row);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
 
         monitor.endGeneration();
     }

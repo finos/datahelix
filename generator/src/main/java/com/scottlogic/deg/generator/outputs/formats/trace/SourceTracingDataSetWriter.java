@@ -1,51 +1,49 @@
-package com.scottlogic.deg.generator.outputs.datasetwriters;
+package com.scottlogic.deg.generator.outputs.formats.trace;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
+import com.fasterxml.jackson.databind.SequenceWriter;
 import com.scottlogic.deg.common.profile.RuleInformation;
+import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.outputs.CellSource;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.RowSource;
+import com.scottlogic.deg.generator.outputs.formats.DataSetWriter;
 
 import java.io.*;
-import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class SourceTracingDataSetWriter implements DataSetWriter<SourceTracingDataSetWriter.JsonArrayOutputWriter> {
-    private final ObjectWriter writer;
+class SourceTracingDataSetWriter implements DataSetWriter {
+    private final SequenceWriter writer;
 
-    public SourceTracingDataSetWriter() {
+    private SourceTracingDataSetWriter(SequenceWriter writer) {
+        this.writer = writer;
+    }
+
+    static DataSetWriter open(OutputStream stream) throws IOException {
         ObjectMapper jsonObjectMapper = new ObjectMapper();
-        writer = jsonObjectMapper.writerWithDefaultPrettyPrinter();
+        final ObjectWriter objectWriter = jsonObjectMapper.writerWithDefaultPrettyPrinter();
+
+        return new SourceTracingDataSetWriter(
+            objectWriter.writeValues(stream));
     }
 
     @Override
-    public JsonArrayOutputWriter openWriter(Path directory, String fileName, ProfileFields profileFields) throws IOException {
-        return new JsonArrayOutputWriter(new PrintWriter(new FileOutputStream(directory.resolve(fileName).toString(), false)));
-    }
-
-    @Override
-    public String getFileName(String fileNameWithoutExtension) {
-        return fileNameWithoutExtension + "-trace.json";
-    }
-
-    @Override
-    public void writeRow(JsonArrayOutputWriter closeable, GeneratedObject row) throws IOException {
+    public void writeRow(GeneratedObject row) throws IOException {
         Collection<TracingDto> dto = row.source != null
             ? TracingDto.fromRowSource(row.source)
             : TracingDto.empty;
-        closeable.writeArrayItem(serialise(dto));
+
+        writer.write(dto);
     }
 
-    private String serialise(Object value) throws JsonProcessingException {
-        return writer.writeValueAsString(value);
+    @Override
+    public void close() throws IOException {
+        writer.close();
     }
 
     static class TracingDto {
@@ -100,33 +98,6 @@ public class SourceTracingDataSetWriter implements DataSetWriter<SourceTracingDa
                 .map(RuleInformation::getDescription)
                 .collect(Collectors.toList());
             this.violated = violated;
-        }
-    }
-
-    class JsonArrayOutputWriter implements Closeable {
-        private final PrintWriter writer;
-        private boolean firstItemInArrayWritten = false;
-
-        JsonArrayOutputWriter(PrintWriter writer) {
-            this.writer = writer;
-            this.writer.println("[");
-        }
-
-        @Override
-        public void close() {
-            this.writer.println("]");
-            this.writer.close();
-        }
-
-        void writeArrayItem(String jsonString) {
-            if (firstItemInArrayWritten){
-                this.writer.print(",");
-                this.writer.println();
-            }
-
-            this.writer.print(" " + jsonString);
-            firstItemInArrayWritten = true;
-            this.writer.flush();
         }
     }
 }

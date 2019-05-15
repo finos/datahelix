@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator.utils;
 
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
-import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.Arrays;
+import java.util.function.Function;
 
 public class FileUtils {
     /**
@@ -114,5 +114,24 @@ public class FileUtils {
         if (prntDir != null) {
             checkValidDirectoryPath(prntDir);
         }
+    }
+
+    /** addFilenameSuffix("C:\something.bat", "-trace") == "C:\something-trace.bat" */
+    public static Path addFilenameSuffix(Path path, String newSuffix) {
+        return transformFilename(
+            path,
+            filename -> filename.replaceAll("\\.[^.]+$", newSuffix + "$0"));
+    }
+
+    public static Path replaceExtension(Path path, String newExtension) {
+        return transformFilename(
+            path,
+            filename -> filename.replaceAll("\\.[^.]+$", "." + newExtension));
+    }
+
+    private static Path transformFilename(Path filePath, Function<String, String> transformFunc) {
+        final String newFilename = transformFunc.apply(filePath.getFileName().toString());
+
+        return filePath.resolveSibling(Paths.get(newFilename));
     }
 }

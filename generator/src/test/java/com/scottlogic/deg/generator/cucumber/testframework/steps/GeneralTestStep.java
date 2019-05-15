@@ -29,7 +29,7 @@ public class GeneralTestStep {
 
     @Before
     public void BeforeEach() {
-        this.state.clearState();
+        this.state.initialise();
         this.cucumberTestHelper = new CucumberTestHelper(state);
     }
 

@@ -26,9 +26,11 @@ public class IndividualRuleProfileViolator implements ProfileViolator {
     private final RuleViolator ruleViolator;
 
     @Inject
-    public IndividualRuleProfileViolator(ManifestWriter manifestWriter,
-                                          @Named("outputPath") Path outputPath,
-                                          RuleViolator ruleViolator) {
+    public IndividualRuleProfileViolator(
+        ManifestWriter manifestWriter,
+        @Named("config:outputPath") Path outputPath,
+        RuleViolator ruleViolator) {
+
         this.manifestWriter = manifestWriter;
         this.outputPath = outputPath;
         this.ruleViolator = ruleViolator;

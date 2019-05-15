@@ -1,46 +1,51 @@
 package com.scottlogic.deg.generator.cucumber.testframework.utils;
 
-import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
-import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
+import com.scottlogic.deg.generator.outputs.formats.DataSetWriter;
+import com.scottlogic.deg.generator.outputs.targets.SingleDatasetOutputTarget;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Defines an output target which stores the output data into the test state.
  */
-public class InMemoryOutputTarget implements OutputTarget {
-
+public class InMemoryOutputTarget implements SingleDatasetOutputTarget {
     private final CucumberTestState testState;
 
-    @Inject
-    public InMemoryOutputTarget(CucumberTestState testState) {
+    InMemoryOutputTarget(CucumberTestState testState) {
         this.testState = testState;
     }
 
     @Override
-    public void outputDataset(Stream<GeneratedObject> generatedObjects, ProfileFields profileFields) throws IllegalStateException {
-        this.testState.generatedObjects = getRows(generatedObjects);
+    public DataSetWriter openWriter(ProfileFields fields) {
+        return new DummyWriter(testState.generatedObjects);
     }
 
-    private List<List<Object>> getRows(Stream<GeneratedObject> generatedObjects) throws IllegalStateException {
-        return generatedObjects
-            .collect(Collectors.toList())
-            .stream()
-            .map(genObj -> {
+    private class DummyWriter implements DataSetWriter {
+        private final List<List<Object>> listToAppendTo;
 
-                if (genObj == null) {
-                    throw new IllegalStateException("GeneratedObject is null");
-                }
+        DummyWriter(List<List<Object>> listToAppendTo) {
+            this.listToAppendTo = listToAppendTo;
+        }
 
-                return genObj.values
-                    .stream()
-                    .map(DataBagValue::getFormattedValue)
-                    .collect(Collectors.toList());
-            }).collect(Collectors.toList());
+        @Override
+        public void writeRow(GeneratedObject row) {
+            if (row == null) {
+                throw new IllegalStateException("GeneratedObject is null");
+            }
+
+            List<Object> values = row.values
+                .stream()
+                .map(DataBagValue::getFormattedValue)
+                .collect(Collectors.toList());
+
+            listToAppendTo.add(values);
+        }
+
+        @Override
+        public void close() {}
     }
 }

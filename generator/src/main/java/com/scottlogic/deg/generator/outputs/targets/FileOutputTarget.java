@@ -1,59 +1,70 @@
 package com.scottlogic.deg.generator.outputs.targets;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
+import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.generator.outputs.GeneratedObject;
-import com.scottlogic.deg.generator.outputs.datasetwriters.DataSetWriter;
+import com.scottlogic.deg.generator.outputs.formats.DataSetWriter;
+import com.scottlogic.deg.generator.outputs.formats.OutputFormat;
+import com.scottlogic.deg.generator.utils.FileUtils;
 
-import java.io.Closeable;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.stream.Stream;
 
-public class FileOutputTarget implements OutputTarget{
+public class FileOutputTarget implements SingleDatasetOutputTarget {
     private final Path filePath;
-    private final DataSetWriter dataSetWriter;
+    private final FileUtils fileUtils;
+    private final boolean canOverwriteExistingFiles;
+    private final OutputFormat outputFormat;
 
-    @Inject
-    public FileOutputTarget(@Named("outputPath") Path filePath, DataSetWriter dataSetWriter) {
-        this.filePath = filePath;
-        this.dataSetWriter = dataSetWriter;
-    }
+    public FileOutputTarget(
+        Path filePath,
+        OutputFormat outputFormat,
+        boolean canOverwriteExistingFiles,
+        FileUtils fileUtils) {
 
-    @Override
-    public void outputDataset(
-        Stream<GeneratedObject> generatedObjects,
-        ProfileFields profileFields)
-        throws IOException {
+        this.fileUtils = fileUtils;
+        this.canOverwriteExistingFiles = canOverwriteExistingFiles;
+        this.outputFormat = outputFormat;
 
-        Path directoryPath = this.filePath.getParent();
+        Path directoryPath = filePath.getParent();
         if (directoryPath == null) {
             directoryPath = Paths.get(System.getProperty("user.dir"));
         }
 
-        String fileNameWithoutExtension = this.filePath.getFileName().toString().replaceAll("\\.[^.]+$", "");
-        String fileName = this.dataSetWriter.getFileName(fileNameWithoutExtension);
+        this.filePath = directoryPath.resolve(filePath.getFileName());
+    }
 
-        try (Closeable writer = this.dataSetWriter.openWriter(directoryPath, fileName, profileFields)) {
-            generatedObjects.forEach(row -> {
-                try {
-                    this.dataSetWriter.writeRow(writer, row);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
+    @Override
+    public DataSetWriter openWriter(ProfileFields fields) throws IOException {
+        final OutputStream stream = new FileOutputStream(
+            this.filePath.toFile(),
+            false);
+
+        try {
+            return outputFormat.createWriter(stream, fields);
+        } catch (Exception e) {
+            stream.close();
+
+            throw e;
         }
     }
 
-    public FileOutputTarget withFilename(String filename){
-        return new FileOutputTarget(
-            filePath.resolve(dataSetWriter.getFileName(filename)),
-            dataSetWriter);
-    }
-
-    public Path getFilePath() {
-        return filePath;
+    @Override
+    public void validate(Profile profile) throws OutputTargetValidationException, IOException {
+        if (fileUtils.isDirectory(filePath)) {
+            throw new OutputTargetValidationException(
+                "target is a directory, please use a different output filename");
+        } else if (!canOverwriteExistingFiles && fileUtils.exists(filePath)) {
+            throw new OutputTargetValidationException(
+                "file already exists, please use a different output filename or use the --replace option");
+        } else if (!fileUtils.exists(filePath)) {
+            Path parent = filePath.toAbsolutePath().getParent();
+            if (!fileUtils.createDirectories(parent)) {
+                throw new OutputTargetValidationException(
+                    "parent directory of output file already exists but is not a directory, please use a different output filename");
+            }
+        }
     }
 }

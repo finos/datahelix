@@ -20,8 +20,9 @@ import com.scottlogic.deg.generator.inputs.JsonProfileReader;
 import com.scottlogic.deg.generator.inputs.profileviolation.IndividualConstraintRuleViolator;
 import com.scottlogic.deg.generator.inputs.profileviolation.IndividualRuleProfileViolator;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
-import com.scottlogic.deg.generator.outputs.datasetwriters.DataSetWriter;
-import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
+import com.scottlogic.deg.generator.outputs.formats.DataSetWriter;
+import com.scottlogic.deg.generator.outputs.targets.MultiDatasetOutputTarget;
+import com.scottlogic.deg.generator.outputs.targets.SingleDatasetOutputTarget;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
@@ -32,15 +33,12 @@ import org.junit.Assert;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
-import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.notNullValue;
@@ -74,7 +72,7 @@ class ExampleProfilesViolationTests {
                 
         return forEachProfileFile(config, ((standard, violating, profileFile) -> {
             final Profile profile = new JsonProfileReader().read(profileFile.toPath());
-            standard.generateDataSet(profile, config, new NullOutputTarget());
+            standard.generateDataSet(profile, config, new NullSingleDatasetOutputTarget());
         }));
     }
 
@@ -88,7 +86,7 @@ class ExampleProfilesViolationTests {
 
         return forEachProfileFile(config, ((standard, violating, profileFile) -> {
             final Profile profile = new JsonProfileReader().read(profileFile.toPath());
-            violating.generateDataSet(profile, config, new NullOutputTarget());
+            violating.generateDataSet(profile, config, new NullMultiDatasetOutputTarget());
         }));
     }
 
@@ -104,7 +102,7 @@ class ExampleProfilesViolationTests {
             File profileFile = Paths.get(dir.getCanonicalPath(), "profile.json").toFile();
 
             DynamicTest test = DynamicTest.dynamicTest(dir.getName(), () -> {
-                StandardGenerationEngine engine = new StandardGenerationEngine(
+                StandardGenerationEngine standardGenerationEngine = new StandardGenerationEngine(
                     new DecisionTreeDataGenerator(
                         new CartesianProductDecisionTreeWalker(
                             new ConstraintReducer(
@@ -126,16 +124,17 @@ class ExampleProfilesViolationTests {
                         new PinningCombinationStrategy()),
                     new MaxStringLengthInjectingDecisionTreeFactory(new ProfileDecisionTreeFactory(), 200),
                     new NoopDataGeneratorMonitor());
+
                 ViolationGenerationEngine violationGenerationEngine =
                     new ViolationGenerationEngine(
                         new IndividualRuleProfileViolator(
                             new CucumberManifestWriter(),
                             null,
                             new IndividualConstraintRuleViolator(new ArrayList<>())),
-                        engine);
+                        standardGenerationEngine);
 
                 consumer.generate(
-                    engine,
+                    standardGenerationEngine,
                     violationGenerationEngine,
                     profileFile);
             });
@@ -146,38 +145,27 @@ class ExampleProfilesViolationTests {
         return dynamicTests;
     }
 
-    private class NullOutputTarget extends FileOutputTarget {
-        NullOutputTarget() {
-            super(null, new NullDataSetWriter());
+    private class NullSingleDatasetOutputTarget implements SingleDatasetOutputTarget {
+        @Override
+        public DataSetWriter openWriter(ProfileFields fields) {
+            return new NullDataSetWriter();
         }
 
-        @Override
-        public void outputDataset(Stream<GeneratedObject> generatedObjects, ProfileFields profileFields) {
-            // iterate through the rows - assume lazy generation, so we haven't tested unless we've exhausted the iterable
+        private class NullDataSetWriter implements DataSetWriter {
+            @Override
+            public void writeRow(GeneratedObject row) {
+                Assert.assertThat(row, notNullValue()); // non-essential, but might occasionally catch an error
+            }
 
-            generatedObjects.forEach(
-                row -> Assert.assertThat(row, notNullValue())); // might as well assert non-null while we're at it
-        }
-
-        @Override
-        public FileOutputTarget withFilename(String filename){
-            return new NullOutputTarget();
+            @Override
+            public void close() {}
         }
     }
 
-    private class NullDataSetWriter implements DataSetWriter{
+    private class NullMultiDatasetOutputTarget implements MultiDatasetOutputTarget {
         @Override
-        public Closeable openWriter(Path directory, String filenameWithoutExtension, ProfileFields profileFields) {
-            return null;
-        }
-
-        @Override
-        public void writeRow(Closeable closeable, GeneratedObject row) {
-        }
-
-        @Override
-        public String getFileName(String fileNameWithoutExtension) {
-            return null;
+        public SingleDatasetOutputTarget getSubTarget(String name) {
+            return new NullSingleDatasetOutputTarget();
         }
     }
 
@@ -185,5 +173,4 @@ class ExampleProfilesViolationTests {
     private interface GenerateConsumer {
         void generate(StandardGenerationEngine standardEngine, ViolationGenerationEngine violatingEngine, File profileFile) throws IOException, InvalidProfileException;
     }
-
 }
