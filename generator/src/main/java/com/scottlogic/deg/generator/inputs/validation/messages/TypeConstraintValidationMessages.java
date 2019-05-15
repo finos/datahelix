@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.inputs.validation.messages;
 
-import com.scottlogic.deg.common.constraint.atomic.IsOfTypeConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 
 public class TypeConstraintValidationMessages implements StandardValidationMessages {
 

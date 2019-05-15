@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.generation.fieldvaluesources.datetime;
 
-import com.scottlogic.deg.common.constraint.restriction.Timescale;
+import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

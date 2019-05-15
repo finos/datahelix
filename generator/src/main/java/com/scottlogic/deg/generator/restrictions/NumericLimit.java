@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.common.NumberUtils;
+import com.scottlogic.deg.common.util.NumberUtils;
 
 import java.math.BigDecimal;
 import java.util.Objects;

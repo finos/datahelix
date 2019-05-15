@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.common.constraint.atomic.IsOfTypeConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.restrictions.*;
 import org.jetbrains.annotations.NotNull;
 

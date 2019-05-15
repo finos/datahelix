@@ -1,8 +1,6 @@
 package com.scottlogic.deg.common.profile;
 
-import com.scottlogic.deg.common.constraint.Constraint;
-
-import com.scottlogic.deg.common.profile.RuleInformation;
+import com.scottlogic.deg.common.profile.constraints.Constraint;
 
 import java.util.Collection;
 

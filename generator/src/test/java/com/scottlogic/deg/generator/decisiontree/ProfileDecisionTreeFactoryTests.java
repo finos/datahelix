@@ -1,18 +1,18 @@
 package com.scottlogic.deg.generator.decisiontree;
 
-import com.scottlogic.deg.common.constraint.atomic.AtomicConstraint;
-import com.scottlogic.deg.common.constraint.atomic.IsGreaterThanConstantConstraint;
-import com.scottlogic.deg.common.constraint.atomic.IsInSetConstraint;
-import com.scottlogic.deg.common.constraint.atomic.MatchesRegexConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsGreaterThanConstantConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.MatchesRegexConstraint;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.profile.Rule;
-import com.scottlogic.deg.common.constraint.Constraint;
-import com.scottlogic.deg.common.constraint.grammatical.AndConstraint;
-import com.scottlogic.deg.common.constraint.grammatical.ConditionalConstraint;
-import com.scottlogic.deg.common.constraint.grammatical.NegatedGrammaticalConstraint;
-import com.scottlogic.deg.common.constraint.grammatical.OrConstraint;
+import com.scottlogic.deg.common.profile.constraints.Constraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.NegatedGrammaticalConstraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.decisiontree.testutils.*;
 import com.scottlogic.deg.common.profile.RuleInformation;
 import org.hamcrest.core.Is;

@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.inputs.validation.validators;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.constraint.atomic.IsOfTypeConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.inputs.validation.*;
 import com.scottlogic.deg.generator.inputs.validation.messages.*;
 import com.scottlogic.deg.generator.restrictions.*;

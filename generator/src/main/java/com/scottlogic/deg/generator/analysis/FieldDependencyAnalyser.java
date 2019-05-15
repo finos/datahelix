@@ -3,8 +3,8 @@ package com.scottlogic.deg.generator.analysis;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.common.constraint.grammatical.ConditionalConstraint;
-import com.scottlogic.deg.common.constraint.Constraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.common.profile.constraints.Constraint;
 
 import java.util.*;
 import java.util.stream.Collectors;

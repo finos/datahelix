@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.common.constraint.atomic.AtomicConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 
 import java.util.Collection;
 import java.util.Collections;

@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.violations.filters;
 
-import com.scottlogic.deg.common.constraint.Constraint;
+import com.scottlogic.deg.common.profile.constraints.Constraint;
 
 public interface ViolationFilter {
     /**

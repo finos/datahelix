@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.common.constraint.restriction.ParsedGranularity;
+import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 

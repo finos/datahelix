@@ -3,10 +3,10 @@ package com.scottlogic.deg.generator.inputs.validation;
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.common.constraint.atomic.AtomicConstraint;
-import com.scottlogic.deg.common.constraint.atomic.IsInSetConstraint;
-import com.scottlogic.deg.common.constraint.atomic.IsNullConstraint;
-import com.scottlogic.deg.common.constraint.atomic.IsOfTypeConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsNullConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.inputs.validation.messages.StringValidationMessage;
 

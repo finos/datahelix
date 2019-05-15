@@ -1,10 +1,10 @@
 package com.scottlogic.deg.generator;
 
-import com.scottlogic.deg.common.constraint.Constraint;
-import com.scottlogic.deg.common.constraint.atomic.IsInSetConstraint;
-import com.scottlogic.deg.common.constraint.atomic.IsNullConstraint;
-import com.scottlogic.deg.common.constraint.grammatical.AndConstraint;
-import com.scottlogic.deg.common.constraint.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.common.profile.constraints.Constraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsNullConstraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.RuleInformation;
 

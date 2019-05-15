@@ -2,12 +2,12 @@ package com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy;
 
 import com.scottlogic.deg.generator.ConstraintBuilder;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.constraint.atomic.AtomicConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
-import com.scottlogic.deg.common.constraint.Constraint;
+import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.common.profile.RuleInformation;
 import org.junit.Assert;

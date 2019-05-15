@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.builders;
 
-import com.scottlogic.deg.common.constraint.Constraint;
-import com.scottlogic.deg.common.constraint.grammatical.AndConstraint;
+import com.scottlogic.deg.common.profile.constraints.Constraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 
 import java.util.List;
 
