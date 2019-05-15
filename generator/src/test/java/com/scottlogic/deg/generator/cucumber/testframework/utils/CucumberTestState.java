@@ -6,6 +6,7 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.*;
@@ -23,28 +24,44 @@ public class CucumberTestState {
      * Boolean to represent if the generation mode is validating or violating.
      * If true, generation is in violate mode.
      */
-    public Boolean shouldViolate = false;
-    public boolean requireFieldTyping = true;
+    public Boolean shouldViolate;
+    boolean requireFieldTyping;
 
     /** If true, we inject a no-op generation engine during the test (e.g. because we're just testing profile validation) */
-    private Boolean shouldSkipGeneration = false;
+    private Boolean shouldSkipGeneration;
     private int maxStringLength = 200;
 
-    public Boolean shouldSkipGeneration() { return shouldSkipGeneration; }
-    public void disableGeneration() { shouldSkipGeneration = true; }
+    Boolean shouldSkipGeneration() { return shouldSkipGeneration; }
+    void disableGeneration() { shouldSkipGeneration = true; }
 
     public Optional<Long> maxRows = Optional.empty();
 
-    public Boolean generationHasAlreadyOccured = false;
-    public List<List<Object>> generatedObjects;
+    Boolean generationHasAlreadyOccured;
 
-    final List<Field> profileFields = new ArrayList<>();
-    final List<ConstraintDTO> constraints = new ArrayList<>();
-    final List<Exception> testExceptions = new ArrayList<>();
+    List<List<Object>> generatedObjects;
+    List<Field> profileFields;
+    List<ConstraintDTO> constraints;
+    List<Exception> testExceptions;
 
     final RecordingProfileValidationReporter validationReporter = new RecordingProfileValidationReporter();
 
-    final List<AtomicConstraintType> contstraintsToNotViolate = new ArrayList<>();
+    private final List<AtomicConstraintType> contstraintsToNotViolate = new ArrayList<>();
+
+    public CucumberTestState() {
+        this.initialise();
+    }
+
+    public void initialise(){
+        profileFields = new ArrayList<>();
+        constraints = new ArrayList<>();
+        testExceptions = new ArrayList<>();
+        generatedObjects = new ArrayList<>();
+        contstraintsToNotViolate.clear();
+        generationHasAlreadyOccured = false;
+        shouldSkipGeneration = false;
+        requireFieldTyping = true;
+        shouldViolate = false;
+    }
 
     public void addConstraint(String fieldName, String constraintName, List<Object> value) {
         if (value == null)
@@ -89,15 +106,6 @@ public class CucumberTestState {
         return values.stream()
             .filter(value -> !(value instanceof Exception))
             .collect(Collectors.toSet());
-    }
-
-    public void clearState(){
-        this.profileFields.clear();
-        this.constraints.clear();
-        this.testExceptions.clear();
-        this.generatedObjects = null;
-        this.generationHasAlreadyOccured = false;
-        this.shouldSkipGeneration = false;
     }
 
     public void addField(String fieldName) {

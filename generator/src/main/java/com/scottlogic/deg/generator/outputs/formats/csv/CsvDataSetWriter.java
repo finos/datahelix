@@ -1,49 +1,63 @@
-package com.scottlogic.deg.generator.outputs.datasetwriters;
+package com.scottlogic.deg.generator.outputs.formats.csv;
 
 import com.scottlogic.deg.generator.ProfileFields;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
+import com.scottlogic.deg.generator.outputs.formats.DataSetWriter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.QuoteMode;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
 
-public class CsvDataSetWriter implements DataSetWriter<CSVPrinter> {
+class CsvDataSetWriter implements DataSetWriter {
     private static final DateTimeFormatter standardDateFormat = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
     private static final CSVFormat writerFormat = CSVFormat.RFC4180;
     private static final CSVFormat csvStringFormatter = writerFormat.withQuoteMode(QuoteMode.ALL);
 
-    public CSVPrinter openWriter(Path directory, String fileName, ProfileFields profileFields) throws IOException {
-        return writerFormat
-            .withEscape('\0') //Dont escape any character, we're formatting strings ourselves
-            .withQuoteMode(QuoteMode.NONE)
-            .withHeader(profileFields.stream()
-                .map(f -> f.name)
-                .toArray(String[]::new))
-            .print(
-                directory.resolve(fileName),
-                StandardCharsets.UTF_8);
+    @NotNull
+    private final CSVPrinter csvPrinter;
+
+    private CsvDataSetWriter(@NotNull CSVPrinter csvPrinter) {
+        this.csvPrinter = csvPrinter;
     }
 
-    public void writeRow(CSVPrinter writer, GeneratedObject row) throws IOException {
-        writer.printRecord(row.values.stream()
-            .map(CsvDataSetWriter::extractCellValue)
-            .map(CsvDataSetWriter::wrapInQuotesIfString)
-            .collect(Collectors.toList()));
+    static DataSetWriter open(OutputStream stream, ProfileFields fields) throws IOException {
+        final Appendable outputStreamAsAppendable = new OutputStreamWriter(stream, StandardCharsets.UTF_8);
 
-        writer.flush();
+        CSVPrinter csvPrinter = writerFormat
+            .withEscape('\0') //Dont escape any character, we're formatting strings ourselves
+            .withQuoteMode(QuoteMode.NONE)
+            .withHeader(fields.stream()
+                .map(f -> f.name)
+                .toArray(String[]::new))
+            .print(outputStreamAsAppendable);
+
+        return new CsvDataSetWriter(csvPrinter);
     }
 
     @Override
-    public String getFileName(String fileNameWithoutExtension) {
-        return fileNameWithoutExtension + ".csv";
+    public void writeRow(GeneratedObject row) throws IOException {
+        csvPrinter.printRecord(
+            row.values.stream()
+                .map(CsvDataSetWriter::extractCellValue)
+                .map(CsvDataSetWriter::wrapInQuotesIfString)
+                .collect(Collectors.toList()));
+
+        csvPrinter.flush();
+    }
+
+    @Override
+    public void close() throws IOException {
+        csvPrinter.close();
     }
 
     private static Object extractCellValue(DataBagValue cell) {
