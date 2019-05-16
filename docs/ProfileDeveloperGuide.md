@@ -35,6 +35,7 @@
         2. [afterOrAt](#predicate-afterorat)
         3. [before](#predicate-before)
         4. [beforeOrAt](#predicate-beforeorat)
+        5. [granularTo](#predicate-granularto-datetime)
 
 4. [Grammatical constraints](#Grammatical-Constraints)
     1. [not](#not)
@@ -381,6 +382,15 @@ Is satisfied if `field` is a datetime occurring before `value`.
 
 Is satisfied if `field` is a datetime occurring before or simultaneously with `value`.
 
+<div id="predicate-granularto-datetime"></div>
+
+### `granularTo` _(field, value)_
+
+```javascript
+{ "field": "date", "is": "granularTo", "value": "days" }
+```
+
+Is satisfied if `field` has at least the [granularity](#DateTime-granularity) specified in `value`.
 
 # Grammatical constraints
 <div id="Grammatical-constraints"></div>
