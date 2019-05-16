@@ -11,6 +11,11 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
+import static com.scottlogic.deg.generator.generation.GenerationConfig.CombinationStrategyType.MINIMAL;
+import static com.scottlogic.deg.generator.generation.GenerationConfig.DataGenerationType.RANDOM;
+import static com.scottlogic.deg.generator.generation.GenerationConfig.OutputFormat.CSV;
+import static com.scottlogic.deg.generator.generation.GenerationConfig.TreeWalkerType.REDUCTIVE;
+
 /**
  * This class holds the generate specific command line options.
  */
@@ -28,16 +33,14 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
 
     @CommandLine.Option(names = {"-t", "--generation-type"},
         description = "Determines the type of data generation performed (${COMPLETION-CANDIDATES})",
-        defaultValue = "RANDOM",
         hidden = true)
-    private GenerationConfig.DataGenerationType generationType;
+    private GenerationConfig.DataGenerationType generationType = RANDOM;
 
     @CommandLine.Option(names = {"-c", "--combination-strategy"},
         description = "Determines the type of combination strategy used (${COMPLETION-CANDIDATES})",
-        defaultValue = "MINIMAL",
         hidden = true)
     @SuppressWarnings("unused")
-    private GenerationConfig.CombinationStrategyType combinationType;
+    private GenerationConfig.CombinationStrategyType combinationType = MINIMAL;
 
     @CommandLine.Option(
         names = {"--no-partition"},
@@ -47,9 +50,8 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
 
     @CommandLine.Option(names = {"-w", "--walker-type"},
         description = "Determines the tree walker that should be used (${COMPLETION-CANDIDATES})",
-        defaultValue = "REDUCTIVE",
         hidden = true)
-    private GenerationConfig.TreeWalkerType walkerType;
+    private GenerationConfig.TreeWalkerType walkerType = REDUCTIVE;
 
     @CommandLine.Option(
         names = {"-n", "--max-rows"},
@@ -98,9 +100,8 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
 
     @CommandLine.Option(
         names = {"-o"},
-        description = "Output format (${COMPLETION-CANDIDATES})",
-        defaultValue = "CSV")
-    private GenerationConfig.OutputFormat outputFormat;
+        description = "Output format (${COMPLETION-CANDIDATES})")
+    private GenerationConfig.OutputFormat outputFormat = CSV;
 
     @CommandLine.Option(
         names = {"--allow-untyped-fields"},
