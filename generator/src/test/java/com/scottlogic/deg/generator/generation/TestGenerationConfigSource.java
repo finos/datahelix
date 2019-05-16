@@ -12,7 +12,7 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     public GenerationConfig.DataGenerationType generationType;
     public GenerationConfig.CombinationStrategyType combinationStrategy;
     public GenerationConfig.TreeWalkerType walkerType;
-    public Long maxRows;
+    public long maxRows;
     public boolean validateProfile = false;
     public Path outputPath;
     public GenerationConfig.OutputFormat outputFormat = GenerationConfig.OutputFormat.CSV;
@@ -58,13 +58,11 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     }
 
     @Override
-    public Optional<Long> getMaxRows() {
-        return maxRows == null
-            ? Optional.empty()
-            : Optional.of(maxRows);
+    public long getMaxRows() {
+        return maxRows;
     }
 
-    public void setMaxRows(Long maxRows) {
+    public void setMaxRows(long maxRows) {
         this.maxRows = maxRows;
     }
 

@@ -11,6 +11,12 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
+import static com.scottlogic.deg.generator.generation.GenerationConfig.CombinationStrategyType.MINIMAL;
+import static com.scottlogic.deg.generator.generation.GenerationConfig.Constants.DEFAULT_MAX_ROWS;
+import static com.scottlogic.deg.generator.generation.GenerationConfig.DataGenerationType.RANDOM;
+import static com.scottlogic.deg.generator.generation.GenerationConfig.OutputFormat.CSV;
+import static com.scottlogic.deg.generator.generation.GenerationConfig.TreeWalkerType.REDUCTIVE;
+
 /**
  * This class holds the generate specific command line options.
  */
@@ -27,23 +33,15 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
     private Path outputPath;
 
     @CommandLine.Option(names = {"-t", "--generation-type"},
-        description = "Determines the type of data generation performed (" +
-            GenerationConfig.Constants.GenerationTypes.FULL_SEQUENTIAL +
-            ", " + GenerationConfig.Constants.GenerationTypes.INTERESTING +
-            ", " + GenerationConfig.Constants.GenerationTypes.RANDOM + ").",
-        defaultValue = GenerationConfig.Constants.GenerationTypes.DEFAULT,
+        description = "Determines the type of data generation performed (${COMPLETION-CANDIDATES})",
         hidden = true)
-    private GenerationConfig.DataGenerationType generationType;
+    private GenerationConfig.DataGenerationType generationType = RANDOM;
 
     @CommandLine.Option(names = {"-c", "--combination-strategy"},
-        description = "Determines the type of combination strategy used (" +
-            GenerationConfig.Constants.CombinationStrategies.PINNING + ", " +
-            GenerationConfig.Constants.CombinationStrategies.EXHAUSTIVE + ", " +
-            GenerationConfig.Constants.CombinationStrategies.MINIMAL + ").",
-        defaultValue = GenerationConfig.Constants.CombinationStrategies.DEFAULT,
+        description = "Determines the type of combination strategy used (${COMPLETION-CANDIDATES})",
         hidden = true)
     @SuppressWarnings("unused")
-    private GenerationConfig.CombinationStrategyType combinationType;
+    private GenerationConfig.CombinationStrategyType combinationType = MINIMAL;
 
     @CommandLine.Option(
         names = {"--no-partition"},
@@ -52,15 +50,14 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
     private boolean dontPartitionTrees;
 
     @CommandLine.Option(names = {"-w", "--walker-type"},
-        description = "Determines the tree walker that should be used.",
-        defaultValue = GenerationConfig.Constants.WalkerTypes.DEFAULT,
+        description = "Determines the tree walker that should be used (${COMPLETION-CANDIDATES})",
         hidden = true)
-    private GenerationConfig.TreeWalkerType walkerType;
+    private GenerationConfig.TreeWalkerType walkerType = REDUCTIVE;
 
     @CommandLine.Option(
         names = {"-n", "--max-rows"},
         description = "Defines the maximum number of rows that should be generated")
-    private Long maxRows;
+    private long maxRows = DEFAULT_MAX_ROWS;
 
     @CommandLine.Option(
         names = {"--validate-profile"},
@@ -104,9 +101,8 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
 
     @CommandLine.Option(
         names = {"-o"},
-        description = "Output format",
-        defaultValue = GenerationConfig.Constants.OutputFormats.DEFAULT)
-    private GenerationConfig.OutputFormat outputFormat;
+        description = "Output format (${COMPLETION-CANDIDATES})")
+    private GenerationConfig.OutputFormat outputFormat = CSV;
 
     @CommandLine.Option(
         names = {"--allow-untyped-fields"},
@@ -189,10 +185,8 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
     }
 
     @Override
-    public Optional<Long> getMaxRows() {
-        return maxRows == null
-            ? Optional.empty()
-            : Optional.of(maxRows);
+    public long getMaxRows() {
+        return maxRows;
     }
 
     @Override
