@@ -32,14 +32,13 @@ public class StandardGenerationEngine {
 
     public void generateDataSet(
         Profile profile,
-        GenerationConfig config,
         SingleDatasetOutputTarget outputTarget)
         throws IOException {
 
         final DecisionTree decisionTree = this.decisionTreeGenerator.analyse(profile);
 
         final Stream<GeneratedObject> generatedDataItems =
-            this.dataGenerator.generateData(profile, decisionTree, config);
+            this.dataGenerator.generateData(profile, decisionTree);
 
         try (DataSetWriter writer = outputTarget.openWriter(profile.fields)) {
             generatedDataItems.forEach(row -> {

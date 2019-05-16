@@ -18,6 +18,8 @@ import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static com.scottlogic.deg.generator.generation.GenerationConfig.DataGenerationType.FULL_SEQUENTIAL;
+import static com.scottlogic.deg.generator.generation.GenerationConfig.DataGenerationType.INTERESTING;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -52,14 +54,8 @@ class FieldSpecValueGeneratorTests {
                     )
                 )
             );
-        GenerationConfig config = new GenerationConfig(
-            new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
-        );
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
-            config,
+            INTERESTING,
             new StandardFieldValueSourceEvaluator(),
             new JavaUtilRandomNumberGenerator());
 
@@ -121,14 +117,8 @@ class FieldSpecValueGeneratorTests {
                 )
             )
         );
-        GenerationConfig generationConfig = new GenerationConfig(
-            new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
-        );
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
-            generationConfig,
+            INTERESTING,
             new StandardFieldValueSourceEvaluator(),
             new JavaUtilRandomNumberGenerator());
 
@@ -193,14 +183,8 @@ class FieldSpecValueGeneratorTests {
                     )
                 )
             );
-        GenerationConfig generationConfig = new GenerationConfig(
-            new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
-        );
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
-            generationConfig,
+            INTERESTING,
             new StandardFieldValueSourceEvaluator(),
             new JavaUtilRandomNumberGenerator());
 
@@ -253,14 +237,8 @@ class FieldSpecValueGeneratorTests {
                     )
                 )
             );
-        GenerationConfig generationConfig = new GenerationConfig(
-            new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
-        );
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
-            generationConfig,
+            INTERESTING,
             new StandardFieldValueSourceEvaluator(),
             new JavaUtilRandomNumberGenerator());
 
@@ -291,14 +269,8 @@ class FieldSpecValueGeneratorTests {
                     new HashSet<>(
                         Arrays.asList(10, 20, 30))),
                 fieldSpecSource);
-        GenerationConfig generationConfig = new GenerationConfig(
-            new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
-        );
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
-            generationConfig,
+            INTERESTING,
             new StandardFieldValueSourceEvaluator(),
             new JavaUtilRandomNumberGenerator());
 
@@ -338,14 +310,8 @@ class FieldSpecValueGeneratorTests {
                     Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
                 ),
                 fieldSpecSource);
-        GenerationConfig generationConfig = new GenerationConfig(
-            new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
-        );
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
-            generationConfig,
+            INTERESTING,
             new StandardFieldValueSourceEvaluator(),
             new JavaUtilRandomNumberGenerator());
 
@@ -404,14 +370,8 @@ class FieldSpecValueGeneratorTests {
         );
         rootFieldSpec.withMustContainRestriction(mustContainRestriction);
 
-        GenerationConfig generationConfig = new GenerationConfig(
-            new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.FULL_SEQUENTIAL,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
-        );
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
-            generationConfig,
+            FULL_SEQUENTIAL,
             new StandardFieldValueSourceEvaluator(),
             new JavaUtilRandomNumberGenerator());
 
@@ -462,14 +422,8 @@ class FieldSpecValueGeneratorTests {
         );
         rootFieldSpec.withMustContainRestriction(mustContainRestriction);
 
-        GenerationConfig generationConfig = new GenerationConfig(
-            new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.FULL_SEQUENTIAL,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE)
-        );
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
-            generationConfig,
+            FULL_SEQUENTIAL,
             new StandardFieldValueSourceEvaluator(),
             new JavaUtilRandomNumberGenerator());
 

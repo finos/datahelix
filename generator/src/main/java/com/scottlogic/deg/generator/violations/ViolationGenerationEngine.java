@@ -27,7 +27,6 @@ public class ViolationGenerationEngine {
 
     public void generateDataSet(
         Profile profile,
-        GenerationConfig config,
         MultiDatasetOutputTarget outputTarget)
         throws IOException {
 
@@ -43,7 +42,6 @@ public class ViolationGenerationEngine {
         for (Profile violatedProfile : violatedProfiles) {
             generationEngine.generateDataSet(
                 violatedProfile,
-                config,
                 outputTarget.getSubTarget(
                     intFormatter.format(filename))
             );

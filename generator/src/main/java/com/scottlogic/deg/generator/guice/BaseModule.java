@@ -113,6 +113,9 @@ public class BaseModule extends AbstractModule {
 
             bind(DataGenerationType.class).toInstance(generationConfigSource.getGenerationType());
 
+            bind(long.class)
+                .annotatedWith(Names.named("config:maxRows"))
+                .toInstance(generationConfigSource.getMaxRows());
             bind(boolean.class)
                 .annotatedWith(Names.named("config:tracingIsEnabled"))
                 .toInstance(generationConfigSource.isEnableTracing());

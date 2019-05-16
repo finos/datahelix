@@ -48,13 +48,7 @@ class ExampleProfilesViolationTests {
 
     @TestFactory
     Collection<DynamicTest> shouldReadProfileCorrectly() throws IOException {
-        GenerationConfig config = new GenerationConfig(
-            new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.PINNING));
-
-        return forEachProfileFile(config, ((standard, violating, profileFile) -> {
+        return forEachProfileFile(((standard, violating, profileFile) -> {
             final Profile profile = new JsonProfileReader().read(profileFile.toPath());
 
             Collection<Integer> constraintsPerRule = profile.rules.stream().map(r -> r.constraints.size()).collect(Collectors.toList());
@@ -64,33 +58,21 @@ class ExampleProfilesViolationTests {
 
     @TestFactory
     Collection<DynamicTest> shouldGenerateAsTestCasesWithoutErrors() throws IOException {
-        GenerationConfig config = new GenerationConfig(
-            new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.PINNING));
-                
-        return forEachProfileFile(config, ((standard, violating, profileFile) -> {
+        return forEachProfileFile(((standard, violating, profileFile) -> {
             final Profile profile = new JsonProfileReader().read(profileFile.toPath());
-            standard.generateDataSet(profile, config, new NullSingleDatasetOutputTarget());
+            standard.generateDataSet(profile, new NullSingleDatasetOutputTarget());
         }));
     }
 
     @TestFactory
     Collection<DynamicTest> shouldGenerateWithoutErrors() throws IOException {
-        GenerationConfig config = new GenerationConfig(
-            new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
-                GenerationConfig.CombinationStrategyType.PINNING));
-
-        return forEachProfileFile(config, ((standard, violating, profileFile) -> {
+        return forEachProfileFile(((standard, violating, profileFile) -> {
             final Profile profile = new JsonProfileReader().read(profileFile.toPath());
-            violating.generateDataSet(profile, config, new NullMultiDatasetOutputTarget());
+            violating.generateDataSet(profile, new NullMultiDatasetOutputTarget());
         }));
     }
 
-    private Collection<DynamicTest> forEachProfileFile(GenerationConfig config, GenerateConsumer consumer) throws IOException {
+    private Collection<DynamicTest> forEachProfileFile(GenerateConsumer consumer) throws IOException {
         Collection<DynamicTest> dynamicTests = new ArrayList<>();
 
         File[] directoriesArray =
@@ -116,11 +98,12 @@ class ExampleProfilesViolationTests {
                         new NoopDataGeneratorMonitor(),
                         new StandardRowSpecDataBagGenerator(
                             new FieldSpecValueGenerator(
-                                config,
+                                GenerationConfig.DataGenerationType.INTERESTING,
                                 new StandardFieldValueSourceEvaluator(),
                                 new JavaUtilRandomNumberGenerator()),
                             new PinningCombinationStrategy()),
-                        new PinningCombinationStrategy()),
+                        new PinningCombinationStrategy(),
+                        10),
                     new MaxStringLengthInjectingDecisionTreeFactory(new ProfileDecisionTreeFactory(), 200),
                     new NoopDataGeneratorMonitor());
 

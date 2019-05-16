@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.ProfileFields;
@@ -23,6 +24,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
     private final TreePartitioner treePartitioner;
     private final DecisionTreeOptimiser treeOptimiser;
     private final CombinationStrategy partitionCombiner;
+    private final long maxRows;
 
     @Inject
     public DecisionTreeDataGenerator(
@@ -31,20 +33,21 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         DecisionTreeOptimiser optimiser,
         DataGeneratorMonitor monitor,
         RowSpecDataBagGenerator dataBagSourceFactory,
-        CombinationStrategy combinationStrategy) {
+        CombinationStrategy combinationStrategy,
+        @Named("config:maxRows") long maxRows) {
         this.treePartitioner = treePartitioner;
         this.treeOptimiser = optimiser;
         this.treeWalker = treeWalker;
         this.monitor = monitor;
         this.dataBagSourceFactory = dataBagSourceFactory;
         this.partitionCombiner = combinationStrategy;
+        this.maxRows = maxRows;
     }
 
     @Override
     public Stream<GeneratedObject> generateData(
         Profile profile,
-        DecisionTree decisionTree,
-        GenerationConfig generationConfig) {
+        DecisionTree decisionTree) {
 
         monitor.generationStarting();
 
@@ -55,7 +58,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
 
         return partitionCombiner.permute(partitionedDataBags)
             .map(dataBag -> convertToGeneratedObject(dataBag, profile.fields))
-            .limit(generationConfig.getMaxRows())
+            .limit(maxRows)
             .peek(monitor::rowEmitted);
     }
 

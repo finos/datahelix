@@ -6,7 +6,6 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 public class TestGenerationConfigSource implements GenerationConfigSource {
     public GenerationConfig.DataGenerationType generationType;

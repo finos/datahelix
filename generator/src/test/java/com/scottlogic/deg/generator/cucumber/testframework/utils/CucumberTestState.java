@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * Class to represent the state during cucumber test running and execution
  */
 public class CucumberTestState {
-    public GenerationConfig.DataGenerationType dataGenerationType;
+    public GenerationConfig.DataGenerationType dataGenerationType = GenerationConfig.DataGenerationType.FULL_SEQUENTIAL;
     public GenerationConfig.CombinationStrategyType combinationStrategyType = GenerationConfig.CombinationStrategyType.PINNING;
     public GenerationConfig.TreeWalkerType walkerType = GenerationConfig.TreeWalkerType.REDUCTIVE;
 
