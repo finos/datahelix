@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.generation.databags;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;

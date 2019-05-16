@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.Timescale;
+import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
 
 import java.time.OffsetDateTime;
 

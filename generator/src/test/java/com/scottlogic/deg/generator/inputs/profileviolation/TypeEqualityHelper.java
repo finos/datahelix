@@ -1,12 +1,12 @@
 package com.scottlogic.deg.generator.inputs.profileviolation;
 
-import com.scottlogic.deg.generator.Profile;
-import com.scottlogic.deg.generator.Rule;
-import com.scottlogic.deg.generator.constraints.Constraint;
-import com.scottlogic.deg.generator.constraints.atomic.NotConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
+import com.scottlogic.deg.common.profile.Profile;
+import com.scottlogic.deg.common.profile.Rule;
+import com.scottlogic.deg.common.profile.constraints.Constraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.NotConstraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
 import org.junit.Assert;
 
 import java.util.ArrayList;

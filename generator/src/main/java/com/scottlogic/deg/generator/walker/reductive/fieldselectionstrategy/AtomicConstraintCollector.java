@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy;
 
-import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.visualisation.BaseVisitor;

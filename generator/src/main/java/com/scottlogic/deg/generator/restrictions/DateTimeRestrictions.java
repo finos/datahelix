@@ -1,13 +1,9 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.Timescale;
+import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
 
-import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Objects;
-
-import static com.scottlogic.deg.generator.utils.NumberUtils.coerceToBigDecimal;
 
 public class DateTimeRestrictions {
     private static final Timescale DEFAULT_GRANULARITY = Timescale.MILLIS;

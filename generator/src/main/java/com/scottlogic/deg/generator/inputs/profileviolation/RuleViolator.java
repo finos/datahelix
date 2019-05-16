@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.inputs.profileviolation;
 
-import com.scottlogic.deg.generator.Rule;
+import com.scottlogic.deg.common.profile.Rule;
 
 public interface RuleViolator {
     /**

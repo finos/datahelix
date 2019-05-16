@@ -1,6 +1,9 @@
 package com.scottlogic.deg.generator;
 
 import static org.junit.Assert.*;
+
+import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.ProfileFields;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

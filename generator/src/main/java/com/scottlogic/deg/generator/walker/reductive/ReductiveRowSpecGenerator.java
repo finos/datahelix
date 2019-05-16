@@ -1,12 +1,9 @@
 package com.scottlogic.deg.generator.walker.reductive;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
+import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
-import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FieldValue;
 
 import java.util.*;

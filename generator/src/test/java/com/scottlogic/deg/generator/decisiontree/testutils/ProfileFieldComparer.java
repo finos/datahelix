@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.decisiontree.testutils;
 
-import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.common.profile.ProfileFields;
 
 import java.util.Collection;
 import java.util.stream.Collectors;

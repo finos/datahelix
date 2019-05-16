@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.inputs.validation.validators;
 
-import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.inputs.validation.*;
 import com.scottlogic.deg.generator.inputs.validation.messages.*;

@@ -1,8 +1,6 @@
 package com.scottlogic.deg.generator.violations.filters;
 
-import com.scottlogic.deg.generator.constraints.Constraint;
-import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.common.profile.constraints.Constraint;
 
 /**
  * Violation filter which filters on teh type of the constraint.

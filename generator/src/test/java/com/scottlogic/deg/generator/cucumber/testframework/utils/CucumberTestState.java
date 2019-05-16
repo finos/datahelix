@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.cucumber.testframework.utils;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import com.scottlogic.deg.profile.v0_1.ConstraintDTO;

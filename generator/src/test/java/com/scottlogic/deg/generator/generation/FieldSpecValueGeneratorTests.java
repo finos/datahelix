@@ -1,8 +1,9 @@
 package com.scottlogic.deg.generator.generation;
 
+import com.scottlogic.deg.common.profile.constraintdetail.Nullness;
 import com.scottlogic.deg.generator.DataBagValueSource;
-import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
+import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 import com.scottlogic.deg.generator.generation.databags.DataBag;

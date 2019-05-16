@@ -1,8 +1,8 @@
 package com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy;
 
-import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.common.profile.constraints.atomic.*;
+import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.FlatMappingSpliterator;
-import com.scottlogic.deg.generator.constraints.atomic.*;
 
 import java.util.Collection;
 import java.util.Set;

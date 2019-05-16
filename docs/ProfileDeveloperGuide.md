@@ -102,7 +102,7 @@ DataHelix currently recognises four data types: _string_, _datetime_, _integer_ 
 
 Within a profile, users can specify two numeric data types: integer and decimal. Under the hood both of these data types are considered numeric from a point of generation but the integer type enforces a granularity of 1, see below for more information on granularity.
 
-In principle, a decimal can be any real number. In practice, this is any number that can be represented in a Java [BigDecimal](https://docs.oracle.com/javase/7/docs/api/java/math/BigDecimal.html) object.
+Decimals and integers have a maximum value of 1E20, and a minimum value of -1E20.
 
 In profile files, numbers must be expressed as JSON numbers, without quotation marks.
 
@@ -121,7 +121,7 @@ Note that granularity concerns which values are valid, not how they're presented
 
 ## Strings
 
-Strings are sequences of unicode characters. Currently, only characters from the [Basic Multilingual Plane](https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane) (Plane 0) are supported.
+Strings are sequences of unicode characters with a maximum length of 1000 characters. Currently, only characters from the [Basic Multilingual Plane](https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane) (Plane 0) are supported.
 
 ## DateTime
 

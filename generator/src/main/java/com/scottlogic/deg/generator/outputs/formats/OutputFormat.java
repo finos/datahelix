@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.outputs.formats;
 
-import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.common.profile.ProfileFields;
 
 import java.io.IOException;
 import java.io.OutputStream;

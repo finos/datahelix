@@ -1,8 +1,8 @@
 package com.scottlogic.deg.generator.outputs.formats.csv;
 
 import com.scottlogic.deg.generator.DataBagValueSource;
-import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.ProfileFields;
+import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.RowSource;

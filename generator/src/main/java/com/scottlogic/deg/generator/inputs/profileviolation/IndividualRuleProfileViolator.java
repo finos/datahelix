@@ -2,8 +2,8 @@ package com.scottlogic.deg.generator.inputs.profileviolation;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.scottlogic.deg.generator.Profile;
-import com.scottlogic.deg.generator.Rule;
+import com.scottlogic.deg.common.profile.Profile;
+import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.violations.ViolatedProfile;
 

@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.generation.databags;
 
 import com.scottlogic.deg.generator.DataBagValueSource;
-import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.common.profile.Field;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

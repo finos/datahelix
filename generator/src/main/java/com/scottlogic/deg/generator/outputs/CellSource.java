@@ -2,10 +2,10 @@ package com.scottlogic.deg.generator.outputs;
 
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.DataBagValueSource;
-import com.scottlogic.deg.generator.Field;
+import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.FlatMappingSpliterator;
-import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.inputs.RuleInformation;
+import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.common.profile.RuleInformation;
 
 import java.util.Set;
 import java.util.stream.Collectors;

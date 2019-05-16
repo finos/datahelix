@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.visualisation.DecisionTreeVisualisationWriter;
