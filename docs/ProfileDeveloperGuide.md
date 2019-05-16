@@ -272,8 +272,9 @@ Is satisfied if `field` is a string with length less than `value`, must be a who
 
 Is satisfied if `field` is a valid `value`, in this case a valid ISIN code. Possible options for `value` are:
 * ISIN
+* SEDOL
 
-**NOTE**: This constraint cannot be combined with any other textual constraint, doing so will mean no string data is created. See [Frequently asked questions](FrequentlyAskedQuestions.md) for more detail.
+**NOTE**: This constraint cannot at present be combined with the constraints `matchingRegex` or `containingRegex`.  Doing so will mean no data is emitted.  See [Frequently Asked Questions](FrequentlyAskedQuestions.md) for more information.
 
 ## Integer/Decimal constraints
 

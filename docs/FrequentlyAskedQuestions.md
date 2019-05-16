@@ -68,26 +68,19 @@ All fields permit the inclusion of the empty set (&#8709;) by default, to preven
 
 For more details see the [set restriction and generation](./../generator/docs/SetRestrictionAndGeneration.md) page.
 
-## Why can I not combine `aValid` and other textual constraints
+## Why can I not combine `aValid` and regex constraints
 
-If a profile with these constraints exist, then no string values will be emitted:
+If a profile contains both `aValid` constraint(s) and `matchingRegex` or `containingRegex` constraint(s) that apply to the same field(s), no data will be emitted, even if the regexes could potentially match valid values produced by the `aValid` constraints.
 
-`aValid ISIN` & `longerThan 5`
+This is a limitation with the current implementation of the generator, there are plans to solve this issue - see [#487](https://github.com/ScottLogic/datahelix/issues/487) for progress. 
 
-This is a limitation with the current implementation of the generator, there are plans to solve this issue - see [#487](https://github.com/ScottLogic/datahelix/issues/487) for progress. For now, combining the `aValid` constraint with any of following (textual) constraints will cause the generator to emit no strings.
-* `shorterThan`
-* `longerThan`
-* `matchingRegex`
-* `containingRegex`
-* `ofLength`
-
-Combining an `aValid` with any other constrains is still permitted including `inSet` and `equalTo` with a string value. Combining the use of both will ensure no string values are emitted.
+Combining an `aValid` constraint with any other constraints is still permitted and will produce data where appropriate.
 
 Valid examples are:
 * `aValid ISIN` & `inSet [ "GB0002634947", 123 ]` - will emit `null` and `"GB0002634947"`
 * `not(aValid ISIN)` & `inSet [ "GB0002634947", 123 ]` - will emit `null` and `123`
 * `aValid ISIN` & `equalTo "GB0002634947"` - will emit `null` and `"GB0002634947"`
-* `aValid ISIN` & `greaterThan 5` - will emit `null` and all valid ISIN codes
+* `aValid SEDOL` & `greaterThan 5` - will emit `null` and all valid SEDOL codes
 
 ## Why are we continuing to use an out-of-date JDK
 
