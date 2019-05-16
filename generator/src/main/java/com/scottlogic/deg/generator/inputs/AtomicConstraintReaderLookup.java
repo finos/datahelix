@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.inputs;
 
+import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
@@ -65,11 +66,21 @@ class AtomicConstraintReaderLookup {
 
         add(AtomicConstraintType.AVALID.toString(),
             (dto, fields, rules) ->
-                new MatchesStandardConstraint(
-                    fields.getByName(dto.field),
-                    StandardConstraintTypes.valueOf(getValidatedValue(dto, String.class)),
-                    rules
-                ));
+            {
+                StandardConstraintTypes standardType =
+                    StandardConstraintTypes.valueOf(getValidatedValue(dto, String.class));
+                Field field = fields.getByName(dto.field);
+                switch (standardType) {
+                    case ISIN:
+                    case SEDOL:
+                        return new AndConstraint(
+                            new MatchesStandardConstraint(field, standardType, rules),
+                            new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.STRING, rules)
+                        );
+                    default:
+                    return new MatchesStandardConstraint(field, standardType, rules);
+                }
+            });
 
         add(AtomicConstraintType.ISGREATERTHANCONSTANT.toString(),
             (dto, fields, rules) ->
