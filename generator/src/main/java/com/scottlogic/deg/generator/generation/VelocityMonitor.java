@@ -29,7 +29,7 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
     private long previousVelocity = 0;
 
     @Override
-    public void generationStarting(GenerationConfig generationConfig) {
+    public void generationStarting() {
         startedGenerating = OffsetDateTime.now(ZoneOffset.UTC);
         rowsSinceLastSample = 0;
         rowsEmitted = BigInteger.ZERO;

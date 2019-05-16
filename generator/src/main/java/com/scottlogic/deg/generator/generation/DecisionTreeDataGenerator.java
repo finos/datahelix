@@ -46,7 +46,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         DecisionTree decisionTree,
         GenerationConfig generationConfig) {
 
-        monitor.generationStarting(generationConfig);
+        monitor.generationStarting();
 
         Stream<Stream<DataBag>> partitionedDataBags = treePartitioner
             .splitTreeIntoPartitions(decisionTree)
