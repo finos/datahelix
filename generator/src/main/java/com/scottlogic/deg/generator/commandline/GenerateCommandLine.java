@@ -34,11 +34,13 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
 
     @CommandLine.Option(names = {"-t", "--generation-type"},
         description = "Determines the type of data generation performed (${COMPLETION-CANDIDATES})",
+        defaultValue = "RANDOM",
         hidden = true)
     private GenerationConfig.DataGenerationType generationType = RANDOM;
 
     @CommandLine.Option(names = {"-c", "--combination-strategy"},
         description = "Determines the type of combination strategy used (${COMPLETION-CANDIDATES})",
+        defaultValue = "MINIMAL",
         hidden = true)
     @SuppressWarnings("unused")
     private GenerationConfig.CombinationStrategyType combinationType = MINIMAL;
@@ -51,6 +53,7 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
 
     @CommandLine.Option(names = {"-w", "--walker-type"},
         description = "Determines the tree walker that should be used (${COMPLETION-CANDIDATES})",
+        defaultValue = "REDUCTIVE",
         hidden = true)
     private GenerationConfig.TreeWalkerType walkerType = REDUCTIVE;
 
@@ -101,8 +104,9 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
 
     @CommandLine.Option(
         names = {"-o"},
-        description = "Output format (${COMPLETION-CANDIDATES})")
-    private GenerationConfig.OutputFormat outputFormat = CSV;
+        description = "Output format (${COMPLETION-CANDIDATES})",
+        defaultValue = "CSV")
+    private GenerationConfig.OutputFormat outputFormat;
 
     @CommandLine.Option(
         names = {"--allow-untyped-fields"},
