@@ -1029,20 +1029,6 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null           |
       | "GB00YG2XYC52" |
 
-  Scenario Outline: 'InSet' of a non-string type with 'aValid' is successful
-    Given there is a field foo
-    And foo is in set:
-      | <typeValue> |
-    And foo is a valid "ISIN"
-    Then the following data should be generated:
-      | foo         |
-      | null        |
-      | <typeValue> |
-    Examples:
-      | typeValue                |
-      | 1                        |
-      | 2018-01-01T00:00:00.000Z |
-
   Scenario: 'InSet' run against a contradicting 'aValid' ISIN emits null
     Given there is a field foo
     And foo is in set:

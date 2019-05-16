@@ -1204,19 +1204,6 @@ Feature: User can specify that a value is equalTo a required value
       | foo  |
       | null |
 
-  Scenario Outline: 'EqualTo' a value of a different type with a non contradicting 'aValid' should be successful
-    Given there is a field foo
-    And foo is equal to <value>
-    And foo is a valid "ISIN"
-    Then the following data should be generated:
-      | foo     |
-      | null    |
-      | <value> |
-    Examples:
-      | value                    |
-      | 1                        |
-      | 2018-01-01T00:00:00.000Z |
-
   Scenario: 'EqualTo' run against a contradicting 'aValid' ISIN should only generate null
     Given there is a field foo
     And foo is equal to "aa"

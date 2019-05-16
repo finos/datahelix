@@ -256,7 +256,7 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "GB00YG2XYC52" |
       | "US0378331005" |
 
-  Scenario: 'longerThan' against contradicting 'aValid' emits numeric,datetime and null
+  Scenario: 'longerThan' against contradicting 'aValid' emits null
     Given foo is longer than 20
     And foo is a valid "ISIN"
     And foo is in set:
@@ -265,10 +265,7 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "US0000XVGZA3"           |
       | 2011-01-01T00:00:00.000Z |
     Then the following data should be generated:
-      | foo                      |
       | null                     |
-      | 22                       |
-      | 2011-01-01T00:00:00.000Z |
 
   Scenario: Not 'longerThan' with a non-contradicting not 'aValid' is successful
     Given foo is anything but longer than 12
