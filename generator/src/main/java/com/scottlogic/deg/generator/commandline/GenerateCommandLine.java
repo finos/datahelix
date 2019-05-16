@@ -27,20 +27,14 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
     private Path outputPath;
 
     @CommandLine.Option(names = {"-t", "--generation-type"},
-        description = "Determines the type of data generation performed (" +
-            GenerationConfig.Constants.GenerationTypes.FULL_SEQUENTIAL +
-            ", " + GenerationConfig.Constants.GenerationTypes.INTERESTING +
-            ", " + GenerationConfig.Constants.GenerationTypes.RANDOM + ").",
-        defaultValue = GenerationConfig.Constants.GenerationTypes.DEFAULT,
+        description = "Determines the type of data generation performed (${COMPLETION-CANDIDATES})",
+        defaultValue = "RANDOM",
         hidden = true)
     private GenerationConfig.DataGenerationType generationType;
 
     @CommandLine.Option(names = {"-c", "--combination-strategy"},
-        description = "Determines the type of combination strategy used (" +
-            GenerationConfig.Constants.CombinationStrategies.PINNING + ", " +
-            GenerationConfig.Constants.CombinationStrategies.EXHAUSTIVE + ", " +
-            GenerationConfig.Constants.CombinationStrategies.MINIMAL + ").",
-        defaultValue = GenerationConfig.Constants.CombinationStrategies.DEFAULT,
+        description = "Determines the type of combination strategy used (${COMPLETION-CANDIDATES})",
+        defaultValue = "MINIMAL",
         hidden = true)
     @SuppressWarnings("unused")
     private GenerationConfig.CombinationStrategyType combinationType;
@@ -52,8 +46,8 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
     private boolean dontPartitionTrees;
 
     @CommandLine.Option(names = {"-w", "--walker-type"},
-        description = "Determines the tree walker that should be used.",
-        defaultValue = GenerationConfig.Constants.WalkerTypes.DEFAULT,
+        description = "Determines the tree walker that should be used (${COMPLETION-CANDIDATES})",
+        defaultValue = "REDUCTIVE",
         hidden = true)
     private GenerationConfig.TreeWalkerType walkerType;
 
@@ -104,8 +98,8 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
 
     @CommandLine.Option(
         names = {"-o"},
-        description = "Output format",
-        defaultValue = GenerationConfig.Constants.OutputFormats.DEFAULT)
+        description = "Output format (${COMPLETION-CANDIDATES})",
+        defaultValue = "CSV")
     private GenerationConfig.OutputFormat outputFormat;
 
     @CommandLine.Option(
