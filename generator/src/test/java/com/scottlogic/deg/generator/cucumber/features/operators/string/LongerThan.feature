@@ -259,13 +259,9 @@ Feature: User can specify that a string length is longer than, a specified numbe
   Scenario: 'longerThan' against contradicting 'aValid' emits null
     Given foo is longer than 20
     And foo is a valid "ISIN"
-    And foo is in set:
-      | 22                       |
-      | "abc"                    |
-      | "US0000XVGZA3"           |
-      | 2011-01-01T00:00:00.000Z |
     Then the following data should be generated:
-      | null                     |
+      | foo  |
+      | null |
 
   Scenario: Not 'longerThan' with a non-contradicting not 'aValid' is successful
     Given foo is anything but longer than 12
