@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.generator.DataBagValueSource;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.config.details.DataGenerationType;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.CombiningFieldValueSource;
@@ -50,7 +51,7 @@ public class FieldSpecValueGenerator {
             });
     }
 
-    private Iterable<Object> getDataValues(FieldValueSource source, GenerationConfig.DataGenerationType dataType) {
+    private Iterable<Object> getDataValues(FieldValueSource source, DataGenerationType dataType) {
         switch (dataType) {
             case FULL_SEQUENTIAL:
             default:

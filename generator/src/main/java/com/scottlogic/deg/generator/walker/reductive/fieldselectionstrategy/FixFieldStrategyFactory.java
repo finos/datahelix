@@ -4,8 +4,8 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
+import com.scottlogic.deg.generator.config.details.TreeWalkerType;
 
 public class FixFieldStrategyFactory {
     private final FieldDependencyAnalyser analyser;
@@ -20,7 +20,7 @@ public class FixFieldStrategyFactory {
         DecisionTree tree,
         GenerationConfigSource generationConfig){
 
-        if (generationConfig.getWalkerType() != GenerationConfig.TreeWalkerType.REDUCTIVE){
+        if (generationConfig.getWalkerType() != TreeWalkerType.REDUCTIVE){
             return null;
         }
 

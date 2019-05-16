@@ -6,7 +6,7 @@ import com.scottlogic.deg.common.profile.RuleInformation;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.config.details.Defaults;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
 import org.junit.Assert;
@@ -154,11 +154,11 @@ public class AtomicConstraintReaderLookupTests {
 
         ConstraintDTO maxValueDtoPlusOne = new ConstraintDTO();
         maxValueDtoPlusOne.field = "test";
-        maxValueDtoPlusOne.value = GenerationConfig.Constants.NUMERIC_MAX.add(BigDecimal.ONE);
+        maxValueDtoPlusOne.value = Defaults.NUMERIC_MAX.add(BigDecimal.ONE);
 
         ConstraintDTO minValueDtoMinusOne = new ConstraintDTO();
         minValueDtoMinusOne.field = "test";
-        minValueDtoMinusOne.value = GenerationConfig.Constants.NUMERIC_MIN.subtract(BigDecimal.ONE);
+        minValueDtoMinusOne.value = Defaults.NUMERIC_MIN.subtract(BigDecimal.ONE);
 
         return Stream.of(
             Arguments.of(AtomicConstraintType.ISEQUALTOCONSTANT, maxValueDtoPlusOne),

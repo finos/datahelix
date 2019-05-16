@@ -3,10 +3,12 @@ package com.scottlogic.deg.generator.cucumber.testframework.utils;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.config.details.CombinationStrategyType;
+import com.scottlogic.deg.generator.config.details.DataGenerationType;
+import com.scottlogic.deg.generator.config.details.Defaults;
+import com.scottlogic.deg.generator.config.details.TreeWalkerType;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.*;
@@ -16,9 +18,9 @@ import java.util.stream.Collectors;
  * Class to represent the state during cucumber test running and execution
  */
 public class CucumberTestState {
-    public GenerationConfig.DataGenerationType dataGenerationType;
-    public GenerationConfig.CombinationStrategyType combinationStrategyType = GenerationConfig.CombinationStrategyType.PINNING;
-    public GenerationConfig.TreeWalkerType walkerType = GenerationConfig.TreeWalkerType.REDUCTIVE;
+    public DataGenerationType dataGenerationType;
+    public CombinationStrategyType combinationStrategyType = CombinationStrategyType.PINNING;
+    public TreeWalkerType walkerType = TreeWalkerType.REDUCTIVE;
 
     /**
      * Boolean to represent if the generation mode is validating or violating.
@@ -162,8 +164,8 @@ public class CucumberTestState {
     }
 
     public void setMaxStringLength(int maxLength) {
-        if (maxLength > GenerationConfig.Constants.MAX_STRING_LENGTH){
-            throw new IllegalArgumentException("String lengths are limited to " + GenerationConfig.Constants.MAX_STRING_LENGTH + " characters in production");
+        if (maxLength > Defaults.MAX_STRING_LENGTH){
+            throw new IllegalArgumentException("String lengths are limited to " + Defaults.MAX_STRING_LENGTH + " characters in production");
         }
 
         maxStringLength = maxLength;

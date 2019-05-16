@@ -1,14 +1,13 @@
 package com.scottlogic.deg.generator.cucumber.testframework.utils;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.config.details.*;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Optional;
 
 public class CucumberGenerationConfigSource implements GenerationConfigSource {
     private final CucumberTestState state;
@@ -24,17 +23,17 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
     }
 
     @Override
-    public GenerationConfig.DataGenerationType getDataGenerationType() {
+    public DataGenerationType getDataGenerationType() {
         return state.dataGenerationType;
     }
 
     @Override
-    public GenerationConfig.CombinationStrategyType getCombinationStrategyType() {
+    public CombinationStrategyType getCombinationStrategyType() {
         return state.combinationStrategyType;
     }
 
     @Override
-    public GenerationConfig.TreeWalkerType getWalkerType() {
+    public TreeWalkerType getWalkerType() {
         return state.walkerType;
     }
 
@@ -44,8 +43,8 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
     }
 
     @Override
-    public GenerationConfig.MonitorType getMonitorType() {
-        return GenerationConfig.MonitorType.QUIET;
+    public MonitorType getMonitorType() {
+        return MonitorType.QUIET;
     }
 
     @Override
@@ -104,7 +103,7 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
     }
 
     @Override
-    public GenerationConfig.OutputFormat getOutputFormat() {
+    public OutputFormat getOutputFormat() {
         return null;
     }
 }

@@ -6,6 +6,9 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
+import com.scottlogic.deg.generator.config.details.CombinationStrategyType;
+import com.scottlogic.deg.generator.config.details.DataGenerationType;
+import com.scottlogic.deg.generator.config.details.TreeWalkerType;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.restrictions.*;
@@ -53,9 +56,9 @@ class FieldSpecValueGeneratorTests {
                 )
             );
         GenerationConfigSource config = new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE);
+                DataGenerationType.INTERESTING,
+                TreeWalkerType.REDUCTIVE,
+                CombinationStrategyType.EXHAUSTIVE);
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
             config,
             new StandardFieldValueSourceEvaluator(),
@@ -121,9 +124,9 @@ class FieldSpecValueGeneratorTests {
         );
         GenerationConfigSource generationConfig =
             new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE);
+                DataGenerationType.INTERESTING,
+                TreeWalkerType.REDUCTIVE,
+                CombinationStrategyType.EXHAUSTIVE);
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
             generationConfig,
             new StandardFieldValueSourceEvaluator(),
@@ -192,9 +195,9 @@ class FieldSpecValueGeneratorTests {
             );
         GenerationConfigSource generationConfig =
             new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE);
+                DataGenerationType.INTERESTING,
+                TreeWalkerType.REDUCTIVE,
+                CombinationStrategyType.EXHAUSTIVE);
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
             generationConfig,
             new StandardFieldValueSourceEvaluator(),
@@ -251,9 +254,9 @@ class FieldSpecValueGeneratorTests {
             );
         GenerationConfigSource generationConfig =
             new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE);
+                DataGenerationType.INTERESTING,
+                TreeWalkerType.REDUCTIVE,
+                CombinationStrategyType.EXHAUSTIVE);
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
             generationConfig,
             new StandardFieldValueSourceEvaluator(),
@@ -288,9 +291,9 @@ class FieldSpecValueGeneratorTests {
                 fieldSpecSource);
         GenerationConfigSource generationConfig =
             new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE);
+                DataGenerationType.INTERESTING,
+                TreeWalkerType.REDUCTIVE,
+                CombinationStrategyType.EXHAUSTIVE);
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
             generationConfig,
             new StandardFieldValueSourceEvaluator(),
@@ -334,9 +337,9 @@ class FieldSpecValueGeneratorTests {
                 fieldSpecSource);
         GenerationConfigSource generationConfig =
             new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE);
+                DataGenerationType.INTERESTING,
+                TreeWalkerType.REDUCTIVE,
+                CombinationStrategyType.EXHAUSTIVE);
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
             generationConfig,
             new StandardFieldValueSourceEvaluator(),
@@ -399,9 +402,9 @@ class FieldSpecValueGeneratorTests {
 
         GenerationConfigSource generationConfig =
             new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.FULL_SEQUENTIAL,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE);
+                DataGenerationType.FULL_SEQUENTIAL,
+                TreeWalkerType.REDUCTIVE,
+                CombinationStrategyType.EXHAUSTIVE);
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
             generationConfig,
             new StandardFieldValueSourceEvaluator(),
@@ -456,9 +459,9 @@ class FieldSpecValueGeneratorTests {
 
         GenerationConfigSource generationConfig =
             new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.FULL_SEQUENTIAL,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.EXHAUSTIVE);
+                DataGenerationType.FULL_SEQUENTIAL,
+                TreeWalkerType.REDUCTIVE,
+                CombinationStrategyType.EXHAUSTIVE);
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
             generationConfig,
             new StandardFieldValueSourceEvaluator(),

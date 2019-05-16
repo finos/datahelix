@@ -14,6 +14,9 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.generation.combinationstrategies.PinningCombinationStrategy;
+import com.scottlogic.deg.generator.config.details.CombinationStrategyType;
+import com.scottlogic.deg.generator.config.details.DataGenerationType;
+import com.scottlogic.deg.generator.config.details.TreeWalkerType;
 import com.scottlogic.deg.generator.generation.databags.StandardRowSpecDataBagGenerator;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.generator.inputs.JsonProfileReader;
@@ -50,9 +53,9 @@ class ExampleProfilesViolationTests {
     Collection<DynamicTest> shouldReadProfileCorrectly() throws IOException {
         GenerationConfigSource config =
             new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.PINNING);
+                DataGenerationType.INTERESTING,
+                TreeWalkerType.REDUCTIVE,
+                CombinationStrategyType.PINNING);
 
         return forEachProfileFile(config, ((standard, violating, profileFile) -> {
             final Profile profile = new JsonProfileReader().read(profileFile.toPath());
@@ -66,9 +69,9 @@ class ExampleProfilesViolationTests {
     Collection<DynamicTest> shouldGenerateAsTestCasesWithoutErrors() throws IOException {
         GenerationConfigSource config =
             new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.PINNING);
+                DataGenerationType.INTERESTING,
+                TreeWalkerType.REDUCTIVE,
+                CombinationStrategyType.PINNING);
                 
         return forEachProfileFile(config, ((standard, violating, profileFile) -> {
             final Profile profile = new JsonProfileReader().read(profileFile.toPath());
@@ -80,9 +83,9 @@ class ExampleProfilesViolationTests {
     Collection<DynamicTest> shouldGenerateWithoutErrors() throws IOException {
         GenerationConfigSource config =
             new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
-                GenerationConfig.CombinationStrategyType.PINNING);
+                DataGenerationType.INTERESTING,
+                TreeWalkerType.CARTESIAN_PRODUCT,
+                CombinationStrategyType.PINNING);
 
         return forEachProfileFile(config, ((standard, violating, profileFile) -> {
             final Profile profile = new JsonProfileReader().read(profileFile.toPath());

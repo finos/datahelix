@@ -3,8 +3,8 @@ package com.scottlogic.deg.generator.decisiontree;
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsStringShorterThanConstraint;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.common.profile.RuleInformation;
+import com.scottlogic.deg.generator.config.details.Defaults;
 
 import java.util.Collections;
 import java.util.Set;
@@ -19,7 +19,7 @@ public class MaxStringLengthInjectingDecisionTreeFactory implements DecisionTree
 
     @Inject
     public MaxStringLengthInjectingDecisionTreeFactory(ProfileDecisionTreeFactory underlyingFactory) {
-        this(underlyingFactory, GenerationConfig.Constants.MAX_STRING_LENGTH);
+        this(underlyingFactory, Defaults.MAX_STRING_LENGTH);
     }
 
     public MaxStringLengthInjectingDecisionTreeFactory(DecisionTreeFactory underlyingFactory, int maxLength) {

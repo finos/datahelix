@@ -2,8 +2,8 @@ package com.scottlogic.deg.generator.guice;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
+import com.scottlogic.deg.generator.config.details.DataGenerationType;
 import com.scottlogic.deg.generator.walker.*;
 
 public class DecisionTreeWalkerProvider implements Provider<DecisionTreeWalker> {
@@ -31,7 +31,7 @@ public class DecisionTreeWalkerProvider implements Provider<DecisionTreeWalker> 
                   return this.cartesianProductDecisionTreeWalker;
 
               case REDUCTIVE:
-                  if (this.configSource.getDataGenerationType() == GenerationConfig.DataGenerationType.RANDOM)
+                  if (this.configSource.getDataGenerationType() == DataGenerationType.RANDOM)
                       return this.randomReductiveDecisionTreeWalker;
 
                   return this.reductiveDecisionTreeWalker;

@@ -7,9 +7,11 @@ import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
+import com.scottlogic.deg.generator.config.details.CombinationStrategyType;
+import com.scottlogic.deg.generator.config.details.DataGenerationType;
+import com.scottlogic.deg.generator.config.details.TreeWalkerType;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,9 +56,9 @@ public class FixFieldStrategyFactoryTests {
     public void getWalkerStrategy_withReductiveWalkerConfig_returnsHierarchicalStrategy() {
         // Arrange
         GenerationConfigSource configSource = new TestGenerationConfigSource(
-            GenerationConfig.DataGenerationType.FULL_SEQUENTIAL,
-            GenerationConfig.TreeWalkerType.REDUCTIVE,
-            GenerationConfig.CombinationStrategyType.EXHAUSTIVE
+            DataGenerationType.FULL_SEQUENTIAL,
+            TreeWalkerType.REDUCTIVE,
+            CombinationStrategyType.EXHAUSTIVE
         );
 
         //Act
@@ -78,15 +80,15 @@ public class FixFieldStrategyFactoryTests {
      */
     @ParameterizedTest
     @EnumSource(
-        value = GenerationConfig.TreeWalkerType.class,
+        value = TreeWalkerType.class,
         names = {"CARTESIAN_PRODUCT"}
     )
-    public void getWalkerStrategy_withNonReductiveWalkerConfig_returnsNull(GenerationConfig.TreeWalkerType walkerType) {
+    public void getWalkerStrategy_withNonReductiveWalkerConfig_returnsNull(TreeWalkerType walkerType) {
         // Arrange
         GenerationConfigSource configSource = new TestGenerationConfigSource(
-            GenerationConfig.DataGenerationType.FULL_SEQUENTIAL,
+            DataGenerationType.FULL_SEQUENTIAL,
             walkerType,
-            GenerationConfig.CombinationStrategyType.EXHAUSTIVE
+            CombinationStrategyType.EXHAUSTIVE
         );
 
         //Act

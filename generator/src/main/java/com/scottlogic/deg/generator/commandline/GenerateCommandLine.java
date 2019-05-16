@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.commandline;
 
 import com.scottlogic.deg.generator.GenerateExecute;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.config.details.*;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import picocli.CommandLine;
@@ -9,13 +9,12 @@ import picocli.CommandLine;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Optional;
 
-import static com.scottlogic.deg.generator.generation.GenerationConfig.CombinationStrategyType.MINIMAL;
-import static com.scottlogic.deg.generator.generation.GenerationConfig.Constants.DEFAULT_MAX_ROWS;
-import static com.scottlogic.deg.generator.generation.GenerationConfig.DataGenerationType.RANDOM;
-import static com.scottlogic.deg.generator.generation.GenerationConfig.OutputFormat.CSV;
-import static com.scottlogic.deg.generator.generation.GenerationConfig.TreeWalkerType.REDUCTIVE;
+import static com.scottlogic.deg.generator.config.details.CombinationStrategyType.MINIMAL;
+import static com.scottlogic.deg.generator.config.details.Defaults.DEFAULT_MAX_ROWS;
+import static com.scottlogic.deg.generator.config.details.DataGenerationType.RANDOM;
+import static com.scottlogic.deg.generator.config.details.OutputFormat.CSV;
+import static com.scottlogic.deg.generator.config.details.TreeWalkerType.REDUCTIVE;
 
 /**
  * This class holds the generate specific command line options.
@@ -35,13 +34,13 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
     @CommandLine.Option(names = {"-t", "--generation-type"},
         description = "Determines the type of data generation performed (${COMPLETION-CANDIDATES})",
         hidden = true)
-    private GenerationConfig.DataGenerationType generationType = RANDOM;
+    private DataGenerationType generationType = RANDOM;
 
     @CommandLine.Option(names = {"-c", "--combination-strategy"},
         description = "Determines the type of combination strategy used (${COMPLETION-CANDIDATES})",
         hidden = true)
     @SuppressWarnings("unused")
-    private GenerationConfig.CombinationStrategyType combinationType = MINIMAL;
+    private CombinationStrategyType combinationType = MINIMAL;
 
     @CommandLine.Option(
         names = {"--no-partition"},
@@ -52,7 +51,7 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
     @CommandLine.Option(names = {"-w", "--walker-type"},
         description = "Determines the tree walker that should be used (${COMPLETION-CANDIDATES})",
         hidden = true)
-    private GenerationConfig.TreeWalkerType walkerType = REDUCTIVE;
+    private TreeWalkerType walkerType = REDUCTIVE;
 
     @CommandLine.Option(
         names = {"-n", "--max-rows"},
@@ -102,7 +101,7 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
     @CommandLine.Option(
         names = {"-o"},
         description = "Output format (${COMPLETION-CANDIDATES})")
-    private GenerationConfig.OutputFormat outputFormat = CSV;
+    private OutputFormat outputFormat = CSV;
 
     @CommandLine.Option(
         names = {"--allow-untyped-fields"},
@@ -149,17 +148,17 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
     }
 
     @Override
-    public GenerationConfig.DataGenerationType getDataGenerationType() {
+    public DataGenerationType getDataGenerationType() {
         return this.generationType;
     }
 
     @Override
-    public GenerationConfig.CombinationStrategyType getCombinationStrategyType() {
+    public CombinationStrategyType getCombinationStrategyType() {
         return this.combinationType;
     }
 
     @Override
-    public GenerationConfig.TreeWalkerType getWalkerType() {
+    public TreeWalkerType getWalkerType() {
         return this.walkerType;
     }
 
@@ -174,14 +173,14 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
     }
 
     @Override
-    public GenerationConfig.MonitorType getMonitorType() {
+    public MonitorType getMonitorType() {
         if (this.verbose) {
-            return GenerationConfig.MonitorType.VERBOSE;
+            return MonitorType.VERBOSE;
         }
         if (this.quiet) {
-            return GenerationConfig.MonitorType.QUIET;
+            return MonitorType.QUIET;
         }
-        return GenerationConfig.MonitorType.STANDARD;
+        return MonitorType.STANDARD;
     }
 
     @Override
@@ -199,7 +198,7 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
         return visualiseReductions;
     }
 
-    public GenerationConfig.OutputFormat getOutputFormat() {
+    public OutputFormat getOutputFormat() {
         return outputFormat;
     }
 
