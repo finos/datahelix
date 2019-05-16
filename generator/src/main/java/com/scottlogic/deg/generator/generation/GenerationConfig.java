@@ -11,7 +11,7 @@ public class GenerationConfig {
     private final DataGenerationType dataGenerationType;
     private final TreeWalkerType walkerType;
     private final CombinationStrategyType combinationStrategyType;
-    private final Optional<Long> maxRows;
+    private final long maxRows;
 
     @Inject
     public GenerationConfig(GenerationConfigSource source) {
@@ -30,7 +30,7 @@ public class GenerationConfig {
         return this.walkerType;
     }
 
-    public Optional<Long> getMaxRows() { return maxRows; }
+    public long getMaxRows() { return maxRows; }
 
     public CombinationStrategyType getCombinationStrategyType() {
         return combinationStrategyType;

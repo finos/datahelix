@@ -253,7 +253,7 @@ public class GeneralTestStep {
 
     @Given("the generator can generate at most {long} rows")
     public void theGeneratorCanGenerateAtMostRows(long maxNumberOfRows) {
-        state.maxRows = Optional.of(maxNumberOfRows);
+        state.maxRows = maxNumberOfRows;
     }
 
     class GeneratedTestData {

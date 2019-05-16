@@ -49,7 +49,7 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
     }
 
     @Override
-    public Optional<Long> getMaxRows() {
+    public long getMaxRows() {
         return state.maxRows;
     }
 

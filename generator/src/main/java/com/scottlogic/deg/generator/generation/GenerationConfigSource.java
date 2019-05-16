@@ -26,7 +26,7 @@ public interface GenerationConfigSource extends ConfigSource {
     GenerationConfig.TreeWalkerType getWalkerType();
     GenerationConfig.MonitorType getMonitorType();
     List<AtomicConstraintType> getConstraintsToNotViolate();
-    Optional<Long> getMaxRows();
+    long getMaxRows();
     boolean shouldDoPartitioning();
     boolean isEnableTracing();
     boolean overwriteOutputFiles();

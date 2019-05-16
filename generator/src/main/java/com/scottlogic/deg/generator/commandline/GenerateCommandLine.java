@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.scottlogic.deg.generator.generation.GenerationConfig.CombinationStrategyType.MINIMAL;
+import static com.scottlogic.deg.generator.generation.GenerationConfig.Constants.DEFAULT_MAX_ROWS;
 import static com.scottlogic.deg.generator.generation.GenerationConfig.DataGenerationType.RANDOM;
 import static com.scottlogic.deg.generator.generation.GenerationConfig.OutputFormat.CSV;
 import static com.scottlogic.deg.generator.generation.GenerationConfig.TreeWalkerType.REDUCTIVE;
@@ -56,7 +57,7 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
     @CommandLine.Option(
         names = {"-n", "--max-rows"},
         description = "Defines the maximum number of rows that should be generated")
-    private Long maxRows;
+    private long maxRows = DEFAULT_MAX_ROWS;
 
     @CommandLine.Option(
         names = {"--validate-profile"},
@@ -184,10 +185,8 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
     }
 
     @Override
-    public Optional<Long> getMaxRows() {
-        return maxRows == null
-            ? Optional.empty()
-            : Optional.of(maxRows);
+    public long getMaxRows() {
+        return maxRows;
     }
 
     @Override
