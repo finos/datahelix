@@ -137,6 +137,9 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
         if (type == StandardConstraintTypes.ISIN) {
             return IsinStringGenerator.ISIN_LENGTH;
         }
+        if (type == StandardConstraintTypes.SEDOL) {
+            return SedolStringGenerator.SEDOL_LENGTH;
+        }
 
         throw new UnsupportedOperationException(String.format("Unable to check string restrictions for: %s", type));
     }

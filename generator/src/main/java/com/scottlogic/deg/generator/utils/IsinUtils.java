@@ -42,17 +42,19 @@ public class IsinUtils {
 
     // Assumes generic NSIN checks have already been run, i.e. `nsin` is 9 alphanumeric characters
     public static boolean isValidSedolNsin(String nsin) {
-        // SEDOL has length 7, so first two digits of NSIN must be padded 0s
-        if (!nsin.substring(0, 2).equals("00")) {
+        // A SEDOL has length 7, but is prefixed by zeroes when used as a nine-digit NSIN
+        int sedolStartOffset = nsin.length() - 7;
+        if (nsin.length() > 7 && !nsin.substring(0, sedolStartOffset).matches("^0*$")) {
             return false;
         }
         // SEDOL is alphanumeric but cannot contain vowels
         if (nsin.matches(".*[AEIOU@*#].*")) {
             return false;
         }
-        String sedolPreCheckDigit = nsin.substring(2, 8);
+        int checkDigitPosition = sedolStartOffset + 6;
+        String sedolPreCheckDigit = nsin.substring(sedolStartOffset, checkDigitPosition);
         char checkDigit = calculateSedolCheckDigit(sedolPreCheckDigit);
-        return nsin.charAt(8) == checkDigit;
+        return nsin.charAt(checkDigitPosition) == checkDigit;
     }
 
     // Assumes generic NSIN checks have already been run, i.e. `nsin` is 9 alphanumeric characters
