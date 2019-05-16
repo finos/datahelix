@@ -155,7 +155,7 @@ If the generation is taking too long, you can halt the command via <kbd>Ctrl</kb
 The generator supports four different data types:
 
  - **integer** - any integer number between -1E20 and 1E20 inclusive
- - **decimal** - any real number between -1E20 and 1E20 inclusive, with an optional granularity / precision of upto 1E-20 that can be defined via a `granularTo` constraint.
+ - **decimal** - any real number between -1E20 and 1E20 inclusive, with an optional granularity / precision (a power of ten between 1 and 1E-20) that can be defined via a `granularTo` constraint.
  - **string** - sequences of unicode characters up to a maximum length of 1000 characters
  - **datetime** - specific moments in time, with values in the range 0001-01-01T00:00:00.000 to 9999-12-31T23:59:59.999, with an optional granularity / precision that can be defined via a `granularTo` constraint.
 
