@@ -60,7 +60,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
 
         return partitionCombiner.permute(partitionedDataBags)
             .map(dataBag -> convertToGeneratedObject(dataBag, profile.fields))
-            .limit(generationConfig.getMaxRows().orElse(GenerationConfig.Constants.DEFAULT_MAX_ROWS))
+            .limit(generationConfig.getMaxRows())
             .peek(monitor::rowEmitted);
     }
 

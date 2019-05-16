@@ -35,6 +35,7 @@
         2. [afterOrAt](#predicate-afterorat)
         3. [before](#predicate-before)
         4. [beforeOrAt](#predicate-beforeorat)
+        5. [granularTo](#predicate-granularto-datetime)
 
 4. [Grammatical constraints](#Grammatical-Constraints)
     1. [not](#not)
@@ -139,7 +140,16 @@ that is **_`midnight on the 1st January 0001`_** to **_`1 millisecond to midnigh
 
 ### DateTime granularity
 
-DateTimes currently have granularities derived from the size of their range. Future work ([#141](https://github.com/ScottLogic/datahelix/issues/141)) will make this configurable.
+The granularity of a DateTime field is a measure of how small the distinctions in that field can be; it is the smallest positive unit of which every valid value is a multiple. For instance:
+
+- if a DateTime field has a granularity of years, it can only be satisfied by dates that are complete years (e.g. `2018-01-01T00:00:00.000Z`)
+- if a decimal field has a granularity of days, it can be satisfied by (for example) `2018-02-02T00:00:00.000Z` or `2018-02-03T00:00:00.000Z`, but not `2018-02-02T01:00:00.000Z` or `2018-02-02T00:00:00.001Z`
+
+Granularities must be one of the units: millis, seconds, minutes, hours, days, months, years.
+
+DateTime fields currently default to the most precise granularity of milliseconds. A user is able to add a granularTo constraint for a DateTime value with coarser granularity (seconds, minutes...years) but no finer granularity than milliseconds is currently allowed.
+
+Note that granularity concerns which values are valid, not how they're presented. All values will be output with the full format defined by [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601), so that a value granular to years will still be output as (e.g.) `0001-01-01T00:00:00.000Z`, rather than `0001` or `0001-01-01`.
 
 
 # Predicate constraints
@@ -373,6 +383,15 @@ Is satisfied if `field` is a datetime occurring before `value`.
 
 Is satisfied if `field` is a datetime occurring before or simultaneously with `value`.
 
+<div id="predicate-granularto-datetime"></div>
+
+### `granularTo` _(field, value)_
+
+```javascript
+{ "field": "date", "is": "granularTo", "value": "days" }
+```
+
+Is satisfied if `field` has at least the [granularity](#DateTime-granularity) specified in `value`.
 
 # Grammatical constraints
 <div id="Grammatical-constraints"></div>
