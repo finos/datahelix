@@ -22,7 +22,7 @@ import java.util.Collection;
 
 public class GenerateExecute implements Runnable {
     private final ErrorReporter errorReporter;
-    private final GenerationConfig config;
+    private final GenerationConfigSource config;
     private final GenerationConfigSource configSource;
     private final ConfigValidator configValidator;
 
@@ -38,7 +38,7 @@ public class GenerateExecute implements Runnable {
 
     @Inject
     GenerateExecute(
-        GenerationConfig config,
+        GenerationConfigSource config,
         ProfileReader profileReader,
         StandardGenerationEngine standardGenerationEngine,
         ViolationGenerationEngine violationGenerationEngine,

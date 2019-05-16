@@ -58,10 +58,9 @@ public class FixFieldStrategyFactoryTests {
             GenerationConfig.TreeWalkerType.REDUCTIVE,
             GenerationConfig.CombinationStrategyType.EXHAUSTIVE
         );
-        GenerationConfig inputConfig = new GenerationConfig(configSource);
 
         //Act
-        FixFieldStrategy actualStrategy = target.getWalkerStrategy(inputProfile, inputTree, inputConfig);
+        FixFieldStrategy actualStrategy = target.getWalkerStrategy(inputProfile, inputTree, configSource);
 
         //Assert
         HierarchicalDependencyFixFieldStrategy expectedStrategy = new HierarchicalDependencyFixFieldStrategy(
@@ -89,10 +88,9 @@ public class FixFieldStrategyFactoryTests {
             walkerType,
             GenerationConfig.CombinationStrategyType.EXHAUSTIVE
         );
-        GenerationConfig inputConfig = new GenerationConfig(configSource);
 
         //Act
-        FixFieldStrategy actualStrategy = target.getWalkerStrategy(inputProfile, inputTree, inputConfig);
+        FixFieldStrategy actualStrategy = target.getWalkerStrategy(inputProfile, inputTree, configSource);
 
         //Assert
         Assert.assertThat(actualStrategy, nullValue());

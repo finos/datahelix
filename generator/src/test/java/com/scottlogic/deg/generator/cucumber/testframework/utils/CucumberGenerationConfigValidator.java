@@ -11,7 +11,7 @@ import java.util.Collections;
 public class CucumberGenerationConfigValidator implements ConfigValidator {
 
     @Override
-    public Collection<ValidationAlert> preProfileChecks(GenerationConfig config, GenerationConfigSource configSource) {
+    public Collection<ValidationAlert> preProfileChecks(GenerationConfigSource config, GenerationConfigSource configSource) {
         return Collections.emptySet();
     }
 }

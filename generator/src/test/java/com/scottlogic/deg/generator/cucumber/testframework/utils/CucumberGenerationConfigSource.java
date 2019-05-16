@@ -24,7 +24,7 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
     }
 
     @Override
-    public GenerationConfig.DataGenerationType getGenerationType() {
+    public GenerationConfig.DataGenerationType getDataGenerationType() {
         return state.dataGenerationType;
     }
 

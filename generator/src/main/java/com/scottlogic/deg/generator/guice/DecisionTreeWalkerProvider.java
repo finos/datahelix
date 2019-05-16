@@ -31,7 +31,7 @@ public class DecisionTreeWalkerProvider implements Provider<DecisionTreeWalker> 
                   return this.cartesianProductDecisionTreeWalker;
 
               case REDUCTIVE:
-                  if (this.configSource.getGenerationType() == GenerationConfig.DataGenerationType.RANDOM)
+                  if (this.configSource.getDataGenerationType() == GenerationConfig.DataGenerationType.RANDOM)
                       return this.randomReductiveDecisionTreeWalker;
 
                   return this.reductiveDecisionTreeWalker;

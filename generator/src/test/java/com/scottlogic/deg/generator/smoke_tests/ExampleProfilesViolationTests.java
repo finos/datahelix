@@ -48,11 +48,11 @@ class ExampleProfilesViolationTests {
 
     @TestFactory
     Collection<DynamicTest> shouldReadProfileCorrectly() throws IOException {
-        GenerationConfig config = new GenerationConfig(
+        GenerationConfigSource config =
             new TestGenerationConfigSource(
                 GenerationConfig.DataGenerationType.INTERESTING,
                 GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.PINNING));
+                GenerationConfig.CombinationStrategyType.PINNING);
 
         return forEachProfileFile(config, ((standard, violating, profileFile) -> {
             final Profile profile = new JsonProfileReader().read(profileFile.toPath());
@@ -64,11 +64,11 @@ class ExampleProfilesViolationTests {
 
     @TestFactory
     Collection<DynamicTest> shouldGenerateAsTestCasesWithoutErrors() throws IOException {
-        GenerationConfig config = new GenerationConfig(
+        GenerationConfigSource config =
             new TestGenerationConfigSource(
                 GenerationConfig.DataGenerationType.INTERESTING,
                 GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.PINNING));
+                GenerationConfig.CombinationStrategyType.PINNING);
                 
         return forEachProfileFile(config, ((standard, violating, profileFile) -> {
             final Profile profile = new JsonProfileReader().read(profileFile.toPath());
@@ -78,11 +78,11 @@ class ExampleProfilesViolationTests {
 
     @TestFactory
     Collection<DynamicTest> shouldGenerateWithoutErrors() throws IOException {
-        GenerationConfig config = new GenerationConfig(
+        GenerationConfigSource config =
             new TestGenerationConfigSource(
                 GenerationConfig.DataGenerationType.INTERESTING,
                 GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
-                GenerationConfig.CombinationStrategyType.PINNING));
+                GenerationConfig.CombinationStrategyType.PINNING);
 
         return forEachProfileFile(config, ((standard, violating, profileFile) -> {
             final Profile profile = new JsonProfileReader().read(profileFile.toPath());
@@ -90,7 +90,7 @@ class ExampleProfilesViolationTests {
         }));
     }
 
-    private Collection<DynamicTest> forEachProfileFile(GenerationConfig config, GenerateConsumer consumer) throws IOException {
+    private Collection<DynamicTest> forEachProfileFile(GenerationConfigSource config, GenerateConsumer consumer) throws IOException {
         Collection<DynamicTest> dynamicTests = new ArrayList<>();
 
         File[] directoriesArray =

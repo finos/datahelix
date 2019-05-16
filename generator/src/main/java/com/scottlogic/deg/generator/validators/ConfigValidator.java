@@ -7,5 +7,5 @@ import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
 import java.util.Collection;
 
 public interface ConfigValidator {
-    Collection<ValidationAlert> preProfileChecks(GenerationConfig config, GenerationConfigSource configSource);
+    Collection<ValidationAlert> preProfileChecks(GenerationConfigSource config, GenerationConfigSource configSource);
 }

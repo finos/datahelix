@@ -149,7 +149,7 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
     }
 
     @Override
-    public GenerationConfig.DataGenerationType getGenerationType() {
+    public GenerationConfig.DataGenerationType getDataGenerationType() {
         return this.generationType;
     }
 

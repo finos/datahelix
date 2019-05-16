@@ -11,7 +11,7 @@ public interface GenerationConfigSource extends ConfigSource {
      * Gets a value signifying the data generation type, i.e. one of interesting, full sequential or random.
      * @return Enum value of the current generation types.
      */
-    GenerationConfig.DataGenerationType getGenerationType();
+    GenerationConfig.DataGenerationType getDataGenerationType();
 
     /**
      * Gets a value signifying the combination strategy, i.e. one of exhaustive, pinning or minimal

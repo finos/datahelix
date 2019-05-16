@@ -11,7 +11,7 @@ import java.util.Map;
 public class NoopDataGeneratorMonitor implements ReductiveDataGeneratorMonitor {
 
     @Override
-    public void generationStarting(GenerationConfig generationConfig) { }
+    public void generationStarting(GenerationConfigSource generationConfig) { }
 
     @Override
     public void rowEmitted(GeneratedObject row) { }

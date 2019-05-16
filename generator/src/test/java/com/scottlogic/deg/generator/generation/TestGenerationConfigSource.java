@@ -33,7 +33,7 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     }
 
     @Override
-    public GenerationConfig.DataGenerationType getGenerationType() {
+    public GenerationConfig.DataGenerationType getDataGenerationType() {
         return this.generationType;
     }
 

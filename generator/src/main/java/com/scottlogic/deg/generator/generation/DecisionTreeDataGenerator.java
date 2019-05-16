@@ -49,7 +49,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
     public Stream<GeneratedObject> generateData(
         Profile profile,
         DecisionTree decisionTree,
-        GenerationConfig generationConfig) {
+        GenerationConfigSource generationConfig) {
 
         monitor.generationStarting(generationConfig);
 
@@ -64,7 +64,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
             .peek(monitor::rowEmitted);
     }
 
-    private Stream<DataBag> generateForPartition(Profile profile, DecisionTree tree, GenerationConfig config) {
+    private Stream<DataBag> generateForPartition(Profile profile, DecisionTree tree, GenerationConfigSource config) {
         FixFieldStrategy fixFieldStrategy = walkerStrategyFactory.getWalkerStrategy(profile, tree, config);
 
         Stream<RowSpec> rowSpecsForPartition = treeWalker.walk(tree, fixFieldStrategy);

@@ -5,6 +5,7 @@ import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.generator.analysis.FieldDependencyAnalyser;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 
 public class FixFieldStrategyFactory {
     private final FieldDependencyAnalyser analyser;
@@ -17,7 +18,7 @@ public class FixFieldStrategyFactory {
     public FixFieldStrategy getWalkerStrategy(
         Profile profile,
         DecisionTree tree,
-        GenerationConfig generationConfig){
+        GenerationConfigSource generationConfig){
 
         if (generationConfig.getWalkerType() != GenerationConfig.TreeWalkerType.REDUCTIVE){
             return null;

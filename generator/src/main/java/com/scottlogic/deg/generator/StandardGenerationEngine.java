@@ -5,7 +5,7 @@ import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.generation.DataGenerator;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.formats.DataSetWriter;
@@ -32,7 +32,7 @@ public class StandardGenerationEngine {
 
     public void generateDataSet(
         Profile profile,
-        GenerationConfig config,
+        GenerationConfigSource config,
         SingleDatasetOutputTarget outputTarget)
         throws IOException {
 

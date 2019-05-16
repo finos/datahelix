@@ -3,13 +3,14 @@ package com.scottlogic.deg.generator.guice;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.generation.combinationstrategies.*;
 
 public class CombinationStrategyProvider  implements Provider<CombinationStrategy> {
-    private final GenerationConfig config;
+    private final GenerationConfigSource config;
 
     @Inject
-    public CombinationStrategyProvider(GenerationConfig config){
+    public CombinationStrategyProvider(GenerationConfigSource config){
         this.config = config;
     }
 

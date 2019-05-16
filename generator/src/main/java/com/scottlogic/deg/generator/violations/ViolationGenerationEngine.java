@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.violations;
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.generator.StandardGenerationEngine;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.profileviolation.ProfileViolator;
 import com.scottlogic.deg.generator.outputs.targets.MultiDatasetOutputTarget;
 import com.scottlogic.deg.generator.utils.FileUtils;
@@ -27,7 +27,7 @@ public class ViolationGenerationEngine {
 
     public void generateDataSet(
         Profile profile,
-        GenerationConfig config,
+        GenerationConfigSource config,
         MultiDatasetOutputTarget outputTarget)
         throws IOException {
 
