@@ -15,6 +15,7 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.MaxStringLengthInjectingDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.treepartitioning.TreePartitioner;
 import com.scottlogic.deg.generator.generation.*;
+import com.scottlogic.deg.generator.generation.GenerationConfig.DataGenerationType;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagGenerator;
 import com.scottlogic.deg.generator.inputs.JsonProfileReader;
@@ -109,6 +110,8 @@ public class BaseModule extends AbstractModule {
             if (generationConfigSource instanceof GenerateCommandLine) {
                 bind(GenerateCommandLine.class).toInstance((GenerateCommandLine)configSource);
             }
+
+            bind(DataGenerationType.class).toInstance(generationConfigSource.getGenerationType());
 
             bind(boolean.class)
                 .annotatedWith(Names.named("config:tracingIsEnabled"))
