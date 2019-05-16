@@ -34,7 +34,7 @@ public class CucumberTestState {
     Boolean shouldSkipGeneration() { return shouldSkipGeneration; }
     void disableGeneration() { shouldSkipGeneration = true; }
 
-    public Optional<Long> maxRows = Optional.empty();
+    public long maxRows = 200;
 
     Boolean generationHasAlreadyOccured;
 
