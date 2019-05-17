@@ -13,7 +13,7 @@ import com.scottlogic.deg.generator.inputs.ProfileReader;
 import com.scottlogic.deg.generator.validators.ConfigValidator;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.generator.violations.ViolationGenerationEngine;
-import com.scottlogic.deg.profile.common.ValidationResult;
+import com.scottlogic.deg.profile.serialisation.ValidationResult;
 import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
 
 import java.io.IOException;

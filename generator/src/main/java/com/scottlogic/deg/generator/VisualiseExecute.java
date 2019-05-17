@@ -15,7 +15,7 @@ import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.generator.validators.StaticContradictionDecisionTreeValidator;
 import com.scottlogic.deg.generator.validators.VisualisationConfigValidator;
 import com.scottlogic.deg.generator.visualisation.VisualisationConfigSource;
-import com.scottlogic.deg.profile.common.ValidationResult;
+import com.scottlogic.deg.profile.serialisation.ValidationResult;
 import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
 
 import java.io.FileOutputStream;

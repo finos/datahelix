@@ -1,6 +1,6 @@
 package com.scottlogic.deg.profile.v0_1;
 
-import com.scottlogic.deg.profile.common.ValidationResult;
+import com.scottlogic.deg.profile.serialisation.ValidationResult;
 
 import java.io.File;
 
