@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator.validators;
 
 import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.constraints.Constraint;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
@@ -9,7 +8,6 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.Node;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import com.scottlogic.deg.generator.walker.reductive.Merged;
 
 
 import java.util.*;
@@ -20,29 +18,29 @@ public class AncestralContradictionDecisionTreeValidator {
 
     private DecisionTree decisionTree;
     private final ConstraintReducer constraintReducer;
+    private final ContradictionValidationMonitor validationMonitor;
 
-    public AncestralContradictionDecisionTreeValidator(ConstraintReducer cr){
-        constraintReducer = cr;
+    public AncestralContradictionDecisionTreeValidator(ConstraintReducer constraintReducer, ContradictionValidationMonitor validationMonitor){
+        this.constraintReducer = constraintReducer;
+        this.validationMonitor = validationMonitor;
     }
 
-    public DecisionTree markContradictions(DecisionTree tree) {
+    /**
+     * Takes a DecisionTree, walks every node, and check every child of each node for contradictory constraints
+     * Emits output about contradictions via the ContradictionValidationMonitor
+     * @param decisionTree
+     */
+    public void reportContradictions(DecisionTree decisionTree) {
+        this.decisionTree = decisionTree;
 
-        decisionTree = tree;
-
-        // get starting point
-        ConstraintNode root =  tree.rootNode;
+        ConstraintNode root =  this.decisionTree.rootNode;
 
         // walk tree, check for contradictions in child nodes.
-        //recursiveWalkTree(cn);
-        inOrderWalk(root);
-        // modify the tree
-
-
-        return tree;
+        walkTree(root);
+        return;
     }
 
-    private void inOrderWalk (Node root){
-        //https://java2blog.com/binary-tree-inorder-traversal-in-java/
+    private void walkTree(Node root){
         Stack<Node> stack = new Stack<Node>();
         Node currentNode = root;
 
@@ -67,11 +65,14 @@ public class AncestralContradictionDecisionTreeValidator {
             {
                 // we reached the bottom of the branch, and now need to back track
                 Node node = stack.pop();
-                // perform contradiction check
-                boolean contradictionFound = findContradictionForNode(node);
-                if(contradictionFound){
 
+                if(node instanceof ConstraintNode){
+                    boolean contradictionFound = findContradictionForNode((ConstraintNode)node);
+                    if(contradictionFound){
+
+                    }
                 }
+
                 // get the next right node if it exists.
                 if (node instanceof ConstraintNode){
                     // get right node
@@ -87,57 +88,24 @@ public class AncestralContradictionDecisionTreeValidator {
         }
     }
 
-//    private boolean recursiveWalkTree(Node currentNode){
-//
-//        if (currentNode instanceof ConstraintNode) {
-//            for (DecisionNode nextNode : ((ConstraintNode) currentNode).getDecisions()) {
-//                boolean contradictionFound = findContradictionForNode(currentNode);
-//                if(contradictionFound){
-//                    return true;
-//                }
-//                recursiveWalkTree(nextNode);
-//            }
-//        }
-//        if(currentNode instanceof DecisionNode){
-//            for (ConstraintNode nextNode : ((DecisionNode) currentNode).getOptions()) {
-//                boolean contradictionFound = findContradictionForNode(currentNode);
-//                if(contradictionFound){
-//                    return true;
-//                }
-//                //recursiveWalkTree(nextNode);
-//            }
-//        }
-//        return false;
-//    }
-
-    // kick off a recursive contradiction check
-    private boolean findContradictionForNode(Node nodeToCheck){
-        if (nodeToCheck instanceof ConstraintNode) {
-            for (DecisionNode node : ((ConstraintNode) nodeToCheck).getDecisions()) {
+    /**
+     * Recursively looks for constraint contradictions between the nodeToCheck, and its descendants
+     * @param nodeToCheck the node that should be checked for contradictions
+     * @return return true if a contradiction is found.
+     */
+    private boolean findContradictionForNode(ConstraintNode nodeToCheck){
+            for (DecisionNode node : (nodeToCheck).getDecisions()) {
                 boolean contradictionFound = recursiveFindContradiction(nodeToCheck, node);
                 if (contradictionFound) {
                     return true;
                 }
             }
-        }
-        // remove this.. we can't check for contradictions on a decision node
-        if (nodeToCheck instanceof DecisionNode) {
-            for (ConstraintNode node : ((DecisionNode) nodeToCheck).getOptions()) {
-                boolean contradictionFound = recursiveFindContradiction(nodeToCheck, node);
-                if (contradictionFound) {
-                    return true;
-                }
-            }
-        }
-
         return false;
     }
 
     private boolean recursiveFindContradiction(Node nodeToCheck, Node currentNode){
-
         // can only check for contradictions on ConstraintNodes
         if (currentNode instanceof ConstraintNode && nodeToCheck instanceof ConstraintNode){
-            // check for contradiction by creating RowSpec
             boolean contradiction = checkContradictions((ConstraintNode)nodeToCheck, (ConstraintNode)currentNode);
             if(contradiction)
                 return true;
@@ -166,7 +134,14 @@ public class AncestralContradictionDecisionTreeValidator {
 
     }
 
+    /**
+     * Check for any contradictions
+     * @param leftNode
+     * @param rightNode
+     * @return
+     */
     public boolean checkContradictions(ConstraintNode leftNode, ConstraintNode rightNode){
+
         Collection<Field> leftFields = leftNode.getAtomicConstraints()
             .stream()
             .map(x -> x.getField())
@@ -196,6 +171,7 @@ public class AncestralContradictionDecisionTreeValidator {
             Optional<FieldSpec> fieldSpec = constraintReducer.reduceConstraintsToFieldSpec(entry.getValue());
 
             if (!fieldSpec.isPresent()){
+                validationMonitor.contradictionInTree(entry);
                 return true;
             }
         }

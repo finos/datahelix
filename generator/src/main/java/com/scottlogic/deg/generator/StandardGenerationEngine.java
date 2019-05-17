@@ -14,6 +14,7 @@ import com.scottlogic.deg.generator.outputs.targets.OutputTarget;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import com.scottlogic.deg.generator.validators.AncestralContradictionDecisionTreeValidator;
+import com.scottlogic.deg.generator.validators.ContradictionValidationMonitor;
 import com.scottlogic.deg.generator.validators.StaticContradictionDecisionTreeValidator;
 
 import java.io.IOException;
@@ -43,30 +44,17 @@ public class StandardGenerationEngine implements GenerationEngine {
     public void generateDataSet(Profile profile, GenerationConfig config, OutputTarget outputTarget) throws IOException {
         final DecisionTree decisionTree = this.decisionTreeGenerator.analyse(profile);
 
-        // check the if decision tree is wholly contradictory
-        // stop execusion, output warning, and blank Dataset
-
-        // check the if the decision tree has any contradictions
-        // warn and continue
-        //StaticContradictionDecisionTreeValidator treeValidator =
-          //  new StaticContradictionDecisionTreeValidator(
-           //     profile.fields,
-            //    new RowSpecMerger(fieldSpecMerger),
-            //    new ConstraintReducer(fieldSpecFactory, fieldSpecMerger));
-
-        //DecisionTree markedTree = treeValidator.markContradictions(decisionTree);
-
         AncestralContradictionDecisionTreeValidator ac =
             new AncestralContradictionDecisionTreeValidator(
                 new ConstraintReducer(
                     new FieldSpecFactory(
                         new FieldSpecMerger(),
                         new StringRestrictionsFactory()),
-                    new FieldSpecMerger()));
+                    new FieldSpecMerger()),
+                new ContradictionValidationMonitor());
 
-        ac.markContradictions(decisionTree);
+        ac.reportContradictions(decisionTree);
 
-        // prune tree of contradictory nodes
 
         final Stream<GeneratedObject> generatedDataItems =
             this.dataGenerator.generateData(profile, decisionTree, config);
