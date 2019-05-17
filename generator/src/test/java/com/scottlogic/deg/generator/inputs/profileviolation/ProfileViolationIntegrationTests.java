@@ -5,6 +5,9 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
+import com.scottlogic.deg.generator.config.detail.DataGenerationType;
+import com.scottlogic.deg.generator.config.detail.TreeWalkerType;
 import com.scottlogic.deg.generator.guice.BaseModule;
 import com.scottlogic.deg.generator.guice.TestModule;
 import com.scottlogic.deg.common.profile.Profile;
@@ -13,7 +16,6 @@ import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.generator.builders.AndBuilder;
 import com.scottlogic.deg.generator.builders.OrBuilder;
 import com.scottlogic.deg.generator.builders.RuleBuilder;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
 import com.scottlogic.deg.generator.violations.ViolatedProfile;
 import org.junit.Assert;
@@ -41,9 +43,9 @@ public class ProfileViolationIntegrationTests {
     @BeforeEach
     public void setUp() {
         TestGenerationConfigSource configSource = new TestGenerationConfigSource(
-            GenerationConfig.DataGenerationType.FULL_SEQUENTIAL,
-            GenerationConfig.TreeWalkerType.REDUCTIVE,
-            GenerationConfig.CombinationStrategyType.EXHAUSTIVE
+            DataGenerationType.FULL_SEQUENTIAL,
+            TreeWalkerType.REDUCTIVE,
+            CombinationStrategyType.EXHAUSTIVE
         );
         configSource.outputPath = initTempOutputPath();
 

@@ -2,7 +2,8 @@ package com.scottlogic.deg.generator.guice;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.config.detail.DataGenerationType;
+import com.scottlogic.deg.generator.config.detail.TreeWalkerType;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.generation.databags.ReductiveRandomRowSpecDataBagGenerator;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagGenerator;
@@ -25,8 +26,8 @@ public class RowSpecDataBagSourceFactoryProvider implements Provider<RowSpecData
 
     @Override
     public RowSpecDataBagGenerator get() {
-        boolean isReductive = configSource.getWalkerType() == GenerationConfig.TreeWalkerType.REDUCTIVE;
-        boolean isRandom = configSource.getGenerationType() == GenerationConfig.DataGenerationType.RANDOM;
+        boolean isReductive = configSource.getWalkerType() == TreeWalkerType.REDUCTIVE;
+        boolean isRandom = configSource.getGenerationType() == DataGenerationType.RANDOM;
 
         if (isRandom && isReductive){
             return reductiveRandomFactory;

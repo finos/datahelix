@@ -1,8 +1,10 @@
 package com.scottlogic.deg.generator.cucumber.testframework.steps;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
+import com.scottlogic.deg.generator.config.detail.DataGenerationType;
+import com.scottlogic.deg.generator.config.detail.TreeWalkerType;
 import com.scottlogic.deg.generator.cucumber.testframework.utils.*;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import cucumber.api.java.Before;
@@ -13,7 +15,6 @@ import org.junit.Assert;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
@@ -49,12 +50,12 @@ public class GeneralTestStep {
     }
 
     @When("the generation strategy is {generationStrategy}")
-    public void setTheGenerationStrategy(GenerationConfig.DataGenerationType strategy) {
+    public void setTheGenerationStrategy(DataGenerationType strategy) {
         this.state.dataGenerationType = strategy;
     }
 
     @When("the combination strategy is {combinationStrategy}")
-    public void setTheCombinationStrategy(GenerationConfig.CombinationStrategyType strategy) {
+    public void setTheCombinationStrategy(CombinationStrategyType strategy) {
         this.state.combinationStrategyType = strategy;
     }
 
@@ -64,7 +65,7 @@ public class GeneralTestStep {
     }
 
     @When("the walker type is {walkerType}")
-    public void setTheCombinationStrategy(GenerationConfig.TreeWalkerType walkerType) {
+    public void setTheCombinationStrategy(TreeWalkerType walkerType) {
         this.state.walkerType = walkerType;
     }
 

@@ -2,7 +2,8 @@ package com.scottlogic.deg.generator.guice;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.config.detail.DataGenerationType;
+import com.scottlogic.deg.generator.config.detail.TreeWalkerType;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.generation.combinationstrategies.*;
 
@@ -16,13 +17,13 @@ public class CombinationStrategyProvider  implements Provider<CombinationStrateg
 
     @Override
     public CombinationStrategy get() {
-        if (config.getGenerationType() == GenerationConfig.DataGenerationType.RANDOM){
+        if (config.getGenerationType() == DataGenerationType.RANDOM){
             // The minimal combination strategy doesn't reuse values for fields.
             // This is required to get truly random data.
             return new MinimalCombinationStrategy();
         }
 
-        if (config.getWalkerType() == GenerationConfig.TreeWalkerType.REDUCTIVE){
+        if (config.getWalkerType() == TreeWalkerType.REDUCTIVE){
             return new ReductiveCombinationStrategy();
         }
 

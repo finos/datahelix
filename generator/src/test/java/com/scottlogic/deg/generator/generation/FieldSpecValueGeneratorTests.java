@@ -18,8 +18,8 @@ import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static com.scottlogic.deg.generator.generation.GenerationConfig.DataGenerationType.FULL_SEQUENTIAL;
-import static com.scottlogic.deg.generator.generation.GenerationConfig.DataGenerationType.INTERESTING;
+import static com.scottlogic.deg.generator.config.detail.DataGenerationType.FULL_SEQUENTIAL;
+import static com.scottlogic.deg.generator.config.detail.DataGenerationType.INTERESTING;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.hamcrest.Matchers.containsInAnyOrder;

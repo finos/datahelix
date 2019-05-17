@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
 import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.generator.FlatMappingSpliterator;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.Defaults;
 import com.scottlogic.deg.generator.restrictions.NumericLimit;
 import com.scottlogic.deg.generator.restrictions.NumericRestrictions;
 import com.scottlogic.deg.generator.utils.*;
@@ -56,7 +56,7 @@ public class RealNumberFieldValueSource implements FieldValueSource {
     }
 
     private NumericLimit<BigDecimal> getUpperLimit(NumericRestrictions restrictions) {
-        BigDecimal maxValue = GenerationConfig.Constants.NUMERIC_MAX;
+        BigDecimal maxValue = Defaults.NUMERIC_MAX;
         if (restrictions.max == null) {
             return new NumericLimit<>(maxValue, true);
         }
@@ -66,7 +66,7 @@ public class RealNumberFieldValueSource implements FieldValueSource {
     }
 
     private NumericLimit<BigDecimal> getLowerLimit(NumericRestrictions restrictions) {
-        BigDecimal minValue = GenerationConfig.Constants.NUMERIC_MIN;
+        BigDecimal minValue = Defaults.NUMERIC_MIN;
         if (restrictions.min == null) {
             return new NumericLimit<>(minValue, true);
         }

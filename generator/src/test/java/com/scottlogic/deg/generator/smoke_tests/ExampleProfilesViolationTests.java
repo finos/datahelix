@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.smoke_tests;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.StandardGenerationEngine;
+import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.generator.decisiontree.MaxStringLengthInjectingDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
@@ -27,7 +28,6 @@ import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.violations.ViolationGenerationEngine;
 import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
-import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategyFactory;
 import org.junit.Assert;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -98,7 +98,7 @@ class ExampleProfilesViolationTests {
                         new NoopDataGeneratorMonitor(),
                         new StandardRowSpecDataBagGenerator(
                             new FieldSpecValueGenerator(
-                                GenerationConfig.DataGenerationType.INTERESTING,
+                                DataGenerationType.INTERESTING,
                                 new StandardFieldValueSourceEvaluator(),
                                 new JavaUtilRandomNumberGenerator()),
                             new PinningCombinationStrategy()),
