@@ -24,11 +24,6 @@ public class FieldAppearanceAnalyser extends BaseVisitor {
     }
 
     private void countField(Field field) {
-        if (fieldAppearances.containsKey(field)){
-            fieldAppearances.put(field, fieldAppearances.get(field) + 1);
-        }
-        else {
-            fieldAppearances.put(field, 1);
-        }
+        fieldAppearances.compute(field, (k, count) -> count == null ? 1 : count+1);
     }
 }
