@@ -1,20 +1,17 @@
 package com.scottlogic.deg.generator.cucumber.testframework.utils;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
 import com.google.inject.name.Names;
 import com.scottlogic.deg.generator.ConfigSource;
 import com.scottlogic.deg.generator.StandardGenerationEngine;
 import com.scottlogic.deg.generator.commandline.OutputTargetSpecification;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
-import com.scottlogic.deg.generator.inputs.ProfileReader;
+import com.scottlogic.deg.profile.reader.ProfileReader;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.TypingRequiredPerFieldValidator;
 import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
-import com.scottlogic.deg.generator.outputs.targets.MultiDatasetOutputTarget;
-import com.scottlogic.deg.generator.outputs.targets.SingleDatasetOutputTarget;
 import com.scottlogic.deg.generator.validators.ConfigValidator;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.generator.violations.ViolationGenerationEngine;
