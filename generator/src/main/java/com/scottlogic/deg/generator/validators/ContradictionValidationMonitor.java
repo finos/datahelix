@@ -6,7 +6,7 @@ import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import java.util.Collection;
 import java.util.Map;
 
-public class ContradictionValidationMonitor   {
+public class ContradictionValidationMonitor  implements ContradictionValidatorMonitorInterface {
 
     public void contradictionInTree(Map.Entry<Field, Collection<AtomicConstraint>> mapEntry) {
         String fieldName = mapEntry.getKey().name;

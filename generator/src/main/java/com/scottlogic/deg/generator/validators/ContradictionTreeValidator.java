@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.validators;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
@@ -14,13 +15,15 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class AncestralContradictionDecisionTreeValidator {
+
+public class ContradictionTreeValidator {
 
     private DecisionTree decisionTree;
     private final ConstraintReducer constraintReducer;
-    private final ContradictionValidationMonitor validationMonitor;
+    private final ContradictionValidatorMonitorInterface validationMonitor;
 
-    public AncestralContradictionDecisionTreeValidator(ConstraintReducer constraintReducer, ContradictionValidationMonitor validationMonitor){
+    @Inject
+    public ContradictionTreeValidator(ConstraintReducer constraintReducer, ContradictionValidatorMonitorInterface validationMonitor){
         this.constraintReducer = constraintReducer;
         this.validationMonitor = validationMonitor;
     }
@@ -67,10 +70,7 @@ public class AncestralContradictionDecisionTreeValidator {
                 Node node = stack.pop();
 
                 if(node instanceof ConstraintNode){
-                    boolean contradictionFound = findContradictionForNode((ConstraintNode)node);
-                    if(contradictionFound){
-
-                    }
+                    findContradictionForNode((ConstraintNode)node);
                 }
 
                 // get the next right node if it exists.

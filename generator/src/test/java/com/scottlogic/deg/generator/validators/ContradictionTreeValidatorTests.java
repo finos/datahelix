@@ -19,9 +19,9 @@ import java.util.Collection;
 
 import static org.mockito.Mockito.*;
 
-public class AncestralContradictionDecisionTreeValidatorTests {
+public class ContradictionTreeValidatorTests {
 
-    private AncestralContradictionDecisionTreeValidator validator;
+    private ContradictionTreeValidator validator;
     private Field fieldA;
     private Field fieldB;
     private Field fieldC;
@@ -36,7 +36,7 @@ public class AncestralContradictionDecisionTreeValidatorTests {
         outputter = mock(ContradictionValidationMonitor.class);
 
         validator =
-            new AncestralContradictionDecisionTreeValidator(
+            new ContradictionTreeValidator(
                 new ConstraintReducer(
                     new FieldSpecFactory(
                         new FieldSpecMerger(),

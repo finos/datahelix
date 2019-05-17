@@ -25,6 +25,8 @@ import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
+import com.scottlogic.deg.generator.validators.ContradictionTreeValidator;
+import com.scottlogic.deg.generator.validators.ContradictionValidationMonitor;
 import com.scottlogic.deg.generator.violations.ViolationGenerationEngine;
 import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategyFactory;
@@ -129,7 +131,15 @@ class ExampleProfilesViolationTests {
                     new FieldSpecFactory(
                         new FieldSpecMerger(),
                         new StringRestrictionsFactory()),
-                    new FieldSpecMerger());
+                    new FieldSpecMerger(),
+                    new ContradictionTreeValidator(
+                        new ConstraintReducer(
+                        new FieldSpecFactory(
+                            new FieldSpecMerger(),
+                            new StringRestrictionsFactory()),
+                        new FieldSpecMerger()),
+                        new ContradictionValidationMonitor()));
+
                 ViolationGenerationEngine violationGenerationEngine =
                     new ViolationGenerationEngine(
                         new IndividualRuleProfileViolator(
