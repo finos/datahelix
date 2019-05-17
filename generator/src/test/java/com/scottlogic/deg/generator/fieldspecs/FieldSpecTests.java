@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -571,17 +570,17 @@ class FieldSpecTests {
 
         @Override
         public MergeResult<StringRestrictions> intersect(StringRestrictions other) {
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException("Not implemented");
         }
 
         @Override
         public boolean match(String x) {
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException("Not implemented");
         }
 
         @Override
         public StringGenerator createGenerator() {
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException("Not implemented");
         }
     }
 
