@@ -6,7 +6,7 @@ import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.generator.config.detail.TreeWalkerType;
 import com.scottlogic.deg.generator.cucumber.testframework.utils.CucumberGenerationMode;
 import com.scottlogic.deg.generator.cucumber.testframework.utils.GeneratorTestUtilities;
-import com.scottlogic.deg.generator.inputs.InvalidProfileException;
+import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import cucumber.api.TypeRegistry;
 import cucumber.api.TypeRegistryConfigurer;

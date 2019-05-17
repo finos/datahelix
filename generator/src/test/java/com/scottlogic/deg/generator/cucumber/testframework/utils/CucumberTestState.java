@@ -6,7 +6,7 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.generator.config.detail.TreeWalkerType;
-import com.scottlogic.deg.generator.generation.Defaults;
+import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
 

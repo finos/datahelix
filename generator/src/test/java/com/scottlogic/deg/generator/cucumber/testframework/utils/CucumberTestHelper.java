@@ -8,7 +8,7 @@ import com.google.inject.util.Modules;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.GenerateExecute;
 import com.scottlogic.deg.generator.guice.BaseModule;
-import com.scottlogic.deg.generator.inputs.InvalidProfileException;
+import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import org.junit.Assert;
 
 import java.util.ArrayList;
