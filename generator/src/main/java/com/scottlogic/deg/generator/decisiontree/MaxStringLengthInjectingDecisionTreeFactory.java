@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.decisiontree;
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsStringShorterThanConstraint;
-import com.scottlogic.deg.generator.generation.Defaults;
+import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.common.profile.RuleInformation;
 
 import java.util.Collections;

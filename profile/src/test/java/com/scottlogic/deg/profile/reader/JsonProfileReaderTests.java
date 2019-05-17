@@ -1,7 +1,6 @@
-package com.scottlogic.deg.generator.inputs;
+package com.scottlogic.deg.profile.reader;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
-import com.scottlogic.deg.generator.AssertUtils;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.Rule;
@@ -9,6 +8,8 @@ import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
+import com.scottlogic.deg.profile.reader.InvalidProfileException;
+import com.scottlogic.deg.profile.reader.JsonProfileReader;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.function.Consumer;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -90,11 +92,17 @@ public class JsonProfileReaderTests {
             Iterable<T> assertionTargets,
             Consumer<T>... perItemAssertions) {
 
-        AssertUtils.pairwiseAssert(
-                assertionTargets,
-                Arrays.asList(perItemAssertions), // because arrays aren't iterable?
-                (assertionTarget, asserter) -> asserter.accept(assertionTarget));
+        Iterator<T> aIterator = assertionTargets.iterator();
+        Iterator<Consumer<T>> bIterator = Arrays.asList(perItemAssertions).iterator();
+
+        while (aIterator.hasNext() && bIterator.hasNext()) {
+            bIterator.next().accept(aIterator.next());
+        }
+
+        if (aIterator.hasNext() || bIterator.hasNext())
+            Assert.fail("Sequences had different numbers of elements");
     }
+
 
     @Test
     public void shouldDeserialiseSingleField() throws IOException, InvalidProfileException {
