@@ -12,8 +12,6 @@ import com.scottlogic.deg.generator.generation.combinationstrategies.Combination
 import com.scottlogic.deg.generator.generation.databags.*;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
-import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategy;
-import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategyFactory;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -24,7 +22,6 @@ public class DecisionTreeDataGenerator implements DataGenerator {
     private final RowSpecDataBagGenerator dataBagSourceFactory;
     private final TreePartitioner treePartitioner;
     private final DecisionTreeOptimiser treeOptimiser;
-    private final FixFieldStrategyFactory walkerStrategyFactory;
     private final CombinationStrategy partitionCombiner;
 
     @Inject
@@ -34,14 +31,12 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         DecisionTreeOptimiser optimiser,
         DataGeneratorMonitor monitor,
         RowSpecDataBagGenerator dataBagSourceFactory,
-        FixFieldStrategyFactory walkerStrategyFactory,
         CombinationStrategy combinationStrategy) {
         this.treePartitioner = treePartitioner;
         this.treeOptimiser = optimiser;
         this.treeWalker = treeWalker;
         this.monitor = monitor;
         this.dataBagSourceFactory = dataBagSourceFactory;
-        this.walkerStrategyFactory = walkerStrategyFactory;
         this.partitionCombiner = combinationStrategy;
     }
 
@@ -56,7 +51,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         Stream<Stream<DataBag>> partitionedDataBags = treePartitioner
             .splitTreeIntoPartitions(decisionTree)
             .map(treeOptimiser::optimiseTree)
-            .map(tree -> generateForPartition(profile, tree, generationConfig));
+            .map(this::generateForPartition);
 
         return partitionCombiner.permute(partitionedDataBags)
             .map(dataBag -> convertToGeneratedObject(dataBag, profile.fields))
@@ -64,10 +59,8 @@ public class DecisionTreeDataGenerator implements DataGenerator {
             .peek(monitor::rowEmitted);
     }
 
-    private Stream<DataBag> generateForPartition(Profile profile, DecisionTree tree, GenerationConfig config) {
-        FixFieldStrategy fixFieldStrategy = walkerStrategyFactory.getWalkerStrategy(profile, tree, config);
-
-        Stream<RowSpec> rowSpecsForPartition = treeWalker.walk(tree, fixFieldStrategy);
+    private Stream<DataBag> generateForPartition(DecisionTree tree) {
+        Stream<RowSpec> rowSpecsForPartition = treeWalker.walk(tree);
 
         return FlatMappingSpliterator.flatMap(
             rowSpecsForPartition,

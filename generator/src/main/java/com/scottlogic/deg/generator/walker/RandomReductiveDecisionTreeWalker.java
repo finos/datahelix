@@ -17,8 +17,8 @@ public class RandomReductiveDecisionTreeWalker implements DecisionTreeWalker {
     }
 
     @Override
-    public Stream<RowSpec> walk(DecisionTree tree, FixFieldStrategy fixFieldStrategy) {
-        Optional<RowSpec> firstRowSpecOpt = getFirstRowSpecFromRandomisingIteration(tree, fixFieldStrategy);
+    public Stream<RowSpec> walk(DecisionTree tree) {
+        Optional<RowSpec> firstRowSpecOpt = getFirstRowSpecFromRandomisingIteration(tree);
         //noinspection OptionalIsPresent
         if (!firstRowSpecOpt.isPresent()) {
             return Stream.empty();
@@ -27,13 +27,13 @@ public class RandomReductiveDecisionTreeWalker implements DecisionTreeWalker {
         return Stream.concat(
             Stream.of(firstRowSpecOpt.get()),
             Stream.generate(() ->
-                getFirstRowSpecFromRandomisingIteration(tree, fixFieldStrategy))
+                getFirstRowSpecFromRandomisingIteration(tree))
                     .filter(Optional::isPresent)
                     .map(Optional::get));
     }
 
-    private Optional<RowSpec> getFirstRowSpecFromRandomisingIteration(DecisionTree tree, FixFieldStrategy fixFieldStrategy){
-        return underlyingWalker.walk(tree, fixFieldStrategy)
+    private Optional<RowSpec> getFirstRowSpecFromRandomisingIteration(DecisionTree tree){
+        return underlyingWalker.walk(tree)
             .findFirst();
     }
 }
