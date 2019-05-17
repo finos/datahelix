@@ -216,7 +216,7 @@ Feature: User can specify that a field is null or absent
 
 ### aValid ###
 
-  Scenario: Not 'null' with a non contradicting 'aValid' should be successful
+  Scenario: Not 'null' with a non contradicting 'aValid' ISIN should be successful
     Given foo is anything but null
     And foo is a valid "ISIN"
     And foo is in set:
@@ -225,16 +225,39 @@ Feature: User can specify that a field is null or absent
       | foo            |
       | "GB0002634946" |
 
-  Scenario: 'Null' with a contradicting 'aValid' should only generate null
+  Scenario: 'Null' with a contradicting 'aValid' ISIN should only generate null
     Given foo is null
     And foo is a valid "ISIN"
     Then the following data should be generated:
       | foo  |
       | null |
 
-  Scenario: 'Null' with a contradicting not 'aValid' should only generate null
+  Scenario: 'Null' with a contradicting not 'aValid' ISIN should only generate null
     Given foo is null
     And foo is anything but a valid "ISIN"
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
+  Scenario: Not 'null' with a non contradicting 'aValid' SEDOL should be successful
+    Given foo is anything but null
+    And foo is a valid "SEDOL"
+    And foo is in set:
+      | "0263494" |
+    Then the following data should be generated:
+      | foo       |
+      | "0263494" |
+
+  Scenario: 'Null' with a contradicting 'aValid' SEDOL should only generate null
+    Given foo is null
+    And foo is a valid "SEDOL"
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
+  Scenario: 'Null' with a contradicting not 'aValid' SEDOL should only generate null
+    Given foo is null
+    And foo is anything but a valid "SEDOL"
     Then the following data should be generated:
       | foo  |
       | null |

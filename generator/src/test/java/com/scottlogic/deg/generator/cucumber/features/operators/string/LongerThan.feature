@@ -216,7 +216,7 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | 1                        |
       | 2011-01-01T00:00:00.000Z |
 
-  Scenario: 'longerThan' alongside a non-contradicting 'aValid' constraint should be successful
+  Scenario: 'longerThan' alongside a non-contradicting 'aValid' ISIN constraint should be successful
     Given foo is longer than 11
     And foo is a valid "ISIN"
     And foo is in set:
@@ -229,7 +229,7 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "GB00YG2XYC52" |
       | "US0378331005" |
 
-  Scenario: 'longerThan' alongside a non-contradicting not 'aValid' constraint should be successful
+  Scenario: 'longerThan' alongside a non-contradicting not 'aValid' ISIN constraint should be successful
     Given foo is longer than 2
     And foo is anything but a valid "ISIN"
     And foo is in set:
@@ -243,7 +243,7 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "U10378331005" |
       | "twelvedigits" |
 
-  Scenario: Not 'longerThan' alongside a non-contradicting 'aValid' constraint should be successful
+  Scenario: Not 'longerThan' alongside a non-contradicting 'aValid' ISIN constraint should be successful
     Given foo is anything but longer than 12
     And foo is a valid "ISIN"
     And foo is in set:
@@ -256,21 +256,14 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "GB00YG2XYC52" |
       | "US0378331005" |
 
-  Scenario: 'longerThan' against contradicting 'aValid' emits numeric,datetime and null
+  Scenario: 'longerThan' against contradicting 'aValid' ISIN emits null
     Given foo is longer than 20
     And foo is a valid "ISIN"
-    And foo is in set:
-      | 22                       |
-      | "abc"                    |
-      | "US0000XVGZA3"           |
-      | 2011-01-01T00:00:00.000Z |
     Then the following data should be generated:
-      | foo                      |
-      | null                     |
-      | 22                       |
-      | 2011-01-01T00:00:00.000Z |
+      | foo  |
+      | null |
 
-  Scenario: Not 'longerThan' with a non-contradicting not 'aValid' is successful
+  Scenario: Not 'longerThan' with a non-contradicting not 'aValid' ISIN is successful
     Given foo is anything but longer than 12
     And foo is anything but a valid "ISIN"
     And foo is in set:
@@ -283,6 +276,67 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "US0000XVGZA3" |
       | "U10000XVGZA3" |
       | "twelvedigits" |
+
+  Scenario: 'longerThan' alongside a non-contradicting 'aValid' SEDOL constraint should be successful
+    Given foo is longer than 6
+    And foo is a valid "SEDOL"
+    And foo is in set:
+      | "0263494" |
+      | "3091357" |
+      | "string7" |
+    Then the following data should be generated:
+      | foo       |
+      | null      |
+      | "0263494" |
+      | "3091357" |
+
+  Scenario: 'longerThan' alongside a non-contradicting not 'aValid' SEDOL constraint should be successful
+    Given foo is longer than 2
+    And foo is anything but a valid "SEDOL"
+    And foo is in set:
+      | "0263499" |
+      | "3091352" |
+      | "string7" |
+    Then the following data should be generated:
+      | foo       |
+      | null      |
+      | "0263499" |
+      | "3091352" |
+      | "string7" |
+
+  Scenario: Not 'longerThan' alongside a non-contradicting 'aValid' SEDOL constraint should be successful
+    Given foo is anything but longer than 7
+    And foo is a valid "SEDOL"
+    And foo is in set:
+      | "0263494" |
+      | "3091357" |
+      | "2"       |
+    Then the following data should be generated:
+      | foo       |
+      | null      |
+      | "0263494" |
+      | "3091357" |
+
+  Scenario: 'longerThan' against contradicting 'aValid' SEDOL emits null
+    Given foo is longer than 20
+    And foo is a valid "SEDOL"
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
+  Scenario: Not 'longerThan' with a non-contradicting not 'aValid' SEDOL is successful
+    Given foo is anything but longer than 7
+    And foo is anything but a valid "SEDOL"
+    And foo is in set:
+      | "0263497" |
+      | "3091354" |
+      | "string7" |
+    Then the following data should be generated:
+      | foo       |
+      | null      |
+      | "0263497" |
+      | "3091354" |
+      | "string7" |
 
   Scenario: Running a 'longerThan' request against non contradicting 'greaterThan' should be successful
     Given foo is longer than 1

@@ -1029,20 +1029,6 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null           |
       | "GB00YG2XYC52" |
 
-  Scenario Outline: 'InSet' of a non-string type with 'aValid' is successful
-    Given there is a field foo
-    And foo is in set:
-      | <typeValue> |
-    And foo is a valid "ISIN"
-    Then the following data should be generated:
-      | foo         |
-      | null        |
-      | <typeValue> |
-    Examples:
-      | typeValue                |
-      | 1                        |
-      | 2018-01-01T00:00:00.000Z |
-
   Scenario: 'InSet' run against a contradicting 'aValid' ISIN emits null
     Given there is a field foo
     And foo is in set:
@@ -1057,6 +1043,57 @@ Feature: User can specify that a field value belongs to a set of predetermined o
     And foo is in set:
       | "GB00YG2XYC52" |
     And foo is anything but a valid "ISIN"
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
+  Scenario: 'InSet' with a non contradicting 'aValid' SEDOL is successful
+    Given there is a field foo
+    And foo is in set:
+      | "0263494" |
+    And foo is a valid "SEDOL"
+    Then the following data should be generated:
+      | foo       |
+      | null      |
+      | "0263494" |
+
+  Scenario: 'InSet' with a non contradicting not 'aValid' SEDOL is successful
+    Given there is a field foo
+    And foo is in set:
+      | "a" |
+    And foo is anything but a valid "SEDOL"
+    Then the following data should be generated:
+      | foo  |
+      | null |
+      | "a"  |
+
+  Scenario: Not 'inSet' with a non contradicting 'aValid' SEDOL is successful
+    Given there is a field foo
+    And foo is anything but in set:
+      | "a" |
+    And foo is a valid "SEDOL"
+    And foo is in set:
+      | "a"       |
+      | "0263494" |
+    Then the following data should be generated:
+      | foo       |
+      | null      |
+      | "0263494" |
+
+  Scenario: 'InSet' run against a contradicting 'aValid' SEDOL emits null
+    Given there is a field foo
+    And foo is in set:
+      | "a" |
+    And foo is a valid "SEDOL"
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
+  Scenario: 'InSet' run against a contradicting not 'aValid' SEDOL emits null
+    Given there is a field foo
+    And foo is in set:
+      | "0263494" |
+    And foo is anything but a valid "SEDOL"
     Then the following data should be generated:
       | foo  |
       | null |
