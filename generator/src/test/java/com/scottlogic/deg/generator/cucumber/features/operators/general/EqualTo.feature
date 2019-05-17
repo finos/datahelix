@@ -1220,6 +1220,52 @@ Feature: User can specify that a value is equalTo a required value
       | foo  |
       | null |
 
+  Scenario: 'EqualTo' run against a non contradicting not 'aValid' SEDOL should be successful
+    Given there is a field foo
+    And foo is equal to "a"
+    And foo is anything but a valid "SEDOL"
+    Then the following data should be generated:
+      | foo  |
+      | null |
+      | "a"  |
+
+  Scenario: Not 'equalTo' run against a non contradicting 'aValid' SEDOL should be successful
+    Given there is a field foo
+    And foo is anything but equal to "a"
+    And foo is a valid "SEDOL"
+    And foo is in set:
+      | "a"       |
+      | "0263494" |
+      | "0263497" |
+    Then the following data should be generated:
+      | foo       |
+      | null      |
+      | "0263494" |
+
+  Scenario: 'EqualTo' an invalid SEDOL with 'aValid' should emit null
+    Given there is a field foo
+    And foo is equal to "0263497"
+    And foo is a valid "SEDOL"
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
+  Scenario: 'EqualTo' run against a contradicting 'aValid' SEDOL should only generate null
+    Given there is a field foo
+    And foo is equal to "aa"
+    And foo is a valid "SEDOL"
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
+  Scenario: 'EqualTo' a valid SEDOL with a contradicting not 'aValid' SEDOL emits null
+    Given there is a field foo
+    And foo is equal to "0263494"
+    And foo is anything but a valid "SEDOL"
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
 ### greaterThan ###
 
   Scenario: 'EqualTo' run against a non contradicting 'greaterThan' should be successful

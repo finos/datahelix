@@ -44,6 +44,9 @@ public class IsinUtils {
     public static boolean isValidSedolNsin(String nsin) {
         // A SEDOL has length 7, but is prefixed by zeroes when used as a nine-digit NSIN
         int sedolStartOffset = nsin.length() - 7;
+        if (sedolStartOffset < 0) {
+            return false;
+        }
         if (nsin.length() > 7 && !nsin.substring(0, sedolStartOffset).matches("^0*$")) {
             return false;
         }

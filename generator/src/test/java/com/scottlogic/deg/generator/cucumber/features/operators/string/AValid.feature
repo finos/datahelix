@@ -5,7 +5,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
     And there is a field foo
     And foo is of type "string"
 
-  Scenario: Running an 'aValid' request should be successful
+  Scenario: Running an 'aValid' request with the value "ISIN" should be successful
     Given foo is a valid "ISIN"
     And foo is in set:
       | "GB0002634946" |
@@ -19,7 +19,21 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
     Then the profile is invalid because "No enum constant com.scottlogic.deg.common.profile.constraints.atomic.StandardConstraintTypes.isin"
     And no data is created
 
-  Scenario: Running a 'aValid' request that includes a non ISIN string should fail with an error message
+  Scenario: Running an 'aValid' request with the value "SEDOL" should be successful
+    Given foo is a valid "SEDOL"
+    And foo is in set:
+      | "0263494" |
+    Then the following data should be generated:
+      | foo       |
+      | null      |
+      | "0263494" |
+
+  Scenario: Running a 'aValid' request that includes the string "sedol" should fail with an error message
+    Given foo is a valid "sedol"
+    Then the profile is invalid because "No enum constant com.scottlogic.deg.common.profile.constraints.atomic.StandardConstraintTypes.sedol"
+    And no data is created
+
+  Scenario: Running a 'aValid' request with an invalid value should fail with an error message
     Given foo is a valid "BURRITO"
     Then the profile is invalid because "No enum constant com.scottlogic.deg.common.profile.constraints.atomic.StandardConstraintTypes.BURRITO"
     And no data is created
@@ -34,7 +48,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
     Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be set to a value"
     And no data is created
 
-  Scenario: aValid run against a non contradicting aValid should be successful
+  Scenario: aValid run against a non contradicting aValid ISIN should be successful
     Given foo is a valid "ISIN"
     And foo is a valid "ISIN"
     And foo is in set:
@@ -44,14 +58,14 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | null           |
       | "GB0002634946" |
 
-  Scenario: aValid run against a non contradicting not aValid should only generate null data
+  Scenario: aValid run against a non contradicting not aValid ISIN should only generate null data
     Given foo is a valid "ISIN"
     And foo is anything but a valid "ISIN"
     Then the following data should be generated:
       | foo  |
       | null |
 
-  Scenario: aValid run against a non contradicting greaterThan should be successful
+  Scenario: aValid ISIN run against a non contradicting greaterThan should be successful
     Given foo is a valid "ISIN"
     And foo is greater than 0
     And foo is in set:
@@ -64,7 +78,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "GB0002634946" |
       | null           |
 
-  Scenario: aValid run against a non contradicting not greaterThan should be successful
+  Scenario: aValid ISIN run against a non contradicting not greaterThan should be successful
     Given foo is a valid "ISIN"
     And foo is anything but greater than 0
     And foo is in set:
@@ -77,7 +91,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "GB0002634946" |
       | null           |
 
-  Scenario: aValid run against a non contradicting greaterThanOrEqualTo should be successful
+  Scenario: aValid ISIN run against a non contradicting greaterThanOrEqualTo should be successful
     Given foo is a valid "ISIN"
     And foo is greater than or equal to 0
     And foo is in set:
@@ -90,7 +104,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "GB0002634946" |
       | null           |
 
-  Scenario: aValid run against a non contradicting not greaterThanOrEqualTo should be successful
+  Scenario: aValid ISIN run against a non contradicting not greaterThanOrEqualTo should be successful
     Given foo is a valid "ISIN"
     And foo is anything but greater than or equal to 0
     And foo is in set:
@@ -103,7 +117,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "GB0002634946" |
       | null           |
 
-  Scenario: aValid run against a non contradicting lessThan should be successful
+  Scenario: aValid ISIN run against a non contradicting lessThan should be successful
     Given foo is a valid "ISIN"
     And foo is less than 0
     And foo is in set:
@@ -116,7 +130,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "GB0002634946" |
       | null           |
 
-  Scenario: aValid run against a non contradicting not lessThan should be successful
+  Scenario: aValid ISIN run against a non contradicting not lessThan should be successful
     Given foo is a valid "ISIN"
     And foo is anything but less than 0
     And foo is in set:
@@ -129,7 +143,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "GB0002634946" |
       | null           |
 
-  Scenario: aValid run against a non contradicting lessThanOrEqualTo should be successful
+  Scenario: aValid ISIN run against a non contradicting lessThanOrEqualTo should be successful
     Given foo is a valid "ISIN"
     And foo is less than or equal to 0
     And foo is in set:
@@ -142,7 +156,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "GB0002634946" |
       | null           |
 
-  Scenario: aValid run against a non contradicting not lessThanOrEqualTo should be successful
+  Scenario: aValid ISIN run against a non contradicting not lessThanOrEqualTo should be successful
     Given foo is a valid "ISIN"
     And foo is anything but less than or equal to 0
     And foo is in set:
@@ -155,7 +169,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "GB0002634946" |
       | null           |
 
-  Scenario: aValid run against a non contradicting granularTo should be successful
+  Scenario: aValid ISIN run against a non contradicting granularTo should be successful
     Given foo is a valid "ISIN"
     And foo is granular to 1
     And foo is in set:
@@ -168,7 +182,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "GB0002634946" |
       | null           |
 
-  Scenario: aValid run against a non contradicting not granularTo should be successful
+  Scenario: aValid ISIN run against a non contradicting not granularTo should be successful
     Given foo is a valid "ISIN"
     And foo is anything but granular to 1
     And foo is in set:
@@ -181,7 +195,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "GB0002634946" |
       | null           |
 
-  Scenario: aValid run against a non contradicting after should be successful
+  Scenario: aValid ISIN run against a non contradicting after should be successful
     Given foo is a valid "ISIN"
     And foo is after 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -194,7 +208,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "GB0002634946" |
       | null           |
 
-  Scenario: aValid run against a non contradicting not after should be successful
+  Scenario: aValid ISIN run against a non contradicting not after should be successful
     Given foo is a valid "ISIN"
     And foo is anything but after 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -207,7 +221,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "GB0002634946" |
       | null           |
 
-  Scenario: aValid run against a non contradicting afterOrAt should be successful
+  Scenario: aValid ISIN run against a non contradicting afterOrAt should be successful
     Given foo is a valid "ISIN"
     And foo is after or at 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -220,7 +234,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "GB0002634946" |
       | null           |
 
-  Scenario: aValid run against a non contradicting not afterOrAt should be successful
+  Scenario: aValid ISIN run against a non contradicting not afterOrAt should be successful
     Given foo is a valid "ISIN"
     And foo is anything but after or at 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -233,7 +247,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "GB0002634946" |
       | null           |
 
-  Scenario: aValid run against a non contradicting before should be successful
+  Scenario: aValid ISIN run against a non contradicting before should be successful
     Given foo is a valid "ISIN"
     And foo is before 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -246,7 +260,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "GB0002634946" |
       | null           |
 
-  Scenario: aValid run against a non contradicting not before should be successful
+  Scenario: aValid ISIN run against a non contradicting not before should be successful
     Given foo is a valid "ISIN"
     And foo is anything but before 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -259,7 +273,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "GB0002634946" |
       | null           |
 
-  Scenario: aValid run against a non contradicting beforeOrAt should be successful
+  Scenario: aValid ISIN run against a non contradicting beforeOrAt should be successful
     Given foo is a valid "ISIN"
     And foo is before or at 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -272,7 +286,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "GB0002634946" |
       | null           |
 
-  Scenario: aValid run against a non contradicting not beforeOrAt should be successful
+  Scenario: aValid ISIN run against a non contradicting not beforeOrAt should be successful
     Given foo is a valid "ISIN"
     And foo is anything but before or at 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -284,3 +298,254 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | foo            |
       | "GB0002634946" |
       | null           |
+
+  Scenario: aValid run against a non contradicting aValid SEDOL should be successful
+    Given foo is a valid "SEDOL"
+    And foo is a valid "SEDOL"
+    And foo is in set:
+      | "0263494" |
+    Then the following data should be generated:
+      | foo       |
+      | null      |
+      | "0263494" |
+
+  Scenario: aValid run against a non contradicting not aValid SEDOL should only generate null data
+    Given foo is a valid "SEDOL"
+    And foo is anything but a valid "SEDOL"
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
+  Scenario: aValid SEDOL run against a non contradicting greaterThan should be successful
+    Given foo is a valid "SEDOL"
+    And foo is greater than 0
+    And foo is in set:
+      | "0263494"  |
+      | "026349"   |
+      | "02634948" |
+      | 1          |
+    Then the following data should be generated:
+      | foo       |
+      | "0263494" |
+      | null      |
+
+  Scenario: aValid SEDOL run against a non contradicting not greaterThan should be successful
+    Given foo is a valid "SEDOL"
+    And foo is anything but greater than 0
+    And foo is in set:
+      | "0263494"  |
+      | "026349"   |
+      | "02634948" |
+      | 1          |
+    Then the following data should be generated:
+      | foo       |
+      | "0263494" |
+      | null      |
+
+  Scenario: aValid SEDOL run against a non contradicting greaterThanOrEqualTo should be successful
+    Given foo is a valid "SEDOL"
+    And foo is greater than or equal to 0
+    And foo is in set:
+      | "0263494"  |
+      | "026349"   |
+      | "02634948" |
+      | 1          |
+    Then the following data should be generated:
+      | foo       |
+      | "0263494" |
+      | null      |
+
+  Scenario: aValid SEDOL run against a non contradicting not greaterThanOrEqualTo should be successful
+    Given foo is a valid "SEDOL"
+    And foo is anything but greater than or equal to 0
+    And foo is in set:
+      | "0263494"  |
+      | "026349"   |
+      | "02634948" |
+      | 1          |
+    Then the following data should be generated:
+      | foo       |
+      | "0263494" |
+      | null      |
+
+  Scenario: aValid SEDOL run against a non contradicting lessThan should be successful
+    Given foo is a valid "SEDOL"
+    And foo is less than 0
+    And foo is in set:
+      | "0263494"  |
+      | "026349"   |
+      | "02634948" |
+      | 1          |
+    Then the following data should be generated:
+      | foo       |
+      | "0263494" |
+      | null      |
+
+  Scenario: aValid SEDOL run against a non contradicting not lessThan should be successful
+    Given foo is a valid "SEDOL"
+    And foo is anything but less than 0
+    And foo is in set:
+      | "0263494"  |
+      | "026349"   |
+      | "02634948" |
+      | 1          |
+    Then the following data should be generated:
+      | foo       |
+      | "0263494" |
+      | null      |
+
+  Scenario: aValid SEDOL run against a non contradicting lessThanOrEqualTo should be successful
+    Given foo is a valid "SEDOL"
+    And foo is less than or equal to 0
+    And foo is in set:
+      | "0263494"  |
+      | "026349"   |
+      | "02634948" |
+      | 1          |
+    Then the following data should be generated:
+      | foo       |
+      | "0263494" |
+      | null      |
+
+  Scenario: aValid SEDOL run against a non contradicting not lessThanOrEqualTo should be successful
+    Given foo is a valid "SEDOL"
+    And foo is anything but less than or equal to 0
+    And foo is in set:
+      | "0263494"  |
+      | "026349"   |
+      | "02634948" |
+      | 1          |
+    Then the following data should be generated:
+      | foo       |
+      | "0263494" |
+      | null      |
+
+  Scenario: aValid SEDOL run against a non contradicting granularTo should be successful
+    Given foo is a valid "SEDOL"
+    And foo is granular to 1
+    And foo is in set:
+      | "0263494"  |
+      | "026349"   |
+      | "02634948" |
+      | 1          |
+    Then the following data should be generated:
+      | foo       |
+      | "0263494" |
+      | null      |
+
+  Scenario: aValid SEDOL run against a non contradicting not granularTo should be successful
+    Given foo is a valid "SEDOL"
+    And foo is anything but granular to 1
+    And foo is in set:
+      | "0263494"  |
+      | "026349"   |
+      | "02634948" |
+      | 1          |
+    Then the following data should be generated:
+      | foo       |
+      | "0263494" |
+      | null      |
+
+  Scenario: aValid SEDOL run against a non contradicting after should be successful
+    Given foo is a valid "SEDOL"
+    And foo is after 2019-01-01T00:00:00.000Z
+    And foo is in set:
+      | "0263494"  |
+      | "026349"   |
+      | "02634948" |
+      | 1          |
+    Then the following data should be generated:
+      | foo       |
+      | "0263494" |
+      | null      |
+
+  Scenario: aValid SEDOL run against a non contradicting not after should be successful
+    Given foo is a valid "SEDOL"
+    And foo is anything but after 2019-01-01T00:00:00.000Z
+    And foo is in set:
+      | "0263494"  |
+      | "026349"   |
+      | "02634948" |
+      | 1          |
+    Then the following data should be generated:
+      | foo       |
+      | "0263494" |
+      | null      |
+
+  Scenario: aValid SEDOL run against a non contradicting afterOrAt should be successful
+    Given foo is a valid "SEDOL"
+    And foo is after or at 2019-01-01T00:00:00.000Z
+    And foo is in set:
+      | "0263494"  |
+      | "026349"   |
+      | "02634948" |
+      | 1          |
+    Then the following data should be generated:
+      | foo       |
+      | "0263494" |
+      | null      |
+
+  Scenario: aValid SEDOL run against a non contradicting not afterOrAt should be successful
+    Given foo is a valid "SEDOL"
+    And foo is anything but after or at 2019-01-01T00:00:00.000Z
+    And foo is in set:
+      | "0263494"  |
+      | "026349"   |
+      | "02634948" |
+      | 1          |
+    Then the following data should be generated:
+      | foo       |
+      | "0263494" |
+      | null      |
+
+  Scenario: aValid SEDOL run against a non contradicting before should be successful
+    Given foo is a valid "SEDOL"
+    And foo is before 2019-01-01T00:00:00.000Z
+    And foo is in set:
+      | "0263494"  |
+      | "026349"   |
+      | "02634948" |
+      | 1          |
+    Then the following data should be generated:
+      | foo       |
+      | "0263494" |
+      | null      |
+
+  Scenario: aValid SEDOL run against a non contradicting not before should be successful
+    Given foo is a valid "SEDOL"
+    And foo is anything but before 2019-01-01T00:00:00.000Z
+    And foo is in set:
+      | "0263494"  |
+      | "026349"   |
+      | "02634948" |
+      | 1          |
+    Then the following data should be generated:
+      | foo       |
+      | "0263494" |
+      | null      |
+
+  Scenario: aValid SEDOL run against a non contradicting beforeOrAt should be successful
+    Given foo is a valid "SEDOL"
+    And foo is before or at 2019-01-01T00:00:00.000Z
+    And foo is in set:
+      | "0263494"  |
+      | "026349"   |
+      | "02634948" |
+      | 1          |
+    Then the following data should be generated:
+      | foo       |
+      | "0263494" |
+      | null      |
+
+  Scenario: aValid SEDOL run against a non contradicting not beforeOrAt should be successful
+    Given foo is a valid "SEDOL"
+    And foo is anything but before or at 2019-01-01T00:00:00.000Z
+    And foo is in set:
+      | "0263494"  |
+      | "026349"   |
+      | "02634948" |
+      | 1          |
+    Then the following data should be generated:
+      | foo       |
+      | "0263494" |
+      | null      |
