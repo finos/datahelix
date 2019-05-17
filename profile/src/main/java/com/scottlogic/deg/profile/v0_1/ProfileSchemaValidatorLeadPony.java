@@ -1,6 +1,6 @@
 package com.scottlogic.deg.profile.v0_1;
 
-import com.scottlogic.deg.profile.common.ValidationResult;
+import com.scottlogic.deg.profile.serialisation.ValidationResult;
 import org.leadpony.justify.api.JsonSchema;
 import org.leadpony.justify.api.JsonValidationService;
 import org.leadpony.justify.api.Problem;

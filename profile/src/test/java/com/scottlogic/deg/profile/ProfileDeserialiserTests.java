@@ -2,8 +2,8 @@ package com.scottlogic.deg.profile;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.scottlogic.deg.profile.common.BaseProfile;
-import com.scottlogic.deg.profile.common.ProfileDeserialiser;
+import com.scottlogic.deg.profile.serialisation.BaseProfile;
+import com.scottlogic.deg.profile.serialisation.ProfileDeserialiser;
 import com.scottlogic.deg.profile.v0_1.ProfileDTO;
 import org.junit.jupiter.api.Test;
 

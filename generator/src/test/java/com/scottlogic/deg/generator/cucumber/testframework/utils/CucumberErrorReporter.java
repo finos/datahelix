@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.cucumber.testframework.utils;
 
 import com.scottlogic.deg.generator.validators.ErrorReporter;
-import com.scottlogic.deg.profile.common.ValidationResult;
+import com.scottlogic.deg.profile.serialisation.ValidationResult;
 
 public class CucumberErrorReporter extends ErrorReporter {
     private final CucumberTestState state;

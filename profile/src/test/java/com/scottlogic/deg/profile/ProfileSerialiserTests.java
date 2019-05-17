@@ -1,6 +1,6 @@
 package com.scottlogic.deg.profile;
 
-import com.scottlogic.deg.profile.common.ProfileSerialiser;
+import com.scottlogic.deg.profile.serialisation.ProfileSerialiser;
 import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
 import com.scottlogic.deg.profile.v0_1.FieldDTO;
 import com.scottlogic.deg.profile.v0_1.RuleDTO;
