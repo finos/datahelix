@@ -134,11 +134,12 @@ class ExampleProfilesViolationTests {
                     new FieldSpecMerger(),
                     new ContradictionTreeValidator(
                         new ConstraintReducer(
-                        new FieldSpecFactory(
-                            new FieldSpecMerger(),
-                            new StringRestrictionsFactory()),
-                        new FieldSpecMerger()),
-                        new ContradictionValidationMonitor()));
+                            new FieldSpecFactory(
+                                new FieldSpecMerger(),
+                                new StringRestrictionsFactory()),
+                            new FieldSpecMerger()),
+                        new ContradictionValidationMonitor(),
+                        new FieldSpecMerger()));
 
                 ViolationGenerationEngine violationGenerationEngine =
                     new ViolationGenerationEngine(

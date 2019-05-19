@@ -8,7 +8,9 @@ import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.Node;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
+import com.scottlogic.deg.generator.walker.reductive.Merged;
 
 
 import java.util.*;
@@ -21,11 +23,13 @@ public class ContradictionTreeValidator {
     private DecisionTree decisionTree;
     private final ConstraintReducer constraintReducer;
     private final ContradictionValidatorMonitorInterface validationMonitor;
+    private final FieldSpecMerger fieldSpecMerger;
 
     @Inject
-    public ContradictionTreeValidator(ConstraintReducer constraintReducer, ContradictionValidatorMonitorInterface validationMonitor){
+    public ContradictionTreeValidator(ConstraintReducer constraintReducer, ContradictionValidatorMonitorInterface validationMonitor, FieldSpecMerger fieldSpecMerger){
         this.constraintReducer = constraintReducer;
         this.validationMonitor = validationMonitor;
+        this.fieldSpecMerger = fieldSpecMerger;
     }
 
     /**
@@ -70,7 +74,8 @@ public class ContradictionTreeValidator {
                 Node node = stack.pop();
 
                 if(node instanceof ConstraintNode){
-                    findContradictionForNode((ConstraintNode)node);
+                    //findContradictionForNode((ConstraintNode)node);
+                    findContradictionForNodeFIXED((ConstraintNode)node);
                 }
 
                 // get the next right node if it exists.
@@ -103,6 +108,17 @@ public class ContradictionTreeValidator {
         return false;
     }
 
+    private boolean findContradictionForNodeFIXED(ConstraintNode nodeToCheck){
+        Map<Field, FieldSpec> fieldSpecsForNode = getFieldSpecsForNode(nodeToCheck);
+        for (DecisionNode node : (nodeToCheck).getDecisions()) {
+            boolean contradictionFound = recursiveFindContradictionFIXED(fieldSpecsForNode, node);
+            if (contradictionFound) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private boolean recursiveFindContradiction(Node nodeToCheck, Node currentNode){
         // can only check for contradictions on ConstraintNodes
         if (currentNode instanceof ConstraintNode && nodeToCheck instanceof ConstraintNode){
@@ -132,6 +148,36 @@ public class ContradictionTreeValidator {
         // no more nodes, and no contradiction found.
        return false;
 
+    }
+
+    private boolean recursiveFindContradictionFIXED(Map<Field, FieldSpec> passedDownFieldSpec, Node currentNode){
+        Map<Field, FieldSpec> fieldSpecToPassDown = passedDownFieldSpec;
+        // can only check for contradictions on ConstraintNodes
+        if (currentNode instanceof ConstraintNode){
+            Merged<Map<Field, FieldSpec>> mergedMap = checkContradictions(passedDownFieldSpec, (ConstraintNode)currentNode);
+            if(mergedMap.isContradictory()){
+                return true;
+            }
+            fieldSpecToPassDown = mergedMap.get();
+        }
+
+        // no contradiction call next node.
+        if (currentNode instanceof ConstraintNode) {
+            for (DecisionNode node : ((ConstraintNode) currentNode).getDecisions()) {
+                boolean contradictionFound = recursiveFindContradictionFIXED(fieldSpecToPassDown, node);
+                if (contradictionFound)
+                    return true;
+            }
+        }
+        if(currentNode instanceof DecisionNode){
+            for (ConstraintNode node : ((DecisionNode) currentNode).getOptions()) {
+                boolean contradictionFound = recursiveFindContradictionFIXED(fieldSpecToPassDown, node);
+                if (contradictionFound)
+                    return true;
+            }
+        }
+        // no more nodes, and no contradiction found.
+        return false;
     }
 
     /**
@@ -171,11 +217,59 @@ public class ContradictionTreeValidator {
             Optional<FieldSpec> fieldSpec = constraintReducer.reduceConstraintsToFieldSpec(entry.getValue());
 
             if (!fieldSpec.isPresent()){
-                validationMonitor.contradictionInTree(entry);
+                validationMonitor.contradictionInTree(entry.getKey(),entry.getValue());
                 return true;
             }
         }
         return false;
+    }
+
+    private Merged<Map<Field, FieldSpec>> checkContradictions(Map<Field, FieldSpec> passedDownFieldSpec, ConstraintNode nodeToCheck){
+
+        Collection<Field> passedDownFields = passedDownFieldSpec.keySet();
+        Collection<Field> nodeToCheckFields = nodeToCheck.getAtomicConstraints()
+            .stream()
+            .map(x -> x.getField())
+            .collect(Collectors.toCollection(ArrayList::new));
+
+        // get a collection of all the fields we are concerned with
+        Collection<Field> combinedFields = Stream.concat(passedDownFields.stream(), nodeToCheckFields.stream())
+            .collect(Collectors.toCollection(ArrayList::new));
+
+        Collection<AtomicConstraint> nodeToCheckConstraints = nodeToCheck.getAtomicConstraints();
+
+        Map<Field, Collection<AtomicConstraint>> mapFromNodeToCheck = new HashMap<>();
+        nodeToCheck.getAtomicConstraints()
+            .stream()
+            .filter(constraint -> combinedFields.contains(constraint.getField()))
+            .forEach(constraint -> addToConstraintsMap(mapFromNodeToCheck, constraint));
+
+        boolean contradictionFound = false;
+        for (Map.Entry<Field, Collection<AtomicConstraint>> entry : mapFromNodeToCheck.entrySet()) {
+
+            Optional<FieldSpec> fieldSpecFromNodeToCheck = constraintReducer.reduceConstraintsToFieldSpec(entry.getValue());
+
+            // FieldSpec merger merge this spec, with one from parents. if returns optional empty, a contradiction occurred.
+            if(fieldSpecFromNodeToCheck.isPresent()){
+                Optional<FieldSpec> mergedFieldSpec = fieldSpecMerger.merge(passedDownFieldSpec.get(entry.getKey()) , fieldSpecFromNodeToCheck.get());
+                if (!mergedFieldSpec.isPresent()){
+                    validationMonitor.contradictionInTree(entry.getKey(), entry.getValue());
+                    contradictionFound =true;
+                }
+                else{
+                    passedDownFieldSpec.put(entry.getKey(), mergedFieldSpec.get());
+                }
+            }
+            else{
+                validationMonitor.contradictionInTree(entry.getKey(),  entry.getValue());
+                contradictionFound = true;
+            }
+        }
+        if(contradictionFound)
+        {
+            return Merged.contradictory();
+        }
+        return Merged.of(passedDownFieldSpec);
     }
 
     private void addToConstraintsMap(Map<Field, Collection<AtomicConstraint>> map, AtomicConstraint constraint) {
@@ -185,5 +279,34 @@ public class ContradictionTreeValidator {
 
         map.get(constraint.getField())
             .add(constraint);
+    }
+
+    private Map<Field, FieldSpec> getFieldSpecsForNode(ConstraintNode node){
+        Map<Field, FieldSpec> mapToReturn = new HashMap<>();
+
+        Collection<Field> nodeFields = node.getAtomicConstraints()
+            .stream()
+            .map(x -> x.getField())
+            .collect(Collectors.toCollection(ArrayList::new));
+
+        Collection<AtomicConstraint> allConstraints = node.getAtomicConstraints();
+
+        Map<Field, Collection<AtomicConstraint>> mapOfFieldToAtomicConstraints = new HashMap<>();
+
+        allConstraints.stream()
+            .filter(constraint -> nodeFields.contains(constraint.getField()))
+            .forEach(constraint -> addToConstraintsMap(mapOfFieldToAtomicConstraints, constraint));
+
+        for (Map.Entry<Field, Collection<AtomicConstraint>> entry : mapOfFieldToAtomicConstraints.entrySet()) {
+        // produce a field spec for each field in the node, and
+
+            Optional<FieldSpec> fieldSpec = constraintReducer.reduceConstraintsToFieldSpec(entry.getValue());
+
+            if(fieldSpec.isPresent()){
+                // add field and FieldSpec to map
+                mapToReturn.put(entry.getKey(),fieldSpec.get());
+            }
+        }
+        return mapToReturn;
     }
 }

@@ -7,6 +7,6 @@ import java.util.Collection;
 import java.util.Map;
 
 public interface ContradictionValidatorMonitorInterface {
-    void contradictionInTree(Map.Entry<Field, Collection<AtomicConstraint>> mapEntry);
+    void contradictionInTree(Field field, Collection<AtomicConstraint> atomicConstraints);
     void treeIsWhollyContradictory();
 }

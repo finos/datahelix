@@ -4,15 +4,13 @@ import com.scottlogic.deg.generator.Field;
 import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
 
 import java.util.Collection;
-import java.util.Map;
 
 public class ContradictionValidationMonitor  implements ContradictionValidatorMonitorInterface {
 
-    public void contradictionInTree(Map.Entry<Field, Collection<AtomicConstraint>> mapEntry) {
-        String fieldName = mapEntry.getKey().name;
-        System.out.println(String.format("A contradiction was detected in the tree for field: %s", fieldName));
+    public void contradictionInTree(Field field, Collection<AtomicConstraint> atomicConstraints) {
+        System.out.println(String.format("A contradiction was detected in the tree for field: %s", field.name));
         System.out.println("Constraints that were being checked when the contradiction was detected :");
-        mapEntry.getValue()
+        atomicConstraints
             .stream()
             .map(entry -> String.format("Constraint: %s", entry.toString()))
             .forEach(System.out::println);

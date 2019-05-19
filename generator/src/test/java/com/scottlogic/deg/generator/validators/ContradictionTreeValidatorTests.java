@@ -42,11 +42,17 @@ public class ContradictionTreeValidatorTests {
                         new FieldSpecMerger(),
                         new StringRestrictionsFactory()),
                     new FieldSpecMerger()),
-                outputter);
+                outputter,
+                new FieldSpecMerger());
     }
 
+//    @Test
+//    public void treeWithContradictionInOneNode(){
+//        verify(outputter).contradictionInTree(anyObject(),anyObject());
+//    }
+
     @Test
-    public void check_decisionTreeWithNoContradictions_doesNotOutputContradictionToConsole() {
+    public void decisionTreeWithNoContradictions_doesNotOutputContradictionToConsole() {
         //Arrange
         ArrayList<Field> fieldList = new ArrayList<>();
         fieldList.add(fieldA);
@@ -92,11 +98,11 @@ public class ContradictionTreeValidatorTests {
 
         //Assert
         //verify contradictionInTree outputter method is never called.
-        verify(outputter, never()).contradictionInTree(anyObject());
+        verify(outputter, never()).contradictionInTree(anyObject(),anyObject());
     }
 
     @Test
-    public void check_decisionTreeWithContradictions_whichAreNotOfADescendant_doesNotOutputContradictionToConsole() {
+    public void decisionTreeWithContradictions_whichAreNotOfADescendant_doesNotOutputContradictionToConsole() {
         //Arrange
         ArrayList<Field> fieldList = new ArrayList<>();
         fieldList.add(fieldA);
@@ -141,11 +147,11 @@ public class ContradictionTreeValidatorTests {
         validator.reportContradictions(dt);
 
         //verify contradictionInTree outputter method is never called.
-        verify(outputter, never()).contradictionInTree(anyObject());
+        verify(outputter, never()).contradictionInTree(anyObject(),anyObject());
     }
 
     @Test
-    public void check_decisionTreeWithContradictions_whichAreOfADescendant_OutputsContradictionToConsole() {
+    public void decisionTreeWithContradictions_whichAreOfADescendant_OutputsContradictionToConsole() {
         //Arrange
         ArrayList<Field> fieldList = new ArrayList<>();
         fieldList.add(fieldA);
@@ -202,7 +208,7 @@ public class ContradictionTreeValidatorTests {
         constraintNodesL1.add(l1ConstraintNodeRight);
         decisionL1 = decisionL1.setOptions(constraintNodesL1);
 
-        //compose nodes level 2
+        //compose root node
         rootNode = rootNode.addDecisions(new ArrayList<>(Arrays.asList(decisionL1)));
         ProfileFields profileFields = new ProfileFields(fieldList);
         DecisionTree dt = new DecisionTree(rootNode, profileFields,"A Test Profile");
@@ -211,13 +217,85 @@ public class ContradictionTreeValidatorTests {
         validator.reportContradictions(dt);
 
         //Assert
-        //verify contradictionInTree outputter method is never called.
-        verify(outputter).contradictionInTree(anyObject());
+        //verify contradictionInTree outputter method is called.
+        verify(outputter,atLeast(1)).contradictionInTree(anyObject(),anyObject());
 
     }
 
     @Test
-    public void check_contradictingNodes_returnContradiction(){
+    public void decisionTreeWithContradictionOverSeveralAncestralNodes_OutputsContradictionToConsole(){
+        //Arrange
+        ArrayList<Field> fieldList = new ArrayList<>();
+        fieldList.add(fieldA);
+
+        ConstraintNode rootNode = new TreeConstraintNode();
+        DecisionNode decisionL1 = new TreeDecisionNode();
+        DecisionNode decisionL2 = new TreeDecisionNode();
+        ConstraintNode l1ConstraintNodeLeft  = new TreeConstraintNode();
+        ConstraintNode l1ConstraintNodeRight  = new TreeConstraintNode();
+        ConstraintNode l2ConstraintNodeLeft  = new TreeConstraintNode();
+        ConstraintNode l2ConstraintNodeRight  = new TreeConstraintNode();
+
+        AtomicConstraint fieldAIsInteger = new IsOfTypeConstraint(fieldA, IsOfTypeConstraint.Types.NUMERIC, null);
+        AtomicConstraint fieldANotNull = new NotConstraint(new IsNullConstraint(fieldA, null));
+
+        //rootNodeConstraints
+        Collection<AtomicConstraint> rootConstraints = new ArrayList<>();
+        rootConstraints.add(fieldANotNull);
+        rootConstraints.add(fieldAIsInteger);
+
+        //L1ConstraintNodeLeft
+        Collection<AtomicConstraint> l1leftConstraints = new ArrayList<>();
+        AtomicConstraint fieldALessThan50 = new IsLessThanConstantConstraint(fieldA,50, null);
+        l1leftConstraints.add(fieldALessThan50);
+        l1ConstraintNodeLeft = l1ConstraintNodeLeft.addAtomicConstraints(l1leftConstraints);
+
+        //L1ConstraintNodeRight
+        Collection<AtomicConstraint> l1rightConstraints = new ArrayList<>();
+        AtomicConstraint lessThan50 = new IsLessThanConstantConstraint(fieldB,50, null);
+        l1rightConstraints.add(lessThan50);
+        l1ConstraintNodeRight = l1ConstraintNodeRight.addAtomicConstraints(l1rightConstraints);
+
+        //L2ConstraintNodeLeft
+        Collection<AtomicConstraint> l2LeftConstraints = new ArrayList<>();
+        AtomicConstraint moreThan1000 = new IsGreaterThanConstantConstraint(fieldA,1000, null);
+        l2LeftConstraints.add(moreThan1000);
+        l2ConstraintNodeLeft = l2ConstraintNodeLeft.addAtomicConstraints(l2LeftConstraints);
+
+        //L2ConstraintNodeRight
+        Collection<AtomicConstraint> l2RightConstraints = new ArrayList<>();
+        AtomicConstraint fieldCLessThan5 = new IsLessThanConstantConstraint(fieldC,5, null);
+        l2RightConstraints.add(fieldCLessThan5);
+        l2ConstraintNodeRight = l2ConstraintNodeRight.addAtomicConstraints(l2RightConstraints);
+
+        //compose nodes level 2
+        Collection<ConstraintNode> constraintNodesL2 = new ArrayList<>();
+        constraintNodesL2.add(l2ConstraintNodeLeft);
+        constraintNodesL2.add(l2ConstraintNodeRight);
+        decisionL2 = decisionL2.setOptions(constraintNodesL2);
+        l1ConstraintNodeLeft = l1ConstraintNodeLeft.addDecisions(new ArrayList<>(Arrays.asList(decisionL2)));
+
+        //compose nodes level 1
+        Collection<ConstraintNode> constraintNodesL1 = new ArrayList<>();
+        constraintNodesL1.add(l1ConstraintNodeLeft);
+        constraintNodesL1.add(l1ConstraintNodeRight);
+        decisionL1 = decisionL1.setOptions(constraintNodesL1);
+
+        //compose root node
+        rootNode = rootNode.addDecisions(new ArrayList<>(Arrays.asList(decisionL1)));
+        rootNode = rootNode.addAtomicConstraints(rootConstraints);
+        ProfileFields profileFields = new ProfileFields(fieldList);
+        DecisionTree dt = new DecisionTree(rootNode, profileFields,"A Test Profile");
+
+        //Act
+        validator.reportContradictions(dt);
+
+        // assert
+        verify(outputter).contradictionInTree(anyObject(),anyObject());
+    }
+
+    @Test
+    public void contradictingNodes_returnContradiction(){
         //Arrange
 
         // shared
@@ -251,7 +329,7 @@ public class ContradictionTreeValidatorTests {
     }
 
     @Test
-    public void check_nonContradictingNodes_returnNoContradiction(){
+    public void nonContradictingNodes_returnNoContradiction(){
         //Arrange
 
         // shared
