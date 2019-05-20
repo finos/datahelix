@@ -15,7 +15,6 @@ import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.generator.validators.StaticContradictionDecisionTreeValidator;
 import com.scottlogic.deg.orchestrator.validator.VisualisationConfigValidator;
-import com.scottlogic.deg.profile.serialisation.ValidationResult;
 import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
 
 import java.io.FileOutputStream;
@@ -65,13 +64,8 @@ public class VisualiseExecute implements Runnable {
 
     @Override
     public void run() {
-        ValidationResult validationResult = validator.validateCommandLine(configSource.overwriteOutputFiles(), outputPath);
+        validator.validateCommandLine(configSource.overwriteOutputFiles(), outputPath);
         profileSchemaValidator.validateProfile(configSource.getProfileFile());
-
-        if (!validationResult.isValid()) {
-            errorReporter.display(validationResult);
-            return;
-        }
 
         final Profile profile;
         try {

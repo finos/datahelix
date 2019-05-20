@@ -1,8 +1,6 @@
 package com.scottlogic.deg.profile.v0_1;
 
 import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.profile.serialisation.ValidationResult;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DynamicTest;
 
