@@ -1,9 +1,7 @@
 package com.scottlogic.deg.generator.cucumber.testframework.utils;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
 import com.google.inject.name.Names;
-import com.scottlogic.deg.generator.ConfigSource;
 import com.scottlogic.deg.generator.StandardGenerationEngine;
 import com.scottlogic.deg.generator.commandline.OutputTargetSpecification;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
@@ -13,8 +11,6 @@ import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.TypingRequiredPerFieldValidator;
 import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
-import com.scottlogic.deg.generator.outputs.targets.MultiDatasetOutputTarget;
-import com.scottlogic.deg.generator.outputs.targets.SingleDatasetOutputTarget;
 import com.scottlogic.deg.generator.validators.ConfigValidator;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.generator.violations.ViolationGenerationEngine;
@@ -36,7 +32,6 @@ public class CucumberTestModule extends AbstractModule {
     public void configure() {
         bind(CucumberTestState.class).toInstance(testState);
         bind(ProfileReader.class).to(CucumberProfileReader.class);
-        bind(ConfigSource.class).to(GenerationConfigSource.class);
         bind(GenerationConfigSource.class).to(CucumberGenerationConfigSource.class);
         bind(ManifestWriter.class).to(CucumberManifestWriter.class);
         bind(ConfigValidator.class).to(CucumberGenerationConfigValidator.class);

@@ -53,11 +53,6 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
     }
 
     @Override
-    public boolean getValidateProfile() {
-        return false;
-    }
-
-    @Override
     public boolean shouldDoPartitioning() {
         return false;
     }
