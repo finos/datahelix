@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator;
+package com.scottlogic.deg.orchestrator.visualise;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;

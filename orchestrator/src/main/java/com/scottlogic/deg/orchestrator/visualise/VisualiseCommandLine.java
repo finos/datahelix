@@ -1,8 +1,8 @@
-package com.scottlogic.deg.generator.commandline;
+package com.scottlogic.deg.orchestrator.visualise;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.scottlogic.deg.generator.VisualiseExecute;
+import com.scottlogic.deg.generator.commandline.GenerateCommandLine;
 import com.scottlogic.deg.generator.guice.BaseModule;
 import picocli.CommandLine;
 
@@ -20,7 +20,7 @@ import picocli.CommandLine;
     parameterListHeading = "%nParameters:%n",
     optionListHeading = "%nOptions:%n",
     abbreviateSynopsis = true)
-public class VisualiseCommandLine extends GenerateCommandLine  {
+public class VisualiseCommandLine extends GenerateCommandLine {
 
     @Override
     public void run() {
