@@ -61,11 +61,7 @@ public class GenerateExecute implements Runnable {
 
             Profile profile = profileReader.read(configSource.getProfileFile().toPath());
 
-            Collection<ValidationAlert> alerts = profileValidator.validate(profile);
-            validationReporter.output(alerts);
-            if (validationResultShouldHaltExecution(alerts)) {
-                return;
-            }
+            profileValidator.validate(profile);
 
             standardGenerationEngine.generateDataSet(profile, singleDatasetOutputTarget);
 
@@ -76,11 +72,5 @@ public class GenerateExecute implements Runnable {
         catch (IOException e) {
             errorReporter.displayException(e);
         }
-    }
-
-    private static boolean validationResultShouldHaltExecution(Collection<ValidationAlert> alerts) {
-        return alerts.stream()
-            .anyMatch(alert ->
-                alert.getCriticality().equals(Criticality.ERROR));
     }
 }

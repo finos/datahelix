@@ -8,7 +8,7 @@ Feature: Type mandation validation
     And user_id is granular to 1
     And user_id is formatted as "%d"
     # ideally I guess we'd have more here - what's a sensible amount? maybe we should use scenario outlines?
-    Then field user_id should fail validation: "Field is untyped; add an ofType, equalTo or inSet constraint, or mark it as null"
+    Then the profile is invalid because "user_id is untyped; add an ofType, equalTo or inSet constraint, or mark it as null"
 
   Scenario: An explicit type constraint should satisfy type mandation
     Given there is a field user_id
@@ -52,8 +52,8 @@ Feature: Type mandation validation
     And user_id is of type "string"
     And there is a field price
     And there is a field purchase_time
-    Then field price should fail validation: "Field is untyped; add an ofType, equalTo or inSet constraint, or mark it as null"
-    And field purchase_time should fail validation: "Field is untyped; add an ofType, equalTo or inSet constraint, or mark it as null"
+    Then the profile is invalid because "price is untyped; add an ofType, equalTo or inSet constraint, or mark it as null"
+    And the profile is invalid because "purchase_time is untyped; add an ofType, equalTo or inSet constraint, or mark it as null"
 
   Scenario: An anyOf constraint whose branches all satisfy type mandation should also satisfy type mandation
     Given there is a field user_id
@@ -75,7 +75,7 @@ Feature: Type mandation validation
         { "not": { "field": "user_id", "is": "null" } }
       ]}
       """
-    Then field user_id should fail validation: "Field is untyped; add an ofType, equalTo or inSet constraint, or mark it as null"
+    Then the profile is invalid because "user_id is untyped; add an ofType, equalTo or inSet constraint, or mark it as null"
 
   Scenario: An if constraint should be able to satisfy type mandation
     Given there is a field user_id

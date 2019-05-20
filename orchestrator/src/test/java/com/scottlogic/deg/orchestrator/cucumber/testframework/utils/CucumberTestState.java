@@ -45,6 +45,7 @@ public class CucumberTestState {
     List<ConstraintDTO> constraints;
     List<Exception> testExceptions;
 
+
     final RecordingProfileValidationReporter validationReporter = new RecordingProfileValidationReporter();
 
     private final List<AtomicConstraintType> contstraintsToNotViolate = new ArrayList<>();

@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.inputs.validation;
 
 import com.google.inject.Inject;
+import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
@@ -10,7 +11,7 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.inputs.validation.messages.StringValidationMessage;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -44,19 +45,18 @@ public class TypingRequiredPerFieldValidator implements ProfileValidator {
     }
 
     @Override
-    public Collection<ValidationAlert> validate(Profile profile) {
+    public void validate(Profile profile) {
         final DecisionTree decisionTree = decisionTreeFactory.analyse(profile);
 
-        return profile.fields.stream()
+        List<String> untypedFields = profile.fields.stream()
             .filter(field -> !sufficientlyRestrictsFieldTypes(decisionTree.getRootNode(), field))
-            .map(nonCompliantField ->
-                new ValidationAlert(
-                    Criticality.ERROR,
-                    new StringValidationMessage(
-                        "Field is untyped; add an ofType, equalTo or inSet constraint, or mark it as null"),
-                    ValidationType.TYPE,
-                    nonCompliantField))
+            .map(nonCompliantField -> nonCompliantField.name + " is untyped; add an ofType, equalTo or inSet constraint, or mark it as null")
             .collect(Collectors.toList());
+
+        if (!untypedFields.isEmpty()){
+            throw new ValidationException(untypedFields);
+        }
+
     }
 
     private static boolean sufficientlyRestrictsFieldTypes(ConstraintNode node, Field fieldToCheck) {

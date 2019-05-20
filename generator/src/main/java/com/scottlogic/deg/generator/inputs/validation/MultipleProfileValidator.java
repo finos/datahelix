@@ -1,11 +1,9 @@
 package com.scottlogic.deg.generator.inputs.validation;
 
-import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.common.profile.Profile;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 public class MultipleProfileValidator implements ProfileValidator{
     private final Collection<ProfileValidator> validators;
@@ -19,10 +17,7 @@ public class MultipleProfileValidator implements ProfileValidator{
     }
 
     @Override
-    public Collection<ValidationAlert> validate(Profile profile) {
-        return FlatMappingSpliterator.flatMap(
-            validators.stream(),
-            validator -> validator.validate(profile).stream())
-            .collect(Collectors.toList());
+    public void validate(Profile profile) {
+        validators.forEach(v->v.validate(profile));
     }
 }

@@ -5,6 +5,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
+import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.orchestrator.generate.GenerateExecute;
 import com.scottlogic.deg.generator.guice.GeneratorModule;
@@ -95,7 +96,7 @@ public class CucumberTestHelper {
     public Stream<String> getProfileValidationErrors(){
         return Stream.concat(
             testState.testExceptions.stream()
-                .filter(e -> e instanceof InvalidProfileException || e instanceof JsonParseException)
+                .filter(e -> e instanceof ValidationException || e instanceof JsonParseException)
                 .map(Throwable::getMessage),
             testState.validationReporter
                 .getRecordedAlerts().stream()
@@ -103,13 +104,6 @@ public class CucumberTestHelper {
                     "Field [%s]: %s",
                     a.getField().name,
                     a.getMessage().getVerboseMessage())));
-    }
-
-    public Stream<String> getProfileValidationErrorsForField(String fieldName){
-        return testState.validationReporter
-            .getRecordedAlerts().stream()
-            .filter(a -> a.getField().name.equals(fieldName))
-            .map(a -> a.getMessage().getVerboseMessage());
     }
 
     public <T> void assertFieldContainsNullOrMatching(String fieldName, Class<T> clazz){
