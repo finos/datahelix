@@ -7,7 +7,6 @@ import java.nio.file.Path;
 import java.util.List;
 
 public interface GenerationConfigSource  {
-    boolean shouldViolate();
     List<AtomicConstraintType> getConstraintsToNotViolate();
 
     DataGenerationType getGenerationType();

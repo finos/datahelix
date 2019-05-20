@@ -83,11 +83,6 @@ public class CucumberGenerationConfigSource implements AllConfigSource {
     }
 
     @Override
-    public boolean shouldViolate() {
-        return state.shouldViolate;
-    }
-
-    @Override
     public boolean overwriteOutputFiles() {
         return false;
     }

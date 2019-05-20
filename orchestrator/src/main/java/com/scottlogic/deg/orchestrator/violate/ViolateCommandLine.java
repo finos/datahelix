@@ -15,20 +15,13 @@ import picocli.CommandLine;
     optionListHeading = "%nOptions:%n",
     abbreviateSynopsis = true)
 public class ViolateCommandLine extends GenerateCommandLine {
-
-
     @Override
     public void run() {
-        Module container = new AllModule(this);
+        Module container = new ViolateModule(this);
         Injector injector = Guice.createInjector(container);
 
         Runnable task = injector.getInstance(ViolateExecute.class);
 
         task.run();
-    }
-
-    @Override
-    public boolean shouldViolate() {
-        return true;
     }
 }

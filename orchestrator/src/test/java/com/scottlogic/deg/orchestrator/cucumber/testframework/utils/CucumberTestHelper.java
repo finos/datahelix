@@ -11,6 +11,7 @@ import com.scottlogic.deg.orchestrator.generate.GenerateExecute;
 import com.scottlogic.deg.generator.guice.GeneratorModule;
 import com.scottlogic.deg.orchestrator.guice.AllModule;
 import com.scottlogic.deg.orchestrator.violate.ViolateExecute;
+import com.scottlogic.deg.orchestrator.violate.ViolateModule;
 import com.scottlogic.deg.profile.guice.ProfileModule;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import org.junit.Assert;
@@ -39,7 +40,7 @@ public class CucumberTestHelper {
         }
 
         Module concatenatedModule =
-            Modules.override(new AllModule(new CucumberGenerationConfigSource(testState)))
+            Modules.override(new ViolateModule(new CucumberGenerationConfigSource(testState)))
                 .with(new CucumberTestModule(testState));
 
         Injector injector = Guice.createInjector(concatenatedModule);

@@ -4,24 +4,20 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.validation.*;
-import com.scottlogic.deg.generator.validators.GenerationOutputValidator;
 
 import java.util.ArrayList;
 
 public class ProfileValidatorProvider implements Provider<ProfileValidator> {
     private final GenerationConfigSource configSource;
     private final TypingRequiredPerFieldValidator untypedValidator;
-    private final GenerationOutputValidator outputValidator;
 
     @Inject
     public ProfileValidatorProvider(
         GenerationConfigSource configSource,
-        TypingRequiredPerFieldValidator untypedValidator,
-        GenerationOutputValidator outputValidator) {
+        TypingRequiredPerFieldValidator untypedValidator) {
 
         this.configSource = configSource;
         this.untypedValidator = untypedValidator;
-        this.outputValidator = outputValidator;
     }
 
     @Override
@@ -31,9 +27,6 @@ public class ProfileValidatorProvider implements Provider<ProfileValidator> {
         if(configSource.requireFieldTyping()) {
             validators.add(untypedValidator);
         }
-
-       // TODO PAUL validators.add(outputValidator);
-
         return new MultipleProfileValidator(validators);
     }
 }
