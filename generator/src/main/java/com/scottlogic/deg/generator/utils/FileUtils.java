@@ -1,7 +1,5 @@
 package com.scottlogic.deg.generator.utils;
 
-import com.scottlogic.deg.generator.generation.GenerationConfigSource;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
@@ -83,8 +81,8 @@ public class FileUtils {
         return false;
     }
 
-    public File getTraceFile(GenerationConfigSource configSource) {
-        String filenameWithoutExtension = configSource.getOutputPath().toString().replaceAll("\\.[^.]+$", "");
+    public File getTraceFile(Path outputPath) {
+        String filenameWithoutExtension = outputPath.toString().replaceAll("\\.[^.]+$", "");
         return Paths.get(filenameWithoutExtension + "-trace.json").toFile();
     }
 

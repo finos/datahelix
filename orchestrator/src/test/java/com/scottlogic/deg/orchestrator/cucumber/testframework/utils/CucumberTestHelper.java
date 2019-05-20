@@ -6,7 +6,7 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.generator.GenerateExecute;
+import com.scottlogic.deg.orchestrator.generate.GenerateExecute;
 import com.scottlogic.deg.generator.guice.BaseModule;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import org.junit.Assert;

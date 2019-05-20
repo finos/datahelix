@@ -1,6 +1,6 @@
 package com.scottlogic.deg.orchestrator;
 
-import com.scottlogic.deg.generator.commandline.GenerateCommandLine;
+import com.scottlogic.deg.orchestrator.generate.GenerateCommandLine;
 import com.scottlogic.deg.orchestrator.visualise.VisualiseCommandLine;
 import picocli.CommandLine;
 
