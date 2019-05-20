@@ -1,27 +1,27 @@
 package com.scottlogic.deg.generator.generation;
 
+import com.scottlogic.deg.generator.config.detail.*;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 public class TestGenerationConfigSource implements GenerationConfigSource {
-    public GenerationConfig.DataGenerationType generationType;
-    public GenerationConfig.CombinationStrategyType combinationStrategy;
-    public GenerationConfig.TreeWalkerType walkerType;
+    public DataGenerationType generationType;
+    public CombinationStrategyType combinationStrategy;
+    public TreeWalkerType walkerType;
     public long maxRows;
     public boolean validateProfile = false;
     public Path outputPath;
-    public GenerationConfig.OutputFormat outputFormat = GenerationConfig.OutputFormat.CSV;
+    public OutputFormat outputFormat = OutputFormat.CSV;
     public boolean requireFieldTyping = true;
 
     public TestGenerationConfigSource(
-        GenerationConfig.DataGenerationType generationType,
-        GenerationConfig.TreeWalkerType walkerType,
-        GenerationConfig.CombinationStrategyType combinationStrategy) {
+        DataGenerationType generationType,
+        TreeWalkerType walkerType,
+        CombinationStrategyType combinationStrategy) {
         this.generationType = generationType;
         this.combinationStrategy = combinationStrategy;
         this.walkerType = walkerType;
@@ -33,17 +33,17 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     }
 
     @Override
-    public GenerationConfig.DataGenerationType getGenerationType() {
+    public DataGenerationType getGenerationType() {
         return this.generationType;
     }
 
     @Override
-    public GenerationConfig.CombinationStrategyType getCombinationStrategyType() {
+    public CombinationStrategyType getCombinationStrategyType() {
         return this.combinationStrategy;
     }
 
     @Override
-    public GenerationConfig.TreeWalkerType getWalkerType() {
+    public TreeWalkerType getWalkerType() {
         return this.walkerType;
     }
 
@@ -53,8 +53,8 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     }
 
     @Override
-    public GenerationConfig.MonitorType getMonitorType() {
-        return GenerationConfig.MonitorType.QUIET;
+    public MonitorType getMonitorType() {
+        return MonitorType.QUIET;
     }
 
     @Override
@@ -117,7 +117,7 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     }
 
     @Override
-    public GenerationConfig.OutputFormat getOutputFormat() {
+    public OutputFormat getOutputFormat() {
         return outputFormat;
     }
 }

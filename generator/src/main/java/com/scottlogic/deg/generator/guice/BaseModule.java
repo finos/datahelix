@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator.guice;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.BindingAnnotation;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
@@ -15,6 +14,7 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.MaxStringLengthInjectingDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.treepartitioning.TreePartitioner;
 import com.scottlogic.deg.generator.generation.*;
+import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagGenerator;
 import com.scottlogic.deg.generator.inputs.JsonProfileReader;
@@ -110,6 +110,11 @@ public class BaseModule extends AbstractModule {
                 bind(GenerateCommandLine.class).toInstance((GenerateCommandLine)configSource);
             }
 
+            bind(DataGenerationType.class).toInstance(generationConfigSource.getGenerationType());
+
+            bind(long.class)
+                .annotatedWith(Names.named("config:maxRows"))
+                .toInstance(generationConfigSource.getMaxRows());
             bind(boolean.class)
                 .annotatedWith(Names.named("config:tracingIsEnabled"))
                 .toInstance(generationConfigSource.isEnableTracing());

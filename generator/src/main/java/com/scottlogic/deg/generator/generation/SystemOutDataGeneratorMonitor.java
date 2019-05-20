@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class SystemOutDataGeneratorMonitor implements ReductiveDataGeneratorMonitor {
 
     @Override
-    public void generationStarting(GenerationConfig generationConfig) {
+    public void generationStarting() {
     }
 
     @Override

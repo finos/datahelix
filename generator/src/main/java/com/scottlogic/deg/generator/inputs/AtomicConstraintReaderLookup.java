@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.inputs;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.generation.Defaults;
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedDateGranularity;
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import com.scottlogic.deg.common.util.NumberUtils;
@@ -218,7 +218,7 @@ class AtomicConstraintReaderLookup {
                     rules);
             });
 
-        BigDecimal maxStringLength = BigDecimal.valueOf(GenerationConfig.Constants.MAX_STRING_LENGTH);
+        BigDecimal maxStringLength = BigDecimal.valueOf(Defaults.MAX_STRING_LENGTH);
 
         // String constraints
         add(AtomicConstraintType.ISSTRINGLONGERTHAN.toString(),
@@ -310,12 +310,12 @@ class AtomicConstraintReaderLookup {
     }
 
     private static String validateString(ConstraintDTO dto, String value) throws InvalidProfileException {
-        if (value.length() > GenerationConfig.Constants.MAX_STRING_LENGTH) {
+        if (value.length() > Defaults.MAX_STRING_LENGTH) {
             throw new InvalidProfileException(String.format(
                 "Field [%s]: set contains a string longer than maximum permitted length, was: %d, max-length: %d",
                 dto.field,
                 value.length(),
-                GenerationConfig.Constants.MAX_STRING_LENGTH));
+                Defaults.MAX_STRING_LENGTH));
         }
 
         return value;
@@ -325,8 +325,8 @@ class AtomicConstraintReaderLookup {
         return ensureValueBetween(
             dto,
             value,
-            GenerationConfig.Constants.NUMERIC_MIN,
-            GenerationConfig.Constants.NUMERIC_MAX);
+            Defaults.NUMERIC_MIN,
+            Defaults.NUMERIC_MAX);
     }
 
     private static <T> T ensureValueBetween(

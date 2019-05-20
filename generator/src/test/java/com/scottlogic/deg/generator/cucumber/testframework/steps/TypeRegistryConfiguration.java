@@ -1,9 +1,11 @@
 package com.scottlogic.deg.generator.cucumber.testframework.steps;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
+import com.scottlogic.deg.generator.config.detail.DataGenerationType;
+import com.scottlogic.deg.generator.config.detail.TreeWalkerType;
 import com.scottlogic.deg.generator.cucumber.testframework.utils.CucumberGenerationMode;
 import com.scottlogic.deg.generator.cucumber.testframework.utils.GeneratorTestUtilities;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.inputs.InvalidProfileException;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import cucumber.api.TypeRegistry;
@@ -72,41 +74,41 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
     }
 
     private void defineDataGenerationStrategyType(TypeRegistry tr){
-        Transformer<GenerationConfig.DataGenerationType> transformer = strategyString ->
-            Arrays.stream(GenerationConfig.DataGenerationType.values())
+        Transformer<DataGenerationType> transformer = strategyString ->
+            Arrays.stream(DataGenerationType.values())
             .filter(val -> val.toString().equalsIgnoreCase(strategyString))
-            .findFirst().orElse(GenerationConfig.DataGenerationType.FULL_SEQUENTIAL);
+            .findFirst().orElse(DataGenerationType.FULL_SEQUENTIAL);
 
         tr.defineParameterType(new ParameterType<>(
             "generationStrategy",
             "(.*)$",
-            GenerationConfig.DataGenerationType.class,
+            DataGenerationType.class,
             transformer));
     }
 
     private void defineCombinationStrategyType(TypeRegistry tr){
-        Transformer<GenerationConfig.CombinationStrategyType> transformer = strategyString ->
-            Arrays.stream(GenerationConfig.CombinationStrategyType.values())
+        Transformer<CombinationStrategyType> transformer = strategyString ->
+            Arrays.stream(CombinationStrategyType.values())
                 .filter(val -> val.toString().equalsIgnoreCase(strategyString))
-                .findFirst().orElse(GenerationConfig.CombinationStrategyType.PINNING);
+                .findFirst().orElse(CombinationStrategyType.PINNING);
 
         tr.defineParameterType(new ParameterType<>(
             "combinationStrategy",
             "(.*)$",
-            GenerationConfig.CombinationStrategyType.class,
+            CombinationStrategyType.class,
             transformer));
     }
 
     private void defineWalkerType(TypeRegistry tr) {
-        Transformer<GenerationConfig.TreeWalkerType> transformer = strategyString ->
-            Arrays.stream(GenerationConfig.TreeWalkerType.values())
+        Transformer<TreeWalkerType> transformer = strategyString ->
+            Arrays.stream(TreeWalkerType.values())
                 .filter(val -> val.toString().equalsIgnoreCase(strategyString))
-                .findFirst().orElse(GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT);
+                .findFirst().orElse(TreeWalkerType.CARTESIAN_PRODUCT);
 
         tr.defineParameterType(new ParameterType<>(
             "walkerType",
             "(.*)$",
-            GenerationConfig.TreeWalkerType.class,
+            TreeWalkerType.class,
             transformer));
     }
 

@@ -3,7 +3,6 @@ package com.scottlogic.deg.generator;
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.generator.commandline.OutputTargetSpecification;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
 import com.scottlogic.deg.generator.inputs.validation.Criticality;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
@@ -22,7 +21,6 @@ import java.util.Collection;
 
 public class GenerateExecute implements Runnable {
     private final ErrorReporter errorReporter;
-    private final GenerationConfig config;
     private final GenerationConfigSource configSource;
     private final ConfigValidator configValidator;
 
@@ -38,7 +36,6 @@ public class GenerateExecute implements Runnable {
 
     @Inject
     GenerateExecute(
-        GenerationConfig config,
         ProfileReader profileReader,
         StandardGenerationEngine standardGenerationEngine,
         ViolationGenerationEngine violationGenerationEngine,
@@ -50,7 +47,6 @@ public class GenerateExecute implements Runnable {
         ProfileSchemaValidator profileSchemaValidator,
         ProfileValidationReporter validationReporter) {
 
-        this.config = config;
         this.profileReader = profileReader;
         this.standardGenerationEngine = standardGenerationEngine;
         this.violationGenerationEngine = violationGenerationEngine;
@@ -65,7 +61,7 @@ public class GenerateExecute implements Runnable {
 
     @Override
     public void run() {
-        Collection<ValidationAlert> validationResult = configValidator.preProfileChecks(config, configSource);
+        Collection<ValidationAlert> validationResult = configValidator.preProfileChecks(configSource);
         if (!validationResult.isEmpty()) {
             validationReporter.output(validationResult);
             return;
@@ -87,10 +83,10 @@ public class GenerateExecute implements Runnable {
             }
 
             if (configSource.shouldViolate()) {
-                violationGenerationEngine.generateDataSet(profile, config, outputTargetSpecification.asViolationDirectory());
+                violationGenerationEngine.generateDataSet(profile, outputTargetSpecification.asViolationDirectory());
             }
             else {
-                standardGenerationEngine.generateDataSet(profile, config, outputTargetSpecification.asFilePath());
+                standardGenerationEngine.generateDataSet(profile, outputTargetSpecification.asFilePath());
             }
         } catch (IOException | InvalidProfileException e) {
             errorReporter.displayException(e);

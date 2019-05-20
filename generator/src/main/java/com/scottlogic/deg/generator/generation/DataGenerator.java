@@ -8,6 +8,5 @@ import java.util.stream.Stream;
 
 public interface DataGenerator {
     Stream<GeneratedObject> generateData(Profile profile,
-                                         DecisionTree analysedProfile,
-                                         GenerationConfig generationConfig);
+                                         DecisionTree analysedProfile);
 }

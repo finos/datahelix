@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.smoke_tests;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.StandardGenerationEngine;
+import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.generator.decisiontree.MaxStringLengthInjectingDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.MostProlificConstraintOptimiser;
 import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
@@ -27,7 +28,6 @@ import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.violations.ViolationGenerationEngine;
 import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
-import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategyFactory;
 import org.junit.Assert;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -48,13 +48,7 @@ class ExampleProfilesViolationTests {
 
     @TestFactory
     Collection<DynamicTest> shouldReadProfileCorrectly() throws IOException {
-        GenerationConfig config = new GenerationConfig(
-            new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.PINNING));
-
-        return forEachProfileFile(config, ((standard, violating, profileFile) -> {
+        return forEachProfileFile(((standard, violating, profileFile) -> {
             final Profile profile = new JsonProfileReader().read(profileFile.toPath());
 
             Collection<Integer> constraintsPerRule = profile.rules.stream().map(r -> r.constraints.size()).collect(Collectors.toList());
@@ -64,33 +58,21 @@ class ExampleProfilesViolationTests {
 
     @TestFactory
     Collection<DynamicTest> shouldGenerateAsTestCasesWithoutErrors() throws IOException {
-        GenerationConfig config = new GenerationConfig(
-            new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.REDUCTIVE,
-                GenerationConfig.CombinationStrategyType.PINNING));
-                
-        return forEachProfileFile(config, ((standard, violating, profileFile) -> {
+        return forEachProfileFile(((standard, violating, profileFile) -> {
             final Profile profile = new JsonProfileReader().read(profileFile.toPath());
-            standard.generateDataSet(profile, config, new NullSingleDatasetOutputTarget());
+            standard.generateDataSet(profile, new NullSingleDatasetOutputTarget());
         }));
     }
 
     @TestFactory
     Collection<DynamicTest> shouldGenerateWithoutErrors() throws IOException {
-        GenerationConfig config = new GenerationConfig(
-            new TestGenerationConfigSource(
-                GenerationConfig.DataGenerationType.INTERESTING,
-                GenerationConfig.TreeWalkerType.CARTESIAN_PRODUCT,
-                GenerationConfig.CombinationStrategyType.PINNING));
-
-        return forEachProfileFile(config, ((standard, violating, profileFile) -> {
+        return forEachProfileFile(((standard, violating, profileFile) -> {
             final Profile profile = new JsonProfileReader().read(profileFile.toPath());
-            violating.generateDataSet(profile, config, new NullMultiDatasetOutputTarget());
+            violating.generateDataSet(profile, new NullMultiDatasetOutputTarget());
         }));
     }
 
-    private Collection<DynamicTest> forEachProfileFile(GenerationConfig config, GenerateConsumer consumer) throws IOException {
+    private Collection<DynamicTest> forEachProfileFile(GenerateConsumer consumer) throws IOException {
         Collection<DynamicTest> dynamicTests = new ArrayList<>();
 
         File[] directoriesArray =
@@ -116,11 +98,12 @@ class ExampleProfilesViolationTests {
                         new NoopDataGeneratorMonitor(),
                         new StandardRowSpecDataBagGenerator(
                             new FieldSpecValueGenerator(
-                                config,
+                                DataGenerationType.INTERESTING,
                                 new StandardFieldValueSourceEvaluator(),
                                 new JavaUtilRandomNumberGenerator()),
                             new PinningCombinationStrategy()),
-                        new PinningCombinationStrategy()),
+                        new PinningCombinationStrategy(),
+                        10),
                     new MaxStringLengthInjectingDecisionTreeFactory(new ProfileDecisionTreeFactory(), 200),
                     new NoopDataGeneratorMonitor());
 
