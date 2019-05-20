@@ -20,7 +20,6 @@ import java.util.stream.Stream;
 
 public class ContradictionTreeValidator {
 
-    private DecisionTree decisionTree;
     private final ConstraintReducer constraintReducer;
     private final ContradictionValidatorMonitorInterface validationMonitor;
     private final FieldSpecMerger fieldSpecMerger;
@@ -38,12 +37,10 @@ public class ContradictionTreeValidator {
      * @param decisionTree
      */
     public void reportContradictions(DecisionTree decisionTree) {
-        this.decisionTree = decisionTree;
+        ConstraintNode root =  decisionTree.rootNode;
 
-        ConstraintNode root =  this.decisionTree.rootNode;
-
-        // walk tree, check for contradictions in child nodes.
         walkTree(root);
+
         return;
     }
 
@@ -74,8 +71,8 @@ public class ContradictionTreeValidator {
                 Node node = stack.pop();
 
                 if(node instanceof ConstraintNode){
-                    //findContradictionForNode((ConstraintNode)node);
-                    findContradictionForNodeFIXED((ConstraintNode)node);
+                    findContradictionForNode((ConstraintNode)node);
+                    //findContradictionForNodeFieldSpec((ConstraintNode)node);
                 }
 
                 // get the next right node if it exists.
@@ -108,10 +105,10 @@ public class ContradictionTreeValidator {
         return false;
     }
 
-    private boolean findContradictionForNodeFIXED(ConstraintNode nodeToCheck){
+    private boolean findContradictionForNodeFieldSpec(ConstraintNode nodeToCheck){
         Map<Field, FieldSpec> fieldSpecsForNode = getFieldSpecsForNode(nodeToCheck);
         for (DecisionNode node : (nodeToCheck).getDecisions()) {
-            boolean contradictionFound = recursiveFindContradictionFIXED(fieldSpecsForNode, node);
+            boolean contradictionFound = recursiveFindContradiction(fieldSpecsForNode, node);
             if (contradictionFound) {
                 return true;
             }
@@ -150,7 +147,7 @@ public class ContradictionTreeValidator {
 
     }
 
-    private boolean recursiveFindContradictionFIXED(Map<Field, FieldSpec> passedDownFieldSpec, Node currentNode){
+    private boolean recursiveFindContradiction(Map<Field, FieldSpec> passedDownFieldSpec, Node currentNode){
         Map<Field, FieldSpec> fieldSpecToPassDown = passedDownFieldSpec;
         // can only check for contradictions on ConstraintNodes
         if (currentNode instanceof ConstraintNode){
@@ -164,14 +161,14 @@ public class ContradictionTreeValidator {
         // no contradiction call next node.
         if (currentNode instanceof ConstraintNode) {
             for (DecisionNode node : ((ConstraintNode) currentNode).getDecisions()) {
-                boolean contradictionFound = recursiveFindContradictionFIXED(fieldSpecToPassDown, node);
+                boolean contradictionFound = recursiveFindContradiction(fieldSpecToPassDown, node);
                 if (contradictionFound)
                     return true;
             }
         }
         if(currentNode instanceof DecisionNode){
             for (ConstraintNode node : ((DecisionNode) currentNode).getOptions()) {
-                boolean contradictionFound = recursiveFindContradictionFIXED(fieldSpecToPassDown, node);
+                boolean contradictionFound = recursiveFindContradiction(fieldSpecToPassDown, node);
                 if (contradictionFound)
                     return true;
             }
@@ -236,8 +233,6 @@ public class ContradictionTreeValidator {
         Collection<Field> combinedFields = Stream.concat(passedDownFields.stream(), nodeToCheckFields.stream())
             .collect(Collectors.toCollection(ArrayList::new));
 
-        Collection<AtomicConstraint> nodeToCheckConstraints = nodeToCheck.getAtomicConstraints();
-
         Map<Field, Collection<AtomicConstraint>> mapFromNodeToCheck = new HashMap<>();
         nodeToCheck.getAtomicConstraints()
             .stream()
@@ -298,8 +293,6 @@ public class ContradictionTreeValidator {
             .forEach(constraint -> addToConstraintsMap(mapOfFieldToAtomicConstraints, constraint));
 
         for (Map.Entry<Field, Collection<AtomicConstraint>> entry : mapOfFieldToAtomicConstraints.entrySet()) {
-        // produce a field spec for each field in the node, and
-
             Optional<FieldSpec> fieldSpec = constraintReducer.reduceConstraintsToFieldSpec(entry.getValue());
 
             if(fieldSpec.isPresent()){

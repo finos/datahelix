@@ -46,11 +46,6 @@ public class ContradictionTreeValidatorTests {
                 new FieldSpecMerger());
     }
 
-//    @Test
-//    public void treeWithContradictionInOneNode(){
-//        verify(outputter).contradictionInTree(anyObject(),anyObject());
-//    }
-
     @Test
     public void decisionTreeWithNoContradictions_doesNotOutputContradictionToConsole() {
         //Arrange
