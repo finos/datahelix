@@ -106,11 +106,6 @@ public class GenerateCommandLine implements AllConfigSource, Runnable {
     private boolean enableTracing;
 
     @CommandLine.Option(
-        names = {"--violate"},
-        description = "Defines whether to generate violating data")
-    private boolean violateProfile;
-
-    @CommandLine.Option(
         names = {"--dont-violate"},
         arity = "0..",
         description = "Choose types of constraint should not be violated")
@@ -158,7 +153,7 @@ public class GenerateCommandLine implements AllConfigSource, Runnable {
 
     @Override
     public boolean shouldViolate() {
-        return this.violateProfile;
+        return false;
     }
 
     @Override

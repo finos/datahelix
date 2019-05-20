@@ -9,6 +9,7 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.orchestrator.generate.GenerateExecute;
 import com.scottlogic.deg.generator.guice.GeneratorModule;
 import com.scottlogic.deg.orchestrator.guice.AllModule;
+import com.scottlogic.deg.orchestrator.violate.ViolateExecute;
 import com.scottlogic.deg.profile.guice.ProfileModule;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import org.junit.Assert;
@@ -42,7 +43,11 @@ public class CucumberTestHelper {
 
         Injector injector = Guice.createInjector(concatenatedModule);
 
-        injector.getInstance(GenerateExecute.class).run();
+        if (testState.shouldViolate){
+            injector.getInstance(ViolateExecute.class).run();
+        } else{
+            injector.getInstance(GenerateExecute.class).run();
+        }
 
         testState.generationHasAlreadyOccured = true;
     }
