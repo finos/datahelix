@@ -1,8 +1,7 @@
-package com.scottlogic.deg.generator.commandline;
+package com.scottlogic.deg.orchestrator.generate;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.scottlogic.deg.generator.GenerateExecute;
 import com.scottlogic.deg.generator.config.detail.*;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.guice.BaseModule;

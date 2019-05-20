@@ -1,8 +1,7 @@
-package com.scottlogic.deg.generator.guice;
+package com.scottlogic.deg.orchestrator.violation;
 
 import com.google.inject.AbstractModule;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
-import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
 
 /**
  * Class which defines bindings for Guice injection specific for integration testing.
