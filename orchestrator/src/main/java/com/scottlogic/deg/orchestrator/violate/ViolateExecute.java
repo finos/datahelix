@@ -61,8 +61,6 @@ public class ViolateExecute implements Runnable {
         this.generationEngine = generationEngine;
     }
 
-
-
     private void doGeneration(Profile profile) throws IOException {
         List<Profile> violatedProfiles = profileViolator.violate(profile);
 
@@ -86,15 +84,10 @@ public class ViolateExecute implements Runnable {
 
     @Override
     public void run() {
-        configValidator.preProfileChecks(configSource);
-
-        ValidationResult profileSchemaValidationResult = profileSchemaValidator.validateProfile(configSource.getProfileFile());
-        if (!profileSchemaValidationResult.isValid()) {
-            errorReporter.display(profileSchemaValidationResult);
-            return;
-        }
-
         try {
+            configValidator.preProfileChecks(configSource);
+            profileSchemaValidator.validateProfile(configSource.getProfileFile());
+
             Profile profile = profileReader.read(configSource.getProfileFile().toPath());
 
             Collection<ValidationAlert> alerts = profileValidator.validate(profile);

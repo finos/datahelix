@@ -13,6 +13,6 @@ public class ErrorReporter {
     }
 
     public void displayValidation(ValidationException e) {
-        System.err.println(e.getMessage());
+        e.errorMessages.forEach(msg -> System.err.println("* " + msg));
     }
 }
