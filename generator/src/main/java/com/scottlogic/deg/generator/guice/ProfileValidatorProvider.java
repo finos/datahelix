@@ -32,7 +32,7 @@ public class ProfileValidatorProvider implements Provider<ProfileValidator> {
             validators.add(untypedValidator);
         }
 
-        validators.add(outputValidator);
+       // TODO PAUL validators.add(outputValidator);
 
         return new MultipleProfileValidator(validators);
     }

@@ -1,5 +1,7 @@
 package com.scottlogic.deg.generator.outputs.targets;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.generator.outputs.formats.OutputFormat;
 import com.scottlogic.deg.generator.utils.FileUtils;
@@ -8,16 +10,17 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 /** Represents a directory specified by a user as a target for violation data */
-public class ViolationDirectoryOutputTarget implements MultiDatasetOutputTarget {
+public class OutputTargetFactory implements ValidatableOutput{
     private final FileUtils fileUtils;
     private final Path directoryPath;
     private final boolean canOverwriteExistingFiles;
     private final OutputFormat formatOfViolationDatasets;
 
-    public ViolationDirectoryOutputTarget(
-        Path directoryPath,
+    @Inject
+    public OutputTargetFactory(
+        @Named("config:outputPath") Path directoryPath,
         OutputFormat formatOfViolationDatasets,
-        boolean canOverwriteExistingFiles,
+        @Named("config:canOverwriteOutputFiles") boolean canOverwriteExistingFiles,
         FileUtils fileUtils) {
 
         this.fileUtils = fileUtils;
@@ -26,8 +29,7 @@ public class ViolationDirectoryOutputTarget implements MultiDatasetOutputTarget 
         this.formatOfViolationDatasets = formatOfViolationDatasets;
     }
 
-    @Override
-    public SingleDatasetOutputTarget getSubTarget(String name) {
+    public SingleDatasetOutputTarget create(String name) {
         String filename =
             formatOfViolationDatasets.getFileExtensionWithoutDot()
                 .map(extension -> name + "." + extension)

@@ -1,6 +1,7 @@
-package com.scottlogic.deg.generator.commandline;
+package com.scottlogic.deg.generator.guice;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.name.Named;
 import com.scottlogic.deg.generator.outputs.formats.OutputFormat;
 import com.scottlogic.deg.generator.outputs.formats.trace.TraceOutputFormat;
@@ -9,7 +10,7 @@ import com.scottlogic.deg.generator.utils.FileUtils;
 
 import java.nio.file.Path;
 
-public class OutputTargetSpecificationImpl implements OutputTargetSpecification {
+public class SingleDatasetOutputTargetProvider implements Provider<SingleDatasetOutputTarget> {
     private final boolean canOverwriteOutputFiles;
     private final boolean tracingIsEnabled;
     private final OutputFormat outputFormat;
@@ -17,7 +18,7 @@ public class OutputTargetSpecificationImpl implements OutputTargetSpecification 
     private final Path filePath;
 
     @Inject
-    OutputTargetSpecificationImpl(
+    SingleDatasetOutputTargetProvider(
         @Named("config:outputPath") Path filePath,
         OutputFormat outputFormat,
         @Named("config:canOverwriteOutputFiles") boolean canOverwriteOutputFiles,
@@ -32,7 +33,7 @@ public class OutputTargetSpecificationImpl implements OutputTargetSpecification 
     }
 
     @Override
-    public SingleDatasetOutputTarget asFilePath() {
+    public SingleDatasetOutputTarget get() {
         SingleDatasetOutputTarget mainOutputTarget = new FileOutputTarget(
             filePath,
             outputFormat,
@@ -55,14 +56,5 @@ public class OutputTargetSpecificationImpl implements OutputTargetSpecification 
         } else {
             return mainOutputTarget;
         }
-    }
-
-    @Override
-    public MultiDatasetOutputTarget asViolationDirectory() {
-        return new ViolationDirectoryOutputTarget(
-            filePath,
-            outputFormat,
-            canOverwriteOutputFiles,
-            fileUtils);
     }
 }

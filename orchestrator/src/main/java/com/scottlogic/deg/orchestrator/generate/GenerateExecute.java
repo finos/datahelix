@@ -3,12 +3,12 @@ package com.scottlogic.deg.orchestrator.generate;
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.generator.StandardGenerationEngine;
-import com.scottlogic.deg.generator.commandline.OutputTargetSpecification;
 import com.scottlogic.deg.generator.generation.AllConfigSource;
 import com.scottlogic.deg.generator.inputs.validation.Criticality;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
 import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
+import com.scottlogic.deg.generator.outputs.targets.SingleDatasetOutputTarget;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import com.scottlogic.deg.profile.reader.ProfileReader;
 import com.scottlogic.deg.orchestrator.validator.ConfigValidator;
@@ -22,12 +22,9 @@ import java.util.Collection;
 public class GenerateExecute implements Runnable {
     private final ErrorReporter errorReporter;
     private final AllConfigSource configSource;
+    private final SingleDatasetOutputTarget singleDatasetOutputTarget;
     private final ConfigValidator configValidator;
-
     private final StandardGenerationEngine standardGenerationEngine;
-
-    private final OutputTargetSpecification outputTargetSpecification;
-
     private final ProfileReader profileReader;
     private final ProfileValidator profileValidator;
     private final ProfileSchemaValidator profileSchemaValidator;
@@ -38,7 +35,7 @@ public class GenerateExecute implements Runnable {
         ProfileReader profileReader,
         StandardGenerationEngine standardGenerationEngine,
         AllConfigSource configSource,
-        OutputTargetSpecification outputTargetSpecification,
+        SingleDatasetOutputTarget singleDatasetOutputTarget,
         ConfigValidator configValidator,
         ErrorReporter errorReporter,
         ProfileValidator profileValidator,
@@ -48,7 +45,7 @@ public class GenerateExecute implements Runnable {
         this.profileReader = profileReader;
         this.standardGenerationEngine = standardGenerationEngine;
         this.configSource = configSource;
-        this.outputTargetSpecification = outputTargetSpecification;
+        this.singleDatasetOutputTarget = singleDatasetOutputTarget;
         this.configValidator = configValidator;
         this.profileSchemaValidator = profileSchemaValidator;
         this.errorReporter = errorReporter;
@@ -79,7 +76,7 @@ public class GenerateExecute implements Runnable {
                 return;
             }
 
-            standardGenerationEngine.generateDataSet(profile, outputTargetSpecification.asFilePath());
+            standardGenerationEngine.generateDataSet(profile, singleDatasetOutputTarget);
 
         } catch (IOException | InvalidProfileException e) {
             errorReporter.displayException(e);

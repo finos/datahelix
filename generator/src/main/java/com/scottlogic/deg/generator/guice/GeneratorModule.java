@@ -4,8 +4,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
-import com.scottlogic.deg.generator.commandline.OutputTargetSpecification;
-import com.scottlogic.deg.generator.commandline.OutputTargetSpecificationImpl;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.MaxStringLengthInjectingDecisionTreeFactory;
@@ -24,6 +22,7 @@ import com.scottlogic.deg.generator.inputs.validation.reporters.SystemOutProfile
 import com.scottlogic.deg.generator.outputs.formats.OutputFormat;
 import com.scottlogic.deg.generator.outputs.manifest.JsonManifestWriter;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
+import com.scottlogic.deg.generator.outputs.targets.SingleDatasetOutputTarget;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
@@ -59,6 +58,7 @@ public class GeneratorModule extends AbstractModule {
         bind(IterationVisualiser.class).toProvider(IterationVisualiserProvider.class);
         bind(RowSpecDataBagGenerator.class).toProvider(RowSpecDataBagSourceFactoryProvider.class);
         bind(CombinationStrategy.class).toProvider(CombinationStrategyProvider.class);
+        bind(SingleDatasetOutputTarget.class).toProvider(SingleDatasetOutputTargetProvider.class);
 
         // bind config directly
         bind(DataGenerationType.class).toInstance(generationConfigSource.getGenerationType());
@@ -87,7 +87,6 @@ public class GeneratorModule extends AbstractModule {
         bind(FieldValueSourceEvaluator.class).to(StandardFieldValueSourceEvaluator.class);
         bind(ProfileViolator.class).to(IndividualRuleProfileViolator.class);
         bind(RuleViolator.class).to(IndividualConstraintRuleViolator.class);
-        bind(OutputTargetSpecification.class).to(OutputTargetSpecificationImpl.class);
 
         bind(new TypeLiteral<List<ViolationFilter>>(){}).toProvider(ViolationFiltersProvider.class);
 
