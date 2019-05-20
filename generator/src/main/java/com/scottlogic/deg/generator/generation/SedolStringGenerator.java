@@ -4,14 +4,14 @@ import com.scottlogic.deg.generator.utils.*;
 
 public class SedolStringGenerator extends ChecksummedCodeStringGenerator {
     public final static int SEDOL_LENGTH = 7;
-    private final static String SEDOL_SANS_CHECK_DIGIT_REGEX = "[B-DF-HJ-NP-TV-Z0-9]{6}";
+    private final static String SEDOL_REGEX = "[B-DF-HJ-NP-TV-Z0-9]{6}[0-9]";
 
     public SedolStringGenerator() {
-        super(SEDOL_SANS_CHECK_DIGIT_REGEX);
+        super(SEDOL_REGEX);
     }
 
     public SedolStringGenerator(String prefix) {
-        super(prefix + SEDOL_SANS_CHECK_DIGIT_REGEX);
+        super(prefix + SEDOL_REGEX);
     }
 
     private SedolStringGenerator(RegexStringGenerator sedolSansCheckDigitGenerator, boolean negate) {
@@ -19,13 +19,15 @@ public class SedolStringGenerator extends ChecksummedCodeStringGenerator {
     }
 
     @Override
-    public char calculateCheckDigit(String str) {
-        return IsinUtils.calculateSedolCheckDigit(str.substring(str.length() - (SEDOL_LENGTH - 1)));
+    public char calculateCheckDigit(String withoutCheckDigit) {
+        return IsinUtils.calculateSedolCheckDigit(
+            withoutCheckDigit.substring(withoutCheckDigit.length() - (SEDOL_LENGTH - 1))
+        );
     }
 
     @Override
     public StringGenerator complement() {
-        return new SedolStringGenerator(sansCheckDigitGenerator, !negate);
+        return new SedolStringGenerator(regexGenerator, !negate);
     }
 
     @Override
