@@ -31,9 +31,9 @@ public class SplittingOutputTarget implements SingleDatasetOutputTarget {
     }
 
     @Override
-    public void validate(Profile profile) throws OutputTargetValidationException, IOException {
+    public void validate() throws OutputTargetValidationException, IOException {
         for (SingleDatasetOutputTarget subTarget : subTargets) {
-            subTarget.validate(profile);
+            subTarget.validate();
         }
     }
 }

@@ -28,6 +28,7 @@ public class ViolateExecute implements Runnable {
     private final ProfileSchemaValidator profileSchemaValidator;
     private final ProfileViolator profileViolator;
     private final StandardGenerationEngine generationEngine;
+    private final ViolateOutputValidator violateOutputValidator;
 
     @Inject
     ViolateExecute(
@@ -39,7 +40,8 @@ public class ViolateExecute implements Runnable {
         ProfileValidator profileValidator,
         ProfileSchemaValidator profileSchemaValidator,
         ProfileViolator profileViolator,
-        StandardGenerationEngine generationEngine) {
+        StandardGenerationEngine generationEngine,
+        ViolateOutputValidator violateOutputValidator) {
 
         this.profileReader = profileReader;
         this.configSource = configSource;
@@ -50,6 +52,29 @@ public class ViolateExecute implements Runnable {
         this.profileValidator = profileValidator;
         this.profileViolator = profileViolator;
         this.generationEngine = generationEngine;
+        this.violateOutputValidator = violateOutputValidator;
+    }
+
+    @Override
+    public void run() {
+        try {
+            configValidator.preProfileChecks(configSource);
+            profileSchemaValidator.validateProfile(configSource.getProfileFile());
+
+            Profile profile = profileReader.read(configSource.getProfileFile().toPath());
+
+            profileValidator.validate(profile);
+            violateOutputValidator.validate(profile);
+
+            doGeneration(profile);
+
+        }
+        catch (ValidationException e){
+            errorReporter.displayValidation(e);
+        }
+        catch (IOException e) {
+            errorReporter.displayException(e);
+        }
     }
 
     private void doGeneration(Profile profile) throws IOException {
@@ -65,32 +90,8 @@ public class ViolateExecute implements Runnable {
         for (Profile violatedProfile : violatedProfiles) {
             generationEngine.generateDataSet(
                 violatedProfile,
-                outputTargetFactory.create(
-                    intFormatter.format(filename))
+                outputTargetFactory.create(intFormatter.format(filename++))
             );
-
-            filename++;
-        }
-    }
-
-    @Override
-    public void run() {
-        try {
-            configValidator.preProfileChecks(configSource);
-            profileSchemaValidator.validateProfile(configSource.getProfileFile());
-
-            Profile profile = profileReader.read(configSource.getProfileFile().toPath());
-
-            profileValidator.validate(profile);
-
-            doGeneration(profile);
-
-        }
-        catch (ValidationException e){
-            errorReporter.displayValidation(e);
-        }
-        catch (IOException e) {
-            errorReporter.displayException(e);
         }
     }
 }

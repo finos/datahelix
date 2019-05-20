@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 /** Represents a directory specified by a user as a target for violation data */
-public class OutputTargetFactory implements ValidatableOutput{
+public class OutputTargetFactory {
     private final FileUtils fileUtils;
     private final Path directoryPath;
     private final boolean canOverwriteExistingFiles;
@@ -39,18 +39,5 @@ public class OutputTargetFactory implements ValidatableOutput{
             directoryPath.resolve(filename),
             formatOfViolationDatasets, canOverwriteExistingFiles, fileUtils
         );
-    }
-
-    @Override
-    public void validate(Profile profile) throws OutputTargetValidationException, IOException {
-        if (!fileUtils.exists(directoryPath)) {
-            fileUtils.createDirectories(directoryPath);
-        } else if (!fileUtils.isDirectory(directoryPath)) {
-            throw new OutputTargetValidationException(
-                "not a directory, please enter a valid directory name");
-        } else if (!canOverwriteExistingFiles && !fileUtils.isDirectoryEmpty(directoryPath, profile.rules.size())) {
-            throw new OutputTargetValidationException(
-                "directory not empty, please remove any 'manifest.json' and '[0-9].csv' files or use the --replace option");
-        }
     }
 }

@@ -55,6 +55,7 @@ public class GenerateExecute implements Runnable {
             Profile profile = profileReader.read(configSource.getProfileFile().toPath());
 
             profileValidator.validate(profile);
+            singleDatasetOutputTarget.validate();
 
             standardGenerationEngine.generateDataSet(profile, singleDatasetOutputTarget);
 

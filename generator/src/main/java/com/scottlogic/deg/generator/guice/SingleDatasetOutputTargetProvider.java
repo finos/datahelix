@@ -41,18 +41,17 @@ public class SingleDatasetOutputTargetProvider implements Provider<SingleDataset
             fileUtils);
 
         if (tracingIsEnabled) {
-            return new SplittingOutputTarget(
-                mainOutputTarget,
-                new FileOutputTarget(
-                    FileUtils.addFilenameSuffix(
-                        FileUtils.replaceExtension(
-                            filePath,
-                            "json"),
-                        "-trace"),
-                    new TraceOutputFormat(),
-                    canOverwriteOutputFiles,
-                    fileUtils
-                ));
+            SingleDatasetOutputTarget tracingOutputTarget = new FileOutputTarget(
+                FileUtils.addFilenameSuffix(
+                    FileUtils.replaceExtension(
+                        filePath,
+                        "json"),
+                    "-trace"),
+                new TraceOutputFormat(),
+                canOverwriteOutputFiles,
+                fileUtils);
+
+            return new SplittingOutputTarget(mainOutputTarget, tracingOutputTarget);
         } else {
             return mainOutputTarget;
         }

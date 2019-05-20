@@ -1,6 +1,7 @@
 package com.scottlogic.deg.orchestrator.violation;
 
 import com.scottlogic.deg.generator.config.detail.*;
+import com.scottlogic.deg.generator.generation.AllConfigSource;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 
@@ -9,7 +10,7 @@ import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 
-public class TestGenerationConfigSource implements GenerationConfigSource {
+public class TestGenerationConfigSource implements AllConfigSource {
     public DataGenerationType generationType;
     public CombinationStrategyType combinationStrategy;
     public TreeWalkerType walkerType;
@@ -87,11 +88,6 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     }
 
     @Override
-    public boolean shouldViolate() {
-        return false;
-    }
-
-    @Override
     public boolean overwriteOutputFiles() {
         return false;
     }
@@ -104,5 +100,15 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     @Override
     public OutputFormat getOutputFormat() {
         return outputFormat;
+    }
+
+    @Override
+    public File getProfileFile() {
+        return null;
+    }
+
+    @Override
+    public boolean isSchemaValidationEnabled() {
+        return false;
     }
 }

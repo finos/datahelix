@@ -72,9 +72,6 @@ public class GeneratorModule extends AbstractModule {
         bind(boolean.class)
             .annotatedWith(Names.named("config:tracingIsEnabled"))
             .toInstance(generationConfigSource.isEnableTracing());
-        bind(boolean.class)
-            .annotatedWith(Names.named("config:inViolationMode"))
-            .toInstance(generationConfigSource.shouldViolate());
 
         // Bind known implementations - no user input required
         bind(ManifestWriter.class).to(JsonManifestWriter.class);
@@ -82,8 +79,6 @@ public class GeneratorModule extends AbstractModule {
         bind(DataGenerator.class).to(DecisionTreeDataGenerator.class);
         bind(DecisionTreeFactory.class).to(MaxStringLengthInjectingDecisionTreeFactory.class);
         bind(FieldValueSourceEvaluator.class).to(StandardFieldValueSourceEvaluator.class);
-        bind(ProfileViolator.class).to(IndividualRuleProfileViolator.class);
-        bind(RuleViolator.class).to(IndividualConstraintRuleViolator.class);
 
         bind(new TypeLiteral<List<ViolationFilter>>(){}).toProvider(ViolationFiltersProvider.class);
 

@@ -152,11 +152,6 @@ public class GenerateCommandLine implements AllConfigSource, Runnable {
     }
 
     @Override
-    public boolean shouldViolate() {
-        return false;
-    }
-
-    @Override
     public boolean isSchemaValidationEnabled() {
         return this.enableSchemaValidation;
     }
