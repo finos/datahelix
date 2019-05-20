@@ -2,6 +2,7 @@ package com.scottlogic.deg.profile.v0_1;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.profile.serialisation.ValidationResult;
 import com.worldturner.medeia.api.SchemaSource;
 import com.worldturner.medeia.api.UrlSchemaSource;
@@ -19,23 +20,15 @@ public class ProfileSchemaValidatorMedeia implements ProfileSchemaValidator {
     private static ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public ValidationResult validateProfile(File profileFile) {
+    public void validateProfile(File profileFile) {
         try {
-            return validateProfile(new FileInputStream(profileFile));
+            validateProfile(this.getClass().getResourceAsStream(datahelixProfileSchema), new FileInputStream(profileFile));
         } catch (FileNotFoundException e) {
-            List<String> errMsgs = new ArrayList<>();
-            errMsgs.add(e.getLocalizedMessage());
-            return new ValidationResult(errMsgs);
+            throw new ValidationException(e.getLocalizedMessage());
         }
     }
 
-    private ValidationResult validateProfile(InputStream profileStream) {
-        return validateProfile(
-            this.getClass().getResourceAsStream(datahelixProfileSchema),
-            profileStream);
-    }
-
-    private ValidationResult validateProfile(InputStream schemaStream, InputStream profileStream) {
+    private void validateProfile(InputStream schemaStream, InputStream profileStream) {
         List<String> errorMessages = new ArrayList<>();
         if (schemaStream == null) {
             errorMessages.add("Null Profile Schema Stream");
@@ -52,7 +45,10 @@ public class ProfileSchemaValidatorMedeia implements ProfileSchemaValidator {
                 errorMessages.add("Exception validating profile:" + e);
             }
         }
-        return new ValidationResult(errorMessages);
+
+        if (!errorMessages.isEmpty()) {
+            throw new ValidationException(errorMessages);
+        }
     }
 
     private SchemaValidator loadSchema() {

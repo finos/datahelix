@@ -66,10 +66,10 @@ public class VisualiseExecute implements Runnable {
     @Override
     public void run() {
         ValidationResult validationResult = validator.validateCommandLine(configSource.overwriteOutputFiles(), outputPath);
-        ValidationResult profileSchemaValidationResult = profileSchemaValidator.validateProfile(configSource.getProfileFile());
-        if (!validationResult.isValid() || !profileSchemaValidationResult.isValid()) {
+        profileSchemaValidator.validateProfile(configSource.getProfileFile());
+
+        if (!validationResult.isValid()) {
             errorReporter.display(validationResult);
-            errorReporter.display(profileSchemaValidationResult);
             return;
         }
 

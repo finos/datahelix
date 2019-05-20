@@ -22,16 +22,14 @@ public class VisualisationConfigValidatorTests {
 
     private FileUtils mockFileUtils = mock(FileUtils.class);
     private Path mockFilePath = mock(Path.class);
-    private ProfileSchemaValidator mockProfileSchemaValidator = mock(ProfileSchemaValidator.class);
     private VisualisationConfigValidator validator;
 
     @BeforeEach
-    void setup() throws IOException {
+    void setup() {
         //Arrange
         validator = new VisualisationConfigValidator(mockFileUtils);
         when(mockFileUtils.isDirectory(eq(mockFilePath))).thenReturn(false);
         when(mockFileUtils.exists(eq(mockFilePath))).thenReturn(false);
-        when(mockProfileSchemaValidator.validateProfile(any(File.class))).thenReturn(new ValidationResult(new ArrayList<>()));
     }
 
     @Test
