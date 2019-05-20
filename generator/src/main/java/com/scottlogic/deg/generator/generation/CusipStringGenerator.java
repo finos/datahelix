@@ -56,7 +56,7 @@ public class CusipStringGenerator implements StringGenerator {
 
     @Override
     public boolean match(String subject) {
-        boolean matches = IsinUtils.isValidSedolNsin(subject);
+        boolean matches = IsinUtils.isValidCusipNsin(subject);
         return matches != negate;
     }
 
@@ -94,7 +94,8 @@ public class CusipStringGenerator implements StringGenerator {
                 randomNumberGenerator);
         }
         return new ProjectingIterable<>(cusipSansCheckDigitGenerator.generateRandomValues(randomNumberGenerator),
-            cusipSansCheckDigit -> cusipSansCheckDigit + IsinUtils.calculateCusipCheckDigit(cusipSansCheckDigit.substring(4)));
+            cusipSansCheckDigit -> cusipSansCheckDigit + IsinUtils.calculateCusipCheckDigit(
+                cusipSansCheckDigit.substring(cusipSansCheckDigit.length() - (CUSIP_LENGTH - 1))));
     }
 
     private Iterable<String> generateAllInvalidRegexCusips() {
