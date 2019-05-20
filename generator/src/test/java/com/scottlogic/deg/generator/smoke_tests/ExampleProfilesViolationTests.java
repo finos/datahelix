@@ -16,17 +16,12 @@ import com.scottlogic.deg.generator.generation.combinationstrategies.PinningComb
 import com.scottlogic.deg.generator.generation.databags.StandardRowSpecDataBagGenerator;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import com.scottlogic.deg.profile.reader.JsonProfileReader;
-import com.scottlogic.deg.generator.inputs.profileviolation.IndividualConstraintRuleViolator;
-import com.scottlogic.deg.generator.inputs.profileviolation.IndividualRuleProfileViolator;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.formats.DataSetWriter;
-import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
-import com.scottlogic.deg.generator.outputs.targets.MultiDatasetOutputTarget;
 import com.scottlogic.deg.generator.outputs.targets.SingleDatasetOutputTarget;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
-import com.scottlogic.deg.generator.violations.ViolationGenerationEngine;
 import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
 import org.junit.Assert;
 import org.junit.jupiter.api.DynamicTest;
@@ -48,7 +43,7 @@ class ExampleProfilesViolationTests {
 
     @TestFactory
     Collection<DynamicTest> shouldReadProfileCorrectly() throws IOException {
-        return forEachProfileFile(((standard, violating, profileFile) -> {
+        return forEachProfileFile(((standard, profileFile) -> {
             final Profile profile = new JsonProfileReader().read(profileFile.toPath());
 
             Collection<Integer> constraintsPerRule = profile.rules.stream().map(r -> r.constraints.size()).collect(Collectors.toList());
@@ -58,17 +53,9 @@ class ExampleProfilesViolationTests {
 
     @TestFactory
     Collection<DynamicTest> shouldGenerateAsTestCasesWithoutErrors() throws IOException {
-        return forEachProfileFile(((standard, violating, profileFile) -> {
+        return forEachProfileFile(((standard, profileFile) -> {
             final Profile profile = new JsonProfileReader().read(profileFile.toPath());
             standard.generateDataSet(profile, new NullSingleDatasetOutputTarget());
-        }));
-    }
-
-    @TestFactory
-    Collection<DynamicTest> shouldGenerateWithoutErrors() throws IOException {
-        return forEachProfileFile(((standard, violating, profileFile) -> {
-            final Profile profile = new JsonProfileReader().read(profileFile.toPath());
-            violating.generateDataSet(profile, new NullMultiDatasetOutputTarget());
         }));
     }
 
@@ -107,17 +94,8 @@ class ExampleProfilesViolationTests {
                     new MaxStringLengthInjectingDecisionTreeFactory(new ProfileDecisionTreeFactory(), 200),
                     new NoopDataGeneratorMonitor());
 
-                ViolationGenerationEngine violationGenerationEngine =
-                    new ViolationGenerationEngine(
-                        new IndividualRuleProfileViolator(
-                            mock(ManifestWriter.class),
-                            null,
-                            new IndividualConstraintRuleViolator(new ArrayList<>())),
-                        standardGenerationEngine);
-
                 consumer.generate(
                     standardGenerationEngine,
-                    violationGenerationEngine,
                     profileFile);
             });
 
@@ -144,15 +122,8 @@ class ExampleProfilesViolationTests {
         }
     }
 
-    private class NullMultiDatasetOutputTarget implements MultiDatasetOutputTarget {
-        @Override
-        public SingleDatasetOutputTarget getSubTarget(String name) {
-            return new NullSingleDatasetOutputTarget();
-        }
-    }
-
     @FunctionalInterface
     private interface GenerateConsumer {
-        void generate(StandardGenerationEngine standardEngine, ViolationGenerationEngine violatingEngine, File profileFile) throws IOException, InvalidProfileException;
+        void generate(StandardGenerationEngine standardEngine, File profileFile) throws IOException, InvalidProfileException;
     }
 }
