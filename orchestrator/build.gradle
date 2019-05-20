@@ -28,6 +28,7 @@ dependencies {
     testCompile 'io.cucumber:cucumber-expressions:6.0.1'
     testCompile 'info.cukes:cucumber-picocontainer:1.2.5'
     testCompile 'org.mockito:mockito-all:1.9.5'
+    testCompile 'com.shazam:shazamcrest:0.11'
     testCompile 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
     testCompile group: 'junit', name: 'junit', version: '4.12'
     
