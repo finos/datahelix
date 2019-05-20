@@ -13,7 +13,6 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     public CombinationStrategyType combinationStrategy;
     public TreeWalkerType walkerType;
     public long maxRows;
-    public boolean validateProfile = false;
     public Path outputPath;
     public OutputFormat outputFormat = OutputFormat.CSV;
     public boolean requireFieldTyping = true;
@@ -64,11 +63,6 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
 
     public void setMaxRows(long maxRows) {
         this.maxRows = maxRows;
-    }
-
-    @Override
-    public boolean getValidateProfile() {
-        return validateProfile;
     }
 
     @Override

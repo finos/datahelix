@@ -4,11 +4,8 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
-import com.scottlogic.deg.generator.ConfigSource;
-import com.scottlogic.deg.generator.commandline.GenerateCommandLine;
 import com.scottlogic.deg.generator.commandline.OutputTargetSpecification;
 import com.scottlogic.deg.generator.commandline.OutputTargetSpecificationImpl;
-import com.scottlogic.deg.generator.commandline.VisualiseCommandLine;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.MaxStringLengthInjectingDecisionTreeFactory;
@@ -33,7 +30,6 @@ import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.validators.ConfigValidator;
 import com.scottlogic.deg.generator.validators.GenerationConfigValidator;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
-import com.scottlogic.deg.generator.visualisation.VisualisationConfigSource;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
 import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
@@ -47,18 +43,16 @@ import java.util.List;
  * 'generate' classes should be bound for this execution run.
  */
 public class BaseModule extends AbstractModule {
-    private final ConfigSource configSource;
+    private final GenerationConfigSource generationConfigSource;
 
-    public BaseModule(ConfigSource configSource) {
-        this.configSource = configSource;
+    public BaseModule(GenerationConfigSource configSource) {
+        this.generationConfigSource = configSource;
     }
 
     @Override
     protected void configure() {
         // Bind command line to correct implementation
-        bind(GenerationConfigSource.class).to(GenerateCommandLine.class);
-        bind(VisualisationConfigSource.class).to(VisualiseCommandLine.class);
-        bindAllCommandLineTypes();
+        bind(GenerationConfigSource.class).toInstance(generationConfigSource);
 
         // Bind providers - used to retrieve implementations based on user input
         bind(DecisionTreeOptimiser.class).toProvider(DecisionTreeOptimiserProvider.class);
@@ -71,6 +65,24 @@ public class BaseModule extends AbstractModule {
         bind(RowSpecDataBagGenerator.class).toProvider(RowSpecDataBagSourceFactoryProvider.class);
         bind(ProfileSchemaValidator.class).toProvider(ProfileSchemaValidatorProvider.class);
         bind(CombinationStrategy.class).toProvider(CombinationStrategyProvider.class);
+
+        // bind config directly
+        bind(DataGenerationType.class).toInstance(generationConfigSource.getGenerationType());
+        bind(Path.class)
+            .annotatedWith(Names.named("config:outputPath"))
+            .toInstance(generationConfigSource.getOutputPath());
+        bind(boolean.class)
+            .annotatedWith(Names.named("config:canOverwriteOutputFiles"))
+            .toInstance(generationConfigSource.overwriteOutputFiles());
+        bind(long.class)
+            .annotatedWith(Names.named("config:maxRows"))
+            .toInstance(generationConfigSource.getMaxRows());
+        bind(boolean.class)
+            .annotatedWith(Names.named("config:tracingIsEnabled"))
+            .toInstance(generationConfigSource.isEnableTracing());
+        bind(boolean.class)
+            .annotatedWith(Names.named("config:inViolationMode"))
+            .toInstance(generationConfigSource.shouldViolate());
 
         // Bind known implementations - no user input required
         bind(ManifestWriter.class).to(JsonManifestWriter.class);
@@ -85,44 +97,10 @@ public class BaseModule extends AbstractModule {
         bind(ConfigValidator.class).to(GenerationConfigValidator.class);
         bind(OutputTargetSpecification.class).to(OutputTargetSpecificationImpl.class);
 
-        bind(new TypeLiteral<List<ViolationFilter>>() {
-        }).toProvider(ViolationFiltersProvider.class);
+        bind(new TypeLiteral<List<ViolationFilter>>(){}).toProvider(ViolationFiltersProvider.class);
 
         bind(VelocityMonitor.class).in(Singleton.class);
         bind(JavaUtilRandomNumberGenerator.class).toInstance(new JavaUtilRandomNumberGenerator(OffsetDateTime.now().getNano()));
 
-    }
-
-    private void bindAllCommandLineTypes() {
-        bind(Path.class)
-            .annotatedWith(Names.named("config:outputPath"))
-            .toInstance(configSource.getOutputPath());
-
-        bind(boolean.class)
-            .annotatedWith(Names.named("config:canOverwriteOutputFiles"))
-            .toInstance(configSource.overwriteOutputFiles());
-
-        bind(ConfigSource.class).toInstance(configSource);
-
-        if (this.configSource instanceof GenerationConfigSource) {
-            GenerationConfigSource generationConfigSource = (GenerationConfigSource)configSource;
-            if (generationConfigSource instanceof GenerateCommandLine) {
-                bind(GenerateCommandLine.class).toInstance((GenerateCommandLine)configSource);
-            }
-
-            bind(DataGenerationType.class).toInstance(generationConfigSource.getGenerationType());
-
-            bind(long.class)
-                .annotatedWith(Names.named("config:maxRows"))
-                .toInstance(generationConfigSource.getMaxRows());
-            bind(boolean.class)
-                .annotatedWith(Names.named("config:tracingIsEnabled"))
-                .toInstance(generationConfigSource.isEnableTracing());
-            bind(boolean.class)
-                .annotatedWith(Names.named("config:inViolationMode"))
-                .toInstance(generationConfigSource.shouldViolate());
-        } else if (this.configSource instanceof VisualiseCommandLine) {
-            bind(VisualiseCommandLine.class).toInstance((VisualiseCommandLine) this.configSource);
-        }
     }
 }
