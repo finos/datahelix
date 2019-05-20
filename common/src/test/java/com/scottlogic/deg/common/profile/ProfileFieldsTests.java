@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator;
+package com.scottlogic.deg.common.profile;
 
 import static org.junit.Assert.*;
 
