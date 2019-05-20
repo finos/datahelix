@@ -1,6 +1,7 @@
 package com.scottlogic.deg.orchestrator.violate;
 
 import com.google.inject.Inject;
+import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.generator.StandardGenerationEngine;
 import com.scottlogic.deg.generator.generation.AllConfigSource;
@@ -85,11 +86,7 @@ public class ViolateExecute implements Runnable {
 
     @Override
     public void run() {
-        Collection<ValidationAlert> validationResult = configValidator.preProfileChecks(configSource);
-        if (!validationResult.isEmpty()) {
-            validationReporter.output(validationResult);
-            return;
-        }
+        configValidator.preProfileChecks(configSource);
 
         ValidationResult profileSchemaValidationResult = profileSchemaValidator.validateProfile(configSource.getProfileFile());
         if (!profileSchemaValidationResult.isValid()) {
@@ -108,7 +105,11 @@ public class ViolateExecute implements Runnable {
 
             doGeneration(profile);
 
-        } catch (IOException | InvalidProfileException e) {
+        }
+        catch (ValidationException e){
+            errorReporter.displayValidation(e);
+        }
+        catch (IOException e) {
             errorReporter.displayException(e);
         }
     }
