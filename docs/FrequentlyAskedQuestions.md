@@ -78,7 +78,7 @@ Combining an `aValid` constraint with any other constraints is still permitted a
 
 Valid examples are:
 * `aValid ISIN` & `inSet [ "GB0002634947", 123 ]` - will emit `null` and `"GB0002634947"`
-* `not(aValid ISIN)` & `inSet [ "GB0002634947", 123 ]` - will emit `null` and `123`
+* `not(aValid CUSIP)` & `inSet [ "594918104", 123 ]` - will emit `null` and `123`
 * `aValid ISIN` & `equalTo "GB0002634947"` - will emit `null` and `"GB0002634947"`
 * `aValid SEDOL` & `greaterThan 5` - will emit `null` and all valid SEDOL codes
 
