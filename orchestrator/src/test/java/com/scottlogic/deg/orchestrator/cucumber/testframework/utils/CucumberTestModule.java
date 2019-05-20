@@ -2,7 +2,6 @@ package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
-import com.scottlogic.deg.generator.ConfigSource;
 import com.scottlogic.deg.generator.StandardGenerationEngine;
 import com.scottlogic.deg.generator.commandline.OutputTargetSpecification;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
@@ -33,7 +32,6 @@ public class CucumberTestModule extends AbstractModule {
     public void configure() {
         bind(CucumberTestState.class).toInstance(testState);
         bind(ProfileReader.class).to(CucumberProfileReader.class);
-        bind(ConfigSource.class).to(GenerationConfigSource.class);
         bind(GenerationConfigSource.class).to(CucumberGenerationConfigSource.class);
         bind(ConfigValidator.class).to(CucumberGenerationConfigValidator.class);
         bind(ProfileValidator.class).to(TypingRequiredPerFieldValidator.class);

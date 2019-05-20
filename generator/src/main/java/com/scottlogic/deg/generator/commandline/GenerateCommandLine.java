@@ -1,8 +1,11 @@
 package com.scottlogic.deg.generator.commandline;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.scottlogic.deg.generator.GenerateExecute;
 import com.scottlogic.deg.generator.config.detail.*;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
+import com.scottlogic.deg.generator.guice.BaseModule;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import picocli.CommandLine;
 
@@ -26,7 +29,42 @@ import static com.scottlogic.deg.generator.config.detail.TreeWalkerType.REDUCTIV
     parameterListHeading = "%nParameters:%n",
     optionListHeading = "%nOptions:%n",
     abbreviateSynopsis = true)
-public class GenerateCommandLine extends CommandLineBase implements GenerationConfigSource {
+public class GenerateCommandLine implements GenerationConfigSource, Runnable {
+
+    @Override
+    public void run() {
+        BaseModule container = new BaseModule(this);
+        Injector injector = Guice.createInjector(container);
+
+        Runnable task = injector.getInstance(GenerateExecute.class);
+
+        task.run();
+    }
+
+    @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
+    File profileFile;
+
+    @CommandLine.Option(
+        names = {"--no-optimise"},
+        description = "Prevents tree optimisation",
+        hidden = true)
+    boolean dontOptimise;
+
+    @CommandLine.Option(
+        names = "--help",
+        usageHelp = true,
+        description = "Display these available command line options")
+    boolean help;
+
+    @CommandLine.Option(
+        names = {"--replace"},
+        description = "Defines whether to overwrite/replace existing output files")
+    boolean overwriteOutputFiles = false;
+
+    @CommandLine.Option(
+        names = { "--enable-schema-validation" },
+        description = "Enables schema validation")
+    boolean enableSchemaValidation = false;
 
     @CommandLine.Parameters(index = "1", description = "The path to write the generated data file to.")
     private Path outputPath;
@@ -57,13 +95,6 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
         names = {"-n", "--max-rows"},
         description = "Defines the maximum number of rows that should be generated")
     private long maxRows = DEFAULT_MAX_ROWS;
-
-    @CommandLine.Option(
-        names = {"--validate-profile"},
-        description = "Defines whether to validate the profile (" +
-            true+ ", " +
-            false + ").")
-    private boolean validateProfile;
 
     @CommandLine.Option(
         names = {"--trace-constraints"},
@@ -189,21 +220,11 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
     }
 
     @Override
-    public boolean getValidateProfile() {
-        return this.validateProfile;
-    }
-
-    @Override
     public boolean visualiseReductions() {
         return visualiseReductions;
     }
 
     public OutputFormat getOutputFormat() {
         return outputFormat;
-    }
-
-    @Override
-    protected Class<? extends Runnable> getExecutorType() {
-        return GenerateExecute.class;
     }
 }

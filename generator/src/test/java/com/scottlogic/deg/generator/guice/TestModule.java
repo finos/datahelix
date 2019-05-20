@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.guice;
 
 import com.google.inject.AbstractModule;
-import com.scottlogic.deg.generator.ConfigSource;
+import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.generation.TestGenerationConfigSource;
 
 /**
@@ -17,6 +17,6 @@ public class TestModule extends AbstractModule {
 
     @Override
     public void configure() {
-        bind(ConfigSource.class).toInstance(configSource);
+        bind(GenerationConfigSource.class).toInstance(configSource);
     }
 }

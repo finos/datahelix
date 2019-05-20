@@ -10,11 +10,11 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.profile.reader.ProfileReader;
+import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.generator.validators.StaticContradictionDecisionTreeValidator;
 import com.scottlogic.deg.generator.validators.VisualisationConfigValidator;
-import com.scottlogic.deg.generator.visualisation.VisualisationConfigSource;
 import com.scottlogic.deg.profile.serialisation.ValidationResult;
 import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
 
@@ -39,7 +39,7 @@ public class VisualiseExecute implements Runnable {
     private final Path outputPath;
     private final ProfileReader profileReader;
     private final ProfileSchemaValidator profileSchemaValidator;
-    private final VisualisationConfigSource configSource;
+    private final GenerationConfigSource configSource;
     private final VisualisationConfigValidator validator;
 
     @Inject
@@ -47,10 +47,10 @@ public class VisualiseExecute implements Runnable {
                             ErrorReporter errorReporter,
                             FieldSpecFactory fieldSpecFactory,
                             FieldSpecMerger fieldSpecMerger,
-                            @Named("outputPath") Path outputPath,
+                            @Named("config:outputPath") Path outputPath,
                             ProfileReader profileReader,
                             ProfileSchemaValidator profileSchemaValidator,
-                            VisualisationConfigSource configSource,
+                            GenerationConfigSource configSource,
                             VisualisationConfigValidator validator) {
         this.profileAnalyser = profileAnalyser;
         this.errorReporter = errorReporter;
@@ -95,9 +95,8 @@ public class VisualiseExecute implements Runnable {
 
         DecisionTree validatedTree = treeValidator.markContradictions(mergedTree);
 
-        final String title = configSource.shouldHideTitle()
-            ? null
-            : Stream.of(configSource.getTitleOverride(), profile.description, profileBaseName)
+        final String title =
+            Stream.of(profile.description, profileBaseName)
             .filter(Objects::nonNull)
             .findFirst()
             .orElse(null);
