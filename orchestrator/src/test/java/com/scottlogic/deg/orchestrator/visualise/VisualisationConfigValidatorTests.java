@@ -1,6 +1,7 @@
-package com.scottlogic.deg.generator.validators;
+package com.scottlogic.deg.orchestrator.visualise;
 
 import com.scottlogic.deg.generator.utils.FileUtils;
+import com.scottlogic.deg.orchestrator.validator.VisualisationConfigValidator;
 import com.scottlogic.deg.profile.serialisation.ValidationResult;
 import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
 import org.junit.Assert;

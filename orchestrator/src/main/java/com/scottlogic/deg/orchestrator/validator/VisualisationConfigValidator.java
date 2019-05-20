@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.validators;
+package com.scottlogic.deg.orchestrator.validator;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.utils.FileUtils;
