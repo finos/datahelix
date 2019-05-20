@@ -17,7 +17,7 @@ import com.scottlogic.deg.generator.builders.RuleBuilder;
 import com.scottlogic.deg.generator.inputs.profileviolation.IndividualRuleProfileViolator;
 import com.scottlogic.deg.generator.inputs.profileviolation.TypeEqualityHelper;
 import com.scottlogic.deg.generator.violations.ViolatedProfile;
-import com.scottlogic.deg.generator.guice.BaseModule;
+import com.scottlogic.deg.generator.guice.GeneratorModule;
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,7 +49,7 @@ public class ProfileViolationIntegrationTests {
         configSource.outputPath = initTempOutputPath();
 
         Module testModule = Modules
-            .override(new BaseModule(configSource))
+            .override(new GeneratorModule(configSource))
             .with(new TestModule(configSource));
 
         Injector injector = Guice.createInjector(testModule);

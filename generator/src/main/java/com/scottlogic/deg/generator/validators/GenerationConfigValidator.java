@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.validators;
 
 import com.google.inject.Inject;
+import com.scottlogic.deg.generator.generation.AllConfigSource;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.validation.Criticality;
 import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
@@ -26,7 +27,7 @@ public class GenerationConfigValidator implements ConfigValidator {
     }
 
     @Override
-    public Collection<ValidationAlert> preProfileChecks(GenerationConfigSource generationConfigSource) {
+    public Collection<ValidationAlert> preProfileChecks(AllConfigSource generationConfigSource) {
         ArrayList<ValidationAlert> errorMessages = new ArrayList<>();
 
         checkSwitches(generationConfigSource, errorMessages);

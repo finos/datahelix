@@ -3,14 +3,10 @@ package com.scottlogic.deg.generator.generation;
 import com.scottlogic.deg.generator.config.detail.*;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 
 public interface GenerationConfigSource  {
-    File getProfileFile();
-    boolean isSchemaValidationEnabled();
-
     boolean shouldViolate();
     List<AtomicConstraintType> getConstraintsToNotViolate();
 

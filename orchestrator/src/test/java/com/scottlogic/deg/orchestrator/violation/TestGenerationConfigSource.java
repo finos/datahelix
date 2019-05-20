@@ -87,16 +87,6 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     }
 
     @Override
-    public File getProfileFile() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean isSchemaValidationEnabled() {
-        return true;
-    }
-
-    @Override
     public boolean shouldViolate() {
         return false;
     }
