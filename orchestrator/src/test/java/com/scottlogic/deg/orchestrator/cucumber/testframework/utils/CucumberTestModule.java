@@ -35,11 +35,11 @@ public class CucumberTestModule extends AbstractModule {
         bind(CucumberTestState.class).toInstance(testState);
         bind(ProfileReader.class).to(CucumberProfileReader.class);
         bind(GenerationConfigSource.class).to(CucumberGenerationConfigSource.class);
-        bind(ConfigValidator.class).to(CucumberGenerationConfigValidator.class);
         bind(ProfileValidator.class).to(TypingRequiredPerFieldValidator.class);
         bind(ErrorReporter.class).toInstance(new CucumberErrorReporter(testState));
         bind(DecisionTreeFactory.class).to(CucumberDecisionTreeFactory.class);
 
+        bind(ConfigValidator.class).toInstance(mock(ConfigValidator.class));
         bind(ManifestWriter.class).toInstance(mock(ManifestWriter.class));
         bind(ProfileValidationReporter.class).toInstance(testState.validationReporter);
         bind(SingleDatasetOutputTarget.class).toInstance(new InMemoryOutputTarget(testState));
