@@ -2,14 +2,14 @@ package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.config.detail.*;
-import com.scottlogic.deg.generator.generation.GenerationConfigSource;
+import com.scottlogic.deg.generator.generation.AllConfigSource;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 
-public class CucumberGenerationConfigSource implements GenerationConfigSource {
+public class CucumberGenerationConfigSource implements AllConfigSource {
     private final CucumberTestState state;
 
     @Inject

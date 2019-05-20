@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.generator.StandardGenerationEngine;
 import com.scottlogic.deg.generator.commandline.OutputTargetSpecification;
+import com.scottlogic.deg.generator.generation.AllConfigSource;
 import com.scottlogic.deg.generator.inputs.validation.Criticality;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
@@ -22,7 +23,7 @@ import java.util.Collection;
 
 public class GenerateExecute implements Runnable {
     private final ErrorReporter errorReporter;
-    private final GenerationConfigSource configSource;
+    private final AllConfigSource configSource;
     private final ConfigValidator configValidator;
 
     private final StandardGenerationEngine standardGenerationEngine;
@@ -40,7 +41,7 @@ public class GenerateExecute implements Runnable {
         ProfileReader profileReader,
         StandardGenerationEngine standardGenerationEngine,
         ViolationGenerationEngine violationGenerationEngine,
-        GenerationConfigSource configSource,
+        AllConfigSource configSource,
         OutputTargetSpecification outputTargetSpecification,
         ConfigValidator configValidator,
         ErrorReporter errorReporter,

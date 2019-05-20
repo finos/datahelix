@@ -2,8 +2,12 @@ package com.scottlogic.deg.orchestrator.visualise;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Module;
+import com.google.inject.util.Modules;
 import com.scottlogic.deg.orchestrator.generate.GenerateCommandLine;
-import com.scottlogic.deg.generator.guice.BaseModule;
+import com.scottlogic.deg.generator.guice.GeneratorModule;
+import com.scottlogic.deg.orchestrator.guice.AllModule;
+import com.scottlogic.deg.profile.guice.ProfileModule;
 import picocli.CommandLine;
 
 
@@ -24,7 +28,7 @@ public class VisualiseCommandLine extends GenerateCommandLine {
 
     @Override
     public void run() {
-        BaseModule container = new BaseModule(this);
+        Module container = new AllModule(this);
         Injector injector = Guice.createInjector(container);
 
         Runnable task = injector.getInstance(VisualiseExecute.class);
