@@ -88,11 +88,7 @@ public class ViolateExecute implements Runnable {
 
             Profile profile = profileReader.read(configSource.getProfileFile().toPath());
 
-            Collection<ValidationAlert> alerts = profileValidator.validate(profile);
-            validationReporter.output(alerts);
-            if (validationResultShouldHaltExecution(alerts)) {
-                return;
-            }
+            profileValidator.validate(profile);
 
             doGeneration(profile);
 

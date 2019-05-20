@@ -125,24 +125,6 @@ public class GeneralTestStep {
         }
     }
 
-    @But("^field (.+?) should fail validation: \"(.+)\"$")
-    public void fieldIsInvalidWithError(String fieldName, String expectedError) {
-        cucumberTestHelper.runChecksWithoutGeneratingData();
-
-        List<String> errors = this.cucumberTestHelper
-            .getProfileValidationErrorsForField(fieldName)
-            .collect(Collectors.toList());
-
-        if (errors.size() == 0) {
-            Assert.fail("No validation errors were raised");
-        } else {
-            Assert.assertThat(
-                "Expected profile validation error for field " + fieldName,
-                errors,
-                hasItem(expectedError));
-        }
-    }
-
     @And("^no data is created$")
     public void noDataIsCreated() {
         List<List<Object>> data = cucumberTestHelper.generateAndGetData();
