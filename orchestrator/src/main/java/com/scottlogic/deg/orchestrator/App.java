@@ -1,7 +1,7 @@
 package com.scottlogic.deg.orchestrator;
 
 import com.scottlogic.deg.generator.commandline.GenerateCommandLine;
-import com.scottlogic.deg.generator.commandline.VisualiseCommandLine;
+import com.scottlogic.deg.orchestrator.visualise.VisualiseCommandLine;
 import picocli.CommandLine;
 
 import java.util.stream.Collectors;
