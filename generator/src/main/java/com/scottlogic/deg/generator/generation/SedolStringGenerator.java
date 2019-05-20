@@ -24,13 +24,6 @@ public class SedolStringGenerator extends ChecksummedCodeStringGenerator {
     }
 
     @Override
-    public StringGenerator intersect(StringGenerator stringGenerator) {
-        return new NoStringsStringGenerator(
-            RegexStringGenerator.intersectRepresentation(stringGenerator.toString(), "<SEDOL>")
-        );
-    }
-
-    @Override
     public StringGenerator complement() {
         return new SedolStringGenerator(sansCheckDigitGenerator, !negate);
     }
