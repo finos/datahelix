@@ -7,7 +7,9 @@ import com.google.inject.Module;
 import com.google.inject.util.Modules;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.orchestrator.generate.GenerateExecute;
-import com.scottlogic.deg.generator.guice.BaseModule;
+import com.scottlogic.deg.generator.guice.GeneratorModule;
+import com.scottlogic.deg.orchestrator.guice.AllModule;
+import com.scottlogic.deg.profile.guice.ProfileModule;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import org.junit.Assert;
 
@@ -35,8 +37,7 @@ public class CucumberTestHelper {
         }
 
         Module concatenatedModule =
-            Modules
-                .override(new BaseModule(new CucumberGenerationConfigSource(testState)))
+            Modules.override(new AllModule(new CucumberGenerationConfigSource(testState)))
                 .with(new CucumberTestModule(testState));
 
         Injector injector = Guice.createInjector(concatenatedModule);

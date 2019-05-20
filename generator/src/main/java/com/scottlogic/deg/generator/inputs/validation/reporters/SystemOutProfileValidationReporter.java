@@ -1,6 +1,5 @@
 package com.scottlogic.deg.generator.inputs.validation.reporters;
 
-import com.scottlogic.deg.generator.inputs.validation.Criticality;
 import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
 
 import java.util.Collection;

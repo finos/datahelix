@@ -42,10 +42,10 @@ import java.util.List;
  * Class to define default bindings for Guice injection. Utilises the generation config source to determine which
  * 'generate' classes should be bound for this execution run.
  */
-public class BaseModule extends AbstractModule {
+public class GeneratorModule extends AbstractModule {
     private final GenerationConfigSource generationConfigSource;
 
-    public BaseModule(GenerationConfigSource configSource) {
+    public GeneratorModule(GenerationConfigSource configSource) {
         this.generationConfigSource = configSource;
     }
 
@@ -63,7 +63,6 @@ public class BaseModule extends AbstractModule {
         bind(ReductiveDataGeneratorMonitor.class).toProvider(MonitorProvider.class).in(Singleton.class);
         bind(IterationVisualiser.class).toProvider(IterationVisualiserProvider.class);
         bind(RowSpecDataBagGenerator.class).toProvider(RowSpecDataBagSourceFactoryProvider.class);
-        bind(ProfileSchemaValidator.class).toProvider(ProfileSchemaValidatorProvider.class);
         bind(CombinationStrategy.class).toProvider(CombinationStrategyProvider.class);
 
         // bind config directly
@@ -90,7 +89,6 @@ public class BaseModule extends AbstractModule {
         bind(DataGenerator.class).to(DecisionTreeDataGenerator.class);
         bind(DecisionTreeFactory.class).to(MaxStringLengthInjectingDecisionTreeFactory.class);
         bind(ProfileValidationReporter.class).to(SystemOutProfileValidationReporter.class);
-        bind(ProfileReader.class).to(JsonProfileReader.class);
         bind(FieldValueSourceEvaluator.class).to(StandardFieldValueSourceEvaluator.class);
         bind(ProfileViolator.class).to(IndividualRuleProfileViolator.class);
         bind(RuleViolator.class).to(IndividualConstraintRuleViolator.class);
