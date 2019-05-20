@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.validation.*;
-import com.scottlogic.deg.generator.validators.GenerationConfigValidator;
 import com.scottlogic.deg.generator.validators.GenerationOutputValidator;
 
 import java.util.ArrayList;

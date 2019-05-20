@@ -1,9 +1,8 @@
 package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 
 import com.scottlogic.deg.generator.generation.AllConfigSource;
-import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
-import com.scottlogic.deg.generator.validators.ConfigValidator;
+import com.scottlogic.deg.orchestrator.validator.ConfigValidator;
 
 import java.util.Collection;
 import java.util.Collections;
