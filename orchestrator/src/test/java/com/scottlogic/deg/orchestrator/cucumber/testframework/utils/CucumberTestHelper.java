@@ -94,16 +94,9 @@ public class CucumberTestHelper {
     }
 
     public Stream<String> getProfileValidationErrors(){
-        return Stream.concat(
-            testState.testExceptions.stream()
+           return testState.testExceptions.stream()
                 .filter(e -> e instanceof ValidationException || e instanceof JsonParseException)
-                .map(Throwable::getMessage),
-            testState.validationReporter
-                .getRecordedAlerts().stream()
-                .map(a -> String.format(
-                    "Field [%s]: %s",
-                    a.getField().name,
-                    a.getMessage().getVerboseMessage())));
+                .map(Throwable::getMessage);
     }
 
     public <T> void assertFieldContainsNullOrMatching(String fieldName, Class<T> clazz){

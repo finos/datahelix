@@ -4,17 +4,10 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.generator.generation.AllConfigSource;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
-import com.scottlogic.deg.generator.inputs.validation.Criticality;
-import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
-import com.scottlogic.deg.generator.inputs.validation.ValidationType;
-import com.scottlogic.deg.generator.inputs.validation.messages.InputValidationMessage;
-import com.scottlogic.deg.generator.inputs.validation.messages.OutputValidationMessage;
 import com.scottlogic.deg.generator.outputs.targets.OutputTargetValidationException;
 import com.scottlogic.deg.generator.utils.FileUtils;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * Class used to determine whether the command line options are valid for generation.

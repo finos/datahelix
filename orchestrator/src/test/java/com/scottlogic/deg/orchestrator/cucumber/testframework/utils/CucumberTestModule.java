@@ -10,7 +10,6 @@ import com.scottlogic.deg.generator.outputs.targets.SingleDatasetOutputTarget;
 import com.scottlogic.deg.profile.reader.ProfileReader;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.TypingRequiredPerFieldValidator;
-import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.orchestrator.validator.ConfigValidator;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
@@ -41,7 +40,6 @@ public class CucumberTestModule extends AbstractModule {
 
         bind(ConfigValidator.class).toInstance(mock(ConfigValidator.class));
         bind(ManifestWriter.class).toInstance(mock(ManifestWriter.class));
-        bind(ProfileValidationReporter.class).toInstance(testState.validationReporter);
         bind(SingleDatasetOutputTarget.class).toInstance(new InMemoryOutputTarget(testState));
 
         OutputTargetFactory mockOutputTargetFactory = mock(OutputTargetFactory.class);
