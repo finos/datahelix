@@ -10,11 +10,9 @@ import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
 import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 import com.scottlogic.deg.generator.outputs.targets.SingleDatasetOutputTarget;
-import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import com.scottlogic.deg.profile.reader.ProfileReader;
 import com.scottlogic.deg.orchestrator.validator.ConfigValidator;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
-import com.scottlogic.deg.profile.serialisation.ValidationResult;
 import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
 
 import java.io.IOException;
