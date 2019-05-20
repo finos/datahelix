@@ -40,7 +40,7 @@ public class GenerationConfigValidator implements ConfigValidator {
                                ArrayList<ValidationAlert> errorMessages) {
 
         if (configSource.isEnableTracing()) {
-            if (fileUtils.getTraceFile(configSource).exists() && !configSource.overwriteOutputFiles()) {
+            if (fileUtils.getTraceFile(configSource.getOutputPath()).exists() && !configSource.overwriteOutputFiles()) {
                 errorMessages.add(new ValidationAlert(
                     Criticality.ERROR,
                     new OutputValidationMessage("trace file already exists, please use a different output filename or use the --replace option"),

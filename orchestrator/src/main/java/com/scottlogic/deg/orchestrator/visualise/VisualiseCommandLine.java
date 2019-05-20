@@ -2,7 +2,7 @@ package com.scottlogic.deg.orchestrator.visualise;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.scottlogic.deg.generator.commandline.GenerateCommandLine;
+import com.scottlogic.deg.orchestrator.generate.GenerateCommandLine;
 import com.scottlogic.deg.generator.guice.BaseModule;
 import picocli.CommandLine;
 

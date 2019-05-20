@@ -1,6 +1,7 @@
-package com.scottlogic.deg.generator.generation;
+package com.scottlogic.deg.orchestrator.violation;
 
 import com.scottlogic.deg.generator.config.detail.*;
+import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 
 import java.io.File;

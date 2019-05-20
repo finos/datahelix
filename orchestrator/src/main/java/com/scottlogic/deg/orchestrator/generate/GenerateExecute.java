@@ -1,7 +1,8 @@
-package com.scottlogic.deg.generator;
+package com.scottlogic.deg.orchestrator.generate;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Profile;
+import com.scottlogic.deg.generator.StandardGenerationEngine;
 import com.scottlogic.deg.generator.commandline.OutputTargetSpecification;
 import com.scottlogic.deg.generator.inputs.validation.Criticality;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
