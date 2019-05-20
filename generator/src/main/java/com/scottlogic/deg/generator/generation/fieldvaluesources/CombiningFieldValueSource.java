@@ -90,7 +90,7 @@ public class CombiningFieldValueSource implements FieldValueSource {
         @Override
         public Object next() {
             int iteratorIndex = randomNumberGenerator.nextInt(
-                underlyingSources.size());
+                iterators.size());
 
             Iterator<Object> iterator = iterators.get(iteratorIndex);
 
