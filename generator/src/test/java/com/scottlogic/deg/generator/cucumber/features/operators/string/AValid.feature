@@ -313,6 +313,16 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "GB0002634946" |
       | null           |
 
+  Scenario: aValid ISIN run against a non-contradicting matchingRegex should be successful
+    Given foo is a valid "ISIN"
+    And foo is matching regex "/GB[0-9]{10}/"
+    And foo is in set:
+      | "GB0002634946"  |
+    Then the following data should be generated:
+      | foo            |
+      | "GB0002634946" |
+      | null           |
+
   Scenario: aValid run against a non contradicting aValid SEDOL should be successful
     Given foo is a valid "SEDOL"
     And foo is a valid "SEDOL"
@@ -564,6 +574,16 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "0263494" |
       | null      |
 
+  Scenario: aValid SEDOL run against a non-contradicting matchingRegex should be successful
+    Given foo is a valid "SEDOL"
+    And foo is matching regex "/[0-9]{7}/"
+    And foo is in set:
+      | "0263494" |
+    Then the following data should be generated:
+      | foo       |
+      | "0263494" |
+      | null      |
+
   Scenario: aValid run against a non contradicting aValid CUSIP should be successful
     Given foo is a valid "CUSIP"
     And foo is a valid "CUSIP"
@@ -805,6 +825,19 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
   Scenario: aValid CUSIP run against a non contradicting not beforeOrAt should be successful
     Given foo is a valid "CUSIP"
     And foo is anything but before or at 2019-01-01T00:00:00.000Z
+    And foo is in set:
+      | "38259P508"  |
+      | "38259P58"   |
+      | "38259EP508" |
+      | 1            |
+    Then the following data should be generated:
+      | foo         |
+      | "38259P508" |
+      | null        |
+
+  Scenario: aValid CUSIP run against a non-contradicting matchingRegex should be successful
+    Given foo is a valid "CUSIP"
+    And foo is matching regex "/[0-9]{3}.{5}[0-9]/"
     And foo is in set:
       | "38259P508"  |
       | "38259P58"   |
