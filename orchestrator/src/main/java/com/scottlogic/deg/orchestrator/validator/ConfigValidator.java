@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.validators;
+package com.scottlogic.deg.orchestrator.validator;
 
 import com.scottlogic.deg.generator.generation.AllConfigSource;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
