@@ -7,4 +7,6 @@ include(':profile')
 include(':generator')
 include 'common'
 include 'orchestrator'
+include 'output'
+include 'output'
 

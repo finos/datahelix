@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.outputs.formats;
+package com.scottlogic.deg.output.writer;
 
 import com.scottlogic.deg.common.output.GeneratedObject;
 

@@ -3,9 +3,9 @@ package com.scottlogic.deg.generator.guice;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
-import com.scottlogic.deg.generator.outputs.formats.OutputWriterFactory;
-import com.scottlogic.deg.generator.outputs.formats.csv.CsvOutputWriterFactory;
-import com.scottlogic.deg.generator.outputs.formats.json.JsonOutputWriterFactory;
+import com.scottlogic.deg.output.writer.OutputWriterFactory;
+import com.scottlogic.deg.output.writer.csv.CsvOutputWriterFactory;
+import com.scottlogic.deg.output.writer.json.JsonOutputWriterFactory;
 
 public class OutputWriterFactoryProvider implements Provider<OutputWriterFactory> {
     private final GenerationConfigSource configSource;

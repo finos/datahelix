@@ -1,8 +1,8 @@
 package com.scottlogic.deg.generator.outputs.targets;
 
 import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.generator.outputs.formats.DataSetWriter;
-import com.scottlogic.deg.generator.outputs.formats.OutputWriterFactory;
+import com.scottlogic.deg.output.writer.DataSetWriter;
+import com.scottlogic.deg.output.writer.OutputWriterFactory;
 import com.scottlogic.deg.generator.utils.FileUtils;
 
 import java.io.FileOutputStream;

@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.outputs.formats.json;
+package com.scottlogic.deg.output.writer.json;
 
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,7 +8,7 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.output.DataBagValue;
 import com.scottlogic.deg.common.output.GeneratedObject;
-import com.scottlogic.deg.generator.outputs.formats.DataSetWriter;
+import com.scottlogic.deg.output.writer.DataSetWriter;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -17,7 +17,6 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 class JsonDataSetWriter implements DataSetWriter {
     private static final DateTimeFormatter standardDateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss");

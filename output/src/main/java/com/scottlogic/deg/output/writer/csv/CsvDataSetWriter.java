@@ -1,9 +1,9 @@
-package com.scottlogic.deg.generator.outputs.formats.csv;
+package com.scottlogic.deg.output.writer.csv;
 
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.output.DataBagValue;
 import com.scottlogic.deg.common.output.GeneratedObject;
-import com.scottlogic.deg.generator.outputs.formats.DataSetWriter;
+import com.scottlogic.deg.output.writer.DataSetWriter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.QuoteMode;
