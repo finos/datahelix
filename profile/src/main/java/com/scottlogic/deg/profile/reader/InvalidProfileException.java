@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.inputs;
+package com.scottlogic.deg.profile.reader;
 
 public class InvalidProfileException extends Exception
 {

@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.validators;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.utils.FileUtils;
-import com.scottlogic.deg.profile.common.ValidationResult;
+import com.scottlogic.deg.profile.serialisation.ValidationResult;
 
 import java.nio.file.Path;
 import java.util.ArrayList;

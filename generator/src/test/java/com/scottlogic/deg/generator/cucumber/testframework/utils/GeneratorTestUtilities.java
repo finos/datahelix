@@ -5,16 +5,12 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scottlogic.deg.generator.cucumber.testframework.steps.DateObject;
 import com.scottlogic.deg.generator.cucumber.testframework.steps.DateValueStep;
-import com.scottlogic.deg.generator.inputs.InvalidProfileException;
-import org.jetbrains.annotations.NotNull;
+import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import org.junit.Assert;
 
 import java.io.IOException;
 import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.ResolverStyle;
 
 public class GeneratorTestUtilities {
     private static final ObjectMapper mapper = createMapper();

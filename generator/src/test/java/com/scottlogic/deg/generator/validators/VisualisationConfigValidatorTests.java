@@ -4,7 +4,7 @@ import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.utils.FileUtils;
 import com.scottlogic.deg.generator.visualisation.TestVisualisationConfigSource;
-import com.scottlogic.deg.profile.common.ValidationResult;
+import com.scottlogic.deg.profile.serialisation.ValidationResult;
 import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
