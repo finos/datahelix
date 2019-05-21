@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.outputs.manifest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
-import com.scottlogic.deg.generator.utils.FileUtils;
+import com.scottlogic.deg.output.FileUtils;
 import com.scottlogic.deg.generator.violations.ViolatedProfile;
 
 import java.io.IOException;

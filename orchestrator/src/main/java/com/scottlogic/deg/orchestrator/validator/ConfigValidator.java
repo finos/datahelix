@@ -4,8 +4,8 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
-import com.scottlogic.deg.generator.outputs.targets.OutputTargetValidationException;
-import com.scottlogic.deg.generator.utils.FileUtils;
+import com.scottlogic.deg.output.target.OutputTargetValidationException;
+import com.scottlogic.deg.output.FileUtils;
 
 import java.io.File;
 

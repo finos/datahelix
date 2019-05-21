@@ -15,7 +15,7 @@ import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.output.writer.OutputWriterFactory;
 import com.scottlogic.deg.generator.outputs.manifest.JsonManifestWriter;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
-import com.scottlogic.deg.generator.outputs.targets.SingleDatasetOutputTarget;
+import com.scottlogic.deg.output.target.SingleDatasetOutputTarget;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;

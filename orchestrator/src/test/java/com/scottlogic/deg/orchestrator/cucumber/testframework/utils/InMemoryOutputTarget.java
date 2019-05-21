@@ -4,7 +4,7 @@ import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.output.DataBagValue;
 import com.scottlogic.deg.common.output.GeneratedObject;
 import com.scottlogic.deg.output.writer.DataSetWriter;
-import com.scottlogic.deg.generator.outputs.targets.SingleDatasetOutputTarget;
+import com.scottlogic.deg.output.target.SingleDatasetOutputTarget;
 
 import java.util.List;
 import java.util.stream.Collectors;
