@@ -234,7 +234,7 @@ public class FieldSpec {
             return false;
         }
 
-        if (!(obj instanceof FieldSpec)){
+        if (!(obj.getClass() == this.getClass())){
             return false;
         }
 
