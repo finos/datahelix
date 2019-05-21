@@ -15,6 +15,7 @@ import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -39,10 +40,9 @@ class JsonDataSetWriter implements DataSetWriter {
 
     @Override
     public void writeRow(GeneratedObject row) throws IOException {
-        Map<Field, Object> jsonObject = row.getFieldToValue().entrySet().stream().collect(
-            Collectors.toMap(
-                Map.Entry::getKey,
-                e -> convertValue(e.getValue())));
+        Map<Field, Object> jsonObject = new HashMap<>();
+        fields.forEach(field -> jsonObject
+            .put(field , convertValue(row.getValueAndFormat(field))));
 
         writer.write(jsonObject);
     }
