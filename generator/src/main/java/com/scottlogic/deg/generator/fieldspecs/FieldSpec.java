@@ -1,10 +1,13 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
+
 import com.scottlogic.deg.generator.restrictions.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.scottlogic.deg.generator.restrictions.DateTimeRestrictions.isDateTime;
@@ -197,6 +200,9 @@ public class FieldSpec {
     /** Create a predicate that returns TRUE for all (and only) values permitted by this FieldSpec */
     public boolean permits(@NotNull Object value) {
         if (typeRestrictions != null) {
+            TypeCheckHolder numericHolder = new TypeCheckHolder(Types.NUMERIC, NumericRestrictions::isNumeric);
+            TypeCheckHolder stringHolder = new TypeCheckHolder(Types.STRING, StringRestrictions::isString);
+            TypeCheckHolder dateTimeHolder = new TypeCheckHolder(Types.DATETIME, DateTimeRestrictions::isDateTime);
             if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.NUMERIC)) {
                 if (isNumeric(value)) return false;
             }
@@ -223,6 +229,28 @@ public class FieldSpec {
         }
 
         return true;
+    }
+
+    private boolean checkRestrictionIsValid(Types type, Function<Object, Boolean> checker, Object toCheck) {
+        return !(!typeRestrictions.isTypeAllowed(type) && checker.apply(toCheck));
+    }
+
+    private class TypeCheckHolder {
+        private final Types type;
+        private final Function<Object, Boolean> check;
+
+        public TypeCheckHolder(Types type, Function<Object, Boolean> check) {
+            this.type = type;
+            this.check = check;
+        }
+
+        public Types getType() {
+            return type;
+        }
+
+        public Function<Object, Boolean> getCheck() {
+            return check;
+        }
     }
 
     public int hashCode(){
