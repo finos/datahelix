@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.guice;
+package com.scottlogic.deg.orchestrator.violate;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;

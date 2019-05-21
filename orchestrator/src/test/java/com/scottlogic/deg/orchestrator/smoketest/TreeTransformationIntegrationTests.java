@@ -1,8 +1,11 @@
-package com.scottlogic.deg.generator.decisiontree;
+package com.scottlogic.deg.orchestrator.smoketest;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scottlogic.deg.common.profile.Profile;
+import com.scottlogic.deg.generator.decisiontree.DecisionTree;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
+import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.serialisation.DecisionTreeDto;
 import com.scottlogic.deg.generator.decisiontree.serialisation.DecisionTreeMapper;
 import com.scottlogic.deg.generator.decisiontree.testutils.*;

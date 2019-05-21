@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.guice;
+package com.scottlogic.deg.orchestrator.violate;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ViolationFiltersProvider implements Provider<List<ViolationFilter>> {
-    private final GenerationConfigSource commandLine;
+    private final ViolateConfigSource commandLine;
     private final AtomicConstraintTypeMapper mapper;
 
     @Inject
-    public ViolationFiltersProvider(GenerationConfigSource commandLine, AtomicConstraintTypeMapper mapper) {
+    public ViolationFiltersProvider(ViolateConfigSource commandLine, AtomicConstraintTypeMapper mapper) {
         this.commandLine = commandLine;
         this.mapper = mapper;
     }

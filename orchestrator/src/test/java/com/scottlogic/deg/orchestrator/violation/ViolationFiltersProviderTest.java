@@ -1,10 +1,12 @@
-package com.scottlogic.deg.generator.guice;
+package com.scottlogic.deg.orchestrator.violation;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.IsStringShorterThanConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.StringHasLengthConstraint;
-import com.scottlogic.deg.generator.generation.GenerationConfigSource;
+import com.scottlogic.deg.orchestrator.violate.AtomicConstraintTypeMapper;
 import com.scottlogic.deg.generator.violations.filters.ConstraintTypeViolationFilter;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
+import com.scottlogic.deg.orchestrator.violate.ViolateConfigSource;
+import com.scottlogic.deg.orchestrator.violate.ViolationFiltersProvider;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +24,7 @@ class ViolationFiltersProviderTest {
 
     @Test
     void whenNullConstraintsToViolate_ReturnEmptyListOfViolationFilters() {
-        GenerationConfigSource configSource = mock(GenerationConfigSource.class);
+        ViolateConfigSource configSource = mock(ViolateConfigSource.class);
         when(configSource.getConstraintsToNotViolate()).thenReturn(null);
         ViolationFiltersProvider provider = new ViolationFiltersProvider(configSource, new AtomicConstraintTypeMapper());
 
@@ -31,7 +33,7 @@ class ViolationFiltersProviderTest {
 
     @Test
     void whenEmptyConstraintsToViolate_ReturnEmptyListOfViolationFilters() {
-        GenerationConfigSource configSource = mock(GenerationConfigSource.class);
+        ViolateConfigSource configSource = mock(ViolateConfigSource.class);
         when(configSource.getConstraintsToNotViolate()).thenReturn(Collections.emptyList());
         ViolationFiltersProvider provider = new ViolationFiltersProvider(configSource, new AtomicConstraintTypeMapper());
 
@@ -40,7 +42,7 @@ class ViolationFiltersProviderTest {
 
     @Test
     void hasLengthConstraintsToViolate_ReturnsOneFilter_ThatDoesNotAcceptHasLengthConstraints() {
-        GenerationConfigSource configSource = mock(GenerationConfigSource.class);
+        ViolateConfigSource configSource = mock(ViolateConfigSource.class);
         when(configSource.getConstraintsToNotViolate()).thenReturn(Arrays.asList(AtomicConstraintType.HASLENGTH));
         ViolationFiltersProvider provider = new ViolationFiltersProvider(configSource, new AtomicConstraintTypeMapper());
 
@@ -61,7 +63,7 @@ class ViolationFiltersProviderTest {
 
     @Test
     void twoConstraintsToViolate_ReturnListWithTwoFilter() {
-        GenerationConfigSource configSource = mock(GenerationConfigSource.class);
+        ViolateConfigSource configSource = mock(ViolateConfigSource.class);
         when(configSource.getConstraintsToNotViolate()).thenReturn(Arrays.asList(AtomicConstraintType.HASLENGTH, AtomicConstraintType.ISINSET));
         ViolationFiltersProvider provider = new ViolationFiltersProvider(configSource, new AtomicConstraintTypeMapper());
 

@@ -9,7 +9,7 @@ import com.scottlogic.deg.generator.decisiontree.visualisation.DecisionTreeVisua
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
-import com.scottlogic.deg.generator.generation.AllConfigSource;
+import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
 import com.scottlogic.deg.profile.reader.ProfileReader;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.validators.ErrorReporter;

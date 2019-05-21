@@ -1,8 +1,8 @@
 package com.scottlogic.deg.orchestrator.violation;
 
 import com.scottlogic.deg.generator.config.detail.*;
-import com.scottlogic.deg.generator.generation.AllConfigSource;
-import com.scottlogic.deg.generator.generation.GenerationConfigSource;
+import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
+import com.scottlogic.deg.orchestrator.violate.ViolateConfigSource;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 
 import java.io.File;
@@ -10,7 +10,7 @@ import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 
-public class TestGenerationConfigSource implements AllConfigSource {
+public class TestGenerationConfigSource implements ViolateConfigSource {
     public DataGenerationType generationType;
     public CombinationStrategyType combinationStrategy;
     public TreeWalkerType walkerType;

@@ -12,10 +12,6 @@ import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagGenerator;
-import com.scottlogic.deg.generator.inputs.profileviolation.IndividualConstraintRuleViolator;
-import com.scottlogic.deg.generator.inputs.profileviolation.IndividualRuleProfileViolator;
-import com.scottlogic.deg.generator.inputs.profileviolation.ProfileViolator;
-import com.scottlogic.deg.generator.inputs.profileviolation.RuleViolator;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.outputs.formats.OutputFormat;
 import com.scottlogic.deg.generator.outputs.manifest.JsonManifestWriter;
@@ -80,7 +76,6 @@ public class GeneratorModule extends AbstractModule {
         bind(DecisionTreeFactory.class).to(MaxStringLengthInjectingDecisionTreeFactory.class);
         bind(FieldValueSourceEvaluator.class).to(StandardFieldValueSourceEvaluator.class);
 
-        bind(new TypeLiteral<List<ViolationFilter>>(){}).toProvider(ViolationFiltersProvider.class);
 
         bind(VelocityMonitor.class).in(Singleton.class);
         bind(JavaUtilRandomNumberGenerator.class).toInstance(new JavaUtilRandomNumberGenerator(OffsetDateTime.now().getNano()));

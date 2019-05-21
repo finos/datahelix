@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.generator.StandardGenerationEngine;
-import com.scottlogic.deg.generator.generation.AllConfigSource;
+import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.outputs.targets.SingleDatasetOutputTarget;
 import com.scottlogic.deg.profile.reader.ProfileReader;

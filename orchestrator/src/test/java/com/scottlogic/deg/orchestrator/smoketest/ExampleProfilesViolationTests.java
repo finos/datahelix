@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.smoke_tests;
+package com.scottlogic.deg.orchestrator.smoketest;
 
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.ProfileFields;
@@ -37,7 +37,6 @@ import java.util.stream.Collectors;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.IsNot.not;
-import static org.mockito.Mockito.mock;
 
 class ExampleProfilesViolationTests {
 

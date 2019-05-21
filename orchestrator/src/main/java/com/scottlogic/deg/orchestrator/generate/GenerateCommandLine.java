@@ -3,12 +3,9 @@ package com.scottlogic.deg.orchestrator.generate;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.google.inject.util.Modules;
 import com.scottlogic.deg.generator.config.detail.*;
-import com.scottlogic.deg.generator.generation.AllConfigSource;
-import com.scottlogic.deg.generator.guice.GeneratorModule;
+import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
 import com.scottlogic.deg.orchestrator.guice.AllModule;
-import com.scottlogic.deg.profile.guice.ProfileModule;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import picocli.CommandLine;
 
@@ -106,12 +103,6 @@ public class GenerateCommandLine implements AllConfigSource, Runnable {
     private boolean enableTracing;
 
     @CommandLine.Option(
-        names = {"--dont-violate"},
-        arity = "0..",
-        description = "Choose types of constraint should not be violated")
-    private List<AtomicConstraintType> constraintsToNotViolate;
-
-    @CommandLine.Option(
         names = {"--quiet"},
         description = "Turns OFF default monitoring")
     private Boolean quiet = false;
@@ -184,11 +175,6 @@ public class GenerateCommandLine implements AllConfigSource, Runnable {
     @Override
     public TreeWalkerType getWalkerType() {
         return this.walkerType;
-    }
-
-    @Override
-    public List<AtomicConstraintType> getConstraintsToNotViolate() {
-        return constraintsToNotViolate;
     }
 
     @Override
