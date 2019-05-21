@@ -1,0 +1,21 @@
+plugins {
+    id 'java'
+}
+
+group 'com.scottlogic.deg'
+version 'unspecified'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':common')
+
+    compile 'org.jetbrains.kotlin:kotlin-stdlib:1.3.21'
+    compile 'org.apache.commons:commons-csv:1.5'
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}

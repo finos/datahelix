@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.outputs.targets;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.scottlogic.deg.generator.outputs.formats.OutputWriterFactory;
+import com.scottlogic.deg.output.writer.OutputWriterFactory;
 import com.scottlogic.deg.generator.utils.FileUtils;
 
 import java.nio.file.Path;

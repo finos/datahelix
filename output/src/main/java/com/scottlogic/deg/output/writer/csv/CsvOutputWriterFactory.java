@@ -1,10 +1,10 @@
-package com.scottlogic.deg.generator.outputs.formats.csv;
+package com.scottlogic.deg.output.writer.csv;
 
 import com.scottlogic.deg.common.profile.ProfileFields;
-    import com.scottlogic.deg.generator.outputs.formats.DataSetWriter;
-    import com.scottlogic.deg.generator.outputs.formats.OutputWriterFactory;
+import com.scottlogic.deg.output.writer.DataSetWriter;
+import com.scottlogic.deg.output.writer.OutputWriterFactory;
 
-    import java.io.IOException;
+import java.io.IOException;
     import java.io.OutputStream;
     import java.util.Optional;
 

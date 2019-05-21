@@ -12,7 +12,7 @@ import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagGenerator;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
-import com.scottlogic.deg.generator.outputs.formats.OutputWriterFactory;
+import com.scottlogic.deg.output.writer.OutputWriterFactory;
 import com.scottlogic.deg.generator.outputs.manifest.JsonManifestWriter;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.outputs.targets.SingleDatasetOutputTarget;
