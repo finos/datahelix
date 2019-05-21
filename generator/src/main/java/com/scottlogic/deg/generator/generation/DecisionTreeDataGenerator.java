@@ -54,7 +54,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
             .map(treeWalker::walk);
 
         return partitionCombiner.permute(partitionedDataBags)
-            .map(GeneratedObject::new)
+            .map(d->(GeneratedObject)d)
             .limit(maxRows)
             .peek(monitor::rowEmitted);
     }

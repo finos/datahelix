@@ -43,5 +43,9 @@ public class DataBagValue {
 
         return String.format(format, value);
     }
+
+    public Object getUnformattedValue(){
+        return value;
+    }
 }
 
