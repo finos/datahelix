@@ -659,7 +659,7 @@ class FieldSpecTests {
 
         @Override
         public boolean isInstanceOf(Object o) {
-            return StringRestrictions.isString(o);
+            return IsOfTypeConstraint.Types.DATETIME.getIsInstanceOf().apply(o);
         }
 
         @Override

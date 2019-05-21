@@ -186,7 +186,7 @@ public class FieldSpecFactory {
         }
 
         return FieldSpec.Empty.withNumericRestrictions(
-            new NumericRestrictions(constraint.granularity),
+            new NumericRestrictions(constraint.granularity.getNumericGranularity().scale()),
             FieldSpecSource.fromConstraint(constraint, false, violated));
     }
 

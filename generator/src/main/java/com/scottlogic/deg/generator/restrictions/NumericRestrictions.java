@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -19,26 +20,18 @@ public class NumericRestrictions implements Restrictions {
         this.numericScale = numericScale;
     }
 
-    public NumericRestrictions(ParsedGranularity granularity) {
-        numericScale = granularity.getNumericGranularity().scale();
-    }
-
     public int getNumericScale() {
         return this.numericScale;
     }
 
-    public static boolean isNumeric(Object o){
-        return o instanceof Number;
-    }
-
     @Override
     public boolean isInstanceOf(Object o) {
-        return NumericRestrictions.isNumeric(o);
+        return IsOfTypeConstraint.Types.NUMERIC.getIsInstanceOf().apply(o);
     }
 
     @Override
     public boolean match(Object o) {
-        if (!NumericRestrictions.isNumeric(o)) {
+        if (!isInstanceOf(o)) {
             return false;
         }
 

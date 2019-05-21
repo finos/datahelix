@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 
 import java.time.OffsetDateTime;
 import java.util.Objects;
@@ -23,18 +24,14 @@ public class DateTimeRestrictions implements Restrictions {
         return granularity;
     }
 
-    public static boolean isDateTime(Object o) {
-        return o instanceof OffsetDateTime;
-    }
-
     @Override
     public boolean isInstanceOf(Object o) {
-        return DateTimeRestrictions.isDateTime(o);
+        return IsOfTypeConstraint.Types.DATETIME.getIsInstanceOf().apply(o);
     }
 
     @Override
     public boolean match(Object o) {
-        if (!DateTimeRestrictions.isDateTime(o)) {
+        if (!isInstanceOf(o)) {
             return false;
         }
 
