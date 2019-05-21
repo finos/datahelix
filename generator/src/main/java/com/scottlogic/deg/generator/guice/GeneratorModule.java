@@ -2,7 +2,6 @@ package com.scottlogic.deg.generator.guice;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
-import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
@@ -13,21 +12,19 @@ import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagGenerator;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
-import com.scottlogic.deg.generator.outputs.formats.OutputFormat;
+import com.scottlogic.deg.generator.outputs.formats.OutputWriterFactory;
 import com.scottlogic.deg.generator.outputs.manifest.JsonManifestWriter;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.outputs.targets.SingleDatasetOutputTarget;
 import com.scottlogic.deg.generator.utils.FileUtils;
 import com.scottlogic.deg.generator.utils.FileUtilsImpl;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
-import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
 
 import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.time.OffsetDateTime;
-import java.util.List;
 
 /**
  * Class to define default bindings for Guice injection. Utilises the generation config source to determine which
@@ -47,7 +44,7 @@ public class GeneratorModule extends AbstractModule {
 
         // Bind providers - used to retrieve implementations based on user input
         bind(DecisionTreeOptimiser.class).toProvider(DecisionTreeOptimiserProvider.class);
-        bind(OutputFormat.class).toProvider(OutputFormatProvider.class);
+        bind(OutputWriterFactory.class).toProvider(OutputWriterFactoryProvider.class);
         bind(TreePartitioner.class).toProvider(TreePartitioningProvider.class);
         bind(DecisionTreeWalker.class).toProvider(DecisionTreeWalkerProvider.class);
         bind(ProfileValidator.class).toProvider(ProfileValidatorProvider.class);

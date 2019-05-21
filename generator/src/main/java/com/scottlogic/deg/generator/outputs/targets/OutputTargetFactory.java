@@ -2,11 +2,9 @@ package com.scottlogic.deg.generator.outputs.targets;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.generator.outputs.formats.OutputFormat;
+import com.scottlogic.deg.generator.outputs.formats.OutputWriterFactory;
 import com.scottlogic.deg.generator.utils.FileUtils;
 
-import java.io.IOException;
 import java.nio.file.Path;
 
 /** Represents a directory specified by a user as a target for violation data */
@@ -14,12 +12,12 @@ public class OutputTargetFactory {
     private final FileUtils fileUtils;
     private final Path directoryPath;
     private final boolean canOverwriteExistingFiles;
-    private final OutputFormat formatOfViolationDatasets;
+    private final OutputWriterFactory formatOfViolationDatasets;
 
     @Inject
     public OutputTargetFactory(
         @Named("config:outputPath") Path directoryPath,
-        OutputFormat formatOfViolationDatasets,
+        OutputWriterFactory formatOfViolationDatasets,
         @Named("config:canOverwriteOutputFiles") boolean canOverwriteExistingFiles,
         FileUtils fileUtils) {
 
