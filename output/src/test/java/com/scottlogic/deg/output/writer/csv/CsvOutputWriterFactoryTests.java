@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.outputs.formats.csv;
+package com.scottlogic.deg.output.writer.csv;
 
 import com.google.common.collect.ImmutableMap;
 import com.scottlogic.deg.common.output.DataBagValueSource;
@@ -7,8 +7,8 @@ import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.output.DataBagValue;
 import com.scottlogic.deg.common.output.GeneratedObject;
 import com.scottlogic.deg.output.writer.DataSetWriter;
-import com.scottlogic.deg.output.writer.csv.CsvOutputWriterFactory;
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -21,9 +21,6 @@ import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.equalTo;
-
 class CsvOutputWriterFactoryTests {
     @Test
     void writeRow_withBigDecimalAndNoFormat_shouldOutputDefaultFormat() throws IOException {
@@ -31,7 +28,7 @@ class CsvOutputWriterFactoryTests {
             fields("my_number"),
             unformattedValue(new BigDecimal("0.00000001")),
 
-            containsString("0.00000001"));
+            Matchers.containsString("0.00000001"));
     }
 
     @Test
@@ -40,7 +37,7 @@ class CsvOutputWriterFactoryTests {
             fields("my_number"),
             formattedValue(new BigDecimal("0.00000001"), "%.1e"),
 
-            containsString("\"1.0e-08\""));
+            Matchers.containsString("\"1.0e-08\""));
     }
 
     @Test
@@ -49,7 +46,7 @@ class CsvOutputWriterFactoryTests {
             fields("my_null"),
             unformattedValue(null),
 
-            equalTo("my_null\n\n"));
+            Matchers.equalTo("my_null\n\n"));
     }
 
     @Test
@@ -58,7 +55,7 @@ class CsvOutputWriterFactoryTests {
             fields("my_number"),
             unformattedValue(1.2f),
 
-            equalTo("my_number\n1.2\n"));
+            Matchers.equalTo("my_number\n1.2\n"));
     }
 
     @Test
@@ -67,7 +64,7 @@ class CsvOutputWriterFactoryTests {
             fields("my_string"),
             formattedValue("Hello World", "%.5s"), // Format string to max 5 chars
 
-            containsString("\"Hello\""));
+            Matchers.containsString("\"Hello\""));
     }
 
     @Test
@@ -81,7 +78,7 @@ class CsvOutputWriterFactoryTests {
             fields("my_date"),
             unformattedValue(date),
 
-            containsString("2001-02-03T04:05:06Z"));
+            Matchers.containsString("2001-02-03T04:05:06Z"));
     }
 
     @Test
@@ -95,7 +92,7 @@ class CsvOutputWriterFactoryTests {
             fields("my_date"),
             unformattedValue(date),
 
-            containsString("2001-02-03T04:05:06.777Z"));
+            Matchers.containsString("2001-02-03T04:05:06.777Z"));
     }
 
     @Test
@@ -109,7 +106,7 @@ class CsvOutputWriterFactoryTests {
             fields("my_date"),
             formattedValue(date, "%tF"),
 
-            containsString("\"2001-02-03\""));
+            Matchers.containsString("\"2001-02-03\""));
     }
 
     private static DataBagValue formattedValue(Object value, String format) {

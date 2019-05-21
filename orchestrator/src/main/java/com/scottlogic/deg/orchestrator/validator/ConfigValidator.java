@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
+import com.scottlogic.deg.output.guice.OutputConfigSource;
 import com.scottlogic.deg.output.target.OutputTargetValidationException;
 import com.scottlogic.deg.output.FileUtils;
 
@@ -28,7 +29,7 @@ public class ConfigValidator {
 
     }
 
-    private void checkSwitches(GenerationConfigSource configSource) {
+    private void checkSwitches(OutputConfigSource configSource) {
 
         if (configSource.isEnableTracing() && fileUtils.getTraceFile(configSource.getOutputPath()).exists() && !configSource.overwriteOutputFiles()) {
                 throw new OutputTargetValidationException("trace file already exists, please use a different output filename or use the --replace option");

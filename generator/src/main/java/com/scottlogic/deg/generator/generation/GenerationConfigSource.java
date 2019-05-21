@@ -10,14 +10,11 @@ public interface GenerationConfigSource  {
     TreeWalkerType getWalkerType();
     long getMaxRows();
 
-    OutputFormat getOutputFormat();
-    Path getOutputPath();
-    boolean overwriteOutputFiles();
+    Path getOutputPath();// TODO PAUL remove this, only here for visualise
 
 
     MonitorType getMonitorType();
     boolean shouldDoPartitioning();
-    boolean isEnableTracing();
     boolean visualiseReductions();
     boolean requireFieldTyping();
     boolean dontOptimise();

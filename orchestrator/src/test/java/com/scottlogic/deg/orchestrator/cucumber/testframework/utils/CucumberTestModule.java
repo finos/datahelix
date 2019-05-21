@@ -10,7 +10,7 @@ import com.scottlogic.deg.output.target.SingleDatasetOutputTarget;
 import com.scottlogic.deg.profile.reader.ProfileReader;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.TypingRequiredPerFieldValidator;
-import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
+import com.scottlogic.deg.output.manifest.ManifestWriter;
 import com.scottlogic.deg.orchestrator.validator.ConfigValidator;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
 

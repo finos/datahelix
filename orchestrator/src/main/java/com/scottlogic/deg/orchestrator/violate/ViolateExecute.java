@@ -5,6 +5,8 @@ import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.common.output.GeneratedObject;
+import com.scottlogic.deg.output.manifest.ManifestWriter;
+import com.scottlogic.deg.common.profile.ViolatedProfile;
 import com.scottlogic.deg.output.writer.DataSetWriter;
 import com.scottlogic.deg.output.target.SingleDatasetOutputTarget;
 import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
@@ -33,6 +35,7 @@ public class ViolateExecute implements Runnable {
     private final ProfileViolator profileViolator;
     private final DataGenerator dataGenerator;
     private final ViolateOutputValidator violateOutputValidator;
+    private final ManifestWriter manifestWriter;
 
     @Inject
     ViolateExecute(
@@ -45,7 +48,8 @@ public class ViolateExecute implements Runnable {
         ProfileSchemaValidator profileSchemaValidator,
         ProfileViolator profileViolator,
         DataGenerator dataGenerator,
-        ViolateOutputValidator violateOutputValidator) {
+        ViolateOutputValidator violateOutputValidator,
+        ManifestWriter manifestWriter) {
 
         this.profileReader = profileReader;
         this.configSource = configSource;
@@ -57,6 +61,7 @@ public class ViolateExecute implements Runnable {
         this.profileViolator = profileViolator;
         this.dataGenerator = dataGenerator;
         this.violateOutputValidator = violateOutputValidator;
+        this.manifestWriter = manifestWriter;
     }
 
     @Override
@@ -82,10 +87,11 @@ public class ViolateExecute implements Runnable {
     }
 
     private void doGeneration(Profile profile) throws IOException {
-        List<Profile> violatedProfiles = profileViolator.violate(profile);
+        List<ViolatedProfile> violatedProfiles = profileViolator.violate(profile);
         if (violatedProfiles.isEmpty()) {
             return;
         }
+        manifestWriter.writeManifest(violatedProfiles);
 
         DecimalFormat intFormatter = FileUtils.getDecimalFormat(violatedProfiles.size());
 
