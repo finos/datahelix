@@ -11,7 +11,9 @@ import com.scottlogic.deg.generator.generation.fieldvaluesources.CombiningFieldV
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -43,11 +45,9 @@ public class FieldSpecValueGenerator {
                         : null,
                     new DataBagValueSource(spec.getFieldSpecSource()));
 
-                return DataBag.startBuilding()
-                    .set(
-                        field,
-                        dataBagValue)
-                    .build();
+                Map<Field, DataBagValue> map = new HashMap<>();
+                map.put(field, dataBagValue);
+                return new DataBag(map);
             });
     }
 

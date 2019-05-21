@@ -4,6 +4,7 @@ import com.scottlogic.deg.common.profile.constraintdetail.Nullness;
 import com.scottlogic.deg.generator.DataBagValueSource;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
+import com.scottlogic.deg.generator.builders.DataBagBuilder;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
@@ -64,15 +65,15 @@ class FieldSpecValueGeneratorTests {
 
         Set<DataBag> expectedDataBags = new HashSet<>(
             Arrays.asList(
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
                     new DataBagValue(1, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build(),
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
                     new DataBagValue(5, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build(),
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
                     new DataBagValue(10, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build()
@@ -127,27 +128,27 @@ class FieldSpecValueGeneratorTests {
 
         Set<DataBag> expectedDataBags = new HashSet<>(
             Arrays.asList(
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
                     new DataBagValue(new BigDecimal("10.00000000000000000001"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build(),
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
                     new DataBagValue(new BigDecimal("10.00000000000000000002"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build(),
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
                     new DataBagValue(new BigDecimal("15"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build(),
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
                     new DataBagValue(new BigDecimal("25"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build(),
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
                     new DataBagValue(new BigDecimal("29.99999999999999999998"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build(),
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
                     new DataBagValue(new BigDecimal("29.99999999999999999999"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build()
@@ -193,13 +194,13 @@ class FieldSpecValueGeneratorTests {
         assertTrue(result.size() > 2);
         assertTrue(
             result.contains(
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
                     new DataBagValue("Test One", new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build()
             ) &&
                 result.contains(
-                    DataBag.startBuilding().set(
+                    new DataBagBuilder().set(
                         new Field("First Field"),
                         new DataBagValue("Test Two", new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                     ).build()
@@ -246,11 +247,11 @@ class FieldSpecValueGeneratorTests {
 
         Set<DataBag> expectedDataBags = new HashSet<>(
             Arrays.asList(
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
                     new DataBagValue("ba", new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build(),
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
                     new DataBagValue("ab", new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build()
@@ -278,15 +279,15 @@ class FieldSpecValueGeneratorTests {
 
         Set<DataBag> expectedDataBags = new HashSet<>(
             Arrays.asList(
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
                     new DataBagValue(10, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build(),
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
                     new DataBagValue(20, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build(),
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
                     new DataBagValue(30, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build()
@@ -319,23 +320,23 @@ class FieldSpecValueGeneratorTests {
 
         Set<DataBag> expectedDataBags = new HashSet<>(
             Arrays.asList(
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
                     new DataBagValue(new BigDecimal("10.00000000000000000001"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build(),
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
                     new DataBagValue(new BigDecimal("10.00000000000000000002"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build(),
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
                     new DataBagValue(new BigDecimal("29.99999999999999999998"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build(),
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
                     new DataBagValue(new BigDecimal("29.99999999999999999999"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build(),
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
                     new DataBagValue(null, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
                 ).build()
