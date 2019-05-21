@@ -6,8 +6,8 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SequenceWriter;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.generator.generation.databags.DataBagValue;
-import com.scottlogic.deg.generator.outputs.GeneratedObject;
+import com.scottlogic.deg.common.output.DataBagValue;
+import com.scottlogic.deg.common.output.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.formats.DataSetWriter;
 
 import java.io.IOException;
@@ -15,10 +15,7 @@ import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 class JsonDataSetWriter implements DataSetWriter {

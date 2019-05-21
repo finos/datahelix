@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SequenceWriter;
 import com.scottlogic.deg.common.profile.RuleInformation;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.outputs.CellSource;
-import com.scottlogic.deg.generator.outputs.GeneratedObject;
-import com.scottlogic.deg.generator.outputs.RowSource;
+import com.scottlogic.deg.common.output.CellSource;
+import com.scottlogic.deg.common.output.GeneratedObject;
+import com.scottlogic.deg.common.output.RowSource;
 import com.scottlogic.deg.generator.outputs.formats.DataSetWriter;
 
 import java.io.*;

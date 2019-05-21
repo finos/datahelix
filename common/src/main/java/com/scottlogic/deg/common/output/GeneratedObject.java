@@ -1,7 +1,6 @@
-package com.scottlogic.deg.generator.outputs;
+package com.scottlogic.deg.common.output;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 
 import java.util.Map;
 import java.util.Objects;

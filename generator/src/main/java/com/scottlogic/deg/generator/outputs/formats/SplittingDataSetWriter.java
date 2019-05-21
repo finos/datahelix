@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.outputs.formats;
 
-import com.scottlogic.deg.generator.outputs.GeneratedObject;
+import com.scottlogic.deg.common.output.GeneratedObject;
 
 import java.io.Closeable;
 import java.io.IOException;

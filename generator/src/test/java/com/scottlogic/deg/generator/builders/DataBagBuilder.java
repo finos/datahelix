@@ -1,9 +1,9 @@
 package com.scottlogic.deg.generator.builders;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.generator.DataBagValueSource;
+import com.scottlogic.deg.common.output.DataBagValueSource;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
-import com.scottlogic.deg.generator.generation.databags.DataBagValue;
+import com.scottlogic.deg.common.output.DataBagValue;
 
 import java.util.HashMap;
 import java.util.Map;

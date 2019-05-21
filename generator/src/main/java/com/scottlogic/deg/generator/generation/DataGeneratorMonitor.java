@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.generator.outputs.GeneratedObject;
+import com.scottlogic.deg.common.output.GeneratedObject;
 
 public interface DataGeneratorMonitor {
     default void generationStarting() {}

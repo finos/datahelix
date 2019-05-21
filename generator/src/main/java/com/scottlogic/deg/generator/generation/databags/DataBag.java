@@ -1,14 +1,11 @@
 package com.scottlogic.deg.generator.generation.databags;
 
+import com.scottlogic.deg.common.output.DataBagValue;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.*;
-import com.scottlogic.deg.generator.outputs.CellSource;
-import com.scottlogic.deg.generator.outputs.GeneratedObject;
-import com.scottlogic.deg.generator.outputs.RowSource;
+import com.scottlogic.deg.common.output.GeneratedObject;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 public class DataBag extends GeneratedObject {
