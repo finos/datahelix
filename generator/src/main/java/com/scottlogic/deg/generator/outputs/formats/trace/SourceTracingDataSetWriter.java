@@ -34,8 +34,8 @@ class SourceTracingDataSetWriter implements DataSetWriter {
 
     @Override
     public void writeRow(GeneratedObject row) throws IOException {
-        Collection<TracingDto> dto = row.source != null
-            ? TracingDto.fromRowSource(row.source)
+        Collection<TracingDto> dto = row.getRowSource() != null
+            ? TracingDto.fromRowSource(row.getRowSource())
             : TracingDto.empty;
 
         writer.write(dto);
