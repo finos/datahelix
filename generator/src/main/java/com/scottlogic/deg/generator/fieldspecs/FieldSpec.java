@@ -196,9 +196,7 @@ public class FieldSpec {
     /** Create a predicate that returns TRUE for all (and only) values permitted by this FieldSpec */
     public boolean permits(@NotNull Object value) {
         if (typeRestrictions != null) {
-            Set<Types> types = SetUtils.setOf(Types.NUMERIC, Types.STRING, Types.DATETIME);
-
-            for (Types type : types) {
+            for (Types type : Types.values()) {
                 if (!typeRestrictions.isTypeAllowed(type) && type.getIsInstanceOf().apply(value)) {
                     return false;
                 }
