@@ -204,14 +204,19 @@ public class FieldSpec {
             TypeCheckHolder stringHolder = new TypeCheckHolder(Types.STRING, StringRestrictions::isString);
             TypeCheckHolder dateTimeHolder = new TypeCheckHolder(Types.DATETIME, DateTimeRestrictions::isDateTime);
             Set<TypeCheckHolder> holders = SetUtils.setOf(numericHolder, stringHolder, dateTimeHolder);
-            boolean disallowedType = holders.stream()
-                .anyMatch(h -> !typeRestrictions.isTypeAllowed(h.type) && h.check.apply(value));
-            if (disallowedType) return false;
+
+            for (TypeCheckHolder holder : holders) {
+                if (!typeRestrictions.isTypeAllowed(holder.type) && holder.check.apply(value)) {
+                    return false;
+                }
+            }
         }
 
         Set<Restrictions> restrictions = SetUtils.setOf(numericRestrictions, dateTimeRestrictions, stringRestrictions);
         for (Restrictions restriction : restrictions) {
-            if (restriction != null && restriction.isInstanceOf(value) && !restriction.match(value)) return false;
+            if (restriction != null && restriction.isInstanceOf(value) && !restriction.match(value)) {
+                return false;
+            }
         }
 
         return true;
