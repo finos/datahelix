@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.generation.databags;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.generator.builders.DataBagBuilder;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
@@ -29,9 +30,9 @@ class StandardRowSpecDataBagGeneratorTests {
     Field field2 = new Field("field2");
     Field field3 = new Field("field3");
 
-    DataBag dataBag = DataBag.startBuilding().set(field, "value", null).build();
-    DataBag dataBag2 = DataBag.startBuilding().set(field2, "value", null).build();
-    DataBag dataBag3 = DataBag.startBuilding().set(field3, "value", null).build();
+    DataBag dataBag = new DataBagBuilder().set(field, "value", null).build();
+    DataBag dataBag2 = new DataBagBuilder().set(field2, "value", null).build();
+    DataBag dataBag3 = new DataBagBuilder().set(field3, "value", null).build();
 
     @Test
     void shouldCreateValuesForEachFieldSpecInRowSpec() {

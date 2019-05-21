@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 
 public class DataBag {
     public static final DataBag empty = new DataBag(new HashMap<>());
-    public static DataBagBuilder startBuilding() { return new DataBagBuilder(); }
 
     public Map<Field, DataBagValue> getFieldToValue() {
         return fieldToValue;
@@ -73,30 +72,5 @@ public class DataBag {
                 .map(e -> new CellSource(e.getKey() , e.getValue()))
                 .collect(Collectors.toList())
         );
-    }
-
-    public static class DataBagBuilder {
-        private final Map<Field, DataBagValue> fieldToValue;
-
-        private DataBagBuilder() {
-            this.fieldToValue = new HashMap<>();
-        }
-
-        public DataBagBuilder set(Field field, DataBagValue value) {
-            if (this.fieldToValue.containsKey(field))
-                throw new IllegalArgumentException("Databag already contains a value for " + field);
-
-            this.fieldToValue.put(field, value);
-
-            return this;
-        }
-
-        public DataBagBuilder set(Field field, Object value, DataBagValueSource source) {
-            return this.set(field, new DataBagValue(value, source));
-        }
-
-        public DataBag build() {
-            return new DataBag(this.fieldToValue);
-        }
     }
 }

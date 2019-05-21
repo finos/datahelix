@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.generation.combinationstrategies;
 
+import com.scottlogic.deg.generator.builders.DataBagBuilder;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.DataBagValueSource;
 import com.scottlogic.deg.common.profile.Field;
@@ -17,13 +18,13 @@ class ReductiveCombinationStrategyTests {
     void permute_dataBagSequencesContainsTwoFieldsWithMultipleValues_returnsExpectedValues() {
         List<DataBag> firstFieldDataBags = new ArrayList<DataBag>() {{
             add(
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
                     new DataBagValue(10, new DataBagValueSource(null))
                 ).build()
             );
             add(
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
                     new DataBagValue(20, new DataBagValueSource(null))
                 ).build()
@@ -31,13 +32,13 @@ class ReductiveCombinationStrategyTests {
         }};
         List<DataBag> secondFieldDataBags = new ArrayList<DataBag>() {{
             add(
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("Second Field"),
                     new DataBagValue("A", new DataBagValueSource(null))
                 ).build()
             );
             add(
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("Second Field"),
                     new DataBagValue("B", new DataBagValueSource(null))
                 ).build()
@@ -54,7 +55,7 @@ class ReductiveCombinationStrategyTests {
 
         List<DataBag> expectedDataBags = new ArrayList<DataBag>() {{
             add(
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
                     new DataBagValue(10, new DataBagValueSource(null))
                 ).set(
@@ -63,7 +64,7 @@ class ReductiveCombinationStrategyTests {
                 ).build()
             );
             add(
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
                     new DataBagValue(10, new DataBagValueSource(null))
                 ).set(
@@ -72,7 +73,7 @@ class ReductiveCombinationStrategyTests {
                 ).build()
             );
             add(
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
                     new DataBagValue(20, new DataBagValueSource(null))
                 ).set(
@@ -81,7 +82,7 @@ class ReductiveCombinationStrategyTests {
                 ).build()
             );
             add(
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
                     new DataBagValue(20, new DataBagValueSource(null))
                 ).set(
