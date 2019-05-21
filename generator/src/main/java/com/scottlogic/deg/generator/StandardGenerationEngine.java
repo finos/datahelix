@@ -2,8 +2,6 @@ package com.scottlogic.deg.generator;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.generator.decisiontree.DecisionTree;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
@@ -14,18 +12,15 @@ import java.io.IOException;
 import java.util.stream.Stream;
 
 public class StandardGenerationEngine {
-    private final DecisionTreeFactory decisionTreeGenerator;
     private final ReductiveDataGeneratorMonitor monitor;
     private final DataGenerator dataGenerator;
 
     @Inject
     public StandardGenerationEngine(
         DataGenerator dataGenerator,
-        DecisionTreeFactory decisionTreeGenerator,
         ReductiveDataGeneratorMonitor monitor) {
 
         this.dataGenerator = dataGenerator;
-        this.decisionTreeGenerator = decisionTreeGenerator;
         this.monitor = monitor;
     }
 
@@ -34,10 +29,9 @@ public class StandardGenerationEngine {
         SingleDatasetOutputTarget outputTarget)
         throws IOException {
 
-        final DecisionTree decisionTree = this.decisionTreeGenerator.analyse(profile);
-
         final Stream<GeneratedObject> generatedDataItems =
-            this.dataGenerator.generateData(profile, decisionTree);
+            this.dataGenerator.
+                generateData(profile);
 
         try (DataSetWriter writer = outputTarget.openWriter(profile.fields)) {
             generatedDataItems.forEach(row -> {
