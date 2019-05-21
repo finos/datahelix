@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.utils;
+package com.scottlogic.deg.output;
 
 import java.io.File;
 import java.io.IOException;

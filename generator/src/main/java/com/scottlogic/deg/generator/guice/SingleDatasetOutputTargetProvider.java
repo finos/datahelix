@@ -3,11 +3,12 @@ package com.scottlogic.deg.generator.guice;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
+import com.scottlogic.deg.output.target.FileOutputTarget;
+import com.scottlogic.deg.output.target.SingleDatasetOutputTarget;
+import com.scottlogic.deg.output.target.SplittingOutputTarget;
 import com.scottlogic.deg.output.writer.OutputWriterFactory;
 import com.scottlogic.deg.output.writer.trace.TraceOutputWriterFactory;
-import com.scottlogic.deg.generator.outputs.targets.*;
-import com.scottlogic.deg.generator.utils.FileUtils;
-import com.scottlogic.deg.generator.utils.FileUtilsImpl;
+import com.scottlogic.deg.output.FileUtils;
 
 import java.nio.file.Path;
 

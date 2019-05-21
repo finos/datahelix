@@ -2,7 +2,7 @@ package com.scottlogic.deg.orchestrator.validator;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.generator.utils.FileUtils;
+import com.scottlogic.deg.output.FileUtils;
 
 import java.nio.file.Path;
 

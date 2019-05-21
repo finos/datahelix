@@ -9,7 +9,7 @@ import com.scottlogic.deg.common.output.GeneratedObject;
 import com.scottlogic.deg.output.writer.DataSetWriter;
 import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
-import com.scottlogic.deg.generator.outputs.targets.SingleDatasetOutputTarget;
+import com.scottlogic.deg.output.target.SingleDatasetOutputTarget;
 import com.scottlogic.deg.profile.reader.ProfileReader;
 import com.scottlogic.deg.orchestrator.validator.ConfigValidator;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
