@@ -6,7 +6,7 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class NumericRestrictions implements Restrictions {
+public class NumericRestrictions implements TypedRestrictions {
     public static final int DEFAULT_NUMERIC_SCALE = 20;
     private final int numericScale;
     public NumericLimit<BigDecimal> min;

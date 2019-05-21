@@ -6,7 +6,7 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
-public class DateTimeRestrictions implements Restrictions {
+public class DateTimeRestrictions implements TypedRestrictions {
     private static final Timescale DEFAULT_GRANULARITY = Timescale.MILLIS;
     private final Timescale granularity;
     public DateTimeLimit min;

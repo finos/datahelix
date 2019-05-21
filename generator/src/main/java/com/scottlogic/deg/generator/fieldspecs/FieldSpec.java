@@ -25,6 +25,18 @@ public class FieldSpec {
         null,
         FieldSpecSource.Empty);
 
+    private enum RestrictionMapping {
+        SET,
+        NUMERIC,
+        STRING,
+        NULL,
+        DATE_TIME,
+        FORMAT,
+        MUST_CONTAIN
+    }
+
+    private final EnumMap<RestrictionMapping, Restrictions> restrictions = new EnumMap<>(RestrictionMapping.class);
+
     private final SetRestrictions setRestrictions;
     private final NumericRestrictions numericRestrictions;
     private final StringRestrictions stringRestrictions;
@@ -203,8 +215,8 @@ public class FieldSpec {
             }
         }
 
-        Set<Restrictions> restrictions = SetUtils.setOf(numericRestrictions, dateTimeRestrictions, stringRestrictions);
-        for (Restrictions restriction : restrictions) {
+        Set<TypedRestrictions> restrictions = SetUtils.setOf(numericRestrictions, dateTimeRestrictions, stringRestrictions);
+        for (TypedRestrictions restriction : restrictions) {
             if (restriction != null && restriction.isInstanceOf(value) && !restriction.match(value)) {
                 return false;
             }

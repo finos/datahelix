@@ -87,7 +87,11 @@ public class FieldSpecFactory {
             return construct((IsStringLongerThanConstraint) constraint, negate, violated);
         } else if (constraint instanceof IsStringShorterThanConstraint) {
             return construct((IsStringShorterThanConstraint) constraint, negate, violated);
-        } else {
+        } else if (constraint instanceof HasFirstNameConstraint) {
+            return construct((HasFirstNameConstraint) constraint, negate, violated);
+        } else if (constraint instanceof HasLastNameConstraint) {
+            return construct((HasLastNameConstraint) constraint, negate, violated);
+        }  else {
             throw new UnsupportedOperationException();
         }
     }
@@ -310,4 +314,5 @@ public class FieldSpecFactory {
                 FieldSpecSource.fromConstraint(constraint, negate, violated)
             );
     }
+
 }

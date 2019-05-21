@@ -366,7 +366,7 @@ class AtomicConstraintReaderLookup {
     }
 
     private static Set<Object> getValidatedValues(ConstraintDTO dto) throws InvalidProfileException {
-        HashSet<Object> mappedValues = new HashSet<>();
+        Set<Object> mappedValues = new HashSet<>();
 
         if (dto.values == null) {
             throw new InvalidProfileException(String.format("Field [%s]: Couldn't recognise 'values' property, it must not contain 'null'", dto.field));
