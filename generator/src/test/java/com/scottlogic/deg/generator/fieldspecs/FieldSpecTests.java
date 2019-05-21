@@ -15,8 +15,6 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -24,7 +22,6 @@ import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 class FieldSpecTests {
 

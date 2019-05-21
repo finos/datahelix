@@ -10,10 +10,6 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.scottlogic.deg.generator.restrictions.DateTimeRestrictions.isDateTime;
-import static com.scottlogic.deg.generator.restrictions.NumericRestrictions.isNumeric;
-import static com.scottlogic.deg.generator.restrictions.StringRestrictions.isString;
-
 /**
  * Details a column's atomic constraints
  */
@@ -55,7 +51,7 @@ public class FieldSpec {
         this.mustContainRestriction = mustContainRestriction;
         this.formatRestrictions = formatRestrictions;
 
-        if (setRestrictions != null && setRestrictions.getWhitelist() != null && setRestrictions.getWhitelist().size() > 0) {
+        if (setRestrictions != null && setRestrictions.getWhitelist() != null && !setRestrictions.getWhitelist().isEmpty()) {
             this.numericRestrictions = null;
             this.stringRestrictions = null;
             this.typeRestrictions = null;
@@ -241,7 +237,7 @@ public class FieldSpec {
             return false;
         }
 
-        if (!(obj.getClass() == this.getClass())){
+        if (obj.getClass() != this.getClass()){
             return false;
         }
 
