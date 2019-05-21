@@ -43,7 +43,7 @@ public class FieldSpecValueGenerator {
                     spec.getFormatRestrictions() != null
                         ? spec.getFormatRestrictions().formatString
                         : null,
-                    new DataBagValueSource(spec.getFieldSpecSource()));
+                    spec.getFieldSpecSource().toDataBagValueSource());
 
                 Map<Field, DataBagValue> map = new HashMap<>();
                 map.put(field, dataBagValue);

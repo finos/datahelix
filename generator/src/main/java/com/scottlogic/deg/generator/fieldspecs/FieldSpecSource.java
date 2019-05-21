@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.generator.DataBagValueSource;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -63,6 +64,10 @@ public class FieldSpecSource {
             concat(this.constraints, source.constraints),
             concat(this.violatedConstraints, source.violatedConstraints)
         );
+    }
+
+    public DataBagValueSource toDataBagValueSource(){
+        return new DataBagValueSource(getConstraints(), getViolatedConstraints());
     }
 
     private static <T> Set<T> concat(Collection<T> left, Collection<T> right){

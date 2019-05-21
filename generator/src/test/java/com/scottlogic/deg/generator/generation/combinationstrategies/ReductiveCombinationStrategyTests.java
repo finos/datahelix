@@ -20,13 +20,13 @@ class ReductiveCombinationStrategyTests {
             add(
                 new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue(10, new DataBagValueSource(null))
+                    new DataBagValue(10, DataBagValueSource.Empty)
                 ).build()
             );
             add(
                 new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue(20, new DataBagValueSource(null))
+                    new DataBagValue(20, DataBagValueSource.Empty)
                 ).build()
             );
         }};
@@ -34,13 +34,13 @@ class ReductiveCombinationStrategyTests {
             add(
                 new DataBagBuilder().set(
                     new Field("Second Field"),
-                    new DataBagValue("A", new DataBagValueSource(null))
+                    new DataBagValue("A", DataBagValueSource.Empty)
                 ).build()
             );
             add(
                 new DataBagBuilder().set(
                     new Field("Second Field"),
-                    new DataBagValue("B", new DataBagValueSource(null))
+                    new DataBagValue("B", DataBagValueSource.Empty)
                 ).build()
             );
         }};
@@ -57,37 +57,37 @@ class ReductiveCombinationStrategyTests {
             add(
                 new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue(10, new DataBagValueSource(null))
+                    new DataBagValue(10, DataBagValueSource.Empty)
                 ).set(
                     new Field("Second Field"),
-                    new DataBagValue("A", new DataBagValueSource(null))
+                    new DataBagValue("A", DataBagValueSource.Empty)
                 ).build()
             );
             add(
                 new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue(10, new DataBagValueSource(null))
+                    new DataBagValue(10, DataBagValueSource.Empty)
                 ).set(
                     new Field("Second Field"),
-                    new DataBagValue("B", new DataBagValueSource(null))
+                    new DataBagValue("B", DataBagValueSource.Empty)
                 ).build()
             );
             add(
                 new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue(20, new DataBagValueSource(null))
+                    new DataBagValue(20, DataBagValueSource.Empty)
                 ).set(
                     new Field("Second Field"),
-                    new DataBagValue("A", new DataBagValueSource(null))
+                    new DataBagValue("A", DataBagValueSource.Empty)
                 ).build()
             );
             add(
                 new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue(20, new DataBagValueSource(null))
+                    new DataBagValue(20, DataBagValueSource.Empty)
                 ).set(
                     new Field("Second Field"),
-                    new DataBagValue("B", new DataBagValueSource(null))
+                    new DataBagValue("B", DataBagValueSource.Empty)
                 ).build()
             );
         }};

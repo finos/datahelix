@@ -67,15 +67,15 @@ class FieldSpecValueGeneratorTests {
             Arrays.asList(
                 new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue(1, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                    new DataBagValue(1, fieldSpec.getFieldSpecSource().toDataBagValueSource())
                 ).build(),
                 new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue(5, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                    new DataBagValue(5, fieldSpec.getFieldSpecSource().toDataBagValueSource())
                 ).build(),
                 new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue(10, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                    new DataBagValue(10, fieldSpec.getFieldSpecSource().toDataBagValueSource())
                 ).build()
             )
         );
@@ -130,27 +130,27 @@ class FieldSpecValueGeneratorTests {
             Arrays.asList(
                 new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue(new BigDecimal("10.00000000000000000001"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                    new DataBagValue(new BigDecimal("10.00000000000000000001"), fieldSpec.getFieldSpecSource().toDataBagValueSource())
                 ).build(),
                 new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue(new BigDecimal("10.00000000000000000002"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                    new DataBagValue(new BigDecimal("10.00000000000000000002"), fieldSpec.getFieldSpecSource().toDataBagValueSource())
                 ).build(),
                 new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue(new BigDecimal("15"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                    new DataBagValue(new BigDecimal("15"), fieldSpec.getFieldSpecSource().toDataBagValueSource())
                 ).build(),
                 new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue(new BigDecimal("25"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                    new DataBagValue(new BigDecimal("25"), fieldSpec.getFieldSpecSource().toDataBagValueSource())
                 ).build(),
                 new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue(new BigDecimal("29.99999999999999999998"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                    new DataBagValue(new BigDecimal("29.99999999999999999998"), fieldSpec.getFieldSpecSource().toDataBagValueSource())
                 ).build(),
                 new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue(new BigDecimal("29.99999999999999999999"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                    new DataBagValue(new BigDecimal("29.99999999999999999999"), fieldSpec.getFieldSpecSource().toDataBagValueSource())
                 ).build()
             )
         );
@@ -196,13 +196,13 @@ class FieldSpecValueGeneratorTests {
             result.contains(
                 new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue("Test One", new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                    new DataBagValue("Test One", fieldSpec.getFieldSpecSource().toDataBagValueSource())
                 ).build()
             ) &&
                 result.contains(
                     new DataBagBuilder().set(
                         new Field("First Field"),
-                        new DataBagValue("Test Two", new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                        new DataBagValue("Test Two", fieldSpec.getFieldSpecSource().toDataBagValueSource())
                     ).build()
                 )
         );
@@ -249,11 +249,11 @@ class FieldSpecValueGeneratorTests {
             Arrays.asList(
                 new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue("ba", new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                    new DataBagValue("ba", fieldSpec.getFieldSpecSource().toDataBagValueSource())
                 ).build(),
                 new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue("ab", new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                    new DataBagValue("ab", fieldSpec.getFieldSpecSource().toDataBagValueSource())
                 ).build()
             )
         );
@@ -281,15 +281,15 @@ class FieldSpecValueGeneratorTests {
             Arrays.asList(
                 new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue(10, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                    new DataBagValue(10, fieldSpec.getFieldSpecSource().toDataBagValueSource())
                 ).build(),
                 new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue(20, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                    new DataBagValue(20, fieldSpec.getFieldSpecSource().toDataBagValueSource())
                 ).build(),
                 new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue(30, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                    new DataBagValue(30, fieldSpec.getFieldSpecSource().toDataBagValueSource())
                 ).build()
             )
         );
@@ -322,23 +322,23 @@ class FieldSpecValueGeneratorTests {
             Arrays.asList(
                 new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue(new BigDecimal("10.00000000000000000001"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                    new DataBagValue(new BigDecimal("10.00000000000000000001"), fieldSpec.getFieldSpecSource().toDataBagValueSource())
                 ).build(),
                 new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue(new BigDecimal("10.00000000000000000002"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                    new DataBagValue(new BigDecimal("10.00000000000000000002"), fieldSpec.getFieldSpecSource().toDataBagValueSource())
                 ).build(),
                 new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue(new BigDecimal("29.99999999999999999998"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                    new DataBagValue(new BigDecimal("29.99999999999999999998"), fieldSpec.getFieldSpecSource().toDataBagValueSource())
                 ).build(),
                 new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue(new BigDecimal("29.99999999999999999999"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                    new DataBagValue(new BigDecimal("29.99999999999999999999"), fieldSpec.getFieldSpecSource().toDataBagValueSource())
                 ).build(),
                 new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue(null, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
+                    new DataBagValue(null, fieldSpec.getFieldSpecSource().toDataBagValueSource())
                 ).build()
             )
         );
