@@ -10,32 +10,6 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 
 public class NumericRestrictionsTests {
-    @Test
-    void equals_whenOtherObjectIsNull_returnsFalse() {
-        NumericRestrictions restriction = new NumericRestrictions();
-
-        boolean result = restriction.equals(null);
-
-        Assert.assertFalse(result);
-    }
-
-    @Test
-    void equals_whenOtherObjectIsStringNotTypeNumericRestrictions_returnsFalse() {
-        NumericRestrictions restriction = new NumericRestrictions();
-
-        boolean result = restriction.equals("Test");
-
-        Assert.assertFalse(result);
-    }
-
-    @Test
-    void equals_whenOtherObjectIsIntNotTypeNumericRestrictions_returnsFalse() {
-        NumericRestrictions restriction = new NumericRestrictions();
-
-        boolean result = restriction.equals(1);
-
-        Assert.assertFalse(result);
-    }
 
     @Test
     void equals_whenNumericRestrictionsAreEqual_returnsTrue() {
