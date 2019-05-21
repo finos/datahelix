@@ -505,6 +505,50 @@ class FieldSpecTests {
         return holders.stream().map(Arguments::of);
     }
 
+    @Test
+    void permitsRejectsInvalidNumeric() {
+        NumericRestrictions numeric = new NumericRestrictions();
+        FieldSpec spec = FieldSpec.Empty.withNumericRestrictions(numeric, FieldSpecSource.Empty);
+
+        numeric.min = new NumericLimit<>(BigDecimal.TEN, true);
+
+        assertFalse(spec.permits(BigDecimal.ONE));
+    }
+
+    @Test
+    void permitsRejectsInvalidDateTime() {
+        DateTimeRestrictions dateTime = new DateTimeRestrictions();
+        FieldSpec spec = FieldSpec.Empty.withDateTimeRestrictions(dateTime, FieldSpecSource.Empty);
+
+        OffsetDateTime time = OffsetDateTime.of(100, 1, 1, 1, 1, 1, 1, ZoneOffset.UTC);
+        dateTime.max = new DateTimeRestrictions.DateTimeLimit(time, true);
+
+        assertFalse(spec.permits(time.plusNanos(1_000_000)));
+    }
+
+    @Test
+    void permitsRejectsInvalidString() {
+        StringRestrictions string = new StringRestrictions() {
+            @Override
+            public MergeResult<StringRestrictions> intersect(StringRestrictions other) {
+                return null;
+            }
+
+            @Override
+            public boolean match(String x) {
+                return false;
+            }
+
+            @Override
+            public StringGenerator createGenerator() {
+                return null;
+            }
+        };
+        FieldSpec spec = FieldSpec.Empty.withStringRestrictions(string, FieldSpecSource.Empty);
+
+        assertFalse(spec.permits("Anything"));
+    }
+
     @ParameterizedTest()
     @MethodSource("partiallyUnequalProvider")
     public void fieldSpecsThatArePartiallyEqualShouldBeReportedAsUnequal(

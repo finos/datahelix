@@ -208,20 +208,10 @@ public class FieldSpec {
                 .anyMatch(h -> !typeRestrictions.isTypeAllowed(h.type) && h.check.apply(value));
             if (disallowedType) return false;
         }
-        RestrictionHolder numericHolder = new RestrictionHolder(numericRestrictions, NumericRestrictions::isNumeric);
-        RestrictionHolder stringHolder = new RestrictionHolder(dateTimeRestrictions, DateTimeRestrictions::isDateTime);
-        RestrictionHolder dateTimeHolder = new RestrictionHolder(stringRestrictions, StringRestrictions::isString);
 
-        if (numericRestrictions != null) {
-            if (isNumeric(value) && !numericRestrictions.match(value)) return false;
-        }
-
-        if (dateTimeRestrictions != null) {
-            if (isDateTime(value) && !dateTimeRestrictions.match(value)) return false;
-        }
-
-        if (stringRestrictions != null) {
-            if (isString(value) && !stringRestrictions.match(value)) return false;
+        Set<Restrictions> restrictions = SetUtils.setOf(numericRestrictions, dateTimeRestrictions, stringRestrictions);
+        for (Restrictions restriction : restrictions) {
+            if (restriction != null && restriction.isInstanceOf(value) && !restriction.match(value)) return false;
         }
 
         return true;
@@ -233,16 +223,6 @@ public class FieldSpec {
 
         TypeCheckHolder(Types type, Function<Object, Boolean> check) {
             this.type = type;
-            this.check = check;
-        }
-    }
-
-    private class RestrictionHolder {
-        private final Restrictions restrictions;
-        private final Function<Object, Boolean> check;
-
-        RestrictionHolder(Restrictions restrictions, Function<Object, Boolean> check) {
-            this.restrictions = restrictions;
             this.check = check;
         }
     }
