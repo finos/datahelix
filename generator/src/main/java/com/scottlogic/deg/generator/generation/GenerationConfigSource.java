@@ -34,5 +34,5 @@ public interface GenerationConfigSource extends ConfigSource {
     boolean shouldViolate();
     boolean requireFieldTyping();
 
-    OutputFormat getOutputFormat();
+    OutputFormatOption getOutputFormat();
 }

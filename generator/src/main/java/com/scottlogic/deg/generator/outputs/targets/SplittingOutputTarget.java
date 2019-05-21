@@ -29,11 +29,4 @@ public class SplittingOutputTarget implements SingleDatasetOutputTarget {
 
         return new SplittingDataSetWriter(list);
     }
-
-    @Override
-    public void validate(Profile profile) throws OutputTargetValidationException, IOException {
-        for (SingleDatasetOutputTarget subTarget : subTargets) {
-            subTarget.validate(profile);
-        }
-    }
 }

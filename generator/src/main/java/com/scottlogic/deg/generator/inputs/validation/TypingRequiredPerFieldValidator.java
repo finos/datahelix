@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  *
  * see {@link https://github.com/ScottLogic/datahelix/issues/767 #767} for more details
  */
-public class TypingRequiredPerFieldValidator implements ProfileValidator {
+public class TypingRequiredPerFieldValidator {
     private final DecisionTreeFactory decisionTreeFactory;
 
     @Inject
@@ -43,7 +43,6 @@ public class TypingRequiredPerFieldValidator implements ProfileValidator {
         this.decisionTreeFactory = decisionTreeFactory;
     }
 
-    @Override
     public Collection<ValidationAlert> validate(Profile profile) {
         final DecisionTree decisionTree = decisionTreeFactory.analyse(profile);
 

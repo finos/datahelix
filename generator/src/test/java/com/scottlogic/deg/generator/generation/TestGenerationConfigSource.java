@@ -15,7 +15,7 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     public long maxRows;
     public boolean validateProfile = false;
     public Path outputPath;
-    public OutputFormat outputFormat = OutputFormat.CSV;
+    public OutputFormatOption outputFormat = OutputFormatOption.CSV;
     public boolean requireFieldTyping = true;
 
     public TestGenerationConfigSource(
@@ -117,7 +117,7 @@ public class TestGenerationConfigSource implements GenerationConfigSource {
     }
 
     @Override
-    public OutputFormat getOutputFormat() {
+    public OutputFormatOption getOutputFormat() {
         return outputFormat;
     }
 }

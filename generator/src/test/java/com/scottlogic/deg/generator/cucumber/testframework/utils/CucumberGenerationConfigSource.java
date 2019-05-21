@@ -69,7 +69,7 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
 
     @Override
     public Path getOutputPath() {
-        return new File("mockFilePath").toPath();
+        return new File("outputFilePath").toPath();
     }
 
     @Override
@@ -79,7 +79,7 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
 
     @Override
     public File getProfileFile() {
-        return new File("mockFilePath");
+        return new File("profileFilePath");
     }
 
     @Override
@@ -103,7 +103,7 @@ public class CucumberGenerationConfigSource implements GenerationConfigSource {
     }
 
     @Override
-    public OutputFormat getOutputFormat() {
-        return null;
+    public OutputFormatOption getOutputFormat() {
+        return OutputFormatOption.CSV; // not essential - just exists to get us past the validation
     }
 }

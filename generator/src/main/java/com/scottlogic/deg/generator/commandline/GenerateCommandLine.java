@@ -13,7 +13,7 @@ import java.util.List;
 import static com.scottlogic.deg.generator.config.detail.CombinationStrategyType.MINIMAL;
 import static com.scottlogic.deg.common.util.Defaults.DEFAULT_MAX_ROWS;
 import static com.scottlogic.deg.generator.config.detail.DataGenerationType.RANDOM;
-import static com.scottlogic.deg.generator.config.detail.OutputFormat.CSV;
+import static com.scottlogic.deg.generator.config.detail.OutputFormatOption.CSV;
 import static com.scottlogic.deg.generator.config.detail.TreeWalkerType.REDUCTIVE;
 
 /**
@@ -101,7 +101,7 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
     @CommandLine.Option(
         names = {"-o"},
         description = "Output format (${COMPLETION-CANDIDATES})")
-    private OutputFormat outputFormat = CSV;
+    private OutputFormatOption outputFormat = CSV;
 
     @CommandLine.Option(
         names = {"--allow-untyped-fields"},
@@ -198,7 +198,7 @@ public class GenerateCommandLine extends CommandLineBase implements GenerationCo
         return visualiseReductions;
     }
 
-    public OutputFormat getOutputFormat() {
+    public OutputFormatOption getOutputFormat() {
         return outputFormat;
     }
 

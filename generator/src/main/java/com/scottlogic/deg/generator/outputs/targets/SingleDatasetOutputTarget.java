@@ -5,6 +5,6 @@ import com.scottlogic.deg.generator.outputs.formats.DataSetWriter;
 
 import java.io.IOException;
 
-public interface SingleDatasetOutputTarget extends ValidatableOutput {
+public interface SingleDatasetOutputTarget {
     DataSetWriter openWriter(ProfileFields fields) throws IOException;
 }

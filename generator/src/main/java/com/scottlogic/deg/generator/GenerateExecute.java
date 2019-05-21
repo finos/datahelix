@@ -2,100 +2,167 @@ package com.scottlogic.deg.generator;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.generator.commandline.OutputTargetSpecification;
-import com.scottlogic.deg.generator.inputs.validation.Criticality;
-import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
-import com.scottlogic.deg.generator.inputs.validation.ValidationAlert;
-import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
-import com.scottlogic.deg.profile.reader.InvalidProfileException;
-import com.scottlogic.deg.profile.reader.ProfileReader;
-import com.scottlogic.deg.generator.validators.ConfigValidator;
+import com.scottlogic.deg.generator.outputs.formats.OutputFormat;
+import com.scottlogic.deg.generator.outputs.formats.trace.TraceOutputFormat;
+import com.scottlogic.deg.generator.outputs.targets.*;
+import com.scottlogic.deg.generator.utils.FileUtils;
+import com.scottlogic.deg.generator.utils.FileUtilsImpl;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
+import com.scottlogic.deg.generator.validators.ValidationException;
+import com.scottlogic.deg.generator.validators.ValidationRuleFactory;
+import com.scottlogic.deg.generator.validators.Validator;
 import com.scottlogic.deg.generator.violations.ViolationGenerationEngine;
-import com.scottlogic.deg.profile.serialisation.ValidationResult;
-import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
+import com.scottlogic.deg.profile.reader.ProfileReader;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
+import java.nio.file.Path;
 
 public class GenerateExecute implements Runnable {
     private final ErrorReporter errorReporter;
     private final GenerationConfigSource configSource;
-    private final ConfigValidator configValidator;
+
+    private final OutputFormatLookup outputFormatLookup;
 
     private final StandardGenerationEngine standardGenerationEngine;
     private final ViolationGenerationEngine violationGenerationEngine;
 
-    private final OutputTargetSpecification outputTargetSpecification;
-
     private final ProfileReader profileReader;
-    private final ProfileValidator profileValidator;
-    private final ProfileSchemaValidator profileSchemaValidator;
-    private final ProfileValidationReporter validationReporter;
+
+    private final Validator validator;
+    private final ValidationRuleFactory validationRules;
+
+    private final FileUtils fileUtils;
 
     @Inject
     GenerateExecute(
-        ProfileReader profileReader,
+        ErrorReporter errorReporter,
+        GenerationConfigSource configSource,
+        OutputFormatLookup outputFormatLookup,
         StandardGenerationEngine standardGenerationEngine,
         ViolationGenerationEngine violationGenerationEngine,
-        GenerationConfigSource configSource,
-        OutputTargetSpecification outputTargetSpecification,
-        ConfigValidator configValidator,
-        ErrorReporter errorReporter,
-        ProfileValidator profileValidator,
-        ProfileSchemaValidator profileSchemaValidator,
-        ProfileValidationReporter validationReporter) {
+        ProfileReader profileReader,
+        Validator validator,
+        ValidationRuleFactory validationRules,
+        FileUtils fileUtils) {
 
-        this.profileReader = profileReader;
+        this.errorReporter = errorReporter;
+        this.configSource = configSource;
+        this.outputFormatLookup = outputFormatLookup;
         this.standardGenerationEngine = standardGenerationEngine;
         this.violationGenerationEngine = violationGenerationEngine;
-        this.configSource = configSource;
-        this.outputTargetSpecification = outputTargetSpecification;
-        this.configValidator = configValidator;
-        this.profileSchemaValidator = profileSchemaValidator;
-        this.errorReporter = errorReporter;
-        this.profileValidator = profileValidator;
-        this.validationReporter = validationReporter;
+        this.profileReader = profileReader;
+        this.validator = validator;
+        this.validationRules = validationRules;
+        this.fileUtils = fileUtils;
     }
 
-    @Override
     public void run() {
-        Collection<ValidationAlert> validationResult = configValidator.preProfileChecks(configSource);
-        if (!validationResult.isEmpty()) {
-            validationReporter.output(validationResult);
-            return;
-        }
-
-        ValidationResult profileSchemaValidationResult = profileSchemaValidator.validateProfile(configSource.getProfileFile());
-        if (!profileSchemaValidationResult.isValid()) {
-            errorReporter.display(profileSchemaValidationResult);
-            return;
-        }
-
         try {
-            Profile profile = profileReader.read(configSource.getProfileFile().toPath());
-
-            Collection<ValidationAlert> alerts = profileValidator.validate(profile);
-            validationReporter.output(alerts);
-            if (validationResultShouldHaltExecution(alerts)) {
-                return;
-            }
-
-            if (configSource.shouldViolate()) {
-                violationGenerationEngine.generateDataSet(profile, outputTargetSpecification.asViolationDirectory());
-            }
-            else {
-                standardGenerationEngine.generateDataSet(profile, outputTargetSpecification.asFilePath());
-            }
-        } catch (IOException | InvalidProfileException e) {
+            runInner();
+        } catch (ValidationException e) {
+            // validation errors are outputted to the user by the validator object, so nothing left to do here
+        } catch (Exception e) {
             errorReporter.displayException(e);
         }
     }
 
-    private static boolean validationResultShouldHaltExecution(Collection<ValidationAlert> alerts) {
-        return alerts.stream()
-            .anyMatch(alert ->
-                alert.getCriticality().equals(Criticality.ERROR));
+    /** Does all the main work, sans exception handling */
+    private void runInner() throws IOException {
+        validator.validateAll(
+            validationRules.outputFormatIsKnown(configSource.getOutputFormat()));
+
+        final OutputFormat outputFormat = outputFormatLookup.get(configSource.getOutputFormat());
+
+        final Profile profile = validateAndLoadProfile(configSource.getProfileFile());
+
+        if (configSource.shouldViolate()) {
+            Path outputPath = configSource.getOutputPath();
+
+            MultiDatasetOutputTarget outputTarget =
+                validateAndCreateViolationDirectoryOutputTarget(outputPath, outputFormat, profile);
+
+            violationGenerationEngine.generateDataSet(profile, outputTarget);
+        } else {
+            Path outputPath = configSource.getOutputPath();
+
+            SingleDatasetOutputTarget outputTarget =
+                configSource.isEnableTracing()
+                ? validateAndCreateFileOutputTargetWithTracing(outputPath, outputFormat)
+                : validateAndCreateFileOutputTarget(outputPath, outputFormat);
+
+            standardGenerationEngine.generateDataSet(profile, outputTarget);
+        }
+    }
+
+    private Profile validateAndLoadProfile(File profileFile) {
+        validator.validateAll(
+            validationRules.profilePathHasNoInvalidCharacters(profileFile),
+            validationRules.profileExists(profileFile),
+            validationRules.profilePathPointsAtAFile(profileFile),
+            validationRules.profileFileIsNotEmpty(profileFile),
+            validationRules.profileMatchesJsonSchema(profileFile));
+
+        final Profile profile;
+        try {
+            profile = profileReader.read(profileFile.toPath());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        validator.validateAll(
+            validationRules.profileAssignsTypesToAllFields(profile)
+                .onlyIf(configSource.requireFieldTyping()));
+
+        return profile;
+    }
+
+    private MultiDatasetOutputTarget validateAndCreateViolationDirectoryOutputTarget(
+        Path outputPath,
+        OutputFormat format,
+        Profile profile) {
+
+        validator.validateAll(
+            validationRules.outputDirectoryExistsOrCanBeCreated(outputPath),
+            validationRules.outputPathIsNotAFile(outputPath),
+            validationRules.outputDirectoryHasRoomForViolationFiles(outputPath, profile.fields.size())
+                .unless(configSource.overwriteOutputFiles()));
+
+        return new ViolationDirectoryOutputTarget(outputPath, format, fileUtils);
+    }
+
+    private SingleDatasetOutputTarget validateAndCreateFileOutputTarget(
+        Path outputPath,
+        OutputFormat format) {
+
+        validator.validateAll(
+            validationRules.outputFileIsAbsent(outputPath)
+                .unless(configSource.overwriteOutputFiles()),
+            validationRules.outputPathAncestryExistsOrCanBeCreated(outputPath),
+            validationRules.outputPathIsNotADirectory(outputPath));
+
+        return fileUtils.createFileTarget(outputPath, format);
+    }
+
+    private SingleDatasetOutputTarget validateAndCreateFileOutputTargetWithTracing(
+        Path outputPath,
+        OutputFormat format) {
+
+        return new SplittingOutputTarget(
+            validateAndCreateFileOutputTarget(
+                outputPath,
+                format),
+            validateAndCreateFileOutputTarget(
+                createTraceFilePath(outputPath),
+                new TraceOutputFormat()));
+    }
+
+    private static Path createTraceFilePath(Path path) {
+        return FileUtilsImpl.addFilenameSuffix(
+            FileUtilsImpl.replaceExtension(
+                path,
+                "json"),
+            "-trace");
     }
 }

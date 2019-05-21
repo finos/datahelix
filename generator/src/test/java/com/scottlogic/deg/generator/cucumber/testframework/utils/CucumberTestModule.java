@@ -4,15 +4,12 @@ import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 import com.scottlogic.deg.generator.ConfigSource;
 import com.scottlogic.deg.generator.StandardGenerationEngine;
-import com.scottlogic.deg.generator.commandline.OutputTargetSpecification;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
+import com.scottlogic.deg.generator.utils.FileUtils;
 import com.scottlogic.deg.profile.reader.ProfileReader;
-import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
-import com.scottlogic.deg.generator.inputs.validation.TypingRequiredPerFieldValidator;
 import com.scottlogic.deg.generator.inputs.validation.reporters.ProfileValidationReporter;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
-import com.scottlogic.deg.generator.validators.ConfigValidator;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.generator.violations.ViolationGenerationEngine;
 
@@ -36,12 +33,10 @@ public class CucumberTestModule extends AbstractModule {
         bind(ConfigSource.class).to(GenerationConfigSource.class);
         bind(GenerationConfigSource.class).to(CucumberGenerationConfigSource.class);
         bind(ManifestWriter.class).to(CucumberManifestWriter.class);
-        bind(ConfigValidator.class).to(CucumberGenerationConfigValidator.class);
         bind(ProfileValidationReporter.class).toInstance(testState.validationReporter);
-        bind(ProfileValidator.class).to(TypingRequiredPerFieldValidator.class);
         bind(ErrorReporter.class).toInstance(new CucumberErrorReporter(testState));
         bind(DecisionTreeFactory.class).to(CucumberDecisionTreeFactory.class);
-        bind(OutputTargetSpecification.class).to(CucumberOutputTargetSpecification.class);
+        bind(FileUtils.class).to(CucumberFileUtils.class);
 
         bind(boolean.class)
             .annotatedWith(Names.named("config:tracingIsEnabled"))
@@ -53,4 +48,3 @@ public class CucumberTestModule extends AbstractModule {
         }
     }
 }
-

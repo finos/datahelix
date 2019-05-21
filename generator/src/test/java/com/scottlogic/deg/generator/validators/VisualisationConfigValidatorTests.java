@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.validators;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.generator.outputs.targets.FileOutputTarget;
 import com.scottlogic.deg.generator.utils.FileUtils;
+import com.scottlogic.deg.generator.utils.FileUtilsImpl;
 import com.scottlogic.deg.generator.visualisation.TestVisualisationConfigSource;
 import com.scottlogic.deg.profile.serialisation.ValidationResult;
 import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
@@ -23,7 +24,7 @@ import static org.mockito.Mockito.when;
 public class VisualisationConfigValidatorTests {
 
     private FileOutputTarget mockOutputTarget = mock(FileOutputTarget.class);
-    private FileUtils mockFileUtils = mock(FileUtils.class);
+    private FileUtils mockFileUtils = mock(FileUtilsImpl.class);
     private Path mockFilePath = mock(Path.class);
     private Profile profile;
     private TestVisualisationConfigSource mockConfigSource = mock(TestVisualisationConfigSource.class);

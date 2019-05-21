@@ -93,6 +93,7 @@ public class CucumberTestHelper {
                 .map(Throwable::getMessage),
             testState.validationReporter
                 .getRecordedAlerts().stream()
+                .filter(a -> a.getField() != null)
                 .map(a -> String.format(
                     "Field [%s]: %s",
                     a.getField().name,
