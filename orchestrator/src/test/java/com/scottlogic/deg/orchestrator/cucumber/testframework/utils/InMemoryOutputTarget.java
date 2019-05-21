@@ -1,8 +1,8 @@
 package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 
 import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.generator.generation.databags.DataBagValue;
-import com.scottlogic.deg.generator.outputs.GeneratedObject;
+import com.scottlogic.deg.common.output.DataBagValue;
+import com.scottlogic.deg.common.output.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.formats.DataSetWriter;
 import com.scottlogic.deg.generator.outputs.targets.SingleDatasetOutputTarget;
 

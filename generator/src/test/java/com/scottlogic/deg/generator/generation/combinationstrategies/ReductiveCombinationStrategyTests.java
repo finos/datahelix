@@ -1,8 +1,8 @@
 package com.scottlogic.deg.generator.generation.combinationstrategies;
 
 import com.scottlogic.deg.generator.builders.DataBagBuilder;
-import com.scottlogic.deg.generator.generation.databags.DataBagValue;
-import com.scottlogic.deg.generator.DataBagValueSource;
+import com.scottlogic.deg.common.output.DataBagValue;
+import com.scottlogic.deg.common.output.DataBagValueSource;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import org.junit.Assert;

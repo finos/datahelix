@@ -1,6 +1,4 @@
-package com.scottlogic.deg.generator.generation.databags;
-
-import com.scottlogic.deg.generator.DataBagValueSource;
+package com.scottlogic.deg.common.output;
 
 import java.util.Objects;
 

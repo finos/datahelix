@@ -1,9 +1,6 @@
-package com.scottlogic.deg.generator.outputs;
+package com.scottlogic.deg.common.output;
 
-import com.scottlogic.deg.generator.generation.databags.DataBagValue;
-import com.scottlogic.deg.generator.DataBagValueSource;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.common.profile.RuleInformation;
 
@@ -28,14 +25,14 @@ public class CellSource {
     }
 
     public boolean isViolated(RuleInformation rule){
-        return FlatMappingSpliterator.flatMap(this.source.getViolatedConstraints()
-            .stream(), c -> c.getRules().stream())
+        return source.getViolatedConstraints().stream()
+            .flatMap(c->c.getRules().stream())
             .anyMatch(r -> r.equals(rule));
     }
 
     public Set<RuleInformation> getRules(){
-        return FlatMappingSpliterator.flatMap(this.source.getConstraints()
-            .stream(), c -> c.getRules().stream())
+        return source.getConstraints().stream()
+            .flatMap(c->getRules().stream())
             .collect(Collectors.toSet());
     }
 }

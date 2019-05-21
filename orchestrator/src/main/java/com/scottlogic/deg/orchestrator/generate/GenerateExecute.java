@@ -5,7 +5,7 @@ import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.DataGeneratorMonitor;
-import com.scottlogic.deg.generator.outputs.GeneratedObject;
+import com.scottlogic.deg.common.output.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.formats.DataSetWriter;
 import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;

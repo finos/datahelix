@@ -2,7 +2,7 @@
 //
 //import com.scottlogic.deg.common.profile.Field;
 //import com.scottlogic.deg.common.profile.ProfileFields;
-//import com.scottlogic.deg.generator.outputs.GeneratedObject;
+//import com.scottlogic.deg.common.output.GeneratedObject;
 //
 //import com.scottlogic.deg.generator.restrictions.*;
 //import org.junit.Assert;

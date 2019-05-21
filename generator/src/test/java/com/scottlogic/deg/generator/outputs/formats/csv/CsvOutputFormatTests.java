@@ -1,12 +1,11 @@
 package com.scottlogic.deg.generator.outputs.formats.csv;
 
 import com.google.common.collect.ImmutableMap;
-import com.scottlogic.deg.generator.DataBagValueSource;
+import com.scottlogic.deg.common.output.DataBagValueSource;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.generator.generation.databags.DataBagValue;
-import com.scottlogic.deg.generator.outputs.GeneratedObject;
-import com.scottlogic.deg.generator.outputs.RowSource;
+import com.scottlogic.deg.common.output.DataBagValue;
+import com.scottlogic.deg.common.output.GeneratedObject;
 import com.scottlogic.deg.generator.outputs.formats.DataSetWriter;
 import org.hamcrest.Matcher;
 import org.junit.Assert;
@@ -19,7 +18,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.containsString;
