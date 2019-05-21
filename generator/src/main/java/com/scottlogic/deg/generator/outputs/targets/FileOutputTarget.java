@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.outputs.targets;
 
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.outputs.formats.DataSetWriter;
-import com.scottlogic.deg.generator.outputs.formats.OutputFormat;
+import com.scottlogic.deg.generator.outputs.formats.OutputWriterFactory;
 import com.scottlogic.deg.generator.utils.FileUtils;
 
 import java.io.FileOutputStream;
@@ -15,17 +15,17 @@ public class FileOutputTarget implements SingleDatasetOutputTarget {
     private final Path filePath;
     private final FileUtils fileUtils;
     private final boolean canOverwriteExistingFiles;
-    private final OutputFormat outputFormat;
+    private final OutputWriterFactory outputWriterFactory;
 
     public FileOutputTarget(
         Path filePath,
-        OutputFormat outputFormat,
+        OutputWriterFactory outputWriterFactory,
         boolean canOverwriteExistingFiles,
         FileUtils fileUtils) {
 
         this.fileUtils = fileUtils;
         this.canOverwriteExistingFiles = canOverwriteExistingFiles;
-        this.outputFormat = outputFormat;
+        this.outputWriterFactory = outputWriterFactory;
 
         Path directoryPath = filePath.getParent();
         if (directoryPath == null) {
@@ -42,7 +42,7 @@ public class FileOutputTarget implements SingleDatasetOutputTarget {
             false);
 
         try {
-            return outputFormat.createWriter(stream, fields);
+            return outputWriterFactory.createWriter(stream, fields);
         } catch (Exception e) {
             stream.close();
 

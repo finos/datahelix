@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 
-class CsvOutputFormatTests {
+class CsvOutputWriterFactoryTests {
     @Test
     void writeRow_withBigDecimalAndNoFormat_shouldOutputDefaultFormat() throws IOException {
         expectCsv(
@@ -137,7 +137,7 @@ class CsvOutputFormatTests {
     private static String generateCsv(ProfileFields fields, GeneratedObject generatedObject) throws IOException {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
-        try (DataSetWriter writer = new CsvOutputFormat().createWriter(stream, fields)) {
+        try (DataSetWriter writer = new CsvOutputWriterFactory().createWriter(stream, fields)) {
             writer.writeRow(generatedObject);
         }
 

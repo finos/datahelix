@@ -7,7 +7,7 @@ import java.io.OutputStream;
 import java.util.Optional;
 
 /** Represents a file format in which data could be output - e.g. CSV, JSON. */
-public interface OutputFormat {
+public interface OutputWriterFactory {
     DataSetWriter createWriter(
         OutputStream stream,
         ProfileFields profileFields) throws IOException;
