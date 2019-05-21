@@ -2,8 +2,8 @@ package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
-import com.scottlogic.deg.generator.StandardGenerationEngine;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
+import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.outputs.targets.OutputTargetFactory;
 import com.scottlogic.deg.generator.outputs.targets.SingleDatasetOutputTarget;
@@ -13,6 +13,8 @@ import com.scottlogic.deg.generator.inputs.validation.TypingRequiredPerFieldVali
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.orchestrator.validator.ConfigValidator;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
+
+import java.util.stream.Stream;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -51,7 +53,9 @@ public class CucumberTestModule extends AbstractModule {
             .toInstance(false);
 
         if (testState.shouldSkipGeneration()) {
-            bind(StandardGenerationEngine.class).toInstance(mock(StandardGenerationEngine.class));
+            DataGenerator mockDataGenerator = mock(DataGenerator.class);
+            when(mockDataGenerator.generateData(any())).thenReturn(Stream.empty());
+            bind(DataGenerator.class).toInstance(mockDataGenerator);
         }
     }
 }
