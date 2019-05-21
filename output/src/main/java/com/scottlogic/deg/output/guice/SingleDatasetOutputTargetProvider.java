@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.guice;
+package com.scottlogic.deg.output.guice;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;

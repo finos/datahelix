@@ -12,12 +12,6 @@ import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagGenerator;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
-import com.scottlogic.deg.output.writer.OutputWriterFactory;
-import com.scottlogic.deg.generator.outputs.manifest.JsonManifestWriter;
-import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
-import com.scottlogic.deg.generator.outputs.targets.SingleDatasetOutputTarget;
-import com.scottlogic.deg.generator.utils.FileUtils;
-import com.scottlogic.deg.generator.utils.FileUtilsImpl;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
@@ -44,7 +38,6 @@ public class GeneratorModule extends AbstractModule {
 
         // Bind providers - used to retrieve implementations based on user input
         bind(DecisionTreeOptimiser.class).toProvider(DecisionTreeOptimiserProvider.class);
-        bind(OutputWriterFactory.class).toProvider(OutputWriterFactoryProvider.class);
         bind(TreePartitioner.class).toProvider(TreePartitioningProvider.class);
         bind(DecisionTreeWalker.class).toProvider(DecisionTreeWalkerProvider.class);
         bind(ProfileValidator.class).toProvider(ProfileValidatorProvider.class);
@@ -52,25 +45,19 @@ public class GeneratorModule extends AbstractModule {
         bind(IterationVisualiser.class).toProvider(IterationVisualiserProvider.class);
         bind(RowSpecDataBagGenerator.class).toProvider(RowSpecDataBagSourceFactoryProvider.class);
         bind(CombinationStrategy.class).toProvider(CombinationStrategyProvider.class);
-        bind(SingleDatasetOutputTarget.class).toProvider(SingleDatasetOutputTargetProvider.class);
 
         // bind config directly
         bind(DataGenerationType.class).toInstance(generationConfigSource.getGenerationType());
-        bind(Path.class)
-            .annotatedWith(Names.named("config:outputPath"))
-            .toInstance(generationConfigSource.getOutputPath());
-        bind(boolean.class)
-            .annotatedWith(Names.named("config:canOverwriteOutputFiles"))
-            .toInstance(generationConfigSource.overwriteOutputFiles());
+
         bind(long.class)
             .annotatedWith(Names.named("config:maxRows"))
             .toInstance(generationConfigSource.getMaxRows());
-        bind(boolean.class)
-            .annotatedWith(Names.named("config:tracingIsEnabled"))
-            .toInstance(generationConfigSource.isEnableTracing());
+
+        bind(Path.class) // TODO PAUL REMOVE THIS, ONLY USED FOR VISUALISE
+            .annotatedWith(Names.named("config:outputPath"))
+            .toInstance(generationConfigSource.getOutputPath());
 
         // Bind known implementations - no user input required
-        bind(ManifestWriter.class).to(JsonManifestWriter.class);
         bind(DataGeneratorMonitor.class).to(ReductiveDataGeneratorMonitor.class);
         bind(DataGenerator.class).to(DecisionTreeDataGenerator.class);
         bind(DecisionTreeFactory.class).to(MaxStringLengthInjectingDecisionTreeFactory.class);

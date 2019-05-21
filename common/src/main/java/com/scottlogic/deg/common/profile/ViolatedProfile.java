@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.violations;
+package com.scottlogic.deg.common.profile;
 
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.ProfileFields;

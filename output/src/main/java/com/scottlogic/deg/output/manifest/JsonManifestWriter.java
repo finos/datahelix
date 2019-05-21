@@ -1,9 +1,11 @@
-package com.scottlogic.deg.generator.outputs.manifest;
+package com.scottlogic.deg.output.manifest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
-import com.scottlogic.deg.generator.utils.FileUtilsImpl;
-import com.scottlogic.deg.generator.violations.ViolatedProfile;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import com.scottlogic.deg.common.profile.ViolatedProfile;
+import com.scottlogic.deg.output.FileUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,13 +21,18 @@ import java.util.stream.Collectors;
  * This file shows which rule has been violated in which output file.
  */
 public class JsonManifestWriter implements ManifestWriter {
+    private final Path outputPath;
+
+    @Inject
+    public JsonManifestWriter(@Named("config:outputPath") Path outputPath){
+        this.outputPath = outputPath;
+    }
 
     public void writeManifest(
-        List<ViolatedProfile> result,
-        Path directoryPath) throws IOException {
+        List<ViolatedProfile> result) throws IOException {
 
         AtomicInteger dataSetIndex = new AtomicInteger(1);
-        DecimalFormat intFormatter = FileUtilsImpl.getDecimalFormat(result.size());
+        DecimalFormat intFormatter = FileUtils.getDecimalFormat(result.size());
 
         List<ManifestDTO.TestCaseDTO> testCaseDtos = result
             .stream()
@@ -36,7 +43,7 @@ public class JsonManifestWriter implements ManifestWriter {
 
         write(
             new ManifestDTO(testCaseDtos),
-            directoryPath.resolve(
+            outputPath.resolve(
                 "manifest.json"));
     }
 
