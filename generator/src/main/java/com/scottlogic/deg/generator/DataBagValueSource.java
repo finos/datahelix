@@ -7,19 +7,14 @@ import java.util.Collections;
 import java.util.Set;
 
 public class DataBagValueSource {
-    public static final DataBagValueSource Empty = new DataBagValueSource();
+    public static final DataBagValueSource Empty = new DataBagValueSource(Collections.emptySet(), Collections.emptySet());
 
     private final Set<AtomicConstraint> constraints;
     private final Set<AtomicConstraint> violatedConstraints;
 
-    private DataBagValueSource() {
-        constraints = Collections.emptySet();
-        violatedConstraints = Collections.emptySet();
-    }
-
-    public DataBagValueSource(FieldSpecSource fieldSpecSource) {
-        this.constraints = fieldSpecSource != null ? fieldSpecSource.getConstraints() : null;
-        this.violatedConstraints = fieldSpecSource != null ? fieldSpecSource.getViolatedConstraints() : null;
+    public DataBagValueSource(Set<AtomicConstraint> constraints, Set<AtomicConstraint> violatedConstraints){
+        this.constraints = constraints;
+        this.violatedConstraints = violatedConstraints;
     }
 
     public Set<AtomicConstraint> getConstraints() {

@@ -69,6 +69,6 @@ public class ReductiveState {
     public DataBag asDataBag() {
         return new DataBag(fieldValues.values().stream().collect(Collectors.toMap(
             FieldValue::getField,
-            v-> new DataBagValue(v.getValue(), v.getFormat(), new DataBagValueSource(v.getFieldSpecSource())))));
+            v-> new DataBagValue(v.getValue(), v.getFormat(), v.getFieldSpecSource().toDataBagValueSource()))));
     }
 }
