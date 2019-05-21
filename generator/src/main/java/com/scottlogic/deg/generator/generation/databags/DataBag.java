@@ -16,7 +16,7 @@ public class DataBag {
 
     private final Map<Field, DataBagValue> fieldToValue;
 
-    DataBag(Map<Field, DataBagValue> fieldToValue) {
+    public DataBag(Map<Field, DataBagValue> fieldToValue) {
         this.fieldToValue = fieldToValue;
     }
 

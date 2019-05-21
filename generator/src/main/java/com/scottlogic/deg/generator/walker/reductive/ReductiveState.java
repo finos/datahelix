@@ -2,6 +2,9 @@ package com.scottlogic.deg.generator.walker.reductive;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.generator.DataBagValueSource;
+import com.scottlogic.deg.generator.generation.databags.DataBag;
+import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FieldValue;
 
 import java.util.*;
@@ -61,5 +64,11 @@ public class ReductiveState {
 
     public ProfileFields getFields() {
         return this.fields;
+    }
+
+    public DataBag asDataBag() {
+        return new DataBag(fieldValues.values().stream().collect(Collectors.toMap(
+            FieldValue::getField,
+            v-> new DataBagValue(v.getValue(), v.getFormat(), new DataBagValueSource(v.getFieldSpecSource())))));
     }
 }

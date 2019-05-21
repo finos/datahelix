@@ -9,7 +9,7 @@ public class FieldValue {
     private final Field field;
     private final Object value;
     private final FieldSpecSource valueSource;
-    private final FormatRestrictions formatRestrictions;
+    private final String format;
 
     public FieldValue(Field field, Object value){
         this(field, value, FieldSpec.Empty);
@@ -18,7 +18,7 @@ public class FieldValue {
         this.value = value;
         this.field = field;
         this.valueSource = valueSource.getFieldSpecSource();
-        this.formatRestrictions = valueSource.getFormatRestrictions();
+        this.format = valueSource.getFormatRestrictions() == null ? null : valueSource.getFormatRestrictions().formatString;
     }
 
     public Object getValue() {
@@ -35,8 +35,8 @@ public class FieldValue {
         return value.toString();
     }
 
-    public FormatRestrictions getFormatRestrictions() {
-        return formatRestrictions;
+    public String getFormat() {
+        return format;
     }
 
     public FieldSpecSource getFieldSpecSource() {
