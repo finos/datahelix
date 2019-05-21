@@ -93,7 +93,8 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
 
     /**
      * Calculate if the given TextualRestrictions could impact the ability to create some or all values
-     * If there are ANY regex statements then they COULD affect the ability to create values (therefore yield true)
+     * If there are regex statements, determine if the intersection of those regexes with the regex for
+     * a valid string can produce any values or not.
      * Get the length of the codes that would be produced, e.g. an ISIN is 12 characters.
      * Check if any length restrictions exist that would prevent strings of this length being produced.
      *
@@ -105,8 +106,13 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
             || !textualRestrictions.notMatchingRegex.isEmpty()
             || !textualRestrictions.notContainingRegex.isEmpty();
 
-        if (hasRegexRestrictions){
-            return Impact.POTENTIAL; //because we dont know they wouldn't affect the values - see #487
+        if (hasRegexRestrictions) {
+            StringGenerator ourGenerator = getStringGenerator();
+            StringGenerator combinedGenerator = ourGenerator.intersect(textualRestrictions.createGenerator());
+            if (combinedGenerator.isFinite() && combinedGenerator.getValueCount() == 0) {
+                return Impact.CONFIRMED;
+            }
+            return Impact.NONE;
         }
 
         int maxLength = textualRestrictions.maxLength != null ? textualRestrictions.maxLength : Integer.MAX_VALUE;

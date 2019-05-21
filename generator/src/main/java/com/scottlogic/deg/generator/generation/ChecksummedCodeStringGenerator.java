@@ -26,10 +26,32 @@ public abstract class ChecksummedCodeStringGenerator implements StringGenerator 
 
     @Override
     public StringGenerator intersect(StringGenerator stringGenerator) {
+        if (stringGenerator instanceof ChecksummedCodeStringGenerator) {
+            ChecksummedCodeStringGenerator otherGenerator =
+                (ChecksummedCodeStringGenerator)stringGenerator;
+            return intersect(otherGenerator.negate ?
+                otherGenerator.regexGenerator.complement() :
+                otherGenerator.regexGenerator);
+        }
+        if (stringGenerator instanceof RegexStringGenerator) {
+            return intersect((RegexStringGenerator)stringGenerator);
+        }
         return new NoStringsStringGenerator(
             RegexStringGenerator.intersectRepresentation(stringGenerator.toString(), "<checksummed string>")
         );
     }
+
+    private StringGenerator intersect(RegexStringGenerator other) {
+        StringGenerator intersection = other.intersect(negate ? regexGenerator.complement() : regexGenerator);
+        if ((intersection.isFinite() && intersection.getValueCount() == 0) || !(intersection instanceof RegexStringGenerator)) {
+            return new NoStringsStringGenerator(
+                RegexStringGenerator.intersectRepresentation(other.toString(), regexGenerator.toString())
+            );
+        }
+        return instantiate((RegexStringGenerator)intersection);
+    }
+
+    abstract ChecksummedCodeStringGenerator instantiate(RegexStringGenerator generator);
 
     @Override
     public abstract StringGenerator complement();

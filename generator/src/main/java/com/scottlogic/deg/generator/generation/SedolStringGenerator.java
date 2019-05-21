@@ -14,8 +14,12 @@ public class SedolStringGenerator extends ChecksummedCodeStringGenerator {
         super(prefix + SEDOL_REGEX);
     }
 
-    private SedolStringGenerator(RegexStringGenerator sedolSansCheckDigitGenerator, boolean negate) {
-        super(sedolSansCheckDigitGenerator, negate);
+    private SedolStringGenerator(RegexStringGenerator sedolGenerator) {
+        super(sedolGenerator, false);
+    }
+
+    private SedolStringGenerator(RegexStringGenerator sedolGenerator, boolean negate) {
+        super(sedolGenerator, negate);
     }
 
     @Override
@@ -34,5 +38,10 @@ public class SedolStringGenerator extends ChecksummedCodeStringGenerator {
     public boolean match(String subject) {
         boolean matches = IsinUtils.isValidSedolNsin(subject);
         return matches != negate;
+    }
+
+    @Override
+    ChecksummedCodeStringGenerator instantiate(RegexStringGenerator generator) {
+        return new SedolStringGenerator(generator);
     }
 }

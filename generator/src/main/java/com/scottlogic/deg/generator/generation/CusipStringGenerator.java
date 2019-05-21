@@ -14,6 +14,10 @@ public class CusipStringGenerator extends ChecksummedCodeStringGenerator {
         super(prefix + CUSIP_REGEX);
     }
 
+    private CusipStringGenerator(RegexStringGenerator generator) {
+        super(generator, false);
+    }
+
     private CusipStringGenerator(RegexStringGenerator cusipSansCheckDigitGenerator, boolean negate) {
         super(cusipSansCheckDigitGenerator, negate);
     }
@@ -34,5 +38,10 @@ public class CusipStringGenerator extends ChecksummedCodeStringGenerator {
     public boolean match(String subject) {
         boolean matches = IsinUtils.isValidCusipNsin(subject);
         return matches != negate;
+    }
+
+    @Override
+    ChecksummedCodeStringGenerator instantiate(RegexStringGenerator generator) {
+        return new CusipStringGenerator(generator);
     }
 }

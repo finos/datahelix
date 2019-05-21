@@ -575,10 +575,9 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "0263494" |
       | null      |
 
-  @ignore Still implementing this...
   Scenario: aValid SEDOL run against a non-contradicting matchingRegex should be successful
     Given foo is a valid "SEDOL"
-    And foo is matching regex "/[0-9]{7}/"
+    And foo is matching regex "[0-9]{7}"
     And foo is in set:
       | "0263494" |
     Then the following data should be generated:
@@ -837,10 +836,9 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "38259P508" |
       | null        |
 
-  @ignore Still implementing this...
   Scenario: aValid CUSIP run against a non-contradicting matchingRegex should be successful
     Given foo is a valid "CUSIP"
-    And foo is matching regex "/[0-9]{3}.{5}[0-9]/"
+    And foo is matching regex "[0-9]{3}.{5}[0-9]"
     And foo is in set:
       | "38259P508"  |
       | "38259P58"   |
