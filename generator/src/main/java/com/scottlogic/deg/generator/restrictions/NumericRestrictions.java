@@ -5,7 +5,7 @@ import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class NumericRestrictions {
+public class NumericRestrictions implements Restrictions {
     public static final int DEFAULT_NUMERIC_SCALE = 20;
     private final int numericScale;
     public NumericLimit<BigDecimal> min;
@@ -31,6 +31,12 @@ public class NumericRestrictions {
         return o instanceof Number;
     }
 
+    @Override
+    public boolean isInstanceOf(Object o) {
+        return NumericRestrictions.isNumeric(o);
+    }
+
+    @Override
     public boolean match(Object o) {
         if (!NumericRestrictions.isNumeric(o)) {
             return false;

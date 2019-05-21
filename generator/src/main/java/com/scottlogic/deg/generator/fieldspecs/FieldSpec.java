@@ -1,9 +1,9 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
 
 import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.utils.SetUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -203,18 +203,14 @@ public class FieldSpec {
             TypeCheckHolder numericHolder = new TypeCheckHolder(Types.NUMERIC, NumericRestrictions::isNumeric);
             TypeCheckHolder stringHolder = new TypeCheckHolder(Types.STRING, StringRestrictions::isString);
             TypeCheckHolder dateTimeHolder = new TypeCheckHolder(Types.DATETIME, DateTimeRestrictions::isDateTime);
-            if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.NUMERIC)) {
-                if (isNumeric(value)) return false;
-            }
-
-            if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.STRING)) {
-                if (isString(value)) return false;
-            }
-
-            if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.DATETIME)) {
-                if (isDateTime(value)) return false;
-            }
+            Set<TypeCheckHolder> holders = SetUtils.setOf(numericHolder, stringHolder, dateTimeHolder);
+            boolean disallowedType = holders.stream()
+                .anyMatch(h -> !typeRestrictions.isTypeAllowed(h.type) && h.check.apply(value));
+            if (disallowedType) return false;
         }
+        RestrictionHolder numericHolder = new RestrictionHolder(numericRestrictions, NumericRestrictions::isNumeric);
+        RestrictionHolder stringHolder = new RestrictionHolder(dateTimeRestrictions, DateTimeRestrictions::isDateTime);
+        RestrictionHolder dateTimeHolder = new RestrictionHolder(stringRestrictions, StringRestrictions::isString);
 
         if (numericRestrictions != null) {
             if (isNumeric(value) && !numericRestrictions.match(value)) return false;
@@ -231,25 +227,23 @@ public class FieldSpec {
         return true;
     }
 
-    private boolean checkRestrictionIsValid(Types type, Function<Object, Boolean> checker, Object toCheck) {
-        return !(!typeRestrictions.isTypeAllowed(type) && checker.apply(toCheck));
-    }
-
     private class TypeCheckHolder {
         private final Types type;
         private final Function<Object, Boolean> check;
 
-        public TypeCheckHolder(Types type, Function<Object, Boolean> check) {
+        TypeCheckHolder(Types type, Function<Object, Boolean> check) {
             this.type = type;
             this.check = check;
         }
+    }
 
-        public Types getType() {
-            return type;
-        }
+    private class RestrictionHolder {
+        private final Restrictions restrictions;
+        private final Function<Object, Boolean> check;
 
-        public Function<Object, Boolean> getCheck() {
-            return check;
+        RestrictionHolder(Restrictions restrictions, Function<Object, Boolean> check) {
+            this.restrictions = restrictions;
+            this.check = check;
         }
     }
 

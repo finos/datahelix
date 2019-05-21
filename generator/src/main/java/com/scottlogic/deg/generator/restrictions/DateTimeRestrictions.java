@@ -5,7 +5,7 @@ import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
-public class DateTimeRestrictions {
+public class DateTimeRestrictions implements Restrictions {
     private static final Timescale DEFAULT_GRANULARITY = Timescale.MILLIS;
     private final Timescale granularity;
     public DateTimeLimit min;
@@ -27,6 +27,12 @@ public class DateTimeRestrictions {
         return o instanceof OffsetDateTime;
     }
 
+    @Override
+    public boolean isInstanceOf(Object o) {
+        return DateTimeRestrictions.isDateTime(o);
+    }
+
+    @Override
     public boolean match(Object o) {
         if (!DateTimeRestrictions.isDateTime(o)) {
             return false;

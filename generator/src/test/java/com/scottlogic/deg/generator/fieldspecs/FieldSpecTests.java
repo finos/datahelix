@@ -4,6 +4,7 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
 import com.scottlogic.deg.generator.generation.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.utils.SetUtils;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -489,8 +490,8 @@ class FieldSpecTests {
         String stringValue = "a string";
         OffsetDateTime dateValue = OffsetDateTime.of(2001, 1, 1, 1, 1, 1, 1, ZoneOffset.UTC);
 
-        Set<TypeRestrictions> typeRestrictions = setOf(numericRestrictions, stringRestrictions, dateTimeRestrictions);
-        Set<Object> objects = setOf(intValue, stringValue, dateValue);
+        Set<TypeRestrictions> typeRestrictions = SetUtils.setOf(numericRestrictions, stringRestrictions, dateTimeRestrictions);
+        Set<Object> objects = SetUtils.setOf(intValue, stringValue, dateValue);
 
         Set<TypeCheckHolder> holders = new HashSet<>();
         for (TypeRestrictions restriction : typeRestrictions) {
@@ -502,10 +503,6 @@ class FieldSpecTests {
             }
         }
         return holders.stream().map(Arguments::of);
-    }
-
-    private static <T> Set<T> setOf(T... elements) {
-        return Stream.of(elements).collect(Collectors.toSet());
     }
 
     @ParameterizedTest()
@@ -617,6 +614,16 @@ class FieldSpecTests {
         @Override
         public boolean match(String x) {
             throw new UnsupportedOperationException("Not implemented");
+        }
+
+        @Override
+        public boolean isInstanceOf(Object o) {
+            return StringRestrictions.isString(o);
+        }
+
+        @Override
+        public boolean match(Object x) {
+            return false;
         }
 
         @Override
