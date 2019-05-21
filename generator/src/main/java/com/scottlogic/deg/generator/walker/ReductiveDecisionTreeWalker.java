@@ -9,6 +9,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
+import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.walker.reductive.*;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FieldValue;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategy;
@@ -23,7 +24,6 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
     private final IterationVisualiser iterationVisualiser;
     private final ReductiveFieldSpecBuilder reductiveFieldSpecBuilder;
     private final ReductiveDataGeneratorMonitor monitor;
-    private final ReductiveRowSpecGenerator reductiveRowSpecGenerator;
     private final FieldSpecValueGenerator fieldSpecValueGenerator;
     private final FixFieldStrategyFactory fixFieldStrategyFactory;
 
@@ -33,28 +33,26 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         ReductiveFieldSpecBuilder reductiveFieldSpecBuilder,
         ReductiveDataGeneratorMonitor monitor,
         ReductiveTreePruner treePruner,
-        ReductiveRowSpecGenerator reductiveRowSpecGenerator,
         FieldSpecValueGenerator fieldSpecValueGenerator,
         FixFieldStrategyFactory fixFieldStrategyFactory) {
         this.iterationVisualiser = iterationVisualiser;
         this.reductiveFieldSpecBuilder = reductiveFieldSpecBuilder;
         this.monitor = monitor;
         this.treePruner = treePruner;
-        this.reductiveRowSpecGenerator = reductiveRowSpecGenerator;
         this.fieldSpecValueGenerator = fieldSpecValueGenerator;
         this.fixFieldStrategyFactory = fixFieldStrategyFactory;
     }
 
     /* initialise the walker with a set (ReductiveState) of unfixed fields */
     @Override
-    public Stream<RowSpec> walk(DecisionTree tree) {
+    public Stream<DataBag> walk(DecisionTree tree) {
         ReductiveState initialState = new ReductiveState(tree.fields);
         visualise(tree.getRootNode(), initialState);
         FixFieldStrategy fixFieldStrategy = fixFieldStrategyFactory.create(tree.getRootNode());
         return fixNextField(tree.getRootNode(), initialState, fixFieldStrategy);
     }
 
-    private Stream<RowSpec> fixNextField(ConstraintNode tree, ReductiveState reductiveState, FixFieldStrategy fixFieldStrategy) {
+    private Stream<DataBag> fixNextField(ConstraintNode tree, ReductiveState reductiveState, FixFieldStrategy fixFieldStrategy) {
 
         Field fieldToFix = fixFieldStrategy.getNextFieldToFix(reductiveState);
         Set<FieldSpec> nextFieldSpecs = reductiveFieldSpecBuilder.getDecisionFieldSpecs(tree, fieldToFix);
@@ -72,7 +70,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
             fieldValue -> pruneTreeForNextValue(tree, reductiveState, fixFieldStrategy, fieldValue));
     }
 
-    private Stream<RowSpec> pruneTreeForNextValue(
+    private Stream<DataBag> pruneTreeForNextValue(
         ConstraintNode tree,
         ReductiveState reductiveState,
         FixFieldStrategy fixFieldStrategy,
@@ -93,7 +91,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         visualise(reducedTree.get(), newReductiveState);
 
         if (newReductiveState.allFieldsAreFixed()){
-            return Stream.of(reductiveRowSpecGenerator.createRowSpecsFromFixedValues(newReductiveState));
+            return Stream.of(newReductiveState.asDataBag());
         }
 
         return fixNextField(reducedTree.get(), newReductiveState, fixFieldStrategy);

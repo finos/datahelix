@@ -60,7 +60,6 @@ class ReductiveDecisionTreeWalkerTests {
             reductiveFieldSpecBuilder,
             new NoopDataGeneratorMonitor(),
             treePruner,
-            mock(ReductiveRowSpecGenerator.class),
             fieldSpecValueGenerator,
             fixFieldStrategyFactory
         );
@@ -73,7 +72,7 @@ class ReductiveDecisionTreeWalkerTests {
     public void shouldReturnEmptyCollectionOfRowsWhenFirstFieldCannotBeFixed() {
         when(reductiveFieldSpecBuilder.getDecisionFieldSpecs(eq(rootNode), any())).thenReturn(Collections.EMPTY_SET);
 
-        List<RowSpec> result = walker.walk(tree).collect(Collectors.toList());
+        List<DataBag> result = walker.walk(tree).collect(Collectors.toList());
 
         verify(reductiveFieldSpecBuilder).getDecisionFieldSpecs(eq(rootNode), any());
         Assert.assertThat(result, empty());
@@ -93,7 +92,7 @@ class ReductiveDecisionTreeWalkerTests {
 
         when(reductiveFieldSpecBuilder.getDecisionFieldSpecs(any(), any())).thenReturn(Collections.singleton(firstFieldSpec), Collections.emptySet());
 
-        List<RowSpec> result = walker.walk(tree).collect(Collectors.toList());
+        List<DataBag> result = walker.walk(tree).collect(Collectors.toList());
 
         verify(reductiveFieldSpecBuilder, times(2)).getDecisionFieldSpecs(eq(rootNode), any());
         Assert.assertThat(result, empty());

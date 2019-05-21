@@ -10,6 +10,8 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
+import com.scottlogic.deg.generator.generation.databags.DataBag;
+import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagGenerator;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 
 import java.util.Arrays;
@@ -22,18 +24,24 @@ import java.util.stream.Stream;
 public class CartesianProductDecisionTreeWalker implements DecisionTreeWalker {
     private final ConstraintReducer constraintReducer;
     private final RowSpecMerger rowSpecMerger;
+    private final RowSpecDataBagGenerator dataBagSourceFactory;
 
     @Inject
     public CartesianProductDecisionTreeWalker(
         ConstraintReducer constraintReducer,
-        RowSpecMerger rowSpecMerger) {
+        RowSpecMerger rowSpecMerger, RowSpecDataBagGenerator dataBagSourceFactory) {
         this.constraintReducer = constraintReducer;
         this.rowSpecMerger = rowSpecMerger;
+        this.dataBagSourceFactory = dataBagSourceFactory;
     }
 
-    public Stream<RowSpec> walk(DecisionTree tree) {
+    public Stream<DataBag> walk(DecisionTree tree) {
         final DecisionTreeWalkerHelper helper = new DecisionTreeWalkerHelper(tree.getFields());
-        return helper.walk(tree.getRootNode());
+        Stream<RowSpec> rowSpecs = helper.walk(tree.getRootNode());
+
+        return FlatMappingSpliterator.flatMap(
+            rowSpecs,
+            dataBagSourceFactory::createDataBags);
     }
 
     private class DecisionTreeWalkerHelper {

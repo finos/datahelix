@@ -7,6 +7,9 @@ import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.common.profile.RuleInformation;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
+import com.scottlogic.deg.generator.generation.databags.DataBag;
+import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagGenerator;
+import com.scottlogic.deg.generator.generation.databags.StandardRowSpecDataBagGenerator;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
@@ -19,11 +22,16 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class CartesianProductDecisionTreeWalkerTests {
     private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
+    private RowSpecDataBagGenerator dataBagSourceFactory = mock(RowSpecDataBagGenerator.class);
     private final CartesianProductDecisionTreeWalker dTreeWalker = new CartesianProductDecisionTreeWalker(
             new ConstraintReducer(
                     new FieldSpecFactory(new StringRestrictionsFactory()),
@@ -31,12 +39,13 @@ class CartesianProductDecisionTreeWalkerTests {
             ),
             new RowSpecMerger(
                     fieldSpecMerger
-            )
-    );
+            ),
+        dataBagSourceFactory);
     private final ProfileDecisionTreeFactory dTreeGenerator = new ProfileDecisionTreeFactory();
 
     @Test
     void test() {
+        when(dataBagSourceFactory.createDataBags(any())).thenReturn(Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)));
         final Field country = new Field("country");
         final Field currency = new Field("currency");
         final Field city = new Field("city");
@@ -97,7 +106,7 @@ class CartesianProductDecisionTreeWalkerTests {
 
         final DecisionTree merged = this.dTreeGenerator.analyse(profile);
 
-        final List<RowSpec> rowSpecs = dTreeWalker
+        final List<DataBag> rowSpecs = dTreeWalker
             .walk(merged)
             .collect(Collectors.toList());
 

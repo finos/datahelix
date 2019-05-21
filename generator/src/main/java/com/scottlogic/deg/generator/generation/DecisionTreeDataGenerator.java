@@ -20,7 +20,6 @@ import java.util.stream.Stream;
 public class DecisionTreeDataGenerator implements DataGenerator {
     private final DecisionTreeWalker treeWalker;
     private final DataGeneratorMonitor monitor;
-    private final RowSpecDataBagGenerator dataBagSourceFactory;
     private final TreePartitioner treePartitioner;
     private final DecisionTreeOptimiser treeOptimiser;
     private final CombinationStrategy partitionCombiner;
@@ -32,14 +31,12 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         TreePartitioner treePartitioner,
         DecisionTreeOptimiser optimiser,
         DataGeneratorMonitor monitor,
-        RowSpecDataBagGenerator dataBagSourceFactory,
         CombinationStrategy combinationStrategy,
         @Named("config:maxRows") long maxRows) {
         this.treePartitioner = treePartitioner;
         this.treeOptimiser = optimiser;
         this.treeWalker = treeWalker;
         this.monitor = monitor;
-        this.dataBagSourceFactory = dataBagSourceFactory;
         this.partitionCombiner = combinationStrategy;
         this.maxRows = maxRows;
     }
@@ -54,20 +51,12 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         Stream<Stream<DataBag>> partitionedDataBags = treePartitioner
             .splitTreeIntoPartitions(decisionTree)
             .map(treeOptimiser::optimiseTree)
-            .map(this::generateForPartition);
+            .map(treeWalker::walk);
 
         return partitionCombiner.permute(partitionedDataBags)
             .map(dataBag -> convertToGeneratedObject(dataBag, profile.fields))
             .limit(maxRows)
             .peek(monitor::rowEmitted);
-    }
-
-    private Stream<DataBag> generateForPartition(DecisionTree tree) {
-        Stream<RowSpec> rowSpecsForPartition = treeWalker.walk(tree);
-
-        return FlatMappingSpliterator.flatMap(
-            rowSpecsForPartition,
-            dataBagSourceFactory::createDataBags);
     }
 
     private GeneratedObject convertToGeneratedObject(DataBag dataBag, ProfileFields fields) {
