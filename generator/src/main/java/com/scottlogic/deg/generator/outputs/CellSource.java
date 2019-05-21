@@ -14,7 +14,7 @@ public class CellSource {
     public final Field field;
     private final DataBagValueSource source;
 
-    public CellSource(DataBagValue value, Field field) {
+    public CellSource(Field field, DataBagValue value) {
         this.field = field;
         this.source = value.source != null ? value.source : DataBagValueSource.Empty;
     }

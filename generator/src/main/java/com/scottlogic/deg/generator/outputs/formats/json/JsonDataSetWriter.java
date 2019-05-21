@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SequenceWriter;
+import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
@@ -18,6 +19,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 class JsonDataSetWriter implements DataSetWriter {
     private static final DateTimeFormatter standardDateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss");
@@ -40,15 +42,10 @@ class JsonDataSetWriter implements DataSetWriter {
 
     @Override
     public void writeRow(GeneratedObject row) throws IOException {
-        Map<String, Object> jsonObject = new HashMap<>();
-
-        forEachPair(
-            row.values, fields,
-            (dataBagValue, field) -> {
-                Object convertedValue = convertValue(dataBagValue);
-
-                jsonObject.put(field.name, convertedValue);
-            });
+        Map<Field, Object> jsonObject = row.getFieldToValue().entrySet().stream().collect(
+            Collectors.toMap(
+                Map.Entry::getKey,
+                e -> convertValue(e.getValue())));
 
         writer.write(jsonObject);
     }
@@ -58,17 +55,6 @@ class JsonDataSetWriter implements DataSetWriter {
         writer.close();
     }
 
-    private static <T, U> void forEachPair(
-        Iterable<T> iterableA,
-        Iterable<U> iterableB,
-        BiConsumer<T, U> action) {
-
-        Iterator<T> iteratorA = iterableA.iterator();
-        Iterator<U> iteratorB = iterableB.iterator();
-        while (iteratorB.hasNext() && iteratorA.hasNext()) {
-            action.accept(iteratorA.next(), iteratorB.next());
-        }
-    }
 
     private static Object convertValue(DataBagValue dataBagValue) {
         Object value = dataBagValue.getFormattedValue();

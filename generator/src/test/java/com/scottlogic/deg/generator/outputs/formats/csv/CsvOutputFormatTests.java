@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.outputs.formats.csv;
 
+import com.google.common.collect.ImmutableMap;
 import com.scottlogic.deg.generator.DataBagValueSource;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
@@ -112,18 +113,12 @@ class CsvOutputFormatTests {
             containsString("\"2001-02-03\""));
     }
 
-    private static GeneratedObject formattedValue(Object value, String format) {
-        return new GeneratedObject(
-            Collections.singletonList(
-                new DataBagValue(value, format, DataBagValueSource.Empty)), // Format string to max 5 chars
-            new RowSource(Collections.emptyList()));
+    private static DataBagValue formattedValue(Object value, String format) {
+        return new DataBagValue(value, format, DataBagValueSource.Empty);
     }
 
-    private static GeneratedObject unformattedValue(Object value) {
-        return new GeneratedObject(
-            Collections.singletonList(
-                new DataBagValue(value, DataBagValueSource.Empty)),
-            new RowSource(Collections.emptyList()));
+    private static DataBagValue unformattedValue(Object value) {
+        return new DataBagValue(value, DataBagValueSource.Empty);
     }
 
     private static ProfileFields fields(String ...names) {
@@ -133,9 +128,9 @@ class CsvOutputFormatTests {
                 .collect(Collectors.toList()));
     }
 
-    private static void expectCsv(ProfileFields fields, GeneratedObject generatedObject, Matcher<String> matcher) throws IOException {
+    private static void expectCsv(ProfileFields fields, DataBagValue dataBagValue, Matcher<String> matcher) throws IOException {
         // Act
-        String generatedCsv = generateCsv(fields, generatedObject);
+        String generatedCsv = generateCsv(fields, new GeneratedObject(ImmutableMap.of(fields.iterator().next(), dataBagValue)));
 
         // Assert
         Assert.assertThat(generatedCsv, matcher);

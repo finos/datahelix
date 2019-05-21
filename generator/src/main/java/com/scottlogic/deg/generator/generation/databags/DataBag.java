@@ -14,6 +14,10 @@ public class DataBag {
     public static final DataBag empty = new DataBag(new HashMap<>());
     public static DataBagBuilder startBuilding() { return new DataBagBuilder(); }
 
+    public Map<Field, DataBagValue> getFieldToValue() {
+        return fieldToValue;
+    }
+
     private final Map<Field, DataBagValue> fieldToValue;
 
     public DataBag(Map<Field, DataBagValue> fieldToValue) {
@@ -63,14 +67,10 @@ public class DataBag {
         return Objects.hash(fieldToValue);
     }
 
-    public RowSource getRowSource(ProfileFields fields) {
+    public RowSource getRowSource() {
         return new RowSource(
-            fields
-                .stream()
-                .map(field -> {
-                    DataBagValue value = this.fieldToValue.get(field);
-                    return new CellSource(value, field);
-                })
+            fieldToValue.entrySet().stream()
+                .map(e -> new CellSource(e.getKey() , e.getValue()))
                 .collect(Collectors.toList())
         );
     }

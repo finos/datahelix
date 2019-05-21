@@ -21,13 +21,15 @@ public class InMemoryOutputTarget implements SingleDatasetOutputTarget {
 
     @Override
     public DataSetWriter openWriter(ProfileFields fields) {
-        return new DummyWriter(testState.generatedObjects);
+        return new DummyWriter(fields, testState.generatedObjects);
     }
 
     private class DummyWriter implements DataSetWriter {
+        private final ProfileFields fields;
         private final List<List<Object>> listToAppendTo;
 
-        DummyWriter(List<List<Object>> listToAppendTo) {
+        DummyWriter(ProfileFields fields, List<List<Object>> listToAppendTo) {
+            this.fields = fields;
             this.listToAppendTo = listToAppendTo;
         }
 
@@ -37,8 +39,8 @@ public class InMemoryOutputTarget implements SingleDatasetOutputTarget {
                 throw new IllegalStateException("GeneratedObject is null");
             }
 
-            List<Object> values = row.values
-                .stream()
+            List<Object> values = fields.stream()
+                .map(row::getValueAndFormat)
                 .map(DataBagValue::getFormattedValue)
                 .collect(Collectors.toList());
 

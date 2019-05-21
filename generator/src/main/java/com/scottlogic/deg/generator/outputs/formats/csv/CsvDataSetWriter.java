@@ -25,9 +25,11 @@ class CsvDataSetWriter implements DataSetWriter {
 
     @NotNull
     private final CSVPrinter csvPrinter;
+    private final ProfileFields fieldOrder;
 
-    private CsvDataSetWriter(@NotNull CSVPrinter csvPrinter) {
+    private CsvDataSetWriter(@NotNull CSVPrinter csvPrinter, ProfileFields fieldOrder) {
         this.csvPrinter = csvPrinter;
+        this.fieldOrder = fieldOrder;
     }
 
     static DataSetWriter open(OutputStream stream, ProfileFields fields) throws IOException {
@@ -41,13 +43,13 @@ class CsvDataSetWriter implements DataSetWriter {
                 .toArray(String[]::new))
             .print(outputStreamAsAppendable);
 
-        return new CsvDataSetWriter(csvPrinter);
+        return new CsvDataSetWriter(csvPrinter, fields);
     }
 
     @Override
     public void writeRow(GeneratedObject row) throws IOException {
-        csvPrinter.printRecord(
-            row.values.stream()
+        csvPrinter.printRecord(fieldOrder.stream()
+                .map(row::getValueAndFormat)
                 .map(CsvDataSetWriter::extractCellValue)
                 .map(CsvDataSetWriter::wrapInQuotesIfString)
                 .collect(Collectors.toList()));

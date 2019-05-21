@@ -54,16 +54,8 @@ public class DecisionTreeDataGenerator implements DataGenerator {
             .map(treeWalker::walk);
 
         return partitionCombiner.permute(partitionedDataBags)
-            .map(dataBag -> convertToGeneratedObject(dataBag, profile.fields))
+            .map(GeneratedObject::new)
             .limit(maxRows)
             .peek(monitor::rowEmitted);
-    }
-
-    private GeneratedObject convertToGeneratedObject(DataBag dataBag, ProfileFields fields) {
-        return new GeneratedObject(
-            fields.stream()
-                .map(dataBag::getValueAndFormat)
-                .collect(Collectors.toList()),
-            dataBag.getRowSource(fields));
     }
 }
