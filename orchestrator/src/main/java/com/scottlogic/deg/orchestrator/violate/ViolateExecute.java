@@ -3,7 +3,10 @@ package com.scottlogic.deg.orchestrator.violate;
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.generator.StandardGenerationEngine;
+import com.scottlogic.deg.generator.generation.DataGenerator;
+import com.scottlogic.deg.generator.outputs.GeneratedObject;
+import com.scottlogic.deg.generator.outputs.formats.DataSetWriter;
+import com.scottlogic.deg.generator.outputs.targets.SingleDatasetOutputTarget;
 import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
 import com.scottlogic.deg.generator.inputs.profileviolation.ProfileViolator;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
@@ -17,6 +20,7 @@ import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class ViolateExecute implements Runnable {
     private final ErrorReporter errorReporter;
@@ -27,7 +31,7 @@ public class ViolateExecute implements Runnable {
     private final ProfileValidator profileValidator;
     private final ProfileSchemaValidator profileSchemaValidator;
     private final ProfileViolator profileViolator;
-    private final StandardGenerationEngine generationEngine;
+    private final DataGenerator dataGenerator;
     private final ViolateOutputValidator violateOutputValidator;
 
     @Inject
@@ -40,7 +44,7 @@ public class ViolateExecute implements Runnable {
         ProfileValidator profileValidator,
         ProfileSchemaValidator profileSchemaValidator,
         ProfileViolator profileViolator,
-        StandardGenerationEngine generationEngine,
+        DataGenerator dataGenerator,
         ViolateOutputValidator violateOutputValidator) {
 
         this.profileReader = profileReader;
@@ -51,7 +55,7 @@ public class ViolateExecute implements Runnable {
         this.errorReporter = errorReporter;
         this.profileValidator = profileValidator;
         this.profileViolator = profileViolator;
-        this.generationEngine = generationEngine;
+        this.dataGenerator = dataGenerator;
         this.violateOutputValidator = violateOutputValidator;
     }
 
@@ -79,7 +83,6 @@ public class ViolateExecute implements Runnable {
 
     private void doGeneration(Profile profile) throws IOException {
         List<Profile> violatedProfiles = profileViolator.violate(profile);
-
         if (violatedProfiles.isEmpty()) {
             return;
         }
@@ -88,10 +91,22 @@ public class ViolateExecute implements Runnable {
 
         int filename = 1;
         for (Profile violatedProfile : violatedProfiles) {
-            generationEngine.generateDataSet(
-                violatedProfile,
-                outputTargetFactory.create(intFormatter.format(filename++))
-            );
+            SingleDatasetOutputTarget outputTarget = outputTargetFactory.create(intFormatter.format(filename++));
+            Stream<GeneratedObject> generatedObjectStream = dataGenerator.generateData(violatedProfile);
+            outputData(profile, generatedObjectStream, outputTarget);
+        }
+    }
+
+
+    private void outputData(Profile profile, Stream<GeneratedObject> generatedDataItems, SingleDatasetOutputTarget outputTarget) throws IOException {
+        try (DataSetWriter writer = outputTarget.openWriter(profile.fields)) {
+            generatedDataItems.forEach(row -> {
+                try {
+                    writer.writeRow(row);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         }
     }
 }
