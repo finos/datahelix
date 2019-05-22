@@ -2,7 +2,7 @@ package com.scottlogic.deg.profile.v0_1;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scottlogic.deg.profile.common.ValidationResult;
+import com.scottlogic.deg.profile.serialisation.ValidationResult;
 import com.worldturner.medeia.api.SchemaSource;
 import com.worldturner.medeia.api.UrlSchemaSource;
 import com.worldturner.medeia.api.ValidationFailedException;

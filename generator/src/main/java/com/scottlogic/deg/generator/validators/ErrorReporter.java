@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.validators;
 
-import com.scottlogic.deg.profile.common.ValidationResult;
+import com.scottlogic.deg.profile.serialisation.ValidationResult;
 
 public class ErrorReporter {
     public void display(ValidationResult validationResult) {

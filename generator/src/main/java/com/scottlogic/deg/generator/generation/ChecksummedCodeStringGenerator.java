@@ -27,6 +27,12 @@ public abstract class ChecksummedCodeStringGenerator implements StringGenerator 
     public abstract String getRegexRepresentation();
 
     @Override
+    public abstract StringGenerator complement();
+
+    @Override
+    public abstract boolean match(String subject);
+
+    @Override
     public StringGenerator intersect(StringGenerator stringGenerator) {
         if (stringGenerator instanceof ChecksummedCodeStringGenerator) {
             ChecksummedCodeStringGenerator otherGenerator =
@@ -56,9 +62,6 @@ public abstract class ChecksummedCodeStringGenerator implements StringGenerator 
     abstract ChecksummedCodeStringGenerator instantiate(RegexStringGenerator generator);
 
     @Override
-    public abstract StringGenerator complement();
-
-    @Override
     public boolean isFinite() {
         return true;
     }
@@ -67,9 +70,6 @@ public abstract class ChecksummedCodeStringGenerator implements StringGenerator 
     public long getValueCount() {
         return regexGenerator.getValueCount();
     }
-
-    @Override
-    public abstract boolean match(String subject);
 
     @Override
     public Iterable<String> generateInterestingValues() {
