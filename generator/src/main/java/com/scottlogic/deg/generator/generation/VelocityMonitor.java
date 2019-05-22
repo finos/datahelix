@@ -1,10 +1,6 @@
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
-import com.scottlogic.deg.generator.walker.reductive.ReductiveState;
 
 import java.io.PrintWriter;
 import java.math.BigDecimal;
@@ -14,7 +10,6 @@ import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -111,30 +106,5 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
     private void println(String message, Object... args) {
         writer.format(message, args);
         writer.println();
-    }
-
-    @Override
-    public void rowSpecEmitted(RowSpec rowSpec) {
-
-    }
-
-    @Override
-    public void fieldFixedToValue(Field field, Object current) {
-
-    }
-
-    @Override
-    public void unableToStepFurther(ReductiveState reductiveState) {
-
-    }
-
-    @Override
-    public void noValuesForField(ReductiveState reductiveState, Field field) {
-
-    }
-
-    @Override
-    public void unableToEmitRowAsSomeFieldSpecsAreEmpty(ReductiveState reductiveState, Map<Field, FieldSpec> fieldSpecsPerField) {
-
     }
 }
