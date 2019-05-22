@@ -30,6 +30,11 @@ public class SedolStringGenerator extends ChecksummedCodeStringGenerator {
     }
 
     @Override
+    public String getRegexRepresentation() {
+        return SEDOL_REGEX;
+    }
+
+    @Override
     public StringGenerator complement() {
         return new SedolStringGenerator(regexGenerator, !negate);
     }

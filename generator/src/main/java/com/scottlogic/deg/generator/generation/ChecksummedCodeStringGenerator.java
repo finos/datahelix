@@ -24,6 +24,8 @@ public abstract class ChecksummedCodeStringGenerator implements StringGenerator 
 
     public abstract char calculateCheckDigit(String str);
 
+    public abstract String getRegexRepresentation();
+
     @Override
     public StringGenerator intersect(StringGenerator stringGenerator) {
         if (stringGenerator instanceof ChecksummedCodeStringGenerator) {

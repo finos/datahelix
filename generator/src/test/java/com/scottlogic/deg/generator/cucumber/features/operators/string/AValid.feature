@@ -313,10 +313,9 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "GB0002634946" |
       | null           |
 
-  @ignore Still implementing this...
   Scenario: aValid ISIN run against a non-contradicting matchingRegex should be successful
     Given foo is a valid "ISIN"
-    And foo is matching regex "/GB[0-9]{10}/"
+    And foo is matching regex "GB[0-9]{10}"
     And foo is in set:
       | "GB0002634946"  |
     Then the following data should be generated:

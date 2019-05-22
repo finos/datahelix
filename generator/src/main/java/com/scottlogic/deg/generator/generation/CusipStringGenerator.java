@@ -30,6 +30,11 @@ public class CusipStringGenerator extends ChecksummedCodeStringGenerator {
     }
 
     @Override
+    public String getRegexRepresentation() {
+        return CUSIP_REGEX;
+    }
+
+    @Override
     public StringGenerator complement() {
         return new CusipStringGenerator(regexGenerator, !negate);
     }

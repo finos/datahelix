@@ -14,6 +14,10 @@ public class IsinStringGenerator implements StringGenerator {
     public static final int ISIN_LENGTH = 12;
     private static final String GENERIC_NSIN_REGEX = "[A-Z0-9]{9}";
 
+    // This generator is not used in generation itself, but is used to describe the possible
+    // range of output values when combining with other string generators.
+    private RegexStringGenerator isinRegexGenerator;
+
     private final boolean isNegated;
 
     public IsinStringGenerator() {
@@ -21,13 +25,50 @@ public class IsinStringGenerator implements StringGenerator {
     }
 
     private IsinStringGenerator(boolean isNegated) {
+        this(getRegexGeneratorForAllLegalIsinFormats(), isNegated);
+    }
+
+    private IsinStringGenerator(RegexStringGenerator regexGenerator, boolean isNegated) {
         this.isNegated = isNegated;
+        isinRegexGenerator = regexGenerator;
     }
 
     @Override
     public StringGenerator intersect(StringGenerator stringGenerator) {
+        if (stringGenerator instanceof IsinStringGenerator) {
+            if (isNegated == ((IsinStringGenerator)stringGenerator).isNegated) {
+                return this; // TODO this will not work when intersecting with a generator that is the result of another intersection operation
+            }
+            return new NoStringsStringGenerator(RegexStringGenerator.intersectRepresentation(stringGenerator.toString(), "<ISIN>"));
+        }
+        if (stringGenerator instanceof ChecksummedCodeStringGenerator) {
+            // Assume that no other checksummed string format we know about is going to be compatible with the ISIN format.
+            // This is true at the time of writing.
+            return new NoStringsStringGenerator(RegexStringGenerator.intersectRepresentation(stringGenerator.toString(), "<ISIN>"));
+        }
+        if (stringGenerator instanceof RegexStringGenerator) {
+            return intersect((RegexStringGenerator)stringGenerator);
+        }
         return new NoStringsStringGenerator(
             RegexStringGenerator.intersectRepresentation(stringGenerator.toString(), "<ISIN>")
+        );
+    }
+
+    private StringGenerator intersect(RegexStringGenerator other) {
+        StringGenerator intersection =
+            other.intersect(isNegated ? isinRegexGenerator.complement() : isinRegexGenerator);
+        if ((intersection.isFinite() && intersection.getValueCount() == 0) ||
+                !(intersection instanceof RegexStringGenerator)) {
+            return new NoStringsStringGenerator(
+                RegexStringGenerator.intersectRepresentation(other.toString(), isinRegexGenerator.toString())
+            );
+        }
+        if (!isNegated) {
+            return new IsinStringGenerator((RegexStringGenerator)intersection, false);
+        }
+        return new IsinStringGenerator(
+            isinRegexGenerator.union((RegexStringGenerator)other.complement()),
+            true
         );
     }
 
@@ -228,6 +269,34 @@ public class IsinStringGenerator implements StringGenerator {
             return new CusipStringGenerator("US");
         }
         return new RegexStringGenerator(countryCode + GENERIC_NSIN_REGEX, true);
+    }
+
+    private static RegexStringGenerator getRegexGeneratorForAllLegalIsinFormats() {
+        Stream<RegexStringGenerator> countryGenerators = IsinUtils.VALID_COUNTRY_CODES
+            .stream()
+            .map(
+                country -> new RegexStringGenerator(getIsinRegexRepresentationForCountry(country), true)
+        );
+        RegexStringGenerator.UnionCollector collector = countryGenerators.collect(
+            RegexStringGenerator.UnionCollector::new,
+            RegexStringGenerator.UnionCollector::accumulate,
+            RegexStringGenerator.UnionCollector::combine
+        );
+        return collector.getUnionGenerator();
+    }
+
+    private static String getIsinRegexRepresentationForCountry(String countryCode) {
+        String sansCheckDigit;
+        if (countryCode.equals("GB")) {
+            sansCheckDigit = (new SedolStringGenerator("GB00")).getRegexRepresentation();
+        }
+        else if (countryCode.equals("US")) {
+            sansCheckDigit = (new CusipStringGenerator("US")).getRegexRepresentation();
+        }
+        else {
+            sansCheckDigit = countryCode + GENERIC_NSIN_REGEX;
+        }
+        return sansCheckDigit + "[0-9]";
     }
 
     private static StringGenerator getNsinGeneratorForCountry(String countryCode) {
