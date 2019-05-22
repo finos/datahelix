@@ -25,14 +25,17 @@ public abstract class ChecksummedCodeStringGenerator implements StringGenerator 
     public abstract char calculateCheckDigit(String str);
 
     @Override
+    public abstract StringGenerator complement();
+
+    @Override
+    public abstract boolean match(String subject);
+
+    @Override
     public StringGenerator intersect(StringGenerator stringGenerator) {
         return new NoStringsStringGenerator(
             RegexStringGenerator.intersectRepresentation(stringGenerator.toString(), "<checksummed string>")
         );
     }
-
-    @Override
-    public abstract StringGenerator complement();
 
     @Override
     public boolean isFinite() {
@@ -43,9 +46,6 @@ public abstract class ChecksummedCodeStringGenerator implements StringGenerator 
     public long getValueCount() {
         return sansCheckDigitGenerator.getValueCount();
     }
-
-    @Override
-    public abstract boolean match(String subject);
 
     @Override
     public Iterable<String> generateInterestingValues() {
