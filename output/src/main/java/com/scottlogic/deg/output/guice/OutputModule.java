@@ -4,7 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 import com.scottlogic.deg.output.manifest.JsonManifestWriter;
 import com.scottlogic.deg.output.manifest.ManifestWriter;
-import com.scottlogic.deg.output.target.SingleDatasetOutputTarget;
+import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
 import com.scottlogic.deg.output.writer.OutputWriterFactory;
 
 import java.nio.file.Path;
