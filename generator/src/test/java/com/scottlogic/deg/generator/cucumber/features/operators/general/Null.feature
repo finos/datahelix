@@ -262,6 +262,29 @@ Feature: User can specify that a field is null or absent
       | foo  |
       | null |
 
+  Scenario: Not 'null' with a non contradicting 'aValid' CUSIP should be successful
+    Given foo is anything but null
+    And foo is a valid "CUSIP"
+    And foo is in set:
+      | "38259P508" |
+    Then the following data should be generated:
+      | foo         |
+      | "38259P508" |
+
+  Scenario: 'Null' with a contradicting 'aValid' CUSIP should only generate null
+    Given foo is null
+    And foo is a valid "CUSIP"
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
+  Scenario: 'Null' with a contradicting not 'aValid' CUSIP should only generate null
+    Given foo is null
+    And foo is anything but a valid "CUSIP"
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
 ### greaterThan ###
 
   Scenario: Not 'null' with a non contradicting 'greaterThan' should be successful

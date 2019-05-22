@@ -338,6 +338,67 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "3091354" |
       | "string7" |
 
+  Scenario: 'longerThan' alongside a non-contradicting 'aValid' CUSIP constraint should be successful
+    Given foo is longer than 8
+    And foo is a valid "CUSIP"
+    And foo is in set:
+      | "38259P508" |
+      | "594918104" |
+      | "strngnine" |
+    Then the following data should be generated:
+      | foo         |
+      | null        |
+      | "38259P508" |
+      | "594918104" |
+
+  Scenario: 'longerThan' alongside a non-contradicting not 'aValid' CUSIP constraint should be successful
+    Given foo is longer than 2
+    And foo is anything but a valid "CUSIP"
+    And foo is in set:
+      | "38259W508" |
+      | "5F4918104" |
+      | "strngnine" |
+    Then the following data should be generated:
+      | foo         |
+      | null        |
+      | "38259W508" |
+      | "5F4918104" |
+      | "strngnine" |
+
+  Scenario: Not 'longerThan' alongside a non-contradicting 'aValid' CUSIP constraint should be successful
+    Given foo is anything but longer than 9
+    And foo is a valid "CUSIP"
+    And foo is in set:
+      | "38259P508" |
+      | "594918104" |
+      | "2"         |
+    Then the following data should be generated:
+      | foo         |
+      | null        |
+      | "38259P508" |
+      | "594918104" |
+
+  Scenario: 'longerThan' against contradicting 'aValid' CUSIP emits null
+    Given foo is longer than 10
+    And foo is a valid "CUSIP"
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
+  Scenario: Not 'longerThan' with a non-contradicting not 'aValid' CUSIP is successful
+    Given foo is anything but longer than 9
+    And foo is anything but a valid "CUSIP"
+    And foo is in set:
+      | "38259W508" |
+      | "5F4918104" |
+      | "strngnine" |
+    Then the following data should be generated:
+      | foo         |
+      | null        |
+      | "38259W508" |
+      | "5F4918104" |
+      | "strngnine" |
+
   Scenario: Running a 'longerThan' request against non contradicting 'greaterThan' should be successful
     Given foo is longer than 1
     And foo is greater than 10

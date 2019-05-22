@@ -40,7 +40,6 @@ public class IsinUtils {
 
     private static List<Integer> SEDOL_WEIGHTS = Arrays.asList(1, 3, 1, 7, 3, 9, 1);
 
-    // Assumes generic NSIN checks have already been run, i.e. `nsin` is 9 alphanumeric characters
     public static boolean isValidSedolNsin(String nsin) {
         // A SEDOL has length 7, but is prefixed by zeroes when used as a nine-digit NSIN
         int sedolStartOffset = nsin.length() - 7;
@@ -60,8 +59,10 @@ public class IsinUtils {
         return nsin.charAt(checkDigitPosition) == checkDigit;
     }
 
-    // Assumes generic NSIN checks have already been run, i.e. `nsin` is 9 alphanumeric characters
     public static boolean isValidCusipNsin(String nsin) {
+        if (nsin.length() != 9) { return false; }
+        // CUSIPs can only contain digits in the first three positions
+        if (nsin.substring(0, 3).matches(".*[^0-9].*")) { return false; }
         String cusipPreCheckDigit = nsin.substring(0, 8);
         char checkDigit = calculateCusipCheckDigit(cusipPreCheckDigit);
         return nsin.charAt(8) == checkDigit;
