@@ -584,6 +584,13 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "0263494" |
       | null      |
 
+  Scenario: aValid SEDOL run against a contradicting matchingRegex should not be successful
+    Given foo is a valid "SEDOL"
+    And foo is matching regex "0263492"
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
   Scenario: aValid run against a non contradicting aValid CUSIP should be successful
     Given foo is a valid "CUSIP"
     And foo is a valid "CUSIP"
