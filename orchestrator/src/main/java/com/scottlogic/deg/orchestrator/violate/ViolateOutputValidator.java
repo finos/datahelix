@@ -3,7 +3,7 @@ package com.scottlogic.deg.orchestrator.violate;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.output.target.OutputTargetValidationException;
+import com.scottlogic.deg.output.outputtarget.OutputTargetValidationException;
 import com.scottlogic.deg.output.FileUtils;
 
 import java.io.IOException;
