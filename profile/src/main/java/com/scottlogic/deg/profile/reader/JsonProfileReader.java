@@ -1,11 +1,11 @@
-package com.scottlogic.deg.generator.inputs;
+package com.scottlogic.deg.profile.reader;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.RuleInformation;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.profile.Rule;
-import com.scottlogic.deg.profile.common.ProfileDeserialiser;
+import com.scottlogic.deg.profile.serialisation.ProfileDeserialiser;
 import com.scottlogic.deg.profile.v0_1.ProfileDTO;
 
 import java.io.IOException;

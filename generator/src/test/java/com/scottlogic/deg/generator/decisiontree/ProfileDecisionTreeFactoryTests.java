@@ -24,9 +24,10 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import static com.scottlogic.deg.generator.AssertUtils.pairwiseAssert;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.empty;
+import static com.shazam.shazamcrest.MatcherAssert.assertThat;
+import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 
 class ProfileDecisionTreeFactoryTests {
     private final Field fieldA = new Field("A");
@@ -88,10 +89,8 @@ class ProfileDecisionTreeFactoryTests {
         DecisionTree testOutput = testObject.analyse(testInput);
         ProfileFields actualFields = testOutput.getFields();
 
-        pairwiseAssert(
-            actualFields,
-            inputFieldList,
-            (actual, expected) -> Assert.assertThat(actual, sameInstance(expected)));
+        ProfileFields expected = new ProfileFields(inputFieldList);
+        assertThat(actualFields, sameBeanAs(expected));
     }
 
     @Test

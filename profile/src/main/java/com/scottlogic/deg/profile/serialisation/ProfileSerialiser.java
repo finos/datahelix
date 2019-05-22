@@ -1,4 +1,4 @@
-package com.scottlogic.deg.profile.common;
+package com.scottlogic.deg.profile.serialisation;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;

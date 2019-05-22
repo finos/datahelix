@@ -1,6 +1,6 @@
 package com.scottlogic.deg.profile.v0_1;
 
-import com.scottlogic.deg.profile.common.BaseProfile;
+import com.scottlogic.deg.profile.serialisation.BaseProfile;
 
 import java.util.Collection;
 

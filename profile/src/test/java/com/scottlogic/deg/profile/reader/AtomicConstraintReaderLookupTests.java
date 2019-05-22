@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.inputs;
+package com.scottlogic.deg.profile.reader;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.Field;
@@ -6,7 +6,10 @@ import com.scottlogic.deg.common.profile.RuleInformation;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
-import com.scottlogic.deg.generator.generation.Defaults;
+import com.scottlogic.deg.common.util.Defaults;
+import com.scottlogic.deg.profile.reader.AtomicConstraintReaderLookup;
+import com.scottlogic.deg.profile.reader.ConstraintReader;
+import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
 import org.junit.Assert;

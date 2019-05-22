@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.generation;
+package com.scottlogic.deg.common.util;
 
 import java.math.BigDecimal;
 

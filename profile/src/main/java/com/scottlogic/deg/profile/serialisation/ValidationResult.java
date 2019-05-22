@@ -1,4 +1,4 @@
-package com.scottlogic.deg.profile.common;
+package com.scottlogic.deg.profile.serialisation;
 
 import java.util.List;
 
