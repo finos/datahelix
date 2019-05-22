@@ -88,9 +88,7 @@ public class BaseModule extends AbstractModule {
         bind(new TypeLiteral<List<ViolationFilter>>() {
         }).toProvider(ViolationFiltersProvider.class);
 
-        bind(VelocityMonitor.class).in(Singleton.class);
         bind(JavaUtilRandomNumberGenerator.class).toInstance(new JavaUtilRandomNumberGenerator(OffsetDateTime.now().getNano()));
-
     }
 
     private void bindAllCommandLineTypes() {

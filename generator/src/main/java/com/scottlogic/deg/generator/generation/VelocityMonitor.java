@@ -6,6 +6,7 @@ import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.walker.reductive.ReductiveState;
 
+import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
@@ -28,15 +29,21 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
     private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     private long previousVelocity = 0;
 
+    private final PrintWriter writer;
+
+    public VelocityMonitor(PrintWriter writer) {
+        this.writer = writer;
+    }
+
     @Override
     public void generationStarting() {
         startedGenerating = OffsetDateTime.now(ZoneOffset.UTC);
         rowsSinceLastSample = 0;
         rowsEmitted = BigInteger.ZERO;
 
-        System.out.println("Generation started at: " + timeFormatter.format(startedGenerating) + "\n");
-        System.out.println("Number of rows | Velocity (rows/sec) | Velocity trend");
-        System.out.println("---------------+---------------------+---------------");
+        println("Generation started at: " + timeFormatter.format(startedGenerating) + "\n");
+        println("Number of rows | Velocity (rows/sec) | Velocity trend");
+        println("---------------+---------------------+---------------");
 
         timer = new Timer(true);
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -77,28 +84,33 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
             .divide(totalMilliseconds, RoundingMode.HALF_UP)
             .multiply(millisecondsInSecond).toBigInteger();
 
-        System.out.println(String.format(
+        println(
             "%-14s | %-19d | Finished",
             rowsEmitted.toString(),
-            averageRowsPerSecond
-        ));
+            averageRowsPerSecond);
 
-        System.out.println(
-            String.format(
-                "\nGeneration finished at: %s",
-                timeFormatter.format(finished)));
+        println(
+            "\nGeneration finished at: %s",
+            timeFormatter.format(finished));
     }
 
     private void reportVelocity(long rowsSinceLastSample) {
         String trend = rowsSinceLastSample > previousVelocity ? "+" : "-";
-        System.out.println(
-        String.format(
+        println(
             "%-14s | %-19d | %s",
             rowsEmitted.toString(),
             rowsSinceLastSample,
-            trend)
-        );
+            trend);
         previousVelocity = rowsSinceLastSample;
+    }
+
+    private void println(String message) {
+        writer.println(message);
+    }
+
+    private void println(String message, Object... args) {
+        writer.format(message, args);
+        writer.println();
     }
 
     @Override
