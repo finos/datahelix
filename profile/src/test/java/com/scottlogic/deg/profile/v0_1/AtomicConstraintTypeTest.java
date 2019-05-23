@@ -9,16 +9,16 @@ class AtomicConstraintTypeTest {
 
     @Test
     void fromText() {
-        String greaterThanString = AtomicConstraintType.ISGREATERTHANOREQUALTOCONSTANT.toString();
+        String greaterThanString = AtomicConstraintType.IS_GREATER_THAN_OR_EQUAL_TO_CONSTANT.toString();
         AtomicConstraintType greaterThanOrEqualTo = AtomicConstraintType.fromText(greaterThanString);
 
-        Assert.assertThat(greaterThanOrEqualTo, is(AtomicConstraintType.ISGREATERTHANOREQUALTOCONSTANT));
+        Assert.assertThat(greaterThanOrEqualTo, is(AtomicConstraintType.IS_GREATER_THAN_OR_EQUAL_TO_CONSTANT));
     }
 
     @Test
     void fromTextLowerCase() {
         AtomicConstraintType greaterThanOrEqualTo = AtomicConstraintType.fromText("shorterthan");
 
-        Assert.assertThat(greaterThanOrEqualTo, is(AtomicConstraintType.ISSTRINGSHORTERTHAN));
+        Assert.assertThat(greaterThanOrEqualTo, is(AtomicConstraintType.IS_STRING_SHORTER_THAN));
     }
 }

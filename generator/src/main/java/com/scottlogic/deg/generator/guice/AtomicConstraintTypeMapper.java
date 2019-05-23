@@ -6,44 +6,44 @@ import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 public class AtomicConstraintTypeMapper {
     public Class toConstraintClass(AtomicConstraintType type) {
         switch (type) {
-            case ISNULL:
+            case IS_NULL:
                 return IsNullConstraint.class;
-            case ISOFTYPE:
+            case IS_OF_TYPE:
                 return IsOfTypeConstraint.class;
-            case MATCHESREGEX:
+            case MATCHES_REGEX:
                 return MatchesRegexConstraint.class;
-            case CONTAINSREGEX:
+            case CONTAINS_REGEX:
                 return ContainsRegexConstraint.class;
-            case FORMATTEDAS:
+            case FORMATTED_AS:
                 return FormatConstraint.class;
-            case AVALID:
+            case A_VALID:
                 return MatchesStandardConstraint.class;
-            case HASLENGTH:
+            case HAS_LENGTH:
                 return StringHasLengthConstraint.class;
-            case ISSTRINGLONGERTHAN:
+            case IS_STRING_LONGER_THAN:
                 return IsStringLongerThanConstraint.class;
-            case ISSTRINGSHORTERTHAN:
+            case IS_STRING_SHORTER_THAN:
                 return IsStringShorterThanConstraint.class;
-            case ISGREATERTHANCONSTANT:
+            case IS_GREATER_THAN_CONSTANT:
                 return IsGreaterThanConstantConstraint.class;
-            case ISGREATERTHANOREQUALTOCONSTANT:
+            case IS_GREATER_THAN_OR_EQUAL_TO_CONSTANT:
                 return IsGreaterThanOrEqualToConstantConstraint.class;
-            case ISLESSTHANCONSTANT:
+            case IS_LESS_THAN_CONSTANT:
                 return IsLessThanConstantConstraint.class;
-            case ISLESSTHANOREQUALTOCONSTANT:
+            case IS_LESS_THAN_OR_EQUAL_TO_CONSTANT:
                 return IsLessThanOrEqualToConstantConstraint.class;
-            case ISAFTERCONSTANTDATETIME:
+            case IS_AFTER_CONSTANT_DATE_TIME:
                 return IsAfterConstantDateTimeConstraint.class;
-            case ISAFTEROREQUALTOCONSTANTDATETIME:
+            case IS_AFTER_OR_EQUAL_TO_CONSTANT_DATE_TIME:
                 return IsAfterOrEqualToConstantDateTimeConstraint.class;
-            case ISBEFORECONSTANTDATETIME:
+            case IS_BEFORE_CONSTANT_DATE_TIME:
                 return IsBeforeConstantDateTimeConstraint.class;
-            case ISBEFOREOREQUALTOCONSTANTDATETIME:
+            case IS_BEFORE_OR_EQUAL_TO_CONSTANT_DATE_TIME:
                 return IsBeforeOrEqualToConstantDateTimeConstraint.class;
-            case ISGRANULARTO:
+            case IS_GRANULAR_TO:
                 return IsGranularToNumericConstraint.class;
-            case ISEQUALTOCONSTANT:
-            case ISINSET:
+            case IS_EQUAL_TO_CONSTANT:
+            case IS_IN_SET:
                 return IsInSetConstraint.class;
             default:
                 throw new UnsupportedOperationException();

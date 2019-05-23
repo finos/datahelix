@@ -55,7 +55,7 @@ public class AtomicConstraintReaderLookupTests {
     private static Stream<Arguments> testProvider() {
         ConstraintDTO stringValueDto = new ConstraintDTO();
         stringValueDto.field = "test";
-        stringValueDto.is = AtomicConstraintType.ISEQUALTOCONSTANT.toString();
+        stringValueDto.is = AtomicConstraintType.IS_EQUAL_TO_CONSTANT.toString();
         stringValueDto.value = "value";
 
         ConstraintDTO numberValueDto = new ConstraintDTO();
@@ -88,26 +88,26 @@ public class AtomicConstraintReaderLookupTests {
         notValueDto.not = stringValueDto;
 
         return Stream.of(
-                Arguments.of(AtomicConstraintType.ISEQUALTOCONSTANT, stringValueDto, IsInSetConstraint.class),
-                Arguments.of(AtomicConstraintType.ISINSET, multipleValuesDto, IsInSetConstraint.class),
-                Arguments.of(AtomicConstraintType.ISNULL, stringValueDto, IsNullConstraint.class),
-                Arguments.of(AtomicConstraintType.ISOFTYPE, typeValueDto, IsOfTypeConstraint.class),
-                Arguments.of(AtomicConstraintType.ISOFTYPE, integerTypeValueDto, AndConstraint.class),
-                Arguments.of(AtomicConstraintType.ISOFTYPE, decimalTypeValueDto, IsOfTypeConstraint.class),
-                Arguments.of(AtomicConstraintType.MATCHESREGEX, stringValueDto, MatchesRegexConstraint.class),
-                Arguments.of(AtomicConstraintType.FORMATTEDAS, stringValueDto, FormatConstraint.class),
-                Arguments.of(AtomicConstraintType.HASLENGTH, numberValueDto, StringHasLengthConstraint.class),
-                Arguments.of(AtomicConstraintType.ISSTRINGLONGERTHAN, numberValueDto, IsStringLongerThanConstraint.class),
-                Arguments.of(AtomicConstraintType.ISSTRINGSHORTERTHAN, numberValueDto, IsStringShorterThanConstraint.class),
-                Arguments.of(AtomicConstraintType.ISGREATERTHANCONSTANT, numberValueDto, IsGreaterThanConstantConstraint.class),
-                Arguments.of(AtomicConstraintType.ISGREATERTHANOREQUALTOCONSTANT, numberValueDto, IsGreaterThanOrEqualToConstantConstraint.class),
-                Arguments.of(AtomicConstraintType.ISLESSTHANCONSTANT, numberValueDto, IsLessThanConstantConstraint.class),
-                Arguments.of(AtomicConstraintType.ISLESSTHANOREQUALTOCONSTANT, numberValueDto, IsLessThanOrEqualToConstantConstraint.class),
-                Arguments.of(AtomicConstraintType.ISAFTERCONSTANTDATETIME, dateValueDto, IsAfterConstantDateTimeConstraint.class),
-                Arguments.of(AtomicConstraintType.ISAFTEROREQUALTOCONSTANTDATETIME, dateValueDto, IsAfterOrEqualToConstantDateTimeConstraint.class),
-                Arguments.of(AtomicConstraintType.ISBEFORECONSTANTDATETIME, dateValueDto, IsBeforeConstantDateTimeConstraint.class),
-                Arguments.of(AtomicConstraintType.ISBEFORECONSTANTDATETIME, dateValueDto, IsBeforeConstantDateTimeConstraint.class),
-                Arguments.of(AtomicConstraintType.ISBEFOREOREQUALTOCONSTANTDATETIME, dateValueDto, IsBeforeOrEqualToConstantDateTimeConstraint.class));
+                Arguments.of(AtomicConstraintType.IS_EQUAL_TO_CONSTANT, stringValueDto, IsInSetConstraint.class),
+                Arguments.of(AtomicConstraintType.IS_IN_SET, multipleValuesDto, IsInSetConstraint.class),
+                Arguments.of(AtomicConstraintType.IS_NULL, stringValueDto, IsNullConstraint.class),
+                Arguments.of(AtomicConstraintType.IS_OF_TYPE, typeValueDto, IsOfTypeConstraint.class),
+                Arguments.of(AtomicConstraintType.IS_OF_TYPE, integerTypeValueDto, AndConstraint.class),
+                Arguments.of(AtomicConstraintType.IS_OF_TYPE, decimalTypeValueDto, IsOfTypeConstraint.class),
+                Arguments.of(AtomicConstraintType.MATCHES_REGEX, stringValueDto, MatchesRegexConstraint.class),
+                Arguments.of(AtomicConstraintType.FORMATTED_AS, stringValueDto, FormatConstraint.class),
+                Arguments.of(AtomicConstraintType.HAS_LENGTH, numberValueDto, StringHasLengthConstraint.class),
+                Arguments.of(AtomicConstraintType.IS_STRING_LONGER_THAN, numberValueDto, IsStringLongerThanConstraint.class),
+                Arguments.of(AtomicConstraintType.IS_STRING_SHORTER_THAN, numberValueDto, IsStringShorterThanConstraint.class),
+                Arguments.of(AtomicConstraintType.IS_GREATER_THAN_CONSTANT, numberValueDto, IsGreaterThanConstantConstraint.class),
+                Arguments.of(AtomicConstraintType.IS_GREATER_THAN_OR_EQUAL_TO_CONSTANT, numberValueDto, IsGreaterThanOrEqualToConstantConstraint.class),
+                Arguments.of(AtomicConstraintType.IS_LESS_THAN_CONSTANT, numberValueDto, IsLessThanConstantConstraint.class),
+                Arguments.of(AtomicConstraintType.IS_LESS_THAN_OR_EQUAL_TO_CONSTANT, numberValueDto, IsLessThanOrEqualToConstantConstraint.class),
+                Arguments.of(AtomicConstraintType.IS_AFTER_CONSTANT_DATE_TIME, dateValueDto, IsAfterConstantDateTimeConstraint.class),
+                Arguments.of(AtomicConstraintType.IS_AFTER_OR_EQUAL_TO_CONSTANT_DATE_TIME, dateValueDto, IsAfterOrEqualToConstantDateTimeConstraint.class),
+                Arguments.of(AtomicConstraintType.IS_BEFORE_CONSTANT_DATE_TIME, dateValueDto, IsBeforeConstantDateTimeConstraint.class),
+                Arguments.of(AtomicConstraintType.IS_BEFORE_CONSTANT_DATE_TIME, dateValueDto, IsBeforeConstantDateTimeConstraint.class),
+                Arguments.of(AtomicConstraintType.IS_BEFORE_OR_EQUAL_TO_CONSTANT_DATE_TIME, dateValueDto, IsBeforeOrEqualToConstantDateTimeConstraint.class));
     }
 
     private static Stream<Arguments> stringLengthInvalidOperandProvider() {
@@ -125,17 +125,17 @@ public class AtomicConstraintReaderLookupTests {
         nullValueDto.value = null;
 
         return Stream.of(
-            Arguments.of(AtomicConstraintType.HASLENGTH, numberValueDto),
-            Arguments.of(AtomicConstraintType.ISSTRINGLONGERTHAN, numberValueDto),
-            Arguments.of(AtomicConstraintType.ISSTRINGSHORTERTHAN, numberValueDto),
+            Arguments.of(AtomicConstraintType.HAS_LENGTH, numberValueDto),
+            Arguments.of(AtomicConstraintType.IS_STRING_LONGER_THAN, numberValueDto),
+            Arguments.of(AtomicConstraintType.IS_STRING_SHORTER_THAN, numberValueDto),
 
-            Arguments.of(AtomicConstraintType.HASLENGTH, stringValueDto),
-            Arguments.of(AtomicConstraintType.ISSTRINGLONGERTHAN, stringValueDto),
-            Arguments.of(AtomicConstraintType.ISSTRINGSHORTERTHAN, stringValueDto),
+            Arguments.of(AtomicConstraintType.HAS_LENGTH, stringValueDto),
+            Arguments.of(AtomicConstraintType.IS_STRING_LONGER_THAN, stringValueDto),
+            Arguments.of(AtomicConstraintType.IS_STRING_SHORTER_THAN, stringValueDto),
 
-            Arguments.of(AtomicConstraintType.HASLENGTH, nullValueDto),
-            Arguments.of(AtomicConstraintType.ISSTRINGLONGERTHAN, nullValueDto),
-            Arguments.of(AtomicConstraintType.ISSTRINGSHORTERTHAN, nullValueDto));
+            Arguments.of(AtomicConstraintType.HAS_LENGTH, nullValueDto),
+            Arguments.of(AtomicConstraintType.IS_STRING_LONGER_THAN, nullValueDto),
+            Arguments.of(AtomicConstraintType.IS_STRING_SHORTER_THAN, nullValueDto));
     }
 
     private static Stream<Arguments> ofTypeInvalidValueProvider() {
@@ -148,8 +148,8 @@ public class AtomicConstraintReaderLookupTests {
         invalidTypeValueDto.value = "garbage";
 
         return Stream.of(
-            Arguments.of(AtomicConstraintType.ISOFTYPE, numericTypeValueDto),
-            Arguments.of(AtomicConstraintType.ISOFTYPE, invalidTypeValueDto)
+            Arguments.of(AtomicConstraintType.IS_OF_TYPE, numericTypeValueDto),
+            Arguments.of(AtomicConstraintType.IS_OF_TYPE, invalidTypeValueDto)
         );
     }
 
@@ -164,19 +164,19 @@ public class AtomicConstraintReaderLookupTests {
         minValueDtoMinusOne.value = Defaults.NUMERIC_MIN.subtract(BigDecimal.ONE);
 
         return Stream.of(
-            Arguments.of(AtomicConstraintType.ISEQUALTOCONSTANT, maxValueDtoPlusOne),
-            Arguments.of(AtomicConstraintType.ISINSET, maxValueDtoPlusOne),
-            Arguments.of(AtomicConstraintType.ISGREATERTHANOREQUALTOCONSTANT, maxValueDtoPlusOne),
-            Arguments.of(AtomicConstraintType.ISGREATERTHANCONSTANT, maxValueDtoPlusOne),
-            Arguments.of(AtomicConstraintType.ISLESSTHANOREQUALTOCONSTANT, maxValueDtoPlusOne),
-            Arguments.of(AtomicConstraintType.ISLESSTHANCONSTANT, maxValueDtoPlusOne),
+            Arguments.of(AtomicConstraintType.IS_EQUAL_TO_CONSTANT, maxValueDtoPlusOne),
+            Arguments.of(AtomicConstraintType.IS_IN_SET, maxValueDtoPlusOne),
+            Arguments.of(AtomicConstraintType.IS_GREATER_THAN_OR_EQUAL_TO_CONSTANT, maxValueDtoPlusOne),
+            Arguments.of(AtomicConstraintType.IS_GREATER_THAN_CONSTANT, maxValueDtoPlusOne),
+            Arguments.of(AtomicConstraintType.IS_LESS_THAN_OR_EQUAL_TO_CONSTANT, maxValueDtoPlusOne),
+            Arguments.of(AtomicConstraintType.IS_LESS_THAN_CONSTANT, maxValueDtoPlusOne),
 
-            Arguments.of(AtomicConstraintType.ISEQUALTOCONSTANT, minValueDtoMinusOne),
-            Arguments.of(AtomicConstraintType.ISINSET, minValueDtoMinusOne),
-            Arguments.of(AtomicConstraintType.ISGREATERTHANOREQUALTOCONSTANT, minValueDtoMinusOne),
-            Arguments.of(AtomicConstraintType.ISGREATERTHANCONSTANT, minValueDtoMinusOne),
-            Arguments.of(AtomicConstraintType.ISLESSTHANOREQUALTOCONSTANT, minValueDtoMinusOne),
-            Arguments.of(AtomicConstraintType.ISLESSTHANCONSTANT, minValueDtoMinusOne)
+            Arguments.of(AtomicConstraintType.IS_EQUAL_TO_CONSTANT, minValueDtoMinusOne),
+            Arguments.of(AtomicConstraintType.IS_IN_SET, minValueDtoMinusOne),
+            Arguments.of(AtomicConstraintType.IS_GREATER_THAN_OR_EQUAL_TO_CONSTANT, minValueDtoMinusOne),
+            Arguments.of(AtomicConstraintType.IS_GREATER_THAN_CONSTANT, minValueDtoMinusOne),
+            Arguments.of(AtomicConstraintType.IS_LESS_THAN_OR_EQUAL_TO_CONSTANT, minValueDtoMinusOne),
+            Arguments.of(AtomicConstraintType.IS_LESS_THAN_CONSTANT, minValueDtoMinusOne)
         );
     }
 
@@ -195,17 +195,17 @@ public class AtomicConstraintReaderLookupTests {
         integerAsDecimalWith0Fraction.value = new BigDecimal(10.0);
 
         return Stream.of(
-            Arguments.of(AtomicConstraintType.HASLENGTH, integerAsDecimalDto),
-            Arguments.of(AtomicConstraintType.ISSTRINGLONGERTHAN, integerAsDecimalDto),
-            Arguments.of(AtomicConstraintType.ISSTRINGSHORTERTHAN, integerAsDecimalDto),
+            Arguments.of(AtomicConstraintType.HAS_LENGTH, integerAsDecimalDto),
+            Arguments.of(AtomicConstraintType.IS_STRING_LONGER_THAN, integerAsDecimalDto),
+            Arguments.of(AtomicConstraintType.IS_STRING_SHORTER_THAN, integerAsDecimalDto),
 
-            Arguments.of(AtomicConstraintType.HASLENGTH, integerAsIntegerDto),
-            Arguments.of(AtomicConstraintType.ISSTRINGLONGERTHAN, integerAsIntegerDto),
-            Arguments.of(AtomicConstraintType.ISSTRINGSHORTERTHAN, integerAsIntegerDto),
+            Arguments.of(AtomicConstraintType.HAS_LENGTH, integerAsIntegerDto),
+            Arguments.of(AtomicConstraintType.IS_STRING_LONGER_THAN, integerAsIntegerDto),
+            Arguments.of(AtomicConstraintType.IS_STRING_SHORTER_THAN, integerAsIntegerDto),
 
-            Arguments.of(AtomicConstraintType.HASLENGTH, integerAsDecimalWith0Fraction),
-            Arguments.of(AtomicConstraintType.ISSTRINGLONGERTHAN, integerAsDecimalWith0Fraction),
-            Arguments.of(AtomicConstraintType.ISSTRINGSHORTERTHAN, integerAsDecimalWith0Fraction));
+            Arguments.of(AtomicConstraintType.HAS_LENGTH, integerAsDecimalWith0Fraction),
+            Arguments.of(AtomicConstraintType.IS_STRING_LONGER_THAN, integerAsDecimalWith0Fraction),
+            Arguments.of(AtomicConstraintType.IS_STRING_SHORTER_THAN, integerAsDecimalWith0Fraction));
     }
 
     @Test
@@ -370,7 +370,7 @@ public class AtomicConstraintReaderLookupTests {
 
     private OffsetDateTime tryParseConstraintDateTimeValue(Object value) throws InvalidProfileException {
         ConstraintReader reader = atomicConstraintReaderLookup.getByTypeCode(
-            AtomicConstraintType.ISAFTERCONSTANTDATETIME.toString());
+            AtomicConstraintType.IS_AFTER_CONSTANT_DATE_TIME.toString());
 
         ConstraintDTO dateDto = new ConstraintDTO();
         dateDto.field = "test";
