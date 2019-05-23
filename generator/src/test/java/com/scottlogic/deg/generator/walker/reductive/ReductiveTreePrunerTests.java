@@ -12,8 +12,6 @@ import com.scottlogic.deg.generator.restrictions.NullRestrictions;
 import com.scottlogic.deg.common.profile.constraintdetail.Nullness;
 import com.scottlogic.deg.generator.restrictions.SetRestrictions;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
-import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FieldValue;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -58,7 +56,7 @@ class ReductiveTreePrunerTests {
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, fieldValue());
+        Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, field, fieldValue());
 
         //Assert
         Merged<Object> expected = Merged.contradictory();
@@ -78,7 +76,7 @@ class ReductiveTreePrunerTests {
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        ConstraintNode actual = treePruner.pruneConstraintNode(tree, fieldValue()).get();
+        ConstraintNode actual = treePruner.pruneConstraintNode(tree, field, fieldValue()).get();
 
         //Assert
         ConstraintNode expected = tree;
@@ -103,7 +101,7 @@ class ReductiveTreePrunerTests {
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, fieldValue());
+        Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, field, fieldValue());
 
         //Assert
         Merged<Object> expected = Merged.contradictory();
@@ -128,7 +126,7 @@ class ReductiveTreePrunerTests {
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        ConstraintNode actual = treePruner.pruneConstraintNode(tree, fieldValue()).get();
+        ConstraintNode actual = treePruner.pruneConstraintNode(tree, field, fieldValue()).get();
 
         //Assert
         ConstraintNode expected = tree;
@@ -153,7 +151,7 @@ class ReductiveTreePrunerTests {
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        ConstraintNode actual = treePruner.pruneConstraintNode(tree, fieldValue()).get();
+        ConstraintNode actual = treePruner.pruneConstraintNode(tree, field, fieldValue()).get();
 
         //Assert
         ConstraintNode expected = constraintNode()
@@ -181,7 +179,7 @@ class ReductiveTreePrunerTests {
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        ConstraintNode actual = treePruner.pruneConstraintNode(tree, fieldValue()).get();
+        ConstraintNode actual = treePruner.pruneConstraintNode(tree, field, fieldValue()).get();
 
         //Assert
         ConstraintNode expected = constraintNode()
@@ -210,7 +208,7 @@ class ReductiveTreePrunerTests {
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        ConstraintNode actual = treePruner.pruneConstraintNode(tree, fieldValue()).get();
+        ConstraintNode actual = treePruner.pruneConstraintNode(tree, field, fieldValue()).get();
 
         //Assert
         ConstraintNode expected = constraintNode()
@@ -243,7 +241,7 @@ class ReductiveTreePrunerTests {
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, fieldValue());
+        Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, field, fieldValue());
 
         //Assert
         Merged<Object> expected = Merged.contradictory();
@@ -274,7 +272,7 @@ class ReductiveTreePrunerTests {
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        ConstraintNode actual = treePruner.pruneConstraintNode(tree, fieldValue()).get();
+        ConstraintNode actual = treePruner.pruneConstraintNode(tree, field, fieldValue()).get();
 
         //Assert
         ConstraintNode expected = constraintNode()
@@ -306,7 +304,7 @@ class ReductiveTreePrunerTests {
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        ConstraintNode actual = treePruner.pruneConstraintNode(tree, fieldValue()).get();
+        ConstraintNode actual = treePruner.pruneConstraintNode(tree, field, fieldValue()).get();
 
         //Assert
         ConstraintNode expected = constraintNode()
@@ -340,7 +338,7 @@ class ReductiveTreePrunerTests {
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        ConstraintNode actual = treePruner.pruneConstraintNode(tree, fieldValue()).get();
+        ConstraintNode actual = treePruner.pruneConstraintNode(tree, field, fieldValue()).get();
 
         //Assert
         ConstraintNode expected = constraintNode()
@@ -375,7 +373,7 @@ class ReductiveTreePrunerTests {
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, fieldValue());
+        Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, field, fieldValue());
 
         //Assert
         Merged<Object> expected = Merged.contradictory();
@@ -404,14 +402,14 @@ class ReductiveTreePrunerTests {
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        ConstraintNode actual = treePruner.pruneConstraintNode(tree, fieldValue()).get();
+        ConstraintNode actual = treePruner.pruneConstraintNode(tree, field, fieldValue()).get();
 
         //Assert
         ConstraintNode expected = tree;
         assertThat(actual, sameBeanAs(expected));
     }
 
-    private FieldValue fieldValue() {
-        return new FieldValue(field, new DataBagValue("TODO", DataBagValueSource.Empty));
+    private DataBagValue fieldValue() {
+        return new DataBagValue("TODO", DataBagValueSource.Empty);
     }
 }

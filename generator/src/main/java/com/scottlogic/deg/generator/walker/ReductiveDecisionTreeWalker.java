@@ -9,8 +9,8 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
+import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.walker.reductive.*;
-import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FieldValue;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategy;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategyFactory;
 
@@ -62,21 +62,22 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
             return Stream.empty();
         }
 
-        Stream<FieldValue> values = fieldSpecValueGenerator.generate(fieldToFix, nextFieldSpec.get())
-            .map(dataBag -> new FieldValue(fieldToFix, dataBag.getDataBagValue(fieldToFix)));
+        Stream<DataBagValue> values = fieldSpecValueGenerator.generate(fieldToFix, nextFieldSpec.get())
+            .map(dataBag -> dataBag.getDataBagValue(fieldToFix));
 
         return FlatMappingSpliterator.flatMap(
             values,
-            fieldValue -> pruneTreeForNextValue(tree, reductiveState, fixFieldStrategy, fieldValue));
+            fieldValue -> pruneTreeForNextValue(tree, reductiveState, fixFieldStrategy, fieldToFix, fieldValue));
     }
 
     private Stream<DataBag> pruneTreeForNextValue(
         ConstraintNode tree,
         ReductiveState reductiveState,
         FixFieldStrategy fixFieldStrategy,
-        FieldValue fieldValue){
+        Field field,
+        DataBagValue fieldValue){
 
-        Merged<ConstraintNode> reducedTree = this.treePruner.pruneConstraintNode(tree, fieldValue);
+        Merged<ConstraintNode> reducedTree = treePruner.pruneConstraintNode(tree, field, fieldValue);
 
         if (reducedTree.isContradictory()){
             //yielding an empty stream will cause back-tracking
@@ -84,10 +85,10 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
             return Stream.empty();
         }
 
-        monitor.fieldFixedToValue(fieldValue.getField(), fieldValue.getDataBagValue().getFormattedValue());
+        monitor.fieldFixedToValue(field, fieldValue.getFormattedValue());
 
         ReductiveState newReductiveState =
-            reductiveState.withFixedFieldValue(fieldValue);
+            reductiveState.withFixedFieldValue(field, fieldValue);
         visualise(reducedTree.get(), newReductiveState);
 
         if (newReductiveState.allFieldsAreFixed()){
