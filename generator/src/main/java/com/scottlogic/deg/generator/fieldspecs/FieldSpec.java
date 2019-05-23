@@ -196,13 +196,10 @@ public class FieldSpec {
     /** Create a predicate that returns TRUE for all (and only) values permitted by this FieldSpec */
     public boolean permits(@NotNull Object value) {
         if (typeRestrictions != null) {
-            TypeCheckHolder numericHolder = new TypeCheckHolder(Types.NUMERIC, NumericRestrictions::isNumeric);
-            TypeCheckHolder stringHolder = new TypeCheckHolder(Types.STRING, StringRestrictions::isString);
-            TypeCheckHolder dateTimeHolder = new TypeCheckHolder(Types.DATETIME, DateTimeRestrictions::isDateTime);
-            Set<TypeCheckHolder> holders = SetUtils.setOf(numericHolder, stringHolder, dateTimeHolder);
+            Set<Types> types = SetUtils.setOf(Types.NUMERIC, Types.STRING, Types.DATETIME);
 
-            for (TypeCheckHolder holder : holders) {
-                if (!typeRestrictions.isTypeAllowed(holder.type) && holder.check.apply(value)) {
+            for (Types type : types) {
+                if (!typeRestrictions.isTypeAllowed(type) && type.getIsInstanceOf().apply(value)) {
                     return false;
                 }
             }
@@ -233,15 +230,12 @@ public class FieldSpec {
     }
 
     public boolean equals(Object obj){
-        if (obj == null){
+        if (this == obj) return true;
+        if (obj == null || obj.getClass() != this.getClass()){
             return false;
         }
 
-        if (obj.getClass() != this.getClass()){
-            return false;
-        }
-
-        return equals((FieldSpec)obj);
+        return equals((FieldSpec) obj);
     }
 
     private boolean equals(FieldSpec other){
