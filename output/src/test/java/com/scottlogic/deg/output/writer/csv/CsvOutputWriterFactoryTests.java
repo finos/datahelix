@@ -1,10 +1,7 @@
 package com.scottlogic.deg.output.writer.csv;
 
-import com.google.common.collect.ImmutableMap;
-import com.scottlogic.deg.common.output.DataBagValueSource;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.common.output.DataBagValue;
 import com.scottlogic.deg.common.output.GeneratedObject;
 import com.scottlogic.deg.output.writer.DataSetWriter;
 import org.hamcrest.Matcher;
@@ -21,30 +18,25 @@ import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 class CsvOutputWriterFactoryTests {
     @Test
     void writeRow_withBigDecimalAndNoFormat_shouldOutputDefaultFormat() throws IOException {
         expectCsv(
             fields("my_number"),
-            unformattedValue(new BigDecimal("0.00000001")),
+            (new BigDecimal("0.00000001")),
 
             Matchers.containsString("0.00000001"));
-    }
-
-    @Test
-    void writeRow_withBigDecimalAndAFormat_shouldOutputFormattedValue() throws IOException{
-        expectCsv(
-            fields("my_number"),
-            formattedValue(new BigDecimal("0.00000001"), "%.1e"),
-
-            Matchers.containsString("\"1.0e-08\""));
     }
 
     @Test
     void writeRow_withNullValue_shouldOutputEmptyValue() throws IOException {
         expectCsv(
             fields("my_null"),
-            unformattedValue(null),
+            (null),
 
             Matchers.equalTo("my_null\n\n"));
     }
@@ -53,18 +45,9 @@ class CsvOutputWriterFactoryTests {
     void writeRow_withNonBigDecimalNumberAndNoFormat_shouldOutputNumberFormattedCorrectly() throws IOException {
         expectCsv(
             fields("my_number"),
-            unformattedValue(1.2f),
+            (1.2f),
 
             Matchers.equalTo("my_number\n1.2\n"));
-    }
-
-    @Test
-    void writeRow_withStringAndFormat_shouldOutputValueQuotedAndFormatted() throws IOException {
-        expectCsv(
-            fields("my_string"),
-            formattedValue("Hello World", "%.5s"), // Format string to max 5 chars
-
-            Matchers.containsString("\"Hello\""));
     }
 
     @Test
@@ -76,7 +59,7 @@ class CsvOutputWriterFactoryTests {
 
         expectCsv(
             fields("my_date"),
-            unformattedValue(date),
+            (date),
 
             Matchers.containsString("2001-02-03T04:05:06Z"));
     }
@@ -90,31 +73,9 @@ class CsvOutputWriterFactoryTests {
 
         expectCsv(
             fields("my_date"),
-            unformattedValue(date),
+            (date),
 
             Matchers.containsString("2001-02-03T04:05:06.777Z"));
-    }
-
-    @Test
-    void writeRow_withDateTimeAndAFormat_shouldUsePrescribedFormat() throws IOException {
-        OffsetDateTime date = OffsetDateTime.of(
-            2001, 02, 03,
-            04, 05, 06, 0,
-            ZoneOffset.UTC);
-
-        expectCsv(
-            fields("my_date"),
-            formattedValue(date, "%tF"),
-
-            Matchers.containsString("\"2001-02-03\""));
-    }
-
-    private static DataBagValue formattedValue(Object value, String format) {
-        return new DataBagValue(value, format, DataBagValueSource.Empty);
-    }
-
-    private static DataBagValue unformattedValue(Object value) {
-        return new DataBagValue(value, DataBagValueSource.Empty);
     }
 
     private static ProfileFields fields(String ...names) {
@@ -124,9 +85,11 @@ class CsvOutputWriterFactoryTests {
                 .collect(Collectors.toList()));
     }
 
-    private static void expectCsv(ProfileFields fields, DataBagValue dataBagValue, Matcher<String> matcher) throws IOException {
+    private static void expectCsv(ProfileFields fields, Object value, Matcher<String> matcher) throws IOException {
         // Act
-        String generatedCsv = generateCsv(fields, new GeneratedObject(ImmutableMap.of(fields.iterator().next(), dataBagValue)));
+        GeneratedObject mockGeneratedObject = mock(GeneratedObject.class);
+        when(mockGeneratedObject.getFormattedValue(eq(fields.iterator().next()))).thenReturn(value);
+        String generatedCsv = generateCsv(fields, mockGeneratedObject);
 
         // Assert
         Assert.assertThat(generatedCsv, matcher);

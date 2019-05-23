@@ -1,7 +1,6 @@
 package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 
 import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.common.output.DataBagValue;
 import com.scottlogic.deg.common.output.GeneratedObject;
 import com.scottlogic.deg.output.writer.DataSetWriter;
 import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
@@ -40,8 +39,7 @@ public class InMemoryOutputTarget implements SingleDatasetOutputTarget {
             }
 
             List<Object> values = fields.stream()
-                .map(row::getValueAndFormat)
-                .map(DataBagValue::getFormattedValue)
+                .map(row::getFormattedValue)
                 .collect(Collectors.toList());
 
             listToAppendTo.add(values);
