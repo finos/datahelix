@@ -2,10 +2,7 @@ package com.scottlogic.deg.generator.utils;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,8 +16,8 @@ class HeterogeneousTypeContainerTest {
         container = container.put(String.class, string);
         container = container.put(Integer.class, integer);
 
-        assertEquals(string, container.get(String.class));
-        assertEquals(integer, container.get(Integer.class));
+        assertEquals(string, container.get(String.class).get());
+        assertEquals(integer, container.get(Integer.class).get());
     }
 
     @Test
@@ -31,8 +28,8 @@ class HeterogeneousTypeContainerTest {
 
         numbers = numbers.put(Integer.class, integerNumber).put(Float.class, floatNumber);
 
-        assertEquals(integerNumber, numbers.get(Integer.class));
-        assertEquals(floatNumber, numbers.get(Float.class));
+        assertEquals(integerNumber, numbers.get(Integer.class).get());
+        assertEquals(floatNumber, numbers.get(Float.class).get());
 
     }
 

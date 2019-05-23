@@ -29,37 +29,37 @@ public class FieldSpec {
     }
 
     public SetRestrictions getSetRestrictions() {
-        return restrictions.get(SetRestrictions.class);
+        return restrictions.get(SetRestrictions.class).orElse(null);
     }
 
     public NumericRestrictions getNumericRestrictions() {
-        return restrictions.get(NumericRestrictions.class);
+        return restrictions.get(NumericRestrictions.class).orElse(null);
     }
 
     public StringRestrictions getStringRestrictions() {
-        return restrictions.get(StringRestrictions.class);
+        return restrictions.get(StringRestrictions.class).orElse(null);
     }
 
     public NullRestrictions getNullRestrictions() {
-        return restrictions.get(NullRestrictions.class);
+        return restrictions.get(NullRestrictions.class).orElse(null);
     }
 
     public TypeRestrictions getTypeRestrictions() {
-        return restrictions.get(TypeRestrictions.class);
+        return restrictions.get(TypeRestrictions.class).orElse(null);
     }
 
     public DateTimeRestrictions getDateTimeRestrictions() {
-        return restrictions.get(DateTimeRestrictions.class);
+        return restrictions.get(DateTimeRestrictions.class).orElse(null);
     }
 
     public MustContainRestriction getMustContainRestriction() {
-        return restrictions.get(MustContainRestriction.class);
+        return restrictions.get(MustContainRestriction.class).orElse(null);
     }
 
     public FormatRestrictions getFormatRestrictions() {
-        return restrictions.get(FormatRestrictions.class);
+        return restrictions.get(FormatRestrictions.class).orElse(null);
     }
-
+    
     @NotNull
     public FieldSpecSource getFieldSpecSource() {
         return source;

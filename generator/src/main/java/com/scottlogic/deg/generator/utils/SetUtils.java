@@ -18,7 +18,7 @@ public class SetUtils {
         return intersection;
     }
 
-    public static <T> Set<? extends T> setOf(T e1, T e2, T e3) {
+    public static <T> Set<T> setOf(T e1, T e2, T e3) {
         return Stream.of(e1, e2, e3).collect(Collectors.toSet());
     }
 
