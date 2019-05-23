@@ -6,6 +6,8 @@ import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Stream;
 
 public class RowSpecDataBagGenerator {
@@ -32,7 +34,14 @@ public class RowSpecDataBagGenerator {
     private Stream<DataBag> generateDataForField(RowSpec rowSpec, Field field) {
         FieldSpec fieldSpec = rowSpec.getSpecForField(field);
 
-        return generator.generate(field, fieldSpec);
+        return generator.generate(fieldSpec)
+            .map(value->toDataBag(field, value));
+    }
+
+    private DataBag toDataBag(Field field, DataBagValue value) {
+        Map<Field, DataBagValue> map = new HashMap<>();
+        map.put(field, value);
+        return new DataBag(map);
     }
 }
 

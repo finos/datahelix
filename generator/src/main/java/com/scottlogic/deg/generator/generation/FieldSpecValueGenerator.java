@@ -28,7 +28,7 @@ public class FieldSpecValueGenerator {
         this.randomNumberGenerator = randomNumberGenerator;
     }
 
-    public Stream<DataBag> generate(Field field, FieldSpec spec) {
+    public Stream<DataBagValue> generate(FieldSpec spec) {
         List<FieldValueSource> fieldValueSources = this.sourceFactory.getFieldValueSources(spec);
 
         FieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
@@ -44,9 +44,7 @@ public class FieldSpecValueGenerator {
                         : null,
                     spec.getFieldSpecSource().toDataBagValueSource());
 
-                Map<Field, DataBagValue> map = new HashMap<>();
-                map.put(field, dataBagValue);
-                return new DataBag(map);
+                return dataBagValue;
             });
     }
 

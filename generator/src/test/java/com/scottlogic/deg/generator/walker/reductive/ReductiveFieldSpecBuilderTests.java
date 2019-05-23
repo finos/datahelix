@@ -6,6 +6,7 @@ import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
+import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -46,7 +47,7 @@ class ReductiveFieldSpecBuilderTests {
         Field field1 = new Field("field");
         TreeConstraintNode rootNode = new TreeConstraintNode(new IsNullConstraint(field1, Collections.emptySet()));
         when(reducer.reduceConstraintsToFieldSpecWithMustContains(any(), any())).thenReturn(Optional.of(FieldSpec.Empty));
-        when(valueGenerator.generate(field1, FieldSpec.Empty)).thenReturn(Stream.of(DataBag.empty));
+        when(valueGenerator.generate(FieldSpec.Empty)).thenReturn(Stream.of(mock(DataBagValue.class)));
 
         Optional<FieldSpec> field = builder.getFieldSpecWithMustContains(rootNode, field1);
 
