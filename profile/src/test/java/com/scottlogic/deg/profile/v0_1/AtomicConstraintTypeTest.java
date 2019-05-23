@@ -9,7 +9,7 @@ class AtomicConstraintTypeTest {
 
     @Test
     void fromText() {
-        String greaterThanString = AtomicConstraintType.IS_GREATER_THAN_OR_EQUAL_TO_CONSTANT.toString();
+        String greaterThanString = AtomicConstraintType.IS_GREATER_THAN_OR_EQUAL_TO_CONSTANT.getText();
         AtomicConstraintType greaterThanOrEqualTo = AtomicConstraintType.fromText(greaterThanString);
 
         Assert.assertThat(greaterThanOrEqualTo, is(AtomicConstraintType.IS_GREATER_THAN_OR_EQUAL_TO_CONSTANT));

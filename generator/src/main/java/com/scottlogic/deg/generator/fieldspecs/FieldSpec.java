@@ -59,7 +59,7 @@ public class FieldSpec {
     public FormatRestrictions getFormatRestrictions() {
         return restrictions.get(FormatRestrictions.class).orElse(null);
     }
-    
+
     @NotNull
     public FieldSpecSource getFieldSpecSource() {
         return source;
