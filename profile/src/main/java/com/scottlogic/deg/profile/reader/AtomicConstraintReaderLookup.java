@@ -75,6 +75,7 @@ class AtomicConstraintReaderLookup {
                 switch (standardType) {
                     case ISIN:
                     case SEDOL:
+                    case CUSIP:
                         return new AndConstraint(
                             new MatchesStandardConstraint(field, standardType, rules),
                             new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.STRING, rules)

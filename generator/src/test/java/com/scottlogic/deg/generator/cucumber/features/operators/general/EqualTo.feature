@@ -1266,6 +1266,52 @@ Feature: User can specify that a value is equalTo a required value
       | foo  |
       | null |
 
+  Scenario: 'EqualTo' run against a non contradicting not 'aValid' CUSIP should be successful
+    Given there is a field foo
+    And foo is equal to "a"
+    And foo is anything but a valid "CUSIP"
+    Then the following data should be generated:
+      | foo  |
+      | null |
+      | "a"  |
+
+  Scenario: Not 'equalTo' run against a non contradicting 'aValid' CUSIP should be successful
+    Given there is a field foo
+    And foo is anything but equal to "a"
+    And foo is a valid "CUSIP"
+    And foo is in set:
+      | "a"         |
+      | "38259P508" |
+      | "38259P502" |
+    Then the following data should be generated:
+      | foo         |
+      | null        |
+      | "38259P508" |
+
+  Scenario: 'EqualTo' an invalid CUSIP with 'aValid' should emit null
+    Given there is a field foo
+    And foo is equal to "38259P502"
+    And foo is a valid "CUSIP"
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
+  Scenario: 'EqualTo' run against a contradicting 'aValid' CUSIP should only generate null
+    Given there is a field foo
+    And foo is equal to "aa"
+    And foo is a valid "CUSIP"
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
+  Scenario: 'EqualTo' a valid CUSIP with a contradicting not 'aValid' CUSIP emits null
+    Given there is a field foo
+    And foo is equal to "38259P508"
+    And foo is anything but a valid "CUSIP"
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
 ### greaterThan ###
 
   Scenario: 'EqualTo' run against a non contradicting 'greaterThan' should be successful

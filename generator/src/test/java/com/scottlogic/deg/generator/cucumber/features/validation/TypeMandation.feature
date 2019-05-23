@@ -37,6 +37,11 @@ Feature: Type mandation validation
     And foo is a valid "SEDOL"
     Then the profile should be considered valid
 
+  Scenario: An aValid CUSIP constraint should satisfy type mandation
+    Given there is a field foo
+    And foo is a valid "CUSIP"
+    Then the profile should be considered valid
+
   Scenario: A mandatorily absent field should satisfy type mandation
     Given there is a field user_id
     And user_id is null

@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.StandardConstraintTypes;
+import com.scottlogic.deg.generator.generation.CusipStringGenerator;
 import com.scottlogic.deg.generator.generation.IsinStringGenerator;
 import com.scottlogic.deg.generator.generation.SedolStringGenerator;
 import com.scottlogic.deg.generator.generation.StringGenerator;
@@ -37,6 +38,8 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
                 return new IsinStringGenerator();
             case SEDOL:
                 return new SedolStringGenerator();
+            case CUSIP:
+                return new CusipStringGenerator();
         }
 
         throw new UnsupportedOperationException(String.format("Unable to create string generator for: %s", type));
@@ -134,13 +137,16 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
     }
 
     private int getCodeLength(StandardConstraintTypes type) {
-        if (type == StandardConstraintTypes.ISIN) {
-            return IsinStringGenerator.ISIN_LENGTH;
+        switch (type)
+        {
+            case ISIN:
+                return IsinStringGenerator.ISIN_LENGTH;
+            case SEDOL:
+                return SedolStringGenerator.SEDOL_LENGTH;
+            case CUSIP:
+                return CusipStringGenerator.CUSIP_LENGTH;
+            default:
+                throw new UnsupportedOperationException(String.format("Unable to check string restrictions for: %s", type));
         }
-        if (type == StandardConstraintTypes.SEDOL) {
-            return SedolStringGenerator.SEDOL_LENGTH;
-        }
-
-        throw new UnsupportedOperationException(String.format("Unable to check string restrictions for: %s", type));
     }
 }
