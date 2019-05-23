@@ -46,7 +46,7 @@ class ReductiveDecisionTreeWalkerTests {
         rootNode = new TreeConstraintNode();
         tree = new DecisionTree(rootNode, fields, "");
         ReductiveTreePruner treePruner = mock(ReductiveTreePruner.class);
-        when(treePruner.pruneConstraintNode(eq(rootNode), any())).thenReturn(Merged.of(rootNode));
+        when(treePruner.pruneConstraintNode(eq(rootNode), any(), any())).thenReturn(Merged.of(rootNode));
 
         reductiveFieldSpecBuilder = mock(ReductiveFieldSpecBuilder.class);
         fieldSpecValueGenerator = mock(FieldSpecValueGenerator.class);

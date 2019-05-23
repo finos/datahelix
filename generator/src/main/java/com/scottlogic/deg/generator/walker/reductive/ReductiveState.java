@@ -4,7 +4,6 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
-import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FieldValue;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -12,7 +11,7 @@ import java.util.stream.Collectors;
 public class ReductiveState {
 
     private final ProfileFields fields;
-    private final Map<Field, FieldValue> fieldValues;
+    private final Map<Field, DataBagValue> fieldValues;
 
     public ReductiveState(ProfileFields fields) {
         this(fields, new HashMap<>());
@@ -20,14 +19,14 @@ public class ReductiveState {
 
     private ReductiveState(
         ProfileFields fields,
-        Map<Field, FieldValue> fieldValues) {
+        Map<Field, DataBagValue> fieldValues) {
         this.fields = fields;
         this.fieldValues = fieldValues;
     }
 
-    public ReductiveState withFixedFieldValue(FieldValue value) {
-        Map<Field, FieldValue> newFixedFieldsMap = new HashMap<>(fieldValues);
-        newFixedFieldsMap.put(value.getField(), value);
+    public ReductiveState withFixedFieldValue(Field field, DataBagValue value) {
+        Map<Field, DataBagValue> newFixedFieldsMap = new HashMap<>(fieldValues);
+        newFixedFieldsMap.put(field, value);
 
         return new ReductiveState(fields, newFixedFieldsMap);
     }
@@ -45,7 +44,7 @@ public class ReductiveState {
         return toString(false);
     }
 
-    public Map<Field, FieldValue> getFieldValues() {
+    public Map<Field, DataBagValue> getFieldValues() {
         return this.fieldValues;
     }
 
@@ -54,10 +53,10 @@ public class ReductiveState {
             return String.format("Fixed fields: %d of %d", this.fieldValues.size(), this.fields.size());
         }
 
-        return String.join(", ", this.fieldValues.values()
+        return String.join(", ", fieldValues.entrySet()
             .stream()
-            .sorted(Comparator.comparing(ff -> ff.getField().toString()))
-            .map(ff -> String.format("%s: %s", ff.getField(), ff.getDataBagValue().getFormattedValue()))
+            .sorted(Comparator.comparing(ff -> ff.getKey().toString()))
+            .map(ff -> String.format("%s: %s", ff.getKey(), ff.getValue().getFormattedValue()))
             .collect(Collectors.toList()));
     }
 
@@ -66,8 +65,6 @@ public class ReductiveState {
     }
 
     public DataBag asDataBag() {
-        return new DataBag(fieldValues.values().stream().collect(Collectors.toMap(
-            FieldValue::getField,
-            FieldValue::getDataBagValue)));
+        return new DataBag(fieldValues);
     }
 }
