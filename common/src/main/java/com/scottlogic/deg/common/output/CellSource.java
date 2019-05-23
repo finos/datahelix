@@ -11,9 +11,9 @@ public class CellSource {
     public final Field field;
     private final DataBagValueSource source;
 
-    public CellSource(Field field, DataBagValue value) {
+    public CellSource(Field field, DataBagValueSource value) {
         this.field = field;
-        this.source = value.source != null ? value.source : DataBagValueSource.Empty;
+        this.source = value != null ? value : DataBagValueSource.Empty;
     }
 
     public Set<AtomicConstraint> getConstraints(){

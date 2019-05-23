@@ -1,7 +1,6 @@
 package com.scottlogic.deg.output.writer.csv;
 
 import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.common.output.DataBagValue;
 import com.scottlogic.deg.common.output.GeneratedObject;
 import com.scottlogic.deg.output.writer.DataSetWriter;
 import org.apache.commons.csv.CSVFormat;
@@ -49,8 +48,7 @@ class CsvDataSetWriter implements DataSetWriter {
     @Override
     public void writeRow(GeneratedObject row) throws IOException {
         csvPrinter.printRecord(fieldOrder.stream()
-                .map(row::getValueAndFormat)
-                .map(CsvDataSetWriter::extractCellValue)
+                .map(row::getFormattedValue)
                 .map(CsvDataSetWriter::wrapInQuotesIfString)
                 .collect(Collectors.toList()));
 
@@ -60,10 +58,6 @@ class CsvDataSetWriter implements DataSetWriter {
     @Override
     public void close() throws IOException {
         csvPrinter.close();
-    }
-
-    private static Object extractCellValue(DataBagValue cell) {
-        return cell.getFormattedValue();
     }
 
     private static Object wrapInQuotesIfString(Object value){

@@ -1,24 +1,66 @@
 package com.scottlogic.deg.generator.generation.databags;
 
-import com.scottlogic.deg.common.output.DataBagValue;
+import com.scottlogic.deg.common.output.CellSource;
+import com.scottlogic.deg.common.output.RowSource;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.*;
 import com.scottlogic.deg.common.output.GeneratedObject;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
-public class DataBag extends GeneratedObject {
+public class DataBag implements GeneratedObject {
     public static final DataBag empty = new DataBag(new HashMap<>());
+
+    private final Map<Field, DataBagValue> fieldToValue;
+
     public DataBag(Map<Field, DataBagValue> fieldToValue) {
-        super(fieldToValue);
+        this.fieldToValue = fieldToValue;
+    }
+
+    public Object getValue(Field field) {
+        if (!this.fieldToValue.containsKey(field))
+            throw new IllegalStateException("Databag has no value stored for " + field);
+
+        return this.fieldToValue.get(field).getUnformattedValue();
+    }
+
+    @Override
+    public Object getFormattedValue(Field field) {
+        if (!fieldToValue.containsKey(field))
+            throw new IllegalStateException("DataBag has no value stored for " + field);
+
+        return fieldToValue.get(field).getFormattedValue();
+    }
+
+    @Override
+    public RowSource getRowSource() {
+        return new RowSource(
+            fieldToValue.entrySet().stream()
+                .map(e -> new CellSource(e.getKey() , e.getValue().source))
+                .collect(Collectors.toList())
+        );
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DataBag generatedObject = (DataBag) o;
+        return Objects.equals(fieldToValue, generatedObject.fieldToValue);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fieldToValue);
     }
 
     public static DataBag merge(DataBag... bags) {
         Map<Field, DataBagValue> newFieldToValue = new HashMap<>();
 
         FlatMappingSpliterator.flatMap(Arrays.stream(bags)
-            .map(r -> r.getFieldToValue().entrySet().stream()),
+            .map(r -> r.fieldToValue.entrySet().stream()),
             entrySetStream -> entrySetStream)
             .forEach(entry -> {
                 if (newFieldToValue.containsKey(entry.getKey()))

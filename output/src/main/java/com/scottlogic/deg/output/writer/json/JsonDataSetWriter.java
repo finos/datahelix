@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SequenceWriter;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.common.output.DataBagValue;
 import com.scottlogic.deg.common.output.GeneratedObject;
 import com.scottlogic.deg.output.writer.DataSetWriter;
 
@@ -41,7 +40,7 @@ class JsonDataSetWriter implements DataSetWriter {
     public void writeRow(GeneratedObject row) throws IOException {
         Map<Field, Object> jsonObject = new HashMap<>();
         fields.forEach(field -> jsonObject
-            .put(field , convertValue(row.getValueAndFormat(field))));
+            .put(field , convertValue(row.getFormattedValue(field))));
 
         writer.write(jsonObject);
     }
@@ -52,9 +51,7 @@ class JsonDataSetWriter implements DataSetWriter {
     }
 
 
-    private static Object convertValue(DataBagValue dataBagValue) {
-        Object value = dataBagValue.getFormattedValue();
-
+    private static Object convertValue(Object value) {
         if (value == null) {
             return null;
         } else if (value instanceof BigDecimal) {
