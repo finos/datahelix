@@ -10,13 +10,13 @@ import java.util.stream.Collectors;
  */
 public class HeterogeneousTypeContainer<I> {
 
-    private final Map<Class<? extends I>, Object> map;
+    private final Map<Class<? extends I>, I> map;
 
     public HeterogeneousTypeContainer() {
         this.map = new HashMap<>();
     }
 
-    private HeterogeneousTypeContainer(Map<Class<? extends I>, Object> map) {
+    private HeterogeneousTypeContainer(Map<Class<? extends I>, I> map) {
         this.map = map;
     }
 
@@ -29,7 +29,7 @@ public class HeterogeneousTypeContainer<I> {
      * @return New container with the value input (original container is unaffected)
      */
     public <T extends I> HeterogeneousTypeContainer<I> put(Class<T> type, T element) {
-        Map<Class<? extends I>, Object> copy = new HashMap<>(map);
+        Map<Class<? extends I>, I> copy = new HashMap<>(map);
         if (element != null) {
             copy.put(Objects.requireNonNull(type), element);
         } else {
@@ -57,7 +57,7 @@ public class HeterogeneousTypeContainer<I> {
      * @param types Subtypes of I
      * @return Set of instances, if the instance mappings have been set up
      */
-    public Collection<Object> getMultiple(Set<Class<? extends I>> types) {
+    public Collection<I> getMultiple(Set<Class<? extends I>> types) {
         return types.stream()
             .map(this::get)
             .filter(Optional::isPresent)
@@ -69,7 +69,7 @@ public class HeterogeneousTypeContainer<I> {
      *
      * @return All of the underlying instances present in the container
      */
-    public Collection<Object> values() {
+    public Collection<I> values() {
         return map.values();
     }
 
