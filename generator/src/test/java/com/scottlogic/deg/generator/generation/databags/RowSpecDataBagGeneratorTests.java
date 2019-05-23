@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 
-class StandardRowSpecDataBagGeneratorTests {
+class RowSpecDataBagGeneratorTests {
 
     private CombinationStrategy exhaustiveCombinationStrategy = new ExhaustiveCombinationStrategy();
     private FieldSpecValueGenerator mockGeneratorFactory = mock(FieldSpecValueGenerator.class);
@@ -36,7 +36,7 @@ class StandardRowSpecDataBagGeneratorTests {
 
     @Test
     void shouldCreateValuesForEachFieldSpecInRowSpec() {
-        RowSpecDataBagGenerator factory = new StandardRowSpecDataBagGenerator(mockGeneratorFactory, exhaustiveCombinationStrategy);
+        RowSpecDataBagGenerator factory = new RowSpecDataBagGenerator(mockGeneratorFactory, exhaustiveCombinationStrategy);
         Map<Field, FieldSpec> map = new HashMap<Field, FieldSpec>() {{ put(field, fieldSpec); }};
         RowSpec rowSpec = new RowSpec(fields, map);
 
@@ -54,7 +54,7 @@ class StandardRowSpecDataBagGeneratorTests {
 
     @Test
     void factoryIsCalledForEachField() {
-        RowSpecDataBagGenerator factory = new StandardRowSpecDataBagGenerator(mockGeneratorFactory, exhaustiveCombinationStrategy);
+        RowSpecDataBagGenerator factory = new RowSpecDataBagGenerator(mockGeneratorFactory, exhaustiveCombinationStrategy);
         Map<Field, FieldSpec> map = new HashMap<Field, FieldSpec>() {{
             put(field, fieldSpec);
             put(field2, fieldSpec);
@@ -75,7 +75,7 @@ class StandardRowSpecDataBagGeneratorTests {
 
     @Test
     void combinationStrategyIsCalled() {
-        RowSpecDataBagGenerator factory = new StandardRowSpecDataBagGenerator(mockGeneratorFactory, mockCombinationStrategy);
+        RowSpecDataBagGenerator factory = new RowSpecDataBagGenerator(mockGeneratorFactory, mockCombinationStrategy);
         Map<Field, FieldSpec> map = new HashMap<Field, FieldSpec>() {{ put(field, fieldSpec); }};
         RowSpec rowSpec = new RowSpec(fields, map);
 

@@ -43,7 +43,6 @@ public class GeneratorModule extends AbstractModule {
         bind(ProfileValidator.class).toProvider(ProfileValidatorProvider.class);
         bind(ReductiveDataGeneratorMonitor.class).toProvider(MonitorProvider.class).in(Singleton.class);
         bind(IterationVisualiser.class).toProvider(IterationVisualiserProvider.class);
-        bind(RowSpecDataBagGenerator.class).toProvider(RowSpecDataBagSourceFactoryProvider.class);
         bind(CombinationStrategy.class).toProvider(CombinationStrategyProvider.class);
 
         // bind config directly
