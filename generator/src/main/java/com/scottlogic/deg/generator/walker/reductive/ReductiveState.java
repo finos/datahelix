@@ -57,7 +57,7 @@ public class ReductiveState {
         return String.join(", ", this.fieldValues.values()
             .stream()
             .sorted(Comparator.comparing(ff -> ff.getField().toString()))
-            .map(ff -> String.format("%s: %s", ff.getField(), ff.getValue()))
+            .map(ff -> String.format("%s: %s", ff.getField(), ff.getDataBagValue().getFormattedValue()))
             .collect(Collectors.toList()));
     }
 
@@ -68,6 +68,6 @@ public class ReductiveState {
     public DataBag asDataBag() {
         return new DataBag(fieldValues.values().stream().collect(Collectors.toMap(
             FieldValue::getField,
-            v-> new DataBagValue(v.getValue(), v.getFormat(), v.getFieldSpecSource().toDataBagValueSource()))));
+            FieldValue::getDataBagValue)));
     }
 }

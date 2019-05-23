@@ -3,26 +3,20 @@ package com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
+import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.restrictions.FormatRestrictions;
 
 public class FieldValue {
     private final Field field;
-    private final Object value;
-    private final FieldSpecSource valueSource;
-    private final String format;
+    private final DataBagValue dataBagValue;
 
-    public FieldValue(Field field, Object value){
-        this(field, value, FieldSpec.Empty);
-    }
-    public FieldValue(Field field, Object value, FieldSpec valueSource){
-        this.value = value;
+    public FieldValue(Field field, DataBagValue dataBagValue){
         this.field = field;
-        this.valueSource = valueSource.getFieldSpecSource();
-        this.format = valueSource.getFormatRestrictions() == null ? null : valueSource.getFormatRestrictions().formatString;
+        this.dataBagValue = dataBagValue;
     }
 
-    public Object getValue() {
-        return value;
+    public DataBagValue getDataBagValue() {
+        return dataBagValue;
     }
 
     public Field getField() {
@@ -31,15 +25,6 @@ public class FieldValue {
 
     @Override
     public String toString() {
-        if (value == null) return "null";
-        return value.toString();
-    }
-
-    public String getFormat() {
-        return format;
-    }
-
-    public FieldSpecSource getFieldSpecSource() {
-        return valueSource;
+        return dataBagValue.toString();
     }
 }

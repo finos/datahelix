@@ -20,7 +20,7 @@ class DataBagTests {
 
         // ASSERT
         Assert.assertThat(
-            objectUnderTest.getValue(idField),
+            objectUnderTest.getFormattedValue(idField),
             equalTo(3));
     }
 
@@ -65,11 +65,11 @@ class DataBagTests {
 
         // ASSERT
         Assert.assertThat(
-            mergedDataBag.getValue(idField),
+            mergedDataBag.getFormattedValue(idField),
             equalTo(3));
 
         Assert.assertThat(
-            mergedDataBag.getValue(priceField),
+            mergedDataBag.getFormattedValue(priceField),
             equalTo(4));
     }
 

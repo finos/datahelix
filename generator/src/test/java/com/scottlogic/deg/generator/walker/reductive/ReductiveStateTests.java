@@ -1,7 +1,9 @@
 package com.scottlogic.deg.generator.walker.reductive;
 
+import com.scottlogic.deg.common.output.DataBagValueSource;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FieldValue;
 import org.junit.jupiter.api.Test;
 
@@ -16,8 +18,8 @@ class ReductiveStateTests {
     Field field1 = new Field("field1");
     Field field2 = new Field("field2");
     ReductiveState reductiveState = new ReductiveState(new ProfileFields(Arrays.asList(field1, field2)));
-    FieldValue value1 = new FieldValue(field1, "v1");
-    FieldValue value2 = new FieldValue(field2, "v2");
+    FieldValue value1 = new FieldValue(field1, new DataBagValue("v1", DataBagValueSource.Empty));
+    FieldValue value2 = new FieldValue(field2, new DataBagValue("v2", DataBagValueSource.Empty));
 
     @Test
     void withFixedFieldValue() {

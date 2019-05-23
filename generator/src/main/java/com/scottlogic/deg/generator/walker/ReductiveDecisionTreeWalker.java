@@ -6,7 +6,6 @@ import com.scottlogic.deg.generator.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
@@ -84,7 +83,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
             return Stream.empty();
         }
 
-        monitor.fieldFixedToValue(fieldValue.getField(), fieldValue.getValue());
+        monitor.fieldFixedToValue(fieldValue.getField(), fieldValue.getDataBagValue().getFormattedValue());
 
         ReductiveState newReductiveState =
             reductiveState.withFixedFieldValue(fieldValue);

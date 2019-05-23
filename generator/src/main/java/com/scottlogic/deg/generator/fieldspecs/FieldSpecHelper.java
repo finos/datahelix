@@ -9,23 +9,21 @@ import java.util.Collections;
 
 public class FieldSpecHelper {
     public FieldSpec getFieldSpecForValue(FieldValue fieldValue){
-        if (fieldValue.getValue() == null) {
-            return getNullRequiredFieldSpec(fieldValue.getFieldSpecSource());
+        if (fieldValue.getDataBagValue().getUnformattedValue() == null) {
+            return getNullRequiredFieldSpec();
         }
         return FieldSpec.Empty
             .withSetRestrictions(
                 SetRestrictions.fromWhitelist(
-                    Collections.singleton(fieldValue.getValue())),
-                fieldValue.getFieldSpecSource())
+                    Collections.singleton(fieldValue.getDataBagValue().getUnformattedValue())), FieldSpecSource.Empty)
             .withNullRestrictions(
-                new NullRestrictions(Nullness.MUST_NOT_BE_NULL),
-                fieldValue.getFieldSpecSource());
+                new NullRestrictions(Nullness.MUST_NOT_BE_NULL), FieldSpecSource.Empty);
     }
 
-    private FieldSpec getNullRequiredFieldSpec(FieldSpecSource fieldSpecSource) {
+    private FieldSpec getNullRequiredFieldSpec() {
         return FieldSpec.Empty
             .withNullRestrictions(
                 new NullRestrictions(Nullness.MUST_BE_NULL),
-                fieldSpecSource);
+                FieldSpecSource.Empty);
     }
 }
