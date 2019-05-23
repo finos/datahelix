@@ -381,7 +381,7 @@ class FieldSpecValueGeneratorTests {
         //Assert
         ArrayList<Object> valuesForFirstField = new ArrayList<>();
         result.forEach(dataBag -> {
-            valuesForFirstField.add(dataBag.getValue(new Field("First Field")));
+            valuesForFirstField.add(dataBag.getFormattedValue(new Field("First Field")));
         });
         
         Assert.assertThat(valuesForFirstField, containsInAnyOrder(
@@ -433,7 +433,7 @@ class FieldSpecValueGeneratorTests {
         //Assert
         ArrayList<Object> valuesForFirstField = new ArrayList<>();
         result.forEach(dataBag -> {
-            valuesForFirstField.add(dataBag.getValue(new Field("First Field")));
+            valuesForFirstField.add(dataBag.getFormattedValue(new Field("First Field")));
         });
 
         Assert.assertThat(valuesForFirstField, containsInAnyOrder(

@@ -19,11 +19,11 @@ public class DataBag implements GeneratedObject {
         this.fieldToValue = fieldToValue;
     }
 
-    public Object getValue(Field field) {
-        if (!this.fieldToValue.containsKey(field))
+    public DataBagValue getDataBagValue(Field field) {
+        if (!fieldToValue.containsKey(field))
             throw new IllegalStateException("Databag has no value stored for " + field);
 
-        return this.fieldToValue.get(field).getUnformattedValue();
+        return fieldToValue.get(field);
     }
 
     @Override
