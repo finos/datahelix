@@ -4,7 +4,6 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.T
 
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.utils.HeterogeneousTypeContainer;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -17,9 +16,7 @@ public class FieldSpec {
         new HeterogeneousTypeContainer<>(),
         FieldSpecSource.Empty);
 
-    // Ensure the map is never modified.
     private final HeterogeneousTypeContainer<Restrictions> restrictions;
-    @NotNull
     private final FieldSpecSource source;
 
     private FieldSpec(HeterogeneousTypeContainer<Restrictions> restrictions,
@@ -60,7 +57,6 @@ public class FieldSpec {
         return restrictions.get(FormatRestrictions.class).orElse(null);
     }
 
-    @NotNull
     public FieldSpecSource getFieldSpecSource() {
         return source;
     }
@@ -119,7 +115,7 @@ public class FieldSpec {
     /**
      * Create a predicate that returns TRUE for all (and only) values permitted by this FieldSpec
      */
-    public boolean permits(@NotNull Object value) {
+    public boolean permits(Object value) {
         TypeRestrictions typeRestrictions = getTypeRestrictions();
         if (typeRestrictions != null) {
             for (Types type : Types.values()) {

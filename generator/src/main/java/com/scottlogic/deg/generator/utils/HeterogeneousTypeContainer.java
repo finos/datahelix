@@ -28,7 +28,7 @@ public class HeterogeneousTypeContainer<I> {
      * @param <T> The specific type of the instance (ie., type)
      * @return New container with the value input (original container is unaffected)
      */
-    public <T extends I> HeterogeneousTypeContainer put(Class<T> type, T element) {
+    public <T extends I> HeterogeneousTypeContainer<I> put(Class<T> type, T element) {
         Map<Class<? extends I>, Object> copy = new HashMap<>(map);
         if (element != null) {
             copy.put(Objects.requireNonNull(type), element);
