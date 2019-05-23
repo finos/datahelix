@@ -52,7 +52,6 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
     }
 
     private Stream<DataBag> fixNextField(ConstraintNode tree, ReductiveState reductiveState, FixFieldStrategy fixFieldStrategy) {
-
         Field fieldToFix = fixFieldStrategy.getNextFieldToFix(reductiveState);
         Set<FieldSpec> nextFieldSpecs = reductiveFieldSpecBuilder.getDecisionFieldSpecs(tree, fieldToFix);
 
@@ -61,12 +60,11 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
             return Stream.empty();
         }
 
-        Stream<DataBagValue> values = fieldSpecValueGenerator.generate(fieldToFix, nextFieldSpec.get())
-            .map(dataBag -> dataBag.getDataBagValue(fieldToFix));
+        Stream<DataBagValue> values = fieldSpecValueGenerator.generate(nextFieldSpec.get());
 
         return FlatMappingSpliterator.flatMap(
             values,
-            fieldValue -> pruneTreeForNextValue(tree, reductiveState, fixFieldStrategy, fieldToFix, fieldValue));
+            dataBagValue -> pruneTreeForNextValue(tree, reductiveState, fixFieldStrategy, fieldToFix, dataBagValue));
     }
 
     private Stream<DataBag> pruneTreeForNextValue(

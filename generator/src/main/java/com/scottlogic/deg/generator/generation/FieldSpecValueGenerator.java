@@ -59,9 +59,7 @@ public class FieldSpecValueGenerator {
                         : null,
                     spec.getFieldSpecSource().toDataBagValueSource());
 
-                Map<Field, DataBagValue> map = new HashMap<>();
-                map.put(field, dataBagValue);
-                return new DataBag(map);
+                return dataBagValue;
             });
     }
 

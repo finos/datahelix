@@ -11,6 +11,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
+import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
 import com.scottlogic.deg.common.profile.constraintdetail.Nullness;
 import com.scottlogic.deg.generator.restrictions.SetRestrictions;
@@ -84,7 +85,7 @@ class ReductiveDecisionTreeWalkerTests {
      */
     @Test
     public void shouldReturnEmptyCollectionOfRowsWhenSecondFieldCannotBeFixed() {
-        DataBag dataBag = new DataBagBuilder().set(field1, "yes", DataBagValueSource.Empty).build();
+        DataBagValue dataBag = new DataBagValue(field1, "yes", DataBagValueSource.Empty);
         FieldSpec firstFieldSpec = FieldSpec.Empty.withSetRestrictions(SetRestrictions
                 .fromWhitelist(Collections.singleton("yes")), FieldSpecSource.Empty)
             .withNullRestrictions(new NullRestrictions(Nullness.MUST_NOT_BE_NULL), FieldSpecSource.Empty);

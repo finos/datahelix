@@ -25,14 +25,16 @@ class RowSpecDataBagGeneratorTests {
     private CombinationStrategy mockCombinationStrategy = mock(CombinationStrategy.class);
 
     private Field field = new Field("Field1");
-    private ProfileFields fields = new ProfileFields(Collections.singletonList(field));
-    private FieldSpec fieldSpec = FieldSpec.Empty;
     Field field2 = new Field("field2");
     Field field3 = new Field("field3");
+    private ProfileFields fields = new ProfileFields(Collections.singletonList(field));
+    private FieldSpec fieldSpec = mock(FieldSpec.class);
+    private FieldSpec fieldSpec2 = mock(FieldSpec.class);
+    private FieldSpec fieldSpec3 = mock(FieldSpec.class);
 
-    DataBag dataBag = new DataBagBuilder().set(field, "value", null).build();
-    DataBag dataBag2 = new DataBagBuilder().set(field2, "value", null).build();
-    DataBag dataBag3 = new DataBagBuilder().set(field3, "value", null).build();
+    DataBagValue dataBagValue = new DataBagValue(field, "value", null);
+    DataBagValue dataBagValue1 = new DataBagValue(field2, "value", null);
+    DataBagValue dataBagValue2 = new DataBagValue(field3, "value", null);
 
     @Test
     void shouldCreateValuesForEachFieldSpecInRowSpec() {
@@ -40,14 +42,14 @@ class RowSpecDataBagGeneratorTests {
         Map<Field, FieldSpec> map = new HashMap<Field, FieldSpec>() {{ put(field, fieldSpec); }};
         RowSpec rowSpec = new RowSpec(fields, map);
 
-        when(mockGeneratorFactory.generate(eq(field), any(FieldSpec.class))).thenReturn(Stream.of(dataBag));
+        when(mockGeneratorFactory.generate(any(FieldSpec.class))).thenReturn(Stream.of(dataBagValue));
 
         List<DataBag> actual = factory.createDataBags(rowSpec)
             .collect(Collectors.toList());
 
-        verify(mockGeneratorFactory, times(1)).generate(field, fieldSpec);
+        verify(mockGeneratorFactory, times(1)).generate(fieldSpec);
 
-        List<DataBag> expected = Arrays.asList(dataBag);
+        List<DataBag> expected = Arrays.asList(new DataBagBuilder().set(field, dataBagValue).build());
 
         assertThat(actual, sameBeanAs(expected));
     }
@@ -57,20 +59,18 @@ class RowSpecDataBagGeneratorTests {
         RowSpecDataBagGenerator factory = new RowSpecDataBagGenerator(mockGeneratorFactory, exhaustiveCombinationStrategy);
         Map<Field, FieldSpec> map = new HashMap<Field, FieldSpec>() {{
             put(field, fieldSpec);
-            put(field2, fieldSpec);
-            put(field3, fieldSpec); }};
+            put(field2, fieldSpec2);
+            put(field3, fieldSpec3); }};
         RowSpec rowSpec = new RowSpec(new ProfileFields(Arrays.asList(field2, field, field3)), map);
 
-        when(mockGeneratorFactory.generate(eq(field), any(FieldSpec.class))).thenReturn(Stream.of(dataBag));
-        when(mockGeneratorFactory.generate(eq(field2), any(FieldSpec.class))).thenReturn(Stream.of(dataBag2));
-        when(mockGeneratorFactory.generate(eq(field3), any(FieldSpec.class))).thenReturn(Stream.of(dataBag3));
+        when(mockGeneratorFactory.generate(any(FieldSpec.class))).thenReturn(Stream.of(dataBagValue), Stream.of(dataBagValue1), Stream.of(dataBagValue2));
 
         factory.createDataBags(rowSpec)
             .collect(Collectors.toList());
 
-        verify(mockGeneratorFactory, times(1)).generate(field, fieldSpec);
-        verify(mockGeneratorFactory, times(1)).generate(field2, fieldSpec);
-        verify(mockGeneratorFactory, times(1)).generate(field3, fieldSpec);
+        verify(mockGeneratorFactory, times(1)).generate(fieldSpec);
+        verify(mockGeneratorFactory, times(1)).generate(fieldSpec);
+        verify(mockGeneratorFactory, times(1)).generate(fieldSpec);
     }
 
     @Test
