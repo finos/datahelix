@@ -724,6 +724,11 @@ class FieldSpecTests {
         }
 
         @Override
+        public String toString() {
+            return "equal";
+        }
+
+        @Override
         public int hashCode() {
             return 1234;
         }

@@ -4,7 +4,7 @@ import com.scottlogic.deg.common.profile.constraintdetail.Nullness;
 
 import java.util.Objects;
 
-public class NullRestrictions {
+public class NullRestrictions implements Restrictions {
     public Nullness nullness;
 
 

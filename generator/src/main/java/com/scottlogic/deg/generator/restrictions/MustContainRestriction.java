@@ -5,7 +5,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import java.util.Objects;
 import java.util.Set;
 
-public class MustContainRestriction {
+public class MustContainRestriction implements Restrictions {
     private Set<FieldSpec> requiredObjects;
 
     public MustContainRestriction(Set<FieldSpec> requiredObjects) {

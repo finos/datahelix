@@ -7,7 +7,6 @@ import com.scottlogic.deg.generator.utils.SetUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -26,6 +25,7 @@ public class FieldSpec {
         FieldSpecSource.Empty);
 
     private enum RestrictionMapping {
+        TYPE,
         SET,
         NUMERIC,
         STRING,
@@ -35,17 +35,17 @@ public class FieldSpec {
         MUST_CONTAIN
     }
 
-    private final EnumMap<RestrictionMapping, Restrictions> restrictions = new EnumMap<>(RestrictionMapping.class);
+    private final Map<RestrictionMapping, Restrictions> restrictions;
+    @NotNull
+    private final FieldSpecSource source;
 
-    private final SetRestrictions setRestrictions;
-    private final NumericRestrictions numericRestrictions;
-    private final StringRestrictions stringRestrictions;
-    private final NullRestrictions nullRestrictions;
-    private final TypeRestrictions typeRestrictions;
-    private final DateTimeRestrictions dateTimeRestrictions;
-    private final FormatRestrictions formatRestrictions;
-    private final MustContainRestriction mustContainRestriction;
-    @NotNull private final FieldSpecSource source;
+    private FieldSpec(Map<RestrictionMapping, Restrictions> restrictions,
+                      FieldSpecSource source) {
+        EnumMap<RestrictionMapping, Restrictions> mappings = new EnumMap<>(RestrictionMapping.class);
+        mappings.putAll(restrictions);
+        this.restrictions = Collections.unmodifiableMap(mappings);
+        this.source = source;
+    }
 
     private FieldSpec(
         SetRestrictions setRestrictions,
@@ -57,156 +57,145 @@ public class FieldSpec {
         FormatRestrictions formatRestrictions,
         MustContainRestriction mustContainRestriction,
         @NotNull FieldSpecSource source) {
+        EnumMap<RestrictionMapping, Restrictions> mappings = new EnumMap<>(RestrictionMapping.class);
 
-        this.setRestrictions = setRestrictions;
-        this.nullRestrictions = nullRestrictions;
-        this.mustContainRestriction = mustContainRestriction;
-        this.formatRestrictions = formatRestrictions;
+        mappings.put(RestrictionMapping.SET, setRestrictions);
+        mappings.put(RestrictionMapping.NULL, nullRestrictions);
+        mappings.put(RestrictionMapping.MUST_CONTAIN, mustContainRestriction);
+        mappings.put(RestrictionMapping.FORMAT, formatRestrictions);
 
-        if (setRestrictions != null && setRestrictions.getWhitelist() != null && !setRestrictions.getWhitelist().isEmpty()) {
-            this.numericRestrictions = null;
-            this.stringRestrictions = null;
-            this.typeRestrictions = null;
-            this.dateTimeRestrictions = null;
-        } else {
-            this.numericRestrictions = numericRestrictions;
-            this.stringRestrictions = stringRestrictions;
-            this.typeRestrictions = typeRestrictions;
-            this.dateTimeRestrictions = dateTimeRestrictions;
+        if (!(setRestrictions != null && setRestrictions.getWhitelist() != null && !setRestrictions.getWhitelist().isEmpty())) {
+            mappings.put(RestrictionMapping.NUMERIC, nullRestrictions);
+            mappings.put(RestrictionMapping.STRING, stringRestrictions);
+            mappings.put(RestrictionMapping.TYPE, typeRestrictions);
+            mappings.put(RestrictionMapping.DATE_TIME, dateTimeRestrictions);
         }
 
         this.source = source;
+        this.restrictions = Collections.unmodifiableMap(mappings);
     }
 
-    public SetRestrictions getSetRestrictions() { return setRestrictions; }
-    public NumericRestrictions getNumericRestrictions() { return numericRestrictions; }
-    public StringRestrictions getStringRestrictions() { return stringRestrictions; }
-    public NullRestrictions getNullRestrictions() { return nullRestrictions; }
-    public TypeRestrictions getTypeRestrictions() { return typeRestrictions; }
-    public DateTimeRestrictions getDateTimeRestrictions() { return dateTimeRestrictions; }
-    public MustContainRestriction getMustContainRestriction() { return mustContainRestriction; }
-    public FormatRestrictions getFormatRestrictions() { return formatRestrictions; }
-    @NotNull public FieldSpecSource getFieldSpecSource() { return this.source; }
+    public SetRestrictions getSetRestrictions() {
+        return (SetRestrictions) restrictions.get(RestrictionMapping.SET);
+    }
+
+    public NumericRestrictions getNumericRestrictions() {
+        return (NumericRestrictions) restrictions.get(RestrictionMapping.NUMERIC);
+    }
+
+    public StringRestrictions getStringRestrictions() {
+        return (StringRestrictions) restrictions.get(RestrictionMapping.STRING);
+    }
+
+    public NullRestrictions getNullRestrictions() {
+        return (NullRestrictions) restrictions.get(RestrictionMapping.NULL);
+    }
+
+    public TypeRestrictions getTypeRestrictions() {
+        return (TypeRestrictions) restrictions.get(RestrictionMapping.TYPE);
+    }
+
+    public DateTimeRestrictions getDateTimeRestrictions() {
+        return (DateTimeRestrictions) restrictions.get(RestrictionMapping.DATE_TIME);
+    }
+
+    public MustContainRestriction getMustContainRestriction() {
+        return (MustContainRestriction) restrictions.get(RestrictionMapping.MUST_CONTAIN);
+    }
+
+    public FormatRestrictions getFormatRestrictions() {
+        return (FormatRestrictions) restrictions.get(RestrictionMapping.FORMAT);
+    }
+
+    @NotNull
+    public FieldSpecSource getFieldSpecSource() {
+        return this.source;
+    }
 
     public FieldSpec withSetRestrictions(SetRestrictions setRestrictions, FieldSpecSource source) {
+        EnumMap<RestrictionMapping, Restrictions> mappings = new EnumMap<>(restrictions);
+        mappings.put(RestrictionMapping.SET, setRestrictions);
         return new FieldSpec(
-            setRestrictions,
-            this.numericRestrictions,
-            this.stringRestrictions,
-            this.nullRestrictions,
-            this.typeRestrictions,
-            this.dateTimeRestrictions,
-            this.formatRestrictions,
-            this.mustContainRestriction,
+            Collections.unmodifiableMap(mappings),
             this.source.combine(source));
     }
 
     public FieldSpec withNumericRestrictions(NumericRestrictions numericRestrictions, FieldSpecSource source) {
+        EnumMap<RestrictionMapping, Restrictions> mappings = new EnumMap<>(restrictions);
+        mappings.put(RestrictionMapping.NUMERIC, numericRestrictions);
         return new FieldSpec(
-            this.setRestrictions,
-            numericRestrictions,
-            this.stringRestrictions,
-            this.nullRestrictions,
-            this.typeRestrictions,
-            this.dateTimeRestrictions,
-            this.formatRestrictions,
-            this.mustContainRestriction,
+            Collections.unmodifiableMap(mappings),
             this.source.combine(source));
     }
 
     public FieldSpec withStringRestrictions(StringRestrictions stringRestrictions, FieldSpecSource source) {
+        EnumMap<RestrictionMapping, Restrictions> mappings = new EnumMap<>(restrictions);
+        mappings.put(RestrictionMapping.STRING, stringRestrictions);
         return new FieldSpec(
-            this.setRestrictions,
-            this.numericRestrictions,
-            stringRestrictions,
-            this.nullRestrictions,
-            this.typeRestrictions,
-            this.dateTimeRestrictions,
-            this.formatRestrictions,
-            this.mustContainRestriction,
+            Collections.unmodifiableMap(mappings),
             this.source.combine(source));
     }
 
     public FieldSpec withTypeRestrictions(TypeRestrictions typeRestrictions, FieldSpecSource source) {
+        EnumMap<RestrictionMapping, Restrictions> mappings = new EnumMap<>(restrictions);
+        mappings.put(RestrictionMapping.TYPE, typeRestrictions);
         return new FieldSpec(
-            this.setRestrictions,
-            this.numericRestrictions,
-            this.stringRestrictions,
-            this.nullRestrictions,
-            typeRestrictions,
-            this.dateTimeRestrictions,
-            this.formatRestrictions,
-            this.mustContainRestriction,
+            Collections.unmodifiableMap(mappings),
             this.source.combine(source));
     }
 
     public FieldSpec withNullRestrictions(NullRestrictions nullRestrictions, FieldSpecSource source) {
+        EnumMap<RestrictionMapping, Restrictions> mappings = new EnumMap<>(restrictions);
+        mappings.put(RestrictionMapping.NULL, nullRestrictions);
         return new FieldSpec(
-            this.setRestrictions,
-            this.numericRestrictions,
-            this.stringRestrictions,
-            nullRestrictions,
-            this.typeRestrictions,
-            this.dateTimeRestrictions,
-            this.formatRestrictions,
-            this.mustContainRestriction,
+            Collections.unmodifiableMap(mappings),
             this.source.combine(source));
     }
 
     public FieldSpec withDateTimeRestrictions(DateTimeRestrictions dateTimeRestrictions, FieldSpecSource source) {
+        EnumMap<RestrictionMapping, Restrictions> mappings = new EnumMap<>(restrictions);
+        mappings.put(RestrictionMapping.DATE_TIME, dateTimeRestrictions);
         return new FieldSpec(
-            this.setRestrictions,
-            this.numericRestrictions,
-            this.stringRestrictions,
-            this.nullRestrictions,
-            this.typeRestrictions,
-            dateTimeRestrictions,
-            this.formatRestrictions,
-            this.mustContainRestriction,
+            Collections.unmodifiableMap(mappings),
             this.source.combine(source));
     }
 
     @Override
     public String toString() {
-        List<String> propertyStrings = Arrays
-            .stream(getPropertiesToCompare(this))
+        List<String> propertyStrings = restrictions.values()
+            .stream()
             .filter(Objects::nonNull)
             .map(Object::toString)
             .collect(Collectors.toList());
 
-        if (propertyStrings.isEmpty()) { return "<empty>"; }
+        if (propertyStrings.isEmpty()) {
+            return "<empty>";
+        }
 
         return String.join(" & ", propertyStrings);
     }
 
     public FieldSpec withFormatRestrictions(FormatRestrictions formatRestrictions, FieldSpecSource source) {
+        EnumMap<RestrictionMapping, Restrictions> mappings = new EnumMap<>(restrictions);
+        mappings.put(RestrictionMapping.FORMAT, formatRestrictions);
         return new FieldSpec(
-            this.setRestrictions,
-            this.numericRestrictions,
-            this.stringRestrictions,
-            this.nullRestrictions,
-            this.typeRestrictions,
-            this.dateTimeRestrictions,
-            formatRestrictions,
-            this.mustContainRestriction,
+            Collections.unmodifiableMap(mappings),
             this.source.combine(source));
     }
 
     public FieldSpec withMustContainRestriction(MustContainRestriction mustContainRestriction) {
+        EnumMap<RestrictionMapping, Restrictions> mappings = new EnumMap<>(restrictions);
+        mappings.put(RestrictionMapping.MUST_CONTAIN, mustContainRestriction);
         return new FieldSpec(
-            this.setRestrictions,
-            this.numericRestrictions,
-            this.stringRestrictions,
-            this.nullRestrictions,
-            this.typeRestrictions,
-            this.dateTimeRestrictions,
-            this.formatRestrictions,
-            mustContainRestriction,
+            Collections.unmodifiableMap(mappings),
             this.source);
     }
 
-    /** Create a predicate that returns TRUE for all (and only) values permitted by this FieldSpec */
+    /**
+     * Create a predicate that returns TRUE for all (and only) values permitted by this FieldSpec
+     */
     public boolean permits(@NotNull Object value) {
+        TypeRestrictions typeRestrictions = getTypeRestrictions();
         if (typeRestrictions != null) {
             for (Types type : Types.values()) {
                 if (!typeRestrictions.isTypeAllowed(type) && type.getIsInstanceOf().apply(value)) {
@@ -215,8 +204,14 @@ public class FieldSpec {
             }
         }
 
-        Set<TypedRestrictions> restrictions = SetUtils.setOf(numericRestrictions, dateTimeRestrictions, stringRestrictions);
-        for (TypedRestrictions restriction : restrictions) {
+        Set<RestrictionMapping> keys = SetUtils.setOf(RestrictionMapping.NUMERIC,
+            RestrictionMapping.DATE_TIME,
+            RestrictionMapping.STRING);
+        Set<TypedRestrictions> toCheckForMatch = getMultipleFromMap(restrictions, keys)
+            .stream()
+            .map(r -> (TypedRestrictions) r)
+            .collect(Collectors.toSet());
+        for (TypedRestrictions restriction : toCheckForMatch) {
             if (restriction != null && restriction.isInstanceOf(value) && !restriction.match(value)) {
                 return false;
             }
@@ -225,77 +220,41 @@ public class FieldSpec {
         return true;
     }
 
-    private class TypeCheckHolder {
-        private final Types type;
-        private final Function<Object, Boolean> check;
-
-        TypeCheckHolder(Types type, Function<Object, Boolean> check) {
-            this.type = type;
-            this.check = check;
-        }
+    private <K, T> Set<T> getMultipleFromMap(Map<K, T> map, Set<K> keys) {
+        return keys.stream().map(map::get).collect(Collectors.toSet());
     }
 
-    public int hashCode(){
-        return Arrays.hashCode(getPropertiesToCompare(this));
+    public int hashCode() {
+        return restrictions.hashCode();
     }
 
-    public boolean equals(Object obj){
+    @Override
+    public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (obj == null || obj.getClass() != this.getClass()){
+        if (obj == null || obj.getClass() != this.getClass()) {
             return false;
         }
 
         return equals((FieldSpec) obj);
     }
 
-    private boolean equals(FieldSpec other){
-        Iterator<Object> myProperties = Arrays.asList(getPropertiesToCompare(this)).iterator();
-        Iterator<Object> otherPropertiesToCompare = Arrays.asList(getPropertiesToCompare(other)).iterator();
-
-        //effectively Stream.zip(myProperties, otherProperties).allMatch((x, y) -> propertiesAreEqual(x, y));
-        while (myProperties.hasNext()){
-            Object myProperty = myProperties.next();
-
-            if (!otherPropertiesToCompare.hasNext()){
-                return false;
-            }
-
-            Object otherProperty = otherPropertiesToCompare.next();
-
-            if (!propertiesAreEqual(myProperty, otherProperty)){
-                return false;
-            }
-        }
-
-        return true;
+    private boolean equals(FieldSpec other) {
+        return restrictions.equals(other.restrictions);
     }
 
     private static boolean propertiesAreEqual(Object myProperty, Object otherProperty) {
-        if (myProperty == null && otherProperty == null){
+        if (myProperty == null && otherProperty == null) {
             return true;
         }
 
-        if (myProperty == null || otherProperty == null){
+        if (myProperty == null || otherProperty == null) {
             return false; //one of the properties are null, but the other one cannot be (the first IF guards against this)
         }
 
-        if (!myProperty.getClass().equals(otherProperty.getClass())){
+        if (!myProperty.getClass().equals(otherProperty.getClass())) {
             return false;
         }
 
         return myProperty.equals(otherProperty);
-    }
-
-    private static Object[] getPropertiesToCompare(FieldSpec fieldSpec){
-        return new Object[]{
-            fieldSpec.dateTimeRestrictions,
-            fieldSpec.formatRestrictions,
-            fieldSpec.mustContainRestriction,
-            fieldSpec.nullRestrictions,
-            fieldSpec.numericRestrictions,
-            fieldSpec.setRestrictions,
-            fieldSpec.stringRestrictions,
-            fieldSpec.typeRestrictions
-        };
     }
 }
