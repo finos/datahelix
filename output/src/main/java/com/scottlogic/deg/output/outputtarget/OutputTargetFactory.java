@@ -9,10 +9,10 @@ import java.nio.file.Path;
 
 /** Represents a directory specified by a user as a target for violation data */
 public class OutputTargetFactory {
-    private final FileUtils fileUtils;
     private final Path directoryPath;
     private final boolean canOverwriteExistingFiles;
     private final OutputWriterFactory formatOfViolationDatasets;
+    private final FileUtils fileUtils;
 
     @Inject
     public OutputTargetFactory(
@@ -20,11 +20,10 @@ public class OutputTargetFactory {
         OutputWriterFactory formatOfViolationDatasets,
         @Named("config:canOverwriteOutputFiles") boolean canOverwriteExistingFiles,
         FileUtils fileUtils) {
-
-        this.fileUtils = fileUtils;
         this.directoryPath = directoryPath;
         this.canOverwriteExistingFiles = canOverwriteExistingFiles;
         this.formatOfViolationDatasets = formatOfViolationDatasets;
+        this.fileUtils = fileUtils;
     }
 
     public SingleDatasetOutputTarget create(String name) {
@@ -35,7 +34,8 @@ public class OutputTargetFactory {
 
         return new FileOutputTarget(
             directoryPath.resolve(filename),
-            formatOfViolationDatasets, canOverwriteExistingFiles, fileUtils
-        );
+            formatOfViolationDatasets,
+            canOverwriteExistingFiles,
+            fileUtils);
     }
 }

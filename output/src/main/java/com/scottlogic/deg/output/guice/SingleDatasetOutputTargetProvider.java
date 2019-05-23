@@ -6,54 +6,29 @@ import com.google.inject.name.Named;
 import com.scottlogic.deg.output.outputtarget.FileOutputTarget;
 import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
 import com.scottlogic.deg.output.outputtarget.SplittingOutputTarget;
-import com.scottlogic.deg.output.writer.OutputWriterFactory;
-import com.scottlogic.deg.output.writer.trace.TraceOutputWriterFactory;
-import com.scottlogic.deg.output.FileUtils;
-
-import java.nio.file.Path;
+import com.scottlogic.deg.output.outputtarget.TraceFileOutputTarget;
 
 public class SingleDatasetOutputTargetProvider implements Provider<SingleDatasetOutputTarget> {
-    private final boolean canOverwriteOutputFiles;
+    private final FileOutputTarget fileOutputTarget;
+    private final TraceFileOutputTarget traceFileOutputTarget;
     private final boolean tracingIsEnabled;
-    private final OutputWriterFactory outputWriterFactory;
-    private final FileUtils fileUtils;
-    private final Path filePath;
 
     @Inject
     SingleDatasetOutputTargetProvider(
-        @Named("config:outputPath") Path filePath,
-        OutputWriterFactory outputWriterFactory,
-        @Named("config:canOverwriteOutputFiles") boolean canOverwriteOutputFiles,
-        @Named("config:tracingIsEnabled") boolean tracingIsEnabled,
-        FileUtils fileUtils) {
-
-        this.filePath = filePath;
-        this.outputWriterFactory = outputWriterFactory;
-        this.canOverwriteOutputFiles = canOverwriteOutputFiles;
+        FileOutputTarget fileOutputTarget,
+        TraceFileOutputTarget traceFileOutputTarget,
+        @Named("config:tracingIsEnabled") boolean tracingIsEnabled) {
+        this.fileOutputTarget = fileOutputTarget;
+        this.traceFileOutputTarget = traceFileOutputTarget;
         this.tracingIsEnabled = tracingIsEnabled;
-        this.fileUtils = fileUtils;
     }
 
     @Override
     public SingleDatasetOutputTarget get() {
-        SingleDatasetOutputTarget mainOutputTarget = new FileOutputTarget(
-            filePath,
-            outputWriterFactory,
-            canOverwriteOutputFiles,
-            fileUtils
-        );
-
         if (tracingIsEnabled) {
-            SingleDatasetOutputTarget tracingOutputTarget = new FileOutputTarget(
-                fileUtils.getTraceFilePath(filePath),
-                new TraceOutputFormat(),
-                canOverwriteOutputFiles,
-                fileUtils
-            );
-
-            return new SplittingOutputTarget(mainOutputTarget, tracingOutputTarget);
+            return new SplittingOutputTarget(fileOutputTarget, traceFileOutputTarget);
         } else {
-            return mainOutputTarget;
+            return fileOutputTarget;
         }
     }
 }
