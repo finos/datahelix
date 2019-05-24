@@ -66,26 +66,6 @@ public class ConstraintReducer {
                 : getRootFieldSpec(constraints);
     }
 
-    public Optional<FieldSpec> reduceConstraintsToFieldSpecWithMustContains(Iterable<AtomicConstraint> rootConstraints,
-                                                            Set<FieldSpec> decisionFieldSpecs) {
-
-        Optional<FieldSpec> rootFieldSpec = reduceConstraintsToFieldSpec(rootConstraints);
-
-        if (decisionFieldSpecs.isEmpty()) { return rootFieldSpec; }
-
-        FieldSpec fieldSpec = rootFieldSpec.orElse(FieldSpec.Empty);
-
-        return Optional.of(fieldSpec.withMustContainRestriction(
-            new MustContainRestriction(
-                decisionFieldSpecs.stream()
-                    .map(decisionSpec -> fieldSpecMerger.merge(fieldSpec, decisionSpec))
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .collect(Collectors.toSet())
-            )
-        ));
-    }
-
     private Optional<FieldSpec> getRootFieldSpec(Iterable<AtomicConstraint> rootConstraints) {
         final Stream<FieldSpec> rootConstraintsStream =
             StreamSupport

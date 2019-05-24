@@ -6,17 +6,22 @@ import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraintsHelper;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
+import com.scottlogic.deg.generator.restrictions.MustContainRestriction;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ReductiveFieldSpecBuilder {
 
     private final ConstraintReducer constraintReducer;
+    private final FieldSpecMerger fieldSpecMerger;
 
     @Inject
-    public ReductiveFieldSpecBuilder(ConstraintReducer constraintReducer) {
+    public ReductiveFieldSpecBuilder(ConstraintReducer constraintReducer, FieldSpecMerger fieldSpecMerger) {
         this.constraintReducer = constraintReducer;
+        this.fieldSpecMerger = fieldSpecMerger;
     }
 
     /**
@@ -32,8 +37,13 @@ public class ReductiveFieldSpecBuilder {
 
         Set<FieldSpec> fieldSpecsForDecisions = getFieldSpecsForDecisions(field, rootNode);
 
-        return constraintReducer.reduceConstraintsToFieldSpecWithMustContains(
-            constraintsForRootNode,
+        Optional<FieldSpec> rootFieldSpec = constraintReducer.reduceConstraintsToFieldSpec(constraintsForRootNode);
+        if (!rootFieldSpec.isPresent()){
+            return Optional.empty();
+        }
+
+        return reduceConstraintsToFieldSpecWithMustContains(
+            rootFieldSpec.get(),
             fieldSpecsForDecisions);
     }
 
@@ -47,4 +57,20 @@ public class ReductiveFieldSpecBuilder {
 
         return visitor.fieldSpecs;
     }
+
+    public Optional<FieldSpec> reduceConstraintsToFieldSpecWithMustContains(FieldSpec rootFieldSpec,
+                                                                            Set<FieldSpec> decisionFieldSpecs) {
+        if (decisionFieldSpecs.isEmpty()) { return Optional.of(rootFieldSpec); }
+
+        return Optional.of(rootFieldSpec.withMustContainRestriction(
+            new MustContainRestriction(
+                decisionFieldSpecs.stream()
+                    .map(decisionSpec -> fieldSpecMerger.merge(rootFieldSpec, decisionSpec))
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .collect(Collectors.toSet())
+            )
+        ));
+    }
+
 }
