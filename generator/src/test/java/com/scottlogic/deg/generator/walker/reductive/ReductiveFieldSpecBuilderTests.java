@@ -26,6 +26,7 @@ class ReductiveFieldSpecBuilderTests {
     @Test
     public void shouldReturnNullWhenAllConstraintsForFieldToFixContradict(){
         ConstraintReducer reducer = mock(ConstraintReducer.class);
+        when(reducer.reduceConstraintsToFieldSpec(any())).thenReturn(Optional.empty());
         ReductiveFieldSpecBuilder builder = new ReductiveFieldSpecBuilder(reducer, mock(FieldSpecMerger.class));
         Field field1 = new Field("field");
         TreeConstraintNode rootNode =
@@ -35,12 +36,13 @@ class ReductiveFieldSpecBuilderTests {
 
         Set<FieldSpec> field = builder.getDecisionFieldSpecs(rootNode, field1);
 
-        Assert.assertThat(field, is(Optional.empty()));
+        Assert.assertEquals(0, field.size());
     }
 
     @Test
     public void shouldReturnFixedFieldWhenRootNodeContainsNoContradictions(){
         ConstraintReducer reducer = mock(ConstraintReducer.class);
+        when(reducer.reduceConstraintsToFieldSpec(any())).thenReturn(Optional.of(mock(FieldSpec.class)));
         FieldSpecValueGenerator valueGenerator = mock(FieldSpecValueGenerator.class);
         ReductiveFieldSpecBuilder builder = new ReductiveFieldSpecBuilder(reducer, mock(FieldSpecMerger.class));
         Field field1 = new Field("field");

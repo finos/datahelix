@@ -32,13 +32,6 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
 
         List<FieldValueSource> validSources = new ArrayList<>();
 
-        if (fieldSpec.getMustContainRestriction() != null && !fieldSpec.getMustContainRestriction().getRequiredObjects().isEmpty()) {
-            List<FieldValueSource> mustContainRestrictionSources = getMustContainRestrictionSources(fieldSpec);
-            if (!mustContainRestrictionSources.isEmpty()){
-                return mustContainRestrictionSources;
-            }
-        }
-
         TypeRestrictions typeRestrictions = fieldSpec.getTypeRestrictions() != null
             ? fieldSpec.getTypeRestrictions()
             : DataTypeRestrictions.ALL_TYPES_PERMITTED;
@@ -83,16 +76,6 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
 
     private boolean mayBeNull(FieldSpec fieldSpec) {
         return fieldSpec.getNullRestrictions() == null;
-    }
-
-    private List<FieldValueSource> getMustContainRestrictionSources(FieldSpec fieldSpec) {
-        Set<FieldSpec> mustContainRestrictionFieldSpecs = fieldSpec.getMustContainRestriction().getRequiredObjects();
-
-        return FlatMappingSpliterator.flatMap(mustContainRestrictionFieldSpecs.stream()
-            .map(this::getFieldValueSources),
-            List::stream)
-            .distinct()
-            .collect(Collectors.toList());
     }
 
     private FieldValueSource getNumericSource(FieldSpec fieldSpec) {

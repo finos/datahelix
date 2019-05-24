@@ -49,10 +49,6 @@ public class FieldSpec {
         return restrictions.get(DateTimeRestrictions.class).orElse(null);
     }
 
-    public MustContainRestriction getMustContainRestriction() {
-        return restrictions.get(MustContainRestriction.class).orElse(null);
-    }
-
     public FormatRestrictions getFormatRestrictions() {
         return restrictions.get(FormatRestrictions.class).orElse(null);
     }
@@ -87,10 +83,6 @@ public class FieldSpec {
 
     public FieldSpec withFormatRestrictions(FormatRestrictions formatRestrictions, FieldSpecSource source) {
         return withConstraint(FormatRestrictions.class, formatRestrictions, source);
-    }
-
-    public FieldSpec withMustContainRestriction(MustContainRestriction mustContainRestriction) {
-        return withConstraint(MustContainRestriction.class, mustContainRestriction, this.source);
     }
 
     private <T extends Restrictions> FieldSpec withConstraint(Class<T> type, T restriction, FieldSpecSource source) {
@@ -155,7 +147,6 @@ public class FieldSpec {
         }
 
         FieldSpec other = (FieldSpec) obj;
-
         return restrictions.equals(other.restrictions);
     }
 }
