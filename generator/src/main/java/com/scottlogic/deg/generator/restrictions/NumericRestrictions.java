@@ -6,7 +6,7 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class NumericRestrictions implements TypedRestrictions {
+public class NumericRestrictions extends AbstractTypedRestrictions {
     public static final int DEFAULT_NUMERIC_SCALE = 20;
     private final int numericScale;
     public NumericLimit<BigDecimal> min;
@@ -25,8 +25,8 @@ public class NumericRestrictions implements TypedRestrictions {
     }
 
     @Override
-    public boolean isInstanceOf(Object o) {
-        return IsOfTypeConstraint.Types.NUMERIC.getIsInstanceOf().apply(o);
+    protected IsOfTypeConstraint.Types getType() {
+        return IsOfTypeConstraint.Types.NUMERIC;
     }
 
     @Override

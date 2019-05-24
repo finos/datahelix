@@ -87,7 +87,7 @@ public class FieldSpecFactory {
             return construct((IsStringLongerThanConstraint) constraint, negate, violated);
         } else if (constraint instanceof IsStringShorterThanConstraint) {
             return construct((IsStringShorterThanConstraint) constraint, negate, violated);
-        }  else {
+        } else {
             throw new UnsupportedOperationException();
         }
     }

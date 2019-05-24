@@ -75,8 +75,12 @@ public class HeterogeneousTypeContainer<I> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         HeterogeneousTypeContainer<?> that = (HeterogeneousTypeContainer<?>) o;
         return map.equals(that.map);
     }

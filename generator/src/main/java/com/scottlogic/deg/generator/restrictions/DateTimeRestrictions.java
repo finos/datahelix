@@ -6,7 +6,7 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
-public class DateTimeRestrictions implements TypedRestrictions {
+public class DateTimeRestrictions extends AbstractTypedRestrictions {
     private static final Timescale DEFAULT_GRANULARITY = Timescale.MILLIS;
     private final Timescale granularity;
     public DateTimeLimit min;
@@ -24,9 +24,10 @@ public class DateTimeRestrictions implements TypedRestrictions {
         return granularity;
     }
 
+
     @Override
-    public boolean isInstanceOf(Object o) {
-        return IsOfTypeConstraint.Types.DATETIME.getIsInstanceOf().apply(o);
+    protected IsOfTypeConstraint.Types getType() {
+        return IsOfTypeConstraint.Types.DATETIME;
     }
 
     @Override
