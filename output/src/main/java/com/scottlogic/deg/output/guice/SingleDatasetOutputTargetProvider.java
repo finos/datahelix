@@ -5,6 +5,8 @@ import com.google.inject.Provider;
 import com.scottlogic.deg.output.outputtarget.FileOutputTarget;
 import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
 
+import java.nio.file.Path;
+
 public class SingleDatasetOutputTargetProvider implements Provider<SingleDatasetOutputTarget> {
     private final FileOutputTarget fileOutputTarget;
 
@@ -16,6 +18,13 @@ public class SingleDatasetOutputTargetProvider implements Provider<SingleDataset
 
     @Override
     public SingleDatasetOutputTarget get() {
-        return fileOutputTarget;
+        if (standardOut()){
+            return stdoutOutputTarget;
+        }
+            return fileOutputTarget;
+    }
+
+    private boolean standardOut() {
+        return outputPath == null;
     }
 }
