@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator;
+package com.scottlogic.deg.common.util;
 
 import java.util.Objects;
 import java.util.Spliterator;
