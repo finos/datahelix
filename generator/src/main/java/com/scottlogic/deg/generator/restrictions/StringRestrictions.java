@@ -8,7 +8,7 @@ public interface StringRestrictions extends TypedRestrictions {
 
     @Override
     default boolean isInstanceOf(Object o) {
-        return IsOfTypeConstraint.Types.STRING.getIsInstanceOf().apply(o);
+        return IsOfTypeConstraint.Types.STRING.isInstanceOf(o);
     }
 
     boolean match(String x);

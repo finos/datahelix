@@ -30,8 +30,8 @@ public class IsOfTypeConstraint implements AtomicConstraint {
             this.isInstanceOf = isInstanceOf;
         }
 
-        public Function<Object, Boolean> getIsInstanceOf() {
-            return isInstanceOf;
+        public boolean isInstanceOf(Object o) {
+            return isInstanceOf.apply(o);
         }
     }
 

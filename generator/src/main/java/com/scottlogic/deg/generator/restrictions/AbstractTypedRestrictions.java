@@ -8,6 +8,6 @@ abstract class AbstractTypedRestrictions implements TypedRestrictions {
 
     @Override
     public boolean isInstanceOf(Object o) {
-        return getType().getIsInstanceOf().apply(o);
+        return getType().isInstanceOf(o);
     }
 }
