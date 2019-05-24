@@ -15,7 +15,7 @@ import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixF
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategyFactory;
 
 import java.io.IOException;
-import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
@@ -57,16 +57,15 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
     private Stream<RowSpec> fixNextField(ConstraintNode tree, ReductiveState reductiveState, FixFieldStrategy fixFieldStrategy) {
 
         Field fieldToFix = fixFieldStrategy.getNextFieldToFix(reductiveState);
-        Optional<FieldSpec> nextFieldSpec = reductiveFieldSpecBuilder.getFieldSpecWithMustContains(tree, fieldToFix);
+        Set<FieldSpec> nextFieldSpecs = reductiveFieldSpecBuilder.getDecisionFieldSpecs(tree, fieldToFix);
 
-        if (!nextFieldSpec.isPresent()){
-            //couldn't fix a field, maybe there are contradictions in the root node?
+        if (nextFieldSpecs.isEmpty()){
             monitor.noValuesForField(reductiveState, fieldToFix);
             return Stream.empty();
         }
 
-        Stream<FieldValue> values = fieldSpecValueGenerator.generate(fieldToFix, nextFieldSpec.get())
-            .map(dataBag -> new FieldValue(fieldToFix, dataBag.getValue(fieldToFix), nextFieldSpec.get()));
+        Stream<FieldValue> values = fieldSpecValueGenerator.generate(fieldToFix, nextFieldSpecs)
+            .map(dataBag -> new FieldValue(fieldToFix, dataBag.getValue(fieldToFix), nextFieldSpecs.stream().findFirst().orElse(FieldSpec.Empty)));
 
         return FlatMappingSpliterator.flatMap(
             values,

@@ -21,10 +21,7 @@ import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -74,11 +71,11 @@ class ReductiveDecisionTreeWalkerTests {
      */
     @Test
     public void shouldReturnEmptyCollectionOfRowsWhenFirstFieldCannotBeFixed() {
-        when(reductiveFieldSpecBuilder.getFieldSpecWithMustContains(eq(rootNode), any())).thenReturn(Optional.empty());
+        when(reductiveFieldSpecBuilder.getDecisionFieldSpecs(eq(rootNode), any())).thenReturn(Collections.EMPTY_SET);
 
         List<RowSpec> result = walker.walk(tree).collect(Collectors.toList());
 
-        verify(reductiveFieldSpecBuilder).getFieldSpecWithMustContains(eq(rootNode), any());
+        verify(reductiveFieldSpecBuilder).getDecisionFieldSpecs(eq(rootNode), any());
         Assert.assertThat(result, empty());
     }
 
@@ -92,13 +89,13 @@ class ReductiveDecisionTreeWalkerTests {
         FieldSpec firstFieldSpec = FieldSpec.Empty.withSetRestrictions(SetRestrictions
                 .fromWhitelist(Collections.singleton("yes")), FieldSpecSource.Empty)
             .withNullRestrictions(new NullRestrictions(Nullness.MUST_NOT_BE_NULL), FieldSpecSource.Empty);
-        when(fieldSpecValueGenerator.generate(any(), any())).thenReturn(Stream.of(dataBag));
+        when(fieldSpecValueGenerator.generate(any(), any(Set.class))).thenReturn(Stream.of(dataBag));
 
-        when(reductiveFieldSpecBuilder.getFieldSpecWithMustContains(any(), any())).thenReturn(Optional.of(firstFieldSpec), Optional.empty());
+        when(reductiveFieldSpecBuilder.getDecisionFieldSpecs(any(), any())).thenReturn(Collections.singleton(firstFieldSpec), Collections.emptySet());
 
         List<RowSpec> result = walker.walk(tree).collect(Collectors.toList());
 
-        verify(reductiveFieldSpecBuilder, times(2)).getFieldSpecWithMustContains(eq(rootNode), any());
+        verify(reductiveFieldSpecBuilder, times(2)).getDecisionFieldSpecs(eq(rootNode), any());
         Assert.assertThat(result, empty());
     }
 }

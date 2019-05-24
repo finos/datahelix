@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.walker.reductive;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.constraintdetail.Nullness;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraintsHelper;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
@@ -31,20 +32,31 @@ public class ReductiveFieldSpecBuilder {
      * @param field to create the fieldSpec for
      * @return fieldSpec with mustContains restriction if not contradictory, otherwise Optional.empty()
      */
-    public Optional<FieldSpec> getFieldSpecWithMustContains(ConstraintNode rootNode, Field field){
+    public Set<FieldSpec> getDecisionFieldSpecs(ConstraintNode rootNode, Field field){
         List<AtomicConstraint> constraintsForRootNode =
             AtomicConstraintsHelper.getConstraintsForField(rootNode.getAtomicConstraints(), field);
 
-        Set<FieldSpec> fieldSpecsForDecisions = getFieldSpecsForDecisions(field, rootNode);
-
-        Optional<FieldSpec> rootFieldSpec = constraintReducer.reduceConstraintsToFieldSpec(constraintsForRootNode);
-        if (!rootFieldSpec.isPresent()){
-            return Optional.empty();
+        Optional<FieldSpec> rootOptional = constraintReducer.reduceConstraintsToFieldSpec(constraintsForRootNode);
+        if (!rootOptional.isPresent()){
+            return Collections.emptySet();
+        }
+        FieldSpec rootFieldSpec = rootOptional.get();
+        if (hasSetOrIsNull(rootFieldSpec)){
+            return Collections.singleton(rootFieldSpec);
         }
 
-        return reduceConstraintsToFieldSpecWithMustContains(
-            rootFieldSpec.get(),
+        Set<FieldSpec> fieldSpecsForDecisions = getFieldSpecsForDecisions(field, rootNode);
+
+        if (fieldSpecsForDecisions.isEmpty()) { return Collections.singleton(rootFieldSpec); }
+
+        return mergeDecisionFieldSpecsWithRoot(
+            rootFieldSpec,
             fieldSpecsForDecisions);
+    }
+
+    private boolean hasSetOrIsNull(FieldSpec fieldSpec) {
+        return  (fieldSpec.getSetRestrictions() != null && fieldSpec.getSetRestrictions().getWhitelist() != null)
+            || (fieldSpec.getNullRestrictions() != null && fieldSpec.getNullRestrictions().nullness == Nullness.MUST_BE_NULL);
     }
 
     private Set<FieldSpec> getFieldSpecsForDecisions(Field field, ConstraintNode rootNode) {
@@ -58,19 +70,12 @@ public class ReductiveFieldSpecBuilder {
         return visitor.fieldSpecs;
     }
 
-    public Optional<FieldSpec> reduceConstraintsToFieldSpecWithMustContains(FieldSpec rootFieldSpec,
-                                                                            Set<FieldSpec> decisionFieldSpecs) {
-        if (decisionFieldSpecs.isEmpty()) { return Optional.of(rootFieldSpec); }
-
-        return Optional.of(rootFieldSpec.withMustContainRestriction(
-            new MustContainRestriction(
-                decisionFieldSpecs.stream()
-                    .map(decisionSpec -> fieldSpecMerger.merge(rootFieldSpec, decisionSpec))
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .collect(Collectors.toSet())
-            )
-        ));
+    private Set<FieldSpec> mergeDecisionFieldSpecsWithRoot(FieldSpec rootFieldSpec, Set<FieldSpec> decisionFieldSpecs) {
+        return decisionFieldSpecs.stream()
+            .map(decisionSpec -> fieldSpecMerger.merge(rootFieldSpec, decisionSpec))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .collect(Collectors.toSet());
     }
 
 }

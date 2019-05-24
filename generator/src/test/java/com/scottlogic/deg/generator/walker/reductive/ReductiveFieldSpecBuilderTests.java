@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static org.hamcrest.core.Is.is;
@@ -32,7 +33,7 @@ class ReductiveFieldSpecBuilderTests {
                 new IsNullConstraint(field1, Collections.emptySet()),
                 new IsNullConstraint(field1, Collections.emptySet()).negate());
 
-        Optional<FieldSpec> field = builder.getFieldSpecWithMustContains(rootNode, field1);
+        Set<FieldSpec> field = builder.getDecisionFieldSpecs(rootNode, field1);
 
         Assert.assertThat(field, is(Optional.empty()));
     }
@@ -46,8 +47,8 @@ class ReductiveFieldSpecBuilderTests {
         TreeConstraintNode rootNode = new TreeConstraintNode(new IsNullConstraint(field1, Collections.emptySet()));
         when(valueGenerator.generate(field1, FieldSpec.Empty)).thenReturn(Stream.of(DataBag.empty));
 
-        Optional<FieldSpec> field = builder.getFieldSpecWithMustContains(rootNode, field1);
+        Set<FieldSpec> field = builder.getDecisionFieldSpecs(rootNode, field1);
 
-        Assert.assertTrue(field.isPresent());
+        Assert.assertEquals(1, field.size());
     }
 }
