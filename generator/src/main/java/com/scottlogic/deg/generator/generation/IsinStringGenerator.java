@@ -288,10 +288,10 @@ public class IsinStringGenerator implements StringGenerator {
     private static String getIsinRegexRepresentationForCountry(String countryCode) {
         String sansCheckDigit;
         if (countryCode.equals("GB")) {
-            sansCheckDigit = (new SedolStringGenerator("GB00")).getRegexRepresentation();
+            sansCheckDigit = "GB00" + SedolStringGenerator.STANDARD_REGEX_REPRESENTATION;
         }
         else if (countryCode.equals("US")) {
-            sansCheckDigit = (new CusipStringGenerator("US")).getRegexRepresentation();
+            sansCheckDigit = "US" + CusipStringGenerator.STANDARD_REGEX_REPRESENTATION;
         }
         else {
             sansCheckDigit = countryCode + GENERIC_NSIN_REGEX;

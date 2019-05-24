@@ -4,14 +4,14 @@ import com.scottlogic.deg.generator.utils.*;
 
 public class CusipStringGenerator extends ChecksummedCodeStringGenerator {
     public final static int CUSIP_LENGTH = 9;
-    private final static String CUSIP_REGEX = "[0-9]{3}[0-9A-Z]{5}[0-9]";
+    public final static String STANDARD_REGEX_REPRESENTATION = "[0-9]{3}[0-9A-Z]{5}[0-9]";
 
     public CusipStringGenerator() {
-        super(CUSIP_REGEX);
+        super(STANDARD_REGEX_REPRESENTATION);
     }
 
     public CusipStringGenerator(String prefix) {
-        super(prefix + CUSIP_REGEX);
+        super(prefix + STANDARD_REGEX_REPRESENTATION);
     }
 
     private CusipStringGenerator(RegexStringGenerator generator) {
@@ -27,11 +27,6 @@ public class CusipStringGenerator extends ChecksummedCodeStringGenerator {
         return IsinUtils.calculateCusipCheckDigit(
             withoutCheckDigit.substring(withoutCheckDigit.length() - (CUSIP_LENGTH - 1))
         );
-    }
-
-    @Override
-    public String getRegexRepresentation() {
-        return CUSIP_REGEX;
     }
 
     @Override
