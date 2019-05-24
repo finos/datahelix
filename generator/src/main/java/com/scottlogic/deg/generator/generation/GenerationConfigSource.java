@@ -10,9 +10,6 @@ public interface GenerationConfigSource  {
     TreeWalkerType getWalkerType();
     long getMaxRows();
 
-    Path getOutputPath();// TODO PAUL remove this, only here for visualise
-
-
     MonitorType getMonitorType();
     boolean shouldDoPartitioning();
     boolean visualiseReductions();

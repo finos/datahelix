@@ -3,6 +3,7 @@ package com.scottlogic.deg.output.guice;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
+import com.scottlogic.deg.output.OutputPath;
 import com.scottlogic.deg.output.outputtarget.*;
 
 import java.nio.file.Path;
@@ -12,36 +13,32 @@ public class SingleDatasetOutputTargetProvider implements Provider<SingleDataset
     private final TraceFileOutputTarget traceFileOutputTarget;
     private final StdoutOutputTarget stdoutOutputTarget;
     private final Path outputPath;
-    private final boolean tracingIsEnabled;
+    private final OutputConfigSource outputConfigSource;
 
     @Inject
     SingleDatasetOutputTargetProvider(
         FileOutputTarget fileOutputTarget,
         TraceFileOutputTarget traceFileOutputTarget,
         StdoutOutputTarget stdoutOutputTarget,
-        @Named("config:outputPath")Path outputPath,
-        @Named("config:tracingIsEnabled") boolean tracingIsEnabled) {
+        OutputPath outputPath,
+        OutputConfigSource outputConfigSource) {
         this.fileOutputTarget = fileOutputTarget;
         this.traceFileOutputTarget = traceFileOutputTarget;
         this.stdoutOutputTarget = stdoutOutputTarget;
-        this.outputPath = outputPath;
-        this.tracingIsEnabled = tracingIsEnabled;
+        this.outputPath = outputPath.get();
+        this.outputConfigSource = outputConfigSource;
     }
 
     @Override
     public SingleDatasetOutputTarget get() {
-        if (standardOut()){
+        if (outputConfigSource.useStdOut()){
             return stdoutOutputTarget;
         }
 
-        if (tracingIsEnabled) {
+        if (outputConfigSource.isEnableTracing()) {
             return new SplittingOutputTarget(fileOutputTarget, traceFileOutputTarget);
         } else {
             return fileOutputTarget;
         }
-    }
-
-    private boolean standardOut() {
-        return outputPath == null;
     }
 }

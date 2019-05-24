@@ -8,4 +8,5 @@ public interface OutputConfigSource {
     boolean overwriteOutputFiles();
 
     boolean isEnableTracing();
+    boolean useStdOut();
 }

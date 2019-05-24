@@ -15,6 +15,7 @@ import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
+import com.scottlogic.deg.output.OutputPath;
 
 import java.nio.file.Path;
 import java.time.OffsetDateTime;
@@ -50,10 +51,6 @@ public class GeneratorModule extends AbstractModule {
         bind(long.class)
             .annotatedWith(Names.named("config:maxRows"))
             .toInstance(generationConfigSource.getMaxRows());
-
-        bind(Path.class) // TODO PAUL REMOVE THIS, ONLY USED FOR VISUALISE
-            .annotatedWith(Names.named("config:outputPath"))
-            .toInstance(generationConfigSource.getOutputPath());
 
         // Bind known implementations - no user input required
         bind(DataGeneratorMonitor.class).to(ReductiveDataGeneratorMonitor.class);

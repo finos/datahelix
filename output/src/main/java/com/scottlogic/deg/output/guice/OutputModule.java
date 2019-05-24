@@ -2,12 +2,11 @@ package com.scottlogic.deg.output.guice;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
+import com.scottlogic.deg.output.OutputPath;
 import com.scottlogic.deg.output.manifest.JsonManifestWriter;
 import com.scottlogic.deg.output.manifest.ManifestWriter;
 import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
 import com.scottlogic.deg.output.writer.OutputWriterFactory;
-
-import java.nio.file.Path;
 
 public class OutputModule extends AbstractModule {
 
@@ -25,14 +24,10 @@ public class OutputModule extends AbstractModule {
         bind(SingleDatasetOutputTarget.class).toProvider(SingleDatasetOutputTargetProvider.class);
         bind(ManifestWriter.class).to(JsonManifestWriter.class);
 
-        bind(Path.class)
-            .annotatedWith(Names.named("config:outputPath"))
-            .toInstance(outputConfigSource.getOutputPath());
+        bind(OutputPath.class)
+            .toInstance(OutputPath.of(outputConfigSource.getOutputPath()));
         bind(boolean.class)
             .annotatedWith(Names.named("config:canOverwriteOutputFiles"))
             .toInstance(outputConfigSource.overwriteOutputFiles());
-        bind(boolean.class)
-            .annotatedWith(Names.named("config:tracingIsEnabled"))
-            .toInstance(outputConfigSource.isEnableTracing());
     }
 }
