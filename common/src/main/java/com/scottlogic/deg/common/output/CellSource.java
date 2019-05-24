@@ -3,6 +3,7 @@ package com.scottlogic.deg.common.output;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.common.profile.RuleInformation;
+import com.scottlogic.deg.common.util.FlatMappingSpliterator;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -25,14 +26,14 @@ public class CellSource {
     }
 
     public boolean isViolated(RuleInformation rule){
-        return source.getViolatedConstraints().stream()
-            .flatMap(c->c.getRules().stream())
+        return FlatMappingSpliterator.flatMap(source.getViolatedConstraints()
+            .stream(), c -> c.getRules().stream())
             .anyMatch(r -> r.equals(rule));
     }
 
     public Set<RuleInformation> getRules(){
-        return source.getConstraints().stream()
-            .flatMap(c->getRules().stream())
+        return FlatMappingSpliterator.flatMap(source.getConstraints()
+            .stream(), c -> c.getRules().stream())
             .collect(Collectors.toSet());
     }
 }
