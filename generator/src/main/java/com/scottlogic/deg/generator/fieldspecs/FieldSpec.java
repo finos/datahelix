@@ -119,7 +119,7 @@ public class FieldSpec {
         TypeRestrictions typeRestrictions = getTypeRestrictions();
         if (typeRestrictions != null) {
             for (Types type : Types.values()) {
-                if (!typeRestrictions.isTypeAllowed(type) && type.getIsInstanceOf().apply(value)) {
+                if (!typeRestrictions.isTypeAllowed(type) && type.isInstanceOf(value)) {
                     return false;
                 }
             }
