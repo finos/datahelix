@@ -8,6 +8,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
+import com.scottlogic.deg.generator.restrictions.MustContainRestriction;
 
 import java.util.*;
 import java.util.function.Function;
@@ -72,9 +73,16 @@ public class ConstraintReducer {
 
         if (decisionFieldSpecs.isEmpty()) { return rootFieldSpec; }
 
-        return Optional.of(fieldSpecFactory.toMustContainRestrictionFieldSpec(
-            rootFieldSpec.orElse(FieldSpec.Empty),
-            StreamSupport.stream(decisionFieldSpecs.spliterator(), false).collect(Collectors.toSet())
+        FieldSpec fieldSpec = rootFieldSpec.orElse(FieldSpec.Empty);
+
+        return Optional.of(fieldSpec.withMustContainRestriction(
+            new MustContainRestriction(
+                decisionFieldSpecs.stream()
+                    .map(decisionSpec -> fieldSpecMerger.merge(fieldSpec, decisionSpec))
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .collect(Collectors.toSet())
+            )
         ));
     }
 
