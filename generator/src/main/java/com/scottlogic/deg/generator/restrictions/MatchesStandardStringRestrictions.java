@@ -1,10 +1,7 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.StandardConstraintTypes;
-import com.scottlogic.deg.generator.generation.CusipStringGenerator;
-import com.scottlogic.deg.generator.generation.IsinStringGenerator;
-import com.scottlogic.deg.generator.generation.SedolStringGenerator;
-import com.scottlogic.deg.generator.generation.StringGenerator;
+import com.scottlogic.deg.generator.generation.*;
 
 /**
  * Represents the restriction of a field to an `aValid` operator
@@ -40,6 +37,8 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
                 return new SedolStringGenerator();
             case CUSIP:
                 return new CusipStringGenerator();
+            case RIC:
+                return new RicStringGenerator();
         }
 
         throw new UnsupportedOperationException(String.format("Unable to create string generator for: %s", type));
@@ -145,6 +144,8 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
                 return SedolStringGenerator.SEDOL_LENGTH;
             case CUSIP:
                 return CusipStringGenerator.CUSIP_LENGTH;
+            case RIC:
+                return RicStringGenerator.RIC_LENGTH;
             default:
                 throw new UnsupportedOperationException(String.format("Unable to check string restrictions for: %s", type));
         }
