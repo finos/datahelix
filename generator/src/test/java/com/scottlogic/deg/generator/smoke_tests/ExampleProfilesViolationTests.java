@@ -88,7 +88,7 @@ class ExampleProfilesViolationTests {
                     new DecisionTreeDataGenerator(
                         new CartesianProductDecisionTreeWalker(
                             new ConstraintReducer(
-                                new FieldSpecFactory(new FieldSpecMerger(), new StringRestrictionsFactory()),
+                                new FieldSpecFactory(new StringRestrictionsFactory()),
                                 new FieldSpecMerger()
                             ),
                             new RowSpecMerger(new FieldSpecMerger())

@@ -32,8 +32,7 @@ class ReductiveTreePrunerTests {
     private ReductiveTreePruner treePruner = new ReductiveTreePruner(
         new FieldSpecMerger(),
         new ConstraintReducer(
-            new FieldSpecFactory(
-                new FieldSpecMerger(), new StringRestrictionsFactory()),
+            new FieldSpecFactory(new StringRestrictionsFactory()),
             new FieldSpecMerger()),
         fieldSpecHelper);
 

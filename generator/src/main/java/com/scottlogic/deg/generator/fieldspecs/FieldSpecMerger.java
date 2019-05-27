@@ -17,8 +17,7 @@ public class FieldSpecMerger {
         new NumericRestrictionsMergeOperation(new NumericRestrictionsMerger()),
         new DateTimeRestrictionsMergeOperation(new DateTimeRestrictionsMerger()),
         new NullRestrictionsMergeOperation(),
-        new FormatRestrictionsMergeOperation(),
-        new MustContainRestrictionMergeOperation()
+        new FormatRestrictionsMergeOperation()
     };
 
     private static final RestrictionMergeOperation finalMergeOperation = new SetRestrictionsMergeOperation();
