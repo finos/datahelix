@@ -1,17 +1,16 @@
 # Table of Contents
-1. [Running the Generator](#running-the-generator)
-2. [Profiles](#Profiles)
+1. [Profiles](#Profiles)
     1. [Fields](#Fields)
     2. [Rules](#Rules)
     3. [Persistence](#Persistence)
     4. [Creation](#Creation)
 
-3. [Data types](#Data-Types)
+2. [Data types](#Data-Types)
     1. [Integer/Decimal](#Integer/Decimal)
     2. [Strings](#Strings)
     3. [DateTime](#DateTime)
 
-4. [Predicate constraints](#Predicate-constraints)
+3. [Predicate constraints](#Predicate-constraints)
     1. [Theory](#Theory)
     2. [General constraints](#General-constraints)
         1. [equalTo](#predicate-equalto)
@@ -38,32 +37,18 @@
         4. [beforeOrAt](#predicate-beforeorat)
         5. [granularTo](#predicate-granularto-datetime)
 
-5. [Grammatical constraints](#Grammatical-Constraints)
+4. [Grammatical constraints](#Grammatical-Constraints)
     1. [not](#not)
     2. [anyOf](#anyOf)
     3. [allOf](#allOf)
     4. [if](#if)
 
-6. [Presentational constraints](#Presentational-Constraints)
+5. [Presentational constraints](#Presentational-Constraints)
 
-7. [Profile Validation](#Profile-Validation)
+6. [Profile Validation](#Profile-Validation)
     1. [JetBrains IntelliJ](#JetBrains-IntelliJ)
     2. [Microsoft Visual Studio Code](#Microsoft-Visual-Studio-Code)
     3. [Schema Validation using library](#Schema-Validation-using-library)
-
-# Running the Generator
-
-## Option 1
-
-Use an IDE to run the main class at: 
-```generator\src\main\java\com\scottlogic\deg\generator\App.java```
-
-
-## Option 2
-
-1) Run `gradle fatJar` to create the full JAR with all dependencies.
-2) Run ```java -jar generator/build/libs/generator.jar generate <profile path> <output file or directory>```
-
 
 # Profiles
 
