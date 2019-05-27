@@ -7,6 +7,7 @@ import com.scottlogic.deg.generator.outputs.formats.OutputFormat;
 import com.scottlogic.deg.generator.outputs.formats.trace.TraceOutputFormat;
 import com.scottlogic.deg.generator.outputs.targets.*;
 import com.scottlogic.deg.generator.utils.FileUtils;
+import com.scottlogic.deg.generator.utils.FileUtilsImpl;
 
 import java.nio.file.Path;
 
@@ -38,18 +39,16 @@ public class SingleDatasetOutputTargetProvider implements Provider<SingleDataset
             filePath,
             outputFormat,
             canOverwriteOutputFiles,
-            fileUtils);
+            fileUtils
+        );
 
         if (tracingIsEnabled) {
             SingleDatasetOutputTarget tracingOutputTarget = new FileOutputTarget(
-                FileUtils.addFilenameSuffix(
-                    FileUtils.replaceExtension(
-                        filePath,
-                        "json"),
-                    "-trace"),
+                fileUtils.getTraceFilePath(filePath),
                 new TraceOutputFormat(),
                 canOverwriteOutputFiles,
-                fileUtils);
+                fileUtils
+            );
 
             return new SplittingOutputTarget(mainOutputTarget, tracingOutputTarget);
         } else {

@@ -17,6 +17,8 @@ import com.scottlogic.deg.generator.outputs.formats.OutputFormat;
 import com.scottlogic.deg.generator.outputs.manifest.JsonManifestWriter;
 import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.generator.outputs.targets.SingleDatasetOutputTarget;
+import com.scottlogic.deg.generator.utils.FileUtils;
+import com.scottlogic.deg.generator.utils.FileUtilsImpl;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
@@ -76,6 +78,7 @@ public class GeneratorModule extends AbstractModule {
         bind(DataGenerator.class).to(DecisionTreeDataGenerator.class);
         bind(DecisionTreeFactory.class).to(MaxStringLengthInjectingDecisionTreeFactory.class);
         bind(FieldValueSourceEvaluator.class).to(StandardFieldValueSourceEvaluator.class);
+        bind(FileUtils.class).to(FileUtilsImpl.class);
 
         bind(VelocityMonitor.class)
             .toInstance(new VelocityMonitor(new PrintWriter(System.out, true)));

@@ -8,7 +8,7 @@ import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
 import com.scottlogic.deg.generator.inputs.profileviolation.ProfileViolator;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.outputs.targets.OutputTargetFactory;
-import com.scottlogic.deg.generator.utils.FileUtils;
+import com.scottlogic.deg.generator.utils.FileUtilsImpl;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.orchestrator.validator.ConfigValidator;
 import com.scottlogic.deg.profile.reader.ProfileReader;
@@ -84,7 +84,7 @@ public class ViolateExecute implements Runnable {
             return;
         }
 
-        DecimalFormat intFormatter = FileUtils.getDecimalFormat(violatedProfiles.size());
+        DecimalFormat intFormatter = FileUtilsImpl.getDecimalFormat(violatedProfiles.size());
 
         int filename = 1;
         for (Profile violatedProfile : violatedProfiles) {
