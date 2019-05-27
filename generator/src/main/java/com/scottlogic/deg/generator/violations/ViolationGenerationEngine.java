@@ -5,7 +5,7 @@ import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.generator.StandardGenerationEngine;
 import com.scottlogic.deg.generator.inputs.profileviolation.ProfileViolator;
 import com.scottlogic.deg.generator.outputs.targets.MultiDatasetOutputTarget;
-import com.scottlogic.deg.generator.utils.FileUtils;
+import com.scottlogic.deg.generator.utils.FileUtilsImpl;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -35,7 +35,7 @@ public class ViolationGenerationEngine {
             return;
         }
 
-        DecimalFormat intFormatter = FileUtils.getDecimalFormat(violatedProfiles.size());
+        DecimalFormat intFormatter = FileUtilsImpl.getDecimalFormat(violatedProfiles.size());
 
         int filename = 1;
         for (Profile violatedProfile : violatedProfiles) {

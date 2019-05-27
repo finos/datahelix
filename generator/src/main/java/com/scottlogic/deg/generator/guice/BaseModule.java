@@ -17,6 +17,8 @@ import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagGenerator;
+import com.scottlogic.deg.generator.utils.FileUtils;
+import com.scottlogic.deg.generator.utils.FileUtilsImpl;
 import com.scottlogic.deg.profile.reader.JsonProfileReader;
 import com.scottlogic.deg.profile.reader.ProfileReader;
 import com.scottlogic.deg.generator.inputs.profileviolation.IndividualConstraintRuleViolator;
@@ -84,6 +86,7 @@ public class BaseModule extends AbstractModule {
         bind(RuleViolator.class).to(IndividualConstraintRuleViolator.class);
         bind(ConfigValidator.class).to(GenerationConfigValidator.class);
         bind(OutputTargetSpecification.class).to(OutputTargetSpecificationImpl.class);
+        bind(FileUtils.class).to(FileUtilsImpl.class);
 
         bind(new TypeLiteral<List<ViolationFilter>>() {
         }).toProvider(ViolationFiltersProvider.class);
