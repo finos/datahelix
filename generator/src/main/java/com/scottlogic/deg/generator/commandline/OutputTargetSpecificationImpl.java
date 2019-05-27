@@ -6,6 +6,7 @@ import com.scottlogic.deg.generator.outputs.formats.OutputFormat;
 import com.scottlogic.deg.generator.outputs.formats.trace.TraceOutputFormat;
 import com.scottlogic.deg.generator.outputs.targets.*;
 import com.scottlogic.deg.generator.utils.FileUtils;
+import com.scottlogic.deg.generator.utils.FileUtilsImpl;
 
 import java.nio.file.Path;
 
@@ -43,8 +44,8 @@ public class OutputTargetSpecificationImpl implements OutputTargetSpecification 
             return new SplittingOutputTarget(
                 mainOutputTarget,
                 new FileOutputTarget(
-                    FileUtils.addFilenameSuffix(
-                        FileUtils.replaceExtension(
+                    FileUtilsImpl.addFilenameSuffix(
+                        FileUtilsImpl.replaceExtension(
                             filePath,
                             "json"),
                         "-trace"),
