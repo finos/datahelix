@@ -1,5 +1,5 @@
 # Table of Contents
-1. [Running the Generator](#Running the Generator)
+1. [Running the Generator](#running-the-generator)
 2. [Profiles](#Profiles)
     1. [Fields](#Fields)
     2. [Rules](#Rules)
