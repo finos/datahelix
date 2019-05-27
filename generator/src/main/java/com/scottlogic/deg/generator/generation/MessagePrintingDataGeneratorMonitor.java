@@ -1,57 +1,57 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.generator.outputs.GeneratedObject;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.walker.reductive.ReductiveState;
 
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class SystemOutDataGeneratorMonitor implements ReductiveDataGeneratorMonitor {
+public class MessagePrintingDataGeneratorMonitor implements ReductiveDataGeneratorMonitor {
+    private final PrintWriter writer;
 
-    @Override
-    public void generationStarting() {
+    public MessagePrintingDataGeneratorMonitor(PrintWriter writer) {
+        this.writer = writer;
     }
 
-    @Override
-    public void rowEmitted(GeneratedObject row) {
+    private void println(String message) {
+        writer.println(message);
     }
 
-    @Override
-    public void endGeneration() {
+    private void println(String message, Object... args) {
+        writer.format(message, args);
+        writer.println();
     }
 
     @Override
     public void rowSpecEmitted(RowSpec rowSpec) {
-        System.out.println("RowSpec emitted");
+        println("RowSpec emitted");
     }
 
     @Override
     public void fieldFixedToValue(Field field, Object current) {
-        System.out.println(String.format("Field [%s] = %s", field.name, current));
+        println("Field [%s] = %s", field.name, current);
     }
 
     @Override
     public void unableToStepFurther(ReductiveState reductiveState) {
-        System.out.println(
-            String.format(
-                "%d: Unable to step further %s ",
-                reductiveState.getFieldValues().size(),
-                reductiveState.toString(true)));
+        println(
+            "%d: Unable to step further %s ",
+            reductiveState.getFieldValues().size(),
+            reductiveState.toString(true));
     }
 
     @Override
     public void noValuesForField(ReductiveState reductiveState, Field field) {
-        System.out.println(
-            String.format(
-                "%d: No values for field %s: %s ",
-                reductiveState.getFieldValues().size(),
-                field,
-                reductiveState.toString(true)));
+        println(
+            "%d: No values for field %s: %s ",
+            reductiveState.getFieldValues().size(),
+            field,
+            reductiveState.toString(true));
     }
 
     @Override
@@ -61,11 +61,9 @@ public class SystemOutDataGeneratorMonitor implements ReductiveDataGeneratorMoni
             .filter(entry -> entry.getValue() == FieldSpec.Empty)
             .collect(Collectors.toList());
 
-        System.out.println(
-            String.format(
-                "%d: Unable to emit row, some FieldSpec's are Empty: %s",
-                reductiveState.getFieldValues().size(),
-                Objects.toString(emptyFieldSpecs)));
+        println(
+            "%d: Unable to emit row, some FieldSpecs are Empty: %s",
+            reductiveState.getFieldValues().size(),
+            Objects.toString(emptyFieldSpecs));
     }
 }
-

@@ -10,32 +10,6 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 
 public class NumericRestrictionsTests {
-    @Test
-    void equals_whenOtherObjectIsNull_returnsFalse() {
-        NumericRestrictions restriction = new NumericRestrictions();
-
-        boolean result = restriction.equals(null);
-
-        Assert.assertFalse(result);
-    }
-
-    @Test
-    void equals_whenOtherObjectIsStringNotTypeNumericRestrictions_returnsFalse() {
-        NumericRestrictions restriction = new NumericRestrictions();
-
-        boolean result = restriction.equals("Test");
-
-        Assert.assertFalse(result);
-    }
-
-    @Test
-    void equals_whenOtherObjectIsIntNotTypeNumericRestrictions_returnsFalse() {
-        NumericRestrictions restriction = new NumericRestrictions();
-
-        boolean result = restriction.equals(1);
-
-        Assert.assertFalse(result);
-    }
 
     @Test
     void equals_whenNumericRestrictionsAreEqual_returnsTrue() {
@@ -572,7 +546,7 @@ public class NumericRestrictionsTests {
 
     private static NumericRestrictions restrictions(double numericScale){
         NumericRestrictions restrictions = new NumericRestrictions(
-            ParsedGranularity.parse(BigDecimal.valueOf(numericScale))
+            ParsedGranularity.parse(BigDecimal.valueOf(numericScale)).getNumericGranularity().scale()
         );
 
         return restrictions;

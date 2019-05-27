@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.restrictions;
 
 import java.util.Objects;
 
-public class FormatRestrictions {
+public class FormatRestrictions implements Restrictions {
     public String formatString;
 
     @Override

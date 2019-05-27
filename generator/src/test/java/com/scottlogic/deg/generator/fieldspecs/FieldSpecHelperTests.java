@@ -11,6 +11,7 @@ import java.util.Collections;
 
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
+import static org.junit.Assert.assertEquals;
 
 class FieldSpecHelperTests {
 
@@ -27,7 +28,7 @@ class FieldSpecHelperTests {
             .withSetRestrictions(SetRestrictions.fromWhitelist(Collections.singleton("value")), FieldSpecSource.Empty)
             .withNullRestrictions(new NullRestrictions(Nullness.MUST_NOT_BE_NULL), FieldSpecSource.Empty);
 
-        assertThat(actual, sameBeanAs(expected).ignoring(FieldSpecSource.class));
+        assertEquals(actual, expected);
     }
 
     @Test
@@ -39,6 +40,6 @@ class FieldSpecHelperTests {
         FieldSpec expected = FieldSpec.Empty
             .withNullRestrictions(new NullRestrictions(Nullness.MUST_BE_NULL), FieldSpecSource.Empty);
 
-        assertThat(actual, sameBeanAs(expected).ignoring(FieldSpecSource.class));
+        assertEquals(actual, expected);
     }
 }

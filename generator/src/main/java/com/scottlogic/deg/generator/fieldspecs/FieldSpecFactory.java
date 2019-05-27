@@ -13,33 +13,15 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class FieldSpecFactory {
-    private final FieldSpecMerger fieldSpecMerger;
     private final StringRestrictionsFactory stringRestrictionsFactory;
 
     @Inject
-    public FieldSpecFactory(FieldSpecMerger fieldSpecMerger, StringRestrictionsFactory stringRestrictionsFactory) {
-        this.fieldSpecMerger = fieldSpecMerger;
+    public FieldSpecFactory(StringRestrictionsFactory stringRestrictionsFactory) {
         this.stringRestrictionsFactory = stringRestrictionsFactory;
     }
 
     public FieldSpec construct(AtomicConstraint constraint) {
         return construct(constraint, false, false);
-    }
-
-    public FieldSpec toMustContainRestrictionFieldSpec(FieldSpec rootFieldSpec, Collection<FieldSpec> decisionConstraints) {
-        if (decisionConstraints == null || decisionConstraints.isEmpty()){
-            return rootFieldSpec;
-        }
-
-        return rootFieldSpec.withMustContainRestriction(
-            new MustContainRestriction(
-                decisionConstraints.stream()
-                    .map(decisionSpec -> fieldSpecMerger.merge(rootFieldSpec, decisionSpec))
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .collect(Collectors.toSet())
-            )
-        );
     }
 
     private FieldSpec construct(AtomicConstraint constraint, boolean negate, boolean violated) {
@@ -186,7 +168,7 @@ public class FieldSpecFactory {
         }
 
         return FieldSpec.Empty.withNumericRestrictions(
-            new NumericRestrictions(constraint.granularity),
+            new NumericRestrictions(constraint.granularity.getNumericGranularity().scale()),
             FieldSpecSource.fromConstraint(constraint, false, violated));
     }
 
@@ -310,4 +292,5 @@ public class FieldSpecFactory {
                 FieldSpecSource.fromConstraint(constraint, negate, violated)
             );
     }
+
 }

@@ -22,6 +22,7 @@ import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
 
+import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -76,9 +77,9 @@ public class GeneratorModule extends AbstractModule {
         bind(DecisionTreeFactory.class).to(MaxStringLengthInjectingDecisionTreeFactory.class);
         bind(FieldValueSourceEvaluator.class).to(StandardFieldValueSourceEvaluator.class);
 
-
-        bind(VelocityMonitor.class).in(Singleton.class);
-        bind(JavaUtilRandomNumberGenerator.class).toInstance(new JavaUtilRandomNumberGenerator(OffsetDateTime.now().getNano()));
-
+        bind(VelocityMonitor.class)
+            .toInstance(new VelocityMonitor(new PrintWriter(System.out, true)));
+        bind(JavaUtilRandomNumberGenerator.class)
+            .toInstance(new JavaUtilRandomNumberGenerator(OffsetDateTime.now().getNano()));
     }
 }

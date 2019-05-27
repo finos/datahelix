@@ -14,139 +14,12 @@ import java.util.*;
 
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
+import static org.junit.Assert.assertEquals;
 
 class FieldSpecFactoryTests {
     private static final StringRestrictionsFactory stringRestrictionsFactory = new StringRestrictionsFactory();
-    private FieldSpecFactory fieldSpecFactory = new FieldSpecFactory(new FieldSpecMerger(), stringRestrictionsFactory);
-    private TypeRestrictions typeRestrictions = new DataTypeRestrictions(Collections.singletonList(IsOfTypeConstraint.Types.STRING));
-    private StringRestrictions longerThanRestriction = stringRestrictionsFactory.forMinLength(3);
-    private StringRestrictions shorterThanRestriction = stringRestrictionsFactory.forMaxLength(4);
+    private FieldSpecFactory fieldSpecFactory = new FieldSpecFactory(stringRestrictionsFactory);
 
-    @Test
-    void toMustContainRestrictionFieldSpec_constraintsContainsNotConstraint_returnsMustContainsRestrictionWithNotConstraint() {
-        FieldSpec nullFieldSpec = FieldSpec.Empty.withNullRestrictions(new NullRestrictions(Nullness.MUST_NOT_BE_NULL), FieldSpecSource.Empty);
-
-        FieldSpec actualFieldSpec = fieldSpecFactory.toMustContainRestrictionFieldSpec(FieldSpec.Empty, Collections.singleton(nullFieldSpec));
-
-        FieldSpec expectedFieldSpec = FieldSpec.Empty.withMustContainRestriction(
-            new MustContainRestriction(
-                new HashSet<FieldSpec>() {{
-                    add(
-                        FieldSpec.Empty.withNullRestrictions(
-                            new NullRestrictions(Nullness.MUST_NOT_BE_NULL), FieldSpecSource.Empty)
-                        .withTypeRestrictions(
-                            DataTypeRestrictions.ALL_TYPES_PERMITTED,
-                            FieldSpecSource.Empty)
-                    );
-                }}
-            )
-        );
-
-        Assert.assertEquals(expectedFieldSpec, actualFieldSpec);
-    }
-
-    @Test
-    void toMustContainRestrictionFieldSpec_nonNullRootAndDecisionConstraint_returnsCorrectlyMerged() {
-        //Arrange
-        FieldSpec rootFieldSpec = FieldSpec.Empty.withTypeRestrictions(typeRestrictions, FieldSpecSource.Empty);
-
-        Set<FieldSpec> decisionFieldSpecs = Collections.singleton(
-            FieldSpec.Empty.withStringRestrictions(longerThanRestriction, FieldSpecSource.Empty));
-
-        //Act
-        FieldSpec actualFieldSpec = fieldSpecFactory.toMustContainRestrictionFieldSpec(rootFieldSpec, decisionFieldSpecs);
-
-        //Assert
-        FieldSpec expectedFieldSpec = rootFieldSpec.withMustContainRestriction(
-            new MustContainRestriction(Collections.singleton(
-            rootFieldSpec.withStringRestrictions(longerThanRestriction, FieldSpecSource.Empty)
-        )));
-
-        assertThat(actualFieldSpec, sameBeanAs(expectedFieldSpec));
-    }
-
-    @Test
-    void toMustContainRestrictionFieldSpec_nonNullRootAndMultipleDecisionConstraints_returnsCorrectlyMerged() {
-        //Arrange
-        FieldSpec rootFieldSpec = FieldSpec.Empty.withTypeRestrictions(typeRestrictions, FieldSpecSource.Empty);
-
-        Set<FieldSpec> decisionFieldSpecs = new HashSet<>(Arrays.asList(
-            FieldSpec.Empty.withStringRestrictions(longerThanRestriction, FieldSpecSource.Empty),
-            FieldSpec.Empty.withStringRestrictions(shorterThanRestriction, FieldSpecSource.Empty)
-        ));
-
-        //Act
-        FieldSpec actualFieldSpec = fieldSpecFactory.toMustContainRestrictionFieldSpec(rootFieldSpec, decisionFieldSpecs);
-
-        //Assert
-        FieldSpec expectedFieldSpec = rootFieldSpec.withMustContainRestriction(
-            new MustContainRestriction(new HashSet<>(Arrays.asList(
-                rootFieldSpec.withStringRestrictions(longerThanRestriction, FieldSpecSource.Empty),
-                rootFieldSpec.withStringRestrictions(shorterThanRestriction, FieldSpecSource.Empty)
-            ))));
-
-        assertThat(actualFieldSpec, sameBeanAs(expectedFieldSpec));
-    }
-
-    @Test
-    void toMustContainRestrictionFieldSpec_multipleRootAndMultipleDecisionConstraints_returnsCorrectlyMerged() {
-        //Arrange
-        FieldSpec rootFieldSpec = FieldSpec.Empty.withTypeRestrictions(typeRestrictions, FieldSpecSource.Empty)
-            .withNullRestrictions(new NullRestrictions(Nullness.MUST_NOT_BE_NULL), FieldSpecSource.Empty);
-
-        Set<FieldSpec> decisionFieldSpecs = new HashSet<>(Arrays.asList(
-            FieldSpec.Empty.withStringRestrictions(longerThanRestriction, FieldSpecSource.Empty),
-            FieldSpec.Empty.withStringRestrictions(shorterThanRestriction, FieldSpecSource.Empty)
-        ));
-
-        //Act
-        FieldSpec actualFieldSpec = fieldSpecFactory.toMustContainRestrictionFieldSpec(rootFieldSpec, decisionFieldSpecs);
-
-        //Assert
-        FieldSpec expectedFieldSpec = rootFieldSpec.withMustContainRestriction(
-            new MustContainRestriction(new HashSet<>(Arrays.asList(
-                rootFieldSpec.withStringRestrictions(longerThanRestriction, FieldSpecSource.Empty),
-                rootFieldSpec.withStringRestrictions(shorterThanRestriction, FieldSpecSource.Empty)
-            ))));
-
-        assertThat(actualFieldSpec, sameBeanAs(expectedFieldSpec));
-    }
-
-    @Test
-    void toMustContainRestrictionFieldSpec_emptyRootAndDecisionConstraint_returnsCorrectlyMerged() {
-        //Arrange
-        FieldSpec rootFieldSpec = FieldSpec.Empty;
-
-        Set<FieldSpec> decisionFieldSpecs = new HashSet<>(Collections.singletonList(
-            FieldSpec.Empty.withStringRestrictions(longerThanRestriction, FieldSpecSource.Empty)
-        ));
-
-        //Act
-        FieldSpec actualFieldSpec = fieldSpecFactory.toMustContainRestrictionFieldSpec(rootFieldSpec, decisionFieldSpecs);
-
-        //Assert
-        FieldSpec expectedFieldSpec = rootFieldSpec.withMustContainRestriction(
-            new MustContainRestriction(new HashSet<>(Collections.singletonList(
-                rootFieldSpec.withStringRestrictions(longerThanRestriction, FieldSpecSource.Empty)
-                    .withTypeRestrictions(DataTypeRestrictions.ALL_TYPES_PERMITTED, FieldSpecSource.Empty)
-            ))));
-
-        assertThat(actualFieldSpec, sameBeanAs(expectedFieldSpec));
-    }
-
-    @Test
-    void toMustContainRestrictionFieldSpec_RootAndEmptyDecisionConstraints_returnsCorrectlyMerged() {
-        //Arrange
-        FieldSpec rootFieldSpec = FieldSpec.Empty.withTypeRestrictions(typeRestrictions, FieldSpecSource.Empty);
-
-        Set<FieldSpec> decisionFieldSpecs = new HashSet<>();
-
-        //Act
-        FieldSpec actualFieldSpec = fieldSpecFactory.toMustContainRestrictionFieldSpec(rootFieldSpec, decisionFieldSpecs);
-
-        //Assert
-        assertThat(actualFieldSpec, sameBeanAs(rootFieldSpec));
-    }
 
     @Test
     void construct_stringHasLengthConstraintRetrievedTwice_returnsTheSameGeneratorInstance() {
@@ -159,7 +32,7 @@ class FieldSpecFactoryTests {
         final FieldSpec firstInstance = fieldSpecFactory.construct(constraint);
         final FieldSpec secondInstance = fieldSpecFactory.construct(constraint);
 
-        Assert.assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
+        assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
     }
 
     @Test
@@ -175,7 +48,7 @@ class FieldSpecFactoryTests {
         final FieldSpec firstInstance = fieldSpecFactory.construct(constraint);
         final FieldSpec secondInstance = fieldSpecFactory.construct(constraint);
 
-        Assert.assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
+        assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
     }
 
     @Test
@@ -194,7 +67,7 @@ class FieldSpecFactoryTests {
         final FieldSpec firstInstance = fieldSpecFactory.construct(firstConstraint);
         final FieldSpec secondInstance = fieldSpecFactory.construct(secondConstraint);
 
-        Assert.assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
+        assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
     }
 
     @Test
@@ -208,7 +81,7 @@ class FieldSpecFactoryTests {
         final FieldSpec firstInstance = fieldSpecFactory.construct(constraint);
         final FieldSpec secondInstance = fieldSpecFactory.construct(constraint);
 
-        Assert.assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
+        assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
     }
 
     @Test
@@ -224,7 +97,7 @@ class FieldSpecFactoryTests {
         final FieldSpec firstInstance = fieldSpecFactory.construct(constraint);
         final FieldSpec secondInstance = fieldSpecFactory.construct(constraint);
 
-        Assert.assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
+        assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
     }
 
     @Test
@@ -243,7 +116,7 @@ class FieldSpecFactoryTests {
         final FieldSpec firstInstance = fieldSpecFactory.construct(firstConstraint);
         final FieldSpec secondInstance = fieldSpecFactory.construct(secondConstraint);
 
-        Assert.assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
+        assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
     }
 
     @Test
@@ -257,7 +130,7 @@ class FieldSpecFactoryTests {
         final FieldSpec firstInstance = fieldSpecFactory.construct(constraint);
         final FieldSpec secondInstance = fieldSpecFactory.construct(constraint);
 
-        Assert.assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
+        assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
     }
 
     @Test
@@ -273,7 +146,7 @@ class FieldSpecFactoryTests {
         final FieldSpec firstInstance = fieldSpecFactory.construct(constraint);
         final FieldSpec secondInstance = fieldSpecFactory.construct(constraint);
 
-        Assert.assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
+        assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
     }
 
     @Test
@@ -292,6 +165,6 @@ class FieldSpecFactoryTests {
         final FieldSpec firstInstance = fieldSpecFactory.construct(firstConstraint);
         final FieldSpec secondInstance = fieldSpecFactory.construct(secondConstraint);
 
-        Assert.assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
+        assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
     }
 }
