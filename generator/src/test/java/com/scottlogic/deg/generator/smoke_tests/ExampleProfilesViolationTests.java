@@ -14,6 +14,7 @@ import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.generation.combinationstrategies.PinningCombinationStrategy;
 import com.scottlogic.deg.generator.generation.databags.StandardRowSpecDataBagGenerator;
+import com.scottlogic.deg.profile.reader.BaseCatalogAtomicConstraintReaderLookup;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import com.scottlogic.deg.profile.reader.JsonProfileReader;
 import com.scottlogic.deg.generator.inputs.profileviolation.IndividualConstraintRuleViolator;
@@ -28,6 +29,7 @@ import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.violations.ViolationGenerationEngine;
 import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
+import com.scottlogic.deg.profile.reader.MainConstraintReader;
 import org.junit.Assert;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -49,7 +51,10 @@ class ExampleProfilesViolationTests {
     @TestFactory
     Collection<DynamicTest> shouldReadProfileCorrectly() throws IOException {
         return forEachProfileFile(((standard, violating, profileFile) -> {
-            final Profile profile = new JsonProfileReader().read(profileFile.toPath());
+            final Profile profile = new JsonProfileReader(
+                new MainConstraintReader(
+                    new BaseCatalogAtomicConstraintReaderLookup()))
+                .read(profileFile.toPath());
 
             Collection<Integer> constraintsPerRule = profile.rules.stream().map(r -> r.constraints.size()).collect(Collectors.toList());
             Assert.assertThat(constraintsPerRule, not(hasItem(0))); //there should be no rules with 0 constraints
@@ -59,7 +64,11 @@ class ExampleProfilesViolationTests {
     @TestFactory
     Collection<DynamicTest> shouldGenerateAsTestCasesWithoutErrors() throws IOException {
         return forEachProfileFile(((standard, violating, profileFile) -> {
-            final Profile profile = new JsonProfileReader().read(profileFile.toPath());
+            final Profile profile = new JsonProfileReader(
+                new MainConstraintReader(
+                    new BaseCatalogAtomicConstraintReaderLookup()
+                )
+            ).read(profileFile.toPath());
             standard.generateDataSet(profile, new NullSingleDatasetOutputTarget());
         }));
     }
@@ -67,7 +76,11 @@ class ExampleProfilesViolationTests {
     @TestFactory
     Collection<DynamicTest> shouldGenerateWithoutErrors() throws IOException {
         return forEachProfileFile(((standard, violating, profileFile) -> {
-            final Profile profile = new JsonProfileReader().read(profileFile.toPath());
+            final Profile profile = new JsonProfileReader(
+                new MainConstraintReader(
+                    new BaseCatalogAtomicConstraintReaderLookup()
+                )
+            ).read(profileFile.toPath());
             violating.generateDataSet(profile, new NullMultiDatasetOutputTarget());
         }));
     }

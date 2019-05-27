@@ -1,5 +1,6 @@
 package com.scottlogic.deg.profile.reader;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.RuleInformation;
 import com.scottlogic.deg.common.profile.Profile;
@@ -22,6 +23,14 @@ import java.util.stream.Collectors;
  * It returns a Profile object for consumption by a generator
  */
 public class JsonProfileReader implements ProfileReader {
+
+    private final ConstraintReader constraintReader;
+
+    @Inject
+    public JsonProfileReader(ConstraintReader constraintReader) {
+        this.constraintReader = constraintReader;
+    }
+
     public Profile read(Path filePath) throws IOException, InvalidProfileException {
         byte[] encoded = Files.readAllBytes(filePath);
         String profileJson = new String(encoded, StandardCharsets.UTF_8);
@@ -46,8 +55,6 @@ public class JsonProfileReader implements ProfileReader {
             profileDto.fields.stream()
                 .map(fDto -> new Field(fDto.name))
                 .collect(Collectors.toList()));
-
-        ConstraintReader constraintReader = new MainConstraintReader();
 
         Collection<Rule> rules = mapDtos(
             profileDto.rules,
