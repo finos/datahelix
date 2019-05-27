@@ -10,7 +10,9 @@ import com.scottlogic.deg.output.guice.OutputFormat;
 import picocli.CommandLine;
 
 import java.io.File;
+import java.net.URI;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static com.scottlogic.deg.generator.config.detail.CombinationStrategyType.MINIMAL;
 import static com.scottlogic.deg.common.util.Defaults.DEFAULT_MAX_ROWS;
@@ -30,6 +32,8 @@ import static com.scottlogic.deg.generator.config.detail.TreeWalkerType.REDUCTIV
     abbreviateSynopsis = true)
 public class GenerateCommandLine implements AllConfigSource, Runnable {
 
+    private static Path STD_OUT = Paths.get("STD_OUT");
+
     @Override
     public void run() {
         Module container = new AllModule(this);
@@ -40,8 +44,16 @@ public class GenerateCommandLine implements AllConfigSource, Runnable {
         task.run();
     }
 
-    @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
+    @CommandLine.Option(
+        names = {"-p", "--profile-file"},
+        required = true,
+        description = "The path of the profile json file.")
     File profileFile;
+
+    @CommandLine.Option(
+        names = {"-op", "--output-path"}, order = 0,
+        description = "The path to write the generated data file to.")
+    private Path outputPath = STD_OUT;
 
     @CommandLine.Option(
         names = {"--no-optimise"},
@@ -64,9 +76,6 @@ public class GenerateCommandLine implements AllConfigSource, Runnable {
         names = { "--enable-schema-validation" },
         description = "Enables schema validation")
     boolean enableSchemaValidation = false;
-
-    @CommandLine.Parameters(index = "1", description = "The path to write the generated data file to.")
-    private Path outputPath;
 
     @CommandLine.Option(names = {"-t", "--generation-type"},
         description = "Determines the type of data generation performed (${COMPLETION-CANDIDATES})",
@@ -149,6 +158,11 @@ public class GenerateCommandLine implements AllConfigSource, Runnable {
     @Override
     public boolean overwriteOutputFiles() {
         return this.overwriteOutputFiles;
+    }
+
+    @Override
+    public boolean useStdOut() {
+        return outputPath == STD_OUT;
     }
 
     @Override

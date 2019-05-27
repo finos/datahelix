@@ -11,37 +11,30 @@ public class SingleDatasetOutputTargetProvider implements Provider<SingleDataset
     private final FileOutputTarget fileOutputTarget;
     private final TraceFileOutputTarget traceFileOutputTarget;
     private final StdoutOutputTarget stdoutOutputTarget;
-    private final Path outputPath;
-    private final boolean tracingIsEnabled;
+    private final OutputConfigSource config;
 
     @Inject
     SingleDatasetOutputTargetProvider(
         FileOutputTarget fileOutputTarget,
         TraceFileOutputTarget traceFileOutputTarget,
         StdoutOutputTarget stdoutOutputTarget,
-        @Named("config:outputPath")Path outputPath,
-        @Named("config:tracingIsEnabled") boolean tracingIsEnabled) {
+        OutputConfigSource outputConfigSource) {
         this.fileOutputTarget = fileOutputTarget;
         this.traceFileOutputTarget = traceFileOutputTarget;
         this.stdoutOutputTarget = stdoutOutputTarget;
-        this.outputPath = outputPath;
-        this.tracingIsEnabled = tracingIsEnabled;
+        this.config = outputConfigSource;
     }
 
     @Override
     public SingleDatasetOutputTarget get() {
-        if (standardOut()){
+        if (config.useStdOut()){
             return stdoutOutputTarget;
         }
 
-        if (tracingIsEnabled) {
+        if (config.isEnableTracing()) {
             return new SplittingOutputTarget(fileOutputTarget, traceFileOutputTarget);
         } else {
             return fileOutputTarget;
         }
-    }
-
-    private boolean standardOut() {
-        return outputPath == null;
     }
 }
