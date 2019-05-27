@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.outputs.manifest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
-import com.scottlogic.deg.generator.utils.FileUtils;
+import com.scottlogic.deg.generator.utils.FileUtilsImpl;
 import com.scottlogic.deg.generator.violations.ViolatedProfile;
 
 import java.io.IOException;
@@ -25,7 +25,7 @@ public class JsonManifestWriter implements ManifestWriter {
         Path directoryPath) throws IOException {
 
         AtomicInteger dataSetIndex = new AtomicInteger(1);
-        DecimalFormat intFormatter = FileUtils.getDecimalFormat(result.size());
+        DecimalFormat intFormatter = FileUtilsImpl.getDecimalFormat(result.size());
 
         List<ManifestDTO.TestCaseDTO> testCaseDtos = result
             .stream()
