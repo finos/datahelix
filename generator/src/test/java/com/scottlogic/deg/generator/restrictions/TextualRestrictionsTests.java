@@ -393,23 +393,23 @@ class TextualRestrictionsTests {
     }
 
     @Test
-    void createGenerator_withMatchingRegexAndMatchingStandardConstraint_shouldCreateNoStrings() {
+    void createGenerator_withMatchingRegexAndMatchingStandardConstraint_shouldCreateStrings() {
         StringRestrictions restrictions = aValid(StandardConstraintTypes.ISIN, false)
             .intersect(matchingRegex("[a-zA-Z0-9]{12}", false)).restrictions;
 
         StringGenerator generator = restrictions.createGenerator();
 
-        assertGeneratorCannotGenerateAnyStrings(generator);
+        assertGeneratorCanGenerateAtLeastOneString(generator);
     }
 
     @Test
-    void createGenerator_withContainingRegexAndMatchingStandardConstraint_shouldCreateNoStrings() {
+    void createGenerator_withContainingRegexAndMatchingStandardConstraint_shouldCreateStrings() {
         StringRestrictions restrictions = aValid(StandardConstraintTypes.ISIN, false)
             .intersect(containsRegex("[a-zA-Z0-9]{12}", false)).restrictions;
 
         StringGenerator generator = restrictions.createGenerator();
 
-        assertGeneratorCannotGenerateAnyStrings(generator);
+        assertGeneratorCanGenerateAtLeastOneString(generator);
     }
 
     @Test
@@ -635,8 +635,13 @@ class TextualRestrictionsTests {
         return new MatchesStandardStringRestrictions(type, negate);
     }
 
-    private static void assertGeneratorCannotGenerateAnyStrings(StringGenerator generator){
+    private static void assertGeneratorCannotGenerateAnyStrings(StringGenerator generator) {
         Iterator<String> stringValueIterator = generator.generateAllValues().iterator();
         Assert.assertThat(stringValueIterator.hasNext(), is(false));
+    }
+
+    private static void assertGeneratorCanGenerateAtLeastOneString(StringGenerator generator) {
+        Iterator<String> stringValueIterator = generator.generateAllValues().iterator();
+        Assert.assertThat(stringValueIterator.hasNext(), is(true));
     }
 }
