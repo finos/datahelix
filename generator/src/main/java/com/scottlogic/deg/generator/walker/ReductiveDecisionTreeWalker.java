@@ -60,7 +60,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
             return Stream.empty();
         }
 
-        Stream<DataBagValue> values = fieldSpecValueGenerator.generate(nextFieldSpec.get());
+        Stream<DataBagValue> values = fieldSpecValueGenerator.generate(nextFieldSpecs);
 
         return FlatMappingSpliterator.flatMap(
             values,

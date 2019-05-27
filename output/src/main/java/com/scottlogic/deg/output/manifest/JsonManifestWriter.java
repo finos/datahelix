@@ -6,6 +6,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.scottlogic.deg.common.profile.ViolatedProfile;
 import com.scottlogic.deg.output.FileUtils;
+import com.scottlogic.deg.output.FileUtilsImpl;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -32,7 +33,7 @@ public class JsonManifestWriter implements ManifestWriter {
         List<ViolatedProfile> result) throws IOException {
 
         AtomicInteger dataSetIndex = new AtomicInteger(1);
-        DecimalFormat intFormatter = FileUtils.getDecimalFormat(result.size());
+        DecimalFormat intFormatter = FileUtilsImpl.getDecimalFormat(result.size());
 
         List<ManifestDTO.TestCaseDTO> testCaseDtos = result
             .stream()

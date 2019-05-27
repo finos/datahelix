@@ -52,16 +52,11 @@ public class GeneratorModule extends AbstractModule {
             .annotatedWith(Names.named("config:maxRows"))
             .toInstance(generationConfigSource.getMaxRows());
 
-        bind(Path.class) // TODO PAUL REMOVE THIS, ONLY USED FOR VISUALISE
-            .annotatedWith(Names.named("config:outputPath"))
-            .toInstance(generationConfigSource.getOutputPath());
-
         // Bind known implementations - no user input required
         bind(DataGeneratorMonitor.class).to(ReductiveDataGeneratorMonitor.class);
         bind(DataGenerator.class).to(DecisionTreeDataGenerator.class);
         bind(DecisionTreeFactory.class).to(MaxStringLengthInjectingDecisionTreeFactory.class);
         bind(FieldValueSourceEvaluator.class).to(StandardFieldValueSourceEvaluator.class);
-        bind(FileUtils.class).to(FileUtilsImpl.class);
 
         bind(VelocityMonitor.class)
             .toInstance(new VelocityMonitor(new PrintWriter(System.out, true)));

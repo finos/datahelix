@@ -49,7 +49,6 @@ class ReductiveFieldSpecBuilderTests {
         Field field1 = new Field("field");
         TreeConstraintNode rootNode = new TreeConstraintNode(new IsNullConstraint(field1, Collections.emptySet()));
         when(valueGenerator.generate(FieldSpec.Empty)).thenReturn(Stream.of(mock(DataBagValue.class)));
-        when(valueGenerator.generate(field1, FieldSpec.Empty)).thenReturn(Stream.of(DataBag.empty));
 
         Set<FieldSpec> field = builder.getDecisionFieldSpecs(rootNode, field1);
 

@@ -26,7 +26,7 @@ public class ConfigValidator {
         checkProfileInputFile(generationConfigSource.getProfileFile());
     }
 
-    private void checkSwitches(GenerationConfigSource configSource) {
+    private void checkSwitches(OutputConfigSource configSource) {
         if (configSource.isEnableTracing() &&
             fileUtils.getTraceFile(configSource.getOutputPath()).exists() &&
             !configSource.overwriteOutputFiles()) {

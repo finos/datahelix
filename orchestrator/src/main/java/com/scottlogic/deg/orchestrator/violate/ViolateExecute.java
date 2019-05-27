@@ -5,6 +5,7 @@ import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.common.output.GeneratedObject;
+import com.scottlogic.deg.output.FileUtilsImpl;
 import com.scottlogic.deg.output.manifest.ManifestWriter;
 import com.scottlogic.deg.common.profile.ViolatedProfile;
 import com.scottlogic.deg.output.writer.DataSetWriter;
