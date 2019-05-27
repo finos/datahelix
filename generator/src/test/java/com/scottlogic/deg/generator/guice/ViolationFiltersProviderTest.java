@@ -41,7 +41,7 @@ class ViolationFiltersProviderTest {
     @Test
     void hasLengthConstraintsToViolate_ReturnsOneFilter_ThatDoesNotAcceptHasLengthConstraints() {
         GenerationConfigSource configSource = mock(GenerationConfigSource.class);
-        when(configSource.getConstraintsToNotViolate()).thenReturn(Arrays.asList(AtomicConstraintType.HASLENGTH));
+        when(configSource.getConstraintsToNotViolate()).thenReturn(Arrays.asList(AtomicConstraintType.HAS_LENGTH));
         ViolationFiltersProvider provider = new ViolationFiltersProvider(configSource, new AtomicConstraintTypeMapper());
 
         List<ViolationFilter> filters = provider.get();
@@ -62,7 +62,7 @@ class ViolationFiltersProviderTest {
     @Test
     void twoConstraintsToViolate_ReturnListWithTwoFilter() {
         GenerationConfigSource configSource = mock(GenerationConfigSource.class);
-        when(configSource.getConstraintsToNotViolate()).thenReturn(Arrays.asList(AtomicConstraintType.HASLENGTH, AtomicConstraintType.ISINSET));
+        when(configSource.getConstraintsToNotViolate()).thenReturn(Arrays.asList(AtomicConstraintType.HAS_LENGTH, AtomicConstraintType.IS_IN_SET));
         ViolationFiltersProvider provider = new ViolationFiltersProvider(configSource, new AtomicConstraintTypeMapper());
 
         assertThat(provider.get(), hasSize(2));

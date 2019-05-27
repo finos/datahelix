@@ -1,8 +1,10 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
 import com.scottlogic.deg.generator.generation.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.utils.SetUtils;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -10,29 +12,18 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
 
 class FieldSpecTests {
-    @Test
-    void equals_objIsNull_returnsFalse() {
-        FieldSpec fieldSpec = FieldSpec.Empty;
-
-        boolean result = fieldSpec.equals(null);
-
-        assertFalse(
-            "Expected that when the other object is null a false value is returned but was true",
-            result
-        );
-    }
 
     @Test
     void equals_objTypeIsNotFieldSpec_returnsFalse() {
@@ -468,6 +459,94 @@ class FieldSpecTests {
     }
 
     @ParameterizedTest()
+    @MethodSource("permitsNotNullProvider")
+    public void permitsShouldRejectInvalidConfigurationsIfTypeRestrictionsIsNotNull(
+        TypeCheckHolder holder) {
+        FieldSpec spec = FieldSpec.Empty.withTypeRestrictions(holder.restrictions, FieldSpecSource.Empty);
+        assertEquals("Given " + holder.object + ", and types allowed " + holder.restrictions.getAllowedTypes() + ", expected " + holder.expectedSuccess , holder.expectedSuccess, spec.permits(holder.object));
+    }
+
+    private static class TypeCheckHolder {
+        private final TypeRestrictions restrictions;
+        private final Object object;
+        private final boolean expectedSuccess;
+
+        public TypeCheckHolder(TypeRestrictions restrictions, Object object, boolean expectedSuccess) {
+            this.restrictions = restrictions;
+            this.object = object;
+            this.expectedSuccess = expectedSuccess;
+        }
+    }
+
+    private static Stream<Arguments> permitsNotNullProvider() {
+        TypeRestrictions numericRestrictions = new AnyTypeRestriction().except(Types.NUMERIC);
+        TypeRestrictions stringRestrictions = new AnyTypeRestriction().except(Types.STRING);
+        TypeRestrictions dateTimeRestrictions = new AnyTypeRestriction().except(Types.DATETIME);
+
+        Integer intValue = 1;
+        String stringValue = "a string";
+        OffsetDateTime dateValue = OffsetDateTime.of(2001, 1, 1, 1, 1, 1, 1, ZoneOffset.UTC);
+
+        Set<TypeRestrictions> typeRestrictions = SetUtils.setOf(numericRestrictions, stringRestrictions, dateTimeRestrictions);
+        Set<Object> objects = SetUtils.setOf(intValue, stringValue, dateValue);
+
+        Set<TypeCheckHolder> holders = new HashSet<>();
+        for (TypeRestrictions restriction : typeRestrictions) {
+            for (Object object : objects) {
+                boolean success = !((restriction == numericRestrictions && object == intValue) ||
+                    (restriction == stringRestrictions && object == stringValue) ||
+                    (restriction == dateTimeRestrictions && object == dateValue));
+                holders.add(new TypeCheckHolder(restriction, object, success));
+            }
+        }
+        return holders.stream().map(Arguments::of);
+    }
+
+    @Test
+    void permitsRejectsInvalidNumeric() {
+        NumericRestrictions numeric = new NumericRestrictions();
+        FieldSpec spec = FieldSpec.Empty.withNumericRestrictions(numeric, FieldSpecSource.Empty);
+
+        numeric.min = new NumericLimit<>(BigDecimal.TEN, true);
+
+        assertFalse(spec.permits(BigDecimal.ONE));
+    }
+
+    @Test
+    void permitsRejectsInvalidDateTime() {
+        DateTimeRestrictions dateTime = new DateTimeRestrictions();
+        FieldSpec spec = FieldSpec.Empty.withDateTimeRestrictions(dateTime, FieldSpecSource.Empty);
+
+        OffsetDateTime time = OffsetDateTime.of(100, 1, 1, 1, 1, 1, 1, ZoneOffset.UTC);
+        dateTime.max = new DateTimeRestrictions.DateTimeLimit(time, true);
+
+        assertFalse(spec.permits(time.plusNanos(1_000_000)));
+    }
+
+    @Test
+    void permitsRejectsInvalidString() {
+        StringRestrictions string = new StringRestrictions() {
+            @Override
+            public MergeResult<StringRestrictions> intersect(StringRestrictions other) {
+                return null;
+            }
+
+            @Override
+            public boolean match(String x) {
+                return false;
+            }
+
+            @Override
+            public StringGenerator createGenerator() {
+                return null;
+            }
+        };
+        FieldSpec spec = FieldSpec.Empty.withStringRestrictions(string, FieldSpecSource.Empty);
+
+        assertFalse(spec.permits("Anything"));
+    }
+
+    @ParameterizedTest()
     @MethodSource("partiallyUnequalProvider")
     public void fieldSpecsThatArePartiallyEqualShouldBeReportedAsUnequal(
         boolean setRestrictionsEqual,
@@ -579,6 +658,16 @@ class FieldSpecTests {
         }
 
         @Override
+        public boolean isInstanceOf(Object o) {
+            return IsOfTypeConstraint.Types.DATETIME.isInstanceOf(o);
+        }
+
+        @Override
+        public boolean match(Object x) {
+            return false;
+        }
+
+        @Override
         public StringGenerator createGenerator() {
             throw new UnsupportedOperationException("Not implemented");
         }
@@ -632,6 +721,11 @@ class FieldSpecTests {
         @Override
         public boolean equals(Object o) {
             return isEqual;
+        }
+
+        @Override
+        public String toString() {
+            return "equal";
         }
 
         @Override

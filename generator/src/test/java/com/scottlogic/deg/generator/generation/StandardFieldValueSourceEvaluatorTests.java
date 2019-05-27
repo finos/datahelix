@@ -253,11 +253,11 @@ public class StandardFieldValueSourceEvaluatorTests {
 
     @Test
     void getFieldValueSources_fieldSpecContainsNumericRestrictionsWithNoScaleAndGranularityHasRestrictionOfTwo_generatesValuesWithTwoDecimalPlaces() {
+        NumericRestrictions restrictions = new NumericRestrictions(2);
+        restrictions.min = new NumericLimit<>(new BigDecimal("15"), false);
+        restrictions.max = new NumericLimit<>(new BigDecimal("16"), false);
         FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(
-            new NumericRestrictions(new ParsedGranularity(new BigDecimal(new BigInteger("0"), 2, new MathContext(1)))) {{
-                min = new NumericLimit<>(new BigDecimal("15"), false);
-                max = new NumericLimit<>(new BigDecimal("16"), false);
-            }},
+            restrictions,
             FieldSpecSource.Empty
         ).withTypeRestrictions(
             new DataTypeRestrictions(

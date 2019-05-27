@@ -14,6 +14,7 @@ import java.util.*;
 
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
+import static org.junit.Assert.assertEquals;
 
 class FieldSpecFactoryTests {
     private static final StringRestrictionsFactory stringRestrictionsFactory = new StringRestrictionsFactory();
@@ -42,7 +43,7 @@ class FieldSpecFactoryTests {
             )
         );
 
-        Assert.assertEquals(expectedFieldSpec, actualFieldSpec);
+        assertEquals(expectedFieldSpec, actualFieldSpec);
     }
 
     @Test
@@ -62,7 +63,7 @@ class FieldSpecFactoryTests {
             rootFieldSpec.withStringRestrictions(longerThanRestriction, FieldSpecSource.Empty)
         )));
 
-        assertThat(actualFieldSpec, sameBeanAs(expectedFieldSpec));
+        assertEquals(actualFieldSpec, expectedFieldSpec);
     }
 
     @Test
@@ -85,7 +86,7 @@ class FieldSpecFactoryTests {
                 rootFieldSpec.withStringRestrictions(shorterThanRestriction, FieldSpecSource.Empty)
             ))));
 
-        assertThat(actualFieldSpec, sameBeanAs(expectedFieldSpec));
+        assertEquals(actualFieldSpec, expectedFieldSpec);
     }
 
     @Test
@@ -109,7 +110,7 @@ class FieldSpecFactoryTests {
                 rootFieldSpec.withStringRestrictions(shorterThanRestriction, FieldSpecSource.Empty)
             ))));
 
-        assertThat(actualFieldSpec, sameBeanAs(expectedFieldSpec));
+        assertEquals(actualFieldSpec, expectedFieldSpec);
     }
 
     @Test
@@ -131,7 +132,7 @@ class FieldSpecFactoryTests {
                     .withTypeRestrictions(DataTypeRestrictions.ALL_TYPES_PERMITTED, FieldSpecSource.Empty)
             ))));
 
-        assertThat(actualFieldSpec, sameBeanAs(expectedFieldSpec));
+        assertEquals(actualFieldSpec, expectedFieldSpec);
     }
 
     @Test
@@ -145,7 +146,7 @@ class FieldSpecFactoryTests {
         FieldSpec actualFieldSpec = fieldSpecFactory.toMustContainRestrictionFieldSpec(rootFieldSpec, decisionFieldSpecs);
 
         //Assert
-        assertThat(actualFieldSpec, sameBeanAs(rootFieldSpec));
+        assertEquals(actualFieldSpec, rootFieldSpec);
     }
 
     @Test
@@ -159,7 +160,7 @@ class FieldSpecFactoryTests {
         final FieldSpec firstInstance = fieldSpecFactory.construct(constraint);
         final FieldSpec secondInstance = fieldSpecFactory.construct(constraint);
 
-        Assert.assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
+        assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
     }
 
     @Test
@@ -175,7 +176,7 @@ class FieldSpecFactoryTests {
         final FieldSpec firstInstance = fieldSpecFactory.construct(constraint);
         final FieldSpec secondInstance = fieldSpecFactory.construct(constraint);
 
-        Assert.assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
+        assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
     }
 
     @Test
@@ -194,7 +195,7 @@ class FieldSpecFactoryTests {
         final FieldSpec firstInstance = fieldSpecFactory.construct(firstConstraint);
         final FieldSpec secondInstance = fieldSpecFactory.construct(secondConstraint);
 
-        Assert.assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
+        assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
     }
 
     @Test
@@ -208,7 +209,7 @@ class FieldSpecFactoryTests {
         final FieldSpec firstInstance = fieldSpecFactory.construct(constraint);
         final FieldSpec secondInstance = fieldSpecFactory.construct(constraint);
 
-        Assert.assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
+        assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
     }
 
     @Test
@@ -224,7 +225,7 @@ class FieldSpecFactoryTests {
         final FieldSpec firstInstance = fieldSpecFactory.construct(constraint);
         final FieldSpec secondInstance = fieldSpecFactory.construct(constraint);
 
-        Assert.assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
+        assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
     }
 
     @Test
@@ -243,7 +244,7 @@ class FieldSpecFactoryTests {
         final FieldSpec firstInstance = fieldSpecFactory.construct(firstConstraint);
         final FieldSpec secondInstance = fieldSpecFactory.construct(secondConstraint);
 
-        Assert.assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
+        assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
     }
 
     @Test
@@ -257,7 +258,7 @@ class FieldSpecFactoryTests {
         final FieldSpec firstInstance = fieldSpecFactory.construct(constraint);
         final FieldSpec secondInstance = fieldSpecFactory.construct(constraint);
 
-        Assert.assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
+        assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
     }
 
     @Test
@@ -273,7 +274,7 @@ class FieldSpecFactoryTests {
         final FieldSpec firstInstance = fieldSpecFactory.construct(constraint);
         final FieldSpec secondInstance = fieldSpecFactory.construct(constraint);
 
-        Assert.assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
+        assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
     }
 
     @Test
@@ -292,6 +293,6 @@ class FieldSpecFactoryTests {
         final FieldSpec firstInstance = fieldSpecFactory.construct(firstConstraint);
         final FieldSpec secondInstance = fieldSpecFactory.construct(secondConstraint);
 
-        Assert.assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
+        assertEquals(firstInstance.getStringRestrictions(), secondInstance.getStringRestrictions());
     }
 }

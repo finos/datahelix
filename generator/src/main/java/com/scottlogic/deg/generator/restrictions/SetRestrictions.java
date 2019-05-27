@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class SetRestrictions {
+public class SetRestrictions implements Restrictions {
     private static final SetRestrictions neutral = new SetRestrictions(null, null);
 
     private final Set<Object> whitelist;

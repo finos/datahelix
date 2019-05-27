@@ -1,11 +1,12 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
-public class DateTimeRestrictions {
+public class DateTimeRestrictions extends AbstractTypedRestrictions {
     private static final Timescale DEFAULT_GRANULARITY = Timescale.MILLIS;
     private final Timescale granularity;
     public DateTimeLimit min;
@@ -23,12 +24,15 @@ public class DateTimeRestrictions {
         return granularity;
     }
 
-    public static boolean isDateTime(Object o) {
-        return o instanceof OffsetDateTime;
+
+    @Override
+    protected IsOfTypeConstraint.Types getType() {
+        return IsOfTypeConstraint.Types.DATETIME;
     }
 
+    @Override
     public boolean match(Object o) {
-        if (!DateTimeRestrictions.isDateTime(o)) {
+        if (!isInstanceOf(o)) {
             return false;
         }
 
