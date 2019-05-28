@@ -188,7 +188,7 @@ class TextualRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{6,}$/ ∩ /[a-z]{0,9}/"));
+        Assert.assertThat(generator.toString(), equalTo("(/^.{6,}$/ ∩ /[a-z]{0,9}/)"));
     }
 
     @Test
@@ -208,7 +208,7 @@ class TextualRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{0,4}$/ ∩ /[a-z]{0,9}/"));
+        Assert.assertThat(generator.toString(), equalTo("(/^.{0,4}$/ ∩ /[a-z]{0,9}/)"));
     }
 
     @Test
@@ -228,7 +228,7 @@ class TextualRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{5}$/ ∩ /[a-z]{0,9}/"));
+        Assert.assertThat(generator.toString(), equalTo("(/^.{5}$/ ∩ /[a-z]{0,9}/)"));
     }
 
     @Test
@@ -249,7 +249,7 @@ class TextualRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{3,7}$/ ∩ /[a-z]{0,9}/"));
+        Assert.assertThat(generator.toString(), equalTo("(/^.{3,7}$/ ∩ /[a-z]{0,9}/)"));
     }
 
     @Test
@@ -268,7 +268,7 @@ class TextualRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{6,}$/ ∩ */[a-z]{0,9}/*"));
+        Assert.assertThat(generator.toString(), equalTo("(/^.{6,}$/ ∩ */[a-z]{0,9}/*)"));
     }
 
     @Test
@@ -289,7 +289,7 @@ class TextualRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{0,4}$/ ∩ */[a-z]{0,9}/*"));
+        Assert.assertThat(generator.toString(), equalTo("(/^.{0,4}$/ ∩ */[a-z]{0,9}/*)"));
     }
 
     @Test
@@ -309,7 +309,7 @@ class TextualRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{5}$/ ∩ */[a-z]{0,9}/*"));
+        Assert.assertThat(generator.toString(), equalTo("(/^.{5}$/ ∩ */[a-z]{0,9}/*)"));
     }
 
     @Test
@@ -330,7 +330,7 @@ class TextualRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{3,7}$/ ∩ */[a-z]{0,9}/*"));
+        Assert.assertThat(generator.toString(), equalTo("(/^.{3,7}$/ ∩ */[a-z]{0,9}/*)"));
     }
 
     @Test

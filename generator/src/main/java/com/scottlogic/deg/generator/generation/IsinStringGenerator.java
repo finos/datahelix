@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.utils.*;
+import jdk.nashorn.internal.runtime.regexp.joni.Regex;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,14 +38,25 @@ public class IsinStringGenerator implements StringGenerator {
     public StringGenerator intersect(StringGenerator stringGenerator) {
         if (stringGenerator instanceof IsinStringGenerator) {
             if (isNegated == ((IsinStringGenerator)stringGenerator).isNegated) {
-                return this; // TODO this will not work when intersecting with a generator that is the result of another intersection operation
+                RegexStringGenerator otherRegexGenerator =
+                    ((IsinStringGenerator) stringGenerator).isinRegexGenerator;
+                return new IsinStringGenerator(
+                    isNegated
+                        ? isinRegexGenerator.union(otherRegexGenerator)
+                        : (RegexStringGenerator)isinRegexGenerator.intersect(otherRegexGenerator),
+                    isNegated
+                );
             }
-            return new NoStringsStringGenerator(RegexStringGenerator.intersectRepresentation(stringGenerator.toString(), "<ISIN>"));
+            return new NoStringsStringGenerator(
+                RegexStringGenerator.intersectRepresentation(stringGenerator.toString(), "<ISIN>")
+            );
         }
         if (stringGenerator instanceof ChecksummedCodeStringGenerator) {
-            // Assume that no other checksummed string format we know about is going to be compatible with the ISIN format.
-            // This is true at the time of writing.
-            return new NoStringsStringGenerator(RegexStringGenerator.intersectRepresentation(stringGenerator.toString(), "<ISIN>"));
+            // Assume that no other checksummed string format we know about is going to be
+            // compatible with the ISIN format.  This is true at the time of writing.
+            return new NoStringsStringGenerator(
+                RegexStringGenerator.intersectRepresentation(stringGenerator.toString(), "<ISIN>")
+            );
         }
         if (stringGenerator instanceof RegexStringGenerator) {
             return intersect((RegexStringGenerator)stringGenerator);

@@ -144,11 +144,11 @@ public class RegexStringGenerator implements StringGenerator {
     }
 
     static String intersectRepresentation(String left, String right) {
-        return String.format("%s ∩ %s", left, right);
+        return String.format("(%s ∩ %s)", left, right);
     }
 
     static String unionRepresentation(String left, String right) {
-        return String.format("%s ∪ %s", left, right);
+        return String.format("(%s ∪ %s)", left, right);
     }
 
     @Override
