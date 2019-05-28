@@ -13,7 +13,6 @@ import java.util.Collection;
 import java.util.function.Supplier;
 
 public class ProfileSchemaValidatorTests {
-
     private final String TEST_PROFILE_DIR = "/test-profiles/";
     private final String INVALID_PROFILE_DIR = "invalid";
     private final String VALID_PROFILE_DIR = "valid";
@@ -48,7 +47,10 @@ public class ProfileSchemaValidatorTests {
         for (int i = 0; i < listOfFiles.length; i++) {
             String profileFilename = listOfFiles[i].getName();
             DynamicTest test = DynamicTest.dynamicTest(profileFilename, () -> {
-                URL testProfileUrl = this.getClass().getResource(TEST_PROFILE_DIR + INVALID_PROFILE_DIR + "/" + profileFilename);
+                URL testProfileUrl =
+                    this.getClass().getResource(
+                        TEST_PROFILE_DIR + INVALID_PROFILE_DIR + "/" + profileFilename
+                    );
 
                 try {
                     profileValidator.validateProfile(new File(testProfileUrl.getPath()));
@@ -56,8 +58,8 @@ public class ProfileSchemaValidatorTests {
                     Supplier<String> msgSupplier = () -> "Profile ["
                         + profileFilename + "] should not be valid";
                     Assertions.fail(msgSupplier);
-
-                } catch (ValidationException e){ }
+                }
+                catch (ValidationException e) { }
             });
             dynTsts.add(test);
         }
@@ -71,16 +73,21 @@ public class ProfileSchemaValidatorTests {
         for (int i = 0; i < listOfFiles.length; i++) {
             String profileFilename = listOfFiles[i].getName();
             DynamicTest test = DynamicTest.dynamicTest(profileFilename, () -> {
-                URL testProfileUrl = this.getClass().getResource(TEST_PROFILE_DIR + VALID_PROFILE_DIR + "/" + profileFilename);
+                URL testProfileUrl =
+                    this.getClass().getResource(
+                        TEST_PROFILE_DIR + VALID_PROFILE_DIR + "/" + profileFilename
+                    );
                 try {
                     profileValidator.validateProfile(new File(testProfileUrl.getPath()));
-                } catch (ValidationException e) {
-                    Assertions.fail("Profile [" + profileFilename + "] should be valid [" + e.errorMessages + "]");
+                }
+                catch (ValidationException e) {
+                    Assertions.fail(
+                        "Profile [" + profileFilename + "] should be valid [" + e.errorMessages + "]"
+                    );
                 }
             });
             dynTsts.add(test);
         }
         return dynTsts;
     }
-
 }

@@ -10,7 +10,6 @@ import java.nio.file.Path;
  * Class used to determine whether the command line options are valid for visualisation
  */
 public class VisualisationConfigValidator {
-
     private final FileUtils fileUtils;
 
     @Inject
@@ -24,11 +23,15 @@ public class VisualisationConfigValidator {
      */
     public void validateCommandLine(boolean overwrite, Path outputPath) {
         if (fileUtils.isDirectory(outputPath)) {
-            throw new ValidationException("Invalid Output - target is a directory, please use a different output filename");
+            throw new ValidationException(
+                "Invalid Output - target is a directory, please use a different output filename"
+            );
         }
          if (!overwrite && fileUtils.exists(outputPath)) {
-            throw new ValidationException("Invalid Output - file already exists, please use a different output filename or use the --overwrite option");
+            throw new ValidationException(
+                "Invalid Output - file already exists, please use a different output filename " +
+                    "or use the --overwrite option"
+            );
         }
     }
-
 }

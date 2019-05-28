@@ -9,7 +9,6 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsNullConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
-import com.scottlogic.deg.generator.inputs.validation.messages.StringValidationMessage;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,17 +49,18 @@ public class TypingRequiredPerFieldValidator implements ProfileValidator {
 
         List<String> untypedFields = profile.fields.stream()
             .filter(field -> !sufficientlyRestrictsFieldTypes(decisionTree.getRootNode(), field))
-            .map(nonCompliantField -> nonCompliantField.name + " is untyped; add an ofType, equalTo or inSet constraint, or mark it as null")
+            .map(nonCompliantField -> nonCompliantField.name +
+                " is untyped; add an ofType, equalTo or inSet constraint, or mark it as null")
             .collect(Collectors.toList());
 
         if (!untypedFields.isEmpty()){
             throw new ValidationException(untypedFields);
         }
-
     }
 
     private static boolean sufficientlyRestrictsFieldTypes(ConstraintNode node, Field fieldToCheck) {
-        // a constraint node is sufficient if any of its constraints, or any of its decision nodes, are sufficient
+        // a constraint node is sufficient if any of its constraints, or any of its decision nodes,
+        // are sufficient
         return
             node.getAtomicConstraints().stream()
                 .anyMatch(constraint -> sufficientlyRestrictsFieldTypes(constraint, fieldToCheck))
@@ -71,9 +71,8 @@ public class TypingRequiredPerFieldValidator implements ProfileValidator {
 
     private static boolean sufficientlyRestrictsFieldTypes(DecisionNode node, Field fieldToCheck) {
         // a decision node is sufficient if all of its branches are sufficient
-        return
-            node.getOptions().stream()
-                .allMatch(constraintNode -> sufficientlyRestrictsFieldTypes(constraintNode, fieldToCheck));
+        return node.getOptions().stream()
+            .allMatch(constraintNode -> sufficientlyRestrictsFieldTypes(constraintNode, fieldToCheck));
     }
 
     private static boolean sufficientlyRestrictsFieldTypes(AtomicConstraint constraint, Field fieldToCheck) {

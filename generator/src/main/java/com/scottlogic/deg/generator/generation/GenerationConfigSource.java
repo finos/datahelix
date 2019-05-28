@@ -14,7 +14,6 @@ public interface GenerationConfigSource  {
     Path getOutputPath();
     boolean overwriteOutputFiles();
 
-
     MonitorType getMonitorType();
     boolean shouldDoPartitioning();
     boolean isEnableTracing();

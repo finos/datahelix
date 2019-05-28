@@ -17,13 +17,11 @@ public class ViolateModule extends AbstractModule {
     private final ViolateConfigSource configSource;
 
     public ViolateModule(ViolateConfigSource configSource) {
-
         this.configSource = configSource;
     }
 
     @Override
     protected void configure() {
-
         bind(AllConfigSource.class).toInstance(configSource);
         bind(ViolateConfigSource.class).toInstance(configSource);
 

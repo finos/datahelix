@@ -47,7 +47,6 @@ public class GenerateExecute implements Runnable {
 
     @Override
     public void run() {
-
         try {
             configValidator.preProfileChecks(configSource);
             profileSchemaValidator.validateProfile(configSource.getProfileFile());
@@ -58,7 +57,6 @@ public class GenerateExecute implements Runnable {
             singleDatasetOutputTarget.validate();
 
             standardGenerationEngine.generateDataSet(profile, singleDatasetOutputTarget);
-
         }
         catch (ValidationException e){
             errorReporter.displayValidation(e);

@@ -47,7 +47,7 @@ public class CucumberTestHelper {
 
         if (testState.shouldViolate){
             injector.getInstance(ViolateExecute.class).run();
-        } else{
+        } else {
             injector.getInstance(GenerateExecute.class).run();
         }
 
@@ -94,24 +94,28 @@ public class CucumberTestHelper {
         return testState.testExceptions;
     }
 
-    public Stream<String> getProfileValidationErrors(){
-           return testState.testExceptions.stream()
-                .filter(e -> e instanceof ValidationException || e instanceof JsonParseException)
-                .map(Throwable::getMessage);
+    public Stream<String> getProfileValidationErrors() {
+        return testState.testExceptions.stream()
+            .filter(e -> e instanceof ValidationException || e instanceof JsonParseException)
+            .map(Throwable::getMessage);
     }
 
-    public <T> void assertFieldContainsNullOrMatching(String fieldName, Class<T> clazz){
+    public <T> void assertFieldContainsNullOrMatching(String fieldName, Class<T> clazz) {
         assertFieldContainsNullOrMatching(fieldName, clazz, value -> true);
     }
 
-    public <T> void assertFieldContainsNullOrMatching(String fieldName, Class<T> clazz, Function<T, Boolean> predicate){
+    public <T> void assertFieldContainsNullOrMatching(
+        String fieldName,
+        Class<T> clazz,
+        Function<T, Boolean> predicate
+    ){
         assertFieldContains(fieldName, objectValue -> {
-            if (objectValue == null){
+            if (objectValue == null) {
                 return true;
             }
 
-            if (!clazz.isInstance(objectValue)){
-                return false; //not the correct type
+            if (!clazz.isInstance(objectValue)) {
+                return false;
             }
 
             //noinspection unchecked
@@ -119,13 +123,13 @@ public class CucumberTestHelper {
         });
     }
 
-    public <T> void assertFieldContainsNullOrNotMatching(String fieldName, Class<T> clazz){
+    public <T> void assertFieldContainsNullOrNotMatching(String fieldName, Class<T> clazz) {
         assertFieldContains(fieldName, objectValue -> {
-            if (objectValue == null){
+            if (objectValue == null) {
                 return true;
             }
 
-            if (clazz.isInstance(objectValue)){
+            if (clazz.isInstance(objectValue)) {
                 return false; //matches, but shouldn't match the type
             }
 
@@ -133,24 +137,26 @@ public class CucumberTestHelper {
         });
     }
 
-    public void assertFieldContains(String fieldName, Function<Object, Boolean> predicate){
+    public void assertFieldContains(String fieldName, Function<Object, Boolean> predicate) {
         Optional<Integer> fieldIndex = getIndexOfField(fieldName);
-        if (!fieldIndex.isPresent()){
-            throw new IllegalArgumentException(String.format("Field [%s] has not been defined", fieldName));
+        if (!fieldIndex.isPresent()) {
+            throw new IllegalArgumentException(String.format(
+                "Field [%s] has not been defined",
+                fieldName
+            ));
         }
 
         List<List<Object>> allData = this.generateAndGetData();
-        List<Object> dataForField = allData.stream().map(row -> row.get(fieldIndex.get())).collect(Collectors.toList());
+        List<Object> dataForField =
+            allData.stream().map(row -> row.get(fieldIndex.get())).collect(Collectors.toList());
 
-        Assert.assertThat(
-            dataForField,
-            new ListPredicateMatcher(predicate));
+        Assert.assertThat(dataForField, new ListPredicateMatcher(predicate));
     }
 
-    private Optional<Integer> getIndexOfField(String fieldName){
-        for (int index = 0; index < testState.profileFields.size(); index++){
+    private Optional<Integer> getIndexOfField(String fieldName) {
+        for (int index = 0; index < testState.profileFields.size(); index++) {
             Field field = testState.profileFields.get(index);
-            if (field.name.equals(fieldName)){
+            if (field.name.equals(fieldName)) {
                 return Optional.of(index);
             }
         }
@@ -158,4 +164,3 @@ public class CucumberTestHelper {
         return Optional.empty();
     }
 }
-

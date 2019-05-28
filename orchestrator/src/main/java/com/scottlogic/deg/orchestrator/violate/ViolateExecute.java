@@ -69,7 +69,7 @@ public class ViolateExecute implements Runnable {
             doGeneration(profile);
 
         }
-        catch (ValidationException e){
+        catch (ValidationException e) {
             errorReporter.displayValidation(e);
         }
         catch (IOException e) {
