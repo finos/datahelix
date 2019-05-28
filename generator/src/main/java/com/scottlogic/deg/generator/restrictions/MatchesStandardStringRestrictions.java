@@ -37,8 +37,6 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
                 return new SedolStringGenerator();
             case CUSIP:
                 return new CusipStringGenerator();
-            case RIC:
-                return new RicStringGenerator();
         }
 
         throw new UnsupportedOperationException(String.format("Unable to create string generator for: %s", type));
@@ -144,8 +142,6 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
                 return SedolStringGenerator.SEDOL_LENGTH;
             case CUSIP:
                 return CusipStringGenerator.CUSIP_LENGTH;
-            case RIC:
-                return RicStringGenerator.RIC_LENGTH;
             default:
                 throw new UnsupportedOperationException(String.format("Unable to check string restrictions for: %s", type));
         }
