@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "0.1",
+  "rules": [
+    {
+      "rule": "rule 1",
+      "constraints": [
+        {
+          "anyOf": [
+            {
+              "field": "field1",
+              "is": "ofType",
+              "value": "string"
+            },
+            {
+              "field": "field1",
+              "is": "ofType",
+              "value": "integer"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "fields": [
+    {
+      "name": "field1"
+    }
+  ]
+}

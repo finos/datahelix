@@ -5,6 +5,8 @@ This page details how to generate data with a given profile.
 
 ## Using the Command Line
 
+For first time setup, see the [Generator setup instructions](../generator/docs/GeneratorSetup.md).
+
 To generate data run the following command from the command line
 
 `java -jar <path to JAR file> generate [options] "<path to profile>" "<desired output path>"`
@@ -37,13 +39,15 @@ With no options this should yield the following data:
 
 The generator can be used to generate data which intentionally violates the profile constraints for testing purposes.
 
-Using the `--violate` switch produces one file per rule violated along with a manifest that lists which rules are violated in each file.
+Using the `violate` command produces one file per rule violated along with a manifest that lists which rules are violated in each file.
 
 Using the [Sample Profile](./ExampleProfile1.json) that was created in the [first](./CreatingAProfile.md) section, run the following command: 
 
-`java -jar <path to JAR file> generate --violate=true "<path to ExampleProfile1.json>" "<path to desired output directory>"`
+`java -jar <path to JAR file> violate "<path to ExampleProfile1.json>" "<path to desired output directory>"`
 
 * `<path to desired output directory>` the location of the folder in which the generated files will be saved
+
+Additional options are [documented here](../Options/ViolateOptions.md).
 
 With no additional options this should yield the following data:
 

@@ -1,7 +1,5 @@
 package com.scottlogic.deg.generator.utils;
 
-import com.scottlogic.deg.generator.generation.GenerationConfigSource;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -19,5 +17,7 @@ public interface FileUtils {
 
     boolean createDirectories(Path dir) throws IOException;
 
-    File getTraceFile(GenerationConfigSource configSource);
+    File getTraceFile(Path outputPath);
+
+    Path getTraceFilePath(Path outputPath);
 }

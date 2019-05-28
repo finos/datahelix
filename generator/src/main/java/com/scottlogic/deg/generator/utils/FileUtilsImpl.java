@@ -109,10 +109,16 @@ public class FileUtilsImpl implements FileUtils {
     }
 
     @Override
-    public File getTraceFile(GenerationConfigSource configSource) {
-        Path path = configSource.getOutputPath();
-        path = addFilenameSuffix(path, "-trace");
-        return replaceExtension(path, ".json").toFile();
+    public File getTraceFile(Path outputPath) {
+        return getTraceFilePath(outputPath).toFile();
+    }
+
+    @Override
+    public Path getTraceFilePath(Path outputPath) {
+        return replaceExtension(
+            addFilenameSuffix(outputPath, "-trace"),
+            ".json"
+        );
     }
 
     /** addFilenameSuffix("C:\something.bat", "-trace") == "C:\something-trace.bat" */
