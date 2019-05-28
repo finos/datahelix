@@ -1,7 +1,5 @@
 package com.scottlogic.deg.profile.v0_1;
 
-import com.scottlogic.deg.profile.serialisation.ValidationResult;
-
 import java.io.File;
 
 /**
@@ -21,5 +19,5 @@ public interface ProfileSchemaValidator {
      * @param profileFile an File object that is the profile to validate
      * @return the result of validating the provided profile
      */
-    ValidationResult validateProfile(File profileFile);
+    void validateProfile(File profileFile);
 }
