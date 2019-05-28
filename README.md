@@ -328,10 +328,10 @@ firstName,age,nationalInsurance
 
 ## Generating invalid data
 
-One of the most powerful features of the generator is its ability to generate data that violates constraints. To create invalid data use the `--violate` command line option. This time you need to specify an output directory rather than a file:
+One of the most powerful features of the generator is its ability to generate data that violates constraints. To create invalid data use the `violate` command. This time you need to specify an output directory rather than a file:
 
 ~~~
-$ java -jar generator.jar generate --violate --max-rows=100 --replace profile.json out
+$ java -jar generator.jar violate --max-rows=100 --replace profile.json out
 ~~~
 
 When the above command has finished, you'll find that the generator has created an `out` directory which has four files:
@@ -379,7 +379,7 @@ firstName,age,nationalInsurance
 However, it might be a surprise to see nulls, numbers and dates as values for the `firstName` field alongside strings that do not match the regex given in the profile. This is because these are all defined as a single rule within the profile. You have a couple of options if you want to ensure that `firstName` is null or a string, the first is to inform the generator that it should not violate specific constraint types:
 
 ~~~
-$ java -jar generator.jar generate --violate --dont-violate=ofType \
+$ java -jar generator.jar violate --dont-violate=ofType \
   --max-rows=100 --replace profile.json out
 ~~~
 

@@ -2,7 +2,7 @@
 
 ## Invocation
 
-Violation is invoked using the `--violate` option with the generate command. An output directory must be specified rather than a single file.
+Violation is invoked using the `violate` command. An output directory must be specified rather than a single file.
 
 ## Algorithm
 

@@ -53,7 +53,7 @@ task release(type: Jar) {
 
 task fatJar(type: Jar) {
     manifest {
-        attributes 'Main-Class': 'com.scottlogic.deg.generator.App'
+        attributes 'Main-Class': 'com.scottlogic.deg.orchestrator.App'
     }
     baseName = 'generator'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
