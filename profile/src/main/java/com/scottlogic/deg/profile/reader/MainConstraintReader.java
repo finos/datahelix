@@ -1,6 +1,5 @@
 package com.scottlogic.deg.profile.reader;
 
-import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.RuleInformation;
 import com.scottlogic.deg.common.profile.ProfileFields;
@@ -14,9 +13,8 @@ import java.util.Set;
 public class MainConstraintReader implements ConstraintReader {
     private final AtomicConstraintReaderLookup atomicConstraintReaderLookup;
 
-    @Inject
-    public MainConstraintReader(AtomicConstraintReaderLookup atomicConstraintReaderLookup) {
-        this.atomicConstraintReaderLookup = atomicConstraintReaderLookup;
+    public MainConstraintReader() {
+        this.atomicConstraintReaderLookup = new AtomicConstraintReaderLookup();
     }
 
     @Override

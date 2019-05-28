@@ -87,9 +87,9 @@ public class BaseModule extends AbstractModule {
         bind(RuleViolator.class).to(IndividualConstraintRuleViolator.class);
         bind(ConfigValidator.class).to(GenerationConfigValidator.class);
         bind(OutputTargetSpecification.class).to(OutputTargetSpecificationImpl.class);
-        bind(AtomicConstraintReaderLookup.class).to(BaseCatalogAtomicConstraintReaderLookup.class);
         bind(ConstraintReader.class).to(MainConstraintReader.class);
         bind(FileUtils.class).to(FileUtilsImpl.class);
+
 
         bind(new TypeLiteral<List<ViolationFilter>>() {
         }).toProvider(ViolationFiltersProvider.class);

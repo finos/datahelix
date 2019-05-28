@@ -37,7 +37,7 @@ public class AtomicConstraintReaderLookupTests {
     @BeforeAll
     public void before() {
 
-        atomicConstraintReaderLookup = new BaseCatalogAtomicConstraintReaderLookup();
+        atomicConstraintReaderLookup = new AtomicConstraintReaderLookup();
 
         List<Field> fields = new ArrayList<>();
 
