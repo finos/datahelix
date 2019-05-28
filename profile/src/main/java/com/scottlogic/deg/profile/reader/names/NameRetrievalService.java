@@ -17,9 +17,9 @@ import static com.scottlogic.deg.common.profile.constraints.atomic.NameConstrain
 
 public class NameRetrievalService implements CatalogService<NameConstraintTypes, NameFrequencyHolder> {
 
-    private static final String SEP = "\\";
+    private static final String SEP = "/";
 
-    private static final String NAMES_ROOT = SEP + "names" + SEP;
+    private static final String NAMES_ROOT = "names" + SEP;
 
     private static final String FIRST_MALE_NAMES = NAMES_ROOT + "firstname_male.csv";
 
