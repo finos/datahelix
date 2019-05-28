@@ -4,8 +4,12 @@ import com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes;
 import com.scottlogic.deg.profile.reader.CatalogService;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -51,9 +55,20 @@ public class NameRetrievalService implements CatalogService<NameConstraintTypes,
             .getResource(classPath)
         ).orElseThrow(() -> new IllegalArgumentException("Path not found on classpath."));
         try {
-            return Paths.get(url.toURI());
+            URI uri = url.toURI();
+            return Paths.get(uri);
         } catch (URISyntaxException e) {
             throw new IllegalArgumentException(e);
+        }
+    }
+
+    private static void createFileSystem(URI uri) {
+        Map<String, String> env = new HashMap<>();
+        env.put("create", "true");
+        try {
+            FileSystems.newFileSystem(uri, env);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
     }
 
