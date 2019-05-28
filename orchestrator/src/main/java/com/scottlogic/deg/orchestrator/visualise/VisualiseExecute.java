@@ -29,10 +29,9 @@ import java.util.stream.Stream;
  * This class performs the visualisation of a profile
  * and outputs the visualisation as a graphviz dot file..
  */
-public class VisualiseExecute implements Runnable {
+public class VisualiseExecute {
 
     private final DecisionTreeFactory profileAnalyser;
-    private final ErrorReporter errorReporter;
     private final FieldSpecFactory fieldSpecFactory;
     private final FieldSpecMerger fieldSpecMerger;
     private final Path outputPath;
@@ -52,7 +51,6 @@ public class VisualiseExecute implements Runnable {
                             AllConfigSource configSource,
                             VisualisationConfigValidator validator) {
         this.profileAnalyser = profileAnalyser;
-        this.errorReporter = errorReporter;
         this.fieldSpecFactory = fieldSpecFactory;
         this.fieldSpecMerger = fieldSpecMerger;
         this.configSource = configSource;
@@ -62,19 +60,12 @@ public class VisualiseExecute implements Runnable {
         this.validator = validator;
     }
 
-    @Override
-    public void run() {
+    public void execute() throws IOException {
         validator.validateCommandLine(configSource.overwriteOutputFiles(), outputPath);
         profileSchemaValidator.validateProfile(configSource.getProfileFile());
 
         final Profile profile;
-        try {
-            profile = profileReader.read(configSource.getProfileFile().toPath());
-        } catch (Exception e) {
-            System.err.println("Failed to read file!");
-            e.printStackTrace();
-            return;
-        }
+        profile = profileReader.read(configSource.getProfileFile().toPath());
 
         final DecisionTree mergedTree = profileAnalyser.analyse(profile);
 
@@ -91,19 +82,14 @@ public class VisualiseExecute implements Runnable {
 
         final String title =
             Stream.of(profile.getDescription(), profileBaseName)
-            .filter(Objects::nonNull)
-            .findFirst()
-            .orElse(null);
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(null);
 
-        try {
-            writeTreeTo(
-                validatedTree,
-                title,
-                configSource.getOutputPath());
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-            e.printStackTrace();
-        }
+        writeTreeTo(
+            validatedTree,
+            title,
+            configSource.getOutputPath());
     }
 
     private void writeTreeTo(

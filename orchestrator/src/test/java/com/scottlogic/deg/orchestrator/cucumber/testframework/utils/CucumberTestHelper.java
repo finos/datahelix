@@ -8,14 +8,11 @@ import com.google.inject.util.Modules;
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.orchestrator.generate.GenerateExecute;
-import com.scottlogic.deg.generator.guice.GeneratorModule;
-import com.scottlogic.deg.orchestrator.guice.AllModule;
 import com.scottlogic.deg.orchestrator.violate.ViolateExecute;
 import com.scottlogic.deg.orchestrator.violate.ViolateModule;
-import com.scottlogic.deg.profile.guice.ProfileModule;
-import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import org.junit.Assert;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -30,11 +27,21 @@ import java.util.stream.Stream;
 public class CucumberTestHelper {
     private final CucumberTestState testState;
 
-    public CucumberTestHelper(CucumberTestState testState){
+    public CucumberTestHelper(CucumberTestState testState) {
         this.testState = testState;
     }
 
     public void runGenerationProcess() {
+        try {
+            doGeneration();
+        } catch (IOException e) {
+            testState.addException(e);
+        } catch (ValidationException e){
+            testState.testExceptions.addAll(e.errorMessages.stream().map(ValidationException::new).collect(Collectors.toList()));
+        }
+    }
+
+    private void doGeneration() throws IOException {
         if (testState.generationHasAlreadyOccured) {
             return;
         }
@@ -45,10 +52,10 @@ public class CucumberTestHelper {
 
         Injector injector = Guice.createInjector(concatenatedModule);
 
-        if (testState.shouldViolate){
-            injector.getInstance(ViolateExecute.class).run();
+        if (testState.shouldViolate) {
+            injector.getInstance(ViolateExecute.class).execute();
         } else {
-            injector.getInstance(GenerateExecute.class).run();
+            injector.getInstance(GenerateExecute.class).execute();
         }
 
         testState.generationHasAlreadyOccured = true;
@@ -78,7 +85,7 @@ public class CucumberTestHelper {
         runGenerationProcess();
     }
 
-    public boolean generatorHasRun(){
+    public boolean generatorHasRun() {
         return testState.generationHasAlreadyOccured;
     }
 
@@ -90,7 +97,7 @@ public class CucumberTestHelper {
         return testState.generatedObjects != null && testState.generatedObjects.size() > 0;
     }
 
-    public Collection<Exception> getThrownExceptions(){
+    public Collection<Exception> getThrownExceptions() {
         return testState.testExceptions;
     }
 
@@ -119,7 +126,7 @@ public class CucumberTestHelper {
             }
 
             //noinspection unchecked
-            return predicate.apply((T)objectValue);
+            return predicate.apply((T) objectValue);
         });
     }
 
