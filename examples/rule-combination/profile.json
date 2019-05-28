@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "0.1",
+  "fields": [
+    {
+      "name": "Column 1"
+    }
+  ],
+  "rules": [
+    {
+      "rule": "Rule 1",
+      "constraints": [
+        {
+          "not": {
+            "field": "Column 1",
+            "is": "equalTo",
+            "value": 0
+          }
+        }
+      ]
+    },
+    {
+      "rule": "Rule 2",
+      "constraints": [
+        {
+          "not": {
+            "field": "Column 1",
+            "is": "equalTo",
+            "value": 1
+          }
+        }
+      ]
+    },
+    {
+      "rule": "Rule 3",
+      "constraints": [
+        {
+          "field": "Column 1",
+          "is": "ofType",
+          "value": "integer"
+        }
+      ]
+    }
+  ]
+}

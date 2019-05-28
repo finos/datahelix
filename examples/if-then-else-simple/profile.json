@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "0.1",
+  "fields": [
+    {
+      "name": "Column 1"
+    }
+  ],
+  "rules": [
+    {
+      "rule": "Rule 1",
+      "constraints": [
+        {
+          "if": {
+            "not": {
+              "field": "Column 1",
+              "is": "null"
+            }
+          },
+          "then": {
+            "field": "Column 1",
+            "is": "equalTo",
+            "value": 1
+          },
+          "else": {
+            "field": "Column 1",
+            "is": "equalTo",
+            "value": 0
+          }
+        }
+      ]
+    }
+  ]
+}
