@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "0.1",
+  "fields": [
+    {"name": "forename"},
+    {"name": "surname"}
+  ],
+  "rules": [
+    {
+      "constraints": [
+        {
+          "allOf": [
+            {"field": "forename", "is": "aTypical", "value": "firstname"},
+            {"field": "surname", "is": "aTypical", "value": "lastname"},
+            { "not": { "field": "forename", "is": "null" }},
+            { "not": { "field":  "surname", "is":  "null"}}
+          ]
+        }
+      ]
+    }
+  ]
+}

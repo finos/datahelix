@@ -6,7 +6,10 @@ import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.util.Defaults;
+import com.scottlogic.deg.common.util.HeterogeneousTypeContainer;
 import com.scottlogic.deg.common.util.NumberUtils;
+import com.scottlogic.deg.profile.reader.names.CatalogService;
+import com.scottlogic.deg.profile.reader.names.NameRetrievalService;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
 
@@ -22,11 +25,17 @@ import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class BaseCatalogAtomicConstraintReaderLookup implements AtomicConstraintReaderLookup {
     private static final Map<String, ConstraintReader> typeCodeToSpecificReader;
 
+    private static final HeterogeneousTypeContainer<CatalogService<?, ?>> catalogServices;
+
     static {
+        catalogServices = new HeterogeneousTypeContainer<CatalogService<?, ?>>()
+            .put(NameRetrievalService.class, new NameRetrievalService());
+
         typeCodeToSpecificReader = new HashMap<>();
 
         add(AtomicConstraintType.FORMATTED_AS.getText(),
@@ -242,6 +251,25 @@ public class BaseCatalogAtomicConstraintReaderLookup implements AtomicConstraint
                     fields.getByName(dto.field),
                     ensureValueBetween(dto, Integer.class, BigDecimal.ZERO, maxStringLength),
                     rules));
+
+        add(AtomicConstraintType.A_TYPICAL.getText(),
+            (dto, fields, rules) -> {
+                NameConstraintTypes type = NameConstraintTypes.lookupProfileText(getValidatedValue(dto, String.class));
+                Field field = fields.getByName(dto.field);
+
+                NameRetrievalService service = catalogServices.get(NameRetrievalService.class)
+                    .orElseThrow(() -> new UnsupportedOperationException("No name retrieval service set!"));
+
+                Set<Object> objects = service.retrieveValues(type)
+                    .stream()
+                    .map(Object.class::cast)
+                    .collect(Collectors.toSet());
+
+                return new AndConstraint(
+                    new IsInSetConstraint(field, objects, rules),
+                    new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.STRING, rules)
+                );
+            });
     }
 
     private static Object getValidatedValue(ConstraintDTO dto) throws InvalidProfileException {

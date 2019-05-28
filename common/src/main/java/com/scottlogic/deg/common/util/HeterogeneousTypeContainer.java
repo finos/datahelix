@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.utils;
+package com.scottlogic.deg.common.util;
 
 import java.util.*;
 import java.util.stream.Collectors;
