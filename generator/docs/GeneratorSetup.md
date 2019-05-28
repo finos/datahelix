@@ -73,7 +73,7 @@ generate "<path to an example JSON profile>" "<path to desired output CSV>"
 Additionally create another run configuration called GenerateViolating and add the program arguments
 
 ```
-generate --violate=true "<path to an example JSON profile>" "<path to desired output folder for generated CSVs>"
+violate "<path to an example JSON profile>" "<path to desired output folder for generated CSVs>"
 ```
 
 Run both of these configurations to test that installation is successful.
@@ -84,11 +84,20 @@ Build the tool with all its dependencies:
 
 `gradle fatJar`
 
-To generate data run the following command from the command line:
+To generate valid data run the following command from the command line:
 
 `java -jar <path to JAR file> generate [options] "<path to profile>" "<desired output path>"`
 
-* `[path to JAR file]` the location of generator.jar
-* `[options]` optionally a combination of [options](../../docs/Options/GenerateOptions.md) to configure how the command operates
-* `<path to profile>` the location of the JSON profile file
-* `<desired output path>` the location of the generated data
+* `[path to JAR file]` - the location of `generator.jar`.
+* `[options]` - optionally a combination of [options](../../docs/Options/GenerateOptions.md) to configure how the command operates.
+* `<path to profile>` - the location of the JSON profile file.
+* `<desired output path>` - the location of the generated data.
+
+To generate violating data run the following command from the command line:
+
+`java -jar <path to JAR file> violate [options] "<path to profile>" "<desired output folder>"`
+
+* `[path to JAR file]` - the location of `generator.jar`.
+* `[options]` - a combination of any (or none) of [the options documented here](../../docs/Options/ViolateOptions.md) to configure how the command operates.
+* `<path to profile>` - the location of the JSON profile file.
+* `<desired output folder>` - the location of a folder in which to create generated data files.
