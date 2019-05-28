@@ -166,7 +166,7 @@ public class RegexStringGenerator implements StringGenerator {
                 ? Collections.singleton(shortestString)
                 : Arrays.asList(shortestString, longestString);
         } catch (Exception e) {
-            System.out.println(
+            System.err.println(
                 String.format(
                     "Unable to generate interesting strings for %s\n%s",
                     this.regexRepresentation,

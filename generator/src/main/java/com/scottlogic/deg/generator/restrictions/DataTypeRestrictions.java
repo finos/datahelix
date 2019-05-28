@@ -6,11 +6,11 @@ import java.util.*;
 
 public class DataTypeRestrictions implements TypeRestrictions {
 
-    public final static TypeRestrictions ALL_TYPES_PERMITTED = new AnyTypeRestriction();
-    public final static TypeRestrictions NO_TYPES_PERMITTED = new NoAllowedTypesRestriction();
+    public static final TypeRestrictions ALL_TYPES_PERMITTED = new AnyTypeRestriction();
+    public static final TypeRestrictions NO_TYPES_PERMITTED = new NoAllowedTypesRestriction();
 
     public DataTypeRestrictions(Collection<IsOfTypeConstraint.Types> allowedTypes) {
-        if (allowedTypes.size() == 0)
+        if (allowedTypes.isEmpty())
             throw new UnsupportedOperationException("Cannot have a type restriction with no types");
 
         this.allowedTypes = new HashSet<>(allowedTypes);

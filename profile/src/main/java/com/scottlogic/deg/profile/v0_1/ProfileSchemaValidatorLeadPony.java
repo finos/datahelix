@@ -1,6 +1,6 @@
 package com.scottlogic.deg.profile.v0_1;
 
-import com.scottlogic.deg.profile.serialisation.ValidationResult;
+import com.scottlogic.deg.common.ValidationException;
 import org.leadpony.justify.api.JsonSchema;
 import org.leadpony.justify.api.JsonValidationService;
 import org.leadpony.justify.api.Problem;
@@ -23,15 +23,13 @@ public class ProfileSchemaValidatorLeadPony implements ProfileSchemaValidator {
     private Path profilePath;
 
     @Override
-    public ValidationResult validateProfile(File profileFile) {
+    public void validateProfile(File profileFile) {
         try {
             byte[] data = Files.readAllBytes(profilePath = profileFile.toPath());
             profileJsonLines = readAllLines(data);
-            return validateProfile(new ByteArrayInputStream(data));
+            validateProfile(this.getClass().getResourceAsStream(datahelixProfileSchema), new ByteArrayInputStream(data));
         } catch (IOException e) {
-            List<String> errorMessages = new ArrayList<>();
-            errorMessages.add(e.getLocalizedMessage());
-            return new ValidationResult(errorMessages);
+            throw new ValidationException(e.getLocalizedMessage());
         }
     }
 
@@ -48,18 +46,9 @@ public class ProfileSchemaValidatorLeadPony implements ProfileSchemaValidator {
     }
 
     /**
-     * Validates a json file against the DataHelix Profile JSON Schema.
-     *
-     * @return the result of validating the provided profile
-     */
-    private ValidationResult validateProfile(InputStream profileStream) {
-        return validateProfile(this.getClass().getResourceAsStream(datahelixProfileSchema), profileStream);
-    }
-
-    /**
      * @return the result of validating the provided DataHelix Profile
      */
-    private ValidationResult validateProfile(InputStream schemaStream, InputStream profileStream) {
+    private void validateProfile(InputStream schemaStream, InputStream profileStream) {
         List<String> errorMessages = new ArrayList<>();
         if (schemaStream == null) {
             errorMessages.add("Null Profile Schema Stream");
@@ -97,8 +86,9 @@ public class ProfileSchemaValidatorLeadPony implements ProfileSchemaValidator {
                 "\nFile path: " + profilePath.toString() +
                 "\nFor full details try opening the profile in a json schema-enabled IDE." +
                 "\nSee https://github.com/ScottLogic/datahelix/blob/master/docs/ProfileDeveloperGuide.md#Microsoft-Visual-Studio-Code\n");
+
+            throw new ValidationException(errorMessages);
         }
-        return new ValidationResult(errorMessages);
     }
 
     private void extractProblems(List<Problem> problems, TreeMap<Integer, String> problemDictionary) {

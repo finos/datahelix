@@ -1,261 +1,133 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
+
 import com.scottlogic.deg.generator.restrictions.*;
-import org.jetbrains.annotations.NotNull;
+import com.scottlogic.deg.generator.utils.HeterogeneousTypeContainer;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static com.scottlogic.deg.generator.restrictions.DateTimeRestrictions.isDateTime;
-import static com.scottlogic.deg.generator.restrictions.NumericRestrictions.isNumeric;
-import static com.scottlogic.deg.generator.restrictions.StringRestrictions.isString;
 
 /**
  * Details a column's atomic constraints
  */
 public class FieldSpec {
     public static final FieldSpec Empty = new FieldSpec(
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
+        new HeterogeneousTypeContainer<>(),
         FieldSpecSource.Empty);
 
-    private final SetRestrictions setRestrictions;
-    private final NumericRestrictions numericRestrictions;
-    private final StringRestrictions stringRestrictions;
-    private final NullRestrictions nullRestrictions;
-    private final TypeRestrictions typeRestrictions;
-    private final DateTimeRestrictions dateTimeRestrictions;
-    private final FormatRestrictions formatRestrictions;
-    private final MustContainRestriction mustContainRestriction;
-    @NotNull private final FieldSpecSource source;
+    private final HeterogeneousTypeContainer<Restrictions> restrictions;
+    private final FieldSpecSource source;
 
-    private FieldSpec(
-        SetRestrictions setRestrictions,
-        NumericRestrictions numericRestrictions,
-        StringRestrictions stringRestrictions,
-        NullRestrictions nullRestrictions,
-        TypeRestrictions typeRestrictions,
-        DateTimeRestrictions dateTimeRestrictions,
-        FormatRestrictions formatRestrictions,
-        MustContainRestriction mustContainRestriction,
-        @NotNull FieldSpecSource source) {
-
-        this.setRestrictions = setRestrictions;
-        this.nullRestrictions = nullRestrictions;
-        this.mustContainRestriction = mustContainRestriction;
-        this.formatRestrictions = formatRestrictions;
-
-        if (setRestrictions != null && setRestrictions.getWhitelist() != null && setRestrictions.getWhitelist().size() > 0) {
-            this.numericRestrictions = null;
-            this.stringRestrictions = null;
-            this.typeRestrictions = null;
-            this.dateTimeRestrictions = null;
-        } else {
-            this.numericRestrictions = numericRestrictions;
-            this.stringRestrictions = stringRestrictions;
-            this.typeRestrictions = typeRestrictions;
-            this.dateTimeRestrictions = dateTimeRestrictions;
-        }
-
+    private FieldSpec(HeterogeneousTypeContainer<Restrictions> restrictions,
+                      FieldSpecSource source) {
+        this.restrictions = restrictions;
         this.source = source;
     }
 
-    public SetRestrictions getSetRestrictions() { return setRestrictions; }
-    public NumericRestrictions getNumericRestrictions() { return numericRestrictions; }
-    public StringRestrictions getStringRestrictions() { return stringRestrictions; }
-    public NullRestrictions getNullRestrictions() { return nullRestrictions; }
-    public TypeRestrictions getTypeRestrictions() { return typeRestrictions; }
-    public DateTimeRestrictions getDateTimeRestrictions() { return dateTimeRestrictions; }
-    public MustContainRestriction getMustContainRestriction() { return mustContainRestriction; }
-    public FormatRestrictions getFormatRestrictions() { return formatRestrictions; }
-    @NotNull public FieldSpecSource getFieldSpecSource() { return this.source; }
+    public SetRestrictions getSetRestrictions() {
+        return restrictions.get(SetRestrictions.class).orElse(null);
+    }
+
+    public NumericRestrictions getNumericRestrictions() {
+        return restrictions.get(NumericRestrictions.class).orElse(null);
+    }
+
+    public StringRestrictions getStringRestrictions() {
+        return restrictions.get(StringRestrictions.class).orElse(null);
+    }
+
+    public NullRestrictions getNullRestrictions() {
+        return restrictions.get(NullRestrictions.class).orElse(null);
+    }
+
+    public TypeRestrictions getTypeRestrictions() {
+        return restrictions.get(TypeRestrictions.class).orElse(null);
+    }
+
+    public DateTimeRestrictions getDateTimeRestrictions() {
+        return restrictions.get(DateTimeRestrictions.class).orElse(null);
+    }
+
+    public FormatRestrictions getFormatRestrictions() {
+        return restrictions.get(FormatRestrictions.class).orElse(null);
+    }
+
+    public FieldSpecSource getFieldSpecSource() {
+        return source;
+    }
 
     public FieldSpec withSetRestrictions(SetRestrictions setRestrictions, FieldSpecSource source) {
-        return new FieldSpec(
-            setRestrictions,
-            this.numericRestrictions,
-            this.stringRestrictions,
-            this.nullRestrictions,
-            this.typeRestrictions,
-            this.dateTimeRestrictions,
-            this.formatRestrictions,
-            this.mustContainRestriction,
-            this.source.combine(source));
+        return withConstraint(SetRestrictions.class, setRestrictions, source);
     }
 
     public FieldSpec withNumericRestrictions(NumericRestrictions numericRestrictions, FieldSpecSource source) {
-        return new FieldSpec(
-            this.setRestrictions,
-            numericRestrictions,
-            this.stringRestrictions,
-            this.nullRestrictions,
-            this.typeRestrictions,
-            this.dateTimeRestrictions,
-            this.formatRestrictions,
-            this.mustContainRestriction,
-            this.source.combine(source));
+        return withConstraint(NumericRestrictions.class, numericRestrictions, source);
     }
 
     public FieldSpec withStringRestrictions(StringRestrictions stringRestrictions, FieldSpecSource source) {
-        return new FieldSpec(
-            this.setRestrictions,
-            this.numericRestrictions,
-            stringRestrictions,
-            this.nullRestrictions,
-            this.typeRestrictions,
-            this.dateTimeRestrictions,
-            this.formatRestrictions,
-            this.mustContainRestriction,
-            this.source.combine(source));
+        return withConstraint(StringRestrictions.class, stringRestrictions, source);
     }
 
     public FieldSpec withTypeRestrictions(TypeRestrictions typeRestrictions, FieldSpecSource source) {
-        return new FieldSpec(
-            this.setRestrictions,
-            this.numericRestrictions,
-            this.stringRestrictions,
-            this.nullRestrictions,
-            typeRestrictions,
-            this.dateTimeRestrictions,
-            this.formatRestrictions,
-            this.mustContainRestriction,
-            this.source.combine(source));
+        return withConstraint(TypeRestrictions.class, typeRestrictions, source);
     }
 
     public FieldSpec withNullRestrictions(NullRestrictions nullRestrictions, FieldSpecSource source) {
-        return new FieldSpec(
-            this.setRestrictions,
-            this.numericRestrictions,
-            this.stringRestrictions,
-            nullRestrictions,
-            this.typeRestrictions,
-            this.dateTimeRestrictions,
-            this.formatRestrictions,
-            this.mustContainRestriction,
-            this.source.combine(source));
+        return withConstraint(NullRestrictions.class, nullRestrictions, source);
     }
 
     public FieldSpec withDateTimeRestrictions(DateTimeRestrictions dateTimeRestrictions, FieldSpecSource source) {
-        return new FieldSpec(
-            this.setRestrictions,
-            this.numericRestrictions,
-            this.stringRestrictions,
-            this.nullRestrictions,
-            this.typeRestrictions,
-            dateTimeRestrictions,
-            this.formatRestrictions,
-            this.mustContainRestriction,
-            this.source.combine(source));
+        return withConstraint(DateTimeRestrictions.class, dateTimeRestrictions, source);
+    }
+
+    public FieldSpec withFormatRestrictions(FormatRestrictions formatRestrictions, FieldSpecSource source) {
+        return withConstraint(FormatRestrictions.class, formatRestrictions, source);
+    }
+
+    private <T extends Restrictions> FieldSpec withConstraint(Class<T> type, T restriction, FieldSpecSource source) {
+        return new FieldSpec(restrictions.put(type, restriction), this.source.combine(source));
     }
 
     @Override
     public String toString() {
-        List<String> propertyStrings = Arrays
-            .stream(getPropertiesToCompare(this))
+        List<String> propertyStrings = restrictions.values()
+            .stream()
             .filter(Objects::nonNull)
             .map(Object::toString)
             .collect(Collectors.toList());
 
-        if (propertyStrings.isEmpty()) { return "<empty>"; }
+        if (propertyStrings.isEmpty()) {
+            return "<empty>";
+        }
 
         return String.join(" & ", propertyStrings);
     }
 
-    public FieldSpec withFormatRestrictions(FormatRestrictions formatRestrictions, FieldSpecSource source) {
-        return new FieldSpec(
-            this.setRestrictions,
-            this.numericRestrictions,
-            this.stringRestrictions,
-            this.nullRestrictions,
-            this.typeRestrictions,
-            this.dateTimeRestrictions,
-            formatRestrictions,
-            this.mustContainRestriction,
-            this.source.combine(source));
-    }
-
-    public FieldSpec withMustContainRestriction(MustContainRestriction mustContainRestriction) {
-        return new FieldSpec(
-            this.setRestrictions,
-            this.numericRestrictions,
-            this.stringRestrictions,
-            this.nullRestrictions,
-            this.typeRestrictions,
-            this.dateTimeRestrictions,
-            this.formatRestrictions,
-            mustContainRestriction,
-            this.source);
-    }
-
-    /** Create a predicate that returns TRUE for all (and only) values permitted by this FieldSpec */
-    public boolean permits(@NotNull Object value) {
+    /**
+     * Create a predicate that returns TRUE for all (and only) values permitted by this FieldSpec
+     */
+    public boolean permits(Object value) {
+        TypeRestrictions typeRestrictions = getTypeRestrictions();
         if (typeRestrictions != null) {
-            if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.NUMERIC)) {
-                if (isNumeric(value)) return false;
-            }
-
-            if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.STRING)) {
-                if (isString(value)) return false;
-            }
-
-            if (!typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.DATETIME)) {
-                if (isDateTime(value)) return false;
+            for (Types type : Types.values()) {
+                if (!typeRestrictions.isTypeAllowed(type) && type.isInstanceOf(value)) {
+                    return false;
+                }
             }
         }
 
-        if (numericRestrictions != null) {
-            if (isNumeric(value) && !numericRestrictions.match(value)) return false;
-        }
+        Set<Class<? extends Restrictions>> keys = new HashSet<>();
+        keys.add(NumericRestrictions.class);
+        keys.add(DateTimeRestrictions.class);
+        keys.add(StringRestrictions.class);
 
-        if (dateTimeRestrictions != null) {
-            if (isDateTime(value) && !dateTimeRestrictions.match(value)) return false;
-        }
-
-        if (stringRestrictions != null) {
-            if (isString(value) && !stringRestrictions.match(value)) return false;
-        }
-
-        return true;
-    }
-
-    public int hashCode(){
-        return Arrays.hashCode(getPropertiesToCompare(this));
-    }
-
-    public boolean equals(Object obj){
-        if (obj == null){
-            return false;
-        }
-
-        if (!(obj instanceof FieldSpec)){
-            return false;
-        }
-
-        return equals((FieldSpec)obj);
-    }
-
-    private boolean equals(FieldSpec other){
-        Iterator<Object> myProperties = Arrays.asList(getPropertiesToCompare(this)).iterator();
-        Iterator<Object> otherPropertiesToCompare = Arrays.asList(getPropertiesToCompare(other)).iterator();
-
-        //effectively Stream.zip(myProperties, otherProperties).allMatch((x, y) -> propertiesAreEqual(x, y));
-        while (myProperties.hasNext()){
-            Object myProperty = myProperties.next();
-
-            if (!otherPropertiesToCompare.hasNext()){
-                return false;
-            }
-
-            Object otherProperty = otherPropertiesToCompare.next();
-
-            if (!propertiesAreEqual(myProperty, otherProperty)){
+        Set<TypedRestrictions> toCheckForMatch = restrictions.getMultiple(keys)
+            .stream()
+            .map(r -> (TypedRestrictions) r)
+            .collect(Collectors.toSet());
+        for (TypedRestrictions restriction : toCheckForMatch) {
+            if (restriction != null && restriction.isInstanceOf(value) && !restriction.match(value)) {
                 return false;
             }
         }
@@ -263,32 +135,18 @@ public class FieldSpec {
         return true;
     }
 
-    private static boolean propertiesAreEqual(Object myProperty, Object otherProperty) {
-        if (myProperty == null && otherProperty == null){
-            return true;
-        }
+    public int hashCode() {
+        return restrictions.hashCode();
+    }
 
-        if (myProperty == null || otherProperty == null){
-            return false; //one of the properties are null, but the other one cannot be (the first IF guards against this)
-        }
-
-        if (!myProperty.getClass().equals(otherProperty.getClass())){
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || obj.getClass() != this.getClass()) {
             return false;
         }
 
-        return myProperty.equals(otherProperty);
-    }
-
-    private static Object[] getPropertiesToCompare(FieldSpec fieldSpec){
-        return new Object[]{
-            fieldSpec.dateTimeRestrictions,
-            fieldSpec.formatRestrictions,
-            fieldSpec.mustContainRestriction,
-            fieldSpec.nullRestrictions,
-            fieldSpec.numericRestrictions,
-            fieldSpec.setRestrictions,
-            fieldSpec.stringRestrictions,
-            fieldSpec.typeRestrictions
-        };
+        FieldSpec other = (FieldSpec) obj;
+        return restrictions.equals(other.restrictions);
     }
 }

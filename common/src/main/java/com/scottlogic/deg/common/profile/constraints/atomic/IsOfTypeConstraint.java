@@ -3,8 +3,10 @@ package com.scottlogic.deg.common.profile.constraints.atomic;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.RuleInformation;
 
+import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 
 public class IsOfTypeConstraint implements AtomicConstraint {
     public final Field field;
@@ -18,9 +20,19 @@ public class IsOfTypeConstraint implements AtomicConstraint {
     }
 
     public enum Types {
-        NUMERIC,
-        STRING,
-        DATETIME
+        NUMERIC(o -> o instanceof Number),
+        STRING(o -> o instanceof String),
+        DATETIME(o -> o instanceof OffsetDateTime);
+
+        private final Function<Object, Boolean> isInstanceOf;
+
+        Types(final Function<Object, Boolean> isInstanceOf) {
+            this.isInstanceOf = isInstanceOf;
+        }
+
+        public boolean isInstanceOf(Object o) {
+            return isInstanceOf.apply(o);
+        }
     }
 
     @Override

@@ -1,18 +1,21 @@
 package com.scottlogic.deg.generator.restrictions;
 
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.generation.StringGenerator;
 
-public interface StringRestrictions {
+public interface StringRestrictions extends TypedRestrictions {
     MergeResult<StringRestrictions> intersect(StringRestrictions other);
 
-    static boolean isString(Object o) {
-        return o instanceof String;
+    @Override
+    default boolean isInstanceOf(Object o) {
+        return IsOfTypeConstraint.Types.STRING.isInstanceOf(o);
     }
 
     boolean match(String x);
 
-    default boolean match(Object x){
-        return isString(x) && match((String)x);
+    @Override
+    default boolean match(Object x) {
+        return isInstanceOf(x) && match((String) x);
     }
 
     StringGenerator createGenerator();

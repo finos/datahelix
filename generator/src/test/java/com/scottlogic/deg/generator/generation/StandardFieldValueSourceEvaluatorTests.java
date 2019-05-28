@@ -131,49 +131,6 @@ public class StandardFieldValueSourceEvaluatorTests {
     }
 
     @Test
-    public void shouldReturnNullSourceLast_WithMustContainNullRestrictionsAndNullAllowed() {
-        StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
-        FieldSpecSource fieldSpecSource = FieldSpecSource.Empty;
-
-        NullRestrictions nullRestrictions = new NullRestrictions(Nullness.MUST_BE_NULL);
-        FieldSpec fieldSpecMustBeNull = FieldSpec.Empty
-            .withNullRestrictions(nullRestrictions, fieldSpecSource);
-
-        MustContainRestriction mustContainRestriction = new MustContainRestriction(new HashSet<>(Collections.singletonList(fieldSpecMustBeNull)));
-
-        FieldSpec fieldSpecWithMustContainNullRestrictionsAndNullNotDisallowed = FieldSpec.Empty
-            .withMustContainRestriction(mustContainRestriction);
-
-        List<FieldValueSource> sources = evaluator.getFieldValueSources(fieldSpecWithMustContainNullRestrictionsAndNullNotDisallowed);
-
-        AssertLastSourceIsNullOnlySource(sources);
-    }
-
-    @Test
-    public void shouldReturnNullSourceLastWithMustContainNullAndNumericRestrictionsAndNullNotDisallowed() {
-        StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
-        FieldSpecSource fieldSpecSource = FieldSpecSource.Empty;
-
-        NullRestrictions nullRestrictions = new NullRestrictions(Nullness.MUST_BE_NULL);
-        NumericRestrictions numericRestrictions = new NumericRestrictions() {{
-            min = new NumericLimit<>(new BigDecimal(10), false);
-            max = new NumericLimit<>(new BigDecimal(30), false);
-        }};
-        FieldSpec fieldSpecMustBeNull = FieldSpec.Empty
-            .withNullRestrictions(nullRestrictions, fieldSpecSource)
-            .withNumericRestrictions(numericRestrictions, fieldSpecSource);
-
-        MustContainRestriction mustContainRestriction = new MustContainRestriction(new HashSet<>(Collections.singletonList(fieldSpecMustBeNull)));
-
-        FieldSpec fieldSpecWithMustContainNullAndNumericRestrictionsAndNullNotDisallowed = FieldSpec.Empty
-            .withMustContainRestriction(mustContainRestriction);
-
-        List<FieldValueSource> sources = evaluator.getFieldValueSources(fieldSpecWithMustContainNullAndNumericRestrictionsAndNullNotDisallowed);
-
-        AssertLastSourceIsNullOnlySource(sources);
-    }
-
-    @Test
     void getFieldValueSources_fieldSpecContainsNumericRestrictionsWithValueTooLargeForInteger_generatesExpectedValues() {
         FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(
             new NumericRestrictions() {{
@@ -253,11 +210,11 @@ public class StandardFieldValueSourceEvaluatorTests {
 
     @Test
     void getFieldValueSources_fieldSpecContainsNumericRestrictionsWithNoScaleAndGranularityHasRestrictionOfTwo_generatesValuesWithTwoDecimalPlaces() {
+        NumericRestrictions restrictions = new NumericRestrictions(2);
+        restrictions.min = new NumericLimit<>(new BigDecimal("15"), false);
+        restrictions.max = new NumericLimit<>(new BigDecimal("16"), false);
         FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(
-            new NumericRestrictions(new ParsedGranularity(new BigDecimal(new BigInteger("0"), 2, new MathContext(1)))) {{
-                min = new NumericLimit<>(new BigDecimal("15"), false);
-                max = new NumericLimit<>(new BigDecimal("16"), false);
-            }},
+            restrictions,
             FieldSpecSource.Empty
         ).withTypeRestrictions(
             new DataTypeRestrictions(

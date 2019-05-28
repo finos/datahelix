@@ -5,6 +5,8 @@ This page details how to generate data with a given profile.
 
 ## Using the Command Line
 
+For first time setup, see the [Generator setup instructions](../generator/docs/GeneratorSetup.md).
+
 To generate data run the following command from the command line
 
 `java -jar <path to JAR file> generate [options] "<path to profile>" "<desired output path>"`

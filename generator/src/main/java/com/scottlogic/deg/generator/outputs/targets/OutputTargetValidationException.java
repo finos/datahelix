@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.outputs.targets;
 
-public class OutputTargetValidationException extends RuntimeException {
-    OutputTargetValidationException(String msg) { super(msg); }
-    OutputTargetValidationException(String msg, Throwable t) { super(msg, t); }
+import com.scottlogic.deg.common.ValidationException;
+
+public class OutputTargetValidationException extends ValidationException {
+    public OutputTargetValidationException(String msg) { super(msg); }
 }

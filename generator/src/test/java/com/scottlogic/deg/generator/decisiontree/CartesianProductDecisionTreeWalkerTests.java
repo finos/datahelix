@@ -26,7 +26,7 @@ class CartesianProductDecisionTreeWalkerTests {
     private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
     private final CartesianProductDecisionTreeWalker dTreeWalker = new CartesianProductDecisionTreeWalker(
             new ConstraintReducer(
-                    new FieldSpecFactory(new FieldSpecMerger(), new StringRestrictionsFactory()),
+                    new FieldSpecFactory(new StringRestrictionsFactory()),
                     fieldSpecMerger
             ),
             new RowSpecMerger(
