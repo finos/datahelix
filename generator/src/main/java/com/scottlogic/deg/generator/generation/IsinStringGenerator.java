@@ -22,11 +22,7 @@ public class IsinStringGenerator implements StringGenerator {
     private final boolean isNegated;
 
     public IsinStringGenerator() {
-        this(false);
-    }
-
-    private IsinStringGenerator(boolean isNegated) {
-        this(getRegexGeneratorForAllLegalIsinFormats(), isNegated);
+        this(getRegexGeneratorForAllLegalIsinFormats(), false);
     }
 
     private IsinStringGenerator(RegexStringGenerator regexGenerator, boolean isNegated) {
@@ -72,7 +68,10 @@ public class IsinStringGenerator implements StringGenerator {
         if ((intersection.isFinite() && intersection.getValueCount() == 0) ||
                 !(intersection instanceof RegexStringGenerator)) {
             return new NoStringsStringGenerator(
-                RegexStringGenerator.intersectRepresentation(other.toString(), isinRegexGenerator.toString())
+                RegexStringGenerator.intersectRepresentation(
+                    other.toString(),
+                    isinRegexGenerator.toString()
+                )
             );
         }
         if (!isNegated) {
@@ -86,7 +85,7 @@ public class IsinStringGenerator implements StringGenerator {
 
     @Override
     public StringGenerator complement() {
-        return new IsinStringGenerator(!isNegated);
+        return new IsinStringGenerator(isinRegexGenerator, !isNegated);
     }
 
     @Override
