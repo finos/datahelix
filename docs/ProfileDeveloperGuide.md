@@ -50,7 +50,6 @@
     2. [Microsoft Visual Studio Code](#Microsoft-Visual-Studio-Code)
     3. [Schema Validation using library](#Schema-Validation-using-library)
 
-
 # Profiles
 
 **Data profiles** describe potential or real data. For instance, we could design a profile that describes a _user_account_ table, where:
