@@ -1,6 +1,5 @@
 package com.scottlogic.deg.generator.outputs.targets;
 
-import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.outputs.formats.DataSetWriter;
 import com.scottlogic.deg.generator.outputs.formats.OutputFormat;
@@ -52,7 +51,7 @@ public class FileOutputTarget implements SingleDatasetOutputTarget {
     }
 
     @Override
-    public void validate(Profile profile) throws OutputTargetValidationException, IOException {
+    public void validate() throws OutputTargetValidationException, IOException {
         if (fileUtils.isDirectory(filePath)) {
             throw new OutputTargetValidationException(
                 "target is a directory, please use a different output filename");

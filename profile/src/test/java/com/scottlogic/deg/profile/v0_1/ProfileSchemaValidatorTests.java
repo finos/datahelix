@@ -1,7 +1,6 @@
 package com.scottlogic.deg.profile.v0_1;
 
-import com.scottlogic.deg.profile.serialisation.ValidationResult;
-import org.junit.Assert;
+import com.scottlogic.deg.common.ValidationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DynamicTest;
 
@@ -14,7 +13,6 @@ import java.util.Collection;
 import java.util.function.Supplier;
 
 public class ProfileSchemaValidatorTests {
-
     private final String TEST_PROFILE_DIR = "/test-profiles/";
     private final String INVALID_PROFILE_DIR = "invalid";
     private final String VALID_PROFILE_DIR = "valid";
@@ -49,11 +47,19 @@ public class ProfileSchemaValidatorTests {
         for (int i = 0; i < listOfFiles.length; i++) {
             String profileFilename = listOfFiles[i].getName();
             DynamicTest test = DynamicTest.dynamicTest(profileFilename, () -> {
-                URL testProfileUrl = this.getClass().getResource(TEST_PROFILE_DIR + INVALID_PROFILE_DIR + "/" + profileFilename);
-                ValidationResult result = profileValidator.validateProfile(new File(testProfileUrl.getPath()));
-                Supplier<String> msgSupplier = () -> "Profile ["
-                    + profileFilename + "] should not be valid";
-                Assertions.assertFalse(result.isValid(), msgSupplier);
+                URL testProfileUrl =
+                    this.getClass().getResource(
+                        TEST_PROFILE_DIR + INVALID_PROFILE_DIR + "/" + profileFilename
+                    );
+
+                try {
+                    profileValidator.validateProfile(new File(testProfileUrl.getPath()));
+
+                    Supplier<String> msgSupplier = () -> "Profile ["
+                        + profileFilename + "] should not be valid";
+                    Assertions.fail(msgSupplier);
+                }
+                catch (ValidationException e) { }
             });
             dynTsts.add(test);
         }
@@ -67,13 +73,21 @@ public class ProfileSchemaValidatorTests {
         for (int i = 0; i < listOfFiles.length; i++) {
             String profileFilename = listOfFiles[i].getName();
             DynamicTest test = DynamicTest.dynamicTest(profileFilename, () -> {
-                URL testProfileUrl = this.getClass().getResource(TEST_PROFILE_DIR + VALID_PROFILE_DIR + "/" + profileFilename);
-                ValidationResult result = profileValidator.validateProfile(new File(testProfileUrl.getPath()));
-                Assert.assertTrue("Profile [" + profileFilename + "] should be valid [" + result.errorMessages + "]", result.isValid());
+                URL testProfileUrl =
+                    this.getClass().getResource(
+                        TEST_PROFILE_DIR + VALID_PROFILE_DIR + "/" + profileFilename
+                    );
+                try {
+                    profileValidator.validateProfile(new File(testProfileUrl.getPath()));
+                }
+                catch (ValidationException e) {
+                    Assertions.fail(
+                        "Profile [" + profileFilename + "] should be valid [" + e.errorMessages + "]"
+                    );
+                }
             });
             dynTsts.add(test);
         }
         return dynTsts;
     }
-
 }
