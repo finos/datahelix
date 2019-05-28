@@ -6,6 +6,7 @@ import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
+import com.scottlogic.deg.profile.reader.AtomicConstraintReaderLookup;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import com.scottlogic.deg.profile.reader.MainConstraintReader;
 import com.scottlogic.deg.profile.reader.ProfileReader;
@@ -22,9 +23,12 @@ public class CucumberProfileReader implements ProfileReader {
 
     private final CucumberTestState state;
 
+    private final AtomicConstraintReaderLookup atomicConstraintReaderLookup;
+
     @Inject
-    public CucumberProfileReader(CucumberTestState state) {
+    public CucumberProfileReader(CucumberTestState state, AtomicConstraintReaderLookup atomicConstraintReaderLookup) {
         this.state = state;
+        this.atomicConstraintReaderLookup = atomicConstraintReaderLookup;
     }
 
     @Override
@@ -34,7 +38,7 @@ public class CucumberProfileReader implements ProfileReader {
 
     private Profile getProfile() throws InvalidProfileException {
         try {
-            MainConstraintReader constraintReader = new MainConstraintReader();
+            MainConstraintReader constraintReader = new MainConstraintReader(atomicConstraintReaderLookup);
             ProfileFields profileFields = new ProfileFields(state.profileFields);
             AtomicBoolean exceptionInMapping = new AtomicBoolean();
 

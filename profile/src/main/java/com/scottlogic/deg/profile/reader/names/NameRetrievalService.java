@@ -1,27 +1,69 @@
 package com.scottlogic.deg.profile.reader.names;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes;
+import com.scottlogic.deg.profile.reader.CatalogService;
 
-import java.util.Set;
+import java.io.File;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class NameRetrievalService implements CatalogService<NameConstraintTypes, String> {
+import static com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes.FIRST;
+import static com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes.LAST;
+
+public class NameRetrievalService implements CatalogService<NameConstraintTypes, NameFrequencyHolder> {
+
+    private static final String SEP = File.separator;
+
+    private static final String NAMES_ROOT = SEP + "names" + SEP;
+
+    private static final String FIRST_MALE_NAMES = NAMES_ROOT + "firstname_male.csv";
+
+    private static final String FIRST_FEMALE_NAMES = NAMES_ROOT + "firstname_female.csv";
+
+    private static final String LAST_NAMES = NAMES_ROOT + "surname.csv";
+
+    private static final Map<NameConstraintTypes, Set<String>> NAME_TYPE_MAPPINGS;
+
+    private static final NamePopulator<Path> POPULATOR = new NameCSVPopulator();
+
+    static {
+        NAME_TYPE_MAPPINGS = new EnumMap<>(NameConstraintTypes.class);
+        NAME_TYPE_MAPPINGS.put(LAST, Stream.of(LAST_NAMES).collect(Collectors.toSet()));
+        NAME_TYPE_MAPPINGS.put(FIRST, Stream.of(FIRST_MALE_NAMES, FIRST_FEMALE_NAMES).collect(Collectors.toSet()));
+    }
 
     @Override
-    public Set<String> retrieveValues(NameConstraintTypes configuration) {
-        switch (configuration) {
-            case FIRST:
-                return arrayToString("John", "Jon", "Jonny");
-            case LAST:
-                return arrayToString("Johnson", "Jonson", "Jones", "Joneson");
-            default:
-                throw new UnsupportedOperationException("Unsupported enum value " + configuration);
+    public Set<NameFrequencyHolder> retrieveValues(NameConstraintTypes configuration) {
+        return NAME_TYPE_MAPPINGS.get(configuration).stream()
+            .map(this::pathFromClasspath)
+            .map(this::parseFromFile)
+            .reduce(new HashSet<>(), this::populateSet);
+    }
+
+    private Path pathFromClasspath(String classPath) {
+        URL url = Optional.ofNullable(this.getClass()
+            .getClassLoader()
+            .getResource(classPath)
+        ).orElseThrow(() -> new IllegalArgumentException("Path not found on classpath."));
+        try {
+            return Paths.get(url.toURI());
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException(e);
         }
     }
 
-    private static Set<String> arrayToString(String... array) {
-        return Stream.of(array).collect(Collectors.toSet());
+    private Set<NameFrequencyHolder> parseFromFile(Path path) {
+        return POPULATOR.retrieveNames(path);
+    }
+
+    private Set<NameFrequencyHolder> populateSet(Set<NameFrequencyHolder> a, Set<NameFrequencyHolder> b) {
+        a.addAll(b);
+        return a;
     }
 
 }

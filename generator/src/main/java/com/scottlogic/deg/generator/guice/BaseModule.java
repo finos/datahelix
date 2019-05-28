@@ -89,6 +89,7 @@ public class BaseModule extends AbstractModule {
         bind(OutputTargetSpecification.class).to(OutputTargetSpecificationImpl.class);
         bind(ConstraintReader.class).to(MainConstraintReader.class);
         bind(FileUtils.class).to(FileUtilsImpl.class);
+        bind(AtomicConstraintReaderLookup.class).to(BaseAtomicConstraintReaderLookup.class);
 
 
         bind(new TypeLiteral<List<ViolationFilter>>() {
