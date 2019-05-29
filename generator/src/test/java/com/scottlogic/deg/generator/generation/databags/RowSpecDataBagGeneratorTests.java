@@ -38,7 +38,8 @@ class RowSpecDataBagGeneratorTests {
 
     @Test
     void shouldCreateValuesForEachFieldSpecInRowSpec() {
-        RowSpecDataBagGenerator factory = new RowSpecDataBagGenerator(mockGeneratorFactory, exhaustiveCombinationStrategy);
+        RowSpecDataBagGenerator factory =
+            new RowSpecDataBagGenerator(mockGeneratorFactory, exhaustiveCombinationStrategy);
         Map<Field, FieldSpec> map = new HashMap<Field, FieldSpec>() {{ put(field, fieldSpec); }};
         RowSpec rowSpec = new RowSpec(fields, map);
 
@@ -56,14 +57,16 @@ class RowSpecDataBagGeneratorTests {
 
     @Test
     void factoryIsCalledForEachField() {
-        RowSpecDataBagGenerator factory = new RowSpecDataBagGenerator(mockGeneratorFactory, exhaustiveCombinationStrategy);
+        RowSpecDataBagGenerator factory =
+            new RowSpecDataBagGenerator(mockGeneratorFactory, exhaustiveCombinationStrategy);
         Map<Field, FieldSpec> map = new HashMap<Field, FieldSpec>() {{
             put(field, fieldSpec);
             put(field2, fieldSpec2);
             put(field3, fieldSpec3); }};
         RowSpec rowSpec = new RowSpec(new ProfileFields(Arrays.asList(field2, field, field3)), map);
 
-        when(mockGeneratorFactory.generate(any(FieldSpec.class))).thenReturn(Stream.of(dataBagValue), Stream.of(dataBagValue1), Stream.of(dataBagValue2));
+        when(mockGeneratorFactory.generate(any(FieldSpec.class)))
+            .thenReturn(Stream.of(dataBagValue), Stream.of(dataBagValue1), Stream.of(dataBagValue2));
 
         factory.createDataBags(rowSpec)
             .collect(Collectors.toList());
@@ -75,7 +78,8 @@ class RowSpecDataBagGeneratorTests {
 
     @Test
     void combinationStrategyIsCalled() {
-        RowSpecDataBagGenerator factory = new RowSpecDataBagGenerator(mockGeneratorFactory, mockCombinationStrategy);
+        RowSpecDataBagGenerator factory =
+            new RowSpecDataBagGenerator(mockGeneratorFactory, mockCombinationStrategy);
         Map<Field, FieldSpec> map = new HashMap<Field, FieldSpec>() {{ put(field, fieldSpec); }};
         RowSpec rowSpec = new RowSpec(fields, map);
 

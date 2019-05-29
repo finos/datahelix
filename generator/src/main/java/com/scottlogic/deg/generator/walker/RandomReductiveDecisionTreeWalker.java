@@ -32,7 +32,7 @@ public class RandomReductiveDecisionTreeWalker implements DecisionTreeWalker {
                     .map(Optional::get));
     }
 
-    private Optional<DataBag> getFirstRowSpecFromRandomisingIteration(DecisionTree tree){
+    private Optional<DataBag> getFirstRowSpecFromRandomisingIteration(DecisionTree tree) {
         return underlyingWalker.walk(tree)
             .findFirst();
     }

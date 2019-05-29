@@ -12,7 +12,6 @@ import com.scottlogic.deg.output.writer.OutputWriterFactory;
 import java.nio.file.Path;
 
 public class OutputModule extends AbstractModule {
-
     private final OutputConfigSource outputConfigSource;
 
     public OutputModule(OutputConfigSource outputConfigSource) {

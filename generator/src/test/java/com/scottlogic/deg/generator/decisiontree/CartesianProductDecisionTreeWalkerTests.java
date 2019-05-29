@@ -43,7 +43,29 @@ class CartesianProductDecisionTreeWalkerTests {
 
     @Test
     void test() {
-        when(dataBagSourceFactory.createDataBags(any())).thenReturn(Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)),Stream.of(mock(DataBag.class)));
+        when(dataBagSourceFactory.createDataBags(any()))
+            .thenReturn(
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class))
+            );
         final Field country = new Field("country");
         final Field currency = new Field("currency");
         final Field city = new Field("city");

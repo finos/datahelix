@@ -9,7 +9,6 @@ import com.scottlogic.deg.output.writer.trace.TraceOutputWriterFactory;
 import java.nio.file.Path;
 
 public class TraceFileOutputTarget extends FileOutputTarget {
-
     @Inject
     public TraceFileOutputTarget(
         @Named("config:outputPath") Path filePath,
@@ -17,10 +16,11 @@ public class TraceFileOutputTarget extends FileOutputTarget {
         @Named("config:canOverwriteOutputFiles") boolean canOverwriteOutputFiles,
         FileUtils fileUtils)
     {
-        super(getTraceFilePath(filePath), outputWriterFactory, canOverwriteOutputFiles, fileUtils);
-    }
-
-    private static Path getTraceFilePath(Path filePath) {
-        return FileUtilsImpl.addFilenameSuffix(FileUtilsImpl.replaceExtension(filePath, "json"), "-trace");
+        super(
+            fileUtils.getTraceFilePath(filePath),
+            outputWriterFactory,
+            canOverwriteOutputFiles,
+            fileUtils
+        );
     }
 }

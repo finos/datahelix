@@ -8,7 +8,7 @@ import com.scottlogic.deg.generator.restrictions.SetRestrictions;
 import java.util.Collections;
 
 public class FieldSpecHelper {
-    public FieldSpec getFieldSpecForValue(DataBagValue fieldValue){
+    public FieldSpec getFieldSpecForValue(DataBagValue fieldValue) {
         if (fieldValue.getUnformattedValue() == null) {
             return getNullRequiredFieldSpec();
         }

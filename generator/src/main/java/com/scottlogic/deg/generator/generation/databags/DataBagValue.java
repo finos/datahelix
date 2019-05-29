@@ -37,7 +37,7 @@ public class DataBagValue {
     }
 
     public Object getFormattedValue() {
-        if (format == null || value == null){
+        if (format == null || value == null) {
             return value;
         }
 

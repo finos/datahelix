@@ -16,7 +16,8 @@ import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 class ReductiveStateTests {
     Field field1 = new Field("field1");
     Field field2 = new Field("field2");
-    ReductiveState reductiveState = new ReductiveState(new ProfileFields(Arrays.asList(field1, field2)));
+    ReductiveState reductiveState =
+        new ReductiveState(new ProfileFields(Arrays.asList(field1, field2)));
     DataBagValue value1 = new DataBagValue("v1", DataBagValueSource.Empty);
     DataBagValue value2 = new DataBagValue("v2", DataBagValueSource.Empty);
 
@@ -33,7 +34,8 @@ class ReductiveStateTests {
 
     @Test
     void withTwoFixedFieldValue() {
-        ReductiveState stateWithBothFixedFields = reductiveState.withFixedFieldValue(field1, value1).withFixedFieldValue(field2, value2);
+        ReductiveState stateWithBothFixedFields =
+            reductiveState.withFixedFieldValue(field1, value1).withFixedFieldValue(field2, value2);
 
         Map<Field, DataBagValue> expected = new HashMap<>();
         expected.put(field1, value1);

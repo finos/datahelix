@@ -29,9 +29,7 @@ public class JsonManifestWriter implements ManifestWriter {
         this.outputPath = outputPath;
     }
 
-    public void writeManifest(
-        List<ViolatedProfile> result) throws IOException {
-
+    public void writeManifest(List<ViolatedProfile> result) throws IOException {
         AtomicInteger dataSetIndex = new AtomicInteger(1);
         DecimalFormat intFormatter = FileUtilsImpl.getDecimalFormat(result.size());
 
@@ -42,10 +40,7 @@ public class JsonManifestWriter implements ManifestWriter {
                 Collections.singleton(profile.violatedRule.ruleInformation.getDescription())))
             .collect(Collectors.toList());
 
-        write(
-            new ManifestDTO(testCaseDtos),
-            outputPath.resolve(
-                "manifest.json"));
+        write(new ManifestDTO(testCaseDtos), outputPath.resolve("manifest.json"));
     }
 
     private void write(ManifestDTO manifest, Path filepath) throws IOException {
@@ -53,9 +48,6 @@ public class JsonManifestWriter implements ManifestWriter {
 
         String manifestAsJson = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(manifest);
 
-        Files.write(
-            filepath,
-            manifestAsJson.getBytes(
-                Charsets.UTF_8));
+        Files.write(filepath, manifestAsJson.getBytes(Charsets.UTF_8));
     }
 }

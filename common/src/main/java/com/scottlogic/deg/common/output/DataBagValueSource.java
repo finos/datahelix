@@ -6,12 +6,16 @@ import java.util.Collections;
 import java.util.Set;
 
 public class DataBagValueSource {
-    public static final DataBagValueSource Empty = new DataBagValueSource(Collections.emptySet(), Collections.emptySet());
+    public static final DataBagValueSource Empty =
+        new DataBagValueSource(Collections.emptySet(), Collections.emptySet());
 
     private final Set<AtomicConstraint> constraints;
     private final Set<AtomicConstraint> violatedConstraints;
 
-    public DataBagValueSource(Set<AtomicConstraint> constraints, Set<AtomicConstraint> violatedConstraints){
+    public DataBagValueSource(
+        Set<AtomicConstraint> constraints,
+        Set<AtomicConstraint> violatedConstraints)
+    {
         this.constraints = constraints;
         this.violatedConstraints = violatedConstraints;
     }

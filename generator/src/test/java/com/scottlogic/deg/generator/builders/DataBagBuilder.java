@@ -16,9 +16,9 @@ public class DataBagBuilder {
     }
 
     public DataBagBuilder set(Field field, DataBagValue value) {
-        if (fieldToValue.containsKey(field))
+        if (fieldToValue.containsKey(field)) {
             throw new IllegalArgumentException("Databag already contains a value for " + field);
-
+        }
         fieldToValue.put(field, value);
 
         return this;

@@ -53,15 +53,21 @@ public class FileOutputTarget implements SingleDatasetOutputTarget {
     @Override
     public void validate() throws OutputTargetValidationException, IOException {
         if (fileUtils.isDirectory(filePath)) {
-            throw new OutputTargetValidationException("target is a directory, please use a different output filename");
+            throw new OutputTargetValidationException(
+                "target is a directory; please use a different output filename"
+            );
         }
         else if (!canOverwriteExistingFiles && fileUtils.exists(filePath)) {
-            throw new OutputTargetValidationException("file already exists, please use a different output filename or use the --replace option");
+            throw new OutputTargetValidationException(
+                "file already exists; please use a different output filename or use the --replace option"
+            );
         }
         else if (!fileUtils.exists(filePath)) {
             Path parent = filePath.toAbsolutePath().getParent();
             if (!fileUtils.createDirectories(parent)) {
-                throw new OutputTargetValidationException("parent directory of output file already exists but is not a directory, please use a different output filename");
+                throw new OutputTargetValidationException(
+                    "parent directory of output file already exists but is not a directory; please use a different output filename"
+                );
             }
         }
     }

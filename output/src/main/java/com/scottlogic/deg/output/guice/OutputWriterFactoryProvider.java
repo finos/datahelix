@@ -15,8 +15,8 @@ public class OutputWriterFactoryProvider implements Provider<OutputWriterFactory
     public OutputWriterFactoryProvider(
         OutputConfigSource configSource,
         CsvOutputWriterFactory csvOutputWriterFactory,
-        JsonOutputWriterFactory jsonOutputWriterFactory) {
-
+        JsonOutputWriterFactory jsonOutputWriterFactory)
+    {
         this.configSource = configSource;
         this.csvOutputWriterFactory = csvOutputWriterFactory;
         this.jsonOutputWriterFactory = jsonOutputWriterFactory;
@@ -31,6 +31,9 @@ public class OutputWriterFactoryProvider implements Provider<OutputWriterFactory
                 return jsonOutputWriterFactory;
         }
 
-        throw new RuntimeException(String.format("Unknown output format %s, options are CSV or JSON", configSource.getOutputFormat()));
+        throw new RuntimeException(String.format(
+            "Unknown output format %s, options are CSV or JSON",
+            configSource.getOutputFormat()
+        ));
     }
 }

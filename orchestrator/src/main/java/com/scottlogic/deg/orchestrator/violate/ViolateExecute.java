@@ -98,14 +98,18 @@ public class ViolateExecute implements Runnable {
 
         int filename = 1;
         for (Profile violatedProfile : violatedProfiles) {
-            SingleDatasetOutputTarget outputTarget = outputTargetFactory.create(intFormatter.format(filename++));
+            SingleDatasetOutputTarget outputTarget =
+                outputTargetFactory.create(intFormatter.format(filename++));
             Stream<GeneratedObject> generatedObjectStream = dataGenerator.generateData(violatedProfile);
             outputData(profile, generatedObjectStream, outputTarget);
         }
     }
 
-
-    private void outputData(Profile profile, Stream<GeneratedObject> generatedDataItems, SingleDatasetOutputTarget outputTarget) throws IOException {
+    private void outputData(
+        Profile profile,
+        Stream<GeneratedObject> generatedDataItems,
+        SingleDatasetOutputTarget outputTarget) throws IOException
+    {
         try (DataSetWriter writer = outputTarget.openWriter(profile.fields)) {
             generatedDataItems.forEach(row -> {
                 try {

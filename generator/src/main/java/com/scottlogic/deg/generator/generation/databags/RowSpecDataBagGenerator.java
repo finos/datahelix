@@ -17,25 +17,24 @@ public class RowSpecDataBagGenerator {
     @Inject
     public RowSpecDataBagGenerator(
         FieldSpecValueGenerator generator,
-        CombinationStrategy combinationStrategy) {
+        CombinationStrategy combinationStrategy)
+    {
         this.generator = generator;
         this.combinationStrategy = combinationStrategy;
     }
 
-    public Stream<DataBag> createDataBags(RowSpec rowSpec){
+    public Stream<DataBag> createDataBags(RowSpec rowSpec) {
         Stream<Stream<DataBag>> dataBagsForFields =
             rowSpec.getFields().stream()
                 .map(field -> generateDataForField(rowSpec, field));
 
-        return combinationStrategy
-            .permute(dataBagsForFields);
+        return combinationStrategy.permute(dataBagsForFields);
     }
 
     private Stream<DataBag> generateDataForField(RowSpec rowSpec, Field field) {
         FieldSpec fieldSpec = rowSpec.getSpecForField(field);
 
-        return generator.generate(fieldSpec)
-            .map(value->toDataBag(field, value));
+        return generator.generate(fieldSpec).map(value->toDataBag(field, value));
     }
 
     private DataBag toDataBag(Field field, DataBagValue value) {
@@ -44,4 +43,3 @@ public class RowSpecDataBagGenerator {
         return new DataBag(map);
     }
 }
-
