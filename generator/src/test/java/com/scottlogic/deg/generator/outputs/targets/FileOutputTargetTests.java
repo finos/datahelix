@@ -1,6 +1,5 @@
 package com.scottlogic.deg.generator.outputs.targets;
 
-import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.generator.outputs.formats.OutputFormat;
 import com.scottlogic.deg.generator.utils.FileUtils;
 import org.junit.jupiter.api.Test;
