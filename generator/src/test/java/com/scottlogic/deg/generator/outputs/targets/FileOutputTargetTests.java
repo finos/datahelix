@@ -22,31 +22,25 @@ public class FileOutputTargetTests {
 
     @Test
     public void validate_generateOutputFileIsADirectory_throwsException(){
-        //Arrange
         when(mockFileUtils.isDirectory(any())).thenReturn(true);
         when(mockFilePath.getParent()).thenReturn(mockParentPath);
         FileOutputTarget outputTarget = new FileOutputTarget(mockFilePath, mockOutputFormat, false, mockFileUtils);
 
-        //Act
         OutputTargetValidationException thrown = assertThrows(OutputTargetValidationException.class, ()->outputTarget.validate(),"Expected OutputTargetValidationException to throw, but didn't");
 
-        //Assert
         assertEquals( "target is a directory, please use a different output filename", thrown.getMessage());
     }
 
     @Test
     public void validate_generateOutputFileAlreadyExistsNoOverwrite_throwsException() {
-        //Arrange
         when(mockFileUtils.isDirectory(mockFilePath)).thenReturn(false);
         when(mockFileUtils.isDirectory(mockParentPath)).thenReturn(true);
         when(mockFilePath.getParent()).thenReturn(mockParentPath);
         when(mockFileUtils.exists(any())).thenReturn(true);
         FileOutputTarget outputTarget = new FileOutputTarget(mockFilePath, mockOutputFormat, false, mockFileUtils);
 
-        //Act
         OutputTargetValidationException thrown = assertThrows(OutputTargetValidationException.class, ()->outputTarget.validate(),"Expected OutputTargetValidationException to throw, but didn't");
 
-        //Assert
         assertEquals( "file already exists, please use a different output filename or use the --replace option", thrown.getMessage());
     }
 
