@@ -57,7 +57,7 @@ public class JsonProfileReaderTests {
     }
 
     private void expectRules(Consumer<Rule>... ruleAssertions) throws IOException, InvalidProfileException {
-        expectMany(this.getResultingProfile().rules, ruleAssertions);
+        expectMany(this.getResultingProfile().getRules(), ruleAssertions);
     }
 
     private Consumer<Rule> ruleWithDescription(String expectedDescription) {
@@ -81,7 +81,7 @@ public class JsonProfileReaderTests {
     }
 
     private void expectFields(Consumer<Field>... fieldAssertions) throws IOException, InvalidProfileException {
-        expectMany(this.getResultingProfile().fields, fieldAssertions);
+        expectMany(this.getResultingProfile().getFields(), fieldAssertions);
     }
 
     /**
