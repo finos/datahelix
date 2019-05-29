@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.generation;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.generator.outputs.GeneratedObject;
 
 import java.io.PrintWriter;
@@ -26,6 +27,7 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
 
     private final PrintWriter writer;
 
+    @Inject
     public VelocityMonitor(PrintWriter writer) {
         this.writer = writer;
     }
