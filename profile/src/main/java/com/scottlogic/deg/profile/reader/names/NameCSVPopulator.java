@@ -10,17 +10,22 @@ import java.nio.file.Path;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class NameCSVPopulator implements NamePopulator<Path> {
+public class NameCSVPopulator implements NamePopulator<FileSystemPathPair> {
 
     @Override
-    public Set<NameFrequencyHolder> retrieveNames(Path config) {
+    public Set<NameFrequencyHolder> retrieveNames(FileSystemPathPair config) {
         try {
-            CSVParser parser = CSVParser.parse(config, Charset.defaultCharset(), CSVFormat.DEFAULT);
-            return parser
+            CSVParser parser = CSVParser.parse(
+                config.getFs().getPath(config.getPath().toString()),
+                Charset.defaultCharset(),
+                CSVFormat.DEFAULT);
+            Set<NameFrequencyHolder> result = parser
                 .getRecords()
                 .stream()
                 .map(record -> new NameFrequencyHolder(record.get(0), Integer.valueOf(record.get(1))))
                 .collect(Collectors.toSet());
+/*            config.getFs().close();*/
+            return result;
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
