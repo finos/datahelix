@@ -3,16 +3,7 @@ package com.scottlogic.deg.profile.reader.names;
 import com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes;
 import com.scottlogic.deg.profile.reader.CatalogService;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -34,7 +25,7 @@ public class NameRetrievalService implements CatalogService<NameConstraintTypes,
 
     private static final Map<NameConstraintTypes, Set<String>> NAME_TYPE_MAPPINGS;
 
-    private static final NamePopulator<FileSystemPathPair> POPULATOR = new NameCSVPopulator();
+    private static final NamePopulator<InputStream> POPULATOR = new NameCSVPopulator();
 
     static {
         NAME_TYPE_MAPPINGS = new EnumMap<>(NameConstraintTypes.class);
@@ -50,30 +41,15 @@ public class NameRetrievalService implements CatalogService<NameConstraintTypes,
             .reduce(new HashSet<>(), this::populateSet);
     }
 
-    private FileSystemPathPair pathFromClasspath(String classPath) {
-        URL url = Optional.ofNullable(this.getClass()
+    private InputStream pathFromClasspath(String classPath) {
+        return Optional.ofNullable(this.getClass()
             .getClassLoader()
-            .getResource(classPath)
+            .getResourceAsStream(classPath)
         ).orElseThrow(() -> new IllegalArgumentException("Path not found on classpath."));
-        try {
-            Path path = Paths.get(url.toURI());
-            System.out.println(path);
-            return new FileSystemPathPair(path, createFileSystem(path));
-        } catch (URISyntaxException e) {
-            throw new IllegalArgumentException(e);
-        }
     }
 
-    private FileSystem createFileSystem(Path path) {
-/*        try {*/
-            return FileSystems.getDefault();
-/*            return FileSystems.newFileSystem(path, ClassLoader.getSystemClassLoader());*/
-/*        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }*/
-    }
 
-    private Set<NameFrequencyHolder> parseFromFile(FileSystemPathPair path) {
+    private Set<NameFrequencyHolder> parseFromFile(InputStream path) {
         return POPULATOR.retrieveNames(path);
     }
 
