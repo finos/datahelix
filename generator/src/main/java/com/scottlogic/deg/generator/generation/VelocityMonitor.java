@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.google.inject.Inject;
+import com.scottlogic.deg.common.output.GeneratedObject;
 
 import java.io.PrintWriter;
 import java.math.BigDecimal;
@@ -52,7 +53,7 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
     }
     
     @Override
-    public void rowEmitted() {
+    public void rowEmitted(GeneratedObject item) {
         rowsSinceLastSample++;
         rowsEmitted = rowsEmitted.add(BigInteger.ONE);
     }

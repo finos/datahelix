@@ -58,8 +58,6 @@ public class GeneratorModule extends AbstractModule {
         bind(DecisionTreeFactory.class).to(MaxStringLengthInjectingDecisionTreeFactory.class);
         bind(FieldValueSourceEvaluator.class).to(StandardFieldValueSourceEvaluator.class);
 
-        bind(VelocityMonitor.class)
-            .toInstance(new VelocityMonitor(new PrintWriter(System.out, true)));
         bind(JavaUtilRandomNumberGenerator.class)
             .toInstance(new JavaUtilRandomNumberGenerator(OffsetDateTime.now().getNano()));
     }
