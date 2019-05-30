@@ -26,9 +26,7 @@ public class ViolateOutputValidatorTests {
         when(mockFileUtils.isDirectory(mockFilePath)).thenReturn(false);
         ViolateOutputValidator outputTarget = new ViolateOutputValidator(false, mockFilePath, mockFileUtils);
 
-        OutputTargetValidationException thrown = assertThrows(OutputTargetValidationException.class, ()->outputTarget.validate(mockProfile),"Expected OutputTargetValidationException to throw, but didn't");
-
-        assertEquals( "not a directory, please enter a valid directory name", thrown.getMessage());
+        assertThrows(OutputTargetValidationException.class, ()->outputTarget.validate(mockProfile),"Expected OutputTargetValidationException to throw, but didn't");
     }
 
     @Test

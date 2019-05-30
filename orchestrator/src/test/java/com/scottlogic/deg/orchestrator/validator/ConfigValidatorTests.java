@@ -70,8 +70,6 @@ public class ConfigValidatorTests {
         when(mockFileUtils.getTraceFile(any())).thenReturn(mock(File.class));
         when(mockFileUtils.getTraceFile(any()).exists()).thenReturn(true);
 
-        OutputTargetValidationException thrown = assertThrows(OutputTargetValidationException.class, ()->configValidator.preProfileChecks(mockConfigSource),"Expected OutputTargetValidationException to throw, but didn't");
-
-        assertEquals( "trace file already exists, please use a different output filename or use the --replace option", thrown.getMessage());
-    }
+        assertThrows(OutputTargetValidationException.class, ()->configValidator.preProfileChecks(mockConfigSource),"Expected OutputTargetValidationException to throw, but didn't");
+   }
 }
