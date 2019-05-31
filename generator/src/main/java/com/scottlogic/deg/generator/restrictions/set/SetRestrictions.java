@@ -15,21 +15,24 @@ public class SetRestrictions implements Restrictions {
     private static final SetRestrictions neutral = new SetRestrictions(null, null);
 
     /**
-     * The whitelist goes from:
+     * The whitelist permits:
      * Empty = Empty set
      * Some = Restricted set
      * Full = Universal set
-     * <p>
+     *
      * Because the universal set (full) is infeasible in terms of memory, we also represent
      * the universal set with null.
      */
     private final Set<Object> whitelist;
 
     /**
-     * The blacklist goes from:
+     * The blacklist permits:
      * Empty = Universal set
      * Some = Restricted set
      * Full = Empty set
+     *
+     * The null blacklist would be equivalent to the empty set, so we enforce that we should
+     * always have an instance (of at least the empty set)
      */
     private final Set<Object> blacklist;
 
@@ -62,7 +65,7 @@ public class SetRestrictions implements Restrictions {
         return new SetRestrictions(null, blacklist);
     }
 
-    private static Set<Object> mergeWhitelist(Set<Object> left, Set<Object> right) {
+    private Set<Object> mergeWhitelist(Set<Object> left, Set<Object> right) {
         if (left == null && right == null) {
             return null;
         } else if (left == null) {
@@ -74,18 +77,18 @@ public class SetRestrictions implements Restrictions {
         }
     }
 
-    private static Set<Object> mergeBlackList(Set<Object> left, Set<Object> right) {
+    private Set<Object> mergeBlackList(Set<Object> left, Set<Object> right) {
         return SetUtils.union(getOrEmpty(left), getOrEmpty(right));
     }
 
-    private static Set<Object> getOrEmpty(Set<Object> set) {
+    private Set<Object> getOrEmpty(Set<Object> set) {
         return Optional.ofNullable(set).orElse(Collections.emptySet());
     }
 
-    public static MergeResult<SetRestrictions> merge(SetRestrictions a, SetRestrictions b) {
-        Set<Object> newWhitelist = mergeWhitelist(a.whitelist, b.whitelist);
+    public MergeResult<SetRestrictions> merge(SetRestrictions other) {
+        Set<Object> newWhitelist = mergeWhitelist(whitelist, other.whitelist);
 
-        Set<Object> newBlacklist = mergeBlackList(a.blacklist, b.blacklist);
+        Set<Object> newBlacklist = mergeBlackList(blacklist, other.blacklist);
 
         if (newWhitelist != null && newBlacklist != null) {
             Set<Object> whiteAndBlacklistIntersection = SetUtils.intersect(
@@ -106,10 +109,6 @@ public class SetRestrictions implements Restrictions {
         }
 
         return new MergeResult<>(new SetRestrictions(newWhitelist, newBlacklist));
-    }
-
-    private static <T> T coalesce(T preferred, T fallback) {
-        return preferred != null ? preferred : fallback;
     }
 
     @Override
