@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.utils.*;
-import jdk.nashorn.internal.runtime.regexp.joni.Regex;
 
 import java.util.Arrays;
 import java.util.List;
