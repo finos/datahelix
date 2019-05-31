@@ -7,6 +7,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.*;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.DateTimeFieldValueSource;
 import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.restrictions.set.SetRestrictions;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -22,8 +23,11 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             return Collections.singletonList(nullOnlySource);
         }
 
-        if (fieldSpec.getSetRestrictions() != null && fieldSpec.getSetRestrictions().getWhitelist().isPresent()) {
-            List<FieldValueSource> setRestrictionSources = getSetRestrictionSources(fieldSpec.getSetRestrictions().getWhitelist().get());
+        Optional<Set<Object>> whitelist = Optional.ofNullable(fieldSpec.getSetRestrictions())
+            .flatMap(SetRestrictions::getWhitelist);
+
+        if (whitelist.isPresent()) {
+            List<FieldValueSource> setRestrictionSources = getSetRestrictionSources(whitelist.get());
             if (mayBeNull(fieldSpec)){
                 return addNullSource(setRestrictionSources);
             }
@@ -105,7 +109,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         Set<Object> blacklist = getBlacklist(fieldSpec);
 
         StringGenerator generator = stringRestrictions.createGenerator();
-        if (blacklist.size() > 0) {
+        if (!blacklist.isEmpty()) {
             RegexStringGenerator blacklistGenerator = RegexStringGenerator.createFromBlacklist(blacklist);
 
             generator = generator.intersect(blacklistGenerator);
