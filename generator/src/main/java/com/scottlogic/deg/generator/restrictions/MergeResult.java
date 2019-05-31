@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.restrictions;
 
 public class MergeResult<T> {
 
-    private static final MergeResult UNSUCCESSFUL = new MergeResult();
+    private static final MergeResult<?> UNSUCCESSFUL = new MergeResult<>();
 
     public final T restrictions;
     public final boolean successful;
