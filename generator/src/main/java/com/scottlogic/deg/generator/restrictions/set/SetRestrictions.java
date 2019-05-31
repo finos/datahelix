@@ -92,7 +92,7 @@ public class SetRestrictions implements Restrictions {
                 newBlacklist,
                 newWhitelist);
 
-            if (whiteAndBlacklistIntersection.size() > 0) {
+            if (!whiteAndBlacklistIntersection.isEmpty()) {
                 newWhitelist = newWhitelist.stream()
                     .filter(val -> !whiteAndBlacklistIntersection.contains(val))
                     .collect(Collectors.toSet());
@@ -101,7 +101,7 @@ public class SetRestrictions implements Restrictions {
             newBlacklist = Collections.emptySet();
         }
 
-        if (newWhitelist != null && newWhitelist.size() == 0) {
+        if (newWhitelist != null && newWhitelist.isEmpty()) {
             return MergeResult.UNSUCCESSFUL;
         }
 
