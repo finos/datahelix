@@ -12,8 +12,6 @@ import java.util.stream.Collectors;
 
 public class SetRestrictions implements Restrictions {
 
-    private static final SetRestrictions neutral = new SetRestrictions(null, null);
-
     /**
      * The whitelist permits:
      * Empty = Empty set
