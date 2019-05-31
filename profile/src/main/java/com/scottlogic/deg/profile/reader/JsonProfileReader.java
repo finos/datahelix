@@ -47,7 +47,9 @@ public class JsonProfileReader implements ProfileReader {
                 .map(fDto -> new Field(fDto.name))
                 .collect(Collectors.toList()));
 
-        ConstraintReader constraintReader = new MainConstraintReader();
+        ConstraintReader constraintReader = new MainConstraintReader(
+            new BaseAtomicConstraintReaderLookup()
+        );
 
         Collection<Rule> rules = mapDtos(
             profileDto.rules,

@@ -1,8 +1,7 @@
 package com.scottlogic.deg.generator.utils;
 
+import com.scottlogic.deg.common.util.HeterogeneousTypeContainer;
 import org.junit.jupiter.api.Test;
-
-import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 

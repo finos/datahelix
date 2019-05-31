@@ -7,9 +7,6 @@ import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.util.Defaults;
-import com.scottlogic.deg.profile.reader.AtomicConstraintReaderLookup;
-import com.scottlogic.deg.profile.reader.ConstraintReader;
-import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
 import org.junit.Assert;
@@ -29,7 +26,7 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class AtomicConstraintReaderLookupTests {
+public class BaseAtomicConstraintReaderLookupTests {
 
     AtomicConstraintReaderLookup atomicConstraintReaderLookup;
     ProfileFields profileFields;
@@ -37,7 +34,7 @@ public class AtomicConstraintReaderLookupTests {
     @BeforeAll
     public void before() {
 
-        atomicConstraintReaderLookup = new AtomicConstraintReaderLookup();
+        atomicConstraintReaderLookup = new BaseAtomicConstraintReaderLookup();
 
         List<Field> fields = new ArrayList<>();
 
