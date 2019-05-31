@@ -59,7 +59,9 @@ public class FileOutputTargetTests {
 
     @Test
     public void validate_generateOutputFileDoesntExist_doesntThrow() throws IOException {
-        mockFilePath = Paths.get("/a/b/c/tmp.out");
+        when(mockFilePath.getParent()).thenReturn(mockParentPath);
+        when(mockFilePath.toAbsolutePath()).thenReturn(mockFilePath);
+        when(mockParentPath.resolve(mockFilePath.getFileName())).thenReturn(mockFilePath);
         when(mockFileUtils.isDirectory(mockFilePath)).thenReturn(false);
         when(mockFileUtils.createDirectories(any())).thenReturn(true);
         FileOutputTarget outputTarget = new FileOutputTarget(mockFilePath, mockOutputFormat, true, mockFileUtils);
@@ -69,7 +71,9 @@ public class FileOutputTargetTests {
 
     @Test
     public void validate_generateOutputFileParentDirIsExistingFile_throwsException(){
-        mockFilePath = Paths.get("/a/b/c/tmp.out/a.csv");
+        when(mockFilePath.getParent()).thenReturn(mockParentPath);
+        when(mockFilePath.toAbsolutePath()).thenReturn(mockFilePath);
+        when(mockParentPath.resolve(mockFilePath.getFileName())).thenReturn(mockFilePath);
         when(mockFileUtils.isDirectory(mockFilePath)).thenReturn(false);
         when(mockFileUtils.isDirectory(mockParentPath)).thenReturn(false);
         FileOutputTarget outputTarget = new FileOutputTarget(mockFilePath, mockOutputFormat, false, mockFileUtils);
