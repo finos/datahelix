@@ -19,7 +19,7 @@ public class SetRestrictions implements Restrictions {
      * Empty = Empty set
      * Some = Restricted set
      * Full = Universal set
-     *
+     * <p>
      * Because the universal set (full) is infeasible in terms of memory, we also represent
      * the universal set with null.
      */
@@ -41,17 +41,13 @@ public class SetRestrictions implements Restrictions {
         return this.blacklist;
     }
 
-    protected SetRestrictions(
-        Set<Object> whitelist,
-        Set<Object> blacklist) {
-
+    protected SetRestrictions(Set<Object> whitelist, Set<Object> blacklist) {
         this.whitelist = whitelist;
         this.blacklist = blacklist == null ? Collections.emptySet() : blacklist;
     }
 
-    private boolean isEmpty(){
-        return (this.whitelist == null || this.whitelist.isEmpty())
-            && this.blacklist.isEmpty();
+    private boolean isEmpty() {
+        return (whitelist == null || whitelist.isEmpty()) && blacklist.isEmpty();
     }
 
     public static SetRestrictions allowNoValues() {
@@ -67,21 +63,23 @@ public class SetRestrictions implements Restrictions {
     }
 
     public static MergeResult<SetRestrictions> merge(SetRestrictions a, SetRestrictions b) {
-        if (a == null && b == null)
+        if (a == null && b == null) {
             return new MergeResult<>(null);
+        }
 
         a = coalesce(a, neutral);
         b = coalesce(b, neutral);
 
         Set<Object> newWhitelist;
-        if (a.whitelist == null && b.whitelist == null)
+        if (a.whitelist == null && b.whitelist == null) {
             newWhitelist = null;
-        else if (a.whitelist == null)
+        } else if (a.whitelist == null) {
             newWhitelist = b.whitelist;
-        else if (b.whitelist == null)
+        } else if (b.whitelist == null) {
             newWhitelist = a.whitelist;
-        else
+        } else {
             newWhitelist = SetUtils.intersect(a.whitelist, b.whitelist);
+        }
 
         Set<Object> newBlacklist = SetUtils.union(
             coalesce(a.blacklist, Collections.emptySet()),
@@ -119,13 +117,13 @@ public class SetRestrictions implements Restrictions {
 
         if (whitelist == null || whitelist.isEmpty())
             return String.format(
-                    "NOT IN %s",
-                    Objects.toString(blacklist));
+                "NOT IN %s",
+                Objects.toString(blacklist));
 
         if (blacklist.isEmpty())
             return String.format(
-                    "IN %s",
-                    Objects.toString(whitelist));
+                "IN %s",
+                Objects.toString(whitelist));
 
         throw new RuntimeException("SetRestrictions is in illegal state (both whitelist and blacklist populated)");
     }
