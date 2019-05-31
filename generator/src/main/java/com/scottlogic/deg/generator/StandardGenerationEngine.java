@@ -39,7 +39,7 @@ public class StandardGenerationEngine {
         final Stream<GeneratedObject> generatedDataItems =
             this.dataGenerator.generateData(profile, decisionTree);
 
-        try (DataSetWriter writer = outputTarget.openWriter(profile.fields)) {
+        try (DataSetWriter writer = outputTarget.openWriter(profile.getFields())) {
             generatedDataItems.forEach(row -> {
                 try {
                     writer.writeRow(row);

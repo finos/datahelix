@@ -45,7 +45,7 @@ class ExampleProfilesViolationTests {
         return forEachProfileFile(((standard, profileFile) -> {
             final Profile profile = new JsonProfileReader().read(profileFile.toPath());
 
-            Collection<Integer> constraintsPerRule = profile.rules.stream().map(r -> r.constraints.size()).collect(Collectors.toList());
+            Collection<Integer> constraintsPerRule = profile.getRules().stream().map(r -> r.constraints.size()).collect(Collectors.toList());
             Assert.assertThat(constraintsPerRule, not(hasItem(0))); //there should be no rules with 0 constraints
         }));
     }

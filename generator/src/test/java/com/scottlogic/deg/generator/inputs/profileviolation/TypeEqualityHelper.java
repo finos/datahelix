@@ -59,8 +59,8 @@ public class TypeEqualityHelper {
      * @param actualProfile The actual profile.
      */
     public static void assertProfileTypeEquality(Profile expectedProfile, Profile actualProfile) {
-        ArrayList<Rule> expectedRules = new ArrayList<>(expectedProfile.rules);
-        ArrayList<Rule> actualRules = new ArrayList<>(actualProfile.rules);
+        ArrayList<Rule> expectedRules = new ArrayList<>(expectedProfile.getRules());
+        ArrayList<Rule> actualRules = new ArrayList<>(actualProfile.getRules());
         Assert.assertEquals("Rule list lengths do not match. Expected: " + expectedRules.size()
                 + ", Actual: " + actualRules.size(),
             expectedRules.size(),
