@@ -47,5 +47,4 @@ public class ViolateOutputValidatorTests {
 
         assertDoesNotThrow(() ->outputTarget.validate(mockProfile),"Expected no exception, but one was thrown");
     }
-
 }

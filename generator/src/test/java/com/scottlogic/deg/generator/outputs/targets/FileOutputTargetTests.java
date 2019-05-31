@@ -6,11 +6,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
@@ -27,13 +24,13 @@ public class FileOutputTargetTests {
     private Path mockParentPath;
 
     @Test
-    public void validate_generateOutputFileIsADirectory_throwsException(){
+    public void validate_generateOutputFileIsADirectory_throwsException() {
         when(mockFileUtils.isDirectory(any())).thenReturn(true);
         when(mockFilePath.getParent()).thenReturn(mockParentPath);
         FileOutputTarget outputTarget = new FileOutputTarget(mockFilePath, mockOutputFormat, false, mockFileUtils);
 
-        assertThrows(OutputTargetValidationException.class, ()->outputTarget.validate(),"Expected OutputTargetValidationException to throw, but didn't");
-  }
+        assertThrows(OutputTargetValidationException.class, outputTarget::validate, "Expected OutputTargetValidationException to throw, but didn't");
+    }
 
     @Test
     public void validate_generateOutputFileAlreadyExistsNoOverwrite_throwsException() {
@@ -43,7 +40,7 @@ public class FileOutputTargetTests {
         when(mockFileUtils.exists(any())).thenReturn(true);
         FileOutputTarget outputTarget = new FileOutputTarget(mockFilePath, mockOutputFormat, false, mockFileUtils);
 
-        assertThrows(OutputTargetValidationException.class, ()->outputTarget.validate(),"Expected OutputTargetValidationException to throw, but didn't");
+        assertThrows(OutputTargetValidationException.class, outputTarget::validate, "Expected OutputTargetValidationException to throw, but didn't");
     }
 
     @Test
@@ -54,7 +51,7 @@ public class FileOutputTargetTests {
         when(mockFileUtils.exists(any())).thenReturn(true);
         FileOutputTarget outputTarget = new FileOutputTarget(mockFilePath, mockOutputFormat, true, mockFileUtils);
 
-        assertDoesNotThrow(() ->outputTarget.validate(),"Expected no exception, but one was thrown");
+        assertDoesNotThrow(outputTarget::validate,"Expected no exception, but one was thrown");
     }
 
     @Test
@@ -78,7 +75,7 @@ public class FileOutputTargetTests {
         when(mockFileUtils.isDirectory(mockParentPath)).thenReturn(false);
         FileOutputTarget outputTarget = new FileOutputTarget(mockFilePath, mockOutputFormat, false, mockFileUtils);
 
-        assertThrows(OutputTargetValidationException.class, ()->outputTarget.validate(),"Expected OutputTargetValidationException to throw, but didn't");
+        assertThrows(OutputTargetValidationException.class, outputTarget::validate,"Expected OutputTargetValidationException to throw, but didn't");
     }
 }
 
