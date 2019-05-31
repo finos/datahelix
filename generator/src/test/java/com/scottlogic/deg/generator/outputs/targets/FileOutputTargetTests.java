@@ -2,22 +2,29 @@ package com.scottlogic.deg.generator.outputs.targets;
 
 import com.scottlogic.deg.generator.outputs.formats.OutputFormat;
 import com.scottlogic.deg.generator.utils.FileUtils;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class FileOutputTargetTests {
-    //Create Mocks
-    private Path mockFilePath = mock(Path.class);
-    private FileUtils mockFileUtils = mock(FileUtils.class);
-    private OutputFormat mockOutputFormat = mock(OutputFormat.class);
-    private Path mockParentPath = mock(Path.class);
+    @Mock
+    private Path mockFilePath;
+    @Mock
+    private FileUtils mockFileUtils;
+    @Mock
+    private OutputFormat mockOutputFormat;
+    @Mock
+    private Path mockParentPath;
 
     @Test
     public void validate_generateOutputFileIsADirectory_throwsException(){
@@ -57,7 +64,7 @@ public class FileOutputTargetTests {
         when(mockFileUtils.createDirectories(any())).thenReturn(true);
         FileOutputTarget outputTarget = new FileOutputTarget(mockFilePath, mockOutputFormat, true, mockFileUtils);
 
-        assertDoesNotThrow(() ->outputTarget.validate(),"Expected no exception, but one was thrown");
+        assertDoesNotThrow(outputTarget::validate,"Expected no exception, but one was thrown");
     }
 
     @Test

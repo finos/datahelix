@@ -4,8 +4,10 @@ import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.generator.outputs.targets.OutputTargetValidationException;
 import com.scottlogic.deg.generator.utils.FileUtils;
-import org.junit.jupiter.api.Test;
-
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,11 +16,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class ViolateOutputValidatorTests {
-    //Create Mocks
-    private Path mockFilePath = mock(Path.class);
-    private FileUtils mockFileUtils = mock(FileUtils.class);
-    private Profile mockProfile = mock(Profile.class);
+    @Mock
+    private Path mockFilePath;
+    @Mock
+    private FileUtils mockFileUtils;
+    @Mock
+    private Profile mockProfile;
 
     @Test
     public void validate_generateViolationOutputFileNotDir_isNotValid(){

@@ -5,17 +5,23 @@ import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.generator.outputs.targets.OutputTargetValidationException;
 import com.scottlogic.deg.generator.utils.FileUtils;
 import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
-import org.junit.jupiter.api.Test;
-
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 import java.io.File;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class ConfigValidatorTests {
-    private FileUtils mockFileUtils = mock(FileUtils.class);
-    private AllConfigSource mockConfigSource =mock(AllConfigSource.class);
+    @Mock
+    private FileUtils mockFileUtils;
+    @Mock
+    private AllConfigSource mockConfigSource;
+    @Mock
     private File mockProfileFile = mock(File.class);
 
     @Test
