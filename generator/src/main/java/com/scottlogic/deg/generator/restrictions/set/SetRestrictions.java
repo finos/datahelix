@@ -62,28 +62,30 @@ public class SetRestrictions implements Restrictions {
         return new SetRestrictions(null, blacklist);
     }
 
-    public static MergeResult<SetRestrictions> merge(SetRestrictions a, SetRestrictions b) {
-        if (a == null && b == null) {
-            return new MergeResult<>(null);
-        }
-
-        a = coalesce(a, neutral);
-        b = coalesce(b, neutral);
-
-        Set<Object> newWhitelist;
-        if (a.whitelist == null && b.whitelist == null) {
-            newWhitelist = null;
-        } else if (a.whitelist == null) {
-            newWhitelist = b.whitelist;
-        } else if (b.whitelist == null) {
-            newWhitelist = a.whitelist;
+    private static Set<Object> mergeWhitelist(Set<Object> left, Set<Object> right) {
+        if (left == null && right == null) {
+            return null;
+        } else if (left == null) {
+            return right;
+        } else if (right == null) {
+            return left;
         } else {
-            newWhitelist = SetUtils.intersect(a.whitelist, b.whitelist);
+            return SetUtils.intersect(left, right);
         }
+    }
 
-        Set<Object> newBlacklist = SetUtils.union(
-            coalesce(a.blacklist, Collections.emptySet()),
-            coalesce(b.blacklist, Collections.emptySet()));
+    private static Set<Object> mergeBlackList(Set<Object> left, Set<Object> right) {
+        return SetUtils.union(getOrEmpty(left), getOrEmpty(right));
+    }
+
+    private static Set<Object> getOrEmpty(Set<Object> set) {
+        return Optional.ofNullable(set).orElse(Collections.emptySet());
+    }
+
+    public static MergeResult<SetRestrictions> merge(SetRestrictions a, SetRestrictions b) {
+        Set<Object> newWhitelist = mergeWhitelist(a.whitelist, b.whitelist);
+
+        Set<Object> newBlacklist = mergeBlackList(a.blacklist, b.blacklist);
 
         if (newWhitelist != null && newBlacklist != null) {
             Set<Object> whiteAndBlacklistIntersection = SetUtils.intersect(
@@ -100,7 +102,7 @@ public class SetRestrictions implements Restrictions {
         }
 
         if (newWhitelist != null && newWhitelist.isEmpty()) {
-            return MergeResult.UNSUCCESSFUL;
+            return MergeResult.unsuccessful();
         }
 
         return new MergeResult<>(new SetRestrictions(newWhitelist, newBlacklist));

@@ -1,10 +1,17 @@
 package com.scottlogic.deg.generator.restrictions;
 
 public class MergeResult<T> {
+
+    private static final MergeResult UNSUCCESSFUL = new MergeResult();
+
     public final T restrictions;
     public final boolean successful;
 
-    public final static MergeResult UNSUCCESSFUL = new MergeResult();
+    public static <T> MergeResult<T> unsuccessful() {
+        @SuppressWarnings("unchecked")
+        MergeResult<T> result = (MergeResult<T>) UNSUCCESSFUL;
+        return result;
+    }
 
     public MergeResult(T restrictions) {
         this.restrictions = restrictions;
