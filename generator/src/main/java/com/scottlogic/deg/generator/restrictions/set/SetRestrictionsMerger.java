@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator.restrictions.set;
 
 import com.scottlogic.deg.generator.restrictions.MergeResult;
-import com.scottlogic.deg.generator.restrictions.set.SetRestrictions;
 
 import java.util.Optional;
 
