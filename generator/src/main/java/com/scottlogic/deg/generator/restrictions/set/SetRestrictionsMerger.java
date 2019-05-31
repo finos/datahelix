@@ -11,6 +11,9 @@ import java.util.Optional;
  */
 public class SetRestrictionsMerger {
     public MergeResult<SetRestrictions> merge(SetRestrictions left, SetRestrictions right) {
+        if (left == null && right == null) {
+            return new MergeResult<>(null);
+        }
         return notNullOf(left).merge(notNullOf(right));
     }
 
