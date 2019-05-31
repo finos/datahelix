@@ -3,14 +3,13 @@ package com.scottlogic.deg.generator.fieldspecs;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
 import com.scottlogic.deg.common.profile.constraintdetail.Nullness;
-import com.scottlogic.deg.generator.restrictions.SetRestrictions;
+import com.scottlogic.deg.generator.restrictions.set.SetRestrictions;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FieldValue;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
-import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.junit.Assert.assertEquals;
 
 class FieldSpecHelperTests {

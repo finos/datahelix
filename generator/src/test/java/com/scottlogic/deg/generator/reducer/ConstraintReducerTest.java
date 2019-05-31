@@ -8,7 +8,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.common.profile.RuleInformation;
-import com.scottlogic.deg.generator.restrictions.SetRestrictions;
+import com.scottlogic.deg.generator.restrictions.set.SetRestrictions;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsEqual;
@@ -96,13 +96,13 @@ class ConstraintReducerTest {
         Assert.assertThat("Country fieldspec set restrictions have no blacklist",
             countryFieldSpec.getSetRestrictions().getBlacklist(), anyOf(nullValue(), empty()));
         Assert.assertThat("Country fieldspec set restrictions have whitelist",
-            countryFieldSpec.getSetRestrictions().getWhitelist(), notNullValue());
+            countryFieldSpec.getSetRestrictions().getWhitelist().orElse(null), notNullValue());
         Assert.assertThat("Country fieldspec set restrictions whitelist has correct size",
-            countryFieldSpec.getSetRestrictions().getWhitelist().size(), Is.is(2));
+            countryFieldSpec.getSetRestrictions().getWhitelist().orElse(null).size(), Is.is(2));
         Assert.assertThat("Country fieldspec set restrictions whitelist contains 'UK'",
-            countryFieldSpec.getSetRestrictions().getWhitelist().contains("UK"), Is.is(true));
+            countryFieldSpec.getSetRestrictions().getWhitelist().orElse(null).contains("UK"), Is.is(true));
         Assert.assertThat("Country fieldspec set restrictions whitelist contains 'US'",
-            countryFieldSpec.getSetRestrictions().getWhitelist().contains("US"), Is.is(true));
+            countryFieldSpec.getSetRestrictions().getWhitelist().orElse(null).contains("US"), Is.is(true));
 
         FieldSpec cityFieldSpec = reducedConstraints.getSpecForField(cityField);
         Assert.assertThat("City fieldspec has no set restrictions", cityFieldSpec.getSetRestrictions(),
@@ -903,7 +903,7 @@ class ConstraintReducerTest {
 
         SetRestrictions setRestrictions = spec.getSetRestrictions();
 
-        Assert.assertThat(setRestrictions.getWhitelist(), containsInAnyOrder(1, 5, 2));
+        Assert.assertThat(setRestrictions.getWhitelist().orElse(null), containsInAnyOrder(1, 5, 2));
     }
 
     @Test
@@ -924,7 +924,7 @@ class ConstraintReducerTest {
 
         SetRestrictions setRestrictions = spec.getSetRestrictions();
 
-        Assert.assertThat(setRestrictions.getWhitelist(), containsInAnyOrder("lorem", "ipsum", 1, 5, 2, datetimeValue));
+        Assert.assertThat(setRestrictions.getWhitelist().orElse(null), containsInAnyOrder("lorem", "ipsum", 1, 5, 2, datetimeValue));
     }
 
     @Test
@@ -945,7 +945,7 @@ class ConstraintReducerTest {
 
         SetRestrictions setRestrictions = spec.getSetRestrictions();
 
-        Assert.assertThat(setRestrictions.getWhitelist(), containsInAnyOrder("lorem", "ipsum", 5, 2, datetimeValue));
+        Assert.assertThat(setRestrictions.getWhitelist().orElse(null), containsInAnyOrder("lorem", "ipsum", 5, 2, datetimeValue));
     }
 
     @Test
@@ -967,7 +967,7 @@ class ConstraintReducerTest {
 
         SetRestrictions setRestrictions = spec.getSetRestrictions();
 
-        Assert.assertThat(setRestrictions.getWhitelist(), containsInAnyOrder("lorem", "ipsum", 1, 5, 2, oneHourLaterDateTimeValue));
+        Assert.assertThat(setRestrictions.getWhitelist().orElse(null), containsInAnyOrder("lorem", "ipsum", 1, 5, 2, oneHourLaterDateTimeValue));
     }
     
     @Test

@@ -1,26 +1,42 @@
-package com.scottlogic.deg.generator.restrictions;
+package com.scottlogic.deg.generator.restrictions.set;
 
+import com.scottlogic.deg.generator.restrictions.MergeResult;
+import com.scottlogic.deg.generator.restrictions.Restrictions;
 import com.scottlogic.deg.generator.utils.SetUtils;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class SetRestrictions implements Restrictions {
+
     private static final SetRestrictions neutral = new SetRestrictions(null, null);
 
+    /**
+     * The whitelist goes from:
+     * Empty = Empty set
+     * Some = Restricted set
+     * Full = Universal set
+     *
+     * Because the universal set (full) is infeasible in terms of memory, we also represent
+     * the universal set with null.
+     */
     private final Set<Object> whitelist;
 
-    @NotNull
+    /**
+     * The blacklist goes from:
+     * Empty = Universal set
+     * Some = Restricted set
+     * Full = Empty set
+     */
     private final Set<Object> blacklist;
 
-    public Set<Object> getWhitelist() {
-        return this.whitelist;
+    public Optional<Set<Object>> getWhitelist() {
+        return Optional.ofNullable(whitelist);
     }
 
-    @NotNull
     public Set<Object> getBlacklist() {
         return this.blacklist;
     }
@@ -30,8 +46,6 @@ public class SetRestrictions implements Restrictions {
         Set<Object> blacklist) {
 
         this.whitelist = whitelist;
-
-        // normalise such that blacklist cannot be an empty set, to avoid ambiguity between null and {}
         this.blacklist = blacklist == null ? Collections.emptySet() : blacklist;
     }
 
@@ -44,11 +58,11 @@ public class SetRestrictions implements Restrictions {
         return fromWhitelist(Collections.emptySet());
     }
 
-    public static SetRestrictions fromWhitelist(@NotNull Set<Object> whitelist) {
+    public static SetRestrictions fromWhitelist(Set<Object> whitelist) {
         return new SetRestrictions(whitelist, null);
     }
 
-    public static SetRestrictions fromBlacklist(@NotNull Set<Object> blacklist) {
+    public static SetRestrictions fromBlacklist(Set<Object> blacklist) {
         return new SetRestrictions(null, blacklist);
     }
 

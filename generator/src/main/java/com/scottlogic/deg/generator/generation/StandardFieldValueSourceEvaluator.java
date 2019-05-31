@@ -22,8 +22,8 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             return Collections.singletonList(nullOnlySource);
         }
 
-        if (fieldSpec.getSetRestrictions() != null && fieldSpec.getSetRestrictions().getWhitelist() != null) {
-            List<FieldValueSource> setRestrictionSources = getSetRestrictionSources(fieldSpec.getSetRestrictions().getWhitelist());
+        if (fieldSpec.getSetRestrictions() != null && fieldSpec.getSetRestrictions().getWhitelist().isPresent()) {
+            List<FieldValueSource> setRestrictionSources = getSetRestrictionSources(fieldSpec.getSetRestrictions().getWhitelist().get());
             if (mayBeNull(fieldSpec)){
                 return addNullSource(setRestrictionSources);
             }

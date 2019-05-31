@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.restrictions;
 
+import com.scottlogic.deg.generator.restrictions.set.SetRestrictions;
 import org.junit.Assert;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,7 @@ class SetRestrictionsTests {
         void copiesWhitelistAndUsesEmptyBlacklist() {
             SetRestrictions objectUnderTest = SetRestrictions.fromWhitelist(set(1, 2, 3));
 
-            Assert.assertThat(objectUnderTest.getWhitelist(), equalTo(set(1, 2, 3)));
+            Assert.assertThat(objectUnderTest.getWhitelist().orElse(null), equalTo(set(1, 2, 3)));
             Assert.assertThat(objectUnderTest.getBlacklist(), equalTo(set()));
         }
     }
@@ -41,7 +42,7 @@ class SetRestrictionsTests {
         void copiesBlacklistAndUsesNullWhitelist() {
             SetRestrictions objectUnderTest = SetRestrictions.fromBlacklist(set(1, 2, 3));
 
-            Assert.assertThat(objectUnderTest.getWhitelist(), nullValue());
+            Assert.assertThat(objectUnderTest.getWhitelist().orElse(null), nullValue());
             Assert.assertThat(objectUnderTest.getBlacklist(), equalTo(set(1, 2, 3)));
         }
     }

@@ -9,16 +9,14 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.restrictions.set.SetRestrictions;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static com.scottlogic.deg.generator.config.detail.DataGenerationType.FULL_SEQUENTIAL;
 import static com.scottlogic.deg.generator.config.detail.DataGenerationType.INTERESTING;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
