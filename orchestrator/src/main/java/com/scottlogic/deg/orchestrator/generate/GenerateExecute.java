@@ -75,7 +75,7 @@ public class GenerateExecute implements Runnable {
     }
 
     private void outputData(Profile profile, Stream<GeneratedObject> generatedDataItems) throws IOException {
-        try (DataSetWriter writer = singleDatasetOutputTarget.openWriter(profile.fields)) {
+        try (DataSetWriter writer = singleDatasetOutputTarget.openWriter(profile.getFields())) {
             generatedDataItems.forEach(row -> {
                 try {
                     writer.writeRow(row);

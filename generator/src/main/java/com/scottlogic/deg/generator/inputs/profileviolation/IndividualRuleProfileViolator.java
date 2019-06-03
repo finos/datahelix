@@ -40,7 +40,7 @@ public class IndividualRuleProfileViolator implements ProfileViolator {
     public List<ViolatedProfile> violate(Profile profile) throws IOException {
         // For each rule in the profile generate a profile with this one rule violated
         List<ViolatedProfile> violatedProfiles =
-            profile.rules.stream()
+            profile.getRules().stream()
                 .map(rule -> violateRuleOnProfile(profile, rule))
                 .collect(Collectors.toList());
 
@@ -56,7 +56,7 @@ public class IndividualRuleProfileViolator implements ProfileViolator {
      * @return New profile with the specified rule violated and all other rules untouched.
      */
     private ViolatedProfile violateRuleOnProfile(Profile profile, Rule violatedRule) {
-        Collection<Rule> newRules = profile.rules.stream()
+        Collection<Rule> newRules = profile.getRules().stream()
             .map(r -> r == violatedRule
                 ? ruleViolator.violateRule(violatedRule)
                 : r)
@@ -64,8 +64,8 @@ public class IndividualRuleProfileViolator implements ProfileViolator {
 
         return new ViolatedProfile(
             violatedRule,
-            profile.fields,
+            profile.getFields(),
             newRules,
-            String.format("%s -- Violating: %s", profile.description, violatedRule.ruleInformation.getDescription()));
+            String.format("%s -- Violating: %s", profile.getDescription(), violatedRule.ruleInformation.getDescription()));
     }
 }

@@ -110,7 +110,7 @@ public class ViolateExecute implements Runnable {
         Stream<GeneratedObject> generatedDataItems,
         SingleDatasetOutputTarget outputTarget) throws IOException
     {
-        try (DataSetWriter writer = outputTarget.openWriter(profile.fields)) {
+        try (DataSetWriter writer = outputTarget.openWriter(profile.getFields())) {
             generatedDataItems.forEach(row -> {
                 try {
                     writer.writeRow(row);

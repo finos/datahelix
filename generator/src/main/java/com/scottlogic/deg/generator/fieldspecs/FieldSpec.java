@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.fieldspecs;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
 
 import com.scottlogic.deg.generator.restrictions.*;
-import com.scottlogic.deg.generator.utils.HeterogeneousTypeContainer;
+import com.scottlogic.deg.common.util.HeterogeneousTypeContainer;
 
 import java.util.*;
 import java.util.stream.Collectors;

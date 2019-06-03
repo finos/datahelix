@@ -72,9 +72,9 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
     @Override
     public DecisionTree analyse(Profile profile) {
         return new DecisionTreeCollection(
-            profile.fields,
-            profile.rules.stream()
-                .map(rule -> new DecisionTree(convertRule(rule), profile.fields, profile.description))
+            profile.getFields(),
+            profile.getRules().stream()
+                .map(rule -> new DecisionTree(convertRule(rule), profile.getFields(), profile.getDescription()))
                 .map(decisionTreeSimplifier::simplify)
                 .collect(Collectors.toList()))
             .getMergedTree();
