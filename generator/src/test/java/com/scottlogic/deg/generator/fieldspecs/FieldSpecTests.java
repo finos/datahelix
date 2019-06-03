@@ -536,7 +536,7 @@ class FieldSpecTests {
         private final boolean isEqual;
 
         MockSetRestrictions(boolean isEqual) {
-            super(Collections.emptySet(), Collections.emptySet());
+            super(Collections.emptySet());
             this.isEqual = isEqual;
         }
 

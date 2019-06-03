@@ -76,10 +76,14 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec construct(IsInSetConstraint constraint, boolean negate, boolean violated) {
+        if (negate){
+            return FieldSpec.Empty.withBlacklistRestrictions(
+                new BlacklistRestrictions(constraint.legalValues),
+                FieldSpecSource.fromConstraint(constraint, negate, violated));
+        }
+
         return FieldSpec.Empty.withSetRestrictions(
-                negate
-                    ? negatedSet(constraint, constraint.legalValues)
-                    : SetRestrictions.fromWhitelist(constraint.legalValues),
+            SetRestrictions.fromWhitelist(constraint.legalValues),
             FieldSpecSource.fromConstraint(constraint, negate, violated));
     }
 

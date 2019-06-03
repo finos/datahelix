@@ -35,14 +35,14 @@ public class SetRestrictionsMergeOperation implements RestrictionMergeOperation 
                 getNewSetRestrictions(
                     left.getSetRestrictions(),
                     right.getSetRestrictions(),
-                    partiallyMerged::permits),
+                    partiallyMerged),
                 FieldSpecSource.fromFieldSpecs(left, right)));
     }
 
     private SetRestrictions getNewSetRestrictions(
         SetRestrictions setRestrictionsA,
         SetRestrictions setRestrictionsB,
-        @NotNull Predicate<Object> valueIsValid) {
+        @NotNull FieldSpec partiallyMerged) {
 
         MergeResult<SetRestrictions> mergeResult =
             setRestrictionsMerger.merge(
@@ -63,28 +63,20 @@ public class SetRestrictionsMergeOperation implements RestrictionMergeOperation 
             return null;
         }
 
-        // filter down whitelist/blacklist to remove values excluded by other restrictions (eg NumericRestrictions)
-        if (mergedSetRestrictions.getWhitelist().isPresent()) {
-            return SetRestrictions.fromWhitelist(
-                filterSet(
-                    mergedSetRestrictions.getWhitelist().get(),
-                    valueIsValid));
-        } else {
-            return SetRestrictions.fromBlacklist(
-                filterSet(
-                    mergedSetRestrictions.getBlacklist(),
-                    valueIsValid));
-        }
+        return SetRestrictions.fromWhitelist(
+            filterSet(
+                mergedSetRestrictions.getWhitelist(),
+                partiallyMerged));
     }
 
     /** If input is non-null, return set of all values that match the given predicate */
-    private static Set<Object> filterSet(Set<Object> input, Predicate<Object> shouldKeepItem) {
+    private static Set<Object> filterSet(Set<Object> input, FieldSpec partiallyMerged) {
         if (input == null) {
             return null;
         }
 
         return input.stream()
-            .filter(shouldKeepItem)
+            .filter(partiallyMerged::permits)
             .collect(Collectors.toCollection(HashSet::new));
     }
 }
