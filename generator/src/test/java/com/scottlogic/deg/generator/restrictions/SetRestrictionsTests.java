@@ -1,5 +1,7 @@
 package com.scottlogic.deg.generator.restrictions;
 
+import com.scottlogic.deg.generator.restrictions.set.SetRestrictions;
+import com.scottlogic.deg.generator.restrictions.set.SetRestrictionsMerger;
 import org.junit.Assert;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -20,7 +22,7 @@ class SetRestrictionsTests {
         void copiesWhitelistAndUsesEmptyBlacklist() {
             SetRestrictions objectUnderTest = SetRestrictions.fromWhitelist(set(1, 2, 3));
 
-            Assert.assertThat(objectUnderTest.getWhitelist(), equalTo(set(1, 2, 3)));
+            Assert.assertThat(objectUnderTest.getWhitelist().orElse(null), equalTo(set(1, 2, 3)));
             Assert.assertThat(objectUnderTest.getBlacklist(), equalTo(set()));
         }
     }
@@ -41,7 +43,7 @@ class SetRestrictionsTests {
         void copiesBlacklistAndUsesNullWhitelist() {
             SetRestrictions objectUnderTest = SetRestrictions.fromBlacklist(set(1, 2, 3));
 
-            Assert.assertThat(objectUnderTest.getWhitelist(), nullValue());
+            Assert.assertThat(objectUnderTest.getWhitelist().orElse(null), nullValue());
             Assert.assertThat(objectUnderTest.getBlacklist(), equalTo(set(1, 2, 3)));
         }
     }
@@ -161,7 +163,7 @@ class SetRestrictionsTests {
 
     private static void expectMerge(SetRestrictions a, SetRestrictions b, SetRestrictions expected) {
         BiConsumer<SetRestrictions, SetRestrictions> assertMergeInner = (aInner, bInner) -> {
-            MergeResult<SetRestrictions> result = SetRestrictions.merge(aInner, bInner);
+            MergeResult<SetRestrictions> result = aInner.merge(bInner);
 
             Assert.assertTrue(result.successful);
             Assert.assertThat(result.restrictions, equalTo(expected));
@@ -173,7 +175,7 @@ class SetRestrictionsTests {
     }
 
     private static void expectUnmergeable(SetRestrictions a, SetRestrictions b) {
-        MergeResult<SetRestrictions> result = SetRestrictions.merge(a, b);
+        MergeResult<SetRestrictions> result = a.merge(b);
 
         Assert.assertFalse(result.successful);
     }

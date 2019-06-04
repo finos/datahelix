@@ -73,7 +73,7 @@ public class FieldSpecMerger {
             return true; // we can't emit null (per above) and no types are allowed
         }
 
-        if (fieldSpec.getSetRestrictions() != null && fieldSpec.getSetRestrictions().getWhitelist() != null && fieldSpec.getSetRestrictions().getWhitelist().isEmpty()) {
+        if (fieldSpec.getSetRestrictions() != null && fieldSpec.getSetRestrictions().getWhitelist().isPresent() && fieldSpec.getSetRestrictions().getWhitelist().get().isEmpty()) {
             return true; // we can't emit null (per above) and no values are allowed
         }
 

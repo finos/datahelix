@@ -1,8 +1,9 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.restrictions.set.SetRestrictions;
+import com.scottlogic.deg.generator.restrictions.set.SetRestrictionsMerger;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -63,10 +64,10 @@ public class SetRestrictionsMergeOperation implements RestrictionMergeOperation 
         }
 
         // filter down whitelist/blacklist to remove values excluded by other restrictions (eg NumericRestrictions)
-        if (mergedSetRestrictions.getWhitelist() != null) {
+        if (mergedSetRestrictions.getWhitelist().isPresent()) {
             return SetRestrictions.fromWhitelist(
                 filterSet(
-                    mergedSetRestrictions.getWhitelist(),
+                    mergedSetRestrictions.getWhitelist().get(),
                     valueIsValid));
         } else {
             return SetRestrictions.fromBlacklist(

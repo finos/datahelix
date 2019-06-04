@@ -10,7 +10,7 @@ import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
 import com.scottlogic.deg.common.profile.constraintdetail.Nullness;
-import com.scottlogic.deg.generator.restrictions.SetRestrictions;
+import com.scottlogic.deg.generator.restrictions.set.SetRestrictions;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import org.junit.jupiter.api.Test;
 

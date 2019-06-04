@@ -3,7 +3,8 @@ package com.scottlogic.deg.generator.fieldspecs;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.restrictions.NullRestrictions;
 import com.scottlogic.deg.common.profile.constraintdetail.Nullness;
-import com.scottlogic.deg.generator.restrictions.SetRestrictions;
+import com.scottlogic.deg.generator.restrictions.set.SetRestrictions;
+
 
 import java.util.Collections;
 

@@ -78,7 +78,7 @@ public class TextualRestrictions implements StringRestrictions {
         );
 
         return merged.isContradictory()
-            ? MergeResult.UNSUCCESSFUL
+            ? MergeResult.unsuccessful()
             : new MergeResult<>(merged);
     }
 
