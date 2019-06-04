@@ -787,7 +787,7 @@ class ConstraintReducerTest {
     }
 
     @Test
-    void shouldNotReduceMultipleFormatConstraint() {
+    void shouldSelectOneFromMultipleFormats() {
         final Field field = new Field("test0");
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
 
@@ -796,9 +796,8 @@ class ConstraintReducerTest {
             new FormatConstraint(field, "Ipsum '$1'", rules())
         );
 
-        Assertions.assertThrows(
-            UnsupportedOperationException.class,
-            () -> constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints));
+        Optional<RowSpec> rowSpec = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints);
+        Assert.assertThat(rowSpec.get().getSpecForField(field).getFormatRestrictions().formatString, Is.is(((FormatConstraint)constraints.get(0)).format));
     }
 
     @Test

@@ -20,7 +20,6 @@ public class FieldSpecMerger {
         new NumericRestrictionsMergeOperation(new NumericRestrictionsMerger()),
         new DateTimeRestrictionsMergeOperation(new DateTimeRestrictionsMerger()),
         new NullRestrictionsMergeOperation(),
-        new FormatRestrictionsMergeOperation(),
         new BlacklistRestictionsMergeOperation()
     };
 
@@ -61,6 +60,8 @@ public class FieldSpecMerger {
     private Optional<FieldSpec> addNullable(FieldSpec left, FieldSpec right, Set<Object> set) {
         FieldSpec newFieldSpec = FieldSpec.Empty.withSetRestrictions(new SetRestrictions(set), FieldSpecSource.fromFieldSpecs(left, right));
 
+        newFieldSpec = addFormatting(left, right, newFieldSpec);
+
         if (isNullable(left, right)){
             return Optional.of(newFieldSpec);
         }
@@ -80,6 +81,16 @@ public class FieldSpecMerger {
         return left.isNullable() && right.isNullable();
     }
 
+    private FieldSpec addFormatting(FieldSpec left, FieldSpec right, FieldSpec newFieldSpec) {
+        if (left.getFormatRestrictions() != null){
+            return newFieldSpec.withFormatRestrictions(left.getFormatRestrictions(), FieldSpecSource.Empty);
+        }
+        if (right.getFormatRestrictions() != null){
+            return newFieldSpec.withFormatRestrictions(right.getFormatRestrictions(), FieldSpecSource.Empty);
+        }
+        return newFieldSpec;
+    }
+
     private Optional<FieldSpec> combineRestrictions(FieldSpec left, FieldSpec right) {
         Optional<FieldSpec> merging = Optional.of(FieldSpec.Empty);
 
@@ -94,7 +105,7 @@ public class FieldSpecMerger {
             return Optional.empty();
         }
 
-        return merging;
+        return Optional.of(addFormatting(left, right, merging.get()));
     }
 
     private boolean cannotEmitAnyData(FieldSpec fieldSpec){
