@@ -13,17 +13,24 @@ import java.util.stream.Collectors;
  * Details a column's atomic constraints
  */
 public class FieldSpec {
+    public boolean isNullable() {
+        return nullable;
+    }
+
+    private final boolean nullable;
     public static final FieldSpec Empty = new FieldSpec(
         new HeterogeneousTypeContainer<>(),
-        FieldSpecSource.Empty);
+        FieldSpecSource.Empty,
+        true);
 
     private final HeterogeneousTypeContainer<Restrictions> restrictions;
     private final FieldSpecSource source;
 
     private FieldSpec(HeterogeneousTypeContainer<Restrictions> restrictions,
-                      FieldSpecSource source) {
+                      FieldSpecSource source, boolean nullable) {
         this.restrictions = restrictions;
         this.source = source;
+        this.nullable = nullable;
     }
 
     public SetRestrictions getSetRestrictions() {
@@ -36,10 +43,6 @@ public class FieldSpec {
 
     public StringRestrictions getStringRestrictions() {
         return restrictions.get(StringRestrictions.class).orElse(null);
-    }
-
-    public NullRestrictions getNullRestrictions() {
-        return restrictions.get(NullRestrictions.class).orElse(null);
     }
 
     public TypeRestrictions getTypeRestrictions() {
@@ -74,8 +77,12 @@ public class FieldSpec {
         return withConstraint(TypeRestrictions.class, typeRestrictions, source);
     }
 
-    public FieldSpec withNullRestrictions(NullRestrictions nullRestrictions, FieldSpecSource source) {
-        return withConstraint(NullRestrictions.class, nullRestrictions, source);
+    public FieldSpec withNotNull(FieldSpecSource specSource){
+        return new FieldSpec(restrictions, this.source.combine(specSource), false);
+    }
+
+    public static FieldSpec mustBeNull(FieldSpecSource specSource){
+        return FieldSpec.Empty.withSetRestrictions(SetRestrictions.fromWhitelist(Collections.emptySet()), specSource);
     }
 
     public FieldSpec withDateTimeRestrictions(DateTimeRestrictions dateTimeRestrictions, FieldSpecSource source) {
@@ -87,7 +94,7 @@ public class FieldSpec {
     }
 
     private <T extends Restrictions> FieldSpec withConstraint(Class<T> type, T restriction, FieldSpecSource source) {
-        return new FieldSpec(restrictions.put(type, restriction), this.source.combine(source));
+        return new FieldSpec(restrictions.put(type, restriction), this.source.combine(source), nullable);
     }
 
     @Override

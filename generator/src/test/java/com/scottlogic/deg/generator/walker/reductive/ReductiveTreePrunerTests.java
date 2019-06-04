@@ -8,9 +8,7 @@ import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import com.scottlogic.deg.generator.restrictions.NullRestrictions;
-import com.scottlogic.deg.common.profile.constraintdetail.Nullness;
-import com.scottlogic.deg.generator.restrictions.set.SetRestrictions;
+import com.scottlogic.deg.generator.restrictions.SetRestrictions;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +24,7 @@ import static org.mockito.Mockito.when;
 class ReductiveTreePrunerTests {
 
     private static final FieldSpec notNull = FieldSpec.Empty
-        .withNullRestrictions(new NullRestrictions(Nullness.MUST_NOT_BE_NULL), FieldSpecSource.Empty);
+        .withNotNull(FieldSpecSource.Empty);
     private Field field = new Field("foo");
     private Field unrelatedField = new Field("unrelated");
     private FieldSpecHelper fieldSpecHelper = mock(FieldSpecHelper.class);

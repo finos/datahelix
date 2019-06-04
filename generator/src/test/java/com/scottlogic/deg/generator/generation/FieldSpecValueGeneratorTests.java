@@ -1,6 +1,5 @@
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.common.profile.constraintdetail.Nullness;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
@@ -21,13 +20,11 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertTrue;
 
 class FieldSpecValueGeneratorTests {
-    private final NullRestrictions notNull = new NullRestrictions(Nullness.MUST_NOT_BE_NULL);
     private final FieldSpecSource fieldSpecSource = FieldSpecSource.Empty;
 
     @Test
     void generate_fieldSpecMustContainRestrictionNullAndSetRestrictionsHasValues_returnsDataBagsWithValuesInSetRestrictions() {
-        FieldSpec fieldSpec = FieldSpec.Empty
-            .withNullRestrictions(notNull, fieldSpecSource)
+        FieldSpec fieldSpec = FieldSpec.Empty.withNotNull(fieldSpecSource)
             .withSetRestrictions(
                 SetRestrictions.fromWhitelist(
                     new HashSet<>(

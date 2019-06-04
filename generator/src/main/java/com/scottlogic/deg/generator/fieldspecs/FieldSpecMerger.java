@@ -65,7 +65,7 @@ public class FieldSpecMerger {
     }
 
     private boolean cannotEmitAnyData(FieldSpec fieldSpec){
-        if (fieldSpec.getNullRestrictions() == null || fieldSpec.getNullRestrictions().nullness.equals(Nullness.MUST_BE_NULL)) {
+        if (fieldSpec.isNullable()) {
             return false; // we can emit null
         }
 

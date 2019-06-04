@@ -25,9 +25,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     public void shouldReturnNullSourceOnlyWithMustBeNullRestrictions() {
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
         FieldSpecSource fieldSpecSource = FieldSpecSource.Empty;
-        NullRestrictions nullRestrictions = new NullRestrictions(Nullness.MUST_BE_NULL);
-        FieldSpec fieldSpecMustBeNull = FieldSpec.Empty
-            .withNullRestrictions(nullRestrictions, fieldSpecSource);
+        FieldSpec fieldSpecMustBeNull = FieldSpec.mustBeNull(fieldSpecSource);
 
         List<FieldValueSource> sources = evaluator.getFieldValueSources(fieldSpecMustBeNull);
 
@@ -141,8 +139,7 @@ public class StandardFieldValueSourceEvaluatorTests {
                 Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
             ),
             FieldSpecSource.Empty
-        ).withNullRestrictions(
-            new NullRestrictions(Nullness.MUST_NOT_BE_NULL),
+        ).withNotNull(
             FieldSpecSource.Empty
         );
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
@@ -178,8 +175,7 @@ public class StandardFieldValueSourceEvaluatorTests {
                 Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
             ),
             FieldSpecSource.Empty
-        ).withNullRestrictions(
-            new NullRestrictions(Nullness.MUST_NOT_BE_NULL),
+        ).withNotNull(
             FieldSpecSource.Empty
         );
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
@@ -219,8 +215,7 @@ public class StandardFieldValueSourceEvaluatorTests {
                 Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
             ),
             FieldSpecSource.Empty
-        ).withNullRestrictions(
-            new NullRestrictions(Nullness.MUST_NOT_BE_NULL),
+        ).withNotNull(
             FieldSpecSource.Empty
         );
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
@@ -253,8 +248,7 @@ public class StandardFieldValueSourceEvaluatorTests {
                 Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
             ),
             FieldSpecSource.Empty
-        ).withNullRestrictions(
-            new NullRestrictions(Nullness.MUST_NOT_BE_NULL),
+        ).withNotNull(
             FieldSpecSource.Empty
         );
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
@@ -290,8 +284,7 @@ public class StandardFieldValueSourceEvaluatorTests {
                 Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
             ),
             FieldSpecSource.Empty
-        ).withNullRestrictions(
-            new NullRestrictions(Nullness.MUST_NOT_BE_NULL),
+        ).withNotNull(
             FieldSpecSource.Empty
         );
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
@@ -322,8 +315,7 @@ public class StandardFieldValueSourceEvaluatorTests {
                 Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
             ),
             FieldSpecSource.Empty
-        ).withNullRestrictions(
-            new NullRestrictions(Nullness.MUST_NOT_BE_NULL),
+        ).withNotNull(
             FieldSpecSource.Empty
         );
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
@@ -354,8 +346,7 @@ public class StandardFieldValueSourceEvaluatorTests {
                 Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
             ),
             FieldSpecSource.Empty
-        ).withNullRestrictions(
-            new NullRestrictions(Nullness.MUST_NOT_BE_NULL),
+        ).withNotNull(
             FieldSpecSource.Empty
         );
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();

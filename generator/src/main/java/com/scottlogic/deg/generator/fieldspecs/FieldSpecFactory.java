@@ -90,15 +90,11 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec constructIsNull(boolean negate, AtomicConstraint constraint, boolean violated) {
-        final NullRestrictions nullRestrictions = new NullRestrictions();
+        if (negate){
+            return FieldSpec.Empty.withNotNull(FieldSpecSource.fromConstraint(constraint, negate, violated));
+        }
 
-        nullRestrictions.nullness = negate
-            ? Nullness.MUST_NOT_BE_NULL
-            : Nullness.MUST_BE_NULL;
-
-        return FieldSpec.Empty.withNullRestrictions(
-            nullRestrictions,
-            FieldSpecSource.fromConstraint(constraint, negate, violated));
+        return FieldSpec.mustBeNull(FieldSpecSource.fromConstraint(constraint, negate, violated));
     }
 
     private FieldSpec construct(IsOfTypeConstraint constraint, boolean negate, boolean violated) {
