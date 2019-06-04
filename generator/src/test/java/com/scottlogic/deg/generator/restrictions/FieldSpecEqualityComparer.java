@@ -8,7 +8,6 @@ public class FieldSpecEqualityComparer implements EqualityComparer {
     private EqualityComparer stringRestrictionsComparer = new StringRestrictionsEqualityComparer();
     private EqualityComparer typeRestrictionsComparer = new TypeRestrictionsEqualityComparer();
     private EqualityComparer dateTimeRestrictionsComparer = new DateTimeRestrictionsEqualityComparer();
-    private EqualityComparer formatRestrictionsComparer = new FormatRestrictionsEqualityComparer();
 
     @Override
     public int getHashCode(Object item) {
@@ -33,8 +32,7 @@ public class FieldSpecEqualityComparer implements EqualityComparer {
         return setRestrictionsComparer.equals(fieldSpec1.getSetRestrictions(), fieldSpec2.getSetRestrictions())
         && stringRestrictionsComparer.equals(fieldSpec1.getStringRestrictions(), fieldSpec2.getStringRestrictions())
         && typeRestrictionsComparer.equals(fieldSpec1.getTypeRestrictions(), fieldSpec2.getTypeRestrictions())
-        && dateTimeRestrictionsComparer.equals(fieldSpec1.getDateTimeRestrictions(), fieldSpec2.getDateTimeRestrictions())
-        && formatRestrictionsComparer.equals(fieldSpec1.getFormatRestrictions(), fieldSpec2.getFormatRestrictions());
+        && dateTimeRestrictionsComparer.equals(fieldSpec1.getDateTimeRestrictions(), fieldSpec2.getDateTimeRestrictions());
     }
 }
 

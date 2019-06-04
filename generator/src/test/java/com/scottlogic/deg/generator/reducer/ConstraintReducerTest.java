@@ -14,7 +14,6 @@ import org.hamcrest.core.Is;
 import org.hamcrest.core.IsEqual;
 import org.hamcrest.core.IsNull;
 import org.junit.Assert;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -781,9 +780,9 @@ class ConstraintReducerTest {
 
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec format restrictions has a value",
-            outputSpec.getFormatRestrictions(), Is.is(IsNull.notNullValue()));
+            outputSpec.getFormatting(), Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec format restrictions has a value",
-            outputSpec.getFormatRestrictions().formatString, Is.is("Hello '$1'"));
+            outputSpec.getFormatting(), Is.is("Hello '$1'"));
     }
 
     @Test
@@ -797,7 +796,7 @@ class ConstraintReducerTest {
         );
 
         Optional<RowSpec> rowSpec = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints);
-        Assert.assertThat(rowSpec.get().getSpecForField(field).getFormatRestrictions().formatString, Is.is(((FormatConstraint)constraints.get(0)).format));
+        Assert.assertThat(rowSpec.get().getSpecForField(field).getFormatting(), Is.is(((FormatConstraint)constraints.get(0)).format));
     }
 
     @Test

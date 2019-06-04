@@ -2,7 +2,6 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
-import com.scottlogic.deg.common.profile.constraintdetail.Nullness;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.generator.restrictions.SetRestrictions;
@@ -85,12 +84,6 @@ public class FieldSpecFactory {
         return FieldSpec.Empty.withSetRestrictions(
             SetRestrictions.fromWhitelist(constraint.legalValues),
             FieldSpecSource.fromConstraint(constraint, negate, violated));
-    }
-
-    private SetRestrictions negatedSet(IsInSetConstraint constraint, Set<Object> values) {
-        return (constraint instanceof IsInNameSetConstraint)
-            ? SetRestrictions.allowNoValues()
-            : SetRestrictions.fromBlacklist(values);
     }
 
     private FieldSpec constructIsNull(boolean negate, AtomicConstraint constraint, boolean violated) {
@@ -268,11 +261,8 @@ public class FieldSpecFactory {
             return FieldSpec.Empty;
         }
 
-        final FormatRestrictions formatRestrictions = new FormatRestrictions();
-        formatRestrictions.formatString = constraint.format;
-
-        return FieldSpec.Empty.withFormatRestrictions(
-            formatRestrictions,
+        return FieldSpec.Empty.withFormatting(
+            constraint.format,
             FieldSpecSource.fromConstraint(constraint, false, violated));
     }
 

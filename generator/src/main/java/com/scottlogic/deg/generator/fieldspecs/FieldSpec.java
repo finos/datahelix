@@ -13,24 +13,26 @@ import java.util.stream.Collectors;
  * Details a column's atomic constraints
  */
 public class FieldSpec {
-    public boolean isNullable() {
-        return nullable;
-    }
-
-    private final boolean nullable;
     public static final FieldSpec Empty = new FieldSpec(
         new HeterogeneousTypeContainer<>(),
-        FieldSpecSource.Empty,
-        true);
+        FieldSpecSource.Empty, true, null);
+
+    private final boolean nullable;
+    private final String formatting;
 
     private final HeterogeneousTypeContainer<Restrictions> restrictions;
     private final FieldSpecSource source;
 
     private FieldSpec(HeterogeneousTypeContainer<Restrictions> restrictions,
-                      FieldSpecSource source, boolean nullable) {
+                      FieldSpecSource source, boolean nullable, String formatting) {
         this.restrictions = restrictions;
         this.source = source;
         this.nullable = nullable;
+        this.formatting = formatting;
+    }
+
+    public boolean isNullable() {
+        return nullable;
     }
 
     public SetRestrictions getSetRestrictions() {
@@ -57,8 +59,8 @@ public class FieldSpec {
         return restrictions.get(DateTimeRestrictions.class).orElse(null);
     }
 
-    public FormatRestrictions getFormatRestrictions() {
-        return restrictions.get(FormatRestrictions.class).orElse(null);
+    public String getFormatting() {
+        return formatting;
     }
 
     public FieldSpecSource getFieldSpecSource() {
@@ -86,7 +88,7 @@ public class FieldSpec {
     }
 
     public FieldSpec withNotNull(FieldSpecSource specSource){
-        return new FieldSpec(restrictions, this.source.combine(specSource), false);
+        return new FieldSpec(restrictions, this.source.combine(specSource), false, formatting);
     }
 
     public static FieldSpec mustBeNull(FieldSpecSource specSource){
@@ -97,12 +99,12 @@ public class FieldSpec {
         return withConstraint(DateTimeRestrictions.class, dateTimeRestrictions, source);
     }
 
-    public FieldSpec withFormatRestrictions(FormatRestrictions formatRestrictions, FieldSpecSource source) {
-        return withConstraint(FormatRestrictions.class, formatRestrictions, source);
+    public FieldSpec withFormatting(String formatting, FieldSpecSource source) {
+        return new FieldSpec(restrictions, this.source.combine(source), nullable, formatting);
     }
 
     private <T extends Restrictions> FieldSpec withConstraint(Class<T> type, T restriction, FieldSpecSource source) {
-        return new FieldSpec(restrictions.put(type, restriction), this.source.combine(source), nullable);
+        return new FieldSpec(restrictions.put(type, restriction), this.source.combine(source), nullable, formatting);
     }
 
     @Override
@@ -153,7 +155,7 @@ public class FieldSpec {
     }
 
     public int hashCode() {
-        return restrictions.hashCode();
+        return Objects.hash(nullable, restrictions, formatting);
     }
 
     @Override
@@ -164,6 +166,8 @@ public class FieldSpec {
         }
 
         FieldSpec other = (FieldSpec) obj;
-        return restrictions.equals(other.restrictions);
+        return Objects.equals(nullable, other.nullable)
+            && Objects.equals(restrictions, other.restrictions)
+            && Objects.equals(formatting, other.formatting);
     }
 }

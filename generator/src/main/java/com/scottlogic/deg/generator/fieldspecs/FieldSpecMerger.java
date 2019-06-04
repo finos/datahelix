@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.restrictions.*;
-import com.scottlogic.deg.common.profile.constraintdetail.Nullness;
 import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.util.Optional;
@@ -82,11 +81,11 @@ public class FieldSpecMerger {
     }
 
     private FieldSpec addFormatting(FieldSpec left, FieldSpec right, FieldSpec newFieldSpec) {
-        if (left.getFormatRestrictions() != null){
-            return newFieldSpec.withFormatRestrictions(left.getFormatRestrictions(), FieldSpecSource.Empty);
+        if (left.getFormatting() != null){
+            return newFieldSpec.withFormatting(left.getFormatting(), FieldSpecSource.Empty);
         }
-        if (right.getFormatRestrictions() != null){
-            return newFieldSpec.withFormatRestrictions(right.getFormatRestrictions(), FieldSpecSource.Empty);
+        if (right.getFormatting() != null){
+            return newFieldSpec.withFormatting(right.getFormatting(), FieldSpecSource.Empty);
         }
         return newFieldSpec;
     }
