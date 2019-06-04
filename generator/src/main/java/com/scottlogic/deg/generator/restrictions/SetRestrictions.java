@@ -17,7 +17,7 @@ public class SetRestrictions implements Restrictions {
         return this.whitelist;
     }
 
-    protected SetRestrictions(Set<Object> whitelist) {
+    public SetRestrictions(Set<Object> whitelist) {
         this.whitelist = whitelist;
     }
 
@@ -32,31 +32,6 @@ public class SetRestrictions implements Restrictions {
     public static SetRestrictions fromWhitelist(@NotNull Set<Object> whitelist) {
         return new SetRestrictions(whitelist);
     }
-
-    public static MergeResult<SetRestrictions> merge(SetRestrictions a, SetRestrictions b) {
-        if (a == null && b == null)
-            return new MergeResult<>(null);
-
-        a = a != null ? a : neutral;
-        b = b != null ? b : neutral;
-
-        Set<Object> newWhitelist;
-        if (a.whitelist == null && b.whitelist == null)
-            newWhitelist = null;
-        else if (a.whitelist == null)
-            newWhitelist = b.whitelist;
-        else if (b.whitelist == null)
-            newWhitelist = a.whitelist;
-        else
-            newWhitelist = SetUtils.intersect(a.whitelist, b.whitelist);
-
-        if (newWhitelist != null && newWhitelist.size() == 0) {
-            return MergeResult.unsuccessful();
-        }
-
-        return new MergeResult<>(new SetRestrictions(newWhitelist));
-    }
-
 
     @Override
     public String toString() {

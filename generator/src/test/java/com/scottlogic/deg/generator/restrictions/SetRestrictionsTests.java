@@ -37,26 +37,6 @@ class SetRestrictionsTests {
     }
 
     @Nested
-    class merge {
-
-        @Test
-        void intersectsWhitelists() {
-            expectMerge(
-                SetRestrictions.fromWhitelist(set(1, 2, 3)),
-                SetRestrictions.fromWhitelist(set(2, 3, 4)),
-
-                SetRestrictions.fromWhitelist(set(2, 3)));
-        }
-
-        @Test
-        void cannotMergeWhitelistsWithNoCommonItems() {
-            expectUnmergeable(
-                SetRestrictions.fromWhitelist(set(1, 2)),
-                SetRestrictions.fromWhitelist(set(3, 4)));
-        }
-    }
-
-    @Nested
     class equality {
         @Test
         void isNotEqualToNull() {
@@ -96,25 +76,6 @@ class SetRestrictionsTests {
                 SetRestrictions.fromWhitelist(set("Test")),
                 SetRestrictions.fromWhitelist(set("Test")));
         }
-    }
-
-    private static void expectMerge(SetRestrictions a, SetRestrictions b, SetRestrictions expected) {
-        BiConsumer<SetRestrictions, SetRestrictions> assertMergeInner = (aInner, bInner) -> {
-            MergeResult<SetRestrictions> result = aInner.merge(bInner);
-
-            Assert.assertTrue(result.successful);
-            Assert.assertThat(result.restrictions, equalTo(expected));
-        };
-
-        // make sure the result is the same regardless of the operand order
-        assertMergeInner.accept(a, b);
-        assertMergeInner.accept(b, a);
-    }
-
-    private static void expectUnmergeable(SetRestrictions a, SetRestrictions b) {
-        MergeResult<SetRestrictions> result = a.merge(b);
-
-        Assert.assertFalse(result.successful);
     }
 
     private static void assertEqual(Object a, Object b) {
