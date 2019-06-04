@@ -6,17 +6,16 @@ import com.google.inject.Module;
 import com.scottlogic.deg.generator.config.detail.*;
 import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
 import com.scottlogic.deg.orchestrator.guice.AllModule;
-import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
+import com.scottlogic.deg.output.guice.OutputFormat;
 import picocli.CommandLine;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.List;
 
 import static com.scottlogic.deg.generator.config.detail.CombinationStrategyType.MINIMAL;
 import static com.scottlogic.deg.common.util.Defaults.DEFAULT_MAX_ROWS;
 import static com.scottlogic.deg.generator.config.detail.DataGenerationType.RANDOM;
-import static com.scottlogic.deg.generator.config.detail.OutputFormat.CSV;
+import static com.scottlogic.deg.output.guice.OutputFormat.CSV;
 import static com.scottlogic.deg.generator.config.detail.TreeWalkerType.REDUCTIVE;
 
 /**

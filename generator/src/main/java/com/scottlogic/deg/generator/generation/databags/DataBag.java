@@ -1,37 +1,59 @@
 package com.scottlogic.deg.generator.generation.databags;
 
+import com.scottlogic.deg.common.output.CellSource;
+import com.scottlogic.deg.common.output.RowSource;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.generator.*;
-import com.scottlogic.deg.generator.outputs.CellSource;
-import com.scottlogic.deg.generator.outputs.RowSource;
+import com.scottlogic.deg.common.util.FlatMappingSpliterator;
+import com.scottlogic.deg.common.output.GeneratedObject;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 
-public class DataBag {
+public class DataBag implements GeneratedObject {
     public static final DataBag empty = new DataBag(new HashMap<>());
-    public static DataBagBuilder startBuilding() { return new DataBagBuilder(); }
 
     private final Map<Field, DataBagValue> fieldToValue;
 
-    DataBag(Map<Field, DataBagValue> fieldToValue) {
+    public DataBag(Map<Field, DataBagValue> fieldToValue) {
         this.fieldToValue = fieldToValue;
     }
 
-    public Object getValue(Field field) {
-        if (!this.fieldToValue.containsKey(field))
+    public DataBagValue getDataBagValue(Field field) {
+        if (!fieldToValue.containsKey(field))
             throw new IllegalStateException("Databag has no value stored for " + field);
 
-        return this.fieldToValue.get(field).value;
+        return fieldToValue.get(field);
     }
 
-    public DataBagValue getValueAndFormat(Field field) {
-        if (!this.fieldToValue.containsKey(field))
-            throw new IllegalStateException("Databag has no value stored for " + field);
+    @Override
+    public Object getFormattedValue(Field field) {
+        if (!fieldToValue.containsKey(field))
+            throw new IllegalStateException("DataBag has no value stored for " + field);
 
-        return this.fieldToValue.get(field);
+        return fieldToValue.get(field).getFormattedValue();
+    }
+
+    @Override
+    public RowSource getRowSource() {
+        return new RowSource(
+            fieldToValue.entrySet().stream()
+                .map(e -> new CellSource(e.getKey() , e.getValue().source))
+                .collect(Collectors.toList())
+        );
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DataBag generatedObject = (DataBag) o;
+        return Objects.equals(fieldToValue, generatedObject.fieldToValue);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fieldToValue);
     }
 
     public static DataBag merge(DataBag... bags) {
@@ -48,55 +70,5 @@ public class DataBag {
             });
 
         return new DataBag(newFieldToValue);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        DataBag dataBag = (DataBag) o;
-        return Objects.equals(fieldToValue, dataBag.fieldToValue);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(fieldToValue);
-    }
-
-    public RowSource getRowSource(ProfileFields fields) {
-        return new RowSource(
-            fields
-                .stream()
-                .map(field -> {
-                    DataBagValue value = this.fieldToValue.get(field);
-                    return new CellSource(value, field);
-                })
-                .collect(Collectors.toList())
-        );
-    }
-
-    public static class DataBagBuilder {
-        private final Map<Field, DataBagValue> fieldToValue;
-
-        private DataBagBuilder() {
-            this.fieldToValue = new HashMap<>();
-        }
-
-        public DataBagBuilder set(Field field, DataBagValue value) {
-            if (this.fieldToValue.containsKey(field))
-                throw new IllegalArgumentException("Databag already contains a value for " + field);
-
-            this.fieldToValue.put(field, value);
-
-            return this;
-        }
-
-        public DataBagBuilder set(Field field, Object value, DataBagValueSource source) {
-            return this.set(field, new DataBagValue(value, source));
-        }
-
-        public DataBag build() {
-            return new DataBag(this.fieldToValue);
-        }
     }
 }

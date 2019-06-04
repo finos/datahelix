@@ -1,12 +1,9 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.common.profile.constraintdetail.Nullness;
-import com.scottlogic.deg.generator.DataBagValueSource;
-import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
-import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
@@ -43,22 +40,13 @@ class FieldSpecValueGeneratorTests {
             new StandardFieldValueSourceEvaluator(),
             new JavaUtilRandomNumberGenerator());
 
-        final Set<DataBag> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec).collect(Collectors.toSet());
+        final Set<DataBagValue> result = fieldSpecFulfiller.generate(fieldSpec).collect(Collectors.toSet());
 
-        Set<DataBag> expectedDataBags = new HashSet<>(
+        Set<DataBagValue> expectedDataBags = new HashSet<>(
             Arrays.asList(
-                DataBag.startBuilding().set(
-                    new Field("First Field"),
-                    new DataBagValue(10, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                ).build(),
-                DataBag.startBuilding().set(
-                    new Field("First Field"),
-                    new DataBagValue(20, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                ).build(),
-                DataBag.startBuilding().set(
-                    new Field("First Field"),
-                    new DataBagValue(30, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                ).build()
+                    new DataBagValue(10, fieldSpec.getFieldSpecSource().toDataBagValueSource()),
+                    new DataBagValue(20, fieldSpec.getFieldSpecSource().toDataBagValueSource()),
+                    new DataBagValue(30, fieldSpec.getFieldSpecSource().toDataBagValueSource())
             )
         );
 
@@ -84,30 +72,28 @@ class FieldSpecValueGeneratorTests {
             new StandardFieldValueSourceEvaluator(),
             new JavaUtilRandomNumberGenerator());
 
-        final Set<DataBag> result = fieldSpecFulfiller.generate(new Field("First Field"), fieldSpec).collect(Collectors.toSet());
+        final Set<DataBagValue> result =
+            fieldSpecFulfiller.generate(fieldSpec).collect(Collectors.toSet());
 
-        Set<DataBag> expectedDataBags = new HashSet<>(
+        Set<DataBagValue> expectedDataBags = new HashSet<>(
             Arrays.asList(
-                DataBag.startBuilding().set(
-                    new Field("First Field"),
-                    new DataBagValue(new BigDecimal("10.00000000000000000001"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                ).build(),
-                DataBag.startBuilding().set(
-                    new Field("First Field"),
-                    new DataBagValue(new BigDecimal("10.00000000000000000002"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                ).build(),
-                DataBag.startBuilding().set(
-                    new Field("First Field"),
-                    new DataBagValue(new BigDecimal("29.99999999999999999998"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                ).build(),
-                DataBag.startBuilding().set(
-                    new Field("First Field"),
-                    new DataBagValue(new BigDecimal("29.99999999999999999999"), new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                ).build(),
-                DataBag.startBuilding().set(
-                    new Field("First Field"),
-                    new DataBagValue(null, new DataBagValueSource(fieldSpec.getFieldSpecSource()))
-                ).build()
+                new DataBagValue(
+                    new BigDecimal("10.00000000000000000001"),
+                    fieldSpec.getFieldSpecSource().toDataBagValueSource()
+                ),
+                new DataBagValue(
+                    new BigDecimal("10.00000000000000000002"),
+                    fieldSpec.getFieldSpecSource().toDataBagValueSource()
+                ),
+                new DataBagValue(
+                    new BigDecimal("29.99999999999999999998"),
+                    fieldSpec.getFieldSpecSource().toDataBagValueSource()
+                ),
+                new DataBagValue(
+                    new BigDecimal("29.99999999999999999999"),
+                    fieldSpec.getFieldSpecSource().toDataBagValueSource()
+                ),
+                new DataBagValue(null, fieldSpec.getFieldSpecSource().toDataBagValueSource())
             )
         );
 

@@ -2,8 +2,8 @@ package com.scottlogic.deg.orchestrator.violate;
 
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.Rule;
-import com.scottlogic.deg.generator.outputs.targets.OutputTargetValidationException;
-import com.scottlogic.deg.generator.utils.FileUtils;
+import com.scottlogic.deg.output.FileUtils;
+import com.scottlogic.deg.output.outputtarget.OutputTargetValidationException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;

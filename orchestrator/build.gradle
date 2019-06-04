@@ -14,6 +14,7 @@ repositories {
 dependencies {
     compile project(':profile')
     compile project(':generator')
+    compile project(':output')
     compile project(':common')
 
     compile group: 'info.picocli', name: 'picocli', version: '4.0.0-alpha-2'

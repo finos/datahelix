@@ -10,9 +10,8 @@ import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.builders.*;
-import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
-import com.scottlogic.deg.generator.violations.ViolatedProfile;
+import com.scottlogic.deg.common.profile.ViolatedProfile;
 import com.scottlogic.deg.generator.violations.filters.ConstraintTypeViolationFilter;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,11 +41,6 @@ import static org.mockito.Mockito.*;
 public class ProfileViolationTests {
     private IndividualRuleProfileViolator profileViolator;
     private ArrayList<ViolationFilter> constraintsToNotViolate;
-
-    @Mock
-    private ManifestWriter mockManifestWriter;
-    @Mock
-    private Path mockPath;
 
     private Field field1;
     private Field field2;
@@ -157,13 +151,10 @@ public class ProfileViolationTests {
     @BeforeEach
     public void setUp() throws IOException {
         MockitoAnnotations.initMocks(this);
-        doNothing()
-            .when(mockManifestWriter)
-            .writeManifest(anyListOf(ViolatedProfile.class), same(mockPath));
 
         constraintsToNotViolate = new ArrayList<>();
         IndividualConstraintRuleViolator ruleViolator = new IndividualConstraintRuleViolator(constraintsToNotViolate);
-        profileViolator = new IndividualRuleProfileViolator(mockManifestWriter, mockPath, ruleViolator);
+        profileViolator = new IndividualRuleProfileViolator(ruleViolator);
         field1 = new Field("field1");
         field2 = new Field("field2");
         field3 = new Field("field3");
@@ -191,12 +182,10 @@ public class ProfileViolationTests {
         );
 
         //Act
-        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
 
         //Assert
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
-        verify(mockManifestWriter, times(1))
-            .writeManifest(anyListOf(ViolatedProfile.class), same(mockPath));
     }
 
     @ParameterizedTest
@@ -220,12 +209,10 @@ public class ProfileViolationTests {
         );
 
         //Act
-        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
 
         //Assert
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
-        verify(mockManifestWriter, times(1))
-            .writeManifest(anyListOf(ViolatedProfile.class), same(mockPath));
     }
 
     @Test
@@ -244,12 +231,10 @@ public class ProfileViolationTests {
         );
 
         //Act
-        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
 
         //Assert
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
-        verify(mockManifestWriter, times(1))
-            .writeManifest(anyListOf(ViolatedProfile.class), same(mockPath));
     }
 
     /**
@@ -284,12 +269,10 @@ public class ProfileViolationTests {
         );
 
         //Act
-        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
 
         //Assert
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
-        verify(mockManifestWriter, times(1))
-            .writeManifest(anyListOf(ViolatedProfile.class), same(mockPath));
     }
 
     /**
@@ -324,11 +307,9 @@ public class ProfileViolationTests {
         );
 
         //Act
-        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
 
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
-        verify(mockManifestWriter, times(1))
-            .writeManifest(anyListOf(ViolatedProfile.class), same(mockPath));
     }
 
     /**
@@ -383,12 +364,10 @@ public class ProfileViolationTests {
         );
 
         //Act
-        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
 
         //Assert
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
-        verify(mockManifestWriter, times(1))
-            .writeManifest(anyListOf(ViolatedProfile.class), same(mockPath));
     }
 
     /**
@@ -430,13 +409,11 @@ public class ProfileViolationTests {
         );
 
         //Act
-        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
 
         //Assert
 
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
-        verify(mockManifestWriter, times(1))
-            .writeManifest(anyListOf(ViolatedProfile.class), same(mockPath));
     }
 
     /**
@@ -500,13 +477,11 @@ public class ProfileViolationTests {
         );
 
         //Act
-        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
 
         //Assert
 
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
-        verify(mockManifestWriter, times(1))
-            .writeManifest(anyListOf(ViolatedProfile.class), same(mockPath));
     }
 
     /**
@@ -566,12 +541,10 @@ public class ProfileViolationTests {
         );
 
         //Act
-        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
 
         //Assert
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
-        verify(mockManifestWriter, times(1))
-            .writeManifest(anyListOf(ViolatedProfile.class), same(mockPath));
     }
 
     /**
@@ -630,12 +603,10 @@ public class ProfileViolationTests {
         );
 
         // Act
-        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
 
         // Assert
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
-        verify(mockManifestWriter, times(1))
-            .writeManifest(anyListOf(ViolatedProfile.class), same(mockPath));
     }
 
     /**
@@ -671,12 +642,10 @@ public class ProfileViolationTests {
         );
 
         // Act
-        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
 
         // Assert
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
-        verify(mockManifestWriter, times(1))
-            .writeManifest(anyListOf(ViolatedProfile.class), same(mockPath));
     }
 
     //Two-Layer Nested Constraints Violation
@@ -710,12 +679,10 @@ public class ProfileViolationTests {
         );
 
         // Act
-        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
 
         // Assert
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
-        verify(mockManifestWriter, times(1))
-            .writeManifest(anyListOf(ViolatedProfile.class), same(mockPath));
     }
 
     /**
@@ -760,12 +727,10 @@ public class ProfileViolationTests {
         );
 
         // Act
-        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
 
         // Assert
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
-        verify(mockManifestWriter, times(1))
-            .writeManifest(anyListOf(ViolatedProfile.class), same(mockPath));
     }
 
     /**
@@ -804,12 +769,10 @@ public class ProfileViolationTests {
         );
 
         // Act
-        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
 
         // Assert
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
-        verify(mockManifestWriter, times(1))
-            .writeManifest(anyListOf(ViolatedProfile.class), same(mockPath));
     }
 
     /**
@@ -848,12 +811,10 @@ public class ProfileViolationTests {
         );
 
         // Act
-        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
 
         // Assert
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
-        verify(mockManifestWriter, times(1))
-            .writeManifest(anyListOf(ViolatedProfile.class), same(mockPath));
     }
 
     /**
@@ -892,12 +853,10 @@ public class ProfileViolationTests {
         );
 
         // Act
-        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
 
         // Assert
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
-        verify(mockManifestWriter, times(1))
-            .writeManifest(anyListOf(ViolatedProfile.class), same(mockPath));
     }
 
     /**
@@ -943,12 +902,10 @@ public class ProfileViolationTests {
         );
 
         // Act
-        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
 
         // Assert
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
-        verify(mockManifestWriter, times(1))
-            .writeManifest(anyListOf(ViolatedProfile.class), same(mockPath));
     }
 
     /**
@@ -994,12 +951,10 @@ public class ProfileViolationTests {
         );
 
         // Act
-        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
 
         // Assert
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
-        verify(mockManifestWriter, times(1))
-            .writeManifest(anyListOf(ViolatedProfile.class), same(mockPath));
     }
 
     /**
@@ -1045,12 +1000,10 @@ public class ProfileViolationTests {
         );
 
         // Act
-        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
 
         // Assert
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
-        verify(mockManifestWriter, times(1))
-            .writeManifest(anyListOf(ViolatedProfile.class), same(mockPath));
     }
 
     private TestProfiles createTestProfiles(String description, List<Field> fields, List<RuleViolatedRulePair> ruleViolationHolders) {

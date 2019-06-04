@@ -9,6 +9,7 @@ import com.scottlogic.deg.generator.inputs.profileviolation.IndividualRuleProfil
 import com.scottlogic.deg.generator.inputs.profileviolation.ProfileViolator;
 import com.scottlogic.deg.generator.inputs.profileviolation.RuleViolator;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
+import com.scottlogic.deg.orchestrator.guice.AllModule;
 import com.scottlogic.deg.profile.guice.ProfileModule;
 
 import java.util.List;
@@ -30,7 +31,6 @@ public class ViolateModule extends AbstractModule {
 
         bind(new TypeLiteral<List<ViolationFilter>>(){}).toProvider(ViolationFiltersProvider.class);
 
-        install(new GeneratorModule(configSource));
-        install(new ProfileModule(configSource));
+        install(new AllModule(configSource));
     }
 }

@@ -6,7 +6,7 @@ import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.visualisation.DecisionTreeVisualisationWriter;
-import com.scottlogic.deg.generator.utils.FileUtils;
+import com.scottlogic.deg.output.FileUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;

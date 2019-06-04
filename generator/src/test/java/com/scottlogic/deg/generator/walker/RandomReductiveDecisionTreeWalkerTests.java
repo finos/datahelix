@@ -5,6 +5,7 @@ import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
+import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategy;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +24,6 @@ class RandomReductiveDecisionTreeWalkerTests {
     private DecisionTree tree;
     private RandomReductiveDecisionTreeWalker walker;
     private ReductiveDecisionTreeWalker underlyingWalker;
-    private FixFieldStrategy fixFieldStrategy;
 
     @BeforeEach
     public void beforeEach(){
@@ -32,7 +32,6 @@ class RandomReductiveDecisionTreeWalkerTests {
             new ProfileFields(Arrays.asList(new Field("field1"), new Field("field2"))),
             "test-tree");
 
-        fixFieldStrategy = mock(FixFieldStrategy.class);
         underlyingWalker = mock(ReductiveDecisionTreeWalker.class);
         walker = new RandomReductiveDecisionTreeWalker(underlyingWalker);
     }
@@ -48,11 +47,11 @@ class RandomReductiveDecisionTreeWalkerTests {
             Stream.of(rowSpec("second-iteration-first-random-row"), rowSpec("second-iteration-second-random-row"))
         );
 
-        List<RowSpec> result = walker.walk(tree).limit(2).collect(Collectors.toList());
+        List<DataBag> result = walker.walk(tree).limit(2).collect(Collectors.toList());
 
         verify(underlyingWalker, times(2)).walk(tree);
         Assert.assertThat(
-            result.stream().map(RowSpec::toString).collect(Collectors.toList()),
+            result.stream().map(DataBag::toString).collect(Collectors.toList()),
             hasItems("first-iteration-first-random-row", "second-iteration-first-random-row"));
     }
 
@@ -64,11 +63,11 @@ class RandomReductiveDecisionTreeWalkerTests {
             Stream.of(rowSpec("third-iteration-first-random-row"), rowSpec("third-iteration-second-random-row"))
         );
 
-        List<RowSpec> result = walker.walk(tree).limit(2).collect(Collectors.toList());
+        List<DataBag> result = walker.walk(tree).limit(2).collect(Collectors.toList());
 
         verify(underlyingWalker, times(3)).walk(tree);
         Assert.assertThat(
-            result.stream().map(RowSpec::toString).collect(Collectors.toList()),
+            result.stream().map(DataBag::toString).collect(Collectors.toList()),
             hasItems("first-iteration-first-random-row", "third-iteration-first-random-row"));
     }
 
@@ -78,7 +77,7 @@ class RandomReductiveDecisionTreeWalkerTests {
             Stream.empty()
         );
 
-        List<RowSpec> result = walker.walk(tree).limit(2).collect(Collectors.toList());
+        List<DataBag> result = walker.walk(tree).limit(2).collect(Collectors.toList());
 
         verify(underlyingWalker, times(1)).walk(tree);
         Assert.assertThat(
@@ -86,7 +85,7 @@ class RandomReductiveDecisionTreeWalkerTests {
             is(false));
     }
 
-    private static RowSpec rowSpec(String detail) {
-        return mock(RowSpec.class, detail);
+    private static DataBag rowSpec(String detail) {
+        return mock(DataBag.class, detail);
     }
 }

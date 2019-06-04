@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
 import com.scottlogic.deg.common.util.NumberUtils;
-import com.scottlogic.deg.generator.FlatMappingSpliterator;
+import com.scottlogic.deg.common.util.FlatMappingSpliterator;
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.generator.restrictions.NumericLimit;
 import com.scottlogic.deg.generator.restrictions.NumericRestrictions;
