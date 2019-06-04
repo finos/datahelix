@@ -83,14 +83,14 @@ public class VisualiseExecute implements Runnable {
 
         StaticContradictionDecisionTreeValidator treeValidator =
             new StaticContradictionDecisionTreeValidator(
-                profile.fields,
+                profile.getFields(),
                 new RowSpecMerger(fieldSpecMerger),
                 new ConstraintReducer(fieldSpecFactory, fieldSpecMerger));
 
         DecisionTree validatedTree = treeValidator.markContradictions(mergedTree);
 
         final String title =
-            Stream.of(profile.description, profileBaseName)
+            Stream.of(profile.getDescription(), profileBaseName)
             .filter(Objects::nonNull)
             .findFirst()
             .orElse(null);

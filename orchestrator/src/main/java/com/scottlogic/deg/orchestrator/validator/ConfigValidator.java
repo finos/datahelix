@@ -3,9 +3,9 @@ package com.scottlogic.deg.orchestrator.validator;
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
-import com.scottlogic.deg.generator.generation.GenerationConfigSource;
-import com.scottlogic.deg.generator.outputs.targets.OutputTargetValidationException;
-import com.scottlogic.deg.generator.utils.FileUtils;
+import com.scottlogic.deg.output.guice.OutputConfigSource;
+import com.scottlogic.deg.output.outputtarget.OutputTargetValidationException;
+import com.scottlogic.deg.output.FileUtils;
 
 import java.io.File;
 
@@ -26,7 +26,7 @@ public class ConfigValidator {
         checkProfileInputFile(generationConfigSource.getProfileFile());
     }
 
-    private void checkSwitches(GenerationConfigSource configSource) {
+    private void checkSwitches(OutputConfigSource configSource) {
         if (configSource.isEnableTracing() &&
             fileUtils.getTraceFile(configSource.getOutputPath()).exists() &&
             !configSource.overwriteOutputFiles()) {

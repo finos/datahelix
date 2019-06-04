@@ -1,7 +1,8 @@
 package com.scottlogic.deg.generator.generation.combinationstrategies;
 
+import com.scottlogic.deg.generator.builders.DataBagBuilder;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
-import com.scottlogic.deg.generator.DataBagValueSource;
+import com.scottlogic.deg.common.output.DataBagValueSource;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import org.junit.Assert;
@@ -17,29 +18,29 @@ class ReductiveCombinationStrategyTests {
     void permute_dataBagSequencesContainsTwoFieldsWithMultipleValues_returnsExpectedValues() {
         List<DataBag> firstFieldDataBags = new ArrayList<DataBag>() {{
             add(
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue(10, new DataBagValueSource(null))
+                    new DataBagValue(10, DataBagValueSource.Empty)
                 ).build()
             );
             add(
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue(20, new DataBagValueSource(null))
+                    new DataBagValue(20, DataBagValueSource.Empty)
                 ).build()
             );
         }};
         List<DataBag> secondFieldDataBags = new ArrayList<DataBag>() {{
             add(
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("Second Field"),
-                    new DataBagValue("A", new DataBagValueSource(null))
+                    new DataBagValue("A", DataBagValueSource.Empty)
                 ).build()
             );
             add(
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("Second Field"),
-                    new DataBagValue("B", new DataBagValueSource(null))
+                    new DataBagValue("B", DataBagValueSource.Empty)
                 ).build()
             );
         }};
@@ -54,39 +55,39 @@ class ReductiveCombinationStrategyTests {
 
         List<DataBag> expectedDataBags = new ArrayList<DataBag>() {{
             add(
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue(10, new DataBagValueSource(null))
+                    new DataBagValue(10, DataBagValueSource.Empty)
                 ).set(
                     new Field("Second Field"),
-                    new DataBagValue("A", new DataBagValueSource(null))
+                    new DataBagValue("A", DataBagValueSource.Empty)
                 ).build()
             );
             add(
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue(10, new DataBagValueSource(null))
+                    new DataBagValue(10, DataBagValueSource.Empty)
                 ).set(
                     new Field("Second Field"),
-                    new DataBagValue("B", new DataBagValueSource(null))
+                    new DataBagValue("B", DataBagValueSource.Empty)
                 ).build()
             );
             add(
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue(20, new DataBagValueSource(null))
+                    new DataBagValue(20, DataBagValueSource.Empty)
                 ).set(
                     new Field("Second Field"),
-                    new DataBagValue("A", new DataBagValueSource(null))
+                    new DataBagValue("A", DataBagValueSource.Empty)
                 ).build()
             );
             add(
-                DataBag.startBuilding().set(
+                new DataBagBuilder().set(
                     new Field("First Field"),
-                    new DataBagValue(20, new DataBagValueSource(null))
+                    new DataBagValue(20, DataBagValueSource.Empty)
                 ).set(
                     new Field("Second Field"),
-                    new DataBagValue("B", new DataBagValueSource(null))
+                    new DataBagValue("B", DataBagValueSource.Empty)
                 ).build()
             );
         }};

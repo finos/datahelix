@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.decisiontree;
 
-import com.scottlogic.deg.generator.FlatMappingSpliterator;
+import com.scottlogic.deg.common.util.FlatMappingSpliterator;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
@@ -72,9 +72,9 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
     @Override
     public DecisionTree analyse(Profile profile) {
         return new DecisionTreeCollection(
-            profile.fields,
-            profile.rules.stream()
-                .map(rule -> new DecisionTree(convertRule(rule), profile.fields, profile.description))
+            profile.getFields(),
+            profile.getRules().stream()
+                .map(rule -> new DecisionTree(convertRule(rule), profile.getFields(), profile.getDescription()))
                 .map(decisionTreeSimplifier::simplify)
                 .collect(Collectors.toList()))
             .getMergedTree();

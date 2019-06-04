@@ -1,10 +1,9 @@
 package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 
 import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.generator.generation.databags.DataBagValue;
-import com.scottlogic.deg.generator.outputs.GeneratedObject;
-import com.scottlogic.deg.generator.outputs.formats.DataSetWriter;
-import com.scottlogic.deg.generator.outputs.targets.SingleDatasetOutputTarget;
+import com.scottlogic.deg.common.output.GeneratedObject;
+import com.scottlogic.deg.output.writer.DataSetWriter;
+import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,13 +20,15 @@ public class InMemoryOutputTarget implements SingleDatasetOutputTarget {
 
     @Override
     public DataSetWriter openWriter(ProfileFields fields) {
-        return new DummyWriter(testState.generatedObjects);
+        return new DummyWriter(fields, testState.generatedObjects);
     }
 
     private class DummyWriter implements DataSetWriter {
+        private final ProfileFields fields;
         private final List<List<Object>> listToAppendTo;
 
-        DummyWriter(List<List<Object>> listToAppendTo) {
+        DummyWriter(ProfileFields fields, List<List<Object>> listToAppendTo) {
+            this.fields = fields;
             this.listToAppendTo = listToAppendTo;
         }
 
@@ -37,9 +38,8 @@ public class InMemoryOutputTarget implements SingleDatasetOutputTarget {
                 throw new IllegalStateException("GeneratedObject is null");
             }
 
-            List<Object> values = row.values
-                .stream()
-                .map(DataBagValue::getFormattedValue)
+            List<Object> values = fields.stream()
+                .map(row::getFormattedValue)
                 .collect(Collectors.toList());
 
             listToAppendTo.add(values);
