@@ -323,7 +323,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "GB0002634946" |
       | null           |
 
-  Scenario: aValid run against a non contradicting aValid SEDOL should be successful
+  Scenario: aValid SEDOL run against a non contradicting aValid SEDOL should be successful
     Given foo is a valid "SEDOL"
     And foo is a valid "SEDOL"
     And foo is in set:
@@ -333,7 +333,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | null      |
       | "0263494" |
 
-  Scenario: aValid run against a non contradicting not aValid SEDOL should only generate null data
+  Scenario: aValid SEDOL run against a contradicting not aValid SEDOL should only generate null data
     Given foo is a valid "SEDOL"
     And foo is anything but a valid "SEDOL"
     Then the following data should be generated:
