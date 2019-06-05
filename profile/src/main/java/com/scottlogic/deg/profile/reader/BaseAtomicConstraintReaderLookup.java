@@ -82,6 +82,7 @@ public class BaseAtomicConstraintReaderLookup implements AtomicConstraintReaderL
                     case ISIN:
                     case SEDOL:
                     case CUSIP:
+                    case RIC:
                         return new AndConstraint(
                             new MatchesStandardConstraint(field, standardType, rules),
                             new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.STRING, rules)
