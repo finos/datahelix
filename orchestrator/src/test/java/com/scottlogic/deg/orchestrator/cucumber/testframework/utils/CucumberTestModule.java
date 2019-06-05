@@ -38,6 +38,8 @@ public class CucumberTestModule extends AbstractModule {
         bind(ProfileReader.class).to(CucumberProfileReader.class);
         bind(GenerationConfigSource.class).to(CucumberGenerationConfigSource.class);
         if (testState.requireFieldTyping) {
+            // This binding overrides the requireFieldTyping config option, so an alternative
+            // (MultipleProfileValidator) needs to be used when field typing is not required.
             bind(ProfileValidator.class).to(TypingRequiredPerFieldValidator.class);
         } else {
             bind(ProfileValidator.class).to(MultipleProfileValidator.class);
