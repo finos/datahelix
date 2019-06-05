@@ -26,7 +26,7 @@ public class NumericRestrictionsMerger {
         merged.max = getMergedLimitStructure(MergeLimit.MAX, left.max, right.max);
 
         if (!canEmitSomeNumericValues(merged)){
-            return MergeResult.UNSUCCESSFUL;
+            return MergeResult.unsuccessful();
         }
 
         return new MergeResult<>(merged);

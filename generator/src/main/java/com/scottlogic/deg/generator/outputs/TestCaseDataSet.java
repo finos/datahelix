@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.outputs;
 
+import com.scottlogic.deg.common.output.GeneratedObject;
 import com.scottlogic.deg.common.profile.RuleInformation;
 
 import java.util.stream.Stream;

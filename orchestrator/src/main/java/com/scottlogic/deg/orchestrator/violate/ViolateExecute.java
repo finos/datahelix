@@ -3,12 +3,18 @@ package com.scottlogic.deg.orchestrator.violate;
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.generator.StandardGenerationEngine;
+import com.scottlogic.deg.generator.generation.DataGenerator;
+import com.scottlogic.deg.common.output.GeneratedObject;
+import com.scottlogic.deg.output.FileUtilsImpl;
+import com.scottlogic.deg.output.manifest.ManifestWriter;
+import com.scottlogic.deg.common.profile.ViolatedProfile;
+import com.scottlogic.deg.output.writer.DataSetWriter;
+import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
 import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
 import com.scottlogic.deg.generator.inputs.profileviolation.ProfileViolator;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
-import com.scottlogic.deg.generator.outputs.targets.OutputTargetFactory;
-import com.scottlogic.deg.generator.utils.FileUtilsImpl;
+import com.scottlogic.deg.output.outputtarget.OutputTargetFactory;
+import com.scottlogic.deg.output.FileUtils;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.orchestrator.validator.ConfigValidator;
 import com.scottlogic.deg.profile.reader.ProfileReader;
@@ -17,6 +23,7 @@ import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class ViolateExecute implements Runnable {
     private final ErrorReporter errorReporter;
@@ -27,8 +34,9 @@ public class ViolateExecute implements Runnable {
     private final ProfileValidator profileValidator;
     private final ProfileSchemaValidator profileSchemaValidator;
     private final ProfileViolator profileViolator;
-    private final StandardGenerationEngine generationEngine;
+    private final DataGenerator dataGenerator;
     private final ViolateOutputValidator violateOutputValidator;
+    private final ManifestWriter manifestWriter;
 
     @Inject
     ViolateExecute(
@@ -40,8 +48,9 @@ public class ViolateExecute implements Runnable {
         ProfileValidator profileValidator,
         ProfileSchemaValidator profileSchemaValidator,
         ProfileViolator profileViolator,
-        StandardGenerationEngine generationEngine,
-        ViolateOutputValidator violateOutputValidator) {
+        DataGenerator dataGenerator,
+        ViolateOutputValidator violateOutputValidator,
+        ManifestWriter manifestWriter) {
 
         this.profileReader = profileReader;
         this.configSource = configSource;
@@ -51,8 +60,9 @@ public class ViolateExecute implements Runnable {
         this.errorReporter = errorReporter;
         this.profileValidator = profileValidator;
         this.profileViolator = profileViolator;
-        this.generationEngine = generationEngine;
+        this.dataGenerator = dataGenerator;
         this.violateOutputValidator = violateOutputValidator;
+        this.manifestWriter = manifestWriter;
     }
 
     @Override
@@ -78,20 +88,36 @@ public class ViolateExecute implements Runnable {
     }
 
     private void doGeneration(Profile profile) throws IOException {
-        List<Profile> violatedProfiles = profileViolator.violate(profile);
-
+        List<ViolatedProfile> violatedProfiles = profileViolator.violate(profile);
         if (violatedProfiles.isEmpty()) {
             return;
         }
+        manifestWriter.writeManifest(violatedProfiles);
 
         DecimalFormat intFormatter = FileUtilsImpl.getDecimalFormat(violatedProfiles.size());
 
         int filename = 1;
         for (Profile violatedProfile : violatedProfiles) {
-            generationEngine.generateDataSet(
-                violatedProfile,
-                outputTargetFactory.create(intFormatter.format(filename++))
-            );
+            SingleDatasetOutputTarget outputTarget =
+                outputTargetFactory.create(intFormatter.format(filename++));
+            Stream<GeneratedObject> generatedObjectStream = dataGenerator.generateData(violatedProfile);
+            outputData(profile, generatedObjectStream, outputTarget);
+        }
+    }
+
+    private void outputData(
+        Profile profile,
+        Stream<GeneratedObject> generatedDataItems,
+        SingleDatasetOutputTarget outputTarget) throws IOException
+    {
+        try (DataSetWriter writer = outputTarget.openWriter(profile.getFields())) {
+            generatedDataItems.forEach(row -> {
+                try {
+                    writer.writeRow(row);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         }
     }
 }

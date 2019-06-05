@@ -55,7 +55,7 @@ class DateTimeRestrictionsMergeOperationTests {
     public void applyMergeOperation_withContradictoryDateTimeRestrictionsAndNoTypeRestrictions_shouldPreventAnyDateTimeValues(){
         FieldSpec merging = FieldSpec.Empty;
         when(merger.merge(left.getDateTimeRestrictions(), right.getDateTimeRestrictions()))
-            .thenReturn(MergeResult.UNSUCCESSFUL);
+            .thenReturn(MergeResult.unsuccessful());
 
         Optional<FieldSpec> result = operation.applyMergeOperation(left, right, merging);
 
@@ -72,7 +72,7 @@ class DateTimeRestrictionsMergeOperationTests {
             .withTypeRestrictions(DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.STRING, IsOfTypeConstraint.Types.DATETIME),
                 FieldSpecSource.Empty);
         when(merger.merge(left.getDateTimeRestrictions(), right.getDateTimeRestrictions()))
-            .thenReturn(MergeResult.UNSUCCESSFUL);
+            .thenReturn(MergeResult.unsuccessful());
 
         Optional<FieldSpec> result = operation.applyMergeOperation(left, right, merging);
 
@@ -88,7 +88,7 @@ class DateTimeRestrictionsMergeOperationTests {
         FieldSpec merging = FieldSpec.Empty
             .withTypeRestrictions(DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.NUMERIC), FieldSpecSource.Empty);
         when(merger.merge(left.getDateTimeRestrictions(), right.getDateTimeRestrictions()))
-            .thenReturn(MergeResult.UNSUCCESSFUL);
+            .thenReturn(MergeResult.unsuccessful());
 
         Optional<FieldSpec> result = operation.applyMergeOperation(left, right, merging);
 
@@ -104,7 +104,7 @@ class DateTimeRestrictionsMergeOperationTests {
         FieldSpec merging = FieldSpec.Empty
             .withTypeRestrictions(DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.DATETIME), FieldSpecSource.Empty);
         when(merger.merge(left.getDateTimeRestrictions(), right.getDateTimeRestrictions()))
-            .thenReturn(MergeResult.UNSUCCESSFUL);
+            .thenReturn(MergeResult.unsuccessful());
 
         Optional<FieldSpec> result = operation.applyMergeOperation(left, right, merging);
 

@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.generation.databags;
 
-import com.scottlogic.deg.generator.DataBagValueSource;
+import com.scottlogic.deg.common.output.DataBagValueSource;
 
 import java.util.Objects;
 
@@ -37,11 +37,15 @@ public class DataBagValue {
     }
 
     public Object getFormattedValue() {
-        if (format == null || value == null){
+        if (format == null || value == null) {
             return value;
         }
 
         return String.format(format, value);
+    }
+
+    public Object getUnformattedValue(){
+        return value;
     }
 }
 

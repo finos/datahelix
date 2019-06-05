@@ -1,7 +1,8 @@
 package com.scottlogic.deg.generator.generation.databags;
 
-import com.scottlogic.deg.generator.DataBagValueSource;
+import com.scottlogic.deg.common.output.DataBagValueSource;
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.generator.builders.DataBagBuilder;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -15,11 +16,11 @@ class DataBagTests {
         Field idField = new Field("id");
 
         // ACT
-        DataBag objectUnderTest = DataBag.startBuilding().set(idField, 3, DataBagValueSource.Empty).build();
+        DataBag objectUnderTest = new DataBagBuilder().set(idField, 3, DataBagValueSource.Empty).build();
 
         // ASSERT
         Assert.assertThat(
-            objectUnderTest.getValue(idField),
+            objectUnderTest.getFormattedValue(idField),
             equalTo(3));
     }
 
@@ -31,7 +32,7 @@ class DataBagTests {
         // ACT / ASSERT
         Assertions.assertThrows(
             IllegalArgumentException.class,
-            () -> DataBag.startBuilding()
+            () -> new DataBagBuilder()
                 .set(idField, 3, DataBagValueSource.Empty)
                 .set(idField, 3, DataBagValueSource.Empty)
                 .build());
@@ -47,7 +48,7 @@ class DataBagTests {
         // ACT / ASSERT
         Assertions.assertThrows(
             IllegalStateException.class,
-            () -> objectUnderTest.getValueAndFormat(idField));
+            () -> objectUnderTest.getFormattedValue(idField));
     }
 
     @Test
@@ -56,19 +57,19 @@ class DataBagTests {
         Field idField = new Field("id");
         Field priceField = new Field("price");
 
-        DataBag dataBag1 = DataBag.startBuilding().set(idField, new DataBagValue(3, DataBagValueSource.Empty)).build();
-        DataBag dataBag2 = DataBag.startBuilding().set(priceField, new DataBagValue(4, DataBagValueSource.Empty)).build();
+        DataBag dataBag1 = new DataBagBuilder().set(idField, new DataBagValue(3, DataBagValueSource.Empty)).build();
+        DataBag dataBag2 = new DataBagBuilder().set(priceField, new DataBagValue(4, DataBagValueSource.Empty)).build();
 
         // ACT
         DataBag mergedDataBag = DataBag.merge(dataBag1, dataBag2);
 
         // ASSERT
         Assert.assertThat(
-            mergedDataBag.getValue(idField),
+            mergedDataBag.getFormattedValue(idField),
             equalTo(3));
 
         Assert.assertThat(
-            mergedDataBag.getValue(priceField),
+            mergedDataBag.getFormattedValue(priceField),
             equalTo(4));
     }
 
@@ -78,11 +79,11 @@ class DataBagTests {
         Field idField = new Field("id");
         Field priceField = new Field("price");
 
-        DataBag dataBag1 = DataBag.startBuilding()
+        DataBag dataBag1 = new DataBagBuilder()
             .set(idField, "foo", DataBagValueSource.Empty)
             .build();
 
-        DataBag dataBag2 = DataBag.startBuilding()
+        DataBag dataBag2 = new DataBagBuilder()
             .set(idField, "foo", DataBagValueSource.Empty)
             .set(priceField, 4, DataBagValueSource.Empty)
             .build();

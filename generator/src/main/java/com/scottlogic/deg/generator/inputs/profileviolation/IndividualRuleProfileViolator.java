@@ -1,14 +1,11 @@
 package com.scottlogic.deg.generator.inputs.profileviolation;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.Rule;
-import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
-import com.scottlogic.deg.generator.violations.ViolatedProfile;
+import com.scottlogic.deg.common.profile.ViolatedProfile;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -21,18 +18,10 @@ import java.util.stream.Collectors;
  */
 public class IndividualRuleProfileViolator implements ProfileViolator {
 
-    private final ManifestWriter manifestWriter;
-    private final Path outputPath;
     private final RuleViolator ruleViolator;
 
     @Inject
-    public IndividualRuleProfileViolator(
-        ManifestWriter manifestWriter,
-        @Named("config:outputPath") Path outputPath,
-        RuleViolator ruleViolator) {
-
-        this.manifestWriter = manifestWriter;
-        this.outputPath = outputPath;
+    public IndividualRuleProfileViolator(RuleViolator ruleViolator) {
         this.ruleViolator = ruleViolator;
     }
 
@@ -48,14 +37,12 @@ public class IndividualRuleProfileViolator implements ProfileViolator {
      * @throws IOException if the manifest writer fails to write
      */
     @Override
-    public List<Profile> violate(Profile profile) throws IOException {
+    public List<ViolatedProfile> violate(Profile profile) throws IOException {
         // For each rule in the profile generate a profile with this one rule violated
         List<ViolatedProfile> violatedProfiles =
-            profile.rules.stream()
+            profile.getRules().stream()
                 .map(rule -> violateRuleOnProfile(profile, rule))
                 .collect(Collectors.toList());
-
-        manifestWriter.writeManifest(violatedProfiles, outputPath);
 
         // The following will allow the conversion to a List<Profile> from a List<ViolatedProfile>.
         return new ArrayList<>(violatedProfiles);
@@ -69,7 +56,7 @@ public class IndividualRuleProfileViolator implements ProfileViolator {
      * @return New profile with the specified rule violated and all other rules untouched.
      */
     private ViolatedProfile violateRuleOnProfile(Profile profile, Rule violatedRule) {
-        Collection<Rule> newRules = profile.rules.stream()
+        Collection<Rule> newRules = profile.getRules().stream()
             .map(r -> r == violatedRule
                 ? ruleViolator.violateRule(violatedRule)
                 : r)
@@ -77,8 +64,8 @@ public class IndividualRuleProfileViolator implements ProfileViolator {
 
         return new ViolatedProfile(
             violatedRule,
-            profile.fields,
+            profile.getFields(),
             newRules,
-            String.format("%s -- Violating: %s", profile.description, violatedRule.ruleInformation.getDescription()));
+            String.format("%s -- Violating: %s", profile.getDescription(), violatedRule.ruleInformation.getDescription()));
     }
 }

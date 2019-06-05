@@ -54,7 +54,7 @@ public class ReductiveFieldSpecBuilder {
     }
 
     private boolean hasSetOrIsNull(FieldSpec fieldSpec) {
-        return  (fieldSpec.getSetRestrictions() != null && fieldSpec.getSetRestrictions().getWhitelist() != null)
+        return  (fieldSpec.getSetRestrictions() != null && fieldSpec.getSetRestrictions().getWhitelist().isPresent())
             || (fieldSpec.getNullRestrictions() != null && fieldSpec.getNullRestrictions().nullness == Nullness.MUST_BE_NULL);
     }
 

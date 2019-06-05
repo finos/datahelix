@@ -5,12 +5,10 @@ import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.constraintdetail.Nullness;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.common.util.NumberUtils;
+import com.scottlogic.deg.generator.restrictions.set.SetRestrictions;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.Collection;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class FieldSpecFactory {
     private final StringRestrictionsFactory stringRestrictionsFactory;
