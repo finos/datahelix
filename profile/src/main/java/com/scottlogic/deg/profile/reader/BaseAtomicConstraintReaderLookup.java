@@ -266,7 +266,7 @@ public class BaseAtomicConstraintReaderLookup implements AtomicConstraintReaderL
                     .collect(Collectors.toSet());
 
                 return new AndConstraint(
-                    new IsInSetConstraint(field, objects, rules),
+                    new IsInNameSetConstraint(field, objects, rules),
                     new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.STRING, rules)
                 );
             });

@@ -7,17 +7,34 @@
   ],
   "rules": [
     {
+      "rule": "notnull",
       "constraints": [
-        {
-          "allOf": [
-            {"field": "forename", "is": "aTypical", "value": "firstname"},
-            {"field": "surname", "is": "aTypical", "value": "lastname"},
-            {"field": "fullname", "is":  "aTypical", "value":  "fullname"},
-            { "not": { "field": "forename", "is": "null" }},
-            { "not": { "field":  "surname", "is":  "null"}},
-            { "not": { "field":  "fullname", "is":  "null"}}
+        { "allOf":
+          [
+            { "not": { "field": "forename", "is": "null" } },
+            { "not": { "field": "surname", "is": "null" } },
+            { "not": { "field": "fullname", "is": "null" } }
           ]
-        }
+        },
+        {"field": "forename", "is": "aTypical", "value": "firstname"}
+      ]
+    },
+    {
+      "rule": "forename",
+      "constraints": [
+        {"field": "forename", "is": "aTypical", "value": "firstname"}
+      ]
+    },
+    {
+      "rule": "surname",
+      "constraints": [
+        {"field": "surname", "is": "aTypical", "value": "lastname"}
+      ]
+    },
+    {
+      "rule": "fullname",
+      "constraints": [
+        {"field": "fullname", "is":  "aTypical", "value":  "fullname"}
       ]
     }
   ]

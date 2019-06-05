@@ -9,6 +9,7 @@ import com.scottlogic.deg.generator.restrictions.set.SetRestrictions;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.Set;
 
 public class FieldSpecFactory {
     private final StringRestrictionsFactory stringRestrictionsFactory;
@@ -75,9 +76,15 @@ public class FieldSpecFactory {
     private FieldSpec construct(IsInSetConstraint constraint, boolean negate, boolean violated) {
         return FieldSpec.Empty.withSetRestrictions(
                 negate
-                    ? SetRestrictions.fromBlacklist(constraint.legalValues)
+                    ? negatedSet(constraint, constraint.legalValues)
                     : SetRestrictions.fromWhitelist(constraint.legalValues),
             FieldSpecSource.fromConstraint(constraint, negate, violated));
+    }
+
+    private SetRestrictions negatedSet(IsInSetConstraint constraint, Set<Object> values) {
+        return (constraint instanceof IsInNameSetConstraint)
+            ? SetRestrictions.allowNoValues()
+            : SetRestrictions.fromBlacklist(values);
     }
 
     private FieldSpec constructIsNull(boolean negate, AtomicConstraint constraint, boolean violated) {
