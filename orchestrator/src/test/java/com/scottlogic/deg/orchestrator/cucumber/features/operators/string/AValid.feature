@@ -814,3 +814,32 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | foo         |
       | "38259P508" |
       | null        |
+
+  Scenario: aValid RIC run against a non contradicting set should be successful
+    Given foo is a valid "RIC"
+    And foo is anything but null
+    And foo is in set:
+      | "AB.PQ"    |
+    Then the following data should be generated:
+      | foo         |
+      | "AB.PQ"    |
+
+  Scenario: aValid RIC run against a contradicting set should not return data
+    Given foo is a valid "RIC"
+    And foo is anything but null
+    And foo is in set:
+      | "NOPE"    |
+    Then the following data should be generated:
+      | foo         |
+
+  Scenario: aValid RIC run against a length should be successful
+    Given foo is a valid "RIC"
+    And foo is anything but null
+    And foo is of length 6
+    And foo is in set:
+      | "AB.PQ"    |
+      | "ABC.PQ"    |
+      | "ABCD.PQ"    |
+    Then the following data should be generated:
+      | foo         |
+      | "ABC.PQ"    |
