@@ -2,7 +2,8 @@
   "schemaVersion": "0.1",
   "fields": [
     {"name": "forename"},
-    {"name": "surname"}
+    {"name": "surname"},
+    {"name": "fullname"}
   ],
   "rules": [
     {
@@ -11,8 +12,10 @@
           "allOf": [
             {"field": "forename", "is": "aTypical", "value": "firstname"},
             {"field": "surname", "is": "aTypical", "value": "lastname"},
+            {"field": "fullname", "is":  "aTypical", "value":  "fullname"},
             { "not": { "field": "forename", "is": "null" }},
-            { "not": { "field":  "surname", "is":  "null"}}
+            { "not": { "field":  "surname", "is":  "null"}},
+            { "not": { "field":  "fullname", "is":  "null"}}
           ]
         }
       ]

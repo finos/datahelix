@@ -35,10 +35,33 @@ public class NameRetrievalService implements CatalogService<NameConstraintTypes,
 
     @Override
     public Set<NameFrequencyHolder> retrieveValues(NameConstraintTypes configuration) {
-        return NAME_TYPE_MAPPINGS.get(configuration).stream()
+        switch (configuration) {
+            case FIRST:
+            case LAST:
+                return generateSingles(NAME_TYPE_MAPPINGS.get(configuration));
+            case FULL:
+                return generateCombinations(generateSingles(NAME_TYPE_MAPPINGS.get(FIRST)),
+                    generateSingles(NAME_TYPE_MAPPINGS.get(LAST)));
+            default:
+                throw new UnsupportedOperationException("Name not implemented of type: " + configuration);
+        }
+    }
+
+    private Set<NameFrequencyHolder> generateSingles(Set<String> sources) {
+        return sources.stream()
             .map(this::pathFromClasspath)
             .map(this::parseFromFile)
             .reduce(new HashSet<>(), this::populateSet);
+    }
+
+    private Set<NameFrequencyHolder> generateCombinations(Set<NameFrequencyHolder> firstNames,
+                                                          Set<NameFrequencyHolder> lastNames) {
+        return firstNames.stream()
+            .flatMap(
+                first -> lastNames.stream()
+                    .map(last -> new NameFrequencyHolder(first.getName() + " " + last.getName(),
+                        first.getFrequency() * last.getFrequency())))
+            .collect(Collectors.toSet());
     }
 
     private InputStream pathFromClasspath(String classPath) {
