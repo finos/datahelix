@@ -41,13 +41,6 @@ public final class TreeConstraintNode implements ConstraintNode {
             Collections.emptySet());
     }
 
-    TreeConstraintNode(DecisionNode... decisionNodes) {
-        this(
-            Collections.emptyList(),
-            Arrays.asList(decisionNodes),
-            Collections.emptySet());
-    }
-
     public Collection<AtomicConstraint> getAtomicConstraints() {
         return new HashSet<>(atomicConstraints);
     }
@@ -55,15 +48,6 @@ public final class TreeConstraintNode implements ConstraintNode {
     public Collection<DecisionNode> getDecisions() {
         return decisions;
     }
-
-    public Optional<RowSpec> getOrCreateRowSpec(Supplier<Optional<RowSpec>> createRowSpecFunc) {
-        if (adaptedRowSpec != null)
-            return adaptedRowSpec;
-
-        adaptedRowSpec = createRowSpecFunc.get();
-        return adaptedRowSpec;
-    }
-    private Optional<RowSpec> adaptedRowSpec = null;
 
     public String toString(){
         if (decisions.isEmpty())

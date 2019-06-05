@@ -33,10 +33,9 @@ public class StaticContradictionDecisionTreeValidator {
     }
 
     public ConstraintNode markContradictions(ConstraintNode node, RowSpec accumulatedSpec){
-        final Optional<RowSpec> nominalRowSpec = node.getOrCreateRowSpec(() -> constraintReducer.reduceConstraintsToRowSpec(
+        final Optional<RowSpec> nominalRowSpec =  constraintReducer.reduceConstraintsToRowSpec(
             profileFields,
-            node.getAtomicConstraints()
-        ));
+            node.getAtomicConstraints());
 
         if (!nominalRowSpec.isPresent()) {
             return node.markNode(NodeMarking.STATICALLY_CONTRADICTORY);

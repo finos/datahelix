@@ -63,10 +63,9 @@ public class CartesianProductDecisionTreeWalker implements DecisionTreeWalker {
         }
 
         public Stream<RowSpec> walk(ConstraintNode option, RowSpec accumulatedSpec) {
-            final Optional<RowSpec> nominalRowSpec = option.getOrCreateRowSpec(() -> constraintReducer.reduceConstraintsToRowSpec(
+            final Optional<RowSpec> nominalRowSpec = constraintReducer.reduceConstraintsToRowSpec(
                     profileFields,
-                    option.getAtomicConstraints()
-            ));
+                    option.getAtomicConstraints());
 
             if (!nominalRowSpec.isPresent()) {
                 return Stream.empty();

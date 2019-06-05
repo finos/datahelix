@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 public interface ConstraintNode extends Node {
     Collection<AtomicConstraint> getAtomicConstraints();
     Collection<DecisionNode> getDecisions();
-    Optional<RowSpec> getOrCreateRowSpec(Supplier<Optional<RowSpec>> createRowSpecFunc);
     ConstraintNode removeDecisions(Collection<DecisionNode> decisionsToRemove);
     ConstraintNode cloneWithoutAtomicConstraint(AtomicConstraint excludeAtomicConstraint);
     boolean atomicConstraintExists(AtomicConstraint constraint);
