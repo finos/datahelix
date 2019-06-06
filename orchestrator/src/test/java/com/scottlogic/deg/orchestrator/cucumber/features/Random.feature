@@ -55,7 +55,7 @@ Feature: User can generate valid data for all types (string, integer, decimal, o
     And the generator can generate at most 5 rows
     And foo is anything but matching regex /[a-z]{0,9}/
     Then 5 rows of data are generated
-    And foo contains string data
+    And foo contains only string data
     And foo contains anything but strings matching /[a-z]{0,9}/
     And foo contains anything but null
 
