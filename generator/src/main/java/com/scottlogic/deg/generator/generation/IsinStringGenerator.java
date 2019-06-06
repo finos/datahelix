@@ -5,6 +5,7 @@ import com.scottlogic.deg.generator.utils.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -21,7 +22,7 @@ public class IsinStringGenerator implements StringGenerator {
     private final boolean isNegated;
 
     public IsinStringGenerator() {
-        this(getRegexGeneratorForAllLegalIsinFormats(), false);
+        this(getRegexGeneratorForAllLegalIsinFormats(IsinStringGenerator::getIsinRegexRepresentationForCountry), false);
     }
 
     private IsinStringGenerator(RegexStringGenerator regexGenerator, boolean isNegated) {
@@ -94,9 +95,7 @@ public class IsinStringGenerator implements StringGenerator {
 
     @Override
     public long getValueCount() {
-        return getAllCountryIsinGeneratorsAsStream()
-            .map(StringGenerator::getValueCount)
-            .reduce(0L, Long::sum);
+        return isinRegexGenerator.getValueCount();
     }
 
     @Override
@@ -116,9 +115,15 @@ public class IsinStringGenerator implements StringGenerator {
         }
         final List<Iterable<String>> countryCodeIterables = getAllCountryIsinGeneratorsAsStream()
             .limit(2)
-            .map(isinSansCheckDigitGenerator ->
-                new ProjectingIterable<>(isinSansCheckDigitGenerator.generateInterestingValues(),
-                    isinSansCheckDigit -> isinSansCheckDigit + IsinUtils.calculateIsinCheckDigit(isinSansCheckDigit)))
+            .map(isinGenerator ->
+                new FilteringIterable<>(
+                    new ProjectingIterable<>(
+                        isinGenerator.generateInterestingValues(),
+                        this::replaceCheckDigit
+                    ),
+                    isinRegexGenerator::match
+                )
+            )
             .collect(Collectors.toList());
         return new ConcatenatingIterable<>(countryCodeIterables);
     }
@@ -133,9 +138,15 @@ public class IsinStringGenerator implements StringGenerator {
                     generateAllInvalidCheckDigitIsins()));
         }
         final List<Iterable<String>> countryCodeIterables = getAllCountryIsinGeneratorsAsStream()
-            .map(isinSansCheckDigitGenerator ->
-                new ProjectingIterable<>(isinSansCheckDigitGenerator.generateAllValues(),
-                    isinSansCheckDigit -> isinSansCheckDigit + IsinUtils.calculateIsinCheckDigit(isinSansCheckDigit)))
+            .map(isinGenerator ->
+                new FilteringIterable<>(
+                    new ProjectingIterable<>(
+                        isinGenerator.generateAllValues(),
+                        this::replaceCheckDigit
+                    ),
+                    isinRegexGenerator::match
+                )
+            )
             .collect(Collectors.toList());
         return new ConcatenatingIterable<>(countryCodeIterables);
     }
@@ -151,11 +162,22 @@ public class IsinStringGenerator implements StringGenerator {
                     randomNumberGenerator);
         }
         final List<Iterable<String>> countryCodeIterables = getAllCountryIsinGeneratorsAsStream()
-                .map(isinSansCheckDigitGenerator ->
-                        new ProjectingIterable<>(isinSansCheckDigitGenerator.generateRandomValues(randomNumberGenerator),
-                                isinSansCheckDigit -> isinSansCheckDigit + IsinUtils.calculateIsinCheckDigit(isinSansCheckDigit)))
-                .collect(Collectors.toList());
+            .map(isinGenerator ->
+                new FilteringIterable<>(
+                    new ProjectingIterable<>(
+                        isinGenerator.generateRandomValues(randomNumberGenerator),
+                        this::replaceCheckDigit
+                    ),
+                    isinRegexGenerator::match
+                )
+            )
+            .collect(Collectors.toList());
         return new RandomMergingIterable<>(countryCodeIterables, randomNumberGenerator);
+    }
+
+    private String replaceCheckDigit(String isin) {
+        String isinWithoutCheckDigit = isin.substring(0, isin.length() - 1);
+        return isinWithoutCheckDigit + IsinUtils.calculateIsinCheckDigit(isinWithoutCheckDigit);
     }
 
     private Iterable<String> generateInterestingInvalidCountryStrings() {
@@ -268,25 +290,25 @@ public class IsinStringGenerator implements StringGenerator {
 
     private Stream<StringGenerator> getAllCountryIsinGeneratorsAsStream() {
         return IsinUtils.VALID_COUNTRY_CODES.stream()
-                .map(IsinStringGenerator::getIsinSansCheckDigitGeneratorForCountry);
+                .map(this::getIsinGeneratorForCountry);
     }
 
-    private static StringGenerator getIsinSansCheckDigitGeneratorForCountry(String countryCode) {
+    private StringGenerator getIsinGeneratorForCountry(String countryCode) {
         if (countryCode.equals("GB")) {
-            return new SedolStringGenerator("GB00");
+            return new SedolStringGenerator("GB00", "0", isinRegexGenerator);
         }
         if (countryCode.equals("US")) {
-            return new CusipStringGenerator("US");
+            return new CusipStringGenerator("US", "0", isinRegexGenerator);
         }
-        return new RegexStringGenerator(countryCode + GENERIC_NSIN_REGEX, true);
+        return new RegexStringGenerator(countryCode + GENERIC_NSIN_REGEX + "0", true);
     }
 
-    private static RegexStringGenerator getRegexGeneratorForAllLegalIsinFormats() {
+    private static RegexStringGenerator getRegexGeneratorForAllLegalIsinFormats(Function<String, String> regexProvider) {
         Stream<RegexStringGenerator> countryGenerators = IsinUtils.VALID_COUNTRY_CODES
             .stream()
             .map(
-                country -> new RegexStringGenerator(getIsinRegexRepresentationForCountry(country), true)
-        );
+                country -> new RegexStringGenerator(regexProvider.apply(country), true)
+            );
         RegexStringGenerator.UnionCollector collector = countryGenerators.collect(
             RegexStringGenerator.UnionCollector::new,
             RegexStringGenerator.UnionCollector::accumulate,
@@ -295,18 +317,20 @@ public class IsinStringGenerator implements StringGenerator {
         return collector.getUnionGenerator();
     }
 
-    private static String getIsinRegexRepresentationForCountry(String countryCode) {
-        String sansCheckDigit;
+    private static String getIsinRegexRepresentationForCountrySansCheckDigit(String countryCode) {
         if (countryCode.equals("GB")) {
-            sansCheckDigit = "GB00" + SedolStringGenerator.STANDARD_REGEX_REPRESENTATION;
+            return "GB00" + SedolStringGenerator.STANDARD_REGEX_REPRESENTATION;
         }
         else if (countryCode.equals("US")) {
-            sansCheckDigit = "US" + CusipStringGenerator.STANDARD_REGEX_REPRESENTATION;
+            return "US" + CusipStringGenerator.STANDARD_REGEX_REPRESENTATION;
         }
         else {
-            sansCheckDigit = countryCode + GENERIC_NSIN_REGEX;
+            return countryCode + GENERIC_NSIN_REGEX;
         }
-        return sansCheckDigit + "[0-9]";
+    }
+
+    private static String getIsinRegexRepresentationForCountry(String countryCode) {
+        return getIsinRegexRepresentationForCountrySansCheckDigit(countryCode) + "[0-9]";
     }
 
     private static StringGenerator getNsinGeneratorForCountry(String countryCode) {

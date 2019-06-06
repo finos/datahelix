@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.utils.*;
+import jdk.nashorn.internal.runtime.regexp.joni.Regex;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -11,18 +12,53 @@ import java.util.stream.IntStream;
 public abstract class ChecksummedCodeStringGenerator implements StringGenerator {
     protected final RegexStringGenerator regexGenerator;
     protected final boolean negate;
+    protected final int prefixLength;
+    protected final int codeLength;
+    protected boolean unfulfillable;
 
-    public ChecksummedCodeStringGenerator(String generationPattern) {
-        negate = false;
-        regexGenerator = new RegexStringGenerator(generationPattern, true);
+    public ChecksummedCodeStringGenerator(
+        String generationPattern,
+        int codeLength,
+        int prefixLength
+    ) {
+        this(
+            new RegexStringGenerator(generationPattern, true),
+            false,
+            codeLength,
+            prefixLength
+        );
     }
 
-    public ChecksummedCodeStringGenerator(RegexStringGenerator generator, boolean negate) {
+    public ChecksummedCodeStringGenerator(
+        String generationPattern,
+        RegexStringGenerator intersectingGenerator,
+        int codeLength,
+        int prefixLength
+    ) {
+        this(
+            (RegexStringGenerator) new RegexStringGenerator(generationPattern, true)
+                .intersect(intersectingGenerator),
+            false,
+            codeLength,
+            prefixLength
+        );
+    }
+
+    public ChecksummedCodeStringGenerator(
+        RegexStringGenerator generator,
+        boolean negate,
+        int codeLength,
+        int prefixLength
+    ) {
         this.negate = negate;
         regexGenerator = generator;
+        this.codeLength = codeLength;
+        this.prefixLength = prefixLength;
     }
 
     public abstract char calculateCheckDigit(String str);
+
+    public abstract String fixCheckDigit(String str);
 
     @Override
     public abstract StringGenerator complement();
@@ -79,7 +115,7 @@ public abstract class ChecksummedCodeStringGenerator implements StringGenerator 
         return new FilteringIterable<>(
             new ProjectingIterable<>(
                 regexGenerator.generateInterestingValues(),
-                this::replaceLastCharWithCheckDigit
+                this::fixCheckDigit
             ),
             regexGenerator::match
         );
@@ -95,7 +131,7 @@ public abstract class ChecksummedCodeStringGenerator implements StringGenerator 
         return new FilteringIterable<>(
             new ProjectingIterable<>(
                 regexGenerator.generateAllValues(),
-                this::replaceLastCharWithCheckDigit
+                this::fixCheckDigit
             ),
             regexGenerator::match
         );
@@ -113,7 +149,7 @@ public abstract class ChecksummedCodeStringGenerator implements StringGenerator 
         return new FilteringIterable<>(
             new ProjectingIterable<>(
                 regexGenerator.generateRandomValues(randomNumberGenerator),
-                this::replaceLastCharWithCheckDigit
+                this::fixCheckDigit
             ),
             regexGenerator::match
         );
@@ -146,7 +182,10 @@ public abstract class ChecksummedCodeStringGenerator implements StringGenerator 
         return new FlatteningIterable<>(
             valueSupplier.get(),
             initialValue -> {
-                String sansCheckDigit = initialValue.substring(0, initialValue.length() - 1);
+                String sansCheckDigit = initialValue.substring(
+                    prefixLength,
+                    prefixLength + codeLength - 1
+                );
                 final char checkDigit = calculateCheckDigit(sansCheckDigit);
                 return IntStream.range(0, 10).boxed()
                     .map(digit -> Character.forDigit(digit, 10))
@@ -154,13 +193,6 @@ public abstract class ChecksummedCodeStringGenerator implements StringGenerator 
                     .map(digit -> sansCheckDigit + digit)
                     .collect(Collectors.toList());
             });
-    }
-
-    private String replaceLastCharWithCheckDigit(String str) {
-        if (str.length() <= 1) { return str; }
-        final String sansCheckDigit = str.substring(0, str.length() - 1);
-        final char checkDigit = calculateCheckDigit(sansCheckDigit);
-        return sansCheckDigit + checkDigit;
     }
 
     @Override

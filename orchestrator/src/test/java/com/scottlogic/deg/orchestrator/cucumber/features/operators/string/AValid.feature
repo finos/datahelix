@@ -323,6 +323,13 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | "GB0002634946" |
       | null           |
 
+  Scenario: aValid ISIN run against a contradicting matchingRegex (invalid checksum) should only generate null data
+    Given foo is a valid "ISIN"
+    And foo is matching regex "US9311421038"
+    Then the following data should be generated:
+      | foo            |
+      | null           |
+
   Scenario: aValid run against a non contradicting aValid SEDOL should be successful
     Given foo is a valid "SEDOL"
     And foo is a valid "SEDOL"
