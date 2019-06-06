@@ -10,9 +10,7 @@ import com.scottlogic.deg.output.guice.OutputFormat;
 import picocli.CommandLine;
 
 import java.io.File;
-import java.net.URI;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import static com.scottlogic.deg.generator.config.detail.CombinationStrategyType.MINIMAL;
 import static com.scottlogic.deg.common.util.Defaults.DEFAULT_MAX_ROWS;
@@ -159,7 +157,7 @@ public class GenerateCommandLine implements AllConfigSource, Runnable {
 
     @Override
     public Path getOutputPath() {
-        return useStdOut() ? Paths.get("unused path") : outputPath;
+        return outputPath;
     }
 
     @Override
