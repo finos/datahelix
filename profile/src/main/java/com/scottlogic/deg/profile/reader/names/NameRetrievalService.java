@@ -25,7 +25,7 @@ public class NameRetrievalService implements CatalogService<NameConstraintTypes,
 
     private static final Map<NameConstraintTypes, Set<String>> NAME_TYPE_MAPPINGS;
 
-    private final NamePopulator<InputStream> populator;
+    private final NamePopulator<String> populator;
 
     static {
         NAME_TYPE_MAPPINGS = new EnumMap<>(NameConstraintTypes.class);
@@ -33,7 +33,7 @@ public class NameRetrievalService implements CatalogService<NameConstraintTypes,
         NAME_TYPE_MAPPINGS.put(FIRST, Stream.of(FIRST_MALE_NAMES, FIRST_FEMALE_NAMES).collect(Collectors.toSet()));
     }
 
-    public NameRetrievalService(final NamePopulator<InputStream> populator) {
+    public NameRetrievalService(final NamePopulator<String> populator) {
         this.populator = populator;
     }
 
@@ -53,8 +53,7 @@ public class NameRetrievalService implements CatalogService<NameConstraintTypes,
 
     private Set<NameFrequencyHolder> generateSingles(Set<String> sources) {
         return sources.stream()
-            .map(this::pathFromClasspath)
-            .map(this::parseFromFile)
+            .map(populator::retrieveNames)
             .reduce(new HashSet<>(), this::populateSet);
     }
 
@@ -66,18 +65,6 @@ public class NameRetrievalService implements CatalogService<NameConstraintTypes,
                     .map(last -> new NameFrequencyHolder(first.getName() + " " + last.getName(),
                         first.getFrequency() * last.getFrequency())))
             .collect(Collectors.toSet());
-    }
-
-    private InputStream pathFromClasspath(String classPath) {
-        return Optional.ofNullable(this.getClass()
-            .getClassLoader()
-            .getResourceAsStream(classPath)
-        ).orElseThrow(() -> new IllegalArgumentException("Path not found on classpath."));
-    }
-
-
-    private Set<NameFrequencyHolder> parseFromFile(InputStream path) {
-        return populator.retrieveNames(path);
     }
 
     private Set<NameFrequencyHolder> populateSet(Set<NameFrequencyHolder> a, Set<NameFrequencyHolder> b) {
