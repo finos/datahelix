@@ -3,7 +3,6 @@ package com.scottlogic.deg.profile.reader.names;
 import com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes;
 import com.scottlogic.deg.profile.reader.CatalogService;
 
-import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -60,11 +59,17 @@ public class NameRetrievalService implements CatalogService<NameConstraintTypes,
     private Set<NameFrequencyHolder> generateCombinations(Set<NameFrequencyHolder> firstNames,
                                                           Set<NameFrequencyHolder> lastNames) {
         return firstNames.stream()
-            .flatMap(
-                first -> lastNames.stream()
-                    .map(last -> new NameFrequencyHolder(first.getName() + " " + last.getName(),
-                        first.getFrequency() * last.getFrequency())))
+            .flatMap(first -> lastNames.stream()
+                .map(last -> combineFirstAndLastName(first, last)))
             .collect(Collectors.toSet());
+    }
+
+    private NameFrequencyHolder combineFirstAndLastName(final NameFrequencyHolder first,
+                                                        final NameFrequencyHolder last) {
+        final String name = first.getName() + " " + last.getName();
+        // TODO: Check frequency for overflow
+        final int frequency = first.getFrequency() * last.getFrequency();
+        return new NameFrequencyHolder(name, frequency);
     }
 
     private Set<NameFrequencyHolder> populateSet(Set<NameFrequencyHolder> a, Set<NameFrequencyHolder> b) {
