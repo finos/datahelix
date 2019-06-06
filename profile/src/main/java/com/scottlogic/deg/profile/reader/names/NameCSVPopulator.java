@@ -8,13 +8,25 @@ import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class NameCSVPopulator implements NamePopulator<InputStream> {
+public class NameCSVPopulator implements NamePopulator<String> {
 
     @Override
-    public Set<NameFrequencyHolder> retrieveNames(InputStream is) {
+    public Set<NameFrequencyHolder> retrieveNames(String input) {
+        return readFromFile(pathFromClasspath(input));
+    }
+
+    private InputStream pathFromClasspath(String classPath) {
+        return Optional.ofNullable(this.getClass()
+            .getClassLoader()
+            .getResourceAsStream(classPath)
+        ).orElseThrow(() -> new IllegalArgumentException("Path not found on classpath."));
+    }
+
+    private Set<NameFrequencyHolder> readFromFile(InputStream is) {
         try {
             return CSVParser.parse(
                 is,
