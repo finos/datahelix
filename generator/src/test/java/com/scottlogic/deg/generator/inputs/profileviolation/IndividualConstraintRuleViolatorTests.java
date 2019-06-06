@@ -1,16 +1,14 @@
 package com.scottlogic.deg.generator.inputs.profileviolation;
 
+import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.Rule;
+import com.scottlogic.deg.common.profile.RuleInformation;
+import com.scottlogic.deg.common.profile.constraints.Constraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsLessThanConstantConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.Rule;
-import com.scottlogic.deg.common.profile.constraints.Constraint;
-import com.scottlogic.deg.common.profile.constraintdetail.UnviolatableConstraintException;
-import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.common.profile.constraints.atomic.IsLessThanConstantConstraint;
-import com.scottlogic.deg.common.profile.constraints.atomic.ViolatedAtomicConstraint;
-import com.scottlogic.deg.common.profile.RuleInformation;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +22,6 @@ import java.util.*;
 import static com.scottlogic.deg.generator.inputs.profileviolation.TypeEqualityHelper.assertRuleTypeEquality;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
@@ -60,14 +57,11 @@ public class IndividualConstraintRuleViolatorTests {
     }
 
     /**
-     * Tests that the violate method with an AND constraint returns the correct OR constraint.
-     * VIOLATE(AND(X, Y)) reduces to
-     *         OR(
-     *            AND(VIOLATE(X), Y),
-     *            AND(X, VIOLATE(Y)))
+     * Tests that the violate method with an AND constraint returns the correct negated constraint.
+     * VIOLATE(AND(X, Y)) reduces to NOT(AND(X, Y))
      */
     @Test
-    public void violateRule_withAndConstraint_returnsOrConstraint() {
+    public void violateRule_withAndConstraint_returnsNegatedEquivalent() {
         //Arrange
         AndConstraint andConstraint = new AndConstraint(atomicConstraint1, atomicConstraint2);
         inputConstraints.add(andConstraint);
@@ -81,10 +75,7 @@ public class IndividualConstraintRuleViolatorTests {
         Rule expectedRule = new Rule(
             ruleInformation,
             Collections.singleton(
-                new OrConstraint(
-                    new AndConstraint(new ViolatedAtomicConstraint(atomicConstraint1.negate()), atomicConstraint2),
-                    new AndConstraint(atomicConstraint1, new ViolatedAtomicConstraint(atomicConstraint2.negate()))
-                ))
+                andConstraint.negate())
         );
 
         assertThat("The violate method should have returned the correct shaped rule", outputRule, sameBeanAs(expectedRule));
@@ -117,11 +108,11 @@ public class IndividualConstraintRuleViolatorTests {
     }
 
     /**
-     * Tests that the violate method with an OR constraint returns the correct AND constraint.
-     * VIOLATE(OR(X, Y)) reduces to AND(VIOLATE(X), VIOLATE(Y))
+     * Tests that the violate method with an OR constraint returns the correct negated constraint.
+     * VIOLATE(OR(X, Y)) reduces to NOT(OR(X, Y))
      */
     @Test
-    public void violateRule_withOrConstraint_returnsAndConstraint() {
+    public void violateRule_withOrConstraint_returnsNegatedEquivalent() {
         //Arrange
         OrConstraint orConstraint = new OrConstraint(atomicConstraint1, atomicConstraint2);
         inputConstraints.add(orConstraint);
@@ -135,10 +126,7 @@ public class IndividualConstraintRuleViolatorTests {
         Rule expectedRule = new Rule(
             ruleInformation,
             Collections.singleton(
-                new AndConstraint(
-                    new ViolatedAtomicConstraint(atomicConstraint1.negate()),
-                    new ViolatedAtomicConstraint(atomicConstraint2.negate())
-                ))
+                orConstraint.negate())
         );
 
         assertThat("The violate method should have returned the correct shaped rule", outputRule, sameBeanAs(expectedRule));
@@ -171,8 +159,8 @@ public class IndividualConstraintRuleViolatorTests {
     }
 
     /**
-     * Tests that the violate method with an IF THEN constraint (conditional constraint) returns the correct AND
-     * constraint. VIOLATE(IF(X, then: Y)) reduces to AND(X, VIOLATE(Y))
+     * Tests that the violate method with an IF THEN constraint (conditional constraint) returns the correct negated
+     * constraint. VIOLATE(IF(X, then: Y)) reduces to NOT(IF(X, then: Y))
      */
     @Test
     public void violateRule_withIfThenConstraint_returnsAndConstraint() {
@@ -189,10 +177,7 @@ public class IndividualConstraintRuleViolatorTests {
         Rule expectedRule = new Rule(
             ruleInformation,
             Collections.singleton(
-                new AndConstraint(
-                    atomicConstraint1,
-                    new ViolatedAtomicConstraint(atomicConstraint2.negate())
-                ))
+                ifThenConstraint.negate())
         );
 
         assertThat("The violate method should have returned the correct shaped rule", outputRule, sameBeanAs(expectedRule));
@@ -225,9 +210,9 @@ public class IndividualConstraintRuleViolatorTests {
     }
 
     /**
-     * Tests that the violate method with an IF THEN ELSE constraint (conditional constraint) returns the correct OR
+     * Tests that the violate method with an IF THEN ELSE constraint (conditional constraint) returns the correct negated
      * constraint.
-     * VIOLATE(IF(X, then: Y, else: Z)) reduces to OR(AND(X, VIOLATE(Y)), AND(VIOLATE(X), VIOLATE(Z)))
+     * VIOLATE(IF(X, then: Y, else: Z)) reduces to NOT(IF(X, then: Y, else: Z))
      */
     @Test
     public void violateRule_withIfThenElseConstraint_returnsAndConstraint() {
@@ -243,15 +228,7 @@ public class IndividualConstraintRuleViolatorTests {
         //Assert
         Rule expectedRule = new Rule(
             ruleInformation,
-            Collections.singleton(
-                new OrConstraint(
-                    new AndConstraint(
-                        atomicConstraint1,
-                        new ViolatedAtomicConstraint(atomicConstraint2.negate())),
-                    new AndConstraint(
-                        new ViolatedAtomicConstraint(atomicConstraint1.negate()),
-                        new ViolatedAtomicConstraint(atomicConstraint3.negate()))
-                ))
+            Collections.singleton(ifThenElseConstraint.negate())
         );
 
         assertThat("The violate method should have returned the correct shaped rule", outputRule, sameBeanAs(expectedRule));
@@ -301,8 +278,7 @@ public class IndividualConstraintRuleViolatorTests {
         Rule expectedRule = new Rule(
             ruleInformation,
             Collections.singleton(
-                new ViolatedAtomicConstraint(atomicConstraint1.negate())
-                )
+                atomicConstraint1.negate())
         );
 
         assertThat("The violate method should have returned the correct shaped rule", outputRule, sameBeanAs(expectedRule));
@@ -310,9 +286,9 @@ public class IndividualConstraintRuleViolatorTests {
     }
 
     /**
-     * Tests that the violate method with multiple atomic constraint returns the correct combinations of negated atomic
-     * constraints.
-     * VIOLATE(RULE(X,Y,Z)) reduces to VIOLATE(X),VIOLATE(Y),VIOLATE(Z)
+     * Tests that the violate method with multiple atomic constraint returns the correct combinations of negated AND
+     * constraint.
+     * VIOLATE(RULE(X,Y,Z)) reduces to NOT(AND(X, Y, Z))
      */
     @Test
     public void violateRule_withMultipleAtomicConstraints_returnsViolatedConstraints() {
@@ -330,47 +306,12 @@ public class IndividualConstraintRuleViolatorTests {
         Rule expectedRule = new Rule(
             ruleInformation,
             Arrays.asList(
-                new OrConstraint(
-                    new AndConstraint(
-                        new ViolatedAtomicConstraint(atomicConstraint1.negate()),
-                        atomicConstraint2,
-                        atomicConstraint3
-                    ),
-                    new AndConstraint(
-                        atomicConstraint1,
-                        new ViolatedAtomicConstraint(atomicConstraint2.negate()),
-                        atomicConstraint3
-                    ),
-                    new AndConstraint(
-                        atomicConstraint1,
-                        atomicConstraint2,
-                        new ViolatedAtomicConstraint(atomicConstraint3.negate())
-                    )
-                )
+                new AndConstraint(atomicConstraint1, atomicConstraint2, atomicConstraint3).negate()
             )
         );
 
         assertThat("The violate method should have returned the correct shaped rule", outputRule, sameBeanAs(expectedRule));
         assertRuleTypeEquality(expectedRule, outputRule);
-    }
-
-    /**
-     * Tests that the violate method with unsupported constraint type throws UnviolatableConstraintException exception.
-     */
-    @Test
-    public void violateRule_withUnsupportedConstraints_throwsRuntimeException() {
-        //Arrange
-        Constraint mockConstraint = Mockito.mock(Constraint.class);
-        inputConstraints.add(mockConstraint);
-
-        Rule inputRule = new Rule(ruleInformation, inputConstraints);
-
-        //Act/Assert
-        assertThrows(
-            UnviolatableConstraintException.class,
-            () -> target.violateRule(inputRule),
-            "Violate method should throw with a non-specific Constraint type object."
-        );
     }
 
     /**
@@ -426,7 +367,7 @@ public class IndividualConstraintRuleViolatorTests {
     /**
      * Tests that the violate method with multiple atomic constraint and the first constraint filtered out returns a
      * rule including the non-violated constraint and the combinations of the remaining negated constraint.
-     * VIOLATE(RULE(X,Y,Z)), ignore constraint X reduces to X,VIOLATE(Y),VIOLATE(Z)
+     * VIOLATE(RULE(X,Y,Z)), ignore constraint X reduces to AND(X, NOT(AND(X, Y)))
      */
     @Test
     public void violateRule_withViolationFilterFirst_returnsViolatedAndNonViolatedConstraints() {
@@ -450,16 +391,10 @@ public class IndividualConstraintRuleViolatorTests {
             ruleInformation,
             Arrays.asList(
                 atomicConstraint1,
-                new OrConstraint(
-                    new AndConstraint(
-                        new ViolatedAtomicConstraint(atomicConstraint2.negate()),
-                        atomicConstraint3
-                    ),
-                    new AndConstraint(
-                        atomicConstraint2,
-                        new ViolatedAtomicConstraint(atomicConstraint3.negate())
-                    )
-                )
+                new AndConstraint(
+                    atomicConstraint2,
+                    atomicConstraint3
+                ).negate()
             )
         );
 
@@ -470,7 +405,7 @@ public class IndividualConstraintRuleViolatorTests {
     /**
      * Tests that the violate method with multiple atomic constraint and the last constraint filtered out returns a
      * rule including the non-violated constraint and the combinations of the remaining negated constraint.
-     * VIOLATE(RULE(X,Y,Z)), ignore constraint Z reduces to Z,VIOLATE(X),VIOLATE(Y)
+     * VIOLATE(RULE(X,Y,Z)), ignore constraint Z reduces to AND(Z, NOT(AND(X, Y)))
      */
     @Test
     public void violateRule_withViolationFilterLast_returnsViolatedAndNonViolatedConstraints() {
@@ -494,16 +429,10 @@ public class IndividualConstraintRuleViolatorTests {
             ruleInformation,
             Arrays.asList(
                 atomicConstraint3,
-                new OrConstraint(
-                    new AndConstraint(
-                        new ViolatedAtomicConstraint(atomicConstraint1.negate()),
-                        atomicConstraint2
-                    ),
-                    new AndConstraint(
-                        atomicConstraint1,
-                        new ViolatedAtomicConstraint(atomicConstraint2.negate())
-                    )
-                )
+                new AndConstraint(
+                    atomicConstraint1,
+                    atomicConstraint2
+                ).negate()
             )
         );
 

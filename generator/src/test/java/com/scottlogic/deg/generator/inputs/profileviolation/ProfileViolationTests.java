@@ -1,17 +1,13 @@
 package com.scottlogic.deg.generator.inputs.profileviolation;
 
-import com.scottlogic.deg.common.profile.constraints.atomic.*;
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.common.profile.Rule;
+import com.scottlogic.deg.common.profile.*;
+import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.builders.*;
-import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
-import com.scottlogic.deg.common.profile.ViolatedProfile;
 import com.scottlogic.deg.generator.violations.filters.ConstraintTypeViolationFilter;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,12 +15,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.nio.file.Path;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
@@ -33,7 +27,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.scottlogic.deg.generator.inputs.profileviolation.TypeEqualityHelper.assertProfileListsAreEquivalent;
-import static org.mockito.Mockito.*;
 
 /**
  * Defines tests for all business logic involved in Profile Violation.
@@ -92,7 +85,7 @@ public class ProfileViolationTests {
             .withEqualToConstraint(STATIC_FIELD, "hello").negate();
 
         BaseConstraintBuilder<Constraint> violatedNotConstraintBuilder = new SingleConstraintBuilder()
-            .withEqualToConstraint(STATIC_FIELD, "hello").wrapAtomicWithViolate();
+            .withEqualToConstraint(STATIC_FIELD, "hello");
 
         BaseConstraintBuilder<AndConstraint> andConstraintBuilder = new AndBuilder()
             .withGreaterThanConstraint(STATIC_FIELD, 100)
@@ -100,12 +93,12 @@ public class ProfileViolationTests {
 
         BaseConstraintBuilder<OrConstraint> violatedAndConstraintBuilder = new OrBuilder()
             .withAndConstraint(new AndBuilder()
-                .withGreaterThanConstraint(STATIC_FIELD, 100).negate().wrapAtomicWithViolate()
+                .withGreaterThanConstraint(STATIC_FIELD, 100).negate()
                 .withLessThanConstraint(STATIC_FIELD, 200)
             )
             .withAndConstraint(new AndBuilder()
                 .withGreaterThanConstraint(STATIC_FIELD, 100)
-                .withLessThanConstraint(STATIC_FIELD, 200).negate().wrapAtomicWithViolate()
+                .withLessThanConstraint(STATIC_FIELD, 200).negate()
             );
 
         BaseConstraintBuilder<OrConstraint> orConstraintBuilder = new OrBuilder()
@@ -113,8 +106,8 @@ public class ProfileViolationTests {
             .withBeforeConstraint(STATIC_FIELD, OffsetDateTime.of(2019, 1, 15, 12, 0, 0, 0, ZoneOffset.UTC));
 
         BaseConstraintBuilder<AndConstraint> violatedOrConstraintBuilder = new AndBuilder()
-            .withAfterConstraint(STATIC_FIELD, OffsetDateTime.of(2018, 1, 15, 12, 0, 0, 0, ZoneOffset.UTC)).negate().wrapAtomicWithViolate()
-            .withBeforeConstraint(STATIC_FIELD, OffsetDateTime.of(2019, 1, 15, 12, 0, 0, 0, ZoneOffset.UTC)).negate().wrapAtomicWithViolate();
+            .withAfterConstraint(STATIC_FIELD, OffsetDateTime.of(2018, 1, 15, 12, 0, 0, 0, ZoneOffset.UTC)).negate()
+            .withBeforeConstraint(STATIC_FIELD, OffsetDateTime.of(2019, 1, 15, 12, 0, 0, 0, ZoneOffset.UTC)).negate();
 
         BaseConstraintBuilder<ConditionalConstraint> ifThenConstraintBuilder = new IfBuilder()
             .withIf(new SingleConstraintBuilder().withOfTypeConstraint(STATIC_FIELD, IsOfTypeConstraint.Types.NUMERIC))
@@ -122,7 +115,7 @@ public class ProfileViolationTests {
 
         BaseConstraintBuilder<AndConstraint> violatedIfThenConstraintBuilder = new AndBuilder()
             .withOfTypeConstraint(STATIC_FIELD, IsOfTypeConstraint.Types.NUMERIC)
-            .withInSetConstraint(STATIC_FIELD, new Object[]{10, 100}).negate().wrapAtomicWithViolate();
+            .withInSetConstraint(STATIC_FIELD, new Object[]{10, 100}).negate();
 
         BaseConstraintBuilder<ConditionalConstraint> ifThenElseConstraintBuilder = new IfBuilder()
             .withIf(new SingleConstraintBuilder().withOfLengthConstraint(STATIC_FIELD, 5))
@@ -132,11 +125,11 @@ public class ProfileViolationTests {
         BaseConstraintBuilder<OrConstraint> violatedIfThenElseConstraintBuilder = new OrBuilder()
             .withAndConstraint(new AndBuilder()
                 .withOfLengthConstraint(STATIC_FIELD, 5)
-                .withMatchesRegexConstraint(STATIC_FIELD, Pattern.compile("abcde")).negate().wrapAtomicWithViolate()
+                .withMatchesRegexConstraint(STATIC_FIELD, Pattern.compile("abcde")).negate()
             )
             .withAndConstraint(new AndBuilder()
-                .withOfLengthConstraint(STATIC_FIELD, 5).negate().wrapAtomicWithViolate()
-                .withContainsRegexConstraint(STATIC_FIELD, Pattern.compile("z")).negate().wrapAtomicWithViolate()
+                .withOfLengthConstraint(STATIC_FIELD, 5).negate()
+                .withContainsRegexConstraint(STATIC_FIELD, Pattern.compile("z")).negate()
             );
 
         return Stream.of(
@@ -199,7 +192,7 @@ public class ProfileViolationTests {
             .build();
 
         Rule violatedRule = new RuleBuilder("Input Rule")
-            .withAtomicConstraint(field1, atomicConstraint, value).negate().wrapAtomicWithViolate()
+            .withAtomicConstraint(field1, atomicConstraint, value).negate()
             .build();
 
         TestProfiles testProfiles = createTestProfiles(
@@ -250,16 +243,10 @@ public class ProfileViolationTests {
             .build();
 
         Rule violatedRule1 = new RuleBuilder("Rule 1")
-            .withOrConstraint(new OrBuilder()
-                .withAndConstraint(new AndBuilder()
-                    .withLessThanConstraint(field1, 100).negate().wrapAtomicWithViolate()
-                    .withGreaterThanConstraint(field2, 200)
-                )
-                .withAndConstraint(new AndBuilder()
-                    .withLessThanConstraint(field1, 100)
-                    .withGreaterThanConstraint(field2, 200).negate().wrapAtomicWithViolate()
-                )
-            )
+            .withAndConstraint(new AndBuilder()
+                .withLessThanConstraint(field1, 100)
+                .withGreaterThanConstraint(field2, 200)
+            ).negate()
             .build();
 
         TestProfiles testProfiles = createTestProfiles(
@@ -288,16 +275,10 @@ public class ProfileViolationTests {
             .build();
 
         Rule violatedRule = new RuleBuilder("Rule 1")
-            .withOrConstraint(new OrBuilder()
-                .withAndConstraint(new AndBuilder()
-                    .withLessThanConstraint(field1, 100).wrapAtomicWithViolate()
-                    .withGreaterThanConstraint(field2, 200)
-                )
-                .withAndConstraint(new AndBuilder()
-                    .withLessThanConstraint(field1, 100).negate()
-                    .withGreaterThanConstraint(field2, 200).negate().wrapAtomicWithViolate()
-                )
-            )
+            .withAndConstraint(new AndBuilder()
+                .withLessThanConstraint(field1, 100).negate()
+                .withGreaterThanConstraint(field2, 200)
+            ).negate()
             .build();
 
         TestProfiles testProfiles = createTestProfiles(
@@ -332,29 +313,17 @@ public class ProfileViolationTests {
             .build();
 
         Rule violatedRule1 = new RuleBuilder("Rule 1")
-            .withOrConstraint(new OrBuilder()
-                .withAndConstraint(new AndBuilder()
-                    .withLessThanConstraint(field1, 100).negate().wrapAtomicWithViolate()
-                    .withLessThanConstraint(field1, 200)
-                )
-                .withAndConstraint(new AndBuilder()
-                    .withLessThanConstraint(field1, 100)
-                    .withLessThanConstraint(field1, 200).negate().wrapAtomicWithViolate()
-                )
-            )
+            .withAndConstraint(new AndBuilder()
+                .withLessThanConstraint(field1, 100)
+                .withLessThanConstraint(field1, 200)
+            ).negate()
             .build();
 
         Rule violatedRule2 = new RuleBuilder("Rule 2")
-            .withOrConstraint(new OrBuilder()
-                .withAndConstraint(new AndBuilder()
-                    .withGreaterThanConstraint(field1, 10).negate().wrapAtomicWithViolate()
-                    .withGreaterThanConstraint(field1, 15)
-                )
-                .withAndConstraint(new AndBuilder()
-                    .withGreaterThanConstraint(field1, 10)
-                    .withGreaterThanConstraint(field1, 15).negate().wrapAtomicWithViolate()
-                )
-            )
+            .withAndConstraint(new AndBuilder()
+                .withLessThanConstraint(field1, 10)
+                .withLessThanConstraint(field1, 15)
+            ).negate()
             .build();
 
         TestProfiles testProfiles = createTestProfiles(
@@ -373,7 +342,7 @@ public class ProfileViolationTests {
     /**
      * Tests that an if-then constraint nested inside the conditional of another if-then constraint violates as
      * expected.
-     * In shorthand where A,B,C are atomic constraints: VIOLATE(IF(IF A THEN B) THEN C) -> (IF A THEN B) AND VIOLATE(C)
+     * In shorthand where A,B,C are atomic constraints: VIOLATE(IF(IF A THEN B) THEN C) -> NOT(IF(IF A THEN B) THEN C)
      *
      * @throws IOException if the manifest writer fails to write.
      */
@@ -393,13 +362,13 @@ public class ProfileViolationTests {
             .build();
 
         Rule violatedRule = new RuleBuilder(ruleName)
-            .withAndConstraint(new AndBuilder()
-                .withIfConstraint(new IfBuilder()
+            .withIfConstraint(new IfBuilder()
+                .withIf(new IfBuilder()
                     .withIf(A)
                     .withThen(B)
                 )
-                .appendBuilder(C.negate().wrapAtomicWithViolate())
-            )
+                .withThen(C)
+            ).negate()
             .build();
 
         TestProfiles testProfiles = createTestProfiles(
@@ -421,8 +390,7 @@ public class ProfileViolationTests {
      * as expected.
      * In shorthand where A,B,C,D,E are atomic constraints:
      * VIOLATE(IF(IF A THEN B ELSE C) THEN D ELSE E)
-     * ->   ((IF A THEN B ELSE C) AND VIOLATE(D)) OR (VIOLATE(IF A THEN B ELSE C) AND VIOLATE(E))
-     * ->   ((IF A THEN B ELSE C) AND VIOLATE(D)) OR (((A AND VIOLATE(B)) OR (VIOLATE(A) AND VIOLATE(C))) AND VIOLATE(E))
+     *  -> NOT(IF(IF A THEN B ELSE C) THEN D ELSE E)
      *
      * @throws IOException if the manifest writer fails to write.
      */
@@ -443,31 +411,16 @@ public class ProfileViolationTests {
             )
             .build();
 
-        //((IF A THEN B ELSE C) AND VIOLATE(D)) OR (((A AND VIOLATE(B)) OR (VIOLATE(A) AND VIOLATE(C))) AND VIOLATE(E))
         Rule violatedRule = new RuleBuilder(ruleName)
-            .withOrConstraint(new OrBuilder()
-                .withAndConstraint(new AndBuilder()
-                    .withIfConstraint(new IfBuilder()
-                        .withIf(A)
-                        .withThen(B)
-                        .withElse(C)
-                    )
-                    .appendBuilder(D.negate().wrapAtomicWithViolate())
+            .withIfConstraint(new IfBuilder()
+                .withIf(new IfBuilder()
+                    .withIf(A)
+                    .withThen(B)
+                    .withElse(C)
                 )
-                .withAndConstraint(new AndBuilder()
-                    .withOrConstraint(new OrBuilder()
-                        .withAndConstraint(new AndBuilder()
-                            .appendBuilder(A)
-                            .appendBuilder(B.negate().wrapAtomicWithViolate())
-                        )
-                        .withAndConstraint(new AndBuilder()
-                            .appendBuilder(A.negate().wrapAtomicWithViolate())
-                            .appendBuilder(C.negate().wrapAtomicWithViolate())
-                        )
-                    )
-                    .appendBuilder(E.negate().wrapAtomicWithViolate())
-                )
-            )
+                .withThen(D)
+                .withElse(E)
+            ).negate()
             .build();
 
         TestProfiles testProfiles = createTestProfiles(
@@ -489,8 +442,7 @@ public class ProfileViolationTests {
      * as expected.
      * In shorthand where A,B,C,D,E are atomic constraints:
      * VIOLATE(IF A THEN (IF B THEN C ELSE D) ELSE E)
-     * ->   (A AND VIOLATE(IF B THEN C ELSE D)) OR (VIOLATE(A) AND VIOLATE(E))
-     * ->   (A AND ((B AND VIOLATE(C)) OR (VIOLATE(B) AND VIOLATE(D))) OR (VIOLATE(A) AND VIOLATE(E))
+     * ->   NOT(IF A THEN (IF B THEN C ELSE D) ELSE E)
      *
      * @throws IOException if the manifest writer fails to write.
      */
@@ -511,27 +463,17 @@ public class ProfileViolationTests {
             )
             .build();
 
-        //(A AND ((B AND VIOLATE(C)) OR (VIOLATE(B) AND VIOLATE(D))) OR (VIOLATE(A) AND VIOLATE(E))
+
         Rule violatedRule = new RuleBuilder(ruleName)
-            .withOrConstraint(new OrBuilder()
-                .withAndConstraint(new AndBuilder()
-                    .appendBuilder(A)
-                    .withOrConstraint(new OrBuilder()
-                        .withAndConstraint(new AndBuilder()
-                            .appendBuilder(B)
-                            .appendBuilder(C.negate().wrapAtomicWithViolate())
-                        )
-                        .withAndConstraint(new AndBuilder()
-                            .appendBuilder(B.negate().wrapAtomicWithViolate())
-                            .appendBuilder(D.negate().wrapAtomicWithViolate())
-                        )
-                    )
+            .withIfConstraint(new IfBuilder()
+                .withIf(A)
+                .withThen(new IfBuilder()
+                    .withIf(B)
+                    .withThen(C)
+                    .withElse(D)
                 )
-                .withAndConstraint(new AndBuilder()
-                    .appendBuilder(A.negate().wrapAtomicWithViolate())
-                    .appendBuilder(E.negate().wrapAtomicWithViolate())
-                )
-            )
+                .withElse(E)
+            ).negate()
             .build();
 
         TestProfiles testProfiles = createTestProfiles(
@@ -552,8 +494,7 @@ public class ProfileViolationTests {
      * as expected.
      * In shorthand where A,B,C,D,E are atomic constraints:
      * VIOLATE(IF A THEN B ELSE (IF C THEN D ELSE E))
-     * ->   (A AND VIOLATE(B)) OR (VIOLATE(A) AND VIOLATE(IF C THEN D ELSE E))
-     * ->   (A AND VIOLATE(B)) OR (VIOLATE(A) AND ((C AND VIOLATE(D)) OR (VIOLATE(C) AND VIOLATE(E))))
+     * ->   NOT(IF A THEN B ELSE (IF C THEN D ELSE E))
      *
      * @throws IOException if the manifest writer fails to write.
      */
@@ -573,27 +514,17 @@ public class ProfileViolationTests {
             )
             .build();
 
-        //(A AND VIOLATE(B)) OR (VIOLATE(A) AND ((C AND VIOLATE(D)) OR (VIOLATE(C) AND VIOLATE(E))))
+
         Rule violatedRule = new RuleBuilder(ruleName)
-            .withOrConstraint(new OrBuilder()
-                .withAndConstraint(new AndBuilder()
-                    .appendBuilder(A)
-                    .appendBuilder(B.negate().wrapAtomicWithViolate())
+            .withIfConstraint(new IfBuilder()
+                .withIf(A)
+                .withThen(B)
+                .withElse(new IfBuilder()
+                    .withIf(C)
+                    .withThen(D)
+                    .withElse(E)
                 )
-                .withAndConstraint(new AndBuilder()
-                    .appendBuilder(A.negate().wrapAtomicWithViolate())
-                    .withOrConstraint(new OrBuilder()
-                        .withAndConstraint(new AndBuilder()
-                            .appendBuilder(C)
-                            .appendBuilder(D.negate().wrapAtomicWithViolate())
-                        )
-                        .withAndConstraint(new AndBuilder()
-                            .appendBuilder(C.negate().wrapAtomicWithViolate())
-                            .appendBuilder(E.negate().wrapAtomicWithViolate())
-                        )
-                    )
-                )
-            )
+            ).negate()
             .build();
 
         TestProfiles testProfiles = createTestProfiles(
@@ -612,7 +543,10 @@ public class ProfileViolationTests {
     /**
      * Tests that an if-then constraint nested within inside an if statement of a not-if-then constraint violates
      * as expected.
-     * In shorthand where A,B,C are atomic constraints: VIOLATE(IF(NOT(IF A THEN B)) THEN C) -> NOT(IF A THEN B) AND VIOLATE(C)
+     * In shorthand where A,B,C are atomic constraints:
+     *   VIOLATE(IF(NOT(IF A THEN B)) THEN C)
+     *   -> NOT(IF(NOT(IF A THEN B)) THEN C)
+     *
      */
     @Test
     public void violate_nestedIfThenInsideIfOfIfNotThen_producesViolatedProfiles() throws IOException {
@@ -626,13 +560,11 @@ public class ProfileViolationTests {
             .build();
 
         Rule violatedRule = new RuleBuilder("rule name")
-            .withAndConstraint(new AndBuilder()
-                .withIfConstraint(new IfBuilder()
+            .withIfConstraint(new IfBuilder()
+                .withIf(new IfBuilder()
                     .withIf(A)
-                    .withThen(B)
-                ).negate()
-                .appendBuilder(C).negate().wrapAtomicWithViolate()
-            )
+                    .withThen(B)).negate()
+                .withThen(C)).negate()
             .build();
 
         TestProfiles testProfiles = createTestProfiles(
@@ -669,7 +601,7 @@ public class ProfileViolationTests {
             .build();
 
         Rule violatedRule = new RuleBuilder("Nested Not Rule")
-            .appendBuilder(nestingConstraint).wrapAtomicWithViolate()
+            .appendBuilder(nestingConstraint)
             .build();
 
         TestProfiles testProfiles = createTestProfiles(
@@ -688,7 +620,7 @@ public class ProfileViolationTests {
     /**
      * Tests that a profile violates correctly with nested AND.
      * Where X is any constraint which can contain another constraint and A is an atomic constraint:
-     * VIOLATE(X AND A)) -> (VIOLATE(X) AND A) OR (X AND VIOLATE(A))
+     * VIOLATE(X AND A)) -> NOT(X AND A)
      *
      * @param nestingConstraint         A builder of a constraint which can contain at least one other constraint.
      * @param violatedNestingConstraint The violated form of the previous nesting constraint.
@@ -708,16 +640,10 @@ public class ProfileViolationTests {
             .build();
 
         Rule violatedRule = new RuleBuilder("Nested And Rule")
-            .withOrConstraint(new OrBuilder()
-                .withAndConstraint(new AndBuilder()
-                    .appendBuilder(violatedNestingConstraint)
-                    .appendBuilder(A)
-                )
-                .withAndConstraint(new AndBuilder()
-                    .appendBuilder(nestingConstraint)
-                    .appendBuilder(A).negate().wrapAtomicWithViolate()
-                )
-            )
+            .withAndConstraint(new AndBuilder()
+                .appendBuilder(nestingConstraint)
+                .appendBuilder(A)
+            ).negate()
             .build();
 
         TestProfiles testProfiles = createTestProfiles(
@@ -736,7 +662,7 @@ public class ProfileViolationTests {
     /**
      * Tests that a profile violates correctly with nested OR.
      * Where X is any constraint which can contain another constraint and A is an atomic constraint:
-     * VIOLATE(X OR A)) -> VIOLATE(X) AND VIOLATE(A)
+     * VIOLATE(X OR A)) -> NOT(X OR A))
      *
      * @param nestingConstraint         A builder of a constraint which can contain at least one other constraint.
      * @param violatedNestingConstraint The violated form of the previous nesting constraint.
@@ -756,10 +682,10 @@ public class ProfileViolationTests {
             .build();
 
         Rule violatedRule = new RuleBuilder("Nested Or Rule")
-            .withAndConstraint(new AndBuilder()
-                .appendBuilder(violatedNestingConstraint)
-                .appendBuilder(A).negate().wrapAtomicWithViolate()
-            )
+            .withOrConstraint(new OrBuilder()
+                .appendBuilder(nestingConstraint)
+                .appendBuilder(A)
+            ).negate()
             .build();
 
         TestProfiles testProfiles = createTestProfiles(
@@ -778,7 +704,7 @@ public class ProfileViolationTests {
     /**
      * Tests that a profile violates correctly with nested IF.
      * Where X is any constraint which can contain another constraint and A is an atomic constraint:
-     * VIOLATE(IF X THEN A) -> X AND VIOLATE(A)
+     * VIOLATE(IF X THEN A) -> NOT(IF X THEN A)
      *
      * @param nestingConstraint         A builder of a constraint which can contain at least one other constraint.
      * @param violatedNestingConstraint The violated form of the previous nesting constraint.
@@ -798,10 +724,10 @@ public class ProfileViolationTests {
             .build();
 
         Rule violatedRule = new RuleBuilder("Nested Inside If of If-Then Rule")
-            .withAndConstraint(new AndBuilder()
-                .appendBuilder(nestingConstraint)
-                .appendBuilder(A).negate().wrapAtomicWithViolate()
-            )
+            .withIfConstraint(new IfBuilder()
+                .withIf(nestingConstraint)
+                .withThen(A)
+            ).negate()
             .build();
 
         TestProfiles testProfiles = createTestProfiles(
@@ -820,7 +746,7 @@ public class ProfileViolationTests {
     /**
      * Tests that a profile violates correctly with nested IF.
      * Where X is any constraint which can contain another constraint and A is an atomic constraint:
-     * VIOLATE(IF A THEN X) -> A AND VIOLATE(X)
+     * VIOLATE(IF A THEN X) -> NOT(IF A THEN X)
      *
      * @param nestingConstraint         A builder of a constraint which can contain at least one other constraint.
      * @param violatedNestingConstraint The violated form of the previous nesting constraint.
@@ -840,10 +766,10 @@ public class ProfileViolationTests {
             .build();
 
         Rule violatedRule = new RuleBuilder("Nested Inside Then of If-Then Rule")
-            .withAndConstraint(new AndBuilder()
-                .appendBuilder(A)
-                .appendBuilder(violatedNestingConstraint)
-            )
+            .withIfConstraint(new IfBuilder()
+                .withIf(A)
+                .withThen(nestingConstraint)
+            ).negate()
             .build();
 
         TestProfiles testProfiles = createTestProfiles(
@@ -862,7 +788,7 @@ public class ProfileViolationTests {
     /**
      * Tests that a profile violates correctly with nested IF.
      * Where X is any constraint which can contain another constraint and A,B are atomic constraints:
-     * VIOLATE(IF X THEN A ELSE B) -> (X AND VIOLATE(A)) OR (VIOLATE(X) AND VIOLATE(B))
+     * VIOLATE(IF X THEN A ELSE B) -> NOT(IF X THEN A ELSE B)
      *
      * @param nestingConstraint         A builder of a constraint which can contain at least one other constraint.
      * @param violatedNestingConstraint The violated form of the previous nesting constraint.
@@ -883,16 +809,11 @@ public class ProfileViolationTests {
             .build();
 
         Rule violatedRule = new RuleBuilder("Nested Inside If of If-Then-Else Rule")
-            .withOrConstraint(new OrBuilder()
-                .withAndConstraint(new AndBuilder()
-                    .appendBuilder(nestingConstraint)
-                    .appendBuilder(A).negate().wrapAtomicWithViolate()
-                )
-                .withAndConstraint(new AndBuilder()
-                    .appendBuilder(violatedNestingConstraint)
-                    .appendBuilder(B).negate().wrapAtomicWithViolate()
-                )
-            )
+            .withIfConstraint(new IfBuilder()
+                .withIf(nestingConstraint)
+                .withThen(A)
+                .withElse(B)
+            ).negate()
             .build();
 
         TestProfiles testProfiles = createTestProfiles(
@@ -911,7 +832,7 @@ public class ProfileViolationTests {
     /**
      * Tests that a profile violates correctly with nested IF.
      * Where X is any constraint which can contain another constraint and A,B are atomic constraints:
-     * VIOLATE(IF A THEN X ELSE B) -> (A AND VIOLATE(X)) OR (VIOLATE(A) AND VIOLATE(B))
+     * VIOLATE(IF A THEN X ELSE B) -> NOT(IF A THEN X ELSE B)
      *
      * @param nestingConstraint         A builder of a constraint which can contain at least one other constraint.
      * @param violatedNestingConstraint The violated form of the previous nesting constraint.
@@ -932,16 +853,11 @@ public class ProfileViolationTests {
             .build();
 
         Rule violatedRule = new RuleBuilder("Nested Inside Then of If-Then-Else Rule")
-            .withOrConstraint(new OrBuilder()
-                .withAndConstraint(new AndBuilder()
-                    .appendBuilder(A)
-                    .appendBuilder(violatedNestingConstraint)
-                )
-                .withAndConstraint(new AndBuilder()
-                    .appendBuilder(A).negate().wrapAtomicWithViolate()
-                    .appendBuilder(B).negate().wrapAtomicWithViolate()
-                )
-            )
+            .withIfConstraint(new IfBuilder()
+                .withIf(A)
+                .withThen(nestingConstraint)
+                .withElse(B)
+            ).negate()
             .build();
 
         TestProfiles testProfiles = createTestProfiles(
@@ -960,16 +876,14 @@ public class ProfileViolationTests {
     /**
      * Tests that a profile violates correctly with nested IF.
      * Where X is any constraint which can contain another constraint and A,B are atomic constraints:
-     * VIOLATE(IF A THEN B ELSE X) -> (A AND VIOLATE(B)) OR (VIOLATE(A) AND VIOLATE(X))
+     * VIOLATE(IF A THEN B ELSE X) -> NOT(IF A THEN B ELSE X)
      *
      * @param nestingConstraint         A builder of a constraint which can contain at least one other constraint.
-     * @param violatedNestingConstraint The violated form of the previous nesting constraint.
      */
     @ParameterizedTest
     @MethodSource("nestingConstraints")
     public void violate_withNestedInsideElseOfIfThenElseConstraint_returnsCorrectViolatedProfile(
-        BaseConstraintBuilder<? extends Constraint> nestingConstraint,
-        BaseConstraintBuilder<? extends Constraint> violatedNestingConstraint
+        BaseConstraintBuilder<? extends Constraint> nestingConstraint
     ) throws IOException {
         //Arrange
         Rule rule = new RuleBuilder("Nested Inside Else of If-Then-Else Rule")
@@ -981,16 +895,11 @@ public class ProfileViolationTests {
             .build();
 
         Rule violatedRule = new RuleBuilder("Nested Inside Else of If-Then-Else Rule")
-            .withOrConstraint(new OrBuilder()
-                .withAndConstraint(new AndBuilder()
-                    .appendBuilder(A)
-                    .appendBuilder(B).negate().wrapAtomicWithViolate()
-                )
-                .withAndConstraint(new AndBuilder()
-                    .appendBuilder(A).negate().wrapAtomicWithViolate()
-                    .appendBuilder(violatedNestingConstraint)
-                )
-            )
+            .withIfConstraint(new IfBuilder()
+                .withIf(A)
+                .withThen(B)
+                .withElse(nestingConstraint)
+            ).negate()
             .build();
 
         TestProfiles testProfiles = createTestProfiles(
