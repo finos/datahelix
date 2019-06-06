@@ -25,12 +25,16 @@ public class NameRetrievalService implements CatalogService<NameConstraintTypes,
 
     private static final Map<NameConstraintTypes, Set<String>> NAME_TYPE_MAPPINGS;
 
-    private static final NamePopulator<InputStream> POPULATOR = new NameCSVPopulator();
+    private final NamePopulator<InputStream> populator;
 
     static {
         NAME_TYPE_MAPPINGS = new EnumMap<>(NameConstraintTypes.class);
         NAME_TYPE_MAPPINGS.put(LAST, Stream.of(LAST_NAMES).collect(Collectors.toSet()));
         NAME_TYPE_MAPPINGS.put(FIRST, Stream.of(FIRST_MALE_NAMES, FIRST_FEMALE_NAMES).collect(Collectors.toSet()));
+    }
+
+    public NameRetrievalService(final NamePopulator<InputStream> populator) {
+        this.populator = populator;
     }
 
     @Override
@@ -73,7 +77,7 @@ public class NameRetrievalService implements CatalogService<NameConstraintTypes,
 
 
     private Set<NameFrequencyHolder> parseFromFile(InputStream path) {
-        return POPULATOR.retrieveNames(path);
+        return populator.retrieveNames(path);
     }
 
     private Set<NameFrequencyHolder> populateSet(Set<NameFrequencyHolder> a, Set<NameFrequencyHolder> b) {

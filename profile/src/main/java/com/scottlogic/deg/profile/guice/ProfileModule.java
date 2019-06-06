@@ -24,6 +24,6 @@ public class ProfileModule extends AbstractModule {
 
         bind(ProfileReader.class).to(JsonProfileReader.class);
 
-        bind(AtomicConstraintReaderLookup .class).to(BaseAtomicConstraintReaderLookup .class);
+        bind(AtomicConstraintReaderLookup.class).to(BaseAtomicConstraintReaderLookup.class);
     }
 }
