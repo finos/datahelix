@@ -9,8 +9,11 @@ import com.scottlogic.deg.generator.restrictions.set.SetRestrictions;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 public class FieldSpecFactory {
+    public static final String RIC_REGEX = "[A-Z]{1,4}\\.[A-Z]{1,2}";
     private final StringRestrictionsFactory stringRestrictionsFactory;
 
     @Inject
@@ -75,9 +78,15 @@ public class FieldSpecFactory {
     private FieldSpec construct(IsInSetConstraint constraint, boolean negate, boolean violated) {
         return FieldSpec.Empty.withSetRestrictions(
                 negate
-                    ? SetRestrictions.fromBlacklist(constraint.legalValues)
+                    ? negatedSet(constraint, constraint.legalValues)
                     : SetRestrictions.fromWhitelist(constraint.legalValues),
             FieldSpecSource.fromConstraint(constraint, negate, violated));
+    }
+
+    private SetRestrictions negatedSet(IsInSetConstraint constraint, Set<Object> values) {
+        return (constraint instanceof IsInNameSetConstraint)
+            ? SetRestrictions.allowNoValues()
+            : SetRestrictions.fromBlacklist(values);
     }
 
     private FieldSpec constructIsNull(boolean negate, AtomicConstraint constraint, boolean violated) {
@@ -242,6 +251,10 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec construct(MatchesStandardConstraint constraint, boolean negate, boolean violated) {
+        if (constraint.standard.equals(StandardConstraintTypes.RIC)){
+            return construct(new MatchesRegexConstraint(constraint.field, Pattern.compile(RIC_REGEX), constraint.getRules()), negate, violated);
+        }
+
         return FieldSpec.Empty
             .withStringRestrictions(
                 new MatchesStandardStringRestrictions(constraint.standard, negate),

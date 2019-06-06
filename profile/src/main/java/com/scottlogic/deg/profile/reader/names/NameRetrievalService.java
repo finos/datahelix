@@ -3,7 +3,6 @@ package com.scottlogic.deg.profile.reader.names;
 import com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes;
 import com.scottlogic.deg.profile.reader.CatalogService;
 
-import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -25,7 +24,7 @@ public class NameRetrievalService implements CatalogService<NameConstraintTypes,
 
     private static final Map<NameConstraintTypes, Set<String>> NAME_TYPE_MAPPINGS;
 
-    private static final NamePopulator<InputStream> POPULATOR = new NameCSVPopulator();
+    private final NamePopulator<String> populator;
 
     static {
         NAME_TYPE_MAPPINGS = new EnumMap<>(NameConstraintTypes.class);
@@ -33,24 +32,44 @@ public class NameRetrievalService implements CatalogService<NameConstraintTypes,
         NAME_TYPE_MAPPINGS.put(FIRST, Stream.of(FIRST_MALE_NAMES, FIRST_FEMALE_NAMES).collect(Collectors.toSet()));
     }
 
+    public NameRetrievalService(final NamePopulator<String> populator) {
+        this.populator = populator;
+    }
+
     @Override
     public Set<NameFrequencyHolder> retrieveValues(NameConstraintTypes configuration) {
-        return NAME_TYPE_MAPPINGS.get(configuration).stream()
-            .map(this::pathFromClasspath)
-            .map(this::parseFromFile)
+        switch (configuration) {
+            case FIRST:
+            case LAST:
+                return generateSingles(NAME_TYPE_MAPPINGS.get(configuration));
+            case FULL:
+                return generateCombinations(generateSingles(NAME_TYPE_MAPPINGS.get(FIRST)),
+                    generateSingles(NAME_TYPE_MAPPINGS.get(LAST)));
+            default:
+                throw new UnsupportedOperationException("Name not implemented of type: " + configuration);
+        }
+    }
+
+    private Set<NameFrequencyHolder> generateSingles(Set<String> sources) {
+        return sources.stream()
+            .map(populator::retrieveNames)
             .reduce(new HashSet<>(), this::populateSet);
     }
 
-    private InputStream pathFromClasspath(String classPath) {
-        return Optional.ofNullable(this.getClass()
-            .getClassLoader()
-            .getResourceAsStream(classPath)
-        ).orElseThrow(() -> new IllegalArgumentException("Path not found on classpath."));
+    private Set<NameFrequencyHolder> generateCombinations(Set<NameFrequencyHolder> firstNames,
+                                                          Set<NameFrequencyHolder> lastNames) {
+        return firstNames.stream()
+            .flatMap(first -> lastNames.stream()
+                .map(last -> combineFirstAndLastName(first, last)))
+            .collect(Collectors.toSet());
     }
 
-
-    private Set<NameFrequencyHolder> parseFromFile(InputStream path) {
-        return POPULATOR.retrieveNames(path);
+    private NameFrequencyHolder combineFirstAndLastName(final NameFrequencyHolder first,
+                                                        final NameFrequencyHolder last) {
+        final String name = first.getName() + " " + last.getName();
+        // TODO: Check frequency for overflow
+        final int frequency = first.getFrequency() * last.getFrequency();
+        return new NameFrequencyHolder(name, frequency);
     }
 
     private Set<NameFrequencyHolder> populateSet(Set<NameFrequencyHolder> a, Set<NameFrequencyHolder> b) {

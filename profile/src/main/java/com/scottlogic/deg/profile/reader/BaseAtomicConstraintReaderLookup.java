@@ -8,6 +8,7 @@ import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.common.util.HeterogeneousTypeContainer;
 import com.scottlogic.deg.common.util.NumberUtils;
+import com.scottlogic.deg.profile.reader.names.NameCSVPopulator;
 import com.scottlogic.deg.profile.reader.names.NameFrequencyHolder;
 import com.scottlogic.deg.profile.reader.names.NameRetrievalService;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
@@ -33,7 +34,7 @@ public class BaseAtomicConstraintReaderLookup implements AtomicConstraintReaderL
 
     static {
         catalogServices = new HeterogeneousTypeContainer<CatalogService<?, ?>>()
-            .put(NameRetrievalService.class, new NameRetrievalService());
+            .put(NameRetrievalService.class, new NameRetrievalService(new NameCSVPopulator()));
 
         typeCodeToSpecificReader = new HashMap<>();
 
@@ -82,6 +83,7 @@ public class BaseAtomicConstraintReaderLookup implements AtomicConstraintReaderL
                     case ISIN:
                     case SEDOL:
                     case CUSIP:
+                    case RIC:
                         return new AndConstraint(
                             new MatchesStandardConstraint(field, standardType, rules),
                             new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.STRING, rules)
@@ -266,7 +268,7 @@ public class BaseAtomicConstraintReaderLookup implements AtomicConstraintReaderL
                     .collect(Collectors.toSet());
 
                 return new AndConstraint(
-                    new IsInSetConstraint(field, objects, rules),
+                    new IsInNameSetConstraint(field, objects, rules),
                     new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.STRING, rules)
                 );
             });
