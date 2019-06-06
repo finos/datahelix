@@ -30,9 +30,14 @@ public class DateValueStep {
         state.addNotConstraint(fieldName, constraintName, value);
     }
 
-    @Then("{fieldVar} contains datetime data")
-    public void producedDataShouldContainDateTimeValuesForField(String fieldName){
+    @Then("{fieldVar} contains only datetime data")
+    public void producedDataShouldContainOnlyDateTimeValuesForField(String fieldName){
         helper.assertFieldContainsNullOrMatching(fieldName, OffsetDateTime.class);
+    }
+
+    @Then("{fieldVar} contains datetime data")
+    public void producedDataShouldContainStringValuesForField(String fieldName){
+        helper.assertFieldContainsSomeOf(fieldName, OffsetDateTime.class);
     }
 
     @Then("{fieldVar} contains anything but datetime data")
