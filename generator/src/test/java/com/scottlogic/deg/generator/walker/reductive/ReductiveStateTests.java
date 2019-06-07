@@ -1,6 +1,5 @@
 package com.scottlogic.deg.generator.walker.reductive;
 
-import com.scottlogic.deg.common.output.DataBagValueSource;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
@@ -18,8 +17,8 @@ class ReductiveStateTests {
     Field field2 = new Field("field2");
     ReductiveState reductiveState =
         new ReductiveState(new ProfileFields(Arrays.asList(field1, field2)));
-    DataBagValue value1 = new DataBagValue("v1", DataBagValueSource.Empty);
-    DataBagValue value2 = new DataBagValue("v2", DataBagValueSource.Empty);
+    DataBagValue value1 = new DataBagValue("v1");
+    DataBagValue value2 = new DataBagValue("v2");
 
     @Test
     void withFixedFieldValue() {
