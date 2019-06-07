@@ -610,7 +610,6 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | foo  |
       | null |
 
-
   Scenario: aValid run against a non contradicting aValid CUSIP should be successful
     Given foo is a valid "CUSIP"
     And foo is a valid "CUSIP"
