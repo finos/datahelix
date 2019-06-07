@@ -138,3 +138,17 @@ Feature: The violations mode of the Data Helix app can be run in violations mode
     Then 5 rows of data are generated
     And foo contains string data
     And foo contains strings matching /[a-z]{0,9}/
+
+  Scenario: The generator should produce correct violating data for anyOf construction
+    Given there is a constraint:
+      """
+      { "anyOf": [
+        { "field": "foo", "is": "ofType", "value": "string" },
+        { "field": "foo", "is": "ofType", "value": "decimal" }
+      ]}
+      """
+    And the generation strategy is random
+    And the data requested is violating
+    Then some data should be generated
+    And foo contains anything but string data
+    And foo contains anything but numeric data

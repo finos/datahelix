@@ -5,6 +5,7 @@ import com.google.inject.name.Names;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
+import com.scottlogic.deg.generator.inputs.validation.MultipleProfileValidator;
 import com.scottlogic.deg.output.outputtarget.OutputTargetFactory;
 import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
 import com.scottlogic.deg.profile.reader.ProfileReader;
@@ -36,7 +37,13 @@ public class CucumberTestModule extends AbstractModule {
         bind(CucumberTestState.class).toInstance(testState);
         bind(ProfileReader.class).to(CucumberProfileReader.class);
         bind(GenerationConfigSource.class).to(CucumberGenerationConfigSource.class);
-        bind(ProfileValidator.class).to(TypingRequiredPerFieldValidator.class);
+        if (testState.requireFieldTyping) {
+            // This binding overrides the requireFieldTyping config option, so an alternative
+            // (MultipleProfileValidator) needs to be used when field typing is not required.
+            bind(ProfileValidator.class).to(TypingRequiredPerFieldValidator.class);
+        } else {
+            bind(ProfileValidator.class).to(MultipleProfileValidator.class);
+        }
         bind(ErrorReporter.class).toInstance(new CucumberErrorReporter(testState));
         bind(DecisionTreeFactory.class).to(CucumberDecisionTreeFactory.class);
 
