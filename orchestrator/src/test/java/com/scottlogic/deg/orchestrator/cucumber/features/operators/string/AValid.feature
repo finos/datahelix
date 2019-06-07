@@ -873,3 +873,17 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | foo         |
       | "38259P508" |
       | null        |
+
+  Scenario: aValid CUSIP run against a contradicting matchingRegex (invalid checksum) should not be successful
+    Given foo is a valid "CUSIP"
+    And foo is matching regex "38259P509"
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
+  Scenario: aValid CUSIP run against a contradicting matchingRegex (invalid length) should only generate null data
+    Given foo is a valid "CUSIP"
+    And foo is matching regex "[0-9]{3}.{4}[0-9]"
+    Then the following data should be generated:
+      | foo            |
+      | null           |
