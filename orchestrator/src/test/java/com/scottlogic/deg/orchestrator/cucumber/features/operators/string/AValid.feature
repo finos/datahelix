@@ -335,7 +335,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | foo            |
       | null           |
 
-  Scenario: aValid run against a non contradicting aValid SEDOL should be successful
+  Scenario: aValid SEDOL run against a non contradicting aValid SEDOL should be successful
     Given foo is a valid "SEDOL"
     And foo is a valid "SEDOL"
     And foo is in set:
