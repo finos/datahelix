@@ -315,12 +315,17 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
 
   Scenario: aValid ISIN run against a non-contradicting matchingRegex should be successful
     Given foo is a valid "ISIN"
-    And foo is matching regex "GB[0-9]{10}"
-    And foo is in set:
-      | "GB0002634946"  |
+    And foo is matching regex "US9311421039"
     Then the following data should be generated:
       | foo            |
-      | "GB0002634946" |
+      | "US9311421039" |
+      | null           |
+
+  Scenario: aValid ISIN run against a contradicting matchingRegex (invalid length) should only generate null data
+    Given foo is a valid "ISIN"
+    And foo is matching regex "US[0-9]{9}"
+    Then the following data should be generated:
+      | foo            |
       | null           |
 
   Scenario: aValid ISIN run against a contradicting matchingRegex (invalid checksum) should only generate null data
