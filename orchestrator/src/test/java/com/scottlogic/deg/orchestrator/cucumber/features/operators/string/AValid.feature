@@ -601,6 +601,13 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
       | foo  |
       | null |
 
+  Scenario: aValid SEDOL run against a contradicting matchingRegex (invalid length) should only generate null data
+    Given foo is a valid "SEDOL"
+    And foo is matching regex "[0-9]{6}"
+    Then the following data should be generated:
+      | foo            |
+      | null           |
+
   Scenario: aValid SEDOL run against a contradicting matchingRegex that could return multiple values should not be successful
     Given foo is a valid "SEDOL"
     And foo is matching regex "0[023]63492"
