@@ -2,12 +2,12 @@ package com.scottlogic.deg.profile.reader.names;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
-import java.nio.file.Path;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class NameCSVPopulator implements NamePopulator<String> {
 
     @Override
-    public Set<NameFrequencyHolder> retrieveNames(String input) {
+    public Set<NameHolder> retrieveNames(String input) {
         return readFromFile(pathFromClasspath(input));
     }
 
@@ -26,7 +26,7 @@ public class NameCSVPopulator implements NamePopulator<String> {
         ).orElseThrow(() -> new IllegalArgumentException("Path not found on classpath."));
     }
 
-    private Set<NameFrequencyHolder> readFromFile(InputStream is) {
+    private Set<NameHolder> readFromFile(InputStream is) {
         try {
             return CSVParser.parse(
                 is,
@@ -34,11 +34,15 @@ public class NameCSVPopulator implements NamePopulator<String> {
                 CSVFormat.DEFAULT)
                 .getRecords()
                 .stream()
-                .map(record -> new NameFrequencyHolder(record.get(0), Integer.valueOf(record.get(1))))
+                .map(this::populateWithRecord)
                 .collect(Collectors.toSet());
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
+    }
+
+    private NameHolder populateWithRecord(CSVRecord record) {
+        return new NameHolder(record.get(0));
     }
 
 }

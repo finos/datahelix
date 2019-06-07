@@ -2,44 +2,35 @@ package com.scottlogic.deg.profile.reader.names;
 
 import java.util.Objects;
 
-public class NameFrequencyHolder {
+public class NameHolder {
 
     private final String name;
 
-    private final int frequency;
-
-    public NameFrequencyHolder(String name, int frequency) {
+    public NameHolder(String name) {
         this.name = name;
-        this.frequency = frequency;
     }
 
     public String getName() {
         return name;
     }
 
-    public int getFrequency() {
-        return frequency;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        NameFrequencyHolder that = (NameFrequencyHolder) o;
-        return frequency == that.frequency &&
-            Objects.equals(name, that.name);
+        NameHolder that = (NameHolder) o;
+        return Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, frequency);
+        return Objects.hash(name);
     }
 
     @Override
     public String toString() {
-        return "NameFrequencyHolder{" +
+        return "NameHolder{" +
             "name='" + name + '\'' +
-            ", frequency=" + frequency +
             '}';
     }
 }

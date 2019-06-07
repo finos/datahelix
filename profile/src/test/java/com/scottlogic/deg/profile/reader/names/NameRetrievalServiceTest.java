@@ -2,7 +2,6 @@ package com.scottlogic.deg.profile.reader.names;
 
 
 import com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -40,30 +39,30 @@ public class NameRetrievalServiceTest {
         when(populator.retrieveNames(fileName)).thenReturn(namesToHolders(names));
     }
 
-    private Set<NameFrequencyHolder> namesToHolders(String... names) {
+    private Set<NameHolder> namesToHolders(String... names) {
         return Stream.of(names)
-            .map(name -> new NameFrequencyHolder(name, 1))
+            .map(NameHolder::new)
             .collect(Collectors.toSet());
     }
 
     @Test
     public void retrieveValuesFirst() {
         mockFirst();
-        Set<NameFrequencyHolder> names = service.retrieveValues(NameConstraintTypes.FIRST);
+        Set<NameHolder> names = service.retrieveValues(NameConstraintTypes.FIRST);
         assertEquals(names, namesToHolders("Mark", "Paul", "Jolene", "Tanya"));
     }
 
     @Test
     public void retrieveValuesLast() {
         mockLast();
-        Set<NameFrequencyHolder> names = service.retrieveValues(NameConstraintTypes.LAST);
+        Set<NameHolder> names = service.retrieveValues(NameConstraintTypes.LAST);
         assertEquals(names, namesToHolders("Gore", "May"));
     }
 
     @ParameterizedTest
     @EnumSource(NameConstraintTypes.class)
     public void testAllValuesGiveValidResult(NameConstraintTypes config) {
-        Set<NameFrequencyHolder> result = service.retrieveValues(config);
+        Set<NameHolder> result = service.retrieveValues(config);
         assertNotNull(result);
     }
 }
