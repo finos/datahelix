@@ -9,7 +9,7 @@ import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.common.util.HeterogeneousTypeContainer;
 import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.profile.reader.names.NameCSVPopulator;
-import com.scottlogic.deg.profile.reader.names.NameFrequencyHolder;
+import com.scottlogic.deg.profile.reader.names.NameHolder;
 import com.scottlogic.deg.profile.reader.names.NameRetrievalService;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
@@ -263,7 +263,7 @@ public class BaseAtomicConstraintReaderLookup implements AtomicConstraintReaderL
 
                 Set<Object> objects = service.retrieveValues(type)
                     .stream()
-                    .map(NameFrequencyHolder::getName)
+                    .map(NameHolder::getName)
                     .map(Object.class::cast)
                     .collect(Collectors.toSet());
 
