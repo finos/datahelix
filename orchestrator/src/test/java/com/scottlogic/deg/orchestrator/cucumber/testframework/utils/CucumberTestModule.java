@@ -55,10 +55,6 @@ public class CucumberTestModule extends AbstractModule {
         when(mockOutputTargetFactory.create(any())).thenReturn(new InMemoryOutputTarget(testState));
         bind(OutputTargetFactory.class).toInstance(mockOutputTargetFactory);
 
-        bind(boolean.class)
-            .annotatedWith(Names.named("config:tracingIsEnabled"))
-            .toInstance(false);
-
         if (testState.shouldSkipGeneration()) {
             DataGenerator mockDataGenerator = mock(DataGenerator.class);
             when(mockDataGenerator.generateData(any())).thenReturn(Stream.empty());

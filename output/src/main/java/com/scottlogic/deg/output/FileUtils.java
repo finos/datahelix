@@ -16,8 +16,4 @@ public interface FileUtils {
     boolean isDirectoryEmpty(Path filepath, int fileCount);
 
     boolean createDirectories(Path dir) throws IOException;
-
-    File getTraceFile(Path outputPath);
-
-    Path getTraceFilePath(Path outputPath);
 }
