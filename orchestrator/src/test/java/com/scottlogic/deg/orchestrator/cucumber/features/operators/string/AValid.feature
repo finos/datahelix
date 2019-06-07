@@ -588,9 +588,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
 
   Scenario: aValid SEDOL run against a non-contradicting matchingRegex should be successful
     Given foo is a valid "SEDOL"
-    And foo is matching regex "[0-9]{7}"
-    And foo is in set:
-      | "0263494" |
+    And foo is matching regex "0263494"
     Then the following data should be generated:
       | foo       |
       | "0263494" |
