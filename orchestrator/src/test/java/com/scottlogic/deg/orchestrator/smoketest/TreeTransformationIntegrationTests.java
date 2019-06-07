@@ -9,8 +9,7 @@ import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.serialisation.DecisionTreeDto;
 import com.scottlogic.deg.generator.decisiontree.serialisation.DecisionTreeMapper;
 import com.scottlogic.deg.generator.decisiontree.testutils.*;
-import com.scottlogic.deg.profile.reader.InvalidProfileException;
-import com.scottlogic.deg.profile.reader.JsonProfileReader;
+import com.scottlogic.deg.profile.reader.*;
 import org.junit.Assert;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -21,6 +20,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -109,7 +109,14 @@ class TreeTransformationIntegrationTests {
     }
 
     private Profile getProfile(Path path) throws IOException, InvalidProfileException {
-        return new JsonProfileReader().read(path);
+        ConstraintReaderMapEntryProvider[] mappingProviders = {
+            new CoreAtomicTypesConstraintReaderProvider(),
+            new FinancialTypesConstraintReaderProvider(),
+            new PersonalDataTypesConstraintReaderProvider()
+        };
+        BaseConstraintReaderMap readerMap =
+            new BaseConstraintReaderMap(Arrays.stream(mappingProviders));
+        return new JsonProfileReader(readerMap).read(path);
     }
 
     private List<DecisionTreeDto> getMappedExpectedOutput(File file) throws IOException {

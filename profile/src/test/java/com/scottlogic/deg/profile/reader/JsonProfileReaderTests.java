@@ -28,11 +28,18 @@ import static org.hamcrest.core.IsNull.nullValue;
 public class JsonProfileReaderTests {
     private String json;
     private Profile profile;
+    private ConstraintReaderMap readerMap;
 
     @BeforeEach
     public void Setup() {
         this.json = null;
         this.profile = null;
+        ConstraintReaderMapEntryProvider[] mappingProviders = {
+            new CoreAtomicTypesConstraintReaderProvider(),
+            new FinancialTypesConstraintReaderProvider(),
+            new PersonalDataTypesConstraintReaderProvider()
+        };
+        readerMap = new BaseConstraintReaderMap(Arrays.stream(mappingProviders));
     }
 
     private void givenJson(String json) {
@@ -41,7 +48,7 @@ public class JsonProfileReaderTests {
 
     private Profile getResultingProfile() throws IOException, InvalidProfileException {
         if (this.profile == null) {
-            JsonProfileReader objectUnderTest = new JsonProfileReader();
+            JsonProfileReader objectUnderTest = new JsonProfileReader(readerMap);
             this.profile = objectUnderTest.read(this.json);
         }
 
