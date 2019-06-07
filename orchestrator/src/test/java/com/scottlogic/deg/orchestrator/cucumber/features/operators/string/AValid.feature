@@ -868,12 +868,7 @@ Feature: User can specify that a field must be a valid ISIN (International Secur
 
   Scenario: aValid CUSIP run against a non-contradicting matchingRegex should be successful
     Given foo is a valid "CUSIP"
-    And foo is matching regex "[0-9]{3}.{5}[0-9]"
-    And foo is in set:
-      | "38259P508"  |
-      | "38259P58"   |
-      | "38259EP508" |
-      | 1            |
+    And foo is matching regex "38259P508"
     Then the following data should be generated:
       | foo         |
       | "38259P508" |
