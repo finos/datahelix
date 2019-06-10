@@ -3,6 +3,7 @@ package com.scottlogic.deg.output.outputtarget;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.scottlogic.deg.output.FileUtils;
+import com.scottlogic.deg.output.OutputPath;
 import com.scottlogic.deg.output.writer.OutputWriterFactory;
 
 import java.nio.file.Path;
@@ -16,11 +17,11 @@ public class OutputTargetFactory {
 
     @Inject
     public OutputTargetFactory(
-        @Named("config:outputPath") Path directoryPath,
+        OutputPath directoryPath,
         OutputWriterFactory formatOfViolationDatasets,
         @Named("config:canOverwriteOutputFiles") boolean canOverwriteExistingFiles,
         FileUtils fileUtils) {
-        this.directoryPath = directoryPath;
+        this.directoryPath = directoryPath.getPath();
         this.canOverwriteExistingFiles = canOverwriteExistingFiles;
         this.formatOfViolationDatasets = formatOfViolationDatasets;
         this.fileUtils = fileUtils;
@@ -33,7 +34,7 @@ public class OutputTargetFactory {
                 .orElse(name);
 
         return new FileOutputTarget(
-            directoryPath.resolve(filename),
+            new OutputPath(directoryPath.resolve(filename)),
             formatOfViolationDatasets,
             canOverwriteExistingFiles,
             fileUtils);
