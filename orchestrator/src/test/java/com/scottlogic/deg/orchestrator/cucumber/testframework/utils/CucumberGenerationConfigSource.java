@@ -86,11 +86,6 @@ public class CucumberGenerationConfigSource implements AllConfigSource, ViolateC
     }
 
     @Override
-    public boolean useStdOut() {
-        return false;
-    }
-
-    @Override
     public boolean visualiseReductions() {
         return false;
     }

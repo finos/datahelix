@@ -10,7 +10,6 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
-import com.scottlogic.deg.output.OutputPath;
 import com.scottlogic.deg.profile.reader.ProfileReader;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
@@ -47,7 +46,7 @@ public class VisualiseExecute implements Runnable {
                             ErrorReporter errorReporter,
                             FieldSpecFactory fieldSpecFactory,
                             FieldSpecMerger fieldSpecMerger,
-                            OutputPath outputPath,
+                            @Named("config:outputPath") Path outputPath,
                             ProfileReader profileReader,
                             ProfileSchemaValidator profileSchemaValidator,
                             AllConfigSource configSource,
@@ -57,7 +56,7 @@ public class VisualiseExecute implements Runnable {
         this.fieldSpecFactory = fieldSpecFactory;
         this.fieldSpecMerger = fieldSpecMerger;
         this.configSource = configSource;
-        this.outputPath = outputPath.getPath();
+        this.outputPath = outputPath;
         this.profileReader = profileReader;
         this.profileSchemaValidator = profileSchemaValidator;
         this.validator = validator;

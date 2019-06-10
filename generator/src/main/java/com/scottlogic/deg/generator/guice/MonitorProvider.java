@@ -24,14 +24,14 @@ public class MonitorProvider implements Provider<ReductiveDataGeneratorMonitor> 
         switch (commandLine.getMonitorType()) {
             case VERBOSE:
                 return new MessagePrintingDataGeneratorMonitor(
-                    new PrintWriter(System.err, true));
+                    new PrintWriter(System.out, true));
 
             case QUIET:
                 return this.noopDataGeneratorMonitor;
 
             default:
                 return new VelocityMonitor(
-                    new PrintWriter(System.err, true));
+                    new PrintWriter(System.out, true));
         }
     }
 }

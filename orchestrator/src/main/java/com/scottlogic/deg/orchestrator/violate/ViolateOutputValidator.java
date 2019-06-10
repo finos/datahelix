@@ -3,7 +3,6 @@ package com.scottlogic.deg.orchestrator.violate;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.output.OutputPath;
 import com.scottlogic.deg.output.outputtarget.OutputTargetValidationException;
 import com.scottlogic.deg.output.FileUtils;
 
@@ -18,9 +17,9 @@ public class ViolateOutputValidator {
     @Inject
     public ViolateOutputValidator(
         @Named("config:canOverwriteOutputFiles") boolean canOverwriteExistingFiles,
-        OutputPath directoryPath, FileUtils fileUtils) {
+        @Named("config:outputPath") Path directoryPath, FileUtils fileUtils) {
         this.canOverwriteExistingFiles = canOverwriteExistingFiles;
-        this.directoryPath = directoryPath.getPath();
+        this.directoryPath = directoryPath;
         this.fileUtils = fileUtils;
     }
 

@@ -40,16 +40,8 @@ public class GenerateCommandLine implements AllConfigSource, Runnable {
         task.run();
     }
 
-    @CommandLine.Option(
-        names = {"-p", "--profile-file"},
-        required = true,
-        description = "The path of the profile json file.")
+    @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
     File profileFile;
-
-    @CommandLine.Option(
-        names = {"-o", "--output-path"}, order = 0,
-        description = "The path to write the generated data file to.")
-    private Path outputPath;
 
     @CommandLine.Option(
         names = {"--no-optimise"},
@@ -72,6 +64,9 @@ public class GenerateCommandLine implements AllConfigSource, Runnable {
         names = { "--enable-schema-validation" },
         description = "Enables schema validation")
     boolean enableSchemaValidation = false;
+
+    @CommandLine.Parameters(index = "1", description = "The path to write the generated data file to.")
+    private Path outputPath;
 
     @CommandLine.Option(names = {"-t", "--generation-type"},
         description = "Determines the type of data generation performed (${COMPLETION-CANDIDATES})",
@@ -117,7 +112,7 @@ public class GenerateCommandLine implements AllConfigSource, Runnable {
     private Boolean visualiseReductions = false;
 
     @CommandLine.Option(
-        names = {"--output-format"},
+        names = {"-o"},
         description = "Output format (${COMPLETION-CANDIDATES})")
     private OutputFormat outputFormat = CSV;
 
@@ -151,13 +146,8 @@ public class GenerateCommandLine implements AllConfigSource, Runnable {
     }
 
     @Override
-    public boolean useStdOut() {
-        return outputPath == null;
-    }
-
-    @Override
     public Path getOutputPath() {
-        return outputPath;
+        return this.outputPath;
     }
 
     @Override

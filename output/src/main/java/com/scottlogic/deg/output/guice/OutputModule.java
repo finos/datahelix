@@ -4,7 +4,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 import com.scottlogic.deg.output.FileUtils;
 import com.scottlogic.deg.output.FileUtilsImpl;
-import com.scottlogic.deg.output.OutputPath;
 import com.scottlogic.deg.output.manifest.JsonManifestWriter;
 import com.scottlogic.deg.output.manifest.ManifestWriter;
 import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
@@ -28,8 +27,9 @@ public class OutputModule extends AbstractModule {
         bind(ManifestWriter.class).to(JsonManifestWriter.class);
         bind(FileUtils.class).to(FileUtilsImpl.class);
 
-        bind(OutputPath.class).toInstance(new OutputPath(outputConfigSource.getOutputPath()));
-
+        bind(Path.class)
+            .annotatedWith(Names.named("config:outputPath"))
+            .toInstance(outputConfigSource.getOutputPath());
         bind(boolean.class)
             .annotatedWith(Names.named("config:canOverwriteOutputFiles"))
             .toInstance(outputConfigSource.overwriteOutputFiles());
