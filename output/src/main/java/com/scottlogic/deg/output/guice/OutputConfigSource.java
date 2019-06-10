@@ -7,4 +7,6 @@ public interface OutputConfigSource {
     Path getOutputPath();
     boolean overwriteOutputFiles();
     boolean useStdOut();
+
+    boolean isEnableTracing();
 }

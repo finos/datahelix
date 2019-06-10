@@ -71,6 +71,11 @@ public class CucumberGenerationConfigSource implements AllConfigSource, ViolateC
     }
 
     @Override
+    public boolean isEnableTracing() {
+        return false;
+    }
+
+    @Override
     public File getProfileFile() {
         return new File("mockFilePath");
     }

@@ -33,5 +33,8 @@ public class OutputModule extends AbstractModule {
         bind(boolean.class)
             .annotatedWith(Names.named("config:canOverwriteOutputFiles"))
             .toInstance(outputConfigSource.overwriteOutputFiles());
+        bind(boolean.class)
+            .annotatedWith(Names.named("config:tracingIsEnabled"))
+            .toInstance(outputConfigSource.isEnableTracing());
     }
 }

@@ -101,6 +101,12 @@ public class GenerateCommandLine implements AllConfigSource, Runnable {
     private long maxRows = DEFAULT_MAX_ROWS;
 
     @CommandLine.Option(
+        names = {"--trace-constraints"},
+        description = "Defines whether constraint tracing is enabled for the output",
+        hidden = true)
+    private boolean enableTracing;
+
+    @CommandLine.Option(
         names = {"--quiet"},
         description = "Turns OFF default monitoring")
     private Boolean quiet = false;
@@ -158,6 +164,11 @@ public class GenerateCommandLine implements AllConfigSource, Runnable {
     @Override
     public Path getOutputPath() {
         return outputPath;
+    }
+
+    @Override
+    public boolean isEnableTracing() {
+        return this.enableTracing;
     }
 
     @Override
