@@ -13,17 +13,12 @@ import java.util.stream.Collectors;
  * Details a column's atomic constraints
  */
 public class FieldSpec {
-    public static final FieldSpec Empty = new FieldSpec(
-        new HeterogeneousTypeContainer<>(),
-        FieldSpecSource.Empty);
+    public static final FieldSpec Empty = new FieldSpec(new HeterogeneousTypeContainer<>());
 
     private final HeterogeneousTypeContainer<Restrictions> restrictions;
-    private final FieldSpecSource source;
 
-    private FieldSpec(HeterogeneousTypeContainer<Restrictions> restrictions,
-                      FieldSpecSource source) {
+    private FieldSpec(HeterogeneousTypeContainer<Restrictions> restrictions) {
         this.restrictions = restrictions;
-        this.source = source;
     }
 
     public SetRestrictions getSetRestrictions() {
@@ -54,40 +49,36 @@ public class FieldSpec {
         return restrictions.get(FormatRestrictions.class).orElse(null);
     }
 
-    public FieldSpecSource getFieldSpecSource() {
-        return source;
+    public FieldSpec withSetRestrictions(SetRestrictions setRestrictions) {
+        return withConstraint(SetRestrictions.class, setRestrictions);
     }
 
-    public FieldSpec withSetRestrictions(SetRestrictions setRestrictions, FieldSpecSource source) {
-        return withConstraint(SetRestrictions.class, setRestrictions, source);
+    public FieldSpec withNumericRestrictions(NumericRestrictions numericRestrictions) {
+        return withConstraint(NumericRestrictions.class, numericRestrictions);
     }
 
-    public FieldSpec withNumericRestrictions(NumericRestrictions numericRestrictions, FieldSpecSource source) {
-        return withConstraint(NumericRestrictions.class, numericRestrictions, source);
+    public FieldSpec withStringRestrictions(StringRestrictions stringRestrictions) {
+        return withConstraint(StringRestrictions.class, stringRestrictions);
     }
 
-    public FieldSpec withStringRestrictions(StringRestrictions stringRestrictions, FieldSpecSource source) {
-        return withConstraint(StringRestrictions.class, stringRestrictions, source);
+    public FieldSpec withTypeRestrictions(TypeRestrictions typeRestrictions) {
+        return withConstraint(TypeRestrictions.class, typeRestrictions);
     }
 
-    public FieldSpec withTypeRestrictions(TypeRestrictions typeRestrictions, FieldSpecSource source) {
-        return withConstraint(TypeRestrictions.class, typeRestrictions, source);
+    public FieldSpec withNullRestrictions(NullRestrictions nullRestrictions) {
+        return withConstraint(NullRestrictions.class, nullRestrictions);
     }
 
-    public FieldSpec withNullRestrictions(NullRestrictions nullRestrictions, FieldSpecSource source) {
-        return withConstraint(NullRestrictions.class, nullRestrictions, source);
+    public FieldSpec withDateTimeRestrictions(DateTimeRestrictions dateTimeRestrictions) {
+        return withConstraint(DateTimeRestrictions.class, dateTimeRestrictions);
     }
 
-    public FieldSpec withDateTimeRestrictions(DateTimeRestrictions dateTimeRestrictions, FieldSpecSource source) {
-        return withConstraint(DateTimeRestrictions.class, dateTimeRestrictions, source);
+    public FieldSpec withFormatRestrictions(FormatRestrictions formatRestrictions) {
+        return withConstraint(FormatRestrictions.class, formatRestrictions);
     }
 
-    public FieldSpec withFormatRestrictions(FormatRestrictions formatRestrictions, FieldSpecSource source) {
-        return withConstraint(FormatRestrictions.class, formatRestrictions, source);
-    }
-
-    private <T extends Restrictions> FieldSpec withConstraint(Class<T> type, T restriction, FieldSpecSource source) {
-        return new FieldSpec(restrictions.put(type, restriction), this.source.combine(source));
+    private <T extends Restrictions> FieldSpec withConstraint(Class<T> type, T restriction) {
+        return new FieldSpec(restrictions.put(type, restriction));
     }
 
     @Override

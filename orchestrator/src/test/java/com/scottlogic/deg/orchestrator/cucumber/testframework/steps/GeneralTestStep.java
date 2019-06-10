@@ -93,6 +93,11 @@ public class GeneralTestStep {
         this.state.addNotConstraint(fieldName, "null", null);
     }
 
+    @And("untyped fields are allowed")
+    public void fieldCanBeUntyped() {
+        this.state.setRequireFieldTyping(false);
+    }
+
     @Then("^the profile should be considered valid$")
     public void theProfileIsValid() {
         cucumberTestHelper.runChecksWithoutGeneratingData();

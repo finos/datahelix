@@ -7,7 +7,7 @@ import com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.util.HeterogeneousTypeContainer;
 import com.scottlogic.deg.profile.reader.names.NameCSVPopulator;
-import com.scottlogic.deg.profile.reader.names.NameFrequencyHolder;
+import com.scottlogic.deg.profile.reader.names.NameHolder;
 import com.scottlogic.deg.profile.reader.names.NameRetrievalService;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 
@@ -37,7 +37,7 @@ public class PersonalDataTypesConstraintReaderProvider implements ConstraintRead
 
             Set<Object> objects = service.retrieveValues(type)
                 .stream()
-                .map(NameFrequencyHolder::getName)
+                .map(NameHolder::getName)
                 .map(Object.class::cast)
                 .collect(Collectors.toSet());
 

@@ -56,8 +56,7 @@ public class FieldSpecValueGenerator {
                     value,
                     spec.getFormatRestrictions() != null
                         ? spec.getFormatRestrictions().formatString
-                        : null,
-                    spec.getFieldSpecSource().toDataBagValueSource());
+                        : null);
 
                 return dataBagValue;
             });
@@ -66,12 +65,12 @@ public class FieldSpecValueGenerator {
     private Iterable<Object> getDataValues(FieldValueSource source) {
         switch (dataType) {
             case FULL_SEQUENTIAL:
-            default:
-                return source.generateAllValues();
             case INTERESTING:
                 return source.generateInterestingValues();
             case RANDOM:
                 return source.generateRandomValues(randomNumberGenerator);
+            default:
+                return source.generateAllValues();
         }
     }
 }

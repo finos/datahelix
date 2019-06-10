@@ -35,8 +35,7 @@ public class SetRestrictionsMergeOperation implements RestrictionMergeOperation 
                 getNewSetRestrictions(
                     left.getSetRestrictions(),
                     right.getSetRestrictions(),
-                    partiallyMerged::permits),
-                FieldSpecSource.fromFieldSpecs(left, right)));
+                    partiallyMerged::permits)));
     }
 
     private SetRestrictions getNewSetRestrictions(

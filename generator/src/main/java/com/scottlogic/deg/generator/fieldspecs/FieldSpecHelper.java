@@ -16,15 +16,14 @@ public class FieldSpecHelper {
         return FieldSpec.Empty
             .withSetRestrictions(
                 SetRestrictions.fromWhitelist(
-                    Collections.singleton(fieldValue.getUnformattedValue())), FieldSpecSource.Empty)
+                    Collections.singleton(fieldValue.getUnformattedValue())))
             .withNullRestrictions(
-                new NullRestrictions(Nullness.MUST_NOT_BE_NULL), FieldSpecSource.Empty);
+                new NullRestrictions(Nullness.MUST_NOT_BE_NULL));
     }
 
     private FieldSpec getNullRequiredFieldSpec() {
         return FieldSpec.Empty
             .withNullRestrictions(
-                new NullRestrictions(Nullness.MUST_BE_NULL),
-                FieldSpecSource.Empty);
+                new NullRestrictions(Nullness.MUST_BE_NULL));
     }
 }

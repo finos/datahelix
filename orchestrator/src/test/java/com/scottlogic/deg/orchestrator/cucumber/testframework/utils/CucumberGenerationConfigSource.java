@@ -1,6 +1,7 @@
 package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 
 import com.google.inject.Inject;
+import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.generator.config.detail.*;
 import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
 import com.scottlogic.deg.orchestrator.violate.ViolateConfigSource;
@@ -70,11 +71,6 @@ public class CucumberGenerationConfigSource implements AllConfigSource, ViolateC
     }
 
     @Override
-    public boolean isEnableTracing() {
-        return false;
-    }
-
-    @Override
     public File getProfileFile() {
         return new File("mockFilePath");
     }
@@ -86,6 +82,11 @@ public class CucumberGenerationConfigSource implements AllConfigSource, ViolateC
 
     @Override
     public boolean overwriteOutputFiles() {
+        return false;
+    }
+
+    @Override
+    public boolean useStdOut() {
         return false;
     }
 
