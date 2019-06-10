@@ -1168,7 +1168,7 @@ Feature: User can specify that a value is equalTo a required value
   Scenario: 'equalTo' with a non-contradicting 'aValid' constraint should be successful
     Given there is a field foo
     And foo is equal to "GB0002634946"
-    And foo is a valid "ISIN"
+    And foo is of type "ISIN"
     Then the following data should be generated:
       | foo            |
       | null           |
@@ -1177,7 +1177,7 @@ Feature: User can specify that a value is equalTo a required value
   Scenario: 'EqualTo' run against a non contradicting not 'aValid' ISIN should be successful
     Given there is a field foo
     And foo is equal to "a"
-    And foo is anything but a valid "ISIN"
+    And foo is anything but of type "ISIN"
     Then the following data should be generated:
       | foo  |
       | null |
@@ -1186,7 +1186,7 @@ Feature: User can specify that a value is equalTo a required value
   Scenario: Not 'equalTo' run against a non contradicting 'aValid' ISIN should be successful
     Given there is a field foo
     And foo is anything but equal to "a"
-    And foo is a valid "ISIN"
+    And foo is of type "ISIN"
     And foo is in set:
       | "a"            |
       | "GB0002634946" |
@@ -1199,7 +1199,7 @@ Feature: User can specify that a value is equalTo a required value
   Scenario: 'EqualTo' an invalid ISIN with 'aValid' should emit null
     Given there is a field foo
     And foo is equal to "GB00026349"
-    And foo is a valid "ISIN"
+    And foo is of type "ISIN"
     Then the following data should be generated:
       | foo  |
       | null |
@@ -1207,7 +1207,7 @@ Feature: User can specify that a value is equalTo a required value
   Scenario: 'EqualTo' run against a contradicting 'aValid' ISIN should only generate null
     Given there is a field foo
     And foo is equal to "aa"
-    And foo is a valid "ISIN"
+    And foo is of type "ISIN"
     Then the following data should be generated:
       | foo  |
       | null |
@@ -1215,7 +1215,7 @@ Feature: User can specify that a value is equalTo a required value
   Scenario: 'EqualTo' a valid ISIN with a contradicting not 'aValid' ISIN emits null
     Given there is a field foo
     And foo is equal to "GB00YG2XYC52"
-    And foo is anything but a valid "ISIN"
+    And foo is anything but of type "ISIN"
     Then the following data should be generated:
       | foo  |
       | null |
@@ -1223,7 +1223,7 @@ Feature: User can specify that a value is equalTo a required value
   Scenario: 'EqualTo' run against a non contradicting not 'aValid' SEDOL should be successful
     Given there is a field foo
     And foo is equal to "a"
-    And foo is anything but a valid "SEDOL"
+    And foo is anything but of type "SEDOL"
     Then the following data should be generated:
       | foo  |
       | null |
@@ -1232,7 +1232,7 @@ Feature: User can specify that a value is equalTo a required value
   Scenario: Not 'equalTo' run against a non contradicting 'aValid' SEDOL should be successful
     Given there is a field foo
     And foo is anything but equal to "a"
-    And foo is a valid "SEDOL"
+    And foo is of type "SEDOL"
     And foo is in set:
       | "a"       |
       | "0263494" |
@@ -1245,7 +1245,7 @@ Feature: User can specify that a value is equalTo a required value
   Scenario: 'EqualTo' an invalid SEDOL with 'aValid' should emit null
     Given there is a field foo
     And foo is equal to "0263497"
-    And foo is a valid "SEDOL"
+    And foo is of type "SEDOL"
     Then the following data should be generated:
       | foo  |
       | null |
@@ -1253,7 +1253,7 @@ Feature: User can specify that a value is equalTo a required value
   Scenario: 'EqualTo' run against a contradicting 'aValid' SEDOL should only generate null
     Given there is a field foo
     And foo is equal to "aa"
-    And foo is a valid "SEDOL"
+    And foo is of type "SEDOL"
     Then the following data should be generated:
       | foo  |
       | null |
@@ -1261,7 +1261,7 @@ Feature: User can specify that a value is equalTo a required value
   Scenario: 'EqualTo' a valid SEDOL with a contradicting not 'aValid' SEDOL emits null
     Given there is a field foo
     And foo is equal to "0263494"
-    And foo is anything but a valid "SEDOL"
+    And foo is anything but of type "SEDOL"
     Then the following data should be generated:
       | foo  |
       | null |
@@ -1269,7 +1269,7 @@ Feature: User can specify that a value is equalTo a required value
   Scenario: 'EqualTo' run against a non contradicting not 'aValid' CUSIP should be successful
     Given there is a field foo
     And foo is equal to "a"
-    And foo is anything but a valid "CUSIP"
+    And foo is anything but of type "CUSIP"
     Then the following data should be generated:
       | foo  |
       | null |
@@ -1278,7 +1278,7 @@ Feature: User can specify that a value is equalTo a required value
   Scenario: Not 'equalTo' run against a non contradicting 'aValid' CUSIP should be successful
     Given there is a field foo
     And foo is anything but equal to "a"
-    And foo is a valid "CUSIP"
+    And foo is of type "CUSIP"
     And foo is in set:
       | "a"         |
       | "38259P508" |
@@ -1291,7 +1291,7 @@ Feature: User can specify that a value is equalTo a required value
   Scenario: 'EqualTo' an invalid CUSIP with 'aValid' should emit null
     Given there is a field foo
     And foo is equal to "38259P502"
-    And foo is a valid "CUSIP"
+    And foo is of type "CUSIP"
     Then the following data should be generated:
       | foo  |
       | null |
@@ -1299,7 +1299,7 @@ Feature: User can specify that a value is equalTo a required value
   Scenario: 'EqualTo' run against a contradicting 'aValid' CUSIP should only generate null
     Given there is a field foo
     And foo is equal to "aa"
-    And foo is a valid "CUSIP"
+    And foo is of type "CUSIP"
     Then the following data should be generated:
       | foo  |
       | null |
@@ -1307,7 +1307,7 @@ Feature: User can specify that a value is equalTo a required value
   Scenario: 'EqualTo' a valid CUSIP with a contradicting not 'aValid' CUSIP emits null
     Given there is a field foo
     And foo is equal to "38259P508"
-    And foo is anything but a valid "CUSIP"
+    And foo is anything but of type "CUSIP"
     Then the following data should be generated:
       | foo  |
       | null |

@@ -7,8 +7,6 @@ import java.util.stream.Stream;
 public class BaseConstraintReaderMap implements ConstraintReaderMap {
     private final Map<String, Map<String, ConstraintReader>> map = new HashMap<>();
 
-    //public BaseConstraintReaderMap() {}
-
     public BaseConstraintReaderMap(Stream<ConstraintReaderMapEntryProvider> providersToLoad) {
         providersToLoad.forEach(p -> add(p.getConstraintReaderMapEntries()));
     }
@@ -20,7 +18,7 @@ public class BaseConstraintReaderMap implements ConstraintReaderMap {
         }
         Map<String, ConstraintReader> innerMap = map.get(typeCode);
         if (innerMap == null || innerMap.isEmpty()) {
-            return null;
+            throw new InvalidProfileException("Profile is invalid: no constraints known for " + typeCode);
         }
 
         // handle "is": "X", "value": "Y" cases
@@ -34,8 +32,12 @@ public class BaseConstraintReaderMap implements ConstraintReaderMap {
                     return entry.getValue();
                 }
             }
-            // fallback to null if there are entries for X but no match to Y
-            return null;
+            // Throw exception if there are entries for X but no match to Y
+            throw new InvalidProfileException(String.format(
+                "Profile is invalid: no constraints known for \"is\": \"%s\", \"value\": \"%s\"",
+                typeCode,
+                valueCode
+            ));
         }
 
         // handle bare "is": "X" cases with no "value" part.

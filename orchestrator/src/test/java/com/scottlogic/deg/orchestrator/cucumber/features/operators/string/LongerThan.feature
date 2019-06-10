@@ -216,9 +216,9 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | 1                        |
       | 2011-01-01T00:00:00.000Z |
 
-  Scenario: 'longerThan' alongside a non-contradicting 'aValid' ISIN constraint should be successful
+  Scenario: 'longerThan' alongside a non-contradicting ISIN constraint should be successful
     Given foo is longer than 11
-    And foo is a valid "ISIN"
+    And foo is of type "ISIN"
     And foo is in set:
       | "GB00YG2XYC52" |
       | "US0378331005" |
@@ -229,9 +229,9 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "GB00YG2XYC52" |
       | "US0378331005" |
 
-  Scenario: 'longerThan' alongside a non-contradicting not 'aValid' ISIN constraint should be successful
+  Scenario: 'longerThan' alongside a non-contradicting non-ISIN constraint should be successful
     Given foo is longer than 2
-    And foo is anything but a valid "ISIN"
+    And foo is anything but of type "ISIN"
     And foo is in set:
       | "US0000XVGZA3" |
       | "U10378331005" |
@@ -243,9 +243,9 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "U10378331005" |
       | "twelvedigits" |
 
-  Scenario: Not 'longerThan' alongside a non-contradicting 'aValid' ISIN constraint should be successful
+  Scenario: Not 'longerThan' alongside a non-contradicting ISIN constraint should be successful
     Given foo is anything but longer than 12
-    And foo is a valid "ISIN"
+    And foo is of type "ISIN"
     And foo is in set:
       | "GB00YG2XYC52" |
       | "US0378331005" |
@@ -256,16 +256,16 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "GB00YG2XYC52" |
       | "US0378331005" |
 
-  Scenario: 'longerThan' against contradicting 'aValid' ISIN emits null
+  Scenario: 'longerThan' against contradicting ISIN emits null
     Given foo is longer than 20
-    And foo is a valid "ISIN"
+    And foo is of type "ISIN"
     Then the following data should be generated:
       | foo  |
       | null |
 
-  Scenario: Not 'longerThan' with a non-contradicting not 'aValid' ISIN is successful
+  Scenario: Not 'longerThan' with a non-contradicting non-ISIN is successful
     Given foo is anything but longer than 12
-    And foo is anything but a valid "ISIN"
+    And foo is anything but of type "ISIN"
     And foo is in set:
       | "US0000XVGZA3" |
       | "U10000XVGZA3" |
@@ -277,9 +277,9 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "U10000XVGZA3" |
       | "twelvedigits" |
 
-  Scenario: 'longerThan' alongside a non-contradicting 'aValid' SEDOL constraint should be successful
+  Scenario: 'longerThan' alongside a non-contradicting SEDOL constraint should be successful
     Given foo is longer than 6
-    And foo is a valid "SEDOL"
+    And foo is of type "SEDOL"
     And foo is in set:
       | "0263494" |
       | "3091357" |
@@ -290,9 +290,9 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "0263494" |
       | "3091357" |
 
-  Scenario: 'longerThan' alongside a non-contradicting not 'aValid' SEDOL constraint should be successful
+  Scenario: 'longerThan' alongside a non-contradicting non-SEDOL constraint should be successful
     Given foo is longer than 2
-    And foo is anything but a valid "SEDOL"
+    And foo is anything but of type "SEDOL"
     And foo is in set:
       | "0263499" |
       | "3091352" |
@@ -304,9 +304,9 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "3091352" |
       | "string7" |
 
-  Scenario: Not 'longerThan' alongside a non-contradicting 'aValid' SEDOL constraint should be successful
+  Scenario: Not 'longerThan' alongside a non-contradicting SEDOL constraint should be successful
     Given foo is anything but longer than 7
-    And foo is a valid "SEDOL"
+    And foo is of type "SEDOL"
     And foo is in set:
       | "0263494" |
       | "3091357" |
@@ -317,16 +317,16 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "0263494" |
       | "3091357" |
 
-  Scenario: 'longerThan' against contradicting 'aValid' SEDOL emits null
+  Scenario: 'longerThan' against contradicting SEDOL emits null
     Given foo is longer than 20
-    And foo is a valid "SEDOL"
+    And foo is of type "SEDOL"
     Then the following data should be generated:
       | foo  |
       | null |
 
-  Scenario: Not 'longerThan' with a non-contradicting not 'aValid' SEDOL is successful
+  Scenario: Not 'longerThan' with a non-contradicting non-SEDOL is successful
     Given foo is anything but longer than 7
-    And foo is anything but a valid "SEDOL"
+    And foo is anything but of type "SEDOL"
     And foo is in set:
       | "0263497" |
       | "3091354" |
@@ -338,9 +338,9 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "3091354" |
       | "string7" |
 
-  Scenario: 'longerThan' alongside a non-contradicting 'aValid' CUSIP constraint should be successful
+  Scenario: 'longerThan' alongside a non-contradicting CUSIP constraint should be successful
     Given foo is longer than 8
-    And foo is a valid "CUSIP"
+    And foo is of type "CUSIP"
     And foo is in set:
       | "38259P508" |
       | "594918104" |
@@ -351,9 +351,9 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "38259P508" |
       | "594918104" |
 
-  Scenario: 'longerThan' alongside a non-contradicting not 'aValid' CUSIP constraint should be successful
+  Scenario: 'longerThan' alongside a non-contradicting non-CUSIP constraint should be successful
     Given foo is longer than 2
-    And foo is anything but a valid "CUSIP"
+    And foo is anything but of type "CUSIP"
     And foo is in set:
       | "38259W508" |
       | "5F4918104" |
@@ -365,9 +365,9 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "5F4918104" |
       | "strngnine" |
 
-  Scenario: Not 'longerThan' alongside a non-contradicting 'aValid' CUSIP constraint should be successful
+  Scenario: Not 'longerThan' alongside a non-contradicting CUSIP constraint should be successful
     Given foo is anything but longer than 9
-    And foo is a valid "CUSIP"
+    And foo is of type "CUSIP"
     And foo is in set:
       | "38259P508" |
       | "594918104" |
@@ -378,16 +378,16 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "38259P508" |
       | "594918104" |
 
-  Scenario: 'longerThan' against contradicting 'aValid' CUSIP emits null
+  Scenario: 'longerThan' against contradicting CUSIP emits null
     Given foo is longer than 10
-    And foo is a valid "CUSIP"
+    And foo is of type "CUSIP"
     Then the following data should be generated:
       | foo  |
       | null |
 
-  Scenario: Not 'longerThan' with a non-contradicting not 'aValid' CUSIP is successful
+  Scenario: Not 'longerThan' with a non-contradicting non-CUSIP is successful
     Given foo is anything but longer than 9
-    And foo is anything but a valid "CUSIP"
+    And foo is anything but of type "CUSIP"
     And foo is in set:
       | "38259W508" |
       | "5F4918104" |

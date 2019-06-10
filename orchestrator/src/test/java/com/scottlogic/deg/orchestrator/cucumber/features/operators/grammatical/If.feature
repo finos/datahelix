@@ -1585,7 +1585,7 @@ Feature: Values can be specified by using if, then and else constraints
       | foo    | bar    |
       | "dddd" | "4444" |
 
-  Scenario: Running an if request that contains a non contradictory aValid constraint within its if statement should be successful
+  Scenario: Running an if request that contains a non contradictory ofType ISIN constraint within its if statement should be successful
     Given foo is in set:
       | "GB0002634946" |
       | "bb"           |
@@ -1601,7 +1601,7 @@ Feature: Values can be specified by using if, then and else constraints
     And there is a constraint:
       """
       {
-        "if": { "field": "foo", "is": "aValid", "value": "ISIN" },
+        "if": { "field": "foo", "is": "ofType", "value": "ISIN" },
         "then": { "field": "bar", "is": "equalTo", "value": "22" },
         "else": { "field": "bar", "is": "equalTo", "value": "4444" }
       }
@@ -1613,7 +1613,7 @@ Feature: Values can be specified by using if, then and else constraints
       | "ccc"          | "4444" |
       | "dddd"         | "4444" |
 
-  Scenario: Running an if request that contains a non contradictory aValid constraint within its then statement should be successful
+  Scenario: Running an if request that contains a non contradictory ofType ISIN constraint within its then statement should be successful
     Given foo is in set:
       | "GB0002634946" |
       | "bb"           |
@@ -1630,7 +1630,7 @@ Feature: Values can be specified by using if, then and else constraints
       """
       {
         "if": { "field": "foo", "is": "equalTo", "value": "bb" },
-        "then": { "field": "bar", "is": "aValid", "value": "ISIN" },
+        "then": { "field": "bar", "is": "ofType", "value": "ISIN" },
         "else": { "field": "bar", "is": "equalTo", "value": "333" }
       }
       """
@@ -1641,7 +1641,7 @@ Feature: Values can be specified by using if, then and else constraints
       | "ccc"          | "333"          |
       | "dddd"         | "333"          |
 
-  Scenario: Running an if request that contains a non contradictory aValid constraint within its else statement should be successful
+  Scenario: Running an if request that contains a non contradictory ofType ISIN constraint within its else statement should be successful
     Given foo is in set:
       | "GB0002634946" |
       | "bb"           |
@@ -1659,7 +1659,7 @@ Feature: Values can be specified by using if, then and else constraints
       {
         "if": { "field": "foo", "is": "equalTo", "value": "bb" },
         "then": { "field": "bar", "is": "equalTo", "value": "22" },
-        "else": { "field": "bar", "is": "aValid", "value": "ISIN" }
+        "else": { "field": "bar", "is": "ofType", "value": "ISIN" }
       }
       """
     Then the following data should be generated:
@@ -1669,7 +1669,7 @@ Feature: Values can be specified by using if, then and else constraints
       | "ccc"          | "GB0002634946" |
       | "dddd"         | "GB0002634946" |
 
-  Scenario: Running an if request that contains a contradictory aValid constraint within its if statement should be successful
+  Scenario: Running an if request that contains a contradictory ofType ISIN constraint within its if statement should be successful
     Given foo is in set:
       | "aa"   |
       | "bb"   |
@@ -1685,7 +1685,7 @@ Feature: Values can be specified by using if, then and else constraints
     And there is a constraint:
       """
       {
-        "if": { "field": "foo", "is": "aValid", "value": "ISIN" },
+        "if": { "field": "foo", "is": "ofType", "value": "ISIN" },
         "then": { "field": "bar", "is": "equalTo", "value": "22" },
         "else": { "field": "bar", "is": "equalTo", "value": "333" }
       }
@@ -1698,7 +1698,7 @@ Feature: Values can be specified by using if, then and else constraints
       | "dddd" | "333" |
 
 
-  Scenario: Running an if request that contains a contradictory aValid constraint within its then statement should be successful
+  Scenario: Running an if request that contains a contradictory ofType ISIN constraint within its then statement should be successful
     Given foo is in set:
       | "aa"   |
       | "bb"   |
@@ -1715,7 +1715,7 @@ Feature: Values can be specified by using if, then and else constraints
       """
       {
         "if": { "field": "foo", "is": "equalTo", "value": "ccc" },
-        "then": { "field": "bar", "is": "aValid", "value": "ISIN" },
+        "then": { "field": "bar", "is": "ofType", "value": "ISIN" },
         "else": { "field": "bar", "is": "equalTo", "value": "333" }
       }
       """
@@ -1725,7 +1725,7 @@ Feature: Values can be specified by using if, then and else constraints
       | "bb"   | "333" |
       | "dddd" | "333" |
 
-  Scenario: Running an if request that contains a contradictory aValid constraint within its else statement should be successful
+  Scenario: Running an if request that contains a contradictory ofType ISIN constraint within its else statement should be successful
     Given foo is in set:
       | "aa"   |
       | "bb"   |
@@ -1743,7 +1743,7 @@ Feature: Values can be specified by using if, then and else constraints
       {
         "if": { "field": "foo", "is": "equalTo", "value": "ccc" },
         "then": { "field": "bar", "is": "equalTo", "value": "333" },
-        "else": { "field": "bar", "is": "aValid", "value": "ISIN" }
+        "else": { "field": "bar", "is": "ofType", "value": "ISIN" }
       }
       """
     Then the following data should be generated:

@@ -216,71 +216,71 @@ Feature: User can specify that a field is null or absent
 
 ### aValid ###
 
-  Scenario: Not 'null' with a non contradicting 'aValid' ISIN should be successful
+  Scenario: Not 'null' with a non contradicting ISIN should be successful
     Given foo is anything but null
-    And foo is a valid "ISIN"
+    And foo is of type "ISIN"
     And foo is in set:
       | "GB0002634946" |
     Then the following data should be generated:
       | foo            |
       | "GB0002634946" |
 
-  Scenario: 'Null' with a contradicting 'aValid' ISIN should only generate null
+  Scenario: 'Null' with a contradicting ISIN should only generate null
     Given foo is null
-    And foo is a valid "ISIN"
+    And foo is of type "ISIN"
     Then the following data should be generated:
       | foo  |
       | null |
 
-  Scenario: 'Null' with a contradicting not 'aValid' ISIN should only generate null
+  Scenario: 'Null' with a contradicting non-ISIN should only generate null
     Given foo is null
-    And foo is anything but a valid "ISIN"
+    And foo is anything but of type "ISIN"
     Then the following data should be generated:
       | foo  |
       | null |
 
-  Scenario: Not 'null' with a non contradicting 'aValid' SEDOL should be successful
+  Scenario: Not 'null' with a non contradicting SEDOL should be successful
     Given foo is anything but null
-    And foo is a valid "SEDOL"
+    And foo is of type "SEDOL"
     And foo is in set:
       | "0263494" |
     Then the following data should be generated:
       | foo       |
       | "0263494" |
 
-  Scenario: 'Null' with a contradicting 'aValid' SEDOL should only generate null
+  Scenario: 'Null' with a contradicting SEDOL should only generate null
     Given foo is null
-    And foo is a valid "SEDOL"
+    And foo is of type "SEDOL"
     Then the following data should be generated:
       | foo  |
       | null |
 
-  Scenario: 'Null' with a contradicting not 'aValid' SEDOL should only generate null
+  Scenario: 'Null' with a contradicting non-SEDOL should only generate null
     Given foo is null
-    And foo is anything but a valid "SEDOL"
+    And foo is anything but of type "SEDOL"
     Then the following data should be generated:
       | foo  |
       | null |
 
-  Scenario: Not 'null' with a non contradicting 'aValid' CUSIP should be successful
+  Scenario: Not 'null' with a non contradicting CUSIP should be successful
     Given foo is anything but null
-    And foo is a valid "CUSIP"
+    And foo is of type "CUSIP"
     And foo is in set:
       | "38259P508" |
     Then the following data should be generated:
       | foo         |
       | "38259P508" |
 
-  Scenario: 'Null' with a contradicting 'aValid' CUSIP should only generate null
+  Scenario: 'Null' with a contradicting CUSIP should only generate null
     Given foo is null
-    And foo is a valid "CUSIP"
+    And foo is of type "CUSIP"
     Then the following data should be generated:
       | foo  |
       | null |
 
-  Scenario: 'Null' with a contradicting not 'aValid' CUSIP should only generate null
+  Scenario: 'Null' with a contradicting non-CUSIP should only generate null
     Given foo is null
-    And foo is anything but a valid "CUSIP"
+    And foo is anything but of type "CUSIP"
     Then the following data should be generated:
       | foo  |
       | null |

@@ -112,7 +112,6 @@ public class BaseConstraintReaderMapTests {
     }
 
     private static Stream<Arguments> stringLengthInvalidOperandProvider() {
-
         ConstraintDTO numberValueDto = new ConstraintDTO();
         numberValueDto.field = "test";
         numberValueDto.value = new BigDecimal(10.11);
@@ -144,18 +143,18 @@ public class BaseConstraintReaderMapTests {
         numericTypeValueDto.field = "test";
         numericTypeValueDto.value = "numeric";
 
-        ConstraintDTO invalidTypeValueDto = new ConstraintDTO();
-        invalidTypeValueDto.field = "test";
-        invalidTypeValueDto.value = "garbage";
+        return Stream.of(Arguments.of(AtomicConstraintType.IS_OF_TYPE, numericTypeValueDto));
+    }
 
-        return Stream.of(
-            Arguments.of(AtomicConstraintType.IS_OF_TYPE, numericTypeValueDto),
-            Arguments.of(AtomicConstraintType.IS_OF_TYPE, invalidTypeValueDto)
-        );
+    private static Stream<Arguments> ofTypeUnmappedValueProvider() {
+        ConstraintDTO invalidTypeNameDto = new ConstraintDTO();
+        invalidTypeNameDto.field = "test";
+        invalidTypeNameDto.value = "garbage";
+
+        return Stream.of(Arguments.of(AtomicConstraintType.IS_OF_TYPE, invalidTypeNameDto));
     }
 
     private static Stream<Arguments> numericOutOfBoundsOperandProvider() {
-
         ConstraintDTO maxValueDtoPlusOne = new ConstraintDTO();
         maxValueDtoPlusOne.field = "test";
         maxValueDtoPlusOne.value = Defaults.NUMERIC_MAX.add(BigDecimal.ONE);
@@ -216,7 +215,6 @@ public class BaseConstraintReaderMapTests {
 
         for (AtomicConstraintType type : AtomicConstraintType.values()) {
             ConstraintReader reader = constraintReaderMap.getReader(type.toString(), null);
-            // Assert.assertNotNull("No reader found for constraint type '" + type.toString() + "'", reader);
             if (reader == null) {
                 missingConstraints.add(type.toString());
             }
@@ -236,7 +234,10 @@ public class BaseConstraintReaderMapTests {
     @ParameterizedTest(name = "{0} should return {1}")
     @MethodSource("testProvider")
     public void testAtomicConstraintReader(AtomicConstraintType type, ConstraintDTO dto, Class<?> constraintType) {
-        ConstraintReader reader = constraintReaderMap.getReader(type.toString(), null);
+        ConstraintReader reader = constraintReaderMap.getReader(
+            type.toString(),
+            dto.value != null ? dto.value.toString() : null
+        );
 
         try {
             Set<RuleInformation> ruleInformation = Collections.singleton(new RuleInformation());
@@ -256,11 +257,24 @@ public class BaseConstraintReaderMapTests {
     @ParameterizedTest(name = "{0} should be invalid")
     @MethodSource({"stringLengthInvalidOperandProvider", "ofTypeInvalidValueProvider"})
     public void testAtomicConstraintReaderWithInvalidOperands(AtomicConstraintType type, ConstraintDTO dto) {
-        ConstraintReader reader = constraintReaderMap.getReader(type.toString(), null);
+        ConstraintReader reader = constraintReaderMap.getReader(
+            type.toString(),
+            dto.value != null ? dto.value.toString() : null
+        );
 
         Set<RuleInformation> ruleInformation = Collections.singleton(new RuleInformation());
 
         Assertions.assertThrows(InvalidProfileException.class, () -> reader.apply(dto, profileFields, ruleInformation));
+    }
+
+    @DisplayName("Should fail when there is no mapping for a given operator-operand combination")
+    @ParameterizedTest(name = "{0} should be invalid")
+    @MethodSource("ofTypeUnmappedValueProvider")
+    public void testBaseConstraintReaderMapWithUnmappedOperands(AtomicConstraintType type, ConstraintDTO dto) {
+        Assertions.assertThrows(
+            InvalidProfileException.class,
+            () -> constraintReaderMap.getReader(type.toString(), getStringValueOrNull(dto))
+        );
     }
 
     @DisplayName("Should fail when value property is numeric and out of bounds")
@@ -382,5 +396,9 @@ public class BaseConstraintReaderMapTests {
         IsAfterConstantDateTimeConstraint constraint = (IsAfterConstantDateTimeConstraint) reader.apply(dateDto, profileFields, ruleInformation);
 
         return constraint.referenceValue;
+    }
+
+    private String getStringValueOrNull(ConstraintDTO dto) {
+        return dto.value != null ? dto.value.toString() : null;
     }
 }
