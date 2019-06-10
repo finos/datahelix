@@ -32,11 +32,11 @@ public class CucumberProfileReader implements ProfileReader {
     }
 
     @Override
-    public Profile read(Path filePath) throws InvalidProfileException {
+    public Profile read(Path filePath) {
         return this.getProfile();
     }
 
-    private Profile getProfile() throws InvalidProfileException {
+    private Profile getProfile() {
         try {
             MainConstraintReader constraintReader = new MainConstraintReader(atomicConstraintReaderLookup);
             ProfileFields profileFields = new ProfileFields(state.profileFields);

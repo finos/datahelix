@@ -39,7 +39,7 @@ public class JsonProfileReaderTests {
         this.json = json;
     }
 
-    private Profile getResultingProfile() throws IOException, InvalidProfileException {
+    private Profile getResultingProfile() throws IOException {
         if (this.profile == null) {
             JsonProfileReader objectUnderTest = new JsonProfileReader();
             this.profile = objectUnderTest.read(this.json);
@@ -56,7 +56,7 @@ public class JsonProfileReaderTests {
         Assertions.assertThrows(InvalidProfileException.class, this::getResultingProfile);
     }
 
-    private void expectRules(Consumer<Rule>... ruleAssertions) throws IOException, InvalidProfileException {
+    private void expectRules(Consumer<Rule>... ruleAssertions) throws IOException {
         expectMany(this.getResultingProfile().getRules(), ruleAssertions);
     }
 
@@ -80,7 +80,7 @@ public class JsonProfileReaderTests {
         return field -> Assert.assertThat(field.name, equalTo(expectedName));
     }
 
-    private void expectFields(Consumer<Field>... fieldAssertions) throws IOException, InvalidProfileException {
+    private void expectFields(Consumer<Field>... fieldAssertions) throws IOException {
         expectMany(this.getResultingProfile().getFields(), fieldAssertions);
     }
 
@@ -105,7 +105,7 @@ public class JsonProfileReaderTests {
 
 
     @Test
-    public void shouldDeserialiseSingleField() throws IOException, InvalidProfileException {
+    public void shouldDeserialiseSingleField() throws IOException {
         givenJson(
                 "{" +
                         "    \"schemaVersion\": \"0.1\"," +
@@ -118,7 +118,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldDeserialiseMultipleFields() throws IOException, InvalidProfileException {
+    public void shouldDeserialiseMultipleFields() throws IOException {
         givenJson(
                 "{" +
                         "    \"schemaVersion\": \"0.1\"," +
@@ -132,7 +132,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldDeserialiseInvalidProfileAsEmptyRule() throws IOException, InvalidProfileException {
+    public void shouldDeserialiseInvalidProfileAsEmptyRule() throws IOException {
         givenJson(
             "{" +
                 "    \"schemaVersion\": \"0.1\"," +
@@ -146,7 +146,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldGiveDefaultNameToUnnamedRules() throws IOException, InvalidProfileException {
+    public void shouldGiveDefaultNameToUnnamedRules() throws IOException {
         givenJson(
                 "{" +
                         "    \"schemaVersion\": \"0.1\"," +
@@ -165,7 +165,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldReadNameOfNamedRules() throws IOException, InvalidProfileException {
+    public void shouldReadNameOfNamedRules() throws IOException {
         givenJson(
                 "{" +
                         "    \"schemaVersion\": \"0.1\"," +
@@ -225,7 +225,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldDeserialiseIsOfTypeConstraint() throws IOException, InvalidProfileException {
+    public void shouldDeserialiseIsOfTypeConstraint() throws IOException {
         givenJson(
                 "{" +
                         "    \"schemaVersion\": \"0.1\"," +
@@ -249,7 +249,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldDeserialiseFormatConstraint() throws IOException, InvalidProfileException {
+    public void shouldDeserialiseFormatConstraint() throws IOException {
         givenJson(
                 "{" +
                         "    \"schemaVersion\": \"0.1\"," +
@@ -273,7 +273,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldDeserialiseIsOfLengthConstraint() throws IOException, InvalidProfileException {
+    public void shouldDeserialiseIsOfLengthConstraint() throws IOException {
         givenJson(
                 "{" +
                         "    \"schemaVersion\": \"0.1\"," +
@@ -295,7 +295,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldDeserialiseNotWrapper() throws IOException, InvalidProfileException {
+    public void shouldDeserialiseNotWrapper() throws IOException {
         // Arrange
         givenJson(
                 "{" +
@@ -322,7 +322,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldDeserialiseOrConstraint() throws IOException, InvalidProfileException {
+    public void shouldDeserialiseOrConstraint() throws IOException {
         givenJson(
                 "{" +
                         "    \"schemaVersion\": \"0.1\"," +
@@ -351,7 +351,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldDeserialiseAndConstraint() throws IOException, InvalidProfileException {
+    public void shouldDeserialiseAndConstraint() throws IOException {
         givenJson(
                 "{" +
                         "    \"schemaVersion\": \"0.1\"," +
@@ -380,7 +380,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldDeserialiseIfConstraint() throws IOException, InvalidProfileException {
+    public void shouldDeserialiseIfConstraint() throws IOException {
         givenJson(
                 "{" +
                         "    \"schemaVersion\": \"0.1\"," +
@@ -418,7 +418,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldDeserialiseIfConstraintWithoutElse() throws IOException, InvalidProfileException {
+    public void shouldDeserialiseIfConstraintWithoutElse() throws IOException {
         givenJson(
                 "{" +
                         "    \"schemaVersion\": \"0.1\"," +
@@ -455,7 +455,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldDeserialiseOneAsNumericGranularToConstraint() throws IOException, InvalidProfileException {
+    public void shouldDeserialiseOneAsNumericGranularToConstraint() throws IOException {
         givenJson(
             "{" +
             "    \"schemaVersion\": \"0.1\"," +
@@ -481,7 +481,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldDeserialiseTenthAsNumericGranularToConstraint() throws IOException, InvalidProfileException {
+    public void shouldDeserialiseTenthAsNumericGranularToConstraint() throws IOException {
         givenJson(
             "{" +
                 "    \"schemaVersion\": \"0.1\"," +
@@ -507,7 +507,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldDisregardTrailingZeroesInNumericGranularities() throws IOException, InvalidProfileException {
+    public void shouldDisregardTrailingZeroesInNumericGranularities() throws IOException {
         givenJson(
             "{" +
                 "    \"schemaVersion\": \"0.1\"," +
@@ -533,7 +533,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldAllowValidISO8601DateTime() throws IOException, InvalidProfileException {
+    public void shouldAllowValidISO8601DateTime() throws IOException {
         givenJson(
             "{" +
                 "    \"schemaVersion\": \"0.1\"," +
