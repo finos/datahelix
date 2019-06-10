@@ -2,6 +2,8 @@ package com.scottlogic.deg.profile.reader.names;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes;
 import com.scottlogic.deg.profile.reader.inputstream.ClasspathMapper;
+import com.scottlogic.deg.profile.reader.parser.CSVRecordParser;
+import com.scottlogic.deg.profile.reader.parser.NameCSVPopulator;
 
 import java.io.InputStream;
 import java.util.*;
@@ -26,7 +28,7 @@ public class NameRetrievalService {
 
     private static final Map<NameConstraintTypes, Set<String>> NAME_TYPE_MAPPINGS;
 
-    private final NameCSVPopulator populator;
+    private final CSVRecordParser<NameHolder> populator;
 
     private final Function<String, InputStream> mapper;
 

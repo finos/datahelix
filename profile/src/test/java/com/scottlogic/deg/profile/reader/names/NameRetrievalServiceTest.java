@@ -2,6 +2,7 @@ package com.scottlogic.deg.profile.reader.names;
 
 
 import com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes;
+import com.scottlogic.deg.profile.reader.parser.NameCSVPopulator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;

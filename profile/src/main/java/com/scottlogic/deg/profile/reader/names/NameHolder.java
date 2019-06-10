@@ -16,8 +16,12 @@ public class NameHolder {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         NameHolder that = (NameHolder) o;
         return Objects.equals(name, that.name);
     }

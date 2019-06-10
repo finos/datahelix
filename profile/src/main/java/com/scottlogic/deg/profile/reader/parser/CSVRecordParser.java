@@ -1,36 +1,32 @@
-package com.scottlogic.deg.profile.reader.names;
+package com.scottlogic.deg.profile.reader.parser;
 
 import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class NameCSVPopulator {
+@FunctionalInterface
+public interface CSVRecordParser<T> {
 
-    public Set<NameHolder> readFromFile(InputStream is) {
+    default Set<T> readFromFile(InputStream is) {
         try {
-            return CSVParser.parse(
+            return org.apache.commons.csv.CSVParser.parse(
                 is,
                 Charset.defaultCharset(),
                 CSVFormat.DEFAULT)
                 .getRecords()
                 .stream()
-                .map(this::populateWithRecord)
+                .map(this::convertRecord)
                 .collect(Collectors.toSet());
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
 
-    private NameHolder populateWithRecord(CSVRecord record) {
-        return new NameHolder(record.get(0));
-    }
-
+    T convertRecord(CSVRecord element);
 }
