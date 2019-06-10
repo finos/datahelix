@@ -20,7 +20,8 @@ public class NullRestrictionsMergeOperation implements RestrictionMergeOperation
         }
 
         return Optional.of(merging.withNullRestrictions(
-            mergeResult.restrictions));
+            mergeResult.restrictions,
+            FieldSpecSource.fromFieldSpecs(left, right)));
     }
 }
 

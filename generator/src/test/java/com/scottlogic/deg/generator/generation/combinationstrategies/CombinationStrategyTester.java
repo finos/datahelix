@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.generation.combinationstrategies;
 
+import com.scottlogic.deg.common.output.DataBagValueSource;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.builders.DataBagBuilder;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
@@ -38,7 +39,7 @@ class CombinationStrategyTester {
         DataBagBuilder builder = new DataBagBuilder();
 
         for (String fieldName : fieldNames) {
-            builder.set(new Field(fieldName), "whatever");
+            builder.set(new Field(fieldName), "whatever", DataBagValueSource.Empty);
         }
 
         return builder.build();

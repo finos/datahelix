@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.builders;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.output.DataBagValueSource;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 
@@ -23,8 +24,8 @@ public class DataBagBuilder {
         return this;
     }
 
-    public DataBagBuilder set(Field field, Object value) {
-        return this.set(field, new DataBagValue(value));
+    public DataBagBuilder set(Field field, Object value, DataBagValueSource source) {
+        return this.set(field, new DataBagValue(value, source));
     }
 
     public DataBag build() {

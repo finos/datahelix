@@ -31,9 +31,11 @@ class NumericRestrictionsMergeOperationTests {
         merger = mock(NumericRestrictionsMerger.class);
         operation = new NumericRestrictionsMergeOperation(merger);
         left = FieldSpec.Empty.withNumericRestrictions(
-            new NumericRestrictions());
+            new NumericRestrictions(),
+            FieldSpecSource.Empty);
         right = FieldSpec.Empty.withNumericRestrictions(
-            new NumericRestrictions());
+            new NumericRestrictions(),
+            FieldSpecSource.Empty);
     }
 
     @Test
@@ -66,10 +68,8 @@ class NumericRestrictionsMergeOperationTests {
     @Test
     public void applyMergeOperation_withContradictoryNumericRestrictions_shouldPreventAnyNumericValues(){
         FieldSpec merging = FieldSpec.Empty
-            .withTypeRestrictions(
-                DataTypeRestrictions.createFromWhiteList(
-                    IsOfTypeConstraint.Types.STRING,
-                    IsOfTypeConstraint.Types.NUMERIC));
+            .withTypeRestrictions(DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.STRING, IsOfTypeConstraint.Types.NUMERIC),
+                FieldSpecSource.Empty);
 
         when(merger.merge(left.getNumericRestrictions(), right.getNumericRestrictions()))
             .thenReturn(MergeResult.unsuccessful());
@@ -86,7 +86,7 @@ class NumericRestrictionsMergeOperationTests {
     @Test
     public void applyMergeOperation_withContradictoryNumericRestrictionsAndNumericTypeAlreadyNotPermitted_shouldPreventAnyNumericValues(){
         FieldSpec merging = FieldSpec.Empty
-            .withTypeRestrictions(DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.STRING));
+            .withTypeRestrictions(DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.STRING), FieldSpecSource.Empty);
 
         when(merger.merge(left.getNumericRestrictions(), right.getNumericRestrictions()))
             .thenReturn(MergeResult.unsuccessful());
@@ -103,7 +103,7 @@ class NumericRestrictionsMergeOperationTests {
     @Test
     public void applyMergeOperation_withContradictoryNumericRestrictionsAndNumericTypeOnlyPermittedType_shouldPreventAnyNumericValues(){
         FieldSpec merging = FieldSpec.Empty
-            .withTypeRestrictions(DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.NUMERIC));
+            .withTypeRestrictions(DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.NUMERIC), FieldSpecSource.Empty);
 
         when(merger.merge(left.getNumericRestrictions(), right.getNumericRestrictions()))
             .thenReturn(MergeResult.unsuccessful());
@@ -120,7 +120,7 @@ class NumericRestrictionsMergeOperationTests {
     @Test
     public void applyMergeOperation_withMergableNumericRestrictions_shouldApplyMergedNumericRestrictions(){
         FieldSpec merging = FieldSpec.Empty
-            .withTypeRestrictions(DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.NUMERIC));
+            .withTypeRestrictions(DataTypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.NUMERIC), FieldSpecSource.Empty);
         NumericRestrictions merged = new NumericRestrictions();
         when(merger.merge(left.getNumericRestrictions(), right.getNumericRestrictions()))
             .thenReturn(new MergeResult<>(merged));

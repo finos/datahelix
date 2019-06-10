@@ -10,7 +10,8 @@ public class FormatRestrictionsMergeOperation implements RestrictionMergeOperati
     @Override
     public Optional<FieldSpec> applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merging) {
         return Optional.of(merging.withFormatRestrictions(
-            formatRestrictionMerger.merge(left.getFormatRestrictions(), right.getFormatRestrictions())));
+            formatRestrictionMerger.merge(left.getFormatRestrictions(), right.getFormatRestrictions()),
+            FieldSpecSource.fromFieldSpecs(left, right)));
     }
 }
 

@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.generation.databags;
 
+import com.scottlogic.deg.common.output.DataBagValueSource;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.builders.DataBagBuilder;
 import org.junit.Assert;
@@ -15,7 +16,7 @@ class DataBagTests {
         Field idField = new Field("id");
 
         // ACT
-        DataBag objectUnderTest = new DataBagBuilder().set(idField, 3).build();
+        DataBag objectUnderTest = new DataBagBuilder().set(idField, 3, DataBagValueSource.Empty).build();
 
         // ASSERT
         Assert.assertThat(
@@ -32,8 +33,8 @@ class DataBagTests {
         Assertions.assertThrows(
             IllegalArgumentException.class,
             () -> new DataBagBuilder()
-                .set(idField, 3)
-                .set(idField, 3)
+                .set(idField, 3, DataBagValueSource.Empty)
+                .set(idField, 3, DataBagValueSource.Empty)
                 .build());
     }
 
@@ -56,8 +57,8 @@ class DataBagTests {
         Field idField = new Field("id");
         Field priceField = new Field("price");
 
-        DataBag dataBag1 = new DataBagBuilder().set(idField, new DataBagValue(3)).build();
-        DataBag dataBag2 = new DataBagBuilder().set(priceField, new DataBagValue(4)).build();
+        DataBag dataBag1 = new DataBagBuilder().set(idField, new DataBagValue(3, DataBagValueSource.Empty)).build();
+        DataBag dataBag2 = new DataBagBuilder().set(priceField, new DataBagValue(4, DataBagValueSource.Empty)).build();
 
         // ACT
         DataBag mergedDataBag = DataBag.merge(dataBag1, dataBag2);
@@ -79,12 +80,12 @@ class DataBagTests {
         Field priceField = new Field("price");
 
         DataBag dataBag1 = new DataBagBuilder()
-            .set(idField, "foo")
+            .set(idField, "foo", DataBagValueSource.Empty)
             .build();
 
         DataBag dataBag2 = new DataBagBuilder()
-            .set(idField, "foo")
-            .set(priceField, 4)
+            .set(idField, "foo", DataBagValueSource.Empty)
+            .set(priceField, 4, DataBagValueSource.Empty)
             .build();
 
         // ACT / ASSERT

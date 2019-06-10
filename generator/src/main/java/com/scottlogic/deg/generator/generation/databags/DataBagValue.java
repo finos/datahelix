@@ -1,18 +1,25 @@
 package com.scottlogic.deg.generator.generation.databags;
 
+import com.scottlogic.deg.common.output.DataBagValueSource;
+
 import java.util.Objects;
 
 public class DataBagValue {
-    private final Object value;
+    final Object value;
     private final String format;
 
-    public DataBagValue(Object value, String format){
+    public final DataBagValueSource source;
+
+    public DataBagValue(Object value, String format, DataBagValueSource source){
         this.value = value;
         this.format = format;
+        this.source = source;
     }
 
-    public DataBagValue(Object value) {
-        this(value, null);
+    public DataBagValue(Object value, DataBagValueSource source){
+        this.value = value;
+        this.source = source;
+        this.format = null;
     }
 
     @Override

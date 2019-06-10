@@ -25,7 +25,8 @@ public class TypesRestrictionMergeOperation implements RestrictionMergeOperation
             : DataTypeRestrictions.ALL_TYPES_PERMITTED;
 
         return Optional.of(merging.withTypeRestrictions(
-            restrictions));
+            restrictions,
+            FieldSpecSource.fromFieldSpecs(left, right)));
     }
 }
 
