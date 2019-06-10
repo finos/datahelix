@@ -64,12 +64,12 @@ public class FieldSpecValueGenerator {
 
     private Iterable<Object> getDataValues(FieldValueSource source) {
         switch (dataType) {
+            default:
             case FULL_SEQUENTIAL:
                 return source.generateAllValues();
             case INTERESTING:
                 return source.generateInterestingValues();
             case RANDOM:
-            default:
                 return source.generateRandomValues(randomNumberGenerator);
         }
     }
