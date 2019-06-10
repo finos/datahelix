@@ -33,7 +33,7 @@ public class IndividualConstraintRuleViolator implements RuleViolator {
     public Rule violateRule(Rule rule) {
         List<Constraint> newConstraints = new ArrayList<>();
         List<Constraint> violate = new ArrayList<>();
-        for (Constraint constraint:rule.constraints) {
+        for (Constraint constraint:rule.getConstraints()) {
             if (canViolate(constraint)){
                 violate.add(constraint);
             } else {
@@ -49,7 +49,7 @@ public class IndividualConstraintRuleViolator implements RuleViolator {
                     : new AndConstraint(violate)
                 ));
         }
-        return new Rule(rule.ruleInformation, newConstraints);
+        return new Rule(rule.getRuleInformation(), newConstraints);
     }
 
     /**
