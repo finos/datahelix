@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class PersonalDataTypesConstraintReaderProvider implements ConstraintReaderMapEntryProvider {
+
     private final NameRetrievalService nameRetrievalService;
 
     public PersonalDataTypesConstraintReaderProvider() {
@@ -40,9 +41,9 @@ public class PersonalDataTypesConstraintReaderProvider implements ConstraintRead
         };
 
         return Arrays.stream(NameConstraintTypes.values())
-            .map(n -> new ConstraintReaderMapEntry(
+            .map(nameType -> new ConstraintReaderMapEntry(
                 AtomicConstraintType.IS_OF_TYPE.getText(),
-                n.getProfileText(),
+                nameType.getProfileText(),
                 nameConstraintReader
             ));
     }

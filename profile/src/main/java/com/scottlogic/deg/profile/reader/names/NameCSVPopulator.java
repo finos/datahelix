@@ -12,21 +12,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class NameCSVPopulator implements NamePopulator<String> {
+public class NameCSVPopulator {
 
-    @Override
-    public Set<NameHolder> retrieveNames(String input) {
-        return readFromFile(pathFromClasspath(input));
-    }
-
-    private InputStream pathFromClasspath(String classPath) {
-        return Optional.ofNullable(this.getClass()
-            .getClassLoader()
-            .getResourceAsStream(classPath)
-        ).orElseThrow(() -> new IllegalArgumentException("Path not found on classpath."));
-    }
-
-    private Set<NameHolder> readFromFile(InputStream is) {
+    public Set<NameHolder> readFromFile(InputStream is) {
         try {
             return CSVParser.parse(
                 is,

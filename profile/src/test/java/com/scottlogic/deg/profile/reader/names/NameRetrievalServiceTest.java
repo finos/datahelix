@@ -10,11 +10,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.InputStream;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -24,7 +27,10 @@ public class NameRetrievalServiceTest {
     private NameRetrievalService service;
 
     @Mock
-    private NamePopulator<String> populator;
+    private NameCSVPopulator populator;
+
+    @Mock
+    private Function<String, InputStream> mapper;
 
     private void mockFirst() {
         mockNames("names/firstname_male.csv", "Mark", "Paul");
@@ -36,7 +42,9 @@ public class NameRetrievalServiceTest {
     }
 
     private void mockNames(String fileName, String... names) {
-        when(populator.retrieveNames(fileName)).thenReturn(namesToHolders(names));
+        InputStream mockStream = mock(InputStream.class);
+        when(mapper.apply(fileName)).thenReturn(mockStream);
+        when(populator.readFromFile(mockStream)).thenReturn(namesToHolders(names));
     }
 
     private Set<NameHolder> namesToHolders(String... names) {

@@ -1,16 +1,18 @@
 package com.scottlogic.deg.profile.reader.names;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes;
-import com.scottlogic.deg.profile.reader.CatalogService;
+import com.scottlogic.deg.profile.reader.inputstream.ClasspathMapper;
 
+import java.io.InputStream;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes.FIRST;
 import static com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes.LAST;
 
-public class NameRetrievalService implements CatalogService<NameConstraintTypes, NameHolder> {
+public class NameRetrievalService {
 
     private static final String SEP = "/";
 
@@ -24,7 +26,9 @@ public class NameRetrievalService implements CatalogService<NameConstraintTypes,
 
     private static final Map<NameConstraintTypes, Set<String>> NAME_TYPE_MAPPINGS;
 
-    private final NamePopulator<String> populator;
+    private final NameCSVPopulator populator;
+
+    private final Function<String, InputStream> mapper;
 
     static {
         NAME_TYPE_MAPPINGS = new EnumMap<>(NameConstraintTypes.class);
@@ -32,11 +36,16 @@ public class NameRetrievalService implements CatalogService<NameConstraintTypes,
         NAME_TYPE_MAPPINGS.put(FIRST, Stream.of(FIRST_MALE_NAMES, FIRST_FEMALE_NAMES).collect(Collectors.toSet()));
     }
 
-    public NameRetrievalService(final NamePopulator<String> populator) {
-        this.populator = populator;
+    public NameRetrievalService(final NameCSVPopulator populator) {
+        this(populator, new ClasspathMapper());
     }
 
-    @Override
+    public NameRetrievalService(final NameCSVPopulator populator,
+                                final Function<String, InputStream> mapper) {
+        this.populator = populator;
+        this.mapper = mapper;
+    }
+
     public Set<NameHolder> retrieveValues(NameConstraintTypes configuration) {
         switch (configuration) {
             case FIRST:
@@ -52,7 +61,8 @@ public class NameRetrievalService implements CatalogService<NameConstraintTypes,
 
     private Set<NameHolder> generateSingles(Set<String> sources) {
         return sources.stream()
-            .map(populator::retrieveNames)
+            .map(mapper::apply)
+            .map(populator::readFromFile)
             .reduce(new HashSet<>(), this::populateSet);
     }
 
