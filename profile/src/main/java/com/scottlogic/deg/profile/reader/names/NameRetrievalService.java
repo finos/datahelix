@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 import static com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes.FIRST;
 import static com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes.LAST;
 
-public class NameRetrievalService implements CatalogService<NameConstraintTypes, NameFrequencyHolder> {
+public class NameRetrievalService implements CatalogService<NameConstraintTypes, NameHolder> {
 
     private static final String SEP = "/";
 
@@ -37,7 +37,7 @@ public class NameRetrievalService implements CatalogService<NameConstraintTypes,
     }
 
     @Override
-    public Set<NameFrequencyHolder> retrieveValues(NameConstraintTypes configuration) {
+    public Set<NameHolder> retrieveValues(NameConstraintTypes configuration) {
         switch (configuration) {
             case FIRST:
             case LAST:
@@ -50,29 +50,27 @@ public class NameRetrievalService implements CatalogService<NameConstraintTypes,
         }
     }
 
-    private Set<NameFrequencyHolder> generateSingles(Set<String> sources) {
+    private Set<NameHolder> generateSingles(Set<String> sources) {
         return sources.stream()
             .map(populator::retrieveNames)
             .reduce(new HashSet<>(), this::populateSet);
     }
 
-    private Set<NameFrequencyHolder> generateCombinations(Set<NameFrequencyHolder> firstNames,
-                                                          Set<NameFrequencyHolder> lastNames) {
+    private Set<NameHolder> generateCombinations(Set<NameHolder> firstNames,
+                                                 Set<NameHolder> lastNames) {
         return firstNames.stream()
             .flatMap(first -> lastNames.stream()
                 .map(last -> combineFirstAndLastName(first, last)))
             .collect(Collectors.toSet());
     }
 
-    private NameFrequencyHolder combineFirstAndLastName(final NameFrequencyHolder first,
-                                                        final NameFrequencyHolder last) {
+    private NameHolder combineFirstAndLastName(final NameHolder first,
+                                               final NameHolder last) {
         final String name = first.getName() + " " + last.getName();
-        // TODO: Check frequency for overflow
-        final int frequency = first.getFrequency() * last.getFrequency();
-        return new NameFrequencyHolder(name, frequency);
+        return new NameHolder(name);
     }
 
-    private Set<NameFrequencyHolder> populateSet(Set<NameFrequencyHolder> a, Set<NameFrequencyHolder> b) {
+    private Set<NameHolder> populateSet(Set<NameHolder> a, Set<NameHolder> b) {
         a.addAll(b);
         return a;
     }

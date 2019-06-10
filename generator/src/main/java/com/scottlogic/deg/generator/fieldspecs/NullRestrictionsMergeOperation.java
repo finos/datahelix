@@ -3,7 +3,8 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import java.util.Optional;
 
-public class NullRestrictionsMergeOperation implements RestrictionMergeOperation {
+public class
+NullRestrictionsMergeOperation implements RestrictionMergeOperation {
 
     @Override
     public Optional<FieldSpec> applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merging) {
@@ -11,7 +12,7 @@ public class NullRestrictionsMergeOperation implements RestrictionMergeOperation
             return Optional.of(merging);
         }
 
-        return Optional.of(merging.withNotNull(FieldSpecSource.fromFieldSpecs(left, right)));
+        return Optional.of(merging.withNotNull());
     }
 }
 

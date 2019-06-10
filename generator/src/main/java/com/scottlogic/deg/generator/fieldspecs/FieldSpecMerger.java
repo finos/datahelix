@@ -57,7 +57,7 @@ public class FieldSpecMerger {
     }
 
     private Optional<FieldSpec> addNullable(FieldSpec left, FieldSpec right, Set<Object> set) {
-        FieldSpec newFieldSpec = FieldSpec.Empty.withSetRestrictions(new SetRestrictions(set), FieldSpecSource.fromFieldSpecs(left, right));
+        FieldSpec newFieldSpec = FieldSpec.Empty.withSetRestrictions(new SetRestrictions(set));
 
         newFieldSpec = addFormatting(left, right, newFieldSpec);
 
@@ -69,7 +69,7 @@ public class FieldSpecMerger {
             return Optional.empty();
         }
 
-        return Optional.of(newFieldSpec.withNotNull(FieldSpecSource.fromFieldSpecs(left, right)));
+        return Optional.of(newFieldSpec.withNotNull());
     }
 
     private boolean hasSet(FieldSpec fieldSpec) {
@@ -82,10 +82,10 @@ public class FieldSpecMerger {
 
     private FieldSpec addFormatting(FieldSpec left, FieldSpec right, FieldSpec newFieldSpec) {
         if (left.getFormatting() != null){
-            return newFieldSpec.withFormatting(left.getFormatting(), FieldSpecSource.Empty);
+            return newFieldSpec.withFormatting(left.getFormatting());
         }
         if (right.getFormatting() != null){
-            return newFieldSpec.withFormatting(right.getFormatting(), FieldSpecSource.Empty);
+            return newFieldSpec.withFormatting(right.getFormatting());
         }
         return newFieldSpec;
     }

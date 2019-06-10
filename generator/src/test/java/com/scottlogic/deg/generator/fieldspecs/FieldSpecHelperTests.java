@@ -1,6 +1,5 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.common.output.DataBagValueSource;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.restrictions.SetRestrictions;
 import org.junit.jupiter.api.Test;
@@ -15,24 +14,24 @@ class FieldSpecHelperTests {
 
     @Test
     void getFieldSpecForValue() {
-        DataBagValue input = new DataBagValue("value", DataBagValueSource.Empty);
+        DataBagValue input = new DataBagValue("value");
 
         FieldSpec actual = fieldSpecHelper.getFieldSpecForValue(input);
 
         FieldSpec expected = FieldSpec.Empty
-            .withSetRestrictions(SetRestrictions.fromWhitelist(Collections.singleton("value")), FieldSpecSource.Empty)
-            .withNotNull(FieldSpecSource.Empty);
+            .withSetRestrictions(SetRestrictions.fromWhitelist(Collections.singleton("value")))
+            .withNotNull();
 
         assertEquals(actual, expected);
     }
 
     @Test
     void getFieldSpecForNullValue() {
-        DataBagValue input = new DataBagValue(null, DataBagValueSource.Empty);
+        DataBagValue input = new DataBagValue(null);
 
         FieldSpec actual = fieldSpecHelper.getFieldSpecForValue(input);
 
-        FieldSpec expected = FieldSpec.mustBeNull(FieldSpecSource.Empty);
+        FieldSpec expected = FieldSpec.mustBeNull();
 
         assertEquals(actual, expected);
     }

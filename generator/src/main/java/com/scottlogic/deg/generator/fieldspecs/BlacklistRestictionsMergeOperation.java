@@ -19,6 +19,6 @@ public class BlacklistRestictionsMergeOperation implements RestrictionMergeOpera
         else
             newBlacklist = new BlacklistRestrictions(SetUtils.union(left.getBlacklistRestrictions().getBlacklist(), right.getBlacklistRestrictions().getBlacklist()));
 
-        return Optional.of(merging.withBlacklistRestrictions(newBlacklist, FieldSpecSource.Empty));
+        return Optional.of(merging.withBlacklistRestrictions(newBlacklist));
     }
 }

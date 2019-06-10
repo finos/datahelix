@@ -51,19 +51,18 @@ public class FieldSpecValueGenerator {
         return StreamSupport.stream(iterable.spliterator(), false)
             .map(value -> new DataBagValue(
                     value,
-                    spec.getFormatting(),
-                    spec.getFieldSpecSource().toDataBagValueSource()));
+                    spec.getFormatting()));
     }
 
     private Iterable<Object> getDataValues(FieldValueSource source) {
         switch (dataType) {
             case FULL_SEQUENTIAL:
-            default:
-                return source.generateAllValues();
             case INTERESTING:
                 return source.generateInterestingValues();
             case RANDOM:
                 return source.generateRandomValues(randomNumberGenerator);
+            default:
+                return source.generateAllValues();
         }
     }
 }

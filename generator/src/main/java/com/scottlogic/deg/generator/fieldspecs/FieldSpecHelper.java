@@ -14,11 +14,11 @@ public class FieldSpecHelper {
         return FieldSpec.Empty
             .withSetRestrictions(
                 SetRestrictions.fromWhitelist(
-                    Collections.singleton(fieldValue.getUnformattedValue())), FieldSpecSource.Empty)
-            .withNotNull(FieldSpecSource.Empty);
+                    Collections.singleton(fieldValue.getUnformattedValue())))
+            .withNotNull();
     }
 
     private FieldSpec getNullRequiredFieldSpec() {
-        return FieldSpec.mustBeNull(FieldSpecSource.Empty);
+        return FieldSpec.mustBeNull();
     }
 }
