@@ -35,18 +35,20 @@ public class SetRestrictions implements Restrictions {
 
     @Override
     public String toString() {
-        if (isEmpty())
+        if (isEmpty()) {
             return "<empty>";
-
-        return String.format(
-            "IN %s",
-            Objects.toString(whitelist));
+        }
+        return String.format("IN %s", Objects.toString(whitelist));
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         SetRestrictions that = (SetRestrictions) o;
         return Objects.equals(whitelist, that.whitelist);
     }

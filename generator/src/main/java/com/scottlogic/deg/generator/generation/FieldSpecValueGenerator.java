@@ -49,9 +49,7 @@ public class FieldSpecValueGenerator {
         Iterable<Object> iterable =  getDataValues(combinedFieldValueSource);
 
         return StreamSupport.stream(iterable.spliterator(), false)
-            .map(value -> new DataBagValue(
-                    value,
-                    spec.getFormatting()));
+            .map(value -> new DataBagValue(value, spec.getFormatting()));
     }
 
     private Iterable<Object> getDataValues(FieldValueSource source) {

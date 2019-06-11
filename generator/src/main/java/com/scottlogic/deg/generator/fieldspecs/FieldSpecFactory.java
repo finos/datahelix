@@ -75,17 +75,19 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec construct(IsInSetConstraint constraint, boolean negate, boolean violated) {
-        if (negate){
+        if (negate) {
             return FieldSpec.Empty.withBlacklistRestrictions(
-                new BlacklistRestrictions(constraint.legalValues));
+                new BlacklistRestrictions(constraint.legalValues)
+            );
         }
 
         return FieldSpec.Empty.withSetRestrictions(
-            SetRestrictions.fromWhitelist(constraint.legalValues));
+            SetRestrictions.fromWhitelist(constraint.legalValues)
+        );
     }
 
     private FieldSpec constructIsNull(boolean negate, AtomicConstraint constraint, boolean violated) {
-        if (negate){
+        if (negate) {
             return FieldSpec.Empty.withNotNull();
         }
 
@@ -233,12 +235,12 @@ public class FieldSpecFactory {
 
     private FieldSpec construct(FormatConstraint constraint, boolean negate, boolean violated) {
         if (negate) {
-            // it's not worth much effort to figure out how to negate a formatting constraint - let's just make it a no-op
+            // it's not worth much effort to figure out how to negate a formatting constraint
+            // - let's just make it a no-op
             return FieldSpec.Empty;
         }
 
-        return FieldSpec.Empty.withFormatting(
-            constraint.format);
+        return FieldSpec.Empty.withFormatting(constraint.format);
     }
 
     private FieldSpec construct(StringHasLengthConstraint constraint, boolean negate, boolean violated) {

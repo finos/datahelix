@@ -8,7 +8,7 @@ NullRestrictionsMergeOperation implements RestrictionMergeOperation {
 
     @Override
     public Optional<FieldSpec> applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merging) {
-        if (left.isNullable() && right.isNullable()){
+        if (left.isNullable() && right.isNullable()) {
             return Optional.of(merging);
         }
 

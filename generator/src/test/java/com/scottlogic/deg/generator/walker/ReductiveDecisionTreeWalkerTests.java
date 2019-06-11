@@ -83,7 +83,7 @@ class ReductiveDecisionTreeWalkerTests {
         DataBagValue dataBag = new DataBagValue(field1, "yes");
         FieldSpec firstFieldSpec = FieldSpec.Empty.withSetRestrictions(SetRestrictions
                 .fromWhitelist(Collections.singleton("yes")))
-            .withNotNull( );
+            .withNotNull();
         when(fieldSpecValueGenerator.generate(any(Set.class))).thenReturn(Stream.of(dataBag));
 
         when(reductiveFieldSpecBuilder.getDecisionFieldSpecs(any(), any())).thenReturn(Collections.singleton(firstFieldSpec), Collections.emptySet());

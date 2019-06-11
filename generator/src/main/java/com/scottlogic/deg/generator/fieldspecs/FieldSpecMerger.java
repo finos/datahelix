@@ -43,8 +43,8 @@ public class FieldSpecMerger {
     private Optional<FieldSpec> mergeSets(FieldSpec left, FieldSpec right) {
         Set<Object> set = SetUtils.intersect(
             left.getSetRestrictions().getWhitelist(),
-            right.getSetRestrictions().getWhitelist());
-
+            right.getSetRestrictions().getWhitelist()
+        );
         return addNullable(left, right, set);
     }
 
@@ -61,11 +61,11 @@ public class FieldSpecMerger {
 
         newFieldSpec = addFormatting(left, right, newFieldSpec);
 
-        if (isNullable(left, right)){
+        if (isNullable(left, right)) {
             return Optional.of(newFieldSpec);
         }
 
-        if (set.isEmpty()){
+        if (set.isEmpty()) {
             return Optional.empty();
         }
 
@@ -81,10 +81,10 @@ public class FieldSpecMerger {
     }
 
     private FieldSpec addFormatting(FieldSpec left, FieldSpec right, FieldSpec newFieldSpec) {
-        if (left.getFormatting() != null){
+        if (left.getFormatting() != null) {
             return newFieldSpec.withFormatting(left.getFormatting());
         }
-        if (right.getFormatting() != null){
+        if (right.getFormatting() != null) {
             return newFieldSpec.withFormatting(right.getFormatting());
         }
         return newFieldSpec;
@@ -93,22 +93,22 @@ public class FieldSpecMerger {
     private Optional<FieldSpec> combineRestrictions(FieldSpec left, FieldSpec right) {
         Optional<FieldSpec> merging = Optional.of(FieldSpec.Empty);
 
-        for (RestrictionMergeOperation operation : mergeOperations){
+        for (RestrictionMergeOperation operation : mergeOperations) {
             merging = operation.applyMergeOperation(left, right, merging.get());
-            if (!merging.isPresent()){
+            if (!merging.isPresent()) {
                 return Optional.empty();
             }
         }
 
-        if (cannotEmitAnyData(merging.get())){
+        if (cannotEmitAnyData(merging.get())) {
             return Optional.empty();
         }
 
         return Optional.of(addFormatting(left, right, merging.get()));
     }
 
-    private boolean cannotEmitAnyData(FieldSpec fieldSpec){
-        return !fieldSpec.isNullable() && fieldSpec.getTypeRestrictions().getAllowedTypes().isEmpty();
-
+    private boolean cannotEmitAnyData(FieldSpec fieldSpec) {
+        return !fieldSpec.isNullable()
+            && fieldSpec.getTypeRestrictions().getAllowedTypes().isEmpty();
     }
 }

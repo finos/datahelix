@@ -13,16 +13,19 @@ import java.util.stream.Collectors;
  * Details a column's atomic constraints
  */
 public class FieldSpec {
-    public static final FieldSpec Empty = new FieldSpec(
-        new HeterogeneousTypeContainer<>(), true, null);
+    public static final FieldSpec Empty =
+        new FieldSpec(new HeterogeneousTypeContainer<>(), true, null);
 
     private final boolean nullable;
     private final String formatting;
 
     private final HeterogeneousTypeContainer<Restrictions> restrictions;
 
-    private FieldSpec(HeterogeneousTypeContainer<Restrictions> restrictions,
-                      boolean nullable, String formatting) {
+    private FieldSpec(
+        HeterogeneousTypeContainer<Restrictions> restrictions,
+        boolean nullable,
+        String formatting
+    ) {
         this.restrictions = restrictions;
         this.nullable = nullable;
         this.formatting = formatting;
@@ -80,12 +83,14 @@ public class FieldSpec {
         return withConstraint(StringRestrictions.class, stringRestrictions);
     }
 
-    public FieldSpec withNotNull(){
+    public FieldSpec withNotNull() {
         return new FieldSpec(restrictions, false, formatting);
     }
 
-    public static FieldSpec mustBeNull(){
-        return FieldSpec.Empty.withSetRestrictions(SetRestrictions.fromWhitelist(Collections.emptySet()));
+    public static FieldSpec mustBeNull() {
+        return FieldSpec.Empty.withSetRestrictions(
+            SetRestrictions.fromWhitelist(Collections.emptySet())
+        );
     }
 
     public FieldSpec withDateTimeRestrictions(DateTimeRestrictions dateTimeRestrictions) {
