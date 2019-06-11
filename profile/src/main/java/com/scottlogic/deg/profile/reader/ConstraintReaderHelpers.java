@@ -26,8 +26,6 @@ public class ConstraintReaderHelpers {
     }
 
     public static Set<Object> getValidatedValues(ConstraintDTO dto) {
-        Set<Object> mappedValues = new HashSet<>();
-
         if (dto.values == null) {
             throw new InvalidProfileException(String.format(
                 "Field [%s]: Couldn't recognise 'values' property, it must not contain 'null'",
@@ -35,6 +33,7 @@ public class ConstraintReaderHelpers {
             ));
         }
 
+        Set<Object> mappedValues = new HashSet<>();
         for (Object value : dto.values) {
             if (value == null) {
                 throw new InvalidProfileException(String.format(

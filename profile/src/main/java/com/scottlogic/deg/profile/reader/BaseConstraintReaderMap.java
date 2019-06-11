@@ -13,8 +13,23 @@ public class BaseConstraintReaderMap implements ConstraintReaderMap {
     }
 
     @Override
+    public void add(ConstraintReaderMapEntry entry) {
+        if (!operatorAndValueToReadermap.containsKey(entry.operatorCode)) {
+            operatorAndValueToReadermap.putIfAbsent(entry.operatorCode, new HashMap<>());
+        }
+        Map<String, ConstraintReader> valueToReaderMap =
+            operatorAndValueToReadermap.get(entry.operatorCode);
+        valueToReaderMap.put(entry.valueCode, entry.reader);
+    }
+
+    @Override
+    public void add(Stream<ConstraintReaderMapEntry> entries) {
+        entries.forEach(e -> add(e));
+    }
+
+    @Override
     public ConstraintReader getReader(String operatorCode, String valueCode) {
-        if (operatorAndValueToReadermap == null || operatorAndValueToReadermap.isEmpty()) {
+        if (operatorAndValueToReadermap.isEmpty()) {
             return null;
         }
         Map<String, ConstraintReader> valueToReaderMap = operatorAndValueToReadermap.get(operatorCode);
@@ -51,20 +66,5 @@ public class BaseConstraintReaderMap implements ConstraintReaderMap {
             return func;
         }
         return valueToReaderMap.values().iterator().next();
-    }
-
-    @Override
-    public void add(ConstraintReaderMapEntry entry) {
-        if (!operatorAndValueToReadermap.containsKey(entry.operatorCode)) {
-            operatorAndValueToReadermap.putIfAbsent(entry.operatorCode, new HashMap<>());
-        }
-        Map<String, ConstraintReader> valueToReaderMap =
-            operatorAndValueToReadermap.get(entry.operatorCode);
-        valueToReaderMap.put(entry.valueCode, entry.reader);
-    }
-
-    @Override
-    public void add(Stream<ConstraintReaderMapEntry> entries) {
-        entries.forEach(e -> add(e));
     }
 }
