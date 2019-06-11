@@ -20,8 +20,7 @@ public class PersonalDataTypesConstraintReaderSource implements ConstraintReader
     private final HeterogeneousTypeContainer<CatalogService<?, ?>> catalogServices;
 
     public PersonalDataTypesConstraintReaderSource() {
-        catalogServices = new HeterogeneousTypeContainer<>();
-        catalogServices.put(
+        catalogServices = new HeterogeneousTypeContainer<CatalogService<?, ?>>().put(
             NameRetrievalService.class,
             new NameRetrievalService(new NameCSVPopulator())
         );

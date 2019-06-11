@@ -14,12 +14,12 @@ public class BaseConstraintReaderMap implements ConstraintReaderMap {
 
     @Override
     public void add(ConstraintReaderMapEntry entry) {
-        if (!operatorAndValueToReadermap.containsKey(entry.operatorCode)) {
-            operatorAndValueToReadermap.putIfAbsent(entry.operatorCode, new HashMap<>());
+        if (!operatorAndValueToReadermap.containsKey(entry.getOperatorCode())) {
+            operatorAndValueToReadermap.putIfAbsent(entry.getOperatorCode(), new HashMap<>());
         }
         Map<String, ConstraintReader> valueToReaderMap =
-            operatorAndValueToReadermap.get(entry.operatorCode);
-        valueToReaderMap.put(entry.valueCode, entry.reader);
+            operatorAndValueToReadermap.get(entry.getOperatorCode());
+        valueToReaderMap.put(entry.getValueCode(), entry.getReader());
     }
 
     @Override
