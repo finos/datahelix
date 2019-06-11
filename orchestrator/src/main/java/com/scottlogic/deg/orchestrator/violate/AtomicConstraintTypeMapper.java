@@ -16,8 +16,6 @@ public class AtomicConstraintTypeMapper {
                 return ContainsRegexConstraint.class;
             case FORMATTED_AS:
                 return FormatConstraint.class;
-            case A_VALID:
-                return MatchesStandardConstraint.class;
             case HAS_LENGTH:
                 return StringHasLengthConstraint.class;
             case IS_STRING_LONGER_THAN:

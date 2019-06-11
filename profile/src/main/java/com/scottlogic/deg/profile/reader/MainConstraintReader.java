@@ -12,11 +12,11 @@ import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
 import java.util.Set;
 
 public class MainConstraintReader implements ConstraintReader {
-    private final AtomicConstraintReaderLookup atomicConstraintReaderLookup;
+    private final ConstraintReaderMap constraintReaderMap;
 
     @Inject
-    public MainConstraintReader(AtomicConstraintReaderLookup atomicConstraintReaderLookup) {
-        this.atomicConstraintReaderLookup = atomicConstraintReaderLookup;
+    public MainConstraintReader(ConstraintReaderMap constraintReaderMap) {
+        this.constraintReaderMap = constraintReaderMap;
     }
 
     @Override
@@ -34,7 +34,10 @@ public class MainConstraintReader implements ConstraintReader {
         }
 
         if (dto.is != ConstraintDTO.undefined) {
-            ConstraintReader subReader = this.atomicConstraintReaderLookup.getByTypeCode((String) dto.is);
+            ConstraintReader subReader = this.constraintReaderMap.getReader(
+                (String) dto.is,
+                ConstraintReaderHelpers.getValueAsString(dto.value)
+            );
 
             if (subReader == null) {
                 throw new InvalidProfileException("Couldn't recognise constraint type from DTO: " + dto.is);

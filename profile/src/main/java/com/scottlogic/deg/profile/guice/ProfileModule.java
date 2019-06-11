@@ -1,11 +1,10 @@
 package com.scottlogic.deg.profile.guice;
 
 import com.google.inject.AbstractModule;
-import com.scottlogic.deg.profile.reader.AtomicConstraintReaderLookup;
-import com.scottlogic.deg.profile.reader.BaseAtomicConstraintReaderLookup;
-import com.scottlogic.deg.profile.reader.JsonProfileReader;
-import com.scottlogic.deg.profile.reader.ProfileReader;
+import com.scottlogic.deg.profile.reader.*;
 import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
+
+import java.util.stream.Stream;
 
 public class ProfileModule extends AbstractModule {
 
@@ -24,6 +23,12 @@ public class ProfileModule extends AbstractModule {
 
         bind(ProfileReader.class).to(JsonProfileReader.class);
 
-        bind(AtomicConstraintReaderLookup.class).to(BaseAtomicConstraintReaderLookup.class);
+        // Load built-in profile-to-constraint mappings
+        BaseConstraintReaderMap map = new BaseConstraintReaderMap(Stream.of(
+            new CoreAtomicTypesConstraintReaderSource(),
+            new FinancialTypesConstraintReaderSource(),
+            new PersonalDataTypesConstraintReaderSource()
+        ));
+        bind(ConstraintReaderMap.class).toInstance(map);
     }
 }

@@ -27,19 +27,19 @@ Feature: Type mandation validation
       | "cactus" |
     Then the profile should be considered valid
 
-  Scenario: An aValid ISIN constraint should satisfy type mandation
+  Scenario: An ISIN constraint should satisfy type mandation
     Given there is a field foo
-    And foo is a valid "ISIN"
+    And foo is of type "ISIN"
     Then the profile should be considered valid
 
-  Scenario: An aValid SEDOL constraint should satisfy type mandation
+  Scenario: A SEDOL constraint should satisfy type mandation
     Given there is a field foo
-    And foo is a valid "SEDOL"
+    And foo is of type "SEDOL"
     Then the profile should be considered valid
 
-  Scenario: An aValid CUSIP constraint should satisfy type mandation
+  Scenario: A CUSIP constraint should satisfy type mandation
     Given there is a field foo
-    And foo is a valid "CUSIP"
+    And foo is of type "CUSIP"
     Then the profile should be considered valid
 
   Scenario: A mandatorily absent field should satisfy type mandation
