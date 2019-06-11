@@ -13,7 +13,7 @@ public enum NameConstraintTypes {
         this.profileText = profileText;
     }
 
-    private String getProfileText() {
+    public String getProfileText() {
         return profileText;
     }
 

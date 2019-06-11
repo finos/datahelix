@@ -16,25 +16,25 @@
             { "not": { "field": "fullname", "is": "null" } }
           ]
         },
-        {"field": "forename", "is": "aTypical", "value": "firstname"}
+        {"field": "forename", "is": "ofType", "value": "firstname"}
       ]
     },
     {
       "rule": "forename",
       "constraints": [
-        {"field": "forename", "is": "aTypical", "value": "firstname"}
+        {"field": "forename", "is": "ofType", "value": "firstname"}
       ]
     },
     {
       "rule": "surname",
       "constraints": [
-        {"field": "surname", "is": "aTypical", "value": "lastname"}
+        {"field": "surname", "is": "ofType", "value": "lastname"}
       ]
     },
     {
       "rule": "fullname",
       "constraints": [
-        {"field": "fullname", "is":  "aTypical", "value":  "fullname"}
+        {"field": "fullname", "is":  "ofType", "value":  "fullname"}
       ]
     }
   ]

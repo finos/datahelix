@@ -8,8 +8,6 @@ import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
-import com.scottlogic.deg.profile.reader.InvalidProfileException;
-import com.scottlogic.deg.profile.reader.JsonProfileReader;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +19,7 @@ import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.core.IsNull.nullValue;
@@ -28,11 +27,17 @@ import static org.hamcrest.core.IsNull.nullValue;
 public class JsonProfileReaderTests {
     private String json;
     private Profile profile;
+    private ConstraintReaderMap readerMap;
 
     @BeforeEach
     public void Setup() {
         this.json = null;
         this.profile = null;
+        readerMap = new BaseConstraintReaderMap(Stream.of(
+            new CoreAtomicTypesConstraintReaderSource(),
+            new FinancialTypesConstraintReaderSource(),
+            new PersonalDataTypesConstraintReaderSource()
+        ));
     }
 
     private void givenJson(String json) {
@@ -41,7 +46,7 @@ public class JsonProfileReaderTests {
 
     private Profile getResultingProfile() throws IOException {
         if (this.profile == null) {
-            JsonProfileReader objectUnderTest = new JsonProfileReader();
+            JsonProfileReader objectUnderTest = new JsonProfileReader(readerMap);
             this.profile = objectUnderTest.read(this.json);
         }
 
