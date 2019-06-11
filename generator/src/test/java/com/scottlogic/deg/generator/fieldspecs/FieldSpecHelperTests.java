@@ -1,9 +1,7 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
-import com.scottlogic.deg.generator.restrictions.NullRestrictions;
-import com.scottlogic.deg.common.profile.constraintdetail.Nullness;
-import com.scottlogic.deg.generator.restrictions.set.SetRestrictions;
+import com.scottlogic.deg.generator.restrictions.SetRestrictions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -22,7 +20,7 @@ class FieldSpecHelperTests {
 
         FieldSpec expected = FieldSpec.Empty
             .withSetRestrictions(SetRestrictions.fromWhitelist(Collections.singleton("value")))
-            .withNullRestrictions(new NullRestrictions(Nullness.MUST_NOT_BE_NULL));
+            .withNotNull();
 
         assertEquals(actual, expected);
     }
@@ -33,8 +31,7 @@ class FieldSpecHelperTests {
 
         FieldSpec actual = fieldSpecHelper.getFieldSpecForValue(input);
 
-        FieldSpec expected = FieldSpec.Empty
-            .withNullRestrictions(new NullRestrictions(Nullness.MUST_BE_NULL));
+        FieldSpec expected = FieldSpec.mustBeNull();
 
         assertEquals(actual, expected);
     }

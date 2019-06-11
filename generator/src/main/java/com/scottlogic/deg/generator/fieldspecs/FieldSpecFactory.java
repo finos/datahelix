@@ -2,10 +2,9 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
-import com.scottlogic.deg.common.profile.constraintdetail.Nullness;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.common.util.NumberUtils;
-import com.scottlogic.deg.generator.restrictions.set.SetRestrictions;
+import com.scottlogic.deg.generator.restrictions.SetRestrictions;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -76,26 +75,23 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec construct(IsInSetConstraint constraint, boolean negate, boolean violated) {
-        return FieldSpec.Empty.withSetRestrictions(
-            negate
-                ? negatedSet(constraint, constraint.legalValues)
-                : SetRestrictions.fromWhitelist(constraint.legalValues));
-    }
+        if (negate) {
+            return FieldSpec.Empty.withBlacklistRestrictions(
+                new BlacklistRestrictions(constraint.legalValues)
+            );
+        }
 
-    private SetRestrictions negatedSet(IsInSetConstraint constraint, Set<Object> values) {
-        return (constraint instanceof IsInNameSetConstraint)
-            ? SetRestrictions.allowNoValues()
-            : SetRestrictions.fromBlacklist(values);
+        return FieldSpec.Empty.withSetRestrictions(
+            SetRestrictions.fromWhitelist(constraint.legalValues)
+        );
     }
 
     private FieldSpec constructIsNull(boolean negate, AtomicConstraint constraint, boolean violated) {
-        final NullRestrictions nullRestrictions = new NullRestrictions();
+        if (negate) {
+            return FieldSpec.Empty.withNotNull();
+        }
 
-        nullRestrictions.nullness = negate
-            ? Nullness.MUST_NOT_BE_NULL
-            : Nullness.MUST_BE_NULL;
-
-        return FieldSpec.Empty.withNullRestrictions(nullRestrictions);
+        return FieldSpec.mustBeNull();
     }
 
     private FieldSpec construct(IsOfTypeConstraint constraint, boolean negate, boolean violated) {
@@ -239,14 +235,12 @@ public class FieldSpecFactory {
 
     private FieldSpec construct(FormatConstraint constraint, boolean negate, boolean violated) {
         if (negate) {
-            // it's not worth much effort to figure out how to negate a formatting constraint - let's just make it a no-op
+            // it's not worth much effort to figure out how to negate a formatting constraint
+            // - let's just make it a no-op
             return FieldSpec.Empty;
         }
 
-        final FormatRestrictions formatRestrictions = new FormatRestrictions();
-        formatRestrictions.formatString = constraint.format;
-
-        return FieldSpec.Empty.withFormatRestrictions(formatRestrictions);
+        return FieldSpec.Empty.withFormatting(constraint.format);
     }
 
     private FieldSpec construct(StringHasLengthConstraint constraint, boolean negate, boolean violated) {

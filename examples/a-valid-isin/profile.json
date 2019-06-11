@@ -6,7 +6,7 @@
   "rules": [
     {
       "constraints": [
-        { "field": "isin", "is": "aValid", "value": "ISIN" },
+        { "field": "isin", "is": "ofType", "value": "ISIN" },
         { "not" : { "field": "isin", "is": "null" } }
       ]
     }

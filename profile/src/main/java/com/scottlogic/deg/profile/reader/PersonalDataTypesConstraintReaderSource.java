@@ -18,11 +18,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class PersonalDataTypesConstraintReaderProvider implements ConstraintReaderMapEntryProvider {
+public class PersonalDataTypesConstraintReaderSource implements ConstraintReaderMapEntrySource {
 
     private final NameRetrievalService nameRetrievalService;
 
-    public PersonalDataTypesConstraintReaderProvider() {
+    public PersonalDataTypesConstraintReaderSource() {
         nameRetrievalService = new NameRetrievalService(
             new CSVSetMapper<>(new ClasspathMapper(), new NameCSVPopulator()));
     }

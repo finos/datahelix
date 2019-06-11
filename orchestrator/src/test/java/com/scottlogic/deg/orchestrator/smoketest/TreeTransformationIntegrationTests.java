@@ -20,7 +20,6 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -108,14 +107,13 @@ class TreeTransformationIntegrationTests {
                 .listFiles(File::isDirectory)));
     }
 
-    private Profile getProfile(Path path) throws IOException, InvalidProfileException {
-        ConstraintReaderMapEntryProvider[] mappingProviders = {
-            new CoreAtomicTypesConstraintReaderProvider(),
-            new FinancialTypesConstraintReaderProvider(),
-            new PersonalDataTypesConstraintReaderProvider()
-        };
+    private Profile getProfile(Path path) throws IOException {
         BaseConstraintReaderMap readerMap =
-            new BaseConstraintReaderMap(Arrays.stream(mappingProviders));
+            new BaseConstraintReaderMap(Stream.of(
+                new CoreAtomicTypesConstraintReaderSource(),
+                new FinancialTypesConstraintReaderSource(),
+                new PersonalDataTypesConstraintReaderSource()
+            ));
         return new JsonProfileReader(readerMap).read(path);
     }
 

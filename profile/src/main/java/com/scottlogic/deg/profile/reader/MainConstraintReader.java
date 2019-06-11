@@ -23,8 +23,7 @@ public class MainConstraintReader implements ConstraintReader {
     public Constraint apply(
         ConstraintDTO dto,
         ProfileFields fields,
-        Set<RuleInformation> rules)
-        throws InvalidProfileException {
+        Set<RuleInformation> rules) {
 
         if (dto == null) {
             throw new InvalidProfileException("Constraint is null");

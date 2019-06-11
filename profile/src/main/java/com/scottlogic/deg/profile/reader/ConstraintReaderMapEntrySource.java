@@ -2,6 +2,6 @@ package com.scottlogic.deg.profile.reader;
 
 import java.util.stream.Stream;
 
-public interface ConstraintReaderMapEntryProvider {
+public interface ConstraintReaderMapEntrySource {
     Stream<ConstraintReaderMapEntry> getConstraintReaderMapEntries();
 }

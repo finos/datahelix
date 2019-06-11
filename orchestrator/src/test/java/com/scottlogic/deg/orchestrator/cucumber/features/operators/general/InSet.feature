@@ -996,7 +996,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 
 ### Financial data types ###
 
-  Scenario: 'InSet' with a non contradicting ISIN is successful
+  Scenario: In set of valid ISINs combined with an ISIN constraint returns members of the set
     Given there is a field foo
     And foo is in set:
       | "GB00YG2XYC52" |
@@ -1006,7 +1006,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null           |
       | "GB00YG2XYC52" |
 
-  Scenario: 'InSet' with a non contradicting non-ISIN is successful
+  Scenario: In set of things that are not valid ISINs combined with a non-ISIN constraint returns members of the set
     Given there is a field foo
     And foo is in set:
       | "a" |
@@ -1016,7 +1016,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
       | "a"  |
 
-  Scenario: Not 'inSet' with a non contradicting ISIN is successful
+  Scenario: Not in set of things that are not valid ISINs combined with an ISIN constraint generates valid ISINs
     Given there is a field foo
     And foo is anything but in set:
       | "a" |
@@ -1029,7 +1029,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null           |
       | "GB00YG2XYC52" |
 
-  Scenario: 'InSet' run against a contradicting ISIN emits null
+  Scenario: In set of things that are not valid ISINs combined with an ISIN constraint only generates nulls
     Given there is a field foo
     And foo is in set:
       | "a" |
@@ -1038,7 +1038,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | foo  |
       | null |
 
-  Scenario: 'InSet' run against a contradicting non-ISIN emits null
+  Scenario: In set of valid ISINs combined with a non-ISIN constraint only generates nulls
     Given there is a field foo
     And foo is in set:
       | "GB00YG2XYC52" |
@@ -1047,7 +1047,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | foo  |
       | null |
 
-  Scenario: 'InSet' with a non contradicting SEDOL is successful
+  Scenario: In set of valid SEDOLs combined with a SEDOL constraint returns members of the set
     Given there is a field foo
     And foo is in set:
       | "0263494" |
@@ -1057,7 +1057,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null      |
       | "0263494" |
 
-  Scenario: 'InSet' with a non contradicting non-SEDOL is successful
+  Scenario: In set of things that are not valid SEDOLs combined with a non-SEDOL constraint returns members of the set
     Given there is a field foo
     And foo is in set:
       | "a" |
@@ -1067,7 +1067,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
       | "a"  |
 
-  Scenario: Not 'inSet' with a non contradicting SEDOL is successful
+  Scenario: Not in set of things that are not valid SEDOLs combined with a SEDOL constraint generates valid SEDOLs
     Given there is a field foo
     And foo is anything but in set:
       | "a" |
@@ -1080,7 +1080,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null      |
       | "0263494" |
 
-  Scenario: 'InSet' run against a contradicting SEDOL emits null
+  Scenario: In set of things that are not valid SEDOLs combined with a SEDOL constraint only generates null
     Given there is a field foo
     And foo is in set:
       | "a" |
@@ -1089,7 +1089,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | foo  |
       | null |
 
-  Scenario: 'InSet' run against a contradicting non-SEDOL emits null
+  Scenario: In set of valid SEDOLs combined with a non-SEDOL constraint only generates null
     Given there is a field foo
     And foo is in set:
       | "0263494" |
@@ -1098,7 +1098,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | foo  |
       | null |
 
-  Scenario: 'InSet' with a non contradicting CUSIP is successful
+  Scenario: In set of valid CUSIPs combined with a CUSIP constraint returns members of the set
     Given there is a field foo
     And foo is in set:
       | "38259P508" |
@@ -1108,7 +1108,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null        |
       | "38259P508" |
 
-  Scenario: 'InSet' with a non contradicting non-CUSIP is successful
+  Scenario: In set of things that are not valid CUSIPs combined with a non-CUSIP constraint returns members of the set
     Given there is a field foo
     And foo is in set:
       | "a" |
@@ -1118,7 +1118,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
       | "a"  |
 
-  Scenario: Not 'inSet' with a non contradicting CUSIP is successful
+  Scenario: Not in set of things that are not valid CUSIPs combined with a CUSIP constraint generates valid CUSIPs
     Given there is a field foo
     And foo is anything but in set:
       | "a" |
@@ -1131,7 +1131,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null        |
       | "38259P508" |
 
-  Scenario: 'InSet' run against a contradicting CUSIP emits null
+  Scenario: In set of things that are not valid CUSIPs combined with a CUSIP constraint only generates null
     Given there is a field foo
     And foo is in set:
       | "a" |
@@ -1140,7 +1140,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | foo  |
       | null |
 
-  Scenario: 'InSet' run against a contradicting non-CUSIP emits null
+  Scenario: In set of things that are valid CUSIPs combined with a non-CUSIP constraint only generates null
     Given there is a field foo
     And foo is in set:
       | "38259P508" |

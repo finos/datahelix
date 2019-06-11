@@ -1,13 +1,25 @@
 package com.scottlogic.deg.profile.reader;
 
 public class ConstraintReaderMapEntry {
-    public String typeCode;
-    public String valueCode;
-    public ConstraintReader reader;
+    private String operatorCode;
+    private String valueCode;
+    private ConstraintReader reader;
 
-    public ConstraintReaderMapEntry(String typeCode, String valueCode, ConstraintReader reader) {
-        this.typeCode = typeCode;
+    public ConstraintReaderMapEntry(String operatorCode, String valueCode, ConstraintReader reader) {
+        this.operatorCode = operatorCode;
         this.valueCode = valueCode;
         this.reader = reader;
+    }
+
+    public String getOperatorCode() {
+        return operatorCode;
+    }
+
+    public String getValueCode() {
+        return valueCode;
+    }
+
+    public ConstraintReader getReader() {
+        return reader;
     }
 }

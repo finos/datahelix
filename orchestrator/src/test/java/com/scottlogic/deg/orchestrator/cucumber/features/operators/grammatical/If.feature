@@ -1585,7 +1585,7 @@ Feature: Values can be specified by using if, then and else constraints
       | foo    | bar    |
       | "dddd" | "4444" |
 
-  Scenario: Running an if request that contains a non contradictory ofType ISIN constraint within its if statement should be successful
+  Scenario: An if constraint that contains an ISIN constraint in the if clause generates the expected output
     Given foo is in set:
       | "GB0002634946" |
       | "bb"           |
@@ -1613,7 +1613,7 @@ Feature: Values can be specified by using if, then and else constraints
       | "ccc"          | "4444" |
       | "dddd"         | "4444" |
 
-  Scenario: Running an if request that contains a non contradictory ofType ISIN constraint within its then statement should be successful
+  Scenario: An if constraint that contains an ISIN constraint in the then clause generates valid ISINs when the if clause applies
     Given foo is in set:
       | "GB0002634946" |
       | "bb"           |
@@ -1641,7 +1641,7 @@ Feature: Values can be specified by using if, then and else constraints
       | "ccc"          | "333"          |
       | "dddd"         | "333"          |
 
-  Scenario: Running an if request that contains a non contradictory ofType ISIN constraint within its else statement should be successful
+  Scenario: An if constraint that contains an ISIN constraint in the else clause generates valid ISINs when the if clause does not apply
     Given foo is in set:
       | "GB0002634946" |
       | "bb"           |
@@ -1669,7 +1669,7 @@ Feature: Values can be specified by using if, then and else constraints
       | "ccc"          | "GB0002634946" |
       | "dddd"         | "GB0002634946" |
 
-  Scenario: Running an if request that contains a contradictory ofType ISIN constraint within its if statement should be successful
+  Scenario: An if constraint that contains an ISIN constraint in the if clause and is combined with an in set constraint that does not contain any valid ISINs only generates data that matches the else clause
     Given foo is in set:
       | "aa"   |
       | "bb"   |
@@ -1698,7 +1698,7 @@ Feature: Values can be specified by using if, then and else constraints
       | "dddd" | "333" |
 
 
-  Scenario: Running an if request that contains a contradictory ofType ISIN constraint within its then statement should be successful
+  Scenario: An if constraint that contains an ISIN constraint in the then clause combined with an in set constraint that does not contain any valid ISINs only generates data that matches the else clause
     Given foo is in set:
       | "aa"   |
       | "bb"   |
@@ -1725,7 +1725,7 @@ Feature: Values can be specified by using if, then and else constraints
       | "bb"   | "333" |
       | "dddd" | "333" |
 
-  Scenario: Running an if request that contains a contradictory ofType ISIN constraint within its else statement should be successful
+  Scenario: An if constraint with an else clause containing an ISIN constraint which contradicts an in set constraint generates data that only matches the then clause
     Given foo is in set:
       | "aa"   |
       | "bb"   |

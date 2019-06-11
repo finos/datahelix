@@ -9,14 +9,12 @@ import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-
-public class CoreAtomicTypesConstraintReaderProvider implements ConstraintReaderMapEntryProvider {
+public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMapEntrySource {
     public Stream<ConstraintReaderMapEntry> getConstraintReaderMapEntries() {
         BigDecimal maxStringLength = BigDecimal.valueOf(Defaults.MAX_STRING_LENGTH);
 
@@ -50,7 +48,7 @@ public class CoreAtomicTypesConstraintReaderProvider implements ConstraintReader
             return new IsOfTypeConstraint(fields.getByName(dto.field), type, rules);
         };
 
-        ConstraintReaderMapEntry[] entries = {
+        return Stream.of(
             new ConstraintReaderMapEntry(
                 AtomicConstraintType.FORMATTED_AS.getText(),
                 ".*",
@@ -305,8 +303,6 @@ public class CoreAtomicTypesConstraintReaderProvider implements ConstraintReader
                         rules
                     )
             )
-        };
-
-        return Arrays.stream(entries);
+        );
     }
 }

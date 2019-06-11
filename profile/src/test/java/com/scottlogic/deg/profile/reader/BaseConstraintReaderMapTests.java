@@ -33,12 +33,11 @@ public class BaseConstraintReaderMapTests {
 
     @BeforeAll
     public void before() {
-        ConstraintReaderMapEntryProvider[] mappingProviders = {
-            new CoreAtomicTypesConstraintReaderProvider(),
-            new FinancialTypesConstraintReaderProvider(),
-            new PersonalDataTypesConstraintReaderProvider()
-        };
-        constraintReaderMap = new BaseConstraintReaderMap(Arrays.stream(mappingProviders));
+        constraintReaderMap = new BaseConstraintReaderMap(Stream.of(
+            new CoreAtomicTypesConstraintReaderSource(),
+            new FinancialTypesConstraintReaderSource(),
+            new PersonalDataTypesConstraintReaderSource()
+        ));
 
         List<Field> fields = new ArrayList<>();
 
@@ -318,7 +317,7 @@ public class BaseConstraintReaderMapTests {
     }
 
     @Test
-    public void shouldAcceptDatesAtStartOf0001() throws InvalidProfileException {
+    public void shouldAcceptDatesAtStartOf0001() {
         assertSuccessfulDateParse(
             "0001-01-01T00:00:00.000",
             OffsetDateTime.of(1, 1, 1, 00, 00, 00, 0, ZoneOffset.UTC));
@@ -329,7 +328,7 @@ public class BaseConstraintReaderMapTests {
     }
 
     @Test
-    public void shouldAcceptDatesAtEndOf9999() throws InvalidProfileException {
+    public void shouldAcceptDatesAtEndOf9999() {
         assertSuccessfulDateParse(
             "9999-12-31T23:59:59.999",
             OffsetDateTime.of(9999, 12, 31, 23, 59, 59, 999000000, ZoneOffset.UTC));
@@ -358,20 +357,20 @@ public class BaseConstraintReaderMapTests {
     }
 
     @Test
-    public void shouldAssumeUTCWhenOffsetNotSpecified() throws InvalidProfileException {
+    public void shouldAssumeUTCWhenOffsetNotSpecified() {
         assertSuccessfulDateParse(
             "2018-04-01T00:00:00.000",
             OffsetDateTime.of(2018, 04, 01, 00, 00, 00, 0, ZoneOffset.UTC));
     }
 
     @Test
-    public void shouldHandleExplicitHourOffsets() throws InvalidProfileException {
+    public void shouldHandleExplicitHourOffsets() {
         assertSuccessfulDateParse(
             "2018-04-01T00:00:00.000+03",
             OffsetDateTime.of(2018, 04, 01, 00, 00, 00, 0, ZoneOffset.ofHours(3)));
     }
 
-    private void assertSuccessfulDateParse(String dateString, OffsetDateTime expectedDateTime) throws InvalidProfileException {
+    private void assertSuccessfulDateParse(String dateString, OffsetDateTime expectedDateTime) {
         OffsetDateTime actualDateTime = tryParseConstraintDateTimeValue(createDateObject(dateString));
 
         Assert.assertThat(actualDateTime, equalTo(expectedDateTime));
@@ -383,7 +382,7 @@ public class BaseConstraintReaderMapTests {
             () -> tryParseConstraintDateTimeValue(createDateObject(dateString)));
     }
 
-    private OffsetDateTime tryParseConstraintDateTimeValue(Object value) throws InvalidProfileException {
+    private OffsetDateTime tryParseConstraintDateTimeValue(Object value) {
         ConstraintReader reader = constraintReaderMap.getReader(
             AtomicConstraintType.IS_AFTER_CONSTANT_DATE_TIME.toString(), null);
 

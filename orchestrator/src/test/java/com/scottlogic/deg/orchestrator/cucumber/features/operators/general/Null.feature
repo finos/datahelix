@@ -214,9 +214,9 @@ Feature: User can specify that a field is null or absent
       | foo  |
       | null |
 
-### aValid ###
+### Financial data types ###
 
-  Scenario: Not 'null' with a non contradicting ISIN should be successful
+  Scenario: Not null combined with an ISIN constraint generates valid ISINs
     Given foo is anything but null
     And foo is of type "ISIN"
     And foo is in set:
@@ -225,21 +225,21 @@ Feature: User can specify that a field is null or absent
       | foo            |
       | "GB0002634946" |
 
-  Scenario: 'Null' with a contradicting ISIN should only generate null
+  Scenario: Null combined with an ISIN constraint generates null
     Given foo is null
     And foo is of type "ISIN"
     Then the following data should be generated:
       | foo  |
       | null |
 
-  Scenario: 'Null' with a contradicting non-ISIN should only generate null
+  Scenario: Null combined with a non-ISIN constraint generates null
     Given foo is null
     And foo is anything but of type "ISIN"
     Then the following data should be generated:
       | foo  |
       | null |
 
-  Scenario: Not 'null' with a non contradicting SEDOL should be successful
+  Scenario: Not null combined with a SEDOL constraint generates valid SEDOLs
     Given foo is anything but null
     And foo is of type "SEDOL"
     And foo is in set:
@@ -248,21 +248,21 @@ Feature: User can specify that a field is null or absent
       | foo       |
       | "0263494" |
 
-  Scenario: 'Null' with a contradicting SEDOL should only generate null
+  Scenario: Null combined with a SEDOL constraint generates null
     Given foo is null
     And foo is of type "SEDOL"
     Then the following data should be generated:
       | foo  |
       | null |
 
-  Scenario: 'Null' with a contradicting non-SEDOL should only generate null
+  Scenario: Null combined with a non-SEDOL constraint generates null
     Given foo is null
     And foo is anything but of type "SEDOL"
     Then the following data should be generated:
       | foo  |
       | null |
 
-  Scenario: Not 'null' with a non contradicting CUSIP should be successful
+  Scenario: Not null combined with a CUSIP constraint generates valid CUSIPs
     Given foo is anything but null
     And foo is of type "CUSIP"
     And foo is in set:
@@ -271,14 +271,14 @@ Feature: User can specify that a field is null or absent
       | foo         |
       | "38259P508" |
 
-  Scenario: 'Null' with a contradicting CUSIP should only generate null
+  Scenario: Null combined with a CUSIP constraint generates null
     Given foo is null
     And foo is of type "CUSIP"
     Then the following data should be generated:
       | foo  |
       | null |
 
-  Scenario: 'Null' with a contradicting non-CUSIP should only generate null
+  Scenario: Null combined with a non-CUSIP constraint generates null
     Given foo is null
     And foo is anything but of type "CUSIP"
     Then the following data should be generated:

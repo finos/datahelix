@@ -68,19 +68,19 @@ All fields permit the inclusion of the empty set (&#8709;) by default, to preven
 
 For more details see the [set restriction and generation](./../generator/docs/SetRestrictionAndGeneration.md) page.
 
-## Why can I not combine `aValid` and regex constraints
+## Why can I not combine regex constraints with some `ofType` constraints
 
-If a profile contains both `aValid` constraint(s) and `matchingRegex` or `containingRegex` constraint(s) that apply to the same field(s), no data will be emitted, even if the regexes could potentially match valid values produced by the `aValid` constraints.
+If a profile contains both `ofType` constraint(s) that refer to financial codes, and `matchingRegex` or `containingRegex` constraint(s) that apply to the same field(s), no data will be emitted, even if the regexes could potentially match valid values produced by the `ofType` constraints.
 
 This is a limitation with the current implementation of the generator, there are plans to solve this issue - see [#487](https://github.com/ScottLogic/datahelix/issues/487) for progress. 
 
-Combining an `aValid` constraint with any other constraints is still permitted and will produce data where appropriate.
+Combining an `ofType` constraint with any other constraints is still permitted and will produce data where appropriate.  Combining other kinds of `ofType` constraint with `matchingRegex` or `containingRegex` constraints is also permitted.
 
 Valid examples are:
-* `aValid ISIN` & `inSet [ "GB0002634947", 123 ]` - will emit `null` and `"GB0002634947"`
-* `not(aValid CUSIP)` & `inSet [ "594918104", 123 ]` - will emit `null` and `123`
-* `aValid ISIN` & `equalTo "GB0002634947"` - will emit `null` and `"GB0002634947"`
-* `aValid SEDOL` & `greaterThan 5` - will emit `null` and all valid SEDOL codes
+* `ofType ISIN` & `inSet [ "GB0002634947", 123 ]` - will emit `null` and `"GB0002634947"`
+* `not(ofType CUSIP)` & `inSet [ "594918104", 123 ]` - will emit `null` and `123`
+* `ofType ISIN` & `equalTo "GB0002634947"` - will emit `null` and `"GB0002634947"`
+* `ofType SEDOL` & `greaterThan 5` - will emit `null` and all valid SEDOL codes
 
 ## Why are we continuing to use an out-of-date JDK
 

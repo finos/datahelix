@@ -4,7 +4,7 @@ Feature: User can specify that a field must be a financial code type
     Given the generation strategy is full
     And there is a field foo
 
-  Scenario: Running an ofType request with the value "ISIN" should be successful
+  Scenario: An ofType constraint with the value "ISIN" generates valid ISINs
     Given foo is of type "ISIN"
     And foo is in set:
       | "GB0002634946" |
@@ -13,12 +13,12 @@ Feature: User can specify that a field must be a financial code type
       | null           |
       | "GB0002634946" |
 
-  Scenario: Running an 'ofType' request that includes the string "isin" should fail with an error message
+  Scenario: An ofType constraint with the value "isin" fails with an invalid profile error message
     Given foo is of type "isin"
     Then the profile is invalid because "Profile is invalid: no constraints known for \"is\": \"ofType\", \"value\": \"isin\""
     And no data is created
 
-  Scenario: Running an 'ofType' request with the value "SEDOL" should be successful
+  Scenario: An ofType constraint with the value "SEDOL" generates valid SEDOLs
     Given foo is of type "SEDOL"
     And foo is in set:
       | "0263494" |
@@ -27,12 +27,12 @@ Feature: User can specify that a field must be a financial code type
       | null      |
       | "0263494" |
 
-  Scenario: Running an 'ofType' request that includes the string "sedol" should fail with an error message
+  Scenario: An ofType constraint with the value "sedol" fails with an invalid profile error message
     Given foo is of type "sedol"
     Then the profile is invalid because "Profile is invalid: no constraints known for \"is\": \"ofType\", \"value\": \"sedol\""
     And no data is created
 
-  Scenario: Running an 'ofType' request with the value "CUSIP" should be successful
+  Scenario: An ofType constraint with the value "CUSIP" generates valid CUSIPs
     Given foo is of type "CUSIP"
     And foo is in set:
       | "38259P508" |
@@ -41,27 +41,27 @@ Feature: User can specify that a field must be a financial code type
       | null        |
       | "38259P508" |
 
-  Scenario: Running an 'ofType' request that includes the string "cusip" should fail with an error message
+  Scenario: An ofType constraint with the value "cusip" fails with an invalid profile error message
     Given foo is of type "cusip"
     Then the profile is invalid because "Profile is invalid: no constraints known for \"is\": \"ofType\", \"value\": \"cusip\""
     And no data is created
 
-  Scenario: Running an 'ofType' request with an invalid value should fail with an error message
+  Scenario: An ofType constraint with the value "BURRITO" fails with an invalid profile error message
     Given foo is of type "BURRITO"
     Then the profile is invalid because "Profile is invalid: no constraints known for \"is\": \"ofType\", \"value\": \"BURRITO\""
     And no data is created
 
-  Scenario: Running an 'ofType' request that includes a null entry ("") characters should fail with an error message
+  Scenario: An ofType constraint with a value that is an empty string fails with an invalid profile error message
     Given foo is of type ""
     Then the profile is invalid because "Profile is invalid: no constraints known for \"is\": \"ofType\", \"value\": \"\""
     And no data is created
 
-  Scenario: Running an 'ofType' request with the value property set to a null entry (null) should throw an error
+  Scenario: An ofType constraint with a null value fails with an error message
     Given foo is of type null
     Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be set to a value"
     And no data is created
 
-  Scenario: ofType run against a non contradicting ofType ISIN should be successful
+  Scenario: Two ISIN constraints combined generate valid ISINs
     Given foo is of type "ISIN"
     And foo is of type "ISIN"
     And foo is in set:
@@ -71,14 +71,14 @@ Feature: User can specify that a field must be a financial code type
       | null           |
       | "GB0002634946" |
 
-  Scenario: ofType run against a non contradicting non-ISIN should only generate null data
+  Scenario: An ISIN constraint combined with a non-ISIN constraint only generates null
     Given foo is of type "ISIN"
     And foo is anything but of type "ISIN"
     Then the following data should be generated:
       | foo  |
       | null |
 
-  Scenario: ofType ISIN run against a non contradicting greaterThan should be successful
+  Scenario: An ISIN constraint combined with a greater than constraint generates valid ISINs
     Given foo is of type "ISIN"
     And foo is greater than 0
     And foo is in set:
@@ -91,7 +91,7 @@ Feature: User can specify that a field must be a financial code type
       | "GB0002634946" |
       | null           |
 
-  Scenario: ofType ISIN run against a non contradicting not greaterThan should be successful
+  Scenario: An ISIN constraint combined with a not greater than constraint generates valid ISINs
     Given foo is of type "ISIN"
     And foo is anything but greater than 0
     And foo is in set:
@@ -104,7 +104,7 @@ Feature: User can specify that a field must be a financial code type
       | "GB0002634946" |
       | null           |
 
-  Scenario: ofType ISIN run against a non contradicting greaterThanOrEqualTo should be successful
+  Scenario: An ISIN constraint combined with a greater than or equal to constraint generates valid ISINs
     Given foo is of type "ISIN"
     And foo is greater than or equal to 0
     And foo is in set:
@@ -117,7 +117,7 @@ Feature: User can specify that a field must be a financial code type
       | "GB0002634946" |
       | null           |
 
-  Scenario: oftype ISIN run against a non contradicting not greaterThanOrEqualTo should be successful
+  Scenario: An ISIN constraint combined with a not greater than or equal to constraint generates valid ISINs
     Given foo is of type "ISIN"
     And foo is anything but greater than or equal to 0
     And foo is in set:
@@ -130,7 +130,7 @@ Feature: User can specify that a field must be a financial code type
       | "GB0002634946" |
       | null           |
 
-  Scenario: ofType ISIN run against a non contradicting lessThan should be successful
+  Scenario: An ISIN constraint combined with a less than constraint generates valid ISINs
     Given foo is of type "ISIN"
     And foo is less than 0
     And foo is in set:
@@ -143,7 +143,7 @@ Feature: User can specify that a field must be a financial code type
       | "GB0002634946" |
       | null           |
 
-  Scenario: ofType ISIN run against a non contradicting not lessThan should be successful
+  Scenario: An ISIN constraint combined with a not less than constraint generates valid ISINs
     Given foo is of type "ISIN"
     And foo is anything but less than 0
     And foo is in set:
@@ -156,7 +156,7 @@ Feature: User can specify that a field must be a financial code type
       | "GB0002634946" |
       | null           |
 
-  Scenario: ofType ISIN run against a non contradicting lessThanOrEqualTo should be successful
+  Scenario: An ISIN constraint combined with a less than or equal to constraint generates valid ISINs
     Given foo is of type "ISIN"
     And foo is less than or equal to 0
     And foo is in set:
@@ -169,7 +169,7 @@ Feature: User can specify that a field must be a financial code type
       | "GB0002634946" |
       | null           |
 
-  Scenario: ofType ISIN run against a non contradicting not lessThanOrEqualTo should be successful
+  Scenario: An ISIN constraint combined with a not less than or equal to constraint generates valid ISINs
     Given foo is of type "ISIN"
     And foo is anything but less than or equal to 0
     And foo is in set:
@@ -182,7 +182,7 @@ Feature: User can specify that a field must be a financial code type
       | "GB0002634946" |
       | null           |
 
-  Scenario: ofType ISIN run against a non contradicting granularTo should be successful
+  Scenario: An ISIN constraint combined with a granular to constraint generates valid ISINs
     Given foo is of type "ISIN"
     And foo is granular to 1
     And foo is in set:
@@ -195,7 +195,7 @@ Feature: User can specify that a field must be a financial code type
       | "GB0002634946" |
       | null           |
 
-  Scenario: ofType ISIN run against a non contradicting not granularTo should be successful
+  Scenario: An ISIN constraint combined with a not granular to constraint generates valid ISINs
     Given foo is of type "ISIN"
     And foo is anything but granular to 1
     And foo is in set:
@@ -208,7 +208,7 @@ Feature: User can specify that a field must be a financial code type
       | "GB0002634946" |
       | null           |
 
-  Scenario: ofType ISIN run against a non contradicting after should be successful
+  Scenario: An ISIN constraint combined with an is after constraint generates valid ISINs
     Given foo is of type "ISIN"
     And foo is after 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -221,7 +221,7 @@ Feature: User can specify that a field must be a financial code type
       | "GB0002634946" |
       | null           |
 
-  Scenario: ofType ISIN run against a non contradicting not after should be successful
+  Scenario: An ISIN constraint combined with a not after constraint generates valid ISINs
     Given foo is of type "ISIN"
     And foo is anything but after 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -234,7 +234,7 @@ Feature: User can specify that a field must be a financial code type
       | "GB0002634946" |
       | null           |
 
-  Scenario: ofType ISIN run against a non contradicting afterOrAt should be successful
+  Scenario: An ISIN constraint combined with an is after or at constraint generates valid ISINs
     Given foo is of type "ISIN"
     And foo is after or at 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -247,7 +247,7 @@ Feature: User can specify that a field must be a financial code type
       | "GB0002634946" |
       | null           |
 
-  Scenario: ofType ISIN run against a non contradicting not afterOrAt should be successful
+  Scenario: An ISIN constraint combined with a not after or at constraint generates valid ISINs
     Given foo is of type "ISIN"
     And foo is anything but after or at 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -260,7 +260,7 @@ Feature: User can specify that a field must be a financial code type
       | "GB0002634946" |
       | null           |
 
-  Scenario: ofType ISIN run against a non contradicting before should be successful
+  Scenario: An ISIN constraint combined with an is before constraint generates valid ISINs
     Given foo is of type "ISIN"
     And foo is before 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -273,7 +273,7 @@ Feature: User can specify that a field must be a financial code type
       | "GB0002634946" |
       | null           |
 
-  Scenario: ofType ISIN run against a non contradicting not before should be successful
+  Scenario: An ISIN constraint combined with a not before constraint generates valid ISINs
     Given foo is of type "ISIN"
     And foo is anything but before 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -286,7 +286,7 @@ Feature: User can specify that a field must be a financial code type
       | "GB0002634946" |
       | null           |
 
-  Scenario: ofType ISIN run against a non contradicting beforeOrAt should be successful
+  Scenario: An ISIN constraint combined with an is before or at constraint generates valid ISINs
     Given foo is of type "ISIN"
     And foo is before or at 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -299,7 +299,7 @@ Feature: User can specify that a field must be a financial code type
       | "GB0002634946" |
       | null           |
 
-  Scenario: ofType ISIN run against a non contradicting not beforeOrAt should be successful
+  Scenario: An ISIN constraint combined with a not is before or at constraint generates valid ISINs
     Given foo is of type "ISIN"
     And foo is anything but before or at 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -312,7 +312,7 @@ Feature: User can specify that a field must be a financial code type
       | "GB0002634946" |
       | null           |
 
-  Scenario: ofType run against a non contradicting SEDOL should be successful
+  Scenario: A SEDOL constraint combined with another SEDOL constraint generates valid SEDOLs
     Given foo is of type "SEDOL"
     And foo is of type "SEDOL"
     And foo is in set:
@@ -322,14 +322,14 @@ Feature: User can specify that a field must be a financial code type
       | null      |
       | "0263494" |
 
-  Scenario: ofType run against a non contradicting non-SEDOL should only generate null data
+  Scenario: A SEDOL constraint combined with a non-SEDOL constraint only generates null
     Given foo is of type "SEDOL"
     And foo is anything but of type "SEDOL"
     Then the following data should be generated:
       | foo  |
       | null |
 
-  Scenario: ofType SEDOL run against a non contradicting greaterThan should be successful
+  Scenario: A SEDOL constraint combined with a greater than constraint generates valid SEDOLs
     Given foo is of type "SEDOL"
     And foo is greater than 0
     And foo is in set:
@@ -342,7 +342,7 @@ Feature: User can specify that a field must be a financial code type
       | "0263494" |
       | null      |
 
-  Scenario: ofType SEDOL run against a non contradicting not greaterThan should be successful
+  Scenario: A SEDOL constraint combined with a not greater than constraint generates valid SEDOLs
     Given foo is of type "SEDOL"
     And foo is anything but greater than 0
     And foo is in set:
@@ -355,7 +355,7 @@ Feature: User can specify that a field must be a financial code type
       | "0263494" |
       | null      |
 
-  Scenario: ofType SEDOL run against a non contradicting greaterThanOrEqualTo should be successful
+  Scenario: A SEDOL constraint combined with a greater than or equal to constraint generates valid SEDOLs
     Given foo is of type "SEDOL"
     And foo is greater than or equal to 0
     And foo is in set:
@@ -368,7 +368,7 @@ Feature: User can specify that a field must be a financial code type
       | "0263494" |
       | null      |
 
-  Scenario: ofType SEDOL run against a non contradicting not greaterThanOrEqualTo should be successful
+  Scenario: A SEDOL constraint combined with a not greater than or equal to constraint generates valid SEDOLs
     Given foo is of type "SEDOL"
     And foo is anything but greater than or equal to 0
     And foo is in set:
@@ -381,7 +381,7 @@ Feature: User can specify that a field must be a financial code type
       | "0263494" |
       | null      |
 
-  Scenario: ofType SEDOL run against a non contradicting lessThan should be successful
+  Scenario: A SEDOL constraint combined with a less than constraint generates valid SEDOLs
     Given foo is of type "SEDOL"
     And foo is less than 0
     And foo is in set:
@@ -394,7 +394,7 @@ Feature: User can specify that a field must be a financial code type
       | "0263494" |
       | null      |
 
-  Scenario: ofType SEDOL run against a non contradicting not lessThan should be successful
+  Scenario: A SEDOL constraint combined with a not less than constraint generates valid SEDOLs
     Given foo is of type "SEDOL"
     And foo is anything but less than 0
     And foo is in set:
@@ -407,7 +407,7 @@ Feature: User can specify that a field must be a financial code type
       | "0263494" |
       | null      |
 
-  Scenario: ofType SEDOL run against a non contradicting lessThanOrEqualTo should be successful
+  Scenario: A SEDOL constraint combined with a less than or equal to constraint generates valid SEDOLs
     Given foo is of type "SEDOL"
     And foo is less than or equal to 0
     And foo is in set:
@@ -420,7 +420,7 @@ Feature: User can specify that a field must be a financial code type
       | "0263494" |
       | null      |
 
-  Scenario: ofType SEDOL run against a non contradicting not lessThanOrEqualTo should be successful
+  Scenario: A SEDOL constraint combined with a not less than or equal to constraint generates valid SEDOLs
     Given foo is of type "SEDOL"
     And foo is anything but less than or equal to 0
     And foo is in set:
@@ -433,7 +433,7 @@ Feature: User can specify that a field must be a financial code type
       | "0263494" |
       | null      |
 
-  Scenario: ofType SEDOL run against a non contradicting granularTo should be successful
+  Scenario: A SEDOL constraint combined with a granular to constraint generates valid SEDOLs
     Given foo is of type "SEDOL"
     And foo is granular to 1
     And foo is in set:
@@ -446,7 +446,7 @@ Feature: User can specify that a field must be a financial code type
       | "0263494" |
       | null      |
 
-  Scenario: ofType SEDOL run against a non contradicting not granularTo should be successful
+  Scenario: A SEDOL constraint combined with a not granular to constraint generates valid SEDOLs
     Given foo is of type "SEDOL"
     And foo is anything but granular to 1
     And foo is in set:
@@ -459,7 +459,7 @@ Feature: User can specify that a field must be a financial code type
       | "0263494" |
       | null      |
 
-  Scenario: ofType SEDOL run against a non contradicting after should be successful
+  Scenario: A SEDOL constraint combined with an after constraint generates valid SEDOLs
     Given foo is of type "SEDOL"
     And foo is after 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -472,7 +472,7 @@ Feature: User can specify that a field must be a financial code type
       | "0263494" |
       | null      |
 
-  Scenario: ofType SEDOL run against a non contradicting not after should be successful
+  Scenario: A SEDOL constraint combined with a not after constraint generates valid SEDOLs
     Given foo is of type "SEDOL"
     And foo is anything but after 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -485,7 +485,7 @@ Feature: User can specify that a field must be a financial code type
       | "0263494" |
       | null      |
 
-  Scenario: ofType SEDOL run against a non contradicting afterOrAt should be successful
+  Scenario: A SEDOL constraint combined with an after or at constraint generates valid SEDOLs
     Given foo is of type "SEDOL"
     And foo is after or at 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -498,7 +498,7 @@ Feature: User can specify that a field must be a financial code type
       | "0263494" |
       | null      |
 
-  Scenario: ofType SEDOL run against a non contradicting not afterOrAt should be successful
+  Scenario: A SEDOL constraint combined with a not after or at constraint generates valid SEDOLs
     Given foo is of type "SEDOL"
     And foo is anything but after or at 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -511,7 +511,7 @@ Feature: User can specify that a field must be a financial code type
       | "0263494" |
       | null      |
 
-  Scenario: ofType SEDOL run against a non contradicting before should be successful
+  Scenario: A SEDOL constraint combined with a before constraint generates valid SEDOLs
     Given foo is of type "SEDOL"
     And foo is before 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -524,7 +524,7 @@ Feature: User can specify that a field must be a financial code type
       | "0263494" |
       | null      |
 
-  Scenario: ofType SEDOL run against a non contradicting not before should be successful
+  Scenario: A SEDOL constraint combined with a not before constraint generates valid SEDOLs
     Given foo is of type "SEDOL"
     And foo is anything but before 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -537,7 +537,7 @@ Feature: User can specify that a field must be a financial code type
       | "0263494" |
       | null      |
 
-  Scenario: ofType SEDOL run against a non contradicting beforeOrAt should be successful
+  Scenario: A SEDOL constraint combined with a before or at constraint generates valid SEDOLs
     Given foo is of type "SEDOL"
     And foo is before or at 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -550,7 +550,7 @@ Feature: User can specify that a field must be a financial code type
       | "0263494" |
       | null      |
 
-  Scenario: ofType SEDOL run against a non contradicting not beforeOrAt should be successful
+  Scenario: A SEDOL constraint combined with a not before or at constraint generates valid SEDOLs
     Given foo is of type "SEDOL"
     And foo is anything but before or at 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -563,7 +563,7 @@ Feature: User can specify that a field must be a financial code type
       | "0263494" |
       | null      |
 
-  Scenario: ofType run against a non contradicting CUSIP should be successful
+  Scenario: A CUSIP constraint combined with a second CUSIP constraint generates valid CUSIPs
     Given foo is of type "CUSIP"
     And foo is of type "CUSIP"
     And foo is in set:
@@ -573,14 +573,14 @@ Feature: User can specify that a field must be a financial code type
       | null        |
       | "38259P508" |
 
-  Scenario: ofType run against a non contradicting non-CUSIP should only generate null data
+  Scenario: A CUSIP constraint combined with a non-CUSIP constraint only generates null
     Given foo is of type "CUSIP"
     And foo is anything but of type "CUSIP"
     Then the following data should be generated:
       | foo  |
       | null |
 
-  Scenario: ofType CUSIP run against a non contradicting greaterThan should be successful
+  Scenario: A CUSIP constraint combined with a greater than constraint generates valid CUSIPs
     Given foo is of type "CUSIP"
     And foo is greater than 0
     And foo is in set:
@@ -593,7 +593,7 @@ Feature: User can specify that a field must be a financial code type
       | "38259P508" |
       | null        |
 
-  Scenario: ofType CUSIP run against a non contradicting not greaterThan should be successful
+  Scenario: A CUSIP constraint combined with a not greater than constraint generates valid CUSIPs
     Given foo is of type "CUSIP"
     And foo is anything but greater than 0
     And foo is in set:
@@ -606,7 +606,7 @@ Feature: User can specify that a field must be a financial code type
       | "38259P508" |
       | null        |
 
-  Scenario: ofType CUSIP run against a non contradicting greaterThanOrEqualTo should be successful
+  Scenario: A CUSIP constraint combined with a greater than or equal to constraint generates valid CUSIPs
     Given foo is of type "CUSIP"
     And foo is greater than or equal to 0
     And foo is in set:
@@ -619,7 +619,7 @@ Feature: User can specify that a field must be a financial code type
       | "38259P508" |
       | null        |
 
-  Scenario: ofType CUSIP run against a non contradicting not greaterThanOrEqualTo should be successful
+  Scenario: A CUSIP constraint combined with a not greater than or equal to constraint generates valid CUSIPs
     Given foo is of type "CUSIP"
     And foo is anything but greater than or equal to 0
     And foo is in set:
@@ -632,7 +632,7 @@ Feature: User can specify that a field must be a financial code type
       | "38259P508" |
       | null        |
 
-  Scenario: ofType CUSIP run against a non contradicting lessThan should be successful
+  Scenario: A CUSIP constraint combined with a less than constraint generates valid CUSIPs
     Given foo is of type "CUSIP"
     And foo is less than 0
     And foo is in set:
@@ -645,7 +645,7 @@ Feature: User can specify that a field must be a financial code type
       | "38259P508" |
       | null        |
 
-  Scenario: ofType CUSIP run against a non contradicting not lessThan should be successful
+  Scenario: A CUSIP constraint combined with a not less than constraint generates valid CUSIPs
     Given foo is of type "CUSIP"
     And foo is anything but less than 0
     And foo is in set:
@@ -658,7 +658,7 @@ Feature: User can specify that a field must be a financial code type
       | "38259P508" |
       | null        |
 
-  Scenario: ofType CUSIP run against a non contradicting lessThanOrEqualTo should be successful
+  Scenario: A CUSIP constraint combined with a less than or equal to constraint generates valid CUSIPs
     Given foo is of type "CUSIP"
     And foo is less than or equal to 0
     And foo is in set:
@@ -671,7 +671,7 @@ Feature: User can specify that a field must be a financial code type
       | "38259P508" |
       | null        |
 
-  Scenario: ofType CUSIP run against a non contradicting not lessThanOrEqualTo should be successful
+  Scenario: A CUSIP constraint combined with a not less than or equal to constraint generates valid CUSIPs
     Given foo is of type "CUSIP"
     And foo is anything but less than or equal to 0
     And foo is in set:
@@ -684,7 +684,7 @@ Feature: User can specify that a field must be a financial code type
       | "38259P508" |
       | null        |
 
-  Scenario: ofType CUSIP run against a non contradicting granularTo should be successful
+  Scenario: A CUSIP constraint combined with a granular to constraint generates valid CUSIPs
     Given foo is of type "CUSIP"
     And foo is granular to 1
     And foo is in set:
@@ -697,7 +697,7 @@ Feature: User can specify that a field must be a financial code type
       | "38259P508" |
       | null        |
 
-  Scenario: ofType CUSIP run against a non contradicting not granularTo should be successful
+  Scenario: A CUSIP constraint combined with a not granular to constraint generates valid CUSIPs
     Given foo is of type "CUSIP"
     And foo is anything but granular to 1
     And foo is in set:
@@ -710,7 +710,7 @@ Feature: User can specify that a field must be a financial code type
       | "38259P508" |
       | null        |
 
-  Scenario: ofType CUSIP run against a non contradicting after should be successful
+  Scenario: A CUSIP constraint combined with an after constraint generates valid CUSIPs
     Given foo is of type "CUSIP"
     And foo is after 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -723,7 +723,7 @@ Feature: User can specify that a field must be a financial code type
       | "38259P508" |
       | null        |
 
-  Scenario: ofType CUSIP run against a non contradicting not after should be successful
+  Scenario: A CUSIP constraint combined with a not after constraint generates valid CUSIPs
     Given foo is of type "CUSIP"
     And foo is anything but after 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -736,7 +736,7 @@ Feature: User can specify that a field must be a financial code type
       | "38259P508" |
       | null        |
 
-  Scenario: ofType CUSIP run against a non contradicting afterOrAt should be successful
+  Scenario: A CUSIP constraint combined with an after or at constraint generates valid CUSIPs
     Given foo is of type "CUSIP"
     And foo is after or at 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -749,7 +749,7 @@ Feature: User can specify that a field must be a financial code type
       | "38259P508" |
       | null        |
 
-  Scenario: ofType CUSIP run against a non contradicting not afterOrAt should be successful
+  Scenario: A CUSIP constraint combined with a not after or at constraint generates valid CUSIPs
     Given foo is of type "CUSIP"
     And foo is anything but after or at 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -762,7 +762,7 @@ Feature: User can specify that a field must be a financial code type
       | "38259P508" |
       | null        |
 
-  Scenario: ofType CUSIP run against a non contradicting before should be successful
+  Scenario: A CUSIP constraint combined with a before constraint generates valid CUSIPs
     Given foo is of type "CUSIP"
     And foo is before 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -775,7 +775,7 @@ Feature: User can specify that a field must be a financial code type
       | "38259P508" |
       | null        |
 
-  Scenario: ofType CUSIP run against a non contradicting not before should be successful
+  Scenario: A CUSIP constraint combined with a not before constraint generates valid CUSIPs
     Given foo is of type "CUSIP"
     And foo is anything but before 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -788,7 +788,7 @@ Feature: User can specify that a field must be a financial code type
       | "38259P508" |
       | null        |
 
-  Scenario: ofType CUSIP run against a non contradicting beforeOrAt should be successful
+  Scenario: A CUSIP constraint combined with a before or at constraint generates valid CUSIPs
     Given foo is of type "CUSIP"
     And foo is before or at 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -801,7 +801,7 @@ Feature: User can specify that a field must be a financial code type
       | "38259P508" |
       | null        |
 
-  Scenario: ofType CUSIP run against a non contradicting not beforeOrAt should be successful
+  Scenario: A CUSIP constraint combined with a not before or at constraint generates valid CUSIPs
     Given foo is of type "CUSIP"
     And foo is anything but before or at 2019-01-01T00:00:00.000Z
     And foo is in set:
@@ -814,7 +814,7 @@ Feature: User can specify that a field must be a financial code type
       | "38259P508" |
       | null        |
 
-  Scenario: ofType RIC run against a non contradicting set should be successful
+  Scenario: A RIC constraint combined with a not null constraint generates valid RICs
     Given foo is of type "RIC"
     And foo is anything but null
     And foo is in set:
@@ -823,7 +823,7 @@ Feature: User can specify that a field must be a financial code type
       | foo         |
       | "AB.PQ"    |
 
-  Scenario: ofType RIC run against a contradicting set should not return data
+  Scenario: A RIC constraint combined with a not null constraint and an in set constraint that does not contain any valid RICs generates no data
     Given foo is of type "RIC"
     And foo is anything but null
     And foo is in set:
@@ -831,7 +831,7 @@ Feature: User can specify that a field must be a financial code type
     Then the following data should be generated:
       | foo         |
 
-  Scenario: ofType RIC run against a length should be successful
+  Scenario: A RIC constraint combined with an of length constraint returns valid RICs of the specified length
     Given foo is of type "RIC"
     And foo is anything but null
     And foo is of length 6
