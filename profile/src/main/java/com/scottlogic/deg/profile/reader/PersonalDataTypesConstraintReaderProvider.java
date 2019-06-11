@@ -24,7 +24,7 @@ public class PersonalDataTypesConstraintReaderProvider implements ConstraintRead
 
     public PersonalDataTypesConstraintReaderProvider() {
         nameRetrievalService = new NameRetrievalService(
-            new CSVSetMapper(new ClasspathMapper(), new NameCSVPopulator()));
+            new CSVSetMapper<>(new ClasspathMapper(), new NameCSVPopulator()));
     }
 
     public Stream<ConstraintReaderMapEntry> getConstraintReaderMapEntries() {
