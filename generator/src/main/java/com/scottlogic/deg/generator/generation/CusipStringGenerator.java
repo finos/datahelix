@@ -29,21 +29,14 @@ public class CusipStringGenerator extends ChecksummedCodeStringGenerator {
 
     @Override
     public char calculateCheckDigit(String str) {
-        return IsinUtils.calculateCusipCheckDigit(
+        return FinancialCodeUtils.calculateCusipCheckDigit(
             str.substring(prefixLength, CUSIP_LENGTH + prefixLength - 1)
         );
     }
 
     @Override
-    public String fixCheckDigit(String str) {
-        char checkDigit = IsinUtils.calculateCusipCheckDigit(
-            str.substring(prefixLength, CUSIP_LENGTH + prefixLength - 1)
-        );
-        if (str.length() > prefixLength + CUSIP_LENGTH) {
-            return str.substring(0, prefixLength + CUSIP_LENGTH - 1) +
-                checkDigit + str.substring(prefixLength + CUSIP_LENGTH);
-        }
-        return str.substring(0, str.length() - 1) + checkDigit;
+    public int getLength() {
+        return CUSIP_LENGTH;
     }
 
     @Override
@@ -53,7 +46,7 @@ public class CusipStringGenerator extends ChecksummedCodeStringGenerator {
 
     @Override
     public boolean match(String subject) {
-        boolean matches = IsinUtils.isValidCusipNsin(subject);
+        boolean matches = FinancialCodeUtils.isValidCusipNsin(subject);
         return matches != negate;
     }
 

@@ -3,7 +3,7 @@ package com.scottlogic.deg.generator.utils;
 import java.util.*;
 import java.util.stream.IntStream;
 
-public class IsinUtils {
+public class FinancialCodeUtils {
     public static final List<String> VALID_COUNTRY_CODES = Arrays.asList("GB", "US");
     public static final int ISIN_LENGTH = 12;
     public static final int CUSIP_LENGTH = 9;
@@ -116,12 +116,12 @@ public class IsinUtils {
                 .map(character -> specialCharacters.contains((char) character)
                         ? 36 + specialCharacters.indexOf((char) character)
                         : Character.digit(character, 36))
-                .flatMap(splitStartingDigits ? IsinUtils::splitDigits : IntStream::of)
+                .flatMap(splitStartingDigits ? FinancialCodeUtils::splitDigits : IntStream::of)
                 .collect(ArrayList::new, List::add, ArrayList::addAll);
 
         final int weightedDigitSum = IntStream.range(0, convertedDigits.size())
                 .map(reverseIndex -> convertedDigits.get(convertedDigits.size() - reverseIndex - 1) * weights.next())
-                .flatMap(splitWeightedDigits ? IsinUtils::splitDigits : IntStream::of)
+                .flatMap(splitWeightedDigits ? FinancialCodeUtils::splitDigits : IntStream::of)
                 .reduce(0, Integer::sum);
 
         int checkDigit = (10 - (weightedDigitSum % 10)) % 10;

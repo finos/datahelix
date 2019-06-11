@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.utils.*;
-import jdk.nashorn.internal.runtime.regexp.joni.Regex;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -58,13 +57,23 @@ public abstract class ChecksummedCodeStringGenerator implements StringGenerator 
 
     public abstract char calculateCheckDigit(String str);
 
-    public abstract String fixCheckDigit(String str);
+    public abstract int getLength();
 
     @Override
     public abstract StringGenerator complement();
 
     @Override
     public abstract boolean match(String subject);
+
+    public String fixCheckDigit(String str) {
+        char checkDigit = calculateCheckDigit(str);
+        int codeLength = getLength();
+        if (str.length() > prefixLength + codeLength) {
+            return str.substring(0, prefixLength + codeLength - 1) +
+                checkDigit + str.substring(prefixLength + codeLength);
+        }
+        return str.substring(0, str.length() - 1) + checkDigit;
+    }
 
     @Override
     public StringGenerator intersect(StringGenerator stringGenerator) {
@@ -112,13 +121,7 @@ public abstract class ChecksummedCodeStringGenerator implements StringGenerator 
                 regexGenerator.complement().generateInterestingValues(),
                 generateInvalidCheckDigitStrings(regexGenerator::generateInterestingValues));
         }
-        return new FilteringIterable<>(
-            new ProjectingIterable<>(
-                regexGenerator.generateInterestingValues(),
-                this::fixCheckDigit
-            ),
-            regexGenerator::match
-        );
+        return wrapIterableWithProjectionAndFilter(regexGenerator.generateInterestingValues());
     }
 
     @Override
@@ -128,13 +131,7 @@ public abstract class ChecksummedCodeStringGenerator implements StringGenerator 
                 generateAllInvalidRegexStrings(),
                 generateAllInvalidCheckDigitStrings());
         }
-        return new FilteringIterable<>(
-            new ProjectingIterable<>(
-                regexGenerator.generateAllValues(),
-                this::fixCheckDigit
-            ),
-            regexGenerator::match
-        );
+        return wrapIterableWithProjectionAndFilter(regexGenerator.generateAllValues());
     }
 
     @Override
@@ -146,26 +143,28 @@ public abstract class ChecksummedCodeStringGenerator implements StringGenerator 
                     generateRandomInvalidCheckDigitStrings(randomNumberGenerator)),
                 randomNumberGenerator);
         }
-        return new FilteringIterable<>(
-            new ProjectingIterable<>(
-                regexGenerator.generateRandomValues(randomNumberGenerator),
-                this::fixCheckDigit
-            ),
+        return wrapIterableWithProjectionAndFilter(
+            regexGenerator.generateRandomValues(randomNumberGenerator)
+        );
+    }
+
+    private Iterable<String> wrapIterableWithProjectionAndFilter(Iterable<String> iterable) {
+        return IterableUtils.wrapIterableWithProjectionAndFilter(
+            iterable,
+            this::fixCheckDigit,
             regexGenerator::match
         );
     }
 
     private Iterable<String> generateAllInvalidRegexStrings() {
-        return new FilteringIterable<>(
-            regexGenerator.complement().generateAllValues(),
-            str -> !str.isEmpty()
+        return IterableUtils.wrapIterableWithNonEmptyStringCheck(
+            regexGenerator.complement().generateAllValues()
         );
     }
 
     private Iterable<String> generateRandomInvalidRegexStrings(RandomNumberGenerator randomNumberGenerator) {
-        return new FilteringIterable<>(
-            regexGenerator.complement().generateRandomValues(randomNumberGenerator),
-            str -> !str.isEmpty()
+        return IterableUtils.wrapIterableWithNonEmptyStringCheck(
+            regexGenerator.complement().generateRandomValues(randomNumberGenerator)
         );
     }
 

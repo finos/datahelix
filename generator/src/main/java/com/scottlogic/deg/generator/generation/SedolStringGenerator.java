@@ -30,21 +30,14 @@ public class SedolStringGenerator extends ChecksummedCodeStringGenerator {
 
     @Override
     public char calculateCheckDigit(String str) {
-        return IsinUtils.calculateSedolCheckDigit(
+        return FinancialCodeUtils.calculateSedolCheckDigit(
             str.substring(prefixLength, SEDOL_LENGTH + prefixLength - 1)
         );
     }
 
     @Override
-    public String fixCheckDigit(String str) {
-        char checkDigit = IsinUtils.calculateSedolCheckDigit(
-            str.substring(prefixLength, SEDOL_LENGTH + prefixLength - 1)
-        );
-        if (str.length() > prefixLength + SEDOL_LENGTH) {
-            return str.substring(0, prefixLength + SEDOL_LENGTH - 1) +
-                checkDigit + str.substring(prefixLength + SEDOL_LENGTH);
-        }
-        return str.substring(0, str.length() - 1) + checkDigit;
+    public int getLength() {
+        return SEDOL_LENGTH;
     }
 
     @Override
@@ -54,7 +47,7 @@ public class SedolStringGenerator extends ChecksummedCodeStringGenerator {
 
     @Override
     public boolean match(String subject) {
-        boolean matches = IsinUtils.isValidSedolNsin(subject, prefixLength);
+        boolean matches = FinancialCodeUtils.isValidSedolNsin(subject, prefixLength);
         return matches != negate;
     }
 

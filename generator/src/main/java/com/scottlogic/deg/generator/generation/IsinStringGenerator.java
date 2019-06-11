@@ -100,7 +100,7 @@ public class IsinStringGenerator implements StringGenerator {
 
     @Override
     public boolean match(String subject) {
-        boolean matches = IsinUtils.isValidIsin(subject);
+        boolean matches = FinancialCodeUtils.isValidIsin(subject);
         return matches != isNegated;
     }
 
@@ -115,15 +115,7 @@ public class IsinStringGenerator implements StringGenerator {
         }
         final List<Iterable<String>> countryCodeIterables = getAllCountryIsinGeneratorsAsStream()
             .limit(2)
-            .map(isinGenerator ->
-                new FilteringIterable<>(
-                    new ProjectingIterable<>(
-                        isinGenerator.generateInterestingValues(),
-                        this::replaceCheckDigit
-                    ),
-                    isinRegexGenerator::match
-                )
-            )
+            .map(generator -> wrapIterableWithProjectionAndFilter(generator.generateInterestingValues()))
             .collect(Collectors.toList());
         return new ConcatenatingIterable<>(countryCodeIterables);
     }
@@ -138,15 +130,7 @@ public class IsinStringGenerator implements StringGenerator {
                     generateAllInvalidCheckDigitIsins()));
         }
         final List<Iterable<String>> countryCodeIterables = getAllCountryIsinGeneratorsAsStream()
-            .map(isinGenerator ->
-                new FilteringIterable<>(
-                    new ProjectingIterable<>(
-                        isinGenerator.generateAllValues(),
-                        this::replaceCheckDigit
-                    ),
-                    isinRegexGenerator::match
-                )
-            )
+            .map(generator -> wrapIterableWithProjectionAndFilter(generator.generateAllValues()))
             .collect(Collectors.toList());
         return new ConcatenatingIterable<>(countryCodeIterables);
     }
@@ -162,45 +146,47 @@ public class IsinStringGenerator implements StringGenerator {
                     randomNumberGenerator);
         }
         final List<Iterable<String>> countryCodeIterables = getAllCountryIsinGeneratorsAsStream()
-            .map(isinGenerator ->
-                new FilteringIterable<>(
-                    new ProjectingIterable<>(
-                        isinGenerator.generateRandomValues(randomNumberGenerator),
-                        this::replaceCheckDigit
-                    ),
-                    isinRegexGenerator::match
-                )
-            )
+            .map(generator -> wrapIterableWithProjectionAndFilter(
+                generator.generateRandomValues(randomNumberGenerator)
+            ))
             .collect(Collectors.toList());
         return new RandomMergingIterable<>(countryCodeIterables, randomNumberGenerator);
     }
 
+    private Iterable<String> wrapIterableWithProjectionAndFilter(Iterable<String> iterable) {
+        return IterableUtils.wrapIterableWithProjectionAndFilter(
+            iterable,
+            this::replaceCheckDigit,
+            isinRegexGenerator::match
+        );
+    }
+
     private String replaceCheckDigit(String isin) {
         String isinWithoutCheckDigit = isin.substring(0, isin.length() - 1);
-        return isinWithoutCheckDigit + IsinUtils.calculateIsinCheckDigit(isinWithoutCheckDigit);
+        return isinWithoutCheckDigit + FinancialCodeUtils.calculateIsinCheckDigit(isinWithoutCheckDigit);
     }
 
     private Iterable<String> generateInterestingInvalidCountryStrings() {
-        final String invalidCountryCodeRegex = IsinUtils.VALID_COUNTRY_CODES.stream()
+        final String invalidCountryCodeRegex = FinancialCodeUtils.VALID_COUNTRY_CODES.stream()
             .limit(2)
             .collect(Collectors.joining("|", "((?!", ")).*"));
         return new RegexStringGenerator(invalidCountryCodeRegex, true).generateInterestingValues();
     }
 
     private Iterable<String> generateAllInvalidCountryStrings() {
-        final String invalidCountryCodeRegex = IsinUtils.VALID_COUNTRY_CODES.stream()
+        final String invalidCountryCodeRegex = FinancialCodeUtils.VALID_COUNTRY_CODES.stream()
             .collect(Collectors.joining("|", "((?!", ")).*"));
         return new RegexStringGenerator(invalidCountryCodeRegex, true).generateAllValues();
     }
 
     private Iterable<String> generateRandomInvalidCountryStrings(RandomNumberGenerator randomNumberGenerator) {
-        final String invalidCountryCodeRegex = IsinUtils.VALID_COUNTRY_CODES.stream()
+        final String invalidCountryCodeRegex = FinancialCodeUtils.VALID_COUNTRY_CODES.stream()
             .collect(Collectors.joining("|", "((?!", ")).*"));
         return new RegexStringGenerator(invalidCountryCodeRegex, true).generateRandomValues(randomNumberGenerator);
     }
 
     private static Iterable<String> generateInterestingCountriesWithInvalidNsins() {
-        final List<Iterable<String>> countryWithInvalidNsinIterables = IsinUtils.VALID_COUNTRY_CODES.stream()
+        final List<Iterable<String>> countryWithInvalidNsinIterables = FinancialCodeUtils.VALID_COUNTRY_CODES.stream()
             .limit(2)
             .map(countryCode -> {
                 final StringGenerator nsinGeneratorForCountry = getNsinGeneratorForCountry(countryCode);
@@ -209,11 +195,11 @@ public class IsinStringGenerator implements StringGenerator {
             })
             .collect(Collectors.toList());
         return new FilteringIterable<>(new ConcatenatingIterable<>(countryWithInvalidNsinIterables),
-            isin -> !IsinUtils.isValidIsin(isin));
+            isin -> !FinancialCodeUtils.isValidIsin(isin));
     }
 
     private static Iterable<String> generateAllCountriesWithInvalidNsins() {
-        final List<Iterable<String>> countryWithInvalidNsinIterables = IsinUtils.VALID_COUNTRY_CODES.stream()
+        final List<Iterable<String>> countryWithInvalidNsinIterables = FinancialCodeUtils.VALID_COUNTRY_CODES.stream()
                 .map(countryCode -> {
                     final StringGenerator nsinGeneratorForCountry = getNsinGeneratorForCountry(countryCode);
                     final Iterable<String> invalidNsinIterators = nsinGeneratorForCountry.complement().generateAllValues();
@@ -221,11 +207,11 @@ public class IsinStringGenerator implements StringGenerator {
                 })
                 .collect(Collectors.toList());
         return new FilteringIterable<>(new ConcatenatingIterable<>(countryWithInvalidNsinIterables),
-                isin -> !IsinUtils.isValidIsin(isin));
+                isin -> !FinancialCodeUtils.isValidIsin(isin));
     }
 
     private static Iterable<String> generateRandomCountriesWithInvalidNsins(RandomNumberGenerator randomNumberGenerator) {
-        final List<Iterable<String>> countryWithInvalidNsinIterables = IsinUtils.VALID_COUNTRY_CODES.stream()
+        final List<Iterable<String>> countryWithInvalidNsinIterables = FinancialCodeUtils.VALID_COUNTRY_CODES.stream()
                 .map(countryCode -> {
                     final StringGenerator nsinGeneratorForCountry = getNsinGeneratorForCountry(countryCode);
                     final Iterable<String> invalidNsinIterators = nsinGeneratorForCountry.complement().generateRandomValues(randomNumberGenerator);
@@ -233,7 +219,7 @@ public class IsinStringGenerator implements StringGenerator {
                 })
                 .collect(Collectors.toList());
         return new FilteringIterable<>(new RandomMergingIterable<>(countryWithInvalidNsinIterables, randomNumberGenerator),
-                isin -> !IsinUtils.isValidIsin(isin));
+                isin -> !FinancialCodeUtils.isValidIsin(isin));
     }
 
     private Iterable<String> generateInterestingInvalidCheckDigitIsins() {
@@ -243,7 +229,7 @@ public class IsinStringGenerator implements StringGenerator {
                 new FlatteningIterable<>(
                     isinSansCheckDigitGenerator.generateInterestingValues(),
                     isinSansCheckDigit -> {
-                        final char checkDigit = IsinUtils.calculateIsinCheckDigit(isinSansCheckDigit);
+                        final char checkDigit = FinancialCodeUtils.calculateIsinCheckDigit(isinSansCheckDigit);
                         return IntStream.range(0, 10).boxed()
                             .map(digit -> Character.forDigit(digit, 10))
                             .filter(digit -> digit != checkDigit)
@@ -260,7 +246,7 @@ public class IsinStringGenerator implements StringGenerator {
                         new FlatteningIterable<>(
                                 isinSansCheckDigitGenerator.generateAllValues(),
                                 isinSansCheckDigit -> {
-                                    final char checkDigit = IsinUtils.calculateIsinCheckDigit(isinSansCheckDigit);
+                                    final char checkDigit = FinancialCodeUtils.calculateIsinCheckDigit(isinSansCheckDigit);
                                     return IntStream.range(0, 10).boxed()
                                             .map(digit -> Character.forDigit(digit, 10))
                                             .filter(digit -> digit != checkDigit)
@@ -277,7 +263,7 @@ public class IsinStringGenerator implements StringGenerator {
                         new FlatteningIterable<>(
                                 isinSansCheckDigitGenerator.generateRandomValues(randomNumberGenerator),
                                 isinSansCheckDigit -> {
-                                    final char checkDigit = IsinUtils.calculateIsinCheckDigit(isinSansCheckDigit);
+                                    final char checkDigit = FinancialCodeUtils.calculateIsinCheckDigit(isinSansCheckDigit);
                                     return IntStream.range(0, 10).boxed()
                                             .map(digit -> Character.forDigit(digit, 10))
                                             .filter(digit -> digit != checkDigit)
@@ -289,7 +275,7 @@ public class IsinStringGenerator implements StringGenerator {
     }
 
     private Stream<StringGenerator> getAllCountryIsinGeneratorsAsStream() {
-        return IsinUtils.VALID_COUNTRY_CODES.stream()
+        return FinancialCodeUtils.VALID_COUNTRY_CODES.stream()
                 .map(this::getIsinGeneratorForCountry);
     }
 
@@ -304,7 +290,7 @@ public class IsinStringGenerator implements StringGenerator {
     }
 
     private static RegexStringGenerator getRegexGeneratorForAllLegalIsinFormats(Function<String, String> regexProvider) {
-        Stream<RegexStringGenerator> countryGenerators = IsinUtils.VALID_COUNTRY_CODES
+        Stream<RegexStringGenerator> countryGenerators = FinancialCodeUtils.VALID_COUNTRY_CODES
             .stream()
             .map(
                 country -> new RegexStringGenerator(regexProvider.apply(country), true)
