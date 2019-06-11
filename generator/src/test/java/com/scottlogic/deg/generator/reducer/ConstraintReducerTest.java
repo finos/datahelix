@@ -8,13 +8,12 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.common.profile.RuleInformation;
-import com.scottlogic.deg.generator.restrictions.set.SetRestrictions;
+import com.scottlogic.deg.generator.restrictions.SetRestrictions;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsEqual;
 import org.hamcrest.core.IsNull;
 import org.junit.Assert;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -61,8 +60,8 @@ class ConstraintReducerTest {
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Quantity fieldspec has no string restrictions", quantityFieldSpec.getStringRestrictions(),
             Is.is(IsNull.nullValue()));
-        Assert.assertThat("Quantity fieldspec has no null restrictions", quantityFieldSpec.getNullRestrictions(),
-            Is.is(IsNull.nullValue()));
+        Assert.assertThat("Quantity fieldspec has no null restrictions", quantityFieldSpec.isNullable(),
+            Is.is(true));
         Assert.assertThat("Fieldspec has a Numeric type constraint",
             quantityFieldSpec.getTypeRestrictions().getAllowedTypes(),
             containsInAnyOrder(IsOfTypeConstraint.Types.values()));
@@ -82,8 +81,8 @@ class ConstraintReducerTest {
         FieldSpec countryFieldSpec = reducedConstraints.getSpecForField(countryField);
         Assert.assertThat("Country fieldspec has no string restrictions", countryFieldSpec.getStringRestrictions(),
             Is.is(IsNull.nullValue()));
-        Assert.assertThat("Country fieldspec has no null restrictions", countryFieldSpec.getNullRestrictions(),
-            Is.is(IsNull.nullValue()));
+        Assert.assertThat("Country fieldspec has no null restrictions", countryFieldSpec.isNullable(),
+            Is.is(true));
         Assert.assertThat("Fieldspec has a Numeric type constraint",
             quantityFieldSpec.getTypeRestrictions().getAllowedTypes(),
             containsInAnyOrder(IsOfTypeConstraint.Types.values()));
@@ -94,23 +93,23 @@ class ConstraintReducerTest {
         Assert.assertThat("Country fieldspec has set restrictions", countryFieldSpec.getSetRestrictions(),
             Is.is(IsNull.notNullValue()));
         Assert.assertThat("Country fieldspec set restrictions have no blacklist",
-            countryFieldSpec.getSetRestrictions().getBlacklist(), anyOf(nullValue(), empty()));
+            countryFieldSpec.getBlacklistRestrictions(), nullValue());
         Assert.assertThat("Country fieldspec set restrictions have whitelist",
-            countryFieldSpec.getSetRestrictions().getWhitelist().orElse(null), notNullValue());
+            countryFieldSpec.getSetRestrictions().getWhitelist(), notNullValue());
         Assert.assertThat("Country fieldspec set restrictions whitelist has correct size",
-            countryFieldSpec.getSetRestrictions().getWhitelist().orElse(null).size(), Is.is(2));
+            countryFieldSpec.getSetRestrictions().getWhitelist().size(), Is.is(2));
         Assert.assertThat("Country fieldspec set restrictions whitelist contains 'UK'",
-            countryFieldSpec.getSetRestrictions().getWhitelist().orElse(null).contains("UK"), Is.is(true));
+            countryFieldSpec.getSetRestrictions().getWhitelist().contains("UK"), Is.is(true));
         Assert.assertThat("Country fieldspec set restrictions whitelist contains 'US'",
-            countryFieldSpec.getSetRestrictions().getWhitelist().orElse(null).contains("US"), Is.is(true));
+            countryFieldSpec.getSetRestrictions().getWhitelist().contains("US"), Is.is(true));
 
         FieldSpec cityFieldSpec = reducedConstraints.getSpecForField(cityField);
         Assert.assertThat("City fieldspec has no set restrictions", cityFieldSpec.getSetRestrictions(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("City fieldspec has no string restrictions", cityFieldSpec.getStringRestrictions(),
             Is.is(IsNull.nullValue()));
-        Assert.assertThat("City fieldspec has no null restrictions", cityFieldSpec.getNullRestrictions(),
-            Is.is(IsNull.nullValue()));
+        Assert.assertThat("City fieldspec has no null restrictions", cityFieldSpec.isNullable(),
+            Is.is(true));
         Assert.assertThat("City fieldspec has no datetime restrictions", cityFieldSpec.getDateTimeRestrictions(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("City fieldspec has no numeric restrictions", cityFieldSpec.getNumericRestrictions(),
@@ -139,8 +138,8 @@ class ConstraintReducerTest {
             containsInAnyOrder(IsOfTypeConstraint.Types.values()));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
             Is.is(IsNull.nullValue()));
-        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
-            Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
+            Is.is(true));
         Assert.assertThat("Fieldspec has no string restrictions", outputSpec.getStringRestrictions(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no datetime restrictions", outputSpec.getDateTimeRestrictions(),
@@ -174,8 +173,8 @@ class ConstraintReducerTest {
             containsInAnyOrder(IsOfTypeConstraint.Types.values()));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
             Is.is(IsNull.nullValue()));
-        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
-            Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
+            Is.is(true));
         Assert.assertThat("Fieldspec has no string restrictions", outputSpec.getStringRestrictions(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no datetime restrictions", outputSpec.getDateTimeRestrictions(),
@@ -208,8 +207,8 @@ class ConstraintReducerTest {
             containsInAnyOrder(IsOfTypeConstraint.Types.values()));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
             Is.is(IsNull.nullValue()));
-        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
-            Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
+            Is.is(true));
         Assert.assertThat("Fieldspec has no string restrictions", outputSpec.getStringRestrictions(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no datetime restrictions", outputSpec.getDateTimeRestrictions(),
@@ -243,8 +242,8 @@ class ConstraintReducerTest {
             containsInAnyOrder(IsOfTypeConstraint.Types.values()));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
             Is.is(IsNull.nullValue()));
-        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
-            Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
+            Is.is(true));
         Assert.assertThat("Fieldspec has no string restrictions", outputSpec.getStringRestrictions(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no datetime restrictions", outputSpec.getDateTimeRestrictions(),
@@ -278,8 +277,8 @@ class ConstraintReducerTest {
             containsInAnyOrder(IsOfTypeConstraint.Types.values()));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
             Is.is(IsNull.nullValue()));
-        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
-            Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
+            Is.is(true));
         Assert.assertThat("Fieldspec has no string restrictions", outputSpec.getStringRestrictions(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no datetime restrictions", outputSpec.getDateTimeRestrictions(),
@@ -312,8 +311,8 @@ class ConstraintReducerTest {
             containsInAnyOrder(IsOfTypeConstraint.Types.values()));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
             Is.is(IsNull.nullValue()));
-        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
-            Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
+            Is.is(true));
         Assert.assertThat("Fieldspec has no string restrictions", outputSpec.getStringRestrictions(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no datetime restrictions", outputSpec.getDateTimeRestrictions(),
@@ -347,8 +346,8 @@ class ConstraintReducerTest {
             containsInAnyOrder(IsOfTypeConstraint.Types.values()));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
             Is.is(IsNull.nullValue()));
-        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
-            Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
+            Is.is(true));
         Assert.assertThat("Fieldspec has no string restrictions", outputSpec.getStringRestrictions(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no datetime restrictions", outputSpec.getDateTimeRestrictions(),
@@ -381,8 +380,8 @@ class ConstraintReducerTest {
             containsInAnyOrder(IsOfTypeConstraint.Types.values()));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
             Is.is(IsNull.nullValue()));
-        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
-            Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
+            Is.is(true));
         Assert.assertThat("Fieldspec has no string restrictions", outputSpec.getStringRestrictions(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no datetime restrictions", outputSpec.getDateTimeRestrictions(),
@@ -416,8 +415,8 @@ class ConstraintReducerTest {
             containsInAnyOrder(IsOfTypeConstraint.Types.values()));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
             Is.is(IsNull.nullValue()));
-        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
-            Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
+            Is.is(true));
         Assert.assertThat("Fieldspec has no string restrictions", outputSpec.getStringRestrictions(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no numeric restrictions", outputSpec.getNumericRestrictions(),
@@ -451,8 +450,8 @@ class ConstraintReducerTest {
             containsInAnyOrder(IsOfTypeConstraint.Types.values()));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
             Is.is(IsNull.nullValue()));
-        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
-            Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
+            Is.is(true));
         Assert.assertThat("Fieldspec has no string restrictions", outputSpec.getStringRestrictions(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no numeric restrictions", outputSpec.getNumericRestrictions(),
@@ -486,8 +485,8 @@ class ConstraintReducerTest {
             containsInAnyOrder(IsOfTypeConstraint.Types.values()));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
             Is.is(IsNull.nullValue()));
-        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
-            Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
+            Is.is(true));
         Assert.assertThat("Fieldspec has no string restrictions", outputSpec.getStringRestrictions(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no numeric restrictions", outputSpec.getNumericRestrictions(),
@@ -522,8 +521,8 @@ class ConstraintReducerTest {
             containsInAnyOrder(IsOfTypeConstraint.Types.values()));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
             Is.is(IsNull.nullValue()));
-        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
-            Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
+            Is.is(true));
         Assert.assertThat("Fieldspec has no string restrictions", outputSpec.getStringRestrictions(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no numeric restrictions", outputSpec.getNumericRestrictions(),
@@ -558,8 +557,8 @@ class ConstraintReducerTest {
             containsInAnyOrder(IsOfTypeConstraint.Types.values()));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
             Is.is(IsNull.nullValue()));
-        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
-            Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
+            Is.is(true));
         Assert.assertThat("Fieldspec has no string restrictions", outputSpec.getStringRestrictions(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no numeric restrictions", outputSpec.getNumericRestrictions(),
@@ -593,8 +592,8 @@ class ConstraintReducerTest {
             containsInAnyOrder(IsOfTypeConstraint.Types.values()));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
             Is.is(IsNull.nullValue()));
-        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
-            Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
+            Is.is(true));
         Assert.assertThat("Fieldspec has no string restrictions", outputSpec.getStringRestrictions(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no numeric restrictions", outputSpec.getNumericRestrictions(),
@@ -629,8 +628,8 @@ class ConstraintReducerTest {
             containsInAnyOrder(IsOfTypeConstraint.Types.values()));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
             Is.is(IsNull.nullValue()));
-        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
-            Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
+            Is.is(true));
         Assert.assertThat("Fieldspec has no string restrictions", outputSpec.getStringRestrictions(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no numeric restrictions", outputSpec.getNumericRestrictions(),
@@ -664,8 +663,8 @@ class ConstraintReducerTest {
             containsInAnyOrder(IsOfTypeConstraint.Types.values()));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
             Is.is(IsNull.nullValue()));
-        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
-            Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
+            Is.is(true));
         Assert.assertThat("Fieldspec has no string restrictions", outputSpec.getStringRestrictions(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no numeric restrictions", outputSpec.getNumericRestrictions(),
@@ -702,8 +701,8 @@ class ConstraintReducerTest {
             containsInAnyOrder(IsOfTypeConstraint.Types.values()));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
             Is.is(IsNull.nullValue()));
-        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
-            Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
+            Is.is(true));
         Assert.assertThat("Fieldspec has no string restrictions", outputSpec.getStringRestrictions(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no numeric restrictions", outputSpec.getNumericRestrictions(),
@@ -742,8 +741,8 @@ class ConstraintReducerTest {
             containsInAnyOrder(IsOfTypeConstraint.Types.values()));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
             Is.is(IsNull.nullValue()));
-        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
-            Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
+            Is.is(true));
         Assert.assertThat("Fieldspec has no numeric restrictions", outputSpec.getNumericRestrictions(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no datetime restrictions", outputSpec.getDateTimeRestrictions(),
@@ -771,8 +770,8 @@ class ConstraintReducerTest {
             containsInAnyOrder(IsOfTypeConstraint.Types.values()));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
             Is.is(IsNull.nullValue()));
-        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
-            Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
+            Is.is(true));
         Assert.assertThat("Fieldspec has no numeric restrictions", outputSpec.getNumericRestrictions(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no datetime restrictions", outputSpec.getDateTimeRestrictions(),
@@ -781,13 +780,13 @@ class ConstraintReducerTest {
 
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec format restrictions has a value",
-            outputSpec.getFormatRestrictions(), Is.is(IsNull.notNullValue()));
+            outputSpec.getFormatting(), Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec format restrictions has a value",
-            outputSpec.getFormatRestrictions().formatString, Is.is("Hello '$1'"));
+            outputSpec.getFormatting(), Is.is("Hello '$1'"));
     }
 
     @Test
-    void shouldNotReduceMultipleFormatConstraint() {
+    void shouldSelectOneFromMultipleFormats() {
         final Field field = new Field("test0");
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
 
@@ -796,9 +795,8 @@ class ConstraintReducerTest {
             new FormatConstraint(field, "Ipsum '$1'", rules())
         );
 
-        Assertions.assertThrows(
-            UnsupportedOperationException.class,
-            () -> constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints));
+        Optional<RowSpec> rowSpec = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints);
+        Assert.assertThat(rowSpec.get().getSpecForField(field).getFormatting(), Is.is(((FormatConstraint)constraints.get(0)).format));
     }
 
     @Test
@@ -820,8 +818,8 @@ class ConstraintReducerTest {
             containsInAnyOrder(IsOfTypeConstraint.Types.values()));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
             Is.is(IsNull.nullValue()));
-        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
-            Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
+            Is.is(true));
         Assert.assertThat("Fieldspec has no numeric restrictions", outputSpec.getNumericRestrictions(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no datetime restrictions", outputSpec.getDateTimeRestrictions(),
@@ -848,8 +846,8 @@ class ConstraintReducerTest {
             containsInAnyOrder(IsOfTypeConstraint.Types.values()));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
             Is.is(IsNull.nullValue()));
-        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
-            Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
+            Is.is(true));
         Assert.assertThat("Fieldspec has no numeric restrictions", outputSpec.getNumericRestrictions(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no datetime restrictions", outputSpec.getDateTimeRestrictions(),
@@ -876,8 +874,8 @@ class ConstraintReducerTest {
             containsInAnyOrder(IsOfTypeConstraint.Types.values()));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getSetRestrictions(),
             Is.is(IsNull.nullValue()));
-        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.getNullRestrictions(),
-            Is.is(IsNull.nullValue()));
+        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
+            Is.is(true));
         Assert.assertThat("Fieldspec has no numeric restrictions", outputSpec.getNumericRestrictions(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no datetime restrictions", outputSpec.getDateTimeRestrictions(),
@@ -903,7 +901,7 @@ class ConstraintReducerTest {
 
         SetRestrictions setRestrictions = spec.getSetRestrictions();
 
-        Assert.assertThat(setRestrictions.getWhitelist().orElse(null), containsInAnyOrder(1, 5, 2));
+        Assert.assertThat(setRestrictions.getWhitelist(), containsInAnyOrder(1, 5, 2));
     }
 
     @Test
@@ -924,7 +922,7 @@ class ConstraintReducerTest {
 
         SetRestrictions setRestrictions = spec.getSetRestrictions();
 
-        Assert.assertThat(setRestrictions.getWhitelist().orElse(null), containsInAnyOrder("lorem", "ipsum", 1, 5, 2, datetimeValue));
+        Assert.assertThat(setRestrictions.getWhitelist(), containsInAnyOrder("lorem", "ipsum", 1, 5, 2, datetimeValue));
     }
 
     @Test
@@ -945,7 +943,7 @@ class ConstraintReducerTest {
 
         SetRestrictions setRestrictions = spec.getSetRestrictions();
 
-        Assert.assertThat(setRestrictions.getWhitelist().orElse(null), containsInAnyOrder("lorem", "ipsum", 5, 2, datetimeValue));
+        Assert.assertThat(setRestrictions.getWhitelist(), containsInAnyOrder("lorem", "ipsum", 5, 2, datetimeValue));
     }
 
     @Test
@@ -967,7 +965,7 @@ class ConstraintReducerTest {
 
         SetRestrictions setRestrictions = spec.getSetRestrictions();
 
-        Assert.assertThat(setRestrictions.getWhitelist().orElse(null), containsInAnyOrder("lorem", "ipsum", 1, 5, 2, oneHourLaterDateTimeValue));
+        Assert.assertThat(setRestrictions.getWhitelist(), containsInAnyOrder("lorem", "ipsum", 1, 5, 2, oneHourLaterDateTimeValue));
     }
     
     @Test
