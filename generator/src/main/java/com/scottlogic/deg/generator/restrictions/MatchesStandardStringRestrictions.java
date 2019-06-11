@@ -146,4 +146,12 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
                 throw new UnsupportedOperationException(String.format("Unable to check string restrictions for: %s", type));
         }
     }
+
+    @Override
+    public String toString() {
+        if (negated){
+            return "not " + type.name();
+        }
+        return type.name();
+    }
 }

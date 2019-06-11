@@ -112,9 +112,13 @@ public class FieldSpec {
             .filter(Objects::nonNull)
             .map(Object::toString)
             .collect(Collectors.toList());
+        
+        if (!nullable){
+            propertyStrings.add(0, "Not Null");
+        }
 
         if (propertyStrings.isEmpty()) {
-            return "<empty>";
+            return "<all values>";
         }
 
         return String.join(" & ", propertyStrings);
