@@ -27,17 +27,17 @@ Feature: Type mandation validation
       | "cactus" |
     Then the profile should be considered valid
 
-  Scenario: An ofType ISIN constraint should satisfy type mandation
+  Scenario: An ISIN constraint should satisfy type mandation
     Given there is a field foo
     And foo is of type "ISIN"
     Then the profile should be considered valid
 
-  Scenario: An ofType SEDOL constraint should satisfy type mandation
+  Scenario: A SEDOL constraint should satisfy type mandation
     Given there is a field foo
     And foo is of type "SEDOL"
     Then the profile should be considered valid
 
-  Scenario: An ofType CUSIP constraint should satisfy type mandation
+  Scenario: A CUSIP constraint should satisfy type mandation
     Given there is a field foo
     And foo is of type "CUSIP"
     Then the profile should be considered valid
