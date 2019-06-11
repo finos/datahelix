@@ -295,12 +295,12 @@ public class IsinStringGenerator implements StringGenerator {
 
     private StringGenerator getIsinGeneratorForCountry(String countryCode) {
         if (countryCode.equals("GB")) {
-            return new SedolStringGenerator("GB00", "0", isinRegexGenerator);
+            return new SedolStringGenerator("GB00", "[0-9]", isinRegexGenerator);
         }
         if (countryCode.equals("US")) {
-            return new CusipStringGenerator("US", "0", isinRegexGenerator);
+            return new CusipStringGenerator("US", "[0-9]", isinRegexGenerator);
         }
-        return new RegexStringGenerator(countryCode + GENERIC_NSIN_REGEX + "0", true);
+        return new RegexStringGenerator(countryCode + GENERIC_NSIN_REGEX + "[0-9]", true);
     }
 
     private static RegexStringGenerator getRegexGeneratorForAllLegalIsinFormats(Function<String, String> regexProvider) {
