@@ -15,13 +15,13 @@ public class JSONTestStep {
     }
 
     @And("^there is a constraint:$")
-    public void jsonConstraint(String jsonConstraint) throws IOException, InvalidProfileException {
+    public void jsonConstraint(String jsonConstraint) throws IOException {
         String constraintProfile = "[" + jsonConstraint + "]";
         this.jsonConstraints(constraintProfile);
     }
 
     @And("^there are constraints:$")
-    public void jsonConstraints(String jsonConstraints) throws IOException, InvalidProfileException {
+    public void jsonConstraints(String jsonConstraints) throws IOException {
         this.state.addConstraintsFromJson("{ \"constraints\" : " + jsonConstraints + "}");
     }
 }

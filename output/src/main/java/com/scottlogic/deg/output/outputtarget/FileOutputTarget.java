@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.output.FileUtils;
+import com.scottlogic.deg.output.OutputPath;
 import com.scottlogic.deg.output.writer.DataSetWriter;
 import com.scottlogic.deg.output.writer.OutputWriterFactory;
 
@@ -21,19 +22,13 @@ public class FileOutputTarget implements SingleDatasetOutputTarget {
 
     @Inject
     public FileOutputTarget(
-        @Named("config:outputPath") Path filePath,
+        OutputPath outputPath,
         OutputWriterFactory outputWriterFactory,
         @Named("config:canOverwriteOutputFiles") boolean canOverwriteOutputFiles, FileUtils fileUtils) {
         this.canOverwriteExistingFiles = canOverwriteOutputFiles;
         this.outputWriterFactory = outputWriterFactory;
         this.fileUtils = fileUtils;
-
-        Path directoryPath = filePath.getParent();
-        if (directoryPath == null) {
-            directoryPath = Paths.get(System.getProperty("user.dir"));
-        }
-
-        this.filePath = directoryPath.resolve(filePath.getFileName());
+        this.filePath = outputPath.getPath();
     }
 
     @Override

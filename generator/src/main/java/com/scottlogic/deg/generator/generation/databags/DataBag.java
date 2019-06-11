@@ -1,13 +1,10 @@
 package com.scottlogic.deg.generator.generation.databags;
 
-import com.scottlogic.deg.common.output.CellSource;
-import com.scottlogic.deg.common.output.RowSource;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.util.FlatMappingSpliterator;
 import com.scottlogic.deg.common.output.GeneratedObject;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 public class DataBag implements GeneratedObject {
@@ -32,15 +29,6 @@ public class DataBag implements GeneratedObject {
             throw new IllegalStateException("DataBag has no value stored for " + field);
 
         return fieldToValue.get(field).getFormattedValue();
-    }
-
-    @Override
-    public RowSource getRowSource() {
-        return new RowSource(
-            fieldToValue.entrySet().stream()
-                .map(e -> new CellSource(e.getKey() , e.getValue().source))
-                .collect(Collectors.toList())
-        );
     }
 
     @Override

@@ -1,20 +1,15 @@
 package com.scottlogic.deg.generator.walker;
 
-import com.scottlogic.deg.common.output.DataBagValueSource;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.generator.builders.DataBagBuilder;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpecSource;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
-import com.scottlogic.deg.generator.restrictions.NullRestrictions;
-import com.scottlogic.deg.common.profile.constraintdetail.Nullness;
-import com.scottlogic.deg.generator.restrictions.set.SetRestrictions;
+import com.scottlogic.deg.generator.restrictions.SetRestrictions;
 import com.scottlogic.deg.generator.walker.reductive.*;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategy;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategyFactory;
@@ -85,10 +80,10 @@ class ReductiveDecisionTreeWalkerTests {
      */
     @Test
     public void shouldReturnEmptyCollectionOfRowsWhenSecondFieldCannotBeFixed() {
-        DataBagValue dataBag = new DataBagValue(field1, "yes", DataBagValueSource.Empty);
+        DataBagValue dataBag = new DataBagValue(field1, "yes");
         FieldSpec firstFieldSpec = FieldSpec.Empty.withSetRestrictions(SetRestrictions
-                .fromWhitelist(Collections.singleton("yes")), FieldSpecSource.Empty)
-            .withNullRestrictions(new NullRestrictions(Nullness.MUST_NOT_BE_NULL), FieldSpecSource.Empty);
+                .fromWhitelist(Collections.singleton("yes")))
+            .withNotNull();
         when(fieldSpecValueGenerator.generate(any(Set.class))).thenReturn(Stream.of(dataBag));
 
         when(reductiveFieldSpecBuilder.getDecisionFieldSpecs(any(), any())).thenReturn(Collections.singleton(firstFieldSpec), Collections.emptySet());

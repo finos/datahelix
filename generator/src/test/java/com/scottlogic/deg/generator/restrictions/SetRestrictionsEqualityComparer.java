@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.generator.decisiontree.testutils.EqualityComparer;
-import com.scottlogic.deg.generator.restrictions.set.SetRestrictions;
 
 import java.util.Collections;
 import java.util.Set;
@@ -28,8 +27,7 @@ public class SetRestrictionsEqualityComparer implements EqualityComparer {
             return true;
         }
 
-        return checkNullObject(item1.getBlacklist()).equals(checkNullObject(item2.getBlacklist()))
-            && checkNullObject(item1.getWhitelist().orElse(null)).equals(checkNullObject(item1.getWhitelist().orElse(null)));
+        return checkNullObject(item1.getWhitelist()).equals(checkNullObject(item1.getWhitelist()));
 
         }
 
