@@ -8,8 +8,6 @@ import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
-import com.scottlogic.deg.profile.reader.InvalidProfileException;
-import com.scottlogic.deg.profile.reader.JsonProfileReader;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,10 +32,10 @@ public class JsonProfileReaderTests {
     public void Setup() {
         this.json = null;
         this.profile = null;
-        ConstraintReaderMapEntryProvider[] mappingProviders = {
-            new CoreAtomicTypesConstraintReaderProvider(),
-            new FinancialTypesConstraintReaderProvider(),
-            new PersonalDataTypesConstraintReaderProvider()
+        ConstraintReaderMapEntrySource[] mappingProviders = {
+            new CoreAtomicTypesConstraintReaderSource(),
+            new FinancialTypesConstraintReaderSource(),
+            new PersonalDataTypesConstraintReaderSource()
         };
         readerMap = new BaseConstraintReaderMap(Arrays.stream(mappingProviders));
     }

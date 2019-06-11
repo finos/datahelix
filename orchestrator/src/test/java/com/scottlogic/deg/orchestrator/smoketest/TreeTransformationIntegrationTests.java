@@ -109,10 +109,10 @@ class TreeTransformationIntegrationTests {
     }
 
     private Profile getProfile(Path path) throws IOException, InvalidProfileException {
-        ConstraintReaderMapEntryProvider[] mappingProviders = {
-            new CoreAtomicTypesConstraintReaderProvider(),
-            new FinancialTypesConstraintReaderProvider(),
-            new PersonalDataTypesConstraintReaderProvider()
+        ConstraintReaderMapEntrySource[] mappingProviders = {
+            new CoreAtomicTypesConstraintReaderSource(),
+            new FinancialTypesConstraintReaderSource(),
+            new PersonalDataTypesConstraintReaderSource()
         };
         BaseConstraintReaderMap readerMap =
             new BaseConstraintReaderMap(Arrays.stream(mappingProviders));

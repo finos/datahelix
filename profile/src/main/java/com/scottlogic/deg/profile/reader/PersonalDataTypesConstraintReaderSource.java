@@ -16,10 +16,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class PersonalDataTypesConstraintReaderProvider implements ConstraintReaderMapEntryProvider {
+public class PersonalDataTypesConstraintReaderSource implements ConstraintReaderMapEntrySource {
     private final HeterogeneousTypeContainer<CatalogService<?, ?>> catalogServices;
 
-    public PersonalDataTypesConstraintReaderProvider() {
+    public PersonalDataTypesConstraintReaderSource() {
         catalogServices = new HeterogeneousTypeContainer<>();
         catalogServices.put(
             NameRetrievalService.class,

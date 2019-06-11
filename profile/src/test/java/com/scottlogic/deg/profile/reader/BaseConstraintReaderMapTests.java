@@ -33,10 +33,10 @@ public class BaseConstraintReaderMapTests {
 
     @BeforeAll
     public void before() {
-        ConstraintReaderMapEntryProvider[] mappingProviders = {
-            new CoreAtomicTypesConstraintReaderProvider(),
-            new FinancialTypesConstraintReaderProvider(),
-            new PersonalDataTypesConstraintReaderProvider()
+        ConstraintReaderMapEntrySource[] mappingProviders = {
+            new CoreAtomicTypesConstraintReaderSource(),
+            new FinancialTypesConstraintReaderSource(),
+            new PersonalDataTypesConstraintReaderSource()
         };
         constraintReaderMap = new BaseConstraintReaderMap(Arrays.stream(mappingProviders));
 

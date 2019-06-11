@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 
-public class CoreAtomicTypesConstraintReaderProvider implements ConstraintReaderMapEntryProvider {
+public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMapEntrySource {
     public Stream<ConstraintReaderMapEntry> getConstraintReaderMapEntries() {
         BigDecimal maxStringLength = BigDecimal.valueOf(Defaults.MAX_STRING_LENGTH);
 

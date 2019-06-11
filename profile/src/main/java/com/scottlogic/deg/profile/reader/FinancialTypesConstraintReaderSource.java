@@ -10,7 +10,7 @@ import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
-public class FinancialTypesConstraintReaderProvider implements ConstraintReaderMapEntryProvider {
+public class FinancialTypesConstraintReaderSource implements ConstraintReaderMapEntrySource {
     public Stream<ConstraintReaderMapEntry> getConstraintReaderMapEntries() {
         ConstraintReader financialCodesReader = (dto, fields, rules) -> {
             StandardConstraintTypes standardType =

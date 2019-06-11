@@ -24,10 +24,10 @@ public class ProfileModule extends AbstractModule {
         bind(ProfileReader.class).to(JsonProfileReader.class);
 
         // Load built-in profile-to-constraint mappings
-        ConstraintReaderMapEntryProvider[] mappingProviders = {
-            new CoreAtomicTypesConstraintReaderProvider(),
-            new FinancialTypesConstraintReaderProvider(),
-            new PersonalDataTypesConstraintReaderProvider()
+        ConstraintReaderMapEntrySource[] mappingProviders = {
+            new CoreAtomicTypesConstraintReaderSource(),
+            new FinancialTypesConstraintReaderSource(),
+            new PersonalDataTypesConstraintReaderSource()
         };
         BaseConstraintReaderMap map = new BaseConstraintReaderMap(Arrays.stream(mappingProviders));
         bind(ConstraintReaderMap.class).toInstance(map);
