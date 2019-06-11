@@ -316,14 +316,14 @@ public class TextualRestrictions implements StringRestrictions {
 
     @Override
     public String toString() {
-        return String.format("Strings: %d..%s (not: %s)\nmatching: %s\ncontaining: %s\nnotMatching: %s\nnotContaining: %s",
+        return String.format("Strings: %d..%s%s%s%s%s%s",
             minLength != null ? minLength : 0,
             maxLength != null ? maxLength.toString() : "",
-            excludedLengths.toString(),
-            patternsAsString(matchingRegex),
-            patternsAsString(containingRegex),
-            patternsAsString(notMatchingRegex),
-            patternsAsString(notContainingRegex));
+            excludedLengths.isEmpty() ? "" : " not lengths " + excludedLengths,
+            matchingRegex.isEmpty() ? "" : " matching: " + patternsAsString(matchingRegex),
+            containingRegex.isEmpty() ? "" : " containing: " + patternsAsString(containingRegex),
+            notMatchingRegex.isEmpty() ? "" : " not matching: " + patternsAsString(notMatchingRegex),
+            notContainingRegex.isEmpty() ? "" : " not containing: " + patternsAsString(notContainingRegex));
     }
 
     private String patternsAsString(Set<Pattern> patterns) {
