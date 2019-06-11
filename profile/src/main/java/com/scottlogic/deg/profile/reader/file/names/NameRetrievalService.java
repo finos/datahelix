@@ -1,11 +1,7 @@
-package com.scottlogic.deg.profile.reader.names;
+package com.scottlogic.deg.profile.reader.file.names;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes;
-import com.scottlogic.deg.profile.reader.inputstream.ClasspathMapper;
-import com.scottlogic.deg.profile.reader.parser.CSVRecordParser;
-import com.scottlogic.deg.profile.reader.parser.NameCSVPopulator;
 
-import java.io.InputStream;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -26,36 +22,30 @@ public class NameRetrievalService {
 
     private static final String LAST_NAMES = NAMES_ROOT + "surname.csv";
 
-    private static final Map<NameConstraintTypes, Set<String>> NAME_TYPE_MAPPINGS;
+    private final Map<NameConstraintTypes, Set<String>> nameTypeMappings;
 
-    private final CSVRecordParser<NameHolder> populator;
+    private final Function<String, Set<NameHolder>> mapper;
 
-    private final Function<String, InputStream> mapper;
-
-    static {
-        NAME_TYPE_MAPPINGS = new EnumMap<>(NameConstraintTypes.class);
-        NAME_TYPE_MAPPINGS.put(LAST, Stream.of(LAST_NAMES).collect(Collectors.toSet()));
-        NAME_TYPE_MAPPINGS.put(FIRST, Stream.of(FIRST_MALE_NAMES, FIRST_FEMALE_NAMES).collect(Collectors.toSet()));
-    }
-
-    public NameRetrievalService(final NameCSVPopulator populator) {
-        this(populator, new ClasspathMapper());
-    }
-
-    public NameRetrievalService(final NameCSVPopulator populator,
-                                final Function<String, InputStream> mapper) {
-        this.populator = populator;
+    public NameRetrievalService(final Function<String, Set<NameHolder>> mapper) {
         this.mapper = mapper;
+        this.nameTypeMappings = setupNameMappings();
+    }
+
+    private Map<NameConstraintTypes, Set<String>> setupNameMappings() {
+        Map<NameConstraintTypes, Set<String>> mappings = new EnumMap<>(NameConstraintTypes.class);
+        mappings.put(LAST, Stream.of(LAST_NAMES).collect(Collectors.toSet()));
+        mappings.put(FIRST, Stream.of(FIRST_MALE_NAMES, FIRST_FEMALE_NAMES).collect(Collectors.toSet()));
+        return mappings;
     }
 
     public Set<NameHolder> retrieveValues(NameConstraintTypes configuration) {
         switch (configuration) {
             case FIRST:
             case LAST:
-                return generateSingles(NAME_TYPE_MAPPINGS.get(configuration));
+                return generateSingles(nameTypeMappings.get(configuration));
             case FULL:
-                return generateCombinations(generateSingles(NAME_TYPE_MAPPINGS.get(FIRST)),
-                    generateSingles(NAME_TYPE_MAPPINGS.get(LAST)));
+                return generateCombinations(generateSingles(nameTypeMappings.get(FIRST)),
+                    generateSingles(nameTypeMappings.get(LAST)));
             default:
                 throw new UnsupportedOperationException("Name not implemented of type: " + configuration);
         }
@@ -63,8 +53,7 @@ public class NameRetrievalService {
 
     private Set<NameHolder> generateSingles(Set<String> sources) {
         return sources.stream()
-            .map(mapper::apply)
-            .map(populator::readFromFile)
+            .map(mapper)
             .reduce(new HashSet<>(), this::populateSet);
     }
 
@@ -83,7 +72,9 @@ public class NameRetrievalService {
     }
 
     private Set<NameHolder> populateSet(Set<NameHolder> a, Set<NameHolder> b) {
-        a.addAll(b);
+        if (b != null) {
+            a.addAll(b);
+        }
         return a;
     }
 

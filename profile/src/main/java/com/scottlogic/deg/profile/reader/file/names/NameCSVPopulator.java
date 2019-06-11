@@ -1,7 +1,6 @@
-package com.scottlogic.deg.profile.reader.parser;
+package com.scottlogic.deg.profile.reader.file.names;
 
-import com.scottlogic.deg.profile.reader.names.NameHolder;
-import com.scottlogic.deg.profile.reader.parser.CSVRecordParser;
+import com.scottlogic.deg.profile.reader.file.parser.CSVRecordParser;
 import org.apache.commons.csv.CSVRecord;
 
 

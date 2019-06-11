@@ -1,4 +1,4 @@
-package com.scottlogic.deg.profile.reader.inputstream;
+package com.scottlogic.deg.profile.reader.file.inputstream;
 
 import java.io.FileInputStream;
 import java.io.IOException;

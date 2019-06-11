@@ -1,4 +1,4 @@
-package com.scottlogic.deg.profile.reader.names;
+package com.scottlogic.deg.profile.reader.file.names;
 
 import java.util.Objects;
 

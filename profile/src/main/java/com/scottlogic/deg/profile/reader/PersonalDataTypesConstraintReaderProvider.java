@@ -5,9 +5,11 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsInNameSetConstrain
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
-import com.scottlogic.deg.profile.reader.parser.NameCSVPopulator;
-import com.scottlogic.deg.profile.reader.names.NameHolder;
-import com.scottlogic.deg.profile.reader.names.NameRetrievalService;
+import com.scottlogic.deg.profile.reader.file.CSVSetMapper;
+import com.scottlogic.deg.profile.reader.file.inputstream.ClasspathMapper;
+import com.scottlogic.deg.profile.reader.file.names.NameCSVPopulator;
+import com.scottlogic.deg.profile.reader.file.names.NameHolder;
+import com.scottlogic.deg.profile.reader.file.names.NameRetrievalService;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
 
@@ -21,7 +23,8 @@ public class PersonalDataTypesConstraintReaderProvider implements ConstraintRead
     private final NameRetrievalService nameRetrievalService;
 
     public PersonalDataTypesConstraintReaderProvider() {
-        nameRetrievalService = new NameRetrievalService(new NameCSVPopulator());
+        nameRetrievalService = new NameRetrievalService(
+            new CSVSetMapper(new ClasspathMapper(), new NameCSVPopulator()));
     }
 
     public Stream<ConstraintReaderMapEntry> getConstraintReaderMapEntries() {
