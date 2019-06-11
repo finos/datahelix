@@ -4,7 +4,7 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
 import com.scottlogic.deg.generator.generation.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
-import com.scottlogic.deg.generator.restrictions.set.SetRestrictions;
+import com.scottlogic.deg.generator.restrictions.SetRestrictions;
 import com.scottlogic.deg.generator.utils.SetUtils;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -181,11 +181,9 @@ class FieldSpecTests {
     @Test
     public void shouldCreateNewInstanceWithNullRestrictions(){
         FieldSpec original = FieldSpec.Empty;
-        NullRestrictions restrictions = mock(NullRestrictions.class);
-        FieldSpec augmentedFieldSpec = original.withNullRestrictions(restrictions);
+        FieldSpec augmentedFieldSpec = original.withNotNull();
 
         Assert.assertNotSame(original, augmentedFieldSpec);
-        Assert.assertSame(augmentedFieldSpec.getNullRestrictions(), restrictions);
     }
 
     @Test
@@ -201,11 +199,10 @@ class FieldSpecTests {
     @Test
     public void shouldCreateNewInstanceWithFormatRestrictions(){
         FieldSpec original = FieldSpec.Empty;
-        FormatRestrictions restrictions = mock(FormatRestrictions.class);
-        FieldSpec augmentedFieldSpec = original.withFormatRestrictions(restrictions);
+        FieldSpec augmentedFieldSpec = original.withFormatting("format");
 
         Assert.assertNotSame(original, augmentedFieldSpec);
-        Assert.assertSame(augmentedFieldSpec.getFormatRestrictions(), restrictions);
+        Assert.assertSame(augmentedFieldSpec.getFormatting(), "format");
     }
 
     @Test
@@ -215,15 +212,6 @@ class FieldSpecTests {
 
         Assert.assertThat(first, equalTo(second));
         Assert.assertThat(first.hashCode(), equalTo(second.hashCode()));
-    }
-
-    @Test
-    public void emptyFieldSpecAugmentedWithNothingShouldBeEqualToEmpty(){
-        FieldSpec first = FieldSpec.Empty;
-        FieldSpec augmented = FieldSpec.Empty.withNullRestrictions(null);
-
-        Assert.assertThat(first, equalTo(augmented));
-        Assert.assertThat(first.hashCode(), equalTo(augmented.hashCode()));
     }
 
     @Test
@@ -312,10 +300,8 @@ class FieldSpecTests {
 
     @Test
     public void fieldSpecsWithEqualNullRestrictionsShouldBeEqual(){
-        NullRestrictions aRestrictions = new MockNullRestrictions(true);
-        NullRestrictions bRestrictions = new MockNullRestrictions(true);
-        FieldSpec a = FieldSpec.Empty.withNullRestrictions(aRestrictions);
-        FieldSpec b = FieldSpec.Empty.withNullRestrictions(bRestrictions);
+        FieldSpec a = FieldSpec.Empty.withNotNull();
+        FieldSpec b = FieldSpec.Empty.withNotNull();
 
         Assert.assertThat(a, equalTo(b));
         Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
@@ -323,10 +309,8 @@ class FieldSpecTests {
 
     @Test
     public void fieldSpecsWithUnequalNullRestrictionsShouldBeUnequal(){
-        NullRestrictions aRestrictions = new MockNullRestrictions(false);
-        NullRestrictions bRestrictions = new MockNullRestrictions(false);
-        FieldSpec a = FieldSpec.Empty.withNullRestrictions(aRestrictions);
-        FieldSpec b = FieldSpec.Empty.withNullRestrictions(bRestrictions);
+        FieldSpec a = FieldSpec.Empty.withNotNull();
+        FieldSpec b = FieldSpec.mustBeNull();
 
         Assert.assertThat(a, not(equalTo(b)));
     }
@@ -354,10 +338,8 @@ class FieldSpecTests {
     
     @Test
     public void fieldSpecsWithEqualFormatRestrictionsShouldBeEqual(){
-        FormatRestrictions aRestrictions = new MockFormatRestrictions(true);
-        FormatRestrictions bRestrictions = new MockFormatRestrictions(true);
-        FieldSpec a = FieldSpec.Empty.withFormatRestrictions(aRestrictions);
-        FieldSpec b = FieldSpec.Empty.withFormatRestrictions(bRestrictions);
+        FieldSpec a = FieldSpec.Empty.withFormatting("format");
+        FieldSpec b = FieldSpec.Empty.withFormatting("format");
 
         Assert.assertThat(a, equalTo(b));
         Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
@@ -365,10 +347,8 @@ class FieldSpecTests {
 
     @Test
     public void fieldSpecsWithUnequalFormatRestrictionsShouldBeUnequal(){
-        FormatRestrictions aRestrictions = new MockFormatRestrictions(false);
-        FormatRestrictions bRestrictions = new MockFormatRestrictions(false);
-        FieldSpec a = FieldSpec.Empty.withFormatRestrictions(aRestrictions);
-        FieldSpec b = FieldSpec.Empty.withFormatRestrictions(bRestrictions);
+        FieldSpec a = FieldSpec.Empty.withFormatting("format1");
+        FieldSpec b = FieldSpec.Empty.withFormatting("format2");
 
         Assert.assertThat(a, not(equalTo(b)));
     }
@@ -380,17 +360,15 @@ class FieldSpecTests {
             .withNumericRestrictions(new MockNumericRestrictions(true))
             .withStringRestrictions(new MockStringRestrictions(true))
             .withTypeRestrictions(new MockTypeRestrictions(true))
-            .withNullRestrictions(new MockNullRestrictions(true))
             .withDateTimeRestrictions(new MockDateTimeRestrictions(true))
-            .withFormatRestrictions(new MockFormatRestrictions(true));
+            .withFormatting("format");
         FieldSpec b = FieldSpec.Empty
             .withSetRestrictions(new MockSetRestrictions(true))
             .withNumericRestrictions(new MockNumericRestrictions(true))
             .withStringRestrictions(new MockStringRestrictions(true))
             .withTypeRestrictions(new MockTypeRestrictions(true))
-            .withNullRestrictions(new MockNullRestrictions(true))
             .withDateTimeRestrictions(new MockDateTimeRestrictions(true))
-            .withFormatRestrictions(new MockFormatRestrictions(true));
+            .withFormatting("format");
 
         Assert.assertThat(a, equalTo(b));
         Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
@@ -403,17 +381,15 @@ class FieldSpecTests {
             .withNumericRestrictions(new MockNumericRestrictions(false))
             .withStringRestrictions(new MockStringRestrictions(false))
             .withTypeRestrictions(new MockTypeRestrictions(false))
-            .withNullRestrictions(new MockNullRestrictions(false))
             .withDateTimeRestrictions(new MockDateTimeRestrictions(false))
-            .withFormatRestrictions(new MockFormatRestrictions(false));
+            .withFormatting("format1");
         FieldSpec b = FieldSpec.Empty
             .withSetRestrictions(new MockSetRestrictions(false))
             .withNumericRestrictions(new MockNumericRestrictions(false))
             .withStringRestrictions(new MockStringRestrictions(false))
             .withTypeRestrictions(new MockTypeRestrictions(false))
-            .withNullRestrictions(new MockNullRestrictions(false))
             .withDateTimeRestrictions(new MockDateTimeRestrictions(false))
-            .withFormatRestrictions(new MockFormatRestrictions(false));
+            .withFormatting("format2");
 
         Assert.assertThat(a, not(equalTo(b)));
     }
@@ -513,39 +489,31 @@ class FieldSpecTests {
         boolean numericRestrictionsEqual,
         boolean stringRestrictionsEqual,
         boolean typeRestrictionsEqual,
-        boolean nullRestrictionsEqual,
-        boolean dateTimeRestrictionsEqual,
-        boolean formatRestrictionsEqual){
+        boolean dateTimeRestrictionsEqual){
 
         FieldSpec a = FieldSpec.Empty
             .withSetRestrictions(new MockSetRestrictions(setRestrictionsEqual))
             .withNumericRestrictions(new MockNumericRestrictions(numericRestrictionsEqual))
             .withStringRestrictions(new MockStringRestrictions(stringRestrictionsEqual))
             .withTypeRestrictions(new MockTypeRestrictions(typeRestrictionsEqual))
-            .withNullRestrictions(new MockNullRestrictions(nullRestrictionsEqual))
-            .withDateTimeRestrictions(new MockDateTimeRestrictions(dateTimeRestrictionsEqual))
-            .withFormatRestrictions(new MockFormatRestrictions(formatRestrictionsEqual));
+            .withDateTimeRestrictions(new MockDateTimeRestrictions(dateTimeRestrictionsEqual));
         FieldSpec b = FieldSpec.Empty
             .withSetRestrictions(new MockSetRestrictions(setRestrictionsEqual))
             .withNumericRestrictions(new MockNumericRestrictions(numericRestrictionsEqual))
             .withStringRestrictions(new MockStringRestrictions(stringRestrictionsEqual))
             .withTypeRestrictions(new MockTypeRestrictions(typeRestrictionsEqual))
-            .withNullRestrictions(new MockNullRestrictions(nullRestrictionsEqual))
-            .withDateTimeRestrictions(new MockDateTimeRestrictions(dateTimeRestrictionsEqual))
-            .withFormatRestrictions(new MockFormatRestrictions(formatRestrictionsEqual));
+            .withDateTimeRestrictions(new MockDateTimeRestrictions(dateTimeRestrictionsEqual));
 
         Assert.assertThat(a, not(equalTo(b)));
     }
 
     private static Stream<Arguments> partiallyUnequalProvider(){
         return Stream.of(
-            Arguments.of(false, true, true, true, true, true, true),
-            Arguments.of(true, false, true, true, true, true, true),
-            Arguments.of(true, true, false, true, true, true, true),
-            Arguments.of(true, true, true, false, true, true, true),
-            Arguments.of(true, true, true, true, false, true, true),
-            Arguments.of(true, true, true, true, true, false, true),
-            Arguments.of(true, true, true, true, true, true, false)
+            Arguments.of(false, true, true, true, true),
+            Arguments.of(true, false, true, true, true),
+            Arguments.of(true, true, false, true, true),
+            Arguments.of(true, true, true, false, true),
+            Arguments.of(true, true, true, true, false)
         );
     }
 
@@ -553,7 +521,7 @@ class FieldSpecTests {
         private final boolean isEqual;
 
         MockSetRestrictions(boolean isEqual) {
-            super(Collections.emptySet(), Collections.emptySet());
+            super(Collections.emptySet());
             this.isEqual = isEqual;
         }
 
@@ -667,28 +635,6 @@ class FieldSpecTests {
         }
     }
 
-    private class MockNullRestrictions extends NullRestrictions{
-        private final boolean isEqual;
-
-        MockNullRestrictions(boolean isEqual) {
-            this.isEqual = isEqual;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            return isEqual;
-        }
-
-        @Override
-        public String toString() {
-            return "equal";
-        }
-
-        @Override
-        public int hashCode() {
-            return 1234;
-        }
-    }
 
     private class MockDateTimeRestrictions extends DateTimeRestrictions{
         private final boolean isEqual;
@@ -707,22 +653,5 @@ class FieldSpecTests {
             return 1234;
         }
     }
-    
-    private class MockFormatRestrictions extends FormatRestrictions{
-        private final boolean isEqual;
 
-        MockFormatRestrictions(boolean isEqual) {
-            this.isEqual = isEqual;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            return isEqual;
-        }
-
-        @Override
-        public int hashCode() {
-            return 1234;
-        }
-    }
 }

@@ -108,7 +108,7 @@ class TreeTransformationIntegrationTests {
                 .listFiles(File::isDirectory)));
     }
 
-    private Profile getProfile(Path path) throws IOException, InvalidProfileException {
+    private Profile getProfile(Path path) throws IOException {
         ConstraintReaderMapEntrySource[] mappingProviders = {
             new CoreAtomicTypesConstraintReaderSource(),
             new FinancialTypesConstraintReaderSource(),

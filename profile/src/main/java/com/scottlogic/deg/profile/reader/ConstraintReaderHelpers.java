@@ -17,15 +17,15 @@ import java.time.temporal.TemporalAccessor;
 import java.util.*;
 
 public class ConstraintReaderHelpers {
-    public static Object getValidatedValue(ConstraintDTO dto) throws InvalidProfileException {
+    public static Object getValidatedValue(ConstraintDTO dto) {
         return getValidatedValue(dto, dto.value, Object.class);
     }
 
-    public static <T> T getValidatedValue(ConstraintDTO dto, Class<T> requiredType) throws InvalidProfileException {
+    public static <T> T getValidatedValue(ConstraintDTO dto, Class<T> requiredType) {
         return getValidatedValue(dto, dto.value, requiredType);
     }
 
-    public static Set<Object> getValidatedValues(ConstraintDTO dto) throws InvalidProfileException {
+    public static Set<Object> getValidatedValues(ConstraintDTO dto) {
         Set<Object> mappedValues = new HashSet<>();
 
         if (dto.values == null) {
@@ -149,7 +149,7 @@ public class ConstraintReaderHelpers {
         return value.toString();
     }
 
-    private static OffsetDateTime getValueAsDate(ConstraintDTO dto, Object value) throws InvalidProfileException {
+    private static OffsetDateTime getValueAsDate(ConstraintDTO dto, Object value) {
         if (!(value instanceof Map)) {
             throw new InvalidProfileException(String.format(
                 "Field [%s]: Dates should be expressed in object format e.g. { \"date\": \"%s\" }",
@@ -184,11 +184,11 @@ public class ConstraintReaderHelpers {
         return offsetDateTime;
     }
 
-    private static Number validateNumber(ConstraintDTO dto, Number value) throws InvalidProfileException {
+    private static Number validateNumber(ConstraintDTO dto, Number value) {
         return ensureValueBetween(dto, value, Defaults.NUMERIC_MIN, Defaults.NUMERIC_MAX);
     }
 
-    private static String validateString(ConstraintDTO dto, String value) throws InvalidProfileException {
+    private static String validateString(ConstraintDTO dto, String value) {
         if (value.length() > Defaults.MAX_STRING_LENGTH) {
             throw new InvalidProfileException(String.format(
                 "Field [%s]: set contains a string longer than maximum permitted length, was: %d, max-length: %d",
@@ -200,7 +200,7 @@ public class ConstraintReaderHelpers {
         return value;
     }
 
-    private static OffsetDateTime parseDate(String value, ConstraintDTO dto) throws InvalidProfileException {
+    private static OffsetDateTime parseDate(String value, ConstraintDTO dto) {
         DateTimeFormatter formatter = new DateTimeFormatterBuilder()
             .append(DateTimeFormatter.ofPattern("u-MM-dd'T'HH:mm:ss'.'SSS"))
             .optionalStart()
@@ -220,7 +220,7 @@ public class ConstraintReaderHelpers {
         }
     }
 
-    private static void throwDateTimeError(String profileDate, ConstraintDTO dto) throws InvalidProfileException {
+    private static void throwDateTimeError(String profileDate, ConstraintDTO dto) {
         throw new InvalidProfileException(String.format(
             "Field [%s]: Date string '%s' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS[Z] between (inclusive) " +
                 "0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z",
@@ -229,7 +229,7 @@ public class ConstraintReaderHelpers {
         ));
     }
 
-    private static <T> T ensureValueBetween(ConstraintDTO dto, T value, BigDecimal min, BigDecimal max) throws InvalidProfileException {
+    private static <T> T ensureValueBetween(ConstraintDTO dto, T value, BigDecimal min, BigDecimal max) {
         BigDecimal valueAsBigDecimal = NumberUtils.coerceToBigDecimal(value);
         if (valueAsBigDecimal.compareTo(min) < 0) {
             throw new InvalidProfileException(String.format(
