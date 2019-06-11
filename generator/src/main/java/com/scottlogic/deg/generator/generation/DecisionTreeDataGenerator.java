@@ -58,7 +58,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         Node contradictingNode = treeValidator.reportContradictions(decisionTree);
         if (decisionTree.getRootNode().equals(contradictingNode)) {
             // Contradiction
-            System.out.println("There is a hard contradiction in the profile. No data can be generated at all.");
+            System.err.println("There is a hard contradiction in the profile. No data can be generated at all.");
             return Stream.empty();
         }
 
