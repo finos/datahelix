@@ -151,6 +151,11 @@ public final class TreeConstraintNode implements ConstraintNode {
     }
 
     @Override
+    public Node getFirstChild() {
+        return getDecisions().stream().findFirst().orElse(null);
+    }
+
+    @Override
     public ConstraintNode markNode(NodeMarking marking) {
         Set<NodeMarking> newMarkings = FlatMappingSpliterator.flatMap(
             Stream.of(Collections.singleton(marking), this.nodeMarkings),

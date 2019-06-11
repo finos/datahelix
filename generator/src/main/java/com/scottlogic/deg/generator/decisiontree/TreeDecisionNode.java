@@ -40,6 +40,11 @@ public final class TreeDecisionNode implements DecisionNode {
     }
 
     @Override
+    public Node getFirstChild() {
+        return getOptions().stream().findFirst().orElse(null);
+    }
+
+    @Override
     public DecisionNode markNode(NodeMarking marking) {
         Set<NodeMarking> newMarkings = FlatMappingSpliterator.flatMap(
                 Stream.of(Collections.singleton(marking), this.nodeMarkings),

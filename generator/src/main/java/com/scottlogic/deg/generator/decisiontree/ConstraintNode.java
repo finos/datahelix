@@ -41,5 +41,10 @@ public interface ConstraintNode extends Node {
             .filter(this::hasMarking)
             .collect(Collectors.toSet());
     }
+
+    @Override
+    default Node getFirstChild() {
+        return getDecisions().stream().findFirst().orElse(null);
+    }
 }
 
