@@ -1,11 +1,9 @@
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.fieldspecs.RowSpec;
-import com.scottlogic.deg.generator.outputs.GeneratedObject;
-import com.scottlogic.deg.generator.walker.reductive.ReductiveState;
+import com.google.inject.Inject;
+import com.scottlogic.deg.common.output.GeneratedObject;
 
+import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
@@ -13,7 +11,6 @@ import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -28,15 +25,22 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
     private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     private long previousVelocity = 0;
 
+    private final PrintWriter writer;
+
+    @Inject
+    public VelocityMonitor(PrintWriter writer) {
+        this.writer = writer;
+    }
+
     @Override
-    public void generationStarting(GenerationConfig generationConfig) {
+    public void generationStarting() {
         startedGenerating = OffsetDateTime.now(ZoneOffset.UTC);
         rowsSinceLastSample = 0;
         rowsEmitted = BigInteger.ZERO;
 
-        System.out.println("Generation started at: " + timeFormatter.format(startedGenerating) + "\n");
-        System.out.println("Number of rows | Velocity (rows/sec) | Velocity trend");
-        System.out.println("---------------+---------------------+---------------");
+        println("Generation started at: " + timeFormatter.format(startedGenerating) + "\n");
+        println("Number of rows | Velocity (rows/sec) | Velocity trend");
+        println("---------------+---------------------+---------------");
 
         timer = new Timer(true);
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -49,7 +53,7 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
     }
     
     @Override
-    public void rowEmitted(GeneratedObject row) {
+    public void rowEmitted(GeneratedObject item) {
         rowsSinceLastSample++;
         rowsEmitted = rowsEmitted.add(BigInteger.ONE);
     }
@@ -77,52 +81,32 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
             .divide(totalMilliseconds, RoundingMode.HALF_UP)
             .multiply(millisecondsInSecond).toBigInteger();
 
-        System.out.println(String.format(
+        println(
             "%-14s | %-19d | Finished",
             rowsEmitted.toString(),
-            averageRowsPerSecond
-        ));
+            averageRowsPerSecond);
 
-        System.out.println(
-            String.format(
-                "\nGeneration finished at: %s",
-                timeFormatter.format(finished)));
+        println(
+            "\nGeneration finished at: %s",
+            timeFormatter.format(finished));
     }
 
     private void reportVelocity(long rowsSinceLastSample) {
         String trend = rowsSinceLastSample > previousVelocity ? "+" : "-";
-        System.out.println(
-        String.format(
+        println(
             "%-14s | %-19d | %s",
             rowsEmitted.toString(),
             rowsSinceLastSample,
-            trend)
-        );
+            trend);
         previousVelocity = rowsSinceLastSample;
     }
 
-    @Override
-    public void rowSpecEmitted(RowSpec rowSpec) {
-
+    private void println(String message) {
+        writer.println(message);
     }
 
-    @Override
-    public void fieldFixedToValue(Field field, Object current) {
-
-    }
-
-    @Override
-    public void unableToStepFurther(ReductiveState reductiveState) {
-
-    }
-
-    @Override
-    public void noValuesForField(ReductiveState reductiveState, Field field) {
-
-    }
-
-    @Override
-    public void unableToEmitRowAsSomeFieldSpecsAreEmpty(ReductiveState reductiveState, Map<Field, FieldSpec> fieldSpecsPerField) {
-
+    private void println(String message, Object... args) {
+        writer.format(message, args);
+        writer.println();
     }
 }

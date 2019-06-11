@@ -1,12 +1,12 @@
 package com.scottlogic.deg.generator.inputs.profileviolation;
 
-import com.scottlogic.deg.generator.Profile;
-import com.scottlogic.deg.generator.Rule;
-import com.scottlogic.deg.generator.constraints.Constraint;
-import com.scottlogic.deg.generator.constraints.atomic.NotConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
+import com.scottlogic.deg.common.profile.Profile;
+import com.scottlogic.deg.common.profile.Rule;
+import com.scottlogic.deg.common.profile.constraints.Constraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.NotConstraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
 import org.junit.Assert;
 
 import java.util.ArrayList;
@@ -59,8 +59,8 @@ public class TypeEqualityHelper {
      * @param actualProfile The actual profile.
      */
     public static void assertProfileTypeEquality(Profile expectedProfile, Profile actualProfile) {
-        ArrayList<Rule> expectedRules = new ArrayList<>(expectedProfile.rules);
-        ArrayList<Rule> actualRules = new ArrayList<>(actualProfile.rules);
+        ArrayList<Rule> expectedRules = new ArrayList<>(expectedProfile.getRules());
+        ArrayList<Rule> actualRules = new ArrayList<>(actualProfile.getRules());
         Assert.assertEquals("Rule list lengths do not match. Expected: " + expectedRules.size()
                 + ", Actual: " + actualRules.size(),
             expectedRules.size(),

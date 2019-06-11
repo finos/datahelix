@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.validators;
 
-import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 
 import java.util.Collection;
 

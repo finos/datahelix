@@ -78,7 +78,7 @@ public class TextualRestrictions implements StringRestrictions {
         );
 
         return merged.isContradictory()
-            ? MergeResult.UNSUCCESSFUL
+            ? MergeResult.unsuccessful()
             : new MergeResult<>(merged);
     }
 
@@ -131,7 +131,7 @@ public class TextualRestrictions implements StringRestrictions {
     }
 
     public boolean match(Object o) {
-        if (!StringRestrictions.isString(o)) {
+        if (!isInstanceOf(o)) {
             return false;
         }
 

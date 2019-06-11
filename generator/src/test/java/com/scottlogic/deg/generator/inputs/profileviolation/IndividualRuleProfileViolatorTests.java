@@ -1,23 +1,20 @@
 package com.scottlogic.deg.generator.inputs.profileviolation;
 
-import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.Profile;
-import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.Rule;
-import com.scottlogic.deg.generator.constraints.Constraint;
-import com.scottlogic.deg.generator.constraints.atomic.IsGreaterThanConstantConstraint;
-import com.scottlogic.deg.generator.constraints.atomic.IsLessThanConstantConstraint;
-import com.scottlogic.deg.generator.inputs.RuleInformation;
-import com.scottlogic.deg.generator.outputs.manifest.ManifestWriter;
-import com.scottlogic.deg.generator.violations.ViolatedProfile;
-import com.scottlogic.deg.schemas.v0_1.RuleDTO;
+import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.Profile;
+import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Rule;
+import com.scottlogic.deg.common.profile.constraints.Constraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsGreaterThanConstantConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsLessThanConstantConstraint;
+import com.scottlogic.deg.common.profile.RuleInformation;
+import com.scottlogic.deg.common.profile.ViolatedProfile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -25,8 +22,6 @@ import java.util.List;
 import static com.scottlogic.deg.generator.inputs.profileviolation.TypeEqualityHelper.assertListProfileTypeEquality;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Mockito.*;
 
 public class IndividualRuleProfileViolatorTests {
@@ -34,8 +29,6 @@ public class IndividualRuleProfileViolatorTests {
     private IndividualRuleProfileViolator target;
 
     @Mock private RuleViolator mockRuleViolator;
-    @Mock private ManifestWriter mockManifestWriter;
-    @Mock private Path mockPath;
 
     private Field fooField;
     private Field barField;
@@ -49,8 +42,6 @@ public class IndividualRuleProfileViolatorTests {
         MockitoAnnotations.initMocks(this);
 
         target = new IndividualRuleProfileViolator(
-            mockManifestWriter,
-            mockPath,
             mockRuleViolator
         );
 
@@ -72,7 +63,7 @@ public class IndividualRuleProfileViolatorTests {
         when(mockRuleViolator.violateRule(rule1)).thenReturn(violatedRule1);
 
         //Act
-        List<Profile> outputProfileList = target.violate(inputProfile);
+        List<Profile> outputProfileList = (List<Profile>)(List<?>) target.violate(inputProfile);
 
         //Assert
         List<Profile> expectedProfileList =
@@ -109,7 +100,7 @@ public class IndividualRuleProfileViolatorTests {
         when(mockRuleViolator.violateRule(rule2)).thenReturn(violatedRule2);
 
         //Act
-        List<Profile> outputProfileList = target.violate(inputProfile);
+        List<Profile> outputProfileList = (List<Profile>)(List<?>) target.violate(inputProfile);
 
         //Assert
         List<Profile> expectedProfileList =
@@ -136,61 +127,9 @@ public class IndividualRuleProfileViolatorTests {
         assertListProfileTypeEquality(outputProfileList, expectedProfileList);
     }
 
-    /**
-     * Violate with any profile should call the manifest writer.
-     */
-    @Test
-    public void violate_withAnyProfile_callsManifestWriter() throws IOException {
-        //Arrange
-        Profile inputProfile = new Profile(
-            Arrays.asList(fooField, barField),
-            Collections.singletonList(rule1),
-            "Input profile description"
-        );
-
-        doNothing()
-            .when(mockManifestWriter)
-            .writeManifest(anyListOf(ViolatedProfile.class), eq(mockPath));
-
-        //Act
-        target.violate(inputProfile);
-
-        //Assert
-        verify(mockManifestWriter, times(1))
-            .writeManifest(anyListOf(ViolatedProfile.class), eq(mockPath));
-    }
-
-    /**
-     * Violate with any profile that is unable to write the manifest continues execution.
-     */
-    @Test
-    public void violate_withAnyProfileFailedManifestWriter_doesNotThrow() throws IOException {
-        //Arrange
-        Profile inputProfile = new Profile(
-            Arrays.asList(fooField, barField),
-            Collections.singletonList(rule1),
-            "Input profile description"
-        );
-
-        doThrow(new IOException("Exception to be caught"))
-            .when(mockManifestWriter)
-            .writeManifest(anyListOf(ViolatedProfile.class), eq(mockPath));
-
-        //Act
-        IOException thrown =
-            assertThrows(IOException.class,
-                () -> target.violate(inputProfile),
-                "Expected violate() to throw IOException, but it didn't");
-
-        //Assert
-        verify(mockManifestWriter, times(1))
-            .writeManifest(anyListOf(ViolatedProfile.class), eq(mockPath));
-    }
-
     private void initRules() {
         //Rule 1 consists of 2 constraints, "foo is greater than 100" and "bar is greater than 50"
-        RuleDTO rule1DTO = new RuleDTO("Rule 1 description", null);
-        RuleInformation ruleInformation1 = new RuleInformation(rule1DTO);
+        RuleInformation ruleInformation1 = new RuleInformation("Rule 1 description");
         fooField = new Field("foo");
         barField = new Field("bar");
         Constraint constraint1 = new IsGreaterThanConstantConstraint(
@@ -214,8 +153,7 @@ public class IndividualRuleProfileViolatorTests {
             Collections.singleton(ruleInformation1));
         violatedRule1 = new Rule(ruleInformation1, Arrays.asList(constraint3, constraint4));
 
-        RuleDTO rule2DTO = new RuleDTO("Rule 2 description", null);
-        RuleInformation ruleInformation2 = new RuleInformation(rule2DTO);
+        RuleInformation ruleInformation2 = new RuleInformation("Rule 2 description");
         rule2 = new Rule(ruleInformation2, Arrays.asList(constraint1,constraint4));
         violatedRule2 = new Rule(ruleInformation2, Arrays.asList(constraint2,constraint3));
     }

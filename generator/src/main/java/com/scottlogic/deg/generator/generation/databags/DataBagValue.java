@@ -1,25 +1,18 @@
 package com.scottlogic.deg.generator.generation.databags;
 
-import com.scottlogic.deg.generator.DataBagValueSource;
-
 import java.util.Objects;
 
 public class DataBagValue {
-    final Object value;
+    private final Object value;
     private final String format;
 
-    public final DataBagValueSource source;
-
-    public DataBagValue(Object value, String format, DataBagValueSource source){
+    public DataBagValue(Object value, String format){
         this.value = value;
         this.format = format;
-        this.source = source;
     }
 
-    public DataBagValue(Object value, DataBagValueSource source){
-        this.value = value;
-        this.source = source;
-        this.format = null;
+    public DataBagValue(Object value) {
+        this(value, null);
     }
 
     @Override
@@ -37,11 +30,15 @@ public class DataBagValue {
     }
 
     public Object getFormattedValue() {
-        if (format == null || value == null){
+        if (format == null || value == null) {
             return value;
         }
 
         return String.format(format, value);
+    }
+
+    public Object getUnformattedValue(){
+        return value;
     }
 }
 

@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.decisiontree;
 
-import com.scottlogic.deg.generator.FlatMappingSpliterator;
-import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.common.util.FlatMappingSpliterator;
+import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 
 import java.util.*;
@@ -175,12 +175,11 @@ public final class TreeConstraintNode implements ConstraintNode {
 
     @Override
     public ConstraintNode accept(NodeVisitor visitor){
-        Stream<AtomicConstraint> atomicConstraintStream = getAtomicConstraints().stream().map(a -> a.accept(visitor));
         Stream<DecisionNode> decisionNodeStream = getDecisions().stream().map(d -> d.accept(visitor));
 
         return visitor.visit(
             new TreeConstraintNode(
-                atomicConstraintStream.collect(Collectors.toSet()),
+                new ArrayList<>(atomicConstraints),
                 decisionNodeStream.collect(Collectors.toSet()),
                 nodeMarkings));
     }

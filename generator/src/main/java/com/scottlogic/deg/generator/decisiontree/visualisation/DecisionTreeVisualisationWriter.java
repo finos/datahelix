@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.decisiontree.visualisation;
 
-import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
 
 import java.io.IOException;

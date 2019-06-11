@@ -154,10 +154,10 @@ If the generation is taking too long, you can halt the command via <kbd>Ctrl</kb
 
 The generator supports four different data types:
 
- - **integer** - any integer that can be defined by the Java [BigDecimal](https://docs.oracle.com/javase/7/docs/api/java/math/BigDecimal.html) type
- - **decimal** - any real number (again a BigDecimal), with an optional granularity / precision that can be defined via a `granularTo` constraint.
- - **string** - sequences of unicode characters
- - **datetime** - specific moments in time, with values in the range 0001-01-01T00:00 to 9999-12-31T23:59
+ - **integer** - any integer number between -1E20 and 1E20 inclusive
+ - **decimal** - any real number between -1E20 and 1E20 inclusive, with an optional granularity / precision (a power of ten between 1 and 1E-20) that can be defined via a `granularTo` constraint.
+ - **string** - sequences of unicode characters up to a maximum length of 1000 characters
+ - **datetime** - specific moments in time, with values in the range 0001-01-01T00:00:00.000 to 9999-12-31T23:59:59.999, with an optional granularity / precision (from a maximum of one year to a minimum of one millisecond) that can be defined via a `granularTo` constraint.
 
 <!-- TODO: rename as datetime -->
 
@@ -328,10 +328,10 @@ firstName,age,nationalInsurance
 
 ## Generating invalid data
 
-One of the most powerful features of the generator is its ability to generate data that violates constraints. To create invalid data use the `--violate` command line option. This time you need to specify an output directory rather than a file:
+One of the most powerful features of the generator is its ability to generate data that violates constraints. To create invalid data use the `violate` command. This time you need to specify an output directory rather than a file:
 
 ~~~
-$ java -jar generator.jar generate --violate --max-rows=100 --replace profile.json out
+$ java -jar generator.jar violate --max-rows=100 --replace profile.json out
 ~~~
 
 When the above command has finished, you'll find that the generator has created an `out` directory which has four files:
@@ -379,7 +379,7 @@ firstName,age,nationalInsurance
 However, it might be a surprise to see nulls, numbers and dates as values for the `firstName` field alongside strings that do not match the regex given in the profile. This is because these are all defined as a single rule within the profile. You have a couple of options if you want to ensure that `firstName` is null or a string, the first is to inform the generator that it should not violate specific constraint types:
 
 ~~~
-$ java -jar generator.jar generate --violate --dont-violate=ofType \
+$ java -jar generator.jar violate --dont-violate=ofType \
   --max-rows=100 --replace profile.json out
 ~~~
 

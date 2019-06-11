@@ -1,16 +1,17 @@
 package com.scottlogic.deg.generator.inputs.profileviolation;
 
-import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.Rule;
-import com.scottlogic.deg.generator.constraints.Constraint;
-import com.scottlogic.deg.generator.constraints.UnviolatableConstraintException;
-import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.constraints.atomic.IsLessThanConstantConstraint;
-import com.scottlogic.deg.generator.constraints.atomic.ViolatedAtomicConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.*;
-import com.scottlogic.deg.generator.inputs.RuleInformation;
+import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
+import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.Rule;
+import com.scottlogic.deg.common.profile.constraints.Constraint;
+import com.scottlogic.deg.common.profile.constraintdetail.UnviolatableConstraintException;
+import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsLessThanConstantConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.ViolatedAtomicConstraint;
+import com.scottlogic.deg.common.profile.RuleInformation;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
-import com.scottlogic.deg.schemas.v0_1.RuleDTO;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,7 +56,7 @@ public class IndividualConstraintRuleViolatorTests {
         atomicConstraint1 = new IsLessThanConstantConstraint(new Field("foo"), 10, null);
         atomicConstraint2 = new IsLessThanConstantConstraint(new Field("bar"), 20, null);
         atomicConstraint3 = new IsLessThanConstantConstraint(new Field("foobar"), 30, null);
-        ruleInformation = new RuleInformation(new RuleDTO());
+        ruleInformation = new RuleInformation();
     }
 
     /**

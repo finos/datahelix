@@ -27,8 +27,7 @@ public class SetRestrictionsEqualityComparer implements EqualityComparer {
             return true;
         }
 
-        return checkNullObject(item1.getBlacklist()).equals(checkNullObject(item2.getBlacklist()))
-            && checkNullObject(item1.getWhitelist()).equals(checkNullObject(item1.getWhitelist()));
+        return checkNullObject(item1.getWhitelist()).equals(checkNullObject(item1.getWhitelist()));
 
         }
 

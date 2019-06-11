@@ -1,16 +1,16 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 
 import java.util.*;
 
 public class DataTypeRestrictions implements TypeRestrictions {
 
-    public final static TypeRestrictions ALL_TYPES_PERMITTED = new AnyTypeRestriction();
-    public final static TypeRestrictions NO_TYPES_PERMITTED = new NoAllowedTypesRestriction();
+    public static final TypeRestrictions ALL_TYPES_PERMITTED = new AnyTypeRestriction();
+    public static final TypeRestrictions NO_TYPES_PERMITTED = new NoAllowedTypesRestriction();
 
     public DataTypeRestrictions(Collection<IsOfTypeConstraint.Types> allowedTypes) {
-        if (allowedTypes.size() == 0)
+        if (allowedTypes.isEmpty())
             throw new UnsupportedOperationException("Cannot have a type restriction with no types");
 
         this.allowedTypes = new HashSet<>(allowedTypes);
@@ -59,12 +59,6 @@ public class DataTypeRestrictions implements TypeRestrictions {
         if (allowedTypes.isEmpty())
             return null;
 
-        //micro-optimisation; if there is only one value in allowedTypes then there must have been only one value in either this.allowedTypes or other.allowedTypes
-        if (allowedTypes.size() == 1) {
-            return other.getAllowedTypes().size() == 1
-                    ? other
-                    : this;
-        }
 
         return new DataTypeRestrictions(allowedTypes);
     }

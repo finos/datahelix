@@ -1,16 +1,14 @@
 package com.scottlogic.deg.generator.walker.reductive;
 
-import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.constraints.atomic.IsLessThanConstantConstraint;
+import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsLessThanConstantConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.*;
+import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import com.scottlogic.deg.generator.restrictions.NullRestrictions;
-import com.scottlogic.deg.generator.restrictions.Nullness;
 import com.scottlogic.deg.generator.restrictions.SetRestrictions;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
-import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FieldValue;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -24,16 +22,15 @@ import static org.mockito.Mockito.when;
 
 class ReductiveTreePrunerTests {
 
-    public static final FieldSpec notNull = FieldSpec.Empty
-        .withNullRestrictions(new NullRestrictions(Nullness.MUST_NOT_BE_NULL), FieldSpecSource.Empty);
-    Field field = new Field("foo");
-    Field unrelatedField = new Field("unrelated");
-    FieldSpecHelper fieldSpecHelper = mock(FieldSpecHelper.class);
-    ReductiveTreePruner treePruner = new ReductiveTreePruner(
+    private static final FieldSpec notNull = FieldSpec.Empty
+        .withNotNull();
+    private Field field = new Field("foo");
+    private Field unrelatedField = new Field("unrelated");
+    private FieldSpecHelper fieldSpecHelper = mock(FieldSpecHelper.class);
+    private ReductiveTreePruner treePruner = new ReductiveTreePruner(
         new FieldSpecMerger(),
         new ConstraintReducer(
-            new FieldSpecFactory(
-                new FieldSpecMerger(), new StringRestrictionsFactory()),
+            new FieldSpecFactory(new StringRestrictionsFactory()),
             new FieldSpecMerger()),
         fieldSpecHelper);
 
@@ -48,12 +45,13 @@ class ReductiveTreePrunerTests {
         //Arrange
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList(10, 20));
         ConstraintNode tree = new TreeConstraintNode(new IsLessThanConstantConstraint(field, 5, Collections.emptySet()));
-        FieldSpec inputFieldSpec = notNull.withSetRestrictions(new SetRestrictions(inputWhitelist, Collections.emptySet()), FieldSpecSource.Empty);
+        FieldSpec inputFieldSpec = notNull.withSetRestrictions(
+            SetRestrictions.fromWhitelist(inputWhitelist));
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, new FieldValue(field, "TODO"));
+        Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, field, fieldValue());
 
         //Assert
         Merged<Object> expected = Merged.contradictory();
@@ -66,12 +64,13 @@ class ReductiveTreePrunerTests {
         //Arrange
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList(1, 2));
         ConstraintNode tree = new TreeConstraintNode(new IsLessThanConstantConstraint(field, 5, Collections.emptySet()));
-        FieldSpec inputFieldSpec = FieldSpec.Empty.withSetRestrictions(new SetRestrictions(inputWhitelist, Collections.emptySet()), FieldSpecSource.Empty);
+        FieldSpec inputFieldSpec = FieldSpec.Empty.withSetRestrictions(
+            SetRestrictions.fromWhitelist(inputWhitelist));
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        ConstraintNode actual = treePruner.pruneConstraintNode(tree, new FieldValue(field, "TODO")).get();
+        ConstraintNode actual = treePruner.pruneConstraintNode(tree, field, fieldValue()).get();
 
         //Assert
         ConstraintNode expected = tree;
@@ -89,12 +88,13 @@ class ReductiveTreePrunerTests {
                     constraintNode().where(field).isInSet("b"))
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("c"));
-        FieldSpec inputFieldSpec = notNull.withSetRestrictions(new SetRestrictions(inputWhitelist, Collections.emptySet()), FieldSpecSource.Empty);
+        FieldSpec inputFieldSpec = notNull.withSetRestrictions(
+            SetRestrictions.fromWhitelist(inputWhitelist));
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, new FieldValue(field, "TODO"));
+        Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, field, fieldValue());
 
         //Assert
         Merged<Object> expected = Merged.contradictory();
@@ -112,12 +112,13 @@ class ReductiveTreePrunerTests {
                     constraintNode().where(field).isInSet("b"))
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("a", "b"));
-        FieldSpec inputFieldSpec = notNull.withSetRestrictions(new SetRestrictions(inputWhitelist, Collections.emptySet()), FieldSpecSource.Empty);
+        FieldSpec inputFieldSpec = notNull.withSetRestrictions(
+            SetRestrictions.fromWhitelist(inputWhitelist));
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        ConstraintNode actual = treePruner.pruneConstraintNode(tree, new FieldValue(field, "TODO")).get();
+        ConstraintNode actual = treePruner.pruneConstraintNode(tree, field, fieldValue()).get();
 
         //Assert
         ConstraintNode expected = tree;
@@ -135,12 +136,13 @@ class ReductiveTreePrunerTests {
                     constraintNode().where(field).isInSet("b"))
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("a"));
-        FieldSpec inputFieldSpec = notNull.withSetRestrictions(new SetRestrictions(inputWhitelist, Collections.emptySet()), FieldSpecSource.Empty);
+        FieldSpec inputFieldSpec = notNull.withSetRestrictions(
+            SetRestrictions.fromWhitelist(inputWhitelist));
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        ConstraintNode actual = treePruner.pruneConstraintNode(tree, new FieldValue(field, "TODO")).get();
+        ConstraintNode actual = treePruner.pruneConstraintNode(tree, field, fieldValue()).get();
 
         //Assert
         ConstraintNode expected = constraintNode()
@@ -161,12 +163,13 @@ class ReductiveTreePrunerTests {
                     constraintNode().where(field).isInSet("c"))
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("a"));
-        FieldSpec inputFieldSpec = notNull.withSetRestrictions(new SetRestrictions(inputWhitelist, Collections.emptySet()), FieldSpecSource.Empty);
+        FieldSpec inputFieldSpec = notNull.withSetRestrictions(
+            SetRestrictions.fromWhitelist(inputWhitelist));
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        ConstraintNode actual = treePruner.pruneConstraintNode(tree, new FieldValue(field, "TODO")).get();
+        ConstraintNode actual = treePruner.pruneConstraintNode(tree, field, fieldValue()).get();
 
         //Assert
         ConstraintNode expected = constraintNode()
@@ -188,12 +191,13 @@ class ReductiveTreePrunerTests {
                 .build();
 
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("a", "b"));
-        FieldSpec inputFieldSpec = notNull.withSetRestrictions(new SetRestrictions(inputWhitelist, Collections.emptySet()), FieldSpecSource.Empty);
+        FieldSpec inputFieldSpec = notNull.withSetRestrictions(
+            SetRestrictions.fromWhitelist(inputWhitelist));
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        ConstraintNode actual = treePruner.pruneConstraintNode(tree, new FieldValue(field, "TODO")).get();
+        ConstraintNode actual = treePruner.pruneConstraintNode(tree, field, fieldValue()).get();
 
         //Assert
         ConstraintNode expected = constraintNode()
@@ -219,12 +223,13 @@ class ReductiveTreePrunerTests {
                     constraintNode().where(field).isInSet("contradictory"))
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("valid"));
-        FieldSpec inputFieldSpec = notNull.withSetRestrictions(new SetRestrictions(inputWhitelist, Collections.emptySet()), FieldSpecSource.Empty);
+        FieldSpec inputFieldSpec = notNull.withSetRestrictions(
+            SetRestrictions.fromWhitelist(inputWhitelist));
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, new FieldValue(field, "TODO"));
+        Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, field, fieldValue());
 
         //Assert
         Merged<Object> expected = Merged.contradictory();
@@ -248,12 +253,13 @@ class ReductiveTreePrunerTests {
                         ))
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("valid"));
-        FieldSpec inputFieldSpec = notNull.withSetRestrictions(new SetRestrictions(inputWhitelist, Collections.emptySet()), FieldSpecSource.Empty);
+        FieldSpec inputFieldSpec = notNull.withSetRestrictions(
+            SetRestrictions.fromWhitelist(inputWhitelist));
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        ConstraintNode actual = treePruner.pruneConstraintNode(tree, new FieldValue(field, "TODO")).get();
+        ConstraintNode actual = treePruner.pruneConstraintNode(tree, field, fieldValue()).get();
 
         //Assert
         ConstraintNode expected = constraintNode()
@@ -277,13 +283,14 @@ class ReductiveTreePrunerTests {
                             constraintNode().where(unrelatedField).isInSet("unrelated2")
                         ))
                 .build();
-        Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("valid"));
-        FieldSpec inputFieldSpec = notNull.withSetRestrictions(new SetRestrictions(inputWhitelist, Collections.emptySet()), FieldSpecSource.Empty);
+        Set<Object> inputWhitelist = Collections.singleton("valid");
+        FieldSpec inputFieldSpec = notNull.withSetRestrictions(
+            SetRestrictions.fromWhitelist(inputWhitelist));
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        ConstraintNode actual = treePruner.pruneConstraintNode(tree, new FieldValue(field, "TODO")).get();
+        ConstraintNode actual = treePruner.pruneConstraintNode(tree, field, fieldValue()).get();
 
         //Assert
         ConstraintNode expected = constraintNode()
@@ -310,12 +317,13 @@ class ReductiveTreePrunerTests {
                         ))
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("valid"));
-        FieldSpec inputFieldSpec = notNull.withSetRestrictions(new SetRestrictions(inputWhitelist, Collections.emptySet()), FieldSpecSource.Empty);
+        FieldSpec inputFieldSpec = notNull.withSetRestrictions(
+            SetRestrictions.fromWhitelist(inputWhitelist));
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        ConstraintNode actual = treePruner.pruneConstraintNode(tree, new FieldValue(field, "TODO")).get();
+        ConstraintNode actual = treePruner.pruneConstraintNode(tree, field, fieldValue()).get();
 
         //Assert
         ConstraintNode expected = constraintNode()
@@ -343,12 +351,13 @@ class ReductiveTreePrunerTests {
                         ))
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("valid"));
-        FieldSpec inputFieldSpec = notNull.withSetRestrictions(new SetRestrictions(inputWhitelist, Collections.emptySet()), FieldSpecSource.Empty);
+        FieldSpec inputFieldSpec = notNull.withSetRestrictions(
+            SetRestrictions.fromWhitelist(inputWhitelist));
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, new FieldValue(field, "TODO"));
+        Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, field, fieldValue());
 
         //Assert
         Merged<Object> expected = Merged.contradictory();
@@ -370,15 +379,20 @@ class ReductiveTreePrunerTests {
                         ))
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("valid"));
-        FieldSpec inputFieldSpec = notNull.withSetRestrictions(new SetRestrictions(inputWhitelist, Collections.emptySet()), FieldSpecSource.Empty);
+        FieldSpec inputFieldSpec = notNull.withSetRestrictions(
+            SetRestrictions.fromWhitelist(inputWhitelist));
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
         //Act
-        ConstraintNode actual = treePruner.pruneConstraintNode(tree, new FieldValue(field, "TODO")).get();
+        ConstraintNode actual = treePruner.pruneConstraintNode(tree, field, fieldValue()).get();
 
         //Assert
         ConstraintNode expected = tree;
         assertThat(actual, sameBeanAs(expected));
+    }
+
+    private DataBagValue fieldValue() {
+        return new DataBagValue("TODO");
     }
 }

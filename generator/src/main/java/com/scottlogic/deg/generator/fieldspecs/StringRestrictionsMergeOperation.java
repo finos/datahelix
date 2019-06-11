@@ -1,6 +1,5 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.restrictions.*;
 
 import java.util.Optional;
@@ -20,15 +19,12 @@ public class StringRestrictionsMergeOperation implements RestrictionMergeOperati
         StringRestrictions stringRestrictions = mergeResult.restrictions;
 
         if (stringRestrictions == null) {
-            return Optional.of(merging.withStringRestrictions(
-                null,
-                FieldSpecSource.Empty));
+            return Optional.of(merging.withStringRestrictions(null));
         }
 
         return Optional.of(merging
             .withStringRestrictions(
-                stringRestrictions,
-                FieldSpecSource.fromFieldSpecs(left, right)));
+                stringRestrictions));
     }
 }
 

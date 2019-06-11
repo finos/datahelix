@@ -1,122 +1,95 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import org.junit.Assert;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 import static org.hamcrest.Matchers.equalTo;
 
 class SetRestrictionsTests {
-    @Test
-    void whenItemIsOnABlacklistAndAWhitelist() {
-        givenFirstInputWhitelist(1, 2, 3);
-        givenSecondInputBlacklist(1);
+    @Nested
+    class fromWhitelist {
+        @Test
+        void copiesWhitelistAndUsesEmptyBlacklist() {
+            SetRestrictions objectUnderTest = SetRestrictions.fromWhitelist(set(1, 2, 3));
 
-        expectOutputWhitelist(2, 3);
-        expectOutputBlacklist(); //empty
+            Assert.assertThat(objectUnderTest.getWhitelist(), equalTo(set(1, 2, 3)));
+        }
     }
 
-    @Test
-    void shouldIntersectWhitelists() {
-        givenFirstInputWhitelist(1, 2, 3);
-        givenSecondInputWhitelist(2, 3, 4);
-
-        expectOutputWhitelist(2, 3);
+    @Nested
+    class allowNoValues {
+        @Test
+        void isSameAsEmptyWhitelist() {
+            assertEqual(
+                SetRestrictions.allowNoValues(),
+                SetRestrictions.fromWhitelist(Collections.emptySet()));
+        }
     }
 
-    @Test
-    void shouldUnionBlacklists() {
-        givenFirstInputBlacklist(1, 2, 3);
-        givenSecondInputBlacklist(2, 3, 4);
-
-        expectOutputBlacklist(1, 2, 3, 4);
-    }
-
-    @Test
-    void shouldDiscardBlacklistIfWhitelistPopulated() {
-        givenFirstInputWhitelist(1, 2, 3);
-        givenSecondInputBlacklist(7, 8);
-
-        expectOutputWhitelist(1, 2, 3);
-        expectOutputBlacklist(); //empty
-    }
-
-    @Test
-    void shouldDeclareUnsatisfiabilityIfResultingWhitelistIsEmpty() {
-        givenFirstInputWhitelist(1, 2);
-        givenSecondInputWhitelist(3, 4);
-
-        expectUnsatisfiable();
-    }
-
-
-    @BeforeEach
-    private void beforeEach() {
-        this.firstInputWhitelist = null;
-        this.firstInputBlacklist = null;
-        this.secondInputWhitelist = null;
-        this.secondInputBlacklist = null;
-        this.actualOutput = null;
-    }
-
-    private Set<Object> firstInputWhitelist = null;
-    private Set<Object> firstInputBlacklist = null;
-    private Set<Object> secondInputWhitelist = null;
-    private Set<Object> secondInputBlacklist = null;
-
-    private MergeResult<SetRestrictions> actualOutput = null;
-
-    private MergeResult<SetRestrictions> getActualOutput() {
-        if (actualOutput == null) {
-            actualOutput = SetRestrictions.merge(
-                new SetRestrictions(firstInputWhitelist, firstInputBlacklist),
-                new SetRestrictions(secondInputWhitelist, secondInputBlacklist));
+    @Nested
+    class equality {
+        @Test
+        void isNotEqualToNull() {
+            assertNotEqual(
+                SetRestrictions.fromWhitelist(set("Test")),
+                null);
         }
 
-        return actualOutput;
+        @Test
+        void isNotEqualToNonSetRestrictionsObject() {
+            assertNotEqual(
+                SetRestrictions.fromWhitelist(set("Test")),
+                "String");
+        }
+
+        @Test
+        void twoEmptyWhitelistsAreEqual() {
+            assertEqual(
+                SetRestrictions.fromWhitelist(Collections.emptySet()),
+                SetRestrictions.fromWhitelist(Collections.emptySet()));
+        }
+
+        @Test
+        void twoDifferentWhitelistsAreNotEqual() {
+            assertNotEqual( // same types
+                SetRestrictions.fromWhitelist(set("Test")),
+                SetRestrictions.fromWhitelist(set("Parrot")));
+
+            assertNotEqual( // different types
+                SetRestrictions.fromWhitelist(set("Test")),
+                SetRestrictions.fromWhitelist(set(1)));
+        }
+
+        @Test
+        void twoIdenticalWhitelistsAreEqual() {
+            assertEqual(
+                SetRestrictions.fromWhitelist(set("Test")),
+                SetRestrictions.fromWhitelist(set("Test")));
+        }
     }
 
-    private void givenFirstInputWhitelist(Object... expectedValues) {
-        firstInputWhitelist = new HashSet<>(Arrays.asList(expectedValues));
-    }
-    private void givenFirstInputBlacklist(Object... expectedValues) {
-        firstInputBlacklist = new HashSet<>(Arrays.asList(expectedValues));
-    }
-    private void givenSecondInputWhitelist(Object... expectedValues) {
-        secondInputWhitelist = new HashSet<>(Arrays.asList(expectedValues));
-    }
-    private void givenSecondInputBlacklist(Object... expectedValues) {
-        secondInputBlacklist = new HashSet<>(Arrays.asList(expectedValues));
+    private static void assertEqual(Object a, Object b) {
+        Assert.assertEquals(a, b);
+        Assert.assertEquals(b, a);
+
+        if (a != null && b != null) Assert.assertEquals(a.hashCode(), b.hashCode());
     }
 
-    private void expectOutputWhitelist(Object... expectedValues) {
-        MergeResult<SetRestrictions> actualOutput = getActualOutput();
+    private static void assertNotEqual(Object a, Object b) {
+        Assert.assertNotEquals(a, b);
+        Assert.assertNotEquals(b, a);
 
-        Assert.assertTrue(actualOutput.successful);
-
-        Assert.assertThat(
-            actualOutput.restrictions.getWhitelist(),
-            equalTo(new HashSet<>(Arrays.asList(expectedValues))));
+        // not sure about this; hash collisions aren't intrinsically functional errors
+        if (a != null && b != null) Assert.assertNotEquals(a.hashCode(), b.hashCode());
     }
 
-    private void expectOutputBlacklist(Object... expectedValues) {
-        MergeResult<SetRestrictions> actualOutput = getActualOutput();
-
-        Assert.assertTrue(actualOutput.successful);
-
-        Assert.assertThat(
-            actualOutput.restrictions.getBlacklist(),
-            equalTo(new HashSet<>(Arrays.asList(expectedValues))));
-    }
-
-    private void expectUnsatisfiable() {
-        MergeResult<SetRestrictions> actualOutput = getActualOutput();
-
-        Assert.assertFalse(actualOutput.successful);
+    private static Set<Object> set(Object... values) {
+        return new HashSet<>(Arrays.asList(values));
     }
 }

@@ -1,9 +1,9 @@
 package com.scottlogic.deg.generator.reducer;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
@@ -63,19 +63,6 @@ public class ConstraintReducer {
         return constraints == null
                 ? Optional.of(FieldSpec.Empty)
                 : getRootFieldSpec(constraints);
-    }
-
-    public Optional<FieldSpec> reduceConstraintsToFieldSpecWithMustContains(Iterable<AtomicConstraint> rootConstraints,
-                                                            Set<FieldSpec> decisionFieldSpecs) {
-
-        Optional<FieldSpec> rootFieldSpec = reduceConstraintsToFieldSpec(rootConstraints);
-
-        if (decisionFieldSpecs.isEmpty()) { return rootFieldSpec; }
-
-        return Optional.of(fieldSpecFactory.toMustContainRestrictionFieldSpec(
-            rootFieldSpec.orElse(FieldSpec.Empty),
-            StreamSupport.stream(decisionFieldSpecs.spliterator(), false).collect(Collectors.toSet())
-        ));
     }
 
     private Optional<FieldSpec> getRootFieldSpec(Iterable<AtomicConstraint> rootConstraints) {

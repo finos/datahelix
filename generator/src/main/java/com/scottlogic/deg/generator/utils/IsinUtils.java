@@ -40,23 +40,29 @@ public class IsinUtils {
 
     private static List<Integer> SEDOL_WEIGHTS = Arrays.asList(1, 3, 1, 7, 3, 9, 1);
 
-    // Assumes generic NSIN checks have already been run, i.e. `nsin` is 9 alphanumeric characters
     public static boolean isValidSedolNsin(String nsin) {
-        // SEDOL has length 7, so first two digits of NSIN must be padded 0s
-        if (!nsin.substring(0, 2).equals("00")) {
+        // A SEDOL has length 7, but is prefixed by zeroes when used as a nine-digit NSIN
+        int sedolStartOffset = nsin.length() - 7;
+        if (sedolStartOffset < 0) {
+            return false;
+        }
+        if (nsin.length() > 7 && !nsin.substring(0, sedolStartOffset).matches("^0*$")) {
             return false;
         }
         // SEDOL is alphanumeric but cannot contain vowels
         if (nsin.matches(".*[AEIOU@*#].*")) {
             return false;
         }
-        String sedolPreCheckDigit = nsin.substring(2, 8);
+        int checkDigitPosition = sedolStartOffset + 6;
+        String sedolPreCheckDigit = nsin.substring(sedolStartOffset, checkDigitPosition);
         char checkDigit = calculateSedolCheckDigit(sedolPreCheckDigit);
-        return nsin.charAt(8) == checkDigit;
+        return nsin.charAt(checkDigitPosition) == checkDigit;
     }
 
-    // Assumes generic NSIN checks have already been run, i.e. `nsin` is 9 alphanumeric characters
     public static boolean isValidCusipNsin(String nsin) {
+        if (nsin.length() != 9) { return false; }
+        // CUSIPs can only contain digits in the first three positions
+        if (nsin.substring(0, 3).matches(".*[^0-9].*")) { return false; }
         String cusipPreCheckDigit = nsin.substring(0, 8);
         char checkDigit = calculateCusipCheckDigit(cusipPreCheckDigit);
         return nsin.charAt(8) == checkDigit;

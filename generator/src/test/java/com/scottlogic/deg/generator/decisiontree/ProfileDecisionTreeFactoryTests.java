@@ -1,18 +1,20 @@
 package com.scottlogic.deg.generator.decisiontree;
 
-import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.Profile;
-import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.Rule;
-import com.scottlogic.deg.generator.constraints.Constraint;
-import com.scottlogic.deg.generator.constraints.atomic.*;
-import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.NegatedGrammaticalConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsGreaterThanConstantConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.MatchesRegexConstraint;
+import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.Profile;
+import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Rule;
+import com.scottlogic.deg.common.profile.constraints.Constraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.NegatedGrammaticalConstraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.decisiontree.testutils.*;
-import com.scottlogic.deg.generator.inputs.RuleInformation;
-import com.scottlogic.deg.schemas.v0_1.RuleDTO;
+import com.scottlogic.deg.common.profile.RuleInformation;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.Assert;
@@ -22,9 +24,10 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import static com.scottlogic.deg.generator.AssertUtils.pairwiseAssert;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.empty;
+import static com.shazam.shazamcrest.MatcherAssert.assertThat;
+import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 
 class ProfileDecisionTreeFactoryTests {
     private final Field fieldA = new Field("A");
@@ -86,10 +89,8 @@ class ProfileDecisionTreeFactoryTests {
         DecisionTree testOutput = testObject.analyse(testInput);
         ProfileFields actualFields = testOutput.getFields();
 
-        pairwiseAssert(
-            actualFields,
-            inputFieldList,
-            (actual, expected) -> Assert.assertThat(actual, sameInstance(expected)));
+        ProfileFields expected = new ProfileFields(inputFieldList);
+        assertThat(actualFields, sameBeanAs(expected));
     }
 
     @Test
@@ -551,8 +552,6 @@ class ProfileDecisionTreeFactoryTests {
     }
 
     private static RuleInformation rule(String description){
-        RuleDTO rule = new RuleDTO();
-        rule.rule = description;
-        return new RuleInformation(rule);
+        return new RuleInformation(description);
     }
 }

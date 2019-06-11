@@ -3,5 +3,10 @@
  */
 
 rootProject.name = 'datahelix'
-include(':schemas')
+include(':profile')
 include(':generator')
+include(':output')
+include 'common'
+include 'orchestrator'
+include 'output'
+

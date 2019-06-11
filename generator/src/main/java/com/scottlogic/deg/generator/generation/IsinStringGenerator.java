@@ -222,14 +222,20 @@ public class IsinStringGenerator implements StringGenerator {
 
     private static StringGenerator getIsinSansCheckDigitGeneratorForCountry(String countryCode) {
         if (countryCode.equals("GB")) {
-            return new SedolStringGenerator(countryCode);
+            return new SedolStringGenerator("GB00");
+        }
+        if (countryCode.equals("US")) {
+            return new CusipStringGenerator("US");
         }
         return new RegexStringGenerator(countryCode + GENERIC_NSIN_REGEX, true);
     }
 
     private static StringGenerator getNsinGeneratorForCountry(String countryCode) {
         if (countryCode.equals("GB")) {
-            return new SedolStringGenerator();
+            return new SedolStringGenerator("00");
+        }
+        if (countryCode.equals("US")) {
+            return new CusipStringGenerator();
         }
         return new RegexStringGenerator(GENERIC_NSIN_REGEX, true);
     }
