@@ -4,9 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.generator.decisiontree.DecisionTree;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
+import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.decisiontree.treepartitioning.TreePartitioner;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
@@ -57,8 +55,12 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         monitor.generationStarting();
         DecisionTree decisionTree = decisionTreeGenerator.analyse(profile);
 
-//        ContradictionTreeValidator contradictionTreeValidator = new ContradictionTreeValidator(new ConstraintReducer())
-        treeValidator.reportContradictions(decisionTree);
+        Node contradictingNode = treeValidator.reportContradictions(decisionTree);
+        if (decisionTree.getRootNode().equals(contradictingNode)) {
+            // Contradiction
+            System.out.println("There is a hard contradiction in the profile. No data can be generated at all.");
+            return Stream.empty();
+        }
 
         Stream<Stream<DataBag>> partitionedDataBags = treePartitioner
             .splitTreeIntoPartitions(decisionTree)

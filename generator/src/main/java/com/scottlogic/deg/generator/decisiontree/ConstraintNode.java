@@ -46,5 +46,10 @@ public interface ConstraintNode extends Node {
     default Node getFirstChild() {
         return getDecisions().stream().findFirst().orElse(null);
     }
+
+    @Override
+    default Node getSecondChild() {
+        return getDecisions().stream().skip(1).findFirst().orElse(null);
+    }
 }
 

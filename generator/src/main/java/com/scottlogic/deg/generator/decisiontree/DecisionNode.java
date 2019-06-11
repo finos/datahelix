@@ -11,5 +11,10 @@ public interface DecisionNode extends Node {
     default Node getFirstChild() {
         return getOptions().stream().findFirst().orElse(null);
     }
+
+    @Override
+    default Node getSecondChild() {
+        return getOptions().stream().skip(1).findFirst().orElse(null);
+    }
 }
 
