@@ -19,6 +19,7 @@ import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.core.IsNull.nullValue;
@@ -32,12 +33,11 @@ public class JsonProfileReaderTests {
     public void Setup() {
         this.json = null;
         this.profile = null;
-        ConstraintReaderMapEntrySource[] mappingProviders = {
+        readerMap = new BaseConstraintReaderMap(Stream.of(
             new CoreAtomicTypesConstraintReaderSource(),
             new FinancialTypesConstraintReaderSource(),
             new PersonalDataTypesConstraintReaderSource()
-        };
-        readerMap = new BaseConstraintReaderMap(Arrays.stream(mappingProviders));
+        ));
     }
 
     private void givenJson(String json) {

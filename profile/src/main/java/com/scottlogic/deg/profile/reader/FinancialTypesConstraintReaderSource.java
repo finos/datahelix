@@ -7,7 +7,6 @@ import com.scottlogic.deg.common.profile.constraints.atomic.StandardConstraintTy
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 public class FinancialTypesConstraintReaderSource implements ConstraintReaderMapEntrySource {
@@ -32,7 +31,7 @@ public class FinancialTypesConstraintReaderSource implements ConstraintReaderMap
             }
         };
 
-        ConstraintReaderMapEntry[] entries = {
+        return Stream.of(
             new ConstraintReaderMapEntry(
                 AtomicConstraintType.IS_OF_TYPE.getText(),
                 "ISIN",
@@ -53,8 +52,6 @@ public class FinancialTypesConstraintReaderSource implements ConstraintReaderMap
                 "RIC",
                 financialCodesReader
             )
-        };
-
-        return Arrays.stream(entries);
+        );
     }
 }

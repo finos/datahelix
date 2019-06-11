@@ -4,7 +4,6 @@ import com.google.inject.AbstractModule;
 import com.scottlogic.deg.profile.reader.*;
 import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
 
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 public class ProfileModule extends AbstractModule {
