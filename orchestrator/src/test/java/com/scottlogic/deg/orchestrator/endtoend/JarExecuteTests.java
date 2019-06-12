@@ -18,12 +18,11 @@ public class JarExecuteTests {
             String line;
             while ((line = BufferedSTDOUTReader.readLine()) != null) {
                 STDOUT.add(line);
-                System.out.println(line);
             }
             p.waitFor();
             p.destroy();
 
-            assertEquals("\"Generation successful\"",STDOUT.get(1));
+            assertEquals("\"Generation successful\"",STDOUT.get(0));
     }
     }
 
