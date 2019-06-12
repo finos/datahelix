@@ -82,6 +82,7 @@ public class ContradictionTreeValidator {
         if (currentNode instanceof ConstraintNode && nodeToCheck instanceof ConstraintNode){
             boolean contradiction = checkContradictions((ConstraintNode)nodeToCheck, (ConstraintNode)currentNode);
             if (contradiction) {
+                contradictingNode = currentNode;
                 return true;
             }
         }
