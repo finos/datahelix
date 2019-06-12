@@ -26,7 +26,6 @@ public class ContradictionTreeValidatorTests {
     private Field fieldA;
     private Field fieldB;
     private Field fieldC;
-    private ContradictionValidationMonitor outputter;
 
     @BeforeEach
     void setup() {
@@ -34,16 +33,12 @@ public class ContradictionTreeValidatorTests {
         fieldB = new Field("fieldB");
         fieldC = new Field("fieldC");
 
-        outputter = mock(ContradictionValidationMonitor.class);
-
         validator =
             new ContradictionTreeValidator(
                 new ConstraintReducer(
                     new FieldSpecFactory(
                         new StringRestrictionsFactory()),
-                    new FieldSpecMerger()),
-                outputter,
-                new FieldSpecMerger());
+                    new FieldSpecMerger()));
     }
 
     @Test
@@ -93,7 +88,7 @@ public class ContradictionTreeValidatorTests {
 
         //Assert
         //verify contradictionInTree outputter method is never called.
-        verify(outputter, never()).contradictionInTree(anyObject(),anyObject());
+//        verify(outputter, never()).contradictionInTree(anyObject(),anyObject());
     }
 
     @Test
@@ -142,7 +137,7 @@ public class ContradictionTreeValidatorTests {
         validator.reportContradictions(dt);
 
         //verify contradictionInTree outputter method is never called.
-        verify(outputter, never()).contradictionInTree(anyObject(),anyObject());
+//        verify(outputter, never()).contradictionInTree(anyObject(),anyObject());
     }
 
     @Test
@@ -213,7 +208,7 @@ public class ContradictionTreeValidatorTests {
 
         //Assert
         //verify contradictionInTree outputter method is called.
-        verify(outputter,atLeast(1)).contradictionInTree(anyObject(),anyObject());
+//        verify(outputter,atLeast(1)).contradictionInTree(anyObject(),anyObject());
 
     }
 
@@ -287,7 +282,7 @@ public class ContradictionTreeValidatorTests {
         validator.reportContradictions(dt);
 
         // assert
-        verify(outputter).contradictionInTree(anyObject(),anyObject());
+//        verify(outputter).contradictionInTree(anyObject(),anyObject());
     }
 
     @Test

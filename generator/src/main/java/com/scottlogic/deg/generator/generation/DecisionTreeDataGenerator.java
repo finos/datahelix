@@ -2,18 +2,13 @@ package com.scottlogic.deg.generator.generation;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.decisiontree.treepartitioning.TreePartitioner;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 import com.scottlogic.deg.generator.generation.databags.*;
 import com.scottlogic.deg.common.output.GeneratedObject;
-import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.validators.ContradictionTreeValidator;
-import com.scottlogic.deg.generator.validators.ContradictionValidationMonitor;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 
 import java.util.stream.Stream;
@@ -35,8 +30,6 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         TreePartitioner treePartitioner,
         DecisionTreeOptimiser optimiser,
         DataGeneratorMonitor monitor,
-        FieldSpecFactory fieldSpecFactory,
-        FieldSpecMerger fieldSpecMerger,
         ContradictionTreeValidator treeValidator,
         CombinationStrategy combinationStrategy,
         @Named("config:maxRows") long maxRows) {
@@ -57,9 +50,13 @@ public class DecisionTreeDataGenerator implements DataGenerator {
 
         Node contradictingNode = treeValidator.reportContradictions(decisionTree);
         if (decisionTree.getRootNode().equals(contradictingNode)) {
-            // Contradiction
-            System.err.println("There is a hard contradiction in the profile. No data can be generated at all.");
+            // Entire profile is contradictory.
+            monitor.addLineToPrintAtEndOfGeneration("The provided profile is wholly contradictory. No fields can successfully be fixed.");
             return Stream.empty();
+        } else if (contradictingNode != null) {
+            // Part of the profile is contradictory, and therefore could be simplified.
+            monitor.addLineToPrintAtEndOfGeneration("Warning: There is a partial contradiction in the profile. The contradicting section is:");
+            monitor.addLineToPrintAtEndOfGeneration(contradictingNode.toString());
         }
 
         Stream<Stream<DataBag>> partitionedDataBags = treePartitioner

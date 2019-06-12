@@ -10,16 +10,11 @@ import com.scottlogic.deg.generator.decisiontree.treepartitioning.TreePartitione
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
-import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagGenerator;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
-import com.scottlogic.deg.generator.validators.ContradictionValidationMonitor;
-import com.scottlogic.deg.generator.validators.ContradictionValidatorMonitorInterface;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
 
-import java.io.PrintWriter;
-import java.nio.file.Path;
 import java.time.OffsetDateTime;
 
 /**
@@ -59,7 +54,6 @@ public class GeneratorModule extends AbstractModule {
         bind(DataGenerator.class).to(DecisionTreeDataGenerator.class);
         bind(DecisionTreeFactory.class).to(MaxStringLengthInjectingDecisionTreeFactory.class);
         bind(FieldValueSourceEvaluator.class).to(StandardFieldValueSourceEvaluator.class);
-        bind(ContradictionValidatorMonitorInterface.class).to(ContradictionValidationMonitor.class);
 
 
         bind(JavaUtilRandomNumberGenerator.class)

@@ -8,7 +8,6 @@ import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.Node;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 
 import java.util.*;
@@ -19,20 +18,15 @@ import java.util.stream.Stream;
 public class ContradictionTreeValidator {
 
     private final ConstraintReducer constraintReducer;
-    private final ContradictionValidatorMonitorInterface validationMonitor;
-    private final FieldSpecMerger fieldSpecMerger;
     private Node contradictingNode = null;
 
     @Inject
-    public ContradictionTreeValidator(ConstraintReducer constraintReducer, ContradictionValidatorMonitorInterface validationMonitor, FieldSpecMerger fieldSpecMerger){
+    public ContradictionTreeValidator(ConstraintReducer constraintReducer){
         this.constraintReducer = constraintReducer;
-        this.validationMonitor = validationMonitor;
-        this.fieldSpecMerger = fieldSpecMerger;
     }
 
     /**
-     * Takes a DecisionTree, walks every node, and check every child of each node for contradictory constraints
-     * Emits output about contradictions via the ContradictionValidationMonitor
+     * Takes a DecisionTree, walks every node, and check every child of each node for contradictory constraints.
      * @param decisionTree
      */
     public Node reportContradictions(DecisionTree decisionTree) {
@@ -151,7 +145,6 @@ public class ContradictionTreeValidator {
             Optional<FieldSpec> fieldSpec = constraintReducer.reduceConstraintsToFieldSpec(entry.getValue());
 
             if (!fieldSpec.isPresent()){
-                validationMonitor.contradictionInTree(entry.getKey(),entry.getValue());
                 return true;
             }
         }
