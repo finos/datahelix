@@ -11,6 +11,6 @@ public class ClasspathMapper implements Function<String, InputStream> {
         return Optional.ofNullable(this.getClass()
             .getClassLoader()
             .getResourceAsStream(path)
-        ).orElseThrow(() -> new IllegalArgumentException("Path not found on classpath."));
+        ).orElseThrow(() -> new IllegalArgumentException("Classpath does not contain path " + path));
     }
 }
