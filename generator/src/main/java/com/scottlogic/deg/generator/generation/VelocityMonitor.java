@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
+public class VelocityMonitor extends ReductiveDataGeneratorMonitor {
     private static final BigDecimal millisecondsInSecond = BigDecimal.valueOf(1_000);
     private static final BigDecimal nanoSecondsInMillisecond = BigDecimal.valueOf(1_000_000);
 
@@ -89,6 +89,8 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
         println(
             "\nGeneration finished at: %s",
             timeFormatter.format(finished));
+
+        super.endGeneration();
     }
 
     private void reportVelocity(long rowsSinceLastSample) {
