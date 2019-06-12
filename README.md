@@ -21,6 +21,8 @@ The generator has been written in Java, allowing it to work on Microsoft Windows
 
 The generator is distributed as a JAR file, with the latest release always available from the [GitHub releases page](https://github.com/ScottLogic/datahelix/releases/). The project is currently in beta and under active development. You can expect breaking changes in future releases, and new features too!
 
+You are also welcome to download the source code and build the generator yourself.  To do so, follow the instructions for [downloading and building it using a Java IDE](generator/docs/GeneratorSetup.md), or for [downloading and building it using Docker](generator/docs/DockerSetup.md).
+
 Your feedback on the beta would be greatly appreciated. If you have any issues, feature requests, or ideas, please share them via the [GitHub issues page](https://github.com/ScottLogic/datahelix/issues).
 
 ## Creating your first profile

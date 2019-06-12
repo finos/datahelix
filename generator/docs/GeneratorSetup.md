@@ -1,4 +1,6 @@
-# Generator Setup Instructions
+# Build and run the generator using an IDE
+
+The instructions below explain how to download the generator source code, build it and run it, using a Java IDE.  This is the recommended setup if you would like to contribute to the project yourself.  If you would like to use Docker to build the source code and run the generator, [please follow these alternate instructions](DockerSetup.md).
 
 ## Get Code
 
