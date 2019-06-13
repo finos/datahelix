@@ -10,6 +10,7 @@ import com.scottlogic.deg.generator.generation.*;
 public class MatchesStandardStringRestrictions implements StringRestrictions{
     private final StandardConstraintTypes type;
     private final boolean negated;
+    private StringGenerator generator;
 
     public MatchesStandardStringRestrictions(StandardConstraintTypes type, boolean negated) {
         this.type = type;
@@ -30,16 +31,22 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
     }
 
     private StringGenerator getStringGenerator() {
-        switch (type){
-            case ISIN:
-                return new IsinStringGenerator();
-            case SEDOL:
-                return new SedolStringGenerator();
-            case CUSIP:
-                return new CusipStringGenerator();
+        if (generator == null) {
+            switch (type) {
+                case ISIN:
+                    generator = new IsinStringGenerator();
+                    break;
+                case SEDOL:
+                    generator = new SedolStringGenerator();
+                    break;
+                case CUSIP:
+                    generator = new CusipStringGenerator();
+                    break;
+                default:
+                    throw new UnsupportedOperationException(String.format("Unable to create string generator for: %s", type));
+            }
         }
-
-        throw new UnsupportedOperationException(String.format("Unable to create string generator for: %s", type));
+        return generator;
     }
 
     /**
@@ -59,8 +66,12 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
     public MergeResult<StringRestrictions> intersect(StringRestrictions other) {
         if (other instanceof TextualRestrictions){
             TextualRestrictions textualRestrictions = (TextualRestrictions) other;
-            if (getImpactOnValueProduction(textualRestrictions) == Impact.NONE){
+            Impact impact = getImpactOnValueProduction(textualRestrictions);
+            if (impact == Impact.NONE) {
                 return new MergeResult<>(this); //no impact on values produced by this type
+            }
+            if (impact == Impact.PARTIAL) {
+                return new MergeResult<>(copyWithGenerator(getCombinedGenerator(textualRestrictions)));
             }
 
             //must not be reported as contradictory, yet at least
@@ -90,7 +101,8 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
 
     /**
      * Calculate if the given TextualRestrictions could impact the ability to create some or all values
-     * If there are ANY regex statements then they COULD affect the ability to create values (therefore yield true)
+     * If there are regex statements, determine if the intersection of those regexes with the regex for
+     * a valid string can produce any values or not.
      * Get the length of the codes that would be produced, e.g. an ISIN is 12 characters.
      * Check if any length restrictions exist that would prevent strings of this length being produced.
      *
@@ -102,8 +114,17 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
             || !textualRestrictions.notMatchingRegex.isEmpty()
             || !textualRestrictions.notContainingRegex.isEmpty();
 
-        if (hasRegexRestrictions){
-            return Impact.POTENTIAL; //because we dont know they wouldn't affect the values - see #487
+        if (hasRegexRestrictions) {
+            StringGenerator ourGenerator = getStringGenerator();
+            StringGenerator combinedGenerator =
+                ourGenerator.intersect(textualRestrictions.createGenerator());
+            if (combinedGenerator.isFinite() && combinedGenerator.getValueCount() == 0) {
+                return Impact.FULL;
+            }
+            if (combinedGenerator.getValueCount() < ourGenerator.getValueCount()) {
+                return Impact.PARTIAL;
+            }
+            return Impact.NONE;
         }
 
         int maxLength = textualRestrictions.maxLength != null ? textualRestrictions.maxLength : Integer.MAX_VALUE;
@@ -111,26 +132,39 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
         int codeLength = getCodeLength(type);
 
         return (codeLength < minLength || codeLength > maxLength || textualRestrictions.excludedLengths.contains(codeLength))
-            ? Impact.CONFIRMED
+            ? Impact.FULL
             : Impact.NONE;
+    }
+
+    private StringGenerator getCombinedGenerator(TextualRestrictions textualRestrictions) {
+        StringGenerator ourGenerator = getStringGenerator();
+        return ourGenerator.intersect(textualRestrictions.createGenerator());
+    }
+
+    private MatchesStandardStringRestrictions copyWithGenerator(StringGenerator generator) {
+        MatchesStandardStringRestrictions newRestrictions =
+            new MatchesStandardStringRestrictions(type, negated);
+        newRestrictions.generator = generator;
+        return newRestrictions;
     }
 
     private enum Impact
     {
         /**
-         * There is the potential for some impact, but it cannot be confirmed or denied
+         * There is definitely a partial impact on value production, but its level is
+         * currently unknown.
          */
-        POTENTIAL,
+        PARTIAL,
 
         /**
-         * There is no impact on the production of values
+         * There is potentially no impact on the production of values
          */
         NONE,
 
         /**
-         * There is a confirmed impact on the generation of values
+         * The impact is such that values definitely cannot be produced.
          */
-        CONFIRMED
+        FULL
     }
 
     private int getCodeLength(StandardConstraintTypes type) {
