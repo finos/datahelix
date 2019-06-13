@@ -312,6 +312,28 @@ Feature: User can specify that a field must be a financial code type
       | "GB0002634946" |
       | null           |
 
+  Scenario: An ISIN constraint combined with a matching regex constraint that matches valid ISINs should generate matching valid ISINs
+    Given foo is of type "ISIN"
+    And foo is matching regex "US9311421039"
+    Then the following data should be generated:
+      | foo            |
+      | "US9311421039" |
+      | null           |
+
+  Scenario: An ISIN constraint combined with a matching regex constraint that cannot match any valid ISIN due to its length should only generate null
+    Given foo is of type "ISIN"
+    And foo is matching regex "US[0-9]{9}"
+    Then the following data should be generated:
+      | foo            |
+      | null           |
+
+  Scenario: An ISIN constraint combined with a matching regex constraint that cannot match any valid ISIN due to its check digit should only generate null
+    Given foo is of type "ISIN"
+    And foo is matching regex "US9311421038"
+    Then the following data should be generated:
+      | foo            |
+      | null           |
+
   Scenario: A SEDOL constraint combined with another SEDOL constraint generates valid SEDOLs
     Given foo is of type "SEDOL"
     And foo is of type "SEDOL"
@@ -562,6 +584,35 @@ Feature: User can specify that a field must be a financial code type
       | foo       |
       | "0263494" |
       | null      |
+
+  Scenario: A SEDOL constraint combined with a matching regex constraint that matches valid SEDOLs should generate valid SEDOLs
+    Given foo is of type "SEDOL"
+    And foo is matching regex "0263494"
+    Then the following data should be generated:
+      | foo       |
+      | "0263494" |
+      | null      |
+
+  Scenario: A SEDOL constraint combined with a matching regex constraint that cannot match any valid SEDOL because it has the wrong check digit should only generate null
+    Given foo is of type "SEDOL"
+    And foo is matching regex "0263492"
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
+  Scenario: A SEDOL constraint combined with a matching regex constraint that cannot match any valid SEDOL because it has the wrong length should only generate null
+    Given foo is of type "SEDOL"
+    And foo is matching regex "[0-9]{6}"
+    Then the following data should be generated:
+      | foo            |
+      | null           |
+
+  Scenario: A SEDOL constraint combined with a matching regex constraint that cannot match any valid SEDOL because it cannot have a correct check digit should only generate null
+    Given foo is of type "SEDOL"
+    And foo is matching regex "0[023]63492"
+    Then the following data should be generated:
+      | foo  |
+      | null |
 
   Scenario: A CUSIP constraint combined with a second CUSIP constraint generates valid CUSIPs
     Given foo is of type "CUSIP"
@@ -814,6 +865,28 @@ Feature: User can specify that a field must be a financial code type
       | "38259P508" |
       | null        |
 
+  Scenario: A CUSIP constraint combined with a matching regex constraint that matches a valid CUSIP generates valid CUSIPs
+    Given foo is of type "CUSIP"
+    And foo is matching regex "38259P508"
+    Then the following data should be generated:
+      | foo         |
+      | "38259P508" |
+      | null        |
+
+  Scenario: A CUSIP constraint combined with a matching regex constraint that cannot match a valid CUSIP because it has an invalid check digit should only generate null
+    Given foo is of type "CUSIP"
+    And foo is matching regex "38259P509"
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
+  Scenario: A CUSIP constraint combined with a matching regex constraint that cannot match a valid CUSIP because it has the wrong length should only generate null
+    Given foo is of type "CUSIP"
+    And foo is matching regex "[0-9]{3}.{4}[0-9]"
+    Then the following data should be generated:
+      | foo            |
+      | null           |
+
   Scenario: A RIC constraint combined with a not null constraint generates valid RICs
     Given foo is of type "RIC"
     And foo is anything but null
@@ -842,3 +915,4 @@ Feature: User can specify that a field must be a financial code type
     Then the following data should be generated:
       | foo         |
       | "ABC.PQ"    |
+

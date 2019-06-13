@@ -8,7 +8,7 @@ public class SedolStringGeneratorTests {
     public void shouldMatchAValidSedolCodeWhenNotNegated(){
         StringGenerator SedolGenerator = new SedolStringGenerator();
 
-        boolean matches = SedolGenerator.match("002634946");
+        boolean matches = SedolGenerator.match("2634946");
 
         Assert.assertTrue(matches);
     }
@@ -26,7 +26,7 @@ public class SedolStringGeneratorTests {
     public void shouldNotMatchAValidSedolCodeWhenNegated(){
         StringGenerator SedolGenerator = new SedolStringGenerator().complement();
 
-        boolean matches = SedolGenerator.match("002634946");
+        boolean matches = SedolGenerator.match("2634946");
 
         Assert.assertFalse(matches);
     }

@@ -122,6 +122,16 @@ public class RegexStringGenerator implements StringGenerator {
         return new RegexStringGenerator(merged, mergedRepresentation);
     }
 
+    public RegexStringGenerator union(RegexStringGenerator otherGenerator) {
+        Automaton b = otherGenerator.automaton;
+        Automaton merged = automaton.union(b);
+        String mergedRepresentation = unionRepresentation(
+            this.regexRepresentation,
+            otherGenerator.regexRepresentation
+        );
+        return new RegexStringGenerator(merged, mergedRepresentation);
+    }
+
     @Override
     public StringGenerator complement() {
         return new RegexStringGenerator(
@@ -134,7 +144,11 @@ public class RegexStringGenerator implements StringGenerator {
     }
 
     static String intersectRepresentation(String left, String right) {
-        return String.format("%s ∩ %s", left, right);
+        return String.format("(%s ∩ %s)", left, right);
+    }
+
+    static String unionRepresentation(String left, String right) {
+        return String.format("(%s ∪ %s)", left, right);
     }
 
     @Override
@@ -567,6 +581,33 @@ public class RegexStringGenerator implements StringGenerator {
 
     public int hashCode() {
         return Objects.hash(this.automaton, this.getClass());
+    }
+
+    public static class UnionCollector
+    {
+        private RegexStringGenerator union = null;
+
+        public UnionCollector() { }
+
+        public void accumulate(RegexStringGenerator another) {
+            if (union == null) {
+                union = another;
+            }
+            else {
+                union = union.union(another);
+            }
+        }
+
+        public void combine(UnionCollector other) {
+            if (other == null || other.union == null) {
+                return;
+            }
+            union = union.union(other.union);
+        }
+
+        public RegexStringGenerator getUnionGenerator() {
+            return union;
+        }
     }
 }
 

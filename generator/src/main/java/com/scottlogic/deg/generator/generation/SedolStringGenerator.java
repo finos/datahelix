@@ -4,33 +4,55 @@ import com.scottlogic.deg.generator.utils.*;
 
 public class SedolStringGenerator extends ChecksummedCodeStringGenerator {
     public final static int SEDOL_LENGTH = 7;
-    private final static String SEDOL_SANS_CHECK_DIGIT_REGEX = "[B-DF-HJ-NP-TV-Z0-9]{6}";
+    public final static String STANDARD_REGEX_REPRESENTATION = "[B-DF-HJ-NP-TV-Z0-9]{6}[0-9]";
 
     public SedolStringGenerator() {
-        super(SEDOL_SANS_CHECK_DIGIT_REGEX);
+        super(STANDARD_REGEX_REPRESENTATION, SEDOL_LENGTH, 0);
     }
 
-    public SedolStringGenerator(String prefix) {
-        super(prefix + SEDOL_SANS_CHECK_DIGIT_REGEX);
+    public SedolStringGenerator(String prefix) { this(prefix, ""); }
+
+    public SedolStringGenerator(String prefix, String suffix) {
+        super(prefix + STANDARD_REGEX_REPRESENTATION + suffix, SEDOL_LENGTH, 0);
     }
 
-    private SedolStringGenerator(RegexStringGenerator sedolSansCheckDigitGenerator, boolean negate) {
-        super(sedolSansCheckDigitGenerator, negate);
+    public SedolStringGenerator(String prefix, String suffix, RegexStringGenerator additionalRestrictions) {
+        super(prefix + STANDARD_REGEX_REPRESENTATION + suffix, additionalRestrictions, SEDOL_LENGTH, prefix.length());
+    }
+
+    private SedolStringGenerator(RegexStringGenerator sedolGenerator) {
+        super(sedolGenerator, false, SEDOL_LENGTH, 0);
+    }
+
+    private SedolStringGenerator(RegexStringGenerator sedolGenerator, boolean negate) {
+        super(sedolGenerator, negate, SEDOL_LENGTH, 0);
     }
 
     @Override
     public char calculateCheckDigit(String str) {
-        return IsinUtils.calculateSedolCheckDigit(str.substring(str.length() - (SEDOL_LENGTH - 1)));
+        return FinancialCodeUtils.calculateSedolCheckDigit(
+            str.substring(prefixLength, SEDOL_LENGTH + prefixLength - 1)
+        );
+    }
+
+    @Override
+    public int getLength() {
+        return SEDOL_LENGTH;
     }
 
     @Override
     public StringGenerator complement() {
-        return new SedolStringGenerator(sansCheckDigitGenerator, !negate);
+        return new SedolStringGenerator(regexGenerator, !negate);
     }
 
     @Override
     public boolean match(String subject) {
-        boolean matches = IsinUtils.isValidSedolNsin(subject);
+        boolean matches = FinancialCodeUtils.isValidSedolNsin(subject, prefixLength);
         return matches != negate;
+    }
+
+    @Override
+    ChecksummedCodeStringGenerator instantiate(RegexStringGenerator generator) {
+        return new SedolStringGenerator(generator);
     }
 }
