@@ -55,14 +55,14 @@ public class NameRetriever implements Function<NameConstraintTypes, Stream<Strin
             .flatMap(filepathToNames);
     }
 
-    private Stream<String> generateCombinations(Stream<String> firstNames, Stream<String> lastNames) {
+    private static Stream<String> generateCombinations(Stream<String> firstNames, Stream<String> lastNames) {
         Set<String> lastNamesStored = lastNames.collect(Collectors.toSet());
         return firstNames
             .flatMap(first -> lastNamesStored.stream()
                 .map(last -> combineFirstAndLastName(first, last)));
     }
 
-    private String combineFirstAndLastName(final String first, final String last) {
+    private static String combineFirstAndLastName(final String first, final String last) {
         return first + " " + last;
     }
 
