@@ -6,11 +6,11 @@ import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.Node;
 
-import java.util.Stack;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class ContradictionTreeValidator {
-    private Node contradictingNode = null;
     private final ContradictionChecker contradictionChecker;
 
     @Inject
@@ -23,32 +23,46 @@ public class ContradictionTreeValidator {
      * @param decisionTree
      * @return the contradicting Node, or null if there are no contradictions.
      */
-    public Node reportContradictions(DecisionTree decisionTree) {
-        Node root = decisionTree.getRootNode();
-
-        return walkTree(root);
+    public Collection<Node> reportContradictions(DecisionTree decisionTree) {
+        return walkTree(decisionTree.getRootNode());
     }
 
-    private Node walkTree(Node root){
-        Stack<Node> stack = new Stack<>();
-        Node currentNode = root;
+    private Collection<Node> walkTree(ConstraintNode root){
+        Collection<Node> contradictingNodes = getContradictingNodes(root)
+            .stream()
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList());
 
-        while (!stack.empty() || currentNode != null){
-            if (currentNode != null) {
-                // push this node to the stack, so we can back track to it later.
-                stack.push(currentNode);
-                // get the next left node if it exists.
-                currentNode = currentNode.getFirstChild();
+        return contradictingNodes;
+    }
+
+    private Collection<Node> getContradictingNodes(ConstraintNode currentNode) {
+        if (currentNode.getDecisions().size() == 0) {
+            // Base Case
+            Node contradiction = findContradictionForNode(currentNode);
+            if (contradiction == null) {
+                return Collections.EMPTY_LIST;
             } else {
-                // we reached the bottom of the branch, and now need to back track
-                Node node = stack.pop();
-
-                if (node instanceof ConstraintNode) {
-                    findContradictionForNode((ConstraintNode)node);
-                }
+                return Collections.singleton(contradiction);
             }
+        } else {
+            // Recursive Case
+            // Only Constraint Nodes can be checked for contradictions, so add all the Constraint Nodes, which are
+            // always children of the children of the current ConstraintNode.
+            List<ConstraintNode> nodesToCheck = new ArrayList<>();
+            for (DecisionNode decisionNode : currentNode.getDecisions()) {
+                nodesToCheck.addAll(decisionNode.getOptions());
+            }
+            Collection<Node> contradictingNodes = new ArrayList<>();
+
+            contradictingNodes.add(findContradictionForNode(currentNode)); // Check from the current node.
+
+            for (ConstraintNode nodeToCheck : nodesToCheck) {
+                 contradictingNodes.addAll(getContradictingNodes(nodeToCheck));
+            }
+
+            return contradictingNodes;
         }
-        return contradictingNode;
     }
 
     /**
@@ -56,17 +70,16 @@ public class ContradictionTreeValidator {
      * @param nodeToCheck the node that should be checked for contradictions
      * @return return true if a contradiction is found.
      */
-    private boolean findContradictionForNode(ConstraintNode nodeToCheck){
+    private Node findContradictionForNode(ConstraintNode nodeToCheck){
         return recursiveFindContradiction(nodeToCheck, nodeToCheck);
     }
 
-    private boolean recursiveFindContradiction(Node nodeToCheck, Node currentNode){
+    private Node recursiveFindContradiction(Node nodeToCheck, Node currentNode){
         // can only check for contradictions on ConstraintNodes
         if (currentNode instanceof ConstraintNode && nodeToCheck instanceof ConstraintNode){
             boolean contradiction = contradictionChecker.checkContradictions((ConstraintNode)nodeToCheck, (ConstraintNode)currentNode);
             if (contradiction) {
-                contradictingNode = currentNode;
-                return true;
+                return currentNode;
             }
         }
 
@@ -74,10 +87,9 @@ public class ContradictionTreeValidator {
         if (currentNode instanceof ConstraintNode) {
             // If any of the nodes in an AND statement are contradictory, then the statement itself is considered one.
             for (DecisionNode node : ((ConstraintNode) currentNode).getDecisions()) {
-                boolean contradictionFound = recursiveFindContradiction(nodeToCheck, node);
+                boolean contradictionFound = recursiveFindContradiction(nodeToCheck, node) != null;
                 if (contradictionFound){
-                    contradictingNode = currentNode;
-                    return true;
+                    return currentNode;
                 }
             }
         }
@@ -85,15 +97,14 @@ public class ContradictionTreeValidator {
             // If all the nodes in an OR statement are contradictory, then the statement itself is considered one.
             boolean contradictionInAllOptions = ((DecisionNode) currentNode).getOptions()
                 .stream()
-                .allMatch(n -> recursiveFindContradiction(nodeToCheck, n));
+                .allMatch(n -> recursiveFindContradiction(nodeToCheck, n) != null);
             if (contradictionInAllOptions) {
-                contradictingNode = currentNode;
-                return true;
+                return currentNode;
             }
         }
 
         // no more nodes, and no contradiction found.
-       return false;
+        return null;
 
     }
 }
