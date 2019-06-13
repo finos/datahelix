@@ -10,7 +10,7 @@ public class JarExecuteTests {
 
     @Test
     void GenerateSuccessfullyFromJar() throws Exception {
-            ProcessBuilder pb = new ProcessBuilder("java", "-jar", "\"build/libs/generator.jar\"", "generate","-p=\"src/test/java/com/scottlogic/deg/orchestrator/endtoend/testprofile.profile.json\"","--max-rows=1");
+            ProcessBuilder pb = new ProcessBuilder("java", "-jar", "build/libs/generator.jar", "generate","-p=src/test/java/com/scottlogic/deg/orchestrator/endtoend/testprofile.profile.json","--max-rows=1");
             pb.redirectErrorStream(true);
             Process p = pb.start();
             BufferedReader BufferedSTDOUTReader = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -22,7 +22,6 @@ public class JarExecuteTests {
             p.waitFor();
             p.destroy();
 
-            assertEquals("Tell me the working directory",System.getProperty("user.dir"));
             assertEquals("\"Generation successful\"",STDOUT.get(0));
     }
     }
