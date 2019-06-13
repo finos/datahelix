@@ -1,6 +1,5 @@
 package com.scottlogic.deg.profile.reader.file;
 
-import com.scottlogic.deg.profile.reader.file.inputstream.ClasspathMapper;
 import com.scottlogic.deg.profile.reader.file.inputstream.PathMapper;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
