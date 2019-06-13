@@ -3,6 +3,7 @@ package com.scottlogic.deg.orchestrator.endtoend;
 import org.junit.jupiter.api.Test;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -21,8 +22,7 @@ public class JarExecuteTests {
             p.waitFor();
             p.destroy();
 
-            assertEquals(2,collectedOutput.size());
-            assertEquals("\"Generation successful\"",collectedOutput.get(1));
+            assertEquals(Arrays.asList("foo", "\"Generation successful\""), collectedOutput);
     }
 }
 
