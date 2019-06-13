@@ -1,33 +1,27 @@
 package com.scottlogic.deg.generator.validators;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.Node;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.Stack;
 
 
 public class ContradictionTreeValidator {
-
-    private final ConstraintReducer constraintReducer;
     private Node contradictingNode = null;
+    private final ContradictionChecker contradictionChecker;
 
     @Inject
-    public ContradictionTreeValidator(ConstraintReducer constraintReducer){
-        this.constraintReducer = constraintReducer;
+    public ContradictionTreeValidator(ContradictionChecker contradictionChecker){
+        this.contradictionChecker = contradictionChecker;
     }
 
     /**
      * Takes a DecisionTree, walks every node, and check every child of each node for contradictory constraints.
      * @param decisionTree
+     * @return the contradicting Node, or null if there are no contradictions.
      */
     public Node reportContradictions(DecisionTree decisionTree) {
         Node root = decisionTree.getRootNode();
@@ -39,24 +33,19 @@ public class ContradictionTreeValidator {
         Stack<Node> stack = new Stack<>();
         Node currentNode = root;
 
-        while(!stack.empty() || currentNode!=null){
-            if(currentNode!=null)
-            {
+        while (!stack.empty() || currentNode != null){
+            if (currentNode != null) {
                 // push this node to the stack, so we can back track to it later.
                 stack.push(currentNode);
                 // get the next left node if it exists.
                 currentNode = currentNode.getFirstChild();
-            }
-            else
-            {
+            } else {
                 // we reached the bottom of the branch, and now need to back track
                 Node node = stack.pop();
 
-                if(node instanceof ConstraintNode){
+                if (node instanceof ConstraintNode) {
                     findContradictionForNode((ConstraintNode)node);
                 }
-
-                currentNode = null;
             }
         }
         return contradictingNode;
@@ -74,7 +63,7 @@ public class ContradictionTreeValidator {
     private boolean recursiveFindContradiction(Node nodeToCheck, Node currentNode){
         // can only check for contradictions on ConstraintNodes
         if (currentNode instanceof ConstraintNode && nodeToCheck instanceof ConstraintNode){
-            boolean contradiction = checkContradictions((ConstraintNode)nodeToCheck, (ConstraintNode)currentNode);
+            boolean contradiction = contradictionChecker.checkContradictions((ConstraintNode)nodeToCheck, (ConstraintNode)currentNode);
             if (contradiction) {
                 contradictingNode = currentNode;
                 return true;
@@ -106,57 +95,5 @@ public class ContradictionTreeValidator {
         // no more nodes, and no contradiction found.
        return false;
 
-    }
-
-    /**
-     * Check for any contradictions
-     * @param leftNode
-     * @param rightNode
-     * @return
-     */
-    public boolean checkContradictions(ConstraintNode leftNode, ConstraintNode rightNode){
-
-        Collection<Field> leftFields = leftNode.getAtomicConstraints()
-            .stream()
-            .map(AtomicConstraint::getField)
-            .collect(Collectors.toCollection(ArrayList::new));
-
-        Collection<Field> rightFields = rightNode.getAtomicConstraints()
-            .stream()
-            .map(AtomicConstraint::getField)
-            .collect(Collectors.toCollection(ArrayList::new));
-
-        Collection<Field> combinedFields = Stream.concat(leftFields.stream(), rightFields.stream())
-            .collect(Collectors.toCollection(ArrayList::new));
-
-        Collection<AtomicConstraint> nodeToCheckConstraints = leftNode.getAtomicConstraints();
-        Collection<AtomicConstraint> currentNodeConstraints = rightNode.getAtomicConstraints();
-
-        Collection<AtomicConstraint> combinedConstraints = Stream.concat(
-            nodeToCheckConstraints.stream(),
-            currentNodeConstraints.stream()).collect(Collectors.toCollection(ArrayList::new));
-
-        Map<Field, Collection<AtomicConstraint>> map = new HashMap<>();
-        combinedConstraints.stream()
-            .filter(constraint -> combinedFields.contains(constraint.getField()))
-            .forEach(constraint -> addToConstraintsMap(map, constraint));
-
-        for (Map.Entry<Field, Collection<AtomicConstraint>> entry : map.entrySet()) {
-            Optional<FieldSpec> fieldSpec = constraintReducer.reduceConstraintsToFieldSpec(entry.getValue());
-
-            if (!fieldSpec.isPresent()){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private void addToConstraintsMap(Map<Field, Collection<AtomicConstraint>> map, AtomicConstraint constraint) {
-        if (!map.containsKey(constraint.getField())) {
-            map.put(constraint.getField(), new ArrayList<>());
-        }
-
-        map.get(constraint.getField())
-            .add(constraint);
     }
 }
