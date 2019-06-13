@@ -8,7 +8,6 @@ import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.profile.reader.file.CSVPathSetMapper;
 import com.scottlogic.deg.profile.reader.file.inputstream.PathMapper;
-import com.scottlogic.deg.profile.reader.file.parser.StringCSVPopulator;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 
 import java.math.BigDecimal;

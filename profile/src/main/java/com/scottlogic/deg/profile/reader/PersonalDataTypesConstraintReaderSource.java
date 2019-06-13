@@ -5,10 +5,8 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsInNameSetConstrain
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
-import com.scottlogic.deg.profile.reader.file.CSVPathSetMapper;
 import com.scottlogic.deg.profile.reader.file.inputstream.ClasspathMapper;
 import com.scottlogic.deg.profile.reader.file.names.NameRetrievalService;
-import com.scottlogic.deg.profile.reader.file.parser.StringCSVPopulator;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
 
