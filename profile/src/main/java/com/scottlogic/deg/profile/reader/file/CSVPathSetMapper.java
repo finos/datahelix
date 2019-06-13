@@ -32,13 +32,13 @@ public class CSVPathSetMapper implements Function<String, Stream<String>> {
             return CSVParser.parse(stream, Charset.defaultCharset(), CSVFormat.DEFAULT)
                 .getRecords()
                 .stream()
-                .map(this::firstElementFromRecord);
+                .map(CSVPathSetMapper::firstElementFromRecord);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
 
-    private String firstElementFromRecord(CSVRecord record) {
+    private static String firstElementFromRecord(CSVRecord record) {
         return record.get(0);
     }
 

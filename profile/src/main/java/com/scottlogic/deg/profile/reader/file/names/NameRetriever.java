@@ -2,6 +2,7 @@ package com.scottlogic.deg.profile.reader.file.names;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes;
 import com.scottlogic.deg.profile.reader.file.CSVPathSetMapper;
+import com.scottlogic.deg.profile.reader.file.inputstream.ClasspathMapper;
 
 import java.io.InputStream;
 import java.util.EnumMap;
@@ -19,6 +20,10 @@ public class NameRetriever implements Function<NameConstraintTypes, Stream<Strin
     private static final Map<NameConstraintTypes, Set<String>> NAME_TYPE_MAPPINGS = setupNameMappings();
 
     private final Function<String, Stream<String>> filepathToNames;
+
+    public NameRetriever() {
+        this(new ClasspathMapper());
+    }
 
     public NameRetriever(final Function<String, InputStream> pathMapper) {
         filepathToNames = new CSVPathSetMapper(pathMapper);
