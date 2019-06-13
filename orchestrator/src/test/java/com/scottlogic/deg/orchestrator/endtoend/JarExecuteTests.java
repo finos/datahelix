@@ -13,16 +13,16 @@ public class JarExecuteTests {
             ProcessBuilder pb = new ProcessBuilder("java", "-jar", "build/libs/generator.jar", "generate", "-p=src/test/java/com/scottlogic/deg/orchestrator/endtoend/testprofile.profile.json", "--max-rows=1");
             Process p = pb.start();
             BufferedReader BufferedSTDOUTReader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            List<String> STDOUT = new ArrayList<String>();
+            List<String> collectedOutput = new ArrayList<String>();
             String line;
             while ((line = BufferedSTDOUTReader.readLine()) != null) {
-                STDOUT.add(line);
+                collectedOutput.add(line);
             }
             p.waitFor();
             p.destroy();
 
-            assertEquals(2,STDOUT.size());
-            assertEquals("\"Generation successful\"",STDOUT.get(1));
+            assertEquals(2,collectedOutput.size());
+            assertEquals("\"Generation successful\"",collectedOutput.get(1));
     }
 }
 
