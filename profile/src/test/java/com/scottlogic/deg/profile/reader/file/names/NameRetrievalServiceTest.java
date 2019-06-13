@@ -11,14 +11,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,18 +28,13 @@ public class NameRetrievalServiceTest {
     private NameRetrievalService service;
 
     @Mock
-    private Function<String, Set<String>> mapper;
+    private Function<String, InputStream> mapper;
 
     private void mockNames(String fileName, String... names) {
-        InputStream mockStream = mock(InputStream.class);
-        when(mapper.apply(fileName)).thenReturn(SetUtils.setOf(names));
-    }
-
-    @Test
-    public void retrieveValuesFirst() {
-        mockFirstNames();
-        Set<String> names = service.retrieveValues(NameConstraintTypes.FIRST);
-        assertEquals(names, SetUtils.setOf("Mark", "Paul", "Jolene", "Tanya"));
+        String combinedName = Stream.of(names)
+            .reduce((a,b) -> String.join("\n", a, b))
+            .orElseThrow(IllegalStateException::new);
+        when(mapper.apply(fileName)).thenReturn(new ByteArrayInputStream(combinedName.getBytes(Charset.defaultCharset())));
     }
 
     private void mockFirstNames() {
@@ -48,10 +43,10 @@ public class NameRetrievalServiceTest {
     }
 
     @Test
-    public void retrieveValuesLast() {
-        mockLastNames();
-        Set<String> names = service.retrieveValues(NameConstraintTypes.LAST);
-        assertEquals(names, SetUtils.setOf("Gore", "May"));
+    public void retrieveValuesFirst() {
+        mockFirstNames();
+        Set<String> names = service.retrieveValues(NameConstraintTypes.FIRST);
+        assertEquals(SetUtils.setOf("Mark", "Paul", "Jolene", "Tanya"), names);
     }
 
     private void mockLastNames() {
@@ -59,17 +54,40 @@ public class NameRetrievalServiceTest {
     }
 
     @Test
-    public void retrieveValuesFull() {
+    public void retrieveValuesLast() {
+        mockLastNames();
+        Set<String> names = service.retrieveValues(NameConstraintTypes.LAST);
+        assertEquals(SetUtils.setOf("Gore", "May"), names);
+    }
+
+    private void mockAllNames() {
         mockFirstNames();
         mockLastNames();
+    }
+
+    @Test
+    public void retrieveValuesFull() {
+        mockAllNames();
         Set<String> names = service.retrieveValues(NameConstraintTypes.FULL);
-        assertEquals(names, SetUtils.setOf("Mark Gore", "Paul Gore", "Jolene Gore", "Tanya Gore",
-            "Mark May", "Paul May", "Jolene May", "Tanya May"));
+        assertEquals(SetUtils.setOf("Mark Gore", "Paul Gore", "Jolene Gore", "Tanya Gore",
+            "Mark May", "Paul May", "Jolene May", "Tanya May"), names);
     }
 
     @ParameterizedTest
     @EnumSource(NameConstraintTypes.class)
     public void testAllValuesGiveValidResult(NameConstraintTypes config) {
+        switch (config) {
+            case FIRST:
+                mockFirstNames();
+                break;
+            case LAST:
+                mockLastNames();
+                break;
+            case FULL:
+                mockAllNames();
+                break;
+        }
+
         Set<String> result = service.retrieveValues(config);
         assertNotNull(result);
     }
