@@ -228,7 +228,7 @@ public class GeneralTestStep {
         Assert.assertThat("No data was generated but some was expected", data, not(empty()));
     }
 
-    @Then("{long} rows of data are generated")
+    @Then("{long} row(s) of data is/are generated")
     public void theExpectedNumberOfRowsAreGenerated(long expectedNumberOfRows) {
         List <List<Object>> data = cucumberTestHelper.generateAndGetData();
 
@@ -239,7 +239,7 @@ public class GeneralTestStep {
             equalTo(expectedNumberOfRows));
     }
 
-    @Given("the generator can generate at most {long} rows")
+    @Given("the generator can generate at most {long} row(s)")
     public void theGeneratorCanGenerateAtMostRows(long maxNumberOfRows) {
         state.maxRows = maxNumberOfRows;
     }

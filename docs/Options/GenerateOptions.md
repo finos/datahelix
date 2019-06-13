@@ -1,6 +1,10 @@
 # Generate Options
 Option switches are case-sensitive, arguments are case-insensitive
 
+* `--profile-file=<path>` (or `-p <path>`)
+    * Path to the input profile file.
+* `--output-path=<path>` (or `-o <path>`)
+    * Path to the output file.  If not specified, output will be to standard output.
 * `--replace`
     * Overwrite/replace existing output files.
 * `-n <rows>` or `--max-rows <rows>`

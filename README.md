@@ -21,6 +21,8 @@ The generator has been written in Java, allowing it to work on Microsoft Windows
 
 The generator is distributed as a JAR file, with the latest release always available from the [GitHub releases page](https://github.com/ScottLogic/datahelix/releases/). The project is currently in beta and under active development. You can expect breaking changes in future releases, and new features too!
 
+You are also welcome to download the source code and build the generator yourself.  To do so, follow the instructions for [downloading and building it using a Java IDE](generator/docs/GeneratorSetup.md), or for [downloading and building it using Docker](generator/docs/DockerSetup.md).
+
 Your feedback on the beta would be greatly appreciated. If you have any issues, feature requests, or ideas, please share them via the [GitHub issues page](https://github.com/ScottLogic/datahelix/issues).
 
 ## Creating your first profile
@@ -46,7 +48,7 @@ We'll start by generating data for a trivial schema. Using your favourite text e
 Now place the `generator.jar` file (downloaded from the [GitHub releases page](https://github.com/ScottLogic/datahelix/releases/)) in the same folder as the profile, open up a terminal, and execute the following:
 
 ~~~
-$ java -jar generator.jar generate --max-rows=100 --allow-untyped-fields --replace profile.json output.csv
+$ java -jar generator.jar generate --max-rows=100 --allow-untyped-fields --replace --profile-file=profile.json --output-path=output.csv
 Generation started at: 08:02:52
 
 Number of rows | Velocity (rows/sec) | Velocity trend
@@ -56,7 +58,7 @@ Number of rows | Velocity (rows/sec) | Velocity trend
 
 <!-- bug velocity not right -->
 
-The generator is a command line tool which reads a profile, and outputs data in CSV format. The `--max-rows=100` option tells the generator to create 100 rows of data, and the `--replace` option tells it to overwrite previously generated files. The generator outputs progress, in rows per second, which is useful when generating large volumes of data.
+The generator is a command line tool which reads a profile, and outputs data in CSV format. The `--max-rows=100` option tells the generator to create 100 rows of data, and the `--replace` option tells it to overwrite previously generated files.  The compulsary `--profile-file` option specifies the name of the input profile, and the `--output-path` option specifies the location to write the output to.  In `generate` mode `--output-path` is optional; the generator will default to standard output if it is not supplied.  By default the generator outputs progress, in rows per second, to the standard error output.  This can be useful when generating large volumes of data.
 
 If you open up `output.csv` you'll see the following:
 
@@ -137,7 +139,7 @@ The current profile outputs random text strings for the `firstName` field. Depen
 The generator has been designed to be fast and efficient, allowing you to generate large quantities of test and simulation data. If you supply a large number for the `--max-rows` option, the data will be streamed to the output file, with the progress / velocity reported during generation.
 
 ```
-$ java -jar generator.jar generate --max-rows=10000 --replace profile.json output.csv
+$ java -jar generator.jar generate --max-rows=10000 --replace --profile-file=profile.json --output-path=output.csv
 Generation started at: 16:41:44
 
 Number of rows | Velocity (rows/sec) | Velocity trend
@@ -301,7 +303,7 @@ The generator supports a number of different generation modes:
 The mode is specified via the `--generation-type` option. The following example outputs 'interesting' values for the current profile:
 
 ~~~
-$ java -jar generator.jar generate --generation-type interesting --replace profile.json output.csv
+$ java -jar generator.jar generate --generation-type interesting --replace --profile-file=profile.json --output-path=output.csv
 ~~~
 
 In this case it generates just 14 rows where you can see that it is exploring the boundary values of the constraints:
@@ -331,7 +333,7 @@ firstName,age,nationalInsurance
 One of the most powerful features of the generator is its ability to generate data that violates constraints. To create invalid data use the `violate` command. This time you need to specify an output directory rather than a file:
 
 ~~~
-$ java -jar generator.jar violate --max-rows=100 --replace profile.json out
+$ java -jar generator.jar violate --max-rows=100 --replace --profile-file=profile.json --output-path=out
 ~~~
 
 When the above command has finished, you'll find that the generator has created an `out` directory which has four files:
@@ -380,7 +382,7 @@ However, it might be a surprise to see nulls, numbers and dates as values for th
 
 ~~~
 $ java -jar generator.jar violate --dont-violate=ofType \
-  --max-rows=100 --replace profile.json out
+  --max-rows=100 --replace --profile-file=profile.json --output-path=out
 ~~~
 
 Or, alternatively, you can re-arrange your constraints so that the ones that define types / null, are grouped as a single rule. After By re-grouping constraints, the following output, with random strings that violate the regex constraint, is generated:
