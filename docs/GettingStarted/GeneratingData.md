@@ -9,22 +9,22 @@ For first time setup, see the [Generator setup instructions](../generator/docs/G
 
 To generate data run the following command from the command line
 
-`java -jar <path to JAR file> generate [options] "<path to profile>" "<desired output path>"`
+`java -jar <path to JAR file> generate [options] --profile-file="<path to profile>" --output-path="<desired output path>"`
 
 * `[path to JAR file]` the location of generator.jar
 * `[options]` optionally a combination of [options](../Options/GenerateOptions.md) to configure how the command operates
 * `<path to profile>` the location of the JSON profile file
-* `<desired output path>` the location of the generated data
+* `<desired output path>` the location of the generated data.  If this option is omitted, generated data will be streamed to the standard output.
 
 ## Example - Generating Valid Data
 
 Using the [Sample Profile](./ExampleProfile1.json) that was created in the [previous](./CreatingAProfile.md) section, run the following command:
 
- `java -jar <path to JAR file> generate "<path to ExampleProfile1.json>" "<path to desired output file>"`
+ `java -jar <path to JAR file> generate --profile-file="<path to ExampleProfile1.json>" --output-path="<path to desired output file>"`
 
 * `<path to desired output file>` the file path to the desired output file 
 
-With no options this should yield the following data:
+With no other options this should yield the following data:
 
 |Column 1       |Column 2     |
 |:-------------:|:-----------:|
@@ -43,7 +43,7 @@ Using the `violate` command produces one file per rule violated along with a man
 
 Using the [Sample Profile](./ExampleProfile1.json) that was created in the [first](./CreatingAProfile.md) section, run the following command: 
 
-`java -jar <path to JAR file> violate "<path to ExampleProfile1.json>" "<path to desired output directory>"`
+`java -jar <path to JAR file> violate --profile-file="<path to ExampleProfile1.json>" --output-path="<path to desired output directory>"`
 
 * `<path to desired output directory>` the location of the folder in which the generated files will be saved
 

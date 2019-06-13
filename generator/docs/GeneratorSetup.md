@@ -88,7 +88,7 @@ Build the tool with all its dependencies:
 
 To generate valid data run the following command from the command line:
 
-`java -jar <path to JAR file> generate [options] "<path to profile>" "<desired output path>"`
+`java -jar <path to JAR file> generate [options] --profile-file="<path to profile>" --output-path="<desired output path>"`
 
 * `[path to JAR file]` - the location of `generator.jar`.
 * `[options]` - optionally a combination of [options](../../docs/Options/GenerateOptions.md) to configure how the command operates.
@@ -97,7 +97,7 @@ To generate valid data run the following command from the command line:
 
 To generate violating data run the following command from the command line:
 
-`java -jar <path to JAR file> violate [options] "<path to profile>" "<desired output folder>"`
+`java -jar <path to JAR file> violate [options] --profile-file="<path to profile>" --output-path="<desired output folder>"`
 
 * `[path to JAR file]` - the location of `generator.jar`.
 * `[options]` - a combination of any (or none) of [the options documented here](../../docs/Options/ViolateOptions.md) to configure how the command operates.

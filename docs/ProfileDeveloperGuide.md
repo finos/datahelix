@@ -164,8 +164,6 @@ When this is specified as the type of a field, the data generated will contain l
 
 Data Helix currently only supports ISIN codes in the `GB` and `US` ranges.  Only codes in these ranges will be generated.
 
-There are currently limitations on using financial code types with regular expression constraints.  See [Frequently Asked Questions](FrequentlyAskedQuestions.md) for details.
-
 ## Personal Data Types
 
 Data Helix can generate data containing typical real names, based on recent demographic data, by defining a field as being of the types `firstname`, `lastname` or `fullname`.  Name fields are strings and can be combined with other textual constraints to generate, for example, first names that are longer than 6 letters.

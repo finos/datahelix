@@ -10,12 +10,12 @@ for manual inspection, in the form of a gv file.
 
 To visualise the decision tree run the following command from the command line:
 
-`java -jar <path to JAR file> visualise [options] "<path to profile>" "<path to desired output GV file>"`
+`java -jar <path to JAR file> visualise [options] --profile-file="<path to profile>" --output-path="<path to desired output GV file>"`
 
 * `[path to JAR file]` the location of generator.jar
 * `[options]` optionally a combination of [options](../Options/VisualiseOptions.md) to configure how the command operates
 * `<path to profile>` the location of the JSON profile file
-* `<path to desired output directory>` the location of the folder for the resultant GV file of the tree
+* `<path to desired output GV file>` the location of the folder for the resultant GV file of the tree
 
 ## Example
 

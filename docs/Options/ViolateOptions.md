@@ -1,6 +1,10 @@
 # Violate Options
 Option switches are case-sensitive, arguments are case-insensitive
 
+* `--profile-file=<path>` (or `-p <path>`)
+   * Path to input profile file.
+* `--output-path=<path>` (or `-o <path>`)
+   * Path to output directory.
 * `--replace`
     * Overwrite/replace existing output files.
 * `--dont-violate` <epistemic constraints...>
