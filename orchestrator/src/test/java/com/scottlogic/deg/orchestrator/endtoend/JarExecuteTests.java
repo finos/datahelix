@@ -22,6 +22,7 @@ public class JarExecuteTests {
             p.waitFor();
             p.destroy();
 
+            assertEquals("Tell me the working directory",System.getProperty("user.dir"));
             assertEquals("\"Generation successful\"",STDOUT.get(0));
     }
     }
