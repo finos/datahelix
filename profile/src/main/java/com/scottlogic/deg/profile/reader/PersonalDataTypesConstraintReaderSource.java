@@ -33,7 +33,7 @@ public class PersonalDataTypesConstraintReaderSource implements ConstraintReader
             Set<Object> objects = nameRetrievalService.retrieveValues(type)
                 .stream()
                 .map(NameHolder::getName)
-                .map(Object.class::cast)
+                .map(ConstraintReaderHelpers::downcastToObject)
                 .collect(Collectors.toSet());
 
             Field field = fields.getByName(dto.field);

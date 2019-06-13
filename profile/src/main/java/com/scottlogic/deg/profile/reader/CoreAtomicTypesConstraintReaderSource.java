@@ -1,17 +1,26 @@
 package com.scottlogic.deg.profile.reader;
 
+import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedDateGranularity;
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.util.Defaults;
+import com.scottlogic.deg.profile.reader.file.CSVSetMapper;
+import com.scottlogic.deg.profile.reader.file.inputstream.PathMapper;
+import com.scottlogic.deg.profile.reader.file.parser.CSVRecordParser;
+import com.scottlogic.deg.profile.reader.file.parser.StringCSVPopulator;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMapEntrySource {
@@ -302,7 +311,30 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                         ),
                         rules
                     )
+            ),
+            new ConstraintReaderMapEntry(
+                AtomicConstraintType.IS_FROM_FILE.getText(),
+                ".*",
+                (dto, fields, rules) -> {
+                    Function<String, Set<String>> pathToStringMapper = setupPathToStringMapper();
+                    String path = ConstraintReaderHelpers.getValidatedValue(dto, String.class);
+                    String csvPath = path + ".csv";
+                    Set<Object> strings = pathToStringMapper.apply(csvPath)
+                        .stream()
+                        .map(ConstraintReaderHelpers::downcastToObject)
+                        .collect(Collectors.toSet());
+
+                    Field field = fields.getByName(dto.field);
+                    return new AndConstraint(
+                        new IsInSetConstraint(field, strings, rules),
+                        new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.STRING, rules)
+                    );
+                }
             )
         );
+    }
+
+    private Function<String, Set<String>> setupPathToStringMapper() {
+        return new CSVSetMapper<>(new PathMapper(), new StringCSVPopulator());
     }
 }

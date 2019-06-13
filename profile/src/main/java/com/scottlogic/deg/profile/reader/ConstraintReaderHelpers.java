@@ -250,4 +250,8 @@ public class ConstraintReaderHelpers {
 
         return value;
     }
+
+    public static <T> Object downcastToObject(T value) {
+        return value;
+    }
 }

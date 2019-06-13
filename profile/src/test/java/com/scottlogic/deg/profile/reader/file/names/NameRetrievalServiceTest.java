@@ -42,31 +42,31 @@ public class NameRetrievalServiceTest {
 
     @Test
     public void retrieveValuesFirst() {
-        mockFirst();
+        mockFirstNames();
         Set<NameHolder> names = service.retrieveValues(NameConstraintTypes.FIRST);
         assertEquals(names, namesToHolders("Mark", "Paul", "Jolene", "Tanya"));
     }
 
-    private void mockFirst() {
+    private void mockFirstNames() {
         mockNames("names/firstname_male.csv", "Mark", "Paul");
         mockNames("names/firstname_female.csv", "Jolene", "Tanya");
     }
 
     @Test
     public void retrieveValuesLast() {
-        mockLast();
+        mockLastNames();
         Set<NameHolder> names = service.retrieveValues(NameConstraintTypes.LAST);
         assertEquals(names, namesToHolders("Gore", "May"));
     }
 
-    private void mockLast() {
+    private void mockLastNames() {
         mockNames("names/surname.csv", "Gore", "May");
     }
 
     @Test
     public void retrieveValuesFull() {
-        mockFirst();
-        mockLast();
+        mockFirstNames();
+        mockLastNames();
         Set<NameHolder> names = service.retrieveValues(NameConstraintTypes.FULL);
         assertEquals(names, namesToHolders("Mark Gore", "Paul Gore", "Jolene Gore", "Tanya Gore",
             "Mark May", "Paul May", "Jolene May", "Tanya May"));

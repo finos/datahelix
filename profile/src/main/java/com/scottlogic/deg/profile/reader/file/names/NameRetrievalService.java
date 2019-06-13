@@ -16,10 +16,10 @@ public class NameRetrievalService {
 
     private static final Map<NameConstraintTypes, Set<String>> NAME_TYPE_MAPPINGS = setupNameMappings();
 
-    private final Function<String, Set<NameHolder>> mapper;
+    private final Function<String, Set<NameHolder>> filepathToNames;
 
-    public NameRetrievalService(final Function<String, Set<NameHolder>> mapper) {
-        this.mapper = mapper;
+    public NameRetrievalService(final Function<String, Set<NameHolder>> filepathToNames) {
+        this.filepathToNames = filepathToNames;
     }
 
     private static Map<NameConstraintTypes, Set<String>> setupNameMappings() {
@@ -44,7 +44,7 @@ public class NameRetrievalService {
 
     private Set<NameHolder> generateSingles(Set<String> sources) {
         return sources.stream()
-            .map(mapper)
+            .map(filepathToNames)
             .reduce(new HashSet<>(), this::populateSet);
     }
 
