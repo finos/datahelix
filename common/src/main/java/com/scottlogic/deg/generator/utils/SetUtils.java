@@ -26,4 +26,11 @@ public class SetUtils {
     public static <T> Set<T> setOf(T ... elements) {
         return Stream.of(elements).collect(Collectors.toSet());
     }
+
+    public static <T> Set<T> populateSet(Set<T> a, Set<T> b) {
+        if (b != null) {
+            a.addAll(b);
+        }
+        return a;
+    }
 }

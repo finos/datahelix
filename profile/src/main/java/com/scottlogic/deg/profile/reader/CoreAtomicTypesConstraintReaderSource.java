@@ -333,6 +333,6 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
     }
 
     private Function<String, Set<String>> setupPathToStringMapper() {
-        return new CSVPathSetMapper<>(new PathMapper(), new StringCSVPopulator());
+        return new CSVPathSetMapper(new PathMapper());
     }
 }

@@ -2,6 +2,7 @@ package com.scottlogic.deg.profile.reader.file.names;
 
 
 import com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes;
+import com.scottlogic.deg.generator.utils.SetUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -27,24 +28,18 @@ public class NameRetrievalServiceTest {
     private NameRetrievalService service;
 
     @Mock
-    private Function<String, Set<NameHolder>> mapper;
+    private Function<String, Set<String>> mapper;
 
     private void mockNames(String fileName, String... names) {
         InputStream mockStream = mock(InputStream.class);
-        when(mapper.apply(fileName)).thenReturn(namesToHolders(names));
-    }
-
-    private Set<NameHolder> namesToHolders(String... names) {
-        return Stream.of(names)
-            .map(NameHolder::new)
-            .collect(Collectors.toSet());
+        when(mapper.apply(fileName)).thenReturn(SetUtils.setOf(names));
     }
 
     @Test
     public void retrieveValuesFirst() {
         mockFirstNames();
-        Set<NameHolder> names = service.retrieveValues(NameConstraintTypes.FIRST);
-        assertEquals(names, namesToHolders("Mark", "Paul", "Jolene", "Tanya"));
+        Set<String> names = service.retrieveValues(NameConstraintTypes.FIRST);
+        assertEquals(names, SetUtils.setOf("Mark", "Paul", "Jolene", "Tanya"));
     }
 
     private void mockFirstNames() {
@@ -55,8 +50,8 @@ public class NameRetrievalServiceTest {
     @Test
     public void retrieveValuesLast() {
         mockLastNames();
-        Set<NameHolder> names = service.retrieveValues(NameConstraintTypes.LAST);
-        assertEquals(names, namesToHolders("Gore", "May"));
+        Set<String> names = service.retrieveValues(NameConstraintTypes.LAST);
+        assertEquals(names, SetUtils.setOf("Gore", "May"));
     }
 
     private void mockLastNames() {
@@ -67,15 +62,15 @@ public class NameRetrievalServiceTest {
     public void retrieveValuesFull() {
         mockFirstNames();
         mockLastNames();
-        Set<NameHolder> names = service.retrieveValues(NameConstraintTypes.FULL);
-        assertEquals(names, namesToHolders("Mark Gore", "Paul Gore", "Jolene Gore", "Tanya Gore",
+        Set<String> names = service.retrieveValues(NameConstraintTypes.FULL);
+        assertEquals(names, SetUtils.setOf("Mark Gore", "Paul Gore", "Jolene Gore", "Tanya Gore",
             "Mark May", "Paul May", "Jolene May", "Tanya May"));
     }
 
     @ParameterizedTest
     @EnumSource(NameConstraintTypes.class)
     public void testAllValuesGiveValidResult(NameConstraintTypes config) {
-        Set<NameHolder> result = service.retrieveValues(config);
+        Set<String> result = service.retrieveValues(config);
         assertNotNull(result);
     }
 }

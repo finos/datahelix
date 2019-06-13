@@ -1,27 +1,28 @@
 package com.scottlogic.deg.profile.reader.file;
 
+import com.scottlogic.deg.profile.reader.file.parser.StringCSVPopulator;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.util.Set;
 import java.util.function.Function;
 
-public class CSVPathSetMapper<T> implements Function<String, Set<T>> {
+public class CSVPathSetMapper implements Function<String, Set<String>> {
 
     private final Function<String, InputStream> pathStreamMapper;
 
-    private final Function<InputStream, Set<T>> streamSetMapper;
+    private final Function<InputStream, Set<String>> streamSetMapper;
 
-    public CSVPathSetMapper(final Function<String, InputStream> pathStreamMapper,
-                            final Function<InputStream, Set<T>> streamSetMapper) {
+    public CSVPathSetMapper(final Function<String, InputStream> pathStreamMapper) {
         this.pathStreamMapper = pathStreamMapper;
-        this.streamSetMapper = streamSetMapper;
+        streamSetMapper = new StringCSVPopulator();
     }
 
     @Override
-    public Set<T> apply(String path) {
+    public Set<String> apply(String path) {
         InputStream stream = pathStreamMapper.apply(path);
-        Set<T> result = streamSetMapper.apply(stream);
+        Set<String> result = streamSetMapper.apply(stream);
         closeQuietly(stream);
         return result;
     }

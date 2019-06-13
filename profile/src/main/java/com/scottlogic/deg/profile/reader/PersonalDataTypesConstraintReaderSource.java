@@ -7,9 +7,8 @@ import com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.profile.reader.file.CSVPathSetMapper;
 import com.scottlogic.deg.profile.reader.file.inputstream.ClasspathMapper;
-import com.scottlogic.deg.profile.reader.file.names.NameCSVPopulator;
-import com.scottlogic.deg.profile.reader.file.names.NameHolder;
 import com.scottlogic.deg.profile.reader.file.names.NameRetrievalService;
+import com.scottlogic.deg.profile.reader.file.parser.StringCSVPopulator;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
 
@@ -23,8 +22,7 @@ public class PersonalDataTypesConstraintReaderSource implements ConstraintReader
     private final NameRetrievalService nameRetrievalService;
 
     public PersonalDataTypesConstraintReaderSource() {
-        nameRetrievalService = new NameRetrievalService(
-            new CSVPathSetMapper<>(new ClasspathMapper(), new NameCSVPopulator()));
+        nameRetrievalService = new NameRetrievalService(new ClasspathMapper());
     }
 
     public Stream<ConstraintReaderMapEntry> getConstraintReaderMapEntries() {
@@ -32,7 +30,6 @@ public class PersonalDataTypesConstraintReaderSource implements ConstraintReader
             NameConstraintTypes type = lookupNameConstraint(dto);
             Set<Object> objects = nameRetrievalService.retrieveValues(type)
                 .stream()
-                .map(NameHolder::getName)
                 .map(ConstraintReaderHelpers::downcastToObject)
                 .collect(Collectors.toSet());
 
