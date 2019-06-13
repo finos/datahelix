@@ -9,7 +9,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class IsinTest {
+public class FinancialCodeUtilsTests {
 
     private static final List<String> VALID_ISINS = Arrays.asList(
             "US0378331005", "US5949181045", "US38259P5089",
@@ -31,7 +31,7 @@ public class IsinTest {
     @Test
     public void testCorrectCheckDigitIsCalculated() {
         for (String isin : VALID_ISINS) {
-            final char checkDigit = IsinUtils.calculateIsinCheckDigit(isin.substring(0, 11));
+            final char checkDigit = FinancialCodeUtils.calculateIsinCheckDigit(isin.substring(0, 11));
             assertThat(isin.charAt(11), equalTo(checkDigit));
         }
     }
@@ -39,28 +39,28 @@ public class IsinTest {
     @Test
     public void testValidIsinsAreVerified() {
         for (String isin : VALID_ISINS) {
-            assertThat(IsinUtils.isValidIsin(isin), is(true));
+            assertThat(FinancialCodeUtils.isValidIsin(isin), is(true));
         }
     }
 
     @Test
     public void testIncorrectCheckDigitIsinsAreVerifiedInvalid() {
         for (String isin : INCORRECT_CHECK_DIGIT_ISINS) {
-            assertThat(IsinUtils.isValidIsin(isin), is(false));
+            assertThat(FinancialCodeUtils.isValidIsin(isin), is(false));
         }
     }
 
     @Test
     public void testIncorrectSedolCheckDigitIsinsAreVerifiedInvalid() {
         for (String isin : INCORRECT_SEDOL_ISINS) {
-            assertThat(IsinUtils.isValidIsin(isin), is(false));
+            assertThat(FinancialCodeUtils.isValidIsin(isin), is(false));
         }
     }
 
     @Test
     public void testCusipCheckDigitsCorrectlyCalculated() {
         for (String isin : INCORRECT_CUSIP_ISINS) {
-            assertThat(IsinUtils.isValidIsin(isin), is(false));
+            assertThat(FinancialCodeUtils.isValidIsin(isin), is(false));
         }
     }
 }
