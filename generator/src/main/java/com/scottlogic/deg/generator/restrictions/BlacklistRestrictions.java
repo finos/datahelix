@@ -10,7 +10,7 @@ public class BlacklistRestrictions implements TypedRestrictions {
     }
 
     public Set<Object> getBlacklist() {
-        return this.blacklist;
+        return blacklist;
     }
 
     @Override
@@ -21,5 +21,10 @@ public class BlacklistRestrictions implements TypedRestrictions {
     @Override
     public boolean isInstanceOf(Object o) {
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("NOT %s", blacklist);
     }
 }

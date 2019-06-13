@@ -24,6 +24,10 @@ public class DateTimeRestrictions extends AbstractTypedRestrictions {
         return granularity;
     }
 
+    @Override
+    public String toString() {
+        return "min=" + min + ", max=" + max + " " + granularity.name();
+    }
 
     @Override
     protected IsOfTypeConstraint.Types getType() {
@@ -76,6 +80,12 @@ public class DateTimeRestrictions extends AbstractTypedRestrictions {
 
     public static class DateTimeLimit {
         private final OffsetDateTime limit;
+
+        @Override
+        public String toString() {
+            return String.format("%s%s",limit, inclusive ? " inclusive" : "");
+        }
+
         private final boolean inclusive;
 
         public DateTimeLimit(OffsetDateTime limit, boolean inclusive) {

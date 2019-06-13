@@ -1,16 +1,13 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.utils.SetUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class SetRestrictions implements Restrictions {
-    private static final SetRestrictions neutral = new SetRestrictions(null);
-
+    @NotNull
     private final Set<Object> whitelist;
 
     public Set<Object> getWhitelist() {
@@ -21,24 +18,20 @@ public class SetRestrictions implements Restrictions {
         this.whitelist = whitelist;
     }
 
-    private boolean isEmpty(){
-        return (this.whitelist == null || this.whitelist.isEmpty());
-    }
-
     public static SetRestrictions allowNoValues() {
         return fromWhitelist(Collections.emptySet());
     }
 
-    public static SetRestrictions fromWhitelist(@NotNull Set<Object> whitelist) {
+    public static SetRestrictions fromWhitelist(Set<Object> whitelist) {
         return new SetRestrictions(whitelist);
     }
 
     @Override
     public String toString() {
-        if (isEmpty()) {
-            return "<empty>";
+        if (whitelist.isEmpty()) {
+            return "<No Values>";
         }
-        return String.format("IN %s", Objects.toString(whitelist));
+        return String.format("IN %s", whitelist);
     }
 
     @Override
