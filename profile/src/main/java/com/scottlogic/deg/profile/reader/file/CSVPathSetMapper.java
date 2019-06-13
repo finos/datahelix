@@ -6,14 +6,14 @@ import java.io.UncheckedIOException;
 import java.util.Set;
 import java.util.function.Function;
 
-public class CSVSetMapper<T> implements Function<String, Set<T>> {
+public class CSVPathSetMapper<T> implements Function<String, Set<T>> {
 
     private final Function<String, InputStream> pathStreamMapper;
 
     private final Function<InputStream, Set<T>> streamSetMapper;
 
-    public CSVSetMapper(final Function<String, InputStream> pathStreamMapper,
-                        final Function<InputStream, Set<T>> streamSetMapper) {
+    public CSVPathSetMapper(final Function<String, InputStream> pathStreamMapper,
+                            final Function<InputStream, Set<T>> streamSetMapper) {
         this.pathStreamMapper = pathStreamMapper;
         this.streamSetMapper = streamSetMapper;
     }

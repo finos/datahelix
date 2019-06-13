@@ -6,13 +6,11 @@ import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.util.Defaults;
-import com.scottlogic.deg.profile.reader.file.CSVSetMapper;
+import com.scottlogic.deg.profile.reader.file.CSVPathSetMapper;
 import com.scottlogic.deg.profile.reader.file.inputstream.PathMapper;
-import com.scottlogic.deg.profile.reader.file.parser.CSVRecordParser;
 import com.scottlogic.deg.profile.reader.file.parser.StringCSVPopulator;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 
-import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Collections;
@@ -335,6 +333,6 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
     }
 
     private Function<String, Set<String>> setupPathToStringMapper() {
-        return new CSVSetMapper<>(new PathMapper(), new StringCSVPopulator());
+        return new CSVPathSetMapper<>(new PathMapper(), new StringCSVPopulator());
     }
 }
