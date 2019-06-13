@@ -6,7 +6,7 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.profile.reader.file.inputstream.ClasspathMapper;
-import com.scottlogic.deg.profile.reader.file.names.NameRetrievalService;
+import com.scottlogic.deg.profile.reader.file.names.NameRetriever;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
 
@@ -17,17 +17,13 @@ import java.util.stream.Stream;
 
 public class PersonalDataTypesConstraintReaderSource implements ConstraintReaderMapEntrySource {
 
-    private final NameRetrievalService nameRetrievalService;
-
-    public PersonalDataTypesConstraintReaderSource() {
-        nameRetrievalService = new NameRetrievalService(new ClasspathMapper());
-    }
-
     public Stream<ConstraintReaderMapEntry> getConstraintReaderMapEntries() {
         ConstraintReader nameConstraintReader = (dto, fields, rules) -> {
             NameConstraintTypes type = lookupNameConstraint(dto);
-            Set<Object> objects = nameRetrievalService.retrieveValues(type)
-                .stream()
+            NameRetriever nameRetriever = new NameRetriever(new ClasspathMapper());
+
+            Set<Object> objects = Stream.of(type)
+                .map(nameRetriever)
                 .map(ConstraintReaderHelpers::downcastToObject)
                 .collect(Collectors.toSet());
 

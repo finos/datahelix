@@ -313,11 +313,11 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                 AtomicConstraintType.IS_FROM_FILE.getText(),
                 ".*",
                 (dto, fields, rules) -> {
-                    Function<String, Set<String>> pathToStringMapper = setupPathToStringMapper();
+                    Function<String, Stream<String>> pathToStringMapper = setupPathToStringMapper();
                     String path = ConstraintReaderHelpers.getValidatedValue(dto, String.class);
                     String csvPath = path + ".csv";
-                    Set<Object> strings = pathToStringMapper.apply(csvPath)
-                        .stream()
+                    Set<Object> strings = Stream.of(csvPath)
+                        .flatMap(pathToStringMapper)
                         .map(ConstraintReaderHelpers::downcastToObject)
                         .collect(Collectors.toSet());
 
@@ -331,7 +331,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
         );
     }
 
-    private Function<String, Set<String>> setupPathToStringMapper() {
+    private Function<String, Stream<String>> setupPathToStringMapper() {
         return new CSVPathSetMapper(new PathMapper());
     }
 }

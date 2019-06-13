@@ -8,11 +8,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
-import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public class CSVPathSetMapper implements Function<String, Set<String>> {
+public class CSVPathSetMapper implements Function<String, Stream<String>> {
 
     private final Function<String, InputStream> pathStreamMapper;
 
@@ -21,20 +20,19 @@ public class CSVPathSetMapper implements Function<String, Set<String>> {
     }
 
     @Override
-    public Set<String> apply(String path) {
+    public Stream<String> apply(String path) {
         InputStream stream = pathStreamMapper.apply(path);
-        Set<String> result = extractLines(stream);
+        Stream<String> result = extractLines(stream);
         closeQuietly(stream);
         return result;
     }
 
-    private Set<String> extractLines(InputStream stream) {
+    private Stream<String> extractLines(InputStream stream) {
         try {
             return CSVParser.parse(stream, Charset.defaultCharset(), CSVFormat.DEFAULT)
                 .getRecords()
                 .stream()
-                .map(this::firstElementFromRecord)
-                .collect(Collectors.toSet());
+                .map(this::firstElementFromRecord);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

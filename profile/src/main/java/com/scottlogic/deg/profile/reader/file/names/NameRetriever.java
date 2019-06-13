@@ -1,27 +1,26 @@
 package com.scottlogic.deg.profile.reader.file.names;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes;
-import com.scottlogic.deg.generator.utils.SetUtils;
 import com.scottlogic.deg.profile.reader.file.CSVPathSetMapper;
 
 import java.io.InputStream;
 import java.util.EnumMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes.FIRST;
 import static com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes.LAST;
 
-public class NameRetrievalService {
+public class NameRetriever implements Function<NameConstraintTypes, Stream<String>> {
 
     private static final Map<NameConstraintTypes, Set<String>> NAME_TYPE_MAPPINGS = setupNameMappings();
 
-    private final Function<String, Set<String>> filepathToNames;
+    private final Function<String, Stream<String>> filepathToNames;
 
-    public NameRetrievalService(final Function<String, InputStream> pathMapper) {
+    public NameRetriever(final Function<String, InputStream> pathMapper) {
         filepathToNames = new CSVPathSetMapper(pathMapper);
     }
 
@@ -32,7 +31,8 @@ public class NameRetrievalService {
         return mappings;
     }
 
-    public Set<String> retrieveValues(NameConstraintTypes configuration) {
+    @Override
+    public Stream<String> apply(NameConstraintTypes configuration) {
         switch (configuration) {
             case FIRST:
             case LAST:
@@ -45,22 +45,19 @@ public class NameRetrievalService {
         }
     }
 
-    private Set<String> generateSingles(Set<String> sources) {
+    private Stream<String> generateSingles(Set<String> sources) {
         return sources.stream()
-            .map(filepathToNames)
-            .reduce(new HashSet<>(), SetUtils::populateSet);
+            .flatMap(filepathToNames);
     }
 
-    private Set<String> generateCombinations(Set<String> firstNames,
-                                                 Set<String> lastNames) {
-        return firstNames.stream()
-            .flatMap(first -> lastNames.stream()
-                .map(last -> combineFirstAndLastName(first, last)))
-            .collect(Collectors.toSet());
+    private Stream<String> generateCombinations(Stream<String> firstNames, Stream<String> lastNames) {
+        Set<String> lastNamesStored = lastNames.collect(Collectors.toSet());
+        return firstNames
+            .flatMap(first -> lastNamesStored.stream()
+                .map(last -> combineFirstAndLastName(first, last)));
     }
 
-    private String combineFirstAndLastName(final String first,
-                                               final String last) {
+    private String combineFirstAndLastName(final String first, final String last) {
         return first + " " + last;
     }
 

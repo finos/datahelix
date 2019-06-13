@@ -16,16 +16,17 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class NameRetrievalServiceTest {
+public class NameRetrieverTest {
 
     @InjectMocks
-    private NameRetrievalService service;
+    private NameRetriever service;
 
     @Mock
     private Function<String, InputStream> mapper;
@@ -45,7 +46,9 @@ public class NameRetrievalServiceTest {
     @Test
     public void retrieveValuesFirst() {
         mockFirstNames();
-        Set<String> names = service.retrieveValues(NameConstraintTypes.FIRST);
+
+        Set<String> names = setFromConstraint(NameConstraintTypes.FIRST);
+
         assertEquals(SetUtils.setOf("Mark", "Paul", "Jolene", "Tanya"), names);
     }
 
@@ -56,7 +59,9 @@ public class NameRetrievalServiceTest {
     @Test
     public void retrieveValuesLast() {
         mockLastNames();
-        Set<String> names = service.retrieveValues(NameConstraintTypes.LAST);
+
+        Set<String> names = setFromConstraint(NameConstraintTypes.LAST);
+
         assertEquals(SetUtils.setOf("Gore", "May"), names);
     }
 
@@ -68,7 +73,9 @@ public class NameRetrievalServiceTest {
     @Test
     public void retrieveValuesFull() {
         mockAllNames();
-        Set<String> names = service.retrieveValues(NameConstraintTypes.FULL);
+
+        Set<String> names = setFromConstraint(NameConstraintTypes.FULL);
+
         assertEquals(SetUtils.setOf("Mark Gore", "Paul Gore", "Jolene Gore", "Tanya Gore",
             "Mark May", "Paul May", "Jolene May", "Tanya May"), names);
     }
@@ -88,7 +95,14 @@ public class NameRetrievalServiceTest {
                 break;
         }
 
-        Set<String> result = service.retrieveValues(config);
+        Set<String> result = setFromConstraint(config);
+
         assertNotNull(result);
+    }
+
+    private Set<String> setFromConstraint(NameConstraintTypes config) {
+        return Stream.of(config)
+            .flatMap(service)
+            .collect(Collectors.toSet());
     }
 }
