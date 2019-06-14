@@ -23,6 +23,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.times;
 
 public class DecisionTreeGeneratorTests {
@@ -97,7 +98,8 @@ public class DecisionTreeGeneratorTests {
 
             //Assert
             Mockito.verify(monitor, times(1)).addLineToPrintAtEndOfGeneration(
-                "The provided profile is wholly contradictory. No fields can successfully be fixed."
+                eq("The provided profile is wholly contradictory. No fields can successfully be fixed."),
+                any()
             );
         }
 
@@ -142,8 +144,8 @@ public class DecisionTreeGeneratorTests {
             Stream<GeneratedObject> actual = generator.generateData(profile);
 
             //Assert
-            Mockito.verify(monitor, times(1)).addLineToPrintAtEndOfGeneration(node0Text);
-            Mockito.verify(monitor, times(1)).addLineToPrintAtEndOfGeneration(node1Text);
+            Mockito.verify(monitor, times(1)).addLineToPrintAtEndOfGeneration(eq(node0Text), any());
+            Mockito.verify(monitor, times(1)).addLineToPrintAtEndOfGeneration(eq(node1Text), any());
         }
     }
 }
