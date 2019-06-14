@@ -74,33 +74,34 @@ public class ContradictionTreeValidator {
         return recursiveFindContradiction(nodeToCheck, nodeToCheck);
     }
 
-    private Node recursiveFindContradiction(Node nodeToCheck, Node currentNode){
+    private Node recursiveFindContradiction(ConstraintNode nodeToCheck, ConstraintNode currentNode){
         // can only check for contradictions on ConstraintNodes
-        if (currentNode instanceof ConstraintNode && nodeToCheck instanceof ConstraintNode){
-            boolean contradiction = contradictionChecker.checkContradictions((ConstraintNode)nodeToCheck, (ConstraintNode)currentNode);
-            if (contradiction) {
+        boolean contradiction = contradictionChecker.checkContradictions(nodeToCheck, currentNode);
+        if (contradiction) {
+            return currentNode;
+        }
+
+        // no contradiction, call next node.
+        // If any of the nodes in an AND statement are contradictory, then the statement itself is considered one.
+        for (DecisionNode node : currentNode.getDecisions()) {
+            boolean contradictionFound = recursiveFindContradiction(nodeToCheck, node) != null;
+            if (contradictionFound){
                 return currentNode;
             }
         }
 
-        // no contradiction, call next node.
-        if (currentNode instanceof ConstraintNode) {
-            // If any of the nodes in an AND statement are contradictory, then the statement itself is considered one.
-            for (DecisionNode node : ((ConstraintNode) currentNode).getDecisions()) {
-                boolean contradictionFound = recursiveFindContradiction(nodeToCheck, node) != null;
-                if (contradictionFound){
-                    return currentNode;
-                }
-            }
-        }
-        if(currentNode instanceof DecisionNode){
-            // If all the nodes in an OR statement are contradictory, then the statement itself is considered one.
-            boolean contradictionInAllOptions = ((DecisionNode) currentNode).getOptions()
-                .stream()
-                .allMatch(n -> recursiveFindContradiction(nodeToCheck, n) != null);
-            if (contradictionInAllOptions) {
-                return currentNode;
-            }
+        // no more nodes, and no contradiction found.
+        return null;
+
+    }
+
+    private Node recursiveFindContradiction(ConstraintNode nodeToCheck, DecisionNode currentNode){
+        // If all the nodes in an OR statement are contradictory, then the statement itself is considered one.
+        boolean contradictionInAllOptions = currentNode.getOptions()
+            .stream()
+            .allMatch(n -> recursiveFindContradiction(nodeToCheck, n) != null);
+        if (contradictionInAllOptions) {
+            return currentNode;
         }
 
         // no more nodes, and no contradiction found.
