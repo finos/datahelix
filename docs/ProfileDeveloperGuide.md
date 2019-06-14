@@ -19,6 +19,7 @@
         2. [inSet](#predicate-inset)
         3. [null](#predicate-null)
         4. [ofType](#predicate-oftype)
+        5. [fromFile](#predicate-fromfile)
     3. [Textual constraints](#Textual-constraints)
         1. [matchingRegex](#predicate-matchingregex)
         2. [containingRegex](#predicate-containingregex)
@@ -229,6 +230,27 @@ Is satisfied if `field` is null or absent.
 ```
 
 Is satisfied if `field` is of type represented by `value` (valid options: `decimal`, `integer`, `string`, `datetime`, `ISIN`, `SEDOL`, `CUSIP`, `RIC`, `firstname`, `lastname` or `fullname`)
+
+<div id="predicate-fromfile"></div>
+
+### `fromFile` _(field, value)_
+
+```javascript
+{ "field": "country", "is": "fromFile", "value": "countries" }
+```
+
+Populates a set from the new-line delimited file, where each line represents a string value to load.
+
+Example file excerpt:
+```javascript
+...
+England
+Wales
+Scotland
+...
+```
+
+After loading the set from the file, this constraint behaves identically to the [inSet](#predicate-inset) constraint.
 
 ## Textual constraints
 
