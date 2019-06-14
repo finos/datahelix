@@ -64,7 +64,7 @@ public class IndividualConstraintRuleViolator implements RuleViolator {
         //     AND(X, VIOLATE(Y), Z),
         //     AND(X, Y, VIOLATE(Z)))
         if (constraint instanceof AndConstraint) {
-            Collection<Constraint> subConstraints = ((AndConstraint) constraint).subConstraints;
+            Collection<Constraint> subConstraints = ((AndConstraint) constraint).getSubConstraints();
 
             Collection<Constraint> violatedIndividually =
                 subConstraints.stream()
@@ -116,7 +116,7 @@ public class IndividualConstraintRuleViolator implements RuleViolator {
         // VIOLATE(NOT(IF(X,Y))) reduces to IF(X,Y)
         // VIOLATE(NOT(IF(X,Y,Z))) reduces to IF(X,Y,Z)
         else if (constraint instanceof NegatedGrammaticalConstraint) {
-            return ((NegatedGrammaticalConstraint)constraint).negatedConstraint;
+            return ((NegatedGrammaticalConstraint)constraint).getNegatedConstraint();
         }
         // VIOLATE(AtomicConstraint) reduces to NEGATE(AtomicConstraint)
         // We wrap this in a ViolatedAtomicConstraint to allow Visualise to show which constraint is being violated

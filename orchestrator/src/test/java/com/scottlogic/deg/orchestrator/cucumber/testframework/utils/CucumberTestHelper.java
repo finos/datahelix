@@ -178,15 +178,11 @@ public class CucumberTestHelper {
 
     public <T> void assertFieldContainsSomeOf(String fieldName, Class<T> clazz) {
         assertFieldContains(fieldName, objectValue -> {
-            if (objectValue == null) {
+            if (clazz.isInstance(objectValue)) {
                 return true;
             }
 
-            if (clazz.isInstance(objectValue)) {
-                return false; //matches, but shouldn't match the type
-            }
-
-            return true;
+            return false; //doesn't match the type when it should.
         });
     }
 }
