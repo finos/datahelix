@@ -152,21 +152,4 @@ Feature: The violations mode of the Data Helix app can be run in violations mode
     Then some data should be generated
     And foo contains anything but string data
     And foo contains anything but numeric data
-
-
-  Scenario: The generator should produce correct violating data for allOf construction
-    Given there is a constraint:
-      """
-      { "allOf": [
-        { "field": "foo", "is": "ofType", "value": "string" },
-        { "field": "foo", "is": "ofType", "value": "decimal" },
-        { "not": { "field": "foo", "is": "null" }}
-      ]}
-      """
-    And the generation strategy is random
-    And the data requested is violating
-    And the generator can generate at most 100 rows
-    Then some data should be generated
-    And foo contains numeric data
-    And foo contains string data
-    And foo contains datetime data
+    
