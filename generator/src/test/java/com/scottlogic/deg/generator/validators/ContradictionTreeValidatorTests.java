@@ -1,356 +1,132 @@
 package com.scottlogic.deg.generator.validators;
 
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.common.profile.constraints.atomic.*;
-import com.scottlogic.deg.generator.decisiontree.*;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
-import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
-
-import org.junit.Assert;
+import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
+import com.scottlogic.deg.generator.decisiontree.DecisionNode;
+import com.scottlogic.deg.generator.decisiontree.DecisionTree;
+import com.scottlogic.deg.generator.decisiontree.Node;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Matchers.any;
 
 public class ContradictionTreeValidatorTests {
 
     private ContradictionTreeValidator validator;
-    private Field fieldA;
-    private Field fieldB;
-    private Field fieldC;
+    private ContradictionChecker checker;
+    private DecisionTree mockTree;
+    private ConstraintNode rootNode;
+    private ConstraintNode child0;
+    private ConstraintNode child1;
 
     @BeforeEach
     void setup() {
-        fieldA = new Field("fieldA");
-        fieldB = new Field("fieldB");
-        fieldC = new Field("fieldC");
+        checker = Mockito.mock(ContradictionChecker.class);
+        validator = new ContradictionTreeValidator(checker);
 
-        validator =
-            new ContradictionTreeValidator(
-                new ConstraintReducer(
-                    new FieldSpecFactory(
-                        new StringRestrictionsFactory()),
-                    new FieldSpecMerger()));
+        mockTree = Mockito.mock(DecisionTree.class);
+        rootNode = Mockito.mock(ConstraintNode.class);
+        DecisionNode subtree0 = Mockito.mock(DecisionNode.class);
+        DecisionNode subtree1 = Mockito.mock(DecisionNode.class);
+        child0 = Mockito.mock(ConstraintNode.class);
+        child1 = Mockito.mock(ConstraintNode.class);
+
+        Mockito.when(mockTree.getRootNode()).thenReturn(rootNode);
+        Mockito.when(rootNode.getDecisions()).thenReturn(Arrays.asList(subtree0, subtree1));
+        Mockito.when(subtree0.getOptions()).thenReturn(Collections.singleton(child0));
+        Mockito.when(subtree1.getOptions()).thenReturn(Collections.singleton(child1));
     }
 
     @Test
-    public void decisionTreeWithNoContradictions_doesNotOutputContradictionToConsole() {
+    public void reportContradictions_forNonContradictoryProfile_returnsEmptyCollection() {
         //Arrange
-        ArrayList<Field> fieldList = new ArrayList<>();
-        fieldList.add(fieldA);
-
-        ConstraintNode rootNode = new TreeConstraintNode();
-        DecisionNode levelOneDecision = new TreeDecisionNode();
-        ConstraintNode leafNodeLeft  = new TreeConstraintNode();
-        ConstraintNode leafNodeRight  = new TreeConstraintNode();
-
-        AtomicConstraint isInteger = new IsOfTypeConstraint(fieldA, IsOfTypeConstraint.Types.NUMERIC, null);
-        AtomicConstraint notNull = new NotConstraint(new IsNullConstraint(fieldA, null));
-
-        //leafNodeLeft
-        Collection<AtomicConstraint> leftConstraints = new ArrayList<>();
-        AtomicConstraint moreThan100 = new IsGreaterThanConstantConstraint(fieldA,100, null);
-        leftConstraints.add(moreThan100);
-        leftConstraints.add(isInteger);
-        leftConstraints.add(notNull);
-        leafNodeLeft = leafNodeLeft.addAtomicConstraints(leftConstraints);
-
-        // leafNodeRight
-        Collection<AtomicConstraint> rightConstraints = new ArrayList<>();
-        AtomicConstraint moreThan50 = new IsGreaterThanConstantConstraint(fieldA,50, null);
-        rightConstraints.add(moreThan50);
-        rightConstraints.add(isInteger);
-        rightConstraints.add(notNull);
-        leafNodeRight = leafNodeRight.addAtomicConstraints(rightConstraints);
-
-        // compose nodes
-        Collection<ConstraintNode> constraintNodes = new ArrayList<>();
-        constraintNodes.add(leafNodeLeft);
-        constraintNodes.add(leafNodeRight);
-
-        levelOneDecision = levelOneDecision.setOptions(constraintNodes);
-        rootNode = rootNode.addDecisions(new ArrayList<>(Arrays.asList(levelOneDecision)));
-
-        ProfileFields profileFields = new ProfileFields(fieldList);
-
-        DecisionTree dt = new DecisionTree(rootNode, profileFields,"A Test Profile");
+        Mockito.when(checker.checkContradictions(any(), any())).thenReturn(false);
 
         //Act
-        validator.reportContradictions(dt);
+        Collection<Node> contradictingNodes = validator.reportContradictions(mockTree);
 
         //Assert
-        //verify contradictionInTree outputter method is never called.
-//        verify(outputter, never()).contradictionInTree(anyObject(),anyObject());
+        assertEquals(0, contradictingNodes.size());
     }
 
     @Test
-    public void decisionTreeWithContradictions_whichAreNotOfADescendant_doesNotOutputContradictionToConsole() {
+    public void reportContradictions_forWhollyContradictoryProfile_returnsRootNode() {
         //Arrange
-        ArrayList<Field> fieldList = new ArrayList<>();
-        fieldList.add(fieldA);
-
-        ConstraintNode rootNode = new TreeConstraintNode();
-        DecisionNode levelOneDecision = new TreeDecisionNode();
-        ConstraintNode leafNodeLeft  = new TreeConstraintNode();
-        ConstraintNode leafNodeRight  = new TreeConstraintNode();
-
-        AtomicConstraint isInteger = new IsOfTypeConstraint(fieldA, IsOfTypeConstraint.Types.NUMERIC, null);
-        AtomicConstraint notNull = new NotConstraint(new IsNullConstraint(fieldA, null));
-
-        //leafNodeLeft
-        Collection<AtomicConstraint> leftConstraints = new ArrayList<>();
-        AtomicConstraint moreThan100 = new IsGreaterThanConstantConstraint(fieldA,100, null);
-        leftConstraints.add(moreThan100);
-        leftConstraints.add(isInteger);
-        leftConstraints.add(notNull);
-        leafNodeLeft = leafNodeLeft.addAtomicConstraints(leftConstraints);
-
-        //leafNodeRight
-        Collection<AtomicConstraint> rightConstraints = new ArrayList<>();
-        AtomicConstraint lessThan50 = new IsLessThanConstantConstraint(fieldA,50, null);
-        rightConstraints.add(lessThan50);
-        rightConstraints.add(isInteger);
-        rightConstraints.add(notNull);
-        leafNodeRight = leafNodeRight.addAtomicConstraints(rightConstraints);
-
-        //compose nodes
-        Collection<ConstraintNode> constraintNodes = new ArrayList<>();
-        constraintNodes.add(leafNodeLeft);
-        constraintNodes.add(leafNodeRight);
-
-        levelOneDecision = levelOneDecision.setOptions(constraintNodes);
-        rootNode = rootNode.addDecisions(new ArrayList<>(Arrays.asList(levelOneDecision)));
-
-        ProfileFields profileFields = new ProfileFields(fieldList);
-
-        DecisionTree dt = new DecisionTree(rootNode, profileFields,"A Test Profile");
+        Mockito.when(checker.checkContradictions(any(), any())).thenReturn(false);
+        Mockito.when(checker.checkContradictions(rootNode, rootNode)).thenReturn(true);
 
         //Act
-        validator.reportContradictions(dt);
-
-        //verify contradictionInTree outputter method is never called.
-//        verify(outputter, never()).contradictionInTree(anyObject(),anyObject());
-    }
-
-    @Test
-    public void decisionTreeWithContradictions_whichAreOfADescendant_OutputsContradictionToConsole() {
-        //Arrange
-        ArrayList<Field> fieldList = new ArrayList<>();
-        fieldList.add(fieldA);
-
-        ConstraintNode rootNode = new TreeConstraintNode();
-        DecisionNode decisionL1 = new TreeDecisionNode();
-        DecisionNode decisionL2 = new TreeDecisionNode();
-        ConstraintNode l1ConstraintNodeLeft  = new TreeConstraintNode();
-        ConstraintNode l1ConstraintNodeRight  = new TreeConstraintNode();
-        ConstraintNode l2ConstraintNodeLeft  = new TreeConstraintNode();
-        ConstraintNode l2ConstraintNodeRight  = new TreeConstraintNode();
-
-        AtomicConstraint fieldAIsInteger = new IsOfTypeConstraint(fieldA, IsOfTypeConstraint.Types.NUMERIC, null);
-        AtomicConstraint fieldANotNull = new NotConstraint(new IsNullConstraint(fieldA, null));
-
-        //L1ConstraintNodeLeft
-        Collection<AtomicConstraint> l1leftConstraints = new ArrayList<>();
-        AtomicConstraint fieldALessThan50 = new IsLessThanConstantConstraint(fieldA,50, null);
-        l1leftConstraints.add(fieldALessThan50);
-        l1leftConstraints.add(fieldAIsInteger);
-        l1leftConstraints.add(fieldANotNull);
-        l1ConstraintNodeLeft = l1ConstraintNodeLeft.addAtomicConstraints(l1leftConstraints);
-
-        //L1ConstraintNodeRight
-        Collection<AtomicConstraint> l1rightConstraints = new ArrayList<>();
-        AtomicConstraint lessThan50 = new IsLessThanConstantConstraint(fieldB,50, null);
-        l1rightConstraints.add(lessThan50);
-        l1ConstraintNodeRight = l1ConstraintNodeRight.addAtomicConstraints(l1rightConstraints);
-
-        //L2ConstraintNodeLeft
-        Collection<AtomicConstraint> l2LeftConstraints = new ArrayList<>();
-        AtomicConstraint moreThan1000 = new IsGreaterThanConstantConstraint(fieldA,1000, null);
-        l2LeftConstraints.add(moreThan1000);
-        l2LeftConstraints.add(fieldAIsInteger);
-        l2LeftConstraints.add(fieldANotNull);
-        l2ConstraintNodeLeft = l2ConstraintNodeLeft.addAtomicConstraints(l2LeftConstraints);
-
-        //L2ConstraintNodeRight
-        Collection<AtomicConstraint> l2RightConstraints = new ArrayList<>();
-        AtomicConstraint fieldCLessThan5 = new IsLessThanConstantConstraint(fieldC,5, null);
-        l2RightConstraints.add(fieldCLessThan5);
-        l2ConstraintNodeRight = l2ConstraintNodeRight.addAtomicConstraints(l2RightConstraints);
-
-        //compose nodes level 2
-        Collection<ConstraintNode> constraintNodesL2 = new ArrayList<>();
-        constraintNodesL2.add(l2ConstraintNodeLeft);
-        constraintNodesL2.add(l2ConstraintNodeRight);
-        decisionL2 = decisionL2.setOptions(constraintNodesL2);
-        l1ConstraintNodeLeft = l1ConstraintNodeLeft.addDecisions(new ArrayList<>(Arrays.asList(decisionL2)));
-
-        //compose nodes level 1
-        Collection<ConstraintNode> constraintNodesL1 = new ArrayList<>();
-        constraintNodesL1.add(l1ConstraintNodeLeft);
-        constraintNodesL1.add(l1ConstraintNodeRight);
-        decisionL1 = decisionL1.setOptions(constraintNodesL1);
-
-        //compose root node
-        rootNode = rootNode.addDecisions(new ArrayList<>(Arrays.asList(decisionL1)));
-        ProfileFields profileFields = new ProfileFields(fieldList);
-        DecisionTree dt = new DecisionTree(rootNode, profileFields,"A Test Profile");
-
-        //Act
-        validator.reportContradictions(dt);
+        Collection<Node> contradictingNodes = validator.reportContradictions(mockTree);
 
         //Assert
-        //verify contradictionInTree outputter method is called.
-//        verify(outputter,atLeast(1)).contradictionInTree(anyObject(),anyObject());
-
+        assertEquals(1, contradictingNodes.size());
+        assertEquals(rootNode, contradictingNodes.stream().findFirst().orElse(null));
     }
 
     @Test
-    @Disabled
-    public void decisionTreeWithContradictionOverSeveralAncestralNodes_OutputsContradictionToConsole(){
+    public void reportContradictions_forPartiallyContradictoryProfileInFirstSubtree_returnsFirstSubtree() {
         //Arrange
-        ArrayList<Field> fieldList = new ArrayList<>();
-        fieldList.add(fieldA);
+        Mockito.when(checker.checkContradictions(any(), any())).thenReturn(false);
+        Mockito.when(checker.checkContradictions(child0, child0)).thenReturn(true);
 
-        ConstraintNode rootNode = new TreeConstraintNode();
-        DecisionNode decisionL1 = new TreeDecisionNode();
-        DecisionNode decisionL2 = new TreeDecisionNode();
-        ConstraintNode l1ConstraintNodeLeft  = new TreeConstraintNode();
-        ConstraintNode l1ConstraintNodeRight  = new TreeConstraintNode();
-        ConstraintNode l2ConstraintNodeLeft  = new TreeConstraintNode();
-        ConstraintNode l2ConstraintNodeRight  = new TreeConstraintNode();
-
-        AtomicConstraint fieldAIsInteger = new IsOfTypeConstraint(fieldA, IsOfTypeConstraint.Types.NUMERIC, null);
-        AtomicConstraint fieldANotNull = new NotConstraint(new IsNullConstraint(fieldA, null));
-
-        //rootNodeConstraints
-        Collection<AtomicConstraint> rootConstraints = new ArrayList<>();
-        rootConstraints.add(fieldANotNull);
-        rootConstraints.add(fieldAIsInteger);
-
-        //L1ConstraintNodeLeft
-        Collection<AtomicConstraint> l1leftConstraints = new ArrayList<>();
-        AtomicConstraint fieldALessThan50 = new IsLessThanConstantConstraint(fieldA,50, null);
-        l1leftConstraints.add(fieldALessThan50);
-        l1ConstraintNodeLeft = l1ConstraintNodeLeft.addAtomicConstraints(l1leftConstraints);
-
-        //L1ConstraintNodeRight
-        Collection<AtomicConstraint> l1rightConstraints = new ArrayList<>();
-        AtomicConstraint lessThan50 = new IsLessThanConstantConstraint(fieldB,50, null);
-        l1rightConstraints.add(lessThan50);
-        l1ConstraintNodeRight = l1ConstraintNodeRight.addAtomicConstraints(l1rightConstraints);
-
-        //L2ConstraintNodeLeft
-        Collection<AtomicConstraint> l2LeftConstraints = new ArrayList<>();
-        AtomicConstraint moreThan1000 = new IsGreaterThanConstantConstraint(fieldA,1000, null);
-        l2LeftConstraints.add(moreThan1000);
-        l2ConstraintNodeLeft = l2ConstraintNodeLeft.addAtomicConstraints(l2LeftConstraints);
-
-        //L2ConstraintNodeRight
-        Collection<AtomicConstraint> l2RightConstraints = new ArrayList<>();
-        AtomicConstraint fieldCLessThan5 = new IsLessThanConstantConstraint(fieldC,5, null);
-        l2RightConstraints.add(fieldCLessThan5);
-        l2ConstraintNodeRight = l2ConstraintNodeRight.addAtomicConstraints(l2RightConstraints);
-
-        //compose nodes level 2
-        Collection<ConstraintNode> constraintNodesL2 = new ArrayList<>();
-        constraintNodesL2.add(l2ConstraintNodeLeft);
-        constraintNodesL2.add(l2ConstraintNodeRight);
-        decisionL2 = decisionL2.setOptions(constraintNodesL2);
-        l1ConstraintNodeLeft = l1ConstraintNodeLeft.addDecisions(new ArrayList<>(Arrays.asList(decisionL2)));
-
-        //compose nodes level 1
-        Collection<ConstraintNode> constraintNodesL1 = new ArrayList<>();
-        constraintNodesL1.add(l1ConstraintNodeLeft);
-        constraintNodesL1.add(l1ConstraintNodeRight);
-        decisionL1 = decisionL1.setOptions(constraintNodesL1);
-
-        //compose root node
-        rootNode = rootNode.addDecisions(new ArrayList<>(Arrays.asList(decisionL1)));
-        rootNode = rootNode.addAtomicConstraints(rootConstraints);
-        ProfileFields profileFields = new ProfileFields(fieldList);
-        DecisionTree dt = new DecisionTree(rootNode, profileFields,"A Test Profile");
 
         //Act
-        validator.reportContradictions(dt);
-
-        // assert
-//        verify(outputter).contradictionInTree(anyObject(),anyObject());
-    }
-
-    @Test
-    public void contradictingNodes_returnContradiction(){
-        //Arrange
-
-        // shared
-        Field fieldA = new Field("fieldA");
-        AtomicConstraint isInteger = new IsOfTypeConstraint(fieldA, IsOfTypeConstraint.Types.NUMERIC, null);
-        AtomicConstraint notNull = new NotConstraint(new IsNullConstraint(fieldA, null));
-
-        //left
-        ConstraintNode leftNode = new TreeConstraintNode();
-        Collection<AtomicConstraint> leftConstraints = new ArrayList<>();
-        AtomicConstraint moreThan100 = new IsGreaterThanConstantConstraint(fieldA,100, null);
-        leftConstraints.add(moreThan100);
-        leftConstraints.add(isInteger);
-        leftConstraints.add(notNull);
-        leftNode = leftNode.addAtomicConstraints(leftConstraints);
-
-        //right
-        ConstraintNode rightNode = new TreeConstraintNode();
-        Collection<AtomicConstraint> rightConstraints = new ArrayList<>();
-        AtomicConstraint lessThan50 = new IsLessThanConstantConstraint(fieldA,50, null);
-        rightConstraints.add(lessThan50);
-        rightConstraints.add(isInteger);
-        rightConstraints.add(notNull);
-        rightNode = rightNode.addAtomicConstraints(rightConstraints);
-
-        //Act
-        boolean contradictionFound = validator.checkContradictions(leftNode, rightNode);
+        Collection<Node> contradictingNodes = validator.reportContradictions(mockTree);
 
         //Assert
-        Assert.assertTrue(contradictionFound);
+        assertEquals(1, contradictingNodes.size());
+        assertEquals(child0, contradictingNodes.stream().findFirst().orElse(null));
+    }
+
+
+    @Test
+    public void reportContradictions_forPartiallyContradictoryProfileInSecondSubtree_returnsSecondSubtree() {
+        //Arrange
+        Mockito.when(checker.checkContradictions(any(), any())).thenReturn(false);
+        Mockito.when(checker.checkContradictions(child1, child1)).thenReturn(true);
+
+        //Act
+        Collection<Node> contradictingNodes = validator.reportContradictions(mockTree);
+
+        //Assert
+        assertEquals(1, contradictingNodes.size());
+        assertEquals(child1, contradictingNodes.stream().findFirst().orElse(null));
     }
 
     @Test
-    public void nonContradictingNodes_returnNoContradiction(){
+    public void reportContradictions_forMultiplePartialContradictions_returnsAllContradictions() {
         //Arrange
+        DecisionTree mockTree = Mockito.mock(DecisionTree.class);
+        ConstraintNode rootNode = Mockito.mock(ConstraintNode.class);
+        DecisionNode subtree0 = Mockito.mock(DecisionNode.class);
+        DecisionNode subtree1 = Mockito.mock(DecisionNode.class);
+        DecisionNode subtree2 = Mockito.mock(DecisionNode.class);
+        ConstraintNode child0 = Mockito.mock(ConstraintNode.class);
+        ConstraintNode child1 = Mockito.mock(ConstraintNode.class);
+        ConstraintNode child2 = Mockito.mock(ConstraintNode.class);
 
-        // shared
-        Field fieldA = new Field("fieldA");
-        AtomicConstraint isInteger = new IsOfTypeConstraint(fieldA, IsOfTypeConstraint.Types.NUMERIC, null);
-        AtomicConstraint notNull = new NotConstraint(new IsNullConstraint(fieldA, null));
+        Mockito.when(mockTree.getRootNode()).thenReturn(rootNode);
+        Mockito.when(rootNode.getDecisions()).thenReturn(Arrays.asList(subtree0, subtree1));
+        Mockito.when(subtree0.getOptions()).thenReturn(Collections.singleton(child0));
+        Mockito.when(subtree1.getOptions()).thenReturn(Collections.singleton(child1));
+        Mockito.when(subtree2.getOptions()).thenReturn(Collections.singleton(child2));
 
-        //left
-        ConstraintNode leftNode = new TreeConstraintNode();
-        Collection<AtomicConstraint> leftConstraints = new ArrayList<>();
-        AtomicConstraint moreThan100 = new IsGreaterThanConstantConstraint(fieldA,100, null);
-
-        leftConstraints.add(moreThan100);
-        leftConstraints.add(isInteger);
-        leftConstraints.add(notNull);
-        leftNode = leftNode.addAtomicConstraints(leftConstraints);
-
-        //right
-        ConstraintNode rightNode = new TreeConstraintNode();
-        Collection<AtomicConstraint> rightConstraints = new ArrayList<>();
-        AtomicConstraint moreThan1000 = new IsGreaterThanConstantConstraint(fieldA,1000, null);
-        rightConstraints.add(moreThan1000);
-        rightConstraints.add(isInteger);
-        rightConstraints.add(notNull);
-        rightNode = rightNode.addAtomicConstraints(rightConstraints);
+        Mockito.when(checker.checkContradictions(any(), any())).thenReturn(false);
+        Mockito.when(checker.checkContradictions(child0, child0)).thenReturn(true);
+        Mockito.when(checker.checkContradictions(child1, child1)).thenReturn(true);
 
         //Act
-        boolean contradictionFound = validator.checkContradictions(leftNode, rightNode);
+        Collection<Node> contradictingNodes = validator.reportContradictions(mockTree);
 
         //Assert
-        Assert.assertFalse(contradictionFound);
+        assertEquals(2, contradictingNodes.size());
+        assertTrue(contradictingNodes.contains(child0));
+        assertTrue(contradictingNodes.contains(child1));
     }
 }
