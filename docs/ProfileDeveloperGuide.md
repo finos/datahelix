@@ -239,9 +239,11 @@ Is satisfied if `field` is of type represented by `value` (valid options: `decim
 { "field": "country", "is": "fromFile", "value": "countries" }
 ```
 
-Populates a set from the new-line delimited file, where each line represents a string value to load.
+Populates a set from the new-line delimited file (with suffix `.csv`), where each line represents a string value to load.
+The file should be location in the same directory as the jar, and the name should match the `value` with `.csv` appended.
+In the above example, this would be `countries.csv`.
 
-Example file excerpt:
+Example `countries.csv` excerpt:
 ```javascript
 ...
 England
