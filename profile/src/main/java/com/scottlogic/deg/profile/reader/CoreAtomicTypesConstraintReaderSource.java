@@ -6,8 +6,8 @@ import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.util.Defaults;
-import com.scottlogic.deg.profile.reader.file.CSVPathSetMapper;
-import com.scottlogic.deg.profile.reader.file.inputstream.PathMapper;
+import com.scottlogic.deg.profile.reader.file.CSVFromPathToStringsLoader;
+import com.scottlogic.deg.profile.reader.file.PathToStringsLoader;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 
 import java.math.BigDecimal;
@@ -15,7 +15,6 @@ import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -192,7 +191,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                 {
                     Optional<Number> numberValidatedValue =
                         ConstraintReaderHelpers.tryGetValidatedValue(dto, Number.class);
-                    Optional <String> stringValidatedValue =
+                    Optional<String> stringValidatedValue =
                         ConstraintReaderHelpers.tryGetValidatedValue(dto, String.class);
 
                     if (numberValidatedValue.isPresent()) {
@@ -205,8 +204,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                                 rules
                             );
                         }
-                    }
-                    else if (stringValidatedValue.isPresent()) {
+                    } else if (stringValidatedValue.isPresent()) {
                         Optional<ParsedDateGranularity> parsedDateGranularity =
                             ParsedDateGranularity.tryParse(stringValidatedValue.get());
                         if (parsedDateGranularity.isPresent()) {
@@ -313,9 +311,13 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                 AtomicConstraintType.IS_FROM_FILE.getText(),
                 ".*",
                 (dto, fields, rules) -> {
-                    Set<Object> strings = Stream.of(ConstraintReaderHelpers.getValidatedValue(dto, String.class))
-                        .map(string -> string + ".csv")
-                        .flatMap(pathToStringMapper())
+                    String value = ConstraintReaderHelpers.getValidatedValue(dto, String.class);
+                    String withEnding = appendCsvIfNotPresent(value);
+
+                    PathToStringsLoader loader = new CSVFromPathToStringsLoader();
+                    Stream<String> names = loader.retrieveNames(withEnding);
+
+                    Set<Object> strings = names
                         .map(ConstraintReaderHelpers::downcastToObject)
                         .collect(Collectors.toSet());
 
@@ -329,7 +331,15 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
         );
     }
 
-    private static Function<String, Stream<String>> pathToStringMapper() {
-        return new CSVPathSetMapper();
+    private String appendCsvIfNotPresent(final String path) {
+        final String csv = ".csv";
+
+        if (path.length() < csv.length()) {
+            return path;
+        } else {
+            final String ending = path.substring(path.length() - csv.length());
+            return csv.equals(ending) ? path : path + csv;
+        }
     }
+
 }

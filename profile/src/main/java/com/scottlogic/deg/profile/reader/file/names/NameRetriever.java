@@ -1,7 +1,8 @@
 package com.scottlogic.deg.profile.reader.file.names;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes;
-import com.scottlogic.deg.profile.reader.file.CSVPathSetMapper;
+import com.scottlogic.deg.profile.reader.file.CSVFromPathToStringsLoader;
+import com.scottlogic.deg.profile.reader.file.PathToStringsLoader;
 import com.scottlogic.deg.profile.reader.file.inputstream.ClasspathMapper;
 
 import java.io.InputStream;
@@ -19,14 +20,14 @@ public class NameRetriever implements Function<NameConstraintTypes, Stream<Strin
 
     private static final Map<NameConstraintTypes, Set<String>> NAME_TYPE_MAPPINGS = setupNameMappings();
 
-    private final Function<String, Stream<String>> filepathToNames;
+    private final PathToStringsLoader filepathToNames;
 
     public NameRetriever() {
         this(new ClasspathMapper());
     }
 
     public NameRetriever(final Function<String, InputStream> pathMapper) {
-        filepathToNames = new CSVPathSetMapper(pathMapper);
+        filepathToNames = new CSVFromPathToStringsLoader(pathMapper);
     }
 
     private static Map<NameConstraintTypes, Set<String>> setupNameMappings() {
@@ -52,7 +53,7 @@ public class NameRetriever implements Function<NameConstraintTypes, Stream<Strin
 
     private Stream<String> generateSingles(Set<String> sources) {
         return sources.stream()
-            .flatMap(filepathToNames);
+            .flatMap(filepathToNames::retrieveNames);
     }
 
     private static Stream<String> generateCombinations(Stream<String> firstNames, Stream<String> lastNames) {

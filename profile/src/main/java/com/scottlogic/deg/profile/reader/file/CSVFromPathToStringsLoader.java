@@ -13,20 +13,20 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public class CSVPathSetMapper implements Function<String, Stream<String>> {
+public class CSVFromPathToStringsLoader implements PathToStringsLoader {
 
     private final Function<String, InputStream> pathStreamMapper;
 
-    public CSVPathSetMapper() {
+    public CSVFromPathToStringsLoader() {
         this(new PathMapper());
     }
 
-    public CSVPathSetMapper(final Function<String, InputStream> pathStreamMapper) {
+    public CSVFromPathToStringsLoader(final Function<String, InputStream> pathStreamMapper) {
         this.pathStreamMapper = pathStreamMapper;
     }
 
     @Override
-    public Stream<String> apply(String path) {
+    public Stream<String> retrieveNames(String path) {
         InputStream stream = Optional.of(path)
             .map(pathStreamMapper)
             .orElseThrow(() -> new UnsupportedOperationException("Path mapper is incorrectly configured"));
@@ -40,7 +40,7 @@ public class CSVPathSetMapper implements Function<String, Stream<String>> {
             return CSVParser.parse(stream, Charset.defaultCharset(), CSVFormat.DEFAULT)
                 .getRecords()
                 .stream()
-                .map(CSVPathSetMapper::firstElementFromRecord);
+                .map(CSVFromPathToStringsLoader::firstElementFromRecord);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
