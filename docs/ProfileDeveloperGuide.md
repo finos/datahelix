@@ -9,6 +9,8 @@
     1. [Integer/Decimal](#Integer/Decimal)
     2. [Strings](#Strings)
     3. [DateTime](#DateTime)
+    4. [Financial Codes](#FinancialCodes)
+    5. [Personal Data Types](#PersonalDataTypes)
 
 3. [Predicate constraints](#Predicate-constraints)
     1. [Theory](#Theory)
@@ -23,7 +25,6 @@
         3. [ofLength](#predicate-oflength)
         4. [longerThan](#predicate-longerthan)
         5. [shorterThan](#predicate-shorterthan)
-        6. [aValid](#predicate-avalid)
     4. [Integer/Decimal constraints](#Integer/Decimal-constraints)
         1. [greaterThan](#predicate-greaterthan)
         2. [greaterThanOrEqualTo](#predicate-greaterthanorequalto)
@@ -96,7 +97,7 @@ Profiles can be created by any of:
 
 # Data Types
 
-DataHelix currently recognises four data types: _string_, _datetime_, _integer_ and _decimal_. Keeping this set small is a deliberate goal; it would be possible to have types like _FirstName_ or _Postcode_, but instead these are considered specialisations of the _String_ type, so they can be constrained by the normal string operators (e.g. a user could generate all first names shorter than 10 characters, starting with a vowel).
+DataHelix currently recognises four core data types: _string_, _datetime_, _integer_ and _decimal_.  It also recognises more complex data types which are extensions of these core types.  At present, all such data types are extensions of the _string_ type.
 
 ## Integer/Decimal
 
@@ -150,6 +151,24 @@ DateTime fields currently default to the most precise granularity of millisecond
 
 Note that granularity concerns which values are valid, not how they're presented. All values will be output with the full format defined by [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601), so that a value granular to years will still be output as (e.g.) `0001-01-01T00:00:00.000Z`, rather than `0001` or `0001-01-01`.
 
+## Financial Codes
+
+Data Helix currently recognises and can generate a number of types of financial code
+
+- ISIN
+- SEDOL
+- CUSIP
+- RIC
+
+When this is specified as the type of a field, the data generated will contain legal values for the type of code in question (with correct check digits, where appropriate), but the codes generated may or may not be allocated in the real world.
+
+Data Helix currently only supports ISIN codes in the `GB` and `US` ranges.  Only codes in these ranges will be generated.
+
+## Personal Data Types
+
+Data Helix can generate data containing typical real names, based on recent demographic data, by defining a field as being of the types `firstname`, `lastname` or `fullname`.  Name fields are strings and can be combined with other textual constraints to generate, for example, first names that are longer than 6 letters.
+
+The only string considered to be an invalid name is the empty string.
 
 # Predicate constraints
 
@@ -209,7 +228,7 @@ Is satisfied if `field` is null or absent.
 { "field": "price", "is": "ofType", "value": "string" }
 ```
 
-Is satisfied if `field` is of type represented by `value` (valid options: `decimal`, `integer`, `string`, `datetime`)
+Is satisfied if `field` is of type represented by `value` (valid options: `decimal`, `integer`, `string`, `datetime`, `ISIN`, `SEDOL`, `CUSIP`, `RIC`, `firstname`, `lastname` or `fullname`)
 
 ## Textual constraints
 
@@ -270,21 +289,6 @@ Is satisfied if `field` is a string with length greater than `value`, must be a 
 ```
 
 Is satisfied if `field` is a string with length less than `value`, must be a whole number between `1` and `1001`.   
-
-<div id="predicate-avalid"></div>
-
-### `aValid` _(field, value)_
-
-```javascript
-{ "field": "name", "is": "aValid", "value": "ISIN" }
-```
-
-Is satisfied if `field` is a valid `value`, in this case a valid ISIN code. Possible options for `value` are:
-* ISIN
-* SEDOL
-* CUSIP
-
-**NOTE**: This constraint cannot at present be combined with the constraints `matchingRegex` or `containingRegex`.  Doing so will mean no data is emitted.  See [Frequently Asked Questions](FrequentlyAskedQuestions.md) for more information.
 
 ## Integer/Decimal constraints
 

@@ -6,7 +6,7 @@ import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
-import com.scottlogic.deg.profile.reader.AtomicConstraintReaderLookup;
+import com.scottlogic.deg.profile.reader.ConstraintReaderMap;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import com.scottlogic.deg.profile.reader.MainConstraintReader;
 import com.scottlogic.deg.profile.reader.ProfileReader;
@@ -23,22 +23,22 @@ public class CucumberProfileReader implements ProfileReader {
 
     private final CucumberTestState state;
 
-    private final AtomicConstraintReaderLookup atomicConstraintReaderLookup;
+    private final ConstraintReaderMap constraintReaderMap;
 
     @Inject
-    public CucumberProfileReader(CucumberTestState state, AtomicConstraintReaderLookup atomicConstraintReaderLookup) {
+    public CucumberProfileReader(CucumberTestState state, ConstraintReaderMap constraintReaderMap) {
         this.state = state;
-        this.atomicConstraintReaderLookup = atomicConstraintReaderLookup;
+        this.constraintReaderMap = constraintReaderMap;
     }
 
     @Override
-    public Profile read(Path filePath) throws InvalidProfileException {
+    public Profile read(Path filePath) {
         return this.getProfile();
     }
 
-    private Profile getProfile() throws InvalidProfileException {
+    private Profile getProfile() {
         try {
-            MainConstraintReader constraintReader = new MainConstraintReader(atomicConstraintReaderLookup);
+            MainConstraintReader constraintReader = new MainConstraintReader(constraintReaderMap);
             ProfileFields profileFields = new ProfileFields(state.profileFields);
             AtomicBoolean exceptionInMapping = new AtomicBoolean();
 

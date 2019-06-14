@@ -1,5 +1,6 @@
 package com.scottlogic.deg.profile.reader;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.RuleInformation;
 import com.scottlogic.deg.common.profile.Profile;
@@ -22,14 +23,21 @@ import java.util.stream.Collectors;
  * It returns a Profile object for consumption by a generator
  */
 public class JsonProfileReader implements ProfileReader {
-    public Profile read(Path filePath) throws IOException, InvalidProfileException {
+    ConstraintReaderMap readerMap;
+
+    @Inject
+    public JsonProfileReader(ConstraintReaderMap mappings) {
+        readerMap = mappings;
+    }
+
+    public Profile read(Path filePath) throws IOException {
         byte[] encoded = Files.readAllBytes(filePath);
         String profileJson = new String(encoded, StandardCharsets.UTF_8);
 
         return this.read(profileJson);
     }
 
-    public Profile read(String profileJson) throws IOException, InvalidProfileException {
+    public Profile read(String profileJson) throws IOException {
         ProfileDTO profileDto = (ProfileDTO) new ProfileDeserialiser()
             .deserialise(
                 profileJson,
@@ -47,9 +55,7 @@ public class JsonProfileReader implements ProfileReader {
                 .map(fDto -> new Field(fDto.name))
                 .collect(Collectors.toList()));
 
-        ConstraintReader constraintReader = new MainConstraintReader(
-            new BaseAtomicConstraintReaderLookup()
-        );
+        ConstraintReader constraintReader = new MainConstraintReader(readerMap);
 
         Collection<Rule> rules = mapDtos(
             profileDto.rules,
@@ -79,7 +85,7 @@ public class JsonProfileReader implements ProfileReader {
 
     static <TInput, TOutput> Collection<TOutput> mapDtos(
         Collection<TInput> dtos,
-        DtoConverterFunction<TInput, TOutput> mapFunc) throws InvalidProfileException {
+        DtoConverterFunction<TInput, TOutput> mapFunc) {
 
         Collection<TOutput> resultSet = new ArrayList<>();
 
@@ -92,6 +98,6 @@ public class JsonProfileReader implements ProfileReader {
 
     @FunctionalInterface
     interface DtoConverterFunction<TInput, TOutput> {
-        TOutput apply(TInput t) throws InvalidProfileException;
+        TOutput apply(TInput t);
     }
 }
