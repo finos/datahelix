@@ -118,6 +118,9 @@ public class FieldSpec {
     }
 
     private <T extends Restrictions> FieldSpec withConstraint(Class<T> type, T restriction) {
+        if (restriction == null){
+            return this;
+        }
         return new FieldSpec(restrictions.put(type, restriction), nullable, formatting);
     }
 

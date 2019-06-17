@@ -95,15 +95,12 @@ public class FieldSpecMerger {
     }
 
     private Optional<FieldSpec> combineRestrictions(FieldSpec left, FieldSpec right) {
-        Optional<FieldSpec> merging = Optional.of(FieldSpec.Empty);
+        FieldSpec merging = FieldSpec.Empty;
 
         for (RestrictionMergeOperation operation : mergeOperations) {
-            merging = operation.applyMergeOperation(left, right, merging.get());
-            if (!merging.isPresent()) {
-                return Optional.empty();
-            }
+            merging = operation.applyMergeOperation(left, right, merging);
         }
 
-        return addNullable(left, right, merging.get());
+        return addNullable(left, right, merging);
     }
 }

@@ -41,10 +41,9 @@ class DateTimeRestrictionsMergeOperationTests {
         when(merger.merge(left.getDateTimeRestrictions(), right.getDateTimeRestrictions()))
             .thenReturn(new MergeResult<>(null));
 
-        Optional<FieldSpec> result = operation.applyMergeOperation(left, right, merging);
+        FieldSpec result = operation.applyMergeOperation(left, right, merging);
 
-        Assert.assertThat(result.isPresent(), is(true));
-        Assert.assertThat(result.get(), sameInstance(merging));
+        Assert.assertThat(result, sameInstance(merging));
     }
 
     @Test
@@ -53,13 +52,12 @@ class DateTimeRestrictionsMergeOperationTests {
         when(merger.merge(left.getDateTimeRestrictions(), right.getDateTimeRestrictions()))
             .thenReturn(MergeResult.unsuccessful());
 
-        Optional<FieldSpec> result = operation.applyMergeOperation(left, right, merging);
+        FieldSpec result = operation.applyMergeOperation(left, right, merging);
 
-        Assert.assertThat(result.isPresent(), is(true));
-        Assert.assertThat(result.get(), not(sameInstance(merging)));
-        Assert.assertThat(result.get().getDateTimeRestrictions(), is(nullValue()));
-        Assert.assertThat(result.get().getTypeRestrictions(), not(nullValue()));
-        Assert.assertThat(result.get().getTypeRestrictions().getAllowedTypes(), not(hasItem(IsOfTypeConstraint.Types.DATETIME)));
+        Assert.assertThat(result, not(sameInstance(merging)));
+        Assert.assertThat(result.getDateTimeRestrictions(), is(nullValue()));
+        Assert.assertThat(result.getTypeRestrictions(), not(nullValue()));
+        Assert.assertThat(result.getTypeRestrictions().getAllowedTypes(), not(hasItem(IsOfTypeConstraint.Types.DATETIME)));
     }
 
     @Test
@@ -69,13 +67,12 @@ class DateTimeRestrictionsMergeOperationTests {
         when(merger.merge(left.getDateTimeRestrictions(), right.getDateTimeRestrictions()))
             .thenReturn(MergeResult.unsuccessful());
 
-        Optional<FieldSpec> result = operation.applyMergeOperation(left, right, merging);
+        FieldSpec result = operation.applyMergeOperation(left, right, merging);
 
-        Assert.assertThat(result.isPresent(), is(true));
-        Assert.assertThat(result.get(), not(sameInstance(merging)));
-        Assert.assertThat(result.get().getDateTimeRestrictions(), is(nullValue()));
-        Assert.assertThat(result.get().getTypeRestrictions(), not(nullValue()));
-        Assert.assertThat(result.get().getTypeRestrictions().getAllowedTypes(), not(hasItem(IsOfTypeConstraint.Types.DATETIME)));
+        Assert.assertThat(result, not(sameInstance(merging)));
+        Assert.assertThat(result.getDateTimeRestrictions(), is(nullValue()));
+        Assert.assertThat(result.getTypeRestrictions(), not(nullValue()));
+        Assert.assertThat(result.getTypeRestrictions().getAllowedTypes(), not(hasItem(IsOfTypeConstraint.Types.DATETIME)));
     }
 
     @Test
@@ -85,13 +82,12 @@ class DateTimeRestrictionsMergeOperationTests {
         when(merger.merge(left.getDateTimeRestrictions(), right.getDateTimeRestrictions()))
             .thenReturn(MergeResult.unsuccessful());
 
-        Optional<FieldSpec> result = operation.applyMergeOperation(left, right, merging);
+        FieldSpec result = operation.applyMergeOperation(left, right, merging);
 
-        Assert.assertThat(result.isPresent(), is(true));
-        Assert.assertThat(result.get(), sameInstance(merging));
-        Assert.assertThat(result.get().getDateTimeRestrictions(), is(nullValue()));
-        Assert.assertThat(result.get().getTypeRestrictions(), not(nullValue()));
-        Assert.assertThat(result.get().getTypeRestrictions().getAllowedTypes(), not(hasItem(IsOfTypeConstraint.Types.DATETIME)));
+        Assert.assertThat(result, sameInstance(merging));
+        Assert.assertThat(result.getDateTimeRestrictions(), is(nullValue()));
+        Assert.assertThat(result.getTypeRestrictions(), not(nullValue()));
+        Assert.assertThat(result.getTypeRestrictions().getAllowedTypes(), not(hasItem(IsOfTypeConstraint.Types.DATETIME)));
     }
 
     @Test
@@ -101,12 +97,11 @@ class DateTimeRestrictionsMergeOperationTests {
         when(merger.merge(left.getDateTimeRestrictions(), right.getDateTimeRestrictions()))
             .thenReturn(MergeResult.unsuccessful());
 
-        Optional<FieldSpec> result = operation.applyMergeOperation(left, right, merging);
+        FieldSpec result = operation.applyMergeOperation(left, right, merging);
 
-        Assert.assertThat(result.isPresent(), is(true));
-        Assert.assertThat(result.get(), not(sameInstance(merging)));
-        Assert.assertThat(result.get().getDateTimeRestrictions(), is(nullValue()));
-        Assert.assertThat(result.get().getSetRestrictions().getWhitelist(), is(empty()));
+        Assert.assertThat(result, not(sameInstance(merging)));
+        Assert.assertThat(result.getDateTimeRestrictions(), is(nullValue()));
+        Assert.assertThat(result.getSetRestrictions().getWhitelist(), is(empty()));
     }
 
     @Test
@@ -117,11 +112,10 @@ class DateTimeRestrictionsMergeOperationTests {
         when(merger.merge(left.getDateTimeRestrictions(), right.getDateTimeRestrictions()))
             .thenReturn(new MergeResult<>(merged));
 
-        Optional<FieldSpec> result = operation.applyMergeOperation(left, right, merging);
+        FieldSpec result = operation.applyMergeOperation(left, right, merging);
 
-        Assert.assertThat(result.isPresent(), is(true));
-        Assert.assertThat(result.get(), not(sameInstance(merging)));
-        Assert.assertThat(result.get().getDateTimeRestrictions(), sameInstance(merged));
-        Assert.assertThat(result.get().getTypeRestrictions(), sameInstance(merging.getTypeRestrictions()));
+        Assert.assertThat(result, not(sameInstance(merging)));
+        Assert.assertThat(result.getDateTimeRestrictions(), sameInstance(merged));
+        Assert.assertThat(result.getTypeRestrictions(), sameInstance(merging.getTypeRestrictions()));
     }
 }
