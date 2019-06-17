@@ -18,15 +18,13 @@ public final class NameRetriever {
     }
 
     public static Set<Object> loadNamesFromFile(NameConstraintTypes configuration) {
-        Set<String> names;
         if (configuration == FULL) {
-            names = combineFirstWithLastNames(
+            return new HashSet<>(combineFirstWithLastNames(
                 generateNamesFromSingleFile(FIRST.getFilePath()),
-                generateNamesFromSingleFile(LAST.getFilePath()));
+                generateNamesFromSingleFile(LAST.getFilePath())));
         } else {
-            names = generateNamesFromSingleFile(configuration.getFilePath());
+            return new HashSet<>(generateNamesFromSingleFile(configuration.getFilePath()));
         }
-        return new HashSet<>(names);
     }
 
     private static Set<String> generateNamesFromSingleFile(String source) {

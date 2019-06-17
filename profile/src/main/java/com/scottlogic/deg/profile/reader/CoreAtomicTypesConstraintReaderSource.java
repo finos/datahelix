@@ -1,5 +1,6 @@
 package com.scottlogic.deg.profile.reader;
 
+import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedDateGranularity;
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
@@ -333,7 +334,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
         try {
             return new FileInputStream(path);
         } catch (IOException e) {
-            throw new UncheckedIOException(e);
+            throw new ValidationException(e.getMessage());
         }
     }
 
