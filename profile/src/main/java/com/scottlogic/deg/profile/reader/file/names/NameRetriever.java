@@ -30,7 +30,7 @@ public final class NameRetriever {
     }
 
     private static Set<String> generateNamesFromSingleFile(String source) {
-        InputStream stream = NameRetriever.class.getClassLoader().getResourceAsStream(source);
+        InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(source);
         Set<String> result = CsvInputStreamReader.retrieveLines(stream);
         try {
             stream.close();
