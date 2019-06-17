@@ -13,21 +13,21 @@ import static org.junit.jupiter.api.Assertions.*;
 public class NameRetrieverTest {
 
     @Test
-    public void retrieveValuesFirst() {
+    public void testLoadingFirstNames() {
         Set<Object> names = NameRetriever.loadNamesFromFile(NameConstraintTypes.FIRST);
 
         assertEquals(704, names.size());
     }
 
     @Test
-    public void retrieveValuesLast() {
+    public void testLoadingLastNames() {
         Set<Object> names = NameRetriever.loadNamesFromFile(NameConstraintTypes.LAST);
 
         assertEquals(280, names.size());
     }
 
     @Test
-    public void retrieveValuesFull() {
+    public void testLoadingFullNames() {
         Set<Object> names = NameRetriever.loadNamesFromFile(NameConstraintTypes.FULL);
 
         assertEquals(197120, names.size());
