@@ -40,14 +40,14 @@ public class FieldSpecMerger {
 
     private Optional<FieldSpec> mergeSets(FieldSpec left, FieldSpec right) {
         Set<Object> set = SetUtils.intersect(
-            left.getSetRestrictions().getWhitelist(),
-            right.getSetRestrictions().getWhitelist()
+            left.getWhitelist(),
+            right.getWhitelist()
         );
         return addNullable(left, right, setRestriction(set));
     }
 
     private Optional<FieldSpec> combineSetWithRestrictions(FieldSpec set, FieldSpec restrictions) {
-        Set<Object> newSet = set.getSetRestrictions().getWhitelist().stream()
+        Set<Object> newSet = set.getWhitelist().stream()
             .filter(restrictions::permits)
             .collect(Collectors.toSet());
 
@@ -69,15 +69,15 @@ public class FieldSpecMerger {
     }
 
     private boolean noAllowedValues(FieldSpec fieldSpec) {
-        return (fieldSpec.getSetRestrictions() != null && fieldSpec.getSetRestrictions().getWhitelist().isEmpty());
+        return (fieldSpec.getWhitelist() != null && fieldSpec.getWhitelist().isEmpty());
     }
 
     private FieldSpec setRestriction(Set<Object> set) {
-        return FieldSpec.Empty.withSetRestrictions(new SetRestrictions(set));
+        return FieldSpec.Empty.withWhitelist(set);
     }
 
     private boolean hasSet(FieldSpec fieldSpec) {
-        return fieldSpec.getSetRestrictions() != null;
+        return fieldSpec.getWhitelist() != null;
     }
 
     private boolean isNullable(FieldSpec left, FieldSpec right) {

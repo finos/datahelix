@@ -5,7 +5,6 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.T
 
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.common.util.HeterogeneousTypeContainer;
-import com.scottlogic.deg.generator.restrictions.SetRestrictions;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -18,18 +17,20 @@ import java.util.stream.Collectors;
  */
 public class FieldSpec {
     public static final FieldSpec Empty =
-        new FieldSpec(new HeterogeneousTypeContainer<>(), true, null);
+        new FieldSpec(null, new HeterogeneousTypeContainer<>(), true, null);
 
     private final boolean nullable;
     private final String formatting;
-
+    private final Set<Object> whitelist;
     private final HeterogeneousTypeContainer<Restrictions> restrictions;
 
     private FieldSpec(
+        Set<Object> whitelist,
         HeterogeneousTypeContainer<Restrictions> restrictions,
         boolean nullable,
         String formatting
     ) {
+        this.whitelist = whitelist;
         this.restrictions = restrictions;
         this.nullable = nullable;
         this.formatting = formatting;
@@ -39,8 +40,8 @@ public class FieldSpec {
         return nullable;
     }
 
-    public SetRestrictions getSetRestrictions() {
-        return restrictions.get(SetRestrictions.class).orElse(null);
+    public Set<Object> getWhitelist() {
+        return whitelist;
     }
 
     public BlacklistRestrictions getBlacklistRestrictions() {
@@ -67,8 +68,8 @@ public class FieldSpec {
         return formatting;
     }
 
-    public FieldSpec withSetRestrictions(SetRestrictions setRestrictions) {
-        return withConstraint(SetRestrictions.class, setRestrictions);
+    public FieldSpec withWhitelist(Set<Object> whitelist) {
+        return new FieldSpec(whitelist, new HeterogeneousTypeContainer<>(), nullable, formatting);
     }
 
     public FieldSpec withNumericRestrictions(NumericRestrictions numericRestrictions) {
@@ -88,13 +89,11 @@ public class FieldSpec {
     }
 
     public FieldSpec withNotNull() {
-        return new FieldSpec(restrictions, false, formatting);
+        return new FieldSpec(whitelist, restrictions, false, formatting);
     }
 
     public static FieldSpec mustBeNull() {
-        return FieldSpec.Empty.withSetRestrictions(
-            SetRestrictions.fromWhitelist(Collections.emptySet())
-        );
+        return FieldSpec.Empty.withWhitelist(Collections.emptySet());
     }
 
     public FieldSpec withDateTimeRestrictions(DateTimeRestrictions dateTimeRestrictions) {
@@ -102,7 +101,7 @@ public class FieldSpec {
     }
 
     public FieldSpec withFormatting(String formatting) {
-        return new FieldSpec(restrictions, nullable, formatting);
+        return new FieldSpec(whitelist, restrictions, nullable, formatting);
     }
 
     public FieldSpec withoutType(IsOfTypeConstraint.Types type){
@@ -123,7 +122,7 @@ public class FieldSpec {
         if (restriction == null){
             return this;
         }
-        return new FieldSpec(restrictions.put(type, restriction), nullable, formatting);
+        return new FieldSpec(null, restrictions.put(type, restriction), nullable, formatting);
     }
 
     public boolean isTypeAllowed(IsOfTypeConstraint.Types type){
@@ -132,18 +131,25 @@ public class FieldSpec {
 
     @Override
     public String toString() {
-        List<String> propertyStrings = restrictions.values()
-            .stream()
-            .filter(Objects::nonNull)
-            .map(Object::toString)
-            .collect(Collectors.toList());
-        
-        if (!nullable){
-            propertyStrings.add(0, "Not Null");
+        if (whitelist != null) {
+            if (whitelist.isEmpty()) {
+                return "Null only";
+            }
+            return (nullable ? "" : "Not Null") + String.format("IN %s", whitelist);
         }
+
+        List<String> propertyStrings = restrictions.values()
+                .stream()
+                .filter(Objects::nonNull)
+                .map(Object::toString)
+                .collect(Collectors.toList());
 
         if (propertyStrings.isEmpty()) {
             return "<all values>";
+        }
+
+        if (!nullable){
+            propertyStrings.add(0, "Not Null");
         }
 
         return String.join(" & ", propertyStrings);
@@ -182,7 +188,7 @@ public class FieldSpec {
     }
 
     public int hashCode() {
-        return Objects.hash(nullable, restrictions, formatting);
+        return Objects.hash(nullable, whitelist, restrictions, formatting);
     }
 
     @Override
@@ -194,6 +200,7 @@ public class FieldSpec {
 
         FieldSpec other = (FieldSpec) obj;
         return Objects.equals(nullable, other.nullable)
+            && Objects.equals(whitelist, other.whitelist)
             && Objects.equals(restrictions, other.restrictions)
             && Objects.equals(formatting, other.formatting);
     }
