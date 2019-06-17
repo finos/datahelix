@@ -252,7 +252,7 @@ Scotland
 ...
 ```
 
-After loading the set from the file, this constraint behaves identically to the [inSet](#predicate-inset) constraint.
+After loading the set from the file, this constraint behaves identically to the [inSet](#predicate-inset) constraint. This includes its behaviour when negated or violated.
 
 ## Textual constraints
 
