@@ -3,6 +3,7 @@ package com.scottlogic.deg.profile.reader.file.names;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes;
 import com.scottlogic.deg.generator.utils.SetUtils;
+import com.scottlogic.deg.profile.reader.file.inputstream.FilepathToInputStream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -29,18 +30,17 @@ public class NameRetrieverTest {
     private NameRetriever service;
 
     @Mock
-    private Function<String, InputStream> mapper;
+    private FilepathToInputStream mapper;
 
     private void mockNames(String fileName, String... names) {
         String combinedName = Stream.of(names)
-            .reduce((a,b) -> String.join("\n", a, b))
+            .reduce((a, b) -> String.join("\n", a, b))
             .orElseThrow(IllegalStateException::new);
-        when(mapper.apply(fileName)).thenReturn(new ByteArrayInputStream(combinedName.getBytes(Charset.defaultCharset())));
+        when(mapper.createStreamFromPath(fileName)).thenReturn(new ByteArrayInputStream(combinedName.getBytes(Charset.defaultCharset())));
     }
 
     private void mockFirstNames() {
-        mockNames("names/firstname_male.csv", "Mark", "Paul");
-        mockNames("names/firstname_female.csv", "Jolene", "Tanya");
+        mockNames("names/firstname.csv", "Mark", "Paul", "Jolene", "Tanya");
     }
 
     @Test
