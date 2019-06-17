@@ -22,8 +22,4 @@ public class SetUtils {
         return Stream.of(e1, e2, e3).collect(Collectors.toSet());
     }
 
-    @SafeVarargs
-    public static <T> Set<T> setOf(T ... elements) {
-        return Stream.of(elements).collect(Collectors.toSet());
-    }
 }

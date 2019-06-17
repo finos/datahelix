@@ -19,6 +19,7 @@
         2. [inSet](#predicate-inset)
         3. [null](#predicate-null)
         4. [ofType](#predicate-oftype)
+        5. [fromFile](#predicate-fromfile)
     3. [Textual constraints](#Textual-constraints)
         1. [matchingRegex](#predicate-matchingregex)
         2. [containingRegex](#predicate-containingregex)
@@ -229,6 +230,29 @@ Is satisfied if `field` is null or absent.
 ```
 
 Is satisfied if `field` is of type represented by `value` (valid options: `decimal`, `integer`, `string`, `datetime`, `ISIN`, `SEDOL`, `CUSIP`, `RIC`, `firstname`, `lastname` or `fullname`)
+
+<div id="predicate-fromfile"></div>
+
+### `fromFile` _(field, value)_
+
+```javascript
+{ "field": "country", "is": "fromFile", "value": "countries.csv" }
+```
+
+Populates a set from the new-line delimited file (with suffix `.csv`), where each line represents a string value to load.
+The file should be location in the same directory as the jar, and the name should match the `value` with `.csv` appended.
+In the above example, this would be `countries.csv`.
+
+Example `countries.csv` excerpt:
+```javascript
+...
+England
+Wales
+Scotland
+...
+```
+
+After loading the set from the file, this constraint behaves identically to the [inSet](#predicate-inset) constraint. This includes its behaviour when negated or violated.
 
 ## Textual constraints
 
