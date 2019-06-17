@@ -94,7 +94,7 @@ class NumericRestrictionsMergeOperationTests {
         Optional<FieldSpec> result = operation.applyMergeOperation(left, right, merging);
 
         Assert.assertThat(result.isPresent(), is(true));
-        Assert.assertThat(result.get(), not(sameInstance(merging)));
+        Assert.assertThat(result.get(), is(sameInstance(merging)));
         Assert.assertThat(result.get().getNumericRestrictions(), is(nullValue()));
         Assert.assertThat(result.get().getTypeRestrictions(), not(nullValue()));
         Assert.assertThat(result.get().getTypeRestrictions().getAllowedTypes(), not(hasItem(IsOfTypeConstraint.Types.NUMERIC)));
@@ -113,8 +113,7 @@ class NumericRestrictionsMergeOperationTests {
         Assert.assertThat(result.isPresent(), is(true));
         Assert.assertThat(result.get(), not(sameInstance(merging)));
         Assert.assertThat(result.get().getNumericRestrictions(), is(nullValue()));
-        Assert.assertThat(result.get().getTypeRestrictions(), not(nullValue()));
-        Assert.assertThat(result.get().getTypeRestrictions().getAllowedTypes(), empty());
+        Assert.assertThat(result.get().getSetRestrictions().getWhitelist(), is(empty()));
     }
 
     @Test

@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
 
 import com.scottlogic.deg.generator.restrictions.*;
@@ -101,8 +102,27 @@ public class FieldSpec {
         return new FieldSpec(restrictions, nullable, formatting);
     }
 
+    public FieldSpec withoutType(IsOfTypeConstraint.Types type){
+        TypeRestrictions typeRestrictions = getTypeRestrictions();
+        if (typeRestrictions == null){
+            typeRestrictions = DataTypeRestrictions.ALL_TYPES_PERMITTED;
+        }
+        typeRestrictions = typeRestrictions.except(type);
+
+        if (typeRestrictions.getAllowedTypes().isEmpty()){
+            return new FieldSpec(new HeterogeneousTypeContainer<>(), nullable, formatting)
+                .withSetRestrictions(new SetRestrictions(Collections.emptySet()));
+        }
+
+        return withTypeRestrictions(typeRestrictions);
+    }
+
     private <T extends Restrictions> FieldSpec withConstraint(Class<T> type, T restriction) {
         return new FieldSpec(restrictions.put(type, restriction), nullable, formatting);
+    }
+
+    public boolean isTypeAllowed(IsOfTypeConstraint.Types type){
+        return getTypeRestrictions() == null || getTypeRestrictions().isTypeAllowed(type);
     }
 
     @Override

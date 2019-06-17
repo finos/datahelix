@@ -6,6 +6,9 @@ import com.scottlogic.deg.generator.restrictions.*;
 
 import java.util.Optional;
 
+import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.NUMERIC;
+import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.STRING;
+
 public class NumericRestrictionsMergeOperation implements RestrictionMergeOperation {
     private final NumericRestrictionsMerger merger;
 
@@ -16,18 +19,15 @@ public class NumericRestrictionsMergeOperation implements RestrictionMergeOperat
 
     @Override
     public Optional<FieldSpec> applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merging) {
+        if (!merging.isTypeAllowed(NUMERIC)){
+            return Optional.of(merging);
+        }
+
         MergeResult<NumericRestrictions> mergeResult = merger.merge(
             left.getNumericRestrictions(), right.getNumericRestrictions());
 
         if (!mergeResult.successful) {
-            TypeRestrictions typeRestrictions = merging.getTypeRestrictions();
-            if (typeRestrictions == null){
-                typeRestrictions = DataTypeRestrictions.ALL_TYPES_PERMITTED;
-            }
-
-            return Optional.of(merging
-                .withTypeRestrictions(
-                    typeRestrictions.except(IsOfTypeConstraint.Types.NUMERIC)));
+            return Optional.of(merging.withoutType(NUMERIC));
         }
 
         NumericRestrictions numberRestrictions = mergeResult.restrictions;

@@ -6,6 +6,9 @@ import com.scottlogic.deg.generator.restrictions.*;
 
 import java.util.Optional;
 
+import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.DATETIME;
+import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.STRING;
+
 public class DateTimeRestrictionsMergeOperation implements RestrictionMergeOperation {
     private final DateTimeRestrictionsMerger merger;
 
@@ -16,20 +19,15 @@ public class DateTimeRestrictionsMergeOperation implements RestrictionMergeOpera
 
     @Override
     public Optional<FieldSpec> applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merging) {
+        if (!merging.isTypeAllowed(DATETIME)){
+            return Optional.of(merging);
+        }
+
         MergeResult<DateTimeRestrictions> mergeResult = merger.merge(
             left.getDateTimeRestrictions(), right.getDateTimeRestrictions());
 
         if (!mergeResult.successful){
-            //no datetimes can be created
-
-            TypeRestrictions typeRestrictions = merging.getTypeRestrictions();
-            if (typeRestrictions == null){
-                typeRestrictions = DataTypeRestrictions.ALL_TYPES_PERMITTED;
-            }
-
-            return Optional.of(merging
-                .withTypeRestrictions(
-                    typeRestrictions.except(IsOfTypeConstraint.Types.DATETIME)));
+            return Optional.of(merging.withoutType(DATETIME));
         }
 
         if (mergeResult.restrictions == null) {

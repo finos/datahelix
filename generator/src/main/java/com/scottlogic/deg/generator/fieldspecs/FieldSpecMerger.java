@@ -12,13 +12,11 @@ import java.util.stream.Collectors;
  */
 public class FieldSpecMerger {
     private static final RestrictionMergeOperation initialMergeOperation = new TypesRestrictionMergeOperation();
-
     private static final RestrictionMergeOperation[] mergeOperations = new RestrictionMergeOperation[]{
         initialMergeOperation,
         new StringRestrictionsMergeOperation(),
         new NumericRestrictionsMergeOperation(new NumericRestrictionsMerger()),
         new DateTimeRestrictionsMergeOperation(new DateTimeRestrictionsMerger()),
-        new NullRestrictionsMergeOperation(),
         new BlacklistRestictionsMergeOperation()
     };
 
@@ -45,7 +43,7 @@ public class FieldSpecMerger {
             left.getSetRestrictions().getWhitelist(),
             right.getSetRestrictions().getWhitelist()
         );
-        return addNullable(left, right, set);
+        return addNullable(left, right, setRestriction(set));
     }
 
     private Optional<FieldSpec> combineSetWithRestrictions(FieldSpec set, FieldSpec restrictions) {
@@ -53,23 +51,29 @@ public class FieldSpecMerger {
             .filter(restrictions::permits)
             .collect(Collectors.toSet());
 
-        return addNullable(set, restrictions, newSet);
+        return addNullable(set, restrictions, setRestriction(newSet));
     }
 
-    private Optional<FieldSpec> addNullable(FieldSpec left, FieldSpec right, Set<Object> set) {
-        FieldSpec newFieldSpec = FieldSpec.Empty.withSetRestrictions(new SetRestrictions(set));
-
+    private Optional<FieldSpec> addNullable(FieldSpec left, FieldSpec right, FieldSpec newFieldSpec) {
         newFieldSpec = addFormatting(left, right, newFieldSpec);
 
         if (isNullable(left, right)) {
             return Optional.of(newFieldSpec);
         }
 
-        if (set.isEmpty()) {
+        if (noAllowedValues(newFieldSpec)) {
             return Optional.empty();
         }
 
         return Optional.of(newFieldSpec.withNotNull());
+    }
+
+    private boolean noAllowedValues(FieldSpec fieldSpec) {
+        return (fieldSpec.getSetRestrictions() != null && fieldSpec.getSetRestrictions().getWhitelist().isEmpty());
+    }
+
+    private FieldSpec setRestriction(Set<Object> set) {
+        return FieldSpec.Empty.withSetRestrictions(new SetRestrictions(set));
     }
 
     private boolean hasSet(FieldSpec fieldSpec) {
@@ -100,15 +104,6 @@ public class FieldSpecMerger {
             }
         }
 
-        if (cannotEmitAnyData(merging.get())) {
-            return Optional.empty();
-        }
-
-        return Optional.of(addFormatting(left, right, merging.get()));
-    }
-
-    private boolean cannotEmitAnyData(FieldSpec fieldSpec) {
-        return !fieldSpec.isNullable()
-            && fieldSpec.getTypeRestrictions().getAllowedTypes().isEmpty();
+        return addNullable(left, right, merging.get());
     }
 }
