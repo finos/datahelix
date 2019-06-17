@@ -20,16 +20,16 @@ public final class NameRetriever {
     public static Set<Object> loadNamesFromFile(NameConstraintTypes configuration) {
         Set<String> names;
         if (configuration == FULL) {
-            names = generateCombinations(
-                generateSingles(FIRST.getFilePath()),
-                generateSingles(LAST.getFilePath()));
+            names = combineFirstWithLastNames(
+                generateNamesFromSingleFile(FIRST.getFilePath()),
+                generateNamesFromSingleFile(LAST.getFilePath()));
         } else {
-            names = generateSingles(configuration.getFilePath());
+            names = generateNamesFromSingleFile(configuration.getFilePath());
         }
         return new HashSet<>(names);
     }
 
-    private static Set<String> generateSingles(String source) {
+    private static Set<String> generateNamesFromSingleFile(String source) {
         InputStream stream = NameRetriever.class.getClassLoader().getResourceAsStream(source);
         Set<String> result = CsvInputStreamReader.retrieveLines(stream);
         try {
@@ -40,18 +40,14 @@ public final class NameRetriever {
         return result;
     }
 
-    private static Set<String> generateCombinations(Set<String> firstNames, Set<String> lastNames) {
+    private static Set<String> combineFirstWithLastNames(Set<String> firstNames, Set<String> lastNames) {
         Set<String> names = new HashSet<>();
         for (String first : firstNames) {
             for (String last : lastNames) {
-                names.add(combineFirstAndLastName(first, last));
+                names.add(String.format("%s %s", first, last));
             }
         }
         return names;
-    }
-
-    private static String combineFirstAndLastName(final String first, final String last) {
-        return first + " " + last;
     }
 
 }
