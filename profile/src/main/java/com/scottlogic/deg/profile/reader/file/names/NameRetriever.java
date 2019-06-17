@@ -6,6 +6,9 @@ import com.scottlogic.deg.profile.reader.file.PathToStringsLoader;
 import com.scottlogic.deg.profile.reader.file.inputstream.ClasspathMapper;
 import com.scottlogic.deg.profile.reader.file.inputstream.FilepathToInputStream;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,14 +17,14 @@ import static com.scottlogic.deg.common.profile.constraints.atomic.NameConstrain
 
 public class NameRetriever {
 
-    private final PathToStringsLoader filepathToNames;
+    private final FilepathToInputStream pathToStream;
 
     public NameRetriever() {
-        this(new ClasspathMapper());
+        this.pathToStream = new ClasspathMapper();
     }
 
-    public NameRetriever(final FilepathToInputStream filepathToInputStream) {
-        filepathToNames = new CSVFromPathToStringsLoader(filepathToInputStream);
+    public NameRetriever(final FilepathToInputStream pathToStream) {
+        this.pathToStream = pathToStream;
     }
 
     public Set<Object> loadNamesFromFile(NameConstraintTypes configuration) {
@@ -43,7 +46,14 @@ public class NameRetriever {
     }
 
     private Set<String> generateSingles(String source) {
-        return filepathToNames.retrieveNames(source);
+        InputStream stream = pathToStream.createStreamFromPath(source);
+        Set<String> result = CSVFromPathToStringsLoader.retrieveNames(stream);
+        try {
+            stream.close();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+        return result;
     }
 
     private static Set<String> generateCombinations(Set<String> firstNames, Set<String> lastNames) {

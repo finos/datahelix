@@ -14,21 +14,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class CSVFromPathToStringsLoader implements PathToStringsLoader {
+public class CSVFromPathToStringsLoader {
 
-    private final FilepathToInputStream pathStreamMapper;
-
-    public CSVFromPathToStringsLoader() {
-        this(new PathMapper());
-    }
-
-    public CSVFromPathToStringsLoader(final FilepathToInputStream pathStreamMapper) {
-        this.pathStreamMapper = pathStreamMapper;
-    }
-
-    @Override
-    public Set<String> retrieveNames(String path) {
-        InputStream stream = pathStreamMapper.createStreamFromPath(path);
+    public static Set<String> retrieveNames(InputStream stream) {
         Set<String> result = extractLines(stream);
         closeQuietly(stream);
         return result;

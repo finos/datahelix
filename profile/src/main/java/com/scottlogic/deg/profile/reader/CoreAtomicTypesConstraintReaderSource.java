@@ -8,8 +8,10 @@ import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.profile.reader.file.CSVFromPathToStringsLoader;
 import com.scottlogic.deg.profile.reader.file.PathToStringsLoader;
+import com.scottlogic.deg.profile.reader.file.inputstream.ClasspathMapper;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Collections;
@@ -314,8 +316,9 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                 (dto, fields, rules) -> {
                     String value = ConstraintReaderHelpers.getValidatedValue(dto, String.class);
 
-                    PathToStringsLoader loader = new CSVFromPathToStringsLoader();
-                    Set<String> names = loader.retrieveNames(value);
+                    InputStream stream = getClass().getClassLoader().getResourceAsStream(value);
+
+                    Set<String> names = CSVFromPathToStringsLoader.retrieveNames(stream);
 
                     Set<Object> downcastedNames = new HashSet<>(names);
 
