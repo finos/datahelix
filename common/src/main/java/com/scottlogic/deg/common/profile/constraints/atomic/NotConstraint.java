@@ -10,7 +10,7 @@ import java.util.Set;
 public class NotConstraint implements AtomicConstraint {
     public final AtomicConstraint negatedConstraint;
 
-    public NotConstraint(AtomicConstraint negatedConstraint) {
+    protected NotConstraint(AtomicConstraint negatedConstraint) {
         if (negatedConstraint instanceof NotConstraint)
             throw new IllegalArgumentException("Nested NotConstraint not allowed");
         this.negatedConstraint = negatedConstraint;

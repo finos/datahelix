@@ -28,7 +28,7 @@ public class ContradictionCheckerTests {
         // shared
         Field fieldA = new Field("fieldA");
         AtomicConstraint isInteger = new IsOfTypeConstraint(fieldA, IsOfTypeConstraint.Types.NUMERIC, null);
-        AtomicConstraint notNull = new NotConstraint(new IsNullConstraint(fieldA, null));
+        AtomicConstraint notNull = (new IsNullConstraint(fieldA, null)).negate();
 
         //left
         ConstraintNode leftNode = new TreeConstraintNode();
@@ -62,7 +62,7 @@ public class ContradictionCheckerTests {
         // shared
         Field fieldA = new Field("fieldA");
         AtomicConstraint isInteger = new IsOfTypeConstraint(fieldA, IsOfTypeConstraint.Types.NUMERIC, null);
-        AtomicConstraint notNull = new NotConstraint(new IsNullConstraint(fieldA, null));
+        AtomicConstraint notNull = (new IsNullConstraint(fieldA, null)).negate();
 
         //left
         ConstraintNode leftNode = new TreeConstraintNode();
