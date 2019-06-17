@@ -14,21 +14,21 @@ public class NameRetrieverTest {
 
     @Test
     public void retrieveValuesFirst() {
-        Set<Object> names = setFromConstraint(NameConstraintTypes.FIRST);
+        Set<Object> names = NameRetriever.loadNamesFromFile(NameConstraintTypes.FIRST);
 
         assertEquals(704, names.size());
     }
 
     @Test
     public void retrieveValuesLast() {
-        Set<Object> names = setFromConstraint(NameConstraintTypes.LAST);
+        Set<Object> names = NameRetriever.loadNamesFromFile(NameConstraintTypes.LAST);
 
         assertEquals(280, names.size());
     }
 
     @Test
     public void retrieveValuesFull() {
-        Set<Object> names = setFromConstraint(NameConstraintTypes.FULL);
+        Set<Object> names = NameRetriever.loadNamesFromFile(NameConstraintTypes.FULL);
 
         assertEquals(197120, names.size());
     }
@@ -36,12 +36,8 @@ public class NameRetrieverTest {
     @ParameterizedTest
     @EnumSource(NameConstraintTypes.class)
     public void testAllValuesGiveValidResult(NameConstraintTypes config) {
-        Set<Object> result = setFromConstraint(config);
+        Set<Object> result = NameRetriever.loadNamesFromFile(config);
 
         assertNotNull(result);
-    }
-
-    private Set<Object> setFromConstraint(NameConstraintTypes config) {
-        return NameRetriever.loadNamesFromFile(config);
     }
 }
