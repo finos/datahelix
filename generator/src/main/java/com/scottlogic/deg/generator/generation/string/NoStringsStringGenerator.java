@@ -1,10 +1,9 @@
-package com.scottlogic.deg.generator.generation;
+package com.scottlogic.deg.generator.generation.string;
 
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Optional;
 
 public class NoStringsStringGenerator implements StringGenerator {
     private final String stringRepresentation;

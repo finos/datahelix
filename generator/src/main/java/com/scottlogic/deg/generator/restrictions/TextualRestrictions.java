@@ -1,8 +1,8 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.generation.NoStringsStringGenerator;
-import com.scottlogic.deg.generator.generation.RegexStringGenerator;
-import com.scottlogic.deg.generator.generation.StringGenerator;
+import com.scottlogic.deg.generator.generation.string.NoStringsStringGenerator;
+import com.scottlogic.deg.generator.generation.string.RegexStringGenerator;
+import com.scottlogic.deg.generator.generation.string.StringGenerator;
 import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.util.*;

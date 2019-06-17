@@ -1,9 +1,9 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.StandardConstraintTypes;
-import com.scottlogic.deg.generator.generation.IsinStringGenerator;
-import com.scottlogic.deg.generator.generation.RegexStringGenerator;
-import com.scottlogic.deg.generator.generation.StringGenerator;
+import com.scottlogic.deg.generator.generation.string.IsinStringGenerator;
+import com.scottlogic.deg.generator.generation.string.RegexStringGenerator;
+import com.scottlogic.deg.generator.generation.string.StringGenerator;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 

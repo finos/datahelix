@@ -1,5 +1,7 @@
-package com.scottlogic.deg.generator.generation;
+package com.scottlogic.deg.generator.generation.string;
 
+import com.scottlogic.deg.generator.generation.string.AutomatonUtils;
+import com.scottlogic.deg.generator.generation.string.RegexStringGenerator;
 import dk.brics.automaton.Automaton;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;

@@ -1,5 +1,7 @@
-package com.scottlogic.deg.generator.generation;
+package com.scottlogic.deg.generator.generation.string;
 
+import com.scottlogic.deg.generator.generation.string.RegexStringGenerator;
+import com.scottlogic.deg.generator.generation.string.StringGenerator;
 import com.scottlogic.deg.generator.utils.IterableAsStream;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import org.hamcrest.core.Is;
@@ -349,8 +351,8 @@ public class RegexStringGeneratorTests {
         String invalidStr = "a simple invalid 😘 string";
         String validStr = "a simple valid 亮 string";
 
-        assertFalse(generator.isStringValidUtf8(invalidStr));
-        assertTrue(generator.isStringValidUtf8(validStr));
+        assertFalse(StringUtils.isStringValidUtf8(invalidStr));
+        assertTrue(StringUtils.isStringValidUtf8(validStr));
     }
 
     @Test
@@ -360,8 +362,8 @@ public class RegexStringGeneratorTests {
         char invalidChar = 0xD83D;
         char validChar = '亮';
 
-        assertFalse(generator.isCharValidUtf8(invalidChar));
-        assertTrue(generator.isCharValidUtf8(validChar));
+        assertFalse(StringUtils.isCharValidUtf8(invalidChar));
+        assertTrue(StringUtils.isCharValidUtf8(validChar));
     }
 
     @Test

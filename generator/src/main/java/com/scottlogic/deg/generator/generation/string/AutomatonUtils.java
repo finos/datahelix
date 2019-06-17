@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.generation;
+package com.scottlogic.deg.generator.generation.string;
 
 import dk.brics.automaton.Automaton;
 import dk.brics.automaton.State;
@@ -167,4 +167,5 @@ class AutomatonUtils {
 
         return currentBest;
     }
+
 }

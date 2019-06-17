@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.generation.NoStringsStringGenerator;
-import com.scottlogic.deg.generator.generation.StringGenerator;
+import com.scottlogic.deg.generator.generation.string.NoStringsStringGenerator;
+import com.scottlogic.deg.generator.generation.string.StringGenerator;
 
 /**
  * Represents a set of string restrictions that could never produce and values

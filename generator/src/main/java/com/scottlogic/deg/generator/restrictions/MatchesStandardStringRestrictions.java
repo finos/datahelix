@@ -1,7 +1,10 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.StandardConstraintTypes;
-import com.scottlogic.deg.generator.generation.*;
+import com.scottlogic.deg.generator.generation.string.CusipStringGenerator;
+import com.scottlogic.deg.generator.generation.string.IsinStringGenerator;
+import com.scottlogic.deg.generator.generation.string.SedolStringGenerator;
+import com.scottlogic.deg.generator.generation.string.StringGenerator;
 
 /**
  * Represents the restriction of a field to an `aValid` operator
