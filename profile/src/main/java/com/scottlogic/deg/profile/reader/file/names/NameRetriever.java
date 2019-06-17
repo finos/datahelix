@@ -12,9 +12,13 @@ import java.util.Set;
 import static com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes.FIRST;
 import static com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes.LAST;
 
-public class NameRetriever {
+public final class NameRetriever {
 
-    public Set<Object> loadNamesFromFile(NameConstraintTypes configuration) {
+    private NameRetriever() {
+        throw new UnsupportedOperationException("No static class instantiation");
+    }
+
+    public static Set<Object> loadNamesFromFile(NameConstraintTypes configuration) {
         Set<String> names;
         switch (configuration) {
             case FIRST:
@@ -32,8 +36,8 @@ public class NameRetriever {
         return new HashSet<>(names);
     }
 
-    private Set<String> generateSingles(String source) {
-        InputStream stream = getClass().getClassLoader().getResourceAsStream(source);
+    private static Set<String> generateSingles(String source) {
+        InputStream stream = NameRetriever.class.getClassLoader().getResourceAsStream(source);
         Set<String> result = CSVFromPathToStringsLoader.retrieveNames(stream);
         try {
             stream.close();

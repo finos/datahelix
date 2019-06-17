@@ -17,11 +17,10 @@ public class PersonalDataTypesConstraintReaderSource implements ConstraintReader
 
     public Stream<ConstraintReaderMapEntry> getConstraintReaderMapEntries() {
         ConstraintReader nameConstraintReader = (dto, fields, rules) -> {
-            NameRetriever nameRetriever = new NameRetriever();
-            
+
             NameConstraintTypes type = lookupNameConstraint(dto);
 
-            Set<Object> names = nameRetriever.loadNamesFromFile(type);
+            Set<Object> names = NameRetriever.loadNamesFromFile(type);
 
             Field field = fields.getByName(dto.field);
             return new AndConstraint(
