@@ -7,6 +7,7 @@ import com.google.inject.name.Named;
 import com.scottlogic.deg.common.profile.ViolatedProfile;
 import com.scottlogic.deg.output.FileUtils;
 import com.scottlogic.deg.output.FileUtilsImpl;
+import com.scottlogic.deg.output.OutputPath;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -25,8 +26,8 @@ public class JsonManifestWriter implements ManifestWriter {
     private final Path outputPath;
 
     @Inject
-    public JsonManifestWriter(@Named("config:outputPath") Path outputPath){
-        this.outputPath = outputPath;
+    public JsonManifestWriter(OutputPath outputPath){
+        this.outputPath = outputPath.getPath();
     }
 
     public void writeManifest(List<ViolatedProfile> result) throws IOException {

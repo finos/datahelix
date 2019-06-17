@@ -4,7 +4,7 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.T
 
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.common.util.HeterogeneousTypeContainer;
-import com.scottlogic.deg.generator.restrictions.set.SetRestrictions;
+import com.scottlogic.deg.generator.restrictions.SetRestrictions;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -13,21 +13,34 @@ import java.util.stream.Collectors;
  * Details a column's atomic constraints
  */
 public class FieldSpec {
-    public static final FieldSpec Empty = new FieldSpec(
-        new HeterogeneousTypeContainer<>(),
-        FieldSpecSource.Empty);
+    public static final FieldSpec Empty =
+        new FieldSpec(new HeterogeneousTypeContainer<>(), true, null);
+
+    private final boolean nullable;
+    private final String formatting;
 
     private final HeterogeneousTypeContainer<Restrictions> restrictions;
-    private final FieldSpecSource source;
 
-    private FieldSpec(HeterogeneousTypeContainer<Restrictions> restrictions,
-                      FieldSpecSource source) {
+    private FieldSpec(
+        HeterogeneousTypeContainer<Restrictions> restrictions,
+        boolean nullable,
+        String formatting
+    ) {
         this.restrictions = restrictions;
-        this.source = source;
+        this.nullable = nullable;
+        this.formatting = formatting;
+    }
+
+    public boolean isNullable() {
+        return nullable;
     }
 
     public SetRestrictions getSetRestrictions() {
         return restrictions.get(SetRestrictions.class).orElse(null);
+    }
+
+    public BlacklistRestrictions getBlacklistRestrictions() {
+        return restrictions.get(BlacklistRestrictions.class).orElse(null);
     }
 
     public NumericRestrictions getNumericRestrictions() {
@@ -38,10 +51,6 @@ public class FieldSpec {
         return restrictions.get(StringRestrictions.class).orElse(null);
     }
 
-    public NullRestrictions getNullRestrictions() {
-        return restrictions.get(NullRestrictions.class).orElse(null);
-    }
-
     public TypeRestrictions getTypeRestrictions() {
         return restrictions.get(TypeRestrictions.class).orElse(null);
     }
@@ -50,44 +59,50 @@ public class FieldSpec {
         return restrictions.get(DateTimeRestrictions.class).orElse(null);
     }
 
-    public FormatRestrictions getFormatRestrictions() {
-        return restrictions.get(FormatRestrictions.class).orElse(null);
+    public String getFormatting() {
+        return formatting;
     }
 
-    public FieldSpecSource getFieldSpecSource() {
-        return source;
+    public FieldSpec withSetRestrictions(SetRestrictions setRestrictions) {
+        return withConstraint(SetRestrictions.class, setRestrictions);
     }
 
-    public FieldSpec withSetRestrictions(SetRestrictions setRestrictions, FieldSpecSource source) {
-        return withConstraint(SetRestrictions.class, setRestrictions, source);
+    public FieldSpec withNumericRestrictions(NumericRestrictions numericRestrictions) {
+        return withConstraint(NumericRestrictions.class, numericRestrictions);
     }
 
-    public FieldSpec withNumericRestrictions(NumericRestrictions numericRestrictions, FieldSpecSource source) {
-        return withConstraint(NumericRestrictions.class, numericRestrictions, source);
+    public FieldSpec withBlacklistRestrictions(BlacklistRestrictions blacklistRestrictions) {
+        return withConstraint(BlacklistRestrictions.class, blacklistRestrictions);
     }
 
-    public FieldSpec withStringRestrictions(StringRestrictions stringRestrictions, FieldSpecSource source) {
-        return withConstraint(StringRestrictions.class, stringRestrictions, source);
+    public FieldSpec withTypeRestrictions(TypeRestrictions typeRestrictions) {
+        return withConstraint(TypeRestrictions.class, typeRestrictions);
     }
 
-    public FieldSpec withTypeRestrictions(TypeRestrictions typeRestrictions, FieldSpecSource source) {
-        return withConstraint(TypeRestrictions.class, typeRestrictions, source);
+    public FieldSpec withStringRestrictions(StringRestrictions stringRestrictions) {
+        return withConstraint(StringRestrictions.class, stringRestrictions);
     }
 
-    public FieldSpec withNullRestrictions(NullRestrictions nullRestrictions, FieldSpecSource source) {
-        return withConstraint(NullRestrictions.class, nullRestrictions, source);
+    public FieldSpec withNotNull() {
+        return new FieldSpec(restrictions, false, formatting);
     }
 
-    public FieldSpec withDateTimeRestrictions(DateTimeRestrictions dateTimeRestrictions, FieldSpecSource source) {
-        return withConstraint(DateTimeRestrictions.class, dateTimeRestrictions, source);
+    public static FieldSpec mustBeNull() {
+        return FieldSpec.Empty.withSetRestrictions(
+            SetRestrictions.fromWhitelist(Collections.emptySet())
+        );
     }
 
-    public FieldSpec withFormatRestrictions(FormatRestrictions formatRestrictions, FieldSpecSource source) {
-        return withConstraint(FormatRestrictions.class, formatRestrictions, source);
+    public FieldSpec withDateTimeRestrictions(DateTimeRestrictions dateTimeRestrictions) {
+        return withConstraint(DateTimeRestrictions.class, dateTimeRestrictions);
     }
 
-    private <T extends Restrictions> FieldSpec withConstraint(Class<T> type, T restriction, FieldSpecSource source) {
-        return new FieldSpec(restrictions.put(type, restriction), this.source.combine(source));
+    public FieldSpec withFormatting(String formatting) {
+        return new FieldSpec(restrictions, nullable, formatting);
+    }
+
+    private <T extends Restrictions> FieldSpec withConstraint(Class<T> type, T restriction) {
+        return new FieldSpec(restrictions.put(type, restriction), nullable, formatting);
     }
 
     @Override
@@ -97,9 +112,13 @@ public class FieldSpec {
             .filter(Objects::nonNull)
             .map(Object::toString)
             .collect(Collectors.toList());
+        
+        if (!nullable){
+            propertyStrings.add(0, "Not Null");
+        }
 
         if (propertyStrings.isEmpty()) {
-            return "<empty>";
+            return "<all values>";
         }
 
         return String.join(" & ", propertyStrings);
@@ -122,6 +141,7 @@ public class FieldSpec {
         keys.add(NumericRestrictions.class);
         keys.add(DateTimeRestrictions.class);
         keys.add(StringRestrictions.class);
+        keys.add(BlacklistRestrictions.class);
 
         Set<TypedRestrictions> toCheckForMatch = restrictions.getMultiple(keys)
             .stream()
@@ -137,7 +157,7 @@ public class FieldSpec {
     }
 
     public int hashCode() {
-        return restrictions.hashCode();
+        return Objects.hash(nullable, restrictions, formatting);
     }
 
     @Override
@@ -148,6 +168,8 @@ public class FieldSpec {
         }
 
         FieldSpec other = (FieldSpec) obj;
-        return restrictions.equals(other.restrictions);
+        return Objects.equals(nullable, other.nullable)
+            && Objects.equals(restrictions, other.restrictions)
+            && Objects.equals(formatting, other.formatting);
     }
 }

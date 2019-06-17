@@ -9,20 +9,55 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public abstract class ChecksummedCodeStringGenerator implements StringGenerator {
-    protected final RegexStringGenerator sansCheckDigitGenerator;
+    protected final RegexStringGenerator regexGenerator;
     protected final boolean negate;
+    protected final int prefixLength;
+    protected final int codeLength;
+    protected boolean unfulfillable;
 
-    public ChecksummedCodeStringGenerator(String generationPatternSansCheck) {
-        negate = false;
-        sansCheckDigitGenerator = new RegexStringGenerator(generationPatternSansCheck, true);
+    public ChecksummedCodeStringGenerator(
+        String generationPattern,
+        int codeLength,
+        int prefixLength
+    ) {
+        this(
+            new RegexStringGenerator(generationPattern, true),
+            false,
+            codeLength,
+            prefixLength
+        );
     }
 
-    public ChecksummedCodeStringGenerator(RegexStringGenerator generator, boolean negate) {
+    public ChecksummedCodeStringGenerator(
+        String generationPattern,
+        RegexStringGenerator intersectingGenerator,
+        int codeLength,
+        int prefixLength
+    ) {
+        this(
+            (RegexStringGenerator) new RegexStringGenerator(generationPattern, true)
+                .intersect(intersectingGenerator),
+            false,
+            codeLength,
+            prefixLength
+        );
+    }
+
+    public ChecksummedCodeStringGenerator(
+        RegexStringGenerator generator,
+        boolean negate,
+        int codeLength,
+        int prefixLength
+    ) {
         this.negate = negate;
-        sansCheckDigitGenerator = generator;
+        regexGenerator = generator;
+        this.codeLength = codeLength;
+        this.prefixLength = prefixLength;
     }
 
     public abstract char calculateCheckDigit(String str);
+
+    public abstract int getLength();
 
     @Override
     public abstract StringGenerator complement();
@@ -30,12 +65,44 @@ public abstract class ChecksummedCodeStringGenerator implements StringGenerator 
     @Override
     public abstract boolean match(String subject);
 
+    public String fixCheckDigit(String str) {
+        char checkDigit = calculateCheckDigit(str);
+        int codeLength = getLength();
+        if (str.length() > prefixLength + codeLength) {
+            return str.substring(0, prefixLength + codeLength - 1) +
+                checkDigit + str.substring(prefixLength + codeLength);
+        }
+        return str.substring(0, str.length() - 1) + checkDigit;
+    }
+
     @Override
     public StringGenerator intersect(StringGenerator stringGenerator) {
+        if (stringGenerator instanceof ChecksummedCodeStringGenerator) {
+            ChecksummedCodeStringGenerator otherGenerator =
+                (ChecksummedCodeStringGenerator)stringGenerator;
+            return intersect(otherGenerator.negate ?
+                otherGenerator.regexGenerator.complement() :
+                otherGenerator.regexGenerator);
+        }
+        if (stringGenerator instanceof RegexStringGenerator) {
+            return intersect((RegexStringGenerator)stringGenerator);
+        }
         return new NoStringsStringGenerator(
             RegexStringGenerator.intersectRepresentation(stringGenerator.toString(), "<checksummed string>")
         );
     }
+
+    private StringGenerator intersect(RegexStringGenerator other) {
+        StringGenerator intersection = other.intersect(negate ? regexGenerator.complement() : regexGenerator);
+        if ((intersection.isFinite() && intersection.getValueCount() == 0) || !(intersection instanceof RegexStringGenerator)) {
+            return new NoStringsStringGenerator(
+                RegexStringGenerator.intersectRepresentation(other.toString(), regexGenerator.toString())
+            );
+        }
+        return instantiate((RegexStringGenerator)intersection);
+    }
+
+    abstract ChecksummedCodeStringGenerator instantiate(RegexStringGenerator generator);
 
     @Override
     public boolean isFinite() {
@@ -44,18 +111,17 @@ public abstract class ChecksummedCodeStringGenerator implements StringGenerator 
 
     @Override
     public long getValueCount() {
-        return sansCheckDigitGenerator.getValueCount();
+        return regexGenerator.getValueCount();
     }
 
     @Override
     public Iterable<String> generateInterestingValues() {
         if (negate) {
             return new ConcatenatingIterable<>(
-                sansCheckDigitGenerator.complement().generateInterestingValues(),
-                generateInvalidCheckDigitStrings(sansCheckDigitGenerator::generateInterestingValues));
+                regexGenerator.complement().generateInterestingValues(),
+                generateInvalidCheckDigitStrings(regexGenerator::generateInterestingValues));
         }
-        return new ProjectingIterable<>(sansCheckDigitGenerator.generateInterestingValues(),
-            sansCheckDigit -> sansCheckDigit + calculateCheckDigit(sansCheckDigit));
+        return wrapIterableWithProjectionAndFilter(regexGenerator.generateInterestingValues());
     }
 
     @Override
@@ -65,8 +131,7 @@ public abstract class ChecksummedCodeStringGenerator implements StringGenerator 
                 generateAllInvalidRegexStrings(),
                 generateAllInvalidCheckDigitStrings());
         }
-        return new ProjectingIterable<>(sansCheckDigitGenerator.generateAllValues(),
-            sansCheckDigit -> sansCheckDigit + calculateCheckDigit(sansCheckDigit));
+        return wrapIterableWithProjectionAndFilter(regexGenerator.generateAllValues());
     }
 
     @Override
@@ -78,31 +143,48 @@ public abstract class ChecksummedCodeStringGenerator implements StringGenerator 
                     generateRandomInvalidCheckDigitStrings(randomNumberGenerator)),
                 randomNumberGenerator);
         }
-        return new ProjectingIterable<>(sansCheckDigitGenerator.generateRandomValues(randomNumberGenerator),
-            sansCheckDigit -> sansCheckDigit + calculateCheckDigit(sansCheckDigit));
+        return wrapIterableWithProjectionAndFilter(
+            regexGenerator.generateRandomValues(randomNumberGenerator)
+        );
+    }
+
+    private Iterable<String> wrapIterableWithProjectionAndFilter(Iterable<String> iterable) {
+        return IterableUtils.wrapIterableWithProjectionAndFilter(
+            iterable,
+            this::fixCheckDigit,
+            regexGenerator::match
+        );
     }
 
     private Iterable<String> generateAllInvalidRegexStrings() {
-        return sansCheckDigitGenerator.complement().generateAllValues();
+        return IterableUtils.wrapIterableWithNonEmptyStringCheck(
+            regexGenerator.complement().generateAllValues()
+        );
     }
 
     private Iterable<String> generateRandomInvalidRegexStrings(RandomNumberGenerator randomNumberGenerator) {
-        return sansCheckDigitGenerator.complement().generateRandomValues(randomNumberGenerator);
+        return IterableUtils.wrapIterableWithNonEmptyStringCheck(
+            regexGenerator.complement().generateRandomValues(randomNumberGenerator)
+        );
     }
 
     private Iterable<String> generateAllInvalidCheckDigitStrings() {
-        return generateInvalidCheckDigitStrings(sansCheckDigitGenerator::generateAllValues);
+        return generateInvalidCheckDigitStrings(regexGenerator::generateAllValues);
     }
 
     private Iterable<String> generateRandomInvalidCheckDigitStrings(RandomNumberGenerator randomNumberGenerator) {
         return generateInvalidCheckDigitStrings(
-            () -> sansCheckDigitGenerator.generateRandomValues(randomNumberGenerator));
+            () -> regexGenerator.generateRandomValues(randomNumberGenerator));
     }
 
-    private Iterable<String> generateInvalidCheckDigitStrings(Supplier<Iterable<String>> sansCheckDigitSupplier) {
+    private Iterable<String> generateInvalidCheckDigitStrings(Supplier<Iterable<String>> valueSupplier) {
         return new FlatteningIterable<>(
-            sansCheckDigitSupplier.get(),
-            sansCheckDigit -> {
+            valueSupplier.get(),
+            initialValue -> {
+                String sansCheckDigit = initialValue.substring(
+                    prefixLength,
+                    prefixLength + codeLength - 1
+                );
                 final char checkDigit = calculateCheckDigit(sansCheckDigit);
                 return IntStream.range(0, 10).boxed()
                     .map(digit -> Character.forDigit(digit, 10))

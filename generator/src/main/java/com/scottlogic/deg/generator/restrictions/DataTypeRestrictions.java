@@ -59,12 +59,6 @@ public class DataTypeRestrictions implements TypeRestrictions {
         if (allowedTypes.isEmpty())
             return null;
 
-        //micro-optimisation; if there is only one value in allowedTypes then there must have been only one value in either this.allowedTypes or other.allowedTypes
-        if (allowedTypes.size() == 1) {
-            return other.getAllowedTypes().size() == 1
-                    ? other
-                    : this;
-        }
 
         return new DataTypeRestrictions(allowedTypes);
     }

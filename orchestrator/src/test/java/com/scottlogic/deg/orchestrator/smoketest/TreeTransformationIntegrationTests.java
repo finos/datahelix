@@ -9,8 +9,7 @@ import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.serialisation.DecisionTreeDto;
 import com.scottlogic.deg.generator.decisiontree.serialisation.DecisionTreeMapper;
 import com.scottlogic.deg.generator.decisiontree.testutils.*;
-import com.scottlogic.deg.profile.reader.InvalidProfileException;
-import com.scottlogic.deg.profile.reader.JsonProfileReader;
+import com.scottlogic.deg.profile.reader.*;
 import org.junit.Assert;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -108,8 +107,14 @@ class TreeTransformationIntegrationTests {
                 .listFiles(File::isDirectory)));
     }
 
-    private Profile getProfile(Path path) throws IOException, InvalidProfileException {
-        return new JsonProfileReader().read(path);
+    private Profile getProfile(Path path) throws IOException {
+        BaseConstraintReaderMap readerMap =
+            new BaseConstraintReaderMap(Stream.of(
+                new CoreAtomicTypesConstraintReaderSource(),
+                new FinancialTypesConstraintReaderSource(),
+                new PersonalDataTypesConstraintReaderSource()
+            ));
+        return new JsonProfileReader(readerMap).read(path);
     }
 
     private List<DecisionTreeDto> getMappedExpectedOutput(File file) throws IOException {

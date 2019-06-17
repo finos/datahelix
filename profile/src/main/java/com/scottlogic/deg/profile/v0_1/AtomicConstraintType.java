@@ -12,8 +12,6 @@ public enum AtomicConstraintType {
     MATCHES_REGEX("matchingRegex"),
     CONTAINS_REGEX("containingRegex"),
     FORMATTED_AS("formattedAs"),
-    A_VALID("aValid"),
-    A_TYPICAL("aTypical"),
 
     // String
     HAS_LENGTH("ofLength"),

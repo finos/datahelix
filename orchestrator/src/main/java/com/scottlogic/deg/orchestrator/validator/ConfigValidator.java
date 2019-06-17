@@ -21,19 +21,7 @@ public class ConfigValidator {
     }
 
     public void preProfileChecks(AllConfigSource generationConfigSource) {
-        checkSwitches(generationConfigSource);
-
         checkProfileInputFile(generationConfigSource.getProfileFile());
-    }
-
-    private void checkSwitches(OutputConfigSource configSource) {
-        if (configSource.isEnableTracing() &&
-            fileUtils.getTraceFile(configSource.getOutputPath()).exists() &&
-            !configSource.overwriteOutputFiles()) {
-            throw new OutputTargetValidationException(
-                "trace file already exists, please use a different output filename or use the --replace option"
-            );
-        }
     }
 
     private void checkProfileInputFile(File profileFile) {

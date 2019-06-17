@@ -40,8 +40,16 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
         return 0;
     }
 
-    @CommandLine.Parameters(index = "0", description = "The path of the profile json file.")
+    @CommandLine.Option(
+        names = {"-p", "--profile-file"},
+        required = true,
+        description = "The path of the profile json file.")
     File profileFile;
+
+    @CommandLine.Option(
+        names = {"-o", "--output-path"}, order = 0,
+        description = "The path to write the generated data file to.")
+    private Path outputPath;
 
     @CommandLine.Option(
         names = {"--no-optimise"},
@@ -64,9 +72,6 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
         names = { "--enable-schema-validation" },
         description = "Enables schema validation")
     boolean enableSchemaValidation = false;
-
-    @CommandLine.Parameters(index = "1", description = "The path to write the generated data file to.")
-    private Path outputPath;
 
     @CommandLine.Option(names = {"-t", "--generation-type"},
         description = "Determines the type of data generation performed (${COMPLETION-CANDIDATES})",
@@ -96,12 +101,6 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     private long maxRows = DEFAULT_MAX_ROWS;
 
     @CommandLine.Option(
-        names = {"--trace-constraints"},
-        description = "Defines whether constraint tracing is enabled for the output",
-        hidden = true)
-    private boolean enableTracing;
-
-    @CommandLine.Option(
         names = {"--quiet"},
         description = "Turns OFF default monitoring")
     private Boolean quiet = false;
@@ -118,7 +117,7 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     private Boolean visualiseReductions = false;
 
     @CommandLine.Option(
-        names = {"-o"},
+        names = {"--output-format"},
         description = "Output format (${COMPLETION-CANDIDATES})")
     private OutputFormat outputFormat = CSV;
 
@@ -152,13 +151,13 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     }
 
     @Override
-    public Path getOutputPath() {
-        return this.outputPath;
+    public boolean useStdOut() {
+        return outputPath == null;
     }
 
     @Override
-    public boolean isEnableTracing() {
-        return this.enableTracing;
+    public Path getOutputPath() {
+        return outputPath;
     }
 
     @Override

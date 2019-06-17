@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.generator.utils.IsinUtils;
+import com.scottlogic.deg.generator.utils.FinancialCodeUtils;
 import com.scottlogic.deg.generator.utils.IterableAsStream;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import org.junit.Assert;
@@ -25,7 +25,7 @@ public class IsinStringGeneratorTests {
 
         for (int ii = 0; ii < NumberOfTests; ++ii) {
             final String nextIsin = allIsins.next();
-            final char checkDigit = IsinUtils.calculateIsinCheckDigit(nextIsin.substring(0, 11));
+            final char checkDigit = FinancialCodeUtils.calculateIsinCheckDigit(nextIsin.substring(0, 11));
             assertThat(nextIsin.charAt(11), equalTo(checkDigit));
         }
     }
@@ -40,7 +40,7 @@ public class IsinStringGeneratorTests {
 
         for (int ii = 0; ii < NumberOfTests; ++ii) {
             final String nextIsin = allIsins.next();
-            final char checkDigit = IsinUtils.calculateIsinCheckDigit(nextIsin.substring(0, 11));
+            final char checkDigit = FinancialCodeUtils.calculateIsinCheckDigit(nextIsin.substring(0, 11));
             assertThat(nextIsin.charAt(11), equalTo(checkDigit));
         }
     }
@@ -57,7 +57,7 @@ public class IsinStringGeneratorTests {
                     throw new IllegalStateException("Test assumes that the first 100 ISINs will be GB-flavoured");
 
                 assertThat(
-                    IsinUtils.isValidSedolNsin(isinString.substring(2, 11)), is(true));
+                    FinancialCodeUtils.isValidSedolNsin(isinString.substring(2, 11)), is(true));
 
                 numberOfIsinsTested.incrementAndGet();
             });
@@ -84,7 +84,7 @@ public class IsinStringGeneratorTests {
 
         for (int ii = 0; ii < NumberOfTests; ++ii) {
             final String nextIsin = allIsins.next();
-            assertThat(IsinUtils.isValidIsin(nextIsin), is(false));
+            assertThat(FinancialCodeUtils.isValidIsin(nextIsin), is(false));
         }
     }
 

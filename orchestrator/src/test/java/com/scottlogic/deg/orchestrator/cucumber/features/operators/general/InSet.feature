@@ -994,33 +994,33 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | foo  |
       | null |
 
-### aValid ###
+### Financial data types ###
 
-  Scenario: 'InSet' with a non contradicting 'aValid' ISIN is successful
+  Scenario: In set of valid ISINs combined with an ISIN constraint returns members of the set
     Given there is a field foo
     And foo is in set:
       | "GB00YG2XYC52" |
-    And foo is a valid "ISIN"
+    And foo is of type "ISIN"
     Then the following data should be generated:
       | foo            |
       | null           |
       | "GB00YG2XYC52" |
 
-  Scenario: 'InSet' with a non contradicting not 'aValid' ISIN is successful
+  Scenario: In set of things that are not valid ISINs combined with a non-ISIN constraint returns members of the set
     Given there is a field foo
     And foo is in set:
       | "a" |
-    And foo is anything but a valid "ISIN"
+    And foo is anything but of type "ISIN"
     Then the following data should be generated:
       | foo  |
       | null |
       | "a"  |
 
-  Scenario: Not 'inSet' with a non contradicting 'aValid' ISIN is successful
+  Scenario: Not in set of things that are not valid ISINs combined with an ISIN constraint generates valid ISINs
     Given there is a field foo
     And foo is anything but in set:
       | "a" |
-    And foo is a valid "ISIN"
+    And foo is of type "ISIN"
     And foo is in set:
       | "a"            |
       | "GB00YG2XYC52" |
@@ -1029,49 +1029,49 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null           |
       | "GB00YG2XYC52" |
 
-  Scenario: 'InSet' run against a contradicting 'aValid' ISIN emits null
+  Scenario: In set of things that are not valid ISINs combined with an ISIN constraint only generates nulls
     Given there is a field foo
     And foo is in set:
       | "a" |
-    And foo is a valid "ISIN"
+    And foo is of type "ISIN"
     Then the following data should be generated:
       | foo  |
       | null |
 
-  Scenario: 'InSet' run against a contradicting not 'aValid' ISIN emits null
+  Scenario: In set of valid ISINs combined with a non-ISIN constraint only generates nulls
     Given there is a field foo
     And foo is in set:
       | "GB00YG2XYC52" |
-    And foo is anything but a valid "ISIN"
+    And foo is anything but of type "ISIN"
     Then the following data should be generated:
       | foo  |
       | null |
 
-  Scenario: 'InSet' with a non contradicting 'aValid' SEDOL is successful
+  Scenario: In set of valid SEDOLs combined with a SEDOL constraint returns members of the set
     Given there is a field foo
     And foo is in set:
       | "0263494" |
-    And foo is a valid "SEDOL"
+    And foo is of type "SEDOL"
     Then the following data should be generated:
       | foo       |
       | null      |
       | "0263494" |
 
-  Scenario: 'InSet' with a non contradicting not 'aValid' SEDOL is successful
+  Scenario: In set of things that are not valid SEDOLs combined with a non-SEDOL constraint returns members of the set
     Given there is a field foo
     And foo is in set:
       | "a" |
-    And foo is anything but a valid "SEDOL"
+    And foo is anything but of type "SEDOL"
     Then the following data should be generated:
       | foo  |
       | null |
       | "a"  |
 
-  Scenario: Not 'inSet' with a non contradicting 'aValid' SEDOL is successful
+  Scenario: Not in set of things that are not valid SEDOLs combined with a SEDOL constraint generates valid SEDOLs
     Given there is a field foo
     And foo is anything but in set:
       | "a" |
-    And foo is a valid "SEDOL"
+    And foo is of type "SEDOL"
     And foo is in set:
       | "a"       |
       | "0263494" |
@@ -1080,49 +1080,49 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null      |
       | "0263494" |
 
-  Scenario: 'InSet' run against a contradicting 'aValid' SEDOL emits null
+  Scenario: In set of things that are not valid SEDOLs combined with a SEDOL constraint only generates null
     Given there is a field foo
     And foo is in set:
       | "a" |
-    And foo is a valid "SEDOL"
+    And foo is of type "SEDOL"
     Then the following data should be generated:
       | foo  |
       | null |
 
-  Scenario: 'InSet' run against a contradicting not 'aValid' SEDOL emits null
+  Scenario: In set of valid SEDOLs combined with a non-SEDOL constraint only generates null
     Given there is a field foo
     And foo is in set:
       | "0263494" |
-    And foo is anything but a valid "SEDOL"
+    And foo is anything but of type "SEDOL"
     Then the following data should be generated:
       | foo  |
       | null |
 
-  Scenario: 'InSet' with a non contradicting 'aValid' CUSIP is successful
+  Scenario: In set of valid CUSIPs combined with a CUSIP constraint returns members of the set
     Given there is a field foo
     And foo is in set:
       | "38259P508" |
-    And foo is a valid "CUSIP"
+    And foo is of type "CUSIP"
     Then the following data should be generated:
       | foo         |
       | null        |
       | "38259P508" |
 
-  Scenario: 'InSet' with a non contradicting not 'aValid' CUSIP is successful
+  Scenario: In set of things that are not valid CUSIPs combined with a non-CUSIP constraint returns members of the set
     Given there is a field foo
     And foo is in set:
       | "a" |
-    And foo is anything but a valid "CUSIP"
+    And foo is anything but of type "CUSIP"
     Then the following data should be generated:
       | foo  |
       | null |
       | "a"  |
 
-  Scenario: Not 'inSet' with a non contradicting 'aValid' CUSIP is successful
+  Scenario: Not in set of things that are not valid CUSIPs combined with a CUSIP constraint generates valid CUSIPs
     Given there is a field foo
     And foo is anything but in set:
       | "a" |
-    And foo is a valid "CUSIP"
+    And foo is of type "CUSIP"
     And foo is in set:
       | "a"         |
       | "38259P508" |
@@ -1131,20 +1131,20 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null        |
       | "38259P508" |
 
-  Scenario: 'InSet' run against a contradicting 'aValid' CUSIP emits null
+  Scenario: In set of things that are not valid CUSIPs combined with a CUSIP constraint only generates null
     Given there is a field foo
     And foo is in set:
       | "a" |
-    And foo is a valid "CUSIP"
+    And foo is of type "CUSIP"
     Then the following data should be generated:
       | foo  |
       | null |
 
-  Scenario: 'InSet' run against a contradicting not 'aValid' CUSIP emits null
+  Scenario: In set of things that are valid CUSIPs combined with a non-CUSIP constraint only generates null
     Given there is a field foo
     And foo is in set:
       | "38259P508" |
-    And foo is anything but a valid "CUSIP"
+    And foo is anything but of type "CUSIP"
     Then the following data should be generated:
       | foo  |
       | null |

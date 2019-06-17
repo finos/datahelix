@@ -4,7 +4,8 @@ import java.util.Arrays;
 
 public enum NameConstraintTypes {
     FIRST("firstname"),
-    LAST("lastname");
+    LAST("lastname"),
+    FULL("fullname");
 
     private final String profileText;
 
@@ -12,7 +13,7 @@ public enum NameConstraintTypes {
         this.profileText = profileText;
     }
 
-    private String getProfileText() {
+    public String getProfileText() {
         return profileText;
     }
 

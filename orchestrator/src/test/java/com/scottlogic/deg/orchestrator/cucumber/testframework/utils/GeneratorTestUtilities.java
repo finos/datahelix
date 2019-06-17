@@ -21,7 +21,7 @@ public class GeneratorTestUtilities {
         return mapper;
     }
 
-    public static Object parseInput(String input) throws JsonParseException, InvalidProfileException {
+    public static Object parseInput(String input) throws JsonParseException {
         if (input.startsWith("\"") && input.endsWith("\"")) {
             return input.substring(1, input.length() - 1);
         } else if (input.matches(DateValueStep.DATE_REGEX)) {
@@ -50,7 +50,7 @@ public class GeneratorTestUtilities {
         }
     }
 
-    public static Object parseExpected(String input) throws JsonParseException, InvalidProfileException {
+    public static Object parseExpected(String input) throws JsonParseException {
         if (input.matches(DateValueStep.DATE_REGEX)) {
             return getOffsetDateTime(input);
         }

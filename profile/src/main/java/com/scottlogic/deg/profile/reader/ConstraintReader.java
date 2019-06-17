@@ -13,6 +13,5 @@ public interface ConstraintReader {
     Constraint apply(
         ConstraintDTO dto,
         ProfileFields fields,
-        Set<RuleInformation> rules)
-        throws InvalidProfileException;
+        Set<RuleInformation> rules);
 }
