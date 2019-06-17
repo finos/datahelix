@@ -6,7 +6,7 @@ import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.util.Defaults;
-import com.scottlogic.deg.profile.reader.file.CSVFromPathToStringsLoader;
+import com.scottlogic.deg.profile.reader.file.CsvInputStreamReader;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 
 import java.io.FileInputStream;
@@ -317,7 +317,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                     String value = ConstraintReaderHelpers.getValidatedValue(dto, String.class);
 
                     InputStream streamFromPath = createStreamFromPath(value);
-                    Set<String> names = CSVFromPathToStringsLoader.retrieveNames(streamFromPath);
+                    Set<String> names = CsvInputStreamReader.retrieveLines(streamFromPath);
 
                     Set<Object> downcastedNames = new HashSet<>(names);
                     Field field = fields.getByName(dto.field);

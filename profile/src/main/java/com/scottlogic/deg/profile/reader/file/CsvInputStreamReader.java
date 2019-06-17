@@ -12,9 +12,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class CSVFromPathToStringsLoader {
+public final class CsvInputStreamReader {
 
-    public static Set<String> retrieveNames(InputStream stream) {
+    private CsvInputStreamReader() {
+        throw new UnsupportedOperationException("No instantiation of static class");
+    }
+
+    public static Set<String> retrieveLines(InputStream stream) {
         Set<String> result = extractLines(stream);
         closeQuietly(stream);
         return result;
@@ -25,7 +29,7 @@ public class CSVFromPathToStringsLoader {
 
         Set<String> firstElementFromEachRecord = new HashSet<>();
         for (CSVRecord record : records) {
-            String firstElement = CSVFromPathToStringsLoader.firstElementFromRecord(record);
+            String firstElement = firstElementFromRecord(record);
             firstElementFromEachRecord.add(firstElement);
         }
 

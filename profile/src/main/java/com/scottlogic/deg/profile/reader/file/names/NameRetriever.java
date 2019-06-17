@@ -1,7 +1,7 @@
 package com.scottlogic.deg.profile.reader.file.names;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes;
-import com.scottlogic.deg.profile.reader.file.CSVFromPathToStringsLoader;
+import com.scottlogic.deg.profile.reader.file.CsvInputStreamReader;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,8 +9,7 @@ import java.io.UncheckedIOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes.FIRST;
-import static com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes.LAST;
+import static com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes.*;
 
 public final class NameRetriever {
 
@@ -20,25 +19,19 @@ public final class NameRetriever {
 
     public static Set<Object> loadNamesFromFile(NameConstraintTypes configuration) {
         Set<String> names;
-        switch (configuration) {
-            case FIRST:
-            case LAST:
-                names = generateSingles(configuration.getFilePath());
-                break;
-            case FULL:
-                names = generateCombinations(
-                    generateSingles(FIRST.getFilePath()),
-                    generateSingles(LAST.getFilePath()));
-                break;
-            default:
-                throw new UnsupportedOperationException("Name not implemented of type: " + configuration);
+        if (configuration == FULL) {
+            names = generateCombinations(
+                generateSingles(FIRST.getFilePath()),
+                generateSingles(LAST.getFilePath()));
+        } else {
+            names = generateSingles(configuration.getFilePath());
         }
         return new HashSet<>(names);
     }
 
     private static Set<String> generateSingles(String source) {
         InputStream stream = NameRetriever.class.getClassLoader().getResourceAsStream(source);
-        Set<String> result = CSVFromPathToStringsLoader.retrieveNames(stream);
+        Set<String> result = CsvInputStreamReader.retrieveLines(stream);
         try {
             stream.close();
         } catch (IOException e) {
