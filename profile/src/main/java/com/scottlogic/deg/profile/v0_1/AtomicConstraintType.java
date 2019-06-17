@@ -8,6 +8,7 @@ public enum AtomicConstraintType {
     IS_IN_SET("inSet"),
     IS_NULL("null"),
     IS_OF_TYPE("ofType"),
+    IS_FROM_FILE("fromFile"),
 
     MATCHES_REGEX("matchingRegex"),
     CONTAINS_REGEX("containingRegex"),

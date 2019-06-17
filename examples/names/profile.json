@@ -15,8 +15,7 @@
             { "not": { "field": "surname", "is": "null" } },
             { "not": { "field": "fullname", "is": "null" } }
           ]
-        },
-        {"field": "forename", "is": "ofType", "value": "firstname"}
+        }
       ]
     },
     {
