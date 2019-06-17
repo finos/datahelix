@@ -19,12 +19,6 @@ public final class CsvInputStreamReader {
     }
 
     public static Set<String> retrieveLines(InputStream stream) {
-        Set<String> result = extractLines(stream);
-        closeQuietly(stream);
-        return result;
-    }
-
-    private static Set<String> extractLines(InputStream stream) {
         List<CSVRecord> records = parse(stream);
 
         Set<String> firstElementFromEachRecord = new HashSet<>();
@@ -48,13 +42,6 @@ public final class CsvInputStreamReader {
     private static String firstElementFromRecord(CSVRecord record) {
         return record.get(0);
     }
-
-    private static void closeQuietly(InputStream stream) {
-        try {
-            stream.close();
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
+    
 
 }

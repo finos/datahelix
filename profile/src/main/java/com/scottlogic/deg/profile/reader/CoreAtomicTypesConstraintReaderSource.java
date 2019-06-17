@@ -318,6 +318,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
 
                     InputStream streamFromPath = createStreamFromPath(value);
                     Set<String> names = CsvInputStreamReader.retrieveLines(streamFromPath);
+                    closeStream(streamFromPath);
 
                     Set<Object> downcastedNames = new HashSet<>(names);
                     Field field = fields.getByName(dto.field);
@@ -331,6 +332,14 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
     private static InputStream createStreamFromPath(String path) {
         try {
             return new FileInputStream(path);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    private static void closeStream(InputStream stream) {
+        try {
+            stream.close();
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
