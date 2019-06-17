@@ -236,7 +236,7 @@ Is satisfied if `field` is of type represented by `value` (valid options: `decim
 ### `fromFile` _(field, value)_
 
 ```javascript
-{ "field": "country", "is": "fromFile", "value": "countries" }
+{ "field": "country", "is": "fromFile", "value": "countries.csv" }
 ```
 
 Populates a set from the new-line delimited file (with suffix `.csv`), where each line represents a string value to load.
