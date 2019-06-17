@@ -9,7 +9,10 @@ import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.profile.reader.file.CSVFromPathToStringsLoader;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Collections;
@@ -313,9 +316,9 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                 (dto, fields, rules) -> {
                     String value = ConstraintReaderHelpers.getValidatedValue(dto, String.class);
 
-                    InputStream stream = getClass().getClassLoader().getResourceAsStream(value);
+                    InputStream streamFromPath = createStreamFromPath(value);
 
-                    Set<String> names = CSVFromPathToStringsLoader.retrieveNames(stream);
+                    Set<String> names = CSVFromPathToStringsLoader.retrieveNames(streamFromPath);
 
                     Set<Object> downcastedNames = new HashSet<>(names);
 
@@ -327,6 +330,14 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                 }
             )
         );
+    }
+
+    private static InputStream createStreamFromPath(String path) {
+        try {
+            return new FileInputStream(path);
+        } catch(IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
 }

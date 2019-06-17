@@ -2,8 +2,6 @@ package com.scottlogic.deg.profile.reader.file.names;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes;
 import com.scottlogic.deg.profile.reader.file.CSVFromPathToStringsLoader;
-import com.scottlogic.deg.profile.reader.file.inputstream.ClasspathMapper;
-import com.scottlogic.deg.profile.reader.file.inputstream.FilepathToInputStream;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,16 +13,6 @@ import static com.scottlogic.deg.common.profile.constraints.atomic.NameConstrain
 import static com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes.LAST;
 
 public class NameRetriever {
-
-    private final FilepathToInputStream pathToStream;
-
-    public NameRetriever() {
-        this.pathToStream = new ClasspathMapper();
-    }
-
-    public NameRetriever(final FilepathToInputStream pathToStream) {
-        this.pathToStream = pathToStream;
-    }
 
     public Set<Object> loadNamesFromFile(NameConstraintTypes configuration) {
         Set<String> names;
@@ -45,7 +33,7 @@ public class NameRetriever {
     }
 
     private Set<String> generateSingles(String source) {
-        InputStream stream = pathToStream.createStreamFromPath(source);
+        InputStream stream = getClass().getClassLoader().getResourceAsStream(source);
         Set<String> result = CSVFromPathToStringsLoader.retrieveNames(stream);
         try {
             stream.close();
