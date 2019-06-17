@@ -317,16 +317,12 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                     String value = ConstraintReaderHelpers.getValidatedValue(dto, String.class);
 
                     InputStream streamFromPath = createStreamFromPath(value);
-
                     Set<String> names = CSVFromPathToStringsLoader.retrieveNames(streamFromPath);
 
                     Set<Object> downcastedNames = new HashSet<>(names);
-
                     Field field = fields.getByName(dto.field);
-                    return new AndConstraint(
-                        new IsInSetConstraint(field, downcastedNames, rules),
-                        new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.STRING, rules)
-                    );
+
+                    return new IsInSetConstraint(field, downcastedNames, rules);
                 }
             )
         );
@@ -335,7 +331,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
     private static InputStream createStreamFromPath(String path) {
         try {
             return new FileInputStream(path);
-        } catch(IOException e) {
+        } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
