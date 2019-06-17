@@ -2,7 +2,6 @@ package com.scottlogic.deg.profile.reader.file.names;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes;
 import com.scottlogic.deg.profile.reader.file.CSVFromPathToStringsLoader;
-import com.scottlogic.deg.profile.reader.file.PathToStringsLoader;
 import com.scottlogic.deg.profile.reader.file.inputstream.ClasspathMapper;
 import com.scottlogic.deg.profile.reader.file.inputstream.FilepathToInputStream;
 

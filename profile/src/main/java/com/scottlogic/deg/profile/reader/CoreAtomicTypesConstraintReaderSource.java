@@ -7,8 +7,6 @@ import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.profile.reader.file.CSVFromPathToStringsLoader;
-import com.scottlogic.deg.profile.reader.file.PathToStringsLoader;
-import com.scottlogic.deg.profile.reader.file.inputstream.ClasspathMapper;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 
 import java.io.InputStream;
@@ -19,7 +17,6 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMapEntrySource {
