@@ -129,11 +129,11 @@ public class RegexStringGenerator implements StringGenerator {
         return String.format("¬(%s)", representation);
     }
 
-    static String intersectRepresentation(String left, String right) {
+    private static String intersectRepresentation(String left, String right) {
         return String.format("(%s ∩ %s)", left, right);
     }
 
-    static String unionRepresentation(String left, String right) {
+    private static String unionRepresentation(String left, String right) {
         return String.format("(%s ∪ %s)", left, right);
     }
 
@@ -151,7 +151,7 @@ public class RegexStringGenerator implements StringGenerator {
             return shortestString.equals(longestString)
                 ? Collections.singleton(shortestString)
                 : Arrays.asList(shortestString, longestString);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             System.err.println(
                 String.format(
                     "Unable to generate interesting strings for %s%n%s",
@@ -257,7 +257,12 @@ public class RegexStringGenerator implements StringGenerator {
                     int randomOffset = diff > 0 ? random.nextInt(diff) : diff;
                     randomChar = (char) (randomOffset + randomTransition.getMin());
                 } while (!StringUtils.isCharValidUtf8(randomChar));
-                result = generateRandomStringInternal(strMatch + randomChar, randomTransition.getDest(), minLength, maxLength, random);
+                result = generateRandomStringInternal(
+                    strMatch + randomChar,
+                    randomTransition.getDest(),
+                    minLength,
+                    maxLength,
+                    random);
             }
         }
 
@@ -281,7 +286,7 @@ public class RegexStringGenerator implements StringGenerator {
             }
         }
 
-        return transitions.size() == 0;
+        return transitions.isEmpty();
     }
 
     private String buildStringFromNode(RegexStringGenerator.Node node, int indexOrder) {
@@ -298,8 +303,9 @@ public class RegexStringGenerator implements StringGenerator {
             }
         }
         long passedStringNbrInChildNode = 0;
-        if (result.length() == 0)
+        if (result.length() == 0) {
             passedStringNbrInChildNode = passedStringNbr;
+        }
         for (RegexStringGenerator.Node childN : node.getNextNodes()) {
             passedStringNbrInChildNode += childN.getMatchedStringIdx();
             if (passedStringNbrInChildNode >= indexOrder) {
@@ -314,8 +320,9 @@ public class RegexStringGenerator implements StringGenerator {
 
     private void buildRootNode() {
 
-        if (isRootNodeBuilt)
+        if (isRootNodeBuilt) {
             return;
+        }
         isRootNodeBuilt = true;
 
         rootNode = new RegexStringGenerator.Node();
@@ -338,11 +345,6 @@ public class RegexStringGenerator implements StringGenerator {
             transactionNodes.add(acceptedNode);
         }
         List<Transition> transitions = state.getSortedTransitions(true);
-
-        //System.out.println(">" + state.toString());
-//        if (transitions.size() > 1) {
-//            System.out.println(">" + transitions.get(0).getMin());
-//        }
 
         for (Transition transition : transitions) {
             RegexStringGenerator.Node trsNode = new RegexStringGenerator.Node();
@@ -385,7 +387,7 @@ public class RegexStringGenerator implements StringGenerator {
             if (isNbrMatchedStringUpdated) {
                 return;
             }
-            if (nextNodes.size() == 0) {
+            if (nextNodes.isEmpty()) {
                 matchedStringIdx = nbrChar;
             } else {
                 for (RegexStringGenerator.Node childNode : nextNodes) {
