@@ -1,16 +1,11 @@
 package com.scottlogic.deg.profile.reader.file.inputstream;
 
 import java.io.InputStream;
-import java.util.Optional;
-import java.util.function.Function;
 
-public class ClasspathMapper implements Function<String, InputStream> {
+public class ClasspathMapper implements FilepathToInputStream {
 
     @Override
-    public InputStream apply(String path) {
-        return Optional.ofNullable(this.getClass()
-            .getClassLoader()
-            .getResourceAsStream(path)
-        ).orElseThrow(() -> new IllegalArgumentException("Classpath does not contain path " + path));
+    public InputStream createStreamFromPath(String path) {
+        return getClass().getClassLoader().getResourceAsStream(path);
     }
 }

@@ -4,21 +4,15 @@ import com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes;
 import com.scottlogic.deg.profile.reader.file.CSVFromPathToStringsLoader;
 import com.scottlogic.deg.profile.reader.file.PathToStringsLoader;
 import com.scottlogic.deg.profile.reader.file.inputstream.ClasspathMapper;
+import com.scottlogic.deg.profile.reader.file.inputstream.FilepathToInputStream;
 
-import java.io.InputStream;
-import java.util.EnumMap;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes.FIRST;
 import static com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes.LAST;
 
-public class NameRetriever implements Function<NameConstraintTypes, Stream<String>> {
-
-    private static final Map<NameConstraintTypes, Set<String>> NAME_TYPE_MAPPINGS = setupNameMappings();
+public class NameRetriever {
 
     private final PathToStringsLoader filepathToNames;
 
@@ -26,41 +20,40 @@ public class NameRetriever implements Function<NameConstraintTypes, Stream<Strin
         this(new ClasspathMapper());
     }
 
-    public NameRetriever(final Function<String, InputStream> pathMapper) {
-        filepathToNames = new CSVFromPathToStringsLoader(pathMapper);
+    public NameRetriever(final FilepathToInputStream filepathToInputStream) {
+        filepathToNames = new CSVFromPathToStringsLoader(filepathToInputStream);
     }
 
-    private static Map<NameConstraintTypes, Set<String>> setupNameMappings() {
-        Map<NameConstraintTypes, Set<String>> mappings = new EnumMap<>(NameConstraintTypes.class);
-        mappings.put(LAST, NameClassPathFiles.getLastNames());
-        mappings.put(FIRST, NameClassPathFiles.getFirstNames());
-        return mappings;
-    }
-
-    @Override
-    public Stream<String> apply(NameConstraintTypes configuration) {
+    public Set<Object> loadNamesFromFile(NameConstraintTypes configuration) {
+        Set<String> names;
         switch (configuration) {
             case FIRST:
             case LAST:
-                return generateSingles(NAME_TYPE_MAPPINGS.get(configuration));
+                names = generateSingles(configuration.getFilePath());
+                break;
             case FULL:
-                return generateCombinations(generateSingles(NAME_TYPE_MAPPINGS.get(FIRST)),
-                    generateSingles(NAME_TYPE_MAPPINGS.get(LAST)));
+                names = generateCombinations(
+                    generateSingles(FIRST.getFilePath()),
+                    generateSingles(LAST.getFilePath()));
+                break;
             default:
                 throw new UnsupportedOperationException("Name not implemented of type: " + configuration);
         }
+        return new HashSet<>(names);
     }
 
-    private Stream<String> generateSingles(Set<String> sources) {
-        return sources.stream()
-            .flatMap(filepathToNames::retrieveNames);
+    private Set<String> generateSingles(String source) {
+        return filepathToNames.retrieveNames(source);
     }
 
-    private static Stream<String> generateCombinations(Stream<String> firstNames, Stream<String> lastNames) {
-        Set<String> lastNamesStored = lastNames.collect(Collectors.toSet());
-        return firstNames
-            .flatMap(first -> lastNamesStored.stream()
-                .map(last -> combineFirstAndLastName(first, last)));
+    private static Set<String> generateCombinations(Set<String> firstNames, Set<String> lastNames) {
+        Set<String> names = new HashSet<>();
+        for (String first : firstNames) {
+            for (String last : lastNames) {
+                names.add(combineFirstAndLastName(first, last));
+            }
+        }
+        return names;
     }
 
     private static String combineFirstAndLastName(final String first, final String last) {

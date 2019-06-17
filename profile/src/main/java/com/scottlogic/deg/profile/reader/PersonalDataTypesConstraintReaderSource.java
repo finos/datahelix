@@ -11,7 +11,6 @@ import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
 
 import java.util.Arrays;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class PersonalDataTypesConstraintReaderSource implements ConstraintReaderMapEntrySource {
@@ -19,16 +18,14 @@ public class PersonalDataTypesConstraintReaderSource implements ConstraintReader
     public Stream<ConstraintReaderMapEntry> getConstraintReaderMapEntries() {
         ConstraintReader nameConstraintReader = (dto, fields, rules) -> {
             NameRetriever nameRetriever = new NameRetriever();
+            
+            NameConstraintTypes type = lookupNameConstraint(dto);
 
-            Set<Object> objects = Stream.of(dto)
-                .map(this::lookupNameConstraint)
-                .flatMap(nameRetriever)
-                .map(ConstraintReaderHelpers::downcastToObject)
-                .collect(Collectors.toSet());
+            Set<Object> names = nameRetriever.loadNamesFromFile(type);
 
             Field field = fields.getByName(dto.field);
             return new AndConstraint(
-                new IsInNameSetConstraint(field, objects, rules),
+                new IsInNameSetConstraint(field, names, rules),
                 new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.STRING, rules)
             );
         };

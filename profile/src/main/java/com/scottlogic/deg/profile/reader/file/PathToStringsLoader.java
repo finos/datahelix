@@ -1,10 +1,9 @@
 package com.scottlogic.deg.profile.reader.file;
 
-import java.util.stream.Stream;
+import java.util.Set;
 
-@FunctionalInterface
 public interface PathToStringsLoader {
 
-    Stream<String> retrieveNames(String path);
+    Set<String> retrieveNames(String path);
 
 }

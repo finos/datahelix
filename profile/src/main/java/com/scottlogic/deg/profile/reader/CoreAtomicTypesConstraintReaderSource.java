@@ -13,6 +13,7 @@ import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -312,34 +313,20 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                 ".*",
                 (dto, fields, rules) -> {
                     String value = ConstraintReaderHelpers.getValidatedValue(dto, String.class);
-                    String withEnding = appendCsvIfNotPresent(value);
 
                     PathToStringsLoader loader = new CSVFromPathToStringsLoader();
-                    Stream<String> names = loader.retrieveNames(withEnding);
+                    Set<String> names = loader.retrieveNames(value);
 
-                    Set<Object> strings = names
-                        .map(ConstraintReaderHelpers::downcastToObject)
-                        .collect(Collectors.toSet());
+                    Set<Object> downcastedNames = new HashSet<>(names);
 
                     Field field = fields.getByName(dto.field);
                     return new AndConstraint(
-                        new IsInSetConstraint(field, strings, rules),
+                        new IsInSetConstraint(field, downcastedNames, rules),
                         new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.STRING, rules)
                     );
                 }
             )
         );
-    }
-
-    private String appendCsvIfNotPresent(final String path) {
-        final String csv = ".csv";
-
-        if (path.length() < csv.length()) {
-            return path;
-        } else {
-            final String ending = path.substring(path.length() - csv.length());
-            return csv.equals(ending) ? path : path + csv;
-        }
     }
 
 }

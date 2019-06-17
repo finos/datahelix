@@ -47,7 +47,7 @@ public class NameRetrieverTest {
     public void retrieveValuesFirst() {
         mockFirstNames();
 
-        Set<String> names = setFromConstraint(NameConstraintTypes.FIRST);
+        Set<Object> names = setFromConstraint(NameConstraintTypes.FIRST);
 
         assertEquals(SetUtils.setOf("Mark", "Paul", "Jolene", "Tanya"), names);
     }
@@ -60,7 +60,7 @@ public class NameRetrieverTest {
     public void retrieveValuesLast() {
         mockLastNames();
 
-        Set<String> names = setFromConstraint(NameConstraintTypes.LAST);
+        Set<Object> names = setFromConstraint(NameConstraintTypes.LAST);
 
         assertEquals(SetUtils.setOf("Gore", "May"), names);
     }
@@ -74,7 +74,7 @@ public class NameRetrieverTest {
     public void retrieveValuesFull() {
         mockAllNames();
 
-        Set<String> names = setFromConstraint(NameConstraintTypes.FULL);
+        Set<Object> names = setFromConstraint(NameConstraintTypes.FULL);
 
         assertEquals(SetUtils.setOf("Mark Gore", "Paul Gore", "Jolene Gore", "Tanya Gore",
             "Mark May", "Paul May", "Jolene May", "Tanya May"), names);
@@ -95,14 +95,12 @@ public class NameRetrieverTest {
                 break;
         }
 
-        Set<String> result = setFromConstraint(config);
+        Set<Object> result = setFromConstraint(config);
 
         assertNotNull(result);
     }
 
-    private Set<String> setFromConstraint(NameConstraintTypes config) {
-        return Stream.of(config)
-            .flatMap(service)
-            .collect(Collectors.toSet());
+    private Set<Object> setFromConstraint(NameConstraintTypes config) {
+        return service.loadNamesFromFile(config);
     }
 }

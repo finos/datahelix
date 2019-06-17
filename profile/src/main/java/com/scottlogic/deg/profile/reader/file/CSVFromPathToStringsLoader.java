@@ -1,5 +1,6 @@
 package com.scottlogic.deg.profile.reader.file;
 
+import com.scottlogic.deg.profile.reader.file.inputstream.FilepathToInputStream;
 import com.scottlogic.deg.profile.reader.file.inputstream.PathMapper;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -9,38 +10,46 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Stream;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class CSVFromPathToStringsLoader implements PathToStringsLoader {
 
-    private final Function<String, InputStream> pathStreamMapper;
+    private final FilepathToInputStream pathStreamMapper;
 
     public CSVFromPathToStringsLoader() {
         this(new PathMapper());
     }
 
-    public CSVFromPathToStringsLoader(final Function<String, InputStream> pathStreamMapper) {
+    public CSVFromPathToStringsLoader(final FilepathToInputStream pathStreamMapper) {
         this.pathStreamMapper = pathStreamMapper;
     }
 
     @Override
-    public Stream<String> retrieveNames(String path) {
-        InputStream stream = Optional.of(path)
-            .map(pathStreamMapper)
-            .orElseThrow(() -> new UnsupportedOperationException("Path mapper is incorrectly configured"));
-        Stream<String> result = extractLines(stream);
+    public Set<String> retrieveNames(String path) {
+        InputStream stream = pathStreamMapper.createStreamFromPath(path);
+        Set<String> result = extractLines(stream);
         closeQuietly(stream);
         return result;
     }
 
-    private static Stream<String> extractLines(InputStream stream) {
+    private static Set<String> extractLines(InputStream stream) {
+        List<CSVRecord> records = parse(stream);
+
+        Set<String> firstElementFromEachRecord = new HashSet<>();
+        for (CSVRecord record : records) {
+            String firstElement = CSVFromPathToStringsLoader.firstElementFromRecord(record);
+            firstElementFromEachRecord.add(firstElement);
+        }
+
+        return firstElementFromEachRecord;
+    }
+
+    private static List<CSVRecord> parse(InputStream stream) {
         try {
-            return CSVParser.parse(stream, Charset.defaultCharset(), CSVFormat.DEFAULT)
-                .getRecords()
-                .stream()
-                .map(CSVFromPathToStringsLoader::firstElementFromRecord);
+            CSVParser parser = CSVParser.parse(stream, Charset.defaultCharset(), CSVFormat.DEFAULT);
+            return parser.getRecords();
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

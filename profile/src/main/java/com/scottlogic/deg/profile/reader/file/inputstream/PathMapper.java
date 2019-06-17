@@ -4,17 +4,15 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
-import java.util.function.Function;
 
-public class PathMapper implements Function<String, InputStream> {
+public class PathMapper implements FilepathToInputStream {
 
     @Override
-    public InputStream apply(String s) {
+    public InputStream createStreamFromPath(String path) {
         try {
-            return new FileInputStream(s);
+            return new FileInputStream(path);
         } catch(IOException e) {
             throw new UncheckedIOException(e);
         }
     }
-
 }
