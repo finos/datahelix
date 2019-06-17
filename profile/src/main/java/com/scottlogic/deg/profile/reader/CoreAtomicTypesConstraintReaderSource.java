@@ -10,10 +10,7 @@ import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.profile.reader.file.CsvInputStreamReader;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UncheckedIOException;
+import java.io.*;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Collections;
@@ -333,7 +330,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
     private static InputStream createStreamFromPath(String path) {
         try {
             return new FileInputStream(path);
-        } catch (IOException e) {
+        } catch (FileNotFoundException e) {
             throw new ValidationException(e.getMessage());
         }
     }
