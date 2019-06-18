@@ -9,10 +9,10 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public class RandomReductiveDecisionTreeWalker implements DecisionTreeWalker {
-    private final ReductiveDecisionTreeWalker underlyingWalker;
+    private final ReductiveTreeWalker underlyingWalker;
 
     @Inject
-    RandomReductiveDecisionTreeWalker(ReductiveDecisionTreeWalker underlyingWalker) {
+    RandomReductiveDecisionTreeWalker(ReductiveTreeWalker underlyingWalker) {
         this.underlyingWalker = underlyingWalker;
     }
 

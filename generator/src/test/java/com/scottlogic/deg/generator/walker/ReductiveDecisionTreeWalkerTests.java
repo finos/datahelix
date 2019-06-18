@@ -52,7 +52,6 @@ class ReductiveDecisionTreeWalkerTests {
         when(fixFieldStrategyFactory.create(any())).thenReturn(fixFieldStrategy);
 
         walker = new ReductiveDecisionTreeWalker(
-            new NoOpIterationVisualiser(),
             reductiveFieldSpecBuilder,
             new NoopDataGeneratorMonitor(),
             treePruner,

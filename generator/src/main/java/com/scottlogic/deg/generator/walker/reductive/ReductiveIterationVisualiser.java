@@ -18,7 +18,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ReductiveIterationVisualiser implements IterationVisualiser {
+public class ReductiveIterationVisualiser {
     private final AtomicInteger currentIteration = new AtomicInteger();
     private final FileUtils fileUtils;
     private final Path visualiseDirectoryPath;
@@ -44,7 +44,6 @@ public class ReductiveIterationVisualiser implements IterationVisualiser {
         this.visualiseDirectoryPath = directoryPath.resolve("reductive-walker");
     }
 
-    @Override
     public void visualise(ConstraintNode rootNode, ReductiveState reductiveState) throws IOException {
         createVisualiseDirectoryIfAbsent();
 

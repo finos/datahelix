@@ -18,9 +18,8 @@ import java.io.IOException;
 import java.util.Set;
 import java.util.stream.Stream;
 
-public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
+public class ReductiveDecisionTreeWalker implements ReductiveTreeWalker {
     private final ReductiveTreePruner treePruner;
-    private final IterationVisualiser iterationVisualiser;
     private final ReductiveFieldSpecBuilder reductiveFieldSpecBuilder;
     private final ReductiveDataGeneratorMonitor monitor;
     private final FieldSpecValueGenerator fieldSpecValueGenerator;
@@ -28,13 +27,11 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
 
     @Inject
     public ReductiveDecisionTreeWalker(
-        IterationVisualiser iterationVisualiser,
         ReductiveFieldSpecBuilder reductiveFieldSpecBuilder,
         ReductiveDataGeneratorMonitor monitor,
         ReductiveTreePruner treePruner,
         FieldSpecValueGenerator fieldSpecValueGenerator,
         FixFieldStrategyFactory fixFieldStrategyFactory) {
-        this.iterationVisualiser = iterationVisualiser;
         this.reductiveFieldSpecBuilder = reductiveFieldSpecBuilder;
         this.monitor = monitor;
         this.treePruner = treePruner;
@@ -46,12 +43,15 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
     @Override
     public Stream<DataBag> walk(DecisionTree tree) {
         ReductiveState initialState = new ReductiveState(tree.fields);
-        visualise(tree.getRootNode(), initialState);
         FixFieldStrategy fixFieldStrategy = fixFieldStrategyFactory.create(tree.getRootNode());
         return fixNextField(tree.getRootNode(), initialState, fixFieldStrategy);
     }
 
-    private Stream<DataBag> fixNextField(ConstraintNode tree, ReductiveState reductiveState, FixFieldStrategy fixFieldStrategy) {
+    protected Stream<DataBag> fixNextField(ConstraintNode tree, ReductiveState reductiveState, FixFieldStrategy fixFieldStrategy) {
+        if (reductiveState.allFieldsAreFixed()) {
+            return Stream.of(reductiveState.asDataBag());
+        }
+
         Field fieldToFix = fixFieldStrategy.getNextFieldToFix(reductiveState);
         Set<FieldSpec> nextFieldSpecs = reductiveFieldSpecBuilder.getDecisionFieldSpecs(tree, fieldToFix);
 
@@ -84,22 +84,9 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
 
         monitor.fieldFixedToValue(field, fieldValue.getFormattedValue());
 
-        ReductiveState newReductiveState =
-            reductiveState.withFixedFieldValue(field, fieldValue);
-        visualise(reducedTree.get(), newReductiveState);
-
-        if (newReductiveState.allFieldsAreFixed()) {
-            return Stream.of(newReductiveState.asDataBag());
-        }
-
-        return fixNextField(reducedTree.get(), newReductiveState, fixFieldStrategy);
-    }
-
-    private void visualise(ConstraintNode rootNode, ReductiveState reductiveState){
-        try {
-            iterationVisualiser.visualise(rootNode, reductiveState);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return fixNextField(
+            reducedTree.get(),
+            reductiveState.withFixedFieldValue(field, fieldValue),
+            fixFieldStrategy);
     }
 }
