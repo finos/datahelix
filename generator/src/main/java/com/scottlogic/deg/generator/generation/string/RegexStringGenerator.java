@@ -463,7 +463,7 @@ public class RegexStringGenerator implements StringGenerator {
                 if (currentIndex > matches) {
                     return false;
                 }
-                currentValue = stringGenerator.getMatchedString(currentIndex);
+                currentValue = getMatchedString(currentIndex);
             } while (!StringUtils.isStringValidUtf8(currentValue));
             return currentValue != null;
         }
