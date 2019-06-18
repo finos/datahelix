@@ -11,6 +11,7 @@ import picocli.CommandLine;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.concurrent.Callable;
 
 import static com.scottlogic.deg.generator.config.detail.CombinationStrategyType.MINIMAL;
 import static com.scottlogic.deg.common.util.Defaults.DEFAULT_MAX_ROWS;
@@ -28,16 +29,15 @@ import static com.scottlogic.deg.generator.config.detail.TreeWalkerType.REDUCTIV
     parameterListHeading = "%nParameters:%n",
     optionListHeading = "%nOptions:%n",
     abbreviateSynopsis = true)
-public class GenerateCommandLine implements AllConfigSource, Runnable {
+public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
 
     @Override
-    public void run() {
+    public Integer call() throws Exception {
         Module container = new AllModule(this);
         Injector injector = Guice.createInjector(container);
 
-        Runnable task = injector.getInstance(GenerateExecute.class);
-
-        task.run();
+        injector.getInstance(GenerateExecute.class).execute();
+        return 0;
     }
 
     @CommandLine.Option(
