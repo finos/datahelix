@@ -1,6 +1,8 @@
 package com.scottlogic.deg.orchestrator.guice;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Module;
+import com.google.inject.util.Modules;
 import com.scottlogic.deg.generator.guice.GeneratorModule;
 import com.scottlogic.deg.orchestrator.visualise.ReductiveWalkerProvider;
 import com.scottlogic.deg.generator.walker.ReductiveTreeWalker;
@@ -19,9 +21,17 @@ public class AllModule extends AbstractModule {
         bind(AllConfigSource.class).toInstance(configSource);
 
         install(new ProfileModule(configSource));
-        install(new GeneratorModule(configSource));
         install(new OutputModule(configSource));
 
-        bind(ReductiveTreeWalker.class).toProvider(ReductiveWalkerProvider.class);
+        Module generatorModule = Modules.override(new GeneratorModule(configSource))
+            .with(new ReductiveVisualiseOverride());
+        install(generatorModule);
+    }
+
+    private static class ReductiveVisualiseOverride extends AbstractModule {
+        @Override
+        protected void configure() {
+            bind(ReductiveTreeWalker.class).toProvider(ReductiveWalkerProvider.class);
+        }
     }
 }
