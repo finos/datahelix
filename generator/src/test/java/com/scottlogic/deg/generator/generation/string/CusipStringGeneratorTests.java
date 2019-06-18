@@ -1,9 +1,10 @@
 package com.scottlogic.deg.generator.generation.string;
 
-import com.scottlogic.deg.generator.generation.string.CusipStringGenerator;
-import com.scottlogic.deg.generator.generation.string.StringGenerator;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class CusipStringGeneratorTests {
     @Test
@@ -12,7 +13,7 @@ public class CusipStringGeneratorTests {
 
         boolean matches = cusipGenerator.match("38259P508");
 
-        Assert.assertTrue(matches);
+        assertTrue(matches);
     }
 
     @Test
@@ -21,7 +22,7 @@ public class CusipStringGeneratorTests {
 
         boolean matches = cusipGenerator.match("not a cusip");
 
-        Assert.assertFalse(matches);
+        assertFalse(matches);
     }
 
     @Test
@@ -30,7 +31,7 @@ public class CusipStringGeneratorTests {
 
         boolean matches = cusipGenerator.match("38259P508");
 
-        Assert.assertFalse(matches);
+        assertFalse(matches);
     }
 
     @Test
@@ -39,6 +40,6 @@ public class CusipStringGeneratorTests {
 
         boolean matches = cusipGenerator.match("not a cusip");
 
-        Assert.assertTrue(matches);
+        assertTrue(matches);
     }
 }

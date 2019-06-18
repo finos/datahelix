@@ -39,35 +39,12 @@ public class RegexStringGenerator implements StringGenerator {
         Map<String, Automaton> cache = matchFullString ? matchingRegexAutomatonCache : containingRegexAutomatonCache;
         Automaton generatedAutomaton = cache.containsKey(regexStr)
             ? cache.get(regexStr)
-            : createAutomaton(regexStr, matchFullString, cache);
+            : AutomatonUtils.createAutomaton(regexStr, matchFullString, cache);
 
         String prefix = matchFullString ? "" : "*";
         String suffix = matchFullString ? "" : "*";
         this.regexRepresentation = String.format("%s/%s/%s", prefix, regexStr, suffix);
         this.automaton = generatedAutomaton;
-    }
-
-    /**
-     * Create an automaton and store its instance in the cache, keyed on the given regex
-     * The cache will vary based on &lt;matchFullString&gt;.
-     * <p>
-     * The creation of an automaton is a time-consuming process, especially for more complex expressions.
-     *
-     * @param regexStr        The string to create the automaton from
-     * @param matchFullString Whether the string represents a matchingRegex (true) or containingRegex (false) expression
-     * @param cache           The cache to store the automaton instance in
-     * @return The created automaton
-     */
-    static Automaton createAutomaton(String regexStr, boolean matchFullString, Map<String, Automaton> cache) {
-        final String anchoredStr = RegexUtils.convertEndAnchors(regexStr, matchFullString);
-        final String requotedStr = RegexUtils.escapeCharacters(anchoredStr);
-        final RegExp bricsRegExp = RegexUtils.expandShorthandClasses(requotedStr);
-
-        Automaton generatedAutomaton = bricsRegExp.toAutomaton();
-        generatedAutomaton.expandSingleton();
-
-        cache.put(regexStr, generatedAutomaton);
-        return generatedAutomaton;
     }
 
     @Override
@@ -195,7 +172,7 @@ public class RegexStringGenerator implements StringGenerator {
         buildRootNode();
 
         if (rootNode.nextNodes.isEmpty()) {
-            return 0;
+            return 0L;
         }
 
         return rootNode.matchedStringIdx;
@@ -291,7 +268,7 @@ public class RegexStringGenerator implements StringGenerator {
         return transitions.isEmpty();
     }
 
-    private String buildStringFromNode(RegexStringGenerator.Node node, int indexOrder) {
+    private String buildStringFromNode(Node node, int indexOrder) {
         String result = "";
         long passedStringNbr = 0;
         long step = node.getMatchedStringIdx() / node.getNbrChar();
@@ -308,7 +285,7 @@ public class RegexStringGenerator implements StringGenerator {
         if (result.length() == 0) {
             passedStringNbrInChildNode = passedStringNbr;
         }
-        for (RegexStringGenerator.Node childN : node.getNextNodes()) {
+        for (Node childN : node.getNextNodes()) {
             passedStringNbrInChildNode += childN.getMatchedStringIdx();
             if (passedStringNbrInChildNode >= indexOrder) {
                 passedStringNbrInChildNode -= childN.getMatchedStringIdx();
@@ -327,34 +304,34 @@ public class RegexStringGenerator implements StringGenerator {
         }
         isRootNodeBuilt = true;
 
-        rootNode = new RegexStringGenerator.Node();
-        List<RegexStringGenerator.Node> nextNodes = prepareTransactionNodes(automaton.getInitialState());
+        rootNode = new Node();
+        List<Node> nextNodes = prepareTransactionNodes(automaton.getInitialState());
         rootNode.setNextNodes(nextNodes);
         rootNode.updateMatchedStringIdx();
     }
 
-    private List<RegexStringGenerator.Node> prepareTransactionNodes(State state) {
+    private List<Node> prepareTransactionNodes(State state) {
 
-        List<RegexStringGenerator.Node> transactionNodes = new ArrayList<>();
+        List<Node> transactionNodes = new ArrayList<>();
         if (preparedTransactionNode == Integer.MAX_VALUE / 2) {
             return transactionNodes;
         }
         ++preparedTransactionNode;
 
         if (state.isAccept()) {
-            RegexStringGenerator.Node acceptedNode = new RegexStringGenerator.Node();
+            Node acceptedNode = new Node();
             acceptedNode.setNbrChar(1);
             transactionNodes.add(acceptedNode);
         }
         List<Transition> transitions = state.getSortedTransitions(true);
 
         for (Transition transition : transitions) {
-            RegexStringGenerator.Node trsNode = new RegexStringGenerator.Node();
+            Node trsNode = new Node();
             int nbrChar = transition.getMax() - transition.getMin() + 1;
             trsNode.setNbrChar(nbrChar);
             trsNode.setMaxChar(transition.getMax());
             trsNode.setMinChar(transition.getMin());
-            List<RegexStringGenerator.Node> nextNodes = prepareTransactionNodes(transition.getDest());
+            List<Node> nextNodes = prepareTransactionNodes(transition.getDest());
             trsNode.setNextNodes(nextNodes);
             transactionNodes.add(trsNode);
         }
@@ -363,7 +340,7 @@ public class RegexStringGenerator implements StringGenerator {
 
     private class Node {
         private int nbrChar = 1;
-        private List<RegexStringGenerator.Node> nextNodes = new ArrayList<>();
+        private List<Node> nextNodes = new ArrayList<>();
         private boolean isNbrMatchedStringUpdated;
         private long matchedStringIdx = 0;
         private char minChar;
@@ -377,11 +354,11 @@ public class RegexStringGenerator implements StringGenerator {
             this.nbrChar = nbrChar;
         }
 
-        List<RegexStringGenerator.Node> getNextNodes() {
+        List<Node> getNextNodes() {
             return nextNodes;
         }
 
-        void setNextNodes(List<RegexStringGenerator.Node> nextNodes) {
+        void setNextNodes(List<Node> nextNodes) {
             this.nextNodes = nextNodes;
         }
 
@@ -392,7 +369,7 @@ public class RegexStringGenerator implements StringGenerator {
             if (nextNodes.isEmpty()) {
                 matchedStringIdx = nbrChar;
             } else {
-                for (RegexStringGenerator.Node childNode : nextNodes) {
+                for (Node childNode : nextNodes) {
                     childNode.updateMatchedStringIdx();
                     long childNbrChar = childNode.getMatchedStringIdx();
                     matchedStringIdx += nbrChar * childNbrChar;

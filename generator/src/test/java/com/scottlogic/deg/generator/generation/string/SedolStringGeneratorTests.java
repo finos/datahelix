@@ -1,9 +1,9 @@
 package com.scottlogic.deg.generator.generation.string;
 
-import com.scottlogic.deg.generator.generation.string.SedolStringGenerator;
-import com.scottlogic.deg.generator.generation.string.StringGenerator;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class SedolStringGeneratorTests {
     @Test
@@ -12,7 +12,7 @@ public class SedolStringGeneratorTests {
 
         boolean matches = SedolGenerator.match("2634946");
 
-        Assert.assertTrue(matches);
+        assertTrue(matches);
     }
 
     @Test
@@ -21,7 +21,7 @@ public class SedolStringGeneratorTests {
 
         boolean matches = SedolGenerator.match("not a sedol");
 
-        Assert.assertFalse(matches);
+        assertFalse(matches);
     }
 
     @Test
@@ -30,7 +30,7 @@ public class SedolStringGeneratorTests {
 
         boolean matches = SedolGenerator.match("2634946");
 
-        Assert.assertFalse(matches);
+        assertFalse(matches);
     }
 
     @Test
@@ -39,6 +39,6 @@ public class SedolStringGeneratorTests {
 
         boolean matches = SedolGenerator.match("not a sedol");
 
-        Assert.assertTrue(matches);
+        assertTrue(matches);
     }
 }

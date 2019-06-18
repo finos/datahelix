@@ -1,7 +1,5 @@
 package com.scottlogic.deg.generator.generation.string;
 
-import com.scottlogic.deg.generator.generation.string.IsinStringGenerator;
-import com.scottlogic.deg.generator.generation.string.StringGenerator;
 import com.scottlogic.deg.generator.utils.FinancialCodeUtils;
 import com.scottlogic.deg.generator.utils.IterableAsStream;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;

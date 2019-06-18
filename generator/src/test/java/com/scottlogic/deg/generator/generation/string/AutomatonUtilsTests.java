@@ -1,7 +1,5 @@
 package com.scottlogic.deg.generator.generation.string;
 
-import com.scottlogic.deg.generator.generation.string.AutomatonUtils;
-import com.scottlogic.deg.generator.generation.string.RegexStringGenerator;
 import dk.brics.automaton.Automaton;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -12,8 +10,10 @@ import java.util.stream.IntStream;
 
 import static org.hamcrest.Matchers.matchesPattern;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertThat;
 
 class AutomatonUtilsTests {
+    
     @Test
     public void getLongestExample_withFixedLengthRegex_shouldReturnCorrectString(){
         Automaton automaton = getAutomaton("[a-z]{9}");
@@ -21,7 +21,7 @@ class AutomatonUtilsTests {
         String longestExample = AutomatonUtils.getLongestExample(automaton);
 
         String expected = repeat('a', 9);
-        Assert.assertThat(longestExample, equalTo(expected));
+        assertThat(longestExample, equalTo(expected));
     }
 
     @Test
@@ -31,7 +31,7 @@ class AutomatonUtilsTests {
         String longestExample = AutomatonUtils.getLongestExample(automaton);
 
         String expected = repeat('a', 9);
-        Assert.assertThat(longestExample, equalTo(expected));
+        assertThat(longestExample, equalTo(expected));
     }
 
     @Test
@@ -41,7 +41,7 @@ class AutomatonUtilsTests {
         String longestExample = AutomatonUtils.getLongestExample(automaton);
 
         String expected = repeat('a', 1000);
-        Assert.assertThat(longestExample, equalTo(expected));
+        assertThat(longestExample, equalTo(expected));
     }
 
     @Test
@@ -51,7 +51,7 @@ class AutomatonUtilsTests {
         String longestExample = AutomatonUtils.getLongestExample(automaton);
 
         String expected = repeat('f', 10) + repeat('d', 5);
-        Assert.assertThat(longestExample, equalTo(expected));
+        assertThat(longestExample, equalTo(expected));
     }
 
     @Test
@@ -60,7 +60,7 @@ class AutomatonUtilsTests {
 
         String longestExample = AutomatonUtils.getLongestExample(automaton);
 
-        Assert.assertThat(longestExample, matchesPattern("[a-z]{10}[d-e]{5}"));
+        assertThat(longestExample, matchesPattern("[a-z]{10}[d-e]{5}"));
     }
 
     @Test
@@ -71,8 +71,8 @@ class AutomatonUtilsTests {
 
         String longestExample = AutomatonUtils.getLongestExample(intersected);
 
-        Assert.assertThat(longestExample.length(), equalTo(20));
-        Assert.assertThat(longestExample, matchesPattern("^[a-z0-9]+\\@[a-z0-9]+\\.co(m|\\.uk)$"));
+        assertThat(longestExample.length(), equalTo(20));
+        assertThat(longestExample, matchesPattern("^[a-z0-9]+\\@[a-z0-9]+\\.co(m|\\.uk)$"));
     }
 
     @Test
@@ -81,7 +81,7 @@ class AutomatonUtilsTests {
 
         String longestExample = AutomatonUtils.getLongestExample(automaton);
 
-        Assert.assertThat(longestExample, equalTo(""));
+        assertThat(longestExample, equalTo(""));
     }
 
     @Test
@@ -91,7 +91,7 @@ class AutomatonUtilsTests {
         String shortestExample = AutomatonUtils.getShortestExample(automaton);
 
         String expected = repeat('a', 9);
-        Assert.assertThat(shortestExample, equalTo(expected));
+        assertThat(shortestExample, equalTo(expected));
     }
 
     @Test
@@ -100,7 +100,7 @@ class AutomatonUtilsTests {
 
         String shortestExample = AutomatonUtils.getShortestExample(automaton);
 
-        Assert.assertThat(shortestExample, equalTo(""));
+        assertThat(shortestExample, equalTo(""));
     }
 
     @Test
@@ -109,7 +109,7 @@ class AutomatonUtilsTests {
 
         String shortestExample = AutomatonUtils.getShortestExample(automaton);
 
-        Assert.assertThat(shortestExample, equalTo(""));
+        assertThat(shortestExample, equalTo(""));
     }
 
     @Test
@@ -119,7 +119,7 @@ class AutomatonUtilsTests {
         String shortestExample = AutomatonUtils.getShortestExample(automaton);
 
         String expected = repeat('a', 3);
-        Assert.assertThat(shortestExample, equalTo(expected));
+        assertThat(shortestExample, equalTo(expected));
     }
 
     @Test
@@ -128,7 +128,7 @@ class AutomatonUtilsTests {
 
         String shortestExample = AutomatonUtils.getShortestExample(automaton);
 
-        Assert.assertThat(shortestExample, matchesPattern("[a-z]{3}"));
+        assertThat(shortestExample, matchesPattern("[a-z]{3}"));
     }
 
     @Test
@@ -139,8 +139,8 @@ class AutomatonUtilsTests {
 
         String longestExample = AutomatonUtils.getShortestExample(intersected);
 
-        Assert.assertThat(longestExample.length(), equalTo(7));
-        Assert.assertThat(longestExample, matchesPattern("^[a-z0-9]+\\@[a-z0-9]+\\.co(m|\\.uk)$"));
+        assertThat(longestExample.length(), equalTo(7));
+        assertThat(longestExample, matchesPattern("^[a-z0-9]+\\@[a-z0-9]+\\.co(m|\\.uk)$"));
     }
 
     @Test
@@ -149,11 +149,11 @@ class AutomatonUtilsTests {
 
         String longestExample = AutomatonUtils.getShortestExample(automaton);
 
-        Assert.assertThat(longestExample, equalTo(""));
+        assertThat(longestExample, equalTo(""));
     }
 
     private static Automaton getAutomaton(String regex){
-        return RegexStringGenerator.createAutomaton(regex, true, new HashMap<>());
+        return AutomatonUtils.createAutomaton(regex, true, new HashMap<>());
     }
 
     private static String repeat(Character character, int times){
