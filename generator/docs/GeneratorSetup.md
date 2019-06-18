@@ -56,26 +56,28 @@ On IntelliJ's splash screen, choose "Open".
 
 Open the repository root directory, `datahelix`.
 
-Right-click the backend Module, `generator`, choose "Open Module Settings".
+Right-click the Module `orchestrator`, choose "Open Module Settings".
 
 In "Project": specify a Project SDK (Java 1.8), clicking "New..." if necessary.  
 Set Project language level to 8.
 
-Open the "Gradle Projects" Tool Window, and double-click _Tasks > build > build.
+Open the "Gradle" Tool Window, and double-click Tasks > build > build.
 Your IDE may do this automatically for you.
 
-Navigate to the `App.java` file (...\datahelix\generator\src\main\java\com\scottlogic\deg\generator\App.java). Right click and debug - *this will fail*.
+Note: May need to run fatJar too since change to nest generator inside orchestrator jar
 
-Now edit the run configuration on the top toolbar created by the initial run. Name the run configuration 'Generate' and under 'Program Arguments' enter the following, replacing the paths with your desired locations:
+Navigate to the `App.java` file (...\datahelix\orchestrator\src\main\java\com\scottlogic\deg\orchestrator\App.java). Right click and debug - *this will fail*.
+
+Now edit the run configuration on the top toolbar created by the initial run. Name the run configuration 'Generate' and under 'Program Arguments' enter the following, replacing the paths with your desired files:
 
 ```
-generate "<path to an example JSON profile>" "<path to desired output CSV>"
+generate "<path of an example JSON profile>" "<desired output file path>"
 ```
 
 Additionally create another run configuration called GenerateViolating and add the program arguments
 
 ```
-violate "<path to an example JSON profile>" "<path to desired output folder for generated CSVs>"
+violate "<path of an example JSON profile>" "<desired output file path>"
 ```
 
 Run both of these configurations to test that installation is successful.
@@ -88,7 +90,7 @@ Build the tool with all its dependencies:
 
 To generate valid data run the following command from the command line:
 
-`java -jar <path to JAR file> generate [options] --profile-file="<path to profile>" --output-path="<desired output path>"`
+`java -jar <path to JAR file> generate [options] --profile-file="<path to profile>" --output-path="<desired output file path>"`
 
 * `[path to JAR file]` - the location of `generator.jar`.
 * `[options]` - optionally a combination of [options](../../docs/Options/GenerateOptions.md) to configure how the command operates.
