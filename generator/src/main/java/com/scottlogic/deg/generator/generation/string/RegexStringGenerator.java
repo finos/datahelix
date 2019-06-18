@@ -131,11 +131,11 @@ public class RegexStringGenerator implements StringGenerator {
         return String.format("¬(%s)", representation);
     }
 
-    private static String intersectRepresentation(String left, String right) {
+    public static String intersectRepresentation(String left, String right) {
         return String.format("(%s ∩ %s)", left, right);
     }
 
-    private static String unionRepresentation(String left, String right) {
+    public static String unionRepresentation(String left, String right) {
         return String.format("(%s ∪ %s)", left, right);
     }
 
