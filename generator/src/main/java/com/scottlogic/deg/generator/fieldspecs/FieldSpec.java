@@ -12,6 +12,9 @@ import java.util.stream.Collectors;
 
 /**
  * Details a column's atomic constraints
+ * A fieldSpec can either be a whitelist of allowed values, or a set of restrictions.
+ * if a fieldSpec can not be a type, it will not have any restrictions for that type
+ * This is enforced during merging.
  */
 public class FieldSpec {
     public static final FieldSpec Empty =
@@ -110,8 +113,7 @@ public class FieldSpec {
         typeRestrictions = typeRestrictions.except(type);
 
         if (typeRestrictions.getAllowedTypes().isEmpty()){
-            return new FieldSpec(new HeterogeneousTypeContainer<>(), nullable, formatting)
-                .withSetRestrictions(new SetRestrictions(Collections.emptySet()));
+            return mustBeNull();
         }
 
         return withTypeRestrictions(typeRestrictions);
