@@ -1,11 +1,11 @@
-package com.scottlogic.deg.generator.walker;
+package com.scottlogic.deg.orchestrator.visualise;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
-import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
+import com.scottlogic.deg.generator.walker.ReductiveDecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.reductive.*;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategy;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategyFactory;

@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.walker.reductive;
+package com.scottlogic.deg.orchestrator.visualise;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -6,6 +6,7 @@ import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.visualisation.DecisionTreeVisualisationWriter;
+import com.scottlogic.deg.generator.walker.reductive.ReductiveState;
 import com.scottlogic.deg.output.FileUtils;
 import com.scottlogic.deg.output.OutputPath;
 

@@ -10,14 +10,11 @@ import com.scottlogic.deg.generator.decisiontree.treepartitioning.TreePartitione
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
-import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagGenerator;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.ReductiveTreeWalker;
 
-import java.io.PrintWriter;
-import java.nio.file.Path;
 import java.time.OffsetDateTime;
 
 /**
@@ -43,7 +40,6 @@ public class GeneratorModule extends AbstractModule {
         bind(ProfileValidator.class).toProvider(ProfileValidatorProvider.class);
         bind(ReductiveDataGeneratorMonitor.class).toProvider(MonitorProvider.class).in(Singleton.class);
         bind(CombinationStrategy.class).toProvider(CombinationStrategyProvider.class);
-        bind(ReductiveTreeWalker.class).toProvider(ReductiveWalkerProvider.class);
 
         // bind config directly
         bind(DataGenerationType.class).toInstance(generationConfigSource.getGenerationType());
