@@ -72,11 +72,13 @@ public class RegexStringGenerator implements StringGenerator {
 
     @Override
     public String toString() {
-        if (regexRepresentation != null)
+        if (regexRepresentation != null) {
             return regexRepresentation;
+        }
 
-        if (this.automaton != null)
+        if (this.automaton != null) {
             return this.automaton.toString();
+        }
 
         return "<UNKNOWN>";
     }
@@ -422,13 +424,11 @@ public class RegexStringGenerator implements StringGenerator {
 
     private class FiniteStringAutomatonIterator implements Iterator<String> {
 
-        private final RegexStringGenerator stringGenerator;
         private final long matches;
         private int currentIndex;
         private String currentValue;
 
         FiniteStringAutomatonIterator(RegexStringGenerator stringGenerator) {
-            this.stringGenerator = stringGenerator;
             this.matches = stringGenerator.getValueCount();
             currentIndex = 0;
         }
@@ -470,8 +470,9 @@ public class RegexStringGenerator implements StringGenerator {
 
         private String getMatchedString(int indexOrder) {
             buildRootNode();
-            if (indexOrder < 1)
+            if (indexOrder < 1) {
                 throw new IllegalArgumentException("indexOrder must be >= 1");
+            }
 
             if (indexOrder > rootNode.matchedStringIdx) {
                 return null;
@@ -503,9 +504,6 @@ public class RegexStringGenerator implements StringGenerator {
 
     public static class UnionCollector {
         private RegexStringGenerator union;
-
-        public UnionCollector() {
-        }
 
         public void accumulate(RegexStringGenerator another) {
             if (union == null) {
