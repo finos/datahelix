@@ -19,8 +19,8 @@ Feature: User can specify that a field must be a type of name
 
   Scenario: Generating with an of type fullname constraint generates valid fullnames
     Given foo is of type "fullname"
-    And the generator can generate at most 10 rows
-    Then 10 rows of data are generated
+    And the generator can generate at most 5 rows
+    Then 5 rows of data are generated
     And foo contains strings matching /.+\s.+/
 
   Scenario: Generating with type firstname combined with shorter than constraint is successful
@@ -62,7 +62,7 @@ Feature: User can specify that a field must be a type of name
   Scenario: Generating with type fullname combined with longer than constraint is successful
     Given foo is of type "fullname"
     And foo is longer than 5
-    And the generator can generate at most 10 rows
+    And the generator can generate at most 5 rows
     Then 5 rows of data are generated
     And foo contains strings longer than or equal to 11
     And foo contains strings matching /.+\s.+/
