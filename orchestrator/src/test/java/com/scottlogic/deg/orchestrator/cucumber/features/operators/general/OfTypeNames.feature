@@ -61,7 +61,7 @@ Feature: User can specify that a field must be a type of name
 
   Scenario: Generating with type fullname combined with longer than constraint is successful
     Given foo is of type "fullname"
-    And foo is longer than 5
+    And foo is longer than 10
     And the generator can generate at most 5 rows
     Then 5 rows of data are generated
     And foo contains strings longer than or equal to 11
