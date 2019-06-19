@@ -1,10 +1,11 @@
 package com.scottlogic.deg.common.profile.constraints.atomic;
 
+import java.io.File;
 import java.util.Arrays;
 
 public enum NameConstraintTypes {
-    FIRST("firstname", "names/firstname.csv"),
-    LAST("lastname", "names/surname.csv"),
+    FIRST("firstname", "names"+ File.separator +"firstname.csv"),
+    LAST("lastname", "names"+ File.separator +"surname.csv"),
     FULL("fullname", null);
 
     private final String profileText;
