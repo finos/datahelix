@@ -59,8 +59,11 @@ task fatJar(type: Jar) {
 }
 
 jar {
-    fatJar
+    manifest {
+        attributes 'Main-Class': 'com.scottlogic.deg.orchestrator.App'
+    }
 }
+
 project.ext.ghToken = project.hasProperty('ghToken') ? project.getProperty('ghToken') : System.getenv('GH_TOKEN') ?: null
 semanticRelease {
     repo {
@@ -76,7 +79,7 @@ task sourcesJar(type: Jar) {
 
 semanticRelease {
     repo {
-        releaseAsset jar
+        releaseAsset fatJar
         // optionally set name, label and/or contentType
         releaseAsset sourcesJar, name: "the-sources.jar", label: 'the sources jar', contentType: 'application/zip'
         // or
