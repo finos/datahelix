@@ -27,6 +27,7 @@ jobs:
           fingerprints:
             - "2e:7e:4f:29:21:87:2b:71:46:42:45:c4:9a:f4:a3:b6"
       - checkout
+      - run: gradle fatJar
       # If changing build tools be sure to update GeneratorSetup.md in docs
       - run: gradle :orchestrator:release
 
@@ -34,7 +35,10 @@ workflows:
   version: 2
   build_and_test:
     jobs:
-      - build
+      - build:
+          filters:
+            branches:
+              ignore: master
 # TODO: Ensure gradle migration is smooth before introducing release job
   release:
     jobs:
