@@ -70,6 +70,7 @@ semanticRelease {
         ghToken = project.ghToken
     }
 }
+
 apply plugin: 'java'
 task sourcesJar(type: Jar) {
     classifier = 'sources'
