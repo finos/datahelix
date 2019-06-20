@@ -25,7 +25,7 @@ jobs:
     steps:
       - checkout
       # If changing build tools be sure to update GeneratorSetup.md in docs
-      - run: gradle :output:release :profile:release :generator:release :common:release :orchestrator:release
+      - run: gradle :orchestrator:release
 
 workflows:
   version: 2
