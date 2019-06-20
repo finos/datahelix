@@ -1,7 +1,13 @@
 version: 2.1
-orbs:
-  codecov: codecov/codecov@1.0.2
 jobs:
+
+  check_commit_message:
+    docker:
+      - image: circleci/openjdk:8-jdk-browsers
+    steps:
+      - checkout
+      - chmod +x commit_check.sh
+      - ./commit_check.sh
 
   build:
     docker:
@@ -20,32 +26,36 @@ jobs:
           path: ~/test-results
       - store_artifacts:
           path: ~/test-results/junit
-      - codecov/upload:
-          file: schemas/target/jacoco-reports/jacoco.xml
-      - codecov/upload:
-          file: generator/target/jacoco-reports/jacoco.xml
 
   release:
     docker:
       - image: circleci/openjdk:8-jdk-browsers
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "2e:7e:4f:29:21:87:2b:71:46:42:45:c4:9a:f4:a3:b6"
       - checkout
+      - run: gradle fatJar
       # If changing build tools be sure to update GeneratorSetup.md in docs
-      - run: gradle :output:release :profile:release :generator:release :orchestrator:release
-      - store-artifacts:
-          path: schemas/build/libs
-      - store-artifacts:
-          path: generator/build/libs
+      - run: gradle release -Dorg.ajoberstar.grgit.auth.username=${GH_TOKEN} -Dorg.ajoberstar.grgit.auth.password
+      # If not, let's try :orchestrator:release
 
 workflows:
   version: 2
   build_and_test:
     jobs:
-      - build
+      - build:
+          filters:
+            branches:
+              ignore: master
+      - check_commit_message:
+          filters:
+            branches:
+              ignore: master
 # TODO: Ensure gradle migration is smooth before introducing release job
-#  release:
-#    jobs:
-#      - release:
-#          filters:
-#            branches:
-#              only: master
+  release:
+    jobs:
+      - release:
+          filters:
+            branches:
+              only: master
