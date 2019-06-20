@@ -30,6 +30,7 @@ jobs:
       - run: gradle fatJar
       # If changing build tools be sure to update GeneratorSetup.md in docs
       - run: gradle release -Dorg.ajoberstar.grgit.auth.username=${GH_TOKEN} -Dorg.ajoberstar.grgit.auth.password
+      # If not, let's try :orchestrator:release
 
 workflows:
   version: 2

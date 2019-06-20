@@ -60,8 +60,12 @@ task fatJar(type: Jar) {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'com.scottlogic.deg.generator.App'
+        attributes 'Main-Class': 'com.scottlogic.deg.orchestrator.App'
     }
+    baseName = 'generator'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+    archiveName = "${baseName}.${extension}"
 }
 project.ext.ghToken = project.hasProperty('ghToken') ? project.getProperty('ghToken') : System.getenv('GH_TOKEN') ?: null
 semanticRelease {
