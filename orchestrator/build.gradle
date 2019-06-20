@@ -71,19 +71,10 @@ semanticRelease {
     }
 }
 
-apply plugin: 'java'
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
 semanticRelease {
     repo {
         releaseAsset fatJar
         // optionally set name, label and/or contentType
-        releaseAsset sourcesJar, name: "the-sources.jar", label: 'the sources jar', contentType: 'application/zip'
-        // or
-        // releaseAsset sourcesJar name "the-sources.jar" label "the sources jar" contentType "application/zip"
     }
 }
 
