@@ -1,6 +1,4 @@
 version: 2.1
-orbs:
-  codecov: codecov/codecov@1.0.2
 jobs:
 
   build:
@@ -20,10 +18,6 @@ jobs:
           path: ~/test-results
       - store_artifacts:
           path: ~/test-results/junit
-      - codecov/upload:
-          file: schemas/target/jacoco-reports/jacoco.xml
-      - codecov/upload:
-          file: generator/target/jacoco-reports/jacoco.xml
 
   release:
     docker:
@@ -31,11 +25,7 @@ jobs:
     steps:
       - checkout
       # If changing build tools be sure to update GeneratorSetup.md in docs
-      - run: gradle :output:release :profile:release :generator:release :orchestrator:release
-      - store-artifacts:
-          path: schemas/build/libs
-      - store-artifacts:
-          path: generator/build/libs
+      - run: gradle :output:release :profile:release :generator:release :common:release :orchestrator:release
 
 workflows:
   version: 2
@@ -43,9 +33,9 @@ workflows:
     jobs:
       - build
 # TODO: Ensure gradle migration is smooth before introducing release job
-#  release:
-#    jobs:
-#      - release:
-#          filters:
-#            branches:
-#              only: master
+  release:
+    jobs:
+      - release:
+          filters:
+            branches:
+              only: master
