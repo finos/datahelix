@@ -53,7 +53,7 @@ $ java -jar generator.jar generate --max-rows=100 --allow-untyped-fields --repla
 
 The generator is a command line tool which reads a profile, and outputs data in CSV format. The `--max-rows=100` option tells the generator to create 100 rows of data, and the `--replace` option tells it to overwrite previously generated files.  The compulsary `--profile-file` option specifies the name of the input profile, and the `--output-path` option specifies the location to write the output to.  In `generate` mode `--output-path` is optional; the generator will default to standard output if it is not supplied.  By default the generator outputs progress, in rows per second, to the standard error output.  This can be useful when generating large volumes of data.
 
-If you open up `output.csv` you'll see the following:
+If you open up `output.csv` you'll see something like the following:
 
 ~~~
 firstName
