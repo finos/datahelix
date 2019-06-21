@@ -34,6 +34,7 @@ jobs:
     steps:
       - add_ssh_keys:
           fingerprints:
+            # TODO: Configure fingerprint for main project credentials
             - "2e:7e:4f:29:21:87:2b:71:46:42:45:c4:9a:f4:a3:b6"
       - checkout
       - run: gradle fatJar
