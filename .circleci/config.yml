@@ -4,10 +4,11 @@ jobs:
   check_commit_message:
     docker:
       - image: circleci/openjdk:8-jdk-browsers
+    working_directory: ~/datahelix/
     steps:
       - checkout
-      - chmod +x commit_check.sh
-      - ./commit_check.sh
+      - run: chmod +x commit_check.sh
+      - run: ./commit_check.sh
 
   build:
     docker:
