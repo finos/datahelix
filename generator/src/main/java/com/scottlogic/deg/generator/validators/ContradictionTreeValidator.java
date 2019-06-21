@@ -22,14 +22,12 @@ public class ContradictionTreeValidator {
     public DecisionTree reportThenCullContradictions(DecisionTree decisionTree, DataGeneratorMonitor monitor) {
         Collection<Node> contradictingNodes = reportContradictions(decisionTree);
         if (contradictingNodes.contains(decisionTree.getRootNode())) {
-            // Entire profile is contradictory.
             monitor.addLineToPrintAtEndOfGeneration(
                 "The provided profile is wholly contradictory. No fields can successfully be fixed.",
                 System.err
             );
             return new DecisionTree(null, decisionTree.getFields(), decisionTree.getDescription());
         } else if (contradictingNodes.size() > 0) {
-            // Part of the profile is contradictory, and therefore could be simplified.
             monitor.addLineToPrintAtEndOfGeneration(
                 "Warning: There are " +
                     contradictingNodes.size() +
