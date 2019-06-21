@@ -128,7 +128,7 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     private boolean allowUntypedFields = false;
 
     @CommandLine.Option(
-        names = {"--from-file-root"},
+        names = {"--set-from-file-directory"},
         description = "Custom root for loading sets from file."
     )
     private String fromFilePath;
