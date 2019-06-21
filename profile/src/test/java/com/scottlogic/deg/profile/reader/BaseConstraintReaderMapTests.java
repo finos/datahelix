@@ -34,7 +34,7 @@ public class BaseConstraintReaderMapTests {
     @BeforeAll
     public void before() {
         constraintReaderMap = new BaseConstraintReaderMap(Stream.of(
-            new CoreAtomicTypesConstraintReaderSource(),
+            new CoreAtomicTypesConstraintReaderSource(null),
             new FinancialTypesConstraintReaderSource(),
             new PersonalDataTypesConstraintReaderSource()
         ));
