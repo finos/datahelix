@@ -1,12 +1,19 @@
 version: 2.1
 jobs:
 
+  check_commit_message:
+    docker:
+      - image: circleci/openjdk:8-jdk-browsers
+    working_directory: ~/datahelix/
+    steps:
+      - checkout
+      - run: chmod +x commit_check.sh
+      - run: ./commit_check.sh
+
   build:
     docker:
       - image: circleci/openjdk:8-jdk-browsers
     steps:
-      #- chmod +x commit_check.sh
-      #- ./commit_check.sh
       - checkout
       # If changing build tools be sure to update GeneratorSetup.md in docs
       - run: gradle fatJar :output:test :profile:test :generator:test :common:test :orchestrator:test
@@ -39,6 +46,10 @@ workflows:
   build_and_test:
     jobs:
       - build:
+          filters:
+            branches:
+              ignore: master
+      - check_commit_message:
           filters:
             branches:
               ignore: master
