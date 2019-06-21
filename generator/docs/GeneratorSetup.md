@@ -19,7 +19,7 @@ git clone https://github.com/ScottLogic/datahelix.git
 
 ### Java
 
-[Download JDK 8 SE](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) 
+[Download JDK 8 SE](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html). 
 
 (*Please note, this has been tested with jdk1.8.0_172 but later versions of JDK 1.8 may still work)*
 
@@ -40,13 +40,13 @@ Alternatively, download and install [Eclipse](https://www.eclipse.org/downloads/
 
 ### Cucumber
 
-Add **Gherkin** and **Cucumber for Java** plugins (file > settings > plugins if using IntelliJ IDE) 
+Add **Gherkin** and **Cucumber for Java** plugins (file > settings > plugins if using IntelliJ IDE).
 
-Currently the tests cannot be run from the TestRunner class
+Currently the tests cannot be run from the TestRunner class.
 
-To run a feature file you’ll have to modify the configuration by removing .steps from the end of the Glue field 
+To run a feature file you’ll have to modify the configuration by removing .steps from the end of the Glue field. 
 
-An explanation of the particular syntax used can be found [here](https://github.com/ScottLogic/datahelix/blob/master/docs/CucumberSyntax.md) 
+An explanation of the particular syntax used can be found [here](https://github.com/ScottLogic/datahelix/blob/master/docs/CucumberSyntax.md). 
 
 ## First time setup
 
