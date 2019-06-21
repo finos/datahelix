@@ -96,7 +96,7 @@ The manifest shows which rules are violated in which file.
 ## Hints and Tips
 
 * The generator will output velocity and row data to the console as standard
-(see [options](../Options/GenerateOptions.md) for other monitoring choices).
+(see [options](../Options/GenerateOptions.md) for other monitoring choices)
     * If multiple monitoring options are selected the most detailed monitor will be implemented
 * Ensure any desired output files are not being used by any other programs or the generator will not be able to run
     * If a file already exists it will be overwritten
