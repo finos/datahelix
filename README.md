@@ -17,7 +17,7 @@ The generation of representative test and simulation data is a challenging and t
 
 *The following guide gives a 10 minute introduction to the generator via various practical examples. For more detailed documentation please refer to the [Profile Developer Guide](docs/ProfileDeveloperGuide.md), and if you are interested in extending / modifying the generator itself, refer to the [DataHelix Generator Developer Guide](docs/GeneratorDeveloperGuide.md).*
 
-The generator has been written in Java, allowing it to work on Microsoft Windows, Apple Mac and Linux. You will need Java v1.8 installed to run the generator (you can run `java version` to check whether you meet ths requirement), it can be [downloaded here](https://www.java.com/en/download/manual.jsp).
+The generator has been written in Java, allowing it to work on Microsoft Windows, Apple Mac and Linux. You will need Java v1.8 installed to run the generator (you can run `java version` to check whether you meet this requirement), it can be [downloaded here](https://www.java.com/en/download/manual.jsp).
 
 The generator is distributed as a JAR file, with the latest release always available from the [GitHub releases page](https://github.com/ScottLogic/datahelix/releases/). The project is currently in beta and under active development. You can expect breaking changes in future releases, and new features too!
 
