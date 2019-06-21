@@ -17,7 +17,7 @@
     {
       "rule": "file",
       "constraints": [
-        {"field": "foo", "is": "fromFile", "value": "src/test/java/com/scottlogic/deg/orchestrator/endtoend/testfile.csv"}
+        {"field": "foo", "is": "setFromFile", "value": "src/test/java/com/scottlogic/deg/orchestrator/endtoend/testfile.csv"}
       ]
     }
   ]
