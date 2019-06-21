@@ -25,5 +25,22 @@ public class JarExecuteTests {
 
             assertEquals(Arrays.asList("foo", "\"Generation successful\""), collectedOutput);
     }
+
+    @Test
+    void GenerateSuccessfullyFromJarAndLoadFile() throws Exception {
+        ProcessBuilder pb = new ProcessBuilder("java", "-jar", "build/libs/generator.jar", "generate", "-p=src/test/java/com/scottlogic/deg/orchestrator/endtoend/loadfiletest.profile.json", "--max-rows=1", "--quiet");
+        pb.redirectErrorStream(true);
+        Process p = pb.start();
+        BufferedReader BufferedSTDOUTReader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        List<String> collectedOutput = new ArrayList<String>();
+        String line;
+        while ((line = BufferedSTDOUTReader.readLine()) != null) {
+            collectedOutput.add(line);
+        }
+        p.waitFor();
+        p.destroy();
+
+        assertEquals(Arrays.asList("foo", "\"Generated successfully from file\""), collectedOutput);
+    }
 }
 
