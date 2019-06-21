@@ -13,5 +13,5 @@ Selective violation does nothing if the generator is not run in violation mode.
 - If all constraints in a profile are selected to be not violated, the system will generate valid data
 
 ## Potential future work
-Let user choose single constraints or rules to violate.
-Let user choose single constraints or rules to not violate.
+- Let user choose single constraints or rules to violate.
+- Let user choose single constraints or rules to not violate.
