@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
+import com.scottlogic.deg.generator.decisiontree.Node;
 
 import java.util.*;
 import java.util.stream.Collectors;
