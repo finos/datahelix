@@ -34,7 +34,7 @@ public class JsonProfileReaderTests {
         this.json = null;
         this.profile = null;
         readerMap = new BaseConstraintReaderMap(Stream.of(
-            new CoreAtomicTypesConstraintReaderSource(),
+            new CoreAtomicTypesConstraintReaderSource(null),
             new FinancialTypesConstraintReaderSource(),
             new PersonalDataTypesConstraintReaderSource()
         ));

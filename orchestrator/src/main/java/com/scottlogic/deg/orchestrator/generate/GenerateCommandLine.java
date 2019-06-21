@@ -7,6 +7,7 @@ import com.scottlogic.deg.generator.config.detail.*;
 import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
 import com.scottlogic.deg.orchestrator.guice.AllModule;
 import com.scottlogic.deg.output.guice.OutputFormat;
+import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import picocli.CommandLine;
 
 import java.io.File;
@@ -126,6 +127,12 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
         description = "Remove the need for each field to have at least one compliant typing constraint applied")
     private boolean allowUntypedFields = false;
 
+    @CommandLine.Option(
+        names = {"--from-file-root"},
+        description = "Custom root for loading sets from file."
+    )
+    private String fromFilePath;
+
     public boolean shouldDoPartitioning() {
         return !this.dontPartitionTrees;
     }
@@ -203,5 +210,10 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
 
     public OutputFormat getOutputFormat() {
         return outputFormat;
+    }
+
+    @Override
+    public String fromFilePath() {
+        return fromFilePath;
     }
 }
