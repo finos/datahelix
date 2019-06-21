@@ -3,7 +3,6 @@ package com.scottlogic.deg.generator.validators;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
-import com.scottlogic.deg.generator.decisiontree.Node;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -46,7 +45,7 @@ public class ContradictionTreeValidatorTests {
     @Test
     public void reportContradictions_forNonContradictoryProfile_returnsEmptyCollection() {
         //Arrange
-        Mockito.when(checker.checkContradictions(any(), any())).thenReturn(false);
+        Mockito.when(checker.isContradictory(any(), any())).thenReturn(false);
 
         //Act
         Collection<Node> contradictingNodes = validator.reportContradictions(mockTree);
@@ -58,8 +57,8 @@ public class ContradictionTreeValidatorTests {
     @Test
     public void reportContradictions_forWhollyContradictoryProfile_returnsRootNode() {
         //Arrange
-        Mockito.when(checker.checkContradictions(any(), any())).thenReturn(false);
-        Mockito.when(checker.checkContradictions(rootNode, rootNode)).thenReturn(true);
+        Mockito.when(checker.isContradictory(any(), any())).thenReturn(false);
+        Mockito.when(checker.isContradictory(rootNode, rootNode)).thenReturn(true);
 
         //Act
         Collection<Node> contradictingNodes = validator.reportContradictions(mockTree);
@@ -72,8 +71,8 @@ public class ContradictionTreeValidatorTests {
     @Test
     public void reportContradictions_forPartiallyContradictoryProfileInFirstSubtree_returnsFirstSubtree() {
         //Arrange
-        Mockito.when(checker.checkContradictions(any(), any())).thenReturn(false);
-        Mockito.when(checker.checkContradictions(child0, child0)).thenReturn(true);
+        Mockito.when(checker.isContradictory(any(), any())).thenReturn(false);
+        Mockito.when(checker.isContradictory(child0, child0)).thenReturn(true);
 
 
         //Act
@@ -88,8 +87,8 @@ public class ContradictionTreeValidatorTests {
     @Test
     public void reportContradictions_forPartiallyContradictoryProfileInSecondSubtree_returnsSecondSubtree() {
         //Arrange
-        Mockito.when(checker.checkContradictions(any(), any())).thenReturn(false);
-        Mockito.when(checker.checkContradictions(child1, child1)).thenReturn(true);
+        Mockito.when(checker.isContradictory(any(), any())).thenReturn(false);
+        Mockito.when(checker.isContradictory(child1, child1)).thenReturn(true);
 
         //Act
         Collection<Node> contradictingNodes = validator.reportContradictions(mockTree);
@@ -117,9 +116,9 @@ public class ContradictionTreeValidatorTests {
         Mockito.when(subtree1.getOptions()).thenReturn(Collections.singleton(child1));
         Mockito.when(subtree2.getOptions()).thenReturn(Collections.singleton(child2));
 
-        Mockito.when(checker.checkContradictions(any(), any())).thenReturn(false);
-        Mockito.when(checker.checkContradictions(child0, child0)).thenReturn(true);
-        Mockito.when(checker.checkContradictions(child1, child1)).thenReturn(true);
+        Mockito.when(checker.isContradictory(any(), any())).thenReturn(false);
+        Mockito.when(checker.isContradictory(child0, child0)).thenReturn(true);
+        Mockito.when(checker.isContradictory(child1, child1)).thenReturn(true);
 
         //Act
         Collection<Node> contradictingNodes = validator.reportContradictions(mockTree);

@@ -1,19 +1,15 @@
 package com.scottlogic.deg.generator.validators;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -49,7 +45,7 @@ public class ContradictionCheckerTests {
         rightNode = rightNode.addAtomicConstraints(rightConstraints);
 
         //Act
-        boolean contradictionFound = checker.checkContradictions(leftNode, rightNode);
+        boolean contradictionFound = checker.isContradictory(leftNode, rightNode);
 
         //Assert
         assertTrue(contradictionFound);
@@ -84,7 +80,7 @@ public class ContradictionCheckerTests {
         rightNode = rightNode.addAtomicConstraints(rightConstraints);
 
         //Act
-        boolean contradictionFound = checker.checkContradictions(leftNode, rightNode);
+        boolean contradictionFound = checker.isContradictory(leftNode, rightNode);
 
         //Assert
         assertFalse(contradictionFound);

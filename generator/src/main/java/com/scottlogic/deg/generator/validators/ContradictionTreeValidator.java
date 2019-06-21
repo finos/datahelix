@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
-import com.scottlogic.deg.generator.decisiontree.Node;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -43,7 +42,7 @@ public class ContradictionTreeValidator {
             if (contradiction == null) {
                 return Collections.EMPTY_LIST;
             } else {
-                return Collections.singleton(contradiction);
+                return Collections.singleton(currentNode);
             }
         } else {
             // Recursive Case
@@ -76,8 +75,7 @@ public class ContradictionTreeValidator {
 
     private Node recursiveFindContradiction(ConstraintNode nodeToCheck, ConstraintNode currentNode){
         // can only check for contradictions on ConstraintNodes
-        boolean contradiction = contradictionChecker.checkContradictions(nodeToCheck, currentNode);
-        if (contradiction) {
+        if (contradictionChecker.isContradictory(nodeToCheck, currentNode)) {
             return currentNode;
         }
 
