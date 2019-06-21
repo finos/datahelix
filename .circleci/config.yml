@@ -5,8 +5,8 @@ jobs:
     docker:
       - image: circleci/openjdk:8-jdk-browsers
     steps:
-      - chmod +x commit_check.sh
-      - ./commit_check.sh
+      #- chmod +x commit_check.sh
+      #- ./commit_check.sh
       - checkout
       # If changing build tools be sure to update GeneratorSetup.md in docs
       - run: gradle fatJar :output:test :profile:test :generator:test :common:test :orchestrator:test
