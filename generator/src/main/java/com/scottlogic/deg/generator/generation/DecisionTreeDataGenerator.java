@@ -52,7 +52,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         monitor.generationStarting();
         DecisionTree decisionTree = decisionTreeGenerator.analyse(profile);
 
-        decisionTree = reportThenCullContradictions(decisionTree);
+        decisionTree = treeValidator.reportThenCullContradictions(decisionTree, monitor);
         if (decisionTree.getRootNode() == null) {
             return Stream.empty();
         }
@@ -66,33 +66,5 @@ public class DecisionTreeDataGenerator implements DataGenerator {
             .map(d->(GeneratedObject)d)
             .limit(maxRows)
             .peek(monitor::rowEmitted);
-    }
-
-    private DecisionTree reportThenCullContradictions(DecisionTree decisionTree) {
-        Collection<Node> contradictingNodes = treeValidator.reportContradictions(decisionTree);
-        if (contradictingNodes.contains(decisionTree.getRootNode())) {
-            // Entire profile is contradictory.
-            monitor.addLineToPrintAtEndOfGeneration(
-            "The provided profile is wholly contradictory. No fields can successfully be fixed.",
-                System.err
-            );
-            return new DecisionTree(null, decisionTree.getFields(), decisionTree.getDescription());
-        } else if (contradictingNodes.size() > 0) {
-            // Part of the profile is contradictory, and therefore could be simplified.
-            monitor.addLineToPrintAtEndOfGeneration(
-            "Warning: There are " +
-                contradictingNodes.size() +
-                " partial contradiction(s) in the profile. The contradicting section(s) are:",
-                System.err
-            );
-            for (Node node : contradictingNodes) {
-                monitor.addLineToPrintAtEndOfGeneration(node.toString(), System.err);
-            }
-            // TODO: Remove all contradicting subtrees in the decision tree and return the new tree.
-            // Currently the tree is being returned without removing any parts.
-            return decisionTree;
-        }
-        // No contradictions.
-        return decisionTree;
     }
 }

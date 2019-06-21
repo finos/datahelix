@@ -5,6 +5,7 @@ import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.Node;
+import com.scottlogic.deg.generator.generation.DataGeneratorMonitor;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -16,6 +17,34 @@ public class ContradictionTreeValidator {
     @Inject
     public ContradictionTreeValidator(ContradictionChecker contradictionChecker){
         this.contradictionChecker = contradictionChecker;
+    }
+
+    public DecisionTree reportThenCullContradictions(DecisionTree decisionTree, DataGeneratorMonitor monitor) {
+        Collection<Node> contradictingNodes = reportContradictions(decisionTree);
+        if (contradictingNodes.contains(decisionTree.getRootNode())) {
+            // Entire profile is contradictory.
+            monitor.addLineToPrintAtEndOfGeneration(
+                "The provided profile is wholly contradictory. No fields can successfully be fixed.",
+                System.err
+            );
+            return new DecisionTree(null, decisionTree.getFields(), decisionTree.getDescription());
+        } else if (contradictingNodes.size() > 0) {
+            // Part of the profile is contradictory, and therefore could be simplified.
+            monitor.addLineToPrintAtEndOfGeneration(
+                "Warning: There are " +
+                    contradictingNodes.size() +
+                    " partial contradiction(s) in the profile. The contradicting section(s) are:",
+                System.err
+            );
+            for (Node node : contradictingNodes) {
+                monitor.addLineToPrintAtEndOfGeneration(node.toString(), System.err);
+            }
+            // TODO: Remove all contradicting subtrees in the decision tree and return the new tree.
+            // Currently the tree is being returned without removing any parts.
+            return decisionTree;
+        }
+        // No contradictions.
+        return decisionTree;
     }
 
     /**

@@ -79,7 +79,9 @@ public class DecisionTreeGeneratorTests {
         @Test
         public void generateData_withWhollyContradictingProfile_returnsEmptyStream() {
             //Arrange
-            Mockito.when(treeValidator.reportContradictions(tree)).thenReturn(Collections.singleton(rootNode));
+            DecisionTree outputTree = Mockito.mock(DecisionTree.class);
+            Mockito.when(outputTree.getRootNode()).thenReturn(null);
+            Mockito.when(treeValidator.reportThenCullContradictions(tree, monitor)).thenReturn(outputTree);
 
             //Act
             Stream<GeneratedObject> actual = generator.generateData(profile);
@@ -89,63 +91,17 @@ public class DecisionTreeGeneratorTests {
         }
 
         @Test
-        public void generateData_withWhollyContradictingProfile_reportsContradiction() {
+        public void generateData_withNotWhollyContradictoryProfile_canReturnData() {
             //Arrange
-            Mockito.when(treeValidator.reportContradictions(tree)).thenReturn(Collections.singleton(rootNode));
-
-            //Act
-            generator.generateData(profile);
-
-            //Assert
-            Mockito.verify(monitor, times(1)).addLineToPrintAtEndOfGeneration(
-                eq("The provided profile is wholly contradictory. No fields can successfully be fixed."),
-                any()
-            );
-        }
-
-        @Test
-        public void generateData_withProfileWithNoContradictions_canReturnData() {
-            //Arrange
-            Mockito.when(treeValidator.reportContradictions(tree)).thenReturn(Collections.EMPTY_LIST);
+            DecisionTree outputTree = Mockito.mock(DecisionTree.class);
+            Mockito.when(outputTree.getRootNode()).thenReturn(rootNode);
+            Mockito.when(treeValidator.reportThenCullContradictions(tree, monitor)).thenReturn(outputTree);
 
             //Act
             Stream<GeneratedObject> actual = generator.generateData(profile);
 
             //Assert
             assertNotEquals(0, actual.count());
-        }
-
-
-        @Test
-        public void generateData_withPartiallyContradictingProfile_canReturnData() {
-            //Arrange
-            Mockito.when(treeValidator.reportContradictions(tree)).thenReturn(Collections.singleton(Mockito.mock(Node.class)));
-
-            //Act
-            Stream<GeneratedObject> actual = generator.generateData(profile);
-
-            //Assert
-            assertNotEquals(0, actual.count());
-        }
-
-
-        @Test
-        public void generateData_withPartiallyContradictingProfile_reportsEveryContradiction() {
-            //Arrange
-            String node0Text = "Node 0";
-            String node1Text = "Node 1";
-            Node node0 = Mockito.mock(Node.class);
-            Node node1 = Mockito.mock(Node.class);
-            Mockito.when(node0.toString()).thenReturn(node0Text);
-            Mockito.when(node1.toString()).thenReturn(node1Text);
-            Mockito.when(treeValidator.reportContradictions(tree)).thenReturn(Arrays.asList(node0, node1));
-
-            //Act
-            Stream<GeneratedObject> actual = generator.generateData(profile);
-
-            //Assert
-            Mockito.verify(monitor, times(1)).addLineToPrintAtEndOfGeneration(eq(node0Text), any());
-            Mockito.verify(monitor, times(1)).addLineToPrintAtEndOfGeneration(eq(node1Text), any());
         }
     }
 }
