@@ -1,5 +1,6 @@
 package com.scottlogic.deg.profile.reader;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedDateGranularity;
@@ -12,6 +13,7 @@ import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 
 import java.io.*;
 import java.math.BigDecimal;
+import java.nio.file.Path;
 import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.HashSet;
@@ -21,6 +23,14 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMapEntrySource {
+
+    private final String fromFilePath;
+
+    @Inject
+    public CoreAtomicTypesConstraintReaderSource(final String fromFilePath) {
+        this.fromFilePath = fromFilePath;
+    }
+
     public Stream<ConstraintReaderMapEntry> getConstraintReaderMapEntries() {
         BigDecimal maxStringLength = BigDecimal.valueOf(Defaults.MAX_STRING_LENGTH);
 
@@ -314,7 +324,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                 (dto, fields, rules) -> {
                     String value = ConstraintReaderHelpers.getValidatedValue(dto, String.class);
 
-                    InputStream streamFromPath = createStreamFromPath(value);
+                    InputStream streamFromPath = createStreamFromPath(appendPath(value));
                     Set<String> names = CsvInputStreamReader.retrieveLines(streamFromPath);
                     closeStream(streamFromPath);
 
@@ -325,6 +335,10 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                 }
             )
         );
+    }
+
+    private String appendPath(String path) {
+        return fromFilePath != null ? fromFilePath + path : path;
     }
 
     private static InputStream createStreamFromPath(String path) {

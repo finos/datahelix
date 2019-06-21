@@ -25,7 +25,7 @@ public class ProfileModule extends AbstractModule {
 
         // Load built-in profile-to-constraint mappings
         BaseConstraintReaderMap map = new BaseConstraintReaderMap(Stream.of(
-            new CoreAtomicTypesConstraintReaderSource(),
+            new CoreAtomicTypesConstraintReaderSource(profileConfigSource.fromFilePath()),
             new FinancialTypesConstraintReaderSource(),
             new PersonalDataTypesConstraintReaderSource()
         ));
