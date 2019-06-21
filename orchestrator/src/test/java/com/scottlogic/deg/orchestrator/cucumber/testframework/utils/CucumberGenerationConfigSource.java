@@ -99,4 +99,7 @@ public class CucumberGenerationConfigSource implements AllConfigSource, ViolateC
     public OutputFormat getOutputFormat() {
         return null;
     }
+
+    @Override
+    public String fromFilePath() { return null; }
 }
