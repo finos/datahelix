@@ -121,7 +121,7 @@ Fields are nullable by default, however, you can add a further constraint to a f
 
 The generator supports three different types of constraint. These are:
 
- - **Predicates** - boolean-valued functions that define whether a given value as valid or invalid. In the above profile `ofType` and `matchingRegex` are examples of predicates.
+ - **Predicates** - boolean-valued functions that define whether a given value is valid or invalid. In the above profile `ofType` and `matchingRegex` are examples of predicates.
  - **Grammatical** - combine or modify other constraints. They are fully recursive; any grammatical constraint is a valid input to any other grammatical constraint. In the above profile `not` is an example of a grammatical constraint. 
  - **Presentational** - provide additional formatting information, we'll cover these later.
 
