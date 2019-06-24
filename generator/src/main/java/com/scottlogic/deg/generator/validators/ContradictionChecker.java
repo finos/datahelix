@@ -22,12 +22,7 @@ public class ContradictionChecker {
     public ContradictionChecker(ConstraintReducer constraintReducer){
         this.constraintReducer = constraintReducer;
     }
-    /**
-     * Check for any contradictions
-     * @param leftNode
-     * @param rightNode
-     * @return
-     */
+
     public boolean isContradictory(ConstraintNode leftNode, ConstraintNode rightNode){
 
         Set<Field> fields = SetUtils.union(getFields(leftNode), getFields(rightNode));
