@@ -1,10 +1,11 @@
 package com.scottlogic.deg.generator.generation;
 
-import com.google.inject.name.Named;
 import com.scottlogic.deg.common.output.GeneratedObject;
 import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.common.profile.constraints.Constraint;
-import com.scottlogic.deg.generator.decisiontree.*;
+import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
+import com.scottlogic.deg.generator.decisiontree.DecisionTree;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.treepartitioning.TreePartitioner;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
@@ -15,16 +16,11 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.times;
 
 public class DecisionTreeGeneratorTests {
     private DecisionTreeDataGenerator generator;

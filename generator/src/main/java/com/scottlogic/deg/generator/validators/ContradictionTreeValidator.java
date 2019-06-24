@@ -1,11 +1,15 @@
 package com.scottlogic.deg.generator.validators;
 
 import com.google.inject.Inject;
+import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.Node;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.DataGeneratorMonitor;
+import com.scottlogic.deg.generator.walker.reductive.ReductiveTreePruner;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -13,10 +17,12 @@ import java.util.stream.Collectors;
 
 public class ContradictionTreeValidator {
     private final ContradictionChecker contradictionChecker;
+    private final ReductiveTreePruner treePruner;
 
     @Inject
-    public ContradictionTreeValidator(ContradictionChecker contradictionChecker){
+    public ContradictionTreeValidator(ContradictionChecker contradictionChecker, ReductiveTreePruner treePruner){
         this.contradictionChecker = contradictionChecker;
+        this.treePruner = treePruner;
     }
 
     public DecisionTree reportThenCullContradictions(DecisionTree decisionTree, DataGeneratorMonitor monitor) {
@@ -31,18 +37,25 @@ public class ContradictionTreeValidator {
             monitor.addLineToPrintAtEndOfGeneration(
                 "Warning: There are " +
                     contradictingNodes.size() +
-                    " partial contradiction(s) in the profile. The contradicting section(s) are:",
+                    " partial contradiction(s) in the profile. Run the profile through the visualiser for more information.",
                 System.err
             );
-            for (Node node : contradictingNodes) {
-                monitor.addLineToPrintAtEndOfGeneration(node.toString(), System.err);
-            }
-            // TODO: Remove all contradicting subtrees in the decision tree and return the new tree.
-            // Currently the tree is being returned without removing any parts.
-            return decisionTree;
+
+            // Remove all contradicting subtrees in the decision tree and return the new tree.
+            ConstraintNode prunedRootNode = pruneOutPartialContradictions(decisionTree.getRootNode(), decisionTree.getFields());
+            return new DecisionTree(prunedRootNode, decisionTree.getFields(), decisionTree.getDescription());
         }
         // No contradictions.
         return decisionTree;
+    }
+
+    private ConstraintNode pruneOutPartialContradictions(ConstraintNode unPrunedNode, ProfileFields profileFields) {
+        Map<Field, FieldSpec> fieldSpecs = new HashMap<>();
+
+        for (Field field : profileFields.getFields()) {
+            fieldSpecs.put(field, FieldSpec.Empty);
+        }
+        return treePruner.pruneConstraintNode(unPrunedNode, fieldSpecs).get();
     }
 
     /**

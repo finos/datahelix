@@ -1,14 +1,18 @@
 package com.scottlogic.deg.generator.validators;
 
+import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.Node;
 import com.scottlogic.deg.generator.generation.DataGeneratorMonitor;
+import com.scottlogic.deg.generator.walker.reductive.Merged;
+import com.scottlogic.deg.generator.walker.reductive.ReductiveTreePruner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -22,6 +26,7 @@ public class ContradictionTreeValidatorTests {
 
     private ContradictionTreeValidator validator;
     private ContradictionChecker checker;
+    private ReductiveTreePruner pruner;
     private DecisionTree mockTree;
     private ConstraintNode rootNode;
     private ConstraintNode child0;
@@ -32,7 +37,8 @@ public class ContradictionTreeValidatorTests {
     @BeforeEach
     void setup() {
         checker = Mockito.mock(ContradictionChecker.class);
-        validator = new ContradictionTreeValidator(checker);
+        pruner = Mockito.mock(ReductiveTreePruner.class);
+        validator = new ContradictionTreeValidator(checker, pruner);
 
         mockTree = Mockito.mock(DecisionTree.class);
         rootNode = Mockito.mock(ConstraintNode.class);
@@ -182,39 +188,50 @@ public class ContradictionTreeValidatorTests {
 
 
     @Test
-    public void reportThenCullContradictions_withPartiallyContradictingProfile_returnsOriginalTree() {
+    public void reportThenCullContradictions_withPartiallyContradictingProfile_returnsPrunedTree() {
         //Arrange
         Mockito.when(checker.isContradictory(any(), any())).thenReturn(false);
         Mockito.when(checker.isContradictory(eq(child0), any())).thenReturn(true);
+
+        ConstraintNode prunedNode = Mockito.mock(ConstraintNode.class);
+        Merged<ConstraintNode> merged = Merged.of(prunedNode);
+        Mockito.when(pruner.pruneConstraintNode(any(), any())).thenReturn(merged);
+
+        ProfileFields profileFields = Mockito.mock(ProfileFields.class);
+        Mockito.when(profileFields.getFields()).thenReturn(new ArrayList<>());
+        Mockito.when(mockTree.getFields()).thenReturn(profileFields);
 
         //Act
         DecisionTree checkedTree = validator.reportThenCullContradictions(mockTree, monitor);
 
         //Assert
-        assertEquals(mockTree, checkedTree);
+        assertEquals(prunedNode, checkedTree.getRootNode());
     }
 
 
     @Test
-    public void reportThenCullContradictions_withPartiallyContradictingProfile_reportsEveryContradiction() {
+    public void reportThenCullContradictions_withPartiallyContradictingProfile_reportsNumberOfContradictions() {
         //Arrange
-        String node0Text = "Node 0";
-        String node1Text = "Node 1";
-        String node2Text = "Node 2";
-        Mockito.when(child0.toString()).thenReturn(node0Text);
-        Mockito.when(child1.toString()).thenReturn(node1Text);
-        Mockito.when(child2.toString()).thenReturn(node2Text);
-
         Mockito.when(checker.isContradictory(any(), any())).thenReturn(false);
         Mockito.when(checker.isContradictory(child0, child0)).thenReturn(true);
         Mockito.when(checker.isContradictory(child1, child1)).thenReturn(true);
+
+        ConstraintNode prunedNode = Mockito.mock(ConstraintNode.class);
+        Merged<ConstraintNode> merged = Merged.of(prunedNode);
+        Mockito.when(pruner.pruneConstraintNode(any(), any())).thenReturn(merged);
+
+        ProfileFields profileFields = Mockito.mock(ProfileFields.class);
+        Mockito.when(profileFields.getFields()).thenReturn(new ArrayList<>());
+        Mockito.when(mockTree.getFields()).thenReturn(profileFields);
 
         //Act
         validator.reportThenCullContradictions(mockTree, monitor);
 
         //Assert
-        Mockito.verify(monitor, times(1)).addLineToPrintAtEndOfGeneration(eq(node0Text), any());
-        Mockito.verify(monitor, times(1)).addLineToPrintAtEndOfGeneration(eq(node1Text), any());
-        Mockito.verify(monitor, times(0)).addLineToPrintAtEndOfGeneration(eq(node2Text), any());
+        Mockito.verify(monitor, times(1))
+            .addLineToPrintAtEndOfGeneration(
+                eq("Warning: There are 2 partial contradiction(s) in the profile." +
+                    " Run the profile through the visualiser for more information."),
+                any());
     }
 }
