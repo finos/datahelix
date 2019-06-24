@@ -1031,7 +1031,7 @@ public class ProfileViolationTests {
             .map(h -> h.getRule().equals(rule) ? h.getViolatedRule() : h.getRule())
             .collect(Collectors.toList());
 
-        String processedDescription = description + " -- Violating: " + rule.ruleInformation.getDescription();
+        String processedDescription = description + " -- Violating: " + rule.getRuleInformation().getDescription();
 
         return new ViolatedProfile(rule, new ProfileFields(fields), newRuleList, processedDescription);
     }

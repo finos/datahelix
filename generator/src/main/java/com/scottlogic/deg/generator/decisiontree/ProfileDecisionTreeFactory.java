@@ -30,7 +30,7 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
     }
 
     private ConstraintNode convertRule(Rule rule) {
-        return convertAndConstraint(new AndConstraint(rule.constraints));
+        return convertAndConstraint(new AndConstraint(rule.getConstraints()));
     }
 
     private ConstraintNode convertConstraint(Constraint constraintToConvert) {
@@ -51,11 +51,11 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
     }
 
     private ConstraintNode convertNegatedConstraint(Object constraintToConvert) {
-        Constraint negatedConstraint = ((NegatedGrammaticalConstraint) constraintToConvert).negatedConstraint;
+        Constraint negatedConstraint = ((NegatedGrammaticalConstraint) constraintToConvert).getNegatedConstraint();
 
         // ¬AND(X, Y, Z) reduces to OR(¬X, ¬Y, ¬Z)
         if (negatedConstraint instanceof AndConstraint) {
-            Collection<Constraint> subConstraints = ((AndConstraint) negatedConstraint).subConstraints;
+            Collection<Constraint> subConstraints = ((AndConstraint) negatedConstraint).getSubConstraints();
 
             return convertOrConstraint(
                 new OrConstraint(negateEach(subConstraints)));
@@ -95,7 +95,7 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
 
     private ConstraintNode convertAndConstraint(AndConstraint constraintToConvert) {
         // AND(X, Y, Z) becomes a flattened list of constraint nodes
-        Collection<Constraint> subConstraints = constraintToConvert.subConstraints;
+        Collection<Constraint> subConstraints = constraintToConvert.getSubConstraints();
 
         Iterator<ConstraintNode> iterator = subConstraints.stream().map(this::convertConstraint)
             .iterator();
