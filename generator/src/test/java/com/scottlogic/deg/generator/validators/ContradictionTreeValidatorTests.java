@@ -4,7 +4,6 @@ import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
-import com.scottlogic.deg.generator.decisiontree.Node;
 import com.scottlogic.deg.generator.generation.DataGeneratorMonitor;
 import com.scottlogic.deg.generator.walker.reductive.Merged;
 import com.scottlogic.deg.generator.walker.reductive.ReductiveTreePruner;
@@ -64,7 +63,7 @@ public class ContradictionTreeValidatorTests {
         Mockito.when(checker.isContradictory(any(), any())).thenReturn(false);
 
         //Act
-        Collection<Node> contradictingNodes = validator.reportContradictions(mockTree);
+        Collection<ConstraintNode> contradictingNodes = validator.reportContradictions(mockTree);
 
         //Assert
         assertEquals(0, contradictingNodes.size());
@@ -77,7 +76,7 @@ public class ContradictionTreeValidatorTests {
         Mockito.when(checker.isContradictory(rootNode, rootNode)).thenReturn(true);
 
         //Act
-        Collection<Node> contradictingNodes = validator.reportContradictions(mockTree);
+        Collection<ConstraintNode> contradictingNodes = validator.reportContradictions(mockTree);
 
         //Assert
         assertEquals(1, contradictingNodes.size());
@@ -92,7 +91,7 @@ public class ContradictionTreeValidatorTests {
 
 
         //Act
-        Collection<Node> contradictingNodes = validator.reportContradictions(mockTree);
+        Collection<ConstraintNode> contradictingNodes = validator.reportContradictions(mockTree);
 
         //Assert
         assertEquals(1, contradictingNodes.size());
@@ -107,7 +106,7 @@ public class ContradictionTreeValidatorTests {
         Mockito.when(checker.isContradictory(child1, child1)).thenReturn(true);
 
         //Act
-        Collection<Node> contradictingNodes = validator.reportContradictions(mockTree);
+        Collection<ConstraintNode> contradictingNodes = validator.reportContradictions(mockTree);
 
         //Assert
         assertEquals(1, contradictingNodes.size());
@@ -137,7 +136,7 @@ public class ContradictionTreeValidatorTests {
         Mockito.when(checker.isContradictory(child1, child1)).thenReturn(true);
 
         //Act
-        Collection<Node> contradictingNodes = validator.reportContradictions(mockTree);
+        Collection<ConstraintNode> contradictingNodes = validator.reportContradictions(mockTree);
 
         //Assert
         assertEquals(2, contradictingNodes.size());

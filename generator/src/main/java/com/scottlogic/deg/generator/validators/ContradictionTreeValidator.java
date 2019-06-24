@@ -26,7 +26,7 @@ public class ContradictionTreeValidator {
     }
 
     public DecisionTree reportThenCullContradictions(DecisionTree decisionTree, DataGeneratorMonitor monitor) {
-        Collection<Node> contradictingNodes = reportContradictions(decisionTree);
+        Collection<ConstraintNode> contradictingNodes = reportContradictions(decisionTree);
         if (contradictingNodes.contains(decisionTree.getRootNode())) {
             monitor.addLineToPrintAtEndOfGeneration(
                 "The provided profile is wholly contradictory. No fields can successfully be fixed.",
@@ -63,18 +63,18 @@ public class ContradictionTreeValidator {
      * @param decisionTree
      * @return all nodes that contain a contradiction. If the root is returned, then the whole tree is contradictory.
      */
-    public Collection<Node> reportContradictions(DecisionTree decisionTree) {
+    public Collection<ConstraintNode> reportContradictions(DecisionTree decisionTree) {
         return walkTree(decisionTree.getRootNode());
     }
 
-    private Collection<Node> walkTree(ConstraintNode root){
+    private Collection<ConstraintNode> walkTree(ConstraintNode root){
         return getContradictingNodes(root)
             .stream()
             .filter(Objects::nonNull)
             .collect(Collectors.toList());
     }
 
-    private Collection<Node> getContradictingNodes(ConstraintNode currentNode) {
+    private Collection<ConstraintNode> getContradictingNodes(ConstraintNode currentNode) {
         if (currentNode.getDecisions().size() == 0) {
             // Base Case
             Node contradiction = findContradictionForNode(currentNode);
@@ -91,7 +91,7 @@ public class ContradictionTreeValidator {
             for (DecisionNode decisionNode : currentNode.getDecisions()) {
                 nodesToCheck.addAll(decisionNode.getOptions());
             }
-            Collection<Node> contradictingNodes = new ArrayList<>();
+            Collection<ConstraintNode> contradictingNodes = new ArrayList<>();
 
             contradictingNodes.add(findContradictionForNode(currentNode)); // Check from the current node.
 
