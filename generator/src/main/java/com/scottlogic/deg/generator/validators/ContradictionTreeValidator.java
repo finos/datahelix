@@ -26,26 +26,24 @@ public class ContradictionTreeValidator {
     }
 
     public DecisionTree reportThenCullContradictions(DecisionTree decisionTree, DataGeneratorMonitor monitor) {
-        Collection<ConstraintNode> contradictingNodes = reportContradictions(decisionTree);
-        if (contradictingNodes.contains(decisionTree.getRootNode())) {
+        ContradictionItem contradictionItem = getAllNodesInTreeThatAreRootsOfWhollyContradictorySubTrees(decisionTree);
+        if (contradictionItem.isWhollyContradictory(decisionTree)) {
             monitor.addLineToPrintAtEndOfGeneration(
                 "The provided profile is wholly contradictory. No fields can successfully be fixed.",
                 System.err
             );
             return new DecisionTree(null, decisionTree.getFields(), decisionTree.getDescription());
-        } else if (contradictingNodes.size() > 0) {
+        } else if (contradictionItem.isPartiallyContradictory()) {
             monitor.addLineToPrintAtEndOfGeneration(
                 "Warning: There are " +
-                    contradictingNodes.size() +
+                    contradictionItem.getContradictingNodes().size() +
                     " partial contradiction(s) in the profile. Run the profile through the visualiser for more information.",
                 System.err
             );
 
-            // Remove all contradicting subtrees in the decision tree and return the new tree.
             ConstraintNode prunedRootNode = pruneOutPartialContradictions(decisionTree.getRootNode(), decisionTree.getFields());
             return new DecisionTree(prunedRootNode, decisionTree.getFields(), decisionTree.getDescription());
         }
-        // No contradictions.
         return decisionTree;
     }
 
@@ -57,27 +55,18 @@ public class ContradictionTreeValidator {
         }
         return treePruner.pruneConstraintNode(unPrunedNode, fieldSpecs).get();
     }
-
-    /**
-     * Takes a DecisionTree, walks every node, and check every child of each node for contradictory constraints.
-     * @param decisionTree
-     * @return all nodes that contain a contradiction. If the root is returned, then the whole tree is contradictory.
-     */
-    public Collection<ConstraintNode> reportContradictions(DecisionTree decisionTree) {
-        return walkTree(decisionTree.getRootNode());
-    }
-
-    private Collection<ConstraintNode> walkTree(ConstraintNode root){
-        return getContradictingNodes(root)
+    
+    public ContradictionItem getAllNodesInTreeThatAreRootsOfWhollyContradictorySubTrees(DecisionTree decisionTree) {
+        return new ContradictionItem(getAllNodesThatAreContradictoryAndADescendentOfNode(decisionTree.getRootNode())
             .stream()
             .filter(Objects::nonNull)
-            .collect(Collectors.toList());
+            .collect(Collectors.toList()));
     }
 
-    private Collection<ConstraintNode> getContradictingNodes(ConstraintNode currentNode) {
+    private Collection<ConstraintNode> getAllNodesThatAreContradictoryAndADescendentOfNode(ConstraintNode currentNode) {
         if (currentNode.getDecisions().size() == 0) {
             // Base Case
-            Node contradiction = findContradictionForNode(currentNode);
+            Node contradiction = findNodeHighestInTreeThatContradictsWithCurrent(currentNode);
             if (contradiction == null) {
                 return new ArrayList<>();
             } else {
@@ -85,61 +74,56 @@ public class ContradictionTreeValidator {
             }
         } else {
             // Recursive Case
-            // Only Constraint Nodes can be checked for contradictions, so add all the Constraint Nodes, which are
-            // always children of the children of the current ConstraintNode.
+            // It only makes sense for Constraint Nodes to be checked for contradictions, because if there is a
+            // contradiction in a DecisionNode then by definition there must be a contradiction in the parent
+            // ConstraintNode. So, add all the Constraint Nodes, which are always children of the children of the
+            // current ConstraintNode.
             List<ConstraintNode> nodesToCheck = new ArrayList<>();
             for (DecisionNode decisionNode : currentNode.getDecisions()) {
                 nodesToCheck.addAll(decisionNode.getOptions());
             }
             Collection<ConstraintNode> contradictingNodes = new ArrayList<>();
 
-            contradictingNodes.add(findContradictionForNode(currentNode)); // Check from the current node.
+            contradictingNodes.add(findNodeHighestInTreeThatContradictsWithCurrent(currentNode));
 
             for (ConstraintNode nodeToCheck : nodesToCheck) {
-                 contradictingNodes.addAll(getContradictingNodes(nodeToCheck));
+                 contradictingNodes.addAll(getAllNodesThatAreContradictoryAndADescendentOfNode(nodeToCheck));
             }
 
             return contradictingNodes;
         }
     }
 
-    /**
-     * Recursively looks for constraint contradictions between the nodeToCheck, and its descendants
-     * @param nodeToCheck the node that should be checked for contradictions
-     * @return the highest contradiction.
-     */
-    private ConstraintNode findContradictionForNode(ConstraintNode nodeToCheck){
-        return findConstraintContradictions(nodeToCheck, nodeToCheck);
+    private ConstraintNode findNodeHighestInTreeThatContradictsWithCurrent(ConstraintNode nodeToCheck){
+        return getConstraintNodeIfItContradictsElseReturnNull(nodeToCheck, nodeToCheck);
     }
 
-    private ConstraintNode findConstraintContradictions(ConstraintNode nodeToCheck, ConstraintNode currentNode){
-        if (contradictionChecker.isContradictory(nodeToCheck, currentNode)) {
-            return currentNode;
+    private ConstraintNode getConstraintNodeIfItContradictsElseReturnNull(ConstraintNode nodeToCheck, ConstraintNode potentiallyContradictingSubTree){
+        if (contradictionChecker.isContradictory(nodeToCheck, potentiallyContradictingSubTree)) {
+            return potentiallyContradictingSubTree;
         }
 
         // If any of the nodes in an AND statement are contradictory, then the statement itself is considered one.
-        for (DecisionNode node : currentNode.getDecisions()) {
-            boolean contradictionFound = findDecisionContradictions(nodeToCheck, node) != null;
+        for (DecisionNode node : potentiallyContradictingSubTree.getDecisions()) {
+            boolean contradictionFound = getDecisionNodeIfItContradictsElseReturnNull(nodeToCheck, node) != null;
             if (contradictionFound){
-                return currentNode;
+                return potentiallyContradictingSubTree;
             }
         }
 
-        // no more nodes, and no contradiction found.
         return null;
 
     }
 
-    private DecisionNode findDecisionContradictions(ConstraintNode nodeToCheck, DecisionNode currentNode){
+    private DecisionNode getDecisionNodeIfItContradictsElseReturnNull(ConstraintNode nodeToCheck, DecisionNode potentiallyContradictingSubTree){
         // If all the nodes in an OR statement are contradictory, then the statement itself is considered one.
-        boolean contradictionInAllOptions = currentNode.getOptions()
+        boolean contradictionInAllOptions = potentiallyContradictingSubTree.getOptions()
             .stream()
-            .allMatch(n -> findConstraintContradictions(nodeToCheck, n) != null);
+            .allMatch(n -> getConstraintNodeIfItContradictsElseReturnNull(nodeToCheck, n) != null);
         if (contradictionInAllOptions) {
-            return currentNode;
+            return potentiallyContradictingSubTree;
         }
 
-        // no more nodes, and no contradiction found.
         return null;
     }
 }

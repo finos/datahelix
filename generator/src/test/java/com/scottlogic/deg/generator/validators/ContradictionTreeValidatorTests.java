@@ -13,7 +13,6 @@ import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -58,29 +57,28 @@ public class ContradictionTreeValidatorTests {
     }
 
     @Test
-    public void reportContradictions_forNonContradictoryProfile_returnsEmptyCollection() {
+    public void reportContradictions_forNonContradictoryProfile_returnsItemWithNoContradiction() {
         //Arrange
         Mockito.when(checker.isContradictory(any(), any())).thenReturn(false);
 
         //Act
-        Collection<ConstraintNode> contradictingNodes = validator.reportContradictions(mockTree);
+        ContradictionItem contradictionItem = validator.getAllNodesInTreeThatAreRootsOfWhollyContradictorySubTrees(mockTree);
 
         //Assert
-        assertEquals(0, contradictingNodes.size());
+        assertFalse(contradictionItem.isPartiallyContradictory());
     }
 
     @Test
-    public void reportContradictions_forWhollyContradictoryProfile_returnsRootNode() {
+    public void reportContradictions_forWhollyContradictoryProfile_returnsWhollyContradictoryItem() {
         //Arrange
         Mockito.when(checker.isContradictory(any(), any())).thenReturn(false);
         Mockito.when(checker.isContradictory(rootNode, rootNode)).thenReturn(true);
 
         //Act
-        Collection<ConstraintNode> contradictingNodes = validator.reportContradictions(mockTree);
+        ContradictionItem contradictionItem = validator.getAllNodesInTreeThatAreRootsOfWhollyContradictorySubTrees(mockTree);
 
         //Assert
-        assertEquals(1, contradictingNodes.size());
-        assertEquals(rootNode, contradictingNodes.stream().findFirst().orElse(null));
+        assertTrue(contradictionItem.isWhollyContradictory(mockTree));
     }
 
     @Test
@@ -91,11 +89,12 @@ public class ContradictionTreeValidatorTests {
 
 
         //Act
-        Collection<ConstraintNode> contradictingNodes = validator.reportContradictions(mockTree);
+        ContradictionItem contradictionItem = validator.getAllNodesInTreeThatAreRootsOfWhollyContradictorySubTrees(mockTree);
 
         //Assert
-        assertEquals(1, contradictingNodes.size());
-        assertEquals(child0, contradictingNodes.stream().findFirst().orElse(null));
+        assertTrue(contradictionItem.isPartiallyContradictory());
+        assertEquals(1, contradictionItem.getContradictingNodes().size());
+        assertEquals(child0, contradictionItem.getContradictingNodes().stream().findFirst().orElse(null));
     }
 
 
@@ -106,11 +105,12 @@ public class ContradictionTreeValidatorTests {
         Mockito.when(checker.isContradictory(child1, child1)).thenReturn(true);
 
         //Act
-        Collection<ConstraintNode> contradictingNodes = validator.reportContradictions(mockTree);
+        ContradictionItem contradictionItem = validator.getAllNodesInTreeThatAreRootsOfWhollyContradictorySubTrees(mockTree);
 
         //Assert
-        assertEquals(1, contradictingNodes.size());
-        assertEquals(child1, contradictingNodes.stream().findFirst().orElse(null));
+        assertTrue(contradictionItem.isPartiallyContradictory());
+        assertEquals(1, contradictionItem.getContradictingNodes().size());
+        assertEquals(child1, contradictionItem.getContradictingNodes().stream().findFirst().orElse(null));
     }
 
     @Test
@@ -136,12 +136,13 @@ public class ContradictionTreeValidatorTests {
         Mockito.when(checker.isContradictory(child1, child1)).thenReturn(true);
 
         //Act
-        Collection<ConstraintNode> contradictingNodes = validator.reportContradictions(mockTree);
+        ContradictionItem contradictionItem = validator.getAllNodesInTreeThatAreRootsOfWhollyContradictorySubTrees(mockTree);
 
         //Assert
-        assertEquals(2, contradictingNodes.size());
-        assertTrue(contradictingNodes.contains(child0));
-        assertTrue(contradictingNodes.contains(child1));
+        assertTrue(contradictionItem.isPartiallyContradictory());
+        assertEquals(2, contradictionItem.getContradictingNodes().size());
+        assertTrue(contradictionItem.getContradictingNodes().contains(child0));
+        assertTrue(contradictionItem.getContradictingNodes().contains(child1));
     }
 
     @Test
