@@ -9,7 +9,6 @@ import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
-import com.scottlogic.deg.generator.restrictions.SetRestrictions;
 import com.scottlogic.deg.generator.walker.reductive.*;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategy;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategyFactory;
@@ -81,8 +80,7 @@ class ReductiveDecisionTreeWalkerTests {
     @Test
     public void shouldReturnEmptyCollectionOfRowsWhenSecondFieldCannotBeFixed() {
         DataBagValue dataBag = new DataBagValue(field1, "yes");
-        FieldSpec firstFieldSpec = FieldSpec.Empty.withSetRestrictions(SetRestrictions
-                .fromWhitelist(Collections.singleton("yes")))
+        FieldSpec firstFieldSpec = FieldSpec.Empty.withWhitelist(Collections.singleton("yes"))
             .withNotNull();
         when(fieldSpecValueGenerator.generate(any(Set.class))).thenReturn(Stream.of(dataBag));
 

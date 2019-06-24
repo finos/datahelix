@@ -4,7 +4,6 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
 import com.scottlogic.deg.generator.generation.string.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
-import com.scottlogic.deg.generator.restrictions.SetRestrictions;
 import com.scottlogic.deg.generator.utils.SetUtils;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -41,7 +40,7 @@ class FieldSpecTests {
     @Test
     void equals_fieldSpecHasSetRestrictionsAndOtherObjectSetRestrictionsNull_returnsFalse() {
         FieldSpec fieldSpec = FieldSpec.Empty
-            .withSetRestrictions(SetRestrictions.fromWhitelist(
+            .withWhitelist((
                 Collections.singleton("whitelist")));
 
         boolean result = fieldSpec.equals(FieldSpec.Empty);
@@ -57,8 +56,8 @@ class FieldSpecTests {
         FieldSpec fieldSpec = FieldSpec.Empty;
 
         boolean result = fieldSpec.equals(
-            FieldSpec.Empty.withSetRestrictions(
-                SetRestrictions.fromWhitelist(Collections.singleton("whitelist")))
+            FieldSpec.Empty.withWhitelist(
+                (Collections.singleton("whitelist")))
         );
 
         assertFalse(
@@ -70,15 +69,15 @@ class FieldSpecTests {
     @Test
     void equals_fieldSpecSetRestrictionsNotNullAndOtherObjectSetRestrictionsNotNullAndSetRestrictionsAreNotEqual_returnsFalse() {
         FieldSpec fieldSpec = FieldSpec.Empty
-            .withSetRestrictions(
-                SetRestrictions.fromWhitelist(
+            .withWhitelist(
+                (
                     new HashSet<>(
                         Arrays.asList(1, 2, 3)
                     )));
 
         boolean result = fieldSpec.equals(
-            FieldSpec.Empty.withSetRestrictions(
-                SetRestrictions.fromWhitelist(
+            FieldSpec.Empty.withWhitelist(
+                (
                     new HashSet<>(
                         Arrays.asList(1, 2, 3, 4)
                     )))
@@ -141,11 +140,11 @@ class FieldSpecTests {
     @Test
     public void shouldCreateNewInstanceWithSetRestrictions(){
         FieldSpec original = FieldSpec.Empty;
-        SetRestrictions restrictions = mock(SetRestrictions.class);
-        FieldSpec augmentedFieldSpec = original.withSetRestrictions(restrictions);
+        Set<Object> restrictions = Collections.singleton("whitelist");
+        FieldSpec augmentedFieldSpec = original.withWhitelist(restrictions);
 
         Assert.assertNotSame(original, augmentedFieldSpec);
-        Assert.assertSame(augmentedFieldSpec.getSetRestrictions(), restrictions);
+        Assert.assertSame(augmentedFieldSpec.getWhitelist(), restrictions);
     }
 
     @Test
@@ -216,10 +215,8 @@ class FieldSpecTests {
 
     @Test
     public void fieldSpecsWithEqualSetRestrictionsShouldBeEqual(){
-        SetRestrictions aRestrictions = new MockSetRestrictions(true);
-        SetRestrictions bRestrictions = new MockSetRestrictions(true);
-        FieldSpec a = FieldSpec.Empty.withSetRestrictions(aRestrictions);
-        FieldSpec b = FieldSpec.Empty.withSetRestrictions(bRestrictions);
+        FieldSpec a = FieldSpec.Empty.withWhitelist(Collections.singleton("same"));
+        FieldSpec b = FieldSpec.Empty.withWhitelist(Collections.singleton("same"));
 
         Assert.assertThat(a, equalTo(b));
         Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
@@ -227,10 +224,8 @@ class FieldSpecTests {
 
     @Test
     public void fieldSpecsWithUnequalSetRestrictionsShouldBeUnequal(){
-        SetRestrictions aRestrictions = new MockSetRestrictions(false);
-        SetRestrictions bRestrictions = new MockSetRestrictions(false);
-        FieldSpec a = FieldSpec.Empty.withSetRestrictions(aRestrictions);
-        FieldSpec b = FieldSpec.Empty.withSetRestrictions(bRestrictions);
+        FieldSpec a = FieldSpec.Empty.withWhitelist(Collections.singleton("not same"));
+        FieldSpec b = FieldSpec.Empty.withWhitelist(Collections.singleton("different"));
 
         Assert.assertThat(a, not(equalTo(b)));
     }
@@ -356,14 +351,12 @@ class FieldSpecTests {
     @Test
     public void fieldSpecsShouldBeEntirelyEqual(){
         FieldSpec a = FieldSpec.Empty
-            .withSetRestrictions(new MockSetRestrictions(true))
             .withNumericRestrictions(new MockNumericRestrictions(true))
             .withStringRestrictions(new MockStringRestrictions(true))
             .withTypeRestrictions(new MockTypeRestrictions(true))
             .withDateTimeRestrictions(new MockDateTimeRestrictions(true))
             .withFormatting("format");
         FieldSpec b = FieldSpec.Empty
-            .withSetRestrictions(new MockSetRestrictions(true))
             .withNumericRestrictions(new MockNumericRestrictions(true))
             .withStringRestrictions(new MockStringRestrictions(true))
             .withTypeRestrictions(new MockTypeRestrictions(true))
@@ -377,14 +370,12 @@ class FieldSpecTests {
     @Test
     public void fieldSpecsShouldBeEntirelyUnequal(){
         FieldSpec a = FieldSpec.Empty
-            .withSetRestrictions(new MockSetRestrictions(false))
             .withNumericRestrictions(new MockNumericRestrictions(false))
             .withStringRestrictions(new MockStringRestrictions(false))
             .withTypeRestrictions(new MockTypeRestrictions(false))
             .withDateTimeRestrictions(new MockDateTimeRestrictions(false))
             .withFormatting("format1");
         FieldSpec b = FieldSpec.Empty
-            .withSetRestrictions(new MockSetRestrictions(false))
             .withNumericRestrictions(new MockNumericRestrictions(false))
             .withStringRestrictions(new MockStringRestrictions(false))
             .withTypeRestrictions(new MockTypeRestrictions(false))
@@ -485,20 +476,17 @@ class FieldSpecTests {
     @ParameterizedTest()
     @MethodSource("partiallyUnequalProvider")
     public void fieldSpecsThatArePartiallyEqualShouldBeReportedAsUnequal(
-        boolean setRestrictionsEqual,
         boolean numericRestrictionsEqual,
         boolean stringRestrictionsEqual,
         boolean typeRestrictionsEqual,
         boolean dateTimeRestrictionsEqual){
 
         FieldSpec a = FieldSpec.Empty
-            .withSetRestrictions(new MockSetRestrictions(setRestrictionsEqual))
             .withNumericRestrictions(new MockNumericRestrictions(numericRestrictionsEqual))
             .withStringRestrictions(new MockStringRestrictions(stringRestrictionsEqual))
             .withTypeRestrictions(new MockTypeRestrictions(typeRestrictionsEqual))
             .withDateTimeRestrictions(new MockDateTimeRestrictions(dateTimeRestrictionsEqual));
         FieldSpec b = FieldSpec.Empty
-            .withSetRestrictions(new MockSetRestrictions(setRestrictionsEqual))
             .withNumericRestrictions(new MockNumericRestrictions(numericRestrictionsEqual))
             .withStringRestrictions(new MockStringRestrictions(stringRestrictionsEqual))
             .withTypeRestrictions(new MockTypeRestrictions(typeRestrictionsEqual))
@@ -509,32 +497,13 @@ class FieldSpecTests {
 
     private static Stream<Arguments> partiallyUnequalProvider(){
         return Stream.of(
-            Arguments.of(false, true, true, true, true),
-            Arguments.of(true, false, true, true, true),
-            Arguments.of(true, true, false, true, true),
-            Arguments.of(true, true, true, false, true),
-            Arguments.of(true, true, true, true, false)
+            Arguments.of(false, true, true, true),
+            Arguments.of(true, false, true, true),
+            Arguments.of(true, true, false, true),
+            Arguments.of(true, true, true, false)
         );
     }
 
-    private class MockSetRestrictions extends SetRestrictions{
-        private final boolean isEqual;
-
-        MockSetRestrictions(boolean isEqual) {
-            super(Collections.emptySet());
-            this.isEqual = isEqual;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            return isEqual;
-        }
-
-        @Override
-        public int hashCode() {
-            return 1234;
-        }
-    }
 
     private class MockNumericRestrictions extends NumericRestrictions{
         private final boolean isEqual;
