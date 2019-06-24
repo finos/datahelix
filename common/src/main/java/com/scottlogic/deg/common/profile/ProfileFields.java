@@ -19,6 +19,10 @@ public class ProfileFields implements Iterable<Field> {
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException("Profile fields do not contain " + fieldName));
     }
+
+    public List<Field> getFields() {
+        return fields;
+    }
     
     public int size() {
         return this.fields.size();
