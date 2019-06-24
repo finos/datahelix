@@ -69,13 +69,13 @@ Navigate to the `App.java` file (...\datahelix\generator\src\main\java\com\scott
 Now edit the run configuration on the top toolbar created by the initial run. Name the run configuration 'Generate' and under 'Program Arguments' enter the following, replacing the paths with your desired locations:
 
 ```
-generate "<path to an example JSON profile>" "<path to desired output CSV>"
+generate --profile-file="<path to an example JSON profile>" --output-path="<path to desired output CSV>"
 ```
 
 Additionally create another run configuration called GenerateViolating and add the program arguments
 
 ```
-violate "<path to an example JSON profile>" "<path to desired output folder for generated CSVs>"
+violate --profile-file="<path to an example JSON profile>" --output-path="<path to desired output folder for generated CSVs>"
 ```
 
 Run both of these configurations to test that installation is successful.
