@@ -5,9 +5,9 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 
 import java.util.Collection;
 
-public class ContradictionItem {
+public class ContradictionWrapper {
     private Collection<ConstraintNode> contradictingNodes;
-    public ContradictionItem(Collection<ConstraintNode> contradictingNodes) {
+    public ContradictionWrapper(Collection<ConstraintNode> contradictingNodes) {
         this.contradictingNodes = contradictingNodes;
     }
 
@@ -19,7 +19,11 @@ public class ContradictionItem {
         return this.contradictingNodes.contains(tree.getRootNode());
     }
 
-    public boolean isPartiallyContradictory() {
-        return !this.contradictingNodes.isEmpty();
+    public boolean isOnlyPartiallyContradictory(DecisionTree tree) {
+        return !this.contradictingNodes.isEmpty() && !isWhollyContradictory(tree);
+    }
+
+    public boolean hasNoContradictions() {
+        return this.contradictingNodes.isEmpty();
     }
 }

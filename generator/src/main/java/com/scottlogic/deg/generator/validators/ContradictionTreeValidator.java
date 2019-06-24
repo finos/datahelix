@@ -26,25 +26,26 @@ public class ContradictionTreeValidator {
     }
 
     public DecisionTree reportThenCullContradictions(DecisionTree decisionTree, DataGeneratorMonitor monitor) {
-        ContradictionItem contradictionItem = getAllNodesInTreeThatAreRootsOfWhollyContradictorySubTrees(decisionTree);
-        if (contradictionItem.isWhollyContradictory(decisionTree)) {
-            monitor.addLineToPrintAtEndOfGeneration(
-                "The provided profile is wholly contradictory. No fields can successfully be fixed.",
-                System.err
-            );
-            return new DecisionTree(null, decisionTree.getFields(), decisionTree.getDescription());
-        } else if (contradictionItem.isPartiallyContradictory()) {
+        ContradictionWrapper contradictionWrapper = getAllNodesInTreeThatAreRootsOfWhollyContradictorySubTrees(decisionTree);
+        if (contradictionWrapper.hasNoContradictions()) {
+            return decisionTree;
+        } else if (contradictionWrapper.isOnlyPartiallyContradictory(decisionTree)) {
             monitor.addLineToPrintAtEndOfGeneration(
                 "Warning: There are " +
-                    contradictionItem.getContradictingNodes().size() +
+                    contradictionWrapper.getContradictingNodes().size() +
                     " partial contradiction(s) in the profile. Run the profile through the visualiser for more information.",
                 System.err
             );
 
             ConstraintNode prunedRootNode = pruneOutPartialContradictions(decisionTree.getRootNode(), decisionTree.getFields());
             return new DecisionTree(prunedRootNode, decisionTree.getFields(), decisionTree.getDescription());
+        } else {
+            monitor.addLineToPrintAtEndOfGeneration(
+                "The provided profile is wholly contradictory. No fields can successfully be fixed.",
+                System.err
+            );
+            return new DecisionTree(null, decisionTree.getFields(), decisionTree.getDescription());
         }
-        return decisionTree;
     }
 
     private ConstraintNode pruneOutPartialContradictions(ConstraintNode unPrunedNode, ProfileFields profileFields) {
@@ -55,9 +56,9 @@ public class ContradictionTreeValidator {
         }
         return treePruner.pruneConstraintNode(unPrunedNode, fieldSpecs).get();
     }
-    
-    public ContradictionItem getAllNodesInTreeThatAreRootsOfWhollyContradictorySubTrees(DecisionTree decisionTree) {
-        return new ContradictionItem(getAllNodesThatAreContradictoryAndADescendentOfNode(decisionTree.getRootNode())
+
+    public ContradictionWrapper getAllNodesInTreeThatAreRootsOfWhollyContradictorySubTrees(DecisionTree decisionTree) {
+        return new ContradictionWrapper(getAllNodesThatAreContradictoryAndADescendentOfNode(decisionTree.getRootNode())
             .stream()
             .filter(Objects::nonNull)
             .collect(Collectors.toList()));
