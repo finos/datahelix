@@ -110,7 +110,7 @@ class TreeTransformationIntegrationTests {
     private Profile getProfile(Path path) throws IOException {
         BaseConstraintReaderMap readerMap =
             new BaseConstraintReaderMap(Stream.of(
-                new CoreAtomicTypesConstraintReaderSource(),
+                new CoreAtomicTypesConstraintReaderSource(null),
                 new FinancialTypesConstraintReaderSource(),
                 new PersonalDataTypesConstraintReaderSource()
             ));
