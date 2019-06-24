@@ -23,7 +23,10 @@ public class App implements Runnable {
 
     @Override
     public void run() {
-        String commandListString = picoCliCommandLine.getSubcommands().keySet().stream().sorted().collect(Collectors.joining(", "));
+        String commandListString = picoCliCommandLine.getSubcommands()
+            .keySet().stream()
+            .sorted()
+            .collect(Collectors.joining(", "));
 
         System.err.println("Valid commands: " + commandListString);
     }

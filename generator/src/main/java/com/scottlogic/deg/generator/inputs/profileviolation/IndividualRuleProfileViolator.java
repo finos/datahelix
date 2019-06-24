@@ -66,6 +66,6 @@ public class IndividualRuleProfileViolator implements ProfileViolator {
             violatedRule,
             profile.getFields(),
             newRules,
-            String.format("%s -- Violating: %s", profile.getDescription(), violatedRule.ruleInformation.getDescription()));
+            String.format("%s -- Violating: %s", profile.getDescription(), violatedRule.getRuleInformation().getDescription()));
     }
 }

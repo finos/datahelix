@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.Set;
 
 public class NegatedGrammaticalConstraint implements GrammaticalConstraint {
-    public final GrammaticalConstraint negatedConstraint;
+    private final GrammaticalConstraint negatedConstraint;
 
     NegatedGrammaticalConstraint(GrammaticalConstraint negatedConstraint) {
         if (negatedConstraint instanceof NegatedGrammaticalConstraint)
@@ -52,5 +52,9 @@ public class NegatedGrammaticalConstraint implements GrammaticalConstraint {
     @Override
     public Set<RuleInformation> getRules() {
         return negatedConstraint.getRules();
+    }
+
+    public GrammaticalConstraint getNegatedConstraint() {
+        return negatedConstraint;
     }
 }
