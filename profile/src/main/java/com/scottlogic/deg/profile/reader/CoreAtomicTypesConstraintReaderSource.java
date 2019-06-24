@@ -1,20 +1,36 @@
 package com.scottlogic.deg.profile.reader;
 
+import com.google.inject.Inject;
+import com.scottlogic.deg.common.ValidationException;
+import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedDateGranularity;
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.util.Defaults;
+import com.scottlogic.deg.profile.reader.file.CsvInputStreamReader;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 
+import java.io.*;
 import java.math.BigDecimal;
+import java.nio.file.Path;
 import java.time.OffsetDateTime;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMapEntrySource {
+
+    private final String fromFilePath;
+
+    @Inject
+    public CoreAtomicTypesConstraintReaderSource(final String fromFilePath) {
+        this.fromFilePath = fromFilePath;
+    }
+
     public Stream<ConstraintReaderMapEntry> getConstraintReaderMapEntries() {
         BigDecimal maxStringLength = BigDecimal.valueOf(Defaults.MAX_STRING_LENGTH);
 
@@ -186,7 +202,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                 {
                     Optional<Number> numberValidatedValue =
                         ConstraintReaderHelpers.tryGetValidatedValue(dto, Number.class);
-                    Optional <String> stringValidatedValue =
+                    Optional<String> stringValidatedValue =
                         ConstraintReaderHelpers.tryGetValidatedValue(dto, String.class);
 
                     if (numberValidatedValue.isPresent()) {
@@ -199,8 +215,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                                 rules
                             );
                         }
-                    }
-                    else if (stringValidatedValue.isPresent()) {
+                    } else if (stringValidatedValue.isPresent()) {
                         Optional<ParsedDateGranularity> parsedDateGranularity =
                             ParsedDateGranularity.tryParse(stringValidatedValue.get());
                         if (parsedDateGranularity.isPresent()) {
@@ -302,7 +317,44 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                         ),
                         rules
                     )
+            ),
+            new ConstraintReaderMapEntry(
+                AtomicConstraintType.IS_FROM_FILE.getText(),
+                ".*",
+                (dto, fields, rules) -> {
+                    String value = ConstraintReaderHelpers.getValidatedValue(dto, String.class);
+
+                    InputStream streamFromPath = createStreamFromPath(appendPath(value));
+                    Set<String> names = CsvInputStreamReader.retrieveLines(streamFromPath);
+                    closeStream(streamFromPath);
+
+                    Set<Object> downcastedNames = new HashSet<>(names);
+                    Field field = fields.getByName(dto.field);
+
+                    return new IsInSetConstraint(field, downcastedNames, rules);
+                }
             )
         );
     }
+
+    private String appendPath(String path) {
+        return fromFilePath != null ? fromFilePath + path : path;
+    }
+
+    private static InputStream createStreamFromPath(String path) {
+        try {
+            return new FileInputStream(path);
+        } catch (FileNotFoundException e) {
+            throw new ValidationException(e.getMessage());
+        }
+    }
+
+    private static void closeStream(InputStream stream) {
+        try {
+            stream.close();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
 }

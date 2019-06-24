@@ -4,10 +4,10 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.scottlogic.deg.orchestrator.generate.GenerateCommandLine;
-import com.scottlogic.deg.orchestrator.guice.AllModule;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import picocli.CommandLine;
 
+import java.io.IOException;
 import java.util.List;
 
 @CommandLine.Command(
@@ -20,13 +20,12 @@ import java.util.List;
 public class ViolateCommandLine extends GenerateCommandLine implements ViolateConfigSource {
 
     @Override
-    public void run() {
+    public Integer call() throws IOException {
         Module container = new ViolateModule(this);
         Injector injector = Guice.createInjector(container);
 
-        Runnable task = injector.getInstance(ViolateExecute.class);
-
-        task.run();
+        injector.getInstance(ViolateExecute.class).execute();
+        return 0;
     }
 
     @CommandLine.Option(

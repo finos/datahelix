@@ -18,7 +18,7 @@ import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
 import java.io.IOException;
 import java.util.stream.Stream;
 
-public class GenerateExecute implements Runnable {
+public class GenerateExecute {
     private final ErrorReporter errorReporter;
     private final AllConfigSource configSource;
     private final SingleDatasetOutputTarget singleDatasetOutputTarget;
@@ -51,27 +51,18 @@ public class GenerateExecute implements Runnable {
         this.monitor = monitor;
     }
 
-    @Override
-    public void run() {
-        try {
-            configValidator.preProfileChecks(configSource);
-            profileSchemaValidator.validateProfile(configSource.getProfileFile());
+    public void execute() throws IOException {
+        configValidator.preProfileChecks(configSource);
+        profileSchemaValidator.validateProfile(configSource.getProfileFile());
 
-            Profile profile = profileReader.read(configSource.getProfileFile().toPath());
+        Profile profile = profileReader.read(configSource.getProfileFile().toPath());
 
-            profileValidator.validate(profile);
-            singleDatasetOutputTarget.validate();
+        profileValidator.validate(profile);
+        singleDatasetOutputTarget.validate();
 
-            Stream<GeneratedObject> generatedDataItems = dataGenerator.generateData(profile);
+        Stream<GeneratedObject> generatedDataItems = dataGenerator.generateData(profile);
 
-            outputData(profile, generatedDataItems);
-        }
-        catch (ValidationException e){
-            errorReporter.displayValidation(e);
-        }
-        catch (IOException e) {
-            errorReporter.displayException(e);
-        }
+        outputData(profile, generatedDataItems);
     }
 
     private void outputData(Profile profile, Stream<GeneratedObject> generatedDataItems) throws IOException {

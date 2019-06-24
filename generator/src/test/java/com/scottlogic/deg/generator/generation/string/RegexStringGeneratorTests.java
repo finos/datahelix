@@ -1,9 +1,8 @@
-package com.scottlogic.deg.generator.generation;
+package com.scottlogic.deg.generator.generation.string;
 
 import com.scottlogic.deg.generator.utils.IterableAsStream;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import org.hamcrest.core.Is;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,6 +13,7 @@ import java.util.stream.StreamSupport;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
+import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class RegexStringGeneratorTests {
@@ -90,7 +90,7 @@ public class RegexStringGeneratorTests {
 
         Iterable<String> resultsIterable = generator.generateInterestingValues();
 
-        Assert.assertThat(
+        assertThat(
             resultsIterable,
             containsInAnyOrder(
                 "Test_000_apple",
@@ -105,7 +105,7 @@ public class RegexStringGeneratorTests {
 
         for (String interestingValue : resultsIterable) {
             for (char character : interestingValue.toCharArray()) {
-                Assert.assertThat(character, greaterThanOrEqualTo((char)32));
+                assertThat(character, greaterThanOrEqualTo((char)32));
             }
         }
     }
@@ -120,9 +120,9 @@ public class RegexStringGeneratorTests {
 
         resultsIterable.iterator().forEachRemaining(results::add);
 
-        Assert.assertThat(results.size(), Is.is(2));
-        Assert.assertThat(results.get(0).length(), Is.is(10));
-        Assert.assertThat(results.get(1).length(), Is.is(20));
+        assertThat(results.size(), Is.is(2));
+        assertThat(results.get(0).length(), Is.is(10));
+        assertThat(results.get(1).length(), Is.is(20));
     }
 
     @Test
@@ -148,7 +148,7 @@ public class RegexStringGeneratorTests {
                 IterableAsStream.convert(resultsIterable)
                         .toArray(String[]::new);
 
-        Assert.assertThat(
+        assertThat(
                 sampleValues,
                 arrayContainingInAnyOrder(
                         "",
@@ -166,13 +166,13 @@ public class RegexStringGeneratorTests {
                         .limit(1000)
                         .collect(Collectors.toList());
 
-        Assert.assertThat(sampleValues, not(contains(null, "")));
+        assertThat(sampleValues, not(contains(null, "")));
     }
 
     @Test
     void shouldExpandSingletons() {
         StringGenerator generator = new RegexStringGenerator("THIS_IS_A_SINGLETON", true);
-        Assert.assertThat(generator.getValueCount(), Is.is(1L));
+        assertThat(generator.getValueCount(), Is.is(1L));
     }
 
     @Test
@@ -183,12 +183,12 @@ public class RegexStringGeneratorTests {
 
         StringGenerator actual = infiniteGenerator.intersect(rangeGenerator);
 
-        Assert.assertThat(actual.isFinite(), Is.is(true));
+        assertThat(actual.isFinite(), Is.is(true));
 
         List<String> actualResults = new ArrayList<>();
         actual.generateAllValues().iterator().forEachRemaining(actualResults::add);
 
-        Assert.assertThat(actualResults.size(), Is.is(2046));
+        assertThat(actualResults.size(), Is.is(2046));
     }
 
     @Test
@@ -196,13 +196,13 @@ public class RegexStringGeneratorTests {
         StringGenerator limitedRangeGenerator = new RegexStringGenerator("[a-m]", true);
         StringGenerator complementedGenerator = limitedRangeGenerator.complement();
 
-        Assert.assertThat(complementedGenerator.isFinite(), equalTo(false));
+        assertThat(complementedGenerator.isFinite(), equalTo(false));
 
         String sampleValue = complementedGenerator
                 .generateRandomValues(new JavaUtilRandomNumberGenerator(0))
                 .iterator().next();
 
-        Assert.assertThat(
+        assertThat(
                 sampleValue,
                 not(matchesPattern("^[a-m]$")));
         //todo: more robust tests
@@ -233,7 +233,7 @@ public class RegexStringGeneratorTests {
 
         StringGenerator contradictingGenerator = firstGenerator.intersect(secondGenerator);
 
-        Assert.assertEquals(0, contradictingGenerator.getValueCount());
+        assertEquals(0, contradictingGenerator.getValueCount());
     }
 
     @Test
@@ -243,7 +243,7 @@ public class RegexStringGeneratorTests {
 
         StringGenerator nonContradictingGenerator = firstGenerator.intersect(secondGenerator);
 
-        Assert.assertNotEquals(0, nonContradictingGenerator.getValueCount());
+        assertNotEquals(0, nonContradictingGenerator.getValueCount());
     }
 
     @Test
@@ -297,9 +297,9 @@ public class RegexStringGeneratorTests {
         List<String> generatedValues = new ArrayList<>();
         generator.generateAllValues().iterator().forEachRemaining(generatedValues::add);
 
-        Assert.assertEquals(expectedValues.length, generatedValues.size());
+        assertEquals(expectedValues.length, generatedValues.size());
         for (int i = 0; i < expectedValues.length; i++) {
-            Assert.assertEquals(expectedValues[i], generatedValues.get(i));
+            assertEquals(expectedValues[i], generatedValues.get(i));
         }
     }
 
@@ -309,7 +309,7 @@ public class RegexStringGeneratorTests {
         List<String> generatedValues = new ArrayList<>();
         generator.generateAllValues().iterator().forEachRemaining(generatedValues::add);
 
-        Assert.assertEquals(expectedValues.length, generatedValues.size());
+        assertEquals(expectedValues.length, generatedValues.size());
         generatedValues.containsAll(Arrays.asList(expectedValues));
     }
 
@@ -325,7 +325,7 @@ public class RegexStringGeneratorTests {
             .limit(1)
             .findFirst().orElse(null);
 
-        Assert.assertThat(
+        assertThat(
                 actualValue,
                 equalTo(expectedValue));
     }
@@ -333,13 +333,13 @@ public class RegexStringGeneratorTests {
     private void expectMatch(String subject, boolean matchFullString) {
         StringGenerator generator = constructGenerator(matchFullString);
 
-        Assert.assertTrue(generator.match(subject));
+        assertTrue(generator.match(subject));
     }
 
     private void expectNoMatch(String subject, boolean matchFullString) {
         StringGenerator generator = constructGenerator(matchFullString);
 
-        Assert.assertFalse(generator.match(subject));
+        assertFalse(generator.match(subject));
     }
 
     @Test
@@ -349,8 +349,8 @@ public class RegexStringGeneratorTests {
         String invalidStr = "a simple invalid 😘 string";
         String validStr = "a simple valid 亮 string";
 
-        assertFalse(generator.isStringValidUtf8(invalidStr));
-        assertTrue(generator.isStringValidUtf8(validStr));
+        assertFalse(StringUtils.isStringValidUtf8(invalidStr));
+        assertTrue(StringUtils.isStringValidUtf8(validStr));
     }
 
     @Test
@@ -360,8 +360,8 @@ public class RegexStringGeneratorTests {
         char invalidChar = 0xD83D;
         char validChar = '亮';
 
-        assertFalse(generator.isCharValidUtf8(invalidChar));
-        assertTrue(generator.isCharValidUtf8(validChar));
+        assertFalse(StringUtils.isCharValidUtf8(invalidChar));
+        assertTrue(StringUtils.isCharValidUtf8(validChar));
     }
 
     @Test
@@ -376,7 +376,7 @@ public class RegexStringGeneratorTests {
 
         ArrayList<String> strings = new ArrayList<>();
         result.iterator().forEachRemaining(strings::add);
-        Assert.assertThat(strings, not(empty()));
+        assertThat(strings, not(empty()));
     }
 
     @Test
@@ -390,7 +390,7 @@ public class RegexStringGeneratorTests {
 
         ArrayList<String> strings = new ArrayList<>();
         result.iterator().forEachRemaining(strings::add);
-        Assert.assertThat(strings, not(empty()));
+        assertThat(strings, not(empty()));
     }
 
     @Test
@@ -399,7 +399,7 @@ public class RegexStringGeneratorTests {
 
         boolean match = shorterThan.match("a");
 
-        Assert.assertThat(match, is(true));
+        assertThat(match, is(true));
     }
 
     @Test
@@ -408,7 +408,7 @@ public class RegexStringGeneratorTests {
 
         boolean match = shorterThan.match("a");
 
-        Assert.assertThat(match, is(true));
+        assertThat(match, is(true));
     }
 
     @Test
@@ -417,7 +417,7 @@ public class RegexStringGeneratorTests {
 
         boolean match = shorterThan.match("aaa");
 
-        Assert.assertThat(match, is(true));
+        assertThat(match, is(true));
     }
 
     @Test
@@ -426,6 +426,6 @@ public class RegexStringGeneratorTests {
 
         boolean match = shorterThan.match("aa");
 
-        Assert.assertThat(match, is(false));
+        assertThat(match, is(false));
     }
 }
