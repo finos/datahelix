@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
-import com.scottlogic.deg.generator.generation.StringGenerator;
+import com.scottlogic.deg.generator.generation.string.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.restrictions.SetRestrictions;
 import com.scottlogic.deg.generator.utils.SetUtils;

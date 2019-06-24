@@ -25,7 +25,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class ViolateExecute implements Runnable {
+public class ViolateExecute {
     private final ErrorReporter errorReporter;
     private final AllConfigSource configSource;
     private final ConfigValidator configValidator;
@@ -65,26 +65,16 @@ public class ViolateExecute implements Runnable {
         this.manifestWriter = manifestWriter;
     }
 
-    @Override
-    public void run() {
-        try {
-            configValidator.preProfileChecks(configSource);
-            profileSchemaValidator.validateProfile(configSource.getProfileFile());
+    public void execute() throws IOException {
+        configValidator.preProfileChecks(configSource);
+        profileSchemaValidator.validateProfile(configSource.getProfileFile());
 
-            Profile profile = profileReader.read(configSource.getProfileFile().toPath());
+        Profile profile = profileReader.read(configSource.getProfileFile().toPath());
 
-            profileValidator.validate(profile);
-            violateOutputValidator.validate(profile);
+        profileValidator.validate(profile);
+        violateOutputValidator.validate(profile);
 
-            doGeneration(profile);
-
-        }
-        catch (ValidationException e) {
-            errorReporter.displayValidation(e);
-        }
-        catch (IOException e) {
-            errorReporter.displayException(e);
-        }
+        doGeneration(profile);
     }
 
     private void doGeneration(Profile profile) throws IOException {

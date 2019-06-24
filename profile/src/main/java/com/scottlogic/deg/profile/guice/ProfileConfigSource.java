@@ -5,4 +5,5 @@ import java.io.File;
 public interface ProfileConfigSource {
     File getProfileFile();
     boolean isSchemaValidationEnabled();
+    String fromFilePath();
 }

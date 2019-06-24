@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.generation;
+package com.scottlogic.deg.generator.generation.string;
 
 import com.scottlogic.deg.generator.utils.*;
 
@@ -13,7 +13,6 @@ public abstract class ChecksummedCodeStringGenerator implements StringGenerator 
     protected final boolean negate;
     protected final int prefixLength;
     protected final int codeLength;
-    protected boolean unfulfillable;
 
     public ChecksummedCodeStringGenerator(
         String generationPattern,
@@ -58,12 +57,6 @@ public abstract class ChecksummedCodeStringGenerator implements StringGenerator 
     public abstract char calculateCheckDigit(String str);
 
     public abstract int getLength();
-
-    @Override
-    public abstract StringGenerator complement();
-
-    @Override
-    public abstract boolean match(String subject);
 
     public String fixCheckDigit(String str) {
         char checkDigit = calculateCheckDigit(str);

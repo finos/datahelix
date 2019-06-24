@@ -16,14 +16,17 @@ public class App implements Runnable {
         .setCaseInsensitiveEnumValuesAllowed(true);
 
     public static void main(String[] args) {
-        picoCliCommandLine.parseWithHandler(
-            new CommandLine.RunLast(), // the base command (ie, this class) is always identified as a possible handler. RunLast picks the most specific handler
-            args);
+        picoCliCommandLine
+            .setExecutionExceptionHandler(new ValidationExceptionHandler())
+            .execute(args);
     }
 
     @Override
     public void run() {
-        String commandListString = picoCliCommandLine.getSubcommands().keySet().stream().sorted().collect(Collectors.joining(", "));
+        String commandListString = picoCliCommandLine.getSubcommands()
+            .keySet().stream()
+            .sorted()
+            .collect(Collectors.joining(", "));
 
         System.err.println("Valid commands: " + commandListString);
     }

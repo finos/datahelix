@@ -7,10 +7,12 @@ import com.scottlogic.deg.generator.config.detail.*;
 import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
 import com.scottlogic.deg.orchestrator.guice.AllModule;
 import com.scottlogic.deg.output.guice.OutputFormat;
+import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import picocli.CommandLine;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.concurrent.Callable;
 
 import static com.scottlogic.deg.generator.config.detail.CombinationStrategyType.MINIMAL;
 import static com.scottlogic.deg.common.util.Defaults.DEFAULT_MAX_ROWS;
@@ -28,16 +30,15 @@ import static com.scottlogic.deg.generator.config.detail.TreeWalkerType.REDUCTIV
     parameterListHeading = "%nParameters:%n",
     optionListHeading = "%nOptions:%n",
     abbreviateSynopsis = true)
-public class GenerateCommandLine implements AllConfigSource, Runnable {
+public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
 
     @Override
-    public void run() {
+    public Integer call() throws Exception {
         Module container = new AllModule(this);
         Injector injector = Guice.createInjector(container);
 
-        Runnable task = injector.getInstance(GenerateExecute.class);
-
-        task.run();
+        injector.getInstance(GenerateExecute.class).execute();
+        return 0;
     }
 
     @CommandLine.Option(
@@ -126,6 +127,12 @@ public class GenerateCommandLine implements AllConfigSource, Runnable {
         description = "Remove the need for each field to have at least one compliant typing constraint applied")
     private boolean allowUntypedFields = false;
 
+    @CommandLine.Option(
+        names = {"--set-from-file-directory"},
+        description = "Custom root for loading sets from file."
+    )
+    private String fromFilePath;
+
     public boolean shouldDoPartitioning() {
         return !this.dontPartitionTrees;
     }
@@ -203,5 +210,10 @@ public class GenerateCommandLine implements AllConfigSource, Runnable {
 
     public OutputFormat getOutputFormat() {
         return outputFormat;
+    }
+
+    @Override
+    public String fromFilePath() {
+        return fromFilePath;
     }
 }
