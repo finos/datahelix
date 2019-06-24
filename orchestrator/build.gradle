@@ -75,7 +75,6 @@ semanticRelease {
 semanticRelease {
     repo {
         releaseAsset fatJar
-        // optionally set name, label and/or contentType
     }
 }
 
