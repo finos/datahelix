@@ -31,19 +31,14 @@ public class ContradictionTreeValidator {
             return decisionTree;
         } else if (contradictionWrapper.isOnlyPartiallyContradictory(decisionTree)) {
             monitor.addLineToPrintAtEndOfGeneration(
-                "Warning: There are " +
-                    contradictionWrapper.getContradictingNodes().size() +
-                    " partial contradiction(s) in the profile. Run the profile through the visualiser for more information.",
-                System.err
-            );
+                "Warning: There are " + contradictionWrapper.getContradictingNodes().size() +
+                    " partial contradiction(s) in the profile. Run the profile through the visualiser for more information.");
 
             ConstraintNode prunedRootNode = pruneOutPartialContradictions(decisionTree.getRootNode(), decisionTree.getFields());
             return new DecisionTree(prunedRootNode, decisionTree.getFields(), decisionTree.getDescription());
         } else {
             monitor.addLineToPrintAtEndOfGeneration(
-                "The provided profile is wholly contradictory. No fields can successfully be fixed.",
-                System.err
-            );
+                "The provided profile is wholly contradictory. No fields can successfully be fixed." );
             return new DecisionTree(null, decisionTree.getFields(), decisionTree.getDescription());
         }
     }

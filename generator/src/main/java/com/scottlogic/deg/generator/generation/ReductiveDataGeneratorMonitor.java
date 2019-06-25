@@ -5,24 +5,26 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.walker.reductive.ReductiveState;
 
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public abstract class ReductiveDataGeneratorMonitor implements DataGeneratorMonitor {
-    private List<LinkedHashMap<String, PrintStream>> linesToPrintAtEndOfGeneration = new ArrayList<>();
+    protected PrintWriter writer;
+    private List<String> linesToPrintAtEndOfGeneration = new ArrayList<>();
+
     public void endGeneration() {
-        for (LinkedHashMap<String, PrintStream> pair : linesToPrintAtEndOfGeneration) {
-            pair.forEach((String line, PrintStream out) -> out.println(line));
+        for (String line : linesToPrintAtEndOfGeneration) {
+            writer.println(line);
         }
     }
 
-    public void addLineToPrintAtEndOfGeneration(String line, PrintStream pw) {
-        LinkedHashMap<String, PrintStream> pair = new LinkedHashMap<>();
-        pair.put(line, pw);
-        linesToPrintAtEndOfGeneration.add(pair);
+    public void addLineToPrintAtEndOfGeneration(String line) {
+        linesToPrintAtEndOfGeneration.add(line);
     }
+
     public void fieldFixedToValue(Field field, Object current) {}
     public void unableToStepFurther(ReductiveState reductiveState) {}
     public void noValuesForField(ReductiveState reductiveState, Field field) {}

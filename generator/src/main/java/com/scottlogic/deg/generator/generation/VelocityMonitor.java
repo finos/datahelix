@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.generation;
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.output.GeneratedObject;
 
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -24,8 +25,6 @@ public class VelocityMonitor extends ReductiveDataGeneratorMonitor {
     private Timer timer;
     private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     private long previousVelocity = 0;
-
-    private final PrintWriter writer;
 
     @Inject
     public VelocityMonitor(PrintWriter writer) {

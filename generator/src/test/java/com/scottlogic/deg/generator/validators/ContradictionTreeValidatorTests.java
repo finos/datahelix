@@ -169,9 +169,7 @@ public class ContradictionTreeValidatorTests {
 
         //Assert
         Mockito.verify(monitor, times(1)).addLineToPrintAtEndOfGeneration(
-            eq("The provided profile is wholly contradictory. No fields can successfully be fixed."),
-            any()
-        );
+            eq("The provided profile is wholly contradictory. No fields can successfully be fixed."));
     }
 
     @Test
@@ -231,7 +229,6 @@ public class ContradictionTreeValidatorTests {
         Mockito.verify(monitor, times(1))
             .addLineToPrintAtEndOfGeneration(
                 eq("Warning: There are 2 partial contradiction(s) in the profile." +
-                    " Run the profile through the visualiser for more information."),
-                any());
+                    " Run the profile through the visualiser for more information."));
     }
 }

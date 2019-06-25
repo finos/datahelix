@@ -12,7 +12,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class MessagePrintingDataGeneratorMonitor extends ReductiveDataGeneratorMonitor {
-    private final PrintWriter writer;
 
     public MessagePrintingDataGeneratorMonitor(PrintWriter writer) {
         this.writer = writer;
