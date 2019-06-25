@@ -34,7 +34,7 @@ public class JsonProfileReaderTests {
         this.json = null;
         this.profile = null;
         readerMap = new BaseConstraintReaderMap(Stream.of(
-            new CoreAtomicTypesConstraintReaderSource(),
+            new CoreAtomicTypesConstraintReaderSource(null),
             new FinancialTypesConstraintReaderSource(),
             new PersonalDataTypesConstraintReaderSource()
         ));
@@ -66,11 +66,11 @@ public class JsonProfileReaderTests {
     }
 
     private Consumer<Rule> ruleWithDescription(String expectedDescription) {
-        return rule -> Assert.assertThat(rule.ruleInformation.getDescription(), equalTo(expectedDescription));
+        return rule -> Assert.assertThat(rule.getRuleInformation().getDescription(), equalTo(expectedDescription));
     }
 
     private Consumer<Rule> ruleWithConstraints(Consumer<Constraint>... constraintAsserters) {
-        return rule -> expectMany(rule.constraints, constraintAsserters);
+        return rule -> expectMany(rule.getConstraints(), constraintAsserters);
     }
 
     private <T> Consumer<Constraint> typedConstraint(Class<T> constraintType, Consumer<T> asserter) {
@@ -380,7 +380,7 @@ public class JsonProfileReaderTests {
                         typedConstraint(
                                 AndConstraint.class,
                                 c -> Assert.assertThat(
-                                        c.subConstraints.size(),
+                                        c.getSubConstraints().size(),
                                         equalTo(2)))));
     }
 

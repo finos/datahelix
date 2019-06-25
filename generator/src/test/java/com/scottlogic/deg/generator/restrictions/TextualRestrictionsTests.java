@@ -354,12 +354,10 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withMaxLengthShorterThanCodeLengthAndMatchingStandardConstraint_shouldCreateNoStrings() {
-        StringRestrictions restrictions = aValid(StandardConstraintTypes.ISIN, false)
-            .intersect(maxLength(10)).restrictions;
+        MergeResult<StringRestrictions> intersect = aValid(StandardConstraintTypes.ISIN, false)
+            .intersect(maxLength(10));
 
-        StringGenerator generator = restrictions.createGenerator();
-
-        assertGeneratorCannotGenerateAnyStrings(generator);
+        Assert.assertFalse(intersect.successful);
     }
 
     @Test

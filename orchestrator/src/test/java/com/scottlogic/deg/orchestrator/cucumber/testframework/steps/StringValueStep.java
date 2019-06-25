@@ -27,9 +27,14 @@ public class StringValueStep {
         state.addNotConstraint(fieldName, constraintName, value);
     }
 
+    @Then("{fieldVar} contains only string data")
+    public void producedDataShouldContainOnlyStringValuesForField(String fieldName){
+        helper.assertFieldContainsNullOrMatching(fieldName, String.class);
+    }
+
     @Then("{fieldVar} contains string data")
     public void producedDataShouldContainStringValuesForField(String fieldName){
-        helper.assertFieldContainsNullOrMatching(fieldName, String.class);
+        helper.assertFieldContainsSomeOf(fieldName, String.class);
     }
 
     @Then("{fieldVar} contains anything but string data")

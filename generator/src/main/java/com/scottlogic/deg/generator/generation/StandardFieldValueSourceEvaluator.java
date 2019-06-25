@@ -18,10 +18,10 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
 
     public List<FieldValueSource> getFieldValueSources(FieldSpec fieldSpec){
 
-        if (fieldSpec.getSetRestrictions() != null && fieldSpec.getSetRestrictions().getWhitelist() != null) {
+        if (fieldSpec.getWhitelist() != null && fieldSpec.getWhitelist() != null) {
 
             List<FieldValueSource> setRestrictionSources =
-                getSetRestrictionSources(fieldSpec.getSetRestrictions().getWhitelist());
+                getSetRestrictionSources(fieldSpec.getWhitelist());
             if (fieldSpec.isNullable()) {
                 return addNullSource(setRestrictionSources);
             }

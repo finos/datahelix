@@ -53,10 +53,6 @@ public class TextualRestrictions implements StringRestrictions {
             throw new IllegalArgumentException("Other StringRestrictions must not be null");
         }
 
-        if (other instanceof NoStringsPossibleStringRestrictions){
-            return new MergeResult<>(other);
-        }
-
         if (other instanceof MatchesStandardStringRestrictions){
             return other.intersect(this);
         }

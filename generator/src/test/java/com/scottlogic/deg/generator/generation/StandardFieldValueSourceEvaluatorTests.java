@@ -2,12 +2,10 @@ package com.scottlogic.deg.generator.generation;
 
 import com.google.common.collect.Iterators;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
-import com.scottlogic.deg.common.profile.constraintdetail.Nullness;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.CannedValuesFieldValueSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.restrictions.*;
-import com.scottlogic.deg.generator.restrictions.SetRestrictions;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -35,7 +33,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     public void returnsNullSourceOnlyWithSetRestrictionWithEmptyWhitelist() {
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
         FieldSpec fieldSpecMustBeNull = FieldSpec.Empty
-            .withSetRestrictions(SetRestrictions.fromWhitelist(Collections.emptySet()));
+            .withWhitelist((Collections.emptySet()));
 
         List<FieldValueSource> sources = evaluator.getFieldValueSources(fieldSpecMustBeNull);
 
@@ -56,9 +54,8 @@ public class StandardFieldValueSourceEvaluatorTests {
     @Test
     public void shouldReturnNullSourceLastWithInSetRestrictionsAndNullNotDisallowed() {
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
-        SetRestrictions setRestrictions = SetRestrictions.fromWhitelist(new HashSet<>(Arrays.asList(15, 25)));
         FieldSpec fieldSpecInSetAndNullNotDisallowed = FieldSpec.Empty
-            .withSetRestrictions(setRestrictions);
+            .withWhitelist(new HashSet<>(Arrays.asList(15, 25)));
 
         List<FieldValueSource> sources = evaluator.getFieldValueSources(fieldSpecInSetAndNullNotDisallowed);
 

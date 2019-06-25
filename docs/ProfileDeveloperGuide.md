@@ -19,7 +19,7 @@
         2. [inSet](#predicate-inset)
         3. [null](#predicate-null)
         4. [ofType](#predicate-oftype)
-        5. [fromFile](#predicate-fromfile)
+        5. [setFromFile](#predicate-setfromfile)
     3. [Textual constraints](#Textual-constraints)
         1. [matchingRegex](#predicate-matchingregex)
         2. [containingRegex](#predicate-containingregex)
@@ -117,7 +117,7 @@ The granularity of a numeric field is a measure of how small the distinctions in
 
 Granularities must be powers of ten less than or equal to one (1, 0.1, 0.01, etc). Note that it is possible to specify these granularities in scientific format eg 1E-10, 1E-15 where the _10_ and _15_ clearly distinguish that these numbers can have up to _10_ or _15_ decimal places respectively. Granularities outside these restrictions could be potentially useful (e.g. a granularity of 2 would permit only even numbers) but are not currently supported. 
 
-Decimal fields currently default to the maximum granularity of 1E-20 (0.00000000000000000001) which means that numbers can be produced with up to 20 decimal places. This numeric granularity also dictates the smallest possible step between two numeric values, for example the next biggest decimal than _10_ is _10.00000000000000000001_. A user is able to add a granularTo constraint for a decimal value with coarser granularity (1, 0.1, 0.01...1E-18, 1E-19) but no finer granularity than 1E-20 is allowed
+Decimal fields currently default to the maximum granularity of 1E-20 (0.00000000000000000001) which means that numbers can be produced with up to 20 decimal places. This numeric granularity also dictates the smallest possible step between two numeric values, for example the next biggest decimal than _10_ is _10.00000000000000000001_. A user is able to add a `granularTo` constraint for a decimal value with coarser granularity (1, 0.1, 0.01...1E-18, 1E-19) but no finer granularity than 1E-20 is allowed.
 
 Note that granularity concerns which values are valid, not how they're presented. If the goal is to enforce a certain number of decimal places in text output, the `formattedAs` operator is required. See: [What's the difference between formattedAs and granularTo?](./FrequentlyAskedQuestions.md#whats-the-difference-between-formattedas-and-granularto)
 
@@ -137,7 +137,7 @@ The format is a subset of [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601); th
 with precisely 3 digits of sub-second precision, plus an optional offset specifier of "Z". All datetimes are treated as UTC.
 
 DateTimes can be in the range `0001-01-01T00:00:00.000Z` to `9999-12-31T23:59:59.999Z`
-that is **_`midnight on the 1st January 0001`_** to **_`1 millisecond to midnight on the 31 December 9999`_**
+that is **_`midnight on the 1st January 0001`_** to **_`1 millisecond to midnight on the 31 December 9999`_**.
 
 ### DateTime granularity
 
@@ -148,13 +148,13 @@ The granularity of a DateTime field is a measure of how small the distinctions i
 
 Granularities must be one of the units: millis, seconds, minutes, hours, days, months, years.
 
-DateTime fields currently default to the most precise granularity of milliseconds. A user is able to add a granularTo constraint for a DateTime value with coarser granularity (seconds, minutes...years) but no finer granularity than milliseconds is currently allowed.
+DateTime fields currently default to the most precise granularity of milliseconds. A user is able to add a `granularTo` constraint for a DateTime value with coarser granularity (seconds, minutes...years) but no finer granularity than milliseconds is currently allowed.
 
 Note that granularity concerns which values are valid, not how they're presented. All values will be output with the full format defined by [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601), so that a value granular to years will still be output as (e.g.) `0001-01-01T00:00:00.000Z`, rather than `0001` or `0001-01-01`.
 
 ## Financial Codes
 
-Data Helix currently recognises and can generate a number of types of financial code
+Data Helix currently recognises and can generate a number of types of financial code:
 
 - ISIN
 - SEDOL
@@ -231,16 +231,17 @@ Is satisfied if `field` is null or absent.
 
 Is satisfied if `field` is of type represented by `value` (valid options: `decimal`, `integer`, `string`, `datetime`, `ISIN`, `SEDOL`, `CUSIP`, `RIC`, `firstname`, `lastname` or `fullname`)
 
-<div id="predicate-fromfile"></div>
+<div id="predicate-setfromfile"></div>
 
-### `fromFile` _(field, value)_
+### `setFromFile` _(field, value)_
 
 ```javascript
-{ "field": "country", "is": "fromFile", "value": "countries.csv" }
+{ "field": "country", "is": "setFromFile", "value": "countries.csv" }
 ```
 
 Populates a set from the new-line delimited file (with suffix `.csv`), where each line represents a string value to load.
-The file should be location in the same directory as the jar, and the name should match the `value` with `.csv` appended.
+The file should be location in the same directory as the jar, or in the directory explicitly specified using the command line argument `--set-from-file-directory`, and the name should match the `value` with `.csv` appended.
+Alternatively an absolute path can be used which does not have any relation to the jar location.
 In the above example, this would be `countries.csv`.
 
 Example `countries.csv` excerpt:
@@ -499,9 +500,7 @@ See the [FAQ](FrequentlyAskedQuestions.md) for the difference between this and [
 
 # Profile Validation
 
-The [JSON schema](https://json-schema.org/) for the DataHelix data profile is stored in the file [`datahelix.schema.json`](../schemas/src/main/resources/profileschema/0.1/datahelix.schema.json) in the [schemas module](../schemas/src/main/resources/profileschema/0.1/) directory.
-
-The grammar for the schema is documented in [BNF](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form) form in the file [`datahelix.profile.bnf`](../schemas/src/main/resources/profileschema/0.1/datahelix.profile.bnf) and in syntax diagrams in the file [ProfileGrammar.md](ProfileGrammar.md)
+The [JSON schema](https://json-schema.org/) for the DataHelix data profile is stored in the file [`datahelix.schema.json`](../profile/src/main/resources/profileschema/0.1/datahelix.schema.json) in the [schemas module](../profile/src/main/resources/profileschema/0.1/) directory.
 
 ## JetBrains IntelliJ
 
@@ -515,11 +514,11 @@ To use the DataHelix profile JSON schema in IntelliJ we need to  set up the inte
 To setup IntelliJ to validate json files against the schema follow these steps:
 
 1. Open IntelliJ
-1. Select `File` -> `Settings` -> `Languages & Frameworks` -> `Schemas and DTDs'
+1. Select `File` -> `Settings` -> `Languages & Frameworks` -> `Schemas and DTDs`
 1. Select `JSON Schema Mappings`
 1. Press the `+` button to add a new schema mapping
 1. Give the mapping a name (e.g. `DataHelix Profile Schema`)
-1. For `Schema file or URL:` select the local schema file (e.g. `<project root>/datahelix/json/datahelix.schema.json`)
+1. For `Schema file or URL:` select the local schema file (e.g. `<project root>/datahelix/profile/src/main/resources/profileschema/0.1/datahelix.schema.json`)
 1. Make sure the `Schema version:` is set to `JSON schema version 7`
 1. Press the `+` button to add a new mapping
 1. Select `Add Directory`
@@ -535,7 +534,7 @@ To enable visual studio code to validate json files against the DataHelix profil
 
 To do this:
 
-1. Click on the gear icon (<img src="../wikiimages/settingsicon.png" width="16" height="16">) at the bottom left of the screen and select `Settings`
+1. Click on the gear icon at the bottom left of the screen and select `Settings`
 1. In the settings windows, click `Extensions` -> `JSON`
 1. You should see a section like this:
     ```
@@ -551,7 +550,7 @@ To do this:
           "fileMatch": [
             "<datahelix_projectroot>/*"
           ],
-          "url": "file:///<datahelix_projectroot>/schemas/src/main/resources/profileschema/0.1/datahelix.schema.json"
+          "url": "file:///<datahelix_projectroot>/profile/src/main/resources/profileschema/0.1/datahelix.schema.json"
         }
       ]
     ```
@@ -559,35 +558,3 @@ To do this:
 
     To verify that the url to the `datahelix.schema.json` is valid you can `ctrl-click` on it and the schema file will open in the editor.  
 1. If the ` "json.schemas"` snippet already exists, you can add a new object to the JSON array for the DataHelix profile schema.
-
-
-## Schema Validation using library
-
-To validate a DataHelix Profile json file against the schema the `schema.jar` file needs to be included in the project:
-
-To include the schema.jar file in a maven project add the following dependency: 
-```
-<dependencies>
-    <dependency>
-        <groupId>com.scottlogic.deg</groupId>
-        <artifactId>schemas</artifactId>
-        <version>1.0-SNAPSHOT</version>
-    </dependency>
-    .
-    .
-    .
-</dependencies>
-```
-
-Then create an instance of the [`ProfileValidator`](https://github.com/ScottLogic/datahelix/blob/master/schemas/src/main/java/com/scottlogic/deg/schemas/v0_1/ProfileValidator.java) object and call the validateProfile() method passing in an `java.io.InputStream` that contains the profile data to be validated.
-
-An example of calling the validator:
-
-```java
-File profileFile = new File("path/to/profile.json");
-InputStream profileStream = new FileInputStream(profileFile);
-ValidationResult result = profileValidator.validateProfile(profileStream);
-```
-This will return a [`ValidationResult`](https://github.com/ScottLogic/datahelix/blob/master/schemas/src/main/java/com/scottlogic/deg/schemas/common/ValidationResult.java) object which contains a list of error messages found during validation.
-
-If the list of error messages is empty then validation was successful. `ValidationResult.isValid()` is a convenience method that can be used to check whether validation was successful.
