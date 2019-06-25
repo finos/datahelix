@@ -77,29 +77,21 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
                 return new MergeResult<>(copyWithGenerator(getCombinedGenerator(textualRestrictions)));
             }
 
-            //must not be reported as contradictory, yet at least
-            return new MergeResult<>(
-                new NoStringsPossibleStringRestrictions("Cannot merge textual constraints with aValid constraints"));
+            return MergeResult.unsuccessful();
         }
 
         if (!(other instanceof MatchesStandardStringRestrictions)){
-            return new MergeResult<>(
-                new NoStringsPossibleStringRestrictions(
-                    String.format("Intersection of %s and aValid constraints", other.getClass().getName())));
+            return MergeResult.unsuccessful();
         }
 
         MatchesStandardStringRestrictions that = (MatchesStandardStringRestrictions) other;
         if (that.type != type) {
-            return new MergeResult<>(
-                new NoStringsPossibleStringRestrictions(
-                    String.format("Intersection of aValid %s and aValid %s)", type, that.type)));
+            return MergeResult.unsuccessful();
         }
 
         return that.negated == negated
             ? new MergeResult<>(this)
-            : new MergeResult<>(
-                new NoStringsPossibleStringRestrictions(
-                    String.format("Intersection of aValid %s and not(aValid %s)", type, type)));
+            : MergeResult.unsuccessful();
     }
 
     /**

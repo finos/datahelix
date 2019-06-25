@@ -44,6 +44,7 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    dependsOn("fatJar")
 }
 
 description = 'DataHelix Generator'

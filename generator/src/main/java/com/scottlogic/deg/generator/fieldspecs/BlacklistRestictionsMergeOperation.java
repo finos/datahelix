@@ -7,10 +7,7 @@ import java.util.Optional;
 
 public class BlacklistRestictionsMergeOperation implements RestrictionMergeOperation {
     @Override
-    public Optional<FieldSpec> applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merging) {
-        if (left.getBlacklistRestrictions() == null && right.getBlacklistRestrictions() == null) {
-            return Optional.of(merging);
-        }
+    public FieldSpec applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merging) {
         BlacklistRestrictions newBlacklist;
         if (left.getBlacklistRestrictions() == null) {
             newBlacklist = right.getBlacklistRestrictions();
@@ -27,6 +24,6 @@ public class BlacklistRestictionsMergeOperation implements RestrictionMergeOpera
             );
         }
 
-        return Optional.of(merging.withBlacklistRestrictions(newBlacklist));
+        return merging.withBlacklistRestrictions(newBlacklist);
     }
 }

@@ -4,7 +4,6 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.restrictions.*;
-import com.scottlogic.deg.generator.restrictions.SetRestrictions;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import org.junit.jupiter.api.Test;
 
@@ -15,16 +14,14 @@ import java.util.stream.Collectors;
 import static com.scottlogic.deg.generator.config.detail.DataGenerationType.INTERESTING;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.junit.Assert.assertTrue;
 
 class FieldSpecValueGeneratorTests {
 
     @Test
     void generate_fieldSpecMustContainRestrictionNullAndSetRestrictionsHasValues_returnsDataBagsWithValuesInSetRestrictions() {
         FieldSpec fieldSpec = FieldSpec.Empty.withNotNull()
-            .withSetRestrictions(
-                SetRestrictions.fromWhitelist(
+            .withWhitelist(
+                (
                     new HashSet<>(
                         Arrays.asList(10, 20, 30))));
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
@@ -34,8 +31,7 @@ class FieldSpecValueGeneratorTests {
 
         final Set<DataBagValue> result = fieldSpecFulfiller.generate(fieldSpec).collect(Collectors.toSet());
 
-        Set<DataBagValue> expectedDataBags = fieldSpec.getSetRestrictions()
-            .getWhitelist()
+        Set<DataBagValue> expectedDataBags = fieldSpec.getWhitelist()
             .stream()
             .map(value -> new DataBagValue(value, null))
             .collect(Collectors.toSet());

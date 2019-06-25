@@ -4,11 +4,9 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.common.util.NumberUtils;
-import com.scottlogic.deg.generator.restrictions.SetRestrictions;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 public class FieldSpecFactory {
@@ -81,9 +79,7 @@ public class FieldSpecFactory {
             );
         }
 
-        return FieldSpec.Empty.withSetRestrictions(
-            SetRestrictions.fromWhitelist(constraint.legalValues)
-        );
+        return FieldSpec.Empty.withWhitelist(constraint.legalValues);
     }
 
     private FieldSpec constructIsNull(boolean negate, AtomicConstraint constraint, boolean violated) {

@@ -38,7 +38,7 @@ public class JsonManifestWriter implements ManifestWriter {
             .stream()
             .map(profile -> new ManifestDTO.TestCaseDTO(
                 intFormatter.format(dataSetIndex.getAndIncrement()),
-                Collections.singleton(profile.violatedRule.ruleInformation.getDescription())))
+                Collections.singleton(profile.violatedRule.getRuleInformation().getDescription())))
             .collect(Collectors.toList());
 
         write(new ManifestDTO(testCaseDtos), outputPath.resolve("manifest.json"));
