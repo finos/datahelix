@@ -7,9 +7,7 @@ import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
-import java.time.Duration;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -18,7 +16,7 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
     private static final BigDecimal millisecondsInSecond = BigDecimal.valueOf(1_000);
     private static final BigDecimal nanoSecondsInMillisecond = BigDecimal.valueOf(1_000_000);
 
-    private OffsetDateTime startedGenerating;
+    private ZonedDateTime startedGenerating;
     private long rowsSinceLastSample;
     private BigInteger rowsEmitted;
     private Timer timer;
@@ -34,7 +32,7 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
 
     @Override
     public void generationStarting() {
-        startedGenerating = OffsetDateTime.now(ZoneOffset.UTC);
+        startedGenerating = ZonedDateTime.now();
         rowsSinceLastSample = 0;
         rowsEmitted = BigInteger.ZERO;
 
@@ -62,7 +60,7 @@ public class VelocityMonitor implements ReductiveDataGeneratorMonitor {
     public void endGeneration() {
         timer.cancel();
 
-        OffsetDateTime finished = OffsetDateTime.now(ZoneOffset.UTC);
+        ZonedDateTime finished = ZonedDateTime.now();
         Duration totalDuration = Duration.between(startedGenerating, finished);
 
         //Get the total duration of the generator in milliseconds
