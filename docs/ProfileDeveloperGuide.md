@@ -486,11 +486,15 @@ While it's not prohibited, wrapping conditional constraints in any other kind of
 { "field": "price", "is": "formattedAs", "value": "%.5s" }
 ```
 
-Used by output serialisers where string output is required. `value` must be:
+Used by output serialisers where string output is required.
+
+For the formatting to be applied, the generated data must be applicable, and the `value` must be:
 
 * a string recognised by Java's `String.format` method
 * appropriate for the data type of `field`
 * not `null` (formatting will not be applied for null values)
+
+Formatting will not be applied if not applicable to the field's value
 
 See the [FAQ](FrequentlyAskedQuestions.md) for the difference between this and [granularTo](#predicate-granularto).
 

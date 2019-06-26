@@ -32,6 +32,11 @@ public class NumericValueStep {
 
     @Then("{fieldVar} contains numeric data")
     public void producedDataShouldContainNumericValuesForField(String fieldName){
+        helper.assertFieldContainsSomeOf(fieldName, Number.class);
+    }
+
+    @Then("{fieldVar} contains only numeric data")
+    public void producedDataShouldContainOnlyNumericValuesForField(String fieldName){
         helper.assertFieldContainsNullOrMatching(fieldName, Number.class);
     }
 

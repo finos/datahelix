@@ -78,8 +78,8 @@ public class TypeEqualityHelper {
      * @param actualRule The actual rule.
      */
     public static void assertRuleTypeEquality(Rule expectedRule, Rule actualRule) {
-        ArrayList<Constraint> expectedConstraints = new ArrayList<>(expectedRule.constraints);
-        ArrayList<Constraint> actualConstraints = new ArrayList<>(actualRule.constraints);
+        ArrayList<Constraint> expectedConstraints = new ArrayList<>(expectedRule.getConstraints());
+        ArrayList<Constraint> actualConstraints = new ArrayList<>(actualRule.getConstraints());
         assertConstraintListTypeEquality(expectedConstraints, actualConstraints);
     }
 
@@ -123,8 +123,8 @@ public class TypeEqualityHelper {
                 ((NotConstraint)actualConstraint).negatedConstraint);
         }
         else if (expectedConstraint instanceof AndConstraint) {
-            ArrayList<Constraint> expectedConstraints = new ArrayList<>(((AndConstraint) expectedConstraint).subConstraints);
-            ArrayList<Constraint> actualConstraints = new ArrayList<>(((AndConstraint) actualConstraint).subConstraints);
+            ArrayList<Constraint> expectedConstraints = new ArrayList<>(((AndConstraint) expectedConstraint).getSubConstraints());
+            ArrayList<Constraint> actualConstraints = new ArrayList<>(((AndConstraint) actualConstraint).getSubConstraints());
             assertConstraintListTypeEquality(expectedConstraints, actualConstraints);
         }
         else if (expectedConstraint instanceof OrConstraint) {

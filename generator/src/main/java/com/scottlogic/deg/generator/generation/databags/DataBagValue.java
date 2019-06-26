@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.generation.databags;
 
+import java.util.IllegalFormatException;
 import java.util.Objects;
 
 public class DataBagValue {
@@ -34,7 +35,11 @@ public class DataBagValue {
             return value;
         }
 
-        return String.format(format, value);
+        try {
+            return String.format(format, value);
+        } catch (IllegalFormatException e){
+            return value;
+        }
     }
 
     public Object getUnformattedValue(){

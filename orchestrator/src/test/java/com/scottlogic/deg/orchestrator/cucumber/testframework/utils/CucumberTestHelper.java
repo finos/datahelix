@@ -116,7 +116,7 @@ public class CucumberTestHelper {
         Class<T> clazz,
         Function<T, Boolean> predicate
     ){
-        assertFieldContains(fieldName, objectValue -> {
+        assertFieldContainsOnly(fieldName, objectValue -> {
             if (objectValue == null) {
                 return true;
             }
@@ -131,7 +131,7 @@ public class CucumberTestHelper {
     }
 
     public <T> void assertFieldContainsNullOrNotMatching(String fieldName, Class<T> clazz) {
-        assertFieldContains(fieldName, objectValue -> {
+        assertFieldContainsOnly(fieldName, objectValue -> {
             if (objectValue == null) {
                 return true;
             }
@@ -157,6 +157,22 @@ public class CucumberTestHelper {
         List<Object> dataForField =
             allData.stream().map(row -> row.get(fieldIndex.get())).collect(Collectors.toList());
 
+        Assert.assertThat(dataForField, new ListPredicateAnyTrueIsSuccessMatcher(predicate));
+    }
+
+    public void assertFieldContainsOnly(String fieldName, Function<Object, Boolean> predicate) {
+        Optional<Integer> fieldIndex = getIndexOfField(fieldName);
+        if (!fieldIndex.isPresent()) {
+            throw new IllegalArgumentException(String.format(
+                "Field [%s] has not been defined",
+                fieldName
+            ));
+        }
+
+        List<List<Object>> allData = this.generateAndGetData();
+        List<Object> dataForField =
+            allData.stream().map(row -> row.get(fieldIndex.get())).collect(Collectors.toList());
+
         Assert.assertThat(dataForField, new ListPredicateMatcher(predicate));
     }
 
@@ -169,5 +185,15 @@ public class CucumberTestHelper {
         }
 
         return Optional.empty();
+    }
+
+    public <T> void assertFieldContainsSomeOf(String fieldName, Class<T> clazz) {
+        assertFieldContains(fieldName, objectValue -> {
+            if (clazz.isInstance(objectValue)) {
+                return true;
+            }
+
+            return false; //doesn't match the type when it should.
+        });
     }
 }

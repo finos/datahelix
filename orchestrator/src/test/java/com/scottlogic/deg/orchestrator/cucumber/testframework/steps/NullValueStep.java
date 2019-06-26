@@ -29,6 +29,6 @@ public class NullValueStep {
 
     @Then("{fieldVar} contains anything but null")
     public void producedDataShouldNotContainNull(String fieldName) {
-        helper.assertFieldContains(fieldName, Objects::nonNull);
+        helper.assertFieldContainsOnly(fieldName, Objects::nonNull);
     }
 }
