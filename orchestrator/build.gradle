@@ -66,14 +66,10 @@ jar {
 }
 
 project.ext.ghToken = project.hasProperty('ghToken') ? project.getProperty('ghToken') : System.getenv('GH_TOKEN') ?: null
-semanticRelease {
-    repo {
-        ghToken = project.ghToken
-    }
-}
 
 semanticRelease {
     repo {
+        ghToken = project.ghToken
         releaseAsset fatJar
     }
 }
