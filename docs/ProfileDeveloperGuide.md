@@ -19,7 +19,7 @@
         2. [inSet](#predicate-inset)
         3. [null](#predicate-null)
         4. [ofType](#predicate-oftype)
-        5. [fromFile](#predicate-fromfile)
+        5. [setFromFile](#predicate-setfromfile)
     3. [Textual constraints](#Textual-constraints)
         1. [matchingRegex](#predicate-matchingregex)
         2. [containingRegex](#predicate-containingregex)
@@ -231,16 +231,17 @@ Is satisfied if `field` is null or absent.
 
 Is satisfied if `field` is of type represented by `value` (valid options: `decimal`, `integer`, `string`, `datetime`, `ISIN`, `SEDOL`, `CUSIP`, `RIC`, `firstname`, `lastname` or `fullname`)
 
-<div id="predicate-fromfile"></div>
+<div id="predicate-setfromfile"></div>
 
-### `fromFile` _(field, value)_
+### `setFromFile` _(field, value)_
 
 ```javascript
-{ "field": "country", "is": "fromFile", "value": "countries.csv" }
+{ "field": "country", "is": "setFromFile", "value": "countries.csv" }
 ```
 
 Populates a set from the new-line delimited file (with suffix `.csv`), where each line represents a string value to load.
-The file should be location in the same directory as the jar, and the name should match the `value` with `.csv` appended.
+The file should be location in the same directory as the jar, or in the directory explicitly specified using the command line argument `--set-from-file-directory`, and the name should match the `value` with `.csv` appended.
+Alternatively an absolute path can be used which does not have any relation to the jar location.
 In the above example, this would be `countries.csv`.
 
 Example `countries.csv` excerpt:
@@ -485,11 +486,15 @@ While it's not prohibited, wrapping conditional constraints in any other kind of
 { "field": "price", "is": "formattedAs", "value": "%.5s" }
 ```
 
-Used by output serialisers where string output is required. `value` must be:
+Used by output serialisers where string output is required.
+
+For the formatting to be applied, the generated data must be applicable, and the `value` must be:
 
 * a string recognised by Java's `String.format` method
 * appropriate for the data type of `field`
 * not `null` (formatting will not be applied for null values)
+
+Formatting will not be applied if not applicable to the field's value
 
 See the [FAQ](FrequentlyAskedQuestions.md) for the difference between this and [granularTo](#predicate-granularto).
 

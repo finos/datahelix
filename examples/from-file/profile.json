@@ -17,7 +17,7 @@
     {
       "rule": "name",
       "constraints": [
-        {"field": "name", "is": "fromFile", "value": "greek.csv"}
+        {"field": "name", "is": "setFromFile", "value": "greek.csv"}
       ]
     }
   ]

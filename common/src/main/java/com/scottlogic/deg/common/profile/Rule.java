@@ -6,13 +6,21 @@ import java.util.Collection;
 
 public class Rule
 {
-    public final RuleInformation ruleInformation;
-    public final Collection<Constraint> constraints;
+    private final RuleInformation ruleInformation;
+    private final Collection<Constraint> constraints;
 
     public Rule(RuleInformation ruleInformation, Collection<Constraint> constraints)
     {
         this.ruleInformation = ruleInformation;
         this.constraints = constraints;
+    }
+
+    public RuleInformation getRuleInformation() {
+        return ruleInformation;
+    }
+
+    public Collection<Constraint> getConstraints() {
+        return constraints;
     }
 
 }

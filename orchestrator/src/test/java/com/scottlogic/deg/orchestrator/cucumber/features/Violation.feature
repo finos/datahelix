@@ -92,7 +92,7 @@ Feature: The violations mode of the Data Helix app can be run in violations mode
     And the data requested is violating
     And we do not violate any of type constraints
     Then 5 rows of data are generated
-    And foo contains datetime data
+    And foo contains only datetime data
     And foo contains datetimes after or at 2019-01-01T00:00:00.000Z
 
   Scenario: The generator produces violating (not type) 'Decimal' data in random mode
@@ -103,7 +103,7 @@ Feature: The violations mode of the Data Helix app can be run in violations mode
     And the data requested is violating
     And we do not violate any of type constraints
     Then 5 rows of data are generated
-    And foo contains numeric data
+    And foo contains only numeric data
     And foo contains numeric values greater than or equal to 10
 
   Scenario: The generator produces violating (not type) 'String' data in random mode
@@ -114,7 +114,7 @@ Feature: The violations mode of the Data Helix app can be run in violations mode
     And the data requested is violating
     And we do not violate any of type constraints
     Then 5 rows of data are generated
-    And foo contains string data
+    And foo contains only string data
     And foo contains strings longer than or equal to 10
 
   Scenario: The generator produces violating (not type) RegEx restricted 'String' data in random mode
@@ -125,7 +125,7 @@ Feature: The violations mode of the Data Helix app can be run in violations mode
     And the data requested is violating
     And we do not violate any of type constraints
     Then 5 rows of data are generated
-    And foo contains string data
+    And foo contains only string data
     And foo contains anything but strings matching /[a-z]{0,9}/
 
   Scenario: The generator produces violating (not type) inverted RegEx restricted 'String' data in random mode
@@ -136,7 +136,7 @@ Feature: The violations mode of the Data Helix app can be run in violations mode
     And the data requested is violating
     And we do not violate any of type constraints
     Then 5 rows of data are generated
-    And foo contains string data
+    And foo contains only string data
     And foo contains strings matching /[a-z]{0,9}/
 
   Scenario: The generator should produce correct violating data for anyOf construction
@@ -152,3 +152,4 @@ Feature: The violations mode of the Data Helix app can be run in violations mode
     Then some data should be generated
     And foo contains anything but string data
     And foo contains anything but numeric data
+    

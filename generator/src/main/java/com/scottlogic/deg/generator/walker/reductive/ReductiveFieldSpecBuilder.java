@@ -2,7 +2,6 @@ package com.scottlogic.deg.generator.walker.reductive;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.constraintdetail.Nullness;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraintsHelper;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
@@ -54,7 +53,7 @@ public class ReductiveFieldSpecBuilder {
     }
 
     private boolean hasSetOrIsNull(FieldSpec fieldSpec) {
-        return  (fieldSpec.getSetRestrictions() != null && fieldSpec.getSetRestrictions().getWhitelist() != null);
+        return  (fieldSpec.getWhitelist() != null);
     }
 
     private Set<FieldSpec> getFieldSpecsForDecisions(Field field, ConstraintNode rootNode) {
