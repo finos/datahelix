@@ -24,8 +24,11 @@ public class ContradictionChecker {
     }
 
     public boolean isContradictory(ConstraintNode leftNode, ConstraintNode rightNode){
-
         Set<Field> fields = SetUtils.union(getFields(leftNode), getFields(rightNode));
+
+        if (fields.size() == 0){
+            return false;
+        }
 
         Collection<AtomicConstraint> constraints = Stream.concat(
             leftNode.getAtomicConstraints().stream(),

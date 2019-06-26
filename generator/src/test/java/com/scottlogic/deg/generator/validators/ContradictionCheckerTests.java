@@ -85,4 +85,17 @@ public class ContradictionCheckerTests {
         //Assert
         assertFalse(contradictionFound);
     }
+
+    @Test
+    public void checkContradictions_withNodesThatDoNotAffectAnyFields_returnNoContradiction() {
+        //Arrange
+        ConstraintNode leftNode = new TreeConstraintNode();
+        ConstraintNode rightNode = new TreeConstraintNode();
+
+        //Act
+        boolean contradictionFound = checker.isContradictory(leftNode, rightNode);
+
+        //Assert
+        assertFalse(contradictionFound);
+    }
 }
