@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class AndConstraint implements GrammaticalConstraint
 {
-    public final Collection<Constraint> subConstraints;
+    private final Collection<Constraint> subConstraints;
 
     public AndConstraint(Collection<Constraint> subConstraints) {
         this.subConstraints = subConstraints;
@@ -39,6 +39,10 @@ public class AndConstraint implements GrammaticalConstraint
     @Override
     public Collection<Field> getFields() {
         return subConstraints.stream().flatMap(c -> c.getFields().stream()).collect(Collectors.toSet());
+    }
+
+    public Collection<Constraint> getSubConstraints() {
+        return subConstraints;
     }
 
     @Override

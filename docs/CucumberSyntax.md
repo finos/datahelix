@@ -46,6 +46,7 @@ Operators are converted to English language equivalents for use in cucumber, so 
 * _`{field}` is anything but `{operator}` `{operand}`_, adds a negated `operator` constraint to the field `field` with the data `operand`, see **operators** and **operands** sections below
 * _there is a constraint:_, adds the given JSON block as a constraint as if it was read from the profile file itself. It should only be used where the constraint cannot otherwise be expressed, e.g. for `anyOf`, `allOf` and `if`.
 * _the maximum string length is {length}_, sets the maximum length for strings to the _max_ for the given scenario. The default is _200_ (for performance reasons), however in production the limit is _1000_.
+* _untyped fields are allowed_, sets the --allow-untyped-fields flag to false - default: flag is true
 
 #### Operators
 See [Predicate constraints](ProfileDeveloperGuide.md#Predicate-constraints), [Grammatical Constraints](ProfileDeveloperGuide.md#Grammatical-constraints) and [Presentational Constraints](ProfileDeveloperGuide.md#Presentational-constraints) for details of the constraints.
@@ -102,7 +103,8 @@ And there is a constraint:
 ### Validating the data in the output
 
 #### DateTime
-* _{field} contains datetime data_, executes the generator and asserts that _field_ contains either `null` or datetimes
+* _{field} contains datetime data_, executes the generator and asserts that _field_ contains either `null` or datetimes (other types are allowed)
+* _{field} contains only datetime data_, executes the generator and asserts that _field_ contains only `null` or datetimes
 * _{field} contains anything but datetime data_, executes the generator and asserts that _field_ contains either `null` or data that is not a datetime.
 * _{field} contains datetimes between {min} and {max} inclusively_, executes the generator and asserts that _field_ contains either `null` or datetimes between _{min}_ and _{max}_. Does so in an inclusive manner for both min and max.
 * _{field} contains datetimes outside {min} and {max}_, executes the generator and asserts that _field_ contains either `null` or datetimes outside _{min}_ and _{max}_.
@@ -111,7 +113,8 @@ And there is a constraint:
 
 #### Numeric
 Note these steps work for asserting both integer and decimal data. There are no current steps for asserting general granularity.
-* _{field} contains numeric data_, executes the generator and asserts that _field_ contains either `null` or numeric values
+* _{field} contains numeric data_, executes the generator and asserts that _field_ contains either `null` or numeric values (other types are allowed)
+* _{field} contains only numeric data_, executes the generator and asserts that _field_ contains only `null` or numeric values
 * _{field} contains anything but numeric data_, executes the generator and asserts that _field_ contains either `null` or data that is not numeric.
 * _{field} contains numeric values between {min} and {max} inclusively_, executes the generator and asserts that _field_ contains either `null` or numeric values between _{min}_ and _{max}_. Does so in an inclusive manner for both min and max.
 * _{field} contains numeric values outside {min} and {max}_, executes the generator and asserts that _field_ contains either `null` or numeric values outside _{min}_ and _{max}_.
@@ -119,7 +122,8 @@ Note these steps work for asserting both integer and decimal data. There are no 
 * _{field} contains numeric values greater than or equal to {value}_, executes the generator and asserts that _field_ contains either `null` or numeric values greater than or equal to _{value}_
 
 #### String
-* _{field} contains string data_, executes the generator and asserts that _field_ contains either `null` or string values
+* _{field} contains string data_, executes the generator and asserts that _field_ contains either `null` or string values (other types are allowed)
+* _{field} contains only string data_, executes the generator and asserts that _field_ contains only `null` or string values
 * _{field} contains anything but string data_, executes the generator and asserts that _field_ contains either `null` or data that is not a string.
 * _{field} contains strings of length between {min} and {max} inclusively_, executes the generator and asserts that _field_ contains either `null` or strings with lengths between _{min}_ and _{max}_. Does so in an inclusive manner for both min and max.
 * _{field} contains strings of length outside {min} and {max}_, executes the generator and asserts that _field_ contains either `null` or strings with lengths outside _{min}_ and _{max}_.
