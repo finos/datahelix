@@ -26,7 +26,7 @@ public class ContradictionTreeValidator {
     }
 
     public DecisionTree reportThenCullContradictions(DecisionTree decisionTree, DataGeneratorMonitor monitor) {
-        ContradictionWrapper contradictionWrapper = getAllNodesInTreeThatAreRootsOfWhollyContradictorySubTrees(decisionTree);
+        ContradictionWrapper contradictionWrapper = getContradictoryNodes(decisionTree);
         if (contradictionWrapper.hasNoContradictions()) {
             return decisionTree;
         } else if (contradictionWrapper.isOnlyPartiallyContradictory(decisionTree)) {
@@ -57,7 +57,7 @@ public class ContradictionTreeValidator {
         return treePruner.pruneConstraintNode(unPrunedNode, fieldSpecs).get();
     }
 
-    public ContradictionWrapper getAllNodesInTreeThatAreRootsOfWhollyContradictorySubTrees(DecisionTree decisionTree) {
+    public ContradictionWrapper getContradictoryNodes(DecisionTree decisionTree) {
         return new ContradictionWrapper(getAllNodesThatAreContradictoryAndADescendentOfNode(decisionTree.getRootNode())
             .stream()
             .filter(Objects::nonNull)
