@@ -55,5 +55,5 @@ The following are examples of where constraints can be combined and (whilst pote
 
 ## Current stance
 1. The cucumber framework of tests should be able to (optionally) detect 'hard' contradictions - [#202](https://github.com/ScottLogic/data-engineering-generator/issues/202)
-1. The profile validator should be defaulted to __on for ___errors____ but have the option for disabling it - [#467](https://github.com/ScottLogic/data-engineering-generator/issues/467)
+1. The profile validator should be defaulted to "on for errors" but have the option for disabling it - [#467](https://github.com/ScottLogic/data-engineering-generator/issues/467)
 1. Contradiction checking to a greater degree will be deferred to tooling for the generator, such as profile writers, user interfaces, etc.
