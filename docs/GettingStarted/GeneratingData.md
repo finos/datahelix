@@ -96,16 +96,16 @@ The manifest shows which rules are violated in which file.
 ## Hints and Tips
 
 * The generator will output velocity and row data to the console as standard
-(see [options](../Options/GenerateOptions.md) for other monitoring choices)
-    * If multiple monitoring options are selected the most detailed monitor will be implemented
-* Ensure any desired output files are not being used by any other programs or the generator will not be able to run
-    * If a file already exists it will be overwritten
-* Violated data generation will produce one output file per rule being violated
-    * This is why the output location is a directory and not a file
-    * If there are already files in the output directory with the same names they will be overwritten 
-* It is important to give your rules descriptions so that the manifest can list the violated rules clearly
-* Rules made up of multiple constraints will be violated as one rule and therefore will produce one output file per rule
-* Unless explicitly excluded `null` will always be generated for each field 
+(see [options](../Options/GenerateOptions.md) for other monitoring choices).
+    * If multiple monitoring options are selected the most detailed monitor will be implemented.
+* Ensure any desired output files are not being used by any other programs or the generator will not be able to run.
+    * If a file already exists it will be overwritten.
+* Violated data generation will produce one output file per rule being violated.
+    * This is why the output location is a directory and not a file.
+    * If there are already files in the output directory with the same names they will be overwritten.
+* It is important to give your rules descriptions so that the manifest can list the violated rules clearly.
+* Rules made up of multiple constraints will be violated as one rule and therefore will produce one output file per rule.
+* Unless explicitly excluded `null` will always be generated for each field.
 
 #
 [< Previous](CreatingAProfile.md) | [Contents](StepByStepInstructions.md) | [Next Section >](Visualise.md)
