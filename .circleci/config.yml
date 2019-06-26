@@ -3,6 +3,15 @@ orbs:
   codecov: codecov/codecov@1.0.2
 jobs:
 
+  check_commit_message:
+    docker:
+      - image: circleci/openjdk:8-jdk-browsers
+    working_directory: ~/datahelix/
+    steps:
+      - checkout
+      - run: chmod +x commit_check.sh
+      - run: ./commit_check.sh
+
   build:
     docker:
       - image: circleci/openjdk:8-jdk-browsers
@@ -29,23 +38,30 @@ jobs:
     docker:
       - image: circleci/openjdk:8-jdk-browsers
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            # TODO: Configure fingerprint for main project credentials
+            - "2e:7e:4f:29:21:87:2b:71:46:42:45:c4:9a:f4:a3:b6"
       - checkout
-      # If changing build tools be sure to update GeneratorSetup.md in docs
-      - run: gradle :output:release :profile:release :generator:release :orchestrator:release
-      - store-artifacts:
-          path: schemas/build/libs
-      - store-artifacts:
-          path: generator/build/libs
+      - run: gradle fatJar
+      - run: gradle release -Dorg.ajoberstar.grgit.auth.username=${GH_TOKEN} -Dorg.ajoberstar.grgit.auth.password
+
 
 workflows:
   version: 2
   build_and_test:
     jobs:
-      - build
-# TODO: Ensure gradle migration is smooth before introducing release job
-#  release:
-#    jobs:
-#      - release:
-#          filters:
-#            branches:
-#              only: master
+      - build:
+          filters:
+            branches:
+              ignore: master
+      - check_commit_message:
+          filters:
+            branches:
+              ignore: master
+  release:
+    jobs:
+      - release:
+          filters:
+            branches:
+              only: master
