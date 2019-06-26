@@ -6,7 +6,6 @@ dependencies {
     compile project(':common')
     compile group: 'org.apache.commons', name: 'commons-csv', version: '1.6'
     compile group: 'com.google.inject', name: 'guice', version: '4.2.2'
-    compile 'org.jetbrains.kotlin:kotlin-stdlib:1.3.21'
     compile 'com.worldturner.medeia:medeia-validator-jackson:1.0.0'
     compile 'org.leadpony.justify:justify:0.14.0'
     compile 'org.glassfish:javax.json:1.1.3'
