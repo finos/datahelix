@@ -50,8 +50,4 @@ public class ProfileFields implements Iterable<Field> {
     public int hashCode() {
         return fields.hashCode();
     }
-
-    public List<Field> getFields() {
-        return this.fields;
-    }
 }

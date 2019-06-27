@@ -11,42 +11,76 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 
 class UpfrontTreePrunerTests {
-    private UpfrontTreePruner upfrontTreePruner;
-    private ReductiveTreePruner reductiveTreePruner;
-    @BeforeEach
-    void setup() {
-        reductiveTreePruner = Mockito.mock(ReductiveTreePruner.class);
-        upfrontTreePruner = new UpfrontTreePruner(reductiveTreePruner);
-    }
+    private ReductiveTreePruner reductiveTreePruner = Mockito.mock(ReductiveTreePruner.class);
+    private UpfrontTreePruner upfrontTreePruner = new UpfrontTreePruner(reductiveTreePruner);
+    private Field fieldA = new Field("A");
+    private Field fieldB = new Field("B");
 
     @Test
-    void runUpfrontPrune_returnsPrunedTree() {
+    void runUpfrontPrune_withOneField_returnsPrunedTree() {
         //Arrange
-        DecisionTree unprunedTree = Mockito.mock(DecisionTree.class);
-        Field field = new Field("A");
-        List<Field> fields = Collections.singletonList(field);
-        ProfileFields profileFields = Mockito.mock(ProfileFields.class);
-        Mockito.when(profileFields.getFields()).thenReturn(fields);
-        Mockito.when(unprunedTree.getFields()).thenReturn(profileFields);
+        List<Field> fields = Collections.singletonList(fieldA);
         ConstraintNode prunedRoot = Mockito.mock(ConstraintNode.class);
         Map<Field, FieldSpec> fieldSpecs = new HashMap<>();
-        fieldSpecs.put(field, FieldSpec.Empty);
-        Mockito.when(reductiveTreePruner.pruneConstraintNode(any(), eq(fieldSpecs))).thenReturn(Merged.of(prunedRoot));
+        fieldSpecs.put(fieldA, FieldSpec.Empty);
+
+        ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
+        DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields), "desc");
+
+        Mockito.when(reductiveTreePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.of(prunedRoot));
 
         //Act
-        DecisionTree actual = upfrontTreePruner.runUpfrontPrune(unprunedTree);
+        DecisionTree actual = upfrontTreePruner.runUpfrontPrune(tree);
 
         //Assert
         assertEquals(prunedRoot, actual.getRootNode());
+    }
+
+    @Test
+    void runUpfrontPrune_withTwoFields_returnsPrunedTree() {
+        //Arrange
+        List<Field> fields = Arrays.asList(fieldA, fieldB);
+        ConstraintNode prunedRoot = Mockito.mock(ConstraintNode.class);
+        Map<Field, FieldSpec> fieldSpecs = new HashMap<>();
+        fieldSpecs.put(fieldA, FieldSpec.Empty);
+        fieldSpecs.put(fieldB, FieldSpec.Empty);
+
+        ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
+        DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields), "desc");
+
+        Mockito.when(reductiveTreePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.of(prunedRoot));
+
+        //Act
+        DecisionTree actual = upfrontTreePruner.runUpfrontPrune(tree);
+
+        //Assert
+        assertEquals(prunedRoot, actual.getRootNode());
+    }
+
+    @Test
+    void runUpfrontPrune_whenTreeWhollyContradictory_returnsPrunedTree() {
+        //Arrange
+        List<Field> fields = Collections.singletonList(fieldA);
+        Map<Field, FieldSpec> fieldSpecs = new HashMap<>();
+        fieldSpecs.put(fieldA, FieldSpec.Empty);
+
+        ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
+        DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields), "desc");
+
+        //Act
+        Mockito.when(reductiveTreePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.contradictory());
+
+        DecisionTree actual = upfrontTreePruner.runUpfrontPrune(tree);
+
+        //Assert
+        assertNull(actual.getRootNode());
     }
 }
