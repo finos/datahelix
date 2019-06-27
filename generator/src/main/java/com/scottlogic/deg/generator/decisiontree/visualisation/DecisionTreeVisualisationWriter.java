@@ -202,10 +202,6 @@ class NodeVisualiser {
             return "[color=\"red\"]";
         }
 
-        if (node.hasMarking(NodeMarking.OPTIMISED)){
-            return "[color=\"blue\"]";
-        }
-
         return "";
     }
 }

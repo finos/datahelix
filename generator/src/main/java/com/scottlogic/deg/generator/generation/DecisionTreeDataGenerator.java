@@ -21,6 +21,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
     private final TreePartitioner treePartitioner;
     private final DecisionTreeOptimiser treeOptimiser;
     private final CombinationStrategy partitionCombiner;
+    private final UpfrontTreePruner upfrontTreePruner;
     private final long maxRows;
 
     @Inject
@@ -31,6 +32,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         DecisionTreeOptimiser optimiser,
         DataGeneratorMonitor monitor,
         CombinationStrategy combinationStrategy,
+        UpfrontTreePruner upfrontTreePruner,
         @Named("config:maxRows") long maxRows) {
         this.decisionTreeGenerator = decisionTreeGenerator;
         this.treePartitioner = treePartitioner;
@@ -38,6 +40,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         this.treeWalker = treeWalker;
         this.monitor = monitor;
         this.partitionCombiner = combinationStrategy;
+        this.upfrontTreePruner = upfrontTreePruner;
         this.maxRows = maxRows;
     }
 
@@ -45,6 +48,11 @@ public class DecisionTreeDataGenerator implements DataGenerator {
     public Stream<GeneratedObject> generateData(Profile profile) {
         monitor.generationStarting();
         DecisionTree decisionTree = decisionTreeGenerator.analyse(profile);
+
+        decisionTree = upfrontTreePruner.runUpfrontPrune(decisionTree);
+        if (decisionTree.getRootNode() == null) {
+            return Stream.empty();
+        }
 
         Stream<Stream<DataBag>> partitionedDataBags = treePartitioner
             .splitTreeIntoPartitions(decisionTree)
