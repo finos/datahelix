@@ -27,7 +27,7 @@ Once [Java v1.8](https://www.java.com/en/download/manual.jsp) is installed you c
 
 ## Examples
 * `java -jar generator.jar generate profile.json profile.csv`
-* `java -jar generator.jar generate --violate=true profile.json violated-data-files/`
+* `java -jar generator.jar violate profile.json violated-data-files/`
 
 Example profiles can be found at `../docs/GettingStarted/ExampleProfile1.json` or `../examples/`.
 
@@ -42,7 +42,15 @@ Generates data to a specified endpoint.
 
 The full list of generate options can be viewed [here](../docs/Options/GenerateOptions.md).
 
-#
+### Violate
+#### `violate [options] <profile path> <output directory>`
+
+Generates violating data to a specified folder/directory.
+
+* `<profile path>`, a path to the profile JSON file.
+* `<output directory>`, a path to a directory into which the data should be emitted.  This will consist of a set of output files, and a `manifest.json` file describing which constraints are violated by which output file.
+
+The full list of violate options can be viewed [here](../docs/Options/ViolateOptions.md)
 
 ### Visualise
 #### `visualise [options] <profile path> <output path>`
@@ -58,14 +66,6 @@ There may be other visualisers that are suitable to use. The requirements for a 
 - gv files are encoded with UTF-8, visualisers must support this encoding.
 - gv files can include HTML encoded entities, visualisers should support this feature.
 
-#
-### Generate Tree JSON
-#### `genTreeJson [options] <profile path> <output path>`
-
-Generates a JSON file representing the in-memory decision tree.  This is a utility to assist the creation of `expected.json` files for `TreeTransformationIntegrationTest`
-
-* `<profile path>`, a path to the profile JSON file
-* `<output path>`, a file path to where the tree JSON should be emitted to. This will be a UTF-8 encoded JSON file.
 
 #### Options
 Options are optional and case-insensitive

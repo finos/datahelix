@@ -1,12 +1,15 @@
 package com.scottlogic.deg.generator.inputs.profileviolation;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.Rule;
-import com.scottlogic.deg.generator.constraints.Constraint;
-import com.scottlogic.deg.generator.constraints.UnviolatableConstraintException;
-import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.constraints.atomic.ViolatedAtomicConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.*;
+import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.NegatedGrammaticalConstraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
+import com.scottlogic.deg.common.profile.Rule;
+import com.scottlogic.deg.common.profile.constraints.Constraint;
+import com.scottlogic.deg.common.profile.constraintdetail.UnviolatableConstraintException;
+import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.ViolatedAtomicConstraint;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 
 import java.util.ArrayList;
@@ -30,7 +33,7 @@ public class IndividualConstraintRuleViolator implements RuleViolator {
     public Rule violateRule(Rule rule) {
         List<Constraint> newConstraints = new ArrayList<>();
         List<Constraint> violate = new ArrayList<>();
-        for (Constraint constraint:rule.constraints) {
+        for (Constraint constraint:rule.getConstraints()) {
             if (canViolate(constraint)){
                 violate.add(constraint);
             } else {
@@ -46,7 +49,7 @@ public class IndividualConstraintRuleViolator implements RuleViolator {
                     : new AndConstraint(violate)
                 ));
         }
-        return new Rule(rule.ruleInformation, newConstraints);
+        return new Rule(rule.getRuleInformation(), newConstraints);
     }
 
     /**
@@ -61,7 +64,7 @@ public class IndividualConstraintRuleViolator implements RuleViolator {
         //     AND(X, VIOLATE(Y), Z),
         //     AND(X, Y, VIOLATE(Z)))
         if (constraint instanceof AndConstraint) {
-            Collection<Constraint> subConstraints = ((AndConstraint) constraint).subConstraints;
+            Collection<Constraint> subConstraints = ((AndConstraint) constraint).getSubConstraints();
 
             Collection<Constraint> violatedIndividually =
                 subConstraints.stream()
@@ -113,7 +116,7 @@ public class IndividualConstraintRuleViolator implements RuleViolator {
         // VIOLATE(NOT(IF(X,Y))) reduces to IF(X,Y)
         // VIOLATE(NOT(IF(X,Y,Z))) reduces to IF(X,Y,Z)
         else if (constraint instanceof NegatedGrammaticalConstraint) {
-            return ((NegatedGrammaticalConstraint)constraint).negatedConstraint;
+            return ((NegatedGrammaticalConstraint)constraint).getNegatedConstraint();
         }
         // VIOLATE(AtomicConstraint) reduces to NEGATE(AtomicConstraint)
         // We wrap this in a ViolatedAtomicConstraint to allow Visualise to show which constraint is being violated

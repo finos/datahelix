@@ -17,9 +17,11 @@ The generation of representative test and simulation data is a challenging and t
 
 *The following guide gives a 10 minute introduction to the generator via various practical examples. For more detailed documentation please refer to the [Profile Developer Guide](docs/ProfileDeveloperGuide.md), and if you are interested in extending / modifying the generator itself, refer to the [DataHelix Generator Developer Guide](docs/GeneratorDeveloperGuide.md).*
 
-The generator has been written in Java, allowing it to work on Microsoft Windows, Apple Mac and Linux. You will need Java v1.8 installed to run the generator (you can run `java version` to check whether you meet ths requirement), it can be [downloaded here](https://www.java.com/en/download/manual.jsp).
+The generator has been written in Java, allowing it to work on Microsoft Windows, Apple Mac and Linux. You will need Java v1.8 installed to run the generator (you can run `java version` to check whether you meet this requirement), it can be [downloaded here](https://www.java.com/en/download/manual.jsp).
 
 The generator is distributed as a JAR file, with the latest release always available from the [GitHub releases page](https://github.com/ScottLogic/datahelix/releases/). The project is currently in beta and under active development. You can expect breaking changes in future releases, and new features too!
+
+You are also welcome to download the source code and build the generator yourself.  To do so, follow the instructions for [downloading and building it using a Java IDE](generator/docs/GeneratorSetup.md), or for [downloading and building it using Docker](generator/docs/DockerSetup.md).
 
 Your feedback on the beta would be greatly appreciated. If you have any issues, feature requests, or ideas, please share them via the [GitHub issues page](https://github.com/ScottLogic/datahelix/issues).
 
@@ -46,19 +48,12 @@ We'll start by generating data for a trivial schema. Using your favourite text e
 Now place the `generator.jar` file (downloaded from the [GitHub releases page](https://github.com/ScottLogic/datahelix/releases/)) in the same folder as the profile, open up a terminal, and execute the following:
 
 ~~~
-$ java -jar generator.jar generate --max-rows=100 --allow-untyped-fields --replace profile.json output.csv
-Generation started at: 08:02:52
-
-Number of rows | Velocity (rows/sec) | Velocity trend
----------------+---------------------+---------------
-100            | 0                   | - 
+$ java -jar generator.jar generate --max-rows=100 --allow-untyped-fields --replace --profile-file=profile.json --output-path=output.csv
 ~~~
 
-<!-- bug velocity not right -->
+The generator is a command line tool which reads a profile, and outputs data in CSV format. The `--max-rows=100` option tells the generator to create 100 rows of data, and the `--replace` option tells it to overwrite previously generated files.  The compulsary `--profile-file` option specifies the name of the input profile, and the `--output-path` option specifies the location to write the output to.  In `generate` mode `--output-path` is optional; the generator will default to standard output if it is not supplied.  By default the generator outputs progress, in rows per second, to the standard error output.  This can be useful when generating large volumes of data.
 
-The generator is a command line tool which reads a profile, and outputs data in CSV format. The `--max-rows=100` option tells the generator to create 100 rows of data, and the `--replace` option tells it to overwrite previously generated files. The generator outputs progress, in rows per second, which is useful when generating large volumes of data.
-
-If you open up `output.csv` you'll see the following:
+If you open up `output.csv` you'll see something like the following:
 
 ~~~
 firstName
@@ -126,7 +121,7 @@ Fields are nullable by default, however, you can add a further constraint to a f
 
 The generator supports three different types of constraint. These are:
 
- - **Predicates** - boolean-valued functions that define whether a given value as valid or invalid. In the above profile `ofType` and `matchingRegex` are examples of predicates.
+ - **Predicates** - boolean-valued functions that define whether a given value is valid or invalid. In the above profile `ofType` and `matchingRegex` are examples of predicates.
  - **Grammatical** - combine or modify other constraints. They are fully recursive; any grammatical constraint is a valid input to any other grammatical constraint. In the above profile `not` is an example of a grammatical constraint. 
  - **Presentational** - provide additional formatting information, we'll cover these later.
 
@@ -137,7 +132,7 @@ The current profile outputs random text strings for the `firstName` field. Depen
 The generator has been designed to be fast and efficient, allowing you to generate large quantities of test and simulation data. If you supply a large number for the `--max-rows` option, the data will be streamed to the output file, with the progress / velocity reported during generation.
 
 ```
-$ java -jar generator.jar generate --max-rows=10000 --replace profile.json output.csv
+$ java -jar generator.jar generate --max-rows=10000 --replace --profile-file=profile.json --output-path=output.csv
 Generation started at: 16:41:44
 
 Number of rows | Velocity (rows/sec) | Velocity trend
@@ -154,10 +149,10 @@ If the generation is taking too long, you can halt the command via <kbd>Ctrl</kb
 
 The generator supports four different data types:
 
- - **integer** - any integer that can be defined by the Java [BigDecimal](https://docs.oracle.com/javase/7/docs/api/java/math/BigDecimal.html) type
- - **decimal** - any real number (again a BigDecimal), with an optional granularity / precision that can be defined via a `granularTo` constraint.
- - **string** - sequences of unicode characters
- - **datetime** - specific moments in time, with values in the range 0001-01-01T00:00 to 9999-12-31T23:59
+ - **integer** - any integer number between -1E20 and 1E20 inclusive
+ - **decimal** - any real number between -1E20 and 1E20 inclusive, with an optional granularity / precision (a power of ten between 1 and 1E-20) that can be defined via a `granularTo` constraint.
+ - **string** - sequences of unicode characters up to a maximum length of 1000 characters
+ - **datetime** - specific moments in time, with values in the range 0001-01-01T00:00:00.000 to 9999-12-31T23:59:59.999, with an optional granularity / precision (from a maximum of one year to a minimum of one millisecond) that can be defined via a `granularTo` constraint.
 
 <!-- TODO: rename as datetime -->
 
@@ -301,7 +296,7 @@ The generator supports a number of different generation modes:
 The mode is specified via the `--generation-type` option. The following example outputs 'interesting' values for the current profile:
 
 ~~~
-$ java -jar generator.jar generate --generation-type interesting --replace profile.json output.csv
+$ java -jar generator.jar generate --generation-type interesting --replace --profile-file=profile.json --output-path=output.csv
 ~~~
 
 In this case it generates just 14 rows where you can see that it is exploring the boundary values of the constraints:
@@ -328,10 +323,10 @@ firstName,age,nationalInsurance
 
 ## Generating invalid data
 
-One of the most powerful features of the generator is its ability to generate data that violates constraints. To create invalid data use the `--violate` command line option. This time you need to specify an output directory rather than a file:
+One of the most powerful features of the generator is its ability to generate data that violates constraints. To create invalid data use the `violate` command. This time you need to specify an output directory rather than a file:
 
 ~~~
-$ java -jar generator.jar generate --violate --max-rows=100 --replace profile.json out
+$ java -jar generator.jar violate --max-rows=100 --replace --profile-file=profile.json --output-path=out
 ~~~
 
 When the above command has finished, you'll find that the generator has created an `out` directory which has four files:
@@ -379,8 +374,8 @@ firstName,age,nationalInsurance
 However, it might be a surprise to see nulls, numbers and dates as values for the `firstName` field alongside strings that do not match the regex given in the profile. This is because these are all defined as a single rule within the profile. You have a couple of options if you want to ensure that `firstName` is null or a string, the first is to inform the generator that it should not violate specific constraint types:
 
 ~~~
-$ java -jar generator.jar generate --violate --dont-violate=ofType \
-  --max-rows=100 --replace profile.json out
+$ java -jar generator.jar violate --dont-violate=ofType \
+  --max-rows=100 --replace --profile-file=profile.json --output-path=out
 ~~~
 
 Or, alternatively, you can re-arrange your constraints so that the ones that define types / null, are grouped as a single rule. After By re-grouping constraints, the following output, with random strings that violate the regex constraint, is generated:

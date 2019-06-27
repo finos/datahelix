@@ -1,10 +1,11 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.restrictions.*;
 
 import java.util.Optional;
+
+import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.DATETIME;
 
 public class DateTimeRestrictionsMergeOperation implements RestrictionMergeOperation {
     private final DateTimeRestrictionsMerger merger;
@@ -15,31 +16,18 @@ public class DateTimeRestrictionsMergeOperation implements RestrictionMergeOpera
     }
 
     @Override
-    public Optional<FieldSpec> applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merging) {
+    public FieldSpec applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merging) {
+        if (!merging.isTypeAllowed(DATETIME)){
+            return merging;
+        }
+
         MergeResult<DateTimeRestrictions> mergeResult = merger.merge(
             left.getDateTimeRestrictions(), right.getDateTimeRestrictions());
 
         if (!mergeResult.successful){
-            //no datetimes can be created
-
-            TypeRestrictions typeRestrictions = merging.getTypeRestrictions();
-            if (typeRestrictions == null){
-                typeRestrictions = DataTypeRestrictions.ALL_TYPES_PERMITTED;
-            }
-
-            return Optional.of(merging
-                .withTypeRestrictions(
-                    typeRestrictions.except(IsOfTypeConstraint.Types.DATETIME),
-                    left.getFieldSpecSource().combine(right.getFieldSpecSource())));
+            return merging.withoutType(DATETIME);
         }
 
-        if (mergeResult.restrictions == null) {
-            return Optional.of(merging); //no change
-        }
-
-        return Optional.of(merging
-            .withDateTimeRestrictions(
-                mergeResult.restrictions,
-                FieldSpecSource.fromFieldSpecs(left, right)));
+        return merging.withDateTimeRestrictions(mergeResult.restrictions);
     }
 }

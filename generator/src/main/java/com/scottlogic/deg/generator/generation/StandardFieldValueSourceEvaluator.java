@@ -1,11 +1,13 @@
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.generator.FlatMappingSpliterator;
-import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.*;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.DateTimeFieldValueSource;
+import com.scottlogic.deg.generator.generation.string.RegexStringGenerator;
+import com.scottlogic.deg.generator.generation.string.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -16,26 +18,17 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
 
     public List<FieldValueSource> getFieldValueSources(FieldSpec fieldSpec){
 
-        if (mustBeNull(fieldSpec)){
-            return Collections.singletonList(nullOnlySource);
-        }
+        if (fieldSpec.getWhitelist() != null && fieldSpec.getWhitelist() != null) {
 
-        if (fieldSpec.getSetRestrictions() != null && fieldSpec.getSetRestrictions().getWhitelist() != null) {
-            List<FieldValueSource> setRestrictionSources = getSetRestrictionSources(fieldSpec);
-            if (mayBeNull(fieldSpec)){
+            List<FieldValueSource> setRestrictionSources =
+                getSetRestrictionSources(fieldSpec.getWhitelist());
+            if (fieldSpec.isNullable()) {
                 return addNullSource(setRestrictionSources);
             }
             return setRestrictionSources;
         }
 
         List<FieldValueSource> validSources = new ArrayList<>();
-
-        if (fieldSpec.getMustContainRestriction() != null && !fieldSpec.getMustContainRestriction().getRequiredObjects().isEmpty()) {
-            List<FieldValueSource> mustContainRestrictionSources = getMustContainRestrictionSources(fieldSpec);
-            if (!mustContainRestrictionSources.isEmpty()){
-                return mustContainRestrictionSources;
-            }
-        }
 
         TypeRestrictions typeRestrictions = fieldSpec.getTypeRestrictions() != null
             ? fieldSpec.getTypeRestrictions()
@@ -53,7 +46,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             validSources.add(getDateTimeSource(fieldSpec));
         }
 
-        if (mayBeNull(fieldSpec)){
+        if (fieldSpec.isNullable()) {
             validSources.add(nullOnlySource);
         }
 
@@ -64,32 +57,14 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         return Stream.concat(setRestrictionSources.stream(), Stream.of(nullOnlySource)).collect(Collectors.toList());
     }
 
-    private boolean mustBeNull(FieldSpec fieldSpec) {
-        return fieldSpec.getNullRestrictions() != null
-            && fieldSpec.getNullRestrictions().nullness == Nullness.MUST_BE_NULL;
-    }
+    private List<FieldValueSource> getSetRestrictionSources(@NotNull Set<Object> whitelist) {
+        if (whitelist.isEmpty()){
+            return Collections.emptyList();
+        }
 
-    private List<FieldValueSource> getSetRestrictionSources(FieldSpec fieldSpec) {
-        List<Object> whitelist = new ArrayList<>(fieldSpec.getSetRestrictions().getWhitelist());
-         if (whitelist.isEmpty()){
-             return Collections.emptyList();
-         }
-
-        return Collections.singletonList(new CannedValuesFieldValueSource(whitelist));
-    }
-
-    private boolean mayBeNull(FieldSpec fieldSpec) {
-        return fieldSpec.getNullRestrictions() == null;
-    }
-
-    private List<FieldValueSource> getMustContainRestrictionSources(FieldSpec fieldSpec) {
-        Set<FieldSpec> mustContainRestrictionFieldSpecs = fieldSpec.getMustContainRestriction().getRequiredObjects();
-
-        return FlatMappingSpliterator.flatMap(mustContainRestrictionFieldSpecs.stream()
-            .map(this::getFieldValueSources),
-            List::stream)
-            .distinct()
-            .collect(Collectors.toList());
+        return Collections.singletonList(
+            new CannedValuesFieldValueSource(
+                new ArrayList<>(whitelist)));
     }
 
     private FieldValueSource getNumericSource(FieldSpec fieldSpec) {
@@ -103,10 +78,10 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
     }
 
     private Set<Object> getBlacklist(FieldSpec fieldSpec) {
-        if (fieldSpec.getSetRestrictions() == null)
+        if (fieldSpec.getBlacklistRestrictions() == null)
             return Collections.emptySet();
 
-        return new HashSet<>(fieldSpec.getSetRestrictions().getBlacklist());
+        return new HashSet<>(fieldSpec.getBlacklistRestrictions().getBlacklist());
     }
 
     private FieldValueSource getStringSource(FieldSpec fieldSpec) {
@@ -119,7 +94,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         Set<Object> blacklist = getBlacklist(fieldSpec);
 
         StringGenerator generator = stringRestrictions.createGenerator();
-        if (blacklist.size() > 0) {
+        if (!blacklist.isEmpty()) {
             RegexStringGenerator blacklistGenerator = RegexStringGenerator.createFromBlacklist(blacklist);
 
             generator = generator.intersect(blacklistGenerator);

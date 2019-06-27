@@ -64,7 +64,7 @@ class StringRestrictionsMergerTests {
     public void merge_withBothNotNullAndContradictory_shouldReturnFailWithNullRestrictions(){
         StringRestrictions left = mock(StringRestrictions.class);
         StringRestrictions right = mock(StringRestrictions.class);
-        MergeResult<StringRestrictions> merged = MergeResult.UNSUCCESSFUL;
+        MergeResult<StringRestrictions> merged = MergeResult.unsuccessful();
         StringRestrictionsMerger merger = new StringRestrictionsMerger();
         when(left.intersect(right)).thenReturn(merged);
 

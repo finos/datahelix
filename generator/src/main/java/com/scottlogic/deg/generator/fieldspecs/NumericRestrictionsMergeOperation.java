@@ -1,10 +1,11 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.restrictions.*;
 
 import java.util.Optional;
+
+import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.NUMERIC;
 
 public class NumericRestrictionsMergeOperation implements RestrictionMergeOperation {
     private final NumericRestrictionsMerger merger;
@@ -15,31 +16,19 @@ public class NumericRestrictionsMergeOperation implements RestrictionMergeOperat
     }
 
     @Override
-    public Optional<FieldSpec> applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merging) {
+    public FieldSpec applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merging) {
+        if (!merging.isTypeAllowed(NUMERIC)){
+            return merging;
+        }
+
         MergeResult<NumericRestrictions> mergeResult = merger.merge(
             left.getNumericRestrictions(), right.getNumericRestrictions());
 
         if (!mergeResult.successful) {
-            TypeRestrictions typeRestrictions = merging.getTypeRestrictions();
-            if (typeRestrictions == null){
-                typeRestrictions = DataTypeRestrictions.ALL_TYPES_PERMITTED;
-            }
-
-            return Optional.of(merging
-                .withTypeRestrictions(
-                    typeRestrictions.except(IsOfTypeConstraint.Types.NUMERIC),
-                    left.getFieldSpecSource().combine(right.getFieldSpecSource())));
+            return merging.withoutType(NUMERIC);
         }
 
-        NumericRestrictions numberRestrictions = mergeResult.restrictions;
-        if (numberRestrictions == null) {
-            return Optional.of(merging);
-        }
-
-        return Optional.of(merging
-            .withNumericRestrictions(
-                numberRestrictions,
-                FieldSpecSource.fromFieldSpecs(left, right)));
+        return merging.withNumericRestrictions(mergeResult.restrictions);
     }
 }
 

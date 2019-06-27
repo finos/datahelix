@@ -1,12 +1,12 @@
 package com.scottlogic.deg.generator.inputs.profileviolation;
 
-import com.scottlogic.deg.generator.Profile;
-import com.scottlogic.deg.generator.Rule;
-import com.scottlogic.deg.generator.constraints.Constraint;
-import com.scottlogic.deg.generator.constraints.atomic.NotConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
+import com.scottlogic.deg.common.profile.Profile;
+import com.scottlogic.deg.common.profile.Rule;
+import com.scottlogic.deg.common.profile.constraints.Constraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.NotConstraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
 import org.junit.Assert;
 
 import java.util.ArrayList;
@@ -59,8 +59,8 @@ public class TypeEqualityHelper {
      * @param actualProfile The actual profile.
      */
     public static void assertProfileTypeEquality(Profile expectedProfile, Profile actualProfile) {
-        ArrayList<Rule> expectedRules = new ArrayList<>(expectedProfile.rules);
-        ArrayList<Rule> actualRules = new ArrayList<>(actualProfile.rules);
+        ArrayList<Rule> expectedRules = new ArrayList<>(expectedProfile.getRules());
+        ArrayList<Rule> actualRules = new ArrayList<>(actualProfile.getRules());
         Assert.assertEquals("Rule list lengths do not match. Expected: " + expectedRules.size()
                 + ", Actual: " + actualRules.size(),
             expectedRules.size(),
@@ -78,8 +78,8 @@ public class TypeEqualityHelper {
      * @param actualRule The actual rule.
      */
     public static void assertRuleTypeEquality(Rule expectedRule, Rule actualRule) {
-        ArrayList<Constraint> expectedConstraints = new ArrayList<>(expectedRule.constraints);
-        ArrayList<Constraint> actualConstraints = new ArrayList<>(actualRule.constraints);
+        ArrayList<Constraint> expectedConstraints = new ArrayList<>(expectedRule.getConstraints());
+        ArrayList<Constraint> actualConstraints = new ArrayList<>(actualRule.getConstraints());
         assertConstraintListTypeEquality(expectedConstraints, actualConstraints);
     }
 
@@ -123,8 +123,8 @@ public class TypeEqualityHelper {
                 ((NotConstraint)actualConstraint).negatedConstraint);
         }
         else if (expectedConstraint instanceof AndConstraint) {
-            ArrayList<Constraint> expectedConstraints = new ArrayList<>(((AndConstraint) expectedConstraint).subConstraints);
-            ArrayList<Constraint> actualConstraints = new ArrayList<>(((AndConstraint) actualConstraint).subConstraints);
+            ArrayList<Constraint> expectedConstraints = new ArrayList<>(((AndConstraint) expectedConstraint).getSubConstraints());
+            ArrayList<Constraint> actualConstraints = new ArrayList<>(((AndConstraint) actualConstraint).getSubConstraints());
             assertConstraintListTypeEquality(expectedConstraints, actualConstraints);
         }
         else if (expectedConstraint instanceof OrConstraint) {

@@ -3,14 +3,12 @@ package com.scottlogic.deg.generator.restrictions;
 import com.scottlogic.deg.generator.decisiontree.testutils.EqualityComparer;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 
+import java.util.Objects;
+
 public class FieldSpecEqualityComparer implements EqualityComparer {
-    private EqualityComparer setRestrictionsComparer = new SetRestrictionsEqualityComparer();
     private EqualityComparer stringRestrictionsComparer = new StringRestrictionsEqualityComparer();
-    private EqualityComparer nullRestrictionsComparer = new NullRestrictionsEqualityComparer();
     private EqualityComparer typeRestrictionsComparer = new TypeRestrictionsEqualityComparer();
     private EqualityComparer dateTimeRestrictionsComparer = new DateTimeRestrictionsEqualityComparer();
-    private EqualityComparer formatRestrictionsComparer = new FormatRestrictionsEqualityComparer();
-    private EqualityComparer mustContainRestrictionsComparer = new MustContainRestrictionsEqualityComparer(this);
 
     @Override
     public int getHashCode(Object item) {
@@ -32,13 +30,10 @@ public class FieldSpecEqualityComparer implements EqualityComparer {
             return true;
         }
 
-        return setRestrictionsComparer.equals(fieldSpec1.getSetRestrictions(), fieldSpec2.getSetRestrictions())
+        return Objects.equals(fieldSpec1.getWhitelist(), fieldSpec2.getWhitelist())
         && stringRestrictionsComparer.equals(fieldSpec1.getStringRestrictions(), fieldSpec2.getStringRestrictions())
-        && nullRestrictionsComparer.equals(fieldSpec1.getNullRestrictions(), fieldSpec2.getNullRestrictions())
         && typeRestrictionsComparer.equals(fieldSpec1.getTypeRestrictions(), fieldSpec2.getTypeRestrictions())
-        && dateTimeRestrictionsComparer.equals(fieldSpec1.getDateTimeRestrictions(), fieldSpec2.getDateTimeRestrictions())
-        && formatRestrictionsComparer.equals(fieldSpec1.getFormatRestrictions(), fieldSpec2.getFormatRestrictions())
-        && mustContainRestrictionsComparer.equals(fieldSpec1.getMustContainRestriction(), fieldSpec2.getMustContainRestriction());
+        && dateTimeRestrictionsComparer.equals(fieldSpec1.getDateTimeRestrictions(), fieldSpec2.getDateTimeRestrictions());
     }
 }
 

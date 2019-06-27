@@ -1,10 +1,7 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.generator.Field;
-import com.scottlogic.deg.generator.ProfileFields;
-import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
-import com.scottlogic.deg.generator.generation.databags.DataBagSource;
-import com.scottlogic.deg.generator.generation.databags.MultiplexingDataBagSource;
+import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.ProfileFields;
 
 import java.util.*;
 import java.util.function.Function;

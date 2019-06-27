@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "0.1",
+  "fields": [
+    {"name": "forename"},
+    {"name": "surname"},
+    {"name": "fullname"}
+  ],
+  "rules": [
+    {
+      "rule": "notnull",
+      "constraints": [
+        { "allOf":
+          [
+            { "not": { "field": "forename", "is": "null" } },
+            { "not": { "field": "surname", "is": "null" } },
+            { "not": { "field": "fullname", "is": "null" } }
+          ]
+        }
+      ]
+    },
+    {
+      "rule": "forename",
+      "constraints": [
+        {"field": "forename", "is": "ofType", "value": "firstname"}
+      ]
+    },
+    {
+      "rule": "surname",
+      "constraints": [
+        {"field": "surname", "is": "ofType", "value": "lastname"}
+      ]
+    },
+    {
+      "rule": "fullname",
+      "constraints": [
+        {"field": "fullname", "is":  "ofType", "value":  "fullname"}
+      ]
+    }
+  ]
+}

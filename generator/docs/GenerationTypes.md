@@ -6,7 +6,7 @@ The generator supports the following data generation types
 * Interesting
 
 ## Random
-Generate some random data that abides by the given set of constraints. It is mandatory for a maximum row limit `-n=<row limit>` to be specified otherwise the tool would attempt to run forever. This mode has the potential to repeat data points, it does not keep track of values that have already been emitted.
+Generate some random data that abides by the given set of constraints. This mode has the potential to repeat data points, it does not keep track of values that have already been emitted.
 
 Examples:
 
@@ -17,6 +17,7 @@ Examples:
 
 Notes:
 - Random generation of data is infinite and is limited to 1000 by default, use `--max-rows` to enable generation of more data.
+
 
 ## Interesting
 See [this document](https://github.com/ScottLogic/datahelix/wiki/Interesting-data-generation) for more details on the _interesting generation mode_.

@@ -7,7 +7,7 @@ In multiple areas of the generator, we find ourselves with multiple streams of v
 
 There are multiple ways to perform this selection process; we refer to these as **combination strategies**. Different combination strategies have different properties.
 
-Our current default is the **pinning** strategy.
+Our current default is the **exhaustive** strategy.
 
 ## Exhaustive
 

@@ -1,39 +1,68 @@
 package com.scottlogic.deg.generator.restrictions;
 
+import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
+
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
-public class DateTimeRestrictions {
+public class DateTimeRestrictions extends AbstractTypedRestrictions {
+    private static final Timescale DEFAULT_GRANULARITY = Timescale.MILLIS;
+    private final Timescale granularity;
     public DateTimeLimit min;
     public DateTimeLimit max;
 
-    public static boolean isDateTime(Object o){
-        return o instanceof OffsetDateTime;
+    public DateTimeRestrictions() {
+        this(DEFAULT_GRANULARITY);
     }
 
+    public DateTimeRestrictions(final Timescale granularity) {
+        this.granularity = granularity;
+    }
+
+    public Timescale getGranularity() {
+        return granularity;
+    }
+
+    @Override
+    public String toString() {
+        return "min=" + min + ", max=" + max + " " + granularity.name();
+    }
+
+    @Override
+    protected IsOfTypeConstraint.Types getType() {
+        return IsOfTypeConstraint.Types.DATETIME;
+    }
+
+    @Override
     public boolean match(Object o) {
-        if(!DateTimeRestrictions.isDateTime(o)){
+        if (!isInstanceOf(o)) {
             return false;
         }
 
         OffsetDateTime d = (OffsetDateTime) o;
 
-        if(min != null){
-            if(d.compareTo(min.getLimit()) < (min.isInclusive() ? 0 : 1))
-            {
+        if (min != null) {
+            if (d.compareTo(min.getLimit()) < (min.isInclusive() ? 0 : 1)) {
                 return false;
             }
         }
 
-        if(max != null){
-            if(d.compareTo(max.getLimit()) > (max.isInclusive() ? 0 : -1))
-            {
+        if (max != null) {
+            if (d.compareTo(max.getLimit()) > (max.isInclusive() ? 0 : -1)) {
                 return false;
             }
         }
 
-        return true;
+        return isCorrectGranularity(d);
     }
+
+    private boolean isCorrectGranularity(OffsetDateTime inputDate) {
+        OffsetDateTime granularDate = granularity.getGranularityFunction().apply(inputDate);
+
+        return inputDate.equals(granularDate);
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -51,6 +80,12 @@ public class DateTimeRestrictions {
 
     public static class DateTimeLimit {
         private final OffsetDateTime limit;
+
+        @Override
+        public String toString() {
+            return String.format("%s%s",limit, inclusive ? " inclusive" : "");
+        }
+
         private final boolean inclusive;
 
         public DateTimeLimit(OffsetDateTime limit, boolean inclusive) {
@@ -87,8 +122,8 @@ public class DateTimeRestrictions {
             return minLimit.isAfter(maxLimit);
         }
 
-        private OffsetDateTime getReferenceTime(int nanoOffset){
-            if (inclusive){
+        private OffsetDateTime getReferenceTime(int nanoOffset) {
+            if (inclusive) {
                 return limit;
             }
 

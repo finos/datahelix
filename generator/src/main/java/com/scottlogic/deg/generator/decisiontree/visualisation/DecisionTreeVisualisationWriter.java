@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.decisiontree.visualisation;
 
-import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
 
 import java.io.IOException;
@@ -200,10 +200,6 @@ class NodeVisualiser {
 
         if (node.hasMarking(NodeMarking.STATICALLY_CONTRADICTORY)) {
             return "[color=\"red\"]";
-        }
-
-        if (node.hasMarking(NodeMarking.OPTIMISED)){
-            return "[color=\"blue\"]";
         }
 
         return "";

@@ -2,14 +2,13 @@ package com.scottlogic.deg.generator.guice;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.scottlogic.deg.generator.generation.GenerationConfig;
+import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.walker.*;
 
 public class DecisionTreeWalkerProvider implements Provider<DecisionTreeWalker> {
     private final DecisionTreeWalker reductiveDecisionTreeWalker;
     private final DecisionTreeWalker cartesianProductDecisionTreeWalker;
-    private final DecisionTreeWalker routedDecisionTreeWalker;
     private final RandomReductiveDecisionTreeWalker randomReductiveDecisionTreeWalker;
     private final GenerationConfigSource configSource;
 
@@ -17,12 +16,10 @@ public class DecisionTreeWalkerProvider implements Provider<DecisionTreeWalker> 
     public DecisionTreeWalkerProvider(
         ReductiveDecisionTreeWalker reductiveDecisionTreeWalker,
         CartesianProductDecisionTreeWalker cartesianProductDecisionTreeWalker,
-        DecisionTreeRoutesTreeWalker routedDecisionTreeWalker,
         RandomReductiveDecisionTreeWalker randomReductiveDecisionTreeWalker,
         GenerationConfigSource configSource) {
         this.reductiveDecisionTreeWalker = reductiveDecisionTreeWalker;
         this.cartesianProductDecisionTreeWalker = cartesianProductDecisionTreeWalker;
-        this.routedDecisionTreeWalker = routedDecisionTreeWalker;
         this.randomReductiveDecisionTreeWalker = randomReductiveDecisionTreeWalker;
         this.configSource = configSource;
     }
@@ -34,13 +31,10 @@ public class DecisionTreeWalkerProvider implements Provider<DecisionTreeWalker> 
                   return this.cartesianProductDecisionTreeWalker;
 
               case REDUCTIVE:
-                  if (this.configSource.getGenerationType() == GenerationConfig.DataGenerationType.RANDOM)
+                  if (this.configSource.getGenerationType() == DataGenerationType.RANDOM)
                       return this.randomReductiveDecisionTreeWalker;
 
                   return this.reductiveDecisionTreeWalker;
-
-              case ROUTED:
-                  return this.routedDecisionTreeWalker;
 
               default:
                   return this.reductiveDecisionTreeWalker;

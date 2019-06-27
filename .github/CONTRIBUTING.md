@@ -33,7 +33,7 @@ We adopt a modified subset of the [Google Java Coding Style](https://google.gith
 
 * [2.2](https://google.github.io/styleguide/javaguide.html#s2.2-file-encoding) Files are encoded in UTF-8
 * [2.3.1](https://google.github.io/styleguide/javaguide.html#s2.3.1-whitespace-characters) Use ASCII hard space (0x20) not tab for indentation
-* [4.1.1](https://google.github.io/styleguide/javaguide.html#s4.1.1-braces-always-used) Braces are used where optional
+* [4.1.1](https://google.github.io/styleguide/javaguide.html#s4.1.1-braces-always-used) Braces are used where optional (an exception is made for auto-generated code such as equals methods)
 * [4.1.2](https://google.github.io/styleguide/javaguide.html#s4.1.2-blocks-k-r-style) Nonempty blocks: K & R style
 * [4.1.3](https://google.github.io/styleguide/javaguide.html#s4.1.3-braces-empty-blocks) Empty blocks: may be concise
 * _**Contrary** to [4.2](https://google.github.io/styleguide/javaguide.html#s4.2-block-indentation)_: Block indentation: **4 spaces**

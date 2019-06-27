@@ -1,162 +1,146 @@
 package com.scottlogic.deg.generator.decisiontree;
 
-import com.scottlogic.deg.generator.FlatMappingSpliterator;
-import com.scottlogic.deg.generator.Profile;
-import com.scottlogic.deg.generator.Rule;
-import com.scottlogic.deg.generator.constraints.Constraint;
-import com.scottlogic.deg.generator.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.constraints.atomic.ViolatedAtomicConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.AndConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.ConditionalConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.NegatedGrammaticalConstraint;
-import com.scottlogic.deg.generator.constraints.grammatical.OrConstraint;
+import com.scottlogic.deg.common.profile.Profile;
+import com.scottlogic.deg.common.profile.Rule;
+import com.scottlogic.deg.common.profile.constraints.Constraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.ViolatedAtomicConstraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.NegatedGrammaticalConstraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.function.Function;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
     private final DecisionTreeSimplifier decisionTreeSimplifier = new DecisionTreeSimplifier();
 
-    private static Collection<Constraint> wrapEach(
-        Collection<Constraint> constraints,
-        Function<Constraint, Constraint> wrapFunc) {
-
-        return constraints.stream()
-            .map(wrapFunc)
-            .collect(Collectors.toList());
-    }
-
-    private static Collection<Constraint> negateEach(Collection<Constraint> constraints) {
-        return wrapEach(constraints, Constraint::negate);
-    }
-
-    private static Constraint reduceConditionalConstraint(ConditionalConstraint constraint) {
-        Constraint ifConstraint = constraint.condition;
-        Constraint thenConstraint = constraint.whenConditionIsTrue;
-        Constraint elseConstraint = constraint.whenConditionIsFalse;
-
-        return new OrConstraint(
-            ifConstraint.and(thenConstraint),
-            elseConstraint != null
-                ? ifConstraint.negate().and(elseConstraint)
-                : ifConstraint.negate());
-    }
-
-    private static Collection<ConstraintNode> asConstraintNodeList(Collection<AtomicConstraint> constraints) {
-
-        return Collections.singleton(
-            new TreeConstraintNode(
-                constraints,
-                Collections.emptyList(),
-                constraints.stream().anyMatch(ac -> ac instanceof ViolatedAtomicConstraint)
-                    ? Collections.singleton(NodeMarking.VIOLATED)
-                    : Collections.emptySet()
-                ));
-    }
-
-    private static Collection<ConstraintNode> asConstraintNodeList(AtomicConstraint constraint) {
-
-        return asConstraintNodeList(Collections.singleton(constraint));
-    }
-
-    private static Collection<ConstraintNode> asConstraintNodeList(DecisionNode decision) {
-        return Collections.singleton(
-            new TreeConstraintNode(
-                Collections.emptyList(),
-                Collections.singleton(decision)));
-    }
-
     @Override
     public DecisionTree analyse(Profile profile) {
-        return new DecisionTreeCollection(
-            profile.fields,
-            profile.rules.stream()
-                .map(rule -> new DecisionTree(convertRule(rule), profile.fields, profile.description))
-                .map(decisionTreeSimplifier::simplify)
-                .collect(Collectors.toList()))
-            .getMergedTree();
+        Iterator<ConstraintNode> nodes = profile.getRules().stream()
+            .map(this::convertRule)
+            .map(decisionTreeSimplifier::simplify)
+            .iterator();
+
+        return new DecisionTree(ConstraintNode.merge(nodes), profile.getFields(), profile.getDescription());
     }
 
     private ConstraintNode convertRule(Rule rule) {
-        Iterator<ConstraintNode> rootConstraintNodeFragments = FlatMappingSpliterator.flatMap(rule.constraints.stream(),
-            c -> convertConstraint(c).stream())
-            .iterator();
-
-        return ConstraintNode.merge(rootConstraintNodeFragments);
+        return convertAndConstraint(new AndConstraint(rule.getConstraints()));
     }
 
-    private Collection<ConstraintNode> convertConstraint(Constraint constraintToConvert) {
+    private ConstraintNode convertConstraint(Constraint constraintToConvert) {
         if (constraintToConvert instanceof NegatedGrammaticalConstraint) {
-            Constraint negatedConstraint = ((NegatedGrammaticalConstraint) constraintToConvert).negatedConstraint;
-
-            // ¬AND(X, Y, Z) reduces to OR(¬X, ¬Y, ¬Z)
-            if (negatedConstraint instanceof AndConstraint) {
-                Collection<Constraint> subConstraints = ((AndConstraint) negatedConstraint).subConstraints;
-
-                return convertConstraint(
-                    new OrConstraint(negateEach(subConstraints)));
-            }
-            // ¬OR(X, Y, Z) reduces to AND(¬X, ¬Y, ¬Z)
-            else if (negatedConstraint instanceof OrConstraint) {
-                Collection<Constraint> subConstraints = ((OrConstraint) negatedConstraint).subConstraints;
-
-                return convertConstraint(
-                    new AndConstraint(negateEach(subConstraints)));
-            }
-            // ¬IF(X, then: Y) reduces to AND(X, ¬Y)
-            // ¬IF(X, then: Y, else: Z) reduces to OR(AND(X, ¬Y), AND(¬X, ¬Z))
-            else if (negatedConstraint instanceof ConditionalConstraint) {
-                ConditionalConstraint conditional = (ConditionalConstraint) negatedConstraint;
-
-                Constraint positiveNegation = new AndConstraint(
-                    conditional.condition,
-                    conditional.whenConditionIsTrue.negate());
-
-                Constraint negativeNegation = conditional.whenConditionIsFalse == null
-                    ? null
-                    : new AndConstraint(
-                    conditional.condition.negate(),
-                    conditional.whenConditionIsFalse.negate());
-
-                return convertConstraint(
-                    negativeNegation != null
-                        ? positiveNegation.or(negativeNegation)
-                        : positiveNegation
-                );
-            }
-            // if we got this far, it must be an atomic constraint
-            else {
-                AtomicConstraint atomicConstraint = (AtomicConstraint) constraintToConvert;
-                return asConstraintNodeList(atomicConstraint);
-            }
+            return convertNegatedConstraint(constraintToConvert);
         }
-        // AND(X, Y, Z) becomes a flattened list of constraint nodes
         else if (constraintToConvert instanceof AndConstraint) {
-            Collection<Constraint> subConstraints = ((AndConstraint) constraintToConvert).subConstraints;
-
-            return FlatMappingSpliterator.flatMap(subConstraints.stream(),
-                c -> convertConstraint(c).stream())
-                .collect(Collectors.toList());
+            return convertAndConstraint((AndConstraint) constraintToConvert);
         }
-        // OR(X, Y, Z) becomes a decision node
         else if (constraintToConvert instanceof OrConstraint) {
-            Collection<Constraint> subConstraints = ((OrConstraint) constraintToConvert).subConstraints;
-
-            DecisionNode decisionPoint = new TreeDecisionNode(
-                subConstraints.stream()
-                    .map(c -> ConstraintNode.merge(convertConstraint(c).stream().iterator()))
-                    .collect(Collectors.toList()));
-
-            return asConstraintNodeList(decisionPoint);
+            return convertOrConstraint((OrConstraint) constraintToConvert);
         } else if (constraintToConvert instanceof ConditionalConstraint) {
-            return convertConstraint(reduceConditionalConstraint((ConditionalConstraint) constraintToConvert));
+            return convertConditionalConstraint((ConditionalConstraint) constraintToConvert);
         } else {
             AtomicConstraint atomicConstraint = (AtomicConstraint) constraintToConvert;
-            return asConstraintNodeList(atomicConstraint);
+            return asConstraintNode(atomicConstraint);
         }
     }
-}
 
+    private ConstraintNode convertNegatedConstraint(Object constraintToConvert) {
+        Constraint negatedConstraint = ((NegatedGrammaticalConstraint) constraintToConvert).getNegatedConstraint();
+
+        // ¬AND(X, Y, Z) reduces to OR(¬X, ¬Y, ¬Z)
+        if (negatedConstraint instanceof AndConstraint) {
+            Collection<Constraint> subConstraints = ((AndConstraint) negatedConstraint).getSubConstraints();
+
+            return convertOrConstraint(
+                new OrConstraint(negateEach(subConstraints)));
+        }
+        // ¬OR(X, Y, Z) reduces to AND(¬X, ¬Y, ¬Z)
+        else if (negatedConstraint instanceof OrConstraint) {
+            Collection<Constraint> subConstraints = ((OrConstraint) negatedConstraint).subConstraints;
+
+            return convertAndConstraint(
+                new AndConstraint(negateEach(subConstraints)));
+        }
+        // ¬IF(X, then: Y) reduces to AND(X, ¬Y)
+        // ¬IF(X, then: Y, else: Z) reduces to OR(AND(X, ¬Y), AND(¬X, ¬Z))
+        else if (negatedConstraint instanceof ConditionalConstraint) {
+            ConditionalConstraint conditional = (ConditionalConstraint) negatedConstraint;
+
+            AndConstraint positiveNegation =
+                new AndConstraint(conditional.condition, conditional.whenConditionIsTrue.negate());
+
+            if (conditional.whenConditionIsFalse == null) {
+                return convertAndConstraint(positiveNegation);
+            }
+
+            Constraint negativeNegation =
+                new AndConstraint(conditional.condition.negate(), conditional.whenConditionIsFalse.negate());
+
+            return convertOrConstraint(
+                new OrConstraint(positiveNegation, negativeNegation));
+
+        }
+        // if we got this far, it must be an atomic constraint
+        else {
+            AtomicConstraint atomicConstraint = (AtomicConstraint) constraintToConvert;
+            return asConstraintNode(atomicConstraint);
+        }
+    }
+
+    private ConstraintNode convertAndConstraint(AndConstraint constraintToConvert) {
+        // AND(X, Y, Z) becomes a flattened list of constraint nodes
+        Collection<Constraint> subConstraints = constraintToConvert.getSubConstraints();
+
+        Iterator<ConstraintNode> iterator = subConstraints.stream().map(this::convertConstraint)
+            .iterator();
+
+        return ConstraintNode.merge(iterator);
+    }
+
+    private ConstraintNode convertOrConstraint(OrConstraint constraintToConvert) {
+        // OR(X, Y, Z) becomes a decision node
+        Collection<Constraint> subConstraints = constraintToConvert.subConstraints;
+
+        List<ConstraintNode> options = subConstraints.stream()
+            .map(this::convertConstraint)
+            .collect(Collectors.toList());
+
+        return asConstraintNode(new TreeDecisionNode(options));
+    }
+
+    private ConstraintNode convertConditionalConstraint(ConditionalConstraint constraintToConvert) {
+        Constraint ifConstraint = constraintToConvert.condition;
+        Constraint thenConstraint = constraintToConvert.whenConditionIsTrue;
+        Constraint elseConstraint = constraintToConvert.whenConditionIsFalse;
+
+        OrConstraint convertedConstraint = new OrConstraint(
+            new AndConstraint(ifConstraint, thenConstraint),
+            elseConstraint == null ? ifConstraint.negate() : new AndConstraint(ifConstraint.negate(), elseConstraint));
+
+        return convertOrConstraint(convertedConstraint);
+    }
+
+    private static Collection<Constraint> negateEach(Collection<Constraint> constraints) {
+        return constraints.stream()
+            .map(Constraint::negate)
+            .collect(Collectors.toList());
+    }
+
+    private static ConstraintNode asConstraintNode(AtomicConstraint constraint) {
+        return new TreeConstraintNode(
+            Collections.singleton(constraint),
+            Collections.emptyList());
+    }
+
+    private static ConstraintNode asConstraintNode(DecisionNode decision) {
+        return new TreeConstraintNode(
+            Collections.emptyList(),
+            Collections.singleton(decision));
+    }
+}

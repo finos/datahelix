@@ -1,11 +1,11 @@
 package com.scottlogic.deg.generator.restrictions;
 
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 
-import static com.scottlogic.deg.generator.utils.NumberUtils.coerceToBigDecimal;
-
-public class NumericRestrictions {
+public class NumericRestrictions extends AbstractTypedRestrictions {
     public static final int DEFAULT_NUMERIC_SCALE = 20;
     private final int numericScale;
     public NumericLimit<BigDecimal> min;
@@ -19,20 +19,18 @@ public class NumericRestrictions {
         this.numericScale = numericScale;
     }
 
-    public NumericRestrictions(ParsedGranularity granularity) {
-        numericScale = granularity.getNumericGranularity().scale();
-    }
-
     public int getNumericScale() {
         return this.numericScale;
     }
 
-    public static boolean isNumeric(Object o){
-        return o instanceof Number;
+    @Override
+    protected IsOfTypeConstraint.Types getType() {
+        return IsOfTypeConstraint.Types.NUMERIC;
     }
 
+    @Override
     public boolean match(Object o) {
-        if (!NumericRestrictions.isNumeric(o)) {
+        if (!isInstanceOf(o)) {
             return false;
         }
 

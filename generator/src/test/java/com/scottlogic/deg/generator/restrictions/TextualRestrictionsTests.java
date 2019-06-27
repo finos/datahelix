@@ -1,9 +1,9 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.constraints.atomic.StandardConstraintTypes;
-import com.scottlogic.deg.generator.generation.IsinStringGenerator;
-import com.scottlogic.deg.generator.generation.RegexStringGenerator;
-import com.scottlogic.deg.generator.generation.StringGenerator;
+import com.scottlogic.deg.common.profile.constraints.atomic.StandardConstraintTypes;
+import com.scottlogic.deg.generator.generation.string.IsinStringGenerator;
+import com.scottlogic.deg.generator.generation.string.RegexStringGenerator;
+import com.scottlogic.deg.generator.generation.string.StringGenerator;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -188,7 +188,7 @@ class TextualRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{6,}$/ ∩ /[a-z]{0,9}/"));
+        Assert.assertThat(generator.toString(), equalTo("(/^.{6,}$/ ∩ /[a-z]{0,9}/)"));
     }
 
     @Test
@@ -208,7 +208,7 @@ class TextualRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{0,4}$/ ∩ /[a-z]{0,9}/"));
+        Assert.assertThat(generator.toString(), equalTo("(/^.{0,4}$/ ∩ /[a-z]{0,9}/)"));
     }
 
     @Test
@@ -228,7 +228,7 @@ class TextualRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{5}$/ ∩ /[a-z]{0,9}/"));
+        Assert.assertThat(generator.toString(), equalTo("(/^.{5}$/ ∩ /[a-z]{0,9}/)"));
     }
 
     @Test
@@ -249,7 +249,7 @@ class TextualRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{3,7}$/ ∩ /[a-z]{0,9}/"));
+        Assert.assertThat(generator.toString(), equalTo("(/^.{3,7}$/ ∩ /[a-z]{0,9}/)"));
     }
 
     @Test
@@ -268,7 +268,7 @@ class TextualRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{6,}$/ ∩ */[a-z]{0,9}/*"));
+        Assert.assertThat(generator.toString(), equalTo("(/^.{6,}$/ ∩ */[a-z]{0,9}/*)"));
     }
 
     @Test
@@ -289,7 +289,7 @@ class TextualRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{0,4}$/ ∩ */[a-z]{0,9}/*"));
+        Assert.assertThat(generator.toString(), equalTo("(/^.{0,4}$/ ∩ */[a-z]{0,9}/*)"));
     }
 
     @Test
@@ -309,7 +309,7 @@ class TextualRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{5}$/ ∩ */[a-z]{0,9}/*"));
+        Assert.assertThat(generator.toString(), equalTo("(/^.{5}$/ ∩ */[a-z]{0,9}/*)"));
     }
 
     @Test
@@ -330,7 +330,7 @@ class TextualRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator.toString(), equalTo("/^.{3,7}$/ ∩ */[a-z]{0,9}/*"));
+        Assert.assertThat(generator.toString(), equalTo("(/^.{3,7}$/ ∩ */[a-z]{0,9}/*)"));
     }
 
     @Test
@@ -354,12 +354,10 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withMaxLengthShorterThanCodeLengthAndMatchingStandardConstraint_shouldCreateNoStrings() {
-        StringRestrictions restrictions = aValid(StandardConstraintTypes.ISIN, false)
-            .intersect(maxLength(10)).restrictions;
+        MergeResult<StringRestrictions> intersect = aValid(StandardConstraintTypes.ISIN, false)
+            .intersect(maxLength(10));
 
-        StringGenerator generator = restrictions.createGenerator();
-
-        assertGeneratorCannotGenerateAnyStrings(generator);
+        Assert.assertFalse(intersect.successful);
     }
 
     @Test
@@ -393,23 +391,23 @@ class TextualRestrictionsTests {
     }
 
     @Test
-    void createGenerator_withMatchingRegexAndMatchingStandardConstraint_shouldCreateNoStrings() {
+    void createGenerator_withMatchingRegexAndMatchingStandardConstraint_shouldCreateStrings() {
         StringRestrictions restrictions = aValid(StandardConstraintTypes.ISIN, false)
             .intersect(matchingRegex("[a-zA-Z0-9]{12}", false)).restrictions;
 
         StringGenerator generator = restrictions.createGenerator();
 
-        assertGeneratorCannotGenerateAnyStrings(generator);
+        assertGeneratorCanGenerateAtLeastOneString(generator);
     }
 
     @Test
-    void createGenerator_withContainingRegexAndMatchingStandardConstraint_shouldCreateNoStrings() {
+    void createGenerator_withContainingRegexAndMatchingStandardConstraint_shouldCreateStrings() {
         StringRestrictions restrictions = aValid(StandardConstraintTypes.ISIN, false)
             .intersect(containsRegex("[a-zA-Z0-9]{12}", false)).restrictions;
 
         StringGenerator generator = restrictions.createGenerator();
 
-        assertGeneratorCannotGenerateAnyStrings(generator);
+        assertGeneratorCanGenerateAtLeastOneString(generator);
     }
 
     @Test
@@ -635,8 +633,13 @@ class TextualRestrictionsTests {
         return new MatchesStandardStringRestrictions(type, negate);
     }
 
-    private static void assertGeneratorCannotGenerateAnyStrings(StringGenerator generator){
+    private static void assertGeneratorCannotGenerateAnyStrings(StringGenerator generator) {
         Iterator<String> stringValueIterator = generator.generateAllValues().iterator();
         Assert.assertThat(stringValueIterator.hasNext(), is(false));
+    }
+
+    private static void assertGeneratorCanGenerateAtLeastOneString(StringGenerator generator) {
+        Iterator<String> stringValueIterator = generator.generateAllValues().iterator();
+        Assert.assertThat(stringValueIterator.hasNext(), is(true));
     }
 }

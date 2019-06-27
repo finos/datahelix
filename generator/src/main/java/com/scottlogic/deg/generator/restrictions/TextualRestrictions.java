@@ -1,8 +1,8 @@
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.generation.NoStringsStringGenerator;
-import com.scottlogic.deg.generator.generation.RegexStringGenerator;
-import com.scottlogic.deg.generator.generation.StringGenerator;
+import com.scottlogic.deg.generator.generation.string.NoStringsStringGenerator;
+import com.scottlogic.deg.generator.generation.string.RegexStringGenerator;
+import com.scottlogic.deg.generator.generation.string.StringGenerator;
 import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.util.*;
@@ -53,10 +53,6 @@ public class TextualRestrictions implements StringRestrictions {
             throw new IllegalArgumentException("Other StringRestrictions must not be null");
         }
 
-        if (other instanceof NoStringsPossibleStringRestrictions){
-            return new MergeResult<>(other);
-        }
-
         if (other instanceof MatchesStandardStringRestrictions){
             return other.intersect(this);
         }
@@ -78,7 +74,7 @@ public class TextualRestrictions implements StringRestrictions {
         );
 
         return merged.isContradictory()
-            ? MergeResult.UNSUCCESSFUL
+            ? MergeResult.unsuccessful()
             : new MergeResult<>(merged);
     }
 
@@ -131,7 +127,7 @@ public class TextualRestrictions implements StringRestrictions {
     }
 
     public boolean match(Object o) {
-        if (!StringRestrictions.isString(o)) {
+        if (!isInstanceOf(o)) {
             return false;
         }
 
@@ -316,14 +312,14 @@ public class TextualRestrictions implements StringRestrictions {
 
     @Override
     public String toString() {
-        return String.format("Strings: %d..%s (not: %s)\nmatching: %s\ncontaining: %s\nnotMatching: %s\nnotContaining: %s",
+        return String.format("Strings: %d..%s%s%s%s%s%s",
             minLength != null ? minLength : 0,
             maxLength != null ? maxLength.toString() : "",
-            excludedLengths.toString(),
-            patternsAsString(matchingRegex),
-            patternsAsString(containingRegex),
-            patternsAsString(notMatchingRegex),
-            patternsAsString(notContainingRegex));
+            excludedLengths.isEmpty() ? "" : " not lengths " + excludedLengths,
+            matchingRegex.isEmpty() ? "" : " matching: " + patternsAsString(matchingRegex),
+            containingRegex.isEmpty() ? "" : " containing: " + patternsAsString(containingRegex),
+            notMatchingRegex.isEmpty() ? "" : " not matching: " + patternsAsString(notMatchingRegex),
+            notContainingRegex.isEmpty() ? "" : " not containing: " + patternsAsString(notContainingRegex));
     }
 
     private String patternsAsString(Set<Pattern> patterns) {
