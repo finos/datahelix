@@ -5,20 +5,14 @@ import com.scottlogic.deg.common.profile.ProfileFields;
 public class DecisionTree {
     public final ConstraintNode rootNode;
     public final ProfileFields fields;
-    public final String description;
 
-    public DecisionTree(ConstraintNode rootNode, ProfileFields fields, String description) {
+    public DecisionTree(ConstraintNode rootNode, ProfileFields fields) {
         this.rootNode = rootNode;
         this.fields = fields;
-        this.description = description;
     }
 
     public ConstraintNode getRootNode() {
         return rootNode;
-    }
-
-    public String getDescription(){
-        return description;
     }
 
     public ProfileFields getFields() {
@@ -26,7 +20,7 @@ public class DecisionTree {
     }
 
     public String toString(){
-        return description;
+        return rootNode.toString();
     }
 }
 

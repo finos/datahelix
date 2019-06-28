@@ -67,14 +67,12 @@ public class RelatedFieldTreePartitioner implements TreePartitioner {
                 .sorted(Comparator.comparingInt(p -> p.id))
                 .map(partition -> new DecisionTree(
                     new TreeConstraintNode(partition.getAtomicConstraints(), partition.getDecisionNodes()),
-                    new ProfileFields(new ArrayList<>(partition.fields)),
-                    "Partitioned Tree"
+                    new ProfileFields(new ArrayList<>(partition.fields))
                 )),
             unpartitionedFields
                 .map(field -> new DecisionTree(
                     new TreeConstraintNode(),
-                    new ProfileFields(Collections.singletonList(field)),
-                    "Tree with Unpartitioned Fields"
+                    new ProfileFields(Collections.singletonList(field))
                 ))
             );
     }
