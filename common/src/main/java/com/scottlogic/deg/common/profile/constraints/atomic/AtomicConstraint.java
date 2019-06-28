@@ -18,9 +18,5 @@ public interface AtomicConstraint extends Constraint {
         return new NotConstraint(this);
     }
 
-    default Collection<Field> getFields() {
-        return Collections.singleton(getField());
-    }
-
     AtomicConstraint withRules(Set<RuleInformation> rules);
 }

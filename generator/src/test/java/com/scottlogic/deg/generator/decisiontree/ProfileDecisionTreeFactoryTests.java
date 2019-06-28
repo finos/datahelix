@@ -348,7 +348,9 @@ class ProfileDecisionTreeFactoryTests {
 
         givenRule(
             new ConditionalConstraint(
-                aEquals10.or(aGreaterThan10),
+                new OrConstraint(
+                    aEquals10,
+                    aGreaterThan10),
                 bGreaterThan20));
 
         Assert.assertTrue(

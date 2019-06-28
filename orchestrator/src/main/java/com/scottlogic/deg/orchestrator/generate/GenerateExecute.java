@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.util.stream.Stream;
 
 public class GenerateExecute {
-    private final ErrorReporter errorReporter;
     private final AllConfigSource configSource;
     private final SingleDatasetOutputTarget singleDatasetOutputTarget;
     private final ConfigValidator configValidator;
@@ -36,7 +35,6 @@ public class GenerateExecute {
         AllConfigSource configSource,
         SingleDatasetOutputTarget singleDatasetOutputTarget,
         ConfigValidator configValidator,
-        ErrorReporter errorReporter,
         ProfileValidator profileValidator,
         ProfileSchemaValidator profileSchemaValidator,
         DataGeneratorMonitor monitor) {
@@ -46,7 +44,6 @@ public class GenerateExecute {
         this.singleDatasetOutputTarget = singleDatasetOutputTarget;
         this.configValidator = configValidator;
         this.profileSchemaValidator = profileSchemaValidator;
-        this.errorReporter = errorReporter;
         this.profileValidator = profileValidator;
         this.monitor = monitor;
     }
