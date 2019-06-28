@@ -4,15 +4,19 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsLessThanConstantConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
-import com.scottlogic.deg.generator.fieldspecs.*;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecHelper;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static com.scottlogic.deg.generator.builders.ConstraintNodeBuilder.*;
+import static com.scottlogic.deg.generator.builders.ConstraintNodeBuilder.constraintNode;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.mockito.Matchers.any;
@@ -389,6 +393,66 @@ class ReductiveTreePrunerTests {
         //Assert
         ConstraintNode expected = tree;
         assertThat(actual, sameBeanAs(expected));
+    }
+
+    // With two identical options -> simplifies
+    // Ignore until issue #1096 is resolved.
+    @Disabled
+    @Test
+    public void pruneConstraintNode_redundantAnyOf_returnsConstraintNode() {
+        //Arrange
+        Field fieldA = new Field("A");
+        Field fieldB = new Field("B");
+
+        ConstraintNode tree = constraintNode()
+            .withDecision(
+                constraintNode()
+                    .where(fieldA).isNull(),
+                constraintNode()
+                    .where(fieldA).isNull())
+            .build();
+
+        Map<Field, FieldSpec> fieldSpecs = new HashMap<>();
+        fieldSpecs.put(fieldA, FieldSpec.Empty);
+        fieldSpecs.put(fieldB, FieldSpec.Empty);
+
+        //Act
+        Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, fieldSpecs);
+
+        //Assert
+        ConstraintNode expected = constraintNode()
+            .where(fieldA).isNull()
+            .build();
+        assertThat(actual.get(), sameBeanAs(expected));
+    }
+
+    // Both options contradict -> returns invalid tree
+    // Ignore until issue #1090 is resolved.
+    @Disabled
+    @Test
+    public void pruneConstraintNode_withFullyContradictoryTree_returnsContradictory() {
+        //Arrange
+        Field fieldA = new Field("A");
+        Field fieldB = new Field("B");
+
+        ConstraintNode tree = constraintNode()
+            .withDecision(
+                constraintNode()
+                    .where(fieldA).isNull(),
+                constraintNode()
+                    .where(fieldA).isNotNull())
+            .build();
+
+        Map<Field, FieldSpec> fieldSpecs = new HashMap<>();
+        fieldSpecs.put(fieldA, FieldSpec.Empty);
+        fieldSpecs.put(fieldB, FieldSpec.Empty);
+
+        //Act
+        Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, fieldSpecs);
+
+        //Assert
+        Merged<Object> expected = Merged.contradictory();
+        assertThat(actual.get(), sameBeanAs(expected));
     }
 
     private DataBagValue fieldValue() {
