@@ -401,27 +401,23 @@ class ReductiveTreePrunerTests {
     @Test
     public void pruneConstraintNode_redundantAnyOf_returnsConstraintNode() {
         //Arrange
-        Field fieldA = new Field("A");
-        Field fieldB = new Field("B");
-
         ConstraintNode tree = constraintNode()
             .withDecision(
                 constraintNode()
-                    .where(fieldA).isNull(),
+                    .where(field).isNull(),
                 constraintNode()
-                    .where(fieldA).isNull())
+                    .where(field).isNull())
             .build();
 
         Map<Field, FieldSpec> fieldSpecs = new HashMap<>();
-        fieldSpecs.put(fieldA, FieldSpec.Empty);
-        fieldSpecs.put(fieldB, FieldSpec.Empty);
+        fieldSpecs.put(field, FieldSpec.Empty);
 
         //Act
         Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, fieldSpecs);
 
         //Assert
         ConstraintNode expected = constraintNode()
-            .where(fieldA).isNull()
+            .where(field).isNull()
             .build();
         assertThat(actual.get(), sameBeanAs(expected));
     }
@@ -432,20 +428,16 @@ class ReductiveTreePrunerTests {
     @Test
     public void pruneConstraintNode_withFullyContradictoryTree_returnsContradictory() {
         //Arrange
-        Field fieldA = new Field("A");
-        Field fieldB = new Field("B");
-
         ConstraintNode tree = constraintNode()
             .withDecision(
                 constraintNode()
-                    .where(fieldA).isNull(),
+                    .where(field).isNull(),
                 constraintNode()
-                    .where(fieldA).isNotNull())
+                    .where(field).isNotNull())
             .build();
 
         Map<Field, FieldSpec> fieldSpecs = new HashMap<>();
-        fieldSpecs.put(fieldA, FieldSpec.Empty);
-        fieldSpecs.put(fieldB, FieldSpec.Empty);
+        fieldSpecs.put(field, FieldSpec.Empty);
 
         //Act
         Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, fieldSpecs);
