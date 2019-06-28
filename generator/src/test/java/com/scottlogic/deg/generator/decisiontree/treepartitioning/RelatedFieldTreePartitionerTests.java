@@ -202,6 +202,37 @@ class RelatedFieldTreePartitionerTests {
             tree(fields("C"), emptyConstraint));
     }
 
+    @Test
+    void simpleITwoPartitions() {
+        givenTree(
+            tree(fields("L", "T", "I", "E"),
+                constraint(new String[]{"L", "T", "I", "E"},
+                    decision(
+                        constraint("T", "L"),
+                        constraint("T")),
+                    decision(
+                        constraint("T", "L"),
+                        constraint("T")),
+                    decision(
+                        constraint("I", "E"),
+                        constraint("I")))));
+
+        expectTrees(
+            tree(fields("L", "T"),
+                constraint(new String[]{"L", "T"},
+                    decision(
+                        constraint("T", "L"),
+                        constraint("T")),
+                    decision(
+                        constraint("T", "L"),
+                        constraint("T")))),
+            tree(fields("I", "E"),
+                constraint(new String[]{"I", "E"},
+                    decision(
+                        constraint("I", "E"),
+                        constraint("I")))));
+    }
+
     private ConstraintNode constraint(String... fieldNames) {
         return constraint(fieldNames, new DecisionNode[0]);
     }
