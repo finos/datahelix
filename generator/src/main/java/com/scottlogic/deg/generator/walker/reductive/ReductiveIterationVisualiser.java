@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator.walker.reductive;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
@@ -60,7 +59,7 @@ public class ReductiveIterationVisualiser implements IterationVisualiser {
             StandardCharsets.UTF_8)) {
 
             new DecisionTreeVisualisationWriter(outWriter).writeDot(
-                new DecisionTree(rootNode, profileFields, description),
+                new DecisionTree(rootNode, profileFields),
                 "tree",
                 description);
         } catch (IOException e) {

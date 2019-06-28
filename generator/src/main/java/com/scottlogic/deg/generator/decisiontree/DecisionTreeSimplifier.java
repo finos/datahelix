@@ -8,8 +8,7 @@ public class DecisionTreeSimplifier {
     public DecisionTree simplify(DecisionTree originalTree) {
         return new DecisionTree(
             simplify(originalTree.getRootNode()),
-            originalTree.getFields(),
-            originalTree.getDescription());
+            originalTree.getFields());
     }
 
     public ConstraintNode simplify(ConstraintNode node) {

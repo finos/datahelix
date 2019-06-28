@@ -39,8 +39,7 @@ class DecisionTreeSimplifierTests {
             ),
             new ProfileFields(
                 new ArrayList<Field>() {{ add(new Field("Field 1")); }}
-            ),
-            ""
+            )
         );
         DecisionTreeSimplifier simplifier = new DecisionTreeSimplifier();
 
@@ -76,8 +75,7 @@ class DecisionTreeSimplifierTests {
             ),
             new ProfileFields(
                 new ArrayList<Field>() {{ add(new Field("Field 1")); }}
-            ),
-            ""
+            )
         );
         DecisionTreeSimplifier simplifier = new DecisionTreeSimplifier();
 
