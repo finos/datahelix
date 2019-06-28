@@ -7,7 +7,6 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.walker.reductive.Merged;
 import com.scottlogic.deg.generator.walker.reductive.ReductiveTreePruner;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -33,7 +32,7 @@ class UpfrontTreePrunerTests {
         fieldSpecs.put(fieldA, FieldSpec.Empty);
 
         ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
-        DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields), "desc");
+        DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
 
         Mockito.when(reductiveTreePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.of(prunedRoot));
 
@@ -54,7 +53,7 @@ class UpfrontTreePrunerTests {
         fieldSpecs.put(fieldB, FieldSpec.Empty);
 
         ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
-        DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields), "desc");
+        DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
 
         Mockito.when(reductiveTreePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.of(prunedRoot));
 
@@ -73,7 +72,7 @@ class UpfrontTreePrunerTests {
         fieldSpecs.put(fieldA, FieldSpec.Empty);
 
         ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
-        DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields), "desc");
+        DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
 
         //Act
         Mockito.when(reductiveTreePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.contradictory());

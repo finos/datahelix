@@ -4,7 +4,6 @@ import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.common.profile.constraints.atomic.ViolatedAtomicConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.NegatedGrammaticalConstraint;
@@ -26,7 +25,7 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
             .map(decisionTreeSimplifier::simplify)
             .iterator();
 
-        return new DecisionTree(ConstraintNode.merge(nodes), profile.getFields(), profile.getDescription());
+        return new DecisionTree(ConstraintNode.merge(nodes), profile.getFields());
     }
 
     private ConstraintNode convertRule(Rule rule) {

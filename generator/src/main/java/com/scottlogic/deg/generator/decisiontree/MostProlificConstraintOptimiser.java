@@ -30,7 +30,7 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
         if (newRootNode == null)
             return tree;
 
-        return new DecisionTree(newRootNode, tree.getFields(), tree.getDescription());
+        return new DecisionTree(newRootNode, tree.getFields());
     }
 
     private ConstraintNode optimiseLevelOfTree(ConstraintNode rootNode, int depth){
