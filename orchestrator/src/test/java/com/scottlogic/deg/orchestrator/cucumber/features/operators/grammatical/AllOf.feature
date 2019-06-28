@@ -93,10 +93,9 @@ Feature: User can specify that data must be created to conform to each of multip
       """
     Then the following data should be generated:
       | foo      |
-      | null     |
       | "Test01" |
 
-  Scenario: User attempts to combine two constraints that only intersect at the empty set within an allOf operator should generate null
+  Scenario: User attempts to combine two constraints that only intersect at the empty set within an allOf operator should not generate data
     Given there is a field foo
     And there is a constraint:
       """
@@ -105,9 +104,7 @@ Feature: User can specify that data must be created to conform to each of multip
         { "field": "foo", "is": "equalTo", "value": 5 }
       ]}
       """
-    Then the following data should be generated:
-      | foo  |
-      | null |
+    Then no data is created
 
   Scenario: User constrains type with not allOf construction should generate only datetimes
     Given there is a field foo
