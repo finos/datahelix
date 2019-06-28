@@ -38,7 +38,7 @@ class MostProlificConstraintOptimiserTest {
                     .where(B).isNotNull())
             .build();
 
-        ConstraintNode actual = optimiser.optimiseTree(new DecisionTree(original, new ProfileFields(Collections.EMPTY_LIST), ""))
+        ConstraintNode actual = optimiser.optimiseTree(new DecisionTree(original, new ProfileFields(Collections.EMPTY_LIST)))
             .getRootNode();
 
         assertThat(actual, sameBeanAs(original));
@@ -71,7 +71,7 @@ class MostProlificConstraintOptimiserTest {
                     .where(A).isNotInSet("a1"))
             .build();
 
-        ConstraintNode actual = optimiser.optimiseTree(new DecisionTree(original, new ProfileFields(Collections.EMPTY_LIST), ""))
+        ConstraintNode actual = optimiser.optimiseTree(new DecisionTree(original, new ProfileFields(Collections.EMPTY_LIST)))
             .getRootNode();
 
         assertThat(actual, sameBeanAs(original));
@@ -112,7 +112,7 @@ class MostProlificConstraintOptimiserTest {
                     .where(D).isNotInSet("d1"))
             .build();
 
-        ConstraintNode actual = optimiser.optimiseTree(new DecisionTree(original, new ProfileFields(Collections.EMPTY_LIST), ""))
+        ConstraintNode actual = optimiser.optimiseTree(new DecisionTree(original, new ProfileFields(Collections.EMPTY_LIST)))
             .getRootNode();
 
 

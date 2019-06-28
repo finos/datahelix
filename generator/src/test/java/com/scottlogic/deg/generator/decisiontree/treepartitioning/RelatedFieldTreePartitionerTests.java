@@ -241,7 +241,7 @@ class RelatedFieldTreePartitionerTests {
     }
 
     private DecisionTree tree(ProfileFields fields, ConstraintNode rootNode) {
-        return new DecisionTree(rootNode, fields, "Decision Tree");
+        return new DecisionTree(rootNode, fields);
     }
 
     @BeforeEach

@@ -4,9 +4,7 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
-import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
-import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategy;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,8 +27,8 @@ class RandomReductiveDecisionTreeWalkerTests {
     public void beforeEach(){
         tree = new DecisionTree(
             new TreeConstraintNode(),
-            new ProfileFields(Arrays.asList(new Field("field1"), new Field("field2"))),
-            "test-tree");
+            new ProfileFields(Arrays.asList(new Field("field1"), new Field("field2")))
+        );
 
         underlyingWalker = mock(ReductiveDecisionTreeWalker.class);
         walker = new RandomReductiveDecisionTreeWalker(underlyingWalker);
