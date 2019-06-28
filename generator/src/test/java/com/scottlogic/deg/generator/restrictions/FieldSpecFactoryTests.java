@@ -6,7 +6,6 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import org.junit.jupiter.api.Test;
 
-import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 
 class FieldSpecFactoryTests {

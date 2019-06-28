@@ -7,7 +7,6 @@ import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.CombiningFieldValueSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -42,7 +41,6 @@ public class FieldSpecValueGenerator {
         return createValuesFromSources(spec, fieldValueSources);
     }
 
-    @NotNull
     private Stream<DataBagValue> createValuesFromSources(FieldSpec spec, List<FieldValueSource> fieldValueSources) {
         FieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
 
