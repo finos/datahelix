@@ -6,7 +6,6 @@ import com.scottlogic.deg.output.writer.DataSetWriter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.QuoteMode;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -22,11 +21,10 @@ class CsvDataSetWriter implements DataSetWriter {
     private static final CSVFormat writerFormat = CSVFormat.RFC4180;
     private static final CSVFormat csvStringFormatter = writerFormat.withQuoteMode(QuoteMode.ALL);
 
-    @NotNull
     private final CSVPrinter csvPrinter;
     private final ProfileFields fieldOrder;
 
-    private CsvDataSetWriter(@NotNull CSVPrinter csvPrinter, ProfileFields fieldOrder) {
+    private CsvDataSetWriter(CSVPrinter csvPrinter, ProfileFields fieldOrder) {
         this.csvPrinter = csvPrinter;
         this.fieldOrder = fieldOrder;
     }

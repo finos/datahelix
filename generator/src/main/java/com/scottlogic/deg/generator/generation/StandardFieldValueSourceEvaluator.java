@@ -7,7 +7,6 @@ import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.DateTi
 import com.scottlogic.deg.generator.generation.string.RegexStringGenerator;
 import com.scottlogic.deg.generator.generation.string.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -57,7 +56,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         return Stream.concat(setRestrictionSources.stream(), Stream.of(nullOnlySource)).collect(Collectors.toList());
     }
 
-    private List<FieldValueSource> getSetRestrictionSources(@NotNull Set<Object> whitelist) {
+    private List<FieldValueSource> getSetRestrictionSources(Set<Object> whitelist) {
         if (whitelist.isEmpty()){
             return Collections.emptyList();
         }
