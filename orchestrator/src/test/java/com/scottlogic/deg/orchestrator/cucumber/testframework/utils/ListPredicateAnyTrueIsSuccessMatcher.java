@@ -9,8 +9,6 @@ import java.util.function.Function;
 
 public class ListPredicateAnyTrueIsSuccessMatcher extends BaseMatcher<List<Object>> {
     private final Function<Object, Boolean> predicate;
-    private final HashMap<Integer, Object> rowsThatMatch = new HashMap<>();
-    private Integer checkedRows;
 
     public ListPredicateAnyTrueIsSuccessMatcher(Function<Object, Boolean> predicate) {
         this.predicate = predicate;
@@ -20,23 +18,13 @@ public class ListPredicateAnyTrueIsSuccessMatcher extends BaseMatcher<List<Objec
     public void describeMismatch(Object item, Description description) {
         description
             .appendText("No rows match.");
-
     }
 
     @Override
     public boolean matches(Object o) {
         List<Object> values = (List<Object>) o;
-        checkedRows = values.size();
 
-        for (int index = 0; index < values.size(); index++){
-            Object value = values.get(index);
-
-            if (predicate.apply(value)){
-                rowsThatMatch.put(index, value);
-            }
-        }
-
-        return !rowsThatMatch.isEmpty();
+        return values.stream().anyMatch(predicate::apply);
     }
 
     @Override

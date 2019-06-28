@@ -1,6 +1,5 @@
 package com.scottlogic.deg.common.profile.constraints.grammatical;
 
-import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.RuleInformation;
 
@@ -32,11 +31,6 @@ public class OrConstraint implements GrammaticalConstraint {
     @Override
     public int hashCode(){
         return Objects.hash("OR", subConstraints);
-    }
-
-    @Override
-    public Collection<Field> getFields() {
-        return subConstraints.stream().flatMap(c -> c.getFields().stream()).collect(Collectors.toSet());
     }
 
     @Override
