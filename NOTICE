@@ -10,3 +10,6 @@ icu4j - http://icu-project.org/
 
 BSD 2-clause:
 automaton - http://www.brics.dk/automaton/
+
+Common Development and Distribution License 1.0:
+javax.json - https://javaee.github.io/jsonp
