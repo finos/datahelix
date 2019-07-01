@@ -17,7 +17,7 @@ public class DecisionTreeOptimiserProvider implements Provider<DecisionTreeOptim
 
     @Override
     public DecisionTreeOptimiser get() {
-        if(this.configSource.dontOptimise()) {
+        if(configSource.dontOptimise()) {
             return new NoopDecisionTreeOptimiser();
         }
         return new MostProlificConstraintOptimiser();

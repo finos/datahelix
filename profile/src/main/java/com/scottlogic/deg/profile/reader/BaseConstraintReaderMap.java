@@ -9,10 +9,12 @@ public class BaseConstraintReaderMap implements ConstraintReaderMap {
         new HashMap<>();
 
     public BaseConstraintReaderMap(Stream<ConstraintReaderMapEntrySource> providersToLoad) {
-        providersToLoad.forEach(p -> add(p.getConstraintReaderMapEntries()));
+        providersToLoad
+            .forEach(p ->
+                p.getConstraintReaderMapEntries()
+                    .forEach(this::add));
     }
 
-    @Override
     public void add(ConstraintReaderMapEntry entry) {
         if (!operatorAndValueToReadermap.containsKey(entry.getOperatorCode())) {
             operatorAndValueToReadermap.putIfAbsent(entry.getOperatorCode(), new HashMap<>());
@@ -20,11 +22,6 @@ public class BaseConstraintReaderMap implements ConstraintReaderMap {
         Map<String, ConstraintReader> valueToReaderMap =
             operatorAndValueToReadermap.get(entry.getOperatorCode());
         valueToReaderMap.put(entry.getValueCode(), entry.getReader());
-    }
-
-    @Override
-    public void add(Stream<ConstraintReaderMapEntry> entries) {
-        entries.forEach(e -> add(e));
     }
 
     @Override

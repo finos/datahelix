@@ -3,10 +3,6 @@ package com.scottlogic.deg.generator.decisiontree.testutils;
 public class DefaultEqualityComparer implements EqualityComparer {
     private final EqualityComparer collectionComparer;
 
-    public DefaultEqualityComparer() {
-        collectionComparer = new StrictOrderCollectionEqualityComparer(this);
-    }
-
     public DefaultEqualityComparer(EqualityComparer collectionComparer) {
         this.collectionComparer = collectionComparer;
     }

@@ -43,7 +43,6 @@ public class VisualiseExecute {
 
     @Inject
     public VisualiseExecute(DecisionTreeFactory profileAnalyser,
-                            ErrorReporter errorReporter,
                             FieldSpecFactory fieldSpecFactory,
                             FieldSpecMerger fieldSpecMerger,
                             OutputPath outputPath,

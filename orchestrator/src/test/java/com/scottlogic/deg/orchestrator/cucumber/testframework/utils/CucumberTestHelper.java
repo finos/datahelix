@@ -89,14 +89,6 @@ public class CucumberTestHelper {
         return testState.generationHasAlreadyOccured;
     }
 
-    public boolean generatorHasThrownException() {
-        return testState.testExceptions.size() > 0;
-    }
-
-    public boolean hasDataBeenGenerated() {
-        return testState.generatedObjects != null && testState.generatedObjects.size() > 0;
-    }
-
     public Collection<Exception> getThrownExceptions() {
         return testState.testExceptions;
     }

@@ -8,7 +8,6 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.walker.reductive.Merged;
 import com.scottlogic.deg.generator.walker.reductive.ReductiveTreePruner;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -29,8 +28,8 @@ public class UpfrontTreePruner {
 
         Merged<ConstraintNode> prunedNode = treePruner.pruneConstraintNode(tree.getRootNode(), fieldSpecs);
         if (prunedNode.isContradictory()) {
-            return new DecisionTree(null, tree.getFields(), tree.getDescription());
+            return new DecisionTree(null, tree.getFields());
         }
-        return new DecisionTree(prunedNode.get(), tree.getFields(), tree.getDescription());
+        return new DecisionTree(prunedNode.get(), tree.getFields());
     }
 }

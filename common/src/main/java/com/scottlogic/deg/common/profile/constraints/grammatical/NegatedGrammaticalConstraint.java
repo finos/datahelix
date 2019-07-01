@@ -1,9 +1,7 @@
 package com.scottlogic.deg.common.profile.constraints.grammatical;
 
-import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.RuleInformation;
 
-import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
 
@@ -42,11 +40,6 @@ public class NegatedGrammaticalConstraint implements GrammaticalConstraint {
     @Override
     public int hashCode(){
         return Objects.hash("NOT", negatedConstraint.hashCode());
-    }
-
-    @Override
-    public Collection<Field> getFields() {
-        return negatedConstraint.getFields();
     }
 
     @Override

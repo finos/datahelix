@@ -1,6 +1,5 @@
 package com.scottlogic.deg.common.profile.constraints.grammatical;
 
-import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.RuleInformation;
 
@@ -34,11 +33,6 @@ public class AndConstraint implements GrammaticalConstraint
     @Override
     public int hashCode(){
         return Objects.hash("AND", subConstraints);
-    }
-
-    @Override
-    public Collection<Field> getFields() {
-        return subConstraints.stream().flatMap(c -> c.getFields().stream()).collect(Collectors.toSet());
     }
 
     public Collection<Constraint> getSubConstraints() {
