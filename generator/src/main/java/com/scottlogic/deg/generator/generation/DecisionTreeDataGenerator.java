@@ -22,6 +22,7 @@ import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
+import com.scottlogic.deg.generator.decisiontree.TreeDecisionNode;
 import com.scottlogic.deg.generator.decisiontree.treepartitioning.TreePartitioner;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 import com.scottlogic.deg.generator.generation.databags.*;
@@ -65,7 +66,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         monitor.generationStarting();
         DecisionTree decisionTree = decisionTreeGenerator.analyse(profile);
 
-        decisionTree = upfrontTreePruner.runUpfrontPrune(decisionTree);
+        decisionTree = upfrontTreePruner.runUpfrontPrune(decisionTree, monitor);
         if (decisionTree.getRootNode() == null) {
             return Stream.empty();
         }

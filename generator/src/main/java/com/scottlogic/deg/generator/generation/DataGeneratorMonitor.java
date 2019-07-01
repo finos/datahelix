@@ -22,4 +22,5 @@ public interface DataGeneratorMonitor {
     default void generationStarting() {}
     default void rowEmitted(GeneratedObject row) {}
     default void endGeneration() {}
+    void addLineToPrintAtEndOfGeneration(String line);
 }

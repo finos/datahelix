@@ -92,7 +92,7 @@ public class DecisionTreeDataGeneratorTests {
             //Arrange
             DecisionTree outputTree = Mockito.mock(DecisionTree.class);
             Mockito.when(outputTree.getRootNode()).thenReturn(null);
-            Mockito.when(upfrontTreePruner.runUpfrontPrune(tree)).thenReturn(outputTree);
+            Mockito.when(upfrontTreePruner.runUpfrontPrune(tree, Mockito.mock(DataGeneratorMonitor.class))).thenReturn(outputTree);
 
             //Act
             Stream<GeneratedObject> actual = generator.generateData(profile);
@@ -106,7 +106,7 @@ public class DecisionTreeDataGeneratorTests {
             //Arrange
             DecisionTree outputTree = Mockito.mock(DecisionTree.class);
             Mockito.when(outputTree.getRootNode()).thenReturn(rootNode);
-            Mockito.when(upfrontTreePruner.runUpfrontPrune(tree)).thenReturn(outputTree);
+            Mockito.when(upfrontTreePruner.runUpfrontPrune(tree, Mockito.mock(DataGeneratorMonitor.class))).thenReturn(outputTree);
 
             //Act
             Stream<GeneratedObject> actual = generator.generateData(profile);

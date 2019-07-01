@@ -27,9 +27,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class MessagePrintingDataGeneratorMonitor implements ReductiveDataGeneratorMonitor {
-    private final PrintWriter writer;
-
+public class MessagePrintingDataGeneratorMonitor extends ReductiveDataGeneratorMonitor {
     public MessagePrintingDataGeneratorMonitor(PrintWriter writer) {
         this.writer = writer;
     }

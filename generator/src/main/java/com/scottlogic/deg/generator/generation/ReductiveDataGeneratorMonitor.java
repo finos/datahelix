@@ -21,11 +21,25 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.walker.reductive.ReductiveState;
 
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
-public interface ReductiveDataGeneratorMonitor extends DataGeneratorMonitor {
-    default void fieldFixedToValue(Field field, Object current) {}
-    default void unableToStepFurther(ReductiveState reductiveState) {}
-    default void noValuesForField(ReductiveState reductiveState, Field field) {}
-    default void unableToEmitRowAsSomeFieldSpecsAreEmpty(ReductiveState reductiveState, Map<Field, FieldSpec> fieldSpecsPerField) {}
+public abstract class ReductiveDataGeneratorMonitor implements DataGeneratorMonitor {
+    protected PrintWriter writer;
+
+    private List<String> linesToPrintAtEndOfGeneration = new ArrayList<>();
+    public void endGeneration() {
+        linesToPrintAtEndOfGeneration.forEach(writer::println);
+    }
+
+    public void addLineToPrintAtEndOfGeneration(String line) {
+        linesToPrintAtEndOfGeneration.add(line);
+    }
+    public void fieldFixedToValue(Field field, Object current) {}
+    public void unableToStepFurther(ReductiveState reductiveState) {}
+    public void noValuesForField(ReductiveState reductiveState, Field field) {}
+    public void unableToEmitRowAsSomeFieldSpecsAreEmpty(ReductiveState reductiveState, Map<Field, FieldSpec> fieldSpecsPerField) {}
 }
