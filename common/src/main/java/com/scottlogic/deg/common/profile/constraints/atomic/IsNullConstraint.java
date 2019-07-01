@@ -1,6 +1,5 @@
 package com.scottlogic.deg.common.profile.constraints.atomic;
 
-import com.scottlogic.deg.common.profile.constraintdetail.Nullness;
 import com.scottlogic.deg.common.profile.Field;
 
 import com.scottlogic.deg.common.profile.RuleInformation;
@@ -25,8 +24,7 @@ public class IsNullConstraint implements AtomicConstraint
 
     public String toString(){
         return String.format(
-                "`%s`: %s",
-                Nullness.MUST_BE_NULL,
+                "MUST_BE_NULL: %s",
                 field.toString());
     }
 

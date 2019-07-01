@@ -344,8 +344,6 @@ public class RegexStringGeneratorTests {
 
     @Test
     void isStringValidUtf8() {
-        RegexStringGenerator generator = new RegexStringGenerator("Test_(\\d{3}|[A-Z]{5})_(banana|apple)", true);
-
         String invalidStr = "a simple invalid 😘 string";
         String validStr = "a simple valid 亮 string";
 
@@ -355,8 +353,6 @@ public class RegexStringGeneratorTests {
 
     @Test
     void isCharValidUtf8() {
-        RegexStringGenerator generator = new RegexStringGenerator("Test_(\\d{3}|[A-Z]{5})_(banana|apple)", true);
-
         char invalidChar = 0xD83D;
         char validChar = '亮';
 

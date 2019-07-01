@@ -3,7 +3,6 @@ package com.scottlogic.deg.common.profile.constraints.atomic;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.RuleInformation;
 
-import java.util.Collection;
 import java.util.Set;
 
 public class ViolatedAtomicConstraint implements AtomicConstraint {
@@ -26,11 +25,6 @@ public class ViolatedAtomicConstraint implements AtomicConstraint {
     @Override
     public AtomicConstraint negate() {
         return new ViolatedAtomicConstraint(violatedConstraint.negate());
-    }
-
-    @Override
-    public Collection<Field> getFields() {
-        return violatedConstraint.getFields();
     }
 
     @Override

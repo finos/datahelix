@@ -39,7 +39,7 @@ class ReductiveDecisionTreeWalkerTests {
     public void beforeEach(){
         ProfileFields fields = new ProfileFields(Arrays.asList(field1, field2));
         rootNode = new TreeConstraintNode();
-        tree = new DecisionTree(rootNode, fields, "");
+        tree = new DecisionTree(rootNode, fields);
         ReductiveTreePruner treePruner = mock(ReductiveTreePruner.class);
         when(treePruner.pruneConstraintNode(eq(rootNode), any(), any())).thenReturn(Merged.of(rootNode));
 

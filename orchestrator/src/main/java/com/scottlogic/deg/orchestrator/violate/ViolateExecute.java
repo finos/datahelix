@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class ViolateExecute {
-    private final ErrorReporter errorReporter;
     private final AllConfigSource configSource;
     private final ConfigValidator configValidator;
     private final OutputTargetFactory outputTargetFactory;
@@ -44,7 +43,6 @@ public class ViolateExecute {
         AllConfigSource configSource,
         OutputTargetFactory outputTargetFactory,
         ConfigValidator configValidator,
-        ErrorReporter errorReporter,
         ProfileValidator profileValidator,
         ProfileSchemaValidator profileSchemaValidator,
         ProfileViolator profileViolator,
@@ -57,7 +55,6 @@ public class ViolateExecute {
         this.outputTargetFactory = outputTargetFactory;
         this.configValidator = configValidator;
         this.profileSchemaValidator = profileSchemaValidator;
-        this.errorReporter = errorReporter;
         this.profileValidator = profileValidator;
         this.profileViolator = profileViolator;
         this.dataGenerator = dataGenerator;
