@@ -18,8 +18,8 @@ class DecisionTreeSimplifierTests {
         DecisionTree tree = new DecisionTree(
             new TreeConstraintNode(
                 Arrays.asList(
-                    new IsInSetConstraint(new Field("Field 1"), new HashSet<Object>() {{ add(1); add(2); }}, null),
-                    new IsNullConstraint(new Field("Field 1"), null).negate()
+                    new IsInSetConstraint(new Field("Field 1"), new HashSet<Object>() {{ add(1); add(2); }}),
+                    new IsNullConstraint(new Field("Field 1")).negate()
                 ),
                 Collections.singletonList(
                     new TreeDecisionNode(
@@ -29,7 +29,7 @@ class DecisionTreeSimplifierTests {
                                     new IsInSetConstraint(new Field("Field 1"), new HashSet<Object>() {{
                                         add(1);
                                         add(2);
-                                    }}, null)
+                                    }})
                                 ),
                                 Collections.emptyList()
                             )
@@ -54,8 +54,8 @@ class DecisionTreeSimplifierTests {
         DecisionTree tree = new DecisionTree(
             new TreeConstraintNode(
                 Arrays.asList(
-                    new IsInSetConstraint(new Field("Field 1"), new HashSet<Object>() {{ add(1); add(2); }}, null),
-                    new IsNullConstraint(new Field("Field 1"), null).negate()
+                    new IsInSetConstraint(new Field("Field 1"), new HashSet<Object>() {{ add(1); add(2); }}),
+                    new IsNullConstraint(new Field("Field 1")).negate()
                 ),
                 Collections.singletonList(
                     new TreeDecisionNode(
@@ -65,7 +65,7 @@ class DecisionTreeSimplifierTests {
                                     new IsInSetConstraint(new Field("Field 2"), new HashSet<Object>() {{
                                         add("A");
                                         add("B");
-                                    }}, null)
+                                    }})
                                 ),
                                 Collections.emptyList()
                             )
@@ -85,12 +85,12 @@ class DecisionTreeSimplifierTests {
             new IsInSetConstraint(new Field("Field 1"), new HashSet<Object>() {{
                 add(1);
                 add(2);
-            }}, null),
-            new IsNullConstraint(new Field("Field 1"), null).negate(),
+            }}),
+            new IsNullConstraint(new Field("Field 1")).negate(),
             new IsInSetConstraint(new Field("Field 2"), new HashSet<Object>() {{
                 add("A");
                 add("B");
-            }}, null)
+            }})
         );
         Assert.assertTrue(result.rootNode.getAtomicConstraints().containsAll(expectedConstraints));
         Assert.assertTrue(result.rootNode.getDecisions().isEmpty());

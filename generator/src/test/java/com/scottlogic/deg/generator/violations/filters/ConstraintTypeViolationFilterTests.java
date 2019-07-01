@@ -28,7 +28,7 @@ public class ConstraintTypeViolationFilterTests {
     @Test
     public void canViolate_withMatchingTypeConstraint_returnsFalse() {
         //Arrange
-        Constraint inputConstraint = new IsInSetConstraint(null, Collections.singleton(""), null);
+        Constraint inputConstraint = new IsInSetConstraint(null, Collections.singleton(""));
 
         //Act
         boolean actual = target.canViolate(inputConstraint);
@@ -43,7 +43,7 @@ public class ConstraintTypeViolationFilterTests {
     @Test
     public void canViolate_withNonMatchingTypeConstraint_returnsTrue() {
         //Arrange
-        Constraint inputConstraint = new IsGreaterThanConstantConstraint(null, 100, null);
+        Constraint inputConstraint = new IsGreaterThanConstantConstraint(null, 100);
 
         //Act
         boolean actual = target.canViolate(inputConstraint);

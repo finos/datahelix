@@ -9,13 +9,11 @@ import java.util.Set;
 
 public class IsGreaterThanOrEqualToConstantConstraint implements AtomicConstraint {
     public final Field field;
-    private final Set<RuleInformation> rules;
     public final Number referenceValue;
 
-    public IsGreaterThanOrEqualToConstantConstraint(Field field, Number referenceValue, Set<RuleInformation> rules) {
+    public IsGreaterThanOrEqualToConstantConstraint(Field field, Number referenceValue) {
         this.referenceValue = referenceValue;
         this.field = field;
-        this.rules = rules;
     }
 
     @Override
@@ -47,16 +45,5 @@ public class IsGreaterThanOrEqualToConstantConstraint implements AtomicConstrain
     @Override
     public String toString() {
         return String.format("`%s` >= %s", field.name, referenceValue);
-    }
-
-
-    @Override
-    public Set<RuleInformation> getRules() {
-        return rules;
-    }
-
-    @Override
-    public AtomicConstraint withRules(Set<RuleInformation> rules) {
-        return new IsGreaterThanOrEqualToConstantConstraint(this.field, this.referenceValue, rules);
     }
 }

@@ -253,7 +253,7 @@ class RelatedFieldTreePartitionerTests {
         AtomicConstraint constraint = this.constraints.get(fieldName);
 
         if (constraint == null) {
-            constraint = new IsInSetConstraint(new Field(fieldName), Collections.singleton("sample-value"), rules());
+            constraint = new IsInSetConstraint(new Field(fieldName), Collections.singleton("sample-value"));
             this.constraints.put(fieldName, constraint);
         }
 
@@ -325,7 +325,4 @@ class RelatedFieldTreePartitionerTests {
         }
     }
 
-    private static Set<RuleInformation> rules(){
-        return Collections.singleton(new RuleInformation());
-    }
 }

@@ -96,9 +96,9 @@ class ProfileDecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithNoDecisions_IfProfileContainsOnlyAtomicConstraints() {
         List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
-        IsInSetConstraint constraint0 = new IsInSetConstraint(inputFieldList.get(0), Collections.singleton(10), rules());
-        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0, rules());
-        MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"), rules());
+        IsInSetConstraint constraint0 = new IsInSetConstraint(inputFieldList.get(0), Collections.singleton(10));
+        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
+        MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
         Rule testRule = new Rule(rule("test"), Arrays.asList(constraint0, constraint1, constraint2));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
 
@@ -116,9 +116,9 @@ class ProfileDecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithAllConstraintsInAtomicConstraintsCollection_IfProfileContainsOnlyAtomicConstraints() {
         List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
-        IsInSetConstraint constraint0 = new IsInSetConstraint(inputFieldList.get(0), Collections.singleton(10), rules());
-        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0, rules());
-        MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"), rules());
+        IsInSetConstraint constraint0 = new IsInSetConstraint(inputFieldList.get(0), Collections.singleton(10));
+        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
+        MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
         List<Constraint> inputConstraints = Arrays.asList(constraint0, constraint1, constraint2);
         Rule testRule = new Rule(rule("test"), inputConstraints);
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
@@ -139,10 +139,10 @@ class ProfileDecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithNoDecisions_IfProfileContainsOnlyAtomicConstraintsAndAndConstraints() {
         List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
-        IsInSetConstraint constraint0 = new IsInSetConstraint(inputFieldList.get(0), Collections.singleton(10), rules());
-        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0, rules());
+        IsInSetConstraint constraint0 = new IsInSetConstraint(inputFieldList.get(0), Collections.singleton(10));
+        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
         AndConstraint andConstraint0 = new AndConstraint(Arrays.asList(constraint0, constraint1));
-        MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"), rules());
+        MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
         Rule testRule = new Rule(rule("test"), Arrays.asList(andConstraint0, constraint2));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
         ProfileDecisionTreeFactory testObject = new ProfileDecisionTreeFactory();
@@ -159,10 +159,10 @@ class ProfileDecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithAllAtomicConstraintsInAtomicConstraintsCollection_IfProfileContainsOnlyAtomicConstraintsAndAndConstraints() {
         List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
-        IsInSetConstraint constraint0 = new IsInSetConstraint(inputFieldList.get(0), Collections.singleton(10), rules());
-        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0, rules());
+        IsInSetConstraint constraint0 = new IsInSetConstraint(inputFieldList.get(0), Collections.singleton(10));
+        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
         AndConstraint andConstraint0 = new AndConstraint(Arrays.asList(constraint0, constraint1));
-        MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"), rules());
+        MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
         Rule testRule = new Rule(rule("test"), Arrays.asList(andConstraint0, constraint2));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
 
@@ -184,11 +184,11 @@ class ProfileDecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithDecisionForEachOrConstraint() {
         List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
-        IsInSetConstraint constraint0 = new IsInSetConstraint(inputFieldList.get(0), Collections.singleton(10), rules());
-        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0, rules());
+        IsInSetConstraint constraint0 = new IsInSetConstraint(inputFieldList.get(0), Collections.singleton(10));
+        IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
         OrConstraint orConstraint0 = new OrConstraint(Arrays.asList(constraint0, constraint1));
-        IsInSetConstraint constraint2 = new IsInSetConstraint(inputFieldList.get(1), Collections.singleton("steam"), rules());
-        IsInSetConstraint constraint3 = new IsInSetConstraint(inputFieldList.get(1), Collections.singleton("diesel"), rules());
+        IsInSetConstraint constraint2 = new IsInSetConstraint(inputFieldList.get(1), Collections.singleton("steam"));
+        IsInSetConstraint constraint3 = new IsInSetConstraint(inputFieldList.get(1), Collections.singleton("diesel"));
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraint2, constraint3));
         Rule testRule = new Rule(rule("test"), Arrays.asList(orConstraint0, orConstraint1));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
@@ -205,11 +205,11 @@ class ProfileDecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithNoAtomicConstraints_IfAllAtomicConstraintsInProfileAreChildrenOfOrConstraints() {
         List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
-        IsInSetConstraint constraintA = new IsInSetConstraint(inputFieldList.get(0), Collections.singleton(10), rules());
-        IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0, rules());
+        IsInSetConstraint constraintA = new IsInSetConstraint(inputFieldList.get(0), Collections.singleton(10));
+        IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
         OrConstraint orConstraint0 = new OrConstraint(Arrays.asList(constraintA, constraintB));
-        IsInSetConstraint constraintC = new IsInSetConstraint(inputFieldList.get(1), Collections.singleton("steam"), rules());
-        IsInSetConstraint constraintD = new IsInSetConstraint(inputFieldList.get(1), Collections.singleton("diesel"), rules());
+        IsInSetConstraint constraintC = new IsInSetConstraint(inputFieldList.get(1), Collections.singleton("steam"));
+        IsInSetConstraint constraintD = new IsInSetConstraint(inputFieldList.get(1), Collections.singleton("diesel"));
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraintC, constraintD));
         Rule testRule = new Rule(rule("test"), Arrays.asList(orConstraint0, orConstraint1));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
@@ -226,11 +226,11 @@ class ProfileDecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfAllAtomicConstraintsInProfileAreChildrenOfOrConstraints() {
         List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
-        IsInSetConstraint constraintA = new IsInSetConstraint(inputFieldList.get(0), Collections.singleton(10), rules());
-        IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0, rules());
+        IsInSetConstraint constraintA = new IsInSetConstraint(inputFieldList.get(0), Collections.singleton(10));
+        IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
         OrConstraint orConstraint0 = new OrConstraint(Arrays.asList(constraintA, constraintB));
-        IsInSetConstraint constraintC = new IsInSetConstraint(inputFieldList.get(1), Collections.singleton("steam"), rules());
-        IsInSetConstraint constraintD = new IsInSetConstraint(inputFieldList.get(1), Collections.singleton("diesel"), rules());
+        IsInSetConstraint constraintC = new IsInSetConstraint(inputFieldList.get(1), Collections.singleton("steam"));
+        IsInSetConstraint constraintD = new IsInSetConstraint(inputFieldList.get(1), Collections.singleton("diesel"));
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraintC, constraintD));
         Rule testRule = new Rule(rule("test"), Arrays.asList(orConstraint0, orConstraint1));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
@@ -261,13 +261,13 @@ class ProfileDecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfAllAtomicConstraintsInProfileAreChildrenOfOrAndAndConstraints() {
         List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
-        IsInSetConstraint constraintA = new IsInSetConstraint(inputFieldList.get(0), Collections.singleton(10), rules());
-        IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0, rules());
-        IsGreaterThanConstantConstraint constraintC = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 5, rules());
+        IsInSetConstraint constraintA = new IsInSetConstraint(inputFieldList.get(0), Collections.singleton(10));
+        IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
+        IsGreaterThanConstantConstraint constraintC = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 5);
         AndConstraint andConstraint0 = new AndConstraint(Arrays.asList(constraintC, constraintB));
         OrConstraint orConstraint0 = new OrConstraint(Arrays.asList(constraintA, andConstraint0));
-        IsInSetConstraint constraintD = new IsInSetConstraint(inputFieldList.get(1), Collections.singleton("steam"), rules());
-        IsInSetConstraint constraintE = new IsInSetConstraint(inputFieldList.get(1), Collections.singleton("diesel"), rules());
+        IsInSetConstraint constraintD = new IsInSetConstraint(inputFieldList.get(1), Collections.singleton("steam"));
+        IsInSetConstraint constraintE = new IsInSetConstraint(inputFieldList.get(1), Collections.singleton("diesel"));
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraintD, constraintE));
         Rule testRule = new Rule(rule("test"), Arrays.asList(orConstraint0, orConstraint1));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
@@ -303,9 +303,9 @@ class ProfileDecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfConditionalConstraintIsPresent() {
         List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
-        IsInSetConstraint constraintA = new IsInSetConstraint(inputFieldList.get(0), Collections.singleton(10), rules());
-        IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 10, rules());
-        IsGreaterThanConstantConstraint constraintC = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 20, rules());
+        IsInSetConstraint constraintA = new IsInSetConstraint(inputFieldList.get(0), Collections.singleton(10));
+        IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 10);
+        IsGreaterThanConstantConstraint constraintC = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 20);
         ConditionalConstraint conditionalConstraint = new ConditionalConstraint(constraintA, constraintB, constraintC);
         Rule testRule = new Rule(rule("test"), Collections.singletonList(conditionalConstraint));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
@@ -342,9 +342,9 @@ class ProfileDecisionTreeFactoryTests {
     // Checks IF (A OR B) THEN C
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfConditionalConstraintWithNestedOrIsPresent() {
-        AtomicConstraint aEquals10 = new IsInSetConstraint(fieldA, Collections.singleton(10), rules());
-        AtomicConstraint aGreaterThan10 = new IsGreaterThanConstantConstraint(fieldA, 10, rules());
-        AtomicConstraint bGreaterThan20 = new IsGreaterThanConstantConstraint(fieldB, 20, rules());
+        AtomicConstraint aEquals10 = new IsInSetConstraint(fieldA, Collections.singleton(10));
+        AtomicConstraint aGreaterThan10 = new IsGreaterThanConstantConstraint(fieldA, 10);
+        AtomicConstraint bGreaterThan20 = new IsGreaterThanConstantConstraint(fieldB, 20);
 
         givenRule(
             new ConditionalConstraint(
@@ -382,9 +382,9 @@ class ProfileDecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfNegatedConditionalConstraintIsPresent() {
         List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
-        IsInSetConstraint constraintA = new IsInSetConstraint(inputFieldList.get(0), Collections.singleton(10), rules());
-        IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 20, rules());
-        IsGreaterThanConstantConstraint constraintC = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 10, rules());
+        IsInSetConstraint constraintA = new IsInSetConstraint(inputFieldList.get(0), Collections.singleton(10));
+        IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 20);
+        IsGreaterThanConstantConstraint constraintC = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 10);
         ConditionalConstraint conditionalConstraint = new ConditionalConstraint(constraintA, constraintB, constraintC);
         Constraint notConstraint = conditionalConstraint.negate();
         Rule testRule = new Rule(rule("test"), Collections.singletonList(notConstraint));
@@ -427,8 +427,8 @@ class ProfileDecisionTreeFactoryTests {
         // is equivalent to
         // A ^ ¬B
 
-        AtomicConstraint aEqualTo10 = new IsInSetConstraint(fieldA, Collections.singleton(10), rules());
-        AtomicConstraint bGreaterThan20 = new IsGreaterThanConstantConstraint(fieldB, 20, rules());
+        AtomicConstraint aEqualTo10 = new IsInSetConstraint(fieldA, Collections.singleton(10));
+        AtomicConstraint bGreaterThan20 = new IsGreaterThanConstantConstraint(fieldB, 20);
 
         Constraint inputRule = new ConditionalConstraint(aEqualTo10, bGreaterThan20).negate();
 
@@ -449,7 +449,7 @@ class ProfileDecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfDoubleNegationIsPresent() {
         List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
-        IsInSetConstraint constraintA = new IsInSetConstraint(inputFieldList.get(0), Collections.singleton(10), rules());
+        IsInSetConstraint constraintA = new IsInSetConstraint(inputFieldList.get(0), Collections.singleton(10));
         Constraint notConstraint0 = constraintA.negate();
         Constraint notConstraint1 = notConstraint0.negate();
         Rule testRule = new Rule(rule("test"), Collections.singletonList(notConstraint1));
@@ -472,8 +472,8 @@ class ProfileDecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfNegatedAndIsPresent() {
         List<Field> inputFieldList = Arrays.asList(new Field("one"), new Field("two"), new Field("three"));
-        IsInSetConstraint constraintA = new IsInSetConstraint(inputFieldList.get(0), Collections.singleton(10), rules());
-        IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 5, rules());
+        IsInSetConstraint constraintA = new IsInSetConstraint(inputFieldList.get(0), Collections.singleton(10));
+        IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 5);
         NegatedGrammaticalConstraint notConstraint = (NegatedGrammaticalConstraint) new AndConstraint(Arrays.asList(constraintA, constraintB)).negate();
         Rule testRule = new Rule(rule("test"), Collections.singletonList(notConstraint));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
@@ -506,9 +506,9 @@ class ProfileDecisionTreeFactoryTests {
     // (A OR B) OR C
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfNestedOrsArePresent() {
-        AtomicConstraint constraintA = new IsInSetConstraint(fieldA, Collections.singleton(10), rules());
-        AtomicConstraint constraintB = new IsGreaterThanConstantConstraint(fieldB, 20, rules());
-        AtomicConstraint constraintC = new IsGreaterThanConstantConstraint(fieldB, 10, rules());
+        AtomicConstraint constraintA = new IsInSetConstraint(fieldA, Collections.singleton(10));
+        AtomicConstraint constraintB = new IsGreaterThanConstantConstraint(fieldB, 20);
+        AtomicConstraint constraintC = new IsGreaterThanConstantConstraint(fieldB, 10);
 
         givenRule(
             new OrConstraint(
@@ -547,10 +547,6 @@ class ProfileDecisionTreeFactoryTests {
         }
 
         return match;
-    }
-
-    private static Set<RuleInformation> rules(){
-        return Collections.singleton(rule("rules"));
     }
 
     private static RuleInformation rule(String description){

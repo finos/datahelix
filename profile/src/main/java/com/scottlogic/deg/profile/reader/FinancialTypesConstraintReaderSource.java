@@ -23,11 +23,11 @@ public class FinancialTypesConstraintReaderSource implements ConstraintReaderMap
                 case CUSIP:
                 case RIC:
                     return new AndConstraint(
-                        new MatchesStandardConstraint(field, standardType, rules),
-                        new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.STRING, rules)
+                        new MatchesStandardConstraint(field, standardType),
+                        new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.STRING)
                     );
                 default:
-                    return new MatchesStandardConstraint(field, standardType, rules);
+                    return new MatchesStandardConstraint(field, standardType);
             }
         };
 

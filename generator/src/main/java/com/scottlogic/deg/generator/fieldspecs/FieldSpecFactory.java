@@ -222,7 +222,7 @@ public class FieldSpecFactory {
 
     private FieldSpec construct(MatchesStandardConstraint constraint, boolean negate) {
         if (constraint.standard.equals(StandardConstraintTypes.RIC)) {
-            return construct(new MatchesRegexConstraint(constraint.field, Pattern.compile(RIC_REGEX), constraint.getRules()), negate);
+            return construct(new MatchesRegexConstraint(constraint.field, Pattern.compile(RIC_REGEX)), negate);
         }
 
         return FieldSpec.Empty

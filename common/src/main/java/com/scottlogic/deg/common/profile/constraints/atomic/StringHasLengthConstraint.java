@@ -9,15 +9,13 @@ import java.util.Set;
 public class StringHasLengthConstraint implements AtomicConstraint {
     public final Field field;
     public final int referenceValue;
-    private final Set<RuleInformation> rules;
 
-    public StringHasLengthConstraint(Field field, int referenceValue, Set<RuleInformation> rules) {
+    public StringHasLengthConstraint(Field field, int referenceValue) {
         if (referenceValue < 0){
             throw new IllegalArgumentException("Cannot create an StringHasLengthConstraint for field '" +
                 field.name + "' with a a negative length.");
         }
 
-        this.rules = rules;
         this.referenceValue = referenceValue;
         this.field = field;
     }
@@ -50,14 +48,4 @@ public class StringHasLengthConstraint implements AtomicConstraint {
 
     @Override
     public String toString() { return String.format("`%s` length = %s", field.name, referenceValue); }
-
-    @Override
-    public Set<RuleInformation> getRules() {
-        return rules;
-    }
-
-    @Override
-    public AtomicConstraint withRules(Set<RuleInformation> rules) {
-        return new StringHasLengthConstraint(this.field, this.referenceValue, rules);
-    }
 }

@@ -6,13 +6,11 @@ import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
-import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -32,8 +30,8 @@ class ReductiveFieldSpecBuilderTests {
         Field field1 = new Field("field");
         TreeConstraintNode rootNode =
             new TreeConstraintNode(
-                new IsNullConstraint(field1, Collections.emptySet()),
-                new IsNullConstraint(field1, Collections.emptySet()).negate());
+                new IsNullConstraint(field1),
+                new IsNullConstraint(field1).negate());
 
         Set<FieldSpec> field = builder.getDecisionFieldSpecs(rootNode, field1);
 
@@ -47,7 +45,7 @@ class ReductiveFieldSpecBuilderTests {
         FieldSpecValueGenerator valueGenerator = mock(FieldSpecValueGenerator.class);
         ReductiveFieldSpecBuilder builder = new ReductiveFieldSpecBuilder(reducer, mock(FieldSpecMerger.class));
         Field field1 = new Field("field");
-        TreeConstraintNode rootNode = new TreeConstraintNode(new IsNullConstraint(field1, Collections.emptySet()));
+        TreeConstraintNode rootNode = new TreeConstraintNode(new IsNullConstraint(field1));
         when(valueGenerator.generate(FieldSpec.Empty)).thenReturn(Stream.of(mock(DataBagValue.class)));
 
         Set<FieldSpec> field = builder.getDecisionFieldSpecs(rootNode, field1);

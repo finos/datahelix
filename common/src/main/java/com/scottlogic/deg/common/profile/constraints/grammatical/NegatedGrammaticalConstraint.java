@@ -42,11 +42,6 @@ public class NegatedGrammaticalConstraint implements GrammaticalConstraint {
         return Objects.hash("NOT", negatedConstraint.hashCode());
     }
 
-    @Override
-    public Set<RuleInformation> getRules() {
-        return negatedConstraint.getRules();
-    }
-
     public GrammaticalConstraint getNegatedConstraint() {
         return negatedConstraint;
     }

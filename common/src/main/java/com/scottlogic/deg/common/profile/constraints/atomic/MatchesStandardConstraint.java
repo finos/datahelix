@@ -9,12 +9,10 @@ import java.util.Set;
 public class MatchesStandardConstraint implements AtomicConstraint {
     public final Field field;
     public final StandardConstraintTypes standard;
-    private final Set<RuleInformation> rules;
 
-    public MatchesStandardConstraint(Field field, StandardConstraintTypes standard, Set<RuleInformation> rules) {
+    public MatchesStandardConstraint(Field field, StandardConstraintTypes standard) {
         this.field = field;
         this.standard = standard;
-        this.rules = rules;
     }
 
     @Override
@@ -25,11 +23,6 @@ public class MatchesStandardConstraint implements AtomicConstraint {
     @Override
     public Field getField() {
         return field;
-    }
-
-    @Override
-    public Set<RuleInformation> getRules() {
-        return rules;
     }
 
     @Override
@@ -46,11 +39,6 @@ public class MatchesStandardConstraint implements AtomicConstraint {
     @Override
     public int hashCode(){
         return Objects.hash(field, standard);
-    }
-
-    @Override
-    public AtomicConstraint withRules(Set<RuleInformation> rules) {
-        return new MatchesStandardConstraint(this.field, this.standard, rules);
     }
 }
 

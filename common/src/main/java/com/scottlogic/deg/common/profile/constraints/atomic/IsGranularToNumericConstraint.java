@@ -10,10 +10,9 @@ import java.util.Set;
 
 public class IsGranularToNumericConstraint implements AtomicConstraint {
     public final Field field;
-    private final Set<RuleInformation> rules;
     public final ParsedGranularity granularity;
 
-    public IsGranularToNumericConstraint(Field field, ParsedGranularity granularity, Set<RuleInformation> rules) {
+    public IsGranularToNumericConstraint(Field field, ParsedGranularity granularity) {
         if(field == null)
             throw new IllegalArgumentException("field must not be null");
         if(granularity == null)
@@ -21,7 +20,6 @@ public class IsGranularToNumericConstraint implements AtomicConstraint {
 
         this.granularity = granularity;
         this.field = field;
-        this.rules = rules;
     }
 
     @Override
@@ -48,17 +46,6 @@ public class IsGranularToNumericConstraint implements AtomicConstraint {
     @Override
     public int hashCode(){
         return Objects.hash(field, granularity.getNumericGranularity());
-    }
-
-
-    @Override
-    public Set<RuleInformation> getRules() {
-        return rules;
-    }
-
-    @Override
-    public AtomicConstraint withRules(Set<RuleInformation> rules) {
-        return new IsGranularToNumericConstraint(this.field, this.granularity, rules);
     }
 
     @Override

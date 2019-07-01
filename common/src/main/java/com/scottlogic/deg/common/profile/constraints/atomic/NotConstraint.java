@@ -61,15 +61,4 @@ public class NotConstraint implements AtomicConstraint {
     public int hashCode(){
         return Objects.hash("NOT", negatedConstraint.hashCode());
     }
-
-
-    @Override
-    public Set<RuleInformation> getRules() {
-        return negatedConstraint.getRules();
-    }
-
-    @Override
-    public AtomicConstraint withRules(Set<RuleInformation> rules) {
-        return new NotConstraint(this.negatedConstraint.withRules(rules));
-    }
 }
