@@ -413,6 +413,7 @@ firstName,age,nationalInsurance
 ## Next steps
 
 That's the end of our getting started guide. Hopefully it has given you a good understanding of what the DataHelix generator is capable of. If you'd like to find out more about the various constraints the tool supports, the [Profile Developer Guide](docs/ProfileDeveloperGuide.md) is a good next step. You might also be interested in the [examples folder](https://github.com/finos/datahelix/tree/master/examples), which illustrates various features of the generator.
+For more detail about the behaviour of certain profiles, see the  [behaviour in detail.](./docs/BehaviourInDetail.md)
 
 ## Contributing
 
