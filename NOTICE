@@ -1,4 +1,27 @@
 DataHelix - FINOS
-Copyright 2018 Scott Logic Ltd
+Copyright 2018 - 2019 Scott Logic Ltd 
 
 This product includes software developed at the Fintech Open Source Foundation (https://www.finos.org/).
+
+The following dependencies are provided under other licenses.
+
+ICU License:
+icu4j - http://icu-project.org/
+
+BSD 2-clause:
+automaton - http://www.brics.dk/automaton/
+
+BSD License 3:
+hamcrest - http://hamcrest.org/JavaHamcrest/
+
+Common Development and Distribution License 1.0:
+javax.json - https://javaee.github.io/jsonp
+
+Eclipse Public License 1.0:
+junit4 - http://junit.org
+
+MIT License:
+cucumber - http://cucumber.io
+
+Apache License v2.0:
+shazamcrest - http://github.com/shazam/shazamcrest
