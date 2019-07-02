@@ -23,25 +23,19 @@ import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.NodeMarking;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
-import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
-import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
-import com.scottlogic.deg.generator.validators.StaticContradictionDecisionTreeValidator;
+import com.scottlogic.deg.generator.validators.ContradictionDecisionTreeValidator;
 import com.scottlogic.deg.generator.walker.reductive.Merged;
 import com.scottlogic.deg.generator.walker.reductive.ReductiveTreePruner;
 
-import java.lang.ref.ReferenceQueue;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class UpfrontTreePruner {
     private ReductiveTreePruner treePruner;
-    private StaticContradictionDecisionTreeValidator validator;
+    private ContradictionDecisionTreeValidator validator;
     @Inject
-    public UpfrontTreePruner(ReductiveTreePruner treePruner, StaticContradictionDecisionTreeValidator validator) {
+    public UpfrontTreePruner(ReductiveTreePruner treePruner, ContradictionDecisionTreeValidator validator) {
         this.treePruner = treePruner;
         this.validator = validator;
     }

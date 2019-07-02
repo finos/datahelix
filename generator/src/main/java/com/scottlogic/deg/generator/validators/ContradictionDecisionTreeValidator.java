@@ -29,12 +29,12 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class StaticContradictionDecisionTreeValidator {
+public class ContradictionDecisionTreeValidator {
     private final RowSpecMerger rowSpecMerger;
     private final ConstraintReducer constraintReducer;
 
     @Inject
-    public StaticContradictionDecisionTreeValidator(RowSpecMerger rowSpecMerger, ConstraintReducer constraintReducer){
+    public ContradictionDecisionTreeValidator(RowSpecMerger rowSpecMerger, ConstraintReducer constraintReducer){
         this.rowSpecMerger = rowSpecMerger;
         this.constraintReducer = constraintReducer;
     }

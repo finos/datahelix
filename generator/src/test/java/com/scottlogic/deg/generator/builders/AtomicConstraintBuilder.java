@@ -63,8 +63,8 @@ public class AtomicConstraintBuilder {
     }
 
     public ConstraintNodeBuilder isSelfContradictory() {
-        IsNullConstraint isNullConstraint = new IsNullConstraint(field, Collections.emptySet());
-        AtomicConstraint isNotNullConstraint = new IsNullConstraint(field, Collections.emptySet()).negate();
+        IsNullConstraint isNullConstraint = new IsNullConstraint(field);
+        AtomicConstraint isNotNullConstraint = new IsNullConstraint(field).negate();
         constraintNodeBuilder.constraints.add(isNullConstraint);
         constraintNodeBuilder.constraints.add(isNotNullConstraint);
         return constraintNodeBuilder;

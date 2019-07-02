@@ -26,10 +26,9 @@ import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
-import com.scottlogic.deg.generator.validators.StaticContradictionDecisionTreeValidator;
+import com.scottlogic.deg.generator.validators.ContradictionDecisionTreeValidator;
 import com.scottlogic.deg.generator.walker.reductive.Merged;
 import com.scottlogic.deg.generator.walker.reductive.ReductiveTreePruner;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Nested;
 import org.mockito.Mockito;
@@ -47,7 +46,7 @@ class UpfrontTreePrunerTests {
     class unit_tests {
 
         private ReductiveTreePruner reductiveTreePruner = Mockito.mock(ReductiveTreePruner.class);
-        private StaticContradictionDecisionTreeValidator contradictionValidator = Mockito.mock(StaticContradictionDecisionTreeValidator.class);
+        private ContradictionDecisionTreeValidator contradictionValidator = Mockito.mock(ContradictionDecisionTreeValidator.class);
         private UpfrontTreePruner upfrontTreePruner = new UpfrontTreePruner(reductiveTreePruner, contradictionValidator);
         private Field fieldA = new Field("A");
         private Field fieldB = new Field("B");
@@ -134,7 +133,7 @@ class UpfrontTreePrunerTests {
             new FieldSpecMerger(),
             constraintReducer,
             new FieldSpecHelper());
-        private StaticContradictionDecisionTreeValidator validator = new StaticContradictionDecisionTreeValidator(
+        private ContradictionDecisionTreeValidator validator = new ContradictionDecisionTreeValidator(
             new RowSpecMerger(
                 new FieldSpecMerger()),
             constraintReducer);

@@ -17,7 +17,6 @@
 package com.scottlogic.deg.orchestrator.visualise;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
@@ -29,8 +28,7 @@ import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
 import com.scottlogic.deg.output.OutputPath;
 import com.scottlogic.deg.profile.reader.ProfileReader;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import com.scottlogic.deg.generator.validators.ErrorReporter;
-import com.scottlogic.deg.generator.validators.StaticContradictionDecisionTreeValidator;
+import com.scottlogic.deg.generator.validators.ContradictionDecisionTreeValidator;
 import com.scottlogic.deg.orchestrator.validator.VisualisationConfigValidator;
 import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
 
@@ -88,8 +86,8 @@ public class VisualiseExecute {
         final String profileBaseName = configSource.getProfileFile().getName()
             .replaceFirst("\\.[^.]+$", "");
 
-        StaticContradictionDecisionTreeValidator treeValidator =
-            new StaticContradictionDecisionTreeValidator(
+        ContradictionDecisionTreeValidator treeValidator =
+            new ContradictionDecisionTreeValidator(
                 new RowSpecMerger(fieldSpecMerger),
                 new ConstraintReducer(fieldSpecFactory, fieldSpecMerger));
 
