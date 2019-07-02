@@ -401,6 +401,10 @@ firstName,age,nationalInsurance
 
 That's the end of our getting started guide. Hopefully it has given you a good understanding of what the DataHelix generator is capable of. If you'd like to find out more about the various constraints the tool supports, the [Profile Developer Guide](docs/ProfileDeveloperGuide.md) is a good next step. You might also be interested in the [examples folder](https://github.com/ScottLogic/datahelix/tree/master/examples), which illustrates various features of the generator.
 
+## Contributing
+
+Please read the [Contributing](https://github.com/ScottLogic/datahelix/blob/master/.github/CONTRIBUTING.md) guidelines before making any changes.
+
 ## License
 
 Copyright 2019 Scott Logic Ltd
