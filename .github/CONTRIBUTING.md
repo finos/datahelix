@@ -12,6 +12,8 @@ that must also be met.**
 
 As a result, PRs submitted to the DataHelix project cannot be accepted until you have a CLA in place with the Foundation.
 
+Notice that some dependencies, as referenced in the [NOTICE](https://github.com/ScottLogic/DataHelix/NOTICE.md) file have certain restrictions upon contributors.
+
 # Contributing Issues
 
 ## Prerequisites
