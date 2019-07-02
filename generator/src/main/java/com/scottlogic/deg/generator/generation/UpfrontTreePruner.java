@@ -19,23 +19,34 @@ package com.scottlogic.deg.generator.generation;
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
+import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
+import com.scottlogic.deg.generator.decisiontree.NodeMarking;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
+import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
+import com.scottlogic.deg.generator.reducer.ConstraintReducer;
+import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
+import com.scottlogic.deg.generator.validators.StaticContradictionDecisionTreeValidator;
 import com.scottlogic.deg.generator.walker.reductive.Merged;
 import com.scottlogic.deg.generator.walker.reductive.ReductiveTreePruner;
 
+import java.lang.ref.ReferenceQueue;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class UpfrontTreePruner {
     private ReductiveTreePruner treePruner;
+    private StaticContradictionDecisionTreeValidator validator;
     @Inject
-    public UpfrontTreePruner(ReductiveTreePruner treePruner) {
+    public UpfrontTreePruner(ReductiveTreePruner treePruner, StaticContradictionDecisionTreeValidator validator) {
         this.treePruner = treePruner;
+        this.validator = validator;
     }
 
-    public DecisionTree runUpfrontPrune(DecisionTree tree) {
+    public DecisionTree runUpfrontPrune(DecisionTree tree, DataGeneratorMonitor monitor) {
         Map<Field, FieldSpec> fieldSpecs = tree.getFields().stream()
             .collect(
                 Collectors.toMap(
@@ -43,9 +54,31 @@ public class UpfrontTreePruner {
                     f -> FieldSpec.Empty));
 
         Merged<ConstraintNode> prunedNode = treePruner.pruneConstraintNode(tree.getRootNode(), fieldSpecs);
+        DecisionTree markedTree = validator.markContradictions(tree);
+
         if (prunedNode.isContradictory()) {
+            monitor.addLineToPrintAtEndOfGeneration("The provided profile is wholly contradictory.");
+            monitor.addLineToPrintAtEndOfGeneration("No data can be generated.");
             return new DecisionTree(null, tree.getFields());
+
+        } else if (isPartiallyContradictory(markedTree.getRootNode())) {
+            monitor.addLineToPrintAtEndOfGeneration("The provided profile is partially contradictory.");
+            monitor.addLineToPrintAtEndOfGeneration("Run the visualise command for more information.");
+            return new DecisionTree(prunedNode.get(), tree.getFields());
+
         }
         return new DecisionTree(prunedNode.get(), tree.getFields());
+    }
+
+    private boolean isPartiallyContradictory(ConstraintNode root) {
+        return
+            root.hasMarking(NodeMarking.CONTRADICTORY) ||
+            root.getDecisions().stream().anyMatch(this::isPartiallyContradictory);
+    }
+
+    private boolean isPartiallyContradictory(DecisionNode root) {
+        return
+            root.hasMarking(NodeMarking.CONTRADICTORY) ||
+            root.getOptions().stream().anyMatch(this::isPartiallyContradictory);
     }
 }

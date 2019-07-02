@@ -16,21 +16,26 @@
 
 package com.scottlogic.deg.generator.generation;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.walker.reductive.ReductiveState;
 
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public abstract class ReductiveDataGeneratorMonitor implements DataGeneratorMonitor {
-    protected PrintWriter writer;
+    final PrintWriter writer;
 
     private List<String> linesToPrintAtEndOfGeneration = new ArrayList<>();
+
+    @Inject
+    ReductiveDataGeneratorMonitor(PrintWriter writer) {
+        this.writer = writer;
+    }
+
     public void endGeneration() {
         linesToPrintAtEndOfGeneration.forEach(writer::println);
     }

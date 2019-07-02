@@ -17,19 +17,20 @@
 package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.name.Names;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
+import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
+import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.inputs.validation.MultipleProfileValidator;
+import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
+import com.scottlogic.deg.generator.inputs.validation.TypingRequiredPerFieldValidator;
+import com.scottlogic.deg.generator.validators.ErrorReporter;
+import com.scottlogic.deg.orchestrator.validator.ConfigValidator;
+import com.scottlogic.deg.output.manifest.ManifestWriter;
 import com.scottlogic.deg.output.outputtarget.OutputTargetFactory;
 import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
 import com.scottlogic.deg.profile.reader.ProfileReader;
-import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
-import com.scottlogic.deg.generator.inputs.validation.TypingRequiredPerFieldValidator;
-import com.scottlogic.deg.output.manifest.ManifestWriter;
-import com.scottlogic.deg.orchestrator.validator.ConfigValidator;
-import com.scottlogic.deg.generator.validators.ErrorReporter;
 
 import java.util.stream.Stream;
 
@@ -66,6 +67,7 @@ public class CucumberTestModule extends AbstractModule {
         bind(ConfigValidator.class).toInstance(mock(ConfigValidator.class));
         bind(ManifestWriter.class).toInstance(mock(ManifestWriter.class));
         bind(SingleDatasetOutputTarget.class).toInstance(new InMemoryOutputTarget(testState));
+        bind(ReductiveDataGeneratorMonitor.class).to(NoopDataGeneratorMonitor.class);
 
         OutputTargetFactory mockOutputTargetFactory = mock(OutputTargetFactory.class);
         when(mockOutputTargetFactory.create(any())).thenReturn(new InMemoryOutputTarget(testState));

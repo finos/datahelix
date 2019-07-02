@@ -90,7 +90,6 @@ public class VisualiseExecute {
 
         StaticContradictionDecisionTreeValidator treeValidator =
             new StaticContradictionDecisionTreeValidator(
-                profile.getFields(),
                 new RowSpecMerger(fieldSpecMerger),
                 new ConstraintReducer(fieldSpecFactory, fieldSpecMerger));
 

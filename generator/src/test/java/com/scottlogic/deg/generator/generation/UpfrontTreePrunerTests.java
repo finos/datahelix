@@ -18,84 +18,576 @@ package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.generator.builders.ConstraintNodeBuilder;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.decisiontree.NodeMarking;
+import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
+import com.scottlogic.deg.generator.fieldspecs.*;
+import com.scottlogic.deg.generator.reducer.ConstraintReducer;
+import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
+import com.scottlogic.deg.generator.validators.StaticContradictionDecisionTreeValidator;
 import com.scottlogic.deg.generator.walker.reductive.Merged;
 import com.scottlogic.deg.generator.walker.reductive.ReductiveTreePruner;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Nested;
 import org.mockito.Mockito;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static com.scottlogic.deg.generator.builders.ConstraintNodeBuilder.constraintNode;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 
 class UpfrontTreePrunerTests {
-    private ReductiveTreePruner reductiveTreePruner = Mockito.mock(ReductiveTreePruner.class);
-    private UpfrontTreePruner upfrontTreePruner = new UpfrontTreePruner(reductiveTreePruner);
-    private Field fieldA = new Field("A");
-    private Field fieldB = new Field("B");
+    @Nested
+    class unit_tests {
 
-    @Test
-    void runUpfrontPrune_withOneField_returnsPrunedTree() {
-        //Arrange
-        List<Field> fields = Collections.singletonList(fieldA);
-        ConstraintNode prunedRoot = Mockito.mock(ConstraintNode.class);
-        Map<Field, FieldSpec> fieldSpecs = new HashMap<>();
-        fieldSpecs.put(fieldA, FieldSpec.Empty);
+        private ReductiveTreePruner reductiveTreePruner = Mockito.mock(ReductiveTreePruner.class);
+        private StaticContradictionDecisionTreeValidator contradictionValidator = Mockito.mock(StaticContradictionDecisionTreeValidator.class);
+        private UpfrontTreePruner upfrontTreePruner = new UpfrontTreePruner(reductiveTreePruner, contradictionValidator);
+        private Field fieldA = new Field("A");
+        private Field fieldB = new Field("B");
 
-        ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
-        DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
+        @Test
+        void runUpfrontPrune_withOneField_returnsPrunedTree() {
+            //Arrange
+            List<Field> fields = Collections.singletonList(fieldA);
+            ConstraintNode prunedRoot = Mockito.mock(ConstraintNode.class);
+            Map<Field, FieldSpec> fieldSpecs = new HashMap<>();
+            fieldSpecs.put(fieldA, FieldSpec.Empty);
 
-        Mockito.when(reductiveTreePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.of(prunedRoot));
+            ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
+            DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
+            DecisionTree treeMarkedWithContradictions = new DecisionTree(
+                new TreeConstraintNode().markNode(NodeMarking.CONTRADICTORY),
+                new ProfileFields(fields));
 
-        //Act
-        DecisionTree actual = upfrontTreePruner.runUpfrontPrune(tree);
+            Mockito.when(reductiveTreePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.of(prunedRoot));
+            Mockito.when(contradictionValidator.markContradictions(tree)).thenReturn(treeMarkedWithContradictions);
 
-        //Assert
-        assertEquals(prunedRoot, actual.getRootNode());
+            //Act
+            DecisionTree actual = upfrontTreePruner.runUpfrontPrune(tree, Mockito.mock(DataGeneratorMonitor.class));
+
+            //Assert
+            assertEquals(prunedRoot, actual.getRootNode());
+        }
+
+        @Test
+        void runUpfrontPrune_withTwoFields_returnsPrunedTree() {
+            //Arrange
+            List<Field> fields = Arrays.asList(fieldA, fieldB);
+            ConstraintNode prunedRoot = Mockito.mock(ConstraintNode.class);
+            Map<Field, FieldSpec> fieldSpecs = new HashMap<>();
+            fieldSpecs.put(fieldA, FieldSpec.Empty);
+            fieldSpecs.put(fieldB, FieldSpec.Empty);
+
+            ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
+            DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
+
+            DecisionTree treeMarkedWithContradictions = new DecisionTree(
+                new TreeConstraintNode().markNode(NodeMarking.CONTRADICTORY),
+                new ProfileFields(fields));
+
+            Mockito.when(reductiveTreePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.of(prunedRoot));
+            Mockito.when(contradictionValidator.markContradictions(tree)).thenReturn(treeMarkedWithContradictions);
+
+            //Act
+            DecisionTree actual = upfrontTreePruner.runUpfrontPrune(tree, Mockito.mock(DataGeneratorMonitor.class));
+
+            //Assert
+            assertEquals(prunedRoot, actual.getRootNode());
+        }
+
+        @Test
+        void runUpfrontPrune_whenTreeWhollyContradictory_returnsPrunedTree() {
+            //Arrange
+            List<Field> fields = Collections.singletonList(fieldA);
+            Map<Field, FieldSpec> fieldSpecs = new HashMap<>();
+            fieldSpecs.put(fieldA, FieldSpec.Empty);
+
+            ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
+            DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
+
+            //Act
+            Mockito.when(reductiveTreePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.contradictory());
+
+            DecisionTree actual = upfrontTreePruner.runUpfrontPrune(tree, Mockito.mock(DataGeneratorMonitor.class));
+
+            //Assert
+            assertNull(actual.getRootNode());
+        }
+
     }
 
-    @Test
-    void runUpfrontPrune_withTwoFields_returnsPrunedTree() {
-        //Arrange
-        List<Field> fields = Arrays.asList(fieldA, fieldB);
-        ConstraintNode prunedRoot = Mockito.mock(ConstraintNode.class);
-        Map<Field, FieldSpec> fieldSpecs = new HashMap<>();
-        fieldSpecs.put(fieldA, FieldSpec.Empty);
-        fieldSpecs.put(fieldB, FieldSpec.Empty);
+    @Nested
+    class integration_tests {
+        private DataGeneratorMonitor monitor = Mockito.mock(DataGeneratorMonitor.class);
+        private ConstraintReducer constraintReducer = new ConstraintReducer(
+            new FieldSpecFactory(
+                new StringRestrictionsFactory()),
+            new FieldSpecMerger());
+        private ReductiveTreePruner treePruner = new ReductiveTreePruner(
+            new FieldSpecMerger(),
+            constraintReducer,
+            new FieldSpecHelper());
+        private StaticContradictionDecisionTreeValidator validator = new StaticContradictionDecisionTreeValidator(
+            new RowSpecMerger(
+                new FieldSpecMerger()),
+            constraintReducer);
+        private UpfrontTreePruner upfrontPruner = new UpfrontTreePruner(treePruner, validator);
 
-        ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
-        DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
+        private String partialContradictionSubstring = "partially contradictory"; // Implementation Detail
+        private String fullContradictionSubstring = "wholly contradictory"; // Implementation Detail
 
-        Mockito.when(reductiveTreePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.of(prunedRoot));
+        @Test
+        public void runUpfrontPrune_forNonContradictoryTreeWithOneNode_reportsNoContradictions() {
+            //Arrange
+            Field fieldA = new Field("A");
+            Field fieldB = new Field("B");
+            List<Field> fields = new ArrayList<>();
+            fields.add(fieldA);
+            fields.add(fieldB);
+            ConstraintNode root = constraintNode()
+                .where(fieldA).isNull()
+                .build();
 
-        //Act
-        DecisionTree actual = upfrontTreePruner.runUpfrontPrune(tree);
 
-        //Assert
-        assertEquals(prunedRoot, actual.getRootNode());
-    }
+            DecisionTree tree = new DecisionTree(root, new ProfileFields(fields));
 
-    @Test
-    void runUpfrontPrune_whenTreeWhollyContradictory_returnsPrunedTree() {
-        //Arrange
-        List<Field> fields = Collections.singletonList(fieldA);
-        Map<Field, FieldSpec> fieldSpecs = new HashMap<>();
-        fieldSpecs.put(fieldA, FieldSpec.Empty);
+            //Act
+            upfrontPruner.runUpfrontPrune(tree, monitor);
 
-        ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
-        DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
+            //Assert
+            Mockito.verify(monitor, never()).addLineToPrintAtEndOfGeneration(anyString());
+        }
 
-        //Act
-        Mockito.when(reductiveTreePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.contradictory());
+        @Test
+        public void runUpfrontPrune_forNonContradictoryTreeWithTwoNonContradictoryChildren_reportsNoContradictions() {
+            //Arrange
+            Field fieldA = new Field("A");
+            Field fieldB = new Field("B");
+            List<Field> fields = new ArrayList<>();
+            fields.add(fieldA);
+            fields.add(fieldB);
+            ConstraintNodeBuilder nonContradictingChild0 = constraintNode().where(fieldA).isNull();
+            ConstraintNodeBuilder nonContradictingChild1 = constraintNode().where(fieldA).isNull();
+            ConstraintNode root = constraintNode()
+                .withDecision(nonContradictingChild0, nonContradictingChild1)
+                .build();
 
-        DecisionTree actual = upfrontTreePruner.runUpfrontPrune(tree);
 
-        //Assert
-        assertNull(actual.getRootNode());
+            DecisionTree tree = new DecisionTree(root, new ProfileFields(fields));
+
+            //Act
+            upfrontPruner.runUpfrontPrune(tree, monitor);
+
+            //Assert
+            Mockito.verify(monitor, never()).addLineToPrintAtEndOfGeneration(anyString());
+        }
+
+        @Test
+        public void runUpfrontPrune_forNonContradictoryTreeWithContradictionsThatAreNotRelevant_reportsNoContradictions() {
+            //Arrange
+            Field fieldA = new Field("A");
+            Field fieldB = new Field("B");
+            List<Field> fields = new ArrayList<>();
+            fields.add(fieldA);
+            fields.add(fieldB);
+            ConstraintNodeBuilder fieldAIsNullInThisCase = constraintNode().where(fieldA).isNull();
+            ConstraintNodeBuilder fieldAIsNotNullInThisCase = constraintNode().where(fieldA).isNotNull();
+            ConstraintNodeBuilder nonContradictingChild0 = constraintNode().where(fieldB).isNull();
+            ConstraintNodeBuilder nonContradictingChild1 = constraintNode().where(fieldB).isNull();
+
+            ConstraintNodeBuilder subTree0 = constraintNode()
+                .withDecision(fieldAIsNullInThisCase, nonContradictingChild0);
+
+            ConstraintNodeBuilder subTree1 = constraintNode()
+                .withDecision(fieldAIsNotNullInThisCase, nonContradictingChild1);
+
+            ConstraintNode root = constraintNode()
+                .withDecision(subTree0, subTree1)
+                .build();
+
+
+            DecisionTree tree = new DecisionTree(root, new ProfileFields(fields));
+
+            //Act
+            upfrontPruner.runUpfrontPrune(tree, monitor);
+
+            //Assert
+            Mockito.verify(monitor, never()).addLineToPrintAtEndOfGeneration(anyString());
+        }
+
+        @Test
+        public void runUpfrontPrune_forPartiallyContradictoryTreeWithTwoContradictionsInDifferentLeaves_reportsNoContradiction() {
+            //Arrange
+            Field fieldA = new Field("A");
+            Field fieldB = new Field("B");
+            List<Field> fields = new ArrayList<>();
+            fields.add(fieldA);
+            fields.add(fieldB);
+
+            ConstraintNode root = constraintNode()
+                .where(fieldA).isNull()
+                .withDecision(
+                    constraintNode()
+                        .withDecision(
+                            constraintNode()
+                                .where(fieldB).isNull(), // Contradicts with one path in other branch
+                            constraintNode()
+                                .where(fieldA).isNull()),
+                    constraintNode()
+                        .withDecision(
+                            constraintNode()
+                                .where(fieldB).isNotNull(), // Contradicts with one path in other branch
+                            constraintNode()
+                                .where(fieldA).isNull())
+                )
+                .build();
+
+
+            DecisionTree tree = new DecisionTree(root, new ProfileFields(fields));
+
+            //Act
+            upfrontPruner.runUpfrontPrune(tree, monitor);
+
+            //Assert
+            Mockito.verify(monitor, never()).addLineToPrintAtEndOfGeneration(anyString());
+        }
+
+
+        @Test
+        public void runUpfrontPrune_forNonContradictoryTreeWithContradictionInOneBranch_reportsPartialContradiction() {
+            //Arrange
+            Field fieldA = new Field("A");
+            Field fieldB = new Field("B");
+            List<Field> fields = new ArrayList<>();
+            fields.add(fieldA);
+            fields.add(fieldB);
+            ConstraintNodeBuilder contradictingChild = constraintNode().where(fieldA).isNull();
+            ConstraintNodeBuilder nonContradictingChild = constraintNode().where(fieldB).isNull();
+            ConstraintNode root = constraintNode()
+                .where(fieldA).isNotNull()
+                .withDecision(contradictingChild, nonContradictingChild)
+                .build();
+
+
+            DecisionTree tree = new DecisionTree(root, new ProfileFields(fields));
+
+            //Act
+            upfrontPruner.runUpfrontPrune(tree, monitor);
+
+            //Assert
+            Mockito.verify(monitor, times(1))
+                .addLineToPrintAtEndOfGeneration(contains(partialContradictionSubstring));
+        }
+
+        @Test
+        public void runUpfrontPrune_forPartiallyContradictoryTreeWithOneContradictoryChild_reportsPartialContradictions() {
+            //Arrange
+            Field fieldA = new Field("A");
+            Field fieldB = new Field("B");
+            List<Field> fields = new ArrayList<>();
+            fields.add(fieldA);
+            fields.add(fieldB);
+            ConstraintNodeBuilder contradictingChild = constraintNode().where(fieldA).isSelfContradictory();
+            ConstraintNodeBuilder nonContradictingChild = constraintNode().where(fieldA).isNull();
+            ConstraintNode root = constraintNode()
+                .withDecision(contradictingChild, nonContradictingChild)
+                .build();
+
+
+            DecisionTree tree = new DecisionTree(root, new ProfileFields(fields));
+
+            //Act
+            upfrontPruner.runUpfrontPrune(tree, monitor);
+
+            //Assert
+            Mockito.verify(monitor, times(1))
+                .addLineToPrintAtEndOfGeneration(contains(partialContradictionSubstring));
+        }
+
+
+        @Test
+        public void runUpfrontPrune_forPartiallyContradictoryTreeWithRootContradictingWithOneBranch_reportsPartialContradictions() {
+            //Arrange
+            Field fieldA = new Field("A");
+            Field fieldB = new Field("B");
+            List<Field> fields = new ArrayList<>();
+            fields.add(fieldA);
+            fields.add(fieldB);
+
+            ConstraintNode root = constraintNode()
+                .where(fieldA).isNull()
+                .withDecision(
+                    constraintNode()
+                        .where(fieldA).isNotNull(),
+                    constraintNode()
+                        .withDecision(
+                            constraintNode()
+                                .where(fieldB).isNull()))
+                .build();
+
+            DecisionTree tree = new DecisionTree(root, new ProfileFields(fields));
+
+            //Act
+            upfrontPruner.runUpfrontPrune(tree, monitor);
+
+            //Assert
+            Mockito.verify(monitor, times(1))
+                .addLineToPrintAtEndOfGeneration(contains(partialContradictionSubstring));
+        }
+
+
+
+        @Test
+        public void runUpfrontPrune_forPartiallyContradictoryTreeWithOneContradictionDeepInBranch_reportsPartialContradictions() {
+            //Arrange
+            Field fieldA = new Field("A");
+            Field fieldB = new Field("B");
+            List<Field> fields = new ArrayList<>();
+            fields.add(fieldA);
+            fields.add(fieldB);
+
+            ConstraintNode root = constraintNode()
+                .where(fieldA).isNull()
+                .withDecision(
+                    constraintNode()
+                        .where(fieldB).isNull()
+                        .withDecision(
+                            constraintNode()
+                                .withDecision(
+                                    constraintNode()
+                                        .where(fieldA).isNotNull())),
+                    constraintNode()
+                        .withDecision(
+                            constraintNode()
+                                .where(fieldB).isNull()))
+                .build();
+
+            DecisionTree tree = new DecisionTree(root, new ProfileFields(fields));
+
+            //Act
+            upfrontPruner.runUpfrontPrune(tree, monitor);
+
+            //Assert
+            Mockito.verify(monitor, times(1))
+                .addLineToPrintAtEndOfGeneration(contains(partialContradictionSubstring));
+        }
+
+        @Test
+        public void runUpfrontPrune_forPartiallyContradictoryTreeWithTwoSelfContradictingLeaves_reportsPartialContradictions() {
+            //Arrange
+            Field fieldA = new Field("A");
+            Field fieldB = new Field("B");
+            List<Field> fields = new ArrayList<>();
+            fields.add(fieldA);
+            fields.add(fieldB);
+
+            ConstraintNode root = constraintNode()
+                .where(fieldA).isNull()
+                .withDecision(
+                    constraintNode()
+                        .withDecision(
+                            constraintNode()
+                                .where(fieldB).isNull()
+                                .where(fieldB).isNotNull(),
+                            constraintNode()
+                                .where(fieldA).isNull()),
+                    constraintNode()
+                        .withDecision(
+                            constraintNode()
+                                .where(fieldB).isNull()
+                                .where(fieldB).isNotNull(),
+                            constraintNode()
+                                .where(fieldA).isNull())
+                )
+                .build();
+
+            DecisionTree tree = new DecisionTree(root, new ProfileFields(fields));
+
+            //Act
+            upfrontPruner.runUpfrontPrune(tree, monitor);
+
+            //Assert
+            Mockito.verify(monitor, times(1))
+                .addLineToPrintAtEndOfGeneration(contains(partialContradictionSubstring));
+        }
+
+        @Test
+        public void runUpfrontPrune_forWhollyContradictoryProfileWithOnlyRoot_reportsFullContradiction() {
+            //Arrange
+            Field fieldA = new Field("A");
+            Field fieldB = new Field("B");
+            List<Field> fields = new ArrayList<>();
+            fields.add(fieldA);
+            fields.add(fieldB);
+            ConstraintNode root = constraintNode()
+                .where(fieldA).isSelfContradictory()
+                .build();
+
+
+            DecisionTree tree = new DecisionTree(root, new ProfileFields(fields));
+
+            //Act
+            upfrontPruner.runUpfrontPrune(tree, monitor);
+
+            //Assert
+            Mockito.verify(monitor, times(1))
+                .addLineToPrintAtEndOfGeneration(contains(fullContradictionSubstring));
+        }
+
+        @Test
+        public void runUpfrontPrune_forWhollyContradictoryProfileWithContradictoryRoot_reportsFullContradiction() {
+            //Arrange
+            Field fieldA = new Field("A");
+            Field fieldB = new Field("B");
+            List<Field> fields = new ArrayList<>();
+            fields.add(fieldA);
+            fields.add(fieldB);
+            ConstraintNode root = constraintNode()
+                .where(fieldA).isSelfContradictory()
+                .withDecision(
+                    constraintNode()
+                        .where(fieldB).isNull(),
+                    constraintNode()
+                        .where(fieldB).isNull())
+                .build();
+
+
+            DecisionTree tree = new DecisionTree(root, new ProfileFields(fields));
+
+            //Act
+            upfrontPruner.runUpfrontPrune(tree, monitor);
+
+            //Assert
+            Mockito.verify(monitor, times(1))
+                .addLineToPrintAtEndOfGeneration(contains(fullContradictionSubstring));
+        }
+
+        @Test
+        public void runUpfrontPrune_forWhollyContradictoryProfileWithEveryNodeContradictory_reportsFullContradiction() {
+            //Arrange
+            Field fieldA = new Field("A");
+            Field fieldB = new Field("B");
+            List<Field> fields = new ArrayList<>();
+            fields.add(fieldA);
+            fields.add(fieldB);
+            ConstraintNode root = constraintNode()
+                .where(fieldA).isSelfContradictory()
+                .withDecision(
+                    constraintNode()
+                        .where(fieldB).isSelfContradictory(),
+                    constraintNode()
+                        .where(fieldB).isSelfContradictory(),
+                    constraintNode()
+                        .where(fieldB).isSelfContradictory())
+                .build();
+
+
+            DecisionTree tree = new DecisionTree(root, new ProfileFields(fields));
+
+            //Act
+            upfrontPruner.runUpfrontPrune(tree, monitor);
+
+            //Assert
+            Mockito.verify(monitor, times(1))
+                .addLineToPrintAtEndOfGeneration(contains(fullContradictionSubstring));
+        }
+
+        @Test
+        public void runUpfrontPrune_forWhollyContradictoryProfileWithContradictionDeepInBranch_reportsFullContradiction() {
+            //Arrange
+            Field fieldA = new Field("A");
+            Field fieldB = new Field("B");
+            List<Field> fields = new ArrayList<>();
+            fields.add(fieldA);
+            fields.add(fieldB);
+
+            ConstraintNode root = constraintNode()
+                .where(fieldA).isNull()
+                .withDecision(
+                    constraintNode()
+                        .where(fieldB).isNull()
+                        .withDecision(
+                            constraintNode()
+                                .withDecision(
+                                    constraintNode()
+                                        .where(fieldA).isNotNull())))
+                .build();
+
+            DecisionTree tree = new DecisionTree(root, new ProfileFields(fields));
+
+            //Act
+            upfrontPruner.runUpfrontPrune(tree, monitor);
+
+            //Assert
+            Mockito.verify(monitor, times(1))
+                .addLineToPrintAtEndOfGeneration(contains(fullContradictionSubstring));
+        }
+
+        @Test
+        public void runUpfrontPrune_forWhollyContradictoryProfileWithAllContradictingNodes_reportsFullContradiction() {
+            //Arrange
+            Field fieldA = new Field("A");
+            Field fieldB = new Field("B");
+            List<Field> fields = new ArrayList<>();
+            fields.add(fieldA);
+            fields.add(fieldB);
+            ConstraintNode root = constraintNode()
+                .where(fieldA).isSelfContradictory()
+                .withDecision(
+                    constraintNode()
+                        .where(fieldB).isSelfContradictory(),
+                    constraintNode()
+                        .where(fieldB).isSelfContradictory(),
+                    constraintNode()
+                        .where(fieldB).isSelfContradictory())
+                .build();
+
+
+            DecisionTree tree = new DecisionTree(root, new ProfileFields(fields));
+
+            //Act
+            upfrontPruner.runUpfrontPrune(tree, monitor);
+
+            //Assert
+            Mockito.verify(monitor, times(1))
+                .addLineToPrintAtEndOfGeneration(contains(fullContradictionSubstring));
+        }
+
+        @Test
+        public void runUpfrontPrune_forWhollyContradictoryProfileWithNonContradictingRoot_reportsFullContradiction() {
+            //Arrange
+            Field fieldA = new Field("A");
+            Field fieldB = new Field("B");
+            List<Field> fields = new ArrayList<>();
+            fields.add(fieldA);
+            fields.add(fieldB);
+            ConstraintNode root = constraintNode()
+                .where(fieldA).isNull()
+                .withDecision(
+                    constraintNode()
+                        .where(fieldB).isSelfContradictory(),
+                    constraintNode()
+                        .where(fieldB).isSelfContradictory(),
+                    constraintNode()
+                        .where(fieldB).isSelfContradictory())
+                .build();
+
+
+            DecisionTree tree = new DecisionTree(root, new ProfileFields(fields));
+
+            //Act
+            upfrontPruner.runUpfrontPrune(tree, monitor);
+
+            //Assert
+            Mockito.verify(monitor, times(1))
+                .addLineToPrintAtEndOfGeneration(contains(fullContradictionSubstring));
+        }
     }
 }

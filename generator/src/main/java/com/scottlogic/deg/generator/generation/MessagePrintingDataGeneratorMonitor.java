@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 
 public class MessagePrintingDataGeneratorMonitor extends ReductiveDataGeneratorMonitor {
     public MessagePrintingDataGeneratorMonitor(PrintWriter writer) {
-        this.writer = writer;
+        super(writer);
     }
 
     private void println(String message) {

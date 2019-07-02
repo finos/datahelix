@@ -27,6 +27,7 @@ import com.scottlogic.deg.generator.decisiontree.treepartitioning.TreePartitione
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 import com.scottlogic.deg.generator.generation.databags.*;
 import com.scottlogic.deg.common.output.GeneratedObject;
+import com.scottlogic.deg.generator.validators.StaticContradictionDecisionTreeValidator;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 
 import java.util.stream.Stream;

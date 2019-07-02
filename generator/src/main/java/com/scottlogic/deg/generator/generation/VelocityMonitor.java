@@ -41,7 +41,7 @@ public class VelocityMonitor extends ReductiveDataGeneratorMonitor {
 
     @Inject
     public VelocityMonitor(PrintWriter writer) {
-        this.writer = writer;
+        super(writer);
     }
 
     @Override
