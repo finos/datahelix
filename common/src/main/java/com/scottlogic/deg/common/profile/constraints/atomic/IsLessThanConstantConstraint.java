@@ -2,20 +2,15 @@ package com.scottlogic.deg.common.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
 
-import com.scottlogic.deg.common.profile.RuleInformation;
-
 import java.util.Objects;
-import java.util.Set;
 
 public class IsLessThanConstantConstraint implements AtomicConstraint {
     public final Field field;
-    private final Set<RuleInformation> rules;
     public final Number referenceValue;
 
-    public IsLessThanConstantConstraint(Field field, Number referenceValue, Set<RuleInformation> rules) {
+    public IsLessThanConstantConstraint(Field field, Number referenceValue) {
         this.referenceValue = referenceValue;
         this.field = field;
-        this.rules = rules;
     }
 
     @Override
@@ -46,15 +41,4 @@ public class IsLessThanConstantConstraint implements AtomicConstraint {
 
     @Override
     public String toString() { return String.format("`%s` < %s", field.name, referenceValue); }
-
-
-    @Override
-    public Set<RuleInformation> getRules() {
-        return rules;
-    }
-
-    @Override
-    public AtomicConstraint withRules(Set<RuleInformation> rules) {
-        return new IsLessThanConstantConstraint(this.field, this.referenceValue, rules);
-    }
 }

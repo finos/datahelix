@@ -13,7 +13,6 @@ import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 
 import java.io.*;
 import java.math.BigDecimal;
-import java.nio.file.Path;
 import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.HashSet;
@@ -61,7 +60,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                     throw new InvalidProfileException("Unrecognised type in type constraint: " + dto.value);
             }
 
-            return new IsOfTypeConstraint(fields.getByName(dto.field), type, rules);
+            return new IsOfTypeConstraint(fields.getByName(dto.field), type);
         };
 
         return Stream.of(
@@ -71,8 +70,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                 (dto, fields, rules) ->
                     new FormatConstraint(
                         fields.getByName(dto.field),
-                        ConstraintReaderHelpers.getValidatedValue(dto, String.class),
-                        rules
+                        ConstraintReaderHelpers.getValidatedValue(dto, String.class)
                     )
             ),
             new ConstraintReaderMapEntry(
@@ -81,8 +79,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                 (dto, fields, rules) ->
                     new IsInSetConstraint(
                         fields.getByName(dto.field),
-                        Collections.singleton(ConstraintReaderHelpers.getValidatedValue(dto)),
-                        rules
+                        Collections.singleton(ConstraintReaderHelpers.getValidatedValue(dto))
                     )
             ),
             new ConstraintReaderMapEntry(
@@ -91,8 +88,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                 (dto, fields, rules) ->
                     new IsInSetConstraint(
                         fields.getByName(dto.field),
-                        ConstraintReaderHelpers.getValidatedValues(dto),
-                        rules
+                        ConstraintReaderHelpers.getValidatedValues(dto)
                     )
             ),
             new ConstraintReaderMapEntry(
@@ -101,8 +97,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                 (dto, fields, rules) ->
                     new ContainsRegexConstraint(
                         fields.getByName(dto.field),
-                        Pattern.compile(ConstraintReaderHelpers.getValidatedValue(dto, String.class)),
-                        rules
+                        Pattern.compile(ConstraintReaderHelpers.getValidatedValue(dto, String.class))
                     )
             ),
             new ConstraintReaderMapEntry(
@@ -111,8 +106,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                 (dto, fields, rules) ->
                     new MatchesRegexConstraint(
                         fields.getByName(dto.field),
-                        Pattern.compile(ConstraintReaderHelpers.getValidatedValue(dto, String.class)),
-                        rules
+                        Pattern.compile(ConstraintReaderHelpers.getValidatedValue(dto, String.class))
                     )
             ),
             new ConstraintReaderMapEntry(
@@ -121,8 +115,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                 (dto, fields, rules) ->
                     new IsGreaterThanConstantConstraint(
                         fields.getByName(dto.field),
-                        ConstraintReaderHelpers.getValidatedValue(dto, Number.class),
-                        rules
+                        ConstraintReaderHelpers.getValidatedValue(dto, Number.class)
                     )
             ),
             new ConstraintReaderMapEntry(
@@ -131,8 +124,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                 (dto, fields, rules) ->
                     new IsGreaterThanOrEqualToConstantConstraint(
                         fields.getByName(dto.field),
-                        ConstraintReaderHelpers.getValidatedValue(dto, Number.class),
-                        rules
+                        ConstraintReaderHelpers.getValidatedValue(dto, Number.class)
                     )
             ),
             new ConstraintReaderMapEntry(
@@ -141,8 +133,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                 (dto, fields, rules) ->
                     new IsLessThanConstantConstraint(
                         fields.getByName(dto.field),
-                        ConstraintReaderHelpers.getValidatedValue(dto, Number.class),
-                        rules
+                        ConstraintReaderHelpers.getValidatedValue(dto, Number.class)
                     )
             ),
             new ConstraintReaderMapEntry(
@@ -151,8 +142,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                 (dto, fields, rules) ->
                     new IsLessThanOrEqualToConstantConstraint(
                         fields.getByName(dto.field),
-                        ConstraintReaderHelpers.getValidatedValue(dto, Number.class),
-                        rules
+                        ConstraintReaderHelpers.getValidatedValue(dto, Number.class)
                     )
             ),
             new ConstraintReaderMapEntry(
@@ -161,8 +151,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                 (dto, fields, rules) ->
                     new IsBeforeConstantDateTimeConstraint(
                         fields.getByName(dto.field),
-                        ConstraintReaderHelpers.getValidatedValue(dto, OffsetDateTime.class),
-                        rules
+                        ConstraintReaderHelpers.getValidatedValue(dto, OffsetDateTime.class)
                     )
             ),
             new ConstraintReaderMapEntry(
@@ -171,8 +160,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                 (dto, fields, rules) ->
                     new IsBeforeOrEqualToConstantDateTimeConstraint(
                         fields.getByName(dto.field),
-                        ConstraintReaderHelpers.getValidatedValue(dto, OffsetDateTime.class),
-                        rules
+                        ConstraintReaderHelpers.getValidatedValue(dto, OffsetDateTime.class)
                     )
             ),
             new ConstraintReaderMapEntry(
@@ -181,8 +169,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                 (dto, fields, rules) ->
                     new IsAfterConstantDateTimeConstraint(
                         fields.getByName(dto.field),
-                        ConstraintReaderHelpers.getValidatedValue(dto, OffsetDateTime.class),
-                        rules
+                        ConstraintReaderHelpers.getValidatedValue(dto, OffsetDateTime.class)
                     )
             ),
             new ConstraintReaderMapEntry(
@@ -191,8 +178,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                 (dto, fields, rules) ->
                     new IsAfterOrEqualToConstantDateTimeConstraint(
                         fields.getByName(dto.field),
-                        ConstraintReaderHelpers.getValidatedValue(dto, OffsetDateTime.class),
-                        rules
+                        ConstraintReaderHelpers.getValidatedValue(dto, OffsetDateTime.class)
                     )
             ),
             new ConstraintReaderMapEntry(
@@ -211,8 +197,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                         if (parsedNumericGranularity.isPresent()) {
                             return new IsGranularToNumericConstraint(
                                 fields.getByName(dto.field),
-                                parsedNumericGranularity.get(),
-                                rules
+                                parsedNumericGranularity.get()
                             );
                         }
                     } else if (stringValidatedValue.isPresent()) {
@@ -221,8 +206,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                         if (parsedDateGranularity.isPresent()) {
                             return new IsGranularToDateConstraint(
                                 fields.getByName(dto.field),
-                                parsedDateGranularity.get(),
-                                rules
+                                parsedDateGranularity.get()
                             );
                         }
                     }
@@ -235,7 +219,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
             new ConstraintReaderMapEntry(
                 AtomicConstraintType.IS_NULL.getText(),
                 ".*",
-                (dto, fields, rules) -> new IsNullConstraint(fields.getByName(dto.field), rules)
+                (dto, fields, rules) -> new IsNullConstraint(fields.getByName(dto.field))
             ),
             new ConstraintReaderMapEntry(
                 AtomicConstraintType.IS_OF_TYPE.getText(),
@@ -243,13 +227,11 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                 (dto, fields, rules) -> new AndConstraint(
                     new IsOfTypeConstraint(
                         fields.getByName(dto.field),
-                        IsOfTypeConstraint.Types.NUMERIC,
-                        rules
+                        IsOfTypeConstraint.Types.NUMERIC
                     ),
                     new IsGranularToNumericConstraint(
                         fields.getByName(dto.field),
-                        new ParsedGranularity(BigDecimal.ONE),
-                        rules
+                        new ParsedGranularity(BigDecimal.ONE)
                     )
                 )
             ),
@@ -284,8 +266,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                             Integer.class,
                             BigDecimal.ZERO,
                             maxStringLength.subtract(BigDecimal.ONE)
-                        ),
-                        rules
+                        )
                     )
             ),
             new ConstraintReaderMapEntry(
@@ -299,8 +280,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                             Integer.class,
                             BigDecimal.ONE,
                             maxStringLength.add(BigDecimal.ONE)
-                        ),
-                        rules
+                        )
                     )
             ),
             new ConstraintReaderMapEntry(
@@ -314,8 +294,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                             Integer.class,
                             BigDecimal.ZERO,
                             maxStringLength
-                        ),
-                        rules
+                        )
                     )
             ),
             new ConstraintReaderMapEntry(
@@ -331,7 +310,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                     Set<Object> downcastedNames = new HashSet<>(names);
                     Field field = fields.getByName(dto.field);
 
-                    return new IsInSetConstraint(field, downcastedNames, rules);
+                    return new IsInSetConstraint(field, downcastedNames);
                 }
             )
         );

@@ -26,7 +26,5 @@ import java.util.Set;
 public interface Constraint
 {
     Constraint negate();
-
-    Set<RuleInformation> getRules();
 }
 

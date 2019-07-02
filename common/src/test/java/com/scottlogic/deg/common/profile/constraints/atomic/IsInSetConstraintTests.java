@@ -16,7 +16,7 @@ public class IsInSetConstraintTests {
 
         Assertions.assertThrows(
             IllegalArgumentException.class,
-            () -> new IsInSetConstraint(field1, Collections.emptySet(), rules()));
+            () -> new IsInSetConstraint(field1, Collections.emptySet()));
     }
 
     @Test
@@ -25,17 +25,14 @@ public class IsInSetConstraintTests {
 
         Assertions.assertThrows(
             IllegalArgumentException.class,
-            () -> new IsInSetConstraint(field1, Collections.singleton(null), rules()));
+            () -> new IsInSetConstraint(field1, Collections.singleton(null)));
     }
 
     @Test
     public void testConstraintThrowsNothingIfGivenAValidSet(){
         Field field1 = new Field("TestField");
         Assertions.assertDoesNotThrow(
-            () -> new IsInSetConstraint(field1, Collections.singleton("foo"), rules()));
+            () -> new IsInSetConstraint(field1, Collections.singleton("foo")));
     }
 
-    private static Set<RuleInformation> rules(){
-        return Collections.singleton(new RuleInformation());
-    }
 }

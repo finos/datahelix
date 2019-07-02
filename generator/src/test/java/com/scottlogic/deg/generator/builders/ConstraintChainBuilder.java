@@ -72,15 +72,15 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
     }
 
     public ConstraintChainBuilder<T> withLessThanConstraint(Field field, int referenceValue) {
-        return saveAndSet(new IsLessThanConstantConstraint(field, referenceValue, null));
+        return saveAndSet(new IsLessThanConstantConstraint(field, referenceValue));
     }
 
     public ConstraintChainBuilder<T> withGreaterThanConstraint(Field field, int referenceValue) {
-        return saveAndSet(new IsGreaterThanConstantConstraint(field, referenceValue, null));
+        return saveAndSet(new IsGreaterThanConstantConstraint(field, referenceValue));
     }
 
     public ConstraintChainBuilder<T> withEqualToConstraint(Field barField, Object referenceValue) {
-        return saveAndSet(new IsInSetConstraint(barField, Collections.singleton(referenceValue), null));
+        return saveAndSet(new IsInSetConstraint(barField, Collections.singleton(referenceValue)));
     }
 
     public ConstraintChainBuilder<T> withOrConstraint(ConstraintChainBuilder<OrConstraint> orBuilder) {
@@ -97,31 +97,31 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
 
     public ConstraintChainBuilder<T> withInSetConstraint(Field field, Object[] legalArray) {
         Set<Object> legalSet = new HashSet<>(Arrays.asList(legalArray));
-        return saveAndSet(new IsInSetConstraint(field, legalSet, null ));
+        return saveAndSet(new IsInSetConstraint(field, legalSet));
     }
 
     public ConstraintChainBuilder<T> withOfLengthConstraint(Field fooField, int length) {
-        return saveAndSet(new StringHasLengthConstraint(fooField, length, null));
+        return saveAndSet(new StringHasLengthConstraint(fooField, length));
     }
 
     public ConstraintChainBuilder<T> withOfTypeConstraint(Field fooField, IsOfTypeConstraint.Types requiredType) {
-        return saveAndSet(new IsOfTypeConstraint(fooField, requiredType, null));
+        return saveAndSet(new IsOfTypeConstraint(fooField, requiredType));
     }
 
     public ConstraintChainBuilder<T> withAfterConstraint(Field field, OffsetDateTime dateTime) {
-        return saveAndSet(new IsAfterConstantDateTimeConstraint(field, dateTime, null));
+        return saveAndSet(new IsAfterConstantDateTimeConstraint(field, dateTime));
     }
 
     public ConstraintChainBuilder<T> withBeforeConstraint(Field field, OffsetDateTime dateTime) {
-        return saveAndSet(new IsBeforeConstantDateTimeConstraint(field, dateTime, null));
+        return saveAndSet(new IsBeforeConstantDateTimeConstraint(field, dateTime));
     }
 
     public ConstraintChainBuilder<T> withMatchesRegexConstraint(Field field, Pattern pattern) {
-        return saveAndSet(new MatchesRegexConstraint(field, pattern, null));
+        return saveAndSet(new MatchesRegexConstraint(field, pattern));
     }
 
     public ConstraintChainBuilder<T> withContainsRegexConstraint(Field field, Pattern pattern) {
-        return saveAndSet(new ContainsRegexConstraint(field, pattern, null));
+        return saveAndSet(new ContainsRegexConstraint(field, pattern));
     }
 
     public ConstraintChainBuilder<T> withAtomicConstraint(
@@ -132,7 +132,7 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
         if(value == null) {
             try {
                 final Constructor<?>[] constructors = atomicConstraint.getConstructors();
-                AtomicConstraint constraint = (AtomicConstraint)constructors[0].newInstance(fooField, null);
+                AtomicConstraint constraint = (AtomicConstraint)constructors[0].newInstance(fooField);
                 return saveAndSet(constraint);
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                 throw new RuntimeException("Unable to build constraint of type " + atomicConstraint.toString() +
@@ -142,7 +142,7 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
         else {
             try {
                 final Constructor<?>[] constructors = atomicConstraint.getConstructors();
-                AtomicConstraint constraint = (AtomicConstraint)constructors[0].newInstance(fooField, value, null);
+                AtomicConstraint constraint = (AtomicConstraint)constructors[0].newInstance(fooField, value);
                 return saveAndSet(constraint);
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                 throw new RuntimeException("Unable to build constraint of type " + atomicConstraint.toString() +

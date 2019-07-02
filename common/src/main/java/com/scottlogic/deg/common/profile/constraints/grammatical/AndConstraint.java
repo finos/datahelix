@@ -40,14 +40,6 @@ public class AndConstraint implements GrammaticalConstraint
     }
 
     @Override
-    public Set<RuleInformation> getRules() {
-        return this.subConstraints
-            .stream()
-            .flatMap(c -> c.getRules().stream())
-            .collect(Collectors.toSet());
-    }
-
-    @Override
     public String toString() {
         return String.join(
             " and ",

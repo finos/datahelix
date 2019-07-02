@@ -134,23 +134,23 @@ public class IndividualRuleProfileViolatorTests {
         barField = new Field("bar");
         Constraint constraint1 = new IsGreaterThanConstantConstraint(
             fooField,
-            100,
-            Collections.singleton(ruleInformation1));
+            100
+        );
         Constraint constraint2 = new IsGreaterThanConstantConstraint(
             barField,
-            50,
-            Collections.singleton(ruleInformation1));
+            50
+        );
         rule1 = new Rule(ruleInformation1, Arrays.asList(constraint1, constraint2));
 
         //Violated Rule 1 consists of two constraints, "foo is less than to 101" and "bar is less than 51"
         Constraint constraint3 = new IsLessThanConstantConstraint(
             fooField,
-            101,
-            Collections.singleton(ruleInformation1));
+            101
+        );
         Constraint constraint4 = new IsLessThanConstantConstraint(
             barField,
-            51,
-            Collections.singleton(ruleInformation1));
+            51
+        );
         violatedRule1 = new Rule(ruleInformation1, Arrays.asList(constraint3, constraint4));
 
         RuleInformation ruleInformation2 = new RuleInformation("Rule 2 description");

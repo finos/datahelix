@@ -28,11 +28,6 @@ public class ViolatedAtomicConstraint implements AtomicConstraint {
     }
 
     @Override
-    public Set<RuleInformation> getRules() {
-        return this.violatedConstraint.getRules();
-    }
-
-    @Override
     public String toString() {
         return String.format("Violated: %s", this.violatedConstraint.toString());
     }
@@ -43,10 +38,5 @@ public class ViolatedAtomicConstraint implements AtomicConstraint {
 
     public boolean equals(Object obj){
         return violatedConstraint.equals(obj);
-    }
-
-    @Override
-    public AtomicConstraint withRules(Set<RuleInformation> rules) {
-        return new ViolatedAtomicConstraint(this.violatedConstraint.withRules(rules));
     }
 }

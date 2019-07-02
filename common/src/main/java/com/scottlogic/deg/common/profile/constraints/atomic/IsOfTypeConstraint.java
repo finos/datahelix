@@ -11,12 +11,10 @@ import java.util.function.Function;
 public class IsOfTypeConstraint implements AtomicConstraint {
     public final Field field;
     public final Types requiredType;
-    private final Set<RuleInformation> rules;
 
-    public IsOfTypeConstraint(Field field, Types requiredType, Set<RuleInformation> rules) {
+    public IsOfTypeConstraint(Field field, Types requiredType) {
         this.field = field;
         this.requiredType = requiredType;
-        this.rules = rules;
     }
 
     public enum Types {
@@ -63,14 +61,4 @@ public class IsOfTypeConstraint implements AtomicConstraint {
 
     @Override
     public String toString() { return String.format("`%s` is %s", field.name, requiredType.name()); }
-
-    @Override
-    public Set<RuleInformation> getRules() {
-        return rules;
-    }
-
-    @Override
-    public AtomicConstraint withRules(Set<RuleInformation> rules) {
-        return new IsOfTypeConstraint(this.field, this.requiredType, rules);
-    }
 }

@@ -21,7 +21,7 @@ public class PersonalDataTypesConstraintReaderSource implements ConstraintReader
 
             Field field = fields.getByName(dto.field);
 
-            return new IsInNameSetConstraint(field, names, rules);
+            return new IsInNameSetConstraint(field, names);
         };
 
         return Arrays.stream(NameConstraintTypes.values())

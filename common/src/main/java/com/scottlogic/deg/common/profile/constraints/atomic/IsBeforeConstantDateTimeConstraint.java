@@ -11,12 +11,10 @@ import java.util.Set;
 public class IsBeforeConstantDateTimeConstraint implements AtomicConstraint {
     public final Field field;
     public final OffsetDateTime referenceValue;
-    private final Set<RuleInformation> rules;
 
-    public IsBeforeConstantDateTimeConstraint(Field field, OffsetDateTime referenceValue, Set<RuleInformation> rules) {
+    public IsBeforeConstantDateTimeConstraint(Field field, OffsetDateTime referenceValue) {
         this.field = field;
         this.referenceValue = referenceValue;
-        this.rules = rules;
     }
 
     @Override
@@ -48,16 +46,5 @@ public class IsBeforeConstantDateTimeConstraint implements AtomicConstraint {
     @Override
     public String toString() {
         return String.format("`%s` < %s", field.name, referenceValue);
-    }
-
-
-    @Override
-    public Set<RuleInformation> getRules() {
-        return rules;
-    }
-
-    @Override
-    public AtomicConstraint withRules(Set<RuleInformation> rules) {
-        return new IsBeforeConstantDateTimeConstraint(this.field, this.referenceValue, rules);
     }
 }

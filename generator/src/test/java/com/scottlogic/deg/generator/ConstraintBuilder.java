@@ -24,12 +24,12 @@ public class ConstraintBuilder {
     }
 
     public ConstraintBuilder addInSetConstraint(String fieldname, List<Object> values){
-        constraints.add(new IsInSetConstraint(fields.get(fieldname), new HashSet<>(values), rules()));
+        constraints.add(new IsInSetConstraint(fields.get(fieldname), new HashSet<>(values)));
         return this;
     }
 
     public ConstraintBuilder addEqualToConstraint(String fieldname, Object value){
-        constraints.add(new IsInSetConstraint(fields.get(fieldname), Collections.singleton(value), rules()));
+        constraints.add(new IsInSetConstraint(fields.get(fieldname), Collections.singleton(value)));
         return this;
     }
 
@@ -39,11 +39,7 @@ public class ConstraintBuilder {
     }
 
     public ConstraintBuilder addNullConstraint(String fieldName){
-        constraints.add(new IsNullConstraint(fields.get(fieldName), rules()));
+        constraints.add(new IsNullConstraint(fields.get(fieldName)));
         return this;
-    }
-
-    private static Set<RuleInformation> rules(){
-        return Collections.singleton(new RuleInformation());
     }
 }

@@ -10,12 +10,10 @@ import java.util.regex.Pattern;
 public class MatchesRegexConstraint implements AtomicConstraint {
     public final Field field;
     public final Pattern regex;
-    private final Set<RuleInformation> rules;
 
-    public MatchesRegexConstraint(Field field, Pattern regex, Set<RuleInformation> rules) {
+    public MatchesRegexConstraint(Field field, Pattern regex) {
         this.field = field;
         this.regex = regex;
-        this.rules = rules;
     }
 
     @Override
@@ -46,14 +44,4 @@ public class MatchesRegexConstraint implements AtomicConstraint {
 
     @Override
     public String toString(){ return String.format("`%s` matches /%s/", field.name, regex); }
-
-    @Override
-    public Set<RuleInformation> getRules() {
-        return rules;
-    }
-
-    @Override
-    public AtomicConstraint withRules(Set<RuleInformation> rules) {
-        return new MatchesRegexConstraint(this.field, this.regex, rules);
-    }
 }
