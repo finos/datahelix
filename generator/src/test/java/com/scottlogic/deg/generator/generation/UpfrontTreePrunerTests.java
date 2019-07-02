@@ -42,9 +42,12 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 
 class UpfrontTreePrunerTests {
+    private String partialContradictionSubstring = "partially contradictory"; // Implementation Detail
+    private String fullContradictionSubstring = "wholly contradictory"; // Implementation Detail
+
     @Nested
     class unit_tests {
-
+        private DataGeneratorMonitor monitor = Mockito.mock(DataGeneratorMonitor.class);
         private ReductiveTreePruner reductiveTreePruner = Mockito.mock(ReductiveTreePruner.class);
         private ContradictionDecisionTreeValidator contradictionValidator = Mockito.mock(ContradictionDecisionTreeValidator.class);
         private UpfrontTreePruner upfrontTreePruner = new UpfrontTreePruner(reductiveTreePruner, contradictionValidator);
@@ -69,7 +72,7 @@ class UpfrontTreePrunerTests {
             Mockito.when(contradictionValidator.markContradictions(tree)).thenReturn(treeMarkedWithContradictions);
 
             //Act
-            DecisionTree actual = upfrontTreePruner.runUpfrontPrune(tree, Mockito.mock(DataGeneratorMonitor.class));
+            DecisionTree actual = upfrontTreePruner.runUpfrontPrune(tree, monitor);
 
             //Assert
             assertEquals(prunedRoot, actual.getRootNode());
@@ -95,7 +98,7 @@ class UpfrontTreePrunerTests {
             Mockito.when(contradictionValidator.markContradictions(tree)).thenReturn(treeMarkedWithContradictions);
 
             //Act
-            DecisionTree actual = upfrontTreePruner.runUpfrontPrune(tree, Mockito.mock(DataGeneratorMonitor.class));
+            DecisionTree actual = upfrontTreePruner.runUpfrontPrune(tree, monitor);
 
             //Assert
             assertEquals(prunedRoot, actual.getRootNode());
@@ -114,12 +117,87 @@ class UpfrontTreePrunerTests {
             //Act
             Mockito.when(reductiveTreePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.contradictory());
 
-            DecisionTree actual = upfrontTreePruner.runUpfrontPrune(tree, Mockito.mock(DataGeneratorMonitor.class));
+            DecisionTree actual = upfrontTreePruner.runUpfrontPrune(tree, monitor);
 
             //Assert
             assertNull(actual.getRootNode());
         }
 
+        @Test
+        void runUpfrontPrune_whenTreeNotContradictory_reportsNothing() {
+            //Arrange
+            List<Field> fields = Collections.singletonList(fieldA);
+            Map<Field, FieldSpec> fieldSpecs = new HashMap<>();
+            fieldSpecs.put(fieldA, FieldSpec.Empty);
+
+            ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
+            DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
+            DecisionTree completelyUnmarkedTree = new DecisionTree(
+                new TreeConstraintNode(),
+                new ProfileFields(fields));
+
+            //Act
+            Mockito.when(reductiveTreePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.of(unPrunedRoot));
+            Mockito.when(contradictionValidator.markContradictions(tree)).thenReturn(completelyUnmarkedTree);
+
+            upfrontTreePruner.runUpfrontPrune(tree, monitor);
+
+            //Assert
+            Mockito.verify(monitor, never()).addLineToPrintAtEndOfGeneration(anyString());
+        }
+
+        @Test
+        void runUpfrontPrune_whenTreePartiallyContradictory_reportsPartialContradiction() {
+            //Arrange
+            List<Field> fields = Collections.singletonList(fieldA);
+            Map<Field, FieldSpec> fieldSpecs = new HashMap<>();
+            fieldSpecs.put(fieldA, FieldSpec.Empty);
+
+            ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
+            DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
+            ConstraintNode root = constraintNode()
+                .withDecision(
+                    constraintNode().markNode(NodeMarking.CONTRADICTORY)).build();
+            DecisionTree treeMarkedWithContradictions = new DecisionTree(
+                root,
+                new ProfileFields(fields));
+
+            //Act
+            Mockito.when(reductiveTreePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.of(root));
+            Mockito.when(contradictionValidator.markContradictions(tree)).thenReturn(treeMarkedWithContradictions);
+
+            upfrontTreePruner.runUpfrontPrune(tree, monitor);
+
+            //Assert
+            Mockito.verify(monitor, times(1))
+                .addLineToPrintAtEndOfGeneration(contains(partialContradictionSubstring));
+
+        }
+
+        @Test
+        void runUpfrontPrune_whenTreeWhollyContradictory_reportsFullContradiction() {
+            //Arrange
+            List<Field> fields = Collections.singletonList(fieldA);
+            Map<Field, FieldSpec> fieldSpecs = new HashMap<>();
+            fieldSpecs.put(fieldA, FieldSpec.Empty);
+
+            ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
+            DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
+            DecisionTree treeMarkedWithContradictions = new DecisionTree(
+                new TreeConstraintNode().markNode(NodeMarking.CONTRADICTORY),
+                new ProfileFields(fields));
+
+            //Act
+            Mockito.when(reductiveTreePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.contradictory());
+            Mockito.when(contradictionValidator.markContradictions(tree)).thenReturn(treeMarkedWithContradictions);
+
+            upfrontTreePruner.runUpfrontPrune(tree, monitor);
+
+            //Assert
+            Mockito.verify(monitor, times(1))
+                .addLineToPrintAtEndOfGeneration(contains(fullContradictionSubstring));
+
+        }
     }
 
     @Nested
@@ -138,9 +216,6 @@ class UpfrontTreePrunerTests {
                 new FieldSpecMerger()),
             constraintReducer);
         private UpfrontTreePruner upfrontPruner = new UpfrontTreePruner(treePruner, validator);
-
-        private String partialContradictionSubstring = "partially contradictory"; // Implementation Detail
-        private String fullContradictionSubstring = "wholly contradictory"; // Implementation Detail
 
         @Test
         public void runUpfrontPrune_forNonContradictoryTreeWithOneNode_reportsNoContradictions() {
