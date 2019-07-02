@@ -79,48 +79,48 @@ class CartesianProductDecisionTreeWalkerTests {
                     new ConditionalConstraint(
                         new IsInSetConstraint(
                             country,
-                            Collections.singleton("US"),
-                            rules()),
+                            Collections.singleton("US")
+                        ),
                         new IsInSetConstraint(
                             city,
-                            new HashSet<>(Arrays.asList("New York", "Washington DC")),
-                            rules())))),
+                            new HashSet<>(Arrays.asList("New York", "Washington DC"))
+                        )))),
             new Rule(
                 rule("GB country constrains city"),
                 Collections.singletonList(
                     new ConditionalConstraint(
                         new IsInSetConstraint(
                             country,
-                            Collections.singleton("GB"),
-                            rules()),
+                            Collections.singleton("GB")
+                        ),
                         new IsInSetConstraint(
                             city,
-                            new HashSet<>(Arrays.asList("Bristol", "London")),
-                            rules())))),
+                            new HashSet<>(Arrays.asList("Bristol", "London"))
+                        )))),
             new Rule(
                 rule("US country constrains currency"),
                 Collections.singletonList(
                     new ConditionalConstraint(
                         new IsInSetConstraint(
                             country,
-                            Collections.singleton("US"),
-                            rules()),
+                            Collections.singleton("US")
+                        ),
                         new IsInSetConstraint(
                             currency,
-                            Collections.singleton("USD"),
-                            rules())))),
+                            Collections.singleton("USD")
+                        )))),
             new Rule(
                 rule("GB country constrains currency"),
                 Collections.singletonList(
                     new ConditionalConstraint(
                         new IsInSetConstraint(
                             country,
-                            Collections.singleton("GB"),
-                            rules()),
+                            Collections.singleton("GB")
+                        ),
                         new IsInSetConstraint(
                             currency,
-                            Collections.singleton("GBP"),
-                            rules())))));
+                            Collections.singleton("GBP")
+                        )))));
 
         Profile profile = new Profile(fields, dummyRules);
 
@@ -131,10 +131,6 @@ class CartesianProductDecisionTreeWalkerTests {
             .collect(Collectors.toList());
 
         Assert.assertThat(rowSpecs, notNullValue());
-    }
-
-    private static Set<RuleInformation> rules(){
-        return Collections.singleton(rule("rules"));
     }
 
     private static RuleInformation rule(String description){

@@ -9,10 +9,9 @@ import java.util.Set;
 
 public class IsStringShorterThanConstraint implements AtomicConstraint {
     public final Field field;
-    private final Set<RuleInformation> rules;
     public final int referenceValue;
 
-    public IsStringShorterThanConstraint(Field field, int referenceValue, Set<RuleInformation> rules) {
+    public IsStringShorterThanConstraint(Field field, int referenceValue) {
         if (referenceValue < 0){
             throw new IllegalArgumentException("Cannot create an IsStringShorterThanConstraint for field '" +
                 field.name + "' with a a negative length.");
@@ -20,7 +19,6 @@ public class IsStringShorterThanConstraint implements AtomicConstraint {
 
         this.referenceValue = referenceValue;
         this.field = field;
-        this.rules = rules;
     }
 
     @Override
@@ -51,15 +49,4 @@ public class IsStringShorterThanConstraint implements AtomicConstraint {
 
     @Override
     public String toString() { return String.format("`%s` length < %d", field.name, referenceValue); }
-
-
-    @Override
-    public Set<RuleInformation> getRules() {
-        return rules;
-    }
-
-    @Override
-    public AtomicConstraint withRules(Set<RuleInformation> rules) {
-        return new IsStringShorterThanConstraint(this.field, this.referenceValue, rules);
-    }
 }

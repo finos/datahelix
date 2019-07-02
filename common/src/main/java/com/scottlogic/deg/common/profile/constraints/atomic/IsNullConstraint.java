@@ -10,11 +10,9 @@ import java.util.Set;
 public class IsNullConstraint implements AtomicConstraint
 {
     public final Field field;
-    private final Set<RuleInformation> rules;
 
-    public IsNullConstraint(Field field, Set<RuleInformation> rules) {
+    public IsNullConstraint(Field field) {
         this.field = field;
-        this.rules = rules;
     }
 
     @Override
@@ -49,14 +47,4 @@ public class IsNullConstraint implements AtomicConstraint
         return Objects.hash(field);
     }
 
-
-    @Override
-    public Set<RuleInformation> getRules() {
-        return rules;
-    }
-
-    @Override
-    public AtomicConstraint withRules(Set<RuleInformation> rules) {
-        return new IsNullConstraint(this.field, rules);
-    }
 }

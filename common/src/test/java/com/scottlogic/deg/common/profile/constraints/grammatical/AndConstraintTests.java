@@ -19,8 +19,8 @@ public class AndConstraintTests {
 
         Field field3 = new Field("TestField");
         Field field4 = new Field("TestField");
-        AndConstraint constraint1 = new AndConstraint(new IsNullConstraint(field1, rules()), new IsNullConstraint(field2, rules()));
-        AndConstraint constraint2 = new AndConstraint(new IsNullConstraint(field3, rules()), new IsNullConstraint(field4, rules()));
+        AndConstraint constraint1 = new AndConstraint(new IsNullConstraint(field1), new IsNullConstraint(field2));
+        AndConstraint constraint2 = new AndConstraint(new IsNullConstraint(field3), new IsNullConstraint(field4));
         Assert.assertThat(constraint1, Matchers.equalTo(constraint2));
     }
 
@@ -31,12 +31,8 @@ public class AndConstraintTests {
 
         Field field3 = new Field("TestField");
         Field field4 = new Field("TestField");
-        AndConstraint constraint1 = new AndConstraint(new AndConstraint(new IsNullConstraint(field1, rules()), new IsNullConstraint(field2, rules())));
-        AndConstraint constraint2 = new AndConstraint(new AndConstraint(new IsNullConstraint(field3, rules()), new IsNullConstraint(field4, rules())));
+        AndConstraint constraint1 = new AndConstraint(new AndConstraint(new IsNullConstraint(field1), new IsNullConstraint(field2)));
+        AndConstraint constraint2 = new AndConstraint(new AndConstraint(new IsNullConstraint(field3), new IsNullConstraint(field4)));
         Assert.assertThat(constraint1, Matchers.equalTo(constraint2));
-    }
-
-    private static Set<RuleInformation> rules(){
-        return Collections.singleton(new RuleInformation());
     }
 }

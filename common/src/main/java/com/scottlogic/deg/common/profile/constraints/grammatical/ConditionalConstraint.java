@@ -30,14 +30,6 @@ public class ConditionalConstraint implements GrammaticalConstraint
     }
 
     @Override
-    public Set<RuleInformation> getRules() {
-        return Stream.of(condition, whenConditionIsTrue, whenConditionIsFalse)
-                .filter(Objects::nonNull)
-                .flatMap(c -> c.getRules().stream())
-                .collect(Collectors.toSet());
-    }
-
-    @Override
     public String toString() {
         return String.format(
             "if (%s) then %s%s",

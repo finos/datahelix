@@ -17,6 +17,4 @@ public interface AtomicConstraint extends Constraint {
     default AtomicConstraint negate() {
         return new NotConstraint(this);
     }
-
-    AtomicConstraint withRules(Set<RuleInformation> rules);
 }

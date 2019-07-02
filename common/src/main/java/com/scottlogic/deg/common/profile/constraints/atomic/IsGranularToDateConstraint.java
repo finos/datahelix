@@ -9,10 +9,9 @@ import java.util.Set;
 
 public class IsGranularToDateConstraint implements AtomicConstraint {
     public final Field field;
-    private final Set<RuleInformation> rules;
     public final ParsedDateGranularity granularity;
 
-    public IsGranularToDateConstraint(Field field, ParsedDateGranularity granularity, Set<RuleInformation> rules) {
+    public IsGranularToDateConstraint(Field field, ParsedDateGranularity granularity) {
         if(field == null)
             throw new IllegalArgumentException("field must not be null");
         if(granularity == null)
@@ -20,7 +19,6 @@ public class IsGranularToDateConstraint implements AtomicConstraint {
 
         this.granularity = granularity;
         this.field = field;
-        this.rules = rules;
     }
 
     @Override
@@ -47,16 +45,6 @@ public class IsGranularToDateConstraint implements AtomicConstraint {
     @Override
     public int hashCode(){
         return Objects.hash(field, granularity);
-    }
-
-    @Override
-    public Set<RuleInformation> getRules() {
-        return rules;
-    }
-
-    @Override
-    public AtomicConstraint withRules(Set<RuleInformation> rules) {
-        return new IsGranularToDateConstraint(field, granularity, rules);
     }
 
     @Override

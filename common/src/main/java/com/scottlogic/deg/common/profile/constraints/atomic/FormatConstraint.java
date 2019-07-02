@@ -9,12 +9,10 @@ public class FormatConstraint implements AtomicConstraint {
 
     public final Field field;
     public final String format;
-    private final Set<RuleInformation> rules;
 
-    public FormatConstraint(Field field, String format, Set<RuleInformation> rules) {
+    public FormatConstraint(Field field, String format) {
         this.field = field;
         this.format = format;
-        this.rules = rules;
     }
 
     @Override
@@ -25,15 +23,5 @@ public class FormatConstraint implements AtomicConstraint {
     @Override
     public Field getField() {
         return field;
-    }
-
-    @Override
-    public Set<RuleInformation> getRules() {
-        return rules;
-    }
-
-    @Override
-    public AtomicConstraint withRules(Set<RuleInformation> rules) {
-        return new FormatConstraint(this.field, this.format, rules);
     }
 }

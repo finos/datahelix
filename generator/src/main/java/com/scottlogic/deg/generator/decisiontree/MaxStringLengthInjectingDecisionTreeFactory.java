@@ -37,7 +37,7 @@ public class MaxStringLengthInjectingDecisionTreeFactory implements DecisionTree
             tree.rootNode.addAtomicConstraints(
                 tree.fields
                     .stream()
-                    .map(field -> new IsStringShorterThanConstraint(field, maxLength + 1, rules))
+                    .map(field -> new IsStringShorterThanConstraint(field, maxLength + 1))
                     .collect(Collectors.toList())
             ),
             tree.fields
