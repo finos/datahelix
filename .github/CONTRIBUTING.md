@@ -12,7 +12,7 @@ that must also be met.**
 
 As a result, PRs submitted to the DataHelix project cannot be accepted until you have a CLA in place with the Foundation.
 
-Notice that some dependencies, as referenced in the [NOTICE](https://github.com/finos/datahelix/NOTICE.md) file have certain restrictions upon contributors.
+Notice that some dependencies, as referenced in the [NOTICE](https://github.com/finos/datahelix/blob/master/NOTICE.md) file have certain restrictions upon contributors.
 
 # Contributing Issues
 
@@ -35,7 +35,7 @@ To make review of PRs easier, please:
 
  * Please make sure your PRs will merge cleanly - PRs that don't are unlikely to be accepted.
  * For code contributions, follow the existing code layout.
- * For documentation contributions, follow the general structure, language, and tone of the [existing docs](https://github.com/finos/datahelix/wiki).
+ * For documentation contributions, follow the general structure, language, and tone of the [existing docs](https://github.com/finos/datahelix/blob/master/.github/CONTRIBUTING.md).
  * Keep commits small and cohesive - if you have multiple contributions, please submit them as independent commits (and ideally as independent PRs too).
  * Reference issue #s if your PR has anything to do with an issue (even if it doesn't address it).
  * Minimise non-functional changes (e.g. whitespace).
