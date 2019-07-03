@@ -4,25 +4,34 @@
 Nulls can always be produced for a field, except when a field is explicitly not null. 
 
 ### Misleading Examples
-|Field is           |Null produced|
-|:------------------|:-----------:|
-|Of type X          | ✔ |
-|Not of type X      | ✔ |
-|In set [X, Y, ...] | ✔ |
-|Equal to X         | ✔ |
-|Greater than X     | ✔ |
-|Null               | ✔ |
-|Not null           | ❌ |
+|Field is               |Null produced|
+|:----------------------|:-----------:|
+|Of type X              | ✔ |
+|Not of type X          | ✔ |
+|In set [X, Y, ...]     | ✔ |
+|Not in set [X, Y, ...] | ✔ |
+|Equal to X             | ✔ |
+|Not equal to X         | ✔ |
+|Greater than X         | ✔ |
+|Null                   | ✔ |
+|Not null               | ❌ |
 
-Consider a profile where field A is equal to X and field B is equal to Y if field A is equal to X.
-This effectively is an if statement but with the "if" condition forced to be true.
+For the profile snippet:
+```
+{ "if":
+    { "field": "A", "is": "equalTo", "value": 1 },
+  "then":
+    { "field": "B", "is": "equalTo", "value": 2 }
+},
+{ "field": "A", "is": "equalTo", "value": 1 }
+```
 
 |Allowed value of A|Allowed value of B|
 |------------------|------------------|
 |Null              |Null              |
-|Null              |Y                 |
-|X                 |Null              |
-|X                 |Y                 |
+|Null              |2                 |
+|1                 |Null              |
+|1                 |2                 |
 
 ## Type Implication
 ### Behaviour
