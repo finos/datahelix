@@ -57,7 +57,7 @@ Build the tool with all its dependencies:
 
 Check the setup worked with this example command:
 
-`java -jar orchestrator\build\libs\generator.jar generate --replace -p=docs/GettingStarted/ExampleProfile1.json -o=out.csv`
+`java -jar orchestrator\build\libs\generator.jar generate --replace --profile-file==docs/GettingStarted/ExampleProfile1.json --output-path=out.csv`
 
 To generate valid data run the following command from the command line:
 
@@ -89,21 +89,26 @@ Right-click the backend Module, `generator`, choose "Open Module Settings".
 In "Project": specify a Project SDK (Java 1.8), clicking "New..." if necessary.  
 Set Project language level to 8.
 
-Open the "Gradle Projects" Tool Window, and double-click _Tasks > build > build.
+Open the "Gradle" Tool Window (this is an extension that may need to be installed), and double-click Tasks > build > build.
 Your IDE may do this automatically for you.
 
-Navigate to the `App.java` file (...\datahelix\generator\src\main\java\com\scottlogic\deg\generator\App.java). Right click and debug - *this will fail*.
+Navigate to the [`App.java` file](../../orchestrator/src/main/java/com/scottlogic/deg/orchestrator/App.java). Right click and debug.
 
-Now edit the run configuration on the top toolbar created by the initial run. Name the run configuration 'Generate' and under 'Program Arguments' enter the following, replacing the paths with your desired locations:
+Now edit the run configuration on the top toolbar created by the initial run. Name the run configuration 'Generate' and under 'Program Arguments' enter the following, replacing the paths with your desired files:
 
 ```
-generate --profile-file="<path to an example JSON profile>" --output-path="<path to desired output CSV>"
+generate --profile-file="<path to an example JSON profile>" --output-path="<desired output file path>"
+```
+
+For example, run this command:
+```
+`java -jar orchestrator\build\libs\generator.jar generate --replace --profile-file==docs/GettingStarted/ExampleProfile1.json --output-path=out.csv`
 ```
 
 Additionally create another run configuration called GenerateViolating and add the program arguments
 
 ```
-violate --profile-file="<path to an example JSON profile>" --output-path="<path to desired output folder for generated CSVs>"
+violate --profile-file="<path to an example JSON profile>" --output-path="<desired output directory path>"
 ```
 
 Run both of these configurations to test that installation is successful.
