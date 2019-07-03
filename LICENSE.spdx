@@ -1,7 +1,7 @@
 SPDXVersion: SPDX-2.0
 DataLicense: CC0-1.0
 Creator: Scott Logic Ltd
-PackageName: data-generator
+PackageName: DataHelix
 PackageOriginator: Scott Logic Ltd
-PackageHomePage: https://github.com/finos/data-generator
+PackageHomePage: https://github.com/ScottLogic/DataHelix
 PackageLicenseDeclared: Apache-2.0

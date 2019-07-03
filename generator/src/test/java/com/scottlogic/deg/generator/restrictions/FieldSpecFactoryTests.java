@@ -1,3 +1,19 @@
+/*
+ * Copyright 2019 Scott Logic Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
@@ -17,8 +33,7 @@ class FieldSpecFactoryTests {
     void construct_stringHasLengthConstraintRetrievedTwice_returnsTheSameGeneratorInstance() {
         StringHasLengthConstraint constraint = new StringHasLengthConstraint(
             new Field("Test"),
-            10,
-            null
+            10
         );
 
         final FieldSpec firstInstance = fieldSpecFactory.construct(constraint);
@@ -32,8 +47,7 @@ class FieldSpecFactoryTests {
         ViolatedAtomicConstraint constraint = new ViolatedAtomicConstraint(
             new StringHasLengthConstraint(
                 new Field("Test"),
-                10,
-                null
+                10
             )
         );
 
@@ -47,13 +61,11 @@ class FieldSpecFactoryTests {
     void construct_twoInstancesOfStringHasLengthConstraintCalledWithEqualValues_returnsTheSameGeneratorInstance() {
         StringHasLengthConstraint firstConstraint = new StringHasLengthConstraint(
             new Field("Test"),
-            20,
-            null
+            20
         );
         StringHasLengthConstraint secondConstraint = new StringHasLengthConstraint(
             new Field("Test"),
-            20,
-            null
+            20
         );
 
         final FieldSpec firstInstance = fieldSpecFactory.construct(firstConstraint);
@@ -66,8 +78,7 @@ class FieldSpecFactoryTests {
     void construct_isStringLongerThanConstraintRetrievedTwice_returnsTheSameGeneratorInstance() {
         IsStringLongerThanConstraint constraint = new IsStringLongerThanConstraint(
             new Field("Test"),
-            15,
-            null
+            15
         );
 
         final FieldSpec firstInstance = fieldSpecFactory.construct(constraint);
@@ -81,8 +92,7 @@ class FieldSpecFactoryTests {
         ViolatedAtomicConstraint constraint = new ViolatedAtomicConstraint(
             new IsStringLongerThanConstraint(
                 new Field("Test"),
-                10,
-                null
+                10
             )
         );
 
@@ -96,13 +106,11 @@ class FieldSpecFactoryTests {
     void construct_twoInstancesOfIsStringLongerThanConstraintCalledWithEqualValues_returnsTheSameGeneratorInstance() {
         IsStringLongerThanConstraint firstConstraint = new IsStringLongerThanConstraint(
             new Field("Test"),
-            20,
-            null
+            20
         );
         IsStringLongerThanConstraint secondConstraint = new IsStringLongerThanConstraint(
             new Field("Test"),
-            20,
-            null
+            20
         );
 
         final FieldSpec firstInstance = fieldSpecFactory.construct(firstConstraint);
@@ -115,8 +123,7 @@ class FieldSpecFactoryTests {
     void construct_isStringShorterThanConstraintRetrievedTwice_returnsTheSameGeneratorInstance() {
         IsStringShorterThanConstraint constraint = new IsStringShorterThanConstraint(
             new Field("Test"),
-            25,
-            null
+            25
         );
 
         final FieldSpec firstInstance = fieldSpecFactory.construct(constraint);
@@ -130,8 +137,7 @@ class FieldSpecFactoryTests {
         ViolatedAtomicConstraint constraint = new ViolatedAtomicConstraint(
             new IsStringShorterThanConstraint(
                 new Field("Test"),
-                10,
-                null
+                10
             )
         );
 
@@ -145,13 +151,11 @@ class FieldSpecFactoryTests {
     void construct_twoInstancesOfIsStringShorterThanConstraintCalledWithEqualValues_returnsTheSameGeneratorInstance() {
         IsStringShorterThanConstraint firstConstraint = new IsStringShorterThanConstraint(
             new Field("Test"),
-            20,
-            null
+            20
         );
         IsStringShorterThanConstraint secondConstraint = new IsStringShorterThanConstraint(
             new Field("Test"),
-            20,
-            null
+            20
         );
 
         final FieldSpec firstInstance = fieldSpecFactory.construct(firstConstraint);

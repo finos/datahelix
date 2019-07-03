@@ -1,3 +1,19 @@
+/*
+ * Copyright 2019 Scott Logic Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.scottlogic.deg.generator.decisiontree;
 
 import com.scottlogic.deg.common.profile.Field;
@@ -79,48 +95,48 @@ class CartesianProductDecisionTreeWalkerTests {
                     new ConditionalConstraint(
                         new IsInSetConstraint(
                             country,
-                            Collections.singleton("US"),
-                            rules()),
+                            Collections.singleton("US")
+                        ),
                         new IsInSetConstraint(
                             city,
-                            new HashSet<>(Arrays.asList("New York", "Washington DC")),
-                            rules())))),
+                            new HashSet<>(Arrays.asList("New York", "Washington DC"))
+                        )))),
             new Rule(
                 rule("GB country constrains city"),
                 Collections.singletonList(
                     new ConditionalConstraint(
                         new IsInSetConstraint(
                             country,
-                            Collections.singleton("GB"),
-                            rules()),
+                            Collections.singleton("GB")
+                        ),
                         new IsInSetConstraint(
                             city,
-                            new HashSet<>(Arrays.asList("Bristol", "London")),
-                            rules())))),
+                            new HashSet<>(Arrays.asList("Bristol", "London"))
+                        )))),
             new Rule(
                 rule("US country constrains currency"),
                 Collections.singletonList(
                     new ConditionalConstraint(
                         new IsInSetConstraint(
                             country,
-                            Collections.singleton("US"),
-                            rules()),
+                            Collections.singleton("US")
+                        ),
                         new IsInSetConstraint(
                             currency,
-                            Collections.singleton("USD"),
-                            rules())))),
+                            Collections.singleton("USD")
+                        )))),
             new Rule(
                 rule("GB country constrains currency"),
                 Collections.singletonList(
                     new ConditionalConstraint(
                         new IsInSetConstraint(
                             country,
-                            Collections.singleton("GB"),
-                            rules()),
+                            Collections.singleton("GB")
+                        ),
                         new IsInSetConstraint(
                             currency,
-                            Collections.singleton("GBP"),
-                            rules())))));
+                            Collections.singleton("GBP")
+                        )))));
 
         Profile profile = new Profile(fields, dummyRules);
 
@@ -131,10 +147,6 @@ class CartesianProductDecisionTreeWalkerTests {
             .collect(Collectors.toList());
 
         Assert.assertThat(rowSpecs, notNullValue());
-    }
-
-    private static Set<RuleInformation> rules(){
-        return Collections.singleton(rule("rules"));
     }
 
     private static RuleInformation rule(String description){

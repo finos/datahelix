@@ -1,3 +1,19 @@
+/*
+ * Copyright 2019 Scott Logic Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.scottlogic.deg.generator.inputs.profileviolation;
 
 import com.scottlogic.deg.common.profile.Field;
@@ -134,23 +150,23 @@ public class IndividualRuleProfileViolatorTests {
         barField = new Field("bar");
         Constraint constraint1 = new IsGreaterThanConstantConstraint(
             fooField,
-            100,
-            Collections.singleton(ruleInformation1));
+            100
+        );
         Constraint constraint2 = new IsGreaterThanConstantConstraint(
             barField,
-            50,
-            Collections.singleton(ruleInformation1));
+            50
+        );
         rule1 = new Rule(ruleInformation1, Arrays.asList(constraint1, constraint2));
 
         //Violated Rule 1 consists of two constraints, "foo is less than to 101" and "bar is less than 51"
         Constraint constraint3 = new IsLessThanConstantConstraint(
             fooField,
-            101,
-            Collections.singleton(ruleInformation1));
+            101
+        );
         Constraint constraint4 = new IsLessThanConstantConstraint(
             barField,
-            51,
-            Collections.singleton(ruleInformation1));
+            51
+        );
         violatedRule1 = new Rule(ruleInformation1, Arrays.asList(constraint3, constraint4));
 
         RuleInformation ruleInformation2 = new RuleInformation("Rule 2 description");

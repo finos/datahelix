@@ -1,3 +1,19 @@
+/*
+ * Copyright 2019 Scott Logic Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.scottlogic.deg.generator.decisiontree.treepartitioning;
 
 import com.scottlogic.deg.common.profile.Field;
@@ -22,7 +38,7 @@ class ConstraintToFieldMapperTests {
     void shouldFindConstraintMappings() {
         givenFields("A");
 
-        final AtomicConstraint constraint = new IsInSetConstraint(new Field("A"), Collections.singleton("test-value"), rules());
+        final AtomicConstraint constraint = new IsInSetConstraint(new Field("A"), Collections.singleton("test-value"));
         givenConstraints(constraint);
         givenFields("A");
 
@@ -33,7 +49,7 @@ class ConstraintToFieldMapperTests {
     void shouldFindRootDecisionNodeMapping() {
         givenFields("B");
 
-        final AtomicConstraint constraint = new IsInSetConstraint(new Field("B"), Collections.singleton("test-value"), rules());
+        final AtomicConstraint constraint = new IsInSetConstraint(new Field("B"), Collections.singleton("test-value"));
         final DecisionNode decision = new TreeDecisionNode(
             new TreeConstraintNode(constraint));
 
@@ -46,9 +62,9 @@ class ConstraintToFieldMapperTests {
     void shouldCreateCorrectNumberOfMappings() {
         givenFields("A", "B", "C");
 
-        final AtomicConstraint constraintA = new IsInSetConstraint(new Field("A"), Collections.singleton("test-value"), rules());
-        final AtomicConstraint constraintB = new IsInSetConstraint(new Field("B"), Collections.singleton("test-value"), rules());
-        final AtomicConstraint constraintC = new IsInSetConstraint(new Field("C"), Collections.singleton("test-value"), rules());
+        final AtomicConstraint constraintA = new IsInSetConstraint(new Field("A"), Collections.singleton("test-value"));
+        final AtomicConstraint constraintB = new IsInSetConstraint(new Field("B"), Collections.singleton("test-value"));
+        final AtomicConstraint constraintC = new IsInSetConstraint(new Field("C"), Collections.singleton("test-value"));
 
         givenConstraints(constraintA, constraintB, constraintC);
 
@@ -59,12 +75,12 @@ class ConstraintToFieldMapperTests {
     void shouldMapTopLevelConstraintsToNestedFields() {
         givenFields("A", "B", "C", "D", "E", "F");
 
-        final AtomicConstraint constraintA = new IsInSetConstraint(new Field("A"), Collections.singleton("test-value"), rules());
-        final AtomicConstraint constraintB = new IsInSetConstraint(new Field("B"), Collections.singleton("test-value"), rules());
-        final AtomicConstraint constraintC = new IsInSetConstraint(new Field("C"), Collections.singleton("test-value"), rules());
-        final AtomicConstraint constraintD = new IsInSetConstraint(new Field("D"), Collections.singleton("test-value"), rules());
-        final AtomicConstraint constraintE = new IsInSetConstraint(new Field("E"), Collections.singleton("test-value"), rules());
-        final AtomicConstraint constraintF = new IsInSetConstraint(new Field("F"), Collections.singleton("test-value"), rules());
+        final AtomicConstraint constraintA = new IsInSetConstraint(new Field("A"), Collections.singleton("test-value"));
+        final AtomicConstraint constraintB = new IsInSetConstraint(new Field("B"), Collections.singleton("test-value"));
+        final AtomicConstraint constraintC = new IsInSetConstraint(new Field("C"), Collections.singleton("test-value"));
+        final AtomicConstraint constraintD = new IsInSetConstraint(new Field("D"), Collections.singleton("test-value"));
+        final AtomicConstraint constraintE = new IsInSetConstraint(new Field("E"), Collections.singleton("test-value"));
+        final AtomicConstraint constraintF = new IsInSetConstraint(new Field("F"), Collections.singleton("test-value"));
 
         final DecisionNode decisionABC = new TreeDecisionNode(
             new TreeConstraintNode(
@@ -127,8 +143,7 @@ class ConstraintToFieldMapperTests {
         mappings = new ConstraintToFieldMapper()
             .mapConstraintsToFields(new DecisionTree(
                 new TreeConstraintNode(constraintsList, decisionsList),
-                fields,
-                "Decision Tree"
+                fields
             ));
     }
 
@@ -159,9 +174,5 @@ class ConstraintToFieldMapperTests {
             getMappings();
 
         Assert.assertThat(mappings, Matchers.aMapWithSize(mappingsCount));
-    }
-
-    private static Set<RuleInformation> rules(){
-        return Collections.singleton(new RuleInformation());
     }
 }

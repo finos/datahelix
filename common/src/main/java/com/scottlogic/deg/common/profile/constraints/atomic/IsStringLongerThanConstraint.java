@@ -1,18 +1,30 @@
+/*
+ * Copyright 2019 Scott Logic Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.scottlogic.deg.common.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
 
-import com.scottlogic.deg.common.profile.RuleInformation;
-
 import java.util.Objects;
-import java.util.Set;
 
 public class IsStringLongerThanConstraint implements AtomicConstraint {
     public final Field field;
-    private final Set<RuleInformation> rules;
     public final int referenceValue;
 
-    public IsStringLongerThanConstraint(Field field, int referenceValue, Set<RuleInformation> rules) {
+    public IsStringLongerThanConstraint(Field field, int referenceValue) {
         if (referenceValue < 0){
             throw new IllegalArgumentException("Cannot create an IsStringLongerThanConstraint for field '" +
                 field.name + "' with a a negative length.");
@@ -20,7 +32,6 @@ public class IsStringLongerThanConstraint implements AtomicConstraint {
 
         this.referenceValue = referenceValue;
         this.field = field;
-        this.rules = rules;
     }
 
     @Override
@@ -51,15 +62,4 @@ public class IsStringLongerThanConstraint implements AtomicConstraint {
 
     @Override
     public String toString() { return String.format("`%s` length > %d", field.name, referenceValue); }
-
-
-    @Override
-    public Set<RuleInformation> getRules() {
-        return rules;
-    }
-
-    @Override
-    public AtomicConstraint withRules(Set<RuleInformation> rules) {
-        return new IsStringLongerThanConstraint(this.field, this.referenceValue, rules);
-    }
 }

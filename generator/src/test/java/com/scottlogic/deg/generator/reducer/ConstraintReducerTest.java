@@ -1,3 +1,19 @@
+/*
+ * Copyright 2019 Scott Logic Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.scottlogic.deg.generator.reducer;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
@@ -43,10 +59,10 @@ class ConstraintReducerTest {
         final Set<Object> countryAmong = new HashSet<>(Arrays.asList("UK", "US"));
 
         final List<AtomicConstraint> constraints = Arrays.asList(
-            new IsGreaterThanConstantConstraint(quantityField, 0, rules()),
-            new IsGreaterThanConstantConstraint(quantityField, 5, rules()).negate(),
-            new IsInSetConstraint(countryField, countryAmong, rules()),
-            new IsOfTypeConstraint(cityField, IsOfTypeConstraint.Types.STRING, rules()));
+            new IsGreaterThanConstantConstraint(quantityField, 0),
+            new IsGreaterThanConstantConstraint(quantityField, 5).negate(),
+            new IsInSetConstraint(countryField, countryAmong),
+            new IsOfTypeConstraint(cityField, IsOfTypeConstraint.Types.STRING));
 
         // ACT
         final RowSpec reducedConstraints = constraintReducer.reduceConstraintsToRowSpec(
@@ -113,7 +129,7 @@ class ConstraintReducerTest {
         final Field field = new Field("test0");
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
-            new IsGreaterThanConstantConstraint(field, 5, rules()));
+            new IsGreaterThanConstantConstraint(field, 5));
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
@@ -147,7 +163,7 @@ class ConstraintReducerTest {
         final Field field = new Field("test0");
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
-            new IsGreaterThanConstantConstraint(field, 5, rules()).negate());
+            new IsGreaterThanConstantConstraint(field, 5).negate());
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
@@ -182,7 +198,7 @@ class ConstraintReducerTest {
         final Field field = new Field("test0");
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
-            new IsGreaterThanOrEqualToConstantConstraint(field, 5, rules()));
+            new IsGreaterThanOrEqualToConstantConstraint(field, 5));
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
@@ -216,7 +232,7 @@ class ConstraintReducerTest {
         final Field field = new Field("test0");
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
-            new IsGreaterThanOrEqualToConstantConstraint(field, 5, rules()).negate());
+            new IsGreaterThanOrEqualToConstantConstraint(field, 5).negate());
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
@@ -251,7 +267,7 @@ class ConstraintReducerTest {
         final Field field = new Field("test0");
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
-            new IsLessThanConstantConstraint(field, 5, rules()));
+            new IsLessThanConstantConstraint(field, 5));
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
@@ -286,7 +302,7 @@ class ConstraintReducerTest {
         final Field field = new Field("test0");
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
-            new IsLessThanConstantConstraint(field, 5, rules()).negate());
+            new IsLessThanConstantConstraint(field, 5).negate());
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
@@ -320,7 +336,7 @@ class ConstraintReducerTest {
         final Field field = new Field("test0");
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
-            new IsLessThanOrEqualToConstantConstraint(field, 5, rules()));
+            new IsLessThanOrEqualToConstantConstraint(field, 5));
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
@@ -355,7 +371,7 @@ class ConstraintReducerTest {
         final Field field = new Field("test0");
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
-            new IsLessThanOrEqualToConstantConstraint(field, 5, rules()).negate());
+            new IsLessThanOrEqualToConstantConstraint(field, 5).negate());
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
@@ -390,7 +406,7 @@ class ConstraintReducerTest {
         final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
-            new IsAfterConstantDateTimeConstraint(field, testTimestamp, rules()));
+            new IsAfterConstantDateTimeConstraint(field, testTimestamp));
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
@@ -425,7 +441,7 @@ class ConstraintReducerTest {
         final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16,0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
-            new IsAfterConstantDateTimeConstraint(field, testTimestamp, rules()).negate());
+            new IsAfterConstantDateTimeConstraint(field, testTimestamp).negate());
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
@@ -460,7 +476,7 @@ class ConstraintReducerTest {
         final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
-            new IsAfterOrEqualToConstantDateTimeConstraint(field, testTimestamp, rules()));
+            new IsAfterOrEqualToConstantDateTimeConstraint(field, testTimestamp));
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
@@ -495,7 +511,7 @@ class ConstraintReducerTest {
         final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
-            new IsAfterOrEqualToConstantDateTimeConstraint(field, testTimestamp, rules()).negate());
+            new IsAfterOrEqualToConstantDateTimeConstraint(field, testTimestamp).negate());
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
@@ -531,7 +547,7 @@ class ConstraintReducerTest {
         final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
-            new IsBeforeConstantDateTimeConstraint(field, testTimestamp, rules()));
+            new IsBeforeConstantDateTimeConstraint(field, testTimestamp));
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
@@ -567,7 +583,7 @@ class ConstraintReducerTest {
         final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
-            new IsBeforeConstantDateTimeConstraint(field, testTimestamp, rules()).negate());
+            new IsBeforeConstantDateTimeConstraint(field, testTimestamp).negate());
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
@@ -602,7 +618,7 @@ class ConstraintReducerTest {
         final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
-            new IsBeforeOrEqualToConstantDateTimeConstraint(field, testTimestamp, rules()));
+            new IsBeforeOrEqualToConstantDateTimeConstraint(field, testTimestamp));
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
@@ -638,7 +654,7 @@ class ConstraintReducerTest {
         final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
-            new IsBeforeOrEqualToConstantDateTimeConstraint(field, testTimestamp, rules()).negate());
+            new IsBeforeOrEqualToConstantDateTimeConstraint(field, testTimestamp).negate());
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
@@ -674,8 +690,8 @@ class ConstraintReducerTest {
         final OffsetDateTime endTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 8, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Arrays.asList(
-            new IsAfterConstantDateTimeConstraint(field, startTimestamp, rules()),
-            new IsBeforeConstantDateTimeConstraint(field, endTimestamp, rules()));
+            new IsAfterConstantDateTimeConstraint(field, startTimestamp),
+            new IsBeforeConstantDateTimeConstraint(field, endTimestamp));
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
@@ -715,7 +731,7 @@ class ConstraintReducerTest {
         String pattern = ".*\\..*";
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
-            new MatchesRegexConstraint(field, Pattern.compile(pattern), rules()));
+            new MatchesRegexConstraint(field, Pattern.compile(pattern)));
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
 
@@ -743,7 +759,7 @@ class ConstraintReducerTest {
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
 
         List<AtomicConstraint> constraints = Arrays.asList(
-            new FormatConstraint(field, "Hello '$1'", rules())
+            new FormatConstraint(field, "Hello '$1'")
         );
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
@@ -777,8 +793,8 @@ class ConstraintReducerTest {
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
 
         List<AtomicConstraint> constraints = Arrays.asList(
-            new FormatConstraint(field, "Lorem '$1'", rules()),
-            new FormatConstraint(field, "Ipsum '$1'", rules())
+            new FormatConstraint(field, "Lorem '$1'"),
+            new FormatConstraint(field, "Ipsum '$1'")
         );
 
         Optional<RowSpec> rowSpec = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints);
@@ -791,7 +807,7 @@ class ConstraintReducerTest {
 
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
-            new IsStringLongerThanConstraint(field, 5, rules())
+            new IsStringLongerThanConstraint(field, 5)
         );
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
@@ -820,7 +836,7 @@ class ConstraintReducerTest {
 
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
-            new IsStringShorterThanConstraint(field, 5, rules())
+            new IsStringShorterThanConstraint(field, 5)
         );
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
@@ -848,7 +864,7 @@ class ConstraintReducerTest {
 
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
-            new StringHasLengthConstraint(field, 5, rules())
+            new StringHasLengthConstraint(field, 5)
         );
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints).get();
@@ -877,8 +893,8 @@ class ConstraintReducerTest {
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
 
         List<AtomicConstraint> constraints = Arrays.asList(
-            new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.NUMERIC, rules()),
-            new IsInSetConstraint(field, new HashSet<>(Arrays.asList(1, "lorem", 5, "ipsum", 2)), rules())
+            new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.NUMERIC),
+            new IsInSetConstraint(field, new HashSet<>(Arrays.asList(1, "lorem", 5, "ipsum", 2)))
         );
 
         Optional<RowSpec> testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints);
@@ -896,8 +912,8 @@ class ConstraintReducerTest {
 
         OffsetDateTime datetimeValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         List<AtomicConstraint> constraints = Arrays.asList(
-            new MatchesRegexConstraint(field, Pattern.compile("(lorem|ipsum)"), rules()),
-            new IsInSetConstraint(field, new HashSet<>(Arrays.asList(1, "lorem", 5, "ipsum", 2, "foo", datetimeValue)), rules())
+            new MatchesRegexConstraint(field, Pattern.compile("(lorem|ipsum)")),
+            new IsInSetConstraint(field, new HashSet<>(Arrays.asList(1, "lorem", 5, "ipsum", 2, "foo", datetimeValue)))
         );
 
         Optional<RowSpec> testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints);
@@ -915,8 +931,8 @@ class ConstraintReducerTest {
 
         OffsetDateTime datetimeValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         List<AtomicConstraint> constraints = Arrays.asList(
-            new IsGreaterThanOrEqualToConstantConstraint(field, 2, rules()),
-            new IsInSetConstraint(field, new HashSet<>(Arrays.asList(1, "lorem", 5, "ipsum", 2, datetimeValue)), rules())
+            new IsGreaterThanOrEqualToConstantConstraint(field, 2),
+            new IsInSetConstraint(field, new HashSet<>(Arrays.asList(1, "lorem", 5, "ipsum", 2, datetimeValue)))
         );
 
         Optional<RowSpec> testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints);
@@ -935,8 +951,8 @@ class ConstraintReducerTest {
         OffsetDateTime datetimeValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         OffsetDateTime oneHourLaterDateTimeValue = datetimeValue.plusHours(1);
         List<AtomicConstraint> constraints = Arrays.asList(
-            new IsAfterConstantDateTimeConstraint(field, datetimeValue, rules()),
-            new IsInSetConstraint(field, new HashSet<>(Arrays.asList(1, "lorem", 5, "ipsum", 2, datetimeValue, oneHourLaterDateTimeValue)), rules())
+            new IsAfterConstantDateTimeConstraint(field, datetimeValue),
+            new IsInSetConstraint(field, new HashSet<>(Arrays.asList(1, "lorem", 5, "ipsum", 2, datetimeValue, oneHourLaterDateTimeValue)))
         );
 
         Optional<RowSpec> testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints);
@@ -949,9 +965,9 @@ class ConstraintReducerTest {
     @Test
     public void shouldReduceConstraintsCorrectlyWhereOneIsViolated(){
         Field field = new Field("field");
-        AtomicConstraint violatedConstraint = new ViolatedAtomicConstraint(new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.STRING, rules()).negate());
-        AtomicConstraint ofLengthConstraint = new IsStringShorterThanConstraint(field, 100, rules());
-        AtomicConstraint matchesRegexConstraint = new MatchesRegexConstraint(field, Pattern.compile("[a-z]{2,}"), rules());
+        AtomicConstraint violatedConstraint = new ViolatedAtomicConstraint(new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.STRING).negate());
+        AtomicConstraint ofLengthConstraint = new IsStringShorterThanConstraint(field, 100);
+        AtomicConstraint matchesRegexConstraint = new MatchesRegexConstraint(field, Pattern.compile("[a-z]{2,}"));
 
         Optional<FieldSpec> result = this.constraintReducer.reduceConstraintsToFieldSpec(
             Arrays.asList(violatedConstraint, ofLengthConstraint, matchesRegexConstraint));
@@ -964,16 +980,12 @@ class ConstraintReducerTest {
     @Test
     public void shouldReduceConstraintsToNullAllowedFieldSpecOnly() {
         Field field = new Field("field");
-        AtomicConstraint ofTypeString = new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.STRING, rules());
+        AtomicConstraint ofTypeString = new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.STRING);
 
         Optional<FieldSpec> result = this.constraintReducer.reduceConstraintsToFieldSpec(
             Arrays.asList(ofTypeString, ofTypeString.negate()));
 
         Assert.assertThat(result.isPresent(), is(true));
         Assert.assertThat(result.get().getTypeRestrictions().getAllowedTypes(), empty());
-    }
-
-    private static Set<RuleInformation> rules(){
-        return Collections.singleton(new RuleInformation());
     }
 }

@@ -1,3 +1,19 @@
+/*
+ * Copyright 2019 Scott Logic Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.scottlogic.deg.profile.reader;
 
 import java.util.*;
@@ -9,10 +25,12 @@ public class BaseConstraintReaderMap implements ConstraintReaderMap {
         new HashMap<>();
 
     public BaseConstraintReaderMap(Stream<ConstraintReaderMapEntrySource> providersToLoad) {
-        providersToLoad.forEach(p -> add(p.getConstraintReaderMapEntries()));
+        providersToLoad
+            .forEach(p ->
+                p.getConstraintReaderMapEntries()
+                    .forEach(this::add));
     }
 
-    @Override
     public void add(ConstraintReaderMapEntry entry) {
         if (!operatorAndValueToReadermap.containsKey(entry.getOperatorCode())) {
             operatorAndValueToReadermap.putIfAbsent(entry.getOperatorCode(), new HashMap<>());
@@ -20,11 +38,6 @@ public class BaseConstraintReaderMap implements ConstraintReaderMap {
         Map<String, ConstraintReader> valueToReaderMap =
             operatorAndValueToReadermap.get(entry.getOperatorCode());
         valueToReaderMap.put(entry.getValueCode(), entry.getReader());
-    }
-
-    @Override
-    public void add(Stream<ConstraintReaderMapEntry> entries) {
-        entries.forEach(e -> add(e));
     }
 
     @Override
