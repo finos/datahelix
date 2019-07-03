@@ -1,4 +1,4 @@
-# Build and run the generator using an IDE
+# Build and run the generator
 
 The instructions below explain how to download the generator source code, build it and run it, using a Java IDE.  This is the recommended setup if you would like to contribute to the project yourself.  If you would like to use Docker to build the source code and run the generator, [please follow these alternate instructions](DockerSetup.md).
 
@@ -49,6 +49,34 @@ To run a feature file you’ll have to modify the configuration by removing .ste
 An explanation of the particular syntax used can be found [here](https://github.com/ScottLogic/datahelix/blob/master/docs/CucumberSyntax.md). 
 
 ## First time setup
+### Command Line
+
+Build the tool with all its dependencies:
+
+`gradle build`
+
+Check the setup worked with this example command:
+
+`java -jar orchestrator\build\libs\generator.jar generate --replace -p=docs/GettingStarted/ExampleProfile1.json -o=out.csv`
+
+To generate valid data run the following command from the command line:
+
+`java -jar <path to JAR file> generate [options] --profile-file="<path to profile>" --output-path="<desired output path>"`
+
+* `[path to JAR file]` - the location of `generator.jar`.
+* `[options]` - optionally a combination of [options](../../docs/Options/GenerateOptions.md) to configure how the command operates.
+* `<path to profile>` - the location of the JSON profile file.
+* `<desired output path>` - the location of the generated data.
+
+To generate violating data run the following command from the command line:
+
+`java -jar <path to JAR file> violate [options] --profile-file="<path to profile>" --output-path="<desired output folder>"`
+
+* `[path to JAR file]` - the location of `generator.jar`.
+* `[options]` - a combination of any (or none) of [the options documented here](../../docs/Options/ViolateOptions.md) to configure how the command operates.
+* `<path to profile>` - the location of the JSON profile file.
+* `<desired output folder>` - the location of a folder in which to create generated data files.
+
 
 ### IntelliJ
 
@@ -79,27 +107,3 @@ violate --profile-file="<path to an example JSON profile>" --output-path="<path 
 ```
 
 Run both of these configurations to test that installation is successful.
-
-### Command Line
-
-Build the tool with all its dependencies:
-
-`gradle fatJar`
-
-To generate valid data run the following command from the command line:
-
-`java -jar <path to JAR file> generate [options] --profile-file="<path to profile>" --output-path="<desired output path>"`
-
-* `[path to JAR file]` - the location of `generator.jar`.
-* `[options]` - optionally a combination of [options](../../docs/Options/GenerateOptions.md) to configure how the command operates.
-* `<path to profile>` - the location of the JSON profile file.
-* `<desired output path>` - the location of the generated data.
-
-To generate violating data run the following command from the command line:
-
-`java -jar <path to JAR file> violate [options] --profile-file="<path to profile>" --output-path="<desired output folder>"`
-
-* `[path to JAR file]` - the location of `generator.jar`.
-* `[options]` - a combination of any (or none) of [the options documented here](../../docs/Options/ViolateOptions.md) to configure how the command operates.
-* `<path to profile>` - the location of the JSON profile file.
-* `<desired output folder>` - the location of a folder in which to create generated data files.
