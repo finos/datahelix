@@ -7,7 +7,7 @@ The instructions below explain how to download the generator source code, build 
 Clone the repository to your local development folder.
 
 ```
-git clone https://github.com/ScottLogic/datahelix.git 
+git clone https://github.com/finos/datahelix.git
 ```
 
 ## Installation Requirements
@@ -46,7 +46,7 @@ Currently the tests cannot be run from the TestRunner class.
 
 To run a feature file you’ll have to modify the configuration by removing .steps from the end of the Glue field. 
 
-An explanation of the particular syntax used can be found [here](https://github.com/ScottLogic/datahelix/blob/master/docs/CucumberSyntax.md). 
+An explanation of the particular syntax used can be found [here](https://github.com/finos/datahelix/blob/master/docs/CucumberSyntax.md).
 
 ## First time setup
 

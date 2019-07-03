@@ -49,7 +49,7 @@ import java.util.stream.Collectors;
  *
  * Crucially, it should never permit an invalid case.
  *
- * see {@link https://github.com/ScottLogic/datahelix/issues/767 #767} for more details
+ * see {@link https://github.com/finos/datahelix/issues/767 #767} for more details
  */
 public class TypingRequiredPerFieldValidator implements ProfileValidator {
     private final DecisionTreeFactory decisionTreeFactory;

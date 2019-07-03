@@ -17,14 +17,14 @@ Feature: the name of my feature
       | null |
 ```
 
-More examples can be seen in the [generator cucumber features](https://github.com/ScottLogic/datahelix/tree/master/generator/src/test/java/com/scottlogic/deg/generator/cucumber)
+More examples can be seen in the [generator cucumber features](https://github.com/finos/datahelix/tree/master/generator/src/test/java/com/scottlogic/deg/generator/cucumber)
 
 The framework supports setting configuration settings for the generator, defining the profile and describing the expected outcome. All of these are described below, all variable elements (e.g. `{generationStrategy}` are case insensitive), all fields and values **are case sensitive**.
 
 ### Configuration options
-* _the generation strategy is `{generationStrategy}`_ see [generation strategies](https://github.com/ScottLogic/datahelix/blob/master/generator/docs/GenerationTypes.md) - default: `random`
-* _the combination strategy is `{combinationStrategy}`_ see [combination strategies](https://github.com/ScottLogic/datahelix/blob/master/generator/docs/CombinationStrategies.md) - default: `exhaustive`
-* _the walker type is `{walkerType}`_ see [walker types](https://github.com/ScottLogic/datahelix/blob/master/generator/docs/TreeWalkerTypes.md) - default: `reductive`
+* _the generation strategy is `{generationStrategy}`_ see [generation strategies](https://github.com/finos/datahelix/blob/master/generator/docs/GenerationTypes.md) - default: `random`
+* _the combination strategy is `{combinationStrategy}`_ see [combination strategies](https://github.com/finos/datahelix/blob/master/generator/docs/CombinationStrategies.md) - default: `exhaustive`
+* _the walker type is `{walkerType}`_ see [walker types](https://github.com/finos/datahelix/blob/master/generator/docs/TreeWalkerTypes.md) - default: `reductive`
 * _the data requested is `{generationMode}`_, either `violating` or `validating` - default: `validating`
 * _the generator can generate at most `{int}` rows_, ensures that the generator will only emit `int` rows, default: `1000`
 * _we do not violate constraint `{operator}`_, prevent this operator from being violated (see **Operators** section below), you can specify this step many times if required
