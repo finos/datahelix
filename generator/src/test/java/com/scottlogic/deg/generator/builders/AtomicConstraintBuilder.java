@@ -61,4 +61,12 @@ public class AtomicConstraintBuilder {
         constraintNodeBuilder.constraints.add(isNotNullConstraint);
         return constraintNodeBuilder;
     }
+
+    public ConstraintNodeBuilder isSelfContradictory() {
+        IsNullConstraint isNullConstraint = new IsNullConstraint(field);
+        AtomicConstraint isNotNullConstraint = new IsNullConstraint(field).negate();
+        constraintNodeBuilder.constraints.add(isNullConstraint);
+        constraintNodeBuilder.constraints.add(isNotNullConstraint);
+        return constraintNodeBuilder;
+    }
 }

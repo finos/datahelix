@@ -16,6 +16,11 @@
 
 package com.scottlogic.deg.generator.generation;
 
-public class NoopDataGeneratorMonitor implements ReductiveDataGeneratorMonitor {
+import java.io.PrintWriter;
+
+public class NoopDataGeneratorMonitor extends ReductiveDataGeneratorMonitor {
+    public NoopDataGeneratorMonitor() {
+        super(new PrintWriter(System.err));
+    }
     // don't override any of the default no-op implementations from the interface
 }

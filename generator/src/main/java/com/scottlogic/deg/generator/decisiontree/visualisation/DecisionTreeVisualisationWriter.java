@@ -214,7 +214,7 @@ class NodeVisualiser {
             return "[color=\"green\"]";
         }
 
-        if (node.hasMarking(NodeMarking.STATICALLY_CONTRADICTORY)) {
+        if (node.hasMarking(NodeMarking.CONTRADICTORY)) {
             return "[color=\"red\"]";
         }
 
