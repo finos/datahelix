@@ -51,12 +51,14 @@ public class UpfrontTreePruner {
         DecisionTree markedTree = validator.markContradictions(tree);
 
         if (prunedNode.isContradictory()) {
-            monitor.addLineToPrintAtEndOfGeneration("The provided profile is wholly contradictory.");
-            monitor.addLineToPrintAtEndOfGeneration("No data can be generated.");
+            monitor.addLineToPrintAtEndOfGeneration("");
+            monitor.addLineToPrintAtEndOfGeneration("The provided profile is wholly contradictory!");
+            monitor.addLineToPrintAtEndOfGeneration("No data can be generated!");
             return new DecisionTree(null, tree.getFields());
 
         } else if (isPartiallyContradictory(markedTree.getRootNode())) {
-            monitor.addLineToPrintAtEndOfGeneration("The provided profile is partially contradictory.");
+            monitor.addLineToPrintAtEndOfGeneration("");
+            monitor.addLineToPrintAtEndOfGeneration("The provided profile is partially contradictory!");
             monitor.addLineToPrintAtEndOfGeneration("Run the visualise command for more information.");
             return new DecisionTree(prunedNode.get(), tree.getFields());
 
