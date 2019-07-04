@@ -1,4 +1,4 @@
-# Contributing to DataHelix
+Contributing to DataHelix
 
 # Contributor License Agreement (CLA)
 A CLA is a document that specifies how a project is allowed to use your
@@ -12,7 +12,7 @@ that must also be met.**
 
 As a result, PRs submitted to the DataHelix project cannot be accepted until you have a CLA in place with the Foundation.
 
-Notice that some dependencies, as referenced in the [NOTICE](https://github.com/finos/datahelix/blob/master/NOTICE.md) file have certain restrictions upon contributors.
+Notice that some dependencies, as referenced in the [NOTICE](https://github.com/finos/datahelix/blob/master/NOTICE) file have certain restrictions upon contributors.
 
 # Contributing Issues
 
