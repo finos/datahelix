@@ -1,4 +1,4 @@
-# DataHelix Generator [![CircleCI](https://circleci.com/gh/finos/datahelix.svg?style=svg)](https://circleci.com/gh/finos/datahelix) [![FINOS - Operating](https://cdn.jsdelivr.net/gh/finos/contrib-toolbox@master/images/badge-operating.svg)](https://finosfoundation.atlassian.net/wiki/display/FINOS/Operating)
+# DataHelix Generator [![CircleCI](https://circleci.com/gh/finos/datahelix.svg?style=svg)](https://circleci.com/gh/finos/datahelix) [![FINOS - Incubating](https://cdn.jsdelivr.net/gh/finos/contrib-toolbox@master/images/badge-incubating.svg)](https://finosfoundation.atlassian.net/wiki/display/FINOS/Incubating)
 
 ![DataHelix logo](logo.png)
 
@@ -23,11 +23,11 @@ _The following guide gives a 10 minute introduction to the generator via various
 
 The generator has been written in Java, allowing it to work on Microsoft Windows, Apple Mac and Linux. You will need Java v1.8 installed to run the generator (you can run `java version` to check whether you meet this requirement), it can be [downloaded here](https://www.java.com/en/download/manual.jsp).
 
-The generator is distributed as a JAR file, with the latest release always available from the [GitHub releases page](https://github.com/ScottLogic/datahelix/releases/). The project is currently in beta and under active development. You can expect breaking changes in future releases, and new features too!
+The generator is distributed as a JAR file, with the latest release always available from the [GitHub releases page](https://github.com/finos/datahelix/releases/). The project is currently in beta and under active development. You can expect breaking changes in future releases, and new features too!
 
 You are also welcome to download the source code and build the generator yourself. To do so, follow the instructions for [downloading and building it using a Java IDE](generator/docs/GeneratorSetup.md), or for [downloading and building it using Docker](generator/docs/DockerSetup.md).
 
-Your feedback on the beta would be greatly appreciated. If you have any issues, feature requests, or ideas, please share them via the [GitHub issues page](https://github.com/ScottLogic/datahelix/issues).
+Your feedback on the beta would be greatly appreciated. If you have any issues, feature requests, or ideas, please share them via the [GitHub issues page](https://github.com/finos/datahelix/issues).
 
 ## Creating your first profile
 
@@ -47,7 +47,7 @@ We'll start by generating data for a trivial schema. Using your favourite text e
 }
 ```
 
-Now place the `generator.jar` file (downloaded from the [GitHub releases page](https://github.com/ScottLogic/datahelix/releases/)) in the same folder as the profile, open up a terminal, and execute the following:
+Now place the `generator.jar` file (downloaded from the [GitHub releases page](https://github.com/finos/datahelix/releases/)) in the same folder as the profile, open up a terminal, and execute the following:
 
 ```
 $ java -jar generator.jar generate --max-rows=100 --allow-untyped-fields --replace --profile-file=profile.json --output-path=output.csv
@@ -303,7 +303,7 @@ You can find out more about the various constraints the generator supports in th
 The generator supports a number of different generation modes:
 
 -   **random** - generates random data that abides by the given set of constraints, with the number of generated rows limited via the `--max-rows` option.
--   **interesting** - generates data that is typically [deemed 'interesting'](https://github.com/ScottLogic/datahelix/wiki/Interesting-data-generation) from a test perspective, for example exploring [boundary values](https://en.wikipedia.org/wiki/Boundary-value_analysis).
+-   **interesting** - generates data that is typically [deemed 'interesting'](https://github.com/finos/datahelix/wiki/Interesting-data-generation) from a test perspective, for example exploring [boundary values](https://en.wikipedia.org/wiki/Boundary-value_analysis).
 
 The mode is specified via the `--generation-type` option. The following example outputs 'interesting' values for the current profile:
 
@@ -412,11 +412,11 @@ firstName,age,nationalInsurance
 
 ## Next steps
 
-That's the end of our getting started guide. Hopefully it has given you a good understanding of what the DataHelix generator is capable of. If you'd like to find out more about the various constraints the tool supports, the [Profile Developer Guide](docs/ProfileDeveloperGuide.md) is a good next step. You might also be interested in the [examples folder](https://github.com/ScottLogic/datahelix/tree/master/examples), which illustrates various features of the generator.
+That's the end of our getting started guide. Hopefully it has given you a good understanding of what the DataHelix generator is capable of. If you'd like to find out more about the various constraints the tool supports, the [Profile Developer Guide](docs/ProfileDeveloperGuide.md) is a good next step. You might also be interested in the [examples folder](https://github.com/finos/datahelix/tree/master/examples), which illustrates various features of the generator.
 
 ## Contributing
 
-Please read the [Contributing](https://github.com/ScottLogic/datahelix/blob/master/.github/CONTRIBUTING.md) guidelines before making any changes.
+Please read the [Contributing](https://github.com/finos/datahelix/blob/master/.github/CONTRIBUTING.md) guidelines before making any changes.
 
 ## License
 
