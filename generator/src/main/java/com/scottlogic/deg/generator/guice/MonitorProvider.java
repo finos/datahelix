@@ -24,15 +24,12 @@ import java.io.PrintWriter;
 
 public class MonitorProvider implements Provider<ReductiveDataGeneratorMonitor>  {
     private GenerationConfigSource commandLine;
-    private NoopDataGeneratorMonitor noopDataGeneratorMonitor;
 
     @Inject
     MonitorProvider(
-        GenerationConfigSource commandLine,
-        NoopDataGeneratorMonitor noopDataGeneratorMonitor) {
+        GenerationConfigSource commandLine) {
 
         this.commandLine = commandLine;
-        this.noopDataGeneratorMonitor = noopDataGeneratorMonitor;
     }
 
     @Override
@@ -43,7 +40,7 @@ public class MonitorProvider implements Provider<ReductiveDataGeneratorMonitor> 
                     new PrintWriter(System.err, true));
 
             case QUIET:
-                return this.noopDataGeneratorMonitor;
+                return new NoopDataGeneratorMonitor();
 
             default:
                 return new VelocityMonitor(
