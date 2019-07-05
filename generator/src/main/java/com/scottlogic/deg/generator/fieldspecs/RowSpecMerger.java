@@ -17,9 +17,15 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
 import com.google.inject.Inject;
+import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.ProfileFields;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class RowSpecMerger {
     private final FieldSpecMerger fieldSpecMerger;
@@ -29,10 +35,22 @@ public class RowSpecMerger {
         this.fieldSpecMerger = fieldSpecMerger;
     }
 
-    public Optional<RowSpec> merge(Collection<RowSpec> rowSpecs) {
-        return RowSpec.merge(
-                fieldSpecMerger,
-                rowSpecs
-        );
+    /**
+     * @param left must have all the fields represented
+     */
+    public Optional<RowSpec> merge(RowSpec left, RowSpec right) {
+
+        Map<Field, FieldSpec> newMap = new HashMap<>();
+
+        for (Field field : left.getFields()) {
+            Optional<FieldSpec> merge = fieldSpecMerger.merge(left.getSpecForField(field), right.getSpecForField(field));
+
+            if (!merge.isPresent()){
+                return Optional.empty();
+            }
+            newMap.put(field, merge.get());
+        }
+
+        return Optional.of(new RowSpec(left.getFields(), newMap));
     }
 }
