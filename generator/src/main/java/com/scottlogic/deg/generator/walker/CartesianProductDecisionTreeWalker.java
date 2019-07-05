@@ -30,7 +30,6 @@ import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagGenerator;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
@@ -98,11 +97,11 @@ public class CartesianProductDecisionTreeWalker implements DecisionTreeWalker {
 
             final RowSpec mergedRowSpec = mergedRowSpecOpt.get();
 
-            if (option.getDecisions().isEmpty()) {
+            if (option.getChildren().isEmpty()) {
                 return Stream.of(mergedRowSpec);
             }
 
-            return option.getDecisions()
+            return option.getChildren()
                 .stream()
                 .reduce(
                     Stream.of(mergedRowSpec),
@@ -114,7 +113,7 @@ public class CartesianProductDecisionTreeWalker implements DecisionTreeWalker {
 
         private Stream<RowSpec> walk(DecisionNode decision, RowSpec accumulatedSpec) {
             return FlatMappingSpliterator.flatMap(decision
-                    .getOptions()
+                    .getChildren()
                     .stream(),
                     option -> walk(option, accumulatedSpec));
         }

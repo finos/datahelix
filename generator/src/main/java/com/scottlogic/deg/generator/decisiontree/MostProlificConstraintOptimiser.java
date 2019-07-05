@@ -49,7 +49,7 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
     }
 
     private ConstraintNode optimiseLevelOfTree(ConstraintNode rootNode, int depth){
-        Collection<DecisionNode> decisions = rootNode.getDecisions();
+        Collection<DecisionNode> decisions = rootNode.getChildren();
         if (decisions.size() <= 1 || depth > this.maxDepth)
             return null; //not worth optimising
 
@@ -60,7 +60,7 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
         {
             rootNode = newRootNode;
 
-            int newDecisionCount = rootNode.getDecisions().size();
+            int newDecisionCount = rootNode.getChildren().size();
             int changeInDecisionCount = newDecisionCount - prevDecisionCount;
             if (Math.abs(changeInDecisionCount) < 1) {
                 break;
@@ -74,14 +74,14 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
     }
 
     private ConstraintNode optimiseDecisions(ConstraintNode rootNode, int depth){
-        AtomicConstraint mostProlificAtomicConstraint = getMostProlificAtomicConstraint(rootNode.getDecisions());
+        AtomicConstraint mostProlificAtomicConstraint = getMostProlificAtomicConstraint(rootNode.getChildren());
         if (mostProlificAtomicConstraint == null){
             return null;
         }
         // Add negation of most prolific constraint to new decision node
         AtomicConstraint negatedMostProlificConstraint = mostProlificAtomicConstraint.negate();
 
-        List<DecisionNode> factorisableDecisionNodes = rootNode.getDecisions().stream()
+        List<DecisionNode> factorisableDecisionNodes = rootNode.getChildren().stream()
             .filter(node -> this.decisionIsFactorisable(node, mostProlificAtomicConstraint, negatedMostProlificConstraint))
             .collect(Collectors.toList());
         if (factorisableDecisionNodes.size() < 2){
@@ -116,8 +116,8 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
             .collect(Collectors.toList()));
 
         return rootNode
-            .removeDecisions(decisionsToRemove)
-            .addDecisions(Collections.singletonList(factorisedDecisionNode));
+            .removeChildren(decisionsToRemove)
+            .addChildren(Collections.singletonList(factorisedDecisionNode));
     }
 
     private boolean constraintNodeContainsNegatedConstraints(ConstraintNode node, Set<AtomicConstraint> constraints){
@@ -134,7 +134,7 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
         }
 
         DecisionNode decisionUnderFactorisedNode = new TreeDecisionNode(optionsToAdd);
-        return newNode.addDecisions(Collections.singletonList(decisionUnderFactorisedNode));
+        return newNode.addChildren(Collections.singletonList(decisionUnderFactorisedNode));
     }
 
     private int disfavourNotConstraints(Map.Entry<AtomicConstraint, List<AtomicConstraint>> entry){
@@ -146,7 +146,7 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
             FlatMappingSpliterator.flatMap(
                 FlatMappingSpliterator.flatMap(
                     decisions.stream(),
-                    dn -> dn.getOptions().stream()),
+                    dn -> dn.getChildren().stream()),
                 option -> option.getAtomicConstraints().stream())
             .collect(Collectors.groupingBy(Function.identity()));
 
@@ -171,12 +171,12 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
 
     private boolean decisionIsFactorisable(DecisionNode decision, AtomicConstraint factorisingConstraint, AtomicConstraint negatedFactorisingConstraint){
         // The decision should contain ONE option with the MPC
-        boolean optionWithMPCExists = decision.getOptions().stream()
+        boolean optionWithMPCExists = decision.getChildren().stream()
             .filter(option -> option.atomicConstraintExists(factorisingConstraint))
             .count() == 1;
 
         // The decision should contain ONE separate option with the negated MPC (which is atomic).
-        boolean optionWithNegatedMPCExists = decision.getOptions().stream()
+        boolean optionWithNegatedMPCExists = decision.getChildren().stream()
             .filter(option -> option.atomicConstraintExists(negatedFactorisingConstraint) && option.getAtomicConstraints().size() == 1)
             .count() == 1;
 
@@ -211,7 +211,7 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
         DecisionAnalysisResult performAnalysis() {
             DecisionAnalysisResult result = new DecisionAnalysisResult();
             List<ConstraintNode> otherOptions = new ArrayList<>();
-            for (ConstraintNode option : decision.getOptions()) {
+            for (ConstraintNode option : decision.getChildren()) {
                 boolean optionContainsProlificConstraint = option.atomicConstraintExists(factorisingConstraint);
                 boolean optionContainsNegatedProlificConstraint = option.atomicConstraintExists(negatedFactorisingConstraint);
                 if (optionContainsProlificConstraint && optionContainsNegatedProlificConstraint) {

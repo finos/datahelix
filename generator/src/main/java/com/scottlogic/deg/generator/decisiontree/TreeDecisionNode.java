@@ -41,12 +41,12 @@ public final class TreeDecisionNode implements DecisionNode {
     }
 
     @Override
-    public Collection<ConstraintNode> getOptions() {
+    public Collection<ConstraintNode> getChildren() {
         return options;
     }
 
     @Override
-    public DecisionNode setOptions(Collection<ConstraintNode> options){
+    public DecisionNode setChildren(Collection<ConstraintNode> options){
         return new TreeDecisionNode(options);
     }
 
@@ -90,7 +90,7 @@ public final class TreeDecisionNode implements DecisionNode {
 
     @Override
     public DecisionNode accept(NodeVisitor visitor){
-        Stream<ConstraintNode> options = getOptions().stream().map(c->c.accept(visitor));
+        Stream<ConstraintNode> options = getChildren().stream().map(c->c.accept(visitor));
         return visitor.visit(
             new TreeDecisionNode(
                 options.collect(Collectors.toSet()),

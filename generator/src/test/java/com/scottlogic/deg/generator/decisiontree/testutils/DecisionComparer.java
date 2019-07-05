@@ -32,7 +32,7 @@ public class DecisionComparer implements EqualityComparer {
 
     public int getHashCode(DecisionNode decision){
         return decision
-            .getOptions()
+            .getChildren()
             .stream()
             .reduce(
                 0,
@@ -52,8 +52,8 @@ public class DecisionComparer implements EqualityComparer {
         if (decision1 == null || decision2 == null)
             return false; //either decision1 XOR decision2 is null
 
-        return decision1.getOptions().size() == decision2.getOptions().size()
-            && optionAnyOrderComparer.equals(decision1.getOptions(), decision2.getOptions());
+        return decision1.getChildren().size() == decision2.getChildren().size()
+            && optionAnyOrderComparer.equals(decision1.getChildren(), decision2.getChildren());
     }
 
     static class OptionEqualityComparer implements EqualityComparer{

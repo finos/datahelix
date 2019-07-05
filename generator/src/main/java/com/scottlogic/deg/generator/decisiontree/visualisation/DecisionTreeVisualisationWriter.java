@@ -89,14 +89,14 @@ public class DecisionTreeVisualisationWriter {
             declareParenthood(parentNodeId, nodeId);
         }
 
-        for (DecisionNode decisionNode : constraintNode.getDecisions()) {
+        for (DecisionNode decisionNode : constraintNode.getChildren()) {
             TreeInfo thisOptionTreeInfo = visit(decisionNode, nodeId);
 
             treeInfo.addExceptRowSpecCount(thisOptionTreeInfo);
             treeInfo.rowSpecs = treeInfo.rowSpecs.multiply(thisOptionTreeInfo.rowSpecs);
         }
 
-        if (constraintNode.getDecisions().isEmpty() && this.shouldWriteDecisionNodeInfo && parentNodeId != null) {
+        if (constraintNode.getChildren().isEmpty() && this.shouldWriteDecisionNodeInfo && parentNodeId != null) {
             writeTreeInfo(treeInfo, nodeId, "blue");
         }
 
@@ -111,7 +111,7 @@ public class DecisionTreeVisualisationWriter {
 
         TreeInfo treeInfo = new TreeInfo();
         treeInfo.decisions = 1;
-        for (ConstraintNode childNode : decisionNode.getOptions()) {
+        for (ConstraintNode childNode : decisionNode.getChildren()) {
             TreeInfo thisConstraintTreeInfo = visit(childNode, nodeId);
 
             treeInfo.addExceptRowSpecCount(thisConstraintTreeInfo);

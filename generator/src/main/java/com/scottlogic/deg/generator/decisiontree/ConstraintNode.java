@@ -25,14 +25,14 @@ import java.util.stream.Collectors;
 
 public interface ConstraintNode extends Node {
     Collection<AtomicConstraint> getAtomicConstraints();
-    Collection<DecisionNode> getDecisions();
+    Collection<DecisionNode> getChildren();
     Optional<RowSpec> getOrCreateRowSpec(Supplier<Optional<RowSpec>> createRowSpecFunc);
-    ConstraintNode removeDecisions(Collection<DecisionNode> decisionsToRemove);
+    ConstraintNode removeChildren(Collection<DecisionNode> decisionsToRemove);
     ConstraintNode cloneWithoutAtomicConstraint(AtomicConstraint excludeAtomicConstraint);
     boolean atomicConstraintExists(AtomicConstraint constraint);
     ConstraintNode addAtomicConstraints(Collection<AtomicConstraint> constraints);
-    ConstraintNode addDecisions(Collection<DecisionNode> decisions);
-    ConstraintNode setDecisions(Collection<DecisionNode> decisions);
+    ConstraintNode addChildren(Collection<DecisionNode> decisions);
+    ConstraintNode setChildren(Collection<DecisionNode> decisions);
     ConstraintNode markNode(NodeMarking marking);
     ConstraintNode accept(NodeVisitor visitor);
 
@@ -45,7 +45,7 @@ public interface ConstraintNode extends Node {
             ConstraintNode constraintNode = constraintNodeIterator.next();
 
             atomicConstraints.addAll(constraintNode.getAtomicConstraints());
-            decisions.addAll(constraintNode.getDecisions());
+            decisions.addAll(constraintNode.getChildren());
             markings.addAll(constraintNode.getNodeMarkings());
         }
 

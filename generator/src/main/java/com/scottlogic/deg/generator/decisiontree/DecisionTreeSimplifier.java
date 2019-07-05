@@ -28,52 +28,52 @@ public class DecisionTreeSimplifier {
     }
 
     public ConstraintNode simplify(ConstraintNode node) {
-        if (node.getDecisions().isEmpty())
+        if (node.getChildren().isEmpty())
             return node;
 
         ConstraintNode transformedNode = this.simplifySingleOptionDecisions(node);
-        Collection<DecisionNode> simplifiedDecisions = transformedNode.getDecisions().stream()
+        Collection<DecisionNode> simplifiedDecisions = transformedNode.getChildren().stream()
             .map(this::simplify)
             .collect(Collectors.toList());
-        return transformedNode.setDecisions(simplifiedDecisions);
+        return transformedNode.setChildren(simplifiedDecisions);
     }
 
     private DecisionNode simplify(DecisionNode decision) {
         List<ConstraintNode> newNodes = new ArrayList<>();
 
-        for (ConstraintNode existingOption : decision.getOptions()) {
+        for (ConstraintNode existingOption : decision.getChildren()) {
             ConstraintNode simplifiedNode = simplify(existingOption);
 
             // if an option contains no constraints and only one decision, then it can be replaced by the set of options within that decision.
             // this helps simplify the sorts of trees that come from eg A OR (B OR C)
-            if (simplifiedNode.getAtomicConstraints().isEmpty() && simplifiedNode.getDecisions().size() == 1) {
+            if (simplifiedNode.getAtomicConstraints().isEmpty() && simplifiedNode.getChildren().size() == 1) {
                 newNodes.addAll(
-                    simplifiedNode.getDecisions()
+                    simplifiedNode.getChildren()
                         .iterator().next() //get only member
-                        .getOptions());
+                        .getChildren());
             } else {
                 newNodes.add(simplifiedNode);
             }
         }
 
-        return decision.setOptions(newNodes);
+        return decision.setChildren(newNodes);
     }
 
     private ConstraintNode simplifySingleOptionDecisions(ConstraintNode node) {
-        return node.getDecisions()
+        return node.getChildren()
             .stream()
-            .filter(decisionNode -> decisionNode.getOptions().size() == 1)
+            .filter(decisionNode -> decisionNode.getChildren().size() == 1)
             .reduce(
                 node,
                 (parentConstraint, decisionNode) -> {
-                    ConstraintNode firstOption = decisionNode.getOptions().iterator().next();
+                    ConstraintNode firstOption = decisionNode.getChildren().iterator().next();
                     if (parentConstraint.getAtomicConstraints().stream().anyMatch(firstOption.getAtomicConstraints()::contains)) {
-                        return parentConstraint.removeDecisions(Collections.singletonList(decisionNode));
+                        return parentConstraint.removeChildren(Collections.singletonList(decisionNode));
                     } else {
                         return parentConstraint
                             .addAtomicConstraints(firstOption.getAtomicConstraints())
-                            .addDecisions(firstOption.getDecisions())
-                            .removeDecisions(Collections.singletonList(decisionNode));
+                            .addChildren(firstOption.getChildren())
+                            .removeChildren(Collections.singletonList(decisionNode));
                     }
                 },
                 (node1, node2) ->
@@ -82,7 +82,7 @@ public class DecisionTreeSimplifier {
                             .concat(node1.getAtomicConstraints().stream(), node2.getAtomicConstraints().stream())
                             .collect(Collectors.toList()),
                         Stream
-                            .concat(node1.getDecisions().stream(), node2.getDecisions().stream())
+                            .concat(node1.getChildren().stream(), node2.getChildren().stream())
                             .collect(Collectors.toList())
                     ));
     }

@@ -69,12 +69,12 @@ public class UpfrontTreePruner {
     private boolean isPartiallyContradictory(ConstraintNode root) {
         return
             root.hasMarking(NodeMarking.CONTRADICTORY) ||
-            root.getDecisions().stream().anyMatch(this::isPartiallyContradictory);
+            root.getChildren().stream().anyMatch(this::isPartiallyContradictory);
     }
 
     private boolean isPartiallyContradictory(DecisionNode root) {
         return
             root.hasMarking(NodeMarking.CONTRADICTORY) ||
-            root.getOptions().stream().anyMatch(this::isPartiallyContradictory);
+            root.getChildren().stream().anyMatch(this::isPartiallyContradictory);
     }
 }

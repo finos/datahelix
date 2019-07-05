@@ -47,7 +47,7 @@ class PrunedConstraintState {
         ConstraintNode remainingConstraintNode = getOnlyRemainingOption(prunedDecisionNode);
         pulledUpAtomicConstraints.addAll(remainingConstraintNode.getAtomicConstraints());
         newAtomicConstraints.addAll(remainingConstraintNode.getAtomicConstraints());
-        newDecisionNodes.addAll(remainingConstraintNode.getDecisions());
+        newDecisionNodes.addAll(remainingConstraintNode.getChildren());
     }
 
     boolean hasPulledUpDecisions() {
@@ -67,10 +67,10 @@ class PrunedConstraintState {
     }
 
     private boolean onlyOneOption(DecisionNode prunedDecisionNode) {
-        return prunedDecisionNode.getOptions().size() == 1;
+        return prunedDecisionNode.getChildren().size() == 1;
     }
 
     private ConstraintNode getOnlyRemainingOption(DecisionNode prunedDecisionNode) {
-        return prunedDecisionNode.getOptions().iterator().next();
+        return prunedDecisionNode.getChildren().iterator().next();
     }
 }

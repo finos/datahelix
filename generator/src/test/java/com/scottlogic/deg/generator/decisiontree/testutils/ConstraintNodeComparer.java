@@ -51,7 +51,7 @@ public class ConstraintNodeComparer implements EqualityComparer {
 
     public int getHashCode(ConstraintNode constraint) {
         int decisionsHashCode = constraint
-            .getDecisions()
+            .getChildren()
             .stream()
             .reduce(
                 0,
@@ -92,23 +92,23 @@ public class ConstraintNodeComparer implements EqualityComparer {
                 return false;
             }
 
-            boolean decisionsMatch = decisionAnyOrderComparer.equals(constraint1.getDecisions(), constraint2.getDecisions());
+            boolean decisionsMatch = decisionAnyOrderComparer.equals(constraint1.getChildren(), constraint2.getChildren());
             if (!decisionsMatch) {
                 comparisonContext.reportDifferences(
                     decisionCollectionEqualityComparer.getItemsMissingFrom(
-                        constraint1.getDecisions(),
-                        constraint2.getDecisions()
+                        constraint1.getChildren(),
+                        constraint2.getChildren()
                     ),
                     decisionCollectionEqualityComparer.getItemsMissingFrom(
-                        constraint2.getDecisions(),
-                        constraint1.getDecisions()
+                        constraint2.getChildren(),
+                        constraint1.getChildren()
                     ),
                     TreeComparisonContext.TreeElementType.DECISION);
                 return false;
             }
 
-            for (DecisionNode constraint1Decision : constraint1.getDecisions()) {
-                DecisionNode constraint2Decision = getDecision(constraint1Decision, constraint2.getDecisions());
+            for (DecisionNode constraint1Decision : constraint1.getChildren()) {
+                DecisionNode constraint2Decision = getDecision(constraint1Decision, constraint2.getChildren());
 
                 if (!optionsAreEqual(constraint1Decision, constraint2Decision))
                     return false;
@@ -137,8 +137,8 @@ public class ConstraintNodeComparer implements EqualityComparer {
         try{
             comparisonContext.pushToStack(decision1, decision2);
 
-            for (ConstraintNode option1: decision1.getOptions()){
-                ConstraintNode option2 = getOption(option1, decision2.getOptions());
+            for (ConstraintNode option1: decision1.getChildren()){
+                ConstraintNode option2 = getOption(option1, decision2.getChildren());
 
                 if (!this.equals(option1, option2)){
                     return false;

@@ -59,7 +59,7 @@ public final class TreeConstraintNode implements ConstraintNode {
         return new HashSet<>(atomicConstraints);
     }
 
-    public Collection<DecisionNode> getDecisions() {
+    public Collection<DecisionNode> getChildren() {
         return decisions;
     }
 
@@ -93,7 +93,7 @@ public final class TreeConstraintNode implements ConstraintNode {
                 : Objects.toString(atomicConstraints));
     }
 
-    public ConstraintNode removeDecisions(Collection<DecisionNode> decisionsToRemove) {
+    public ConstraintNode removeChildren(Collection<DecisionNode> decisionsToRemove) {
         Function<DecisionNode, Boolean> shouldRemove = existingDecision -> decisionsToRemove.stream()
             .anyMatch(decisionToExclude -> decisionToExclude.equals(existingDecision));
 
@@ -135,7 +135,7 @@ public final class TreeConstraintNode implements ConstraintNode {
     }
 
     @Override
-    public ConstraintNode addDecisions(Collection<DecisionNode> decisions) {
+    public ConstraintNode addChildren(Collection<DecisionNode> decisions) {
         return new TreeConstraintNode(
             atomicConstraints,
             Stream
@@ -148,7 +148,7 @@ public final class TreeConstraintNode implements ConstraintNode {
     }
 
     @Override
-    public ConstraintNode setDecisions(Collection<DecisionNode> decisions) {
+    public ConstraintNode setChildren(Collection<DecisionNode> decisions) {
         return new TreeConstraintNode(this.atomicConstraints, decisions, this.nodeMarkings);
     }
 
@@ -182,7 +182,7 @@ public final class TreeConstraintNode implements ConstraintNode {
 
     @Override
     public ConstraintNode accept(NodeVisitor visitor){
-        Stream<DecisionNode> decisionNodeStream = getDecisions().stream().map(d -> d.accept(visitor));
+        Stream<DecisionNode> decisionNodeStream = getChildren().stream().map(d -> d.accept(visitor));
 
         return visitor.visit(
             new TreeConstraintNode(

@@ -62,7 +62,7 @@ class DecisionTreeSimplifierTests {
         final DecisionTree result = simplifier.simplify(tree);
 
         Assert.assertEquals(result.rootNode.getAtomicConstraints(), tree.getRootNode().getAtomicConstraints());
-        Assert.assertTrue(result.rootNode.getDecisions().isEmpty());
+        Assert.assertTrue(result.rootNode.getChildren().isEmpty());
     }
 
     @Test
@@ -109,6 +109,6 @@ class DecisionTreeSimplifierTests {
             }})
         );
         Assert.assertTrue(result.rootNode.getAtomicConstraints().containsAll(expectedConstraints));
-        Assert.assertTrue(result.rootNode.getDecisions().isEmpty());
+        Assert.assertTrue(result.rootNode.getChildren().isEmpty());
     }
 }

@@ -60,7 +60,7 @@ public class ReductiveTreePruner {
         }
 
         PrunedConstraintState state = new PrunedConstraintState(constraintNode);
-        for (DecisionNode decision : constraintNode.getDecisions()) {
+        for (DecisionNode decision : constraintNode.getChildren()) {
 
             Merged<DecisionNode> prunedDecisionNode = pruneDecisionNode(decision, newFieldSpecs.get());
             if (prunedDecisionNode.isContradictory()) {
@@ -82,7 +82,7 @@ public class ReductiveTreePruner {
     private Merged<DecisionNode> pruneDecisionNode(DecisionNode decisionNode,  Map<Field, FieldSpec> fieldSpecs) {
         Collection<ConstraintNode> newConstraintNodes = new ArrayList<>();
 
-        for (ConstraintNode constraintNode : decisionNode.getOptions()) {
+        for (ConstraintNode constraintNode : decisionNode.getChildren()) {
             pruneConstraintNode(constraintNode, fieldSpecs).ifPresent(newConstraintNodes::add);
         }
 

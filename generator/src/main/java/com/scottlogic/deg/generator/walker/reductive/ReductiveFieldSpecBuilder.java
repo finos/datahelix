@@ -76,8 +76,8 @@ public class ReductiveFieldSpecBuilder {
         FieldSpecExtractionVisitor visitor = new FieldSpecExtractionVisitor(field, constraintReducer);
 
         //ignore the root node, pass the visitor into any option of a decision below the root node.
-        rootNode.getDecisions()
-            .forEach(d -> d.getOptions()
+        rootNode.getChildren()
+            .forEach(d -> d.getChildren()
                 .forEach(o -> o.accept(visitor)));
 
         return visitor.fieldSpecs;

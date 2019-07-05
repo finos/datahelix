@@ -52,13 +52,13 @@ class ConstraintToFieldMapper {
             node.getAtomicConstraints()
                 .stream()
                 .map(constraint -> new ConstraintToFields(new RootLevelConstraint(constraint), constraint.getField())),
-            node.getDecisions()
+            node.getChildren()
                 .stream()
                 .map(decision -> new ConstraintToFields(
                     new RootLevelConstraint(decision),
                     FlatMappingSpliterator.flatMap(
                         FlatMappingSpliterator.flatMap(decision
-                            .getOptions()
+                            .getChildren()
                             .stream(),
                             this::mapConstraintToFields),
                         objectField -> objectField.fields.stream())

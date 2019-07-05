@@ -93,7 +93,7 @@ class ProfileDecisionTreeFactoryTests {
         Assert.assertThat(testOutput.getFields().size(), is(0));
         Assert.assertThat(testOutput.getRootNode(), not(is(nullValue())));
         Assert.assertThat(testOutput.getRootNode().getAtomicConstraints(), is(empty()));
-        Assert.assertThat(testOutput.getRootNode().getDecisions(), is(empty()));
+        Assert.assertThat(testOutput.getRootNode().getChildren(), is(empty()));
     }
 
     @Test
@@ -124,9 +124,9 @@ class ProfileDecisionTreeFactoryTests {
 
         Assert.assertThat("analyse() output is not null", outputRule, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Decision tree root has non-null list of decisions",
-            outputRule.getRootNode().getDecisions(), Is.is(IsNull.notNullValue()));
+            outputRule.getRootNode().getChildren(), Is.is(IsNull.notNullValue()));
         Assert.assertThat("Decision tree root has empty list of decisions",
-            outputRule.getRootNode().getDecisions().size(), Is.is(0));
+            outputRule.getRootNode().getChildren().size(), Is.is(0));
     }
 
     @Test
@@ -167,9 +167,9 @@ class ProfileDecisionTreeFactoryTests {
 
         Assert.assertThat("analyse() output is not null", outputRule, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Decision tree root has non-null list of decisions",
-            outputRule.getRootNode().getDecisions(), Is.is(IsNull.notNullValue()));
+            outputRule.getRootNode().getChildren(), Is.is(IsNull.notNullValue()));
         Assert.assertThat("Decision tree root has empty list of decisions",
-            outputRule.getRootNode().getDecisions().size(), Is.is(0));
+            outputRule.getRootNode().getChildren().size(), Is.is(0));
     }
 
     @Test
@@ -214,7 +214,7 @@ class ProfileDecisionTreeFactoryTests {
 
         Assert.assertThat("analyse() output is not null", outputRule, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Decision tree root contains correct number of decisions",
-            outputRule.getRootNode().getDecisions().size(), Is.is(2));
+            outputRule.getRootNode().getChildren().size(), Is.is(2));
     }
 
     // checks (A OR B) AND (C OR D)
@@ -479,7 +479,7 @@ class ProfileDecisionTreeFactoryTests {
         Assert.assertThat("Decision tree root contains one atomic constraint",
             outputRule.getRootNode().getAtomicConstraints().size(), Is.is(1));
         Assert.assertThat("Decision tree root contains no decisions",
-            outputRule.getRootNode().getDecisions().size(), Is.is(0));
+            outputRule.getRootNode().getChildren().size(), Is.is(0));
         Assert.assertThat("Atomic constraint of decision tree root is constraint A",
             outputRule.getRootNode().getAtomicConstraints().contains(constraintA), Is.is(true));
     }

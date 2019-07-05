@@ -81,13 +81,13 @@ public class TypingRequiredPerFieldValidator implements ProfileValidator {
             node.getAtomicConstraints().stream()
                 .anyMatch(constraint -> sufficientlyRestrictsFieldTypes(constraint, fieldToCheck))
             ||
-            node.getDecisions().stream()
+            node.getChildren().stream()
                 .anyMatch(decisionNode -> sufficientlyRestrictsFieldTypes(decisionNode, fieldToCheck));
     }
 
     private static boolean sufficientlyRestrictsFieldTypes(DecisionNode node, Field fieldToCheck) {
         // a decision node is sufficient if all of its branches are sufficient
-        return node.getOptions().stream()
+        return node.getChildren().stream()
             .allMatch(constraintNode -> sufficientlyRestrictsFieldTypes(constraintNode, fieldToCheck));
     }
 

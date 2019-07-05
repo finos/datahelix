@@ -65,29 +65,29 @@ public class ContradictionDecisionTreeValidator {
             return node.markNode(NodeMarking.CONTRADICTORY);
         }
 
-        if (node.getDecisions().isEmpty()) {
+        if (node.getChildren().isEmpty()) {
             return node;
         } else {
-            Collection<DecisionNode> decisions = node.getDecisions()
+            Collection<DecisionNode> decisions = node.getChildren()
                 .stream()
                 .map(d -> markContradictions(d, mergedRowSpecOpt.get(), profileFields))
                 .collect(Collectors.toList());
             boolean nodeIsContradictory = decisions.stream().allMatch(this::isNodeContradictory);
-            ConstraintNode transformed = node.setDecisions(decisions);
+            ConstraintNode transformed = node.setChildren(decisions);
             return nodeIsContradictory ? transformed.markNode(NodeMarking.CONTRADICTORY) : transformed;
         }
     }
 
     private DecisionNode markContradictions(DecisionNode node, RowSpec accumulatedSpec, ProfileFields profileFields){
-        if (node.getOptions().isEmpty()){
+        if (node.getChildren().isEmpty()){
             return node;
         }
-        Collection<ConstraintNode> options = node.getOptions().stream()
+        Collection<ConstraintNode> options = node.getChildren().stream()
             .map(c -> markContradictions(c, accumulatedSpec, profileFields))
             .collect(Collectors.toList());
 
         boolean decisionIsContradictory = options.stream().allMatch(this::isNodeContradictory);
-        DecisionNode transformed = node.setOptions(options);
+        DecisionNode transformed = node.setChildren(options);
         if (decisionIsContradictory) {
             return transformed.markNode(NodeMarking.CONTRADICTORY);
         }
