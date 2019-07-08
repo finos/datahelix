@@ -23,6 +23,8 @@ import com.scottlogic.deg.common.util.NumberUtils;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.regex.Pattern;
 
 public class FieldSpecFactory {
@@ -45,6 +47,8 @@ public class FieldSpecFactory {
             return construct(((NotConstraint) constraint).negatedConstraint, !negate);
         } else if (constraint instanceof IsInSetConstraint) {
             return construct((IsInSetConstraint) constraint, negate);
+        } else if (constraint instanceof EqualToConstraint) {
+            return construct((EqualToConstraint) constraint, negate);
         } else if (constraint instanceof IsGreaterThanConstantConstraint) {
             return construct((IsGreaterThanConstantConstraint) constraint, negate);
         } else if (constraint instanceof IsGreaterThanOrEqualToConstantConstraint) {
@@ -96,6 +100,18 @@ public class FieldSpecFactory {
         }
 
         return FieldSpec.Empty.withWhitelist(constraint.legalValues);
+    }
+
+    private FieldSpec construct(EqualToConstraint constraint, boolean negate) {
+        if (negate) {
+            return FieldSpec.Empty.withBlacklistRestrictions(
+                new BlacklistRestrictions(Collections.singleton(constraint.value))
+            );
+        }
+
+        return FieldSpec.Empty
+            .withWhitelist(Collections.singleton(constraint.value))
+            .withNotNull();
     }
 
     private FieldSpec constructIsNull(boolean negate) {

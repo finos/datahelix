@@ -20,10 +20,7 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
-import com.scottlogic.deg.common.profile.constraints.atomic.IsNullConstraint;
-import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.generator.decisiontree.*;
 
 import java.util.List;
@@ -94,10 +91,9 @@ public class TypingRequiredPerFieldValidator implements ProfileValidator {
     private static boolean sufficientlyRestrictsFieldTypes(AtomicConstraint constraint, Field fieldToCheck) {
         return
             constraint.getField().equals(fieldToCheck)
-            && (
-                constraint instanceof IsOfTypeConstraint
+            && (constraint instanceof IsOfTypeConstraint
                 || constraint instanceof IsNullConstraint
-                || constraint instanceof IsInSetConstraint // covers the equalTo case as well as inSet
-            );
+                || constraint instanceof IsInSetConstraint
+                || constraint instanceof EqualToConstraint);
     }
 }

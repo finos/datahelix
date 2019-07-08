@@ -93,14 +93,9 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                 AtomicConstraintType.IS_EQUAL_TO_CONSTANT.getText(),
                 ".*",
                 (dto, fields, rules) ->
-                    new AndConstraint(
-                        new IsInSetConstraint(
-                            fields.getByName(dto.field),
-                            Collections.singleton(ConstraintReaderHelpers.getValidatedValue(dto)),
-                            rules
-                        ),
-                        new IsNullConstraint(fields.getByName(dto.field), rules).negate()
-                    )
+                    new EqualToConstraint(
+                        fields.getByName(dto.field),
+                        ConstraintReaderHelpers.getValidatedValue(dto))
             ),
             new ConstraintReaderMapEntry(
                 AtomicConstraintType.IS_IN_SET.getText(),

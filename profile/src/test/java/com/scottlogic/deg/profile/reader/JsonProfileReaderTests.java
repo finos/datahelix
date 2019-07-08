@@ -290,18 +290,14 @@ public class JsonProfileReaderTests {
                 "}");
 
 
-        Profile profile = getResultingProfile();
-        Collection<Constraint> constraints = ((AndConstraint)profile.getRules().iterator().next().getConstraints().iterator().next()).getSubConstraints();
 
-
-        MatcherAssert.assertThat(constraints, hasItem(instanceOf(IsInSetConstraint.class)));
-
-        AtomicConstraint notNull = new IsNullConstraint(
-            new Field("foo"),
-            Collections.singleton(new RuleInformation("Unnamed rule")))
-            .negate();
-
-        MatcherAssert.assertThat(constraints, hasItem(sameBeanAs(notNull)));
+        expectRules(
+            ruleWithConstraints(
+                typedConstraint(
+                    EqualToConstraint.class,
+                    c -> Assert.assertThat(
+                        c.value,
+                        equalTo("equal")))));
 
     }
 
@@ -503,7 +499,7 @@ public class JsonProfileReaderTests {
 
                                     Assert.assertThat(
                                             c.whenConditionIsTrue,
-                                            instanceOf(IsInSetConstraint.class));
+                                            instanceOf(EqualToConstraint.class));
 
                                     Assert.assertThat(
                                             c.whenConditionIsFalse,
