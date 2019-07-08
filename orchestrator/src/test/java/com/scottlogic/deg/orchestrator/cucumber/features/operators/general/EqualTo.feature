@@ -73,8 +73,6 @@ Feature: User can specify that a value is equalTo a required value
       | foo   |
       | null |
 
-
-
 ### EqualTo ###
 
   Scenario: Two equivalent 'equalTo' statements should be successful
@@ -147,6 +145,22 @@ Feature: User can specify that a value is equalTo a required value
       | foo  |
       | 1    |
 
+  Scenario: 'EqualTo' should combine with types
+    Given there is a field foo
+    And foo is equal to "test"
+    And foo is of type "string"
+    Then the following data should be generated:
+      | foo    |
+      | "test" |
+
+  Scenario: 'EqualTo' should combine with types
+    Given there is a field foo
+    And foo is equal to 2000-01-01T00:00:00.001Z
+    And foo is of type "datetime"
+    Then the following data should be generated:
+      | foo                      |
+      | 2000-01-01T00:00:00.001Z |
+
   Scenario: 'EqualTo' should contradict with incorrect types
     Given there is a field foo
     And foo is equal to 1
@@ -169,7 +183,7 @@ Feature: User can specify that a value is equalTo a required value
     And foo is matching regex /[a]{3}/
     Then no data is created
 
-### ofLength ###
+### String Length ###
 
   Scenario: 'EqualTo' alongside a non-contradicting 'ofLength' constraint should be successful
     Given there is a field foo
@@ -184,6 +198,49 @@ Feature: User can specify that a value is equalTo a required value
     And foo is equal to "1"
     And foo is of length 2
     Then no data is created
+
+  Scenario: 'EqualTo' alongside a non-contradicting 'longerThan' constraint should be successful
+    Given there is a field foo
+    And foo is equal to "1"
+    And foo is longer than 0
+    Then the following data should be generated:
+      | foo  |
+      | "1"  |
+
+  Scenario: 'EqualTo' alongside a contradicting 'longerThan' constraint should emit no data
+    Given there is a field foo
+    And foo is equal to "1"
+    And foo is longer than 2
+    Then no data is created
+
+  Scenario: 'EqualTo' alongside a non-contradicting 'shorterThan' constraint should be successful
+    Given there is a field foo
+    And foo is equal to "1"
+    And foo is shorter than 2
+    Then the following data should be generated:
+      | foo  |
+      | "1"  |
+
+  Scenario: 'EqualTo' alongside a contradicting 'shorterThan' constraint should emit no data
+    Given there is a field foo
+    And foo is equal to "1"
+    And foo is shorter than 1
+    Then no data is created
+
+  Scenario: 'EqualTo' request including a string of the maximum length should be successful
+    Given there is a field foo
+    And the maximum string length is 1000
+    And foo is equal to "I am 1000 chars long   jdny97XhjJE0ywt6mRMfYj1ECoNufcF3Dy2DStFmnLVHH5GcfLtLTXEG34LNgTxPvmAqYL6UCWiia23IqmzrooICtND1UtSbrsDOhQeVjNUjTNMsin6AO5oSOiLkpU0h4hctiKKg8IoZ05TrRyl8ZBg99S986vM737sSUxUv3yKj8lPOMH5ZjrgAn52D2LerAlBRvcQMoYP5mnuPidtCHT6RrHMJX44nHFeMJS6371dHMC9bDqjJRrMsnu1DWc7kUkttSPioKZbR1BDUn5s1WTM5brzWv9bgWvtFhjzHYdhMY0bxq1qXksGzAqaOkcbbUh6bCirz6N4nAt4I2aQccMQqCp5TjXAFGMLxbRO7uttWZI8GRWiXP2joA9aTw7K8Fk5rllWbGfgFHSlMHYmeGGRF8ig10LgkeVDdP7tVHyGr4O6nKV3TB61UJaHCRZUIoyPuce3SWeckv835iwVrKy9PIC5D42HBd3431GIyMy7sxpR4pWs7djW6UxhdnTC3q2MlX0aMXjDrLCAjybo89q7qJw4eEPfR2cwuc1xvSiC2RoVVlBprmLkKiDeCZPRZxxVn9QwzvPNnRsjx9nFenwfPIDf1C6MbQ22aYmxqcnxQky1gLLdPRWVYpgqzeztnBziahVuZZLob5EvFjgv5HmKnfg3DUrU2Em61l9nE0L6IYiz9xrZ0kmiDSB44cEOoubhJUwihD7PrM92pmCKXoWouigS6LSlCIX8OkQxaHRA0m2FYgtYV0H9rkK0kQfflvlF3zd7TvSjW1NGRxzjh5jGNfvkl9M9O5tpvieoM55uPi2fY9f8ZD2Eq0KjEHEcKtLNWnxdpuIVa7mzByWqkawwrhdjH0qF4RwXsGbTHhrNT7SFyBs4h1MdKEkUlrXgGlXXtSo104KsMv5qWIXRI221jjfwZZ7nl1XLSSOqLhDoWdvgiR0XPPwvLtPMBWiwqW86upHDMMcPAYKCnP"
+    Then the following data should be generated:
+      | foo                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+      | "I am 1000 chars long   jdny97XhjJE0ywt6mRMfYj1ECoNufcF3Dy2DStFmnLVHH5GcfLtLTXEG34LNgTxPvmAqYL6UCWiia23IqmzrooICtND1UtSbrsDOhQeVjNUjTNMsin6AO5oSOiLkpU0h4hctiKKg8IoZ05TrRyl8ZBg99S986vM737sSUxUv3yKj8lPOMH5ZjrgAn52D2LerAlBRvcQMoYP5mnuPidtCHT6RrHMJX44nHFeMJS6371dHMC9bDqjJRrMsnu1DWc7kUkttSPioKZbR1BDUn5s1WTM5brzWv9bgWvtFhjzHYdhMY0bxq1qXksGzAqaOkcbbUh6bCirz6N4nAt4I2aQccMQqCp5TjXAFGMLxbRO7uttWZI8GRWiXP2joA9aTw7K8Fk5rllWbGfgFHSlMHYmeGGRF8ig10LgkeVDdP7tVHyGr4O6nKV3TB61UJaHCRZUIoyPuce3SWeckv835iwVrKy9PIC5D42HBd3431GIyMy7sxpR4pWs7djW6UxhdnTC3q2MlX0aMXjDrLCAjybo89q7qJw4eEPfR2cwuc1xvSiC2RoVVlBprmLkKiDeCZPRZxxVn9QwzvPNnRsjx9nFenwfPIDf1C6MbQ22aYmxqcnxQky1gLLdPRWVYpgqzeztnBziahVuZZLob5EvFjgv5HmKnfg3DUrU2Em61l9nE0L6IYiz9xrZ0kmiDSB44cEOoubhJUwihD7PrM92pmCKXoWouigS6LSlCIX8OkQxaHRA0m2FYgtYV0H9rkK0kQfflvlF3zd7TvSjW1NGRxzjh5jGNfvkl9M9O5tpvieoM55uPi2fY9f8ZD2Eq0KjEHEcKtLNWnxdpuIVa7mzByWqkawwrhdjH0qF4RwXsGbTHhrNT7SFyBs4h1MdKEkUlrXgGlXXtSo104KsMv5qWIXRI221jjfwZZ7nl1XLSSOqLhDoWdvgiR0XPPwvLtPMBWiwqW86upHDMMcPAYKCnP" |
+
+  Scenario: 'EqualTo' request including a string over the maximum length should throw an error
+    Given there is a field foo
+    And the maximum string length is 1000
+    And foo is equal to "I am 1001 chars long    dny97XhjJE0ywt6mRMfYj1ECoNufcF3Dy2DStFmnLVHH5GcfLtLTXEG34LNgTxPvmAqYL6UCWiia23IqmzrooICtND1UtSbrsDOhQeVjNUjTNMsin6AO5oSOiLkpU0h4hctiKKg8IoZ05TrRyl8ZBg99S986vM737sSUxUv3yKj8lPOMH5ZjrgAn52D2LerAlBRvcQMoYP5mnuPidtCHT6RrHMJX44nHFeMJS6371dHMC9bDqjJRrMsnu1DWc7kUkttSPioKZbR1BDUn5s1WTM5brzWv9bgWvtFhjzHYdhMY0bxq1qXksGzAqaOkcbbUh6bCirz6N4nAt4I2aQccMQqCp5TjXAFGMLxbRO7uttWZI8GRWiXP2joA9aTw7K8Fk5rllWbGfgFHSlMHYmeGGRF8ig10LgkeVDdP7tVHyGr4O6nKV3TB61UJaHCRZUIoyPuce3SWeckv835iwVrKy9PIC5D42HBd3431GIyMy7sxpR4pWs7djW6UxhdnTC3q2MlX0aMXjDrLCAjybo89q7qJw4eEPfR2cwuc1xvSiC2RoVVlBprmLkKiDeCZPRZxxVn9QwzvPNnRsjx9nFenwfPIDf1C6MbQ22aYmxqcnxQky1gLLdPRWVYpgqzeztnBziahVuZZLob5EvFjgv5HmKnfg3DUrU2Em61l9nE0L6IYiz9xrZ0kmiDSB44cEOoubhJUwihD7PrM92pmCKXoWouigS6LSlCIX8OkQxaHRA0m2FYgtYV0H9rkK0kQfflvlF3zd7TvSjW1NGRxzjh5jGNfvkl9M9O5tpvieoM55uPi2fY9f8ZD2Eq0KjEHEcKtLNWnxdpuIVa7mzByWqkawwrhdjH0qF4RwXsGbTHhrNT7SFyBs4h1MdKEkUlrXgGlXXtSo104KsMv5qWIXRI221jjfwZZ7nl1XLSSOqLhDoWdvgiR0XPPwvLtPMBWiwqW86upHDMMcPAYKCnPe"
+    Then the profile is invalid because "Field \[foo\]: set contains a string longer than maximum permitted length, was: 1001, max-length: 1000"
+
 
 ### Financial code types ###
 
@@ -229,9 +286,9 @@ Feature: User can specify that a value is equalTo a required value
     And foo is of type "SEDOL"
     Then no data is created
 
-### greaterThan ###
+### numeric ###
 
-  Scenario: 'EqualTo' run against non contradictory numeric constraints
+  Scenario: 'EqualTo' run against non contradictory 'greaterThan' constraints
     Given there is a field foo
     And foo is equal to 2
     And foo is greater than 1
@@ -243,9 +300,21 @@ Feature: User can specify that a value is equalTo a required value
     Given there is a field foo
     And foo is equal to 1
     And foo is greater than 2
+    Then no data is created
 
-### granularTo ###
+  Scenario: 'EqualTo' run against non contradictory 'lessThan' constraints
+    Given there is a field foo
+    And foo is equal to 2
+    And foo is less than 3
+    Then the following data should be generated:
+      | foo  |
+      | 2    |
 
+  Scenario: 'EqualTo' run against a contradicting 'lessThan' should generate no data
+    Given there is a field foo
+    And foo is equal to 1
+    And foo is less than 1
+    Then no data is created
 
   Scenario: 'EqualTo' run against a non contradicting 'granularTo' should be successful
     Given there is a field foo
@@ -261,7 +330,7 @@ Feature: User can specify that a value is equalTo a required value
     And foo is granular to 1
     Then no data is created
 
-### after ###
+### datetime ###
 
   Scenario: 'EqualTo' run against a non contradicting 'after' should be successful
     Given there is a field foo
@@ -277,16 +346,8 @@ Feature: User can specify that a value is equalTo a required value
     And foo is before 2018-01-01T00:00:00.000Z
     Then no data is created
 
-  Scenario: 'EqualTo' request including a string of the maximum length should be successful
+  Scenario: 'EqualTo' run against a contradicting 'granularTo' should generate no data
     Given there is a field foo
-    And the maximum string length is 1000
-    And foo is equal to "I am 1000 chars long   jdny97XhjJE0ywt6mRMfYj1ECoNufcF3Dy2DStFmnLVHH5GcfLtLTXEG34LNgTxPvmAqYL6UCWiia23IqmzrooICtND1UtSbrsDOhQeVjNUjTNMsin6AO5oSOiLkpU0h4hctiKKg8IoZ05TrRyl8ZBg99S986vM737sSUxUv3yKj8lPOMH5ZjrgAn52D2LerAlBRvcQMoYP5mnuPidtCHT6RrHMJX44nHFeMJS6371dHMC9bDqjJRrMsnu1DWc7kUkttSPioKZbR1BDUn5s1WTM5brzWv9bgWvtFhjzHYdhMY0bxq1qXksGzAqaOkcbbUh6bCirz6N4nAt4I2aQccMQqCp5TjXAFGMLxbRO7uttWZI8GRWiXP2joA9aTw7K8Fk5rllWbGfgFHSlMHYmeGGRF8ig10LgkeVDdP7tVHyGr4O6nKV3TB61UJaHCRZUIoyPuce3SWeckv835iwVrKy9PIC5D42HBd3431GIyMy7sxpR4pWs7djW6UxhdnTC3q2MlX0aMXjDrLCAjybo89q7qJw4eEPfR2cwuc1xvSiC2RoVVlBprmLkKiDeCZPRZxxVn9QwzvPNnRsjx9nFenwfPIDf1C6MbQ22aYmxqcnxQky1gLLdPRWVYpgqzeztnBziahVuZZLob5EvFjgv5HmKnfg3DUrU2Em61l9nE0L6IYiz9xrZ0kmiDSB44cEOoubhJUwihD7PrM92pmCKXoWouigS6LSlCIX8OkQxaHRA0m2FYgtYV0H9rkK0kQfflvlF3zd7TvSjW1NGRxzjh5jGNfvkl9M9O5tpvieoM55uPi2fY9f8ZD2Eq0KjEHEcKtLNWnxdpuIVa7mzByWqkawwrhdjH0qF4RwXsGbTHhrNT7SFyBs4h1MdKEkUlrXgGlXXtSo104KsMv5qWIXRI221jjfwZZ7nl1XLSSOqLhDoWdvgiR0XPPwvLtPMBWiwqW86upHDMMcPAYKCnP"
-    Then the following data should be generated:
-      | foo                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-      | "I am 1000 chars long   jdny97XhjJE0ywt6mRMfYj1ECoNufcF3Dy2DStFmnLVHH5GcfLtLTXEG34LNgTxPvmAqYL6UCWiia23IqmzrooICtND1UtSbrsDOhQeVjNUjTNMsin6AO5oSOiLkpU0h4hctiKKg8IoZ05TrRyl8ZBg99S986vM737sSUxUv3yKj8lPOMH5ZjrgAn52D2LerAlBRvcQMoYP5mnuPidtCHT6RrHMJX44nHFeMJS6371dHMC9bDqjJRrMsnu1DWc7kUkttSPioKZbR1BDUn5s1WTM5brzWv9bgWvtFhjzHYdhMY0bxq1qXksGzAqaOkcbbUh6bCirz6N4nAt4I2aQccMQqCp5TjXAFGMLxbRO7uttWZI8GRWiXP2joA9aTw7K8Fk5rllWbGfgFHSlMHYmeGGRF8ig10LgkeVDdP7tVHyGr4O6nKV3TB61UJaHCRZUIoyPuce3SWeckv835iwVrKy9PIC5D42HBd3431GIyMy7sxpR4pWs7djW6UxhdnTC3q2MlX0aMXjDrLCAjybo89q7qJw4eEPfR2cwuc1xvSiC2RoVVlBprmLkKiDeCZPRZxxVn9QwzvPNnRsjx9nFenwfPIDf1C6MbQ22aYmxqcnxQky1gLLdPRWVYpgqzeztnBziahVuZZLob5EvFjgv5HmKnfg3DUrU2Em61l9nE0L6IYiz9xrZ0kmiDSB44cEOoubhJUwihD7PrM92pmCKXoWouigS6LSlCIX8OkQxaHRA0m2FYgtYV0H9rkK0kQfflvlF3zd7TvSjW1NGRxzjh5jGNfvkl9M9O5tpvieoM55uPi2fY9f8ZD2Eq0KjEHEcKtLNWnxdpuIVa7mzByWqkawwrhdjH0qF4RwXsGbTHhrNT7SFyBs4h1MdKEkUlrXgGlXXtSo104KsMv5qWIXRI221jjfwZZ7nl1XLSSOqLhDoWdvgiR0XPPwvLtPMBWiwqW86upHDMMcPAYKCnP" |
-
-  Scenario: 'EqualTo' request including a string over the maximum length should throw an error
-    Given there is a field foo
-    And the maximum string length is 1000
-    And foo is equal to "I am 1001 chars long    dny97XhjJE0ywt6mRMfYj1ECoNufcF3Dy2DStFmnLVHH5GcfLtLTXEG34LNgTxPvmAqYL6UCWiia23IqmzrooICtND1UtSbrsDOhQeVjNUjTNMsin6AO5oSOiLkpU0h4hctiKKg8IoZ05TrRyl8ZBg99S986vM737sSUxUv3yKj8lPOMH5ZjrgAn52D2LerAlBRvcQMoYP5mnuPidtCHT6RrHMJX44nHFeMJS6371dHMC9bDqjJRrMsnu1DWc7kUkttSPioKZbR1BDUn5s1WTM5brzWv9bgWvtFhjzHYdhMY0bxq1qXksGzAqaOkcbbUh6bCirz6N4nAt4I2aQccMQqCp5TjXAFGMLxbRO7uttWZI8GRWiXP2joA9aTw7K8Fk5rllWbGfgFHSlMHYmeGGRF8ig10LgkeVDdP7tVHyGr4O6nKV3TB61UJaHCRZUIoyPuce3SWeckv835iwVrKy9PIC5D42HBd3431GIyMy7sxpR4pWs7djW6UxhdnTC3q2MlX0aMXjDrLCAjybo89q7qJw4eEPfR2cwuc1xvSiC2RoVVlBprmLkKiDeCZPRZxxVn9QwzvPNnRsjx9nFenwfPIDf1C6MbQ22aYmxqcnxQky1gLLdPRWVYpgqzeztnBziahVuZZLob5EvFjgv5HmKnfg3DUrU2Em61l9nE0L6IYiz9xrZ0kmiDSB44cEOoubhJUwihD7PrM92pmCKXoWouigS6LSlCIX8OkQxaHRA0m2FYgtYV0H9rkK0kQfflvlF3zd7TvSjW1NGRxzjh5jGNfvkl9M9O5tpvieoM55uPi2fY9f8ZD2Eq0KjEHEcKtLNWnxdpuIVa7mzByWqkawwrhdjH0qF4RwXsGbTHhrNT7SFyBs4h1MdKEkUlrXgGlXXtSo104KsMv5qWIXRI221jjfwZZ7nl1XLSSOqLhDoWdvgiR0XPPwvLtPMBWiwqW86upHDMMcPAYKCnPe"
-    Then the profile is invalid because "Field \[foo\]: set contains a string longer than maximum permitted length, was: 1001, max-length: 1000"
+    And foo is equal to 2019-01-01T00:00:00.010Z
+    And foo is granular to "seconds"
+    Then no data is created
