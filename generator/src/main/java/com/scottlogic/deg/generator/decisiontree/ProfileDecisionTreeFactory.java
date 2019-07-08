@@ -20,6 +20,7 @@ import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsNullConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.NegatedGrammaticalConstraint;
@@ -135,10 +136,38 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
         Constraint elseConstraint = constraintToConvert.whenConditionIsFalse;
 
         OrConstraint convertedConstraint = new OrConstraint(
-            new AndConstraint(ifConstraint, thenConstraint),
-            elseConstraint == null ? ifConstraint.negate() : new AndConstraint(ifConstraint.negate(), elseConstraint));
+            notNull(new AndConstraint(ifConstraint, thenConstraint)),
+            elseConstraint == null ? ifConstraint.negate() : new AndConstraint(ifConstraint.negate(), notNull(elseConstraint)));
 
         return convertOrConstraint(convertedConstraint);
+    }
+
+    private Constraint notNull(Constraint constraint){
+        if (constraint instanceof AtomicConstraint){
+            if (constraint instanceof IsNullConstraint){
+                return constraint;
+            }
+
+            return new AndConstraint(constraint,
+                new IsNullConstraint(((AtomicConstraint) constraint).getField())
+                    .negate());
+        }
+
+        if (constraint instanceof AndConstraint){
+            return new AndConstraint(
+                ((AndConstraint) constraint).getSubConstraints().stream()
+                    .map(this::notNull)
+                    .collect(Collectors.toList()));
+        }
+
+        if (constraint instanceof OrConstraint){
+            return new OrConstraint(
+                ((OrConstraint) constraint).subConstraints.stream()
+                    .map(this::notNull)
+                    .collect(Collectors.toList()));
+        }
+
+        return constraint;
     }
 
     private static Collection<Constraint> negateEach(Collection<Constraint> constraints) {
