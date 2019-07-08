@@ -58,11 +58,8 @@ public class ContradictionDecisionTreeValidator {
         }
 
         final Optional<RowSpec> mergedRowSpecOpt = rowSpecMerger.merge(
-            Arrays.asList(
-                nominalRowSpec.get(),
-                accumulatedSpec
-            )
-        );
+            nominalRowSpec.get(),
+            accumulatedSpec);
 
         if (!mergedRowSpecOpt.isPresent()) {
             return node.markNode(NodeMarking.CONTRADICTORY);
