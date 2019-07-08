@@ -7,7 +7,7 @@ The instructions below explain how to download the source code, and then build a
 Clone the repository to your local development folder.
 
 ```
-git clone https://github.com/ScottLogic/datahelix.git 
+git clone https://github.com/finos/datahelix.git
 ```
 
 ## Installation requirements

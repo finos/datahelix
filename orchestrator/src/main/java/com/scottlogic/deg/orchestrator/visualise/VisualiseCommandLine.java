@@ -29,7 +29,7 @@ import java.io.IOException;
 /**
  * This class holds the visualisation specific command line options.
  *
- * @see <a href="https://github.com/ScottLogic/datahelix/blob/master/docs/Options/VisualiseOptions.md">
+ * @see <a href="https://github.com/finos/datahelix/blob/master/docs/Options/VisualiseOptions.md">
  * Visualise options</a> for more details.
  */
 @CommandLine.Command(
