@@ -16,7 +16,6 @@
 
 package com.scottlogic.deg.generator.decisiontree;
 
-import com.scottlogic.deg.common.util.FlatMappingSpliterator;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.NotConstraint;
 
@@ -49,7 +48,7 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
     }
 
     private boolean noChangeInDecisionCount(ConstraintNode rootNode, ConstraintNode newRootNode) {
-        return newRootNode.getDecisions().size() - rootNode.getDecisions().size() == 0;
+        return newRootNode.getDecisions().size() == rootNode.getDecisions().size();
     }
 
     private ConstraintNode optimiseDecisions(ConstraintNode rootNode){
@@ -122,12 +121,10 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
 
     private AtomicConstraint getMostProlificAtomicConstraint(Collection<DecisionNode> decisions) {
         Map<AtomicConstraint, List<AtomicConstraint>> decisionConstraints =
-            FlatMappingSpliterator.flatMap(
-                FlatMappingSpliterator.flatMap(
-                    decisions.stream(),
-                    dn -> dn.getOptions().stream()),
-                option -> option.getAtomicConstraints().stream())
-            .collect(Collectors.groupingBy(Function.identity()));
+                decisions.stream()
+                    .flatMap(dn -> dn.getOptions().stream())
+                    .flatMap(option -> option.getAtomicConstraints().stream())
+                    .collect(Collectors.groupingBy(Function.identity()));
 
         Comparator<Map.Entry<AtomicConstraint, List<AtomicConstraint>>> comparator = Comparator
             .comparing(entry -> entry.getValue().size());
