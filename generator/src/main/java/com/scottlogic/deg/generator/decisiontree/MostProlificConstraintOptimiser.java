@@ -27,32 +27,26 @@ import java.util.stream.Stream;
 
 public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
     private final int maxIterations;
-    private final int maxDepth;
 
     public MostProlificConstraintOptimiser() {
-        this(50, 10000000);
-    }
-
-    public MostProlificConstraintOptimiser(int maxIterations, int maxDepth) {
-        this.maxIterations = maxIterations;
-        this.maxDepth = maxDepth;
+        maxIterations = 50;
     }
 
     @Override
     public DecisionTree optimiseTree(DecisionTree tree){
-        ConstraintNode newRootNode = optimiseLevelOfTree(tree.getRootNode(), 1);
+        ConstraintNode newRootNode = optimiseLevelOfTree(tree.getRootNode());
         return new DecisionTree(newRootNode, tree.getFields());
     }
 
-    private ConstraintNode optimiseLevelOfTree(ConstraintNode rootNode, int depth){
+    private ConstraintNode optimiseLevelOfTree(ConstraintNode rootNode){
         Collection<DecisionNode> decisions = rootNode.getDecisions();
-        if (decisions.size() <= 1 || depth > maxDepth)
+        if (decisions.size() <= 1)
             return rootNode; //not worth optimising
 
         int iteration = 0;
         int prevDecisionCount = decisions.size();
         ConstraintNode newRootNode;
-        while (iteration < maxIterations && (newRootNode = optimiseDecisions(rootNode, depth)) != null)
+        while (iteration < maxIterations && (newRootNode = optimiseDecisions(rootNode)) != null)
         {
             rootNode = newRootNode;
 
@@ -69,7 +63,7 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
         return rootNode;
     }
 
-    private ConstraintNode optimiseDecisions(ConstraintNode rootNode, int depth){
+    private ConstraintNode optimiseDecisions(ConstraintNode rootNode){
         AtomicConstraint mostProlificAtomicConstraint = getMostProlificAtomicConstraint(rootNode.getDecisions());
         if (mostProlificAtomicConstraint == null){
             return null;
@@ -106,8 +100,8 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
         DecisionNode factorisedDecisionNode = new TreeDecisionNode(
             Stream.concat(
                 Stream.of(
-                    optimiseLevelOfTree(factorisingConstraintNode, depth + 1),
-                    optimiseLevelOfTree(negatedFactorisingConstraintNode, depth + 1)),
+                    optimiseLevelOfTree(factorisingConstraintNode),
+                    optimiseLevelOfTree(negatedFactorisingConstraintNode)),
                 otherOptions.stream())
             .collect(Collectors.toList()));
 
