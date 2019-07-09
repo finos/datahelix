@@ -41,22 +41,18 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
     @Override
     public DecisionTree optimiseTree(DecisionTree tree){
         ConstraintNode newRootNode = optimiseLevelOfTree(tree.getRootNode(), 1);
-
-        if (newRootNode == null)
-            return tree;
-
         return new DecisionTree(newRootNode, tree.getFields());
     }
 
     private ConstraintNode optimiseLevelOfTree(ConstraintNode rootNode, int depth){
         Collection<DecisionNode> decisions = rootNode.getDecisions();
-        if (decisions.size() <= 1 || depth > this.maxDepth)
-            return null; //not worth optimising
+        if (decisions.size() <= 1 || depth > maxDepth)
+            return rootNode; //not worth optimising
 
         int iteration = 0;
         int prevDecisionCount = decisions.size();
         ConstraintNode newRootNode;
-        while (iteration < this.maxIterations && (newRootNode = optimiseDecisions(rootNode, depth)) != null)
+        while (iteration < maxIterations && (newRootNode = optimiseDecisions(rootNode, depth)) != null)
         {
             rootNode = newRootNode;
 
@@ -110,8 +106,8 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
         DecisionNode factorisedDecisionNode = new TreeDecisionNode(
             Stream.concat(
                 Stream.of(
-                    coalesce(optimiseLevelOfTree(factorisingConstraintNode, depth + 1), factorisingConstraintNode),
-                    coalesce(optimiseLevelOfTree(negatedFactorisingConstraintNode, depth + 1), negatedFactorisingConstraintNode)),
+                    optimiseLevelOfTree(factorisingConstraintNode, depth + 1),
+                    optimiseLevelOfTree(negatedFactorisingConstraintNode, depth + 1)),
                 otherOptions.stream())
             .collect(Collectors.toList()));
 
@@ -181,15 +177,6 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
             .count() == 1;
 
         return optionWithMPCExists && optionWithNegatedMPCExists;
-    }
-
-    private static <T> T coalesce(T... items){
-        for (T item : items) {
-            if (item != null)
-                return item;
-        }
-
-        throw new UnsupportedOperationException("Unable to find a non-null value");
     }
 
     class DecisionAnalyser {
