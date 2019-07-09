@@ -26,11 +26,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
-    private final int maxIterations;
-
-    public MostProlificConstraintOptimiser() {
-        maxIterations = 50;
-    }
+    private final int maxIterations = 50;
 
     @Override
     public DecisionTree optimiseTree(DecisionTree tree){
@@ -39,34 +35,27 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
     }
 
     private ConstraintNode optimiseLevelOfTree(ConstraintNode rootNode){
-        Collection<DecisionNode> decisions = rootNode.getDecisions();
-        if (decisions.size() <= 1)
-            return rootNode; //not worth optimising
+        for (int iteration = 0; iteration < maxIterations; iteration++) {
+            ConstraintNode newRootNode = optimiseDecisions(rootNode);
 
-        int iteration = 0;
-        int prevDecisionCount = decisions.size();
-        ConstraintNode newRootNode;
-        while (iteration < maxIterations && (newRootNode = optimiseDecisions(rootNode)) != null)
-        {
-            rootNode = newRootNode;
-
-            int newDecisionCount = rootNode.getDecisions().size();
-            int changeInDecisionCount = newDecisionCount - prevDecisionCount;
-            if (Math.abs(changeInDecisionCount) < 1) {
-                break;
+            if (noChangeInDecisionCount(rootNode, newRootNode)) {
+                return newRootNode;
             }
 
-            prevDecisionCount = newDecisionCount;
-            iteration++;
+            rootNode = newRootNode;
         }
 
         return rootNode;
     }
 
+    private boolean noChangeInDecisionCount(ConstraintNode rootNode, ConstraintNode newRootNode) {
+        return newRootNode.getDecisions().size() - rootNode.getDecisions().size() == 0;
+    }
+
     private ConstraintNode optimiseDecisions(ConstraintNode rootNode){
         AtomicConstraint mostProlificAtomicConstraint = getMostProlificAtomicConstraint(rootNode.getDecisions());
         if (mostProlificAtomicConstraint == null){
-            return null;
+            return rootNode;
         }
         // Add negation of most prolific constraint to new decision node
         AtomicConstraint negatedMostProlificConstraint = mostProlificAtomicConstraint.negate();
@@ -75,7 +64,7 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
             .filter(node -> this.decisionIsFactorisable(node, mostProlificAtomicConstraint, negatedMostProlificConstraint))
             .collect(Collectors.toList());
         if (factorisableDecisionNodes.size() < 2){
-            return null;
+            return rootNode;
         }
 
         // Add most prolific constraint to new decision node
