@@ -27,6 +27,7 @@ import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public final class CsvInputStreamReader {
 
@@ -36,14 +37,7 @@ public final class CsvInputStreamReader {
 
     public static Set<String> retrieveLines(InputStream stream) {
         List<CSVRecord> records = parse(stream);
-
-        Set<String> firstElementFromEachRecord = new HashSet<>();
-        for (CSVRecord record : records) {
-            String firstElement = firstElementFromRecord(record);
-            firstElementFromEachRecord.add(firstElement);
-        }
-
-        return firstElementFromEachRecord;
+        return records.stream().map(record -> record.get(0)).collect(Collectors.toSet());
     }
 
     private static List<CSVRecord> parse(InputStream stream) {
@@ -54,10 +48,4 @@ public final class CsvInputStreamReader {
             throw new UncheckedIOException(e);
         }
     }
-
-    private static String firstElementFromRecord(CSVRecord record) {
-        return record.get(0);
-    }
-    
-
 }
