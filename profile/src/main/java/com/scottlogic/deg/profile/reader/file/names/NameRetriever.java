@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes.*;
 
@@ -55,13 +56,11 @@ public final class NameRetriever {
     }
 
     private static Set<String> combineFirstWithLastNames(Set<String> firstNames, Set<String> lastNames) {
-        Set<String> names = new HashSet<>();
-        for (String first : firstNames) {
-            for (String last : lastNames) {
-                names.add(String.format("%s %s", first, last));
-            }
-        }
-        return names;
+        return firstNames.stream()
+            .flatMap(
+                first -> lastNames.stream()
+                    .map(last -> String.format("%s %s", first, last))
+            ).collect(Collectors.toSet());
     }
 
 }
