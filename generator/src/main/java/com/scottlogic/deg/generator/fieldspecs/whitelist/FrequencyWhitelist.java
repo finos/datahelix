@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.fieldspecs.whitelist;
 
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -36,4 +37,16 @@ public class FrequencyWhitelist<T> implements Whitelist<T> {
         return underlyingSet;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FrequencyWhitelist<?> that = (FrequencyWhitelist<?>) o;
+        return Objects.equals(underlyingSet, that.underlyingSet);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(underlyingSet);
+    }
 }
