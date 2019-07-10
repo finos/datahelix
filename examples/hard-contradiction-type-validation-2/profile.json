@@ -7,7 +7,7 @@
   ],
   "rules": [
     {
-      "rule": "Column 1 is a string",
+      "rule": "Column 1 is a string, an integer, and not null",
       "constraints": [
         {
           "allOf": [
@@ -29,7 +29,6 @@
             }
           ]
         }
-
       ]
     }
   ]
