@@ -56,8 +56,7 @@ class FieldSpecTests {
     @Test
     void equals_fieldSpecHasSetRestrictionsAndOtherObjectSetRestrictionsNull_returnsFalse() {
         FieldSpec fieldSpec = FieldSpec.Empty
-            .withWhitelist((
-                Collections.singleton("whitelist")));
+            .withWhitelist((new FrequencyWhitelist<>(Collections.singleton("whitelist"))));
 
         boolean result = fieldSpec.equals(FieldSpec.Empty);
 
@@ -72,8 +71,7 @@ class FieldSpecTests {
         FieldSpec fieldSpec = FieldSpec.Empty;
 
         boolean result = fieldSpec.equals(
-            FieldSpec.Empty.withWhitelist(
-                (Collections.singleton("whitelist")))
+            FieldSpec.Empty.withWhitelist(new FrequencyWhitelist<>(Collections.singleton("whitelist")))
         );
 
         assertFalse(
@@ -86,17 +84,17 @@ class FieldSpecTests {
     void equals_fieldSpecSetRestrictionsNotNullAndOtherObjectSetRestrictionsNotNullAndSetRestrictionsAreNotEqual_returnsFalse() {
         FieldSpec fieldSpec = FieldSpec.Empty
             .withWhitelist(
-                (
+                (new FrequencyWhitelist<>(
                     new HashSet<>(
                         Arrays.asList(1, 2, 3)
-                    )));
+                    ))));
 
         boolean result = fieldSpec.equals(
             FieldSpec.Empty.withWhitelist(
-                (
+                (new FrequencyWhitelist<>(
                     new HashSet<>(
                         Arrays.asList(1, 2, 3, 4)
-                    )))
+                    ))))
         );
 
         assertFalse(
@@ -154,9 +152,9 @@ class FieldSpecTests {
     }
 
     @Test
-    public void shouldCreateNewInstanceWithSetRestrictions(){
+    public void shouldCreateNewInstanceWithSetRestrictions() {
         FieldSpec original = FieldSpec.Empty;
-        Set<Object> restrictions = Collections.singleton("whitelist");
+        Whitelist<Object> restrictions = new FrequencyWhitelist<>(Collections.singleton("whitelist"));
         FieldSpec augmentedFieldSpec = original.withWhitelist(restrictions);
 
         Assert.assertNotSame(original, augmentedFieldSpec);
@@ -164,7 +162,7 @@ class FieldSpecTests {
     }
 
     @Test
-    public void shouldCreateNewInstanceWithNumericRestrictions(){
+    public void shouldCreateNewInstanceWithNumericRestrictions() {
         FieldSpec original = FieldSpec.Empty;
         NumericRestrictions restrictions = mock(NumericRestrictions.class);
         FieldSpec augmentedFieldSpec = original.withNumericRestrictions(restrictions);
@@ -174,7 +172,7 @@ class FieldSpecTests {
     }
 
     @Test
-    public void shouldCreateNewInstanceWithStringRestrictions(){
+    public void shouldCreateNewInstanceWithStringRestrictions() {
         FieldSpec original = FieldSpec.Empty;
         StringRestrictions restrictions = mock(StringRestrictions.class);
         FieldSpec augmentedFieldSpec = original.withStringRestrictions(restrictions);
@@ -184,7 +182,7 @@ class FieldSpecTests {
     }
 
     @Test
-    public void shouldCreateNewInstanceWithTypeRestrictions(){
+    public void shouldCreateNewInstanceWithTypeRestrictions() {
         FieldSpec original = FieldSpec.Empty;
         TypeRestrictions restrictions = mock(TypeRestrictions.class);
         FieldSpec augmentedFieldSpec = original.withTypeRestrictions(restrictions);
@@ -194,7 +192,7 @@ class FieldSpecTests {
     }
 
     @Test
-    public void shouldCreateNewInstanceWithNullRestrictions(){
+    public void shouldCreateNewInstanceWithNullRestrictions() {
         FieldSpec original = FieldSpec.Empty;
         FieldSpec augmentedFieldSpec = original.withNotNull();
 
@@ -202,7 +200,7 @@ class FieldSpecTests {
     }
 
     @Test
-    public void shouldCreateNewInstanceWithDateTimeRestrictions(){
+    public void shouldCreateNewInstanceWithDateTimeRestrictions() {
         FieldSpec original = FieldSpec.Empty;
         DateTimeRestrictions restrictions = mock(DateTimeRestrictions.class);
         FieldSpec augmentedFieldSpec = original.withDateTimeRestrictions(restrictions);
@@ -212,7 +210,7 @@ class FieldSpecTests {
     }
 
     @Test
-    public void shouldCreateNewInstanceWithFormatRestrictions(){
+    public void shouldCreateNewInstanceWithFormatRestrictions() {
         FieldSpec original = FieldSpec.Empty;
         FieldSpec augmentedFieldSpec = original.withFormatting("format");
 
@@ -221,7 +219,7 @@ class FieldSpecTests {
     }
 
     @Test
-    public void emptyFieldSpecsShouldBeEqualAndHaveSameHashCode(){
+    public void emptyFieldSpecsShouldBeEqualAndHaveSameHashCode() {
         FieldSpec first = FieldSpec.Empty;
         FieldSpec second = FieldSpec.Empty;
 
@@ -230,24 +228,24 @@ class FieldSpecTests {
     }
 
     @Test
-    public void fieldSpecsWithEqualSetRestrictionsShouldBeEqual(){
-        FieldSpec a = FieldSpec.Empty.withWhitelist(Collections.singleton("same"));
-        FieldSpec b = FieldSpec.Empty.withWhitelist(Collections.singleton("same"));
+    public void fieldSpecsWithEqualSetRestrictionsShouldBeEqual() {
+        FieldSpec a = FieldSpec.Empty.withWhitelist(new FrequencyWhitelist<>(Collections.singleton("same")));
+        FieldSpec b = FieldSpec.Empty.withWhitelist(new FrequencyWhitelist<>(Collections.singleton("same")));
 
         Assert.assertThat(a, equalTo(b));
         Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
     }
 
     @Test
-    public void fieldSpecsWithUnequalSetRestrictionsShouldBeUnequal(){
-        FieldSpec a = FieldSpec.Empty.withWhitelist(Collections.singleton("not same"));
-        FieldSpec b = FieldSpec.Empty.withWhitelist(Collections.singleton("different"));
+    public void fieldSpecsWithUnequalSetRestrictionsShouldBeUnequal() {
+        FieldSpec a = FieldSpec.Empty.withWhitelist(new FrequencyWhitelist<>(Collections.singleton("not same")));
+        FieldSpec b = FieldSpec.Empty.withWhitelist(new FrequencyWhitelist<>(Collections.singleton("different")));
 
         Assert.assertThat(a, not(equalTo(b)));
     }
 
     @Test
-    public void fieldSpecsWithEqualNumericRestrictionsShouldBeEqual(){
+    public void fieldSpecsWithEqualNumericRestrictionsShouldBeEqual() {
         NumericRestrictions aRestrictions = new MockNumericRestrictions(true);
         NumericRestrictions bRestrictions = new MockNumericRestrictions(true);
         FieldSpec a = FieldSpec.Empty.withNumericRestrictions(aRestrictions);
@@ -258,7 +256,7 @@ class FieldSpecTests {
     }
 
     @Test
-    public void fieldSpecsWithUnequalNumericRestrictionsShouldBeUnequal(){
+    public void fieldSpecsWithUnequalNumericRestrictionsShouldBeUnequal() {
         NumericRestrictions aRestrictions = new MockNumericRestrictions(false);
         NumericRestrictions bRestrictions = new MockNumericRestrictions(false);
         FieldSpec a = FieldSpec.Empty.withNumericRestrictions(aRestrictions);
@@ -268,7 +266,7 @@ class FieldSpecTests {
     }
 
     @Test
-    public void fieldSpecsWithEqualStringRestrictionsShouldBeEqual(){
+    public void fieldSpecsWithEqualStringRestrictionsShouldBeEqual() {
         StringRestrictions aRestrictions = new MockStringRestrictions(true);
         StringRestrictions bRestrictions = new MockStringRestrictions(true);
         FieldSpec a = FieldSpec.Empty.withStringRestrictions(aRestrictions);
@@ -279,7 +277,7 @@ class FieldSpecTests {
     }
 
     @Test
-    public void fieldSpecsWithUnequalStringRestrictionsShouldBeUnequal(){
+    public void fieldSpecsWithUnequalStringRestrictionsShouldBeUnequal() {
         StringRestrictions aRestrictions = new MockStringRestrictions(false);
         StringRestrictions bRestrictions = new MockStringRestrictions(false);
         FieldSpec a = FieldSpec.Empty.withStringRestrictions(aRestrictions);
@@ -289,7 +287,7 @@ class FieldSpecTests {
     }
 
     @Test
-    public void fieldSpecsWithEqualTypeRestrictionsShouldBeEqual(){
+    public void fieldSpecsWithEqualTypeRestrictionsShouldBeEqual() {
         TypeRestrictions aRestrictions = new MockTypeRestrictions(true);
         TypeRestrictions bRestrictions = new MockTypeRestrictions(true);
         FieldSpec a = FieldSpec.Empty.withTypeRestrictions(aRestrictions);
@@ -300,7 +298,7 @@ class FieldSpecTests {
     }
 
     @Test
-    public void fieldSpecsWithUnequalTypeRestrictionsShouldBeUnequal(){
+    public void fieldSpecsWithUnequalTypeRestrictionsShouldBeUnequal() {
         TypeRestrictions aRestrictions = new MockTypeRestrictions(false);
         TypeRestrictions bRestrictions = new MockTypeRestrictions(false);
         FieldSpec a = FieldSpec.Empty.withTypeRestrictions(aRestrictions);
@@ -310,7 +308,7 @@ class FieldSpecTests {
     }
 
     @Test
-    public void fieldSpecsWithEqualNullRestrictionsShouldBeEqual(){
+    public void fieldSpecsWithEqualNullRestrictionsShouldBeEqual() {
         FieldSpec a = FieldSpec.Empty.withNotNull();
         FieldSpec b = FieldSpec.Empty.withNotNull();
 
@@ -319,7 +317,7 @@ class FieldSpecTests {
     }
 
     @Test
-    public void fieldSpecsWithUnequalNullRestrictionsShouldBeUnequal(){
+    public void fieldSpecsWithUnequalNullRestrictionsShouldBeUnequal() {
         FieldSpec a = FieldSpec.Empty.withNotNull();
         FieldSpec b = FieldSpec.NullOnly;
 
@@ -327,7 +325,7 @@ class FieldSpecTests {
     }
 
     @Test
-    public void fieldSpecsWithEqualDateTimeRestrictionsShouldBeEqual(){
+    public void fieldSpecsWithEqualDateTimeRestrictionsShouldBeEqual() {
         DateTimeRestrictions aRestrictions = new MockDateTimeRestrictions(true);
         DateTimeRestrictions bRestrictions = new MockDateTimeRestrictions(true);
         FieldSpec a = FieldSpec.Empty.withDateTimeRestrictions(aRestrictions);
@@ -338,7 +336,7 @@ class FieldSpecTests {
     }
 
     @Test
-    public void fieldSpecsWithUnequalDateTimeRestrictionsShouldBeUnequal(){
+    public void fieldSpecsWithUnequalDateTimeRestrictionsShouldBeUnequal() {
         DateTimeRestrictions aRestrictions = new MockDateTimeRestrictions(false);
         DateTimeRestrictions bRestrictions = new MockDateTimeRestrictions(false);
         FieldSpec a = FieldSpec.Empty.withDateTimeRestrictions(aRestrictions);
@@ -346,9 +344,9 @@ class FieldSpecTests {
 
         Assert.assertThat(a, not(equalTo(b)));
     }
-    
+
     @Test
-    public void fieldSpecsWithEqualFormatRestrictionsShouldBeEqual(){
+    public void fieldSpecsWithEqualFormatRestrictionsShouldBeEqual() {
         FieldSpec a = FieldSpec.Empty.withFormatting("format");
         FieldSpec b = FieldSpec.Empty.withFormatting("format");
 
@@ -357,7 +355,7 @@ class FieldSpecTests {
     }
 
     @Test
-    public void fieldSpecsWithUnequalFormatRestrictionsShouldBeUnequal(){
+    public void fieldSpecsWithUnequalFormatRestrictionsShouldBeUnequal() {
         FieldSpec a = FieldSpec.Empty.withFormatting("format1");
         FieldSpec b = FieldSpec.Empty.withFormatting("format2");
 
@@ -365,7 +363,7 @@ class FieldSpecTests {
     }
 
     @Test
-    public void fieldSpecsShouldBeEntirelyEqual(){
+    public void fieldSpecsShouldBeEntirelyEqual() {
         FieldSpec a = FieldSpec.Empty
             .withNumericRestrictions(new MockNumericRestrictions(true))
             .withStringRestrictions(new MockStringRestrictions(true))
@@ -384,7 +382,7 @@ class FieldSpecTests {
     }
 
     @Test
-    public void fieldSpecsShouldBeEntirelyUnequal(){
+    public void fieldSpecsShouldBeEntirelyUnequal() {
         FieldSpec a = FieldSpec.Empty
             .withNumericRestrictions(new MockNumericRestrictions(false))
             .withStringRestrictions(new MockStringRestrictions(false))
@@ -406,7 +404,7 @@ class FieldSpecTests {
     public void permitsShouldRejectInvalidConfigurationsIfTypeRestrictionsIsNotNull(
         TypeCheckHolder holder) {
         FieldSpec spec = FieldSpec.Empty.withTypeRestrictions(holder.restrictions);
-        assertEquals("Given " + holder.object + ", and types allowed " + holder.restrictions.getAllowedTypes() + ", expected " + holder.expectedSuccess , holder.expectedSuccess, spec.permits(holder.object));
+        assertEquals("Given " + holder.object + ", and types allowed " + holder.restrictions.getAllowedTypes() + ", expected " + holder.expectedSuccess, holder.expectedSuccess, spec.permits(holder.object));
     }
 
     private static class TypeCheckHolder {
@@ -495,7 +493,7 @@ class FieldSpecTests {
         boolean numericRestrictionsEqual,
         boolean stringRestrictionsEqual,
         boolean typeRestrictionsEqual,
-        boolean dateTimeRestrictionsEqual){
+        boolean dateTimeRestrictionsEqual) {
 
         FieldSpec a = FieldSpec.Empty
             .withNumericRestrictions(new MockNumericRestrictions(numericRestrictionsEqual))
@@ -511,7 +509,7 @@ class FieldSpecTests {
         Assert.assertThat(a, not(equalTo(b)));
     }
 
-    private static Stream<Arguments> partiallyUnequalProvider(){
+    private static Stream<Arguments> partiallyUnequalProvider() {
         return Stream.of(
             Arguments.of(false, true, true, true),
             Arguments.of(true, false, true, true),
@@ -521,7 +519,7 @@ class FieldSpecTests {
     }
 
 
-    private class MockNumericRestrictions extends NumericRestrictions{
+    private class MockNumericRestrictions extends NumericRestrictions {
         private final boolean isEqual;
 
         MockNumericRestrictions(boolean isEqual) {
@@ -539,7 +537,7 @@ class FieldSpecTests {
         }
     }
 
-    private class MockStringRestrictions implements StringRestrictions{
+    private class MockStringRestrictions implements StringRestrictions {
         private final boolean isEqual;
 
         MockStringRestrictions(boolean isEqual) {
@@ -612,7 +610,7 @@ class FieldSpecTests {
     }
 
 
-    private class MockDateTimeRestrictions extends DateTimeRestrictions{
+    private class MockDateTimeRestrictions extends DateTimeRestrictions {
         private final boolean isEqual;
 
         MockDateTimeRestrictions(boolean isEqual) {

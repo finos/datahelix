@@ -97,13 +97,13 @@ class ConstraintReducerTest {
         Assert.assertThat("Country fieldspec has no null restrictions", countryFieldSpec.isNullable(),
             Is.is(true));
         Assert.assertThat("Country fieldspec set restrictions have whitelist",
-            countryFieldSpec.getWhitelist(), notNullValue());
+            countryFieldSpec.getWhitelist().set(), notNullValue());
         Assert.assertThat("Country fieldspec set restrictions whitelist has correct size",
-            countryFieldSpec.getWhitelist().size(), Is.is(2));
+            countryFieldSpec.getWhitelist().set().size(), Is.is(2));
         Assert.assertThat("Country fieldspec set restrictions whitelist contains 'UK'",
-            countryFieldSpec.getWhitelist().contains("UK"), Is.is(true));
+            countryFieldSpec.getWhitelist().set().contains("UK"), Is.is(true));
         Assert.assertThat("Country fieldspec set restrictions whitelist contains 'US'",
-            countryFieldSpec.getWhitelist().contains("US"), Is.is(true));
+            countryFieldSpec.getWhitelist().set().contains("US"), Is.is(true));
 
         FieldSpec cityFieldSpec = reducedConstraints.getSpecForField(cityField);
         Assert.assertThat("City fieldspec has no set restrictions", cityFieldSpec.getWhitelist(),
@@ -901,7 +901,7 @@ class ConstraintReducerTest {
 
         FieldSpec spec = testOutput.get().getSpecForField(field);
 
-        Assert.assertThat(spec.getWhitelist(), containsInAnyOrder(1, 5, 2));
+        Assert.assertThat(spec.getWhitelist().set(), containsInAnyOrder(1, 5, 2));
     }
 
     @Test
@@ -920,7 +920,7 @@ class ConstraintReducerTest {
 
         FieldSpec spec = testOutput.get().getSpecForField(field);
 
-        Assert.assertThat(spec.getWhitelist(), containsInAnyOrder("lorem", "ipsum", 1, 5, 2, datetimeValue));
+        Assert.assertThat(spec.getWhitelist().set(), containsInAnyOrder("lorem", "ipsum", 1, 5, 2, datetimeValue));
     }
 
     @Test
@@ -939,7 +939,7 @@ class ConstraintReducerTest {
 
         FieldSpec spec = testOutput.get().getSpecForField(field);
 
-        Assert.assertThat(spec.getWhitelist(), containsInAnyOrder("lorem", "ipsum", 5, 2, datetimeValue));
+        Assert.assertThat(spec.getWhitelist().set(), containsInAnyOrder("lorem", "ipsum", 5, 2, datetimeValue));
     }
 
     @Test
@@ -959,7 +959,7 @@ class ConstraintReducerTest {
 
         FieldSpec spec = testOutput.get().getSpecForField(field);
 
-        Assert.assertThat(spec.getWhitelist(), containsInAnyOrder("lorem", "ipsum", 1, 5, 2, oneHourLaterDateTimeValue));
+        Assert.assertThat(spec.getWhitelist().set(), containsInAnyOrder("lorem", "ipsum", 1, 5, 2, oneHourLaterDateTimeValue));
     }
     
     @Test
@@ -986,7 +986,7 @@ class ConstraintReducerTest {
             Arrays.asList(ofTypeString, ofTypeString.negate()));
 
         Assert.assertThat(result.isPresent(), is(true));
-        Assert.assertThat(result.get().getWhitelist(), empty());
+        Assert.assertThat(result.get().getWhitelist().set(), empty());
         Assert.assertTrue(result.get().isNullable());
     }
 }

@@ -114,7 +114,7 @@ class DateTimeRestrictionsMergeOperationTests {
         FieldSpec result = operation.applyMergeOperation(left, right, merging);
 
         Assert.assertThat(result, not(sameInstance(merging)));
-        Assert.assertThat(result.getWhitelist(), is(empty()));
+        Assert.assertThat(result.getWhitelist().set(), is(empty()));
     }
 
     @Test

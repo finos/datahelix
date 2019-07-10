@@ -19,6 +19,7 @@ package com.scottlogic.deg.generator.generation;
 import com.google.common.collect.Iterators;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FrequencyWhitelist;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.CannedValuesFieldValueSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.restrictions.*;
@@ -49,7 +50,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     public void returnsNullSourceOnlyWithSetRestrictionWithEmptyWhitelist() {
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
         FieldSpec fieldSpecMustBeNull = FieldSpec.Empty
-            .withWhitelist((Collections.emptySet()));
+            .withWhitelist((new FrequencyWhitelist<>(Collections.emptySet())));
 
         List<FieldValueSource> sources = evaluator.getFieldValueSources(fieldSpecMustBeNull);
 
@@ -71,7 +72,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     public void shouldReturnNullSourceLastWithInSetRestrictionsAndNullNotDisallowed() {
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
         FieldSpec fieldSpecInSetAndNullNotDisallowed = FieldSpec.Empty
-            .withWhitelist(new HashSet<>(Arrays.asList(15, 25)));
+            .withWhitelist(new FrequencyWhitelist<>(new HashSet<>(Arrays.asList(15, 25))));
 
         List<FieldValueSource> sources = evaluator.getFieldValueSources(fieldSpecInSetAndNullNotDisallowed);
 

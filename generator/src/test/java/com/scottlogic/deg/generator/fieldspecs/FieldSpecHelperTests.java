@@ -34,7 +34,7 @@ class FieldSpecHelperTests {
         FieldSpec actual = fieldSpecHelper.getFieldSpecForValue(input);
 
         FieldSpec expected = FieldSpec.Empty
-            .withWhitelist((Collections.singleton("value")))
+            .withWhitelist((new FrequencyWhitelist<>(Collections.singleton("value"))))
             .withNotNull();
 
         assertEquals(actual, expected);

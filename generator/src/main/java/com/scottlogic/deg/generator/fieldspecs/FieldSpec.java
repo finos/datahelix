@@ -35,15 +35,15 @@ import java.util.stream.Collectors;
 public class FieldSpec {
     public static final FieldSpec Empty =
         new FieldSpec(null, new HeterogeneousTypeContainer<>(), true, null);
-    public static final FieldSpec NullOnly = Empty.withWhitelist(Collections.EMPTY_SET);
+    public static final FieldSpec NullOnly = Empty.withWhitelist(FrequencyWhitelist.empty());
 
     private final boolean nullable;
     private final String formatting;
-    private final Set<Object> whitelist;
+    private final Whitelist<Object> whitelist;
     private final HeterogeneousTypeContainer<Restrictions> restrictions;
 
     private FieldSpec(
-        Set<Object> whitelist,
+        Whitelist<Object> whitelist,
         HeterogeneousTypeContainer<Restrictions> restrictions,
         boolean nullable,
         String formatting
@@ -58,7 +58,7 @@ public class FieldSpec {
         return nullable;
     }
 
-    public Set<Object> getWhitelist() {
+    public Whitelist<Object> getWhitelist() {
         return whitelist;
     }
 
@@ -86,7 +86,7 @@ public class FieldSpec {
         return formatting;
     }
 
-    public FieldSpec withWhitelist(Set<Object> whitelist) {
+    public FieldSpec withWhitelist(Whitelist<Object> whitelist) {
         return new FieldSpec(whitelist, new HeterogeneousTypeContainer<>(), nullable, formatting);
     }
 
@@ -151,7 +151,7 @@ public class FieldSpec {
     @Override
     public String toString() {
         if (whitelist != null) {
-            if (whitelist.isEmpty()) {
+            if (whitelist.set().isEmpty()) {
                 return "Null only";
             }
             return (nullable ? "" : "Not Null") + String.format("IN %s", whitelist);
