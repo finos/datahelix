@@ -38,7 +38,7 @@ class FieldSpecValueGeneratorTests {
     void generate_fieldSpecMustContainRestrictionNullAndSetRestrictionsHasValues_returnsDataBagsWithValuesInSetRestrictions() {
         FieldSpec fieldSpec = FieldSpec.Empty.withNotNull()
             .withWhitelist(
-                (new FrequencyWhitelist<>(
+                (FrequencyWhitelist.uniform(
                     new HashSet<>(
                         Arrays.asList(10, 20, 30)))));
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(

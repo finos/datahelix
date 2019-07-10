@@ -72,7 +72,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     public void shouldReturnNullSourceLastWithInSetRestrictionsAndNullNotDisallowed() {
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
         FieldSpec fieldSpecInSetAndNullNotDisallowed = FieldSpec.Empty
-            .withWhitelist(new FrequencyWhitelist<>(new HashSet<>(Arrays.asList(15, 25))));
+            .withWhitelist(FrequencyWhitelist.uniform(new HashSet<>(Arrays.asList(15, 25))));
 
         List<FieldValueSource> sources = evaluator.getFieldValueSources(fieldSpecInSetAndNullNotDisallowed);
 

@@ -55,7 +55,7 @@ public class FieldSpecMerger {
     }
 
     private Optional<FieldSpec> mergeSets(FieldSpec left, FieldSpec right) {
-        Whitelist<Object> set = new FrequencyWhitelist<>(SetUtils.intersect(
+        Whitelist<Object> set = FrequencyWhitelist.uniform(SetUtils.intersect(
             left.getWhitelist().set(),
             right.getWhitelist().set()
         ));
@@ -63,7 +63,7 @@ public class FieldSpecMerger {
     }
 
     private Optional<FieldSpec> combineSetWithRestrictions(FieldSpec set, FieldSpec restrictions) {
-        Whitelist<Object> newSet = new FrequencyWhitelist<>(
+        Whitelist<Object> newSet = FrequencyWhitelist.uniform(
             set.getWhitelist().set().stream()
             .filter(restrictions::permits)
             .collect(Collectors.toSet()));

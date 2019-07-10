@@ -56,7 +56,7 @@ class FieldSpecTests {
     @Test
     void equals_fieldSpecHasSetRestrictionsAndOtherObjectSetRestrictionsNull_returnsFalse() {
         FieldSpec fieldSpec = FieldSpec.Empty
-            .withWhitelist((new FrequencyWhitelist<>(Collections.singleton("whitelist"))));
+            .withWhitelist((FrequencyWhitelist.uniform(Collections.singleton("whitelist"))));
 
         boolean result = fieldSpec.equals(FieldSpec.Empty);
 
@@ -71,7 +71,7 @@ class FieldSpecTests {
         FieldSpec fieldSpec = FieldSpec.Empty;
 
         boolean result = fieldSpec.equals(
-            FieldSpec.Empty.withWhitelist(new FrequencyWhitelist<>(Collections.singleton("whitelist")))
+            FieldSpec.Empty.withWhitelist(FrequencyWhitelist.uniform(Collections.singleton("whitelist")))
         );
 
         assertFalse(
@@ -84,14 +84,14 @@ class FieldSpecTests {
     void equals_fieldSpecSetRestrictionsNotNullAndOtherObjectSetRestrictionsNotNullAndSetRestrictionsAreNotEqual_returnsFalse() {
         FieldSpec fieldSpec = FieldSpec.Empty
             .withWhitelist(
-                (new FrequencyWhitelist<>(
+                (FrequencyWhitelist.uniform(
                     new HashSet<>(
                         Arrays.asList(1, 2, 3)
                     ))));
 
         boolean result = fieldSpec.equals(
             FieldSpec.Empty.withWhitelist(
-                (new FrequencyWhitelist<>(
+                (FrequencyWhitelist.uniform(
                     new HashSet<>(
                         Arrays.asList(1, 2, 3, 4)
                     ))))
@@ -154,7 +154,7 @@ class FieldSpecTests {
     @Test
     public void shouldCreateNewInstanceWithSetRestrictions() {
         FieldSpec original = FieldSpec.Empty;
-        Whitelist<Object> restrictions = new FrequencyWhitelist<>(Collections.singleton("whitelist"));
+        Whitelist<Object> restrictions = FrequencyWhitelist.uniform(Collections.singleton("whitelist"));
         FieldSpec augmentedFieldSpec = original.withWhitelist(restrictions);
 
         Assert.assertNotSame(original, augmentedFieldSpec);
@@ -229,8 +229,8 @@ class FieldSpecTests {
 
     @Test
     public void fieldSpecsWithEqualSetRestrictionsShouldBeEqual() {
-        FieldSpec a = FieldSpec.Empty.withWhitelist(new FrequencyWhitelist<>(Collections.singleton("same")));
-        FieldSpec b = FieldSpec.Empty.withWhitelist(new FrequencyWhitelist<>(Collections.singleton("same")));
+        FieldSpec a = FieldSpec.Empty.withWhitelist(FrequencyWhitelist.uniform(Collections.singleton("same")));
+        FieldSpec b = FieldSpec.Empty.withWhitelist(FrequencyWhitelist.uniform(Collections.singleton("same")));
 
         Assert.assertThat(a, equalTo(b));
         Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
@@ -238,8 +238,8 @@ class FieldSpecTests {
 
     @Test
     public void fieldSpecsWithUnequalSetRestrictionsShouldBeUnequal() {
-        FieldSpec a = FieldSpec.Empty.withWhitelist(new FrequencyWhitelist<>(Collections.singleton("not same")));
-        FieldSpec b = FieldSpec.Empty.withWhitelist(new FrequencyWhitelist<>(Collections.singleton("different")));
+        FieldSpec a = FieldSpec.Empty.withWhitelist(FrequencyWhitelist.uniform(Collections.singleton("not same")));
+        FieldSpec b = FieldSpec.Empty.withWhitelist(FrequencyWhitelist.uniform(Collections.singleton("different")));
 
         Assert.assertThat(a, not(equalTo(b)));
     }

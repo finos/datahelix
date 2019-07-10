@@ -101,7 +101,7 @@ public class FieldSpecFactory {
             );
         }
 
-        return FieldSpec.Empty.withWhitelist(new FrequencyWhitelist<>(constraint.legalValues));
+        return FieldSpec.Empty.withWhitelist(FrequencyWhitelist.uniform(constraint.legalValues));
     }
 
     private FieldSpec constructIsNull(boolean negate) {
