@@ -1,15 +1,35 @@
 {
 	"schemaVersion": "0.1",
 	"fields": [
-		{ "name": "an_integer" }
+		{
+			"name": "an_integer"
+		}
 	],
 	"rules": [
-		{ "constraints": [
-			{ "not": { "field": "an_integer", "is": "null" } },
-			{ "field": "an_integer", "is": "ofType", "value": "integer" },
-
-			{ "field": "an_integer", "is": "greaterThanOrEqualTo", "value": 1 },
-			{ "field": "an_integer", "is": "lessThanOrEqualTo", "value": 4 }
-		] }
+		{
+			"constraints": [
+				{
+					"not": {
+						"field": "an_integer",
+						"is": "null"
+					}
+				},
+				{
+					"field": "an_integer",
+					"is": "ofType",
+					"value": "integer"
+				},
+				{
+					"field": "an_integer",
+					"is": "greaterThanOrEqualTo",
+					"value": 1
+				},
+				{
+					"field": "an_integer",
+					"is": "lessThanOrEqualTo",
+					"value": 4
+				}
+			]
+		}
 	]
 }
