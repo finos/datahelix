@@ -1,12 +1,20 @@
 {
   "schemaVersion": "0.1",
   "fields": [
-    {"name": "not_number"}
+    {
+      "name": "not_number"
+    }
   ],
   "rules": [
     {
       "constraints": [
-        {"not": {"field": "not_number", "is": "ofType", "value": "decimal"}}
+        {
+          "not": {
+            "field": "not_number",
+            "is": "ofType",
+            "value": "decimal"
+          }
+        }
       ]
     }
   ]
