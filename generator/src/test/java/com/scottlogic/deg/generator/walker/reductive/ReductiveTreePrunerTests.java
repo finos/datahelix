@@ -21,6 +21,7 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsLessThanConstantCo
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.*;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyWhitelist;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;

@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyWhitelist;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 
 

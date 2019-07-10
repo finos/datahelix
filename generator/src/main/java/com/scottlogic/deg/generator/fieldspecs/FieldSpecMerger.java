@@ -16,11 +16,12 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyWhitelist;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.Whitelist;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**

@@ -16,9 +16,8 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyWhitelist;
 import com.scottlogic.deg.generator.restrictions.*;
-
-import java.util.Collections;
 
 public class TypesRestrictionMergeOperation implements RestrictionMergeOperation {
     private static final TypeRestrictionsMerger typeRestrictionsMerger = new TypeRestrictionsMerger();

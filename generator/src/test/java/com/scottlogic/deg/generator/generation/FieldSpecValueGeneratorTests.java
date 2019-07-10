@@ -18,7 +18,7 @@ package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.fieldspecs.FrequencyWhitelist;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyWhitelist;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;

@@ -18,6 +18,8 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyWhitelist;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.Whitelist;
 import com.scottlogic.deg.generator.generation.string.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.utils.SetUtils;

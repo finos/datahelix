@@ -20,16 +20,15 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyWhitelist;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.common.util.NumberUtils;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class FieldSpecFactory {
     public static final String RIC_REGEX = "[A-Z]{1,4}\\.[A-Z]{1,2}";
