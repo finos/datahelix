@@ -9,9 +9,17 @@
     {
       "constraints": [
         {
+          "not": {
+            "field": "date",
+            "is": "null"
+          }
+        },
+        {
           "field": "date",
           "is": "equalTo",
-          "value": {"date": "2001-02-03T04:05:06.007"}
+          "value": {
+            "date": "2001-02-03T04:05:06.007"
+          }
         }
       ]
     }
