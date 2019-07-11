@@ -12,7 +12,13 @@ public class FrequencyWhitelist<T> implements Whitelist<T> {
     private final Set<ElementFrequency<T>> underlyingSet;
 
     public FrequencyWhitelist(final Set<ElementFrequency<T>> underlyingSet) {
-        this.underlyingSet = underlyingSet;
+        float total = underlyingSet.stream()
+            .map(ElementFrequency::frequency)
+            .reduce(0.0F, Float::sum);
+
+        this.underlyingSet = underlyingSet.stream()
+            .map(holder -> new ElementFrequency<>(holder.element(), holder.frequency() / total))
+            .collect(Collectors.toSet());
     }
 
     public static <T> FrequencyWhitelist<T> uniform(final Set<T> underlyingSet) {
