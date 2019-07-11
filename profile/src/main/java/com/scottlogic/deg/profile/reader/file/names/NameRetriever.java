@@ -17,6 +17,7 @@
 package com.scottlogic.deg.profile.reader.file.names;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.ElementFrequency;
 import com.scottlogic.deg.profile.reader.file.CsvInputStreamReader;
 
 import java.io.IOException;
@@ -34,19 +35,25 @@ public final class NameRetriever {
         throw new UnsupportedOperationException("No static class instantiation");
     }
 
-    public static Set<Object> loadNamesFromFile(NameConstraintTypes configuration) {
+    public static Set<ElementFrequency<Object>> loadNamesFromFile(NameConstraintTypes configuration) {
         if (configuration == FULL) {
-            return new HashSet<>(combineFirstWithLastNames(
+            return downcastToObject(combineFirstWithLastNames(
                 generateNamesFromSingleFile(FIRST.getFilePath()),
                 generateNamesFromSingleFile(LAST.getFilePath())));
         } else {
-            return new HashSet<>(generateNamesFromSingleFile(configuration.getFilePath()));
+            return downcastToObject(generateNamesFromSingleFile(configuration.getFilePath()));
         }
     }
 
-    private static Set<String> generateNamesFromSingleFile(String source) {
+    private static <T> Set<ElementFrequency<Object>> downcastToObject(Set<ElementFrequency<T>> higher) {
+        return higher.stream()
+            .map(holder -> new ElementFrequency<Object>(holder.element(), holder.frequency()))
+            .collect(Collectors.toSet());
+    };
+
+    private static Set<ElementFrequency<String>> generateNamesFromSingleFile(String source) {
         InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(source);
-        Set<String> result = CsvInputStreamReader.retrieveLines(stream);
+        Set<ElementFrequency<String>> result = CsvInputStreamReader.retrieveLines(stream);
         try {
             stream.close();
         } catch (IOException e) {
@@ -55,12 +62,20 @@ public final class NameRetriever {
         return result;
     }
 
-    private static Set<String> combineFirstWithLastNames(Set<String> firstNames, Set<String> lastNames) {
+    private static Set<ElementFrequency<String>> combineFirstWithLastNames(Set<ElementFrequency<String>> firstNames,
+                                                                           Set<ElementFrequency<String>> lastNames) {
         return firstNames.stream()
             .flatMap(
                 first -> lastNames.stream()
-                    .map(last -> String.format("%s %s", first, last))
+                    .map(last -> mergeFrequencies(first, last))
             ).collect(Collectors.toSet());
+    }
+
+    private static ElementFrequency<String> mergeFrequencies(ElementFrequency<String> first,
+                                                             ElementFrequency<String> last) {
+        String name = String.format("%s %s", first, last);
+        float frequency = first.frequency() + last.frequency();
+        return new ElementFrequency<>(name, frequency);
     }
 
 }
