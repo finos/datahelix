@@ -154,7 +154,6 @@
           "enum": [
             "ofType",
             "equalTo",
-            "aValid",
             "formattedAs",
             "matchingRegex",
             "containingRegex",
@@ -373,23 +372,6 @@
             "properties": {
               "value": {
                 "$ref": "#/definitions/numeric"
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "is": {
-                "const": "aValid"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "value": {
-                "const": "ISIN",
-                "default": "ISIN"
               }
             }
           }
