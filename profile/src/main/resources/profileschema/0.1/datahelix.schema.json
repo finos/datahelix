@@ -168,7 +168,8 @@
             "after",
             "afterOrAt",
             "before",
-            "beforeOrAt"
+            "beforeOrAt",
+            "setFromFile"
           ]
         },
         "value": {}
@@ -372,6 +373,22 @@
             "properties": {
               "value": {
                 "$ref": "#/definitions/numeric"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "is": {
+                "const": "setFromFile"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "$ref": "#/definitions/string"
               }
             }
           }
