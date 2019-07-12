@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
+import com.scottlogic.deg.generator.fieldspecs.whitelist.ElementFrequency;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyWhitelist;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.Whitelist;
 import com.scottlogic.deg.generator.restrictions.*;
@@ -56,18 +57,26 @@ public class FieldSpecMerger {
     }
 
     private Optional<FieldSpec> mergeSets(FieldSpec left, FieldSpec right) {
-        Whitelist<Object> set = new FrequencyWhitelist<>(SetUtils.intersect(
-            left.getWhitelist().distributedSet(),
-            right.getWhitelist().distributedSet()
-        ));
+        //TODO: Insert new merging logic
+        Whitelist<Object> set = new FrequencyWhitelist<>(left.getWhitelist().distributedSet().stream()
+            .flatMap(leftElement -> right.getWhitelist().distributedSet().stream()
+                .filter(rightElement -> leftElement.element().equals(rightElement.element()))
+                .map(rightElement -> new ElementFrequency<>(leftElement.element(), leftElement.frequency() + rightElement.frequency())))
+            .collect(Collectors.toSet()));
+
+
+//        Whitelist<Object> set = new FrequencyWhitelist<>(SetUtils.intersect(
+//            left.getWhitelist().distributedSet(),
+//            right.getWhitelist().distributedSet()
+//        ));
         return addNullable(left, right, setRestriction(set));
     }
 
     private Optional<FieldSpec> combineSetWithRestrictions(FieldSpec set, FieldSpec restrictions) {
         Whitelist<Object> newSet = new FrequencyWhitelist<>(
             set.getWhitelist().distributedSet().stream()
-            .filter(holder -> restrictions.permits(holder.element()))
-            .collect(Collectors.toSet()));
+                .filter(holder -> restrictions.permits(holder.element()))
+                .collect(Collectors.toSet()));
 
         return addNullable(set, restrictions, setRestriction(newSet));
     }
