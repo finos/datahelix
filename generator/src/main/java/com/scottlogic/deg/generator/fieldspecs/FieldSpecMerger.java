@@ -56,19 +56,18 @@ public class FieldSpecMerger {
         return combineRestrictions(left, right);
     }
 
+    private ElementFrequency<Object> mergeElements(ElementFrequency<Object> left,
+                                                   ElementFrequency<Object> right) {
+        return new ElementFrequency<>(left.element(), left.frequency() + right.frequency());
+    }
+
     private Optional<FieldSpec> mergeSets(FieldSpec left, FieldSpec right) {
-        //TODO: Insert new merging logic
         Whitelist<Object> set = new FrequencyWhitelist<>(left.getWhitelist().distributedSet().stream()
-            .flatMap(leftElement -> right.getWhitelist().distributedSet().stream()
-                .filter(rightElement -> leftElement.element().equals(rightElement.element()))
-                .map(rightElement -> new ElementFrequency<>(leftElement.element(), leftElement.frequency() + rightElement.frequency())))
+            .flatMap(leftHolder -> right.getWhitelist().distributedSet().stream()
+                .filter(rightHolder -> leftHolder.element().equals(rightHolder.element()))
+                .map(rightElement -> mergeElements(leftHolder, rightElement)))
             .collect(Collectors.toSet()));
 
-
-//        Whitelist<Object> set = new FrequencyWhitelist<>(SetUtils.intersect(
-//            left.getWhitelist().distributedSet(),
-//            right.getWhitelist().distributedSet()
-//        ));
         return addNullable(left, right, setRestriction(set));
     }
 
