@@ -18,13 +18,13 @@ package com.scottlogic.deg.profile.reader.file.names;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.ElementFrequency;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyWhitelist;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.Whitelist;
 import com.scottlogic.deg.profile.reader.file.CsvInputStreamReader;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes.*;
@@ -35,7 +35,7 @@ public final class NameRetriever {
         throw new UnsupportedOperationException("No static class instantiation");
     }
 
-    public static Set<ElementFrequency<Object>> loadNamesFromFile(NameConstraintTypes configuration) {
+    public static Whitelist<Object> loadNamesFromFile(NameConstraintTypes configuration) {
         if (configuration == FULL) {
             return downcastToObject(combineFirstWithLastNames(
                 generateNamesFromSingleFile(FIRST.getFilePath()),
@@ -45,15 +45,18 @@ public final class NameRetriever {
         }
     }
 
-    private static <T> Set<ElementFrequency<Object>> downcastToObject(Set<ElementFrequency<T>> higher) {
-        return higher.stream()
-            .map(holder -> new ElementFrequency<Object>(holder.element(), holder.frequency()))
-            .collect(Collectors.toSet());
-    };
+    private static <T> Whitelist<Object> downcastToObject(Whitelist<T> higher) {
+        return new FrequencyWhitelist<>(
+            higher.distributedSet().stream()
+                .map(holder -> new ElementFrequency<Object>(holder.element(), holder.frequency()))
+                .collect(Collectors.toSet()));
+    }
 
-    private static Set<ElementFrequency<String>> generateNamesFromSingleFile(String source) {
+    ;
+
+    private static Whitelist<String> generateNamesFromSingleFile(String source) {
         InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(source);
-        Set<ElementFrequency<String>> result = CsvInputStreamReader.retrieveLines(stream);
+        Whitelist<String> result = CsvInputStreamReader.retrieveLines(stream);
         try {
             stream.close();
         } catch (IOException e) {
@@ -62,13 +65,13 @@ public final class NameRetriever {
         return result;
     }
 
-    private static Set<ElementFrequency<String>> combineFirstWithLastNames(Set<ElementFrequency<String>> firstNames,
-                                                                           Set<ElementFrequency<String>> lastNames) {
-        return firstNames.stream()
+    private static Whitelist<String> combineFirstWithLastNames(Whitelist<String> firstNames,
+                                                               Whitelist<String> lastNames) {
+        return new FrequencyWhitelist<>(firstNames.distributedSet().stream()
             .flatMap(
-                first -> lastNames.stream()
+                first -> lastNames.distributedSet().stream()
                     .map(last -> mergeFrequencies(first, last))
-            ).collect(Collectors.toSet());
+            ).collect(Collectors.toSet()));
     }
 
     private static ElementFrequency<String> mergeFrequencies(ElementFrequency<String> first,

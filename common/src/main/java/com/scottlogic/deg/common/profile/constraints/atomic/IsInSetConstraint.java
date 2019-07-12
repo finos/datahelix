@@ -18,7 +18,7 @@ package com.scottlogic.deg.common.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
 
-import com.scottlogic.deg.common.profile.RuleInformation;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.Whitelist;
 
 import java.util.Objects;
 import java.util.Set;
@@ -26,37 +26,41 @@ import java.util.stream.Collectors;
 
 public class IsInSetConstraint implements AtomicConstraint {
     public final Field field;
-    public final Set<Object> legalValues;
+    public final Whitelist<Object> legalValues;
 
-    public IsInSetConstraint(Field field, Set<Object> legalValues) {
+    public IsInSetConstraint(Field field, Whitelist<Object> legalValues) {
         this.field = field;
         this.legalValues = legalValues;
 
-        if (legalValues.isEmpty()) {
+        if (legalValues.set().isEmpty()) {
             throw new IllegalArgumentException("Cannot create an IsInSetConstraint for field '" +
                 field.name + "' with an empty set.");
         }
 
-        if (legalValues.contains(null)){
+        if (legalValues.set().contains(null)){
             throw new IllegalArgumentException("Cannot create an IsInSetConstraint for field '" +
                 field.name + "' with a set containing null.");
         }
+    }
+
+    public Set<Object> legalValuesWithoutFrequency() {
+        return legalValues.set();
     }
 
     @Override
     public String toDotLabel() {
         final int limit = 3;
 
-        if (legalValues.size() <= limit) {
+        if (legalValues.set().size() <= limit) {
             return String.format("%s in [%s]", field.name,
-                legalValues.stream().map(x -> x.toString()).collect(Collectors.joining(", ")));
+                legalValues.set().stream().map(x -> x.toString()).collect(Collectors.joining(", ")));
         }
 
 
         return String.format("%s in [%s, ...](%d values)",
             field.name,
-            legalValues.stream().limit(limit).map(x -> x.toString()).collect(Collectors.joining(", ")),
-            legalValues.size());
+            legalValues.set().stream().limit(limit).map(x -> x.toString()).collect(Collectors.joining(", ")),
+            legalValues.set().size());
     }
 
     @Override

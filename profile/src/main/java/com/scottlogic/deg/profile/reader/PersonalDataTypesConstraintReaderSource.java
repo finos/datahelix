@@ -17,9 +17,10 @@
 package com.scottlogic.deg.profile.reader;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.constraints.atomic.IsInNameSetConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.ElementFrequency;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.Whitelist;
 import com.scottlogic.deg.profile.reader.file.names.NameRetriever;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
@@ -34,11 +35,11 @@ public class PersonalDataTypesConstraintReaderSource implements ConstraintReader
         ConstraintReader nameConstraintReader = (dto, fields, rules) -> {
 
             NameConstraintTypes type = lookupNameConstraint(dto);
-            Set<ElementFrequency<Object>> names = NameRetriever.loadNamesFromFile(type);
+            Whitelist<Object> names = NameRetriever.loadNamesFromFile(type);
 
             Field field = fields.getByName(dto.field);
 
-            return new IsInNameSetConstraint(field, names);
+            return new IsInSetConstraint(field, names);
         };
 
         return Arrays.stream(NameConstraintTypes.values())

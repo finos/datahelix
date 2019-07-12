@@ -21,6 +21,8 @@ import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsNullConstraint;
 import com.scottlogic.deg.common.profile.RuleInformation;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.ElementFrequency;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyWhitelist;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -70,8 +72,18 @@ public class NotConstraintTests {
     public void testConstraintIsNotEqualDueToValue() {
         Field field1 = new Field("TestField");
         Field field2 = new Field("TestField");
-        Constraint constraint1 = new IsInSetConstraint(field1, Collections.singleton("abc")).negate();
-        Constraint constraint2 = new IsInSetConstraint(field2, Collections.singleton("abcd")).negate();
+        Constraint constraint1 = new IsInSetConstraint(
+            field1,
+            new FrequencyWhitelist<>(
+                Collections.singleton(
+                    new ElementFrequency<>("abc", 1.0F))
+            )).negate();
+        Constraint constraint2 = new IsInSetConstraint(
+            field2,
+            new FrequencyWhitelist<>(
+                Collections.singleton(
+                    new ElementFrequency<>("abcd", 1.0F))
+            )).negate();
         Assert.assertNotEquals(constraint1, constraint2);
     }
 

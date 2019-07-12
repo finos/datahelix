@@ -18,6 +18,8 @@ package com.scottlogic.deg.common.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.RuleInformation;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.ElementFrequency;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyWhitelist;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -32,7 +34,7 @@ public class IsInSetConstraintTests {
 
         Assertions.assertThrows(
             IllegalArgumentException.class,
-            () -> new IsInSetConstraint(field1, Collections.emptySet()));
+            () -> new IsInSetConstraint(field1, new FrequencyWhitelist<>(Collections.emptySet())));
     }
 
     @Test
@@ -41,14 +43,16 @@ public class IsInSetConstraintTests {
 
         Assertions.assertThrows(
             IllegalArgumentException.class,
-            () -> new IsInSetConstraint(field1, Collections.singleton(null)));
+            () -> new IsInSetConstraint(field1, new FrequencyWhitelist<>(Collections.singleton(null))));
     }
 
     @Test
     public void testConstraintThrowsNothingIfGivenAValidSet(){
         Field field1 = new Field("TestField");
         Assertions.assertDoesNotThrow(
-            () -> new IsInSetConstraint(field1, Collections.singleton("foo")));
+            () -> new IsInSetConstraint(field1, new FrequencyWhitelist<>(
+                Collections.singleton(
+                    new ElementFrequency<>("foo", 1.0F)))));
     }
 
 }

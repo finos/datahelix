@@ -23,15 +23,17 @@ import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.RuleInformation;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.ElementFrequency;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyWhitelist;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class ConstraintBuilder {
-    private final List<Constraint> constraints =  new ArrayList<>();
+    private final List<Constraint> constraints = new ArrayList<>();
     private final Map<String, Field> fields;
 
-    public ConstraintBuilder(List<Field> fields){
+    public ConstraintBuilder(List<Field> fields) {
         this.fields = fields.stream().collect(Collectors.toMap(f -> f.name, f -> f));
     }
 
@@ -39,22 +41,30 @@ public class ConstraintBuilder {
         return constraints;
     }
 
-    public ConstraintBuilder addInSetConstraint(String fieldname, List<Object> values){
-        constraints.add(new IsInSetConstraint(fields.get(fieldname), new HashSet<>(values)));
+    public ConstraintBuilder addInSetConstraint(String fieldname, List<Object> values) {
+        constraints.add(new IsInSetConstraint(fields.get(fieldname),
+            new FrequencyWhitelist<>(
+                values.stream()
+                    .map(value -> new ElementFrequency<>(value, 1.0F))
+                    .collect(Collectors.toSet()))));
         return this;
     }
 
-    public ConstraintBuilder addEqualToConstraint(String fieldname, Object value){
-        constraints.add(new IsInSetConstraint(fields.get(fieldname), Collections.singleton(value)));
+    public ConstraintBuilder addEqualToConstraint(String fieldname, Object value) {
+        constraints.add(new IsInSetConstraint(
+            fields.get(fieldname),
+            new FrequencyWhitelist<>(
+                Collections.singleton(
+                    new ElementFrequency<>(value, 1.0F)))));
         return this;
     }
 
-    public ConstraintBuilder addConditionalConstraint(List<Constraint> predicates, List<Constraint> consequences){
+    public ConstraintBuilder addConditionalConstraint(List<Constraint> predicates, List<Constraint> consequences) {
         constraints.add(new ConditionalConstraint(new AndConstraint(predicates), new AndConstraint(consequences)));
         return this;
     }
 
-    public ConstraintBuilder addNullConstraint(String fieldName){
+    public ConstraintBuilder addNullConstraint(String fieldName) {
         constraints.add(new IsNullConstraint(fields.get(fieldName)));
         return this;
     }

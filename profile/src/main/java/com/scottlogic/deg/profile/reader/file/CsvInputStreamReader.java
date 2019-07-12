@@ -17,6 +17,8 @@
 package com.scottlogic.deg.profile.reader.file;
 
 import com.scottlogic.deg.generator.fieldspecs.whitelist.ElementFrequency;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyWhitelist;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.Whitelist;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -36,11 +38,11 @@ public final class CsvInputStreamReader {
         throw new UnsupportedOperationException("No instantiation of static class");
     }
 
-    public static Set<ElementFrequency<String>> retrieveLines(InputStream stream) {
+    public static Whitelist<String> retrieveLines(InputStream stream) {
         List<CSVRecord> records = parse(stream);
-        return records.stream()
+        return new FrequencyWhitelist<>(records.stream()
             .map(record -> new ElementFrequency<>(record.get(0), Float.parseFloat(record.get(1))))
-            .collect(Collectors.toSet());
+            .collect(Collectors.toSet()));
     }
 
     private static List<CSVRecord> parse(InputStream stream) {

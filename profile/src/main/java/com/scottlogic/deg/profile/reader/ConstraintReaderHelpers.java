@@ -18,6 +18,7 @@ package com.scottlogic.deg.profile.reader;
 
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.common.util.NumberUtils;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.ElementFrequency;
 import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
 
 import java.math.BigDecimal;
@@ -31,6 +32,7 @@ import java.time.format.ResolverStyle;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ConstraintReaderHelpers {
     public static Object getValidatedValue(ConstraintDTO dto) {
@@ -41,7 +43,7 @@ public class ConstraintReaderHelpers {
         return getValidatedValue(dto, dto.value, requiredType);
     }
 
-    public static Set<Object> getValidatedValues(ConstraintDTO dto) {
+    public static Set<ElementFrequency<Object>> getValidatedValues(ConstraintDTO dto) {
         if (dto.values == null) {
             throw new InvalidProfileException(String.format(
                 "Field [%s]: Couldn't recognise 'values' property, it must not contain 'null'",
@@ -61,7 +63,9 @@ public class ConstraintReaderHelpers {
             mappedValues.add(getValidatedValue(dto, value, Object.class));
         }
 
-        return mappedValues;
+        return mappedValues.stream()
+            .map(element -> new ElementFrequency<>(element, 1.0F))
+            .collect(Collectors.toSet());
     }
 
     public static <T> Optional<T> tryGetValidatedValue(ConstraintDTO dto, Class<T> requiredType) {

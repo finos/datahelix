@@ -22,6 +22,7 @@ import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyWhitelist;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.Whitelist;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
@@ -32,6 +33,7 @@ import java.util.*;
 import static com.scottlogic.deg.generator.builders.ConstraintNodeBuilder.*;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -127,9 +129,8 @@ class ReductiveTreePrunerTests {
                     constraintNode().where(field).isInSet("a"),
                     constraintNode().where(field).isInSet("b"))
                 .build();
-        Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("a", "b"));
-        FieldSpec inputFieldSpec = notNull.withWhitelist(
-            (FrequencyWhitelist.uniform(inputWhitelist)));
+        Whitelist<Object> inputWhitelist = FrequencyWhitelist.uniform(new HashSet<>(Arrays.asList("a", "b")));
+        FieldSpec inputFieldSpec = notNull.withWhitelist((inputWhitelist));
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
@@ -282,7 +283,7 @@ class ReductiveTreePrunerTests {
             .where(unrelatedField).isInSet("unrelated1")
             .where(unrelatedField).isInSet("unrelated2")
             .build();
-        assertThat(actual, sameBeanAs(expected));
+        assertEquals(actual.getAtomicConstraints(), expected.getAtomicConstraints());
     }
 
     // Only one layer has contradiction -> prunes correctly
@@ -349,7 +350,7 @@ class ReductiveTreePrunerTests {
                     .where(unrelatedField).isInSet("unrelated1")
                     .where(unrelatedField).isInSet("unrelated2"))
             .build();
-        assertThat(actual, sameBeanAs(expected));
+        assertEquals(actual.getAtomicConstraints(), expected.getAtomicConstraints());
     }
 
     // Both layers contradict -> returns invalid tree

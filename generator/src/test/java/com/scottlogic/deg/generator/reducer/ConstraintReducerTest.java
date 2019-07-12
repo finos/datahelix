@@ -24,6 +24,9 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.common.profile.RuleInformation;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.ElementFrequency;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyWhitelist;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.Whitelist;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsEqual;
@@ -36,6 +39,8 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.*;
 
@@ -56,7 +61,9 @@ class ConstraintReducerTest {
         ProfileFields fieldList = new ProfileFields(
             Arrays.asList(quantityField, countryField, cityField));
 
-        final Set<Object> countryAmong = new HashSet<>(Arrays.asList("UK", "US"));
+        final Whitelist<Object> countryAmong = new FrequencyWhitelist<>(Stream.of("UK", "US")
+            .map(string -> new ElementFrequency<>((Object) string, 1.0F))
+            .collect(Collectors.toSet()));
 
         final List<AtomicConstraint> constraints = Arrays.asList(
             new IsGreaterThanConstantConstraint(quantityField, 0),
@@ -894,7 +901,9 @@ class ConstraintReducerTest {
 
         List<AtomicConstraint> constraints = Arrays.asList(
             new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.NUMERIC),
-            new IsInSetConstraint(field, new HashSet<>(Arrays.asList(1, "lorem", 5, "ipsum", 2)))
+            new IsInSetConstraint(field, new FrequencyWhitelist<>(Stream.of(1, "lorem", 5, "ipsum", 2)
+            .map(element -> new ElementFrequency<Object>(element, 1.0F))
+            .collect(Collectors.toSet())))
         );
 
         Optional<RowSpec> testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints);
@@ -913,7 +922,9 @@ class ConstraintReducerTest {
         OffsetDateTime datetimeValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         List<AtomicConstraint> constraints = Arrays.asList(
             new MatchesRegexConstraint(field, Pattern.compile("(lorem|ipsum)")),
-            new IsInSetConstraint(field, new HashSet<>(Arrays.asList(1, "lorem", 5, "ipsum", 2, "foo", datetimeValue)))
+            new IsInSetConstraint(field, new FrequencyWhitelist<>(Stream.of(1, "lorem", 5, "ipsum", 2, "foo", datetimeValue)
+            .map(element -> new ElementFrequency<Object>(element, 1.0F))
+            .collect(Collectors.toSet())))
         );
 
         Optional<RowSpec> testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints);
@@ -932,7 +943,9 @@ class ConstraintReducerTest {
         OffsetDateTime datetimeValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         List<AtomicConstraint> constraints = Arrays.asList(
             new IsGreaterThanOrEqualToConstantConstraint(field, 2),
-            new IsInSetConstraint(field, new HashSet<>(Arrays.asList(1, "lorem", 5, "ipsum", 2, datetimeValue)))
+            new IsInSetConstraint(field, new FrequencyWhitelist<>(Stream.of(1, "lorem", 5, "ipsum", 2, datetimeValue)
+            .map(element -> new ElementFrequency<Object>(element, 1.0F))
+            .collect(Collectors.toSet())))
         );
 
         Optional<RowSpec> testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints);
@@ -952,7 +965,10 @@ class ConstraintReducerTest {
         OffsetDateTime oneHourLaterDateTimeValue = datetimeValue.plusHours(1);
         List<AtomicConstraint> constraints = Arrays.asList(
             new IsAfterConstantDateTimeConstraint(field, datetimeValue),
-            new IsInSetConstraint(field, new HashSet<>(Arrays.asList(1, "lorem", 5, "ipsum", 2, datetimeValue, oneHourLaterDateTimeValue)))
+            new IsInSetConstraint(field, new FrequencyWhitelist<>(Stream.of(1, "lorem", 5, "ipsum", 2, datetimeValue, oneHourLaterDateTimeValue)
+            .map(element -> new ElementFrequency<Object>(element, 1.0F))
+            .collect(Collectors.toSet())))
+
         );
 
         Optional<RowSpec> testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints);

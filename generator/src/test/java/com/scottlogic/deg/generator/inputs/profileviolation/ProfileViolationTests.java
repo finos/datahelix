@@ -28,6 +28,9 @@ import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.builders.*;
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import com.scottlogic.deg.common.profile.ViolatedProfile;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.ElementFrequency;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyWhitelist;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.Whitelist;
 import com.scottlogic.deg.generator.violations.filters.ConstraintTypeViolationFilter;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import org.junit.jupiter.api.BeforeEach;
@@ -74,7 +77,10 @@ public class ProfileViolationTests {
 
     private static Stream<Arguments> allAtomicConstraints() {
         OffsetDateTime sampleDate = OffsetDateTime.of(2019, 1, 15, 12, 0, 0, 0, ZoneOffset.UTC);
-        final HashSet<Object> sampleSet = new HashSet<>(Arrays.asList("hello", 10));
+        final Whitelist<Object> sampleSet = new FrequencyWhitelist<>(
+            Stream.of("hello", 10)
+                .map(element -> new ElementFrequency<>((Object) element, 1.0F))
+                .collect(Collectors.toSet()));
 
         return Stream.of(
             Arguments.of(FormatConstraint.class, "%d"),

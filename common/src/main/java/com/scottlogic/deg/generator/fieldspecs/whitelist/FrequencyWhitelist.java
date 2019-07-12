@@ -12,25 +12,37 @@ public class FrequencyWhitelist<T> implements Whitelist<T> {
     private final Set<ElementFrequency<T>> underlyingSet;
 
     public FrequencyWhitelist(final Set<ElementFrequency<T>> underlyingSet) {
-        float total = underlyingSet.stream()
-            .map(ElementFrequency::frequency)
-            .reduce(0.0F, Float::sum);
+        if (underlyingSet.isEmpty()) {
+            this.underlyingSet = underlyingSet;
+        } else {
+            if (underlyingSet.contains(null)) {
+                throw new IllegalArgumentException("Whitelist should not contain null elements");
+            }
 
-        this.underlyingSet = underlyingSet.stream()
-            .map(holder -> new ElementFrequency<>(holder.element(), holder.frequency() / total))
-            .collect(Collectors.toSet());
+            float total = underlyingSet.stream()
+                .map(ElementFrequency::frequency)
+                .reduce(0.0F, Float::sum);
+
+            if (total == 0.0F) {
+                throw new IllegalArgumentException("Total of frequency whitelists sum to zero.");
+            }
+
+            this.underlyingSet = underlyingSet.stream()
+                .map(holder -> new ElementFrequency<>(holder.element(), holder.frequency() / total))
+                .collect(Collectors.toSet());
+        }
     }
 
     public static <T> FrequencyWhitelist<T> uniform(final Set<T> underlyingSet) {
         return new FrequencyWhitelist<>(
             underlyingSet.stream()
-            .map(e -> new ElementFrequency<T>(e, 1.0F))
-            .collect(Collectors.toSet()));
+                .map(e -> new ElementFrequency<T>(e, 1.0F))
+                .collect(Collectors.toSet()));
     }
 
     @SuppressWarnings("unchecked")
     public static <T> FrequencyWhitelist<T> empty() {
-        return (FrequencyWhitelist<T>)EMPTY;
+        return (FrequencyWhitelist<T>) EMPTY;
     }
 
     @Override

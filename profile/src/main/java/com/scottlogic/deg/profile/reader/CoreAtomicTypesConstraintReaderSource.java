@@ -24,6 +24,9 @@ import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.util.Defaults;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.ElementFrequency;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyWhitelist;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.Whitelist;
 import com.scottlogic.deg.profile.reader.file.CsvInputStreamReader;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 
@@ -35,6 +38,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMapEntrySource {
@@ -95,7 +99,11 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                 (dto, fields, rules) ->
                     new IsInSetConstraint(
                         fields.getByName(dto.field),
-                        Collections.singleton(ConstraintReaderHelpers.getValidatedValue(dto))
+                        new FrequencyWhitelist<>(
+                        Collections.singleton(
+                            new ElementFrequency<Object>(ConstraintReaderHelpers.getValidatedValue(dto), 1.0F)
+                        )
+                        )
                     )
             ),
             new ConstraintReaderMapEntry(
@@ -104,7 +112,9 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                 (dto, fields, rules) ->
                     new IsInSetConstraint(
                         fields.getByName(dto.field),
+                        new FrequencyWhitelist<>(
                         ConstraintReaderHelpers.getValidatedValues(dto)
+                        )
                     )
             ),
             new ConstraintReaderMapEntry(
@@ -320,10 +330,13 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                     String value = ConstraintReaderHelpers.getValidatedValue(dto, String.class);
 
                     InputStream streamFromPath = createStreamFromPath(appendPath(value));
-                    Set<String> names = CsvInputStreamReader.retrieveLines(streamFromPath);
+                    Whitelist<String> names = CsvInputStreamReader.retrieveLines(streamFromPath);
                     closeStream(streamFromPath);
 
-                    Set<Object> downcastedNames = new HashSet<>(names);
+                   Whitelist<Object> downcastedNames = new FrequencyWhitelist<>(
+                        names.distributedSet().stream()
+                        .map(holder -> new ElementFrequency<>((Object) holder.element(), holder.frequency()))
+                        .collect(Collectors.toSet()));
                     Field field = fields.getByName(dto.field);
 
                     return new IsInSetConstraint(field, downcastedNames);

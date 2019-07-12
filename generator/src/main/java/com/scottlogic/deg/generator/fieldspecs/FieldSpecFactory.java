@@ -96,11 +96,11 @@ public class FieldSpecFactory {
     private FieldSpec construct(IsInSetConstraint constraint, boolean negate) {
         if (negate) {
             return FieldSpec.Empty.withBlacklistRestrictions(
-                new BlacklistRestrictions(constraint.legalValues)
+                new BlacklistRestrictions(constraint.legalValuesWithoutFrequency())
             );
         }
 
-        return FieldSpec.Empty.withWhitelist(FrequencyWhitelist.uniform(constraint.legalValues));
+        return FieldSpec.Empty.withWhitelist(constraint.legalValues);
     }
 
     private FieldSpec constructIsNull(boolean negate) {
