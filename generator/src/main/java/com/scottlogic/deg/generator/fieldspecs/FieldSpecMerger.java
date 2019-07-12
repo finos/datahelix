@@ -56,7 +56,7 @@ public class FieldSpecMerger {
         return combineRestrictions(left, right);
     }
 
-    private ElementFrequency<Object> mergeElements(ElementFrequency<Object> left,
+    private static ElementFrequency<Object> mergeElements(ElementFrequency<Object> left,
                                                    ElementFrequency<Object> right) {
         return new ElementFrequency<>(left.element(), left.frequency() + right.frequency());
     }

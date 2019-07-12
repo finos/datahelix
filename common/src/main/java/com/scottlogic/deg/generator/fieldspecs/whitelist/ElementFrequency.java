@@ -34,4 +34,12 @@ public class ElementFrequency<E> {
     public int hashCode() {
         return Objects.hash(element, frequency);
     }
+
+    @Override
+    public String toString() {
+        return "ElementFrequency{" +
+            "element=" + element +
+            ", frequency=" + frequency +
+            '}';
+    }
 }

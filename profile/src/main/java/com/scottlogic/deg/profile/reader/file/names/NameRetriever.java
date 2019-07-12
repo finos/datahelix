@@ -76,7 +76,7 @@ public final class NameRetriever {
 
     private static ElementFrequency<String> mergeFrequencies(ElementFrequency<String> first,
                                                              ElementFrequency<String> last) {
-        String name = String.format("%s %s", first, last);
+        String name = String.format("%s %s", first.element(), last.element());
         float frequency = first.frequency() + last.frequency();
         return new ElementFrequency<>(name, frequency);
     }
