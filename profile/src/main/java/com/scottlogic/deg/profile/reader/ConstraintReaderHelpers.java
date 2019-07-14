@@ -43,10 +43,17 @@ public class ConstraintReaderHelpers {
 
     public static Set<Object> getValidatedValues(ConstraintDTO dto) {
         if (dto.values == null) {
-            throw new InvalidProfileException(String.format(
-                "Field [%s]: Couldn't recognise 'values' property, it must not contain 'null'",
-                dto.field
-            ));
+            if(dto.value != null) {
+                throw new InvalidProfileException(String.format(
+                    "Field[%s]: Requires a \"values\" property but instead a \"value\" property has been added.",
+                    dto.field
+                ));
+            } else {
+                throw new InvalidProfileException(String.format(
+                    "Field [%s]: Couldn't recognise 'values' property, it must not contain 'null'",
+                    dto.field
+                ));
+            }
         }
 
         Set<Object> mappedValues = new HashSet<>();
