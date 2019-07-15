@@ -67,4 +67,11 @@ public class FrequencyWhitelist<T> implements Whitelist<T> {
     public int hashCode() {
         return Objects.hash(underlyingSet);
     }
+
+    @Override
+    public String toString() {
+        return "FrequencyWhitelist{" +
+            "underlyingSet=" + underlyingSet +
+            '}';
+    }
 }
