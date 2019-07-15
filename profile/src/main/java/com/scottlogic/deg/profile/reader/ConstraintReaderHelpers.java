@@ -43,26 +43,15 @@ public class ConstraintReaderHelpers {
 
     public static Set<Object> getValidatedValues(ConstraintDTO dto) {
         if (dto.values == null) {
-            if(dto.value != null) {
-                throw new InvalidProfileException(String.format(
+            throw new InvalidProfileException(String.format(
                     "Field[%s]: Requires a \"values\" property but instead a \"value\" property has been added.",
-                    dto.field
-                ));
-            } else {
-                throw new InvalidProfileException(String.format(
-                    "Field [%s]: Couldn't recognise 'values' property, it must not contain 'null'",
-                    dto.field
-                ));
-            }
+                    dto.field));
         }
 
         Set<Object> mappedValues = new HashSet<>();
         for (Object value : dto.values) {
             if (value == null) {
-                throw new InvalidProfileException(String.format(
-                    "Field [%s]: Set must not contain null",
-                    dto.field
-                ));
+                throw new InvalidProfileException(String.format("Field [%s]: Set must not contain null", dto.field));
             }
 
             mappedValues.add(getValidatedValue(dto, value, Object.class));
@@ -74,17 +63,14 @@ public class ConstraintReaderHelpers {
     public static <T> Optional<T> tryGetValidatedValue(ConstraintDTO dto, Class<T> requiredType) {
         try {
             return Optional.of(getValidatedValue(dto, dto.value, requiredType));
-        }
-        catch(Exception exp) {
+        } catch (Exception exp) {
             return Optional.empty();
         }
     }
 
-    public static <T> T ensureValueBetween(
-        ConstraintDTO dto,
-        @SuppressWarnings("SameParameterValue") Class<T> requiredType,
-        BigDecimal min,
-        BigDecimal max) throws InvalidProfileException {
+    public static <T> T ensureValueBetween(ConstraintDTO dto,
+            @SuppressWarnings("SameParameterValue") Class<T> requiredType, BigDecimal min, BigDecimal max)
+            throws InvalidProfileException {
 
         T value = getValidatedValue(dto, dto.value, requiredType);
         return ensureValueBetween(dto, value, min, max);
@@ -92,24 +78,22 @@ public class ConstraintReaderHelpers {
 
     /**
      * @param dto          The ConstraintDTO instance
-     * @param requiredType the type of value required, pass Object.class if any type is acceptable
+     * @param requiredType the type of value required, pass Object.class if any type
+     *                     is acceptable
      * @return the value in the ConstraintDTO cast as T
-     * @throws InvalidProfileException if the value is null, not of type T, or (when a number) outside of the allowed range
+     * @throws InvalidProfileException if the value is null, not of type T, or (when
+     *                                 a number) outside of the allowed range
      */
-    private static <T> T getValidatedValue(
-        ConstraintDTO dto,
-        Object value,
-        Class<T> requiredType) throws InvalidProfileException {
+    private static <T> T getValidatedValue(ConstraintDTO dto, Object value, Class<T> requiredType)
+            throws InvalidProfileException {
 
         if (value == null) {
-            throw new InvalidProfileException(String.format(
-                "Field [%s]: Couldn't recognise 'value' property, it must be set to a value",
-                dto.field
-            ));
+            throw new InvalidProfileException(String
+                    .format("Field [%s]: Couldn't recognise 'value' property, it must be set to a value", dto.field));
         }
 
         if (requiredType == OffsetDateTime.class || value instanceof Map) {
-            //the only value that is currently permitted to be a Map is a DateObject
+            // the only value that is currently permitted to be a Map is a DateObject
             value = getValueAsDate(dto, value);
         }
 
@@ -117,25 +101,17 @@ public class ConstraintReaderHelpers {
             BigDecimal valueAsBigDecimal = (BigDecimal) value;
             if (valueAsBigDecimal.stripTrailingZeros().scale() > 0) {
                 throw new InvalidProfileException(String.format(
-                    "Field [%s]: Couldn't recognise 'value' property, it must be an integer but was a decimal with value `%s`",
-                    dto.field,
-                    value
-                ));
+                        "Field [%s]: Couldn't recognise 'value' property, it must be an integer but was a decimal with value `%s`",
+                        dto.field, value));
             }
 
             value = valueAsBigDecimal.intValueExact();
         }
 
         if (!requiredType.isInstance(value)) {
-            throw new InvalidProfileException(
-                String.format(
+            throw new InvalidProfileException(String.format(
                     "Field [%s]: Couldn't recognise 'value' property, it must be a %s but was a %s with value `%s`",
-                    dto.field,
-                    requiredType.getSimpleName(),
-                    value.getClass().getSimpleName(),
-                    value
-                )
-            );
+                    dto.field, requiredType.getSimpleName(), value.getClass().getSimpleName(), value));
         }
 
         if (value instanceof Number) {
@@ -153,7 +129,7 @@ public class ConstraintReaderHelpers {
         }
 
         if (value instanceof String) {
-            return (String)value;
+            return (String) value;
         }
 
         if (value instanceof Map) {
@@ -173,29 +149,22 @@ public class ConstraintReaderHelpers {
 
     private static OffsetDateTime getValueAsDate(ConstraintDTO dto, Object value) {
         if (!(value instanceof Map)) {
-            throw new InvalidProfileException(String.format(
-                "Field [%s]: Dates should be expressed in object format e.g. { \"date\": \"%s\" }",
-                dto.field,
-                value
-            ));
+            throw new InvalidProfileException(
+                    String.format("Field [%s]: Dates should be expressed in object format e.g. { \"date\": \"%s\" }",
+                            dto.field, value));
         }
 
         Map objectMap = (Map) value;
         if (!objectMap.containsKey("date")) {
-            throw new InvalidProfileException(String.format(
-                "Field [%s]: Object found but no 'date' property exists, found %s",
-                dto.field,
-                Objects.toString(objectMap.keySet())
-            ));
+            throw new InvalidProfileException(
+                    String.format("Field [%s]: Object found but no 'date' property exists, found %s", dto.field,
+                            Objects.toString(objectMap.keySet())));
         }
 
         Object date = objectMap.get("date");
         if (!(date instanceof String)) {
-            throw new InvalidProfileException(String.format(
-                "Field [%s]: Date on date object must be a string, found %s",
-                dto.field,
-                date
-            ));
+            throw new InvalidProfileException(
+                    String.format("Field [%s]: Date on date object must be a string, found %s", dto.field, date));
         }
 
         OffsetDateTime offsetDateTime = parseDate((String) date, dto);
@@ -213,10 +182,8 @@ public class ConstraintReaderHelpers {
     private static String validateString(ConstraintDTO dto, String value) {
         if (value.length() > Defaults.MAX_STRING_LENGTH) {
             throw new InvalidProfileException(String.format(
-                "Field [%s]: set contains a string longer than maximum permitted length, was: %d, max-length: %d",
-                dto.field,
-                value.length(),
-                Defaults.MAX_STRING_LENGTH));
+                    "Field [%s]: set contains a string longer than maximum permitted length, was: %d, max-length: %d",
+                    dto.field, value.length(), Defaults.MAX_STRING_LENGTH));
         }
 
         return value;
@@ -224,18 +191,14 @@ public class ConstraintReaderHelpers {
 
     private static OffsetDateTime parseDate(String value, ConstraintDTO dto) {
         DateTimeFormatter formatter = new DateTimeFormatterBuilder()
-            .append(DateTimeFormatter.ofPattern("u-MM-dd'T'HH:mm:ss'.'SSS"))
-            .optionalStart()
-            .appendOffset("+HH", "Z")
-            .toFormatter()
-            .withResolverStyle(ResolverStyle.STRICT);
+                .append(DateTimeFormatter.ofPattern("u-MM-dd'T'HH:mm:ss'.'SSS")).optionalStart()
+                .appendOffset("+HH", "Z").toFormatter().withResolverStyle(ResolverStyle.STRICT);
 
         try {
             TemporalAccessor temporalAccessor = formatter.parse(value);
 
-            return temporalAccessor.isSupported(ChronoField.OFFSET_SECONDS)
-                ? OffsetDateTime.from(temporalAccessor)
-                : LocalDateTime.from(temporalAccessor).atOffset(ZoneOffset.UTC);
+            return temporalAccessor.isSupported(ChronoField.OFFSET_SECONDS) ? OffsetDateTime.from(temporalAccessor)
+                    : LocalDateTime.from(temporalAccessor).atOffset(ZoneOffset.UTC);
         } catch (DateTimeParseException dtpe) {
             throwDateTimeError(value, dto);
             return null;
@@ -244,31 +207,23 @@ public class ConstraintReaderHelpers {
 
     private static void throwDateTimeError(String profileDate, ConstraintDTO dto) {
         throw new InvalidProfileException(String.format(
-            "Field [%s]: Date string '%s' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS[Z] between (inclusive) " +
-                "0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z",
-            dto.field,
-            profileDate
-        ));
+                "Field [%s]: Date string '%s' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS[Z] between (inclusive) "
+                        + "0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z",
+                dto.field, profileDate));
     }
 
     private static <T> T ensureValueBetween(ConstraintDTO dto, T value, BigDecimal min, BigDecimal max) {
         BigDecimal valueAsBigDecimal = NumberUtils.coerceToBigDecimal(value);
         if (valueAsBigDecimal.compareTo(min) < 0) {
-            throw new InvalidProfileException(String.format(
-                "Field [%s]: %s constraint must have an operand/value >= %s, currently is %s",
-                dto.field,
-                dto.is,
-                min.toPlainString(),
-                valueAsBigDecimal.toPlainString()));
+            throw new InvalidProfileException(
+                    String.format("Field [%s]: %s constraint must have an operand/value >= %s, currently is %s",
+                            dto.field, dto.is, min.toPlainString(), valueAsBigDecimal.toPlainString()));
         }
 
         if (valueAsBigDecimal.compareTo(max) > 0) {
-            throw new InvalidProfileException(String.format(
-                "Field [%s]: %s constraint must have an operand/value <= %s, currently is %s",
-                dto.field,
-                dto.is,
-                max.toPlainString(),
-                valueAsBigDecimal.toPlainString()));
+            throw new InvalidProfileException(
+                    String.format("Field [%s]: %s constraint must have an operand/value <= %s, currently is %s",
+                            dto.field, dto.is, max.toPlainString(), valueAsBigDecimal.toPlainString()));
         }
 
         return value;
