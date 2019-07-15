@@ -1,0 +1,496 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang=""> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>DataHelix Generator – FINOS</title>
+        <meta name="description" content="Quickly generate customised, complex data for system testing and validation.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="style.css">
+
+        <!--[if lt IE 9]>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div class="container">
+            <div class="row">
+
+                <div class="three columns sidebar">
+                    <h1 class="title">DataHelix Generator</h1>
+                    <nav>
+                        <ul>
+                            <li><a href="#background">Background</a></li>
+                            <li>
+                                <a href="#getting-started">Getting started</a>
+                                <ul>
+                                    <li><a href="#first-profile">Creating your first profile</a></li>
+                                    <li><a href="#constraints">Adding constraints</a></li>
+                                    <li><a href="#datasets">Generating large datasets</a></li>
+                                    <li><a href="#datatypes">Data types</a></li>
+                                    <li><a href="#modes">Generation modes</a></li>
+                                    <li><a href="#invalid-data">Generating invalid data</a></li>
+                                    <li><a href="#next-steps">Next steps</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="https://github.com/finos/datahelix/wiki">Wiki</a></li>
+                            <li><a href="https://github.com/finos/datahelix/releases/">Latest release</a></li>
+                            <li><a href="#contributing">Contributing</a></li>
+                            <li><a href="#license">License</a></li>
+                        </ul>
+                    </nav>
+                    <section class="attribution finos">
+                        <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                            <polygon points="26 20.02 6 13.82 6 6.21 26 12.41 26 20.02" fill="#3785ba"/>
+                            <polygon points="26 0 6 6.21 6 13.82 26 7.61 26 0" fill="#00b5e2"/>
+                            <polygon points="26 12.41 6 18.62 6 26.23 6 32 13.7 32 13.7 23.84 26 20.02 26 12.41" fill="#00b5e2"/>
+                        </svg>
+                        <span>By <a href="https://www.finos.org/">FINOS</a></span>
+                    </section>
+                    <section class="attribution github">
+                        <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                            <path d="M16,0a16,16,0,0,0-5.06,31.18c.8.15,1.09-.34,1.09-.77s0-1.38,0-2.72c-4.45,1-5.39-2.14-5.39-2.14A4.25,4.25,0,0,0,4.85,23.2c-1.46-1,.11-1,.11-1a3.39,3.39,0,0,1,2.45,1.65,3.39,3.39,0,0,0,4.65,1.33,3.44,3.44,0,0,1,1-2.14c-3.55-.4-7.29-1.78-7.29-7.91a6.21,6.21,0,0,1,1.65-4.29A5.67,5.67,0,0,1,7.6,6.64S8.94,6.21,12,8.28a15.12,15.12,0,0,1,8,0c3-2.07,4.39-1.64,4.39-1.64a5.72,5.72,0,0,1,.16,4.23,6.16,6.16,0,0,1,1.65,4.29c0,6.15-3.74,7.5-7.31,7.9A3.79,3.79,0,0,1,20,26c0,2.14,0,3.87,0,4.39s.29.93,1.1.77A16,16,0,0,0,16,0Z" fill="#181818" fill-rule="evenodd"/>
+                        </svg>
+                        <span>View on <a href="https://github.com/finos/datahelix/">GitHub</a></span>     
+                    </section>
+                </div>
+
+                <div class="nine columns">
+                    <h2><a id="background"></a>Background</h2>
+                    <p>The generation of representative test and simulation data is a challenging
+                    and time-consuming task. The DataHelix Generator allows you to quickly create
+                    data, based on a JSON profile that defines fields and the relationships
+                    between them, for the purpose of testing and validation. The generator supports
+                    a number of generation modes, allowing the creation of data that both conforms
+                    to, or violates, the profile.
+                    <p>DataHelix is a proud member of the <a href="https://www.finos.org/">Fintech 
+                    Open Source Foundation</a> and operates within its <a href="https://www.finos.org/dt">
+                    Data Technologies Program</a>.</p>
+
+                    <h2><a id="getting-started"></a>Getting Started</h2>
+                    <p><i>The following guide gives a 10 minute introduction to the generator via various 
+                       practical examples. For more detailed documentation please refer to the 
+                       <a href="https://github.com/finos/datahelix/blob/master/docs/ProfileDeveloperGuide.md">
+                       Profile Developer Guide</a>, and if you are interested in extending / modifying 
+                       the generator itself, refer to the <a href="https://github.com/finos/datahelix/blob/master/docs/GeneratorDeveloperGuide.md">
+                        DataHelix Generator Developer Guide</a>.</i></p>
+                    <p>The generator has been written in Java, allowing it to work on Microsoft Windows, 
+                        Apple Mac and Linux. You will need Java v1.8 installed to run the generator 
+                        (you can run java version to check whether you meet this requirement), it can be 
+                        <a href="https://www.java.com/en/download/manual.jsp">downloaded here</a>.</p>
+                    <p>The generator is distributed as a JAR file, with the latest release always available
+                       from the <a href="https://github.com/finos/datahelix/releases/">GitHub releases page</a>. 
+                       The project is currently in beta and under active development. You can expect 
+                       breaking changes in future releases, and new features too!</p>
+                    <p>You are also welcome to download the source code and build the generator yourself. To 
+                       do so, follow the instructions for <a href="https://github.com/finos/datahelix/blob/master/generator/docs/GeneratorSetup.md">
+                        downloading and building it using a Java IDE</a>, or for <a href="https://github.com/finos/datahelix/blob/master/generator/docs/DockerSetup.md">
+                       downloading and building it using Docker</a>.</p>
+                    <p>Your feedback on the beta would be greatly appreciated. If you have any issues, feature 
+                        requests, or ideas, please share them via the <a href="https://github.com/finos/datahelix/issues">
+                        GitHub issues page</a>.</p>
+                    
+                    <h3><a id="first-profile"></a>Creating your first profile</h3>
+                    <p>Profiles are JSON files that describe the data you want to generate. They are composed of:</p>
+                    <ul class="no-bullets">
+                        <li><strong>fields</strong> - an array of uniquely named fields (or columns)</li>
+                        <li><strong>rules</strong> - an array of constraints, with an optional description</li>
+                        <li><strong>constraints</strong> - restrict the types and ranges of data permitted for the given column</li>
+                    </ul>
+                    <p>We'll start by generating data for a trivial schema. Using your favourite text editor, 
+                       create the following JSON profile and save it as <code>profile.json</code>:</p>
+                    <pre><code>{
+    "schemaVersion": "0.1",
+    "fields": [{ "name": "firstName" }],
+    "rules": []
+}</code></pre>
+                    <p>Now place the <code>generator.jar</code> file (downloaded from the 
+                       <a href="https://github.com/finos/datahelix/releases/">GitHub releases page</a>) in 
+                       the same folder as the profile, open up a terminal, and execute the following:</p>
+                    <pre><code>$ java -jar generator.jar generate --max-rows=100 --allow-untyped-fields --replace --profile-file=profile.json --output-path=output.csv</code></pre>
+                    <p>The generator is a command line tool which reads a profile, and outputs data in CSV 
+                        format. The <code>--max-rows=100</code> option tells the generator to create 100 rows of 
+                        data, and the <code>--replace</code> option tells it to overwrite previously generated 
+                        files. The compulsary <code>--profile-file</code> option specifies the name of the input 
+                        profile, and the <code>--output-path</code> option specifies the location to write the
+                        output to. In generate mode <code>--output-path</code> is optional; the generator will 
+                        default to standard output if it is not supplied. By default the generator outputs 
+                        progress, in rows per second, to the standard error output. This can be useful when 
+                        generating large volumes of data.</p>
+                    <p>If you open up <code>output.csv</code> you'll see something like the following:</p>
+                    <pre><code>firstName
+15-09-1971 04:30:18
+28-10-2087 09:23:30
+1876153676
+334227637
+
+03-04-2053 04:57:06
+"Lorem Ipsum"
+[...]
+</code></pre>
+                    <p>The generator has successfully created 100 rows of random data. However, in most cases 
+                        this data will not be terribly useful. It is likely that <code>firstName</code> will 
+                        only allow string values, with this constraint enforced via a database schema for 
+                        example. If you don't provide any constraints, the generator will output values from 
+                        the 'universal set', which contains all generatable values (null, any string, any date, 
+                        any number, etc).</p>
+                    <p>Let's assume you only want to generate string values for the <code>firstName</code> field; 
+                        this can be achieved by adding an <code>ofType</code> constraint for the field. With this 
+                        constraint alone, the generator will output random strings containing characters from the 
+                        unicode <a href="https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane" rel="nofollow">
+                        Basic Multilingual Plane</a>. If you want a more restrictive character set, ths can be 
+                        achieved by adding <code>matchingRegex</code>.</p>
+
+                    <h3><a id="constraints"></a>Adding constraints</h3>
+                    <p>Update the JSON profile as follows:</p>
+                    <pre><code>{
+    "schemaVersion": "0.1",
+    "fields": [{ "name": "firstName" }],
+    "rules": [
+        {
+            "rule": "first name constraints",
+            "constraints": [
+                { "field": "firstName", "is": "ofType", "value": "string" },
+                {
+                    "field": "firstName",
+                    "is": "matchingRegex",
+                    "value": "[a-z]{1,10}"
+                }
+            ]
+        }
+    ]
+}</code></pre>
+                    <p>Re-running generation now creates a file containing random strings that match the simple 
+                        regex <code>[a-z]{1,10}</code>:</p>
+                        <pre><code>firstName
+"f"
+
+"draxonsa"
+"j"
+"srsub"
+
+"f"
+
+[...]
+</code></pre>
+                    <p>Fields are nullable by default, however, you can add a further constraint to a field to 
+                        indicate it is 'not null'. If you add the following constraint, the generator will no 
+                        longer output null values:</p>
+                    <pre><code>"constraints": [
+    { "field": "firstName", "is": "ofType", "value": "string" },
+    { "field": "firstName", "is": "matchingRegex", "value": "[a-z]{1,10}" },
+    { "not": { "field": "firstName", "is": "null" } }
+]</code></pre>
+                    <p>The generator supports three different types of constraint. These are:</p>
+                    <ul class="no-bullets">
+                        <li><strong>Predicates</strong> - boolean-valued functions that define whether a given value is valid or invalid. In the above profile <code>ofType</code> and <code>matchingRegex</code> are examples of predicates.</li>
+                        <li><strong>Grammatical</strong> - combine or modify other constraints. They are fully recursive; any grammatical constraint is a valid input to any other grammatical constraint. In the above profile <code>not</code> is an example of a grammatical constraint.</li>
+                        <li><strong>Presentational</strong> - provide additional formatting information, we'll cover these later.</li>
+                    </ul>
+                    <p>The current profile outputs random text strings for the <code>firstName</code> field. 
+                        Depending on what you are intending to use this data for this may or may not be 
+                        appropriate. For testing purposes, you are likely to want output data that has a lot of 
+                        variability, however, if you are using the generator to create simulation data, you 
+                        might want to use a regex that creates more realistic data, for example the regex 
+                        <code>(Joh?n|Mar[yk])</code>.</p>
+
+                    <h3><a id="datasets"></a>Generating large datasets</h3>
+                    <p>The generator has been designed to be fast and efficient, allowing you to generate large 
+                        quantities of test and simulation data. If you supply a large number for the 
+                        <code>--max-rows</code> option, the data will be streamed to the output file, with the 
+                        progress / velocity reported during generation.</p>
+                    <pre><code>$ java -jar generator.jar generate --max-rows=10000 --replace --profile-file=profile.json --output-path=output.csv
+Generation started at: 16:41:44
+
+Number of rows | Velocity (rows/sec) | Velocity trend
+---------------+---------------------+---------------
+1477           | 1477                | +
+4750           | 3271                | +
+9348           | 4597                | +
+10000          | 0                   | -
+</code></pre>
+                    <p>If the generation is taking too long, you can halt the command via <kbd>Ctrl</kbd>+<kbd>C</kbd>.</p>
+
+                    <h3><a id="datatypes"></a>Data types</h3>
+                    <p>The generator supports four different data types:</p>
+                    <ul class="no-bullets">
+                        <li><strong>integer</strong> - any integer number between -1E20 and 1E20 inclusive</li>
+                        <li><strong>decimal</strong> - any real number between -1E20 and 1E20 inclusive, with an optional granularity / precision (a power of ten between 1 and 1E-20) that can be defined via a <code>granularTo</code> constraint.</li>
+                        <li><strong>string</strong> - sequences of unicode characters up to a maximum length of 1000 characters</li>
+                        <li><strong>datetime</strong> - specific moments in time, with values in the range 0001-01-01T00:00:00.000 to 9999-12-31T23:59:59.999, with an optional granularity / precision (from a maximum of one year to a minimum of one millisecond) that can be defined via a <code>granularTo</code> constraint.</li>
+                    </ul>
+                    <p>We'll expand the example profile to add a new <code>age</code> field, a not-null 
+                        integer in the range 1-99:</p>
+                    <pre><code>{
+    "schemaVersion": "0.1",
+    "fields": [{ "name": "firstName" }, { "name": "age" }],
+    "rules": [
+        {
+            "constraints": [
+                { "field": "firstName", "is": "ofType", "value": "string" },
+                { "not": { "field": "firstName", "is": "null" } },
+                {
+                    "field": "firstName",
+                    "is": "matchingRegex",
+                    "value": "(Joh?n|Mar[yk])"
+                }
+            ]
+        },
+        {
+            "constraints": [
+                { "field": "age", "is": "ofType", "value": "integer" },
+                { "field": "age", "is": "greaterThan", "value": 0 },
+                { "field": "age", "is": "lessThan", "value": 100 },
+                { "not": { "field": "age", "is": "null" } }
+            ]
+        }
+    ]
+}</code></pre>
+                    <p>With the change in the <code>firstname</code> regex, the output is now starting to look 
+                        quite realistic:</p>
+                        <pre><code>firstName,age
+"John",31
+"Mary",73
+"Jon",44
+"John",24
+"Jon",43
+"Jon",18
+"Jon",5
+"John",82
+"John",19
+"Jon",43
+[...]
+</code></pre>
+                    <p>Finally, before exploring some more interesting features of the generator, we'll add a 
+                        field for National Insurance number. In this case, the constraints applied to the 
+                        field ensure that it only has a value if the age is greater than or equal to 16:</p>
+                    <pre><code>{
+    "schemaVersion": "0.1",
+    "fields": [
+        { "name": "firstName" },
+        { "name": "age" },
+        { "name": "nationalInsurance" }
+    ],
+    "rules": [
+        {
+            "rule": "first name",
+            "constraints": [
+                { "field": "firstName", "is": "ofType", "value": "string" },
+                { "not": { "field": "firstName", "is": "null" } },
+                {
+                    "field": "firstName",
+                    "is": "matchingRegex",
+                    "value": "(Joh?n|Mar[yk])"
+                }
+            ]
+        },
+        {
+            "rule": "age",
+            "constraints": [
+                { "field": "age", "is": "ofType", "value": "numeric" },
+                { "field": "age", "is": "greaterThan", "value": 0 },
+                { "field": "age", "is": "lessThan", "value": 100 },
+                { "not": { "field": "age", "is": "null" } }
+            ]
+        },
+        {
+            "rule": "national insurance",
+            "constraints": [
+                {
+                    "field": "nationalInsurance",
+                    "is": "ofType",
+                    "value": "string"
+                },
+                {
+                    "if": {
+                        "field": "age",
+                        "is": "greaterThanOrEqualTo",
+                        "value": 16
+                    },
+                    "then": {
+                        "allOf": [
+                            {
+                                "field": "nationalInsurance",
+                                "is": "matchingRegex",
+                                "value": "[A-CEGHJ-PR-TW-Z]{1}[A-CEGHJ-NPR-TW-Z]{1}[0-9]{6}[A-DFM]{0,1}"
+                            },
+                            {
+                                "not": {
+                                    "field": "nationalInsurance",
+                                    "is": "null"
+                                }
+                            }
+                        ]
+                    },
+                    "else": {
+                        "field": "nationalInsurance",
+                        "is": "null"
+                    }
+                }
+            ]
+        }
+    ]
+}</code></pre>
+                    <p>The above profile yields the following output:</p>
+                    <pre><code>firstName,age,nationalInsurance
+"Mary",85,"RP139559B"
+"Jon",2,
+"Mark",10,
+"Mary",20,"NW372471"
+"Mark",47,"ZP195766"
+"Jon",41,"RW557276F"
+"Mark",16,
+"Jon",69,"OR650886"
+"John",19,"CB460473"
+"Mark",55,"AE656210B"
+"Mark",68,"ER027015"
+[...]
+</code></pre>
+                    <p>You can find out more about the various constraints the generator supports in the 
+                        detailed <a href="/finos/datahelix/blob/master/docs/ProfileDeveloperGuide.md">Profile 
+                        Developer Guide</a>.</p>
+
+                    <h3><a id="modes"></a>Generation modes</h3>
+                    <p>The generator supports a number of different generation modes:</p>
+                    <ul class="no-bullets">
+                        <li><strong>random</strong> - generates random data that abides by the given set of constraints, with the number of generated rows limited via the <code>--max-rows</code> option.</li>
+                        <li><strong>interesting</strong> - generates data that is typically <a href="https://github.com/finos/datahelix/wiki/Interesting-data-generation">deemed 'interesting'</a> from a test perspective, for example exploring <a href="https://en.wikipedia.org/wiki/Boundary-value_analysis" rel="nofollow">boundary values</a>.</li>
+                    </ul>
+                    <p>The mode is specified via the <code>--generation-type</code> option. The following 
+                        example outputs 'interesting' values for the current profile:</p>
+                    <pre><code>$ java -jar generator.jar generate --generation-type interesting --replace --profile-file=profile.json --output-path=output.csv</code></pre>
+                    <p>In this case it generates just 14 rows where you can see that it is exploring the 
+                        boundary values of the constraints:</p>
+                    <pre><code>firstName,age,nationalInsurance
+"Jon",18,"AA000000"
+"John",18,"AA000000"
+"Jon",18,"AJ000000F"
+"John",18,"AJ000000F"
+"Jon",19,"AA000000"
+"John",19,"AA000000"
+"Jon",19,"AJ000000F"
+"John",19,"AJ000000F"
+"Jon",1,
+"John",1,
+"Jon",99,"AA000000"
+"John",99,"AA000000"
+"Jon",99,"AJ000000F"
+"John",99,"AJ000000F"
+</code></pre>
+
+                    <h3><a id="invalid-data"></a>Generating invalid data</h3>
+                    <p>One of the most powerful features of the generator is its ability to generate data 
+                        that violates constraints. To create invalid data use the <code>violate</code> command. 
+                        This time you need to specify an output directory rather than a file:</p>
+                    <pre><code>$ java -jar generator.jar violate --max-rows=100 --replace --profile-file=profile.json --output-path=out</code></pre>
+                    <p>When the above command has finished, you'll find that the generator has created an 
+                        <code>out</code> directory which has four files:</p>
+                    <pre><code>$ ls out
+1.csv           2.csv           3.csv           manifest.json
+</code></pre>
+                    <p>The manifest file details which rules have been violated in each of the output files:</p>
+                    <pre><code>{
+    "cases": [
+        {
+        "filePath": "1",
+        "violatedRules": ["first name"]
+        },
+        {
+        "filePath": "2",
+        "violatedRules": ["age"]
+        },
+        {
+        "filePath": "3",
+        "violatedRules": ["national insurance"]
+        }
+    ]
+}
+</code></pre>
+                    <p>If you take a look at the generated file <code>1.csv</code> you'll see that data for 
+                        the <code>firstName</code> field does not obey the given constraints, whilst those 
+                        for <code>age</code> and <code>nationalInsurance</code> are correct:</p>
+                    <pre><code>firstName,age,nationalInsurance
+-619248029,71,"HT849919"
+08-12-2001 02:53:16,15,
+"Lorem Ipsum",11,
+"Lorem Ipsum",71,"WX004081"
+1263483797,19,"HG054666"
+,75,"GE023082"
+"Lorem Ipsum",59,"ZM850737C"
+[...]
+</code></pre>
+                    <p>However, it might be a surprise to see nulls, numbers and dates as values for 
+                        the <code>firstName</code> field alongside strings that do not match the regex 
+                        given in the profile. This is because these are all defined as a single rule within 
+                        the profile. You have a couple of options if you want to ensure that 
+                        <code>firstName</code> is null or a string, the first is to inform the generator that 
+                        it should not violate specific constraint types:</p>
+                    <pre><code>$ java -jar generator.jar violate --dont-violate=ofType \
+--max-rows=100 --replace --profile-file=profile.json --output-path=out</code></pre>
+                    <p>Or, alternatively, you can re-arrange your constraints so that the ones that define 
+                        types / null, are grouped as a single rule. After By re-grouping constraints, the 
+                        following output, with random strings that violate the regex constraint, is generated:</p>
+                    <pre><code>firstName,age,nationalInsurance
+"�",43,"PT530853D"
+"뷇",56,"GE797875M"
+"邦爃",84,"JA172890M"
+"J㠃懇圑㊡俫杈",32,"AE613401F"
+"俵튡",38,"TS256211F"
+"M",60,"GE987171M"
+"M",7,
+"Mꞎኅ剭Ꙥ哌톞곒",97,"EN082475C"
+")",80,"BX025130C"
+",⑁쪝",60,"RW177969"
+"5ᢃ풞ﺯ䒿囻",57,"RY904705"
+[...]
+</code></pre>
+                    <p><strong>NOTE</strong> we are considering adding a feature that allows you to 
+                        <a href="https://github.com/finos/datahelix/issues/294">specify / restrict the 
+                        character set</a> in a future release.</p>
+
+                    <h3><a id="next-steps"></a>Next steps</h3>
+                    <p>That's the end of our getting started guide. Hopefully it has given you a good 
+                        understanding of what the DataHelix generator is capable of. If you'd like to 
+                        find out more about the various constraints the tool supports, the 
+                        <a href="/finos/datahelix/blob/master/docs/ProfileDeveloperGuide.md">Profile 
+                        Developer Guide</a> is a good next step. You might also be interested in 
+                        the <a href="https://github.com/finos/datahelix/tree/master/examples">examples 
+                        folder</a>, which illustrates various features of the generator. For more detail 
+                        about the behaviour of certain profiles, see the 
+                        <a href="/finos/datahelix/blob/master/docs/BehaviourInDetail.md">behaviour in detail.</a></p>
+                    
+                    <h2><a id="contributing"></a>Contributing</h2>
+                    <p>Please read the <a href="https://github.com/finos/datahelix/blob/master/.github/CONTRIBUTING.md">Contributing</a> 
+                        guidelines before making any changes.</p>
+
+                    <h2><a id="license"></a>License</h2>
+                    <p>Copyright 2019 Scott Logic Ltd</p>
+                    <p>Distributed under the <a href="http://www.apache.org/licenses/LICENSE-2.0" rel="nofollow">Apache License, Version 2.0</a>.</p>
+                    <p>SPDX-License-Identifier: <a href="https://spdx.org/licenses/Apache-2.0" rel="nofollow">Apache-2.0</a></p>
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+            function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+            e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+            e.src='//www.google-analytics.com/analytics.js';
+            r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+            ga('create','UA-126914328-1','auto');ga('send','pageview');
+        </script>
+    </body>
+</html>
