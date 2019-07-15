@@ -44,7 +44,7 @@ public class ConstraintReaderHelpers {
     public static Set<Object> getValidatedValues(ConstraintDTO dto) {
         if (dto.values == null) {
             throw new InvalidProfileException(String.format(
-                    "Field[%s]: Requires a \"values\" property but instead a \"value\" property has been added.",
+                    "Field[%s]: Requires a 'values' property but instead a 'value' property has been added.",
                     dto.field));
         }
 
