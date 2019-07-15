@@ -1,22 +1,75 @@
 {
   "schemaVersion": "0.1",
   "fields": [
-    {"name": "forename"},
-    {"name": "surname"}
+    {
+      "name": "forename"
+    },
+    {
+      "name": "surname"
+    }
   ],
   "rules": [
     {
       "constraints": [
         {
+          "field": "forename",
+          "is": "ofType",
+          "value": "string"
+        },
+        {
+          "field": "surname",
+          "is": "ofType",
+          "value": "string"
+        },
+        {
+          "not": {
+            "field": "forename",
+            "is": "null"
+          }
+        },
+        {
+          "not": {
+            "field": "surname",
+            "is": "null"
+          }
+        }
+      ]
+    },
+    {
+      "constraints": [
+        {
           "anyOf": [
-            {"field": "forename", "is": "equalTo", "value": "Matt"},
-            {"field": "forename", "is": "equalTo", "value": "Ryan"}
+            {
+              "field": "forename",
+              "is": "equalTo",
+              "value": "Matt"
+            },
+            {
+              "field": "forename",
+              "is": "equalTo",
+              "value": "Ryan"
+            }
           ]
         },
         {
-          "if": {"field": "forename", "is": "equalTo", "value": "Matt"},
-          "then": {"field": "surname", "is": "equalTo", "value": "Damon"},
-          "else": {"field": "surname", "is": "inSet", "values": ["Reynolds", "Gosling"]}
+          "if": {
+            "field": "forename",
+            "is": "equalTo",
+            "value": "Matt"
+          },
+          "then": {
+            "field": "surname",
+            "is": "equalTo",
+            "value": "Damon"
+          },
+          "else": {
+            "field": "surname",
+            "is": "inSet",
+            "values": [
+              "Reynolds",
+              "Gosling"
+            ]
+          }
         }
       ]
     }

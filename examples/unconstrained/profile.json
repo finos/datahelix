@@ -1,7 +1,9 @@
 {
   "schemaVersion": "0.1",
   "fields": [
-    {"name": "a"}
+    {
+      "name": "a"
+    }
   ],
   "rules": []
 }

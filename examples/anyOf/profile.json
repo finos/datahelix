@@ -5,6 +5,12 @@
       "rule": "rule 1",
       "constraints": [
         {
+          "not": {
+            "field": "field1",
+            "is": "null"
+          }
+        },
+        {
           "anyOf": [
             {
               "field": "field1",

@@ -1,13 +1,29 @@
 {
   "schemaVersion": "0.1",
   "fields": [
-    {"name": "first_name"}
+    {
+      "name": "first_name"
+    }
   ],
   "rules": [
     {
       "constraints": [
-        {"not": {"field": "first_name", "is": "null"}},
-        {"field": "first_name", "is": "containingRegex", "value": "^(Joh?n|Mar[yk])$"}
+        {
+          "not": {
+            "field": "first_name",
+            "is": "null"
+          }
+        },
+        {
+          "field": "first_name",
+          "is": "ofType",
+          "value": "string"
+        },
+        {
+          "field": "first_name",
+          "is": "containingRegex",
+          "value": "^(Joh?n|Mar[yk])$"
+        }
       ]
     }
   ]

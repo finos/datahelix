@@ -7,6 +7,16 @@
   ],
   "rules": [
     {
+      "rule": "Column 1 is ofType decimal",
+      "constraints": [
+        {
+          "field": "Column 1",
+          "is": "ofType",
+          "value": "decimal"
+        }
+      ]
+    },
+    {
       "rule": "Column 1 is greaterThan 0",
       "constraints": [
         {
