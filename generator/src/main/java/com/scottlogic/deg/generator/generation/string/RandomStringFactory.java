@@ -9,14 +9,14 @@ import java.util.List;
 public class RandomStringFactory {
 
     String createRandomString(
-            String strMatch,
+            String currentString,
             State state,
             int minLength,
             int maxLength,
             RandomNumberGenerator random) {
 
-        if (finishCreating(strMatch, state, minLength, maxLength, random)) {
-            return strMatch;
+        if (finishCreating(currentString, state, minLength, maxLength, random)) {
+            return currentString;
         }
 
         List<Transition> transitions = state.getSortedTransitions(false);
@@ -26,7 +26,7 @@ public class RandomStringFactory {
         char randomChar = getRandomChar(random, randomTransition);
 
         return createRandomString(
-            strMatch + randomChar,
+            currentString + randomChar,
             randomTransition.getDest(),
             minLength,
             maxLength,
@@ -34,17 +34,17 @@ public class RandomStringFactory {
     }
 
     private boolean finishCreating(
-            String strMatch,
+            String currentString,
             State state,
             int minLength,
             int maxLength,
             RandomNumberGenerator random) {
 
         if (state.isAccept()) {
-            if (strMatch.length() == maxLength) {
+            if (currentString.length() == maxLength) {
                 return true;
             }
-            if (strMatch.length() >= minLength && randomlyStop(random)) {
+            if (currentString.length() >= minLength && randomlyStop(random)) {
                 return true;
             }
         }
