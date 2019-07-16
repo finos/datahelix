@@ -5,6 +5,9 @@ import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,10 +20,9 @@ class CsvInputStreamReaderTest {
 
         final DistributedSet<String> names = CsvInputStreamReader.retrieveLines(is);
 
-        // Weight extracted from name file by computing the total and dividing
-        WeightedElement<String> sampleName = new WeightedElement<>("Rory", 0.0072439485F);
+        final Set<String> sampleNames = Stream.of("Rory", "Kyle", "Grace").collect(Collectors.toSet());
 
-        assertTrue(names.distributedSet().contains(sampleName));
+        assertTrue(names.set().containsAll(sampleNames));
     }
 
     @Test
