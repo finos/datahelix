@@ -77,7 +77,7 @@ public final class NameRetriever {
     private static WeightedElement<String> mergeFrequencies(WeightedElement<String> first,
                                                             WeightedElement<String> last) {
         String name = String.format("%s %s", first.element(), last.element());
-        float frequency = first.weight() + last.weight();
+        double frequency = first.weight() + last.weight();
         return new WeightedElement<>(name, frequency);
     }
 

@@ -35,9 +35,9 @@ public class FrequencyDistributedSet<T> implements DistributedSet<T> {
                 throw new IllegalArgumentException("DistributedSet should not contain null elements");
             }
 
-            float total = underlyingSet.stream()
+            double total = underlyingSet.stream()
                 .map(WeightedElement::weight)
-                .reduce(0.0F, Float::sum);
+                .reduce(0.0D, Double::sum);
 
             this.underlyingSet = underlyingSet.stream()
                 .map(holder -> new WeightedElement<>(holder.element(), holder.weight() / total))
@@ -48,7 +48,7 @@ public class FrequencyDistributedSet<T> implements DistributedSet<T> {
     public static <T> FrequencyDistributedSet<T> uniform(final Set<T> underlyingSet) {
         return new FrequencyDistributedSet<>(
             underlyingSet.stream()
-                .map(e -> new WeightedElement<T>(e, 1.0F))
+                .map(e -> new WeightedElement<T>(e, 1.0D))
                 .collect(Collectors.toSet()));
     }
 

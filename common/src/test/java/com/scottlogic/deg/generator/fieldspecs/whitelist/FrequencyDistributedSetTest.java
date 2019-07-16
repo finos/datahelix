@@ -42,7 +42,7 @@ class FrequencyDistributedSetTest {
 
     @Test
     public void testUniformGeneratesUniformDistribution() {
-        final float uniformWeight = 10.0F;
+        final double uniformWeight = 10.0D;
         WeightedElement<String> first = new WeightedElement<>("first", uniformWeight);
         WeightedElement<String> second = new WeightedElement<>("second", uniformWeight);
         WeightedElement<String> third = new WeightedElement<>("third", uniformWeight);

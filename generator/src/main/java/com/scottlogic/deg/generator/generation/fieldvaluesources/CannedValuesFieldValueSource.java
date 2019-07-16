@@ -58,15 +58,15 @@ public class CannedValuesFieldValueSource implements FieldValueSource {
     @Override
     public Iterable<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
         return () -> new SupplierBasedIterator<>(
-            () -> pickFromDistribution((float) randomNumberGenerator.nextDouble(0.0F, 1.0F)));
+            () -> pickFromDistribution(randomNumberGenerator.nextDouble(0.0F, 1.0F)));
     }
 
-    private Object pickFromDistribution(float random) {
+    private Object pickFromDistribution(double random) {
         //TODO: This implementation is O(n), could be O(n log(n)) by using cumulative frequency and
         // doing a binary search on the range.
         for (WeightedElement<Object> holder : allValues.distributedSet()) {
             random = random - holder.weight();
-            if (random <= 0.0F) {
+            if (random <= 0.0D) {
                 return holder.element();
             }
         }

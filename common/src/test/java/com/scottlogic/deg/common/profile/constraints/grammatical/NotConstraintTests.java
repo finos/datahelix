@@ -74,13 +74,13 @@ public class NotConstraintTests {
             field1,
             new FrequencyDistributedSet<>(
                 Collections.singleton(
-                    new WeightedElement<>("abc", 1.0F))
+                    new WeightedElement<>("abc", 1.0D))
             )).negate();
         Constraint constraint2 = new IsInSetConstraint(
             field2,
             new FrequencyDistributedSet<>(
                 Collections.singleton(
-                    new WeightedElement<>("abcd", 1.0F))
+                    new WeightedElement<>("abcd", 1.0D))
             )).negate();
         Assert.assertNotEquals(constraint1, constraint2);
     }

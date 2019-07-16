@@ -50,7 +50,7 @@ public class IsInSetConstraintTests {
         Assertions.assertDoesNotThrow(
             () -> new IsInSetConstraint(field1, new FrequencyDistributedSet<>(
                 Collections.singleton(
-                    new WeightedElement<>("foo", 1.0F)))));
+                    new WeightedElement<>("foo", 1.0D)))));
     }
 
 }

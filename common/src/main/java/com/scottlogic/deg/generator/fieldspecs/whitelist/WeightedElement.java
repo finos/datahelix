@@ -29,11 +29,11 @@ public class WeightedElement<E> {
 
     private final E element;
 
-    private final float weight;
+    private final double weight;
 
-    public WeightedElement(final E element, final float weight) {
+    public WeightedElement(final E element, final double weight) {
         this.element = element;
-        if (weight <= 0.0F) {
+        if (weight <= 0.0D) {
             throw new IllegalArgumentException("Cannot have a zero or negative valued weight");
         }
         this.weight = weight;
@@ -43,7 +43,7 @@ public class WeightedElement<E> {
         return element;
     }
 
-    public float weight() {
+    public double weight() {
         return weight;
     }
 
@@ -52,7 +52,7 @@ public class WeightedElement<E> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         WeightedElement<?> that = (WeightedElement<?>) o;
-        return Float.compare(that.weight, weight) == 0 &&
+        return Double.compare(that.weight, weight) == 0 &&
             Objects.equals(element, that.element);
     }
 

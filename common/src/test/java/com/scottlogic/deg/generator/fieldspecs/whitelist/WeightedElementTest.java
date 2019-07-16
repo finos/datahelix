@@ -24,17 +24,17 @@ class WeightedElementTest {
 
     @Test
     public void testConstructorRejectsZeroValuedWeight() {
-        assertThrows(IllegalArgumentException.class, () -> new WeightedElement<String>("A string", 0.0F));
+        assertThrows(IllegalArgumentException.class, () -> new WeightedElement<String>("A string", 0.0D));
     }
 
     @Test
     public void testConstructorRejectsNegativeValuedWeight() {
-        assertThrows(IllegalArgumentException.class, () -> new WeightedElement<>("A string", -1.0F));
+        assertThrows(IllegalArgumentException.class, () -> new WeightedElement<>("A string", -1.0D));
     }
 
     @Test
     public void testConstructorRetainsWeight() {
-        final float weight = 64.0F;
+        final double weight = 64.0D;
         WeightedElement<String> weightedElement = new WeightedElement<>("A string", weight);
 
         assertEquals(weight, weightedElement.weight());
