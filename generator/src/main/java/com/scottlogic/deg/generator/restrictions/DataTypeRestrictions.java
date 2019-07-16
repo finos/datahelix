@@ -24,7 +24,6 @@ import java.util.*;
 public class DataTypeRestrictions implements TypeRestrictions {
 
     public static final TypeRestrictions ALL_TYPES_PERMITTED = new AnyTypeRestriction();
-    public static final TypeRestrictions NO_TYPES_PERMITTED = new NoAllowedTypesRestriction();
 
     public DataTypeRestrictions(Collection<IsOfTypeConstraint.Types> allowedTypes) {
         if (allowedTypes.isEmpty())
@@ -43,10 +42,6 @@ public class DataTypeRestrictions implements TypeRestrictions {
 
         ArrayList<IsOfTypeConstraint.Types> allowedTypes = new ArrayList<>(this.allowedTypes);
         allowedTypes.removeAll(Arrays.asList(types));
-
-        if (allowedTypes.isEmpty()){
-            return NO_TYPES_PERMITTED;
-        }
 
         return new DataTypeRestrictions(allowedTypes);
     }

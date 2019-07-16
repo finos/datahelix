@@ -22,6 +22,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -93,7 +94,7 @@ class DataTypeRestrictionsTests {
         allowedTypes.add(IsOfTypeConstraint.Types.DATETIME);
         DataTypeRestrictions self = new DataTypeRestrictions(allowedTypes);
 
-        TypeRestrictions actual = self.intersect(DataTypeRestrictions.NO_TYPES_PERMITTED);
+        TypeRestrictions actual = self.intersect(new DataTypeRestrictions(Collections.EMPTY_LIST));
 
         assertNull(actual);
     }
