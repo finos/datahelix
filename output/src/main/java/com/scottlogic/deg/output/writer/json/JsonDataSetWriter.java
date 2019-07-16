@@ -72,6 +72,8 @@ class JsonDataSetWriter implements DataSetWriter {
             return null;
         } else if (value instanceof BigDecimal) {
             return value;
+        } else if (value instanceof Integer) {
+            return value;
         } else if (value instanceof String) {
             return value;
         } else if (value instanceof OffsetDateTime) {

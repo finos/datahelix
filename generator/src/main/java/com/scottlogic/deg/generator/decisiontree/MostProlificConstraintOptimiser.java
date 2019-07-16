@@ -16,7 +16,6 @@
 
 package com.scottlogic.deg.generator.decisiontree;
 
-import com.scottlogic.deg.common.util.FlatMappingSpliterator;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.NotConstraint;
 
@@ -26,57 +25,36 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
-    private final int maxIterations;
-    private final int maxDepth;
-
-    public MostProlificConstraintOptimiser() {
-        this(50, 10000000);
-    }
-
-    public MostProlificConstraintOptimiser(int maxIterations, int maxDepth) {
-        this.maxIterations = maxIterations;
-        this.maxDepth = maxDepth;
-    }
+    private final int maxIterations = 50;
 
     @Override
     public DecisionTree optimiseTree(DecisionTree tree){
-        ConstraintNode newRootNode = optimiseLevelOfTree(tree.getRootNode(), 1);
-
-        if (newRootNode == null)
-            return tree;
-
+        ConstraintNode newRootNode = optimiseLevelOfTree(tree.getRootNode());
         return new DecisionTree(newRootNode, tree.getFields());
     }
 
-    private ConstraintNode optimiseLevelOfTree(ConstraintNode rootNode, int depth){
-        Collection<DecisionNode> decisions = rootNode.getDecisions();
-        if (decisions.size() <= 1 || depth > this.maxDepth)
-            return null; //not worth optimising
+    private ConstraintNode optimiseLevelOfTree(ConstraintNode rootNode){
+        for (int iteration = 0; iteration < maxIterations; iteration++) {
+            ConstraintNode newRootNode = optimiseDecisions(rootNode);
 
-        int iteration = 0;
-        int prevDecisionCount = decisions.size();
-        ConstraintNode newRootNode;
-        while (iteration < this.maxIterations && (newRootNode = optimiseDecisions(rootNode, depth)) != null)
-        {
-            rootNode = newRootNode;
-
-            int newDecisionCount = rootNode.getDecisions().size();
-            int changeInDecisionCount = newDecisionCount - prevDecisionCount;
-            if (Math.abs(changeInDecisionCount) < 1) {
-                break;
+            if (noChangeInDecisionCount(rootNode, newRootNode)) {
+                return newRootNode;
             }
 
-            prevDecisionCount = newDecisionCount;
-            iteration++;
+            rootNode = newRootNode;
         }
 
         return rootNode;
     }
 
-    private ConstraintNode optimiseDecisions(ConstraintNode rootNode, int depth){
+    private boolean noChangeInDecisionCount(ConstraintNode rootNode, ConstraintNode newRootNode) {
+        return newRootNode.getDecisions().size() == rootNode.getDecisions().size();
+    }
+
+    private ConstraintNode optimiseDecisions(ConstraintNode rootNode){
         AtomicConstraint mostProlificAtomicConstraint = getMostProlificAtomicConstraint(rootNode.getDecisions());
         if (mostProlificAtomicConstraint == null){
-            return null;
+            return rootNode;
         }
         // Add negation of most prolific constraint to new decision node
         AtomicConstraint negatedMostProlificConstraint = mostProlificAtomicConstraint.negate();
@@ -85,7 +63,7 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
             .filter(node -> this.decisionIsFactorisable(node, mostProlificAtomicConstraint, negatedMostProlificConstraint))
             .collect(Collectors.toList());
         if (factorisableDecisionNodes.size() < 2){
-            return null;
+            return rootNode;
         }
 
         // Add most prolific constraint to new decision node
@@ -110,8 +88,8 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
         DecisionNode factorisedDecisionNode = new TreeDecisionNode(
             Stream.concat(
                 Stream.of(
-                    coalesce(optimiseLevelOfTree(factorisingConstraintNode, depth + 1), factorisingConstraintNode),
-                    coalesce(optimiseLevelOfTree(negatedFactorisingConstraintNode, depth + 1), negatedFactorisingConstraintNode)),
+                    optimiseLevelOfTree(factorisingConstraintNode),
+                    optimiseLevelOfTree(negatedFactorisingConstraintNode)),
                 otherOptions.stream())
             .collect(Collectors.toList()));
 
@@ -143,12 +121,10 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
 
     private AtomicConstraint getMostProlificAtomicConstraint(Collection<DecisionNode> decisions) {
         Map<AtomicConstraint, List<AtomicConstraint>> decisionConstraints =
-            FlatMappingSpliterator.flatMap(
-                FlatMappingSpliterator.flatMap(
-                    decisions.stream(),
-                    dn -> dn.getOptions().stream()),
-                option -> option.getAtomicConstraints().stream())
-            .collect(Collectors.groupingBy(Function.identity()));
+                decisions.stream()
+                    .flatMap(dn -> dn.getOptions().stream())
+                    .flatMap(option -> option.getAtomicConstraints().stream())
+                    .collect(Collectors.groupingBy(Function.identity()));
 
         Comparator<Map.Entry<AtomicConstraint, List<AtomicConstraint>>> comparator = Comparator
             .comparing(entry -> entry.getValue().size());
@@ -181,15 +157,6 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
             .count() == 1;
 
         return optionWithMPCExists && optionWithNegatedMPCExists;
-    }
-
-    private static <T> T coalesce(T... items){
-        for (T item : items) {
-            if (item != null)
-                return item;
-        }
-
-        throw new UnsupportedOperationException("Unable to find a non-null value");
     }
 
     class DecisionAnalyser {
