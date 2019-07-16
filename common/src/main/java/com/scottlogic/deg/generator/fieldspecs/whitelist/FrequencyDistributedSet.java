@@ -16,9 +16,7 @@
 
 package com.scottlogic.deg.generator.fieldspecs.whitelist;
 
-import java.util.Collections;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class FrequencyDistributedSet<T> implements DistributedSet<T> {
@@ -65,6 +63,22 @@ public class FrequencyDistributedSet<T> implements DistributedSet<T> {
     @Override
     public Set<WeightedElement<T>> distributedSet() {
         return underlyingSet;
+    }
+
+    @Override
+    public T pickFromDistribution(double random) {
+        //TODO: This implementation is O(n), could be O(n log(n)) by using cumulative frequency and
+        // doing a binary search on the range.
+        for (WeightedElement<T> holder : underlyingSet) {
+            random = random - holder.weight();
+            if (random <= 0.0D) {
+                return holder.element();
+            }
+        }
+
+        // Possibility of rounding errors, causing the sum of the weights to be <= 1.0F
+        List<WeightedElement<T>> list = new LinkedList<>(underlyingSet);
+        return list.get(list.size() - 1).element();
     }
 
     @Override

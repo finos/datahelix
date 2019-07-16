@@ -62,18 +62,7 @@ public class CannedValuesFieldValueSource implements FieldValueSource {
     }
 
     private Object pickFromDistribution(double random) {
-        //TODO: This implementation is O(n), could be O(n log(n)) by using cumulative frequency and
-        // doing a binary search on the range.
-        for (WeightedElement<Object> holder : allValues.distributedSet()) {
-            random = random - holder.weight();
-            if (random <= 0.0D) {
-                return holder.element();
-            }
-        }
-
-        // Possibility of rounding errors, causing the sum of the weights to be <= 1.0F
-        List<Object> list = new LinkedList<>(allValues.set());
-        return list.get(list.size() - 1);
+        return allValues.pickFromDistribution(random);
     }
 
     @Override
