@@ -36,15 +36,6 @@ public class IsInSetConstraintTests {
     }
 
     @Test
-    public void testConstraintThrowsIfGivenNullInASet(){
-        Field field1 = new Field("TestField");
-
-        Assertions.assertThrows(
-            IllegalArgumentException.class,
-            () -> new IsInSetConstraint(field1, new FrequencyDistributedSet<>(Collections.singleton(null))));
-    }
-
-    @Test
     public void testConstraintThrowsNothingIfGivenAValidSet(){
         Field field1 = new Field("TestField");
         Assertions.assertDoesNotThrow(

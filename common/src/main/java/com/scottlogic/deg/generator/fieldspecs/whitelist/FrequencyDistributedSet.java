@@ -33,14 +33,32 @@ public class FrequencyDistributedSet<T> implements DistributedSet<T> {
                 throw new IllegalArgumentException("DistributedSet should not contain null elements");
             }
 
-            double total = underlyingSet.stream()
-                .map(WeightedElement::weight)
-                .reduce(0.0D, Double::sum);
-
-            this.underlyingSet = underlyingSet.stream()
-                .map(holder -> new WeightedElement<>(holder.element(), holder.weight() / total))
-                .collect(Collectors.toSet());
+            this.underlyingSet = cumulative(underlyingSet);
         }
+    }
+
+    private static <T> Set<WeightedElement<T>> cumulative(Set<WeightedElement<T>> nonCumulativeSet) {
+        double total = nonCumulativeSet.stream()
+            .map(WeightedElement::weight)
+            .reduce(0.0D, Double::sum);
+
+        double runningTotal = 0.0D;
+        List<WeightedElement<T>> cumulative = new LinkedList<>();
+        for (WeightedElement<T> weightedElement : nonCumulativeSet) {
+            double weight = weightedElement.weight() / total;
+            runningTotal += weight;
+            cumulative.add(new WeightedElement<>(weightedElement.element(), runningTotal));
+        }
+
+        // Manually adjust last entry to equal 1
+        final int lastIndex = cumulative.size() - 1;
+        WeightedElement<T> last = cumulative.get(lastIndex);
+        cumulative.remove(lastIndex);
+        cumulative.add(new WeightedElement<>(last.element(), 1.0D));
+
+        System.out.println(cumulative);
+        return new HashSet<>(cumulative);
+
     }
 
     public static <T> FrequencyDistributedSet<T> uniform(final Set<T> underlyingSet) {

@@ -20,6 +20,7 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.NullDistributedSet;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.*;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.DateTimeFieldValueSource;
 import com.scottlogic.deg.generator.generation.string.RegexStringGenerator;
@@ -34,7 +35,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
     private static final CannedValuesFieldValueSource nullOnlySource = setupNullOnlySource();
 
     private static CannedValuesFieldValueSource setupNullOnlySource() {
-        return new CannedValuesFieldValueSource(FrequencyDistributedSet.empty());
+        return new CannedValuesFieldValueSource(new NullDistributedSet<>());
     }
 
     public List<FieldValueSource> getFieldValueSources(FieldSpec fieldSpec){
