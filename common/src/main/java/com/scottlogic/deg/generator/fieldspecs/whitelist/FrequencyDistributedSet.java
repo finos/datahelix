@@ -56,7 +56,6 @@ public class FrequencyDistributedSet<T> implements DistributedSet<T> {
         cumulative.remove(lastIndex);
         cumulative.add(new WeightedElement<>(last.element(), 1.0D));
 
-        System.out.println(cumulative);
         return new HashSet<>(cumulative);
 
     }
