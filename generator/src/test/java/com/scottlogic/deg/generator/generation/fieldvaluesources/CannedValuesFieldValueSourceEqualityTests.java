@@ -46,6 +46,14 @@ class CannedValuesFieldValueSourceEqualityTests {
     }
 
     @Test
+    public void shouldBeUnequalIfAllAndInterestingValuesMatchButInDifferentOrder(){
+        FieldValueSource a = valueSourceOf("a", "b", "c");
+        FieldValueSource b = valueSourceOf("c", "b", "a");
+
+        Assert.assertThat(a, not(equalTo(b)));
+    }
+
+    @Test
     public void shouldBeUnequalIfAllOrInterestingValuesDiffer(){
         FieldValueSource a = valueSourceOf("a", "b", "c");
         FieldValueSource b = valueSourceOf("a", "b");

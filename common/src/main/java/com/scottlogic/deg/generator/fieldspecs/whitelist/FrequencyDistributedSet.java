@@ -33,31 +33,14 @@ public class FrequencyDistributedSet<T> implements DistributedSet<T> {
                 throw new IllegalArgumentException("DistributedSet should not contain null elements");
             }
 
-            this.underlyingSet = cumulative(underlyingSet);
+            double total = underlyingSet.stream()
+                .map(WeightedElement::weight)
+                .reduce(0.0D, Double::sum);
+
+            this.underlyingSet = underlyingSet.stream()
+                .map(holder -> new WeightedElement<>(holder.element(), holder.weight() / total))
+                .collect(Collectors.toSet());
         }
-    }
-
-    private static <T> Set<WeightedElement<T>> cumulative(Set<WeightedElement<T>> nonCumulativeSet) {
-        double total = nonCumulativeSet.stream()
-            .map(WeightedElement::weight)
-            .reduce(0.0D, Double::sum);
-
-        double runningTotal = 0.0D;
-        List<WeightedElement<T>> cumulative = new LinkedList<>();
-        for (WeightedElement<T> weightedElement : nonCumulativeSet) {
-            double weight = weightedElement.weight() / total;
-            runningTotal += weight;
-            cumulative.add(new WeightedElement<>(weightedElement.element(), runningTotal));
-        }
-
-        // Manually adjust last entry to equal 1
-        final int lastIndex = cumulative.size() - 1;
-        WeightedElement<T> last = cumulative.get(lastIndex);
-        cumulative.remove(lastIndex);
-        cumulative.add(new WeightedElement<>(last.element(), 1.0D));
-
-        return new HashSet<>(cumulative);
-
     }
 
     public static <T> FrequencyDistributedSet<T> uniform(final Set<T> underlyingSet) {
@@ -84,7 +67,7 @@ public class FrequencyDistributedSet<T> implements DistributedSet<T> {
 
     @Override
     public T pickFromDistribution(double random) {
-        //TODO: This implementation is O(n), could be O(n log(n)) by using cumulative frequency and
+        //TODO: This implementation is O(n), could be O(log(n)) by using cumulative frequency and
         // doing a binary search on the range.
         for (WeightedElement<T> holder : underlyingSet) {
             random = random - holder.weight();
