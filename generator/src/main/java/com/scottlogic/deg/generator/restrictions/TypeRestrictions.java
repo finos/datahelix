@@ -37,17 +37,6 @@ public class TypeRestrictions implements Restrictions {
         return new TypeRestrictions(Arrays.asList(types));
     }
 
-    public TypeRestrictions except(IsOfTypeConstraint.Types... types) {
-        if (types.length == 0)
-            return this;
-
-        ArrayList<IsOfTypeConstraint.Types> allowedTypes = new ArrayList<>(this.allowedTypes);
-        allowedTypes.removeAll(Arrays.asList(types));
-
-        return new TypeRestrictions(allowedTypes);
-    }
-
-
     public boolean isTypeAllowed(IsOfTypeConstraint.Types type){
         return allowedTypes.contains(type);
     }

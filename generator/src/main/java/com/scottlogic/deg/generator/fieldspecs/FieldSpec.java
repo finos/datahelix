@@ -21,6 +21,7 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.T
 
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.common.util.HeterogeneousTypeContainer;
+import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -122,16 +123,18 @@ public class FieldSpec {
 
     public FieldSpec withoutType(IsOfTypeConstraint.Types type){
         TypeRestrictions typeRestrictions = getTypeRestrictions();
-        if (typeRestrictions == null){
-            typeRestrictions = TypeRestrictions.ALL_TYPES_PERMITTED;
-        }
-        typeRestrictions = typeRestrictions.except(type);
 
-        if (typeRestrictions.getAllowedTypes().isEmpty()){
+        Set<Types> types = typeRestrictions == null
+            ? new HashSet<>(Arrays.asList(Types.values()))
+            : new HashSet<>(typeRestrictions.getAllowedTypes());
+
+        types.remove(type);
+
+        if (types.isEmpty()){
             return mustBeNull();
         }
 
-        return withTypeRestrictions(typeRestrictions);
+        return withTypeRestrictions(new TypeRestrictions(types));
     }
 
     private <T extends Restrictions> FieldSpec withConstraint(Class<T> type, T restriction) {

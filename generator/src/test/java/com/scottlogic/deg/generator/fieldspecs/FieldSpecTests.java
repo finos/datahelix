@@ -422,9 +422,9 @@ class FieldSpecTests {
     }
 
     private static Stream<Arguments> permitsNotNullProvider() {
-        TypeRestrictions numericRestrictions = TypeRestrictions.ALL_TYPES_PERMITTED.except(Types.NUMERIC);
-        TypeRestrictions stringRestrictions = TypeRestrictions.ALL_TYPES_PERMITTED.except(Types.STRING);
-        TypeRestrictions dateTimeRestrictions = TypeRestrictions.ALL_TYPES_PERMITTED.except(Types.DATETIME);
+        TypeRestrictions numericRestrictions = TypeRestrictions.createFromWhiteList(Types.DATETIME, Types.STRING);
+        TypeRestrictions stringRestrictions = TypeRestrictions.createFromWhiteList(Types.NUMERIC, Types.DATETIME);
+        TypeRestrictions dateTimeRestrictions = TypeRestrictions.createFromWhiteList(Types.STRING, Types.NUMERIC);
 
         Integer intValue = 1;
         String stringValue = "a string";
@@ -598,11 +598,6 @@ class FieldSpecTests {
         @Override
         public int hashCode() {
             return 1234;
-        }
-
-        @Override
-        public TypeRestrictions except(IsOfTypeConstraint.Types... types) {
-            throw new UnsupportedOperationException("Not supported");
         }
 
         @Override

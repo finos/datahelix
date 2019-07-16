@@ -23,7 +23,11 @@ import com.scottlogic.deg.common.util.NumberUtils;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class FieldSpecFactory {
     public static final String RIC_REGEX = "[A-Z]{1,4}\\.[A-Z]{1,2}";
@@ -107,16 +111,18 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec construct(IsOfTypeConstraint constraint, boolean negate) {
-        final TypeRestrictions typeRestrictions;
-
+        List<IsOfTypeConstraint.Types> types;
         if (negate) {
-            typeRestrictions = TypeRestrictions.ALL_TYPES_PERMITTED.except(constraint.requiredType);
+            types = Arrays.stream(
+                IsOfTypeConstraint.Types.values())
+                .filter(type -> !type.equals(constraint.requiredType))
+                .collect(Collectors.toList());
         } else {
-            typeRestrictions = TypeRestrictions.createFromWhiteList(constraint.requiredType);
+            types = Collections.singletonList(constraint.requiredType);
         }
 
         return FieldSpec.Empty.withTypeRestrictions(
-            typeRestrictions);
+            new TypeRestrictions(types));
     }
 
     private FieldSpec construct(IsGreaterThanConstantConstraint constraint, boolean negate) {

@@ -986,6 +986,7 @@ class ConstraintReducerTest {
             Arrays.asList(ofTypeString, ofTypeString.negate()));
 
         Assert.assertThat(result.isPresent(), is(true));
-        Assert.assertThat(result.get().getTypeRestrictions().getAllowedTypes(), empty());
+        Assert.assertThat(result.get().getWhitelist(), empty());
+        Assert.assertTrue(result.get().isNullable());
     }
 }
