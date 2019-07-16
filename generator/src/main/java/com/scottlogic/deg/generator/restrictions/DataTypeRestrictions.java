@@ -23,7 +23,7 @@ import java.util.*;
 
 public class DataTypeRestrictions implements TypeRestrictions {
 
-    public static final TypeRestrictions ALL_TYPES_PERMITTED = new AnyTypeRestriction();
+    public static final TypeRestrictions ALL_TYPES_PERMITTED = new DataTypeRestrictions(Arrays.asList(IsOfTypeConstraint.Types.values()));
 
     public DataTypeRestrictions(Collection<IsOfTypeConstraint.Types> allowedTypes) {
         if (allowedTypes.isEmpty())
