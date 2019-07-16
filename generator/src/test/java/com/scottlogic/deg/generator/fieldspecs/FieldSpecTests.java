@@ -37,6 +37,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 
 class FieldSpecTests {
@@ -399,6 +400,24 @@ class FieldSpecTests {
             .withFormatting("format2");
 
         Assert.assertThat(a, not(equalTo(b)));
+    }
+
+    @Test
+    public void isContradictory_whenFieldSpecContradictory_returnsTrue() {
+        FieldSpec fieldSpec = FieldSpec.Empty
+            .withNotNull()
+            .withTypeRestrictions(new NoAllowedTypesRestriction());
+
+        assertTrue(fieldSpec.isContradictory());
+    }
+
+    @Test
+    public void isContradictory_whenFieldSpecNotContradictory_returnsFalse() {
+        FieldSpec fieldSpec = FieldSpec.Empty
+            .withNotNull()
+            .withTypeRestrictions(new DataTypeRestrictions(Arrays.asList(Types.STRING, Types.NUMERIC)));
+
+        assertFalse(fieldSpec.isContradictory());
     }
 
     @ParameterizedTest()

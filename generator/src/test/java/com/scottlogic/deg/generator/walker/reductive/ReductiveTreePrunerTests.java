@@ -23,7 +23,9 @@ import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
+import com.scottlogic.deg.generator.restrictions.NoAllowedTypesRestriction;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
+import com.scottlogic.deg.generator.restrictions.TypeRestrictions;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -105,6 +107,30 @@ class ReductiveTreePrunerTests {
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("c"));
         FieldSpec inputFieldSpec = notNull.withWhitelist(
             (inputWhitelist));
+
+        when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
+
+        //Act
+        Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, field, fieldValue());
+
+        //Assert
+        Merged<Object> expected = Merged.contradictory();
+        assertThat(actual, sameBeanAs(expected));
+    }
+
+    @Test
+    public void pruneConstraintNode_withContradictoryFieldSpec_returnsContradictory() {
+        //Arrange
+        ConstraintNode tree =
+            constraintNode()
+                .where(field).isNotNull()
+                .where(field).isString()
+                .where(field).isNumeric()
+                .build();
+
+        FieldSpec inputFieldSpec = notNull.withTypeRestrictions(new NoAllowedTypesRestriction());
+        Map<Field, FieldSpec> fieldSpecMap = new HashMap<>();
+        fieldSpecMap.put(field, inputFieldSpec);
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 

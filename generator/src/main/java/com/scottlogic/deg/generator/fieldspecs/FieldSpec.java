@@ -145,6 +145,13 @@ public class FieldSpec {
         return getTypeRestrictions() == null || getTypeRestrictions().isTypeAllowed(type);
     }
 
+    public boolean isContradictory() {
+        return
+            !isNullable() &&
+            getTypeRestrictions() != null &&
+            getTypeRestrictions().getAllowedTypes().isEmpty();
+    }
+
     @Override
     public String toString() {
         if (whitelist != null) {

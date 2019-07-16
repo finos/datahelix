@@ -19,6 +19,7 @@ package com.scottlogic.deg.generator.builders;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
+import com.scottlogic.deg.generator.restrictions.TypeRestrictions;
 
 import java.util.ArrayList;
 import java.util.HashSet;

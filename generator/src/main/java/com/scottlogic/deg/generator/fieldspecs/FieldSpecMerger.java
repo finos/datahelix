@@ -42,6 +42,9 @@ public class FieldSpecMerger {
      * Returning an empty Optional conveys that the fields were unmergeable.
      */
     public Optional<FieldSpec> merge(FieldSpec left, FieldSpec right) {
+        if (left.isContradictory() || right.isContradictory()) {
+            return Optional.empty();
+        }
         if (hasSet(left) && hasSet(right)) {
             return mergeSets(left, right);
         }

@@ -31,6 +31,7 @@ import com.scottlogic.deg.generator.walker.reductive.Merged;
 import com.scottlogic.deg.generator.walker.reductive.ReductiveTreePruner;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Nested;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import java.util.*;
@@ -169,7 +170,7 @@ class UpfrontTreePrunerTests {
             upfrontTreePruner.runUpfrontPrune(tree, monitor);
 
             //Assert
-            Mockito.verify(monitor, times(1))
+            Mockito.verify(monitor)
                 .addLineToPrintAtEndOfGeneration(contains(partialContradictionSubstring));
 
         }
@@ -194,7 +195,7 @@ class UpfrontTreePrunerTests {
             upfrontTreePruner.runUpfrontPrune(tree, monitor);
 
             //Assert
-            Mockito.verify(monitor, times(1))
+            Mockito.verify(monitor)
                 .addLineToPrintAtEndOfGeneration(contains(fullContradictionSubstring));
 
         }
@@ -356,8 +357,12 @@ class UpfrontTreePrunerTests {
             upfrontPruner.runUpfrontPrune(tree, monitor);
 
             //Assert
-            Mockito.verify(monitor, times(1))
-                .addLineToPrintAtEndOfGeneration(contains(partialContradictionSubstring));
+            ArgumentCaptor<String> errorMessageCaptor = ArgumentCaptor.forClass(String.class);
+            Mockito.verify(monitor, times(3))
+                .addLineToPrintAtEndOfGeneration(errorMessageCaptor.capture());
+
+            List<String> messages = errorMessageCaptor.getAllValues();
+            assertTrue(messages.stream().anyMatch(partialContradictionSubstring::contains));
         }
 
         @Test
@@ -381,8 +386,12 @@ class UpfrontTreePrunerTests {
             upfrontPruner.runUpfrontPrune(tree, monitor);
 
             //Assert
-            Mockito.verify(monitor, times(1))
-                .addLineToPrintAtEndOfGeneration(contains(partialContradictionSubstring));
+            ArgumentCaptor<String> errorMessageCaptor = ArgumentCaptor.forClass(String.class);
+            Mockito.verify(monitor, times(3))
+                .addLineToPrintAtEndOfGeneration(errorMessageCaptor.capture());
+
+            List<String> messages = errorMessageCaptor.getAllValues();
+            assertTrue(messages.stream().anyMatch(partialContradictionSubstring::contains));
         }
 
 
@@ -412,8 +421,12 @@ class UpfrontTreePrunerTests {
             upfrontPruner.runUpfrontPrune(tree, monitor);
 
             //Assert
-            Mockito.verify(monitor, times(1))
-                .addLineToPrintAtEndOfGeneration(contains(partialContradictionSubstring));
+            ArgumentCaptor<String> errorMessageCaptor = ArgumentCaptor.forClass(String.class);
+            Mockito.verify(monitor, times(3))
+                .addLineToPrintAtEndOfGeneration(errorMessageCaptor.capture());
+
+            List<String> messages = errorMessageCaptor.getAllValues();
+            assertTrue(messages.stream().anyMatch(partialContradictionSubstring::contains));
         }
 
 
@@ -449,8 +462,12 @@ class UpfrontTreePrunerTests {
             upfrontPruner.runUpfrontPrune(tree, monitor);
 
             //Assert
-            Mockito.verify(monitor, times(1))
-                .addLineToPrintAtEndOfGeneration(contains(partialContradictionSubstring));
+            ArgumentCaptor<String> errorMessageCaptor = ArgumentCaptor.forClass(String.class);
+            Mockito.verify(monitor, times(3))
+                .addLineToPrintAtEndOfGeneration(errorMessageCaptor.capture());
+
+            List<String> messages = errorMessageCaptor.getAllValues();
+            assertTrue(messages.stream().anyMatch(partialContradictionSubstring::contains));
         }
 
         @Test
@@ -488,8 +505,12 @@ class UpfrontTreePrunerTests {
             upfrontPruner.runUpfrontPrune(tree, monitor);
 
             //Assert
-            Mockito.verify(monitor, times(1))
-                .addLineToPrintAtEndOfGeneration(contains(partialContradictionSubstring));
+            ArgumentCaptor<String> errorMessageCaptor = ArgumentCaptor.forClass(String.class);
+            Mockito.verify(monitor, times(3))
+                .addLineToPrintAtEndOfGeneration(errorMessageCaptor.capture());
+
+            List<String> messages = errorMessageCaptor.getAllValues();
+            assertTrue(messages.stream().anyMatch(partialContradictionSubstring::contains));
         }
 
         @Test
@@ -511,7 +532,7 @@ class UpfrontTreePrunerTests {
             upfrontPruner.runUpfrontPrune(tree, monitor);
 
             //Assert
-            Mockito.verify(monitor, times(1))
+            Mockito.verify(monitor)
                 .addLineToPrintAtEndOfGeneration(contains(fullContradictionSubstring));
         }
 
@@ -539,7 +560,7 @@ class UpfrontTreePrunerTests {
             upfrontPruner.runUpfrontPrune(tree, monitor);
 
             //Assert
-            Mockito.verify(monitor, times(1))
+            Mockito.verify(monitor)
                 .addLineToPrintAtEndOfGeneration(contains(fullContradictionSubstring));
         }
 
@@ -569,7 +590,7 @@ class UpfrontTreePrunerTests {
             upfrontPruner.runUpfrontPrune(tree, monitor);
 
             //Assert
-            Mockito.verify(monitor, times(1))
+            Mockito.verify(monitor)
                 .addLineToPrintAtEndOfGeneration(contains(fullContradictionSubstring));
         }
 
@@ -600,7 +621,7 @@ class UpfrontTreePrunerTests {
             upfrontPruner.runUpfrontPrune(tree, monitor);
 
             //Assert
-            Mockito.verify(monitor, times(1))
+            Mockito.verify(monitor)
                 .addLineToPrintAtEndOfGeneration(contains(fullContradictionSubstring));
         }
 
@@ -630,7 +651,7 @@ class UpfrontTreePrunerTests {
             upfrontPruner.runUpfrontPrune(tree, monitor);
 
             //Assert
-            Mockito.verify(monitor, times(1))
+            Mockito.verify(monitor)
                 .addLineToPrintAtEndOfGeneration(contains(fullContradictionSubstring));
         }
 
@@ -660,7 +681,7 @@ class UpfrontTreePrunerTests {
             upfrontPruner.runUpfrontPrune(tree, monitor);
 
             //Assert
-            Mockito.verify(monitor, times(1))
+            Mockito.verify(monitor)
                 .addLineToPrintAtEndOfGeneration(contains(fullContradictionSubstring));
         }
     }

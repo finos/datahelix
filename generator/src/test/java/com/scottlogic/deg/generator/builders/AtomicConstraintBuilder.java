@@ -20,6 +20,7 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsNullConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -67,6 +68,18 @@ public class AtomicConstraintBuilder {
         AtomicConstraint isNotNullConstraint = new IsNullConstraint(field).negate();
         constraintNodeBuilder.constraints.add(isNullConstraint);
         constraintNodeBuilder.constraints.add(isNotNullConstraint);
+        return constraintNodeBuilder;
+    }
+
+    public ConstraintNodeBuilder isString() {
+        IsOfTypeConstraint typeConstraint = new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.STRING);
+        constraintNodeBuilder.constraints.add(typeConstraint);
+        return constraintNodeBuilder;
+    }
+
+    public ConstraintNodeBuilder isNumeric() {
+        IsOfTypeConstraint typeConstraint = new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.NUMERIC);
+        constraintNodeBuilder.constraints.add(typeConstraint);
         return constraintNodeBuilder;
     }
 }
