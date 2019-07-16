@@ -17,6 +17,7 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
+import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.util.*;
 
@@ -69,14 +70,12 @@ public class DataTypeRestrictions implements TypeRestrictions {
         if (other == ALL_TYPES_PERMITTED)
             return this;
 
-        ArrayList<IsOfTypeConstraint.Types> allowedTypes = new ArrayList<>(this.allowedTypes);
-        allowedTypes.retainAll(other.getAllowedTypes());
+        Set<IsOfTypeConstraint.Types> intersection = SetUtils.intersect(allowedTypes, other.getAllowedTypes());
 
-        if (allowedTypes.isEmpty())
+        if (intersection.isEmpty())
             return null;
 
-
-        return new DataTypeRestrictions(allowedTypes);
+        return new DataTypeRestrictions(intersection);
     }
 
     public Set<IsOfTypeConstraint.Types> getAllowedTypes() {
