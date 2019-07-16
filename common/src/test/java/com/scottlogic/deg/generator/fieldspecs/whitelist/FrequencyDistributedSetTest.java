@@ -1,0 +1,59 @@
+/*
+ * Copyright 2019 Scott Logic Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.scottlogic.deg.generator.fieldspecs.whitelist;
+
+import org.junit.jupiter.api.Test;
+
+import java.util.Collections;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class FrequencyDistributedSetTest {
+
+    @Test
+    public void testEmptyIsEmpty() {
+        DistributedSet<String> empty = FrequencyDistributedSet.empty();
+        DistributedSet<String> manualEmpty = new FrequencyDistributedSet<>(Collections.emptySet());
+
+        assertEquals(manualEmpty, empty);
+    }
+
+    @Test
+    public void testNullSetIsRejected() {
+        assertThrows(IllegalArgumentException.class, () -> new FrequencyDistributedSet<>(Collections.singleton(null)));
+    }
+
+    @Test
+    public void testUniformGeneratesUniformDistribution() {
+        final float uniformWeight = 10.0F;
+        WeightedElement<String> first = new WeightedElement<>("first", uniformWeight);
+        WeightedElement<String> second = new WeightedElement<>("second", uniformWeight);
+        WeightedElement<String> third = new WeightedElement<>("third", uniformWeight);
+
+        Set<WeightedElement<String>> weightedElements = Stream.of(first, second, third).collect(Collectors.toSet());
+
+        DistributedSet<String> manualSet = new FrequencyDistributedSet<>(weightedElements);
+
+        Set<String> elements = Stream.of("first", "second", "third").collect(Collectors.toSet());
+        DistributedSet<String> uniformSet = FrequencyDistributedSet.uniform(elements);
+
+        assertEquals(manualSet, uniformSet);
+    }
+}

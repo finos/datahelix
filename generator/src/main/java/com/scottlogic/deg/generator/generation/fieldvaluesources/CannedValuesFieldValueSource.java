@@ -21,6 +21,9 @@ import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.SupplierBasedIterator;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 public class CannedValuesFieldValueSource implements FieldValueSource {
@@ -65,7 +68,10 @@ public class CannedValuesFieldValueSource implements FieldValueSource {
                 return holder.element();
             }
         }
-        throw new IllegalStateException("Set of whitelist weights do not sum to 1.0F");
+
+        // Possibility of rounding errors, causing the sum of the weights to be <= 1.0F
+        List<Object> list = new LinkedList<>(allValues.set());
+        return list.get(list.size() - 1);
     }
 
     @Override
