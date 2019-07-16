@@ -21,9 +21,9 @@ import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsNullConstraint;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.ElementFrequency;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyWhitelist;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.Whitelist;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -34,9 +34,9 @@ import java.util.stream.Stream;
 class DecisionTreeSimplifierTests {
     // TODO: Simplifier tests needs fleshing out
 
-    private static Whitelist<Object> setOf(Object... objects) {
-        return new FrequencyWhitelist<>(Stream.of(objects)
-            .map(element -> new ElementFrequency<>(element, 1.0F))
+    private static DistributedSet<Object> setOf(Object... objects) {
+        return new FrequencyDistributedSet<>(Stream.of(objects)
+            .map(element -> new WeightedElement<>(element, 1.0F))
             .collect(Collectors.toSet()));
     }
 

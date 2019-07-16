@@ -22,9 +22,8 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsNullConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.RuleInformation;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.ElementFrequency;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyWhitelist;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -43,9 +42,9 @@ public class ConstraintBuilder {
 
     public ConstraintBuilder addInSetConstraint(String fieldname, List<Object> values) {
         constraints.add(new IsInSetConstraint(fields.get(fieldname),
-            new FrequencyWhitelist<>(
+            new FrequencyDistributedSet<>(
                 values.stream()
-                    .map(value -> new ElementFrequency<>(value, 1.0F))
+                    .map(value -> new WeightedElement<>(value, 1.0F))
                     .collect(Collectors.toSet()))));
         return this;
     }
@@ -53,9 +52,9 @@ public class ConstraintBuilder {
     public ConstraintBuilder addEqualToConstraint(String fieldname, Object value) {
         constraints.add(new IsInSetConstraint(
             fields.get(fieldname),
-            new FrequencyWhitelist<>(
+            new FrequencyDistributedSet<>(
                 Collections.singleton(
-                    new ElementFrequency<>(value, 1.0F)))));
+                    new WeightedElement<>(value, 1.0F)))));
         return this;
     }
 

@@ -16,9 +16,9 @@
 
 package com.scottlogic.deg.profile.reader.file;
 
-import com.scottlogic.deg.generator.fieldspecs.whitelist.ElementFrequency;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyWhitelist;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.Whitelist;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -27,9 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public final class CsvInputStreamReader {
@@ -38,10 +36,10 @@ public final class CsvInputStreamReader {
         throw new UnsupportedOperationException("No instantiation of static class");
     }
 
-    public static Whitelist<String> retrieveLines(InputStream stream) {
+    public static DistributedSet<String> retrieveLines(InputStream stream) {
         List<CSVRecord> records = parse(stream);
-        return new FrequencyWhitelist<>(records.stream()
-            .map(record -> new ElementFrequency<>(record.get(0), Float.parseFloat(record.get(1))))
+        return new FrequencyDistributedSet<>(records.stream()
+            .map(record -> new WeightedElement<>(record.get(0), Float.parseFloat(record.get(1))))
             .collect(Collectors.toSet()));
     }
 

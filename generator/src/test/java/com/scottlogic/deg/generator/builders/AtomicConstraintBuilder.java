@@ -20,14 +20,11 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsNullConstraint;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.ElementFrequency;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyWhitelist;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.Whitelist;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class AtomicConstraintBuilder {
@@ -39,10 +36,10 @@ public class AtomicConstraintBuilder {
         this.field = field;
     }
 
-    private Whitelist<Object> whitelistOf(Object... values) {
-        return new FrequencyWhitelist<>(
+    private DistributedSet<Object> whitelistOf(Object... values) {
+        return new FrequencyDistributedSet<>(
             Arrays.stream(values)
-                .map(value -> new ElementFrequency<>(value, 1.0F))
+                .map(value -> new WeightedElement<>(value, 1.0F))
                 .collect(Collectors.toSet())
         );
     }

@@ -17,14 +17,12 @@
 package com.scottlogic.deg.common.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.RuleInformation;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.ElementFrequency;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyWhitelist;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
-import java.util.Set;
 
 public class IsInSetConstraintTests {
 
@@ -34,7 +32,7 @@ public class IsInSetConstraintTests {
 
         Assertions.assertThrows(
             IllegalArgumentException.class,
-            () -> new IsInSetConstraint(field1, new FrequencyWhitelist<>(Collections.emptySet())));
+            () -> new IsInSetConstraint(field1, new FrequencyDistributedSet<>(Collections.emptySet())));
     }
 
     @Test
@@ -43,16 +41,16 @@ public class IsInSetConstraintTests {
 
         Assertions.assertThrows(
             IllegalArgumentException.class,
-            () -> new IsInSetConstraint(field1, new FrequencyWhitelist<>(Collections.singleton(null))));
+            () -> new IsInSetConstraint(field1, new FrequencyDistributedSet<>(Collections.singleton(null))));
     }
 
     @Test
     public void testConstraintThrowsNothingIfGivenAValidSet(){
         Field field1 = new Field("TestField");
         Assertions.assertDoesNotThrow(
-            () -> new IsInSetConstraint(field1, new FrequencyWhitelist<>(
+            () -> new IsInSetConstraint(field1, new FrequencyDistributedSet<>(
                 Collections.singleton(
-                    new ElementFrequency<>("foo", 1.0F)))));
+                    new WeightedElement<>("foo", 1.0F)))));
     }
 
 }

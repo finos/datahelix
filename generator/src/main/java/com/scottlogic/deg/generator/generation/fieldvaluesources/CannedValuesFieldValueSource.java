@@ -16,18 +16,18 @@
 
 package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
-import com.scottlogic.deg.generator.fieldspecs.whitelist.ElementFrequency;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.Whitelist;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.SupplierBasedIterator;
 
 import java.util.Objects;
 
 public class CannedValuesFieldValueSource implements FieldValueSource {
-    private final Whitelist<Object> allValues;
-    private final Whitelist<Object> interestingValues;
+    private final DistributedSet<Object> allValues;
+    private final DistributedSet<Object> interestingValues;
 
-    public CannedValuesFieldValueSource(Whitelist<Object> values) {
+    public CannedValuesFieldValueSource(DistributedSet<Object> values) {
         this.allValues = values;
         this.interestingValues = values;
     }
@@ -59,13 +59,13 @@ public class CannedValuesFieldValueSource implements FieldValueSource {
     }
 
     private Object pickFromDistribution(float random) {
-        for (ElementFrequency<Object> holder : allValues.distributedSet()) {
-            random = random - holder.frequency();
+        for (WeightedElement<Object> holder : allValues.distributedSet()) {
+            random = random - holder.weight();
             if (random <= 0.0F) {
                 return holder.element();
             }
         }
-        throw new IllegalStateException("Set of whitelist frequencies do not sum to 1.0F");
+        throw new IllegalStateException("Set of whitelist weights do not sum to 1.0F");
     }
 
     @Override

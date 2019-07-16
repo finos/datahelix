@@ -2,9 +2,9 @@ package com.scottlogic.deg.generator.fieldspecs.whitelist;
 
 import java.util.Set;
 
-public interface Whitelist<T> {
+public interface DistributedSet<T> {
 
     Set<T> set();
 
-    Set<ElementFrequency<T>> distributedSet();
+    Set<WeightedElement<T>> distributedSet();
 }

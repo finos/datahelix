@@ -5,53 +5,53 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class FrequencyWhitelist<T> implements Whitelist<T> {
+public class FrequencyDistributedSet<T> implements DistributedSet<T> {
 
-    private static final FrequencyWhitelist<?> EMPTY = new FrequencyWhitelist<>(Collections.emptySet());
+    private static final FrequencyDistributedSet<?> EMPTY = new FrequencyDistributedSet<>(Collections.emptySet());
 
-    private final Set<ElementFrequency<T>> underlyingSet;
+    private final Set<WeightedElement<T>> underlyingSet;
 
-    public FrequencyWhitelist(final Set<ElementFrequency<T>> underlyingSet) {
+    public FrequencyDistributedSet(final Set<WeightedElement<T>> underlyingSet) {
         if (underlyingSet.isEmpty()) {
             this.underlyingSet = underlyingSet;
         } else {
             if (underlyingSet.contains(null)) {
-                throw new IllegalArgumentException("Whitelist should not contain null elements");
+                throw new IllegalArgumentException("DistributedSet should not contain null elements");
             }
 
             float total = underlyingSet.stream()
-                .map(ElementFrequency::frequency)
+                .map(WeightedElement::weight)
                 .reduce(0.0F, Float::sum);
 
             if (total == 0.0F) {
-                throw new IllegalArgumentException("Total of frequency whitelists sum to zero.");
+                throw new IllegalArgumentException("Total of weight whitelists sum to zero.");
             }
 
             this.underlyingSet = underlyingSet.stream()
-                .map(holder -> new ElementFrequency<>(holder.element(), holder.frequency() / total))
+                .map(holder -> new WeightedElement<>(holder.element(), holder.weight() / total))
                 .collect(Collectors.toSet());
         }
     }
 
-    public static <T> FrequencyWhitelist<T> uniform(final Set<T> underlyingSet) {
-        return new FrequencyWhitelist<>(
+    public static <T> FrequencyDistributedSet<T> uniform(final Set<T> underlyingSet) {
+        return new FrequencyDistributedSet<>(
             underlyingSet.stream()
-                .map(e -> new ElementFrequency<T>(e, 1.0F))
+                .map(e -> new WeightedElement<T>(e, 1.0F))
                 .collect(Collectors.toSet()));
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> FrequencyWhitelist<T> empty() {
-        return (FrequencyWhitelist<T>) EMPTY;
+    public static <T> FrequencyDistributedSet<T> empty() {
+        return (FrequencyDistributedSet<T>) EMPTY;
     }
 
     @Override
     public Set<T> set() {
-        return underlyingSet.stream().map(ElementFrequency::element).collect(Collectors.toSet());
+        return underlyingSet.stream().map(WeightedElement::element).collect(Collectors.toSet());
     }
 
     @Override
-    public Set<ElementFrequency<T>> distributedSet() {
+    public Set<WeightedElement<T>> distributedSet() {
         return underlyingSet;
     }
 
@@ -59,7 +59,7 @@ public class FrequencyWhitelist<T> implements Whitelist<T> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        FrequencyWhitelist<?> that = (FrequencyWhitelist<?>) o;
+        FrequencyDistributedSet<?> that = (FrequencyDistributedSet<?>) o;
         return Objects.equals(underlyingSet, that.underlyingSet);
     }
 
@@ -70,7 +70,7 @@ public class FrequencyWhitelist<T> implements Whitelist<T> {
 
     @Override
     public String toString() {
-        return "FrequencyWhitelist{" +
+        return "FrequencyDistributedSet{" +
             "underlyingSet=" + underlyingSet +
             '}';
     }

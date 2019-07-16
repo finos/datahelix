@@ -19,8 +19,8 @@ package com.scottlogic.deg.generator.fieldspecs;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
 
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyWhitelist;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.Whitelist;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.common.util.HeterogeneousTypeContainer;
 import com.scottlogic.deg.generator.utils.SetUtils;
@@ -37,15 +37,15 @@ import java.util.stream.Collectors;
 public class FieldSpec {
     public static final FieldSpec Empty =
         new FieldSpec(null, new HeterogeneousTypeContainer<>(), true, null);
-    public static final FieldSpec NullOnly = Empty.withWhitelist(FrequencyWhitelist.empty());
+    public static final FieldSpec NullOnly = Empty.withWhitelist(FrequencyDistributedSet.empty());
 
     private final boolean nullable;
     private final String formatting;
-    private final Whitelist<Object> whitelist;
+    private final DistributedSet<Object> whitelist;
     private final HeterogeneousTypeContainer<Restrictions> restrictions;
 
     private FieldSpec(
-        Whitelist<Object> whitelist,
+        DistributedSet<Object> whitelist,
         HeterogeneousTypeContainer<Restrictions> restrictions,
         boolean nullable,
         String formatting
@@ -60,7 +60,7 @@ public class FieldSpec {
         return nullable;
     }
 
-    public Whitelist<Object> getWhitelist() {
+    public DistributedSet<Object> getWhitelist() {
         return whitelist;
     }
 
@@ -88,7 +88,7 @@ public class FieldSpec {
         return formatting;
     }
 
-    public FieldSpec withWhitelist(Whitelist<Object> whitelist) {
+    public FieldSpec withWhitelist(DistributedSet<Object> whitelist) {
         return new FieldSpec(whitelist, new HeterogeneousTypeContainer<>(), nullable, formatting);
     }
 

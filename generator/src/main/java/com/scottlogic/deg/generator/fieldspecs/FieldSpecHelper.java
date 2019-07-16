@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyWhitelist;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 
 
@@ -28,7 +28,7 @@ public class FieldSpecHelper {
             return getNullRequiredFieldSpec();
         }
         return FieldSpec.Empty
-            .withWhitelist(FrequencyWhitelist.uniform(Collections.singleton(fieldValue.getUnformattedValue())))
+            .withWhitelist(FrequencyDistributedSet.uniform(Collections.singleton(fieldValue.getUnformattedValue())))
             .withNotNull();
     }
 

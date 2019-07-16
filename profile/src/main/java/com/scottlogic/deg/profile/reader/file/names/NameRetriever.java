@@ -17,9 +17,9 @@
 package com.scottlogic.deg.profile.reader.file.names;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.ElementFrequency;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyWhitelist;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.Whitelist;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.profile.reader.file.CsvInputStreamReader;
 
 import java.io.IOException;
@@ -35,7 +35,7 @@ public final class NameRetriever {
         throw new UnsupportedOperationException("No static class instantiation");
     }
 
-    public static Whitelist<Object> loadNamesFromFile(NameConstraintTypes configuration) {
+    public static DistributedSet<Object> loadNamesFromFile(NameConstraintTypes configuration) {
         if (configuration == FULL) {
             return downcastToObject(combineFirstWithLastNames(
                 generateNamesFromSingleFile(FIRST.getFilePath()),
@@ -45,18 +45,18 @@ public final class NameRetriever {
         }
     }
 
-    private static <T> Whitelist<Object> downcastToObject(Whitelist<T> higher) {
-        return new FrequencyWhitelist<>(
+    private static <T> DistributedSet<Object> downcastToObject(DistributedSet<T> higher) {
+        return new FrequencyDistributedSet<>(
             higher.distributedSet().stream()
-                .map(holder -> new ElementFrequency<Object>(holder.element(), holder.frequency()))
+                .map(holder -> new WeightedElement<Object>(holder.element(), holder.weight()))
                 .collect(Collectors.toSet()));
     }
 
     ;
 
-    private static Whitelist<String> generateNamesFromSingleFile(String source) {
+    private static DistributedSet<String> generateNamesFromSingleFile(String source) {
         InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(source);
-        Whitelist<String> result = CsvInputStreamReader.retrieveLines(stream);
+        DistributedSet<String> result = CsvInputStreamReader.retrieveLines(stream);
         try {
             stream.close();
         } catch (IOException e) {
@@ -65,20 +65,20 @@ public final class NameRetriever {
         return result;
     }
 
-    private static Whitelist<String> combineFirstWithLastNames(Whitelist<String> firstNames,
-                                                               Whitelist<String> lastNames) {
-        return new FrequencyWhitelist<>(firstNames.distributedSet().stream()
+    private static DistributedSet<String> combineFirstWithLastNames(DistributedSet<String> firstNames,
+                                                                    DistributedSet<String> lastNames) {
+        return new FrequencyDistributedSet<>(firstNames.distributedSet().stream()
             .flatMap(
                 first -> lastNames.distributedSet().stream()
                     .map(last -> mergeFrequencies(first, last))
             ).collect(Collectors.toSet()));
     }
 
-    private static ElementFrequency<String> mergeFrequencies(ElementFrequency<String> first,
-                                                             ElementFrequency<String> last) {
+    private static WeightedElement<String> mergeFrequencies(WeightedElement<String> first,
+                                                            WeightedElement<String> last) {
         String name = String.format("%s %s", first.element(), last.element());
-        float frequency = first.frequency() + last.frequency();
-        return new ElementFrequency<>(name, frequency);
+        float frequency = first.weight() + last.weight();
+        return new WeightedElement<>(name, frequency);
     }
 
 }

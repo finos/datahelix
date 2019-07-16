@@ -18,7 +18,7 @@ package com.scottlogic.deg.common.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
 
-import com.scottlogic.deg.generator.fieldspecs.whitelist.Whitelist;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 
 import java.util.Objects;
 import java.util.Set;
@@ -26,9 +26,9 @@ import java.util.stream.Collectors;
 
 public class IsInSetConstraint implements AtomicConstraint {
     public final Field field;
-    public final Whitelist<Object> legalValues;
+    public final DistributedSet<Object> legalValues;
 
-    public IsInSetConstraint(Field field, Whitelist<Object> legalValues) {
+    public IsInSetConstraint(Field field, DistributedSet<Object> legalValues) {
         this.field = field;
         this.legalValues = legalValues;
 

@@ -19,13 +19,12 @@ package com.scottlogic.deg.generator.decisiontree.treepartitioning;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
-import com.scottlogic.deg.common.profile.RuleInformation;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.decisiontree.testutils.*;
 import com.scottlogic.deg.generator.decisiontree.testutils.EqualityComparer;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.ElementFrequency;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyWhitelist;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -273,9 +272,9 @@ class RelatedFieldTreePartitionerTests {
         if (constraint == null) {
             constraint = new IsInSetConstraint(
                 new Field(fieldName),
-                new FrequencyWhitelist<>(
+                new FrequencyDistributedSet<>(
                     Collections.singleton(
-                        new ElementFrequency<>("sample-value", 1.0F))));
+                        new WeightedElement<>("sample-value", 1.0F))));
             this.constraints.put(fieldName, constraint);
         }
 

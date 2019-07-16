@@ -16,8 +16,8 @@
 
 package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyWhitelist;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.Whitelist;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -32,7 +32,7 @@ class CannedValuesFieldValueSourceEqualityTests {
 
     private FieldValueSource valueSourceOf(Object... elements) {
         Set<Object> set = Arrays.stream(elements).collect(Collectors.toSet());
-        Whitelist<Object> whitelist = FrequencyWhitelist.uniform(set);
+        DistributedSet<Object> whitelist = FrequencyDistributedSet.uniform(set);
         return new CannedValuesFieldValueSource(whitelist);
     }
 

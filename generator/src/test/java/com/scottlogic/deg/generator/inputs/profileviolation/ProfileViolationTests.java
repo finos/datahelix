@@ -28,9 +28,9 @@ import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.builders.*;
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import com.scottlogic.deg.common.profile.ViolatedProfile;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.ElementFrequency;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyWhitelist;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.Whitelist;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.violations.filters.ConstraintTypeViolationFilter;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,12 +38,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.nio.file.Path;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
@@ -52,7 +50,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.scottlogic.deg.generator.inputs.profileviolation.TypeEqualityHelper.assertProfileListsAreEquivalent;
-import static org.mockito.Mockito.*;
 
 /**
  * Defines tests for all business logic involved in Profile Violation.
@@ -77,9 +74,9 @@ public class ProfileViolationTests {
 
     private static Stream<Arguments> allAtomicConstraints() {
         OffsetDateTime sampleDate = OffsetDateTime.of(2019, 1, 15, 12, 0, 0, 0, ZoneOffset.UTC);
-        final Whitelist<Object> sampleSet = new FrequencyWhitelist<>(
+        final DistributedSet<Object> sampleSet = new FrequencyDistributedSet<>(
             Stream.of("hello", 10)
-                .map(element -> new ElementFrequency<>((Object) element, 1.0F))
+                .map(element -> new WeightedElement<>((Object) element, 1.0F))
                 .collect(Collectors.toSet()));
 
         return Stream.of(

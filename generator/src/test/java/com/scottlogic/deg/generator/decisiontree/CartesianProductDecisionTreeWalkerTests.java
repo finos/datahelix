@@ -23,8 +23,8 @@ import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.common.profile.RuleInformation;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.ElementFrequency;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyWhitelist;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagGenerator;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
@@ -97,13 +97,13 @@ class CartesianProductDecisionTreeWalkerTests {
                     new ConditionalConstraint(
                         new IsInSetConstraint(
                             country,
-                            new FrequencyWhitelist<>(Collections.singleton(new ElementFrequency<>("US", 1.0F)))
+                            new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>("US", 1.0F)))
                         ),
                         new IsInSetConstraint(
                             city,
-                            new FrequencyWhitelist<>(new HashSet<>(Arrays.asList(
-                                new ElementFrequency<>("New York", 1.0F),
-                                new ElementFrequency<>("Washington DC", 1.0F)))
+                            new FrequencyDistributedSet<>(new HashSet<>(Arrays.asList(
+                                new WeightedElement<>("New York", 1.0F),
+                                new WeightedElement<>("Washington DC", 1.0F)))
                         ))))),
             new Rule(
                 rule("GB country constrains city"),
@@ -111,13 +111,13 @@ class CartesianProductDecisionTreeWalkerTests {
                     new ConditionalConstraint(
                         new IsInSetConstraint(
                             country,
-                            new FrequencyWhitelist<>(Collections.singleton(new ElementFrequency<>("GB", 1.0F)))
+                            new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>("GB", 1.0F)))
                         ),
                         new IsInSetConstraint(
                             city,
-                            new FrequencyWhitelist<>(new HashSet<>(Arrays.asList(
-                                new ElementFrequency<>("Bristol", 1.0F),
-                                new ElementFrequency<>("London", 1.0F)))
+                            new FrequencyDistributedSet<>(new HashSet<>(Arrays.asList(
+                                new WeightedElement<>("Bristol", 1.0F),
+                                new WeightedElement<>("London", 1.0F)))
                         ))))),
             new Rule(
                 rule("US country constrains currency"),
@@ -125,11 +125,11 @@ class CartesianProductDecisionTreeWalkerTests {
                     new ConditionalConstraint(
                         new IsInSetConstraint(
                             country,
-                            new FrequencyWhitelist<>(Collections.singleton(new ElementFrequency<>("US", 1.0F)))
+                            new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>("US", 1.0F)))
                         ),
                         new IsInSetConstraint(
                             currency,
-                            new FrequencyWhitelist<>(Collections.singleton(new ElementFrequency<>("USD", 1.0F)))
+                            new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>("USD", 1.0F)))
                         )))),
             new Rule(
                 rule("GB country constrains currency"),
@@ -137,11 +137,11 @@ class CartesianProductDecisionTreeWalkerTests {
                     new ConditionalConstraint(
                         new IsInSetConstraint(
                             country,
-                            new FrequencyWhitelist<>(Collections.singleton(new ElementFrequency<>("GB", 1.0F)))
+                            new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>("GB", 1.0F)))
                         ),
                         new IsInSetConstraint(
                             currency,
-                            new FrequencyWhitelist<>(Collections.singleton(new ElementFrequency<>("GBP", 1.0F)))
+                            new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>("GBP", 1.0F)))
                         )))));
 
         Profile profile = new Profile(fields, dummyRules);

@@ -18,7 +18,7 @@ package com.scottlogic.deg.profile.reader;
 
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.common.util.NumberUtils;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.ElementFrequency;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
 
 import java.math.BigDecimal;
@@ -43,7 +43,7 @@ public class ConstraintReaderHelpers {
         return getValidatedValue(dto, dto.value, requiredType);
     }
 
-    public static Set<ElementFrequency<Object>> getValidatedValues(ConstraintDTO dto) {
+    public static Set<WeightedElement<Object>> getValidatedValues(ConstraintDTO dto) {
         if (dto.values == null) {
             throw new InvalidProfileException(String.format(
                 "Field [%s]: Couldn't recognise 'values' property, it must not contain 'null'",
@@ -64,7 +64,7 @@ public class ConstraintReaderHelpers {
         }
 
         return mappedValues.stream()
-            .map(element -> new ElementFrequency<>(element, 1.0F))
+            .map(element -> new WeightedElement<>(element, 1.0F))
             .collect(Collectors.toSet());
     }
 
