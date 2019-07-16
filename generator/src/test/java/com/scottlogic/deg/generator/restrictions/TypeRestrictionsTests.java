@@ -28,10 +28,10 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-class DataTypeRestrictionsTests {
+class TypeRestrictionsTests {
     @Test
     public void except_withAlreadyExcludedType_shouldReturnSameCollectionOfPermittedTypes(){
-        TypeRestrictions exceptStrings = DataTypeRestrictions.createFromWhiteList(
+        TypeRestrictions exceptStrings = TypeRestrictions.createFromWhiteList(
             IsOfTypeConstraint.Types.NUMERIC,
             IsOfTypeConstraint.Types.DATETIME);
 
@@ -44,7 +44,7 @@ class DataTypeRestrictionsTests {
 
     @Test
     public void except_withNoTypes_shouldReturnSameCollectionOfPermittedTypes(){
-        TypeRestrictions exceptStrings = DataTypeRestrictions.createFromWhiteList(
+        TypeRestrictions exceptStrings = TypeRestrictions.createFromWhiteList(
             IsOfTypeConstraint.Types.NUMERIC,
             IsOfTypeConstraint.Types.DATETIME);
 
@@ -55,7 +55,7 @@ class DataTypeRestrictionsTests {
 
     @Test
     public void except_withPermittedType_shouldReturnSameCollectionExcludingGivenType(){
-        TypeRestrictions exceptStrings = DataTypeRestrictions.createFromWhiteList(
+        TypeRestrictions exceptStrings = TypeRestrictions.createFromWhiteList(
             IsOfTypeConstraint.Types.NUMERIC,
             IsOfTypeConstraint.Types.DATETIME);
 
@@ -67,7 +67,7 @@ class DataTypeRestrictionsTests {
 
     @Test
     public void except_withLastPermittedType_shouldReturnNoTypesPermitted(){
-        TypeRestrictions exceptStrings = DataTypeRestrictions.createFromWhiteList(
+        TypeRestrictions exceptStrings = TypeRestrictions.createFromWhiteList(
             IsOfTypeConstraint.Types.DATETIME);
 
         TypeRestrictions result = exceptStrings.except(IsOfTypeConstraint.Types.DATETIME);
@@ -80,9 +80,9 @@ class DataTypeRestrictionsTests {
         Collection<IsOfTypeConstraint.Types> allowedTypes = new ArrayList<>();
         allowedTypes.add(IsOfTypeConstraint.Types.STRING);
         allowedTypes.add(IsOfTypeConstraint.Types.DATETIME);
-        DataTypeRestrictions self = new DataTypeRestrictions(allowedTypes);
+        TypeRestrictions self = new TypeRestrictions(allowedTypes);
 
-        TypeRestrictions actual = self.intersect(DataTypeRestrictions.ALL_TYPES_PERMITTED);
+        TypeRestrictions actual = self.intersect(TypeRestrictions.ALL_TYPES_PERMITTED);
 
         assertEquals(self, actual);
     }
@@ -92,9 +92,9 @@ class DataTypeRestrictionsTests {
         Collection<IsOfTypeConstraint.Types> allowedTypes = new ArrayList<>();
         allowedTypes.add(IsOfTypeConstraint.Types.STRING);
         allowedTypes.add(IsOfTypeConstraint.Types.DATETIME);
-        DataTypeRestrictions self = new DataTypeRestrictions(allowedTypes);
+        TypeRestrictions self = new TypeRestrictions(allowedTypes);
 
-        TypeRestrictions actual = self.intersect(new DataTypeRestrictions(Collections.EMPTY_LIST));
+        TypeRestrictions actual = self.intersect(new TypeRestrictions(Collections.EMPTY_LIST));
 
         assertNull(actual);
     }
@@ -104,18 +104,18 @@ class DataTypeRestrictionsTests {
         Collection<IsOfTypeConstraint.Types> allowedTypes = new ArrayList<>();
         allowedTypes.add(IsOfTypeConstraint.Types.STRING);
         allowedTypes.add(IsOfTypeConstraint.Types.DATETIME);
-        DataTypeRestrictions self = new DataTypeRestrictions(allowedTypes);
+        TypeRestrictions self = new TypeRestrictions(allowedTypes);
 
         Collection<IsOfTypeConstraint.Types> otherAllowedTypes = new ArrayList<>();
         otherAllowedTypes.add(IsOfTypeConstraint.Types.NUMERIC);
         otherAllowedTypes.add(IsOfTypeConstraint.Types.STRING);
-        DataTypeRestrictions other = new DataTypeRestrictions(otherAllowedTypes);
+        TypeRestrictions other = new TypeRestrictions(otherAllowedTypes);
 
         TypeRestrictions actual = self.intersect(other);
 
         Collection<IsOfTypeConstraint.Types> expectedAllowedTypes = new ArrayList<>();
         expectedAllowedTypes.add(IsOfTypeConstraint.Types.STRING);
-        DataTypeRestrictions expected = new DataTypeRestrictions(expectedAllowedTypes);
+        TypeRestrictions expected = new TypeRestrictions(expectedAllowedTypes);
         assertEquals(expected, actual);
     }
 }

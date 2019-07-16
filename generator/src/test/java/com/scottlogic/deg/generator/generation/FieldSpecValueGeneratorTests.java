@@ -64,7 +64,7 @@ class FieldSpecValueGeneratorTests {
                     max = new NumericLimit<>(new BigDecimal(30), false);
                 }})
             .withTypeRestrictions(
-                new DataTypeRestrictions(
+                new TypeRestrictions(
                     Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
                 )
             );

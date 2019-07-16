@@ -422,9 +422,9 @@ class FieldSpecTests {
     }
 
     private static Stream<Arguments> permitsNotNullProvider() {
-        TypeRestrictions numericRestrictions = DataTypeRestrictions.ALL_TYPES_PERMITTED.except(Types.NUMERIC);
-        TypeRestrictions stringRestrictions = DataTypeRestrictions.ALL_TYPES_PERMITTED.except(Types.STRING);
-        TypeRestrictions dateTimeRestrictions = DataTypeRestrictions.ALL_TYPES_PERMITTED.except(Types.DATETIME);
+        TypeRestrictions numericRestrictions = TypeRestrictions.ALL_TYPES_PERMITTED.except(Types.NUMERIC);
+        TypeRestrictions stringRestrictions = TypeRestrictions.ALL_TYPES_PERMITTED.except(Types.STRING);
+        TypeRestrictions dateTimeRestrictions = TypeRestrictions.ALL_TYPES_PERMITTED.except(Types.DATETIME);
 
         Integer intValue = 1;
         String stringValue = "a string";
@@ -582,7 +582,7 @@ class FieldSpecTests {
         }
     }
 
-    private class MockTypeRestrictions extends DataTypeRestrictions{
+    private class MockTypeRestrictions extends TypeRestrictions {
         private final boolean isEqual;
 
         MockTypeRestrictions(boolean isEqual) {

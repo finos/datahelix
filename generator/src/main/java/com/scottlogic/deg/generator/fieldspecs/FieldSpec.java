@@ -123,7 +123,7 @@ public class FieldSpec {
     public FieldSpec withoutType(IsOfTypeConstraint.Types type){
         TypeRestrictions typeRestrictions = getTypeRestrictions();
         if (typeRestrictions == null){
-            typeRestrictions = DataTypeRestrictions.ALL_TYPES_PERMITTED;
+            typeRestrictions = TypeRestrictions.ALL_TYPES_PERMITTED;
         }
         typeRestrictions = typeRestrictions.except(type);
 

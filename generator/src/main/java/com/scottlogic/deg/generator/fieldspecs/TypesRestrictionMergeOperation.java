@@ -35,7 +35,7 @@ public class TypesRestrictionMergeOperation implements RestrictionMergeOperation
 
         TypeRestrictions restrictions = mergeResult.restrictions != null
             ? mergeResult.restrictions
-            : DataTypeRestrictions.ALL_TYPES_PERMITTED;
+            : TypeRestrictions.ALL_TYPES_PERMITTED;
 
         return merging.withTypeRestrictions(restrictions);
     }
