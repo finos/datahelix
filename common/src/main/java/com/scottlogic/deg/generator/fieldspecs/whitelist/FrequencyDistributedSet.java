@@ -23,11 +23,11 @@ public class FrequencyDistributedSet<T> implements DistributedSet<T> {
 
     private static final FrequencyDistributedSet<?> EMPTY = new FrequencyDistributedSet<>(Collections.emptySet());
 
-    private final Set<WeightedElement<T>> underlyingSet;
+    private final List<WeightedElement<T>> underlyingSet;
 
     public FrequencyDistributedSet(final Set<WeightedElement<T>> underlyingSet) {
         if (underlyingSet.isEmpty()) {
-            this.underlyingSet = underlyingSet;
+            this.underlyingSet = new ArrayList<>(underlyingSet);
         } else {
             if (underlyingSet.contains(null)) {
                 throw new IllegalArgumentException("DistributedSet should not contain null elements");
@@ -39,7 +39,7 @@ public class FrequencyDistributedSet<T> implements DistributedSet<T> {
 
             this.underlyingSet = underlyingSet.stream()
                 .map(holder -> new WeightedElement<>(holder.element(), holder.weight() / total))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
         }
     }
 
@@ -62,7 +62,7 @@ public class FrequencyDistributedSet<T> implements DistributedSet<T> {
 
     @Override
     public Set<WeightedElement<T>> distributedSet() {
-        return underlyingSet;
+        return new HashSet<>(underlyingSet);
     }
 
     @Override
