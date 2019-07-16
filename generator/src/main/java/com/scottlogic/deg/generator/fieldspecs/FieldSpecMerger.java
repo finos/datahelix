@@ -63,11 +63,15 @@ public class FieldSpecMerger {
     private Optional<FieldSpec> mergeSets(FieldSpec left, FieldSpec right) {
         DistributedSet<Object> set = new FrequencyDistributedSet<>(left.getWhitelist().distributedSet().stream()
             .flatMap(leftHolder -> right.getWhitelist().distributedSet().stream()
-                .filter(rightHolder -> leftHolder.element().equals(rightHolder.element()))
-                .map(rightElement -> mergeElements(leftHolder, rightElement)))
+                .filter(rightHolder -> elementsEqual(leftHolder, rightHolder))
+                .map(rightHolder -> mergeElements(leftHolder, rightHolder)))
             .collect(Collectors.toSet()));
 
         return addNullable(left, right, setRestriction(set));
+    }
+
+    private static <T> boolean elementsEqual(WeightedElement<T> left, WeightedElement<T> right) {
+        return left.element().equals(right.element());
     }
 
     private Optional<FieldSpec> combineSetWithRestrictions(FieldSpec set, FieldSpec restrictions) {
