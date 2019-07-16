@@ -35,7 +35,9 @@ public class FieldSpecValueGenerator {
     private final JavaUtilRandomNumberGenerator randomNumberGenerator;
 
     @Inject
-    public FieldSpecValueGenerator(DataGenerationType dataGenerationType, FieldValueSourceEvaluator sourceEvaluator, JavaUtilRandomNumberGenerator randomNumberGenerator) {
+    public FieldSpecValueGenerator(DataGenerationType dataGenerationType,
+                                   FieldValueSourceEvaluator sourceEvaluator,
+                                   JavaUtilRandomNumberGenerator randomNumberGenerator) {
         this.dataType = dataGenerationType;
         this.sourceFactory = sourceEvaluator;
         this.randomNumberGenerator = randomNumberGenerator;
@@ -43,8 +45,7 @@ public class FieldSpecValueGenerator {
 
     public Stream<DataBagValue> generate(Set<FieldSpec> specs) {
         List<FieldValueSource> fieldValueSources = specs.stream()
-            .map(sourceFactory::getFieldValueSources)
-            .flatMap(Collection::stream)
+            .flatMap(sourceFactory::getFieldValueSources)
             .distinct()
             .collect(Collectors.toList());
 
@@ -66,7 +67,7 @@ public class FieldSpecValueGenerator {
             .map(value -> new DataBagValue(value, spec.getFormatting()));
     }
 
-    private Iterable<Object> getDataValues(FieldValueSource source) {
+    private Stream<Object> getDataValues(FieldValueSource source) {
         switch (dataType) {
             case FULL_SEQUENTIAL:
                 return source.generateAllValues();

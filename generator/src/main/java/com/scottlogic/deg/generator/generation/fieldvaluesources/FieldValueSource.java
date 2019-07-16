@@ -18,14 +18,16 @@ package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
+import java.util.stream.Stream;
+
 public interface FieldValueSource {
     boolean isFinite();
     long getValueCount();
 
-    Iterable<Object> generateInterestingValues();
+    Stream<Object> generateInterestingValues();
 
-    Iterable<Object> generateAllValues();
+    Stream<Object> generateAllValues();
 
-    Iterable<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator);
+    Stream<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator);
 }
 

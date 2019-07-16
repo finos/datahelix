@@ -22,7 +22,9 @@ import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CombiningFieldValueSource implements FieldValueSource {
     private final List<FieldValueSource> underlyingSources;
@@ -38,35 +40,34 @@ public class CombiningFieldValueSource implements FieldValueSource {
 
     @Override
     public long getValueCount() {
-        return underlyingSources.stream()
+        return underlyingSources
+            .stream()
             .map(FieldValueSource::getValueCount)
             .reduce(Long::sum)
-            .get();
+            .orElse(0L);
     }
 
     @Override
-    public Iterable<Object> generateInterestingValues() {
-        return new ConcatenatingIterable<>(
-                underlyingSources.stream()
-                        .map(FieldValueSource::generateInterestingValues)
-                        .collect(Collectors.toList()));
+    public Stream<Object> generateInterestingValues() {
+        return underlyingSources.stream().flatMap(FieldValueSource::generateInterestingValues);
+
     }
 
     @Override
-    public Iterable<Object> generateAllValues() {
-        return new ConcatenatingIterable<>(
-            underlyingSources.stream()
-                .map(FieldValueSource::generateAllValues)
-                .collect(Collectors.toList()));
+    public Stream<Object> generateAllValues() {
+        return underlyingSources.stream().flatMap(FieldValueSource::generateAllValues);
+
     }
 
     @Override
-    public Iterable<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
-        return () -> new InternalRandomIterator(
+    public Stream<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
+        return Stream.generate(underlyingSources::stream).flatMap(Function.identity());
+
+/*        return () -> new InternalRandomIterator(
             underlyingSources.stream()
                 .map(source -> source.generateRandomValues(randomNumberGenerator).iterator())
                 .collect(Collectors.toList()),
-            randomNumberGenerator);
+            randomNumberGenerator);*/
     }
 
     @Override
@@ -78,44 +79,4 @@ public class CombiningFieldValueSource implements FieldValueSource {
         return underlyingSources.equals(otherSource.underlyingSources);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(underlyingSources);
-    }
-
-    private class InternalRandomIterator implements Iterator<Object> {
-        private final List<Iterator<Object>> iterators;
-        private final RandomNumberGenerator randomNumberGenerator;
-
-        InternalRandomIterator(
-            List<Iterator<Object>> iterators,
-            RandomNumberGenerator randomNumberGenerator) {
-
-            this.iterators = iterators.stream()
-                .filter(Iterator::hasNext)
-                .collect(Collectors.toList());
-
-            this.randomNumberGenerator = randomNumberGenerator;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return !this.iterators.isEmpty();
-        }
-
-        @Override
-        public Object next() {
-            int iteratorIndex = randomNumberGenerator.nextInt(
-                iterators.size());
-
-            Iterator<Object> iterator = iterators.get(iteratorIndex);
-
-            Object value = iterator.next();
-
-            if (!iterator.hasNext())
-                this.iterators.remove(iteratorIndex);
-
-            return value;
-        }
-    }
 }
