@@ -137,95 +137,86 @@ Feature: User can specify that a value is equalTo a required value
 
 ### ofType ###
 
-  Scenario: 'EqualTo' should combine with types
+  Scenario Outline: 'EqualTo' should combine with type <type>
     Given there is a field foo
-    And foo is equal to 1
-    And foo is of type "integer"
+    And foo is equal to <value>
+    And foo is of type <type>
     Then the following data should be generated:
-      | foo  |
-      | 1    |
+      | foo     |
+      | <value> |
+    Examples:
+      | type | value |
+      | "integer"  | 1 |
+      | "string"   | "test" |
+      | "datetime" | 2000-01-01T00:00:00.001Z |
+      | "decimal"  | 1.1 |
 
-  Scenario: 'EqualTo' should combine with types
-    Given there is a field foo
-    And foo is equal to "test"
-    And foo is of type "string"
-    Then the following data should be generated:
-      | foo    |
-      | "test" |
 
-  Scenario: 'EqualTo' should combine with types
+  Scenario Outline: 'EqualTo' should contradict with incorrect type <type>
     Given there is a field foo
-    And foo is equal to 2000-01-01T00:00:00.001Z
-    And foo is of type "datetime"
-    Then the following data should be generated:
-      | foo                      |
-      | 2000-01-01T00:00:00.001Z |
-
-  Scenario: 'EqualTo' should contradict with incorrect types
-    Given there is a field foo
-    And foo is equal to 1
-    And foo is of type "datetime"
+    And foo is equal to <value>
+    And foo is of type <type>
     Then no data is created
+    Examples:
+      | type | value |
+      | "integer"  | 1.1   |
+      | "string"   | 1.1   |
+      | "datetime" | 1.1   |
+      | "decimal"  | "1.1" |
 
-### matchingRegex ###
+### constraints ###
 
-  Scenario: 'EqualTo' with a non-contradictory 'matchingRegex' should be successful
+  Scenario Outline: 'EqualTo' alongside a non-contradicting <operator> should be successful
     Given there is a field foo
-    And foo is equal to "aaa"
-    And foo is matching regex /[a]{3}/
+    And foo is equal to <value>
+    And foo is <operator>
     Then the following data should be generated:
-      | foo   |
-      | "aaa" |
+      | foo      |
+      | <value> |
+    Examples:
+      | operator | value |
+      | of length 1         | "a"  |
+      | longer than 1       | "ab" |
+      | shorter than 1      | ""   |
+      | matching regex /[a]{3}/ | "aaa" |
 
-  Scenario: 'EqualTo' with a contradictory 'matchingRegex' should emit no data
+      | greater than 1              | 2   |
+      | less than 1                 | 0   |
+      | greater than or equal to 1  | 1   |
+      | less than or equal to 1     | 1   |
+      | granular to 0.1             | 1.2 |
+
+      | after 2018-01-01T00:00:00.000Z | 2019-01-01T00:00:00.000Z |
+      | before 2020-01-01T00:00:00.000Z | 2019-01-01T00:00:00.000Z |
+      | after or at 2019-01-01T00:00:00.000Z | 2019-01-01T00:00:00.000Z |
+      | before or at 2019-01-01T00:00:00.000Z | 2019-01-01T00:00:00.000Z |
+      | granular to "seconds" | 2019-01-01T00:00:01.000Z |
+
+  Scenario Outline: 'EqualTo' alongside a contradicting <operator> should produce no data
     Given there is a field foo
-    And foo is equal to "BBB"
-    And foo is matching regex /[a]{3}/
+    And foo is equal to <value>
+    And foo is <operator>
     Then no data is created
+    Examples:
+      | operator | value |
+      | of length 2 | "a"   |
+      | longer than 2 | "ab"   |
+      | shorter than 2 | "abc" |
+      | matching regex /[a]{3}/ | "BBB" |
 
-### String Length ###
+      | greater than 2              | 1   |
+      | less than 2                 | 2   |
+      | greater than or equal to 2  | 1    |
+      | less than or equal to 2     | 3    |
+      | granular to 0.1             | 1.23 |
 
-  Scenario: 'EqualTo' alongside a non-contradicting 'ofLength' constraint should be successful
-    Given there is a field foo
-    And foo is equal to "1"
-    And foo is of length 1
-    Then the following data should be generated:
-      | foo  |
-      | "1"  |
+      | after 2020-01-01T00:00:00.000Z | 2019-01-01T00:00:00.000Z |
+      | before 2018-01-01T00:00:00.000Z | 2019-01-01T00:00:00.000Z |
+      | after or at 2020-01-01T00:00:00.000Z | 2019-01-01T00:00:00.000Z |
+      | before or at 2018-01-01T00:00:00.000Z | 2019-01-01T00:00:00.000Z |
+      | granular to "minutes" | 2019-01-01T00:00:01.000Z |
 
-  Scenario: 'EqualTo' alongside a contradicting 'ofLength' constraint should emit no data
-    Given there is a field foo
-    And foo is equal to "1"
-    And foo is of length 2
-    Then no data is created
-
-  Scenario: 'EqualTo' alongside a non-contradicting 'longerThan' constraint should be successful
-    Given there is a field foo
-    And foo is equal to "1"
-    And foo is longer than 0
-    Then the following data should be generated:
-      | foo  |
-      | "1"  |
-
-  Scenario: 'EqualTo' alongside a contradicting 'longerThan' constraint should emit no data
-    Given there is a field foo
-    And foo is equal to "1"
-    And foo is longer than 2
-    Then no data is created
-
-  Scenario: 'EqualTo' alongside a non-contradicting 'shorterThan' constraint should be successful
-    Given there is a field foo
-    And foo is equal to "1"
-    And foo is shorter than 2
-    Then the following data should be generated:
-      | foo  |
-      | "1"  |
-
-  Scenario: 'EqualTo' alongside a contradicting 'shorterThan' constraint should emit no data
-    Given there is a field foo
-    And foo is equal to "1"
-    And foo is shorter than 1
-    Then no data is created
+### Max String Length ###
 
   Scenario: 'EqualTo' request including a string of the maximum length should be successful
     Given there is a field foo
@@ -284,70 +275,4 @@ Feature: User can specify that a value is equalTo a required value
     Given there is a field foo
     And foo is equal to "0263497"
     And foo is of type "SEDOL"
-    Then no data is created
-
-### numeric ###
-
-  Scenario: 'EqualTo' run against non contradictory 'greaterThan' constraints
-    Given there is a field foo
-    And foo is equal to 2
-    And foo is greater than 1
-    Then the following data should be generated:
-      | foo  |
-      | 2    |
-
-  Scenario: 'EqualTo' run against a contradicting 'greaterThan' should generate no data
-    Given there is a field foo
-    And foo is equal to 1
-    And foo is greater than 2
-    Then no data is created
-
-  Scenario: 'EqualTo' run against non contradictory 'lessThan' constraints
-    Given there is a field foo
-    And foo is equal to 2
-    And foo is less than 3
-    Then the following data should be generated:
-      | foo  |
-      | 2    |
-
-  Scenario: 'EqualTo' run against a contradicting 'lessThan' should generate no data
-    Given there is a field foo
-    And foo is equal to 1
-    And foo is less than 1
-    Then no data is created
-
-  Scenario: 'EqualTo' run against a non contradicting 'granularTo' should be successful
-    Given there is a field foo
-    And foo is equal to 1
-    And foo is granular to 1
-    Then the following data should be generated:
-      | foo  |
-      | 1    |
-
-  Scenario: 'EqualTo' run against a contradicting 'granularTo' should generate no data
-    Given there is a field foo
-    And foo is equal to 1.1
-    And foo is granular to 1
-    Then no data is created
-
-### datetime ###
-
-  Scenario: 'EqualTo' run against a non contradicting 'after' should be successful
-    Given there is a field foo
-    And foo is equal to 2019-01-01T00:00:00.000Z
-    And foo is after 2018-01-01T00:00:00.000Z
-    Then the following data should be generated:
-      | foo                      |
-      | 2019-01-01T00:00:00.000Z |
-
-  Scenario: 'EqualTo' run against a contradicting 'before' should generate no data
-    Given there is a field foo
-    And foo is equal to 2019-01-01T00:00:00.000Z
-    And foo is before 2018-01-01T00:00:00.000Z
-    Then no data is created
-
-  Scenario: 'EqualTo' run against a contradicting 'granularTo' should generate no data
-    Given there is a field foo
-    And foo is equal to 2019-01-01T00:00:00.010Z
-    And foo is granular to "seconds"
     Then no data is created
