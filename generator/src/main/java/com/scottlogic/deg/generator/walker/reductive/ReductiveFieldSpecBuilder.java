@@ -61,9 +61,7 @@ public class ReductiveFieldSpecBuilder {
 
         Set<FieldSpec> fieldSpecsForDecisions = getFieldSpecsForDecisions(field, rootNode);
 
-        if (fieldSpecsForDecisions.isEmpty()) {
-            return Collections.singleton(rootFieldSpec);
-        }
+        if (fieldSpecsForDecisions.isEmpty()) { return Collections.singleton(rootFieldSpec); }
 
         return mergeDecisionFieldSpecsWithRoot(
             rootFieldSpec,

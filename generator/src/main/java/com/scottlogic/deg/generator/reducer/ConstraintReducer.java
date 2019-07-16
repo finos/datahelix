@@ -28,6 +28,7 @@ import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class ConstraintReducer {
@@ -36,8 +37,8 @@ public class ConstraintReducer {
 
     @Inject
     public ConstraintReducer(
-        FieldSpecFactory fieldSpecFactory,
-        FieldSpecMerger fieldSpecMerger
+            FieldSpecFactory fieldSpecFactory,
+            FieldSpecMerger fieldSpecMerger
     ) {
         this.fieldSpecFactory = fieldSpecFactory;
         this.fieldSpecMerger = fieldSpecMerger;
@@ -56,7 +57,7 @@ public class ConstraintReducer {
             .collect(
                 Collectors.toMap(
                     Function.identity(),
-                    field -> reduceConstraintsToFieldSpec(fieldToConstraints.get(field))));
+                    field ->  reduceConstraintsToFieldSpec(fieldToConstraints.get(field))));
 
         final Optional<Map<Field, FieldSpec>> optionalMap = Optional.of(fieldToFieldSpec)
             .filter(map -> map.values().stream().allMatch(Optional::isPresent))
@@ -76,17 +77,23 @@ public class ConstraintReducer {
 
     public Optional<FieldSpec> reduceConstraintsToFieldSpec(Iterable<AtomicConstraint> constraints) {
         return constraints == null
-            ? Optional.of(FieldSpec.Empty)
-            : getRootFieldSpec(constraints);
+                ? Optional.of(FieldSpec.Empty)
+                : getRootFieldSpec(constraints);
     }
 
     private Optional<FieldSpec> getRootFieldSpec(Iterable<AtomicConstraint> rootConstraints) {
-        return StreamSupport
-            .stream(rootConstraints.spliterator(), false)
-            .map(fieldSpecFactory::construct)
-            .map(Optional::ofNullable)
+        final Stream<FieldSpec> rootConstraintsStream =
+            StreamSupport
+                .stream(rootConstraints.spliterator(), false)
+                .map(fieldSpecFactory::construct);
+
+        return rootConstraintsStream
             .reduce(
                 Optional.of(FieldSpec.Empty),
-                (optAcc, next) -> fieldSpecMerger.merge(optAcc.orElse(null), next.orElse(null)));
+                (optAcc, next) ->
+                    optAcc.flatMap(acc -> fieldSpecMerger.merge(acc, next)),
+                (optAcc1, optAcc2) -> optAcc1.flatMap(
+                    acc1 -> optAcc2.flatMap(
+                        acc2 -> fieldSpecMerger.merge(acc1, acc2))));
     }
 }

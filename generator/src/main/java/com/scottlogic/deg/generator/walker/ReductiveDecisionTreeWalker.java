@@ -67,13 +67,11 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         return fixNextField(tree.getRootNode(), initialState, fixFieldStrategy);
     }
 
-    private Stream<DataBag> fixNextField(ConstraintNode tree,
-                                         ReductiveState reductiveState,
-                                         FixFieldStrategy fixFieldStrategy) {
+    private Stream<DataBag> fixNextField(ConstraintNode tree, ReductiveState reductiveState, FixFieldStrategy fixFieldStrategy) {
         Field fieldToFix = fixFieldStrategy.getNextFieldToFix(reductiveState);
         Set<FieldSpec> nextFieldSpecs = reductiveFieldSpecBuilder.getDecisionFieldSpecs(tree, fieldToFix);
 
-        if (nextFieldSpecs.isEmpty()) {
+        if (nextFieldSpecs.isEmpty()){
             monitor.noValuesForField(reductiveState, fieldToFix);
             return Stream.empty();
         }
@@ -90,11 +88,11 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         ReductiveState reductiveState,
         FixFieldStrategy fixFieldStrategy,
         Field field,
-        DataBagValue fieldValue) {
+        DataBagValue fieldValue){
 
         Merged<ConstraintNode> reducedTree = treePruner.pruneConstraintNode(tree, field, fieldValue);
 
-        if (reducedTree.isContradictory()) {
+        if (reducedTree.isContradictory()){
             //yielding an empty stream will cause back-tracking
             this.monitor.unableToStepFurther(reductiveState);
             return Stream.empty();
@@ -113,7 +111,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         return fixNextField(reducedTree.get(), newReductiveState, fixFieldStrategy);
     }
 
-    private void visualise(ConstraintNode rootNode, ReductiveState reductiveState) {
+    private void visualise(ConstraintNode rootNode, ReductiveState reductiveState){
         try {
             iterationVisualiser.visualise(rootNode, reductiveState);
         } catch (IOException e) {
