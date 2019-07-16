@@ -39,8 +39,13 @@ public final class CsvInputStreamReader {
     public static DistributedSet<String> retrieveLines(InputStream stream) {
         List<CSVRecord> records = parse(stream);
         return new FrequencyDistributedSet<>(records.stream()
-            .map(record -> new WeightedElement<>(record.get(0), Float.parseFloat(record.get(1))))
+            .map(CsvInputStreamReader::createWeightedElement)
             .collect(Collectors.toSet()));
+    }
+
+    private static WeightedElement<String> createWeightedElement(CSVRecord record) {
+        final float weight = record.size() > 1 ? Float.parseFloat(record.get(1)) : 1.0F;
+        return new WeightedElement<>(record.get(0), weight);
     }
 
     private static List<CSVRecord> parse(InputStream stream) {
