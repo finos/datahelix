@@ -23,24 +23,30 @@ public class FrequencyDistributedSet<T> implements DistributedSet<T> {
 
     private static final FrequencyDistributedSet<?> EMPTY = new FrequencyDistributedSet<>(Collections.emptySet());
 
-    private final List<WeightedElement<T>> underlyingSet;
+    private final Set<WeightedElement<T>> underlyingWeights;
 
-    public FrequencyDistributedSet(final Set<WeightedElement<T>> underlyingSet) {
-        if (underlyingSet.isEmpty()) {
-            this.underlyingSet = new ArrayList<>(underlyingSet);
+    private List<WeightedElement<T>> underlyingCumulativeWeights;
+
+    public FrequencyDistributedSet(final Set<WeightedElement<T>> underlyingWeights) {
+        if (underlyingWeights.isEmpty()) {
+            this.underlyingWeights = underlyingWeights;
         } else {
-            if (underlyingSet.contains(null)) {
+            if (underlyingWeights.contains(null)) {
                 throw new IllegalArgumentException("DistributedSet should not contain null elements");
             }
 
-            double total = underlyingSet.stream()
-                .map(WeightedElement::weight)
-                .reduce(0.0D, Double::sum);
+            double total = total(underlyingWeights);
 
-            this.underlyingSet = underlyingSet.stream()
+            this.underlyingWeights = underlyingWeights.stream()
                 .map(holder -> new WeightedElement<>(holder.element(), holder.weight() / total))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
         }
+    }
+
+    public static <T> double total(final Set<WeightedElement<T>> set) {
+        return set.stream()
+            .map(WeightedElement::weight)
+            .reduce(0.0D, Double::sum);
     }
 
     public static <T> FrequencyDistributedSet<T> uniform(final Set<T> underlyingSet) {
@@ -50,6 +56,31 @@ public class FrequencyDistributedSet<T> implements DistributedSet<T> {
                 .collect(Collectors.toSet()));
     }
 
+    private List<WeightedElement<T>> cumulative() {
+        if (underlyingCumulativeWeights == null) {
+            underlyingCumulativeWeights = generateCumulative(underlyingWeights);
+        }
+        return underlyingCumulativeWeights;
+    }
+
+    private static <T> List<WeightedElement<T>> generateCumulative(Set<WeightedElement<T>> nonCumulative) {
+        List<WeightedElement<T>> cumulative = new LinkedList<>();
+        double runningTotal = 0.0D;
+        for (WeightedElement<T> holder : nonCumulative) {
+            runningTotal += holder.weight();
+            cumulative.add(new WeightedElement<>(holder.element(), runningTotal));
+        }
+
+        if (!cumulative.isEmpty()) {
+            int lastIndex = cumulative.size() - 1;
+            WeightedElement<T> last = cumulative.get(lastIndex);
+            cumulative.remove(lastIndex);
+            cumulative.add(new WeightedElement<>(last.element(), 1.0D));
+        }
+
+        return new ArrayList<>(cumulative);
+    }
+
     @SuppressWarnings("unchecked")
     public static <T> FrequencyDistributedSet<T> empty() {
         return (FrequencyDistributedSet<T>) EMPTY;
@@ -57,28 +88,26 @@ public class FrequencyDistributedSet<T> implements DistributedSet<T> {
 
     @Override
     public Set<T> set() {
-        return underlyingSet.stream().map(WeightedElement::element).collect(Collectors.toSet());
+        return underlyingWeights.stream().map(WeightedElement::element).collect(Collectors.toSet());
     }
 
     @Override
     public Set<WeightedElement<T>> distributedSet() {
-        return new HashSet<>(underlyingSet);
+        return new HashSet<>(underlyingWeights);
     }
 
     @Override
     public T pickFromDistribution(double random) {
-        //TODO: This implementation is O(n), could be O(log(n)) by using cumulative frequency and
-        // doing a binary search on the range.
-        for (WeightedElement<T> holder : underlyingSet) {
-            random = random - holder.weight();
-            if (random <= 0.0D) {
-                return holder.element();
-            }
+        List<WeightedElement<T>> cumulativeWeights = cumulative();
+
+        int index = Collections.binarySearch(cumulativeWeights,
+            new WeightedElement<>(null, 1.0D - random),
+            Comparator.comparingDouble(WeightedElement::weight));
+        if (index < 0) {
+            index = -(index) - 1;
         }
 
-        // Possibility of rounding errors, causing the sum of the weights to be <= 1.0F
-        List<WeightedElement<T>> list = new LinkedList<>(underlyingSet);
-        return list.get(list.size() - 1).element();
+        return cumulativeWeights.get(index).element();
     }
 
     @Override
@@ -86,18 +115,18 @@ public class FrequencyDistributedSet<T> implements DistributedSet<T> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FrequencyDistributedSet<?> that = (FrequencyDistributedSet<?>) o;
-        return Objects.equals(underlyingSet, that.underlyingSet);
+        return Objects.equals(underlyingWeights, that.underlyingWeights);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(underlyingSet);
+        return Objects.hash(underlyingWeights);
     }
 
     @Override
     public String toString() {
         return "FrequencyDistributedSet{" +
-            "underlyingSet=" + underlyingSet +
+            "underlyingWeights=" + underlyingWeights +
             '}';
     }
 }

@@ -56,4 +56,30 @@ class FrequencyDistributedSetTest {
 
         assertEquals(manualSet, uniformSet);
     }
+
+    private DistributedSet<String> prepareTwoElementSet() {
+        Set<WeightedElement<String>> holders = Stream.of("first", "second", "third", "fourth")
+            .map(e -> new WeightedElement<>(e, 1.0D))
+            .collect(Collectors.toSet());
+        return new FrequencyDistributedSet<>(holders);
+    }
+
+    @Test
+    public void testRandomPick() {
+        DistributedSet<String> set = prepareTwoElementSet();
+
+        String firstValue = set.pickFromDistribution(0.0D);
+        String otherFirstValue = set.pickFromDistribution(0.24D);
+        String secondValue = set.pickFromDistribution(0.25D);
+        String otherSecondValue = set.pickFromDistribution(0.49D);
+        String thirdValue = set.pickFromDistribution(0.5D);
+        String otherThirdValue = set.pickFromDistribution(0.74D);
+        String fourthValue = set.pickFromDistribution(0.75D);
+        String otherFourthValue = set.pickFromDistribution(0.99D);
+
+        assertEquals(firstValue, otherFirstValue);
+        assertEquals(secondValue, otherSecondValue);
+        assertEquals(thirdValue, otherThirdValue);
+        assertEquals(fourthValue, otherFourthValue);
+    }
 }
