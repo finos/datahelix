@@ -20,8 +20,6 @@ import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSourc
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.UpCastingIterator;
 
-import java.util.stream.Stream;
-
 public interface StringGenerator {
     StringGenerator intersect(StringGenerator stringGenerator);
     StringGenerator complement();
@@ -59,8 +57,7 @@ public interface StringGenerator {
         }
 
         @Override
-        public Stream<Object> generateInterestingValues() {
-            return underlyingGenerator.generateInterestingValues();
+        public Iterable<Object> generateInterestingValues() {
             return () -> new UpCastingIterator<>(
                 underlyingGenerator.generateInterestingValues().iterator());
         }

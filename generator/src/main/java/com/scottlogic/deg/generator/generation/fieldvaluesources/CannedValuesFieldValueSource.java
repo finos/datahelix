@@ -16,28 +16,24 @@
 
 package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
-import com.scottlogic.deg.generator.fieldspecs.whitelist.ElementFrequency;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyWhitelist;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.Whitelist;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.SupplierBasedIterator;
 
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 public class CannedValuesFieldValueSource implements FieldValueSource {
-    private final Whitelist<Object> allValues;
-    private final Whitelist<Object> interestingValues;
+    private final List<Object> allValues;
+    private final List<Object> interestingValues;
 
-    public CannedValuesFieldValueSource(Whitelist<Object> values) {
+    public CannedValuesFieldValueSource(List<Object> values) {
         this.allValues = values;
         this.interestingValues = values;
     }
 
-    public static FieldValueSource of(ElementFrequency<Object>... values) {
-        Set<ElementFrequency<Object>> set = Arrays.stream(values).collect(Collectors.toSet());
-        return new CannedValuesFieldValueSource(new FrequencyWhitelist<Object>(set));
+    public static FieldValueSource of(Object... values) {
+        return new CannedValuesFieldValueSource(Arrays.asList(values));
     }
 
     @Override
@@ -47,22 +43,25 @@ public class CannedValuesFieldValueSource implements FieldValueSource {
 
     @Override
     public long getValueCount() {
-        return allValues.set().size();
+        return this.allValues.size();
     }
 
     @Override
-    public Stream<Object> generateInterestingValues() {
-        return interestingValues.set().stream();
+    public Iterable<Object> generateInterestingValues() {
+        return this.interestingValues;
     }
 
     @Override
-    public Stream<Object> generateAllValues() {
-        return allValues.set().stream();
+    public Iterable<Object> generateAllValues() {
+        return this.allValues;
     }
 
     @Override
-    public Stream<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
-        return allValues.generate(randomNumberGenerator);
+    public Iterable<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
+        return () -> new SupplierBasedIterator<>(
+            () -> this.allValues.get(
+                randomNumberGenerator.nextInt(
+                    this.allValues.size())));
     }
 
     @Override

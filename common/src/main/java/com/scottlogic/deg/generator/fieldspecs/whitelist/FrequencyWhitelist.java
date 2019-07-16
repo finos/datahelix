@@ -1,12 +1,9 @@
 package com.scottlogic.deg.generator.fieldspecs.whitelist;
 
-import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
-
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class FrequencyWhitelist<T> implements Whitelist<T> {
 
@@ -56,23 +53,6 @@ public class FrequencyWhitelist<T> implements Whitelist<T> {
     @Override
     public Set<ElementFrequency<T>> distributedSet() {
         return underlyingSet;
-    }
-
-    @Override
-    public Stream<T> generate(RandomNumberGenerator source) {
-        float random = (float) source.nextDouble(0.0D, 1.0D);
-
-        return Stream.generate(() -> randomElement(random));
-    }
-
-    private T randomElement(float random) {
-        for (ElementFrequency<T> element : underlyingSet) {
-            random = random - element.frequency();
-            if (random <= 0) {
-                return element.element();
-            }
-        }
-        throw new IllegalArgumentException("Iterated all values of the whitelist without picking one.");
     }
 
     @Override
