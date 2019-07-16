@@ -16,24 +16,25 @@
 
 package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
+import com.scottlogic.deg.generator.fieldspecs.whitelist.ElementFrequency;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyWhitelist;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.Whitelist;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.SupplierBasedIterator;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class CannedValuesFieldValueSource implements FieldValueSource {
-    private final List<Object> allValues;
-    private final List<Object> interestingValues;
+    private final Whitelist<Object> allValues;
+    private final Whitelist<Object> interestingValues;
 
-    public CannedValuesFieldValueSource(List<Object> values) {
+    public CannedValuesFieldValueSource(Whitelist<Object> values) {
         this.allValues = values;
         this.interestingValues = values;
-    }
-
-    public static FieldValueSource of(Object... values) {
-        return new CannedValuesFieldValueSource(Arrays.asList(values));
     }
 
     @Override
@@ -43,25 +44,33 @@ public class CannedValuesFieldValueSource implements FieldValueSource {
 
     @Override
     public long getValueCount() {
-        return this.allValues.size();
+        return allValues.distributedSet().size();
     }
 
     @Override
     public Iterable<Object> generateInterestingValues() {
-        return this.interestingValues;
+        return interestingValues.set();
     }
 
     @Override
     public Iterable<Object> generateAllValues() {
-        return this.allValues;
+        return allValues.set();
     }
 
     @Override
     public Iterable<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
         return () -> new SupplierBasedIterator<>(
-            () -> this.allValues.get(
-                randomNumberGenerator.nextInt(
-                    this.allValues.size())));
+            () -> pickFromDistribution((float) randomNumberGenerator.nextDouble(0.0F, 1.0F)));
+    }
+
+    private Object pickFromDistribution(float random) {
+        for (ElementFrequency<Object> holder : allValues.distributedSet()) {
+            random = random - holder.frequency();
+            if (random <= 0.0F) {
+                return holder.element();
+            }
+        }
+        throw new IllegalStateException("Set of whitelist frequencies do not sum to 1.0F");
     }
 
     @Override
