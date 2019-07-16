@@ -28,7 +28,7 @@ public class TypeRestrictionsMerger {
         final TypeRestrictions merged = left.intersect(right);
 
         if (merged == null) {
-            return new MergeResult<>(DataTypeRestrictions.NO_TYPES_PERMITTED);
+            return MergeResult.unsuccessful();
         }
 
         return new MergeResult<>(merged);
