@@ -611,11 +611,6 @@ class FieldSpecTests {
         }
 
         @Override
-        public TypeRestrictions intersect(TypeRestrictions other) {
-            throw new UnsupportedOperationException("Not supported");
-        }
-
-        @Override
         public Set<IsOfTypeConstraint.Types> getAllowedTypes() {
             throw new UnsupportedOperationException("Not supported");
         }

@@ -22,8 +22,9 @@ import com.scottlogic.deg.generator.utils.SetUtils;
 import java.util.*;
 
 public class TypeRestrictions implements Restrictions {
-
     public static final TypeRestrictions ALL_TYPES_PERMITTED = new TypeRestrictions(Arrays.asList(IsOfTypeConstraint.Types.values()));
+
+    private final Set<IsOfTypeConstraint.Types> allowedTypes;
 
     public TypeRestrictions(Collection<IsOfTypeConstraint.Types> allowedTypes) {
         if (allowedTypes.isEmpty())
@@ -46,7 +47,6 @@ public class TypeRestrictions implements Restrictions {
         return new TypeRestrictions(allowedTypes);
     }
 
-    private final Set<IsOfTypeConstraint.Types> allowedTypes;
 
     public boolean isTypeAllowed(IsOfTypeConstraint.Types type){
         return allowedTypes.contains(type);
@@ -59,18 +59,6 @@ public class TypeRestrictions implements Restrictions {
         return String.format(
                 "Types: %s",
                 Objects.toString(allowedTypes));
-    }
-
-    public TypeRestrictions intersect(TypeRestrictions other) {
-        if (other == ALL_TYPES_PERMITTED)
-            return this;
-
-        Set<IsOfTypeConstraint.Types> intersection = SetUtils.intersect(allowedTypes, other.getAllowedTypes());
-
-        if (intersection.isEmpty())
-            return null;
-
-        return new TypeRestrictions(intersection);
     }
 
     public Set<IsOfTypeConstraint.Types> getAllowedTypes() {

@@ -75,47 +75,4 @@ class TypeRestrictionsTests {
         Assert.assertThat(result.getAllowedTypes(), empty());
     }
 
-    @Test
-    public void intersect_withAllPermittedTypes_shouldReturnSelf(){
-        Collection<IsOfTypeConstraint.Types> allowedTypes = new ArrayList<>();
-        allowedTypes.add(IsOfTypeConstraint.Types.STRING);
-        allowedTypes.add(IsOfTypeConstraint.Types.DATETIME);
-        TypeRestrictions self = new TypeRestrictions(allowedTypes);
-
-        TypeRestrictions actual = self.intersect(TypeRestrictions.ALL_TYPES_PERMITTED);
-
-        assertEquals(self, actual);
-    }
-
-    @Test
-    public void intersect_withNoPermittedTypes_shouldReturnNull(){
-        Collection<IsOfTypeConstraint.Types> allowedTypes = new ArrayList<>();
-        allowedTypes.add(IsOfTypeConstraint.Types.STRING);
-        allowedTypes.add(IsOfTypeConstraint.Types.DATETIME);
-        TypeRestrictions self = new TypeRestrictions(allowedTypes);
-
-        TypeRestrictions actual = self.intersect(new TypeRestrictions(Collections.EMPTY_LIST));
-
-        assertNull(actual);
-    }
-
-    @Test
-    public void intersect_withSomePermittedTypes_shouldReturnIntersection(){
-        Collection<IsOfTypeConstraint.Types> allowedTypes = new ArrayList<>();
-        allowedTypes.add(IsOfTypeConstraint.Types.STRING);
-        allowedTypes.add(IsOfTypeConstraint.Types.DATETIME);
-        TypeRestrictions self = new TypeRestrictions(allowedTypes);
-
-        Collection<IsOfTypeConstraint.Types> otherAllowedTypes = new ArrayList<>();
-        otherAllowedTypes.add(IsOfTypeConstraint.Types.NUMERIC);
-        otherAllowedTypes.add(IsOfTypeConstraint.Types.STRING);
-        TypeRestrictions other = new TypeRestrictions(otherAllowedTypes);
-
-        TypeRestrictions actual = self.intersect(other);
-
-        Collection<IsOfTypeConstraint.Types> expectedAllowedTypes = new ArrayList<>();
-        expectedAllowedTypes.add(IsOfTypeConstraint.Types.STRING);
-        TypeRestrictions expected = new TypeRestrictions(expectedAllowedTypes);
-        assertEquals(expected, actual);
-    }
 }
