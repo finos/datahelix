@@ -17,7 +17,7 @@ public class NullDistributedSet<T> implements DistributedSet<T> {
     }
 
     @Override
-    public T pickFromDistribution(double randomValue) {
+    public T pick(double randomValue) {
         return null;
     }
 }

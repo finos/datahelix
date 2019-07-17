@@ -17,13 +17,9 @@
 package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.SupplierBasedIterator;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Objects;
 
 public class CannedValuesFieldValueSource implements FieldValueSource {
@@ -62,7 +58,7 @@ public class CannedValuesFieldValueSource implements FieldValueSource {
     }
 
     private Object pickFromDistribution(double random) {
-        return allValues.pickFromDistribution(random);
+        return allValues.pick(random);
     }
 
     @Override

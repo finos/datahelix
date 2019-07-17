@@ -44,7 +44,7 @@ public final class CsvInputStreamReader {
     }
 
     private static WeightedElement<String> createWeightedElement(CSVRecord record) {
-        final double weight = record.size() > 1 ? Double.parseDouble(record.get(1)) : 1.0F;
+        final double weight = record.size() > 1 ? Double.parseDouble(record.get(1)) : 1.0D;
         return new WeightedElement<>(record.get(0), weight);
     }
 

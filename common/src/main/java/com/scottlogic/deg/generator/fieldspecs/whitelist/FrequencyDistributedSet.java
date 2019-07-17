@@ -97,7 +97,7 @@ public class FrequencyDistributedSet<T> implements DistributedSet<T> {
     }
 
     @Override
-    public T pickFromDistribution(double random) {
+    public T pick(double random) {
         List<WeightedElement<T>> cumulativeWeights = cumulative();
 
         int index = Collections.binarySearch(cumulativeWeights,
