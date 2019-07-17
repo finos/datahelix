@@ -107,7 +107,7 @@ public class FieldSpecFactory {
             return FieldSpec.Empty.withNotNull();
         }
 
-        return FieldSpec.mustBeNull();
+        return FieldSpec.NullOnly;
     }
 
     private FieldSpec construct(IsOfTypeConstraint constraint, boolean negate) {

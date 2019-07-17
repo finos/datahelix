@@ -46,7 +46,7 @@ class FieldSpecHelperTests {
 
         FieldSpec actual = fieldSpecHelper.getFieldSpecForValue(input);
 
-        FieldSpec expected = FieldSpec.mustBeNull();
+        FieldSpec expected = FieldSpec.NullOnly;
 
         assertEquals(actual, expected);
     }

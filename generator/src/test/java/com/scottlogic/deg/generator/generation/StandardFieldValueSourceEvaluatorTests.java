@@ -37,7 +37,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     @Test
     public void shouldReturnNullSourceOnlyWithMustBeNullRestrictions() {
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
-        FieldSpec fieldSpecMustBeNull = FieldSpec.mustBeNull();
+        FieldSpec fieldSpecMustBeNull = FieldSpec.NullOnly;
 
         List<FieldValueSource> sources = evaluator.getFieldValueSources(fieldSpecMustBeNull);
 

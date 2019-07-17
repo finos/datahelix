@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class RowSpecMergerTest {
     RowSpecMerger rowSpecMerger = new RowSpecMerger(new FieldSpecMerger());
 
-    FieldSpec isNull = FieldSpec.mustBeNull();
+    FieldSpec isNull = FieldSpec.NullOnly;
     FieldSpec notNull = FieldSpec.Empty.withNotNull().withTypeRestrictions(TypeRestrictions.ALL_TYPES_PERMITTED);
     Field A = new Field("A");
     Field B = new Field("B");

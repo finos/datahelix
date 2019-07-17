@@ -35,6 +35,7 @@ import java.util.stream.Collectors;
 public class FieldSpec {
     public static final FieldSpec Empty =
         new FieldSpec(null, new HeterogeneousTypeContainer<>(), true, null);
+    public static final FieldSpec NullOnly = Empty.withWhitelist(Collections.EMPTY_SET);
 
     private final boolean nullable;
     private final String formatting;
@@ -109,10 +110,6 @@ public class FieldSpec {
         return new FieldSpec(whitelist, restrictions, false, formatting);
     }
 
-    public static FieldSpec mustBeNull() {
-        return FieldSpec.Empty.withWhitelist(Collections.emptySet());
-    }
-
     public FieldSpec withDateTimeRestrictions(DateTimeRestrictions dateTimeRestrictions) {
         return withConstraint(DateTimeRestrictions.class, dateTimeRestrictions);
     }
@@ -131,7 +128,7 @@ public class FieldSpec {
         types.remove(type);
 
         if (types.isEmpty()){
-            return mustBeNull();
+            return NullOnly;
         }
 
         return withTypeRestrictions(new TypeRestrictions(types));

@@ -30,7 +30,7 @@ public class TypesRestrictionMergeOperation implements RestrictionMergeOperation
             right.getTypeRestrictions());
 
         if (!mergeResult.successful) {
-            return FieldSpec.Empty.withWhitelist(Collections.emptySet());
+            return FieldSpec.NullOnly;
         }
 
         return merging.withTypeRestrictions(mergeResult.restrictions);
