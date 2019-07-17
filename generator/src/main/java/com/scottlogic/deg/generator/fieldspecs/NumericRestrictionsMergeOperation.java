@@ -19,8 +19,6 @@ package com.scottlogic.deg.generator.fieldspecs;
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.restrictions.*;
 
-import java.util.Optional;
-
 import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.NUMERIC;
 
 public class NumericRestrictionsMergeOperation implements RestrictionMergeOperation {
@@ -33,7 +31,7 @@ public class NumericRestrictionsMergeOperation implements RestrictionMergeOperat
 
     @Override
     public FieldSpec applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merging) {
-        if (!merging.isTypeAllowed(NUMERIC)){
+        if (!merging.allowsRestrictionForType(NUMERIC)){
             return merging;
         }
 

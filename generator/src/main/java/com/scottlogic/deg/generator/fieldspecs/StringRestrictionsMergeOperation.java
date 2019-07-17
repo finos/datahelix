@@ -18,8 +18,6 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.restrictions.*;
 
-import java.util.Optional;
-
 import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.STRING;
 
 public class StringRestrictionsMergeOperation implements RestrictionMergeOperation {
@@ -27,7 +25,7 @@ public class StringRestrictionsMergeOperation implements RestrictionMergeOperati
 
     @Override
     public FieldSpec applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merging) {
-        if (!merging.isTypeAllowed(STRING)){
+        if (!merging.allowsRestrictionForType(STRING)){
             return merging;
         }
 

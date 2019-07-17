@@ -144,7 +144,10 @@ public class FieldSpec {
         return new FieldSpec(null, restrictions.put(type, restriction), nullable, formatting);
     }
 
-    public boolean isTypeAllowed(IsOfTypeConstraint.Types type){
+    public boolean allowsRestrictionForType(IsOfTypeConstraint.Types type){
+        if (whitelist != null){
+            return false;
+        }
         return getTypeRestrictions() == null || getTypeRestrictions().isTypeAllowed(type);
     }
 
