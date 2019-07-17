@@ -36,7 +36,7 @@ public class ProfileSchemaValidatorProvider implements Provider<ProfileSchemaVal
 
     @Override
     public ProfileSchemaValidator get() {
-        if (!profileConfigSource.isSchemaValidationEnabled()) {
+        if (profileConfigSource.isSchemaValidationDisabled()) {
             return new NoopProfileSchemaValidator();
         }
 
