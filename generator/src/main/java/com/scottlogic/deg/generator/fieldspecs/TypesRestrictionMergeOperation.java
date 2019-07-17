@@ -33,11 +33,7 @@ public class TypesRestrictionMergeOperation implements RestrictionMergeOperation
             return FieldSpec.Empty.withWhitelist(Collections.emptySet());
         }
 
-        TypeRestrictions restrictions = mergeResult.restrictions != null
-            ? mergeResult.restrictions
-            : TypeRestrictions.ALL_TYPES_PERMITTED;
-
-        return merging.withTypeRestrictions(restrictions);
+        return merging.withTypeRestrictions(mergeResult.restrictions);
     }
 }
 

@@ -26,7 +26,7 @@ import static com.scottlogic.deg.generator.restrictions.TypeRestrictions.ALL_TYP
 public class TypeRestrictionsMerger {
     public MergeResult<TypeRestrictions> merge(TypeRestrictions left, TypeRestrictions right) {
         if (allowsAll(left) && allowsAll(right))
-            return new MergeResult<>(null);
+            return new MergeResult<>(ALL_TYPES_PERMITTED);
         if (allowsAll(left))
             return new MergeResult<>(right);
         if (allowsAll(right))
