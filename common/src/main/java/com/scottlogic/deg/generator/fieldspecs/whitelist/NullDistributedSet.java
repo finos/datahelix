@@ -7,13 +7,8 @@ import java.util.stream.Collectors;
 public class NullDistributedSet<T> implements DistributedSet<T> {
 
     @Override
-    public Set<T> set() {
-        return Collections.singleton(null);
-    }
-
-    @Override
     public Set<WeightedElement<T>> distributedSet() {
-        return set().stream().map(e -> new WeightedElement<>(e, 1.0D)).collect(Collectors.toSet());
+        return Collections.singleton(new WeightedElement<>(null, 1.0D));
     }
 
     @Override

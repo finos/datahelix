@@ -19,6 +19,7 @@ package com.scottlogic.deg.common.profile.constraints.atomic;
 import com.scottlogic.deg.common.profile.Field;
 
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 
 import java.util.Objects;
 import java.util.Set;
@@ -32,12 +33,12 @@ public class IsInSetConstraint implements AtomicConstraint {
         this.field = field;
         this.legalValues = legalValues;
 
-        if (legalValues.set().isEmpty()) {
+        if (legalValues.distributedSet().isEmpty()) {
             throw new IllegalArgumentException("Cannot create an IsInSetConstraint for field '" +
                 field.name + "' with an empty set.");
         }
 
-        if (legalValues.set().contains(null)){
+        if (legalValues.set().stream().anyMatch(Objects::isNull)){
             throw new IllegalArgumentException("Cannot create an IsInSetConstraint for field '" +
                 field.name + "' with a set containing null.");
         }

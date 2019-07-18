@@ -18,10 +18,13 @@ package com.scottlogic.deg.generator.fieldspecs.whitelist;
 
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public interface DistributedSet<T> {
 
-    Set<T> set();
+    default Set<T> set() {
+        return distributedSet().stream().map(WeightedElement::element).collect(Collectors.toSet());
+    }
 
     Set<WeightedElement<T>> distributedSet();
 

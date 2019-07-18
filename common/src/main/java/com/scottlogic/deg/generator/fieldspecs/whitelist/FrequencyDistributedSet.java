@@ -87,11 +87,6 @@ public class FrequencyDistributedSet<T> implements DistributedSet<T> {
     }
 
     @Override
-    public Set<T> set() {
-        return underlyingWeights.stream().map(WeightedElement::element).collect(Collectors.toSet());
-    }
-
-    @Override
     public Set<WeightedElement<T>> distributedSet() {
         return new HashSet<>(underlyingWeights);
     }
