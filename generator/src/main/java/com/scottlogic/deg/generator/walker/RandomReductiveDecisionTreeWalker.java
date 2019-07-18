@@ -49,7 +49,12 @@ public class RandomReductiveDecisionTreeWalker implements DecisionTreeWalker {
     }
 
     private Optional<DataBag> getFirstRowSpecFromRandomisingIteration(DecisionTree tree) {
-        return underlyingWalker.walk(tree)
-            .findFirst();
+        try {
+            return underlyingWalker.walk(tree)
+                .findFirst();
+        } catch (RetryLimitReachedException ex) {
+            return Optional.empty();
+        }
+
     }
 }

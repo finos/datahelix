@@ -27,6 +27,7 @@ import com.scottlogic.deg.generator.generation.combinationstrategies.Combination
 import com.scottlogic.deg.generator.generation.databags.*;
 import com.scottlogic.deg.common.output.GeneratedObject;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
+import com.scottlogic.deg.generator.walker.RetryLimitReachedException;
 
 import java.util.stream.Stream;
 
