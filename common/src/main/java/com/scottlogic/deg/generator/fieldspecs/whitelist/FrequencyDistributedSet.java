@@ -28,31 +28,28 @@ public class FrequencyDistributedSet<T> implements DistributedSet<T> {
     private final List<WeightedElement<T>> underlyingCumulativeWeights;
 
     public FrequencyDistributedSet(final Set<WeightedElement<T>> underlyingWeights) {
-        if (underlyingWeights.isEmpty()) {
-            this.underlyingWeights = Collections.emptySet();
-            this.underlyingCumulativeWeights = generateCumulative(underlyingWeights);
-        } else {
-            if (underlyingWeights.contains(null)) {
-                throw new IllegalArgumentException("DistributedSet should not contain null elements");
-            }
-
-            double total = total(underlyingWeights);
-            Set<WeightedElement<T>> normalisedWeights = underlyingWeights.stream()
-                .map(holder -> new WeightedElement<>(holder.element(), holder.weight() / total))
-                .collect(Collectors.toSet());
-            this.underlyingWeights = normalisedWeights;
-            this.underlyingCumulativeWeights = generateCumulative(normalisedWeights);
+        if (underlyingWeights.contains(null)) {
+            throw new IllegalArgumentException("FrequencyDistributedSet should not contain null elements");
         }
+
+        Set<WeightedElement<T>> normalisedWeights = normalise(underlyingWeights);
+        this.underlyingWeights = Collections.unmodifiableSet(normalisedWeights);
+        this.underlyingCumulativeWeights = cumulative(normalisedWeights);
+    }
+
+    private static <T> Set<WeightedElement<T>> normalise(final Set<WeightedElement<T>> denormalised) {
+        final double total = denormalised.stream()
+            .map(WeightedElement::weight)
+            .reduce(0.0D, Double::sum);
+
+        // Stream (even with 0 elements) ensure a copy of the original set is returned
+        return denormalised.stream()
+            .map(holder -> new WeightedElement<>(holder.element(), holder.weight() / total))
+            .collect(Collectors.toSet());
     }
 
     public static <T> FrequencyDistributedSet<T> singleton(final T element) {
         return FrequencyDistributedSet.uniform(Collections.singleton(element));
-    }
-
-    public static <T> double total(final Set<WeightedElement<T>> set) {
-        return set.stream()
-            .map(WeightedElement::weight)
-            .reduce(0.0D, Double::sum);
     }
 
     public static <T> FrequencyDistributedSet<T> uniform(final Collection<T> underlyingSet) {
@@ -62,7 +59,7 @@ public class FrequencyDistributedSet<T> implements DistributedSet<T> {
                 .collect(Collectors.toSet()));
     }
 
-    private static <T> List<WeightedElement<T>> generateCumulative(Set<WeightedElement<T>> nonCumulative) {
+    private static <T> List<WeightedElement<T>> cumulative(Set<WeightedElement<T>> nonCumulative) {
         List<WeightedElement<T>> cumulative = new LinkedList<>();
         double runningTotal = 0.0D;
         for (WeightedElement<T> holder : nonCumulative) {
@@ -71,14 +68,17 @@ public class FrequencyDistributedSet<T> implements DistributedSet<T> {
         }
 
         if (!cumulative.isEmpty()) {
-            // Manually assure that the cumulative distribution reaches 1
-            int lastIndex = cumulative.size() - 1;
-            WeightedElement<T> last = cumulative.get(lastIndex);
-            cumulative.remove(lastIndex);
-            cumulative.add(new WeightedElement<>(last.element(), 1.0D));
+           replaceLastCumulativeElement(cumulative);
         }
 
         return new ArrayList<>(cumulative);
+    }
+
+    private static <T> void replaceLastCumulativeElement(List<WeightedElement<T>> cumulative) {
+        int lastIndex = cumulative.size() - 1;
+        WeightedElement<T> last = cumulative.get(lastIndex);
+        cumulative.remove(lastIndex);
+        cumulative.add(new WeightedElement<>(last.element(), 1.0D));
     }
 
     @SuppressWarnings("unchecked")
@@ -88,7 +88,7 @@ public class FrequencyDistributedSet<T> implements DistributedSet<T> {
 
     @Override
     public Set<WeightedElement<T>> distributedSet() {
-        return new HashSet<>(underlyingWeights);
+        return underlyingWeights;
     }
 
     @Override
