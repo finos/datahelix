@@ -154,7 +154,6 @@
           "enum": [
             "ofType",
             "equalTo",
-            "aValid",
             "formattedAs",
             "matchingRegex",
             "containingRegex",
@@ -169,7 +168,8 @@
             "after",
             "afterOrAt",
             "before",
-            "beforeOrAt"
+            "beforeOrAt",
+            "setFromFile"
           ]
         },
         "value": {}
@@ -218,7 +218,7 @@
           "then": {
             "properties": {
               "value": {
-                "enum": ["decimal", "integer", "string", "datetime"]
+                "enum": ["decimal", "integer", "string", "datetime","ISIN","SEDOL","CUSIP","RIC","firstname","lastname","fullname"]
               }
             }
           }
@@ -381,15 +381,14 @@
           "if": {
             "properties": {
               "is": {
-                "const": "aValid"
+                "const": "setFromFile"
               }
             }
           },
           "then": {
             "properties": {
               "value": {
-                "const": "ISIN",
-                "default": "ISIN"
+                "$ref": "#/definitions/string"
               }
             }
           }

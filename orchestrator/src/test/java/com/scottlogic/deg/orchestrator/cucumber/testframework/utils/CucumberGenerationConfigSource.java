@@ -92,8 +92,8 @@ public class CucumberGenerationConfigSource implements AllConfigSource, ViolateC
     }
 
     @Override
-    public boolean isSchemaValidationEnabled() {
-        return false;
+    public boolean isSchemaValidationDisabled() {
+        return true;
     }
 
     @Override

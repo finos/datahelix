@@ -66,7 +66,6 @@ These three sections are combined to form the [complete profile](ExampleProfile1
 * FAQs about constraints can be found [here](../FrequentlyAskedQuestions.md)
 * For a larger profile example see [here](../Schema.md)
 * Sometimes constraints can contradict one another, click [here](../../generator/docs/Contradictions.md) to find out what happens in these cases
-* To ensure your profile is able to generate data the validate option can be turned on, find out more [here](../../generator/docs/ProfileValidation.md)
 
 #
 
