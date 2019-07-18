@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvaluator {
-    private static final CannedValuesFieldValueSource nullOnlySource = setupNullOnlySource();
+    private static final CannedValuesFieldValueSource NULL_ONLY_SOURCE = setupNullOnlySource();
 
     private static CannedValuesFieldValueSource setupNullOnlySource() {
         return new CannedValuesFieldValueSource(new NullDistributedSet<>());
@@ -69,14 +69,14 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         }
 
         if (fieldSpec.isNullable()) {
-            validSources.add(nullOnlySource);
+            validSources.add(NULL_ONLY_SOURCE);
         }
 
         return validSources;
     }
 
     private List<FieldValueSource> addNullSource(List<FieldValueSource> setRestrictionSources) {
-        return Stream.concat(setRestrictionSources.stream(), Stream.of(nullOnlySource)).collect(Collectors.toList());
+        return Stream.concat(setRestrictionSources.stream(), Stream.of(NULL_ONLY_SOURCE)).collect(Collectors.toList());
     }
 
     private List<FieldValueSource> getSetRestrictionSources(DistributedSet<Object> whitelist) {

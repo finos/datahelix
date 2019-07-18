@@ -19,7 +19,6 @@ package com.scottlogic.deg.common.profile.constraints.atomic;
 import com.scottlogic.deg.common.profile.Field;
 
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 
 import java.util.Objects;
 import java.util.Set;
@@ -54,13 +53,13 @@ public class IsInSetConstraint implements AtomicConstraint {
 
         if (legalValues.set().size() <= limit) {
             return String.format("%s in [%s]", field.name,
-                legalValues.set().stream().map(x -> x.toString()).collect(Collectors.joining(", ")));
+                legalValues.set().stream().map(Object::toString).collect(Collectors.joining(", ")));
         }
 
 
         return String.format("%s in [%s, ...](%d values)",
             field.name,
-            legalValues.set().stream().limit(limit).map(x -> x.toString()).collect(Collectors.joining(", ")),
+            legalValues.set().stream().limit(limit).map(Object::toString).collect(Collectors.joining(", ")),
             legalValues.set().size());
     }
 
