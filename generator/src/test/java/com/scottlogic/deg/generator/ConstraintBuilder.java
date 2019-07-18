@@ -42,19 +42,14 @@ public class ConstraintBuilder {
 
     public ConstraintBuilder addInSetConstraint(String fieldname, List<Object> values) {
         constraints.add(new IsInSetConstraint(fields.get(fieldname),
-            new FrequencyDistributedSet<>(
-                values.stream()
-                    .map(value -> new WeightedElement<>(value, 1.0F))
-                    .collect(Collectors.toSet()))));
+            FrequencyDistributedSet.uniform(values)));
         return this;
     }
 
     public ConstraintBuilder addEqualToConstraint(String fieldname, Object value) {
         constraints.add(new IsInSetConstraint(
             fields.get(fieldname),
-            new FrequencyDistributedSet<>(
-                Collections.singleton(
-                    new WeightedElement<>(value, 1.0F)))));
+            FrequencyDistributedSet.singleton(value)));
         return this;
     }
 

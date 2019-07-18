@@ -32,7 +32,7 @@ public class IsInSetConstraintTests {
 
         Assertions.assertThrows(
             IllegalArgumentException.class,
-            () -> new IsInSetConstraint(field1, new FrequencyDistributedSet<>(Collections.emptySet())));
+            () -> new IsInSetConstraint(field1, FrequencyDistributedSet.empty()));
     }
 
     @Test
@@ -41,16 +41,14 @@ public class IsInSetConstraintTests {
 
         Assertions.assertThrows(
             IllegalArgumentException.class,
-            () -> new IsInSetConstraint(field1, new FrequencyDistributedSet<>(Collections.singleton(null))));
+            () -> new IsInSetConstraint(field1, FrequencyDistributedSet.singleton(null)));
     }
 
     @Test
     public void testConstraintThrowsNothingIfGivenAValidSet(){
         Field field1 = new Field("TestField");
         Assertions.assertDoesNotThrow(
-            () -> new IsInSetConstraint(field1, new FrequencyDistributedSet<>(
-                Collections.singleton(
-                    new WeightedElement<>("foo", 1.0D)))));
+            () -> new IsInSetConstraint(field1, FrequencyDistributedSet.singleton("foo")));
     }
 
 }

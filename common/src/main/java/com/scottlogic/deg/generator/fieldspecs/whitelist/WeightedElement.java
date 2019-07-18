@@ -27,6 +27,10 @@ import java.util.Objects;
  */
 public class WeightedElement<E> {
 
+    private static final double DEFAULT_WEIGHT = 1.0D;
+
+    private static final WeightedElement<?> NULL = withDefaultWeight(null);
+
     private final E element;
 
     private final double weight;
@@ -45,6 +49,15 @@ public class WeightedElement<E> {
 
     public double weight() {
         return weight;
+    }
+
+    public static <T> WeightedElement<T> withDefaultWeight(final T element) {
+        return new WeightedElement<>(element, DEFAULT_WEIGHT);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> WeightedElement<T> ofNull() {
+        return (WeightedElement<T>) NULL;
     }
 
     @Override

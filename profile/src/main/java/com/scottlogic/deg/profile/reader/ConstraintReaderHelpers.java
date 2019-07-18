@@ -43,7 +43,7 @@ public class ConstraintReaderHelpers {
         return getValidatedValue(dto, dto.value, requiredType);
     }
 
-    public static Set<WeightedElement<Object>> getValidatedValues(ConstraintDTO dto) {
+    public static Set<Object> getValidatedValues(ConstraintDTO dto) {
         if (dto.values == null) {
             throw new InvalidProfileException(String.format(
                 "Field [%s]: Couldn't recognise 'values' property, it must not contain 'null'",
@@ -63,9 +63,7 @@ public class ConstraintReaderHelpers {
             mappedValues.add(getValidatedValue(dto, value, Object.class));
         }
 
-        return mappedValues.stream()
-            .map(element -> new WeightedElement<>(element, 1.0F))
-            .collect(Collectors.toSet());
+        return mappedValues;
     }
 
     public static <T> Optional<T> tryGetValidatedValue(ConstraintDTO dto, Class<T> requiredType) {

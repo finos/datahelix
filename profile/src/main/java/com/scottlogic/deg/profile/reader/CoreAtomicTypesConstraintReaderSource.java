@@ -97,11 +97,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                 (dto, fields, rules) ->
                     new IsInSetConstraint(
                         fields.getByName(dto.field),
-                        new FrequencyDistributedSet<>(
-                        Collections.singleton(
-                            new WeightedElement<Object>(ConstraintReaderHelpers.getValidatedValue(dto), 1.0F)
-                        )
-                        )
+                        FrequencyDistributedSet.singleton(ConstraintReaderHelpers.getValidatedValue(dto))
                     )
             ),
             new ConstraintReaderMapEntry(
@@ -110,9 +106,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                 (dto, fields, rules) ->
                     new IsInSetConstraint(
                         fields.getByName(dto.field),
-                        new FrequencyDistributedSet<>(
-                        ConstraintReaderHelpers.getValidatedValues(dto)
-                        )
+                        FrequencyDistributedSet.uniform(ConstraintReaderHelpers.getValidatedValues(dto))
                     )
             ),
             new ConstraintReaderMapEntry(
@@ -331,10 +325,10 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                     DistributedSet<String> names = CsvInputStreamReader.retrieveLines(streamFromPath);
                     closeStream(streamFromPath);
 
-                   DistributedSet<Object> downcastedNames = new FrequencyDistributedSet<>(
+                    DistributedSet<Object> downcastedNames = new FrequencyDistributedSet<>(
                         names.distributedSet().stream()
-                        .map(holder -> new WeightedElement<>((Object) holder.element(), holder.weight()))
-                        .collect(Collectors.toSet()));
+                            .map(holder -> new WeightedElement<>((Object) holder.element(), holder.weight()))
+                            .collect(Collectors.toSet()));
                     Field field = fields.getByName(dto.field);
 
                     return new IsInSetConstraint(field, downcastedNames);

@@ -23,6 +23,7 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsNullConstraint;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
+import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -37,11 +38,7 @@ public class AtomicConstraintBuilder {
     }
 
     private DistributedSet<Object> whitelistOf(Object... values) {
-        return new FrequencyDistributedSet<>(
-            Arrays.stream(values)
-                .map(value -> new WeightedElement<>(value, 1.0F))
-                .collect(Collectors.toSet())
-        );
+        return FrequencyDistributedSet.uniform(SetUtils.setOf(values));
     }
 
     public ConstraintNodeBuilder isInSet(Object... legalValues) {

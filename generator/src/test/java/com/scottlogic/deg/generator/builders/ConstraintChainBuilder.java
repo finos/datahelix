@@ -24,6 +24,7 @@ import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalCons
 import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
+import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -106,9 +107,7 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
         return saveAndSet(
             new IsInSetConstraint(
                 barField,
-                new FrequencyDistributedSet<>(
-                    Collections.singleton(
-                        new WeightedElement<>(referenceValue, 1.0F)))));
+                FrequencyDistributedSet.singleton(referenceValue)));
     }
 
     public ConstraintChainBuilder<T> withOrConstraint(ConstraintChainBuilder<OrConstraint> orBuilder) {
@@ -126,9 +125,7 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
     public ConstraintChainBuilder<T> withInSetConstraint(Field field, Object[] legalArray) {
         return saveAndSet(new IsInSetConstraint(
             field,
-            new FrequencyDistributedSet<>(Stream.of(legalArray)
-                .map(element -> new WeightedElement<>(element, 1.0F))
-                .collect(Collectors.toSet()))));
+            FrequencyDistributedSet.uniform(SetUtils.setOf(legalArray))));
     }
 
     public ConstraintChainBuilder<T> withOfLengthConstraint(Field fooField, int length) {

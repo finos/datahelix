@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.generator.fieldspecs.whitelist;
 
+import com.scottlogic.deg.generator.utils.SetUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -47,11 +48,11 @@ class FrequencyDistributedSetTest {
         WeightedElement<String> second = new WeightedElement<>("second", uniformWeight);
         WeightedElement<String> third = new WeightedElement<>("third", uniformWeight);
 
-        Set<WeightedElement<String>> weightedElements = Stream.of(first, second, third).collect(Collectors.toSet());
+        Set<WeightedElement<String>> weightedElements = SetUtils.setOf(first, second, third);
 
         DistributedSet<String> manualSet = new FrequencyDistributedSet<>(weightedElements);
 
-        Set<String> elements = Stream.of("first", "second", "third").collect(Collectors.toSet());
+        Set<String> elements = SetUtils.setOf("first", "second", "third");
         DistributedSet<String> uniformSet = FrequencyDistributedSet.uniform(elements);
 
         assertEquals(manualSet, uniformSet);
@@ -59,7 +60,7 @@ class FrequencyDistributedSetTest {
 
     private DistributedSet<String> prepareTwoElementSet() {
         Set<WeightedElement<String>> holders = Stream.of("first", "second", "third", "fourth")
-            .map(e -> new WeightedElement<>(e, 1.0D))
+            .map(WeightedElement::withDefaultWeight)
             .collect(Collectors.toSet());
         return new FrequencyDistributedSet<>(holders);
     }
