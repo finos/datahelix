@@ -224,10 +224,16 @@ class AutomatonUtils {
 
         Automaton generatedAutomaton = bricsRegExp.toAutomaton();
         generatedAutomaton.expandSingleton();
-        generatedAutomaton =  BasicOperations.intersection(Automaton.makeCharRange('\u002c', '\u007e').repeat(), generatedAutomaton);
+        generatedAutomaton = restrictCharacterSet(generatedAutomaton, '\u0020', '\u007e');
 
         cache.put(regexStr, generatedAutomaton);
         return generatedAutomaton;
+    }
+
+    private static Automaton restrictCharacterSet(Automaton generatedAutomaton, char minChar, char maxChar) {
+        return BasicOperations.intersection(
+            Automaton.makeCharRange(minChar, maxChar).repeat(),
+            generatedAutomaton);
     }
 
     private static String escapeCharacters(String regex) {
