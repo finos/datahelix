@@ -55,7 +55,7 @@ class ReductiveDecisionTreeWalkerTests {
     private FixFieldStrategyFactory fixFieldStrategyFactory;
     private FieldSpecValueGenerator fieldSpecValueGenerator;
     private ReductiveTreePruner treePruner;
-    private ReductiveWalkerRetryChecker retryChecker = new ReductiveWalkerRetryChecker();
+    private ReductiveWalkerRetryChecker retryChecker = new ReductiveWalkerRetryChecker(100);
     private Field field1 = new Field("field1");
     private Field field2 = new Field("field2");
 

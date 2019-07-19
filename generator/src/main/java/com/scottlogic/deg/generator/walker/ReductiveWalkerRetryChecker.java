@@ -1,8 +1,13 @@
 package com.scottlogic.deg.generator.walker;
 
-class ReductiveWalkerRetryChecker {
+public class ReductiveWalkerRetryChecker {
     private int numRetriesSoFar = 0;
     private boolean guaranteedNotFullyContradictory = false;
+    private int retryLimit;
+
+    public ReductiveWalkerRetryChecker(int retryLimit) {
+        this.retryLimit = retryLimit;
+    }
 
     void setRetrySuccessful() {
         guaranteedNotFullyContradictory = true;
@@ -10,8 +15,7 @@ class ReductiveWalkerRetryChecker {
 
     void setRetryUnsuccessful() {
         numRetriesSoFar++;
-        int RETRY_LIMIT = 100;
-        if (numRetriesSoFar > RETRY_LIMIT && !guaranteedNotFullyContradictory) {
+        if (numRetriesSoFar > retryLimit && !guaranteedNotFullyContradictory) {
             throw new RetryLimitReachedException();
         }
     }
