@@ -16,10 +16,7 @@
 
 package com.scottlogic.deg.generator.generation.string;
 
-import dk.brics.automaton.Automaton;
-import dk.brics.automaton.RegExp;
-import dk.brics.automaton.State;
-import dk.brics.automaton.Transition;
+import dk.brics.automaton.*;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -209,8 +206,6 @@ class AutomatonUtils {
         return currentBest;
     }
 
-
-
     /**
      * Create an automaton and store its instance in the cache, keyed on the given regex
      * The cache will vary based on &lt;matchFullString&gt;.
@@ -229,6 +224,7 @@ class AutomatonUtils {
 
         Automaton generatedAutomaton = bricsRegExp.toAutomaton();
         generatedAutomaton.expandSingleton();
+        generatedAutomaton =  BasicOperations.intersection(Automaton.makeCharRange('\u002c', '\u007e').repeat(), generatedAutomaton);
 
         cache.put(regexStr, generatedAutomaton);
         return generatedAutomaton;
