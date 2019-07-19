@@ -17,16 +17,18 @@
 package com.scottlogic.deg.generator.generation.string;
 
 import dk.brics.automaton.Automaton;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.hamcrest.Matchers.matchesPattern;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AutomatonUtilsTests {
     
@@ -166,6 +168,36 @@ class AutomatonUtilsTests {
         String longestExample = AutomatonUtils.getShortestExample(automaton);
 
         assertThat(longestExample, equalTo(""));
+    }
+
+    @Test
+    public void createAutomaton_withValidString_shouldAcceptValidCharacters(){
+        String validRegex = ".*";
+        Map<String, Automaton> dummyCache = new HashMap<>();
+
+        Automaton automaton = AutomatonUtils.createAutomaton(validRegex, true, dummyCache);
+
+        assertTrue(automaton.run("a"));
+    }
+
+    @Test
+    public void createAutomaton_withValidString_shouldRejectInvalidCharacters(){
+        String validRegex = ".*";
+        Map<String, Automaton> dummyCache = new HashMap<>();
+
+        Automaton automaton = AutomatonUtils.createAutomaton(validRegex, true, dummyCache);
+
+        assertFalse(automaton.run("汉字"));
+    }
+
+    @Test
+    public void createAutomaton_withInValidString_shouldCreateEmptyAutomaton(){
+        String validRegex = "汉字*";
+        Map<String, Automaton> dummyCache = new HashMap<>();
+
+        Automaton automaton = AutomatonUtils.createAutomaton(validRegex, true, dummyCache);
+
+        assertTrue(automaton.isEmpty());
     }
 
     private static Automaton getAutomaton(String regex){
