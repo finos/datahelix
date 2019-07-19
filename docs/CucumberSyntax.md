@@ -14,7 +14,6 @@ Feature: the name of my feature
     Then the following data should be generated:
       | foo  |
       | 8    |
-      | null |
 ```
 
 More examples can be seen in the [generator cucumber features](https://github.com/finos/datahelix/tree/master/orchestrator/src/test/java/com/scottlogic/deg/orchestrator/cucumber)
