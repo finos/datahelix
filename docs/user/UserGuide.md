@@ -124,7 +124,7 @@ Note that granularity concerns which values are valid, not how they're presented
 
 ## Strings
 
-Strings are sequences of unicode characters with a maximum length of 1000 characters. Currently, only characters from the [Basic Multilingual Plane](https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane) (Plane 0) are supported.
+Strings are sequences of unicode characters with a maximum length of 1000 characters. Currently, only basic latin characters (unicode 002c - 007e) are supported.
 
 ## DateTime
 
