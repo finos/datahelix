@@ -54,10 +54,10 @@ public class CannedValuesFieldValueSource implements FieldValueSource {
     @Override
     public Iterable<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
         return () -> new SupplierBasedIterator<>(
-            () -> pickFromDistribution(randomNumberGenerator.nextDouble(0.0F, 1.0F)));
+            () -> pickFromDistribution(randomNumberGenerator));
     }
 
-    private Object pickFromDistribution(double random) {
+    private Object pickFromDistribution(RandomNumberGenerator random) {
         return allValues.pick(random);
     }
 

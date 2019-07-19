@@ -17,6 +17,8 @@
 package com.scottlogic.deg.generator.fieldspecs.whitelist;
 
 
+import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
+
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -28,5 +30,5 @@ public interface DistributedSet<T> {
 
     Set<WeightedElement<T>> distributedSet();
 
-    T pick (double randomValue);
+    T pick(RandomNumberGenerator randomValue);
 }

@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.generator.fieldspecs.whitelist;
 
+import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.SetUtils;
 import org.junit.jupiter.api.Test;
 
@@ -25,6 +26,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class FrequencyDistributedSetTest {
 
@@ -69,18 +72,24 @@ class FrequencyDistributedSetTest {
     public void testRandomPick() {
         DistributedSet<String> set = prepareTwoElementSet();
 
-        String firstValue = set.pick(0.0D);
-        String otherFirstValue = set.pick(0.24D);
-        String secondValue = set.pick(0.25D);
-        String otherSecondValue = set.pick(0.49D);
-        String thirdValue = set.pick(0.5D);
-        String otherThirdValue = set.pick(0.74D);
-        String fourthValue = set.pick(0.75D);
-        String otherFourthValue = set.pick(0.99D);
+        String firstValue = set.pick(mockOfRandom(0.0D));
+        String otherFirstValue = set.pick(mockOfRandom(0.24D));
+        String secondValue = set.pick(mockOfRandom(0.25D));
+        String otherSecondValue = set.pick(mockOfRandom(0.49D));
+        String thirdValue = set.pick(mockOfRandom(0.5D));
+        String otherThirdValue = set.pick(mockOfRandom(0.74D));
+        String fourthValue = set.pick(mockOfRandom(0.75D));
+        String otherFourthValue = set.pick(mockOfRandom(0.99D));
 
         assertEquals(firstValue, otherFirstValue);
         assertEquals(secondValue, otherSecondValue);
         assertEquals(thirdValue, otherThirdValue);
         assertEquals(fourthValue, otherFourthValue);
+    }
+
+    private static RandomNumberGenerator mockOfRandom(double value) {
+        RandomNumberGenerator generator = mock(RandomNumberGenerator.class);
+        when(generator.nextDouble(0.0D, 1.0D)).thenReturn(value);
+        return generator;
     }
 }

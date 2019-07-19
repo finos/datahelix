@@ -1,5 +1,7 @@
 package com.scottlogic.deg.generator.fieldspecs.whitelist;
 
+import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
+
 import java.util.Collections;
 import java.util.Set;
 
@@ -17,7 +19,7 @@ public class NullDistributedSet<T> implements DistributedSet<T> {
     }
 
     @Override
-    public T pick(double randomValue) {
+    public T pick(RandomNumberGenerator randomValue) {
         return null;
     }
 }

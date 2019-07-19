@@ -16,6 +16,8 @@
 
 package com.scottlogic.deg.generator.fieldspecs.whitelist;
 
+import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -92,8 +94,8 @@ public class FrequencyDistributedSet<T> implements DistributedSet<T> {
     }
 
     @Override
-    public T pick(double random) {
-        final int index = binarySearchForBucket(1.0D - random);
+    public T pick(RandomNumberGenerator random) {
+        final int index = binarySearchForBucket(1.0D - random.nextDouble(0.0D, 1.0D));
         return underlyingCumulativeWeights.get(index).element();
     }
 
