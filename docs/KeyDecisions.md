@@ -49,9 +49,9 @@ Should I be able to express the above, and if so what does it mean? Intuitive, w
 
 Both of these approaches seem more or less intuitive in different cases (for example, how should `equalTo` constraints be applied?). To resolve this problem, we currently require datetime expressions to be fully specified down to thousandths of milliseconds.
 
-## How should we generate characters above the Basic Unicode Plane?
+## How should we generate characters outside the basic latin character set?
 
-We currently only support generation of characters represented in range 0000-FFFF.
+We currently only support generation of characters represented in range 002c-007e.
 
 Either we can:
 1) Update the tool to reject any regular expressions that contain characters outside of this range.
