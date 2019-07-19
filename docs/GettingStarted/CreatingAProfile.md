@@ -21,7 +21,7 @@ interpret the profile fields and rules. The latest version is 0.1.
         }
     ]
 ```
-- **Rules** - an array of constraints defined with a description. Constraints reduce the data in each column from the [universal set](../../generator/docs/SetRestrictionAndGeneration.md)
+- **Rules** - an array of constraints defined with a description. Constraints reduce the data in each column from the [universal set](../../docs/SetRestrictionAndGeneration.md)
 to the desired range of values. They are formatted as JSON objects. There are three types of constraints: 
 
     - [Predicate Constraints](../ProfileDeveloperGuide.md#Predicate-constraints) - predicates that define any given value as being 
@@ -65,7 +65,7 @@ These three sections are combined to form the [complete profile](ExampleProfile1
 * More detail on key decisions to make while constructing a profile can be found [here](../KeyDecisions.md)
 * FAQs about constraints can be found [here](../FrequentlyAskedQuestions.md)
 * For a larger profile example see [here](../Schema.md)
-* Sometimes constraints can contradict one another, click [here](../../generator/docs/Contradictions.md) to find out what happens in these cases
+* Sometimes constraints can contradict one another, click [here](../../docs/Contradictions.md) to find out what happens in these cases
 
 #
 

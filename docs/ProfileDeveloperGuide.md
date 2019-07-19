@@ -82,7 +82,7 @@ Every rule is a named collection of *constraints*, which can be any of:
 
 (Predicate and formatting constraints are collectively referred to as **data constraints**)
 
-The decision of how to group constraints into rules is up to the user. At the extremes, there could be a separate rule for each constraint, or one rule containing every constraint. More usually, rules will represent collections of related constraints (eg, _"X is a non-null integer between 0 and 100"_ is a fine rule, comprising four constraints). How to group into rules becomes particularly important when [deliberate violation](../generator/docs/DeliberateViolation.md) is involved.
+The decision of how to group constraints into rules is up to the user. At the extremes, there could be a separate rule for each constraint, or one rule containing every constraint. More usually, rules will represent collections of related constraints (eg, _"X is a non-null integer between 0 and 100"_ is a fine rule, comprising four constraints). How to group into rules becomes particularly important when [deliberate violation](../docs/DeliberateViolation.md) is involved.
 
 ## Persistence
 
@@ -179,7 +179,7 @@ The only string considered to be an invalid name is the empty string.
 * The **universal set** contains all generatable values (`null`, any string, any date, any number, etc)
 * The **denotation** of a constraint is the subset of the universal set that it defines as valid
 
-See [set restriction and generation](/generator/docs/SetRestrictionAndGeneration.md) for an indepth explanation of how the constraints are merged and data generated from them.
+See [set restriction and generation](/docs/SetRestrictionAndGeneration.md) for an indepth explanation of how the constraints are merged and data generated from them.
 
 If no constraints are defined over a field, then it can accept any member of the universal set. Each constraint added to that field progressively limits the universal set.
 
@@ -427,7 +427,7 @@ Is satisfied if `field` has at least the [granularity](#DateTime-granularity) sp
 
 **Grammatical constraints** combine or modify other constraints. They are fully recursive; any grammatical constraint is a valid input to any other grammatical constraint.
 
-See [set restriction and generation](./../generator/docs/SetRestrictionAndGeneration.md) for an indepth explanation of how the constraints are merged and data generated from them.
+See [set restriction and generation](./../docs/SetRestrictionAndGeneration.md) for an indepth explanation of how the constraints are merged and data generated from them.
 
 ## `not`
 

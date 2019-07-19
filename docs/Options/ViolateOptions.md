@@ -8,7 +8,7 @@ Option switches are case-sensitive, arguments are case-insensitive
 * `--replace`
     * Overwrite/replace existing output files.
 * `--dont-violate` <epistemic constraints...>
-   * Choose specific [predicate constraints](../ProfileDeveloperGuide.md#Predicate-constraints) to [not violate](../../generator/docs/SelectiveViolation.md), e.g. "--dont-violate=ofType lessThan" will not violate ANY data type constraints and will also not violate ANY less than constraints.
+   * Choose specific [predicate constraints](../ProfileDeveloperGuide.md#Predicate-constraints) to [not violate](../../docs/SelectiveViolation.md), e.g. "--dont-violate=ofType lessThan" will not violate ANY data type constraints and will also not violate ANY less than constraints.
 * `-n <rows>` or `--max-rows <rows>`
    * Emit at most `<rows>` rows to the output file, if not specified will limit to 10,000,000 rows.
    * Mandatory in `RANDOM` mode.
