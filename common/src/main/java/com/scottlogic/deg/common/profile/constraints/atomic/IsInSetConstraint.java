@@ -37,7 +37,7 @@ public class IsInSetConstraint implements AtomicConstraint {
                 field.name + "' with an empty set.");
         }
 
-        if (legalValues.set().stream().anyMatch(Objects::isNull)){
+        if (legalValues.set().contains(null)) {
             throw new IllegalArgumentException("Cannot create an IsInSetConstraint for field '" +
                 field.name + "' with a set containing null.");
         }
