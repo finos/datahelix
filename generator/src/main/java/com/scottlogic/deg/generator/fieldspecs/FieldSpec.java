@@ -21,6 +21,7 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.T
 
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.common.util.HeterogeneousTypeContainer;
+import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -34,6 +35,7 @@ import java.util.stream.Collectors;
 public class FieldSpec {
     public static final FieldSpec Empty =
         new FieldSpec(null, new HeterogeneousTypeContainer<>(), true, null);
+    public static final FieldSpec NullOnly = Empty.withWhitelist(Collections.EMPTY_SET);
 
     private final boolean nullable;
     private final String formatting;
@@ -108,10 +110,6 @@ public class FieldSpec {
         return new FieldSpec(whitelist, restrictions, false, formatting);
     }
 
-    public static FieldSpec mustBeNull() {
-        return FieldSpec.Empty.withWhitelist(Collections.emptySet());
-    }
-
     public FieldSpec withDateTimeRestrictions(DateTimeRestrictions dateTimeRestrictions) {
         return withConstraint(DateTimeRestrictions.class, dateTimeRestrictions);
     }
@@ -120,18 +118,20 @@ public class FieldSpec {
         return new FieldSpec(whitelist, restrictions, nullable, formatting);
     }
 
-    public FieldSpec withoutType(IsOfTypeConstraint.Types type){
+    public FieldSpec withoutType(Types type){
         TypeRestrictions typeRestrictions = getTypeRestrictions();
-        if (typeRestrictions == null){
-            typeRestrictions = DataTypeRestrictions.ALL_TYPES_PERMITTED;
-        }
-        typeRestrictions = typeRestrictions.except(type);
 
-        if (typeRestrictions.getAllowedTypes().isEmpty()){
-            return mustBeNull();
+        Set<Types> types = typeRestrictions == null
+            ? new HashSet<>(Arrays.asList(Types.values()))
+            : new HashSet<>(typeRestrictions.getAllowedTypes());
+
+        types.remove(type);
+
+        if (types.isEmpty()){
+            return NullOnly;
         }
 
-        return withTypeRestrictions(typeRestrictions);
+        return withTypeRestrictions(new TypeRestrictions(types));
     }
 
     private <T extends Restrictions> FieldSpec withConstraint(Class<T> type, T restriction) {
@@ -141,7 +141,10 @@ public class FieldSpec {
         return new FieldSpec(null, restrictions.put(type, restriction), nullable, formatting);
     }
 
-    public boolean isTypeAllowed(IsOfTypeConstraint.Types type){
+    public boolean isTypeAllowed(Types type){
+        if (whitelist != null){
+            return false;
+        }
         return getTypeRestrictions() == null || getTypeRestrictions().isTypeAllowed(type);
     }
 

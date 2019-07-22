@@ -32,6 +32,6 @@ public class FieldSpecHelper {
     }
 
     private FieldSpec getNullRequiredFieldSpec() {
-        return FieldSpec.mustBeNull();
+        return FieldSpec.NullOnly;
     }
 }

@@ -321,7 +321,7 @@ class FieldSpecTests {
     @Test
     public void fieldSpecsWithUnequalNullRestrictionsShouldBeUnequal(){
         FieldSpec a = FieldSpec.Empty.withNotNull();
-        FieldSpec b = FieldSpec.mustBeNull();
+        FieldSpec b = FieldSpec.NullOnly;
 
         Assert.assertThat(a, not(equalTo(b)));
     }
@@ -422,9 +422,9 @@ class FieldSpecTests {
     }
 
     private static Stream<Arguments> permitsNotNullProvider() {
-        TypeRestrictions numericRestrictions = new AnyTypeRestriction().except(Types.NUMERIC);
-        TypeRestrictions stringRestrictions = new AnyTypeRestriction().except(Types.STRING);
-        TypeRestrictions dateTimeRestrictions = new AnyTypeRestriction().except(Types.DATETIME);
+        TypeRestrictions numericRestrictions = TypeRestrictions.createFromWhiteList(Types.DATETIME, Types.STRING);
+        TypeRestrictions stringRestrictions = TypeRestrictions.createFromWhiteList(Types.NUMERIC, Types.DATETIME);
+        TypeRestrictions dateTimeRestrictions = TypeRestrictions.createFromWhiteList(Types.STRING, Types.NUMERIC);
 
         Integer intValue = 1;
         String stringValue = "a string";
@@ -582,10 +582,11 @@ class FieldSpecTests {
         }
     }
 
-    private class MockTypeRestrictions implements TypeRestrictions{
+    private class MockTypeRestrictions extends TypeRestrictions {
         private final boolean isEqual;
 
         MockTypeRestrictions(boolean isEqual) {
+            super(Arrays.asList(Types.values()));
             this.isEqual = isEqual;
         }
 
@@ -600,17 +601,7 @@ class FieldSpecTests {
         }
 
         @Override
-        public TypeRestrictions except(IsOfTypeConstraint.Types... types) {
-            throw new UnsupportedOperationException("Not supported");
-        }
-
-        @Override
         public boolean isTypeAllowed(IsOfTypeConstraint.Types type) {
-            throw new UnsupportedOperationException("Not supported");
-        }
-
-        @Override
-        public TypeRestrictions intersect(TypeRestrictions other) {
             throw new UnsupportedOperationException("Not supported");
         }
 
