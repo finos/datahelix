@@ -111,6 +111,10 @@ public class FrequencyDistributedSet<T> implements DistributedSet<T> {
     private static int binarySearch(List<Double> weights, double target) {
         final int index = Collections.binarySearch(weights, target, Double::compare);
 
+        // We need to resolve the index.
+        // A positive index represents an exact match
+        // A negative index represents an inexact match
+        // See Collections.binarySearch javadoc for more information
         if (index < 0) {
             return (-index) - 1;
         } else {
