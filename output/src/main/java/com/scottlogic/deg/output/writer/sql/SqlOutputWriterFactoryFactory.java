@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.output.guice;
+package com.scottlogic.deg.output.writer.sql;
 
-public enum OutputFormat {
-    CSV,
-    JSON,
-    SQL
+public class SqlOutputWriterFactoryFactory {
+
+    public SqlOutputWriterFactory create(String tableName) {
+        return new SqlOutputWriterFactory(tableName);
+    }
 }

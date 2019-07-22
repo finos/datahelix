@@ -1,0 +1,97 @@
+{
+	"schemaVersion": "0.1",
+	"fields": [
+    { "name": "currency" },
+    { "name": "from_date" },
+    { "name": "to_date" },
+    { "name": "currency2" },
+    { "name": "from_date2" },
+    { "name": "to_date2" },
+		{ "name": "currency3" },
+    { "name": "from_date3" },
+    { "name": "to_date3" }
+	],
+	"rules": [
+		{
+      "rule": "Currency has 3 letters and a blacklist",
+      "constraints": [
+			  { "not": { "field": "currency", "is": "null" } },
+			  { "field": "currency", "is": "ofType", "value": "string" },
+        { "field": "currency", "is": "matchingRegex", "value": "[A-Z]{3}"},
+        { "not" : { "field": "currency", "is": "inSet", "values": [ "AAA", "BBB" ]} }
+      ]
+    },
+    {
+      "rule": "From date is nullable and is between 2 Jan 1753 and 1 Jan 1900",
+      "constraints": [
+        { "field": "from_date", "is": "ofType", "value": "datetime" },
+        { "field": "from_date", "is": "granularTo", "value": "days" },
+        { "field": "from_date", "is": "after", "value": { "date":  "1753-01-02T00:00:00.000"} },
+        { "field": "from_date", "is": "beforeOrAt", "value": { "date": "1900-01-01T00:00:00.000"} }
+      ]
+    },
+    {
+      "rule": "To date is nullable and is between 2 Jan 1900 and 1 Jul 2019",
+      "constraints": [
+        { "field": "to_date", "is": "ofType", "value": "datetime" },
+        { "field": "to_date", "is": "granularTo", "value": "days" },
+        { "field": "to_date", "is": "afterOrAt", "value": { "date": "1900-01-01T00:00:00.000"} },
+        { "field": "to_date", "is": "beforeOrAt", "value": { "date": "2019-07-01T00:00:00.000"} }
+		  ]
+    },
+    {
+      "rule": "Currency2 has 3 letters and a blacklist",
+      "constraints": [
+			  { "not": { "field": "currency2", "is": "null" } },
+			  { "field": "currency2", "is": "ofType", "value": "string" },
+        { "field": "currency2", "is": "matchingRegex", "value": "[A-Z]{3}"},
+        { "not" : { "field": "currency2", "is": "inSet", "values": [ "AAA", "BBB" ]} }
+      ]
+    },
+    {
+      "rule": "From date2 is nullable and is between 2 Jan 1753 and 1 Jan 1900",
+      "constraints": [
+        { "field": "from_date2", "is": "ofType", "value": "datetime" },
+        { "field": "from_date2", "is": "granularTo", "value": "days" },
+        { "field": "from_date2", "is": "after", "value": { "date":  "1753-01-02T00:00:00.000"} },
+        { "field": "from_date2", "is": "beforeOrAt", "value": { "date": "1900-01-01T00:00:00.000"} }
+      ]
+    },
+    {
+      "rule": "To date2 is nullable and is between 2 Jan 1900 and 1 Jul 2019",
+      "constraints": [
+        { "field": "to_date2", "is": "ofType", "value": "datetime" },
+        { "field": "to_date2", "is": "granularTo", "value": "days" },
+        { "field": "to_date2", "is": "afterOrAt", "value": { "date": "1900-01-01T00:00:00.000"} },
+        { "field": "to_date2", "is": "beforeOrAt", "value": { "date": "2019-07-01T00:00:00.000"} }
+		  ]
+    },
+    {
+      "rule": "Currency3 has 3 letters and a blacklist",
+      "constraints": [
+			  { "not": { "field": "currency3", "is": "null" } },
+			  { "field": "currency3", "is": "ofType", "value": "string" },
+        { "field": "currency3", "is": "matchingRegex", "value": "[A-Z]{3}"},
+        { "not" : { "field": "currency3", "is": "inSet", "values": [ "AAA", "BBB" ]} }
+      ]
+    },
+    {
+      "rule": "From date3 is nullable and is between 2 Jan 1753 and 1 Jan 1900",
+      "constraints": [
+        { "field": "from_date3", "is": "ofType", "value": "datetime" },
+        { "field": "from_date3", "is": "granularTo", "value": "days" },
+        { "field": "from_date3", "is": "after", "value": { "date":  "1753-01-02T00:00:00.000"} },
+        { "field": "from_date3", "is": "beforeOrAt", "value": { "date": "1900-01-01T00:00:00.000"} }
+      ]
+    },
+    {
+      "rule": "To date3 is nullable and is between 2 Jan 1900 and 1 Jul 2019",
+      "constraints": [
+        { "field": "to_date3", "is": "ofType", "value": "datetime" },
+        { "field": "to_date3", "is": "granularTo", "value": "days" },
+        { "field": "to_date3", "is": "afterOrAt", "value": { "date": "1900-01-01T00:00:00.000"} },
+        { "field": "to_date3", "is": "beforeOrAt", "value": { "date": "2019-07-01T00:00:00.000"} }
+		  ]
+    }
+	]
+}

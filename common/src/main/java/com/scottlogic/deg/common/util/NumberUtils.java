@@ -29,6 +29,11 @@ public class NumberUtils {
         return decimalValue.signum() == 0 || decimalValue.scale() <= 0 || decimalValue.stripTrailingZeros().scale() <= 0;
     }
 
+    // TODO AF - this method is being called when the type of value is known to be Number so
+    // should have a convert(Number) method that always returns NotNull BigDecimal
+    // - where have string can use tryParse (which should just rename to parse)
+    // - where have object then can call method like this but refactor it so uses the new method that takes Number
+    //   and just check for instance of Number
     public static BigDecimal coerceToBigDecimal( Object value ) {
         // stolen from http://www.java2s.com/Code/Java/Data-Type/ConvertObjecttoBigDecimal.htm
         if (value == null) {
@@ -52,7 +57,7 @@ public class NumberUtils {
         }
     }
 
-    public static BigDecimal tryParse(String value) {
+    private static BigDecimal tryParse(String value) {
         return (BigDecimal) bigDecimalFormatter.parse(value, new ParsePosition(0));
     }
 

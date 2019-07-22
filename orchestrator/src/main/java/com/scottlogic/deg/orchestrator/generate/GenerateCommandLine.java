@@ -139,6 +139,11 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     private OutputFormat outputFormat = CSV;
 
     @CommandLine.Option(
+        names = {"--output-table-name"},
+        description = "Name of database table to use if Output format is SQL. Defaults to DEFAULT_TABLE_NAME")
+    private String outputTableName = "DEFAULT_TABLE_NAME";
+
+    @CommandLine.Option(
         names = {"--allow-untyped-fields"},
         description = "Remove the need for each field to have at least one compliant typing constraint applied")
     private boolean allowUntypedFields = false;
@@ -229,7 +234,13 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     }
 
     @Override
+    public String getOutputTableName() {
+        return outputTableName;
+    }
+
+    @Override
     public String fromFilePath() {
         return fromFilePath;
     }
+
 }

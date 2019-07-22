@@ -21,6 +21,8 @@ import java.nio.file.Path;
 public interface OutputConfigSource {
     OutputFormat getOutputFormat();
     Path getOutputPath();
+    /** this is currently only used if outputFormat is SQL */
+    String getOutputTableName();
     boolean overwriteOutputFiles();
     boolean useStdOut();
 }

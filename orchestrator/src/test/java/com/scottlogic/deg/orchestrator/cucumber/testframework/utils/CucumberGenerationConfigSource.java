@@ -117,5 +117,10 @@ public class CucumberGenerationConfigSource implements AllConfigSource, ViolateC
     }
 
     @Override
+    public String getOutputTableName() {
+        return null;
+    }
+
+    @Override
     public String fromFilePath() { return null; }
 }

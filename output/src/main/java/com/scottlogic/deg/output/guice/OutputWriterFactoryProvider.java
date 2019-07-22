@@ -21,21 +21,26 @@ import com.google.inject.Provider;
 import com.scottlogic.deg.output.writer.OutputWriterFactory;
 import com.scottlogic.deg.output.writer.csv.CsvOutputWriterFactory;
 import com.scottlogic.deg.output.writer.json.JsonOutputWriterFactory;
+import com.scottlogic.deg.output.writer.sql.SqlOutputWriterFactory;
+import com.scottlogic.deg.output.writer.sql.SqlOutputWriterFactoryFactory;
 
 public class OutputWriterFactoryProvider implements Provider<OutputWriterFactory> {
     private final OutputConfigSource configSource;
     private final CsvOutputWriterFactory csvOutputWriterFactory;
     private final JsonOutputWriterFactory jsonOutputWriterFactory;
+    private final SqlOutputWriterFactory sqlOutputWriterFactory;
 
     @Inject
     public OutputWriterFactoryProvider(
         OutputConfigSource configSource,
         CsvOutputWriterFactory csvOutputWriterFactory,
-        JsonOutputWriterFactory jsonOutputWriterFactory)
+        JsonOutputWriterFactory jsonOutputWriterFactory,
+        SqlOutputWriterFactoryFactory sqlOutputWriterFactoryFactory)
     {
         this.configSource = configSource;
         this.csvOutputWriterFactory = csvOutputWriterFactory;
         this.jsonOutputWriterFactory = jsonOutputWriterFactory;
+        this.sqlOutputWriterFactory = sqlOutputWriterFactoryFactory.create(configSource.getOutputTableName());
     }
 
     @Override
@@ -45,6 +50,9 @@ public class OutputWriterFactoryProvider implements Provider<OutputWriterFactory
                 return csvOutputWriterFactory;
             case JSON:
                 return jsonOutputWriterFactory;
+            case SQL:
+                return sqlOutputWriterFactory;
+
         }
 
         throw new RuntimeException(String.format(

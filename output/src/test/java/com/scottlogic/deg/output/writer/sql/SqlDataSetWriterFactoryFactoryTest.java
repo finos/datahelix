@@ -14,10 +14,27 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.output.guice;
+package com.scottlogic.deg.output.writer.sql;
 
-public enum OutputFormat {
-    CSV,
-    JSON,
-    SQL
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.platform.runner.JUnitPlatform;
+import org.junit.runner.RunWith;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+@RunWith(JUnitPlatform.class)
+class SqlDataSetWriterFactoryFactoryTest {
+
+    private SqlOutputWriterFactoryFactory factory;
+
+    @BeforeEach
+    void setUp() {
+        factory = new SqlOutputWriterFactoryFactory();
+    }
+
+    @Test
+    void createWriter() {
+        assertNotNull(factory.create("T"));
+    }
 }
