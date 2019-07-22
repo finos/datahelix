@@ -16,24 +16,19 @@
 
 package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.SupplierBasedIterator;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 public class CannedValuesFieldValueSource implements FieldValueSource {
-    private final List<Object> allValues;
-    private final List<Object> interestingValues;
+    private final DistributedSet<Object> allValues;
+    private final DistributedSet<Object> interestingValues;
 
-    public CannedValuesFieldValueSource(List<Object> values) {
+    public CannedValuesFieldValueSource(DistributedSet<Object> values) {
         this.allValues = values;
         this.interestingValues = values;
-    }
-
-    public static FieldValueSource of(Object... values) {
-        return new CannedValuesFieldValueSource(Arrays.asList(values));
     }
 
     @Override
@@ -43,25 +38,27 @@ public class CannedValuesFieldValueSource implements FieldValueSource {
 
     @Override
     public long getValueCount() {
-        return this.allValues.size();
+        return allValues.distributedSet().size();
     }
 
     @Override
     public Iterable<Object> generateInterestingValues() {
-        return this.interestingValues;
+        return interestingValues.set();
     }
 
     @Override
     public Iterable<Object> generateAllValues() {
-        return this.allValues;
+        return allValues.set();
     }
 
     @Override
     public Iterable<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
         return () -> new SupplierBasedIterator<>(
-            () -> this.allValues.get(
-                randomNumberGenerator.nextInt(
-                    this.allValues.size())));
+            () -> pickFromDistribution(randomNumberGenerator));
+    }
+
+    private Object pickFromDistribution(RandomNumberGenerator random) {
+        return allValues.pickRandomly(random);
     }
 
     @Override

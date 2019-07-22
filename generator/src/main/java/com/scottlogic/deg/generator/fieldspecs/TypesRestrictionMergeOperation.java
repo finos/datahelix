@@ -16,9 +16,8 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.restrictions.*;
-
-import java.util.Collections;
 
 public class TypesRestrictionMergeOperation implements RestrictionMergeOperation {
     private static final TypeRestrictionsMerger typeRestrictionsMerger = new TypeRestrictionsMerger();
@@ -30,7 +29,7 @@ public class TypesRestrictionMergeOperation implements RestrictionMergeOperation
             right.getTypeRestrictions());
 
         if (!mergeResult.successful) {
-            return FieldSpec.NullOnly;
+            return FieldSpec.Empty.withWhitelist(FrequencyDistributedSet.empty());
         }
 
         return merging.withTypeRestrictions(mergeResult.restrictions);

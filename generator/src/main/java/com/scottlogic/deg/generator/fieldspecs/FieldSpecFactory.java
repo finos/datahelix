@@ -25,11 +25,9 @@ import com.scottlogic.deg.common.util.NumberUtils;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class FieldSpecFactory {
     public static final String RIC_REGEX = "[A-Z]{1,4}\\.[A-Z]{1,2}";
@@ -97,7 +95,7 @@ public class FieldSpecFactory {
     private FieldSpec construct(IsInSetConstraint constraint, boolean negate) {
         if (negate) {
             return FieldSpec.Empty.withBlacklistRestrictions(
-                new BlacklistRestrictions(constraint.legalValues)
+                new BlacklistRestrictions(constraint.legalValuesWithoutFrequency())
             );
         }
 

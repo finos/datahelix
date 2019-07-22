@@ -14,16 +14,21 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.common.profile.constraints.atomic;
+package com.scottlogic.deg.generator.fieldspecs.whitelist;
 
-import com.scottlogic.deg.common.profile.Field;
+
+import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
-public class IsInNameSetConstraint extends IsInSetConstraint {
+public interface DistributedSet<T> {
 
-    public IsInNameSetConstraint(Field field, Set<Object> legalValues) {
-        super(field, legalValues);
+    default Set<T> set() {
+        return distributedSet().stream().map(WeightedElement::element).collect(Collectors.toSet());
     }
 
+    Set<WeightedElement<T>> distributedSet();
+
+    T pickRandomly(RandomNumberGenerator randomValue);
 }
