@@ -28,7 +28,7 @@ public class FieldSpecHelper {
             return getNullRequiredFieldSpec();
         }
         return FieldSpec.Empty
-            .withWhitelist(FrequencyDistributedSet.uniform(Collections.singleton(fieldValue.getUnformattedValue())))
+            .withWhitelist(FrequencyDistributedSet.singleton(fieldValue.getUnformattedValue()))
             .withNotNull();
     }
 
