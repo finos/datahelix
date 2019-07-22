@@ -10,14 +10,10 @@
       "rule": "notnull",
       "constraints": [
         {
-          "allOf": [
-            {
-              "not": {
-                "field": "name",
-                "is": "null"
-              }
-            }
-          ]
+          "not": {
+            "field": "name",
+            "is": "null"
+          }
         }
       ]
     },

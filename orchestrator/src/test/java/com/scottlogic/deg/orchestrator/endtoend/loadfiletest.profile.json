@@ -1,23 +1,30 @@
 {
   "schemaVersion": "0.1",
   "fields": [
-    {"name": "foo"}
+    {
+      "name": "foo"
+    }
   ],
   "rules": [
     {
       "rule": "notnull",
       "constraints": [
-        { "allOf":
-        [
-          { "not": { "field": "foo", "is": "null" } }
-        ]
+        {
+          "not": {
+            "field": "foo",
+            "is": "null"
+          }
         }
       ]
     },
     {
       "rule": "file",
       "constraints": [
-        {"field": "foo", "is": "setFromFile", "value": "src/test/java/com/scottlogic/deg/orchestrator/endtoend/testfile.csv"}
+        {
+          "field": "foo",
+          "is": "setFromFile",
+          "value": "src/test/java/com/scottlogic/deg/orchestrator/endtoend/testfile.csv"
+        }
       ]
     }
   ]
