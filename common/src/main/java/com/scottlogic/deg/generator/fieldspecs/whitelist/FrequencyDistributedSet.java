@@ -94,18 +94,21 @@ public class FrequencyDistributedSet<T> implements DistributedSet<T> {
     }
 
     @Override
-    public T pick(RandomNumberGenerator random) {
-        final int index = binarySearchForBucket(1.0D - random.nextDouble(0.0D, 1.0D));
-        return underlyingCumulativeWeights.get(index).element();
+    public T pickRandomlyFromDistribution(RandomNumberGenerator random) {
+        return getElementFromCumulativeDistribution(1.0D - random.nextDouble(0.0D, 1.0D));
     }
 
-    private int binarySearchForBucket(final double value) {
+    private T getElementFromCumulativeDistribution(final double value) {
         List<Double> weights = underlyingCumulativeWeights.stream()
             .map(WeightedElement::weight)
             .collect(Collectors.toList());
 
-        final int index = Collections.binarySearch(weights, value, Double::compare);
+        final int index = convertBinarySearchIndex(Collections.binarySearch(weights, value, Double::compare));
 
+        return underlyingCumulativeWeights.get(index).element();
+    }
+
+    private static int convertBinarySearchIndex(int index) {
         if (index < 0) {
             return (-index) - 1;
         } else {
