@@ -25,7 +25,7 @@ public class StringRestrictionsMergeOperation implements RestrictionMergeOperati
 
     @Override
     public FieldSpec applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merging) {
-        if (!merging.allowsRestrictionForType(STRING)){
+        if (!merging.isTypeAllowed(STRING)){
             return merging;
         }
 

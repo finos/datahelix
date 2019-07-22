@@ -16,8 +16,10 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.common.util.NumberUtils;
 
@@ -111,12 +113,10 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec construct(IsOfTypeConstraint constraint, boolean negate) {
-        List<IsOfTypeConstraint.Types> types;
+        List<Types> types;
         if (negate) {
-            types = Arrays.stream(
-                IsOfTypeConstraint.Types.values())
-                .filter(type -> !type.equals(constraint.requiredType))
-                .collect(Collectors.toList());
+            types = Lists.newArrayList(Types.values());
+            types.remove(constraint.requiredType);
         } else {
             types = Collections.singletonList(constraint.requiredType);
         }

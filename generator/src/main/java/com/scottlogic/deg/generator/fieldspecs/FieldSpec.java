@@ -118,7 +118,7 @@ public class FieldSpec {
         return new FieldSpec(whitelist, restrictions, nullable, formatting);
     }
 
-    public FieldSpec withoutType(IsOfTypeConstraint.Types type){
+    public FieldSpec withoutType(Types type){
         TypeRestrictions typeRestrictions = getTypeRestrictions();
 
         Set<Types> types = typeRestrictions == null
@@ -141,7 +141,7 @@ public class FieldSpec {
         return new FieldSpec(null, restrictions.put(type, restriction), nullable, formatting);
     }
 
-    public boolean allowsRestrictionForType(IsOfTypeConstraint.Types type){
+    public boolean isTypeAllowed(Types type){
         if (whitelist != null){
             return false;
         }

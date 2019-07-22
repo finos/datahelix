@@ -31,7 +31,7 @@ public class DateTimeRestrictionsMergeOperation implements RestrictionMergeOpera
 
     @Override
     public FieldSpec applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merging) {
-        if (!merging.allowsRestrictionForType(DATETIME)){
+        if (!merging.isTypeAllowed(DATETIME)){
             return merging;
         }
 

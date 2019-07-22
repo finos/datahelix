@@ -31,7 +31,7 @@ public class NumericRestrictionsMergeOperation implements RestrictionMergeOperat
 
     @Override
     public FieldSpec applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merging) {
-        if (!merging.allowsRestrictionForType(NUMERIC)){
+        if (!merging.isTypeAllowed(NUMERIC)){
             return merging;
         }
 
