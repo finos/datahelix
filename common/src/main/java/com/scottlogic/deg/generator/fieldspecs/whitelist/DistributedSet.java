@@ -30,5 +30,5 @@ public interface DistributedSet<T> {
 
     Set<WeightedElement<T>> distributedSet();
 
-    T pickRandomlyFromDistribution(RandomNumberGenerator randomValue);
+    T pickRandomly(RandomNumberGenerator randomValue);
 }

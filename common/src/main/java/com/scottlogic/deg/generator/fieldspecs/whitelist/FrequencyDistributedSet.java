@@ -94,7 +94,7 @@ public class FrequencyDistributedSet<T> implements DistributedSet<T> {
     }
 
     @Override
-    public T pickRandomlyFromDistribution(RandomNumberGenerator random) {
+    public T pickRandomly(RandomNumberGenerator random) {
         return getElementFromCumulativeDistribution(1.0D - random.nextDouble(0.0D, 1.0D));
     }
 

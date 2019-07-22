@@ -72,14 +72,14 @@ class FrequencyDistributedSetTest {
     public void testRandomPick() {
         DistributedSet<String> set = prepareTwoElementSet();
 
-        String firstValue = set.pickRandomlyFromDistribution(mockOfRandom(0.0D));
-        String otherFirstValue = set.pickRandomlyFromDistribution(mockOfRandom(0.24D));
-        String secondValue = set.pickRandomlyFromDistribution(mockOfRandom(0.25D));
-        String otherSecondValue = set.pickRandomlyFromDistribution(mockOfRandom(0.49D));
-        String thirdValue = set.pickRandomlyFromDistribution(mockOfRandom(0.5D));
-        String otherThirdValue = set.pickRandomlyFromDistribution(mockOfRandom(0.74D));
-        String fourthValue = set.pickRandomlyFromDistribution(mockOfRandom(0.75D));
-        String otherFourthValue = set.pickRandomlyFromDistribution(mockOfRandom(0.99D));
+        String firstValue = set.pickRandomly(mockOfRandom(0.0D));
+        String otherFirstValue = set.pickRandomly(mockOfRandom(0.24D));
+        String secondValue = set.pickRandomly(mockOfRandom(0.25D));
+        String otherSecondValue = set.pickRandomly(mockOfRandom(0.49D));
+        String thirdValue = set.pickRandomly(mockOfRandom(0.5D));
+        String otherThirdValue = set.pickRandomly(mockOfRandom(0.74D));
+        String fourthValue = set.pickRandomly(mockOfRandom(0.75D));
+        String otherFourthValue = set.pickRandomly(mockOfRandom(0.99D));
 
         assertEquals(firstValue, otherFirstValue);
         assertEquals(secondValue, otherSecondValue);
