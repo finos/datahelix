@@ -146,10 +146,10 @@ Feature: User can specify that a value is equalTo a required value
       | <value> |
     Examples:
       | type | value |
-      | "integer"  | 1 |
-      | "string"   | "test" |
+      | "integer"  | 1                        |
+      | "string"   | "test"                   |
       | "datetime" | 2000-01-01T00:00:00.001Z |
-      | "decimal"  | 1.1 |
+      | "decimal"  | 1.1                      |
 
 
   Scenario Outline: 'EqualTo' should contradict with incorrect type <type>
@@ -175,9 +175,9 @@ Feature: User can specify that a value is equalTo a required value
       | <value> |
     Examples:
       | operator | value |
-      | of length 1         | "a"  |
-      | longer than 1       | "ab" |
-      | shorter than 1      | ""   |
+      | of length 1             | "a"   |
+      | longer than 1           | "ab"  |
+      | shorter than 1          | ""    |
       | matching regex /[a]{3}/ | "aaa" |
 
       | greater than 1              | 2   |
@@ -186,11 +186,11 @@ Feature: User can specify that a value is equalTo a required value
       | less than or equal to 1     | 1   |
       | granular to 0.1             | 1.2 |
 
-      | after 2018-01-01T00:00:00.000Z | 2019-01-01T00:00:00.000Z |
-      | before 2020-01-01T00:00:00.000Z | 2019-01-01T00:00:00.000Z |
-      | after or at 2019-01-01T00:00:00.000Z | 2019-01-01T00:00:00.000Z |
+      | after 2018-01-01T00:00:00.000Z        | 2019-01-01T00:00:00.000Z |
+      | before 2020-01-01T00:00:00.000Z       | 2019-01-01T00:00:00.000Z |
+      | after or at 2019-01-01T00:00:00.000Z  | 2019-01-01T00:00:00.000Z |
       | before or at 2019-01-01T00:00:00.000Z | 2019-01-01T00:00:00.000Z |
-      | granular to "seconds" | 2019-01-01T00:00:01.000Z |
+      | granular to "seconds"                 | 2019-01-01T00:00:01.000Z |
 
   Scenario Outline: 'EqualTo' alongside a contradicting <operator> should produce no data
     Given there is a field foo
@@ -204,17 +204,17 @@ Feature: User can specify that a value is equalTo a required value
       | shorter than 2 | "abc" |
       | matching regex /[a]{3}/ | "BBB" |
 
-      | greater than 2              | 1   |
-      | less than 2                 | 2   |
+      | greater than 2              | 1    |
+      | less than 2                 | 2    |
       | greater than or equal to 2  | 1    |
       | less than or equal to 2     | 3    |
       | granular to 0.1             | 1.23 |
 
-      | after 2020-01-01T00:00:00.000Z | 2019-01-01T00:00:00.000Z |
-      | before 2018-01-01T00:00:00.000Z | 2019-01-01T00:00:00.000Z |
-      | after or at 2020-01-01T00:00:00.000Z | 2019-01-01T00:00:00.000Z |
+      | after 2020-01-01T00:00:00.000Z        | 2019-01-01T00:00:00.000Z |
+      | before 2018-01-01T00:00:00.000Z       | 2019-01-01T00:00:00.000Z |
+      | after or at 2020-01-01T00:00:00.000Z  | 2019-01-01T00:00:00.000Z |
       | before or at 2018-01-01T00:00:00.000Z | 2019-01-01T00:00:00.000Z |
-      | granular to "minutes" | 2019-01-01T00:00:01.000Z |
+      | granular to "minutes"                 | 2019-01-01T00:00:01.000Z |
 
 ### Max String Length ###
 
