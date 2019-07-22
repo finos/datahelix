@@ -3,22 +3,19 @@ package com.scottlogic.deg.generator.fieldspecs;
 import com.google.common.collect.ImmutableMap;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.generator.restrictions.AnyTypeRestriction;
+import com.scottlogic.deg.generator.restrictions.TypeRestrictions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Optional;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RowSpecMergerTest {
     RowSpecMerger rowSpecMerger = new RowSpecMerger(new FieldSpecMerger());
 
-    FieldSpec isNull = FieldSpec.mustBeNull();
-    FieldSpec notNull = FieldSpec.Empty.withNotNull().withTypeRestrictions(new AnyTypeRestriction());
+    FieldSpec isNull = FieldSpec.NullOnly;
+    FieldSpec notNull = FieldSpec.Empty.withNotNull().withTypeRestrictions(TypeRestrictions.ALL_TYPES_PERMITTED);
     Field A = new Field("A");
     Field B = new Field("B");
     ProfileFields fields = new ProfileFields(Arrays.asList(A, B));

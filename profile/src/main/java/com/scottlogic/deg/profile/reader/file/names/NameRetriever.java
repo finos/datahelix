@@ -17,13 +17,15 @@
 package com.scottlogic.deg.profile.reader.file.names;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.profile.reader.file.CsvInputStreamReader;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes.*;
 
@@ -33,19 +35,28 @@ public final class NameRetriever {
         throw new UnsupportedOperationException("No static class instantiation");
     }
 
-    public static Set<Object> loadNamesFromFile(NameConstraintTypes configuration) {
+    public static DistributedSet<Object> loadNamesFromFile(NameConstraintTypes configuration) {
         if (configuration == FULL) {
-            return new HashSet<>(combineFirstWithLastNames(
+            return downcastToObject(combineFirstWithLastNames(
                 generateNamesFromSingleFile(FIRST.getFilePath()),
                 generateNamesFromSingleFile(LAST.getFilePath())));
         } else {
-            return new HashSet<>(generateNamesFromSingleFile(configuration.getFilePath()));
+            return downcastToObject(generateNamesFromSingleFile(configuration.getFilePath()));
         }
     }
 
-    private static Set<String> generateNamesFromSingleFile(String source) {
+    private static <T> DistributedSet<Object> downcastToObject(DistributedSet<T> higher) {
+        return new FrequencyDistributedSet<>(
+            higher.distributedSet().stream()
+                .map(holder -> new WeightedElement<Object>(holder.element(), holder.weight()))
+                .collect(Collectors.toSet()));
+    }
+
+    ;
+
+    private static DistributedSet<String> generateNamesFromSingleFile(String source) {
         InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(source);
-        Set<String> result = CsvInputStreamReader.retrieveLines(stream);
+        DistributedSet<String> result = CsvInputStreamReader.retrieveLines(stream);
         try {
             stream.close();
         } catch (IOException e) {
@@ -54,14 +65,20 @@ public final class NameRetriever {
         return result;
     }
 
-    private static Set<String> combineFirstWithLastNames(Set<String> firstNames, Set<String> lastNames) {
-        Set<String> names = new HashSet<>();
-        for (String first : firstNames) {
-            for (String last : lastNames) {
-                names.add(String.format("%s %s", first, last));
-            }
-        }
-        return names;
+    private static DistributedSet<String> combineFirstWithLastNames(DistributedSet<String> firstNames,
+                                                                    DistributedSet<String> lastNames) {
+        return new FrequencyDistributedSet<>(firstNames.distributedSet().stream()
+            .flatMap(
+                first -> lastNames.distributedSet().stream()
+                    .map(last -> mergeFrequencies(first, last))
+            ).collect(Collectors.toSet()));
+    }
+
+    private static WeightedElement<String> mergeFrequencies(WeightedElement<String> first,
+                                                            WeightedElement<String> last) {
+        String name = String.format("%s %s", first.element(), last.element());
+        double frequency = first.weight() + last.weight();
+        return new WeightedElement<>(name, frequency);
     }
 
 }

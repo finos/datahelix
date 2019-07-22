@@ -20,6 +20,6 @@ import java.io.File;
 
 public interface ProfileConfigSource {
     File getProfileFile();
-    boolean isSchemaValidationEnabled();
+    boolean isSchemaValidationDisabled();
     String fromFilePath();
 }

@@ -34,7 +34,7 @@
                       "anyOf": [
                         {
                           "field": "field1",
-                          "is": "aValid",
+                          "is": "ofType",
                           "value": "ISIN"
                         },
                         {
@@ -86,7 +86,7 @@
                                         },
                                         {
                                           "field": "field1",
-                                          "is": "aValid",
+                                          "is": "ofType",
                                           "value": "ISIN"
                                         },
                                         {
@@ -144,7 +144,7 @@
                                         },
                                         {
                                           "field": "field1",
-                                          "is": "aValid",
+                                          "is": "ofType",
                                           "value": "ISIN"
                                         },
                                         {
@@ -206,7 +206,7 @@
                                 },
                                 {
                                   "field": "field1",
-                                  "is": "aValid",
+                                  "is": "ofType",
                                   "value": "ISIN"
                                 },
                                 {
@@ -264,7 +264,7 @@
                                 },
                                 {
                                   "field": "field1",
-                                  "is": "aValid",
+                                  "is": "ofType",
                                   "value": "ISIN"
                                 },
                                 {

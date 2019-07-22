@@ -23,6 +23,8 @@ import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.common.profile.RuleInformation;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagGenerator;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
@@ -95,35 +97,39 @@ class CartesianProductDecisionTreeWalkerTests {
                     new ConditionalConstraint(
                         new IsInSetConstraint(
                             country,
-                            Collections.singleton("US")
+                            new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>("US", 1.0F)))
                         ),
                         new IsInSetConstraint(
                             city,
-                            new HashSet<>(Arrays.asList("New York", "Washington DC"))
-                        )))),
+                            new FrequencyDistributedSet<>(new HashSet<>(Arrays.asList(
+                                new WeightedElement<>("New York", 1.0F),
+                                new WeightedElement<>("Washington DC", 1.0F)))
+                        ))))),
             new Rule(
                 rule("GB country constrains city"),
                 Collections.singletonList(
                     new ConditionalConstraint(
                         new IsInSetConstraint(
                             country,
-                            Collections.singleton("GB")
+                            new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>("GB", 1.0F)))
                         ),
                         new IsInSetConstraint(
                             city,
-                            new HashSet<>(Arrays.asList("Bristol", "London"))
-                        )))),
+                            new FrequencyDistributedSet<>(new HashSet<>(Arrays.asList(
+                                new WeightedElement<>("Bristol", 1.0F),
+                                new WeightedElement<>("London", 1.0F)))
+                        ))))),
             new Rule(
                 rule("US country constrains currency"),
                 Collections.singletonList(
                     new ConditionalConstraint(
                         new IsInSetConstraint(
                             country,
-                            Collections.singleton("US")
+                            new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>("US", 1.0F)))
                         ),
                         new IsInSetConstraint(
                             currency,
-                            Collections.singleton("USD")
+                            new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>("USD", 1.0F)))
                         )))),
             new Rule(
                 rule("GB country constrains currency"),
@@ -131,11 +137,11 @@ class CartesianProductDecisionTreeWalkerTests {
                     new ConditionalConstraint(
                         new IsInSetConstraint(
                             country,
-                            Collections.singleton("GB")
+                            new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>("GB", 1.0F)))
                         ),
                         new IsInSetConstraint(
                             currency,
-                            Collections.singleton("GBP")
+                            new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>("GBP", 1.0F)))
                         )))));
 
         Profile profile = new Profile(fields, dummyRules);

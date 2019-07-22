@@ -16,21 +16,32 @@
 
 package com.scottlogic.deg.generator.restrictions;
 
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
+import com.scottlogic.deg.generator.utils.SetUtils;
+
+import java.util.Set;
+
+import static com.scottlogic.deg.generator.restrictions.TypeRestrictions.ALL_TYPES_PERMITTED;
+
 public class TypeRestrictionsMerger {
     public MergeResult<TypeRestrictions> merge(TypeRestrictions left, TypeRestrictions right) {
-        if (left == null && right == null)
-            return new MergeResult<>(null);
-        if (left == null)
+        if (allowsAll(left) && allowsAll(right))
+            return new MergeResult<>(ALL_TYPES_PERMITTED);
+        if (allowsAll(left))
             return new MergeResult<>(right);
-        if (right == null)
+        if (allowsAll(right))
             return new MergeResult<>(left);
 
-        final TypeRestrictions merged = left.intersect(right);
+        Set<IsOfTypeConstraint.Types> intersection = SetUtils.intersect(left.getAllowedTypes(), right.getAllowedTypes());
 
-        if (merged == null) {
-            return new MergeResult<>(DataTypeRestrictions.NO_TYPES_PERMITTED);
+        if (intersection.isEmpty()) {
+            return MergeResult.unsuccessful();
         }
 
-        return new MergeResult<>(merged);
+        return new MergeResult<>(new TypeRestrictions(intersection));
+    }
+
+    private boolean allowsAll(TypeRestrictions restriction) {
+        return restriction == null || restriction == ALL_TYPES_PERMITTED;
     }
 }

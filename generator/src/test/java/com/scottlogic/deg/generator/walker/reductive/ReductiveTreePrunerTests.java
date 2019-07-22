@@ -21,6 +21,8 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsLessThanConstantCo
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.*;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
@@ -31,6 +33,7 @@ import java.util.*;
 import static com.scottlogic.deg.generator.builders.ConstraintNodeBuilder.*;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -61,7 +64,7 @@ class ReductiveTreePrunerTests {
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList(10, 20));
         ConstraintNode tree = new TreeConstraintNode(new IsLessThanConstantConstraint(field, 5));
         FieldSpec inputFieldSpec = notNull.withWhitelist(
-            (inputWhitelist));
+            (FrequencyDistributedSet.uniform(inputWhitelist)));
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
@@ -80,7 +83,7 @@ class ReductiveTreePrunerTests {
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList(1, 2));
         ConstraintNode tree = new TreeConstraintNode(new IsLessThanConstantConstraint(field, 5));
         FieldSpec inputFieldSpec = FieldSpec.Empty.withWhitelist(
-            (inputWhitelist));
+            (FrequencyDistributedSet.uniform(inputWhitelist)));
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
@@ -104,7 +107,7 @@ class ReductiveTreePrunerTests {
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("c"));
         FieldSpec inputFieldSpec = notNull.withWhitelist(
-            (inputWhitelist));
+            (FrequencyDistributedSet.uniform(inputWhitelist)));
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
@@ -126,9 +129,8 @@ class ReductiveTreePrunerTests {
                     constraintNode().where(field).isInSet("a"),
                     constraintNode().where(field).isInSet("b"))
                 .build();
-        Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("a", "b"));
-        FieldSpec inputFieldSpec = notNull.withWhitelist(
-            (inputWhitelist));
+        DistributedSet<Object> inputWhitelist = FrequencyDistributedSet.uniform(new HashSet<>(Arrays.asList("a", "b")));
+        FieldSpec inputFieldSpec = notNull.withWhitelist((inputWhitelist));
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
@@ -152,7 +154,7 @@ class ReductiveTreePrunerTests {
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("a"));
         FieldSpec inputFieldSpec = notNull.withWhitelist(
-            (inputWhitelist));
+            (FrequencyDistributedSet.uniform(inputWhitelist)));
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
@@ -179,7 +181,7 @@ class ReductiveTreePrunerTests {
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("a"));
         FieldSpec inputFieldSpec = notNull.withWhitelist(
-            (inputWhitelist));
+            (FrequencyDistributedSet.uniform(inputWhitelist)));
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
@@ -207,7 +209,7 @@ class ReductiveTreePrunerTests {
 
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("a", "b"));
         FieldSpec inputFieldSpec = notNull.withWhitelist(
-            (inputWhitelist));
+            (FrequencyDistributedSet.uniform(inputWhitelist)));
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
@@ -239,7 +241,7 @@ class ReductiveTreePrunerTests {
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("valid"));
         FieldSpec inputFieldSpec = notNull.withWhitelist(
-            (inputWhitelist));
+            (FrequencyDistributedSet.uniform(inputWhitelist)));
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
@@ -269,7 +271,7 @@ class ReductiveTreePrunerTests {
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("valid"));
         FieldSpec inputFieldSpec = notNull.withWhitelist(
-            (inputWhitelist));
+            (FrequencyDistributedSet.uniform(inputWhitelist)));
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
@@ -281,7 +283,7 @@ class ReductiveTreePrunerTests {
             .where(unrelatedField).isInSet("unrelated1")
             .where(unrelatedField).isInSet("unrelated2")
             .build();
-        assertThat(actual, sameBeanAs(expected));
+        assertEquals(actual.getAtomicConstraints(), expected.getAtomicConstraints());
     }
 
     // Only one layer has contradiction -> prunes correctly
@@ -300,7 +302,7 @@ class ReductiveTreePrunerTests {
                 .build();
         Set<Object> inputWhitelist = Collections.singleton("valid");
         FieldSpec inputFieldSpec = notNull.withWhitelist(
-            (inputWhitelist));
+            (FrequencyDistributedSet.uniform(inputWhitelist)));
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
@@ -333,7 +335,7 @@ class ReductiveTreePrunerTests {
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("valid"));
         FieldSpec inputFieldSpec = notNull.withWhitelist(
-            (inputWhitelist));
+            (FrequencyDistributedSet.uniform(inputWhitelist)));
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
@@ -348,7 +350,7 @@ class ReductiveTreePrunerTests {
                     .where(unrelatedField).isInSet("unrelated1")
                     .where(unrelatedField).isInSet("unrelated2"))
             .build();
-        assertThat(actual, sameBeanAs(expected));
+        assertEquals(actual.getAtomicConstraints(), expected.getAtomicConstraints());
     }
 
     // Both layers contradict -> returns invalid tree
@@ -367,7 +369,7 @@ class ReductiveTreePrunerTests {
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("valid"));
         FieldSpec inputFieldSpec = notNull.withWhitelist(
-            (inputWhitelist));
+            (FrequencyDistributedSet.uniform(inputWhitelist)));
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
@@ -395,7 +397,7 @@ class ReductiveTreePrunerTests {
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("valid"));
         FieldSpec inputFieldSpec = notNull.withWhitelist(
-            (inputWhitelist));
+            (FrequencyDistributedSet.uniform(inputWhitelist)));
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 

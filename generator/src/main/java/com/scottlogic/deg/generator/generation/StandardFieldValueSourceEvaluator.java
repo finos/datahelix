@@ -18,6 +18,9 @@ package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.NullDistributedSet;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.*;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.DateTimeFieldValueSource;
 import com.scottlogic.deg.generator.generation.string.RegexStringGenerator;
@@ -29,11 +32,15 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvaluator {
-    private static final CannedValuesFieldValueSource nullOnlySource = new CannedValuesFieldValueSource(Collections.singletonList(null));
+    private static final CannedValuesFieldValueSource NULL_ONLY_SOURCE = setupNullOnlySource();
+
+    private static CannedValuesFieldValueSource setupNullOnlySource() {
+        return new CannedValuesFieldValueSource(new NullDistributedSet<>());
+    }
 
     public List<FieldValueSource> getFieldValueSources(FieldSpec fieldSpec){
 
-        if (fieldSpec.getWhitelist() != null && fieldSpec.getWhitelist() != null) {
+        if (fieldSpec.getWhitelist() != null) {
 
             List<FieldValueSource> setRestrictionSources =
                 getSetRestrictionSources(fieldSpec.getWhitelist());
@@ -47,7 +54,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
 
         TypeRestrictions typeRestrictions = fieldSpec.getTypeRestrictions() != null
             ? fieldSpec.getTypeRestrictions()
-            : DataTypeRestrictions.ALL_TYPES_PERMITTED;
+            : TypeRestrictions.ALL_TYPES_PERMITTED;
 
         if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.NUMERIC)) {
             validSources.add(getNumericSource(fieldSpec));
@@ -62,24 +69,23 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         }
 
         if (fieldSpec.isNullable()) {
-            validSources.add(nullOnlySource);
+            validSources.add(NULL_ONLY_SOURCE);
         }
 
         return validSources;
     }
 
     private List<FieldValueSource> addNullSource(List<FieldValueSource> setRestrictionSources) {
-        return Stream.concat(setRestrictionSources.stream(), Stream.of(nullOnlySource)).collect(Collectors.toList());
+        return Stream.concat(setRestrictionSources.stream(), Stream.of(NULL_ONLY_SOURCE)).collect(Collectors.toList());
     }
 
-    private List<FieldValueSource> getSetRestrictionSources(Set<Object> whitelist) {
-        if (whitelist.isEmpty()){
+    private List<FieldValueSource> getSetRestrictionSources(DistributedSet<Object> whitelist) {
+        if (whitelist.distributedSet().isEmpty()){
             return Collections.emptyList();
         }
 
         return Collections.singletonList(
-            new CannedValuesFieldValueSource(
-                new ArrayList<>(whitelist)));
+            new CannedValuesFieldValueSource(whitelist));
     }
 
     private FieldValueSource getNumericSource(FieldSpec fieldSpec) {
@@ -103,7 +109,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         StringRestrictions stringRestrictions = fieldSpec.getStringRestrictions();
 
         if (stringRestrictions == null) {
-            return new CannedValuesFieldValueSource(Collections.emptyList());
+            return new CannedValuesFieldValueSource(FrequencyDistributedSet.empty());
         }
 
         Set<Object> blacklist = getBlacklist(fieldSpec);

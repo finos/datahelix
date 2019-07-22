@@ -86,9 +86,9 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     boolean overwriteOutputFiles = false;
 
     @CommandLine.Option(
-        names = { "--enable-schema-validation" },
-        description = "Enables schema validation")
-    boolean enableSchemaValidation = false;
+        names = { "--disable-schema-validation" },
+        description = "Disables schema validation")
+    boolean disableSchemaValidation = false;
 
     @CommandLine.Option(names = {"-t", "--generation-type"},
         description = "Determines the type of data generation performed (${COMPLETION-CANDIDATES})",
@@ -164,8 +164,8 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     }
 
     @Override
-    public boolean isSchemaValidationEnabled() {
-        return this.enableSchemaValidation;
+    public boolean isSchemaValidationDisabled() {
+        return this.disableSchemaValidation;
     }
 
     @Override

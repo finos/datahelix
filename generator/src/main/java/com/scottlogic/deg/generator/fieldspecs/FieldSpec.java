@@ -19,8 +19,11 @@ package com.scottlogic.deg.generator.fieldspecs;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
 
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.common.util.HeterogeneousTypeContainer;
+import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -34,14 +37,15 @@ import java.util.stream.Collectors;
 public class FieldSpec {
     public static final FieldSpec Empty =
         new FieldSpec(null, new HeterogeneousTypeContainer<>(), true, null);
+    public static final FieldSpec NullOnly = Empty.withWhitelist(FrequencyDistributedSet.empty());
 
     private final boolean nullable;
     private final String formatting;
-    private final Set<Object> whitelist;
+    private final DistributedSet<Object> whitelist;
     private final HeterogeneousTypeContainer<Restrictions> restrictions;
 
     private FieldSpec(
-        Set<Object> whitelist,
+        DistributedSet<Object> whitelist,
         HeterogeneousTypeContainer<Restrictions> restrictions,
         boolean nullable,
         String formatting
@@ -56,7 +60,7 @@ public class FieldSpec {
         return nullable;
     }
 
-    public Set<Object> getWhitelist() {
+    public DistributedSet<Object> getWhitelist() {
         return whitelist;
     }
 
@@ -84,7 +88,7 @@ public class FieldSpec {
         return formatting;
     }
 
-    public FieldSpec withWhitelist(Set<Object> whitelist) {
+    public FieldSpec withWhitelist(DistributedSet<Object> whitelist) {
         return new FieldSpec(whitelist, new HeterogeneousTypeContainer<>(), nullable, formatting);
     }
 
@@ -108,10 +112,6 @@ public class FieldSpec {
         return new FieldSpec(whitelist, restrictions, false, formatting);
     }
 
-    public static FieldSpec mustBeNull() {
-        return FieldSpec.Empty.withWhitelist(Collections.emptySet());
-    }
-
     public FieldSpec withDateTimeRestrictions(DateTimeRestrictions dateTimeRestrictions) {
         return withConstraint(DateTimeRestrictions.class, dateTimeRestrictions);
     }
@@ -120,18 +120,20 @@ public class FieldSpec {
         return new FieldSpec(whitelist, restrictions, nullable, formatting);
     }
 
-    public FieldSpec withoutType(IsOfTypeConstraint.Types type){
+    public FieldSpec withoutType(Types type){
         TypeRestrictions typeRestrictions = getTypeRestrictions();
-        if (typeRestrictions == null){
-            typeRestrictions = DataTypeRestrictions.ALL_TYPES_PERMITTED;
-        }
-        typeRestrictions = typeRestrictions.except(type);
 
-        if (typeRestrictions.getAllowedTypes().isEmpty()){
-            return mustBeNull();
+        Set<Types> types = typeRestrictions == null
+            ? new HashSet<>(Arrays.asList(Types.values()))
+            : new HashSet<>(typeRestrictions.getAllowedTypes());
+
+        types.remove(type);
+
+        if (types.isEmpty()){
+            return NullOnly;
         }
 
-        return withTypeRestrictions(typeRestrictions);
+        return withTypeRestrictions(new TypeRestrictions(types));
     }
 
     private <T extends Restrictions> FieldSpec withConstraint(Class<T> type, T restriction) {
@@ -141,14 +143,17 @@ public class FieldSpec {
         return new FieldSpec(null, restrictions.put(type, restriction), nullable, formatting);
     }
 
-    public boolean isTypeAllowed(IsOfTypeConstraint.Types type){
+    public boolean isTypeAllowed(Types type){
+        if (whitelist != null){
+            return false;
+        }
         return getTypeRestrictions() == null || getTypeRestrictions().isTypeAllowed(type);
     }
 
     @Override
     public String toString() {
         if (whitelist != null) {
-            if (whitelist.isEmpty()) {
+            if (whitelist.set().isEmpty()) {
                 return "Null only";
             }
             return (nullable ? "" : "Not Null") + String.format("IN %s", whitelist);
