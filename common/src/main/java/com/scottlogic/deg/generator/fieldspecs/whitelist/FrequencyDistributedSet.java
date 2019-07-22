@@ -103,12 +103,14 @@ public class FrequencyDistributedSet<T> implements DistributedSet<T> {
             .map(WeightedElement::weight)
             .collect(Collectors.toList());
 
-        final int index = convertBinarySearchIndex(Collections.binarySearch(weights, value, Double::compare));
+        final int index = binarySearch(weights, value);
 
         return underlyingCumulativeWeights.get(index).element();
     }
 
-    private static int convertBinarySearchIndex(int index) {
+    private static int binarySearch(List<Double> weights, double target) {
+        final int index = Collections.binarySearch(weights, target, Double::compare);
+
         if (index < 0) {
             return (-index) - 1;
         } else {
