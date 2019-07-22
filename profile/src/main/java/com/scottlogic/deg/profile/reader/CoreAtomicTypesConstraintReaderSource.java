@@ -97,7 +97,7 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                 (dto, fields, rules) ->
                     new EqualToConstraint(
                         fields.getByName(dto.field),
-                        FrequencyDistributedSet.singleton(ConstraintReaderHelpers.getValidatedValue(dto))
+                        ConstraintReaderHelpers.getValidatedValue(dto)
                     )
             ),
             new ConstraintReaderMapEntry(
