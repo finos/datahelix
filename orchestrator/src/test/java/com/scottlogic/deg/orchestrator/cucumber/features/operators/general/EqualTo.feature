@@ -257,22 +257,101 @@ Feature: User can specify that a value is equalTo a required value
     And foo is of type "ISIN"
     Then no data is created
 
-  Scenario: Equal to something that is not a valid ISIN combined with an ISIN constraint should only generate null
+  Scenario: Equal to something that is not a valid ISIN combined with an ISIN constraint should generate no data
     Given there is a field foo
     And foo is equal to "aa"
     And foo is of type "ISIN"
     Then no data is created
 
-  Scenario: equalTo should interact with sedol
+  Scenario: 'EqualTo' something that is not a valid SEDOL combined with a non-SEDOL constraint should be successful
     Given there is a field foo
+    And foo is equal to "a"
+    And foo is anything but of type "SEDOL"
+    Then the following data should be generated:
+      | foo  |
+      | "a"  |
+
+  Scenario: Not equal to something that is not a valid SEDOL combined with a SEDOL constraint should generate SEDOLs
+    Given there is a field foo
+    And foo is anything but equal to "a"
     And foo is of type "SEDOL"
-    And foo is equal to "0263494"
+    And foo is in set:
+      | "a"       |
+      | "0263494" |
+      | "0263497" |
     Then the following data should be generated:
       | foo       |
+      | null      |
       | "0263494" |
 
-  Scenario: Equal to something that is not a valid SEDOL because its check digit is wrong combined with a SEDOL constraint should not genreate data
+  Scenario: Equal to something that is not a valid SEDOL because its check digit is wrong combined with a SEDOL constraint should generate no data
     Given there is a field foo
     And foo is equal to "0263497"
     And foo is of type "SEDOL"
     Then no data is created
+
+  Scenario: Equal to something that is not a valid SEDOL combined with a SEDOL constraint should generate no data
+    Given there is a field foo
+    And foo is equal to "aa"
+    And foo is of type "SEDOL"
+    Then no data is created
+
+  Scenario: Equal to a valid SEDOL combined with a non-SEDOL constraint should generate no data
+    Given there is a field foo
+    And foo is equal to "0263494"
+    And foo is anything but of type "SEDOL"
+    Then no data is created
+
+  Scenario: Equal to something that is not a valid CUSIP combined with a non-CUSIP constraint should be successful
+    Given there is a field foo
+    And foo is equal to "a"
+    And foo is anything but of type "CUSIP"
+    Then the following data should be generated:
+      | foo  |
+      | "a"  |
+
+  Scenario: Not equal to something that is not a valid CUSIP combined with a CUSIP constraint should generate valid CUSIPs
+    Given there is a field foo
+    And foo is anything but equal to "a"
+    And foo is of type "CUSIP"
+    And foo is in set:
+      | "a"         |
+      | "38259P508" |
+      | "38259P502" |
+    Then the following data should be generated:
+      | foo         |
+      | null        |
+      | "38259P508" |
+
+  Scenario: Equal to something that is not a valid CUSIP because its check digit is wrong combined with a CUSIP constraint should generate no data
+    Given there is a field foo
+    And foo is equal to "38259P502"
+    And foo is of type "CUSIP"
+    Then no data is created
+
+  Scenario: Equal to something that is not a valid CUSIP combined with a CUSIP constraint should generate no data
+    Given there is a field foo
+    And foo is equal to "aa"
+    And foo is of type "CUSIP"
+    Then no data is created
+
+  Scenario: Equal to a valid CUSIP combined with a non-CUSIP constraint should generate no data
+    Given there is a field foo
+    And foo is equal to "38259P508"
+    And foo is anything but of type "CUSIP"
+    Then no data is created
+
+  Scenario: Equal to a valid RIC combined with an RIC constraint should generate the equal to value
+    Given there is a field foo
+    And foo is equal to "R.IC"
+    And foo is of type "RIC"
+    Then the following data should be generated:
+      | foo            |
+      | "R.IC" |
+
+  Scenario: Equal to not a RIC combined with an RIC constraint should generate no data
+    Given there is a field foo
+    And foo is equal to "NOTRIC"
+    And foo is of type "RIC"
+    Then no data is created
+
