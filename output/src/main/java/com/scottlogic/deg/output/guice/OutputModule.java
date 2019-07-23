@@ -25,6 +25,7 @@ import com.scottlogic.deg.output.manifest.JsonManifestWriter;
 import com.scottlogic.deg.output.manifest.ManifestWriter;
 import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
 import com.scottlogic.deg.output.writer.OutputWriterFactory;
+import com.scottlogic.deg.output.writer.sql.SqlOutputWriterFactory;
 
 import java.nio.file.Path;
 
@@ -44,6 +45,7 @@ public class OutputModule extends AbstractModule {
         bind(ManifestWriter.class).to(JsonManifestWriter.class);
         bind(FileUtils.class).to(FileUtilsImpl.class);
 
+        bind(SqlOutputWriterFactory.class).toInstance(new SqlOutputWriterFactory(outputConfigSource.getOutputTableName()));
         bind(OutputPath.class).toInstance(new OutputPath(outputConfigSource.getOutputPath()));
 
         bind(boolean.class)

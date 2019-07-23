@@ -22,7 +22,6 @@ import com.scottlogic.deg.output.writer.OutputWriterFactory;
 import com.scottlogic.deg.output.writer.csv.CsvOutputWriterFactory;
 import com.scottlogic.deg.output.writer.json.JsonOutputWriterFactory;
 import com.scottlogic.deg.output.writer.sql.SqlOutputWriterFactory;
-import com.scottlogic.deg.output.writer.sql.SqlOutputWriterFactoryFactory;
 
 public class OutputWriterFactoryProvider implements Provider<OutputWriterFactory> {
     private final OutputConfigSource configSource;
@@ -35,12 +34,12 @@ public class OutputWriterFactoryProvider implements Provider<OutputWriterFactory
         OutputConfigSource configSource,
         CsvOutputWriterFactory csvOutputWriterFactory,
         JsonOutputWriterFactory jsonOutputWriterFactory,
-        SqlOutputWriterFactoryFactory sqlOutputWriterFactoryFactory)
+        SqlOutputWriterFactory sqlOutputWriterFactory)
     {
         this.configSource = configSource;
         this.csvOutputWriterFactory = csvOutputWriterFactory;
         this.jsonOutputWriterFactory = jsonOutputWriterFactory;
-        this.sqlOutputWriterFactory = sqlOutputWriterFactoryFactory.create(configSource.getOutputTableName());
+        this.sqlOutputWriterFactory = sqlOutputWriterFactory;
     }
 
     @Override
@@ -56,7 +55,7 @@ public class OutputWriterFactoryProvider implements Provider<OutputWriterFactory
         }
 
         throw new RuntimeException(String.format(
-            "Unknown output format %s, options are CSV or JSON",
+            "Unknown output format %s, options are CSV or JSON or SQL",
             configSource.getOutputFormat()
         ));
     }

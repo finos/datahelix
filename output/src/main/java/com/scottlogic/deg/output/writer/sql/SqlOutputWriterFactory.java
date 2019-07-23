@@ -30,7 +30,7 @@ import java.util.Optional;
 public class SqlOutputWriterFactory implements OutputWriterFactory {
     private final String tableName;
 
-    SqlOutputWriterFactory(String tableName) {
+    public SqlOutputWriterFactory(String tableName) {
         this.tableName = tableName;
     }
 
