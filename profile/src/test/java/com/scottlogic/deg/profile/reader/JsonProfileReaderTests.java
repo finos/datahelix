@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.profile.reader;
 
+import com.scottlogic.deg.common.profile.RuleInformation;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.Profile;
@@ -24,6 +25,7 @@ import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
+import com.shazam.shazamcrest.MatcherAssert;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,10 +35,13 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.core.IsNull.nullValue;
 
@@ -248,25 +253,52 @@ public class JsonProfileReaderTests {
     @Test
     public void shouldDeserialiseIsOfTypeConstraint() throws IOException {
         givenJson(
-                "{" +
-                        "    \"schemaVersion\": \"0.1\"," +
-                        "    \"fields\": [ { \"name\": \"foo\" } ]," +
-                        "    \"rules\": [" +
-                        "      {" +
-                        "        \"constraints\": [" +
-                        "        { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"string\" }" +
-                        "        ]" +
-                        "      }" +
-                        "    ]" +
-                        "}");
+            "{" +
+                "    \"schemaVersion\": \"0.1\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "      {" +
+                "        \"constraints\": [" +
+                "        { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"string\" }" +
+                "        ]" +
+                "      }" +
+                "    ]" +
+                "}");
 
         expectRules(
-                ruleWithConstraints(
-                        typedConstraint(
-                                IsOfTypeConstraint.class,
-                                c -> Assert.assertThat(
-                                        c.requiredType,
-                                        equalTo(IsOfTypeConstraint.Types.STRING)))));
+            ruleWithConstraints(
+                typedConstraint(
+                    IsOfTypeConstraint.class,
+                    c -> Assert.assertThat(
+                        c.requiredType,
+                        equalTo(IsOfTypeConstraint.Types.STRING)))));
+    }
+
+    @Test
+    public void shouldDeserialiseIsEqualToConstraint() throws IOException {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"0.1\"," +
+                "    \"fields\": [ { \"name\": \"foo\" } ]," +
+                "    \"rules\": [" +
+                "      {" +
+                "        \"constraints\": [" +
+                "        { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"equal\" }" +
+                "        ]" +
+                "      }" +
+                "    ]" +
+                "}");
+
+
+
+        expectRules(
+            ruleWithConstraints(
+                typedConstraint(
+                    EqualToConstraint.class,
+                    c -> Assert.assertThat(
+                        c.value,
+                        equalTo("equal")))));
+
     }
 
     @Test
@@ -411,7 +443,7 @@ public class JsonProfileReaderTests {
                         "        \"constraints\": [" +
                         "          {" +
                         "            \"if\": { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"string\" }," +
-                        "            \"then\": { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"str!\" }," +
+                        "            \"then\": { \"field\": \"foo\", \"is\": \"inSet\", \"values\": [ \"str!\" ] }," +
                         "            \"else\": { \"field\": \"foo\", \"is\": \"greaterThan\", \"value\": 3 }" +
                         "          }" +
                         "        ]" +
@@ -467,7 +499,7 @@ public class JsonProfileReaderTests {
 
                                     Assert.assertThat(
                                             c.whenConditionIsTrue,
-                                            instanceOf(IsInSetConstraint.class));
+                                            instanceOf(EqualToConstraint.class));
 
                                     Assert.assertThat(
                                             c.whenConditionIsFalse,

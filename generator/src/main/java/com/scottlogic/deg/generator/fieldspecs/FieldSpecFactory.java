@@ -20,6 +20,7 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.common.util.NumberUtils;
 
@@ -49,6 +50,8 @@ public class FieldSpecFactory {
             return construct(((NotConstraint) constraint).negatedConstraint, !negate);
         } else if (constraint instanceof IsInSetConstraint) {
             return construct((IsInSetConstraint) constraint, negate);
+        } else if (constraint instanceof EqualToConstraint) {
+            return construct((EqualToConstraint) constraint, negate);
         } else if (constraint instanceof IsGreaterThanConstantConstraint) {
             return construct((IsGreaterThanConstantConstraint) constraint, negate);
         } else if (constraint instanceof IsGreaterThanOrEqualToConstantConstraint) {
@@ -100,6 +103,18 @@ public class FieldSpecFactory {
         }
 
         return FieldSpec.Empty.withWhitelist(constraint.legalValues);
+    }
+
+    private FieldSpec construct(EqualToConstraint constraint, boolean negate) {
+        if (negate) {
+            return FieldSpec.Empty.withBlacklistRestrictions(
+                new BlacklistRestrictions(Collections.singleton(constraint.value))
+            );
+        }
+
+        return FieldSpec.Empty
+            .withWhitelist(FrequencyDistributedSet.singleton(constraint.value))
+            .withNotNull();
     }
 
     private FieldSpec constructIsNull(boolean negate) {

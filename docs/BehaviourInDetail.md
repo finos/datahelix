@@ -10,7 +10,7 @@ Nulls can always be produced for a field, except when a field is explicitly not 
 |Not of type X          | ✔ |
 |In set [X, Y, ...]     | ✔ |
 |Not in set [X, Y, ...] | ✔ |
-|Equal to X             | ✔ |
+|Equal to X             | ❌ |
 |Not equal to X         | ✔ |
 |Greater than X         | ✔ |
 |Null                   | ✔ |
@@ -28,9 +28,6 @@ For the profile snippet:
 
 |Allowed value of A|Allowed value of B|
 |------------------|------------------|
-|Null              |Null              |
-|Null              |2                 |
-|1                 |Null              |
 |1                 |2                 |
 
 ## Type Implication
