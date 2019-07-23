@@ -87,6 +87,8 @@ public class GenerateExecute {
                     throw new RuntimeException(e);
                 }
             });
+        } catch (RetryLimitReachedException ignored) {
+
         }
         monitor.endGeneration();
     }
