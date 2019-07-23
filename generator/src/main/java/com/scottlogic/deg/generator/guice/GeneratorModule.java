@@ -71,7 +71,7 @@ public class GeneratorModule extends AbstractModule {
         bind(DataGenerator.class).to(DecisionTreeDataGenerator.class);
         bind(DecisionTreeFactory.class).to(MaxStringLengthInjectingDecisionTreeFactory.class);
         bind(FieldValueSourceEvaluator.class).to(StandardFieldValueSourceEvaluator.class);
-        bind(ReductiveWalkerRetryChecker.class).toInstance(new ReductiveWalkerRetryChecker(100));
+        bind(ReductiveWalkerRetryChecker.class).toInstance(new ReductiveWalkerRetryChecker(10000));
 
         bind(JavaUtilRandomNumberGenerator.class)
             .toInstance(new JavaUtilRandomNumberGenerator(OffsetDateTime.now().getNano()));
