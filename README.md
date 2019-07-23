@@ -71,7 +71,7 @@ firstName
 
 The generator has successfully created 100 rows of random data. However, in most cases this data will not be terribly useful. It is likely that `firstName` will only allow string values, with this constraint enforced via a database schema for example. If you don't provide any constraints, the generator will output values from the 'universal set', which contains all generatable values (null, any string, any date, any number, etc).
 
-Let's assume you only want to generate string values for the `firstName` field; this can be achieved by adding an `ofType` constraint for the field. With this constraint alone, the generator will output random strings containing characters from the unicode [Basic Multilingual Plane](<https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane>). If you want a more restrictive character set, ths can be achieved by adding `matchingRegex`.
+Let's assume you only want to generate string values for the `firstName` field; this can be achieved by adding an `ofType` constraint for the field. With this constraint alone, the generator will output random strings containing basic latin characters and punctuation. If you want a more restrictive character set, ths can be achieved by adding `matchingRegex`.
 
 ## Adding constraints
 
