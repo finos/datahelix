@@ -85,11 +85,8 @@ class SqlDataSetWriter implements DataSetWriter {
         else if (value instanceof OffsetDateTime) {
             return "'" + standardDateFormat.format((OffsetDateTime) value) + "'";
         }
-        else if (value instanceof String) {
-            return "'" + value + "'";
-        }
         else {
-            return value.toString();
+            return "'" + value.toString() + "'";
         }
     }
 
