@@ -60,6 +60,8 @@ class SqlDataSetWriter implements DataSetWriter {
             return;
         }
 
+        // TODO AF: this is prone to SQL injection attacks so should do some post processing on the names
+        // and values to make sure they are valid and non-malicious
         writer
             .append("INSERT INTO ")
             .append(tableName).append(" (")
