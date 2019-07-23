@@ -14,9 +14,11 @@ public class ReductiveWalkerRetryChecker {
     }
 
     void retryUnsuccessful() {
-        numRetriesSoFar++;
-        if (numRetriesSoFar > retryLimit && !successOccurredAtLeastOnce) {
-            throw new RetryLimitReachedException();
+        if (!successOccurredAtLeastOnce) {
+            numRetriesSoFar++;
+            if (numRetriesSoFar > retryLimit) {
+                throw new RetryLimitReachedException();
+            }
         }
     }
 
