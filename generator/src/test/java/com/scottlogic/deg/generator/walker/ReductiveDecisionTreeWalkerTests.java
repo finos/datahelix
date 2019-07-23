@@ -42,6 +42,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.time.Duration.ofMillis;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
@@ -95,7 +97,7 @@ class ReductiveDecisionTreeWalkerTests {
         List<DataBag> result = walker.walk(tree).collect(Collectors.toList());
 
         verify(reductiveFieldSpecBuilder).getDecisionFieldSpecs(eq(rootNode), any());
-        assertTrue(result.isEmpty());
+        assertThat(result, empty());
     }
 
     /**
@@ -114,7 +116,7 @@ class ReductiveDecisionTreeWalkerTests {
         List<DataBag> result = walker.walk(tree).collect(Collectors.toList());
 
         verify(reductiveFieldSpecBuilder, times(2)).getDecisionFieldSpecs(eq(rootNode), any());
-        assertTrue(result.isEmpty());
+        assertThat(result, empty());
     }
 
     @Test
