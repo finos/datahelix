@@ -99,7 +99,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         if (reducedTree.isContradictory()){
             //yielding an empty stream will cause back-tracking
             this.monitor.unableToStepFurther(reductiveState);
-            retryChecker.setRetryUnsuccessful();
+            retryChecker.retryUnsuccessful();
             return Stream.empty();
         }
 
@@ -110,7 +110,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         visualise(reducedTree.get(), newReductiveState);
 
         if (newReductiveState.allFieldsAreFixed()) {
-            retryChecker.setRetrySuccessful();
+            retryChecker.retrySuccessful();
             return Stream.of(newReductiveState.asDataBag());
         }
 

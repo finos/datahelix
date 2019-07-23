@@ -11,11 +11,11 @@ class ReductiveWalkerRetryCheckerTests {
         ReductiveWalkerRetryChecker retryChecker = new ReductiveWalkerRetryChecker(2);
 
         //Act
-        retryChecker.setRetryUnsuccessful();
-        retryChecker.setRetryUnsuccessful();
+        retryChecker.retryUnsuccessful();
+        retryChecker.retryUnsuccessful();
 
         //Assert
-        assertThrows(RetryLimitReachedException.class, retryChecker::setRetryUnsuccessful);
+        assertThrows(RetryLimitReachedException.class, retryChecker::retryUnsuccessful);
     }
 
     @Test
@@ -24,12 +24,12 @@ class ReductiveWalkerRetryCheckerTests {
         ReductiveWalkerRetryChecker retryChecker = new ReductiveWalkerRetryChecker(2);
 
         //Act
-        retryChecker.setRetryUnsuccessful();
-        retryChecker.setRetrySuccessful();
-        retryChecker.setRetryUnsuccessful();
+        retryChecker.retryUnsuccessful();
+        retryChecker.retrySuccessful();
+        retryChecker.retryUnsuccessful();
 
         //Assert
-        assertDoesNotThrow(retryChecker::setRetryUnsuccessful);
+        assertDoesNotThrow(retryChecker::retryUnsuccessful);
     }
 
     @Test
@@ -38,14 +38,14 @@ class ReductiveWalkerRetryCheckerTests {
         ReductiveWalkerRetryChecker retryChecker = new ReductiveWalkerRetryChecker(2);
 
         //Act
-        retryChecker.setRetryUnsuccessful();
-        retryChecker.setRetryUnsuccessful();
+        retryChecker.retryUnsuccessful();
+        retryChecker.retryUnsuccessful();
         retryChecker.reset();
-        retryChecker.setRetryUnsuccessful();
-        retryChecker.setRetryUnsuccessful();
+        retryChecker.retryUnsuccessful();
+        retryChecker.retryUnsuccessful();
 
         //Assert
-        assertThrows(RetryLimitReachedException.class, retryChecker::setRetryUnsuccessful);
+        assertThrows(RetryLimitReachedException.class, retryChecker::retryUnsuccessful);
     }
 
     @Test
@@ -54,12 +54,12 @@ class ReductiveWalkerRetryCheckerTests {
         ReductiveWalkerRetryChecker retryChecker = new ReductiveWalkerRetryChecker(2);
 
         //Act
-        retryChecker.setRetrySuccessful();
+        retryChecker.retrySuccessful();
         retryChecker.reset();
-        retryChecker.setRetryUnsuccessful();
-        retryChecker.setRetryUnsuccessful();
+        retryChecker.retryUnsuccessful();
+        retryChecker.retryUnsuccessful();
 
         //Assert
-        assertThrows(RetryLimitReachedException.class, retryChecker::setRetryUnsuccessful);
+        assertThrows(RetryLimitReachedException.class, retryChecker::retryUnsuccessful);
     }
 }
