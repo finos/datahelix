@@ -19,7 +19,6 @@ plugins {
 }
 
 group 'com.scottlogic.deg'
-version 'unspecified'
 
 sourceCompatibility = 1.8
 
