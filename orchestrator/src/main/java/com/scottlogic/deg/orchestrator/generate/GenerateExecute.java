@@ -22,7 +22,6 @@ import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.DataGeneratorMonitor;
 import com.scottlogic.deg.common.output.GeneratedObject;
-import com.scottlogic.deg.generator.walker.RetryLimitReachedException;
 import com.scottlogic.deg.output.writer.DataSetWriter;
 import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
