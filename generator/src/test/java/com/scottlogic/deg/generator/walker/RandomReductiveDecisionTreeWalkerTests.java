@@ -20,24 +20,28 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
+import com.scottlogic.deg.generator.generation.DataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 class RandomReductiveDecisionTreeWalkerTests {
     private DecisionTree tree;
     private RandomReductiveDecisionTreeWalker walker;
     private ReductiveDecisionTreeWalker underlyingWalker;
+    private DataGeneratorMonitor monitor = mock(DataGeneratorMonitor.class);
 
     @BeforeEach
     public void beforeEach(){
@@ -47,7 +51,7 @@ class RandomReductiveDecisionTreeWalkerTests {
         );
 
         underlyingWalker = mock(ReductiveDecisionTreeWalker.class);
-        walker = new RandomReductiveDecisionTreeWalker(underlyingWalker);
+        walker = new RandomReductiveDecisionTreeWalker(underlyingWalker, monitor);
     }
 
     /**
@@ -97,6 +101,32 @@ class RandomReductiveDecisionTreeWalkerTests {
         Assert.assertThat(
             result.stream().iterator().hasNext(),
             is(false));
+    }
+
+    @Test
+    public void getFirstRowSpecFromRandomisingIteration_onRetryFail_returnsEmptyStream() {
+        when(underlyingWalker.walk(tree)).thenReturn(
+            Stream.iterate(new DataBag(new HashMap<>()), dataBag -> {
+                throw new RetryLimitReachedException();
+            }).skip(1));
+
+        DataBag result = walker.walk(tree).findFirst().orElse(null);
+
+        verify(underlyingWalker, times(1)).walk(tree);
+        assertNull(result);
+
+    }
+
+    @Test
+    public void getFirstRowSpecFromRandomisingIteration_onRetryFail_reportsError() {
+        when(underlyingWalker.walk(tree)).thenReturn(
+            Stream.iterate(new DataBag(new HashMap<>()), dataBag -> {
+                throw new RetryLimitReachedException();
+            }).skip(1));
+
+        walker.walk(tree).findFirst();
+
+        verify(monitor, atLeastOnce()).addLineToPrintAtEndOfGeneration(anyString());
     }
 
     private static DataBag rowSpec(String detail) {

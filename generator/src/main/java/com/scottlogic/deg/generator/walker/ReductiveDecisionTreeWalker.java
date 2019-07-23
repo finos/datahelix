@@ -41,6 +41,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
     private final ReductiveDataGeneratorMonitor monitor;
     private final FieldSpecValueGenerator fieldSpecValueGenerator;
     private final FixFieldStrategyFactory fixFieldStrategyFactory;
+    private ReductiveWalkerRetryChecker retryChecker;
 
     @Inject
     public ReductiveDecisionTreeWalker(
@@ -49,13 +50,15 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         ReductiveDataGeneratorMonitor monitor,
         ReductiveTreePruner treePruner,
         FieldSpecValueGenerator fieldSpecValueGenerator,
-        FixFieldStrategyFactory fixFieldStrategyFactory) {
+        FixFieldStrategyFactory fixFieldStrategyFactory,
+        ReductiveWalkerRetryChecker retryChecker) {
         this.iterationVisualiser = iterationVisualiser;
         this.reductiveFieldSpecBuilder = reductiveFieldSpecBuilder;
         this.monitor = monitor;
         this.treePruner = treePruner;
         this.fieldSpecValueGenerator = fieldSpecValueGenerator;
         this.fixFieldStrategyFactory = fixFieldStrategyFactory;
+        this.retryChecker = retryChecker;
     }
 
     /* initialise the walker with a set (ReductiveState) of unfixed fields */
@@ -64,6 +67,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         ReductiveState initialState = new ReductiveState(tree.fields);
         visualise(tree.getRootNode(), initialState);
         FixFieldStrategy fixFieldStrategy = fixFieldStrategyFactory.create(tree.getRootNode());
+        retryChecker.reset();
         return fixNextField(tree.getRootNode(), initialState, fixFieldStrategy);
     }
 
@@ -95,6 +99,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         if (reducedTree.isContradictory()){
             //yielding an empty stream will cause back-tracking
             this.monitor.unableToStepFurther(reductiveState);
+            retryChecker.retryUnsuccessful();
             return Stream.empty();
         }
 
@@ -105,6 +110,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         visualise(reducedTree.get(), newReductiveState);
 
         if (newReductiveState.allFieldsAreFixed()) {
+            retryChecker.retrySuccessful();
             return Stream.of(newReductiveState.asDataBag());
         }
 

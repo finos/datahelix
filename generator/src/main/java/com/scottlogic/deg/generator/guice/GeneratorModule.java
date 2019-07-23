@@ -29,6 +29,7 @@ import com.scottlogic.deg.generator.generation.combinationstrategies.Combination
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
+import com.scottlogic.deg.generator.walker.ReductiveWalkerRetryChecker;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
 
 import java.time.OffsetDateTime;
@@ -70,6 +71,7 @@ public class GeneratorModule extends AbstractModule {
         bind(DataGenerator.class).to(DecisionTreeDataGenerator.class);
         bind(DecisionTreeFactory.class).to(MaxStringLengthInjectingDecisionTreeFactory.class);
         bind(FieldValueSourceEvaluator.class).to(StandardFieldValueSourceEvaluator.class);
+        bind(ReductiveWalkerRetryChecker.class).toInstance(new ReductiveWalkerRetryChecker(10000));
 
         bind(JavaUtilRandomNumberGenerator.class)
             .toInstance(new JavaUtilRandomNumberGenerator(OffsetDateTime.now().getNano()));
