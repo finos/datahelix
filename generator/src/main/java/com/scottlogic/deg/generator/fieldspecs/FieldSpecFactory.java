@@ -16,13 +16,17 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.common.util.NumberUtils;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class FieldSpecFactory {
@@ -91,7 +95,7 @@ public class FieldSpecFactory {
     private FieldSpec construct(IsInSetConstraint constraint, boolean negate) {
         if (negate) {
             return FieldSpec.Empty.withBlacklistRestrictions(
-                new BlacklistRestrictions(constraint.legalValues)
+                new BlacklistRestrictions(constraint.legalValuesWithoutFrequency())
             );
         }
 
@@ -103,20 +107,20 @@ public class FieldSpecFactory {
             return FieldSpec.Empty.withNotNull();
         }
 
-        return FieldSpec.mustBeNull();
+        return FieldSpec.NullOnly;
     }
 
     private FieldSpec construct(IsOfTypeConstraint constraint, boolean negate) {
-        final TypeRestrictions typeRestrictions;
-
+        List<Types> types;
         if (negate) {
-            typeRestrictions = DataTypeRestrictions.ALL_TYPES_PERMITTED.except(constraint.requiredType);
+            types = Lists.newArrayList(Types.values());
+            types.remove(constraint.requiredType);
         } else {
-            typeRestrictions = DataTypeRestrictions.createFromWhiteList(constraint.requiredType);
+            types = Collections.singletonList(constraint.requiredType);
         }
 
         return FieldSpec.Empty.withTypeRestrictions(
-            typeRestrictions);
+            new TypeRestrictions(types));
     }
 
     private FieldSpec construct(IsGreaterThanConstantConstraint constraint, boolean negate) {

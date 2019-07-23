@@ -86,12 +86,7 @@ public class VelocityMonitor extends ReductiveDataGeneratorMonitor {
             .multiply(millisecondsInSecond);
         BigDecimal totalMilliseconds = nanoSecondsAsMilliseconds.add(secondsAsMilliseconds);
 
-        //Work out the average velocity for the generator as a whole by using the formula
-        // (<rowsEmitted>/<totalMilliseconds>)*1000 = <rowsEmitted>/second
-        BigInteger averageRowsPerSecond = new BigDecimal(rowsEmitted)
-            .setScale(2, RoundingMode.UNNECESSARY)
-            .divide(totalMilliseconds, RoundingMode.HALF_UP)
-            .multiply(millisecondsInSecond).toBigInteger();
+        BigInteger averageRowsPerSecond = calculateRowsPerSecond(totalMilliseconds);
 
         println(
             "%-14s | %-19d | Finished",
@@ -103,6 +98,19 @@ public class VelocityMonitor extends ReductiveDataGeneratorMonitor {
             timeFormatter.format(finished));
 
         super.endGeneration();
+    }
+
+    private BigInteger calculateRowsPerSecond(BigDecimal totalMilliseconds) {
+        if (BigDecimal.ZERO.compareTo(totalMilliseconds) != 0 ) {
+            //Work out the average velocity for the generator as a whole by using the formula
+            // (<rowsEmitted>/<totalMilliseconds>)*1000 = <rowsEmitted>/second
+            return new BigDecimal(rowsEmitted)
+                .setScale(2, RoundingMode.UNNECESSARY)
+                .divide(totalMilliseconds, RoundingMode.HALF_UP)
+                .multiply(millisecondsInSecond).toBigInteger();
+        } else {
+            return new BigDecimal(rowsEmitted).toBigInteger();
+        }
     }
 
     private void reportVelocity(long rowsSinceLastSample) {

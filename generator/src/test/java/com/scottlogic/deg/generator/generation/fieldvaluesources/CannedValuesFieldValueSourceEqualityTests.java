@@ -16,42 +16,47 @@
 
 package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 
 class CannedValuesFieldValueSourceEqualityTests {
+
+    private FieldValueSource valueSourceOf(Object... elements) {
+        Set<Object> set = Arrays.stream(elements).collect(Collectors.toSet());
+        DistributedSet<Object> whitelist = FrequencyDistributedSet.uniform(set);
+        return new CannedValuesFieldValueSource(whitelist);
+    }
+
     @Test
     public void shouldBeEqualIfAllAndInterestingValuesMatch(){
-        FieldValueSource a = CannedValuesFieldValueSource.of("a", "b", "c");
-        FieldValueSource b = CannedValuesFieldValueSource.of("a", "b", "c");
+        FieldValueSource a = valueSourceOf("a", "b", "c");
+        FieldValueSource b = valueSourceOf("a", "b", "c");
 
         Assert.assertThat(a, equalTo(b));
         Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
     }
 
     @Test
-    public void shouldBeUnequalIfAllAndInterestingValuesMatchButInDifferentOrder(){
-        FieldValueSource a = CannedValuesFieldValueSource.of("a", "b", "c");
-        FieldValueSource b = CannedValuesFieldValueSource.of("c", "b", "a");
-
-        Assert.assertThat(a, not(equalTo(b)));
-    }
-
-    @Test
     public void shouldBeUnequalIfAllOrInterestingValuesDiffer(){
-        FieldValueSource a = CannedValuesFieldValueSource.of("a", "b", "c");
-        FieldValueSource b = CannedValuesFieldValueSource.of("a", "b");
+        FieldValueSource a = valueSourceOf("a", "b", "c");
+        FieldValueSource b = valueSourceOf("a", "b");
 
         Assert.assertThat(a, not(equalTo(b)));
     }
 
     @Test
     public void emptyCollectionsShouldBeEqual(){
-        FieldValueSource a = CannedValuesFieldValueSource.of();
-        FieldValueSource b = CannedValuesFieldValueSource.of();
+        FieldValueSource a = valueSourceOf();
+        FieldValueSource b = valueSourceOf();
 
         Assert.assertThat(a, equalTo(b));
         Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));

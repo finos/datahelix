@@ -16,11 +16,12 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.restrictions.*;
-import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -54,18 +55,30 @@ public class FieldSpecMerger {
         return combineRestrictions(left, right);
     }
 
+    private static WeightedElement<Object> mergeElements(WeightedElement<Object> left,
+                                                         WeightedElement<Object> right) {
+        return new WeightedElement<>(left.element(), left.weight() + right.weight());
+    }
+
     private Optional<FieldSpec> mergeSets(FieldSpec left, FieldSpec right) {
-        Set<Object> set = SetUtils.intersect(
-            left.getWhitelist(),
-            right.getWhitelist()
-        );
+        DistributedSet<Object> set = new FrequencyDistributedSet<>(left.getWhitelist().distributedSet().stream()
+            .flatMap(leftHolder -> right.getWhitelist().distributedSet().stream()
+                .filter(rightHolder -> elementsEqual(leftHolder, rightHolder))
+                .map(rightHolder -> mergeElements(leftHolder, rightHolder)))
+            .collect(Collectors.toSet()));
+
         return addNullable(left, right, setRestriction(set));
     }
 
+    private static <T> boolean elementsEqual(WeightedElement<T> left, WeightedElement<T> right) {
+        return left.element().equals(right.element());
+    }
+
     private Optional<FieldSpec> combineSetWithRestrictions(FieldSpec set, FieldSpec restrictions) {
-        Set<Object> newSet = set.getWhitelist().stream()
-            .filter(restrictions::permits)
-            .collect(Collectors.toSet());
+        DistributedSet<Object> newSet = new FrequencyDistributedSet<>(
+            set.getWhitelist().distributedSet().stream()
+                .filter(holder -> restrictions.permits(holder.element()))
+                .collect(Collectors.toSet()));
 
         return addNullable(set, restrictions, setRestriction(newSet));
     }
@@ -85,10 +98,10 @@ public class FieldSpecMerger {
     }
 
     private boolean noAllowedValues(FieldSpec fieldSpec) {
-        return (fieldSpec.getWhitelist() != null && fieldSpec.getWhitelist().isEmpty());
+        return (fieldSpec.getWhitelist() != null && fieldSpec.getWhitelist().set().isEmpty());
     }
 
-    private FieldSpec setRestriction(Set<Object> set) {
+    private FieldSpec setRestriction(DistributedSet<Object> set) {
         return FieldSpec.Empty.withWhitelist(set);
     }
 

@@ -18,6 +18,7 @@ package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
@@ -37,9 +38,9 @@ class FieldSpecValueGeneratorTests {
     void generate_fieldSpecMustContainRestrictionNullAndSetRestrictionsHasValues_returnsDataBagsWithValuesInSetRestrictions() {
         FieldSpec fieldSpec = FieldSpec.Empty.withNotNull()
             .withWhitelist(
-                (
+                (FrequencyDistributedSet.uniform(
                     new HashSet<>(
-                        Arrays.asList(10, 20, 30))));
+                        Arrays.asList(10, 20, 30)))));
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
             INTERESTING,
             new StandardFieldValueSourceEvaluator(),
@@ -47,7 +48,7 @@ class FieldSpecValueGeneratorTests {
 
         final Set<DataBagValue> result = fieldSpecFulfiller.generate(fieldSpec).collect(Collectors.toSet());
 
-        Set<DataBagValue> expectedDataBags = fieldSpec.getWhitelist()
+        Set<DataBagValue> expectedDataBags = fieldSpec.getWhitelist().set()
             .stream()
             .map(value -> new DataBagValue(value, null))
             .collect(Collectors.toSet());
@@ -64,7 +65,7 @@ class FieldSpecValueGeneratorTests {
                     max = new NumericLimit<>(new BigDecimal(30), false);
                 }})
             .withTypeRestrictions(
-                new DataTypeRestrictions(
+                new TypeRestrictions(
                     Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
                 )
             );
