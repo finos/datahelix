@@ -19,10 +19,15 @@ package com.scottlogic.deg.common.profile;
 import java.util.Objects;
 
 public class Field {
+    // TODO AF make private
     public final String name;
 
     public Field(String name) {
         this.name = name;
+    }
+
+    public String name() {
+        return name;
     }
 
     @Override

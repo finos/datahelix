@@ -46,26 +46,26 @@ class SqlDataSetWriter implements DataSetWriter {
         // eg insert into dbo.Currencies (currency, from_date, to_date) values
         //    ( 'YYY', '1762-02-16T00:00:00Z', '1980-02-16T00:00:00Z');
 
-        Optional<String> columnNamesCsvString = reduceStringStreamToCsvString(
+        Optional<String> columnNamesString = reduceStringStreamToParameterString(
             fieldOrder.stream()
-                .map(Field::toString)
+                .map(Field::name)
         );
-        Optional<String> columnValuesCsvString = reduceStringStreamToCsvString(
+        Optional<String> columnValuesString = reduceStringStreamToParameterString(
             fieldOrder.stream()
                 .map(row::getFormattedValue)
                 .map(SqlDataSetWriter::fieldValueToString)
         );
 
-        if (!columnNamesCsvString.isPresent() || !columnValuesCsvString.isPresent()) {
+        if (!columnNamesString.isPresent() || !columnValuesString.isPresent()) {
             return;
         }
 
         writer
             .append("INSERT INTO ")
             .append(tableName).append(" (")
-            .append(columnNamesCsvString.get())
+            .append(columnNamesString.get())
             .append(") VALUES (")
-            .append(columnValuesCsvString.get())
+            .append(columnValuesString.get())
             .append(");\n")
             .flush();
     }
@@ -93,7 +93,7 @@ class SqlDataSetWriter implements DataSetWriter {
         }
     }
 
-    private static Optional<String> reduceStringStreamToCsvString(Stream<String> stream) {
+    private static Optional<String> reduceStringStreamToParameterString(Stream<String> stream) {
         return stream.reduce((t, u) -> t + ", " + u);
     }
 }
