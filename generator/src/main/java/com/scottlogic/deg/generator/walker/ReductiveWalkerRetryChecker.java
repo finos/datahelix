@@ -2,7 +2,6 @@ package com.scottlogic.deg.generator.walker;
 
 public class ReductiveWalkerRetryChecker {
     private int numRetriesSoFar = 0;
-    private boolean successOccurredAtLeastOnce = false;
     private int retryLimit;
 
     public ReductiveWalkerRetryChecker(int retryLimit) {
@@ -10,20 +9,17 @@ public class ReductiveWalkerRetryChecker {
     }
 
     void retrySuccessful() {
-        successOccurredAtLeastOnce = true;
+        numRetriesSoFar = 0;
     }
 
     void retryUnsuccessful() {
-        if (!successOccurredAtLeastOnce) {
-            numRetriesSoFar++;
-            if (numRetriesSoFar > retryLimit) {
-                throw new RetryLimitReachedException();
-            }
+        numRetriesSoFar++;
+        if (numRetriesSoFar > retryLimit) {
+            throw new RetryLimitReachedException();
         }
     }
 
     void reset() {
         numRetriesSoFar = 0;
-        successOccurredAtLeastOnce = false;
     }
 }
