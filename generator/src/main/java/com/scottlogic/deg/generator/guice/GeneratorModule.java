@@ -28,6 +28,7 @@ import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
+import com.scottlogic.deg.generator.walker.decisionbased.OptionPicker;
 import com.scottlogic.deg.generator.walker.rowspec.CartesianProductRowSpecTreeSolver;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.ReductiveWalkerRetryChecker;
@@ -60,6 +61,8 @@ public class GeneratorModule extends AbstractModule {
         bind(ReductiveDataGeneratorMonitor.class).toProvider(MonitorProvider.class).in(Singleton.class);
         bind(IterationVisualiser.class).toProvider(IterationVisualiserProvider.class);
         bind(CombinationStrategy.class).toProvider(CombinationStrategyProvider.class);
+        bind(OptionPicker.class).toProvider(OptionPickerProvider.class);
+        bind(RowSpecTreeSolver.class).toProvider(RowSpecTreeSolverProvider.class);
 
         // bind config directly
         bind(DataGenerationType.class).toInstance(generationConfigSource.getGenerationType());
@@ -73,7 +76,6 @@ public class GeneratorModule extends AbstractModule {
         bind(DataGenerator.class).to(DecisionTreeDataGenerator.class);
         bind(DecisionTreeFactory.class).to(MaxStringLengthInjectingDecisionTreeFactory.class);
         bind(FieldValueSourceEvaluator.class).to(StandardFieldValueSourceEvaluator.class);
-        bind(RowSpecTreeSolver.class).to(CartesianProductRowSpecTreeSolver.class);
         bind(ReductiveWalkerRetryChecker.class).toInstance(new ReductiveWalkerRetryChecker(10000));
 
         bind(JavaUtilRandomNumberGenerator.class)

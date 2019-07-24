@@ -45,6 +45,7 @@ public class DecisionTreeWalkerProvider implements Provider<DecisionTreeWalker> 
     public DecisionTreeWalker get() {
           switch(configSource.getWalkerType()) {
               case CARTESIAN_PRODUCT:
+              case DECISION_BASED:
                   return rowSpecDecisionTreeWalker;
 
               case REDUCTIVE:
