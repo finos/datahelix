@@ -38,6 +38,12 @@ jobs:
       - codecov/upload:
           file: generator/target/jacoco-reports/jacoco.xml
 
+  # Release generates version x.y.z for:
+  # x - BREAKING CHANGE included in commit message body
+  # y - feat
+  # z - fix, perf
+  # Otherwise no release is created.
+  # See https://github.com/tschulte/gradle-semantic-release-plugin/blob/master/src/main/groovy/de/gliderpilot/gradle/semanticrelease/SemanticReleaseChangeLogService.groovy
   release:
     docker:
       - image: circleci/openjdk:8-jdk-browsers
