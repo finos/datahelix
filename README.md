@@ -296,15 +296,15 @@ firstName,age,nationalInsurance
 [...]
 ```
 
-You can find out more about the various constraints the generator supports in the detailed [Profile Developer Guide](docs/ProfileDeveloperGuide.md).
+You can find out more about the various constraints the generator supports in the detailed [User Guide](docs/user/UserGuide.md).
 
 ## Generation modes
 
 The generator supports a number of different generation modes:
 
--   **random** - generates random data that abides by the given set of constraints, with the number of generated rows limited via the `--max-rows` option.
+-   **random** - _(default)_ generates random data that abides by the given set of constraints, with the number of generated rows limited via the `--max-rows` option.
 -   **full** - generates all the data that abides by the given set of constraints, with the number of generated rows limited via the `--max-rows` option.
--   **interesting** - generates data that is typically [deemed 'interesting'](https://github.com/finos/datahelix/wiki/Interesting-data-generation) from a test perspective, for example exploring [boundary values](https://en.wikipedia.org/wiki/Boundary-value_analysis).
+-   **interesting** - _(alpha feature)_ generates data that is typically [deemed 'interesting'](docs/user/alphaFeatures/Interesting.md) from a test perspective, for example exploring [boundary values](https://en.wikipedia.org/wiki/Boundary-value_analysis).
 
 The mode is specified via the `--generation-type` option.
 
@@ -386,7 +386,7 @@ firstName,age,nationalInsurance
 
 ## Next steps
 
-That's the end of our getting started guide. Hopefully it has given you a good understanding of what the DataHelix generator is capable of. If you'd like to find out more about the various constraints the tool supports, the [Profile Developer Guide](docs/ProfileDeveloperGuide.md) is a good next step. You might also be interested in the [examples folder](https://github.com/finos/datahelix/tree/master/examples), which illustrates various features of the generator.
+That's the end of our getting started guide. Hopefully it has given you a good understanding of what the DataHelix generator is capable of. If you'd like to find out more about the various constraints the tool supports, the [User Guide](docs/user/UserGuide.md) is a good next step. You might also be interested in the [examples folder](https://github.com/finos/datahelix/tree/master/examples), which illustrates various features of the generator.
 For more detail about the behaviour of certain profiles, see the  [behaviour in detail.](docs/developer/behaviour/BehaviourInDetail.md)
 
 ## Contributing

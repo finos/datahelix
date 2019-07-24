@@ -63,7 +63,7 @@
   * however, if _user_id_ is itself an email address, _email_address_ must be absent
 * _creation_date_ is a non-optional date, with no time component, later than 2003 and output per [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601)    
 
-This data profile can be found in the [example folder](../../examples/user-account).
+This data profile can be found in the [examples folder](../../examples/user-account).
 
 Every profile declares some **fields** and some **constraints**.
 
