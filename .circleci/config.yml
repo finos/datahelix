@@ -9,8 +9,12 @@ jobs:
     working_directory: ~/datahelix/
     steps:
       - checkout
-      - run: chmod +x commit_check.sh
-      - run: ./commit_check.sh
+      - run:
+          name: Set commit script priviledges
+          command: chmod +x commit_check.sh
+      - run:
+          name: Check commit messages
+          command: ./commit_check.sh
 
   build:
     docker:
