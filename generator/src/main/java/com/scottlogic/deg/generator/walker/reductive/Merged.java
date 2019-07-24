@@ -16,6 +16,8 @@
 
 package com.scottlogic.deg.generator.walker.reductive;
 
+import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
+
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -49,6 +51,10 @@ public class Merged<T> {
      */
     public boolean isContradictory() {
         return value == null;
+    }
+
+    public boolean notContradictory() {
+        return !isContradictory();
     }
 
     /**
