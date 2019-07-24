@@ -1,12 +1,13 @@
 # DataHelix Generator [![CircleCI](https://circleci.com/gh/finos/datahelix.svg?style=svg)](https://circleci.com/gh/finos/datahelix) [![FINOS - Incubating](https://cdn.jsdelivr.net/gh/finos/contrib-toolbox@master/images/badge-incubating.svg)](https://finosfoundation.atlassian.net/wiki/display/FINOS/Incubating)
 
-![DataHelix logo](logo.png)
+![DataHelix logo](docs/logo.png)
 
 The generation of representative test and simulation data is a challenging and time-consuming task. The DataHelix generator allows you to quickly create data, based on a JSON profile that defines fields and the relationships between them, for the purpose of testing and validation. The generator supports a number of generation modes, allowing the creation of data that both conforms to, or violates, the profile.
 
 DataHelix is a proud member of the [Fintech Open Source Foundation](https://www.finos.org/) and operates within the [Data Technologies Program](https://www.finos.org/dt).
 
 - [Getting Started](#Getting-Started)
+  - [First Time Setup](docs/user/gettingStarted/BuildAndRun.md)
   - [Creating your first profile](#Creating-your-first-profile)
   - [Adding constraints](#Adding-constraints)
   - [Generating large datasets](#Generating-large-datasets)
@@ -17,15 +18,16 @@ DataHelix is a proud member of the [Fintech Open Source Foundation](https://www.
   - [Contributing](#Contributing)
   - [License](#License)
 
+
 # Getting Started
 
-_The following guide gives a 10 minute introduction to the generator via various practical examples. For more detailed documentation please refer to the [Profile Developer Guide](docs/ProfileDeveloperGuide.md), and if you are interested in extending / modifying the generator itself, refer to the [DataHelix Generator Developer Guide](docs/GeneratorDeveloperGuide.md)._
+_The following guide gives a 10 minute introduction to the generator via various practical examples. For more detailed documentation please refer to the [User Guide](docs/user/UserGuide.md), and if you are interested in extending / modifying the generator itself, refer to the [DataHelix Generator Developer Guide](docs/developer/DeveloperGuide.md)._
 
 The generator has been written in Java, allowing it to work on Microsoft Windows, Apple Mac and Linux. You will need Java v1.8 installed to run the generator (you can run `java version` to check whether you meet this requirement), it can be [downloaded here](https://www.java.com/en/download/manual.jsp).
 
 The generator is distributed as a JAR file, with the latest release always available from the [GitHub releases page](https://github.com/finos/datahelix/releases/). The project is currently in beta and under active development. You can expect breaking changes in future releases, and new features too!
 
-You are also welcome to download the source code and build the generator yourself. To do so, follow the instructions for [downloading and building it using a Java IDE](generator/docs/GeneratorSetup.md), or for [downloading and building it using Docker](generator/docs/DockerSetup.md).
+You are also welcome to download the source code and build the generator yourself. To do so, follow the instructions for [downloading and building it using a Java IDE](generator/docs/GeneratorSetup.md), or for [downloading and building it using Docker](docs/user/gettingStarted/BuildAndRun.md).
 
 Your feedback on the beta would be greatly appreciated. If you have any issues, feature requests, or ideas, please share them via the [GitHub issues page](https://github.com/finos/datahelix/issues).
 
@@ -156,8 +158,6 @@ The generator supports four different data types:
 -   **decimal** - any real number between -1E20 and 1E20 inclusive, with an optional granularity / precision (a power of ten between 1 and 1E-20) that can be defined via a `granularTo` constraint.
 -   **string** - sequences of unicode characters up to a maximum length of 1000 characters
 -   **datetime** - specific moments in time, with values in the range 0001-01-01T00:00:00.000 to 9999-12-31T23:59:59.999, with an optional granularity / precision (from a maximum of one year to a minimum of one millisecond) that can be defined via a `granularTo` constraint.
-
-<!-- TODO: rename as datetime -->
 
 We'll expand the example profile to add a new `age` field, a not-null integer in the range 1-99:
 
@@ -303,35 +303,10 @@ You can find out more about the various constraints the generator supports in th
 The generator supports a number of different generation modes:
 
 -   **random** - generates random data that abides by the given set of constraints, with the number of generated rows limited via the `--max-rows` option.
+-   **full** - generates all the data that abides by the given set of constraints, with the number of generated rows limited via the `--max-rows` option.
 -   **interesting** - generates data that is typically [deemed 'interesting'](https://github.com/finos/datahelix/wiki/Interesting-data-generation) from a test perspective, for example exploring [boundary values](https://en.wikipedia.org/wiki/Boundary-value_analysis).
 
-The mode is specified via the `--generation-type` option. The following example outputs 'interesting' values for the current profile:
-
-```
-$ java -jar generator.jar generate --generation-type interesting --replace --profile-file=profile.json --output-path=output.csv
-```
-
-In this case it generates just 14 rows where you can see that it is exploring the boundary values of the constraints:
-
-```
-firstName,age,nationalInsurance
-"Jon",18,"AA000000"
-"John",18,"AA000000"
-"Jon",18,"AJ000000F"
-"John",18,"AJ000000F"
-"Jon",19,"AA000000"
-"John",19,"AA000000"
-"Jon",19,"AJ000000F"
-"John",19,"AJ000000F"
-"Jon",1,
-"John",1,
-"Jon",99,"AA000000"
-"John",99,"AA000000"
-"Jon",99,"AJ000000F"
-"John",99,"AJ000000F"
-```
-
-<!-- I've got a few questions about this output! -->
+The mode is specified via the `--generation-type` option.
 
 ## Generating invalid data
 
@@ -412,7 +387,7 @@ firstName,age,nationalInsurance
 ## Next steps
 
 That's the end of our getting started guide. Hopefully it has given you a good understanding of what the DataHelix generator is capable of. If you'd like to find out more about the various constraints the tool supports, the [Profile Developer Guide](docs/ProfileDeveloperGuide.md) is a good next step. You might also be interested in the [examples folder](https://github.com/finos/datahelix/tree/master/examples), which illustrates various features of the generator.
-For more detail about the behaviour of certain profiles, see the  [behaviour in detail.](./docs/BehaviourInDetail.md)
+For more detail about the behaviour of certain profiles, see the  [behaviour in detail.](docs/developer/behaviour/BehaviourInDetail.md)
 
 ## Contributing
 
