@@ -42,10 +42,12 @@ To make review of PRs easier, please:
  * Ensure all new files include a header comment block containing the [Apache License v2.0 and your copyright information](http://www.apache.org/licenses/LICENSE-2.0#apply).
  * If necessary (e.g. due to 3rd party dependency licensing requirements), update the [NOTICE file](https://github.com/finos/datahelix/blob/master/NOTICE) with any new attribution or other notices
 
-
 ## Commit and PR Messages
 
 * **Reference issues, wiki pages, and pull requests liberally!**
 * Use the present tense ("Add feature" not "Added feature")
 * Use the imperative mood ("Move button left..." not "Moves button left...")
 * Limit the first line to 72 characters or less
+* Ensure you follow the [angular style](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md) for commit messages. See [here](https://github.com/conventional-changelog-archived-repos/conventional-changelog-angular/blob/master/convention.md) for an outline of the structure used.
+
+
