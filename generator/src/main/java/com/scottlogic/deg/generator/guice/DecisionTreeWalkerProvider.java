@@ -21,12 +21,14 @@ import com.google.inject.Provider;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.walker.*;
+import com.scottlogic.deg.generator.walker.rowspec.RandomRowSpecDecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.rowspec.RowSpecDecisionTreeWalker;
 
 public class DecisionTreeWalkerProvider implements Provider<DecisionTreeWalker> {
     private final ReductiveDecisionTreeWalker reductiveDecisionTreeWalker;
-    private final RowSpecDecisionTreeWalker rowSpecDecisionTreeWalker;
     private final RandomReductiveDecisionTreeWalker randomReductiveDecisionTreeWalker;
+    private final RowSpecDecisionTreeWalker rowSpecDecisionTreeWalker;
+    private final RandomRowSpecDecisionTreeWalker randomRowSpecDecisionTreeWalker;
     private final GenerationConfigSource configSource;
 
     @Inject
@@ -34,10 +36,12 @@ public class DecisionTreeWalkerProvider implements Provider<DecisionTreeWalker> 
         ReductiveDecisionTreeWalker reductiveDecisionTreeWalker,
         RowSpecDecisionTreeWalker rowSpecDecisionTreeWalker,
         RandomReductiveDecisionTreeWalker randomReductiveDecisionTreeWalker,
+        RandomRowSpecDecisionTreeWalker randomRowSpecDecisionTreeWalker,
         GenerationConfigSource configSource) {
         this.reductiveDecisionTreeWalker = reductiveDecisionTreeWalker;
         this.rowSpecDecisionTreeWalker = rowSpecDecisionTreeWalker;
         this.randomReductiveDecisionTreeWalker = randomReductiveDecisionTreeWalker;
+        this.randomRowSpecDecisionTreeWalker = randomRowSpecDecisionTreeWalker;
         this.configSource = configSource;
     }
 
@@ -46,6 +50,8 @@ public class DecisionTreeWalkerProvider implements Provider<DecisionTreeWalker> 
           switch(configSource.getWalkerType()) {
               case CARTESIAN_PRODUCT:
               case DECISION_BASED:
+                  if (configSource.getGenerationType() == DataGenerationType.RANDOM)
+                      return randomRowSpecDecisionTreeWalker;
                   return rowSpecDecisionTreeWalker;
 
               case REDUCTIVE:
