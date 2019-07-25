@@ -53,10 +53,6 @@ public class Merged<T> {
         return value == null;
     }
 
-    public boolean notContradictory() {
-        return !isContradictory();
-    }
-
     /**
      * If a value not Contradictory in this {@code Merged}, returns the value,
      * otherwise throws {@code NoSuchElementException}.
