@@ -41,14 +41,14 @@ done
 rm shafile.txt  >/dev/null 2>&1
 
 echo "No commits exist with valid formatting."
-echo "The [Angular style](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines)"
-echo "**is enforced for at least one commit in every PR** to make the automatic semantic versioning work."
+echo "The Angular style (see https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines)"
+echo "is enforced for at least one commit in every PR to make the automatic semantic versioning work."
 echo "For example, a commit might look like:"
 echo ""
-echo "feat(#0000): your commit message here"
+echo "feat(#xxxx): your commit message here"
 echo ""
 echo "where feat is the commit type, the options are feat|fix|docs|style|refactor|perf|test|chore"
-echo "and 0000 is the Github issue number."
+echo "and xxxx is the Github issue number."
 echo ""
 echo "Note there is no whitespace between feat and the issue number, and there is a colon and a space after the issue number."
 echo ""
