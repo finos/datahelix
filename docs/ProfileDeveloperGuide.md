@@ -253,6 +253,16 @@ Scotland
 ...
 ```
 
+Additionally, weights can be included in the source file, which will then weight each element proportionally to its weight.
+Example `countries_weighted.csv` excerpt:
+```javascript
+...
+England, 2
+Wales, 1
+Scotland, 3
+...
+```
+
 After loading the set from the file, this constraint behaves identically to the [inSet](#predicate-inset) constraint. This includes its behaviour when negated or violated.
 
 ## Textual constraints

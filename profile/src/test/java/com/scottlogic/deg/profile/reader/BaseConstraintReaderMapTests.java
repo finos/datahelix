@@ -104,7 +104,7 @@ public class BaseConstraintReaderMapTests {
         notValueDto.not = stringValueDto;
 
         return Stream.of(
-                Arguments.of(AtomicConstraintType.IS_EQUAL_TO_CONSTANT, stringValueDto, IsInSetConstraint.class),
+                Arguments.of(AtomicConstraintType.IS_EQUAL_TO_CONSTANT, stringValueDto, EqualToConstraint.class),
                 Arguments.of(AtomicConstraintType.IS_IN_SET, multipleValuesDto, IsInSetConstraint.class),
                 Arguments.of(AtomicConstraintType.IS_NULL, stringValueDto, IsNullConstraint.class),
                 Arguments.of(AtomicConstraintType.IS_OF_TYPE, typeValueDto, IsOfTypeConstraint.class),

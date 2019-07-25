@@ -23,7 +23,9 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
-import com.scottlogic.deg.common.profile.RuleInformation;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsEqual;
@@ -36,6 +38,8 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.*;
 
@@ -56,7 +60,9 @@ class ConstraintReducerTest {
         ProfileFields fieldList = new ProfileFields(
             Arrays.asList(quantityField, countryField, cityField));
 
-        final Set<Object> countryAmong = new HashSet<>(Arrays.asList("UK", "US"));
+        final DistributedSet<Object> countryAmong = new FrequencyDistributedSet<>(Stream.of("UK", "US")
+            .map(string -> new WeightedElement<>((Object) string, 1.0F))
+            .collect(Collectors.toSet()));
 
         final List<AtomicConstraint> constraints = Arrays.asList(
             new IsGreaterThanConstantConstraint(quantityField, 0),
@@ -97,13 +103,13 @@ class ConstraintReducerTest {
         Assert.assertThat("Country fieldspec has no null restrictions", countryFieldSpec.isNullable(),
             Is.is(true));
         Assert.assertThat("Country fieldspec set restrictions have whitelist",
-            countryFieldSpec.getWhitelist(), notNullValue());
+            countryFieldSpec.getWhitelist().set(), notNullValue());
         Assert.assertThat("Country fieldspec set restrictions whitelist has correct size",
-            countryFieldSpec.getWhitelist().size(), Is.is(2));
+            countryFieldSpec.getWhitelist().set().size(), Is.is(2));
         Assert.assertThat("Country fieldspec set restrictions whitelist contains 'UK'",
-            countryFieldSpec.getWhitelist().contains("UK"), Is.is(true));
+            countryFieldSpec.getWhitelist().set().contains("UK"), Is.is(true));
         Assert.assertThat("Country fieldspec set restrictions whitelist contains 'US'",
-            countryFieldSpec.getWhitelist().contains("US"), Is.is(true));
+            countryFieldSpec.getWhitelist().set().contains("US"), Is.is(true));
 
         FieldSpec cityFieldSpec = reducedConstraints.getSpecForField(cityField);
         Assert.assertThat("City fieldspec has no set restrictions", cityFieldSpec.getWhitelist(),
@@ -894,14 +900,16 @@ class ConstraintReducerTest {
 
         List<AtomicConstraint> constraints = Arrays.asList(
             new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.NUMERIC),
-            new IsInSetConstraint(field, new HashSet<>(Arrays.asList(1, "lorem", 5, "ipsum", 2)))
+            new IsInSetConstraint(field, new FrequencyDistributedSet<>(Stream.of(1, "lorem", 5, "ipsum", 2)
+            .map(element -> new WeightedElement<Object>(element, 1.0F))
+            .collect(Collectors.toSet())))
         );
 
         Optional<RowSpec> testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints);
 
         FieldSpec spec = testOutput.get().getSpecForField(field);
 
-        Assert.assertThat(spec.getWhitelist(), containsInAnyOrder(1, 5, 2));
+        Assert.assertThat(spec.getWhitelist().set(), containsInAnyOrder(1, 5, 2));
     }
 
     @Test
@@ -913,14 +921,16 @@ class ConstraintReducerTest {
         OffsetDateTime datetimeValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         List<AtomicConstraint> constraints = Arrays.asList(
             new MatchesRegexConstraint(field, Pattern.compile("(lorem|ipsum)")),
-            new IsInSetConstraint(field, new HashSet<>(Arrays.asList(1, "lorem", 5, "ipsum", 2, "foo", datetimeValue)))
+            new IsInSetConstraint(field, new FrequencyDistributedSet<>(Stream.of(1, "lorem", 5, "ipsum", 2, "foo", datetimeValue)
+            .map(element -> new WeightedElement<Object>(element, 1.0F))
+            .collect(Collectors.toSet())))
         );
 
         Optional<RowSpec> testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints);
 
         FieldSpec spec = testOutput.get().getSpecForField(field);
 
-        Assert.assertThat(spec.getWhitelist(), containsInAnyOrder("lorem", "ipsum", 1, 5, 2, datetimeValue));
+        Assert.assertThat(spec.getWhitelist().set(), containsInAnyOrder("lorem", "ipsum", 1, 5, 2, datetimeValue));
     }
 
     @Test
@@ -932,14 +942,16 @@ class ConstraintReducerTest {
         OffsetDateTime datetimeValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         List<AtomicConstraint> constraints = Arrays.asList(
             new IsGreaterThanOrEqualToConstantConstraint(field, 2),
-            new IsInSetConstraint(field, new HashSet<>(Arrays.asList(1, "lorem", 5, "ipsum", 2, datetimeValue)))
+            new IsInSetConstraint(field, new FrequencyDistributedSet<>(Stream.of(1, "lorem", 5, "ipsum", 2, datetimeValue)
+            .map(element -> new WeightedElement<Object>(element, 1.0F))
+            .collect(Collectors.toSet())))
         );
 
         Optional<RowSpec> testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints);
 
         FieldSpec spec = testOutput.get().getSpecForField(field);
 
-        Assert.assertThat(spec.getWhitelist(), containsInAnyOrder("lorem", "ipsum", 5, 2, datetimeValue));
+        Assert.assertThat(spec.getWhitelist().set(), containsInAnyOrder("lorem", "ipsum", 5, 2, datetimeValue));
     }
 
     @Test
@@ -952,14 +964,17 @@ class ConstraintReducerTest {
         OffsetDateTime oneHourLaterDateTimeValue = datetimeValue.plusHours(1);
         List<AtomicConstraint> constraints = Arrays.asList(
             new IsAfterConstantDateTimeConstraint(field, datetimeValue),
-            new IsInSetConstraint(field, new HashSet<>(Arrays.asList(1, "lorem", 5, "ipsum", 2, datetimeValue, oneHourLaterDateTimeValue)))
+            new IsInSetConstraint(field, new FrequencyDistributedSet<>(Stream.of(1, "lorem", 5, "ipsum", 2, datetimeValue, oneHourLaterDateTimeValue)
+            .map(element -> new WeightedElement<Object>(element, 1.0F))
+            .collect(Collectors.toSet())))
+
         );
 
         Optional<RowSpec> testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, constraints);
 
         FieldSpec spec = testOutput.get().getSpecForField(field);
 
-        Assert.assertThat(spec.getWhitelist(), containsInAnyOrder("lorem", "ipsum", 1, 5, 2, oneHourLaterDateTimeValue));
+        Assert.assertThat(spec.getWhitelist().set(), containsInAnyOrder("lorem", "ipsum", 1, 5, 2, oneHourLaterDateTimeValue));
     }
     
     @Test
@@ -986,6 +1001,7 @@ class ConstraintReducerTest {
             Arrays.asList(ofTypeString, ofTypeString.negate()));
 
         Assert.assertThat(result.isPresent(), is(true));
-        Assert.assertThat(result.get().getTypeRestrictions().getAllowedTypes(), empty());
+        Assert.assertThat(result.get().getWhitelist().set(), empty());
+        Assert.assertTrue(result.get().isNullable());
     }
 }

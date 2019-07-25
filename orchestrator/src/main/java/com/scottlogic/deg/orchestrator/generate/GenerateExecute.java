@@ -17,18 +17,17 @@
 package com.scottlogic.deg.orchestrator.generate;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.common.ValidationException;
+import com.scottlogic.deg.common.output.GeneratedObject;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.DataGeneratorMonitor;
-import com.scottlogic.deg.common.output.GeneratedObject;
-import com.scottlogic.deg.output.writer.DataSetWriter;
-import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
-import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
-import com.scottlogic.deg.profile.reader.ProfileReader;
+import com.scottlogic.deg.generator.walker.RetryLimitReachedException;
+import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
 import com.scottlogic.deg.orchestrator.validator.ConfigValidator;
-import com.scottlogic.deg.generator.validators.ErrorReporter;
+import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
+import com.scottlogic.deg.output.writer.DataSetWriter;
+import com.scottlogic.deg.profile.reader.ProfileReader;
 import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
 
 import java.io.IOException;
@@ -87,6 +86,12 @@ public class GenerateExecute {
                     throw new RuntimeException(e);
                 }
             });
+        }
+        catch (RetryLimitReachedException ignored) {
+            monitor.addLineToPrintAtEndOfGeneration("");
+            monitor.addLineToPrintAtEndOfGeneration("The retry limit for generating data has been hit.");
+            monitor.addLineToPrintAtEndOfGeneration("This may mean that a lot or all of the profile is contradictory.");
+            monitor.addLineToPrintAtEndOfGeneration("Either fix the profile, or try running the same command again.");
         }
         monitor.endGeneration();
     }

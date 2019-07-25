@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.walker;
+package com.scottlogic.deg.generator.walker.rowspec;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Field;
@@ -29,6 +29,7 @@ import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagGenerator;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
+import com.scottlogic.deg.generator.walker.rowspec.RowSpecTreeSolver;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -37,27 +38,22 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class CartesianProductDecisionTreeWalker implements DecisionTreeWalker {
+public class CartesianProductRowSpecTreeSolver implements RowSpecTreeSolver {
     private final ConstraintReducer constraintReducer;
     private final RowSpecMerger rowSpecMerger;
-    private final RowSpecDataBagGenerator dataBagSourceFactory;
 
     @Inject
-    public CartesianProductDecisionTreeWalker(
+    public CartesianProductRowSpecTreeSolver(
         ConstraintReducer constraintReducer,
-        RowSpecMerger rowSpecMerger, RowSpecDataBagGenerator dataBagSourceFactory) {
+        RowSpecMerger rowSpecMerger) {
         this.constraintReducer = constraintReducer;
         this.rowSpecMerger = rowSpecMerger;
-        this.dataBagSourceFactory = dataBagSourceFactory;
     }
 
-    public Stream<DataBag> walk(DecisionTree tree) {
+    @Override
+    public Stream<RowSpec> createRowSpecs(DecisionTree tree) {
         final DecisionTreeWalkerHelper helper = new DecisionTreeWalkerHelper(tree.getFields());
-        Stream<RowSpec> rowSpecs = helper.walk(tree.getRootNode());
-
-        return FlatMappingSpliterator.flatMap(
-            rowSpecs,
-            dataBagSourceFactory::createDataBags);
+        return helper.walk(tree.getRootNode());
     }
 
     private class DecisionTreeWalkerHelper {

@@ -21,39 +21,40 @@ import com.google.inject.Provider;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.walker.*;
+import com.scottlogic.deg.generator.walker.rowspec.RowSpecDecisionTreeWalker;
 
 public class DecisionTreeWalkerProvider implements Provider<DecisionTreeWalker> {
-    private final DecisionTreeWalker reductiveDecisionTreeWalker;
-    private final DecisionTreeWalker cartesianProductDecisionTreeWalker;
+    private final ReductiveDecisionTreeWalker reductiveDecisionTreeWalker;
+    private final RowSpecDecisionTreeWalker rowSpecDecisionTreeWalker;
     private final RandomReductiveDecisionTreeWalker randomReductiveDecisionTreeWalker;
     private final GenerationConfigSource configSource;
 
     @Inject
     public DecisionTreeWalkerProvider(
         ReductiveDecisionTreeWalker reductiveDecisionTreeWalker,
-        CartesianProductDecisionTreeWalker cartesianProductDecisionTreeWalker,
+        RowSpecDecisionTreeWalker rowSpecDecisionTreeWalker,
         RandomReductiveDecisionTreeWalker randomReductiveDecisionTreeWalker,
         GenerationConfigSource configSource) {
         this.reductiveDecisionTreeWalker = reductiveDecisionTreeWalker;
-        this.cartesianProductDecisionTreeWalker = cartesianProductDecisionTreeWalker;
+        this.rowSpecDecisionTreeWalker = rowSpecDecisionTreeWalker;
         this.randomReductiveDecisionTreeWalker = randomReductiveDecisionTreeWalker;
         this.configSource = configSource;
     }
 
     @Override
     public DecisionTreeWalker get() {
-          switch(this.configSource.getWalkerType()) {
+          switch(configSource.getWalkerType()) {
               case CARTESIAN_PRODUCT:
-                  return this.cartesianProductDecisionTreeWalker;
+                  return rowSpecDecisionTreeWalker;
 
               case REDUCTIVE:
-                  if (this.configSource.getGenerationType() == DataGenerationType.RANDOM)
-                      return this.randomReductiveDecisionTreeWalker;
+                  if (configSource.getGenerationType() == DataGenerationType.RANDOM)
+                      return randomReductiveDecisionTreeWalker;
 
-                  return this.reductiveDecisionTreeWalker;
+                  return reductiveDecisionTreeWalker;
 
               default:
-                  return this.reductiveDecisionTreeWalker;
+                  return reductiveDecisionTreeWalker;
         }
     }
 }

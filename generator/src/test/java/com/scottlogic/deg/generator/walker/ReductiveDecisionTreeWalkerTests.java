@@ -18,17 +18,22 @@ package com.scottlogic.deg.generator.walker;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.generator.builders.ConstraintNodeBuilder;
+import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
-import com.scottlogic.deg.generator.walker.reductive.*;
+import com.scottlogic.deg.generator.walker.reductive.Merged;
+import com.scottlogic.deg.generator.walker.reductive.NoOpIterationVisualiser;
+import com.scottlogic.deg.generator.walker.reductive.ReductiveFieldSpecBuilder;
+import com.scottlogic.deg.generator.walker.reductive.ReductiveTreePruner;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategy;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategyFactory;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -36,7 +41,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.hamcrest.collection.IsEmptyCollection.empty;
+import static java.time.Duration.ofMillis;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
@@ -48,6 +56,8 @@ class ReductiveDecisionTreeWalkerTests {
     private FixFieldStrategy fixFieldStrategy;
     private FixFieldStrategyFactory fixFieldStrategyFactory;
     private FieldSpecValueGenerator fieldSpecValueGenerator;
+    private ReductiveTreePruner treePruner;
+    private ReductiveWalkerRetryChecker retryChecker = new ReductiveWalkerRetryChecker(100);
     private Field field1 = new Field("field1");
     private Field field2 = new Field("field2");
 
@@ -56,8 +66,6 @@ class ReductiveDecisionTreeWalkerTests {
         ProfileFields fields = new ProfileFields(Arrays.asList(field1, field2));
         rootNode = new TreeConstraintNode();
         tree = new DecisionTree(rootNode, fields);
-        ReductiveTreePruner treePruner = mock(ReductiveTreePruner.class);
-        when(treePruner.pruneConstraintNode(eq(rootNode), any(), any())).thenReturn(Merged.of(rootNode));
 
         reductiveFieldSpecBuilder = mock(ReductiveFieldSpecBuilder.class);
         fieldSpecValueGenerator = mock(FieldSpecValueGenerator.class);
@@ -65,6 +73,8 @@ class ReductiveDecisionTreeWalkerTests {
         when(fixFieldStrategy.getNextFieldToFix(any())).thenReturn(field1, field2);
         fixFieldStrategyFactory = mock(FixFieldStrategyFactory.class);
         when(fixFieldStrategyFactory.create(any())).thenReturn(fixFieldStrategy);
+        treePruner = mock(ReductiveTreePruner.class);
+        when(treePruner.pruneConstraintNode(eq(rootNode), any(), any())).thenReturn(Merged.of(rootNode));
 
         walker = new ReductiveDecisionTreeWalker(
             new NoOpIterationVisualiser(),
@@ -72,7 +82,8 @@ class ReductiveDecisionTreeWalkerTests {
             new NoopDataGeneratorMonitor(),
             treePruner,
             fieldSpecValueGenerator,
-            fixFieldStrategyFactory
+            fixFieldStrategyFactory,
+            retryChecker
         );
     }
 
@@ -86,7 +97,7 @@ class ReductiveDecisionTreeWalkerTests {
         List<DataBag> result = walker.walk(tree).collect(Collectors.toList());
 
         verify(reductiveFieldSpecBuilder).getDecisionFieldSpecs(eq(rootNode), any());
-        Assert.assertThat(result, empty());
+        assertThat(result, empty());
     }
 
     /**
@@ -96,7 +107,7 @@ class ReductiveDecisionTreeWalkerTests {
     @Test
     public void shouldReturnEmptyCollectionOfRowsWhenSecondFieldCannotBeFixed() {
         DataBagValue dataBag = new DataBagValue(field1, "yes");
-        FieldSpec firstFieldSpec = FieldSpec.Empty.withWhitelist(Collections.singleton("yes"))
+        FieldSpec firstFieldSpec = FieldSpec.Empty.withWhitelist(FrequencyDistributedSet.uniform(Collections.singleton("yes")))
             .withNotNull();
         when(fieldSpecValueGenerator.generate(any(Set.class))).thenReturn(Stream.of(dataBag));
 
@@ -105,6 +116,34 @@ class ReductiveDecisionTreeWalkerTests {
         List<DataBag> result = walker.walk(tree).collect(Collectors.toList());
 
         verify(reductiveFieldSpecBuilder, times(2)).getDecisionFieldSpecs(eq(rootNode), any());
-        Assert.assertThat(result, empty());
+        assertThat(result, empty());
+    }
+
+    @Test
+    public void walk_whereFirstFieldCannotBeFixed_throwsException() {
+        ProfileFields fields = new ProfileFields(Arrays.asList(field1, field2));
+        FieldSpec firstFieldSpec = FieldSpec.Empty.withNotNull();
+        FieldSpec secondFieldSpec = FieldSpec.Empty.withNotNull();
+        Set<FieldSpec> fieldSpecs = new HashSet<>();
+        fieldSpecs.add(firstFieldSpec);
+        fieldSpecs.add(secondFieldSpec);
+        ConstraintNode root = ConstraintNodeBuilder.constraintNode()
+            .where(field1).isNull()
+            .where(field1).isNotNull()
+            .build();
+        DecisionTree tree = new DecisionTree(root, fields);
+        DataBagValue dataBagValue = mock(DataBagValue.class);
+        when(fixFieldStrategy.getNextFieldToFix(any())).thenReturn(field1, field2);
+        when(fixFieldStrategyFactory.create(any())).thenReturn(fixFieldStrategy);
+        when(treePruner.pruneConstraintNode(eq(root), any(), any())).thenReturn(Merged.of(root));
+        when(reductiveFieldSpecBuilder.getDecisionFieldSpecs(any(), any())).thenReturn(fieldSpecs);
+        when(treePruner.pruneConstraintNode(eq(root), any(), any())).thenReturn(Merged.contradictory());
+
+        Stream<DataBagValue> infiniteStream = Stream.iterate(dataBagValue, i -> dataBagValue);
+        when(fieldSpecValueGenerator.generate(anySetOf(FieldSpec.class))).thenReturn(infiniteStream);
+
+        assertTimeoutPreemptively(ofMillis(100), () -> {
+            assertThrows(RetryLimitReachedException.class, () -> walker.walk(tree).findFirst());
+        });
     }
 }

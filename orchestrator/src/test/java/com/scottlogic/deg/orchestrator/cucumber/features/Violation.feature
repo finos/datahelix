@@ -26,7 +26,6 @@ Feature: The violations mode of the Data Helix app can be run in violations mode
     Then the following data should be generated:
       | foo  |
       | 8    |
-      | null |
 
   Scenario: Running the generator in violate mode where equal to is not violated is successful
     Given foo is equal to 8
@@ -35,7 +34,6 @@ Feature: The violations mode of the Data Helix app can be run in violations mode
     Then the following data should be generated:
       | foo  |
       | 8    |
-      | null |
 
   Scenario: Running the generator in violate mode for multiple constraints with strings is successful
     Given the generation strategy is interesting

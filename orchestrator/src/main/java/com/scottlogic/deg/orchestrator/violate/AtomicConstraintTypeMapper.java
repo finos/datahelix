@@ -57,6 +57,7 @@ public class AtomicConstraintTypeMapper {
             case IS_GRANULAR_TO:
                 return IsGranularToNumericConstraint.class;
             case IS_EQUAL_TO_CONSTANT:
+                return EqualToConstraint.class;
             case IS_IN_SET:
                 return IsInSetConstraint.class;
             default:
