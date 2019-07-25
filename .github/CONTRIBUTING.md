@@ -44,7 +44,18 @@ To make review of PRs easier, please:
 
 ## Commit and PR Messages
 
-* Ensure you follow the [angular style](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md) for commit messages. See [here](https://github.com/conventional-changelog-archived-repos/conventional-changelog-angular/blob/master/convention.md) for an outline of the structure used. **This is enforced for at least one commit in every PR to make the automatic semantic versioning work.**
+The [Angular style](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines)
+**is enforced for at least one commit in every PR** to make the automatic semantic versioning work.
+For example, a commit might look like:
+
+`feat(#0000): your commit message here`
+
+where feat is the commit type, the options are feat|fix|docs|style|refactor|perf|test|chore
+and 0000 is the Github issue number.
+
+Note there is no whitespace between feat and the issue number, and there is a colon and a space after the issue number.
+
+Additionally, we have the following (unenforced) guidelines:
 * Use the present tense ("Add feature" not "Added feature")
 * Use the imperative mood ("Move button left..." not "Moves button left...")
 * Limit the first line to 72 characters or less
