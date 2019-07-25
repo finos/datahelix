@@ -224,7 +224,7 @@ class AutomatonUtils {
 
         Automaton generatedAutomaton = bricsRegExp.toAutomaton();
         generatedAutomaton.expandSingleton();
-        generatedAutomaton = restrictCharacterSet(generatedAutomaton, '\u001F', '\u007E');
+        generatedAutomaton = restrictCharacterSet(generatedAutomaton, '\u0020', '\u007E');
 
         cache.put(regexStr, generatedAutomaton);
         return generatedAutomaton;

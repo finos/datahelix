@@ -20,19 +20,21 @@ import com.scottlogic.deg.generator.utils.IterableAsStream;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import static com.scottlogic.deg.generator.helpers.StringGeneratorHelper.assertGeneratorCanGenerateAtLeastOneStringWithinLengthBounds;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class RegexStringGeneratorTests {
+class RegexStringGeneratorTests {
     @Test
     void shouldFullStringMatchAnchoredString() {
         givenRegex("^test$");
@@ -271,6 +273,24 @@ public class RegexStringGeneratorTests {
                 fail("string contains surrogate character");
             }
         }
+    }
+
+    @Test
+    void generateAllShouldGenerateStringsOfLength11() {
+        RegexStringGenerator generator = new RegexStringGenerator(".{11}", true);
+        generator.generateAllValues();
+
+        assertGeneratorCanGenerateAtLeastOneStringWithinLengthBounds(generator, 11, 11);
+    }
+
+    // TODO AF re-enable this test when #1154 bug fixed
+    @Disabled("TODO AF when fixed bug #1154 of long overflow in RegExStringGenerator can re-enable this test method")
+    @Test
+    void generateAllShouldGenerateStringsOfLength12() {
+        RegexStringGenerator generator = new RegexStringGenerator(".{12}", true);
+        generator.generateAllValues();
+
+        assertGeneratorCanGenerateAtLeastOneStringWithinLengthBounds(generator, 12, 12);
     }
 
     private final boolean doesStringContainSurrogates(String testString) {

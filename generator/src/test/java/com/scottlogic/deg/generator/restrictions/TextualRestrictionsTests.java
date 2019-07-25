@@ -21,12 +21,13 @@ import com.scottlogic.deg.generator.generation.string.IsinStringGenerator;
 import com.scottlogic.deg.generator.generation.string.RegexStringGenerator;
 import com.scottlogic.deg.generator.generation.string.StringGenerator;
 import org.junit.Assert;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.regex.Pattern;
 
+import static com.scottlogic.deg.generator.helpers.StringGeneratorHelper.*;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsNull.nullValue;
 
@@ -234,6 +235,29 @@ class TextualRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
+        Assert.assertThat(generator.toString(), equalTo("(/^.{0,2}$/ ∩ /[a-z]{5,9}/)"));
+        assertGeneratorCannotGenerateAnyStrings(generator);
+    }
+
+    @Test
+    void createGenerator_withContradictingLength10AndMatchingRegexConstraintThatIsShorter_shouldCreateNoStrings() {
+        StringRestrictions restrictions = matchingRegex("[a-z]{5,9}", false)
+            .intersect(ofLength(10, false)).restrictions;
+
+        StringGenerator generator = restrictions.createGenerator();
+
+        Assert.assertThat(generator.toString(), equalTo("(/^.{10}$/ ∩ /[a-z]{5,9}/)"));
+        assertGeneratorCannotGenerateAnyStrings(generator);
+    }
+
+    @Test
+    void createGenerator_withContradictingLength15AndMatchingRegexConstraintThatIsShorter_shouldCreateNoStrings() {
+        StringRestrictions restrictions = matchingRegex("[a-z]{5,9}", false)
+            .intersect(ofLength(15, false)).restrictions;
+
+        StringGenerator generator = restrictions.createGenerator();
+
+        Assert.assertThat(generator.toString(), equalTo("(/^.{15}$/ ∩ /[a-z]{5,9}/)"));
         assertGeneratorCannotGenerateAnyStrings(generator);
     }
 
@@ -329,12 +353,44 @@ class TextualRestrictionsTests {
     }
 
     @Test
-    void createGenerator_withContradictingOfLengthAndContainingRegexConstraint_shouldCreateNoStrings() {
-        StringRestrictions restrictions = containsRegex("[a-z]{0,9}", false)
+    void createGenerator_OfLength11_shouldCreateStrings() {
+        StringRestrictions restrictions = ofLength(11, false);
+        StringGenerator generator = restrictions.createGenerator();
+
+        Assert.assertThat(generator.toString(), equalTo("/^.{11}$/"));
+        assertGeneratorCanGenerateAtLeastOneStringWithinLengthBounds(generator, 11, 11);
+    }
+
+    // TODO AF re-enable this test when #1154 bug fixed
+    @Disabled("TODO AF when fixed bug #1154 of long overflow in RegExStringGenerator can re-enable this test method")
+    @Test
+    void createGenerator_OfLength12_shouldCreateStrings() {
+        StringRestrictions restrictions = ofLength(12, false);
+        StringGenerator generator = restrictions.createGenerator();
+
+        Assert.assertThat(generator.toString(), equalTo("/^.{12}$/"));
+        assertGeneratorCanGenerateAtLeastOneStringWithinLengthBounds(generator, 12, 12);
+    }
+
+    @Test
+    void createGenerator_withContradictingOfLength10AndContainingRegexConstraint_shouldCreateNoStrings() {
+        StringRestrictions restrictions = containsRegex("[a-z]{11,12}", false)
+            .intersect(ofLength(10, false)).restrictions;
+
+        StringGenerator generator = restrictions.createGenerator();
+
+        Assert.assertThat(generator.toString(), equalTo("(/^.{10}$/ ∩ */[a-z]{11,12}/*)"));
+        assertGeneratorCannotGenerateAnyStrings(generator);
+    }
+
+    @Test
+    void createGenerator_withContradictingOfLength100AndContainingRegexConstraint_shouldCreateNoStrings() {
+        StringRestrictions restrictions = containsRegex("[a-z]{102,103}", false)
             .intersect(ofLength(100, false)).restrictions;
 
         StringGenerator generator = restrictions.createGenerator();
 
+        Assert.assertThat(generator.toString(), equalTo("(/^.{100}$/ ∩ */[a-z]{102,103}/*)"));
         assertGeneratorCannotGenerateAnyStrings(generator);
     }
 
@@ -347,6 +403,7 @@ class TextualRestrictionsTests {
         StringGenerator generator = restrictions.createGenerator();
 
         Assert.assertThat(generator.toString(), equalTo("(/^.{3,7}$/ ∩ */[a-z]{0,9}/*)"));
+        assertGeneratorCanGenerateAtLeastOneStringWithinLengthBounds(generator, 3, 7);
     }
 
     @Test
@@ -649,13 +706,4 @@ class TextualRestrictionsTests {
         return new MatchesStandardStringRestrictions(type, negate);
     }
 
-    private static void assertGeneratorCannotGenerateAnyStrings(StringGenerator generator) {
-        Iterator<String> stringValueIterator = generator.generateAllValues().iterator();
-        Assert.assertThat(stringValueIterator.hasNext(), is(false));
-    }
-
-    private static void assertGeneratorCanGenerateAtLeastOneString(StringGenerator generator) {
-        Iterator<String> stringValueIterator = generator.generateAllValues().iterator();
-        Assert.assertThat(stringValueIterator.hasNext(), is(true));
-    }
 }
