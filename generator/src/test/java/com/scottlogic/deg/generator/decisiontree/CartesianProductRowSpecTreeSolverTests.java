@@ -23,6 +23,7 @@ import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.common.profile.RuleInformation;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
+import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
@@ -32,7 +33,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
-import com.scottlogic.deg.generator.walker.CartesianProductDecisionTreeWalker;
+import com.scottlogic.deg.generator.walker.rowspec.CartesianProductRowSpecTreeSolver;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -45,18 +46,16 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class CartesianProductDecisionTreeWalkerTests {
+class CartesianProductRowSpecTreeSolverTests {
     private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
     private RowSpecDataBagGenerator dataBagSourceFactory = mock(RowSpecDataBagGenerator.class);
-    private final CartesianProductDecisionTreeWalker dTreeWalker = new CartesianProductDecisionTreeWalker(
-            new ConstraintReducer(
+    private final CartesianProductRowSpecTreeSolver dTreeWalker =
+            new CartesianProductRowSpecTreeSolver(
+                new ConstraintReducer(
                     new FieldSpecFactory(new StringRestrictionsFactory()),
                     fieldSpecMerger
-            ),
-            new RowSpecMerger(
-                    fieldSpecMerger
-            ),
-        dataBagSourceFactory);
+                ), new RowSpecMerger(fieldSpecMerger));
+
     private final ProfileDecisionTreeFactory dTreeGenerator = new ProfileDecisionTreeFactory();
 
     @Test
@@ -148,8 +147,8 @@ class CartesianProductDecisionTreeWalkerTests {
 
         final DecisionTree merged = this.dTreeGenerator.analyse(profile);
 
-        final List<DataBag> rowSpecs = dTreeWalker
-            .walk(merged)
+        final List<RowSpec> rowSpecs = dTreeWalker
+            .createRowSpecs(merged)
             .collect(Collectors.toList());
 
         Assert.assertThat(rowSpecs, notNullValue());
