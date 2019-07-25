@@ -44,10 +44,8 @@ To make review of PRs easier, please:
 
 ## Commit and PR Messages
 
-* **Reference issues, wiki pages, and pull requests liberally!**
+* Ensure you follow the [angular style](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md) for commit messages. See [here](https://github.com/conventional-changelog-archived-repos/conventional-changelog-angular/blob/master/convention.md) for an outline of the structure used. **This is enforced for at least one commit in every PR to make the automatic semantic versioning work.**
 * Use the present tense ("Add feature" not "Added feature")
 * Use the imperative mood ("Move button left..." not "Moves button left...")
 * Limit the first line to 72 characters or less
-* Ensure you follow the [angular style](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md) for commit messages. See [here](https://github.com/conventional-changelog-archived-repos/conventional-changelog-angular/blob/master/convention.md) for an outline of the structure used.
-
-
+* Reference issues, wiki pages, and pull requests liberally!

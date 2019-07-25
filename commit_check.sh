@@ -27,7 +27,7 @@ do
 gitmessage=`git log --format=%B -n 1 "$i"`
 echo "Checking message: $gitmessage"
 
-# All checks run at the same time by pipeing from one grep to another
+# All checks run at the same time by piping from one grep to another
 messagecheck=`echo ${gitmessage} | grep "\(feat\|fix\|docs\|style\|refactor\|perf\|test\|chore\)(#[0-9]*): "`
 
 # check to see if the messagecheck var is empty
@@ -41,6 +41,10 @@ done
 rm shafile.txt  >/dev/null 2>&1
 
 echo "No commits exist with valid formatting."
+echo "At least one commit in the pull request must use the angular format."
+echo "This means that at least one commit must match this regex exactly (Note especially the whitespace):"
+echo "(feat|fix|docs|style|refactor|perf|test|chore)#([0-9])*: .*"
+echo "See https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines for more details."
 
 set -o errexit
 exit 1
