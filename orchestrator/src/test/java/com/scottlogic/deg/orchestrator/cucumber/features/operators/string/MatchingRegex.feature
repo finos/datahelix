@@ -110,23 +110,6 @@ Feature: User can specify that a value either matches or contains a specified re
     Then the following data should be generated:
       | foo  |
       | null |
-      | "あ"  |
-      | "ぃ"  |
-      | "い"  |
-      | "ぅ"  |
-      | "う"  |
-      | "ぇ"  |
-      | "え"  |
-      | "ぉ"  |
-      | "お"  |
-      | "か"  |
-      | "が"  |
-      | "き"  |
-      | "ぎ"  |
-      | "く"  |
-      | "ぐ"  |
-      | "け"  |
-      | "げ"  |
 
   Scenario: Running a 'matchingRegex' request that includes special characters (emoji) only should be successful
     Given foo is matching regex /[😁-😘]{1}/

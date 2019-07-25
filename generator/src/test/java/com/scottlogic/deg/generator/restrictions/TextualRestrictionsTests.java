@@ -21,12 +21,14 @@ import com.scottlogic.deg.generator.generation.string.IsinStringGenerator;
 import com.scottlogic.deg.generator.generation.string.RegexStringGenerator;
 import com.scottlogic.deg.generator.generation.string.StringGenerator;
 import org.junit.Assert;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.regex.Pattern;
 
+import static com.scottlogic.deg.generator.helpers.StringGeneratorHelper.*;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsNull.nullValue;
 
@@ -234,6 +236,22 @@ class TextualRestrictionsTests {
     }
 
     @Test
+    void createGenerator_withContradictingLength10AndMatchingRegexConstraintThatIsShorter_shouldCreateNoStrings() {
+        MergeResult<StringRestrictions> intersect = matchingRegex("[a-z]{5,9}", false)
+            .intersect(ofLength(10, false));
+
+        Assert.assertThat(intersect, equalTo(MergeResult.unsuccessful()));
+    }
+
+    @Test
+    void createGenerator_withContradictingLength15AndMatchingRegexConstraintThatIsShorter_shouldCreateNoStrings() {
+        MergeResult<StringRestrictions> intersect = matchingRegex("[a-z]{5,9}", false)
+            .intersect(ofLength(15, false));
+
+        Assert.assertThat(intersect, equalTo(MergeResult.unsuccessful()));
+    }
+
+    @Test
     void createGenerator_withNonContradictingOfLengthAndMatchingRegexConstraint_shouldCreateStringsMatchingRegexAndOfPrescribedLength() {
         StringRestrictions restrictions = matchingRegex("[a-z]{0,9}", false)
             .intersect(ofLength(5, false)).restrictions;
@@ -329,6 +347,40 @@ class TextualRestrictionsTests {
     }
 
     @Test
+    void createGenerator_OfLength11_shouldCreateStrings() {
+        StringRestrictions restrictions = ofLength(11, false);
+        StringGenerator generator = restrictions.createGenerator();
+
+        Assert.assertThat(generator.toString(), equalTo("/^.{11}$/"));
+        assertGeneratorCanGenerateAtLeastOneStringWithinLengthBounds(generator, 11, 11);
+    }
+
+    @Test
+    void createGenerator_OfLength12_shouldCreateStrings() {
+        StringRestrictions restrictions = ofLength(12, false);
+        StringGenerator generator = restrictions.createGenerator();
+
+        Assert.assertThat(generator.toString(), equalTo("/^.{12}$/"));
+        assertGeneratorCanGenerateAtLeastOneStringWithinLengthBounds(generator, 12, 12);
+    }
+
+    @Test
+    void createGenerator_withContradictingOfLength10AndContainingRegexConstraint_shouldCreateNoStrings() {
+        MergeResult<StringRestrictions> intersect = containsRegex("[a-z]{11,12}", false)
+            .intersect(ofLength(10, false));
+
+        Assert.assertThat(intersect, equalTo(MergeResult.unsuccessful()));
+    }
+
+    @Test
+    void createGenerator_withContradictingOfLength100AndContainingRegexConstraint_shouldCreateNoStrings() {
+        MergeResult<StringRestrictions> intersect = containsRegex("[a-z]{102,103}", false)
+            .intersect(ofLength(100, false));
+
+        Assert.assertThat(intersect, equalTo(MergeResult.unsuccessful()));
+    }
+
+    @Test
     void createGenerator_withMinAndMaxLengthAndContainingRegexConstraint_shouldCreateStringsContainingRegexAndBetweenLengths() {
         StringRestrictions restrictions = containsRegex("[a-z]{0,9}", false)
             .intersect(minLength(3)).restrictions
@@ -337,6 +389,7 @@ class TextualRestrictionsTests {
         StringGenerator generator = restrictions.createGenerator();
 
         Assert.assertThat(generator.toString(), equalTo("(/^.{3,7}$/ ∩ */[a-z]{0,9}/*)"));
+        assertGeneratorCanGenerateAtLeastOneStringWithinLengthBounds(generator, 3, 7);
     }
 
     @Test
