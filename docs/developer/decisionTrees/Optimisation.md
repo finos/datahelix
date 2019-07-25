@@ -12,7 +12,7 @@ We can observe that variations in `x` and `y` have no implications on one anothe
 
 ![](partitioning.after1.svg) ![](partitioning.after2.svg)
 
-The motivation for partitioning is to determine which fields can vary independently of each other so that streams of values can be generated for them independently (and potentially in parallel execution threads) and then recombined by any preferred [combination strategy](../../generator/docs/CombinationStrategies.md).
+The motivation for partitioning is to determine which fields can vary independently of each other so that streams of values can be generated for them independently (and potentially in parallel execution threads) and then recombined by any preferred [combination strategy](../../user/CombinationStrategies.md).
 
 ## Unification
 

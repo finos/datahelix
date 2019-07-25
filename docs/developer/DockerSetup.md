@@ -1,6 +1,6 @@
 # Build and run the generator using Docker
 
-The instructions below explain how to download the source code, and then build and run it using Docker.  This generates a self-contained executable Docker image which can then run the generator without needing to install a JRE.  If you would like to download and build the source code in order to contribute to development, we recommend you [build and run the generator using an IDE](../../generator/docs/GeneratorSetup.md) instead.
+The instructions below explain how to download the source code, and then build and run it using Docker.  This generates a self-contained executable Docker image which can then run the generator without needing to install a JRE.  If you would like to download and build the source code in order to contribute to development, we recommend you [build and run the generator using an IDE](../user/gettingStarted/BuildAndRun.md) instead.
 
 ## Get Code
 

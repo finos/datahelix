@@ -21,13 +21,13 @@ DataHelix is a proud member of the [Fintech Open Source Foundation](https://www.
 
 # Getting Started
 
-_The following guide gives a 10 minute introduction to the generator via various practical examples. For more detailed documentation please refer to the [User Guide](docs/user/UserGuide.md), and if you are interested in extending / modifying the generator itself, refer to the [DataHelix Generator Developer Guide](docs/developer/DeveloperGuide.md)._
+_The following guide gives a 10 minute introduction to the generator via various practical examples. For more detailed documentation please refer to the [User Guide](docs/user/UserGuide.md). If you are interested in extending / modifying the generator itself please refer to the [Developer Guide](docs/developer/DeveloperGuide.md)._
 
-The generator has been written in Java, allowing it to work on Microsoft Windows, Apple Mac and Linux. You will need Java v1.8 installed to run the generator (you can run `java version` to check whether you meet this requirement), it can be [downloaded here](https://www.java.com/en/download/manual.jsp).
+The generator has been written in Java, allowing it to work on Microsoft Windows, Apple Mac and Linux. You will need Java v1.8 installed to run the generator (you can run `java -version` to check whether you meet this requirement), it can be [downloaded here](https://www.java.com/en/download/manual.jsp).
 
 The generator is distributed as a JAR file, with the latest release always available from the [GitHub releases page](https://github.com/finos/datahelix/releases/). The project is currently in beta and under active development. You can expect breaking changes in future releases, and new features too!
 
-You are also welcome to download the source code and build the generator yourself. To do so, follow the instructions for [downloading and building it using a Java IDE](generator/docs/GeneratorSetup.md), or for [downloading and building it using Docker](docs/user/gettingStarted/BuildAndRun.md).
+You are also welcome to download the source code and build the generator yourself. To do so, follow the instructions for [downloading and building it using a Java IDE](docs/user/gettingStarted/BuildAndRun.md), or for [downloading and building it using Docker](docs/developer/DockerSetup.md).
 
 Your feedback on the beta would be greatly appreciated. If you have any issues, feature requests, or ideas, please share them via the [GitHub issues page](https://github.com/finos/datahelix/issues).
 

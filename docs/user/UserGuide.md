@@ -79,11 +79,11 @@ Every rule is a named collection of *constraints*, which can be any of:
 
 * [Predicate constraints](#Predicate-constraints), which limit a field's possible values
 * [Presentational constraints](#Presentational-Constraints), which control how values are serialised (eg, number of significant figures)
-* [Grammatical constraints](#Grammatical-Constraints), which combine other constraints together
+* [Grammatical constraints](#Grammatical-constraints), which combine other constraints together
 
 (Predicate and formatting constraints are collectively referred to as **data constraints**)
 
-The decision of how to group constraints into rules is up to the user. At the extremes, there could be a separate rule for each constraint, or one rule containing every constraint. More usually, rules will represent collections of related constraints (eg, _"X is a non-null integer between 0 and 100"_ is a fine rule, comprising four constraints). How to group into rules becomes particularly important when [deliberate violation](../generator/docs/DeliberateViolation.md) is involved.
+The decision of how to group constraints into rules is up to the user. At the extremes, there could be a separate rule for each constraint, or one rule containing every constraint. More usually, rules will represent collections of related constraints (eg, _"X is a non-null integer between 0 and 100"_ is a fine rule, comprising four constraints). How to group into rules becomes particularly important when [deliberate violation](alphaFeatures/DeliberateViolation.md) is involved.
 
 ## Persistence
 
