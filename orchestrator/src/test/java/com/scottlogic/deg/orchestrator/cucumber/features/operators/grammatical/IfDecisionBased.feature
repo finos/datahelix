@@ -1,5 +1,7 @@
 Feature: Values can be specified by using if, then and else constraints
 
+  # this feature is a duplicate of If.feature. except it tests the Decision Based walker instead of reductive
+
     Background:
     Given the generation strategy is full
     And the combination strategy is exhaustive

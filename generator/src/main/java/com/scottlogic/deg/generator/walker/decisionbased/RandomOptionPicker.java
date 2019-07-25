@@ -6,6 +6,7 @@ import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 import java.util.stream.Stream;
 
@@ -25,7 +26,7 @@ public class RandomOptionPicker implements OptionPicker {
 
     @Override
     public Stream<ConstraintNode> streamOptions(DecisionNode decisionNode) {
-        ArrayList options = new ArrayList(decisionNode.getOptions());
+        List<ConstraintNode> options = new ArrayList<>(decisionNode.getOptions());
         Collections.shuffle(options);
         return options.stream();
     }

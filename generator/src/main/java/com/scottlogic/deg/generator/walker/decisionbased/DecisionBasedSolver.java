@@ -42,8 +42,7 @@ public class DecisionBasedSolver implements RowSpecTreeSolver {
 
     private RowSpec toRowspec(ProfileFields fields, ConstraintNode rootNode){
         return constraintReducer
-            .reduceConstraintsToRowSpec(fields, rootNode.getAtomicConstraints())
-            .get();//todo
+            .reduceConstraintsToRowSpec(fields, rootNode.getAtomicConstraints()).get();
     }
 
     private Stream<ConstraintNode> reduceToRowNodes(ConstraintNode rootNode){
@@ -56,7 +55,7 @@ public class DecisionBasedSolver implements RowSpecTreeSolver {
 
         Stream<ConstraintNode> rootOnlyConstraintNodes = optionPicker.streamOptions(decisionNode)
             .map(option -> combineWithRootNode(rootWithoutDecision, option))
-            .filter(Merged::notContradictory)
+            .filter(newNode -> !newNode.isContradictory())
             .map(Merged::get);
 
         return FlatMappingSpliterator.flatMap(
