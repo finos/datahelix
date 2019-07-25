@@ -1,7 +1,6 @@
 package com.scottlogic.deg.generator.walker.rowspec;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.common.util.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
@@ -23,20 +22,17 @@ public class RandomRowSpecDecisionTreeWalker implements DecisionTreeWalker {
 
     @Override
     public Stream<DataBag> walk(DecisionTree tree) {
-
         if (tree.rootNode.getDecisions().isEmpty()){
             return generateWithoutRestarting(tree);
         }
 
-        return FlatMappingSpliterator.flatMap(
-            getRowSpecAndRestart(tree),
-            this::createDataBags);
+        return getRowSpecAndRestart(tree)
+            .map(this::createDataBag);
     }
 
     private Stream<DataBag> generateWithoutRestarting(DecisionTree tree) {
-        return FlatMappingSpliterator.flatMap(
-            rowSpecTreeSolver.createRowSpecs(tree),
-            rowSpecDataBagGenerator::createDataBags);
+        RowSpec rowSpec = getFirstRowSpec(tree).get();
+        return rowSpecDataBagGenerator.createDataBags(rowSpec);
     }
 
     private Stream<RowSpec> getRowSpecAndRestart(DecisionTree tree) {
@@ -53,8 +49,7 @@ public class RandomRowSpecDecisionTreeWalker implements DecisionTreeWalker {
         return rowSpecTreeSolver.createRowSpecs(tree).findFirst();
     }
 
-    private Stream<DataBag> createDataBags(RowSpec rowSpec) {
-        return rowSpecDataBagGenerator.createDataBags(rowSpec)
-            .limit(1);
+    private DataBag createDataBag(RowSpec rowSpec) {
+        return rowSpecDataBagGenerator.createDataBags(rowSpec).findFirst().get();
     }
 }
