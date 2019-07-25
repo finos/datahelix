@@ -22,7 +22,7 @@ Examples are:
 * `ofType string` and `ofType decimal` and `not(is null)`
 * `ofType string` and `shorterThan 1` and `not(is null)`
 
-The contradictions that the validator will detect are [documented here](../../generator/docs/ProfileValidation.md).
+The contradictions that the validator will detect are [documented here](ProfileValidation.md).
 
 Examples of profiles are:
 * [Null Validation](../../examples/hard-contradiction-null-validation/profile.json)
