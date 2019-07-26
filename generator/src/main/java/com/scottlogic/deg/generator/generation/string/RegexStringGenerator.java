@@ -216,8 +216,6 @@ public class RegexStringGenerator implements StringGenerator {
             passedStringNbrInChildNode = passedStringNbr;
         }
         for (Node childN : node.getNextNodes()) {
-            // TODO AF delete this commented out old code before merge:
-            // AF passedStringNbrInChildNode += childN.getMatchedStringIdx();
             passedStringNbrInChildNode += Math.min(childN.getMatchedStringIdx(), Long.MAX_VALUE - childN.getMatchedStringIdx());
             if (passedStringNbrInChildNode >= indexOrder) {
                 passedStringNbrInChildNode -= childN.getMatchedStringIdx();
@@ -304,8 +302,6 @@ public class RegexStringGenerator implements StringGenerator {
                 for (Node childNode : nextNodes) {
                     childNode.updateMatchedStringIdx();
                     long childNbrChar = childNode.getMatchedStringIdx();
-                    // TODO AF delete this commented out old code before merge:
-                    // matchedStringIdx += nbrChar * childNbrChar;
                     long newNbrChar = (childNbrChar == 0 || Long.MAX_VALUE / childNbrChar > nbrChar) ? nbrChar * childNbrChar : nbrChar;
                     matchedStringIdx += Math.min(newNbrChar, Long.MAX_VALUE - newNbrChar);
                 }

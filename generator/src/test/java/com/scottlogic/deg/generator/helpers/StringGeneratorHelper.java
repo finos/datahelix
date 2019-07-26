@@ -31,14 +31,6 @@ public enum StringGeneratorHelper {
 
     public static void assertGeneratorCannotGenerateAnyStrings(StringGenerator generator) {
         Iterator<String> stringValueIterator = generator.generateAllValues().iterator();
-
-        // TODO AF remove once fixed #1154 bug - useful for testing this bug
-        int i = 0;
-        while (stringValueIterator.hasNext() && i < 15) {
-            System.out.println("" + i + ": '" + stringValueIterator.next() + "'");
-            ++i;
-        }
-
         Assert.assertThat(stringValueIterator.hasNext(), is(false));
     }
 
@@ -51,15 +43,6 @@ public enum StringGeneratorHelper {
         Iterator<String> stringValueIterator = generator.generateAllValues().iterator();
         Assert.assertThat(stringValueIterator.hasNext(), is(true));
         String value = stringValueIterator.next();
-
-        // TODO AF remove once fixed #1154 bug - useful for testing this bug
-        System.out.println("'" + value + "'");
-        int i = 1;
-        while (stringValueIterator.hasNext() && i < 100) {
-            String next = stringValueIterator.next();
-            System.out.println("" + i + ": '" + next + "'");
-            ++i;
-        }
 
         Assert.assertThat(value.length(), greaterThanOrEqualTo(minLength));
         Assert.assertThat(value.length(), lessThanOrEqualTo(maxLength));
