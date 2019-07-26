@@ -117,6 +117,12 @@
     "constraint": {
       "oneOf": [
         {
+          "$ref": "#/definitions/anyOfConstraint"
+        },
+        {
+          "$ref": "#/definitions/allOfConstraint"
+        },
+        {
           "$ref": "#/definitions/dataConstraint"
         },
         {
@@ -127,12 +133,6 @@
         },
         {
           "$ref": "#/definitions/notConstraint"
-        },
-        {
-          "$ref": "#/definitions/anyOfConstraint"
-        },
-        {
-          "$ref": "#/definitions/allOfConstraint"
         },
         {
           "$ref": "#/definitions/ifThenConstraint"
