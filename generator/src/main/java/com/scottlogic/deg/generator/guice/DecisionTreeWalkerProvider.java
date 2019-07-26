@@ -18,6 +18,7 @@ package com.scottlogic.deg.generator.guice;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.walker.*;
@@ -61,7 +62,7 @@ public class DecisionTreeWalkerProvider implements Provider<DecisionTreeWalker> 
                   return reductiveDecisionTreeWalker;
 
               default:
-                  return reductiveDecisionTreeWalker;
+                  throw new ValidationException("no WalkerType selected");
         }
     }
 }

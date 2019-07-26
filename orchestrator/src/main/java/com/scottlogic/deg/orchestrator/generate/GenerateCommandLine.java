@@ -33,8 +33,8 @@ import java.util.concurrent.Callable;
 import static com.scottlogic.deg.generator.config.detail.CombinationStrategyType.MINIMAL;
 import static com.scottlogic.deg.common.util.Defaults.DEFAULT_MAX_ROWS;
 import static com.scottlogic.deg.generator.config.detail.DataGenerationType.RANDOM;
+import static com.scottlogic.deg.generator.config.detail.TreeWalkerType.DECISION_BASED;
 import static com.scottlogic.deg.output.guice.OutputFormat.CSV;
-import static com.scottlogic.deg.generator.config.detail.TreeWalkerType.REDUCTIVE;
 
 /**
  * This class holds the generate specific command line options.
@@ -110,7 +110,7 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     @CommandLine.Option(names = {"-w", "--walker-type"},
         description = "Determines the tree walker that should be used (${COMPLETION-CANDIDATES})",
         hidden = true)
-    private TreeWalkerType walkerType = REDUCTIVE;
+    private TreeWalkerType walkerType = DECISION_BASED;
 
     @CommandLine.Option(
         names = {"-n", "--max-rows"},
