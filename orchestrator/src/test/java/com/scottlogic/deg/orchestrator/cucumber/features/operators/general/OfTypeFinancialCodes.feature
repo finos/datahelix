@@ -71,12 +71,11 @@ Feature: User can specify that a field must be a financial code type
       | null           |
       | "GB0002634946" |
 
-  Scenario: An ISIN constraint combined with a non-ISIN constraint only generates null
+  Scenario: An ISIN constraint combined with a non-ISIN constraint generates no data
     Given foo is of type "ISIN"
+    And foo is anything but null
     And foo is anything but of type "ISIN"
-    Then the following data should be generated:
-      | foo  |
-      | null |
+    Then no data is created
 
   Scenario: An ISIN constraint combined with a greater than constraint generates valid ISINs
     Given foo is of type "ISIN"
@@ -344,12 +343,11 @@ Feature: User can specify that a field must be a financial code type
       | null      |
       | "0263494" |
 
-  Scenario: A SEDOL constraint combined with a non-SEDOL constraint only generates null
+  Scenario: A SEDOL constraint combined with a non-SEDOL constraint generates no data
     Given foo is of type "SEDOL"
+    And foo is anything but null
     And foo is anything but of type "SEDOL"
-    Then the following data should be generated:
-      | foo  |
-      | null |
+    Then no data is created
 
   Scenario: A SEDOL constraint combined with a greater than constraint generates valid SEDOLs
     Given foo is of type "SEDOL"
@@ -624,12 +622,11 @@ Feature: User can specify that a field must be a financial code type
       | null        |
       | "38259P508" |
 
-  Scenario: A CUSIP constraint combined with a non-CUSIP constraint only generates null
+  Scenario: A CUSIP constraint combined with a non-CUSIP constraint generates no data
     Given foo is of type "CUSIP"
+    And foo is anything but null
     And foo is anything but of type "CUSIP"
-    Then the following data should be generated:
-      | foo  |
-      | null |
+    Then no data is created
 
   Scenario: A CUSIP constraint combined with a greater than constraint generates valid CUSIPs
     Given foo is of type "CUSIP"
