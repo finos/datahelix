@@ -4,7 +4,7 @@ The generator transforms each profile into one or more [decision trees](../decis
 
 The following walker strategies exist:
 
-* Decision based
+* Decision based (default)
 * Cartesian product
 * Reductive
 
