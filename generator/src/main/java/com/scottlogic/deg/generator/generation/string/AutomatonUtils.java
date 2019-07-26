@@ -56,7 +56,7 @@ class AutomatonUtils {
      * Get the longest string possible given the regex (in the form of the Automaton)
      * There may be many optional sections within a regex which need to be inspected to calculate the longest possible
      * string. The automaton has done the hard work of turning the regex into a set of transitions and states.
-     * see https://github.com/finos/datahelix/blob/master/generator/docs/StringGeneration.md for more detail.
+     * see https://github.com/finos/datahelix/blob/master/docs/developer/algorithmsAndDataStructures/StringGeneration.md for more detail.
      *
      * This method is a recursive implementation that will test each starting point calculating the string and returning
      * the longest possible variant.

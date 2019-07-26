@@ -172,7 +172,19 @@
             "setFromFile"
           ]
         },
-        "value": {}
+        "value": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/datetime"
+            },
+            {
+              "$ref": "#/definitions/numeric"
+            },
+            {
+              "$ref": "#/definitions/string"
+            }
+          ]
+        }
       },
       "allOf": [
         {
