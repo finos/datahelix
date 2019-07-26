@@ -17,8 +17,7 @@ This document describes [how data is generated](SetRestrictionAndGeneration.md) 
 This is where contradictions occur in a way where no rows could be satisfied for at least one field. If this is the case then no rows can be emitted for any field in the profile, therefore the output file/s would be empty.
 Hard contradictions can otherwise be described as removing all possible values from the universal set and denying the absence of values for the field; `not(is null)`.
 
-Note that these contradictions can occur even if most of the profile is correct. If no data can be generated for a single field,
-then it will prevent all the other fields from producing data.
+Note that these contradictions can occur even if most of the profile is correct. If no data can be generated for a single field, then it will prevent all the other fields from producing data.
 
 See [how data is generated](SetRestrictionAndGeneration.md) for more detail on how constraints are combined and in-turn reduce the set of permissible values for a field.
 
@@ -37,7 +36,13 @@ Examples of profiles are:
 * [Type Validation 2](../../examples/hard-contradiction-type-validation-2/profile.json)
 
 ## 'Partial' contradictions
-This is where part of a tree is fully contradictory.
+This is where part of a profile is fully contradictory, i.e. where an otherwise valid profile contains a fully contradictory section. Partially contradictory profiles include ones with multiple fully contradictory sections. These usually occur when one part of an `anyOf` or an `if-then-else` is contradictory. 
+
+Examples are:
+* (`is null` and `not(is null)`) or `equalTo 1`
+* (`ofType string` and `ofType decimal` and `not(is null)`) or `ofType string`
+* (`ofType string` and `shorterThan 1` and `not(is null)`) or `is null` 
+* (`equalTo 1` and `equalTo 2`) or (`is null` and `not(is null)`) or `ofType string`
 
 Examples of profiles are:
 * [Partial Contradiction in anyOf](../../examples/partial-contradictions/profile.json)
@@ -56,4 +61,4 @@ The following are examples of where constraints can be combined and (whilst pote
 
 ## Current stance
 1. Contradiction checking to a greater degree will be deferred to tooling for the generator, such as profile writers, user interfaces, etc.
-1. More detailed contradiction checking (#1090) and better upfront warnings (#896) are being considered as features.
+1. More detailed contradiction checking [(#1090)](https://github.com/finos/datahelix/issues/1090) and better upfront warnings [(#896)](https://github.com/finos/datahelix/issues/896) are being considered as features.
