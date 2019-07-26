@@ -4,8 +4,14 @@ The generator transforms each profile into one or more [decision trees](../decis
 
 The following walker strategies exist:
 
-* Cartesian product (default)
+* Decision based
+* Cartesian product
 * Reductive
+
+## Decision Based
+This is a recursive algorithm that selects an option from the decision tree, then reduces the tree for the constraints in that option.
+
+See [Decision Based Walker](DecisionBasedWalker.md) for more details.
 
 ## Cartesian product
 This strategy is the a recursive algorithm which will 'multiply' each leaf node of the tree against every other leaf node of the decision tree in order to generate data. As such it can create vast numbers of permutations. This strategy makes no attempt to overcome the chance of a combinatorial explosion which can occur with relatively few rules and constraints.
@@ -14,7 +20,8 @@ This strategy uses certain methods of the Java Streams API which are known to bl
 
 This strategy is also known to have limited-to-no intelligence when it comes to [contradictions](../../user/Contradictions.md). The strategy will back track when they are found, but makes no attempt to preemptively check for them or prevent the walker from entering a contradictory path of the tree.
 
-## Reductive (default)
-This strategy takes a different approach to the others above and follows the following process. The strategy focuses on reducing the size of the problem (the tree) progressively until it cannot be any further (then back-tracking occurs) or sufficient information is known (then row/s can be emitted.) 
+## Reductive
+The strategy selects a value for a field, then reduces the size of the problem (the tree) progressively until it cannot be any further (then back-tracking occurs) or sufficient information is known (then row/s can be emitted.)
 
 See [Reductive tree walker](ReductiveTreeWalker.md) for more details.
+
