@@ -1,19 +1,24 @@
 # Contradictions
 
-Contradictions are where constraints are combined in some fashion, creating a representation of data where no, or incorrectly reduced, amounts of data can be produced. The following categories of contradictions can occur in a profile:
+Contradictions are where constraints are combined in some fashion, creating a representation of data where no, or incorrectly reduced, amounts of data can be produced.
+The following categories of contradictions can occur in a profile:
 
-This document describes [how data is generated](SetRestrictionAndGeneration.md) and underpins the concept of contradictions.
 
 | Type | Explanation | Example |
 | ---- | ---- | ---- |
 | 'Hard' | _cannot_ create any rows of data (for the field, and therefore the output file) | `foo ofType string` and `foo ofType decimal` and `foo not(is null)` - no rows would be emitted |
-| 'Soft' | _could_ create some data, but some scenarios would produce none | `foo not null` and `if bar equalTo 1 then foo is null`, also `foo ofType string` and `foo ofType decimal`, 1 row would be emitted, containing `null` |
+| 'Partial' | _could_ create some data, but some scenarios would produce none | `foo equalTo 1` and `anyOf foo equalTo 1 or foo equalTo 2` (1 is produced), also `foo ofType string` and `foo ofType decimal` (`null` is produced) |
 
-There is an optional component of the generator - the profile validator - which can detect some of the above contradictions. See the explanation of each type for more detail.
+Note that the phases "there is a hard contradiction", "the profile is fully contradictory" and "the profile is wholly contradictory" are synonymous.
+
+This document describes [how data is generated](SetRestrictionAndGeneration.md) and underpins the concept of contradictions.
 
 ## 'Hard' contradictions
 This is where contradictions occur in a way where no rows could be satisfied for at least one field. If this is the case then no rows can be emitted for any field in the profile, therefore the output file/s would be empty.
-Hard contradictions can otherwise be described as removing all possible values from the universal set and denying the absence of values for the field; `not(is null)`. All hard contradictions must contain this constraint in some fashion, otherwise the field can still have no value (regularly represented as `null`).
+Hard contradictions can otherwise be described as removing all possible values from the universal set and denying the absence of values for the field; `not(is null)`.
+
+Note that these contradictions can occur even if most of the profile is correct. If no data can be generated for a single field,
+then it will prevent all the other fields from producing data.
 
 See [how data is generated](SetRestrictionAndGeneration.md) for more detail on how constraints are combined and in-turn reduce the set of permissible values for a field.
 
@@ -21,23 +26,21 @@ Examples are:
 * `is null` and `not(is null)`
 * `ofType string` and `ofType decimal` and `not(is null)`
 * `ofType string` and `shorterThan 1` and `not(is null)`
+* `equalTo 1` and `equalTo 2`
 
-The contradictions that the validator will detect are [documented here](ProfileValidation.md).
+The generator can detect some contradictions upfront and will report them, but for performance reasons cannot detect all types.
+If no data is generated for a file, this means that the profile has a hard contradiction. 
 
 Examples of profiles are:
 * [Null Validation](../../examples/hard-contradiction-null-validation/profile.json)
 * [Type Validation 1](../../examples/hard-contradiction-type-validation-1/profile.json)
 * [Type Validation 2](../../examples/hard-contradiction-type-validation-2/profile.json)
 
-## 'Soft' contradictions
-This is where contradictions only appear in more complex constraints, e.g. `anyOf`, `if`, `allOf`, etc. It can also be related to where different types of constraints are combined, e.g. `aValid ISIN` and `matchingRegex /[a-z]{10}/`.
-
-These contradictions are more difficult to detect, and in some cases are only apparent when generating data.
-
-The contradictions that the validator will detect are [documented here](ProfileValidation.md).
+## 'Partial' contradictions
+This is where part of a tree is fully contradictory.
 
 Examples of profiles are:
-* [Type Validation](../../examples/soft-contradictions/profile.json)
+* [Partial Contradiction in anyOf](../../examples/partial-contradictions/profile.json)
 
 ## Non-contradictory examples
 The following are examples of where constraints can be combined and (whilst potentially dubious) are not contradictory:
@@ -47,13 +50,10 @@ The following are examples of where constraints can be combined and (whilst pote
   * this can emit all strings, or emit no value (`null`) (the `greaterThan` constraint is ignored as it only applies to `decimal` or `integer` values, of which none will be generated)
 
 ## What happens
-1. 'hard' contradictions only abort processing when the validator is enabled
-1. 'soft' contradictions never abort processing and can prevent rows from being emitted (correctly or not)
-1. Cucumber tests do not assert whether 'hard' or 'soft' contradictions have been detected (nor do they attempt to check)
-1. The profile validator is an optional component that has to be opted-in to use
-1. The generator will try to generate data whether contradictions are present or not, it may only emit no rows if the combinations are fully-contradictory
+1. Detected 'hard' contradictions give an error and produce no data.
+1. Detected 'partial' contradictions give an error but produce some data.
+1. The generator will try to generate data whether contradictions are present or not, it may only emit no rows if the combinations are fully contradictory.
 
 ## Current stance
-1. The cucumber framework of tests should be able to (optionally) detect 'hard' contradictions - [#202](https://github.com/ScottLogic/data-engineering-generator/issues/202)
-1. The profile validator should be defaulted to "on for errors" but have the option for disabling it - [#467](https://github.com/ScottLogic/data-engineering-generator/issues/467)
 1. Contradiction checking to a greater degree will be deferred to tooling for the generator, such as profile writers, user interfaces, etc.
+1. More detailed contradiction checking (#1090) and better upfront warnings (#896) are being considered as features.

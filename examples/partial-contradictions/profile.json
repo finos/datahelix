@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "0.1",
+  "fields": [
+    {
+      "name": "Column 1"
+    }
+  ],
+  "rules": [
+    {
+      "rule": "Rule 1",
+      "constraints": [
+        {
+          "anyOf": [
+            {
+              "allOf": [
+                {
+                  "allOf": [
+                    {
+                      "field": "Column 1",
+                      "is": "equalTo",
+                      "value": "I am a string!"
+                    },
+                    {
+                      "not": {
+                        "field": "Column 1",
+                        "is": "null"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "not":
+                  {
+                    "allOf": [
+                      {
+                        "field": "Column 1",
+                        "is": "equalTo",
+                        "value": "I am a string!"
+                      },
+                      {
+                        "not": {
+                          "field": "Column 1",
+                          "is": "null"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "field": "Column 1",
+              "is": "equalTo",
+              "value": "The one option that can produce data."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
