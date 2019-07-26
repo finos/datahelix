@@ -61,11 +61,12 @@ class DecisionBasedSolverTests {
         fieldToFieldSpec.put(fieldA, FieldSpec.Empty);
         fieldToFieldSpec.put(fieldB, FieldSpec.Empty);
         expectedRowSpecs.add(new RowSpec(profileFields, fieldToFieldSpec));
+
         assertThat(expectedRowSpecs, sameBeanAs(rowSpecs.collect(Collectors.toList())));
     }
 
     @Test
-    void createRowSpecs_whenRootNodeHasDecisionsButNoChildren_returnsRowSpecOfRoot() {
+    void createRowSpecs_whenRootNodeHasNoDecisionsButSomeConstraints_returnsRowSpecOfRoot() {
         //Arrange
         ConstraintNode root = ConstraintNodeBuilder.constraintNode().where(fieldA).isInSet(1, 2, 3).build();
         DecisionTree tree = new DecisionTree(root, profileFields);
@@ -80,6 +81,7 @@ class DecisionBasedSolverTests {
         fieldToFieldSpec.put(fieldA, FieldSpec.Empty.withWhitelist(whitelist));
         fieldToFieldSpec.put(fieldB, FieldSpec.Empty);
         expectedRowSpecs.add(new RowSpec(profileFields, fieldToFieldSpec));
+
         assertThat(expectedRowSpecs, sameBeanAs(rowSpecs.collect(Collectors.toList())));
     }
 
@@ -109,6 +111,7 @@ class DecisionBasedSolverTests {
         option1.put(fieldA, FieldSpec.Empty);
         option1.put(fieldB, FieldSpec.NullOnly);
         expectedRowSpecs.add(new RowSpec(profileFields, option1));
+
         assertThat(expectedRowSpecs, sameBeanAs(rowSpecs.collect(Collectors.toList())));
     }
 }
