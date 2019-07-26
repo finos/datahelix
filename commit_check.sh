@@ -27,7 +27,7 @@ do
 gitmessage=`git log --format=%B -n 1 "$i"`
 echo "Checking message: $gitmessage"
 
-# All checks run at the same time by pipeing from one grep to another
+# All checks run at the same time by piping from one grep to another
 messagecheck=`echo ${gitmessage} | grep "\(feat\|fix\|docs\|style\|refactor\|perf\|test\|chore\)(#[0-9]*): "`
 
 # check to see if the messagecheck var is empty
@@ -41,6 +41,17 @@ done
 rm shafile.txt  >/dev/null 2>&1
 
 echo "No commits exist with valid formatting."
+echo "The Angular style (see https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines)"
+echo "is enforced for at least one commit in every PR to make the automatic semantic versioning work."
+echo "For example, a commit might look like:"
+echo ""
+echo "feat(#xxxx): your commit message here"
+echo ""
+echo "where feat is the commit type, the options are feat|fix|docs|style|refactor|perf|test|chore"
+echo "and xxxx is the Github issue number."
+echo ""
+echo "Note there is no whitespace between feat and the issue number, and there is a colon and a space after the issue number."
+echo ""
 
 set -o errexit
 exit 1
