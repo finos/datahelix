@@ -1,6 +1,7 @@
-package com.scottlogic.deg.generator.fieldspecs;
+package com.scottlogic.deg.generator.fieldspecs.relations;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 
 public interface FieldSpecRelations {
 
