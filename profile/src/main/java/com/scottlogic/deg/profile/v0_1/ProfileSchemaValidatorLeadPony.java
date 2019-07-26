@@ -101,7 +101,7 @@ public class ProfileSchemaValidatorLeadPony implements ProfileSchemaValidator {
                 "Error(s) occurred during schema validation." +
                 "\nFile path: " + profilePath.toString() +
                 "\nFor full details try opening the profile in a json schema-enabled IDE." +
-                "\nSee https://github.com/finos/datahelix/blob/master/docs/ProfileDeveloperGuide.md#Microsoft-Visual-Studio-Code\n");
+                "\nSee https://github.com/finos/datahelix/blob/master/docs/user/UserGuide.md#Microsoft-Visual-Studio-Code\n");
 
             throw new ValidationException(errorMessages);
         }
