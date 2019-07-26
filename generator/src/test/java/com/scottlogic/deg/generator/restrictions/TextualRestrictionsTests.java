@@ -330,7 +330,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withContradictingOfLengthAndContainingRegexConstraint_shouldCreateNoStrings() {
-        StringRestrictions restrictions = containsRegex("[a-z]{0,9}", false)
+        StringRestrictions restrictions = containsRegex("[a-z]{102}", false)
             .intersect(ofLength(100, false)).restrictions;
 
         StringGenerator generator = restrictions.createGenerator();
