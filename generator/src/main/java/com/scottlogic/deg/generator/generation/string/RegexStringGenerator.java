@@ -104,7 +104,7 @@ public class RegexStringGenerator implements StringGenerator {
         return new RegexStringGenerator(merged, mergedRepresentation);
     }
 
-    public RegexStringGenerator union(RegexStringGenerator otherGenerator) {
+    RegexStringGenerator union(RegexStringGenerator otherGenerator) {
         Automaton b = otherGenerator.automaton;
         Automaton merged = automaton.union(b);
         String mergedRepresentation = unionRepresentation(
@@ -125,11 +125,11 @@ public class RegexStringGenerator implements StringGenerator {
         return String.format("¬(%s)", representation);
     }
 
-    public static String intersectRepresentation(String left, String right) {
+    static String intersectRepresentation(String left, String right) {
         return String.format("(%s ∩ %s)", left, right);
     }
 
-    public static String unionRepresentation(String left, String right) {
+    static String unionRepresentation(String left, String right) {
         return String.format("(%s ∪ %s)", left, right);
     }
 
@@ -220,7 +220,9 @@ public class RegexStringGenerator implements StringGenerator {
             passedStringNbrInChildNode = passedStringNbr;
         }
         for (Node childN : node.getNextNodes()) {
-            passedStringNbrInChildNode += childN.getMatchedStringIdx();
+            // TODO AF delete this commented out old code before merge:
+            // AF passedStringNbrInChildNode += childN.getMatchedStringIdx();
+            passedStringNbrInChildNode += Math.min(childN.getMatchedStringIdx(), Long.MAX_VALUE - childN.getMatchedStringIdx());
             if (passedStringNbrInChildNode >= indexOrder) {
                 passedStringNbrInChildNode -= childN.getMatchedStringIdx();
                 indexOrder -= passedStringNbrInChildNode;
@@ -306,7 +308,10 @@ public class RegexStringGenerator implements StringGenerator {
                 for (Node childNode : nextNodes) {
                     childNode.updateMatchedStringIdx();
                     long childNbrChar = childNode.getMatchedStringIdx();
-                    matchedStringIdx += nbrChar * childNbrChar;
+                    // TODO AF delete this commented out old code before merge:
+                    // matchedStringIdx += nbrChar * childNbrChar;
+                    long newNbrChar = (childNbrChar == 0 || Long.MAX_VALUE / childNbrChar > nbrChar) ? nbrChar * childNbrChar : nbrChar;
+                    matchedStringIdx += Math.min(newNbrChar, Long.MAX_VALUE - newNbrChar);
                 }
             }
             isNbrMatchedStringUpdated = true;
@@ -375,7 +380,7 @@ public class RegexStringGenerator implements StringGenerator {
                     return false;
                 }
                 currentValue = getMatchedString(currentIndex);
-            } while (!StringUtils.isStringValidUtf8(currentValue));
+            } while (currentValue != null && !StringUtils.isStringValidUtf8(currentValue));
             return currentValue != null;
         }
 
@@ -413,10 +418,10 @@ public class RegexStringGenerator implements StringGenerator {
         return Objects.hash(this.automaton, this.getClass());
     }
 
-    public static class UnionCollector {
+    static class UnionCollector {
         private RegexStringGenerator union;
 
-        public void accumulate(RegexStringGenerator another) {
+        void accumulate(RegexStringGenerator another) {
             if (union == null) {
                 union = another;
             } else {
@@ -424,14 +429,14 @@ public class RegexStringGenerator implements StringGenerator {
             }
         }
 
-        public void combine(UnionCollector other) {
+        void combine(UnionCollector other) {
             if (other == null || other.union == null) {
                 return;
             }
             union = union.union(other.union);
         }
 
-        public RegexStringGenerator getUnionGenerator() {
+        RegexStringGenerator getUnionGenerator() {
             return union;
         }
     }
