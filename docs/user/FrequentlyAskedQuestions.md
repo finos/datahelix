@@ -53,18 +53,23 @@ while the same data output to JSON would retain the original full precision:
 
 To reiterate, `formattedAs` only affects how data is presented _after_ it has been generated. It has no impact on _what_ data gets generated, and can be ignored entirely for many data types and output formats. 
 
-## Do `inSet` or `equalTo` permit or deny the empty set (&#8709;)?
-In other words, do `inSet` or `equalTo` prevent `null` from being emitted?
+## Does `inSet` permit or deny the empty set (&#8709;)?
+
+In other words, does `inSet` prevent `null` from being emitted?
 
 In short, **no**, `null` can still be emitted.
 
 The `inSet` operator only defines the initial set of data to work from, but does not convey any instruction or definition that the empty set (&#8709;) is not permitted.
 
-The `equalTo` operator is short-hand for `inSet`, as such abides by the same rules.
-
-Both of the above operators will explicitly deny the inclusion of `null`, therefore `equalTo null` and `inSet [null]` (or any set that contains `null`) will throw an error and abort processing.
+The operator will explicitly deny the inclusion of `null`, therefore `inSet [null]` (or any set that contains `null`) will throw an error and abort processing.
 
 All fields permit the inclusion of the empty set (&#8709;) by default, to prevent the field from having a `null` emitted, ensure you use the `not(is null)` constraint.
+
+For more details see the [set restriction and generation](SetRestrictionAndGeneration.md) page.
+
+## Does `equalTo` permit or deny the empty set (&#8709;)?
+
+`null` can't be emitted.
 
 For more details see the [set restriction and generation](SetRestrictionAndGeneration.md) page.
 

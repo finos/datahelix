@@ -49,7 +49,7 @@ It does **not**
 | 2010-01-01T01:01:01.000 |
 | &#8709; |
 
-### InSet (and EqualTo) restrictions
+### InSet restrictions
 
 ```
 foo inSet [a, b, c]
@@ -67,8 +67,6 @@ It does **not**
 * Prevent the empty set from being emitted
 
 As the original set is a restricted set, only the values provided can be emitted. These values can be of heterogeneous types (e.g. an intermix of datetime, string, decimal and integer types).
-
-The constraint `foo equalTo "c"` is equivalent to `foo inSet ["c"]`.
 
 #### You might expect the following data to be emitted
 | foo | 
