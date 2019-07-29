@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "0.1",
+  "fields": [
+    {
+      "name": "earlier",
+      "name": "later"
+    }
+  ],
+  "rules": [
+    {
+      "constraints": [
+        {
+          "not": {
+            "field": "earlier",
+            "is": "null"
+          }
+        },
+        {
+          "not": {
+            "field": "later",
+            "is": "null"
+          }
+        },
+        {
+          "field": "earlier",
+          "is": "ofType",
+          "value": "datetime"
+        },
+        {
+          "field": "later",
+          "is": "ofType",
+          "value": "datetime"
+        },
+        {
+          "field": "earlier",
+          "is": "after",
+          "value": {
+            "date": "8001-02-03T04:05:06.007"
+          }
+        },
+        {
+          "field": "later",
+          "is": "after",
+          "value": {
+            "field": "earlier"
+          }
+        }
+      ]
+    }
+  ]
+}
