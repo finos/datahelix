@@ -10,4 +10,8 @@ public interface DelayedAtomicConstraint extends Constraint {
 
     Field field();
 
+    default DynamicNotConstraint negate() {
+        return new DynamicNotConstraint(this);
+    }
+
 }
