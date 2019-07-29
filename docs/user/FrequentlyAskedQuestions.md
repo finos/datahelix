@@ -1,6 +1,6 @@
 # Frequently asked questions
 
-## "What's the difference between formattedAs and granularTo?"
+## What's the difference between formattedAs and granularTo?
 
 The below constraints are superficially similar:
 
@@ -53,18 +53,19 @@ while the same data output to JSON would retain the original full precision:
 
 To reiterate, `formattedAs` only affects how data is presented _after_ it has been generated. It has no impact on _what_ data gets generated, and can be ignored entirely for many data types and output formats. 
 
-## Do `inSet` or `equalTo` permit or deny the empty set (&#8709;)?
-In other words, do `inSet` or `equalTo` prevent `null` from being emitted?
+## Does `inSet` allow `null` to be produced?
+**Yes**
 
-In short, **no**, `null` can still be emitted.
+The `inSet` operator only defines the initial set of data to work from, but does not convey any instruction or definition that null is not permitted.
 
-The `inSet` operator only defines the initial set of data to work from, but does not convey any instruction or definition that the empty set (&#8709;) is not permitted.
+To explicitly prevent null, use `inSet` with `not null`.
 
-The `equalTo` operator is short-hand for `inSet`, as such abides by the same rules.
+The operator will not let the user explicitly put `null` into an `inSet`. So, using `inSet [null]` (or any set that contains `null`) will throw an error and abort processing.
 
-Both of the above operators will explicitly deny the inclusion of `null`, therefore `equalTo null` and `inSet [null]` (or any set that contains `null`) will throw an error and abort processing.
+For more details see the [set restriction and generation](SetRestrictionAndGeneration.md) page.
 
-All fields permit the inclusion of the empty set (&#8709;) by default, to prevent the field from having a `null` emitted, ensure you use the `not(is null)` constraint.
+## Does `equalTo` allow `null` to be produced?
+**No**
 
 For more details see the [set restriction and generation](SetRestrictionAndGeneration.md) page.
 
