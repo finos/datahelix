@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public abstract class ChecksummedCodeStringGenerator implements StringGenerator {
-    protected final RegexStringGenerator regexGenerator;
+    protected final StringGenerator regexGenerator;
     protected final boolean negate;
     protected final int prefixLength;
     protected final int codeLength;
@@ -50,7 +50,7 @@ public abstract class ChecksummedCodeStringGenerator implements StringGenerator 
         int prefixLength
     ) {
         this(
-            (RegexStringGenerator) new RegexStringGenerator(generationPattern, true)
+            new RegexStringGenerator(generationPattern, true)
                 .intersect(intersectingGenerator),
             false,
             codeLength,
@@ -59,7 +59,7 @@ public abstract class ChecksummedCodeStringGenerator implements StringGenerator 
     }
 
     public ChecksummedCodeStringGenerator(
-        RegexStringGenerator generator,
+        StringGenerator generator,
         boolean negate,
         int codeLength,
         int prefixLength

@@ -39,7 +39,7 @@ public class CusipStringGenerator extends ChecksummedCodeStringGenerator {
         super(generator, false, CUSIP_LENGTH, 0);
     }
 
-    private CusipStringGenerator(RegexStringGenerator cusipGenerator, boolean negate) {
+    private CusipStringGenerator(StringGenerator cusipGenerator, boolean negate) {
         super(cusipGenerator, negate, CUSIP_LENGTH, 0);
     }
 
