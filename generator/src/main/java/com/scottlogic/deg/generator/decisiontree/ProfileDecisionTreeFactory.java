@@ -126,7 +126,7 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
             .map(this::convertConstraint)
             .collect(Collectors.toList());
 
-        return asConstraintNode(new TreeDecisionNode(options));
+        return asConstraintNode(new DecisionNode(options));
     }
 
     private ConstraintNode convertConditionalConstraint(ConditionalConstraint constraintToConvert) {

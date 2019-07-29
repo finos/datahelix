@@ -85,7 +85,7 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
         }
 
         // Add new decision node
-        DecisionNode factorisedDecisionNode = new TreeDecisionNode(
+        DecisionNode factorisedDecisionNode = new DecisionNode(
             Stream.concat(
                 Stream.of(
                     optimiseLevelOfTree(factorisingConstraintNode),
@@ -111,7 +111,7 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
             return newNode;
         }
 
-        DecisionNode decisionUnderFactorisedNode = new TreeDecisionNode(optionsToAdd);
+        DecisionNode decisionUnderFactorisedNode = new DecisionNode(optionsToAdd);
         return newNode.addDecisions(Collections.singletonList(decisionUnderFactorisedNode));
     }
 

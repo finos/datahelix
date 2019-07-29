@@ -277,11 +277,11 @@ class ProfileDecisionTreeFactoryTests {
             new ConstraintNode(
                 Collections.emptySet(),
                 Arrays.asList(
-                    new TreeDecisionNode(
+                    new DecisionNode(
                         new ConstraintNode(constraintA),
                         new ConstraintNode(constraintB)
                     ),
-                    new TreeDecisionNode(
+                    new DecisionNode(
                         new ConstraintNode(constraintC),
                         new ConstraintNode(constraintD)
                     )
@@ -318,7 +318,7 @@ class ProfileDecisionTreeFactoryTests {
             new ConstraintNode(
                 Collections.emptySet(),
                 Arrays.asList(
-                    new TreeDecisionNode(
+                    new DecisionNode(
                         new ConstraintNode(
                             constraintA
                         ),
@@ -327,7 +327,7 @@ class ProfileDecisionTreeFactoryTests {
                             constraintB
                         )
                     ),
-                    new TreeDecisionNode(
+                    new DecisionNode(
                         new ConstraintNode(constraintD),
                         new ConstraintNode(constraintE)
                     )
@@ -356,7 +356,7 @@ class ProfileDecisionTreeFactoryTests {
             new ConstraintNode(
                 Collections.emptySet(),
                 Collections.singletonList(
-                    new TreeDecisionNode(
+                    new DecisionNode(
                         new ConstraintNode(
                             Arrays.asList(
                                 constraintA,
@@ -396,12 +396,12 @@ class ProfileDecisionTreeFactoryTests {
                 getResultingRootOption(), new ConstraintNode(
                     Collections.emptyList(),
                     Collections.singletonList(
-                        new TreeDecisionNode(
+                        new DecisionNode(
                             /* OPTION 1: AND(C, OR(A, B))  */
                             new ConstraintNode(
                                 Collections.singletonList(bGreaterThan20),
                                 Collections.singleton(
-                                    new TreeDecisionNode(
+                                    new DecisionNode(
                                         new ConstraintNode(aEquals10),
                                         new ConstraintNode(aGreaterThan10)))),
                             /* OPTION 2: AND(¬A, ¬B)  */
@@ -436,7 +436,7 @@ class ProfileDecisionTreeFactoryTests {
             new ConstraintNode(
                 Collections.emptySet(),
                 Collections.singletonList(
-                    new TreeDecisionNode(
+                    new DecisionNode(
                         new ConstraintNode(
                             Arrays.asList(
                                 constraintA,
@@ -525,7 +525,7 @@ class ProfileDecisionTreeFactoryTests {
             new ConstraintNode(
                 Collections.emptySet(),
                 Collections.singletonList(
-                    new TreeDecisionNode(
+                    new DecisionNode(
                         new ConstraintNode(
                             Collections.singletonList(constraintA.negate()),
                             Collections.emptySet()
@@ -559,7 +559,7 @@ class ProfileDecisionTreeFactoryTests {
                 new ConstraintNode(
                     Collections.emptyList(),
                     Collections.singletonList(
-                        new TreeDecisionNode(
+                        new DecisionNode(
                             new ConstraintNode(constraintA),
                             new ConstraintNode(constraintB),
                             new ConstraintNode(constraintC))

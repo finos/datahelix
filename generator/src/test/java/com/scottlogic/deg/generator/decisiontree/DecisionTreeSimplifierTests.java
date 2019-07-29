@@ -49,7 +49,7 @@ class DecisionTreeSimplifierTests {
                     new IsNullConstraint(new Field("Field 1")).negate()
                 ),
                 Collections.singletonList(
-                    new TreeDecisionNode(
+                    new DecisionNode(
                         Collections.singletonList(
                             new ConstraintNode(
                                 Collections.singletonList(
@@ -82,7 +82,7 @@ class DecisionTreeSimplifierTests {
                     new IsNullConstraint(new Field("Field 1")).negate()
                 ),
                 Collections.singletonList(
-                    new TreeDecisionNode(
+                    new DecisionNode(
                         Collections.singletonList(
                             new ConstraintNode(
                                 Collections.singletonList(

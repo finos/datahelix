@@ -50,7 +50,7 @@ public class ConstraintNodeBuilder {
         for (ConstraintNodeBuilder constraintNode : constraintNodes) {
             nodes.add(constraintNode.build());
         }
-        decisionNodes.add(new TreeDecisionNode(nodes));
+        decisionNodes.add(new DecisionNode(nodes));
         return this;
     }
 

@@ -282,7 +282,7 @@ class RelatedFieldTreePartitionerTests {
     }
 
     private DecisionNode decision(ConstraintNode... constraints) {
-        return new TreeDecisionNode(constraints);
+        return new DecisionNode(constraints);
     }
 
     private ProfileFields fields(String... fieldNames) {
