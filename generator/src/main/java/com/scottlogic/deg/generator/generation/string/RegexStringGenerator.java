@@ -93,6 +93,10 @@ public class RegexStringGenerator implements StringGenerator {
         RegexStringGenerator otherRegexGenerator = (RegexStringGenerator) otherGenerator;
         Automaton b = otherRegexGenerator.automaton;
         Automaton merged = automaton.intersection(b);
+        if (merged.isEmpty()){
+            return new NoStringsStringGenerator("regex combination was contradictory");
+        }
+
         String mergedRepresentation = intersectRepresentation(
             this.regexRepresentation,
             otherRegexGenerator.regexRepresentation);

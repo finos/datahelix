@@ -40,7 +40,7 @@ public class SedolStringGenerator extends ChecksummedCodeStringGenerator {
         super(sedolGenerator, false, SEDOL_LENGTH, 0);
     }
 
-    private SedolStringGenerator(RegexStringGenerator sedolGenerator, boolean negate) {
+    private SedolStringGenerator(StringGenerator sedolGenerator, boolean negate) {
         super(sedolGenerator, negate, SEDOL_LENGTH, 0);
     }
 
