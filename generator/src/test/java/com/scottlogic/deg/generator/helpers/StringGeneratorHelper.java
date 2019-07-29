@@ -23,10 +23,9 @@ import java.util.Iterator;
 
 import static org.hamcrest.Matchers.*;
 
-public enum StringGeneratorHelper {
-    ;
+public class StringGeneratorHelper {
 
-    StringGeneratorHelper() {
+    private StringGeneratorHelper() {
     }
 
     public static void assertGeneratorCannotGenerateAnyStrings(StringGenerator generator) {
