@@ -42,7 +42,7 @@
           "field": "later",
           "is": "after",
           "value": {
-            "field": "earlier"
+            "string": "earlier"
           }
         }
       ]
