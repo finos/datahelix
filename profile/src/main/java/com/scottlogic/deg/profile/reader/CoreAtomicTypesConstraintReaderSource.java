@@ -191,8 +191,8 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                         ConstraintReaderHelpers.tryGetValidatedValue(dto, OffsetDateTime.class);
 
                     if (dateValidatedValue.isPresent()) {
-                        new IsAfterConstantDateTimeConstraint(
-                            fields.getByName(dto.field),
+                        return new IsAfterConstantDateTimeConstraint(
+                           fields.getByName(dto.field),
                             dateValidatedValue.get());
                     }
 
