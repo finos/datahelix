@@ -28,7 +28,9 @@ public class DecisionBasedSolver implements RowSpecTreeSolver {
     private final OptionPicker optionPicker;
 
     @Inject
-    public DecisionBasedSolver(ConstraintReducer constraintReducer, ReductiveTreePruner reductiveTreePruner, OptionPicker optionPicker) {
+    public DecisionBasedSolver(ConstraintReducer constraintReducer,
+                               ReductiveTreePruner reductiveTreePruner,
+                               OptionPicker optionPicker) {
         this.constraintReducer = constraintReducer;
         this.reductiveTreePruner = reductiveTreePruner;
         this.optionPicker = optionPicker;

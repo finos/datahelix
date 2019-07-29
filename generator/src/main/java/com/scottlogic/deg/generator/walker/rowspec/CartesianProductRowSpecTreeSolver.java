@@ -32,6 +32,7 @@ import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.walker.rowspec.RowSpecTreeSolver;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
@@ -67,7 +68,7 @@ public class CartesianProductRowSpecTreeSolver implements RowSpecTreeSolver {
             final Map<Field, FieldSpec> fieldToFieldSpec = profileFields.stream()
                     .collect(Collectors.toMap(Function.identity(), field -> FieldSpec.Empty));
 
-            return new RowSpec(profileFields, fieldToFieldSpec);
+            return new RowSpec(profileFields, fieldToFieldSpec, Collections.emptySet());
         }
 
         public Stream<RowSpec> walk(ConstraintNode constraint) {

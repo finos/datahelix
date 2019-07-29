@@ -93,8 +93,9 @@ public final class TreeConstraintNode implements ConstraintNode {
 
     @Override
     public Optional<RowSpec> getOrCreateRowSpec(Supplier<Optional<RowSpec>> createRowSpecFunc) {
-        if (adaptedRowSpec != null)
+        if (adaptedRowSpec != null) {
             return adaptedRowSpec;
+        }
 
         adaptedRowSpec = createRowSpecFunc.get();
         return adaptedRowSpec;
@@ -137,13 +138,13 @@ public final class TreeConstraintNode implements ConstraintNode {
 
     public ConstraintNode cloneWithoutAtomicConstraint(AtomicConstraint excludeAtomicConstraint) {
         return new TreeConstraintNode(
-            this.atomicConstraints
+            atomicConstraints
                 .stream()
                 .filter(c -> !c.equals(excludeAtomicConstraint))
                 .collect(Collectors.toList()),
             delayedAtomicConstraints,
             decisions,
-            this.nodeMarkings);
+            nodeMarkings);
     }
 
     public boolean atomicConstraintExists(AtomicConstraint constraint) {

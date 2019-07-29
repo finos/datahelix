@@ -44,7 +44,8 @@ public class ConstraintReducer {
         this.fieldSpecMerger = fieldSpecMerger;
     }
 
-    public Optional<RowSpec> reduceConstraintsToRowSpec(ProfileFields fields, Iterable<AtomicConstraint> constraints) {
+    public Optional<RowSpec> reduceConstraintsToRowSpec(ProfileFields fields,
+                                                        Iterable<AtomicConstraint> constraints) {
         final Map<Field, List<AtomicConstraint>> fieldToConstraints = StreamSupport
             .stream(constraints.spliterator(), false)
             .collect(
