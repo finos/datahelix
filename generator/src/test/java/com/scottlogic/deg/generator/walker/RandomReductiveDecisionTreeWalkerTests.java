@@ -19,7 +19,7 @@ package com.scottlogic.deg.generator.walker;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
-import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
+import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.generation.DataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import org.junit.Assert;
@@ -46,7 +46,7 @@ class RandomReductiveDecisionTreeWalkerTests {
     @BeforeEach
     public void beforeEach(){
         tree = new DecisionTree(
-            new TreeConstraintNode(),
+            new ConstraintNode(),
             new ProfileFields(Arrays.asList(new Field("field1"), new Field("field2")))
         );
 

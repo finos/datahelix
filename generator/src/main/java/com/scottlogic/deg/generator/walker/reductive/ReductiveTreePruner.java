@@ -90,7 +90,7 @@ public class ReductiveTreePruner {
             return Merged.contradictory();
         }
 
-        return Merged.of(new TreeDecisionNode(newConstraintNodes));
+        return Merged.of(new DecisionNode(newConstraintNodes));
     }
 
     private Merged<Map<Field, FieldSpec>> combineConstraintsWithParent(ConstraintNode constraintNode, Map<Field, FieldSpec> parentFieldSpecs) {
