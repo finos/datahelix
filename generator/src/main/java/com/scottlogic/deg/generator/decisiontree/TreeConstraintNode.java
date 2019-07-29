@@ -16,11 +16,13 @@
 
 package com.scottlogic.deg.generator.decisiontree;
 
+import com.scottlogic.deg.common.profile.constraints.delayed.DelayedAtomicConstraint;
 import com.scottlogic.deg.common.util.FlatMappingSpliterator;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 
 import java.util.*;
+import java.util.concurrent.Delayed;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -28,15 +30,20 @@ import java.util.stream.Stream;
 
 public final class TreeConstraintNode implements ConstraintNode {
     private final Collection<AtomicConstraint> atomicConstraints;
+    private final Collection<DelayedAtomicConstraint> delayedAtomicConstraints;
     private final Collection<DecisionNode> decisions;
     private final Set<NodeMarking> nodeMarkings;
 
     public TreeConstraintNode(Collection<AtomicConstraint> atomicConstraints, Collection<DecisionNode> decisions) {
-        this(atomicConstraints, decisions, Collections.emptySet());
+        this(atomicConstraints, Collections.emptySet(), decisions, Collections.emptySet());
     }
 
-    public TreeConstraintNode(Collection<AtomicConstraint> atomicConstraints, Collection<DecisionNode> decisions, Set<NodeMarking> nodeMarkings) {
+    public TreeConstraintNode(Collection<AtomicConstraint> atomicConstraints,
+                              Collection<DelayedAtomicConstraint> delayedAtomicConstraints,
+                              Collection<DecisionNode> decisions,
+                              Set<NodeMarking> nodeMarkings) {
         this.atomicConstraints = Collections.unmodifiableCollection(atomicConstraints);
+        this.delayedAtomicConstraints = Collections.unmodifiableCollection(delayedAtomicConstraints);
         this.decisions = Collections.unmodifiableCollection(decisions);
         this.nodeMarkings = Collections.unmodifiableSet(nodeMarkings);
     }
@@ -45,6 +52,7 @@ public final class TreeConstraintNode implements ConstraintNode {
         this(
             Arrays.asList(atomicConstraints),
             Collections.emptySet(),
+            Collections.emptySet(),
             Collections.emptySet());
     }
 
@@ -52,17 +60,35 @@ public final class TreeConstraintNode implements ConstraintNode {
         this(
             Collections.singletonList(singleAtomicConstraint),
             Collections.emptySet(),
+            Collections.emptySet(),
             Collections.emptySet());
     }
 
+    public TreeConstraintNode(DelayedAtomicConstraint delayedAtomicConstraint) {
+        this(
+            Collections.emptySet(),
+            Collections.singletonList(delayedAtomicConstraint),
+            Collections.emptySet(),
+            Collections.emptySet()
+        );
+    }
+
+    @Override
     public Collection<AtomicConstraint> getAtomicConstraints() {
         return new HashSet<>(atomicConstraints);
     }
 
+    @Override
+    public Collection<DelayedAtomicConstraint> getDelayedAtomicConstraints() {
+        return new HashSet<>(delayedAtomicConstraints);
+    }
+
+    @Override
     public Collection<DecisionNode> getDecisions() {
         return decisions;
     }
 
+    @Override
     public Optional<RowSpec> getOrCreateRowSpec(Supplier<Optional<RowSpec>> createRowSpecFunc) {
         if (adaptedRowSpec != null)
             return adaptedRowSpec;
@@ -98,7 +124,8 @@ public final class TreeConstraintNode implements ConstraintNode {
             .anyMatch(decisionToExclude -> decisionToExclude.equals(existingDecision));
 
         return new TreeConstraintNode(
-          this.atomicConstraints,
+          atomicConstraints,
+          delayedAtomicConstraints,
           decisions.stream()
               .filter(existingDecision -> !shouldRemove.apply(existingDecision))
               .collect(Collectors.toList()),
@@ -112,6 +139,7 @@ public final class TreeConstraintNode implements ConstraintNode {
                 .stream()
                 .filter(c -> !c.equals(excludeAtomicConstraint))
                 .collect(Collectors.toList()),
+            delayedAtomicConstraints,
             decisions,
             this.nodeMarkings);
     }
@@ -126,11 +154,12 @@ public final class TreeConstraintNode implements ConstraintNode {
         return new TreeConstraintNode(
             Stream
                 .concat(
-                    this.atomicConstraints.stream(),
+                    atomicConstraints.stream(),
                     constraints.stream())
                 .collect(Collectors.toList()),
-            this.decisions,
-            this.nodeMarkings
+            delayedAtomicConstraints,
+            decisions,
+            nodeMarkings
         );
     }
 
@@ -138,18 +167,19 @@ public final class TreeConstraintNode implements ConstraintNode {
     public ConstraintNode addDecisions(Collection<DecisionNode> decisions) {
         return new TreeConstraintNode(
             atomicConstraints,
+            delayedAtomicConstraints,
             Stream
                 .concat(
                     this.decisions.stream(),
                     decisions.stream())
                 .collect(Collectors.toList()),
-            this.nodeMarkings
+            nodeMarkings
         );
     }
 
     @Override
     public ConstraintNode setDecisions(Collection<DecisionNode> decisions) {
-        return new TreeConstraintNode(this.atomicConstraints, decisions, this.nodeMarkings);
+        return new TreeConstraintNode(atomicConstraints, delayedAtomicConstraints, decisions, nodeMarkings);
     }
 
     @Override
@@ -160,10 +190,10 @@ public final class TreeConstraintNode implements ConstraintNode {
     @Override
     public ConstraintNode markNode(NodeMarking marking) {
         Set<NodeMarking> newMarkings = FlatMappingSpliterator.flatMap(
-            Stream.of(Collections.singleton(marking), this.nodeMarkings),
+            Stream.of(Collections.singleton(marking), nodeMarkings),
             Collection::stream)
             .collect(Collectors.toSet());
-        return new TreeConstraintNode(this.atomicConstraints, this.decisions, newMarkings);
+        return new TreeConstraintNode(atomicConstraints, delayedAtomicConstraints, decisions, newMarkings);
     }
 
     @Override
@@ -187,6 +217,7 @@ public final class TreeConstraintNode implements ConstraintNode {
         return visitor.visit(
             new TreeConstraintNode(
                 new ArrayList<>(atomicConstraints),
+                new ArrayList<>(delayedAtomicConstraints),
                 decisionNodeStream.collect(Collectors.toSet()),
                 nodeMarkings));
     }

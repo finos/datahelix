@@ -17,6 +17,7 @@
 package com.scottlogic.deg.generator.decisiontree;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.common.profile.constraints.delayed.DelayedAtomicConstraint;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 
 import java.util.*;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 
 public interface ConstraintNode extends Node {
     Collection<AtomicConstraint> getAtomicConstraints();
+    Collection<DelayedAtomicConstraint> getDelayedAtomicConstraints();
     Collection<DecisionNode> getDecisions();
     Optional<RowSpec> getOrCreateRowSpec(Supplier<Optional<RowSpec>> createRowSpecFunc);
     ConstraintNode removeDecisions(Collection<DecisionNode> decisionsToRemove);
@@ -38,6 +40,7 @@ public interface ConstraintNode extends Node {
 
     static ConstraintNode merge(Iterator<ConstraintNode> constraintNodeIterator) {
         Collection<AtomicConstraint> atomicConstraints = new ArrayList<>();
+        Collection<DelayedAtomicConstraint> delayedAtomicConstraints = new ArrayList<>();
         Collection<DecisionNode> decisions = new ArrayList<>();
         Set<NodeMarking> markings = new HashSet<>();
 
@@ -45,11 +48,12 @@ public interface ConstraintNode extends Node {
             ConstraintNode constraintNode = constraintNodeIterator.next();
 
             atomicConstraints.addAll(constraintNode.getAtomicConstraints());
+            delayedAtomicConstraints.addAll(constraintNode.getDelayedAtomicConstraints());
             decisions.addAll(constraintNode.getDecisions());
             markings.addAll(constraintNode.getNodeMarkings());
         }
 
-        return new TreeConstraintNode(atomicConstraints, decisions, markings);
+        return new TreeConstraintNode(atomicConstraints, delayedAtomicConstraints, decisions, markings);
     }
 
     default Set<NodeMarking> getNodeMarkings(){

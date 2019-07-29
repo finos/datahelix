@@ -20,6 +20,7 @@ import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.common.profile.constraints.delayed.DelayedAtomicConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.NegatedGrammaticalConstraint;
@@ -59,6 +60,9 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
             return convertOrConstraint((OrConstraint) constraintToConvert);
         } else if (constraintToConvert instanceof ConditionalConstraint) {
             return convertConditionalConstraint((ConditionalConstraint) constraintToConvert);
+        } else if (constraintToConvert instanceof DelayedAtomicConstraint) {
+            DelayedAtomicConstraint delayed = (DelayedAtomicConstraint) constraintToConvert;
+            return asConstraintNode(delayed);
         } else {
             AtomicConstraint atomicConstraint = (AtomicConstraint) constraintToConvert;
             return asConstraintNode(atomicConstraint);
@@ -147,10 +151,12 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
             .collect(Collectors.toList());
     }
 
+    private static ConstraintNode asConstraintNode(DelayedAtomicConstraint constraint) {
+        return new TreeConstraintNode(constraint);
+    }
+
     private static ConstraintNode asConstraintNode(AtomicConstraint constraint) {
-        return new TreeConstraintNode(
-            Collections.singleton(constraint),
-            Collections.emptyList());
+        return new TreeConstraintNode(constraint);
     }
 
     private static ConstraintNode asConstraintNode(DecisionNode decision) {

@@ -2,7 +2,8 @@
   "schemaVersion": "0.1",
   "fields": [
     {
-      "name": "earlier",
+      "name": "earlier"
+    }, {
       "name": "later"
     }
   ],
@@ -41,9 +42,7 @@
         {
           "field": "later",
           "is": "after",
-          "value": {
-            "string": "earlier"
-          }
+          "value": "earlier"
         }
       ]
     }
