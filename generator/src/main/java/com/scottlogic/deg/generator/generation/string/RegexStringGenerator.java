@@ -21,6 +21,7 @@ import com.scottlogic.deg.generator.utils.SupplierBasedIterator;
 import dk.brics.automaton.Automaton;
 import dk.brics.automaton.State;
 import dk.brics.automaton.Transition;
+import org.apache.commons.lang3.Validate;
 
 import java.util.*;
 
@@ -216,7 +217,12 @@ public class RegexStringGenerator implements StringGenerator {
             passedStringNbrInChildNode = passedStringNbr;
         }
         for (Node childN : node.getNextNodes()) {
-            passedStringNbrInChildNode += Math.min(childN.getMatchedStringIdx(), Long.MAX_VALUE - childN.getMatchedStringIdx());
+            if (addWouldOverflow(passedStringNbrInChildNode, childN.getMatchedStringIdx())) {
+                passedStringNbrInChildNode = Long.MAX_VALUE;
+            } else {
+                passedStringNbrInChildNode += childN.getMatchedStringIdx();
+            }
+
             if (passedStringNbrInChildNode >= indexOrder) {
                 passedStringNbrInChildNode -= childN.getMatchedStringIdx();
                 indexOrder -= passedStringNbrInChildNode;
@@ -302,8 +308,12 @@ public class RegexStringGenerator implements StringGenerator {
                 for (Node childNode : nextNodes) {
                     childNode.updateMatchedStringIdx();
                     long childNbrChar = childNode.getMatchedStringIdx();
-                    long newNbrChar = (childNbrChar == 0 || Long.MAX_VALUE / childNbrChar > nbrChar) ? nbrChar * childNbrChar : nbrChar;
-                    matchedStringIdx += Math.min(newNbrChar, Long.MAX_VALUE - newNbrChar);
+
+                    if(multiplyWouldOverflow(nbrChar, childNbrChar) || addWouldOverflow(matchedStringIdx, nbrChar * childNbrChar)) {
+                        matchedStringIdx = Long.MAX_VALUE;
+                    } else {
+                        matchedStringIdx += nbrChar * childNbrChar;
+                    }
                 }
             }
             isNbrMatchedStringUpdated = true;
@@ -328,6 +338,8 @@ public class RegexStringGenerator implements StringGenerator {
         void setMaxChar(char maxChar) {
             this.maxChar = maxChar;
         }
+
+
     }
 
     private class FiniteStringAutomatonIterator implements Iterator<String> {
@@ -409,6 +421,19 @@ public class RegexStringGenerator implements StringGenerator {
     public int hashCode() {
         return Objects.hash(this.automaton, this.getClass());
     }
+    /** throws @IllegalArgumentException if a or b less than zero */
+    private static boolean multiplyWouldOverflow(long a, long b) {
+        Validate.isTrue(a >= 0, "The value must be >=0: %d", a);
+        Validate.isTrue(b >= 0, "The value must be >=0: %d", b);
+        return a > 0 && b > 0 && Long.MAX_VALUE / b < a;
+    }
+
+    /** throws @IllegalArgumentException if a or b less than zero */
+    private static boolean addWouldOverflow(long a, long b) {
+        Validate.isTrue(a >= 0, "The value must be >=0: %d", a);
+        Validate.isTrue(b >= 0, "The value must be >=0: %d", b);
+        return a > 0 && b > 0 && (Long.MAX_VALUE - b < a);
+    }
 
     static class UnionCollector {
         private RegexStringGenerator union;
@@ -432,5 +457,6 @@ public class RegexStringGenerator implements StringGenerator {
             return union;
         }
     }
+
 }
 
