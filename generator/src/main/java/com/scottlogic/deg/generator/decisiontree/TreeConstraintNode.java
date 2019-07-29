@@ -24,6 +24,7 @@ import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import java.util.*;
 import java.util.concurrent.Delayed;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -33,6 +34,8 @@ public final class TreeConstraintNode implements ConstraintNode {
     private final Collection<DelayedAtomicConstraint> delayedAtomicConstraints;
     private final Collection<DecisionNode> decisions;
     private final Set<NodeMarking> nodeMarkings;
+
+    private Optional<RowSpec> adaptedRowSpec = null;
 
     public TreeConstraintNode(Collection<AtomicConstraint> atomicConstraints, Collection<DecisionNode> decisions) {
         this(atomicConstraints, Collections.emptySet(), decisions, Collections.emptySet());
@@ -96,7 +99,6 @@ public final class TreeConstraintNode implements ConstraintNode {
         adaptedRowSpec = createRowSpecFunc.get();
         return adaptedRowSpec;
     }
-    private Optional<RowSpec> adaptedRowSpec = null;
 
     public String toString(){
         if (decisions.isEmpty())
@@ -120,14 +122,14 @@ public final class TreeConstraintNode implements ConstraintNode {
     }
 
     public ConstraintNode removeDecisions(Collection<DecisionNode> decisionsToRemove) {
-        Function<DecisionNode, Boolean> shouldRemove = existingDecision -> decisionsToRemove.stream()
+        Predicate<DecisionNode> shouldRemove = existingDecision -> decisionsToRemove.stream()
             .anyMatch(decisionToExclude -> decisionToExclude.equals(existingDecision));
 
         return new TreeConstraintNode(
           atomicConstraints,
           delayedAtomicConstraints,
           decisions.stream()
-              .filter(existingDecision -> !shouldRemove.apply(existingDecision))
+              .filter(existingDecision -> !shouldRemove.test(existingDecision))
               .collect(Collectors.toList()),
             this.nodeMarkings
         );
