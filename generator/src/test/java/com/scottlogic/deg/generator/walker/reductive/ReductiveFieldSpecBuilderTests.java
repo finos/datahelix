@@ -18,7 +18,7 @@ package com.scottlogic.deg.generator.walker.reductive;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsNullConstraint;
-import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
+import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
@@ -44,8 +44,8 @@ class ReductiveFieldSpecBuilderTests {
         when(reducer.reduceConstraintsToFieldSpec(any())).thenReturn(Optional.empty());
         ReductiveFieldSpecBuilder builder = new ReductiveFieldSpecBuilder(reducer, mock(FieldSpecMerger.class));
         Field field1 = new Field("field");
-        TreeConstraintNode rootNode =
-            new TreeConstraintNode(
+        ConstraintNode rootNode =
+            new ConstraintNode(
                 new IsNullConstraint(field1),
                 new IsNullConstraint(field1).negate());
 
@@ -61,7 +61,7 @@ class ReductiveFieldSpecBuilderTests {
         FieldSpecValueGenerator valueGenerator = mock(FieldSpecValueGenerator.class);
         ReductiveFieldSpecBuilder builder = new ReductiveFieldSpecBuilder(reducer, mock(FieldSpecMerger.class));
         Field field1 = new Field("field");
-        TreeConstraintNode rootNode = new TreeConstraintNode(new IsNullConstraint(field1));
+        ConstraintNode rootNode = new ConstraintNode(new IsNullConstraint(field1));
         when(valueGenerator.generate(FieldSpec.Empty)).thenReturn(Stream.of(mock(DataBagValue.class)));
 
         Set<FieldSpec> field = builder.getDecisionFieldSpecs(rootNode, field1);

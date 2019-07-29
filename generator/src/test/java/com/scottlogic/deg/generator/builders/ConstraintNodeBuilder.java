@@ -34,7 +34,7 @@ public class ConstraintNodeBuilder {
     }
 
     public ConstraintNode build() {
-        return applyNodeMarkings(markings, new TreeConstraintNode(constraints, decisionNodes));
+        return applyNodeMarkings(markings, new ConstraintNode(constraints, decisionNodes));
     }
 
     public static ConstraintNodeBuilder constraintNode() {

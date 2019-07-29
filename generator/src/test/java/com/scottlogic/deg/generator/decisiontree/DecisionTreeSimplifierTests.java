@@ -43,7 +43,7 @@ class DecisionTreeSimplifierTests {
     @Test
     void simplify_decisionContainsSingleOptiontWithMatchingConstraintOnRootNode_doesNotSimplifyTree() {
         DecisionTree tree = new DecisionTree(
-            new TreeConstraintNode(
+            new ConstraintNode(
                 Arrays.asList(
                     new IsInSetConstraint(new Field("Field 1"), setOf(1, 2)),
                     new IsNullConstraint(new Field("Field 1")).negate()
@@ -51,7 +51,7 @@ class DecisionTreeSimplifierTests {
                 Collections.singletonList(
                     new TreeDecisionNode(
                         Collections.singletonList(
-                            new TreeConstraintNode(
+                            new ConstraintNode(
                                 Collections.singletonList(
                                     new IsInSetConstraint(new Field("Field 1"), setOf(1, 2))
                                 ),
@@ -76,7 +76,7 @@ class DecisionTreeSimplifierTests {
     @Test
     void simplify_decisionContainsSingleOptionWithDifferingConstraintOnRootNode_simplifiesDecision() {
         DecisionTree tree = new DecisionTree(
-            new TreeConstraintNode(
+            new ConstraintNode(
                 Arrays.asList(
                     new IsInSetConstraint(new Field("Field 1"), setOf(1, 2)),
                     new IsNullConstraint(new Field("Field 1")).negate()
@@ -84,7 +84,7 @@ class DecisionTreeSimplifierTests {
                 Collections.singletonList(
                     new TreeDecisionNode(
                         Collections.singletonList(
-                            new TreeConstraintNode(
+                            new ConstraintNode(
                                 Collections.singletonList(
                                     new IsInSetConstraint(new Field("Field 2"), setOf("A", "B"))
                                 ),

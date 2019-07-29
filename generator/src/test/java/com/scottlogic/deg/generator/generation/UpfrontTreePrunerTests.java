@@ -22,7 +22,6 @@ import com.scottlogic.deg.generator.builders.ConstraintNodeBuilder;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.NodeMarking;
-import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
@@ -65,7 +64,7 @@ class UpfrontTreePrunerTests {
             ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
             DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
             DecisionTree treeMarkedWithContradictions = new DecisionTree(
-                new TreeConstraintNode().markNode(NodeMarking.CONTRADICTORY),
+                new ConstraintNode().markNode(NodeMarking.CONTRADICTORY),
                 new ProfileFields(fields));
 
             Mockito.when(reductiveTreePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.of(prunedRoot));
@@ -91,7 +90,7 @@ class UpfrontTreePrunerTests {
             DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
 
             DecisionTree treeMarkedWithContradictions = new DecisionTree(
-                new TreeConstraintNode().markNode(NodeMarking.CONTRADICTORY),
+                new ConstraintNode().markNode(NodeMarking.CONTRADICTORY),
                 new ProfileFields(fields));
 
             Mockito.when(reductiveTreePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.of(prunedRoot));
@@ -133,7 +132,7 @@ class UpfrontTreePrunerTests {
             ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
             DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
             DecisionTree completelyUnmarkedTree = new DecisionTree(
-                new TreeConstraintNode(),
+                new ConstraintNode(),
                 new ProfileFields(fields));
 
             //Act
@@ -184,7 +183,7 @@ class UpfrontTreePrunerTests {
             ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
             DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
             DecisionTree treeMarkedWithContradictions = new DecisionTree(
-                new TreeConstraintNode().markNode(NodeMarking.CONTRADICTORY),
+                new ConstraintNode().markNode(NodeMarking.CONTRADICTORY),
                 new ProfileFields(fields));
 
             //Act

@@ -19,7 +19,6 @@ package com.scottlogic.deg.generator.walker.reductive;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsLessThanConstantConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
-import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
@@ -62,7 +61,7 @@ class ReductiveTreePrunerTests {
     public void pruneConstraintNode_leafNodeContradictionsWithParent_returnsContradictory() {
         //Arrange
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList(10, 20));
-        ConstraintNode tree = new TreeConstraintNode(new IsLessThanConstantConstraint(field, 5));
+        ConstraintNode tree = new ConstraintNode(new IsLessThanConstantConstraint(field, 5));
         FieldSpec inputFieldSpec = notNull.withWhitelist(
             (FrequencyDistributedSet.uniform(inputWhitelist)));
 
@@ -81,7 +80,7 @@ class ReductiveTreePrunerTests {
     public void pruneConstraintNode_leafNodeNoContradictionsWithParent_returnsLeafNode() {
         //Arrange
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList(1, 2));
-        ConstraintNode tree = new TreeConstraintNode(new IsLessThanConstantConstraint(field, 5));
+        ConstraintNode tree = new ConstraintNode(new IsLessThanConstantConstraint(field, 5));
         FieldSpec inputFieldSpec = FieldSpec.Empty.withWhitelist(
             (FrequencyDistributedSet.uniform(inputWhitelist)));
 
