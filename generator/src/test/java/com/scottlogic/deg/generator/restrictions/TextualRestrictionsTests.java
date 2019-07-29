@@ -586,6 +586,16 @@ class TextualRestrictionsTests {
         Assert.assertThat(generator.toString(), equalTo("/^.{0,3}$/"));
     }
 
+    @Test
+    void intersect_withMaxLengthContradictingMatchingRegex_shouldReturnUnsuccessful(){
+        StringRestrictions maxLength = maxLength(4);
+        StringRestrictions regexLength = matchingRegex("[a-z]{6}", false);
+
+        MergeResult<StringRestrictions> intersect = maxLength.intersect(regexLength);
+
+        Assert.assertThat(intersect, equalTo(MergeResult.unsuccessful()));
+    }
+
     private static StringRestrictions ofLength(int length, boolean negate){
         return new TextualRestrictions(
             negate ? null : length,
