@@ -60,3 +60,34 @@ Additionally, we have the following (unenforced) guidelines:
 * Use the imperative mood ("Move button left..." not "Moves button left...")
 * Limit the first line to 72 characters or less
 * Reference issues, wiki pages, and pull requests liberally!
+
+## Automatically generate copyright header in new java files within IntelliJ
+
+We want the following at the top of each java file:
+
+    /*
+     * Copyright 2019 Scott Logic Ltd
+     *
+     * Licensed under the Apache License, Version 2.0 (the "License");
+     * you may not use this file except in compliance with the License.
+     * You may obtain a copy of the License at
+     *
+     *     http://www.apache.org/licenses/LICENSE-2.0
+     *
+     * Unless required by applicable law or agreed to in writing, software
+     * distributed under the License is distributed on an "AS IS" BASIS,
+     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     * See the License for the specific language governing permissions and
+     * limitations under the License.
+     */
+
+We might want to add it to our cucumber files too in which case we would go through similar process although might need to define a different include file to include as the comment style si different.
+
+To set it up for java files you:
+
+* Open settings and got to Editor -> File and Code Templates
+* Go to Include tab and add/edit the `File Header` entry so contains the comment above
+* Go to Files tab and check the relevant types of files (eg Class, Interface, Enum etc) have `#parse("File Header.java")` at the top.  Most should although you may need to edit some so it appears before the ‘package’ line
+
+
+
