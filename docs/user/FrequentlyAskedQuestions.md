@@ -1,6 +1,6 @@
 # Frequently asked questions
 
-## "What's the difference between formattedAs and granularTo?"
+## What's the difference between formattedAs and granularTo?
 
 The below constraints are superficially similar:
 
@@ -53,8 +53,8 @@ while the same data output to JSON would retain the original full precision:
 
 To reiterate, `formattedAs` only affects how data is presented _after_ it has been generated. It has no impact on _what_ data gets generated, and can be ignored entirely for many data types and output formats. 
 
-## Does `inSet` prevent `null` from being emitted?
-**No**, `null` can still be emitted.
+## Does `inSet` allow `null` to be produced?
+**Yes**
 
 The `inSet` operator only defines the initial set of data to work from, but does not convey any instruction or definition that null is not permitted.
 
@@ -64,8 +64,8 @@ The operator will not let the user explicitly put `null` into an `inSet`. So, us
 
 For more details see the [set restriction and generation](SetRestrictionAndGeneration.md) page.
 
-## Does `inSet` prevent `null` from being emitted?
-**Yes**, `null` can't be emitted.
+## Does `equalTo` allow `null` to be produced?
+**No**
 
 For more details see the [set restriction and generation](SetRestrictionAndGeneration.md) page.
 
