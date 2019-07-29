@@ -22,6 +22,7 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedDateGranularity;
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
+import com.scottlogic.deg.common.profile.constraints.delayed.IsAfterDynamicDateTimeConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
@@ -185,10 +186,28 @@ public class CoreAtomicTypesConstraintReaderSource implements ConstraintReaderMa
                 AtomicConstraintType.IS_AFTER_CONSTANT_DATE_TIME.getText(),
                 ".*",
                 (dto, fields, rules) ->
-                    new IsAfterConstantDateTimeConstraint(
-                        fields.getByName(dto.field),
-                        ConstraintReaderHelpers.getValidatedValue(dto, OffsetDateTime.class)
-                    )
+                {
+                    Optional<OffsetDateTime> dateValidatedValue =
+                        ConstraintReaderHelpers.tryGetValidatedValue(dto, OffsetDateTime.class);
+
+                    if (dateValidatedValue.isPresent()) {
+                        new IsAfterConstantDateTimeConstraint(
+                            fields.getByName(dto.field),
+                            dateValidatedValue.get());
+                    }
+
+                    String otherFieldName = ConstraintReaderHelpers.getValueAsString(dto);
+                    Field otherField = fields.getByName(otherFieldName);
+
+                    // Default to MAX to ensure we handle modifying the value
+                    return new IsAfterDynamicDateTimeConstraint(
+                        new IsAfterConstantDateTimeConstraint(
+                            fields.getByName(dto.field),
+                            OffsetDateTime.MAX
+                        ),
+                        otherField
+                    );
+                }
             ),
             new ConstraintReaderMapEntry(
                 AtomicConstraintType.IS_AFTER_OR_EQUAL_TO_CONSTANT_DATE_TIME.getText(),
