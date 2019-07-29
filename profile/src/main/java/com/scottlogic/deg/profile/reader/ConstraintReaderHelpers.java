@@ -142,7 +142,8 @@ public class ConstraintReaderHelpers {
         return requiredType.cast(value);
     }
 
-    public static String getValueAsString(Object value) {
+    public static String getValueAsString(ConstraintDTO dto) {
+        Object value = dto.value;
         if (value == null) {
             return null;
         }

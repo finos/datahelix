@@ -52,7 +52,7 @@ public class MainConstraintReader implements ConstraintReader {
         if (dto.is != ConstraintDTO.undefined) {
             ConstraintReader subReader = this.constraintReaderMap.getReader(
                 (String) dto.is,
-                ConstraintReaderHelpers.getValueAsString(dto.value)
+                ConstraintReaderHelpers.getValueAsString(dto)
             );
 
             if (subReader == null) {
