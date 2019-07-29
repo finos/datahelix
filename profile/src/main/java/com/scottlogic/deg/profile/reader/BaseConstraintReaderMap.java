@@ -26,9 +26,8 @@ public class BaseConstraintReaderMap implements ConstraintReaderMap {
 
     public BaseConstraintReaderMap(Stream<ConstraintReaderMapEntrySource> providersToLoad) {
         providersToLoad
-            .forEach(p ->
-                p.getConstraintReaderMapEntries()
-                    .forEach(this::add));
+            .flatMap(ConstraintReaderMapEntrySource::getConstraintReaderMapEntries)
+            .forEach(this::add);
     }
 
     public void add(ConstraintReaderMapEntry entry) {
