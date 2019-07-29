@@ -59,28 +59,6 @@ Feature: User can specify that data must be created to conform to each of multip
       | foo  |
       | null |
 
-  @ignore  #91 Reduce duplication where (eg) decisions have overlapping options
-  Scenario: Running an 'allOf' request that contains soft contradictory restraints in a nested anyOf request should be successful
-    Given there is a field foo
-    And foo is in set:
-      | 5     |
-      | "ack" |
-    And there is a constraint:
-      """
-      { "allOf": [
-        { "anyOf": [
-          {"field": "foo", "is": "matchingRegex", "value": "[a-z]{3}" },
-          {"field": "foo", "is": "matchingRegex", "value": "[a-k]{3}" }
-        ]},
-        { "field": "foo", "is": "ofType", "value": "integer" },
-        { "field": "foo", "is": "equalTo", "value": 5 }
-      ]}
-      """
-    Then the following data should be generated:
-      | foo  |
-      | 5    |
-      | null |
-
   Scenario: Running a 'allOf' request that includes multiple values within the same statement should be successful
     Given there is a field foo
     And foo is of type "string"

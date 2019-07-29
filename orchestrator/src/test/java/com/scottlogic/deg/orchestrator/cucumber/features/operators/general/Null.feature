@@ -238,6 +238,7 @@ Feature: User can specify that a field is null or absent
     Then the following data should be generated:
       | foo  |
       | null |
+      | null |
 
   Scenario: Not null combined with a SEDOL constraint generates valid SEDOLs
     Given foo is anything but null
@@ -261,6 +262,7 @@ Feature: User can specify that a field is null or absent
     Then the following data should be generated:
       | foo  |
       | null |
+      | null |
 
   Scenario: Not null combined with a CUSIP constraint generates valid CUSIPs
     Given foo is anything but null
@@ -283,6 +285,7 @@ Feature: User can specify that a field is null or absent
     And foo is anything but of type "CUSIP"
     Then the following data should be generated:
       | foo  |
+      | null |
       | null |
 
 ### greaterThan ###

@@ -231,6 +231,7 @@ Feature: User can specify that a string length is longer than, a specified numbe
 
   Scenario: A longer than constraint combined with a non-ISIN constraint generates data that matches the longer than constraint and contains no valid ISINs
     Given foo is longer than 2
+    And foo is anything but null
     And foo is anything but of type "ISIN"
     And foo is in set:
       | "US0000XVGZA3" |
@@ -238,7 +239,6 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "twelvedigits" |
     Then the following data should be generated:
       | foo            |
-      | null           |
       | "US0000XVGZA3" |
       | "U10378331005" |
       | "twelvedigits" |
@@ -265,6 +265,7 @@ Feature: User can specify that a string length is longer than, a specified numbe
 
   Scenario: A not longer than constraint combined with a non-ISIN constraint generates data that contains no valid ISINs
     Given foo is anything but longer than 12
+    And foo is anything but null
     And foo is anything but of type "ISIN"
     And foo is in set:
       | "US0000XVGZA3" |
@@ -272,7 +273,6 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "twelvedigits" |
     Then the following data should be generated:
       | foo            |
-      | null           |
       | "US0000XVGZA3" |
       | "U10000XVGZA3" |
       | "twelvedigits" |
@@ -292,6 +292,7 @@ Feature: User can specify that a string length is longer than, a specified numbe
 
   Scenario: A longer than constraint combined with a non-SEDOL constraint generates data that matches the longer than constraint and contains no valid SEDOLs
     Given foo is longer than 2
+    And foo is anything but null
     And foo is anything but of type "SEDOL"
     And foo is in set:
       | "0263499" |
@@ -299,7 +300,6 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "string7" |
     Then the following data should be generated:
       | foo       |
-      | null      |
       | "0263499" |
       | "3091352" |
       | "string7" |
@@ -326,6 +326,7 @@ Feature: User can specify that a string length is longer than, a specified numbe
 
   Scenario: A not longer than constraint combined with a non-SEDOL constraint generates data that matches the longer than constraint and contains no valid SEDOLs
     Given foo is anything but longer than 7
+    And foo is anything but null
     And foo is anything but of type "SEDOL"
     And foo is in set:
       | "0263497" |
@@ -333,7 +334,6 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "string7" |
     Then the following data should be generated:
       | foo       |
-      | null      |
       | "0263497" |
       | "3091354" |
       | "string7" |
@@ -353,6 +353,7 @@ Feature: User can specify that a string length is longer than, a specified numbe
 
   Scenario: A longer than constraint combined with a non-CUSIP constraint generates data that matches the longer than constraint and contains no valid CUSIPs
     Given foo is longer than 2
+    And foo is anything but null
     And foo is anything but of type "CUSIP"
     And foo is in set:
       | "38259W508" |
@@ -360,7 +361,6 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "strngnine" |
     Then the following data should be generated:
       | foo         |
-      | null        |
       | "38259W508" |
       | "5F4918104" |
       | "strngnine" |
@@ -387,6 +387,7 @@ Feature: User can specify that a string length is longer than, a specified numbe
 
   Scenario: A not longer than constraint combined with a non-CUSIP constraint generates data that matches the not longer than constraint and contains no valid CUSIPs
     Given foo is anything but longer than 9
+    And foo is anything but null
     And foo is anything but of type "CUSIP"
     And foo is in set:
       | "38259W508" |
@@ -394,7 +395,6 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "strngnine" |
     Then the following data should be generated:
       | foo         |
-      | null        |
       | "38259W508" |
       | "5F4918104" |
       | "strngnine" |
