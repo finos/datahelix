@@ -30,7 +30,7 @@ public class ViolatedProfile extends Profile {
      * @param violatedRule Un-violated form of the rule that has been violated on this profile.
      * @param fields Fields relating to this profile.
      * @param rules Collection of rules on this profile, including the violated form of the one rule which has been
-*              violated.
+     *              violated.
      * @param description Description of profile.
      */
     public ViolatedProfile(String schemaVersion, Rule violatedRule, ProfileFields fields, Collection<Rule> rules, String description){
