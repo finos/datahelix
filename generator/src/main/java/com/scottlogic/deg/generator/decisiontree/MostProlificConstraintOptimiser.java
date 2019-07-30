@@ -67,8 +67,8 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
         }
 
         // Add most prolific constraint to new decision node
-        ConstraintNode factorisingConstraintNode = new ConstraintNode(mostProlificAtomicConstraint);
-        ConstraintNode negatedFactorisingConstraintNode = new ConstraintNode(negatedMostProlificConstraint);
+        ConstraintNode factorisingConstraintNode = new ConstraintNodeBuilder().addAtomicConstraints(mostProlificAtomicConstraint).createConstraintNode();
+        ConstraintNode negatedFactorisingConstraintNode = new ConstraintNodeBuilder().addAtomicConstraints(negatedMostProlificConstraint).createConstraintNode();
 
         Set<ConstraintNode> otherOptions = new HashSet<>();
         Set<DecisionNode> decisionsToRemove = new HashSet<>();
@@ -93,9 +93,9 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
                 otherOptions.stream())
             .collect(Collectors.toList()));
 
-        return rootNode
+        return rootNode.builder()
             .removeDecisions(decisionsToRemove)
-            .addDecisions(Collections.singletonList(factorisedDecisionNode));
+            .addDecision(factorisedDecisionNode).build();
     }
 
     private boolean constraintNodeContainsNegatedConstraints(ConstraintNode node, Set<AtomicConstraint> constraints){
@@ -111,8 +111,7 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
             return newNode;
         }
 
-        DecisionNode decisionUnderFactorisedNode = new DecisionNode(optionsToAdd);
-        return newNode.addDecisions(Collections.singletonList(decisionUnderFactorisedNode));
+        return newNode.builder().addDecision(new DecisionNode(optionsToAdd)).build();
     }
 
     private int disfavourNotConstraints(Map.Entry<AtomicConstraint, List<AtomicConstraint>> entry){
@@ -211,9 +210,13 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
             return result;
         }
 
-        private void markOptionForFactorisation(AtomicConstraint factorisingConstraint, ConstraintNode node, List<ConstraintNode> options, Set<AtomicConstraint> constraints){
-            ConstraintNode newOption = node.cloneWithoutAtomicConstraint(factorisingConstraint);
-            if (!newOption.getAtomicConstraints().isEmpty()){
+        private void markOptionForFactorisation(AtomicConstraint factorisingConstraint,
+                                                ConstraintNode node,
+                                                List<ConstraintNode> options,
+                                                Set<AtomicConstraint> constraints) {
+            ConstraintNode newOption = node.builder().removeAtomicConstraint(factorisingConstraint).build();
+            if (!newOption.getAtomicConstraints().isEmpty()) {
+                int i;
                 options.add(newOption);
                 constraints.addAll(newOption.getAtomicConstraints());
             }

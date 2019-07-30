@@ -50,12 +50,12 @@ public class MaxStringLengthInjectingDecisionTreeFactory implements DecisionTree
         Set<RuleInformation> rules = Collections.singleton(createRule());
 
         return new DecisionTree(
-            tree.rootNode.addAtomicConstraints(
+            tree.rootNode.builder().addAtomicConstraints(
                 tree.fields
                     .stream()
                     .map(field -> new IsStringShorterThanConstraint(field, maxLength + 1))
                     .collect(Collectors.toList())
-            ),
+            ).build(),
             tree.fields
         );
     }

@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.walker.decisionbased;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.generator.builders.ConstraintNodeBuilder;
+import com.scottlogic.deg.generator.builders.ConstraintNodeBuilderDepreciated;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.fieldspecs.*;
@@ -49,7 +49,7 @@ class DecisionBasedSolverTests {
     @Test
     void createRowSpecs_whenRootNodeHasNoDecisions_returnsRowSpecOfRoot() {
         //Arrange
-        ConstraintNode root = ConstraintNodeBuilder.constraintNode().build();
+        ConstraintNode root = ConstraintNodeBuilderDepreciated.constraintNode().build();
         DecisionTree tree = new DecisionTree(root, profileFields);
 
         //Act
@@ -68,7 +68,7 @@ class DecisionBasedSolverTests {
     @Test
     void createRowSpecs_whenRootNodeHasNoDecisionsButSomeConstraints_returnsRowSpecOfRoot() {
         //Arrange
-        ConstraintNode root = ConstraintNodeBuilder.constraintNode().where(fieldA).isInSet(1, 2, 3).build();
+        ConstraintNode root = ConstraintNodeBuilderDepreciated.constraintNode().where(fieldA).isInSet(1, 2, 3).build();
         DecisionTree tree = new DecisionTree(root, profileFields);
 
         //Act
@@ -88,11 +88,11 @@ class DecisionBasedSolverTests {
     @Test
     void createRowSpecs_whenRootNodeHasSomeDecisions_returnsRowSpecOfRoot() {
         //Arrange
-        ConstraintNode root = ConstraintNodeBuilder.constraintNode()
+        ConstraintNode root = ConstraintNodeBuilderDepreciated.constraintNode()
             .withDecision(
-                ConstraintNodeBuilder.constraintNode()
+                ConstraintNodeBuilderDepreciated.constraintNode()
                     .where(fieldB).isNull(),
-                ConstraintNodeBuilder.constraintNode()
+                ConstraintNodeBuilderDepreciated.constraintNode()
                     .where(fieldB).isInSet(1, 2, 3))
             .build();
         DecisionTree tree = new DecisionTree(root, profileFields);

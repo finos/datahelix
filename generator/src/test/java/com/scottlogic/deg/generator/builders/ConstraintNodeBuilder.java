@@ -25,6 +25,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+// Please use ConstraintNodeBuilder in main instead of this test builder
+@Deprecated
+
 public class ConstraintNodeBuilder {
     protected List<AtomicConstraint> constraints = new ArrayList<>();
     private List<DecisionNode> decisionNodes = new ArrayList<>();
@@ -62,7 +65,7 @@ public class ConstraintNodeBuilder {
     private ConstraintNode applyNodeMarkings(Set<NodeMarking> markings, ConstraintNode unmarkedNode) {
         ConstraintNode currentNode = unmarkedNode;
         for (NodeMarking marking : markings) {
-            currentNode = currentNode.markNode(marking);
+            currentNode = currentNode.builder().markNode(marking).build();
         }
         return currentNode;
     }

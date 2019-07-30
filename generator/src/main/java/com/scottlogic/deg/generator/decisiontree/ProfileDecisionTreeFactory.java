@@ -148,14 +148,10 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
     }
 
     private static ConstraintNode asConstraintNode(AtomicConstraint constraint) {
-        return new ConstraintNode(
-            Collections.singleton(constraint),
-            Collections.emptyList());
+        return new ConstraintNodeBuilder().addAtomicConstraints(Collections.singleton(constraint)).setDecisions(Collections.emptyList()).createConstraintNode();
     }
 
     private static ConstraintNode asConstraintNode(DecisionNode decision) {
-        return new ConstraintNode(
-            Collections.emptyList(),
-            Collections.singleton(decision));
+        return new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptyList()).setDecisions(Collections.singleton(decision)).createConstraintNode();
     }
 }

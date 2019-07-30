@@ -20,9 +20,9 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
-import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
@@ -57,7 +57,7 @@ class ConstraintToFieldMapperTests {
 
         final AtomicConstraint constraint = new IsInSetConstraint(new Field("B"), whitelistOf("test-value"));
         final DecisionNode decision = new DecisionNode(
-            new ConstraintNode(constraint));
+            new ConstraintNodeBuilder().addAtomicConstraints(constraint).createConstraintNode());
 
         givenDecisions(decision);
 
@@ -89,26 +89,20 @@ class ConstraintToFieldMapperTests {
         final AtomicConstraint constraintF = new IsInSetConstraint(new Field("F"), whitelistOf("test-value"));
 
         final DecisionNode decisionABC = new DecisionNode(
-            new ConstraintNode(
-                Collections.emptyList(),
-                Arrays.asList(
-                    new DecisionNode(new ConstraintNode(constraintA)),
-                    new DecisionNode(new ConstraintNode(constraintB)),
-                    new DecisionNode(new ConstraintNode(constraintC))
-                )
-            )
+            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptyList()).setDecisions(Arrays.asList(
+                new DecisionNode(new ConstraintNodeBuilder().addAtomicConstraints(constraintA).createConstraintNode()),
+                new DecisionNode(new ConstraintNodeBuilder().addAtomicConstraints(constraintB).createConstraintNode()),
+                new DecisionNode(new ConstraintNodeBuilder().addAtomicConstraints(constraintC).createConstraintNode())
+            )).createConstraintNode()
         );
 
         final DecisionNode decisionDEF = new DecisionNode(
-            new ConstraintNode(
-                Collections.emptyList(),
-                Collections.singletonList(
-                    new DecisionNode(
-                        new ConstraintNode(constraintD),
-                        new ConstraintNode(constraintE),
-                        new ConstraintNode(constraintF))
-                )
-            )
+            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptyList()).setDecisions(Collections.singletonList(
+                new DecisionNode(
+                    new ConstraintNodeBuilder().addAtomicConstraints(constraintD).createConstraintNode(),
+                    new ConstraintNodeBuilder().addAtomicConstraints(constraintE).createConstraintNode(),
+                    new ConstraintNodeBuilder().addAtomicConstraints(constraintF).createConstraintNode())
+            )).createConstraintNode()
         );
 
         givenDecisions(decisionABC, decisionDEF);
@@ -148,7 +142,7 @@ class ConstraintToFieldMapperTests {
     private void getMappings() {
         mappings = new ConstraintToFieldMapper()
             .mapConstraintsToFields(new DecisionTree(
-                new ConstraintNode(constraintsList, decisionsList),
+                new ConstraintNodeBuilder().addAtomicConstraints(constraintsList).setDecisions(decisionsList).createConstraintNode(),
                 fields
             ));
     }

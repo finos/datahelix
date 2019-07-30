@@ -18,7 +18,7 @@ package com.scottlogic.deg.generator.walker;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.generator.builders.ConstraintNodeBuilder;
+import com.scottlogic.deg.generator.builders.ConstraintNodeBuilderDepreciated;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
@@ -63,7 +63,7 @@ class ReductiveDecisionTreeWalkerTests {
     @BeforeEach
     public void beforeEach(){
         ProfileFields fields = new ProfileFields(Arrays.asList(field1, field2));
-        rootNode = new ConstraintNode();
+        rootNode = new com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder().createConstraintNode();
         tree = new DecisionTree(rootNode, fields);
 
         reductiveFieldSpecBuilder = mock(ReductiveFieldSpecBuilder.class);
@@ -126,7 +126,7 @@ class ReductiveDecisionTreeWalkerTests {
         Set<FieldSpec> fieldSpecs = new HashSet<>();
         fieldSpecs.add(firstFieldSpec);
         fieldSpecs.add(secondFieldSpec);
-        ConstraintNode root = ConstraintNodeBuilder.constraintNode()
+        ConstraintNode root = ConstraintNodeBuilderDepreciated.constraintNode()
             .where(field1).isNull()
             .where(field1).isNotNull()
             .build();
