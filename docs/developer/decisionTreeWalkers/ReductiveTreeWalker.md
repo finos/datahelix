@@ -82,6 +82,8 @@ In this case the process will abort this iteration and back-track.
 If a decision is left with only one option after reduction, the tree is still valid. The tree can also be simplified by way of hoisting the atomic constraints to the parent constraint, and removing the then empty decision. This process of simplification further reduces the size and complexity of the tree.
 
 ## Visualisation
+_This is an alpha feature. Please do not rely on it. If you find issues with it, please [report them](https://github.com/finos/datahelix/issues)._ 
+
 The process supports visualisation of each tree as its reduced through this process, a tree can be emitted to disk as the `visualise` method would. An edition of the tree is serialised whenever it is confirmed to still be valid and has been reduced further as such you do NOT see a tree for the last field, as its never fixed.
 
 The trees are emitted to a directory, which must be created manually, under the working directory called `reductive-walker`. Within this directory files will be emitted with the the name `Reduced-tree-nnn.gv` where _nnn_ is the iteration number.
