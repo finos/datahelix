@@ -38,5 +38,4 @@ public abstract class ProfileSchemaValidator {
     protected String getSchemaPath(String schemaVersion) {
         return "/profileschema/" + schemaVersion + "/datahelix.schema.json";
     }
-
 }

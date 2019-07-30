@@ -38,16 +38,17 @@ public class ProfileSchemaValidatorMedeia extends ProfileSchemaValidator {
     public void validateProfile(File profileFile, String schemaVersion) {
         String schemaPath = getSchemaPath(schemaVersion);
         try {
-            validateProfile(this.getClass().getResourceAsStream(schemaPath), new FileInputStream(profileFile), schemaPath);
+            validateProfile(this.getClass().getResourceAsStream(schemaPath), new FileInputStream(profileFile), schemaVersion);
         } catch (FileNotFoundException e) {
             throw new ValidationException(e.getLocalizedMessage());
         }
     }
 
-    private void validateProfile(InputStream schemaStream, InputStream profileStream, String schemaPath) {
+    private void validateProfile(InputStream schemaStream, InputStream profileStream, String schemaVersion) {
+        String schemaPath = getSchemaPath(schemaVersion);
         List<String> errorMessages = new ArrayList<>();
         if (schemaStream == null) {
-            errorMessages.add("Null Profile Schema Stream");
+            errorMessages.add("This version of the generator does not support v" + schemaVersion + " of the schema.");
         } else if (profileStream == null) {
             errorMessages.add("Null Profile Stream");
         } else {
