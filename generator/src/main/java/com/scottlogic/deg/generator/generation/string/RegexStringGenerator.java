@@ -21,9 +21,10 @@ import com.scottlogic.deg.generator.utils.SupplierBasedIterator;
 import dk.brics.automaton.Automaton;
 import dk.brics.automaton.State;
 import dk.brics.automaton.Transition;
-import org.apache.commons.lang3.Validate;
 
 import java.util.*;
+
+import static com.scottlogic.deg.common.util.NumberUtils.*;
 
 public class RegexStringGenerator implements StringGenerator {
 
@@ -221,14 +222,15 @@ public class RegexStringGenerator implements StringGenerator {
             passedStringNbrInChildNode = passedStringNbr;
         }
         for (Node childN : node.getNextNodes()) {
-            if (addWouldOverflow(passedStringNbrInChildNode, childN.getMatchedStringIdx())) {
-                passedStringNbrInChildNode = Long.MAX_VALUE;
-            } else {
+            long origNbrInChildNode = passedStringNbrInChildNode;
+            if (addingNonNegativesIsSafe(passedStringNbrInChildNode, childN.getMatchedStringIdx())) {
                 passedStringNbrInChildNode += childN.getMatchedStringIdx();
+            } else {
+                passedStringNbrInChildNode = Long.MAX_VALUE;
             }
 
             if (passedStringNbrInChildNode >= indexOrder) {
-                passedStringNbrInChildNode -= childN.getMatchedStringIdx();
+                passedStringNbrInChildNode = origNbrInChildNode;
                 indexOrder -= passedStringNbrInChildNode;
                 result = result.concat(buildStringFromNode(childN, indexOrder));
                 break;
@@ -313,10 +315,11 @@ public class RegexStringGenerator implements StringGenerator {
                     childNode.updateMatchedStringIdx();
                     long childNbrChar = childNode.getMatchedStringIdx();
 
-                    if(multiplyWouldOverflow(nbrChar, childNbrChar) || addWouldOverflow(matchedStringIdx, nbrChar * childNbrChar)) {
-                        matchedStringIdx = Long.MAX_VALUE;
-                    } else {
+                    if(multiplyingNonNegativesIsSafe(nbrChar, childNbrChar) &&
+                       addingNonNegativesIsSafe(matchedStringIdx, nbrChar * childNbrChar)) {
                         matchedStringIdx += nbrChar * childNbrChar;
+                    } else {
+                        matchedStringIdx = Long.MAX_VALUE;
                     }
                 }
             }
@@ -424,19 +427,6 @@ public class RegexStringGenerator implements StringGenerator {
 
     public int hashCode() {
         return Objects.hash(this.automaton, this.getClass());
-    }
-    /** throws @IllegalArgumentException if a or b less than zero */
-    private static boolean multiplyWouldOverflow(long a, long b) {
-        Validate.isTrue(a >= 0, "The value must be >=0: %d", a);
-        Validate.isTrue(b >= 0, "The value must be >=0: %d", b);
-        return a > 0 && b > 0 && Long.MAX_VALUE / b < a;
-    }
-
-    /** throws @IllegalArgumentException if a or b less than zero */
-    private static boolean addWouldOverflow(long a, long b) {
-        Validate.isTrue(a >= 0, "The value must be >=0: %d", a);
-        Validate.isTrue(b >= 0, "The value must be >=0: %d", b);
-        return a > 0 && b > 0 && (Long.MAX_VALUE - b < a);
     }
 
     static class UnionCollector {
