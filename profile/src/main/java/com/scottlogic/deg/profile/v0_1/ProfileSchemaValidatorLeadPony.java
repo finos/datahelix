@@ -44,7 +44,7 @@ public class ProfileSchemaValidatorLeadPony extends ProfileSchemaValidator {
         try {
             byte[] data = Files.readAllBytes(profilePath = profileFile.toPath());
             profileJsonLines = readAllLines(data);
-            validateProfile(this.getClass().getResourceAsStream(schemaPath), new ByteArrayInputStream(data));
+            validateProfile(this.getClass().getResourceAsStream(schemaPath), new ByteArrayInputStream(data), schemaVersion);
         } catch (IOException e) {
             throw new ValidationException(e.getLocalizedMessage());
         }
@@ -65,10 +65,10 @@ public class ProfileSchemaValidatorLeadPony extends ProfileSchemaValidator {
     /**
      * @return the result of validating the provided DataHelix Profile
      */
-    private void validateProfile(InputStream schemaStream, InputStream profileStream) {
+    private void validateProfile(InputStream schemaStream, InputStream profileStream, String schemaVersion) {
         List<String> errorMessages = new ArrayList<>();
         if (schemaStream == null) {
-            errorMessages.add("Null Profile Schema Stream");
+            errorMessages.add("This version of the generator does not support v" + schemaVersion + " of the schema.");
         } else if (profileStream == null) {
             errorMessages.add("Null Profile Stream");
         } else {
