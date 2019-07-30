@@ -20,6 +20,8 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.common.profile.constraints.delayed.DelayedAtomicConstraint;
+import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
@@ -38,17 +40,18 @@ public class ConstraintReducer {
 
     @Inject
     public ConstraintReducer(
-            FieldSpecFactory fieldSpecFactory,
-            FieldSpecMerger fieldSpecMerger
+        FieldSpecFactory fieldSpecFactory,
+        FieldSpecMerger fieldSpecMerger
     ) {
         this.fieldSpecFactory = fieldSpecFactory;
         this.fieldSpecMerger = fieldSpecMerger;
     }
 
-    public Optional<RowSpec> reduceConstraintsToRowSpec(ProfileFields fields,
-                                                        Iterable<AtomicConstraint> constraints) {
-        final Map<Field, List<AtomicConstraint>> fieldToConstraints = StreamSupport
-            .stream(constraints.spliterator(), false)
+    public Optional<RowSpec> reduceConstraintsToRowSpec(ProfileFields fields, ConstraintNode node) {
+        Collection<AtomicConstraint> constraints = node.getAtomicConstraints();
+        Collection<DelayedAtomicConstraint> delayedConstraints = node.getDelayedAtomicConstraints();
+
+        final Map<Field, List<AtomicConstraint>> fieldToConstraints = constraints.stream()
             .collect(
                 Collectors.groupingBy(
                     AtomicConstraint::getField,
@@ -59,7 +62,7 @@ public class ConstraintReducer {
             .collect(
                 Collectors.toMap(
                     Function.identity(),
-                    field ->  reduceConstraintsToFieldSpec(fieldToConstraints.get(field))));
+                    field -> reduceConstraintsToFieldSpec(fieldToConstraints.get(field))));
 
         final Optional<Map<Field, FieldSpec>> optionalMap = Optional.of(fieldToFieldSpec)
             .filter(map -> map.values().stream().allMatch(Optional::isPresent))
@@ -71,6 +74,8 @@ public class ConstraintReducer {
                         Map.Entry::getKey,
                         entry -> entry.getValue().get())));
 
+        // TODO: Add delayed constraint -> FieldSpecRelations logic
+
         return optionalMap.map(
             map -> new RowSpec(
                 fields,
@@ -79,8 +84,8 @@ public class ConstraintReducer {
 
     public Optional<FieldSpec> reduceConstraintsToFieldSpec(Iterable<AtomicConstraint> constraints) {
         return constraints == null
-                ? Optional.of(FieldSpec.Empty)
-                : getRootFieldSpec(constraints);
+            ? Optional.of(FieldSpec.Empty)
+            : getRootFieldSpec(constraints);
     }
 
     private Optional<FieldSpec> getRootFieldSpec(Iterable<AtomicConstraint> rootConstraints) {

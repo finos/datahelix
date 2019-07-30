@@ -44,7 +44,7 @@ public class DecisionBasedSolver implements RowSpecTreeSolver {
 
     private RowSpec toRowspec(ProfileFields fields, ConstraintNode rootNode){
         return constraintReducer
-            .reduceConstraintsToRowSpec(fields, rootNode.getAtomicConstraints()).get();
+            .reduceConstraintsToRowSpec(fields, rootNode).get();
     }
 
     private Stream<ConstraintNode> reduceToRowNodes(ConstraintNode rootNode){

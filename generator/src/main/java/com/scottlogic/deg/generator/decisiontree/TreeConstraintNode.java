@@ -59,6 +59,14 @@ public final class TreeConstraintNode implements ConstraintNode {
             Collections.emptySet());
     }
 
+    public TreeConstraintNode(Collection<AtomicConstraint> atomicConstraints) {
+        this(
+            atomicConstraints,
+            Collections.emptySet(),
+            Collections.emptySet(),
+            Collections.emptySet());
+    }
+
     public TreeConstraintNode(AtomicConstraint singleAtomicConstraint) {
         this(
             Collections.singletonList(singleAtomicConstraint),
