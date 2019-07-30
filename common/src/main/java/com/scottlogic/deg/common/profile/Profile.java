@@ -20,23 +20,25 @@ import java.util.Collection;
 import java.util.List;
 
 public class Profile {
+    private final String schemaVersion;
     private final ProfileFields fields;
     private final Collection<Rule> rules;
     private final String description;
 
-    public Profile(List<Field> fields, Collection<Rule> rules) {
-        this(new ProfileFields(fields), rules, null);
+    public Profile(String schemaVersion, List<Field> fields, Collection<Rule> rules) {
+        this(schemaVersion, new ProfileFields(fields), rules, null);
     }
 
-    public Profile(List<Field> fields, Collection<Rule> rules, String description) {
-        this(new ProfileFields(fields), rules, description);
+    public Profile(String schemaVersion, List<Field> fields, Collection<Rule> rules, String description) {
+        this(schemaVersion, new ProfileFields(fields), rules, description);
     }
 
-    public Profile(ProfileFields fields, Collection<Rule> rules) {
-        this(fields, rules, null);
+    public Profile(String schemaVersion, ProfileFields fields, Collection<Rule> rules) {
+        this(schemaVersion, fields, rules, null);
     }
 
-    public Profile(ProfileFields fields, Collection<Rule> rules, String description) {
+    public Profile(String schemaVersion, ProfileFields fields, Collection<Rule> rules, String description) {
+        this.schemaVersion = schemaVersion;
         this.fields = fields;
         this.rules = rules;
         this.description = description;
@@ -52,5 +54,9 @@ public class Profile {
 
     public String getDescription() {
         return description;
+    }
+
+    public String getSchemaVersion() {
+        return schemaVersion;
     }
 }

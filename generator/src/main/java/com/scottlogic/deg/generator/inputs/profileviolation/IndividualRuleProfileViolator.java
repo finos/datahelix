@@ -79,6 +79,7 @@ public class IndividualRuleProfileViolator implements ProfileViolator {
             .collect(Collectors.toList());
 
         return new ViolatedProfile(
+            profile.getSchemaVersion(),
             violatedRule,
             profile.getFields(),
             newRules,

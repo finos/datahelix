@@ -16,10 +16,6 @@
 
 package com.scottlogic.deg.common.profile;
 
-import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.common.profile.Rule;
-
 import java.util.Collection;
 
 public class ViolatedProfile extends Profile {
@@ -30,14 +26,15 @@ public class ViolatedProfile extends Profile {
 
     /**
      * Constructs a new violated profile using the base profile constructor.
+     * @param schemaVersion Schema version of profile.
      * @param violatedRule Un-violated form of the rule that has been violated on this profile.
      * @param fields Fields relating to this profile.
      * @param rules Collection of rules on this profile, including the violated form of the one rule which has been
-     *              violated.
+*              violated.
      * @param description Description of profile.
      */
-    public ViolatedProfile(Rule violatedRule, ProfileFields fields, Collection<Rule> rules, String description){
-        super(fields, rules, description);
+    public ViolatedProfile(String schemaVersion, Rule violatedRule, ProfileFields fields, Collection<Rule> rules, String description){
+        super(schemaVersion, fields, rules, description);
         this.violatedRule = violatedRule;
     }
 

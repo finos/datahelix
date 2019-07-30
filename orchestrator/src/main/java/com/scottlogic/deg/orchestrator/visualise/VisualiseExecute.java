@@ -76,10 +76,9 @@ public class VisualiseExecute {
 
     public void execute() throws IOException {
         validator.validateCommandLine(configSource.overwriteOutputFiles(), outputPath);
-        profileSchemaValidator.validateProfile(configSource.getProfileFile());
 
-        final Profile profile;
-        profile = profileReader.read(configSource.getProfileFile().toPath());
+        final Profile profile = profileReader.read(configSource.getProfileFile().toPath());
+        profileSchemaValidator.validateProfile(configSource.getProfileFile(), profile.getSchemaVersion());
 
         final DecisionTree mergedTree = profileAnalyser.analyse(profile);
 

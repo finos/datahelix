@@ -25,15 +25,19 @@ import java.io.File;
  * DataHelix Profile Schema (datahelix.schema.json)
  * </p>
  */
-public interface ProfileSchemaValidator {
-
-    String datahelixProfileSchema = "/profileschema/0.1/datahelix.schema.json";
-
+public abstract class ProfileSchemaValidator {
     /**
      * Validates a json file against the DataHelix Profile JSON Schema.
      *
      * @param profileFile an File object that is the profile to validate
+     * @param schemaVersion the schema version to check validate against
      * @return the result of validating the provided profile
      */
-    void validateProfile(File profileFile);
+    abstract public void validateProfile(File profileFile, String schemaVersion);
+
+    protected String getSchemaPath(String schemaVersion) {
+        // TODO
+        return "/profileschema/0.1/datahelix.schema.json";
+    }
+
 }

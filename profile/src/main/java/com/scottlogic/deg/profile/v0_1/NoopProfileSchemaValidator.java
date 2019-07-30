@@ -18,10 +18,10 @@ package com.scottlogic.deg.profile.v0_1;
 
 import java.io.File;
 
-public class NoopProfileSchemaValidator implements ProfileSchemaValidator {
+public class NoopProfileSchemaValidator extends ProfileSchemaValidator {
 
     @Override
-    public void validateProfile(File profileFile) {
+    public void validateProfile(File profileFile, String schemaVersion) {
         return;
     }
 }

@@ -81,7 +81,8 @@ public class CucumberProfileReader implements ProfileReader {
                 throw new RuntimeException(firstException);
             }
 
-            return new Profile(profileFields, Collections.singletonList(new Rule(new RuleInformation(), mappedConstraints)));
+            String schemaVersion = "0.1";
+            return new Profile(schemaVersion, profileFields, Collections.singletonList(new Rule(new RuleInformation(), mappedConstraints)));
         } catch (JsonParseException e) {
             state.addException(e);
             throw e;

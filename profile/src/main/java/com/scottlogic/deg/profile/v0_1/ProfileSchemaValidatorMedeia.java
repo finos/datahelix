@@ -29,21 +29,22 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProfileSchemaValidatorMedeia implements ProfileSchemaValidator {
+public class ProfileSchemaValidatorMedeia extends ProfileSchemaValidator {
 
     private static MedeiaJacksonApi api = new MedeiaJacksonApi();
     private static ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public void validateProfile(File profileFile) {
+    public void validateProfile(File profileFile, String schemaVersion) {
+        String schemaPath = getSchemaPath(schemaVersion);
         try {
-            validateProfile(this.getClass().getResourceAsStream(datahelixProfileSchema), new FileInputStream(profileFile));
+            validateProfile(this.getClass().getResourceAsStream(schemaPath), new FileInputStream(profileFile), schemaPath);
         } catch (FileNotFoundException e) {
             throw new ValidationException(e.getLocalizedMessage());
         }
     }
 
-    private void validateProfile(InputStream schemaStream, InputStream profileStream) {
+    private void validateProfile(InputStream schemaStream, InputStream profileStream, String schemaPath) {
         List<String> errorMessages = new ArrayList<>();
         if (schemaStream == null) {
             errorMessages.add("Null Profile Schema Stream");
@@ -51,7 +52,7 @@ public class ProfileSchemaValidatorMedeia implements ProfileSchemaValidator {
             errorMessages.add("Null Profile Stream");
         } else {
             try {
-                SchemaValidator validator = loadSchema();
+                SchemaValidator validator = loadSchema(schemaPath);
 
                 JsonParser unvalidatedParser = objectMapper.getFactory().createParser(profileStream);
                 JsonParser validatedParser = api.decorateJsonParser(validator, unvalidatedParser);
@@ -66,8 +67,8 @@ public class ProfileSchemaValidatorMedeia implements ProfileSchemaValidator {
         }
     }
 
-    private SchemaValidator loadSchema() {
-        SchemaSource source = new UrlSchemaSource(getClass().getResource(datahelixProfileSchema));
+    private SchemaValidator loadSchema(String schemaPath) {
+        SchemaSource source = new UrlSchemaSource(getClass().getResource(schemaPath));
         return api.loadSchema(source);
     }
 }

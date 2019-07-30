@@ -33,17 +33,18 @@ import java.util.*;
  * <p>
  * Checks that the profile JSON file is valid against the DataHelix Profile Schema (datahelix.schema.json)
  */
-public class ProfileSchemaValidatorLeadPony implements ProfileSchemaValidator {
+public class ProfileSchemaValidatorLeadPony extends ProfileSchemaValidator {
 
     private List<String> profileJsonLines;
     private Path profilePath;
 
     @Override
-    public void validateProfile(File profileFile) {
+    public void validateProfile(File profileFile, String schemaVersion) {
+        String schemaPath = getSchemaPath(schemaVersion);
         try {
             byte[] data = Files.readAllBytes(profilePath = profileFile.toPath());
             profileJsonLines = readAllLines(data);
-            validateProfile(this.getClass().getResourceAsStream(datahelixProfileSchema), new ByteArrayInputStream(data));
+            validateProfile(this.getClass().getResourceAsStream(schemaPath), new ByteArrayInputStream(data));
         } catch (IOException e) {
             throw new ValidationException(e.getLocalizedMessage());
         }

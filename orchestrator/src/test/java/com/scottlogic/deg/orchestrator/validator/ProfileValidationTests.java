@@ -39,8 +39,9 @@ public class ProfileValidationTests {
             for (File dir : directoriesArray) {
                 File profileFile = Paths.get(dir.getCanonicalPath(), "profile.json").toFile();
 
+                String schemaVersion = "0.1";
                 DynamicTest test = DynamicTest.dynamicTest(dir.getName(), () -> {
-                    new ProfileSchemaValidatorLeadPony().validateProfile(profileFile);
+                    new ProfileSchemaValidatorLeadPony().validateProfile(profileFile, schemaVersion);
                 });
 
                 dynamicTests.add(test);

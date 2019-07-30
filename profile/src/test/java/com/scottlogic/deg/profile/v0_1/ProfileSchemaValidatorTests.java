@@ -69,7 +69,8 @@ public class ProfileSchemaValidatorTests {
                     );
 
                 try {
-                    profileValidator.validateProfile(new File(testProfileUrl.getPath()));
+                    String schemaVersion = "0.1";
+                    profileValidator.validateProfile(new File(testProfileUrl.getPath()), schemaVersion);
 
                     Supplier<String> msgSupplier = () -> "Profile ["
                         + profileFilename + "] should not be valid";
@@ -94,7 +95,8 @@ public class ProfileSchemaValidatorTests {
                         TEST_PROFILE_DIR + VALID_PROFILE_DIR + "/" + profileFilename
                     );
                 try {
-                    profileValidator.validateProfile(new File(testProfileUrl.getPath()));
+                    String schemaVersion = "0.1";
+                    profileValidator.validateProfile(new File(testProfileUrl.getPath()), schemaVersion);
                 }
                 catch (ValidationException e) {
                     Assertions.fail(

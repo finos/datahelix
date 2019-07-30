@@ -92,7 +92,7 @@ public class JsonProfileReader implements ProfileReader {
                         }));
             });
 
-        return new Profile(profileFields, rules, profileDto.description);
+        return new Profile(profileDto.schemaVersion, profileFields, rules, profileDto.description);
     }
 
     static <TInput, TOutput> Collection<TOutput> mapDtos(

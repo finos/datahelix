@@ -70,7 +70,9 @@ public class IndividualRuleProfileViolatorTests {
     @Test
     public void violate_withSingleRuleProfile_returnsSingleViolatedProfile() throws IOException {
         //Arrange
+        String schemaVersion = "0.1";
         Profile inputProfile = new Profile(
+            schemaVersion,
             Arrays.asList(fooField, barField),
             Collections.singletonList(rule1),
             "Input profile description"
@@ -85,6 +87,7 @@ public class IndividualRuleProfileViolatorTests {
         List<Profile> expectedProfileList =
             Collections.singletonList(
                 new ViolatedProfile(
+                    schemaVersion,
                     rule1,
                     new ProfileFields(Arrays.asList(fooField, barField)),
                     Collections.singletonList(violatedRule1),
@@ -106,7 +109,9 @@ public class IndividualRuleProfileViolatorTests {
     @Test
     public void violate_withMultipleRuleProfile_returnsMultipleViolatedProfile() throws IOException {
         //Arrange
+        String schemaVersion = "0.1";
         Profile inputProfile = new Profile(
+            schemaVersion,
             Arrays.asList(fooField, barField),
             Arrays.asList(rule1, rule2),
             "Input profile description"
@@ -122,12 +127,14 @@ public class IndividualRuleProfileViolatorTests {
         List<Profile> expectedProfileList =
             Arrays.asList(
                 new ViolatedProfile(
+                    schemaVersion,
                     rule1,
                     new ProfileFields(Arrays.asList(fooField, barField)),
                     Arrays.asList(violatedRule1, rule2),
                     "Input profile description -- Violating: Rule 1 description"
                 ),
                 new ViolatedProfile(
+                    schemaVersion,
                     rule2,
                     new ProfileFields(Arrays.asList(fooField, barField)),
                     Arrays.asList(rule1, violatedRule2),

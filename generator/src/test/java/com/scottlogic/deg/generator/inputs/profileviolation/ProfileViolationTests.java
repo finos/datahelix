@@ -194,7 +194,9 @@ public class ProfileViolationTests {
         Rule rule = new RuleBuilder("Empty rule")
             .build();
 
+        String schemaVersion = "0.1";
         TestProfiles testProfiles = createTestProfiles(
+            schemaVersion,
             "Empty rule profile",
             Collections.singletonList(field1),
             Collections.singletonList(new RuleViolatedRulePair(rule, rule))
@@ -221,7 +223,9 @@ public class ProfileViolationTests {
             .withAtomicConstraint(field1, atomicConstraint, value).negate().wrapAtomicWithViolate()
             .build();
 
+        String schemaVersion = "0.1";
         TestProfiles testProfiles = createTestProfiles(
+            schemaVersion,
             "Input Profile",
             Collections.singletonList(field1),
             Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
@@ -243,7 +247,9 @@ public class ProfileViolationTests {
 
         constraintsToNotViolate.add(new ConstraintTypeViolationFilter(IsGreaterThanConstantConstraint.class));
 
+        String schemaVersion = "0.1";
         TestProfiles testProfiles = createTestProfiles(
+            schemaVersion,
             "Input Profile",
             Collections.singletonList(field1),
             Collections.singletonList(new RuleViolatedRulePair(rule, rule))
@@ -281,7 +287,9 @@ public class ProfileViolationTests {
             )
             .build();
 
+        String schemaVersion = "0.1";
         TestProfiles testProfiles = createTestProfiles(
+            schemaVersion,
             "Profile 1",
             Arrays.asList(field1, field2),
             Collections.singletonList(new RuleViolatedRulePair(rule1, violatedRule1))
@@ -319,7 +327,9 @@ public class ProfileViolationTests {
             )
             .build();
 
+        String schemaVersion = "0.1";
         TestProfiles testProfiles = createTestProfiles(
+            schemaVersion,
             "Nested if then else profile",
             Arrays.asList(field1, field2),
             Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
@@ -376,7 +386,9 @@ public class ProfileViolationTests {
             )
             .build();
 
+        String schemaVersion = "0.1";
         TestProfiles testProfiles = createTestProfiles(
+            schemaVersion,
             "Profile 1",
             Collections.singletonList(field1),
             Arrays.asList(new RuleViolatedRulePair(rule1, violatedRule1), new RuleViolatedRulePair(rule2, violatedRule2))
@@ -421,7 +433,9 @@ public class ProfileViolationTests {
             )
             .build();
 
+        String schemaVersion = "0.1";
         TestProfiles testProfiles = createTestProfiles(
+            schemaVersion,
             "Nested if profile",
             Arrays.asList(field1, field2, field3),
             Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
@@ -489,7 +503,9 @@ public class ProfileViolationTests {
             )
             .build();
 
+        String schemaVersion = "0.1";
         TestProfiles testProfiles = createTestProfiles(
+            schemaVersion,
             "Nested if then else profile",
             Arrays.asList(field1, field2, field3, field4, field5),
             Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
@@ -553,7 +569,9 @@ public class ProfileViolationTests {
             )
             .build();
 
+        String schemaVersion = "0.1";
         TestProfiles testProfiles = createTestProfiles(
+            schemaVersion,
             "Nested if then else profile",
             Arrays.asList(field1, field2, field3, field4, field5),
             Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
@@ -615,7 +633,9 @@ public class ProfileViolationTests {
             )
             .build();
 
+        String schemaVersion = "0.1";
         TestProfiles testProfiles = createTestProfiles(
+            schemaVersion,
             "Nested if then else profile",
             Arrays.asList(field1, field2, field3, field4, field5),
             Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
@@ -654,7 +674,9 @@ public class ProfileViolationTests {
             )
             .build();
 
+        String schemaVersion = "0.1";
         TestProfiles testProfiles = createTestProfiles(
+            schemaVersion,
             "Input Profile",
             Arrays.asList(field1, field2, field3),
             Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
@@ -691,7 +713,9 @@ public class ProfileViolationTests {
             .appendBuilder(nestingConstraint).wrapAtomicWithViolate()
             .build();
 
+        String schemaVersion = "0.1";
         TestProfiles testProfiles = createTestProfiles(
+            schemaVersion,
             "Nested Not Profile",
             Collections.singletonList(STATIC_FIELD),
             Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
@@ -739,7 +763,9 @@ public class ProfileViolationTests {
             )
             .build();
 
+        String schemaVersion = "0.1";
         TestProfiles testProfiles = createTestProfiles(
+            schemaVersion,
             "Nested And Profile",
             Arrays.asList(STATIC_FIELD, field1),
             Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
@@ -781,7 +807,9 @@ public class ProfileViolationTests {
             )
             .build();
 
+        String schemaVersion = "0.1";
         TestProfiles testProfiles = createTestProfiles(
+            schemaVersion,
             "Nested Or Profile",
             Arrays.asList(STATIC_FIELD, field1),
             Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
@@ -823,7 +851,9 @@ public class ProfileViolationTests {
             )
             .build();
 
+        String schemaVersion = "0.1";
         TestProfiles testProfiles = createTestProfiles(
+            schemaVersion,
             "Nested Inside If of If-Then Profile",
             Arrays.asList(STATIC_FIELD, field1),
             Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
@@ -865,7 +895,9 @@ public class ProfileViolationTests {
             )
             .build();
 
+        String schemaVersion = "0.1";
         TestProfiles testProfiles = createTestProfiles(
+            schemaVersion,
             "Nested Inside Then of If-Then Profile",
             Arrays.asList(STATIC_FIELD, field1),
             Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
@@ -914,7 +946,9 @@ public class ProfileViolationTests {
             )
             .build();
 
+        String schemaVersion = "0.1";
         TestProfiles testProfiles = createTestProfiles(
+            schemaVersion,
             "Nested Inside If of If-Then-Else Profile",
             Arrays.asList(STATIC_FIELD, field1, field2),
             Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
@@ -963,7 +997,9 @@ public class ProfileViolationTests {
             )
             .build();
 
+        String schemaVersion = "0.1";
         TestProfiles testProfiles = createTestProfiles(
+            schemaVersion,
             "Nested Inside Then of If-Then-Else Profile",
             Arrays.asList(STATIC_FIELD, field1),
             Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
@@ -1012,7 +1048,9 @@ public class ProfileViolationTests {
             )
             .build();
 
+        String schemaVersion = "0.1";
         TestProfiles testProfiles = createTestProfiles(
+            schemaVersion,
             "Nested Inside Else of If-Then Profile",
             Arrays.asList(STATIC_FIELD, field1),
             Collections.singletonList(new RuleViolatedRulePair(rule, violatedRule))
@@ -1025,8 +1063,8 @@ public class ProfileViolationTests {
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
     }
 
-    private TestProfiles createTestProfiles(String description, List<Field> fields, List<RuleViolatedRulePair> ruleViolationHolders) {
-        Profile inputProfile = new Profile(fields, getRulesFromPair(ruleViolationHolders), description);
+    private TestProfiles createTestProfiles(String schemaVersion, String description, List<Field> fields, List<RuleViolatedRulePair> ruleViolationHolders) {
+        Profile inputProfile = new Profile(schemaVersion, fields, getRulesFromPair(ruleViolationHolders), description);
         List<Profile> violatedProfiles = createViolatedProfiles(description, fields, ruleViolationHolders);
 
         return new TestProfiles(inputProfile, violatedProfiles);
@@ -1052,7 +1090,8 @@ public class ProfileViolationTests {
 
         String processedDescription = description + " -- Violating: " + rule.getRuleInformation().getDescription();
 
-        return new ViolatedProfile(rule, new ProfileFields(fields), newRuleList, processedDescription);
+        String schemaVersion = "0.1";
+        return new ViolatedProfile(schemaVersion, rule, new ProfileFields(fields), newRuleList, processedDescription);
     }
 
     private List<Rule> getRulesFromPair(List<RuleViolatedRulePair> pair) {

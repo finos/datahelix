@@ -80,9 +80,9 @@ public class ViolateExecute {
 
     public void execute() throws IOException {
         configValidator.preProfileChecks(configSource);
-        profileSchemaValidator.validateProfile(configSource.getProfileFile());
 
         Profile profile = profileReader.read(configSource.getProfileFile().toPath());
+        profileSchemaValidator.validateProfile(configSource.getProfileFile(), profile.getSchemaVersion());
 
         profileValidator.validate(profile);
         violateOutputValidator.validate(profile);
