@@ -16,18 +16,11 @@
 
 package com.scottlogic.deg.profile.v0_1;
 
-import com.scottlogic.deg.profile.serialisation.BaseProfile;
-
 import java.util.Collection;
 
-public class ProfileDTO extends BaseProfile {
-    public static final String SchemaVersion = "0.1";
-
+public class ProfileDTO {
+    public String schemaVersion;
     public Collection<FieldDTO> fields;
     public Collection<RuleDTO> rules;
     public String description;
-
-    public ProfileDTO() {
-        super(SchemaVersion);
-    }
 }

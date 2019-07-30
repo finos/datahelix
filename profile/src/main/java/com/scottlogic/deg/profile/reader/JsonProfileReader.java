@@ -54,10 +54,8 @@ public class JsonProfileReader implements ProfileReader {
     }
 
     public Profile read(String profileJson) throws IOException {
-        ProfileDTO profileDto = (ProfileDTO) new ProfileDeserialiser()
-            .deserialise(
-                profileJson,
-                ProfileDTO.SchemaVersion);
+        ProfileDTO profileDto = new ProfileDeserialiser()
+            .deserialise(profileJson);
 
         if (profileDto.fields == null) {
             throw new InvalidProfileException("Profile is invalid: 'fields' have not been defined.");

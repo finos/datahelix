@@ -18,19 +18,15 @@ package com.scottlogic.deg.profile.serialisation;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.scottlogic.deg.profile.v0_1.ProfileDTO;
 
 import java.io.IOException;
 
 public class ProfileDeserialiser {
-    public BaseProfile deserialise(String json, String desiredSchemaType) throws IOException {
+    public ProfileDTO deserialise(String json) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
 
-        BaseProfile baseProfile = mapper.readerFor(BaseProfile.class).readValue(json);
-
-        if (!baseProfile.schemaVersion.equals(desiredSchemaType))
-            throw new IOException();
-
-        return baseProfile;
+        return mapper.readerFor(ProfileDTO.class).readValue(json);
     }
 }
