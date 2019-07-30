@@ -36,8 +36,7 @@ public abstract class ProfileSchemaValidator {
     abstract public void validateProfile(File profileFile, String schemaVersion);
 
     protected String getSchemaPath(String schemaVersion) {
-        // TODO
-        return "/profileschema/0.1/datahelix.schema.json";
+        return "/profileschema/" + schemaVersion + "/datahelix.schema.json";
     }
 
 }
