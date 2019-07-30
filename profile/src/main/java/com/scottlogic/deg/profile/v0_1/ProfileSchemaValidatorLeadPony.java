@@ -68,7 +68,7 @@ public class ProfileSchemaValidatorLeadPony extends ProfileSchemaValidator {
     private void validateProfile(InputStream schemaStream, InputStream profileStream, String schemaVersion) {
         List<String> errorMessages = new ArrayList<>();
         if (schemaStream == null) {
-            errorMessages.add("This version of the generator does not support v" + schemaVersion + " of the schema.");
+            errorMessages.add(getUnsupportedSchemaVersionErrorMessage(schemaVersion));
         } else if (profileStream == null) {
             errorMessages.add("Null Profile Stream");
         } else {

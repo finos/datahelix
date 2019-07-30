@@ -48,7 +48,7 @@ public class ProfileSchemaValidatorMedeia extends ProfileSchemaValidator {
         String schemaPath = getSchemaPath(schemaVersion);
         List<String> errorMessages = new ArrayList<>();
         if (schemaStream == null) {
-            errorMessages.add("This version of the generator does not support v" + schemaVersion + " of the schema.");
+            errorMessages.add(getUnsupportedSchemaVersionErrorMessage(schemaVersion));
         } else if (profileStream == null) {
             errorMessages.add("Null Profile Stream");
         } else {
