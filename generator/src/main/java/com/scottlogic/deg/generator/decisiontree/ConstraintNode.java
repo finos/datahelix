@@ -76,31 +76,7 @@ public class ConstraintNode implements Node {
     public ConstraintNodeBuilder builder() {
         return new ConstraintNodeBuilder(atomicConstraints,decisions,nodeMarkings);
     }
-
-
-    public boolean atomicConstraintExists(AtomicConstraint constraint) {
-        return atomicConstraints
-            .stream()
-            .anyMatch(c -> c.equals(constraint));
-    }
-
-    public ConstraintNode addAtomicConstraints(Collection<AtomicConstraint> constraints) {
-        return new ConstraintNode(
-            Stream
-                .concat(
-                    this.atomicConstraints.stream(),
-                    constraints.stream())
-                .collect(Collectors.toList()),
-            this.decisions,
-            this.nodeMarkings
-        );
-    }
-
-
-    public ConstraintNode setDecisions(Collection<DecisionNode> decisions) {
-        return new ConstraintNode(this.atomicConstraints, decisions, this.nodeMarkings);
-    }
-
+    
     @Override
     public boolean hasMarking(NodeMarking detail) {
         return this.nodeMarkings.contains(detail);
