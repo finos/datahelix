@@ -323,12 +323,9 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withContradictingOfLengthAndContainingRegexConstraint_shouldCreateNoStrings() {
-        StringRestrictions restrictions = containsRegex("[a-z]{102}", false)
-            .intersect(ofLength(100, false)).restrictions;
-
-        StringGenerator generator = restrictions.createGenerator();
-
-        assertGeneratorCannotGenerateAnyStrings(generator);
+        MergeResult<StringRestrictions> intersect = containsRegex("[a-z]{102}", false)
+            .intersect(ofLength(100, false));
+        Assert.assertThat(intersect, equalTo(MergeResult.unsuccessful()));
     }
 
     @Test
