@@ -26,6 +26,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 
 import java.util.*;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -89,10 +90,9 @@ public class ConstraintReducer {
                 .map(fieldSpecFactory::construct);
 
         return rootConstraintsStream
+            .map(Optional::of)
             .reduce(
                 Optional.of(FieldSpec.Empty),
-                (optAcc, next) ->
-                    optAcc.flatMap(acc -> fieldSpecMerger.merge(acc, next)),
                 (optAcc1, optAcc2) -> optAcc1.flatMap(
                     acc1 -> optAcc2.flatMap(
                         acc2 -> fieldSpecMerger.merge(acc1, acc2))));

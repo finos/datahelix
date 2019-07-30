@@ -33,6 +33,11 @@ public class RowSpec {
     private final Collection<FieldSpecRelations> relations;
 
     public RowSpec(ProfileFields fields,
+                   Map<Field, FieldSpec> fieldToFieldSpec) {
+        this(fields, fieldToFieldSpec, new HashSet<>()); // TODO: Remove this temporary constructor
+    }
+
+    public RowSpec(ProfileFields fields,
                    Map<Field, FieldSpec> fieldToFieldSpec,
                    Collection<FieldSpecRelations> relations) {
 
