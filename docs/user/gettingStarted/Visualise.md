@@ -1,4 +1,5 @@
 # Visualising the Decision Tree
+_This is an alpha feature. Please do not rely on it. If you find issues with it, please [report them](https://github.com/finos/datahelix/issues)._ 
 
 This page will detail how to use the `visualise` command to view the decision tree for a profile.
 

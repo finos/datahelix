@@ -308,9 +308,9 @@ The generator supports a number of different generation modes:
 
 The mode is specified via the `--generation-type` option.
 
-## Generating invalid data
+## Generating invalid data (_alpha feature_)
 
-One of the most powerful features of the generator is its ability to generate data that violates constraints. To create invalid data use the `violate` command. This time you need to specify an output directory rather than a file:
+One of the most powerful features of the generator is its ability to generate data that violates constraints. It is still an _alpha_ feature at the moment though.  To create invalid data use the `violate` command. This time you need to specify an output directory rather than a file:
 
 ```
 $ java -jar generator.jar violate --max-rows=100 --replace --profile-file=profile.json --output-path=out
