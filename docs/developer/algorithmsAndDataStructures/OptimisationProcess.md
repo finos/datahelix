@@ -1,7 +1,13 @@
 # Decision Tree Optimiser
 
-We optimise the decision tree to improve the performance of how the generator works. 
-The optimisation (also known as factorising) can reduce the number of constraints that need to be visited in-order to produce interpretations of data.
+We optimise the decision tree to improve the performance of how the generator works.
+
+The optimiser only does ["Unification" optimisation](../decisionTrees/Optimisation.md) which works by finding decisions which has two options,
+where one option has a constraint, and the other option has the negation of that constraint.
+it then combines all of those decisions together.
+
+Because this is the only type of optimisation it does. it relies on the tree being created in a way which will have these types of decision.
+So the tree factory specifically creates if statements in the form if X then Y == ¬X || X & Y. so that X is the shared constraint. and can be optimised against other "if X then [...]" constraints.
 
 ## Strategy
 

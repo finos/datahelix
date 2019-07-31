@@ -43,6 +43,8 @@ public class VisualiseCommandLine extends GenerateCommandLine {
 
     @Override
     public Integer call() throws IOException {
+        printAlphaFeatureWarning("VISUALISE command");
+
         Module container = new AllModule(this);
         Injector injector = Guice.createInjector(container);
 

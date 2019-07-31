@@ -24,6 +24,8 @@ import dk.brics.automaton.Transition;
 
 import java.util.*;
 
+import static com.scottlogic.deg.common.util.NumberUtils.*;
+
 public class RegexStringGenerator implements StringGenerator {
 
     /**
@@ -104,7 +106,7 @@ public class RegexStringGenerator implements StringGenerator {
         return new RegexStringGenerator(merged, mergedRepresentation);
     }
 
-    public RegexStringGenerator union(RegexStringGenerator otherGenerator) {
+    RegexStringGenerator union(RegexStringGenerator otherGenerator) {
         Automaton b = otherGenerator.automaton;
         Automaton merged = automaton.union(b);
         String mergedRepresentation = unionRepresentation(
@@ -125,11 +127,11 @@ public class RegexStringGenerator implements StringGenerator {
         return String.format("¬(%s)", representation);
     }
 
-    public static String intersectRepresentation(String left, String right) {
+    static String intersectRepresentation(String left, String right) {
         return String.format("(%s ∩ %s)", left, right);
     }
 
-    public static String unionRepresentation(String left, String right) {
+    static String unionRepresentation(String left, String right) {
         return String.format("(%s ∪ %s)", left, right);
     }
 
@@ -220,9 +222,15 @@ public class RegexStringGenerator implements StringGenerator {
             passedStringNbrInChildNode = passedStringNbr;
         }
         for (Node childN : node.getNextNodes()) {
-            passedStringNbrInChildNode += childN.getMatchedStringIdx();
+            long origNbrInChildNode = passedStringNbrInChildNode;
+            if (addingNonNegativesIsSafe(passedStringNbrInChildNode, childN.getMatchedStringIdx())) {
+                passedStringNbrInChildNode += childN.getMatchedStringIdx();
+            } else {
+                passedStringNbrInChildNode = Long.MAX_VALUE;
+            }
+
             if (passedStringNbrInChildNode >= indexOrder) {
-                passedStringNbrInChildNode -= childN.getMatchedStringIdx();
+                passedStringNbrInChildNode = origNbrInChildNode;
                 indexOrder -= passedStringNbrInChildNode;
                 result = result.concat(buildStringFromNode(childN, indexOrder));
                 break;
@@ -306,7 +314,13 @@ public class RegexStringGenerator implements StringGenerator {
                 for (Node childNode : nextNodes) {
                     childNode.updateMatchedStringIdx();
                     long childNbrChar = childNode.getMatchedStringIdx();
-                    matchedStringIdx += nbrChar * childNbrChar;
+
+                    if(multiplyingNonNegativesIsSafe(nbrChar, childNbrChar) &&
+                       addingNonNegativesIsSafe(matchedStringIdx, nbrChar * childNbrChar)) {
+                        matchedStringIdx += nbrChar * childNbrChar;
+                    } else {
+                        matchedStringIdx = Long.MAX_VALUE;
+                    }
                 }
             }
             isNbrMatchedStringUpdated = true;
@@ -331,6 +345,8 @@ public class RegexStringGenerator implements StringGenerator {
         void setMaxChar(char maxChar) {
             this.maxChar = maxChar;
         }
+
+
     }
 
     private class FiniteStringAutomatonIterator implements Iterator<String> {
@@ -375,7 +391,7 @@ public class RegexStringGenerator implements StringGenerator {
                     return false;
                 }
                 currentValue = getMatchedString(currentIndex);
-            } while (!StringUtils.isStringValidUtf8(currentValue));
+            } while (currentValue != null && !StringUtils.isStringValidUtf8(currentValue));
             return currentValue != null;
         }
 
@@ -413,10 +429,10 @@ public class RegexStringGenerator implements StringGenerator {
         return Objects.hash(this.automaton, this.getClass());
     }
 
-    public static class UnionCollector {
+    static class UnionCollector {
         private RegexStringGenerator union;
 
-        public void accumulate(RegexStringGenerator another) {
+        void accumulate(RegexStringGenerator another) {
             if (union == null) {
                 union = another;
             } else {
@@ -424,16 +440,17 @@ public class RegexStringGenerator implements StringGenerator {
             }
         }
 
-        public void combine(UnionCollector other) {
+        void combine(UnionCollector other) {
             if (other == null || other.union == null) {
                 return;
             }
             union = union.union(other.union);
         }
 
-        public RegexStringGenerator getUnionGenerator() {
+        RegexStringGenerator getUnionGenerator() {
             return union;
         }
     }
+
 }
 

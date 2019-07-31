@@ -37,6 +37,8 @@ public class ViolateCommandLine extends GenerateCommandLine implements ViolateCo
 
     @Override
     public Integer call() throws IOException {
+        printAlphaFeatureWarning("VIOLATE command");
+
         Module container = new ViolateModule(this);
         Injector injector = Guice.createInjector(container);
 
