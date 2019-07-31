@@ -16,10 +16,13 @@
 
 package com.scottlogic.deg.common.util;
 
+import org.apache.commons.lang3.Validate;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.text.ParsePosition;
+import java.util.function.BiPredicate;
 
 public class NumberUtils {
 
@@ -54,6 +57,23 @@ public class NumberUtils {
 
     public static BigDecimal tryParse(String value) {
         return (BigDecimal) bigDecimalFormatter.parse(value, new ParsePosition(0));
+    }
+
+    /** throws @IllegalArgumentException if a or b less than zero */
+    public static boolean multiplyingNonNegativesIsSafe(long a, long b) {
+        return checkPredicateOnNonNegatives(a, b, (n1, n2) -> n1 == 0 || n2 == 0 || Long.MAX_VALUE / n2 >= n1);
+    }
+
+    /** throws @IllegalArgumentException if a or b less than zero */
+    public static boolean addingNonNegativesIsSafe(long a, long b) {
+        return checkPredicateOnNonNegatives(a, b, (n1, n2) -> n1 == 0 || n2 == 0 || Long.MAX_VALUE - n2 >= n1);
+    }
+
+    /** throws @IllegalArgumentException if a or b less than zero */
+    private static boolean checkPredicateOnNonNegatives(long a, long b, BiPredicate<Long, Long> predicate) {
+        Validate.isTrue(a >= 0, "The value must be >=0: %d", a);
+        Validate.isTrue(b >= 0, "The value must be >=0: %d", b);
+        return predicate.test(a, b);
     }
 
     private static final DecimalFormat bigDecimalFormatter;
