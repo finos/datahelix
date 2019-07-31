@@ -30,16 +30,16 @@ import java.util.*;
 public class RowSpec {
     private final ProfileFields fields;
     private final Map<Field, FieldSpec> fieldToFieldSpec;
-    private final Collection<FieldSpecRelations> relations;
+    private final List<FieldSpecRelations> relations;
 
     public RowSpec(ProfileFields fields,
                    Map<Field, FieldSpec> fieldToFieldSpec) {
-        this(fields, fieldToFieldSpec, new HashSet<>()); // TODO: Remove this temporary constructor
+        this(fields, fieldToFieldSpec, new ArrayList<>()); // TODO: Remove this temporary constructor
     }
 
     public RowSpec(ProfileFields fields,
                    Map<Field, FieldSpec> fieldToFieldSpec,
-                   Collection<FieldSpecRelations> relations) {
+                   List<FieldSpecRelations> relations) {
 
         this.fields = fields;
         this.fieldToFieldSpec = fieldToFieldSpec;
@@ -59,7 +59,7 @@ public class RowSpec {
         return ownFieldSpec;
     }
 
-    public Collection<FieldSpecRelations> getRelations() {
+    public List<FieldSpecRelations> getRelations() {
         return relations;
     }
 

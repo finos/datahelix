@@ -22,6 +22,8 @@ public interface FieldSpecRelations {
      */
     FieldSpec reduceToRelatedFieldSpec(FieldSpec otherValue);
 
+    Field main();
+
     Field other();
 
 }

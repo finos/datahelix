@@ -109,7 +109,7 @@ public final class TreeConstraintNode implements ConstraintNode {
         return adaptedRowSpec;
     }
 
-    public String toString(){
+    public String toString() {
         if (decisions.isEmpty())
             return atomicConstraints.size() > 5
                 ? String.format("%d constraints", atomicConstraints.size())
@@ -135,11 +135,11 @@ public final class TreeConstraintNode implements ConstraintNode {
             .anyMatch(decisionToExclude -> decisionToExclude.equals(existingDecision));
 
         return new TreeConstraintNode(
-          atomicConstraints,
-          delayedAtomicConstraints,
-          decisions.stream()
-              .filter(existingDecision -> !shouldRemove.test(existingDecision))
-              .collect(Collectors.toList()),
+            atomicConstraints,
+            delayedAtomicConstraints,
+            decisions.stream()
+                .filter(existingDecision -> !shouldRemove.test(existingDecision))
+                .collect(Collectors.toList()),
             this.nodeMarkings
         );
     }
@@ -155,12 +155,14 @@ public final class TreeConstraintNode implements ConstraintNode {
             nodeMarkings);
     }
 
+    @Override
     public boolean atomicConstraintExists(AtomicConstraint constraint) {
         return atomicConstraints
             .stream()
             .anyMatch(c -> c.equals(constraint));
     }
 
+    @Override
     public ConstraintNode addAtomicConstraints(Collection<AtomicConstraint> constraints) {
         return new TreeConstraintNode(
             Stream
@@ -172,6 +174,16 @@ public final class TreeConstraintNode implements ConstraintNode {
             decisions,
             nodeMarkings
         );
+    }
+
+    @Override
+    public ConstraintNode addDelayedConstraints(Collection<DelayedAtomicConstraint> constraints) {
+        return new TreeConstraintNode(
+            atomicConstraints,
+            Stream.concat(delayedAtomicConstraints.stream(), constraints.stream())
+                .collect(Collectors.toList()),
+            decisions,
+            nodeMarkings);
     }
 
     @Override
@@ -222,7 +234,7 @@ public final class TreeConstraintNode implements ConstraintNode {
     }
 
     @Override
-    public ConstraintNode accept(NodeVisitor visitor){
+    public ConstraintNode accept(NodeVisitor visitor) {
         Stream<DecisionNode> decisionNodeStream = getDecisions().stream().map(d -> d.accept(visitor));
 
         return visitor.visit(

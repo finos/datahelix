@@ -22,10 +22,7 @@ import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
 import com.scottlogic.deg.generator.utils.SetUtils;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -53,7 +50,8 @@ public class RowSpecMerger {
             newMap.put(field, merge.get());
         }
 
-        Collection<FieldSpecRelations> relations = SetUtils.intersect(left.getRelations(), right.getRelations());
+        List<FieldSpecRelations> relations = new ArrayList<>(
+            SetUtils.intersect(left.getRelations(), right.getRelations()));
 
         return Optional.of(new RowSpec(left.getFields(), newMap, relations));
     }

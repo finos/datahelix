@@ -68,7 +68,7 @@ public class CartesianProductRowSpecTreeSolver implements RowSpecTreeSolver {
             final Map<Field, FieldSpec> fieldToFieldSpec = profileFields.stream()
                     .collect(Collectors.toMap(Function.identity(), field -> FieldSpec.Empty));
 
-            return new RowSpec(profileFields, fieldToFieldSpec, Collections.emptySet());
+            return new RowSpec(profileFields, fieldToFieldSpec, Collections.emptyList());
         }
 
         public Stream<RowSpec> walk(ConstraintNode constraint) {

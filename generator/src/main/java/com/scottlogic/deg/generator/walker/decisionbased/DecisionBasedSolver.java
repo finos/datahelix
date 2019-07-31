@@ -42,13 +42,12 @@ public class DecisionBasedSolver implements RowSpecTreeSolver {
             .map(rootNode -> toRowspec(tree.fields, rootNode));
     }
 
-    private RowSpec toRowspec(ProfileFields fields, ConstraintNode rootNode){
-        return constraintReducer
-            .reduceConstraintsToRowSpec(fields, rootNode).get();
+    private RowSpec toRowspec(ProfileFields fields, ConstraintNode rootNode) {
+        return constraintReducer.reduceConstraintsToRowSpec(fields, rootNode).get();
     }
 
-    private Stream<ConstraintNode> reduceToRowNodes(ConstraintNode rootNode){
-        if (rootNode.getDecisions().isEmpty()){
+    private Stream<ConstraintNode> reduceToRowNodes(ConstraintNode rootNode) {
+        if (rootNode.getDecisions().isEmpty()) {
             return Stream.of(rootNode);
         }
 
@@ -68,7 +67,8 @@ public class DecisionBasedSolver implements RowSpecTreeSolver {
     private Merged<ConstraintNode> combineWithRootNode(ConstraintNode rootNode, ConstraintNode option) {
         ConstraintNode constraintNode = rootNode
             .addDecisions(option.getDecisions())
-            .addAtomicConstraints(option.getAtomicConstraints());
+            .addAtomicConstraints(option.getAtomicConstraints())
+            .addDelayedConstraints(option.getDelayedAtomicConstraints());
 
         return reductiveTreePruner.pruneConstraintNode(constraintNode, getFields(option));
     }
@@ -79,7 +79,7 @@ public class DecisionBasedSolver implements RowSpecTreeSolver {
             .distinct()
             .collect(Collectors.toMap(
                 Function.identity(),
-                field-> FieldSpec.Empty));
+                field -> FieldSpec.Empty));
     }
 
 }

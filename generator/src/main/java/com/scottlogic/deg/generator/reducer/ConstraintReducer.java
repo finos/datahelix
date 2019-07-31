@@ -22,14 +22,13 @@ import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.common.profile.constraints.delayed.DelayedAtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
-import com.scottlogic.deg.generator.fieldspecs.RowSpec;
+import com.scottlogic.deg.generator.fieldspecs.*;
+import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
 
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -37,6 +36,7 @@ import java.util.stream.StreamSupport;
 public class ConstraintReducer {
     private final FieldSpecFactory fieldSpecFactory;
     private final FieldSpecMerger fieldSpecMerger;
+    private final FieldRelationsFactory fieldRelationsFactory;
 
     @Inject
     public ConstraintReducer(
@@ -45,6 +45,7 @@ public class ConstraintReducer {
     ) {
         this.fieldSpecFactory = fieldSpecFactory;
         this.fieldSpecMerger = fieldSpecMerger;
+        fieldRelationsFactory = new FieldRelationsFactory();
     }
 
     public Optional<RowSpec> reduceConstraintsToRowSpec(ProfileFields fields, ConstraintNode node) {
@@ -75,11 +76,15 @@ public class ConstraintReducer {
                         entry -> entry.getValue().get())));
 
         // TODO: Add delayed constraint -> FieldSpecRelations logic
+        final List<FieldSpecRelations> relations = delayedConstraints.stream()
+            .map(fieldRelationsFactory::construct)
+            .collect(Collectors.toList());
 
         return optionalMap.map(
             map -> new RowSpec(
                 fields,
-                map));
+                map,
+                relations));
     }
 
     public Optional<FieldSpec> reduceConstraintsToFieldSpec(Iterable<AtomicConstraint> constraints) {

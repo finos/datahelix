@@ -49,6 +49,10 @@ public class ProfileFields implements Iterable<Field> {
         return this.fields.stream();
     }
 
+    public List<Field> asList() {
+        return fields;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

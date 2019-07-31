@@ -98,7 +98,7 @@ public class ContradictionDecisionTreeValidator {
         final Map<Field, FieldSpec> fieldToFieldSpec = profileFields.stream()
             .collect(Collectors.toMap(Function.identity(), field -> FieldSpec.Empty));
 
-        return new RowSpec(profileFields, fieldToFieldSpec, Collections.emptySet());
+        return new RowSpec(profileFields, fieldToFieldSpec, Collections.emptyList());
     }
 
     private boolean isNodeContradictory(Node node){

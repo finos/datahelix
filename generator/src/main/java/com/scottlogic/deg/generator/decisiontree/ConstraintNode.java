@@ -33,6 +33,7 @@ public interface ConstraintNode extends Node {
     ConstraintNode cloneWithoutAtomicConstraint(AtomicConstraint excludeAtomicConstraint);
     boolean atomicConstraintExists(AtomicConstraint constraint);
     ConstraintNode addAtomicConstraints(Collection<AtomicConstraint> constraints);
+    ConstraintNode addDelayedConstraints(Collection<DelayedAtomicConstraint> constraints);
     ConstraintNode addDecisions(Collection<DecisionNode> decisions);
     ConstraintNode setDecisions(Collection<DecisionNode> decisions);
     ConstraintNode markNode(NodeMarking marking);
