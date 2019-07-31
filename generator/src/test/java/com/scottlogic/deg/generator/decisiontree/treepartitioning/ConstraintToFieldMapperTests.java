@@ -57,7 +57,7 @@ class ConstraintToFieldMapperTests {
 
         final AtomicConstraint constraint = new IsInSetConstraint(new Field("B"), whitelistOf("test-value"));
         final DecisionNode decision = new DecisionNode(
-            new ConstraintNodeBuilder().addAtomicConstraints(constraint).createConstraintNode());
+            new ConstraintNodeBuilder().addAtomicConstraints(constraint).build());
 
         givenDecisions(decision);
 
@@ -90,19 +90,19 @@ class ConstraintToFieldMapperTests {
 
         final DecisionNode decisionABC = new DecisionNode(
             new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptyList()).setDecisions(Arrays.asList(
-                new DecisionNode(new ConstraintNodeBuilder().addAtomicConstraints(constraintA).createConstraintNode()),
-                new DecisionNode(new ConstraintNodeBuilder().addAtomicConstraints(constraintB).createConstraintNode()),
-                new DecisionNode(new ConstraintNodeBuilder().addAtomicConstraints(constraintC).createConstraintNode())
-            )).createConstraintNode()
+                new DecisionNode(new ConstraintNodeBuilder().addAtomicConstraints(constraintA).build()),
+                new DecisionNode(new ConstraintNodeBuilder().addAtomicConstraints(constraintB).build()),
+                new DecisionNode(new ConstraintNodeBuilder().addAtomicConstraints(constraintC).build())
+            )).build()
         );
 
         final DecisionNode decisionDEF = new DecisionNode(
             new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptyList()).setDecisions(Collections.singletonList(
                 new DecisionNode(
-                    new ConstraintNodeBuilder().addAtomicConstraints(constraintD).createConstraintNode(),
-                    new ConstraintNodeBuilder().addAtomicConstraints(constraintE).createConstraintNode(),
-                    new ConstraintNodeBuilder().addAtomicConstraints(constraintF).createConstraintNode())
-            )).createConstraintNode()
+                    new ConstraintNodeBuilder().addAtomicConstraints(constraintD).build(),
+                    new ConstraintNodeBuilder().addAtomicConstraints(constraintE).build(),
+                    new ConstraintNodeBuilder().addAtomicConstraints(constraintF).build())
+            )).build()
         );
 
         givenDecisions(decisionABC, decisionDEF);
@@ -142,7 +142,7 @@ class ConstraintToFieldMapperTests {
     private void getMappings() {
         mappings = new ConstraintToFieldMapper()
             .mapConstraintsToFields(new DecisionTree(
-                new ConstraintNodeBuilder().addAtomicConstraints(constraintsList).setDecisions(decisionsList).createConstraintNode(),
+                new ConstraintNodeBuilder().addAtomicConstraints(constraintsList).setDecisions(decisionsList).build(),
                 fields
             ));
     }

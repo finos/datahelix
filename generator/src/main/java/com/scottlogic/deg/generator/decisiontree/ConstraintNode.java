@@ -101,7 +101,7 @@ public class ConstraintNode implements Node {
         Stream<DecisionNode> decisionNodeStream = getDecisions().stream().map(d -> d.accept(visitor));
 
         return visitor.visit(
-            new ConstraintNodeBuilder().addAtomicConstraints(new ArrayList<>(atomicConstraints)).setDecisions(decisionNodeStream.collect(Collectors.toSet())).setNodeMarkings(nodeMarkings).createConstraintNode());
+            new ConstraintNodeBuilder().addAtomicConstraints(new ArrayList<>(atomicConstraints)).setDecisions(decisionNodeStream.collect(Collectors.toSet())).setNodeMarkings(nodeMarkings).build());
     }
 
     static ConstraintNode merge(Iterator<ConstraintNode> constraintNodeIterator) {
@@ -117,6 +117,6 @@ public class ConstraintNode implements Node {
             markings.addAll(constraintNode.nodeMarkings);
         }
 
-        return new ConstraintNodeBuilder().addAtomicConstraints(atomicConstraints).setDecisions(decisions).setNodeMarkings(markings).createConstraintNode();
+        return new ConstraintNodeBuilder().addAtomicConstraints(atomicConstraints).setDecisions(decisions).setNodeMarkings(markings).build();
     }
 }

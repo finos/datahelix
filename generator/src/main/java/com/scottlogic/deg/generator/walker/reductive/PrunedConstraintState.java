@@ -55,7 +55,7 @@ class PrunedConstraintState {
     }
 
     ConstraintNode getNewConstraintNode() {
-        return new ConstraintNodeBuilder().addAtomicConstraints(newAtomicConstraints).setDecisions(newDecisionNodes).createConstraintNode();
+        return new ConstraintNodeBuilder().addAtomicConstraints(newAtomicConstraints).setDecisions(newDecisionNodes).build();
     }
 
     Map<Field, FieldSpec> addPulledUpFieldsToMap(Map<Field, FieldSpec> previousFieldSpecs) {

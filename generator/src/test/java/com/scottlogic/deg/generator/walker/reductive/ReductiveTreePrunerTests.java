@@ -62,7 +62,7 @@ class ReductiveTreePrunerTests {
     public void pruneConstraintNode_leafNodeContradictionsWithParent_returnsContradictory() {
         //Arrange
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList(10, 20));
-        ConstraintNode tree = new ConstraintNodeBuilder().addAtomicConstraints(new IsLessThanConstantConstraint(field, 5)).createConstraintNode();
+        ConstraintNode tree = new ConstraintNodeBuilder().addAtomicConstraints(new IsLessThanConstantConstraint(field, 5)).build();
         FieldSpec inputFieldSpec = notNull.withWhitelist(
             (FrequencyDistributedSet.uniform(inputWhitelist)));
 
@@ -81,7 +81,7 @@ class ReductiveTreePrunerTests {
     public void pruneConstraintNode_leafNodeNoContradictionsWithParent_returnsLeafNode() {
         //Arrange
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList(1, 2));
-        ConstraintNode tree = new ConstraintNodeBuilder().addAtomicConstraints(new IsLessThanConstantConstraint(field, 5)).createConstraintNode();
+        ConstraintNode tree = new ConstraintNodeBuilder().addAtomicConstraints(new IsLessThanConstantConstraint(field, 5)).build();
         FieldSpec inputFieldSpec = FieldSpec.Empty.withWhitelist(
             (FrequencyDistributedSet.uniform(inputWhitelist)));
 

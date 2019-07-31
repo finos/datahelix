@@ -46,7 +46,7 @@ class RandomReductiveDecisionTreeWalkerTests {
     @BeforeEach
     public void beforeEach(){
         tree = new DecisionTree(
-            new ConstraintNodeBuilder().createConstraintNode(),
+            new ConstraintNodeBuilder().build(),
             new ProfileFields(Arrays.asList(new Field("field1"), new Field("field2")))
         );
 

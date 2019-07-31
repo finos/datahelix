@@ -35,7 +35,7 @@ import java.util.stream.Stream;
 
 class RelatedFieldTreePartitionerTests {
     private static final ConstraintNode emptyConstraint
-        = new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Collections.emptySet()).createConstraintNode();
+        = new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Collections.emptySet()).build();
 
     @Test
     void shouldSplitTreeIntoPartitions() {
@@ -261,7 +261,7 @@ class RelatedFieldTreePartitionerTests {
     private ConstraintNode constraint(String[] fieldNames, DecisionNode... decisions) {
         return new ConstraintNodeBuilder().addAtomicConstraints(Stream.of(fieldNames)
             .map(this::atomicConstraint)
-            .collect(Collectors.toList())).setDecisions(Arrays.asList(decisions)).createConstraintNode();
+            .collect(Collectors.toList())).setDecisions(Arrays.asList(decisions)).build();
     }
 
     private AtomicConstraint atomicConstraint(String fieldName) {

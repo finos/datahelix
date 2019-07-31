@@ -35,7 +35,7 @@ public class ConstraintNodeBuilderDepreciated {
     }
 
     public ConstraintNode build() {
-        return applyNodeMarkings(markings, new com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder().addAtomicConstraints(constraints).setDecisions(decisionNodes).createConstraintNode());
+        return applyNodeMarkings(markings, new com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder().addAtomicConstraints(constraints).setDecisions(decisionNodes).build());
     }
 
     public static ConstraintNodeBuilderDepreciated constraintNode() {

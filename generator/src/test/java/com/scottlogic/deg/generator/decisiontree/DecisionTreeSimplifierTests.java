@@ -51,10 +51,10 @@ class DecisionTreeSimplifierTests {
                     Collections.singletonList(
                         new ConstraintNodeBuilder().addAtomicConstraints(Collections.singletonList(
                             new IsInSetConstraint(new Field("Field 1"), setOf(1, 2))
-                        )).setDecisions(Collections.emptyList()).createConstraintNode()
+                        )).setDecisions(Collections.emptyList()).build()
                     )
                 )
-            )).createConstraintNode(),
+            )).build(),
             new ProfileFields(
                 new ArrayList<Field>() {{ add(new Field("Field 1")); }}
             )
@@ -78,10 +78,10 @@ class DecisionTreeSimplifierTests {
                     Collections.singletonList(
                         new ConstraintNodeBuilder().addAtomicConstraints(Collections.singletonList(
                             new IsInSetConstraint(new Field("Field 2"), setOf("A", "B"))
-                        )).setDecisions(Collections.emptyList()).createConstraintNode()
+                        )).setDecisions(Collections.emptyList()).build()
                     )
                 )
-            )).createConstraintNode(),
+            )).build(),
             new ProfileFields(
                 new ArrayList<Field>() {{ add(new Field("Field 1")); }}
             )

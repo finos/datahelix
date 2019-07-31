@@ -276,14 +276,14 @@ class ProfileDecisionTreeFactoryTests {
         Assert.assertTrue(isEquivalentTo(
             new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Arrays.asList(
                 new DecisionNode(
-                    new ConstraintNodeBuilder().addAtomicConstraints(constraintA).createConstraintNode(),
-                    new ConstraintNodeBuilder().addAtomicConstraints(constraintB).createConstraintNode()
+                    new ConstraintNodeBuilder().addAtomicConstraints(constraintA).build(),
+                    new ConstraintNodeBuilder().addAtomicConstraints(constraintB).build()
                 ),
                 new DecisionNode(
-                    new ConstraintNodeBuilder().addAtomicConstraints(constraintC).createConstraintNode(),
-                    new ConstraintNodeBuilder().addAtomicConstraints(constraintD).createConstraintNode()
+                    new ConstraintNodeBuilder().addAtomicConstraints(constraintC).build(),
+                    new ConstraintNodeBuilder().addAtomicConstraints(constraintD).build()
                 )
-            )).createConstraintNode(),
+            )).build(),
             outputRule.getRootNode())
         );
     }
@@ -314,14 +314,14 @@ class ProfileDecisionTreeFactoryTests {
         Assert.assertTrue(isEquivalentTo(
             new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Arrays.asList(
                 new DecisionNode(
-                    new ConstraintNodeBuilder().addAtomicConstraints(constraintA).createConstraintNode(),
-                    new ConstraintNodeBuilder().addAtomicConstraints(constraintC, constraintB).createConstraintNode()
+                    new ConstraintNodeBuilder().addAtomicConstraints(constraintA).build(),
+                    new ConstraintNodeBuilder().addAtomicConstraints(constraintC, constraintB).build()
                 ),
                 new DecisionNode(
-                    new ConstraintNodeBuilder().addAtomicConstraints(constraintD).createConstraintNode(),
-                    new ConstraintNodeBuilder().addAtomicConstraints(constraintE).createConstraintNode()
+                    new ConstraintNodeBuilder().addAtomicConstraints(constraintD).build(),
+                    new ConstraintNodeBuilder().addAtomicConstraints(constraintE).build()
                 )
-            )).createConstraintNode(),
+            )).build(),
             outputRule.getRootNode())
         );
     }
@@ -346,13 +346,13 @@ class ProfileDecisionTreeFactoryTests {
                 new DecisionNode(
                     new ConstraintNodeBuilder().addAtomicConstraints(Arrays.asList(
                         constraintA,
-                        constraintB)).setDecisions(Collections.emptySet()).createConstraintNode(),
+                        constraintB)).setDecisions(Collections.emptySet()).build(),
                     new ConstraintNodeBuilder().addAtomicConstraints(Arrays.asList(
                         constraintA.negate(),
                         constraintC
-                    )).setDecisions(Collections.emptySet()).createConstraintNode()
+                    )).setDecisions(Collections.emptySet()).build()
                 )
-            )).createConstraintNode(),
+            )).build(),
             outputRule.getRootNode())
         );
     }
@@ -378,12 +378,12 @@ class ProfileDecisionTreeFactoryTests {
                         /* OPTION 1: AND(C, OR(A, B))  */
                         new ConstraintNodeBuilder().addAtomicConstraints(Collections.singletonList(bGreaterThan20)).setDecisions(Collections.singleton(
                             new DecisionNode(
-                                new ConstraintNodeBuilder().addAtomicConstraints(aEquals10).createConstraintNode(),
-                                new ConstraintNodeBuilder().addAtomicConstraints(aGreaterThan10).createConstraintNode()))).createConstraintNode(),
+                                new ConstraintNodeBuilder().addAtomicConstraints(aEquals10).build(),
+                                new ConstraintNodeBuilder().addAtomicConstraints(aGreaterThan10).build()))).build(),
                         /* OPTION 2: AND(¬A, ¬B)  */
-                        new ConstraintNodeBuilder().addAtomicConstraints(aEquals10.negate(), aGreaterThan10.negate()).createConstraintNode()
+                        new ConstraintNodeBuilder().addAtomicConstraints(aEquals10.negate(), aGreaterThan10.negate()).build()
                     )
-                )).createConstraintNode()
+                )).build()
             )
         );
     }
@@ -410,13 +410,13 @@ class ProfileDecisionTreeFactoryTests {
                     new ConstraintNodeBuilder().addAtomicConstraints(Arrays.asList(
                         constraintA,
                         constraintB.negate()
-                    )).setDecisions(Collections.emptySet()).createConstraintNode(),
+                    )).setDecisions(Collections.emptySet()).build(),
                     new ConstraintNodeBuilder().addAtomicConstraints(Arrays.asList(
                         constraintA.negate(),
                         constraintC.negate()
-                    )).setDecisions(Collections.emptySet()).createConstraintNode()
+                    )).setDecisions(Collections.emptySet()).build()
                 )
-            )).createConstraintNode(),
+            )).build(),
             outputRule.getRootNode())
         );
     }
@@ -433,7 +433,7 @@ class ProfileDecisionTreeFactoryTests {
 
         Constraint inputRule = new ConditionalConstraint(aEqualTo10, bGreaterThan20).negate();
 
-        ConstraintNode expectedOutput = new ConstraintNodeBuilder().addAtomicConstraints(aEqualTo10, bGreaterThan20.negate()).createConstraintNode();
+        ConstraintNode expectedOutput = new ConstraintNodeBuilder().addAtomicConstraints(aEqualTo10, bGreaterThan20.negate()).build();
 
         givenRule(inputRule);
 
@@ -485,10 +485,10 @@ class ProfileDecisionTreeFactoryTests {
         Assert.assertTrue(isEquivalentTo(
             new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Collections.singletonList(
                 new DecisionNode(
-                    new ConstraintNodeBuilder().addAtomicConstraints(Collections.singletonList(constraintA.negate())).setDecisions(Collections.emptySet()).createConstraintNode(),
-                    new ConstraintNodeBuilder().addAtomicConstraints(Collections.singletonList(constraintB.negate())).setDecisions(Collections.emptySet()).createConstraintNode()
+                    new ConstraintNodeBuilder().addAtomicConstraints(Collections.singletonList(constraintA.negate())).setDecisions(Collections.emptySet()).build(),
+                    new ConstraintNodeBuilder().addAtomicConstraints(Collections.singletonList(constraintB.negate())).setDecisions(Collections.emptySet()).build()
                 )
-            )).createConstraintNode(),
+            )).build(),
             outputRule.getRootNode())
         );
     }
@@ -510,10 +510,10 @@ class ProfileDecisionTreeFactoryTests {
                 getResultingRootOption(),
                 new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptyList()).setDecisions(Collections.singletonList(
                     new DecisionNode(
-                        new ConstraintNodeBuilder().addAtomicConstraints(constraintA).createConstraintNode(),
-                        new ConstraintNodeBuilder().addAtomicConstraints(constraintB).createConstraintNode(),
-                        new ConstraintNodeBuilder().addAtomicConstraints(constraintC).createConstraintNode())
-                )).createConstraintNode()
+                        new ConstraintNodeBuilder().addAtomicConstraints(constraintA).build(),
+                        new ConstraintNodeBuilder().addAtomicConstraints(constraintB).build(),
+                        new ConstraintNodeBuilder().addAtomicConstraints(constraintC).build())
+                )).build()
             )
         );
     }

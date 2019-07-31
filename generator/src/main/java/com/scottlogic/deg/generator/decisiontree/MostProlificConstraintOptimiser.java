@@ -67,8 +67,8 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
         }
 
         // Add most prolific constraint to new decision node
-        ConstraintNode factorisingConstraintNode = new ConstraintNodeBuilder().addAtomicConstraints(mostProlificAtomicConstraint).createConstraintNode();
-        ConstraintNode negatedFactorisingConstraintNode = new ConstraintNodeBuilder().addAtomicConstraints(negatedMostProlificConstraint).createConstraintNode();
+        ConstraintNode factorisingConstraintNode = new ConstraintNodeBuilder().addAtomicConstraints(mostProlificAtomicConstraint).build();
+        ConstraintNode negatedFactorisingConstraintNode = new ConstraintNodeBuilder().addAtomicConstraints(negatedMostProlificConstraint).build();
 
         Set<ConstraintNode> otherOptions = new HashSet<>();
         Set<DecisionNode> decisionsToRemove = new HashSet<>();

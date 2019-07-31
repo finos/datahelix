@@ -63,7 +63,7 @@ class ReductiveDecisionTreeWalkerTests {
     @BeforeEach
     public void beforeEach(){
         ProfileFields fields = new ProfileFields(Arrays.asList(field1, field2));
-        rootNode = new com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder().createConstraintNode();
+        rootNode = new com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder().build();
         tree = new DecisionTree(rootNode, fields);
 
         reductiveFieldSpecBuilder = mock(ReductiveFieldSpecBuilder.class);

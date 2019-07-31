@@ -81,6 +81,6 @@ public class DecisionTreeSimplifier {
                         .concat(node1.getAtomicConstraints().stream(), node2.getAtomicConstraints().stream())
                         .collect(Collectors.toList())).setDecisions(Stream
                         .concat(node1.getDecisions().stream(), node2.getDecisions().stream())
-                        .collect(Collectors.toList())).createConstraintNode());
+                        .collect(Collectors.toList())).build());
     }
 }

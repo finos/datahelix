@@ -46,7 +46,7 @@ class ReductiveFieldSpecBuilderTests {
         ReductiveFieldSpecBuilder builder = new ReductiveFieldSpecBuilder(reducer, mock(FieldSpecMerger.class));
         Field field1 = new Field("field");
         ConstraintNode rootNode =
-            new ConstraintNodeBuilder().addAtomicConstraints(new IsNullConstraint(field1), new IsNullConstraint(field1).negate()).createConstraintNode();
+            new ConstraintNodeBuilder().addAtomicConstraints(new IsNullConstraint(field1), new IsNullConstraint(field1).negate()).build();
 
         Set<FieldSpec> field = builder.getDecisionFieldSpecs(rootNode, field1);
 
@@ -60,7 +60,7 @@ class ReductiveFieldSpecBuilderTests {
         FieldSpecValueGenerator valueGenerator = mock(FieldSpecValueGenerator.class);
         ReductiveFieldSpecBuilder builder = new ReductiveFieldSpecBuilder(reducer, mock(FieldSpecMerger.class));
         Field field1 = new Field("field");
-        ConstraintNode rootNode = new ConstraintNodeBuilder().addAtomicConstraints(new IsNullConstraint(field1)).createConstraintNode();
+        ConstraintNode rootNode = new ConstraintNodeBuilder().addAtomicConstraints(new IsNullConstraint(field1)).build();
         when(valueGenerator.generate(FieldSpec.Empty)).thenReturn(Stream.of(mock(DataBagValue.class)));
 
         Set<FieldSpec> field = builder.getDecisionFieldSpecs(rootNode, field1);
