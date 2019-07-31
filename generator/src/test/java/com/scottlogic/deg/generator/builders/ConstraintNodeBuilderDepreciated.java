@@ -26,38 +26,36 @@ import java.util.List;
 import java.util.Set;
 
 // Please use ConstraintNodeBuilder in main instead of this test builder
-@Deprecated
-
-public class ConstraintNodeBuilder {
+public class ConstraintNodeBuilderDepreciated {
     protected List<AtomicConstraint> constraints = new ArrayList<>();
     private List<DecisionNode> decisionNodes = new ArrayList<>();
     private Set<NodeMarking> markings = new HashSet<>();
 
-    protected ConstraintNodeBuilder() {
+    protected ConstraintNodeBuilderDepreciated() {
     }
 
     public ConstraintNode build() {
-        return applyNodeMarkings(markings, new ConstraintNode(constraints, decisionNodes));
+        return applyNodeMarkings(markings, new com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder().addAtomicConstraints(constraints).setDecisions(decisionNodes).createConstraintNode());
     }
 
-    public static ConstraintNodeBuilder constraintNode() {
-        return new ConstraintNodeBuilder();
+    public static ConstraintNodeBuilderDepreciated constraintNode() {
+        return new ConstraintNodeBuilderDepreciated();
     }
 
     public AtomicConstraintBuilder where(Field field) {
         return new AtomicConstraintBuilder(this, field);
     }
 
-    public ConstraintNodeBuilder withDecision(ConstraintNodeBuilder... constraintNodes) {
+    public ConstraintNodeBuilderDepreciated withDecision(ConstraintNodeBuilderDepreciated... constraintNodes) {
         List<ConstraintNode> nodes = new ArrayList<>();
-        for (ConstraintNodeBuilder constraintNode : constraintNodes) {
+        for (ConstraintNodeBuilderDepreciated constraintNode : constraintNodes) {
             nodes.add(constraintNode.build());
         }
         decisionNodes.add(new DecisionNode(nodes));
         return this;
     }
 
-    public ConstraintNodeBuilder markNode(NodeMarking marking) {
+    public ConstraintNodeBuilderDepreciated markNode(NodeMarking marking) {
         this.markings.add(marking);
         return this;
     }
