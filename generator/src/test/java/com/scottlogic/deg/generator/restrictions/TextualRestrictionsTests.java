@@ -21,7 +21,6 @@ import com.scottlogic.deg.generator.generation.string.IsinStringGenerator;
 import com.scottlogic.deg.generator.generation.string.RegexStringGenerator;
 import com.scottlogic.deg.generator.generation.string.StringGenerator;
 import org.junit.Assert;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
