@@ -17,11 +17,11 @@ public final class FieldSpecGroup {
         this.relations = relations;
     }
 
-    Map<Field, FieldSpec> fieldSpecs() {
+    public Map<Field, FieldSpec> fieldSpecs() {
         return fieldSpecs;
     };
 
-    Collection<FieldSpecRelations> relations() {
+    public Collection<FieldSpecRelations> relations() {
         return relations;
     };
 

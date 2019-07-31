@@ -18,6 +18,7 @@ package com.scottlogic.deg.generator.generation.databags;
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
@@ -64,7 +65,7 @@ public class RowSpecDataBagGenerator {
         return combinationStrategy.permute(dataBagsForFields);
     }
 
-    private Set<FieldGroup> createGroups(RowSpec rowSpec) {
+    private static Set<FieldGroup> createGroups(RowSpec rowSpec) {
         List<FieldSpecRelations> relations = rowSpec.getRelations();
         List<FieldPair> pairs = relations.stream()
             .map(relation -> new FieldPair(relation.main(), relation.other()))
@@ -73,7 +74,7 @@ public class RowSpecDataBagGenerator {
         return findGroups(rowSpec.getFields().asList(), pairs);
     }
 
-    private Set<FieldGroup> findGroups(List<Field> fields, List<FieldPair> pairs) {
+    private static Set<FieldGroup> findGroups(List<Field> fields, List<FieldPair> pairs) {
         if (fields.isEmpty()) {
             return new HashSet<>();
         }
@@ -92,7 +93,7 @@ public class RowSpecDataBagGenerator {
     }
 
     // This method is recursive
-    private Set<FieldGroup> findGroupsFromMap(Map<Field, List<Field>> map) {
+    private static Set<FieldGroup> findGroupsFromMap(Map<Field, List<Field>> map) {
         if (map.isEmpty()) {
             return new HashSet<>();
         }
@@ -108,7 +109,7 @@ public class RowSpecDataBagGenerator {
         return result;
     }
 
-    private Set<Field> findGroup(Field initial, Map<Field, List<Field>> map) {
+    private static Set<Field> findGroup(Field initial, Map<Field, List<Field>> map) {
         Set<Field> searchedFields = new HashSet<>();
         searchedFields.add(initial);
 
@@ -118,7 +119,7 @@ public class RowSpecDataBagGenerator {
         return searchedFields;
     }
 
-    private Set<Field> findGroupRecursive(Deque<Field> toProcess, Set<Field> found, Map<Field, List<Field>> map) {
+    private static Set<Field> findGroupRecursive(Deque<Field> toProcess, Set<Field> found, Map<Field, List<Field>> map) {
         if (toProcess.isEmpty()) {
             return new HashSet<>();
         }
@@ -144,13 +145,13 @@ public class RowSpecDataBagGenerator {
         return list;
     }
 
-    private class FieldPair {
+    private static class FieldPair {
 
         private final Field first;
 
         private final Field second;
 
-        public FieldPair(Field first, Field second) {
+        private FieldPair(Field first, Field second) {
             this.first = first;
             this.second = second;
         }
@@ -161,6 +162,33 @@ public class RowSpecDataBagGenerator {
         FieldSpec fieldSpec = rowSpec.getSpecForField(field);
 
         return generator.generate(fieldSpec).map(value->toDataBag(field, value));
+    }
+
+    private Stream<DataBag> generateDataForGroup(RowSpec rowSpec, FieldGroup group) {
+        List<Field> fields = group.fields();
+        List<FieldSpec> specs = fields.stream().map(rowSpec::getSpecForField).collect(Collectors.toList());
+        List<FieldSpecRelations> relations = rowSpec.getRelations().stream()
+            .filter(relation -> specs.contains(relation.main()) || specs.contains(relation.other()))
+            .collect(Collectors.toList());
+
+        Map<Field, FieldSpec> fieldSpecMap = new HashMap<>();
+        for (Field field : fields) {
+            fieldSpecMap.put(field, rowSpec.getSpecForField(field));
+        }
+
+        FieldSpecGroup specGroup = new FieldSpecGroup(fieldSpecMap, relations);
+
+
+        ValueGenerator<FieldSpecGroup> groupGenerator = new FieldGroupValueGenerator();
+
+        return groupGenerator.generate(specGroup).map(value -> toDataBag(field, ));
+
+        // TODO: Implement!
+        throw new UnsupportedOperationException("Not implemented!");
+    }
+
+    private FieldSpecGroup createFieldSpecGroup(RowSpec rowSpec, FieldGroup group) {
+        group.fields().stream().map(rowSpec::getSpecForField).collect(Collectors.toMap());
     }
 
     private DataBag toDataBag(Field field, DataBagValue value) {
