@@ -2,7 +2,6 @@ package com.scottlogic.deg.generator.decisiontree;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.common.util.FlatMappingSpliterator;
-import sun.security.x509.DNSName;
 
 import java.util.Arrays;
 import java.util.Collection;
