@@ -224,6 +224,8 @@ class AutomatonUtils {
 
         Automaton generatedAutomaton = bricsRegExp.toAutomaton();
         generatedAutomaton.expandSingleton();
+        // NB: AF if want to allow cmd line option to expand to a fuller character set make sure don't
+        // make it unbounded as we don't want to see tabs or back spaces or null (\u0000) unicode chars
         generatedAutomaton = restrictCharacterSet(generatedAutomaton, '\u0020', '\u007E');
 
         cache.put(regexStr, generatedAutomaton);
