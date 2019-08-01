@@ -32,6 +32,7 @@ public class FieldSpecGroupValueGenerator {
         Stream<DataBag> firstDataBagValues = underlyingGenerator.generate(firstSpec)
             .map(value -> toDataBag(first, value));
 
+        FieldSpecGroup groupWithoutFirstField = reduceGroup(first, groupRespectingFirstField);
         return createRemainingDataBags(firstDataBagValues, groupRespectingFirstField);
 
         // recursively operate on stream, adding
@@ -44,6 +45,10 @@ public class FieldSpecGroupValueGenerator {
     }
 
     private FieldSpecGroup adjustBounds(Field field, FieldSpecGroup group) {
+        throw new UnsupportedOperationException("Not implemented!");
+    }
+
+    private FieldSpecGroup reduceGroup(Field toRemove, FieldSpecGroup group) {
         throw new UnsupportedOperationException("Not implemented!");
     }
 
