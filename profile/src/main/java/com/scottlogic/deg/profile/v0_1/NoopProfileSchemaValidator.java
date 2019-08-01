@@ -17,11 +17,12 @@
 package com.scottlogic.deg.profile.v0_1;
 
 import java.io.File;
+import java.net.URL;
 
-public class NoopProfileSchemaValidator extends ProfileSchemaValidator {
+public class NoopProfileSchemaValidator implements ProfileSchemaValidator {
 
     @Override
-    public void validateProfile(File profileFile, String schemaVersion) {
+    public void validateProfile(File profileFile, URL schema) {
         return;
     }
 }

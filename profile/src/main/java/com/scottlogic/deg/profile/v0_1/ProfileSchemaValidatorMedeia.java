@@ -26,34 +26,33 @@ import com.worldturner.medeia.api.jackson.MedeiaJacksonApi;
 import com.worldturner.medeia.schema.validation.SchemaValidator;
 
 import java.io.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProfileSchemaValidatorMedeia extends ProfileSchemaValidator {
+public class ProfileSchemaValidatorMedeia implements ProfileSchemaValidator {
 
     private static MedeiaJacksonApi api = new MedeiaJacksonApi();
     private static ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public void validateProfile(File profileFile, String schemaVersion) {
-        String schemaPath = getSchemaPath(schemaVersion);
+    public void validateProfile(File profileFile, URL schema) {
         try {
-            validateProfile(this.getClass().getResourceAsStream(schemaPath), new FileInputStream(profileFile), schemaVersion);
+            validateProfile(schema, new FileInputStream(profileFile));
         } catch (FileNotFoundException e) {
             throw new ValidationException(e.getLocalizedMessage());
         }
     }
 
-    private void validateProfile(InputStream schemaStream, InputStream profileStream, String schemaVersion) {
-        String schemaPath = getSchemaPath(schemaVersion);
+    private void validateProfile(URL schema, InputStream profileStream) {
         List<String> errorMessages = new ArrayList<>();
-        if (schemaStream == null) {
-            errorMessages.add(getUnsupportedSchemaVersionErrorMessage(schemaVersion));
+        if (schema == null) {
+            errorMessages.add("Null Schema");
         } else if (profileStream == null) {
             errorMessages.add("Null Profile Stream");
         } else {
             try {
-                SchemaValidator validator = loadSchema(schemaPath);
+                SchemaValidator validator = loadSchema(schema);
 
                 JsonParser unvalidatedParser = objectMapper.getFactory().createParser(profileStream);
                 JsonParser validatedParser = api.decorateJsonParser(validator, unvalidatedParser);
@@ -68,8 +67,8 @@ public class ProfileSchemaValidatorMedeia extends ProfileSchemaValidator {
         }
     }
 
-    private SchemaValidator loadSchema(String schemaPath) {
-        SchemaSource source = new UrlSchemaSource(getClass().getResource(schemaPath));
+    private SchemaValidator loadSchema(URL schema) {
+        SchemaSource source = new UrlSchemaSource(schema);
         return api.loadSchema(source);
     }
 }

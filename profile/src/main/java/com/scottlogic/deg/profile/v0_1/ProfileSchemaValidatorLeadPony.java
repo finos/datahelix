@@ -24,6 +24,7 @@ import org.leadpony.justify.api.ProblemHandler;
 
 import javax.json.stream.JsonParser;
 import java.io.*;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -33,20 +34,25 @@ import java.util.*;
  * <p>
  * Checks that the profile JSON file is valid against the DataHelix Profile Schema (datahelix.schema.json)
  */
-public class ProfileSchemaValidatorLeadPony extends ProfileSchemaValidator {
-
+public class ProfileSchemaValidatorLeadPony implements ProfileSchemaValidator {
     private List<String> profileJsonLines;
     private Path profilePath;
 
     @Override
-    public void validateProfile(File profileFile, String schemaVersion) {
-        String schemaPath = getSchemaPath(schemaVersion);
+    public void validateProfile(File profileFile, URL schema) {
+        if (schema == null) {
+            throw new ValidationException("Null Schema");
+        }
         try {
             byte[] data = Files.readAllBytes(profilePath = profileFile.toPath());
             profileJsonLines = readAllLines(data);
-            validateProfile(this.getClass().getResourceAsStream(schemaPath), new ByteArrayInputStream(data), schemaVersion);
+            validateProfile(schema.openStream(), new ByteArrayInputStream(data));
         } catch (IOException e) {
-            throw new ValidationException(e.getLocalizedMessage());
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);
+            String stackTrace = sw.toString();
+            throw new ValidationException(stackTrace);
         }
     }
 
@@ -65,10 +71,10 @@ public class ProfileSchemaValidatorLeadPony extends ProfileSchemaValidator {
     /**
      * @return the result of validating the provided DataHelix Profile
      */
-    private void validateProfile(InputStream schemaStream, InputStream profileStream, String schemaVersion) {
+    private void validateProfile(InputStream schemaStream, InputStream profileStream) {
         List<String> errorMessages = new ArrayList<>();
         if (schemaStream == null) {
-            errorMessages.add(getUnsupportedSchemaVersionErrorMessage(schemaVersion));
+            errorMessages.add("Null Schema Stream");
         } else if (profileStream == null) {
             errorMessages.add("Null Profile Stream");
         } else {

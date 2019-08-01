@@ -4,7 +4,6 @@ import com.scottlogic.deg.common.output.GeneratedObject;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.DataGeneratorMonitor;
-import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.walker.RetryLimitReachedException;
 import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
@@ -18,10 +17,8 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.HashMap;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.atLeastOnce;
@@ -68,6 +65,7 @@ class GenerateExecuteTests {
         File file = mock(File.class);
         when(configSource.getProfileFile()).thenReturn(file);
         when(file.toPath()).thenReturn(mock(Path.class));
+        when(profile.getSchemaVersion()).thenReturn("0.1");
         when(dataGenerator.generateData(profile)).thenReturn(
             Stream.iterate(mock(GeneratedObject.class), dataBag -> {
                 throw new RetryLimitReachedException();

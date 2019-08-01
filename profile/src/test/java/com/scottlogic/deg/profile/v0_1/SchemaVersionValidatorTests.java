@@ -1,0 +1,56 @@
+package com.scottlogic.deg.profile.v0_1;
+
+import com.scottlogic.deg.common.ValidationException;
+import org.junit.jupiter.api.Test;
+
+import java.net.URL;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+/*
+ * Copyright 2019 Scott Logic Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+class SchemaVersionValidatorTests {
+    @Test
+    void getSchemaFile_withSupportedVersion_returnsNonNullURL() {
+        //Arrange
+        String schemaVersion = "0.2";
+        String basePath = this.getClass().getResource("/profileschema/").getPath();
+        SchemaVersionValidator validator = new SchemaVersionValidator(basePath);
+
+        //Act
+        URL schema = null;
+        try {
+            schema = validator.getSchemaFile(schemaVersion);
+        } catch (Exception e) {
+
+        }
+
+        //Assert
+        assertNotNull(schema);
+    }
+
+    @Test
+    void getSchemaFile_withUnsupportedVersion_throwsValidationException() {
+        //Arrange
+        String schemaVersion = "0.1";
+        String basePath = this.getClass().getResource("/profileschema/").getPath();
+        SchemaVersionValidator validator = new SchemaVersionValidator(basePath);
+
+        //Act & Assert
+        assertThrows(ValidationException.class, () -> validator.getSchemaFile(schemaVersion));
+    }
+}

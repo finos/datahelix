@@ -17,9 +17,7 @@
 package com.scottlogic.deg.profile.v0_1;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.net.URL;
 
 /**
  * Used to validate a DataHelix Profile JSON file.
@@ -28,37 +26,14 @@ import java.util.List;
  * DataHelix Profile Schema (datahelix.schema.json)
  * </p>
  */
-public abstract class ProfileSchemaValidator {
-    private String pathToSchemas = "/profileschema/";
+public interface ProfileSchemaValidator {
 
     /**
      * Validates a json file against the DataHelix Profile JSON Schema.
      *
      * @param profileFile an File object that is the profile to validate
-     * @param schemaVersion the schema version to check validate against
+     * @param schema the schema to check validate against
      * @return the result of validating the provided profile
      */
-    abstract public void validateProfile(File profileFile, String schemaVersion);
-
-    String getUnsupportedSchemaVersionErrorMessage(String schemaVersion) {
-        return
-            "This version of the generator does not support v" +
-            schemaVersion +
-            " of the schema. Supported schema versions are " +
-            getSupportedSchemaVersions();
-    }
-
-    String getSchemaPath(String schemaVersion) {
-        return pathToSchemas + schemaVersion + "/datahelix.schema.json";
-    }
-
-    private List<String> getSupportedSchemaVersions() {
-        File file = new File(this.getClass().getResource(pathToSchemas).getPath());
-        String[] directoriesArray = file.list((current, name) -> new File(current, name).isDirectory());
-        List<String> directories = new ArrayList<>();
-        if (directoriesArray != null) {
-            directories = Arrays.asList(directoriesArray);
-        }
-        return directories;
-    }
+    void validateProfile(File profileFile, URL schema);
 }

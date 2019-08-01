@@ -17,7 +17,6 @@
 package com.scottlogic.deg.orchestrator.violate;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.common.output.GeneratedObject;
@@ -30,13 +29,13 @@ import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
 import com.scottlogic.deg.generator.inputs.profileviolation.ProfileViolator;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.output.outputtarget.OutputTargetFactory;
-import com.scottlogic.deg.output.FileUtils;
-import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.orchestrator.validator.ConfigValidator;
 import com.scottlogic.deg.profile.reader.ProfileReader;
 import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
+import com.scottlogic.deg.profile.v0_1.SchemaVersionValidator;
 
 import java.io.IOException;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.stream.Stream;
@@ -48,6 +47,7 @@ public class ViolateExecute {
     private final ProfileReader profileReader;
     private final ProfileValidator profileValidator;
     private final ProfileSchemaValidator profileSchemaValidator;
+    private final SchemaVersionValidator schemaVersionValidator;
     private final ProfileViolator profileViolator;
     private final DataGenerator dataGenerator;
     private final ViolateOutputValidator violateOutputValidator;
@@ -71,6 +71,8 @@ public class ViolateExecute {
         this.outputTargetFactory = outputTargetFactory;
         this.configValidator = configValidator;
         this.profileSchemaValidator = profileSchemaValidator;
+        String directoryOfSchemas = this.getClass().getResource("/profileschema/").getPath();
+        this.schemaVersionValidator = new SchemaVersionValidator(directoryOfSchemas);
         this.profileValidator = profileValidator;
         this.profileViolator = profileViolator;
         this.dataGenerator = dataGenerator;
@@ -82,7 +84,8 @@ public class ViolateExecute {
         configValidator.preProfileChecks(configSource);
 
         Profile profile = profileReader.read(configSource.getProfileFile().toPath());
-        profileSchemaValidator.validateProfile(configSource.getProfileFile(), profile.getSchemaVersion());
+        URL schema = schemaVersionValidator.getSchemaFile(profile.getSchemaVersion());
+        profileSchemaValidator.validateProfile(configSource.getProfileFile(), schema);
 
         profileValidator.validate(profile);
         violateOutputValidator.validate(profile);

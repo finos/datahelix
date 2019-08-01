@@ -31,10 +31,12 @@ import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.validators.ContradictionDecisionTreeValidator;
 import com.scottlogic.deg.orchestrator.validator.VisualisationConfigValidator;
 import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
+import com.scottlogic.deg.profile.v0_1.SchemaVersionValidator;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Objects;
@@ -52,6 +54,7 @@ public class VisualiseExecute {
     private final Path outputPath;
     private final ProfileReader profileReader;
     private final ProfileSchemaValidator profileSchemaValidator;
+    private final SchemaVersionValidator schemaVersionValidator;
     private final AllConfigSource configSource;
     private final VisualisationConfigValidator validator;
 
@@ -71,6 +74,8 @@ public class VisualiseExecute {
         this.outputPath = outputPath.getPath();
         this.profileReader = profileReader;
         this.profileSchemaValidator = profileSchemaValidator;
+        String directoryOfSchemas = this.getClass().getResource("/profileschema/").getPath();
+        this.schemaVersionValidator = new SchemaVersionValidator(directoryOfSchemas);
         this.validator = validator;
     }
 
@@ -78,7 +83,8 @@ public class VisualiseExecute {
         validator.validateCommandLine(configSource.overwriteOutputFiles(), outputPath);
 
         final Profile profile = profileReader.read(configSource.getProfileFile().toPath());
-        profileSchemaValidator.validateProfile(configSource.getProfileFile(), profile.getSchemaVersion());
+        URL schema = schemaVersionValidator.getSchemaFile(profile.getSchemaVersion());
+        profileSchemaValidator.validateProfile(configSource.getProfileFile(), schema);
 
         final DecisionTree mergedTree = profileAnalyser.analyse(profile);
 

@@ -29,8 +29,12 @@ import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
 import com.scottlogic.deg.output.writer.DataSetWriter;
 import com.scottlogic.deg.profile.reader.ProfileReader;
 import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
+import com.scottlogic.deg.profile.v0_1.SchemaVersionValidator;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.stream.Stream;
 
 public class GenerateExecute {
@@ -42,6 +46,7 @@ public class GenerateExecute {
     private final ProfileValidator profileValidator;
     private final DataGeneratorMonitor monitor;
     private final ProfileSchemaValidator profileSchemaValidator;
+    private final SchemaVersionValidator schemaVersionValidator;
 
     @Inject
     GenerateExecute(
@@ -60,6 +65,8 @@ public class GenerateExecute {
         this.configValidator = configValidator;
         this.profileSchemaValidator = profileSchemaValidator;
         this.profileValidator = profileValidator;
+        String directoryOfSchemas = this.getClass().getResource("/profileschema/").getPath();
+        this.schemaVersionValidator = new SchemaVersionValidator(directoryOfSchemas);
         this.monitor = monitor;
     }
 
@@ -67,7 +74,8 @@ public class GenerateExecute {
         configValidator.preProfileChecks(configSource);
 
         Profile profile = profileReader.read(configSource.getProfileFile().toPath());
-        profileSchemaValidator.validateProfile(configSource.getProfileFile(), profile.getSchemaVersion());
+        URL schema = schemaVersionValidator.getSchemaFile(profile.getSchemaVersion());
+        profileSchemaValidator.validateProfile(configSource.getProfileFile(), schema);
 
         profileValidator.validate(profile);
         singleDatasetOutputTarget.validate();

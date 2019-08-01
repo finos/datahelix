@@ -22,30 +22,37 @@ import org.junit.jupiter.api.TestFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class ProfileValidationTests {
+    private static final String TEST_SCHEMA_DIR = "/profileschema/";
 
-        @TestFactory
-        Collection<DynamicTest> shouldAllValidateWithoutErrors() throws IOException {
-            Collection<DynamicTest> dynamicTests = new ArrayList<>();
+    @TestFactory
+    Collection<DynamicTest> shouldAllValidateWithoutErrors() throws IOException {
+        Collection<DynamicTest> dynamicTests = new ArrayList<>();
 
-            File[] directoriesArray =
-                Paths.get("..", "examples")
-                    .toFile()
-                    .listFiles(File::isDirectory);
-            for (File dir : directoriesArray) {
-                File profileFile = Paths.get(dir.getCanonicalPath(), "profile.json").toFile();
+        File[] directoriesArray =
+            Paths.get("..", "examples")
+                .toFile()
+                .listFiles(File::isDirectory);
+        for (File dir : directoriesArray) {
+            File profileFile = Paths.get(dir.getCanonicalPath(), "profile.json").toFile();
 
-                String schemaVersion = "0.1";
-                DynamicTest test = DynamicTest.dynamicTest(dir.getName(), () -> {
-                    new ProfileSchemaValidatorLeadPony().validateProfile(profileFile, schemaVersion);
-                });
+            // Get the real schema
+            String schemaVersion = "0.1";
+            URL testSchemaUrl =
+                this.getClass().getResource(
+                    TEST_SCHEMA_DIR + schemaVersion + "/datahelix.schema.json"
+                );
+            DynamicTest test = DynamicTest.dynamicTest(
+                dir.getName(),
+                () -> new ProfileSchemaValidatorLeadPony().validateProfile(profileFile, testSchemaUrl));
 
-                dynamicTests.add(test);
-            }
-            return dynamicTests;
+            dynamicTests.add(test);
         }
+        return dynamicTests;
     }
+}
