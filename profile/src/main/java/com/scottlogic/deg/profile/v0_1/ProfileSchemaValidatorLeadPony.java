@@ -49,8 +49,6 @@ public class ProfileSchemaValidatorLeadPony implements ProfileSchemaValidator {
             validateProfile(schema.openStream(), new ByteArrayInputStream(data));
         } catch (IOException e) {
             StringWriter sw = new StringWriter();
-            PrintWriter pw = new PrintWriter(sw);
-            e.printStackTrace(pw);
             String stackTrace = sw.toString();
             throw new ValidationException(stackTrace);
         }
