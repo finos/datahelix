@@ -27,7 +27,7 @@ public class FieldSpecGroupValueGenerator {
 
         // Ensure bounds are re-calculated at EACH STEP.
         // recalc bounds initially
-        FieldSpecGroup groupRespectingFirstField = adjustBounds(first, group);
+        FieldSpecGroup groupRespectingFirstField = adjustByUnits(first, group);
         FieldSpec firstSpec = groupRespectingFirstField.fieldSpecs().get(first);
         Stream<DataBag> firstDataBagValues = underlyingGenerator.generate(firstSpec)
             .map(value -> toDataBag(first, value));
@@ -41,6 +41,10 @@ public class FieldSpecGroupValueGenerator {
         Map<Field, DataBagValue> map = new HashMap<>();
         map.put(field, value);
         return new DataBag(map);
+    }
+
+    private FieldSpecGroup adjustByUnits(Field field, FieldSpecGroup group) {
+        throw new UnsupportedOperationException("Not implemented!");
     }
 
     private FieldSpecGroup adjustBounds(Field field, FieldSpecGroup group) {
