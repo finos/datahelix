@@ -13,9 +13,9 @@ import java.util.stream.Stream;
 import static java.util.stream.Stream.concat;
 
 public class ConstraintNodeBuilder {
-    private Collection<AtomicConstraint> atomicConstraints;
-    private Collection<DecisionNode> decisions;
-    private Set<NodeMarking> nodeMarkings;
+    private final Collection<AtomicConstraint> atomicConstraints;
+    private final Collection<DecisionNode> decisions;
+    private final Set<NodeMarking> nodeMarkings;
 
     public ConstraintNodeBuilder(Collection<AtomicConstraint> atomicConstraints, Collection<DecisionNode> decisions, Set<NodeMarking> nodeMarkings) {
         this.atomicConstraints = atomicConstraints;
