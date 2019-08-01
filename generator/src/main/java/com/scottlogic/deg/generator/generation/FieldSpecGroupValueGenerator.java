@@ -3,11 +3,11 @@ package com.scottlogic.deg.generator.generation;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
-import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FieldSpecGroupValueGenerator {
@@ -19,48 +19,99 @@ public class FieldSpecGroupValueGenerator {
     }
 
     public Stream<DataBag> generate(FieldSpecGroup group) {
-        Map<Field, FieldSpec> fields = group.fieldSpecs();
+        Field first = group.fieldSpecs().keySet().iterator().next();
 
-        Collection<FieldSpecRelations> relations = group.relations();
-
-        Field first = fields.keySet().iterator().next();
-
-        // Ensure bounds are re-calculated at EACH STEP.
-        // recalc bounds initially
         FieldSpecGroup groupRespectingFirstField = adjustByUnits(first, group);
         FieldSpec firstSpec = groupRespectingFirstField.fieldSpecs().get(first);
+
         Stream<DataBag> firstDataBagValues = underlyingGenerator.generate(firstSpec)
             .map(value -> toDataBag(first, value));
 
-        return createRemainingDataBags(firstDataBagValues, groupRespectingFirstField);
+        return createRemainingDataBags(firstDataBagValues, first, groupRespectingFirstField);
 
         // recursively operate on stream, adding
     }
 
-    private DataBag toDataBag(Field field, DataBagValue value) {
+    private static DataBag toDataBag(Field field, DataBagValue value) {
         Map<Field, DataBagValue> map = new HashMap<>();
         map.put(field, value);
         return new DataBag(map);
     }
 
-    private FieldSpecGroup adjustByUnits(Field field, FieldSpecGroup group) {
+    private static FieldSpecGroup adjustByUnits(Field field, FieldSpecGroup group) {
         throw new UnsupportedOperationException("Not implemented!");
     }
 
-    private FieldSpecGroup adjustBounds(Field field, FieldSpecGroup group) {
+    private static FieldSpecGroup adjustBounds(Field field, DataBagValue value, FieldSpecGroup group) {
         throw new UnsupportedOperationException("Not implemented!");
     }
 
-    private Stream<DataBag> createRemainingDataBags(Stream<DataBag> stream, FieldSpecGroup group) {
-        if (group.fieldSpecs().isEmpty()) {
-            return stream;
+    private static final class DataBagGroupWrapper {
+
+        private final DataBag dataBag;
+        private final FieldSpecGroup group;
+        private final FieldSpecValueGenerator generator;
+
+        private DataBagGroupWrapper(DataBag databag,
+                                    FieldSpecGroup group,
+                                    FieldSpecValueGenerator generator) {
+            this.dataBag = databag;
+            this.group = group;
+            this.generator = generator;
         }
 
-        Field toProcess = group.fieldSpecs().keySet().iterator().next();
-        stream.map(dataBag -> )
+        public DataBag dataBag() {
+            return dataBag;
+        }
 
-        throw new UnsupportedOperationException("Not implemented!");
+        public DataBagValue generate(FieldSpec spec) {
+            return generator.generateOne(spec);
+        }
+
     }
 
+    private Stream<DataBag> createRemainingDataBags(Stream<DataBag> stream, Field first, FieldSpecGroup group) {
+        Stream<DataBagGroupWrapper> initial = stream
+            .map(dataBag -> new DataBagGroupWrapper(dataBag, group, underlyingGenerator))
+            .map(wrapper -> adjustWrapperBounds(wrapper, first));
+        Set<Field> toProcess = group.fieldSpecs().keySet();
+
+        return recursiveMap(initial, toProcess).map(DataBagGroupWrapper::dataBag);
+    }
+
+    private static DataBagGroupWrapper adjustWrapperBounds(DataBagGroupWrapper wrapper, Field field) {
+        DataBagValue value = wrapper.dataBag.getUnformattedValue(field);
+        FieldSpecGroup newGroup = adjustBounds(field, value, wrapper.group);
+        return new DataBagGroupWrapper(wrapper.dataBag, newGroup, wrapper.generator);
+
+    }
+
+    private static Stream<DataBagGroupWrapper> recursiveMap(Stream<DataBagGroupWrapper> wrapperStream,
+                                                            Set<Field> fieldsToProcess) {
+        if (fieldsToProcess.isEmpty()) {
+            return wrapperStream;
+        }
+
+        Field field = fieldsToProcess.iterator().next();
+        Stream<DataBagGroupWrapper> mappedStream = wrapperStream.map(wrapper -> acceptNextValue(wrapper, field));
+
+        Set<Field> remainingFields = fieldsToProcess.stream()
+            .filter(f -> !f.equals(field))
+            .collect(Collectors.toSet());
+
+        return recursiveMap(mappedStream, remainingFields);
+    }
+
+    private static DataBagGroupWrapper acceptNextValue(DataBagGroupWrapper wrapper, Field field) {
+        FieldSpecGroup group = adjustByUnits(field, wrapper.group);
+
+        DataBagValue nextValue = wrapper.generate(group.fieldSpecs().get(field));
+
+        DataBag combined = DataBag.merge(toDataBag(field, nextValue), wrapper.dataBag);
+
+        FieldSpecGroup newGroup = adjustBounds(field, nextValue, group);
+
+        return new DataBagGroupWrapper(combined, newGroup, wrapper.generator);
+    }
 
 }

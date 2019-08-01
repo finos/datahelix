@@ -35,7 +35,9 @@ public class FieldSpecValueGenerator {
     private final JavaUtilRandomNumberGenerator randomNumberGenerator;
 
     @Inject
-    public FieldSpecValueGenerator(DataGenerationType dataGenerationType, FieldValueSourceEvaluator sourceEvaluator, JavaUtilRandomNumberGenerator randomNumberGenerator) {
+    public FieldSpecValueGenerator(DataGenerationType dataGenerationType,
+                                   FieldValueSourceEvaluator sourceEvaluator,
+                                   JavaUtilRandomNumberGenerator randomNumberGenerator) {
         this.dataType = dataGenerationType;
         this.sourceFactory = sourceEvaluator;
         this.randomNumberGenerator = randomNumberGenerator;
@@ -57,6 +59,12 @@ public class FieldSpecValueGenerator {
         return createValuesFromSources(spec, fieldValueSources);
     }
 
+    public DataBagValue generateOne(FieldSpec spec) {
+        List<FieldValueSource> fieldValueSources = sourceFactory.getFieldValueSources(spec);
+
+        return createValueFromSources(spec, fieldValueSources);
+    }
+
     private Stream<DataBagValue> createValuesFromSources(FieldSpec spec, List<FieldValueSource> fieldValueSources) {
         FieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
 
@@ -64,6 +72,14 @@ public class FieldSpecValueGenerator {
 
         return StreamSupport.stream(iterable.spliterator(), false)
             .map(value -> new DataBagValue(value, spec.getFormatting()));
+    }
+
+    private DataBagValue createValueFromSources(FieldSpec spec, List<FieldValueSource> fieldValueSources) {
+        FieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
+
+        Object value = combinedFieldValueSource.generateRandomValue(randomNumberGenerator);
+
+        return new DataBagValue(value, spec.getFormatting());
     }
 
     private Iterable<Object> getDataValues(FieldValueSource source) {
