@@ -28,8 +28,6 @@ public class FieldSpecGroupValueGenerator {
             .map(value -> toDataBag(first, value));
 
         return createRemainingDataBags(firstDataBagValues, first, groupRespectingFirstField);
-
-        // recursively operate on stream, adding
     }
 
     private static DataBag toDataBag(Field field, DataBagValue value) {

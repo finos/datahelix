@@ -183,7 +183,7 @@ public class RowSpecDataBagGenerator {
         return groupGenerator.generate(specGroup);
     }
 
-    private DataBag toDataBag(Field field, DataBagValue value) {
+    private static DataBag toDataBag(Field field, DataBagValue value) {
         Map<Field, DataBagValue> map = new HashMap<>();
         map.put(field, value);
         return new DataBag(map);
