@@ -216,14 +216,13 @@ public class MostProlificConstraintOptimiser implements DecisionTreeOptimiser {
         }
 
 
-
-        private void markOptionForFactorisation(AtomicConstraint factorisingConstraint,
-                                                ConstraintNode node,
-                                                List<ConstraintNode> options,
-                                                Set<AtomicConstraint> constraints) {
+        private void markOptionForFactorisation(
+            AtomicConstraint factorisingConstraint,
+            ConstraintNode node,
+            List<ConstraintNode> options,
+            Set<AtomicConstraint> constraints) {
             ConstraintNode newOption = node.builder().removeAtomicConstraint(factorisingConstraint).build();
             if (!newOption.getAtomicConstraints().isEmpty()) {
-                int i;
                 options.add(newOption);
                 constraints.addAll(newOption.getAtomicConstraints());
             }

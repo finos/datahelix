@@ -24,7 +24,7 @@ public class ConstraintNodeBuilder {
     }
 
     public ConstraintNodeBuilder() {
-        this(Collections.emptyList(),Collections.emptyList(),Collections.emptySet());
+        this(Collections.emptyList(), Collections.emptyList(), Collections.emptySet());
     }
 
     public ConstraintNodeBuilder setAtomicConstraints(Collection<AtomicConstraint> newAtomicConstraints) {
@@ -52,7 +52,7 @@ public class ConstraintNodeBuilder {
         return addAtomicConstraints(Arrays.asList(constraints));
     }
 
-    public ConstraintNodeBuilder setDecisions (Collection<DecisionNode> newDecisions) {
+    public ConstraintNodeBuilder setDecisions(Collection<DecisionNode> newDecisions) {
         return new ConstraintNodeBuilder(atomicConstraints, newDecisions, nodeMarkings);
     }
 
@@ -93,11 +93,11 @@ public class ConstraintNodeBuilder {
     }
 
     public ConstraintNodeBuilder markNode(NodeMarking marking) {
-        Set<NodeMarking> newMarkings = FlatMappingSpliterator.flatMap(
-            Stream.of(Collections.singleton(marking), nodeMarkings),
-            Collection::stream)
-            .collect(Collectors.toSet());
-        return setNodeMarkings(newMarkings);
+        return setNodeMarkings(
+            FlatMappingSpliterator.flatMap(
+                Stream.of(Collections.singleton(marking), nodeMarkings),
+                Collection::stream
+            ).collect(Collectors.toSet()));
     }
 
     public ConstraintNode build() {

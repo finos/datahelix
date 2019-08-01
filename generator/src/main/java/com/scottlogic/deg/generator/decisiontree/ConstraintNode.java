@@ -50,9 +50,10 @@ public class ConstraintNode implements Node {
         adaptedRowSpec = createRowSpecFunc.get();
         return adaptedRowSpec;
     }
+
     private Optional<RowSpec> adaptedRowSpec = null;
 
-    public String toString(){
+    public String toString() {
         if (decisions.isEmpty())
             return atomicConstraints.size() > 5
                 ? String.format("%d constraints", atomicConstraints.size())
@@ -74,9 +75,9 @@ public class ConstraintNode implements Node {
     }
 
     public ConstraintNodeBuilder builder() {
-        return new ConstraintNodeBuilder(atomicConstraints,decisions,nodeMarkings);
+        return new ConstraintNodeBuilder(atomicConstraints, decisions, nodeMarkings);
     }
-    
+
     @Override
     public boolean hasMarking(NodeMarking detail) {
         return this.nodeMarkings.contains(detail);
@@ -97,7 +98,7 @@ public class ConstraintNode implements Node {
     }
 
 
-    public ConstraintNode accept(NodeVisitor visitor){
+    public ConstraintNode accept(NodeVisitor visitor) {
         Stream<DecisionNode> decisionNodeStream = getDecisions().stream().map(d -> d.accept(visitor));
 
         return visitor.visit(

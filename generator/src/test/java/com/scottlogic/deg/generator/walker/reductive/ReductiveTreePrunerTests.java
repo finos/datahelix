@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static com.scottlogic.deg.generator.builders.ConstraintNodeBuilderDepreciated.*;
+import static com.scottlogic.deg.generator.builders.TestConstraintNodeBuilder.*;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.junit.Assert.assertEquals;

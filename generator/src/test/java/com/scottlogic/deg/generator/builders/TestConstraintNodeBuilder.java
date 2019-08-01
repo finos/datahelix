@@ -25,37 +25,36 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-// Please use ConstraintNodeBuilder in main instead of this test builder
-public class ConstraintNodeBuilderDepreciated {
+public class TestConstraintNodeBuilder {
     protected List<AtomicConstraint> constraints = new ArrayList<>();
     private List<DecisionNode> decisionNodes = new ArrayList<>();
     private Set<NodeMarking> markings = new HashSet<>();
 
-    protected ConstraintNodeBuilderDepreciated() {
+    protected TestConstraintNodeBuilder() {
     }
 
     public ConstraintNode build() {
-        return applyNodeMarkings(markings, new com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder().addAtomicConstraints(constraints).setDecisions(decisionNodes).build());
+        return applyNodeMarkings(markings, new ConstraintNodeBuilder().addAtomicConstraints(constraints).setDecisions(decisionNodes).build());
     }
 
-    public static ConstraintNodeBuilderDepreciated constraintNode() {
-        return new ConstraintNodeBuilderDepreciated();
+    public static TestConstraintNodeBuilder constraintNode() {
+        return new TestConstraintNodeBuilder();
     }
 
-    public AtomicConstraintBuilder where(Field field) {
-        return new AtomicConstraintBuilder(this, field);
+    public TestAtomicConstraintBuilder where(Field field) {
+        return new TestAtomicConstraintBuilder(this, field);
     }
 
-    public ConstraintNodeBuilderDepreciated withDecision(ConstraintNodeBuilderDepreciated... constraintNodes) {
+    public TestConstraintNodeBuilder withDecision(TestConstraintNodeBuilder... constraintNodes) {
         List<ConstraintNode> nodes = new ArrayList<>();
-        for (ConstraintNodeBuilderDepreciated constraintNode : constraintNodes) {
+        for (TestConstraintNodeBuilder constraintNode : constraintNodes) {
             nodes.add(constraintNode.build());
         }
         decisionNodes.add(new DecisionNode(nodes));
         return this;
     }
 
-    public ConstraintNodeBuilderDepreciated markNode(NodeMarking marking) {
+    public TestConstraintNodeBuilder markNode(NodeMarking marking) {
         this.markings.add(marking);
         return this;
     }

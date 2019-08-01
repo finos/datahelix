@@ -73,14 +73,22 @@ public class DecisionTreeSimplifier {
                         return parentConstraint.builder()
                             .addAtomicConstraints(firstOption.getAtomicConstraints())
                             .addDecisions(firstOption.getDecisions())
-                            .removeDecision(decisionNode).build();
+                            .removeDecision(decisionNode)
+                            .build();
                     }
                 },
                 (node1, node2) ->
-                    new ConstraintNodeBuilder().addAtomicConstraints(Stream
-                        .concat(node1.getAtomicConstraints().stream(), node2.getAtomicConstraints().stream())
-                        .collect(Collectors.toList())).setDecisions(Stream
-                        .concat(node1.getDecisions().stream(), node2.getDecisions().stream())
-                        .collect(Collectors.toList())).build());
+                    new ConstraintNodeBuilder()
+                        .addAtomicConstraints(
+                            Stream.concat(
+                                node1.getAtomicConstraints().stream(),
+                                node2.getAtomicConstraints().stream()
+                            ).collect(Collectors.toList())
+                        ).setDecisions(Stream
+                        .concat(
+                            node1.getDecisions().stream(),
+                            node2.getDecisions().stream()
+                        ).collect(Collectors.toList())
+                    ).build());
     }
 }

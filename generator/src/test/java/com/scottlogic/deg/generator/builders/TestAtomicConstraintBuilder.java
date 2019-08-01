@@ -24,12 +24,12 @@ import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.utils.SetUtils;
 
-public class AtomicConstraintBuilder {
-    private ConstraintNodeBuilderDepreciated constraintNodeBuilderDepreciated;
+public class TestAtomicConstraintBuilder {
+    private TestConstraintNodeBuilder testConstraintNodeBuilder;
     private Field field;
 
-    protected AtomicConstraintBuilder(ConstraintNodeBuilderDepreciated constraintNodeBuilderDepreciated, Field field) {
-        this.constraintNodeBuilderDepreciated = constraintNodeBuilderDepreciated;
+    protected TestAtomicConstraintBuilder(TestConstraintNodeBuilder testConstraintNodeBuilder, Field field) {
+        this.testConstraintNodeBuilder = testConstraintNodeBuilder;
         this.field = field;
     }
 
@@ -37,40 +37,40 @@ public class AtomicConstraintBuilder {
         return FrequencyDistributedSet.uniform(SetUtils.setOf(values));
     }
 
-    public ConstraintNodeBuilderDepreciated isInSet(Object... legalValues) {
+    public TestConstraintNodeBuilder isInSet(Object... legalValues) {
         IsInSetConstraint isInSetConstraint = new IsInSetConstraint(
             field,
             whitelistOf(legalValues));
-        constraintNodeBuilderDepreciated.constraints.add(isInSetConstraint);
-        return constraintNodeBuilderDepreciated;
+        testConstraintNodeBuilder.constraints.add(isInSetConstraint);
+        return testConstraintNodeBuilder;
     }
 
-    public ConstraintNodeBuilderDepreciated isNotInSet(Object... legalValues) {
+    public TestConstraintNodeBuilder isNotInSet(Object... legalValues) {
         AtomicConstraint isInSetConstraint = new IsInSetConstraint(
             field,
             whitelistOf(legalValues)
         ).negate();
-        constraintNodeBuilderDepreciated.constraints.add(isInSetConstraint);
-        return constraintNodeBuilderDepreciated;
+        testConstraintNodeBuilder.constraints.add(isInSetConstraint);
+        return testConstraintNodeBuilder;
     }
 
-    public ConstraintNodeBuilderDepreciated isNull() {
+    public TestConstraintNodeBuilder isNull() {
         IsNullConstraint isNullConstraint = new IsNullConstraint(field);
-        constraintNodeBuilderDepreciated.constraints.add(isNullConstraint);
-        return constraintNodeBuilderDepreciated;
+        testConstraintNodeBuilder.constraints.add(isNullConstraint);
+        return testConstraintNodeBuilder;
     }
 
-    public ConstraintNodeBuilderDepreciated isNotNull() {
+    public TestConstraintNodeBuilder isNotNull() {
         AtomicConstraint isNotNullConstraint = new IsNullConstraint(field).negate();
-        constraintNodeBuilderDepreciated.constraints.add(isNotNullConstraint);
-        return constraintNodeBuilderDepreciated;
+        testConstraintNodeBuilder.constraints.add(isNotNullConstraint);
+        return testConstraintNodeBuilder;
     }
 
-    public ConstraintNodeBuilderDepreciated isSelfContradictory() {
+    public TestConstraintNodeBuilder isSelfContradictory() {
         IsNullConstraint isNullConstraint = new IsNullConstraint(field);
         AtomicConstraint isNotNullConstraint = new IsNullConstraint(field).negate();
-        constraintNodeBuilderDepreciated.constraints.add(isNullConstraint);
-        constraintNodeBuilderDepreciated.constraints.add(isNotNullConstraint);
-        return constraintNodeBuilderDepreciated;
+        testConstraintNodeBuilder.constraints.add(isNullConstraint);
+        testConstraintNodeBuilder.constraints.add(isNotNullConstraint);
+        return testConstraintNodeBuilder;
     }
 }
