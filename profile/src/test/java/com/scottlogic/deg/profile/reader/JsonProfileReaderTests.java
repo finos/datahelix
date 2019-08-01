@@ -16,7 +16,6 @@
 
 package com.scottlogic.deg.profile.reader;
 
-import com.scottlogic.deg.common.profile.RuleInformation;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.Profile;
@@ -25,7 +24,6 @@ import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
-import com.shazam.shazamcrest.MatcherAssert;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,13 +33,10 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.core.IsNull.nullValue;
 
@@ -54,7 +49,7 @@ public class JsonProfileReaderTests {
     public void Setup() {
         this.json = null;
         this.profile = null;
-        ConstraintReaderMap readerMap = new BaseConstraintReaderMap(Stream.of(
+        ConstraintReaderMap readerMap = new ConstraintReaderMap(Stream.of(
             new CoreAtomicTypesConstraintReaderSource(null),
             new FinancialTypesConstraintReaderSource(),
             new PersonalDataTypesConstraintReaderSource()

@@ -42,14 +42,14 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class BaseConstraintReaderMapTests {
+public class ConstraintReaderMapTests {
 
     ConstraintReaderMap constraintReaderMap;
     ProfileFields profileFields;
 
     @BeforeAll
     public void before() {
-        constraintReaderMap = new BaseConstraintReaderMap(Stream.of(
+        constraintReaderMap = new ConstraintReaderMap(Arrays.asList(
             new CoreAtomicTypesConstraintReaderSource(null),
             new FinancialTypesConstraintReaderSource(),
             new PersonalDataTypesConstraintReaderSource()
@@ -229,7 +229,7 @@ public class BaseConstraintReaderMapTests {
         List<String> missingConstraints = new ArrayList<String>();
 
         for (AtomicConstraintType type : AtomicConstraintType.values()) {
-            ConstraintReader reader = constraintReaderMap.getReader(type.toString(), null);
+            ConstraintReader reader = constraintReaderMap.getReader(type.toString());
             if (reader == null) {
                 missingConstraints.add(type.toString());
             }
@@ -249,10 +249,7 @@ public class BaseConstraintReaderMapTests {
     @ParameterizedTest(name = "{0} should return {1}")
     @MethodSource("testProvider")
     public void testAtomicConstraintReader(AtomicConstraintType type, ConstraintDTO dto, Class<?> constraintType) {
-        ConstraintReader reader = constraintReaderMap.getReader(
-            type.toString(),
-            dto.value != null ? dto.value.toString() : null
-        );
+        ConstraintReader reader = constraintReaderMap.getReader(type.toString());
 
         try {
             Set<RuleInformation> ruleInformation = Collections.singleton(new RuleInformation());
@@ -272,10 +269,7 @@ public class BaseConstraintReaderMapTests {
     @ParameterizedTest(name = "{0} should be invalid")
     @MethodSource({"stringLengthInvalidOperandProvider", "ofTypeInvalidValueProvider"})
     public void testAtomicConstraintReaderWithInvalidOperands(AtomicConstraintType type, ConstraintDTO dto) {
-        ConstraintReader reader = constraintReaderMap.getReader(
-            type.toString(),
-            dto.value != null ? dto.value.toString() : null
-        );
+        ConstraintReader reader = constraintReaderMap.getReader(type.toString());
 
         Set<RuleInformation> ruleInformation = Collections.singleton(new RuleInformation());
 
@@ -288,7 +282,7 @@ public class BaseConstraintReaderMapTests {
     public void testBaseConstraintReaderMapWithUnmappedOperands(AtomicConstraintType type, ConstraintDTO dto) {
         Assertions.assertThrows(
             InvalidProfileException.class,
-            () -> constraintReaderMap.getReader(type.toString(), getStringValueOrNull(dto))
+            () -> constraintReaderMap.getReader(type.toString())
         );
     }
 
@@ -296,7 +290,7 @@ public class BaseConstraintReaderMapTests {
     @ParameterizedTest(name = "{0} should be invalid")
     @MethodSource("numericOutOfBoundsOperandProvider")
     public void testAtomicConstraintReaderWithOutOfBoundValues(AtomicConstraintType type, ConstraintDTO dto) {
-        ConstraintReader reader = constraintReaderMap.getReader(type.toString(), null);
+        ConstraintReader reader = constraintReaderMap.getReader(type.toString());
 
         Set<RuleInformation> ruleInformation = Collections.singleton(new RuleInformation());
 
@@ -307,7 +301,7 @@ public class BaseConstraintReaderMapTests {
     @ParameterizedTest(name = "{0} should be valid")
     @MethodSource("stringLengthValidOperandProvider")
     public void testAtomicConstraintReaderWithValidOperands(AtomicConstraintType type, ConstraintDTO dto) {
-        ConstraintReader reader = constraintReaderMap.getReader(type.toString(), null);
+        ConstraintReader reader = constraintReaderMap.getReader(type.toString());
 
         Set<RuleInformation> ruleInformation = Collections.singleton(new RuleInformation());
 
@@ -400,7 +394,7 @@ public class BaseConstraintReaderMapTests {
 
     private OffsetDateTime tryParseConstraintDateTimeValue(Object value) {
         ConstraintReader reader = constraintReaderMap.getReader(
-            AtomicConstraintType.IS_AFTER_CONSTANT_DATE_TIME.toString(), null);
+            AtomicConstraintType.IS_AFTER_CONSTANT_DATE_TIME.toString());
 
         ConstraintDTO dateDto = new ConstraintDTO();
         dateDto.field = "test";

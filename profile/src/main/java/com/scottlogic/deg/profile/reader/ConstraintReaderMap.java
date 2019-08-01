@@ -16,6 +16,67 @@
 
 package com.scottlogic.deg.profile.reader;
 
-public interface ConstraintReaderMap {
-    ConstraintReader getReader(String typeCode, String valueCode);
+import java.util.*;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
+
+public class ConstraintReaderMap {
+    private final Map<String, Map<String, ConstraintReader>> operatorAndValueToReadermap =
+        new HashMap<>();
+
+    public ConstraintReaderMap(List<ConstraintReaderMapEntrySource> providersToLoad) {
+        providersToLoad
+            .forEach(p ->
+                p.getConstraintReaderMapEntries()
+                    .forEach(this::add));
+    }
+
+    public void add(ConstraintReaderMapEntry entry) {
+        if (!operatorAndValueToReadermap.containsKey(entry.getOperatorCode())) {
+            operatorAndValueToReadermap.putIfAbsent(entry.getOperatorCode(), new HashMap<>());
+        }
+        Map<String, ConstraintReader> valueToReaderMap =
+            operatorAndValueToReadermap.get(entry.getOperatorCode());
+        valueToReaderMap.put(entry.getValueCode(), entry.getReader());
+    }
+
+    public ConstraintReader getReader(String operatorCode, String valueCode) {
+        if (operatorAndValueToReadermap.isEmpty()) {
+            return null;
+        }
+        Map<String, ConstraintReader> valueToReaderMap = operatorAndValueToReadermap.get(operatorCode);
+        if (valueToReaderMap == null || valueToReaderMap.isEmpty()) {
+            throw new InvalidProfileException(
+                "Profile is invalid: no constraints known for " +
+                    operatorCode
+            );
+        }
+
+        // handle "is": "X", "value": "Y" cases
+        if (valueCode != null) {
+            ConstraintReader func = valueToReaderMap.get(valueCode);
+            if (func != null) {
+                return func;
+            }
+            for (Map.Entry<String, ConstraintReader> entry : valueToReaderMap.entrySet()) {
+                if (Pattern.matches(entry.getKey(), valueCode)) {
+                    return entry.getValue();
+                }
+            }
+            // Throw exception if there are entries for X but no match to Y
+            throw new InvalidProfileException(String.format(
+                "Profile is invalid: no constraints known for \"is\": \"%s\", \"value\": \"%s\"",
+                operatorCode,
+                valueCode
+            ));
+        }
+
+        // handle bare "is": "X" cases with no "value" part.
+        // Look for X/any matches first, and fall back to an arbitrary X match second.
+        ConstraintReader func = valueToReaderMap.get(".*");
+        if (func != null) {
+            return func;
+        }
+        return valueToReaderMap.values().iterator().next();
+    }
 }
