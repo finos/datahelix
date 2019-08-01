@@ -52,7 +52,15 @@ public class FieldSpecGroupValueGenerator {
     }
 
     private Stream<DataBag> createRemainingDataBags(Stream<DataBag> stream, FieldSpecGroup group) {
+        if (group.fieldSpecs().isEmpty()) {
+            return stream;
+        }
+
+        Field toProcess = group.fieldSpecs().keySet().iterator().next();
+        stream.map(dataBag -> )
+
         throw new UnsupportedOperationException("Not implemented!");
     }
+
 
 }
