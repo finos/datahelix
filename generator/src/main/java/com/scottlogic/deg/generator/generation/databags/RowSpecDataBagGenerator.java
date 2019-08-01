@@ -21,6 +21,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
+import com.scottlogic.deg.generator.generation.FieldSpecGroupValueGenerator;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 import com.scottlogic.deg.generator.utils.SetUtils;
@@ -166,9 +167,8 @@ public class RowSpecDataBagGenerator {
 
     private Stream<DataBag> generateDataForGroup(RowSpec rowSpec, FieldGroup group) {
         List<Field> fields = group.fields();
-        List<FieldSpec> specs = fields.stream().map(rowSpec::getSpecForField).collect(Collectors.toList());
         List<FieldSpecRelations> relations = rowSpec.getRelations().stream()
-            .filter(relation -> specs.contains(relation.main()) || specs.contains(relation.other()))
+            .filter(relation -> fields.contains(relation.main()) || fields.contains(relation.other()))
             .collect(Collectors.toList());
 
         Map<Field, FieldSpec> fieldSpecMap = new HashMap<>();
@@ -178,17 +178,9 @@ public class RowSpecDataBagGenerator {
 
         FieldSpecGroup specGroup = new FieldSpecGroup(fieldSpecMap, relations);
 
+        FieldSpecGroupValueGenerator groupGenerator = new FieldSpecGroupValueGenerator(generator);
 
-        ValueGenerator<FieldSpecGroup> groupGenerator = new FieldGroupValueGenerator();
-
-        return groupGenerator.generate(specGroup).map(value -> toDataBag(field, ));
-
-        // TODO: Implement!
-        throw new UnsupportedOperationException("Not implemented!");
-    }
-
-    private FieldSpecGroup createFieldSpecGroup(RowSpec rowSpec, FieldGroup group) {
-        group.fields().stream().map(rowSpec::getSpecForField).collect(Collectors.toMap());
+        return groupGenerator.generate(specGroup);
     }
 
     private DataBag toDataBag(Field field, DataBagValue value) {

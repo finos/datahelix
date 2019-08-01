@@ -6,31 +6,29 @@ import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
 
 import java.time.OffsetDateTime;
 
-public class AfterDateRelation implements FieldSpecRelations {
+public class BeforeOrEqualToDateRelation implements FieldSpecRelations {
 
     private final Field main;
 
     private final Field other;
 
-    public AfterDateRelation(Field main, Field other) {
+    public BeforeOrEqualToDateRelation(Field main, Field other) {
         this.main = main;
         this.other = other;
     }
 
     @Override
     public FieldSpec reduceToRelatedFieldSpec(FieldSpec otherValue) {
-        OffsetDateTime min = otherValue.getDateTimeRestrictions().min.getLimit();
-        OffsetDateTime adjusted = min.plusNanos(1_000);
-
+        OffsetDateTime max = otherValue.getDateTimeRestrictions().max.getLimit();
         DateTimeRestrictions restrictions = new DateTimeRestrictions();
-        restrictions.min = new DateTimeRestrictions.DateTimeLimit(adjusted, false);
+        restrictions.max = new DateTimeRestrictions.DateTimeLimit(max, true);
 
         return FieldSpec.Empty.withDateTimeRestrictions(restrictions);
     }
 
     @Override
     public FieldSpecRelations inverse() {
-        return new BeforeOrEqualToDateRelation(main, other);
+        return new AfterDateRelation(other, main);
     }
 
     @Override
@@ -42,5 +40,4 @@ public class AfterDateRelation implements FieldSpecRelations {
     public Field other() {
         return other;
     }
-
 }

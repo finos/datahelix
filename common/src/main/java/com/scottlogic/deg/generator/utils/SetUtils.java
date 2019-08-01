@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class SetUtils {
-    public static <T> Set<T> union(Set<T> a, Set<T> b) {
+    public static <T> Set<T> union(Collection<T> a, Collection<T> b) {
         return Collections.unmodifiableSet(Stream
             .concat(a.stream(), b.stream())
             .collect(Collectors.toSet()));
