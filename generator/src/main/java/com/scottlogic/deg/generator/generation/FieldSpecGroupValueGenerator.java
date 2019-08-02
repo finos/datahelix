@@ -25,7 +25,7 @@ public class FieldSpecGroupValueGenerator {
 
         Field first = group.fieldSpecs().keySet().iterator().next();
 
-        FieldSpecGroup groupRespectingFirstField = adjustByUnits(first, group);
+        FieldSpecGroup groupRespectingFirstField = initialAdjustments(first, group);
         FieldSpec firstSpec = groupRespectingFirstField.fieldSpecs().get(first);
 
         Stream<DataBag> firstDataBagValues = underlyingGenerator.generate(firstSpec)
@@ -40,7 +40,7 @@ public class FieldSpecGroupValueGenerator {
         return new DataBag(map);
     }
 
-    private static FieldSpecGroup adjustByUnits(Field field, FieldSpecGroup group) {
+    private static FieldSpecGroup initialAdjustments(Field field, FieldSpecGroup group) {
         throw new UnsupportedOperationException("Not implemented!");
     }
 
@@ -76,7 +76,7 @@ public class FieldSpecGroupValueGenerator {
         Stream<DataBagGroupWrapper> initial = stream
             .map(dataBag -> new DataBagGroupWrapper(dataBag, group, underlyingGenerator))
             .map(wrapper -> adjustWrapperBounds(wrapper, first));
-        Set<Field> toProcess = group.fieldSpecs().keySet();
+        Set<Field> toProcess = filterFromSet(group.fieldSpecs().keySet(), first);
 
         return recursiveMap(initial, toProcess).map(DataBagGroupWrapper::dataBag);
     }
@@ -95,17 +95,21 @@ public class FieldSpecGroupValueGenerator {
         }
 
         Field field = fieldsToProcess.iterator().next();
-        Stream<DataBagGroupWrapper> mappedStream = wrapperStream.map(wrapper -> acceptNextValue(wrapper, field));
 
-        Set<Field> remainingFields = fieldsToProcess.stream()
-            .filter(f -> !f.equals(field))
-            .collect(Collectors.toSet());
+        Stream<DataBagGroupWrapper> mappedStream = wrapperStream.map(wrapper -> acceptNextValue(wrapper, field));
+        Set<Field> remainingFields = filterFromSet(fieldsToProcess, field);
 
         return recursiveMap(mappedStream, remainingFields);
     }
 
+    private static <T> Set<T> filterFromSet(Set<T> original, T element) {
+        return original.stream()
+            .filter(f -> !f.equals(element))
+            .collect(Collectors.toSet());
+    }
+
     private static DataBagGroupWrapper acceptNextValue(DataBagGroupWrapper wrapper, Field field) {
-        FieldSpecGroup group = adjustByUnits(field, wrapper.group);
+        FieldSpecGroup group = wrapper.group;
 
         DataBagValue nextValue = wrapper.generate(group.fieldSpecs().get(field));
 
