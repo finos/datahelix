@@ -158,14 +158,6 @@ public class ConstraintReaderMapTests {
         return Stream.of(Arguments.of(AtomicConstraintType.IS_OF_TYPE, numericTypeValueDto));
     }
 
-    private static Stream<Arguments> ofTypeUnmappedValueProvider() {
-        ConstraintDTO invalidTypeNameDto = new ConstraintDTO();
-        invalidTypeNameDto.field = "test";
-        invalidTypeNameDto.value = "garbage";
-
-        return Stream.of(Arguments.of(AtomicConstraintType.IS_OF_TYPE, invalidTypeNameDto));
-    }
-
     private static Stream<Arguments> numericOutOfBoundsOperandProvider() {
         ConstraintDTO maxValueDtoPlusOne = new ConstraintDTO();
         maxValueDtoPlusOne.field = "test";
@@ -226,7 +218,7 @@ public class ConstraintReaderMapTests {
         List<String> missingConstraints = new ArrayList<String>();
 
         for (AtomicConstraintType type : AtomicConstraintType.values()) {
-            ConstraintReader reader = constraintReaderMap.get(type.toString());
+            ConstraintReader reader = constraintReaderMap.get(type);
             if (reader == null) {
                 missingConstraints.add(type.toString());
             }
@@ -246,11 +238,9 @@ public class ConstraintReaderMapTests {
     @ParameterizedTest(name = "{0} should return {1}")
     @MethodSource("testProvider")
     public void testAtomicConstraintReader(AtomicConstraintType type, ConstraintDTO dto, Class<?> constraintType) {
-        ConstraintReader reader = constraintReaderMap.get(type.toString());
+        ConstraintReader reader = constraintReaderMap.get(type);
 
         try {
-            Set<RuleInformation> ruleInformation = Collections.singleton(new RuleInformation());
-
             Constraint constraint = reader.apply(dto, profileFields);
 
             Assert.assertThat("Expected " + constraintType.getName() + " but got " + constraint.getClass().getName(),
@@ -266,30 +256,28 @@ public class ConstraintReaderMapTests {
     @ParameterizedTest(name = "{0} should be invalid")
     @MethodSource({"stringLengthInvalidOperandProvider", "ofTypeInvalidValueProvider"})
     public void testAtomicConstraintReaderWithInvalidOperands(AtomicConstraintType type, ConstraintDTO dto) {
-        ConstraintReader reader = constraintReaderMap.get(type.toString());
-
-        Set<RuleInformation> ruleInformation = Collections.singleton(new RuleInformation());
+        ConstraintReader reader = constraintReaderMap.get(type);
 
         Assertions.assertThrows(InvalidProfileException.class, () -> reader.apply(dto, profileFields));
     }
 
-    @DisplayName("Should fail when there is no mapping for a given operator-operand combination")
-    @ParameterizedTest(name = "{0} should be invalid")
-    @MethodSource("ofTypeUnmappedValueProvider")
-    public void testBaseConstraintReaderMapWithUnmappedOperands(AtomicConstraintType type, ConstraintDTO dto) {
+    @Test
+    public void testBaseConstraintReaderMapWithUnmappedOperands() {
+        ConstraintDTO invalidTypeNameDto = new ConstraintDTO();
+        invalidTypeNameDto.field = "test";
+        invalidTypeNameDto.value = "garbage";
+
+        ConstraintReader constraintReader = constraintReaderMap.get(AtomicConstraintType.IS_OF_TYPE);
         Assertions.assertThrows(
             InvalidProfileException.class,
-            () -> constraintReaderMap.get(type.toString())
-        );
+            () -> constraintReader.apply(invalidTypeNameDto, new ProfileFields(Arrays.asList(new Field("test")))));
     }
 
     @DisplayName("Should fail when value property is numeric and out of bounds")
     @ParameterizedTest(name = "{0} should be invalid")
     @MethodSource("numericOutOfBoundsOperandProvider")
     public void testAtomicConstraintReaderWithOutOfBoundValues(AtomicConstraintType type, ConstraintDTO dto) {
-        ConstraintReader reader = constraintReaderMap.get(type.toString());
-
-        Set<RuleInformation> ruleInformation = Collections.singleton(new RuleInformation());
+        ConstraintReader reader = constraintReaderMap.get(type);
 
         Assertions.assertThrows(InvalidProfileException.class, () -> reader.apply(dto, profileFields));
     }
@@ -298,9 +286,7 @@ public class ConstraintReaderMapTests {
     @ParameterizedTest(name = "{0} should be valid")
     @MethodSource("stringLengthValidOperandProvider")
     public void testAtomicConstraintReaderWithValidOperands(AtomicConstraintType type, ConstraintDTO dto) {
-        ConstraintReader reader = constraintReaderMap.get(type.toString());
-
-        Set<RuleInformation> ruleInformation = Collections.singleton(new RuleInformation());
+        ConstraintReader reader = constraintReaderMap.get(type);
 
         Assertions.assertDoesNotThrow(() -> reader.apply(dto, profileFields));
     }
@@ -391,20 +377,14 @@ public class ConstraintReaderMapTests {
 
     private OffsetDateTime tryParseConstraintDateTimeValue(Object value) {
         ConstraintReader reader = constraintReaderMap.get(
-            AtomicConstraintType.IS_AFTER_CONSTANT_DATE_TIME.toString());
+            AtomicConstraintType.IS_AFTER_CONSTANT_DATE_TIME);
 
         ConstraintDTO dateDto = new ConstraintDTO();
         dateDto.field = "test";
         dateDto.value = value;
 
-        Set<RuleInformation> ruleInformation = Collections.singleton(new RuleInformation());
-
         IsAfterConstantDateTimeConstraint constraint = (IsAfterConstantDateTimeConstraint) reader.apply(dateDto, profileFields);
 
         return constraint.referenceValue;
-    }
-
-    private String getStringValueOrNull(ConstraintDTO dto) {
-        return dto.value != null ? dto.value.toString() : null;
     }
 }

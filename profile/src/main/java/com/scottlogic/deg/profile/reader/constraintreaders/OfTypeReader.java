@@ -10,6 +10,7 @@ import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.profile.reader.ConstraintReader;
 import com.scottlogic.deg.profile.reader.ConstraintReaderHelpers;
+import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import com.scottlogic.deg.profile.reader.file.names.NameRetriever;
 import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
 
@@ -54,7 +55,7 @@ public class OfTypeReader implements ConstraintReader {
             DistributedSet<Object> objectDistributedSet = NameRetriever.loadNamesFromFile(nameType);
             return new IsInSetConstraint(field, objectDistributedSet);
         } catch (UnsupportedOperationException e){
-            throw new ValidationException("Profile is invalid: no constraints known for \"is\": \"ofType\", \"value\": \"" + value + "\"");
+            throw new InvalidProfileException("Profile is invalid: no constraints known for \"is\": \"ofType\", \"value\": \"" + value + "\"");
         }
     }
 }
