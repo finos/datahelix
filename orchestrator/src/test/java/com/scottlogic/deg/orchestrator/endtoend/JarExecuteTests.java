@@ -46,7 +46,7 @@ public class JarExecuteTests {
 
         assertEquals(Arrays.asList("foo", "\"Generated successfully from file\""), collectedOutput,
             "Jar test failed. This might be because you have not built the jar. \n Try running Gradle Build. \n" +
-                "Alternatively, it may be because System.out is being printed to (which interferes with streaming output) e.g. using 'printStackTrace'. ");
+            "Alternatively, it may be because System.out is being printed to (which interferes with streaming output) e.g. using 'printStackTrace'. ");
     }
 
     private Process setupProcess(final String profile) throws IOException {
