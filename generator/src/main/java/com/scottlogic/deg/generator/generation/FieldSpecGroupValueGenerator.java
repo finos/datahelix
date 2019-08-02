@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.util.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
@@ -92,7 +93,9 @@ public class FieldSpecGroupValueGenerator {
 
         Field field = fieldsToProcess.iterator().next();
 
-        Stream<DataBagGroupWrapper> mappedStream = wrapperStream.flatMap(wrapper -> acceptNextValue(wrapper, field));
+        Stream<DataBagGroupWrapper> mappedStream =
+            FlatMappingSpliterator.flatMap(wrapperStream, wrapper -> acceptNextValue(wrapper, field));
+
         Set<Field> remainingFields = filterFromSet(fieldsToProcess, field);
 
         return recursiveMap(mappedStream, remainingFields);
@@ -124,23 +127,23 @@ public class FieldSpecGroupValueGenerator {
         return new DataBagGroupWrapper(combined, newGroup, wrapper.generator);
     }
 
-    private static final class WrappedDataBag<T> {
+    private static final class WrappedDataBag {
         private final DataBag dataBag;
-        private final T other;
+        private final DataBagValue value;
 
-        public WrappedDataBag(DataBag dataBag, T other) {
+        public WrappedDataBag(DataBag dataBag, DataBagValue value) {
             this.dataBag = dataBag;
-            this.other = other;
+            this.value = value;
         }
     }
 
     private static Stream<DataBagGroupWrapper> acceptNextNonRandomValue(DataBagGroupWrapper wrapper, Field field) {
         FieldSpecGroup group = wrapper.group;
         return wrapper.generator().generate(group.fieldSpecs().get(field))
-            .map(value -> new WrappedDataBag<>(toDataBag(field, value), value))
-            .map(wrapped -> new WrappedDataBag<>(DataBag.merge(wrapped.dataBag, wrapper.dataBag), wrapped.other))
+            .map(value -> new WrappedDataBag(toDataBag(field, value), value))
+            .map(wrapped -> new WrappedDataBag(DataBag.merge(wrapped.dataBag, wrapper.dataBag), wrapped.value))
             .map(combined -> new DataBagGroupWrapper(
-                combined.dataBag, adjustBounds(field, combined.other, wrapper.group), wrapper.generator)
+                combined.dataBag, adjustBounds(field, combined.value, wrapper.group), wrapper.generator)
             );
     }
 
