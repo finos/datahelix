@@ -20,7 +20,6 @@
         2. [inSet](#predicate-inset)
         3. [null](#predicate-null)
         4. [ofType](#predicate-oftype)
-        5. [setFromFile](#predicate-setfromfile)
     3. [Textual constraints](#Textual-constraints)
         1. [matchingRegex](#predicate-matchingregex)
         2. [containingRegex](#predicate-containingregex)
@@ -212,32 +211,10 @@ Is satisfied if `field`'s value is equal to `value`
 
 Is satisfied if `field`'s value is in the set `values`
 
-<div id="predicate-null"></div>
-
-### `null` _(field)_
+Alternatively, sets can be populated from files.
 
 ```javascript
-{ "field": "price", "is": "null" }
-```
-
-Is satisfied if `field` is null or absent.
-
-<div id="predicate-oftype"></div>
-
-### `ofType` _(field, value)_
-
-```javascript
-{ "field": "price", "is": "ofType", "value": "string" }
-```
-
-Is satisfied if `field` is of type represented by `value` (valid options: `decimal`, `integer`, `string`, `datetime`, `ISIN`, `SEDOL`, `CUSIP`, `RIC`, `firstname`, `lastname` or `fullname`)
-
-<div id="predicate-setfromfile"></div>
-
-### `setFromFile` _(field, value)_
-
-```javascript
-{ "field": "country", "is": "setFromFile", "value": "countries.csv" }
+{ "field": "country", "is": "inSet", "file": "countries.csv" }
 ```
 
 Populates a set from the new-line delimited file (with suffix `.csv`), where each line represents a string value to load.
@@ -265,6 +242,26 @@ Scotland, 3
 ```
 
 After loading the set from the file, this constraint behaves identically to the [inSet](#predicate-inset) constraint. This includes its behaviour when negated or violated.
+
+<div id="predicate-null"></div>
+
+### `null` _(field)_
+
+```javascript
+{ "field": "price", "is": "null" }
+```
+
+Is satisfied if `field` is null or absent.
+
+<div id="predicate-oftype"></div>
+
+### `ofType` _(field, value)_
+
+```javascript
+{ "field": "price", "is": "ofType", "value": "string" }
+```
+
+Is satisfied if `field` is of type represented by `value` (valid options: `decimal`, `integer`, `string`, `datetime`, `ISIN`, `SEDOL`, `CUSIP`, `RIC`, `firstname`, `lastname` or `fullname`)
 
 ## Textual constraints
 
