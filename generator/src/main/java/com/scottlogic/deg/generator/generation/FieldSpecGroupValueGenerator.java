@@ -19,10 +19,6 @@ public class FieldSpecGroupValueGenerator {
     }
 
     public Stream<DataBag> generate(FieldSpecGroup group) {
-        if (!underlyingGenerator.isRandom()) {
-            throw new UnsupportedOperationException("Not implemented!");
-        }
-
         Field first = group.fieldSpecs().keySet().iterator().next();
 
         FieldSpecGroup groupRespectingFirstField = initialAdjustments(first, group);
@@ -66,8 +62,8 @@ public class FieldSpecGroupValueGenerator {
             return dataBag;
         }
 
-        public DataBagValue generate(FieldSpec spec) {
-            return generator.generateOne(spec);
+        public FieldSpecValueGenerator generator() {
+            return generator;
         }
 
     }
@@ -96,7 +92,7 @@ public class FieldSpecGroupValueGenerator {
 
         Field field = fieldsToProcess.iterator().next();
 
-        Stream<DataBagGroupWrapper> mappedStream = wrapperStream.map(wrapper -> acceptNextValue(wrapper, field));
+        Stream<DataBagGroupWrapper> mappedStream = wrapperStream.flatMap(wrapper -> acceptNextValue(wrapper, field));
         Set<Field> remainingFields = filterFromSet(fieldsToProcess, field);
 
         return recursiveMap(mappedStream, remainingFields);
@@ -108,16 +104,44 @@ public class FieldSpecGroupValueGenerator {
             .collect(Collectors.toSet());
     }
 
-    private static DataBagGroupWrapper acceptNextValue(DataBagGroupWrapper wrapper, Field field) {
+    private static Stream<DataBagGroupWrapper> acceptNextValue(DataBagGroupWrapper wrapper, Field field) {
+        if (wrapper.generator.isRandom()) {
+            return Stream.of(acceptNextRandomValue(wrapper, field));
+        } else {
+            return acceptNextNonRandomValue(wrapper, field);
+        }
+    }
+
+    private static DataBagGroupWrapper acceptNextRandomValue(DataBagGroupWrapper wrapper, Field field) {
         FieldSpecGroup group = wrapper.group;
 
-        DataBagValue nextValue = wrapper.generate(group.fieldSpecs().get(field));
+        DataBagValue nextValue = wrapper.generator().generateOne(group.fieldSpecs().get(field));
 
         DataBag combined = DataBag.merge(toDataBag(field, nextValue), wrapper.dataBag);
 
         FieldSpecGroup newGroup = adjustBounds(field, nextValue, group);
 
         return new DataBagGroupWrapper(combined, newGroup, wrapper.generator);
+    }
+
+    private static final class WrappedDataBag<T> {
+        private final DataBag dataBag;
+        private final T other;
+
+        public WrappedDataBag(DataBag dataBag, T other) {
+            this.dataBag = dataBag;
+            this.other = other;
+        }
+    }
+
+    private static Stream<DataBagGroupWrapper> acceptNextNonRandomValue(DataBagGroupWrapper wrapper, Field field) {
+        FieldSpecGroup group = wrapper.group;
+        return wrapper.generator().generate(group.fieldSpecs().get(field))
+            .map(value -> new WrappedDataBag<>(toDataBag(field, value), value))
+            .map(wrapped -> new WrappedDataBag<>(DataBag.merge(wrapped.dataBag, wrapper.dataBag), wrapped.other))
+            .map(combined -> new DataBagGroupWrapper(
+                combined.dataBag, adjustBounds(field, combined.other, wrapper.group), wrapper.generator)
+            );
     }
 
 }
