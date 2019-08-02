@@ -61,6 +61,7 @@ public class ViolateExecute {
         ConfigValidator configValidator,
         ProfileValidator profileValidator,
         ProfileSchemaValidator profileSchemaValidator,
+        SchemaVersionValidator schemaVersionValidator,
         ProfileViolator profileViolator,
         DataGenerator dataGenerator,
         ViolateOutputValidator violateOutputValidator,
@@ -71,8 +72,7 @@ public class ViolateExecute {
         this.outputTargetFactory = outputTargetFactory;
         this.configValidator = configValidator;
         this.profileSchemaValidator = profileSchemaValidator;
-        String directoryOfSchemas = this.getClass().getResource("/profileschema/").getPath();
-        this.schemaVersionValidator = new SchemaVersionValidator(directoryOfSchemas);
+        this.schemaVersionValidator = schemaVersionValidator;
         this.profileValidator = profileValidator;
         this.profileViolator = profileViolator;
         this.dataGenerator = dataGenerator;

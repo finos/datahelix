@@ -65,6 +65,7 @@ public class VisualiseExecute {
                             OutputPath outputPath,
                             ProfileReader profileReader,
                             ProfileSchemaValidator profileSchemaValidator,
+                            SchemaVersionValidator schemaVersionValidator,
                             AllConfigSource configSource,
                             VisualisationConfigValidator validator) {
         this.profileAnalyser = profileAnalyser;
@@ -74,8 +75,7 @@ public class VisualiseExecute {
         this.outputPath = outputPath.getPath();
         this.profileReader = profileReader;
         this.profileSchemaValidator = profileSchemaValidator;
-        String directoryOfSchemas = this.getClass().getResource("/profileschema/").getPath();
-        this.schemaVersionValidator = new SchemaVersionValidator(directoryOfSchemas);
+        this.schemaVersionValidator = schemaVersionValidator;
         this.validator = validator;
     }
 

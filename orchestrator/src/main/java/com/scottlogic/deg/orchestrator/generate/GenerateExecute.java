@@ -31,9 +31,7 @@ import com.scottlogic.deg.profile.reader.ProfileReader;
 import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
 import com.scottlogic.deg.profile.v0_1.SchemaVersionValidator;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.stream.Stream;
 
@@ -57,6 +55,7 @@ public class GenerateExecute {
         ConfigValidator configValidator,
         ProfileValidator profileValidator,
         ProfileSchemaValidator profileSchemaValidator,
+        SchemaVersionValidator schemaVersionValidator,
         DataGeneratorMonitor monitor) {
         this.profileReader = profileReader;
         this.dataGenerator = dataGenerator;
@@ -65,8 +64,7 @@ public class GenerateExecute {
         this.configValidator = configValidator;
         this.profileSchemaValidator = profileSchemaValidator;
         this.profileValidator = profileValidator;
-        String directoryOfSchemas = this.getClass().getResource("/profileschema/").getPath();
-        this.schemaVersionValidator = new SchemaVersionValidator(directoryOfSchemas);
+        this.schemaVersionValidator = schemaVersionValidator;
         this.monitor = monitor;
     }
 

@@ -11,6 +11,7 @@ import com.scottlogic.deg.orchestrator.validator.ConfigValidator;
 import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
 import com.scottlogic.deg.profile.reader.ProfileReader;
 import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
+import com.scottlogic.deg.profile.v0_1.SchemaVersionValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -32,6 +33,7 @@ class GenerateExecuteTests {
     private ProfileValidator profileValidator;
     private DataGeneratorMonitor monitor;
     private ProfileSchemaValidator profileSchemaValidator;
+    private SchemaVersionValidator schemaVersionValidator;
     private GenerateExecute generateExecute;
     private Profile profile;
 
@@ -45,6 +47,7 @@ class GenerateExecuteTests {
         profileValidator = mock(ProfileValidator.class);
         monitor = mock(DataGeneratorMonitor.class);
         profileSchemaValidator = mock(ProfileSchemaValidator.class);
+        schemaVersionValidator = mock(SchemaVersionValidator.class);
         profile = mock(Profile.class);
 
         generateExecute = new GenerateExecute(
@@ -55,6 +58,7 @@ class GenerateExecuteTests {
             configValidator,
             profileValidator,
             profileSchemaValidator,
+            schemaVersionValidator,
             monitor);
     }
 

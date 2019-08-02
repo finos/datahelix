@@ -27,9 +27,8 @@ class SchemaVersionValidatorTests {
     @Test
     void getSchemaFile_withSupportedVersion_returnsNonNullURL() {
         //Arrange
-        String schemaVersion = "0.2";
-        String basePath = this.getClass().getResource("/profileschema/").getPath();
-        SchemaVersionValidator validator = new SchemaVersionValidator(basePath);
+        String schemaVersion = "0.1";
+        SchemaVersionValidator validator = new SchemaVersionValidator();
 
         //Act
         URL schema = null;
@@ -46,9 +45,8 @@ class SchemaVersionValidatorTests {
     @Test
     void getSchemaFile_withUnsupportedVersion_throwsValidationException() {
         //Arrange
-        String schemaVersion = "0.1";
-        String basePath = this.getClass().getResource("/profileschema/").getPath();
-        SchemaVersionValidator validator = new SchemaVersionValidator(basePath);
+        String schemaVersion = "101.53";
+        SchemaVersionValidator validator = new SchemaVersionValidator();
 
         //Act & Assert
         assertThrows(ValidationException.class, () -> validator.getSchemaFile(schemaVersion));

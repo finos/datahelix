@@ -17,27 +17,18 @@ package com.scottlogic.deg.profile.v0_1;
 
 import com.scottlogic.deg.common.ValidationException;
 
-import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class SchemaVersionValidator {
-    private String directoryContainingSchemas;
-    public SchemaVersionValidator(String directoryContainingSchemas) {
-        this.directoryContainingSchemas = directoryContainingSchemas;
-    }
-
-    public URL getSchemaFile(String schemaVersion) throws MalformedURLException {
+    public URL getSchemaFile(String schemaVersion) {
         validateSchemaVersion(schemaVersion);
-        String protocol = "file://";
-        return new URL(protocol + directoryContainingSchemas + schemaVersion + "/datahelix.schema.json");
+        return this.getClass().getResource("/profileschema/" + schemaVersion + "/datahelix.schema.json");
     }
 
     private void validateSchemaVersion(String schemaVersion) {
-        List<String> supportedSchemaVersions = getSupportedSchemaVersions();
+        List<String> supportedSchemaVersions = Arrays.asList("0.1");
         if (!supportedSchemaVersions.contains(schemaVersion)) {
             String errorMessage = "This version of the generator does not support v" +
                 schemaVersion +
@@ -45,15 +36,5 @@ public class SchemaVersionValidator {
                 supportedSchemaVersions;
             throw new ValidationException(errorMessage);
         }
-    }
-
-    private List<String> getSupportedSchemaVersions() {
-        File file = new File(directoryContainingSchemas);
-        String[] directoriesArray = file.list((current, name) -> new File(current, name).isDirectory());
-        List<String> directories = new ArrayList<>();
-        if (directoriesArray != null) {
-            directories = Arrays.asList(directoriesArray);
-        }
-        return directories;
     }
 }
