@@ -44,26 +44,11 @@ public class RowSpecDataBagGenerator {
     }
 
     public Stream<DataBag> createDataBags(RowSpec rowSpec) {
+        Stream<Stream<DataBag>> dataBagsForGroups =
+            createGroups(rowSpec).stream()
+            .map(group -> generateDataForGroup(rowSpec, group));
 
-        // rowsSpec = Stream[FieldSpec]
-        // Stream[FieldSpec] => Stream[Grouping[FieldSpec]]
-        // Include 'inert' constraints on FieldSpecs,
-        // extract at this point to create links and therefore Groupings
-
-        // Stream[Grouping[FieldSpec]] => Stream[Hierarchy[FieldSpec]]
-        // Pick ordering arbitrarily (?)
-        // Create new bounds that prevent us from being unable to generate a value for any field
-
-        // Stream[Hierarchy[FieldSpec]] => Stream[DataBag]
-        // Generate values with respect to the constraints
-
-        Set<FieldGroup> groups = createGroups(rowSpec);
-
-        Stream<Stream<DataBag>> dataBagsForFields =
-            rowSpec.getFields().stream()
-                .map(field -> generateDataForField(rowSpec, field));
-
-        return combinationStrategy.permute(dataBagsForFields);
+        return combinationStrategy.permute(dataBagsForGroups);
     }
 
     private static Set<FieldGroup> createGroups(RowSpec rowSpec) {

@@ -41,11 +41,11 @@ public class FieldSpecGroupValueGenerator {
     }
 
     private static FieldSpecGroup initialAdjustments(Field field, FieldSpecGroup group) {
-        throw new UnsupportedOperationException("Not implemented!");
+        return group;
     }
 
     private static FieldSpecGroup adjustBounds(Field field, DataBagValue value, FieldSpecGroup group) {
-        throw new UnsupportedOperationException("Not implemented!");
+        return group;
     }
 
     private static final class DataBagGroupWrapper {
