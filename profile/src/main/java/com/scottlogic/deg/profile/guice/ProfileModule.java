@@ -20,9 +20,6 @@ import com.google.inject.AbstractModule;
 import com.scottlogic.deg.profile.reader.*;
 import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
 
-import java.util.Arrays;
-import java.util.stream.Stream;
-
 public class ProfileModule extends AbstractModule {
 
     private final ProfileConfigSource profileConfigSource;
@@ -41,11 +38,7 @@ public class ProfileModule extends AbstractModule {
         bind(ProfileReader.class).to(JsonProfileReader.class);
 
         // Load built-in profile-to-constraint mappings
-        ConstraintReaderMap map = new ConstraintReaderMap(Arrays.asList(
-            new CoreAtomicTypesConstraintReaderSource(profileConfigSource.fromFilePath()),
-            new FinancialTypesConstraintReaderSource(),
-            new PersonalDataTypesConstraintReaderSource()
-        ));
-        bind(ConstraintReaderMap.class).toInstance(map);
+        AtomicConstraintTypeReaderMap atomicConstraintTypeReaderMap = new AtomicConstraintTypeReaderMap(profileConfigSource.fromFilePath());
+        bind(AtomicConstraintTypeReaderMap.class).toInstance(atomicConstraintTypeReaderMap);
     }
 }

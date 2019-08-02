@@ -31,7 +31,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.stream.Collectors;
 
 /**
@@ -86,8 +85,8 @@ public class JsonProfileReader implements ProfileReader {
                             try {
                                 return mainConstraintReader.apply(
                                     dto,
-                                    profileFields,
-                                    Collections.singleton(constraintRule));
+                                    profileFields
+                                );
                             } catch (InvalidProfileException e) {
                                 throw new InvalidProfileException("Rule: " + r.rule + "\n" + e.getMessage());
                             }
