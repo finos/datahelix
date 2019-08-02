@@ -43,6 +43,11 @@ public class FieldSpecValueGenerator {
         this.randomNumberGenerator = randomNumberGenerator;
     }
 
+    // TODO: Delete after non-random modes are implemented
+    public boolean isRandom() {
+        return dataType == DataGenerationType.RANDOM;
+    }
+
     public Stream<DataBagValue> generate(Set<FieldSpec> specs) {
         List<FieldValueSource> fieldValueSources = specs.stream()
             .map(sourceFactory::getFieldValueSources)

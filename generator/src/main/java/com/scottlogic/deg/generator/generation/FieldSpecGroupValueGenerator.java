@@ -19,6 +19,10 @@ public class FieldSpecGroupValueGenerator {
     }
 
     public Stream<DataBag> generate(FieldSpecGroup group) {
+        if (!underlyingGenerator.isRandom()) {
+            throw new UnsupportedOperationException("Not implemented!");
+        }
+
         Field first = group.fieldSpecs().keySet().iterator().next();
 
         FieldSpecGroup groupRespectingFirstField = adjustByUnits(first, group);
