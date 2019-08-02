@@ -1,0 +1,1 @@
+This is a simple profile using the "ofType" string constraint.
