@@ -37,8 +37,7 @@ public class RowSpecDataBagGenerator {
     @Inject
     public RowSpecDataBagGenerator(
         FieldSpecValueGenerator generator,
-        CombinationStrategy combinationStrategy)
-    {
+        CombinationStrategy combinationStrategy) {
         this.generator = generator;
         this.combinationStrategy = combinationStrategy;
     }
@@ -105,7 +104,9 @@ public class RowSpecDataBagGenerator {
         return searchedFields;
     }
 
-    private static Set<Field> findGroupRecursive(Deque<Field> toProcess, Set<Field> found, Map<Field, List<Field>> map) {
+    private static Set<Field> findGroupRecursive(Deque<Field> toProcess,
+                                                 Set<Field> found,
+                                                 Map<Field, List<Field>> map) {
         if (toProcess.isEmpty()) {
             return new HashSet<>();
         }
@@ -131,7 +132,7 @@ public class RowSpecDataBagGenerator {
         return list;
     }
 
-    private static class FieldPair {
+    private static final class FieldPair {
 
         private final Field first;
 
@@ -142,12 +143,6 @@ public class RowSpecDataBagGenerator {
             this.second = second;
         }
 
-    }
-
-    private Stream<DataBag> generateDataForField(RowSpec rowSpec, Field field) {
-        FieldSpec fieldSpec = rowSpec.getSpecForField(field);
-
-        return generator.generate(fieldSpec).map(value->toDataBag(field, value));
     }
 
     private Stream<DataBag> generateDataForGroup(RowSpec rowSpec, FieldGroup group) {
@@ -166,11 +161,5 @@ public class RowSpecDataBagGenerator {
         FieldSpecGroupValueGenerator groupGenerator = new FieldSpecGroupValueGenerator(generator);
 
         return groupGenerator.generate(specGroup);
-    }
-
-    private static DataBag toDataBag(Field field, DataBagValue value) {
-        Map<Field, DataBagValue> map = new HashMap<>();
-        map.put(field, value);
-        return new DataBag(map);
     }
 }
