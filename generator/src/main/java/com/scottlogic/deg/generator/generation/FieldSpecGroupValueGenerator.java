@@ -21,9 +21,13 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.util.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
+import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 
+import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -59,7 +63,32 @@ public class FieldSpecGroupValueGenerator {
     }
 
     private static FieldSpecGroup adjustBounds(Field field, DataBagValue value, FieldSpecGroup group) {
+        Object object = value.getUnformattedValue();
+
+        if (object instanceof OffsetDateTime) {
+            adjustBounds(field, (OffsetDateTime) object, group);
+        }
+
+
         return group;
+    }
+
+    private static FieldSpecGroup adjustBounds(Field field, OffsetDateTime value, FieldSpecGroup group) {
+        Map<Field, FieldSpec> specs = group.fieldSpecs();
+        // Set the value we've specified to be specific
+        FieldSpec newSpec = FieldSpec.Empty.withWhitelist(FrequencyDistributedSet.singleton(value));
+        specs.replace(field, newSpec);
+
+        FieldSpecMerger merger = new FieldSpecMerger();
+
+        // Operate on the new bounds
+        Stream<FieldSpecRelations> relations = group.relations().stream()
+            .filter(relation -> relation.main().equals(field) || relation.other().equals(field))
+            .map(relation -> relation.main().equals(field) ? relation : relation.inverse());
+
+
+         //   .map(relation -> relation.reduceToRelatedFieldSpec(newSpec))
+
     }
 
     private static final class DataBagGroupWrapper {
