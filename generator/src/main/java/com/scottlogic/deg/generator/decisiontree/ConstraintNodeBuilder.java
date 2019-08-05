@@ -39,11 +39,11 @@ public class ConstraintNodeBuilder {
         );
     }
 
-    public ConstraintNodeBuilder addAtomicConstraints(Collection<AtomicConstraint> constraints) {
+    public ConstraintNodeBuilder addAtomicConstraints(Collection<AtomicConstraint> atomicConstraints) {
         return setAtomicConstraints(
             concat(
-                atomicConstraints.stream(),
-                constraints.stream()
+                this.atomicConstraints.stream(),
+                atomicConstraints.stream()
             ).collect(Collectors.toList())
         );
     }
@@ -79,10 +79,10 @@ public class ConstraintNodeBuilder {
             ).collect(Collectors.toList()));
     }
 
-    public ConstraintNodeBuilder addDecisions(Collection<DecisionNode> newDecisions) {
+    public ConstraintNodeBuilder addDecisions(Collection<DecisionNode> decisions) {
         return setDecisions(
             concat(
-                newDecisions.stream(),
+                this.decisions.stream(),
                 decisions.stream()
             ).collect(Collectors.toList()));
     }
