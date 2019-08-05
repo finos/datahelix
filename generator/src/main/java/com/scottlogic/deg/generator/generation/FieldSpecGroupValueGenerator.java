@@ -26,6 +26,7 @@ import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
+import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
 
 import java.time.OffsetDateTime;
 import java.util.*;
@@ -65,30 +66,59 @@ public class FieldSpecGroupValueGenerator {
     private static FieldSpecGroup adjustBounds(Field field, DataBagValue value, FieldSpecGroup group) {
         Object object = value.getUnformattedValue();
 
+        // TODO: Consider null cases
         if (object instanceof OffsetDateTime) {
-            adjustBounds(field, (OffsetDateTime) object, group);
+            adjustBoundsOfDate(field, (OffsetDateTime) object, group);
         }
 
 
         return group;
     }
 
-    private static FieldSpecGroup adjustBounds(Field field, OffsetDateTime value, FieldSpecGroup group) {
-        Map<Field, FieldSpec> specs = group.fieldSpecs();
+    private static final class FieldWrapper<T> {
+        private final Field field;
+        private final T other;
+
+        public FieldWrapper(Field field, T other) {
+            this.field = field;
+            this.other = other;
+        }
+    }
+
+    private static FieldSpecGroup adjustBoundsOfDate(Field field, OffsetDateTime value, FieldSpecGroup group) {
+        Map<Field, FieldSpec> specs = new HashMap<>(group.fieldSpecs());
         // Set the value we've specified to be specific
-        FieldSpec newSpec = FieldSpec.Empty.withWhitelist(FrequencyDistributedSet.singleton(value));
+        DateTimeRestrictions.DateTimeLimit limit = new DateTimeRestrictions.DateTimeLimit(value, true);
+        DateTimeRestrictions restrictions = new DateTimeRestrictions();
+        restrictions.min = limit;
+        restrictions.max = limit;
+        FieldSpec newSpec = FieldSpec.Empty.withNotNull().withDateTimeRestrictions(restrictions);
         specs.replace(field, newSpec);
 
+        // Operate on the new bounds
+        Set<FieldSpecRelations> relations = group.relations().stream()
+            .filter(relation -> relation.main().equals(field) || relation.other().equals(field))
+            .collect(Collectors.toSet());
+         Stream<FieldWrapper<FieldSpec>> relationsOrdered = relations.stream()
+            .map(relation -> relation.main().equals(field) ? relation : relation.inverse())
+            .map(relation -> new FieldWrapper<>(relation.other(), relation.reduceToRelatedFieldSpec(newSpec)));
+
+        relationsOrdered.forEach(wrapper -> applyToFieldSpecMap(specs, specs.get(wrapper.field), wrapper.other, wrapper.field));
+        return new FieldSpecGroup(specs, relations);
+    }
+
+    private static final void applyToFieldSpecMap(Map<Field, FieldSpec> map,
+                                                  FieldSpec left,
+                                                  FieldSpec right,
+                                                  Field field) {
         FieldSpecMerger merger = new FieldSpecMerger();
 
-        // Operate on the new bounds
-        Stream<FieldSpecRelations> relations = group.relations().stream()
-            .filter(relation -> relation.main().equals(field) || relation.other().equals(field))
-            .map(relation -> relation.main().equals(field) ? relation : relation.inverse());
-
-
-         //   .map(relation -> relation.reduceToRelatedFieldSpec(newSpec))
-
+        Optional<FieldSpec> newSpec = merger.merge(left, right);
+        if (newSpec.isPresent()) {
+            map.put(field, newSpec.get());
+        } else {
+            throw new IllegalStateException("Failed to create field spec from value");
+        }
     }
 
     private static final class DataBagGroupWrapper {

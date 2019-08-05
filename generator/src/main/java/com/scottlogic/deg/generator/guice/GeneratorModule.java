@@ -29,7 +29,6 @@ import com.scottlogic.deg.generator.generation.combinationstrategies.Combination
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.walker.decisionbased.OptionPicker;
-import com.scottlogic.deg.generator.walker.rowspec.CartesianProductRowSpecTreeSolver;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.ReductiveWalkerRetryChecker;
 import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;

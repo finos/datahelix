@@ -51,7 +51,7 @@ public class RowSpecMerger {
         }
 
         List<FieldSpecRelations> relations = new ArrayList<>(
-            SetUtils.intersect(left.getRelations(), right.getRelations()));
+            SetUtils.union(left.getRelations(), right.getRelations()));
 
         return Optional.of(new RowSpec(left.getFields(), newMap, relations));
     }

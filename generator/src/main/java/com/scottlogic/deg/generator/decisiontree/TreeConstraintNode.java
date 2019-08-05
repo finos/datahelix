@@ -37,6 +37,12 @@ public final class TreeConstraintNode implements ConstraintNode {
 
     private Optional<RowSpec> adaptedRowSpec = null;
 
+    public TreeConstraintNode(Collection<AtomicConstraint> atomicConstraints,
+                              Collection<DelayedAtomicConstraint> delayedAtomicConstraints,
+                              Collection<DecisionNode> decisions) {
+        this(atomicConstraints, delayedAtomicConstraints, decisions, Collections.emptySet());
+    }
+
     public TreeConstraintNode(Collection<AtomicConstraint> atomicConstraints, Collection<DecisionNode> decisions) {
         this(atomicConstraints, Collections.emptySet(), decisions, Collections.emptySet());
     }

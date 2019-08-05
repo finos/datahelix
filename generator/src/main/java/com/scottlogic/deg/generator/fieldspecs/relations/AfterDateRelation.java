@@ -23,7 +23,7 @@ public class AfterDateRelation implements FieldSpecRelations {
         OffsetDateTime adjusted = min.plusNanos(1_000);
 
         DateTimeRestrictions restrictions = new DateTimeRestrictions();
-        restrictions.min = new DateTimeRestrictions.DateTimeLimit(adjusted, false);
+        restrictions.min = new DateTimeRestrictions.DateTimeLimit(adjusted, true);
 
         return FieldSpec.Empty.withDateTimeRestrictions(restrictions);
     }

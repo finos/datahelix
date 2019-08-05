@@ -18,6 +18,7 @@ package com.scottlogic.deg.generator.walker.reductive;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.common.profile.constraints.delayed.DelayedAtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
@@ -31,11 +32,14 @@ import java.util.Map;
 class PrunedConstraintState {
 
     private final Collection<AtomicConstraint> newAtomicConstraints;
+    private final Collection<DelayedAtomicConstraint> newDelayedAtomicConstraints;
     private final Collection<DecisionNode> newDecisionNodes = new ArrayList<>();
     private final Collection<AtomicConstraint> pulledUpAtomicConstraints = new ArrayList<>();
+    private final Collection<DelayedAtomicConstraint> pulledUpDelayedAtomicConstraints = new ArrayList<>();
 
     PrunedConstraintState(ConstraintNode constraintNode){
         newAtomicConstraints = new ArrayList<>(constraintNode.getAtomicConstraints());
+        newDelayedAtomicConstraints = new ArrayList<>(constraintNode.getDelayedAtomicConstraints());
     }
 
     void addPrunedDecision(DecisionNode prunedDecisionNode) {
@@ -46,7 +50,9 @@ class PrunedConstraintState {
         
         ConstraintNode remainingConstraintNode = getOnlyRemainingOption(prunedDecisionNode);
         pulledUpAtomicConstraints.addAll(remainingConstraintNode.getAtomicConstraints());
+        pulledUpDelayedAtomicConstraints.addAll(remainingConstraintNode.getDelayedAtomicConstraints());
         newAtomicConstraints.addAll(remainingConstraintNode.getAtomicConstraints());
+        newDelayedAtomicConstraints.addAll(remainingConstraintNode.getDelayedAtomicConstraints());
         newDecisionNodes.addAll(remainingConstraintNode.getDecisions());
     }
 
@@ -55,7 +61,7 @@ class PrunedConstraintState {
     }
 
     ConstraintNode getNewConstraintNode() {
-        return new TreeConstraintNode(newAtomicConstraints, newDecisionNodes);
+        return new TreeConstraintNode(newAtomicConstraints, newDelayedAtomicConstraints, newDecisionNodes);
     }
 
     Map<Field, FieldSpec> addPulledUpFieldsToMap(Map<Field, FieldSpec> previousFieldSpecs) {
