@@ -7,11 +7,10 @@ import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
 import com.scottlogic.deg.generator.generation.databags.FieldGroup;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -20,24 +19,86 @@ import static org.mockito.Mockito.when;
 class RowSpecGrouperTest {
 
     @Test
-    void createGroups() {
+    void shouldCreateOneGroupOfTwoElements() {
         Field first = new Field("first");
         Field second = new Field("second");
         ProfileFields fields = new ProfileFields(Arrays.asList(first, second));
 
-        Map<Field, FieldSpec> fieldSpecMap = new HashMap<>();
-        fieldSpecMap.put(first, FieldSpec.Empty);
-        fieldSpecMap.put(second, FieldSpec.Empty);
+        Map<Field, FieldSpec> fieldSpecMap = fieldSpecMapOf(first, second);
 
-        FieldSpecRelations relation = mock(FieldSpecRelations.class);
-        when(relation.main()).thenReturn(first);
-        when(relation.other()).thenReturn(second);
-        List<FieldSpecRelations> relations = Arrays.asList(relation);
+        FieldSpecRelations relation = link(first, second);
+        List<FieldSpecRelations> relations = Collections.singletonList(relation);
 
         RowSpec spec = new RowSpec(fields, fieldSpecMap, relations);
 
         Set<FieldGroup> groups = RowSpecGrouper.createGroups(spec);
 
         assertEquals(1, groups.size());
+    }
+
+    @Test
+    void shouldCreateTwoGroupsBetweenThreeElements() {
+        Field first = new Field("first");
+        Field second = new Field("second");
+        Field third = new Field("third");
+        ProfileFields fields = new ProfileFields(Arrays.asList(first, second, third));
+
+        Map<Field, FieldSpec> fieldSpecMap = fieldSpecMapOf(first, second, third);
+
+        FieldSpecRelations relation = link(first, second);
+        List<FieldSpecRelations> relations = Collections.singletonList(relation);
+
+        RowSpec spec = new RowSpec(fields, fieldSpecMap, relations);
+
+        Set<FieldGroup> groups = RowSpecGrouper.createGroups(spec);
+
+        assertEquals(2, groups.size());
+    }
+
+    @Test
+    void shouldCreateThreeIndependentGroup() {
+        Field first = new Field("first");
+        Field second = new Field("second");
+        Field third = new Field("third");
+        ProfileFields fields = new ProfileFields(Arrays.asList(first, second, third));
+
+        Map<Field, FieldSpec> fieldSpecMap = fieldSpecMapOf(first, second, third);
+
+        List<FieldSpecRelations> relations = Collections.emptyList();
+
+        RowSpec spec = new RowSpec(fields, fieldSpecMap, relations);
+
+        Set<FieldGroup> groups = RowSpecGrouper.createGroups(spec);
+
+        assertEquals(3, groups.size());
+    }
+
+    @Test
+    void shouldCreateOneGroupOfThreeElements() {
+        Field first = new Field("first");
+        Field second = new Field("second");
+        Field third = new Field("third");
+        ProfileFields fields = new ProfileFields(Arrays.asList(first, second, third));
+
+        Map<Field, FieldSpec> fieldSpecMap = fieldSpecMapOf(first, second, third);
+
+        List<FieldSpecRelations> relations = Arrays.asList(link(first, second), link(second, third));
+
+        RowSpec spec = new RowSpec(fields, fieldSpecMap, relations);
+
+        Set<FieldGroup> groups = RowSpecGrouper.createGroups(spec);
+
+        assertEquals(1, groups.size());
+    }
+
+    private static FieldSpecRelations link(Field main, Field other) {
+        FieldSpecRelations relation = mock(FieldSpecRelations.class);
+        when(relation.main()).thenReturn(main);
+        when(relation.other()).thenReturn(other);
+        return relation;
+    }
+
+    private static Map<Field, FieldSpec> fieldSpecMapOf(Field... fields) {
+        return Arrays.stream(fields).collect(Collectors.toMap(Function.identity(), x -> FieldSpec.Empty));
     }
 }
