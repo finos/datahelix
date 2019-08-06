@@ -15,11 +15,11 @@ git clone https://github.com/finos/datahelix.git
 * Java version 1.8
 * Gradle
 * Cucumber
-* Preferred: One of IntelliJ/Eclipse IDE 
+* Preferred: One of IntelliJ/Eclipse IDE
 
 ### Java
 
-[Download JDK 8 SE](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html). 
+[Download JDK 8 SE](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html).
 
 *(Please note, this has been tested with jdk1.8.0_172 but later versions of JDK 1.8 may still work)*
 
@@ -44,7 +44,7 @@ Add **Gherkin** and **Cucumber for Java** plugins (file > settings > plugins if 
 
 Currently the tests cannot be run from the TestRunner class.
 
-To run a feature file you’ll have to modify the configuration by removing .steps from the end of the Glue field. 
+To run a feature file you’ll have to modify the configuration by removing .steps from the end of the Glue field.
 
 An explanation of the particular syntax used can be found [here](https://github.com/finos/datahelix/blob/master/docs/CucumberSyntax.md).
 
@@ -57,7 +57,7 @@ Build the tool with all its dependencies:
 
 Check the setup worked with this example command:
 
-`java -jar orchestrator\build\libs\generator.jar generate --replace --profile-file==docs/GettingStarted/ExampleProfile1.json --output-path=out.csv`
+`java -jar orchestrator\build\libs\generator.jar generate --replace --profile-file=docs/user/gettingStarted/ExampleProfile1.json --output-path=out.csv`
 
 To generate valid data run the following command from the command line:
 
@@ -102,7 +102,7 @@ generate --profile-file="<path to an example JSON profile>" --output-path="<desi
 
 For example, run this command:
 ```
-java -jar orchestrator\build\libs\generator.jar generate --replace --profile-file==docs/GettingStarted/ExampleProfile1.json --output-path=out.csv
+java -jar orchestrator\build\libs\generator.jar generate --replace --profile-file=docs/user/gettingStarted/ExampleProfile1.json --output-path=out.csv
 ```
 
 Additionally create another run configuration called GenerateViolating and add the program arguments

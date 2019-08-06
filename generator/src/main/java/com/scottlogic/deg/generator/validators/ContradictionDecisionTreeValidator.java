@@ -54,7 +54,7 @@ public class ContradictionDecisionTreeValidator {
         ));
 
         if (!nominalRowSpec.isPresent()) {
-            return node.markNode(NodeMarking.CONTRADICTORY);
+            return node.builder().markNode(NodeMarking.CONTRADICTORY).build();
         }
 
         final Optional<RowSpec> mergedRowSpecOpt = rowSpecMerger.merge(
@@ -62,7 +62,7 @@ public class ContradictionDecisionTreeValidator {
             accumulatedSpec);
 
         if (!mergedRowSpecOpt.isPresent()) {
-            return node.markNode(NodeMarking.CONTRADICTORY);
+            return node.builder().markNode(NodeMarking.CONTRADICTORY).build();
         }
 
         if (node.getDecisions().isEmpty()) {
@@ -73,8 +73,8 @@ public class ContradictionDecisionTreeValidator {
                 .map(d -> markContradictions(d, mergedRowSpecOpt.get(), profileFields))
                 .collect(Collectors.toList());
             boolean nodeIsContradictory = decisions.stream().allMatch(this::isNodeContradictory);
-            ConstraintNode transformed = node.setDecisions(decisions);
-            return nodeIsContradictory ? transformed.markNode(NodeMarking.CONTRADICTORY) : transformed;
+            ConstraintNode transformed = node.builder().setDecisions(decisions).build();
+            return nodeIsContradictory ? transformed.builder().markNode(NodeMarking.CONTRADICTORY).build() : transformed;
         }
     }
 

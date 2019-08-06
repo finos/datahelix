@@ -35,7 +35,7 @@ public class DecisionTreeSimplifier {
         Collection<DecisionNode> simplifiedDecisions = transformedNode.getDecisions().stream()
             .map(this::simplify)
             .collect(Collectors.toList());
-        return transformedNode.setDecisions(simplifiedDecisions);
+        return transformedNode.builder().setDecisions(simplifiedDecisions).build();
     }
 
     private DecisionNode simplify(DecisionNode decision) {
@@ -68,22 +68,27 @@ public class DecisionTreeSimplifier {
                 (parentConstraint, decisionNode) -> {
                     ConstraintNode firstOption = decisionNode.getOptions().iterator().next();
                     if (parentConstraint.getAtomicConstraints().stream().anyMatch(firstOption.getAtomicConstraints()::contains)) {
-                        return parentConstraint.removeDecisions(Collections.singletonList(decisionNode));
+                        return parentConstraint.builder().removeDecision(decisionNode).build();
                     } else {
-                        return parentConstraint
+                        return parentConstraint.builder()
                             .addAtomicConstraints(firstOption.getAtomicConstraints())
                             .addDecisions(firstOption.getDecisions())
-                            .removeDecisions(Collections.singletonList(decisionNode));
+                            .removeDecision(decisionNode)
+                            .build();
                     }
                 },
                 (node1, node2) ->
-                    new ConstraintNode(
-                        Stream
-                            .concat(node1.getAtomicConstraints().stream(), node2.getAtomicConstraints().stream())
-                            .collect(Collectors.toList()),
-                        Stream
-                            .concat(node1.getDecisions().stream(), node2.getDecisions().stream())
-                            .collect(Collectors.toList())
-                    ));
+                    new ConstraintNodeBuilder()
+                        .addAtomicConstraints(
+                            Stream.concat(
+                                node1.getAtomicConstraints().stream(),
+                                node2.getAtomicConstraints().stream()
+                            ).collect(Collectors.toList())
+                        ).setDecisions(Stream
+                        .concat(
+                            node1.getDecisions().stream(),
+                            node2.getDecisions().stream()
+                        ).collect(Collectors.toList())
+                    ).build());
     }
 }
