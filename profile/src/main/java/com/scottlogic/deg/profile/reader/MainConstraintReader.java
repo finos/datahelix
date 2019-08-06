@@ -18,28 +18,27 @@ package com.scottlogic.deg.profile.reader;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
-import com.scottlogic.deg.common.profile.RuleInformation;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
+import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
 
-import java.util.Set;
+import java.util.Map;
 
 public class MainConstraintReader implements ConstraintReader {
-    private final ConstraintReaderMap constraintReaderMap;
+    private final Map<AtomicConstraintType, ConstraintReader> constraintReaderMap;
 
     @Inject
-    public MainConstraintReader(ConstraintReaderMap constraintReaderMap) {
-        this.constraintReaderMap = constraintReaderMap;
+    public MainConstraintReader(AtomicConstraintTypeReaderMap constraintReaderMap) {
+        this.constraintReaderMap = constraintReaderMap.getConstraintReaderMapEntries();
     }
 
     @Override
     public Constraint apply(
         ConstraintDTO dto,
-        ProfileFields fields,
-        Set<RuleInformation> rules) {
+        ProfileFields fields) {
 
         if (dto == null) {
             throw new InvalidProfileException("Constraint is null");
@@ -50,24 +49,21 @@ public class MainConstraintReader implements ConstraintReader {
         }
 
         if (dto.is != ConstraintDTO.undefined) {
-            ConstraintReader subReader = this.constraintReaderMap.getReader(
-                (String) dto.is,
-                ConstraintReaderHelpers.getValueAsString(dto.value)
-            );
+            ConstraintReader subReader = constraintReaderMap.get(AtomicConstraintType.fromText((String) dto.is));
 
             if (subReader == null) {
                 throw new InvalidProfileException("Couldn't recognise constraint type from DTO: " + dto.is);
             }
 
             try {
-                return subReader.apply(dto, fields, rules);
+                return subReader.apply(dto, fields);
             } catch (IllegalArgumentException e) {
                 throw new InvalidProfileException(e.getMessage());
             }
         }
 
         if (dto.not != null) {
-            return this.apply(dto.not, fields, rules).negate();
+            return this.apply(dto.not, fields).negate();
         }
 
         if (dto.allOf != null) {
@@ -79,8 +75,8 @@ public class MainConstraintReader implements ConstraintReader {
                     dto.allOf,
                     subConstraintDto -> this.apply(
                         subConstraintDto,
-                        fields,
-                        rules)));
+                        fields
+                    )));
         }
 
         if (dto.anyOf != null) {
@@ -89,25 +85,25 @@ public class MainConstraintReader implements ConstraintReader {
                     dto.anyOf,
                     subConstraintDto -> this.apply(
                         subConstraintDto,
-                        fields,
-                        rules)));
+                        fields
+                    )));
         }
 
         if (dto.if_ != null) {
             return new ConditionalConstraint(
                 this.apply(
                     dto.if_,
-                    fields,
-                    rules),
+                    fields
+                ),
                 this.apply(
                     dto.then,
-                    fields,
-                    rules),
+                    fields
+                ),
                 dto.else_ != null
                     ? this.apply(
                         dto.else_,
-                        fields,
-                        rules)
+                        fields
+                )
                     : null);
         }
 
