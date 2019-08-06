@@ -23,7 +23,6 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
@@ -68,7 +67,7 @@ public class FieldSpecGroupValueGenerator {
 
         // TODO: Consider null cases
         if (object instanceof OffsetDateTime) {
-            adjustBoundsOfDate(field, (OffsetDateTime) object, group);
+            return adjustBoundsOfDate(field, (OffsetDateTime) object, group);
         }
 
 
@@ -99,7 +98,7 @@ public class FieldSpecGroupValueGenerator {
         Set<FieldSpecRelations> relations = group.relations().stream()
             .filter(relation -> relation.main().equals(field) || relation.other().equals(field))
             .collect(Collectors.toSet());
-         Stream<FieldWrapper<FieldSpec>> relationsOrdered = relations.stream()
+        Stream<FieldWrapper<FieldSpec>> relationsOrdered = relations.stream()
             .map(relation -> relation.main().equals(field) ? relation : relation.inverse())
             .map(relation -> new FieldWrapper<>(relation.other(), relation.reduceToRelatedFieldSpec(newSpec)));
 
@@ -107,15 +106,16 @@ public class FieldSpecGroupValueGenerator {
         return new FieldSpecGroup(specs, relations);
     }
 
-    private static final void applyToFieldSpecMap(Map<Field, FieldSpec> map,
-                                                  FieldSpec left,
-                                                  FieldSpec right,
-                                                  Field field) {
+    private static final Map<Field, FieldSpec> applyToFieldSpecMap(Map<Field, FieldSpec> map,
+                                                                   FieldSpec left,
+                                                                   FieldSpec right,
+                                                                   Field field) {
         FieldSpecMerger merger = new FieldSpecMerger();
 
         Optional<FieldSpec> newSpec = merger.merge(left, right);
         if (newSpec.isPresent()) {
             map.put(field, newSpec.get());
+            return map;
         } else {
             throw new IllegalStateException("Failed to create field spec from value");
         }

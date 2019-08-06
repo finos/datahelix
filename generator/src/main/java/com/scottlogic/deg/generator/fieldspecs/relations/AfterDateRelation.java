@@ -19,11 +19,11 @@ public class AfterDateRelation implements FieldSpecRelations {
 
     @Override
     public FieldSpec reduceToRelatedFieldSpec(FieldSpec otherValue) {
-        OffsetDateTime min = otherValue.getDateTimeRestrictions().min.getLimit();
-        OffsetDateTime adjusted = min.plusNanos(1_000);
+        OffsetDateTime max = otherValue.getDateTimeRestrictions().max.getLimit();
+        OffsetDateTime adjusted = max.minusNanos(1_000);
 
         DateTimeRestrictions restrictions = new DateTimeRestrictions();
-        restrictions.min = new DateTimeRestrictions.DateTimeLimit(adjusted, true);
+        restrictions.max = new DateTimeRestrictions.DateTimeLimit(adjusted, true);
 
         return FieldSpec.Empty.withDateTimeRestrictions(restrictions);
     }

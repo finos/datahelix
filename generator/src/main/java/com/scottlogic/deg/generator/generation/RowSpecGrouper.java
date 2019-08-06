@@ -56,13 +56,8 @@ public class RowSpecGrouper {
         }
 
         for (FieldPair pair : pairs) {
-            List<Field> firstList = fieldMapping.get(pair.first);
-            firstList.add(pair.second);
-            fieldMapping.replace(pair.first, firstList);
-
-            List<Field> secondList = fieldMapping.get(pair.second);
-            secondList.add(pair.first);
-            fieldMapping.replace(pair.second, secondList);
+            fieldMapping.get(pair.first).add(pair.second);
+            fieldMapping.get(pair.second).add(pair.first);
         }
 
         return findGroupsFromMap(fieldMapping);
@@ -93,20 +88,21 @@ public class RowSpecGrouper {
         Set<Field> searchedFields = new HashSet<>();
         searchedFields.add(initial);
 
-        Deque<Field> fieldsToSearch = new ArrayDeque<>(map.get(initial));
+        Deque<Field> fieldsToSearch = new ArrayDeque<>();
+        fieldsToSearch.add(initial);
 
         searchedFields.addAll(findGroupRecursive(fieldsToSearch, SetUtils.setOf(initial), map));
         return searchedFields;
     }
 
-    private static Set<Field> findGroupRecursive(Deque<Field> toProcess,
+    private static Set<Field> findGroupRecursive(Deque<Field> fieldsToSearch,
                                                  Set<Field> found,
                                                  Map<Field, List<Field>> map) {
-        if (toProcess.isEmpty()) {
-            return new HashSet<>();
+        if (fieldsToSearch.isEmpty()) {
+            return found;
         }
 
-        Deque<Field> toProcessCopy = new ArrayDeque<>(toProcess);
+        Deque<Field> toProcessCopy = new ArrayDeque<>(fieldsToSearch);
         Set<Field> newFound = new HashSet<>(found);
 
         Field next = toProcessCopy.pop();

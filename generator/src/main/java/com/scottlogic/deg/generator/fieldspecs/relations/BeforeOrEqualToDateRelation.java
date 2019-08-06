@@ -19,9 +19,9 @@ public class BeforeOrEqualToDateRelation implements FieldSpecRelations {
 
     @Override
     public FieldSpec reduceToRelatedFieldSpec(FieldSpec otherValue) {
-        OffsetDateTime max = otherValue.getDateTimeRestrictions().max.getLimit();
+        OffsetDateTime min = otherValue.getDateTimeRestrictions().min.getLimit();
         DateTimeRestrictions restrictions = new DateTimeRestrictions();
-        restrictions.max = new DateTimeRestrictions.DateTimeLimit(max, true);
+        restrictions.min = new DateTimeRestrictions.DateTimeLimit(min, true);
 
         return FieldSpec.Empty.withDateTimeRestrictions(restrictions);
     }

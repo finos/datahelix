@@ -91,6 +91,54 @@ class RowSpecGrouperTest {
         assertEquals(1, groups.size());
     }
 
+    @Test
+    void shouldCreateOneGroupOfThreeElementsWhereAllAreLinked() {
+        Field first = new Field("first");
+        Field second = new Field("second");
+        Field third = new Field("third");
+        ProfileFields fields = new ProfileFields(Arrays.asList(first, second, third));
+
+        Map<Field, FieldSpec> fieldSpecMap = fieldSpecMapOf(first, second, third);
+
+        List<FieldSpecRelations> relations = Arrays.asList(
+            link(first, second),
+            link(second, third),
+            link(first, third));
+
+        RowSpec spec = new RowSpec(fields, fieldSpecMap, relations);
+
+        Set<FieldGroup> groups = RowSpecGrouper.createGroups(spec);
+
+        assertEquals(1, groups.size());
+    }
+
+    @Test
+    void shouldCreateTwoFromFiveElements() {
+        Field first = new Field("first");
+        Field second = new Field("second");
+        Field third = new Field("third");
+        Field fourth = new Field("fourth");
+        Field fifth = new Field("fifth");
+
+        ProfileFields fields = new ProfileFields(Arrays.asList(first, second, third, fourth, fifth));
+
+        Map<Field, FieldSpec> fieldSpecMap = fieldSpecMapOf(first, second, third, fourth, fifth);
+
+        List<FieldSpecRelations> relations = Arrays.asList(
+            link(first, second),
+            link(first, third),
+            link(second, fifth));
+
+        RowSpec spec = new RowSpec(fields, fieldSpecMap, relations);
+
+        Set<FieldGroup> groups = RowSpecGrouper.createGroups(spec);
+
+        assertEquals(2, groups.size());
+    }
+
+
+    //TODO- Test multiple relations between the same pair of fields
+
     private static FieldSpecRelations link(Field main, Field other) {
         FieldSpecRelations relation = mock(FieldSpecRelations.class);
         when(relation.main()).thenReturn(main);
