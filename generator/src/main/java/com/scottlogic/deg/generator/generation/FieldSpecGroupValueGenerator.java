@@ -58,12 +58,43 @@ public class FieldSpecGroupValueGenerator {
         return new DataBag(map);
     }
 
-    private static FieldSpecGroup initialAdjustments(Field field, FieldSpecGroup group) {
-        for (FieldSpecRelations relation : group.relations()) {
+    private static FieldSpecGroup initialAdjustments(Field first, FieldSpecGroup group) {
+        checkOnlyPairwiseRelationsExist(group.relations());
 
+        FieldSpecGroup mutatingGroup = group;
+        for (FieldSpecRelations relation : group.relations()) {
+            // Currently support only dates.
+            Field other = relation.main().equals(first) ? relation.other() : relation.main();
+
+            FieldSpecMerger merger = new FieldSpecMerger();
+
+            FieldSpec reduced = relation.reduceToRelatedFieldSpec(group.fieldSpecs().get(other));
+            Optional<FieldSpec> merged = merger.merge(reduced, group.fieldSpecs().get(first));
+
+            if (merged.isPresent()) {
+                mutatingGroup.fieldSpecs().replace(first, merged.get());
+            } else {
+                throw new IllegalStateException("Failed to merge field specs in related fields");
+            }
         }
 
-        return group;
+        return mutatingGroup;
+    }
+
+    private static void checkOnlyPairwiseRelationsExist(Collection<FieldSpecRelations> relations) {
+        Set<FieldPair> pairs = new HashSet<>();
+        Set<Field> usedFields = new HashSet<>();
+        for (FieldSpecRelations relation : relations) {
+            FieldPair pair = new FieldPair(relation.main(), relation.other());
+            if (!pairs.contains(pair) &&
+                (usedFields.contains(relation.main()) || usedFields.contains(relation.other()))) {
+                throw new UnsupportedOperationException("Using more than two fields in a related dependency"
+                    + "is currently unsupported.");
+            }
+            pairs.add(pair);
+            usedFields.add(relation.main());
+            usedFields.add(relation.other());
+        }
     }
 
     private static FieldSpecGroup adjustBounds(Field field, DataBagValue value, FieldSpecGroup group) {
@@ -88,14 +119,23 @@ public class FieldSpecGroupValueGenerator {
         }
     }
 
-    private static FieldSpecGroup adjustBoundsOfDate(Field field, OffsetDateTime value, FieldSpecGroup group) {
-        Map<Field, FieldSpec> specs = new HashMap<>(group.fieldSpecs());
+    private static FieldSpecGroup adjustBoundsOfDate(Field field,
+                                                     OffsetDateTime value,
+                                                     FieldSpecGroup group) {
         // Set the value we've specified to be specific
         DateTimeRestrictions.DateTimeLimit limit = new DateTimeRestrictions.DateTimeLimit(value, true);
         DateTimeRestrictions restrictions = new DateTimeRestrictions();
         restrictions.min = limit;
         restrictions.max = limit;
         FieldSpec newSpec = FieldSpec.Empty.withNotNull().withDateTimeRestrictions(restrictions);
+
+        return adjustBoundsOfDateFromFieldSpec(field, newSpec, group);
+    }
+
+    private static FieldSpecGroup adjustBoundsOfDateFromFieldSpec(Field field,
+                                                                  FieldSpec newSpec,
+                                                                  FieldSpecGroup group) {
+        Map<Field, FieldSpec> specs = new HashMap<>(group.fieldSpecs());
         specs.replace(field, newSpec);
 
         // Operate on the new bounds

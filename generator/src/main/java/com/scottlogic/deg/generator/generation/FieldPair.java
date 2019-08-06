@@ -18,6 +18,12 @@ package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.common.profile.Field;
 
+import java.util.Objects;
+
+/**
+ * A pair of fields. The equals method does not care about the order.
+ *
+ */
 public final class FieldPair {
     private final Field first;
     private final Field second;
@@ -35,4 +41,24 @@ public final class FieldPair {
         return second;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FieldPair fieldPair = (FieldPair) o;
+        return bothEquals(fieldPair) || bothEqualsFlipped(fieldPair);
+    }
+
+    private boolean bothEquals(FieldPair fieldPair) {
+        return Objects.equals(first, fieldPair.first) && Objects.equals(second, fieldPair.second);
+    }
+
+    private boolean bothEqualsFlipped(FieldPair fieldPair) {
+        return Objects.equals(first, fieldPair.second) && Objects.equals(second, fieldPair.first);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(first) + Objects.hash(second);
+    }
 }
