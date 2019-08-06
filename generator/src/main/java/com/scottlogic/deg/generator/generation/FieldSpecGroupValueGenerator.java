@@ -59,6 +59,10 @@ public class FieldSpecGroupValueGenerator {
     }
 
     private static FieldSpecGroup initialAdjustments(Field field, FieldSpecGroup group) {
+        for (FieldSpecRelations relation : group.relations()) {
+
+        }
+
         return group;
     }
 

@@ -34,17 +34,6 @@ public class RowSpecGrouper {
         return findGroups(rowSpec.getFields().asList(), pairs);
     }
 
-    private static final class FieldPair {
-        private final Field first;
-        private final Field second;
-
-        private FieldPair(Field first, Field second) {
-            this.first = first;
-            this.second = second;
-        }
-
-    }
-
     private static Set<FieldGroup> findGroups(List<Field> fields, List<FieldPair> pairs) {
         if (fields.isEmpty()) {
             return new HashSet<>();
@@ -56,8 +45,8 @@ public class RowSpecGrouper {
         }
 
         for (FieldPair pair : pairs) {
-            fieldMapping.get(pair.first).add(pair.second);
-            fieldMapping.get(pair.second).add(pair.first);
+            fieldMapping.get(pair.first()).add(pair.second());
+            fieldMapping.get(pair.second()).add(pair.first());
         }
 
         return findGroupsFromMap(fieldMapping);
