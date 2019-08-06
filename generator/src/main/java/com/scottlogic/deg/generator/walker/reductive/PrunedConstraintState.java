@@ -19,6 +19,7 @@ package com.scottlogic.deg.generator.walker.reductive;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
+import com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 
@@ -54,7 +55,7 @@ class PrunedConstraintState {
     }
 
     ConstraintNode getNewConstraintNode() {
-        return new ConstraintNode(newAtomicConstraints, newDecisionNodes);
+        return new ConstraintNodeBuilder().addAtomicConstraints(newAtomicConstraints).setDecisions(newDecisionNodes).build();
     }
 
     Map<Field, FieldSpec> addPulledUpFieldsToMap(Map<Field, FieldSpec> previousFieldSpecs) {

@@ -25,36 +25,36 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ConstraintNodeBuilder {
+public class TestConstraintNodeBuilder {
     protected List<AtomicConstraint> constraints = new ArrayList<>();
     private List<DecisionNode> decisionNodes = new ArrayList<>();
     private Set<NodeMarking> markings = new HashSet<>();
 
-    protected ConstraintNodeBuilder() {
+    protected TestConstraintNodeBuilder() {
     }
 
     public ConstraintNode build() {
-        return applyNodeMarkings(markings, new ConstraintNode(constraints, decisionNodes));
+        return applyNodeMarkings(markings, new ConstraintNodeBuilder().addAtomicConstraints(constraints).setDecisions(decisionNodes).build());
     }
 
-    public static ConstraintNodeBuilder constraintNode() {
-        return new ConstraintNodeBuilder();
+    public static TestConstraintNodeBuilder constraintNode() {
+        return new TestConstraintNodeBuilder();
     }
 
-    public AtomicConstraintBuilder where(Field field) {
-        return new AtomicConstraintBuilder(this, field);
+    public TestAtomicConstraintBuilder where(Field field) {
+        return new TestAtomicConstraintBuilder(this, field);
     }
 
-    public ConstraintNodeBuilder withDecision(ConstraintNodeBuilder... constraintNodes) {
+    public TestConstraintNodeBuilder withDecision(TestConstraintNodeBuilder... constraintNodes) {
         List<ConstraintNode> nodes = new ArrayList<>();
-        for (ConstraintNodeBuilder constraintNode : constraintNodes) {
+        for (TestConstraintNodeBuilder constraintNode : constraintNodes) {
             nodes.add(constraintNode.build());
         }
         decisionNodes.add(new DecisionNode(nodes));
         return this;
     }
 
-    public ConstraintNodeBuilder markNode(NodeMarking marking) {
+    public TestConstraintNodeBuilder markNode(NodeMarking marking) {
         this.markings.add(marking);
         return this;
     }
@@ -62,7 +62,7 @@ public class ConstraintNodeBuilder {
     private ConstraintNode applyNodeMarkings(Set<NodeMarking> markings, ConstraintNode unmarkedNode) {
         ConstraintNode currentNode = unmarkedNode;
         for (NodeMarking marking : markings) {
-            currentNode = currentNode.markNode(marking);
+            currentNode = currentNode.builder().markNode(marking).build();
         }
         return currentNode;
     }
