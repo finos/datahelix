@@ -15,14 +15,28 @@
  */
 package com.scottlogic.deg.profile.v0_1;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.common.ValidationException;
+import com.scottlogic.deg.profile.guice.ProfileConfigSource;
+import com.scottlogic.deg.profile.serialisation.SchemaVersionRetriever;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
-public class SchemaVersionValidator {
-    public URL getSchemaFile(String schemaVersion) {
+public class SupportedVersionChecker implements SchemaVersionValidator {
+    private SchemaVersionRetriever schemaVersionRetriever;
+    private ProfileConfigSource configSource;
+
+    @Inject
+    public SupportedVersionChecker(SchemaVersionRetriever schemaVersionRetriever, ProfileConfigSource configSource) {
+        this.schemaVersionRetriever = schemaVersionRetriever;
+        this.configSource = configSource;
+    }
+
+    public URL getSchemaFile() throws IOException {
+        String schemaVersion = schemaVersionRetriever.getSchemaVersionOfJson(configSource.getProfileFile().toPath());
         validateSchemaVersion(schemaVersion);
         return this.getClass().getResource("/profileschema/" + schemaVersion + "/datahelix.schema.json");
     }

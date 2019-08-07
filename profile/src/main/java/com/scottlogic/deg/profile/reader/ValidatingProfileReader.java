@@ -17,43 +17,38 @@ package com.scottlogic.deg.profile.reader;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.profile.reader.validation.ConfigValidator;
 import com.scottlogic.deg.profile.guice.ProfileConfigSource;
-import com.scottlogic.deg.profile.serialisation.SchemaVersionRetriever;
+import com.scottlogic.deg.profile.reader.validation.ConfigValidator;
 import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
 import com.scottlogic.deg.profile.v0_1.SchemaVersionValidator;
 
 import java.io.IOException;
 import java.net.URL;
 
-public class ValidatingProfileReader { // interface with noop
+public class ValidatingProfileReader {
 
     private final ProfileConfigSource configSource;
     private final ConfigValidator configValidator;
     private final ProfileReader profileReader;
     private final ProfileSchemaValidator profileSchemaValidator;
     private final SchemaVersionValidator schemaVersionValidator;
-    private final SchemaVersionRetriever schemaVersionRetriever;
 
     @Inject
     public ValidatingProfileReader(ProfileConfigSource configSource,
                                    ConfigValidator configValidator,
                                    ProfileReader profileReader,
                                    ProfileSchemaValidator profileSchemaValidator,
-                                   SchemaVersionValidator schemaVersionValidator,
-                                   SchemaVersionRetriever schemaVersionRetriever) {
+                                   SchemaVersionValidator schemaVersionValidator) {
         this.configSource = configSource;
         this.configValidator = configValidator;
         this.profileReader = profileReader;
         this.profileSchemaValidator = profileSchemaValidator;
         this.schemaVersionValidator = schemaVersionValidator;
-        this.schemaVersionRetriever = schemaVersionRetriever;
     }
 
     public Profile read() throws IOException {
         configValidator.checkProfileInputFile();
-        String schemaVersion = schemaVersionRetriever.getSchemaVersionOfJson(configSource.getProfileFile().toPath());
-        URL schema = schemaVersionValidator.getSchemaFile(schemaVersion);
+        URL schema = schemaVersionValidator.getSchemaFile();
         profileSchemaValidator.validateProfile(configSource.getProfileFile(), schema);
         return profileReader.read();
     }
