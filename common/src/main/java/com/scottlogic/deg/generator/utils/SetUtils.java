@@ -21,6 +21,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class SetUtils {
+
+    private SetUtils() {
+        throw new IllegalStateException("Do not instantiate utility class");
+    }
+
     public static <T> Set<T> union(Collection<T> a, Collection<T> b) {
         return Collections.unmodifiableSet(Stream
             .concat(a.stream(), b.stream())
@@ -37,6 +42,7 @@ public class SetUtils {
         return Collections.unmodifiableSet(Stream.of(e1, e2, e3).collect(Collectors.toSet()));
     }
 
+    @SafeVarargs
     public static <T> Set<T> setOf(T... elements) {
         return Collections.unmodifiableSet(Arrays.stream(elements).collect(Collectors.toSet()));
     }

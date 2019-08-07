@@ -109,55 +109,6 @@ Feature: User can specify that contains a specified regex
       | "-"  |
       | "."  |
 
-  Scenario: Running a 'containingRegex' request that includes special characters (non roman character maps: Hiragana) should be successful
-    Given foo is containing regex /[あ-げ]{1}/
-    And foo is of length 1
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "あ"  |
-      | "ぃ"  |
-      | "い"  |
-      | "ぅ"  |
-      | "う"  |
-      | "ぇ"  |
-      | "え"  |
-      | "ぉ"  |
-      | "お"  |
-      | "か"  |
-      | "が"  |
-      | "き"  |
-      | "ぎ"  |
-      | "く"  |
-      | "ぐ"  |
-      | "け"  |
-      | "げ"  |
-
-  @ignore #294 As a user I want to be able to configure the characters that can be emitted by the generator
-  Scenario: Running a 'containingRegex' request that includes special characters (emoji) only should be successful
-    Given foo is containing regex /[😁-😘]{1}/
-    And foo is of length 1
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "😁" |
-      | "😂" |
-      | "😃" |
-      | "😄" |
-      | "😅" |
-      | "😆" |
-      | "😉" |
-      | "😊" |
-      | "😋" |
-      | "😌" |
-      | "😍" |
-      | "😏" |
-      | "😒" |
-      | "😓" |
-      | "😔" |
-      | "😖" |
-      | "😘" |
-
   Scenario: Running a 'containingRegex' request that includes anchors ^ and $ should be successful
     Given foo is containing regex /^[a-c]{1}$/
     And foo is of length 1

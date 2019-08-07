@@ -70,69 +70,6 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "nil"       |
       | "infinity"  |
 
-  Scenario: Running an 'inSet' request that includes strings with special characters (standard) should be successful
-    Given there is a field foo
-    And foo is in set:
-      | "!£$%^&*()"   |
-      | "{}:@~;'#<>?" |
-    Then the following data should be generated:
-      | foo           |
-      | null          |
-      | "!£$%^&*()"   |
-      | "{}:@~;'#<>?" |
-
-  Scenario: Running an 'inSet' request that includes strings with special characters (white spaces) should be successful
-    Given there is a field foo
-    And foo is in set:
-      | "]	[] [] [] [" |
-      | "] [] [] ["    |
-    Then the following data should be generated:
-      | foo            |
-      | null           |
-      | "]	[] [] [] [" |
-      | "] [] [] ["    |
-
-  Scenario: Running an 'inSet' request that includes strings with special characters (unicode symbols) should be successful
-    Given there is a field foo
-    And foo is in set:
-      | "†ŠŒŽ™¼ǅ©" |
-      | "®…¶Σ֎"    |
-    Then the following data should be generated:
-      | foo        |
-      | null       |
-      | "†ŠŒŽ™¼ǅ©" |
-      | "®…¶Σ֎"    |
-
-  Scenario: Running an 'inSet' request that includes strings with special characters (emoji) should be successful
-    Given there is a field foo
-    And foo is in set:
-      | "🚫⌛⚡🐢"   |
-      | "👟💪😈🔬" |
-    Then the following data should be generated:
-      | foo        |
-      | null       |
-      | "🚫⌛⚡🐢"   |
-      | "👟💪😈🔬" |
-
-  Scenario: Running an 'inSet' request that includes strings with special characters (non roman character maps) should be successful
-    Given there is a field foo
-    And foo is in set:
-      | "Ω" |
-      | "ڦ" |
-      | "আ" |
-      | "⾉" |
-      | "㑹" |
-      | "㾹" |
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "Ω"  |
-      | "ڦ"  |
-      | "আ"  |
-      | "⾉"  |
-      | "㑹"  |
-      | "㾹"  |
-
   Scenario: Running an 'inSet' request that includes roman numeric strings that include decimal numbers should be successful
     Given there is a field foo
     And foo is in set:
@@ -160,19 +97,6 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "55,5"         |
       | "10,000"       |
       | "1,000,000.00" |
-
-  Scenario: Running an 'inSet' request that includes roman numeric strings that include numbers with Preceding zeros should be successful
-    Given there is a field foo
-    And foo is in set:
-      | "£1.00"   |
-      | "€5,99"   |
-      | "¥10,000" |
-    Then the following data should be generated:
-      | foo       |
-      | null      |
-      | "£1.00"   |
-      | "€5,99"   |
-      | "¥10,000" |
 
   Scenario: Running an 'inSet' request that includes roman numeric strings that include negative numbers("-1") should be successful
     Given there is a field foo
@@ -996,24 +920,14 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 
 ### Financial data types ###
 
-  Scenario: In set of valid ISINs combined with an ISIN constraint returns members of the set
-    Given there is a field foo
-    And foo is in set:
-      | "GB00YG2XYC52" |
-    And foo is of type "ISIN"
-    Then the following data should be generated:
-      | foo            |
-      | null           |
-      | "GB00YG2XYC52" |
-
   Scenario: In set of things that are not valid ISINs combined with a non-ISIN constraint returns members of the set
     Given there is a field foo
+    And foo is anything but null
     And foo is in set:
       | "a" |
     And foo is anything but of type "ISIN"
     Then the following data should be generated:
       | foo  |
-      | null |
       | "a"  |
 
   Scenario: Not in set of things that are not valid ISINs combined with an ISIN constraint generates valid ISINs
@@ -1038,33 +952,22 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | foo  |
       | null |
 
-  Scenario: In set of valid ISINs combined with a non-ISIN constraint only generates nulls
+  Scenario: In set of valid ISINs combined with a non-ISIN constraint generates no data
     Given there is a field foo
+    And foo is anything but null
     And foo is in set:
       | "GB00YG2XYC52" |
     And foo is anything but of type "ISIN"
-    Then the following data should be generated:
-      | foo  |
-      | null |
-
-  Scenario: In set of valid SEDOLs combined with a SEDOL constraint returns members of the set
-    Given there is a field foo
-    And foo is in set:
-      | "0263494" |
-    And foo is of type "SEDOL"
-    Then the following data should be generated:
-      | foo       |
-      | null      |
-      | "0263494" |
+    Then no data is created
 
   Scenario: In set of things that are not valid SEDOLs combined with a non-SEDOL constraint returns members of the set
     Given there is a field foo
+    And foo is anything but null
     And foo is in set:
       | "a" |
     And foo is anything but of type "SEDOL"
     Then the following data should be generated:
       | foo  |
-      | null |
       | "a"  |
 
   Scenario: Not in set of things that are not valid SEDOLs combined with a SEDOL constraint generates valid SEDOLs
@@ -1089,33 +992,22 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | foo  |
       | null |
 
-  Scenario: In set of valid SEDOLs combined with a non-SEDOL constraint only generates null
+  Scenario: In set of valid SEDOLs combined with a non-SEDOL constraint generates no data
     Given there is a field foo
+    And foo is anything but null
     And foo is in set:
       | "0263494" |
     And foo is anything but of type "SEDOL"
-    Then the following data should be generated:
-      | foo  |
-      | null |
-
-  Scenario: In set of valid CUSIPs combined with a CUSIP constraint returns members of the set
-    Given there is a field foo
-    And foo is in set:
-      | "38259P508" |
-    And foo is of type "CUSIP"
-    Then the following data should be generated:
-      | foo         |
-      | null        |
-      | "38259P508" |
+    Then no data is created
 
   Scenario: In set of things that are not valid CUSIPs combined with a non-CUSIP constraint returns members of the set
     Given there is a field foo
+    And foo is anything but null
     And foo is in set:
       | "a" |
     And foo is anything but of type "CUSIP"
     Then the following data should be generated:
       | foo  |
-      | null |
       | "a"  |
 
   Scenario: Not in set of things that are not valid CUSIPs combined with a CUSIP constraint generates valid CUSIPs
@@ -1140,14 +1032,13 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | foo  |
       | null |
 
-  Scenario: In set of things that are valid CUSIPs combined with a non-CUSIP constraint only generates null
+  Scenario: In set of things that are valid CUSIPs combined with a non-CUSIP constraint generates no data
     Given there is a field foo
+    And foo is anything but null
     And foo is in set:
       | "38259P508" |
     And foo is anything but of type "CUSIP"
-    Then the following data should be generated:
-      | foo  |
-      | null |
+    Then no data is created
 
 ### greaterThan ###
 
@@ -2182,6 +2073,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 
   Scenario: Running a 'inSet' request as part of a non-contradicting anyOf constraint should be successful
     Given there is a field foo
+    And foo is anything but null
     And there is a constraint:
       """
       { "anyOf": [
@@ -2191,7 +2083,6 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       """
     Then the following data should be generated:
       | foo      |
-      | null     |
       | "Test 1" |
       | "Test 2" |
       | "Test 3" |

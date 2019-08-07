@@ -117,6 +117,12 @@
     "constraint": {
       "oneOf": [
         {
+          "$ref": "#/definitions/anyOfConstraint"
+        },
+        {
+          "$ref": "#/definitions/allOfConstraint"
+        },
+        {
           "$ref": "#/definitions/dataConstraint"
         },
         {
@@ -126,13 +132,10 @@
           "$ref": "#/definitions/inSetConstraint"
         },
         {
+          "$ref": "#/definitions/fromFileConstraint"
+        },
+        {
           "$ref": "#/definitions/notConstraint"
-        },
-        {
-          "$ref": "#/definitions/anyOfConstraint"
-        },
-        {
-          "$ref": "#/definitions/allOfConstraint"
         },
         {
           "$ref": "#/definitions/ifThenConstraint"
@@ -168,11 +171,22 @@
             "after",
             "afterOrAt",
             "before",
-            "beforeOrAt",
-            "setFromFile"
+            "beforeOrAt"
           ]
         },
-        "value": {}
+        "value": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/datetime"
+            },
+            {
+              "$ref": "#/definitions/numeric"
+            },
+            {
+              "$ref": "#/definitions/string"
+            }
+          ]
+        }
       },
       "allOf": [
         {
@@ -376,22 +390,6 @@
               }
             }
           }
-        },
-        {
-          "if": {
-            "properties": {
-              "is": {
-                "const": "setFromFile"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "value": {
-                "$ref": "#/definitions/string"
-              }
-            }
-          }
         }
       ]
     },
@@ -472,6 +470,22 @@
         },
         "is": {
           "const": "null"
+        }
+      }
+    },
+    "fromFileConstraint": {
+      "type": "object",
+      "required": ["field", "is", "file"],
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "is": {
+          "const": "inSet"
+        },
+        "file": {
+          "type": "string"
         }
       }
     },

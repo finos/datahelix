@@ -20,8 +20,8 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.common.profile.constraints.delayed.DelayedAtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
+import com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
-import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 
 import java.util.ArrayList;
@@ -61,7 +61,11 @@ class PrunedConstraintState {
     }
 
     ConstraintNode getNewConstraintNode() {
-        return new TreeConstraintNode(newAtomicConstraints, newDelayedAtomicConstraints, newDecisionNodes);
+        return new ConstraintNodeBuilder()
+            .addAtomicConstraints(newAtomicConstraints)
+            .addDelayedAtomicConstraints(newDelayedAtomicConstraints)
+            .setDecisions(newDecisionNodes)
+            .build();
     }
 
     Map<Field, FieldSpec> addPulledUpFieldsToMap(Map<Field, FieldSpec> previousFieldSpecs) {

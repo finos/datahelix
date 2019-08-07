@@ -26,13 +26,14 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import static com.scottlogic.deg.generator.helpers.StringGeneratorHelper.assertGeneratorCanGenerateAtLeastOneStringWithinLengthBounds;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class RegexStringGeneratorTests {
+class RegexStringGeneratorTests {
     @Test
     void shouldFullStringMatchAnchoredString() {
         givenRegex("^test$");
@@ -273,7 +274,47 @@ public class RegexStringGeneratorTests {
         }
     }
 
-    private final boolean doesStringContainSurrogates(String testString) {
+    @Test
+    void generateAllShouldGenerateLetterStringsOfLength12() {
+        RegexStringGenerator generator = new RegexStringGenerator("[a-z]{12}", true);
+        generator.generateAllValues();
+
+        assertGeneratorCanGenerateAtLeastOneStringWithinLengthBounds(generator, 12, 12);
+    }
+
+    @Test
+    void generateAllShouldGenerateLatinCharacterStringsOfLength10() {
+        RegexStringGenerator generator = new RegexStringGenerator("[\u0020-\u007E]{10}", true);
+        generator.generateAllValues();
+
+        assertGeneratorCanGenerateAtLeastOneStringWithinLengthBounds(generator, 10, 10);
+    }
+
+    @Test
+    void generateAllShouldGenerateLatinCharacterStringsOfLength12() {
+        RegexStringGenerator generator = new RegexStringGenerator("[\u0020-\u007E]{12}", true);
+        generator.generateAllValues();
+
+        assertGeneratorCanGenerateAtLeastOneStringWithinLengthBounds(generator, 12, 12);
+    }
+
+    @Test
+    void generateAllShouldGenerateNonNullCharacterStringsOfLength12() {
+        RegexStringGenerator generator = new RegexStringGenerator("[\u0001-\uFFFF]{12}", true);
+        generator.generateAllValues();
+
+        assertGeneratorCanGenerateAtLeastOneStringWithinLengthBounds(generator, 12, 12);
+    }
+
+    @Test
+    void generateAllShouldGenerateStringsOfLength12() {
+        RegexStringGenerator generator = new RegexStringGenerator(".{12}", true);
+        generator.generateAllValues();
+
+        assertGeneratorCanGenerateAtLeastOneStringWithinLengthBounds(generator, 12, 12);
+    }
+
+    private boolean doesStringContainSurrogates(String testString) {
         for (char c : testString.toCharArray()) {
             if (Character.isSurrogate(c)) {
                 return true;

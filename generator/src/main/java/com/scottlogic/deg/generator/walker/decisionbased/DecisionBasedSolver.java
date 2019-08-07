@@ -15,7 +15,6 @@ import com.scottlogic.deg.generator.walker.reductive.Merged;
 import com.scottlogic.deg.generator.walker.reductive.ReductiveTreePruner;
 import com.scottlogic.deg.generator.walker.rowspec.RowSpecTreeSolver;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -52,7 +51,7 @@ public class DecisionBasedSolver implements RowSpecTreeSolver {
         }
 
         DecisionNode decisionNode = optionPicker.pickDecision(rootNode);
-        ConstraintNode rootWithoutDecision = rootNode.removeDecisions(Collections.singleton(decisionNode));
+        ConstraintNode rootWithoutDecision = rootNode.builder().removeDecision(decisionNode).build();
 
         Stream<ConstraintNode> rootOnlyConstraintNodes = optionPicker.streamOptions(decisionNode)
             .map(option -> combineWithRootNode(rootWithoutDecision, option))
@@ -65,10 +64,11 @@ public class DecisionBasedSolver implements RowSpecTreeSolver {
     }
 
     private Merged<ConstraintNode> combineWithRootNode(ConstraintNode rootNode, ConstraintNode option) {
-        ConstraintNode constraintNode = rootNode
+        ConstraintNode constraintNode = rootNode.builder()
             .addDecisions(option.getDecisions())
             .addAtomicConstraints(option.getAtomicConstraints())
-            .addDelayedConstraints(option.getDelayedAtomicConstraints());
+            .addDelayedAtomicConstraints(option.getDelayedAtomicConstraints())
+            .build();
 
         return reductiveTreePruner.pruneConstraintNode(constraintNode, getFields(option));
     }

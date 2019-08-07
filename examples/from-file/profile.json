@@ -22,8 +22,8 @@
       "constraints": [
         {
           "field": "name",
-          "is": "setFromFile",
-          "value": "greek.csv"
+          "is": "inSet",
+          "file": "greek.csv"
         }
       ]
     }

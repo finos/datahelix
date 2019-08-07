@@ -18,11 +18,11 @@ package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.generator.builders.ConstraintNodeBuilder;
+import com.scottlogic.deg.generator.builders.TestConstraintNodeBuilder;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
+import com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.NodeMarking;
-import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
@@ -35,7 +35,7 @@ import org.mockito.Mockito;
 
 import java.util.*;
 
-import static com.scottlogic.deg.generator.builders.ConstraintNodeBuilder.constraintNode;
+import static com.scottlogic.deg.generator.builders.TestConstraintNodeBuilder.constraintNode;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.never;
@@ -65,7 +65,7 @@ class UpfrontTreePrunerTests {
             ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
             DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
             DecisionTree treeMarkedWithContradictions = new DecisionTree(
-                new TreeConstraintNode().markNode(NodeMarking.CONTRADICTORY),
+                new ConstraintNodeBuilder().build().builder().markNode(NodeMarking.CONTRADICTORY).build(),
                 new ProfileFields(fields));
 
             Mockito.when(reductiveTreePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.of(prunedRoot));
@@ -91,7 +91,7 @@ class UpfrontTreePrunerTests {
             DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
 
             DecisionTree treeMarkedWithContradictions = new DecisionTree(
-                new TreeConstraintNode().markNode(NodeMarking.CONTRADICTORY),
+                new ConstraintNodeBuilder().build().builder().markNode(NodeMarking.CONTRADICTORY).build(),
                 new ProfileFields(fields));
 
             Mockito.when(reductiveTreePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.of(prunedRoot));
@@ -133,7 +133,7 @@ class UpfrontTreePrunerTests {
             ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
             DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
             DecisionTree completelyUnmarkedTree = new DecisionTree(
-                new TreeConstraintNode(),
+                new ConstraintNodeBuilder().build(),
                 new ProfileFields(fields));
 
             //Act
@@ -184,7 +184,7 @@ class UpfrontTreePrunerTests {
             ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
             DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
             DecisionTree treeMarkedWithContradictions = new DecisionTree(
-                new TreeConstraintNode().markNode(NodeMarking.CONTRADICTORY),
+                new ConstraintNodeBuilder().build().builder().markNode(NodeMarking.CONTRADICTORY).build(),
                 new ProfileFields(fields));
 
             //Act
@@ -247,8 +247,8 @@ class UpfrontTreePrunerTests {
             List<Field> fields = new ArrayList<>();
             fields.add(fieldA);
             fields.add(fieldB);
-            ConstraintNodeBuilder nonContradictingChild0 = constraintNode().where(fieldA).isNull();
-            ConstraintNodeBuilder nonContradictingChild1 = constraintNode().where(fieldA).isNull();
+            TestConstraintNodeBuilder nonContradictingChild0 = constraintNode().where(fieldA).isNull();
+            TestConstraintNodeBuilder nonContradictingChild1 = constraintNode().where(fieldA).isNull();
             ConstraintNode root = constraintNode()
                 .withDecision(nonContradictingChild0, nonContradictingChild1)
                 .build();
@@ -271,15 +271,15 @@ class UpfrontTreePrunerTests {
             List<Field> fields = new ArrayList<>();
             fields.add(fieldA);
             fields.add(fieldB);
-            ConstraintNodeBuilder fieldAIsNullInThisCase = constraintNode().where(fieldA).isNull();
-            ConstraintNodeBuilder fieldAIsNotNullInThisCase = constraintNode().where(fieldA).isNotNull();
-            ConstraintNodeBuilder nonContradictingChild0 = constraintNode().where(fieldB).isNull();
-            ConstraintNodeBuilder nonContradictingChild1 = constraintNode().where(fieldB).isNull();
+            TestConstraintNodeBuilder fieldAIsNullInThisCase = constraintNode().where(fieldA).isNull();
+            TestConstraintNodeBuilder fieldAIsNotNullInThisCase = constraintNode().where(fieldA).isNotNull();
+            TestConstraintNodeBuilder nonContradictingChild0 = constraintNode().where(fieldB).isNull();
+            TestConstraintNodeBuilder nonContradictingChild1 = constraintNode().where(fieldB).isNull();
 
-            ConstraintNodeBuilder subTree0 = constraintNode()
+            TestConstraintNodeBuilder subTree0 = constraintNode()
                 .withDecision(fieldAIsNullInThisCase, nonContradictingChild0);
 
-            ConstraintNodeBuilder subTree1 = constraintNode()
+            TestConstraintNodeBuilder subTree1 = constraintNode()
                 .withDecision(fieldAIsNotNullInThisCase, nonContradictingChild1);
 
             ConstraintNode root = constraintNode()
@@ -342,8 +342,8 @@ class UpfrontTreePrunerTests {
             List<Field> fields = new ArrayList<>();
             fields.add(fieldA);
             fields.add(fieldB);
-            ConstraintNodeBuilder contradictingChild = constraintNode().where(fieldA).isNull();
-            ConstraintNodeBuilder nonContradictingChild = constraintNode().where(fieldB).isNull();
+            TestConstraintNodeBuilder contradictingChild = constraintNode().where(fieldA).isNull();
+            TestConstraintNodeBuilder nonContradictingChild = constraintNode().where(fieldB).isNull();
             ConstraintNode root = constraintNode()
                 .where(fieldA).isNotNull()
                 .withDecision(contradictingChild, nonContradictingChild)
@@ -368,8 +368,8 @@ class UpfrontTreePrunerTests {
             List<Field> fields = new ArrayList<>();
             fields.add(fieldA);
             fields.add(fieldB);
-            ConstraintNodeBuilder contradictingChild = constraintNode().where(fieldA).isSelfContradictory();
-            ConstraintNodeBuilder nonContradictingChild = constraintNode().where(fieldA).isNull();
+            TestConstraintNodeBuilder contradictingChild = constraintNode().where(fieldA).isSelfContradictory();
+            TestConstraintNodeBuilder nonContradictingChild = constraintNode().where(fieldA).isNull();
             ConstraintNode root = constraintNode()
                 .withDecision(contradictingChild, nonContradictingChild)
                 .build();

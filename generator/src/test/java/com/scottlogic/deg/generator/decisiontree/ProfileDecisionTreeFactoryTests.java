@@ -274,19 +274,16 @@ class ProfileDecisionTreeFactoryTests {
 
         Assert.assertThat("analyse() output is not null", outputRule, Is.is(IsNull.notNullValue()));
         Assert.assertTrue(isEquivalentTo(
-            new TreeConstraintNode(
-                Collections.emptySet(),
-                Arrays.asList(
-                    new TreeDecisionNode(
-                        new TreeConstraintNode(constraintA),
-                        new TreeConstraintNode(constraintB)
-                    ),
-                    new TreeDecisionNode(
-                        new TreeConstraintNode(constraintC),
-                        new TreeConstraintNode(constraintD)
-                    )
+            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Arrays.asList(
+                new DecisionNode(
+                    new ConstraintNodeBuilder().addAtomicConstraints(constraintA).build(),
+                    new ConstraintNodeBuilder().addAtomicConstraints(constraintB).build()
+                ),
+                new DecisionNode(
+                    new ConstraintNodeBuilder().addAtomicConstraints(constraintC).build(),
+                    new ConstraintNodeBuilder().addAtomicConstraints(constraintD).build()
                 )
-            ),
+            )).build(),
             outputRule.getRootNode())
         );
     }
@@ -315,24 +312,16 @@ class ProfileDecisionTreeFactoryTests {
 
         Assert.assertThat("analyse() output is not null", outputRule, Is.is(IsNull.notNullValue()));
         Assert.assertTrue(isEquivalentTo(
-            new TreeConstraintNode(
-                Collections.emptySet(),
-                Arrays.asList(
-                    new TreeDecisionNode(
-                        new TreeConstraintNode(
-                            constraintA
-                        ),
-                        new TreeConstraintNode(
-                            constraintC,
-                            constraintB
-                        )
-                    ),
-                    new TreeDecisionNode(
-                        new TreeConstraintNode(constraintD),
-                        new TreeConstraintNode(constraintE)
-                    )
+            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Arrays.asList(
+                new DecisionNode(
+                    new ConstraintNodeBuilder().addAtomicConstraints(constraintA).build(),
+                    new ConstraintNodeBuilder().addAtomicConstraints(constraintC, constraintB).build()
+                ),
+                new DecisionNode(
+                    new ConstraintNodeBuilder().addAtomicConstraints(constraintD).build(),
+                    new ConstraintNodeBuilder().addAtomicConstraints(constraintE).build()
                 )
-            ),
+            )).build(),
             outputRule.getRootNode())
         );
     }
@@ -353,26 +342,17 @@ class ProfileDecisionTreeFactoryTests {
 
         Assert.assertThat("analyse() output is not null", outputRule, Is.is(IsNull.notNullValue()));
         Assert.assertTrue(isEquivalentTo(
-            new TreeConstraintNode(
-                Collections.emptySet(),
-                Collections.singletonList(
-                    new TreeDecisionNode(
-                        new TreeConstraintNode(
-                            Arrays.asList(
-                                constraintA,
-                                constraintB),
-                            Collections.emptySet()
-                        ),
-                        new TreeConstraintNode(
-                            Arrays.asList(
-                                constraintA.negate(),
-                                constraintC
-                            ),
-                            Collections.emptySet()
-                        )
-                    )
+            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Collections.singletonList(
+                new DecisionNode(
+                    new ConstraintNodeBuilder().addAtomicConstraints(Arrays.asList(
+                        constraintA,
+                        constraintB)).setDecisions(Collections.emptySet()).build(),
+                    new ConstraintNodeBuilder().addAtomicConstraints(Arrays.asList(
+                        constraintA.negate(),
+                        constraintC
+                    )).setDecisions(Collections.emptySet()).build()
                 )
-            ),
+            )).build(),
             outputRule.getRootNode())
         );
     }
@@ -393,25 +373,17 @@ class ProfileDecisionTreeFactoryTests {
 
         Assert.assertTrue(
             isEquivalentTo(
-                getResultingRootOption(), new TreeConstraintNode(
-                    Collections.emptyList(),
-                    Collections.singletonList(
-                        new TreeDecisionNode(
-                            /* OPTION 1: AND(C, OR(A, B))  */
-                            new TreeConstraintNode(
-                                Collections.singletonList(bGreaterThan20),
-                                Collections.singleton(
-                                    new TreeDecisionNode(
-                                        new TreeConstraintNode(aEquals10),
-                                        new TreeConstraintNode(aGreaterThan10)))),
-                            /* OPTION 2: AND(¬A, ¬B)  */
-                            new TreeConstraintNode(
-                                aEquals10.negate(),
-                                aGreaterThan10.negate()
-                            )
-                        )
+                getResultingRootOption(), new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptyList()).setDecisions(Collections.singletonList(
+                    new DecisionNode(
+                        /* OPTION 1: AND(C, OR(A, B))  */
+                        new ConstraintNodeBuilder().addAtomicConstraints(Collections.singletonList(bGreaterThan20)).setDecisions(Collections.singleton(
+                            new DecisionNode(
+                                new ConstraintNodeBuilder().addAtomicConstraints(aEquals10).build(),
+                                new ConstraintNodeBuilder().addAtomicConstraints(aGreaterThan10).build()))).build(),
+                        /* OPTION 2: AND(¬A, ¬B)  */
+                        new ConstraintNodeBuilder().addAtomicConstraints(aEquals10.negate(), aGreaterThan10.negate()).build()
                     )
-                )
+                )).build()
             )
         );
     }
@@ -433,27 +405,18 @@ class ProfileDecisionTreeFactoryTests {
 
         Assert.assertThat("analyse() output is not null", outputRule, Is.is(IsNull.notNullValue()));
         Assert.assertTrue(isEquivalentTo(
-            new TreeConstraintNode(
-                Collections.emptySet(),
-                Collections.singletonList(
-                    new TreeDecisionNode(
-                        new TreeConstraintNode(
-                            Arrays.asList(
-                                constraintA,
-                                constraintB.negate()
-                            ),
-                            Collections.emptySet()
-                        ),
-                        new TreeConstraintNode(
-                            Arrays.asList(
-                                constraintA.negate(),
-                                constraintC.negate()
-                            ),
-                            Collections.emptySet()
-                        )
-                    )
+            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Collections.singletonList(
+                new DecisionNode(
+                    new ConstraintNodeBuilder().addAtomicConstraints(Arrays.asList(
+                        constraintA,
+                        constraintB.negate()
+                    )).setDecisions(Collections.emptySet()).build(),
+                    new ConstraintNodeBuilder().addAtomicConstraints(Arrays.asList(
+                        constraintA.negate(),
+                        constraintC.negate()
+                    )).setDecisions(Collections.emptySet()).build()
                 )
-            ),
+            )).build(),
             outputRule.getRootNode())
         );
     }
@@ -470,9 +433,7 @@ class ProfileDecisionTreeFactoryTests {
 
         Constraint inputRule = new ConditionalConstraint(aEqualTo10, bGreaterThan20).negate();
 
-        ConstraintNode expectedOutput = new TreeConstraintNode(
-            aEqualTo10,
-            bGreaterThan20.negate());
+        ConstraintNode expectedOutput = new ConstraintNodeBuilder().addAtomicConstraints(aEqualTo10, bGreaterThan20.negate()).build();
 
         givenRule(inputRule);
 
@@ -522,21 +483,12 @@ class ProfileDecisionTreeFactoryTests {
         Assert.assertThat("analyse() output is not null", outputRule, Is.is(IsNull.notNullValue()));
         // Result should be (NOT A) OR (NOT B)
         Assert.assertTrue(isEquivalentTo(
-            new TreeConstraintNode(
-                Collections.emptySet(),
-                Collections.singletonList(
-                    new TreeDecisionNode(
-                        new TreeConstraintNode(
-                            Collections.singletonList(constraintA.negate()),
-                            Collections.emptySet()
-                        ),
-                        new TreeConstraintNode(
-                            Collections.singletonList(constraintB.negate()),
-                            Collections.emptySet()
-                        )
-                    )
+            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Collections.singletonList(
+                new DecisionNode(
+                    new ConstraintNodeBuilder().addAtomicConstraints(Collections.singletonList(constraintA.negate())).setDecisions(Collections.emptySet()).build(),
+                    new ConstraintNodeBuilder().addAtomicConstraints(Collections.singletonList(constraintB.negate())).setDecisions(Collections.emptySet()).build()
                 )
-            ),
+            )).build(),
             outputRule.getRootNode())
         );
     }
@@ -556,15 +508,12 @@ class ProfileDecisionTreeFactoryTests {
         Assert.assertTrue(
             isEquivalentTo(
                 getResultingRootOption(),
-                new TreeConstraintNode(
-                    Collections.emptyList(),
-                    Collections.singletonList(
-                        new TreeDecisionNode(
-                            new TreeConstraintNode(constraintA),
-                            new TreeConstraintNode(constraintB),
-                            new TreeConstraintNode(constraintC))
-                    )
-                )
+                new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptyList()).setDecisions(Collections.singletonList(
+                    new DecisionNode(
+                        new ConstraintNodeBuilder().addAtomicConstraints(constraintA).build(),
+                        new ConstraintNodeBuilder().addAtomicConstraints(constraintB).build(),
+                        new ConstraintNodeBuilder().addAtomicConstraints(constraintC).build())
+                )).build()
             )
         );
     }

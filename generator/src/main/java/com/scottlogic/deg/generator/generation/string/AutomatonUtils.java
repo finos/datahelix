@@ -16,10 +16,7 @@
 
 package com.scottlogic.deg.generator.generation.string;
 
-import dk.brics.automaton.Automaton;
-import dk.brics.automaton.RegExp;
-import dk.brics.automaton.State;
-import dk.brics.automaton.Transition;
+import dk.brics.automaton.*;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -56,7 +53,7 @@ class AutomatonUtils {
      * Get the longest string possible given the regex (in the form of the Automaton)
      * There may be many optional sections within a regex which need to be inspected to calculate the longest possible
      * string. The automaton has done the hard work of turning the regex into a set of transitions and states.
-     * see https://github.com/finos/datahelix/blob/master/generator/docs/StringGeneration.md for more detail.
+     * see https://github.com/finos/datahelix/blob/master/docs/developer/algorithmsAndDataStructures/StringGeneration.md for more detail.
      *
      * This method is a recursive implementation that will test each starting point calculating the string and returning
      * the longest possible variant.
@@ -209,8 +206,6 @@ class AutomatonUtils {
         return currentBest;
     }
 
-
-
     /**
      * Create an automaton and store its instance in the cache, keyed on the given regex
      * The cache will vary based on &lt;matchFullString&gt;.
@@ -229,9 +224,18 @@ class AutomatonUtils {
 
         Automaton generatedAutomaton = bricsRegExp.toAutomaton();
         generatedAutomaton.expandSingleton();
+        // NB: AF if want to allow cmd line option to expand to a fuller character set make sure don't
+        // make it unbounded as we don't want to see tabs or back spaces or null (\u0000) unicode chars
+        generatedAutomaton = restrictCharacterSet(generatedAutomaton, '\u0020', '\u007E');
 
         cache.put(regexStr, generatedAutomaton);
         return generatedAutomaton;
+    }
+
+    private static Automaton restrictCharacterSet(Automaton generatedAutomaton, char minChar, char maxChar) {
+        return BasicOperations.intersection(
+            Automaton.makeCharRange(minChar, maxChar).repeat(),
+            generatedAutomaton);
     }
 
     private static String escapeCharacters(String regex) {

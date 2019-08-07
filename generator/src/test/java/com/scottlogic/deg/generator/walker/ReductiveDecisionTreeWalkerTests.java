@@ -18,10 +18,10 @@ package com.scottlogic.deg.generator.walker;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.generator.builders.ConstraintNodeBuilder;
+import com.scottlogic.deg.generator.builders.TestConstraintNodeBuilder;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
+import com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
-import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
@@ -49,7 +49,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 class ReductiveDecisionTreeWalkerTests {
-    private TreeConstraintNode rootNode;
+    private ConstraintNode rootNode;
     private DecisionTree tree;
     private ReductiveFieldSpecBuilder reductiveFieldSpecBuilder;
     private ReductiveDecisionTreeWalker walker;
@@ -64,7 +64,7 @@ class ReductiveDecisionTreeWalkerTests {
     @BeforeEach
     public void beforeEach(){
         ProfileFields fields = new ProfileFields(Arrays.asList(field1, field2));
-        rootNode = new TreeConstraintNode();
+        rootNode = new ConstraintNodeBuilder().build();
         tree = new DecisionTree(rootNode, fields);
 
         reductiveFieldSpecBuilder = mock(ReductiveFieldSpecBuilder.class);
@@ -127,7 +127,7 @@ class ReductiveDecisionTreeWalkerTests {
         Set<FieldSpec> fieldSpecs = new HashSet<>();
         fieldSpecs.add(firstFieldSpec);
         fieldSpecs.add(secondFieldSpec);
-        ConstraintNode root = ConstraintNodeBuilder.constraintNode()
+        ConstraintNode root = TestConstraintNodeBuilder.constraintNode()
             .where(field1).isNull()
             .where(field1).isNotNull()
             .build();

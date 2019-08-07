@@ -23,21 +23,102 @@ import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public interface ConstraintNode extends Node {
-    Collection<AtomicConstraint> getAtomicConstraints();
-    Collection<DelayedAtomicConstraint> getDelayedAtomicConstraints();
-    Collection<DecisionNode> getDecisions();
-    Optional<RowSpec> getOrCreateRowSpec(Supplier<Optional<RowSpec>> createRowSpecFunc);
-    ConstraintNode removeDecisions(Collection<DecisionNode> decisionsToRemove);
-    ConstraintNode cloneWithoutAtomicConstraint(AtomicConstraint excludeAtomicConstraint);
-    boolean atomicConstraintExists(AtomicConstraint constraint);
-    ConstraintNode addAtomicConstraints(Collection<AtomicConstraint> constraints);
-    ConstraintNode addDelayedConstraints(Collection<DelayedAtomicConstraint> constraints);
-    ConstraintNode addDecisions(Collection<DecisionNode> decisions);
-    ConstraintNode setDecisions(Collection<DecisionNode> decisions);
-    ConstraintNode markNode(NodeMarking marking);
-    ConstraintNode accept(NodeVisitor visitor);
+public class ConstraintNode implements Node {
+    private final Collection<AtomicConstraint> atomicConstraints;
+    private final Collection<DelayedAtomicConstraint> delayedAtomicConstraints;
+    private final Collection<DecisionNode> decisions;
+    private final Set<NodeMarking> nodeMarkings;
+
+    private Optional<RowSpec> adaptedRowSpec = null;
+
+    public ConstraintNode(Collection<AtomicConstraint> atomicConstraints,
+                          Collection<DelayedAtomicConstraint> delayedAtomicConstraints,
+                          Collection<DecisionNode> decisions,
+                          Set<NodeMarking> nodeMarkings) {
+        this.atomicConstraints = Collections.unmodifiableCollection(atomicConstraints);
+        this.delayedAtomicConstraints = Collections.unmodifiableCollection(delayedAtomicConstraints);
+        this.decisions = Collections.unmodifiableCollection(decisions);
+        this.nodeMarkings = Collections.unmodifiableSet(nodeMarkings);
+    }
+
+    public Collection<AtomicConstraint> getAtomicConstraints() {
+        return new HashSet<>(atomicConstraints);
+    }
+
+    public Collection<DelayedAtomicConstraint> getDelayedAtomicConstraints() {
+        return new HashSet<>(delayedAtomicConstraints);
+    }
+
+    public Collection<DecisionNode> getDecisions() {
+        return decisions;
+    }
+
+    public Optional<RowSpec> getOrCreateRowSpec(Supplier<Optional<RowSpec>> createRowSpecFunc) {
+        if (adaptedRowSpec != null) {
+            return adaptedRowSpec;
+        }
+
+        adaptedRowSpec = createRowSpecFunc.get();
+        return adaptedRowSpec;
+    }
+
+    public String toString() {
+        if (decisions.isEmpty())
+            return atomicConstraints.size() > 5
+                ? String.format("%d constraints", atomicConstraints.size())
+                : Objects.toString(atomicConstraints);
+
+        if (atomicConstraints.isEmpty())
+            return decisions.size() > 5
+                ? String.format("%d decisions", decisions.size())
+                : Objects.toString(decisions);
+
+        return String.format(
+            "Decision: %s, Constraints: %s",
+            decisions.size() > 5
+                ? String.format("%d decisions", decisions.size())
+                : Objects.toString(decisions),
+            atomicConstraints.size() > 5
+                ? String.format("%d constraints", atomicConstraints.size())
+                : Objects.toString(atomicConstraints));
+    }
+
+    public ConstraintNodeBuilder builder() {
+        return new ConstraintNodeBuilder(atomicConstraints, delayedAtomicConstraints, decisions, nodeMarkings);
+    }
+
+    @Override
+    public boolean hasMarking(NodeMarking detail) {
+        return this.nodeMarkings.contains(detail);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ConstraintNode that = (ConstraintNode) o;
+        return Objects.equals(atomicConstraints, that.atomicConstraints) &&
+            Objects.equals(decisions, that.decisions);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(atomicConstraints, decisions);
+    }
+
+
+    public ConstraintNode accept(NodeVisitor visitor) {
+        Stream<DecisionNode> decisionNodeStream = getDecisions().stream().map(d -> d.accept(visitor));
+
+        return visitor.visit(
+            new ConstraintNodeBuilder()
+                .addAtomicConstraints(new ArrayList<>(atomicConstraints))
+                .setDecisions(decisionNodeStream.collect(Collectors.toSet()))
+                .setNodeMarkings(nodeMarkings)
+                .build());
+    }
 
     static ConstraintNode merge(Iterator<ConstraintNode> constraintNodeIterator) {
         Collection<AtomicConstraint> atomicConstraints = new ArrayList<>();
@@ -51,16 +132,9 @@ public interface ConstraintNode extends Node {
             atomicConstraints.addAll(constraintNode.getAtomicConstraints());
             delayedAtomicConstraints.addAll(constraintNode.getDelayedAtomicConstraints());
             decisions.addAll(constraintNode.getDecisions());
-            markings.addAll(constraintNode.getNodeMarkings());
+            markings.addAll(constraintNode.nodeMarkings);
         }
 
-        return new TreeConstraintNode(atomicConstraints, delayedAtomicConstraints, decisions, markings);
-    }
-
-    default Set<NodeMarking> getNodeMarkings(){
-        return Arrays.stream(NodeMarking.values())
-            .filter(this::hasMarking)
-            .collect(Collectors.toSet());
+        return new ConstraintNodeBuilder().addAtomicConstraints(atomicConstraints).setDecisions(decisions).setNodeMarkings(markings).build();
     }
 }
-

@@ -20,9 +20,9 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.util.FlatMappingSpliterator;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
-import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
 
 import java.util.*;
 import java.util.function.Function;
@@ -82,12 +82,12 @@ public class RelatedFieldTreePartitioner implements TreePartitioner {
                 .stream()
                 .sorted(Comparator.comparingInt(p -> p.id))
                 .map(partition -> new DecisionTree(
-                    new TreeConstraintNode(partition.getAtomicConstraints(), partition.getDecisionNodes()),
+                    new ConstraintNodeBuilder().addAtomicConstraints(partition.getAtomicConstraints()).setDecisions(partition.getDecisionNodes()).build(),
                     new ProfileFields(new ArrayList<>(partition.fields))
                 )),
             unpartitionedFields
                 .map(field -> new DecisionTree(
-                    new TreeConstraintNode(),
+                    new ConstraintNodeBuilder().build(),
                     new ProfileFields(Collections.singletonList(field))
                 ))
             );

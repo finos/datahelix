@@ -43,24 +43,18 @@ class DecisionTreeSimplifierTests {
     @Test
     void simplify_decisionContainsSingleOptiontWithMatchingConstraintOnRootNode_doesNotSimplifyTree() {
         DecisionTree tree = new DecisionTree(
-            new TreeConstraintNode(
-                Arrays.asList(
-                    new IsInSetConstraint(new Field("Field 1"), setOf(1, 2)),
-                    new IsNullConstraint(new Field("Field 1")).negate()
-                ),
-                Collections.singletonList(
-                    new TreeDecisionNode(
-                        Collections.singletonList(
-                            new TreeConstraintNode(
-                                Collections.singletonList(
-                                    new IsInSetConstraint(new Field("Field 1"), setOf(1, 2))
-                                ),
-                                Collections.emptyList()
-                            )
-                        )
+            new ConstraintNodeBuilder().addAtomicConstraints(Arrays.asList(
+                new IsInSetConstraint(new Field("Field 1"), setOf(1, 2)),
+                new IsNullConstraint(new Field("Field 1")).negate()
+            )).setDecisions(Collections.singletonList(
+                new DecisionNode(
+                    Collections.singletonList(
+                        new ConstraintNodeBuilder().addAtomicConstraints(Collections.singletonList(
+                            new IsInSetConstraint(new Field("Field 1"), setOf(1, 2))
+                        )).setDecisions(Collections.emptyList()).build()
                     )
                 )
-            ),
+            )).build(),
             new ProfileFields(
                 new ArrayList<Field>() {{ add(new Field("Field 1")); }}
             )
@@ -76,24 +70,18 @@ class DecisionTreeSimplifierTests {
     @Test
     void simplify_decisionContainsSingleOptionWithDifferingConstraintOnRootNode_simplifiesDecision() {
         DecisionTree tree = new DecisionTree(
-            new TreeConstraintNode(
-                Arrays.asList(
-                    new IsInSetConstraint(new Field("Field 1"), setOf(1, 2)),
-                    new IsNullConstraint(new Field("Field 1")).negate()
-                ),
-                Collections.singletonList(
-                    new TreeDecisionNode(
-                        Collections.singletonList(
-                            new TreeConstraintNode(
-                                Collections.singletonList(
-                                    new IsInSetConstraint(new Field("Field 2"), setOf("A", "B"))
-                                ),
-                                Collections.emptyList()
-                            )
-                        )
+            new ConstraintNodeBuilder().addAtomicConstraints(Arrays.asList(
+                new IsInSetConstraint(new Field("Field 1"), setOf(1, 2)),
+                new IsNullConstraint(new Field("Field 1")).negate()
+            )).setDecisions(Collections.singletonList(
+                new DecisionNode(
+                    Collections.singletonList(
+                        new ConstraintNodeBuilder().addAtomicConstraints(Collections.singletonList(
+                            new IsInSetConstraint(new Field("Field 2"), setOf("A", "B"))
+                        )).setDecisions(Collections.emptyList()).build()
                     )
                 )
-            ),
+            )).build(),
             new ProfileFields(
                 new ArrayList<Field>() {{ add(new Field("Field 1")); }}
             )

@@ -31,7 +31,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.stream.Collectors;
 
 /**
@@ -39,11 +38,11 @@ import java.util.stream.Collectors;
  * It returns a Profile object for consumption by a generator
  */
 public class JsonProfileReader implements ProfileReader {
-    ConstraintReaderMap readerMap;
+    private final MainConstraintReader mainConstraintReader;
 
     @Inject
-    public JsonProfileReader(ConstraintReaderMap mappings) {
-        readerMap = mappings;
+    public JsonProfileReader(MainConstraintReader mainConstraintReader) {
+        this.mainConstraintReader = mainConstraintReader;
     }
 
     public Profile read(Path filePath) throws IOException {
@@ -71,8 +70,6 @@ public class JsonProfileReader implements ProfileReader {
                 .map(fDto -> new Field(fDto.name))
                 .collect(Collectors.toList()));
 
-        ConstraintReader constraintReader = new MainConstraintReader(readerMap);
-
         Collection<Rule> rules = mapDtos(
             profileDto.rules,
             r -> {
@@ -86,10 +83,10 @@ public class JsonProfileReader implements ProfileReader {
                         r.constraints,
                         dto -> {
                             try {
-                                return constraintReader.apply(
+                                return mainConstraintReader.apply(
                                     dto,
-                                    profileFields,
-                                    Collections.singleton(constraintRule));
+                                    profileFields
+                                );
                             } catch (InvalidProfileException e) {
                                 throw new InvalidProfileException("Rule: " + r.rule + "\n" + e.getMessage());
                             }

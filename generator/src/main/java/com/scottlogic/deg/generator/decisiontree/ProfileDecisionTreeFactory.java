@@ -52,11 +52,9 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
     private ConstraintNode convertConstraint(Constraint constraintToConvert) {
         if (constraintToConvert instanceof NegatedGrammaticalConstraint) {
             return convertNegatedConstraint(constraintToConvert);
-        }
-        else if (constraintToConvert instanceof AndConstraint) {
+        } else if (constraintToConvert instanceof AndConstraint) {
             return convertAndConstraint((AndConstraint) constraintToConvert);
-        }
-        else if (constraintToConvert instanceof OrConstraint) {
+        } else if (constraintToConvert instanceof OrConstraint) {
             return convertOrConstraint((OrConstraint) constraintToConvert);
         } else if (constraintToConvert instanceof ConditionalConstraint) {
             return convertConditionalConstraint((ConditionalConstraint) constraintToConvert);
@@ -132,7 +130,7 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
             .map(this::convertConstraint)
             .collect(Collectors.toList());
 
-        return asConstraintNode(new TreeDecisionNode(options));
+        return asConstraintNode(new DecisionNode(options));
     }
 
     private ConstraintNode convertConditionalConstraint(ConditionalConstraint constraintToConvert) {
@@ -154,16 +152,20 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
     }
 
     private static ConstraintNode asConstraintNode(DelayedAtomicConstraint constraint) {
-        return new TreeConstraintNode(constraint);
+        return new ConstraintNodeBuilder()
+            .addDelayedAtomicConstraints(Collections.singleton(constraint))
+            .setDecisions(Collections.emptyList())
+            .build();
     }
 
     private static ConstraintNode asConstraintNode(AtomicConstraint constraint) {
-        return new TreeConstraintNode(constraint);
+        return new ConstraintNodeBuilder()
+            .addAtomicConstraints(Collections.singleton(constraint))
+            .setDecisions(Collections.emptyList())
+            .build();
     }
 
     private static ConstraintNode asConstraintNode(DecisionNode decision) {
-        return new TreeConstraintNode(
-            Collections.emptyList(),
-            Collections.singleton(decision));
+        return new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptyList()).setDecisions(Collections.singleton(decision)).build();
     }
 }

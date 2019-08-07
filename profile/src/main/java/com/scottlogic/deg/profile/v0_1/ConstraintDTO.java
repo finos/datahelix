@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.util.Collection;
 
-@JsonPropertyOrder({ "field", "is", "value", "if", "then", "else" })
+@JsonPropertyOrder({ "field", "is", "value", "file", "if", "then", "else" })
 public class ConstraintDTO {
     // the DTO is very permissive, because validation isn't its job.
     // validation rules should be expressed in JSON schemas and DTO -> Model converters
@@ -38,6 +38,8 @@ public class ConstraintDTO {
 
     /** a set of values - eg, used in isInSet */
     public Collection<Object> values;
+
+    public String file;
 
     /** a constraint to negate - this property should only appear alone */
     public ConstraintDTO not;

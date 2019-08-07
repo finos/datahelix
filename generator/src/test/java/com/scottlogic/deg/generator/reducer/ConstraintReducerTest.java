@@ -20,7 +20,7 @@ import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
-import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
+import com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
@@ -53,7 +53,7 @@ class ConstraintReducerTest {
     );
 
     private static ConstraintNode nodeFromConstraints(Collection<AtomicConstraint> constraints) {
-        return new TreeConstraintNode(constraints);
+        return new ConstraintNodeBuilder().addAtomicConstraints(constraints).build();
     }
 
     @Test

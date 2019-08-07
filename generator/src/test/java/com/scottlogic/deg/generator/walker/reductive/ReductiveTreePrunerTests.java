@@ -19,7 +19,7 @@ package com.scottlogic.deg.generator.walker.reductive;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsLessThanConstantConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
-import com.scottlogic.deg.generator.decisiontree.TreeConstraintNode;
+import com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder;
 import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static com.scottlogic.deg.generator.builders.ConstraintNodeBuilder.*;
+import static com.scottlogic.deg.generator.builders.TestConstraintNodeBuilder.*;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.junit.Assert.assertEquals;
@@ -62,7 +62,7 @@ class ReductiveTreePrunerTests {
     public void pruneConstraintNode_leafNodeContradictionsWithParent_returnsContradictory() {
         //Arrange
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList(10, 20));
-        ConstraintNode tree = new TreeConstraintNode(new IsLessThanConstantConstraint(field, 5));
+        ConstraintNode tree = new ConstraintNodeBuilder().addAtomicConstraints(new IsLessThanConstantConstraint(field, 5)).build();
         FieldSpec inputFieldSpec = notNull.withWhitelist(
             (FrequencyDistributedSet.uniform(inputWhitelist)));
 
@@ -81,7 +81,7 @@ class ReductiveTreePrunerTests {
     public void pruneConstraintNode_leafNodeNoContradictionsWithParent_returnsLeafNode() {
         //Arrange
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList(1, 2));
-        ConstraintNode tree = new TreeConstraintNode(new IsLessThanConstantConstraint(field, 5));
+        ConstraintNode tree = new ConstraintNodeBuilder().addAtomicConstraints(new IsLessThanConstantConstraint(field, 5)).build();
         FieldSpec inputFieldSpec = FieldSpec.Empty.withWhitelist(
             (FrequencyDistributedSet.uniform(inputWhitelist)));
 
