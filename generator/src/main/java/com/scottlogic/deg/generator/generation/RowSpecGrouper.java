@@ -40,9 +40,7 @@ public class RowSpecGrouper {
         }
 
         Map<Field, List<Field>> fieldMapping = new HashMap<>();
-        for (Field field : fields) {
-            fieldMapping.put(field, new ArrayList<>());
-        }
+        fields.forEach(field -> fieldMapping.put(field, new ArrayList<>()));
 
         for (FieldPair pair : pairs) {
             fieldMapping.get(pair.first()).add(pair.second());
@@ -63,9 +61,7 @@ public class RowSpecGrouper {
         Set<Field> fields = findGroup(copiedMap.keySet().iterator().next(), copiedMap);
 
         copiedMap.keySet().removeAll(fields);
-        for (List<Field> fieldList : copiedMap.values()) {
-            fieldList.removeAll(fields);
-        }
+        copiedMap.values().forEach(fieldList -> fieldList.removeAll(fields));
 
         FieldGroup converted = new FieldGroup(new ArrayList<>(fields));
         Set<FieldGroup> result = findGroupsFromMap(copiedMap);
@@ -97,14 +93,16 @@ public class RowSpecGrouper {
         Field next = toProcessCopy.pop();
         List<Field> links = map.get(next);
 
-        for (Field field : links) {
-            if (!found.contains(field)) {
-                newFound.add(field);
-                toProcessCopy.add(field);
-            }
-        }
+        links.stream()
+            .filter(field -> !found.contains(field))
+            .forEach(field -> addToBoth(field, newFound, toProcessCopy));
 
         return findGroupRecursive(toProcessCopy, newFound, map);
+    }
+
+    private static <T> void addToBoth(T element, Collection<T> first, Collection<T> second) {
+        first.add(element);
+        second.add(element);
     }
 
 }

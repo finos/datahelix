@@ -63,7 +63,6 @@ public class FieldSpecGroupValueGenerator {
 
         Map<Field, FieldSpec> mutatingSpecs = new HashMap<>(group.fieldSpecs());
         for (FieldSpecRelations relation : group.relations()) {
-            // Currently support only dates.
             Field other = relation.main().equals(first) ? relation.other() : relation.main();
 
             FieldSpecMerger merger = new FieldSpecMerger();

@@ -33,11 +33,6 @@ public class RowSpec {
     private final List<FieldSpecRelations> relations;
 
     public RowSpec(ProfileFields fields,
-                   Map<Field, FieldSpec> fieldToFieldSpec) {
-        this(fields, fieldToFieldSpec, new ArrayList<>()); // TODO: Remove this temporary constructor
-    }
-
-    public RowSpec(ProfileFields fields,
                    Map<Field, FieldSpec> fieldToFieldSpec,
                    List<FieldSpecRelations> relations) {
 
@@ -65,11 +60,7 @@ public class RowSpec {
 
     @Override
     public String toString() {
-        return "RowSpec{" +
-            "fields=" + fields +
-            ", fieldToFieldSpec=" + fieldToFieldSpec +
-            ", relations=" + relations +
-            '}';
+        return Objects.toString(fieldToFieldSpec);
     }
 }
 

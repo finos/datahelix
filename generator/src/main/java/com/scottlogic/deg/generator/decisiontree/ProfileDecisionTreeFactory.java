@@ -63,9 +63,11 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
         } else if (constraintToConvert instanceof DelayedAtomicConstraint) {
             DelayedAtomicConstraint delayed = (DelayedAtomicConstraint) constraintToConvert;
             return asConstraintNode(delayed);
-        } else {
+        } else if (constraintToConvert instanceof AtomicConstraint) {
             AtomicConstraint atomicConstraint = (AtomicConstraint) constraintToConvert;
             return asConstraintNode(atomicConstraint);
+        } else {
+            throw new IllegalStateException("Could not convert constraint to a known constraint node");
         }
     }
 

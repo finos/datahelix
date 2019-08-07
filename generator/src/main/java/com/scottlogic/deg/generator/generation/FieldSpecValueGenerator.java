@@ -43,7 +43,6 @@ public class FieldSpecValueGenerator {
         this.randomNumberGenerator = randomNumberGenerator;
     }
 
-    // TODO: Delete after non-random modes are implemented
     public boolean isRandom() {
         return dataType == DataGenerationType.RANDOM;
     }

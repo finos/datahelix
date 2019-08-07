@@ -18,7 +18,7 @@ public class FieldRelationsFactory {
        } else if (constraint instanceof IsAfterDynamicDateTimeConstraint) {
            return constructAfterDate((IsAfterDynamicDateTimeConstraint) constraint);
        } else {
-           throw new IllegalArgumentException("Unsupported field spec relations");
+           throw new IllegalArgumentException("Unsupported field spec relations: " + constraint.getClass());
        }
    }
 

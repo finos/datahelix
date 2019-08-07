@@ -56,10 +56,8 @@ public class RowSpecDataBagGenerator {
             .filter(relation -> fields.contains(relation.main()) || fields.contains(relation.other()))
             .collect(Collectors.toList());
 
-        Map<Field, FieldSpec> fieldSpecMap = new HashMap<>();
-        for (Field field : fields) {
-            fieldSpecMap.put(field, rowSpec.getSpecForField(field));
-        }
+        Map<Field, FieldSpec> fieldSpecMap = fields.stream()
+            .collect(Collectors.toMap(field -> field, rowSpec::getSpecForField));
 
         FieldSpecGroup specGroup = new FieldSpecGroup(fieldSpecMap, relations);
 

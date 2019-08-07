@@ -1,1 +1,1 @@
-A profile that generates dates after the one specified.
+A profile that generates dates after the constant specified.
