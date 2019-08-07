@@ -22,7 +22,7 @@ import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
-import com.scottlogic.deg.profile.reader.ConstraintReaderMap;
+import com.scottlogic.deg.profile.reader.AtomicConstraintTypeReaderMap;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import com.scottlogic.deg.profile.reader.MainConstraintReader;
 import com.scottlogic.deg.profile.reader.ProfileReader;
@@ -39,10 +39,10 @@ public class CucumberProfileReader implements ProfileReader {
 
     private final CucumberTestState state;
 
-    private final ConstraintReaderMap constraintReaderMap;
+    private final AtomicConstraintTypeReaderMap constraintReaderMap;
 
     @Inject
-    public CucumberProfileReader(CucumberTestState state, ConstraintReaderMap constraintReaderMap) {
+    public CucumberProfileReader(CucumberTestState state, AtomicConstraintTypeReaderMap constraintReaderMap) {
         this.state = state;
         this.constraintReaderMap = constraintReaderMap;
     }
@@ -60,7 +60,7 @@ public class CucumberProfileReader implements ProfileReader {
 
             List<Constraint> mappedConstraints = state.constraints.stream().map(dto -> {
                 try {
-                    return constraintReader.apply(dto, profileFields, getRules());
+                    return constraintReader.apply(dto, profileFields);
                 } catch (InvalidProfileException e) {
                     state.addException(e);
                     exceptionInMapping.set(true);

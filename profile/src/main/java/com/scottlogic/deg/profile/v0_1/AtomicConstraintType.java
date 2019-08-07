@@ -24,7 +24,6 @@ public enum AtomicConstraintType {
     IS_IN_SET("inSet"),
     IS_NULL("null"),
     IS_OF_TYPE("ofType"),
-    IS_FROM_FILE("setFromFile"),
 
     MATCHES_REGEX("matchingRegex"),
     CONTAINS_REGEX("containingRegex"),

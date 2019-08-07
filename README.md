@@ -73,7 +73,7 @@ firstName
 
 The generator has successfully created 100 rows of random data. However, in most cases this data will not be terribly useful. It is likely that `firstName` will only allow string values, with this constraint enforced via a database schema for example. If you don't provide any constraints, the generator will output values from the 'universal set', which contains all generatable values (null, any string, any date, any number, etc).
 
-Let's assume you only want to generate string values for the `firstName` field; this can be achieved by adding an `ofType` constraint for the field. With this constraint alone, the generator will output random strings containing characters from the unicode [Basic Multilingual Plane](<https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane>). If you want a more restrictive character set, ths can be achieved by adding `matchingRegex`.
+Let's assume you only want to generate string values for the `firstName` field; this can be achieved by adding an `ofType` constraint for the field. With this constraint alone, the generator will output random strings containing basic latin characters and punctuation. If you want a more restrictive character set, ths can be achieved by adding `matchingRegex`.
 
 ## Adding constraints
 
@@ -391,7 +391,16 @@ For more detail about the behaviour of certain profiles, see the  [behaviour in 
 
 ## Contributing
 
-Please read the [Contributing](https://github.com/finos/datahelix/blob/master/.github/CONTRIBUTING.md) guidelines before making any changes.
+1. Fork it (<https://github.com/yourname/yourproject/fork>)
+2. Create your feature branch (`git checkout -b feature/fooBar`)
+3. Read our [contribution guidelines](.github/CONTRIBUTING.md) and [Community Code of Conduct](https://www.finos.org/code-of-conduct)
+4. Commit your changes using our [Commit Guidelines](.github/CONTRIBUTING.md#commit-and-pr-messages)
+5. Push to the branch (`git push origin feature/fooBar`)
+6. Create a new Pull Request
+
+_NOTE:_ Commits and pull requests to FINOS repositories will only be accepted from those contributors with an active, executed Individual Contributor License Agreement (ICLA) with FINOS OR who are covered under an existing and active Corporate Contribution License Agreement (CCLA) executed with FINOS. Commits from individuals not covered under an ICLA or CCLA will be flagged and blocked by the FINOS Clabot tool. Please note that some CCLAs require individuals/employees to be explicitly named on the CCLA.
+
+*Need an ICLA? Unsure if you are covered under an existing CCLA? Email [help@finos.org](mailto:help@finos.org)*
 
 ## License
 

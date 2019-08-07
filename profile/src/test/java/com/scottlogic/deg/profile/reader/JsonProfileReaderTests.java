@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.profile.reader;
 
+
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.Rule;
@@ -35,7 +36,6 @@ import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -50,12 +50,7 @@ public class JsonProfileReaderTests {
     public void Setup() {
         this.json = null;
         this.profile = null;
-        ConstraintReaderMap readerMap = new BaseConstraintReaderMap(Stream.of(
-            new CoreAtomicTypesConstraintReaderSource(null),
-            new FinancialTypesConstraintReaderSource(),
-            new PersonalDataTypesConstraintReaderSource()
-        ));
-        mainConstraintReader = new MainConstraintReader(readerMap);
+        mainConstraintReader = new MainConstraintReader(new AtomicConstraintTypeReaderMap(null));
     }
 
     private void givenJson(String json) {

@@ -22,7 +22,6 @@ import com.scottlogic.deg.profile.reader.*;
 import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
 import com.scottlogic.deg.profile.v0_1.SchemaVersionValidator;
 import com.scottlogic.deg.profile.v0_1.SupportedVersionChecker;
-
 import java.io.File;
 import java.util.stream.Stream;
 
@@ -44,16 +43,12 @@ public class ProfileModule extends AbstractModule {
 
         bind(ProfileReader.class).to(JsonProfileReader.class);
 
-        // Load built-in profile-to-constraint mappings
-        BaseConstraintReaderMap map = new BaseConstraintReaderMap(Stream.of(
-            new CoreAtomicTypesConstraintReaderSource(profileConfigSource.fromFilePath()),
-            new FinancialTypesConstraintReaderSource(),
-            new PersonalDataTypesConstraintReaderSource()
-        ));
-        bind(ConstraintReaderMap.class).toInstance(map);
-
         bind(File.class)
             .annotatedWith(Names.named("config:profileFile"))
             .toInstance(profileConfigSource.getProfileFile());
+
+        // Load built-in profile-to-constraint mappings
+        AtomicConstraintTypeReaderMap atomicConstraintTypeReaderMap = new AtomicConstraintTypeReaderMap(profileConfigSource.fromFilePath());
+        bind(AtomicConstraintTypeReaderMap.class).toInstance(atomicConstraintTypeReaderMap);
     }
 }

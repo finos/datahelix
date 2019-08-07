@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
-import static com.scottlogic.deg.generator.builders.ConstraintNodeBuilder.constraintNode;
+import static com.scottlogic.deg.generator.builders.TestConstraintNodeBuilder.constraintNode;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 

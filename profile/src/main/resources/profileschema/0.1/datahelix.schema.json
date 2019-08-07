@@ -130,6 +130,9 @@
           "$ref": "#/definitions/inSetConstraint"
         },
         {
+          "$ref": "#/definitions/fromFileConstraint"
+        },
+        {
           "$ref": "#/definitions/notConstraint"
         },
         {
@@ -166,8 +169,7 @@
             "after",
             "afterOrAt",
             "before",
-            "beforeOrAt",
-            "setFromFile"
+            "beforeOrAt"
           ]
         },
         "value": {
@@ -386,22 +388,6 @@
               }
             }
           }
-        },
-        {
-          "if": {
-            "properties": {
-              "is": {
-                "const": "setFromFile"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "value": {
-                "$ref": "#/definitions/string"
-              }
-            }
-          }
         }
       ]
     },
@@ -482,6 +468,22 @@
         },
         "is": {
           "const": "null"
+        }
+      }
+    },
+    "fromFileConstraint": {
+      "type": "object",
+      "required": ["field", "is", "file"],
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "is": {
+          "const": "inSet"
+        },
+        "file": {
+          "type": "string"
         }
       }
     },

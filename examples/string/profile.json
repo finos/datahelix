@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "0.1",
+  "rules": [
+    {
+      "rule": "rule 1",
+      "constraints": [
+        {
+          "not": {
+            "field": "field1",
+            "is": "null"
+          }
+        },
+        {
+            "field": "field1",
+            "is": "ofType",
+            "value": "string"
+        }
+      ]
+    }
+  ],
+  "fields": [
+    {
+      "name": "field1"
+    }
+  ]
+}

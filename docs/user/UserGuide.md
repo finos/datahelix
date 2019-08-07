@@ -20,7 +20,6 @@
         2. [inSet](#predicate-inset)
         3. [null](#predicate-null)
         4. [ofType](#predicate-oftype)
-        5. [setFromFile](#predicate-setfromfile)
     3. [Textual constraints](#Textual-constraints)
         1. [matchingRegex](#predicate-matchingregex)
         2. [containingRegex](#predicate-containingregex)
@@ -116,7 +115,7 @@ The granularity of a numeric field is a measure of how small the distinctions in
 - if a numeric field has a granularity of 1, it can only be satisfied with multiples of 1; the integer data type adds this constraint by default
 - if a decimal field has a granularity of 0.1, it can be satisfied by (for example) 1, 2, 1.1 or 1.2, but not 1.11 or 1.12
 
-Granularities must be powers of ten less than or equal to one (1, 0.1, 0.01, etc). Note that it is possible to specify these granularities in scientific format eg 1E-10, 1E-15 where the _10_ and _15_ clearly distinguish that these numbers can have up to _10_ or _15_ decimal places respectively. Granularities outside these restrictions could be potentially useful (e.g. a granularity of 2 would permit only even numbers) but are not currently supported. 
+Granularities must be powers of ten less than or equal to zero (1, 0.1, 0.01, etc). Note that it is possible to specify these granularities in scientific format eg 1E-10, 1E-15 where the _10_ and _15_ clearly distinguish that these numbers can have up to _10_ or _15_ decimal places respectively. Granularities outside these restrictions could be potentially useful (e.g. a granularity of 2 would permit only even numbers) but are not currently supported. 
 
 Decimal fields currently default to the maximum granularity of 1E-20 (0.00000000000000000001) which means that numbers can be produced with up to 20 decimal places. This numeric granularity also dictates the smallest possible step between two numeric values, for example the next biggest decimal than _10_ is _10.00000000000000000001_. A user is able to add a `granularTo` constraint for a decimal value with coarser granularity (1, 0.1, 0.01...1E-18, 1E-19) but no finer granularity than 1E-20 is allowed.
 
@@ -124,7 +123,7 @@ Note that granularity concerns which values are valid, not how they're presented
 
 ## Strings
 
-Strings are sequences of unicode characters with a maximum length of 1000 characters. Currently, only characters from the [Basic Multilingual Plane](https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane) (Plane 0) are supported.
+Strings are sequences of unicode characters with a maximum length of 1000 characters. Currently, only basic latin characters (unicode 002c - 007e) are supported.
 
 ## DateTime
 
@@ -134,7 +133,7 @@ DateTimes represent specific moments in time, and are specified in profiles thro
 { "date": "2000-01-01T09:00:00.000" }
 ```
 
-The format is a subset of [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601); the date and time must be fully specified as above, 
+The format is a subset of [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601); the date and time must be fully specified as above,
 with precisely 3 digits of sub-second precision, plus an optional offset specifier of "Z". All datetimes are treated as UTC.
 
 DateTimes can be in the range `0001-01-01T00:00:00.000Z` to `9999-12-31T23:59:59.999Z`
@@ -212,32 +211,10 @@ Is satisfied if `field`'s value is equal to `value`
 
 Is satisfied if `field`'s value is in the set `values`
 
-<div id="predicate-null"></div>
-
-### `null` _(field)_
+Alternatively, sets can be populated from files.
 
 ```javascript
-{ "field": "price", "is": "null" }
-```
-
-Is satisfied if `field` is null or absent.
-
-<div id="predicate-oftype"></div>
-
-### `ofType` _(field, value)_
-
-```javascript
-{ "field": "price", "is": "ofType", "value": "string" }
-```
-
-Is satisfied if `field` is of type represented by `value` (valid options: `decimal`, `integer`, `string`, `datetime`, `ISIN`, `SEDOL`, `CUSIP`, `RIC`, `firstname`, `lastname` or `fullname`)
-
-<div id="predicate-setfromfile"></div>
-
-### `setFromFile` _(field, value)_
-
-```javascript
-{ "field": "country", "is": "setFromFile", "value": "countries.csv" }
+{ "field": "country", "is": "inSet", "file": "countries.csv" }
 ```
 
 Populates a set from the new-line delimited file (with suffix `.csv`), where each line represents a string value to load.
@@ -265,6 +242,26 @@ Scotland, 3
 ```
 
 After loading the set from the file, this constraint behaves identically to the [inSet](#predicate-inset) constraint. This includes its behaviour when negated or violated.
+
+<div id="predicate-null"></div>
+
+### `null` _(field)_
+
+```javascript
+{ "field": "price", "is": "null" }
+```
+
+Is satisfied if `field` is null or absent.
+
+<div id="predicate-oftype"></div>
+
+### `ofType` _(field, value)_
+
+```javascript
+{ "field": "price", "is": "ofType", "value": "string" }
+```
+
+Is satisfied if `field` is of type represented by `value` (valid options: `decimal`, `integer`, `string`, `datetime`, `ISIN`, `SEDOL`, `CUSIP`, `RIC`, `firstname`, `lastname` or `fullname`)
 
 ## Textual constraints
 
@@ -481,7 +478,7 @@ Contains a number of sub-constraints. Is satisfied if all of the inner constrain
 ```
 
 Is satisfied if either:
- 
+
 - Both the `if` and `then` constraints are satisfied
 - The `if` constraint is not satisfied, and the `else` constraint is
 

@@ -34,7 +34,8 @@ public class JarExecuteTests {
         List<String> collectedOutput = collectOutputAndCloseProcess(p);
 
         assertEquals(Arrays.asList("foo", "\"Generation successful\""), collectedOutput,
-            "Jar test failed. This might be because you have not built the jar. \n Try running Gradle Build");
+            "Jar test failed. This might be because you have not built the jar. \n Try running Gradle Build. \n" +
+            "Alternatively, it may be because System.out is being printed to (which interferes with streaming output) e.g. using 'printStackTrace'. ");
     }
 
     @Test
@@ -44,7 +45,8 @@ public class JarExecuteTests {
         List<String> collectedOutput = collectOutputAndCloseProcess(p);
 
         assertEquals(Arrays.asList("foo", "\"Generated successfully from file\""), collectedOutput,
-            "Jar test failed. This might be because you have not built the jar. \n Try running Gradle Build");
+            "Jar test failed. This might be because you have not built the jar. \n Try running Gradle Build. \n" +
+            "Alternatively, it may be because System.out is being printed to (which interferes with streaming output) e.g. using 'printStackTrace'. ");
     }
 
     private Process setupProcess(final String profile) throws IOException {
