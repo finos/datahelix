@@ -17,28 +17,36 @@
 package com.scottlogic.deg.generator.fieldspecs.relations;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 
-import java.time.OffsetDateTime;
+public class EqualToDateRelation implements FieldSpecRelations {
 
-class BeforeDateRelation extends AbstractDateInequalityRelation {
+    private final Field main;
 
-    public BeforeDateRelation(Field main, Field other) {
-        super(main, other);
-    }
+    private final Field other;
 
-    @Override
-    public DateTimeRestrictions.DateTimeLimit dateTimeLimitExtractingFunction(DateTimeRestrictions restrictions) {
-        return restrictions.min;
-    }
+   public EqualToDateRelation(Field main, Field other) {
+       this.main = main;
+       this.other = other;
+   }
 
     @Override
-    protected void appendValueToRestrictions(DateTimeRestrictions restrictions, OffsetDateTime value) {
-        restrictions.min = new DateTimeRestrictions.DateTimeLimit(value, true);
+    public FieldSpec reduceToRelatedFieldSpec(FieldSpec otherValue) {
+        return otherValue;
     }
 
     @Override
     public FieldSpecRelations inverse() {
-        return new AfterDateRelation(other(), main());
+        return this;
+    }
+
+    @Override
+    public Field main() {
+        return main;
+    }
+
+    @Override
+    public Field other() {
+        return other;
     }
 }

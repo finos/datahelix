@@ -19,6 +19,7 @@ package com.scottlogic.deg.profile.reader;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.constraints.delayed.IsAfterDynamicDateTimeConstraint;
+import com.scottlogic.deg.common.profile.constraints.delayed.IsEqualToDynamicDateConstraint;
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.profile.reader.constraintreaders.SetReader;
@@ -62,6 +63,12 @@ public class AtomicConstraintTypeReaderMap {
             (dto, fields) -> new EqualToConstraint(
                 fields.getByName(dto.field),
                 getValidatedValue(dto)));
+
+        map.put(IS_EQUAL_TO_FIELD,
+            (dto, fields) -> new IsEqualToDynamicDateConstraint(
+                new EqualToConstraint(fields.getByName(dto.field), getValidatedValue(dto)),
+                fields.getByName(ConstraintReaderHelpers.getValueAsString(dto))
+            ));
 
         map.put(CONTAINS_REGEX,
             (dto, fields) ->

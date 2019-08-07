@@ -75,7 +75,6 @@ public class ConstraintReducer {
                         Map.Entry::getKey,
                         entry -> entry.getValue().get())));
 
-        // TODO: Add delayed constraint -> FieldSpecRelations logic
         final List<FieldSpecRelations> relations = delayedConstraints.stream()
             .map(fieldRelationsFactory::construct)
             .collect(Collectors.toList());

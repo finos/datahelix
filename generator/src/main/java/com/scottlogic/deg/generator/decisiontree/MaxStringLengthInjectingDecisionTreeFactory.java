@@ -54,8 +54,8 @@ public class MaxStringLengthInjectingDecisionTreeFactory implements DecisionTree
                 tree.fields
                     .stream()
                     .map(field -> new IsStringShorterThanConstraint(field, maxLength + 1))
-                    .collect(Collectors.toList())
-            ).build(),
+                    .collect(Collectors.toList()))
+                .build(),
             tree.fields
         );
     }

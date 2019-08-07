@@ -36,6 +36,8 @@ abstract class AbstractDateInequalityRelation implements FieldSpecRelations {
 
     protected abstract DateTimeLimit dateTimeLimitExtractingFunction(DateTimeRestrictions restrictions);
 
+    protected abstract void appendValueToRestrictions(DateTimeRestrictions restrictions, OffsetDateTime value);
+
     @Override
     public FieldSpec reduceToRelatedFieldSpec(FieldSpec otherValue) {
         DateTimeLimit limit = dateTimeLimitExtractingFunction(otherValue.getDateTimeRestrictions());
@@ -44,8 +46,7 @@ abstract class AbstractDateInequalityRelation implements FieldSpecRelations {
             OffsetDateTime value = limit.getLimit();
 
             DateTimeRestrictions restrictions = new DateTimeRestrictions();
-            DateTimeLimit valueToSet = dateTimeLimitExtractingFunction(restrictions);
-            valueToSet = new DateTimeLimit(value, false);
+            appendValueToRestrictions(restrictions, value);
 
             return FieldSpec.Empty.withDateTimeRestrictions(restrictions);
         } else {

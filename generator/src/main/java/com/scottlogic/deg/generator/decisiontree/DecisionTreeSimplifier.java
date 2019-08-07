@@ -72,6 +72,7 @@ public class DecisionTreeSimplifier {
                     } else {
                         return parentConstraint.builder()
                             .addAtomicConstraints(firstOption.getAtomicConstraints())
+                            .addDelayedAtomicConstraints(firstOption.getDelayedAtomicConstraints())
                             .addDecisions(firstOption.getDecisions())
                             .removeDecision(decisionNode)
                             .build();
@@ -82,13 +83,18 @@ public class DecisionTreeSimplifier {
                         .addAtomicConstraints(
                             Stream.concat(
                                 node1.getAtomicConstraints().stream(),
-                                node2.getAtomicConstraints().stream()
-                            ).collect(Collectors.toList())
-                        ).setDecisions(Stream
-                        .concat(
-                            node1.getDecisions().stream(),
-                            node2.getDecisions().stream()
-                        ).collect(Collectors.toList())
-                    ).build());
+                                node2.getAtomicConstraints().stream())
+                                .collect(Collectors.toList()))
+                        .addDelayedAtomicConstraints(
+                            Stream.concat(
+                                node1.getDelayedAtomicConstraints().stream(),
+                                node2.getDelayedAtomicConstraints().stream())
+                                .collect(Collectors.toList()))
+                        .setDecisions(Stream
+                            .concat(
+                                node1.getDecisions().stream(),
+                                node2.getDecisions().stream())
+                            .collect(Collectors.toList()))
+                        .build());
     }
 }

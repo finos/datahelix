@@ -107,6 +107,9 @@ public class ProfileDecisionTreeFactory implements DecisionTreeFactory {
         }
         // if we got this far, it must be an atomic constraint
         else {
+            if (constraintToConvert instanceof DelayedAtomicConstraint) {
+                return asConstraintNode((DelayedAtomicConstraint) constraintToConvert);
+            }
             AtomicConstraint atomicConstraint = (AtomicConstraint) constraintToConvert;
             return asConstraintNode(atomicConstraint);
         }

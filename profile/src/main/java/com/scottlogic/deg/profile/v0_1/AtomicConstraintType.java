@@ -21,6 +21,7 @@ import java.util.Arrays;
 public enum AtomicConstraintType {
 
     IS_EQUAL_TO_CONSTANT("equalTo"),
+    IS_EQUAL_TO_FIELD("equalToField"),
     IS_IN_SET("inSet"),
     IS_NULL("null"),
     IS_OF_TYPE("ofType"),

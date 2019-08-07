@@ -115,6 +115,7 @@ public class ConstraintNode implements Node {
         return visitor.visit(
             new ConstraintNodeBuilder()
                 .addAtomicConstraints(new ArrayList<>(atomicConstraints))
+                .addDelayedAtomicConstraints(new ArrayList<>(delayedAtomicConstraints))
                 .setDecisions(decisionNodeStream.collect(Collectors.toSet()))
                 .setNodeMarkings(nodeMarkings)
                 .build());
@@ -135,6 +136,11 @@ public class ConstraintNode implements Node {
             markings.addAll(constraintNode.nodeMarkings);
         }
 
-        return new ConstraintNodeBuilder().addAtomicConstraints(atomicConstraints).setDecisions(decisions).setNodeMarkings(markings).build();
+        return new ConstraintNodeBuilder()
+            .addAtomicConstraints(atomicConstraints)
+            .addDelayedAtomicConstraints(delayedAtomicConstraints)
+            .setDecisions(decisions)
+            .setNodeMarkings(markings)
+            .build();
     }
 }
