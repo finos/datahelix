@@ -53,4 +53,13 @@ abstract class AbstractDateInequalityRelation implements FieldSpecRelations {
         }
     }
 
+    @Override
+    public Field main() {
+        return main;
+    }
+
+    @Override
+    public Field other() {
+        return other;
+    }
 }
