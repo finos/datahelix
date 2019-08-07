@@ -10,9 +10,13 @@ must be made with a
 in place, and there are [additional legal requirements](https://finosfoundation.atlassian.net/wiki/spaces/FINOS/pages/75530375/Legal+Requirements)
 that must also be met.**
 
+Commits and pull requests to FINOS repositories will only be accepted from those contributors with an active, executed Individual Contributor License Agreement (ICLA) with FINOS OR who are covered under an existing and active Corporate Contribution License Agreement (CCLA) executed with FINOS. Commits from individuals not covered under an ICLA or CCLA will be flagged and blocked by the FINOS Clabot tool. Please note that some CCLAs require individuals/employees to be explicitly named on the CCLA.
+
 As a result, PRs submitted to the DataHelix project cannot be accepted until you have a CLA in place with the Foundation.
 
 Notice that some dependencies, as referenced in the [NOTICE](https://github.com/finos/datahelix/blob/master/NOTICE) file have certain restrictions upon contributors.
+
+Need an ICLA? Unsure if you are covered under an existing CCLA? Email [help@finos.org](mailto:help@finos.org?subject=CLA)
 
 # Contributing Issues
 
@@ -89,5 +93,10 @@ To set it up for java files you:
 * Go to Include tab and add/edit the `File Header` entry so contains the comment above
 * Go to Files tab and check the relevant types of files (eg Class, Interface, Enum etc) have `#parse("File Header.java")` at the top.  Most should although you may need to edit some so it appears before the ‘package’ line
 
+## Commit and PR Messages
 
+* **Reference issues, wiki pages, and pull requests liberally!**
+* Use the present tense ("Add feature" not "Added feature")
+* Use the imperative mood ("Move button left..." not "Moves button left...")
+* Limit the first line to 72 characters or less
 
