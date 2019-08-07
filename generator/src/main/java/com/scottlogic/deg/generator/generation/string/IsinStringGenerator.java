@@ -146,7 +146,9 @@ public class IsinStringGenerator implements StringGenerator {
                     generateAllInvalidCheckDigitIsins()));
         }
         final List<Iterable<String>> countryCodeIterables = getAllCountryIsinGeneratorsAsStream()
-            .map(generator -> wrapIterableWithProjectionAndFilter(generator.generateAllValues()))
+            .map(generator -> new FilteringIterable<>(
+                generator.generateAllValues(),
+                (x) -> x.equals(replaceCheckDigit(x))))
             .collect(Collectors.toList());
         return new ConcatenatingIterable<>(countryCodeIterables);
     }
