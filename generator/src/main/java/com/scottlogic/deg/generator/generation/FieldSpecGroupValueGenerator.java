@@ -62,23 +62,25 @@ public class FieldSpecGroupValueGenerator {
         checkOnlyPairwiseRelationsExist(group.relations());
 
         Map<Field, FieldSpec> mutatingSpecs = new HashMap<>(group.fieldSpecs());
+
         for (FieldSpecRelations relation : group.relations()) {
-            Field other = relation.main().equals(first) ? relation.other() : relation.main();
-
-            FieldSpecMerger merger = new FieldSpecMerger();
-
-            FieldSpec reduced = relation.inverse().reduceToRelatedFieldSpec(group.fieldSpecs().get(other));
-            Optional<FieldSpec> merged = merger.merge(reduced, group.fieldSpecs().get(first));
-
-            if (merged.isPresent()) {
-                mutatingSpecs.replace(first, merged.get());
-            } else {
-                throw new IllegalStateException("Failed to merge field specs in related fields");
-            }
+            FieldSpec merged = createMergedSpecFromRelation(first, relation, group)
+                .orElseThrow(() -> new IllegalStateException("Failed to merge field specs in related fields"));
+            mutatingSpecs.replace(first, merged);
         }
 
-        FieldSpecGroup newGroup = new FieldSpecGroup(mutatingSpecs, group.relations());
-        return newGroup;
+        return new FieldSpecGroup(mutatingSpecs, group.relations());
+    }
+
+    private static Optional<FieldSpec> createMergedSpecFromRelation(Field first,
+                                                                    FieldSpecRelations relation,
+                                                                    FieldSpecGroup group) {
+        Field other = relation.main().equals(first) ? relation.other() : relation.main();
+
+        FieldSpecMerger merger = new FieldSpecMerger();
+
+        FieldSpec reduced = relation.inverse().reduceToRelatedFieldSpec(group.fieldSpecs().get(other));
+        return merger.merge(reduced, group.fieldSpecs().get(first));
     }
 
     private static void checkOnlyPairwiseRelationsExist(Collection<FieldSpecRelations> relations) {
@@ -100,11 +102,9 @@ public class FieldSpecGroupValueGenerator {
     private static FieldSpecGroup adjustBounds(Field field, DataBagValue value, FieldSpecGroup group) {
         Object object = value.getUnformattedValue();
 
-        // TODO: Consider null cases
         if (object instanceof OffsetDateTime) {
             return adjustBoundsOfDate(field, (OffsetDateTime) object, group);
         }
-
 
         return group;
     }
@@ -156,13 +156,10 @@ public class FieldSpecGroupValueGenerator {
                                                                    Field field) {
         FieldSpecMerger merger = new FieldSpecMerger();
 
-        Optional<FieldSpec> newSpec = merger.merge(left, right);
-        if (newSpec.isPresent()) {
-            map.put(field, newSpec.get());
-            return map;
-        } else {
-            throw new IllegalStateException("Failed to create field spec from value");
-        }
+        FieldSpec newSpec = merger.merge(left, right)
+            .orElseThrow(() -> new IllegalArgumentException("Failed to create field spec from value"));
+        map.put(field, newSpec);
+        return map;
     }
 
     private static final class DataBagGroupWrapper {
