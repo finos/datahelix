@@ -16,30 +16,21 @@
 
 package com.scottlogic.deg.profile.reader;
 
-import com.google.inject.Inject;
-import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.util.Defaults;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
-import com.scottlogic.deg.profile.reader.constraintreaders.FromFileReader;
+import com.scottlogic.deg.profile.reader.constraintreaders.SetReader;
 import com.scottlogic.deg.profile.reader.constraintreaders.GranularToReader;
 import com.scottlogic.deg.profile.reader.constraintreaders.OfTypeReader;
-import com.scottlogic.deg.profile.reader.file.CsvInputStreamReader;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 
-import java.io.*;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import static com.scottlogic.deg.profile.reader.ConstraintReaderHelpers.getValidatedValue;
-import static com.scottlogic.deg.profile.reader.ConstraintReaderHelpers.getValidatedValues;
 import static com.scottlogic.deg.profile.v0_1.AtomicConstraintType.*;
 
 public class AtomicConstraintTypeReaderMap {
@@ -57,7 +48,7 @@ public class AtomicConstraintTypeReaderMap {
 
         map.put(IS_OF_TYPE, new OfTypeReader());
         map.put(IS_GRANULAR_TO, new GranularToReader());
-        map.put(IS_FROM_FILE, new FromFileReader(fromFilePath));
+        map.put(IS_IN_SET, new SetReader(fromFilePath));
 
         map.put(FORMATTED_AS,
             (dto, fields) -> new FormatConstraint(
@@ -68,12 +59,6 @@ public class AtomicConstraintTypeReaderMap {
             (dto, fields) -> new EqualToConstraint(
                 fields.getByName(dto.field),
                 getValidatedValue(dto)));
-
-        map.put(IS_IN_SET,
-            (dto, fields) ->
-                new IsInSetConstraint(
-                    fields.getByName(dto.field),
-                    FrequencyDistributedSet.uniform(getValidatedValues(dto))));
 
         map.put(CONTAINS_REGEX,
             (dto, fields) ->
