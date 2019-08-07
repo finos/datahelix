@@ -61,24 +61,25 @@ public class FieldSpecGroupValueGenerator {
     private static FieldSpecGroup initialAdjustments(Field first, FieldSpecGroup group) {
         checkOnlyPairwiseRelationsExist(group.relations());
 
-        FieldSpecGroup mutatingGroup = group;
+        Map<Field, FieldSpec> mutatingSpecs = new HashMap<>(group.fieldSpecs());
         for (FieldSpecRelations relation : group.relations()) {
             // Currently support only dates.
             Field other = relation.main().equals(first) ? relation.other() : relation.main();
 
             FieldSpecMerger merger = new FieldSpecMerger();
 
-            FieldSpec reduced = relation.reduceToRelatedFieldSpec(group.fieldSpecs().get(other));
+            FieldSpec reduced = relation.inverse().reduceToRelatedFieldSpec(group.fieldSpecs().get(other));
             Optional<FieldSpec> merged = merger.merge(reduced, group.fieldSpecs().get(first));
 
             if (merged.isPresent()) {
-                mutatingGroup.fieldSpecs().replace(first, merged.get());
+                mutatingSpecs.replace(first, merged.get());
             } else {
                 throw new IllegalStateException("Failed to merge field specs in related fields");
             }
         }
 
-        return mutatingGroup;
+        FieldSpecGroup newGroup = new FieldSpecGroup(mutatingSpecs, group.relations());
+        return newGroup;
     }
 
     private static void checkOnlyPairwiseRelationsExist(Collection<FieldSpecRelations> relations) {

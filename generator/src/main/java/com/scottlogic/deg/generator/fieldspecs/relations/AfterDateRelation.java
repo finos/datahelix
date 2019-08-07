@@ -25,7 +25,7 @@ public class AfterDateRelation implements FieldSpecRelations {
             OffsetDateTime max = maxLimit.getLimit();
 
             DateTimeRestrictions restrictions = new DateTimeRestrictions();
-            restrictions.max = new DateTimeRestrictions.DateTimeLimit(max, true);
+            restrictions.max = new DateTimeRestrictions.DateTimeLimit(max, false);
 
             return FieldSpec.Empty.withDateTimeRestrictions(restrictions);
         } else {
@@ -35,7 +35,7 @@ public class AfterDateRelation implements FieldSpecRelations {
 
     @Override
     public FieldSpecRelations inverse() {
-        return new BeforeOrEqualToDateRelation(main, other);
+        return new BeforeDateRelation(main, other);
     }
 
     @Override
