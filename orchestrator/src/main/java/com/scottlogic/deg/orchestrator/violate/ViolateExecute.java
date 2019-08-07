@@ -17,75 +17,53 @@
 package com.scottlogic.deg.orchestrator.violate;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.common.output.GeneratedObject;
-import com.scottlogic.deg.output.FileUtilsImpl;
-import com.scottlogic.deg.output.manifest.ManifestWriter;
+import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.ViolatedProfile;
-import com.scottlogic.deg.output.writer.DataSetWriter;
-import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
-import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
+import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.inputs.profileviolation.ProfileViolator;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
+import com.scottlogic.deg.output.FileUtilsImpl;
+import com.scottlogic.deg.output.manifest.ManifestWriter;
 import com.scottlogic.deg.output.outputtarget.OutputTargetFactory;
-import com.scottlogic.deg.orchestrator.validator.ConfigValidator;
-import com.scottlogic.deg.profile.reader.ProfileReader;
-import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
-import com.scottlogic.deg.profile.v0_1.SchemaVersionValidator;
+import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
+import com.scottlogic.deg.output.writer.DataSetWriter;
+import com.scottlogic.deg.profile.reader.ValidatingProfileReader;
 
 import java.io.IOException;
-import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.stream.Stream;
 
 public class ViolateExecute {
-    private final AllConfigSource configSource;
-    private final ConfigValidator configValidator;
     private final OutputTargetFactory outputTargetFactory;
-    private final ProfileReader profileReader;
     private final ProfileValidator profileValidator;
-    private final ProfileSchemaValidator profileSchemaValidator;
-    private final SchemaVersionValidator schemaVersionValidator;
     private final ProfileViolator profileViolator;
     private final DataGenerator dataGenerator;
     private final ViolateOutputValidator violateOutputValidator;
     private final ManifestWriter manifestWriter;
+    private final ValidatingProfileReader validatingProfileReader;
 
     @Inject
     ViolateExecute(
-        ProfileReader profileReader,
-        AllConfigSource configSource,
         OutputTargetFactory outputTargetFactory,
-        ConfigValidator configValidator,
         ProfileValidator profileValidator,
-        ProfileSchemaValidator profileSchemaValidator,
-        SchemaVersionValidator schemaVersionValidator,
         ProfileViolator profileViolator,
         DataGenerator dataGenerator,
         ViolateOutputValidator violateOutputValidator,
-        ManifestWriter manifestWriter) {
-
-        this.profileReader = profileReader;
-        this.configSource = configSource;
+        ManifestWriter manifestWriter,
+        ValidatingProfileReader validatingProfileReader) {
         this.outputTargetFactory = outputTargetFactory;
-        this.configValidator = configValidator;
-        this.profileSchemaValidator = profileSchemaValidator;
-        this.schemaVersionValidator = schemaVersionValidator;
         this.profileValidator = profileValidator;
         this.profileViolator = profileViolator;
         this.dataGenerator = dataGenerator;
         this.violateOutputValidator = violateOutputValidator;
         this.manifestWriter = manifestWriter;
+        this.validatingProfileReader = validatingProfileReader;
     }
 
     public void execute() throws IOException {
-        configValidator.preProfileChecks(configSource);
-
-        Profile profile = profileReader.read(configSource.getProfileFile().toPath());
-        URL schema = schemaVersionValidator.getSchemaFile(profile.getSchemaVersion());
-        profileSchemaValidator.validateProfile(configSource.getProfileFile(), schema);
+        Profile profile = validatingProfileReader.read();
 
         profileValidator.validate(profile);
         violateOutputValidator.validate(profile);

@@ -15,7 +15,7 @@
  */
 
 package com.scottlogic.deg.output;
-import java.io.File;
+
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
@@ -23,7 +23,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.Arrays;
-import java.util.function.Function;
 
 public class FileUtilsImpl implements FileUtils {
     /**
@@ -40,16 +39,6 @@ public class FileUtilsImpl implements FileUtils {
         Arrays.fill(zeroes, '0');
 
         return new DecimalFormat(new String(zeroes));
-    }
-
-    @Override
-    public boolean containsInvalidChars(File file) {
-        return file.toString().matches(".*[?%*|><\"].*|^(?:[^:]*+:){2,}[^:]*+$");
-    }
-
-    @Override
-    public boolean isFileEmpty(File file) {
-        return file.length() == 0;
     }
 
     @Override

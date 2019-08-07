@@ -64,7 +64,7 @@ public class JsonProfileReaderTests {
 
     private Profile getResultingProfile() throws IOException {
         if (this.profile == null) {
-            JsonProfileReader objectUnderTest = new JsonProfileReader(mainConstraintReader);
+            JsonProfileReader objectUnderTest = new JsonProfileReader(null, mainConstraintReader);
             this.profile = objectUnderTest.read(this.json);
         }
 

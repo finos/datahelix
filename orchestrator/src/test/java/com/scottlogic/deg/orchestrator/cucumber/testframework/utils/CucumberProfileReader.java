@@ -48,7 +48,7 @@ public class CucumberProfileReader implements ProfileReader {
     }
 
     @Override
-    public Profile read(Path filePath) {
+    public Profile read() {
         return this.getProfile();
     }
 
@@ -81,8 +81,7 @@ public class CucumberProfileReader implements ProfileReader {
                 throw new RuntimeException(firstException);
             }
 
-            String schemaVersion = "0.1";
-            return new Profile(schemaVersion, profileFields, Collections.singletonList(new Rule(new RuleInformation(), mappedConstraints)));
+            return new Profile(profileFields, Collections.singletonList(new Rule(new RuleInformation(), mappedConstraints)));
         } catch (JsonParseException e) {
             state.addException(e);
             throw e;

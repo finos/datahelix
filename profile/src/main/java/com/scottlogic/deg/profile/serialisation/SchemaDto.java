@@ -13,17 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.scottlogic.deg.profile.serialisation;
 
-package com.scottlogic.deg.profile.reader;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import com.scottlogic.deg.common.profile.Profile;
-
-import java.io.IOException;
-import java.nio.file.Path;
-
-/**
- * Defines an interface for a class to take in a filepath, read the specified profile and produce a Profile object.
- */
-public interface ProfileReader {
-    Profile read() throws IOException;
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class SchemaDto {
+    public String schemaVersion;
 }

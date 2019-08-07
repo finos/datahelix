@@ -143,8 +143,7 @@ class CartesianProductRowSpecTreeSolverTests {
                             new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>("GBP", 1.0F)))
                         )))));
 
-        String schemaVersion = "0.1";
-        Profile profile = new Profile(schemaVersion, fields, dummyRules);
+        Profile profile = new Profile(fields, dummyRules);
 
         final DecisionTree merged = this.dTreeGenerator.analyse(profile);
 

@@ -17,18 +17,15 @@
 package com.scottlogic.deg.profile.reader;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.RuleInformation;
-import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.common.profile.Rule;
+import com.google.inject.name.Named;
+import com.scottlogic.deg.common.profile.*;
 import com.scottlogic.deg.profile.serialisation.ProfileDeserialiser;
 import com.scottlogic.deg.profile.v0_1.ProfileDTO;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -39,15 +36,17 @@ import java.util.stream.Collectors;
  * It returns a Profile object for consumption by a generator
  */
 public class JsonProfileReader implements ProfileReader {
+    private final File profileFile;
     private final MainConstraintReader mainConstraintReader;
 
     @Inject
-    public JsonProfileReader(MainConstraintReader mainConstraintReader) {
+    public JsonProfileReader(@Named("config:profileFile") File profileFile, MainConstraintReader mainConstraintReader) {
+        this.profileFile = profileFile;
         this.mainConstraintReader = mainConstraintReader;
     }
 
-    public Profile read(Path filePath) throws IOException {
-        byte[] encoded = Files.readAllBytes(filePath);
+    public Profile read() throws IOException {
+        byte[] encoded = Files.readAllBytes(profileFile.toPath());
         String profileJson = new String(encoded, StandardCharsets.UTF_8);
 
         return this.read(profileJson);
@@ -92,7 +91,7 @@ public class JsonProfileReader implements ProfileReader {
                         }));
             });
 
-        return new Profile(profileDto.schemaVersion, profileFields, rules, profileDto.description);
+        return new Profile(profileFields, rules, profileDto.description);
     }
 
     static <TInput, TOutput> Collection<TOutput> mapDtos(

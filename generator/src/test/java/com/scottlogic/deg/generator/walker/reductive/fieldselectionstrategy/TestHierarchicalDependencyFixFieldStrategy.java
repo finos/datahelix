@@ -193,8 +193,7 @@ public class TestHierarchicalDependencyFixFieldStrategy {
 
     private List<Field> getPriorities(List<Field> fields, List<Constraint> constraints) {
         List<Rule> rules = Collections.singletonList(new Rule(new RuleInformation(), constraints));
-        String schemaVersion = "0.1";
-        Profile profile = new Profile(schemaVersion, fields, rules);
+        Profile profile = new Profile(fields, rules);
 
         DecisionTree tree = new ProfileDecisionTreeFactory().analyse(profile);
 

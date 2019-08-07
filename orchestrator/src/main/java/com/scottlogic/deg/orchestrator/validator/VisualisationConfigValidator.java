@@ -19,6 +19,7 @@ package com.scottlogic.deg.orchestrator.validator;
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.output.FileUtils;
+import com.scottlogic.deg.output.guice.OutputConfigSource;
 
 import java.nio.file.Path;
 
@@ -27,23 +28,25 @@ import java.nio.file.Path;
  */
 public class VisualisationConfigValidator {
     private final FileUtils fileUtils;
+    private final OutputConfigSource outputConfigSource;
 
     @Inject
-    public VisualisationConfigValidator(FileUtils fileUtils) {
+    public VisualisationConfigValidator(FileUtils fileUtils, OutputConfigSource outputConfigSource) {
         this.fileUtils = fileUtils;
+        this.outputConfigSource = outputConfigSource;
     }
 
     /**
      * @return the result of command line validation. Contains a list of error messages.
      * if the list is empty then the validation was successful.
      */
-    public void validateCommandLine(boolean overwrite, Path outputPath) {
-        if (fileUtils.isDirectory(outputPath)) {
+    public void validateCommandLine() {
+        if (fileUtils.isDirectory(outputConfigSource.getOutputPath())) {
             throw new ValidationException(
                 "Invalid Output - target is a directory, please use a different output filename"
             );
         }
-         if (!overwrite && fileUtils.exists(outputPath)) {
+        if (!outputConfigSource.overwriteOutputFiles() && fileUtils.exists(outputConfigSource.getOutputPath())) {
             throw new ValidationException(
                 "Invalid Output - file already exists, please use a different output filename " +
                     "or use the --overwrite option"

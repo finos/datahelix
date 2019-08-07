@@ -17,9 +17,11 @@
 package com.scottlogic.deg.profile.guice;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.name.Names;
 import com.scottlogic.deg.profile.reader.*;
 import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
 
+import java.io.File;
 import java.util.stream.Stream;
 
 public class ProfileModule extends AbstractModule {
@@ -46,5 +48,9 @@ public class ProfileModule extends AbstractModule {
             new PersonalDataTypesConstraintReaderSource()
         ));
         bind(ConstraintReaderMap.class).toInstance(map);
+
+        bind(File.class)
+            .annotatedWith(Names.named("config:profileFile"))
+            .toInstance(profileConfigSource.getProfileFile());
     }
 }

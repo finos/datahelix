@@ -26,15 +26,14 @@ public class ViolatedProfile extends Profile {
 
     /**
      * Constructs a new violated profile using the base profile constructor.
-     * @param schemaVersion Schema version of profile.
      * @param violatedRule Un-violated form of the rule that has been violated on this profile.
      * @param fields Fields relating to this profile.
      * @param rules Collection of rules on this profile, including the violated form of the one rule which has been
      *              violated.
      * @param description Description of profile.
      */
-    public ViolatedProfile(String schemaVersion, Rule violatedRule, ProfileFields fields, Collection<Rule> rules, String description){
-        super(schemaVersion, fields, rules, description);
+    public ViolatedProfile(Rule violatedRule, ProfileFields fields, Collection<Rule> rules, String description){
+        super(fields, rules, description);
         this.violatedRule = violatedRule;
     }
 
