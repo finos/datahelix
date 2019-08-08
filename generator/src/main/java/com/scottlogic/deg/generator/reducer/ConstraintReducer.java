@@ -91,8 +91,8 @@ public class ConstraintReducer {
         return rootConstraintsStream
             .reduce(
                 Optional.of(FieldSpec.Empty),
-                (optAcc1, optAcc2) -> optAcc1.flatMap(
-                    acc1 -> optAcc2.flatMap(
-                        acc2 -> fieldSpecMerger.merge(acc1, acc2))));
+                (optSpec1, optSpec2) -> optSpec1.flatMap(
+                    spec1 -> optSpec2.flatMap(
+                        spec2 -> fieldSpecMerger.merge(spec1, spec2))));
     }
 }
