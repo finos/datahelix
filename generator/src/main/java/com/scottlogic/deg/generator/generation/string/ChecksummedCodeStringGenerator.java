@@ -140,7 +140,9 @@ public abstract class ChecksummedCodeStringGenerator implements StringGenerator 
                 generateAllInvalidRegexStrings(),
                 generateAllInvalidCheckDigitStrings());
         }
-        return wrapIterableWithProjectionAndFilter(regexGenerator.generateAllValues());
+        return new FilteringIterable<>(
+            regexGenerator.generateAllValues(),
+            (x) -> x.equals(fixCheckDigit(x)));
     }
 
     @Override
