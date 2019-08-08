@@ -157,6 +157,7 @@
           "enum": [
             "ofType",
             "equalTo",
+            "equalToField",
             "formattedAs",
             "matchingRegex",
             "containingRegex",
@@ -169,9 +170,13 @@
             "lessThanOrEqualTo",
             "granularTo",
             "after",
+            "afterField",
             "afterOrAt",
+            "afterOrAtField",
             "before",
-            "beforeOrAt"
+            "beforeField",
+            "beforeOrAt",
+            "beforeOrAtField"
           ]
         },
         "value": {
