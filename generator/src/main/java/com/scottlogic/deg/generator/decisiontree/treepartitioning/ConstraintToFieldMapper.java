@@ -49,28 +49,37 @@ class ConstraintToFieldMapper {
     }
 
     private Stream<ConstraintToFields> mapConstraintToFields(ConstraintNode node) {
-        return Stream.concat(
-            Stream.concat(
-                node.getAtomicConstraints()
-                    .stream()
-                    .map(constraint -> new ConstraintToFields(new RootLevelConstraint(constraint), constraint.getField())),
-                node.getDelayedAtomicConstraints()
-                    .stream()
-                    .map(constraint -> new ConstraintToFields(
-                        new RootLevelConstraint(constraint),
-                        SetUtils.setOf(constraint.field(), constraint.underlyingConstraint().getField())))),
-            node.getDecisions()
-                .stream()
-                .map(decision -> new ConstraintToFields(
-                    new RootLevelConstraint(decision),
+        return Stream.of(
+            mapAtomicConstraintsToFields(node),
+            mapDelayedConstraintsToFields(node),
+            mapDecisionsToFields(node))
+            .reduce(Stream::concat)
+            .orElseGet(Stream::empty);
+    }
+
+    private Stream<ConstraintToFields> mapAtomicConstraintsToFields(ConstraintNode node) {
+        return node.getAtomicConstraints().stream()
+            .map(constraint -> new ConstraintToFields(new RootLevelConstraint(constraint), constraint.getField()));
+    }
+
+    private Stream<ConstraintToFields> mapDelayedConstraintsToFields(ConstraintNode node) {
+        return node.getDelayedAtomicConstraints().stream()
+            .map(constraint -> new ConstraintToFields(
+                new RootLevelConstraint(constraint),
+                SetUtils.setOf(constraint.field(), constraint.underlyingConstraint().getField())));
+    }
+
+    private Stream<ConstraintToFields> mapDecisionsToFields(ConstraintNode node) {
+        return node.getDecisions()
+            .stream()
+            .map(decision -> new ConstraintToFields(
+                new RootLevelConstraint(decision),
+                FlatMappingSpliterator.flatMap(
                     FlatMappingSpliterator.flatMap(
-                        FlatMappingSpliterator.flatMap(decision
-                                .getOptions()
-                                .stream(),
-                            this::mapConstraintToFields),
-                        objectField -> objectField.fields.stream())
-                        .collect(Collectors.toSet()))
-                ));
+                        decision.getOptions().stream(),
+                        this::mapConstraintToFields),
+                    objectField -> objectField.fields.stream()).collect(Collectors.toSet()))
+            );
     }
 
     Map<RootLevelConstraint, Set<Field>> mapConstraintsToFields(DecisionTree decisionTree) {
