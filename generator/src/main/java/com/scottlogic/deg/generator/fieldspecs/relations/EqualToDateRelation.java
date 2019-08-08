@@ -25,10 +25,10 @@ public class EqualToDateRelation implements FieldSpecRelations {
 
     private final Field other;
 
-   public EqualToDateRelation(Field main, Field other) {
-       this.main = main;
-       this.other = other;
-   }
+    public EqualToDateRelation(Field main, Field other) {
+        this.main = main;
+        this.other = other;
+    }
 
     @Override
     public FieldSpec reduceToRelatedFieldSpec(FieldSpec otherValue) {

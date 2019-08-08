@@ -119,25 +119,20 @@ public class AtomicConstraintTypeReaderMap {
                     getValidatedValue(dto, OffsetDateTime.class)));
 
         map.put(IS_AFTER_CONSTANT_DATE_TIME,
-            (dto, fields) -> {
-                Optional<OffsetDateTime> dateValidatedValue =
-                    ConstraintReaderHelpers.tryGetValidatedValue(dto, OffsetDateTime.class);
+            (dto, fields) ->
+                new IsAfterConstantDateTimeConstraint(
+                    fields.getByName(dto.field),
+                    ConstraintReaderHelpers.getValidatedValue(dto, OffsetDateTime.class)));
 
-                if (dateValidatedValue.isPresent()) {
-                    return new IsAfterConstantDateTimeConstraint(fields.getByName(dto.field), dateValidatedValue.get());
-                }
-
-                String otherFieldName = ConstraintReaderHelpers.getValueAsString(dto);
-                Field otherField = fields.getByName(otherFieldName);
-
-                return new IsAfterDynamicDateTimeConstraint(
+        map.put(IS_AFTER_FIELD_DATE_TIME,
+            (dto, fields) ->
+                new IsAfterDynamicDateTimeConstraint(
                     new IsAfterConstantDateTimeConstraint(
                         fields.getByName(dto.field),
                         OffsetDateTime.MAX
                     ),
-                    otherField
-                );
-            });
+                    fields.getByName(ConstraintReaderHelpers.getValueAsString(dto))
+                ));
 
         map.put(IS_AFTER_OR_EQUAL_TO_CONSTANT_DATE_TIME,
             (dto, fields) ->

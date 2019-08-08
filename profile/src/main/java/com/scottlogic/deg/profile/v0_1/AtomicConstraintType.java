@@ -43,6 +43,7 @@ public enum AtomicConstraintType {
 
     // DateTime
     IS_AFTER_CONSTANT_DATE_TIME("after"),
+    IS_AFTER_FIELD_DATE_TIME("afterField"),
     IS_AFTER_OR_EQUAL_TO_CONSTANT_DATE_TIME("afterOrAt"),
     IS_BEFORE_CONSTANT_DATE_TIME("before"),
     IS_BEFORE_OR_EQUAL_TO_CONSTANT_DATE_TIME("beforeOrAt"),

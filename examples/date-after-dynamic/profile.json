@@ -41,7 +41,7 @@
         },
         {
           "field": "later",
-          "is": "after",
+          "is": "afterField",
           "value": "earlier"
         }
       ]

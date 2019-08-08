@@ -34,7 +34,7 @@ class BeforeDateRelation extends AbstractDateInequalityRelation {
 
     @Override
     protected void appendValueToRestrictions(DateTimeRestrictions restrictions, OffsetDateTime value) {
-        restrictions.min = new DateTimeRestrictions.DateTimeLimit(value, true);
+        restrictions.min = new DateTimeRestrictions.DateTimeLimit(value, false);
     }
 
     @Override
