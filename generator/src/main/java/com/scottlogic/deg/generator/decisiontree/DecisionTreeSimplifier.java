@@ -46,7 +46,9 @@ public class DecisionTreeSimplifier {
 
             // if an option contains no constraints and only one decision, then it can be replaced by the set of options within that decision.
             // this helps simplify the sorts of trees that come from eg A OR (B OR C)
-            if (simplifiedNode.getAtomicConstraints().isEmpty() && simplifiedNode.getDecisions().size() == 1) {
+            if (simplifiedNode.getAtomicConstraints().isEmpty() &&
+                simplifiedNode.getDelayedAtomicConstraints().isEmpty() &&
+                simplifiedNode.getDecisions().size() == 1) {
                 newNodes.addAll(
                     simplifiedNode.getDecisions()
                         .iterator().next() //get only member
@@ -67,7 +69,8 @@ public class DecisionTreeSimplifier {
                 node,
                 (parentConstraint, decisionNode) -> {
                     ConstraintNode firstOption = decisionNode.getOptions().iterator().next();
-                    if (parentConstraint.getAtomicConstraints().stream().anyMatch(firstOption.getAtomicConstraints()::contains)) {
+                    if (parentConstraint.getAtomicConstraints().stream().anyMatch(firstOption.getAtomicConstraints()::contains)
+                    || parentConstraint.getDelayedAtomicConstraints().stream().anyMatch(firstOption.getDelayedAtomicConstraints()::contains)) {
                         return parentConstraint.builder().removeDecision(decisionNode).build();
                     } else {
                         return parentConstraint.builder()
