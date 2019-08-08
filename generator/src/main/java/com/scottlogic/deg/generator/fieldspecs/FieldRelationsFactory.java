@@ -16,7 +16,7 @@ public class FieldRelationsFactory {
 
    private FieldSpecRelations construct(DelayedAtomicConstraint constraint, boolean negate) {
        if (constraint instanceof DynamicNotConstraint) {
-           return construct((DynamicNotConstraint) constraint.negate(), !negate);
+           return construct(constraint.negate(), !negate);
        } else if (constraint instanceof IsAfterDynamicDateTimeConstraint) {
            return constructAfterDate((IsAfterDynamicDateTimeConstraint) constraint);
        } else if (constraint instanceof IsEqualToDynamicDateConstraint) {

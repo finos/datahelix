@@ -40,7 +40,7 @@ public class AfterDateRelation extends AbstractDateInequalityRelation {
 
     @Override
     public FieldSpecRelations inverse() {
-        return new BeforeDateRelation(main(), other());
+        return new BeforeDateRelation(other(), main());
     }
 
 }

@@ -37,7 +37,7 @@ public class EqualToDateRelation implements FieldSpecRelations {
 
     @Override
     public FieldSpecRelations inverse() {
-        return this;
+        return new EqualToDateRelation(other, main);
     }
 
     @Override
