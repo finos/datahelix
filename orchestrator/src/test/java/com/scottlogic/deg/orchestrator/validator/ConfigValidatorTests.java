@@ -37,7 +37,7 @@ public class ConfigValidatorTests {
     private File mockProfileFile = mock(File.class);
 
     @Test
-    public void preProfileChecks_withValid_returnsNoErrorMessages() {
+    public void checkProfileInputFile_withValidFile_returnsNoErrorMessages() {
         ConfigValidator configValidator = new ConfigValidator(mockProfileFile, new FileUtils());
 
         when(mockProfileFile.getPath()).thenReturn("path");
@@ -49,7 +49,7 @@ public class ConfigValidatorTests {
     }
 
     @Test
-    public void preProfileChecks_profileFilePathContainsInvalidChars_throwsException() {
+    public void checkProfileInputFile_profileFilePathContainsInvalidChars_throwsException() {
         ConfigValidator configValidator = new ConfigValidator(mockProfileFile, new FileUtils());
 
         when(mockProfileFile.getPath()).thenReturn("path?");
@@ -58,7 +58,7 @@ public class ConfigValidatorTests {
     }
 
     @Test
-    public void preProfileChecks_profileFileDoesNotExist_throwsException() {
+    public void checkProfileInputFile_profileFileDoesNotExist_throwsException() {
         ConfigValidator configValidator = new ConfigValidator(mockProfileFile, new FileUtils());
 
         when(mockProfileFile.getPath()).thenReturn("path");
@@ -68,7 +68,7 @@ public class ConfigValidatorTests {
     }
 
     @Test
-    public void preProfileChecks_profileFileIsDir_throwsException() {
+    public void checkProfileInputFile_profileFileIsDir_throwsException() {
         ConfigValidator configValidator = new ConfigValidator(mockProfileFile, new FileUtils());
 
         when(mockProfileFile.getPath()).thenReturn("path");
@@ -79,7 +79,7 @@ public class ConfigValidatorTests {
     }
 
     @Test
-    public void preProfileChecks_profileFileIsEmpty_throwsException() {
+    public void checkProfileInputFile_profileFileIsEmpty_throwsException() {
         ConfigValidator configValidator = new ConfigValidator(mockProfileFile, new FileUtils());
 
         when(mockProfileFile.getPath()).thenReturn("path");
