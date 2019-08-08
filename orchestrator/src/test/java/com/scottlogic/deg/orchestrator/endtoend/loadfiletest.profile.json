@@ -22,8 +22,8 @@
       "constraints": [
         {
           "field": "foo",
-          "is": "setFromFile",
-          "value": "src/test/java/com/scottlogic/deg/orchestrator/endtoend/testfile.csv"
+          "is": "inSet",
+          "file": "src/test/java/com/scottlogic/deg/orchestrator/endtoend/testfile.csv"
         }
       ]
     }

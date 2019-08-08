@@ -31,20 +31,33 @@ import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
 import java.io.*;
 import java.util.stream.Collectors;
 
-import static com.scottlogic.deg.profile.reader.ConstraintReaderHelpers.getValidatedValue;
+import static com.scottlogic.deg.profile.reader.ConstraintReaderHelpers.getValidatedValues;
 
-public class FromFileReader implements ConstraintReader {
+public class SetReader implements ConstraintReader {
     private final String fromFilePath;
 
-    public FromFileReader(String fromFilePath) {
+    public SetReader(String fromFilePath) {
         this.fromFilePath = fromFilePath;
     }
 
     @Override
     public Constraint apply(ConstraintDTO dto, ProfileFields fields) {
-        String value = getValidatedValue(dto, String.class);
+        if (dto.file != null) {
+            return setFromFile(dto, fields);
+        }
 
-        InputStream streamFromPath = createStreamFromPath(appendPath(value));
+        return setFromProfile(dto, fields);
+    }
+
+    private Constraint setFromProfile(ConstraintDTO dto, ProfileFields fields) {
+        return new IsInSetConstraint(
+            fields.getByName(dto.field),
+            FrequencyDistributedSet.uniform(getValidatedValues(dto)));
+    }
+
+    private Constraint setFromFile(ConstraintDTO dto, ProfileFields fields) {
+        InputStream streamFromPath = createStreamFromPath(appendPath(dto.file));
+
         DistributedSet<String> names = CsvInputStreamReader.retrieveLines(streamFromPath);
         closeStream(streamFromPath);
 
