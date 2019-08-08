@@ -18,12 +18,14 @@ package com.scottlogic.deg.profile.guice;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
-import com.scottlogic.deg.profile.reader.*;
+import com.scottlogic.deg.profile.reader.AtomicConstraintTypeReaderMap;
+import com.scottlogic.deg.profile.reader.JsonProfileReader;
+import com.scottlogic.deg.profile.reader.ProfileReader;
 import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
 import com.scottlogic.deg.profile.v0_1.SchemaVersionValidator;
 import com.scottlogic.deg.profile.v0_1.SupportedVersionChecker;
+
 import java.io.File;
-import java.util.stream.Stream;
 
 public class ProfileModule extends AbstractModule {
 

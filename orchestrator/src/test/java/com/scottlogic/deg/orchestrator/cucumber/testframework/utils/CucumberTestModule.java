@@ -26,14 +26,13 @@ import com.scottlogic.deg.generator.inputs.validation.MultipleProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.TypingRequiredPerFieldValidator;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
-import com.scottlogic.deg.profile.reader.validation.ConfigValidator;
 import com.scottlogic.deg.output.manifest.ManifestWriter;
 import com.scottlogic.deg.output.outputtarget.OutputTargetFactory;
 import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
 import com.scottlogic.deg.profile.reader.ProfileReader;
+import com.scottlogic.deg.profile.reader.validation.ConfigValidator;
 import com.scottlogic.deg.profile.v0_1.NoopVersionChecker;
 import com.scottlogic.deg.profile.v0_1.SchemaVersionValidator;
-import com.scottlogic.deg.profile.v0_1.SupportedVersionChecker;
 
 import java.util.stream.Stream;
 

@@ -18,7 +18,6 @@ package com.scottlogic.deg.output.guice;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
-import com.scottlogic.deg.common.util.FileUtils;
 import com.scottlogic.deg.output.OutputPath;
 import com.scottlogic.deg.output.manifest.JsonManifestWriter;
 import com.scottlogic.deg.output.manifest.ManifestWriter;
