@@ -14,21 +14,38 @@
  * limitations under the License.
  */
 
-
 package com.scottlogic.deg.common.profile.constraints.delayed;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 
-public interface DelayedAtomicConstraint extends Constraint {
+public class IsBeforeDynamicDateConstraint implements DelayedAtomicConstraint {
 
-    AtomicConstraint underlyingConstraint();
+    private final AtomicConstraint underlyingConstraint;
 
-    Field field();
+    private final Field field;
 
-    default DynamicNotConstraint negate() {
-        return new DynamicNotConstraint(this);
+    private final boolean inclusive;
+
+    public IsBeforeDynamicDateConstraint(AtomicConstraint underlyingConstraint,
+                                         Field field,
+                                         boolean inclusive) {
+        this.underlyingConstraint = underlyingConstraint;
+        this.field = field;
+        this.inclusive = inclusive;
     }
 
+    @Override
+    public AtomicConstraint underlyingConstraint() {
+        return underlyingConstraint;
+    }
+
+    @Override
+    public Field field() {
+        return field;
+    }
+
+    public boolean inclusive() {
+        return inclusive;
+    }
 }

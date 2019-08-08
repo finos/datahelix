@@ -21,24 +21,31 @@ import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
 
 import java.time.OffsetDateTime;
 
-class BeforeDateRelation extends AbstractDateInequalityRelation {
+public class BeforeDateRelation extends AbstractDateInequalityRelation {
 
-    public BeforeDateRelation(Field main, Field other) {
+    private final boolean inclusive;
+
+    public BeforeDateRelation(Field main, Field other, boolean inclusive) {
         super(main, other);
+        this.inclusive = inclusive;
     }
 
     @Override
     public DateTimeRestrictions.DateTimeLimit dateTimeLimitExtractingFunction(DateTimeRestrictions restrictions) {
-        return restrictions.min;
+        if (restrictions != null) {
+            return restrictions.min;
+        } else {
+            return null;
+        }
     }
 
     @Override
     protected void appendValueToRestrictions(DateTimeRestrictions restrictions, OffsetDateTime value) {
-        restrictions.min = new DateTimeRestrictions.DateTimeLimit(value, false);
+        restrictions.min = new DateTimeRestrictions.DateTimeLimit(value, inclusive);
     }
 
     @Override
     public FieldSpecRelations inverse() {
-        return new AfterDateRelation(other(), main());
+        return new AfterDateRelation(other(), main(), inclusive);
     }
 }

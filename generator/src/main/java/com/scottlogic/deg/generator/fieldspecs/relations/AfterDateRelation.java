@@ -24,23 +24,30 @@ import java.time.OffsetDateTime;
 
 public class AfterDateRelation extends AbstractDateInequalityRelation {
 
-    public AfterDateRelation(Field main, Field other) {
+    private final boolean inclusive;
+
+    public AfterDateRelation(Field main, Field other, boolean inclusive) {
         super(main, other);
+        this.inclusive = inclusive;
     }
 
     @Override
     protected DateTimeRestrictions.DateTimeLimit dateTimeLimitExtractingFunction(DateTimeRestrictions restrictions) {
-        return restrictions.max;
+        if (restrictions != null) {
+            return restrictions.max;
+        } else {
+            return null;
+        }
     }
 
     @Override
     protected void appendValueToRestrictions(DateTimeRestrictions restrictions, OffsetDateTime value) {
-        restrictions.max = new DateTimeRestrictions.DateTimeLimit(value, false);
+        restrictions.max = new DateTimeRestrictions.DateTimeLimit(value, inclusive);
     }
 
     @Override
     public FieldSpecRelations inverse() {
-        return new BeforeDateRelation(other(), main());
+        return new BeforeDateRelation(other(), main(), inclusive);
     }
 
 }

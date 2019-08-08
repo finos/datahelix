@@ -2,9 +2,13 @@
   "schemaVersion": "0.1",
   "fields": [
     {
-      "name": "earlier"
+      "name": "field1"
     }, {
-      "name": "later"
+      "name": "field2"
+    }, {
+      "name": "field3"
+    }, {
+      "name": "field4"
     }
   ],
   "rules": [
@@ -12,37 +16,64 @@
       "constraints": [
         {
           "not": {
-            "field": "earlier",
+            "field": "field1",
             "is": "null"
           }
         },
         {
           "not": {
-            "field": "later",
+            "field": "field2",
             "is": "null"
           }
         },
         {
-          "field": "earlier",
+          "not": {
+            "field": "field3",
+            "is": "null"
+          }
+        },
+        {
+          "not": {
+            "field": "field4",
+            "is": "null"
+          }
+        },
+        {
+          "field": "field1",
           "is": "ofType",
           "value": "datetime"
         },
         {
-          "field": "later",
+          "field": "field2",
           "is": "ofType",
           "value": "datetime"
         },
         {
-          "field": "earlier",
+          "field": "field3",
+          "is": "ofType",
+          "value": "datetime"
+        },
+        {
+          "field": "field4",
+          "is": "ofType",
+          "value": "datetime"
+        },
+        {
+          "field": "field1",
           "is": "after",
           "value": {
             "date": "8001-02-03T04:05:06.007"
           }
         },
         {
-          "field": "later",
+          "field": "field2",
           "is": "afterField",
-          "value": "earlier"
+          "value": "field1"
+        },
+        {
+          "field": "field3",
+          "is": "beforeOrAtField",
+          "value": "field4"
         }
       ]
     }

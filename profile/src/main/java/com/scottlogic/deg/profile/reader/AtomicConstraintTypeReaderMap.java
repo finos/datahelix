@@ -16,12 +16,11 @@
 
 package com.scottlogic.deg.profile.reader;
 
-import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
-import com.scottlogic.deg.common.profile.constraints.delayed.IsAfterDynamicDateTimeConstraint;
+import com.scottlogic.deg.common.profile.constraints.delayed.IsAfterDynamicDateConstraint;
+import com.scottlogic.deg.common.profile.constraints.delayed.IsBeforeDynamicDateConstraint;
 import com.scottlogic.deg.common.profile.constraints.delayed.IsEqualToDynamicDateConstraint;
 import com.scottlogic.deg.common.util.Defaults;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.profile.reader.constraintreaders.SetReader;
 import com.scottlogic.deg.profile.reader.constraintreaders.GranularToReader;
 import com.scottlogic.deg.profile.reader.constraintreaders.OfTypeReader;
@@ -31,7 +30,6 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.regex.Pattern;
 
 import static com.scottlogic.deg.profile.reader.ConstraintReaderHelpers.getValidatedValue;
@@ -112,11 +110,35 @@ public class AtomicConstraintTypeReaderMap {
                     fields.getByName(dto.field),
                     getValidatedValue(dto, OffsetDateTime.class)));
 
+        map.put(IS_BEFORE_FIELD_DATE_TIME,
+            (dto, fields) ->
+                new IsBeforeDynamicDateConstraint(
+                    new IsBeforeConstantDateTimeConstraint(
+                        fields.getByName(dto.field),
+                        OffsetDateTime.MIN
+                    ),
+                    fields.getByName(ConstraintReaderHelpers.getValueAsString(dto)),
+                    false
+                )
+            );
+
         map.put(IS_BEFORE_OR_EQUAL_TO_CONSTANT_DATE_TIME,
             (dto, fields) ->
                 new IsBeforeOrEqualToConstantDateTimeConstraint(
                     fields.getByName(dto.field),
                     getValidatedValue(dto, OffsetDateTime.class)));
+
+        map.put(IS_BEFORE_OR_EQUAL_TO_FIELD_DATE_TIME,
+            (dto, fields) ->
+                new IsBeforeDynamicDateConstraint(
+                    new IsBeforeOrEqualToConstantDateTimeConstraint(
+                        fields.getByName(dto.field),
+                        OffsetDateTime.MIN
+                    ),
+                    fields.getByName(ConstraintReaderHelpers.getValueAsString(dto)),
+                    true
+                )
+        );
 
         map.put(IS_AFTER_CONSTANT_DATE_TIME,
             (dto, fields) ->
@@ -126,12 +148,13 @@ public class AtomicConstraintTypeReaderMap {
 
         map.put(IS_AFTER_FIELD_DATE_TIME,
             (dto, fields) ->
-                new IsAfterDynamicDateTimeConstraint(
+                new IsAfterDynamicDateConstraint(
                     new IsAfterConstantDateTimeConstraint(
                         fields.getByName(dto.field),
                         OffsetDateTime.MAX
                     ),
-                    fields.getByName(ConstraintReaderHelpers.getValueAsString(dto))
+                    fields.getByName(ConstraintReaderHelpers.getValueAsString(dto)),
+                    false
                 ));
 
         map.put(IS_AFTER_OR_EQUAL_TO_CONSTANT_DATE_TIME,
@@ -139,6 +162,18 @@ public class AtomicConstraintTypeReaderMap {
                 new IsAfterOrEqualToConstantDateTimeConstraint(
                     fields.getByName(dto.field),
                     getValidatedValue(dto, OffsetDateTime.class)));
+
+        map.put(IS_AFTER_OR_EQUAL_TO_FIELD_DATE_TIME,
+            (dto, fields) ->
+                new IsAfterDynamicDateConstraint(
+                    new IsAfterOrEqualToConstantDateTimeConstraint(
+                        fields.getByName(dto.field),
+                        OffsetDateTime.MAX
+                    ),
+                    fields.getByName(ConstraintReaderHelpers.getValueAsString(dto)),
+                    true
+                )
+            );
 
         map.put(IS_NULL,
             (dto, fields) -> new IsNullConstraint(fields.getByName(dto.field)));
