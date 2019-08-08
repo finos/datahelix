@@ -13,6 +13,17 @@ Feature: User can specify that a field must be a financial code type
       | null           |
       | "GB0002634946" |
 
+  Scenario: Sequential isins are generated uniquely
+    Given foo is of type "ISIN"
+    And foo is anything but null
+    And the generator can generate at most 4 rows
+    Then the following data should be generated:
+      | foo            |
+      | "GB0000000009" |
+      | "GB0000000116" |
+      | "GB0000000223" |
+      | "GB0000000330" |
+
   Scenario: An ofType constraint with the value "isin" fails with an invalid profile error message
     Given foo is of type "isin"
     Then the profile is invalid because "Profile is invalid: no constraints known for \"is\": \"ofType\", \"value\": \"isin\""
