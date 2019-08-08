@@ -23,7 +23,7 @@ import com.scottlogic.deg.common.profile.ViolatedProfile;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.inputs.profileviolation.ProfileViolator;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
-import com.scottlogic.deg.output.FileUtilsImpl;
+import com.scottlogic.deg.common.util.FileUtils;
 import com.scottlogic.deg.output.manifest.ManifestWriter;
 import com.scottlogic.deg.output.outputtarget.OutputTargetFactory;
 import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
@@ -78,7 +78,7 @@ public class ViolateExecute {
         }
         manifestWriter.writeManifest(violatedProfiles);
 
-        DecimalFormat intFormatter = FileUtilsImpl.getDecimalFormat(violatedProfiles.size());
+        DecimalFormat intFormatter = FileUtils.getDecimalFormat(violatedProfiles.size());
 
         int filename = 1;
         for (Profile violatedProfile : violatedProfiles) {

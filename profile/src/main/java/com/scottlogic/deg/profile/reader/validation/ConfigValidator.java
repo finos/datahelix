@@ -19,6 +19,7 @@ package com.scottlogic.deg.profile.reader.validation;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.scottlogic.deg.common.ValidationException;
+import com.scottlogic.deg.common.util.FileUtils;
 
 import java.io.File;
 
@@ -26,16 +27,20 @@ import java.io.File;
  * Class used to determine whether the command line options are valid for generation.
  */
 public class ConfigValidator {
-
+    private final FileUtils fileUtils;
     private final File profileFile;
 
     @Inject
-    public ConfigValidator(@Named("config:profileFile") File profileFile) {
+    public ConfigValidator(
+        @Named("config:profileFile") File profileFile,
+        FileUtils fileUtils
+    ) {
         this.profileFile = profileFile;
+        this.fileUtils = fileUtils;
     }
 
     public void checkProfileInputFile() {
-        if (containsInvalidChars(profileFile)) {
+        if (fileUtils.containsInvalidChars(profileFile)) {
             throw new ValidationException("Profile file path " + profileFile +
                 " contains one or more invalid characters ? : %% \" | > < "
             );
@@ -47,18 +52,8 @@ public class ConfigValidator {
             throw new ValidationException("Profile file path " + profileFile +
                 " provided is to a directory");
         }
-        else if (isFileEmpty(profileFile)) {
+        else if (fileUtils.isFileEmpty(profileFile)) {
             throw new ValidationException("Profile file " + profileFile + " has no content");
         }
     }
-
-    boolean containsInvalidChars(File file) {
-        return file.getPath().matches(".*[?%*|><\"].*|^(?:[^:]*+:){2,}[^:]*+$");
-    }
-
-
-    boolean isFileEmpty(File file) {
-        return file.length() == 0;
-    }
-
 }

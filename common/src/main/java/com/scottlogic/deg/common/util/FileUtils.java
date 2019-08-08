@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.output;
+package com.scottlogic.deg.common.util;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
@@ -24,7 +25,7 @@ import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 
-public class FileUtilsImpl implements FileUtils {
+public class FileUtils {
     /**
      * Provides a decimal formatter for pre-padding numbers with just enough zeroes.
      * E.g. if there are 42 records in a dataset this will produce a formatter of "00"
@@ -41,12 +42,18 @@ public class FileUtilsImpl implements FileUtils {
         return new DecimalFormat(new String(zeroes));
     }
 
-    @Override
+    public boolean containsInvalidChars(File file) {
+        return file.toString().matches(".*[?%*|><\"].*|^(?:[^:]*+:){2,}[^:]*+$");
+    }
+
+    public boolean isFileEmpty(File file) {
+        return file.length() == 0;
+    }
+
     public boolean exists(Path path) {
         return Files.exists(path);
     }
 
-    @Override
     public boolean isDirectory(Path path) {
         return Files.isDirectory(path);
     }
@@ -59,7 +66,6 @@ public class FileUtilsImpl implements FileUtils {
      * @param fileCount the number of files we will check for.
      * @return true if any of the files exist, false only if none of the files exist in the directory.
      */
-    @Override
     public boolean isDirectoryEmpty(Path filepath, int fileCount) {
         if (directoryContainsManifestJsonFile(filepath) ||
             directoryContainsFilesWithExt(filepath, "csv", fileCount)) {
@@ -73,7 +79,7 @@ public class FileUtilsImpl implements FileUtils {
     }
 
     private boolean directoryContainsFilesWithExt(Path filePath, String ext, int fileCount) {
-        DecimalFormat intFormatter = FileUtilsImpl.getDecimalFormat(fileCount);
+        DecimalFormat intFormatter = FileUtils.getDecimalFormat(fileCount);
         for (int x = 1; x <= fileCount; x++) {
             if (Files.exists(Paths.get(filePath.toString(), intFormatter.format(x) + "." + ext))) {
                 return true;
@@ -89,7 +95,6 @@ public class FileUtilsImpl implements FileUtils {
      * false if the parent already exists and is a file
      * @throws IOException if we are unable to create the directory due to an I/O error
      */
-    @Override
     public boolean createDirectories(Path dir) throws IOException {
         try {
             checkValidDirectoryPath(dir);

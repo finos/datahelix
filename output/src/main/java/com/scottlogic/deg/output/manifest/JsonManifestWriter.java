@@ -19,10 +19,8 @@ package com.scottlogic.deg.output.manifest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.scottlogic.deg.common.profile.ViolatedProfile;
-import com.scottlogic.deg.output.FileUtils;
-import com.scottlogic.deg.output.FileUtilsImpl;
+import com.scottlogic.deg.common.util.FileUtils;
 import com.scottlogic.deg.output.OutputPath;
 
 import java.io.IOException;
@@ -48,7 +46,7 @@ public class JsonManifestWriter implements ManifestWriter {
 
     public void writeManifest(List<ViolatedProfile> result) throws IOException {
         AtomicInteger dataSetIndex = new AtomicInteger(1);
-        DecimalFormat intFormatter = FileUtilsImpl.getDecimalFormat(result.size());
+        DecimalFormat intFormatter = FileUtils.getDecimalFormat(result.size());
 
         List<ManifestDTO.TestCaseDTO> testCaseDtos = result
             .stream()

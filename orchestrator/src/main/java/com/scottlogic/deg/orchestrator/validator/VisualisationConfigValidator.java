@@ -18,10 +18,8 @@ package com.scottlogic.deg.orchestrator.validator;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.output.FileUtils;
+import com.scottlogic.deg.common.util.FileUtils;
 import com.scottlogic.deg.output.guice.OutputConfigSource;
-
-import java.nio.file.Path;
 
 /**
  * Class used to determine whether the command line options are valid for visualisation

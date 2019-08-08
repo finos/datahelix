@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.output.writer;
 
-import com.scottlogic.deg.output.FileUtils;
+import com.scottlogic.deg.common.util.FileUtils;
 import com.scottlogic.deg.output.OutputPath;
 import com.scottlogic.deg.output.outputtarget.FileOutputTarget;
 import com.scottlogic.deg.output.outputtarget.OutputTargetValidationException;

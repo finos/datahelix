@@ -17,9 +17,7 @@
 package com.scottlogic.deg.orchestrator.validator;
 
 import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.generator.config.detail.DataGenerationType;
-import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
-import com.scottlogic.deg.output.FileUtils;
+import com.scottlogic.deg.common.util.FileUtils;
 import com.scottlogic.deg.profile.reader.validation.ConfigValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +36,7 @@ public class ConfigValidatorTests {
 
     @Test
     public void preProfileChecks_withValid_returnsNoErrorMessages() {
-        ConfigValidator configValidator = new ConfigValidator(mockProfileFile);
+        ConfigValidator configValidator = new ConfigValidator(mockProfileFile, new FileUtils());
 
         when(mockProfileFile.getPath()).thenReturn("path");
         when(mockProfileFile.exists()).thenReturn(true);
@@ -50,7 +48,7 @@ public class ConfigValidatorTests {
 
     @Test
     public void preProfileChecks_profileFilePathContainsInvalidChars_throwsException() {
-        ConfigValidator configValidator = new ConfigValidator(mockProfileFile);
+        ConfigValidator configValidator = new ConfigValidator(mockProfileFile, new FileUtils());
 
         when(mockProfileFile.getPath()).thenReturn("path?");
 
@@ -59,7 +57,7 @@ public class ConfigValidatorTests {
 
     @Test
     public void preProfileChecks_profileFileDoesNotExist_throwsException() {
-        ConfigValidator configValidator = new ConfigValidator(mockProfileFile);
+        ConfigValidator configValidator = new ConfigValidator(mockProfileFile, new FileUtils());
 
         when(mockProfileFile.getPath()).thenReturn("path");
         when(mockProfileFile.exists()).thenReturn(false);
@@ -69,7 +67,7 @@ public class ConfigValidatorTests {
 
     @Test
     public void preProfileChecks_profileFileIsDir_throwsException() {
-        ConfigValidator configValidator = new ConfigValidator(mockProfileFile);
+        ConfigValidator configValidator = new ConfigValidator(mockProfileFile, new FileUtils());
 
         when(mockProfileFile.getPath()).thenReturn("path");
         when(mockProfileFile.exists()).thenReturn(true);
@@ -80,7 +78,7 @@ public class ConfigValidatorTests {
 
     @Test
     public void preProfileChecks_profileFileIsEmpty_throwsException() {
-        ConfigValidator configValidator = new ConfigValidator(mockProfileFile);
+        ConfigValidator configValidator = new ConfigValidator(mockProfileFile, new FileUtils());
 
         when(mockProfileFile.getPath()).thenReturn("path");
         when(mockProfileFile.exists()).thenReturn(true);
