@@ -35,6 +35,7 @@ public class ProfileSchemaValidatorTests {
     private final String TEST_SCHEMA_DIR = "/profileschema/";
     private final String INVALID_PROFILE_DIR = "invalid";
     private final String VALID_PROFILE_DIR = "valid";
+    private final String VALID_SCHEMA_VERSION = "0.2"; // One in profile/src/test/resources/profileschema
 
     FilenameFilter jsonFilter = new FilenameFilter() {
         public boolean accept(File dir, String name) {
@@ -62,7 +63,6 @@ public class ProfileSchemaValidatorTests {
     Collection<DynamicTest> testInvalidProfiles(ProfileSchemaValidator profileValidator) {
         File[] listOfFiles = getFileFromURL(INVALID_PROFILE_DIR).listFiles(jsonFilter);
         Collection<DynamicTest> dynTsts = new ArrayList<DynamicTest>();
-        String schemaVersion = "0.2";
 
         for (int i = 0; i < listOfFiles.length; i++) {
             String profileFilename = listOfFiles[i].getName();
@@ -73,7 +73,7 @@ public class ProfileSchemaValidatorTests {
                     );
                 URL testSchemaUrl =
                     this.getClass().getResource(
-                        TEST_SCHEMA_DIR + schemaVersion + "/mock-schema.json"
+                        TEST_SCHEMA_DIR + VALID_SCHEMA_VERSION + "/mock-schema.json"
                     );
                 try {
                     profileValidator.validateProfile(new File(testProfileUrl.getPath()), testSchemaUrl);
@@ -92,7 +92,6 @@ public class ProfileSchemaValidatorTests {
     Collection<DynamicTest> testValidProfiles(ProfileSchemaValidator profileValidator) {
         File[] listOfFiles = getFileFromURL(VALID_PROFILE_DIR).listFiles(jsonFilter);
         Collection<DynamicTest> dynTsts = new ArrayList<DynamicTest>();
-        String schemaVersion = "0.2";
 
         for (int i = 0; i < listOfFiles.length; i++) {
             String profileFilename = listOfFiles[i].getName();
@@ -103,7 +102,7 @@ public class ProfileSchemaValidatorTests {
                     );
                 URL testSchemaUrl =
                     this.getClass().getResource(
-                        TEST_SCHEMA_DIR + schemaVersion + "/mock-schema.json"
+                        TEST_SCHEMA_DIR + VALID_SCHEMA_VERSION + "/mock-schema.json"
                     );
                 try {
                     profileValidator.validateProfile(new File(testProfileUrl.getPath()), testSchemaUrl);

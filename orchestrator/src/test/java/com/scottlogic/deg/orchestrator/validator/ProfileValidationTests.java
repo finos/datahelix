@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class ProfileValidationTests {
-    private static final String TEST_SCHEMA_DIR = "/profileschema/";
+    private static final String TEST_SCHEMA_LOCATION = "/profileschema/0.1/datahelix.schema.json";
 
     @TestFactory
     Collection<DynamicTest> shouldAllValidateWithoutErrors() throws IOException {
@@ -41,12 +41,8 @@ public class ProfileValidationTests {
         for (File dir : directoriesArray) {
             File profileFile = Paths.get(dir.getCanonicalPath(), "profile.json").toFile();
 
-            // Get the real schema
-            String schemaVersion = "0.1";
             URL testSchemaUrl =
-                this.getClass().getResource(
-                    TEST_SCHEMA_DIR + schemaVersion + "/datahelix.schema.json"
-                );
+                this.getClass().getResource(TEST_SCHEMA_LOCATION);
             DynamicTest test = DynamicTest.dynamicTest(
                 dir.getName(),
                 () -> new ProfileSchemaValidatorLeadPony().validateProfile(profileFile, testSchemaUrl));
