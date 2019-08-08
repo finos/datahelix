@@ -2,6 +2,7 @@
 
 1. Copy a package in _/profileschema/_ and rename to the new version number.
 1. Change the _schemaVersion_ const from the old version number to the new one.
+1. Change the hardcoded list in com/scottlogic/deg/profile/v0_1/SupportedVersionChecker.java
 
 ### Example
 If the file structure currently looks like the below...
@@ -37,3 +38,12 @@ Then change the below (in the new file)...
 },
 ...
 ``` 
+
+Then change the line in SupportedVersionChecker from...
+```
+List<String> supportedSchemaVersions = Arrays.asList("0.1");
+```
+...to:
+```
+List<String> supportedSchemaVersions = Arrays.asList("0.1", "0.2");
+```

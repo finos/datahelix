@@ -42,6 +42,7 @@ public class SupportedVersionChecker implements SchemaVersionValidator {
     }
 
     private void validateSchemaVersion(String schemaVersion) {
+        // TODO: Change this so the acceptable schema versions are not hardcoded here:
         List<String> supportedSchemaVersions = Arrays.asList("0.1");
         if (!supportedSchemaVersions.contains(schemaVersion)) {
             String errorMessage = "This version of the generator does not support v" +
