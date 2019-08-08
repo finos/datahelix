@@ -60,7 +60,8 @@ public class ProjectingIterable<TFrom, TTo> implements Iterable<TTo>
 
         @Override
         public TTo next() {
-            return this.converter.apply(this.sourceIterator.next());
+            TFrom next = sourceIterator.next();
+            return converter.apply(next);
         }
     }
 }
