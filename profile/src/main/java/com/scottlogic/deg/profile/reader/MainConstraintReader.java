@@ -28,11 +28,12 @@ import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
 import java.util.Map;
 
 public class MainConstraintReader implements ConstraintReader {
-    private final Map<AtomicConstraintType, ConstraintReader> constraintReaderMap;
+
+    private final AtomicConstraintTypeReaderMap constraintReaderMap;
 
     @Inject
     public MainConstraintReader(AtomicConstraintTypeReaderMap constraintReaderMap) {
-        this.constraintReaderMap = constraintReaderMap.getConstraintReaderMapEntries();
+        this.constraintReaderMap = constraintReaderMap;
     }
 
     @Override
@@ -49,10 +50,15 @@ public class MainConstraintReader implements ConstraintReader {
         }
 
         if (dto.is != ConstraintDTO.undefined) {
-            ConstraintReader subReader = constraintReaderMap.get(AtomicConstraintType.fromText((String) dto.is));
+            ConstraintReader subReader = constraintReaderMap.getConstraintReaderMapEntries()
+                .get(AtomicConstraintType.fromText((String) dto.is));
 
             if (subReader == null) {
-                throw new InvalidProfileException("Couldn't recognise constraint type from DTO: " + dto.is);
+                String message = "Couldn't recognise constraint type from DTO: " + dto.is;
+                String delayedMessage = constraintReaderMap.isDelayedConstraintsEnabled()
+                    ? message
+                    : message + ". Relational constraints are disabled for the current chosen walker.";
+                throw new InvalidProfileException(delayedMessage);
             }
 
             try {

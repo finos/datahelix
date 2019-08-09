@@ -39,8 +39,15 @@ public class AtomicConstraintTypeReaderMap {
 
     private final String fromFilePath;
 
-    public AtomicConstraintTypeReaderMap(final String fromFilePath) {
+    private final boolean isDelayedConstraintsEnabled;
+
+    public AtomicConstraintTypeReaderMap(final String fromFilePath, boolean isDelayedConstraintsEnabled) {
         this.fromFilePath = fromFilePath;
+        this.isDelayedConstraintsEnabled = isDelayedConstraintsEnabled;
+    }
+
+    public boolean isDelayedConstraintsEnabled() {
+        return isDelayedConstraintsEnabled;
     }
 
     public Map<AtomicConstraintType, ConstraintReader> getConstraintReaderMapEntries() {
@@ -61,12 +68,6 @@ public class AtomicConstraintTypeReaderMap {
             (dto, fields) -> new EqualToConstraint(
                 fields.getByName(dto.field),
                 getValidatedValue(dto)));
-
-        map.put(IS_EQUAL_TO_FIELD,
-            (dto, fields) -> new IsEqualToDynamicDateConstraint(
-                new EqualToConstraint(fields.getByName(dto.field), getValidatedValue(dto)),
-                fields.getByName(ConstraintReaderHelpers.getValueAsString(dto))
-            ));
 
         map.put(CONTAINS_REGEX,
             (dto, fields) ->
@@ -110,35 +111,11 @@ public class AtomicConstraintTypeReaderMap {
                     fields.getByName(dto.field),
                     getValidatedValue(dto, OffsetDateTime.class)));
 
-        map.put(IS_BEFORE_FIELD_DATE_TIME,
-            (dto, fields) ->
-                new IsBeforeDynamicDateConstraint(
-                    new IsBeforeConstantDateTimeConstraint(
-                        fields.getByName(dto.field),
-                        OffsetDateTime.MIN
-                    ),
-                    fields.getByName(ConstraintReaderHelpers.getValueAsString(dto)),
-                    false
-                )
-            );
-
         map.put(IS_BEFORE_OR_EQUAL_TO_CONSTANT_DATE_TIME,
             (dto, fields) ->
                 new IsBeforeOrEqualToConstantDateTimeConstraint(
                     fields.getByName(dto.field),
                     getValidatedValue(dto, OffsetDateTime.class)));
-
-        map.put(IS_BEFORE_OR_EQUAL_TO_FIELD_DATE_TIME,
-            (dto, fields) ->
-                new IsBeforeDynamicDateConstraint(
-                    new IsBeforeOrEqualToConstantDateTimeConstraint(
-                        fields.getByName(dto.field),
-                        OffsetDateTime.MIN
-                    ),
-                    fields.getByName(ConstraintReaderHelpers.getValueAsString(dto)),
-                    true
-                )
-        );
 
         map.put(IS_AFTER_CONSTANT_DATE_TIME,
             (dto, fields) ->
@@ -146,34 +123,11 @@ public class AtomicConstraintTypeReaderMap {
                     fields.getByName(dto.field),
                     ConstraintReaderHelpers.getValidatedValue(dto, OffsetDateTime.class)));
 
-        map.put(IS_AFTER_FIELD_DATE_TIME,
-            (dto, fields) ->
-                new IsAfterDynamicDateConstraint(
-                    new IsAfterConstantDateTimeConstraint(
-                        fields.getByName(dto.field),
-                        OffsetDateTime.MAX
-                    ),
-                    fields.getByName(ConstraintReaderHelpers.getValueAsString(dto)),
-                    false
-                ));
-
         map.put(IS_AFTER_OR_EQUAL_TO_CONSTANT_DATE_TIME,
             (dto, fields) ->
                 new IsAfterOrEqualToConstantDateTimeConstraint(
                     fields.getByName(dto.field),
                     getValidatedValue(dto, OffsetDateTime.class)));
-
-        map.put(IS_AFTER_OR_EQUAL_TO_FIELD_DATE_TIME,
-            (dto, fields) ->
-                new IsAfterDynamicDateConstraint(
-                    new IsAfterOrEqualToConstantDateTimeConstraint(
-                        fields.getByName(dto.field),
-                        OffsetDateTime.MAX
-                    ),
-                    fields.getByName(ConstraintReaderHelpers.getValueAsString(dto)),
-                    true
-                )
-            );
 
         map.put(IS_NULL,
             (dto, fields) -> new IsNullConstraint(fields.getByName(dto.field)));
@@ -207,6 +161,62 @@ public class AtomicConstraintTypeReaderMap {
                         Integer.class,
                         BigDecimal.ZERO,
                         maxStringLength)));
+
+        if (isDelayedConstraintsEnabled) {
+
+            map.put(IS_EQUAL_TO_FIELD,
+                (dto, fields) -> new IsEqualToDynamicDateConstraint(
+                    new EqualToConstraint(fields.getByName(dto.field), getValidatedValue(dto)),
+                    fields.getByName(ConstraintReaderHelpers.getValueAsString(dto))
+                ));
+
+            map.put(IS_BEFORE_FIELD_DATE_TIME,
+                (dto, fields) ->
+                    new IsBeforeDynamicDateConstraint(
+                        new IsBeforeConstantDateTimeConstraint(
+                            fields.getByName(dto.field),
+                            OffsetDateTime.MIN
+                        ),
+                        fields.getByName(ConstraintReaderHelpers.getValueAsString(dto)),
+                        false
+                    )
+            );
+
+            map.put(IS_BEFORE_OR_EQUAL_TO_FIELD_DATE_TIME,
+                (dto, fields) ->
+                    new IsBeforeDynamicDateConstraint(
+                        new IsBeforeOrEqualToConstantDateTimeConstraint(
+                            fields.getByName(dto.field),
+                            OffsetDateTime.MIN
+                        ),
+                        fields.getByName(ConstraintReaderHelpers.getValueAsString(dto)),
+                        true
+                    )
+            );
+
+            map.put(IS_AFTER_FIELD_DATE_TIME,
+                (dto, fields) ->
+                    new IsAfterDynamicDateConstraint(
+                        new IsAfterConstantDateTimeConstraint(
+                            fields.getByName(dto.field),
+                            OffsetDateTime.MAX
+                        ),
+                        fields.getByName(ConstraintReaderHelpers.getValueAsString(dto)),
+                        false
+                    ));
+
+            map.put(IS_AFTER_OR_EQUAL_TO_FIELD_DATE_TIME,
+                (dto, fields) ->
+                    new IsAfterDynamicDateConstraint(
+                        new IsAfterOrEqualToConstantDateTimeConstraint(
+                            fields.getByName(dto.field),
+                            OffsetDateTime.MAX
+                        ),
+                        fields.getByName(ConstraintReaderHelpers.getValueAsString(dto)),
+                        true
+                    )
+            );
+        }
 
         return map;
     }
