@@ -18,6 +18,7 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.FieldWrapper;
 import com.scottlogic.deg.common.util.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
@@ -25,7 +26,9 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.relations.EqualToDateRelation;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
+import com.scottlogic.deg.generator.generation.databags.DataBagGroupWrapper;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
+import com.scottlogic.deg.generator.generation.databags.WrappedDataBag;
 import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
 
 import java.time.OffsetDateTime;
@@ -110,16 +113,6 @@ public class FieldSpecGroupValueGenerator {
         return group;
     }
 
-    private static final class FieldWrapper<T> {
-        private final Field field;
-        private final T other;
-
-        public FieldWrapper(Field field, T other) {
-            this.field = field;
-            this.other = other;
-        }
-    }
-
     private static FieldSpecGroup adjustBoundsOfDate(Field field,
                                                      OffsetDateTime value,
                                                      FieldSpecGroup group) {
@@ -147,11 +140,16 @@ public class FieldSpecGroupValueGenerator {
             .map(relation -> relation.main().equals(field) ? relation : relation.inverse())
             .map(relation -> new FieldWrapper<>(relation.other(), relation.reduceToRelatedFieldSpec(newSpec)));
 
-        relationsOrdered.forEach(wrapper -> applyToFieldSpecMap(specs, specs.get(wrapper.field), wrapper.other, wrapper.field));
+        relationsOrdered.forEach(
+            wrapper -> applyToFieldSpecMap(
+                specs,
+                specs.get(wrapper.field()),
+                wrapper.other(),
+                wrapper.field()));
         return new FieldSpecGroup(specs, relations);
     }
 
-    private static final Map<Field, FieldSpec> applyToFieldSpecMap(Map<Field, FieldSpec> map,
+    private static void applyToFieldSpecMap(Map<Field, FieldSpec> map,
                                                                    FieldSpec left,
                                                                    FieldSpec right,
                                                                    Field field) {
@@ -160,32 +158,8 @@ public class FieldSpecGroupValueGenerator {
         FieldSpec newSpec = merger.merge(left, right)
             .orElseThrow(() -> new IllegalArgumentException("Failed to create field spec from value"));
         map.put(field, newSpec);
-        return map;
     }
 
-    private static final class DataBagGroupWrapper {
-
-        private final DataBag dataBag;
-        private final FieldSpecGroup group;
-        private final FieldSpecValueGenerator generator;
-
-        private DataBagGroupWrapper(DataBag databag,
-                                    FieldSpecGroup group,
-                                    FieldSpecValueGenerator generator) {
-            this.dataBag = databag;
-            this.group = group;
-            this.generator = generator;
-        }
-
-        public DataBag dataBag() {
-            return dataBag;
-        }
-
-        public FieldSpecValueGenerator generator() {
-            return generator;
-        }
-
-    }
 
     private Stream<DataBag> createRemainingDataBags(Stream<DataBag> stream, Field first, FieldSpecGroup group) {
         Stream<DataBagGroupWrapper> initial = stream
@@ -197,9 +171,9 @@ public class FieldSpecGroupValueGenerator {
     }
 
     private static DataBagGroupWrapper adjustWrapperBounds(DataBagGroupWrapper wrapper, Field field) {
-        DataBagValue value = wrapper.dataBag.getUnformattedValue(field);
-        FieldSpecGroup newGroup = adjustBounds(field, value, wrapper.group);
-        return new DataBagGroupWrapper(wrapper.dataBag, newGroup, wrapper.generator);
+        DataBagValue value = wrapper.dataBag().getUnformattedValue(field);
+        FieldSpecGroup newGroup = adjustBounds(field, value, wrapper.group());
+        return new DataBagGroupWrapper(wrapper.dataBag(), newGroup, wrapper.generator());
 
     }
 
@@ -226,7 +200,7 @@ public class FieldSpecGroupValueGenerator {
     }
 
     private static Stream<DataBagGroupWrapper> acceptNextValue(DataBagGroupWrapper wrapper, Field field) {
-        if (wrapper.generator.isRandom()) {
+        if (wrapper.generator().isRandom()) {
             return Stream.of(acceptNextRandomValue(wrapper, field));
         } else {
             return acceptNextNonRandomValue(wrapper, field);
@@ -234,34 +208,24 @@ public class FieldSpecGroupValueGenerator {
     }
 
     private static DataBagGroupWrapper acceptNextRandomValue(DataBagGroupWrapper wrapper, Field field) {
-        FieldSpecGroup group = wrapper.group;
+        FieldSpecGroup group = wrapper.group();
 
         DataBagValue nextValue = wrapper.generator().generateOne(group.fieldSpecs().get(field));
 
-        DataBag combined = DataBag.merge(toDataBag(field, nextValue), wrapper.dataBag);
+        DataBag combined = DataBag.merge(toDataBag(field, nextValue), wrapper.dataBag());
 
         FieldSpecGroup newGroup = adjustBounds(field, nextValue, group);
 
-        return new DataBagGroupWrapper(combined, newGroup, wrapper.generator);
-    }
-
-    private static final class WrappedDataBag {
-        private final DataBag dataBag;
-        private final DataBagValue value;
-
-        public WrappedDataBag(DataBag dataBag, DataBagValue value) {
-            this.dataBag = dataBag;
-            this.value = value;
-        }
+        return new DataBagGroupWrapper(combined, newGroup, wrapper.generator());
     }
 
     private static Stream<DataBagGroupWrapper> acceptNextNonRandomValue(DataBagGroupWrapper wrapper, Field field) {
-        FieldSpecGroup group = wrapper.group;
+        FieldSpecGroup group = wrapper.group();
         return wrapper.generator().generate(group.fieldSpecs().get(field))
             .map(value -> new WrappedDataBag(toDataBag(field, value), value))
-            .map(wrapped -> new WrappedDataBag(DataBag.merge(wrapped.dataBag, wrapper.dataBag), wrapped.value))
+            .map(wrapped -> new WrappedDataBag(DataBag.merge(wrapped.dataBag(), wrapper.dataBag()), wrapped.value()))
             .map(combined -> new DataBagGroupWrapper(
-                combined.dataBag, adjustBounds(field, combined.value, wrapper.group), wrapper.generator)
+                combined.dataBag(), adjustBounds(field, combined.value(), wrapper.group()), wrapper.generator())
             );
     }
 
