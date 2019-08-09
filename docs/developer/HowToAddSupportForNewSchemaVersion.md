@@ -1,8 +1,8 @@
 ## How to add support for a new schema version
 
-1. Copy a package in _/profileschema/_ and rename to the new version number.
+1. Copy a package in _profile/src/main/resources/profileschema/_ and rename to the new version number.
 1. Change the _schemaVersion_ const from the old version number to the new one.
-1. Change the hardcoded list in com/scottlogic/deg/profile/v0_1/SupportedVersionChecker.java
+1. Change the hardcoded list in _profile/v0_1/SupportedVersionChecker.java_ (future work is to remove the necessity of doing this).
 
 ### Example
 If the file structure currently looks like the below...

@@ -8,9 +8,10 @@
 ## Development
 
 1. [Contributing](../../.github/CONTRIBUTING.md)
-2. [Build and Run the Generator](../user/gettingStarted/BuildAndRun.md)
-4. [Dependency Injection](DependencyInjection.md)
-5. [Cucumber Testing](CucumberSyntax.md)
+1. [Build and Run the Generator](../user/gettingStarted/BuildAndRun.md)
+1. [Adding Schema Versions](HowToAddSupportForNewSchemaVersion.md)
+1. [Dependency Injection](DependencyInjection.md)
+1. [Cucumber Testing](CucumberSyntax.md)
 
 ## Behavioural Explanations
 
