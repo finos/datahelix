@@ -22,16 +22,9 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 public interface FieldSpecRelations {
 
     /**
-     * Produce a field spec similar to how atomic constraints create fieldspecs.
-     * This fieldspec should contain a barebones set of restrictions, with only the
-     * implementation specific bound included.
+     * Creates a field spec from the current state of the passed in FieldSpec.
      *
-     * An example would be for (a:Int > b:Int), where a and b have many restrictions across different types.
-     * The resultant fieldspec would take the fieldspec of a, and extract ONLY the RELEVANT Int information:
-     *
-     * a:Int maximum value, which is the maximum bound of a minus a unit (for ints, 1).
-     * This ensures that the resultant fieldspec, when merged with b, will guarantee that a can choose a value
-     * that respects the inputted relational constraint.
+     * The implementation of this interface should define what the reduced FieldSpec looks like.
      *
      * @param otherValue
      * @return

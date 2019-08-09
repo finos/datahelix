@@ -153,6 +153,25 @@ class RowSpecGrouperTest {
         assertEquals(2, groups.size());
     }
 
+    @Test
+    void shouldCreateOneFromTwoElements() {
+        Field first = new Field("first");
+        Field second = new Field("second");
+
+        ProfileFields fields = new ProfileFields(Arrays.asList(first, second));
+
+        Map<Field, FieldSpec> fieldSpecMap = fieldSpecMapOf(first, second);
+
+        List<FieldSpecRelations> relations = Arrays.asList(
+            link(first, second),
+            link(first, second)        );
+
+        RowSpec spec = new RowSpec(fields, fieldSpecMap, relations);
+
+        Set<FieldGroup> groups = RowSpecGrouper.createGroups(spec);
+
+        assertEquals(1, groups.size());
+    }
 
     //TODO- Test multiple relations between the same pair of fields
 
