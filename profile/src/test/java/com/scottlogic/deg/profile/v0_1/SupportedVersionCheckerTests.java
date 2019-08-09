@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -42,7 +43,9 @@ class SupportedVersionCheckerTests {
         File mockFile = mock(File.class);
         when(mockFile.toPath()).thenReturn(mock(Path.class));
         when(configSource.getProfileFile()).thenReturn(mockFile);
-        SupportedVersionChecker validator = new SupportedVersionChecker(retriever, configSource);
+        SupportedVersionsGetter supportedVersionsGetter = mock(SupportedVersionsGetter.class);
+        when(supportedVersionsGetter.getSupportedSchemaVersions()).thenReturn(Arrays.asList("0.1"));
+        SupportedVersionChecker validator = new SupportedVersionChecker(retriever, configSource, supportedVersionsGetter);
 
         //Act
         URL schema = null;
@@ -65,8 +68,9 @@ class SupportedVersionCheckerTests {
         File mockFile = mock(File.class);
         when(mockFile.toPath()).thenReturn(mock(Path.class));
         when(configSource.getProfileFile()).thenReturn(mockFile);
-        SupportedVersionChecker validator = new SupportedVersionChecker(retriever, configSource);
-
+        SupportedVersionsGetter supportedVersionsGetter = mock(SupportedVersionsGetter.class);
+        when(supportedVersionsGetter.getSupportedSchemaVersions()).thenReturn(Arrays.asList("0.1"));
+        SupportedVersionChecker validator = new SupportedVersionChecker(retriever, configSource, supportedVersionsGetter);
 
         //Act & Assert
         assertThrows(ValidationException.class, validator::getSchemaFile);
