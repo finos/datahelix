@@ -39,8 +39,8 @@ public class RowSpecGrouper {
             return new HashSet<>();
         }
 
-        Map<Field, List<Field>> fieldMapping = new HashMap<>();
-        fields.forEach(field -> fieldMapping.put(field, new ArrayList<>()));
+        Map<Field, List<Field>> fieldMapping = fields.stream()
+            .collect(Collectors.toMap(field -> field, field -> new ArrayList<>()));
 
         for (FieldPair pair : pairs) {
             fieldMapping.get(pair.first()).add(pair.second());
@@ -58,7 +58,7 @@ public class RowSpecGrouper {
 
         Map<Field, List<Field>> copiedMap = new HashMap<>(map);
 
-        Set<Field> fields = findGroup(copiedMap.keySet().iterator().next(), copiedMap);
+        Set<Field> fields = findGroup(SetUtils.firstIteratorElement(copiedMap.keySet()), copiedMap);
 
         copiedMap.keySet().removeAll(fields);
         copiedMap.values().forEach(fieldList -> fieldList.removeAll(fields));
@@ -76,7 +76,7 @@ public class RowSpecGrouper {
         Deque<Field> fieldsToSearch = new ArrayDeque<>();
         fieldsToSearch.add(initial);
 
-        searchedFields.addAll(findGroupRecursive(fieldsToSearch, SetUtils.setOf(initial), map));
+        searchedFields.addAll(findGroupRecursive(fieldsToSearch, Collections.singleton(initial), map));
         return searchedFields;
     }
 

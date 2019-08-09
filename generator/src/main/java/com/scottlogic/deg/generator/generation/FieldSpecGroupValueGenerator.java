@@ -29,6 +29,7 @@ import com.scottlogic.deg.generator.generation.databags.DataBagGroupWrapper;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.generation.databags.WrappedDataBag;
 import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
+import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.time.OffsetDateTime;
 import java.util.*;
@@ -44,7 +45,7 @@ public class FieldSpecGroupValueGenerator {
     }
 
     public Stream<DataBag> generate(FieldSpecGroup group) {
-        Field first = firstElementFromSet(group.fieldSpecs().keySet());
+        Field first = SetUtils.firstIteratorElement(group.fieldSpecs().keySet());
 
         FieldSpecGroup groupRespectingFirstField = initialAdjustments(first, group);
         FieldSpec firstSpec = groupRespectingFirstField.fieldSpecs().get(first);
@@ -179,7 +180,7 @@ public class FieldSpecGroupValueGenerator {
             return wrapperStream;
         }
 
-        Field field = firstElementFromSet(fieldsToProcess);
+        Field field = SetUtils.firstIteratorElement(fieldsToProcess);
 
         Stream<DataBagGroupWrapper> mappedStream =
             FlatMappingSpliterator.flatMap(wrapperStream, wrapper -> acceptNextValue(wrapper, field));
@@ -224,12 +225,4 @@ public class FieldSpecGroupValueGenerator {
                 combined.dataBag(), adjustBounds(field, combined.value(), wrapper.group()), wrapper.generator())
             );
     }
-
-    private static <T> T firstElementFromSet(Set<T> set) {
-        if (set.isEmpty()) {
-            throw new IllegalStateException("Cannot extract first element from an empty set");
-        }
-        return set.iterator().next();
-    }
-
 }

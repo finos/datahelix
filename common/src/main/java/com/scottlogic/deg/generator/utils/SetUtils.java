@@ -38,6 +38,17 @@ public class SetUtils {
         return Collections.unmodifiableSet(intersection);
     }
 
+    public static <T> T firstIteratorElement(Collection<T> collection) {
+        if (collection.isEmpty()) {
+            throw new IllegalArgumentException("Cannot pick first element from an empty collection");
+        }
+        return collection.iterator().next();
+    }
+
+    public static <T> Set<T> setOf(T e1, T e2) {
+        return Collections.unmodifiableSet(Stream.of(e1, e2).collect(Collectors.toSet()));
+    }
+
     public static <T> Set<T> setOf(T e1, T e2, T e3) {
         return Collections.unmodifiableSet(Stream.of(e1, e2, e3).collect(Collectors.toSet()));
     }
