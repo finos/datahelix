@@ -26,6 +26,7 @@ public class IsEqualToDynamicDateConstraint implements DelayedAtomicConstraint {
     private final Field field;
 
     public IsEqualToDynamicDateConstraint(AtomicConstraint underlyingConstraint, Field field) {
+        validateFieldsAreDifferent(underlyingConstraint.getField(), field);
         this.underlyingConstraint = underlyingConstraint;
         this.field = field;
     }

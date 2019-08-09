@@ -30,6 +30,7 @@ public class IsBeforeDynamicDateConstraint implements DelayedAtomicConstraint {
     public IsBeforeDynamicDateConstraint(AtomicConstraint underlyingConstraint,
                                          Field field,
                                          boolean inclusive) {
+        validateFieldsAreDifferent(underlyingConstraint.getField(), field);
         this.underlyingConstraint = underlyingConstraint;
         this.field = field;
         this.inclusive = inclusive;
