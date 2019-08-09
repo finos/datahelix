@@ -51,9 +51,7 @@
   "definitions": {
     "schemaVersion": {
       "title": "The version of the DataHelix profile schema",
-      "type": "string",
-      "default": "0.1",
-      "pattern": "^[0-9]+[.][0-9]+$"
+      "const": "0.1"
     },
     "dataType": {
       "oneOf": [

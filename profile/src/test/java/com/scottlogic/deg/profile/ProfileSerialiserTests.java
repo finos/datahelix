@@ -73,6 +73,8 @@ public class ProfileSerialiserTests {
                 });
             }));
 
+        profile.schemaVersion = "0.1";
+
         Function<String, String> normalise = str -> str.replaceAll("[\r\n\\s]", ""); // normalise the whitespace for comparison
 
         final String expectedJson =
@@ -133,6 +135,8 @@ public class ProfileSerialiserTests {
                 c.value = "string";
             }));
 
+        profile.schemaVersion = "0.1";
+
         Function<String, String> normalise = str -> str.replaceAll("[\r\n\\s]", ""); // normalise the whitespace for comparison
 
         final String expectedJson =
@@ -177,6 +181,8 @@ public class ProfileSerialiserTests {
                 c.field = "typecode";
                 c.value = "string";
             }));
+
+        profile.schemaVersion = "0.1";
 
         Function<String, String> normalise = str -> str.replaceAll("[\r\n\\s]", ""); // normalise the whitespace for comparison
 

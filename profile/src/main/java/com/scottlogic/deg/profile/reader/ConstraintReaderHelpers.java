@@ -18,7 +18,6 @@ package com.scottlogic.deg.profile.reader;
 
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.common.util.NumberUtils;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
 
 import java.math.BigDecimal;
@@ -32,7 +31,6 @@ import java.time.format.ResolverStyle;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ConstraintReaderHelpers {
     public static Object getValidatedValue(ConstraintDTO dto) {

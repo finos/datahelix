@@ -17,8 +17,10 @@
 package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.generator.config.detail.*;
+import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
+import com.scottlogic.deg.generator.config.detail.DataGenerationType;
+import com.scottlogic.deg.generator.config.detail.MonitorType;
+import com.scottlogic.deg.generator.config.detail.TreeWalkerType;
 import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
 import com.scottlogic.deg.orchestrator.violate.ViolateConfigSource;
 import com.scottlogic.deg.output.guice.OutputFormat;

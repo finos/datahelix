@@ -23,54 +23,38 @@ import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.DataGeneratorMonitor;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.walker.RetryLimitReachedException;
-import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
-import com.scottlogic.deg.orchestrator.validator.ConfigValidator;
 import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
 import com.scottlogic.deg.output.writer.DataSetWriter;
-import com.scottlogic.deg.profile.reader.ProfileReader;
-import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
+import com.scottlogic.deg.profile.reader.ValidatingProfileReader;
 
 import java.io.IOException;
 import java.util.stream.Stream;
 
 public class GenerateExecute {
-    private final AllConfigSource configSource;
     private final SingleDatasetOutputTarget singleDatasetOutputTarget;
-    private final ConfigValidator configValidator;
-    private final ProfileReader profileReader;
+    private final ValidatingProfileReader profileReader;
     private final DataGenerator dataGenerator;
     private final ProfileValidator profileValidator;
     private final DataGeneratorMonitor monitor;
-    private final ProfileSchemaValidator profileSchemaValidator;
+
 
     @Inject
     GenerateExecute(
-        ProfileReader profileReader,
         DataGenerator dataGenerator,
-        AllConfigSource configSource,
         SingleDatasetOutputTarget singleDatasetOutputTarget,
-        ConfigValidator configValidator,
-        ProfileValidator profileValidator,
-        ProfileSchemaValidator profileSchemaValidator,
+        ValidatingProfileReader profileReader, ProfileValidator profileValidator,
         DataGeneratorMonitor monitor) {
-        this.profileReader = profileReader;
         this.dataGenerator = dataGenerator;
-        this.configSource = configSource;
         this.singleDatasetOutputTarget = singleDatasetOutputTarget;
-        this.configValidator = configValidator;
-        this.profileSchemaValidator = profileSchemaValidator;
+        this.profileReader = profileReader;
         this.profileValidator = profileValidator;
         this.monitor = monitor;
     }
 
     public void execute() throws IOException {
-        configValidator.preProfileChecks(configSource);
-        profileSchemaValidator.validateProfile(configSource.getProfileFile());
-
-        Profile profile = profileReader.read(configSource.getProfileFile().toPath());
+        Profile profile = profileReader.read();
 
         profileValidator.validate(profile);
-        singleDatasetOutputTarget.validate();
 
         Stream<GeneratedObject> generatedDataItems = dataGenerator.generateData(profile);
 
@@ -78,6 +62,8 @@ public class GenerateExecute {
     }
 
     private void outputData(Profile profile, Stream<GeneratedObject> generatedDataItems) throws IOException {
+        singleDatasetOutputTarget.validate();
+
         try (DataSetWriter writer = singleDatasetOutputTarget.openWriter(profile.getFields())) {
             generatedDataItems.forEach(row -> {
                 try {

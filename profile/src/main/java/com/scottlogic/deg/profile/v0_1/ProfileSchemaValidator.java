@@ -17,6 +17,7 @@
 package com.scottlogic.deg.profile.v0_1;
 
 import java.io.File;
+import java.net.URL;
 
 /**
  * Used to validate a DataHelix Profile JSON file.
@@ -27,13 +28,12 @@ import java.io.File;
  */
 public interface ProfileSchemaValidator {
 
-    String datahelixProfileSchema = "/profileschema/0.1/datahelix.schema.json";
-
     /**
      * Validates a json file against the DataHelix Profile JSON Schema.
      *
      * @param profileFile an File object that is the profile to validate
+     * @param schema the schema to check validate against
      * @return the result of validating the provided profile
      */
-    void validateProfile(File profileFile);
+    void validateProfile(File profileFile, URL schema);
 }

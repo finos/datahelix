@@ -18,11 +18,12 @@ package com.scottlogic.deg.profile.serialisation;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.scottlogic.deg.profile.v0_1.ProfileDTO;
 
 import java.io.IOException;
 
 public class ProfileSerialiser {
-    public String serialise(BaseProfile profile) throws IOException {
+    public String serialise(ProfileDTO profile) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
 
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);

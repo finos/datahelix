@@ -24,6 +24,7 @@ import org.leadpony.justify.api.ProblemHandler;
 
 import javax.json.stream.JsonParser;
 import java.io.*;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -34,18 +35,20 @@ import java.util.*;
  * Checks that the profile JSON file is valid against the DataHelix Profile Schema (datahelix.schema.json)
  */
 public class ProfileSchemaValidatorLeadPony implements ProfileSchemaValidator {
-
     private List<String> profileJsonLines;
     private Path profilePath;
 
     @Override
-    public void validateProfile(File profileFile) {
+    public void validateProfile(File profileFile, URL schema) {
+        if (schema == null) {
+            throw new ValidationException("Null Schema");
+        }
         try {
             byte[] data = Files.readAllBytes(profilePath = profileFile.toPath());
             profileJsonLines = readAllLines(data);
-            validateProfile(this.getClass().getResourceAsStream(datahelixProfileSchema), new ByteArrayInputStream(data));
+            validateProfile(schema.openStream(), new ByteArrayInputStream(data));
         } catch (IOException e) {
-            throw new ValidationException(e.getLocalizedMessage());
+            throw new ValidationException(e.getClass() + " when looking for schema with URL " + schema);
         }
     }
 
@@ -67,7 +70,7 @@ public class ProfileSchemaValidatorLeadPony implements ProfileSchemaValidator {
     private void validateProfile(InputStream schemaStream, InputStream profileStream) {
         List<String> errorMessages = new ArrayList<>();
         if (schemaStream == null) {
-            errorMessages.add("Null Profile Schema Stream");
+            errorMessages.add("Null Schema Stream");
         } else if (profileStream == null) {
             errorMessages.add("Null Profile Stream");
         } else {

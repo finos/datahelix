@@ -16,11 +16,12 @@
 
 package com.scottlogic.deg.profile.reader;
 
-import com.scottlogic.deg.common.profile.constraints.atomic.*;
+
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
@@ -36,7 +37,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.Consumer;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.core.IsNull.nullValue;
 
 public class JsonProfileReaderTests {
@@ -57,7 +59,7 @@ public class JsonProfileReaderTests {
 
     private Profile getResultingProfile() throws IOException {
         if (this.profile == null) {
-            JsonProfileReader objectUnderTest = new JsonProfileReader(mainConstraintReader);
+            JsonProfileReader objectUnderTest = new JsonProfileReader(null, mainConstraintReader);
             this.profile = objectUnderTest.read(this.json);
         }
 

@@ -16,10 +16,6 @@
 
 package com.scottlogic.deg.common.profile;
 
-import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.common.profile.Rule;
-
 import java.util.Collection;
 
 public class ViolatedProfile extends Profile {
