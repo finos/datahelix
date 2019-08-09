@@ -35,6 +35,9 @@ public class SupportedVersionsGetter {
      *  This method picks up any new schema versions added when following the instructions at
      *  docs/developer/HowToAddSupportForNewSchemaVersion.md
      *
+     *  An error in this method could cause the JarExecuteTests to fail because it uses different logic depending
+     *  on whether the JAR has been built.
+     *
      * @return all valid schema versions
      **/
     List<String> getSupportedSchemaVersions() {
