@@ -73,4 +73,11 @@ public class DataBag implements GeneratedObject {
 
         return new DataBag(newFieldToValue);
     }
+
+    @Override
+    public String toString() {
+        return "DataBag{" +
+            "fieldToValue=" + fieldToValue +
+            '}';
+    }
 }
