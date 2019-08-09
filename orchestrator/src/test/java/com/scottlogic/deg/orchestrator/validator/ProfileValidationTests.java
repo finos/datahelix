@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class ProfileValidationTests {
-    private static final String TEST_SCHEMA_LOCATION = "/profileschema/0.1/datahelix.schema.json";
 
     @TestFactory
     Collection<DynamicTest> shouldAllValidateWithoutErrors() throws IOException {
@@ -41,11 +40,12 @@ public class ProfileValidationTests {
         for (File dir : directoriesArray) {
             File profileFile = Paths.get(dir.getCanonicalPath(), "profile.json").toFile();
 
-            URL testSchemaUrl =
-                this.getClass().getResource(TEST_SCHEMA_LOCATION);
+            String LATEST_REAL_SCHEMA_VERSION_PATH = "profileschema/0.1/datahelix.schema.json";
+            URL schemaUrl =
+                Thread.currentThread().getContextClassLoader().getResource(LATEST_REAL_SCHEMA_VERSION_PATH);
             DynamicTest test = DynamicTest.dynamicTest(
                 dir.getName(),
-                () -> new ProfileSchemaValidatorLeadPony().validateProfile(profileFile, testSchemaUrl));
+                () -> new ProfileSchemaValidatorLeadPony().validateProfile(profileFile, schemaUrl));
 
             dynamicTests.add(test);
         }
