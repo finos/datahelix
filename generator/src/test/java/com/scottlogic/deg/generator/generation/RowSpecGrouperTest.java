@@ -164,7 +164,7 @@ class RowSpecGrouperTest {
 
         List<FieldSpecRelations> relations = Arrays.asList(
             link(first, second),
-            link(first, second)        );
+            link(first, second));
 
         RowSpec spec = new RowSpec(fields, fieldSpecMap, relations);
 
@@ -172,8 +172,6 @@ class RowSpecGrouperTest {
 
         assertEquals(1, groups.size());
     }
-
-    //TODO- Test multiple relations between the same pair of fields
 
     private static FieldSpecRelations link(Field main, Field other) {
         FieldSpecRelations relation = mock(FieldSpecRelations.class);

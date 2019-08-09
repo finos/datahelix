@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 class FieldSpecGroupValueGeneratorTest {
 
     @Test
-    public void testGenerationOneField() {
+    public void generate_withGroupOfSingleField_returnsCorrectStream() {
         Map<Field, FieldSpec> specMap = new HashMap<>();
         FieldSpec firstSpec = FieldSpec.Empty;
         Field firstField = new Field("first");
@@ -46,7 +46,7 @@ class FieldSpecGroupValueGeneratorTest {
     }
 
     @Test
-    public void testGenerationTwoFields() {
+    public void generate_withGroupOfTwoFields_returnsCorrectStream() {
         Map<Field, FieldSpec> specMap = new HashMap<>();
         FieldSpec firstSpec = FieldSpec.Empty;
         FieldSpec secondSpec = FieldSpec.Empty;
