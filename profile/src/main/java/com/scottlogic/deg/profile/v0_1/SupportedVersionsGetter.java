@@ -15,11 +15,62 @@
  */
 package com.scottlogic.deg.profile.v0_1;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 public class SupportedVersionsGetter {
+    private final String resourcesPath = "profileschema/";
+    /**
+     *  Searches profile/src/main/resources/profileschema/ for sub-directories. The names of these directories
+     *  are counted as valid schema versions.
+     *
+     *  The alternative is to hard-code the supported schema versions.
+     *
+     *  This method picks up any new schema versions added when following the instructions at
+     *  docs/developer/HowToAddSupportForNewSchemaVersion.md
+     *
+     * @return all valid schema versions
+     **/
     List<String> getSupportedSchemaVersions() {
-        return Arrays.asList("0.1");
+        // Taken from https://stackoverflow.com/a/20073154/
+        List<String> supportedSchemaVersions = new ArrayList<>();
+        File jarFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
+        try {
+            if (jarFile.isFile()) {  // Run with JAR file
+                final JarFile jar = new JarFile(jarFile);
+                final Enumeration<JarEntry> entries = jar.entries(); //gives ALL entries in jar
+                while (entries.hasMoreElements()) {
+                    final String name = entries.nextElement().getName();
+                    if (name.startsWith(resourcesPath)) { //filter according to the path
+                        if (name.split("/").length == 2) {
+                            supportedSchemaVersions.add(name.split("/")[1]);
+                        }
+                    }
+                }
+                jar.close();
+            } else {
+                supportedSchemaVersions = getSupportedSchemaVersionsFromResources();
+            }
+        } catch (IOException ignored) {
+
+        }
+        return supportedSchemaVersions;
+    }
+
+    private List<String> getSupportedSchemaVersionsFromResources() {
+        String directoryContainingSchemas = this.getClass().getResource("/" + resourcesPath).getPath();
+        File file = new File(directoryContainingSchemas);
+        String[] directoriesArray = file.list((current, name) -> new File(current, name).isDirectory());
+        List<String> directories = new ArrayList<>();
+        if (directoriesArray != null) {
+            directories = Arrays.asList(directoriesArray);
+        }
+        return directories;
     }
 }
