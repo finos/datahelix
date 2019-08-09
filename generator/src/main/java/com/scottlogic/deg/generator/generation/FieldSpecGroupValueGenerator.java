@@ -23,7 +23,6 @@ import com.scottlogic.deg.common.util.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
-import com.scottlogic.deg.generator.fieldspecs.relations.EqualToDateRelation;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.DataBagGroupWrapper;
@@ -45,7 +44,7 @@ public class FieldSpecGroupValueGenerator {
     }
 
     public Stream<DataBag> generate(FieldSpecGroup group) {
-        Field first = group.fieldSpecs().keySet().iterator().next();
+        Field first = firstElementFromSet(group.fieldSpecs().keySet());
 
         FieldSpecGroup groupRespectingFirstField = initialAdjustments(first, group);
         FieldSpec firstSpec = groupRespectingFirstField.fieldSpecs().get(first);
@@ -116,7 +115,6 @@ public class FieldSpecGroupValueGenerator {
     private static FieldSpecGroup adjustBoundsOfDate(Field field,
                                                      OffsetDateTime value,
                                                      FieldSpecGroup group) {
-        // Set the value we've specified to be specific
         DateTimeRestrictions.DateTimeLimit limit = new DateTimeRestrictions.DateTimeLimit(value, true);
         DateTimeRestrictions restrictions = new DateTimeRestrictions();
         restrictions.min = limit;
@@ -132,7 +130,6 @@ public class FieldSpecGroupValueGenerator {
         Map<Field, FieldSpec> specs = new HashMap<>(group.fieldSpecs());
         specs.replace(field, newSpec);
 
-        // Operate on the new bounds
         Set<FieldSpecRelations> relations = group.relations().stream()
             .filter(relation -> relation.main().equals(field) || relation.other().equals(field))
             .collect(Collectors.toSet());
@@ -160,7 +157,6 @@ public class FieldSpecGroupValueGenerator {
         map.put(field, newSpec);
     }
 
-
     private Stream<DataBag> createRemainingDataBags(Stream<DataBag> stream, Field first, FieldSpecGroup group) {
         Stream<DataBagGroupWrapper> initial = stream
             .map(dataBag -> new DataBagGroupWrapper(dataBag, group, underlyingGenerator))
@@ -183,7 +179,7 @@ public class FieldSpecGroupValueGenerator {
             return wrapperStream;
         }
 
-        Field field = fieldsToProcess.iterator().next();
+        Field field = firstElementFromSet(fieldsToProcess);
 
         Stream<DataBagGroupWrapper> mappedStream =
             FlatMappingSpliterator.flatMap(wrapperStream, wrapper -> acceptNextValue(wrapper, field));
@@ -227,6 +223,13 @@ public class FieldSpecGroupValueGenerator {
             .map(combined -> new DataBagGroupWrapper(
                 combined.dataBag(), adjustBounds(field, combined.value(), wrapper.group()), wrapper.generator())
             );
+    }
+
+    private static <T> T firstElementFromSet(Set<T> set) {
+        if (set.isEmpty()) {
+            throw new IllegalStateException("Cannot extract first element from an empty set");
+        }
+        return set.iterator().next();
     }
 
 }
