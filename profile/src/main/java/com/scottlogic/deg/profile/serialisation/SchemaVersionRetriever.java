@@ -13,20 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.scottlogic.deg.profile.serialisation;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scottlogic.deg.profile.v0_1.ProfileDTO;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
-public class ProfileDeserialiser {
-    public ProfileDTO deserialise(String json) throws IOException {
+public class SchemaVersionRetriever {
+    public String getSchemaVersionOfJson(Path filePath) throws IOException {
+        byte[] encoded = Files.readAllBytes(filePath);
+        String profileJson = new String(encoded, StandardCharsets.UTF_8);
+
+        return this.getSchemaVersionOfJson(profileJson);
+    }
+
+    private String getSchemaVersionOfJson(String json) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        mapper.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
 
-        return mapper.readerFor(ProfileDTO.class).readValue(json);
+        SchemaDto schemaDto = mapper.readerFor(SchemaDto.class).readValue(json);
+        return schemaDto.schemaVersion;
     }
 }
+

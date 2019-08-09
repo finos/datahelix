@@ -13,23 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.scottlogic.deg.profile.v0_1;
 
-package com.scottlogic.deg.output;
-
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
+import java.net.URL;
 
-public interface FileUtils {
-    boolean containsInvalidChars(File file);
-
-    boolean isFileEmpty(File file);
-
-    boolean exists(Path path);
-
-    boolean isDirectory(Path path);
-
-    boolean isDirectoryEmpty(Path filepath, int fileCount);
-
-    boolean createDirectories(Path dir) throws IOException;
+public interface SchemaVersionValidator {
+    URL getSchemaFile() throws IOException;
 }
