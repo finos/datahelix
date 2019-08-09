@@ -809,8 +809,17 @@ class ConstraintReducerTest {
             new FormatConstraint(field, "Ipsum '$1'")
         );
 
-        Optional<RowSpec> rowSpec = constraintReducer.reduceConstraintsToRowSpec(profileFields, nodeFromConstraints(constraints));
-        Assert.assertThat(rowSpec.get().getSpecForField(field).getFormatting(), Is.is(((FormatConstraint)constraints.get(0)).format));
+        RowSpec rowSpec = constraintReducer
+            .reduceConstraintsToRowSpec(profileFields, nodeFromConstraints(constraints))
+            .get();
+
+        String formatting = rowSpec.getSpecForField(field).getFormatting();
+
+        Assert.assertTrue(constraints.stream()
+            .map(constraint -> (FormatConstraint)constraint)
+            .map(constraint -> constraint.format)
+            .collect(Collectors.toSet())
+            .contains(formatting));
     }
 
     @Test
