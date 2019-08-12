@@ -22,22 +22,27 @@ import com.scottlogic.deg.profile.serialisation.SchemaVersionRetriever;
 import com.scottlogic.deg.profile.v0_1.*;
 
 public class ProfileSchemaVersionCheckingProvider implements Provider<SchemaVersionValidator> {
-
     private final ProfileConfigSource profileConfigSource;
-    private final SupportedVersionChecker validator;
+    private final SupportedVersionChecker supportedVersionChecker;
+    private final NoValidationVersionChecker noValidationVersionChecker;
 
     @Inject
-    public ProfileSchemaVersionCheckingProvider(ProfileConfigSource profileConfigSource, SupportedVersionChecker validator) {
+    public ProfileSchemaVersionCheckingProvider(
+        ProfileConfigSource profileConfigSource,
+        SupportedVersionChecker supportedVersionChecker,
+        NoValidationVersionChecker noValidationVersionChecker
+    ) {
         this.profileConfigSource = profileConfigSource;
-        this.validator = validator;
+        this.supportedVersionChecker = supportedVersionChecker;
+        this.noValidationVersionChecker = noValidationVersionChecker;
     }
 
     @Override
     public SchemaVersionValidator get() {
         if (profileConfigSource.isSchemaVersionValidationDisabled()) {
-            return new NoValidationVersionChecker(new SchemaVersionRetriever(), profileConfigSource);
+            return noValidationVersionChecker;
         }
 
-        return validator;
+        return supportedVersionChecker;
     }
 }
