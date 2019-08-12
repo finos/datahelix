@@ -34,7 +34,6 @@ public class ProfileSchemaVersionCheckingProvider implements Provider<SchemaVers
 
     @Override
     public SchemaVersionValidator get() {
-        System.err.println(profileConfigSource.isSchemaVersionValidationDisabled());
         if (profileConfigSource.isSchemaVersionValidationDisabled()) {
             return new NoValidationVersionChecker(new SchemaVersionRetriever(), profileConfigSource);
         }
