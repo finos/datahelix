@@ -18,7 +18,7 @@ package com.scottlogic.deg.output.outputtarget;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.scottlogic.deg.output.FileUtils;
+import com.scottlogic.deg.common.util.FileUtils;
 import com.scottlogic.deg.output.OutputPath;
 import com.scottlogic.deg.output.writer.OutputWriterFactory;
 

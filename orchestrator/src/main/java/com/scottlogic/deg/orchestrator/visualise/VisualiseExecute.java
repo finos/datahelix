@@ -30,6 +30,7 @@ import com.scottlogic.deg.profile.reader.ProfileReader;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.validators.ContradictionDecisionTreeValidator;
 import com.scottlogic.deg.orchestrator.validator.VisualisationConfigValidator;
+import com.scottlogic.deg.profile.reader.ValidatingProfileReader;
 import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
 
 import java.io.FileOutputStream;
@@ -50,8 +51,7 @@ public class VisualiseExecute {
     private final FieldSpecFactory fieldSpecFactory;
     private final FieldSpecMerger fieldSpecMerger;
     private final Path outputPath;
-    private final ProfileReader profileReader;
-    private final ProfileSchemaValidator profileSchemaValidator;
+    private final ValidatingProfileReader validatingProfileReader;
     private final AllConfigSource configSource;
     private final VisualisationConfigValidator validator;
 
@@ -60,26 +60,22 @@ public class VisualiseExecute {
                             FieldSpecFactory fieldSpecFactory,
                             FieldSpecMerger fieldSpecMerger,
                             OutputPath outputPath,
-                            ProfileReader profileReader,
-                            ProfileSchemaValidator profileSchemaValidator,
+                            ValidatingProfileReader validatingProfileReader,
                             AllConfigSource configSource,
                             VisualisationConfigValidator validator) {
         this.profileAnalyser = profileAnalyser;
         this.fieldSpecFactory = fieldSpecFactory;
         this.fieldSpecMerger = fieldSpecMerger;
+        this.validatingProfileReader = validatingProfileReader;
         this.configSource = configSource;
         this.outputPath = outputPath.getPath();
-        this.profileReader = profileReader;
-        this.profileSchemaValidator = profileSchemaValidator;
         this.validator = validator;
     }
 
     public void execute() throws IOException {
-        validator.validateCommandLine(configSource.overwriteOutputFiles(), outputPath);
-        profileSchemaValidator.validateProfile(configSource.getProfileFile());
+        validator.validateCommandLine();
 
-        final Profile profile;
-        profile = profileReader.read(configSource.getProfileFile().toPath());
+        Profile profile = validatingProfileReader.read();
 
         final DecisionTree mergedTree = profileAnalyser.analyse(profile);
 
@@ -102,7 +98,7 @@ public class VisualiseExecute {
         writeTreeTo(
             validatedTree,
             title,
-            configSource.getOutputPath());
+            outputPath);
     }
 
     private void writeTreeTo(

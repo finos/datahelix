@@ -22,29 +22,33 @@ import org.junit.jupiter.api.TestFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class ProfileValidationTests {
 
-        @TestFactory
-        Collection<DynamicTest> shouldAllValidateWithoutErrors() throws IOException {
-            Collection<DynamicTest> dynamicTests = new ArrayList<>();
+    @TestFactory
+    Collection<DynamicTest> shouldAllValidateWithoutErrors() throws IOException {
+        Collection<DynamicTest> dynamicTests = new ArrayList<>();
 
-            File[] directoriesArray =
-                Paths.get("..", "examples")
-                    .toFile()
-                    .listFiles(File::isDirectory);
-            for (File dir : directoriesArray) {
-                File profileFile = Paths.get(dir.getCanonicalPath(), "profile.json").toFile();
+        File[] directoriesArray =
+            Paths.get("..", "examples")
+                .toFile()
+                .listFiles(File::isDirectory);
+        for (File dir : directoriesArray) {
+            File profileFile = Paths.get(dir.getCanonicalPath(), "profile.json").toFile();
 
-                DynamicTest test = DynamicTest.dynamicTest(dir.getName(), () -> {
-                    new ProfileSchemaValidatorLeadPony().validateProfile(profileFile);
-                });
+            String LATEST_REAL_SCHEMA_VERSION_PATH = "profileschema/0.1/datahelix.schema.json";
+            URL schemaUrl =
+                Thread.currentThread().getContextClassLoader().getResource(LATEST_REAL_SCHEMA_VERSION_PATH);
+            DynamicTest test = DynamicTest.dynamicTest(
+                dir.getName(),
+                () -> new ProfileSchemaValidatorLeadPony().validateProfile(profileFile, schemaUrl));
 
-                dynamicTests.add(test);
-            }
-            return dynamicTests;
+            dynamicTests.add(test);
         }
+        return dynamicTests;
     }
+}

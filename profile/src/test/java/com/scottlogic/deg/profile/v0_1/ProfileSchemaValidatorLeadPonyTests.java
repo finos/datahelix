@@ -35,4 +35,13 @@ class ProfileSchemaValidatorLeadPonyTests extends ProfileSchemaValidatorTests {
         return super.testValidProfiles(profileValidator);
     }
 
+    @TestFactory
+    Collection<DynamicTest> testValidSchemaVersions() {
+        return super.testValidSchemaVersions(profileValidator);
+    }
+
+    @TestFactory
+    Collection<DynamicTest> testInvalidSchemaVersions() {
+        return super.testInvalidSchemaVersions(profileValidator);
+    }
 }

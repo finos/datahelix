@@ -21,7 +21,7 @@ import com.google.inject.name.Named;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.output.OutputPath;
 import com.scottlogic.deg.output.outputtarget.OutputTargetValidationException;
-import com.scottlogic.deg.output.FileUtils;
+import com.scottlogic.deg.common.util.FileUtils;
 
 import java.io.IOException;
 import java.nio.file.Path;

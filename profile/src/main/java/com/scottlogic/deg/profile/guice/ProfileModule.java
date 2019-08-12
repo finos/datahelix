@@ -17,8 +17,15 @@
 package com.scottlogic.deg.profile.guice;
 
 import com.google.inject.AbstractModule;
-import com.scottlogic.deg.profile.reader.*;
+import com.google.inject.name.Names;
+import com.scottlogic.deg.profile.reader.AtomicConstraintTypeReaderMap;
+import com.scottlogic.deg.profile.reader.JsonProfileReader;
+import com.scottlogic.deg.profile.reader.ProfileReader;
 import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
+import com.scottlogic.deg.profile.v0_1.SchemaVersionValidator;
+import com.scottlogic.deg.profile.v0_1.SupportedVersionChecker;
+
+import java.io.File;
 
 public class ProfileModule extends AbstractModule {
 
@@ -34,8 +41,13 @@ public class ProfileModule extends AbstractModule {
         bind(ProfileConfigSource.class).toInstance(profileConfigSource);
 
         bind(ProfileSchemaValidator.class).toProvider(ProfileSchemaValidatorProvider.class);
+        bind(SchemaVersionValidator.class).to(SupportedVersionChecker.class);
 
         bind(ProfileReader.class).to(JsonProfileReader.class);
+
+        bind(File.class)
+            .annotatedWith(Names.named("config:profileFile"))
+            .toInstance(profileConfigSource.getProfileFile());
 
         // Load built-in profile-to-constraint mappings
         AtomicConstraintTypeReaderMap atomicConstraintTypeReaderMap = new AtomicConstraintTypeReaderMap(profileConfigSource.fromFilePath());

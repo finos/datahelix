@@ -48,7 +48,7 @@ public class CucumberProfileReader implements ProfileReader {
     }
 
     @Override
-    public Profile read(Path filePath) {
+    public Profile read() {
         return this.getProfile();
     }
 
