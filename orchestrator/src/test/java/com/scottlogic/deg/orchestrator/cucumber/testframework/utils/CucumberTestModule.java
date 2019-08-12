@@ -58,6 +58,9 @@ public class CucumberTestModule extends AbstractModule {
     public void configure() {
         bind(CucumberTestState.class).toInstance(testState);
         bind(ProfileReader.class).to(CucumberProfileReader.class);
+        // The Cucumber tests do not use a schema version at all, but use the getProfile method of the
+        // CucumberTestModule to map the cucumber profile to its internal representation,
+        // so anything using the schema must use a no-op:
         bind(SchemaVersionValidator.class).to(NoopVersionChecker.class);
         bind(GenerationConfigSource.class).to(CucumberGenerationConfigSource.class);
         if (testState.requireFieldTyping) {
