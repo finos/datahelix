@@ -94,6 +94,13 @@
           "value": {
             "date": "now"
           }
+        },
+        {
+          "field": "current",
+          "is": "after",
+          "value": {
+            "date": "2019-06-01T12:00:00.000"
+          }
         }
       ]
     }
