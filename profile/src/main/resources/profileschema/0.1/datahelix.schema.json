@@ -124,6 +124,9 @@
           "$ref": "#/definitions/dataConstraint"
         },
         {
+          "$ref": "#/definitions/extendedDataConstraint"
+        },
+        {
           "$ref": "#/definitions/nullConstraint"
         },
         {
@@ -146,7 +149,7 @@
     "dataConstraint": {
       "type": "object",
       "required": ["field", "is", "value"],
-      "additionalProperties": true,
+      "additionalProperties": false,
       "properties": {
         "field": {
           "type": "string"
@@ -155,7 +158,6 @@
           "enum": [
             "ofType",
             "equalTo",
-            "equalToField",
             "formattedAs",
             "matchingRegex",
             "containingRegex",
@@ -395,6 +397,30 @@
           }
         }
       ]
+    },
+    "extendedDataConstraint": {
+      "type": "object",
+      "required": ["field", "is", "value"],
+      "additionalProperties": true,
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "is": {
+          "enum": [
+            "equalToField"
+          ]
+        },
+        "value": {
+          "$ref": "#/definitions/string"
+        },
+        "offset": {
+          "type": "string"
+        },
+        "offsetUnit": {
+          "type": "string"
+        }
+      }
     },
     "notConstraint": {
       "type": "object",
