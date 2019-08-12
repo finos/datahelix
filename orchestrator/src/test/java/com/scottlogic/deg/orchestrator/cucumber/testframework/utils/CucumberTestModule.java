@@ -29,10 +29,12 @@ import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.output.manifest.ManifestWriter;
 import com.scottlogic.deg.output.outputtarget.OutputTargetFactory;
 import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
+import com.scottlogic.deg.profile.guice.ProfileSchemaVersionCheckingProvider;
 import com.scottlogic.deg.profile.reader.ProfileReader;
 import com.scottlogic.deg.profile.reader.validation.ConfigValidator;
-import com.scottlogic.deg.profile.v0_1.NoopVersionChecker;
+import com.scottlogic.deg.profile.v0_1.NoValidationVersionChecker;
 import com.scottlogic.deg.profile.v0_1.SchemaVersionValidator;
+import com.scottlogic.deg.profile.v0_1.SupportedVersionChecker;
 
 import java.util.stream.Stream;
 
@@ -55,7 +57,7 @@ public class CucumberTestModule extends AbstractModule {
     public void configure() {
         bind(CucumberTestState.class).toInstance(testState);
         bind(ProfileReader.class).to(CucumberProfileReader.class);
-        bind(SchemaVersionValidator.class).to(NoopVersionChecker.class);
+        bind(SchemaVersionValidator.class).toProvider(ProfileSchemaVersionCheckingProvider.class);
         bind(GenerationConfigSource.class).to(CucumberGenerationConfigSource.class);
         if (testState.requireFieldTyping) {
             // This binding overrides the requireFieldTyping config option, so an alternative

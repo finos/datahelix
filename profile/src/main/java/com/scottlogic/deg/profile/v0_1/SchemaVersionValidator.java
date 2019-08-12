@@ -20,4 +20,5 @@ import java.net.URL;
 
 public interface SchemaVersionValidator {
     URL getSchemaFile() throws IOException;
+
 }

@@ -21,5 +21,6 @@ import java.io.File;
 public interface ProfileConfigSource {
     File getProfileFile();
     boolean isSchemaValidationDisabled();
+    boolean isSchemaVersionValidationDisabled();
     String fromFilePath();
 }

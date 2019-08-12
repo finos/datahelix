@@ -99,6 +99,11 @@ public class CucumberGenerationConfigSource implements AllConfigSource, ViolateC
     }
 
     @Override
+    public boolean isSchemaVersionValidationDisabled() {
+        return true;
+    }
+
+    @Override
     public boolean overwriteOutputFiles() {
         return false;
     }

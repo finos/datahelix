@@ -40,6 +40,7 @@ public class SupportedVersionChecker implements SchemaVersionValidator {
         this.supportedVersionsGetter = supportedVersionsGetter;
     }
 
+    @Override
     public URL getSchemaFile() throws IOException {
         String schemaVersion = schemaVersionGetter.getSchemaVersionOfJson(configSource.getProfileFile().toPath());
         validateSchemaVersion(schemaVersion);

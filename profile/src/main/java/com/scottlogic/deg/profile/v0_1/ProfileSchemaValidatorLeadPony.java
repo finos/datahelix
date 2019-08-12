@@ -41,7 +41,7 @@ public class ProfileSchemaValidatorLeadPony implements ProfileSchemaValidator {
     @Override
     public void validateProfile(File profileFile, URL schema) {
         if (schema == null) {
-            throw new ValidationException("Null Schema");
+            throw new ValidationException("Schema file not found");
         }
         try {
             byte[] data = Files.readAllBytes(profilePath = profileFile.toPath());
@@ -70,9 +70,9 @@ public class ProfileSchemaValidatorLeadPony implements ProfileSchemaValidator {
     private void validateProfile(InputStream schemaStream, InputStream profileStream) {
         List<String> errorMessages = new ArrayList<>();
         if (schemaStream == null) {
-            errorMessages.add("Null Schema Stream");
+            errorMessages.add("Schema file not found");
         } else if (profileStream == null) {
-            errorMessages.add("Null Profile Stream");
+            errorMessages.add("Profile file not found");
         } else {
             JsonValidationService service = JsonValidationService.newInstance();
 

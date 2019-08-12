@@ -99,6 +99,11 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
         description = "Disables schema validation")
     boolean disableSchemaValidation = false;
 
+    @CommandLine.Option(
+        names = { "--disable-schema-version-checking" },
+        description = "Allows use of features that are not in the version specified by the profile.")
+    boolean disableSchemaVersionChecking = false;
+
     @CommandLine.Option(names = {"-t", "--generation-type"},
         description = "Determines the type of data generation performed (${COMPLETION-CANDIDATES})",
         hidden = true)
@@ -175,6 +180,11 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     @Override
     public boolean isSchemaValidationDisabled() {
         return this.disableSchemaValidation;
+    }
+
+    @Override
+    public boolean isSchemaVersionValidationDisabled() {
+        return this.disableSchemaVersionChecking;
     }
 
     @Override

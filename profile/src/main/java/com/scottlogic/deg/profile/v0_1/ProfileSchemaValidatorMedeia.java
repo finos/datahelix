@@ -47,9 +47,9 @@ public class ProfileSchemaValidatorMedeia implements ProfileSchemaValidator {
     private void validateProfile(URL schema, InputStream profileStream) {
         List<String> errorMessages = new ArrayList<>();
         if (schema == null) {
-            errorMessages.add("Null Schema");
+            errorMessages.add("Schema file not found");
         } else if (profileStream == null) {
-            errorMessages.add("Null Profile Stream");
+            errorMessages.add("Profile file not found");
         } else {
             try {
                 SchemaValidator validator = loadSchema(schema);
