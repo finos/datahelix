@@ -19,6 +19,7 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
+import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions.DateTimeLimit;
 
 import java.time.OffsetDateTime;
 import java.time.temporal.TemporalAmount;
@@ -40,10 +41,10 @@ public class EqualToOffsetDateRelation implements FieldSpecRelations {
     @Override
     public FieldSpec reduceToRelatedFieldSpec(FieldSpec otherValue) {
         if (otherValue.getDateTimeRestrictions() != null) {
-            DateTimeRestrictions.DateTimeLimit limit = otherValue.getDateTimeRestrictions().min;
+            DateTimeLimit limit = otherValue.getDateTimeRestrictions().min;
             OffsetDateTime time = limit.getLimit();
             OffsetDateTime newTime = time.plus(offset);
-            DateTimeRestrictions.DateTimeLimit newLimit = new DateTimeRestrictions.DateTimeLimit(newTime, true);
+            DateTimeLimit newLimit = new DateTimeLimit(newTime, true);
             DateTimeRestrictions newRestrictions = new DateTimeRestrictions();
             newRestrictions.min = newLimit;
             newRestrictions.max = newLimit;
