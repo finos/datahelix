@@ -55,9 +55,8 @@ public class CucumberTestModule extends AbstractModule {
     @Override
     public void configure() {
         bind(CucumberTestState.class).toInstance(testState);
-        bind(ProfileReader.class).to(CucumberProfileReader.class);
-        bind(SchemaVersionValidator.class).to(NoopVersionChecker.class);
         bind(ValidatingProfileReader.class).to(CucumberValidatingProfileReader.class);
+        bind(ProfileReader.class).to(CucumberProfileReader.class);
         bind(GenerationConfigSource.class).to(CucumberGenerationConfigSource.class);
         if (testState.requireFieldTyping) {
             // This binding overrides the requireFieldTyping config option, so an alternative

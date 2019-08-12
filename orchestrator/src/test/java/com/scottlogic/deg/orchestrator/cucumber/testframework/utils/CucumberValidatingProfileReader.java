@@ -15,14 +15,19 @@
  */
 package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.profile.reader.ValidatingProfileReader;
 
-import java.io.IOException;
-
 public class CucumberValidatingProfileReader implements ValidatingProfileReader {
+    private final CucumberProfileReader profileReader;
+    @Inject
+    CucumberValidatingProfileReader(CucumberProfileReader profileReader) {
+        this.profileReader = profileReader;
+    }
+
     @Override
-    public Profile read() throws IOException {
-        return null;
+    public Profile read() {
+        return profileReader.read();
     }
 }
