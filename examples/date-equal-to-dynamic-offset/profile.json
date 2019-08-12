@@ -76,6 +76,24 @@
           "value": "firstWorking",
           "offset": "8",
           "offsetUnit": "working days"
+        },
+        {
+          "field": "current",
+          "is": "ofType",
+          "value": "datetime"
+        },
+        {
+          "not": {
+            "field": "current",
+            "is": "null"
+          }
+        },
+        {
+          "field": "current",
+          "is": "before",
+          "value": {
+            "date": "now"
+          }
         }
       ]
     }
