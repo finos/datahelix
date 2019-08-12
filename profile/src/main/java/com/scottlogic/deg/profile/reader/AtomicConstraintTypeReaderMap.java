@@ -28,17 +28,13 @@ import com.scottlogic.deg.profile.reader.constraintreaders.OfTypeReader;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 
 import java.math.BigDecimal;
-import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAdjuster;
-import java.time.temporal.TemporalAdjusters;
-import java.time.temporal.TemporalAmount;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import static com.scottlogic.deg.profile.reader.ConstraintReaderHelpers.getValidatedValue;
+import static com.scottlogic.deg.profile.reader.ConstraintReaderHelpers.*;
 import static com.scottlogic.deg.profile.v0_1.AtomicConstraintType.*;
 
 public class AtomicConstraintTypeReaderMap {
@@ -127,7 +123,7 @@ public class AtomicConstraintTypeReaderMap {
             (dto, fields) ->
                 new IsAfterConstantDateTimeConstraint(
                     fields.getByName(dto.field),
-                    ConstraintReaderHelpers.getValidatedValue(dto, OffsetDateTime.class)));
+                    getValidatedValue(dto, OffsetDateTime.class)));
 
         map.put(IS_AFTER_OR_EQUAL_TO_CONSTANT_DATE_TIME,
             (dto, fields) ->
@@ -142,7 +138,7 @@ public class AtomicConstraintTypeReaderMap {
             (dto, fields) ->
                 new IsStringLongerThanConstraint(
                     fields.getByName(dto.field),
-                    ConstraintReaderHelpers.ensureValueBetween(
+                    ensureValueBetween(
                         dto,
                         Integer.class,
                         BigDecimal.ZERO,
@@ -152,7 +148,7 @@ public class AtomicConstraintTypeReaderMap {
             (dto, fields) ->
                 new IsStringShorterThanConstraint(
                     fields.getByName(dto.field),
-                    ConstraintReaderHelpers.ensureValueBetween(
+                    ensureValueBetween(
                         dto,
                         Integer.class,
                         BigDecimal.ONE,
@@ -162,7 +158,7 @@ public class AtomicConstraintTypeReaderMap {
             (dto, fields) ->
                 new StringHasLengthConstraint(
                     fields.getByName(dto.field),
-                    ConstraintReaderHelpers.ensureValueBetween(
+                    ensureValueBetween(
                         dto,
                         Integer.class,
                         BigDecimal.ZERO,
@@ -187,7 +183,7 @@ public class AtomicConstraintTypeReaderMap {
 
                         return new IsEqualToDynamicDateConstraint(
                             new EqualToConstraint(fields.getByName(dto.field), getValidatedValue(dto)),
-                            fields.getByName(ConstraintReaderHelpers.getValueAsString(dto)),
+                            fields.getByName(getValueAsString(dto)),
                             unit,
                             value
                         );
@@ -195,7 +191,7 @@ public class AtomicConstraintTypeReaderMap {
 
                     return new IsEqualToDynamicDateConstraint(
                         new EqualToConstraint(fields.getByName(dto.field), getValidatedValue(dto)),
-                        fields.getByName(ConstraintReaderHelpers.getValueAsString(dto))
+                        fields.getByName(getValueAsString(dto))
                     );
                 });
 
@@ -206,7 +202,7 @@ public class AtomicConstraintTypeReaderMap {
                             fields.getByName(dto.field),
                             OffsetDateTime.MIN
                         ),
-                        fields.getByName(ConstraintReaderHelpers.getValueAsString(dto)),
+                        fields.getByName(getValueAsString(dto)),
                         false
                     )
             );
@@ -218,7 +214,7 @@ public class AtomicConstraintTypeReaderMap {
                             fields.getByName(dto.field),
                             OffsetDateTime.MIN
                         ),
-                        fields.getByName(ConstraintReaderHelpers.getValueAsString(dto)),
+                        fields.getByName(getValueAsString(dto)),
                         true
                     )
             );
@@ -230,7 +226,7 @@ public class AtomicConstraintTypeReaderMap {
                             fields.getByName(dto.field),
                             OffsetDateTime.MAX
                         ),
-                        fields.getByName(ConstraintReaderHelpers.getValueAsString(dto)),
+                        fields.getByName(getValueAsString(dto)),
                         false
                     ));
 
@@ -241,7 +237,7 @@ public class AtomicConstraintTypeReaderMap {
                             fields.getByName(dto.field),
                             OffsetDateTime.MAX
                         ),
-                        fields.getByName(ConstraintReaderHelpers.getValueAsString(dto)),
+                        fields.getByName(getValueAsString(dto)),
                         true
                     )
             );
