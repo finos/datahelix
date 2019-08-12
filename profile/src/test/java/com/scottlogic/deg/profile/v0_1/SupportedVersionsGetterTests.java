@@ -1,9 +1,3 @@
-package com.scottlogic.deg.profile.v0_1;
-
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 /*
  * Copyright 2019 Scott Logic Ltd
  *
@@ -19,6 +13,13 @@ import static org.junit.jupiter.api.Assertions.*;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package com.scottlogic.deg.profile.v0_1;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
 class SupportedVersionsGetterTests {
     @Test
     void getSupportedSchemaVersions_returnsAtLeastOneSchemaVersion() {

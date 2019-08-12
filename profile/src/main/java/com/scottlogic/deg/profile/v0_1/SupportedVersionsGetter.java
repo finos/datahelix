@@ -70,9 +70,11 @@ public class SupportedVersionsGetter {
         String directoryContainingSchemas = this.getClass().getResource("/" + resourcesPath).getPath();
         File file = new File(directoryContainingSchemas);
         String[] directoriesArray = file.list((current, name) -> new File(current, name).isDirectory());
-        List<String> directories = new ArrayList<>();
+        List<String> directories;
         if (directoriesArray != null) {
             directories = Arrays.asList(directoriesArray);
+        } else {
+            directories = new ArrayList<>();
         }
         return directories;
     }
