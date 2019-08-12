@@ -13,12 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.scottlogic.deg.profile.reader;
+package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 
 import com.scottlogic.deg.common.profile.Profile;
+import com.scottlogic.deg.profile.reader.ValidatingProfileReader;
 
 import java.io.IOException;
 
-public interface ValidatingProfileReader {
-    Profile read() throws IOException;
+public class CucumberValidatingProfileReader implements ValidatingProfileReader {
+    @Override
+    public Profile read() throws IOException {
+        return null;
+    }
 }
