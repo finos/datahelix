@@ -22,7 +22,7 @@ import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
 import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions.DateTimeLimit;
 
 import java.time.OffsetDateTime;
-import java.time.temporal.TemporalAmount;
+import java.time.temporal.TemporalAdjuster;
 
 public class EqualToOffsetDateRelation implements FieldSpecRelations {
 
@@ -30,11 +30,17 @@ public class EqualToOffsetDateRelation implements FieldSpecRelations {
 
     private Field other;
 
-    private TemporalAmount offset;
+    private TemporalAdjuster adjuster;
 
-    public EqualToOffsetDateRelation(Field main, Field other, TemporalAmount offset) {
+    private int offset;
+
+    public EqualToOffsetDateRelation(Field main,
+                                     Field other,
+                                     TemporalAdjuster adjuster,
+                                     int offset) {
         this.main = main;
         this.other = other;
+        this.adjuster = adjuster;
         this.offset = offset;
     }
 
@@ -43,7 +49,10 @@ public class EqualToOffsetDateRelation implements FieldSpecRelations {
         if (otherValue.getDateTimeRestrictions() != null) {
             DateTimeLimit limit = otherValue.getDateTimeRestrictions().min;
             OffsetDateTime time = limit.getLimit();
-            OffsetDateTime newTime = time.plus(offset);
+            OffsetDateTime newTime = time;
+            for (int i=0; i < offset; i++) {
+                newTime = newTime.with(adjuster);
+            }
             DateTimeLimit newLimit = new DateTimeLimit(newTime, true);
             DateTimeRestrictions newRestrictions = new DateTimeRestrictions();
             newRestrictions.min = newLimit;
@@ -56,7 +65,7 @@ public class EqualToOffsetDateRelation implements FieldSpecRelations {
 
     @Override
     public FieldSpecRelations inverse() {
-        return new EqualToOffsetDateRelation(other, main, offset);
+        return new EqualToOffsetDateRelation(other, main, adjuster, offset);
     }
 
     @Override

@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.profile.reader;
 
+import com.scottlogic.deg.common.date.ChronoUnitWorkingDayWrapper;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.constraints.delayed.IsAfterDynamicDateConstraint;
 import com.scottlogic.deg.common.profile.constraints.delayed.IsBeforeDynamicDateConstraint;
@@ -30,6 +31,8 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjuster;
+import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.TemporalAmount;
 import java.util.HashMap;
 import java.util.Map;
@@ -170,8 +173,17 @@ public class AtomicConstraintTypeReaderMap {
             map.put(IS_EQUAL_TO_FIELD,
                 (dto, fields) -> {
                     if (dto.offset != null && dto.offsetUnit != null) {
-                        ChronoUnit unit = ChronoUnit.valueOf(ChronoUnit.class, ((String) dto.offsetUnit).toUpperCase());
-                        int value = Integer.valueOf((String) dto.offset);
+                        ChronoUnitWorkingDayWrapper unit;
+                        if (((String) dto.offsetUnit).toUpperCase().equals("WORKING DAYS")) {
+                            unit = new ChronoUnitWorkingDayWrapper(
+                                ChronoUnit.valueOf(ChronoUnit.class, ("DAYS").toUpperCase()),
+                                    true);
+                        } else {
+                            unit = new ChronoUnitWorkingDayWrapper(
+                                ChronoUnit.valueOf(ChronoUnit.class, ((String) dto.offsetUnit).toUpperCase()),
+                                false);
+                        }
+                        int value = Integer.parseInt((String) dto.offset);
 
                         return new IsEqualToDynamicDateConstraint(
                             new EqualToConstraint(fields.getByName(dto.field), getValidatedValue(dto)),
@@ -182,9 +194,10 @@ public class AtomicConstraintTypeReaderMap {
                     }
 
                     return new IsEqualToDynamicDateConstraint(
-                    new EqualToConstraint(fields.getByName(dto.field), getValidatedValue(dto)),
-                    fields.getByName(ConstraintReaderHelpers.getValueAsString(dto))
-                );});
+                        new EqualToConstraint(fields.getByName(dto.field), getValidatedValue(dto)),
+                        fields.getByName(ConstraintReaderHelpers.getValueAsString(dto))
+                    );
+                });
 
             map.put(IS_BEFORE_FIELD_DATE_TIME,
                 (dto, fields) ->

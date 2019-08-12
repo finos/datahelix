@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.time.OffsetDateTime;
 import java.time.Period;
 import java.time.ZoneOffset;
+import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAmount;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,9 +20,10 @@ class EqualToOffsetDateRelationTest {
         Field first = new Field("first");
         Field second = new Field("second");
 
-        TemporalAmount time = Period.ofDays(3);
+        TemporalAdjuster adjuster = t -> t.plus(Period.ofDays(1));
+        int days = 3;
 
-        FieldSpecRelations relation = new EqualToOffsetDateRelation(first, second, time);
+        FieldSpecRelations relation = new EqualToOffsetDateRelation(first, second, adjuster, 3);
 
         OffsetDateTime exactTime = OffsetDateTime.of(
             2005,
@@ -35,7 +37,7 @@ class EqualToOffsetDateRelationTest {
 
         FieldSpec initialSpec = specEqualToTime(exactTime);
 
-        FieldSpec expectedSpec = specEqualToTime(exactTime.plusDays(3));
+        FieldSpec expectedSpec = specEqualToTime(exactTime.plusDays(days));
 
         FieldSpec newSpec = relation.reduceToRelatedFieldSpec(initialSpec);
 
