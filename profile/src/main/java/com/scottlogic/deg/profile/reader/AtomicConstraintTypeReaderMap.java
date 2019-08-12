@@ -27,7 +27,10 @@ import com.scottlogic.deg.profile.reader.constraintreaders.OfTypeReader;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAmount;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -165,10 +168,23 @@ public class AtomicConstraintTypeReaderMap {
         if (isDelayedConstraintsEnabled) {
 
             map.put(IS_EQUAL_TO_FIELD,
-                (dto, fields) -> new IsEqualToDynamicDateConstraint(
+                (dto, fields) -> {
+                    if (dto.offset != null && dto.offsetUnit != null) {
+                        ChronoUnit unit = ChronoUnit.valueOf(ChronoUnit.class, ((String) dto.offsetUnit).toUpperCase());
+                        int value = Integer.valueOf((String) dto.offset);
+
+                        return new IsEqualToDynamicDateConstraint(
+                            new EqualToConstraint(fields.getByName(dto.field), getValidatedValue(dto)),
+                            fields.getByName(ConstraintReaderHelpers.getValueAsString(dto)),
+                            unit,
+                            value
+                        );
+                    }
+
+                    return new IsEqualToDynamicDateConstraint(
                     new EqualToConstraint(fields.getByName(dto.field), getValidatedValue(dto)),
                     fields.getByName(ConstraintReaderHelpers.getValueAsString(dto))
-                ));
+                );});
 
             map.put(IS_BEFORE_FIELD_DATE_TIME,
                 (dto, fields) ->

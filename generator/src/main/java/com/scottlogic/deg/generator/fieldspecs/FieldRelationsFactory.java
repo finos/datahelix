@@ -18,10 +18,12 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.common.profile.constraints.delayed.*;
-import com.scottlogic.deg.generator.fieldspecs.relations.AfterDateRelation;
-import com.scottlogic.deg.generator.fieldspecs.relations.BeforeDateRelation;
-import com.scottlogic.deg.generator.fieldspecs.relations.EqualToDateRelation;
-import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
+import com.scottlogic.deg.generator.fieldspecs.relations.*;
+
+import java.time.Duration;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAmount;
 
 public class FieldRelationsFactory {
 
@@ -58,8 +60,30 @@ public class FieldRelationsFactory {
    }
 
    private FieldSpecRelations constructEqualToDate(IsEqualToDynamicDateConstraint constraint) {
-       return new EqualToDateRelation(
-           constraint.underlyingConstraint().getField(),
-           constraint.field());
+       if (constraint.unit() != null) {
+           return new EqualToOffsetDateRelation(
+               constraint.underlyingConstraint().getField(),
+               constraint.field(),
+               constructDate(constraint.unit(), constraint.offset())
+           );
+       } else {
+           return new EqualToDateRelation(
+               constraint.underlyingConstraint().getField(),
+               constraint.field());
+       }
+   }
+
+   private TemporalAmount constructDate(ChronoUnit unit, int amount) {
+       switch(unit) {
+           case MILLIS: return Duration.ofMillis(amount);
+           case SECONDS: return Duration.ofSeconds(amount);
+           case MINUTES: return Duration.ofMinutes(amount);
+           case HOURS: return Duration.ofHours(amount);
+           case DAYS: return Period.ofDays(amount);
+           case WEEKS: return Period.ofWeeks(amount);
+           case MONTHS: return Period.ofMonths(amount);
+           case YEARS: return Period.ofYears(amount);
+           default: throw new IllegalArgumentException("Couldn't construct offset of unit " + unit);
+       }
    }
 }

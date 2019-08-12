@@ -1,0 +1,1 @@
+A profile that generates two dates which are equal with an offset.

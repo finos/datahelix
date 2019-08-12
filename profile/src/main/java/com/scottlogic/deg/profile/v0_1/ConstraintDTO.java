@@ -36,6 +36,10 @@ public class ConstraintDTO {
     /** a constant value - eg, used in isEqualTo or isGreaterThan */
     public Object value;
 
+    public Object offset;
+
+    public Object offsetUnit;
+
     /** a set of values - eg, used in isInSet */
     public Collection<Object> values;
 

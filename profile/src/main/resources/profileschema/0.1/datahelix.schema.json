@@ -146,7 +146,7 @@
     "dataConstraint": {
       "type": "object",
       "required": ["field", "is", "value"],
-      "additionalProperties": false,
+      "additionalProperties": true,
       "properties": {
         "field": {
           "type": "string"

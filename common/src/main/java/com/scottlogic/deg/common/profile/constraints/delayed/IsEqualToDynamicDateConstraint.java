@@ -19,16 +19,31 @@ package com.scottlogic.deg.common.profile.constraints.delayed;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 
+import java.time.temporal.ChronoUnit;
+
 public class IsEqualToDynamicDateConstraint implements DelayedAtomicConstraint {
 
     private final AtomicConstraint underlyingConstraint;
 
     private final Field field;
 
-    public IsEqualToDynamicDateConstraint(AtomicConstraint underlyingConstraint, Field field) {
+    private final ChronoUnit unit;
+
+    private final int offset;
+
+    public IsEqualToDynamicDateConstraint(AtomicConstraint underlyingConstraint,
+                                          Field field,
+                                          ChronoUnit unit,
+                                          int offset) {
         validateFieldsAreDifferent(underlyingConstraint.getField(), field);
         this.underlyingConstraint = underlyingConstraint;
         this.field = field;
+        this.unit = unit;
+        this.offset = offset;
+    }
+
+    public IsEqualToDynamicDateConstraint(AtomicConstraint underlyingConstraint, Field field) {
+        this(underlyingConstraint, field, null, 0);
     }
 
     @Override
@@ -39,5 +54,13 @@ public class IsEqualToDynamicDateConstraint implements DelayedAtomicConstraint {
     @Override
     public Field field() {
         return field;
+    }
+
+    public ChronoUnit unit() {
+        return unit;
+    }
+
+    public int offset() {
+        return offset;
     }
 }
