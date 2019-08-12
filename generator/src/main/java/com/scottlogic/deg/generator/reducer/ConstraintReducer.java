@@ -82,18 +82,17 @@ public class ConstraintReducer {
     }
 
     private Optional<FieldSpec> getRootFieldSpec(Iterable<AtomicConstraint> rootConstraints) {
-        final Stream<FieldSpec> rootConstraintsStream =
+        final Stream<Optional<FieldSpec>> rootConstraintsStream =
             StreamSupport
                 .stream(rootConstraints.spliterator(), false)
-                .map(fieldSpecFactory::construct);
+                .map(fieldSpecFactory::construct)
+                .map(Optional::of);
 
         return rootConstraintsStream
             .reduce(
                 Optional.of(FieldSpec.Empty),
-                (optAcc, next) ->
-                    optAcc.flatMap(acc -> fieldSpecMerger.merge(acc, next)),
-                (optAcc1, optAcc2) -> optAcc1.flatMap(
-                    acc1 -> optAcc2.flatMap(
-                        acc2 -> fieldSpecMerger.merge(acc1, acc2))));
+                (optSpec1, optSpec2) -> optSpec1.flatMap(
+                    spec1 -> optSpec2.flatMap(
+                        spec2 -> fieldSpecMerger.merge(spec1, spec2))));
     }
 }
