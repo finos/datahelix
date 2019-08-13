@@ -24,7 +24,7 @@ dependencies {
     testCompile "junit:junit:${JUNIT_4_VERSION}"
     testCompile "org.junit.platform:junit-platform-runner:${JUNIT_PLATFORM_RUNNER_VERSION}"
     testCompile "org.junit.vintage:junit-vintage-engine:${JUNIT_JUPITER_VERSION}"
-    testCompile "org.hamcrest:java-hamcrest:${HAMCREAST_VERSION}"
+    testCompile "org.hamcrest:java-hamcrest:${HAMCREST_VERSION}"
     testCompile "org.junit.jupiter:junit-jupiter-params:${JUNIT_JUPITER_VERSION}"
     testCompile "org.mockito:mockito-all:${MOCKITO_VERSION}"
     testCompile "org.junit.jupiter:junit-jupiter-engine:${JUNIT_JUPITER_VERSION}"

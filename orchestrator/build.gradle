@@ -36,7 +36,7 @@ dependencies {
     compile group: "info.picocli", name: "picocli", version: "${PICOCLI_VERSION}"
     compile group: "com.google.code.gson", name: "gson", version: "${GSON_VERSION}"
 
-    testCompile "org.hamcrest:java-hamcrest:${HAMCREAST_VERSION}"
+    testCompile "org.hamcrest:java-hamcrest:${HAMCREST_VERSION}"
     testCompile "org.junit.jupiter:junit-jupiter-api:${JUNIT_JUPITER_VERSION}"
     testCompile "org.junit.platform:junit-platform-runner:${JUNIT_PLATFORM_RUNNER_VERSION}"
     testCompile "org.junit.vintage:junit-vintage-engine:${JUNIT_JUPITER_VERSION}"
@@ -49,7 +49,7 @@ dependencies {
     testCompile "io.cucumber:cucumber-expressions:${CUCUMBER_EXPRESSIONS_VERSION}"
     testCompile "info.cukes:cucumber-picocontainer:${CUCUMBER_PICOCONTAINER_VERSION}"
     testCompile "org.mockito:mockito-all:${MOCKITO_VERSION}"
-    testCompile "com.shazam:shazamcrest:${SHAZAMCREAST_VERSION}"
+    testCompile "com.shazam:shazamcrest:${SHAZAMCREST_VERSION}"
     testCompile "org.junit.jupiter:junit-jupiter-engine:${JUNIT_JUPITER_VERSION}"
     testCompile group: "junit", name: "junit", version: "${JUNIT_4_VERSION}"
     
