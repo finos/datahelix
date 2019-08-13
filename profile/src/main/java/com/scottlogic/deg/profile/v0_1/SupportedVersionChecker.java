@@ -18,32 +18,36 @@ package com.scottlogic.deg.profile.v0_1;
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.profile.guice.ProfileConfigSource;
-import com.scottlogic.deg.profile.serialisation.SchemaVersionRetriever;
+import com.scottlogic.deg.profile.serialisation.SchemaVersionGetter;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.List;
 
 public class SupportedVersionChecker implements SchemaVersionValidator {
-    private SchemaVersionRetriever schemaVersionRetriever;
+    private SchemaVersionGetter schemaVersionGetter;
     private ProfileConfigSource configSource;
+    private SupportedVersionsGetter supportedVersionsGetter;
 
     @Inject
-    public SupportedVersionChecker(SchemaVersionRetriever schemaVersionRetriever, ProfileConfigSource configSource) {
-        this.schemaVersionRetriever = schemaVersionRetriever;
+    public SupportedVersionChecker(
+        SchemaVersionGetter schemaVersionGetter,
+        ProfileConfigSource configSource,
+        SupportedVersionsGetter supportedVersionsGetter
+    ) {
+        this.schemaVersionGetter = schemaVersionGetter;
         this.configSource = configSource;
+        this.supportedVersionsGetter = supportedVersionsGetter;
     }
 
     public URL getSchemaFile() throws IOException {
-        String schemaVersion = schemaVersionRetriever.getSchemaVersionOfJson(configSource.getProfileFile().toPath());
+        String schemaVersion = schemaVersionGetter.getSchemaVersionOfJson(configSource.getProfileFile().toPath());
         validateSchemaVersion(schemaVersion);
         return this.getClass().getResource("/profileschema/" + schemaVersion + "/datahelix.schema.json");
     }
 
     private void validateSchemaVersion(String schemaVersion) {
-        // TODO: Change this so the acceptable schema versions are not hardcoded here:
-        List<String> supportedSchemaVersions = Arrays.asList("0.1");
+        List<String> supportedSchemaVersions = supportedVersionsGetter.getSupportedSchemaVersions();
         if (!supportedSchemaVersions.contains(schemaVersion)) {
             String errorMessage = "This version of the generator does not support v" +
                 schemaVersion +

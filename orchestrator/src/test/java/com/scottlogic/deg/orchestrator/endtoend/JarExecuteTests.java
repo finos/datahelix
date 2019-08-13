@@ -26,6 +26,11 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class JarExecuteTests {
+    private String errorMessageOnFailure =
+        "Jar test failed. This may have been caused by one of the following:" +
+        "1) You have not built the jar. \n Try running Gradle Build. \n" +
+        "2) System.out is being printed to (which interferes with streaming output) e.g. using 'printStackTrace'.\n" +
+        "3) There is a bug in code conditional on whether it is running inside the JAR, e.g. in SupportedVersionsGetter. \n";
 
     @Test
     void generateSuccessfullyFromJar() throws Exception {
@@ -33,9 +38,7 @@ public class JarExecuteTests {
 
         List<String> collectedOutput = collectOutputAndCloseProcess(p);
 
-        assertEquals(Arrays.asList("foo", "\"Generation successful\""), collectedOutput,
-            "Jar test failed. This might be because you have not built the jar. \n Try running Gradle Build. \n" +
-            "Alternatively, it may be because System.out is being printed to (which interferes with streaming output) e.g. using 'printStackTrace'. ");
+        assertEquals(Arrays.asList("foo", "\"Generation successful\""), collectedOutput, errorMessageOnFailure);
     }
 
     @Test
@@ -44,9 +47,7 @@ public class JarExecuteTests {
 
         List<String> collectedOutput = collectOutputAndCloseProcess(p);
 
-        assertEquals(Arrays.asList("foo", "\"Generated successfully from file\""), collectedOutput,
-            "Jar test failed. This might be because you have not built the jar. \n Try running Gradle Build. \n" +
-            "Alternatively, it may be because System.out is being printed to (which interferes with streaming output) e.g. using 'printStackTrace'. ");
+        assertEquals(Arrays.asList("foo", "\"Generated successfully from file\""), collectedOutput, errorMessageOnFailure);
     }
 
     private Process setupProcess(final String profile) throws IOException {
