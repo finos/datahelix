@@ -34,7 +34,7 @@ public class ProfileSchemaValidatorTests {
     private final String TEST_PROFILE_DIR = "/test-profiles/";
     private final String INVALID_PROFILE_DIR = "invalid";
     private final String VALID_PROFILE_DIR = "valid";
-    private final String LATEST_REAL_SCHEMA_VERSION_PATH = "profileschema/0.1/datahelix.schema.json";
+    private final String LATEST_REAL_SCHEMA_VERSION_PATH = "profileschema/0.2/datahelix.schema.json";
 
     FilenameFilter jsonFilter = new FilenameFilter() {
         public boolean accept(File dir, String name) {
@@ -147,7 +147,7 @@ public class ProfileSchemaValidatorTests {
         String profileFilename = listOfFiles[0].getName();
         Collection<DynamicTest> dynTsts = new ArrayList<>();
 
-        List<String> invalidSchemaVersions = Arrays.asList("0.0", "0.11", "0.3", "1.1", "2.0", "0.2"); // Ones not in profile/src/main/resources/profileschema
+        List<String> invalidSchemaVersions = Arrays.asList("0.0", "0.11", "0.3", "1.1", "2.0"); // Ones not in profile/src/main/resources/profileschema
         invalidSchemaVersions.forEach(schemaVersion -> {
             DynamicTest test = DynamicTest.dynamicTest(schemaVersion, () -> {
                 URL testProfileUrl =
