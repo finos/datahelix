@@ -17,23 +17,21 @@ package com.scottlogic.deg.profile.v0_1;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.profile.guice.ProfileConfigSource;
-import com.scottlogic.deg.profile.serialisation.SchemaVersionRetriever;
+import com.scottlogic.deg.profile.serialisation.SchemaVersionGetter;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
 public class NoValidationVersionChecker implements SchemaVersionValidator {
-    private final SchemaVersionRetriever schemaVersionRetriever;
+    private final SchemaVersionGetter schemaVersionGetter;
     private final File profile;
     @Inject
     public NoValidationVersionChecker(
-        SchemaVersionRetriever schemaVersionRetriever,
+        SchemaVersionGetter schemaVersionGetter,
         @Named("config:profileFile") File profile
     ) {
-        this.schemaVersionRetriever = schemaVersionRetriever;
+        this.schemaVersionGetter = schemaVersionGetter;
         this.profile = profile;
     }
 
@@ -43,7 +41,7 @@ public class NoValidationVersionChecker implements SchemaVersionValidator {
      */
     @Override
     public URL getSchemaFile() throws IOException {
-        String schemaVersion = schemaVersionRetriever.getSchemaVersionOfJson(profile.toPath());
+        String schemaVersion = schemaVersionGetter.getSchemaVersionOfJson(profile.toPath());
         return this.getClass().getResource(
             "/profileschema/" +
             schemaVersion +

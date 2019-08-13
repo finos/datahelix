@@ -18,8 +18,9 @@ package com.scottlogic.deg.profile.guice;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.scottlogic.deg.profile.serialisation.SchemaVersionRetriever;
-import com.scottlogic.deg.profile.v0_1.*;
+import com.scottlogic.deg.profile.v0_1.NoValidationVersionChecker;
+import com.scottlogic.deg.profile.v0_1.SchemaVersionValidator;
+import com.scottlogic.deg.profile.v0_1.SupportedVersionChecker;
 
 public class ProfileSchemaVersionCheckingProvider implements Provider<SchemaVersionValidator> {
     private final ProfileConfigSource profileConfigSource;
