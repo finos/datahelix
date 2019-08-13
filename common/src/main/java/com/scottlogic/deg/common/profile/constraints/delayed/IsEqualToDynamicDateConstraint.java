@@ -36,7 +36,7 @@ public class IsEqualToDynamicDateConstraint implements DelayedAtomicConstraint {
                                           Field field,
                                           ChronoUnitWorkingDayWrapper unit,
                                           int offset) {
-        validateFieldsAreDifferent(underlyingConstraint.getField(), field);
+        DelayedAtomicConstraint.validateFieldsAreDifferent(underlyingConstraint.getField(), field);
         this.underlyingConstraint = underlyingConstraint;
         this.field = field;
         this.unit = unit;

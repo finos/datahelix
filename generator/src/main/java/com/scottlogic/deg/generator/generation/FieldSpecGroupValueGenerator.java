@@ -18,11 +18,11 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.FieldWrapper;
 import com.scottlogic.deg.common.util.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
+import com.scottlogic.deg.generator.fieldspecs.FieldWithFieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.DataBagGroupWrapper;
@@ -134,15 +134,15 @@ public class FieldSpecGroupValueGenerator {
         Set<FieldSpecRelations> relations = group.relations().stream()
             .filter(relation -> relation.main().equals(field) || relation.other().equals(field))
             .collect(Collectors.toSet());
-        Stream<FieldWrapper<FieldSpec>> relationsOrdered = relations.stream()
+        Stream<FieldWithFieldSpec> relationsOrdered = relations.stream()
             .map(relation -> relation.main().equals(field) ? relation : relation.inverse())
-            .map(relation -> new FieldWrapper<>(relation.other(), relation.reduceToRelatedFieldSpec(newSpec)));
+            .map(relation -> new FieldWithFieldSpec(relation.other(), relation.reduceToRelatedFieldSpec(newSpec)));
 
         relationsOrdered.forEach(
             wrapper -> applyToFieldSpecMap(
                 specs,
                 specs.get(wrapper.field()),
-                wrapper.other(),
+                wrapper.fieldSpec(),
                 wrapper.field()));
         return new FieldSpecGroup(specs, relations);
     }

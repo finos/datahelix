@@ -23,7 +23,7 @@ import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 
 public interface DelayedAtomicConstraint extends Constraint {
 
-    default void validateFieldsAreDifferent(Field first, Field second) {
+    static void validateFieldsAreDifferent(Field first, Field second) {
         if (first.equals(second)) {
             throw new IllegalArgumentException("Cannot have a relational field referring to itself");
         }

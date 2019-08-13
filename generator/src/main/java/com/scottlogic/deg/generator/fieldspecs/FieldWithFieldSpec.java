@@ -14,24 +14,26 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.common.profile;
+package com.scottlogic.deg.generator.fieldspecs;
 
-public final class FieldWrapper<T> {
+import com.scottlogic.deg.common.profile.Field;
+
+public final class FieldWithFieldSpec {
 
     private final Field field;
 
-    private final T other;
+    private final FieldSpec fieldSpec;
 
-    public FieldWrapper(Field field, T other) {
+    public FieldWithFieldSpec(Field field, FieldSpec fieldSpec) {
         this.field = field;
-        this.other = other;
+        this.fieldSpec = fieldSpec;
     }
 
     public Field field() {
         return field;
     }
 
-    public T other() {
-        return other;
+    public FieldSpec fieldSpec() {
+        return fieldSpec;
     }
 }
