@@ -46,7 +46,7 @@ public class IsinStringGenerator implements StringGenerator {
                 new IsinStringGenerator((RegexStringGenerator)isinRegexGenerator
                 .intersect(((IsinStringGenerator) stringGenerator).isinRegexGenerator));
         }
-        if (stringGenerator instanceof NotIsinGenerator) {
+        if (stringGenerator instanceof NegatedIsinGenerator) {
             return new NoStringsStringGenerator(
                 RegexStringGenerator.intersectRepresentation(stringGenerator.toString(), "<ISIN>")
             );
@@ -83,7 +83,7 @@ public class IsinStringGenerator implements StringGenerator {
 
     @Override
     public StringGenerator complement() {
-        return new NotIsinGenerator(isinRegexGenerator);
+        return new NegatedIsinGenerator(isinRegexGenerator);
     }
 
     @Override

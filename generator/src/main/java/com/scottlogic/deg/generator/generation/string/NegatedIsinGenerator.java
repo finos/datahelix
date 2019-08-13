@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public class NotIsinGenerator implements StringGenerator {
+public class NegatedIsinGenerator implements StringGenerator {
     private static final String GENERIC_NSIN_REGEX = "[A-Z0-9]{9}";
 
     // This generator is not used in generation itself, but is used to describe the possible
@@ -33,17 +33,17 @@ public class NotIsinGenerator implements StringGenerator {
     private StringGenerator notIsinRegexGenerator;
 
 
-    public NotIsinGenerator(RegexStringGenerator isinRegexGenerator) {
+    public NegatedIsinGenerator(RegexStringGenerator isinRegexGenerator) {
         this.isinRegexGenerator = isinRegexGenerator;
         notIsinRegexGenerator = isinRegexGenerator.complement();
     }
 
     @Override
     public StringGenerator intersect(StringGenerator stringGenerator) {
-        if (stringGenerator instanceof NotIsinGenerator) {
+        if (stringGenerator instanceof NegatedIsinGenerator) {
             RegexStringGenerator otherRegexGenerator =
-                ((NotIsinGenerator) stringGenerator).isinRegexGenerator;
-            return new NotIsinGenerator(isinRegexGenerator.union(otherRegexGenerator));
+                ((NegatedIsinGenerator) stringGenerator).isinRegexGenerator;
+            return new NegatedIsinGenerator(isinRegexGenerator.union(otherRegexGenerator));
         }
         if (stringGenerator instanceof IsinStringGenerator) {
             return new NoStringsStringGenerator(
@@ -247,7 +247,7 @@ public class NotIsinGenerator implements StringGenerator {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        NotIsinGenerator that = (NotIsinGenerator) o;
+        NegatedIsinGenerator that = (NegatedIsinGenerator) o;
         return Objects.equals(this.isinRegexGenerator, that.isinRegexGenerator);
     }
 
