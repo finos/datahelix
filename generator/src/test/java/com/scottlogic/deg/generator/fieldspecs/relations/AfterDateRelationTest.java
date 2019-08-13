@@ -52,8 +52,8 @@ class AfterDateRelationTest {
             OffsetDateTime.of(
                 2006,
                 6,
-                3
-                ,0,
+                3,
+                0,
                 0,
                 0,
                 0,
