@@ -36,7 +36,7 @@ import static org.mockito.Mockito.when;
 class RowSpecGrouperTest {
 
     @Test
-    void shouldCreateOneGroupOfTwoElements() {
+    void createGroups_withTwoRelatedFields_givesOneGroupOfSizeOne() {
         Field first = new Field("first");
         Field second = new Field("second");
         ProfileFields fields = new ProfileFields(Arrays.asList(first, second));
@@ -54,7 +54,7 @@ class RowSpecGrouperTest {
     }
 
     @Test
-    void shouldCreateTwoGroupsBetweenThreeElements() {
+    void createGroups_withTwoAndOneFields_givesTwoGroups() {
         Field first = new Field("first");
         Field second = new Field("second");
         Field third = new Field("third");
@@ -73,7 +73,7 @@ class RowSpecGrouperTest {
     }
 
     @Test
-    void shouldCreateThreeIndependentGroup() {
+    void createGroups_withThreeIndependentFields_givesThreeGroups() {
         Field first = new Field("first");
         Field second = new Field("second");
         Field third = new Field("third");
@@ -91,7 +91,7 @@ class RowSpecGrouperTest {
     }
 
     @Test
-    void shouldCreateOneGroupOfThreeElements() {
+    void createGroups_withThreeCodependentFields_givesOneGroup() {
         Field first = new Field("first");
         Field second = new Field("second");
         Field third = new Field("third");
@@ -109,7 +109,7 @@ class RowSpecGrouperTest {
     }
 
     @Test
-    void shouldCreateOneGroupOfThreeElementsWhereAllAreLinked() {
+    void createGroups_withThreeRelatedFieldsWithACircularLink_givesOneGroup() {
         Field first = new Field("first");
         Field second = new Field("second");
         Field third = new Field("third");
@@ -130,7 +130,7 @@ class RowSpecGrouperTest {
     }
 
     @Test
-    void shouldCreateTwoFromFiveElements() {
+    void createGroups_withFiveFields_correctlyGroups() {
         Field first = new Field("first");
         Field second = new Field("second");
         Field third = new Field("third");
@@ -154,7 +154,7 @@ class RowSpecGrouperTest {
     }
 
     @Test
-    void shouldCreateOneFromTwoElements() {
+    void createGroups_withMultipleLinksBetweenTwoFields_givesOneGroup() {
         Field first = new Field("first");
         Field second = new Field("second");
 

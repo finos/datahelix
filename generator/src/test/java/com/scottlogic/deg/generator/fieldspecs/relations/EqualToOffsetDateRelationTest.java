@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class EqualToOffsetDateRelationTest {
 
     @Test
-    public void testReduce_isEqualTo_OtherField() {
+    public void reduceToRelatedFieldSpec_comparingTwoFields_givesEquivalentFieldSpec() {
         Field first = new Field("first");
         Field second = new Field("second");
 

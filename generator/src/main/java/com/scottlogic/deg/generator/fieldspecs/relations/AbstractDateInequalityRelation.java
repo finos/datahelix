@@ -24,9 +24,7 @@ import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions.DateTimeLi
 import java.time.OffsetDateTime;
 
 abstract class AbstractDateInequalityRelation implements FieldSpecRelations {
-
     private final Field main;
-
     private final Field other;
 
     public AbstractDateInequalityRelation(Field main, Field other) {

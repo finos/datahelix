@@ -23,7 +23,6 @@ import java.time.OffsetDateTime;
 
 
 public class AfterDateRelation extends AbstractDateInequalityRelation {
-
     private final boolean inclusive;
 
     public AfterDateRelation(Field main, Field other, boolean inclusive) {

@@ -29,7 +29,7 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 class BeforeDateRelationTest {
 
     @Test
-    public void testAfterDateRelation() {
+    public void reduceToRelatedFieldSpec_comparingTwoFields_givesAnEarlierFieldSpec() {
         Field first = new Field("first");
         Field second = new Field("second");
 

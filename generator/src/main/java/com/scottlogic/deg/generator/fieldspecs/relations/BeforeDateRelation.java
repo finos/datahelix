@@ -22,7 +22,6 @@ import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
 import java.time.OffsetDateTime;
 
 public class BeforeDateRelation extends AbstractDateInequalityRelation {
-
     private final boolean inclusive;
 
     public BeforeDateRelation(Field main, Field other, boolean inclusive) {

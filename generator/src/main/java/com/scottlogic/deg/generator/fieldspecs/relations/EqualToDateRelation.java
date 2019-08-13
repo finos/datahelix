@@ -20,9 +20,7 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 
 public class EqualToDateRelation implements FieldSpecRelations {
-
     private final Field main;
-
     private final Field other;
 
     public EqualToDateRelation(Field main, Field other) {

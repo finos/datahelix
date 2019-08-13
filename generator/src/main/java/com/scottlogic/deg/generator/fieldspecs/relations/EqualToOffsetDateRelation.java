@@ -25,13 +25,9 @@ import java.time.OffsetDateTime;
 import java.time.temporal.TemporalAdjuster;
 
 public class EqualToOffsetDateRelation implements FieldSpecRelations {
-
     private Field main;
-
     private Field other;
-
     private TemporalAdjuster adjuster;
-
     private int offset;
 
     public EqualToOffsetDateRelation(Field main,

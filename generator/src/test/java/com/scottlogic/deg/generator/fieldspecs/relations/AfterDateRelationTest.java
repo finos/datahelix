@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class AfterDateRelationTest {
 
     @Test
-    public void testAfterDateRelation() {
+    public void reduceToRelatedFieldSpec_comparingTwoFields_givesALaterFieldSpec() {
         Field first = new Field("first");
         Field second = new Field("second");
 
