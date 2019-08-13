@@ -37,10 +37,10 @@ dependencies {
     compile group: "com.google.code.gson", name: "gson", version: "${GSON_VERSION}"
 
     testCompile "org.hamcrest:java-hamcrest:${HAMCREAST_VERSION}"
-    testCompile "org.junit.jupiter:junit-jupiter-api:${JUPITER_VERSION}"
+    testCompile "org.junit.jupiter:junit-jupiter-api:${JUNIT_JUPITER_VERSION}"
     testCompile "org.junit.platform:junit-platform-runner:${JUNIT_PLATFORM_RUNNER_VERSION}"
-    testCompile "org.junit.vintage:junit-vintage-engine:${JUPITER_VERSION}"
-    testCompile "org.junit.jupiter:junit-jupiter-params:${JUNIT_JUPITER_PARAMS_VERSION}"
+    testCompile "org.junit.vintage:junit-vintage-engine:${JUNIT_JUPITER_VERSION}"
+    testCompile "org.junit.jupiter:junit-jupiter-params:${JUNIT_JUPITER_VERSION}"
     testCompile "io.cucumber:cucumber-core:${CUCUMBER_VERSION}"
     testCompile "io.cucumber:cucumber-junit:${CUCUMBER_VERSION}"
     testCompile "io.cucumber:cucumber-java:${CUCUMBER_VERSION}"
@@ -50,7 +50,7 @@ dependencies {
     testCompile "info.cukes:cucumber-picocontainer:${CUCUMBER_PICOCONTAINER_VERSION}"
     testCompile "org.mockito:mockito-all:${MOCKITO_VERSION}"
     testCompile "com.shazam:shazamcrest:${SHAZAMCREAST_VERSION}"
-    testCompile "org.junit.jupiter:junit-jupiter-engine:${JUPITER_VERSION}"
+    testCompile "org.junit.jupiter:junit-jupiter-engine:${JUNIT_JUPITER_VERSION}"
     testCompile group: "junit", name: "junit", version: "${JUNIT_4_VERSION}"
     
     testCompile project(':generator').sourceSets.test.output

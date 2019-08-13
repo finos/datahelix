@@ -31,14 +31,14 @@ dependencies {
     compile "com.fasterxml.jackson.core:jackson-core:${JACKSON_VERSION}"
     compile "com.fasterxml.jackson.core:jackson-annotations:${JACKSON_VERSION}"
     compile "com.fasterxml.jackson.core:jackson-databind:${JACKSON_VERSION}"
-    testCompile "org.junit.jupiter:junit-jupiter-api:${JUPITER_VERSION}"
+    testCompile "org.junit.jupiter:junit-jupiter-api:${JUNIT_JUPITER_VERSION}"
     testCompile "junit:junit:${JUNIT_4_VERSION}"
     testCompile "org.junit.platform:junit-platform-runner:${JUNIT_PLATFORM_RUNNER_VERSION}"
-    testCompile "org.junit.vintage:junit-vintage-engine:${JUPITER_VERSION}"
+    testCompile "org.junit.vintage:junit-vintage-engine:${JUNIT_JUPITER_VERSION}"
     testCompile "org.hamcrest:java-hamcrest:${HAMCREAST_VERSION}"
-    testCompile "org.junit.jupiter:junit-jupiter-params:${JUNIT_JUPITER_PARAMS_VERSION}"
+    testCompile "org.junit.jupiter:junit-jupiter-params:${JUNIT_JUPITER_VERSION}"
     testCompile "org.mockito:mockito-all:${MOCKITO_VERSION}"
-    testCompile "org.junit.jupiter:junit-jupiter-engine:${JUPITER_VERSION}"
+    testCompile "org.junit.jupiter:junit-jupiter-engine:${JUNIT_JUPITER_VERSION}"
     testImplementation("org.junit.jupiter:junit-jupiter:${JUNIT_JUPITER_VERSION}")
 }
 
