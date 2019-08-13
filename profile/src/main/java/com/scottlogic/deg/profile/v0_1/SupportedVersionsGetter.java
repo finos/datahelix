@@ -25,7 +25,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class SupportedVersionsGetter {
-    private final String resourcesPath = "profileschema/";
+    private final static String RESOURCES_PATH = "profileschema/";
     /**
      *  Searches profile/src/main/resources/profileschema/ for sub-directories. The names of these directories
      *  are counted as valid schema versions.
@@ -50,7 +50,7 @@ public class SupportedVersionsGetter {
                 final Enumeration<JarEntry> entries = jar.entries(); //gives ALL entries in jar
                 while (entries.hasMoreElements()) {
                     final String name = entries.nextElement().getName();
-                    if (name.startsWith(resourcesPath)) { //filter according to the path
+                    if (name.startsWith(RESOURCES_PATH)) { //filter according to the path
                         if (name.split("/").length == 2) {
                             supportedSchemaVersions.add(name.split("/")[1]);
                         }
@@ -67,7 +67,7 @@ public class SupportedVersionsGetter {
     }
 
     private List<String> getSupportedSchemaVersionsFromResources() {
-        String directoryContainingSchemas = this.getClass().getResource("/" + resourcesPath).getPath();
+        String directoryContainingSchemas = this.getClass().getResource("/" + RESOURCES_PATH).getPath();
         File file = new File(directoryContainingSchemas);
         String[] directoriesArray = file.list((current, name) -> new File(current, name).isDirectory());
         List<String> directories;
