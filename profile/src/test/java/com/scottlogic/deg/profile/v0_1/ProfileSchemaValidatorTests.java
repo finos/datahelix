@@ -118,7 +118,7 @@ public class ProfileSchemaValidatorTests {
         String profileFilename = listOfFiles[0].getName();
         Collection<DynamicTest> dynTsts = new ArrayList<>();
 
-        List<String> validSchemaVersions = Arrays.asList("0.1"); // Ones in profile/src/main/resources/profileschema
+        List<String> validSchemaVersions = Arrays.asList("0.1", "0.2"); // Ones in profile/src/main/resources/profileschema
         validSchemaVersions.forEach(schemaVersion -> {
             DynamicTest test = DynamicTest.dynamicTest(schemaVersion, () -> {
                 URL testProfileUrl =
