@@ -18,13 +18,14 @@ package com.scottlogic.deg.profile.v0_1;
 
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.profile.guice.ProfileConfigSource;
-import com.scottlogic.deg.profile.serialisation.SchemaVersionRetriever;
+import com.scottlogic.deg.profile.serialisation.SchemaVersionGetter;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -36,13 +37,15 @@ class SupportedVersionCheckerTests {
     @Test
     void getSchemaFile_withSupportedVersion_returnsNonNullURL() throws IOException {
         //Arrange
-        SchemaVersionRetriever retriever = mock(SchemaVersionRetriever.class);
+        SchemaVersionGetter retriever = mock(SchemaVersionGetter.class);
         when(retriever.getSchemaVersionOfJson(any())).thenReturn("0.1");
         ProfileConfigSource configSource = mock(ProfileConfigSource.class);
         File mockFile = mock(File.class);
         when(mockFile.toPath()).thenReturn(mock(Path.class));
         when(configSource.getProfileFile()).thenReturn(mockFile);
-        SupportedVersionChecker validator = new SupportedVersionChecker(retriever, configSource);
+        SupportedVersionsGetter supportedVersionsGetter = mock(SupportedVersionsGetter.class);
+        when(supportedVersionsGetter.getSupportedSchemaVersions()).thenReturn(Arrays.asList("0.1"));
+        SupportedVersionChecker validator = new SupportedVersionChecker(retriever, configSource, supportedVersionsGetter);
 
         //Act
         URL schema = null;
@@ -59,14 +62,15 @@ class SupportedVersionCheckerTests {
     @Test
     void getSchemaFile_withUnsupportedVersion_throwsValidationException() throws IOException {
         //Arrange
-        SchemaVersionRetriever retriever = mock(SchemaVersionRetriever.class);
+        SchemaVersionGetter retriever = mock(SchemaVersionGetter.class);
         when(retriever.getSchemaVersionOfJson(any())).thenReturn("101.53");
         ProfileConfigSource configSource = mock(ProfileConfigSource.class);
         File mockFile = mock(File.class);
         when(mockFile.toPath()).thenReturn(mock(Path.class));
         when(configSource.getProfileFile()).thenReturn(mockFile);
-        SupportedVersionChecker validator = new SupportedVersionChecker(retriever, configSource);
-
+        SupportedVersionsGetter supportedVersionsGetter = mock(SupportedVersionsGetter.class);
+        when(supportedVersionsGetter.getSupportedSchemaVersions()).thenReturn(Arrays.asList("0.1"));
+        SupportedVersionChecker validator = new SupportedVersionChecker(retriever, configSource, supportedVersionsGetter);
 
         //Act & Assert
         assertThrows(ValidationException.class, validator::getSchemaFile);
