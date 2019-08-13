@@ -22,7 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class SchemaVersionRetriever {
+public class SchemaVersionGetter {
     public String getSchemaVersionOfJson(Path filePath) throws IOException {
         byte[] encoded = Files.readAllBytes(filePath);
         String profileJson = new String(encoded, StandardCharsets.UTF_8);

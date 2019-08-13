@@ -2,7 +2,6 @@
 
 1. Copy a package in _profile/src/main/resources/profileschema/_ and rename to the new version number.
 1. Change the _schemaVersion_ const from the old version number to the new one.
-1. Change the hardcoded list in _profile/v0_1/SupportedVersionChecker.java_ (future work is to remove the necessity of doing this).
 
 ### Example
 If the file structure currently looks like the below...
@@ -38,12 +37,3 @@ Then change the below (in the new file)...
 },
 ...
 ``` 
-
-Then change the line in SupportedVersionChecker from...
-```
-List<String> supportedSchemaVersions = Arrays.asList("0.1");
-```
-...to:
-```
-List<String> supportedSchemaVersions = Arrays.asList("0.1", "0.2");
-```
