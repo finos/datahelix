@@ -204,7 +204,7 @@ public class RegexStringGenerator implements StringGenerator {
 
     }
 
-    private String buildStringFromNode(Node node, int indexOrder) {
+    private String buildStringFromNode(Node node, long indexOrder) {
         String result = "";
         long passedStringNbr = 0;
         long step = node.getMatchedStringIdx() / node.getNbrChar();
@@ -352,7 +352,7 @@ public class RegexStringGenerator implements StringGenerator {
     private class FiniteStringAutomatonIterator implements Iterator<String> {
 
         private final long matches;
-        private int currentIndex;
+        private long currentIndex;
         private String currentValue;
 
         FiniteStringAutomatonIterator(RegexStringGenerator stringGenerator) {
@@ -395,7 +395,7 @@ public class RegexStringGenerator implements StringGenerator {
             return currentValue != null;
         }
 
-        private String getMatchedString(int indexOrder) {
+        private String getMatchedString(long indexOrder) {
             buildRootNode();
             if (indexOrder < 1) {
                 throw new IllegalArgumentException("indexOrder must be >= 1");
