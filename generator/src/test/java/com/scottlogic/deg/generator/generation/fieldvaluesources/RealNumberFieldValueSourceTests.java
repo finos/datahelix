@@ -535,11 +535,6 @@ class RealNumberFieldValueSourceTests {
             .toArray(BigDecimal[]::new);
 
         // ASSERT
-        if (assertCount) {
-            expectValueCount(expectedValuesArray.length);
-            expectFinite();
-        }
-
         Assert.assertThat(actualValues, arrayContainingInAnyOrder(expectedValuesMatchers));
     }
 
@@ -556,16 +551,6 @@ class RealNumberFieldValueSourceTests {
         }
 
         return objectUnderTest;
-    }
-
-    private void expectFinite() {
-        Assert.assertTrue(getObjectUnderTest().isFinite());
-    }
-
-    private void expectValueCount(int expectedCount) {
-        Assert.assertThat(
-            getObjectUnderTest().getValueCount(),
-            equalTo((long)expectedCount));
     }
 
     private void expectCorrectRandomValues() {

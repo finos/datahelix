@@ -53,33 +53,6 @@ public class DateTimeFieldValueSource implements FieldValueSource {
     }
 
     @Override
-    public boolean isFinite() {
-        return restrictions.min != null &&
-            restrictions.min.getLimit() != null &&
-            restrictions.max != null &&
-            restrictions.max.getLimit() != null;
-    }
-
-    @Override
-    public long getValueCount() {
-
-        if (isFinite()) {
-            Duration duration = Duration.between(inclusiveLower, exclusiveUpper);
-            Period period = Period.between(inclusiveLower.toLocalDate(), exclusiveUpper.toLocalDate());
-
-            if (granularity == Timescale.MILLIS) return (duration.getNano() / 1000000) + 1;
-            if (granularity == Timescale.SECONDS) return duration.getSeconds() + 1;
-            if (granularity == Timescale.MINUTES) return (duration.getSeconds() / 60) + 1;
-            if (granularity == Timescale.HOURS) return (duration.getSeconds() / 360) + 1;
-            if (granularity == Timescale.DAYS) return (period.getDays() + 1);
-            if (granularity == Timescale.MONTHS) return (period.getMonths() + 1);
-            if (granularity == Timescale.YEARS) return (period.getYears() + 1);
-        }
-
-        throw new IllegalStateException("Cannot get count of an infinite series");
-    }
-
-    @Override
     public Iterable<Object> generateAllValues() {
         return () -> new UpCastingIterator<>(
             new FilteringIterator<>(

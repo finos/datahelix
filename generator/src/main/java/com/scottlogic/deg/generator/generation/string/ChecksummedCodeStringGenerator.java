@@ -103,7 +103,7 @@ public abstract class ChecksummedCodeStringGenerator implements StringGenerator 
 
     private StringGenerator intersect(RegexStringGenerator other) {
         StringGenerator intersection = other.intersect(negate ? regexGenerator.complement() : regexGenerator);
-        if ((intersection.isFinite() && intersection.getValueCount() == 0) || !(intersection instanceof RegexStringGenerator)) {
+        if (!intersection.generateAllValues().iterator().hasNext() || !(intersection instanceof RegexStringGenerator)) {
             return new NoStringsStringGenerator(
                 RegexStringGenerator.intersectRepresentation(other.toString(), regexGenerator.toString())
             );
@@ -112,16 +112,6 @@ public abstract class ChecksummedCodeStringGenerator implements StringGenerator 
     }
 
     abstract ChecksummedCodeStringGenerator instantiate(RegexStringGenerator generator);
-
-    @Override
-    public boolean isFinite() {
-        return true;
-    }
-
-    @Override
-    public long getValueCount() {
-        return regexGenerator.getValueCount();
-    }
 
     @Override
     public Iterable<String> generateInterestingValues() {

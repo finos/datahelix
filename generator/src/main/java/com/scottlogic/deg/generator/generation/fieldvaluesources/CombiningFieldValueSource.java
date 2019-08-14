@@ -32,19 +32,6 @@ public class CombiningFieldValueSource implements FieldValueSource {
     }
 
     @Override
-    public boolean isFinite() {
-        return underlyingSources.stream().allMatch(FieldValueSource::isFinite);
-    }
-
-    @Override
-    public long getValueCount() {
-        return underlyingSources.stream()
-            .map(FieldValueSource::getValueCount)
-            .reduce(Long::sum)
-            .get();
-    }
-
-    @Override
     public Iterable<Object> generateInterestingValues() {
         return new ConcatenatingIterable<>(
                 underlyingSources.stream()

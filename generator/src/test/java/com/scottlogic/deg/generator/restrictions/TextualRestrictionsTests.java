@@ -305,8 +305,7 @@ class TextualRestrictionsTests {
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator, instanceOf(RegexStringGenerator.class));
-        Assert.assertThat(generator.isFinite(), is(false));
+        Assert.assertThat(generator, instanceOf(RegexStringGenerator.class));//???
     }
 
     @Test

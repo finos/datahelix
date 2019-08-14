@@ -354,7 +354,6 @@ public class StandardFieldValueSourceEvaluatorTests {
     private void AssertLastSourceIsNullOnlySource(List<FieldValueSource> sources) {
         int lastSourceIndex = sources.size() - 1;
         Assert.assertTrue(sources.get(lastSourceIndex) instanceof CannedValuesFieldValueSource);
-        Assert.assertEquals(1, sources.get(lastSourceIndex).getValueCount());
         Assert.assertNull(Iterators.get(sources.get(lastSourceIndex).generateAllValues().iterator(), 0));
     }
 

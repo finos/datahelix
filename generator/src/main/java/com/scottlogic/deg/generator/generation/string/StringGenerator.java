@@ -24,8 +24,6 @@ public interface StringGenerator {
     StringGenerator intersect(StringGenerator stringGenerator);
     StringGenerator complement();
 
-    boolean isFinite();
-    long getValueCount();
     boolean match(String subject);
 
     Iterable<String> generateInterestingValues();
@@ -44,16 +42,6 @@ public interface StringGenerator {
 
         StringGeneratorAsFieldValueSource(StringGenerator underlyingGenerator) {
             this.underlyingGenerator = underlyingGenerator;
-        }
-
-        @Override
-        public boolean isFinite() {
-            return underlyingGenerator.isFinite();
-        }
-
-        @Override
-        public long getValueCount() {
-            return underlyingGenerator.getValueCount();
         }
 
         @Override
