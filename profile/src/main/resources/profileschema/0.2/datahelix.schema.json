@@ -421,7 +421,7 @@
           "$ref": "#/definitions/string"
         },
         "offset": {
-          "type": "string"
+          "$ref": "#/definitions/integer"
         },
         "offsetUnit": {
           "type": "string"

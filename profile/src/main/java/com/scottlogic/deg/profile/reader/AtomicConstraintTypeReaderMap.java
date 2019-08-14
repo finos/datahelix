@@ -22,6 +22,7 @@ import com.scottlogic.deg.common.profile.constraints.delayed.IsAfterDynamicDateC
 import com.scottlogic.deg.common.profile.constraints.delayed.IsBeforeDynamicDateConstraint;
 import com.scottlogic.deg.common.profile.constraints.delayed.IsEqualToDynamicDateConstraint;
 import com.scottlogic.deg.common.util.Defaults;
+import com.scottlogic.deg.profile.reader.constraintreaders.EqualToFieldReader;
 import com.scottlogic.deg.profile.reader.constraintreaders.SetReader;
 import com.scottlogic.deg.profile.reader.constraintreaders.GranularToReader;
 import com.scottlogic.deg.profile.reader.constraintreaders.OfTypeReader;
@@ -165,83 +166,63 @@ public class AtomicConstraintTypeReaderMap {
                         maxStringLength)));
 
         if (isDelayedConstraintsEnabled) {
-
-            map.put(IS_EQUAL_TO_FIELD,
-                (dto, fields) -> {
-                    if (dto.offset != null && dto.offsetUnit != null) {
-                        ChronoUnitWorkingDayWrapper unit;
-                        if (((String) dto.offsetUnit).toUpperCase().equals("WORKING DAYS")) {
-                            unit = new ChronoUnitWorkingDayWrapper(
-                                ChronoUnit.valueOf(ChronoUnit.class, ("DAYS").toUpperCase()),
-                                    true);
-                        } else {
-                            unit = new ChronoUnitWorkingDayWrapper(
-                                ChronoUnit.valueOf(ChronoUnit.class, ((String) dto.offsetUnit).toUpperCase()),
-                                false);
-                        }
-                        int value = Integer.parseInt((String) dto.offset);
-
-                        return new IsEqualToDynamicDateConstraint(
-                            new EqualToConstraint(fields.getByName(dto.field), getValidatedValue(dto)),
-                            fields.getByName(getValueAsString(dto)),
-                            unit,
-                            value
-                        );
-                    }
-
-                    return new IsEqualToDynamicDateConstraint(
-                        new EqualToConstraint(fields.getByName(dto.field), getValidatedValue(dto)),
-                        fields.getByName(getValueAsString(dto))
-                    );
-                });
-
-            map.put(IS_BEFORE_FIELD_DATE_TIME,
-                (dto, fields) ->
-                    new IsBeforeDynamicDateConstraint(
-                        new IsBeforeConstantDateTimeConstraint(
-                            fields.getByName(dto.field),
-                            OffsetDateTime.MIN
-                        ),
-                        fields.getByName(getValueAsString(dto)),
-                        false
-                    )
-            );
-
-            map.put(IS_BEFORE_OR_EQUAL_TO_FIELD_DATE_TIME,
-                (dto, fields) ->
-                    new IsBeforeDynamicDateConstraint(
-                        new IsBeforeOrEqualToConstantDateTimeConstraint(
-                            fields.getByName(dto.field),
-                            OffsetDateTime.MIN
-                        ),
-                        fields.getByName(getValueAsString(dto)),
-                        true
-                    )
-            );
-
-            map.put(IS_AFTER_FIELD_DATE_TIME,
-                (dto, fields) ->
-                    new IsAfterDynamicDateConstraint(
-                        new IsAfterConstantDateTimeConstraint(
-                            fields.getByName(dto.field),
-                            OffsetDateTime.MAX
-                        ),
-                        fields.getByName(getValueAsString(dto)),
-                        false
-                    ));
-
-            map.put(IS_AFTER_OR_EQUAL_TO_FIELD_DATE_TIME,
-                (dto, fields) ->
-                    new IsAfterDynamicDateConstraint(
-                        new IsAfterOrEqualToConstantDateTimeConstraint(
-                            fields.getByName(dto.field),
-                            OffsetDateTime.MAX
-                        ),
-                        fields.getByName(getValueAsString(dto)),
-                        true
-                    )
-            );
+            map.putAll(getDelayedMapEntries());
         }
+
+        return map;
+    }
+
+    private Map<AtomicConstraintType, ConstraintReader> getDelayedMapEntries() {
+        Map<AtomicConstraintType, ConstraintReader> map = new HashMap<>();
+
+        map.put(IS_EQUAL_TO_FIELD, new EqualToFieldReader());
+
+        map.put(IS_BEFORE_FIELD_DATE_TIME,
+            (dto, fields) ->
+                new IsBeforeDynamicDateConstraint(
+                    new IsBeforeConstantDateTimeConstraint(
+                        fields.getByName(dto.field),
+                        OffsetDateTime.MIN
+                    ),
+                    fields.getByName(getValueAsString(dto)),
+                    false
+                )
+        );
+
+        map.put(IS_BEFORE_OR_EQUAL_TO_FIELD_DATE_TIME,
+            (dto, fields) ->
+                new IsBeforeDynamicDateConstraint(
+                    new IsBeforeOrEqualToConstantDateTimeConstraint(
+                        fields.getByName(dto.field),
+                        OffsetDateTime.MIN
+                    ),
+                    fields.getByName(getValueAsString(dto)),
+                    true
+                )
+        );
+
+        map.put(IS_AFTER_FIELD_DATE_TIME,
+            (dto, fields) ->
+                new IsAfterDynamicDateConstraint(
+                    new IsAfterConstantDateTimeConstraint(
+                        fields.getByName(dto.field),
+                        OffsetDateTime.MAX
+                    ),
+                    fields.getByName(getValueAsString(dto)),
+                    false
+                ));
+
+        map.put(IS_AFTER_OR_EQUAL_TO_FIELD_DATE_TIME,
+            (dto, fields) ->
+                new IsAfterDynamicDateConstraint(
+                    new IsAfterOrEqualToConstantDateTimeConstraint(
+                        fields.getByName(dto.field),
+                        OffsetDateTime.MAX
+                    ),
+                    fields.getByName(getValueAsString(dto)),
+                    true
+                )
+        );
 
         return map;
     }
