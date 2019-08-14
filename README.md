@@ -232,7 +232,7 @@ Finally, before exploring some more interesting features of the generator, we'll
         {
             "rule": "age",
             "constraints": [
-                { "field": "age", "is": "ofType", "value": "numeric" },
+                { "field": "age", "is": "ofType", "value": "integer" },
                 { "field": "age", "is": "greaterThan", "value": 0 },
                 { "field": "age", "is": "lessThan", "value": 100 },
                 { "not": { "field": "age", "is": "null" } }
