@@ -36,7 +36,7 @@ public class ConstraintDTO {
     /** a constant value - eg, used in isEqualTo or isGreaterThan */
     public Object value;
 
-    public int offset;
+    public Integer offset;
 
     public Object offsetUnit;
 

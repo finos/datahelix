@@ -33,7 +33,7 @@ public class EqualToFieldReader implements ConstraintReader {
 
     @Override
     public Constraint apply(ConstraintDTO dto, ProfileFields fields) {
-        if (dto.offsetUnit != null) {
+        if (dto.offset != null && dto.offsetUnit != null) {
             ChronoUnitWorkingDayWrapper unit;
             if (((String) dto.offsetUnit).toUpperCase().equals("WORKING DAYS")) {
                 unit = new ChronoUnitWorkingDayWrapper(
