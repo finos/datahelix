@@ -25,6 +25,9 @@
   "fields": [
     {
       "name": "field1"
+    },
+    {
+      "name": "field2"
     }
   ]
 }
