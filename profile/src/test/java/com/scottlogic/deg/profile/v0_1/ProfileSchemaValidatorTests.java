@@ -78,8 +78,8 @@ public class ProfileSchemaValidatorTests {
                     Supplier<String> msgSupplier = () -> "Profile ["
                         + profileFilename + "] should not be valid";
                     Assertions.fail(msgSupplier);
+                } catch (ValidationException e) {
                 }
-                catch (ValidationException e) { }
             });
             dynTsts.add(test);
         }
@@ -90,8 +90,8 @@ public class ProfileSchemaValidatorTests {
         File[] listOfFiles = getFileFromURL(VALID_PROFILE_DIR).listFiles(jsonFilter);
         Collection<DynamicTest> dynTsts = new ArrayList<>();
 
-        for (int i = 0; i < listOfFiles.length; i++) {
-            String profileFilename = listOfFiles[i].getName();
+        for (File file : listOfFiles) {
+            String profileFilename = file.getName();
             DynamicTest test = DynamicTest.dynamicTest(profileFilename, () -> {
                 URL testProfileUrl =
                     this.getClass().getResource(
@@ -101,8 +101,7 @@ public class ProfileSchemaValidatorTests {
                     Thread.currentThread().getContextClassLoader().getResource(LATEST_REAL_SCHEMA_VERSION_PATH);
                 try {
                     profileValidator.validateProfile(new File(testProfileUrl.getPath()), schemaUrl);
-                }
-                catch (ValidationException e) {
+                } catch (ValidationException e) {
                     Assertions.fail(
                         "Profile [" + profileFilename + "] should be valid [" + e.errorMessages + "]"
                     );
@@ -118,27 +117,24 @@ public class ProfileSchemaValidatorTests {
         String profileFilename = listOfFiles[0].getName();
         Collection<DynamicTest> dynTsts = new ArrayList<>();
 
-        List<String> validSchemaVersions = Arrays.asList("0.1", "0.2"); // Ones in profile/src/main/resources/profileschema
-        validSchemaVersions.forEach(schemaVersion -> {
-            DynamicTest test = DynamicTest.dynamicTest(schemaVersion, () -> {
-                URL testProfileUrl =
-                    this.getClass().getResource(
-                        TEST_PROFILE_DIR + VALID_PROFILE_DIR + "/" + profileFilename
-                    );
-                String schemaVersionPath = "profileschema/" + schemaVersion + "/datahelix.schema.json";
-                URL schemaUrl = Thread.currentThread().getContextClassLoader().getResource(schemaVersionPath);
-                try {
-                    profileValidator.validateProfile(new File(testProfileUrl.getPath()), schemaUrl);
+        String schemaVersion = "0.2"; // Latest in profile/src/main/resources/profileschema
+        DynamicTest test = DynamicTest.dynamicTest(schemaVersion, () -> {
+            URL testProfileUrl =
+                this.getClass().getResource(
+                    TEST_PROFILE_DIR + VALID_PROFILE_DIR + "/" + profileFilename
+                );
+            String schemaVersionPath = "profileschema/" + schemaVersion + "/datahelix.schema.json";
+            URL schemaUrl = Thread.currentThread().getContextClassLoader().getResource(schemaVersionPath);
+            try {
+                profileValidator.validateProfile(new File(testProfileUrl.getPath()), schemaUrl);
 
-                }
-                catch (ValidationException e) {
-                    Assertions.fail(
-                        "Schema Version [" + schemaVersion + "] should be valid"
-                    );
-                }
-            });
-            dynTsts.add(test);
+            } catch (ValidationException e) {
+                Assertions.fail(
+                    "Schema Version [" + schemaVersion + "] should be valid"
+                );
+            }
         });
+        dynTsts.add(test);
         return dynTsts;
     }
 
@@ -161,8 +157,7 @@ public class ProfileSchemaValidatorTests {
                     Assertions.fail(
                         "Schema Version [" + schemaVersion + "] should be invalid"
                     );
-                }
-                catch (ValidationException e) {
+                } catch (ValidationException e) {
 
                 }
             });
