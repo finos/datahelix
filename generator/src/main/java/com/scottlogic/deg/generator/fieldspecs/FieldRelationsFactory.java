@@ -17,18 +17,8 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.common.date.ChronoUnitWorkingDayWrapper;
 import com.scottlogic.deg.common.profile.constraints.delayed.*;
 import com.scottlogic.deg.generator.fieldspecs.relations.*;
-import org.threeten.extra.Minutes;
-import org.threeten.extra.Temporals;
-
-import java.time.Duration;
-import java.time.OffsetDateTime;
-import java.time.Period;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAdjuster;
-import java.time.temporal.TemporalAmount;
 
 public class FieldRelationsFactory {
 
@@ -69,29 +59,12 @@ public class FieldRelationsFactory {
            return new EqualToOffsetDateRelation(
                constraint.underlyingConstraint().getField(),
                constraint.field(),
-               constructDate(constraint.unit()),
+               constraint.unit().adjuster(),
                constraint.offset());
        } else {
            return new EqualToDateRelation(
                constraint.underlyingConstraint().getField(),
                constraint.field());
-       }
-   }
-
-   private TemporalAdjuster constructDate(ChronoUnitWorkingDayWrapper unit) {
-       if (unit.workingDay()) {
-           return Temporals.nextWorkingDay();
-       }
-       switch(unit.chronoUnit()) {
-           case MILLIS: return t -> t.plus(Duration.ofMillis(1));
-           case SECONDS: return t -> t.plus(Duration.ofSeconds(1));
-           case MINUTES: return t -> t.plus(Duration.ofMinutes(1));
-           case HOURS: return t -> t.plus(Duration.ofHours(1));
-           case DAYS: return t -> t.plus(Period.ofDays(1));
-           case WEEKS: return t -> t.plus(Period.ofWeeks(1));
-           case MONTHS: return t -> t.plus(Period.ofMonths(1));
-           case YEARS: return t -> t.plus(Period.ofYears(1));
-           default: throw new IllegalArgumentException("Couldn't construct offset of unit " + unit);
        }
    }
 }
