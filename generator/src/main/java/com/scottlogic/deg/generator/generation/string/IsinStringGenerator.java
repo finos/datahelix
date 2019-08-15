@@ -16,12 +16,15 @@
 
 package com.scottlogic.deg.generator.generation.string;
 
+import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.utils.*;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static com.scottlogic.deg.generator.generation.string.streamy.ChecksumStringGeneratorFactory.createIsinGenerator;
 
 public class IsinStringGenerator implements StringGenerator {
     public static final int ISIN_LENGTH = 12;
@@ -186,5 +189,10 @@ public class IsinStringGenerator implements StringGenerator {
     @Override
     public int hashCode() {
         return Objects.hash(isinRegexGenerator);
+    }
+
+    @Override
+    public FieldValueSource asFieldValueSource(){
+        return new StreamStringGeneratorAsFieldValueSource(createIsinGenerator());
     }
 }

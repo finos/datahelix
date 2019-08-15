@@ -17,8 +17,11 @@
 package com.scottlogic.deg.generator.generation.string;
 
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
+import com.scottlogic.deg.generator.generation.string.streamy.StreamStringGenerator;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.UpCastingIterator;
+
+import java.util.stream.StreamSupport;
 
 public interface StringGenerator {
     StringGenerator intersect(StringGenerator stringGenerator);
@@ -41,6 +44,33 @@ public interface StringGenerator {
         private final StringGenerator underlyingGenerator;
 
         StringGeneratorAsFieldValueSource(StringGenerator underlyingGenerator) {
+            this.underlyingGenerator = underlyingGenerator;
+        }
+
+        @Override
+        public Iterable<Object> generateInterestingValues() {
+            return () -> new UpCastingIterator<>(
+                underlyingGenerator.generateInterestingValues().iterator());
+        }
+
+        @Override
+        public Iterable<Object> generateAllValues() {
+            return () -> new UpCastingIterator<>(
+                underlyingGenerator.generateAllValues().iterator());
+        }
+
+        @Override
+        public Iterable<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
+            return () -> new UpCastingIterator<>(
+                underlyingGenerator.generateRandomValues(randomNumberGenerator).iterator());
+        }
+    }
+
+    class StreamStringGeneratorAsFieldValueSource implements FieldValueSource {
+
+        private final StreamStringGenerator underlyingGenerator;
+
+        public StreamStringGeneratorAsFieldValueSource(StreamStringGenerator underlyingGenerator) {
             this.underlyingGenerator = underlyingGenerator;
         }
 

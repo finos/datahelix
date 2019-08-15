@@ -16,7 +16,10 @@
 
 package com.scottlogic.deg.generator.generation.string;
 
+import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.utils.*;
+
+import static com.scottlogic.deg.generator.generation.string.streamy.ChecksumStringGeneratorFactory.createCusipGenerator;
 
 public class CusipStringGenerator extends ChecksummedCodeStringGenerator {
     public final static int CUSIP_LENGTH = 9;
@@ -69,5 +72,10 @@ public class CusipStringGenerator extends ChecksummedCodeStringGenerator {
     @Override
     ChecksummedCodeStringGenerator instantiate(RegexStringGenerator generator) {
         return new CusipStringGenerator(generator);
+    }
+
+    @Override
+    public FieldValueSource asFieldValueSource(){
+        return new StreamStringGeneratorAsFieldValueSource(createCusipGenerator());
     }
 }
