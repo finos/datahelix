@@ -18,6 +18,7 @@ package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 
 import com.google.inject.AbstractModule;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
+import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
@@ -65,7 +66,7 @@ public class CucumberTestModule extends AbstractModule {
             bind(ProfileValidator.class).to(MultipleProfileValidator.class);
         }
         bind(ErrorReporter.class).toInstance(new CucumberErrorReporter(testState));
-        bind(DecisionTreeFactory.class).to(CucumberDecisionTreeFactory.class);
+        bind(DecisionTreeFactory.class).to(ProfileDecisionTreeFactory.class);
 
         bind(ConfigValidator.class).toInstance(mock(ConfigValidator.class));
         bind(ManifestWriter.class).toInstance(mock(ManifestWriter.class));
