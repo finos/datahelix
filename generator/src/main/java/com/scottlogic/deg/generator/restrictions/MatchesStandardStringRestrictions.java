@@ -85,15 +85,13 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
     public MergeResult<StringRestrictions> intersect(StringRestrictions other) {
         if (other instanceof TextualRestrictions){
             TextualRestrictions textualRestrictions = (TextualRestrictions) other;
-            Impact impact = getImpactOnValueProduction(textualRestrictions);
-            if (impact == Impact.NONE) {
-                return new MergeResult<>(this); //no impact on values produced by this type
-            }
-            if (impact == Impact.PARTIAL) {
-                return new MergeResult<>(copyWithGenerator(getCombinedGenerator(textualRestrictions)));
+            StringGenerator combinedGenerator = getCombinedGenerator(textualRestrictions);
+
+            if (!combinedGenerator.generateAllValues().iterator().hasNext()){
+                return MergeResult.unsuccessful();
             }
 
-            return MergeResult.unsuccessful();
+            return new MergeResult<>(copyWithGenerator(combinedGenerator));
         }
 
         if (!(other instanceof MatchesStandardStringRestrictions)){
@@ -108,43 +106,6 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
         return that.negated == negated
             ? new MergeResult<>(this)
             : MergeResult.unsuccessful();
-    }
-
-    /**
-     * Calculate if the given TextualRestrictions could impact the ability to create some or all values
-     * If there are regex statements, determine if the intersection of those regexes with the regex for
-     * a valid string can produce any values or not.
-     * Get the length of the codes that would be produced, e.g. an ISIN is 12 characters.
-     * Check if any length restrictions exist that would prevent strings of this length being produced.
-     *
-     * @param textualRestrictions The other restrictions type to check
-     */
-    private Impact getImpactOnValueProduction(TextualRestrictions textualRestrictions) {
-        boolean hasRegexRestrictions = !textualRestrictions.containingRegex.isEmpty()
-            || !textualRestrictions.matchingRegex.isEmpty()
-            || !textualRestrictions.notMatchingRegex.isEmpty()
-            || !textualRestrictions.notContainingRegex.isEmpty();
-
-        if (hasRegexRestrictions) {
-            StringGenerator ourGenerator = getStringGenerator();
-            StringGenerator combinedGenerator =
-                ourGenerator.intersect(textualRestrictions.createGenerator());
-            if (combinedGenerator.isFinite() && combinedGenerator.getValueCount() == 0) {
-                return Impact.FULL;
-            }
-            if (combinedGenerator.getValueCount() < ourGenerator.getValueCount()) {
-                return Impact.PARTIAL;
-            }
-            return Impact.NONE;
-        }
-
-        int maxLength = textualRestrictions.maxLength != null ? textualRestrictions.maxLength : Integer.MAX_VALUE;
-        int minLength = textualRestrictions.minLength != null ? textualRestrictions.minLength : 0;
-        int codeLength = getCodeLength(type);
-
-        return (codeLength < minLength || codeLength > maxLength || textualRestrictions.excludedLengths.contains(codeLength))
-            ? Impact.FULL
-            : Impact.NONE;
     }
 
     private StringGenerator getCombinedGenerator(TextualRestrictions textualRestrictions) {

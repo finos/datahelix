@@ -136,11 +136,6 @@ public class RegexStringGenerator implements StringGenerator {
     }
 
     @Override
-    public boolean isFinite() {
-        return automaton.isFinite();
-    }
-
-    @Override
     public Iterable<String> generateInterestingValues() {
         try {
             String shortestString = AutomatonUtils.getShortestExample(automaton);
@@ -162,13 +157,7 @@ public class RegexStringGenerator implements StringGenerator {
 
     @Override
     public Iterable<String> generateAllValues() {
-        if (this.isFinite()) {
-            return () -> new RegexStringGenerator.FiniteStringAutomatonIterator(this);
-        }
-
-        // TODO: Assess whether we can do better here. Is it unacceptable to just generate indefinitely?
-        // We used to generate randomly, but that violates a reasonable expectation that values returned by this method should be unique
-        throw new UnsupportedOperationException("Can't generate all strings for a non-finite regex");
+        return () -> new RegexStringGenerator.FiniteStringAutomatonIterator(this);
     }
 
     @Override
@@ -180,21 +169,6 @@ public class RegexStringGenerator implements StringGenerator {
                 1,
                 Integer.MAX_VALUE,
                 randomNumberGenerator));
-    }
-
-    @Override
-    public long getValueCount() {
-        if (!this.isFinite()) {
-            throw new UnsupportedOperationException("Cannot count matches for a non-finite expression.");
-        }
-
-        buildRootNode();
-
-        if (rootNode.nextNodes.isEmpty()) {
-            return 0L;
-        }
-
-        return rootNode.matchedStringIdx;
     }
 
     @Override
@@ -356,7 +330,8 @@ public class RegexStringGenerator implements StringGenerator {
         private String currentValue;
 
         FiniteStringAutomatonIterator(RegexStringGenerator stringGenerator) {
-            this.matches = stringGenerator.getValueCount();
+            stringGenerator.buildRootNode();
+            this.matches = stringGenerator.rootNode.nextNodes.isEmpty() ? 0L : stringGenerator.rootNode.matchedStringIdx;
             currentIndex = 0;
         }
 

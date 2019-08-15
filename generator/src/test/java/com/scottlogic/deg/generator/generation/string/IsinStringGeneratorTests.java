@@ -83,14 +83,6 @@ public class IsinStringGeneratorTests {
     }
 
     @Test
-    public void complementShouldNotSupportGeneratingAllStrings() {
-        final UnsupportedOperationException unsupportedOperationException = assertThrows(UnsupportedOperationException.class, () -> {
-            new IsinStringGenerator().complement().generateAllValues();
-        });
-        assertThat(unsupportedOperationException.getMessage(), is("Can't generate all strings for a non-finite regex"));
-    }
-
-    @Test
     public void complementShouldProduceNoRandomValidIsins() {
         StringGenerator target = new IsinStringGenerator().complement();
 

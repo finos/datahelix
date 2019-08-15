@@ -73,16 +73,6 @@ class CombiningFieldValueSourceEqualityTests {
         }
 
         @Override
-        public boolean isFinite() {
-            throw new UnsupportedOperationException("Not supported");
-        }
-
-        @Override
-        public long getValueCount() {
-            throw new UnsupportedOperationException("Not supported");
-        }
-
-        @Override
         public Iterable<Object> generateInterestingValues() {
             throw new UnsupportedOperationException("Not supported");
         }
