@@ -16,6 +16,9 @@
 
 package com.scottlogic.deg.generator.generation.string;
 
+import com.scottlogic.deg.generator.generation.string.factorys.FiniteStringAutomatonIterator;
+import com.scottlogic.deg.generator.generation.string.factorys.InterestingStringFactory;
+import com.scottlogic.deg.generator.generation.string.factorys.RandomStringFactory;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.SupplierBasedIterator;
 import dk.brics.automaton.Automaton;
@@ -39,11 +42,10 @@ public class RegexStringGenerator implements StringGenerator {
     private static final Map<String, Automaton> containingRegexAutomatonCache = new HashMap<>();
 
     private Automaton automaton;
-    private Node rootNode;
-    private boolean isRootNodeBuilt;
-    private int preparedTransactionNode;
     private final String regexRepresentation;
+
     private RandomStringFactory randomStringFactory = new RandomStringFactory();
+    private InterestingStringFactory interestingStringFactory = new InterestingStringFactory();
 
     private RegexStringGenerator(Automaton automaton, String regexRepresentation) {
         this.automaton = automaton;
@@ -137,27 +139,12 @@ public class RegexStringGenerator implements StringGenerator {
 
     @Override
     public Iterable<String> generateInterestingValues() {
-        try {
-            String shortestString = AutomatonUtils.getShortestExample(automaton);
-            String longestString = AutomatonUtils.getLongestExample(automaton);
-
-            return shortestString.equals(longestString)
-                ? Collections.singleton(shortestString)
-                : Arrays.asList(shortestString, longestString);
-        } catch (RuntimeException e) {
-            System.err.println(
-                String.format(
-                    "Unable to generate interesting strings for %s%n%s",
-                    this.regexRepresentation,
-                    e.getMessage()));
-
-            return Collections.emptySet();
-        }
+        return interestingStringFactory.generateInterestingValues(automaton);
     }
 
     @Override
     public Iterable<String> generateAllValues() {
-        return () -> new RegexStringGenerator.FiniteStringAutomatonIterator(this);
+        return () -> new FiniteStringAutomatonIterator(automaton);
     }
 
     @Override
@@ -176,220 +163,6 @@ public class RegexStringGenerator implements StringGenerator {
 
         return automaton.run(subject);
 
-    }
-
-    private String buildStringFromNode(Node node, long indexOrder) {
-        String result = "";
-        long passedStringNbr = 0;
-        long step = node.getMatchedStringIdx() / node.getNbrChar();
-        for (char usedChar = node.getMinChar(); usedChar <= node.getMaxChar(); ++usedChar) {
-            passedStringNbr += step;
-            if (passedStringNbr >= indexOrder) {
-                passedStringNbr -= step;
-                indexOrder -= passedStringNbr;
-                result = result.concat("" + usedChar);
-                break;
-            }
-        }
-        long passedStringNbrInChildNode = 0;
-        if (result.length() == 0) {
-            passedStringNbrInChildNode = passedStringNbr;
-        }
-        for (Node childN : node.getNextNodes()) {
-            long origNbrInChildNode = passedStringNbrInChildNode;
-            if (addingNonNegativesIsSafe(passedStringNbrInChildNode, childN.getMatchedStringIdx())) {
-                passedStringNbrInChildNode += childN.getMatchedStringIdx();
-            } else {
-                passedStringNbrInChildNode = Long.MAX_VALUE;
-            }
-
-            if (passedStringNbrInChildNode >= indexOrder) {
-                passedStringNbrInChildNode = origNbrInChildNode;
-                indexOrder -= passedStringNbrInChildNode;
-                result = result.concat(buildStringFromNode(childN, indexOrder));
-                break;
-            }
-        }
-        return result;
-    }
-
-    private void buildRootNode() {
-
-        if (isRootNodeBuilt) {
-            return;
-        }
-        isRootNodeBuilt = true;
-
-        rootNode = new Node();
-        List<Node> nextNodes = prepareTransactionNodes(automaton.getInitialState());
-        rootNode.setNextNodes(nextNodes);
-        rootNode.updateMatchedStringIdx();
-    }
-
-    private List<Node> prepareTransactionNodes(State state) {
-
-        List<Node> transactionNodes = new ArrayList<>();
-        if (preparedTransactionNode == Integer.MAX_VALUE / 2) {
-            return transactionNodes;
-        }
-        ++preparedTransactionNode;
-
-        if (state.isAccept()) {
-            Node acceptedNode = new Node();
-            acceptedNode.setNbrChar(1);
-            transactionNodes.add(acceptedNode);
-        }
-        List<Transition> transitions = state.getSortedTransitions(true);
-
-        for (Transition transition : transitions) {
-            Node trsNode = new Node();
-            int nbrChar = transition.getMax() - transition.getMin() + 1;
-            trsNode.setNbrChar(nbrChar);
-            trsNode.setMaxChar(transition.getMax());
-            trsNode.setMinChar(transition.getMin());
-            List<Node> nextNodes = prepareTransactionNodes(transition.getDest());
-            trsNode.setNextNodes(nextNodes);
-            transactionNodes.add(trsNode);
-        }
-        return transactionNodes;
-    }
-
-    private class Node {
-        private int nbrChar = 1;
-        private List<Node> nextNodes = new ArrayList<>();
-        private boolean isNbrMatchedStringUpdated;
-        private long matchedStringIdx = 0;
-        private char minChar;
-        private char maxChar;
-
-        int getNbrChar() {
-            return nbrChar;
-        }
-
-        void setNbrChar(int nbrChar) {
-            this.nbrChar = nbrChar;
-        }
-
-        List<Node> getNextNodes() {
-            return nextNodes;
-        }
-
-        void setNextNodes(List<Node> nextNodes) {
-            this.nextNodes = nextNodes;
-        }
-
-        void updateMatchedStringIdx() {
-            if (isNbrMatchedStringUpdated) {
-                return;
-            }
-            if (nextNodes.isEmpty()) {
-                matchedStringIdx = nbrChar;
-            } else {
-                for (Node childNode : nextNodes) {
-                    childNode.updateMatchedStringIdx();
-                    long childNbrChar = childNode.getMatchedStringIdx();
-
-                    if(multiplyingNonNegativesIsSafe(nbrChar, childNbrChar) &&
-                       addingNonNegativesIsSafe(matchedStringIdx, nbrChar * childNbrChar)) {
-                        matchedStringIdx += nbrChar * childNbrChar;
-                    } else {
-                        matchedStringIdx = Long.MAX_VALUE;
-                    }
-                }
-            }
-            isNbrMatchedStringUpdated = true;
-        }
-
-        long getMatchedStringIdx() {
-            return matchedStringIdx;
-        }
-
-        char getMinChar() {
-            return minChar;
-        }
-
-        void setMinChar(char minChar) {
-            this.minChar = minChar;
-        }
-
-        char getMaxChar() {
-            return maxChar;
-        }
-
-        void setMaxChar(char maxChar) {
-            this.maxChar = maxChar;
-        }
-
-
-    }
-
-    private class FiniteStringAutomatonIterator implements Iterator<String> {
-
-        private final long matches;
-        private long currentIndex;
-        private String currentValue;
-
-        FiniteStringAutomatonIterator(RegexStringGenerator stringGenerator) {
-            stringGenerator.buildRootNode();
-            this.matches = stringGenerator.rootNode.nextNodes.isEmpty() ? 0L : stringGenerator.rootNode.matchedStringIdx;
-            currentIndex = 0;
-        }
-
-        /**
-         * <p>
-         * This function has been updated to only allow valid single 16-bit
-         * word UTF-8 characters to be output.
-         * </p>
-         * <p>
-         * FIXME - This check will be removed if/when the dk.brics.automaton
-         * library is fixed to support surrogate pairs,
-         * </p>
-         * <p>
-         * issue #15 (https://github.com/cs-au-dk/dk.brics.automaton/issues/15)
-         * has been raised on the dk.brics.automaton library
-         * </p>
-         * <p>
-         * issue #537 has been created to track when the dk.brics.automaton library
-         * is updated.
-         * </p>
-         *
-         * @return true if another value is available, false if all valid values have been read.
-         */
-        @Override
-        public boolean hasNext() {
-            if (currentValue != null) {
-                return true;
-            }
-            do {
-                currentIndex++; // starts at 1
-                if (currentIndex > matches) {
-                    return false;
-                }
-                currentValue = getMatchedString(currentIndex);
-            } while (currentValue != null && !StringUtils.isStringValidUtf8(currentValue));
-            return currentValue != null;
-        }
-
-        private String getMatchedString(long indexOrder) {
-            buildRootNode();
-            if (indexOrder < 1) {
-                throw new IllegalArgumentException("indexOrder must be >= 1");
-            }
-
-            if (indexOrder > rootNode.matchedStringIdx) {
-                return null;
-            }
-            String result = buildStringFromNode(rootNode, indexOrder);
-            result = result.substring(1, result.length() - 1);
-            return result;
-        }
-
-        @Override
-        public String next() {
-            String result = currentValue;
-            currentValue = null;
-            return result;
-        }
     }
 
     public boolean equals(Object o) {
