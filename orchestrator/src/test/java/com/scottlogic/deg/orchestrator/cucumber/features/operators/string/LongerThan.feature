@@ -741,7 +741,7 @@ Feature: User can specify that a string length is longer than, a specified numbe
     Given foo is longer than 1000
     Then the profile is invalid because "Field \[foo\]: longerThan constraint must have an operand/value <= 999, currently is 1000"
 
-  Scenario: Running a 'longerThan' request with a value less than implicit max (255) should generate data of length between value and 255
+  Scenario: Running a 'longerThan' request with a value less than default max (1000) should generate data of length between value and 1000
     Given foo is of type "string"
     And foo is longer than 999
     And the generator can generate at most 20 rows
