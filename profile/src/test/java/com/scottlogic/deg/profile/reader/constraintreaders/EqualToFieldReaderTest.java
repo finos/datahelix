@@ -2,19 +2,17 @@ package com.scottlogic.deg.profile.reader.constraintreaders;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.delayed.IsEqualToDynamicDateConstraint;
 import com.scottlogic.deg.profile.reader.ConstraintReader;
 import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.threeten.extra.Temporals;
 
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -52,7 +50,6 @@ class EqualToFieldReaderTest {
         dto.offsetUnit = ChronoUnit.DAYS.toString();
 
         IsEqualToDynamicDateConstraint constraint = createConstraint(equalToFieldReader, dto, fields);
-        assertFalse(constraint.unit().workingDay());
         assertEquals(2, constraint.offset());
     }
 
@@ -62,7 +59,8 @@ class EqualToFieldReaderTest {
         dto.offsetUnit = "WORKING DAYS";
 
         IsEqualToDynamicDateConstraint constraint = createConstraint(equalToFieldReader, dto, fields);
-        assertTrue(constraint.unit().workingDay());
+
+        assertEquals(Temporals.nextWorkingDay(), constraint.unit().adjuster());
     }
 
     private static ConstraintDTO baseDTO() {

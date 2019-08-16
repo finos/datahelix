@@ -44,6 +44,37 @@ class EqualToOffsetDateRelationTest {
         assertEquals(expectedSpec, newSpec);
     }
 
+
+
+    @Test
+    void reduceToRelatedFieldSpec_comparingTwoFieldsNegativeCase_givesEquivalentFieldSpec() {
+        Field first = new Field("first");
+        Field second = new Field("second");
+
+        TemporalAdjuster adjuster = t -> t.minus(Period.ofDays(1));
+        int days = 3;
+
+        FieldSpecRelations relation = new EqualToOffsetDateRelation(first, second, adjuster, 3);
+
+        OffsetDateTime exactTime = OffsetDateTime.of(
+            2005,
+            3,
+            5,
+            5,
+            6,
+            7,
+            0,
+            ZoneOffset.UTC);
+
+        FieldSpec initialSpec = specEqualToTime(exactTime);
+
+        FieldSpec expectedSpec = specEqualToTime(exactTime.minusDays(days));
+
+        FieldSpec newSpec = relation.reduceToRelatedFieldSpec(initialSpec);
+
+        assertEquals(expectedSpec, newSpec);
+    }
+
     private static FieldSpec specEqualToTime(OffsetDateTime time) {
         DateTimeRestrictions.DateTimeLimit limit = new DateTimeRestrictions.DateTimeLimit(time, true);
 
@@ -52,5 +83,4 @@ class EqualToOffsetDateRelationTest {
         restrictions.max = limit;
         return FieldSpec.Empty.withDateTimeRestrictions(restrictions);
     }
-
 }

@@ -38,7 +38,7 @@ public class ConstraintDTO {
 
     public Integer offset;
 
-    public Object offsetUnit;
+    public String offsetUnit;
 
     /** a set of values - eg, used in isInSet */
     public Collection<Object> values;

@@ -39,6 +39,7 @@ dependencies {
     testCompile "com.shazam:shazamcrest:${SHAZAMCREST_VERSION}"
     testImplementation "org.mockito:mockito-junit-jupiter:${MOCKITO_JUNIT_JUPITER_VERSION}"
     testImplementation("org.junit.jupiter:junit-jupiter:${JUNIT_JUPITER_VERSION}")
+    testImplementation "org.threeten:threeten-extra:${THREE_TEN_VERSION}"
 }
 
 test {

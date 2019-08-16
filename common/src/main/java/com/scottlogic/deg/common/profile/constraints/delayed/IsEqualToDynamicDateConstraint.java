@@ -20,8 +20,6 @@ import com.scottlogic.deg.common.date.ChronoUnitWorkingDayWrapper;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 
-import java.time.temporal.ChronoUnit;
-
 public class IsEqualToDynamicDateConstraint implements DelayedAtomicConstraint {
 
     private final AtomicConstraint underlyingConstraint;

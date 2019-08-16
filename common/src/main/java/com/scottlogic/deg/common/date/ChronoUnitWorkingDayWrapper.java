@@ -22,6 +22,8 @@ import java.time.Duration;
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjuster;
+import java.time.temporal.TemporalAmount;
+import java.util.function.IntFunction;
 
 public class ChronoUnitWorkingDayWrapper {
 
@@ -29,34 +31,38 @@ public class ChronoUnitWorkingDayWrapper {
 
     private final boolean workingDay;
 
-    public ChronoUnitWorkingDayWrapper(ChronoUnit chronoUnit, boolean workingDay) {
+    private final boolean positive;
+
+    public ChronoUnitWorkingDayWrapper(ChronoUnit chronoUnit, boolean workingDay, boolean positive) {
         this.chronoUnit = chronoUnit;
         this.workingDay = workingDay;
-    }
-
-    public ChronoUnit chronoUnit() {
-        return chronoUnit;
-    }
-
-    public boolean workingDay() {
-        return workingDay;
+        this.positive = positive;
     }
 
     public TemporalAdjuster adjuster() {
-        if (workingDay) {
-            return Temporals.nextWorkingDay();
-        } else {
-            switch(chronoUnit) {
-                case MILLIS: return t -> t.plus(Duration.ofMillis(1));
-                case SECONDS: return t -> t.plus(Duration.ofSeconds(1));
-                case MINUTES: return t -> t.plus(Duration.ofMinutes(1));
-                case HOURS: return t -> t.plus(Duration.ofHours(1));
-                case DAYS: return t -> t.plus(Period.ofDays(1));
-                case WEEKS: return t -> t.plus(Period.ofWeeks(1));
-                case MONTHS: return t -> t.plus(Period.ofMonths(1));
-                case YEARS: return t -> t.plus(Period.ofYears(1));
-                default: throw new IllegalArgumentException("Couldn't construct offset of unit " + chronoUnit);
-            }
+        return workingDay ? getWorkingDayFunction(positive) : getFunctionWithPositivity(chronoUnit, positive);
+    }
+
+    private TemporalAdjuster getWorkingDayFunction(boolean positive) {
+        return positive ? Temporals.nextWorkingDay() : Temporals.previousWorkingDay();
+    }
+
+    private TemporalAdjuster getFunctionWithPositivity(ChronoUnit unit, boolean positive) {
+        TemporalAmount temporalAmount = getFunction(unit).apply(1);
+        return positive ? t -> t.plus(temporalAmount) : t -> t.minus(temporalAmount);
+    }
+
+    private IntFunction<TemporalAmount> getFunction(ChronoUnit unit) {
+        switch(unit) {
+            case MILLIS: return Duration::ofMillis;
+            case SECONDS: return Duration::ofSeconds;
+            case MINUTES: return Duration::ofMinutes;
+            case HOURS: return Duration::ofHours;
+            case DAYS: return Period::ofDays;
+            case WEEKS: return Period::ofWeeks;
+            case MONTHS: return Period::ofMonths;
+            case YEARS: return Period::ofYears;
+            default: throw new IllegalArgumentException("Couldn't construct offset of unit " + unit);
         }
     }
 }

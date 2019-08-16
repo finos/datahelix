@@ -34,28 +34,30 @@ public class EqualToFieldReader implements ConstraintReader {
     @Override
     public Constraint apply(ConstraintDTO dto, ProfileFields fields) {
         if (dto.offset != null && dto.offsetUnit != null) {
-            ChronoUnitWorkingDayWrapper unit;
-            if (((String) dto.offsetUnit).toUpperCase().equals("WORKING DAYS")) {
-                unit = new ChronoUnitWorkingDayWrapper(
-                    ChronoUnit.valueOf(ChronoUnit.class, ("DAYS").toUpperCase()),
-                    true);
-            } else {
-                unit = new ChronoUnitWorkingDayWrapper(
-                    ChronoUnit.valueOf(ChronoUnit.class, ((String) dto.offsetUnit).toUpperCase()),
-                    false);
-            }
-
-            return new IsEqualToDynamicDateConstraint(
-                new EqualToConstraint(fields.getByName(dto.field), getValidatedValue(dto)),
-                fields.getByName(getValueAsString(dto)),
-                unit,
-                dto.offset
-            );
+            return createOffsetConstraint(dto, fields);
         }
 
         return new IsEqualToDynamicDateConstraint(
             new EqualToConstraint(fields.getByName(dto.field), getValidatedValue(dto)),
             fields.getByName(getValueAsString(dto))
+        );
+    }
+
+    private Constraint createOffsetConstraint(ConstraintDTO dto, ProfileFields fields) {
+        String offsetUnitUpperCase = dto.offsetUnit.toUpperCase();
+        boolean positive = dto.offset >= 0;
+        boolean workingDay = offsetUnitUpperCase.equals("WORKING DAYS");
+        ChronoUnitWorkingDayWrapper unit = new ChronoUnitWorkingDayWrapper(
+            ChronoUnit.valueOf(ChronoUnit.class, workingDay ? "DAYS" : offsetUnitUpperCase),
+            workingDay,
+            positive
+        );
+
+        return new IsEqualToDynamicDateConstraint(
+            new EqualToConstraint(fields.getByName(dto.field), getValidatedValue(dto)),
+            fields.getByName(getValueAsString(dto)),
+            unit,
+            Math.abs(dto.offset)
         );
     }
 }
