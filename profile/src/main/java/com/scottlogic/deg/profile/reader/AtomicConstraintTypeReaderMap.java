@@ -122,6 +122,9 @@ public class AtomicConstraintTypeReaderMap {
         map.put(IS_NULL,
             (dto, fields) -> new IsNullConstraint(fields.getByName(dto.field)));
 
+        map.put(IS_UNIQUE,
+            (dto, fields) -> new IsNullConstraint(fields.getByName(dto.field)));
+
         map.put(IS_STRING_LONGER_THAN,
             (dto, fields) ->
                 new IsStringLongerThanConstraint(
