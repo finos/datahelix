@@ -31,25 +31,23 @@ public class ChronoUnitWorkingDayWrapper {
 
     private final boolean workingDay;
 
-    private final boolean positive;
-
-    public ChronoUnitWorkingDayWrapper(ChronoUnit chronoUnit, boolean workingDay, boolean positive) {
+    public ChronoUnitWorkingDayWrapper(ChronoUnit chronoUnit, boolean workingDay) {
         this.chronoUnit = chronoUnit;
         this.workingDay = workingDay;
-        this.positive = positive;
     }
 
-    public TemporalAdjuster adjuster() {
-        return workingDay ? getWorkingDayFunction(positive) : getFunctionWithPositivity(chronoUnit, positive);
+    public TemporalAdjuster adjuster(int value) {
+        return workingDay ? getWorkingDayFunction(value) : getFunctionWithPositivity(chronoUnit, value);
     }
 
-    private TemporalAdjuster getWorkingDayFunction(boolean positive) {
-        return positive ? Temporals.nextWorkingDay() : Temporals.previousWorkingDay();
+    private TemporalAdjuster getWorkingDayFunction(int value) {
+        TemporalAdjuster adjuster = value >= 0 ? Temporals.nextWorkingDay() : Temporals.previousWorkingDay();
+        return new RepeatedTemporalAdjuster(adjuster, Math.abs(value));
     }
 
-    private TemporalAdjuster getFunctionWithPositivity(ChronoUnit unit, boolean positive) {
-        TemporalAmount temporalAmount = getFunction(unit).apply(1);
-        return positive ? t -> t.plus(temporalAmount) : t -> t.minus(temporalAmount);
+    private TemporalAdjuster getFunctionWithPositivity(ChronoUnit unit, int value) {
+        TemporalAmount temporalAmount = getFunction(unit).apply(Math.abs(value));
+        return value >= 0 ? t -> t.plus(temporalAmount) : t -> t.minus(temporalAmount);
     }
 
     private IntFunction<TemporalAmount> getFunction(ChronoUnit unit) {

@@ -16,23 +16,25 @@
 
 package com.scottlogic.deg.generator.fieldspecs.relations;
 
+import com.scottlogic.deg.common.date.ChronoUnitWorkingDayWrapper;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
 import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions.DateTimeLimit;
 
 import java.time.OffsetDateTime;
+import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAdjuster;
 
 public class EqualToOffsetDateRelation implements FieldSpecRelations {
     private Field main;
     private Field other;
-    private TemporalAdjuster adjuster;
+    private ChronoUnitWorkingDayWrapper adjuster;
     private int offset;
 
     public EqualToOffsetDateRelation(Field main,
                                      Field other,
-                                     TemporalAdjuster adjuster,
+                                     ChronoUnitWorkingDayWrapper adjuster,
                                      int offset) {
         this.main = main;
         this.other = other;
@@ -45,10 +47,7 @@ public class EqualToOffsetDateRelation implements FieldSpecRelations {
         if (otherValue.getDateTimeRestrictions() != null) {
             DateTimeLimit limit = otherValue.getDateTimeRestrictions().min;
             OffsetDateTime time = limit.getLimit();
-            OffsetDateTime newTime = time;
-            for (int i=0; i < offset; i++) {
-                newTime = newTime.with(adjuster);
-            }
+            OffsetDateTime newTime = OffsetDateTime.from(adjuster.adjuster(offset).adjustInto(time));
             DateTimeLimit newLimit = new DateTimeLimit(newTime, true);
             DateTimeRestrictions newRestrictions = new DateTimeRestrictions();
             newRestrictions.min = newLimit;

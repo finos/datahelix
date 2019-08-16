@@ -45,12 +45,10 @@ public class EqualToFieldReader implements ConstraintReader {
 
     private Constraint createOffsetConstraint(ConstraintDTO dto, ProfileFields fields) {
         String offsetUnitUpperCase = dto.offsetUnit.toUpperCase();
-        boolean positive = dto.offset >= 0;
         boolean workingDay = offsetUnitUpperCase.equals("WORKING DAYS");
         ChronoUnitWorkingDayWrapper unit = new ChronoUnitWorkingDayWrapper(
             ChronoUnit.valueOf(ChronoUnit.class, workingDay ? "DAYS" : offsetUnitUpperCase),
-            workingDay,
-            positive
+            workingDay
         );
 
         return new IsEqualToDynamicDateConstraint(

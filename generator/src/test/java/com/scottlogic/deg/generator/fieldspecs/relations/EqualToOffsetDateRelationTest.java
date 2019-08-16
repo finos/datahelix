@@ -1,15 +1,14 @@
 package com.scottlogic.deg.generator.fieldspecs.relations;
 
+import com.scottlogic.deg.common.date.ChronoUnitWorkingDayWrapper;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
 import org.junit.jupiter.api.Test;
 
 import java.time.OffsetDateTime;
-import java.time.Period;
 import java.time.ZoneOffset;
-import java.time.temporal.TemporalAdjuster;
-import java.time.temporal.TemporalAmount;
+import java.time.temporal.ChronoUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,10 +19,10 @@ class EqualToOffsetDateRelationTest {
         Field first = new Field("first");
         Field second = new Field("second");
 
-        TemporalAdjuster adjuster = t -> t.plus(Period.ofDays(1));
+        ChronoUnitWorkingDayWrapper wrapper = new ChronoUnitWorkingDayWrapper(ChronoUnit.DAYS, false);
         int days = 3;
 
-        FieldSpecRelations relation = new EqualToOffsetDateRelation(first, second, adjuster, 3);
+        FieldSpecRelations relation = new EqualToOffsetDateRelation(first, second, wrapper, 3);
 
         OffsetDateTime exactTime = OffsetDateTime.of(
             2005,
@@ -51,10 +50,11 @@ class EqualToOffsetDateRelationTest {
         Field first = new Field("first");
         Field second = new Field("second");
 
-        TemporalAdjuster adjuster = t -> t.minus(Period.ofDays(1));
-        int days = 3;
+        int days = -3;
 
-        FieldSpecRelations relation = new EqualToOffsetDateRelation(first, second, adjuster, 3);
+        ChronoUnitWorkingDayWrapper wrapper = new ChronoUnitWorkingDayWrapper(ChronoUnit.DAYS, false);
+
+        FieldSpecRelations relation = new EqualToOffsetDateRelation(first, second, wrapper, days);
 
         OffsetDateTime exactTime = OffsetDateTime.of(
             2005,
@@ -68,7 +68,7 @@ class EqualToOffsetDateRelationTest {
 
         FieldSpec initialSpec = specEqualToTime(exactTime);
 
-        FieldSpec expectedSpec = specEqualToTime(exactTime.minusDays(days));
+        FieldSpec expectedSpec = specEqualToTime(exactTime.minusDays(Math.abs(days)));
 
         FieldSpec newSpec = relation.reduceToRelatedFieldSpec(initialSpec);
 
