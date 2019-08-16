@@ -8,8 +8,9 @@ import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
 import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.threeten.extra.Temporals;
 
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -55,12 +56,26 @@ class EqualToFieldReaderTest {
 
     @Test
     public void apply_withWorkingDayOffset_createsTwoFieldsWithWorkingDayOffset() {
-        dto.offset = 5;
+        final int days = 5;
+        dto.offset = days;
         dto.offsetUnit = "WORKING DAYS";
 
         IsEqualToDynamicDateConstraint constraint = createConstraint(equalToFieldReader, dto, fields);
 
-        assertEquals(Temporals.nextWorkingDay(), constraint.unit().adjuster());
+        OffsetDateTime initial = OffsetDateTime.of(
+            2000,
+            6,
+            5,
+            4,
+            3,
+            2,
+            1,
+            ZoneOffset.UTC
+        );
+
+
+        OffsetDateTime producedDate = OffsetDateTime.from(constraint.unit().adjuster(days).adjustInto(initial));
+        assertEquals(initial.plusDays(7), producedDate);
     }
 
     private static ConstraintDTO baseDTO() {
