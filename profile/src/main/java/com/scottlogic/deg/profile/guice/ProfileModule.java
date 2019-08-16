@@ -21,9 +21,9 @@ import com.google.inject.name.Names;
 import com.scottlogic.deg.profile.reader.AtomicConstraintTypeReaderMap;
 import com.scottlogic.deg.profile.reader.JsonProfileReader;
 import com.scottlogic.deg.profile.reader.ProfileReader;
-import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
-import com.scottlogic.deg.profile.v0_1.SchemaVersionValidator;
-import com.scottlogic.deg.profile.v0_1.SupportedVersionChecker;
+import com.scottlogic.deg.profile.dto.ProfileSchemaValidator;
+import com.scottlogic.deg.profile.dto.SchemaVersionValidator;
+import com.scottlogic.deg.profile.dto.SupportedVersionChecker;
 
 import java.io.File;
 

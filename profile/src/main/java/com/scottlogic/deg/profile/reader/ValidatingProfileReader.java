@@ -19,8 +19,8 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.profile.guice.ProfileConfigSource;
 import com.scottlogic.deg.profile.reader.validation.ConfigValidator;
-import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
-import com.scottlogic.deg.profile.v0_1.SchemaVersionValidator;
+import com.scottlogic.deg.profile.dto.ProfileSchemaValidator;
+import com.scottlogic.deg.profile.dto.SchemaVersionValidator;
 
 import java.io.IOException;
 import java.net.URL;

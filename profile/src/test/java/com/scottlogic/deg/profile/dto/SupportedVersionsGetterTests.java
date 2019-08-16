@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.v0_1;
+package com.scottlogic.deg.profile.dto;
 
-import java.io.File;
-import java.net.URL;
+import org.junit.jupiter.api.Test;
 
-public class NoopProfileSchemaValidator implements ProfileSchemaValidator {
+import static org.junit.jupiter.api.Assertions.*;
 
-    @Override
-    public void validateProfile(File profileFile, URL schema) {
-        return;
+class SupportedVersionsGetterTests {
+    @Test
+    void getSupportedSchemaVersions_returnsAtLeastOneSchemaVersion() {
+        SupportedVersionsGetter supportedVersionsGetter = new SupportedVersionsGetter();
+
+        assertFalse(
+            supportedVersionsGetter.getSupportedSchemaVersions().isEmpty(),
+            "Expected there to be at least one valid version");
     }
 }

@@ -20,7 +20,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.scottlogic.deg.common.profile.*;
 import com.scottlogic.deg.profile.serialisation.ProfileDeserialiser;
-import com.scottlogic.deg.profile.v0_1.ProfileDTO;
+import com.scottlogic.deg.profile.dto.ProfileDTO;
 
 import java.io.File;
 import java.io.IOException;

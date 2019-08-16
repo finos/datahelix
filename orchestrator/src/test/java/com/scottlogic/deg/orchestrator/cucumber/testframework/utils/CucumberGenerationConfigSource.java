@@ -24,7 +24,7 @@ import com.scottlogic.deg.generator.config.detail.TreeWalkerType;
 import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
 import com.scottlogic.deg.orchestrator.violate.ViolateConfigSource;
 import com.scottlogic.deg.output.guice.OutputFormat;
-import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
+import com.scottlogic.deg.profile.dto.AtomicConstraintType;
 
 import java.io.File;
 import java.nio.file.Path;
