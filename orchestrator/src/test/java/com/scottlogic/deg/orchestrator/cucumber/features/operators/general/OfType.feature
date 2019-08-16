@@ -94,7 +94,7 @@ Feature: User can specify that a field is of a specific type (string, integer, d
     And foo is of type "string"
     And the generation strategy is random
     And the generator can generate at most 20 rows
-    Then foo contains strings of length between 1 and 255 inclusively
+    Then foo contains strings of length between 1 and 1000 inclusively
 
   Scenario: Running a 'ofType' request that specifies null should be unsuccessful
     Given there is a field foo

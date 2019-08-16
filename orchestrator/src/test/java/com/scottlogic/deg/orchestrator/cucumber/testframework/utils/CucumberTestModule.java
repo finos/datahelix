@@ -65,7 +65,6 @@ public class CucumberTestModule extends AbstractModule {
             bind(ProfileValidator.class).to(MultipleProfileValidator.class);
         }
         bind(ErrorReporter.class).toInstance(new CucumberErrorReporter(testState));
-        bind(DecisionTreeFactory.class).to(CucumberDecisionTreeFactory.class);
 
         bind(ConfigValidator.class).toInstance(mock(ConfigValidator.class));
         bind(ManifestWriter.class).toInstance(mock(ManifestWriter.class));
