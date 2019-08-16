@@ -45,16 +45,6 @@ public class NoStringsStringGenerator implements StringGenerator {
     }
 
     @Override
-    public boolean isFinite() {
-        return true;
-    }
-
-    @Override
-    public long getValueCount() {
-        return 0;
-    }
-
-    @Override
     public boolean match(String subject) {
         return false;
     }

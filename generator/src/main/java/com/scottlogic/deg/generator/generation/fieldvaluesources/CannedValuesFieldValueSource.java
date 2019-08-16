@@ -32,16 +32,6 @@ public class CannedValuesFieldValueSource implements FieldValueSource {
     }
 
     @Override
-    public boolean isFinite() {
-        return true;
-    }
-
-    @Override
-    public long getValueCount() {
-        return allValues.distributedSet().size();
-    }
-
-    @Override
     public Iterable<Object> generateInterestingValues() {
         return interestingValues.set();
     }

@@ -187,20 +187,12 @@ class RegexStringGeneratorTests {
     }
 
     @Test
-    void shouldExpandSingletons() {
-        StringGenerator generator = new RegexStringGenerator("THIS_IS_A_SINGLETON", true);
-        assertThat(generator.getValueCount(), Is.is(1L));
-    }
-
-    @Test
     void shouldProduceIntersection() {
         StringGenerator infiniteGenerator = new RegexStringGenerator("[a-z]+", false);
 
         StringGenerator rangeGenerator = new RegexStringGenerator("(a|b){1,10}", true);
 
         StringGenerator actual = infiniteGenerator.intersect(rangeGenerator);
-
-        assertThat(actual.isFinite(), Is.is(true));
 
         List<String> actualResults = new ArrayList<>();
         actual.generateAllValues().iterator().forEachRemaining(actualResults::add);
@@ -213,8 +205,6 @@ class RegexStringGeneratorTests {
         StringGenerator limitedRangeGenerator = new RegexStringGenerator("[a-m]", true);
         StringGenerator complementedGenerator = limitedRangeGenerator.complement();
 
-        assertThat(complementedGenerator.isFinite(), equalTo(false));
-
         String sampleValue = complementedGenerator
                 .generateRandomValues(new JavaUtilRandomNumberGenerator(0))
                 .iterator().next();
@@ -226,31 +216,13 @@ class RegexStringGeneratorTests {
     }
 
     @Test
-    void shouldThrowWhenCountingNonFinite() {
-        StringGenerator infiniteGenerator = new RegexStringGenerator(".*", false);
-
-        assertThrows(
-                UnsupportedOperationException.class,
-                infiniteGenerator::getValueCount);
-    }
-
-    @Test
-    void shouldThrowWhenGeneratingAllFromNonFinite() {
-        StringGenerator infiniteGenerator = new RegexStringGenerator(".*", false);
-
-        assertThrows(
-                UnsupportedOperationException.class,
-                infiniteGenerator::generateAllValues);
-    }
-
-    @Test
     void shouldReturnNoValuesWhenContradictingConstraints() {
         StringGenerator firstGenerator = new RegexStringGenerator("[b]{2}", true);
         StringGenerator secondGenerator = new RegexStringGenerator(".{0,1}", true);
 
         StringGenerator contradictingGenerator = firstGenerator.intersect(secondGenerator);
 
-        assertEquals(0, contradictingGenerator.getValueCount());
+        assertFalse(contradictingGenerator.generateAllValues().iterator().hasNext());
     }
 
     @Test
@@ -260,7 +232,7 @@ class RegexStringGeneratorTests {
 
         StringGenerator nonContradictingGenerator = firstGenerator.intersect(secondGenerator);
 
-        assertNotEquals(0, nonContradictingGenerator.getValueCount());
+        assertTrue(nonContradictingGenerator.generateAllValues().iterator().hasNext());
     }
 
     @Test

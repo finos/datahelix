@@ -56,7 +56,7 @@ class CartesianProductRowSpecTreeSolverTests {
                     fieldSpecMerger
                 ), new RowSpecMerger(fieldSpecMerger));
 
-    private final ProfileDecisionTreeFactory dTreeGenerator = new ProfileDecisionTreeFactory();
+    private final DecisionTreeFactory dTreeGenerator = new DecisionTreeFactory();
 
     @Test
     void test() {

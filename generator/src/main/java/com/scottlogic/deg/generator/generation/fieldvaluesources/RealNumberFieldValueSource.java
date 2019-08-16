@@ -92,19 +92,6 @@ public class RealNumberFieldValueSource implements FieldValueSource {
     }
 
     @Override
-    public boolean isFinite() {
-        return true;
-    }
-
-    @Override
-    public long getValueCount() {
-        BigDecimal lowerStep = inclusiveLowerLimit.divide(stepSize, 0, RoundingMode.HALF_UP);
-        BigDecimal upperStep = inclusiveUpperLimit.divide(stepSize, 0, RoundingMode.HALF_UP);
-
-        return upperStep.subtract(lowerStep).longValue() + 1 - blacklist.size();
-    }
-
-    @Override
     public Iterable<Object> generateInterestingValues() {
         return () -> new UpCastingIterator<>(
             FlatMappingSpliterator.flatMap(

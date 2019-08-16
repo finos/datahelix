@@ -19,9 +19,10 @@ package com.scottlogic.deg.generator.generation;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.NullDistributedSet;
-import com.scottlogic.deg.generator.generation.fieldvaluesources.*;
+import com.scottlogic.deg.generator.generation.fieldvaluesources.CannedValuesFieldValueSource;
+import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
+import com.scottlogic.deg.generator.generation.fieldvaluesources.RealNumberFieldValueSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.DateTimeFieldValueSource;
 import com.scottlogic.deg.generator.generation.string.RegexStringGenerator;
 import com.scottlogic.deg.generator.generation.string.StringGenerator;
@@ -109,7 +110,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         StringRestrictions stringRestrictions = fieldSpec.getStringRestrictions();
 
         if (stringRestrictions == null) {
-            return new CannedValuesFieldValueSource(FrequencyDistributedSet.empty());
+            stringRestrictions = new StringRestrictionsFactory().forMaxLength(1000);
         }
 
         Set<Object> blacklist = getBlacklist(fieldSpec);

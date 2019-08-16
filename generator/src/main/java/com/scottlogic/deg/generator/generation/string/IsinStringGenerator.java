@@ -69,8 +69,7 @@ public class IsinStringGenerator implements StringGenerator {
     private StringGenerator intersect(RegexStringGenerator other) {
         StringGenerator intersection =
             other.intersect(isinRegexGenerator);
-        if ((intersection.isFinite() && intersection.getValueCount() == 0) ||
-                !(intersection instanceof RegexStringGenerator)) {
+        if (!(intersection instanceof RegexStringGenerator)) {
             return new NoStringsStringGenerator(
                 RegexStringGenerator.intersectRepresentation(
                     other.toString(),
@@ -78,22 +77,12 @@ public class IsinStringGenerator implements StringGenerator {
                 )
             );
         }
-            return new IsinStringGenerator((RegexStringGenerator)intersection);
+        return new IsinStringGenerator((RegexStringGenerator)intersection);
     }
 
     @Override
     public StringGenerator complement() {
         return new NegatedIsinGenerator(isinRegexGenerator);
-    }
-
-    @Override
-    public boolean isFinite() {
-        return true;
-    }
-
-    @Override
-    public long getValueCount() {
-        return isinRegexGenerator.getValueCount();
     }
 
     @Override

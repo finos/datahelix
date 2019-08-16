@@ -26,12 +26,10 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
 import com.scottlogic.deg.output.OutputPath;
-import com.scottlogic.deg.profile.reader.ProfileReader;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.validators.ContradictionDecisionTreeValidator;
 import com.scottlogic.deg.orchestrator.validator.VisualisationConfigValidator;
 import com.scottlogic.deg.profile.reader.ValidatingProfileReader;
-import com.scottlogic.deg.profile.v0_1.ProfileSchemaValidator;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

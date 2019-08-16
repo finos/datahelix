@@ -67,16 +67,6 @@ public class NegatedIsinGenerator implements StringGenerator {
     }
 
     @Override
-    public boolean isFinite() {
-        return false;
-    }
-
-    @Override
-    public long getValueCount() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public boolean match(String subject) {
         return !FinancialCodeUtils.isValidIsin(subject);
     }
