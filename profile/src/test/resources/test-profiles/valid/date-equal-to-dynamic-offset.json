@@ -1,0 +1,108 @@
+{
+  "schemaVersion": "0.2",
+  "fields": [
+    {
+      "name": "first"
+    }, {
+      "name": "second"
+    }, {
+      "name": "firstWorking"
+    }, {
+      "name": "secondWorking"
+    }, {
+      "name": "current"
+    }
+  ],
+  "rules": [
+    {
+      "constraints": [
+        {
+          "not": {
+            "field": "first",
+            "is": "null"
+          }
+        },
+        {
+          "not": {
+            "field": "second",
+            "is": "null"
+          }
+        },
+        {
+          "field": "first",
+          "is": "ofType",
+          "value": "datetime"
+        },
+        {
+          "field": "second",
+          "is": "ofType",
+          "value": "datetime"
+        },
+        {
+          "field": "first",
+          "is": "after",
+          "value": {
+            "date": "8001-02-03T04:05:06.007"
+          }
+        },
+        {
+          "field": "second",
+          "is": "equalToField",
+          "value": "first",
+          "offset": 3,
+          "offsetUnit": "days"
+        },
+        {
+          "field": "firstWorking",
+          "is": "equalTo",
+          "value": {
+            "date": "2019-08-12T12:00:00.000"
+          }
+        },
+        {
+          "field": "secondWorking",
+          "is": "ofType",
+          "value": "datetime"
+        },
+        {
+          "not": {
+            "field": "secondWorking",
+            "is": "null"
+          }
+        },
+        {
+          "field": "secondWorking",
+          "is": "equalToField",
+          "value": "firstWorking",
+          "offset": 8,
+          "offsetUnit": "working days"
+        },
+        {
+          "field": "current",
+          "is": "ofType",
+          "value": "datetime"
+        },
+        {
+          "not": {
+            "field": "current",
+            "is": "null"
+          }
+        },
+        {
+          "field": "current",
+          "is": "before",
+          "value": {
+            "date": "now"
+          }
+        },
+        {
+          "field": "current",
+          "is": "after",
+          "value": {
+            "date": "2019-06-01T12:00:00.000"
+          }
+        }
+      ]
+    }
+  ]
+}

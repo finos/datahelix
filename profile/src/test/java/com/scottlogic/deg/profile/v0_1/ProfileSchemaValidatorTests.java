@@ -17,66 +17,54 @@
 package com.scottlogic.deg.profile.v0_1;
 
 import com.scottlogic.deg.common.ValidationException;
+import com.scottlogic.deg.profile.serialisation.SchemaVersionGetter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DynamicTest;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class ProfileSchemaValidatorTests {
     private final String TEST_PROFILE_DIR = "/test-profiles/";
     private final String INVALID_PROFILE_DIR = "invalid";
     private final String VALID_PROFILE_DIR = "valid";
-    private final String LATEST_REAL_SCHEMA_VERSION_PATH = "profileschema/0.2/datahelix.schema.json";
 
-    FilenameFilter jsonFilter = new FilenameFilter() {
-        public boolean accept(File dir, String name) {
-            String lowercaseName = name.toLowerCase();
-            if (lowercaseName.endsWith(".json")) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-    };
+    private FilenameFilter jsonFilter = (dir, name) -> name.toLowerCase().endsWith(".json");
 
     private File getFileFromURL(String profileDirName) {
         URL url = this.getClass().getResource(TEST_PROFILE_DIR + profileDirName);
-        File file = null;
+        File file;
         try {
             file = new File(url.toURI());
         } catch (URISyntaxException e) {
             file = new File(url.getPath());
-        } finally {
-            return file;
         }
+        return file;
     }
 
     Collection<DynamicTest> testInvalidProfiles(ProfileSchemaValidator profileValidator) {
-        File[] listOfFiles = getFileFromURL(INVALID_PROFILE_DIR).listFiles(jsonFilter);
+        File[] arrayOfFiles = getFileFromURL(INVALID_PROFILE_DIR).listFiles(jsonFilter);
         Collection<DynamicTest> dynTsts = new ArrayList<>();
 
-        for (int i = 0; i < listOfFiles.length; i++) {
-            String profileFilename = listOfFiles[i].getName();
-            DynamicTest test = DynamicTest.dynamicTest(profileFilename, () -> {
+        for (File file : arrayOfFiles) {
+            DynamicTest test = DynamicTest.dynamicTest(file.getName(), () -> {
                 URL testProfileUrl =
                     this.getClass().getResource(
-                        TEST_PROFILE_DIR + INVALID_PROFILE_DIR + "/" + profileFilename
+                        TEST_PROFILE_DIR + INVALID_PROFILE_DIR + "/" + file.getName()
                     );
+                String schemaVersion = new SchemaVersionGetter().getSchemaVersionOfJson(file.toPath());
                 URL schemaUrl =
-                    Thread.currentThread().getContextClassLoader().getResource(LATEST_REAL_SCHEMA_VERSION_PATH);
+                    Thread.currentThread().getContextClassLoader().getResource(getSchemaPath(schemaVersion));
                 try {
                     profileValidator.validateProfile(new File(testProfileUrl.getPath()), schemaUrl);
 
                     Supplier<String> msgSupplier = () -> "Profile ["
-                        + profileFilename + "] should not be valid";
+                        + file.getName() + "] should not be valid";
                     Assertions.fail(msgSupplier);
                 } catch (ValidationException e) {
                 }
@@ -87,18 +75,19 @@ public class ProfileSchemaValidatorTests {
     }
 
     Collection<DynamicTest> testValidProfiles(ProfileSchemaValidator profileValidator) {
-        File[] listOfFiles = getFileFromURL(VALID_PROFILE_DIR).listFiles(jsonFilter);
+        File[] arrayOfFiles = getFileFromURL(VALID_PROFILE_DIR).listFiles(jsonFilter);
         Collection<DynamicTest> dynTsts = new ArrayList<>();
 
-        for (File file : listOfFiles) {
+        for (File file : arrayOfFiles) {
             String profileFilename = file.getName();
             DynamicTest test = DynamicTest.dynamicTest(profileFilename, () -> {
                 URL testProfileUrl =
                     this.getClass().getResource(
                         TEST_PROFILE_DIR + VALID_PROFILE_DIR + "/" + profileFilename
                     );
+                String schemaVersion = new SchemaVersionGetter().getSchemaVersionOfJson(file.toPath());
                 URL schemaUrl =
-                    Thread.currentThread().getContextClassLoader().getResource(LATEST_REAL_SCHEMA_VERSION_PATH);
+                    Thread.currentThread().getContextClassLoader().getResource(getSchemaPath(schemaVersion));
                 try {
                     profileValidator.validateProfile(new File(testProfileUrl.getPath()), schemaUrl);
                 } catch (ValidationException e) {
@@ -112,57 +101,7 @@ public class ProfileSchemaValidatorTests {
         return dynTsts;
     }
 
-    Collection<DynamicTest> testValidSchemaVersions(ProfileSchemaValidator profileValidator) {
-        File[] listOfFiles = getFileFromURL(VALID_PROFILE_DIR).listFiles(jsonFilter);
-        String profileFilename = listOfFiles[0].getName();
-        Collection<DynamicTest> dynTsts = new ArrayList<>();
-
-        String schemaVersion = "0.2"; // Latest in profile/src/main/resources/profileschema
-        DynamicTest test = DynamicTest.dynamicTest(schemaVersion, () -> {
-            URL testProfileUrl =
-                this.getClass().getResource(
-                    TEST_PROFILE_DIR + VALID_PROFILE_DIR + "/" + profileFilename
-                );
-            String schemaVersionPath = "profileschema/" + schemaVersion + "/datahelix.schema.json";
-            URL schemaUrl = Thread.currentThread().getContextClassLoader().getResource(schemaVersionPath);
-            try {
-                profileValidator.validateProfile(new File(testProfileUrl.getPath()), schemaUrl);
-
-            } catch (ValidationException e) {
-                Assertions.fail(
-                    "Schema Version [" + schemaVersion + "] should be valid"
-                );
-            }
-        });
-        dynTsts.add(test);
-        return dynTsts;
-    }
-
-    Collection<DynamicTest> testInvalidSchemaVersions(ProfileSchemaValidator profileValidator) {
-        File[] listOfFiles = getFileFromURL(VALID_PROFILE_DIR).listFiles(jsonFilter);
-        String profileFilename = listOfFiles[0].getName();
-        Collection<DynamicTest> dynTsts = new ArrayList<>();
-
-        List<String> invalidSchemaVersions = Arrays.asList("0.0", "0.11", "0.3", "1.1", "2.0"); // Ones not in profile/src/main/resources/profileschema
-        invalidSchemaVersions.forEach(schemaVersion -> {
-            DynamicTest test = DynamicTest.dynamicTest(schemaVersion, () -> {
-                URL testProfileUrl =
-                    this.getClass().getResource(
-                        TEST_PROFILE_DIR + VALID_PROFILE_DIR + "/" + profileFilename
-                    );
-                String schemaVersionPath = "profileschema/" + schemaVersion + "/datahelix.schema.json";
-                URL schemaUrl = Thread.currentThread().getContextClassLoader().getResource(schemaVersionPath);
-                try {
-                    profileValidator.validateProfile(new File(testProfileUrl.getPath()), schemaUrl);
-                    Assertions.fail(
-                        "Schema Version [" + schemaVersion + "] should be invalid"
-                    );
-                } catch (ValidationException e) {
-
-                }
-            });
-            dynTsts.add(test);
-        });
-        return dynTsts;
+    private String getSchemaPath(String schemaVersion) {
+        return "profileschema/" + schemaVersion + "/datahelix.schema.json";
     }
 }

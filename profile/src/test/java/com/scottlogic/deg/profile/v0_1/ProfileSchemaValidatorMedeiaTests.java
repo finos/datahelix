@@ -34,14 +34,4 @@ class ProfileSchemaValidatorMedeiaTests  extends ProfileSchemaValidatorTests {
     Collection<DynamicTest> testValidProfiles() {
         return super.testValidProfiles(profileValidator);
     }
-
-    @TestFactory
-    Collection<DynamicTest> testValidSchemaVersions() {
-        return super.testValidSchemaVersions(profileValidator);
-    }
-
-    @TestFactory
-    Collection<DynamicTest> testInvalidSchemaVersions() {
-        return super.testInvalidSchemaVersions(profileValidator);
-    }
 }
