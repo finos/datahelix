@@ -34,32 +34,24 @@ public class ProfileSchemaValidatorTests {
     private final String INVALID_PROFILE_DIR = "invalid";
     private final String VALID_PROFILE_DIR = "valid";
 
-    FilenameFilter jsonFilter = (dir, name) -> {
-        String lowercaseName = name.toLowerCase();
-        if (lowercaseName.endsWith(".json")) {
-            return true;
-        } else {
-            return false;
-        }
-    };
+    private FilenameFilter jsonFilter = (dir, name) -> name.toLowerCase().endsWith(".json");
 
     private File getFileFromURL(String profileDirName) {
         URL url = this.getClass().getResource(TEST_PROFILE_DIR + profileDirName);
-        File file = null;
+        File file;
         try {
             file = new File(url.toURI());
         } catch (URISyntaxException e) {
             file = new File(url.getPath());
-        } finally {
-            return file;
         }
+        return file;
     }
 
     Collection<DynamicTest> testInvalidProfiles(ProfileSchemaValidator profileValidator) {
-        File[] listOfFiles = getFileFromURL(INVALID_PROFILE_DIR).listFiles(jsonFilter);
+        File[] arrayOfFiles = getFileFromURL(INVALID_PROFILE_DIR).listFiles(jsonFilter);
         Collection<DynamicTest> dynTsts = new ArrayList<>();
 
-        for (File file : listOfFiles) {
+        for (File file : arrayOfFiles) {
             DynamicTest test = DynamicTest.dynamicTest(file.getName(), () -> {
                 URL testProfileUrl =
                     this.getClass().getResource(
@@ -83,10 +75,10 @@ public class ProfileSchemaValidatorTests {
     }
 
     Collection<DynamicTest> testValidProfiles(ProfileSchemaValidator profileValidator) {
-        File[] listOfFiles = getFileFromURL(VALID_PROFILE_DIR).listFiles(jsonFilter);
+        File[] arrayOfFiles = getFileFromURL(VALID_PROFILE_DIR).listFiles(jsonFilter);
         Collection<DynamicTest> dynTsts = new ArrayList<>();
 
-        for (File file : listOfFiles) {
+        for (File file : arrayOfFiles) {
             String profileFilename = file.getName();
             DynamicTest test = DynamicTest.dynamicTest(profileFilename, () -> {
                 URL testProfileUrl =
