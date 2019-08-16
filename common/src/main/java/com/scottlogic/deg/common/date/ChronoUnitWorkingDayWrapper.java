@@ -37,15 +37,15 @@ public class ChronoUnitWorkingDayWrapper {
     }
 
     public TemporalAdjuster adjuster(int value) {
-        return workingDay ? getWorkingDayFunction(value) : getFunctionWithPositivity(chronoUnit, value);
+        return workingDay ? getWorkingDayAdjusterFunction(value) : getAdjusterFunction(chronoUnit, value);
     }
 
-    private TemporalAdjuster getWorkingDayFunction(int value) {
+    private TemporalAdjuster getWorkingDayAdjusterFunction(int value) {
         TemporalAdjuster adjuster = value >= 0 ? Temporals.nextWorkingDay() : Temporals.previousWorkingDay();
         return new RepeatedTemporalAdjuster(adjuster, Math.abs(value));
     }
 
-    private TemporalAdjuster getFunctionWithPositivity(ChronoUnit unit, int value) {
+    private TemporalAdjuster getAdjusterFunction(ChronoUnit unit, int value) {
         TemporalAmount temporalAmount = getFunction(unit).apply(Math.abs(value));
         return value >= 0 ? t -> t.plus(temporalAmount) : t -> t.minus(temporalAmount);
     }
