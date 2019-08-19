@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.profile.reader.constraintreaders;
 
-import com.scottlogic.deg.common.date.ChronoUnitWorkingDayWrapper;
+import com.scottlogic.deg.common.date.TemporalAdjusterGenerator;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.EqualToConstraint;
@@ -46,7 +46,7 @@ public class EqualToFieldReader implements ConstraintReader {
     private Constraint createOffsetConstraint(ConstraintDTO dto, ProfileFields fields) {
         String offsetUnitUpperCase = dto.offsetUnit.toUpperCase();
         boolean workingDay = offsetUnitUpperCase.equals("WORKING DAYS");
-        ChronoUnitWorkingDayWrapper unit = new ChronoUnitWorkingDayWrapper(
+        TemporalAdjusterGenerator unit = new TemporalAdjusterGenerator(
             ChronoUnit.valueOf(ChronoUnit.class, workingDay ? "DAYS" : offsetUnitUpperCase),
             workingDay
         );

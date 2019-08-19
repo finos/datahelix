@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.common.profile.constraints.delayed;
 
-import com.scottlogic.deg.common.date.ChronoUnitWorkingDayWrapper;
+import com.scottlogic.deg.common.date.TemporalAdjusterGenerator;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 
@@ -26,13 +26,13 @@ public class IsEqualToDynamicDateConstraint implements DelayedAtomicConstraint {
 
     private final Field field;
 
-    private final ChronoUnitWorkingDayWrapper unit;
+    private final TemporalAdjusterGenerator unit;
 
     private final int offset;
 
     public IsEqualToDynamicDateConstraint(AtomicConstraint underlyingConstraint,
                                           Field field,
-                                          ChronoUnitWorkingDayWrapper unit,
+                                          TemporalAdjusterGenerator unit,
                                           int offset) {
         DelayedAtomicConstraint.validateFieldsAreDifferent(underlyingConstraint.getField(), field);
         this.underlyingConstraint = underlyingConstraint;
@@ -55,7 +55,7 @@ public class IsEqualToDynamicDateConstraint implements DelayedAtomicConstraint {
         return field;
     }
 
-    public ChronoUnitWorkingDayWrapper unit() {
+    public TemporalAdjusterGenerator unit() {
         return unit;
     }
 

@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.fieldspecs.relations;
 
-import com.scottlogic.deg.common.date.ChronoUnitWorkingDayWrapper;
+import com.scottlogic.deg.common.date.TemporalAdjusterGenerator;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
@@ -19,7 +19,7 @@ class EqualToOffsetDateRelationTest {
         Field first = new Field("first");
         Field second = new Field("second");
 
-        ChronoUnitWorkingDayWrapper wrapper = new ChronoUnitWorkingDayWrapper(ChronoUnit.DAYS, false);
+        TemporalAdjusterGenerator wrapper = new TemporalAdjusterGenerator(ChronoUnit.DAYS, false);
         int days = 3;
 
         FieldSpecRelations relation = new EqualToOffsetDateRelation(first, second, wrapper, 3);
@@ -52,7 +52,7 @@ class EqualToOffsetDateRelationTest {
 
         int days = -3;
 
-        ChronoUnitWorkingDayWrapper wrapper = new ChronoUnitWorkingDayWrapper(ChronoUnit.DAYS, false);
+        TemporalAdjusterGenerator wrapper = new TemporalAdjusterGenerator(ChronoUnit.DAYS, false);
 
         FieldSpecRelations relation = new EqualToOffsetDateRelation(first, second, wrapper, days);
 

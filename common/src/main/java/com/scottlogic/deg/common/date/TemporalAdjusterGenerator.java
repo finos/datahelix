@@ -25,13 +25,13 @@ import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAmount;
 import java.util.function.IntFunction;
 
-public class ChronoUnitWorkingDayWrapper {
+public class TemporalAdjusterGenerator {
 
     private final ChronoUnit chronoUnit;
 
     private final boolean workingDay;
 
-    public ChronoUnitWorkingDayWrapper(ChronoUnit chronoUnit, boolean workingDay) {
+    public TemporalAdjusterGenerator(ChronoUnit chronoUnit, boolean workingDay) {
         this.chronoUnit = chronoUnit;
         this.workingDay = workingDay;
     }

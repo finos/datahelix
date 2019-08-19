@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.fieldspecs.relations;
 
-import com.scottlogic.deg.common.date.ChronoUnitWorkingDayWrapper;
+import com.scottlogic.deg.common.date.TemporalAdjusterGenerator;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
@@ -27,12 +27,12 @@ import java.time.OffsetDateTime;
 public class EqualToOffsetDateRelation implements FieldSpecRelations {
     private Field main;
     private Field other;
-    private ChronoUnitWorkingDayWrapper adjuster;
+    private TemporalAdjusterGenerator adjuster;
     private int offset;
 
     public EqualToOffsetDateRelation(Field main,
                                      Field other,
-                                     ChronoUnitWorkingDayWrapper adjuster,
+                                     TemporalAdjusterGenerator adjuster,
                                      int offset) {
         this.main = main;
         this.other = other;
