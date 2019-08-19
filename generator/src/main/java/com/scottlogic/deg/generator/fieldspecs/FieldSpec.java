@@ -36,10 +36,11 @@ import java.util.stream.Collectors;
  */
 public class FieldSpec {
     public static final FieldSpec Empty =
-        new FieldSpec(null, new HeterogeneousTypeContainer<>(), true, null);
+        new FieldSpec(null, new HeterogeneousTypeContainer<>(), true, false, null);
     public static final FieldSpec NullOnly = Empty.withWhitelist(FrequencyDistributedSet.empty());
 
     private final boolean nullable;
+    private final boolean unique;
     private final String formatting;
     private final DistributedSet<Object> whitelist;
     private final HeterogeneousTypeContainer<Restrictions> restrictions;
@@ -48,16 +49,22 @@ public class FieldSpec {
         DistributedSet<Object> whitelist,
         HeterogeneousTypeContainer<Restrictions> restrictions,
         boolean nullable,
+        boolean unique,
         String formatting
     ) {
         this.whitelist = whitelist;
         this.restrictions = restrictions;
         this.nullable = nullable;
+        this.unique = unique;
         this.formatting = formatting;
     }
 
     public boolean isNullable() {
         return nullable;
+    }
+
+    public boolean isUnique() {
+        return unique;
     }
 
     public DistributedSet<Object> getWhitelist() {
@@ -89,7 +96,7 @@ public class FieldSpec {
     }
 
     public FieldSpec withWhitelist(DistributedSet<Object> whitelist) {
-        return new FieldSpec(whitelist, new HeterogeneousTypeContainer<>(), nullable, formatting);
+        return new FieldSpec(whitelist, new HeterogeneousTypeContainer<>(), nullable, unique, formatting);
     }
 
     public FieldSpec withNumericRestrictions(NumericRestrictions numericRestrictions) {
@@ -109,15 +116,20 @@ public class FieldSpec {
     }
 
     public FieldSpec withNotNull() {
-        return new FieldSpec(whitelist, restrictions, false, formatting);
+        return new FieldSpec(whitelist, restrictions, false, unique, formatting);
     }
+
+    public FieldSpec withUnique() {
+        return new FieldSpec(whitelist, restrictions, nullable, true, formatting);
+    }
+
 
     public FieldSpec withDateTimeRestrictions(DateTimeRestrictions dateTimeRestrictions) {
         return withConstraint(DateTimeRestrictions.class, dateTimeRestrictions);
     }
 
     public FieldSpec withFormatting(String formatting) {
-        return new FieldSpec(whitelist, restrictions, nullable, formatting);
+        return new FieldSpec(whitelist, restrictions, nullable, unique, formatting);
     }
 
     public FieldSpec withoutType(Types type){
@@ -140,7 +152,7 @@ public class FieldSpec {
         if (restriction == null){
             return this;
         }
-        return new FieldSpec(null, restrictions.put(type, restriction), nullable, formatting);
+        return new FieldSpec(null, restrictions.put(type, restriction), nullable, unique, formatting);
     }
 
     public boolean isTypeAllowed(Types type){
@@ -209,7 +221,7 @@ public class FieldSpec {
     }
 
     public int hashCode() {
-        return Objects.hash(nullable, whitelist, restrictions, formatting);
+        return Objects.hash(nullable, unique, whitelist, restrictions, formatting);
     }
 
     @Override
@@ -221,6 +233,7 @@ public class FieldSpec {
 
         FieldSpec other = (FieldSpec) obj;
         return Objects.equals(nullable, other.nullable)
+            && Objects.equals(unique, other.unique)
             && Objects.equals(whitelist, other.whitelist)
             && Objects.equals(restrictions, other.restrictions)
             && Objects.equals(formatting, other.formatting);
