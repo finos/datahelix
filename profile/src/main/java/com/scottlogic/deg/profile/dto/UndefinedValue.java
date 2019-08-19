@@ -13,11 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.scottlogic.deg.profile.v0_1;
 
-import java.io.IOException;
-import java.net.URL;
+package com.scottlogic.deg.profile.dto;
 
-public interface SchemaVersionValidator {
-    URL getSchemaFile() throws IOException;
+public class UndefinedValue {
 }

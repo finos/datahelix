@@ -14,24 +14,19 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.v0_1;
+package com.scottlogic.deg.profile.dto;
 
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.TestFactory;
+import org.junit.jupiter.api.Test;
 
-import java.util.Collection;
+import static org.junit.jupiter.api.Assertions.*;
 
-class ProfileSchemaValidatorMedeiaTests  extends ProfileSchemaValidatorTests {
+class SupportedVersionsGetterTests {
+    @Test
+    void getSupportedSchemaVersions_returnsAtLeastOneSchemaVersion() {
+        SupportedVersionsGetter supportedVersionsGetter = new SupportedVersionsGetter();
 
-    private ProfileSchemaValidator profileValidator = new ProfileSchemaValidatorMedeia();
-
-    @TestFactory
-    Collection<DynamicTest> testInvalidProfiles() {
-        return super.testInvalidProfiles(profileValidator);
-    }
-
-    @TestFactory
-    Collection<DynamicTest> testValidProfiles() {
-        return super.testValidProfiles(profileValidator);
+        assertFalse(
+            supportedVersionsGetter.getSupportedSchemaVersions().isEmpty(),
+            "Expected there to be at least one valid version");
     }
 }

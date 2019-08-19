@@ -18,7 +18,7 @@ package com.scottlogic.deg.profile.reader;
 
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.common.util.NumberUtils;
-import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
+import com.scottlogic.deg.profile.dto.ConstraintDTO;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

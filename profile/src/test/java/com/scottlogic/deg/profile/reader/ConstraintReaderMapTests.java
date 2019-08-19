@@ -18,13 +18,12 @@ package com.scottlogic.deg.profile.reader;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.RuleInformation;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.util.Defaults;
-import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
-import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
+import com.scottlogic.deg.profile.dto.AtomicConstraintType;
+import com.scottlogic.deg.profile.dto.ConstraintDTO;
 import org.junit.Assert;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;

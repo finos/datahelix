@@ -13,24 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.scottlogic.deg.profile.dto;
 
-package com.scottlogic.deg.profile.v0_1;
+import java.io.IOException;
+import java.net.URL;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+public class NoopVersionChecker implements SchemaVersionValidator {
 
-import java.util.Collection;
-
-@JsonDeserialize(using = RuleDeserializer.class)
-@JsonSerialize(using = RuleSerializer.class)
-public class RuleDTO {
-    public String rule;
-    public Collection<ConstraintDTO> constraints;
-
-    public RuleDTO() {}
-
-    public RuleDTO(String rule, Collection<ConstraintDTO> constraints){
-        this.rule = rule;
-        this.constraints = constraints;
+    @Override
+    public URL getSchemaFile() throws IOException {
+        return null;
     }
 }

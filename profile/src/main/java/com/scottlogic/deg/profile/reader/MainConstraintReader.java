@@ -22,8 +22,8 @@ import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
-import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
-import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
+import com.scottlogic.deg.profile.dto.AtomicConstraintType;
+import com.scottlogic.deg.profile.dto.ConstraintDTO;
 
 import java.util.Map;
 

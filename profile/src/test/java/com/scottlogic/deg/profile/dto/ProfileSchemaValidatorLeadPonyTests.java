@@ -14,15 +14,24 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.v0_1;
+package com.scottlogic.deg.profile.dto;
 
-import java.io.File;
-import java.net.URL;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
 
-public class NoopProfileSchemaValidator implements ProfileSchemaValidator {
+import java.util.Collection;
 
-    @Override
-    public void validateProfile(File profileFile, URL schema) {
-        return;
+class ProfileSchemaValidatorLeadPonyTests extends ProfileSchemaValidatorTests {
+
+    private ProfileSchemaValidator profileValidator = new ProfileSchemaValidatorLeadPony();
+
+    @TestFactory
+    Collection<DynamicTest> testInvalidProfiles() {
+        return super.testInvalidProfiles(profileValidator);
+    }
+
+    @TestFactory
+    Collection<DynamicTest> testValidProfiles() {
+        return super.testValidProfiles(profileValidator);
     }
 }
