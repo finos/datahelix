@@ -3,9 +3,9 @@ package com.scottlogic.deg.profile.reader.constraintreaders;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.profile.constraints.delayed.IsEqualToDynamicDateConstraint;
+import com.scottlogic.deg.profile.dto.AtomicConstraintType;
+import com.scottlogic.deg.profile.dto.ConstraintDTO;
 import com.scottlogic.deg.profile.reader.ConstraintReader;
-import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
-import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

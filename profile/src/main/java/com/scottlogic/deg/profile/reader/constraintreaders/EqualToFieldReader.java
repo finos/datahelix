@@ -21,8 +21,8 @@ import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.EqualToConstraint;
 import com.scottlogic.deg.common.profile.constraints.delayed.IsEqualToDynamicDateConstraint;
+import com.scottlogic.deg.profile.dto.ConstraintDTO;
 import com.scottlogic.deg.profile.reader.ConstraintReader;
-import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
 
 import java.time.temporal.ChronoUnit;
 
