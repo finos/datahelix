@@ -95,7 +95,7 @@ public class FieldSpecGroupValueGenerator {
             if (!pairs.contains(pair) &&
                 (usedFields.contains(relation.main()) || usedFields.contains(relation.other()))) {
                 throw new UnsupportedOperationException("Using more than two fields in a related dependency"
-                    + "is currently unsupported.");
+                    + " is currently unsupported.");
             }
             pairs.add(pair);
             usedFields.add(relation.main());

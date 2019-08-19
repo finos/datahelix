@@ -3,13 +3,23 @@
   "fields": [
     {
       "name": "first"
-    }, {
+    },
+    {
       "name": "second"
-    }, {
+    },
+    {
+      "name": "third"
+    },
+    {
+      "name": "fourth"
+    },
+    {
       "name": "firstWorking"
-    }, {
+    },
+    {
       "name": "secondWorking"
-    }, {
+    },
+    {
       "name": "current"
     }
   ],
@@ -29,12 +39,34 @@
           }
         },
         {
+          "not": {
+            "field": "third",
+            "is": "null"
+          }
+        },
+        {
+          "not": {
+            "field": "fourth",
+            "is": "null"
+          }
+        },
+        {
           "field": "first",
           "is": "ofType",
           "value": "datetime"
         },
         {
           "field": "second",
+          "is": "ofType",
+          "value": "datetime"
+        },
+        {
+          "field": "third",
+          "is": "ofType",
+          "value": "datetime"
+        },
+        {
+          "field": "fourth",
           "is": "ofType",
           "value": "datetime"
         },
@@ -50,6 +82,13 @@
           "is": "equalToField",
           "value": "first",
           "offset": 3,
+          "offsetUnit": "days"
+        },
+        {
+          "field": "third",
+          "is": "equalToField",
+          "value": "fourth",
+          "offset": -3,
           "offsetUnit": "days"
         },
         {
