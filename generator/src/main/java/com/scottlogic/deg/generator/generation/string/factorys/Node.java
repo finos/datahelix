@@ -23,12 +23,19 @@ import static com.scottlogic.deg.common.util.NumberUtils.addingNonNegativesIsSaf
 import static com.scottlogic.deg.common.util.NumberUtils.multiplyingNonNegativesIsSafe;
 
 public class Node {
+
+    private static int count = 0;
+
     private int nbrChar = 1;
     private List<Node> nextNodes = new ArrayList<>();
     private boolean isNbrMatchedStringUpdated;
     private long matchedStringIdx = 0;
     private char minChar;
     private char maxChar;
+
+    public Node() {
+        System.out.println(count++);
+    }
 
     int getNbrChar() {
         return nbrChar;

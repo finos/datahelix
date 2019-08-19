@@ -22,12 +22,10 @@ import com.scottlogic.deg.generator.generation.string.factorys.RandomStringFacto
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.SupplierBasedIterator;
 import dk.brics.automaton.Automaton;
-import dk.brics.automaton.State;
-import dk.brics.automaton.Transition;
 
 import java.util.*;
 
-import static com.scottlogic.deg.common.util.NumberUtils.*;
+
 
 public class RegexStringGenerator implements StringGenerator {
 

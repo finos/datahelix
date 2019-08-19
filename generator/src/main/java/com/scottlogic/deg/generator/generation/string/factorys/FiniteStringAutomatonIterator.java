@@ -16,154 +16,83 @@
 
 package com.scottlogic.deg.generator.generation.string.factorys;
 
-import com.scottlogic.deg.generator.generation.string.StringUtils;
 import dk.brics.automaton.Automaton;
 import dk.brics.automaton.State;
-import dk.brics.automaton.Transition;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import static com.scottlogic.deg.common.util.NumberUtils.addingNonNegativesIsSafe;
+import java.util.*;
 
 public class FiniteStringAutomatonIterator implements Iterator<String> {
-    private final long matches;
-    private long currentIndex;
-    private String currentValue;
-    private Node rootNode;
+    private StringBuilder stringBuilder;
+    private String nextValue;
+    private Deque<Deque<TransitionIterator>> transitionStackStack;
+    private Boolean firstStateIsAccept;
 
     public FiniteStringAutomatonIterator(Automaton automaton) {
-        rootNode = buildRootNode(automaton);
-        matches = rootNode.getNextNodes().isEmpty() ? 0L : rootNode.getMatchedStringIdx();
-        currentIndex = 0;
+        transitionStackStack = new ArrayDeque<>();
+        firstStateIsAccept = automaton.getInitialState().isAccept();
+        transitionStackStack.push(getTransitionsStack(automaton.getInitialState()));
+        stringBuilder = new StringBuilder();
+        nextValue = null;
     }
 
-    public Node buildRootNode(Automaton automaton) {
-        rootNode = new Node();
-        List<Node> nextNodes = prepareTransactionNodes(automaton.getInitialState(), 0);
-        rootNode.setNextNodes(nextNodes);
-        rootNode.updateMatchedStringIdx();
-        return rootNode;
+    private Deque<TransitionIterator> getTransitionsStack(State state) {
+        Deque<TransitionIterator> transitions = new ArrayDeque<>();
+        state
+            .getSortedTransitions(true)
+            .iterator()
+            .forEachRemaining(transition -> transitions.addLast(new TransitionIterator(transition)));
+        return transitions;
     }
 
-    private List<Node> prepareTransactionNodes(State state, int preparedTransactionNode) {
-
-        List<Node> transactionNodes = new ArrayList<>();
-        if (preparedTransactionNode == Integer.MAX_VALUE / 2) {
-            return transactionNodes;
-        }
-        ++preparedTransactionNode;
-
-        if (state.isAccept()) {
-            Node acceptedNode = new Node();
-            acceptedNode.setNbrChar(1);
-            transactionNodes.add(acceptedNode);
-        }
-        List<Transition> transitions = state.getSortedTransitions(true);
-
-        for (Transition transition : transitions) {
-            Node trsNode = new Node();
-            int nbrChar = transition.getMax() - transition.getMin() + 1;
-            trsNode.setNbrChar(nbrChar);
-            trsNode.setMaxChar(transition.getMax());
-            trsNode.setMinChar(transition.getMin());
-            List<Node> nextNodes = prepareTransactionNodes(transition.getDest(), preparedTransactionNode);
-            trsNode.setNextNodes(nextNodes);
-            transactionNodes.add(trsNode);
-        }
-        return transactionNodes;
-    }
-
-
-    /**
-     * <p>
-     * This function has been updated to only allow valid single 16-bit
-     * word UTF-8 characters to be output.
-     * </p>
-     * <p>
-     * FIXME - This check will be removed if/when the dk.brics.automaton
-     * library is fixed to support surrogate pairs,
-     * </p>
-     * <p>
-     * issue #15 (https://github.com/cs-au-dk/dk.brics.automaton/issues/15)
-     * has been raised on the dk.brics.automaton library
-     * </p>
-     * <p>
-     * issue #537 has been created to track when the dk.brics.automaton library
-     * is updated.
-     * </p>
-     *
-     * @return true if another value is available, false if all valid values have been read.
-     */
     @Override
     public boolean hasNext() {
-        if (currentValue != null) {
-            return true;
-        }
-        do {
-            currentIndex++; // starts at 1
-            if (currentIndex > matches) {
-                return false;
+
+        while (true){
+            if (nextValue != null) return true;
+            else if (transitionStackStack.isEmpty()) return false;
+            else if (firstStateIsAccept) {
+                firstStateIsAccept = false;
+                nextValue = "";
+                return true;
             }
-            currentValue = getMatchedString(currentIndex);
-        } while (currentValue != null && !StringUtils.isStringValidUtf8(currentValue));
-        return currentValue != null;
-    }
+            else if (transitionStackStack.peek().isEmpty()){
+                transitionStackStack.pop();
+                if (stringBuilder.length() != 0) {
+                    stringBuilder.deleteCharAt(stringBuilder.length()-1);
+                }
+            }
+            else {
+                TransitionIterator topTransitionIterator = transitionStackStack.peek().peek();
 
-    private String getMatchedString(long indexOrder) {
-        if (indexOrder < 1) {
-            throw new IllegalArgumentException("indexOrder must be >= 1");
-        }
+                if (topTransitionIterator.hasNext() && !topTransitionIterator.hasTransitions()) {
+                    StringBuilder stringBuilderCopy = new StringBuilder(stringBuilder);
+                    nextValue = stringBuilderCopy.append(topTransitionIterator.next()).toString();
+                    return true;
+                }
+                else if (topTransitionIterator.hasNext() && topTransitionIterator.hasTransitions()) {
+                    stringBuilder.append(topTransitionIterator.next());
+                    transitionStackStack.push(getTransitionsStack(topTransitionIterator.getState()));
 
-        if (indexOrder > rootNode.getMatchedStringIdx()) {
-            return null;
+                    if (topTransitionIterator.isAccept()) {
+                        topTransitionIterator.markAccept();
+                        nextValue = stringBuilder.toString();
+                        return true;
+                    }
+                }
+                else if (!topTransitionIterator.hasNext()) {
+                    transitionStackStack.peek().pop();
+                }
+            }
         }
-        String result = buildStringFromNode(rootNode, indexOrder);
-        result = result.substring(1, result.length() - 1);
-        return result;
     }
 
     @Override
     public String next() {
-        String result = currentValue;
-        currentValue = null;
+        if (!hasNext()) {
+            throw new NoSuchElementException();
+        }
+        String result = nextValue;
+        nextValue = null;
         return result;
     }
-
-    private String buildStringFromNode(Node node, long indexOrder) {
-        String result = "";
-        long passedStringNbr = 0;
-        long step = node.getMatchedStringIdx() / node.getNbrChar();
-        for (char usedChar = node.getMinChar(); usedChar <= node.getMaxChar(); ++usedChar) {
-            passedStringNbr += step;
-            if (passedStringNbr >= indexOrder) {
-                passedStringNbr -= step;
-                indexOrder -= passedStringNbr;
-                result = result.concat("" + usedChar);
-                break;
-            }
-        }
-        long passedStringNbrInChildNode = 0;
-        if (result.length() == 0) {
-            passedStringNbrInChildNode = passedStringNbr;
-        }
-        for (Node childN : node.getNextNodes()) {
-            long origNbrInChildNode = passedStringNbrInChildNode;
-            if (addingNonNegativesIsSafe(passedStringNbrInChildNode, childN.getMatchedStringIdx())) {
-                passedStringNbrInChildNode += childN.getMatchedStringIdx();
-            } else {
-                passedStringNbrInChildNode = Long.MAX_VALUE;
-            }
-
-            if (passedStringNbrInChildNode >= indexOrder) {
-                passedStringNbrInChildNode = origNbrInChildNode;
-                indexOrder -= passedStringNbrInChildNode;
-                result = result.concat(buildStringFromNode(childN, indexOrder));
-                break;
-            }
-        }
-        return result;
-    }
-
 }
