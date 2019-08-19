@@ -23,7 +23,7 @@ import com.scottlogic.deg.generator.violations.filters.ConstraintTypeViolationFi
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import com.scottlogic.deg.orchestrator.violate.ViolateConfigSource;
 import com.scottlogic.deg.orchestrator.violate.ViolationFiltersProvider;
-import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
+import com.scottlogic.deg.profile.dto.AtomicConstraintType;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

@@ -18,7 +18,7 @@ package com.scottlogic.deg.profile.reader;
 
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
-import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
+import com.scottlogic.deg.profile.dto.ConstraintDTO;
 
 @FunctionalInterface
 public interface ConstraintReader {

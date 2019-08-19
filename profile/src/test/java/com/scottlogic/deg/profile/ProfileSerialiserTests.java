@@ -17,10 +17,10 @@
 package com.scottlogic.deg.profile;
 
 import com.scottlogic.deg.profile.serialisation.ProfileSerialiser;
-import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
-import com.scottlogic.deg.profile.v0_1.FieldDTO;
-import com.scottlogic.deg.profile.v0_1.RuleDTO;
-import com.scottlogic.deg.profile.v0_1.ProfileDTO;
+import com.scottlogic.deg.profile.dto.ConstraintDTO;
+import com.scottlogic.deg.profile.dto.FieldDTO;
+import com.scottlogic.deg.profile.dto.RuleDTO;
+import com.scottlogic.deg.profile.dto.ProfileDTO;
 import org.hamcrest.core.Is;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;

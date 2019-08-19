@@ -27,7 +27,7 @@ import com.scottlogic.deg.profile.reader.ConstraintReader;
 import com.scottlogic.deg.profile.reader.ConstraintReaderHelpers;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import com.scottlogic.deg.profile.reader.file.names.NameRetriever;
-import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
+import com.scottlogic.deg.profile.dto.ConstraintDTO;
 
 import java.math.BigDecimal;
 

@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.v0_1;
+package com.scottlogic.deg.profile.dto;
 
-import java.util.Collection;
+import java.io.File;
+import java.net.URL;
 
-public class ProfileDTO {
-    public String schemaVersion;
-    public Collection<FieldDTO> fields;
-    public Collection<RuleDTO> rules;
-    public String description;
+public class NoopProfileSchemaValidator implements ProfileSchemaValidator {
+
+    @Override
+    public void validateProfile(File profileFile, URL schema) {
+        return;
+    }
 }

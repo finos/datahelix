@@ -14,7 +14,13 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.v0_1;
+package com.scottlogic.deg.profile.dto;
 
-public class UndefinedValue {
+import java.util.Collection;
+
+public class ProfileDTO {
+    public String schemaVersion;
+    public Collection<FieldDTO> fields;
+    public Collection<RuleDTO> rules;
+    public String description;
 }

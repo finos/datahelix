@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.v0_1;
+package com.scottlogic.deg.profile.dto;
 
 import com.scottlogic.deg.common.ValidationException;
 import org.junit.jupiter.api.Assertions;

@@ -18,7 +18,7 @@ package com.scottlogic.deg.profile.serialisation;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scottlogic.deg.profile.v0_1.ProfileDTO;
+import com.scottlogic.deg.profile.dto.ProfileDTO;
 
 import java.io.IOException;
 

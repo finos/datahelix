@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.v0_1;
+package com.scottlogic.deg.profile.dto;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
