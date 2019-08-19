@@ -55,7 +55,7 @@ public class EqualToFieldReader implements ConstraintReader {
             new EqualToConstraint(fields.getByName(dto.field), getValidatedValue(dto)),
             fields.getByName(getValueAsString(dto)),
             unit,
-            Math.abs(dto.offset)
+            dto.offset
         );
     }
 }

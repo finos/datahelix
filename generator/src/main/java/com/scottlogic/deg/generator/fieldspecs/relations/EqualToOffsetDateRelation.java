@@ -23,8 +23,6 @@ import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
 import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions.DateTimeLimit;
 
 import java.time.OffsetDateTime;
-import java.time.temporal.Temporal;
-import java.time.temporal.TemporalAdjuster;
 
 public class EqualToOffsetDateRelation implements FieldSpecRelations {
     private Field main;

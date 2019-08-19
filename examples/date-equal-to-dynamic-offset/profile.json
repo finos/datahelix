@@ -113,7 +113,7 @@
           "field": "secondWorking",
           "is": "equalToField",
           "value": "firstWorking",
-          "offset": 8,
+          "offset": -8,
           "offsetUnit": "working days"
         },
         {
