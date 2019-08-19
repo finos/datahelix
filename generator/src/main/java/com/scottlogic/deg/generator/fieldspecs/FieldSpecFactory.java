@@ -74,6 +74,8 @@ public class FieldSpecFactory {
             return construct((IsGranularToDateConstraint) constraint, negate);
         } else if (constraint instanceof IsNullConstraint) {
             return constructIsNull(negate);
+        } else if (constraint instanceof IsUniqueConstraint) {
+            return constructIsUnique(negate);
         } else if (constraint instanceof MatchesRegexConstraint) {
             return construct((MatchesRegexConstraint) constraint, negate);
         } else if (constraint instanceof ContainsRegexConstraint) {
@@ -123,6 +125,14 @@ public class FieldSpecFactory {
         }
 
         return FieldSpec.NullOnly;
+    }
+
+    private FieldSpec constructIsUnique(boolean negate) {
+        if (negate) {
+            return FieldSpec.Empty;
+        }
+
+        return FieldSpec.Empty.withUnique();
     }
 
     private FieldSpec construct(IsOfTypeConstraint constraint, boolean negate) {
