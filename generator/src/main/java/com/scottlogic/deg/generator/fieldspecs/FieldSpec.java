@@ -181,6 +181,12 @@ public class FieldSpec {
             return "<all values>";
         }
 
+        if (!unique){
+            propertyStrings.add(0, "Not Unique");
+        } else {
+            propertyStrings.add(0, "Unique");
+        }
+
         if (!nullable){
             propertyStrings.add(0, "Not Null");
         }
