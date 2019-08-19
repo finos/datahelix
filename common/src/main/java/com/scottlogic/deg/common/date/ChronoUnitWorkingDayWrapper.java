@@ -36,7 +36,6 @@ public class ChronoUnitWorkingDayWrapper {
         this.workingDay = workingDay;
     }
 
-    // This value is positive, where it probably should be negative. Why is this happening?
     public TemporalAdjuster adjuster(int value) {
         return workingDay ? getWorkingDayAdjusterFunction(value) : getAdjusterFunction(chronoUnit, value);
     }
