@@ -63,10 +63,10 @@ Feature: User can specify that one date should be equal to another date
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.001Z | 2018-01-04T00:00:00.001Z |
 
-  Scenario: Running an "equalToField" constraint allows one date to be always equal to another with a positive offset in working days
+    # Results accomodate for the fact that the 5 working days include non-working days
+  Scenario: Running an "equalToField" constraint allows one date to be always equal to another plus a value in working days
     Given there is a field foo
     And foo is of type "datetime"
-    And foo is after 2018-01-01T00:00:00.000Z
     And there is a field bar
     And bar is of type "datetime"
     And the generator can generate at most 1 rows
@@ -82,13 +82,12 @@ Feature: User can specify that one date should be equal to another date
       """
     Then the following data should be generated:
       | foo                      | bar                      |
-      | 2018-01-15T00:00:00.000Z | 2018-01-08T00:00:00.000Z |
+      | 0000-12-25T00:00:00.000Z | 0001-01-01T00:00:00.000Z |
 
-
-  Scenario: Running an "equalToField" constraint allows one date to be always equal to another with a negative offset in working days
+    # Results accomodate for the fact that the 5 working days include non-working days
+  Scenario: Running an "equalToField" constraint allows one date to be always equal to another minus a value in working days
     Given there is a field foo
     And foo is of type "datetime"
-    And bar is after 2018-01-09T00:00:00.000Z
     And there is a field bar
     And bar is of type "datetime"
     And the generator can generate at most 1 rows
@@ -104,5 +103,5 @@ Feature: User can specify that one date should be equal to another date
       """
     Then the following data should be generated:
       | foo                      | bar                      |
-      | 2018-01-02T00:00:00.001Z | 2018-01-09T00:00:00.001Z |
+      | 0001-01-08T00:00:00.000Z | 0001-01-01T00:00:00.000Z |
 

@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "0.2",
+  "fields": [
+    {
+      "name": "foo"
+    },
+    {
+      "name": "bar"
+    }
+  ],
+  "rules": [
+    {
+      "constraints": [
+        {
+          "not": {
+            "field": "foo",
+            "is": "null"
+          }
+        },
+        {
+          "not": {
+            "field": "bar",
+            "is": "null"
+          }
+        },
+        {
+          "field": "foo",
+          "is": "ofType",
+          "value": "datetime"
+        },
+        {
+          "field": "bar",
+          "is": "ofType",
+          "value": "datetime"
+        },
+        {
+          "field": "bar",
+          "is": "equalToField",
+          "value": "foo",
+          "offset": -3,
+          "offsetUnit": "working days"
+        }
+      ]
+    }
+  ]
+
+}
