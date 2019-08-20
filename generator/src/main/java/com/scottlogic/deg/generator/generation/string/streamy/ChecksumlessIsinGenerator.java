@@ -53,4 +53,13 @@ public class ChecksumlessIsinGenerator implements StreamStringGenerator {
     public Stream<String> generateInterestingValues() {
         return generateAllValues().limit(2);
     }
+
+    @Override
+    public boolean matches(String string) {
+        Stream<StreamStringGenerator> isinStringGenerators =
+            Arrays.stream(IsinCountryCode.values())
+                .map(IsinCountryCode::getChecksumlessStringGenerator);
+
+        return isinStringGenerators.anyMatch(generator -> generator.matches(string));
+    }
 }

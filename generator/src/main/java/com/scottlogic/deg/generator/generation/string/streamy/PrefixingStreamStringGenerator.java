@@ -46,4 +46,16 @@ public class PrefixingStreamStringGenerator implements StreamStringGenerator {
         return innerGenerator.generateInterestingValues()
             .map(string -> prefix + string);
     }
+
+    @Override
+    public boolean matches(String string) {
+        if (string.length() < prefix.length()) {
+            return false;
+        }
+        String candidatePrefix = string.substring(0, prefix.length());
+        if (!candidatePrefix.equals(prefix)) {
+            return false;
+        }
+        return innerGenerator.matches(string.substring(prefix.length()));
+    }
 }

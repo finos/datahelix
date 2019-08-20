@@ -17,10 +17,10 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.StandardConstraintTypes;
-import com.scottlogic.deg.generator.generation.string.CusipStringGenerator;
-import com.scottlogic.deg.generator.generation.string.IsinStringGenerator;
-import com.scottlogic.deg.generator.generation.string.SedolStringGenerator;
-import com.scottlogic.deg.generator.generation.string.StringGenerator;
+import com.scottlogic.deg.generator.generation.string.*;
+import com.scottlogic.deg.generator.generation.string.streamy.StreamStringGenerator;
+
+import static com.scottlogic.deg.generator.generation.string.streamy.ChecksumStringGeneratorFactory.*;
 
 /**
  * Represents the restriction of a field to an `aValid` operator
@@ -28,38 +28,28 @@ import com.scottlogic.deg.generator.generation.string.StringGenerator;
  */
 public class MatchesStandardStringRestrictions implements StringRestrictions{
     private final StandardConstraintTypes type;
-    private final boolean negated;
-    private StringGenerator generator;
+    private StreamStringGenerator generator;
 
-    public MatchesStandardStringRestrictions(StandardConstraintTypes type, boolean negated) {
+    public MatchesStandardStringRestrictions(StandardConstraintTypes type) {
         this.type = type;
-        this.negated = negated;
     }
 
     @Override
     public boolean match(String x) {
-        return createGenerator().match(x);
+        return createGenerator().matches(x);
     }
 
-    public StringGenerator createGenerator() {
-        StringGenerator generator = getStringGenerator();
-
-        return negated
-            ? generator.complement()
-            : generator;
-    }
-
-    private StringGenerator getStringGenerator() {
+    public StreamStringGenerator createGenerator() {
         if (generator == null) {
             switch (type) {
                 case ISIN:
-                    generator = new IsinStringGenerator();
+                    generator = createIsinGenerator();
                     break;
                 case SEDOL:
-                    generator = new SedolStringGenerator();
+                    generator = createSedolGenerator();
                     break;
                 case CUSIP:
-                    generator = new CusipStringGenerator();
+                    generator = createCusipGenerator();
                     break;
                 default:
                     throw new UnsupportedOperationException(String.format("Unable to create string generator for: %s", type));
@@ -68,34 +58,10 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
         return generator;
     }
 
-    /**
-     * Will combine/intersect another StringRestrictions within this instance
-     *
-     * Rules are:
-     * Return this instance within modification if the other restrictions matches the following:
-     *   1. It is an equivalent MatchesStandardStringRestrictions instance (all properties match)
-     *   2. It is a TextualRestrictions that has:
-     *     2.1. no regex restrictions of any kind
-     *     2.2. any present length restrictions do not impact the ability to create any value
-     *
-     * @param other The other restrictions to combine/intersect
-     * @return Either this instance (success) or a NoStringsPossibleStringRestrictions if the other restrictions could not be merged or intersected
-     */
     @Override
     public MergeResult<StringRestrictions> intersect(StringRestrictions other) {
         if (other instanceof TextualRestrictions){
-            TextualRestrictions textualRestrictions = (TextualRestrictions) other;
-            StringGenerator combinedGenerator = getCombinedGenerator(textualRestrictions);
-
-            if (!combinedGenerator.generateAllValues().iterator().hasNext()){
-                return MergeResult.unsuccessful();
-            }
-
-            return new MergeResult<>(copyWithGenerator(combinedGenerator));
-        }
-
-        if (!(other instanceof MatchesStandardStringRestrictions)){
-            return MergeResult.unsuccessful();
+            return isLengthAcceptable((TextualRestrictions) other);
         }
 
         MatchesStandardStringRestrictions that = (MatchesStandardStringRestrictions) other;
@@ -103,61 +69,29 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
             return MergeResult.unsuccessful();
         }
 
-        return that.negated == negated
-            ? new MergeResult<>(this)
-            : MergeResult.unsuccessful();
+        return new MergeResult<>(this);
     }
 
-    private StringGenerator getCombinedGenerator(TextualRestrictions textualRestrictions) {
-        StringGenerator ourGenerator = getStringGenerator();
-        return ourGenerator.intersect(textualRestrictions.createGenerator());
-    }
-
-    private MatchesStandardStringRestrictions copyWithGenerator(StringGenerator generator) {
-        MatchesStandardStringRestrictions newRestrictions =
-            new MatchesStandardStringRestrictions(type, negated);
-        newRestrictions.generator = generator;
-        return newRestrictions;
-    }
-
-    private enum Impact
-    {
-        /**
-         * There is definitely a partial impact on value production, but its level is
-         * currently unknown.
-         */
-        PARTIAL,
-
-        /**
-         * There is potentially no impact on the production of values
-         */
-        NONE,
-
-        /**
-         * The impact is such that values definitely cannot be produced.
-         */
-        FULL
-    }
-
-    private int getCodeLength(StandardConstraintTypes type) {
-        switch (type)
-        {
-            case ISIN:
-                return IsinStringGenerator.ISIN_LENGTH;
-            case SEDOL:
-                return SedolStringGenerator.SEDOL_LENGTH;
-            case CUSIP:
-                return CusipStringGenerator.CUSIP_LENGTH;
-            default:
-                throw new UnsupportedOperationException(String.format("Unable to check string restrictions for: %s", type));
+    private MergeResult<StringRestrictions> isLengthAcceptable(TextualRestrictions other) {
+        if (anyRegexes(other)){
+            return MergeResult.unsuccessful();
         }
+
+        StreamStringGenerator intersect = other.createGenerator().intersect(new RegexStringGenerator(type.getRegex(), true));
+
+        if (intersect instanceof NoStringsStringGenerator){
+            return MergeResult.unsuccessful();
+        }
+
+        return new MergeResult<>(this);
+    }
+
+    private boolean anyRegexes(TextualRestrictions other) {
+        return !other.containingRegex.isEmpty() || !other.matchingRegex.isEmpty() || !other.notContainingRegex.isEmpty() || !other.notMatchingRegex.isEmpty();
     }
 
     @Override
     public String toString() {
-        if (negated){
-            return "not " + type.name();
-        }
         return type.name();
     }
 }

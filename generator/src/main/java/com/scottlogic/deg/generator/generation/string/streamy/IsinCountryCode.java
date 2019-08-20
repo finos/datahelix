@@ -16,6 +16,8 @@
 package com.scottlogic.deg.generator.generation.string.streamy;
 
 
+import com.scottlogic.deg.generator.generation.string.RegexStringGenerator;
+
 import static com.scottlogic.deg.generator.generation.string.streamy.ChecksumStringGeneratorFactory.createCusipGenerator;
 import static com.scottlogic.deg.generator.generation.string.streamy.ChecksumStringGeneratorFactory.createSedolGenerator;
 
@@ -29,7 +31,7 @@ public enum IsinCountryCode {
 
     IsinCountryCode(){
         checksumlessStringGenerator = prefix(this.name(),
-            new RegexStreamStringGenerator(GENERIC_NSIN_REGEX));
+            new RegexStringGenerator(GENERIC_NSIN_REGEX, true));
     }
 
     IsinCountryCode(StreamStringGenerator streamStringGenerator){

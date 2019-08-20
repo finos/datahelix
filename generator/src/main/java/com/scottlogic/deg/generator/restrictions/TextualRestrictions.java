@@ -18,7 +18,7 @@ package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.generator.generation.string.NoStringsStringGenerator;
 import com.scottlogic.deg.generator.generation.string.RegexStringGenerator;
-import com.scottlogic.deg.generator.generation.string.StringGenerator;
+import com.scottlogic.deg.generator.generation.string.streamy.StreamStringGenerator;
 import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.util.*;
@@ -36,7 +36,7 @@ public class TextualRestrictions implements StringRestrictions {
     final Set<Pattern> containingRegex;
     final Set<Pattern> notMatchingRegex;
     final Set<Pattern> notContainingRegex;
-    private StringGenerator generator;
+    private StreamStringGenerator generator;
 
     TextualRestrictions(
         Integer minLength,
@@ -57,7 +57,7 @@ public class TextualRestrictions implements StringRestrictions {
 
     @Override
     public boolean match(String x) {
-        return createGenerator().match(x);
+        return createGenerator().matches(x);
     }
 
     /**
@@ -104,7 +104,7 @@ public class TextualRestrictions implements StringRestrictions {
             return false; //no regular expressions exist that can contradict
         }
 
-        StringGenerator generator = createGenerator();
+        StreamStringGenerator generator = createGenerator();
         return generator instanceof NoStringsStringGenerator;
     }
 
@@ -148,8 +148,8 @@ public class TextualRestrictions implements StringRestrictions {
         }
 
         String s = (String) o;
-        StringGenerator generator = createGenerator();
-        return generator == null || generator.match(s);
+        StreamStringGenerator generator = createGenerator();
+        return generator == null || generator.matches(s);
     }
 
     /**
@@ -158,7 +158,7 @@ public class TextualRestrictions implements StringRestrictions {
      * Create a StringGenerator that will produce strings that match all of the given constraints
      * Yield NoStringsGenerator if no strings could be produced for the given restrictions
      */
-    public StringGenerator createGenerator() {
+    public StreamStringGenerator createGenerator() {
         if (generator != null){
             return generator;
         }
@@ -174,7 +174,7 @@ public class TextualRestrictions implements StringRestrictions {
         //produce a regex, and a generator for it, that can produce ANY string within the given bounds
         //emits /.{&lt;shortest&gt;,&lt;longest&gt;}/
         //can also emit /.{&lt;0&gt;,&lt;5&gt;}|.{&lt;7&gt;,&lt;255&gt;}/ if 6 is an excluded length
-        StringGenerator lengthConstrainingGenerator = minLength == 0 && maxLength == null && excludedLengths.isEmpty()
+        StreamStringGenerator lengthConstrainingGenerator = minLength == 0 && maxLength == null && excludedLengths.isEmpty()
             ? null
             : new RegexStringGenerator(
                 createStringLengthRestrictionRegex(minLength, maxLength),
@@ -223,7 +223,7 @@ public class TextualRestrictions implements StringRestrictions {
     /**
      * Get a stream of StringGenerators that represent each regex restriction in this type
      */
-    private Stream<StringGenerator> getPatternConstraints() {
+    private Stream<StreamStringGenerator> getPatternConstraints() {
         return concatStreams(
             getStringGenerators(matchingRegex, regex -> new RegexStringGenerator(regex, true)),
             getStringGenerators(containingRegex, regex -> new RegexStringGenerator(regex, false)),
@@ -240,7 +240,7 @@ public class TextualRestrictions implements StringRestrictions {
             .orElse(Stream.empty());
     }
 
-    private static Stream<StringGenerator> getStringGenerators(Set<Pattern> patterns, Function<String, StringGenerator> getGenerator) {
+    private static Stream<StreamStringGenerator> getStringGenerators(Set<Pattern> patterns, Function<String, StreamStringGenerator> getGenerator) {
         if (patterns.isEmpty()){
             return Stream.empty();
         }

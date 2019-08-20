@@ -46,4 +46,16 @@ public class ChecksumStreamStringGenerator implements StreamStringGenerator {
         return checksumlessGenerator.generateInterestingValues()
             .map(string -> string + checksumMaker.makeChecksum(string));
     }
+
+    @Override
+    public boolean matches(String string) {
+        if (string.length() < 1) {
+            return false;
+        }
+        String preChecksumComponent = string.substring(0, string.length() - 1);
+        Character checksumComponent = string.charAt(string.length() - 1);
+        return
+            checksumlessGenerator.matches(preChecksumComponent) &&
+            checksumMaker.makeChecksum(preChecksumComponent).equals(checksumComponent);
+    }
 }

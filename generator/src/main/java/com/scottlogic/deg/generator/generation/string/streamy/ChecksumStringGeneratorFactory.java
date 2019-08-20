@@ -15,19 +15,20 @@
  */
 package com.scottlogic.deg.generator.generation.string.streamy;
 
+import com.scottlogic.deg.generator.generation.string.RegexStringGenerator;
 import com.scottlogic.deg.generator.utils.FinancialCodeUtils;
 
 public class ChecksumStringGeneratorFactory {
 
     public static StreamStringGenerator createSedolGenerator() {
         return new ChecksumStreamStringGenerator(
-            new RegexStreamStringGenerator("[B-DF-HJ-NP-TV-Z0-9]{6}"),
+            new RegexStringGenerator("[B-DF-HJ-NP-TV-Z0-9]{6}", true),
             FinancialCodeUtils::calculateSedolCheckDigit);
     }
 
     public static StreamStringGenerator createCusipGenerator() {
         return new ChecksumStreamStringGenerator(
-            new RegexStreamStringGenerator("[0-9]{3}[0-9A-Z]{5}"),
+            new RegexStringGenerator("[0-9]{3}[0-9A-Z]{5}", true),
             FinancialCodeUtils::calculateCusipCheckDigit);
     }
 
