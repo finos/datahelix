@@ -60,6 +60,7 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
 
     @Override
     public MergeResult<StringRestrictions> intersect(StringRestrictions other) {
+
         if (other instanceof TextualRestrictions){
             return isLengthAcceptable((TextualRestrictions) other);
         }
@@ -74,7 +75,7 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
 
     private MergeResult<StringRestrictions> isLengthAcceptable(TextualRestrictions other) {
         if (anyRegexes(other)){
-            return MergeResult.unsuccessful();
+            throw new UnsupportedOperationException("Combining a regex constraint with an " + this.toString() + " constraint is not supported.");
         }
 
         StringGenerator intersect = other.createGenerator().intersect(new RegexStringGenerator(type.getRegex(), true));
