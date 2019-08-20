@@ -32,10 +32,7 @@ public interface StringGenerator {
     boolean matches(String string);
 
     default StringGenerator intersect(StringGenerator stringGenerator){
-        if (this.getClass().equals(stringGenerator.getClass())){
-            return this;
-        }
-        return new NoStringsStringGenerator("can't merge non standard strings");
+        throw new UnsupportedOperationException();
     }
 
     default StringGenerator complement() {
