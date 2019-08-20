@@ -60,13 +60,16 @@ public class FieldSpecValueGenerator {
     private Stream<DataBagValue> createValuesFromSources(FieldSpec spec, List<FieldValueSource> fieldValueSources) {
         FieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
 
-        Iterable<Object> iterable =  getDataValues(combinedFieldValueSource);
+        Iterable<Object> iterable =  getDataValues(combinedFieldValueSource, spec.isUnique());
 
         return StreamSupport.stream(iterable.spliterator(), false)
             .map(value -> new DataBagValue(value, spec.getFormatting()));
     }
 
-    private Iterable<Object> getDataValues(FieldValueSource source) {
+    private Iterable<Object> getDataValues(FieldValueSource source, boolean unique) {
+        if (unique) {
+            return source.generateAllValues();
+        }
         switch (dataType) {
             case FULL_SEQUENTIAL:
                 return source.generateAllValues();
