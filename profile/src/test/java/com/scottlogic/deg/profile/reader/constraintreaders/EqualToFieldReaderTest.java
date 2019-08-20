@@ -75,7 +75,7 @@ class EqualToFieldReaderTest {
 
 
         OffsetDateTime producedDate = OffsetDateTime.from(constraint.unit().adjuster(days).adjustInto(initial));
-        assertEquals(initial.plusDays(7), producedDate);
+        assertEquals(initial.minusDays(7), producedDate);
     }
 
     private static ConstraintDTO baseDTO() {
