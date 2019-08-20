@@ -29,6 +29,7 @@ import java.io.UncheckedIOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,6 +43,10 @@ public class ProfileSchemaImmutabilityTests {
         public VersionHash(String version, String hash) {
             this.version = version;
             this.hash = hash;
+        }
+
+        public String version() {
+            return version;
         }
     }
 
@@ -67,7 +72,8 @@ public class ProfileSchemaImmutabilityTests {
     // Do not modify existing hashes.
     @Test
     public void verifyAllHashesArePresent() {
-        assertEquals(new SupportedVersionsGetter().getSupportedSchemaVersions().size(), versionToHash().size());
+        Set<String> existingSchemas = new HashSet<>(new SupportedVersionsGetter().getSupportedSchemaVersions());
+        assertEquals(existingSchemas, versionToHash().stream().map(VersionHash::version).collect(Collectors.toSet()));
     }
 
     @ParameterizedTest
@@ -89,12 +95,9 @@ public class ProfileSchemaImmutabilityTests {
     }
 
     private static String byteToHex(byte in) {
-        char[] chars = "0123456789abcdef".toCharArray();
+        final char[] chars = "0123456789abcdef".toCharArray();
         StringBuilder output = new StringBuilder();
-        int quotient = in;
-        if (quotient < 0) {
-            quotient = 256 + quotient;
-        }
+        int quotient = in < 0 ? 256 + in : in; // Account for twos complement
 
         for (int i = 0; i < 2; i++) {
             int remainder = quotient % 16;
