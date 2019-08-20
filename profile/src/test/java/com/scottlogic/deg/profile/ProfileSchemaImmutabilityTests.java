@@ -53,6 +53,8 @@ public class ProfileSchemaImmutabilityTests {
     private static Set<VersionHash> versionToHash() {
         Set<VersionHash> versionToHash = new HashSet<>();
         // DO NOT MODIFY EXISTING HASHES! ONLY ADD!
+        // The new hash can be found by running the shell command sha256sum on the respective schema file
+        // example: sha256sum profile/src/main/resources/profileschema/0.1/datahelix.schema.json
         versionToHash.add(new VersionHash(
             "0.1",
             "6346faec92ba67686cc617d1573baed2230fff42acdbc961bf043c4b591bf246"));
@@ -82,6 +84,8 @@ public class ProfileSchemaImmutabilityTests {
         byte[] bytes = readClassResourceAsBytes("profileschema/" + wrapper.version + "/datahelix.schema.json");
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] encoded = digest.digest(bytes);
+
+        System.out.println(Arrays.toString(encoded));
 
         assertEquals(wrapper.hash, bytesToHex(encoded));
     }
