@@ -72,6 +72,10 @@ public class AutomatonUtils {
         // make it unbounded as we don't want to see tabs or back spaces or null (\u0000) unicode chars
         generatedAutomaton = restrictCharacterSet(generatedAutomaton, '\u0020', '\u007E');
 
+        // The automaton is determinised to improve performance. See
+        // https://en.wikipedia.org/wiki/Nondeterministic_finite_automaton#Equivalence_to_DFA
+        // for details.
+        generatedAutomaton.determinize();
         cache.put(regexStr, generatedAutomaton);
         return generatedAutomaton;
     }
