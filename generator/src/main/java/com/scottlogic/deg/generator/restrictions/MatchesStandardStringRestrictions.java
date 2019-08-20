@@ -18,7 +18,7 @@ package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.StandardConstraintTypes;
 import com.scottlogic.deg.generator.generation.string.*;
-import com.scottlogic.deg.generator.generation.string.streamy.StreamStringGenerator;
+import com.scottlogic.deg.generator.generation.string.streamy.StringGenerator;
 
 import static com.scottlogic.deg.generator.generation.string.streamy.ChecksumStringGeneratorFactory.*;
 
@@ -28,7 +28,7 @@ import static com.scottlogic.deg.generator.generation.string.streamy.ChecksumStr
  */
 public class MatchesStandardStringRestrictions implements StringRestrictions{
     private final StandardConstraintTypes type;
-    private StreamStringGenerator generator;
+    private StringGenerator generator;
 
     public MatchesStandardStringRestrictions(StandardConstraintTypes type) {
         this.type = type;
@@ -39,7 +39,7 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
         return createGenerator().matches(x);
     }
 
-    public StreamStringGenerator createGenerator() {
+    public StringGenerator createGenerator() {
         if (generator == null) {
             switch (type) {
                 case ISIN:
@@ -77,7 +77,7 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
             return MergeResult.unsuccessful();
         }
 
-        StreamStringGenerator intersect = other.createGenerator().intersect(new RegexStringGenerator(type.getRegex(), true));
+        StringGenerator intersect = other.createGenerator().intersect(new RegexStringGenerator(type.getRegex(), true));
 
         if (intersect instanceof NoStringsStringGenerator){
             return MergeResult.unsuccessful();

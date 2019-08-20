@@ -22,7 +22,7 @@ import com.scottlogic.deg.generator.utils.UpCastingIterator;
 
 import java.util.stream.Stream;
 
-public interface StreamStringGenerator {
+public interface StringGenerator {
     Stream<String> generateAllValues();
 
     Stream<String> generateRandomValues(RandomNumberGenerator randomNumberGenerator);
@@ -31,14 +31,14 @@ public interface StreamStringGenerator {
 
     boolean matches(String string);
 
-    default StreamStringGenerator intersect(StreamStringGenerator stringGenerator){
+    default StringGenerator intersect(StringGenerator stringGenerator){
         if (this.getClass().equals(stringGenerator.getClass())){
             return this;
         }
         return new NoStringsStringGenerator("can't merge non standard strings");
     }
 
-    default StreamStringGenerator complement() {
+    default StringGenerator complement() {
         throw new UnsupportedOperationException();
     }
 
@@ -48,9 +48,9 @@ public interface StreamStringGenerator {
 
     // Adapter
     class StringGeneratorAsFieldValueSource implements FieldValueSource {
-        private final StreamStringGenerator underlyingGenerator;
+        private final StringGenerator underlyingGenerator;
 
-        StringGeneratorAsFieldValueSource(StreamStringGenerator underlyingGenerator) {
+        StringGeneratorAsFieldValueSource(StringGenerator underlyingGenerator) {
             this.underlyingGenerator = underlyingGenerator;
         }
 

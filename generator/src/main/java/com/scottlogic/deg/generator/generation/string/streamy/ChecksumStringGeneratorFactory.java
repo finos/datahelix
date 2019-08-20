@@ -20,20 +20,20 @@ import com.scottlogic.deg.generator.utils.FinancialCodeUtils;
 
 public class ChecksumStringGeneratorFactory {
 
-    public static StreamStringGenerator createSedolGenerator() {
-        return new ChecksumStreamStringGenerator(
+    public static StringGenerator createSedolGenerator() {
+        return new ChecksumStringGenerator(
             new RegexStringGenerator("[B-DF-HJ-NP-TV-Z0-9]{6}", true),
             FinancialCodeUtils::calculateSedolCheckDigit);
     }
 
-    public static StreamStringGenerator createCusipGenerator() {
-        return new ChecksumStreamStringGenerator(
+    public static StringGenerator createCusipGenerator() {
+        return new ChecksumStringGenerator(
             new RegexStringGenerator("[0-9]{3}[0-9A-Z]{5}", true),
             FinancialCodeUtils::calculateCusipCheckDigit);
     }
 
-    public static StreamStringGenerator createIsinGenerator() {
-        return new ChecksumStreamStringGenerator(
+    public static StringGenerator createIsinGenerator() {
+        return new ChecksumStringGenerator(
             new ChecksumlessIsinGenerator(),
             FinancialCodeUtils::calculateIsinCheckDigit);
     }

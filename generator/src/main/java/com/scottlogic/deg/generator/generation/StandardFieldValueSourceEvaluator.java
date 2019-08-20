@@ -25,7 +25,7 @@ import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSourc
 import com.scottlogic.deg.generator.generation.fieldvaluesources.RealNumberFieldValueSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.DateTimeFieldValueSource;
 import com.scottlogic.deg.generator.generation.string.RegexStringGenerator;
-import com.scottlogic.deg.generator.generation.string.streamy.StreamStringGenerator;
+import com.scottlogic.deg.generator.generation.string.streamy.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
 
 import java.util.*;
@@ -115,7 +115,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
 
         Set<Object> blacklist = getBlacklist(fieldSpec);
 
-        StreamStringGenerator generator = stringRestrictions.createGenerator();
+        StringGenerator generator = stringRestrictions.createGenerator();
         if (!blacklist.isEmpty()) {
             RegexStringGenerator blacklistGenerator = RegexStringGenerator.createFromBlacklist(blacklist);
 

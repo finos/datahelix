@@ -22,17 +22,17 @@ import java.util.stream.Stream;
 
 import static com.scottlogic.deg.common.util.FlatMappingSpliterator.flatMap;
 
-public class ChecksumlessIsinGenerator implements StreamStringGenerator {
+public class ChecksumlessIsinGenerator implements StringGenerator {
 
     @Override
     public Stream<String> generateAllValues() {
-        Stream<StreamStringGenerator> isinStringGenerators =
+        Stream<StringGenerator> isinStringGenerators =
             Arrays.stream(IsinCountryCode.values())
                 .map(IsinCountryCode::getChecksumlessStringGenerator);
 
         return flatMap(
             isinStringGenerators,
-            StreamStringGenerator::generateAllValues);
+            StringGenerator::generateAllValues);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class ChecksumlessIsinGenerator implements StreamStringGenerator {
 
     @Override
     public boolean matches(String string) {
-        Stream<StreamStringGenerator> isinStringGenerators =
+        Stream<StringGenerator> isinStringGenerators =
             Arrays.stream(IsinCountryCode.values())
                 .map(IsinCountryCode::getChecksumlessStringGenerator);
 

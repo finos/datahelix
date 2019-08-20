@@ -27,22 +27,22 @@ public enum IsinCountryCode {
     DN;
 
     String GENERIC_NSIN_REGEX = "[A-Z0-9]{9}";
-    private final StreamStringGenerator checksumlessStringGenerator;
+    private final StringGenerator checksumlessStringGenerator;
 
     IsinCountryCode(){
         checksumlessStringGenerator = prefix(this.name(),
             new RegexStringGenerator(GENERIC_NSIN_REGEX, true));
     }
 
-    IsinCountryCode(StreamStringGenerator streamStringGenerator){
-        this.checksumlessStringGenerator = streamStringGenerator;
+    IsinCountryCode(StringGenerator stringGenerator){
+        this.checksumlessStringGenerator = stringGenerator;
     }
 
-    static StreamStringGenerator prefix(String prefix, StreamStringGenerator inner){
-        return new PrefixingStreamStringGenerator(prefix, inner);
+    static StringGenerator prefix(String prefix, StringGenerator inner){
+        return new PrefixingStringGenerator(prefix, inner);
     }
 
-    public StreamStringGenerator getChecksumlessStringGenerator() {
+    public StringGenerator getChecksumlessStringGenerator() {
         return checksumlessStringGenerator;
     }
 }

@@ -19,12 +19,12 @@ import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
 import java.util.stream.Stream;
 
-public class PrefixingStreamStringGenerator implements StreamStringGenerator {
+public class PrefixingStringGenerator implements StringGenerator {
 
     private final String prefix;
-    private final StreamStringGenerator innerGenerator;
+    private final StringGenerator innerGenerator;
 
-    public PrefixingStreamStringGenerator(String prefix, StreamStringGenerator innerGenerator) {
+    public PrefixingStringGenerator(String prefix, StringGenerator innerGenerator) {
         this.prefix = prefix;
         this.innerGenerator = innerGenerator;
     }

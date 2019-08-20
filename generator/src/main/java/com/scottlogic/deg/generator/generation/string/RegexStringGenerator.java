@@ -19,20 +19,16 @@ package com.scottlogic.deg.generator.generation.string;
 import com.scottlogic.deg.generator.generation.string.factorys.FiniteStringAutomatonIterator;
 import com.scottlogic.deg.generator.generation.string.factorys.InterestingStringFactory;
 import com.scottlogic.deg.generator.generation.string.factorys.RandomStringFactory;
-import com.scottlogic.deg.generator.generation.string.streamy.StreamStringGenerator;
+import com.scottlogic.deg.generator.generation.string.streamy.StringGenerator;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.SupplierBasedIterator;
 import dk.brics.automaton.Automaton;
-import dk.brics.automaton.State;
-import dk.brics.automaton.Transition;
 
 import java.util.*;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import static com.scottlogic.deg.common.util.NumberUtils.*;
-
-public class RegexStringGenerator implements StreamStringGenerator {
+public class RegexStringGenerator implements StringGenerator {
 
     /**
      * Cache of all matching regex automatons, keyed on their regex
@@ -88,7 +84,7 @@ public class RegexStringGenerator implements StreamStringGenerator {
     }
 
     @Override
-    public StreamStringGenerator intersect(StreamStringGenerator otherGenerator) {
+    public StringGenerator intersect(StringGenerator otherGenerator) {
         if (otherGenerator instanceof NoStringsStringGenerator) {
             return otherGenerator.intersect(this);
         }
@@ -122,7 +118,7 @@ public class RegexStringGenerator implements StreamStringGenerator {
     }
 
     @Override
-    public StreamStringGenerator complement() {
+    public StringGenerator complement() {
         return new RegexStringGenerator(
             this.automaton.clone().complement(),
             complementaryRepresentation(this.regexRepresentation));

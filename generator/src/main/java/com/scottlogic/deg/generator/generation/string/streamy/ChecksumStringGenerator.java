@@ -19,12 +19,12 @@ import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
 import java.util.stream.Stream;
 
-public class ChecksumStreamStringGenerator implements StreamStringGenerator {
+public class ChecksumStringGenerator implements StringGenerator {
 
-    private final StreamStringGenerator checksumlessGenerator;
+    private final StringGenerator checksumlessGenerator;
     private final ChecksumMaker checksumMaker;
 
-    public ChecksumStreamStringGenerator(StreamStringGenerator checksumlessGenerator, ChecksumMaker checksumMaker) {
+    public ChecksumStringGenerator(StringGenerator checksumlessGenerator, ChecksumMaker checksumMaker) {
         this.checksumlessGenerator = checksumlessGenerator;
         this.checksumMaker = checksumMaker;
     }
