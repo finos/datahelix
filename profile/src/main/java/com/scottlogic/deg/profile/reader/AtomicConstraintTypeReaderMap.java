@@ -18,11 +18,10 @@ package com.scottlogic.deg.profile.reader;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.util.Defaults;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.profile.reader.constraintreaders.SetReader;
 import com.scottlogic.deg.profile.reader.constraintreaders.GranularToReader;
 import com.scottlogic.deg.profile.reader.constraintreaders.OfTypeReader;
-import com.scottlogic.deg.profile.v0_1.AtomicConstraintType;
+import com.scottlogic.deg.profile.dto.AtomicConstraintType;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -31,7 +30,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import static com.scottlogic.deg.profile.reader.ConstraintReaderHelpers.getValidatedValue;
-import static com.scottlogic.deg.profile.v0_1.AtomicConstraintType.*;
+import static com.scottlogic.deg.profile.dto.AtomicConstraintType.*;
 
 public class AtomicConstraintTypeReaderMap {
 
