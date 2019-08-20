@@ -40,7 +40,7 @@ public class SupportedVersionsGetter {
      *
      * @return all valid schema versions
      **/
-    List<String> getSupportedSchemaVersions() {
+    public List<String> getSupportedSchemaVersions() {
         // Taken from https://stackoverflow.com/a/20073154/
         List<String> supportedSchemaVersions = new ArrayList<>();
         File jarFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
