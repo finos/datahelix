@@ -18,7 +18,6 @@ package com.scottlogic.deg.profile;
 
 import com.scottlogic.deg.profile.dto.SupportedVersionsGetter;
 import org.apache.commons.io.IOUtils;
-import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -79,7 +78,10 @@ public class ProfileSchemaImmutabilityTests {
     @Test
     public void verifyAllHashesArePresent() {
         Set<String> existingSchemas = new HashSet<>(new SupportedVersionsGetter().getSupportedSchemaVersions());
-        assertEquals(existingSchemas, versionToHash().stream().map(VersionHash::version).collect(Collectors.toSet()));
+        assertEquals(
+            existingSchemas,
+            versionToHash().stream().map(VersionHash::version).collect(Collectors.toSet()),
+            "At least one version is either missing or erraneously present in this test's list of checksums");
     }
 
     @ParameterizedTest
@@ -91,7 +93,12 @@ public class ProfileSchemaImmutabilityTests {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] encoded = digest.digest(bytes);
 
-        assertEquals(wrapper.hash, bytesToHex(encoded));
+        assertEquals(
+            wrapper.hash,
+            bytesToHex(encoded),
+            "The expected hash for version %s does not match the hash supplied." +
+            "If you weren't testing for a new hash, you probably modified an existing schema. Do not do this. " +
+                "Create a new schema version instead.");
     }
 
     private static byte[] normaliseLineEndings(byte[] bytes) {
