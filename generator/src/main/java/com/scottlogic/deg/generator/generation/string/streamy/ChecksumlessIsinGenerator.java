@@ -62,4 +62,9 @@ public class ChecksumlessIsinGenerator implements StringGenerator {
 
         return isinStringGenerators.anyMatch(generator -> generator.matches(string));
     }
+
+    @Override
+    public StringGenerator intersect(StringGenerator stringGenerator) {
+        throw new UnsupportedOperationException("Constraints with ISINs can only be used with length and equalTo constraints.");
+    }
 }

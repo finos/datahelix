@@ -31,9 +31,7 @@ public interface StringGenerator {
 
     boolean matches(String string);
 
-    default StringGenerator intersect(StringGenerator stringGenerator){
-        throw new UnsupportedOperationException();
-    }
+    StringGenerator intersect(StringGenerator stringGenerator);
 
     default StringGenerator complement() {
         throw new UnsupportedOperationException();

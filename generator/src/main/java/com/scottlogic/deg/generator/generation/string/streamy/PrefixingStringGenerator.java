@@ -58,4 +58,9 @@ public class PrefixingStringGenerator implements StringGenerator {
         }
         return innerGenerator.matches(string.substring(prefix.length()));
     }
+
+    @Override
+    public StringGenerator intersect(StringGenerator stringGenerator) {
+        throw new UnsupportedOperationException();
+    }
 }

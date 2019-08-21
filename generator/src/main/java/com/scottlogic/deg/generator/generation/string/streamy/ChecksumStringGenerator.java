@@ -58,4 +58,9 @@ public class ChecksumStringGenerator implements StringGenerator {
             checksumlessGenerator.matches(preChecksumComponent) &&
             checksumMaker.makeChecksum(preChecksumComponent).equals(checksumComponent);
     }
+
+    @Override
+    public StringGenerator intersect(StringGenerator stringGenerator) {
+        throw new UnsupportedOperationException("Checksum constraints can only be used with length and equalTo constraints.");
+    }
 }

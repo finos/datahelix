@@ -38,6 +38,11 @@ public class NoStringsStringGenerator implements StringGenerator {
     }
 
     @Override
+    public StringGenerator intersect(StringGenerator stringGenerator) {
+        return this;
+    }
+
+    @Override
     public Stream<String> generateInterestingValues() {
         return Stream.empty();
     }

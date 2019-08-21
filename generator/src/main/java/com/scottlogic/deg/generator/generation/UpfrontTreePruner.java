@@ -47,16 +47,15 @@ public class UpfrontTreePruner {
                     Function.identity(),
                     f -> FieldSpec.Empty));
 
-        Merged<ConstraintNode> prunedNode = getPrunedNode(tree, fieldSpecs, monitor);
+        Merged<ConstraintNode> prunedNode = treePruner.pruneConstraintNode(tree.getRootNode(), fieldSpecs);
+        DecisionTree markedTree = validator.markContradictions(tree);
+
         if (prunedNode.isContradictory()) {
             monitor.addLineToPrintAtEndOfGeneration("");
             monitor.addLineToPrintAtEndOfGeneration("The provided profile is wholly contradictory!");
             monitor.addLineToPrintAtEndOfGeneration("No data can be generated!");
             return new DecisionTree(null, tree.getFields());
-        }
-
-        DecisionTree markedTree = validator.markContradictions(tree);
-        if (isPartiallyContradictory(markedTree.getRootNode())) {
+        } else if (isPartiallyContradictory(markedTree.getRootNode())) {
             monitor.addLineToPrintAtEndOfGeneration("");
             monitor.addLineToPrintAtEndOfGeneration("The provided profile is partially contradictory!");
             monitor.addLineToPrintAtEndOfGeneration("Run the visualise command for more information.");
@@ -64,16 +63,6 @@ public class UpfrontTreePruner {
 
         }
         return new DecisionTree(prunedNode.get(), tree.getFields());
-    }
-
-    private Merged<ConstraintNode> getPrunedNode(DecisionTree tree, Map<Field, FieldSpec> fieldSpecs, DataGeneratorMonitor monitor) {
-        try {
-            return treePruner.pruneConstraintNode(tree.getRootNode(), fieldSpecs);
-        } catch (UnsupportedOperationException ex) {
-            monitor.addLineToPrintAtEndOfGeneration("");
-            monitor.addLineToPrintAtEndOfGeneration(ex.getMessage());
-            return Merged.contradictory();
-        }
     }
 
     private boolean isPartiallyContradictory(ConstraintNode root) {

@@ -70,14 +70,20 @@ public class DecisionTreeDataGenerator implements DataGenerator {
             return Stream.empty();
         }
 
-        Stream<Stream<DataBag>> partitionedDataBags = treePartitioner
-            .splitTreeIntoPartitions(decisionTree)
-            .map(treeOptimiser::optimiseTree)
-            .map(treeWalker::walk);
+        try {
+            Stream<Stream<DataBag>> partitionedDataBags = treePartitioner
+                .splitTreeIntoPartitions(decisionTree)
+                .map(treeOptimiser::optimiseTree)
+                .map(treeWalker::walk);
 
-        return partitionCombiner.permute(partitionedDataBags)
-            .map(d->(GeneratedObject)d)
-            .limit(maxRows)
-            .peek(monitor::rowEmitted);
+            return partitionCombiner.permute(partitionedDataBags)
+                .map(d->(GeneratedObject)d)
+                .limit(maxRows)
+                .peek(monitor::rowEmitted);
+        } catch (UnsupportedOperationException ex) {
+            monitor.addLineToPrintAtEndOfGeneration("");
+            monitor.addLineToPrintAtEndOfGeneration(ex.getMessage());
+            return Stream.empty();
+        }
     }
 }
