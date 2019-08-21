@@ -17,14 +17,48 @@
 package com.scottlogic.deg.generator.generation.string;
 
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
+import com.scottlogic.deg.generator.utils.FinancialCodeUtils;
+import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.util.Iterator;
+
 import static com.scottlogic.deg.generator.generation.string.generators.ChecksumStringGeneratorFactory.createSedolGenerator;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class SedolStringGeneratorTests {
+    @Test
+    public void shouldEndAllSedolsWithValidCheckDigit() {
+        StringGenerator target = createSedolGenerator();
+        final int NumberOfTests = 100;
+
+        final Iterator<String> allSedols = target.generateAllValues().iterator();
+
+        for (int ii = 0; ii < NumberOfTests; ++ii) {
+            final String nextSedol = allSedols.next();
+            final char checkDigit = FinancialCodeUtils.calculateSedolCheckDigit(nextSedol.substring(0, 6));
+            assertThat(nextSedol.charAt(6), equalTo(checkDigit));
+        }
+    }
+
+    @Test
+    public void shouldEndAllRandomCusipsWithValidCheckDigit() {
+        StringGenerator target = createSedolGenerator();
+
+        final int NumberOfTests = 100;
+
+        final Iterator<String> allSedols = target.generateRandomValues(new JavaUtilRandomNumberGenerator()).iterator();
+
+        for (int ii = 0; ii < NumberOfTests; ++ii) {
+            final String nextSedol = allSedols.next();
+            final char checkDigit = FinancialCodeUtils.calculateSedolCheckDigit(nextSedol.substring(0, 6));
+            assertThat(nextSedol.charAt(6), equalTo(checkDigit));
+        }
+    }
     @Test
     public void shouldMatchAValidSedolCodeWhenNotNegated(){
         StringGenerator SedolGenerator = createSedolGenerator();
