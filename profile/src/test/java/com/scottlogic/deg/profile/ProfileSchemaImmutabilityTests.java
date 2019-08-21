@@ -18,6 +18,7 @@ package com.scottlogic.deg.profile;
 
 import com.scottlogic.deg.profile.dto.SupportedVersionsGetter;
 import org.apache.commons.io.IOUtils;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -26,6 +27,7 @@ import org.junit.jupiter.params.provider.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
@@ -53,11 +55,13 @@ public class ProfileSchemaImmutabilityTests {
     private static Set<VersionHash> versionToHash() {
         Set<VersionHash> versionToHash = new HashSet<>();
         // DO NOT MODIFY EXISTING HASHES! ONLY ADD!
-        // The new hash can be found by running the shell command sha256sum on the respective schema file
+        // The new checksum hash can be found by running the shell command sha256sum on the respective schema file
         // example: sha256sum profile/src/main/resources/profileschema/0.1/datahelix.schema.json
+        // Ensure you run this on a unix based machine.
+        // Alternatively, add the new version to the map, and the test will give you the hash it should be.
         versionToHash.add(new VersionHash(
             "0.1",
-            "6346faec92ba67686cc617d1573baed2230fff42acdbc961bf043c4b591bf246"));
+            "575c572e9d00d69b5775cf50f01fc79d8cf7babcb6eb2ac51b1a9572d490487c"));
         return versionToHash;
     }
 
@@ -81,13 +85,22 @@ public class ProfileSchemaImmutabilityTests {
     @ParameterizedTest
     @ArgumentsSource(VersionHashesProvider.class)
     public void validateSchemasAreUnique(VersionHash wrapper) throws NoSuchAlgorithmException {
-        byte[] bytes = readClassResourceAsBytes("profileschema/" + wrapper.version + "/datahelix.schema.json");
+        String location = "profileschema/" + wrapper.version + "/datahelix.schema.json";
+        byte[] bytes = normaliseLineEndings(readClassResourceAsBytes(location));
+
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] encoded = digest.digest(bytes);
 
-        System.out.println(Arrays.toString(encoded));
-
         assertEquals(wrapper.hash, bytesToHex(encoded));
+    }
+
+    private static byte[] normaliseLineEndings(byte[] bytes) {
+        final String encoding = "UTF-8";
+        try {
+            return new String(bytes, encoding).replaceAll("\\r\\n?", "\n").getBytes(encoding);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static String bytesToHex(byte[] bytes) {
@@ -108,6 +121,7 @@ public class ProfileSchemaImmutabilityTests {
             output.append(chars[remainder]);
             quotient = quotient / 16;
         }
+
         return output.reverse().toString();
     }
 
