@@ -16,11 +16,10 @@
 
 package com.scottlogic.deg.generator.generation.string;
 
-import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.DateTimeFieldValueSourceTests;
+import com.scottlogic.deg.generator.generation.string.generators.RegexStringGenerator;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import com.scottlogic.deg.generator.utils.FinancialCodeUtils;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
-import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import org.junit.Assert;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -32,8 +31,7 @@ import static com.scottlogic.deg.generator.generation.string.generators.Checksum
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class IsinStringGeneratorTests {
 
@@ -75,6 +73,44 @@ public class IsinStringGeneratorTests {
             .forEach(isinString -> {
                 assertThat(
                     FinancialCodeUtils.isValidSedolNsin(isinString.substring(2, 11)), is(true));
+
+                numberOfIsinsTested.incrementAndGet();
+            });
+
+        // make sure we tested the number we expected
+        assertThat(numberOfIsinsTested.get(), equalTo(100));
+    }
+
+    @Test
+    public void shouldUseCusipWhenCountryIsUS() {
+        AtomicInteger numberOfIsinsTested = new AtomicInteger(0);
+        createIsinGenerator().generateRandomValues(new JavaUtilRandomNumberGenerator())
+            .filter(isinString -> isinString.substring(0, 2).equals("US"))
+            .limit(100)
+            .forEach(isinString -> {
+                assertThat(
+                    FinancialCodeUtils.isValidCusipNsin(isinString.substring(2, 11)), is(true));
+
+                numberOfIsinsTested.incrementAndGet();
+            });
+
+        // make sure we tested the number we expected
+        assertThat(numberOfIsinsTested.get(), equalTo(100));
+    }
+
+    @Test
+    public void shouldUseGeneralRegexWhenCountryIsNotGbOrUs() {
+        AtomicInteger numberOfIsinsTested = new AtomicInteger(0);
+        createIsinGenerator().generateRandomValues(new JavaUtilRandomNumberGenerator())
+            .filter(isinString -> {
+                String countryCode = isinString.substring(0, 2);
+                return !countryCode.equals("GB") && !countryCode.equals("US");
+            })
+            .limit(100)
+            .forEach(isinString -> {
+                String APPROX_ISIN_REGEX = "[A-Z]{2}[A-Z0-9]{9}[0-9]";
+                RegexStringGenerator regexStringGenerator = new RegexStringGenerator(APPROX_ISIN_REGEX, true);
+                assertTrue(regexStringGenerator.matches(isinString));
 
                 numberOfIsinsTested.incrementAndGet();
             });
