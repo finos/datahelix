@@ -13,13 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.scottlogic.deg.generator.generation.string.streamy;
+package com.scottlogic.deg.generator.generation.string.generators;
 
 
-import com.scottlogic.deg.generator.generation.string.RegexStringGenerator;
-
-import static com.scottlogic.deg.generator.generation.string.streamy.ChecksumStringGeneratorFactory.createCusipGenerator;
-import static com.scottlogic.deg.generator.generation.string.streamy.ChecksumStringGeneratorFactory.createSedolGenerator;
+import static com.scottlogic.deg.generator.generation.string.generators.ChecksumStringGeneratorFactory.createCusipGenerator;
+import static com.scottlogic.deg.generator.generation.string.generators.ChecksumStringGeneratorFactory.createSedolGenerator;
 
 public enum IsinCountryCode {
     GB(prefix("GB00", createSedolGenerator())),

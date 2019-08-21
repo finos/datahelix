@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.scottlogic.deg.generator.generation.string.streamy;
+package com.scottlogic.deg.generator.generation.string.generators;
 
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 

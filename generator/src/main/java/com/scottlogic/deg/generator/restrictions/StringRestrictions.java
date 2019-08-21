@@ -17,7 +17,7 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
-import com.scottlogic.deg.generator.generation.string.streamy.StringGenerator;
+import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 
 public interface StringRestrictions extends TypedRestrictions {
     MergeResult<StringRestrictions> intersect(StringRestrictions other);

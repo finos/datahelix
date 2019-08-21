@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.generation.string;
+package com.scottlogic.deg.generator.generation.string.generators;
 
+import com.scottlogic.deg.generator.generation.string.AutomatonUtils;
 import com.scottlogic.deg.generator.generation.string.factorys.FiniteStringAutomatonIterator;
 import com.scottlogic.deg.generator.generation.string.factorys.InterestingStringFactory;
 import com.scottlogic.deg.generator.generation.string.factorys.RandomStringFactory;
-import com.scottlogic.deg.generator.generation.string.streamy.StringGenerator;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.SupplierBasedIterator;
 import dk.brics.automaton.Automaton;

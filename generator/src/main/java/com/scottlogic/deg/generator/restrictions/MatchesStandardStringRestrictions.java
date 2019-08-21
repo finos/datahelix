@@ -17,10 +17,11 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.StandardConstraintTypes;
-import com.scottlogic.deg.generator.generation.string.*;
-import com.scottlogic.deg.generator.generation.string.streamy.StringGenerator;
+import com.scottlogic.deg.generator.generation.string.generators.NoStringsStringGenerator;
+import com.scottlogic.deg.generator.generation.string.generators.RegexStringGenerator;
+import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 
-import static com.scottlogic.deg.generator.generation.string.streamy.ChecksumStringGeneratorFactory.*;
+import static com.scottlogic.deg.generator.generation.string.generators.ChecksumStringGeneratorFactory.*;
 
 /**
  * Represents the restriction of a field to an `aValid` operator

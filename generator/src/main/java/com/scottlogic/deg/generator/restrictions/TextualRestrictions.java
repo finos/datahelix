@@ -16,9 +16,9 @@
 
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.generation.string.NoStringsStringGenerator;
-import com.scottlogic.deg.generator.generation.string.RegexStringGenerator;
-import com.scottlogic.deg.generator.generation.string.streamy.StringGenerator;
+import com.scottlogic.deg.generator.generation.string.generators.NoStringsStringGenerator;
+import com.scottlogic.deg.generator.generation.string.generators.RegexStringGenerator;
+import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.util.*;

@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.generation.string;
+package com.scottlogic.deg.generator.generation.string.generators;
 
-import com.scottlogic.deg.generator.generation.string.streamy.StringGenerator;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
 import java.util.stream.Stream;
