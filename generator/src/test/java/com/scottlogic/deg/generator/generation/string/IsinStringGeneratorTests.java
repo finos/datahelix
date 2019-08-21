@@ -16,9 +16,11 @@
 
 package com.scottlogic.deg.generator.generation.string;
 
+import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.DateTimeFieldValueSourceTests;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import com.scottlogic.deg.generator.utils.FinancialCodeUtils;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
+import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import org.junit.Assert;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -30,6 +32,8 @@ import static com.scottlogic.deg.generator.generation.string.generators.Checksum
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class IsinStringGeneratorTests {
 
@@ -64,15 +68,11 @@ public class IsinStringGeneratorTests {
 
     @Test
     public void shouldUseSedolWhenCountryIsGB() {
-        // this assumes that the first batch of values produced by the generator are GB-flavoured. If this changes in the future, this test might need to get more complicated
-
         AtomicInteger numberOfIsinsTested = new AtomicInteger(0);
-        createIsinGenerator().generateAllValues()
+        createIsinGenerator().generateRandomValues(new JavaUtilRandomNumberGenerator())
+            .filter(isinString -> isinString.substring(0, 2).equals("GB"))
             .limit(100)
             .forEach(isinString -> {
-                if (!isinString.substring(0, 2).equals("GB"))
-                    throw new IllegalStateException("Test assumes that the first 100 ISINs will be GB-flavoured");
-
                 assertThat(
                     FinancialCodeUtils.isValidSedolNsin(isinString.substring(2, 11)), is(true));
 
