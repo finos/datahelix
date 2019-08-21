@@ -12,6 +12,7 @@
 1. [Adding Schema Versions](HowToAddSupportForNewSchemaVersion.md)
 1. [Dependency Injection](DependencyInjection.md)
 1. [Cucumber Testing](CucumberSyntax.md)
+1. [Git Merging](GitMerging.md)
 
 ## Behavioural Explanations
 
