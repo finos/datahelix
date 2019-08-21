@@ -16,25 +16,26 @@
 
 package com.scottlogic.deg.generator.generation.string;
 
+import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import com.scottlogic.deg.generator.utils.FinancialCodeUtils;
-import com.scottlogic.deg.generator.utils.IterableAsStream;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import org.junit.Assert;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.scottlogic.deg.generator.generation.string.generators.ChecksumStringGeneratorFactory.createIsinGenerator;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class IsinStringGeneratorTests {
 
     @Test
     public void shouldEndAllIsinsWithValidCheckDigit() {
-        IsinStringGenerator target = new IsinStringGenerator();
+        StringGenerator target = createIsinGenerator();
         final int NumberOfTests = 100;
 
         final Iterator<String> allIsins = target.generateAllValues().iterator();
@@ -48,7 +49,7 @@ public class IsinStringGeneratorTests {
 
     @Test
     public void shouldEndAllRandomIsinsWithValidCheckDigit() {
-        IsinStringGenerator target = new IsinStringGenerator();
+        StringGenerator target = createIsinGenerator();
 
         final int NumberOfTests = 100;
 
@@ -66,7 +67,7 @@ public class IsinStringGeneratorTests {
         // this assumes that the first batch of values produced by the generator are GB-flavoured. If this changes in the future, this test might need to get more complicated
 
         AtomicInteger numberOfIsinsTested = new AtomicInteger(0);
-        IterableAsStream.convert(new IsinStringGenerator().generateAllValues())
+        createIsinGenerator().generateAllValues()
             .limit(100)
             .forEach(isinString -> {
                 if (!isinString.substring(0, 2).equals("GB"))
@@ -83,8 +84,9 @@ public class IsinStringGeneratorTests {
     }
 
     @Test
+    @Disabled("Standard constraints e.g. ISINs currently cannot be negated")
     public void complementShouldProduceNoRandomValidIsins() {
-        StringGenerator target = new IsinStringGenerator().complement();
+        StringGenerator target = createIsinGenerator().complement();
 
         final int NumberOfTests = 100;
 
@@ -98,36 +100,38 @@ public class IsinStringGeneratorTests {
 
     @Test
     public void shouldMatchAValidIsinCodeWhenNotNegated(){
-        StringGenerator isinGenerator = new IsinStringGenerator();
+        StringGenerator isinGenerator = createIsinGenerator();
 
-        boolean matches = isinGenerator.match("GB0002634946");
+        boolean matches = isinGenerator.matches("GB0002634946");
 
         Assert.assertTrue(matches);
     }
 
     @Test
     public void shouldNotMatchAnInvalidIsinCodeWhenNotNegated(){
-        StringGenerator isinGenerator = new IsinStringGenerator();
+        StringGenerator isinGenerator = createIsinGenerator();
 
-        boolean matches = isinGenerator.match("not an isin");
+        boolean matches = isinGenerator.matches("not an isin");
 
         Assert.assertFalse(matches);
     }
 
     @Test
+    @Disabled("Standard constraints e.g. ISINs currently cannot be negated")
     public void shouldNotMatchAValidIsinCodeWhenNegated(){
-        StringGenerator isinGenerator = new IsinStringGenerator().complement();
+        StringGenerator isinGenerator = createIsinGenerator().complement();
 
-        boolean matches = isinGenerator.match("GB0002634946");
+        boolean matches = isinGenerator.matches("GB0002634946");
 
         Assert.assertFalse(matches);
     }
 
     @Test
+    @Disabled("Standard constraints e.g. ISINs currently cannot be negated")
     public void shouldMatchAnInvalidIsinCodeWhenNegated(){
-        StringGenerator isinGenerator = new IsinStringGenerator().complement();
+        StringGenerator isinGenerator = createIsinGenerator().complement();
 
-        boolean matches = isinGenerator.match("not an isin");
+        boolean matches = isinGenerator.matches("not an isin");
 
         Assert.assertTrue(matches);
     }

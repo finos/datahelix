@@ -16,44 +16,49 @@
 
 package com.scottlogic.deg.generator.generation.string;
 
+import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import static com.scottlogic.deg.generator.generation.string.generators.ChecksumStringGeneratorFactory.createSedolGenerator;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class SedolStringGeneratorTests {
     @Test
     public void shouldMatchAValidSedolCodeWhenNotNegated(){
-        StringGenerator SedolGenerator = new SedolStringGenerator();
+        StringGenerator SedolGenerator = createSedolGenerator();
 
-        boolean matches = SedolGenerator.match("2634946");
+        boolean matches = SedolGenerator.matches("2634946");
 
         assertTrue(matches);
     }
 
     @Test
     public void shouldNotMatchAnInvalidSedolCodeWhenNotNegated(){
-        StringGenerator SedolGenerator = new SedolStringGenerator();
+        StringGenerator SedolGenerator = createSedolGenerator();
 
-        boolean matches = SedolGenerator.match("not a sedol");
+        boolean matches = SedolGenerator.matches("not a sedol");
 
         assertFalse(matches);
     }
 
     @Test
+    @Disabled("Standard constraints e.g. ISINs currently cannot be negated")
     public void shouldNotMatchAValidSedolCodeWhenNegated(){
-        StringGenerator SedolGenerator = new SedolStringGenerator().complement();
+        StringGenerator SedolGenerator = createSedolGenerator().complement();
 
-        boolean matches = SedolGenerator.match("2634946");
+        boolean matches = SedolGenerator.matches("2634946");
 
         assertFalse(matches);
     }
 
     @Test
+    @Disabled("Standard constraints e.g. ISINs currently cannot be negated")
     public void shouldMatchAnInvalidSedolCodeWhenNegated(){
-        StringGenerator SedolGenerator = new SedolStringGenerator().complement();
+        StringGenerator SedolGenerator = createSedolGenerator().complement();
 
-        boolean matches = SedolGenerator.match("not a sedol");
+        boolean matches = SedolGenerator.matches("not a sedol");
 
         assertTrue(matches);
     }

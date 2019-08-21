@@ -16,45 +16,49 @@
 
 package com.scottlogic.deg.generator.generation.string;
 
-import org.junit.Assert;
+import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import static com.scottlogic.deg.generator.generation.string.generators.ChecksumStringGeneratorFactory.createCusipGenerator;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class CusipStringGeneratorTests {
     @Test
     public void shouldMatchAValidCusipCodeWhenNotNegated(){
-        StringGenerator cusipGenerator = new CusipStringGenerator();
+        StringGenerator cusipGenerator = createCusipGenerator();
 
-        boolean matches = cusipGenerator.match("38259P508");
+        boolean matches = cusipGenerator.matches("38259P508");
 
         assertTrue(matches);
     }
 
     @Test
     public void shouldNotMatchAnInvalidCusipCodeWhenNotNegated(){
-        StringGenerator cusipGenerator = new CusipStringGenerator();
+        StringGenerator cusipGenerator = createCusipGenerator();
 
-        boolean matches = cusipGenerator.match("not a cusip");
+        boolean matches = cusipGenerator.matches("not a cusip");
 
         assertFalse(matches);
     }
 
     @Test
+    @Disabled("Standard constraints e.g. ISINs currently cannot be negated")
     public void shouldNotMatchAValidCusipCodeWhenNegated(){
-        StringGenerator cusipGenerator = new CusipStringGenerator().complement();
+        StringGenerator cusipGenerator = createCusipGenerator().complement();
 
-        boolean matches = cusipGenerator.match("38259P508");
+        boolean matches = cusipGenerator.matches("38259P508");
 
         assertFalse(matches);
     }
 
     @Test
+    @Disabled("Standard constraints e.g. ISINs currently cannot be negated")
     public void shouldMatchAnInvalidCusipCodeWhenNegated(){
-        StringGenerator cusipGenerator = new CusipStringGenerator().complement();
+        StringGenerator cusipGenerator = createCusipGenerator().complement();
 
-        boolean matches = cusipGenerator.match("not a cusip");
+        boolean matches = cusipGenerator.matches("not a cusip");
 
         assertTrue(matches);
     }
