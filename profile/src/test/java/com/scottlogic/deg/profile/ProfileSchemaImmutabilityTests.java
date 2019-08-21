@@ -76,17 +76,18 @@ public class ProfileSchemaImmutabilityTests {
     // You need to include the hash of the new schema in the map in this file.
     // Do not modify existing hashes.
     @Test
-    public void verifyAllHashesArePresent() {
+    public void hashesMustBeAddedToThisFileForAnyNewSchemas() {
         Set<String> existingSchemas = new HashSet<>(new SupportedVersionsGetter().getSupportedSchemaVersions());
         assertEquals(
             existingSchemas,
             versionToHash().stream().map(VersionHash::version).collect(Collectors.toSet()),
-            "At least one version is either missing or erraneously present in this test's list of checksums");
+            "At least one version is either missing or erroneously present in this test's list of checksums. " +
+            "The new checksum must be added to the map of checksum hashes in this test file.");
     }
 
     @ParameterizedTest
     @ArgumentsSource(VersionHashesProvider.class)
-    public void validateSchemasAreUnique(VersionHash wrapper) throws NoSuchAlgorithmException {
+    public void oldSchemasMustNotBeModified(VersionHash wrapper) throws NoSuchAlgorithmException {
         String location = "profileschema/" + wrapper.version + "/datahelix.schema.json";
         byte[] bytes = normaliseLineEndings(readClassResourceAsBytes(location));
 
