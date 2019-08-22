@@ -48,7 +48,7 @@ public class RandomReductiveDecisionTreeWalker implements DecisionTreeWalker {
             Stream.generate(() ->
                 getFirstRowSpecFromRandomisingIteration(tree))
                     .filter(Optional::isPresent)
-                    .map(Optional::get)), false); // TODO is this correct to be false?
+                    .map(Optional::get)), false);
     }
 
     private Optional<DataBag> getFirstRowSpecFromRandomisingIteration(DecisionTree tree) {
