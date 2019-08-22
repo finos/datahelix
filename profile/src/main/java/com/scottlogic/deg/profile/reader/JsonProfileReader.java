@@ -101,7 +101,7 @@ public class JsonProfileReader implements ProfileReader {
         Collection<String> uniqueList = new ArrayList<>();
 
         profileDto.rules.stream().forEach(rule -> rule.constraints.stream()
-            .filter(constraintDTO -> constraintDTO.is != ConstraintDTO.undefined)
+            .filter(constraintDTO -> constraintDTO.is != ConstraintDTO.undefined && constraintDTO.is != null)
             .filter(constraintDTO -> constraintDTO.is.equals("unique"))
             .forEach(result ->  uniqueList.add(result.field)));
 
