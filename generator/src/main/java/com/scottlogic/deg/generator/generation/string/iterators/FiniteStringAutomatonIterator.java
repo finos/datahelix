@@ -25,7 +25,7 @@ public class FiniteStringAutomatonIterator implements Iterator<String> {
     private StringBuilder stringBuilder;
     private String nextValue;
     private Deque<Deque<TransitionIterator>> stateTree;
-    private Boolean firstStateIsAccept;
+    private boolean firstStateIsAccept;
 
     public FiniteStringAutomatonIterator(Automaton automaton) {
         stateTree = new ArrayDeque<>();
