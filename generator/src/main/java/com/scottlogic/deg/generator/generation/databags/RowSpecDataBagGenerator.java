@@ -50,8 +50,8 @@ public class RowSpecDataBagGenerator {
 
     private Stream<DataBag> generateDataForField(RowSpec rowSpec, Field field) {
         FieldSpec fieldSpec = rowSpec.getSpecForField(field);
-
-        return generator.generate(fieldSpec).map(value->toDataBag(field, value));
+        Stream<DataBagValue> stream = generator.generate(fieldSpec);
+        return stream.map(value -> toDataBag(field, value));
     }
 
     private DataBag toDataBag(Field field, DataBagValue value) {

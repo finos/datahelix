@@ -69,7 +69,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         final DecisionTree decisionTree = decisionTreeGenerator.analyse(profile);
 
         final DecisionTree prunedTree = upfrontTreePruner.runUpfrontPrune(decisionTree, monitor);
-        if (decisionTree.getRootNode() == null) {
+        if (prunedTree.getRootNode() == null) {
             return Stream.empty();
         }
 
