@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.generation.combinationstrategies;
 
-import com.scottlogic.deg.generator.generation.databags.DataBag;
+import com.scottlogic.deg.generator.generation.databags.*;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -29,7 +29,7 @@ import java.util.stream.StreamSupport;
 public class PinningCombinationStrategy implements CombinationStrategy {
 
     @Override
-    public Stream<DataBag> permute(Stream<Stream<DataBag>> dataBagSequences) {
+    public Stream<DataBag> permute(Stream<DataBagStream> dataBagSequences) {
         Iterable<DataBag> iterable = new PinningCombinationStrategy
                 .InternalIterable(dataBagSequences);
 
@@ -37,16 +37,16 @@ public class PinningCombinationStrategy implements CombinationStrategy {
     }
 
     class InternalIterable implements Iterable<DataBag> {
-        private final Stream<Stream<DataBag>> dataBagSequences;
+        private final Stream<DataBagStream> dataBagSequences;
 
-        InternalIterable(Stream<Stream<DataBag>> dataBagSequences) {
+        InternalIterable(Stream<DataBagStream> dataBagSequences) {
             this.dataBagSequences = dataBagSequences;
         }
 
         @Override
         public Iterator<DataBag> iterator() {
             List<SequenceAndBaselineTuple> tuples = this.dataBagSequences
-                    .map(sequence -> new SequenceAndBaselineTuple(sequence.iterator()))
+                    .map(sequence -> new SequenceAndBaselineTuple(sequence.toIterator().iterator()))
                     .collect(Collectors.toList());
 
             if (tuples.stream().anyMatch(t -> t.baseline == null))

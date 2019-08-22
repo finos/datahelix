@@ -61,7 +61,7 @@ class RowSpecDataBagGeneratorTests {
 
         when(mockGeneratorFactory.generate(any(FieldSpec.class))).thenReturn(Stream.of(dataBagValue));
 
-        List<DataBag> actual = factory.createDataBags(rowSpec)
+        List<DataBag> actual = factory.createDataBags(rowSpec).stream()
             .collect(Collectors.toList());
 
         verify(mockGeneratorFactory, times(1)).generate(fieldSpec);
@@ -84,7 +84,7 @@ class RowSpecDataBagGeneratorTests {
         when(mockGeneratorFactory.generate(any(FieldSpec.class)))
             .thenReturn(Stream.of(dataBagValue), Stream.of(dataBagValue1), Stream.of(dataBagValue2));
 
-        factory.createDataBags(rowSpec)
+        factory.createDataBags(rowSpec).stream()
             .collect(Collectors.toList());
 
         verify(mockGeneratorFactory, times(1)).generate(fieldSpec);

@@ -60,7 +60,7 @@ class CartesianProductRowSpecTreeSolverTests {
 
     @Test
     void test() {
-        when(dataBagSourceFactory.createDataBags(any()))
+        when(dataBagSourceFactory.createDataBags(any()).stream())
             .thenReturn(
                 Stream.of(mock(DataBag.class)),
                 Stream.of(mock(DataBag.class)),

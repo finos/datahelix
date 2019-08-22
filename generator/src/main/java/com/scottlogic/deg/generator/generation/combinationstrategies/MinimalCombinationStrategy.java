@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.generation.combinationstrategies;
 
-import com.scottlogic.deg.generator.generation.databags.DataBag;
+import com.scottlogic.deg.generator.generation.databags.*;
 
 import java.util.*;
 import java.util.stream.*;
@@ -24,42 +24,58 @@ import java.util.stream.*;
 public class MinimalCombinationStrategy implements CombinationStrategy {
 
     @Override
-    public Stream<DataBag> permute(Stream<Stream<DataBag>> dataBagSequences) {
-        List<Iterator<DataBag>> iterators = dataBagSequences
-                .map(BaseStream::iterator)
-                .collect(Collectors.toList());
+    public Stream<DataBag> permute(Stream<DataBagStream> dataBagSequences) {
+        List<DataBagIterable> iterators = dataBagSequences
+            .map(DataBagStream::toIterator)
+            .collect(Collectors.toList());
 
-        return iterators.stream().allMatch(Iterator::hasNext)
+        return iterators.stream().allMatch(dataBagIterable -> dataBagIterable.iterator().hasNext())
             ? StreamSupport.stream(iterable(iterators).spliterator(), false)
             : Stream.empty();
     }
 
-    private Iterable<DataBag> iterable(List<Iterator<DataBag>> iterators) {
+    private Iterable<DataBag> iterable(List<DataBagIterable> iterators) {
         return () -> new InternalIterator(iterators);
     }
 
     class InternalIterator implements Iterator<DataBag> {
-        private final List<Iterator<DataBag>> iterators;
+        private final List<DataBagIterable> iterators;
         private final Map<Iterator<DataBag>, DataBag> lastValues;
 
-        InternalIterator(List<Iterator<DataBag>> iterators) {
+        InternalIterator(List<DataBagIterable> iterators) {
             this.iterators = iterators;
             this.lastValues = new HashMap<>();
         }
 
         @Override
         public boolean hasNext() {
-            return iterators
-                .stream()
-                .anyMatch(Iterator::hasNext);
+            boolean uniqueHaveNext =
+                or(iterators.stream()
+                        .filter(DataBagIterable::isUnique)
+                        .allMatch(dataBagIterable -> dataBagIterable.iterator().hasNext()),
+                    iterators.stream()
+                        .noneMatch(DataBagIterable::isUnique));
+
+            boolean notUniqueHaveNext =
+                or(iterators.stream()
+                        .filter(dataBagIterable -> !dataBagIterable.isUnique())
+                        .anyMatch(dataBagIterable -> dataBagIterable.iterator().hasNext()),
+                    iterators.stream()
+                        .noneMatch(dataBagIterable -> !dataBagIterable.isUnique()));
+
+            return uniqueHaveNext && notUniqueHaveNext;
+        }
+
+        private boolean or(boolean a, boolean b) {
+            return a || b;
         }
 
         @Override
         public DataBag next() {
             iterators
                 .stream()
-                .filter(Iterator::hasNext)
-                .forEach(iterator -> lastValues.put(iterator, iterator.next()));
+                .filter(dataBagIterable -> dataBagIterable.iterator().hasNext())
+                .forEach(dataBagIterable -> lastValues.put(dataBagIterable.iterator(), dataBagIterable.iterator().next()));
 
             return DataBag.merge(lastValues.values().toArray(new DataBag[0]));
         }

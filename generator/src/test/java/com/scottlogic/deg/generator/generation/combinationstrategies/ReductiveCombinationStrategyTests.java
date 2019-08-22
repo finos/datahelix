@@ -17,6 +17,7 @@
 package com.scottlogic.deg.generator.generation.combinationstrategies;
 
 import com.scottlogic.deg.generator.builders.DataBagBuilder;
+import com.scottlogic.deg.generator.generation.databags.DataBagStream;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
@@ -65,7 +66,7 @@ class ReductiveCombinationStrategyTests {
             add(firstFieldDataBags);
             add(secondFieldDataBags);
         }};
-        final List<DataBag> result = combinationStrategy.permute(dataBagSequences.stream().map(Collection::stream))
+        final List<DataBag> result = combinationStrategy.permute(dataBagSequences.stream().map(Collection::stream).map(i -> new DataBagStream(i, false)))
             .collect(Collectors.toList());
 
         List<DataBag> expectedDataBags = new ArrayList<DataBag>() {{

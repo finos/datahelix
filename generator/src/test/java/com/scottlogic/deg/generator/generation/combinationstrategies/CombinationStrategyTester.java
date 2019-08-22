@@ -19,6 +19,7 @@ package com.scottlogic.deg.generator.generation.combinationstrategies;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.builders.DataBagBuilder;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
+import com.scottlogic.deg.generator.generation.databags.DataBagStream;
 import org.hamcrest.collection.IsArrayContainingInAnyOrder;
 import org.junit.Assert;
 
@@ -26,7 +27,7 @@ import java.util.stream.Stream;
 
 class CombinationStrategyTester {
     private CombinationStrategy strategy;
-    private Stream<Stream<DataBag>> dataBags;
+    private Stream<DataBagStream> dataBags;
 
     CombinationStrategyTester(CombinationStrategy combinationStrategy) {
         strategy = combinationStrategy;
@@ -34,7 +35,7 @@ class CombinationStrategyTester {
 
     @SafeVarargs
     final void given(Stream<DataBag>... bagSequences) {
-        dataBags = Stream.of(bagSequences);
+        dataBags = Stream.of(bagSequences).map(s -> new DataBagStream(s, false));
     }
 
     void expect(Stream<DataBag> bagSequence) {
@@ -54,7 +55,7 @@ class CombinationStrategyTester {
         DataBagBuilder builder = new DataBagBuilder();
 
         for (String fieldName : fieldNames) {
-            builder.set(new Field(fieldName), "whatever");
+            builder.set(new Field(fieldName, false), "whatever");
         }
 
         return builder.build();

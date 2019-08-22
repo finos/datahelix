@@ -23,8 +23,9 @@ import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
-import java.util.stream.Stream;
+import java.util.stream.*;
 
 public class RowSpecDataBagGenerator {
     private final FieldSpecValueGenerator generator;
@@ -39,18 +40,18 @@ public class RowSpecDataBagGenerator {
         this.combinationStrategy = combinationStrategy;
     }
 
-    public Stream<DataBag> createDataBags(RowSpec rowSpec) {
-        Stream<Stream<DataBag>> dataBagsForFields =
+    public DataBagStream createDataBags(RowSpec rowSpec) {
+        Stream<DataBagStream> dataBagsForFields =
             rowSpec.getFields().stream()
                 .map(field -> generateDataForField(rowSpec, field));
 
-        return combinationStrategy.permute(dataBagsForFields);
+        return new DataBagStream(combinationStrategy.permute(dataBagsForFields), rowSpec.getFields().stream().anyMatch(field -> field.unique));
     }
 
-    private Stream<DataBag> generateDataForField(RowSpec rowSpec, Field field) {
+    private DataBagStream generateDataForField(RowSpec rowSpec, Field field) {
         FieldSpec fieldSpec = rowSpec.getSpecForField(field);
 
-        return generator.generate(fieldSpec).map(value->toDataBag(field, value));
+        return new DataBagStream(generator.generate(fieldSpec).map(value->toDataBag(field, value)), field.unique);
     }
 
     private DataBag toDataBag(Field field, DataBagValue value) {
