@@ -24,13 +24,13 @@ import java.util.*;
 public class FiniteStringAutomatonIterator implements Iterator<String> {
     private StringBuilder stringBuilder;
     private String nextValue;
-    private Deque<Deque<TransitionIterator>> transitionStackStack;
+    private Deque<Deque<TransitionIterator>> stateTree;
     private Boolean firstStateIsAccept;
 
     public FiniteStringAutomatonIterator(Automaton automaton) {
-        transitionStackStack = new ArrayDeque<>();
+        stateTree = new ArrayDeque<>();
         firstStateIsAccept = automaton.getInitialState().isAccept();
-        transitionStackStack.push(getTransitionsStack(automaton.getInitialState()));
+        stateTree.push(getTransitionsStack(automaton.getInitialState()));
         stringBuilder = new StringBuilder();
         nextValue = null;
     }
@@ -49,38 +49,42 @@ public class FiniteStringAutomatonIterator implements Iterator<String> {
 
         while (true){
             if (nextValue != null) return true;
-            else if (transitionStackStack.isEmpty()) return false;
+            else if (stateTree.isEmpty()) return false;
             else if (firstStateIsAccept) {
                 firstStateIsAccept = false;
                 nextValue = "";
                 return true;
             }
-            else if (transitionStackStack.peek().isEmpty()){
-                transitionStackStack.pop();
-                if (stringBuilder.length() != 0) {
-                    stringBuilder.deleteCharAt(stringBuilder.length()-1);
-                }
-            }
+
             else {
-                TransitionIterator topTransitionIterator = transitionStackStack.peek().peek();
-
-                if (topTransitionIterator.hasNext() && !topTransitionIterator.hasTransitions()) {
-                    StringBuilder stringBuilderCopy = new StringBuilder(stringBuilder);
-                    nextValue = stringBuilderCopy.append(topTransitionIterator.next()).toString();
-                    return true;
-                }
-                else if (topTransitionIterator.hasNext() && topTransitionIterator.hasTransitions()) {
-                    stringBuilder.append(topTransitionIterator.next());
-                    transitionStackStack.push(getTransitionsStack(topTransitionIterator.getState()));
-
-                    if (topTransitionIterator.isAccept()) {
-                        topTransitionIterator.markAccept();
-                        nextValue = stringBuilder.toString();
-                        return true;
+                Deque<TransitionIterator> stateNode = stateTree.peek();
+                if (stateNode.isEmpty()){
+                    stateTree.pop();
+                    if (stringBuilder.length() != 0) {
+                        stringBuilder.deleteCharAt(stringBuilder.length()-1);
                     }
                 }
-                else if (!topTransitionIterator.hasNext()) {
-                    transitionStackStack.peek().pop();
+                else {
+                    TransitionIterator topTransitionIterator = stateNode.peek();
+
+                    if (topTransitionIterator.hasNext() && !topTransitionIterator.hasTransitions()) {
+                        StringBuilder stringBuilderCopy = new StringBuilder(stringBuilder);
+                        nextValue = stringBuilderCopy.append(topTransitionIterator.next()).toString();
+                        return true;
+                    }
+                    else if (topTransitionIterator.hasNext() && topTransitionIterator.hasTransitions()) {
+                        stringBuilder.append(topTransitionIterator.next());
+                        stateTree.push(getTransitionsStack(topTransitionIterator.getState()));
+
+                        if (topTransitionIterator.isAccept()) {
+                            topTransitionIterator.markAccept();
+                            nextValue = stringBuilder.toString();
+                            return true;
+                        }
+                    }
+                    else if (!topTransitionIterator.hasNext()) {
+                        stateNode.pop();
+                    }
                 }
             }
         }
