@@ -29,7 +29,7 @@ public class TransitionIterator implements Iterator<Character> {
     private Character maxChar;
     private Boolean accept;
 
-    public TransitionIterator(Transition transition) {
+    TransitionIterator(Transition transition) {
         this.transition = transition;
         currentChar = transition.getMin();
         maxChar = transition.getMax();
@@ -47,11 +47,11 @@ public class TransitionIterator implements Iterator<Character> {
         return currentChar++;
     }
 
-    public boolean isAccept() {
+    boolean isAccept() {
         return accept;
     }
 
-    public void markAccept() {
+    void markAccept() {
         accept = false;
     }
 
@@ -59,7 +59,7 @@ public class TransitionIterator implements Iterator<Character> {
         accept = transition.getDest().isAccept();
     }
 
-    public boolean hasTransitions() {
+    boolean hasTransitions() {
         return !transition.getDest().getTransitions().isEmpty();
     }
 
