@@ -65,12 +65,11 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         monitor.generationStarting();
         DecisionTree decisionTree = decisionTreeGenerator.analyse(profile);
 
-        decisionTree = upfrontTreePruner.runUpfrontPrune(decisionTree, monitor);
-        if (decisionTree.getRootNode() == null) {
-            return Stream.empty();
-        }
-
         try {
+            decisionTree = upfrontTreePruner.runUpfrontPrune(decisionTree, monitor);
+            if (decisionTree.getRootNode() == null) {
+                return Stream.empty();
+            }
             Stream<Stream<DataBag>> partitionedDataBags = treePartitioner
                 .splitTreeIntoPartitions(decisionTree)
                 .map(treeOptimiser::optimiseTree)
