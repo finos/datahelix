@@ -26,7 +26,6 @@ import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.math.BigDecimal;
 import java.util.*;
