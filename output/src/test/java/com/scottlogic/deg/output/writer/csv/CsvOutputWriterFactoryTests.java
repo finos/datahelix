@@ -97,7 +97,7 @@ class CsvOutputWriterFactoryTests {
     private static ProfileFields fields(String ...names) {
         return new ProfileFields(
             Arrays.stream(names)
-                .map(Field::new)
+                .map(name -> new Field(name, false))
                 .collect(Collectors.toList()));
     }
 

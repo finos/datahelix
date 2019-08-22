@@ -25,8 +25,8 @@ import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class DecisionBasedSolverTests {
-    private Field fieldA = new Field("A");
-    private Field fieldB = new Field("B");
+    private Field fieldA = new Field("A", false);
+    private Field fieldB = new Field("B", false);
     private List<Field> fields = new ArrayList<>();
     private ProfileFields profileFields;
     private ConstraintReducer constraintReducer;

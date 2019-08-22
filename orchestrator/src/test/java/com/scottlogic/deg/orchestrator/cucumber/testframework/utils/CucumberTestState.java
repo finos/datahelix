@@ -126,7 +126,7 @@ public class CucumberTestState {
     }
 
     public void addField(String fieldName) {
-        this.profileFields.add(new Field(fieldName));
+        this.profileFields.add(new Field(fieldName, false));
     }
 
     public void addException(Exception e){

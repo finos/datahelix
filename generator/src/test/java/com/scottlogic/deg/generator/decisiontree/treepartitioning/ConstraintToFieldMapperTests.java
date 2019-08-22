@@ -44,7 +44,7 @@ class ConstraintToFieldMapperTests {
     void shouldFindConstraintMappings() {
         givenFields("A");
 
-        final AtomicConstraint constraint = new IsInSetConstraint(new Field("A"), whitelistOf("test-value"));
+        final AtomicConstraint constraint = new IsInSetConstraint(new Field("A", false), whitelistOf("test-value"));
         givenConstraints(constraint);
         givenFields("A");
 
@@ -55,7 +55,7 @@ class ConstraintToFieldMapperTests {
     void shouldFindRootDecisionNodeMapping() {
         givenFields("B");
 
-        final AtomicConstraint constraint = new IsInSetConstraint(new Field("B"), whitelistOf("test-value"));
+        final AtomicConstraint constraint = new IsInSetConstraint(new Field("B", false), whitelistOf("test-value"));
         final DecisionNode decision = new DecisionNode(
             new ConstraintNodeBuilder().addAtomicConstraints(constraint).build());
 
@@ -68,9 +68,9 @@ class ConstraintToFieldMapperTests {
     void shouldCreateCorrectNumberOfMappings() {
         givenFields("A", "B", "C");
 
-        final AtomicConstraint constraintA = new IsInSetConstraint(new Field("A"), whitelistOf("test-value"));
-        final AtomicConstraint constraintB = new IsInSetConstraint(new Field("B"), whitelistOf("test-value"));
-        final AtomicConstraint constraintC = new IsInSetConstraint(new Field("C"), whitelistOf("test-value"));
+        final AtomicConstraint constraintA = new IsInSetConstraint(new Field("A", false), whitelistOf("test-value"));
+        final AtomicConstraint constraintB = new IsInSetConstraint(new Field("B", false), whitelistOf("test-value"));
+        final AtomicConstraint constraintC = new IsInSetConstraint(new Field("C", false), whitelistOf("test-value"));
 
         givenConstraints(constraintA, constraintB, constraintC);
 
@@ -81,12 +81,12 @@ class ConstraintToFieldMapperTests {
     void shouldMapTopLevelConstraintsToNestedFields() {
         givenFields("A", "B", "C", "D", "E", "F");
 
-        final AtomicConstraint constraintA = new IsInSetConstraint(new Field("A"), whitelistOf("test-value"));
-        final AtomicConstraint constraintB = new IsInSetConstraint(new Field("B"), whitelistOf("test-value"));
-        final AtomicConstraint constraintC = new IsInSetConstraint(new Field("C"), whitelistOf("test-value"));
-        final AtomicConstraint constraintD = new IsInSetConstraint(new Field("D"), whitelistOf("test-value"));
-        final AtomicConstraint constraintE = new IsInSetConstraint(new Field("E"), whitelistOf("test-value"));
-        final AtomicConstraint constraintF = new IsInSetConstraint(new Field("F"), whitelistOf("test-value"));
+        final AtomicConstraint constraintA = new IsInSetConstraint(new Field("A", false), whitelistOf("test-value"));
+        final AtomicConstraint constraintB = new IsInSetConstraint(new Field("B", false), whitelistOf("test-value"));
+        final AtomicConstraint constraintC = new IsInSetConstraint(new Field("C", false), whitelistOf("test-value"));
+        final AtomicConstraint constraintD = new IsInSetConstraint(new Field("D", false), whitelistOf("test-value"));
+        final AtomicConstraint constraintE = new IsInSetConstraint(new Field("E", false), whitelistOf("test-value"));
+        final AtomicConstraint constraintF = new IsInSetConstraint(new Field("F", false), whitelistOf("test-value"));
 
         final DecisionNode decisionABC = new DecisionNode(
             new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptyList()).setDecisions(Arrays.asList(
@@ -135,7 +135,7 @@ class ConstraintToFieldMapperTests {
     private void givenFields(String... fieldNames) {
         fields = new ProfileFields(
             Arrays.stream(fieldNames)
-                .map(Field::new)
+                .map(name -> new Field(name, false))
                 .collect(Collectors.toList()));
     }
 
@@ -152,7 +152,7 @@ class ConstraintToFieldMapperTests {
             getMappings();
 
         final Field[] fields = Arrays.stream(fieldsAsString)
-            .map(Field::new)
+            .map(name -> new Field(name, false))
             .toArray(Field[]::new);
 
         Assert.assertThat(mappings.get(new RootLevelConstraint(constraint)), Matchers.hasItems(fields));
@@ -163,7 +163,7 @@ class ConstraintToFieldMapperTests {
             getMappings();
 
         final Field[] fields = Arrays.stream(fieldsAsString)
-            .map(Field::new)
+            .map(name -> new Field(name, false))
             .toArray(Field[]::new);
 
         Assert.assertThat(mappings.get(new RootLevelConstraint(decision)), Matchers.hasItems(fields));

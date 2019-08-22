@@ -34,13 +34,13 @@ class ReductiveCombinationStrategyTests {
         List<DataBag> firstFieldDataBags = new ArrayList<DataBag>() {{
             add(
                 new DataBagBuilder().set(
-                    new Field("First Field"),
+                    new Field("First Field", false),
                     new DataBagValue(10)
                 ).build()
             );
             add(
                 new DataBagBuilder().set(
-                    new Field("First Field"),
+                    new Field("First Field", false),
                     new DataBagValue(20)
                 ).build()
             );
@@ -48,13 +48,13 @@ class ReductiveCombinationStrategyTests {
         List<DataBag> secondFieldDataBags = new ArrayList<DataBag>() {{
             add(
                 new DataBagBuilder().set(
-                    new Field("Second Field"),
+                    new Field("Second Field", false),
                     new DataBagValue("A")
                 ).build()
             );
             add(
                 new DataBagBuilder().set(
-                    new Field("Second Field"),
+                    new Field("Second Field", false),
                     new DataBagValue("B")
                 ).build()
             );
@@ -71,37 +71,37 @@ class ReductiveCombinationStrategyTests {
         List<DataBag> expectedDataBags = new ArrayList<DataBag>() {{
             add(
                 new DataBagBuilder().set(
-                    new Field("First Field"),
+                    new Field("First Field", false),
                     new DataBagValue(10)
                 ).set(
-                    new Field("Second Field"),
+                    new Field("Second Field", false),
                     new DataBagValue("A")
                 ).build()
             );
             add(
                 new DataBagBuilder().set(
-                    new Field("First Field"),
+                    new Field("First Field", false),
                     new DataBagValue(10)
                 ).set(
-                    new Field("Second Field"),
+                    new Field("Second Field", false),
                     new DataBagValue("B")
                 ).build()
             );
             add(
                 new DataBagBuilder().set(
-                    new Field("First Field"),
+                    new Field("First Field", false),
                     new DataBagValue(20)
                 ).set(
-                    new Field("Second Field"),
+                    new Field("Second Field", false),
                     new DataBagValue("A")
                 ).build()
             );
             add(
                 new DataBagBuilder().set(
-                    new Field("First Field"),
+                    new Field("First Field", false),
                     new DataBagValue(20)
                 ).set(
-                    new Field("Second Field"),
+                    new Field("Second Field", false),
                     new DataBagValue("B")
                 ).build()
             );

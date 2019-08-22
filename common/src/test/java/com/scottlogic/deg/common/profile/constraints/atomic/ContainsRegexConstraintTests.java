@@ -17,21 +17,18 @@
 package com.scottlogic.deg.common.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.RuleInformation;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 public class ContainsRegexConstraintTests {
 
     @Test
     public void testConstraintIsEqual() {
-        Field field1 = new Field("TestField");
-        Field field2 = new Field("TestField");
+        Field field1 = new Field("TestField", false);
+        Field field2 = new Field("TestField", false);
         ContainsRegexConstraint constraint1 = new ContainsRegexConstraint(field1, Pattern.compile("[abc]"));
         ContainsRegexConstraint constraint2 = new ContainsRegexConstraint(field2, Pattern.compile("[abc]"));
         Assert.assertThat(constraint1, Matchers.equalTo(constraint2));
@@ -39,8 +36,8 @@ public class ContainsRegexConstraintTests {
 
     @Test
     public void testConstraintIsNotEqualDueToField() {
-        Field field1 = new Field("TestField");
-        Field field2 = new Field("TestField2");
+        Field field1 = new Field("TestField", false);
+        Field field2 = new Field("TestField2", false);
         ContainsRegexConstraint constraint1 = new ContainsRegexConstraint(field1, Pattern.compile("[abc]"));
         ContainsRegexConstraint constraint2 = new ContainsRegexConstraint(field2, Pattern.compile("[abc]"));
         Assert.assertNotEquals(constraint1, constraint2);
@@ -48,8 +45,8 @@ public class ContainsRegexConstraintTests {
 
     @Test
     public void testConstraintIsNotEqualDueToValue() {
-        Field field1 = new Field("TestField");
-        Field field2 = new Field("TestField");
+        Field field1 = new Field("TestField", false);
+        Field field2 = new Field("TestField", false);
         ContainsRegexConstraint constraint1 = new ContainsRegexConstraint(field1, Pattern.compile("[abc]"));
         ContainsRegexConstraint constraint2 = new ContainsRegexConstraint(field2, Pattern.compile("[abcd]"));
         Assert.assertNotEquals(constraint1, constraint2);

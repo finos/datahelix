@@ -19,6 +19,8 @@ package com.scottlogic.deg.profile.reader;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.scottlogic.deg.common.profile.*;
+import com.scottlogic.deg.profile.dto.ConstraintDTO;
+import com.scottlogic.deg.profile.dto.RuleDTO;
 import com.scottlogic.deg.profile.serialisation.ProfileDeserialiser;
 import com.scottlogic.deg.profile.dto.ProfileDTO;
 
@@ -26,9 +28,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * JsonProfileReader is responsible for reading and validating a profile from a path to a profile JSON file.
@@ -62,9 +64,11 @@ public class JsonProfileReader implements ProfileReader {
             throw new InvalidProfileException("Profile is invalid: 'rules' have not been defined.");
         }
 
+        Collection<String> uniqueList = getUniqueFields(profileDto);
+
         ProfileFields profileFields = new ProfileFields(
             profileDto.fields.stream()
-                .map(fDto -> new Field(fDto.name))
+                .map(fDto -> new Field(fDto.name, uniqueList.contains(fDto.name)))
                 .collect(Collectors.toList()));
 
         Collection<Rule> rules = mapDtos(
@@ -91,6 +95,17 @@ public class JsonProfileReader implements ProfileReader {
             });
 
         return new Profile(profileFields, rules, profileDto.description);
+    }
+
+    private Collection<String> getUniqueFields(ProfileDTO profileDto) {
+        Collection<String> uniqueList = new ArrayList<>();
+
+        profileDto.rules.stream().forEach(rule -> rule.constraints.stream()
+            .filter(constraintDTO -> constraintDTO.is != ConstraintDTO.undefined)
+            .filter(constraintDTO -> constraintDTO.is.equals("unique"))
+            .forEach(result ->  uniqueList.add(result.field)));
+
+        return uniqueList;
     }
 
     static <TInput, TOutput> Collection<TOutput> mapDtos(

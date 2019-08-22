@@ -269,7 +269,7 @@ class RelatedFieldTreePartitionerTests {
 
         if (constraint == null) {
             constraint = new IsInSetConstraint(
-                new Field(fieldName),
+                new Field(fieldName, false),
                 new FrequencyDistributedSet<>(
                     Collections.singleton(
                         new WeightedElement<>("sample-value", 1.0F))));
@@ -286,7 +286,7 @@ class RelatedFieldTreePartitionerTests {
     private ProfileFields fields(String... fieldNames) {
         return new ProfileFields(
             Stream.of(fieldNames)
-                .map(Field::new)
+                .map(name -> new Field(name, false))
                 .collect(Collectors.toList()));
     }
 

@@ -16,8 +16,8 @@ class RowSpecMergerTest {
 
     FieldSpec isNull = FieldSpec.NullOnly;
     FieldSpec notNull = FieldSpec.Empty.withNotNull().withTypeRestrictions(TypeRestrictions.ALL_TYPES_PERMITTED);
-    Field A = new Field("A");
-    Field B = new Field("B");
+    Field A = new Field("A", false);
+    Field B = new Field("B", false);
     ProfileFields fields = new ProfileFields(Arrays.asList(A, B));
 
     @Test

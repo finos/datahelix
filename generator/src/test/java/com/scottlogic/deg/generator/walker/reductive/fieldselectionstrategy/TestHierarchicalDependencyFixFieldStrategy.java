@@ -80,7 +80,7 @@ public class TestHierarchicalDependencyFixFieldStrategy {
             .build();
         List<Field> actual = getPriorities(fields, constraints);
 
-        List<Field> expected = Arrays.asList(new Field(controlling2), new Field(controlling1), new Field(dependent));
+        List<Field> expected = Arrays.asList(new Field(controlling2, false), new Field(controlling1, false), new Field(dependent, false));
 
         assertThat(actual, sameBeanAs(expected));
     }
@@ -141,7 +141,7 @@ public class TestHierarchicalDependencyFixFieldStrategy {
 
         List<Field> actual = getPriorities(fields, constraints);
 
-        List<Field> expected = Arrays.asList(new Field(controlling), new Field(dependent2), new Field(dependent1), new Field(independent));
+        List<Field> expected = Arrays.asList(new Field(controlling, false), new Field(dependent2, false), new Field(dependent1, false), new Field(independent, false));
 
         assertThat(actual, sameBeanAs(expected));
     }
@@ -187,7 +187,7 @@ public class TestHierarchicalDependencyFixFieldStrategy {
 
     private List<Field> getFields(String ...names) {
         return Arrays.stream(names)
-            .map(Field::new)
+            .map(name -> new Field(name, false))
             .collect(Collectors.toList());
     }
 

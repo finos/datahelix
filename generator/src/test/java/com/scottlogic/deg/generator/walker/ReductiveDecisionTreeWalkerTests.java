@@ -58,8 +58,8 @@ class ReductiveDecisionTreeWalkerTests {
     private FieldSpecValueGenerator fieldSpecValueGenerator;
     private ReductiveTreePruner treePruner;
     private ReductiveWalkerRetryChecker retryChecker = new ReductiveWalkerRetryChecker(100);
-    private Field field1 = new Field("field1");
-    private Field field2 = new Field("field2");
+    private Field field1 = new Field("field1", false);
+    private Field field2 = new Field("field2", false);
 
     @BeforeEach
     public void beforeEach(){

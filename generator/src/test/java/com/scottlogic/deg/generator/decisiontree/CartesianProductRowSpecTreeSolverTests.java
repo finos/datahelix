@@ -83,9 +83,9 @@ class CartesianProductRowSpecTreeSolverTests {
                 Stream.of(mock(DataBag.class)),
                 Stream.of(mock(DataBag.class))
             );
-        final Field country = new Field("country");
-        final Field currency = new Field("currency");
-        final Field city = new Field("city");
+        final Field country = new Field("country", false);
+        final Field currency = new Field("currency", false);
+        final Field city = new Field("city", false);
 
         ProfileFields fields = new ProfileFields(Arrays.asList(country, currency, city));
 

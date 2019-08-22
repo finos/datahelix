@@ -40,9 +40,9 @@ class RowSpecDataBagGeneratorTests {
     private FieldSpecValueGenerator mockGeneratorFactory = mock(FieldSpecValueGenerator.class);
     private CombinationStrategy mockCombinationStrategy = mock(CombinationStrategy.class);
 
-    private Field field = new Field("Field1");
-    Field field2 = new Field("field2");
-    Field field3 = new Field("field3");
+    private Field field = new Field("Field1", false);
+    Field field2 = new Field("field2", false);
+    Field field3 = new Field("field3", false);
     private ProfileFields fields = new ProfileFields(Collections.singletonList(field));
     private FieldSpec fieldSpec = mock(FieldSpec.class);
     private FieldSpec fieldSpec2 = mock(FieldSpec.class);

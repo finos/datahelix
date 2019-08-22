@@ -29,12 +29,12 @@ import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 class MostProlificConstraintOptimiserTest {
 
     MostProlificConstraintOptimiser optimiser = new MostProlificConstraintOptimiser();
-    Field A = new Field("A");
-    Field B = new Field("B");
-    Field C = new Field("C");
-    Field D = new Field("D");
-    Field E = new Field("E");
-    Field F = new Field("F");
+    Field A = new Field("A", false);
+    Field B = new Field("B", false);
+    Field C = new Field("C", false);
+    Field D = new Field("D", false);
+    Field E = new Field("E", false);
+    Field F = new Field("F", false);
 
     @Test
     public void optimise_circularDependency(){

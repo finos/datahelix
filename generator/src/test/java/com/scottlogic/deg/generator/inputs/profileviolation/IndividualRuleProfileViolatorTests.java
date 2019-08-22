@@ -146,8 +146,8 @@ public class IndividualRuleProfileViolatorTests {
     private void initRules() {
         //Rule 1 consists of 2 constraints, "foo is greater than 100" and "bar is greater than 50"
         RuleInformation ruleInformation1 = new RuleInformation("Rule 1 description");
-        fooField = new Field("foo");
-        barField = new Field("bar");
+        fooField = new Field("foo", false);
+        barField = new Field("bar", false);
         Constraint constraint1 = new IsGreaterThanConstantConstraint(
             fooField,
             100

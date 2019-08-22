@@ -18,23 +18,19 @@ package com.scottlogic.deg.common.profile.constraints.grammatical;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsNullConstraint;
-import com.scottlogic.deg.common.profile.RuleInformation;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-
-import java.util.Collections;
-import java.util.Set;
 
 public class AndConstraintTests {
 
     @Test
     public void testConstraintIsEqual() {
-        Field field1 = new Field("TestField");
-        Field field2 = new Field("TestField");
+        Field field1 = new Field("TestField", false);
+        Field field2 = new Field("TestField", false);
 
-        Field field3 = new Field("TestField");
-        Field field4 = new Field("TestField");
+        Field field3 = new Field("TestField", false);
+        Field field4 = new Field("TestField", false);
         AndConstraint constraint1 = new AndConstraint(new IsNullConstraint(field1), new IsNullConstraint(field2));
         AndConstraint constraint2 = new AndConstraint(new IsNullConstraint(field3), new IsNullConstraint(field4));
         Assert.assertThat(constraint1, Matchers.equalTo(constraint2));
@@ -42,11 +38,11 @@ public class AndConstraintTests {
 
     @Test
     public void testConstraintIsEqualRecursively() {
-        Field field1 = new Field("TestField");
-        Field field2 = new Field("TestField");
+        Field field1 = new Field("TestField", false);
+        Field field2 = new Field("TestField", false);
 
-        Field field3 = new Field("TestField");
-        Field field4 = new Field("TestField");
+        Field field3 = new Field("TestField", false);
+        Field field4 = new Field("TestField", false);
         AndConstraint constraint1 = new AndConstraint(new AndConstraint(new IsNullConstraint(field1), new IsNullConstraint(field2)));
         AndConstraint constraint2 = new AndConstraint(new AndConstraint(new IsNullConstraint(field3), new IsNullConstraint(field4)));
         Assert.assertThat(constraint1, Matchers.equalTo(constraint2));

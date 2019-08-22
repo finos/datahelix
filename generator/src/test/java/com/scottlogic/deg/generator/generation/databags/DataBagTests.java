@@ -28,7 +28,7 @@ class DataBagTests {
     @Test
     void getShouldReturnSettedValue() {
         // ARRANGE
-        Field idField = new Field("id");
+        Field idField = new Field("id", false);
 
         // ACT
         DataBag objectUnderTest = new DataBagBuilder().set(idField, 3).build();
@@ -42,7 +42,7 @@ class DataBagTests {
     @Test
     void setShouldThrowExceptionIfAlreadyHasValueForField() {
         // ARRANGE
-        Field idField = new Field("id");
+        Field idField = new Field("id", false);
 
         // ACT / ASSERT
         Assertions.assertThrows(
@@ -56,7 +56,7 @@ class DataBagTests {
     @Test
     void getShouldThrowIfFieldNotSpecified() {
         // ARRANGE
-        Field idField = new Field("id");
+        Field idField = new Field("id", false);
 
         DataBag objectUnderTest = DataBag.empty;
 
@@ -69,8 +69,8 @@ class DataBagTests {
     @Test
     void mergedDataBagsShouldContainTheSameValuesAsInputs() {
         // ARRANGE
-        Field idField = new Field("id");
-        Field priceField = new Field("price");
+        Field idField = new Field("id", false);
+        Field priceField = new Field("price", false);
 
         DataBag dataBag1 = new DataBagBuilder().set(idField, new DataBagValue(3)).build();
         DataBag dataBag2 = new DataBagBuilder().set(priceField, new DataBagValue(4)).build();
@@ -91,8 +91,8 @@ class DataBagTests {
     @Test
     void mergeShouldThrowIfDataBagsOverlap() {
         // ARRANGE
-        Field idField = new Field("id");
-        Field priceField = new Field("price");
+        Field idField = new Field("id", false);
+        Field priceField = new Field("price", false);
 
         DataBag dataBag1 = new DataBagBuilder()
             .set(idField, "foo")
