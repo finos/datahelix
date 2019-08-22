@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.generation.string;
 
-import com.scottlogic.deg.generator.generation.string.factorys.FiniteStringAutomatonIterator;
+import com.scottlogic.deg.generator.generation.string.iterators.FiniteStringAutomatonIterator;
 import com.scottlogic.deg.generator.generation.string.factorys.InterestingStringFactory;
 import com.scottlogic.deg.generator.generation.string.factorys.RandomStringFactory;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;

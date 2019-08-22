@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.generation.string.factorys;
+package com.scottlogic.deg.generator.generation.string.iterators;
 
 import dk.brics.automaton.Automaton;
 import dk.brics.automaton.State;
