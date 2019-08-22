@@ -20,6 +20,7 @@
         2. [inSet](#predicate-inset)
         3. [null](#predicate-null)
         4. [ofType](#predicate-oftype)
+        5. [unique](#predicate-unique)
     3. [Textual constraints](#Textual-constraints)
         1. [matchingRegex](#predicate-matchingregex)
         2. [containingRegex](#predicate-containingregex)
@@ -262,6 +263,16 @@ Is satisfied if `field` is null or absent.
 ```
 
 Is satisfied if `field` is of type represented by `value` (valid options: `decimal`, `integer`, `string`, `datetime`, `ISIN`, `SEDOL`, `CUSIP`, `RIC`, `firstname`, `lastname` or `fullname`)
+
+<div id="predicate-unique"></div>
+
+### `unique` _(field)_
+
+```javascript
+{ "field": "price", "is": "unique" }
+```
+
+Is satisfied if `field`'s values are unique.
 
 ## Textual constraints
 
