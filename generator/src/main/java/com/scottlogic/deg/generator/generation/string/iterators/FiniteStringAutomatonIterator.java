@@ -25,11 +25,11 @@ public class FiniteStringAutomatonIterator implements Iterator<String> {
     private StringBuilder stringBuilder;
     private String nextValue;
     private Deque<Deque<TransitionIterator>> stateTree;
-    private boolean firstStateIsAccept;
+    private boolean atAcceptedRootState;
 
     public FiniteStringAutomatonIterator(Automaton automaton) {
         stateTree = new ArrayDeque<>();
-        firstStateIsAccept = automaton.getInitialState().isAccept();
+        atAcceptedRootState = automaton.getInitialState().isAccept();
         stateTree.push(getTransitionsStack(automaton.getInitialState()));
         stringBuilder = new StringBuilder();
         nextValue = null;
@@ -47,42 +47,38 @@ public class FiniteStringAutomatonIterator implements Iterator<String> {
     @Override
     public boolean hasNext() {
 
-        while (true){
-            if (nextValue != null) return true;
-            else if (stateTree.isEmpty()) return false;
-            else if (firstStateIsAccept) {
-                firstStateIsAccept = false;
-                nextValue = "";
-                return true;
-            }
+        if (atAcceptedRootState) {
+            atAcceptedRootState = false;
+            nextValue = "";
+        }
 
-            else {
+        while (true) {
+            if (nextValue != null) {
+                return true;
+            } if (stateTree.isEmpty()) {
+                return false;
+            } else {
                 Deque<TransitionIterator> stateNode = stateTree.peek();
-                if (stateNode.isEmpty()){
+                if (stateNode.isEmpty()) {
                     stateTree.pop();
                     if (stringBuilder.length() != 0) {
-                        stringBuilder.deleteCharAt(stringBuilder.length()-1);
+                        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
                     }
-                }
-                else {
+                } else {
                     TransitionIterator topTransitionIterator = stateNode.peek();
 
                     if (topTransitionIterator.hasNext() && !topTransitionIterator.hasTransitions()) {
                         StringBuilder stringBuilderCopy = new StringBuilder(stringBuilder);
                         nextValue = stringBuilderCopy.append(topTransitionIterator.next()).toString();
-                        return true;
-                    }
-                    else if (topTransitionIterator.hasNext() && topTransitionIterator.hasTransitions()) {
+                    } else if (topTransitionIterator.hasNext() && topTransitionIterator.hasTransitions()) {
                         stringBuilder.append(topTransitionIterator.next());
                         stateTree.push(getTransitionsStack(topTransitionIterator.getState()));
 
                         if (topTransitionIterator.isAccept()) {
                             topTransitionIterator.markAccept();
                             nextValue = stringBuilder.toString();
-                            return true;
                         }
-                    }
-                    else if (!topTransitionIterator.hasNext()) {
+                    } else if (!topTransitionIterator.hasNext()) {
                         stateNode.pop();
                     }
                 }
