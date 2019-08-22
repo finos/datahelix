@@ -21,6 +21,7 @@ import com.scottlogic.deg.generator.generation.databags.DataBag;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -29,9 +30,9 @@ import java.util.stream.StreamSupport;
 public class PinningCombinationStrategy implements CombinationStrategy {
 
     @Override
-    public Stream<DataBag> permute(Stream<Stream<DataBag>> dataBagSequences) {
+    public Stream<DataBag> permute(Supplier<Stream<Stream<DataBag>>> dataBagSequences) {
         Iterable<DataBag> iterable = new PinningCombinationStrategy
-                .InternalIterable(dataBagSequences);
+                .InternalIterable(dataBagSequences.get());
 
         return StreamSupport.stream(iterable.spliterator(), false);
     }

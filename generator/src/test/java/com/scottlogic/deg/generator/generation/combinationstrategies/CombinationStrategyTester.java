@@ -38,14 +38,14 @@ class CombinationStrategyTester {
     }
 
     void expect(Stream<DataBag> bagSequence) {
-        DataBag[] results = strategy.permute(dataBags).toArray(DataBag[]::new);
+        DataBag[] results = strategy.permute(() -> dataBags).toArray(DataBag[]::new);
         DataBag[] bagArray = bagSequence.toArray(DataBag[]::new);
 
         Assert.assertThat(results, IsArrayContainingInAnyOrder.arrayContainingInAnyOrder(bagArray));
     }
 
     void expectEmpty() {
-        Stream<DataBag> results = strategy.permute(dataBags);
+        Stream<DataBag> results = strategy.permute(() ->dataBags);
 
         Assert.assertFalse(results.iterator().hasNext());
     }

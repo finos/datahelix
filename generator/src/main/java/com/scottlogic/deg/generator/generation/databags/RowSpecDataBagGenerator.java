@@ -24,6 +24,7 @@ import com.scottlogic.deg.generator.generation.combinationstrategies.Combination
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class RowSpecDataBagGenerator {
@@ -40,7 +41,7 @@ public class RowSpecDataBagGenerator {
     }
 
     public Stream<DataBag> createDataBags(RowSpec rowSpec) {
-        Stream<Stream<DataBag>> dataBagsForFields =
+        Supplier<Stream<Stream<DataBag>>> dataBagsForFields = () ->
             rowSpec.getFields().stream()
                 .map(field -> generateDataForField(rowSpec, field));
 
