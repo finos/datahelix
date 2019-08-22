@@ -47,7 +47,13 @@ public class FieldAppearanceFixingStrategy implements FixFieldStrategy {
     }
 
     private Comparator<Map.Entry<Field, Integer>> highestToLowest() {
-        return Collections.reverseOrder(Map.Entry.comparingByValue());
+        return Collections.reverseOrder(this::compare);
     }
 
+    private int compare(Map.Entry<Field, Integer> a, Map.Entry<Field, Integer> b) {
+        if (a.getValue() != b.getValue()) {
+            return a.getValue() - b.getValue();
+        }
+        return b.getKey().name.compareTo(a.getKey().name);
+    }
 }

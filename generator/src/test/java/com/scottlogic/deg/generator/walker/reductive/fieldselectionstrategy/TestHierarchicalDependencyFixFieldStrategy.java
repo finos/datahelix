@@ -141,7 +141,7 @@ public class TestHierarchicalDependencyFixFieldStrategy {
 
         List<Field> actual = getPriorities(fields, constraints);
 
-        List<Field> expected = Arrays.asList(new Field(controlling, false), new Field(dependent2, false), new Field(dependent1, false), new Field(independent, false));
+        List<Field> expected = Arrays.asList(new Field(controlling, false), new Field(dependent1, false), new Field(dependent2, false), new Field(independent, false));
 
         assertThat(actual, sameBeanAs(expected));
     }
