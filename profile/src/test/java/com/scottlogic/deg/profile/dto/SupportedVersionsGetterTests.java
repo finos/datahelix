@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.v0_1;
+package com.scottlogic.deg.profile.dto;
 
-public class FieldDTO {
-    public String name;
+import org.junit.jupiter.api.Test;
 
-    public FieldDTO() {}
+import static org.junit.jupiter.api.Assertions.*;
 
-    public FieldDTO(String name){
-        this.name = name;
+class SupportedVersionsGetterTests {
+    @Test
+    void getSupportedSchemaVersions_returnsAtLeastOneSchemaVersion() {
+        SupportedVersionsGetter supportedVersionsGetter = new SupportedVersionsGetter();
+
+        assertFalse(
+            supportedVersionsGetter.getSupportedSchemaVersions().isEmpty(),
+            "Expected there to be at least one valid version");
     }
 }

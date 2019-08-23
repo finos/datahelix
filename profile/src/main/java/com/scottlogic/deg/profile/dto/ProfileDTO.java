@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
+package com.scottlogic.deg.profile.dto;
 
-import com.google.inject.Inject;
-import com.scottlogic.deg.generator.decisiontree.MaxStringLengthInjectingDecisionTreeFactory;
-import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
+import java.util.Collection;
 
-public class CucumberDecisionTreeFactory extends MaxStringLengthInjectingDecisionTreeFactory {
-    @Inject
-    public CucumberDecisionTreeFactory(ProfileDecisionTreeFactory underlyingFactory, CucumberTestState state) {
-        super(underlyingFactory, state.getMaxStringLength());
-    }
+public class ProfileDTO {
+    public String schemaVersion;
+    public Collection<FieldDTO> fields;
+    public Collection<RuleDTO> rules;
+    public String description;
 }

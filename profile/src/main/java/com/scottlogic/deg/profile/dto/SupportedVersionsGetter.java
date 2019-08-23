@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.scottlogic.deg.profile.v0_1;
+package com.scottlogic.deg.profile.dto;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,7 +40,7 @@ public class SupportedVersionsGetter {
      *
      * @return all valid schema versions
      **/
-    List<String> getSupportedSchemaVersions() {
+    public List<String> getSupportedSchemaVersions() {
         // Taken from https://stackoverflow.com/a/20073154/
         List<String> supportedSchemaVersions = new ArrayList<>();
         File jarFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());

@@ -26,7 +26,7 @@ import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.profile.reader.ConstraintReader;
 import com.scottlogic.deg.profile.reader.file.CsvInputStreamReader;
-import com.scottlogic.deg.profile.v0_1.ConstraintDTO;
+import com.scottlogic.deg.profile.dto.ConstraintDTO;
 
 import java.io.*;
 import java.util.stream.Collectors;

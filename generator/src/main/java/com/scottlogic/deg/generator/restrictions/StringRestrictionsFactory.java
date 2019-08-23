@@ -19,11 +19,13 @@ package com.scottlogic.deg.generator.restrictions;
 import java.util.Collections;
 import java.util.regex.Pattern;
 
+import static com.scottlogic.deg.common.util.Defaults.MAX_STRING_LENGTH;
+
 public class StringRestrictionsFactory {
     public StringRestrictions forStringMatching(Pattern pattern, boolean negate) {
         return new TextualRestrictions(
-            null,
-            null,
+            0,
+            MAX_STRING_LENGTH,
             negate
                 ? Collections.emptySet()
                 : Collections.singleton(pattern),
@@ -38,8 +40,8 @@ public class StringRestrictionsFactory {
 
     public StringRestrictions forStringContaining(Pattern pattern, boolean negate) {
         return new TextualRestrictions(
-            null,
-            null,
+            0,
+            MAX_STRING_LENGTH,
             Collections.emptySet(),
             negate
                 ? Collections.emptySet()
@@ -54,8 +56,8 @@ public class StringRestrictionsFactory {
 
     public StringRestrictions forLength(int length, boolean negate) {
         return new TextualRestrictions(
-            negate ? null : length,
-            negate ? null : length,
+            negate ? 0 : length,
+            negate ? MAX_STRING_LENGTH : length,
             Collections.emptySet(),
             Collections.emptySet(),
             negate
@@ -69,7 +71,7 @@ public class StringRestrictionsFactory {
     public StringRestrictions forMinLength(int length){
         return new TextualRestrictions(
             length,
-            null,
+            MAX_STRING_LENGTH,
             Collections.emptySet(),
             Collections.emptySet(),
             Collections.emptySet(),
@@ -80,7 +82,7 @@ public class StringRestrictionsFactory {
 
     public StringRestrictions forMaxLength(int length){
         return new TextualRestrictions(
-            null,
+            0,
             length,
             Collections.emptySet(),
             Collections.emptySet(),

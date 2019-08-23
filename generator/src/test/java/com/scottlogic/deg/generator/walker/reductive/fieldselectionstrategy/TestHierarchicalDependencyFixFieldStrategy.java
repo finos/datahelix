@@ -22,7 +22,7 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
-import com.scottlogic.deg.generator.decisiontree.ProfileDecisionTreeFactory;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.common.profile.RuleInformation;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -195,7 +195,7 @@ public class TestHierarchicalDependencyFixFieldStrategy {
         List<Rule> rules = Collections.singletonList(new Rule(new RuleInformation(), constraints));
         Profile profile = new Profile(fields, rules);
 
-        DecisionTree tree = new ProfileDecisionTreeFactory().analyse(profile);
+        DecisionTree tree = new DecisionTreeFactory().analyse(profile);
 
         FieldAppearanceFixingStrategy strategy =
             new FieldAppearanceFixingStrategy(tree.getRootNode());
