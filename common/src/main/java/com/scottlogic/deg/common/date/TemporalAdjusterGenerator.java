@@ -49,7 +49,7 @@ public class TemporalAdjusterGenerator {
     }
 
     private TemporalAdjuster getWorkingDayAdjusterFunction(int value) {
-        TemporalAdjuster adjuster = value >= 0 ? Temporals.previousWorkingDay() : Temporals.nextWorkingDay();
+        TemporalAdjuster adjuster = value >= 0 ? Temporals.nextWorkingDay() : Temporals.previousWorkingDay();
         return new RepeatedTemporalAdjuster(adjuster, Math.abs(value));
     }
 

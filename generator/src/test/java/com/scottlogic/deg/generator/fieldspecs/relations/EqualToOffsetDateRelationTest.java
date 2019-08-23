@@ -36,7 +36,7 @@ class EqualToOffsetDateRelationTest {
 
         FieldSpec initialSpec = specEqualToTime(exactTime);
 
-        FieldSpec expectedSpec = specEqualToTime(exactTime.plusDays(days));
+        FieldSpec expectedSpec = specEqualToTime(exactTime.minusDays(days));
 
         FieldSpec newSpec = relation.reduceToRelatedFieldSpec(initialSpec);
 
@@ -68,7 +68,7 @@ class EqualToOffsetDateRelationTest {
 
         FieldSpec initialSpec = specEqualToTime(exactTime);
 
-        FieldSpec expectedSpec = specEqualToTime(exactTime.minusDays(Math.abs(days)));
+        FieldSpec expectedSpec = specEqualToTime(exactTime.plusDays(Math.abs(days)));
 
         FieldSpec newSpec = relation.reduceToRelatedFieldSpec(initialSpec);
 

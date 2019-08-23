@@ -61,7 +61,7 @@ Feature: User can specify that one date should be equal to another date
       """
     Then the following data should be generated:
       | foo                      | bar                      |
-      | 2018-01-01T00:00:00.001Z | 2018-01-04T00:00:00.001Z |
+      | 2018-01-07T00:00:00.001Z | 2018-01-04T00:00:00.001Z |
 
     # Results accomodate for the fact that the 5 working days include non-working days
   Scenario: Running an "equalToField" constraint allows one date to be always equal to another plus a value in working days
