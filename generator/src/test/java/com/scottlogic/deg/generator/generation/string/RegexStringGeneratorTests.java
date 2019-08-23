@@ -286,6 +286,23 @@ class RegexStringGeneratorTests {
         assertGeneratorCanGenerateAtLeastOneStringWithinLengthBounds(generator, 12, 12);
     }
 
+    @Test
+    void generateAllShouldGenerateStringsWithLongNonContiguousRegex(){
+        RegexStringGenerator generator = new RegexStringGenerator("[ace]{50}", true);
+        generator.generateAllValues();
+
+        assertGeneratorCanGenerateAtLeastOneStringWithinLengthBounds(generator, 50, 50);
+    }
+
+    @Test
+    void generateAllShouldGenerateStringsWithNonContiguousRegex(){
+        RegexStringGenerator generator = new RegexStringGenerator("[abcefg]{1,5}", true);
+        generator.generateAllValues();
+
+        assertGeneratorCanGenerateAtLeastOneStringWithinLengthBounds(generator, 1, 5);
+    }
+
+
     private boolean doesStringContainSurrogates(String testString) {
         for (char c : testString.toCharArray()) {
             if (Character.isSurrogate(c)) {
