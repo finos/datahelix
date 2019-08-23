@@ -31,13 +31,21 @@ public class TemporalAdjusterGenerator {
 
     private final boolean workingDay;
 
-    public TemporalAdjusterGenerator(ChronoUnit chronoUnit, boolean workingDay) {
+    private final boolean negated;
+
+    private TemporalAdjusterGenerator(ChronoUnit chronoUnit, boolean workingDay, boolean negated) {
         this.chronoUnit = chronoUnit;
         this.workingDay = workingDay;
+        this.negated = negated;
+    }
+
+    public TemporalAdjusterGenerator(ChronoUnit chronoUnit, boolean workingDay) {
+        this(chronoUnit, workingDay, false);
     }
 
     public TemporalAdjuster adjuster(int value) {
-        return workingDay ? getWorkingDayAdjusterFunction(value) : getAdjusterFunction(chronoUnit, value);
+        int adjustedValue = negated ? value : -value;
+        return workingDay ? getWorkingDayAdjusterFunction(adjustedValue) : getAdjusterFunction(chronoUnit, adjustedValue);
     }
 
     private TemporalAdjuster getWorkingDayAdjusterFunction(int value) {
@@ -62,5 +70,9 @@ public class TemporalAdjusterGenerator {
             case YEARS: return Period::ofYears;
             default: throw new IllegalArgumentException("Couldn't construct offset of unit " + unit);
         }
+    }
+
+    public TemporalAdjusterGenerator negate() {
+        return new TemporalAdjusterGenerator(chronoUnit, workingDay, !negated);
     }
 }

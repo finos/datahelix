@@ -25,10 +25,10 @@ import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions.DateTimeLi
 import java.time.OffsetDateTime;
 
 public class EqualToOffsetDateRelation implements FieldSpecRelations {
-    private Field main;
-    private Field other;
-    private TemporalAdjusterGenerator adjuster;
-    private int offset;
+    private final Field main;
+    private final Field other;
+    private final TemporalAdjusterGenerator adjuster;
+    private final int offset;
 
     public EqualToOffsetDateRelation(Field main,
                                      Field other,
@@ -58,7 +58,7 @@ public class EqualToOffsetDateRelation implements FieldSpecRelations {
 
     @Override
     public FieldSpecRelations inverse() {
-        return new EqualToOffsetDateRelation(other, main, adjuster, offset);
+        return new EqualToOffsetDateRelation(other, main, adjuster.negate(), offset);
     }
 
     @Override

@@ -42,7 +42,7 @@ public class IsEqualToDynamicDateConstraint implements DelayedAtomicConstraint {
     }
 
     public IsEqualToDynamicDateConstraint(AtomicConstraint underlyingConstraint, Field field) {
-        this(underlyingConstraint, field, null, 0);
+        this(underlyingConstraint, field, null,  0);
     }
 
     @Override
