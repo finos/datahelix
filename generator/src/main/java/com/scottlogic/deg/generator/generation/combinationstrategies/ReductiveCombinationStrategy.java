@@ -23,14 +23,16 @@ import com.scottlogic.deg.generator.utils.RestartableIterator;
 import java.util.List;
 import java.util.Spliterator;
 import java.util.Spliterators;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class ReductiveCombinationStrategy implements CombinationStrategy {
     @Override
-    public Stream<DataBag> permute(Stream<Stream<DataBag>> dataBagSequences) {
+    public Stream<DataBag> permute(Stream<Supplier<Stream<DataBag>>> dataBagSequences) {
         List<RestartableIterator<DataBag>> bagsAsLists = dataBagSequences
+            .map(Supplier::get)
             .map(dbs -> new RestartableIterator<>(dbs.iterator()))
             .collect(Collectors.toList());
 

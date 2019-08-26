@@ -20,19 +20,17 @@ import com.scottlogic.deg.common.util.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 public class ExhaustiveCombinationStrategy implements CombinationStrategy {
 
     @Override
-    public Stream<DataBag> permute(Stream<Stream<DataBag>> dataBagSequences) {
+    public Stream<DataBag> permute(Stream<Supplier<Stream<DataBag>>> dataBagSequences) {
 
         List<List<DataBag>> bagsAsLists = dataBagSequences
-            .map(sequence ->
-                StreamSupport.stream(sequence.spliterator(), false)
-                    .collect(Collectors.toList()))
+            .map(sequence -> sequence.get().collect(Collectors.toList()))
             .collect(Collectors.toList());
 
         return next(DataBag.empty, bagsAsLists, 0);
