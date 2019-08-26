@@ -28,9 +28,6 @@ import com.scottlogic.deg.generator.generation.databags.*;
 import com.scottlogic.deg.common.output.GeneratedObject;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 
-import java.util.Set;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class DecisionTreeDataGenerator implements DataGenerator {
@@ -66,19 +63,17 @@ public class DecisionTreeDataGenerator implements DataGenerator {
     @Override
     public Stream<GeneratedObject> generateData(Profile profile) {
         monitor.generationStarting();
-        final DecisionTree decisionTree = decisionTreeGenerator.analyse(profile);
+        DecisionTree decisionTree = decisionTreeGenerator.analyse(profile);
 
-        final DecisionTree prunedTree = upfrontTreePruner.runUpfrontPrune(decisionTree, monitor);
-        if (prunedTree.getRootNode() == null) {
+        decisionTree = upfrontTreePruner.runUpfrontPrune(decisionTree, monitor);
+        if (decisionTree.getRootNode() == null) {
             return Stream.empty();
         }
 
-        Set<DecisionTree> optimisedTrees = treePartitioner
-            .splitTreeIntoPartitions(prunedTree)
+        Stream<Stream<DataBag>> partitionedDataBags = treePartitioner
+            .splitTreeIntoPartitions(decisionTree)
             .map(treeOptimiser::optimiseTree)
-            .collect(Collectors.toSet());
-
-        Supplier<Stream<Stream<DataBag>>> partitionedDataBags = () -> optimisedTrees.stream().map(treeWalker::walk);
+            .map(treeWalker::walk);
 
         return partitionCombiner.permute(partitionedDataBags)
             .map(d->(GeneratedObject)d)
