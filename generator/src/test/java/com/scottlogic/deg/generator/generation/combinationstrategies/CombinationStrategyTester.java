@@ -37,6 +37,10 @@ class CombinationStrategyTester {
     final void given(Stream<DataBag>... bagSequences) {
         dataBags = Stream.of(bagSequences).map(x->()->x);
     }
+    @SafeVarargs
+    final void given(Supplier<Stream<DataBag>>... bagSequences) {
+        dataBags = Stream.of(bagSequences);
+    }
 
     void expect(Stream<DataBag> bagSequence) {
         DataBag[] results = strategy.permute(dataBags).toArray(DataBag[]::new);
