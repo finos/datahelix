@@ -32,6 +32,7 @@ Examples:
 
 Notes:
 - For more information about the behaviour of this example, see the [behaviour in detail.](../../developer/behaviour/BehaviourInDetail.md)
+- There are a few [combination strategies](../CombinationStrategies.md) for full sequential with [minimal](../CombinationStrategies.md#Minimal) being the default.
 
 ## Interesting
 _This is an alpha feature. Please do not rely on it. If you find issues with it, please [report them](https://github.com/finos/datahelix/issues)._
