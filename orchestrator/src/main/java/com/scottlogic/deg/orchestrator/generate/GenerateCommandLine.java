@@ -105,9 +105,7 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     private DataGenerationType generationType = RANDOM;
 
     @CommandLine.Option(names = {"-c", "--combination-strategy"},
-        description = "Determines the type of combination strategy used (${COMPLETION-CANDIDATES})",
-        hidden = true)
-    @SuppressWarnings("unused")
+        description = "Determines the type of combination strategy used (${COMPLETION-CANDIDATES})")
     private CombinationStrategyType combinationType = MINIMAL;
 
     @CommandLine.Option(
