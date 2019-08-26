@@ -50,7 +50,7 @@ public class JsonProfileReaderTests {
     public void Setup() {
         this.json = null;
         this.profile = null;
-        mainConstraintReader = new MainConstraintReader(new AtomicConstraintTypeReaderMap(null));
+        mainConstraintReader = new MainConstraintReader(new AtomicConstraintTypeReaderMap(null, true));
     }
 
     private void givenJson(String json) {

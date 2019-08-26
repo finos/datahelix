@@ -213,6 +213,11 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     }
 
     @Override
+    public boolean isDelayedConstraintsEnabled() {
+        return walkerType == DECISION_BASED;
+    }
+
+    @Override
     public MonitorType getMonitorType() {
         if (this.verbose) {
             return MonitorType.VERBOSE;

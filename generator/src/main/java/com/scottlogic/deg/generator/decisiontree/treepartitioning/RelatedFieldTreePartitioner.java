@@ -17,6 +17,7 @@
 package com.scottlogic.deg.generator.decisiontree.treepartitioning;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.constraints.delayed.DelayedAtomicConstraint;
 import com.scottlogic.deg.common.util.FlatMappingSpliterator;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
@@ -82,7 +83,11 @@ public class RelatedFieldTreePartitioner implements TreePartitioner {
                 .stream()
                 .sorted(Comparator.comparingInt(p -> p.id))
                 .map(partition -> new DecisionTree(
-                    new ConstraintNodeBuilder().addAtomicConstraints(partition.getAtomicConstraints()).setDecisions(partition.getDecisionNodes()).build(),
+                    new ConstraintNodeBuilder()
+                        .addAtomicConstraints(partition.getAtomicConstraints())
+                        .addDelayedAtomicConstraints(partition.getDelayedAtomicConstraints())
+                        .setDecisions(partition.getDecisionNodes())
+                        .build(),
                     new ProfileFields(new ArrayList<>(partition.fields))
                 )),
             unpartitionedFields
@@ -116,6 +121,14 @@ public class RelatedFieldTreePartitioner implements TreePartitioner {
             return constraints
                 .stream()
                 .map(RootLevelConstraint::getDecisionNode)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+        }
+
+        Set<DelayedAtomicConstraint> getDelayedAtomicConstraints() {
+            return constraints
+                .stream()
+                .map(RootLevelConstraint::getDelayedAtomicConstraint)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
         }

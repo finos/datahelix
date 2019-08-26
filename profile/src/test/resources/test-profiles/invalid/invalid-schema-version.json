@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "0.100",
+  "rules": [
+    {
+      "constraints": [
+        {
+          "field": "field1",
+          "is": "equalTo",
+          "value": "hello"
+        }
+      ]
+    }
+  ],
+  "fields": [
+    {
+      "name": "field1"
+    },
+    {
+      "name": "field2"
+    }
+  ]
+}

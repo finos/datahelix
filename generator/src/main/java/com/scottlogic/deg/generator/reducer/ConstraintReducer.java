@@ -20,13 +20,15 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
-import com.scottlogic.deg.generator.fieldspecs.RowSpec;
+import com.scottlogic.deg.common.profile.constraints.delayed.DelayedAtomicConstraint;
+import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
+import com.scottlogic.deg.generator.fieldspecs.*;
+import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
 
 import java.util.*;
+import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -34,19 +36,23 @@ import java.util.stream.StreamSupport;
 public class ConstraintReducer {
     private final FieldSpecFactory fieldSpecFactory;
     private final FieldSpecMerger fieldSpecMerger;
+    private final FieldRelationsFactory fieldRelationsFactory;
 
     @Inject
     public ConstraintReducer(
-            FieldSpecFactory fieldSpecFactory,
-            FieldSpecMerger fieldSpecMerger
+        FieldSpecFactory fieldSpecFactory,
+        FieldSpecMerger fieldSpecMerger
     ) {
         this.fieldSpecFactory = fieldSpecFactory;
         this.fieldSpecMerger = fieldSpecMerger;
+        fieldRelationsFactory = new FieldRelationsFactory();
     }
 
-    public Optional<RowSpec> reduceConstraintsToRowSpec(ProfileFields fields, Iterable<AtomicConstraint> constraints) {
-        final Map<Field, List<AtomicConstraint>> fieldToConstraints = StreamSupport
-            .stream(constraints.spliterator(), false)
+    public Optional<RowSpec> reduceConstraintsToRowSpec(ProfileFields fields, ConstraintNode node) {
+        Collection<AtomicConstraint> constraints = node.getAtomicConstraints();
+        Collection<DelayedAtomicConstraint> delayedConstraints = node.getDelayedAtomicConstraints();
+
+        final Map<Field, List<AtomicConstraint>> fieldToConstraints = constraints.stream()
             .collect(
                 Collectors.groupingBy(
                     AtomicConstraint::getField,
@@ -57,7 +63,7 @@ public class ConstraintReducer {
             .collect(
                 Collectors.toMap(
                     Function.identity(),
-                    field ->  reduceConstraintsToFieldSpec(fieldToConstraints.get(field))));
+                    field -> reduceConstraintsToFieldSpec(fieldToConstraints.get(field))));
 
         final Optional<Map<Field, FieldSpec>> optionalMap = Optional.of(fieldToFieldSpec)
             .filter(map -> map.values().stream().allMatch(Optional::isPresent))
@@ -69,26 +75,31 @@ public class ConstraintReducer {
                         Map.Entry::getKey,
                         entry -> entry.getValue().get())));
 
+        final List<FieldSpecRelations> relations = delayedConstraints.stream()
+            .map(fieldRelationsFactory::construct)
+            .collect(Collectors.toList());
+
         return optionalMap.map(
             map -> new RowSpec(
                 fields,
-                map));
+                map,
+                relations));
     }
 
     public Optional<FieldSpec> reduceConstraintsToFieldSpec(Iterable<AtomicConstraint> constraints) {
         return constraints == null
-                ? Optional.of(FieldSpec.Empty)
-                : getRootFieldSpec(constraints);
+            ? Optional.of(FieldSpec.Empty)
+            : getRootFieldSpec(constraints);
     }
 
     private Optional<FieldSpec> getRootFieldSpec(Iterable<AtomicConstraint> rootConstraints) {
-        final Stream<Optional<FieldSpec>> rootConstraintsStream =
+        final Stream<FieldSpec> rootConstraintsStream =
             StreamSupport
                 .stream(rootConstraints.spliterator(), false)
-                .map(fieldSpecFactory::construct)
-                .map(Optional::of);
+                .map(fieldSpecFactory::construct);
 
         return rootConstraintsStream
+            .map(Optional::of)
             .reduce(
                 Optional.of(FieldSpec.Empty),
                 (optSpec1, optSpec2) -> optSpec1.flatMap(
