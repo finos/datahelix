@@ -32,16 +32,16 @@ public class ExhaustiveCombinationStrategy implements CombinationStrategy {
     }
 
     public Supplier<Stream<DataBag>> flatten(Iterator<Supplier<Stream<DataBag>>> remainingBags) {
-        Supplier<Stream<DataBag>> next = remainingBags.next();
+        Supplier<Stream<DataBag>> firstDataBagStream = remainingBags.next();
 
         if (!remainingBags.hasNext()){
-            return next;
+            return firstDataBagStream;
         }
 
         Supplier<Stream<DataBag>> otherDataBags = flatten(remainingBags);
 
         return ()-> flatMap(
-            next.get(),
+            firstDataBagStream.get(),
             currentBag ->
                 otherDataBags.get()
                     .map(subBag ->

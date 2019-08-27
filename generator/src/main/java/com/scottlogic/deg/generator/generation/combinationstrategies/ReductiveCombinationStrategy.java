@@ -16,36 +16,30 @@
 
 package com.scottlogic.deg.generator.generation.combinationstrategies;
 
-import com.scottlogic.deg.common.util.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
-import com.scottlogic.deg.generator.utils.RestartableIterator;
 
 import java.util.List;
-import java.util.Spliterator;
-import java.util.Spliterators;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
+
+import static com.scottlogic.deg.common.util.FlatMappingSpliterator.flatMap;
 
 public class ReductiveCombinationStrategy implements CombinationStrategy {
+    
     @Override
     public Stream<DataBag> permute(Stream<Supplier<Stream<DataBag>>> dataBagSequences) {
-        List<RestartableIterator<DataBag>> bagsAsLists = dataBagSequences
-            .map(Supplier::get)
-            .map(dbs -> new RestartableIterator<>(dbs.iterator()))
-            .collect(Collectors.toList());
+        List<Supplier<Stream<DataBag>>> bagsAsLists = dataBagSequences.collect(Collectors.toList());
 
         return next(DataBag.empty, bagsAsLists, 0);
     }
 
-    public Stream<DataBag> next(DataBag accumulatingBag, List<RestartableIterator<DataBag>> bagSequences, int bagSequenceIndex) {
+    public Stream<DataBag> next(DataBag accumulatingBag, List<Supplier<Stream<DataBag>>> bagSequences, int bagSequenceIndex) {
         if (bagSequenceIndex < bagSequences.size()) {
-            RestartableIterator<DataBag> nextStream = bagSequences.get(bagSequenceIndex);
-            nextStream.restart();
+            Stream<DataBag> nextStream = bagSequences.get(bagSequenceIndex).get();
 
-            return FlatMappingSpliterator.flatMap(StreamSupport.stream(Spliterators.spliteratorUnknownSize(nextStream, Spliterator.ORDERED),false)
-                .map(innerBag -> DataBag.merge(innerBag, accumulatingBag)),
+            return flatMap(
+                nextStream.map(innerBag -> DataBag.merge(innerBag, accumulatingBag)),
                 innerBag -> next(innerBag, bagSequences, bagSequenceIndex + 1));
         }
         else
