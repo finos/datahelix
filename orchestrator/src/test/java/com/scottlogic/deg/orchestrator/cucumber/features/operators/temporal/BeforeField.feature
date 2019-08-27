@@ -12,14 +12,14 @@ Feature: User can specify that one date should be before another date
     And there is a constraint:
       """
         {
-          "field": "bar",
+          "field": "foo",
           "is": "beforeField",
-          "value": "foo"
+          "value": "bar"
         }
       """
     Then the following data should be generated:
       | foo                      | bar                      |
-      | 0001-01-01T00:00:00.001Z | 0001-01-01T00:00:00.000Z |
-      | 0001-01-01T00:00:00.002Z | 0001-01-01T00:00:00.000Z |
-      | 0001-01-01T00:00:00.003Z | 0001-01-01T00:00:00.000Z |
+      | 0001-01-01T00:00:00.000Z | 0001-01-01T00:00:00.001Z |
+      | 0001-01-01T00:00:00.000Z | 0001-01-01T00:00:00.002Z |
+      | 0001-01-01T00:00:00.000Z | 0001-01-01T00:00:00.003Z |
 

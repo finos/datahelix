@@ -47,12 +47,6 @@ public class RowSpecDataBagGenerator {
         this.combinationStrategy = combinationStrategy;
     }
 
-    private DataBag toDataBag(Field field, DataBagValue value) {
-        Map<Field, DataBagValue> map = new HashMap<>();
-        map.put(field, value);
-        return new DataBag(map);
-    }
-
     public DataBagStream createDataBags(RowSpec rowSpec) {
         Stream<DataBagStream> dataBagsForGroups = RowSpecGrouper.createGroups(rowSpec).stream()
             .map(group -> generateDataForGroup(rowSpec, group));
