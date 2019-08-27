@@ -7,6 +7,7 @@ import com.scottlogic.deg.generator.restrictions.TypeRestrictions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,8 +23,8 @@ class RowSpecMergerTest {
 
     @Test
     void merge_notContradictoryForField() {
-        RowSpec left = new RowSpec(fields, ImmutableMap.of(A, isNull));
-        RowSpec right = new RowSpec(fields, ImmutableMap.of(A, isNull));
+        RowSpec left = new RowSpec(fields, ImmutableMap.of(A, isNull), Collections.emptyList());
+        RowSpec right = new RowSpec(fields, ImmutableMap.of(A, isNull), Collections.emptyList());
 
         RowSpec merged = rowSpecMerger.merge(left, right).get();
 
@@ -32,8 +33,8 @@ class RowSpecMergerTest {
 
     @Test
     void merge_contradictoryForField() {
-        RowSpec left = new RowSpec(fields, ImmutableMap.of(A, isNull));
-        RowSpec right = new RowSpec(fields, ImmutableMap.of(A, notNull));
+        RowSpec left = new RowSpec(fields, ImmutableMap.of(A, isNull), Collections.emptyList());
+        RowSpec right = new RowSpec(fields, ImmutableMap.of(A, notNull), Collections.emptyList());
 
         Optional<RowSpec> merged = rowSpecMerger.merge(left, right);
 
@@ -43,8 +44,8 @@ class RowSpecMergerTest {
 
     @Test
     void merge_twoFields() {
-        RowSpec left = new RowSpec(fields, ImmutableMap.of(A, isNull));
-        RowSpec right = new RowSpec(fields, ImmutableMap.of(B, notNull));
+        RowSpec left = new RowSpec(fields, ImmutableMap.of(A, isNull), Collections.emptyList());
+        RowSpec right = new RowSpec(fields, ImmutableMap.of(B, notNull), Collections.emptyList());
 
         RowSpec merged = rowSpecMerger.merge(left, right).get();
         assertEquals(merged.getSpecForField(A), (isNull));

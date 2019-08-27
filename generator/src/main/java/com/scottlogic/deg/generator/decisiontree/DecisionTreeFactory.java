@@ -20,6 +20,7 @@ import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.common.profile.constraints.delayed.DelayedAtomicConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.NegatedGrammaticalConstraint;
@@ -58,6 +59,9 @@ public class DecisionTreeFactory {
             return convertOrConstraint((OrConstraint) constraintToConvert);
         } else if (constraintToConvert instanceof ConditionalConstraint) {
             return convertConditionalConstraint((ConditionalConstraint) constraintToConvert);
+        } else if (constraintToConvert instanceof DelayedAtomicConstraint) {
+            DelayedAtomicConstraint delayedAtomicConstraint = (DelayedAtomicConstraint) constraintToConvert;
+            return asConstraintNode(delayedAtomicConstraint);
         } else {
             AtomicConstraint atomicConstraint = (AtomicConstraint) constraintToConvert;
             return asConstraintNode(atomicConstraint);
@@ -102,6 +106,9 @@ public class DecisionTreeFactory {
         }
         // if we got this far, it must be an atomic constraint
         else {
+            if (constraintToConvert instanceof DelayedAtomicConstraint) {
+                return asConstraintNode((DelayedAtomicConstraint) constraintToConvert);
+            }
             AtomicConstraint atomicConstraint = (AtomicConstraint) constraintToConvert;
             return asConstraintNode(atomicConstraint);
         }
@@ -147,10 +154,23 @@ public class DecisionTreeFactory {
     }
 
     private static ConstraintNode asConstraintNode(AtomicConstraint constraint) {
-        return new ConstraintNodeBuilder().addAtomicConstraints(Collections.singleton(constraint)).setDecisions(Collections.emptyList()).build();
+        return new ConstraintNodeBuilder()
+            .addAtomicConstraints(Collections.singleton(constraint))
+            .setDecisions(Collections.emptyList())
+            .build();
     }
 
     private static ConstraintNode asConstraintNode(DecisionNode decision) {
-        return new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptyList()).setDecisions(Collections.singleton(decision)).build();
+        return new ConstraintNodeBuilder()
+            .addAtomicConstraints(Collections.emptyList())
+            .setDecisions(Collections.singleton(decision))
+            .build();
+    }
+
+    private static ConstraintNode asConstraintNode(DelayedAtomicConstraint constraint) {
+        return new ConstraintNodeBuilder()
+            .addDelayedAtomicConstraints(constraint)
+            .setDecisions(Collections.emptyList())
+            .build();
     }
 }

@@ -18,26 +18,27 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
 
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * A complete set of information needed to generate a row satisfying a set of constraints.
- *
+ * <p>
  * Typically created by combining choices over a decision tree.
  */
 public class RowSpec {
-    private ProfileFields fields;
-    Map<Field, FieldSpec> fieldToFieldSpec;
+    private final ProfileFields fields;
+    private final Map<Field, FieldSpec> fieldToFieldSpec;
+    private final List<FieldSpecRelations> relations;
 
-    public RowSpec(
-        ProfileFields fields,
-        Map<Field, FieldSpec> fieldToFieldSpec) {
+    public RowSpec(ProfileFields fields,
+                   Map<Field, FieldSpec> fieldToFieldSpec,
+                   List<FieldSpecRelations> relations) {
 
         this.fields = fields;
         this.fieldToFieldSpec = fieldToFieldSpec;
+        this.relations = relations;
     }
 
     public ProfileFields getFields() {
@@ -51,6 +52,10 @@ public class RowSpec {
             return FieldSpec.Empty;
 
         return ownFieldSpec;
+    }
+
+    public List<FieldSpecRelations> getRelations() {
+        return relations;
     }
 
     @Override

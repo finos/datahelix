@@ -20,6 +20,7 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.util.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
+import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.util.Collections;
 import java.util.Map;
@@ -48,25 +49,40 @@ class ConstraintToFieldMapper {
     }
 
     private Stream<ConstraintToFields> mapConstraintToFields(ConstraintNode node) {
-        return Stream.concat(
-            node.getAtomicConstraints()
-                .stream()
-                .map(constraint -> new ConstraintToFields(new RootLevelConstraint(constraint), constraint.getField())),
-            node.getDecisions()
-                .stream()
-                .map(decision -> new ConstraintToFields(
-                    new RootLevelConstraint(decision),
-                    FlatMappingSpliterator.flatMap(
-                        FlatMappingSpliterator.flatMap(decision
-                            .getOptions()
-                            .stream(),
-                            this::mapConstraintToFields),
-                        objectField -> objectField.fields.stream())
-                        .collect(Collectors.toSet()))
-                ));
+        return Stream.of(
+            mapAtomicConstraintsToFields(node),
+            mapDelayedConstraintsToFields(node),
+            mapDecisionsToFields(node))
+            .reduce(Stream::concat)
+            .orElseGet(Stream::empty);
     }
 
-    Map<RootLevelConstraint, Set<Field>> mapConstraintsToFields(DecisionTree decisionTree){
+    private Stream<ConstraintToFields> mapAtomicConstraintsToFields(ConstraintNode node) {
+        return node.getAtomicConstraints().stream()
+            .map(constraint -> new ConstraintToFields(new RootLevelConstraint(constraint), constraint.getField()));
+    }
+
+    private Stream<ConstraintToFields> mapDelayedConstraintsToFields(ConstraintNode node) {
+        return node.getDelayedAtomicConstraints().stream()
+            .map(constraint -> new ConstraintToFields(
+                new RootLevelConstraint(constraint),
+                SetUtils.setOf(constraint.field(), constraint.underlyingConstraint().getField())));
+    }
+
+    private Stream<ConstraintToFields> mapDecisionsToFields(ConstraintNode node) {
+        return node.getDecisions()
+            .stream()
+            .map(decision -> new ConstraintToFields(
+                new RootLevelConstraint(decision),
+                FlatMappingSpliterator.flatMap(
+                    FlatMappingSpliterator.flatMap(
+                        decision.getOptions().stream(),
+                        this::mapConstraintToFields),
+                    objectField -> objectField.fields.stream()).collect(Collectors.toSet()))
+            );
+    }
+
+    Map<RootLevelConstraint, Set<Field>> mapConstraintsToFields(DecisionTree decisionTree) {
         return mapConstraintToFields(decisionTree.getRootNode())
             .collect(
                 Collectors.toMap(

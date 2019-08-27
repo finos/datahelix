@@ -46,6 +46,14 @@ public class DataBagValue {
         return Objects.hash(value, format);
     }
 
+    @Override
+    public String toString() {
+        return "DataBagValue{" +
+            "value=" + value +
+            ", format='" + format + '\'' +
+            '}';
+    }
+
     public Object getFormattedValue() {
         if (format == null || value == null) {
             return value;

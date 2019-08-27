@@ -28,7 +28,7 @@ gitmessage=`git log --format=%B -n 1 "$i"`
 echo "Checking message: $gitmessage"
 
 # All checks run at the same time by piping from one grep to another
-messagecheck=`echo ${gitmessage} | grep "\(feat\|fix\|docs\|style\|refactor\|perf\|test\|chore\)(#[0-9]*): "`
+messagecheck=`echo ${gitmessage} | grep "\(feat\|fix\|docs\|style\|refactor\|perf\|test\|chore\|revert\)(#[0-9]*): "`
 
 # check to see if the messagecheck var is empty
 if ! [[ -z "${messagecheck}" ]]

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "0.1",
+  "fields": [
+    {
+      "name": "date"
+    }
+  ],
+  "rules": [
+    {
+      "constraints": [
+        {
+          "not": {
+            "field": "date",
+            "is": "null"
+          }
+        },
+        {
+          "field": "date",
+          "is": "ofType",
+          "value": "datetime"
+        },
+        {
+          "field": "date",
+          "is": "after",
+          "value": {
+            "date": "8001-02-03T04:05:06.007"
+          }
+        }
+      ]
+    }
+  ]
+}

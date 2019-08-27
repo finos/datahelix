@@ -50,7 +50,7 @@ public class ContradictionDecisionTreeValidator {
     private ConstraintNode markContradictions(ConstraintNode node, RowSpec accumulatedSpec, ProfileFields profileFields){
         final Optional<RowSpec> nominalRowSpec = node.getOrCreateRowSpec(() -> constraintReducer.reduceConstraintsToRowSpec(
             profileFields,
-            node.getAtomicConstraints()
+            node
         ));
 
         if (!nominalRowSpec.isPresent()) {
@@ -98,7 +98,7 @@ public class ContradictionDecisionTreeValidator {
         final Map<Field, FieldSpec> fieldToFieldSpec = profileFields.stream()
             .collect(Collectors.toMap(Function.identity(), field -> FieldSpec.Empty));
 
-        return new RowSpec(profileFields, fieldToFieldSpec);
+        return new RowSpec(profileFields, fieldToFieldSpec, Collections.emptyList());
     }
 
     private boolean isNodeContradictory(Node node){
