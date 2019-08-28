@@ -27,7 +27,6 @@ import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalCons
 import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -43,27 +42,15 @@ import static org.hamcrest.core.IsNull.nullValue;
 
 public class JsonProfileReaderTests {
     private String json;
-    private Profile profile;
-    private MainConstraintReader mainConstraintReader;
+    JsonProfileReader jsonProfileReader = new JsonProfileReader(null, new MainConstraintReader(new AtomicConstraintTypeReaderMap(null, true)));
 
-    @BeforeEach
-    public void Setup() {
-        this.json = null;
-        this.profile = null;
-        mainConstraintReader = new MainConstraintReader(new AtomicConstraintTypeReaderMap(null, true));
-    }
 
     private void givenJson(String json) {
         this.json = json;
     }
 
     private Profile getResultingProfile() throws IOException {
-        if (this.profile == null) {
-            JsonProfileReader objectUnderTest = new JsonProfileReader(null, mainConstraintReader);
-            this.profile = objectUnderTest.read(this.json);
-        }
-
-        return this.profile;
+        return jsonProfileReader.read(json);
     }
 
     private void expectException() {
