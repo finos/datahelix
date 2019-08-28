@@ -26,8 +26,9 @@ import com.scottlogic.deg.profile.dto.AtomicConstraintType;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
-public class MainConstraintReader implements ConstraintReader {
+public class MainConstraintReader {
 
     private final AtomicConstraintTypeReaderMap constraintReaderMap;
 
@@ -36,7 +37,6 @@ public class MainConstraintReader implements ConstraintReader {
         this.constraintReaderMap = constraintReaderMap;
     }
 
-    @Override
     public Constraint apply(
         ConstraintDTO dto,
         ProfileFields fields) {
@@ -77,22 +77,16 @@ public class MainConstraintReader implements ConstraintReader {
                 throw new InvalidProfileException("AllOf must contain at least one constraint.");
             }
             return new AndConstraint(
-                JsonProfileReader.mapDtos(
-                    dto.allOf,
-                    subConstraintDto -> this.apply(
-                        subConstraintDto,
-                        fields
-                    )));
+                dto.allOf.stream()
+                    .map(subConstraintDto -> this.apply(subConstraintDto, fields))
+                    .collect(Collectors.toSet()));
         }
 
         if (dto.anyOf != null) {
             return new OrConstraint(
-                JsonProfileReader.mapDtos(
-                    dto.anyOf,
-                    subConstraintDto -> this.apply(
-                        subConstraintDto,
-                        fields
-                    )));
+                dto.anyOf.stream()
+                    .map(subConstraintDto -> this.apply(subConstraintDto, fields))
+                    .collect(Collectors.toSet()));
         }
 
         if (dto.if_ != null) {
