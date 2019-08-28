@@ -100,4 +100,50 @@ class ReductiveDecisionTreeWalkerTests {
         assertThat(result, empty());
     }
 
+    /**
+     * If a field can be fixed initially, but subsequently another one cannot be fixed then exit as early as possible
+     * with an empty stream of RowSpecs
+     */
+    @Test
+    public void shouldReturnEmptyCollectionOfRowsWhenSecondFieldCannotBeFixed() {
+        DataBagValue dataBag = new DataBagValue(field1, "yes");
+        FieldSpec firstFieldSpec = FieldSpec.Empty.withWhitelist(FrequencyDistributedSet.uniform(Collections.singleton("yes")))
+            .withNotNull();
+        when(fieldSpecValueGenerator.generate(any(Field.class), any(Set.class))).thenReturn(Stream.of(dataBag));
+
+        when(reductiveFieldSpecBuilder.getDecisionFieldSpecs(any(), any())).thenReturn(Collections.singleton(firstFieldSpec), Collections.emptySet());
+
+        List<DataBag> result = walker.walk(tree).stream().collect(Collectors.toList());
+
+        verify(reductiveFieldSpecBuilder, times(2)).getDecisionFieldSpecs(eq(rootNode), any());
+        assertThat(result, empty());
+    }
+
+    @Test
+    public void walk_whereFirstFieldCannotBeFixed_throwsException() {
+        ProfileFields fields = new ProfileFields(Arrays.asList(field1, field2));
+        FieldSpec firstFieldSpec = FieldSpec.Empty.withNotNull();
+        FieldSpec secondFieldSpec = FieldSpec.Empty.withNotNull();
+        Set<FieldSpec> fieldSpecs = new HashSet<>();
+        fieldSpecs.add(firstFieldSpec);
+        fieldSpecs.add(secondFieldSpec);
+        ConstraintNode root = TestConstraintNodeBuilder.constraintNode()
+            .where(field1).isNull()
+            .where(field1).isNotNull()
+            .build();
+        DecisionTree tree = new DecisionTree(root, fields);
+        DataBagValue dataBagValue = mock(DataBagValue.class);
+        when(fixFieldStrategy.getNextFieldToFix(any())).thenReturn(field1, field2);
+        when(fixFieldStrategyFactory.create(any())).thenReturn(fixFieldStrategy);
+        when(treePruner.pruneConstraintNode(eq(root), any(), any())).thenReturn(Merged.of(root));
+        when(reductiveFieldSpecBuilder.getDecisionFieldSpecs(any(), any())).thenReturn(fieldSpecs);
+        when(treePruner.pruneConstraintNode(eq(root), any(), any())).thenReturn(Merged.contradictory());
+
+        Stream<DataBagValue> infiniteStream = Stream.iterate(dataBagValue, i -> dataBagValue);
+        when(fieldSpecValueGenerator.generate(any(Field.class), anySetOf(FieldSpec.class))).thenReturn(infiniteStream);
+
+        assertTimeoutPreemptively(ofMillis(100), () -> {
+            assertThrows(RetryLimitReachedException.class, () -> walker.walk(tree).stream().findFirst());
+        });
+    }
 }

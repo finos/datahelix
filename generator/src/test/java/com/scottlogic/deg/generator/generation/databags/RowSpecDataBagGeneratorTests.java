@@ -52,6 +52,7 @@ class RowSpecDataBagGeneratorTests {
     DataBagValue dataBagValue1 = new DataBagValue(field2, "value");
     DataBagValue dataBagValue2 = new DataBagValue(field3, "value");
 
+    @Test
     void shouldCreateValuesForEachFieldSpecInRowSpec() {
         RowSpecDataBagGenerator factory =
             new RowSpecDataBagGenerator(mockGeneratorFactory, exhaustiveCombinationStrategy);
@@ -63,13 +64,14 @@ class RowSpecDataBagGeneratorTests {
         List<DataBag> actual = factory.createDataBags(rowSpec).stream()
             .collect(Collectors.toList());
 
-        verify(mockGeneratorFactory, times(1)).generate(new Field(null, false), fieldSpec);
+        verify(mockGeneratorFactory, times(1)).generate(any(Field.class), eq(fieldSpec));
 
         List<DataBag> expected = Arrays.asList(new DataBagBuilder().set(field, dataBagValue).build());
 
         assertThat(actual, sameBeanAs(expected));
     }
 
+    @Test
     void factoryIsCalledForEachField() {
         RowSpecDataBagGenerator factory =
             new RowSpecDataBagGenerator(mockGeneratorFactory, exhaustiveCombinationStrategy);
@@ -88,9 +90,9 @@ class RowSpecDataBagGeneratorTests {
         factory.createDataBags(rowSpec).stream()
             .collect(Collectors.toList());
 
-        verify(mockGeneratorFactory, times(1)).generate(new Field(null, false), fieldSpec);
-        verify(mockGeneratorFactory, times(1)).generate(new Field(null, false), fieldSpec);
-        verify(mockGeneratorFactory, times(1)).generate(new Field(null, false), fieldSpec);
+        verify(mockGeneratorFactory, times(1)).generate(any(Field.class), eq(fieldSpec));
+        verify(mockGeneratorFactory, times(1)).generate(any(Field.class), eq(fieldSpec));
+        verify(mockGeneratorFactory, times(1)).generate(any(Field.class), eq(fieldSpec));
     }
 
     @Test
