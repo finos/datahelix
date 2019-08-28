@@ -20,11 +20,15 @@ import java.util.Objects;
 
 public class Field {
     public final String name;
-    public boolean unique;
+    private boolean unique;
 
     public Field(String name, boolean unique) {
         this.name = name;
         this.unique = unique;
+    }
+
+    public boolean unique() {
+        return unique;
     }
 
     @Override

@@ -51,7 +51,9 @@ public class RowSpecDataBagGenerator {
         Stream<DataBagStream> dataBagsForGroups = RowSpecGrouper.createGroups(rowSpec).stream()
             .map(group -> generateDataForGroup(rowSpec, group));
 
-        return new DataBagStream(combinationStrategy.permute(dataBagsForGroups), rowSpec.getFields().stream().anyMatch(field -> field.unique));
+        return new DataBagStream(
+            combinationStrategy.permute(dataBagsForGroups),
+            rowSpec.getFields().stream().anyMatch(Field::unique));
     }
 
     private DataBagStream generateDataForGroup(RowSpec rowSpec, FieldGroup group) {

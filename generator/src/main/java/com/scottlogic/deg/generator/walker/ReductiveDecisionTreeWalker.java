@@ -76,16 +76,17 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         Field fieldToFix = fixFieldStrategy.getNextFieldToFix(reductiveState);
         Set<FieldSpec> nextFieldSpecs = reductiveFieldSpecBuilder.getDecisionFieldSpecs(tree, fieldToFix);
 
-        if (nextFieldSpecs.isEmpty()){
+        if (nextFieldSpecs.isEmpty()) {
             monitor.noValuesForField(reductiveState, fieldToFix);
-            return new DataBagStream(Stream.empty(), fieldToFix.unique);
+            return new DataBagStream(Stream.empty(), fieldToFix.unique());
         }
 
         Stream<DataBagValue> values = fieldSpecValueGenerator.generate(nextFieldSpecs);
 
-        return  new DataBagStream(FlatMappingSpliterator.flatMap(
+        return new DataBagStream(FlatMappingSpliterator.flatMap(
             values,
-            dataBagValue -> pruneTreeForNextValue(tree, reductiveState, fixFieldStrategy, fieldToFix, dataBagValue)), fieldToFix.unique);
+            dataBagValue -> pruneTreeForNextValue(tree, reductiveState, fixFieldStrategy, fieldToFix, dataBagValue)),
+            fieldToFix.unique());
     }
 
     private Stream<DataBag> pruneTreeForNextValue(
@@ -93,11 +94,11 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         ReductiveState reductiveState,
         FixFieldStrategy fixFieldStrategy,
         Field field,
-        DataBagValue fieldValue){
+        DataBagValue fieldValue) {
 
         Merged<ConstraintNode> reducedTree = treePruner.pruneConstraintNode(tree, field, fieldValue);
 
-        if (reducedTree.isContradictory()){
+        if (reducedTree.isContradictory()) {
             //yielding an empty stream will cause back-tracking
             this.monitor.unableToStepFurther(reductiveState);
             retryChecker.retryUnsuccessful();
@@ -118,7 +119,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         return fixNextField(reducedTree.get(), newReductiveState, fixFieldStrategy).stream();
     }
 
-    private void visualise(ConstraintNode rootNode, ReductiveState reductiveState){
+    private void visualise(ConstraintNode rootNode, ReductiveState reductiveState) {
         try {
             iterationVisualiser.visualise(rootNode, reductiveState);
         } catch (IOException e) {

@@ -165,7 +165,7 @@ public class FieldSpecGroupValueGenerator {
 
         return new DataBagStream(
             wrappedStream.map(DataBagGroupWrapper::dataBag),
-            group.fieldSpecs().keySet().stream().anyMatch(field -> field.unique));
+            group.fieldSpecs().keySet().stream().anyMatch(Field::unique));
     }
 
     private static DataBagGroupWrapper adjustWrapperBounds(DataBagGroupWrapper wrapper, Field field) {
