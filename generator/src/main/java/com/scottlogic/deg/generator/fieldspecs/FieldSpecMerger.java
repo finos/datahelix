@@ -85,7 +85,6 @@ public class FieldSpecMerger {
 
     private Optional<FieldSpec> addNullable(FieldSpec left, FieldSpec right, FieldSpec newFieldSpec) {
         newFieldSpec = addFormatting(left, right, newFieldSpec);
-        newFieldSpec = addUnique(left, right, newFieldSpec);
 
         if (isNullable(left, right)) {
             return Optional.of(newFieldSpec);
@@ -96,14 +95,6 @@ public class FieldSpecMerger {
         }
 
         return Optional.of(newFieldSpec.withNotNull());
-    }
-
-    private FieldSpec addUnique(FieldSpec left, FieldSpec right, FieldSpec newFieldSpec) {
-        if (!isUnique(left, right)) {
-            return newFieldSpec;
-        }
-
-        return newFieldSpec.withUnique();
     }
 
     private boolean noAllowedValues(FieldSpec fieldSpec) {
@@ -120,10 +111,6 @@ public class FieldSpecMerger {
 
     private boolean isNullable(FieldSpec left, FieldSpec right) {
         return left.isNullable() && right.isNullable();
-    }
-
-    private boolean isUnique(FieldSpec left, FieldSpec right) {
-        return left.isUnique() || right.isUnique();
     }
 
     private FieldSpec addFormatting(FieldSpec left, FieldSpec right, FieldSpec newFieldSpec) {
