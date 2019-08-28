@@ -61,6 +61,6 @@ public class ChecksumStringGenerator implements StringGenerator {
 
     @Override
     public StringGenerator intersect(StringGenerator stringGenerator) {
-        throw new UnsupportedOperationException("Checksum constraints can only be used with length and equalTo constraints.");
+        return new NoStringsStringGenerator("These constraints cannot be combined.");
     }
 }

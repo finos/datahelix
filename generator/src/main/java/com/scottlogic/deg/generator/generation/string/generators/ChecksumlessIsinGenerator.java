@@ -65,6 +65,6 @@ public class ChecksumlessIsinGenerator implements StringGenerator {
 
     @Override
     public StringGenerator intersect(StringGenerator stringGenerator) {
-        throw new UnsupportedOperationException("Constraints with ISINs can only be used with length and equalTo constraints.");
+        return new NoStringsStringGenerator("Constraints with ISINs can only be used with length and equalTo constraints.");
     }
 }

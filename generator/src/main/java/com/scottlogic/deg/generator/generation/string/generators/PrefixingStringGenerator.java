@@ -61,6 +61,6 @@ public class PrefixingStringGenerator implements StringGenerator {
 
     @Override
     public StringGenerator intersect(StringGenerator stringGenerator) {
-        throw new UnsupportedOperationException();
+        return new NoStringsStringGenerator("The prefixing generator cannot be combined ");
     }
 }
