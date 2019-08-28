@@ -42,15 +42,15 @@ public class FieldSpecGroupValueGenerator {
     }
 
     public DataBagStream generate(FieldSpecGroup group) {
-        Field first = SetUtils.firstIteratorElement(group.fieldSpecs().keySet());
+        Field firstField = SetUtils.firstIteratorElement(group.fieldSpecs().keySet());
 
-        FieldSpecGroup groupRespectingFirstField = initialAdjustments(first, group);
-        FieldSpec firstSpec = groupRespectingFirstField.fieldSpecs().get(first);
+        FieldSpecGroup groupRespectingFirstField = initialAdjustments(firstField, group);
+        FieldSpec firstSpec = groupRespectingFirstField.fieldSpecs().get(firstField);
 
-        Stream<DataBag> firstDataBagValues = underlyingGenerator.generate(firstSpec)
-            .map(value -> toDataBag(first, value));
+        Stream<DataBag> firstDataBagValues = underlyingGenerator.generate(firstField, firstSpec)
+            .map(value -> toDataBag(firstField, value));
 
-        return createRemainingDataBags(firstDataBagValues, first, groupRespectingFirstField);
+        return createRemainingDataBags(firstDataBagValues, firstField, groupRespectingFirstField);
     }
 
     private static DataBag toDataBag(Field field, DataBagValue value) {
@@ -165,7 +165,7 @@ public class FieldSpecGroupValueGenerator {
 
         return new DataBagStream(
             wrappedStream.map(DataBagGroupWrapper::dataBag),
-            group.fieldSpecs().keySet().stream().anyMatch(Field::unique));
+            group.fieldSpecs().keySet().stream().anyMatch(Field::isUnique));
     }
 
     private static DataBagGroupWrapper adjustWrapperBounds(DataBagGroupWrapper wrapper, Field field) {
@@ -208,7 +208,7 @@ public class FieldSpecGroupValueGenerator {
     private static DataBagGroupWrapper acceptNextRandomValue(DataBagGroupWrapper wrapper, Field field) {
         FieldSpecGroup group = wrapper.group();
 
-        DataBagValue nextValue = wrapper.generator().generateOne(group.fieldSpecs().get(field));
+        DataBagValue nextValue = wrapper.generator().generate(field, group.fieldSpecs().get(field)).findFirst().get();
 
         DataBag combined = DataBag.merge(toDataBag(field, nextValue), wrapper.dataBag());
 
@@ -219,7 +219,7 @@ public class FieldSpecGroupValueGenerator {
 
     private static Stream<DataBagGroupWrapper> acceptNextNonRandomValue(DataBagGroupWrapper wrapper, Field field) {
         FieldSpecGroup group = wrapper.group();
-        return wrapper.generator().generate(group.fieldSpecs().get(field))
+        return wrapper.generator().generate(field, group.fieldSpecs().get(field))
             .map(value -> new WrappedDataBag(toDataBag(field, value), value))
             .map(wrapped -> new WrappedDataBag(DataBag.merge(wrapped.dataBag(), wrapper.dataBag()), wrapped.value()))
             .map(combined -> new DataBagGroupWrapper(

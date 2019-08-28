@@ -20,14 +20,14 @@ import java.util.Objects;
 
 public class Field {
     public final String name;
-    private boolean unique;
+    private final boolean unique;
 
     public Field(String name, boolean unique) {
         this.name = name;
         this.unique = unique;
     }
 
-    public boolean unique() {
+    public boolean isUnique() {
         return unique;
     }
 

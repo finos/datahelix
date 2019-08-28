@@ -27,10 +27,7 @@ import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.RowSpecGrouper;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.stream.*;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -53,7 +50,7 @@ public class RowSpecDataBagGenerator {
 
         return new DataBagStream(
             combinationStrategy.permute(dataBagsForGroups),
-            rowSpec.getFields().stream().anyMatch(Field::unique));
+            rowSpec.getFields().stream().anyMatch(Field::isUnique));
     }
 
     private DataBagStream generateDataForGroup(RowSpec rowSpec, FieldGroup group) {

@@ -97,13 +97,20 @@ public class JsonProfileReader implements ProfileReader {
     }
 
     private Collection<String> getUniqueFields(ProfileDTO profileDto) {
-        Collection<String> uniqueList = new ArrayList<>();
-
-        profileDto.rules.stream().forEach(rule -> rule.constraints.stream()
-            .filter(constraintDTO -> constraintDTO.is != ConstraintDTO.undefined && constraintDTO.is != null)
+        return profileDto.rules.stream()
+            .flatMap(ruleDTO -> ruleDTO.constraints.stream())
+            .flatMap(this::getConsraintsAndAndConstraintconstraints)
+            .filter(constraintDTO -> constraintDTO.is != null)
             .filter(constraintDTO -> constraintDTO.is.equals("unique"))
-            .forEach(result ->  uniqueList.add(result.field)));
+            .map(constraintDTO -> constraintDTO.field)
+            .collect(Collectors.toSet());
+    }
 
-        return uniqueList;
+    private Stream<ConstraintDTO> getConsraintsAndAndConstraintconstraints(ConstraintDTO constraintDTO) {
+        if (constraintDTO.allOf != null){
+            return constraintDTO.allOf.stream();
+        }
+
+        return Stream.of(constraintDTO);
     }
 }
