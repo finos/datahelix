@@ -65,24 +65,18 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         monitor.generationStarting();
         DecisionTree decisionTree = decisionTreeGenerator.analyse(profile);
 
-        try {
-            decisionTree = upfrontTreePruner.runUpfrontPrune(decisionTree, monitor);
-            if (decisionTree.getRootNode() == null) {
-                return Stream.empty();
-            }
-            Stream<Stream<DataBag>> partitionedDataBags = treePartitioner
-                .splitTreeIntoPartitions(decisionTree)
-                .map(treeOptimiser::optimiseTree)
-                .map(treeWalker::walk);
-
-            return partitionCombiner.permute(partitionedDataBags)
-                .map(d->(GeneratedObject)d)
-                .limit(maxRows)
-                .peek(monitor::rowEmitted);
-        } catch (UnsupportedOperationException ex) {
-            monitor.addLineToPrintAtEndOfGeneration("");
-            monitor.addLineToPrintAtEndOfGeneration(ex.getMessage());
+        decisionTree = upfrontTreePruner.runUpfrontPrune(decisionTree, monitor);
+        if (decisionTree.getRootNode() == null) {
             return Stream.empty();
         }
+        Stream<Stream<DataBag>> partitionedDataBags = treePartitioner
+            .splitTreeIntoPartitions(decisionTree)
+            .map(treeOptimiser::optimiseTree)
+            .map(treeWalker::walk);
+
+        return partitionCombiner.permute(partitionedDataBags)
+            .map(d->(GeneratedObject)d)
+            .limit(maxRows)
+            .peek(monitor::rowEmitted);
     }
 }

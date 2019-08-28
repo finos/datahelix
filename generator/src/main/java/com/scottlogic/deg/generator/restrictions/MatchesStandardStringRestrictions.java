@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.generator.restrictions;
 
+import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.constraints.atomic.StandardConstraintTypes;
 import com.scottlogic.deg.generator.generation.string.generators.NoStringsStringGenerator;
 import com.scottlogic.deg.generator.generation.string.generators.RegexStringGenerator;
@@ -76,7 +77,7 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
 
     private MergeResult<StringRestrictions> isLengthAcceptable(TextualRestrictions other) {
         if (anyRegexes(other)){
-            throw new UnsupportedOperationException("Combining a regex constraint with an " + this.toString() + " constraint is not supported.");
+            throw new ValidationException("Combining a regex constraint with an " + this.toString() + " constraint is not supported.");
         }
 
         StringGenerator intersect = other.createGenerator().intersect(new RegexStringGenerator(type.getRegex(), true));

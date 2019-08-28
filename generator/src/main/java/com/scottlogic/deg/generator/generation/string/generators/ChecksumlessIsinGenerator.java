@@ -15,6 +15,7 @@
  */
 package com.scottlogic.deg.generator.generation.string.generators;
 
+import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
 import java.util.Arrays;
@@ -65,6 +66,6 @@ public class ChecksumlessIsinGenerator implements StringGenerator {
 
     @Override
     public StringGenerator intersect(StringGenerator stringGenerator) {
-        return new NoStringsStringGenerator("Constraints with ISINs can only be used with length and equalTo constraints.");
+        throw new ValidationException("Constraints with ISINs can only be used with length and equalTo constraints.");
     }
 }

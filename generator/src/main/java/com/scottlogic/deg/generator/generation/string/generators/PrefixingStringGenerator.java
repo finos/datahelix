@@ -15,6 +15,7 @@
  */
 package com.scottlogic.deg.generator.generation.string.generators;
 
+import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
 import java.util.stream.Stream;
@@ -61,6 +62,6 @@ public class PrefixingStringGenerator implements StringGenerator {
 
     @Override
     public StringGenerator intersect(StringGenerator stringGenerator) {
-        return new NoStringsStringGenerator("The prefixing generator cannot be combined ");
+        throw new ValidationException("The prefixing generator cannot be combined ");
     }
 }

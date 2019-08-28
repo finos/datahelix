@@ -15,6 +15,7 @@
  */
 package com.scottlogic.deg.generator.generation.string.generators;
 
+import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
 import java.util.stream.Stream;
@@ -61,6 +62,6 @@ public class ChecksumStringGenerator implements StringGenerator {
 
     @Override
     public StringGenerator intersect(StringGenerator stringGenerator) {
-        return new NoStringsStringGenerator("These constraints cannot be combined.");
+        throw new ValidationException("These constraints cannot be combined.");
     }
 }
