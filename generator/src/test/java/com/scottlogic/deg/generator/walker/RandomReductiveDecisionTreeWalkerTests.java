@@ -48,8 +48,10 @@ class RandomReductiveDecisionTreeWalkerTests {
     public void beforeEach(){
         tree = new DecisionTree(
             new ConstraintNodeBuilder().build(),
-            new ProfileFields(Arrays.asList(new Field("field1", false), new Field("field2", false)))
-        );
+            new ProfileFields(
+                Arrays.asList(
+                    new Field("field1", false),
+                    new Field("field2", false))));
 
         underlyingWalker = mock(ReductiveDecisionTreeWalker.class);
         walker = new RandomReductiveDecisionTreeWalker(underlyingWalker, monitor);
@@ -62,8 +64,16 @@ class RandomReductiveDecisionTreeWalkerTests {
     @Test
     public void shouldProduceTwoRowsOfRandomDataOneRowSpecFromEachIteration() {
         when(underlyingWalker.walk(tree)).thenReturn(
-            new DataBagStream(Stream.of(rowSpec("first-iteration-first-random-row"), rowSpec("first-iteration-second-random-row")), false),
-            new DataBagStream(Stream.of(rowSpec("second-iteration-first-random-row"), rowSpec("second-iteration-second-random-row")), false)
+            new DataBagStream(
+                Stream.of(
+                    rowSpec("first-iteration-first-random-row"),
+                    rowSpec("first-iteration-second-random-row")),
+                false),
+            new DataBagStream(
+                Stream.of(
+                    rowSpec("second-iteration-first-random-row"),
+                    rowSpec("second-iteration-second-random-row")),
+                false)
         );
 
         List<DataBag> result = walker.walk(tree).stream().limit(2).collect(Collectors.toList());
@@ -77,9 +87,19 @@ class RandomReductiveDecisionTreeWalkerTests {
     @Test
     public void shouldProduceNoData() {
         when(underlyingWalker.walk(tree)).thenReturn(
-            new DataBagStream(Stream.of(rowSpec("first-iteration-first-random-row"), rowSpec("first-iteration-second-random-row")), false),
-            new DataBagStream(Stream.empty(), false),
-            new DataBagStream(Stream.of(rowSpec("third-iteration-first-random-row"), rowSpec("third-iteration-second-random-row")), false)
+            new DataBagStream(
+                Stream.of(
+                    rowSpec("first-iteration-first-random-row"),
+                    rowSpec("first-iteration-second-random-row")),
+                false),
+            new DataBagStream(
+                Stream.empty(),
+                false),
+            new DataBagStream(
+                Stream.of(
+                    rowSpec("third-iteration-first-random-row"),
+                    rowSpec("third-iteration-second-random-row")),
+                false)
         );
 
         List<DataBag> result = walker.walk(tree).stream().limit(2).collect(Collectors.toList());

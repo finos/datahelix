@@ -38,7 +38,7 @@ public class MinimalCombinationStrategy implements CombinationStrategy {
         return () -> new InternalIterator(iterators);
     }
 
-    class InternalIterator implements Iterator<DataBag> {
+    static class InternalIterator implements Iterator<DataBag> {
         private final List<DataBagIterable> iterators;
         private final Map<Iterator<DataBag>, DataBag> lastValues;
 
@@ -61,7 +61,7 @@ public class MinimalCombinationStrategy implements CombinationStrategy {
                         .filter(dataBagIterable -> !dataBagIterable.isUnique())
                         .anyMatch(dataBagIterable -> dataBagIterable.iterator().hasNext()),
                     iterators.stream()
-                        .noneMatch(dataBagIterable -> !dataBagIterable.isUnique()));
+                        .allMatch(DataBagIterable::isUnique));
 
             return uniqueHaveNext && notUniqueHaveNext;
         }

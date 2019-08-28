@@ -51,7 +51,7 @@ public class FieldAppearanceFixingStrategy implements FixFieldStrategy {
     }
 
     private int compare(Map.Entry<Field, Integer> a, Map.Entry<Field, Integer> b) {
-        if (a.getValue() != b.getValue()) {
+        if (!a.getValue().equals(b.getValue())) {
             return a.getValue() - b.getValue();
         }
         return b.getKey().name.compareTo(a.getKey().name);
