@@ -25,7 +25,6 @@ import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.profile.dto.AtomicConstraintType;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MainConstraintReader {
@@ -50,7 +49,7 @@ public class MainConstraintReader {
         }
 
         if (dto.is != ConstraintDTO.undefined) {
-            ConstraintReader subReader = constraintReaderMap.getConstraintReaderMapEntries()
+            AtomicConstraintReader subReader = constraintReaderMap.getConstraintReaderMapEntries()
                 .get(AtomicConstraintType.fromText((String) dto.is));
 
             if (subReader == null) {

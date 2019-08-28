@@ -42,7 +42,10 @@ import static org.hamcrest.core.IsNull.nullValue;
 
 public class JsonProfileReaderTests {
     private String json;
-    JsonProfileReader jsonProfileReader = new JsonProfileReader(null, new MainConstraintReader(new AtomicConstraintTypeReaderMap(null, true)));
+    JsonProfileReader jsonProfileReader = new JsonProfileReader(
+        null,
+        new MainConstraintReader(
+            new AtomicConstraintTypeReaderMap(null, true)));
 
 
     private void givenJson(String json) {

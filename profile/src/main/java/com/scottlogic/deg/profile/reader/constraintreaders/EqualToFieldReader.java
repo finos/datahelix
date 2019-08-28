@@ -22,14 +22,14 @@ import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.EqualToConstraint;
 import com.scottlogic.deg.common.profile.constraints.delayed.IsEqualToDynamicDateConstraint;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
-import com.scottlogic.deg.profile.reader.ConstraintReader;
+import com.scottlogic.deg.profile.reader.AtomicConstraintReader;
 
 import java.time.temporal.ChronoUnit;
 
 import static com.scottlogic.deg.profile.reader.ConstraintReaderHelpers.getValidatedValue;
 import static com.scottlogic.deg.profile.reader.ConstraintReaderHelpers.getValueAsString;
 
-public class EqualToFieldReader implements ConstraintReader {
+public class EqualToFieldReader implements AtomicConstraintReader {
 
     @Override
     public Constraint apply(ConstraintDTO dto, ProfileFields fields) {
