@@ -22,14 +22,14 @@ import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsGranularToDateConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsGranularToNumericConstraint;
-import com.scottlogic.deg.profile.reader.ConstraintReader;
+import com.scottlogic.deg.profile.reader.AtomicConstraintReader;
 import com.scottlogic.deg.profile.reader.ConstraintReaderHelpers;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 
 import java.util.Optional;
 
-public class GranularToReader implements ConstraintReader {
+public class GranularToReader implements AtomicConstraintReader {
     @Override
     public Constraint apply(ConstraintDTO dto, ProfileFields fields) {
         Optional<Number> numberValidatedValue =
