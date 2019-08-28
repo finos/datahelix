@@ -34,8 +34,8 @@ class MinimalCombinationStrategyTests {
     @Test
     void shouldCombineMinimally() {
         tester.given(
-            Stream.of(bag("A"), bag("B"), bag("C")),
-            Stream.of(bag("1"), bag("2"), bag("3")));
+            () -> Stream.of(bag("A"), bag("B"), bag("C")),
+            () -> Stream.of(bag("1"), bag("2"), bag("3")));
 
         tester.expect(
             Stream.of(bag("A","1"), bag("B","2"), bag("C","3")));
@@ -44,9 +44,9 @@ class MinimalCombinationStrategyTests {
     @Test
     void shouldCombineSequencesOfDifferentLengths() {
         tester.given(
-            Stream.of(bag("X")),
-            Stream.of(bag("A"), bag("B"), bag("C")),
-            Stream.of(bag("1"), bag("2"), bag("3"), bag("4"), bag("5")));
+            () -> Stream.of(bag("X")),
+            () -> Stream.of(bag("A"), bag("B"), bag("C")),
+            () -> Stream.of(bag("1"), bag("2"), bag("3"), bag("4"), bag("5")));
 
         tester.expect(
             Stream.of(
@@ -59,7 +59,7 @@ class MinimalCombinationStrategyTests {
 
     @Test
     void shouldGiveInputForSingleSequence() {
-        tester.given(Stream.of(bag("A"), bag("B"), bag("C")));
+        tester.given(() -> Stream.of(bag("A"), bag("B"), bag("C")));
 
         tester.expect(Stream.of(bag("A"), bag("B"), bag("C")));
     }
@@ -67,8 +67,8 @@ class MinimalCombinationStrategyTests {
     @Test
     void shouldGiveNoResultsForSingleEmptySequence() {
         tester.given(
-            Stream.of(bag("A"), bag("B"), bag("C")),
-            Stream.of());
+            () -> Stream.of(bag("A"), bag("B"), bag("C")),
+            () -> Stream.of());
 
         tester.expectEmpty();
     }

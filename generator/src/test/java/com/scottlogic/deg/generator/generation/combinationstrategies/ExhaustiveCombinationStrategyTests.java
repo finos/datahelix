@@ -34,8 +34,8 @@ class ExhaustiveCombinationStrategyTests {
     @Test
     void shouldCombineExhaustively() {
         tester.given(
-            Stream.of(bag("A"), bag("B"), bag("C")),
-            Stream.of(bag("1"), bag("2"), bag("3")));
+            () -> Stream.of(bag("A"), bag("B"), bag("C")),
+            () -> Stream.of(bag("1"), bag("2"), bag("3")));
 
         tester.expect(
             Stream.of(
@@ -53,9 +53,9 @@ class ExhaustiveCombinationStrategyTests {
     @Test
     void shouldCombineSequencesOfDifferentLengths() {
         tester.given(
-            Stream.of(bag("X")),
-            Stream.of(bag("A"), bag("B"), bag("C")),
-            Stream.of(bag("1"), bag("2"), bag("3"), bag("4"), bag("5")));
+            () -> Stream.of(bag("X")),
+            () -> Stream.of(bag("A"), bag("B"), bag("C")),
+            () -> Stream.of(bag("1"), bag("2"), bag("3"), bag("4"), bag("5")));
 
         tester.expect(
             Stream.of(
@@ -78,7 +78,7 @@ class ExhaustiveCombinationStrategyTests {
 
     @Test
     void shouldGiveInputForSingleSequence() {
-        tester.given(Stream.of(bag("A"), bag("B"), bag("C")));
+        tester.given(() -> Stream.of(bag("A"), bag("B"), bag("C")));
 
         tester.expect(Stream.of(bag("A"), bag("B"), bag("C")));
     }
@@ -86,8 +86,8 @@ class ExhaustiveCombinationStrategyTests {
     @Test
     void shouldGiveNoResultsForSingleEmptySequence() {
         tester.given(
-            Stream.of(bag("A"), bag("B"), bag("C")),
-            Stream.of());
+            () -> Stream.of(bag("A"), bag("B"), bag("C")),
+            () -> Stream.of());
 
         tester.expectEmpty();
     }
