@@ -21,7 +21,7 @@ import com.scottlogic.deg.common.profile.constraints.delayed.IsAfterDynamicDateC
 import com.scottlogic.deg.common.profile.constraints.delayed.IsBeforeDynamicDateConstraint;
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.profile.reader.constraintreaders.EqualToFieldReader;
-import com.scottlogic.deg.profile.reader.constraintreaders.SetReader;
+import com.scottlogic.deg.profile.reader.constraintreaders.InSetReader;
 import com.scottlogic.deg.profile.reader.constraintreaders.GranularToReader;
 import com.scottlogic.deg.profile.reader.constraintreaders.OfTypeReader;
 import com.scottlogic.deg.profile.dto.AtomicConstraintType;
@@ -51,14 +51,14 @@ public class AtomicConstraintTypeReaderMap {
         return isDelayedConstraintsEnabled;
     }
 
-    public Map<AtomicConstraintType, ConstraintReader> getConstraintReaderMapEntries() {
+    public Map<AtomicConstraintType, AtomicConstraintReader> getConstraintReaderMapEntries() {
         BigDecimal maxStringLength = BigDecimal.valueOf(Defaults.MAX_STRING_LENGTH);
 
-        Map<AtomicConstraintType, ConstraintReader> map = new HashMap<>();
+        Map<AtomicConstraintType, AtomicConstraintReader> map = new HashMap<>();
 
         map.put(IS_OF_TYPE, new OfTypeReader());
         map.put(IS_GRANULAR_TO, new GranularToReader());
-        map.put(IS_IN_SET, new SetReader(fromFilePath));
+        map.put(IS_IN_SET, new InSetReader(fromFilePath));
 
         map.put(FORMATTED_AS,
             (dto, fields) -> new FormatConstraint(
@@ -173,8 +173,8 @@ public class AtomicConstraintTypeReaderMap {
         return map;
     }
 
-    private Map<AtomicConstraintType, ConstraintReader> getDelayedMapEntries() {
-        Map<AtomicConstraintType, ConstraintReader> map = new HashMap<>();
+    private Map<AtomicConstraintType, AtomicConstraintReader> getDelayedMapEntries() {
+        Map<AtomicConstraintType, AtomicConstraintReader> map = new HashMap<>();
 
         map.put(IS_EQUAL_TO_FIELD, new EqualToFieldReader());
 

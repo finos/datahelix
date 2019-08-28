@@ -71,8 +71,8 @@ public class JsonProfileReader implements ProfileReader {
                 .map(fDto -> new Field(fDto.name, uniqueList.contains(fDto.name)))
                 .collect(Collectors.toList()));
 
-        Collection<Rule> rules = mapDtos(
-            profileDto.rules,
+
+        Collection<Rule> rules = profileDto.rules.stream().map(
             r -> {
                 if (r.constraints.isEmpty()) {
                     throw new InvalidProfileException("Profile is invalid: unable to find 'constraints' for rule: " + r.rule);
@@ -80,9 +80,8 @@ public class JsonProfileReader implements ProfileReader {
                 RuleInformation constraintRule = new RuleInformation(r.rule);
                 return new Rule(
                     constraintRule,
-                    mapDtos(
-                        r.constraints,
-                        dto -> {
+                        r.constraints.stream()
+                            .map(dto -> {
                             try {
                                 return mainConstraintReader.apply(
                                     dto,
@@ -91,8 +90,8 @@ public class JsonProfileReader implements ProfileReader {
                             } catch (InvalidProfileException e) {
                                 throw new InvalidProfileException("Rule: " + r.rule + "\n" + e.getMessage());
                             }
-                        }));
-            });
+                        }).collect(Collectors.toList()));
+            }).collect(Collectors.toList());
 
         return new Profile(profileFields, rules, profileDto.description);
     }
@@ -106,23 +105,5 @@ public class JsonProfileReader implements ProfileReader {
             .forEach(result ->  uniqueList.add(result.field)));
 
         return uniqueList;
-    }
-
-    static <TInput, TOutput> Collection<TOutput> mapDtos(
-        Collection<TInput> dtos,
-        DtoConverterFunction<TInput, TOutput> mapFunc) {
-
-        Collection<TOutput> resultSet = new ArrayList<>();
-
-        for (TInput dto : dtos) {
-            resultSet.add(mapFunc.apply(dto));
-        }
-
-        return resultSet;
-    }
-
-    @FunctionalInterface
-    interface DtoConverterFunction<TInput, TOutput> {
-        TOutput apply(TInput t);
     }
 }

@@ -41,9 +41,9 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class ConstraintReaderMapTests {
+public class AtomicConstraintReaderMapTests {
 
-    Map<AtomicConstraintType, ConstraintReader> constraintReaderMap;
+    Map<AtomicConstraintType, AtomicConstraintReader> constraintReaderMap;
     ProfileFields profileFields;
 
     @BeforeAll
@@ -217,7 +217,7 @@ public class ConstraintReaderMapTests {
         List<String> missingConstraints = new ArrayList<String>();
 
         for (AtomicConstraintType type : AtomicConstraintType.values()) {
-            ConstraintReader reader = constraintReaderMap.get(type);
+            AtomicConstraintReader reader = constraintReaderMap.get(type);
             if (reader == null) {
                 missingConstraints.add(type.toString());
             }
@@ -237,7 +237,7 @@ public class ConstraintReaderMapTests {
     @ParameterizedTest(name = "{0} should return {1}")
     @MethodSource("testProvider")
     public void testAtomicConstraintReader(AtomicConstraintType type, ConstraintDTO dto, Class<?> constraintType) {
-        ConstraintReader reader = constraintReaderMap.get(type);
+        AtomicConstraintReader reader = constraintReaderMap.get(type);
 
         try {
             Constraint constraint = reader.apply(dto, profileFields);
@@ -255,7 +255,7 @@ public class ConstraintReaderMapTests {
     @ParameterizedTest(name = "{0} should be invalid")
     @MethodSource({"stringLengthInvalidOperandProvider", "ofTypeInvalidValueProvider"})
     public void testAtomicConstraintReaderWithInvalidOperands(AtomicConstraintType type, ConstraintDTO dto) {
-        ConstraintReader reader = constraintReaderMap.get(type);
+        AtomicConstraintReader reader = constraintReaderMap.get(type);
 
         Assertions.assertThrows(InvalidProfileException.class, () -> reader.apply(dto, profileFields));
     }
@@ -266,17 +266,17 @@ public class ConstraintReaderMapTests {
         invalidTypeNameDto.field = "test";
         invalidTypeNameDto.value = "garbage";
 
-        ConstraintReader constraintReader = constraintReaderMap.get(AtomicConstraintType.IS_OF_TYPE);
+        AtomicConstraintReader atomicConstraintReader = constraintReaderMap.get(AtomicConstraintType.IS_OF_TYPE);
         Assertions.assertThrows(
             InvalidProfileException.class,
-            () -> constraintReader.apply(invalidTypeNameDto, new ProfileFields(Arrays.asList(new Field("test", false)))));
+            () -> atomicConstraintReader.apply(invalidTypeNameDto, new ProfileFields(Arrays.asList(new Field("test", false)))));
     }
 
     @DisplayName("Should fail when value property is numeric and out of bounds")
     @ParameterizedTest(name = "{0} should be invalid")
     @MethodSource("numericOutOfBoundsOperandProvider")
     public void testAtomicConstraintReaderWithOutOfBoundValues(AtomicConstraintType type, ConstraintDTO dto) {
-        ConstraintReader reader = constraintReaderMap.get(type);
+        AtomicConstraintReader reader = constraintReaderMap.get(type);
 
         Assertions.assertThrows(InvalidProfileException.class, () -> reader.apply(dto, profileFields));
     }
@@ -285,7 +285,7 @@ public class ConstraintReaderMapTests {
     @ParameterizedTest(name = "{0} should be valid")
     @MethodSource("stringLengthValidOperandProvider")
     public void testAtomicConstraintReaderWithValidOperands(AtomicConstraintType type, ConstraintDTO dto) {
-        ConstraintReader reader = constraintReaderMap.get(type);
+        AtomicConstraintReader reader = constraintReaderMap.get(type);
 
         Assertions.assertDoesNotThrow(() -> reader.apply(dto, profileFields));
     }
@@ -375,7 +375,7 @@ public class ConstraintReaderMapTests {
     }
 
     private OffsetDateTime tryParseConstraintDateTimeValue(Object value) {
-        ConstraintReader reader = constraintReaderMap.get(
+        AtomicConstraintReader reader = constraintReaderMap.get(
             AtomicConstraintType.IS_AFTER_CONSTANT_DATE_TIME);
 
         ConstraintDTO dateDto = new ConstraintDTO();

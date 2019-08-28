@@ -24,7 +24,7 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
-import com.scottlogic.deg.profile.reader.ConstraintReader;
+import com.scottlogic.deg.profile.reader.AtomicConstraintReader;
 import com.scottlogic.deg.profile.reader.file.CsvInputStreamReader;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 
@@ -33,10 +33,10 @@ import java.util.stream.Collectors;
 
 import static com.scottlogic.deg.profile.reader.ConstraintReaderHelpers.getValidatedValues;
 
-public class SetReader implements ConstraintReader {
+public class InSetReader implements AtomicConstraintReader {
     private final String fromFilePath;
 
-    public SetReader(String fromFilePath) {
+    public InSetReader(String fromFilePath) {
         this.fromFilePath = fromFilePath;
     }
 
