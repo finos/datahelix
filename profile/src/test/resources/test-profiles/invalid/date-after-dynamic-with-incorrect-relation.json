@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "0.2",
+  "fields": [
+    {
+      "name": "field1"
+    }, {
+      "name": "field2"
+    }, {
+      "name": "field3"
+    }, {
+      "name": "field4"
+    }
+  ],
+  "rules": [
+    {
+      "constraints": [
+        {
+          "not": {
+            "field": "field1",
+            "is": "null"
+          }
+        },
+        {
+          "not": {
+            "field": "field2",
+            "is": "null"
+          }
+        },
+        {
+          "not": {
+            "field": "field3",
+            "is": "null"
+          }
+        },
+        {
+          "not": {
+            "field": "field4",
+            "is": "null"
+          }
+        },
+        {
+          "field": "field1",
+          "is": "ofType",
+          "value": "datetime"
+        },
+        {
+          "field": "field2",
+          "is": "ofType",
+          "value": "datetime"
+        },
+        {
+          "field": "field3",
+          "is": "ofType",
+          "value": "datetime"
+        },
+        {
+          "field": "field4",
+          "is": "ofType",
+          "value": "datetime"
+        },
+        {
+          "field": "field1",
+          "is": "after",
+          "value": {
+            "date": "8001-02-03T04:05:06.007"
+          }
+        },
+        {
+          "field": "field2",
+          "is": "afterField",
+          "value": "field1"
+        },
+        {
+          "field": "field3",
+          "is": "beforeOr",
+          "value": "field4"
+        }
+      ]
+    }
+  ]
+}

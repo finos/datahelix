@@ -17,8 +17,11 @@
 package com.scottlogic.deg.profile.reader;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
+import com.scottlogic.deg.common.profile.constraints.delayed.IsAfterDynamicDateConstraint;
+import com.scottlogic.deg.common.profile.constraints.delayed.IsBeforeDynamicDateConstraint;
 import com.scottlogic.deg.common.util.Defaults;
-import com.scottlogic.deg.profile.reader.constraintreaders.SetReader;
+import com.scottlogic.deg.profile.reader.constraintreaders.EqualToFieldReader;
+import com.scottlogic.deg.profile.reader.constraintreaders.InSetReader;
 import com.scottlogic.deg.profile.reader.constraintreaders.GranularToReader;
 import com.scottlogic.deg.profile.reader.constraintreaders.OfTypeReader;
 import com.scottlogic.deg.profile.dto.AtomicConstraintType;
@@ -29,6 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import static com.scottlogic.deg.profile.reader.ConstraintReaderHelpers.*;
 import static com.scottlogic.deg.profile.reader.ConstraintReaderHelpers.getValidatedValue;
 import static com.scottlogic.deg.profile.dto.AtomicConstraintType.*;
 
@@ -36,18 +40,25 @@ public class AtomicConstraintTypeReaderMap {
 
     private final String fromFilePath;
 
-    public AtomicConstraintTypeReaderMap(final String fromFilePath) {
+    private final boolean isDelayedConstraintsEnabled;
+
+    public AtomicConstraintTypeReaderMap(final String fromFilePath, boolean isDelayedConstraintsEnabled) {
         this.fromFilePath = fromFilePath;
+        this.isDelayedConstraintsEnabled = isDelayedConstraintsEnabled;
     }
 
-    public Map<AtomicConstraintType, ConstraintReader> getConstraintReaderMapEntries() {
+    public boolean isDelayedConstraintsEnabled() {
+        return isDelayedConstraintsEnabled;
+    }
+
+    public Map<AtomicConstraintType, AtomicConstraintReader> getConstraintReaderMapEntries() {
         BigDecimal maxStringLength = BigDecimal.valueOf(Defaults.MAX_STRING_LENGTH);
 
-        Map<AtomicConstraintType, ConstraintReader> map = new HashMap<>();
+        Map<AtomicConstraintType, AtomicConstraintReader> map = new HashMap<>();
 
         map.put(IS_OF_TYPE, new OfTypeReader());
         map.put(IS_GRANULAR_TO, new GranularToReader());
-        map.put(IS_IN_SET, new SetReader(fromFilePath));
+        map.put(IS_IN_SET, new InSetReader(fromFilePath));
 
         map.put(FORMATTED_AS,
             (dto, fields) -> new FormatConstraint(
@@ -126,7 +137,7 @@ public class AtomicConstraintTypeReaderMap {
             (dto, fields) ->
                 new IsStringLongerThanConstraint(
                     fields.getByName(dto.field),
-                    ConstraintReaderHelpers.ensureValueBetween(
+                    ensureValueBetween(
                         dto,
                         Integer.class,
                         BigDecimal.ZERO,
@@ -136,7 +147,7 @@ public class AtomicConstraintTypeReaderMap {
             (dto, fields) ->
                 new IsStringShorterThanConstraint(
                     fields.getByName(dto.field),
-                    ConstraintReaderHelpers.ensureValueBetween(
+                    ensureValueBetween(
                         dto,
                         Integer.class,
                         BigDecimal.ONE,
@@ -146,13 +157,72 @@ public class AtomicConstraintTypeReaderMap {
             (dto, fields) ->
                 new StringHasLengthConstraint(
                     fields.getByName(dto.field),
-                    ConstraintReaderHelpers.ensureValueBetween(
+                    ensureValueBetween(
                         dto,
                         Integer.class,
                         BigDecimal.ZERO,
                         maxStringLength)));
 
-            return map;
+        if (isDelayedConstraintsEnabled) {
+            map.putAll(getDelayedMapEntries());
+        }
+
+        return map;
+    }
+
+    private Map<AtomicConstraintType, AtomicConstraintReader> getDelayedMapEntries() {
+        Map<AtomicConstraintType, AtomicConstraintReader> map = new HashMap<>();
+
+        map.put(IS_EQUAL_TO_FIELD, new EqualToFieldReader());
+
+        map.put(IS_BEFORE_FIELD_DATE_TIME,
+            (dto, fields) ->
+                new IsBeforeDynamicDateConstraint(
+                    new IsBeforeConstantDateTimeConstraint(
+                        fields.getByName(dto.field),
+                        OffsetDateTime.MIN
+                    ),
+                    fields.getByName(getValueAsString(dto)),
+                    false
+                )
+        );
+
+        map.put(IS_BEFORE_OR_EQUAL_TO_FIELD_DATE_TIME,
+            (dto, fields) ->
+                new IsBeforeDynamicDateConstraint(
+                    new IsBeforeOrEqualToConstantDateTimeConstraint(
+                        fields.getByName(dto.field),
+                        OffsetDateTime.MIN
+                    ),
+                    fields.getByName(getValueAsString(dto)),
+                    true
+                )
+        );
+
+        map.put(IS_AFTER_FIELD_DATE_TIME,
+            (dto, fields) ->
+                new IsAfterDynamicDateConstraint(
+                    new IsAfterConstantDateTimeConstraint(
+                        fields.getByName(dto.field),
+                        OffsetDateTime.MAX
+                    ),
+                    fields.getByName(getValueAsString(dto)),
+                    false
+                ));
+
+        map.put(IS_AFTER_OR_EQUAL_TO_FIELD_DATE_TIME,
+            (dto, fields) ->
+                new IsAfterDynamicDateConstraint(
+                    new IsAfterOrEqualToConstantDateTimeConstraint(
+                        fields.getByName(dto.field),
+                        OffsetDateTime.MAX
+                    ),
+                    fields.getByName(getValueAsString(dto)),
+                    true
+                )
+        );
+
+        return map;
     }
 
 
