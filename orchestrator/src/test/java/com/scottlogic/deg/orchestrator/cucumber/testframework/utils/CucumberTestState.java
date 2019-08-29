@@ -174,10 +174,6 @@ public class CucumberTestState {
         return mapper.readerFor(ConstraintHolder.class).readValue(json);
     }
 
-    int getMaxStringLength() {
-        return maxStringLength;
-    }
-
     public void setMaxStringLength(int maxLength) {
         if (maxLength > Defaults.MAX_STRING_LENGTH){
             throw new IllegalArgumentException("String lengths are limited to " + Defaults.MAX_STRING_LENGTH + " characters in production");
@@ -188,6 +184,18 @@ public class CucumberTestState {
 
     public void setRequireFieldTyping(boolean requireFieldTyping) {
         this.requireFieldTyping = requireFieldTyping;
+    }
+
+    public void setFieldUnique(String fieldName) {
+        Field oldField = profileFields.stream()
+            .filter(f -> f.name.equals(fieldName))
+            .findFirst()
+            .orElseThrow(UnsupportedOperationException::new);
+
+        Field newField = new Field(fieldName, true);
+
+        profileFields.remove(oldField);
+        profileFields.add(newField);
     }
 }
 
