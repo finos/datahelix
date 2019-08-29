@@ -22,10 +22,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
+import java.util.stream.*;
 
 public class PinningCombinationStrategy implements CombinationStrategy {
 
@@ -48,7 +45,8 @@ public class PinningCombinationStrategy implements CombinationStrategy {
         public Iterator<DataBag> iterator() {
             List<SequenceAndBaselineTuple> tuples = dataBagSequences
                 .map(Supplier::get)
-                .map(sequence -> new SequenceAndBaselineTuple(sequence.iterator()))
+                .map(BaseStream::iterator)
+                .map(SequenceAndBaselineTuple::new)
                 .collect(Collectors.toList());
 
             if (tuples.stream().anyMatch(t -> t.baseline == null))
