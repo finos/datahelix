@@ -14,10 +14,7 @@ import com.scottlogic.deg.generator.walker.reductive.ReductiveTreePruner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -60,7 +57,7 @@ class DecisionBasedSolverTests {
         Map<Field, FieldSpec> fieldToFieldSpec = new HashMap<>();
         fieldToFieldSpec.put(fieldA, FieldSpec.Empty);
         fieldToFieldSpec.put(fieldB, FieldSpec.Empty);
-        expectedRowSpecs.add(new RowSpec(profileFields, fieldToFieldSpec));
+        expectedRowSpecs.add(new RowSpec(profileFields, fieldToFieldSpec, Collections.emptyList()));
 
         assertThat(expectedRowSpecs, sameBeanAs(rowSpecs.collect(Collectors.toList())));
     }
@@ -80,7 +77,7 @@ class DecisionBasedSolverTests {
         DistributedSet<Object> whitelist = new NullDistributedSet<>();
         fieldToFieldSpec.put(fieldA, FieldSpec.Empty.withWhitelist(whitelist));
         fieldToFieldSpec.put(fieldB, FieldSpec.Empty);
-        expectedRowSpecs.add(new RowSpec(profileFields, fieldToFieldSpec));
+        expectedRowSpecs.add(new RowSpec(profileFields, fieldToFieldSpec, Collections.emptyList()));
 
         assertThat(expectedRowSpecs, sameBeanAs(rowSpecs.collect(Collectors.toList())));
     }
@@ -106,11 +103,11 @@ class DecisionBasedSolverTests {
         DistributedSet<Object> whitelist = new NullDistributedSet<>();
         option0.put(fieldA, FieldSpec.Empty);
         option0.put(fieldB, FieldSpec.Empty.withWhitelist(whitelist));
-        expectedRowSpecs.add(new RowSpec(profileFields, option0));
+        expectedRowSpecs.add(new RowSpec(profileFields, option0, Collections.emptyList()));
         Map<Field, FieldSpec> option1 = new HashMap<>();
         option1.put(fieldA, FieldSpec.Empty);
         option1.put(fieldB, FieldSpec.NullOnly);
-        expectedRowSpecs.add(new RowSpec(profileFields, option1));
+        expectedRowSpecs.add(new RowSpec(profileFields, option1, Collections.emptyList()));
 
         assertThat(expectedRowSpecs, sameBeanAs(rowSpecs.collect(Collectors.toList())));
     }

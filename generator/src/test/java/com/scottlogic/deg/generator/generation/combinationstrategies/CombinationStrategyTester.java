@@ -22,20 +22,19 @@ import com.scottlogic.deg.generator.generation.databags.DataBag;
 import org.hamcrest.collection.IsArrayContainingInAnyOrder;
 import org.junit.Assert;
 
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 class CombinationStrategyTester {
     private CombinationStrategy strategy;
-    private Supplier<Stream<Stream<DataBag>>> dataBags;
+    private Stream<Stream<DataBag>> dataBags;
 
     CombinationStrategyTester(CombinationStrategy combinationStrategy) {
         strategy = combinationStrategy;
     }
 
     @SafeVarargs
-    final void given(Supplier<Stream<DataBag>>... bagSequences) {
-        dataBags = () -> Stream.of(bagSequences).map(Supplier::get);
+    final void given(Stream<DataBag>... bagSequences) {
+        dataBags = Stream.of(bagSequences);
     }
 
     void expect(Stream<DataBag> bagSequence) {

@@ -38,13 +38,13 @@ class SupportedVersionCheckerTests {
     void getSchemaFile_withSupportedVersion_returnsNonNullURL() throws IOException {
         //Arrange
         SchemaVersionGetter retriever = mock(SchemaVersionGetter.class);
-        when(retriever.getSchemaVersionOfJson(any())).thenReturn("0.1");
+        when(retriever.getSchemaVersionOfJson(any())).thenReturn("0.2");
         ProfileConfigSource configSource = mock(ProfileConfigSource.class);
         File mockFile = mock(File.class);
         when(mockFile.toPath()).thenReturn(mock(Path.class));
         when(configSource.getProfileFile()).thenReturn(mockFile);
         SupportedVersionsGetter supportedVersionsGetter = mock(SupportedVersionsGetter.class);
-        when(supportedVersionsGetter.getSupportedSchemaVersions()).thenReturn(Arrays.asList("0.1"));
+        when(supportedVersionsGetter.getSupportedSchemaVersions()).thenReturn(Arrays.asList("0.2"));
         SupportedVersionChecker validator = new SupportedVersionChecker(retriever, configSource, supportedVersionsGetter);
 
         //Act
@@ -69,7 +69,7 @@ class SupportedVersionCheckerTests {
         when(mockFile.toPath()).thenReturn(mock(Path.class));
         when(configSource.getProfileFile()).thenReturn(mockFile);
         SupportedVersionsGetter supportedVersionsGetter = mock(SupportedVersionsGetter.class);
-        when(supportedVersionsGetter.getSupportedSchemaVersions()).thenReturn(Arrays.asList("0.1"));
+        when(supportedVersionsGetter.getSupportedSchemaVersions()).thenReturn(Arrays.asList("0.2"));
         SupportedVersionChecker validator = new SupportedVersionChecker(retriever, configSource, supportedVersionsGetter);
 
         //Act & Assert

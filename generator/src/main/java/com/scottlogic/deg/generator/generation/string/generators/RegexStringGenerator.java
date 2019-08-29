@@ -17,9 +17,9 @@
 package com.scottlogic.deg.generator.generation.string.generators;
 
 import com.scottlogic.deg.generator.generation.string.AutomatonUtils;
-import com.scottlogic.deg.generator.generation.string.factorys.FiniteStringAutomatonIterator;
 import com.scottlogic.deg.generator.generation.string.factorys.InterestingStringFactory;
 import com.scottlogic.deg.generator.generation.string.factorys.RandomStringFactory;
+import com.scottlogic.deg.generator.generation.string.iterators.FiniteStringAutomatonIterator;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.SupplierBasedIterator;
 import dk.brics.automaton.Automaton;
@@ -173,29 +173,6 @@ public class RegexStringGenerator implements StringGenerator {
 
     public int hashCode() {
         return Objects.hash(this.automaton, this.getClass());
-    }
-
-    static class UnionCollector {
-        private RegexStringGenerator union;
-
-        void accumulate(RegexStringGenerator another) {
-            if (union == null) {
-                union = another;
-            } else {
-                union = union.union(another);
-            }
-        }
-
-        void combine(UnionCollector other) {
-            if (other == null || other.union == null) {
-                return;
-            }
-            union = union.union(other.union);
-        }
-
-        RegexStringGenerator getUnionGenerator() {
-            return union;
-        }
     }
 
 }

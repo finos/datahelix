@@ -65,7 +65,7 @@ class ReductiveCombinationStrategyTests {
             add(firstFieldDataBags);
             add(secondFieldDataBags);
         }};
-        final List<DataBag> result = combinationStrategy.permute(() -> dataBagSequences.stream().map(Collection::stream))
+        final List<DataBag> result = combinationStrategy.permute(dataBagSequences.stream().map(Collection::stream))
             .collect(Collectors.toList());
 
         List<DataBag> expectedDataBags = new ArrayList<DataBag>() {{

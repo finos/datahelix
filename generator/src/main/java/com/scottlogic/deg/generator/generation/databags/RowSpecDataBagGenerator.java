@@ -15,16 +15,20 @@
  */
 
 package com.scottlogic.deg.generator.generation.databags;
+
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
+import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
+import com.scottlogic.deg.generator.generation.FieldSpecGroupValueGenerator;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
+import com.scottlogic.deg.generator.generation.RowSpecGrouper;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Supplier;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class RowSpecDataBagGenerator {
@@ -34,29 +38,31 @@ public class RowSpecDataBagGenerator {
     @Inject
     public RowSpecDataBagGenerator(
         FieldSpecValueGenerator generator,
-        CombinationStrategy combinationStrategy)
-    {
+        CombinationStrategy combinationStrategy) {
         this.generator = generator;
         this.combinationStrategy = combinationStrategy;
     }
 
     public Stream<DataBag> createDataBags(RowSpec rowSpec) {
-        Supplier<Stream<Stream<DataBag>>> dataBagsForFields = () ->
-            rowSpec.getFields().stream()
-                .map(field -> generateDataForField(rowSpec, field));
+        Stream<Stream<DataBag>> dataBagsForGroups = RowSpecGrouper.createGroups(rowSpec).stream()
+            .map(group -> generateDataForGroup(rowSpec, group));
 
-        return combinationStrategy.permute(dataBagsForFields);
+        return combinationStrategy.permute(dataBagsForGroups);
     }
 
-    private Stream<DataBag> generateDataForField(RowSpec rowSpec, Field field) {
-        FieldSpec fieldSpec = rowSpec.getSpecForField(field);
-        Stream<DataBagValue> stream = generator.generate(fieldSpec);
-        return stream.map(value -> toDataBag(field, value));
-    }
+    private Stream<DataBag> generateDataForGroup(RowSpec rowSpec, FieldGroup group) {
+        List<Field> fields = group.fields();
+        List<FieldSpecRelations> relations = rowSpec.getRelations().stream()
+            .filter(relation -> fields.contains(relation.main()) || fields.contains(relation.other()))
+            .collect(Collectors.toList());
 
-    private DataBag toDataBag(Field field, DataBagValue value) {
-        Map<Field, DataBagValue> map = new HashMap<>();
-        map.put(field, value);
-        return new DataBag(map);
+        Map<Field, FieldSpec> fieldSpecMap = fields.stream()
+            .collect(Collectors.toMap(field -> field, rowSpec::getSpecForField));
+
+        FieldSpecGroup specGroup = new FieldSpecGroup(fieldSpecMap, relations);
+
+        FieldSpecGroupValueGenerator groupGenerator = new FieldSpecGroupValueGenerator(generator);
+
+        return groupGenerator.generate(specGroup);
     }
 }

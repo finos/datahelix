@@ -36,6 +36,10 @@ public class ConstraintDTO {
     /** a constant value - eg, used in isEqualTo or isGreaterThan */
     public Object value;
 
+    public Integer offset;
+
+    public String offsetUnit;
+
     /** a set of values - eg, used in isInSet */
     public Collection<Object> values;
 
@@ -60,4 +64,20 @@ public class ConstraintDTO {
     /** the constraint to apply if 'if_' is false */
     @JsonProperty("else")
     public ConstraintDTO else_;
+
+    @Override
+    public String toString() {
+        return "ConstraintDTO{" +
+            "is=" + is +
+            ", field='" + field + '\'' +
+            ", value=" + value +
+            ", values=" + values +
+            ", not=" + not +
+            ", anyOf=" + anyOf +
+            ", allOf=" + allOf +
+            ", if_=" + if_ +
+            ", then=" + then +
+            ", else_=" + else_ +
+            '}';
+    }
 }
