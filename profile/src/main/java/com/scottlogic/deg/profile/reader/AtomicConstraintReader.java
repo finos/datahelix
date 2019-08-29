@@ -21,7 +21,7 @@ import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 
 @FunctionalInterface
-public interface ConstraintReader {
+public interface AtomicConstraintReader {
     Constraint apply(
         ConstraintDTO dto,
         ProfileFields fields);
