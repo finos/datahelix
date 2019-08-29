@@ -31,7 +31,7 @@ public class ReductiveCombinationStrategy implements CombinationStrategy {
     @Override
     public Stream<DataBag> permute(Stream<DataBagStream> dataBagSequences) {
         List<RestartableIterator<DataBag>> bagsAsLists = dataBagSequences
-            .map(dbs -> new RestartableIterator<>(dbs.toIterator().iterator()))
+            .map(dbs -> new RestartableIterator<>(dbs.toIterator()))
             .collect(Collectors.toList());
 
         return next(DataBag.empty, bagsAsLists, 0);

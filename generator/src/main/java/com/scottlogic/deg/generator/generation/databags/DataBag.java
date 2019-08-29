@@ -80,4 +80,9 @@ public class DataBag implements GeneratedObject {
             "fieldToValue=" + fieldToValue +
             '}';
     }
+
+    public boolean isUnique(){
+        return fieldToValue.keySet().stream()
+            .anyMatch(Field::isUnique);
+    }
 }

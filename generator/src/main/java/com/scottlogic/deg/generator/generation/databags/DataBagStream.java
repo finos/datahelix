@@ -1,5 +1,6 @@
 package com.scottlogic.deg.generator.generation.databags;
 
+import java.util.Iterator;
 import java.util.stream.*;
 
 public class DataBagStream {
@@ -15,10 +16,8 @@ public class DataBagStream {
         return unique;
     };
 
-    public DataBagIterable toIterator() {
-        Iterable<DataBag> data = this.stream::iterator;
-
-        return new DataBagIterable(data.iterator(), this.unique);
+    public Iterator<DataBag> toIterator() {
+        return stream.iterator();
     }
 
     public Stream<DataBag> stream () {

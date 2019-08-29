@@ -46,7 +46,7 @@ public class PinningCombinationStrategy implements CombinationStrategy {
         @Override
         public Iterator<DataBag> iterator() {
             List<SequenceAndBaselineTuple> tuples = this.dataBagSequences
-                    .map(sequence -> new SequenceAndBaselineTuple(sequence.toIterator().iterator()))
+                    .map(sequence -> new SequenceAndBaselineTuple(sequence.toIterator()))
                     .collect(Collectors.toList());
 
             if (tuples.stream().anyMatch(t -> t.baseline == null))
