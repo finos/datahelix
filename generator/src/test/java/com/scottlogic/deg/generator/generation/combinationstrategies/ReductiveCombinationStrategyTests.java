@@ -27,6 +27,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import static com.shazam.shazamcrest.MatcherAssert.assertThat;
+import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
+
 
 class ReductiveCombinationStrategyTests {
     @Test
@@ -65,7 +68,8 @@ class ReductiveCombinationStrategyTests {
             add(firstFieldDataBags);
             add(secondFieldDataBags);
         }};
-        final List<DataBag> result = combinationStrategy.permute(dataBagSequences.stream().map(Collection::stream))
+
+        final List<DataBag> result = combinationStrategy.permute(dataBagSequences.stream().map(x->()->x.stream()))
             .collect(Collectors.toList());
 
         List<DataBag> expectedDataBags = new ArrayList<DataBag>() {{

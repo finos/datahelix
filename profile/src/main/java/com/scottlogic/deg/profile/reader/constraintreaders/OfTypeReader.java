@@ -23,7 +23,7 @@ import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
-import com.scottlogic.deg.profile.reader.ConstraintReader;
+import com.scottlogic.deg.profile.reader.AtomicConstraintReader;
 import com.scottlogic.deg.profile.reader.ConstraintReaderHelpers;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import com.scottlogic.deg.profile.reader.file.names.NameRetriever;
@@ -33,7 +33,7 @@ import java.math.BigDecimal;
 
 import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.*;
 
-public class OfTypeReader implements ConstraintReader {
+public class OfTypeReader implements AtomicConstraintReader {
 
     @Override
     public Constraint apply(ConstraintDTO dto, ProfileFields fields) {

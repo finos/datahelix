@@ -36,6 +36,7 @@ import static com.scottlogic.deg.common.util.Defaults.DEFAULT_MAX_ROWS;
 import static com.scottlogic.deg.generator.config.detail.CombinationStrategyType.MINIMAL;
 import static com.scottlogic.deg.generator.config.detail.DataGenerationType.RANDOM;
 import static com.scottlogic.deg.generator.config.detail.TreeWalkerType.DECISION_BASED;
+import static com.scottlogic.deg.generator.config.detail.TreeWalkerType.REDUCTIVE;
 import static com.scottlogic.deg.output.guice.OutputFormat.CSV;
 
 /**
@@ -105,9 +106,7 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     private DataGenerationType generationType = RANDOM;
 
     @CommandLine.Option(names = {"-c", "--combination-strategy"},
-        description = "Determines the type of combination strategy used (${COMPLETION-CANDIDATES})",
-        hidden = true)
-    @SuppressWarnings("unused")
+        description = "Determines the type of combination strategy used (${COMPLETION-CANDIDATES})")
     private CombinationStrategyType combinationType = MINIMAL;
 
     @CommandLine.Option(
@@ -214,7 +213,7 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
 
     @Override
     public boolean isDelayedConstraintsEnabled() {
-        return walkerType == DECISION_BASED;
+        return walkerType != REDUCTIVE;
     }
 
     @Override

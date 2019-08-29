@@ -7,7 +7,7 @@ In multiple areas of the generator, we find ourselves with multiple streams of v
 
 There are multiple ways to perform this selection process; we refer to these as **combination strategies**. Different combination strategies have different properties.
 
-Our current default is the **exhaustive** strategy.
+Our current default is the **minimal** strategy. The combination strategy can be specified with the ```--combination-strategy``` command line argument with ```EXHAUSTIVE```, ```MINIMAL``` and ```PINNING``` as options (eg. ```--combination-strategy=PINNING```).
 
 ## Exhaustive
 
@@ -59,13 +59,3 @@ It has these properties:
 * It is always possible to find another output differing by just one field
 * Output size increases **linearly** with number of fields
 * The maximum number of rows generated can be calculated as: ( the sum of the total number of possible values for all fields ) less ( the total number of fields ) plus 1
-
-## Random
-
-Whereas other strategies produce a bounded set of outputs, the random strategy produces an infinite series by repeatedly randomly picking values for each field.
-
-## Possible future strategies
-
-### Hybrid
-
-We may want to be exhaustive over some fields (because the user thinks there may be unknown interactions between them) but minimal over others.

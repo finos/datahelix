@@ -19,15 +19,17 @@ package com.scottlogic.deg.generator.generation.combinationstrategies;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.*;
 
 public class MinimalCombinationStrategy implements CombinationStrategy {
 
     @Override
-    public Stream<DataBag> permute(Stream<Stream<DataBag>> dataBagSequences) {
+    public Stream<DataBag> permute(Stream<Supplier<Stream<DataBag>>> dataBagSequences) {
         List<Iterator<DataBag>> iterators = dataBagSequences
-                .map(BaseStream::iterator)
-                .collect(Collectors.toList());
+            .map(Supplier::get)
+            .map(BaseStream::iterator)
+            .collect(Collectors.toList());
 
         return iterators.stream().allMatch(Iterator::hasNext)
             ? StreamSupport.stream(iterable(iterators).spliterator(), false)
