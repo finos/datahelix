@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "0.2",
+  "fields": [
+    {
+      "name": "first"
+    }, {
+      "name": "second"
+    }
+  ],
+  "rules": [
+    {
+      "constraints": [
+        {
+          "not": {
+            "field": "first",
+            "is": "null"
+          }
+        },
+        {
+          "not": {
+            "field": "second",
+            "is": "null"
+          }
+        },
+        {
+          "field": "first",
+          "is": "ofType",
+          "value": "datetime"
+        },
+        {
+          "field": "second",
+          "is": "ofType",
+          "value": "datetime"
+        },
+        {
+          "field": "first",
+          "is": "after",
+          "value": {
+            "date": "8001-02-03T04:05:06.007"
+          }
+        },
+        {
+          "field": "second",
+          "is": "equalToField",
+          "value": "first"
+        }
+      ]
+    }
+  ]
+}

@@ -33,6 +33,9 @@ import java.time.temporal.TemporalAccessor;
 import java.util.*;
 
 public class ConstraintReaderHelpers {
+
+    private static final OffsetDateTime NOW = OffsetDateTime.now();
+
     public static Object getValidatedValue(ConstraintDTO dto) {
         return getValidatedValue(dto, dto.value, Object.class);
     }
@@ -140,7 +143,8 @@ public class ConstraintReaderHelpers {
         return requiredType.cast(value);
     }
 
-    public static String getValueAsString(Object value) {
+    public static String getValueAsString(ConstraintDTO dto) {
+        Object value = dto.value;
         if (value == null) {
             return null;
         }
@@ -216,6 +220,10 @@ public class ConstraintReaderHelpers {
     }
 
     private static OffsetDateTime parseDate(String value, ConstraintDTO dto) {
+        if (value.toUpperCase().equals("NOW")) {
+            return NOW;
+        }
+
         DateTimeFormatter formatter = new DateTimeFormatterBuilder()
             .append(DateTimeFormatter.ofPattern("u-MM-dd'T'HH:mm:ss'.'SSS"))
             .optionalStart()

@@ -24,5 +24,9 @@ public interface FieldValueSource {
     Iterable<Object> generateAllValues();
 
     Iterable<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator);
+
+    default Object generateRandomValue(RandomNumberGenerator randomNumberGenerator) {
+        return generateRandomValues(randomNumberGenerator).iterator().next();
+    }
 }
 

@@ -64,13 +64,14 @@ workflows:
           filters:
             branches:
               ignore: master
-      - check_commit_message:
-          filters:
-            branches:
-              ignore: master
-  release:
-    jobs:
-      - release:
-          filters:
-            branches:
-              only: master
+# # Ignored to disable semantic versioning for now:
+#      - check_commit_message:
+#          filters:
+#            branches:
+#              ignore: master
+#  release:
+#    jobs:
+#      - release:
+#          filters:
+#            branches:
+#              only: master

@@ -28,6 +28,7 @@ import com.scottlogic.deg.generator.generation.databags.*;
 import com.scottlogic.deg.common.output.GeneratedObject;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class DecisionTreeDataGenerator implements DataGenerator {
@@ -69,10 +70,11 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         if (decisionTree.getRootNode() == null) {
             return Stream.empty();
         }
-        Stream<Stream<DataBag>> partitionedDataBags = treePartitioner
+
+        Stream<Supplier<Stream<DataBag>>> partitionedDataBags = treePartitioner
             .splitTreeIntoPartitions(decisionTree)
             .map(treeOptimiser::optimiseTree)
-            .map(treeWalker::walk);
+            .map(tree -> () -> treeWalker.walk(tree));
 
         return partitionCombiner.permute(partitionedDataBags)
             .map(d->(GeneratedObject)d)

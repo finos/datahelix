@@ -34,7 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 class JsonDataSetWriter implements DataSetWriter {
-    private static final DateTimeFormatter standardDateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss");
+    private static final DateTimeFormatter standardDateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
     private final SequenceWriter writer;
     private final ProfileFields fields;

@@ -16,30 +16,44 @@
 
 package com.scottlogic.deg.generator.utils;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class SetUtils {
-    public static <T> Set<T> union(Set<T> a, Set<T> b) {
+
+    private SetUtils() {
+        throw new IllegalStateException("Do not instantiate utility class");
+    }
+
+    public static <T> Set<T> union(Collection<T> a, Collection<T> b) {
         return Collections.unmodifiableSet(Stream
             .concat(a.stream(), b.stream())
             .collect(Collectors.toSet()));
     }
 
-    public static <T> Set<T> intersect(Set<T> a, Set<T> b) {
+    public static <T> Set<T> intersect(Collection<T> a, Collection<T> b) {
         final Set<T> intersection = new HashSet<>(a);
         intersection.retainAll(b);
         return Collections.unmodifiableSet(intersection);
+    }
+
+    public static <T> T firstIteratorElement(Collection<T> collection) {
+        if (collection.isEmpty()) {
+            throw new IllegalArgumentException("Cannot pick first element from an empty collection");
+        }
+        return collection.iterator().next();
+    }
+
+    public static <T> Set<T> setOf(T e1, T e2) {
+        return Collections.unmodifiableSet(Stream.of(e1, e2).collect(Collectors.toSet()));
     }
 
     public static <T> Set<T> setOf(T e1, T e2, T e3) {
         return Collections.unmodifiableSet(Stream.of(e1, e2, e3).collect(Collectors.toSet()));
     }
 
+    @SafeVarargs
     public static <T> Set<T> setOf(T... elements) {
         return Collections.unmodifiableSet(Arrays.stream(elements).collect(Collectors.toSet()));
     }
