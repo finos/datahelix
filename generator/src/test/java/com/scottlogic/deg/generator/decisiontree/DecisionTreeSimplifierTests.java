@@ -44,19 +44,19 @@ class DecisionTreeSimplifierTests {
     void simplify_decisionContainsSingleOptiontWithMatchingConstraintOnRootNode_doesNotSimplifyTree() {
         DecisionTree tree = new DecisionTree(
             new ConstraintNodeBuilder().addAtomicConstraints(Arrays.asList(
-                new IsInSetConstraint(new Field("Field 1", false), setOf(1, 2)),
-                new IsNullConstraint(new Field("Field 1", false)).negate()
+                new IsInSetConstraint(new Field("Field 1"), setOf(1, 2)),
+                new IsNullConstraint(new Field("Field 1")).negate()
             )).setDecisions(Collections.singletonList(
                 new DecisionNode(
                     Collections.singletonList(
                         new ConstraintNodeBuilder().addAtomicConstraints(Collections.singletonList(
-                            new IsInSetConstraint(new Field("Field 1", false), setOf(1, 2))
+                            new IsInSetConstraint(new Field("Field 1"), setOf(1, 2))
                         )).setDecisions(Collections.emptyList()).build()
                     )
                 )
             )).build(),
             new ProfileFields(
-                new ArrayList<Field>() {{ add(new Field("Field 1", false)); }}
+                new ArrayList<Field>() {{ add(new Field("Field 1")); }}
             )
         );
         DecisionTreeSimplifier simplifier = new DecisionTreeSimplifier();
@@ -71,19 +71,19 @@ class DecisionTreeSimplifierTests {
     void simplify_decisionContainsSingleOptionWithDifferingConstraintOnRootNode_simplifiesDecision() {
         DecisionTree tree = new DecisionTree(
             new ConstraintNodeBuilder().addAtomicConstraints(Arrays.asList(
-                new IsInSetConstraint(new Field("Field 1", false), setOf(1, 2)),
-                new IsNullConstraint(new Field("Field 1", false)).negate()
+                new IsInSetConstraint(new Field("Field 1"), setOf(1, 2)),
+                new IsNullConstraint(new Field("Field 1")).negate()
             )).setDecisions(Collections.singletonList(
                 new DecisionNode(
                     Collections.singletonList(
                         new ConstraintNodeBuilder().addAtomicConstraints(Collections.singletonList(
-                            new IsInSetConstraint(new Field("Field 2", false), setOf("A", "B"))
+                            new IsInSetConstraint(new Field("Field 2"), setOf("A", "B"))
                         )).setDecisions(Collections.emptyList()).build()
                     )
                 )
             )).build(),
             new ProfileFields(
-                new ArrayList<Field>() {{ add(new Field("Field 1", false)); }}
+                new ArrayList<Field>() {{ add(new Field("Field 1")); }}
             )
         );
         DecisionTreeSimplifier simplifier = new DecisionTreeSimplifier();
@@ -91,9 +91,9 @@ class DecisionTreeSimplifierTests {
         final DecisionTree result = simplifier.simplify(tree);
 
         final List<AtomicConstraint> expectedConstraints = Arrays.asList(
-            new IsInSetConstraint(new Field("Field 1", false), setOf(1, 2)),
-            new IsNullConstraint(new Field("Field 1", false)).negate(),
-            new IsInSetConstraint(new Field("Field 2", false), setOf("A", "B"))
+            new IsInSetConstraint(new Field("Field 1"), setOf(1, 2)),
+            new IsNullConstraint(new Field("Field 1")).negate(),
+            new IsInSetConstraint(new Field("Field 2"), setOf("A", "B"))
         );
         Assert.assertTrue(result.rootNode.getAtomicConstraints().containsAll(expectedConstraints));
         Assert.assertTrue(result.rootNode.getDecisions().isEmpty());

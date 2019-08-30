@@ -28,8 +28,8 @@ public class IsGranularToNumericConstraintTests {
 
     @Test
     public void testConstraintIsEqual() {
-        Field field1 = new Field("TestField", false);
-        Field field2 = new Field("TestField", false);
+        Field field1 = new Field("TestField");
+        Field field2 = new Field("TestField");
         IsGranularToNumericConstraint constraint1 = new IsGranularToNumericConstraint(field1, new ParsedGranularity(new BigDecimal(0.1)));
         IsGranularToNumericConstraint constraint2 = new IsGranularToNumericConstraint(field2, new ParsedGranularity(new BigDecimal(0.1)));
         Assert.assertThat(constraint1, Matchers.equalTo(constraint2));
@@ -37,8 +37,8 @@ public class IsGranularToNumericConstraintTests {
 
     @Test
     public void testConstraintIsNotEqualDueToField() {
-        Field field1 = new Field("TestField", false);
-        Field field2 = new Field("TestField2", false);
+        Field field1 = new Field("TestField");
+        Field field2 = new Field("TestField2");
         IsGranularToNumericConstraint constraint1 = new IsGranularToNumericConstraint(field1, new ParsedGranularity(new BigDecimal(0.1)));
         IsGranularToNumericConstraint constraint2 = new IsGranularToNumericConstraint(field2, new ParsedGranularity(new BigDecimal(0.1)));
         Assert.assertNotEquals(constraint1, constraint2);
@@ -46,8 +46,8 @@ public class IsGranularToNumericConstraintTests {
 
     @Test
     public void testConstraintIsNotEqualDueToValue() {
-        Field field1 = new Field("TestField", false);
-        Field field2 = new Field("TestField", false);
+        Field field1 = new Field("TestField");
+        Field field2 = new Field("TestField");
         IsGranularToNumericConstraint constraint1 = new IsGranularToNumericConstraint(field1, new ParsedGranularity(new BigDecimal(0.1)));
         IsGranularToNumericConstraint constraint2 = new IsGranularToNumericConstraint(field2, new ParsedGranularity(new BigDecimal(1.0)));
         Assert.assertNotEquals(constraint1, constraint2);

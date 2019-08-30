@@ -126,7 +126,7 @@ public class CucumberTestState {
     }
 
     public void addField(String fieldName) {
-        this.profileFields.add(new Field(fieldName, false));
+        this.profileFields.add(new Field(fieldName));
     }
 
     public void addException(Exception e){
@@ -192,7 +192,7 @@ public class CucumberTestState {
             .findFirst()
             .orElseThrow(UnsupportedOperationException::new);
 
-        Field newField = new Field(fieldName, true);
+        Field newField = new Field(fieldName);
 
         profileFields.remove(oldField);
         profileFields.add(newField);

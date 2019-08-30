@@ -37,8 +37,8 @@ class RowSpecGrouperTest {
 
     @Test
     void createGroups_withTwoRelatedFields_givesOneGroupOfSizeOne() {
-        Field first = new Field("first", false);
-        Field second = new Field("second", false);
+        Field first = new Field("first");
+        Field second = new Field("second");
         ProfileFields fields = new ProfileFields(Arrays.asList(first, second));
 
         Map<Field, FieldSpec> fieldSpecMap = fieldSpecMapOf(first, second);
@@ -55,9 +55,9 @@ class RowSpecGrouperTest {
 
     @Test
     void createGroups_withTwoAndOneFields_givesTwoGroups() {
-        Field first = new Field("first", false);
-        Field second = new Field("second", false);
-        Field third = new Field("third", false);
+        Field first = new Field("first");
+        Field second = new Field("second");
+        Field third = new Field("third");
         ProfileFields fields = new ProfileFields(Arrays.asList(first, second, third));
 
         Map<Field, FieldSpec> fieldSpecMap = fieldSpecMapOf(first, second, third);
@@ -74,9 +74,9 @@ class RowSpecGrouperTest {
 
     @Test
     void createGroups_withThreeIndependentFields_givesThreeGroups() {
-        Field first = new Field("first", false);
-        Field second = new Field("second", false);
-        Field third = new Field("third", false);
+        Field first = new Field("first");
+        Field second = new Field("second");
+        Field third = new Field("third");
         ProfileFields fields = new ProfileFields(Arrays.asList(first, second, third));
 
         Map<Field, FieldSpec> fieldSpecMap = fieldSpecMapOf(first, second, third);
@@ -92,9 +92,9 @@ class RowSpecGrouperTest {
 
     @Test
     void createGroups_withThreeCodependentFields_givesOneGroup() {
-        Field first = new Field("first", false);
-        Field second = new Field("second", false);
-        Field third = new Field("third", false);
+        Field first = new Field("first");
+        Field second = new Field("second");
+        Field third = new Field("third");
         ProfileFields fields = new ProfileFields(Arrays.asList(first, second, third));
 
         Map<Field, FieldSpec> fieldSpecMap = fieldSpecMapOf(first, second, third);
@@ -110,9 +110,9 @@ class RowSpecGrouperTest {
 
     @Test
     void createGroups_withThreeRelatedFieldsWithACircularLink_givesOneGroup() {
-        Field first = new Field("first", false);
-        Field second = new Field("second", false);
-        Field third = new Field("third", false);
+        Field first = new Field("first");
+        Field second = new Field("second");
+        Field third = new Field("third");
         ProfileFields fields = new ProfileFields(Arrays.asList(first, second, third));
 
         Map<Field, FieldSpec> fieldSpecMap = fieldSpecMapOf(first, second, third);
@@ -131,11 +131,11 @@ class RowSpecGrouperTest {
 
     @Test
     void createGroups_withFiveFields_correctlyGroups() {
-        Field first = new Field("first", false);
-        Field second = new Field("second", false);
-        Field third = new Field("third", false);
-        Field fourth = new Field("fourth", false);
-        Field fifth = new Field("fifth", false);
+        Field first = new Field("first");
+        Field second = new Field("second");
+        Field third = new Field("third");
+        Field fourth = new Field("fourth");
+        Field fifth = new Field("fifth");
 
         ProfileFields fields = new ProfileFields(Arrays.asList(first, second, third, fourth, fifth));
 
@@ -155,8 +155,8 @@ class RowSpecGrouperTest {
 
     @Test
     void createGroups_withMultipleLinksBetweenTwoFields_givesOneGroup() {
-        Field first = new Field("first", false);
-        Field second = new Field("second", false);
+        Field first = new Field("first");
+        Field second = new Field("second");
 
         ProfileFields fields = new ProfileFields(Arrays.asList(first, second));
 

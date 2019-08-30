@@ -50,16 +50,16 @@ public class MinimalCombinationStrategy implements CombinationStrategy {
 
         @Override
         public boolean hasNext() {
-            return uniqueHaveNext() && anyHaveNext();
+            return uniqueHasNext() && anyHasNext();
         }
 
-        private boolean uniqueHaveNext() {
+        private boolean uniqueHasNext() {
             return lastValues.entrySet().stream()
                 .filter(entry -> entry.getValue().isUnique())
                 .allMatch(entry -> entry.getKey().hasNext());
         }
 
-        private boolean anyHaveNext() {
+        private boolean anyHasNext() {
             return iterators
                 .stream()
                 .anyMatch(Iterator::hasNext);

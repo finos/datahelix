@@ -29,8 +29,8 @@ public class NotConstraintTests {
 
     @Test
     public void testConstraintIsEqual() {
-        Field field1 = new Field("TestField", false);
-        Field field2 = new Field("TestField", false);
+        Field field1 = new Field("TestField");
+        Field field2 = new Field("TestField");
         Constraint constraint1 = new IsNullConstraint(field1).negate();
         Constraint constraint2 = new IsNullConstraint(field2).negate();
         Assert.assertThat(constraint1, Matchers.equalTo(constraint2));
@@ -38,8 +38,8 @@ public class NotConstraintTests {
 
     @Test
     public void testConstraintIsEqualRecursively() {
-        Field field1 = new Field("TestField", false);
-        Field field2 = new Field("TestField", false);
+        Field field1 = new Field("TestField");
+        Field field2 = new Field("TestField");
         Constraint constraint1 = new IsNullConstraint(field1).negate();
         Constraint constraint2 = new IsNullConstraint(field2).negate().negate().negate();
         Assert.assertThat(constraint1, Matchers.equalTo(constraint2));
@@ -47,8 +47,8 @@ public class NotConstraintTests {
 
     @Test
     public void testConstraintIsEqualRecursivelySameLevel() {
-        Field field1 = new Field("TestField", false);
-        Field field2 = new Field("TestField", false);
+        Field field1 = new Field("TestField");
+        Field field2 = new Field("TestField");
         Constraint constraint1 = new IsNullConstraint(field1).negate().negate().negate();
         Constraint constraint2 = new IsNullConstraint(field2).negate().negate().negate();
         Assert.assertThat(constraint1, Matchers.equalTo(constraint2));
@@ -56,8 +56,8 @@ public class NotConstraintTests {
 
     @Test
     public void testConstraintIsNotEqualDueToField() {
-        Field field1 = new Field("TestField", false);
-        Field field2 = new Field("TestField2", false);
+        Field field1 = new Field("TestField");
+        Field field2 = new Field("TestField2");
         Constraint constraint1 = new IsNullConstraint(field1).negate();
         Constraint constraint2 = new IsNullConstraint(field2).negate();
         Assert.assertNotEquals(constraint1, constraint2);
@@ -65,8 +65,8 @@ public class NotConstraintTests {
 
     @Test
     public void testConstraintIsNotEqualDueToValue() {
-        Field field1 = new Field("TestField", false);
-        Field field2 = new Field("TestField", false);
+        Field field1 = new Field("TestField");
+        Field field2 = new Field("TestField");
         Constraint constraint1 = new IsInSetConstraint(
             field1,
             FrequencyDistributedSet.singleton("abc")
@@ -80,8 +80,8 @@ public class NotConstraintTests {
 
     @Test
     public void testConstraintIsNotEqualRecursively() {
-        Field field1 = new Field("TestField", false);
-        Field field2 = new Field("TestField", false);
+        Field field1 = new Field("TestField");
+        Field field2 = new Field("TestField");
         Constraint constraint1 = new IsNullConstraint(field1).negate();
         Constraint constraint2 = new IsNullConstraint(field2).negate().negate();
         Assert.assertNotEquals(constraint1, constraint2);

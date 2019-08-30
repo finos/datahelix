@@ -51,7 +51,7 @@ class FieldSpecValueGeneratorTests {
             new StandardFieldValueSourceEvaluator(),
             new JavaUtilRandomNumberGenerator());
 
-        final Set<DataBagValue> result = fieldSpecFulfiller.generate(new Field(null, false), fieldSpec).collect(Collectors.toSet());
+        final Set<DataBagValue> result = fieldSpecFulfiller.generate(new Field(null), fieldSpec).collect(Collectors.toSet());
 
         Set<DataBagValue> expectedDataBags = fieldSpec.getWhitelist().set()
             .stream()
@@ -80,7 +80,7 @@ class FieldSpecValueGeneratorTests {
             new JavaUtilRandomNumberGenerator());
 
         final Set<DataBagValue> result =
-            fieldSpecFulfiller.generate(new Field(null, false), fieldSpec).collect(Collectors.toSet());
+            fieldSpecFulfiller.generate(new Field(null), fieldSpec).collect(Collectors.toSet());
 
         Set<DataBagValue> expectedDataBags = new HashSet<>(
             Arrays.asList(
@@ -139,7 +139,7 @@ class FieldSpecValueGeneratorTests {
                 randomNumberGenerator
             );
 
-            fieldSpecFulfiller.generate(new Field(null, true), fieldSpec).collect(Collectors.toSet());
+            fieldSpecFulfiller.generate(new Field(null), fieldSpec).collect(Collectors.toSet());
 
             verify(fieldValueSource, times(1)).generateAllValues();
             verify(fieldValueSource, times(0)).generateInterestingValues();
@@ -156,7 +156,7 @@ class FieldSpecValueGeneratorTests {
                 randomNumberGenerator
             );
 
-            fieldSpecFulfiller.generate(new Field(null, false), fieldSpec).collect(Collectors.toSet());
+            fieldSpecFulfiller.generate(new Field(null), fieldSpec).collect(Collectors.toSet());
 
             verify(fieldValueSource, times(0)).generateAllValues();
             verify(fieldValueSource, times(0)).generateInterestingValues();
@@ -173,7 +173,7 @@ class FieldSpecValueGeneratorTests {
                 randomNumberGenerator
             );
 
-            fieldSpecFulfiller.generate(new Field(null, true), fieldSpec).collect(Collectors.toSet());
+            fieldSpecFulfiller.generate(new Field(null), fieldSpec).collect(Collectors.toSet());
 
             verify(fieldValueSource, times(1)).generateAllValues();
             verify(fieldValueSource, times(0)).generateInterestingValues();
@@ -190,7 +190,7 @@ class FieldSpecValueGeneratorTests {
                 randomNumberGenerator
             );
 
-            fieldSpecFulfiller.generate(new Field(null, false), fieldSpec).collect(Collectors.toSet());
+            fieldSpecFulfiller.generate(new Field(null), fieldSpec).collect(Collectors.toSet());
 
             verify(fieldValueSource, times(0)).generateAllValues();
             verify(fieldValueSource, times(1)).generateInterestingValues();
@@ -207,7 +207,7 @@ class FieldSpecValueGeneratorTests {
                 randomNumberGenerator
             );
 
-            fieldSpecFulfiller.generate(new Field(null, false), fieldSpec).collect(Collectors.toSet());
+            fieldSpecFulfiller.generate(new Field(null), fieldSpec).collect(Collectors.toSet());
 
             verify(fieldValueSource, times(1)).generateAllValues();
             verify(fieldValueSource, times(0)).generateInterestingValues();
@@ -224,7 +224,7 @@ class FieldSpecValueGeneratorTests {
                 randomNumberGenerator
             );
 
-            fieldSpecFulfiller.generate(new Field(null, false), fieldSpec).collect(Collectors.toSet());
+            fieldSpecFulfiller.generate(new Field(null), fieldSpec).collect(Collectors.toSet());
 
             verify(fieldValueSource, times(1)).generateAllValues();
             verify(fieldValueSource, times(0)).generateInterestingValues();

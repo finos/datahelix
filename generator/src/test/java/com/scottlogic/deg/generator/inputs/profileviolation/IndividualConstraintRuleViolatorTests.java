@@ -69,9 +69,9 @@ public class IndividualConstraintRuleViolatorTests {
 
         target = new IndividualConstraintRuleViolator(inputFilters);
 
-        atomicConstraint1 = new IsLessThanConstantConstraint(new Field("foo", false), 10);
-        atomicConstraint2 = new IsLessThanConstantConstraint(new Field("bar", false), 20);
-        atomicConstraint3 = new IsLessThanConstantConstraint(new Field("foobar", false), 30);
+        atomicConstraint1 = new IsLessThanConstantConstraint(new Field("foo"), 10);
+        atomicConstraint2 = new IsLessThanConstantConstraint(new Field("bar"), 20);
+        atomicConstraint3 = new IsLessThanConstantConstraint(new Field("foobar"), 30);
         ruleInformation = new RuleInformation();
     }
 

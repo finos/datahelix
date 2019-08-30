@@ -42,15 +42,15 @@ public class FieldSpecGroupValueGenerator {
     }
 
     public Stream<DataBag> generate(FieldSpecGroup group) {
-        Field firstField = SetUtils.firstIteratorElement(group.fieldSpecs().keySet());
+        Field first = SetUtils.firstIteratorElement(group.fieldSpecs().keySet());
 
-        FieldSpecGroup groupRespectingFirstField = initialAdjustments(firstField, group);
-        FieldSpec firstSpec = groupRespectingFirstField.fieldSpecs().get(firstField);
+        FieldSpecGroup groupRespectingFirstField = initialAdjustments(first, group);
+        FieldSpec firstSpec = groupRespectingFirstField.fieldSpecs().get(first);
 
-        Stream<DataBag> firstDataBagValues = underlyingGenerator.generate(firstField, firstSpec)
-            .map(value -> toDataBag(firstField, value));
+        Stream<DataBag> firstDataBagValues = underlyingGenerator.generate(first, firstSpec)
+            .map(value -> toDataBag(first, value));
 
-        return createRemainingDataBags(firstDataBagValues, firstField, groupRespectingFirstField);
+        return createRemainingDataBags(firstDataBagValues, first, groupRespectingFirstField);
     }
 
     private static DataBag toDataBag(Field field, DataBagValue value) {
@@ -155,11 +155,11 @@ public class FieldSpecGroupValueGenerator {
         map.put(field, newSpec);
     }
 
-    private Stream<DataBag> createRemainingDataBags(Stream<DataBag> stream, Field first, FieldSpecGroup group) {
+    private Stream<DataBag> createRemainingDataBags(Stream<DataBag> stream, Field field, FieldSpecGroup group) {
         Stream<DataBagGroupWrapper> initial = stream
-            .map(dataBag -> new DataBagGroupWrapper(dataBag, first, group, underlyingGenerator))
-            .map(wrapper -> adjustWrapperBounds(wrapper, first));
-        Set<Field> toProcess = filterFromSet(group.fieldSpecs().keySet(), first);
+            .map(dataBag -> new DataBagGroupWrapper(dataBag, field, group, underlyingGenerator))
+            .map(wrapper -> adjustWrapperBounds(wrapper, field));
+        Set<Field> toProcess = filterFromSet(group.fieldSpecs().keySet(), field);
 
         Stream<DataBagGroupWrapper> wrappedStream = recursiveMap(initial, toProcess);
 

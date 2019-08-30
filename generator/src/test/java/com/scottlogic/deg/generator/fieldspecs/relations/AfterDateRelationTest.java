@@ -31,8 +31,8 @@ class AfterDateRelationTest {
 
     @Test
     public void reduceToRelatedFieldSpec_comparingTwoFields_givesALaterFieldSpec() {
-        Field first = new Field("first", false);
-        Field second = new Field("second", false);
+        Field first = new Field("first");
+        Field second = new Field("second");
 
         FieldSpecRelations relation = new AfterDateRelation(first, second, true);
 

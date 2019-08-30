@@ -30,8 +30,8 @@ class BeforeDateRelationTest {
 
     @Test
     public void reduceToRelatedFieldSpec_comparingTwoFields_givesAnEarlierFieldSpec() {
-        Field first = new Field("first", false);
-        Field second = new Field("second", false);
+        Field first = new Field("first");
+        Field second = new Field("second");
 
         FieldSpecRelations relation = new BeforeDateRelation(first, second, true);
 

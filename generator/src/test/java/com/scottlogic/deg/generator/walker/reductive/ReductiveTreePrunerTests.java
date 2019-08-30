@@ -42,8 +42,8 @@ class ReductiveTreePrunerTests {
 
     private static final FieldSpec notNull = FieldSpec.Empty
         .withNotNull();
-    private Field field = new Field("foo", false);
-    private Field unrelatedField = new Field("unrelated", false);
+    private Field field = new Field("foo");
+    private Field unrelatedField = new Field("unrelated");
     private FieldSpecHelper fieldSpecHelper = mock(FieldSpecHelper.class);
     private ReductiveTreePruner treePruner = new ReductiveTreePruner(
         new FieldSpecMerger(),

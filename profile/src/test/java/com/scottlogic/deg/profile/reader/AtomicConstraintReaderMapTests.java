@@ -53,7 +53,7 @@ public class AtomicConstraintReaderMapTests {
 
         List<Field> fields = new ArrayList<>();
 
-        fields.add(new Field("test", false));
+        fields.add(new Field("test"));
 
         profileFields = new ProfileFields(fields);
     }
@@ -269,7 +269,7 @@ public class AtomicConstraintReaderMapTests {
         AtomicConstraintReader atomicConstraintReader = constraintReaderMap.get(AtomicConstraintType.IS_OF_TYPE);
         Assertions.assertThrows(
             InvalidProfileException.class,
-            () -> atomicConstraintReader.apply(invalidTypeNameDto, new ProfileFields(Arrays.asList(new Field("test", false)))));
+            () -> atomicConstraintReader.apply(invalidTypeNameDto, new ProfileFields(Arrays.asList(new Field("test")))));
     }
 
     @DisplayName("Should fail when value property is numeric and out of bounds")

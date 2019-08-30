@@ -16,8 +16,8 @@ class EqualToOffsetDateRelationTest {
 
     @Test
     public void reduceToRelatedFieldSpec_comparingTwoFields_givesEquivalentFieldSpec() {
-        Field first = new Field("first", false);
-        Field second = new Field("second", false);
+        Field first = new Field("first");
+        Field second = new Field("second");
 
         TemporalAdjusterGenerator wrapper = new TemporalAdjusterGenerator(ChronoUnit.DAYS, false);
         int days = 3;
@@ -47,8 +47,8 @@ class EqualToOffsetDateRelationTest {
 
     @Test
     void reduceToRelatedFieldSpec_comparingTwoFieldsNegativeCase_givesEquivalentFieldSpec() {
-        Field first = new Field("first", false);
-        Field second = new Field("second", false);
+        Field first = new Field("first");
+        Field second = new Field("second");
 
         int days = -3;
 

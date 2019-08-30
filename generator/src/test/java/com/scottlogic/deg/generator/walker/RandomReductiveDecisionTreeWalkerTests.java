@@ -49,8 +49,8 @@ class RandomReductiveDecisionTreeWalkerTests {
             new ConstraintNodeBuilder().build(),
             new ProfileFields(
                 Arrays.asList(
-                    new Field("field1", false),
-                    new Field("field2", false))));
+                    new Field("field1"),
+                    new Field("field2"))));
 
         underlyingWalker = mock(ReductiveDecisionTreeWalker.class);
         walker = new RandomReductiveDecisionTreeWalker(underlyingWalker, monitor);

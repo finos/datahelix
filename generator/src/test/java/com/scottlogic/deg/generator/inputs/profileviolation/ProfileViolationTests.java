@@ -63,7 +63,7 @@ public class ProfileViolationTests {
     private Field field3;
     private Field field4;
     private Field field5;
-    private static final Field STATIC_FIELD = new Field("static field", false);
+    private static final Field STATIC_FIELD = new Field("static field");
 
     private ConstraintChainBuilder<Constraint> A;
     private ConstraintChainBuilder<Constraint> B;
@@ -174,11 +174,11 @@ public class ProfileViolationTests {
         constraintsToNotViolate = new ArrayList<>();
         IndividualConstraintRuleViolator ruleViolator = new IndividualConstraintRuleViolator(constraintsToNotViolate);
         profileViolator = new IndividualRuleProfileViolator(ruleViolator);
-        field1 = new Field("field1", false);
-        field2 = new Field("field2", false);
-        field3 = new Field("field3", false);
-        field4 = new Field("field4", false);
-        field5 = new Field("field5", false);
+        field1 = new Field("field1");
+        field2 = new Field("field2");
+        field3 = new Field("field3");
+        field4 = new Field("field4");
+        field5 = new Field("field5");
 
 
         A = new SingleConstraintBuilder().withEqualToConstraint(field1, "A");

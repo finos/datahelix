@@ -25,7 +25,7 @@ public class IsInSetConstraintTests {
 
     @Test
     public void testConstraintThrowsIfGivenEmptySet(){
-        Field field1 = new Field("TestField", false);
+        Field field1 = new Field("TestField");
 
         Assertions.assertThrows(
             IllegalArgumentException.class,
@@ -34,7 +34,7 @@ public class IsInSetConstraintTests {
 
     @Test
     public void testConstraintThrowsIfGivenNullInASet(){
-        Field field1 = new Field("TestField", false);
+        Field field1 = new Field("TestField");
 
         Assertions.assertThrows(
             IllegalArgumentException.class,
@@ -43,7 +43,7 @@ public class IsInSetConstraintTests {
 
     @Test
     public void testConstraintThrowsNothingIfGivenAValidSet(){
-        Field field1 = new Field("TestField", false);
+        Field field1 = new Field("TestField");
         Assertions.assertDoesNotThrow(
             () -> new IsInSetConstraint(field1, FrequencyDistributedSet.singleton("foo")));
     }

@@ -25,7 +25,7 @@ class FieldSpecGroupValueGeneratorTest {
     public void generate_withGroupOfSingleField_returnsCorrectStream() {
         Map<Field, FieldSpec> specMap = new HashMap<>();
         FieldSpec firstSpec = FieldSpec.Empty;
-        Field firstField = new Field("first", false);
+        Field firstField = new Field("first");
         specMap.put(firstField, FieldSpec.Empty);
 
         FieldSpecValueGenerator underlyingGenerator = mock(FieldSpecValueGenerator.class);

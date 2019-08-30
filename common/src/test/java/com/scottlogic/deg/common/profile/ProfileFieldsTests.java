@@ -27,7 +27,7 @@ class ProfileFieldsTests {
     void equals_objIsNull_returnsFalse() {
         ProfileFields fields = new ProfileFields(
             Arrays.asList(
-                new Field("Test", false)
+                new Field("Test")
             )
         );
 
@@ -43,7 +43,7 @@ class ProfileFieldsTests {
     void equals_objTypeIsNotProfileFields_returnsFalse() {
         ProfileFields fields = new ProfileFields(
             Arrays.asList(
-                new Field("Test", false)
+                new Field("Test")
             )
         );
 
@@ -59,15 +59,15 @@ class ProfileFieldsTests {
     void equals_rowSpecFieldsLengthNotEqualToOtherObjectFieldsLength_returnsFalse() {
         ProfileFields fields = new ProfileFields(
             Arrays.asList(
-                new Field("First Field", false),
-                new Field("Second Field", false)
+                new Field("First Field"),
+                new Field("Second Field")
             )
         );
 
         boolean result = fields.equals(
             new ProfileFields(
                 Arrays.asList(
-                    new Field("First Field", false)
+                    new Field("First Field")
                 )
             )
         );
@@ -82,16 +82,16 @@ class ProfileFieldsTests {
     void equals_rowSpecFieldsLengthEqualToOterObjectFieldsLengthButValuesDiffer_returnsFalse() {
         ProfileFields fields = new ProfileFields(
             Arrays.asList(
-                new Field("First Field", false),
-                new Field("Second Field", false)
+                new Field("First Field"),
+                new Field("Second Field")
             )
         );
 
         boolean result = fields.equals(
             new ProfileFields(
                 Arrays.asList(
-                    new Field("First Field", false),
-                    new Field("Third Field", false)
+                    new Field("First Field"),
+                    new Field("Third Field")
                 )
             )
         );
@@ -106,16 +106,16 @@ class ProfileFieldsTests {
     void equals_rowSpecFieldsAreEqualToTheFieldsOfTheOtherObject_returnsTrue() {
         ProfileFields fields = new ProfileFields(
             Arrays.asList(
-                new Field("First Field", false),
-                new Field("Second Field", false)
+                new Field("First Field"),
+                new Field("Second Field")
             )
         );
 
         boolean result = fields.equals(
             new ProfileFields(
                 Arrays.asList(
-                    new Field("First Field", false),
-                    new Field("Second Field", false)
+                    new Field("First Field"),
+                    new Field("Second Field")
                 )
             )
         );
@@ -130,15 +130,15 @@ class ProfileFieldsTests {
     void hashCode_valuesinFieldsDifferInSize_returnsDifferentHashCodes() {
         ProfileFields firstProfileFields = new ProfileFields(
             Arrays.asList(
-                new Field("First Field", false),
-                new Field("Second Field", false)
+                new Field("First Field"),
+                new Field("Second Field")
             )
         );
         ProfileFields secondProfileFields = new ProfileFields(
             Arrays.asList(
-                new Field("First Field", false),
-                new Field("Second Field", false),
-                new Field("Third Field", false)
+                new Field("First Field"),
+                new Field("Second Field"),
+                new Field("Third Field")
             )
         );
 
@@ -156,14 +156,14 @@ class ProfileFieldsTests {
     void hashCode_valuesInFieldsAreEqualSizeButValuesDiffer_returnsDifferentHashCodes() {
         ProfileFields firstProfileFields = new ProfileFields(
             Arrays.asList(
-                new Field("First Field", false),
-                new Field("Second Field", false)
+                new Field("First Field"),
+                new Field("Second Field")
             )
         );
         ProfileFields secondProfileFields = new ProfileFields(
             Arrays.asList(
-                new Field("First Field", false),
-                new Field("Third Field", false)
+                new Field("First Field"),
+                new Field("Third Field")
             )
         );
 
@@ -181,14 +181,14 @@ class ProfileFieldsTests {
     void hashCode_valuesInFieldsAreEqual_identicalHashCodesAreReturned() {
         ProfileFields firstProfileFields = new ProfileFields(
             Arrays.asList(
-                new Field("First Field", false),
-                new Field("Second Field", false)
+                new Field("First Field"),
+                new Field("Second Field")
             )
         );
         ProfileFields secondProfileFields = new ProfileFields(
             Arrays.asList(
-                new Field("First Field", false),
-                new Field("Second Field", false)
+                new Field("First Field"),
+                new Field("Second Field")
             )
         );
 

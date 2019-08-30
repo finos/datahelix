@@ -40,8 +40,8 @@ class EqualToFieldReaderTest {
     public void apply_noOffset_createsTwoEqualFields() {
         IsEqualToDynamicDateConstraint constraint = createConstraint(equalToFieldReader, dto, fields);
 
-        assertEquals(new Field(FIRST, false), constraint.underlyingConstraint().getField());
-        assertEquals(new Field(SECOND, false), constraint.field());
+        assertEquals(new Field(FIRST), constraint.underlyingConstraint().getField());
+        assertEquals(new Field(SECOND), constraint.field());
         assertNull(constraint.unit());
     }
 
@@ -89,7 +89,7 @@ class EqualToFieldReaderTest {
     private static ProfileFields fieldsOf(String... fields) {
         return new ProfileFields(
             Arrays.stream(fields)
-                .map(name -> new Field(name, false))
+                .map(name -> new Field(name))
                 .collect(Collectors.toList()));
     }
 

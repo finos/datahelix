@@ -54,7 +54,7 @@ class CombinationStrategyTester {
         DataBagBuilder builder = new DataBagBuilder();
 
         for (String fieldName : fieldNames) {
-            builder.set(new Field(fieldName, false), "whatever");
+            builder.set(new Field(fieldName), "whatever");
         }
 
         return builder.build();

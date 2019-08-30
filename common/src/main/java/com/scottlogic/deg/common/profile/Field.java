@@ -22,7 +22,12 @@ public class Field {
     public final String name;
     private final boolean unique;
 
-    public Field(String name, boolean unique) {
+    public Field(String name) {
+        this.name = name;
+        this.unique = false;
+    }
+
+    public Field(String name, Boolean unique) {
         this.name = name;
         this.unique = unique;
     }

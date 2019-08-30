@@ -51,8 +51,8 @@ class UpfrontTreePrunerTests {
         private ReductiveTreePruner reductiveTreePruner = Mockito.mock(ReductiveTreePruner.class);
         private ContradictionDecisionTreeValidator contradictionValidator = Mockito.mock(ContradictionDecisionTreeValidator.class);
         private UpfrontTreePruner upfrontTreePruner = new UpfrontTreePruner(reductiveTreePruner, contradictionValidator);
-        private Field fieldA = new Field("A", false);
-        private Field fieldB = new Field("B", false);
+        private Field fieldA = new Field("A");
+        private Field fieldB = new Field("B");
 
         @Test
         void runUpfrontPrune_withOneField_returnsPrunedTree() {
@@ -220,8 +220,8 @@ class UpfrontTreePrunerTests {
         @Test
         public void runUpfrontPrune_forNonContradictoryTreeWithOneNode_reportsNoContradictions() {
             //Arrange
-            Field fieldA = new Field("A", false);
-            Field fieldB = new Field("B", false);
+            Field fieldA = new Field("A");
+            Field fieldB = new Field("B");
             List<Field> fields = new ArrayList<>();
             fields.add(fieldA);
             fields.add(fieldB);
@@ -242,8 +242,8 @@ class UpfrontTreePrunerTests {
         @Test
         public void runUpfrontPrune_forNonContradictoryTreeWithTwoNonContradictoryChildren_reportsNoContradictions() {
             //Arrange
-            Field fieldA = new Field("A", false);
-            Field fieldB = new Field("B", false);
+            Field fieldA = new Field("A");
+            Field fieldB = new Field("B");
             List<Field> fields = new ArrayList<>();
             fields.add(fieldA);
             fields.add(fieldB);
@@ -266,8 +266,8 @@ class UpfrontTreePrunerTests {
         @Test
         public void runUpfrontPrune_forNonContradictoryTreeWithContradictionsThatAreNotRelevant_reportsNoContradictions() {
             //Arrange
-            Field fieldA = new Field("A", false);
-            Field fieldB = new Field("B", false);
+            Field fieldA = new Field("A");
+            Field fieldB = new Field("B");
             List<Field> fields = new ArrayList<>();
             fields.add(fieldA);
             fields.add(fieldB);
@@ -299,8 +299,8 @@ class UpfrontTreePrunerTests {
         @Test
         public void runUpfrontPrune_forPartiallyContradictoryTreeWithTwoContradictionsInDifferentLeaves_reportsNoContradiction() {
             //Arrange
-            Field fieldA = new Field("A", false);
-            Field fieldB = new Field("B", false);
+            Field fieldA = new Field("A");
+            Field fieldB = new Field("B");
             List<Field> fields = new ArrayList<>();
             fields.add(fieldA);
             fields.add(fieldB);
@@ -337,8 +337,8 @@ class UpfrontTreePrunerTests {
         @Test
         public void runUpfrontPrune_forNonContradictoryTreeWithContradictionInOneBranch_reportsPartialContradiction() {
             //Arrange
-            Field fieldA = new Field("A", false);
-            Field fieldB = new Field("B", false);
+            Field fieldA = new Field("A");
+            Field fieldB = new Field("B");
             List<Field> fields = new ArrayList<>();
             fields.add(fieldA);
             fields.add(fieldB);
@@ -363,8 +363,8 @@ class UpfrontTreePrunerTests {
         @Test
         public void runUpfrontPrune_forPartiallyContradictoryTreeWithOneContradictoryChild_reportsPartialContradictions() {
             //Arrange
-            Field fieldA = new Field("A", false);
-            Field fieldB = new Field("B", false);
+            Field fieldA = new Field("A");
+            Field fieldB = new Field("B");
             List<Field> fields = new ArrayList<>();
             fields.add(fieldA);
             fields.add(fieldB);
@@ -389,8 +389,8 @@ class UpfrontTreePrunerTests {
         @Test
         public void runUpfrontPrune_forPartiallyContradictoryTreeWithRootContradictingWithOneBranch_reportsPartialContradictions() {
             //Arrange
-            Field fieldA = new Field("A", false);
-            Field fieldB = new Field("B", false);
+            Field fieldA = new Field("A");
+            Field fieldB = new Field("B");
             List<Field> fields = new ArrayList<>();
             fields.add(fieldA);
             fields.add(fieldB);
@@ -421,8 +421,8 @@ class UpfrontTreePrunerTests {
         @Test
         public void runUpfrontPrune_forPartiallyContradictoryTreeWithOneContradictionDeepInBranch_reportsPartialContradictions() {
             //Arrange
-            Field fieldA = new Field("A", false);
-            Field fieldB = new Field("B", false);
+            Field fieldA = new Field("A");
+            Field fieldB = new Field("B");
             List<Field> fields = new ArrayList<>();
             fields.add(fieldA);
             fields.add(fieldB);
@@ -456,8 +456,8 @@ class UpfrontTreePrunerTests {
         @Test
         public void runUpfrontPrune_forPartiallyContradictoryTreeWithTwoSelfContradictingLeaves_reportsPartialContradictions() {
             //Arrange
-            Field fieldA = new Field("A", false);
-            Field fieldB = new Field("B", false);
+            Field fieldA = new Field("A");
+            Field fieldB = new Field("B");
             List<Field> fields = new ArrayList<>();
             fields.add(fieldA);
             fields.add(fieldB);
@@ -495,8 +495,8 @@ class UpfrontTreePrunerTests {
         @Test
         public void runUpfrontPrune_forWhollyContradictoryProfileWithOnlyRoot_reportsFullContradiction() {
             //Arrange
-            Field fieldA = new Field("A", false);
-            Field fieldB = new Field("B", false);
+            Field fieldA = new Field("A");
+            Field fieldB = new Field("B");
             List<Field> fields = new ArrayList<>();
             fields.add(fieldA);
             fields.add(fieldB);
@@ -518,8 +518,8 @@ class UpfrontTreePrunerTests {
         @Test
         public void runUpfrontPrune_forWhollyContradictoryProfileWithContradictoryRoot_reportsFullContradiction() {
             //Arrange
-            Field fieldA = new Field("A", false);
-            Field fieldB = new Field("B", false);
+            Field fieldA = new Field("A");
+            Field fieldB = new Field("B");
             List<Field> fields = new ArrayList<>();
             fields.add(fieldA);
             fields.add(fieldB);
@@ -546,8 +546,8 @@ class UpfrontTreePrunerTests {
         @Test
         public void runUpfrontPrune_forWhollyContradictoryProfileWithEveryNodeContradictory_reportsFullContradiction() {
             //Arrange
-            Field fieldA = new Field("A", false);
-            Field fieldB = new Field("B", false);
+            Field fieldA = new Field("A");
+            Field fieldB = new Field("B");
             List<Field> fields = new ArrayList<>();
             fields.add(fieldA);
             fields.add(fieldB);
@@ -576,8 +576,8 @@ class UpfrontTreePrunerTests {
         @Test
         public void runUpfrontPrune_forWhollyContradictoryProfileWithContradictionDeepInBranch_reportsFullContradiction() {
             //Arrange
-            Field fieldA = new Field("A", false);
-            Field fieldB = new Field("B", false);
+            Field fieldA = new Field("A");
+            Field fieldB = new Field("B");
             List<Field> fields = new ArrayList<>();
             fields.add(fieldA);
             fields.add(fieldB);
@@ -607,8 +607,8 @@ class UpfrontTreePrunerTests {
         @Test
         public void runUpfrontPrune_forWhollyContradictoryProfileWithAllContradictingNodes_reportsFullContradiction() {
             //Arrange
-            Field fieldA = new Field("A", false);
-            Field fieldB = new Field("B", false);
+            Field fieldA = new Field("A");
+            Field fieldB = new Field("B");
             List<Field> fields = new ArrayList<>();
             fields.add(fieldA);
             fields.add(fieldB);
@@ -637,8 +637,8 @@ class UpfrontTreePrunerTests {
         @Test
         public void runUpfrontPrune_forWhollyContradictoryProfileWithNonContradictingRoot_reportsFullContradiction() {
             //Arrange
-            Field fieldA = new Field("A", false);
-            Field fieldB = new Field("B", false);
+            Field fieldA = new Field("A");
+            Field fieldB = new Field("B");
             List<Field> fields = new ArrayList<>();
             fields.add(fieldA);
             fields.add(fieldB);
