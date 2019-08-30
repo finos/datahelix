@@ -157,7 +157,7 @@ public class FieldSpecGroupValueGenerator {
 
     private Stream<DataBag> createRemainingDataBags(Stream<DataBag> stream, Field field, FieldSpecGroup group) {
         Stream<DataBagGroupWrapper> initial = stream
-            .map(dataBag -> new DataBagGroupWrapper(dataBag, field, group, underlyingGenerator))
+            .map(dataBag -> new DataBagGroupWrapper(dataBag, group, underlyingGenerator))
             .map(wrapper -> adjustWrapperBounds(wrapper, field));
         Set<Field> toProcess = filterFromSet(group.fieldSpecs().keySet(), field);
 
@@ -169,7 +169,7 @@ public class FieldSpecGroupValueGenerator {
     private static DataBagGroupWrapper adjustWrapperBounds(DataBagGroupWrapper wrapper, Field field) {
         DataBagValue value = wrapper.dataBag().getUnformattedValue(field);
         FieldSpecGroup newGroup = adjustBounds(field, value, wrapper.group());
-        return new DataBagGroupWrapper(wrapper.dataBag(), field, newGroup, wrapper.generator());
+        return new DataBagGroupWrapper(wrapper.dataBag(), newGroup, wrapper.generator());
 
     }
 
@@ -212,7 +212,7 @@ public class FieldSpecGroupValueGenerator {
 
         FieldSpecGroup newGroup = adjustBounds(field, nextValue, group);
 
-        return new DataBagGroupWrapper(combined, field, newGroup, wrapper.generator());
+        return new DataBagGroupWrapper(combined, newGroup, wrapper.generator());
     }
 
     private static Stream<DataBagGroupWrapper> acceptNextNonRandomValue(DataBagGroupWrapper wrapper, Field field) {
@@ -221,7 +221,7 @@ public class FieldSpecGroupValueGenerator {
             .map(value -> new WrappedDataBag(toDataBag(field, value), value))
             .map(wrapped -> new WrappedDataBag(DataBag.merge(wrapped.dataBag(), wrapper.dataBag()), wrapped.value()))
             .map(combined -> new DataBagGroupWrapper(
-                combined.dataBag(), field, adjustBounds(field, combined.value(), wrapper.group()), wrapper.generator())
+                combined.dataBag(), adjustBounds(field, combined.value(), wrapper.group()), wrapper.generator())
             );
     }
 }
