@@ -58,11 +58,13 @@
     2. [Microsoft Visual Studio Code](#Microsoft-Visual-Studio-Code)
     3. [Schema Validation using library](#Schema-Validation-using-library)
 
-# Build and run the generator
+# Initial Setup
+
+## Build and run the generator
 
 The instructions below explain how to download the generator source code, build it and run it, using a Java IDE.  This is the recommended setup if you would like to contribute to the project yourself.  If you would like to use Docker to build the source code and run the generator, [please follow these alternate instructions](../../developer/DockerSetup.md).
 
-## Get Code
+### Get Code
 
 Clone the repository to your local development folder.
 
@@ -70,7 +72,7 @@ Clone the repository to your local development folder.
 git clone https://github.com/finos/datahelix.git
 ```
 
-## Installation Requirements
+### Installation Requirements
 
 * Java version 1.8
 * Gradle
@@ -108,7 +110,6 @@ To run a feature file you’ll have to modify the configuration by removing .ste
 
 An explanation of the particular syntax used can be found [here](https://github.com/finos/datahelix/blob/master/docs/CucumberSyntax.md).
 
-## First time setup
 ### Command Line
 
 Build the tool with all its dependencies:
@@ -136,7 +137,6 @@ To generate violating data run the following command from the command line:
 * `[options]` - a combination of any (or none) of [the options documented here](../commandLineOptions/ViolateOptions.md) to configure how the command operates.
 * `<path to profile>` - the location of the JSON profile file.
 * `<desired output folder>` - the location of a folder in which to create generated data files.
-
 
 ### IntelliJ
 
@@ -173,7 +173,7 @@ violate --profile-file="<path to an example JSON profile>" --output-path="<desir
 
 Run both of these configurations to test that installation is successful.
 
-# Creating a Profile
+## Creating a Profile
 
 This page will walk you through creating basic profiles with which you can generate data.
 
@@ -236,7 +236,7 @@ Here is a list of two rules comprised of one constraint each:
 
 These three sections are combined to form the [complete profile](ExampleProfile1.json).
 
-## Further Information 
+### Further Information 
 * More detail on key decisions to make while constructing a profile can be found [here](../../developer/KeyDecisions.md)
 * FAQs about constraints can be found [here](../FrequentlyAskedQuestions.md)
 * For a larger profile example see [here](../Schema.md)
@@ -278,12 +278,12 @@ These three sections are combined to form the [complete profile](ExampleProfile1
     ]
     }
 
-# Generating Data
+## Generating Data
 
 This page details how to generate data with a given profile.
 
 
-## Using the Command Line
+### Using the Command Line
 
 For first time setup, see the [Generator setup instructions](BuildAndRun.md).
 
@@ -296,7 +296,7 @@ To generate data run the following command from the command line
 * `<path to profile>` the location of the JSON profile file
 * `<desired output path>` the location of the generated data.  If this option is omitted, generated data will be streamed to the standard output.
 
-## Example - Generating Valid Data
+### Example - Generating Valid Data
 
 Using the [Sample Profile](ExampleProfile1.json) that was created in the [previous](CreatingAProfile.md) section, run the following command:
 
@@ -315,7 +315,7 @@ With no other options this should yield the following data:
 |	            |-2147483648  |
 
 
-## Example - Generating Violating Data
+### Example - Generating Violating Data
 
 The generator can be used to generate data which intentionally violates the profile constraints for testing purposes.
 
@@ -373,7 +373,7 @@ The data generated violates each rule in turn and records the results in separat
 For example, by violating the `"ofType": "String"` constraint in the first rule the violating data produced is of types *decimal* and *datetime*.
 The manifest shows which rules are violated in which file. 
 
-## Hints and Tips
+### Hints and Tips
 
 * The generator will output velocity and row data to the console as standard
 (see [options](../commandLineOptions/GenerateOptions.md) for other monitoring choices).
@@ -387,7 +387,7 @@ The manifest shows which rules are violated in which file.
 * Rules made up of multiple constraints will be violated as one rule and therefore will produce one output file per rule.
 * Unless explicitly excluded `null` will always be generated for each field.
 
-# Visualising the Decision Tree
+## Visualising the Decision Tree
 _This is an alpha feature. Please do not rely on it. If you find issues with it, please [report them](https://github.com/finos/datahelix/issues)._ 
 
 This page will detail how to use the `visualise` command to view the decision tree for a profile.
@@ -395,7 +395,7 @@ This page will detail how to use the `visualise` command to view the decision tr
 Visualise generates a <a href=https://en.wikipedia.org/wiki/DOT_(graph_description_language)>DOT</a> compliant representation of the decision tree, 
 for manual inspection, in the form of a gv file.
 
-## Using the Command Line
+### Using the Command Line
 
 
 To visualise the decision tree run the following command from the command line:
@@ -407,7 +407,7 @@ To visualise the decision tree run the following command from the command line:
 * `<path to profile>` the location of the JSON profile file
 * `<path to desired output GV file>` the location of the folder for the resultant GV file of the tree
 
-## Example
+### Example
 
 Using the [Sample Profile](ExampleProfile1.json) that was created in the [first](CreatingAProfile.md) section, run the visualise command
 with your preferred above method. 
@@ -432,7 +432,7 @@ Expected RowSpecs: 1"][fontsize="10"][shape=box][style="dotted"]
 
 This is a very simple tree, more complex profiles will generate more complex trees
 
-## Hints and Tips
+### Hints and Tips
 
 * You may read a gv file with any text editor
 * You can also use this representation with a visualiser such as [Graphviz](https://www.graphviz.org/).
