@@ -199,7 +199,7 @@ class FieldSpecValueGeneratorTests {
 
         @Test
         void generateSequential_uniqueFieldSpec_returnsAllValues() {
-            FieldSpec fieldSpec = FieldSpec.Empty.withNotNull().withUnique();
+            FieldSpec fieldSpec = FieldSpec.Empty.withNotNull();
 
             FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
                 FULL_SEQUENTIAL,

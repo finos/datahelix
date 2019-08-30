@@ -110,11 +110,6 @@ public class FieldSpec {
         return new FieldSpec(whitelist, restrictions, false, formatting);
     }
 
-    public FieldSpec withUnique() {
-        return new FieldSpec(whitelist, restrictions, nullable, formatting);
-    }
-
-
     public FieldSpec withDateTimeRestrictions(DateTimeRestrictions dateTimeRestrictions) {
         return withConstraint(DateTimeRestrictions.class, dateTimeRestrictions);
     }

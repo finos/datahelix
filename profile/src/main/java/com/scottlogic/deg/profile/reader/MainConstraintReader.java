@@ -25,6 +25,8 @@ import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.profile.dto.AtomicConstraintType;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 
+import java.util.Collection;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MainConstraintReader {
@@ -75,17 +77,14 @@ public class MainConstraintReader {
             if (dto.allOf.isEmpty()) {
                 throw new InvalidProfileException("AllOf must contain at least one constraint.");
             }
+            Collection<ConstraintDTO> allOf = dto.allOf;
             return new AndConstraint(
-                dto.allOf.stream()
-                    .map(subConstraintDto -> this.apply(subConstraintDto, fields))
-                    .collect(Collectors.toSet()));
+                getSubConstraints(fields, allOf));
         }
 
         if (dto.anyOf != null) {
             return new OrConstraint(
-                dto.anyOf.stream()
-                    .map(subConstraintDto -> this.apply(subConstraintDto, fields))
-                    .collect(Collectors.toSet()));
+                getSubConstraints(fields, dto.anyOf));
         }
 
         if (dto.if_ != null) {
@@ -107,5 +106,12 @@ public class MainConstraintReader {
         }
 
         throw new InvalidProfileException("Couldn't interpret constraint");
+    }
+
+    Set<Constraint> getSubConstraints(ProfileFields fields, Collection<ConstraintDTO> allOf) {
+        return allOf.stream()
+            .map(subConstraintDto -> apply(subConstraintDto, fields))
+            .filter(constraint -> !(constraint instanceof RemoveFromTree))
+            .collect(Collectors.toSet());
     }
 }

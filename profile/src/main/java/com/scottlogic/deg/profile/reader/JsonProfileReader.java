@@ -77,19 +77,7 @@ public class JsonProfileReader implements ProfileReader {
                     throw new InvalidProfileException("Profile is invalid: unable to find 'constraints' for rule: " + r.rule);
                 }
                 RuleInformation constraintRule = new RuleInformation(r.rule);
-                return new Rule(
-                    constraintRule,
-                        r.constraints.stream()
-                            .map(dto -> {
-                            try {
-                                return mainConstraintReader.apply(
-                                    dto,
-                                    profileFields
-                                );
-                            } catch (InvalidProfileException e) {
-                                throw new InvalidProfileException("Rule: " + r.rule + "\n" + e.getMessage());
-                            }
-                        }).collect(Collectors.toList()));
+                return new Rule(constraintRule, mainConstraintReader.getSubConstraints(profileFields, r.constraints));
             }).collect(Collectors.toList());
 
         return new Profile(profileFields, rules, profileDto.description);
