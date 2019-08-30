@@ -1,19 +1,25 @@
 # Table of Contents
-1. [Getting Started](gettingStarted/StepByStepInstructions.md)
-1. [Profiles](#Profiles)
+1. [Initial Setup](#Initial-Setup)
+    1. [Build and Run](#Build-and-run-the-generator)
+    2. [Creating a Profile](#Creating-a-Profile)
+    3. [Example Profile](#Example-Profile)
+    4. [Using a Profile to Generate Data](#Generating-Data)
+    5. [Visualising the Decision Tree](#Visualising-the-Decision-Tree)
+        
+2. [Profiles](#Profiles)
     1. [Fields](#Fields)
     2. [Rules](#Rules)
     3. [Persistence](#Persistence)
     4. [Creation](#Creation)
 
-2. [Data types](#Data-Types)
+3. [Data types](#Data-Types)
     1. [Integer/Decimal](#Integer/Decimal)
     2. [Strings](#Strings)
     3. [DateTime](#DateTime)
     4. [Financial Codes](#FinancialCodes)
     5. [Personal Data Types](#PersonalDataTypes)
 
-3. [Predicate constraints](#Predicate-constraints)
+4. [Predicate constraints](#Predicate-constraints)
     1. [Theory](#Theory)
     2. [General constraints](#General-constraints)
         1. [equalTo](#predicate-equalto)
@@ -39,18 +45,401 @@
         4. [beforeOrAt](#predicate-beforeorat)
         5. [granularTo](#predicate-granularto-datetime)
 
-4. [Grammatical constraints](#Grammatical-Constraints)
+5. [Grammatical constraints](#Grammatical-Constraints)
     1. [not](#not)
     2. [anyOf](#anyOf)
     3. [allOf](#allOf)
     4. [if](#if)
 
-5. [Presentational constraints](#Presentational-Constraints)
+6. [Presentational constraints](#Presentational-Constraints)
 
-6. [Profile Validation](#Profile-Validation)
+7. [Profile Validation](#Profile-Validation)
     1. [JetBrains IntelliJ](#JetBrains-IntelliJ)
     2. [Microsoft Visual Studio Code](#Microsoft-Visual-Studio-Code)
     3. [Schema Validation using library](#Schema-Validation-using-library)
+
+# Build and run the generator
+
+The instructions below explain how to download the generator source code, build it and run it, using a Java IDE.  This is the recommended setup if you would like to contribute to the project yourself.  If you would like to use Docker to build the source code and run the generator, [please follow these alternate instructions](../../developer/DockerSetup.md).
+
+## Get Code
+
+Clone the repository to your local development folder.
+
+```
+git clone https://github.com/finos/datahelix.git
+```
+
+## Installation Requirements
+
+* Java version 1.8
+* Gradle
+* Cucumber
+* Preferred: One of IntelliJ/Eclipse IDE
+
+### Java
+
+[Download JDK 8 SE](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html).
+
+*(Please note, this has been tested with jdk1.8.0_172 but later versions of JDK 1.8 may still work)*
+
+In Control Panel: edit your environment variables; set `JAVA_HOME=C:\Program Files\Java\jdk1.8.0_172`.  
+Add Java binary utilities to your `PATH` (`C:\Program Files\Java\jdk1.8.0_172\bin`).
+
+### Gradle
+
+Download and install Gradle, following the [instructions on their project website](https://docs.gradle.org/current/userguide/installation.html).
+
+### IntelliJ IDE
+
+Get IntelliJ. [EAP](https://www.jetbrains.com/idea/nextversion/) gives you all features of Ultimate (improves framework support and polyglot).
+
+### Eclipse
+
+Alternatively, download and install [Eclipse](https://www.eclipse.org/downloads/). Please note we do not have detailed documentation for using the generator from Eclipse.
+
+### Cucumber
+
+Add **Gherkin** and **Cucumber for Java** plugins (file > settings > plugins if using IntelliJ IDE).
+
+Currently the tests cannot be run from the TestRunner class.
+
+To run a feature file you’ll have to modify the configuration by removing .steps from the end of the Glue field.
+
+An explanation of the particular syntax used can be found [here](https://github.com/finos/datahelix/blob/master/docs/CucumberSyntax.md).
+
+## First time setup
+### Command Line
+
+Build the tool with all its dependencies:
+
+`gradle build`
+
+Check the setup worked with this example command:
+
+`java -jar orchestrator\build\libs\generator.jar generate --replace --profile-file=docs/user/gettingStarted/ExampleProfile1.json --output-path=out.csv`
+
+To generate valid data run the following command from the command line:
+
+`java -jar <path to JAR file> generate [options] --profile-file="<path to profile>" --output-path="<desired output path>"`
+
+* `[path to JAR file]` - the location of `generator.jar`.
+* `[options]` - optionally a combination of [options](../commandLineOptions/GenerateOptions.md) to configure how the command operates.
+* `<path to profile>` - the location of the JSON profile file.
+* `<desired output path>` - the location of the generated data.
+
+To generate violating data run the following command from the command line:
+
+`java -jar <path to JAR file> violate [options] --profile-file="<path to profile>" --output-path="<desired output folder>"`
+
+* `[path to JAR file]` - the location of `generator.jar`.
+* `[options]` - a combination of any (or none) of [the options documented here](../commandLineOptions/ViolateOptions.md) to configure how the command operates.
+* `<path to profile>` - the location of the JSON profile file.
+* `<desired output folder>` - the location of a folder in which to create generated data files.
+
+
+### IntelliJ
+
+On IntelliJ's splash screen, choose "Open".
+
+Open the repository root directory, `datahelix`.
+
+Right-click the backend Module, `generator`, choose "Open Module Settings".
+
+In "Project": specify a Project SDK (Java 1.8), clicking "New..." if necessary.  
+Set Project language level to 8.
+
+Open the "Gradle" Tool Window (this is an extension that may need to be installed), and double-click Tasks > build > build.
+Your IDE may do this automatically for you.
+
+Navigate to the [`App.java` file](../../../orchestrator/src/main/java/com/scottlogic/deg/orchestrator/App.java). Right click and debug.
+
+Now edit the run configuration on the top toolbar created by the initial run. Name the run configuration 'Generate' and under 'Program Arguments' enter the following, replacing the paths with your desired files:
+
+```
+generate --profile-file="<path to an example JSON profile>" --output-path="<desired output file path>"
+```
+
+For example, run this command:
+```
+java -jar orchestrator\build\libs\generator.jar generate --replace --profile-file=docs/user/gettingStarted/ExampleProfile1.json --output-path=out.csv
+```
+
+Additionally create another run configuration called GenerateViolating and add the program arguments
+
+```
+violate --profile-file="<path to an example JSON profile>" --output-path="<desired output directory path>"
+```
+
+Run both of these configurations to test that installation is successful.
+
+# Creating a Profile
+
+This page will walk you through creating basic profiles with which you can generate data.
+
+[Profiles](../UserGuide.md#profiles) are JSON documents consisting of three sections, the schema version, the list 
+of fields and the rules.
+
+- **Schema Version** - Dictates the method of serialisation of the profile in order for the generator to 
+interpret the profile fields and rules. The latest version is 0.1.
+```
+    "schemaVersion": "0.1",
+```
+- **List of Fields** - An array of column headings is defined with unique "name" keys.
+```
+    "fields": [
+        {
+            "name": "Column 1"
+        },
+        {
+            "name": "Column 2"
+        }
+    ]
+```
+- **Rules** - an array of constraints defined with a description. Constraints reduce the data in each column from the [universal set](../SetRestrictionAndGeneration.md)
+to the desired range of values. They are formatted as JSON objects. There are three types of constraints: 
+
+    - [Predicate Constraints](../UserGuide.md#Predicate-constraints) - predicates that define any given value as being 
+    _valid_ or _invalid_
+    - [Grammatical Constraints](../UserGuide.md#Grammatical-constraints) - used to combine or modify other constraints
+    - [Presentational Constraints](../UserGuide.md#Presentational-constraints) - used by output serialisers where
+     string output is required 
+     
+Here is a list of two rules comprised of one constraint each:
+    
+```
+    "rules": [
+        {
+          "rule": "Column 1 is a string",
+          "constraints": [
+            {
+              "field": "Column 1",
+              "is": "ofType",
+              "value": "string"
+            }
+          ]
+        },
+        {
+          "rule": "Column 2 is a number",
+          "constraints": [
+            {
+              "field": "Column 2",
+              "is": "ofType",
+              "value": "integer"
+            }
+          ]
+        }
+      ]
+
+```
+
+
+These three sections are combined to form the [complete profile](ExampleProfile1.json).
+
+## Further Information 
+* More detail on key decisions to make while constructing a profile can be found [here](../../developer/KeyDecisions.md)
+* FAQs about constraints can be found [here](../FrequentlyAskedQuestions.md)
+* For a larger profile example see [here](../Schema.md)
+* Sometimes constraints can contradict one another, click [here](../Contradictions.md) to find out what happens in these cases
+
+## Example Profile
+
+    {
+    "schemaVersion": "0.1",
+    "fields": [
+        {
+        "name": "Column 1"
+        },
+        {
+        "name": "Column 2"
+        }
+    ],
+    "rules": [
+        {
+        "rule": "Column 1 is a string",
+        "constraints": [
+            {
+            "field": "Column 1",
+            "is": "ofType",
+            "value": "string"
+            }
+        ]
+        },
+        {
+        "rule": "Column 2 is a number",
+        "constraints": [
+            {
+            "field": "Column 2",
+            "is": "ofType",
+            "value": "integer"
+            }
+        ]
+        }
+    ]
+    }
+
+# Generating Data
+
+This page details how to generate data with a given profile.
+
+
+## Using the Command Line
+
+For first time setup, see the [Generator setup instructions](BuildAndRun.md).
+
+To generate data run the following command from the command line
+
+`java -jar <path to JAR file> generate [options] --profile-file="<path to profile>" --output-path="<desired output path>"`
+
+* `[path to JAR file]` the location of generator.jar
+* `[options]` optionally a combination of [options](../commandLineOptions/GenerateOptions.md) to configure how the command operates
+* `<path to profile>` the location of the JSON profile file
+* `<desired output path>` the location of the generated data.  If this option is omitted, generated data will be streamed to the standard output.
+
+## Example - Generating Valid Data
+
+Using the [Sample Profile](ExampleProfile1.json) that was created in the [previous](CreatingAProfile.md) section, run the following command:
+
+ `java -jar <path to JAR file> generate --profile-file="<path to ExampleProfile1.json>" --output-path="<path to desired output file>"`
+
+* `<path to desired output file>` the file path to the desired output file 
+
+With no other options this should yield the following data:
+
+|Column 1       |Column 2     |
+|:-------------:|:-----------:|
+|"Lorem Ipsum"	|-2147483648  |
+|"Lorem Ipsum"	|0            |
+|"Lorem Ipsum"	|2147483646   |
+|"Lorem Ipsum"	|             |
+|	            |-2147483648  |
+
+
+## Example - Generating Violating Data
+
+The generator can be used to generate data which intentionally violates the profile constraints for testing purposes.
+
+Using the `violate` command produces one file per rule violated along with a manifest that lists which rules are violated in each file.
+
+Using the [Sample Profile](ExampleProfile1.json) that was created in the [first](CreatingAProfile.md) section, run the following command: 
+
+`java -jar <path to JAR file> violate --profile-file="<path to ExampleProfile1.json>" --output-path="<path to desired output directory>"`
+
+* `<path to desired output directory>` the location of the folder in which the generated files will be saved
+
+Additional options are [documented here](../commandLineOptions/ViolateOptions.md).
+
+With no additional options this should yield the following data:
+
+* `1.csv`:
+
+|Column 1         |	Column 2       |
+|:---------------:|:--------------:|
+|-2147483648	  |-2147483648     |
+|-2147483648	  |0               |
+|-2147483648	  |2147483646      |
+|-2147483648	  |                |
+|0                |-2147483648     |
+|2147483646	      |-2147483648     |
+|1900-01-01T00:00 |-2147483648     |
+|2100-01-01T00:00 |-2147483648     |
+|	              |-2147483648     |
+
+* `2.csv`:
+
+|Column 1 Name	  |Column 2 Name   |
+|:---------------:|:--------------:|
+|"Lorem Ipsum"	  |"Lorem Ipsum"   |
+|"Lorem Ipsum"	  |1900-01-01T00:00|
+|"Lorem Ipsum"	  |2100-01-01T00:00|
+|"Lorem Ipsum"	  |                |
+|                 |"Lorem Ipsum"   |
+
+* `manifest.json`:
+
+```
+{
+  "cases" : [ {
+    "filePath" : "1",
+    "violatedRules" : [ "Column 1 is a string" ]
+  }, {
+    "filePath" : "2",
+    "violatedRules" : [ "Column 2 is a number" ]
+  } ]
+}
+```
+
+The data generated violates each rule in turn and records the results in separate files.
+For example, by violating the `"ofType": "String"` constraint in the first rule the violating data produced is of types *decimal* and *datetime*.
+The manifest shows which rules are violated in which file. 
+
+## Hints and Tips
+
+* The generator will output velocity and row data to the console as standard
+(see [options](../commandLineOptions/GenerateOptions.md) for other monitoring choices).
+    * If multiple monitoring options are selected the most detailed monitor will be implemented.
+* Ensure any desired output files are not being used by any other programs or the generator will not be able to run.
+    * If a file already exists it will be overwritten.
+* Violated data generation will produce one output file per rule being violated.
+    * This is why the output location is a directory and not a file.
+    * If there are already files in the output directory with the same names they will be overwritten.
+* It is important to give your rules descriptions so that the manifest can list the violated rules clearly.
+* Rules made up of multiple constraints will be violated as one rule and therefore will produce one output file per rule.
+* Unless explicitly excluded `null` will always be generated for each field.
+
+# Visualising the Decision Tree
+_This is an alpha feature. Please do not rely on it. If you find issues with it, please [report them](https://github.com/finos/datahelix/issues)._ 
+
+This page will detail how to use the `visualise` command to view the decision tree for a profile.
+
+Visualise generates a <a href=https://en.wikipedia.org/wiki/DOT_(graph_description_language)>DOT</a> compliant representation of the decision tree, 
+for manual inspection, in the form of a gv file.
+
+## Using the Command Line
+
+
+To visualise the decision tree run the following command from the command line:
+
+`java -jar <path to JAR file> visualise [options] --profile-file="<path to profile>" --output-path="<path to desired output GV file>"`
+
+* `[path to JAR file]` the location of generator.jar
+* `[options]` optionally a combination of [options](../commandLineOptions/VisualiseOptions.md) to configure how the command operates
+* `<path to profile>` the location of the JSON profile file
+* `<path to desired output GV file>` the location of the folder for the resultant GV file of the tree
+
+## Example
+
+Using the [Sample Profile](ExampleProfile1.json) that was created in the [first](CreatingAProfile.md) section, run the visualise command
+with your preferred above method. 
+
+With no options this should yield the following gv file:
+
+```
+graph tree {
+  bgcolor="transparent"
+  label="ExampleProfile1"
+  labelloc="t"
+  fontsize="20"
+  c0[bgcolor="white"][fontsize="12"][label="Column 1 Header is STRING
+Column 2 Header is STRING"][shape=box]
+c1[fontcolor="red"][label="Counts:
+Decisions: 0
+Atomic constraints: 2
+Constraints: 1
+Expected RowSpecs: 1"][fontsize="10"][shape=box][style="dotted"]
+}
+```
+
+This is a very simple tree, more complex profiles will generate more complex trees
+
+## Hints and Tips
+
+* You may read a gv file with any text editor
+* You can also use this representation with a visualiser such as [Graphviz](https://www.graphviz.org/).
+
+    There may be other visualisers that are suitable to use. The requirements for a visualiser are known (currently) as:
+    - gv files are encoded with UTF-8, visualisers must support this encoding.
+    - gv files can include HTML encoded entities, visualisers should support this feature.
 
 # Profiles
 
