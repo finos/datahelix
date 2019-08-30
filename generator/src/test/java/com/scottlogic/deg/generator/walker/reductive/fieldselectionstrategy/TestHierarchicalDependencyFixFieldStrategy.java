@@ -187,7 +187,7 @@ public class TestHierarchicalDependencyFixFieldStrategy {
 
     private List<Field> getFields(String ...names) {
         return Arrays.stream(names)
-            .map(name -> new Field(name))
+            .map(Field::new)
             .collect(Collectors.toList());
     }
 

@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 class ConstraintToFieldMapperTests {
 
     private DistributedSet<Object> whitelistOf(Object element) {
-        return new FrequencyDistributedSet<Object>(Collections.singleton(new WeightedElement<>(element, 1.0F)));
+        return new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>(element, 1.0F)));
     }
 
     @Test
@@ -135,7 +135,7 @@ class ConstraintToFieldMapperTests {
     private void givenFields(String... fieldNames) {
         fields = new ProfileFields(
             Arrays.stream(fieldNames)
-                .map(name -> new Field(name))
+                .map(Field::new)
                 .collect(Collectors.toList()));
     }
 
@@ -152,7 +152,7 @@ class ConstraintToFieldMapperTests {
             getMappings();
 
         final Field[] fields = Arrays.stream(fieldsAsString)
-            .map(name -> new Field(name))
+            .map(Field::new)
             .toArray(Field[]::new);
 
         Assert.assertThat(mappings.get(new RootLevelConstraint(constraint)), Matchers.hasItems(fields));
@@ -163,7 +163,7 @@ class ConstraintToFieldMapperTests {
             getMappings();
 
         final Field[] fields = Arrays.stream(fieldsAsString)
-            .map(name -> new Field(name))
+            .map(Field::new)
             .toArray(Field[]::new);
 
         Assert.assertThat(mappings.get(new RootLevelConstraint(decision)), Matchers.hasItems(fields));

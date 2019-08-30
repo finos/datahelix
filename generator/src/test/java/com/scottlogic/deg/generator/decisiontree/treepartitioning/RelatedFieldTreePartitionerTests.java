@@ -286,7 +286,7 @@ class RelatedFieldTreePartitionerTests {
     private ProfileFields fields(String... fieldNames) {
         return new ProfileFields(
             Stream.of(fieldNames)
-                .map(name -> new Field(name))
+                .map(Field::new)
                 .collect(Collectors.toList()));
     }
 

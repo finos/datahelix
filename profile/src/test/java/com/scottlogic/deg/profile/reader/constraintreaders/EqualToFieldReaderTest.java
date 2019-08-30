@@ -89,7 +89,7 @@ class EqualToFieldReaderTest {
     private static ProfileFields fieldsOf(String... fields) {
         return new ProfileFields(
             Arrays.stream(fields)
-                .map(name -> new Field(name))
+                .map(Field::new)
                 .collect(Collectors.toList()));
     }
 
