@@ -11,7 +11,7 @@
 
 # Getting Started
 
-_The following guide gives a 10 minute introduction to the generator via various practical examples. For more detailed documentation please refer to the [User Guide](user/UserGuide.md). If you are interested in extending / modifying the generator itself please refer to the [Developer Guide](docs/developer/DeveloperGuide.md)._
+_The following guide gives a 10 minute introduction to the generator via various practical examples. For more detailed documentation please refer to the [User Guide](user/UserGuide.md). If you are interested in extending / modifying the generator itself please refer to the [Developer Guide](developer/DeveloperGuide.md)._
 
 The generator has been written in Java, allowing it to work on Microsoft Windows, Apple Mac and Linux. You will need Java v1.8 installed to run the generator (you can run `java -version` to check whether you meet this requirement), it can be [downloaded here](https://www.java.com/en/download/manual.jsp).
 
