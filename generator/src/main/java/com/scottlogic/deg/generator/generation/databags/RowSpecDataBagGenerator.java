@@ -49,8 +49,7 @@ public class RowSpecDataBagGenerator {
             .map(group -> generateDataForGroup(rowSpec, group));
 
         return new DataBagStream(
-            combinationStrategy.permute(dataBagsForGroups),
-            rowSpec.getFields().stream().anyMatch(Field::isUnique));
+            combinationStrategy.permute(dataBagsForGroups));
     }
 
     private DataBagStream generateDataForGroup(RowSpec rowSpec, FieldGroup group) {

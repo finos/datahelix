@@ -164,8 +164,7 @@ public class FieldSpecGroupValueGenerator {
         Stream<DataBagGroupWrapper> wrappedStream = recursiveMap(initial, toProcess);
 
         return new DataBagStream(
-            wrappedStream.map(DataBagGroupWrapper::dataBag),
-            group.fieldSpecs().keySet().stream().anyMatch(Field::isUnique));
+            wrappedStream.map(DataBagGroupWrapper::dataBag));
     }
 
     private static DataBagGroupWrapper adjustWrapperBounds(DataBagGroupWrapper wrapper, Field field) {

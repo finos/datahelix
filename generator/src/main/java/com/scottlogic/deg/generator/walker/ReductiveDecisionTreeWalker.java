@@ -78,15 +78,15 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
 
         if (nextFieldSpecs.isEmpty()) {
             monitor.noValuesForField(reductiveState, fieldToFix);
-            return new DataBagStream(Stream.empty(), fieldToFix.isUnique());
+            return new DataBagStream(Stream.empty());
         }
 
         Stream<DataBagValue> values = fieldSpecValueGenerator.generate(fieldToFix, nextFieldSpecs);
 
         return new DataBagStream(FlatMappingSpliterator.flatMap(
             values,
-            dataBagValue -> pruneTreeForNextValue(tree, reductiveState, fixFieldStrategy, fieldToFix, dataBagValue)),
-            fieldToFix.isUnique());
+            dataBagValue -> pruneTreeForNextValue(tree, reductiveState, fixFieldStrategy, fieldToFix, dataBagValue))
+        );
     }
 
     private Stream<DataBag> pruneTreeForNextValue(

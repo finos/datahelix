@@ -35,7 +35,7 @@ class CombinationStrategyTester {
 
     @SafeVarargs
     final void given(Stream<DataBag>... bagSequences) {
-        dataBags = Stream.of(bagSequences).map(s -> new DataBagStream(s, false));
+        dataBags = Stream.of(bagSequences).map(s -> new DataBagStream(s));
     }
 
     void expect(Stream<DataBag> bagSequence) {

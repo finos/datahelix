@@ -40,7 +40,7 @@ public class RandomReductiveDecisionTreeWalker implements DecisionTreeWalker {
         Optional<DataBag> firstRowSpecOpt = getFirstRowSpecFromRandomisingIteration(tree);
         //noinspection OptionalIsPresent
         if (!firstRowSpecOpt.isPresent()) {
-            return new DataBagStream(Stream.empty(), false);
+            return new DataBagStream(Stream.empty());
         }
 
         return new DataBagStream(Stream.concat(
@@ -48,7 +48,7 @@ public class RandomReductiveDecisionTreeWalker implements DecisionTreeWalker {
             Stream.generate(() ->
                 getFirstRowSpecFromRandomisingIteration(tree))
                     .filter(Optional::isPresent)
-                    .map(Optional::get)), false);
+                    .map(Optional::get)));
     }
 
     private Optional<DataBag> getFirstRowSpecFromRandomisingIteration(DecisionTree tree) {

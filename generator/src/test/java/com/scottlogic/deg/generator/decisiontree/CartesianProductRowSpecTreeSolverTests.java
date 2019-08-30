@@ -63,26 +63,26 @@ class CartesianProductRowSpecTreeSolverTests {
     void test() {
         when(dataBagSourceFactory.createDataBags(any()))
             .thenReturn(
-                new DataBagStream(Stream.of(mock(DataBag.class)), false),
-                new DataBagStream(Stream.of(mock(DataBag.class)), false),
-                new DataBagStream(Stream.of(mock(DataBag.class)), false),
-                new DataBagStream(Stream.of(mock(DataBag.class)), false),
-                new DataBagStream(Stream.of(mock(DataBag.class)), false),
-                new DataBagStream(Stream.of(mock(DataBag.class)), false),
-                new DataBagStream(Stream.of(mock(DataBag.class)), false),
-                new DataBagStream(Stream.of(mock(DataBag.class)), false),
-                new DataBagStream(Stream.of(mock(DataBag.class)), false),
-                new DataBagStream(Stream.of(mock(DataBag.class)), false),
-                new DataBagStream(Stream.of(mock(DataBag.class)), false),
-                new DataBagStream(Stream.of(mock(DataBag.class)), false),
-                new DataBagStream(Stream.of(mock(DataBag.class)), false),
-                new DataBagStream(Stream.of(mock(DataBag.class)), false),
-                new DataBagStream(Stream.of(mock(DataBag.class)), false),
-                new DataBagStream(Stream.of(mock(DataBag.class)), false),
-                new DataBagStream(Stream.of(mock(DataBag.class)), false),
-                new DataBagStream(Stream.of(mock(DataBag.class)), false),
-                new DataBagStream(Stream.of(mock(DataBag.class)), false),
-                new DataBagStream(Stream.of(mock(DataBag.class)), false)
+                new DataBagStream(Stream.of(mock(DataBag.class))),
+                new DataBagStream(Stream.of(mock(DataBag.class))),
+                new DataBagStream(Stream.of(mock(DataBag.class))),
+                new DataBagStream(Stream.of(mock(DataBag.class))),
+                new DataBagStream(Stream.of(mock(DataBag.class))),
+                new DataBagStream(Stream.of(mock(DataBag.class))),
+                new DataBagStream(Stream.of(mock(DataBag.class))),
+                new DataBagStream(Stream.of(mock(DataBag.class))),
+                new DataBagStream(Stream.of(mock(DataBag.class))),
+                new DataBagStream(Stream.of(mock(DataBag.class))),
+                new DataBagStream(Stream.of(mock(DataBag.class))),
+                new DataBagStream(Stream.of(mock(DataBag.class))),
+                new DataBagStream(Stream.of(mock(DataBag.class))),
+                new DataBagStream(Stream.of(mock(DataBag.class))),
+                new DataBagStream(Stream.of(mock(DataBag.class))),
+                new DataBagStream(Stream.of(mock(DataBag.class))),
+                new DataBagStream(Stream.of(mock(DataBag.class))),
+                new DataBagStream(Stream.of(mock(DataBag.class))),
+                new DataBagStream(Stream.of(mock(DataBag.class))),
+                new DataBagStream(Stream.of(mock(DataBag.class)))
             );
         final Field country = new Field("country", false);
         final Field currency = new Field("currency", false);
