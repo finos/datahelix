@@ -1,7 +1,6 @@
 # Contents
 
-- [Getting Started](#Getting-Started)
-  - [First Time Setup](docs/user/gettingStarted/BuildAndRun.md)
+  - [Getting Started](#Getting-Started)
   - [Creating your first profile](#Creating-your-first-profile)
   - [Adding constraints](#Adding-constraints)
   - [Generating large datasets](#Generating-large-datasets)
