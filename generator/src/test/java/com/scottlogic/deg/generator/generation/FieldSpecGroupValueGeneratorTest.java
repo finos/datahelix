@@ -3,16 +3,10 @@ package com.scottlogic.deg.generator.generation;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
-import com.scottlogic.deg.generator.fieldspecs.relations.EqualToDateRelation;
-import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
-import com.scottlogic.deg.generator.generation.databags.DataBagStream;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import org.junit.jupiter.api.Test;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,11 +37,11 @@ class FieldSpecGroupValueGeneratorTest {
 
         FieldSpecGroup group = new FieldSpecGroup(specMap, Collections.emptyList());
 
-        DataBagStream stream = generator.generate(group);
+        Stream<DataBag> stream = generator.generate(group);
 
         Map<Field, DataBagValue> dataBag = new HashMap<>();
         dataBag.put(firstField, firstValue);
-        assertEquals(Collections.singleton(new DataBag(dataBag)), stream.stream().collect(Collectors.toSet()));
+        assertEquals(Collections.singleton(new DataBag(dataBag)), stream.collect(Collectors.toSet()));
     }
 
 }

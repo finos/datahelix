@@ -70,7 +70,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
             return Stream.empty();
         }
 
-        Stream<DataBagStream> partitionedDataBags = treePartitioner
+        Stream<Stream<DataBag>> partitionedDataBags = treePartitioner
             .splitTreeIntoPartitions(decisionTree)
             .map(treeOptimiser::optimiseTree)
             .map(treeWalker::walk);

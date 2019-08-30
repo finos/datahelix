@@ -94,7 +94,7 @@ class ReductiveDecisionTreeWalkerTests {
     public void shouldReturnEmptyCollectionOfRowsWhenFirstFieldCannotBeFixed() {
         when(reductiveFieldSpecBuilder.getDecisionFieldSpecs(eq(rootNode), any())).thenReturn(Collections.EMPTY_SET);
 
-        List<DataBag> result = walker.walk(tree).stream().collect(Collectors.toList());
+        List<DataBag> result = walker.walk(tree).collect(Collectors.toList());
 
         verify(reductiveFieldSpecBuilder).getDecisionFieldSpecs(eq(rootNode), any());
         assertThat(result, empty());
@@ -113,7 +113,7 @@ class ReductiveDecisionTreeWalkerTests {
 
         when(reductiveFieldSpecBuilder.getDecisionFieldSpecs(any(), any())).thenReturn(Collections.singleton(firstFieldSpec), Collections.emptySet());
 
-        List<DataBag> result = walker.walk(tree).stream().collect(Collectors.toList());
+        List<DataBag> result = walker.walk(tree).collect(Collectors.toList());
 
         verify(reductiveFieldSpecBuilder, times(2)).getDecisionFieldSpecs(eq(rootNode), any());
         assertThat(result, empty());
@@ -143,7 +143,7 @@ class ReductiveDecisionTreeWalkerTests {
         when(fieldSpecValueGenerator.generate(any(Field.class), anySetOf(FieldSpec.class))).thenReturn(infiniteStream);
 
         assertTimeoutPreemptively(ofMillis(100), () -> {
-            assertThrows(RetryLimitReachedException.class, () -> walker.walk(tree).stream().findFirst());
+            assertThrows(RetryLimitReachedException.class, () -> walker.walk(tree).findFirst());
         });
     }
 }

@@ -27,7 +27,6 @@ import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
-import com.scottlogic.deg.generator.generation.databags.DataBagStream;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagGenerator;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
@@ -63,26 +62,26 @@ class CartesianProductRowSpecTreeSolverTests {
     void test() {
         when(dataBagSourceFactory.createDataBags(any()))
             .thenReturn(
-                new DataBagStream(Stream.of(mock(DataBag.class))),
-                new DataBagStream(Stream.of(mock(DataBag.class))),
-                new DataBagStream(Stream.of(mock(DataBag.class))),
-                new DataBagStream(Stream.of(mock(DataBag.class))),
-                new DataBagStream(Stream.of(mock(DataBag.class))),
-                new DataBagStream(Stream.of(mock(DataBag.class))),
-                new DataBagStream(Stream.of(mock(DataBag.class))),
-                new DataBagStream(Stream.of(mock(DataBag.class))),
-                new DataBagStream(Stream.of(mock(DataBag.class))),
-                new DataBagStream(Stream.of(mock(DataBag.class))),
-                new DataBagStream(Stream.of(mock(DataBag.class))),
-                new DataBagStream(Stream.of(mock(DataBag.class))),
-                new DataBagStream(Stream.of(mock(DataBag.class))),
-                new DataBagStream(Stream.of(mock(DataBag.class))),
-                new DataBagStream(Stream.of(mock(DataBag.class))),
-                new DataBagStream(Stream.of(mock(DataBag.class))),
-                new DataBagStream(Stream.of(mock(DataBag.class))),
-                new DataBagStream(Stream.of(mock(DataBag.class))),
-                new DataBagStream(Stream.of(mock(DataBag.class))),
-                new DataBagStream(Stream.of(mock(DataBag.class)))
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class)),
+                Stream.of(mock(DataBag.class))
             );
         final Field country = new Field("country", false);
         final Field currency = new Field("currency", false);

@@ -25,7 +25,6 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
-import com.scottlogic.deg.generator.generation.databags.DataBagStream;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.walker.reductive.*;
 import com.scottlogic.deg.generator.walker.reductive.fieldselectionstrategy.FixFieldStrategy;
@@ -64,7 +63,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
 
     /* initialise the walker with a set (ReductiveState) of unfixed fields */
     @Override
-    public DataBagStream walk(DecisionTree tree) {
+    public Stream<DataBag> walk(DecisionTree tree) {
         ReductiveState initialState = new ReductiveState(tree.fields);
         visualise(tree.getRootNode(), initialState);
         FixFieldStrategy fixFieldStrategy = fixFieldStrategyFactory.create(tree.getRootNode());
@@ -72,21 +71,20 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
         return fixNextField(tree.getRootNode(), initialState, fixFieldStrategy);
     }
 
-    private DataBagStream fixNextField(ConstraintNode tree, ReductiveState reductiveState, FixFieldStrategy fixFieldStrategy) {
+    private Stream<DataBag> fixNextField(ConstraintNode tree, ReductiveState reductiveState, FixFieldStrategy fixFieldStrategy) {
         Field fieldToFix = fixFieldStrategy.getNextFieldToFix(reductiveState);
         Set<FieldSpec> nextFieldSpecs = reductiveFieldSpecBuilder.getDecisionFieldSpecs(tree, fieldToFix);
 
         if (nextFieldSpecs.isEmpty()) {
             monitor.noValuesForField(reductiveState, fieldToFix);
-            return new DataBagStream(Stream.empty());
+            return Stream.empty();
         }
 
         Stream<DataBagValue> values = fieldSpecValueGenerator.generate(fieldToFix, nextFieldSpecs);
 
-        return new DataBagStream(FlatMappingSpliterator.flatMap(
+        return FlatMappingSpliterator.flatMap(
             values,
-            dataBagValue -> pruneTreeForNextValue(tree, reductiveState, fixFieldStrategy, fieldToFix, dataBagValue))
-        );
+            dataBagValue -> pruneTreeForNextValue(tree, reductiveState, fixFieldStrategy, fieldToFix, dataBagValue));
     }
 
     private Stream<DataBag> pruneTreeForNextValue(
@@ -116,7 +114,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
             return Stream.of(newReductiveState.asDataBag());
         }
 
-        return fixNextField(reducedTree.get(), newReductiveState, fixFieldStrategy).stream();
+        return fixNextField(reducedTree.get(), newReductiveState, fixFieldStrategy);
     }
 
     private void visualise(ConstraintNode rootNode, ReductiveState reductiveState) {

@@ -24,9 +24,9 @@ import java.util.stream.*;
 public class MinimalCombinationStrategy implements CombinationStrategy {
 
     @Override
-    public Stream<DataBag> permute(Stream<DataBagStream> dataBagSequences) {
+    public Stream<DataBag> permute(Stream<Stream<DataBag>> dataBagSequences) {
         List<Iterator<DataBag>> iterators = dataBagSequences
-            .map(DataBagStream::toIterator)
+            .map(BaseStream::iterator)
             .collect(Collectors.toList());
 
         return iterators.stream()

@@ -44,15 +44,14 @@ public class RowSpecDataBagGenerator {
         this.combinationStrategy = combinationStrategy;
     }
 
-    public DataBagStream createDataBags(RowSpec rowSpec) {
-        Stream<DataBagStream> dataBagsForGroups = RowSpecGrouper.createGroups(rowSpec).stream()
+    public Stream<DataBag> createDataBags(RowSpec rowSpec) {
+        Stream<Stream<DataBag>> dataBagsForGroups = RowSpecGrouper.createGroups(rowSpec).stream()
             .map(group -> generateDataForGroup(rowSpec, group));
 
-        return new DataBagStream(
-            combinationStrategy.permute(dataBagsForGroups));
+        return combinationStrategy.permute(dataBagsForGroups);
     }
 
-    private DataBagStream generateDataForGroup(RowSpec rowSpec, FieldGroup group) {
+    private Stream<DataBag> generateDataForGroup(RowSpec rowSpec, FieldGroup group) {
         List<Field> fields = group.fields();
         List<FieldSpecRelations> relations = rowSpec.getRelations().stream()
             .filter(relation -> fields.contains(relation.main()) || fields.contains(relation.other()))

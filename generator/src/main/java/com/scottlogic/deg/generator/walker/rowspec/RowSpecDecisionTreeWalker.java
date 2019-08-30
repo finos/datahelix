@@ -1,8 +1,9 @@
 package com.scottlogic.deg.generator.walker.rowspec;
 
 import com.google.inject.Inject;
+import com.scottlogic.deg.common.util.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
-import com.scottlogic.deg.generator.generation.databags.DataBagStream;
+import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagGenerator;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 
@@ -20,10 +21,9 @@ public class RowSpecDecisionTreeWalker implements DecisionTreeWalker {
     }
 
     @Override
-    public DataBagStream walk(DecisionTree tree) {
-        return rowSpecTreeSolver.createRowSpecs(tree)
-            .map(rowSpecDataBagGenerator::createDataBags)
-            .reduce((a, b) -> new DataBagStream(Stream.concat(a.stream(), b.stream())))
-            .orElse(new DataBagStream(Stream.empty()));
+    public Stream<DataBag> walk(DecisionTree tree) {
+        return FlatMappingSpliterator.flatMap(
+            rowSpecTreeSolver.createRowSpecs(tree),
+            rowSpecDataBagGenerator::createDataBags);
     }
 }

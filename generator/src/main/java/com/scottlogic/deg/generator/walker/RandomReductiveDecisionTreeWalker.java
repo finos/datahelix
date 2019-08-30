@@ -20,7 +20,6 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.generation.DataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
-import com.scottlogic.deg.generator.generation.databags.DataBagStream;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -36,24 +35,24 @@ public class RandomReductiveDecisionTreeWalker implements DecisionTreeWalker {
     }
 
     @Override
-    public DataBagStream walk(DecisionTree tree) {
+    public Stream<DataBag> walk(DecisionTree tree) {
         Optional<DataBag> firstRowSpecOpt = getFirstRowSpecFromRandomisingIteration(tree);
         //noinspection OptionalIsPresent
         if (!firstRowSpecOpt.isPresent()) {
-            return new DataBagStream(Stream.empty());
+            return Stream.empty();
         }
 
-        return new DataBagStream(Stream.concat(
+        return Stream.concat(
             Stream.of(firstRowSpecOpt.get()),
             Stream.generate(() ->
                 getFirstRowSpecFromRandomisingIteration(tree))
                     .filter(Optional::isPresent)
-                    .map(Optional::get)));
+                    .map(Optional::get));
     }
 
     private Optional<DataBag> getFirstRowSpecFromRandomisingIteration(DecisionTree tree) {
         try {
-            return underlyingWalker.walk(tree).stream().findFirst();
+            return underlyingWalker.walk(tree).findFirst();
         } catch (RetryLimitReachedException ex) {
             monitor.addLineToPrintAtEndOfGeneration("");
             monitor.addLineToPrintAtEndOfGeneration("The retry limit for generating data has been hit.");

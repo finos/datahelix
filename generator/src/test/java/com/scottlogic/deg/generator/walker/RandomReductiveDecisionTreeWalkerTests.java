@@ -22,7 +22,6 @@ import com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.generation.DataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
-import com.scottlogic.deg.generator.generation.databags.DataBagStream;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -64,19 +63,14 @@ class RandomReductiveDecisionTreeWalkerTests {
     @Test
     public void shouldProduceTwoRowsOfRandomDataOneRowSpecFromEachIteration() {
         when(underlyingWalker.walk(tree)).thenReturn(
-            new DataBagStream(
-                Stream.of(
-                    rowSpec("first-iteration-first-random-row"),
-                    rowSpec("first-iteration-second-random-row"))
-            ),
-            new DataBagStream(
-                Stream.of(
-                    rowSpec("second-iteration-first-random-row"),
-                    rowSpec("second-iteration-second-random-row"))
-            )
-        );
+            Stream.of(
+                rowSpec("first-iteration-first-random-row"),
+                rowSpec("first-iteration-second-random-row")),
+            Stream.of(
+                rowSpec("second-iteration-first-random-row"),
+                rowSpec("second-iteration-second-random-row")));
 
-        List<DataBag> result = walker.walk(tree).stream().limit(2).collect(Collectors.toList());
+        List<DataBag> result = walker.walk(tree).limit(2).collect(Collectors.toList());
 
         verify(underlyingWalker, times(2)).walk(tree);
         Assert.assertThat(
@@ -87,22 +81,15 @@ class RandomReductiveDecisionTreeWalkerTests {
     @Test
     public void shouldProduceNoData() {
         when(underlyingWalker.walk(tree)).thenReturn(
-            new DataBagStream(
-                Stream.of(
-                    rowSpec("first-iteration-first-random-row"),
-                    rowSpec("first-iteration-second-random-row"))
-            ),
-            new DataBagStream(
-                Stream.empty()
-            ),
-            new DataBagStream(
-                Stream.of(
-                    rowSpec("third-iteration-first-random-row"),
-                    rowSpec("third-iteration-second-random-row"))
-            )
-        );
+            Stream.of(
+                rowSpec("first-iteration-first-random-row"),
+                rowSpec("first-iteration-second-random-row")),
+            Stream.empty(),
+            Stream.of(
+                rowSpec("third-iteration-first-random-row"),
+                rowSpec("third-iteration-second-random-row")));
 
-        List<DataBag> result = walker.walk(tree).stream().limit(2).collect(Collectors.toList());
+        List<DataBag> result = walker.walk(tree).limit(2).collect(Collectors.toList());
 
         verify(underlyingWalker, times(3)).walk(tree);
         Assert.assertThat(
@@ -112,11 +99,9 @@ class RandomReductiveDecisionTreeWalkerTests {
 
     @Test
     public void shouldAccommodateNoDataInSubsequentIteration() {
-        when(underlyingWalker.walk(tree)).thenReturn(
-            new DataBagStream(Stream.empty())
-        );
+        when(underlyingWalker.walk(tree)).thenReturn(Stream.empty());
 
-        List<DataBag> result = walker.walk(tree).stream().limit(2).collect(Collectors.toList());
+        List<DataBag> result = walker.walk(tree).limit(2).collect(Collectors.toList());
 
         verify(underlyingWalker, times(1)).walk(tree);
         Assert.assertThat(
@@ -127,11 +112,11 @@ class RandomReductiveDecisionTreeWalkerTests {
     @Test
     public void getFirstRowSpecFromRandomisingIteration_onRetryFail_returnsEmptyStream() {
         when(underlyingWalker.walk(tree)).thenReturn(
-            new DataBagStream(Stream.iterate(new DataBag(new HashMap<>()), dataBag -> {
+            Stream.iterate(new DataBag(new HashMap<>()), dataBag -> {
                 throw new RetryLimitReachedException();
-            }).skip(1)));
+            }).skip(1));
 
-        DataBag result = walker.walk(tree).stream().findFirst().orElse(null);
+        DataBag result = walker.walk(tree).findFirst().orElse(null);
 
         verify(underlyingWalker, times(1)).walk(tree);
         assertNull(result);
@@ -141,11 +126,11 @@ class RandomReductiveDecisionTreeWalkerTests {
     @Test
     public void getFirstRowSpecFromRandomisingIteration_onRetryFail_reportsError() {
         when(underlyingWalker.walk(tree)).thenReturn(
-            new DataBagStream(Stream.iterate(new DataBag(new HashMap<>()), dataBag -> {
+            Stream.iterate(new DataBag(new HashMap<>()), dataBag -> {
                 throw new RetryLimitReachedException();
-            }).skip(1)));
+            }).skip(1));
 
-        walker.walk(tree).stream().findFirst();
+        walker.walk(tree).findFirst();
 
         verify(monitor, atLeastOnce()).addLineToPrintAtEndOfGeneration(anyString());
     }

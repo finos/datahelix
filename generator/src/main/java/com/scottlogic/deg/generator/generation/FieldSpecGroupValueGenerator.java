@@ -41,7 +41,7 @@ public class FieldSpecGroupValueGenerator {
         this.underlyingGenerator = underlyingGenerator;
     }
 
-    public DataBagStream generate(FieldSpecGroup group) {
+    public Stream<DataBag> generate(FieldSpecGroup group) {
         Field firstField = SetUtils.firstIteratorElement(group.fieldSpecs().keySet());
 
         FieldSpecGroup groupRespectingFirstField = initialAdjustments(firstField, group);
@@ -155,7 +155,7 @@ public class FieldSpecGroupValueGenerator {
         map.put(field, newSpec);
     }
 
-    private DataBagStream createRemainingDataBags(Stream<DataBag> stream, Field first, FieldSpecGroup group) {
+    private Stream<DataBag> createRemainingDataBags(Stream<DataBag> stream, Field first, FieldSpecGroup group) {
         Stream<DataBagGroupWrapper> initial = stream
             .map(dataBag -> new DataBagGroupWrapper(dataBag, first, group, underlyingGenerator))
             .map(wrapper -> adjustWrapperBounds(wrapper, first));
@@ -163,8 +163,7 @@ public class FieldSpecGroupValueGenerator {
 
         Stream<DataBagGroupWrapper> wrappedStream = recursiveMap(initial, toProcess);
 
-        return new DataBagStream(
-            wrappedStream.map(DataBagGroupWrapper::dataBag));
+        return wrappedStream.map(DataBagGroupWrapper::dataBag);
     }
 
     private static DataBagGroupWrapper adjustWrapperBounds(DataBagGroupWrapper wrapper, Field field) {
