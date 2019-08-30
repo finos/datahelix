@@ -62,7 +62,7 @@
 
 ## Build and run the generator
 
-The instructions below explain how to download the generator source code, build it and run it, using a Java IDE.  This is the recommended setup if you would like to contribute to the project yourself.  If you would like to use Docker to build the source code and run the generator, [please follow these alternate instructions](docs/developer/DockerSetup.md).
+The instructions below explain how to download the generator source code, build it and run it, using a Java IDE.  This is the recommended setup if you would like to contribute to the project yourself.  If you would like to use Docker to build the source code and run the generator, [please follow these alternate instructions](https://github.com/finos/datahelix/blob/master/docs/developer/DockerSetup.md).
 
 ### Get Code
 
