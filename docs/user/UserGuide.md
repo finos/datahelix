@@ -177,7 +177,7 @@ Run both of these configurations to test that installation is successful.
 
 This page will walk you through creating basic profiles with which you can generate data.
 
-[Profiles](../UserGuide.md#profiles) are JSON documents consisting of three sections, the schema version, the list 
+[Profiles](#profiles) are JSON documents consisting of three sections, the schema version, the list 
 of fields and the rules.
 
 - **Schema Version** - Dictates the method of serialisation of the profile in order for the generator to 
@@ -196,13 +196,13 @@ interpret the profile fields and rules. The latest version is 0.1.
         }
     ]
 ```
-- **Rules** - an array of constraints defined with a description. Constraints reduce the data in each column from the [universal set](../SetRestrictionAndGeneration.md)
+- **Rules** - an array of constraints defined with a description. Constraints reduce the data in each column from the [universal set](https://github.com/finos/datahelix/blob/master/docs/user/SetRestrictionAndGeneration.md)
 to the desired range of values. They are formatted as JSON objects. There are three types of constraints: 
 
-    - [Predicate Constraints](../UserGuide.md#Predicate-constraints) - predicates that define any given value as being 
+    - [Predicate Constraints](#Predicate-constraints) - predicates that define any given value as being 
     _valid_ or _invalid_
-    - [Grammatical Constraints](../UserGuide.md#Grammatical-constraints) - used to combine or modify other constraints
-    - [Presentational Constraints](../UserGuide.md#Presentational-constraints) - used by output serialisers where
+    - [Grammatical Constraints](#Grammatical-constraints) - used to combine or modify other constraints
+    - [Presentational Constraints](#Presentational-constraints) - used by output serialisers where
      string output is required 
      
 Here is a list of two rules comprised of one constraint each:
@@ -234,13 +234,13 @@ Here is a list of two rules comprised of one constraint each:
 ```
 
 
-These three sections are combined to form the [complete profile](ExampleProfile1.json).
+These three sections are combined to form the [complete profile](#Example-Profile).
 
 ### Further Information 
-* More detail on key decisions to make while constructing a profile can be found [here](../../developer/KeyDecisions.md)
-* FAQs about constraints can be found [here](../FrequentlyAskedQuestions.md)
-* For a larger profile example see [here](../Schema.md)
-* Sometimes constraints can contradict one another, click [here](../Contradictions.md) to find out what happens in these cases
+* More detail on key decisions to make while constructing a profile can be found [here](https://github.com/finos/datahelix/blob/master/docs/developer/KeyDecisions.md)
+* FAQs about constraints can be found [here](https://github.com/finos/datahelix/blob/master/docs/user/FrequentlyAskedQuestions.md)
+* For a larger profile example see [here](https://github.com/finos/datahelix/blob/master/docs/user/Schema.md)
+* Sometimes constraints can contradict one another, click [here](https://github.com/finos/datahelix/blob/master/docs/user/Contradictions.md) to find out what happens in these cases
 
 ## Example Profile
 
