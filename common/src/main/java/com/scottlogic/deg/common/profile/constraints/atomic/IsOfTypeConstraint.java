@@ -50,11 +50,6 @@ public class IsOfTypeConstraint implements AtomicConstraint {
     }
 
     @Override
-    public String toDotLabel() {
-        return String.format("%s is %s", field.name, requiredType.name());
-    }
-
-    @Override
     public Field getField() {
         return field;
     }

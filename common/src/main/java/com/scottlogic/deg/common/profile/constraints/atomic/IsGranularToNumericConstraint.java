@@ -39,11 +39,6 @@ public class IsGranularToNumericConstraint implements AtomicConstraint {
     }
 
     @Override
-    public String toDotLabel() {
-        return String.format("%s granular to %s", field.name, granularity.getNumericGranularity());
-    }
-
-    @Override
     public Field getField() {
         return field;
     }
@@ -66,6 +61,6 @@ public class IsGranularToNumericConstraint implements AtomicConstraint {
 
     @Override
     public String toString() {
-        return String.format("granularTo %s", this.granularity.getNumericGranularity());
+        return String.format("%s granular to %s", field.name, granularity.getNumericGranularity());
     }
 }

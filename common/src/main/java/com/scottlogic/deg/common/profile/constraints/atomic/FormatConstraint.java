@@ -32,11 +32,6 @@ public class FormatConstraint implements AtomicConstraint {
     }
 
     @Override
-    public String toDotLabel(){
-        return String.format("%s has format '%s'", field.name, format);
-    }
-
-    @Override
     public Field getField() {
         return field;
     }

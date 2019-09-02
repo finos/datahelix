@@ -32,14 +32,8 @@ public class IsNullConstraint implements AtomicConstraint
     }
 
     @Override
-    public String toDotLabel() {
+    public String toString() {
         return String.format("%s is null", field.name);
-    }
-
-    public String toString(){
-        return String.format(
-                "MUST_BE_NULL: %s",
-                field.toString());
     }
 
     @Override

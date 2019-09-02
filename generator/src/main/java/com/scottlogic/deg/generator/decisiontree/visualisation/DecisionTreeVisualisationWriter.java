@@ -198,7 +198,7 @@ class NodeVisualiser {
         String label = node.getAtomicConstraints()
             .stream()
             .sorted(Comparator.comparing(ac -> ac.getField().name))
-            .map(AtomicConstraint::toDotLabel)
+            .map(AtomicConstraint::toString)
             .collect(Collectors.joining("\r\n"));
 
         if (label.length() > MAX_LENGTH_FOR_LABEL) {
