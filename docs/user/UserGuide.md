@@ -280,25 +280,25 @@ These three sections are combined to form the [complete profile](#Example-Profil
 
 ## Generating Data
 
-This page details how to generate data with a given profile.
+This section details how to generate data with a given profile.
 
 
 ### Using the Command Line
 
-For first time setup, see the [Generator setup instructions](BuildAndRun.md).
+For first time setup, see the [Generator setup instructions](#Build-and-run-the-generator).
 
 To generate data run the following command from the command line
 
 `java -jar <path to JAR file> generate [options] --profile-file="<path to profile>" --output-path="<desired output path>"`
 
 * `[path to JAR file]` the location of generator.jar
-* `[options]` optionally a combination of [options](../commandLineOptions/GenerateOptions.md) to configure how the command operates
+* `[options]` optionally a combination of [options](https://github.com/finos/datahelix/blob/master/docs/user/commandLineOptions/GenerateOptions.md) to configure how the command operates
 * `<path to profile>` the location of the JSON profile file
 * `<desired output path>` the location of the generated data.  If this option is omitted, generated data will be streamed to the standard output.
 
 ### Example - Generating Valid Data
 
-Using the [Sample Profile](ExampleProfile1.json) that was created in the [previous](CreatingAProfile.md) section, run the following command:
+Using the [Sample Profile](#Example-Profile) that was created in the previous section, run the following command:
 
  `java -jar <path to JAR file> generate --profile-file="<path to ExampleProfile1.json>" --output-path="<path to desired output file>"`
 
@@ -321,13 +321,13 @@ The generator can be used to generate data which intentionally violates the prof
 
 Using the `violate` command produces one file per rule violated along with a manifest that lists which rules are violated in each file.
 
-Using the [Sample Profile](ExampleProfile1.json) that was created in the [first](CreatingAProfile.md) section, run the following command: 
+Using the [Sample Profile](#Example-Profile) that was created in a previous section, run the following command: 
 
 `java -jar <path to JAR file> violate --profile-file="<path to ExampleProfile1.json>" --output-path="<path to desired output directory>"`
 
 * `<path to desired output directory>` the location of the folder in which the generated files will be saved
 
-Additional options are [documented here](../commandLineOptions/ViolateOptions.md).
+Additional options are [documented here](https://github.com/finos/datahelix/blob/master/docs/user/commandLineOptions/ViolateOptions.md).
 
 With no additional options this should yield the following data:
 
@@ -376,7 +376,7 @@ The manifest shows which rules are violated in which file.
 ### Hints and Tips
 
 * The generator will output velocity and row data to the console as standard
-(see [options](../commandLineOptions/GenerateOptions.md) for other monitoring choices).
+(see [options](https://github.com/finos/datahelix/blob/master/docs/user/commandLineOptions/GenerateOptions.md) for other monitoring choices).
     * If multiple monitoring options are selected the most detailed monitor will be implemented.
 * Ensure any desired output files are not being used by any other programs or the generator will not be able to run.
     * If a file already exists it will be overwritten.
@@ -409,7 +409,7 @@ To visualise the decision tree run the following command from the command line:
 
 ### Example
 
-Using the [Sample Profile](ExampleProfile1.json) that was created in the [first](CreatingAProfile.md) section, run the visualise command
+Using the [Sample Profile](#Example-Profile) that was created in an earlier section, run the visualise command
 with your preferred above method. 
 
 With no options this should yield the following gv file:
