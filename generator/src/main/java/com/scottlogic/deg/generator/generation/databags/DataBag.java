@@ -34,10 +34,15 @@ public class DataBag implements GeneratedObject {
 
     @Override
     public Object getFormattedValue(Field field) {
-        if (!fieldToValue.containsKey(field))
-            throw new IllegalStateException("DataBag has no value stored for " + field);
+        return getUnformattedValue(field).getFormattedValue();
+    }
 
-        return fieldToValue.get(field).getFormattedValue();
+    public DataBagValue getUnformattedValue(Field field) {
+        if (!fieldToValue.containsKey(field)) {
+            throw new IllegalStateException("DataBag has no value stored for " + field);
+        }
+
+        return fieldToValue.get(field);
     }
 
     @Override
@@ -67,5 +72,17 @@ public class DataBag implements GeneratedObject {
             });
 
         return new DataBag(newFieldToValue);
+    }
+
+    @Override
+    public String toString() {
+        return "DataBag{" +
+            "fieldToValue=" + fieldToValue +
+            '}';
+    }
+
+    public boolean isUnique(){
+        return fieldToValue.keySet().stream()
+            .anyMatch(Field::isUnique);
     }
 }

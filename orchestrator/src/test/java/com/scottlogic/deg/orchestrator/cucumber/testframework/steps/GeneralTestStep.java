@@ -109,6 +109,11 @@ public class GeneralTestStep {
         this.state.addNotConstraint(fieldName, "null", null);
     }
 
+    @And("^(.+) is unique$")
+    public void uniquefieldIsUnique(String fieldName) {
+        this.state.setFieldUnique(fieldName);
+    }
+
     @And("untyped fields are allowed")
     public void fieldCanBeUntyped() {
         this.state.setRequireFieldTyping(false);

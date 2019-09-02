@@ -36,4 +36,8 @@ Then change the below (in the new file)...
   "const": "0.2"
 },
 ...
-``` 
+```
+
+You will need to update the test in _ProfileSchemaImmutabilityTests_ to contain the new schema version generated. Old versions should **not** be modified. This is reflected by the test failing if any existing schemas are modified.
+
+If you experience any issues with this test not updating the schema in IntelliJ, it is recommended to invalidate the cache and restart, or to delete the _profile/out_ directory and rebuild. 

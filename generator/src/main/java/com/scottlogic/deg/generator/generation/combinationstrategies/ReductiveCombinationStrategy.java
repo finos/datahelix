@@ -17,7 +17,7 @@
 package com.scottlogic.deg.generator.generation.combinationstrategies;
 
 import com.scottlogic.deg.common.util.FlatMappingSpliterator;
-import com.scottlogic.deg.generator.generation.databags.DataBag;
+import com.scottlogic.deg.generator.generation.databags.*;
 import com.scottlogic.deg.generator.utils.RestartableIterator;
 
 import java.util.List;

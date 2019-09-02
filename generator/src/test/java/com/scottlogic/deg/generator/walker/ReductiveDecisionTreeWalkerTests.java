@@ -109,7 +109,7 @@ class ReductiveDecisionTreeWalkerTests {
         DataBagValue dataBag = new DataBagValue(field1, "yes");
         FieldSpec firstFieldSpec = FieldSpec.Empty.withWhitelist(FrequencyDistributedSet.uniform(Collections.singleton("yes")))
             .withNotNull();
-        when(fieldSpecValueGenerator.generate(any(Set.class))).thenReturn(Stream.of(dataBag));
+        when(fieldSpecValueGenerator.generate(any(Field.class), any(Set.class))).thenReturn(Stream.of(dataBag));
 
         when(reductiveFieldSpecBuilder.getDecisionFieldSpecs(any(), any())).thenReturn(Collections.singleton(firstFieldSpec), Collections.emptySet());
 
@@ -140,7 +140,7 @@ class ReductiveDecisionTreeWalkerTests {
         when(treePruner.pruneConstraintNode(eq(root), any(), any())).thenReturn(Merged.contradictory());
 
         Stream<DataBagValue> infiniteStream = Stream.iterate(dataBagValue, i -> dataBagValue);
-        when(fieldSpecValueGenerator.generate(anySetOf(FieldSpec.class))).thenReturn(infiniteStream);
+        when(fieldSpecValueGenerator.generate(any(Field.class), anySetOf(FieldSpec.class))).thenReturn(infiniteStream);
 
         assertTimeoutPreemptively(ofMillis(100), () -> {
             assertThrows(RetryLimitReachedException.class, () -> walker.walk(tree).findFirst());

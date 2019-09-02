@@ -17,12 +17,11 @@
 package com.scottlogic.deg.generator.generation.combinationstrategies;
 
 import com.scottlogic.deg.common.util.FlatMappingSpliterator;
-import com.scottlogic.deg.generator.generation.databags.DataBag;
+import com.scottlogic.deg.generator.generation.databags.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 public class ExhaustiveCombinationStrategy implements CombinationStrategy {
 
@@ -30,8 +29,7 @@ public class ExhaustiveCombinationStrategy implements CombinationStrategy {
     public Stream<DataBag> permute(Stream<Stream<DataBag>> dataBagSequences) {
 
         List<List<DataBag>> bagsAsLists = dataBagSequences
-            .map(sequence ->
-                StreamSupport.stream(sequence.spliterator(), false)
+            .map(sequence ->sequence
                     .collect(Collectors.toList()))
             .collect(Collectors.toList());
 

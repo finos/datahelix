@@ -20,9 +20,20 @@ import java.util.Objects;
 
 public class Field {
     public final String name;
+    private final boolean unique;
 
     public Field(String name) {
         this.name = name;
+        this.unique = false;
+    }
+
+    public Field(String name, Boolean unique) {
+        this.name = name;
+        this.unique = unique;
+    }
+
+    public boolean isUnique() {
+        return unique;
     }
 
     @Override
@@ -35,11 +46,11 @@ public class Field {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Field field = (Field) o;
-        return Objects.equals(name, field.name);
+        return Objects.equals(name, field.name) && Objects.equals(unique, field.unique);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(name, unique);
     }
 }

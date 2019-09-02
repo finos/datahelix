@@ -19,11 +19,10 @@ package com.scottlogic.deg.generator.fieldspecs;
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
+import com.scottlogic.deg.generator.utils.SetUtils;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -51,6 +50,9 @@ public class RowSpecMerger {
             newMap.put(field, merge.get());
         }
 
-        return Optional.of(new RowSpec(left.getFields(), newMap));
+        List<FieldSpecRelations> relations = new ArrayList<>(
+            SetUtils.union(left.getRelations(), right.getRelations()));
+
+        return Optional.of(new RowSpec(left.getFields(), newMap, relations));
     }
 }

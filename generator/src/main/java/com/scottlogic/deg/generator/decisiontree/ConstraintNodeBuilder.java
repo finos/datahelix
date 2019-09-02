@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.decisiontree;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.common.profile.constraints.delayed.DelayedAtomicConstraint;
 import com.scottlogic.deg.common.util.FlatMappingSpliterator;
 
 import java.util.Arrays;
@@ -14,21 +15,30 @@ import static java.util.stream.Stream.concat;
 
 public class ConstraintNodeBuilder {
     private final Collection<AtomicConstraint> atomicConstraints;
+    private final Collection<DelayedAtomicConstraint> delayedAtomicConstraints;
     private final Collection<DecisionNode> decisions;
     private final Set<NodeMarking> nodeMarkings;
 
-    public ConstraintNodeBuilder(Collection<AtomicConstraint> atomicConstraints, Collection<DecisionNode> decisions, Set<NodeMarking> nodeMarkings) {
+    public ConstraintNodeBuilder(Collection<AtomicConstraint> atomicConstraints,
+                                 Collection<DelayedAtomicConstraint> delayedAtomicConstraints,
+                                 Collection<DecisionNode> decisions,
+                                 Set<NodeMarking> nodeMarkings) {
         this.atomicConstraints = atomicConstraints;
+        this.delayedAtomicConstraints = delayedAtomicConstraints;
         this.decisions = decisions;
         this.nodeMarkings = nodeMarkings;
     }
 
     public ConstraintNodeBuilder() {
-        this(Collections.emptyList(), Collections.emptyList(), Collections.emptySet());
+        this(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), Collections.emptySet());
     }
 
     public ConstraintNodeBuilder setAtomicConstraints(Collection<AtomicConstraint> newAtomicConstraints) {
-        return new ConstraintNodeBuilder(newAtomicConstraints, decisions, nodeMarkings);
+        return new ConstraintNodeBuilder(newAtomicConstraints, delayedAtomicConstraints, decisions, nodeMarkings);
+    }
+
+    public ConstraintNodeBuilder setDelayedAtomicConstraints(Collection<DelayedAtomicConstraint> newConstraints) {
+        return new ConstraintNodeBuilder(atomicConstraints, newConstraints, decisions, nodeMarkings);
     }
 
     public ConstraintNodeBuilder removeAtomicConstraint(AtomicConstraint atomicConstraint) {
@@ -52,8 +62,20 @@ public class ConstraintNodeBuilder {
         return addAtomicConstraints(Arrays.asList(constraints));
     }
 
+    public ConstraintNodeBuilder addDelayedAtomicConstraints(Collection<DelayedAtomicConstraint> delayedAtomicConstraints) {
+        return setDelayedAtomicConstraints(delayedAtomicConstraints
+            .stream()
+            .filter(constraint -> !constraint.equals(delayedAtomicConstraints))
+            .collect(Collectors.toList())
+        );
+    }
+
+    public ConstraintNodeBuilder addDelayedAtomicConstraints(DelayedAtomicConstraint... constraints) {
+        return addDelayedAtomicConstraints(Arrays.asList(constraints));
+    }
+
     public ConstraintNodeBuilder setDecisions(Collection<DecisionNode> newDecisions) {
-        return new ConstraintNodeBuilder(atomicConstraints, newDecisions, nodeMarkings);
+        return new ConstraintNodeBuilder(atomicConstraints, delayedAtomicConstraints, newDecisions, nodeMarkings);
     }
 
     public ConstraintNodeBuilder removeDecision(DecisionNode decisionNode) {
@@ -89,7 +111,7 @@ public class ConstraintNodeBuilder {
 
 
     public ConstraintNodeBuilder setNodeMarkings(Set<NodeMarking> newNodeMarkings) {
-        return new ConstraintNodeBuilder(atomicConstraints, decisions, newNodeMarkings);
+        return new ConstraintNodeBuilder(atomicConstraints, delayedAtomicConstraints, decisions, newNodeMarkings);
     }
 
     public ConstraintNodeBuilder markNode(NodeMarking marking) {
@@ -101,7 +123,7 @@ public class ConstraintNodeBuilder {
     }
 
     public ConstraintNode build() {
-        return new ConstraintNode(atomicConstraints, decisions, nodeMarkings);
+        return new ConstraintNode(atomicConstraints, delayedAtomicConstraints, decisions, nodeMarkings);
     }
 
 }

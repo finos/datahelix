@@ -25,17 +25,19 @@ import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.profile.dto.AtomicConstraintType;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 
-import java.util.Map;
+import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-public class MainConstraintReader implements ConstraintReader {
-    private final Map<AtomicConstraintType, ConstraintReader> constraintReaderMap;
+public class MainConstraintReader {
+
+    private final AtomicConstraintTypeReaderMap constraintReaderMap;
 
     @Inject
     public MainConstraintReader(AtomicConstraintTypeReaderMap constraintReaderMap) {
-        this.constraintReaderMap = constraintReaderMap.getConstraintReaderMapEntries();
+        this.constraintReaderMap = constraintReaderMap;
     }
 
-    @Override
     public Constraint apply(
         ConstraintDTO dto,
         ProfileFields fields) {
@@ -49,10 +51,15 @@ public class MainConstraintReader implements ConstraintReader {
         }
 
         if (dto.is != ConstraintDTO.undefined) {
-            ConstraintReader subReader = constraintReaderMap.get(AtomicConstraintType.fromText((String) dto.is));
+            AtomicConstraintReader subReader = constraintReaderMap.getConstraintReaderMapEntries()
+                .get(AtomicConstraintType.fromText((String) dto.is));
 
             if (subReader == null) {
-                throw new InvalidProfileException("Couldn't recognise constraint type from DTO: " + dto.is);
+                String message = "Couldn't recognise constraint type from DTO: " + dto.is;
+                String delayedMessage = constraintReaderMap.isDelayedConstraintsEnabled()
+                    ? message
+                    : message + ". Relational constraints are disabled for the current chosen walker.";
+                throw new InvalidProfileException(delayedMessage);
             }
 
             try {
@@ -70,23 +77,14 @@ public class MainConstraintReader implements ConstraintReader {
             if (dto.allOf.isEmpty()) {
                 throw new InvalidProfileException("AllOf must contain at least one constraint.");
             }
+            Collection<ConstraintDTO> allOf = dto.allOf;
             return new AndConstraint(
-                JsonProfileReader.mapDtos(
-                    dto.allOf,
-                    subConstraintDto -> this.apply(
-                        subConstraintDto,
-                        fields
-                    )));
+                getSubConstraints(fields, allOf));
         }
 
         if (dto.anyOf != null) {
             return new OrConstraint(
-                JsonProfileReader.mapDtos(
-                    dto.anyOf,
-                    subConstraintDto -> this.apply(
-                        subConstraintDto,
-                        fields
-                    )));
+                getSubConstraints(fields, dto.anyOf));
         }
 
         if (dto.if_ != null) {
@@ -108,5 +106,12 @@ public class MainConstraintReader implements ConstraintReader {
         }
 
         throw new InvalidProfileException("Couldn't interpret constraint");
+    }
+
+    Set<Constraint> getSubConstraints(ProfileFields fields, Collection<ConstraintDTO> allOf) {
+        return allOf.stream()
+            .map(subConstraintDto -> apply(subConstraintDto, fields))
+            .filter(constraint -> !(constraint instanceof RemoveFromTree))
+            .collect(Collectors.toSet());
     }
 }
