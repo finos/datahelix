@@ -216,12 +216,15 @@ public class FieldSpecGroupValueGenerator {
     }
 
     private static Stream<DataBagGroupWrapper> acceptNextNonRandomValue(DataBagGroupWrapper wrapper, Field field) {
-        FieldSpecGroup group = wrapper.group();
-        return wrapper.generator().generate(field, group.fieldSpecs().get(field))
-            .map(value -> new WrappedDataBag(toDataBag(field, value), value))
-            .map(wrapped -> new WrappedDataBag(DataBag.merge(wrapped.dataBag(), wrapper.dataBag()), wrapped.value()))
-            .map(combined -> new DataBagGroupWrapper(
-                combined.dataBag(), adjustBounds(field, combined.value(), wrapper.group()), wrapper.generator())
-            );
+        return wrapper.generator()
+            .generate(field, wrapper.group().fieldSpecs().get(field))
+            .map(value -> getWrappedDataBag(wrapper, field, value));
+    }
+
+    private static DataBagGroupWrapper getWrappedDataBag(DataBagGroupWrapper wrapper, Field field, DataBagValue value) {
+        DataBag dataBag = toDataBag(field, value);
+        DataBag merged = DataBag.merge(dataBag, wrapper.dataBag());
+
+        return new DataBagGroupWrapper(merged, adjustBounds(field, value, wrapper.group()), wrapper.generator());
     }
 }
