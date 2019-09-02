@@ -18,10 +18,8 @@ package com.scottlogic.deg.generator.generation.string.iterators;
 
 import dk.brics.automaton.State;
 import dk.brics.automaton.Transition;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Iterator;
-import java.util.function.Consumer;
 
 public class TransitionIterator implements Iterator<Character> {
     private Transition transition;
