@@ -630,6 +630,15 @@ class TextualRestrictionsTests {
         Assert.assertThat(generator.toString(), equalTo("/^.{0,3}$/"));
     }
 
+    @Test
+    void intersect_withStringRestrictionLengthNotSet_shouldReturnUnsuccessful() {
+        StringRestrictions left = setLength(0, 0);
+        StringRestrictions right = setLength(1, 1000);
+        MergeResult<StringRestrictions> intersect = left.intersect(right);
+
+        Assert.assertThat(intersect, equalTo(MergeResult.unsuccessful()));
+    }
+
     private static StringRestrictions ofLength(int length, boolean negate){
         return new TextualRestrictions(
             negate ? null : length,
@@ -642,20 +651,17 @@ class TextualRestrictionsTests {
     }
 
     private static StringRestrictions maxLength(int length){
-        return new TextualRestrictions(
-            null,
-            length,
-            Collections.emptySet(),
-            Collections.emptySet(),
-            Collections.emptySet(),
-            Collections.emptySet(),
-            Collections.emptySet());
+        return setLength(null, length);
     }
 
     private static StringRestrictions minLength(int length){
+        return setLength(length, null);
+    }
+
+    private static StringRestrictions setLength(Integer min, Integer max){
         return new TextualRestrictions(
-            length,
-            null,
+            min,
+            max,
             Collections.emptySet(),
             Collections.emptySet(),
             Collections.emptySet(),

@@ -100,12 +100,7 @@ public class TextualRestrictions implements StringRestrictions {
      * @return Whether this restrictions type is contradictory
      */
     private boolean isContradictory() {
-        if (matchingRegex.isEmpty() && containingRegex.isEmpty()){
-            return false; //no regular expressions exist that can contradict
-        }
-
-        StringGenerator generator = createGenerator();
-        return generator instanceof NoStringsStringGenerator;
+        return createGenerator() instanceof NoStringsStringGenerator;
     }
 
     /**
