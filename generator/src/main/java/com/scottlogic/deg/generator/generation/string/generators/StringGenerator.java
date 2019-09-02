@@ -13,24 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.scottlogic.deg.generator.generation.string;
+package com.scottlogic.deg.generator.generation.string.generators;
 
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.UpCastingIterator;
 
+import java.util.stream.Stream;
+
 public interface StringGenerator {
+    Stream<String> generateAllValues();
+
+    Stream<String> generateRandomValues(RandomNumberGenerator randomNumberGenerator);
+
+    Stream<String> generateInterestingValues();
+
+    boolean matches(String string);
+
     StringGenerator intersect(StringGenerator stringGenerator);
-    StringGenerator complement();
 
-    boolean match(String subject);
-
-    Iterable<String> generateInterestingValues();
-
-    Iterable<String> generateAllValues();
-
-    Iterable<String> generateRandomValues(RandomNumberGenerator randomNumberGenerator);
+    default StringGenerator complement() {
+        throw new UnsupportedOperationException();
+    }
 
     default FieldValueSource asFieldValueSource() {
         return new StringGeneratorAsFieldValueSource(this);

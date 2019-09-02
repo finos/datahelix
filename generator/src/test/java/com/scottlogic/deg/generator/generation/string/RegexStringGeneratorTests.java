@@ -16,7 +16,8 @@
 
 package com.scottlogic.deg.generator.generation.string;
 
-import com.scottlogic.deg.generator.utils.IterableAsStream;
+import com.scottlogic.deg.generator.generation.string.generators.RegexStringGenerator;
+import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +25,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static com.scottlogic.deg.generator.helpers.StringGeneratorHelper.assertGeneratorCanGenerateAtLeastOneStringWithinLengthBounds;
@@ -105,10 +107,10 @@ class RegexStringGeneratorTests {
     void generateInterestingValuesShouldGenerateShortestAndLongestValues() {
         StringGenerator generator = new RegexStringGenerator("Test_(\\d{3}|[A-Z]{5})_(banana|apple)", true);
 
-        Iterable<String> resultsIterable = generator.generateInterestingValues();
+        List<String> results = generator.generateInterestingValues().collect(Collectors.toList());
 
         assertThat(
-            resultsIterable,
+            results,
             containsInAnyOrder(
                 "Test_000_apple",
                 "Test_AAAAA_banana"));
@@ -118,9 +120,9 @@ class RegexStringGeneratorTests {
     void interestingValuesShouldBePrintable() {
         StringGenerator generator = new RegexStringGenerator("Test.Test", true);
 
-        Iterable<String> resultsIterable = generator.generateInterestingValues();
+        List<String> results = generator.generateInterestingValues().collect(Collectors.toList());
 
-        for (String interestingValue : resultsIterable) {
+        for (String interestingValue : results) {
             for (char character : interestingValue.toCharArray()) {
                 assertThat(character, greaterThanOrEqualTo((char)32));
             }
@@ -131,11 +133,7 @@ class RegexStringGeneratorTests {
     void interestingValuesShouldBeBounds() {
         StringGenerator generator = new RegexStringGenerator(".{10,20}", true);
 
-        Iterable<String> resultsIterable = generator.generateInterestingValues();
-
-        ArrayList<String> results = new ArrayList<>();
-
-        resultsIterable.iterator().forEachRemaining(results::add);
+        List<String> results = generator.generateInterestingValues().collect(Collectors.toList());
 
         assertThat(results.size(), Is.is(2));
         assertThat(results.get(0).length(), Is.is(10));
@@ -143,31 +141,14 @@ class RegexStringGeneratorTests {
     }
 
     @Test
-    void iterableShouldBeRepeatable() {
-        StringGenerator generator = new RegexStringGenerator("Test", true);
-
-        Iterable<String> resultsIterable = generator.generateInterestingValues();
-
-        resultsIterable.iterator().forEachRemaining(string -> {
-        }); // once
-
-        resultsIterable.iterator().forEachRemaining(string -> {
-        }); // twice
-    }
-
-    @Test
     void shouldCreateZeroLengthInterestingValue() {
         StringGenerator generator = new RegexStringGenerator("(Test)?", true);
 
-        Iterable<String> resultsIterable = generator.generateInterestingValues();
-
-        String[] sampleValues =
-                IterableAsStream.convert(resultsIterable)
-                        .toArray(String[]::new);
+        List<String> results = generator.generateInterestingValues().collect(Collectors.toList());
 
         assertThat(
-                sampleValues,
-                arrayContainingInAnyOrder(
+                results,
+                containsInAnyOrder(
                         "",
                         "Test"));
     }
@@ -176,12 +157,12 @@ class RegexStringGeneratorTests {
     void shouldCorrectlySampleInfiniteResults() {
         StringGenerator generator = new RegexStringGenerator("[a]+", false);
 
-        Iterable<String> resultsIterable = generator.generateRandomValues(new JavaUtilRandomNumberGenerator(0));
+        Stream<String> results = generator.generateRandomValues(new JavaUtilRandomNumberGenerator(0));
 
         List<String> sampleValues =
-                IterableAsStream.convert(resultsIterable)
-                        .limit(1000)
-                        .collect(Collectors.toList());
+                results
+                    .limit(1000)
+                    .collect(Collectors.toList());
 
         assertThat(sampleValues, not(contains(null, "")));
     }
@@ -238,8 +219,8 @@ class RegexStringGeneratorTests {
     @Test
     void shouldNotGenerateInvalidUnicodeCodePoints() {
         StringGenerator generator = new RegexStringGenerator("[😁-😘]{1}", true);
-        Iterable<String> resultsIterable = generator.generateAllValues();
-        for (String s : resultsIterable) {
+        List<String> results = generator.generateAllValues().collect(Collectors.toList());
+        for (String s : results) {
             if (s != null && doesStringContainSurrogates(s)) {
                 fail("string contains surrogate character");
             }
@@ -379,13 +360,13 @@ class RegexStringGeneratorTests {
     private void expectMatch(String subject, boolean matchFullString) {
         StringGenerator generator = constructGenerator(matchFullString);
 
-        assertTrue(generator.match(subject));
+        assertTrue(generator.matches(subject));
     }
 
     private void expectNoMatch(String subject, boolean matchFullString) {
         StringGenerator generator = constructGenerator(matchFullString);
 
-        assertFalse(generator.match(subject));
+        assertFalse(generator.matches(subject));
     }
 
     @Test
@@ -414,11 +395,9 @@ class RegexStringGeneratorTests {
 
         StringGenerator intersected = shorterThan.intersect(matchingRegex).intersect(containingRegex);
 
-        Iterable<String> result = intersected.generateInterestingValues();
+        List<String> results = intersected.generateInterestingValues().collect(Collectors.toList());
 
-        ArrayList<String> strings = new ArrayList<>();
-        result.iterator().forEachRemaining(strings::add);
-        assertThat(strings, not(empty()));
+        assertThat(results, not(empty()));
     }
 
     @Test
@@ -428,18 +407,16 @@ class RegexStringGeneratorTests {
 
         StringGenerator intersected = shorterThan.intersect(matchingRegex);
 
-        Iterable<String> result = intersected.generateInterestingValues();
+        List<String> results = intersected.generateInterestingValues().collect(Collectors.toList());
 
-        ArrayList<String> strings = new ArrayList<>();
-        result.iterator().forEachRemaining(strings::add);
-        assertThat(strings, not(empty()));
+        assertThat(results, not(empty()));
     }
 
     @Test
     void match_withInputMatchingRequiredLength_shouldMatch(){
         RegexStringGenerator shorterThan = new RegexStringGenerator("^.{0,1}$", true);
 
-        boolean match = shorterThan.match("a");
+        boolean match = shorterThan.matches("a");
 
         assertThat(match, is(true));
     }
@@ -448,7 +425,7 @@ class RegexStringGeneratorTests {
     void match_withInputMatchingFirstRequiredLength_shouldMatch(){
         RegexStringGenerator shorterThan = new RegexStringGenerator("^(.{0,1}|.{3,10})$", true);
 
-        boolean match = shorterThan.match("a");
+        boolean match = shorterThan.matches("a");
 
         assertThat(match, is(true));
     }
@@ -457,7 +434,7 @@ class RegexStringGeneratorTests {
     void match_withInputMatchingSecondRequiredLength_shouldMatch(){
         RegexStringGenerator shorterThan = new RegexStringGenerator("^(.{0,1}|.{3,10})$", true);
 
-        boolean match = shorterThan.match("aaa");
+        boolean match = shorterThan.matches("aaa");
 
         assertThat(match, is(true));
     }
@@ -466,7 +443,7 @@ class RegexStringGeneratorTests {
     void match_withInputNotMatchingAnyRequiredLength_shouldNotMatch(){
         RegexStringGenerator shorterThan = new RegexStringGenerator("^(.{0,1}|.{3,10})$", true);
 
-        boolean match = shorterThan.match("aa");
+        boolean match = shorterThan.matches("aa");
 
         assertThat(match, is(false));
     }

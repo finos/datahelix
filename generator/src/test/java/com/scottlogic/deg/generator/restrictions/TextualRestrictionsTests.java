@@ -17,10 +17,10 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.StandardConstraintTypes;
-import com.scottlogic.deg.generator.generation.string.IsinStringGenerator;
-import com.scottlogic.deg.generator.generation.string.RegexStringGenerator;
-import com.scottlogic.deg.generator.generation.string.StringGenerator;
+import com.scottlogic.deg.generator.generation.string.generators.RegexStringGenerator;
+import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import org.junit.Assert;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 import static com.scottlogic.deg.generator.helpers.StringGeneratorHelper.*;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsNull.nullValue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TextualRestrictionsTests {
     @Test
@@ -392,26 +393,26 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withOnlyAMatchingStandardConstraint_shouldCreateSomeStrings() {
-        StringRestrictions restrictions = aValid(StandardConstraintTypes.ISIN, false);
+        StringRestrictions restrictions = aValid(StandardConstraintTypes.ISIN);
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator, instanceOf(IsinStringGenerator.class));
+        assertTrue(generator.generateAllValues().limit(1).count() > 0);
     }
 
     @Test
     void createGenerator_withMinLengthAndMatchingStandardConstraint_shouldCreateSomeStrings() {
-        StringRestrictions restrictions = aValid(StandardConstraintTypes.ISIN, false)
+        StringRestrictions restrictions = aValid(StandardConstraintTypes.ISIN)
             .intersect(minLength(1)).restrictions;
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator, instanceOf(IsinStringGenerator.class));
+        assertTrue(generator.generateAllValues().limit(1).count() > 0);
     }
 
     @Test
     void createGenerator_withMaxLengthShorterThanCodeLengthAndMatchingStandardConstraint_shouldCreateNoStrings() {
-        MergeResult<StringRestrictions> intersect = aValid(StandardConstraintTypes.ISIN, false)
+        MergeResult<StringRestrictions> intersect = aValid(StandardConstraintTypes.ISIN)
             .intersect(maxLength(10));
 
         Assert.assertFalse(intersect.successful);
@@ -419,37 +420,38 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withMaxLengthAtLengthOfCodeLengthAndMatchingStandardConstraint_shouldCreateSomeStrings() {
-        StringRestrictions restrictions = aValid(StandardConstraintTypes.ISIN, false)
+        StringRestrictions restrictions = aValid(StandardConstraintTypes.ISIN)
             .intersect(maxLength(12)).restrictions;
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator, instanceOf(IsinStringGenerator.class));
+        assertTrue(generator.generateAllValues().limit(1).count() > 0);
     }
 
     @Test
     void createGenerator_withMaxLengthLongerThanCodeLengthAndMatchingStandardConstraint_shouldCreateSomeStrings() {
-        StringRestrictions restrictions = aValid(StandardConstraintTypes.ISIN, false)
+        StringRestrictions restrictions = aValid(StandardConstraintTypes.ISIN)
             .intersect(maxLength(100)).restrictions;
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator, instanceOf(IsinStringGenerator.class));
+        assertTrue(generator.generateAllValues().limit(1).count() > 0);
     }
 
     @Test
     void createGenerator_withOfLengthAndMatchingStandardConstraint_shouldCreateSomeStrings() {
-        StringRestrictions restrictions = aValid(StandardConstraintTypes.ISIN, false)
+        StringRestrictions restrictions = aValid(StandardConstraintTypes.ISIN)
             .intersect(ofLength(12, false)).restrictions;
 
         StringGenerator generator = restrictions.createGenerator();
 
-        Assert.assertThat(generator, instanceOf(IsinStringGenerator.class));
+        assertTrue(generator.generateAllValues().limit(1).count() > 0);
     }
 
     @Test
+    @Disabled("Regex constraints cannot currently be combined with standard constraints e.g. ISINs")
     void createGenerator_withMatchingRegexAndMatchingStandardConstraint_shouldCreateStrings() {
-        StringRestrictions restrictions = aValid(StandardConstraintTypes.ISIN, false)
+        StringRestrictions restrictions = aValid(StandardConstraintTypes.ISIN)
             .intersect(matchingRegex("[a-zA-Z0-9]{12}", false)).restrictions;
 
         StringGenerator generator = restrictions.createGenerator();
@@ -458,8 +460,9 @@ class TextualRestrictionsTests {
     }
 
     @Test
+    @Disabled("Regex constraints cannot currently be combined with standard constraints e.g. ISINs")
     void createGenerator_withContainingRegexAndMatchingStandardConstraint_shouldCreateStrings() {
-        StringRestrictions restrictions = aValid(StandardConstraintTypes.ISIN, false)
+        StringRestrictions restrictions = aValid(StandardConstraintTypes.ISIN)
             .intersect(containsRegex("[a-zA-Z0-9]{12}", false)).restrictions;
 
         StringGenerator generator = restrictions.createGenerator();
@@ -686,8 +689,8 @@ class TextualRestrictionsTests {
             negate ? Collections.singleton(pattern) : Collections.emptySet());
     }
 
-    private static StringRestrictions aValid(@SuppressWarnings("SameParameterValue") StandardConstraintTypes type, @SuppressWarnings("SameParameterValue") boolean negate){
-        return new MatchesStandardStringRestrictions(type, negate);
+    private static StringRestrictions aValid(StandardConstraintTypes type){
+        return new MatchesStandardStringRestrictions(type);
     }
 
     private static void assertGeneratorCannotGenerateAnyStrings(StringGenerator generator) {
