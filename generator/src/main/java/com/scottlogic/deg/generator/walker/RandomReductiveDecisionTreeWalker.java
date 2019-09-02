@@ -18,7 +18,6 @@ package com.scottlogic.deg.generator.walker;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
-import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.DataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 
@@ -53,8 +52,7 @@ public class RandomReductiveDecisionTreeWalker implements DecisionTreeWalker {
 
     private Optional<DataBag> getFirstRowSpecFromRandomisingIteration(DecisionTree tree) {
         try {
-            return underlyingWalker.walk(tree)
-                .findFirst();
+            return underlyingWalker.walk(tree).findFirst();
         } catch (RetryLimitReachedException ex) {
             monitor.addLineToPrintAtEndOfGeneration("");
             monitor.addLineToPrintAtEndOfGeneration("The retry limit for generating data has been hit.");

@@ -59,12 +59,12 @@ class RowSpecDataBagGeneratorTests {
         Map<Field, FieldSpec> map = new HashMap<Field, FieldSpec>() {{ put(field, fieldSpec); }};
         RowSpec rowSpec = new RowSpec(fields, map, Collections.emptyList());
 
-        when(mockGeneratorFactory.generate(any(FieldSpec.class))).thenReturn(Stream.of(dataBagValue));
+        when(mockGeneratorFactory.generate(any(Field.class), any(FieldSpec.class))).thenReturn(Stream.of(dataBagValue));
 
         List<DataBag> actual = factory.createDataBags(rowSpec)
             .collect(Collectors.toList());
 
-        verify(mockGeneratorFactory, times(1)).generate(fieldSpec);
+        verify(mockGeneratorFactory, times(1)).generate(any(Field.class), eq(fieldSpec));
 
         List<DataBag> expected = Arrays.asList(new DataBagBuilder().set(field, dataBagValue).build());
 
@@ -84,15 +84,15 @@ class RowSpecDataBagGeneratorTests {
             map,
             Collections.emptyList());
 
-        when(mockGeneratorFactory.generate(any(FieldSpec.class)))
+        when(mockGeneratorFactory.generate(any(Field.class), any(FieldSpec.class)))
             .thenReturn(Stream.of(dataBagValue), Stream.of(dataBagValue1), Stream.of(dataBagValue2));
 
         factory.createDataBags(rowSpec)
             .collect(Collectors.toList());
 
-        verify(mockGeneratorFactory, times(1)).generate(fieldSpec);
-        verify(mockGeneratorFactory, times(1)).generate(fieldSpec);
-        verify(mockGeneratorFactory, times(1)).generate(fieldSpec);
+        verify(mockGeneratorFactory, times(1)).generate(any(Field.class), eq(fieldSpec));
+        verify(mockGeneratorFactory, times(1)).generate(any(Field.class), eq(fieldSpec));
+        verify(mockGeneratorFactory, times(1)).generate(any(Field.class), eq(fieldSpec));
     }
 
     @Test

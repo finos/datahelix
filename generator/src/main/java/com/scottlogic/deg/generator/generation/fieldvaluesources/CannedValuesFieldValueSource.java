@@ -47,11 +47,6 @@ public class CannedValuesFieldValueSource implements FieldValueSource {
             () -> pickFromDistribution(randomNumberGenerator));
     }
 
-    @Override
-    public Object generateRandomValue(RandomNumberGenerator randomNumberGenerator) {
-        return pickFromDistribution(randomNumberGenerator);
-    }
-
     private Object pickFromDistribution(RandomNumberGenerator random) {
         return allValues.pickRandomly(random);
     }

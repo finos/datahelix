@@ -24,6 +24,7 @@ public enum AtomicConstraintType {
     IS_EQUAL_TO_FIELD("equalToField"),
     IS_IN_SET("inSet"),
     IS_NULL("null"),
+    IS_UNIQUE("unique"),
     IS_OF_TYPE("ofType"),
 
     MATCHES_REGEX("matchingRegex"),

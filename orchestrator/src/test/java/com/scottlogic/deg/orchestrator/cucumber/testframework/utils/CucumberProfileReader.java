@@ -87,8 +87,4 @@ public class CucumberProfileReader implements ProfileReader {
             throw e;
         }
     }
-
-    private static Set<RuleInformation> getRules(){
-        return Collections.singleton(new RuleInformation());
-    }
 }

@@ -27,6 +27,7 @@ import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.RowSpecGrouper;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 
+import java.util.Map;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;

@@ -13,14 +13,14 @@ Feature: User can specify that one date should be after another date
     And there is a constraint:
       """
         {
-          "field": "foo",
+          "field": "bar",
           "is": "afterField",
-          "value": "bar"
+          "value": "foo"
         }
       """
     Then the following data should be generated:
       | foo                      | bar                      |
-      | 2018-09-01T00:00:00.002Z | 2018-09-01T00:00:00.001Z |
-      | 2018-09-01T00:00:00.003Z | 2018-09-01T00:00:00.001Z |
-      | 2018-09-01T00:00:00.004Z | 2018-09-01T00:00:00.001Z |
+      | 2018-09-01T00:00:00.001Z | 2018-09-01T00:00:00.002Z |
+      | 2018-09-01T00:00:00.001Z | 2018-09-01T00:00:00.003Z |
+      | 2018-09-01T00:00:00.001Z | 2018-09-01T00:00:00.004Z |
 

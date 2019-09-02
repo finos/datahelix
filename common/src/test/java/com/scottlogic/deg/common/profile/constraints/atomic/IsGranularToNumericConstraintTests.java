@@ -17,15 +17,12 @@
 package com.scottlogic.deg.common.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.RuleInformation;
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.Set;
 
 public class IsGranularToNumericConstraintTests {
 

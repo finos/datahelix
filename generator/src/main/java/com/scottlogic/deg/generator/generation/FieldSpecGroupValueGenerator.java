@@ -24,10 +24,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.FieldWithFieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
-import com.scottlogic.deg.generator.generation.databags.DataBag;
-import com.scottlogic.deg.generator.generation.databags.DataBagGroupWrapper;
-import com.scottlogic.deg.generator.generation.databags.DataBagValue;
-import com.scottlogic.deg.generator.generation.databags.WrappedDataBag;
+import com.scottlogic.deg.generator.generation.databags.*;
 import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
 import com.scottlogic.deg.generator.utils.SetUtils;
 
@@ -50,7 +47,7 @@ public class FieldSpecGroupValueGenerator {
         FieldSpecGroup groupRespectingFirstField = initialAdjustments(first, group);
         FieldSpec firstSpec = groupRespectingFirstField.fieldSpecs().get(first);
 
-        Stream<DataBag> firstDataBagValues = underlyingGenerator.generate(firstSpec)
+        Stream<DataBag> firstDataBagValues = underlyingGenerator.generate(first, firstSpec)
             .map(value -> toDataBag(first, value));
 
         return createRemainingDataBags(firstDataBagValues, first, groupRespectingFirstField);
@@ -158,13 +155,15 @@ public class FieldSpecGroupValueGenerator {
         map.put(field, newSpec);
     }
 
-    private Stream<DataBag> createRemainingDataBags(Stream<DataBag> stream, Field first, FieldSpecGroup group) {
+    private Stream<DataBag> createRemainingDataBags(Stream<DataBag> stream, Field field, FieldSpecGroup group) {
         Stream<DataBagGroupWrapper> initial = stream
             .map(dataBag -> new DataBagGroupWrapper(dataBag, group, underlyingGenerator))
-            .map(wrapper -> adjustWrapperBounds(wrapper, first));
-        Set<Field> toProcess = filterFromSet(group.fieldSpecs().keySet(), first);
+            .map(wrapper -> adjustWrapperBounds(wrapper, field));
+        Set<Field> toProcess = filterFromSet(group.fieldSpecs().keySet(), field);
 
-        return recursiveMap(initial, toProcess).map(DataBagGroupWrapper::dataBag);
+        Stream<DataBagGroupWrapper> wrappedStream = recursiveMap(initial, toProcess);
+
+        return wrappedStream.map(DataBagGroupWrapper::dataBag);
     }
 
     private static DataBagGroupWrapper adjustWrapperBounds(DataBagGroupWrapper wrapper, Field field) {
@@ -207,7 +206,7 @@ public class FieldSpecGroupValueGenerator {
     private static DataBagGroupWrapper acceptNextRandomValue(DataBagGroupWrapper wrapper, Field field) {
         FieldSpecGroup group = wrapper.group();
 
-        DataBagValue nextValue = wrapper.generator().generateOne(group.fieldSpecs().get(field));
+        DataBagValue nextValue = wrapper.generator().generate(field, group.fieldSpecs().get(field)).findFirst().get();
 
         DataBag combined = DataBag.merge(toDataBag(field, nextValue), wrapper.dataBag());
 
@@ -218,7 +217,7 @@ public class FieldSpecGroupValueGenerator {
 
     private static Stream<DataBagGroupWrapper> acceptNextNonRandomValue(DataBagGroupWrapper wrapper, Field field) {
         FieldSpecGroup group = wrapper.group();
-        return wrapper.generator().generate(group.fieldSpecs().get(field))
+        return wrapper.generator().generate(field, group.fieldSpecs().get(field))
             .map(value -> new WrappedDataBag(toDataBag(field, value), value))
             .map(wrapped -> new WrappedDataBag(DataBag.merge(wrapped.dataBag(), wrapper.dataBag()), wrapped.value()))
             .map(combined -> new DataBagGroupWrapper(
