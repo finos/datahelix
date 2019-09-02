@@ -19,6 +19,7 @@ package com.scottlogic.deg.profile.reader;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.scottlogic.deg.common.profile.*;
+import com.scottlogic.deg.profile.dto.ConstraintDTO;
 import com.scottlogic.deg.profile.serialisation.ProfileDeserialiser;
 import com.scottlogic.deg.profile.dto.ProfileDTO;
 
@@ -26,9 +27,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * JsonProfileReader is responsible for reading and validating a profile from a path to a profile JSON file.
@@ -62,9 +63,11 @@ public class JsonProfileReader implements ProfileReader {
             throw new InvalidProfileException("Profile is invalid: 'rules' have not been defined.");
         }
 
+        Collection<String> uniqueList = getUniqueFields(profileDto);
+
         ProfileFields profileFields = new ProfileFields(
             profileDto.fields.stream()
-                .map(fDto -> new Field(fDto.name))
+                .map(fDto -> new Field(fDto.name, uniqueList.contains(fDto.name)))
                 .collect(Collectors.toList()));
 
 
@@ -74,21 +77,27 @@ public class JsonProfileReader implements ProfileReader {
                     throw new InvalidProfileException("Profile is invalid: unable to find 'constraints' for rule: " + r.rule);
                 }
                 RuleInformation constraintRule = new RuleInformation(r.rule);
-                return new Rule(
-                    constraintRule,
-                        r.constraints.stream()
-                            .map(dto -> {
-                            try {
-                                return mainConstraintReader.apply(
-                                    dto,
-                                    profileFields
-                                );
-                            } catch (InvalidProfileException e) {
-                                throw new InvalidProfileException("Rule: " + r.rule + "\n" + e.getMessage());
-                            }
-                        }).collect(Collectors.toList()));
+                return new Rule(constraintRule, mainConstraintReader.getSubConstraints(profileFields, r.constraints));
             }).collect(Collectors.toList());
 
         return new Profile(profileFields, rules, profileDto.description);
+    }
+
+    private Collection<String> getUniqueFields(ProfileDTO profileDto) {
+        return profileDto.rules.stream()
+            .flatMap(ruleDTO -> ruleDTO.constraints.stream())
+            .flatMap(this::getConstraintOrAllOfConstraints)
+            .filter(constraintDTO -> constraintDTO.is != null)
+            .filter(constraintDTO -> constraintDTO.is.equals("unique"))
+            .map(constraintDTO -> constraintDTO.field)
+            .collect(Collectors.toSet());
+    }
+
+    private Stream<ConstraintDTO> getConstraintOrAllOfConstraints(ConstraintDTO constraintDTO) {
+        if (constraintDTO.allOf != null){
+            return constraintDTO.allOf.stream();
+        }
+
+        return Stream.of(constraintDTO);
     }
 }

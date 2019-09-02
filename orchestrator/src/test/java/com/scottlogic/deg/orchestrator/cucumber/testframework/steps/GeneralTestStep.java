@@ -55,11 +55,6 @@ public class GeneralTestStep {
         this.state.addField(fieldName);
     }
 
-    @Given("the maximum string length is (\\d+)$")
-    public void theMaxStringLengthIs(int maxLength) {
-        this.state.setMaxStringLength(maxLength);
-    }
-
     @Given("^the following fields exist:$")
     public void thereAreFields(List<String> fields) {
         fields.forEach(this::thereIsAField);
@@ -107,6 +102,11 @@ public class GeneralTestStep {
     @And("^(.+) is anything but null$")
     public void fieldIsNotNull(String fieldName) throws Exception{
         this.state.addNotConstraint(fieldName, "null", null);
+    }
+
+    @And("^(.+) is unique$")
+    public void uniquefieldIsUnique(String fieldName) {
+        this.state.setFieldUnique(fieldName);
     }
 
     @And("untyped fields are allowed")

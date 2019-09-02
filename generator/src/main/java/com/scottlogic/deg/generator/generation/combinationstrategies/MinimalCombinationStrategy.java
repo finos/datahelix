@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.generation.combinationstrategies;
 
-import com.scottlogic.deg.generator.generation.databags.DataBag;
+import com.scottlogic.deg.generator.generation.databags.*;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -31,7 +31,8 @@ public class MinimalCombinationStrategy implements CombinationStrategy {
             .map(BaseStream::iterator)
             .collect(Collectors.toList());
 
-        return iterators.stream().allMatch(Iterator::hasNext)
+        return iterators.stream()
+            .allMatch(Iterator::hasNext)
             ? StreamSupport.stream(iterable(iterators).spliterator(), false)
             : Stream.empty();
     }
@@ -40,7 +41,7 @@ public class MinimalCombinationStrategy implements CombinationStrategy {
         return () -> new InternalIterator(iterators);
     }
 
-    class InternalIterator implements Iterator<DataBag> {
+    static class InternalIterator implements Iterator<DataBag> {
         private final List<Iterator<DataBag>> iterators;
         private final Map<Iterator<DataBag>, DataBag> lastValues;
 
@@ -51,6 +52,16 @@ public class MinimalCombinationStrategy implements CombinationStrategy {
 
         @Override
         public boolean hasNext() {
+            return uniqueHasNext() && anyHasNext();
+        }
+
+        private boolean uniqueHasNext() {
+            return lastValues.entrySet().stream()
+                .filter(entry -> entry.getValue().isUnique())
+                .allMatch(entry -> entry.getKey().hasNext());
+        }
+
+        private boolean anyHasNext() {
             return iterators
                 .stream()
                 .anyMatch(Iterator::hasNext);

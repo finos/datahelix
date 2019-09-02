@@ -56,14 +56,17 @@ public class ProfileSchemaImmutabilityTests {
         // DO NOT MODIFY EXISTING HASHES! ONLY ADD!
         // The new checksum hash can be found by running the shell command sha256sum on the respective schema file
         // example: sha256sum profile/src/main/resources/profileschema/0.1/datahelix.schema.json
-        // Ensure you run this on a unix based machine.
+        // Ensure you run this on a unix based machine and the profile has unix line endings.
         // Alternatively, add the new version to the map, and the test will give you the hash it should be.
         versionToHash.add(new VersionHash(
             "0.1",
             "575c572e9d00d69b5775cf50f01fc79d8cf7babcb6eb2ac51b1a9572d490487c"));
         versionToHash.add(new VersionHash(
             "0.2",
-            "1208511af02fcf69285e6d16d1a0caaa3cae3aef95912d1d940d8dfe4eda6031"
+            "1208511af02fcf69285e6d16d1a0caaa3cae3aef95912d1d940d8dfe4eda6031"));
+        versionToHash.add(new VersionHash(
+            "0.3",
+            "545db9f55228cda6eeff076c4cb1905f6c1a3b061a388dcdeadfbfb6cdd36676"
         ));
         return versionToHash;
     }

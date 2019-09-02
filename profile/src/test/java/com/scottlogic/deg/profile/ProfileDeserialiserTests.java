@@ -73,4 +73,53 @@ public class ProfileDeserialiserTests {
         // Assert
         assertEquals("0.1", profile.schemaVersion);
     }
+    @Test
+    public void shouldDeserialisev0_2ProfileWithoutException() throws IOException {
+        // Arrange
+        final String json = "{" +
+            "  \"schemaVersion\" : \"0.2\"," +
+            "  \"fields\": [" +
+            "    { \"name\": \"id\" }," +
+            "    { \"name\": \"type\" }," +
+            "    { \"name\": \"time\" }," +
+            "    { \"name\": \"country\" }," +
+            "    { \"name\": \"tariff\" }," +
+            "    { \"name\": \"low_price\" }," +
+            "    { \"name\": \"high_price\" }" +
+            "  ]," +
+            "  \"rules\": [" +
+            "    { \"field\": \"id\", \"is\": \"ofType\", \"value\": \"datetime\" }," +
+            "    { \"not\": { \"field\": \"id\", \"is\": \"null\" } }," +
+            "    { \"field\": \"id\", \"is\": \"unique\" }," +
+
+            "    { \"field\": \"low_price\", \"is\": \"ofType\", \"value\": \"numeric\" }," +
+            "    { \"not\": { \"field\": \"low_price\", \"is\": \"null\" } }," +
+            "    { \"field\": \"low_price\", \"is\": \"greaterThanOrEqual\", \"value\": \"0\" }," +
+
+            "    {" +
+            "      \"rule\": \"Some rule\"," +
+            "      \"constraints\": [" +
+            "        { \"field\": \"country\", \"is\": \"inSet\", \"values\": [ \"USA\", \"GB\", \"FRANCE\" ] }" +
+            "      ]" +
+            "    }," +
+
+            "    {" +
+            "      \"if\": {" +
+            "        \"anyOf\": [" +
+            "          { \"field\": \"type\", \"is\": \"equalTo\", \"value\": \"USA\" }," +
+            "          { \"field\": \"type\", \"is\": \"null\" }" +
+            "        ]" +
+            "      }," +
+            "      \"then\": { \"field\": \"tariff\", \"is\": \"null\" }," +
+            "      \"else\": { \"not\": { \"field\": \"tariff\", \"is\": \"null\" } }" +
+            "    }" +
+            "  ]" +
+            "}";
+
+        // Act
+        final ProfileDTO profile = new ProfileDeserialiser().deserialise(json);
+
+        // Assert
+        assertEquals("0.2", profile.schemaVersion);
+    }
 }

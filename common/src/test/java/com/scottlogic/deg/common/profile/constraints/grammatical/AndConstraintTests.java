@@ -18,13 +18,9 @@ package com.scottlogic.deg.common.profile.constraints.grammatical;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsNullConstraint;
-import com.scottlogic.deg.common.profile.RuleInformation;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-
-import java.util.Collections;
-import java.util.Set;
 
 public class AndConstraintTests {
 

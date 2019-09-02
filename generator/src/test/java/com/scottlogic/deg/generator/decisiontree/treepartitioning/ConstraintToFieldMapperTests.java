@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 class ConstraintToFieldMapperTests {
 
     private DistributedSet<Object> whitelistOf(Object element) {
-        return new FrequencyDistributedSet<Object>(Collections.singleton(new WeightedElement<>(element, 1.0F)));
+        return new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>(element, 1.0F)));
     }
 
     @Test

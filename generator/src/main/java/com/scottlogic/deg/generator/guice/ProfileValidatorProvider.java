@@ -26,19 +26,23 @@ import java.util.ArrayList;
 public class ProfileValidatorProvider implements Provider<ProfileValidator> {
     private final GenerationConfigSource configSource;
     private final TypingRequiredPerFieldValidator untypedValidator;
+    private final UniquenessValidator uniquenessValidator;
 
     @Inject
     public ProfileValidatorProvider(
         GenerationConfigSource configSource,
-        TypingRequiredPerFieldValidator untypedValidator) {
+        TypingRequiredPerFieldValidator untypedValidator,
+        UniquenessValidator uniquenessValidator) {
 
         this.configSource = configSource;
         this.untypedValidator = untypedValidator;
+        this.uniquenessValidator = uniquenessValidator;
     }
 
     @Override
     public ProfileValidator get() {
         ArrayList<ProfileValidator> validators = new ArrayList<>();
+        validators.add(uniquenessValidator);
 
         if(configSource.requireFieldTyping()) {
             validators.add(untypedValidator);

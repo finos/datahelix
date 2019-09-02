@@ -26,8 +26,8 @@ public final class DataBagGroupWrapper {
     private final FieldSpecValueGenerator generator;
 
     public DataBagGroupWrapper(DataBag databag,
-                                FieldSpecGroup group,
-                                FieldSpecValueGenerator generator) {
+                               FieldSpecGroup group,
+                               FieldSpecValueGenerator generator) {
         this.dataBag = databag;
         this.group = group;
         this.generator = generator;

@@ -22,7 +22,7 @@ public class RandomRowSpecDecisionTreeWalker implements DecisionTreeWalker {
 
     @Override
     public Stream<DataBag> walk(DecisionTree tree) {
-        if (tree.rootNode.getDecisions().isEmpty()){
+        if (tree.rootNode.getDecisions().isEmpty()) {
             return generateWithoutRestarting(tree);
         }
 
