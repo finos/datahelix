@@ -464,7 +464,7 @@ class FieldSpecTests {
         FieldSpec spec = FieldSpec.Empty.withDateTimeRestrictions(dateTime);
 
         OffsetDateTime time = OffsetDateTime.of(100, 1, 1, 1, 1, 1, 1, ZoneOffset.UTC);
-        dateTime.max = new DateTimeRestrictions.DateTimeLimit(time, true);
+        dateTime.max = new DateTimeLimit(time, true);
 
         assertFalse(spec.permits(time.plusNanos(1_000_000)));
     }

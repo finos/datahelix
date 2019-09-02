@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 import com.scottlogic.deg.common.date.TemporalAdjusterGenerator;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.restrictions.DateTimeLimit;
 import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
 import org.junit.jupiter.api.Test;
 
@@ -76,7 +77,7 @@ class EqualToOffsetDateRelationTest {
     }
 
     private static FieldSpec specEqualToTime(OffsetDateTime time) {
-        DateTimeRestrictions.DateTimeLimit limit = new DateTimeRestrictions.DateTimeLimit(time, true);
+        DateTimeLimit limit = new DateTimeLimit(time, true);
 
         DateTimeRestrictions restrictions = new DateTimeRestrictions();
         restrictions.min = limit;

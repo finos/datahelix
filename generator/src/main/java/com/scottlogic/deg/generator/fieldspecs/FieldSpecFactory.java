@@ -218,9 +218,9 @@ public class FieldSpecFactory {
         final DateTimeRestrictions dateTimeRestrictions = new DateTimeRestrictions();
 
         if (negate) {
-            dateTimeRestrictions.max = new DateTimeRestrictions.DateTimeLimit(limit, !inclusive);
+            dateTimeRestrictions.max = new DateTimeLimit(limit, !inclusive);
         } else {
-            dateTimeRestrictions.min = new DateTimeRestrictions.DateTimeLimit(limit, inclusive);
+            dateTimeRestrictions.min = new DateTimeLimit(limit, inclusive);
         }
 
         return FieldSpec.Empty.withDateTimeRestrictions(dateTimeRestrictions);
@@ -238,9 +238,9 @@ public class FieldSpecFactory {
         final DateTimeRestrictions dateTimeRestrictions = new DateTimeRestrictions();
 
         if (negate) {
-            dateTimeRestrictions.min = new DateTimeRestrictions.DateTimeLimit(limit, !inclusive);
+            dateTimeRestrictions.min = new DateTimeLimit(limit, !inclusive);
         } else {
-            dateTimeRestrictions.max = new DateTimeRestrictions.DateTimeLimit(limit, inclusive);
+            dateTimeRestrictions.max = new DateTimeLimit(limit, inclusive);
         }
 
         return FieldSpec.Empty.withDateTimeRestrictions(dateTimeRestrictions);

@@ -17,6 +17,7 @@
 package com.scottlogic.deg.generator.fieldspecs.relations;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.generator.restrictions.DateTimeLimit;
 import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
 
 import java.time.OffsetDateTime;
@@ -31,7 +32,7 @@ public class AfterDateRelation extends AbstractDateInequalityRelation {
     }
 
     @Override
-    protected DateTimeRestrictions.DateTimeLimit dateTimeLimitExtractingFunction(DateTimeRestrictions restrictions) {
+    protected DateTimeLimit dateTimeLimitExtractingFunction(DateTimeRestrictions restrictions) {
         if (restrictions != null) {
             return restrictions.max;
         } else {
@@ -41,7 +42,7 @@ public class AfterDateRelation extends AbstractDateInequalityRelation {
 
     @Override
     protected void appendValueToRestrictions(DateTimeRestrictions restrictions, OffsetDateTime value) {
-        restrictions.max = new DateTimeRestrictions.DateTimeLimit(value, inclusive);
+        restrictions.max = new DateTimeLimit(value, inclusive);
     }
 
     @Override

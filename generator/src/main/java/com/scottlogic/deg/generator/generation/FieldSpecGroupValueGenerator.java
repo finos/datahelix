@@ -33,6 +33,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.scottlogic.deg.generator.generation.FieldSpecGroupDateHelper.adjustBoundsOfDate;
+
 public class FieldSpecGroupValueGenerator {
 
     private final FieldSpecValueGenerator underlyingGenerator;
@@ -110,50 +112,6 @@ public class FieldSpecGroupValueGenerator {
         return group;
     }
 
-    private static FieldSpecGroup adjustBoundsOfDate(Field field,
-                                                     OffsetDateTime value,
-                                                     FieldSpecGroup group) {
-        DateTimeRestrictions.DateTimeLimit limit = new DateTimeRestrictions.DateTimeLimit(value, true);
-        DateTimeRestrictions restrictions = new DateTimeRestrictions();
-        restrictions.min = limit;
-        restrictions.max = limit;
-        FieldSpec newSpec = FieldSpec.Empty.withNotNull().withDateTimeRestrictions(restrictions);
-
-        return adjustBoundsOfDateFromFieldSpec(field, newSpec, group);
-    }
-
-    private static FieldSpecGroup adjustBoundsOfDateFromFieldSpec(Field field,
-                                                                  FieldSpec newSpec,
-                                                                  FieldSpecGroup group) {
-        Map<Field, FieldSpec> specs = new HashMap<>(group.fieldSpecs());
-        specs.replace(field, newSpec);
-
-        Set<FieldSpecRelations> relations = group.relations().stream()
-            .filter(relation -> relation.main().equals(field) || relation.other().equals(field))
-            .collect(Collectors.toSet());
-        Stream<FieldWithFieldSpec> relationsOrdered = relations.stream()
-            .map(relation -> relation.main().equals(field) ? relation : relation.inverse())
-            .map(relation -> new FieldWithFieldSpec(relation.other(), relation.reduceToRelatedFieldSpec(newSpec)));
-
-        relationsOrdered.forEach(
-            wrapper -> applyToFieldSpecMap(
-                specs,
-                specs.get(wrapper.field()),
-                wrapper.fieldSpec(),
-                wrapper.field()));
-        return new FieldSpecGroup(specs, relations);
-    }
-
-    private static void applyToFieldSpecMap(Map<Field, FieldSpec> map,
-                                                                   FieldSpec left,
-                                                                   FieldSpec right,
-                                                                   Field field) {
-        FieldSpecMerger merger = new FieldSpecMerger();
-
-        FieldSpec newSpec = merger.merge(left, right)
-            .orElseThrow(() -> new IllegalArgumentException("Failed to create field spec from value"));
-        map.put(field, newSpec);
-    }
 
     private Stream<DataBag> createRemainingDataBags(Stream<DataBag> stream, Field field, FieldSpecGroup group) {
         Stream<DataBagGroupWrapper> initial = stream

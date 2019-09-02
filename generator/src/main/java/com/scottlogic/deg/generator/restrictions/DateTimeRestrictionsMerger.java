@@ -50,7 +50,7 @@ public class DateTimeRestrictionsMerger {
         return new MergeResult<>(merged);
     }
 
-    private DateTimeRestrictions.DateTimeLimit granulate(MergeLimit mergeLimit, Timescale granularity, DateTimeRestrictions.DateTimeLimit limitHolder) {
+    private DateTimeLimit granulate(MergeLimit mergeLimit, Timescale granularity, DateTimeLimit limitHolder) {
         if (limitHolder == null) {
             return null;
         }
@@ -61,20 +61,20 @@ public class DateTimeRestrictionsMerger {
         switch (mergeLimit) {
             case MIN:
                 if (adjusted.equals(limit)) {
-                    return new DateTimeRestrictions.DateTimeLimit(adjusted, inclusive);
+                    return new DateTimeLimit(adjusted, inclusive);
                 }
-                return new DateTimeRestrictions.DateTimeLimit(granularity.getNext().apply(adjusted), inclusive);
+                return new DateTimeLimit(granularity.getNext().apply(adjusted), inclusive);
             case MAX:
-                return new DateTimeRestrictions.DateTimeLimit(adjusted, inclusive);
+                return new DateTimeLimit(adjusted, inclusive);
             default:
                 throw new UnsupportedOperationException("Unsupported MergeLimit. Only MergeLimit.MIN, and MergeLimit.MAX are supported");
         }
     }
 
-    private DateTimeRestrictions.DateTimeLimit getMergedLimitStructure(
+    private DateTimeLimit getMergedLimitStructure(
         MergeLimit mergeLimit,
-        DateTimeRestrictions.DateTimeLimit left,
-        DateTimeRestrictions.DateTimeLimit right,
+        DateTimeLimit left,
+        DateTimeLimit right,
         Timescale granularity) {
 
         if (left == null && right == null) {
@@ -102,21 +102,21 @@ public class DateTimeRestrictionsMerger {
 
         // if left and right are identical, return new object with same values
         if (left.getLimit().compareTo(right.getLimit()) == 0)
-            return new DateTimeRestrictions.DateTimeLimit(left.getLimit(), leftIsInclusive && rightIsInclusive);
+            return new DateTimeLimit(left.getLimit(), leftIsInclusive && rightIsInclusive);
 
         inclusiveOverride = inclusiveOverride || leftIsInclusive || rightIsInclusive;
 
         switch (mergeLimit) {
             case MIN:
                 if (left.getLimit().compareTo(right.getLimit()) > 0) {
-                    return new DateTimeRestrictions.DateTimeLimit(left.getLimit(), inclusiveOverride);
+                    return new DateTimeLimit(left.getLimit(), inclusiveOverride);
                 }
-                return new DateTimeRestrictions.DateTimeLimit(right.getLimit(), inclusiveOverride);
+                return new DateTimeLimit(right.getLimit(), inclusiveOverride);
             case MAX:
                 if (left.getLimit().compareTo(right.getLimit()) < 0) {
-                    return new DateTimeRestrictions.DateTimeLimit(left.getLimit(), inclusiveOverride);
+                    return new DateTimeLimit(left.getLimit(), inclusiveOverride);
                 }
-                return new DateTimeRestrictions.DateTimeLimit(right.getLimit(), inclusiveOverride);
+                return new DateTimeLimit(right.getLimit(), inclusiveOverride);
             default:
                 throw new UnsupportedOperationException();
         }

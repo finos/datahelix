@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.generator.generation.fieldvaluesources.datetime;
 
+import com.scottlogic.deg.generator.restrictions.DateTimeLimit;
 import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import org.junit.Assert;
@@ -32,8 +33,8 @@ import static org.hamcrest.core.IsNot.not;
 
 public class DateTimeFieldValueSourceTests {
 
-    private DateTimeRestrictions.DateTimeLimit lowerLimit = null;
-    private DateTimeRestrictions.DateTimeLimit upperLimit = null;
+    private DateTimeLimit lowerLimit = null;
+    private DateTimeLimit upperLimit = null;
     private Set<Object> blackList = new HashSet<>();
     private DateTimeFieldValueSource fieldSource;
 
@@ -344,7 +345,7 @@ public class DateTimeFieldValueSourceTests {
     public void datetimeGenerateAllValues_withNoMin_startsAtOffsetDateTimeMin(){
         //Arrange
         DateTimeRestrictions max = new DateTimeRestrictions();
-        max.max = new DateTimeRestrictions.DateTimeLimit(OffsetDateTime.MAX, false);
+        max.max = new DateTimeLimit(OffsetDateTime.MAX, false);
         DateTimeFieldValueSource noMin = new DateTimeFieldValueSource(max, Collections.emptySet());
         //Act
         OffsetDateTime firstValue = (OffsetDateTime) noMin.generateAllValues().iterator().next();
@@ -356,7 +357,7 @@ public class DateTimeFieldValueSourceTests {
     public void datetimeGenerateAllValues_withMinSetToMaxDate_emitsNoValues(){
         //Arrange
         DateTimeRestrictions min = new DateTimeRestrictions();
-        min.min = new DateTimeRestrictions.DateTimeLimit(DateTimeFieldValueSource.ISO_MAX_DATE, false);
+        min.min = new DateTimeLimit(DateTimeFieldValueSource.ISO_MAX_DATE, false);
         DateTimeFieldValueSource datesAfterLastPermittedDate = new DateTimeFieldValueSource(min, Collections.emptySet());
 
         //Act
@@ -369,7 +370,7 @@ public class DateTimeFieldValueSourceTests {
     public void datetimeGenerateAllValues_withMaxSetToMinDate_emitsNoValues(){
         //Arrange
         DateTimeRestrictions max = new DateTimeRestrictions();
-        max.max = new DateTimeRestrictions.DateTimeLimit(DateTimeFieldValueSource.ISO_MIN_DATE, false);
+        max.max = new DateTimeLimit(DateTimeFieldValueSource.ISO_MIN_DATE, false);
         DateTimeFieldValueSource datesBeforeFirstPermittedDate = new DateTimeFieldValueSource(max, Collections.emptySet());
 
         //Act
@@ -385,20 +386,20 @@ public class DateTimeFieldValueSourceTests {
         return restrictions;
     }
 
-    private DateTimeRestrictions.DateTimeLimit getTimeLimit(String dateString) {
+    private DateTimeLimit getTimeLimit(String dateString) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        return new DateTimeRestrictions.DateTimeLimit(
+        return new DateTimeLimit(
             LocalDate.parse(dateString, formatter).atStartOfDay().atOffset(ZoneOffset.UTC),
             true);
     }
 
     private void givenLowerBound(OffsetDateTime value, boolean inclusive) {
-        lowerLimit = new DateTimeRestrictions.DateTimeLimit(value, inclusive);
+        lowerLimit = new DateTimeLimit(value, inclusive);
     }
 
     private void givenUpperBound(OffsetDateTime value, boolean inclusive) {
-        upperLimit = new DateTimeRestrictions.DateTimeLimit(value, inclusive);
+        upperLimit = new DateTimeLimit(value, inclusive);
     }
 
     private void givenBlacklist(Object... list) {

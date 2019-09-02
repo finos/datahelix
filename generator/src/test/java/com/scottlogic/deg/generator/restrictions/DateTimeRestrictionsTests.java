@@ -74,8 +74,8 @@ class DateTimeRestrictionsTests {
 
     @Test
     public void DateTimeLimitShouldBeEqualIfInclusiveAndLimitMatch(){
-        DateTimeRestrictions.DateTimeLimit a = new DateTimeRestrictions.DateTimeLimit(OffsetDateTime.MIN, true);
-        DateTimeRestrictions.DateTimeLimit b = new DateTimeRestrictions.DateTimeLimit(OffsetDateTime.MIN, true);
+        DateTimeLimit a = new DateTimeLimit(OffsetDateTime.MIN, true);
+        DateTimeLimit b = new DateTimeLimit(OffsetDateTime.MIN, true);
 
         Assert.assertThat(a, equalTo(b));
         Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
@@ -83,24 +83,24 @@ class DateTimeRestrictionsTests {
 
     @Test
     public void DateTimeLimitShouldBeUnequalIfOnlyInclusiveMatches(){
-        DateTimeRestrictions.DateTimeLimit a = new DateTimeRestrictions.DateTimeLimit(OffsetDateTime.MIN, true);
-        DateTimeRestrictions.DateTimeLimit b = new DateTimeRestrictions.DateTimeLimit(OffsetDateTime.MAX, true);
+        DateTimeLimit a = new DateTimeLimit(OffsetDateTime.MIN, true);
+        DateTimeLimit b = new DateTimeLimit(OffsetDateTime.MAX, true);
 
         Assert.assertThat(a, not(equalTo(b)));
     }
 
     @Test
     public void DateTimeLimitShouldBeUnequalIfOnlyLimitMatches(){
-        DateTimeRestrictions.DateTimeLimit a = new DateTimeRestrictions.DateTimeLimit(OffsetDateTime.MIN, true);
-        DateTimeRestrictions.DateTimeLimit b = new DateTimeRestrictions.DateTimeLimit(OffsetDateTime.MIN, false);
+        DateTimeLimit a = new DateTimeLimit(OffsetDateTime.MIN, true);
+        DateTimeLimit b = new DateTimeLimit(OffsetDateTime.MIN, false);
 
         Assert.assertThat(a, not(equalTo(b)));
     }
 
     @Test
     public void DateTimeLimitShouldBeUnequalIfNeitherLimitNotInclusiveMatch(){
-        DateTimeRestrictions.DateTimeLimit a = new DateTimeRestrictions.DateTimeLimit(OffsetDateTime.MIN, true);
-        DateTimeRestrictions.DateTimeLimit b = new DateTimeRestrictions.DateTimeLimit(OffsetDateTime.MAX, false);
+        DateTimeLimit a = new DateTimeLimit(OffsetDateTime.MIN, true);
+        DateTimeLimit b = new DateTimeLimit(OffsetDateTime.MAX, false);
 
         Assert.assertThat(a, not(equalTo(b)));
     }
@@ -108,8 +108,8 @@ class DateTimeRestrictionsTests {
     @Test
     public void matchShouldReturnFalseIfGivenSomethingThatIsntADateTime(){
         DateTimeRestrictions restrictions = new DateTimeRestrictions();
-        restrictions.min = new DateTimeRestrictions.DateTimeLimit(OffsetDateTime.MIN, true);
-        restrictions.max = new DateTimeRestrictions.DateTimeLimit(OffsetDateTime.MIN, true);
+        restrictions.min = new DateTimeLimit(OffsetDateTime.MIN, true);
+        restrictions.max = new DateTimeLimit(OffsetDateTime.MIN, true);
 
         boolean result = restrictions.match(123);
 
@@ -128,7 +128,7 @@ class DateTimeRestrictionsTests {
     @Test
     public void matchShouldReturnTrueIfGivenDateIsGreaterThanMin(){
         DateTimeRestrictions restrictions = new DateTimeRestrictions();
-        restrictions.min = new DateTimeRestrictions.DateTimeLimit(OffsetDateTime.MIN, true);
+        restrictions.min = new DateTimeLimit(OffsetDateTime.MIN, true);
 
         boolean result = restrictions.match(MAX);
 
@@ -138,7 +138,7 @@ class DateTimeRestrictionsTests {
     @Test
     public void matchShouldReturnTrueIfGivenDateIsLessThanMax(){
         DateTimeRestrictions restrictions = new DateTimeRestrictions();
-        restrictions.max = new DateTimeRestrictions.DateTimeLimit(OffsetDateTime.MAX, true);
+        restrictions.max = new DateTimeLimit(OffsetDateTime.MAX, true);
 
         boolean result = restrictions.match(MIN);
 
@@ -148,7 +148,7 @@ class DateTimeRestrictionsTests {
     @Test
     public void matchShouldReturnTrueIfGivenDateIsEqualToMinWhenInclusive(){
         DateTimeRestrictions restrictions = new DateTimeRestrictions();
-        restrictions.min = new DateTimeRestrictions.DateTimeLimit(OffsetDateTime.MIN, true);
+        restrictions.min = new DateTimeLimit(OffsetDateTime.MIN, true);
 
         boolean result = restrictions.match(MIN);
 
@@ -158,7 +158,7 @@ class DateTimeRestrictionsTests {
     @Test
     public void matchShouldReturnTrueIfGivenDateIsEqualToMaxWhenInclusive(){
         DateTimeRestrictions restrictions = new DateTimeRestrictions();
-        restrictions.max = new DateTimeRestrictions.DateTimeLimit(OffsetDateTime.MAX, true);
+        restrictions.max = new DateTimeLimit(OffsetDateTime.MAX, true);
 
         boolean result = restrictions.match(MAX);
 
@@ -168,7 +168,7 @@ class DateTimeRestrictionsTests {
     @Test
     public void matchShouldReturnFalseIfGivenDateIsEqualToMinWhenExclusive(){
         DateTimeRestrictions restrictions = new DateTimeRestrictions();
-        restrictions.max = new DateTimeRestrictions.DateTimeLimit(OffsetDateTime.MIN, false);
+        restrictions.max = new DateTimeLimit(OffsetDateTime.MIN, false);
 
         boolean result = restrictions.match(OffsetDateTime.MIN);
 
@@ -178,7 +178,7 @@ class DateTimeRestrictionsTests {
     @Test
     public void matchShouldReturnFalseIfGivenDateIsEqualToMaxWhenExclusive(){
         DateTimeRestrictions restrictions = new DateTimeRestrictions();
-        restrictions.max = new DateTimeRestrictions.DateTimeLimit(OffsetDateTime.MAX, false);
+        restrictions.max = new DateTimeLimit(OffsetDateTime.MAX, false);
 
         boolean result = restrictions.match(OffsetDateTime.MAX);
 
@@ -189,7 +189,7 @@ class DateTimeRestrictionsTests {
     public void matchShouldReturnFalseIfGivenDateIsBeforeMin(){
         DateTimeRestrictions restrictions = new DateTimeRestrictions();
         OffsetDateTime limit = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
-        restrictions.min = new DateTimeRestrictions.DateTimeLimit(limit, false);
+        restrictions.min = new DateTimeLimit(limit, false);
 
         boolean result = restrictions.match(limit.minusSeconds(1));
 
@@ -200,7 +200,7 @@ class DateTimeRestrictionsTests {
     public void matchShouldReturnFalseIfGivenDateIsAfterMax(){
         DateTimeRestrictions restrictions = new DateTimeRestrictions();
         OffsetDateTime limit = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
-        restrictions.max = new DateTimeRestrictions.DateTimeLimit(limit, false);
+        restrictions.max = new DateTimeLimit(limit, false);
 
         boolean result = restrictions.match(limit.plusSeconds(1));
 
@@ -212,8 +212,8 @@ class DateTimeRestrictionsTests {
         DateTimeRestrictions restrictions = new DateTimeRestrictions();
         OffsetDateTime min = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         OffsetDateTime max = min.plusHours(1);
-        restrictions.min = new DateTimeRestrictions.DateTimeLimit(min, false);
-        restrictions.max = new DateTimeRestrictions.DateTimeLimit(max, false);
+        restrictions.min = new DateTimeLimit(min, false);
+        restrictions.max = new DateTimeLimit(max, false);
 
         boolean result = restrictions.match(min.plusMinutes(1));
 
@@ -224,8 +224,8 @@ class DateTimeRestrictionsTests {
     public void matchShouldReturnTrueIfGivenDateIsEqualToMinAndMaxInclusive(){
         DateTimeRestrictions restrictions = new DateTimeRestrictions();
         OffsetDateTime min = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
-        restrictions.min = new DateTimeRestrictions.DateTimeLimit(min, true);
-        restrictions.max = new DateTimeRestrictions.DateTimeLimit(min, true);
+        restrictions.min = new DateTimeLimit(min, true);
+        restrictions.max = new DateTimeLimit(min, true);
 
         boolean result = restrictions.match(min);
 
@@ -236,8 +236,8 @@ class DateTimeRestrictionsTests {
     public void matchShouldReturnFalseIfGivenDateIsEqualToMinAndMaxExclusive(){
         DateTimeRestrictions restrictions = new DateTimeRestrictions();
         OffsetDateTime min = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
-        restrictions.min = new DateTimeRestrictions.DateTimeLimit(min, false);
-        restrictions.max = new DateTimeRestrictions.DateTimeLimit(min, false);
+        restrictions.min = new DateTimeLimit(min, false);
+        restrictions.max = new DateTimeLimit(min, false);
 
         boolean result = restrictions.match(min);
 
@@ -247,8 +247,8 @@ class DateTimeRestrictionsTests {
     @Test
     public void isAfter_whenSameDateAndBothInclusive_shouldBeFalse(){
         OffsetDateTime value = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
-        DateTimeRestrictions.DateTimeLimit self = new DateTimeRestrictions.DateTimeLimit(value, true);
-        DateTimeRestrictions.DateTimeLimit other = new DateTimeRestrictions.DateTimeLimit(value, true);
+        DateTimeLimit self = new DateTimeLimit(value, true);
+        DateTimeLimit other = new DateTimeLimit(value, true);
 
         boolean result = other.isAfter(self);
 
@@ -258,8 +258,8 @@ class DateTimeRestrictionsTests {
     @Test
     public void isAfter_whenSameDateAndOtherIsExclusive_shouldBeTrue(){
         OffsetDateTime value = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
-        DateTimeRestrictions.DateTimeLimit self = new DateTimeRestrictions.DateTimeLimit(value, true);
-        DateTimeRestrictions.DateTimeLimit other = new DateTimeRestrictions.DateTimeLimit(value, false);
+        DateTimeLimit self = new DateTimeLimit(value, true);
+        DateTimeLimit other = new DateTimeLimit(value, false);
 
         boolean result = other.isAfter(self);
 
@@ -270,8 +270,8 @@ class DateTimeRestrictionsTests {
     public void isAfter_whenOtherIsBeforeByOneNanoSecondInclusive_shouldBeFalse(){
         OffsetDateTime selfValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         OffsetDateTime otherValue = selfValue.plusNanos(-1);
-        DateTimeRestrictions.DateTimeLimit self = new DateTimeRestrictions.DateTimeLimit(selfValue, true);
-        DateTimeRestrictions.DateTimeLimit other = new DateTimeRestrictions.DateTimeLimit(otherValue, true);
+        DateTimeLimit self = new DateTimeLimit(selfValue, true);
+        DateTimeLimit other = new DateTimeLimit(otherValue, true);
 
         boolean result = other.isAfter(self);
 
@@ -282,8 +282,8 @@ class DateTimeRestrictionsTests {
     public void isAfter_whenOtherIsBeforeByOneNanoSecondExclusive_shouldBeFalse(){
         OffsetDateTime selfValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         OffsetDateTime otherValue = selfValue.plusNanos(-1);
-        DateTimeRestrictions.DateTimeLimit self = new DateTimeRestrictions.DateTimeLimit(selfValue, true);
-        DateTimeRestrictions.DateTimeLimit other = new DateTimeRestrictions.DateTimeLimit(otherValue, false);
+        DateTimeLimit self = new DateTimeLimit(selfValue, true);
+        DateTimeLimit other = new DateTimeLimit(otherValue, false);
 
         boolean result = other.isAfter(self);
 
@@ -294,8 +294,8 @@ class DateTimeRestrictionsTests {
     public void isAfter_whenOtherIsBeforeInclusive_shouldBeFalse(){
         OffsetDateTime selfValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         OffsetDateTime otherValue = OffsetDateTime.of(2000, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
-        DateTimeRestrictions.DateTimeLimit self = new DateTimeRestrictions.DateTimeLimit(selfValue, true);
-        DateTimeRestrictions.DateTimeLimit other = new DateTimeRestrictions.DateTimeLimit(otherValue, true);
+        DateTimeLimit self = new DateTimeLimit(selfValue, true);
+        DateTimeLimit other = new DateTimeLimit(otherValue, true);
 
         boolean result = other.isAfter(self);
 
@@ -306,8 +306,8 @@ class DateTimeRestrictionsTests {
     public void isAfter_whenOtherIsBeforeExclusive_shouldBeFalse(){
         OffsetDateTime selfValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         OffsetDateTime otherValue = OffsetDateTime.of(2000, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
-        DateTimeRestrictions.DateTimeLimit self = new DateTimeRestrictions.DateTimeLimit(selfValue, true);
-        DateTimeRestrictions.DateTimeLimit other = new DateTimeRestrictions.DateTimeLimit(otherValue, false);
+        DateTimeLimit self = new DateTimeLimit(selfValue, true);
+        DateTimeLimit other = new DateTimeLimit(otherValue, false);
 
         boolean result = other.isAfter(self);
 
@@ -318,8 +318,8 @@ class DateTimeRestrictionsTests {
     public void isAfter_whenOtherIsAfterInclusive_shouldBeTrue(){
         OffsetDateTime selfValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         OffsetDateTime otherValue = OffsetDateTime.of(2002, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
-        DateTimeRestrictions.DateTimeLimit self = new DateTimeRestrictions.DateTimeLimit(selfValue, true);
-        DateTimeRestrictions.DateTimeLimit other = new DateTimeRestrictions.DateTimeLimit(otherValue, true);
+        DateTimeLimit self = new DateTimeLimit(selfValue, true);
+        DateTimeLimit other = new DateTimeLimit(otherValue, true);
 
         boolean result = other.isAfter(self);
 
@@ -330,8 +330,8 @@ class DateTimeRestrictionsTests {
     public void isAfter_whenOtherIsAfterExclusive_shouldBeTrue(){
         OffsetDateTime selfValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         OffsetDateTime otherValue = OffsetDateTime.of(2002, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
-        DateTimeRestrictions.DateTimeLimit self = new DateTimeRestrictions.DateTimeLimit(selfValue, true);
-        DateTimeRestrictions.DateTimeLimit other = new DateTimeRestrictions.DateTimeLimit(otherValue, false);
+        DateTimeLimit self = new DateTimeLimit(selfValue, true);
+        DateTimeLimit other = new DateTimeLimit(otherValue, false);
 
         boolean result = other.isAfter(self);
 
@@ -342,8 +342,8 @@ class DateTimeRestrictionsTests {
     public void isAfter_whenOtherIsAfterByOneNanoSecondInclusive_shouldBeTrue(){
         OffsetDateTime selfValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         OffsetDateTime otherValue = selfValue.plusNanos(1);
-        DateTimeRestrictions.DateTimeLimit self = new DateTimeRestrictions.DateTimeLimit(selfValue, true);
-        DateTimeRestrictions.DateTimeLimit other = new DateTimeRestrictions.DateTimeLimit(otherValue, true);
+        DateTimeLimit self = new DateTimeLimit(selfValue, true);
+        DateTimeLimit other = new DateTimeLimit(otherValue, true);
 
         boolean result = other.isAfter(self);
 
@@ -354,8 +354,8 @@ class DateTimeRestrictionsTests {
     public void isAfter_whenOtherIsAfterByOneNanoSecondExclusive_shouldBeTrue(){
         OffsetDateTime selfValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         OffsetDateTime otherValue = selfValue.plusNanos(1);
-        DateTimeRestrictions.DateTimeLimit self = new DateTimeRestrictions.DateTimeLimit(selfValue, false);
-        DateTimeRestrictions.DateTimeLimit other = new DateTimeRestrictions.DateTimeLimit(otherValue, false);
+        DateTimeLimit self = new DateTimeLimit(selfValue, false);
+        DateTimeLimit other = new DateTimeLimit(otherValue, false);
 
         boolean result = other.isAfter(self);
 
@@ -401,7 +401,7 @@ class DateTimeRestrictionsTests {
         return restrictions;
     }
 
-    private class MockDateTimeLimit extends DateTimeRestrictions.DateTimeLimit{
+    private class MockDateTimeLimit extends DateTimeLimit{
 
         private final boolean equalToOther;
 
