@@ -152,7 +152,7 @@ Set Project language level to 8.
 Open the "Gradle" Tool Window (this is an extension that may need to be installed), and double-click Tasks > build > build.
 Your IDE may do this automatically for you.
 
-Navigate to the [`App.java` file](../../../orchestrator/src/main/java/com/scottlogic/deg/orchestrator/App.java). Right click and debug.
+Navigate to the [`App.java` file](https://github.com/finos/datahelix/blob/master/orchestrator/src/main/java/com/scottlogic/deg/orchestrator/App.java). Right click and debug.
 
 Now edit the run configuration on the top toolbar created by the initial run. Name the run configuration 'Generate' and under 'Program Arguments' enter the following, replacing the paths with your desired files:
 
