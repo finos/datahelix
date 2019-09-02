@@ -77,7 +77,7 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
 
     private MergeResult<StringRestrictions> isLengthAcceptable(TextualRestrictions other) {
         if (anyRegexes(other)){
-            throw new ValidationException("Combining a regex constraint with an " + this.toString() + " constraint is not supported.");
+            throw new ValidationException("Combining a regex constraint with a " + this.toString() + " constraint is not supported.");
         }
 
         StringGenerator intersect = other.createGenerator().intersect(new RegexStringGenerator(type.getRegex(), true));

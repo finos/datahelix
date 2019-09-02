@@ -38,7 +38,7 @@ public class SedolStringGeneratorTests {
 
         final Iterator<String> allSedols = target.generateAllValues().iterator();
 
-        for (int ii = 0; ii < NumberOfTests; ++ii) {
+        for (int i = 0; i < NumberOfTests; ++i) {
             final String nextSedol = allSedols.next();
             final char checkDigit = FinancialCodeUtils.calculateSedolCheckDigit(nextSedol.substring(0, 6));
             assertThat(nextSedol.charAt(6), equalTo(checkDigit));
@@ -53,7 +53,7 @@ public class SedolStringGeneratorTests {
 
         final Iterator<String> allSedols = target.generateRandomValues(new JavaUtilRandomNumberGenerator()).iterator();
 
-        for (int ii = 0; ii < NumberOfTests; ++ii) {
+        for (int i = 0; i < NumberOfTests; ++i) {
             final String nextSedol = allSedols.next();
             final char checkDigit = FinancialCodeUtils.calculateSedolCheckDigit(nextSedol.substring(0, 6));
             assertThat(nextSedol.charAt(6), equalTo(checkDigit));

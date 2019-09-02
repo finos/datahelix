@@ -18,6 +18,7 @@ package com.scottlogic.deg.generator.generation.string.generators;
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class ChecksumStringGenerator implements StringGenerator {
@@ -33,19 +34,24 @@ public class ChecksumStringGenerator implements StringGenerator {
     @Override
     public Stream<String> generateAllValues() {
         return checksumlessGenerator.generateAllValues()
-            .map(string -> string + checksumMaker.makeChecksum(string));
+            .map(addChecksum());
     }
+
 
     @Override
     public Stream<String> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
         return checksumlessGenerator.generateRandomValues(randomNumberGenerator)
-            .map(string -> string + checksumMaker.makeChecksum(string));
+            .map(addChecksum());
     }
 
     @Override
     public Stream<String> generateInterestingValues() {
         return checksumlessGenerator.generateInterestingValues()
-            .map(string -> string + checksumMaker.makeChecksum(string));
+            .map(addChecksum());
+    }
+
+    private Function<String, String> addChecksum() {
+        return string -> string + checksumMaker.makeChecksum(string);
     }
 
     @Override
