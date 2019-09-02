@@ -33,6 +33,7 @@ Feature: As a user
       And foo is of type "integer"
       And foo is greater than 0
       And foo is anything but null
+      And the combination strategy is minimal
       Then the following data should be generated:
         |unique | foo |
         | 1     | 1   |
@@ -58,6 +59,7 @@ Feature: As a user
         | 4     | 3   | 3  |
         | 5     | 3   | 3  |
 
+      @ignore #Exhaustive not yet supported with unique
   Scenario: The one where combination strategy is exhaustive
     Given the combination strategy is exhaustive
     And there is a field foo
