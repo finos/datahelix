@@ -403,7 +403,7 @@ To visualise the decision tree run the following command from the command line:
 `java -jar <path to JAR file> visualise [options] --profile-file="<path to profile>" --output-path="<path to desired output GV file>"`
 
 * `[path to JAR file]` the location of generator.jar
-* `[options]` optionally a combination of [options](../commandLineOptions/VisualiseOptions.md) to configure how the command operates
+* `[options]` optionally a combination of [options](https://github.com/finos/datahelix/blob/master/docs/user/commandLineOptions/VisualiseOptions.md) to configure how the command operates
 * `<path to profile>` the location of the JSON profile file
 * `<path to desired output GV file>` the location of the folder for the resultant GV file of the tree
 
