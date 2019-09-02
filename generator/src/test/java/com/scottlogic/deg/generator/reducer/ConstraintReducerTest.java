@@ -766,63 +766,6 @@ class ConstraintReducerTest {
     }
 
     @Test
-    void shouldReduceSingleFormatConstraint() {
-        final Field field = new Field("test0");
-        ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
-
-        List<AtomicConstraint> constraints = Arrays.asList(
-            new FormatConstraint(field, "Hello '$1'")
-        );
-
-        RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, nodeFromConstraints(constraints)).get();
-
-        Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
-        FieldSpec outputSpec = testOutput.getSpecForField(field);
-        Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec has a String type constraint",
-            outputSpec.getTypeRestrictions().getAllowedTypes(),
-            containsInAnyOrder(IsOfTypeConstraint.Types.values()));
-        Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getWhitelist(),
-            Is.is(IsNull.nullValue()));
-        Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
-            Is.is(true));
-        Assert.assertThat("Fieldspec has no numeric restrictions", outputSpec.getNumericRestrictions(),
-            Is.is(IsNull.nullValue()));
-        Assert.assertThat("Fieldspec has no datetime restrictions", outputSpec.getDateTimeRestrictions(),
-            Is.is(IsNull.nullValue()));
-        Assert.assertThat("Fieldspec has string restrictions", outputSpec.getStringRestrictions(),
-
-            Is.is(IsNull.nullValue()));
-        Assert.assertThat("Fieldspec format restrictions has a value",
-            outputSpec.getFormatting(), Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec format restrictions has a value",
-            outputSpec.getFormatting(), Is.is("Hello '$1'"));
-    }
-
-    @Test
-    void shouldSelectOneFromMultipleFormats() {
-        final Field field = new Field("test0");
-        ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
-
-        List<AtomicConstraint> constraints = Arrays.asList(
-            new FormatConstraint(field, "Lorem '$1'"),
-            new FormatConstraint(field, "Ipsum '$1'")
-        );
-
-        RowSpec rowSpec = constraintReducer
-            .reduceConstraintsToRowSpec(profileFields, nodeFromConstraints(constraints))
-            .get();
-
-        String formatting = rowSpec.getSpecForField(field).getFormatting();
-
-        Assert.assertTrue(constraints.stream()
-            .map(constraint -> (FormatConstraint)constraint)
-            .map(constraint -> constraint.format)
-            .collect(Collectors.toSet())
-            .contains(formatting));
-    }
-
-    @Test
     void shouldReduceStringLongerThanConstraint() {
         final Field field = new Field("test0");
 

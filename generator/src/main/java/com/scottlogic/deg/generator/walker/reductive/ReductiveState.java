@@ -72,7 +72,7 @@ public class ReductiveState {
         return String.join(", ", fieldValues.entrySet()
             .stream()
             .sorted(Comparator.comparing(ff -> ff.getKey().toString()))
-            .map(ff -> String.format("%s: %s", ff.getKey(), ff.getValue().getFormattedValue()))
+            .map(ff -> String.format("%s: %s", ff.getKey(), ff.getValue()))
             .collect(Collectors.toList()));
     }
 

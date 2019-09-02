@@ -19,16 +19,13 @@ package com.scottlogic.deg.generator.fieldspecs;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 
-
-import java.util.Collections;
-
 public class FieldSpecHelper {
     public FieldSpec getFieldSpecForValue(DataBagValue fieldValue) {
-        if (fieldValue.getUnformattedValue() == null) {
+        if (fieldValue.getValue() == null) {
             return getNullRequiredFieldSpec();
         }
         return FieldSpec.Empty
-            .withWhitelist(FrequencyDistributedSet.singleton(fieldValue.getUnformattedValue()))
+            .withWhitelist(FrequencyDistributedSet.singleton(fieldValue.getValue()))
             .withNotNull();
     }
 

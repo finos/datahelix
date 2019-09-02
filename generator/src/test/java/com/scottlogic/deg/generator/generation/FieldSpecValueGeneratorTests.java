@@ -55,7 +55,7 @@ class FieldSpecValueGeneratorTests {
 
         Set<DataBagValue> expectedDataBags = fieldSpec.getWhitelist().set()
             .stream()
-            .map(value -> new DataBagValue(value, null))
+            .map(DataBagValue::new)
             .collect(Collectors.toSet());
 
         assertThat(result, sameBeanAs(expectedDataBags));
@@ -85,22 +85,18 @@ class FieldSpecValueGeneratorTests {
         Set<DataBagValue> expectedDataBags = new HashSet<>(
             Arrays.asList(
                 new DataBagValue(
-                    new BigDecimal("10.00000000000000000001"),
-                    null
+                    new BigDecimal("10.00000000000000000001")
                 ),
                 new DataBagValue(
-                    new BigDecimal("10.00000000000000000002"),
-                    null
+                    new BigDecimal("10.00000000000000000002")
                 ),
                 new DataBagValue(
-                    new BigDecimal("29.99999999999999999998"),
-                    null
+                    new BigDecimal("29.99999999999999999998")
                 ),
                 new DataBagValue(
-                    new BigDecimal("29.99999999999999999999"),
-                    null
+                    new BigDecimal("29.99999999999999999999")
                 ),
-                new DataBagValue(null, null)
+                new DataBagValue(null)
             )
         );
 
@@ -139,7 +135,7 @@ class FieldSpecValueGeneratorTests {
                 randomNumberGenerator
             );
 
-            fieldSpecFulfiller.generate(new Field(null, true), fieldSpec).collect(Collectors.toSet());
+            fieldSpecFulfiller.generate(new Field(null, true, null), fieldSpec).collect(Collectors.toSet());
 
             verify(fieldValueSource, times(1)).generateAllValues();
             verify(fieldValueSource, times(0)).generateInterestingValues();
@@ -173,7 +169,7 @@ class FieldSpecValueGeneratorTests {
                 randomNumberGenerator
             );
 
-            fieldSpecFulfiller.generate(new Field(null, true), fieldSpec).collect(Collectors.toSet());
+            fieldSpecFulfiller.generate(new Field(null, true, null), fieldSpec).collect(Collectors.toSet());
 
             verify(fieldValueSource, times(1)).generateAllValues();
             verify(fieldValueSource, times(0)).generateInterestingValues();

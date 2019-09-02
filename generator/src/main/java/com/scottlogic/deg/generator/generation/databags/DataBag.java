@@ -34,10 +34,20 @@ public class DataBag implements GeneratedObject {
 
     @Override
     public Object getFormattedValue(Field field) {
-        return getUnformattedValue(field).getFormattedValue();
+        Object value = getDataBagValue(field).getValue();
+
+        if (field.getFormatting() == null || value == null) {
+            return value;
+        }
+
+        try {
+            return String.format(field.getFormatting(), value);
+        } catch (IllegalFormatException e){
+            return value;
+        }
     }
 
-    public DataBagValue getUnformattedValue(Field field) {
+    public DataBagValue getDataBagValue(Field field) {
         if (!fieldToValue.containsKey(field)) {
             throw new IllegalStateException("DataBag has no value stored for " + field);
         }

@@ -36,8 +36,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.Consumer;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.core.IsNull.nullValue;
 
 public class JsonProfileReaderTests {
@@ -298,13 +297,12 @@ public class JsonProfileReaderTests {
                         "    ]" +
                         "}");
 
-        expectRules(
-                ruleWithConstraints(
-                        typedConstraint(
-                                FormatConstraint.class,
-                                c -> Assert.assertThat(
-                                        c.format,
-                                        equalTo("%.5s")))));
+        expectFields(
+            field -> {
+                Assert.assertThat(field.name, equalTo("foo"));
+                Assert.assertThat(field.getFormatting(), equalTo("%.5s"));
+            }
+        );
     }
 
     @Test
@@ -585,21 +583,22 @@ public class JsonProfileReaderTests {
 
         expectRules(
             ruleWithConstraints(
-                typedConstraint(
-                    IsAfterOrEqualToConstantDateTimeConstraint.class,
-                    c -> {
-                        Assert.assertThat(
-                            c.referenceValue,
-                            equalTo(OffsetDateTime.parse("2019-01-01T00:00:00.000Z")));
-                    }),
+
                 typedConstraint(
                     IsBeforeConstantDateTimeConstraint.class,
                     c -> {
                         Assert.assertThat(
                             c.referenceValue,
                             equalTo(OffsetDateTime.parse("2019-01-03T00:00:00.000Z")));
+                    }),
+                typedConstraint(
+                    IsAfterOrEqualToConstantDateTimeConstraint.class,
+                    c -> {
+                        Assert.assertThat(
+                            c.referenceValue,
+                            equalTo(OffsetDateTime.parse("2019-01-01T00:00:00.000Z")));
                     })
-                )
+            )
         );
     }
 

@@ -83,8 +83,6 @@ public class FieldSpecFactory {
             return construct((MatchesStandardConstraint) constraint, negate);
         } else if (constraint instanceof IsOfTypeConstraint) {
             return construct((IsOfTypeConstraint) constraint, negate);
-        } else if (constraint instanceof FormatConstraint) {
-            return construct((FormatConstraint) constraint, negate);
         } else if (constraint instanceof StringHasLengthConstraint) {
             return construct((StringHasLengthConstraint) constraint, negate);
         } else if (constraint instanceof IsStringLongerThanConstraint) {
@@ -267,16 +265,6 @@ public class FieldSpecFactory {
 
         return FieldSpec.Empty
             .withStringRestrictions(new MatchesStandardStringRestrictions(constraint.standard));
-    }
-
-    private FieldSpec construct(FormatConstraint constraint, boolean negate) {
-        if (negate) {
-            // it's not worth much effort to figure out how to negate a formatting constraint
-            // - let's just make it a no-op
-            return FieldSpec.Empty;
-        }
-
-        return FieldSpec.Empty.withFormatting(constraint.format);
     }
 
     private FieldSpec construct(StringHasLengthConstraint constraint, boolean negate) {

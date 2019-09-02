@@ -16,20 +16,13 @@
 
 package com.scottlogic.deg.generator.generation.databags;
 
-import java.util.IllegalFormatException;
 import java.util.Objects;
 
 public class DataBagValue {
     private final Object value;
-    private final String format;
 
-    public DataBagValue(Object value, String format){
+    public DataBagValue(Object value){
         this.value = value;
-        this.format = format;
-    }
-
-    public DataBagValue(Object value) {
-        this(value, null);
     }
 
     @Override
@@ -37,36 +30,22 @@ public class DataBagValue {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DataBagValue that = (DataBagValue) o;
-        return Objects.equals(value, that.value) &&
-            Objects.equals(format, that.format);
+        return Objects.equals(value, that.value);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value, format);
+        return Objects.hash(value);
     }
 
     @Override
     public String toString() {
         return "DataBagValue{" +
             "value=" + value +
-            ", format='" + format + '\'' +
             '}';
     }
 
-    public Object getFormattedValue() {
-        if (format == null || value == null) {
-            return value;
-        }
-
-        try {
-            return String.format(format, value);
-        } catch (IllegalFormatException e){
-            return value;
-        }
-    }
-
-    public Object getUnformattedValue(){
+    public Object getValue(){
         return value;
     }
 }

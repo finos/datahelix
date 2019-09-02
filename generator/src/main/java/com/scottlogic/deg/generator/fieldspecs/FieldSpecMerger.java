@@ -84,8 +84,6 @@ public class FieldSpecMerger {
     }
 
     private Optional<FieldSpec> addNullable(FieldSpec left, FieldSpec right, FieldSpec newFieldSpec) {
-        newFieldSpec = addFormatting(left, right, newFieldSpec);
-
         if (isNullable(left, right)) {
             return Optional.of(newFieldSpec);
         }
@@ -111,16 +109,6 @@ public class FieldSpecMerger {
 
     private boolean isNullable(FieldSpec left, FieldSpec right) {
         return left.isNullable() && right.isNullable();
-    }
-
-    private FieldSpec addFormatting(FieldSpec left, FieldSpec right, FieldSpec newFieldSpec) {
-        if (left.getFormatting() != null) {
-            return newFieldSpec.withFormatting(left.getFormatting());
-        }
-        if (right.getFormatting() != null) {
-            return newFieldSpec.withFormatting(right.getFormatting());
-        }
-        return newFieldSpec;
     }
 
     private Optional<FieldSpec> combineRestrictions(FieldSpec left, FieldSpec right) {

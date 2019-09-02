@@ -48,9 +48,9 @@ class RowSpecDataBagGeneratorTests {
     private FieldSpec fieldSpec2 = mock(FieldSpec.class);
     private FieldSpec fieldSpec3 = mock(FieldSpec.class);
 
-    DataBagValue dataBagValue = new DataBagValue(field, "value");
-    DataBagValue dataBagValue1 = new DataBagValue(field2, "value");
-    DataBagValue dataBagValue2 = new DataBagValue(field3, "value");
+    DataBagValue dataBagValue = new DataBagValue(field);
+    DataBagValue dataBagValue1 = new DataBagValue(field2);
+    DataBagValue dataBagValue2 = new DataBagValue(field3);
 
     @Test
     void shouldCreateValuesForEachFieldSpecInRowSpec() {
