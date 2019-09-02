@@ -30,8 +30,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static com.scottlogic.deg.common.profile.constraints.atomic.StandardConstraintTypes.RIC;
+
 public class FieldSpecFactory {
-    public static final String RIC_REGEX = "[A-Z]{1,4}\\.[A-Z]{1,2}";
     private final StringRestrictionsFactory stringRestrictionsFactory;
 
     @Inject
@@ -256,12 +257,16 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec construct(MatchesStandardConstraint constraint, boolean negate) {
-        if (constraint.standard.equals(StandardConstraintTypes.RIC)) {
-            return construct(new MatchesRegexConstraint(constraint.field, Pattern.compile(RIC_REGEX)), negate);
+        if (constraint.standard.equals(RIC)) {
+            return construct(new MatchesRegexConstraint(constraint.field, Pattern.compile(RIC.getRegex())), negate);
+        }
+
+        if (negate){
+            return construct(new MatchesRegexConstraint(constraint.field, Pattern.compile(constraint.standard.getRegex())), negate);
         }
 
         return FieldSpec.Empty
-            .withStringRestrictions(new MatchesStandardStringRestrictions(constraint.standard, negate));
+            .withStringRestrictions(new MatchesStandardStringRestrictions(constraint.standard));
     }
 
     private FieldSpec construct(FormatConstraint constraint, boolean negate) {

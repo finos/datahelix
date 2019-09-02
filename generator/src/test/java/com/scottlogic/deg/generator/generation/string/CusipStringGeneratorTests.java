@@ -16,45 +16,84 @@
 
 package com.scottlogic.deg.generator.generation.string;
 
-import org.junit.Assert;
+import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
+import com.scottlogic.deg.generator.utils.FinancialCodeUtils;
+import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.util.Iterator;
+
+import static com.scottlogic.deg.generator.generation.string.generators.ChecksumStringGeneratorFactory.createCusipGenerator;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class CusipStringGeneratorTests {
     @Test
-    public void shouldMatchAValidCusipCodeWhenNotNegated(){
-        StringGenerator cusipGenerator = new CusipStringGenerator();
+    public void shouldEndAllCusipsWithValidCheckDigit() {
+        StringGenerator target = createCusipGenerator();
+        final int NumberOfTests = 100;
 
-        boolean matches = cusipGenerator.match("38259P508");
+        final Iterator<String> allCusips = target.generateAllValues().iterator();
+
+        for (int ii = 0; ii < NumberOfTests; ++ii) {
+            final String nextCusip = allCusips.next();
+            final char checkDigit = FinancialCodeUtils.calculateCusipCheckDigit(nextCusip.substring(0, 8));
+            assertThat(nextCusip.charAt(8), equalTo(checkDigit));
+        }
+    }
+
+    @Test
+    public void shouldEndAllRandomCusipsWithValidCheckDigit() {
+        StringGenerator target = createCusipGenerator();
+
+        final int NumberOfTests = 100;
+
+        final Iterator<String> allCusips = target.generateRandomValues(new JavaUtilRandomNumberGenerator()).iterator();
+
+        for (int ii = 0; ii < NumberOfTests; ++ii) {
+            final String nextCusip = allCusips.next();
+            final char checkDigit = FinancialCodeUtils.calculateCusipCheckDigit(nextCusip.substring(0, 8));
+            assertThat(nextCusip.charAt(8), equalTo(checkDigit));
+        }
+    }
+
+    @Test
+    public void shouldMatchAValidCusipCodeWhenNotNegated(){
+        StringGenerator cusipGenerator = createCusipGenerator();
+
+        boolean matches = cusipGenerator.matches("38259P508");
 
         assertTrue(matches);
     }
 
     @Test
     public void shouldNotMatchAnInvalidCusipCodeWhenNotNegated(){
-        StringGenerator cusipGenerator = new CusipStringGenerator();
+        StringGenerator cusipGenerator = createCusipGenerator();
 
-        boolean matches = cusipGenerator.match("not a cusip");
+        boolean matches = cusipGenerator.matches("not a cusip");
 
         assertFalse(matches);
     }
 
     @Test
+    @Disabled("Standard constraints e.g. ISINs currently cannot be negated")
     public void shouldNotMatchAValidCusipCodeWhenNegated(){
-        StringGenerator cusipGenerator = new CusipStringGenerator().complement();
+        StringGenerator cusipGenerator = createCusipGenerator().complement();
 
-        boolean matches = cusipGenerator.match("38259P508");
+        boolean matches = cusipGenerator.matches("38259P508");
 
         assertFalse(matches);
     }
 
     @Test
+    @Disabled("Standard constraints e.g. ISINs currently cannot be negated")
     public void shouldMatchAnInvalidCusipCodeWhenNegated(){
-        StringGenerator cusipGenerator = new CusipStringGenerator().complement();
+        StringGenerator cusipGenerator = createCusipGenerator().complement();
 
-        boolean matches = cusipGenerator.match("not a cusip");
+        boolean matches = cusipGenerator.matches("not a cusip");
 
         assertTrue(matches);
     }

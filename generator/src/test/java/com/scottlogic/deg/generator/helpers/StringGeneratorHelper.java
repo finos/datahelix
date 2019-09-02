@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.helpers;
 
-import com.scottlogic.deg.generator.generation.string.StringGenerator;
+import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import org.junit.Assert;
 
 import java.util.Iterator;

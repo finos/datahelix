@@ -66,6 +66,7 @@ Feature: User can generate valid data for all types (string, integer, decimal, o
     Then 5 rows of data are generated
     And foo contains strings matching /[A-Z]{2}[A-Z0-9]{9}[0-9]{1}/
 
+  @ignore "Standard constraints e.g. ISINs cannot yet be combined with not equal to constraints."
   Scenario: The generator produces valid ISIN data in random mode when combined with a not equal to constraint
     Given foo is of type "ISIN"
     And foo is anything but equal to "GB009CJ9GB62"
@@ -80,6 +81,7 @@ Feature: User can generate valid data for all types (string, integer, decimal, o
     Then 5 rows of data are generated
     And foo contains strings matching /[B-DF-HJ-NP-TV-Z0-9]{6}[0-9]/
 
+  @ignore "Standard constraints e.g. ISINs cannot yet be combined with not equal to constraints."
   Scenario: The generator produces valid SEDOL data in random mode when combined with a not equal to constraint
     Given foo is of type "SEDOL"
     And foo is anything but equal to "3091357"
@@ -94,6 +96,7 @@ Feature: User can generate valid data for all types (string, integer, decimal, o
     Then 5 rows of data are generated
     And foo contains strings matching /[0-9]{3}[A-Z0-9]{5}[0-9]/
 
+  @ignore "Standard constraints e.g. ISINs cannot yet be combined with not equal to constraints."
   Scenario: The generator produces valid CUSIP data in random mode when combined with a not equal to constraint
     Given foo is of type "CUSIP"
     And foo is anything but equal to "594918104"
