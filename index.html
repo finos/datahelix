@@ -82,10 +82,10 @@
                     <h2><a id="getting-started"></a>Getting Started</h2>
                     <p><i>The following guide gives a 10 minute introduction to the generator via various 
                        practical examples. For more detailed documentation please refer to the 
-                       <a href="https://github.com/finos/datahelix/blob/master/docs/ProfileDeveloperGuide.md">
-                       Profile Developer Guide</a>, and if you are interested in extending / modifying 
-                       the generator itself, refer to the <a href="https://github.com/finos/datahelix/blob/master/docs/GeneratorDeveloperGuide.md">
-                        DataHelix Generator Developer Guide</a>.</i></p>
+                       <a href="https://github.com/finos/datahelix/blob/master/docs/user/UserGuide.md">
+                       User Guide</a>, and if you are interested in extending / modifying 
+                       the generator itself, refer to the <a href="https://github.com/finos/datahelix/blob/master/docs/developer/DeveloperGuide.md">
+                       Developer Guide</a>.</i></p>
                     <p>The generator has been written in Java, allowing it to work on Microsoft Windows, 
                         Apple Mac and Linux. You will need Java v1.8 installed to run the generator 
                         (you can run java version to check whether you meet this requirement), it can be 
@@ -95,8 +95,8 @@
                        The project is currently in beta and under active development. You can expect 
                        breaking changes in future releases, and new features too!</p>
                     <p>You are also welcome to download the source code and build the generator yourself. To 
-                       do so, follow the instructions for <a href="https://github.com/finos/datahelix/blob/master/generator/docs/GeneratorSetup.md">
-                        downloading and building it using a Java IDE</a>, or for <a href="https://github.com/finos/datahelix/blob/master/generator/docs/DockerSetup.md">
+                       do so, follow the instructions for <a href="https://github.com/finos/datahelix/blob/master/docs/user/gettingStarted/BuildAndRun.md">
+                        downloading and building it using a Java IDE</a>, or for <a href="https://github.com/finos/datahelix/blob/master/docs/developer/DockerSetup.md">
                        downloading and building it using Docker</a>.</p>
                     <p>Your feedback on the beta would be greatly appreciated. If you have any issues, feature 
                         requests, or ideas, please share them via the <a href="https://github.com/finos/datahelix/issues">
@@ -464,16 +464,29 @@ Number of rows | Velocity (rows/sec) | Velocity trend
                     <p>That's the end of our getting started guide. Hopefully it has given you a good 
                         understanding of what the DataHelix generator is capable of. If you'd like to 
                         find out more about the various constraints the tool supports, the 
-                        <a href="/finos/datahelix/blob/master/docs/ProfileDeveloperGuide.md">Profile 
-                        Developer Guide</a> is a good next step. You might also be interested in 
+                        <a href="https://github.com/finos/datahelix/blob/master/docs/user/UserGuide.md">User Guide</a> 
+                        is a good next step. You might also be interested in 
                         the <a href="https://github.com/finos/datahelix/tree/master/examples">examples 
                         folder</a>, which illustrates various features of the generator. For more detail 
                         about the behaviour of certain profiles, see the 
-                        <a href="/finos/datahelix/blob/master/docs/BehaviourInDetail.md">behaviour in detail.</a></p>
+                        <a href="https://github.com/finos/datahelix/blob/master/docs/developer/behaviour/BehaviourInDetail.md">behaviour in detail.</a></p>
                     
                     <h2><a id="contributing"></a>Contributing</h2>
-                    <p>Please read the <a href="https://github.com/finos/datahelix/blob/master/.github/CONTRIBUTING.md">Contributing</a> 
-                        guidelines before making any changes.</p>
+                    <ol>
+                        <li>Fork it (<a href="https://github.com/yourname/yourproject/fork">https://github.com/yourname/yourproject/fork</a>)</li>
+                        <li>Create your feature branch (git checkout -b feature/fooBar)</li>
+                        <li>Read our <a href="https://github.com/finos/datahelix/blob/master/.github/CONTRIBUTING.md">contribution guidelines</a> and <a href="https://www.finos.org/code-of-conduct">Community Code of Conduct</a></li>
+                        <li>Commit your changes using our <a href="https://github.com/finos/datahelix/blob/master/.github/CONTRIBUTING.md#commit-and-pr-messages">Commit Guidelines</a></li>
+                        <li>Push to the branch (git push origin feature/fooBar)</li>
+                        <li>Create a new Pull Request</li>
+                    </ol>
+                    <p>NOTE: Commits and pull requests to FINOS repositories will only be accepted from those
+                       contributors with an active, executed Individual Contributor License Agreement (ICLA) 
+                       with FINOS OR who are covered under an existing and active Corporate Contribution License 
+                       Agreement (CCLA) executed with FINOS. Commits from individuals not covered under an ICLA 
+                       or CCLA will be flagged and blocked by the FINOS Clabot tool. Please note that some CCLAs 
+                       require individuals/employees to be explicitly named on the CCLA.</p>
+                    <p><i>Need an ICLA? Unsure if you are covered under an existing CCLA? Email <a href="mailto:help@finos.org">help@finos.org</a></i></p>
 
                     <h2><a id="license"></a>License</h2>
                     <p>Copyright 2019 Scott Logic Ltd</p>
