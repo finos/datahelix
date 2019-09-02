@@ -125,7 +125,7 @@ To generate valid data run the following command from the command line:
 `java -jar <path to JAR file> generate [options] --profile-file="<path to profile>" --output-path="<desired output path>"`
 
 * `[path to JAR file]` - the location of `generator.jar`.
-* `[options]` - optionally a combination of [options](../commandLineOptions/GenerateOptions.md) to configure how the command operates.
+* `[options]` - optionally a combination of [options](https://github.com/finos/datahelix/blob/master/docs/user/commandLineOptions/GenerateOptions.md) to configure how the command operates.
 * `<path to profile>` - the location of the JSON profile file.
 * `<desired output path>` - the location of the generated data.
 
@@ -134,7 +134,7 @@ To generate violating data run the following command from the command line:
 `java -jar <path to JAR file> violate [options] --profile-file="<path to profile>" --output-path="<desired output folder>"`
 
 * `[path to JAR file]` - the location of `generator.jar`.
-* `[options]` - a combination of any (or none) of [the options documented here](../commandLineOptions/ViolateOptions.md) to configure how the command operates.
+* `[options]` - a combination of any (or none) of [the options documented here](https://github.com/finos/datahelix/blob/master/docs/user/commandLineOptions/ViolateOptions.md) to configure how the command operates.
 * `<path to profile>` - the location of the JSON profile file.
 * `<desired output folder>` - the location of a folder in which to create generated data files.
 
