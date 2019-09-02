@@ -16,36 +16,36 @@
 
 package com.scottlogic.deg.generator.generation.combinationstrategies;
 
-import com.scottlogic.deg.common.util.FlatMappingSpliterator;
-import com.scottlogic.deg.generator.generation.databags.*;
+import com.scottlogic.deg.generator.generation.databags.DataBag;
 
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
+
+import static com.scottlogic.deg.common.util.FlatMappingSpliterator.flatMap;
 
 public class ExhaustiveCombinationStrategy implements CombinationStrategy {
 
     @Override
-    public Stream<DataBag> permute(Stream<Stream<DataBag>> dataBagSequences) {
-
-        List<List<DataBag>> bagsAsLists = dataBagSequences
-            .map(sequence ->sequence
-                    .collect(Collectors.toList()))
-            .collect(Collectors.toList());
-
-        return next(DataBag.empty, bagsAsLists, 0);
+    public Stream<DataBag> permute(Stream<Supplier<Stream<DataBag>>> dataBagSequences) {
+        return flatten(dataBagSequences.iterator()).get();
     }
 
-    public Stream<DataBag> next(DataBag accumulatingBag, List<List<DataBag>> bagSequences, int bagSequenceIndex) {
-        if (bagSequenceIndex < bagSequences.size()) {
-            List<DataBag> nextStream = bagSequences.get(bagSequenceIndex);
+    public Supplier<Stream<DataBag>> flatten(Iterator<Supplier<Stream<DataBag>>> remainingBags) {
+        Supplier<Stream<DataBag>> firstDataBagStream = remainingBags.next();
 
-            return FlatMappingSpliterator.flatMap(nextStream
-                .stream()
-                .map(innerBag -> DataBag.merge(innerBag, accumulatingBag)),
-                innerBag -> next(innerBag, bagSequences, bagSequenceIndex + 1));
+        if (!remainingBags.hasNext()){
+            return firstDataBagStream;
         }
-        else
-            return Stream.of(accumulatingBag);
+
+        Supplier<Stream<DataBag>> otherDataBags = flatten(remainingBags);
+
+        return ()-> flatMap(
+            firstDataBagStream.get(),
+            currentBag ->
+                otherDataBags.get()
+                    .map(subBag ->
+                        DataBag.merge(currentBag, subBag)));
+
     }
 }

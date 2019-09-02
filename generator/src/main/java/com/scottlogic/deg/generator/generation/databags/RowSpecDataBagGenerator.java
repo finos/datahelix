@@ -29,6 +29,7 @@ import com.scottlogic.deg.generator.generation.combinationstrategies.Combination
 
 import java.util.Map;
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -45,8 +46,8 @@ public class RowSpecDataBagGenerator {
     }
 
     public Stream<DataBag> createDataBags(RowSpec rowSpec) {
-        Stream<Stream<DataBag>> dataBagsForGroups = RowSpecGrouper.createGroups(rowSpec).stream()
-            .map(group -> generateDataForGroup(rowSpec, group));
+        Stream<Supplier<Stream<DataBag>>> dataBagsForGroups = RowSpecGrouper.createGroups(rowSpec).stream()
+            .map(group -> () -> generateDataForGroup(rowSpec, group));
 
         return combinationStrategy.permute(dataBagsForGroups);
     }
