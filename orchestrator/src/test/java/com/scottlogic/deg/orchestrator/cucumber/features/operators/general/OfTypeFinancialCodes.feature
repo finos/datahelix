@@ -19,10 +19,10 @@ Feature: User can specify that a field must be a financial code type
     And the generator can generate at most 4 rows
     Then the following data should be generated:
       | foo            |
-      | "GB0000000009" |
-      | "GB0000000116" |
-      | "GB0000000223" |
-      | "GB0000000330" |
+      | "AD0000000003" |
+      | "AD0000000011" |
+      | "AD0000000029" |
+      | "AD0000000037" |
 
   Scenario: An ofType constraint with the value "isin" fails with an invalid profile error message
     Given foo is of type "isin"
@@ -82,6 +82,7 @@ Feature: User can specify that a field must be a financial code type
       | null           |
       | "GB0002634946" |
 
+  @ignore "Standard constraints e.g. ISINs cannot yet be negated."
   Scenario: An ISIN constraint combined with a non-ISIN constraint generates no data
     Given foo is of type "ISIN"
     And foo is anything but null
@@ -322,6 +323,7 @@ Feature: User can specify that a field must be a financial code type
       | "GB0002634946" |
       | null           |
 
+  @ignore "Standard constraints e.g. ISINs cannot yet be combined with regex constraints."
   Scenario: An ISIN constraint combined with a matching regex constraint that matches valid ISINs should generate matching valid ISINs
     Given foo is of type "ISIN"
     And foo is matching regex "US9311421039"
@@ -330,6 +332,7 @@ Feature: User can specify that a field must be a financial code type
       | "US9311421039" |
       | null           |
 
+  @ignore "Standard constraints e.g. ISINs cannot yet be combined with regex constraints."
   Scenario: An ISIN constraint combined with a matching regex constraint that cannot match any valid ISIN due to its length should only generate null
     Given foo is of type "ISIN"
     And foo is matching regex "US[0-9]{9}"
@@ -337,6 +340,7 @@ Feature: User can specify that a field must be a financial code type
       | foo            |
       | null           |
 
+  @ignore "Standard constraints e.g. ISINs cannot yet be combined with regex constraints."
   Scenario: An ISIN constraint combined with a matching regex constraint that cannot match any valid ISIN due to its check digit should only generate null
     Given foo is of type "ISIN"
     And foo is matching regex "US9311421038"
@@ -354,6 +358,7 @@ Feature: User can specify that a field must be a financial code type
       | null      |
       | "0263494" |
 
+  @ignore "Standard constraints e.g. ISINs cannot yet be negated."
   Scenario: A SEDOL constraint combined with a non-SEDOL constraint generates no data
     Given foo is of type "SEDOL"
     And foo is anything but null
@@ -581,6 +586,7 @@ Feature: User can specify that a field must be a financial code type
       | "0263494" |
       | null      |
 
+  @ignore "Standard constraints e.g. ISINs cannot yet be combined with date constraints."
   Scenario: A SEDOL constraint combined with a not before or at constraint generates valid SEDOLs
     Given foo is of type "SEDOL"
     And foo is anything but before or at 2019-01-01T00:00:00.000Z
@@ -594,6 +600,7 @@ Feature: User can specify that a field must be a financial code type
       | "0263494" |
       | null      |
 
+  @ignore "Standard constraints e.g. ISINs cannot yet be combined with regex constraints."
   Scenario: A SEDOL constraint combined with a matching regex constraint that matches valid SEDOLs should generate valid SEDOLs
     Given foo is of type "SEDOL"
     And foo is matching regex "0263494"
@@ -602,6 +609,7 @@ Feature: User can specify that a field must be a financial code type
       | "0263494" |
       | null      |
 
+  @ignore "Standard constraints e.g. ISINs cannot yet be combined with regex constraints."
   Scenario: A SEDOL constraint combined with a matching regex constraint that cannot match any valid SEDOL because it has the wrong check digit should only generate null
     Given foo is of type "SEDOL"
     And foo is matching regex "0263492"
@@ -609,6 +617,7 @@ Feature: User can specify that a field must be a financial code type
       | foo  |
       | null |
 
+  @ignore "Standard constraints e.g. ISINs cannot yet be combined with regex constraints."
   Scenario: A SEDOL constraint combined with a matching regex constraint that cannot match any valid SEDOL because it has the wrong length should only generate null
     Given foo is of type "SEDOL"
     And foo is matching regex "[0-9]{6}"
@@ -616,6 +625,7 @@ Feature: User can specify that a field must be a financial code type
       | foo            |
       | null           |
 
+  @ignore "Standard constraints e.g. ISINs cannot yet be combined with regex constraints."
   Scenario: A SEDOL constraint combined with a matching regex constraint that cannot match any valid SEDOL because it cannot have a correct check digit should only generate null
     Given foo is of type "SEDOL"
     And foo is matching regex "0[023]63492"
@@ -633,6 +643,7 @@ Feature: User can specify that a field must be a financial code type
       | null        |
       | "38259P508" |
 
+  @ignore "Standard constraints e.g. ISINs cannot yet be negated."
   Scenario: A CUSIP constraint combined with a non-CUSIP constraint generates no data
     Given foo is of type "CUSIP"
     And foo is anything but null
@@ -873,6 +884,7 @@ Feature: User can specify that a field must be a financial code type
       | "38259P508" |
       | null        |
 
+  @ignore "Standard constraints e.g. ISINs cannot yet be combined with regex constraints."
   Scenario: A CUSIP constraint combined with a matching regex constraint that matches a valid CUSIP generates valid CUSIPs
     Given foo is of type "CUSIP"
     And foo is matching regex "38259P508"
@@ -881,6 +893,7 @@ Feature: User can specify that a field must be a financial code type
       | "38259P508" |
       | null        |
 
+  @ignore "Standard constraints e.g. ISINs cannot yet be combined with regex constraints."
   Scenario: A CUSIP constraint combined with a matching regex constraint that cannot match a valid CUSIP because it has an invalid check digit should only generate null
     Given foo is of type "CUSIP"
     And foo is matching regex "38259P509"
@@ -888,6 +901,7 @@ Feature: User can specify that a field must be a financial code type
       | foo  |
       | null |
 
+  @ignore "Standard constraints e.g. ISINs cannot yet be combined with regex constraints."
   Scenario: A CUSIP constraint combined with a matching regex constraint that cannot match a valid CUSIP because it has the wrong length should only generate null
     Given foo is of type "CUSIP"
     And foo is matching regex "[0-9]{3}.{4}[0-9]"

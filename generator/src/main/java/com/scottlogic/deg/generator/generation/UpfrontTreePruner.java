@@ -55,7 +55,6 @@ public class UpfrontTreePruner {
             monitor.addLineToPrintAtEndOfGeneration("The provided profile is wholly contradictory!");
             monitor.addLineToPrintAtEndOfGeneration("No data can be generated!");
             return new DecisionTree(null, tree.getFields());
-
         } else if (isPartiallyContradictory(markedTree.getRootNode())) {
             monitor.addLineToPrintAtEndOfGeneration("");
             monitor.addLineToPrintAtEndOfGeneration("The provided profile is partially contradictory!");

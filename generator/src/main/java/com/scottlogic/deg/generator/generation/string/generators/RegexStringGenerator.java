@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.generation.string;
+package com.scottlogic.deg.generator.generation.string.generators;
 
+import com.scottlogic.deg.generator.generation.string.AutomatonUtils;
 import com.scottlogic.deg.generator.generation.string.iterators.FiniteStringAutomatonIterator;
 import com.scottlogic.deg.generator.generation.string.factorys.InterestingStringFactory;
 import com.scottlogic.deg.generator.generation.string.factorys.RandomStringFactory;
@@ -24,8 +25,8 @@ import com.scottlogic.deg.generator.utils.SupplierBasedIterator;
 import dk.brics.automaton.Automaton;
 
 import java.util.*;
-
-
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class RegexStringGenerator implements StringGenerator {
 
@@ -101,7 +102,7 @@ public class RegexStringGenerator implements StringGenerator {
 
         String mergedRepresentation = intersectRepresentation(
             this.regexRepresentation,
-            otherRegexGenerator.regexRepresentation);
+            ((RegexStringGenerator)otherGenerator).regexRepresentation);
 
         return new RegexStringGenerator(merged, mergedRepresentation);
     }
@@ -136,31 +137,30 @@ public class RegexStringGenerator implements StringGenerator {
     }
 
     @Override
-    public Iterable<String> generateInterestingValues() {
-        return interestingStringFactory.generateInterestingValues(automaton);
+    public Stream<String> generateInterestingValues() {
+        return StreamSupport.stream(interestingStringFactory.generateInterestingValues(automaton).spliterator(), false);
     }
 
     @Override
-    public Iterable<String> generateAllValues() {
-        return () -> new FiniteStringAutomatonIterator(automaton);
+    public Stream<String> generateAllValues() {
+        Iterator<String> iterator = new FiniteStringAutomatonIterator(automaton);
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, Spliterator.SORTED), false);
     }
 
     @Override
-    public Iterable<String> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
-        return () -> new SupplierBasedIterator<>(
+    public Stream<String> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
+        final Iterable<String> iterable = () -> new SupplierBasedIterator<>(
             () -> randomStringFactory.createRandomString(
                 "",
                 automaton.getInitialState(),
                 1,
                 Integer.MAX_VALUE,
                 randomNumberGenerator));
+        return StreamSupport.stream(iterable.spliterator(), false);
     }
 
-    @Override
-    public boolean match(String subject) {
-
+    public boolean matches(String subject) {
         return automaton.run(subject);
-
     }
 
     public boolean equals(Object o) {

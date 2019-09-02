@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.generation.string;
+package com.scottlogic.deg.generator.generation.string.generators;
 
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.stream.Stream;
 
 public class NoStringsStringGenerator implements StringGenerator {
     private final String stringRepresentation;
@@ -33,34 +32,27 @@ public class NoStringsStringGenerator implements StringGenerator {
         return String.format("No strings: %s", this.stringRepresentation);
     }
 
-    @Override
-    public StringGenerator intersect(StringGenerator stringGenerator) {
-        return new NoStringsStringGenerator(
-            RegexStringGenerator.intersectRepresentation(this.stringRepresentation, stringGenerator.toString()));
-    }
-
-    @Override
-    public StringGenerator complement() {
-        throw new RuntimeException("Not implemented: Return a string generator able to emit ALL strings");
-    }
-
-    @Override
-    public boolean match(String subject) {
+    public boolean matches(String subject) {
         return false;
     }
 
     @Override
-    public Iterable<String> generateInterestingValues() {
-        return Collections.emptySet();
+    public StringGenerator intersect(StringGenerator stringGenerator) {
+        return this;
     }
 
     @Override
-    public Iterable<String> generateAllValues() {
-        return Collections.emptySet();
+    public Stream<String> generateInterestingValues() {
+        return Stream.empty();
     }
 
     @Override
-    public Iterable<String> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
-        return Collections.emptySet();
+    public Stream<String> generateAllValues() {
+        return Stream.empty();
+    }
+
+    @Override
+    public Stream<String> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
+        return Stream.empty();
     }
 }
