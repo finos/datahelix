@@ -192,7 +192,7 @@ public class CucumberTestState {
             .findFirst()
             .orElseThrow(UnsupportedOperationException::new);
 
-        Field newField = new Field(fieldName);
+        Field newField = new Field(fieldName, true);
 
         profileFields.remove(oldField);
         profileFields.add(newField);
