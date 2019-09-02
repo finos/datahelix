@@ -1,3 +1,6 @@
+version: 2.1
+
 jobs:
         build:
-                - echo "no-op"
+                steps:
+                        - run: echo "No-op for gh-pages branch"
