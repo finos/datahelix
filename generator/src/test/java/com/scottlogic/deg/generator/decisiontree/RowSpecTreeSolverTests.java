@@ -23,17 +23,16 @@ import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.common.profile.RuleInformation;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
-import com.scottlogic.deg.generator.fieldspecs.RowSpec;
+import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagGenerator;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
-import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
-import com.scottlogic.deg.generator.walker.rowspec.CartesianProductRowSpecTreeSolver;
+import com.scottlogic.deg.generator.walker.decisionbased.RowSpecTreeSolver;
+import com.scottlogic.deg.generator.walker.decisionbased.SequentialOptionPicker;
+import com.scottlogic.deg.generator.walker.pruner.TreePruner;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -46,15 +45,14 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class CartesianProductRowSpecTreeSolverTests {
+class RowSpecTreeSolverTests {
     private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
     private RowSpecDataBagGenerator dataBagSourceFactory = mock(RowSpecDataBagGenerator.class);
-    private final CartesianProductRowSpecTreeSolver dTreeWalker =
-            new CartesianProductRowSpecTreeSolver(
-                new ConstraintReducer(
-                    new FieldSpecFactory(new StringRestrictionsFactory()),
-                    fieldSpecMerger
-                ), new RowSpecMerger(fieldSpecMerger));
+    ConstraintReducer constraintReducer = new ConstraintReducer(new FieldSpecFactory(new StringRestrictionsFactory()), fieldSpecMerger);
+    private final RowSpecTreeSolver dTreeWalker = new RowSpecTreeSolver(
+        constraintReducer,
+        new TreePruner(new FieldSpecMerger(), constraintReducer, new FieldSpecHelper()),
+        new SequentialOptionPicker());
 
     private final DecisionTreeFactory dTreeGenerator = new DecisionTreeFactory();
 

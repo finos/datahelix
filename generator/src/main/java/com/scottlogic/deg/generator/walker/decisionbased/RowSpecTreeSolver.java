@@ -13,29 +13,27 @@ import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.walker.pruner.Merged;
 import com.scottlogic.deg.generator.walker.pruner.TreePruner;
-import com.scottlogic.deg.generator.walker.rowspec.RowSpecTreeSolver;
 
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class DecisionBasedSolver implements RowSpecTreeSolver {
+public class RowSpecTreeSolver {
 
     private final ConstraintReducer constraintReducer;
     private final TreePruner treePruner;
     private final OptionPicker optionPicker;
 
     @Inject
-    public DecisionBasedSolver(ConstraintReducer constraintReducer,
-                               TreePruner treePruner,
-                               OptionPicker optionPicker) {
+    public RowSpecTreeSolver(ConstraintReducer constraintReducer,
+                             TreePruner treePruner,
+                             OptionPicker optionPicker) {
         this.constraintReducer = constraintReducer;
         this.treePruner = treePruner;
         this.optionPicker = optionPicker;
     }
 
-    @Override
     public Stream<RowSpec> createRowSpecs(DecisionTree tree) {
         return reduceToRowNodes(tree.rootNode)
             .map(rootNode -> toRowspec(tree.fields, rootNode));

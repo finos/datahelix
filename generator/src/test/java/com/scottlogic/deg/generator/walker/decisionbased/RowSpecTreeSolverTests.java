@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-class DecisionBasedSolverTests {
+class RowSpecTreeSolverTests {
     private Field fieldA = new Field("A");
     private Field fieldB = new Field("B");
     private List<Field> fields = new ArrayList<>();
@@ -29,7 +29,7 @@ class DecisionBasedSolverTests {
     private ConstraintReducer constraintReducer;
     private TreePruner pruner;
     private OptionPicker optionPicker;
-    private DecisionBasedSolver decisionBasedSolver;
+    private RowSpecTreeSolver rowSpecTreeSolver;
 
     @BeforeEach
     void setup() {
@@ -40,7 +40,7 @@ class DecisionBasedSolverTests {
         constraintReducer = new ConstraintReducer(new FieldSpecFactory(new StringRestrictionsFactory()), new FieldSpecMerger());
         pruner = new TreePruner(new FieldSpecMerger(), constraintReducer, new FieldSpecHelper());
         optionPicker = new SequentialOptionPicker();
-        decisionBasedSolver = new DecisionBasedSolver(constraintReducer, pruner, optionPicker);
+        rowSpecTreeSolver = new RowSpecTreeSolver(constraintReducer, pruner, optionPicker);
     }
 
     @Test
@@ -50,7 +50,7 @@ class DecisionBasedSolverTests {
         DecisionTree tree = new DecisionTree(root, profileFields);
 
         //Act
-        Stream<RowSpec> rowSpecs = decisionBasedSolver.createRowSpecs(tree);
+        Stream<RowSpec> rowSpecs = rowSpecTreeSolver.createRowSpecs(tree);
 
         //Assert
         List<RowSpec> expectedRowSpecs = new ArrayList<>();
@@ -69,7 +69,7 @@ class DecisionBasedSolverTests {
         DecisionTree tree = new DecisionTree(root, profileFields);
 
         //Act
-        Stream<RowSpec> rowSpecs = decisionBasedSolver.createRowSpecs(tree);
+        Stream<RowSpec> rowSpecs = rowSpecTreeSolver.createRowSpecs(tree);
 
         //Assert
         List<RowSpec> expectedRowSpecs = new ArrayList<>();
@@ -95,7 +95,7 @@ class DecisionBasedSolverTests {
         DecisionTree tree = new DecisionTree(root, profileFields);
 
         //Act
-        Stream<RowSpec> rowSpecs = decisionBasedSolver.createRowSpecs(tree);
+        Stream<RowSpec> rowSpecs = rowSpecTreeSolver.createRowSpecs(tree);
 
         //Assert
         List<RowSpec> expectedRowSpecs = new ArrayList<>();

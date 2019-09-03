@@ -28,7 +28,6 @@ import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.walker.decisionbased.OptionPicker;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
-import com.scottlogic.deg.generator.walker.rowspec.RowSpecTreeSolver;
 
 import java.time.OffsetDateTime;
 
@@ -56,7 +55,6 @@ public class GeneratorModule extends AbstractModule {
         bind(AbstractDataGeneratorMonitor.class).toProvider(MonitorProvider.class).in(Singleton.class);
         bind(CombinationStrategy.class).toProvider(CombinationStrategyProvider.class);
         bind(OptionPicker.class).toProvider(OptionPickerProvider.class);
-        bind(RowSpecTreeSolver.class).toProvider(RowSpecTreeSolverProvider.class);
 
         // bind config directly
         bind(DataGenerationType.class).toInstance(generationConfigSource.getGenerationType());
