@@ -39,10 +39,6 @@ public class CombinationStrategyProvider  implements Provider<CombinationStrateg
             return new MinimalCombinationStrategy();
         }
 
-        if (config.getWalkerType() == TreeWalkerType.REDUCTIVE){
-            return new ReductiveCombinationStrategy();
-        }
-
         switch(config.getCombinationStrategyType()){
             case EXHAUSTIVE: return new ExhaustiveCombinationStrategy();
             case PINNING: return new PinningCombinationStrategy();

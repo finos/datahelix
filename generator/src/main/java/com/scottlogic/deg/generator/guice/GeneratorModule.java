@@ -21,7 +21,6 @@ import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.treepartitioning.TreePartitioner;
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
@@ -29,8 +28,6 @@ import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.walker.decisionbased.OptionPicker;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
-import com.scottlogic.deg.generator.walker.ReductiveWalkerRetryChecker;
-import com.scottlogic.deg.generator.walker.reductive.IterationVisualiser;
 import com.scottlogic.deg.generator.walker.rowspec.RowSpecTreeSolver;
 
 import java.time.OffsetDateTime;
@@ -56,8 +53,7 @@ public class GeneratorModule extends AbstractModule {
         bind(TreePartitioner.class).toProvider(TreePartitioningProvider.class);
         bind(DecisionTreeWalker.class).toProvider(DecisionTreeWalkerProvider.class);
         bind(ProfileValidator.class).toProvider(ProfileValidatorProvider.class);
-        bind(ReductiveDataGeneratorMonitor.class).toProvider(MonitorProvider.class).in(Singleton.class);
-        bind(IterationVisualiser.class).toProvider(IterationVisualiserProvider.class);
+        bind(AbstractDataGeneratorMonitor.class).toProvider(MonitorProvider.class).in(Singleton.class);
         bind(CombinationStrategy.class).toProvider(CombinationStrategyProvider.class);
         bind(OptionPicker.class).toProvider(OptionPickerProvider.class);
         bind(RowSpecTreeSolver.class).toProvider(RowSpecTreeSolverProvider.class);
@@ -70,10 +66,9 @@ public class GeneratorModule extends AbstractModule {
             .toInstance(generationConfigSource.getMaxRows());
 
         // Bind known implementations - no user input required
-        bind(DataGeneratorMonitor.class).to(ReductiveDataGeneratorMonitor.class);
+        bind(DataGeneratorMonitor.class).to(AbstractDataGeneratorMonitor.class);
         bind(DataGenerator.class).to(DecisionTreeDataGenerator.class);
         bind(FieldValueSourceEvaluator.class).to(StandardFieldValueSourceEvaluator.class);
-        bind(ReductiveWalkerRetryChecker.class).toInstance(new ReductiveWalkerRetryChecker(10000));
 
         bind(JavaUtilRandomNumberGenerator.class)
             .toInstance(new JavaUtilRandomNumberGenerator(OffsetDateTime.now().getNano()));

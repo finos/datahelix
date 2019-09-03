@@ -27,8 +27,8 @@ import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import com.scottlogic.deg.generator.validators.ContradictionDecisionTreeValidator;
-import com.scottlogic.deg.generator.walker.reductive.Merged;
-import com.scottlogic.deg.generator.walker.reductive.ReductiveTreePruner;
+import com.scottlogic.deg.generator.walker.pruner.Merged;
+import com.scottlogic.deg.generator.walker.pruner.TreePruner;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Nested;
 import org.mockito.Mockito;
@@ -48,9 +48,9 @@ class UpfrontTreePrunerTests {
     @Nested
     class unit_tests {
         private DataGeneratorMonitor monitor = Mockito.mock(DataGeneratorMonitor.class);
-        private ReductiveTreePruner reductiveTreePruner = Mockito.mock(ReductiveTreePruner.class);
+        private TreePruner treePruner = Mockito.mock(TreePruner.class);
         private ContradictionDecisionTreeValidator contradictionValidator = Mockito.mock(ContradictionDecisionTreeValidator.class);
-        private UpfrontTreePruner upfrontTreePruner = new UpfrontTreePruner(reductiveTreePruner, contradictionValidator);
+        private UpfrontTreePruner upfrontTreePruner = new UpfrontTreePruner(treePruner, contradictionValidator);
         private Field fieldA = new Field("A");
         private Field fieldB = new Field("B");
 
@@ -68,7 +68,7 @@ class UpfrontTreePrunerTests {
                 new ConstraintNodeBuilder().build().builder().markNode(NodeMarking.CONTRADICTORY).build(),
                 new ProfileFields(fields));
 
-            Mockito.when(reductiveTreePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.of(prunedRoot));
+            Mockito.when(treePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.of(prunedRoot));
             Mockito.when(contradictionValidator.markContradictions(tree)).thenReturn(treeMarkedWithContradictions);
 
             //Act
@@ -94,7 +94,7 @@ class UpfrontTreePrunerTests {
                 new ConstraintNodeBuilder().build().builder().markNode(NodeMarking.CONTRADICTORY).build(),
                 new ProfileFields(fields));
 
-            Mockito.when(reductiveTreePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.of(prunedRoot));
+            Mockito.when(treePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.of(prunedRoot));
             Mockito.when(contradictionValidator.markContradictions(tree)).thenReturn(treeMarkedWithContradictions);
 
             //Act
@@ -115,7 +115,7 @@ class UpfrontTreePrunerTests {
             DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
 
             //Act
-            Mockito.when(reductiveTreePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.contradictory());
+            Mockito.when(treePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.contradictory());
 
             DecisionTree actual = upfrontTreePruner.runUpfrontPrune(tree, monitor);
 
@@ -137,7 +137,7 @@ class UpfrontTreePrunerTests {
                 new ProfileFields(fields));
 
             //Act
-            Mockito.when(reductiveTreePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.of(unPrunedRoot));
+            Mockito.when(treePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.of(unPrunedRoot));
             Mockito.when(contradictionValidator.markContradictions(tree)).thenReturn(completelyUnmarkedTree);
 
             upfrontTreePruner.runUpfrontPrune(tree, monitor);
@@ -163,7 +163,7 @@ class UpfrontTreePrunerTests {
                 new ProfileFields(fields));
 
             //Act
-            Mockito.when(reductiveTreePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.of(root));
+            Mockito.when(treePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.of(root));
             Mockito.when(contradictionValidator.markContradictions(tree)).thenReturn(treeMarkedWithContradictions);
 
             upfrontTreePruner.runUpfrontPrune(tree, monitor);
@@ -188,7 +188,7 @@ class UpfrontTreePrunerTests {
                 new ProfileFields(fields));
 
             //Act
-            Mockito.when(reductiveTreePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.contradictory());
+            Mockito.when(treePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.contradictory());
             Mockito.when(contradictionValidator.markContradictions(tree)).thenReturn(treeMarkedWithContradictions);
 
             upfrontTreePruner.runUpfrontPrune(tree, monitor);
@@ -207,7 +207,7 @@ class UpfrontTreePrunerTests {
             new FieldSpecFactory(
                 new StringRestrictionsFactory()),
             new FieldSpecMerger());
-        private ReductiveTreePruner treePruner = new ReductiveTreePruner(
+        private TreePruner treePruner = new TreePruner(
             new FieldSpecMerger(),
             constraintReducer,
             new FieldSpecHelper());

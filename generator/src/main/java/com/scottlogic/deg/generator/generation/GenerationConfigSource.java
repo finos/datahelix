@@ -26,7 +26,6 @@ public interface GenerationConfigSource  {
 
     MonitorType getMonitorType();
     boolean shouldDoPartitioning();
-    boolean visualiseReductions();
     boolean requireFieldTyping();
     boolean dontOptimise();
 }

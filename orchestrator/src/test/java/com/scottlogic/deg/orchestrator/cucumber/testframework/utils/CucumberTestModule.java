@@ -21,7 +21,7 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
-import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
+import com.scottlogic.deg.generator.generation.AbstractDataGeneratorMonitor;
 import com.scottlogic.deg.generator.inputs.validation.MultipleProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.TypingRequiredPerFieldValidator;
@@ -74,7 +74,7 @@ public class CucumberTestModule extends AbstractModule {
         bind(ConfigValidator.class).toInstance(mock(ConfigValidator.class));
         bind(ManifestWriter.class).toInstance(mock(ManifestWriter.class));
         bind(SingleDatasetOutputTarget.class).toInstance(new InMemoryOutputTarget(testState));
-        bind(ReductiveDataGeneratorMonitor.class).to(NoopDataGeneratorMonitor.class);
+        bind(AbstractDataGeneratorMonitor.class).to(NoopDataGeneratorMonitor.class);
 
         OutputTargetFactory mockOutputTargetFactory = mock(OutputTargetFactory.class);
         when(mockOutputTargetFactory.create(any())).thenReturn(new InMemoryOutputTarget(testState));

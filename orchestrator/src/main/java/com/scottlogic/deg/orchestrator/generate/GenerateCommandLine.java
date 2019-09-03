@@ -36,7 +36,6 @@ import static com.scottlogic.deg.common.util.Defaults.DEFAULT_MAX_ROWS;
 import static com.scottlogic.deg.generator.config.detail.CombinationStrategyType.MINIMAL;
 import static com.scottlogic.deg.generator.config.detail.DataGenerationType.RANDOM;
 import static com.scottlogic.deg.generator.config.detail.TreeWalkerType.DECISION_BASED;
-import static com.scottlogic.deg.generator.config.detail.TreeWalkerType.REDUCTIVE;
 import static com.scottlogic.deg.output.guice.OutputFormat.CSV;
 
 /**
@@ -212,11 +211,6 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     }
 
     @Override
-    public boolean isDelayedConstraintsEnabled() {
-        return walkerType != REDUCTIVE;
-    }
-
-    @Override
     public MonitorType getMonitorType() {
         if (this.verbose) {
             return MonitorType.VERBOSE;
@@ -230,11 +224,6 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     @Override
     public long getMaxRows() {
         return maxRows;
-    }
-
-    @Override
-    public boolean visualiseReductions() {
-        return visualiseReductions;
     }
 
     public OutputFormat getOutputFormat() {

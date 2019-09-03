@@ -56,10 +56,7 @@ public class MainConstraintReader {
 
             if (subReader == null) {
                 String message = "Couldn't recognise constraint type from DTO: " + dto.is;
-                String delayedMessage = constraintReaderMap.isDelayedConstraintsEnabled()
-                    ? message
-                    : message + ". Relational constraints are disabled for the current chosen walker.";
-                throw new InvalidProfileException(delayedMessage);
+                throw new InvalidProfileException(message);
             }
 
             try {

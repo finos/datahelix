@@ -109,20 +109,10 @@ public class CucumberGenerationConfigSource implements AllConfigSource, ViolateC
     }
 
     @Override
-    public boolean visualiseReductions() {
-        return false;
-    }
-
-    @Override
     public OutputFormat getOutputFormat() {
         return null;
     }
 
     @Override
     public String fromFilePath() { return null; }
-
-    @Override
-    public boolean isDelayedConstraintsEnabled() {
-        return true;
-    }
 }

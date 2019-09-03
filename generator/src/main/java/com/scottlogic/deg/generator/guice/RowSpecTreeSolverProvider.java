@@ -24,7 +24,6 @@ public class RowSpecTreeSolverProvider implements Provider<RowSpecTreeSolver> {
     @Override
     public RowSpecTreeSolver get() {
         switch (config.getWalkerType()) {
-            case REDUCTIVE:
             case DECISION_BASED:
                 return decisionBasedSolver;
             case CARTESIAN_PRODUCT:

@@ -10,7 +10,7 @@ import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.NullDistributedSet;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
-import com.scottlogic.deg.generator.walker.reductive.ReductiveTreePruner;
+import com.scottlogic.deg.generator.walker.pruner.TreePruner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -27,7 +27,7 @@ class DecisionBasedSolverTests {
     private List<Field> fields = new ArrayList<>();
     private ProfileFields profileFields;
     private ConstraintReducer constraintReducer;
-    private ReductiveTreePruner pruner;
+    private TreePruner pruner;
     private OptionPicker optionPicker;
     private DecisionBasedSolver decisionBasedSolver;
 
@@ -38,7 +38,7 @@ class DecisionBasedSolverTests {
         profileFields = new ProfileFields(fields);
 
         constraintReducer = new ConstraintReducer(new FieldSpecFactory(new StringRestrictionsFactory()), new FieldSpecMerger());
-        pruner = new ReductiveTreePruner(new FieldSpecMerger(), constraintReducer, new FieldSpecHelper());
+        pruner = new TreePruner(new FieldSpecMerger(), constraintReducer, new FieldSpecHelper());
         optionPicker = new SequentialOptionPicker();
         decisionBasedSolver = new DecisionBasedSolver(constraintReducer, pruner, optionPicker);
     }

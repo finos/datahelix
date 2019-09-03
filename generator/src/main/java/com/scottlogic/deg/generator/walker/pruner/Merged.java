@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.walker.reductive;
-
-import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
+package com.scottlogic.deg.generator.walker.pruner;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;
