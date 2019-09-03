@@ -15,14 +15,15 @@
  */
 
 
-package com.scottlogic.deg.generator.generation;
+package com.scottlogic.deg.generator.generation.grouped;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
-import com.scottlogic.deg.generator.generation.databags.FieldGroup;
+import com.scottlogic.deg.generator.generation.grouped.FieldGroup;
+import com.scottlogic.deg.generator.generation.grouped.RowSpecGrouper;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;

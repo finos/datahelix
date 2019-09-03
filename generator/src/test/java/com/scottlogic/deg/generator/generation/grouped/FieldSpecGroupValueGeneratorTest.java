@@ -1,10 +1,12 @@
-package com.scottlogic.deg.generator.generation;
+package com.scottlogic.deg.generator.generation.grouped;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
+import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
+import com.scottlogic.deg.generator.generation.grouped.FieldSpecGroupValueGenerator;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;

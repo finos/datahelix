@@ -15,7 +15,7 @@
  */
 
 
-package com.scottlogic.deg.generator.generation.databags;
+package com.scottlogic.deg.generator.generation.grouped;
 
 import com.scottlogic.deg.common.profile.Field;
 
