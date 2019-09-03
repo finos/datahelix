@@ -19,7 +19,6 @@ package com.scottlogic.deg.generator.guice;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
-import com.scottlogic.deg.generator.config.detail.TreeWalkerType;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.generation.combinationstrategies.*;
 

@@ -22,7 +22,6 @@ import com.google.inject.Module;
 import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.generator.config.detail.MonitorType;
-import com.scottlogic.deg.generator.config.detail.TreeWalkerType;
 import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
 import com.scottlogic.deg.orchestrator.guice.AllModule;
 import com.scottlogic.deg.output.guice.OutputFormat;
@@ -35,7 +34,6 @@ import java.util.concurrent.Callable;
 import static com.scottlogic.deg.common.util.Defaults.DEFAULT_MAX_ROWS;
 import static com.scottlogic.deg.generator.config.detail.CombinationStrategyType.MINIMAL;
 import static com.scottlogic.deg.generator.config.detail.DataGenerationType.RANDOM;
-import static com.scottlogic.deg.generator.config.detail.TreeWalkerType.DECISION_BASED;
 import static com.scottlogic.deg.output.guice.OutputFormat.CSV;
 
 /**
@@ -113,11 +111,6 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
         description = "Prevents tree partitioning",
         hidden = true)
     private boolean dontPartitionTrees;
-
-    @CommandLine.Option(names = {"-w", "--walker-type"},
-        description = "Determines the tree walker that should be used (${COMPLETION-CANDIDATES})",
-        hidden = true)
-    private TreeWalkerType walkerType = DECISION_BASED;
 
     @CommandLine.Option(
         names = {"-n", "--max-rows"},
@@ -198,11 +191,6 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     @Override
     public CombinationStrategyType getCombinationStrategyType() {
         return this.combinationType;
-    }
-
-    @Override
-    public TreeWalkerType getWalkerType() {
-        return this.walkerType;
     }
 
     @Override

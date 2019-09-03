@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
-import com.scottlogic.deg.generator.config.detail.TreeWalkerType;
+import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.profile.dto.AtomicConstraintType;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 
@@ -35,7 +35,6 @@ import java.util.stream.Collectors;
 public class CucumberTestState {
     public DataGenerationType dataGenerationType = DataGenerationType.FULL_SEQUENTIAL;
     public CombinationStrategyType combinationStrategyType = CombinationStrategyType.PINNING;
-    public TreeWalkerType walkerType = TreeWalkerType.DECISION_BASED;
 
     /**
      * Boolean to represent if the generation mode is validating or violating.

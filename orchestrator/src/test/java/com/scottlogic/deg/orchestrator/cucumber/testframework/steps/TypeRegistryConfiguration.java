@@ -19,7 +19,6 @@ package com.scottlogic.deg.orchestrator.cucumber.testframework.steps;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
-import com.scottlogic.deg.generator.config.detail.TreeWalkerType;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberGenerationMode;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.GeneratorTestUtilities;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
@@ -46,7 +45,6 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
     public void configureTypeRegistry(TypeRegistry tr) {
         this.defineDataGenerationStrategyType(tr);
         this.defineCombinationStrategyType(tr);
-        this.defineWalkerType(tr);
         this.defineOperationParameterType(tr);
         this.defineGenerationMode(tr);
         this.defineParameterType(tr,"fieldVar", "^(.+)");
@@ -112,19 +110,6 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
             "combinationStrategy",
             "(.*)$",
             CombinationStrategyType.class,
-            transformer));
-    }
-
-    private void defineWalkerType(TypeRegistry tr) {
-        Transformer<TreeWalkerType> transformer = strategyString ->
-            Arrays.stream(TreeWalkerType.values())
-                .filter(val -> val.toString().equalsIgnoreCase(strategyString))
-                .findFirst().orElse(TreeWalkerType.CARTESIAN_PRODUCT);
-
-        tr.defineParameterType(new ParameterType<>(
-            "walkerType",
-            "(.*)$",
-            TreeWalkerType.class,
             transformer));
     }
 
