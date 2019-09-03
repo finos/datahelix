@@ -31,11 +31,6 @@ public class ContainsRegexConstraint implements AtomicConstraint {
     }
 
     @Override
-    public String toDotLabel() {
-        return String.format("%s contains /%s/", field.name, regex);
-    }
-
-    @Override
     public Field getField() {
         return field;
     }

@@ -34,18 +34,13 @@ public class ViolatedAtomicConstraint implements AtomicConstraint {
     }
 
     @Override
-    public String toDotLabel() {
-        return "Violated: " + violatedConstraint.toDotLabel();
-    }
-
-    @Override
     public AtomicConstraint negate() {
         return new ViolatedAtomicConstraint(violatedConstraint.negate());
     }
 
     @Override
     public String toString() {
-        return String.format("Violated: %s", this.violatedConstraint.toString());
+        return String.format("Violated: %s", violatedConstraint.toString());
     }
 
     public int hashCode(){

@@ -42,20 +42,14 @@ public class NotConstraint implements AtomicConstraint {
     }
 
     @Override
-    public String toDotLabel() {
+    public String toString() {
         /*Use the encoded character code for the NOT (¬) symbol; leaving it un-encoded causes issues with visualisers*/
-        return String.format("&#x00AC;(%s)", negatedConstraint.toDotLabel());
+        return String.format("&#x00AC;(%s)", negatedConstraint.toString());
     }
 
     @Override
     public Field getField() {
         return negatedConstraint.getField();
-    }
-
-    public String toString(){
-        return String.format(
-                "NOT(%s)",
-                negatedConstraint);
     }
 
     @Override

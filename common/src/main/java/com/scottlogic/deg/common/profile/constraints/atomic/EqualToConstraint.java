@@ -20,11 +20,6 @@ public class EqualToConstraint implements AtomicConstraint {
     }
 
     @Override
-    public String toDotLabel() {
-        return toString();
-    }
-
-    @Override
     public String toString(){
         return String.format("equalTo: {}", value);
     }

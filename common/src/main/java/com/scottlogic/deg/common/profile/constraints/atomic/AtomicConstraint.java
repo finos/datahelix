@@ -28,8 +28,6 @@ public interface AtomicConstraint extends Constraint {
 
     Field getField();
 
-    String toDotLabel();
-
     default AtomicConstraint negate() {
         return new NotConstraint(this);
     }

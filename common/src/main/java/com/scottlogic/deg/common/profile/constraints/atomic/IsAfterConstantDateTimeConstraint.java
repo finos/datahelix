@@ -31,11 +31,6 @@ public class IsAfterConstantDateTimeConstraint implements AtomicConstraint {
     }
 
     @Override
-    public String toDotLabel(){
-        return String.format("%s > %s", field.name, referenceValue);
-    }
-
-    @Override
     public Field getField() {
         return field;
     }
