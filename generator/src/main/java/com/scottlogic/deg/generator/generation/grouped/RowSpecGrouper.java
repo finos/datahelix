@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.generation;
+package com.scottlogic.deg.generator.generation.grouped;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
-import com.scottlogic.deg.generator.generation.databags.FieldGroup;
+import com.scottlogic.deg.generator.generation.FieldPair;
+import com.scottlogic.deg.generator.generation.grouped.FieldGroup;
 import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.util.*;
