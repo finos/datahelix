@@ -108,19 +108,6 @@ public class ConstraintNode implements Node {
         return Objects.hash(atomicConstraints, decisions);
     }
 
-
-    public ConstraintNode accept(NodeVisitor visitor) {
-        Stream<DecisionNode> decisionNodeStream = getDecisions().stream().map(d -> d.accept(visitor));
-
-        return visitor.visit(
-            new ConstraintNodeBuilder()
-                .addAtomicConstraints(new ArrayList<>(atomicConstraints))
-                .addDelayedAtomicConstraints(new ArrayList<>(delayedAtomicConstraints))
-                .setDecisions(decisionNodeStream.collect(Collectors.toSet()))
-                .setNodeMarkings(nodeMarkings)
-                .build());
-    }
-
     static ConstraintNode merge(Iterator<ConstraintNode> constraintNodeIterator) {
         Collection<AtomicConstraint> atomicConstraints = new ArrayList<>();
         Collection<DelayedAtomicConstraint> delayedAtomicConstraints = new ArrayList<>();
