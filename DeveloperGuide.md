@@ -1,15 +1,13 @@
 # Developer Guide
 
+This guide outlines how to contribute to the project as well as the key concepts and structure of the DataHelix. For information on how to get started with DataHelix see our [getting started guide]() and for information on the syntax of the DataHelix schema see the [user guide]().
 
 ## Development
 
 1. [Contributing](#Contributing)
-1. [Building](#building)
-1. [Testing](#testing)
+1. [Building and Testing](#Building-and-Testing)
 1. [Bugs And Issues](#bugs-and-issues)
 1. [Adding Schema Versions](#Adding-Schema-Versions)
-1. [Frameworks](#frameworks)
-1. [Git Merging](#Git-Merging)
 
 
 ## Key Concepts
@@ -19,7 +17,6 @@
     1. [Example](#example)
     1. [Derivation](#derivation)
     1. [Optimisation](#optimisation)
-1. [Profile Syntax](#profile-syntax)
 1. [Behaviour in Detail](#behaviour-in-detail)
     1. [Nullness](#nullness)
     1. [Type Implication](#Type-Implication)
@@ -39,11 +36,6 @@
 1. [String Generation](#String-Generation)
 1. [Tree Walker Types](#Tree-walker-types)
 
-Unsure:
-
-1. [Cucumber cheat sheet](#Cucumber-cheat-sheet)
-
-
 
 # Contributing
 
@@ -58,13 +50,15 @@ _NOTE:_ Commits and pull requests to FINOS repositories will only be accepted fr
 
 *Need an ICLA? Unsure if you are covered under an existing CCLA? Email [help@finos.org](mailto:help@finos.org)*
 
-# Building And Testing
+# Building and Testing
 
 DataHelix uses Java 1.8 which can be downloaded from this [link](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 
 DataHelix uses [gradle](https://gradle.org/) to automate the build and test process. To build the project run `gradle build` from the root folder of the project. If it was successful then the created jar file can be found in _orchestrator/build/libs/generator.jar_ .
 
-DataHelix uses cucumber for behaviour driven development and testing, with [gherkin](https://docs.cucumber.io/gherkin/)-based tests. To run the tests for DataHelix run `gradle test` from the root folder of the project.
+[Guice](https://github.com/google/guice) is used in DataHelix for Dependency Injection (DI). It is configured in our 'module' classes, which all extend `AbstractModule`, and injected with the `@inject` annotation
+
+[Cucumber](https://cucumber.io/) is used for behaviour driven development and testing, with [gherkin](https://docs.cucumber.io/gherkin/)-based tests. To run the tests for DataHelix run `gradle test` from the root folder of the project.
 
 Below is an example of a cucumber test:
 
@@ -83,9 +77,7 @@ Feature: the name of my feature
       | null |
 ```
 
-More examples can be seen in the [generator cucumber features](https://github.com/finos/datahelix/tree/master/orchestrator/src/test/java/com/scottlogic/deg/orchestrator/cucumber)
-
-The framework supports setting configuration settings for the generator, defining the profile and describing the expected outcome. All of these are described below, all variable elements (e.g. `{generationStrategy}` are case insensitive), all fields and values **are case sensitive**.
+More examples can be seen in the [generator cucumber features](https://github.com/finos/datahelix/tree/master/orchestrator/src/test/java/com/scottlogic/deg/orchestrator/cucumber). An outline of how Cucumber is used within DataHelix can be found [here](./docs/developer/CucumberCookbook.md).
 
 # Bugs and Issues
 
@@ -148,43 +140,6 @@ Then change the below (in the new file)...
 You will need to update the test in _ProfileSchemaImmutabilityTests_ to contain the new schema version generated. Old versions should **not** be modified. This is reflected by the test failing if any existing schemas are modified.
 
 If you experience any issues with this test not updating the schema in IntelliJ, it is recommended to invalidate the cache and restart, or to delete the _profile/out_ directory and rebuild. 
-
-
-# Frameworks
-
-## used in the project???
-Don't know if we need this section really
-
-- We are using [Guice](https://github.com/google/guice) for Dependency Injection (DI)
-- We use cucumber for behaviour driven development and testing, with [gherkin](https://docs.cucumber.io/gherkin/)
-
-
-
-# Git Merging
-
-TODO - Do we really need this bit?
-
-Assuming you've been developing a feature on the `feature` branch, but `master` has changed since you started work.
-
-This is depicted below:
-```
-- - - master
-  |
-  | - - feature
-```
-
-To make a Pull Request, you will first need to merge `master` into `feature`.
-
-First, ensure that the local master is up to date. Then, checkout the `feature` branch.
-
-If in doubt, `git merge master` then `git push` will work.
-
-If you don't want to have merge commits, you can rebase using `git rebase master` and push with `git push --force-with-lease`.
-
-Make sure you don't `git pull` between the rebase and the push because it can cause changes to be merged incorrectly. 
-
-
-
 
 # Key decisions
 
@@ -364,104 +319,6 @@ We can simplify to:
 Formally: If a Decision Node `D` contains a Constraint Node `C` with no constraints and a single Decision Node `E`, `E`'s Constraint Nodes can be added to `D` and `C` removed.
 
 This optimisation addresses situations where, for example, an `anyOf` constraint is nested directly inside another `anyOf` constraint.
-
-# Profile Syntax
-
-TODO - Do we need this in the developer guide. should be in user.
-
-## Sample file
-```javascript
-{
-	"schemaVersion": "0.1",
-	"description": "A dataset about financial products",
-	"fields":
-	[
-		{ "name": "id" },
-		{ "name": "time" },
-		{ "name": "country" },
-		{ "name": "tariff" },
-		{ "name": "low_price" },
-		{ "name": "high_price" }
-	],
-	"rules":
-	[
-		{
-			"rule": "id is a non-nullable string",
-			"constraints":
-			[
-				{ "field": "id", "is": "ofType", "value": "string" },
-				{ "not": { "field": "id", "is": "null" } }
-			]
-		},
-
-		{
-			"rule": "low_price is a non-nullable positive integer",
-			"constraints": [
-				{ "field": "low_price", "is": "ofType", "value": "integer" },
-				{ "not": { "field": "low_price", "is": "null" } },
-				{ "field": "low_price", "is": "greaterThanOrEqualTo", "value": 0 }
-			]
-		},
-		{ 
-			"rule": "allowed countries",
-			"constraints": [
-				{ "field": "country", "is": "inSet", "values": [ "USA", "GB", "FRANCE" ] }
-			]
-		},
-		{
-			"rule": "country tariffs",
-			"constraints": [
-				{
-					"if": {
-						"anyOf": [
-							{ "field": "country", "is": "equalTo", "value": "USA" },
-							{ "field": "country", "is": "null" }
-						]
-					},
-					"then": {
-						"allOf": [
-							{ "field": "tariff", "is": "null" },
-							{ "field": "time", "is": "after", "value": { "date": "2014-01-01" } }
-						]
-					},
-					"else": { "not": { "field": "tariff", "is": "null" } }
-				}
-			]
-		}
-	]
-}
-```
-
-## Constituent objects
-
-### `Profile`
-* `"description"`: An optional description of what data the profile is modelling.
-* `"fields"`: A set of one or more `Field` objects. Each field must have a unique name.
-* `"rules"`: A set of one or more `Rule` objects which must contain one or more `Constraint` objects.
-
-### `Field`
-
-A field in the data set.
-
-* `"name"`: The field's name. Should be unique, as constraints will reference fields by name. This property is used for, eg, column headers in CSV output
-
-### `Rule`
-A named collection of constraints. Test case generation revolves around rules, in that the generator will output a separate dataset for each rule, wherein each row violates the rule in a different way.
-
-* `"rule"`: A textual description of the rule
-* `"constraints"`: A set of constraints composing this rule
-
-### `Constraint`
-
-One of:
-
-- a [predicate constraint](UserGuide.md#Predicate-constraints)
-- a [grammatical constraint](UserGuide.md#Grammatical-constraints)
-- a [presentational constraint](UserGuide.md#Presentational-constraints)
-
-
-The Profile schema format is formally documented in the [User Guide](UserGuide.md).
-
 
 # Behaviour in Detail
 ## Nullness
@@ -1013,173 +870,3 @@ The strategy selects a value for a field, then reduces the size of the problem (
 
 See [Reductive tree walker](ReductiveTreeWalker.md) for more details.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Cucumber cheat sheet
-
-### Configuration options
-* _the generation strategy is `{generationStrategy}`_ see [generation strategies](https://github.com/finos/datahelix/blob/master/docs/user/generationTypes/GenerationTypes.md) - default: `random`
-* _the combination strategy is `{combinationStrategy}`_ see [combination strategies](https://github.com/finos/datahelix/blob/master/docs/user/CombinationStrategies.md) - default: `exhaustive`
-* _the walker type is `{walkerType}`_ see [walker types](https://github.com/finos/datahelix/blob/master/docs/developer/decisionTreeWalkers/TreeWalkerTypes.md) - default: `reductive`
-* _the data requested is `{generationMode}`_, either `violating` or `validating` - default: `validating`
-* _the generator can generate at most `{int}` rows_, ensures that the generator will only emit `int` rows, default: `1000`
-* _we do not violate constraint `{operator}`_, prevent this operator from being violated (see **Operators** section below), you can specify this step many times if required
-
-### Defining the profile
-It is important to remember that constraints are built up of 3 components: a field, an operator and most commonly an operand. In the following example the operator is 'greaterThan' and the operand is 5.
-
-```
-foo is greaterThan 5
-```
-
-Operators are converted to English language equivalents for use in cucumber, so 'greaterThan' is expressed as 'greater than'.
-
-* _there is a field `{field}`_, adds a field called `field` to the profile
-* _the following fields exist:_, adds a set of fields to the profile (is followed by a single column set of strings, each represents a field name)
-* _`{field}` is null_, adds a null constraint to the profile for the field `field`
-* _`{field}` is anything but null_, adds a not(is null) constraint to the profile for field `field`
-* _`{field}` is `{operator}` `{operand}`_, adds an `operator` constraint to the field `field` with the data `operand`, see **operators** and **operands** sections below
-* _`{field}` is anything but `{operator}` `{operand}`_, adds a negated `operator` constraint to the field `field` with the data `operand`, see **operators** and **operands** sections below
-* _there is a constraint:_, adds the given JSON block as a constraint as if it was read from the profile file itself. It should only be used where the constraint cannot otherwise be expressed, e.g. for `anyOf`, `allOf` and `if`.
-* _the maximum string length is {length}_, sets the maximum length for strings to the _max_ for the given scenario. The default is _200_ (for performance reasons), however in production the limit is _1000_.
-* _untyped fields are allowed_, sets the --allow-untyped-fields flag to false - default: flag is true
-
-#### Operators
-See [Predicate constraints](docs/user/UserGuide.md#Predicate-constraints), [Grammatical Constraints](docs/user/UserGuide.md#Grammatical-constraints) and [Presentational Constraints](docs/user/UserGuide.md#Presentational-constraints) for details of the constraints.
-
-#### Operands
-When specifying the operator/s for a field, ensure to format the value as in the table below:
-
-| data type | example |
-| ---- | ---- |
-| string | "my value" |
-| number | `1.234` |
-| datetime | `2001-02-03T04:05:06.000` |
-| null | `null` |
-
-datetimes must be expressed as above (i.e. `yyyy-MM-ddTHH:mm:ss.fff`)
-
-#### Examples
-* `ofType` &rarr; `Given foo is of type "string"`
-* `equalTo` &rarr; `Given foo is equal to 5`
-* `inSet` &rarr; 
-```
-Given foo is in set: 
-  | foo |
-  | 1   |
-  | 2   |
-  | 3   |
-```
-* `not(after 01/02/2003)` &rarr; `Given foo is anything but after 2003-02-01T00:00:00.00`
-
-In addition the following shows how the _there is a constraint_ step can be used:
-```
-And there is a constraint:
-  """
-    {
-      "if": { "field": "foo", "is": "equalTo", "value": "dddd" },
-      "then": { "field": "bar", "is": "equalTo", "value": "4444" },
-      "else": { "field": "bar", "is": "shorterThan", "value": 1 }
-    }
-  """
-```
-
-### Describing the outcome
-* _the profile is invalid because "`{reason}`"_, executes the generator and asserts that an `InvalidProfileException` or `JsonParseException` was thrown with the message `{reason}`, reason is a regular expression*.
-* _no data is created_, executes the generator and asserts that no data was emitted
-* _the following data should be generated:_, executes the generator and asserts that no exceptions were thrown and the given data appears in the generated data, no additional data is permitted.
-* _the following data should be generated in order:_, executes the generator and asserts that no exceptions were thrown and the given data appears **in the same order** in the generated data, no additional data is permitted.
-* _the following data should be included in what is generated:_, executes the generator and asserts that no exceptions were thrown and the given data is present in the generated data (regardless of order)
-* _the following data should not be included in what is generated:_, executes the generator and asserts that no exceptions were thrown and the given data is **not** present in the generated data (regardless of order)
-* _some data should be generated_, executes the generator and asserts that at least one row of data was emitted
-* _{number} of rows of data are generated_, executes the generator and asserts that exactly the given number of rows are generated
-
-\* Because `{reason}` is a regular expression, certain characters will need to be escaped, by including a `\` before them, e.g. `\(`, `\)`, `\[`, `\]`, etc.
-
-### Validating the data in the output
-
-#### DateTime
-* _{field} contains datetime data_, executes the generator and asserts that _field_ contains either `null` or datetimes (other types are allowed)
-* _{field} contains only datetime data_, executes the generator and asserts that _field_ contains only `null` or datetimes
-* _{field} contains anything but datetime data_, executes the generator and asserts that _field_ contains either `null` or data that is not a datetime.
-* _{field} contains datetimes between {min} and {max} inclusively_, executes the generator and asserts that _field_ contains either `null` or datetimes between _{min}_ and _{max}_. Does so in an inclusive manner for both min and max.
-* _{field} contains datetimes outside {min} and {max}_, executes the generator and asserts that _field_ contains either `null` or datetimes outside _{min}_ and _{max}_.
-* _{field} contains datetimes before or at {before}_, executes the generator and asserts that _field_ contains either `null` or datetimes at or before _{before}_
-* _{field} contains datetimes after or at {after}_, executes the generator and asserts that _field_ contains either `null` or datetimes at or after _{after}_
-
-#### Numeric
-Note these steps work for asserting both integer and decimal data. There are no current steps for asserting general granularity.
-* _{field} contains numeric data_, executes the generator and asserts that _field_ contains either `null` or numeric values (other types are allowed)
-* _{field} contains only numeric data_, executes the generator and asserts that _field_ contains only `null` or numeric values
-* _{field} contains anything but numeric data_, executes the generator and asserts that _field_ contains either `null` or data that is not numeric.
-* _{field} contains numeric values between {min} and {max} inclusively_, executes the generator and asserts that _field_ contains either `null` or numeric values between _{min}_ and _{max}_. Does so in an inclusive manner for both min and max.
-* _{field} contains numeric values outside {min} and {max}_, executes the generator and asserts that _field_ contains either `null` or numeric values outside _{min}_ and _{max}_.
-* _{field} contains numeric values less than or equal to {value}_, executes the generator and asserts that _field_ contains either `null` or numeric values less than or equal to _{value}_
-* _{field} contains numeric values greater than or equal to {value}_, executes the generator and asserts that _field_ contains either `null` or numeric values greater than or equal to _{value}_
-
-#### String
-* _{field} contains string data_, executes the generator and asserts that _field_ contains either `null` or string values (other types are allowed)
-* _{field} contains only string data_, executes the generator and asserts that _field_ contains only `null` or string values
-* _{field} contains anything but string data_, executes the generator and asserts that _field_ contains either `null` or data that is not a string.
-* _{field} contains strings of length between {min} and {max} inclusively_, executes the generator and asserts that _field_ contains either `null` or strings with lengths between _{min}_ and _{max}_. Does so in an inclusive manner for both min and max.
-* _{field} contains strings of length outside {min} and {max}_, executes the generator and asserts that _field_ contains either `null` or strings with lengths outside _{min}_ and _{max}_.
-* _{field} contains strings matching /{regex}/_, executes the generator and asserts that _field_ contains either `null` or strings that match the given regular expression.
-* _{field} contains anything but strings matching /{regex}/_, executes the generator and asserts that _field_ contains either `null` or strings that do not match the given regular expression.
-* _{field} contains strings shorter than or equal to {length}_, executes the generator and asserts that _field_ contains either `null` or string values shorter than or equal to _{length}_
-* _{field} contains strings longer than or equal to {length}_, executes the generator and asserts that _field_ contains either `null` or string values longer than or equal to _{length}_
-
-
-#### Null (absence/presence)
-* _{field} contains anything but null_, executes the generator and asserts that _field_ has a value in every row (i.e. no `null`s)
-
-### Cucumber test style guide
-* Each test should be specific to one requirement.
-* Tests should specify definite expected results rather than using "should include".
-* All tables should be padded to the width of the largest item.
-* All block-level indentation should be 2 spaces, as below: 
-
-```gherkin
-Feature: ...
-  ...
-
-  Background:
-    Given ...
-
-  Scenario: ...
-    Given ...:
-      | ... |
-      | ... |
-      | ... |
-    And ...:
-      """
-      """
-    When ...
-    Then ... 
-    And ...
-```
