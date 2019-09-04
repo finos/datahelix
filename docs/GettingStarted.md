@@ -6,7 +6,6 @@
   - [Generating large datasets](#Generating-large-datasets)
   - [Data types](#Data-types)
   - [Generation modes](#Generation-modes)
-  - [Generating invalid data](#Generating-invalid-data)
   - [Next steps](#Next-steps)
 
 # Getting Started
@@ -294,87 +293,11 @@ The generator supports a number of different generation modes:
 
 -   **random** - _(default)_ generates random data that abides by the given set of constraints, with the number of generated rows limited via the `--max-rows` option.
 -   **full** - generates all the data that abides by the given set of constraints, with the number of generated rows limited via the `--max-rows` option.
--   **interesting** - _(alpha feature)_ generates data that is typically [deemed 'interesting'](user/alphaFeatures/Interesting.md) from a test perspective, for example exploring [boundary values](https://en.wikipedia.org/wiki/Boundary-value_analysis).
 
 The mode is specified via the `--generation-type` option.
-
-## Generating invalid data (_alpha feature_)
-
-One of the most powerful features of the generator is its ability to generate data that violates constraints. It is still an _alpha_ feature at the moment though.  To create invalid data use the `violate` command. This time you need to specify an output directory rather than a file:
-
-```
-$ java -jar generator.jar violate --max-rows=100 --replace --profile-file=profile.json --output-path=out
-```
-
-When the above command has finished, you'll find that the generator has created an `out` directory which has four files:
-
-```
-$ ls out
-1.csv           2.csv           3.csv           manifest.json
-```
-
-The manifest file details which rules have been violated in each of the output files:
-
-```
-{
-  "cases": [
-    {
-      "filePath": "1",
-      "violatedRules": ["first name"]
-    },
-    {
-      "filePath": "2",
-      "violatedRules": ["age"]
-    },
-    {
-      "filePath": "3",
-      "violatedRules": ["national insurance"]
-    }
-  ]
-}
-```
-
-If you take a look at the generated file `1.csv` you'll see that data for the `firstName` field does not obey the given constraints, whilst those for `age` and `nationalInsurance` are correct:
-
-```
-firstName,age,nationalInsurance
--619248029,71,"HT849919"
-08-12-2001 02:53:16,15,
-"Lorem Ipsum",11,
-"Lorem Ipsum",71,"WX004081"
-1263483797,19,"HG054666"
-,75,"GE023082"
-"Lorem Ipsum",59,"ZM850737C"
-[...]
-```
-
-However, it might be a surprise to see nulls, numbers and dates as values for the `firstName` field alongside strings that do not match the regex given in the profile. This is because these are all defined as a single rule within the profile. You have a couple of options if you want to ensure that `firstName` is null or a string, the first is to inform the generator that it should not violate specific constraint types:
-
-```
-$ java -jar generator.jar violate --dont-violate=ofType \
-  --max-rows=100 --replace --profile-file=profile.json --output-path=out
-```
-
-Or, alternatively, you can re-arrange your constraints so that the ones that define types / null, are grouped as a single rule. After By re-grouping constraints, the following output, with random strings that violate the regex constraint, is generated:
-
-```
-firstName,age,nationalInsurance
-"�",43,"PT530853D"
-"뷇",56,"GE797875M"
-"邦爃",84,"JA172890M"
-"J㠃懇圑㊡俫杈",32,"AE613401F"
-"俵튡",38,"TS256211F"
-"M",60,"GE987171M"
-"M",7,
-"Mꞎኅ剭Ꙥ哌톞곒",97,"EN082475C"
-")",80,"BX025130C"
-",⑁쪝",60,"RW177969"
-"5ᢃ풞ﺯ䒿囻",57,"RY904705"
-[...]
-```
-**NOTE** we are considering adding a feature that allows you to [specify / restrict the character set](https://github.com/finos/datahelix/issues/294) in a future release.
 
 ## Next steps
 
 That's the end of our getting started guide. Hopefully it has given you a good understanding of what the DataHelix generator is capable of. If you'd like to find out more about the various constraints the tool supports, the [User Guide](user/UserGuide.md) is a good next step. You might also be interested in the [examples folder](https://github.com/finos/datahelix/tree/master/examples), which illustrates various features of the generator.
-For more detail about the behaviour of certain profiles, see the  [behaviour in detail.](developer/behaviour/BehaviourInDetail.md)
+
+For a more in-depth technical insight, see the [Developer Guide](developer/DeveloperGuide.md).
