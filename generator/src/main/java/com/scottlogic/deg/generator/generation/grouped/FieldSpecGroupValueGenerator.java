@@ -103,7 +103,7 @@ public class FieldSpecGroupValueGenerator {
     }
 
     private static FieldSpecGroup adjustBounds(Field field, DataBagValue value, FieldSpecGroup group) {
-        Object object = value.getUnformattedValue();
+        Object object = value.getValue();
 
         if (object instanceof OffsetDateTime) {
             return adjustBoundsOfDate(field, (OffsetDateTime) object, group);
@@ -125,7 +125,7 @@ public class FieldSpecGroupValueGenerator {
     }
 
     private static DataBagGroupWrapper adjustWrapperBounds(DataBagGroupWrapper wrapper, Field field) {
-        DataBagValue value = wrapper.dataBag().getUnformattedValue(field);
+        DataBagValue value = wrapper.dataBag().getDataBagValue(field);
         FieldSpecGroup newGroup = adjustBounds(field, value, wrapper.group());
         return new DataBagGroupWrapper(wrapper.dataBag(), newGroup, wrapper.generator());
 

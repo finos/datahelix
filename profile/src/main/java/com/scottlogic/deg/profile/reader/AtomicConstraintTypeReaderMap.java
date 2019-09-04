@@ -60,11 +60,6 @@ public class AtomicConstraintTypeReaderMap {
         map.put(IS_GRANULAR_TO, new GranularToReader());
         map.put(IS_IN_SET, new InSetReader(fromFilePath));
 
-        map.put(FORMATTED_AS,
-            (dto, fields) -> new FormatConstraint(
-                fields.getByName(dto.field),
-                getValidatedValue(dto, String.class)));
-
         map.put(IS_EQUAL_TO_CONSTANT,
             (dto, fields) -> new EqualToConstraint(
                 fields.getByName(dto.field),
@@ -168,8 +163,8 @@ public class AtomicConstraintTypeReaderMap {
             map.putAll(getDelayedMapEntries());
         }
 
-        map.put(IS_UNIQUE,
-            (dto, fields) -> new RemoveFromTree());
+        map.put(IS_UNIQUE, (dto, fields) -> new RemoveFromTree());
+        map.put(FORMATTED_AS, (dto, fields) -> new RemoveFromTree());
 
         return map;
     }

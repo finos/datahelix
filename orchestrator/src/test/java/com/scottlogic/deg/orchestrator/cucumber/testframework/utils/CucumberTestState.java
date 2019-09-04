@@ -22,7 +22,6 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.generator.config.detail.TreeWalkerType;
-import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.profile.dto.AtomicConstraintType;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 
@@ -183,7 +182,19 @@ public class CucumberTestState {
             .findFirst()
             .orElseThrow(UnsupportedOperationException::new);
 
-        Field newField = new Field(fieldName, true);
+        Field newField = new Field(fieldName, true, oldField.getFormatting());
+
+        profileFields.remove(oldField);
+        profileFields.add(newField);
+    }
+
+    public void setFieldFormatting(String fieldName, String formatting) {
+        Field oldField = profileFields.stream()
+            .filter(f -> f.name.equals(fieldName))
+            .findFirst()
+            .orElseThrow(UnsupportedOperationException::new);
+
+        Field newField = new Field(fieldName, oldField.isUnique(), formatting);
 
         profileFields.remove(oldField);
         profileFields.add(newField);

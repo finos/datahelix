@@ -64,12 +64,12 @@ public class JsonProfileReader implements ProfileReader {
         }
 
         Collection<String> uniqueList = getUniqueFields(profileDto);
+        Map<String, String> fieldFormating = getfieldFomatting(profileDto);
 
         ProfileFields profileFields = new ProfileFields(
             profileDto.fields.stream()
-                .map(fDto -> new Field(fDto.name, uniqueList.contains(fDto.name)))
+                .map(fDto -> new Field(fDto.name, uniqueList.contains(fDto.name), fieldFormating.get(fDto.name)))
                 .collect(Collectors.toList()));
-
 
         Collection<Rule> rules = profileDto.rules.stream().map(
             r -> {
@@ -84,13 +84,25 @@ public class JsonProfileReader implements ProfileReader {
     }
 
     private Collection<String> getUniqueFields(ProfileDTO profileDto) {
+        return getTopLevelConstraintsOfType(profileDto, "unique")
+            .map(constraintDTO -> constraintDTO.field)
+            .collect(Collectors.toSet());
+    }
+
+    private Map<String, String> getfieldFomatting(ProfileDTO profileDto) {
+        return getTopLevelConstraintsOfType(profileDto, "formattedAs")
+            .collect(Collectors.toMap(
+                constraintDTO -> constraintDTO.field,
+                constraintDTO -> (String)constraintDTO.value
+            ));
+    }
+
+    private Stream<ConstraintDTO> getTopLevelConstraintsOfType(ProfileDTO profileDto, String constraint) {
         return profileDto.rules.stream()
             .flatMap(ruleDTO -> ruleDTO.constraints.stream())
             .flatMap(this::getConstraintOrAllOfConstraints)
             .filter(constraintDTO -> constraintDTO.is != null)
-            .filter(constraintDTO -> constraintDTO.is.equals("unique"))
-            .map(constraintDTO -> constraintDTO.field)
-            .collect(Collectors.toSet());
+            .filter(constraintDTO -> constraintDTO.is.equals(constraint));
     }
 
     private Stream<ConstraintDTO> getConstraintOrAllOfConstraints(ConstraintDTO constraintDTO) {

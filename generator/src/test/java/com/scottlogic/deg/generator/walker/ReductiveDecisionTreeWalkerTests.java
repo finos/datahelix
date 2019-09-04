@@ -106,7 +106,7 @@ class ReductiveDecisionTreeWalkerTests {
      */
     @Test
     public void shouldReturnEmptyCollectionOfRowsWhenSecondFieldCannotBeFixed() {
-        DataBagValue dataBag = new DataBagValue(field1, "yes");
+        DataBagValue dataBag = new DataBagValue(field1);
         FieldSpec firstFieldSpec = FieldSpec.Empty.withWhitelist(FrequencyDistributedSet.uniform(Collections.singleton("yes")))
             .withNotNull();
         when(fieldSpecValueGenerator.generate(any(Field.class), any(Set.class))).thenReturn(Stream.of(dataBag));

@@ -260,6 +260,12 @@ public class GeneralTestStep {
         state.maxRows = maxNumberOfRows;
     }
 
+    @And("^(.+) has formatting \"(.+)\"$")
+    public void fooHasFormattingFormat(String fieldName, String formatting) {
+        state.setFieldFormatting(fieldName, formatting);
+    }
+
+
     class GeneratedTestData {
         List <List<Object>> expectedData;
         List <List<Object>> generatedData;

@@ -103,7 +103,7 @@ public class ReductiveDecisionTreeWalker implements DecisionTreeWalker {
             return Stream.empty();
         }
 
-        monitor.fieldFixedToValue(field, fieldValue.getFormattedValue());
+        monitor.fieldFixedToValue(field, fieldValue);
 
         ReductiveState newReductiveState =
             reductiveState.withFixedFieldValue(field, fieldValue);

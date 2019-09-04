@@ -55,22 +55,22 @@ public class FieldSpecValueGenerator {
             .distinct()
             .collect(Collectors.toList());
 
-        return createValuesFromSources(field, specs.stream().findFirst().orElse(FieldSpec.Empty), fieldValueSources);
+        return createValuesFromSources(field, fieldValueSources);
     }
 
     public Stream<DataBagValue> generate(Field field, FieldSpec spec) {
         List<FieldValueSource> fieldValueSources = sourceFactory.getFieldValueSources(spec);
 
-        return createValuesFromSources(field, spec, fieldValueSources);
+        return createValuesFromSources(field, fieldValueSources);
     }
 
-    private Stream<DataBagValue> createValuesFromSources(Field field, FieldSpec spec, List<FieldValueSource> fieldValueSources) {
+    private Stream<DataBagValue> createValuesFromSources(Field field, List<FieldValueSource> fieldValueSources) {
         FieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
 
         Iterable<Object> iterable = getDataValues(combinedFieldValueSource, field.isUnique());
 
         return StreamSupport.stream(iterable.spliterator(), false)
-            .map(value -> new DataBagValue(value, spec.getFormatting()));
+            .map(DataBagValue::new);
     }
 
     private Iterable<Object> getDataValues(FieldValueSource source, boolean unique) {
