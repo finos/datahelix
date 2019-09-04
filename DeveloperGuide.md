@@ -21,16 +21,14 @@ This guide outlines how to contribute to the project as well as the key concepts
     1. [Constraint reduction](#Constraint-reduction)
     1. [Databags](#Databags)
     1. [Output](#output)
-1. [Field Fixing Strategy](#Field-Fixing-strategies)
 1. [String Generation](#String-Generation)
-1. [Tree Walker Types](#Tree-walker-types)
+1. [Tree Walking Algorithm](#Tree-Walking-Algorithm)
 
 ## Behaviour in Detail
 
 1. [Nullness](#nullness)
 1. [Type Implication](#Type-Implication)
 1. [Violation of Rules](#Violation-of-Rules)
-1. [General Strategy for Violation](#General-Strategy-for-Violation)
 1. [Null Operator](#Null-Operator)
 1. [Null Operator with If](#Null-Operator-with-If)
 
@@ -298,82 +296,7 @@ To create a row the serialiser iterates through the fields in the profile, in or
 
 CSV and JSON formats are currently supported.
 
-# Field Fixing strategies
-
-The generator in 'reductive' mode can be said to operate in the following way:
-1. Pick a field
-2. Fix that field's value
-3. Eliminate any options that cannot be generated based on this value
-4. Repeat until all fields are fixed with values
-
-One area that _could_ affect performance is the order in which we pick fields to fix values. The way in which we determine this order is known as a **fix field strategy**.
-
-Our current default is the **hierarchical dependency** strategy.
-
-## Hierarchical Dependency
-
-This strategy picks fields to fix using a combination of factors. It sorts a list of fields into an order as follows: 
-- **First** favour picking fields that are **not dependent** on other fields
-- **Then**  favour picking fields that **constrain** other fields
-- **Then** use the [set based strategy](#set-based)
-- **Then** compare fields alphabetically by name
-
-If a field is **independent** of any other fields they can _co-vary_. This means that the field's value cannot cause another fields value to contradict.
-
-Overall this strategy assumes some **hierarchical** categorisation of fields where we attempt to pick the most **constraining** fields first. 
-
-The idea behind this is that:
-- The field picked **reduces** the other fields remaining possible values 
-- The field picked is known to be less dependent than other fields and should be less likely to require backtracking
-
-### Examples
-Consider the following statements:
-- There are 4 fields in a profile A, B, C and D
-- Field B's value is dependent on Field A
-- Field C and D's values are dependent on Field B
-
-From this we can also deduce:
-> Field C and D are also indirectly dependent on Field A
-
-In this example fields would be picked in the following order:
-1. A
-2. B
-3. C
-4. D
-
-#### Explanation
-- A is picked first as it has no dependencies on other fields, but directly constrains B and indirectly constrains C and D
-- B is picked next as it constrains C and D, but is dependent upon A
-- Neither C and D constrain any other field and are both constrained equally by B. Therefore C is only chosen over D because of alphabetical ordering 
-
-## Set Based
-
-This strategy picks fields based on the following:
- - **First** favour picking fields that are always **constrained** by a finite set
- - **Then**  favour picking fields where the sets are smaller
- 
-Currently this is also used as a further step within the Hierarchical Dependency strategy
- 
-## Ranked Constraint
- 
-This strategy does the following:
-1. Get all the atomic constraints in the tree and group them by field
-2. Score each constraint by it's precision (e.g. an equalTo is precise, a set of 2 values is half as precise)
-3. Sort the fields by score into a ranking
-4. Pick the field with the highest rank (greatest precision)
-
-This differs in implementation to the above strategies in that it is **tree based** and not **profile based**.
-
-This means two things:
-- It runs based on a Decision Tree rather than a Profile object
-- It is dynamic and can run multiple times within the generation run time
-
-
-
-
 # String Generation
-
-TODO - this just feels like it is their documentation... although theirs is awful so maybe this has a place
 
 We use a Java library called [dk.brics.automaton](http://www.brics.dk/automaton/) to analyse regexes and generate valid (and invalid for [violation](docs/user/alphaFeatures/DeliberateViolation.md)) strings based on them. It works by representing the regex as a finite state machine. It might be worth reading about state machines for those who aren't familiar: [https://en.wikipedia.org/wiki/Finite-state_machine](https://en.wikipedia.org/wiki/Finite-state_machine). Consider the following regex: `ABC[a-z]?(A|B)`. It would be represented by the following state machine:
 
@@ -474,22 +397,13 @@ The pathway through the automaton is:
 The generator does not support generating strings above the Basic Unicode plane (Plane 0). Using regexes that match characters above the basic plane may lead to unexpected behaviour.
 
 
+# Tree Walking Algorithm
 
+The generator transforms each profile into one or more [decision trees](#Decision-Trees), each of these can then be process through some strategy.
 
-# Tree walker types
+The algorithm that walks a tree recursively selects an option from the decision tree, then reduces the tree for the constraints in that option.
 
-The generator transforms each profile into one or more [decision trees](#Decision-Trees), each of these can then be process through some strategy. The strategies for processing these trees are known as Tree walker types, each must implement `DecisionTreeWalker`.
-
-The following walker strategies exist:
-
-* Decision based (default)
-* Cartesian product
-* Reductive
-
-## Decision Based
-This is a recursive algorithm that selects an option from the decision tree, then reduces the tree for the constraints in that option.
-
-The Decision Based Tree solver generates row specs by:
+The algorithm generates row specs by:
  1. choosing and removing a decision from the tree
  2. selecting an option from that decision
  3. adding the constraints from the chosen option to the root of the tree
@@ -498,18 +412,6 @@ The Decision Based Tree solver generates row specs by:
     - any decisions that only have 1 remaining option will have that option also moved up the tree, and pruned again.
  5. restarting from 1, until there are no decision left
  6. creating a rowspec from the constraints in the remaining root node.
-
-## Cartesian product
-This strategy is the a recursive algorithm which will 'multiply' each leaf node of the tree against every other leaf node of the decision tree in order to generate data. As such it can create vast numbers of permutations. This strategy makes no attempt to overcome the chance of a combinatorial explosion which can occur with relatively few rules and constraints.
-
-This strategy uses certain methods of the Java Streams API which are known to block rather than be lazy (`flatMap`) which means the data may be prevented from being emitted until all permutations have been calculated.
-
-This strategy is also known to have limited-to-no intelligence when it comes to [contradictions](docs/user/Contradictions.md). The strategy will back track when they are found, but makes no attempt to preemptively check for them or prevent the walker from entering a contradictory path of the tree.
-
-## Reductive
-The strategy selects a value for a field, then reduces the size of the problem (the tree) progressively until it cannot be any further (then back-tracking occurs) or sufficient information is known (then row/s can be emitted.)
-
-See [Reductive tree walker](ReductiveTreeWalker.md) for more details.
 
 # Nullness
 ### Behaviour
@@ -566,49 +468,6 @@ For each rule, a file is generated containing data that can be generated by comb
 violation of that rule with the non-violated other rules.
 
 This is equivalent to the behaviour for constraints and `allOf`s, but just splitting it into different files.
-
-# General Strategy for Violation
-_This is an alpha feature. Please do not rely on it. If you find issues with it, please [report them](https://github.com/finos/datahelix/issues)._ 
-### Behaviour
-The violation output is not guaranteed to be able to produce any data,
-even when the negation of the entire profile could produce data.
-
-### Why
-The violation output could have been calculated by simply negating an entire rule or profile. This could then produce all data that breaks the original profile in any way. However, this includes data that breaks the data in multiple ways at once. This could be very noisy, because the user is expected to test one small breakage in a localised area at a time.
-
-To minimise the noise in an efficient way, a guarantee of completeness is broken. The system does not guarantee to be able to produce violating data in all cases where there could be data which meets this requirement. In some cases this means that no data is produced at all.
-
-In normal negation, negating `allOf [A, B, C]` gives any of the following:
-1) `allOf[NOT(A), B, C]`
-2) `allOf[A, NOT(B), C]`
-3) `allOf[A, B, NOT(C)]`
-4) `allOf[NOT(A), NOT(B), C]`
-5) `allOf[A, NOT(B), NOT(C)]`
-6) `allOf[NOT(A), B, NOT(C)]`
-7) `allOf[NOT(A), NOT(B), NOT(C)]`
-
-These are listed from the least to most noisy. The current system only tries to generate data by negating one sub-constraint at a time (in this case, producing only 1, 2 and 3).
-
-### Misleading examples
-When a field is a string, an integer and not null, no data can be produced normally,
-but data can be produced in violation mode.
-
-|Values                |Can be produced when in violation mode|
-|----------------------|:-------------------------------------|
-|Null                  |✔ (By violating the "not null" constraint) |
-|Numbers               |✔ (By violating the "string" constraint) |
-|Strings               |✔ (By violating the "integer" constraint) |
-|Date-times            |❌ (This would need both the "string" and "integer" constraints to be violated at the same time) |
-
-If a field is set to null twice, no data can be produced in violation mode because it tries to evaluate null and not null:
-
-|Values                |Can be produced when in violation mode|
-|----------------------|:-------------------------------------|
-|Null                  |❌|
-|Numbers               |❌|
-|Strings               |❌|
-|Date-times            |❌|
-
 
 # Null Operator
 
