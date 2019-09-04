@@ -19,6 +19,7 @@ package com.scottlogic.deg.profile.reader;
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
+import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -168,6 +169,16 @@ public class ConstraintReaderHelpers {
         return value.toString();
     }
 
+    public static OffsetDateTime getValueAsDate(Object value){
+        return getValueAsDate(dummyDto(), value);
+    }
+
+    private static ConstraintDTO dummyDto() {
+        ConstraintDTO todo = new ConstraintDTO();
+        todo.field = "REPLACE";
+        return todo;
+    }
+
     private static OffsetDateTime getValueAsDate(ConstraintDTO dto, Object value) {
         if (!(value instanceof Map)) {
             throw new InvalidProfileException(String.format(
@@ -203,8 +214,16 @@ public class ConstraintReaderHelpers {
         return offsetDateTime;
     }
 
+    public static Number getValueAsNumber(Object value){
+        return validateNumber(dummyDto(), (Number)value);
+    }
+
     private static Number validateNumber(ConstraintDTO dto, Number value) {
         return ensureValueBetween(dto, value, Defaults.NUMERIC_MIN, Defaults.NUMERIC_MAX);
+    }
+
+    public static String getValueAsString(Object value){
+        return getValidatedValue(dummyDto(), value, String.class);
     }
 
     private static String validateString(ConstraintDTO dto, String value) {

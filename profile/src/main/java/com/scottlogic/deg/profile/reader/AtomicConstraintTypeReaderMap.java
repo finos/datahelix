@@ -20,10 +20,7 @@ import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.constraints.delayed.IsAfterDynamicDateConstraint;
 import com.scottlogic.deg.common.profile.constraints.delayed.IsBeforeDynamicDateConstraint;
 import com.scottlogic.deg.common.util.Defaults;
-import com.scottlogic.deg.profile.reader.constraintreaders.EqualToFieldReader;
-import com.scottlogic.deg.profile.reader.constraintreaders.InSetReader;
-import com.scottlogic.deg.profile.reader.constraintreaders.GranularToReader;
-import com.scottlogic.deg.profile.reader.constraintreaders.OfTypeReader;
+import com.scottlogic.deg.profile.reader.constraintreaders.*;
 import com.scottlogic.deg.profile.dto.AtomicConstraintType;
 
 import java.math.BigDecimal;
@@ -31,6 +28,8 @@ import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.scottlogic.deg.profile.reader.ConstraintReaderHelpers.*;
 import static com.scottlogic.deg.profile.reader.ConstraintReaderHelpers.getValidatedValue;
@@ -48,6 +47,11 @@ public class AtomicConstraintTypeReaderMap {
         BigDecimal maxStringLength = BigDecimal.valueOf(Defaults.MAX_STRING_LENGTH);
 
         Map<AtomicConstraintType, AtomicConstraintReader> map = new HashMap<>();
+
+        map = Stream.of(AtomicConstraintType.values())
+            .collect(Collectors.toMap(
+                type->type,
+                type -> new FactoryConstraintReader(type)));
 
         map.put(IS_OF_TYPE, new OfTypeReader());
         map.put(IS_GRANULAR_TO, new GranularToReader());
