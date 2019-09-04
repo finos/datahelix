@@ -1,13 +1,15 @@
-package com.scottlogic.deg.profile.reader;
+package com.scottlogic.deg.profile.reader.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.profile.dto.AtomicConstraintType;
+import com.scottlogic.deg.profile.reader.ConstraintReaderHelpers;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.time.OffsetDateTime;
+import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -17,9 +19,9 @@ public class AtomicConstraintFactory {
             case IS_EQUAL_TO_CONSTANT:
                 return new EqualToConstraint(field, getType(value));
             case IS_IN_SET:
-                throw new UnsupportedOperationException("");
+                return new IsInSetConstraint(field, collection(value));
             case IS_NULL:
-                return new IsNullConstraint(field); //TODO check value is null
+                return new IsNullConstraint(field);
             case IS_OF_TYPE:
                 throw new UnsupportedOperationException(""); //TODO uhh
 
@@ -59,6 +61,10 @@ public class AtomicConstraintFactory {
         }
 
         throw new NotImplementedException();
+    }
+
+    private static DistributedSet<Object> collection(Object value) {
+        return FrequencyDistributedSet.uniform((Collection)value);
     }
 
     private static Object getType(Object value) {
