@@ -10,23 +10,12 @@ This guide outlines how to contribute to the project as well as the key concepts
 1. [Adding Schema Versions](#Adding-Schema-Versions)
 
 
-## Key Concepts
+## Algorithms and Data Structures
 
-1. [Design Decisions](#key-decisions)
 1. [Decision Trees](#decision-trees)
     1. [Example](#example)
     1. [Derivation](#derivation)
     1. [Optimisation](#optimisation)
-1. [Behaviour in Detail](#behaviour-in-detail)
-    1. [Nullness](#nullness)
-    1. [Type Implication](#Type-Implication)
-    1. [Violation of Rules](#Violation-of-Rules)
-    1. [General Strategy for Violation](#General-Strategy-for-Violation)
-    1. [Null Operator](#Null-Operator)
-    1. [Null Operator with If](#Null-Operator-with-If)
-
-## Algorithms and Data Structures
-
 1. [Generation Algorithm](#decision-tree-generation)
     1. [Decision tree interpretation](#Decision-tree-interpretation)
     1. [Constraint reduction](#Constraint-reduction)
@@ -35,6 +24,15 @@ This guide outlines how to contribute to the project as well as the key concepts
 1. [Field Fixing Strategy](#Field-Fixing-strategies)
 1. [String Generation](#String-Generation)
 1. [Tree Walker Types](#Tree-walker-types)
+
+## Behaviour in Detail
+
+1. [Nullness](#nullness)
+1. [Type Implication](#Type-Implication)
+1. [Violation of Rules](#Violation-of-Rules)
+1. [General Strategy for Violation](#General-Strategy-for-Violation)
+1. [Null Operator](#Null-Operator)
+1. [Null Operator with If](#Null-Operator-with-If)
 
 
 # Contributing
@@ -56,7 +54,7 @@ DataHelix uses Java 1.8 which can be downloaded from this [link](http://www.orac
 
 DataHelix uses [gradle](https://gradle.org/) to automate the build and test process. To build the project run `gradle build` from the root folder of the project. If it was successful then the created jar file can be found in _orchestrator/build/libs/generator.jar_ .
 
-[Guice](https://github.com/google/guice) is used in DataHelix for Dependency Injection (DI). It is configured in our 'module' classes, which all extend `AbstractModule`, and injected with the `@inject` annotation
+[Guice](https://github.com/google/guice) is used in DataHelix for Dependency Injection (DI). It is configured in the 'module' classes, which all extend `AbstractModule`, and injected with the `@inject` annotation
 
 [Cucumber](https://cucumber.io/) is used for behaviour driven development and testing, with [gherkin](https://docs.cucumber.io/gherkin/)-based tests. To run the tests for DataHelix run `gradle test` from the root folder of the project.
 
@@ -140,91 +138,6 @@ Then change the below (in the new file)...
 You will need to update the test in _ProfileSchemaImmutabilityTests_ to contain the new schema version generated. Old versions should **not** be modified. This is reflected by the test failing if any existing schemas are modified.
 
 If you experience any issues with this test not updating the schema in IntelliJ, it is recommended to invalidate the cache and restart, or to delete the _profile/out_ directory and rebuild. 
-
-# Key decisions
-
-## Do type-specific constraints imply corresponding type constraints?
-
-For instance, what is generated for the price field in this example?
-
-```javascript
-{ "field": "price", "is": "greaterThan", "value": 4 }
-```
-
-This constraint means :
-  * Everything except numbers less than or equal to 4 (eg, strings are valid). Users are expected to supplement with type constraints
-
-
-## Does negating a constraint complement its denotation?
-
-In other words, given a constraint `C`, is `¬C` satisfied by everything that doesn't satisfy `C`?
-
-In some cases this is intuitive:
-
-- If `C` says that a field is null, `¬C` should permit that field to be anything _other_ than null.
-- If `C` says that a field is in a set, `¬C` should permit anything _not_ in that set.
-- If `C` says that a field is a decimal, `¬C` should permit strings, datetimes, etc.
-
-But:
-
-- If `C` says that a field is a number greater than 3, it might be intuitive to say that `¬C` permits numbers less than or equal to 3.     
-
-Note that negation of type integer is not fully defined yet as we do not have a negation of granularTo implemented.
-
-## Does an inSet constraint imply anything about nullability?
-
-```javascript
-{ "field": "product_type", "is": "inSet", "values": [ "a", "b" ] }
-```
-
-Given the above, should we expect nulls? If null is considered a _value_ then no would be a reasonable answer, but it can equally be considered the absence of a value. 
-
-## What do datetime constraints mean when datetimes are partially specified?
-
-```javascript
-{ "field": "creationDate", "is": "after", "value": "2015-01-01" }
-```
-
-Should I be able to express the above, and if so what does it mean? Intuitive, we might say that it cannot be satisfied with, eg, `2015-01-01 12:00:00`, but it depends on how we interpret underspecified datetimes:
-
-* As an **instant**? If so, `2015-01-01` is interpreted as `2015-01-01 00:00:00.000`, and even a datetime 0.01 milliseconds later would satisfy the above constraint.
-* As a **range**? If so, `2015-01-01` is interpreted as `2015-01-01 00:00:00.000 ≤ X < 2015-01-02 00:00:00.000`, and the `before` and `after` constraints are interpreted relative to the start and end of this range, respectively.
-
-Both of these approaches seem more or less intuitive in different cases (for example, how should `equalTo` constraints be applied?). To resolve this problem, we currently require datetime expressions to be fully specified down to thousandths of milliseconds.
-
-## How should we generate characters outside the basic latin character set?
-
-We currently only support generation of characters represented in range 002c-007e.
-
-Either we can:
-1) Update the tool to reject any regular expressions that contain characters outside of this range.
-2) Update the tool to accept & generate these characters
-
-## Is the order of rows emitted between each run consistent?
-
-We currently do not guarantee that the order of valid rows is consistent between each generation run. For example on one execution we may produce the following output for three fields:
-
-| Field A | Field B | Field C |
-|---------|---------|---------|
-| 1       | Z       | 100.5   |
-| 1       | Z       | 95.2    |
-| 2       | Z       | 100.5   |
-| 2       | Z       | 95.2    |
-| 1       | Y       | 100.5   |
-| 1       | Y       | 95.2    |
-
-However on another using the same profile we may produce the following output:
-
-| Field A | Field B | Field C |
-|---------|---------|---------|
-| 1       | Z       | 100.5   |
-| 1       | Z       | 95.2    |
-| 1       | Y       | 100.5   |
-| 1       | Y       | 95.2    |
-| 2       | Z       | 100.5   |
-| 2       | Z       | 95.2    |
-
-Both produce valid output and both produce the same values as a whole but in slightly different order.
 
 # Decision Trees
 
@@ -319,278 +232,6 @@ We can simplify to:
 Formally: If a Decision Node `D` contains a Constraint Node `C` with no constraints and a single Decision Node `E`, `E`'s Constraint Nodes can be added to `D` and `C` removed.
 
 This optimisation addresses situations where, for example, an `anyOf` constraint is nested directly inside another `anyOf` constraint.
-
-# Behaviour in Detail
-## Nullness
-### Behaviour
-Nulls can always be produced for a field, except when a field is explicitly not null. 
-
-### Misleading Examples
-|Field is               |Null produced|
-|:----------------------|:-----------:|
-|Of type X              | ✔ |
-|Not of type X          | ✔ |
-|In set [X, Y, ...]     | ✔ |
-|Not in set [X, Y, ...] | ✔ |
-|Equal to X             | ❌ |
-|Not equal to X         | ✔ |
-|Greater than X         | ✔ |
-|Null                   | ✔ |
-|Not null               | ❌ |
-
-For the profile snippet:
-```
-{ "if":
-    { "field": "A", "is": "equalTo", "value": 1 },
-  "then":
-    { "field": "B", "is": "equalTo", "value": 2 }
-},
-{ "field": "A", "is": "equalTo", "value": 1 }
-```
-
-|Allowed value of A|Allowed value of B|
-|------------------|------------------|
-|1                 |2                 |
-
-## Type Implication
-### Behaviour
-No operators imply type (except ofType ones). By default, all values are allowed.
-
-### Misleading Examples
-Field is greater than number X:
-
-|Values                |Can be produced|
-|----------------------|:-------------:|
-|Numbers greater than X|✔ |
-|Numbers less than X   |❌ |
-|Null                  |✔ |
-|Strings               |✔ |
-|Date-times            |✔ |
-
-## Violation of Rules
-### Behaviour
-Rules, constraints and top level `allOf`s are all equivalent in normal generation.
-
-In violation mode (an _alpha feature_), rules are treated as blocks of violation.
-For each rule, a file is generated containing data that can be generated by combining the
-violation of that rule with the non-violated other rules.
-
-This is equivalent to the behaviour for constraints and `allOf`s, but just splitting it into different files.
-
-## General Strategy for Violation
-_This is an alpha feature. Please do not rely on it. If you find issues with it, please [report them](https://github.com/finos/datahelix/issues)._ 
-### Behaviour
-The violation output is not guaranteed to be able to produce any data,
-even when the negation of the entire profile could produce data.
-
-### Why
-The violation output could have been calculated by simply negating an entire rule or profile. This could then produce all data that breaks the original profile in any way. However, this includes data that breaks the data in multiple ways at once. This could be very noisy, because the user is expected to test one small breakage in a localised area at a time.
-
-To minimise the noise in an efficient way, a guarantee of completeness is broken. The system does not guarantee to be able to produce violating data in all cases where there could be data which meets this requirement. In some cases this means that no data is produced at all.
-
-In normal negation, negating `allOf [A, B, C]` gives any of the following:
-1) `allOf[NOT(A), B, C]`
-2) `allOf[A, NOT(B), C]`
-3) `allOf[A, B, NOT(C)]`
-4) `allOf[NOT(A), NOT(B), C]`
-5) `allOf[A, NOT(B), NOT(C)]`
-6) `allOf[NOT(A), B, NOT(C)]`
-7) `allOf[NOT(A), NOT(B), NOT(C)]`
-
-These are listed from the least to most noisy. The current system only tries to generate data by negating one sub-constraint at a time (in this case, producing only 1, 2 and 3).
-
-### Misleading examples
-When a field is a string, an integer and not null, no data can be produced normally,
-but data can be produced in violation mode.
-
-|Values                |Can be produced when in violation mode|
-|----------------------|:-------------------------------------|
-|Null                  |✔ (By violating the "not null" constraint) |
-|Numbers               |✔ (By violating the "string" constraint) |
-|Strings               |✔ (By violating the "integer" constraint) |
-|Date-times            |❌ (This would need both the "string" and "integer" constraints to be violated at the same time) |
-
-If a field is set to null twice, no data can be produced in violation mode because it tries to evaluate null and not null:
-
-|Values                |Can be produced when in violation mode|
-|----------------------|:-------------------------------------|
-|Null                  |❌|
-|Numbers               |❌|
-|Strings               |❌|
-|Date-times            |❌|
-
-
-## Null Operator
-
-The `null` operator in a profile, expressed as `"is": "null"` or the negated equivalent has several meanings. It can mean (and emit the behaviour) as described below:
-
-### Possible scenarios:
-
-| Absence / Presence | Field value |
-| ---- | ---- |
-| (A) _null operator omitted_<br /> **The default**. The field's value may be absent or present | (B) `is null`<br />The field will have _no value_ |
-| (C) `not(is null)`<br />The field's value must be present | (D) `not(is null)`<br />The field must have a value |
-
-Therefore the null operator can:
-- (C, D) `not(is null)` express fields that must have a value (otherwise known as a non-nullable field)
-- (B) `is null` express fields as having no value (otherwise known as setting the value to `null`)
-- (A) _By omitting the constraint_: express fields as permitting absence or presence of a value (otherwise known as a nullable field)
-
-### `null` and interoperability
-`null` is a keyword/term that exists in other technologies and languages, so far as this tool is concerned it relates to the absence or the presence of a value. See [set restriction and generation](docs/user/SetRestrictionAndGeneration.md) for more details.
-
-When a field is serialised or otherwise written to a medium, as the output of the generator, it may choose to represent the absence of a value by using the formats' `null` representation, or some other form such as omitting the property and so on.
-
-#### For illustration
-CSV files do not have any standard for representing the absence of a value differently to an empty string (unless all strings are always wrapped in quotes ([#441](https://github.com/ScottLogic/data-engineering-generator/pull/441)). 
-
-JSON files could be presented with `null` as the value for a property or excluding the property from the serialised result. This is the responsibility of the serialiser, and depends on the use cases.
-
-## Null Operator with If
-With `if` constraints, the absence of a value needs to be considered in order to understand how the generator will behave. Remember, every set contains the empty set, unless excluded by way of the `not(is null)` constraint, for more details see [set restriction and generation](docs/user/SetRestrictionAndGeneration.md).
-
-Consider the following if constraint:
-
-```
-{
-    "if": {
-        {
-            "field": "field1",
-            "is": "equalTo",
-            "value": 5
-        }
-    },
-    "then": {
-        {
-            "field": "field2",
-            "is": "equalTo",
-            "value": "a"
-        }
-    }
-}
-```
-
-The generator will expand the `if` constraint as follows, to ensure the constraint is fully balanced:
-
-```
-{
-    "if": {
-        {
-            "field": "field1",
-            "is": "equalTo",
-            "value": 5
-        }
-    },
-    "then": {
-        {
-            "field": "field2",
-            "is": "equalTo",
-            "value": "a"
-        }
-    },
-    "else": {
-        {
-            "not": {
-                "field": "field1",
-                "is": "equalTo",
-                "value": 5
-            }
-        }
-    }
-}
-```
-
-This expression does not prevent the consequence (the `then` constraints) from being considered when `field1` has no value. Equally it does not say anything about the alternative consequence (the `else` constraints). As such both outcomes are applicable at any time.
-
-The solution to this is to express the `if` constraint as follows. This is not 'auto completed' for profiles as it would remove functionality that may be intended, it must be explicitly included in the profile.
-
-```
-{
-    "if": {
-        "allOf": [
-            {
-                "field": "field1",
-                "is": "equalTo",
-                "value": 5
-            },
-            {
-                "not": {
-                    "field": "field1",
-                    "is": "null"
-                }
-            }
-        ]
-    },
-    "then": {
-        {
-            "field": "field2",
-            "is": "equalTo",
-            "value": "a"
-        }
-    }
-}
-```
-
-The generator will expand the `if` constraint as follows, to ensure the constraint is fully balanced:
-
-```
-{
-    "if": {
-        "allOf": [
-            {
-                "field": "field1",
-                "is": "equalTo",
-                "value": 5
-            },
-            {
-                "not": {
-                    "field": "field1",
-                    "is": "null"
-                }
-            }
-        ]
-    },
-    "then": {
-        {
-            "field": "field2",
-            "is": "equalTo",
-            "value": "a"
-        }
-    },
-    "else": {
-        "anyOf": [
-            {
-                "not": {
-                    "field": "field1",
-                    "is": "equalTo",
-                    "value": 5
-                }
-            },
-            {
-                "field": "field1",
-                "is": "null"
-            }
-        ]
-    }
-}
-```
-
-In this case the `then` constraints will only be applicable when `field1` has a value. Where `field1` has no value, either of the `else` constraints can be considered applicable. Nevertheless `field2` will only have the value `"a"` when `field1` has the value `5`, not when it is absent also.
-
-### Examples:
-Considering this use case, you're trying to generate data to be imported into a SQL server database. Below are some examples of constraints that may help define fields and their mandatoriness or optionality.
-
-* A field that is non-nullable<br />
-`field1 ofType string and field1 not(is null)`
-
-* A field that is nullable<br />
-`field1 ofType string`
-
-* A field that has no value<br />
-`field1 is null`
-
-## Violations
-Violations are a special case for the `null` operator, see [Deliberate Violation](docs/user/alphaFeatures/DeliberateViolation.md) for more details.
 
 # Decision tree generation
 
@@ -869,4 +510,275 @@ This strategy is also known to have limited-to-no intelligence when it comes to 
 The strategy selects a value for a field, then reduces the size of the problem (the tree) progressively until it cannot be any further (then back-tracking occurs) or sufficient information is known (then row/s can be emitted.)
 
 See [Reductive tree walker](ReductiveTreeWalker.md) for more details.
+
+# Nullness
+### Behaviour
+Nulls can always be produced for a field, except when a field is explicitly not null. 
+
+### Misleading Examples
+|Field is               |Null produced|
+|:----------------------|:-----------:|
+|Of type X              | ✔ |
+|Not of type X          | ✔ |
+|In set [X, Y, ...]     | ✔ |
+|Not in set [X, Y, ...] | ✔ |
+|Equal to X             | ❌ |
+|Not equal to X         | ✔ |
+|Greater than X         | ✔ |
+|Null                   | ✔ |
+|Not null               | ❌ |
+
+For the profile snippet:
+```
+{ "if":
+    { "field": "A", "is": "equalTo", "value": 1 },
+  "then":
+    { "field": "B", "is": "equalTo", "value": 2 }
+},
+{ "field": "A", "is": "equalTo", "value": 1 }
+```
+
+|Allowed value of A|Allowed value of B|
+|------------------|------------------|
+|1                 |2                 |
+
+# Type Implication
+### Behaviour
+No operators imply type (except ofType ones). By default, all values are allowed.
+
+### Misleading Examples
+Field is greater than number X:
+
+|Values                |Can be produced|
+|----------------------|:-------------:|
+|Numbers greater than X|✔ |
+|Numbers less than X   |❌ |
+|Null                  |✔ |
+|Strings               |✔ |
+|Date-times            |✔ |
+
+# Violation of Rules
+### Behaviour
+Rules, constraints and top level `allOf`s are all equivalent in normal generation.
+
+In violation mode (an _alpha feature_), rules are treated as blocks of violation.
+For each rule, a file is generated containing data that can be generated by combining the
+violation of that rule with the non-violated other rules.
+
+This is equivalent to the behaviour for constraints and `allOf`s, but just splitting it into different files.
+
+# General Strategy for Violation
+_This is an alpha feature. Please do not rely on it. If you find issues with it, please [report them](https://github.com/finos/datahelix/issues)._ 
+### Behaviour
+The violation output is not guaranteed to be able to produce any data,
+even when the negation of the entire profile could produce data.
+
+### Why
+The violation output could have been calculated by simply negating an entire rule or profile. This could then produce all data that breaks the original profile in any way. However, this includes data that breaks the data in multiple ways at once. This could be very noisy, because the user is expected to test one small breakage in a localised area at a time.
+
+To minimise the noise in an efficient way, a guarantee of completeness is broken. The system does not guarantee to be able to produce violating data in all cases where there could be data which meets this requirement. In some cases this means that no data is produced at all.
+
+In normal negation, negating `allOf [A, B, C]` gives any of the following:
+1) `allOf[NOT(A), B, C]`
+2) `allOf[A, NOT(B), C]`
+3) `allOf[A, B, NOT(C)]`
+4) `allOf[NOT(A), NOT(B), C]`
+5) `allOf[A, NOT(B), NOT(C)]`
+6) `allOf[NOT(A), B, NOT(C)]`
+7) `allOf[NOT(A), NOT(B), NOT(C)]`
+
+These are listed from the least to most noisy. The current system only tries to generate data by negating one sub-constraint at a time (in this case, producing only 1, 2 and 3).
+
+### Misleading examples
+When a field is a string, an integer and not null, no data can be produced normally,
+but data can be produced in violation mode.
+
+|Values                |Can be produced when in violation mode|
+|----------------------|:-------------------------------------|
+|Null                  |✔ (By violating the "not null" constraint) |
+|Numbers               |✔ (By violating the "string" constraint) |
+|Strings               |✔ (By violating the "integer" constraint) |
+|Date-times            |❌ (This would need both the "string" and "integer" constraints to be violated at the same time) |
+
+If a field is set to null twice, no data can be produced in violation mode because it tries to evaluate null and not null:
+
+|Values                |Can be produced when in violation mode|
+|----------------------|:-------------------------------------|
+|Null                  |❌|
+|Numbers               |❌|
+|Strings               |❌|
+|Date-times            |❌|
+
+
+# Null Operator
+
+The `null` operator in a profile, expressed as `"is": "null"` or the negated equivalent has several meanings. It can mean (and emit the behaviour) as described below:
+
+### Possible scenarios:
+
+| Absence / Presence | Field value |
+| ---- | ---- |
+| (A) _null operator omitted_<br /> **The default**. The field's value may be absent or present | (B) `is null`<br />The field will have _no value_ |
+| (C) `not(is null)`<br />The field's value must be present | (D) `not(is null)`<br />The field must have a value |
+
+Therefore the null operator can:
+- (C, D) `not(is null)` express fields that must have a value (otherwise known as a non-nullable field)
+- (B) `is null` express fields as having no value (otherwise known as setting the value to `null`)
+- (A) _By omitting the constraint_: express fields as permitting absence or presence of a value (otherwise known as a nullable field)
+
+### `null` and interoperability
+`null` is a keyword/term that exists in other technologies and languages, so far as this tool is concerned it relates to the absence or the presence of a value. See [set restriction and generation](docs/user/SetRestrictionAndGeneration.md) for more details.
+
+When a field is serialised or otherwise written to a medium, as the output of the generator, it may choose to represent the absence of a value by using the formats' `null` representation, or some other form such as omitting the property and so on.
+
+#### For illustration
+CSV files do not have any standard for representing the absence of a value differently to an empty string (unless all strings are always wrapped in quotes ([#441](https://github.com/ScottLogic/data-engineering-generator/pull/441)). 
+
+JSON files could be presented with `null` as the value for a property or excluding the property from the serialised result. This is the responsibility of the serialiser, and depends on the use cases.
+
+## Null Operator with If
+With `if` constraints, the absence of a value needs to be considered in order to understand how the generator will behave. Remember, every set contains the empty set, unless excluded by way of the `not(is null)` constraint, for more details see [set restriction and generation](docs/user/SetRestrictionAndGeneration.md).
+
+Consider the following if constraint:
+
+```
+{
+    "if": {
+        {
+            "field": "field1",
+            "is": "equalTo",
+            "value": 5
+        }
+    },
+    "then": {
+        {
+            "field": "field2",
+            "is": "equalTo",
+            "value": "a"
+        }
+    }
+}
+```
+
+The generator will expand the `if` constraint as follows, to ensure the constraint is fully balanced:
+
+```
+{
+    "if": {
+        {
+            "field": "field1",
+            "is": "equalTo",
+            "value": 5
+        }
+    },
+    "then": {
+        {
+            "field": "field2",
+            "is": "equalTo",
+            "value": "a"
+        }
+    },
+    "else": {
+        {
+            "not": {
+                "field": "field1",
+                "is": "equalTo",
+                "value": 5
+            }
+        }
+    }
+}
+```
+
+This expression does not prevent the consequence (the `then` constraints) from being considered when `field1` has no value. Equally it does not say anything about the alternative consequence (the `else` constraints). As such both outcomes are applicable at any time.
+
+The solution to this is to express the `if` constraint as follows. This is not 'auto completed' for profiles as it would remove functionality that may be intended, it must be explicitly included in the profile.
+
+```
+{
+    "if": {
+        "allOf": [
+            {
+                "field": "field1",
+                "is": "equalTo",
+                "value": 5
+            },
+            {
+                "not": {
+                    "field": "field1",
+                    "is": "null"
+                }
+            }
+        ]
+    },
+    "then": {
+        {
+            "field": "field2",
+            "is": "equalTo",
+            "value": "a"
+        }
+    }
+}
+```
+
+The generator will expand the `if` constraint as follows, to ensure the constraint is fully balanced:
+
+```
+{
+    "if": {
+        "allOf": [
+            {
+                "field": "field1",
+                "is": "equalTo",
+                "value": 5
+            },
+            {
+                "not": {
+                    "field": "field1",
+                    "is": "null"
+                }
+            }
+        ]
+    },
+    "then": {
+        {
+            "field": "field2",
+            "is": "equalTo",
+            "value": "a"
+        }
+    },
+    "else": {
+        "anyOf": [
+            {
+                "not": {
+                    "field": "field1",
+                    "is": "equalTo",
+                    "value": 5
+                }
+            },
+            {
+                "field": "field1",
+                "is": "null"
+            }
+        ]
+    }
+}
+```
+
+In this case the `then` constraints will only be applicable when `field1` has a value. Where `field1` has no value, either of the `else` constraints can be considered applicable. Nevertheless `field2` will only have the value `"a"` when `field1` has the value `5`, not when it is absent also.
+
+### Examples:
+Considering this use case, you're trying to generate data to be imported into a SQL server database. Below are some examples of constraints that may help define fields and their mandatoriness or optionality.
+
+* A field that is non-nullable<br />
+`field1 ofType string and field1 not(is null)`
+
+* A field that is nullable<br />
+`field1 ofType string`
+
+* A field that has no value<br />
+`field1 is null`
+
+## Violations
+Violations are a special case for the `null` operator, see [Deliberate Violation](docs/user/alphaFeatures/DeliberateViolation.md) for more details.
 
