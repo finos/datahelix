@@ -238,7 +238,7 @@ public class ConstraintReaderHelpers {
         return value;
     }
 
-    private static OffsetDateTime parseDate(String value, ConstraintDTO dto) {
+    public static OffsetDateTime parseDate(String value, ConstraintDTO dto) {
         if (value.toUpperCase().equals("NOW")) {
             return NOW;
         }

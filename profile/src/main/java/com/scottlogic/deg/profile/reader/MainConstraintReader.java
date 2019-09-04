@@ -24,6 +24,8 @@ import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalCons
 import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.profile.dto.AtomicConstraintType;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
+import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintDetailReader;
+import com.scottlogic.deg.profile.reader.atomic.ConstraintValueValidator;
 
 import java.util.Collection;
 import java.util.Set;
@@ -51,8 +53,15 @@ public class MainConstraintReader {
         }
 
         if (dto.is != ConstraintDTO.undefined) {
+
+            Object value = AtomicConstraintDetailReader.getValue(dto);
+
+            AtomicConstraintType atomicConstraintType = AtomicConstraintType.fromText((String) dto.is);
+
+            ConstraintValueValidator.validate(dto.field, atomicConstraintType, value);
+
             AtomicConstraintReader subReader = constraintReaderMap.getConstraintReaderMapEntries()
-                .get(AtomicConstraintType.fromText((String) dto.is));
+                .get(atomicConstraintType);
 
             if (subReader == null) {
                 String message = "Couldn't recognise constraint type from DTO: " + dto.is;
