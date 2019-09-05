@@ -55,9 +55,9 @@ This guide outlines how to create a profile and contains information on the synt
 
 ## Creating a Profile
 
-This page will walk you through creating basic profiles with which you can generate data.
+This section will walk you through creating basic profiles with which you can generate data.
 
-[Profiles](#profiles) are JSON documents consisting of three sections, the schema version, the list 
+Profiles are JSON documents consisting of three sections, the schema version, the list 
 of fields and the rules.
 
 - **Schema Version** - Dictates the method of serialisation of the profile in order for the generator to 
