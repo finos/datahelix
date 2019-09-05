@@ -34,10 +34,13 @@ import java.util.stream.Collectors;
 public class MainConstraintReader {
 
     private final AtomicConstraintTypeReaderMap constraintReaderMap;
+    private final AtomicConstraintDetailReader atomicConstraintDetailReader;
 
     @Inject
-    public MainConstraintReader(AtomicConstraintTypeReaderMap constraintReaderMap) {
+    public MainConstraintReader(AtomicConstraintTypeReaderMap constraintReaderMap,
+                                AtomicConstraintDetailReader atomicConstraintDetailReader) {
         this.constraintReaderMap = constraintReaderMap;
+        this.atomicConstraintDetailReader = atomicConstraintDetailReader;
     }
 
     public Constraint apply(
@@ -54,7 +57,7 @@ public class MainConstraintReader {
 
         if (dto.is != ConstraintDTO.undefined) {
 
-            Object value = AtomicConstraintDetailReader.getValue(dto);
+            Object value = atomicConstraintDetailReader.getValue(dto);
 
             AtomicConstraintType atomicConstraintType = AtomicConstraintType.fromText((String) dto.is);
 

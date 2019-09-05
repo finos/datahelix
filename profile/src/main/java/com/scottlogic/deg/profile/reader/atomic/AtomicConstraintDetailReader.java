@@ -1,22 +1,29 @@
 package com.scottlogic.deg.profile.reader.atomic;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 import com.scottlogic.deg.profile.reader.ConstraintReaderHelpers;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
 import java.util.Map;
 
 public class AtomicConstraintDetailReader {
-    public static Object getValue(ConstraintDTO dto){
+
+    private final FromFileReader fromFileReader;
+
+    @Inject
+    public AtomicConstraintDetailReader(FromFileReader fromFileReader) {
+        this.fromFileReader = fromFileReader;
+    }
+
+    public Object getValue(ConstraintDTO dto){
         if (dto.values != null){
             return dto.values;
         }
 
         if (dto.file != null){
-            return getFileValues(dto.file);
+            return fromFileReader.setFromFile(dto.file);
         }
 
         if (dto.value instanceof Map){
@@ -30,9 +37,4 @@ public class AtomicConstraintDetailReader {
 
         return dto.value;
     }
-
-    private static Object getFileValues(String file) {
-        throw new NotImplementedException();
-    }
-
 }

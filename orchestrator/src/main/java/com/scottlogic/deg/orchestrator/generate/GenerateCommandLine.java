@@ -147,7 +147,7 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
         names = {"--set-from-file-directory"},
         description = "Custom root for loading sets from file."
     )
-    private String fromFilePath;
+    private String fromFilePath = "";
 
     public boolean shouldDoPartitioning() {
         return !this.dontPartitionTrees;
