@@ -49,12 +49,6 @@ public class AtomicConstraintTypeReaderMap {
         Map<AtomicConstraintType, AtomicConstraintReader> map = new HashMap<>();
 
         map.put(IS_GRANULAR_TO, new GranularToReader());
-        map.put(IS_IN_SET, new InSetReader(fromFilePath));
-
-        map.put(IS_EQUAL_TO_CONSTANT,
-            (dto, fields) -> new EqualToConstraint(
-                fields.getByName(dto.field),
-                getValidatedValue(dto)));
 
         map.putAll(getDelayedMapEntries());
 
