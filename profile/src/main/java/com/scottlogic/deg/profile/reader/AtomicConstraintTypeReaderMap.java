@@ -31,8 +31,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.scottlogic.deg.profile.reader.ConstraintReaderHelpers.*;
-import static com.scottlogic.deg.profile.reader.ConstraintReaderHelpers.getValidatedValue;
 import static com.scottlogic.deg.profile.dto.AtomicConstraintType.*;
 
 public class AtomicConstraintTypeReaderMap {
@@ -44,18 +42,7 @@ public class AtomicConstraintTypeReaderMap {
     }
 
     public Map<AtomicConstraintType, AtomicConstraintReader> getConstraintReaderMapEntries() {
-        BigDecimal maxStringLength = BigDecimal.valueOf(Defaults.MAX_STRING_LENGTH);
-
-        Map<AtomicConstraintType, AtomicConstraintReader> map = new HashMap<>();
-
-        map.put(IS_GRANULAR_TO, new GranularToReader());
-
-        map.putAll(getDelayedMapEntries());
-
-        map.put(IS_UNIQUE, (dto, fields) -> new RemoveFromTree());
-        map.put(FORMATTED_AS, (dto, fields) -> new RemoveFromTree());
-
-        return map;
+        return getDelayedMapEntries();
     }
 
     private Map<AtomicConstraintType, AtomicConstraintReader> getDelayedMapEntries() {
@@ -70,7 +57,7 @@ public class AtomicConstraintTypeReaderMap {
                         fields.getByName(dto.field),
                         OffsetDateTime.MIN
                     ),
-                    fields.getByName(getValueAsString(dto)),
+                    fields.getByName((String)dto.value),
                     false
                 )
         );
@@ -82,7 +69,7 @@ public class AtomicConstraintTypeReaderMap {
                         fields.getByName(dto.field),
                         OffsetDateTime.MIN
                     ),
-                    fields.getByName(getValueAsString(dto)),
+                    fields.getByName((String)dto.value),
                     true
                 )
         );
@@ -94,7 +81,7 @@ public class AtomicConstraintTypeReaderMap {
                         fields.getByName(dto.field),
                         OffsetDateTime.MAX
                     ),
-                    fields.getByName(getValueAsString(dto)),
+                    fields.getByName((String)dto.value),
                     false
                 ));
 
@@ -105,7 +92,7 @@ public class AtomicConstraintTypeReaderMap {
                         fields.getByName(dto.field),
                         OffsetDateTime.MAX
                     ),
-                    fields.getByName(getValueAsString(dto)),
+                    fields.getByName((String)dto.value),
                     true
                 )
         );

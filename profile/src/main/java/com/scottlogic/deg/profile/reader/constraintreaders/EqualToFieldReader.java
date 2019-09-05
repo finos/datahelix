@@ -26,9 +26,6 @@ import com.scottlogic.deg.profile.reader.AtomicConstraintReader;
 
 import java.time.temporal.ChronoUnit;
 
-import static com.scottlogic.deg.profile.reader.ConstraintReaderHelpers.getValidatedValue;
-import static com.scottlogic.deg.profile.reader.ConstraintReaderHelpers.getValueAsString;
-
 public class EqualToFieldReader implements AtomicConstraintReader {
 
     @Override
@@ -38,8 +35,8 @@ public class EqualToFieldReader implements AtomicConstraintReader {
         }
 
         return new IsEqualToDynamicDateConstraint(
-            new EqualToConstraint(fields.getByName(dto.field), getValidatedValue(dto)),
-            fields.getByName(getValueAsString(dto))
+            new EqualToConstraint(fields.getByName(dto.field), "to be overriden"),
+            fields.getByName((String)dto.value)
         );
     }
 
@@ -52,8 +49,8 @@ public class EqualToFieldReader implements AtomicConstraintReader {
         );
 
         return new IsEqualToDynamicDateConstraint(
-            new EqualToConstraint(fields.getByName(dto.field), getValidatedValue(dto)),
-            fields.getByName(getValueAsString(dto)),
+            new EqualToConstraint(fields.getByName(dto.field), "to be overriden"),
+            fields.getByName((String)dto.value),
             unit,
             dto.offset
         );
