@@ -179,37 +179,10 @@ public class ConstraintReaderHelpers {
     }
 
     private static OffsetDateTime getValueAsDate(ConstraintDTO dto, Object value) {
-        if (!(value instanceof Map)) {
-            throw new InvalidProfileException(String.format(
-                "Field [%s]: Dates should be expressed in object format e.g. { \"date\": \"%s\" }",
-                dto.field,
-                value
-            ));
-        }
-
         Map objectMap = (Map) value;
-        if (!objectMap.containsKey("date")) {
-            throw new InvalidProfileException(String.format(
-                "Field [%s]: Object found but no 'date' property exists, found %s",
-                dto.field,
-                Objects.toString(objectMap.keySet())
-            ));
-        }
-
         Object date = objectMap.get("date");
-        if (!(date instanceof String)) {
-            throw new InvalidProfileException(String.format(
-                "Field [%s]: Date on date object must be a string, found %s",
-                dto.field,
-                date
-            ));
-        }
 
         OffsetDateTime offsetDateTime = parseDate((String) date, dto);
-        if (offsetDateTime != null && (offsetDateTime.getYear() > 9999 || offsetDateTime.getYear() < 1)) {
-            throwDateTimeError((String) date, dto.field);
-        }
-
         return offsetDateTime;
     }
 
@@ -256,18 +229,13 @@ public class ConstraintReaderHelpers {
                 ? OffsetDateTime.from(temporalAccessor)
                 : LocalDateTime.from(temporalAccessor).atOffset(ZoneOffset.UTC);
         } catch (DateTimeParseException dtpe) {
-            throwDateTimeError(value, dto.field);
-            return null;
+            throw new InvalidProfileException(String.format(
+                "Field [%s]: Date string '%s' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS[Z] between (inclusive) " +
+                    "0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z",
+                dto.field,
+                value
+            ));
         }
-    }
-
-    private static void throwDateTimeError(String profileDate, String field) {
-        throw new InvalidProfileException(String.format(
-            "Field [%s]: Date string '%s' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS[Z] between (inclusive) " +
-                "0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z",
-            field,
-            profileDate
-        ));
     }
 
     private static <T> T ensureValueBetween(ConstraintDTO dto, T value, BigDecimal min, BigDecimal max) {
