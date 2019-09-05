@@ -78,7 +78,7 @@ Feature: User can specify that decimal fields are granular to a certain number o
 
   Scenario: Running a 'granularTo' request that specifies null should be unsuccessful
     Given foo is granular to null
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise granularity value, it must be either a negative power of ten or one of the supported datetime units."
+    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be set to a value"
     And no data is created
 
 

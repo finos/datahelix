@@ -9,6 +9,8 @@ import com.scottlogic.deg.profile.dto.AtomicConstraintType;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.time.OffsetDateTime;
+
 import static com.scottlogic.deg.profile.dto.AtomicConstraintType.IS_NULL;
 
 public class ConstraintValueValidator {
@@ -71,10 +73,14 @@ public class ConstraintValueValidator {
         }
     }
 
-    private static void validateNotNull(Object value) {
-
+    private static void validateNull(Object value) {
     }
 
+    private static void validateNotNull(Object value) {
+        if (value == null){
+            throw new ValidationException("Couldn't recognise 'value' property, it must be set to a value");
+        }
+    }
 
     private static void validateAny(Object value) {
         if (value instanceof Number){
@@ -83,9 +89,6 @@ public class ConstraintValueValidator {
     }
 
     private static void validateSet(Object value) {
-    }
-
-    private static void validateNull(Object value) {
     }
 
     private static void validateTypes(Object value) {
@@ -101,6 +104,14 @@ public class ConstraintValueValidator {
     }
 
     private static void validateDateTime(Object value) {
+        if (!(value instanceof OffsetDateTime)){
+            throw new ValidationException(String.format("Dates should be expressed in object format e.g. { \"date\": \"yyyy-MM-ddTHH:mm:ss.SSS[Z]\" }", value));
+        }
+        OffsetDateTime offsetDateTime = (OffsetDateTime) value;
+
+        if (offsetDateTime != null && (offsetDateTime.getYear() > 9999 || offsetDateTime.getYear() < 1)) {
+            throw new ValidationException("Dates must be between 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z");
+        }
     }
 
     private static void validateGranularity(Object value) {

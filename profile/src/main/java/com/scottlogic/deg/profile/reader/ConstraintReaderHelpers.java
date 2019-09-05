@@ -19,7 +19,6 @@ package com.scottlogic.deg.profile.reader;
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
-import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -208,7 +207,7 @@ public class ConstraintReaderHelpers {
 
         OffsetDateTime offsetDateTime = parseDate((String) date, dto);
         if (offsetDateTime != null && (offsetDateTime.getYear() > 9999 || offsetDateTime.getYear() < 1)) {
-            throwDateTimeError((String) date, dto);
+            throwDateTimeError((String) date, dto.field);
         }
 
         return offsetDateTime;
@@ -257,16 +256,16 @@ public class ConstraintReaderHelpers {
                 ? OffsetDateTime.from(temporalAccessor)
                 : LocalDateTime.from(temporalAccessor).atOffset(ZoneOffset.UTC);
         } catch (DateTimeParseException dtpe) {
-            throwDateTimeError(value, dto);
+            throwDateTimeError(value, dto.field);
             return null;
         }
     }
 
-    private static void throwDateTimeError(String profileDate, ConstraintDTO dto) {
+    private static void throwDateTimeError(String profileDate, String field) {
         throw new InvalidProfileException(String.format(
             "Field [%s]: Date string '%s' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS[Z] between (inclusive) " +
                 "0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z",
-            dto.field,
+            field,
             profileDate
         ));
     }

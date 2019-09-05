@@ -280,4 +280,4 @@ Feature: User can specify that a datetime date is after, but not equal to, a spe
 
   Scenario: Running a 'after' request that specifies the highest valid system date should be unsuccessful
     Given foo is after 10000-01-01T00:00:00.000Z
-    Then the profile is invalid because "Field \[foo\]: Date string '10000-01-01T00:00:00.000Z' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS\[Z\] between \(inclusive\) 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z"
+    Then the profile is invalid because "Field \[foo\]: Dates must be between 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z"
