@@ -22,9 +22,9 @@ public class AtomicConstraintFactory {
     public static Constraint create(AtomicConstraintType type, Field field, Object value){
         switch (type) {
             case IS_EQUAL_TO_CONSTANT:
-                return new EqualToConstraint(field, getType(value));
+                return new EqualToConstraint(field, value);
             case IS_IN_SET:
-                return new IsInSetConstraint(field, collection(value));
+                return new IsInSetConstraint(field, (DistributedSet<Object>)value);
             case IS_NULL:
                 return new IsNullConstraint(field);
             case IS_OF_TYPE:
@@ -43,22 +43,22 @@ public class AtomicConstraintFactory {
                 return new IsStringLongerThanConstraint(field, integer(value));
 
             case IS_GREATER_THAN_CONSTANT:
-                return new IsGreaterThanConstantConstraint(field, number(value));
+                return new IsGreaterThanConstantConstraint(field, (Number)value);
             case IS_GREATER_THAN_OR_EQUAL_TO_CONSTANT:
-                return new IsGreaterThanOrEqualToConstantConstraint(field, number(value));
+                return new IsGreaterThanOrEqualToConstantConstraint(field, (Number)value);
             case IS_LESS_THAN_CONSTANT:
-                return new IsLessThanConstantConstraint(field, number(value));
+                return new IsLessThanConstantConstraint(field, (Number)value);
             case IS_LESS_THAN_OR_EQUAL_TO_CONSTANT:
-                return new IsLessThanOrEqualToConstantConstraint(field, number(value));
+                return new IsLessThanOrEqualToConstantConstraint(field, (Number)value);
 
             case IS_AFTER_CONSTANT_DATE_TIME:
-                return new IsAfterConstantDateTimeConstraint(field, dateTime(value));
+                return new IsAfterConstantDateTimeConstraint(field, (OffsetDateTime)value);
             case IS_AFTER_OR_EQUAL_TO_CONSTANT_DATE_TIME:
-                return new IsAfterOrEqualToConstantDateTimeConstraint(field, dateTime(value));
+                return new IsAfterOrEqualToConstantDateTimeConstraint(field, (OffsetDateTime)value);
             case IS_BEFORE_CONSTANT_DATE_TIME:
-                return new IsBeforeConstantDateTimeConstraint(field, dateTime(value));
+                return new IsBeforeConstantDateTimeConstraint(field, (OffsetDateTime)value);
             case IS_BEFORE_OR_EQUAL_TO_CONSTANT_DATE_TIME:
-                return new IsBeforeOrEqualToConstantDateTimeConstraint(field, dateTime(value));
+                return new IsBeforeOrEqualToConstantDateTimeConstraint(field, (OffsetDateTime)value);
 
             case IS_GRANULAR_TO:
                 if (value instanceof Number)
@@ -75,34 +75,6 @@ public class AtomicConstraintFactory {
         }
     }
 
-    private static DistributedSet<Object> collection(Object value) {
-        if (value instanceof DistributedSet){
-            return (DistributedSet<Object>) value;
-        }
-        return FrequencyDistributedSet.uniform((Collection)value);//todo is this needed
-    }
-
-    private static Object getType(Object value) {
-        if (value instanceof Map)
-            return dateTime(value);
-
-        if (value instanceof Number)
-            return number(value);
-
-        return value;
-    }
-
-    private static OffsetDateTime dateTime(Object value) {
-        if (value instanceof OffsetDateTime)
-            return (OffsetDateTime) value;
-
-        return ConstraintReaderHelpers.getValueAsDate(value);
-    }
-
-    private static Number number(Object value) {
-        return ConstraintReaderHelpers.getValueAsNumber(value);
-    }
-
     private static int integer(Object value) {
         return NumberUtils.coerceToBigDecimal(value).intValueExact();
     }
@@ -112,6 +84,6 @@ public class AtomicConstraintFactory {
             return (Pattern) value;
         }
 
-        return Pattern.compile(ConstraintReaderHelpers.getValueAsString(value));
+        return Pattern.compile((String)value);
     }
 }
