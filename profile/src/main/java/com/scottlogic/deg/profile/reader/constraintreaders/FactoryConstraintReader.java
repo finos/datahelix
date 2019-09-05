@@ -18,11 +18,6 @@ public class FactoryConstraintReader implements AtomicConstraintReader {
 
     @Override
     public Constraint apply(ConstraintDTO dto, ProfileFields fields) {
-        try {
-            return AtomicConstraintFactory.create(type, fields.getByName(dto.field), dto.value);
-        } catch (InvalidProfileException e){
-            String newMessage = e.getMessage().replaceAll("REPLACE", String.format(dto.field));
-            throw new InvalidProfileException(newMessage);
-        }
+        return AtomicConstraintFactory.create(type, fields.getByName(dto.field), dto.value);
     }
 }

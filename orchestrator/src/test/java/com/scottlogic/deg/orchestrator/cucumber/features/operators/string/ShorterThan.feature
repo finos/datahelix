@@ -18,8 +18,8 @@ Feature: User can specify that a string length is lower than, a specified number
       | "xxxx" |
 
   Scenario: Running a 'shorterThan' request using a number (zero) to specify a the length of a generated string should fail with an error message
-    Given foo is shorter than 0
-    Then the profile is invalid because "Field \[foo\]: shorterThan constraint must have an operand/value >= 1, currently is 0"
+    Given foo is shorter than -1
+    Then the profile is invalid because "Field \[foo\]: shorterThan constraint must have an operand/value >= 0, currently is -1"
     And no data is created
 
   Scenario: Running a 'shorterThan' request using a number (negative number) to specify a the length of a generated string should fail with an error message

@@ -1,7 +1,9 @@
 package com.scottlogic.deg.profile.reader.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
+import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.profile.dto.AtomicConstraintType;
@@ -15,7 +17,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 public class AtomicConstraintFactory {
-    public static AtomicConstraint create(AtomicConstraintType type, Field field, Object value){
+    public static Constraint create(AtomicConstraintType type, Field field, Object value){
         switch (type) {
             case IS_EQUAL_TO_CONSTANT:
                 return new EqualToConstraint(field, getType(value));
@@ -24,7 +26,7 @@ public class AtomicConstraintFactory {
             case IS_NULL:
                 return new IsNullConstraint(field);
             case IS_OF_TYPE:
-                throw new UnsupportedOperationException(""); //TODO uhh
+                return OfTypeConstraintFactory.create(field, (String)value);
 
             case MATCHES_REGEX:
                 return new MatchesRegexConstraint(field, pattern(value));
@@ -93,7 +95,7 @@ public class AtomicConstraintFactory {
     }
 
     private static int integer(Object value) {
-        return ((BigDecimal)value).intValueExact();
+        return NumberUtils.coerceToBigDecimal(value).intValueExact();
     }
 
     private static Pattern pattern(Object value) {
