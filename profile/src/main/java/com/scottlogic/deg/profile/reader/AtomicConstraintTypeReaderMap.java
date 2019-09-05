@@ -48,13 +48,14 @@ public class AtomicConstraintTypeReaderMap {
 
         Map<AtomicConstraintType, AtomicConstraintReader> map = new HashMap<>();
 
-        map = Stream.of(AtomicConstraintType.values())
-            .collect(Collectors.toMap(
-                type->type,
-                type -> new FactoryConstraintReader(type)));
-
         map.put(IS_GRANULAR_TO, new GranularToReader());
-        
+        map.put(IS_IN_SET, new InSetReader(fromFilePath));
+
+        map.put(IS_EQUAL_TO_CONSTANT,
+            (dto, fields) -> new EqualToConstraint(
+                fields.getByName(dto.field),
+                getValidatedValue(dto)));
+
         map.putAll(getDelayedMapEntries());
 
         map.put(IS_UNIQUE, (dto, fields) -> new RemoveFromTree());

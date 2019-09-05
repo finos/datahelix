@@ -12,6 +12,7 @@ import com.scottlogic.deg.profile.reader.InvalidProfileException;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.regex.Pattern;
 
 import static com.scottlogic.deg.profile.dto.AtomicConstraintType.IS_NULL;
 
@@ -106,6 +107,11 @@ public class ConstraintValueValidator {
     }
 
     private static void validatePattern(Object value) {
+        try {
+            Pattern.compile((String)value);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidProfileException(e.getMessage());
+        }
     }
 
     private static void validateStringLengthInt(AtomicConstraintType type, Object value) {
