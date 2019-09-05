@@ -5,9 +5,6 @@
     1. [Creating a Profile](#Creating-a-Profile)
     2. [Example Profile](#Example-Profile)
     3. [Fields](#Fields)
-    4. [Rules](#Rules)
-    5. [Persistence](#Persistence)
-    6. [Creation](#Creation)
 
 3. [Data types](#Data-Types)
     1. [Integer/Decimal](#Integer/Decimal)
@@ -159,33 +156,7 @@ These three sections are combined to form the [complete profile](#Example-Profil
 
 ## Fields
 
-Fields are the "slots" of data that can take values. If generating into a CSV or database, fields are columns. If generating into JSON, fields are object properties. Typical fields might be _email_address_ or _user_id_.
-
-By default, any piece of data is valid for a field. To get more specific, we need to add **rules**.
-
-## Rules
-
-Every rule is a named collection of *constraints*, which can be any of:
-
-* [Predicate constraints](#Predicate-constraints), which limit a field's possible values
-* [Presentational constraints](#Presentational-Constraints), which control how values are serialised (eg, number of significant figures)
-* [Grammatical constraints](#Grammatical-constraints), which combine other constraints together
-
-(Predicate and formatting constraints are collectively referred to as **data constraints**)
-
-The decision of how to group constraints into rules is up to the user. At the extremes, there could be a separate rule for each constraint, or one rule containing every constraint. More usually, rules will represent collections of related constraints (eg, _"X is a non-null integer between 0 and 100"_ is a fine rule, comprising four constraints). How to group into rules becomes particularly important when [deliberate violation](alphaFeatures/DeliberateViolation.md) is involved.
-
-## Persistence
-
-Profiles are persisted as JSON documents following a [schema](Schema.md) saved as UTF-8.
-
-## Creation
-
-Profiles can be created by any of:
-
-- Writing JSON profiles by hand or by some custom transform process
-- ~~Deriving them by supplying some sample data to the Profiler~~ (not yet)
-- ~~Designing them through the web front end~~ (not yet)
+Fields are the "slots" of data that can take values. If generating into a CSV or database, fields are columns. If generating into JSON, fields are object properties. Typical fields might be _email_address_ or _user_id_. By default, any piece of data is valid for a field. 
 
 # Data Types
 
