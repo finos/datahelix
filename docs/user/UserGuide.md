@@ -50,11 +50,6 @@
 
 6. [Presentational constraints](#Presentational-Constraints)
 
-7. [Profile Validation](#Profile-Validation)
-    1. [JetBrains IntelliJ](#JetBrains-IntelliJ)
-    2. [Microsoft Visual Studio Code](#Microsoft-Visual-Studio-Code)
-    3. [Schema Validation using library](#Schema-Validation-using-library)
-
 # Introduction
 
 This guide outlines how to create a profile and contains information on the syntax of the DataHelix schema. If you are new to DataHelix, please read the Getting Started guide. If you would like information on how to contribute to the project as well as a technical overview of the key concepts and structure of the DataHelix then see the Developer Guide.
