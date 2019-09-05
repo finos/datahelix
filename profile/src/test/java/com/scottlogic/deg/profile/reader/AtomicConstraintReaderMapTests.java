@@ -280,7 +280,8 @@ public class AtomicConstraintReaderMapTests {
     public void testAtomicConstraintReaderWithOutOfBoundValues(AtomicConstraintType type, ConstraintDTO dto) {
         AtomicConstraintReader reader = constraintReaderMap.get(type);
 
-        Assertions.assertThrows(InvalidProfileException.class, () -> reader.apply(dto, profileFields));
+        Assertions.assertThrows(InvalidProfileException.class, () ->
+            ConstraintValueValidator.validate(dto.field, type, dto.value));
     }
 
     @DisplayName("Should pass when string lengths have an integer operand")

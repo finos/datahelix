@@ -135,7 +135,7 @@ public class ConstraintReaderHelpers {
         }
 
         if (value instanceof Number) {
-            return requiredType.cast(validateNumber(dto, (Number) value));
+            return requiredType.cast(value);
         } else if (value instanceof String) {
             return requiredType.cast(validateString(dto, (String) value));
         }

@@ -1,14 +1,15 @@
 package com.scottlogic.deg.profile.reader.atomic;
 
 import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedDateGranularity;
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
-import com.scottlogic.deg.common.profile.constraints.atomic.*;
+import com.scottlogic.deg.common.util.Defaults;
+import com.scottlogic.deg.common.util.NumberUtils;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.profile.dto.AtomicConstraintType;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 import static com.scottlogic.deg.profile.dto.AtomicConstraintType.IS_NULL;
@@ -34,10 +35,10 @@ public class ConstraintValueValidator {
 
         switch (type) {
             case IS_EQUAL_TO_CONSTANT:
-                validateAny(value);
+                validateAny(type, value);
                 break;
             case IS_IN_SET:
-                validateSet(value);
+                validateSet(type, value);
                 break;
             case IS_OF_TYPE:
                 validateTypes(value);
@@ -58,7 +59,7 @@ public class ConstraintValueValidator {
             case IS_GREATER_THAN_OR_EQUAL_TO_CONSTANT:
             case IS_LESS_THAN_CONSTANT:
             case IS_LESS_THAN_OR_EQUAL_TO_CONSTANT:
-                validateNumber(value);
+                validateNumber(type, value);
                 break;
 
             case IS_AFTER_CONSTANT_DATE_TIME:
@@ -82,13 +83,21 @@ public class ConstraintValueValidator {
         }
     }
 
-    private static void validateAny(Object value) {
-        if (value instanceof Number){
-            validateNumber(value);
+    private static void validateAny(AtomicConstraintType type, Object value) {
+        if (value instanceof OffsetDateTime) {
+            validateDateTime(value);
+        }
+        else if (value instanceof Number){
+            validateNumber(type, value);
         }
     }
 
-    private static void validateSet(Object value) {
+    private static void validateSet(AtomicConstraintType type, Object value) {
+        if (!(value instanceof DistributedSet)){
+            throw new ValidationException("Couldn't recognise 'values' property, it must not contain 'null'");
+        }
+
+        ((DistributedSet) value).set().forEach(val->validateAny(type, val));
     }
 
     private static void validateTypes(Object value) {
@@ -100,7 +109,15 @@ public class ConstraintValueValidator {
     private static void validateInteger(Object value) {
     }
 
-    private static void validateNumber(Object value) {
+    private static void validateNumber(AtomicConstraintType type, Object value) {
+        if (!(value instanceof Number)){
+            throw new ValidationException(
+                String.format("Couldn't recognise 'value' property, it must be a Number but was a %s with value `%s`",
+                    value.getClass().getSimpleName(), value));
+        }
+
+        ensureValueBetween(type, value, Defaults.NUMERIC_MIN, Defaults.NUMERIC_MAX);
+
     }
 
     private static void validateDateTime(Object value) {
@@ -123,6 +140,21 @@ public class ConstraintValueValidator {
         }
         else {
             throw new ValidationException("Couldn't recognise granularity value, it must be either a negative power of ten or one of the supported datetime units.");
+        }
+    }
+
+    private static void ensureValueBetween(AtomicConstraintType type, Object value, BigDecimal min, BigDecimal max) {
+        BigDecimal valueAsBigDecimal = NumberUtils.coerceToBigDecimal(value);
+        if (valueAsBigDecimal.compareTo(min) < 0) {
+            throw new InvalidProfileException(String.format(
+                "%s constraint must have an operand/value >= %s, currently is %s",
+                type, min.toPlainString(), valueAsBigDecimal.toPlainString()));
+        }
+
+        if (valueAsBigDecimal.compareTo(max) > 0) {
+            throw new InvalidProfileException(String.format(
+                "%s constraint must have an operand/value <= %s, currently is %s",
+                type, max.toPlainString(), valueAsBigDecimal.toPlainString()));
         }
     }
 }
