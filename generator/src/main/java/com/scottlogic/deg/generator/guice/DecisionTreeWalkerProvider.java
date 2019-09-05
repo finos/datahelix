@@ -26,43 +26,25 @@ import com.scottlogic.deg.generator.walker.rowspec.RandomRowSpecDecisionTreeWalk
 import com.scottlogic.deg.generator.walker.rowspec.RowSpecDecisionTreeWalker;
 
 public class DecisionTreeWalkerProvider implements Provider<DecisionTreeWalker> {
-    private final ReductiveDecisionTreeWalker reductiveDecisionTreeWalker;
-    private final RandomReductiveDecisionTreeWalker randomReductiveDecisionTreeWalker;
     private final RowSpecDecisionTreeWalker rowSpecDecisionTreeWalker;
     private final RandomRowSpecDecisionTreeWalker randomRowSpecDecisionTreeWalker;
     private final GenerationConfigSource configSource;
 
     @Inject
     public DecisionTreeWalkerProvider(
-        ReductiveDecisionTreeWalker reductiveDecisionTreeWalker,
         RowSpecDecisionTreeWalker rowSpecDecisionTreeWalker,
-        RandomReductiveDecisionTreeWalker randomReductiveDecisionTreeWalker,
         RandomRowSpecDecisionTreeWalker randomRowSpecDecisionTreeWalker,
         GenerationConfigSource configSource) {
-        this.reductiveDecisionTreeWalker = reductiveDecisionTreeWalker;
         this.rowSpecDecisionTreeWalker = rowSpecDecisionTreeWalker;
-        this.randomReductiveDecisionTreeWalker = randomReductiveDecisionTreeWalker;
         this.randomRowSpecDecisionTreeWalker = randomRowSpecDecisionTreeWalker;
         this.configSource = configSource;
     }
 
     @Override
     public DecisionTreeWalker get() {
-          switch(configSource.getWalkerType()) {
-              case CARTESIAN_PRODUCT:
-              case DECISION_BASED:
-                  if (configSource.getGenerationType() == DataGenerationType.RANDOM)
-                      return randomRowSpecDecisionTreeWalker;
-                  return rowSpecDecisionTreeWalker;
+        if (configSource.getGenerationType() == DataGenerationType.RANDOM)
+            return randomRowSpecDecisionTreeWalker;
 
-              case REDUCTIVE:
-                  if (configSource.getGenerationType() == DataGenerationType.RANDOM)
-                      return randomReductiveDecisionTreeWalker;
-
-                  return reductiveDecisionTreeWalker;
-
-              default:
-                  throw new ValidationException("no WalkerType selected");
-        }
+        return rowSpecDecisionTreeWalker;
     }
 }

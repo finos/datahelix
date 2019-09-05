@@ -22,7 +22,6 @@ import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.DataGeneratorMonitor;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
-import com.scottlogic.deg.generator.walker.RetryLimitReachedException;
 import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
 import com.scottlogic.deg.output.writer.DataSetWriter;
 import com.scottlogic.deg.profile.reader.ValidatingProfileReader;
@@ -72,12 +71,6 @@ public class GenerateExecute {
                     throw new RuntimeException(e);
                 }
             });
-        }
-        catch (RetryLimitReachedException ignored) {
-            monitor.addLineToPrintAtEndOfGeneration("");
-            monitor.addLineToPrintAtEndOfGeneration("The retry limit for generating data has been hit.");
-            monitor.addLineToPrintAtEndOfGeneration("This may mean that a lot or all of the profile is contradictory.");
-            monitor.addLineToPrintAtEndOfGeneration("Either fix the profile, or try running the same command again.");
         }
         monitor.endGeneration();
     }

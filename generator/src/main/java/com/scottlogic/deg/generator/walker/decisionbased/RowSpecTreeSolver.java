@@ -11,31 +11,29 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import com.scottlogic.deg.generator.walker.reductive.Merged;
-import com.scottlogic.deg.generator.walker.reductive.ReductiveTreePruner;
-import com.scottlogic.deg.generator.walker.rowspec.RowSpecTreeSolver;
+import com.scottlogic.deg.generator.walker.pruner.Merged;
+import com.scottlogic.deg.generator.walker.pruner.TreePruner;
 
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class DecisionBasedSolver implements RowSpecTreeSolver {
+public class RowSpecTreeSolver {
 
     private final ConstraintReducer constraintReducer;
-    private final ReductiveTreePruner reductiveTreePruner;
+    private final TreePruner treePruner;
     private final OptionPicker optionPicker;
 
     @Inject
-    public DecisionBasedSolver(ConstraintReducer constraintReducer,
-                               ReductiveTreePruner reductiveTreePruner,
-                               OptionPicker optionPicker) {
+    public RowSpecTreeSolver(ConstraintReducer constraintReducer,
+                             TreePruner treePruner,
+                             OptionPicker optionPicker) {
         this.constraintReducer = constraintReducer;
-        this.reductiveTreePruner = reductiveTreePruner;
+        this.treePruner = treePruner;
         this.optionPicker = optionPicker;
     }
 
-    @Override
     public Stream<RowSpec> createRowSpecs(DecisionTree tree) {
         return reduceToRowNodes(tree.rootNode)
             .map(rootNode -> toRowspec(tree.fields, rootNode));
@@ -70,7 +68,7 @@ public class DecisionBasedSolver implements RowSpecTreeSolver {
             .addDelayedAtomicConstraints(option.getDelayedAtomicConstraints())
             .build();
 
-        return reductiveTreePruner.pruneConstraintNode(constraintNode, getFields(option));
+        return treePruner.pruneConstraintNode(constraintNode, getFields(option));
     }
 
     private Map<Field, FieldSpec> getFields(ConstraintNode option) {

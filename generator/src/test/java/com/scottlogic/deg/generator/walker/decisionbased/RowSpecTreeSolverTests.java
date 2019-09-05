@@ -10,7 +10,7 @@ import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.NullDistributedSet;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
-import com.scottlogic.deg.generator.walker.reductive.ReductiveTreePruner;
+import com.scottlogic.deg.generator.walker.pruner.TreePruner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,15 +21,15 @@ import java.util.stream.Stream;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-class DecisionBasedSolverTests {
+class RowSpecTreeSolverTests {
     private Field fieldA = new Field("A");
     private Field fieldB = new Field("B");
     private List<Field> fields = new ArrayList<>();
     private ProfileFields profileFields;
     private ConstraintReducer constraintReducer;
-    private ReductiveTreePruner pruner;
+    private TreePruner pruner;
     private OptionPicker optionPicker;
-    private DecisionBasedSolver decisionBasedSolver;
+    private RowSpecTreeSolver rowSpecTreeSolver;
 
     @BeforeEach
     void setup() {
@@ -38,9 +38,9 @@ class DecisionBasedSolverTests {
         profileFields = new ProfileFields(fields);
 
         constraintReducer = new ConstraintReducer(new FieldSpecFactory(new StringRestrictionsFactory()), new FieldSpecMerger());
-        pruner = new ReductiveTreePruner(new FieldSpecMerger(), constraintReducer, new FieldSpecHelper());
+        pruner = new TreePruner(new FieldSpecMerger(), constraintReducer, new FieldSpecHelper());
         optionPicker = new SequentialOptionPicker();
-        decisionBasedSolver = new DecisionBasedSolver(constraintReducer, pruner, optionPicker);
+        rowSpecTreeSolver = new RowSpecTreeSolver(constraintReducer, pruner, optionPicker);
     }
 
     @Test
@@ -50,7 +50,7 @@ class DecisionBasedSolverTests {
         DecisionTree tree = new DecisionTree(root, profileFields);
 
         //Act
-        Stream<RowSpec> rowSpecs = decisionBasedSolver.createRowSpecs(tree);
+        Stream<RowSpec> rowSpecs = rowSpecTreeSolver.createRowSpecs(tree);
 
         //Assert
         List<RowSpec> expectedRowSpecs = new ArrayList<>();
@@ -69,7 +69,7 @@ class DecisionBasedSolverTests {
         DecisionTree tree = new DecisionTree(root, profileFields);
 
         //Act
-        Stream<RowSpec> rowSpecs = decisionBasedSolver.createRowSpecs(tree);
+        Stream<RowSpec> rowSpecs = rowSpecTreeSolver.createRowSpecs(tree);
 
         //Assert
         List<RowSpec> expectedRowSpecs = new ArrayList<>();
@@ -95,7 +95,7 @@ class DecisionBasedSolverTests {
         DecisionTree tree = new DecisionTree(root, profileFields);
 
         //Act
-        Stream<RowSpec> rowSpecs = decisionBasedSolver.createRowSpecs(tree);
+        Stream<RowSpec> rowSpecs = rowSpecTreeSolver.createRowSpecs(tree);
 
         //Assert
         List<RowSpec> expectedRowSpecs = new ArrayList<>();

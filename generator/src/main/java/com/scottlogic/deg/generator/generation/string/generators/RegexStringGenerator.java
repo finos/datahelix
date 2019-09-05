@@ -174,29 +174,5 @@ public class RegexStringGenerator implements StringGenerator {
     public int hashCode() {
         return Objects.hash(this.automaton, this.getClass());
     }
-
-    static class UnionCollector {
-        private RegexStringGenerator union;
-
-        void accumulate(RegexStringGenerator another) {
-            if (union == null) {
-                union = another;
-            } else {
-                union = union.union(another);
-            }
-        }
-
-        void combine(UnionCollector other) {
-            if (other == null || other.union == null) {
-                return;
-            }
-            union = union.union(other.union);
-        }
-
-        RegexStringGenerator getUnionGenerator() {
-            return union;
-        }
-    }
-
 }
 

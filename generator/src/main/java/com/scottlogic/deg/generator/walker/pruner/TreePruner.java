@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.walker.reductive;
+package com.scottlogic.deg.generator.walker.pruner;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Field;
@@ -28,14 +28,14 @@ import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 
 import java.util.*;
 
-public class ReductiveTreePruner {
+public class TreePruner {
 
     private final FieldSpecMerger merger;
     private final ConstraintReducer constraintReducer;
     private final FieldSpecHelper fieldSpecHelper;
 
     @Inject
-    public ReductiveTreePruner(FieldSpecMerger merger, ConstraintReducer constraintReducer, FieldSpecHelper fieldSpecHelper) {
+    public TreePruner(FieldSpecMerger merger, ConstraintReducer constraintReducer, FieldSpecHelper fieldSpecHelper) {
         this.merger = merger;
         this.constraintReducer = constraintReducer;
         this.fieldSpecHelper = fieldSpecHelper;
