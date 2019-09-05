@@ -1,6 +1,8 @@
 package com.scottlogic.deg.profile.reader.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.constraintdetail.ParsedDateGranularity;
+import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.util.NumberUtils;
@@ -8,7 +10,7 @@ import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.profile.dto.AtomicConstraintType;
 import com.scottlogic.deg.profile.reader.ConstraintReaderHelpers;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import com.scottlogic.deg.profile.reader.RemoveFromTree;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -59,18 +61,25 @@ public class AtomicConstraintFactory {
                 return new IsBeforeOrEqualToConstantDateTimeConstraint(field, dateTime(value));
 
             case IS_GRANULAR_TO:
-                throw new NotImplementedException();
+                if (value instanceof Number)
+                    return new IsGranularToNumericConstraint(field, ParsedGranularity.parse(value));
+                else
+                    return new IsGranularToDateConstraint(field, ParsedDateGranularity.parse((String)value));
 
+            case IS_UNIQUE:
+            case FORMATTED_AS:
+                return new RemoveFromTree();
+
+            default:
+                throw new IllegalArgumentException("constraint type not found");
         }
-
-        throw new NotImplementedException();
     }
 
     private static DistributedSet<Object> collection(Object value) {
         if (value instanceof DistributedSet){
             return (DistributedSet<Object>) value;
         }
-        return FrequencyDistributedSet.uniform((Collection)value);
+        return FrequencyDistributedSet.uniform((Collection)value);//todo is this needed
     }
 
     private static Object getType(Object value) {
