@@ -25,6 +25,7 @@ import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.profile.dto.AtomicConstraintType;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintDetailReader;
+import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintFactory;
 import com.scottlogic.deg.profile.reader.atomic.ConstraintValueValidator;
 import org.junit.Assert;
 import org.junit.jupiter.api.*;
@@ -213,28 +214,6 @@ public class AtomicConstraintReaderMapTests {
             Arguments.of(AtomicConstraintType.IS_STRING_SHORTER_THAN, integerAsDecimalWith0Fraction));
     }
 
-    @Test
-    public void shouldRecogniseAllAtomicConstraints() {
-
-        List<String> missingConstraints = new ArrayList<String>();
-
-        for (AtomicConstraintType type : AtomicConstraintType.values()) {
-            AtomicConstraintReader reader = constraintReaderMap.get(type);
-            if (reader == null) {
-                missingConstraints.add(type.toString());
-            }
-        }
-
-        String message = "No constraint reader is associated with the following constraints: " +
-                String.join(", ", missingConstraints);
-
-        Assert.assertThat(
-                message,
-                missingConstraints,
-                hasSize(0));
-
-    }
-
     @DisplayName("Should return correct constraint type")
     @ParameterizedTest(name = "{0} should return {1}")
     @MethodSource("testProvider")
@@ -242,7 +221,17 @@ public class AtomicConstraintReaderMapTests {
         AtomicConstraintReader reader = constraintReaderMap.get(type);
 
         try {
-            Constraint constraint = reader.apply(dto, profileFields);
+            Object value = new AtomicConstraintDetailReader(null).getValue(dto);
+
+            ConstraintValueValidator.validate(dto.field, type, value);
+
+            Constraint constraint;
+            if (reader != null) {
+                constraint = reader.apply(dto, profileFields);
+            }
+            else {
+                constraint = AtomicConstraintFactory.create(type, new Field(dto.field), value);
+            }
 
             Assert.assertThat("Expected " + constraintType.getName() + " but got " + constraint.getClass().getName(),
                     constraint,
@@ -264,14 +253,9 @@ public class AtomicConstraintReaderMapTests {
 
     @Test
     public void testBaseConstraintReaderMapWithUnmappedOperands() {
-        ConstraintDTO invalidTypeNameDto = new ConstraintDTO();
-        invalidTypeNameDto.field = "test";
-        invalidTypeNameDto.value = "garbage";
-
-        AtomicConstraintReader atomicConstraintReader = constraintReaderMap.get(AtomicConstraintType.IS_OF_TYPE);
         Assertions.assertThrows(
             InvalidProfileException.class,
-            () -> atomicConstraintReader.apply(invalidTypeNameDto, new ProfileFields(Arrays.asList(new Field("test")))));
+            () -> ConstraintValueValidator.validate("test", AtomicConstraintType.IS_OF_TYPE, "garbage"));
     }
 
     @DisplayName("Should fail when value property is numeric and out of bounds")
@@ -290,7 +274,7 @@ public class AtomicConstraintReaderMapTests {
     public void testAtomicConstraintReaderWithValidOperands(AtomicConstraintType type, ConstraintDTO dto) {
         AtomicConstraintReader reader = constraintReaderMap.get(type);
 
-        Assertions.assertDoesNotThrow(() -> reader.apply(dto, profileFields));
+        Assertions.assertDoesNotThrow(() -> ConstraintValueValidator.validate(dto.field, type, dto.value));
     }
 
     @Test
