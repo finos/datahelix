@@ -99,7 +99,13 @@ public class ConstraintValueValidator {
             throw new ValidationException("Couldn't recognise 'values' property, it must not contain 'null'");
         }
 
-        ((DistributedSet) value).set().forEach(val->validateAny(type, val));
+        if (((DistributedSet) value).set().isEmpty()) {
+            throw new ValidationException("Cannot create an IsInSetConstraint with an empty set.");
+        }
+
+        ((DistributedSet) value).set().stream()
+            .peek(val->{if (val == null) throw new ValidationException("Set must not contain null");})
+            .forEach(val->validateAny(type, val));
     }
 
     private static void validateTypes(Object value) {

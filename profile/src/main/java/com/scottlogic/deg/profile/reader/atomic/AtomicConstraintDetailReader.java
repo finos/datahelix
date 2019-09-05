@@ -9,7 +9,9 @@ import com.scottlogic.deg.profile.reader.ConstraintReaderHelpers;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class AtomicConstraintDetailReader {
 
@@ -22,29 +24,37 @@ public class AtomicConstraintDetailReader {
 
     public Object getValue(ConstraintDTO dto){
         if (dto.values != null){
-            return getSet(dto.values);
+            return getSet(dto.values, dto);
         }
 
         if (dto.file != null){
             return fromFileReader.setFromFile(dto.file);
         }
 
-        if (dto.value instanceof Map){
-            return getDate(dto);
-        }
-
-        return dto.value;
+        return getValue(dto.value, dto);
     }
 
-    private FrequencyDistributedSet getSet(Object values) {
+    private FrequencyDistributedSet getSet(Collection<Object> values, ConstraintDTO dto) {
         if (!(values instanceof Collection)){
             return null;//TODO lul
         }
 
-        return FrequencyDistributedSet.uniform((Collection)values);
+        List collect = values.stream()
+            .map(val -> getValue(val, dto))
+            .collect(Collectors.toList());
+        return FrequencyDistributedSet.uniform(collect);
     }
 
-    private OffsetDateTime getDate(ConstraintDTO dto) {
-        return ConstraintReaderHelpers.parseDate((String) ((Map) dto.value).get("date"), dto);
+    private Object getValue(Object value, ConstraintDTO dto) {
+        if (value instanceof Map){
+            return getDate((Map) value, dto);
+        }
+
+        return value;
+    }
+
+
+    private OffsetDateTime getDate(Map value, ConstraintDTO dto) {
+        return ConstraintReaderHelpers.parseDate((String) (value).get("date"), dto);
     }
 }
