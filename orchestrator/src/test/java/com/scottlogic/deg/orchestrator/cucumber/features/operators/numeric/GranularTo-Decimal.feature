@@ -73,7 +73,7 @@ Feature: User can specify that decimal fields are granular to a certain number o
 
   Scenario: User attempts to create a numeric field with data value that include a decimal value to one decimal point incorrectly using a string to set the granularity
     Given foo is granular to "0.1"
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise granularity value, it must be either a negative power of ten or one of the supported datetime units."
+    Then the profile is invalid because "Field \[foo\]: Must be one of the supported datetime units \(millis, seconds, minutes, hours, days, months, years\)"
     And no data is created
 
   Scenario: Running a 'granularTo' request that specifies null should be unsuccessful

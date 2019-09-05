@@ -6,6 +6,7 @@ import com.scottlogic.deg.profile.dto.ConstraintDTO;
 import com.scottlogic.deg.profile.reader.ConstraintReaderHelpers;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.Map;
 
 public class AtomicConstraintDetailReader {
@@ -27,7 +28,7 @@ public class AtomicConstraintDetailReader {
         }
 
         if (dto.value instanceof Map){
-            return ConstraintReaderHelpers.parseDate((String) ((Map) dto.value).get("date"), dto);
+            return getDate(dto);
         }
 
         BigDecimal bigDecimal = NumberUtils.coerceToBigDecimal(dto.value);
@@ -36,5 +37,9 @@ public class AtomicConstraintDetailReader {
         }
 
         return dto.value;
+    }
+
+    private OffsetDateTime getDate(ConstraintDTO dto) {
+        return ConstraintReaderHelpers.parseDate((String) ((Map) dto.value).get("date"), dto);
     }
 }

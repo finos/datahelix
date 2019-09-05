@@ -24,6 +24,8 @@ import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.profile.dto.AtomicConstraintType;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
+import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintDetailReader;
+import com.scottlogic.deg.profile.reader.atomic.ConstraintValueValidator;
 import org.junit.Assert;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -61,6 +63,7 @@ public class AtomicConstraintReaderMapTests {
     private static Object createDateObject(String dateStr) {
         Map<String, String> date = new HashMap<>();
         date.put("date", dateStr);
+
         return date;
     }
 
@@ -374,15 +377,13 @@ public class AtomicConstraintReaderMapTests {
     }
 
     private OffsetDateTime tryParseConstraintDateTimeValue(Object value) {
-        AtomicConstraintReader reader = constraintReaderMap.get(
-            AtomicConstraintType.IS_AFTER_CONSTANT_DATE_TIME);
-
         ConstraintDTO dateDto = new ConstraintDTO();
         dateDto.field = "test";
         dateDto.value = value;
 
-        IsAfterConstantDateTimeConstraint constraint = (IsAfterConstantDateTimeConstraint) reader.apply(dateDto, profileFields);
+        Object val = new AtomicConstraintDetailReader(null).getValue(dateDto);
+        ConstraintValueValidator.validate("test", AtomicConstraintType.IS_AFTER_CONSTANT_DATE_TIME, val);
 
-        return constraint.referenceValue;
+        return (OffsetDateTime)val;
     }
 }
