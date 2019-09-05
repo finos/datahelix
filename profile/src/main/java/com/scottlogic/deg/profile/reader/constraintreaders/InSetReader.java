@@ -25,6 +25,7 @@ import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.profile.reader.AtomicConstraintReader;
+import com.scottlogic.deg.profile.reader.atomic.FromFileReader;
 import com.scottlogic.deg.profile.reader.file.CsvInputStreamReader;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 
@@ -34,10 +35,10 @@ import java.util.stream.Collectors;
 import static com.scottlogic.deg.profile.reader.ConstraintReaderHelpers.getValidatedValues;
 
 public class InSetReader implements AtomicConstraintReader {
-    private final String fromFilePath;
+    private final FromFileReader fromFileReader;
 
     public InSetReader(String fromFilePath) {
-        this.fromFilePath = fromFilePath;
+        this.fromFileReader = new FromFileReader(fromFilePath);
     }
 
     @Override
@@ -56,37 +57,7 @@ public class InSetReader implements AtomicConstraintReader {
     }
 
     private Constraint setFromFile(ConstraintDTO dto, ProfileFields fields) {
-        InputStream streamFromPath = createStreamFromPath(appendPath(dto.file));
-
-        DistributedSet<String> names = CsvInputStreamReader.retrieveLines(streamFromPath);
-        closeStream(streamFromPath);
-
-        DistributedSet<Object> downcastedNames = new FrequencyDistributedSet<>(
-            names.distributedSet().stream()
-                .map(holder -> new WeightedElement<>((Object) holder.element(), holder.weight()))
-                .collect(Collectors.toSet()));
         Field field = fields.getByName(dto.field);
-
-        return new IsInSetConstraint(field, downcastedNames);
-    }
-
-    private String appendPath(String path) {
-        return fromFilePath == null ? path : fromFilePath + path;
-    }
-
-    private static InputStream createStreamFromPath(String path) {
-        try {
-            return new FileInputStream(path);
-        } catch (FileNotFoundException e) {
-            throw new ValidationException(e.getMessage());
-        }
-    }
-
-    private static void closeStream(InputStream stream) {
-        try {
-            stream.close();
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        return new IsInSetConstraint(field, fromFileReader.setFromFile(dto.file));
     }
 }
