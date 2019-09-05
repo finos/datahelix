@@ -26,7 +26,7 @@ Feature: User can specify that a field must be a financial code type
 
   Scenario: An ofType constraint with the value "isin" fails with an invalid profile error message
     Given foo is of type "isin"
-    Then the profile is invalid because "Profile is invalid: no constraints known for \"is\": \"ofType\", \"value\": \"isin\""
+    Then the profile is invalid because "Field \[foo\]: Profile is invalid: no constraints known for \"is\": \"ofType\", \"value\": \"isin\""
     And no data is created
 
   Scenario: An ofType constraint with the value "SEDOL" generates valid SEDOLs
@@ -40,7 +40,7 @@ Feature: User can specify that a field must be a financial code type
 
   Scenario: An ofType constraint with the value "sedol" fails with an invalid profile error message
     Given foo is of type "sedol"
-    Then the profile is invalid because "Profile is invalid: no constraints known for \"is\": \"ofType\", \"value\": \"sedol\""
+    Then the profile is invalid because "Field \[foo\]: Profile is invalid: no constraints known for \"is\": \"ofType\", \"value\": \"sedol\""
     And no data is created
 
   Scenario: An ofType constraint with the value "CUSIP" generates valid CUSIPs
@@ -54,17 +54,17 @@ Feature: User can specify that a field must be a financial code type
 
   Scenario: An ofType constraint with the value "cusip" fails with an invalid profile error message
     Given foo is of type "cusip"
-    Then the profile is invalid because "Profile is invalid: no constraints known for \"is\": \"ofType\", \"value\": \"cusip\""
+    Then the profile is invalid because "Field \[foo\]: Profile is invalid: no constraints known for \"is\": \"ofType\", \"value\": \"cusip\""
     And no data is created
 
   Scenario: An ofType constraint with the value "BURRITO" fails with an invalid profile error message
     Given foo is of type "BURRITO"
-    Then the profile is invalid because "Profile is invalid: no constraints known for \"is\": \"ofType\", \"value\": \"BURRITO\""
+    Then the profile is invalid because "Field \[foo\]: Profile is invalid: no constraints known for \"is\": \"ofType\", \"value\": \"BURRITO\""
     And no data is created
 
   Scenario: An ofType constraint with a value that is an empty string fails with an invalid profile error message
     Given foo is of type ""
-    Then the profile is invalid because "Profile is invalid: no constraints known for \"is\": \"ofType\", \"value\": \"\""
+    Then the profile is invalid because "Field \[foo\]: Profile is invalid: no constraints known for \"is\": \"ofType\", \"value\": \"\""
     And no data is created
 
   Scenario: An ofType constraint with a null value fails with an error message

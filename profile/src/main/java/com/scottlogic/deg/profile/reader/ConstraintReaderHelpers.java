@@ -45,12 +45,6 @@ public class ConstraintReaderHelpers {
     }
 
     public static Set<Object> getValidatedValues(ConstraintDTO dto) {
-        if (dto.values == null) {
-            throw new InvalidProfileException(String.format(
-                "Field [%s]: Couldn't recognise 'values' property, it must not contain 'null'",
-                dto.field
-            ));
-        }
 
         Set<Object> mappedValues = new HashSet<>();
         for (Object value : dto.values) {
@@ -111,21 +105,13 @@ public class ConstraintReaderHelpers {
 
         if (requiredType == Integer.class && value instanceof BigDecimal) {
             BigDecimal valueAsBigDecimal = (BigDecimal) value;
-            if (valueAsBigDecimal.stripTrailingZeros().scale() > 0) {
-                throw new InvalidProfileException(String.format(
-                    "Field [%s]: Couldn't recognise 'value' property, it must be an integer but was a decimal with value `%s`",
-                    dto.field,
-                    value
-                ));
-            }
-
             value = valueAsBigDecimal.intValueExact();
         }
 
         if (!requiredType.isInstance(value)) {
             throw new InvalidProfileException(
                 String.format(
-                    "Field [%s]: Couldn't recognise 'value' property, it must be a %s but was a %s with value `%s`",
+                    "Field [%s]: Couldn't recognise 'value' property, it must be an %s but was a %s with value `%s`",
                     dto.field,
                     requiredType.getSimpleName(),
                     value.getClass().getSimpleName(),

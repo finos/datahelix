@@ -37,17 +37,17 @@ Feature: User can specify that a string length is longer than, a specified numbe
 
   Scenario: 'longerThan' a string should fail with an error message
     Given foo is longer than "Test"
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be a Integer but was a String with value `Test`"
+    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be an Integer but was a String with value `Test`"
     And no data is created
 
   Scenario: 'longerThan' an empty string should fail with an error message
     Given foo is longer than ""
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be a Integer but was a String with value ``"
+    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be an Integer but was a String with value ``"
     And no data is created
 
   Scenario: 'longerThan' whitespace should fail with an error message
     Given foo is longer than " "
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be a Integer but was a String with value ` `"
+    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be an Integer but was a String with value ` `"
     And no data is created
 
   Scenario: 'longerThan' null should fail with an error message

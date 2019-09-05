@@ -72,7 +72,7 @@ Feature: User can specify the length of generated string data using 'ofLength'
     Given foo is of length <length>
     And foo is in set:
       | "a" |
-    Then the profile is invalid because "(Field \[foo\]: Couldn't recognise 'value' property, it must be a Integer but was a String with value `.*`)|(Field \[foo\]: Cannot create an StringHasLengthConstraint for field 'foo' with a a negative length.)|(Field \[foo\]: ofLength constraint must have an operand/value >= 0, currently is -?\d+)"
+    Then the profile is invalid because "(Field \[foo\]: Couldn't recognise 'value' property, it must be an Integer but was a String with value `.*`)|(Field \[foo\]: Cannot create an StringHasLengthConstraint for field 'foo' with a a negative length.)|(Field \[foo\]: ofLength constraint must have an operand/value >= 0, currently is -?\d+)"
     And no data is created
     Examples:
       | length                    |

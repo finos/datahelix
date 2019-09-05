@@ -1,6 +1,7 @@
 package com.scottlogic.deg.profile.reader.atomic;
 
 import com.scottlogic.deg.common.ValidationException;
+import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedDateGranularity;
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import com.scottlogic.deg.common.util.Defaults;
@@ -52,7 +53,7 @@ public class ConstraintValueValidator {
             case HAS_LENGTH:
             case IS_STRING_SHORTER_THAN:
             case IS_STRING_LONGER_THAN:
-                validateInteger(value);
+                validateStringLengthInt(type, value);
                 break;
 
             case IS_GREATER_THAN_CONSTANT:
@@ -101,18 +102,33 @@ public class ConstraintValueValidator {
     }
 
     private static void validateTypes(Object value) {
+        OfTypeConstraintFactory.create(new Field("validation"), (String)value);
     }
 
     private static void validatePattern(Object value) {
     }
 
-    private static void validateInteger(Object value) {
+    private static void validateStringLengthInt(AtomicConstraintType type, Object value) {
+        if (!(value instanceof Number)){
+            throw new ValidationException(
+                String.format("Couldn't recognise 'value' property, it must be an Integer but was a %s with value `%s`",
+                    value.getClass().getSimpleName(), value));
+        }
+
+        BigDecimal valueAsBigDecimal = NumberUtils.coerceToBigDecimal(value);
+        if (valueAsBigDecimal.stripTrailingZeros().scale() > 0) {
+            throw new ValidationException(String.format(
+                "Couldn't recognise 'value' property, it must be an integer but was a decimal with value `%s`",
+                value
+            ));
+        }
+        ensureValueBetween(type, value, BigDecimal.ZERO, BigDecimal.valueOf(Defaults.MAX_STRING_LENGTH));
     }
 
     private static void validateNumber(AtomicConstraintType type, Object value) {
         if (!(value instanceof Number)){
             throw new ValidationException(
-                String.format("Couldn't recognise 'value' property, it must be a Number but was a %s with value `%s`",
+                String.format("Couldn't recognise 'value' property, it must be an Number but was a %s with value `%s`",
                     value.getClass().getSimpleName(), value));
         }
 
