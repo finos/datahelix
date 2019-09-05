@@ -26,6 +26,7 @@ import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.profile.reader.AtomicConstraintReader;
 import com.scottlogic.deg.profile.reader.ConstraintReaderHelpers;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
+import com.scottlogic.deg.profile.reader.atomic.OfTypeConstraintFactory;
 import com.scottlogic.deg.profile.reader.file.names.NameRetriever;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 
@@ -40,37 +41,6 @@ public class OfTypeReader implements AtomicConstraintReader {
         Field field = fields.getByName(dto.field);
 
         String value = ConstraintReaderHelpers.getValidatedValue(dto, String.class);
-        switch (value) {
-            case "decimal":
-                return new IsOfTypeConstraint(field, NUMERIC);
-
-            case "string":
-                return new IsOfTypeConstraint(field, STRING);
-
-            case "datetime":
-                return new IsOfTypeConstraint(field, DATETIME);
-
-            case "integer":
-                return new AndConstraint(
-                    new IsOfTypeConstraint(field, NUMERIC),
-                    new IsGranularToNumericConstraint(field, new ParsedGranularity(BigDecimal.ONE)));
-
-            case "ISIN":
-            case "SEDOL":
-            case "CUSIP":
-            case "RIC":
-                return new AndConstraint(
-                    new MatchesStandardConstraint(field, StandardConstraintTypes.valueOf(value)),
-                    new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.STRING)
-                );
-        }
-
-        try {
-            NameConstraintTypes nameType = NameConstraintTypes.lookupProfileText(value);
-            DistributedSet<Object> objectDistributedSet = NameRetriever.loadNamesFromFile(nameType);
-            return new IsInSetConstraint(field, objectDistributedSet);
-        } catch (UnsupportedOperationException e){
-            throw new InvalidProfileException("Profile is invalid: no constraints known for \"is\": \"ofType\", \"value\": \"" + value + "\"");
-        }
+        return OfTypeConstraintFactory.create(field, value);
     }
 }

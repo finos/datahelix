@@ -8,6 +8,7 @@ import com.scottlogic.deg.profile.dto.AtomicConstraintType;
 import com.scottlogic.deg.profile.reader.ConstraintReaderHelpers;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.Map;
@@ -92,7 +93,7 @@ public class AtomicConstraintFactory {
     }
 
     private static int integer(Object value) {
-        return (int) value;
+        return ((BigDecimal)value).intValueExact();
     }
 
     private static Pattern pattern(Object value) {
