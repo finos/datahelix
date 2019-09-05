@@ -24,7 +24,7 @@ import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalCons
 import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.profile.dto.AtomicConstraintType;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
-import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintDetailReader;
+import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintValueReader;
 import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintFactory;
 import com.scottlogic.deg.profile.reader.atomic.ConstraintValueValidator;
 
@@ -35,13 +35,13 @@ import java.util.stream.Collectors;
 public class MainConstraintReader {
 
     private final AtomicConstraintTypeReaderMap constraintReaderMap;
-    private final AtomicConstraintDetailReader atomicConstraintDetailReader;
+    private final AtomicConstraintValueReader atomicConstraintValueReader;
 
     @Inject
     public MainConstraintReader(AtomicConstraintTypeReaderMap constraintReaderMap,
-                                AtomicConstraintDetailReader atomicConstraintDetailReader) {
+                                AtomicConstraintValueReader atomicConstraintValueReader) {
         this.constraintReaderMap = constraintReaderMap;
-        this.atomicConstraintDetailReader = atomicConstraintDetailReader;
+        this.atomicConstraintValueReader = atomicConstraintValueReader;
     }
 
     public Constraint apply(
@@ -58,7 +58,7 @@ public class MainConstraintReader {
 
         if (dto.is != ConstraintDTO.undefined) {
 
-            Object value = atomicConstraintDetailReader.getValue(dto);
+            Object value = atomicConstraintValueReader.getValue(dto);
 
             AtomicConstraintType atomicConstraintType = AtomicConstraintType.fromText((String) dto.is);
 
