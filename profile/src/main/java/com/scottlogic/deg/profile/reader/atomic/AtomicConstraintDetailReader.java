@@ -2,11 +2,13 @@ package com.scottlogic.deg.profile.reader.atomic;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.util.NumberUtils;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 import com.scottlogic.deg.profile.reader.ConstraintReaderHelpers;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.Collection;
 import java.util.Map;
 
 public class AtomicConstraintDetailReader {
@@ -20,7 +22,7 @@ public class AtomicConstraintDetailReader {
 
     public Object getValue(ConstraintDTO dto){
         if (dto.values != null){
-            return dto.values;
+            return getSet(dto.values);
         }
 
         if (dto.file != null){
@@ -31,12 +33,15 @@ public class AtomicConstraintDetailReader {
             return getDate(dto);
         }
 
-        BigDecimal bigDecimal = NumberUtils.coerceToBigDecimal(dto.value);
-        if (bigDecimal != null){
-            return bigDecimal;
+        return dto.value;
+    }
+
+    private FrequencyDistributedSet getSet(Object values) {
+        if (!(values instanceof Collection)){
+            return null;//TODO lul
         }
 
-        return dto.value;
+        return FrequencyDistributedSet.uniform((Collection)values);
     }
 
     private OffsetDateTime getDate(ConstraintDTO dto) {

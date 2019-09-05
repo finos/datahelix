@@ -64,6 +64,9 @@ public class AtomicConstraintFactory {
     }
 
     private static DistributedSet<Object> collection(Object value) {
+        if (value instanceof DistributedSet){
+            return (DistributedSet<Object>) value;
+        }
         return FrequencyDistributedSet.uniform((Collection)value);
     }
 
