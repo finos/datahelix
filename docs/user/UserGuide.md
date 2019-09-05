@@ -4,11 +4,10 @@
 2. [Profiles](#Profiles)
     1. [Creating a Profile](#Creating-a-Profile)
     2. [Example Profile](#Example-Profile)
-    3. [Using a Profile to Generate Data](#Generating-Data)
-    4. [Fields](#Fields)
-    5. [Rules](#Rules)
-    6. [Persistence](#Persistence)
-    7. [Creation](#Creation)
+    3. [Fields](#Fields)
+    4. [Rules](#Rules)
+    5. [Persistence](#Persistence)
+    6. [Creation](#Creation)
 
 3. [Data types](#Data-Types)
     1. [Integer/Decimal](#Integer/Decimal)
@@ -124,12 +123,6 @@ Here is a list of two rules comprised of one constraint each:
 
 These three sections are combined to form the [complete profile](#Example-Profile).
 
-### Further Information 
-* More detail on key decisions to make while constructing a profile can be found [here](https://github.com/finos/datahelix/blob/master/docs/developer/KeyDecisions.md)
-* FAQs about constraints can be found [here](https://github.com/finos/datahelix/blob/master/docs/user/FrequentlyAskedQuestions.md)
-* For a larger profile example see [here](https://github.com/finos/datahelix/blob/master/docs/user/Schema.md)
-* Sometimes constraints can contradict one another, click [here](https://github.com/finos/datahelix/blob/master/docs/user/Contradictions.md) to find out what happens in these cases
-
 ## Example Profile
 
     {
@@ -166,53 +159,8 @@ These three sections are combined to form the [complete profile](#Example-Profil
     ]
     }
 
-## Generating Data
-
-This section details how to generate data with a given profile.
-
-
-### Using the Command Line
-
-For first time setup, see the [Generator setup instructions](#Build-and-run-the-generator).
-
-To generate data run the following command from the command line
-
-`java -jar <path to JAR file> generate [options] --profile-file="<path to profile>" --output-path="<desired output path>"`
-
-* `[path to JAR file]` the location of generator.jar
-* `[options]` optionally a combination of [options](https://github.com/finos/datahelix/blob/master/docs/user/commandLineOptions/GenerateOptions.md) to configure how the command operates
-* `<path to profile>` the location of the JSON profile file
-* `<desired output path>` the location of the generated data.  If this option is omitted, generated data will be streamed to the standard output.
-
-### Example - Generating Valid Data
-
-Using the [Sample Profile](#Example-Profile) that was created in the previous section, run the following command:
-
- `java -jar <path to JAR file> generate --profile-file="<path to ExampleProfile1.json>" --output-path="<path to desired output file>"`
-
-* `<path to desired output file>` the file path to the desired output file 
-
-With no other options this should yield the following data:
-
-|Column 1       |Column 2     |
-|:-------------:|:-----------:|
-|"Lorem Ipsum"	|-2147483648  |
-|"Lorem Ipsum"	|0            |
-|"Lorem Ipsum"	|2147483646   |
-|"Lorem Ipsum"	|             |
-|	            |-2147483648  |
-
-**Data profiles** describe potential or real data. For instance, we could design a profile that describes a _user_account_ table, where:
-
-* the data must have _user_id_, _email_address_ and _creation_date_ fields
-* _user_id_ is a non-optional string
-* _email_address_ must be populated and contain a @ character
-  * however, if _user_id_ is itself an email address, _email_address_ must be absent
-* _creation_date_ is a non-optional date, with no time component, later than 2003 and output per [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601)    
-
-This data profile can be found in the [examples folder](../../examples/user-account).
-
-Every profile declares some **fields** and some **constraints**.
+* For a larger profile example see [here](https://github.com/finos/datahelix/blob/master/docs/user/Schema.md)
+* Further examples can be found in the Examples folder [here](https://github.com/finos/datahelix/tree/master/examples)
 
 ## Fields
 
@@ -632,7 +580,6 @@ Is satisfied if either:
 
 While it's not prohibited, wrapping conditional constraints in any other kind of constraint (eg, a `not`) may cause unintuitive results.
 
-
 # Presentational Constraints
 <div id="Presentational-constraints"></div>
 
@@ -653,64 +600,3 @@ For the formatting to be applied, the generated data must be applicable, and the
 Formatting will not be applied if not applicable to the field's value
 
 See the [FAQ](FrequentlyAskedQuestions.md) for the difference between this and [granularTo](#predicate-granularto).
-
-# Profile Validation
-
-The [JSON schema](https://json-schema.org/) for the DataHelix data profile is stored in the file [`datahelix.schema.json`](../profile/src/main/resources/profileschema/0.1/datahelix.schema.json) in the [schemas module](../profile/src/main/resources/profileschema/0.1/) directory.
-
-## JetBrains IntelliJ
-
-**_Although IntelliJ tries to validate the profile json files against the schema, it incorrectly shows the whole profile as invalid instead of specific errors._**
-
-**_For this reason we recommend using Visual Studio Code for writing and editing profiles._**
-
-
-To use the DataHelix profile JSON schema in IntelliJ we need to  set up the intellij editor to validate all json files under the `json` and/or `examples` directories against the `datahelix.schema.json` schema file.
-
-To setup IntelliJ to validate json files against the schema follow these steps:
-
-1. Open IntelliJ
-1. Select `File` -> `Settings` -> `Languages & Frameworks` -> `Schemas and DTDs`
-1. Select `JSON Schema Mappings`
-1. Press the `+` button to add a new schema mapping
-1. Give the mapping a name (e.g. `DataHelix Profile Schema`)
-1. For `Schema file or URL:` select the local schema file (e.g. `<project root>/datahelix/profile/src/main/resources/profileschema/0.1/datahelix.schema.json`)
-1. Make sure the `Schema version:` is set to `JSON schema version 7`
-1. Press the `+` button to add a new mapping
-1. Select `Add Directory`
-1. Select the `json` directory
-1. Press okay
-
-Now when you open a json file from the `json` directory in IntelliJ, it will be automatically validated against the DataHelix profile schema.
-
-
-## Microsoft Visual Studio Code
-
-To enable visual studio code to validate json files against the DataHelix profile schema a `json.schemas` section needs to be added to the `settings.json` file.
-
-To do this:
-
-1. Click on the gear icon at the bottom left of the screen and select `Settings`
-1. In the settings windows, click `Extensions` -> `JSON`
-1. You should see a section like this:
-    ```
-    Schemas
-    Associate schemas to JSON files in the current project
-    Edit in settings.json
-    ```
-1. Click on the `Edit in settings.json` link and VSCode will open the settings.json file.
-1. Add the following snippet to the end of the file (replacing `<datahelix_projectroot>` with the root directory path for the DataHelix project and replacing the `"fileMatch"` value with an appropriate value for your configuration):
-    ```
-      "json.schemas": [
-        {
-          "fileMatch": [
-            "<datahelix_projectroot>/*"
-          ],
-          "url": "file:///<datahelix_projectroot>/profile/src/main/resources/profileschema/0.1/datahelix.schema.json"
-        }
-      ]
-    ```
-    Alternatively you can configure this to any naming convention you want for profile files, for example `"*.profile.json"`.
-
-    To verify that the url to the `datahelix.schema.json` is valid you can `ctrl-click` on it and the schema file will open in the editor.  
-1. If the ` "json.schemas"` snippet already exists, you can add a new object to the JSON array for the DataHelix profile schema.
