@@ -26,10 +26,10 @@ This guide outlines how to contribute to the project as well as the key concepts
 
 ## Behaviour in Detail
 
-1. [Nullness](#nullness)
-1. [Type Implication](#Type-Implication)
 1. [Null Operator](#Null-Operator)
 1. [Null Operator with If](#Null-Operator-with-If)
+1. [Nullness](#nullness)
+1. [Type Implication](#Type-Implication)
 
 # Bugs and Issues
 
@@ -53,9 +53,9 @@ liberally to assist in readability.
 
 DataHelix uses Java 1.8 which can be downloaded from this [link](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 
-DataHelix uses [gradle](https://gradle.org/) to automate the build and test process. To build the project run `gradle build` from the root folder of the project. If it was successful then the created jar file can be found in _orchestrator/build/libs/generator.jar_ .
+DataHelix uses [gradle](https://gradle.org/) to automate the build and test process. To build the project run `gradle build` from the root folder of the project. If it was successful then the created jar file can be found in the path _orchestrator/build/libs/generator.jar_ .
 
-[Guice](https://github.com/google/guice) is used in DataHelix for Dependency Injection (DI). It is configured in the 'module' classes, which all extend `AbstractModule`, and injected with the `@inject` annotation
+[Guice](https://github.com/google/guice) is used in DataHelix for Dependency Injection (DI). It is configured in the 'module' classes, which all extend `AbstractModule`, and injected with the `@inject` annotation.
 
 [Cucumber](https://cucumber.io/) is used for behaviour driven development and testing, with [gherkin](https://docs.cucumber.io/gherkin/)-based tests. To run the tests for DataHelix run `gradle test` from the root folder of the project.
 
@@ -413,53 +413,6 @@ The algorithm generates row specs by:
  5. restarting from 1, until there are no decision left
  6. creating a rowspec from the constraints in the remaining root node.
 
-# Nullness
-### Behaviour
-Nulls can always be produced for a field, except when a field is explicitly not null. 
-
-### Misleading Examples
-|Field is               |Null produced|
-|:----------------------|:-----------:|
-|Of type X              | ✔ |
-|Not of type X          | ✔ |
-|In set [X, Y, ...]     | ✔ |
-|Not in set [X, Y, ...] | ✔ |
-|Equal to X             | ❌ |
-|Not equal to X         | ✔ |
-|Greater than X         | ✔ |
-|Null                   | ✔ |
-|Not null               | ❌ |
-
-For the profile snippet:
-```
-{ "if":
-    { "field": "A", "is": "equalTo", "value": 1 },
-  "then":
-    { "field": "B", "is": "equalTo", "value": 2 }
-},
-{ "field": "A", "is": "equalTo", "value": 1 }
-```
-
-|Allowed value of A|Allowed value of B|
-|------------------|------------------|
-|1                 |2                 |
-
-# Type Implication
-### Behaviour
-No operators imply type (except ofType ones). By default, all values are allowed.
-
-### Misleading Examples
-Field is greater than number X:
-
-|Values                |Can be produced|
-|----------------------|:-------------:|
-|Numbers greater than X|✔ |
-|Numbers less than X   |❌ |
-|Null                  |✔ |
-|Strings               |✔ |
-|Date-times            |✔ |
-
-
 # Null Operator
 
 The `null` operator in a profile, expressed as `"is": "null"` or the negated equivalent has several meanings. It can mean (and emit the behaviour) as described below:
@@ -629,6 +582,33 @@ Considering this use case, you're trying to generate data to be imported into a 
 * A field that has no value<br />
 `field1 is null`
 
-## Violations
-Violations are a special case for the `null` operator, see [Deliberate Violation](docs/user/alphaFeatures/DeliberateViolation.md) for more details.
+# Nullness
+### Behaviour
+Nulls can always be produced for a field, except when a field is explicitly not null. How the constraints behave with null is outlined below:
+
+|Field is               |Null produced|
+|:----------------------|:-----------:|
+|Of type X              | ✔ |
+|Not of type X          | ✔ |
+|In set [X, Y, ...]     | ✔ |
+|Not in set [X, Y, ...] | ✔ |
+|Equal to X             | ❌ |
+|Not equal to X         | ✔ |
+|Greater than X         | ✔ |
+|Null                   | ✔ |
+|Not null               | ❌ |
+
+# Type Implication
+### Behaviour
+No operators imply type (except ofType ones). By default, all values are allowed.
+
+Field is greater than number X:
+
+|Values                |Can be produced|
+|----------------------|:-------------:|
+|Numbers greater than X|✔ |
+|Numbers less than X   |❌ |
+|Null                  |✔ |
+|Strings               |✔ |
+|Date-times            |✔ |
 
