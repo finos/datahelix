@@ -25,7 +25,7 @@ import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
-import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintDetailReader;
+import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintValueReader;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -45,7 +45,7 @@ public class JsonProfileReaderTests {
     JsonProfileReader jsonProfileReader = new JsonProfileReader(
         null,
         new MainConstraintReader(
-            new AtomicConstraintTypeReaderMap(null), new AtomicConstraintDetailReader(null)));
+            new AtomicConstraintTypeReaderMap(null), new AtomicConstraintValueReader(null)));
 
 
     private void givenJson(String json) {

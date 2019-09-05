@@ -24,7 +24,7 @@ import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.profile.dto.AtomicConstraintType;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
-import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintDetailReader;
+import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintValueReader;
 import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintFactory;
 import com.scottlogic.deg.profile.reader.atomic.ConstraintValueValidator;
 import org.junit.Assert;
@@ -221,7 +221,7 @@ public class AtomicConstraintReaderMapTests {
         AtomicConstraintReader reader = constraintReaderMap.get(type);
 
         try {
-            Object value = new AtomicConstraintDetailReader(null).getValue(dto);
+            Object value = new AtomicConstraintValueReader(null).getValue(dto);
 
             ConstraintValueValidator.validate(dto.field, type, value);
 
@@ -366,7 +366,7 @@ public class AtomicConstraintReaderMapTests {
         dateDto.field = "test";
         dateDto.value = value;
 
-        Object val = new AtomicConstraintDetailReader(null).getValue(dateDto);
+        Object val = new AtomicConstraintValueReader(null).getValue(dateDto);
         ConstraintValueValidator.validate("test", AtomicConstraintType.IS_AFTER_CONSTANT_DATE_TIME, val);
 
         return (OffsetDateTime)val;

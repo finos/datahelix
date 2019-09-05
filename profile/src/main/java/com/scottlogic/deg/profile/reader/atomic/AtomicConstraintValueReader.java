@@ -13,12 +13,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class AtomicConstraintDetailReader {
+public class AtomicConstraintValueReader {
 
     private final FromFileReader fromFileReader;
 
     @Inject
-    public AtomicConstraintDetailReader(FromFileReader fromFileReader) {
+    public AtomicConstraintValueReader(FromFileReader fromFileReader) {
         this.fromFileReader = fromFileReader;
     }
 
