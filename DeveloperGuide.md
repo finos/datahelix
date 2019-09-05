@@ -4,9 +4,9 @@ This guide outlines how to contribute to the project as well as the key concepts
 
 ## Development
 
-1. [Contributing](#Contributing)
-1. [Building and Testing](#Building-and-Testing)
 1. [Bugs And Issues](#bugs-and-issues)
+1. [Building and Testing](#Building-and-Testing)
+1. [Contributing](#Contributing)
 1. [Adding Schema Versions](#Adding-Schema-Versions)
 
 
@@ -31,19 +31,23 @@ This guide outlines how to contribute to the project as well as the key concepts
 1. [Null Operator](#Null-Operator)
 1. [Null Operator with If](#Null-Operator-with-If)
 
+# Bugs and Issues
 
-# Contributing
+Raising well structured and detailed bug reports will be hugely valuable to maturing the DataHelix.
 
-1. Fork it (<https://github.com/yourname/yourproject/fork>)
-2. Create your feature branch (`git checkout -b feature/fooBar`)
-3. Read our [contribution guidelines](.github/CONTRIBUTING.md) and [Community Code of Conduct](https://www.finos.org/code-of-conduct)
-4. Commit your changes using our [Commit Guidelines](.github/CONTRIBUTING.md#commit-and-pr-messages)
-5. Push to the branch (`git push origin feature/fooBar`)
-6. Create a new Pull Request
+Checklist before raising an issue:
+* [ ] Have you [searched for duplicates](https://github.com/finos/datahelix/issues?utf8=%E2%9C%93&q=)?  A simple search for exception error messages or a summary of the unexpected behaviour should suffice.
+* [ ] Are you running the latest version?
+* [ ] Are you sure this is a bug or missing capability?
+* [ ] Have you managed to isolate the issue to a simple profile or test case?
 
-_NOTE:_ Commits and pull requests to FINOS repositories will only be accepted from those contributors with an active, executed Individual Contributor License Agreement (ICLA) with FINOS OR who are covered under an existing and active Corporate Contribution License Agreement (CCLA) executed with FINOS. Commits from individuals not covered under an ICLA or CCLA will be flagged and blocked by the FINOS Clabot tool. Please note that some CCLAs require individuals/employees to be explicitly named on the CCLA.
-
-*Need an ICLA? Unsure if you are covered under an existing CCLA? Email [help@finos.org](mailto:help@finos.org)*
+## Raising an Issue
+* Create your issue [here](https://github.com/finos/datahelix/issues/new).
+* New issues contain two templates in the description: bug report and enhancement request. Please pick the most appropriate for your issue, **then delete the other**.
+  * Please also tag the new issue with either "Bug" or "Enhancement".
+* Please use [Markdown formatting](https://help.github.com/categories/writing-on-github/)
+liberally to assist in readability.
+  * [Code fences](https://help.github.com/articles/creating-and-highlighting-code-blocks/) for exception stack traces and log entries, for example, massively improve readability.
 
 # Building and Testing
 
@@ -74,23 +78,20 @@ Feature: the name of my feature
 
 More examples can be seen in the [generator cucumber features](https://github.com/finos/datahelix/tree/master/orchestrator/src/test/java/com/scottlogic/deg/orchestrator/cucumber). An outline of how Cucumber is used within DataHelix can be found [here](./docs/developer/CucumberCookbook.md).
 
-# Bugs and Issues
+# Contributing
 
-Raising well structured and detailed bug reports will be hugely valuable to maturing the DataHelix.
+1. Fork it (<https://github.com/yourname/yourproject/fork>)
+2. Create your feature branch (`git checkout -b feature/fooBar`)
+3. Read our [contribution guidelines](.github/CONTRIBUTING.md) and [Community Code of Conduct](https://www.finos.org/code-of-conduct)
+4. Commit your changes using our [Commit Guidelines](.github/CONTRIBUTING.md#commit-and-pr-messages)
+5. Push to the branch (`git push origin feature/fooBar`)
+6. Create a new Pull Request
 
-Checklist before raising an issue:
-* [ ] Have you [searched for duplicates](https://github.com/finos/datahelix/issues?utf8=%E2%9C%93&q=)?  A simple search for exception error messages or a summary of the unexpected behaviour should suffice.
-* [ ] Are you running the latest version?
-* [ ] Are you sure this is a bug or missing capability?
-* [ ] Have you managed to isolate the issue to a simple profile or test case?
+_NOTE:_ Commits and pull requests to FINOS repositories will only be accepted from those contributors with an active, executed Individual Contributor License Agreement (ICLA) with FINOS OR who are covered under an existing and active Corporate Contribution License Agreement (CCLA) executed with FINOS. Commits from individuals not covered under an ICLA or CCLA will be flagged and blocked by the FINOS Clabot tool. Please note that some CCLAs require individuals/employees to be explicitly named on the CCLA.
 
-## Raising an Issue
-* Create your issue [here](https://github.com/finos/datahelix/issues/new).
-* New issues contain two templates in the description: bug report and enhancement request. Please pick the most appropriate for your issue, **then delete the other**.
-  * Please also tag the new issue with either "Bug" or "Enhancement".
-* Please use [Markdown formatting](https://help.github.com/categories/writing-on-github/)
-liberally to assist in readability.
-  * [Code fences](https://help.github.com/articles/creating-and-highlighting-code-blocks/) for exception stack traces and log entries, for example, massively improve readability.
+*Need an ICLA? Unsure if you are covered under an existing CCLA? Email [help@finos.org](mailto:help@finos.org)*
+
+
 
 # Adding Schema Versions
 
