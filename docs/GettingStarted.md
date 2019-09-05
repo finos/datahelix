@@ -1,7 +1,9 @@
 # Contents
 
-  - [Getting Started](#Getting-Started)
+  - [Getting Started](#Getting-started)
+  - [Downloading the JAR file](#Downloading-the-JAR-file)
   - [Creating your first profile](#Creating-your-first-profile)
+  - [Running the generator](#Running-the-generator)
   - [Adding constraints](#Adding-constraints)
   - [Generating large datasets](#Generating-large-datasets)
   - [Data types](#Data-types)
@@ -11,6 +13,8 @@
 # Getting Started
 
 _The following guide gives a 10 minute introduction to the generator via various practical examples. For more detailed documentation please refer to the [User Guide](user/UserGuide.md). If you are interested in extending / modifying the generator itself please refer to the [Developer Guide](developer/DeveloperGuide.md)._
+
+## Downloading the JAR file
 
 The generator has been written in Java, allowing it to work on Microsoft Windows, Apple Mac and Linux. You will need Java v1.8 installed to run the generator (you can run `java -version` to check whether you meet this requirement), it can be [downloaded here](https://www.java.com/en/download/manual.jsp).
 
@@ -37,6 +41,7 @@ We'll start by generating data for a trivial schema. Using your favourite text e
     "rules": []
 }
 ```
+## Running the generator
 
 Now place the `generator.jar` file (downloaded from the [GitHub releases page](https://github.com/finos/datahelix/releases/)) in the same folder as the profile, open up a terminal, and execute the following:
 
@@ -195,7 +200,7 @@ firstName,age
 [...]
 ```
 
-Finally, before exploring some more interesting features of the generator, we'll add a field for National Insurance number. In this case, the constraints applied to the field ensure that it only has a value if the age is greater than or equal to 16:
+Finally, we'll add a field for National Insurance number. In this case, the constraints applied to the field ensure that it only has a value if the age is greater than or equal to 16:
 
 ```json
 {
