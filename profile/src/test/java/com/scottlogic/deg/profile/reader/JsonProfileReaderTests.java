@@ -45,7 +45,7 @@ public class JsonProfileReaderTests {
     JsonProfileReader jsonProfileReader = new JsonProfileReader(
         null,
         new MainConstraintReader(
-            new AtomicConstraintTypeReaderMap(null), new AtomicConstraintValueReader(null)));
+            new AtomicConstraintTypeReaderMap(), new AtomicConstraintValueReader(null)));
 
 
     private void givenJson(String json) {

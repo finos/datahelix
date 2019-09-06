@@ -64,7 +64,7 @@ public class MainConstraintReader {
 
             ConstraintValueValidator.validate(dto.field, atomicConstraintType, value);
 
-            AtomicConstraintReader subReader = constraintReaderMap.getConstraintReaderMapEntries()
+            AtomicConstraintReader subReader = constraintReaderMap.getDelayedMapEntries()
                 .get(atomicConstraintType);
 
             if (subReader == null) {
