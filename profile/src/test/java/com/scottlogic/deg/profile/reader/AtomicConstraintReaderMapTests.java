@@ -49,7 +49,7 @@ public class AtomicConstraintReaderMapTests {
     @BeforeAll
     public void before() {
         constraintReaderMap = 
-            new AtomicConstraintTypeReaderMap(null, true).getConstraintReaderMapEntries();
+            new AtomicConstraintTypeReaderMap(null).getConstraintReaderMapEntries();
 
         List<Field> fields = new ArrayList<>();
 
@@ -107,7 +107,6 @@ public class AtomicConstraintReaderMapTests {
                 Arguments.of(AtomicConstraintType.IS_OF_TYPE, integerTypeValueDto, AndConstraint.class),
                 Arguments.of(AtomicConstraintType.IS_OF_TYPE, decimalTypeValueDto, IsOfTypeConstraint.class),
                 Arguments.of(AtomicConstraintType.MATCHES_REGEX, stringValueDto, MatchesRegexConstraint.class),
-                Arguments.of(AtomicConstraintType.FORMATTED_AS, stringValueDto, FormatConstraint.class),
                 Arguments.of(AtomicConstraintType.HAS_LENGTH, numberValueDto, StringHasLengthConstraint.class),
                 Arguments.of(AtomicConstraintType.IS_STRING_LONGER_THAN, numberValueDto, IsStringLongerThanConstraint.class),
                 Arguments.of(AtomicConstraintType.IS_STRING_SHORTER_THAN, numberValueDto, IsStringShorterThanConstraint.class),

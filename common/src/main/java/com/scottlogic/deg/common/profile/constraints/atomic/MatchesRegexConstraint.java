@@ -33,11 +33,6 @@ public class MatchesRegexConstraint implements AtomicConstraint {
     }
 
     @Override
-    public String toDotLabel(){
-        return String.format("%s matches /%s/", field.name, regex);
-    }
-
-    @Override
     public Field getField() {
         return field;
     }

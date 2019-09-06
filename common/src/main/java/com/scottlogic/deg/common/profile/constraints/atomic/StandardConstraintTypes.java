@@ -17,8 +17,19 @@
 package com.scottlogic.deg.common.profile.constraints.atomic;
 
 public enum StandardConstraintTypes{
-    SEDOL,
-    ISIN,
-    CUSIP,
-    RIC
+    SEDOL("[B-DF-HJ-NP-TV-Z0-9]{6}[0-9]"),
+    ISIN("[A-Z]{2}[A-Z0-9]{10}"),
+    CUSIP("[0-9]{3}[0-9A-Z]{5}[0-9]"),
+    RIC("[A-Z]{1,4}\\.[A-Z]{1,2}");
+
+    private final String regex;
+
+    StandardConstraintTypes(String regex) {
+
+        this.regex = regex;
+    }
+
+    public String getRegex() {
+        return regex;
+    }
 }

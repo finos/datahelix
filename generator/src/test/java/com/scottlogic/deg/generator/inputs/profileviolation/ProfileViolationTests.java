@@ -80,8 +80,6 @@ public class ProfileViolationTests {
                 .collect(Collectors.toSet()));
 
         return Stream.of(
-            Arguments.of(FormatConstraint.class, "%d"),
-
             Arguments.of(IsInSetConstraint.class, sampleSet),
             Arguments.of(IsNullConstraint.class, null),
             Arguments.of(IsOfTypeConstraint.class, IsOfTypeConstraint.Types.STRING),

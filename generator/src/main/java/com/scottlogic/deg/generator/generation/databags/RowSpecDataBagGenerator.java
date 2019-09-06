@@ -22,11 +22,13 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
-import com.scottlogic.deg.generator.generation.FieldSpecGroupValueGenerator;
+import com.scottlogic.deg.generator.generation.grouped.FieldGroup;
+import com.scottlogic.deg.generator.generation.grouped.FieldSpecGroupValueGenerator;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
-import com.scottlogic.deg.generator.generation.RowSpecGrouper;
+import com.scottlogic.deg.generator.generation.grouped.RowSpecGrouper;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 
+import java.util.Map;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;

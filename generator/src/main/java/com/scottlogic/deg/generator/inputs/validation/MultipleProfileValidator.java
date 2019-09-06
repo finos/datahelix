@@ -24,10 +24,6 @@ import java.util.Collection;
 public class MultipleProfileValidator implements ProfileValidator{
     private final Collection<ProfileValidator> validators;
 
-    public MultipleProfileValidator() {
-        this.validators = new ArrayList<>();
-    }
-
     public MultipleProfileValidator(Collection<ProfileValidator> validators) {
         this.validators = validators;
     }

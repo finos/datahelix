@@ -22,10 +22,7 @@ import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
-import com.scottlogic.deg.profile.reader.AtomicConstraintTypeReaderMap;
-import com.scottlogic.deg.profile.reader.InvalidProfileException;
-import com.scottlogic.deg.profile.reader.MainConstraintReader;
-import com.scottlogic.deg.profile.reader.ProfileReader;
+import com.scottlogic.deg.profile.reader.*;
 import com.scottlogic.deg.common.profile.RuleInformation;
 
 import java.nio.file.Path;
@@ -66,7 +63,8 @@ public class CucumberProfileReader implements ProfileReader {
                     exceptionInMapping.set(true);
                     return null;
                 }
-            }).collect(Collectors.toList());
+            }).filter(x->!(x instanceof RemoveFromTree))
+                .collect(Collectors.toList());
 
             if (exceptionInMapping.get()){
                 Exception firstException = state.testExceptions.get(0);
@@ -86,9 +84,5 @@ public class CucumberProfileReader implements ProfileReader {
             state.addException(e);
             throw e;
         }
-    }
-
-    private static Set<RuleInformation> getRules(){
-        return Collections.singleton(new RuleInformation());
     }
 }

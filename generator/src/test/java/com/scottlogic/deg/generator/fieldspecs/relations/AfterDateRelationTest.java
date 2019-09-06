@@ -19,6 +19,7 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.restrictions.DateTimeLimit;
 import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
 import org.junit.jupiter.api.Test;
 
@@ -36,7 +37,7 @@ class AfterDateRelationTest {
 
         FieldSpecRelations relation = new AfterDateRelation(first, second, true);
 
-        DateTimeRestrictions.DateTimeLimit lower = new DateTimeRestrictions.DateTimeLimit(
+        DateTimeLimit lower = new DateTimeLimit(
             OffsetDateTime.of(
                 2005,
                 6,
@@ -48,7 +49,7 @@ class AfterDateRelationTest {
                 ZoneOffset.UTC),
             true);
 
-        DateTimeRestrictions.DateTimeLimit upper = new DateTimeRestrictions.DateTimeLimit(
+        DateTimeLimit upper = new DateTimeLimit(
             OffsetDateTime.of(
                 2006,
                 6,

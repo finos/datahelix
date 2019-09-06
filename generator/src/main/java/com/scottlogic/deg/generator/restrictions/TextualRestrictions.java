@@ -16,9 +16,9 @@
 
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.generation.string.NoStringsStringGenerator;
-import com.scottlogic.deg.generator.generation.string.RegexStringGenerator;
-import com.scottlogic.deg.generator.generation.string.StringGenerator;
+import com.scottlogic.deg.generator.generation.string.generators.NoStringsStringGenerator;
+import com.scottlogic.deg.generator.generation.string.generators.RegexStringGenerator;
+import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.util.*;
@@ -57,7 +57,7 @@ public class TextualRestrictions implements StringRestrictions {
 
     @Override
     public boolean match(String x) {
-        return createGenerator().match(x);
+        return createGenerator().matches(x);
     }
 
     /**
@@ -100,12 +100,7 @@ public class TextualRestrictions implements StringRestrictions {
      * @return Whether this restrictions type is contradictory
      */
     private boolean isContradictory() {
-        if (matchingRegex.isEmpty() && containingRegex.isEmpty()){
-            return false; //no regular expressions exist that can contradict
-        }
-
-        StringGenerator generator = createGenerator();
-        return generator instanceof NoStringsStringGenerator;
+        return createGenerator() instanceof NoStringsStringGenerator;
     }
 
     /**
@@ -149,7 +144,7 @@ public class TextualRestrictions implements StringRestrictions {
 
         String s = (String) o;
         StringGenerator generator = createGenerator();
-        return generator == null || generator.match(s);
+        return generator == null || generator.matches(s);
     }
 
     /**

@@ -30,8 +30,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static com.scottlogic.deg.common.profile.constraints.atomic.StandardConstraintTypes.RIC;
+
 public class FieldSpecFactory {
-    public static final String RIC_REGEX = "[A-Z]{1,4}\\.[A-Z]{1,2}";
     private final StringRestrictionsFactory stringRestrictionsFactory;
 
     @Inject
@@ -82,8 +83,6 @@ public class FieldSpecFactory {
             return construct((MatchesStandardConstraint) constraint, negate);
         } else if (constraint instanceof IsOfTypeConstraint) {
             return construct((IsOfTypeConstraint) constraint, negate);
-        } else if (constraint instanceof FormatConstraint) {
-            return construct((FormatConstraint) constraint, negate);
         } else if (constraint instanceof StringHasLengthConstraint) {
             return construct((StringHasLengthConstraint) constraint, negate);
         } else if (constraint instanceof IsStringLongerThanConstraint) {
@@ -217,9 +216,9 @@ public class FieldSpecFactory {
         final DateTimeRestrictions dateTimeRestrictions = new DateTimeRestrictions();
 
         if (negate) {
-            dateTimeRestrictions.max = new DateTimeRestrictions.DateTimeLimit(limit, !inclusive);
+            dateTimeRestrictions.max = new DateTimeLimit(limit, !inclusive);
         } else {
-            dateTimeRestrictions.min = new DateTimeRestrictions.DateTimeLimit(limit, inclusive);
+            dateTimeRestrictions.min = new DateTimeLimit(limit, inclusive);
         }
 
         return FieldSpec.Empty.withDateTimeRestrictions(dateTimeRestrictions);
@@ -237,9 +236,9 @@ public class FieldSpecFactory {
         final DateTimeRestrictions dateTimeRestrictions = new DateTimeRestrictions();
 
         if (negate) {
-            dateTimeRestrictions.min = new DateTimeRestrictions.DateTimeLimit(limit, !inclusive);
+            dateTimeRestrictions.min = new DateTimeLimit(limit, !inclusive);
         } else {
-            dateTimeRestrictions.max = new DateTimeRestrictions.DateTimeLimit(limit, inclusive);
+            dateTimeRestrictions.max = new DateTimeLimit(limit, inclusive);
         }
 
         return FieldSpec.Empty.withDateTimeRestrictions(dateTimeRestrictions);
@@ -256,22 +255,16 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec construct(MatchesStandardConstraint constraint, boolean negate) {
-        if (constraint.standard.equals(StandardConstraintTypes.RIC)) {
-            return construct(new MatchesRegexConstraint(constraint.field, Pattern.compile(RIC_REGEX)), negate);
+        if (constraint.standard.equals(RIC)) {
+            return construct(new MatchesRegexConstraint(constraint.field, Pattern.compile(RIC.getRegex())), negate);
+        }
+
+        if (negate){
+            return construct(new MatchesRegexConstraint(constraint.field, Pattern.compile(constraint.standard.getRegex())), negate);
         }
 
         return FieldSpec.Empty
-            .withStringRestrictions(new MatchesStandardStringRestrictions(constraint.standard, negate));
-    }
-
-    private FieldSpec construct(FormatConstraint constraint, boolean negate) {
-        if (negate) {
-            // it's not worth much effort to figure out how to negate a formatting constraint
-            // - let's just make it a no-op
-            return FieldSpec.Empty;
-        }
-
-        return FieldSpec.Empty.withFormatting(constraint.format);
+            .withStringRestrictions(new MatchesStandardStringRestrictions(constraint.standard));
     }
 
     private FieldSpec construct(StringHasLengthConstraint constraint, boolean negate) {

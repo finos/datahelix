@@ -17,13 +17,15 @@
 package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 
 import com.google.inject.AbstractModule;
+import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
-import com.scottlogic.deg.generator.generation.ReductiveDataGeneratorMonitor;
+import com.scottlogic.deg.generator.generation.AbstractDataGeneratorMonitor;
 import com.scottlogic.deg.generator.inputs.validation.MultipleProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.TypingRequiredPerFieldValidator;
+import com.scottlogic.deg.generator.inputs.validation.UniquenessValidator;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.output.manifest.ManifestWriter;
 import com.scottlogic.deg.output.outputtarget.OutputTargetFactory;
@@ -33,6 +35,8 @@ import com.scottlogic.deg.profile.reader.validation.ConfigValidator;
 import com.scottlogic.deg.profile.dto.NoopVersionChecker;
 import com.scottlogic.deg.profile.dto.SchemaVersionValidator;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.stream.Stream;
 
 import static org.mockito.Matchers.any;
@@ -52,23 +56,25 @@ public class CucumberTestModule extends AbstractModule {
 
     @Override
     public void configure() {
+        bind(GenerationConfigSource.class).to(CucumberGenerationConfigSource.class);
+
         bind(CucumberTestState.class).toInstance(testState);
         bind(ProfileReader.class).to(CucumberProfileReader.class);
         bind(SchemaVersionValidator.class).to(NoopVersionChecker.class);
-        bind(GenerationConfigSource.class).to(CucumberGenerationConfigSource.class);
+
+        Collection<ProfileValidator> validators = new ArrayList<>();
+        validators.add(new UniquenessValidator(new CucumberGenerationConfigSource(testState)));
         if (testState.requireFieldTyping) {
-            // This binding overrides the requireFieldTyping config option, so an alternative
-            // (MultipleProfileValidator) needs to be used when field typing is not required.
-            bind(ProfileValidator.class).to(TypingRequiredPerFieldValidator.class);
-        } else {
-            bind(ProfileValidator.class).to(MultipleProfileValidator.class);
+            validators.add(new TypingRequiredPerFieldValidator(new DecisionTreeFactory()));
         }
+
+        bind(ProfileValidator.class).toInstance(new MultipleProfileValidator(validators));
         bind(ErrorReporter.class).toInstance(new CucumberErrorReporter(testState));
 
         bind(ConfigValidator.class).toInstance(mock(ConfigValidator.class));
         bind(ManifestWriter.class).toInstance(mock(ManifestWriter.class));
         bind(SingleDatasetOutputTarget.class).toInstance(new InMemoryOutputTarget(testState));
-        bind(ReductiveDataGeneratorMonitor.class).to(NoopDataGeneratorMonitor.class);
+        bind(AbstractDataGeneratorMonitor.class).to(NoopDataGeneratorMonitor.class);
 
         OutputTargetFactory mockOutputTargetFactory = mock(OutputTargetFactory.class);
         when(mockOutputTargetFactory.create(any())).thenReturn(new InMemoryOutputTarget(testState));

@@ -32,7 +32,7 @@ public class MatchesStandardConstraint implements AtomicConstraint {
     }
 
     @Override
-    public String toDotLabel(){
+    public String toString(){
         return String.format("%s is a %s", field.name, standard.getClass().getName());
     }
 

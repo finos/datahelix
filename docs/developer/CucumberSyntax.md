@@ -24,7 +24,6 @@ The framework supports setting configuration settings for the generator, definin
 ### Configuration options
 * _the generation strategy is `{generationStrategy}`_ see [generation strategies](https://github.com/finos/datahelix/blob/master/docs/user/generationTypes/GenerationTypes.md) - default: `random`
 * _the combination strategy is `{combinationStrategy}`_ see [combination strategies](https://github.com/finos/datahelix/blob/master/docs/user/CombinationStrategies.md) - default: `exhaustive`
-* _the walker type is `{walkerType}`_ see [walker types](https://github.com/finos/datahelix/blob/master/docs/developer/decisionTreeWalkers/TreeWalkerTypes.md) - default: `reductive`
 * _the data requested is `{generationMode}`_, either `violating` or `validating` - default: `validating`
 * _the generator can generate at most `{int}` rows_, ensures that the generator will only emit `int` rows, default: `1000`
 * _we do not violate constraint `{operator}`_, prevent this operator from being violated (see **Operators** section below), you can specify this step many times if required

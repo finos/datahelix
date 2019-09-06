@@ -21,7 +21,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
-import com.scottlogic.deg.generator.config.detail.TreeWalkerType;
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.profile.dto.AtomicConstraintType;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
@@ -36,7 +35,6 @@ import java.util.stream.Collectors;
 public class CucumberTestState {
     public DataGenerationType dataGenerationType = DataGenerationType.FULL_SEQUENTIAL;
     public CombinationStrategyType combinationStrategyType = CombinationStrategyType.PINNING;
-    public TreeWalkerType walkerType = TreeWalkerType.DECISION_BASED;
 
     /**
      * Boolean to represent if the generation mode is validating or violating.
@@ -48,7 +46,6 @@ public class CucumberTestState {
 
     /** If true, we inject a no-op generation engine during the test (e.g. because we're just testing profile validation) */
     private Boolean shouldSkipGeneration;
-    private int maxStringLength = 200;
 
     Boolean shouldSkipGeneration() { return shouldSkipGeneration; }
     void disableGeneration() { shouldSkipGeneration = true; }
@@ -174,20 +171,32 @@ public class CucumberTestState {
         return mapper.readerFor(ConstraintHolder.class).readValue(json);
     }
 
-    int getMaxStringLength() {
-        return maxStringLength;
-    }
-
-    public void setMaxStringLength(int maxLength) {
-        if (maxLength > Defaults.MAX_STRING_LENGTH){
-            throw new IllegalArgumentException("String lengths are limited to " + Defaults.MAX_STRING_LENGTH + " characters in production");
-        }
-
-        maxStringLength = maxLength;
-    }
-
     public void setRequireFieldTyping(boolean requireFieldTyping) {
         this.requireFieldTyping = requireFieldTyping;
+    }
+
+    public void setFieldUnique(String fieldName) {
+        Field oldField = profileFields.stream()
+            .filter(f -> f.name.equals(fieldName))
+            .findFirst()
+            .orElseThrow(UnsupportedOperationException::new);
+
+        Field newField = new Field(fieldName, true, oldField.getFormatting());
+
+        profileFields.remove(oldField);
+        profileFields.add(newField);
+    }
+
+    public void setFieldFormatting(String fieldName, String formatting) {
+        Field oldField = profileFields.stream()
+            .filter(f -> f.name.equals(fieldName))
+            .findFirst()
+            .orElseThrow(UnsupportedOperationException::new);
+
+        Field newField = new Field(fieldName, oldField.isUnique(), formatting);
+
+        profileFields.remove(oldField);
+        profileFields.add(newField);
     }
 }
 

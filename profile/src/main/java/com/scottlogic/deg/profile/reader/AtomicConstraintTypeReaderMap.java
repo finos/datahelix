@@ -40,15 +40,8 @@ public class AtomicConstraintTypeReaderMap {
 
     private final String fromFilePath;
 
-    private final boolean isDelayedConstraintsEnabled;
-
-    public AtomicConstraintTypeReaderMap(final String fromFilePath, boolean isDelayedConstraintsEnabled) {
+    public AtomicConstraintTypeReaderMap(final String fromFilePath) {
         this.fromFilePath = fromFilePath;
-        this.isDelayedConstraintsEnabled = isDelayedConstraintsEnabled;
-    }
-
-    public boolean isDelayedConstraintsEnabled() {
-        return isDelayedConstraintsEnabled;
     }
 
     public Map<AtomicConstraintType, AtomicConstraintReader> getConstraintReaderMapEntries() {
@@ -59,11 +52,6 @@ public class AtomicConstraintTypeReaderMap {
         map.put(IS_OF_TYPE, new OfTypeReader());
         map.put(IS_GRANULAR_TO, new GranularToReader());
         map.put(IS_IN_SET, new InSetReader(fromFilePath));
-
-        map.put(FORMATTED_AS,
-            (dto, fields) -> new FormatConstraint(
-                fields.getByName(dto.field),
-                getValidatedValue(dto, String.class)));
 
         map.put(IS_EQUAL_TO_CONSTANT,
             (dto, fields) -> new EqualToConstraint(
@@ -133,6 +121,7 @@ public class AtomicConstraintTypeReaderMap {
         map.put(IS_NULL,
             (dto, fields) -> new IsNullConstraint(fields.getByName(dto.field)));
 
+
         map.put(IS_STRING_LONGER_THAN,
             (dto, fields) ->
                 new IsStringLongerThanConstraint(
@@ -163,9 +152,10 @@ public class AtomicConstraintTypeReaderMap {
                         BigDecimal.ZERO,
                         maxStringLength)));
 
-        if (isDelayedConstraintsEnabled) {
-            map.putAll(getDelayedMapEntries());
-        }
+        map.putAll(getDelayedMapEntries());
+
+        map.put(IS_UNIQUE, (dto, fields) -> new RemoveFromTree());
+        map.put(FORMATTED_AS, (dto, fields) -> new RemoveFromTree());
 
         return map;
     }

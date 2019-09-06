@@ -24,18 +24,18 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.NodeMarking;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.validators.ContradictionDecisionTreeValidator;
-import com.scottlogic.deg.generator.walker.reductive.Merged;
-import com.scottlogic.deg.generator.walker.reductive.ReductiveTreePruner;
+import com.scottlogic.deg.generator.walker.pruner.Merged;
+import com.scottlogic.deg.generator.walker.pruner.TreePruner;
 
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class UpfrontTreePruner {
-    private ReductiveTreePruner treePruner;
+    private TreePruner treePruner;
     private ContradictionDecisionTreeValidator validator;
     @Inject
-    public UpfrontTreePruner(ReductiveTreePruner treePruner, ContradictionDecisionTreeValidator validator) {
+    public UpfrontTreePruner(TreePruner treePruner, ContradictionDecisionTreeValidator validator) {
         this.treePruner = treePruner;
         this.validator = validator;
     }
@@ -55,7 +55,6 @@ public class UpfrontTreePruner {
             monitor.addLineToPrintAtEndOfGeneration("The provided profile is wholly contradictory!");
             monitor.addLineToPrintAtEndOfGeneration("No data can be generated!");
             return new DecisionTree(null, tree.getFields());
-
         } else if (isPartiallyContradictory(markedTree.getRootNode())) {
             monitor.addLineToPrintAtEndOfGeneration("");
             monitor.addLineToPrintAtEndOfGeneration("The provided profile is partially contradictory!");

@@ -229,6 +229,7 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "GB00YG2XYC52" |
       | "US0378331005" |
 
+  @ignore "Standard constraints e.g. ISINs cannot yet be negated."
   Scenario: A longer than constraint combined with a non-ISIN constraint generates data that matches the longer than constraint and contains no valid ISINs
     Given foo is longer than 2
     And foo is anything but null
@@ -263,6 +264,7 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | foo  |
       | null |
 
+  @ignore "Standard constraints e.g. ISINs cannot yet be negated."
   Scenario: A not longer than constraint combined with a non-ISIN constraint generates data that contains no valid ISINs
     Given foo is anything but longer than 12
     And foo is anything but null
@@ -290,6 +292,7 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "0263494" |
       | "3091357" |
 
+  @ignore "Standard constraints e.g. ISINs cannot yet be negated."
   Scenario: A longer than constraint combined with a non-SEDOL constraint generates data that matches the longer than constraint and contains no valid SEDOLs
     Given foo is longer than 2
     And foo is anything but null
@@ -324,6 +327,7 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | foo  |
       | null |
 
+  @ignore "Standard constraints e.g. ISINs cannot yet be negated."
   Scenario: A not longer than constraint combined with a non-SEDOL constraint generates data that matches the longer than constraint and contains no valid SEDOLs
     Given foo is anything but longer than 7
     And foo is anything but null
@@ -351,6 +355,7 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "38259P508" |
       | "594918104" |
 
+  @ignore "Standard constraints e.g. ISINs cannot yet be negated."
   Scenario: A longer than constraint combined with a non-CUSIP constraint generates data that matches the longer than constraint and contains no valid CUSIPs
     Given foo is longer than 2
     And foo is anything but null
@@ -385,6 +390,7 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | foo  |
       | null |
 
+  @ignore "Standard constraints e.g. ISINs cannot yet be negated."
   Scenario: A not longer than constraint combined with a non-CUSIP constraint generates data that matches the not longer than constraint and contains no valid CUSIPs
     Given foo is anything but longer than 9
     And foo is anything but null

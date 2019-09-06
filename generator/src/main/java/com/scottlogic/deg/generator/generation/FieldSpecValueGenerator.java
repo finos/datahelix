@@ -17,6 +17,7 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.google.inject.Inject;
+import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
@@ -47,46 +48,21 @@ public class FieldSpecValueGenerator {
         return dataType == DataGenerationType.RANDOM;
     }
 
-    public Stream<DataBagValue> generate(Set<FieldSpec> specs) {
-        List<FieldValueSource> fieldValueSources = specs.stream()
-            .map(sourceFactory::getFieldValueSources)
-            .flatMap(Collection::stream)
-            .distinct()
-            .collect(Collectors.toList());
-
-        return createValuesFromSources(specs.stream().findFirst().orElse(FieldSpec.Empty), fieldValueSources);
-    }
-
-    public Stream<DataBagValue> generate(FieldSpec spec) {
+    public Stream<DataBagValue> generate(Field field, FieldSpec spec) {
         List<FieldValueSource> fieldValueSources = sourceFactory.getFieldValueSources(spec);
 
-        return createValuesFromSources(spec, fieldValueSources);
-    }
-
-    public DataBagValue generateOne(FieldSpec spec) {
-        List<FieldValueSource> fieldValueSources = sourceFactory.getFieldValueSources(spec);
-
-        return createValueFromSources(spec, fieldValueSources);
-    }
-
-    private Stream<DataBagValue> createValuesFromSources(FieldSpec spec, List<FieldValueSource> fieldValueSources) {
         FieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
 
-        Iterable<Object> iterable =  getDataValues(combinedFieldValueSource);
+        Iterable<Object> iterable = getDataValues(combinedFieldValueSource, field.isUnique());
 
         return StreamSupport.stream(iterable.spliterator(), false)
-            .map(value -> new DataBagValue(value, spec.getFormatting()));
+            .map(DataBagValue::new);
     }
 
-    private DataBagValue createValueFromSources(FieldSpec spec, List<FieldValueSource> fieldValueSources) {
-        FieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
-
-        Object value = combinedFieldValueSource.generateRandomValue(randomNumberGenerator);
-
-        return new DataBagValue(value, spec.getFormatting());
-    }
-
-    private Iterable<Object> getDataValues(FieldValueSource source) {
+    private Iterable<Object> getDataValues(FieldValueSource source, boolean unique) {
+        if (unique) {
+            return source.generateAllValues();
+        }
         switch (dataType) {
             case FULL_SEQUENTIAL:
                 return source.generateAllValues();

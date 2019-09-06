@@ -19,7 +19,6 @@ package com.scottlogic.deg.orchestrator.cucumber.testframework.steps;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
-import com.scottlogic.deg.generator.config.detail.TreeWalkerType;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.*;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import com.scottlogic.deg.profile.dto.AtomicConstraintType;
@@ -55,11 +54,6 @@ public class GeneralTestStep {
         this.state.addField(fieldName);
     }
 
-    @Given("the maximum string length is (\\d+)$")
-    public void theMaxStringLengthIs(int maxLength) {
-        this.state.setMaxStringLength(maxLength);
-    }
-
     @Given("^the following fields exist:$")
     public void thereAreFields(List<String> fields) {
         fields.forEach(this::thereIsAField);
@@ -78,11 +72,6 @@ public class GeneralTestStep {
     @When("we do not violate any {operator} constraints")
     public void constraintTypeIsNotViolated(String operator){
         this.state.addConstraintToNotViolate(AtomicConstraintType.fromText(operator));
-    }
-
-    @When("the walker type is {walkerType}")
-    public void setTheCombinationStrategy(TreeWalkerType walkerType) {
-        this.state.walkerType = walkerType;
     }
 
     @Given("the data requested is {generationMode}")
@@ -107,6 +96,11 @@ public class GeneralTestStep {
     @And("^(.+) is anything but null$")
     public void fieldIsNotNull(String fieldName) throws Exception{
         this.state.addNotConstraint(fieldName, "null", null);
+    }
+
+    @And("^(.+) is unique$")
+    public void uniquefieldIsUnique(String fieldName) {
+        this.state.setFieldUnique(fieldName);
     }
 
     @And("untyped fields are allowed")
@@ -259,6 +253,12 @@ public class GeneralTestStep {
     public void theGeneratorCanGenerateAtMostRows(long maxNumberOfRows) {
         state.maxRows = maxNumberOfRows;
     }
+
+    @And("^(.+) has formatting \"(.+)\"$")
+    public void fooHasFormattingFormat(String fieldName, String formatting) {
+        state.setFieldFormatting(fieldName, formatting);
+    }
+
 
     class GeneratedTestData {
         List <List<Object>> expectedData;
