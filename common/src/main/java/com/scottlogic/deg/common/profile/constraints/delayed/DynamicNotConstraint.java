@@ -34,13 +34,13 @@ public class DynamicNotConstraint implements DelayedAtomicConstraint {
     }
 
     @Override
-    public AtomicConstraint underlyingConstraint() {
-        return negatedConstraint.underlyingConstraint();
+    public Field field() {
+        return negatedConstraint.field();
     }
 
     @Override
-    public Field field() {
-        return negatedConstraint.field();
+    public Field getOtherField() {
+        return negatedConstraint.getOtherField();
     }
 
     @Override

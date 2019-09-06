@@ -29,9 +29,9 @@ public interface DelayedAtomicConstraint extends Constraint {
         }
     }
 
-    AtomicConstraint underlyingConstraint();
-
     Field field();
+
+    Field getOtherField();
 
     default DynamicNotConstraint negate() {
         return new DynamicNotConstraint(this);

@@ -43,47 +43,35 @@ public class AtomicConstraintTypeReaderMap {
         map.put(IS_BEFORE_FIELD_DATE_TIME,
             (dto, fields) ->
                 new IsBeforeDynamicDateConstraint(
-                    new IsBeforeConstantDateTimeConstraint(
-                        fields.getByName(dto.field),
-                        OffsetDateTime.MIN
-                    ),
                     fields.getByName((String)dto.value),
-                    false
+                    false,
+                    fields.getByName(dto.field)
                 )
         );
 
         map.put(IS_BEFORE_OR_EQUAL_TO_FIELD_DATE_TIME,
             (dto, fields) ->
                 new IsBeforeDynamicDateConstraint(
-                    new IsBeforeOrEqualToConstantDateTimeConstraint(
-                        fields.getByName(dto.field),
-                        OffsetDateTime.MIN
-                    ),
                     fields.getByName((String)dto.value),
-                    true
+                    true,
+                    fields.getByName(dto.field)
                 )
         );
 
         map.put(IS_AFTER_FIELD_DATE_TIME,
             (dto, fields) ->
                 new IsAfterDynamicDateConstraint(
-                    new IsAfterConstantDateTimeConstraint(
-                        fields.getByName(dto.field),
-                        OffsetDateTime.MAX
-                    ),
                     fields.getByName((String)dto.value),
-                    false
+                    false,
+                    fields.getByName(dto.field)
                 ));
 
         map.put(IS_AFTER_OR_EQUAL_TO_FIELD_DATE_TIME,
             (dto, fields) ->
                 new IsAfterDynamicDateConstraint(
-                    new IsAfterOrEqualToConstantDateTimeConstraint(
-                        fields.getByName(dto.field),
-                        OffsetDateTime.MAX
-                    ),
                     fields.getByName((String)dto.value),
-                    true
+                    true,
+                    fields.getByName(dto.field)
                 )
         );
 

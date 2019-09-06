@@ -22,37 +22,34 @@ import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 
 public class IsEqualToDynamicDateConstraint implements DelayedAtomicConstraint {
 
-    private final AtomicConstraint underlyingConstraint;
-
     private final Field field;
-
     private final TemporalAdjusterGenerator unit;
-
     private final int offset;
+    private final Field otherField;
 
-    public IsEqualToDynamicDateConstraint(AtomicConstraint underlyingConstraint,
-                                          Field field,
+    public IsEqualToDynamicDateConstraint(Field field,
                                           TemporalAdjusterGenerator unit,
-                                          int offset) {
-        DelayedAtomicConstraint.validateFieldsAreDifferent(underlyingConstraint.getField(), field);
-        this.underlyingConstraint = underlyingConstraint;
+                                          int offset,
+                                          Field otherField) {
+        this.otherField = otherField;
+        DelayedAtomicConstraint.validateFieldsAreDifferent(otherField, field);
         this.field = field;
         this.unit = unit;
         this.offset = offset;
     }
 
-    public IsEqualToDynamicDateConstraint(AtomicConstraint underlyingConstraint, Field field) {
-        this(underlyingConstraint, field, null,  0);
-    }
-
-    @Override
-    public AtomicConstraint underlyingConstraint() {
-        return underlyingConstraint;
+    public IsEqualToDynamicDateConstraint(Field field, Field otherField) {
+        this(field, null,  0, otherField);
     }
 
     @Override
     public Field field() {
         return field;
+    }
+
+    @Override
+    public Field getOtherField(){
+        return otherField;
     }
 
     public TemporalAdjusterGenerator unit() {

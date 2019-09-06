@@ -40,7 +40,7 @@ class EqualToFieldReaderTest {
     public void apply_noOffset_createsTwoEqualFields() {
         IsEqualToDynamicDateConstraint constraint = createConstraint(equalToFieldReader, dto, fields);
 
-        assertEquals(new Field(FIRST), constraint.underlyingConstraint().getField());
+        assertEquals(new Field(FIRST), constraint.getOtherField());
         assertEquals(new Field(SECOND), constraint.field());
         assertNull(constraint.unit());
     }
