@@ -44,16 +44,12 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class AtomicConstraintReaderMapTests {
+public class ConstraintValidationAndReadingTests {
 
-    Map<AtomicConstraintType, AtomicConstraintReader> constraintReaderMap;
     ProfileFields profileFields;
 
     @BeforeAll
     public void before() {
-        constraintReaderMap = 
-            new AtomicConstraintTypeReaderMap().getDelayedMapEntries();
-
         List<Field> fields = new ArrayList<>();
 
         fields.add(new Field("test"));
@@ -218,20 +214,13 @@ public class AtomicConstraintReaderMapTests {
     @ParameterizedTest(name = "{0} should return {1}")
     @MethodSource("testProvider")
     public void testAtomicConstraintReader(AtomicConstraintType type, ConstraintDTO dto, Class<?> constraintType) {
-        AtomicConstraintReader reader = constraintReaderMap.get(type);
 
         try {
             Object value = new AtomicConstraintValueReader(null).getValue(dto);
 
             ConstraintValueValidator.validate(dto.field, type, value);
 
-            Constraint constraint;
-            if (reader != null) {
-                constraint = reader.apply(dto, profileFields);
-            }
-            else {
-                constraint = AtomicConstraintFactory.create(type, new Field(dto.field), value);
-            }
+            Constraint constraint = AtomicConstraintFactory.create(type, new Field(dto.field), value);
 
             Assert.assertThat("Expected " + constraintType.getName() + " but got " + constraint.getClass().getName(),
                     constraint,
@@ -246,8 +235,6 @@ public class AtomicConstraintReaderMapTests {
     @ParameterizedTest(name = "{0} should be invalid")
     @MethodSource({"stringLengthInvalidOperandProvider", "ofTypeInvalidValueProvider"})
     public void testAtomicConstraintReaderWithInvalidOperands(AtomicConstraintType type, ConstraintDTO dto) {
-        AtomicConstraintReader reader = constraintReaderMap.get(type);
-
         Assertions.assertThrows(InvalidProfileException.class, () -> ConstraintValueValidator.validate(dto.field, type, dto.value));
     }
 
@@ -262,8 +249,6 @@ public class AtomicConstraintReaderMapTests {
     @ParameterizedTest(name = "{0} should be invalid")
     @MethodSource("numericOutOfBoundsOperandProvider")
     public void testAtomicConstraintReaderWithOutOfBoundValues(AtomicConstraintType type, ConstraintDTO dto) {
-        AtomicConstraintReader reader = constraintReaderMap.get(type);
-
         Assertions.assertThrows(InvalidProfileException.class, () ->
             ConstraintValueValidator.validate(dto.field, type, dto.value));
     }
@@ -272,8 +257,6 @@ public class AtomicConstraintReaderMapTests {
     @ParameterizedTest(name = "{0} should be valid")
     @MethodSource("stringLengthValidOperandProvider")
     public void testAtomicConstraintReaderWithValidOperands(AtomicConstraintType type, ConstraintDTO dto) {
-        AtomicConstraintReader reader = constraintReaderMap.get(type);
-
         Assertions.assertDoesNotThrow(() -> ConstraintValueValidator.validate(dto.field, type, dto.value));
     }
 
