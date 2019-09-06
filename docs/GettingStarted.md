@@ -12,7 +12,7 @@
 
 # Getting Started
 
-_The following guide gives a 10 minute introduction to the generator via various practical examples. For more detailed documentation please refer to the [User Guide](user/UserGuide.md). If you are interested in extending / modifying the generator itself please refer to the [Developer Guide](developer/DeveloperGuide.md)._
+_The following guide gives a 10 minute introduction to the generator via various practical examples. For more detailed documentation please refer to the [User Guide](user/UserGuide.md). If you are interested in extending / modifying the generator itself please refer to the [Developer Guide](DeveloperGuide.md)._
 
 ## Downloading the JAR file
 
