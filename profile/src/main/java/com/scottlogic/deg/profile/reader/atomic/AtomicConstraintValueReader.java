@@ -3,7 +3,6 @@ package com.scottlogic.deg.profile.reader.atomic;
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
-import com.scottlogic.deg.profile.dto.AtomicConstraintType;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 

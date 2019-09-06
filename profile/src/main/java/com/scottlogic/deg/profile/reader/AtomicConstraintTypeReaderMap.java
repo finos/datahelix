@@ -16,22 +16,14 @@
 
 package com.scottlogic.deg.profile.reader;
 
-import com.scottlogic.deg.common.profile.constraints.atomic.*;
-import com.scottlogic.deg.common.profile.constraints.delayed.IsAfterDynamicDateConstraint;
-import com.scottlogic.deg.common.profile.constraints.delayed.IsBeforeDynamicDateConstraint;
-import com.scottlogic.deg.common.util.Defaults;
+import com.scottlogic.deg.common.profile.constraints.delayed.DelayedAtomicConstraint;
 import com.scottlogic.deg.profile.reader.constraintreaders.*;
-import com.scottlogic.deg.profile.dto.AtomicConstraintType;
+import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 
-import java.math.BigDecimal;
-import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static com.scottlogic.deg.profile.dto.AtomicConstraintType.*;
+import static com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType.*;
 
 public class AtomicConstraintTypeReaderMap {
 
@@ -42,36 +34,36 @@ public class AtomicConstraintTypeReaderMap {
 
         map.put(IS_BEFORE_FIELD_DATE_TIME,
             (dto, fields) ->
-                new IsBeforeDynamicDateConstraint(
-                    fields.getByName((String)dto.value),
-                    false,
-                    fields.getByName(dto.field)
+                new DelayedAtomicConstraint(
+                    fields.getByName(dto.field),
+                    IS_BEFORE_CONSTANT_DATE_TIME,
+                    fields.getByName((String)dto.value)
                 )
         );
 
         map.put(IS_BEFORE_OR_EQUAL_TO_FIELD_DATE_TIME,
             (dto, fields) ->
-                new IsBeforeDynamicDateConstraint(
-                    fields.getByName((String)dto.value),
-                    true,
-                    fields.getByName(dto.field)
+                new DelayedAtomicConstraint(
+                    fields.getByName(dto.field),
+                    IS_BEFORE_OR_EQUAL_TO_CONSTANT_DATE_TIME,
+                    fields.getByName((String)dto.value)
                 )
         );
 
         map.put(IS_AFTER_FIELD_DATE_TIME,
             (dto, fields) ->
-                new IsAfterDynamicDateConstraint(
-                    fields.getByName((String)dto.value),
-                    false,
-                    fields.getByName(dto.field)
+                new DelayedAtomicConstraint(
+                    fields.getByName(dto.field),
+                    IS_AFTER_CONSTANT_DATE_TIME,
+                    fields.getByName((String)dto.value)
                 ));
 
         map.put(IS_AFTER_OR_EQUAL_TO_FIELD_DATE_TIME,
             (dto, fields) ->
-                new IsAfterDynamicDateConstraint(
-                    fields.getByName((String)dto.value),
-                    true,
-                    fields.getByName(dto.field)
+                new DelayedAtomicConstraint(
+                    fields.getByName(dto.field),
+                    IS_AFTER_OR_EQUAL_TO_CONSTANT_DATE_TIME,
+                    fields.getByName((String)dto.value)
                 )
         );
 

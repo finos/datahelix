@@ -18,15 +18,15 @@
 package com.scottlogic.deg.common.profile.constraints.delayed;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 
 import java.util.Objects;
 
-public class DynamicNotConstraint implements DelayedAtomicConstraint {
+public class DynamicNotConstraint extends DelayedAtomicConstraint {
 
     private final DelayedAtomicConstraint negatedConstraint;
 
     public DynamicNotConstraint(DelayedAtomicConstraint negatedConstraint) {
+        super(negatedConstraint.getField(), negatedConstraint.getUnderlyingConstraint(), negatedConstraint.getOtherField());
         if (negatedConstraint instanceof DynamicNotConstraint) {
             throw new IllegalArgumentException("Nested DynamicNotConstraint not allowed");
         }
@@ -34,8 +34,8 @@ public class DynamicNotConstraint implements DelayedAtomicConstraint {
     }
 
     @Override
-    public Field field() {
-        return negatedConstraint.field();
+    public Field getField() {
+        return negatedConstraint.getField();
     }
 
     @Override
