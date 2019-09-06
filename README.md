@@ -6,7 +6,7 @@ The generation of representative test and simulation data is a challenging and t
 
 DataHelix is a proud member of the [Fintech Open Source Foundation](https://www.finos.org/) and operates within the [Data Technologies Program](https://www.finos.org/dt).
 
-For information on how to get started with DataHelix see our [Getting Started guide](docs/GettingStarted.md) and for information on the syntax of the DataHelix schema see the [User Guide](user/UserGuide.md). If you would like information on how to contribute to the project as well as a technical overview of the key concepts and structure of the DataHelix then see the [Developer Guide](docs/DeveloperGuide.md).
+For information on how to get started with DataHelix see our [Getting Started guide](docs/GettingStarted.md) and for information on the syntax of the DataHelix schema see the [User Guide](docs/user/UserGuide.md). If you would like information on how to contribute to the project as well as a technical overview of the key concepts and structure of the DataHelix then see the [Developer Guide](docs/DeveloperGuide.md).
 
 For a high level road map see [Road Map](docs/RoadMap.md).
 
