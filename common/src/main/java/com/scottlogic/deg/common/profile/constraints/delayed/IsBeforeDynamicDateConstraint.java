@@ -21,29 +21,29 @@ import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 
 public class IsBeforeDynamicDateConstraint implements DelayedAtomicConstraint {
 
-    private final AtomicConstraint underlyingConstraint;
-
     private final Field field;
 
     private final boolean inclusive;
 
-    public IsBeforeDynamicDateConstraint(AtomicConstraint underlyingConstraint,
-                                         Field field,
-                                         boolean inclusive) {
-        DelayedAtomicConstraint.validateFieldsAreDifferent(underlyingConstraint.getField(), field);
-        this.underlyingConstraint = underlyingConstraint;
+    private final Field otherField;
+
+    public IsBeforeDynamicDateConstraint(Field field,
+                                         boolean inclusive,
+                                         Field otherField) {
+        DelayedAtomicConstraint.validateFieldsAreDifferent(otherField, field);
         this.field = field;
         this.inclusive = inclusive;
-    }
-
-    @Override
-    public AtomicConstraint underlyingConstraint() {
-        return underlyingConstraint;
+        this.otherField = otherField;
     }
 
     @Override
     public Field field() {
         return field;
+    }
+
+    @Override
+    public Field getOtherField() {
+        return otherField;
     }
 
     public boolean inclusive() {

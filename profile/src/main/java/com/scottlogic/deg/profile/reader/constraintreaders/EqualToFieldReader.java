@@ -35,8 +35,8 @@ public class EqualToFieldReader implements AtomicConstraintReader {
         }
 
         return new IsEqualToDynamicDateConstraint(
-            new EqualToConstraint(fields.getByName(dto.field), "to be overriden"),
-            fields.getByName((String)dto.value)
+            fields.getByName((String)dto.value),
+            fields.getByName(dto.field)
         );
     }
 
@@ -49,10 +49,10 @@ public class EqualToFieldReader implements AtomicConstraintReader {
         );
 
         return new IsEqualToDynamicDateConstraint(
-            new EqualToConstraint(fields.getByName(dto.field), "to be overriden"),
             fields.getByName((String)dto.value),
             unit,
-            dto.offset
+            dto.offset,
+            fields.getByName(dto.field)
         );
     }
 }

@@ -42,14 +42,14 @@ public class FieldRelationsFactory {
 
    private FieldSpecRelations constructBeforeDate(IsBeforeDynamicDateConstraint constraint) {
        return new BeforeDateRelation(
-           constraint.underlyingConstraint().getField(),
+           constraint.getOtherField(),
            constraint.field(),
            constraint.inclusive());
    }
 
    private FieldSpecRelations constructAfterDate(IsAfterDynamicDateConstraint constraint) {
        return new AfterDateRelation(
-           constraint.underlyingConstraint().getField(),
+           constraint.getOtherField(),
            constraint.field(),
            constraint.inclusive());
    }
@@ -57,13 +57,13 @@ public class FieldRelationsFactory {
    private FieldSpecRelations constructEqualToDate(IsEqualToDynamicDateConstraint constraint) {
        if (constraint.unit() != null) {
            return new EqualToOffsetDateRelation(
-               constraint.underlyingConstraint().getField(),
+               constraint.getOtherField(),
                constraint.field(),
                constraint.unit(),
                constraint.offset());
        } else {
            return new EqualToDateRelation(
-               constraint.underlyingConstraint().getField(),
+               constraint.getOtherField(),
                constraint.field());
        }
    }
