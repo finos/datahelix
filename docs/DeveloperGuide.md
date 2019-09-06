@@ -1,37 +1,43 @@
-# Developer Guide
+# Table of Contents
+
+
+1. [Introduction](#introduction)
+1. [Development](#Development)
+
+    1. [Bugs And Issues](#bugs-and-issues)
+    1. [Building and Testing](#Building-and-Testing)
+    1. [Contributing](#Contributing)
+    1. [Adding Schema Versions](#Adding-Schema-Versions)
+
+
+1. [Algorithms and Data Structures](#Algorithms-and-Data-Structures)
+
+    1. [Decision Trees](#decision-trees)
+        1. [Example](#decision-trees-example)
+        1. [Derivation](#derivation)
+        1. [Optimisation](#optimisation)
+    1. [Generation Algorithm](#decision-tree-generation)
+        1. [Decision tree interpretation](#Decision-tree-interpretation)
+        1. [Constraint reduction](#Constraint-reduction)
+        1. [Databags](#Databags)
+        1. [Output](#output)
+    1. [String Generation](#String-Generation)
+    1. [Tree Walking Algorithm](#Tree-Walking-Algorithm)
+
+1. [Behaviour in Detail](Behaviour-in-Detail)
+
+    1. [Null Operator](#Null-Operator)
+    1. [Null Operator with If](#Null-Operator-with-If)
+    1. [Nullness](#nullness)
+    1. [Type Implication](#Type-Implication)
+
+# Introduction
 
 This guide outlines how to contribute to the project as well as the key concepts and structure of the DataHelix. For information on how to get started with DataHelix see our [getting started guide]() and for information on the syntax of the DataHelix schema see the [user guide]().
 
-## Development
+# Development
 
-1. [Bugs And Issues](#bugs-and-issues)
-1. [Building and Testing](#Building-and-Testing)
-1. [Contributing](#Contributing)
-1. [Adding Schema Versions](#Adding-Schema-Versions)
-
-
-## Algorithms and Data Structures
-
-1. [Decision Trees](#decision-trees)
-    1. [Example](#example)
-    1. [Derivation](#derivation)
-    1. [Optimisation](#optimisation)
-1. [Generation Algorithm](#decision-tree-generation)
-    1. [Decision tree interpretation](#Decision-tree-interpretation)
-    1. [Constraint reduction](#Constraint-reduction)
-    1. [Databags](#Databags)
-    1. [Output](#output)
-1. [String Generation](#String-Generation)
-1. [Tree Walking Algorithm](#Tree-Walking-Algorithm)
-
-## Behaviour in Detail
-
-1. [Null Operator](#Null-Operator)
-1. [Null Operator with If](#Null-Operator-with-If)
-1. [Nullness](#nullness)
-1. [Type Implication](#Type-Implication)
-
-# Bugs and Issues
+## Bugs and Issues
 
 Raising well structured and detailed bug reports will be hugely valuable to maturing the DataHelix.
 
@@ -41,7 +47,7 @@ Checklist before raising an issue:
 * [ ] Are you sure this is a bug or missing capability?
 * [ ] Have you managed to isolate the issue to a simple profile or test case?
 
-## Raising an Issue
+### Raising an Issue
 * Create your issue [here](https://github.com/finos/datahelix/issues/new).
 * New issues contain two templates in the description: bug report and enhancement request. Please pick the most appropriate for your issue, **then delete the other**.
   * Please also tag the new issue with either "Bug" or "Enhancement".
@@ -49,7 +55,7 @@ Checklist before raising an issue:
 liberally to assist in readability.
   * [Code fences](https://help.github.com/articles/creating-and-highlighting-code-blocks/) for exception stack traces and log entries, for example, massively improve readability.
 
-# Building and Testing
+## Building and Testing
 
 DataHelix uses Java 1.8 which can be downloaded from this [link](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 
@@ -78,7 +84,7 @@ Feature: the name of my feature
 
 More examples can be seen in the [generator cucumber features](https://github.com/finos/datahelix/tree/master/orchestrator/src/test/java/com/scottlogic/deg/orchestrator/cucumber). An outline of how Cucumber is used within DataHelix can be found [here](./developer/CucumberCookbook.md).
 
-# Contributing
+## Contributing
 
 1. Fork it (<https://github.com/yourname/yourproject/fork>)
 2. Create your feature branch (`git checkout -b feature/fooBar`)
@@ -93,7 +99,7 @@ _NOTE:_ Commits and pull requests to FINOS repositories will only be accepted fr
 
 
 
-# Adding Schema Versions
+## Adding Schema Versions
 
 1. Copy a package in _profile/src/main/resources/profileschema/_ and rename to the new version number.
 1. Change the _schemaVersion_ const from the old version number to the new one.
@@ -137,7 +143,9 @@ You will need to update the test in _ProfileSchemaImmutabilityTests_ to contain 
 
 If you experience any issues with this test not updating the schema in IntelliJ, it is recommended to invalidate the cache and restart, or to delete the _profile/out_ directory and rebuild. 
 
-# Decision Trees
+# Algorithms and Data Structures
+
+## Decision Trees
 
 **Decision Trees** contain **Constraint Nodes** and **Decision Nodes**:
 
@@ -146,13 +154,15 @@ If you experience any issues with this test not updating the schema in IntelliJ,
 
 Every Decision Tree is rooted by a single Constraint Node.
 
-## Example
+<div id="decision-trees-example"></div>
+
+### Example
 
 In our visualisations, we notate constraint nodes with rectangles and decision nodes with triangles.
 
 ![](developer/decisionTrees/hoisting.before.svg)
 
-## Derivation
+### Derivation
 
 Given a set of input constraints, we can build an equivalent Decision Tree.
 
@@ -177,11 +187,11 @@ We can convert a set of constraints to a Constraint Node as follows:
     * If the constraint is an `IFELSE(X, Y, Z)`, add a Decision Node with two Constraint Nodes. One is converted from `AND(X, Y)`, the other from `AND(¬X, Z)`
 
 
-## Optimisation
+### Optimisation
 
-As a post-processing step, we apply optimisations to yield equivalent but more tractable trees.
+As a post-processing step, we apply the following optimisations to yield equivalent but more tractable trees.
 
-### Partitioning
+#### Partitioning
 
 The expression of a field may depend on the expression of other fields. For instance, given `X = 3 OR Y = 5`, `Y` must be `5` if `X` is not `3`; `X` and `Y` can be said to _co-vary_. This covariance property is transitive; if `X` and `Y` co-vary and `Y` and `Z` co-vary, then `X` and `Z` also co-vary. Given this definition, it's usually possible to divide a profile's fields into smaller groups of fields that co-vary. This process is called **partitioning**.
 
@@ -195,7 +205,7 @@ We can observe that variations in `x` and `y` have no implications on one anothe
 
 The motivation for partitioning is to determine which fields can vary independently of each other so that streams of values can be generated for them independently (and potentially in parallel execution threads) and then recombined by any preferred [combination strategy](user/CombinationStrategies.md).
 
-### Unification
+#### Unification
 
 Consider the below tree:
 
@@ -207,7 +217,7 @@ It's impossible to [partition](#Partitioning) this tree because the `type` field
 
 Formally: If you can identify pairs of sibling, equivalent-valency decision nodes A and B such that for each constraint node in A, there is precisely one mutually satisfiable node in B, you can collapse the decisions. There may be multiple ways to do this; the ordering of combinations affects how extensively the tree can be reduced.
 
-### Deletion
+#### Deletion
 
 Consider the below tree:
 
@@ -217,7 +227,7 @@ Because the leftmost node contradicts the root node, we can delete it. Thereafte
 
 ![](developer/decisionTrees/deletion.after.svg)
 
-### Hoisting
+#### Hoisting
 
 Consider the below tree:
 
@@ -231,11 +241,11 @@ Formally: If a Decision Node `D` contains a Constraint Node `C` with no constrai
 
 This optimisation addresses situations where, for example, an `anyOf` constraint is nested directly inside another `anyOf` constraint.
 
-# Decision tree generation
+## Decision tree generation
 
 Given a set of rules, generate a [decision tree](#decision-trees) (or multiple if [partitioning](#partitioning) was successful).
 
-## Decision tree interpretation
+### Decision tree interpretation
 
 An interpretation of the decision tree is defined by chosing an option for every decision visited in the tree.
 
@@ -245,7 +255,7 @@ In the above diagram the red lines represent one interpretation of the graph, fo
 
 Every decision introduces new interpretations, and we provide interpretations of every option of every decision chosen with every option of every other option. If there are many decisons then this can result in too many interpretations.
 
-## Constraint reduction
+### Constraint reduction
 
 An interpretation of a decision tree could contain several atomic constraints related to a single field. To make it easier to reason about these collectively, we **reduce** them into more detailed, holistic objects. These objects are referred to as **fieldspecs**, and can express any restrictions expressed by a constraint. For instance, the constraints:
 
@@ -275,7 +285,7 @@ The reduction algorithm works by converting each constraint into a corresponding
 * The two fieldspecs specify overlapping but compatible restrictions (eg, `X is in [2, 3, 8]` and `X is in [0, 2, 3]`), and the more restrictive interpretation is chosen (eg, `X is in [2, 3]`).
 * The two fieldspecs specify overlapping but incompatible restrictions (eg, `X > 2` and `X < 2`), the merge fails and the interpretation of the decision tree is rejected
 
-## Databags
+### Databags
 
 A **databag** is an immutable mapping from fields to outputs, where outputs are a pairing of a *value* and *formatting information* (eg, a date formatting string or a number of decimal places).
 
@@ -288,7 +298,7 @@ Fieldspecs are able to produce streams of databags containing valid values for t
 * A merger that takes multiple streams and applies one of the available [combination strategies](user/CombinationStrategies.md)
 * A concatenator that takes multiple streams and outputs all the members of each
 
-## Output
+### Output
 
 Once fieldspecs have generated streams of single-field databags, and databag stream combiners have merged them together, we should have a stream of databags that each contains all the information needed for a single datum. At this point, a serialiser can take each databag in turn and create an output.
 
@@ -296,7 +306,7 @@ To create a row the serialiser iterates through the fields in the profile, in or
 
 CSV and JSON formats are currently supported.
 
-# String Generation
+## String Generation
 
 We use a Java library called [dk.brics.automaton](http://www.brics.dk/automaton/) to analyse regexes and generate valid (and invalid for [violation](user/alphaFeatures/DeliberateViolation.md)) strings based on them. It works by representing the regex as a finite state machine. It might be worth reading about state machines for those who aren't familiar: [https://en.wikipedia.org/wiki/Finite-state_machine](https://en.wikipedia.org/wiki/Finite-state_machine). Consider the following regex: `ABC[a-z]?(A|B)`. It would be represented by the following state machine:
 
@@ -312,16 +322,16 @@ Other than the fact that we can use the state machine to generate strings, the m
 
 Due to the way that the generator computes textual data internally the generation of strings is not deterministic and may output valid values in a different order with each generation run. 
 
-## Anchors
+### Anchors
 
 dk.brics.automaton doesn't support start and end anchors `^` & `$` and instead matches the entire word as if the anchors were always present. For some of our use cases though it may be that we want to match the regex in the middle of a string somewhere, so we have two versions of the regex constraint - [matchingRegex](user/UserGuide.md#predicate-matchingregex) and [containingRegex](user/UserGuide.md#predicate-containingregex). If `containingRegex` is used then we simply add a `.*` to the start and end of the regex before passing it into the automaton. Any `^` or `$` characters passed at the start or end of the string respectively are removed, as the automaton will treat them as literal characters.
 
-## Automaton data types
+### Automaton data types
 The automaton represents the state machine using the following types:
 - `Transition`
 - `State`
 
-### `Transition`
+#### `Transition`
 A transition holds the following properties and are represented as lines in the above graph
 - `min: char` - The minimum permitted character that can be emitted at this position
 - `max: char` - The maximum permitted character that can be emitted at this position
@@ -335,7 +345,7 @@ In the above `A` looks like:
 | max | A | z |
 | to | 1 state, `s1` | 1 state, `s4` |
 
-### `State`
+#### `State`
 A state holds the following properties and are represented as circles in the above graph
 - `accept: boolean` - is this a termination state, can string production stop here?
 - `transitions: HashSet<Transition>` - which transitions, if any, follow this state
@@ -392,12 +402,12 @@ The pathway through the automaton is:
       - transition to state **1** (because the current state "ABCA" is rejected/incomplete)
       - current state is accepted so exit with the current string "ABCA"
 
-## Character support
+### Character support
 
 The generator does not support generating strings above the Basic Unicode plane (Plane 0). Using regexes that match characters above the basic plane may lead to unexpected behaviour.
 
 
-# Tree Walking Algorithm
+## Tree Walking Algorithm
 
 The generator transforms each profile into one or more [decision trees](#Decision-Trees), each of these can then be process through some strategy.
 
@@ -413,7 +423,9 @@ The algorithm generates row specs by:
  5. restarting from 1, until there are no decision left
  6. creating a rowspec from the constraints in the remaining root node.
 
-# Null Operator
+# Behaviour in Detail
+
+## Null Operator
 
 The `null` operator in a profile, expressed as `"is": "null"` or the negated equivalent has several meanings. It can mean (and emit the behaviour) as described below:
 
@@ -582,7 +594,7 @@ Considering this use case, you're trying to generate data to be imported into a 
 * A field that has no value<br />
 `field1 is null`
 
-# Nullness
+## Nullness
 ### Behaviour
 Nulls can always be produced for a field, except when a field is explicitly not null. How the constraints behave with null is outlined below:
 
@@ -598,7 +610,7 @@ Nulls can always be produced for a field, except when a field is explicitly not 
 |Null                   | ✔ |
 |Not null               | ❌ |
 
-# Type Implication
+## Type Implication
 ### Behaviour
 No operators imply type (except ofType ones). By default, all values are allowed.
 
