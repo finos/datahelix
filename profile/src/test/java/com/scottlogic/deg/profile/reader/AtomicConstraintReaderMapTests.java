@@ -49,7 +49,7 @@ public class AtomicConstraintReaderMapTests {
     @BeforeAll
     public void before() {
         constraintReaderMap = 
-            new AtomicConstraintTypeReaderMap(null, true).getConstraintReaderMapEntries();
+            new AtomicConstraintTypeReaderMap(null).getConstraintReaderMapEntries();
 
         List<Field> fields = new ArrayList<>();
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.walker.reductive;
+package com.scottlogic.deg.generator.walker.pruner;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsLessThanConstantConstraint;
@@ -38,14 +38,14 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ReductiveTreePrunerTests {
+class TreePrunerTests {
 
     private static final FieldSpec notNull = FieldSpec.Empty
         .withNotNull();
     private Field field = new Field("foo");
     private Field unrelatedField = new Field("unrelated");
     private FieldSpecHelper fieldSpecHelper = mock(FieldSpecHelper.class);
-    private ReductiveTreePruner treePruner = new ReductiveTreePruner(
+    private TreePruner treePruner = new TreePruner(
         new FieldSpecMerger(),
         new ConstraintReducer(
             new FieldSpecFactory(new StringRestrictionsFactory()),

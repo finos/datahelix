@@ -50,9 +50,7 @@ public class ProfileModule extends AbstractModule {
             .toInstance(profileConfigSource.getProfileFile());
 
         // Load built-in profile-to-constraint mappings
-        AtomicConstraintTypeReaderMap atomicConstraintTypeReaderMap = new AtomicConstraintTypeReaderMap(
-            profileConfigSource.fromFilePath(),
-            profileConfigSource.isDelayedConstraintsEnabled());
+        AtomicConstraintTypeReaderMap atomicConstraintTypeReaderMap = new AtomicConstraintTypeReaderMap(profileConfigSource.fromFilePath());
         bind(AtomicConstraintTypeReaderMap.class).toInstance(atomicConstraintTypeReaderMap);
     }
 }

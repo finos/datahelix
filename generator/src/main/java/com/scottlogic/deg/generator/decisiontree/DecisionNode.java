@@ -84,14 +84,4 @@ public final class DecisionNode implements Node {
     public int hashCode() {
         return Objects.hash(options);
     }
-
-    public DecisionNode accept(NodeVisitor visitor){
-        Stream<ConstraintNode> options = getOptions().stream().map(c->c.accept(visitor));
-        return visitor.visit(
-            new DecisionNode(
-                options.collect(Collectors.toSet()),
-                nodeMarkings
-            )
-        );
-    }
 }

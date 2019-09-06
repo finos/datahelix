@@ -22,7 +22,7 @@ import com.scottlogic.deg.generator.generation.*;
 
 import java.io.PrintWriter;
 
-public class MonitorProvider implements Provider<ReductiveDataGeneratorMonitor>  {
+public class MonitorProvider implements Provider<AbstractDataGeneratorMonitor>  {
     private GenerationConfigSource commandLine;
 
     @Inject
@@ -33,7 +33,7 @@ public class MonitorProvider implements Provider<ReductiveDataGeneratorMonitor> 
     }
 
     @Override
-    public ReductiveDataGeneratorMonitor get() {
+    public AbstractDataGeneratorMonitor get() {
         switch (commandLine.getMonitorType()) {
             case VERBOSE:
                 return new MessagePrintingDataGeneratorMonitor(

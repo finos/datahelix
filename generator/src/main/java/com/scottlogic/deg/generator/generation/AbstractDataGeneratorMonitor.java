@@ -17,22 +17,18 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.walker.reductive.ReductiveState;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-public abstract class ReductiveDataGeneratorMonitor implements DataGeneratorMonitor {
+public abstract class AbstractDataGeneratorMonitor implements DataGeneratorMonitor {
     final PrintWriter writer;
 
     private List<String> linesToPrintAtEndOfGeneration = new ArrayList<>();
 
     @Inject
-    ReductiveDataGeneratorMonitor(PrintWriter writer) {
+    AbstractDataGeneratorMonitor(PrintWriter writer) {
         this.writer = writer;
     }
 
@@ -43,8 +39,4 @@ public abstract class ReductiveDataGeneratorMonitor implements DataGeneratorMoni
     public void addLineToPrintAtEndOfGeneration(String line) {
         linesToPrintAtEndOfGeneration.add(line);
     }
-    public void fieldFixedToValue(Field field, Object current) {}
-    public void unableToStepFurther(ReductiveState reductiveState) {}
-    public void noValuesForField(ReductiveState reductiveState, Field field) {}
-    public void unableToEmitRowAsSomeFieldSpecsAreEmpty(ReductiveState reductiveState, Map<Field, FieldSpec> fieldSpecsPerField) {}
 }

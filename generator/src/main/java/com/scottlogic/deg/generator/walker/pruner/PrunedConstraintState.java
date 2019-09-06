@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.walker.reductive;
+package com.scottlogic.deg.generator.walker.pruner;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;

@@ -19,7 +19,6 @@ package com.scottlogic.deg.orchestrator.cucumber.testframework.steps;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
-import com.scottlogic.deg.generator.config.detail.TreeWalkerType;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.*;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import com.scottlogic.deg.profile.dto.AtomicConstraintType;
@@ -73,11 +72,6 @@ public class GeneralTestStep {
     @When("we do not violate any {operator} constraints")
     public void constraintTypeIsNotViolated(String operator){
         this.state.addConstraintToNotViolate(AtomicConstraintType.fromText(operator));
-    }
-
-    @When("the walker type is {walkerType}")
-    public void setTheCombinationStrategy(TreeWalkerType walkerType) {
-        this.state.walkerType = walkerType;
     }
 
     @Given("the data requested is {generationMode}")

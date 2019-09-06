@@ -48,23 +48,9 @@ public class FieldSpecValueGenerator {
         return dataType == DataGenerationType.RANDOM;
     }
 
-    public Stream<DataBagValue> generate(Field field, Set<FieldSpec> specs) {
-        List<FieldValueSource> fieldValueSources = specs.stream()
-            .map(sourceFactory::getFieldValueSources)
-            .flatMap(Collection::stream)
-            .distinct()
-            .collect(Collectors.toList());
-
-        return createValuesFromSources(field, fieldValueSources);
-    }
-
     public Stream<DataBagValue> generate(Field field, FieldSpec spec) {
         List<FieldValueSource> fieldValueSources = sourceFactory.getFieldValueSources(spec);
 
-        return createValuesFromSources(field, fieldValueSources);
-    }
-
-    private Stream<DataBagValue> createValuesFromSources(Field field, List<FieldValueSource> fieldValueSources) {
         FieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
 
         Iterable<Object> iterable = getDataValues(combinedFieldValueSource, field.isUnique());

@@ -18,7 +18,7 @@ package com.scottlogic.deg.generator.generation;
 
 import java.io.PrintWriter;
 
-public class NoopDataGeneratorMonitor extends ReductiveDataGeneratorMonitor {
+public class NoopDataGeneratorMonitor extends AbstractDataGeneratorMonitor {
     public NoopDataGeneratorMonitor() {
         super(new PrintWriter(System.err));
     }
