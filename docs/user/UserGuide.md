@@ -10,9 +10,8 @@
     1. [Integer/Decimal](#Integer/Decimal)
     2. [Strings](#Strings)
     3. [DateTime](#DateTime)
-    4. [Financial Codes](#FinancialCodes)
-    5. [Personal Data Types](#PersonalDataTypes)
-
+    4. [Custom Data Types](#Custom-Data-Types)
+   
 4. [Predicate constraints](#Predicate-constraints)
     1. [Theory](#Theory)
     2. [General constraints](#General-constraints)
@@ -214,7 +213,7 @@ DateTime fields currently default to the most precise granularity of millisecond
 
 Note that granularity concerns which values are valid, not how they're presented. All values will be output with the full format defined by [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601), so that a value granular to years will still be output as (e.g.) `0001-01-01T00:00:00.000Z`, rather than `0001` or `0001-01-01`.
 
-## Financial Codes
+## Custom Data Types
 
 Data Helix currently recognises and can generate a number of types of financial code:
 
@@ -223,15 +222,11 @@ Data Helix currently recognises and can generate a number of types of financial 
 - CUSIP
 - RIC
 
-When this is specified as the type of a field, the data generated will contain legal values for the type of code in question (with correct check digits, where appropriate), but the codes generated may or may not be allocated in the real world.
+Data Helix can generate data containing typical real names by defining a field as being of the types:
 
-Data Helix currently only supports ISIN codes in the `GB` and `US` ranges.  Only codes in these ranges will be generated.
-
-## Personal Data Types
-
-Data Helix can generate data containing typical real names, based on recent demographic data, by defining a field as being of the types `firstname`, `lastname` or `fullname`.  Name fields are strings and can be combined with other textual constraints to generate, for example, first names that are longer than 6 letters.
-
-The only string considered to be an invalid name is the empty string.
+- firstname
+- lastname
+- fullname
 
 # Predicate constraints
 
@@ -564,5 +559,3 @@ For the formatting to be applied, the generated data must be applicable, and the
 * not `null` (formatting will not be applied for null values)
 
 Formatting will not be applied if not applicable to the field's value
-
-See the [FAQ](FrequentlyAskedQuestions.md) for the difference between this and [granularTo](#predicate-granularto).
