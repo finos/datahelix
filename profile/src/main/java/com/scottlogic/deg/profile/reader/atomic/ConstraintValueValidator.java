@@ -7,14 +7,14 @@ import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
-import com.scottlogic.deg.profile.dto.AtomicConstraintType;
+import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.regex.Pattern;
 
-import static com.scottlogic.deg.profile.dto.AtomicConstraintType.IS_NULL;
+import static com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType.IS_NULL;
 
 public class ConstraintValueValidator {
 

@@ -17,11 +17,31 @@
 
 package com.scottlogic.deg.common.profile.constraints.delayed;
 
+import com.scottlogic.deg.common.date.TemporalAdjusterGenerator;
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
-import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 
-public interface DelayedAtomicConstraint extends Constraint {
+public class DelayedAtomicConstraint implements Constraint {
+
+    private final Field field;
+    private final AtomicConstraintType underlyingConstraint;
+    private final Field otherField;
+
+    private final TemporalAdjusterGenerator offsetGenerator;
+
+    private final Integer offsetUnit;
+    public DelayedAtomicConstraint(Field field, AtomicConstraintType underlyingConstraint, Field otherField, TemporalAdjusterGenerator offsetGenerator, Integer offsetUnit) {
+        this.field = field;
+        this.underlyingConstraint = underlyingConstraint;
+        this.otherField = otherField;
+        this.offsetGenerator = offsetGenerator;
+        this.offsetUnit = offsetUnit;
+    }
+
+    public DelayedAtomicConstraint(Field field, AtomicConstraintType underlyingConstraint, Field otherField) {
+        this(field, underlyingConstraint, otherField, null, null);
+    }
 
     static void validateFieldsAreDifferent(Field first, Field second) {
         if (first.equals(second)) {
@@ -29,12 +49,28 @@ public interface DelayedAtomicConstraint extends Constraint {
         }
     }
 
-    Field field();
+    public Field getField(){
+        return field;
+    }
 
-    Field getOtherField();
+    public AtomicConstraintType getUnderlyingConstraint(){
+        return underlyingConstraint;
+    }
 
-    default DynamicNotConstraint negate() {
+    public Field getOtherField(){
+        return otherField;
+    }
+
+    public DelayedAtomicConstraint negate() {
         return new DynamicNotConstraint(this);
+    }
+
+    public TemporalAdjusterGenerator getOffsetGenerator() {
+        return offsetGenerator;
+    }
+
+    public Integer getOffsetUnit() {
+        return offsetUnit;
     }
 
 }

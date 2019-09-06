@@ -18,9 +18,10 @@ package com.scottlogic.deg.profile.reader.constraintreaders;
 
 import com.scottlogic.deg.common.date.TemporalAdjusterGenerator;
 import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.EqualToConstraint;
-import com.scottlogic.deg.common.profile.constraints.delayed.IsEqualToDynamicDateConstraint;
+import com.scottlogic.deg.common.profile.constraints.delayed.DelayedAtomicConstraint;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 import com.scottlogic.deg.profile.reader.AtomicConstraintReader;
 
@@ -34,9 +35,10 @@ public class EqualToFieldReader implements AtomicConstraintReader {
             return createOffsetConstraint(dto, fields);
         }
 
-        return new IsEqualToDynamicDateConstraint(
-            fields.getByName((String)dto.value),
-            fields.getByName(dto.field)
+        return new DelayedAtomicConstraint(
+            fields.getByName(dto.field),
+            AtomicConstraintType.IS_EQUAL_TO_CONSTANT,
+            fields.getByName((String)dto.value)
         );
     }
 
@@ -48,11 +50,12 @@ public class EqualToFieldReader implements AtomicConstraintReader {
             workingDay
         );
 
-        return new IsEqualToDynamicDateConstraint(
+        return new DelayedAtomicConstraint(
+            fields.getByName(dto.field),
+            AtomicConstraintType.IS_EQUAL_TO_CONSTANT,
             fields.getByName((String)dto.value),
             unit,
-            dto.offset,
-            fields.getByName(dto.field)
+            dto.offset
         );
     }
 }

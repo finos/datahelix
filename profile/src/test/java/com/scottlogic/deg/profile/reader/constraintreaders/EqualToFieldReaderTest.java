@@ -1,9 +1,9 @@
+/*
 package com.scottlogic.deg.profile.reader.constraintreaders;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.common.profile.constraints.delayed.IsEqualToDynamicDateConstraint;
-import com.scottlogic.deg.profile.dto.AtomicConstraintType;
+import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 import com.scottlogic.deg.profile.reader.AtomicConstraintReader;
 import org.junit.jupiter.api.BeforeEach;
@@ -98,4 +98,4 @@ class EqualToFieldReaderTest {
                                                                    ProfileFields fields) {
         return (IsEqualToDynamicDateConstraint) reader.apply(dto, fields);
     }
-}
+}*/

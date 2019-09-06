@@ -19,52 +19,57 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.common.profile.constraints.delayed.*;
 import com.scottlogic.deg.generator.fieldspecs.relations.*;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class FieldRelationsFactory {
 
    public FieldSpecRelations construct(DelayedAtomicConstraint constraint) {
-       return construct(constraint, false);
-   }
-
-   private FieldSpecRelations construct(DelayedAtomicConstraint constraint, boolean negate) {
        if (constraint instanceof DynamicNotConstraint) {
-           return construct(constraint.negate(), !negate);
-       } else if (constraint instanceof IsAfterDynamicDateConstraint) {
-           return constructAfterDate((IsAfterDynamicDateConstraint) constraint);
-       } else if (constraint instanceof IsBeforeDynamicDateConstraint) {
-           return constructBeforeDate((IsBeforeDynamicDateConstraint) constraint);
-       } else if (constraint instanceof IsEqualToDynamicDateConstraint) {
-            return constructEqualToDate((IsEqualToDynamicDateConstraint) constraint);
-       } else {
-           throw new IllegalArgumentException("Unsupported field spec relations: " + constraint.getClass());
+           throw new NotImplementedException();
        }
+
+       switch (constraint.getUnderlyingConstraint()) {
+           case IS_EQUAL_TO_CONSTANT:
+               return constructEqualToDate(constraint);
+           case IS_BEFORE_CONSTANT_DATE_TIME:
+               return constructBeforeDate(constraint, false);
+           case IS_BEFORE_OR_EQUAL_TO_CONSTANT_DATE_TIME:
+               return constructBeforeDate(constraint, true);
+           case IS_AFTER_CONSTANT_DATE_TIME:
+               return constructAfterDate(constraint, false);
+           case IS_AFTER_OR_EQUAL_TO_CONSTANT_DATE_TIME:
+               return constructAfterDate(constraint, true);
+       }
+
+       throw new IllegalArgumentException("Unsupported field spec relations: " + constraint.getUnderlyingConstraint());
+
    }
 
-   private FieldSpecRelations constructBeforeDate(IsBeforeDynamicDateConstraint constraint) {
+   private FieldSpecRelations constructBeforeDate(DelayedAtomicConstraint constraint, boolean inclusive) {
        return new BeforeDateRelation(
+           constraint.getField(),
            constraint.getOtherField(),
-           constraint.field(),
-           constraint.inclusive());
+           inclusive);
    }
 
-   private FieldSpecRelations constructAfterDate(IsAfterDynamicDateConstraint constraint) {
+   private FieldSpecRelations constructAfterDate(DelayedAtomicConstraint constraint, boolean inclusive) {
        return new AfterDateRelation(
+           constraint.getField(),
            constraint.getOtherField(),
-           constraint.field(),
-           constraint.inclusive());
+           inclusive);
    }
 
-   private FieldSpecRelations constructEqualToDate(IsEqualToDynamicDateConstraint constraint) {
-       if (constraint.unit() != null) {
+   private FieldSpecRelations constructEqualToDate(DelayedAtomicConstraint constraint) {
+       if (constraint.getOffsetUnit() != null) {
            return new EqualToOffsetDateRelation(
+               constraint.getField(),
                constraint.getOtherField(),
-               constraint.field(),
-               constraint.unit(),
-               constraint.offset());
+               constraint.getOffsetGenerator(),
+               constraint.getOffsetUnit());
        } else {
            return new EqualToDateRelation(
-               constraint.getOtherField(),
-               constraint.field());
+               constraint.getField(),
+               constraint.getOtherField());
        }
    }
 }
