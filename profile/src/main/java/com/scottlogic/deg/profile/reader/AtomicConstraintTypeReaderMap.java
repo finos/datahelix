@@ -35,17 +35,7 @@ import static com.scottlogic.deg.profile.dto.AtomicConstraintType.*;
 
 public class AtomicConstraintTypeReaderMap {
 
-    private final String fromFilePath;
-
-    public AtomicConstraintTypeReaderMap(final String fromFilePath) {
-        this.fromFilePath = fromFilePath;
-    }
-
-    public Map<AtomicConstraintType, AtomicConstraintReader> getConstraintReaderMapEntries() {
-        return getDelayedMapEntries();
-    }
-
-    private Map<AtomicConstraintType, AtomicConstraintReader> getDelayedMapEntries() {
+    public Map<AtomicConstraintType, AtomicConstraintReader> getDelayedMapEntries() {
         Map<AtomicConstraintType, AtomicConstraintReader> map = new HashMap<>();
 
         map.put(IS_EQUAL_TO_FIELD, new EqualToFieldReader());

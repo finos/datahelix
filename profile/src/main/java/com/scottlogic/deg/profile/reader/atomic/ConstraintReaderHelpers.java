@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.reader;
+package com.scottlogic.deg.profile.reader.atomic;
 
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
+import com.scottlogic.deg.profile.reader.InvalidProfileException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -36,7 +37,7 @@ public class ConstraintReaderHelpers {
 
     private static final OffsetDateTime NOW = OffsetDateTime.now();
 
-    public static OffsetDateTime parseDate(String value, ConstraintDTO dto) {
+    public static OffsetDateTime parseDate(String value) {
         if (value.toUpperCase().equals("NOW")) {
             return NOW;
         }
@@ -56,9 +57,8 @@ public class ConstraintReaderHelpers {
                 : LocalDateTime.from(temporalAccessor).atOffset(ZoneOffset.UTC);
         } catch (DateTimeParseException dtpe) {
             throw new InvalidProfileException(String.format(
-                "Field [%s]: Date string '%s' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS[Z] between (inclusive) " +
+                "Date string '%s' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS[Z] between (inclusive) " +
                     "0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z",
-                dto.field,
                 value
             ));
         }

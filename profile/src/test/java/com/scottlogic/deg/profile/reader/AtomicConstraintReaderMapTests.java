@@ -52,7 +52,7 @@ public class AtomicConstraintReaderMapTests {
     @BeforeAll
     public void before() {
         constraintReaderMap = 
-            new AtomicConstraintTypeReaderMap(null).getConstraintReaderMapEntries();
+            new AtomicConstraintTypeReaderMap().getDelayedMapEntries();
 
         List<Field> fields = new ArrayList<>();
 
