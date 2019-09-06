@@ -1,19 +1,18 @@
 # Table of Contents
-1. [Getting Started](gettingStarted/StepByStepInstructions.md)
-1. [Profiles](#Profiles)
-    1. [Fields](#Fields)
-    2. [Rules](#Rules)
-    3. [Persistence](#Persistence)
-    4. [Creation](#Creation)
+1. [Introduction](#Introduction)
 
-2. [Data types](#Data-Types)
+2. [Profiles](#Profiles)
+    1. [Creating a Profile](#Creating-a-Profile)
+    2. [Example Profile](#Example-Profile)
+    3. [Fields](#Fields)
+
+3. [Data types](#Data-Types)
     1. [Integer/Decimal](#Integer/Decimal)
     2. [Strings](#Strings)
     3. [DateTime](#DateTime)
-    4. [Financial Codes](#FinancialCodes)
-    5. [Personal Data Types](#PersonalDataTypes)
-
-3. [Predicate constraints](#Predicate-constraints)
+    4. [Custom Data Types](#Custom-Data-Types)
+   
+4. [Predicate constraints](#Predicate-constraints)
     1. [Theory](#Theory)
     2. [General constraints](#General-constraints)
         1. [equalTo](#predicate-equalto)
@@ -40,62 +39,124 @@
         4. [beforeOrAt](#predicate-beforeorat)
         5. [granularTo](#predicate-granularto-datetime)
 
-4. [Grammatical constraints](#Grammatical-Constraints)
+5. [Grammatical constraints](#Grammatical-Constraints)
     1. [not](#not)
     2. [anyOf](#anyOf)
     3. [allOf](#allOf)
     4. [if](#if)
 
-5. [Presentational constraints](#Presentational-Constraints)
+6. [Presentational constraints](#Presentational-Constraints)
 
-6. [Profile Validation](#Profile-Validation)
-    1. [JetBrains IntelliJ](#JetBrains-IntelliJ)
-    2. [Microsoft Visual Studio Code](#Microsoft-Visual-Studio-Code)
-    3. [Schema Validation using library](#Schema-Validation-using-library)
+# Introduction
+
+This guide outlines how to create a profile and contains information on the syntax of the DataHelix schema. If you are new to DataHelix, please read the [Getting Started page](docs/GettingStarted.md). If you would like information on how to contribute to the project as well as a technical overview of the key concepts and structure of the DataHelix then see the [Developer Guide](docs/developer/DeveloperGuide.md).
 
 # Profiles
 
-**Data profiles** describe potential or real data. For instance, we could design a profile that describes a _user_account_ table, where:
+## Creating a Profile
 
-* the data must have _user_id_, _email_address_ and _creation_date_ fields
-* _user_id_ is a non-optional string
-* _email_address_ must be populated and contain a @ character
-  * however, if _user_id_ is itself an email address, _email_address_ must be absent
-* _creation_date_ is a non-optional date, with no time component, later than 2003 and output per [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601)    
+This section will walk you through creating basic profiles with which you can generate data.
 
-This data profile can be found in the [examples folder](../../examples/user-account).
+Profiles are JSON documents consisting of three sections, the schema version, the list 
+of fields and the rules.
 
-Every profile declares some **fields** and some **constraints**.
+- **Schema Version** - Dictates the method of serialisation of the profile in order for the generator to 
+interpret the profile fields and rules. The latest version is 0.1.
+```
+    "schemaVersion": "0.1",
+```
+- **List of Fields** - An array of column headings is defined with unique "name" keys.
+```
+    "fields": [
+        {
+            "name": "Column 1"
+        },
+        {
+            "name": "Column 2"
+        }
+    ]
+```
+- **Rules** - an array of constraints defined with a description. Constraints reduce the data in each column from the [universal set](https://github.com/finos/datahelix/blob/master/docs/user/SetRestrictionAndGeneration.md)
+to the desired range of values. They are formatted as JSON objects. There are three types of constraints: 
+
+    - [Predicate Constraints](#Predicate-constraints) - predicates that define any given value as being 
+    _valid_ or _invalid_
+    - [Grammatical Constraints](#Grammatical-constraints) - used to combine or modify other constraints
+    - [Presentational Constraints](#Presentational-constraints) - used by output serialisers where
+     string output is required 
+     
+Here is a list of two rules comprised of one constraint each:
+    
+```
+    "rules": [
+        {
+          "rule": "Column 1 is a string",
+          "constraints": [
+            {
+              "field": "Column 1",
+              "is": "ofType",
+              "value": "string"
+            }
+          ]
+        },
+        {
+          "rule": "Column 2 is a number",
+          "constraints": [
+            {
+              "field": "Column 2",
+              "is": "ofType",
+              "value": "integer"
+            }
+          ]
+        }
+      ]
+
+```
+
+These three sections are combined to form the [complete profile](#Example-Profile).
+
+## Example Profile
+
+    {
+    "schemaVersion": "0.1",
+    "fields": [
+        {
+        "name": "Column 1"
+        },
+        {
+        "name": "Column 2"
+        }
+    ],
+    "rules": [
+        {
+        "rule": "Column 1 is a string",
+        "constraints": [
+            {
+            "field": "Column 1",
+            "is": "ofType",
+            "value": "string"
+            }
+        ]
+        },
+        {
+        "rule": "Column 2 is a number",
+        "constraints": [
+            {
+            "field": "Column 2",
+            "is": "ofType",
+            "value": "integer"
+            }
+        ]
+        }
+    ]
+    }
+
+* For a larger profile example see [here](https://github.com/finos/datahelix/blob/master/docs/user/Schema.md)
+* Further examples can be found in the Examples folder [here](https://github.com/finos/datahelix/tree/master/examples)
 
 ## Fields
 
-Fields are the "slots" of data that can take values. If generating into a CSV or database, fields are columns. If generating into JSON, fields are object properties. Typical fields might be _email_address_ or _user_id_.
-
-By default, any piece of data is valid for a field. To get more specific, we need to add **rules**.
-
-## Rules
-
-Every rule is a named collection of *constraints*, which can be any of:
-
-* [Predicate constraints](#Predicate-constraints), which limit a field's possible values
-* [Presentational constraints](#Presentational-Constraints), which control how values are serialised (eg, number of significant figures)
-* [Grammatical constraints](#Grammatical-constraints), which combine other constraints together
-
-(Predicate and formatting constraints are collectively referred to as **data constraints**)
-
-The decision of how to group constraints into rules is up to the user. At the extremes, there could be a separate rule for each constraint, or one rule containing every constraint. More usually, rules will represent collections of related constraints (eg, _"X is a non-null integer between 0 and 100"_ is a fine rule, comprising four constraints). How to group into rules becomes particularly important when [deliberate violation](alphaFeatures/DeliberateViolation.md) is involved.
-
-## Persistence
-
-Profiles are persisted as JSON documents following a [schema](Schema.md) saved as UTF-8.
-
-## Creation
-
-Profiles can be created by any of:
-
-- Writing JSON profiles by hand or by some custom transform process
-- ~~Deriving them by supplying some sample data to the Profiler~~ (not yet)
-- ~~Designing them through the web front end~~ (not yet)
+Fields are the "slots" of data that can take values. If generating into a CSV or database, fields are columns. If generating into JSON, fields are object properties. Typical fields might be _email_address_ or _user_id_. By default, any piece of data is valid for a field. 
 
 # Data Types
 
@@ -153,7 +214,7 @@ DateTime fields currently default to the most precise granularity of millisecond
 
 Note that granularity concerns which values are valid, not how they're presented. All values will be output with the full format defined by [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601), so that a value granular to years will still be output as (e.g.) `0001-01-01T00:00:00.000Z`, rather than `0001` or `0001-01-01`.
 
-## Financial Codes
+## Custom Data Types
 
 Data Helix currently recognises and can generate a number of types of financial code:
 
@@ -162,15 +223,11 @@ Data Helix currently recognises and can generate a number of types of financial 
 - CUSIP
 - RIC
 
-When this is specified as the type of a field, the data generated will contain legal values for the type of code in question (with correct check digits, where appropriate), but the codes generated may or may not be allocated in the real world.
+Data Helix can generate data containing typical real names by defining a field as being of the types:
 
-Data Helix currently only supports ISIN codes in the `GB` and `US` ranges.  Only codes in these ranges will be generated.
-
-## Personal Data Types
-
-Data Helix can generate data containing typical real names, based on recent demographic data, by defining a field as being of the types `firstname`, `lastname` or `fullname`.  Name fields are strings and can be combined with other textual constraints to generate, for example, first names that are longer than 6 letters.
-
-The only string considered to be an invalid name is the empty string.
+- firstname
+- lastname
+- fullname
 
 # Predicate constraints
 
@@ -495,7 +552,6 @@ Is satisfied if either:
 
 While it's not prohibited, wrapping conditional constraints in any other kind of constraint (eg, a `not`) may cause unintuitive results.
 
-
 # Presentational Constraints
 <div id="Presentational-constraints"></div>
 
@@ -514,66 +570,3 @@ For the formatting to be applied, the generated data must be applicable, and the
 * not `null` (formatting will not be applied for null values)
 
 Formatting will not be applied if not applicable to the field's value
-
-See the [FAQ](FrequentlyAskedQuestions.md) for the difference between this and [granularTo](#predicate-granularto).
-
-# Profile Validation
-
-The [JSON schema](https://json-schema.org/) for the DataHelix data profile is stored in the file [`datahelix.schema.json`](../profile/src/main/resources/profileschema/0.1/datahelix.schema.json) in the [schemas module](../profile/src/main/resources/profileschema/0.1/) directory.
-
-## JetBrains IntelliJ
-
-**_Although IntelliJ tries to validate the profile json files against the schema, it incorrectly shows the whole profile as invalid instead of specific errors._**
-
-**_For this reason we recommend using Visual Studio Code for writing and editing profiles._**
-
-
-To use the DataHelix profile JSON schema in IntelliJ we need to  set up the intellij editor to validate all json files under the `json` and/or `examples` directories against the `datahelix.schema.json` schema file.
-
-To setup IntelliJ to validate json files against the schema follow these steps:
-
-1. Open IntelliJ
-1. Select `File` -> `Settings` -> `Languages & Frameworks` -> `Schemas and DTDs`
-1. Select `JSON Schema Mappings`
-1. Press the `+` button to add a new schema mapping
-1. Give the mapping a name (e.g. `DataHelix Profile Schema`)
-1. For `Schema file or URL:` select the local schema file (e.g. `<project root>/datahelix/profile/src/main/resources/profileschema/0.1/datahelix.schema.json`)
-1. Make sure the `Schema version:` is set to `JSON schema version 7`
-1. Press the `+` button to add a new mapping
-1. Select `Add Directory`
-1. Select the `json` directory
-1. Press okay
-
-Now when you open a json file from the `json` directory in IntelliJ, it will be automatically validated against the DataHelix profile schema.
-
-
-## Microsoft Visual Studio Code
-
-To enable visual studio code to validate json files against the DataHelix profile schema a `json.schemas` section needs to be added to the `settings.json` file.
-
-To do this:
-
-1. Click on the gear icon at the bottom left of the screen and select `Settings`
-1. In the settings windows, click `Extensions` -> `JSON`
-1. You should see a section like this:
-    ```
-    Schemas
-    Associate schemas to JSON files in the current project
-    Edit in settings.json
-    ```
-1. Click on the `Edit in settings.json` link and VSCode will open the settings.json file.
-1. Add the following snippet to the end of the file (replacing `<datahelix_projectroot>` with the root directory path for the DataHelix project and replacing the `"fileMatch"` value with an appropriate value for your configuration):
-    ```
-      "json.schemas": [
-        {
-          "fileMatch": [
-            "<datahelix_projectroot>/*"
-          ],
-          "url": "file:///<datahelix_projectroot>/profile/src/main/resources/profileschema/0.1/datahelix.schema.json"
-        }
-      ]
-    ```
-    Alternatively you can configure this to any naming convention you want for profile files, for example `"*.profile.json"`.
-
-    To verify that the url to the `datahelix.schema.json` is valid you can `ctrl-click` on it and the schema file will open in the editor.  
-1. If the ` "json.schemas"` snippet already exists, you can add a new object to the JSON array for the DataHelix profile schema.
