@@ -76,7 +76,7 @@ Feature: the name of my feature
       | null |
 ```
 
-More examples can be seen in the [generator cucumber features](https://github.com/finos/datahelix/tree/master/orchestrator/src/test/java/com/scottlogic/deg/orchestrator/cucumber). An outline of how Cucumber is used within DataHelix can be found [here](./docs/developer/CucumberCookbook.md).
+More examples can be seen in the [generator cucumber features](https://github.com/finos/datahelix/tree/master/orchestrator/src/test/java/com/scottlogic/deg/orchestrator/cucumber). An outline of how Cucumber is used within DataHelix can be found [here](./developer/CucumberCookbook.md).
 
 # Contributing
 
@@ -150,7 +150,7 @@ Every Decision Tree is rooted by a single Constraint Node.
 
 In our visualisations, we notate constraint nodes with rectangles and decision nodes with triangles.
 
-![](docs/developer/decisionTrees/hoisting.before.svg)
+![](developer/decisionTrees/hoisting.before.svg)
 
 ## Derivation
 
@@ -187,23 +187,23 @@ The expression of a field may depend on the expression of other fields. For inst
 
 For example, given the below tree:
 
-![](docs/developer/decisionTrees/partitioning.before.svg)
+![](developer/decisionTrees/partitioning.before.svg)
 
 We can observe that variations in `x` and `y` have no implications on one another, and divide into two trees:
 
-![](docs/developer/decisionTrees/partitioning.after1.svg) ![](docs/developer/decisionTrees/partitioning.after2.svg)
+![](developer/decisionTrees/partitioning.after1.svg) ![](developer/decisionTrees/partitioning.after2.svg)
 
-The motivation for partitioning is to determine which fields can vary independently of each other so that streams of values can be generated for them independently (and potentially in parallel execution threads) and then recombined by any preferred [combination strategy](docs/user/CombinationStrategies.md).
+The motivation for partitioning is to determine which fields can vary independently of each other so that streams of values can be generated for them independently (and potentially in parallel execution threads) and then recombined by any preferred [combination strategy](user/CombinationStrategies.md).
 
 ### Unification
 
 Consider the below tree:
 
-![](docs/developer/decisionTrees/unification.before.svg)
+![](developer/decisionTrees/unification.before.svg)
 
 It's impossible to [partition](#Partitioning) this tree because the `type` field affects every decision node. However, we can see that the below tree is equivalent:  
 
-![](docs/developer/decisionTrees/unification.after.svg)
+![](developer/decisionTrees/unification.after.svg)
 
 Formally: If you can identify pairs of sibling, equivalent-valency decision nodes A and B such that for each constraint node in A, there is precisely one mutually satisfiable node in B, you can collapse the decisions. There may be multiple ways to do this; the ordering of combinations affects how extensively the tree can be reduced.
 
@@ -211,21 +211,21 @@ Formally: If you can identify pairs of sibling, equivalent-valency decision node
 
 Consider the below tree:
 
-![](docs/developer/decisionTrees/deletion.before.svg)
+![](developer/decisionTrees/deletion.before.svg)
 
 Because the leftmost node contradicts the root node, we can delete it. Thereafter, we can pull the content of the other constraint node up to the root node. However, because `¬(x > 12)` is entailed by `x = 3`, we delete it as well. This yields:
 
-![](docs/developer/decisionTrees/deletion.after.svg)
+![](developer/decisionTrees/deletion.after.svg)
 
 ### Hoisting
 
 Consider the below tree:
 
-![](docs/developer/decisionTrees/hoisting.before.svg)
+![](developer/decisionTrees/hoisting.before.svg)
 
 We can simplify to:
 
-![](docs/developer/decisionTrees/hoisting.after.svg)
+![](developer/decisionTrees/hoisting.after.svg)
 
 Formally: If a Decision Node `D` contains a Constraint Node `C` with no constraints and a single Decision Node `E`, `E`'s Constraint Nodes can be added to `D` and `C` removed.
 
@@ -239,7 +239,7 @@ Given a set of rules, generate a [decision tree](#decision-trees) (or multiple i
 
 An interpretation of the decision tree is defined by chosing an option for every decision visited in the tree.
 
-![](docs/user/images/interpreted-graph.png)
+![](user/images/interpreted-graph.png)
 
 In the above diagram the red lines represent one interpretation of the graph, for every decision an option has been chosen and we end up with the set of constraints that the red lines touch at any point. These constraints are reduced into a fieldspec (see [Constraint Reduction](#constraint-reduction) below).
 
@@ -265,7 +265,7 @@ could collapse to
 
 *(note: this is a conceptual example and not a reflection of actual object structure)* 
 
-See [Set restriction and generation](docs/user/SetRestrictionAndGeneration.md) for a more in depth explanation of how the constraints are merged and data generated.
+See [Set restriction and generation](user/SetRestrictionAndGeneration.md) for a more in depth explanation of how the constraints are merged and data generated.
 
 This object has all the information needed to produce the values `[3, 4, 5, 6]`.
 
@@ -285,7 +285,7 @@ Fieldspecs are able to produce streams of databags containing valid values for t
 
 * A memoization decorator that records values being output so they can be replayed inexpensively
 * A filtering decorator that prevents repeated values being output
-* A merger that takes multiple streams and applies one of the available [combination strategies](docs/user/CombinationStrategies.md)
+* A merger that takes multiple streams and applies one of the available [combination strategies](user/CombinationStrategies.md)
 * A concatenator that takes multiple streams and outputs all the members of each
 
 ## Output
@@ -298,9 +298,9 @@ CSV and JSON formats are currently supported.
 
 # String Generation
 
-We use a Java library called [dk.brics.automaton](http://www.brics.dk/automaton/) to analyse regexes and generate valid (and invalid for [violation](docs/user/alphaFeatures/DeliberateViolation.md)) strings based on them. It works by representing the regex as a finite state machine. It might be worth reading about state machines for those who aren't familiar: [https://en.wikipedia.org/wiki/Finite-state_machine](https://en.wikipedia.org/wiki/Finite-state_machine). Consider the following regex: `ABC[a-z]?(A|B)`. It would be represented by the following state machine:
+We use a Java library called [dk.brics.automaton](http://www.brics.dk/automaton/) to analyse regexes and generate valid (and invalid for [violation](user/alphaFeatures/DeliberateViolation.md)) strings based on them. It works by representing the regex as a finite state machine. It might be worth reading about state machines for those who aren't familiar: [https://en.wikipedia.org/wiki/Finite-state_machine](https://en.wikipedia.org/wiki/Finite-state_machine). Consider the following regex: `ABC[a-z]?(A|B)`. It would be represented by the following state machine:
 
-![](docs/user/images/finite-state-machine.svg)
+![](user/images/finite-state-machine.svg)
 
 The [states](http://www.brics.dk/automaton/doc/index.html) (circular nodes) represent a string that may (green) or may not (white) be valid. For example, `s0` is the empty string, `s5` is `ABCA`.
 
@@ -314,7 +314,7 @@ Due to the way that the generator computes textual data internally the generatio
 
 ## Anchors
 
-dk.brics.automaton doesn't support start and end anchors `^` & `$` and instead matches the entire word as if the anchors were always present. For some of our use cases though it may be that we want to match the regex in the middle of a string somewhere, so we have two versions of the regex constraint - [matchingRegex](docs/user/UserGuide.md#predicate-matchingregex) and [containingRegex](docs/user/UserGuide.md#predicate-containingregex). If `containingRegex` is used then we simply add a `.*` to the start and end of the regex before passing it into the automaton. Any `^` or `$` characters passed at the start or end of the string respectively are removed, as the automaton will treat them as literal characters.
+dk.brics.automaton doesn't support start and end anchors `^` & `$` and instead matches the entire word as if the anchors were always present. For some of our use cases though it may be that we want to match the regex in the middle of a string somewhere, so we have two versions of the regex constraint - [matchingRegex](user/UserGuide.md#predicate-matchingregex) and [containingRegex](user/UserGuide.md#predicate-containingregex). If `containingRegex` is used then we simply add a `.*` to the start and end of the regex before passing it into the automaton. Any `^` or `$` characters passed at the start or end of the string respectively are removed, as the automaton will treat them as literal characters.
 
 ## Automaton data types
 The automaton represents the state machine using the following types:
@@ -430,7 +430,7 @@ Therefore the null operator can:
 - (A) _By omitting the constraint_: express fields as permitting absence or presence of a value (otherwise known as a nullable field)
 
 ### `null` and interoperability
-`null` is a keyword/term that exists in other technologies and languages, so far as this tool is concerned it relates to the absence or the presence of a value. See [set restriction and generation](docs/user/SetRestrictionAndGeneration.md) for more details.
+`null` is a keyword/term that exists in other technologies and languages, so far as this tool is concerned it relates to the absence or the presence of a value. See [set restriction and generation](user/SetRestrictionAndGeneration.md) for more details.
 
 When a field is serialised or otherwise written to a medium, as the output of the generator, it may choose to represent the absence of a value by using the formats' `null` representation, or some other form such as omitting the property and so on.
 
@@ -440,7 +440,7 @@ CSV files do not have any standard for representing the absence of a value diffe
 JSON files could be presented with `null` as the value for a property or excluding the property from the serialised result. This is the responsibility of the serialiser, and depends on the use cases.
 
 ## Null Operator with If
-With `if` constraints, the absence of a value needs to be considered in order to understand how the generator will behave. Remember, every set contains the empty set, unless excluded by way of the `not(is null)` constraint, for more details see [set restriction and generation](docs/user/SetRestrictionAndGeneration.md).
+With `if` constraints, the absence of a value needs to be considered in order to understand how the generator will behave. Remember, every set contains the empty set, unless excluded by way of the `not(is null)` constraint, for more details see [set restriction and generation](user/SetRestrictionAndGeneration.md).
 
 Consider the following if constraint:
 
