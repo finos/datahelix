@@ -16,7 +16,6 @@
 
 dependencies {
     compile project(":common")
-    compile project(":output")
 
     compile "com.google.inject:guice:${GUICE_VERSION}"
     compile "dk.brics.automaton:automaton:${AUTOMATON_VERSION}"
