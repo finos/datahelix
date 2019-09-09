@@ -96,7 +96,7 @@ public class FieldSpecMerger {
     }
 
     private boolean noAllowedValues(FieldSpec fieldSpec) {
-        return (fieldSpec.getWhitelist() != null && fieldSpec.getWhitelist().set().isEmpty());
+        return (fieldSpec.getWhitelist() != null && fieldSpec.getWhitelist().isEmpty());
     }
 
     private FieldSpec setRestriction(DistributedSet<Object> set) {

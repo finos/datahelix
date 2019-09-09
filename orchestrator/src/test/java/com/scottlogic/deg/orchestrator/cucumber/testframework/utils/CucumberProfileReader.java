@@ -25,6 +25,7 @@ import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.profile.reader.*;
 import com.scottlogic.deg.common.profile.RuleInformation;
 import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintValueReader;
+import com.scottlogic.deg.profile.reader.atomic.FromFileReader;
 
 import java.util.Collections;
 import java.util.List;
@@ -50,7 +51,7 @@ public class CucumberProfileReader implements ProfileReader {
 
     private Profile getProfile() {
         try {
-            MainConstraintReader constraintReader = new MainConstraintReader(constraintReaderMap, new AtomicConstraintValueReader(null));
+            MainConstraintReader constraintReader = new MainConstraintReader(constraintReaderMap, new AtomicConstraintValueReader(new FromFileReader("")));
             ProfileFields profileFields = new ProfileFields(state.profileFields);
             AtomicBoolean exceptionInMapping = new AtomicBoolean();
 

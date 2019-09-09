@@ -73,6 +73,10 @@ public class ConstraintValueValidator {
 
             case IS_GRANULAR_TO:
                 validateGranularity(value);
+                break;
+
+            default:
+                //throw new ValidationException("Contraint type not recognised, was " + type);
         }
     }
 
@@ -99,11 +103,12 @@ public class ConstraintValueValidator {
             throw new ValidationException("Couldn't recognise 'values' property, it must not contain 'null'");
         }
 
-        if (((DistributedSet) value).set().isEmpty()) {
+        DistributedSet distributedSet = (DistributedSet) value;
+        if (distributedSet.isEmpty()) {
             throw new ValidationException("Cannot create an IsInSetConstraint with an empty set.");
         }
 
-        ((DistributedSet) value).set().stream()
+        distributedSet.stream()
             .peek(val->{if (val == null) throw new ValidationException("Set must not contain null");})
             .forEach(val->validateAny(type, val));
     }
@@ -134,7 +139,7 @@ public class ConstraintValueValidator {
                 value
             ));
         }
-        ensureValueBetween(type, value, BigDecimal.ZERO, BigDecimal.valueOf(Defaults.MAX_STRING_LENGTH));
+        ensureValueBetween(type, (Number) value, BigDecimal.ZERO, BigDecimal.valueOf(Defaults.MAX_STRING_LENGTH));
     }
 
     private static void validateNumber(AtomicConstraintType type, Object value) {
@@ -144,7 +149,7 @@ public class ConstraintValueValidator {
                     value.getClass().getSimpleName(), value));
         }
 
-        ensureValueBetween(type, value, Defaults.NUMERIC_MIN, Defaults.NUMERIC_MAX);
+        ensureValueBetween(type, (Number) value, Defaults.NUMERIC_MIN, Defaults.NUMERIC_MAX);
 
     }
 
@@ -171,7 +176,7 @@ public class ConstraintValueValidator {
         }
     }
 
-    private static void ensureValueBetween(AtomicConstraintType type, Object value, BigDecimal min, BigDecimal max) {
+    private static void ensureValueBetween(AtomicConstraintType type, Number value, BigDecimal min, BigDecimal max) {
         BigDecimal valueAsBigDecimal = NumberUtils.coerceToBigDecimal(value);
         if (valueAsBigDecimal.compareTo(min) < 0) {
             throw new InvalidProfileException(String.format(

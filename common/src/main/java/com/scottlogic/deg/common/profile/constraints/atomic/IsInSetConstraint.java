@@ -56,7 +56,7 @@ public class IsInSetConstraint implements AtomicConstraint {
         boolean overLimit = legalValues.set().size() > 3;
         return String.format("%s in [%s%s](%d values)",
             field.name,
-            legalValues.set().stream().limit(3).map(Object::toString).collect(Collectors.joining(", ")),
+            legalValues.stream().limit(3).map(Object::toString).collect(Collectors.joining(", ")),
             overLimit ? ", ..." : "",
             legalValues.set().size());
     }
