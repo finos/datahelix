@@ -7,7 +7,7 @@
 
 ## Development
 
-1. [Contributing](../../.github/CONTRIBUTING.md)
+1. [Contributing](../../../.github/CONTRIBUTING.md)
 1. [Build and Run the Generator](../user/gettingStarted/BuildAndRun.md)
 1. [Adding Schema Versions](HowToAddSupportForNewSchemaVersion.md)
 1. [Dependency Injection](DependencyInjection.md)
