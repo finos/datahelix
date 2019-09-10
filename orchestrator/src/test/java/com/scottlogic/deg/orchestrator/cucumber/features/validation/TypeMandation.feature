@@ -6,7 +6,6 @@ Feature: Type mandation validation
     And user_id is greater than 3
     And user_id is less than 10
     And user_id is granular to 1
-    And user_id is formatted as "%d"
     # ideally I guess we'd have more here - what's a sensible amount? maybe we should use scenario outlines?
     Then the profile is invalid because "user_id is untyped; add an ofType, equalTo or inSet constraint, or mark it as null"
 

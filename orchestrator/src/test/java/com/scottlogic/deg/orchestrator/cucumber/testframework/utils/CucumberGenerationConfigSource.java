@@ -108,5 +108,5 @@ public class CucumberGenerationConfigSource implements AllConfigSource, ViolateC
     }
 
     @Override
-    public String fromFilePath() { return null; }
+    public String fromFilePath() { return ""; }
 }

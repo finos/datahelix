@@ -37,17 +37,17 @@ Feature: User can specify that a string length is longer than, a specified numbe
 
   Scenario: 'longerThan' a string should fail with an error message
     Given foo is longer than "Test"
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be a Integer but was a String with value `Test`"
+    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be an Integer but was a String with value `Test`"
     And no data is created
 
   Scenario: 'longerThan' an empty string should fail with an error message
     Given foo is longer than ""
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be a Integer but was a String with value ``"
+    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be an Integer but was a String with value ``"
     And no data is created
 
   Scenario: 'longerThan' whitespace should fail with an error message
     Given foo is longer than " "
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be a Integer but was a String with value ` `"
+    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be an Integer but was a String with value ` `"
     And no data is created
 
   Scenario: 'longerThan' null should fail with an error message
@@ -744,8 +744,9 @@ Feature: User can specify that a string length is longer than, a specified numbe
     Then foo contains strings of length between 1000 and 1000 inclusively
 
   Scenario: longerThan with value larger than maximum permitted should fail with an error message
-    Given foo is longer than 1000
-    Then the profile is invalid because "Field \[foo\]: longerThan constraint must have an operand/value <= 999, currently is 1000"
+    Given foo is longer than 1001
+    And foo is of type "string"
+    Then the profile is invalid because "Field \[foo\]: longerThan constraint must have an operand/value <= 1000, currently is 1001"
 
   Scenario: Running a 'longerThan' request with a value less than default max (1000) should generate data of length between value and 1000
     Given foo is of type "string"

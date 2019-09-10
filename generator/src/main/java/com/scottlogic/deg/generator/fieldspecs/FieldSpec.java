@@ -140,7 +140,7 @@ public class FieldSpec {
     @Override
     public String toString() {
         if (whitelist != null) {
-            if (whitelist.set().isEmpty()) {
+            if (whitelist.isEmpty()) {
                 return "Null only";
             }
             return (nullable ? "" : "Not Null") + String.format("IN %s", whitelist);

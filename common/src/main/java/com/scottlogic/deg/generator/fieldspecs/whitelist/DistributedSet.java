@@ -21,11 +21,20 @@ import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public interface DistributedSet<T> {
 
     default Set<T> set() {
-        return distributedSet().stream().map(WeightedElement::element).collect(Collectors.toSet());
+        return stream().collect(Collectors.toSet());
+    }
+
+    default Stream<T> stream() {
+        return distributedSet().stream().map(WeightedElement::element);
+    }
+
+    default boolean isEmpty(){
+        return distributedSet().isEmpty();
     }
 
     Set<WeightedElement<T>> distributedSet();

@@ -68,13 +68,13 @@ Feature: User can specify that a numeric value is lower than, or equal to, a spe
   Scenario: Running a 'lessThanOrEqualTo' request that includes a string should fail
     Given foo is less than or equal to "Zero"
     And foo is of type "integer"
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be a Number but was a String with value `Zero`"
+    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be an Number but was a String with value `Zero`"
     And no data is created
 
   Scenario: Running a 'lessThanOrEqualTo' request that includes an empty string should fail
     Given foo is less than or equal to ""
     And foo is of type "integer"
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be a Number but was a String with value ``"
+    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be an Number but was a String with value ``"
     And no data is created
 
   Scenario: Running a 'lessThanOrEqualTo' request that specifies null should be unsuccessful

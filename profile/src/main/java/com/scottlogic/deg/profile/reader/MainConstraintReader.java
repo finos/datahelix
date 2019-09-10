@@ -24,6 +24,9 @@ import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalCons
 import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.profile.dto.AtomicConstraintType;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
+import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintValueReader;
+import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintFactory;
+import com.scottlogic.deg.profile.reader.atomic.ConstraintValueValidator;
 
 import java.util.Collection;
 import java.util.Set;
@@ -32,10 +35,13 @@ import java.util.stream.Collectors;
 public class MainConstraintReader {
 
     private final AtomicConstraintTypeReaderMap constraintReaderMap;
+    private final AtomicConstraintValueReader atomicConstraintValueReader;
 
     @Inject
-    public MainConstraintReader(AtomicConstraintTypeReaderMap constraintReaderMap) {
+    public MainConstraintReader(AtomicConstraintTypeReaderMap constraintReaderMap,
+                                AtomicConstraintValueReader atomicConstraintValueReader) {
         this.constraintReaderMap = constraintReaderMap;
+        this.atomicConstraintValueReader = atomicConstraintValueReader;
     }
 
     public Constraint apply(
@@ -51,12 +57,18 @@ public class MainConstraintReader {
         }
 
         if (dto.is != ConstraintDTO.undefined) {
-            AtomicConstraintReader subReader = constraintReaderMap.getConstraintReaderMapEntries()
-                .get(AtomicConstraintType.fromText((String) dto.is));
+
+            Object value = atomicConstraintValueReader.getValue(dto);
+
+            AtomicConstraintType atomicConstraintType = AtomicConstraintType.fromText((String) dto.is);
+
+            ConstraintValueValidator.validate(dto.field, atomicConstraintType, value);
+
+            AtomicConstraintReader subReader = constraintReaderMap.getDelayedMapEntries()
+                .get(atomicConstraintType);
 
             if (subReader == null) {
-                String message = "Couldn't recognise constraint type from DTO: " + dto.is;
-                throw new InvalidProfileException(message);
+                return AtomicConstraintFactory.create(atomicConstraintType, fields.getByName(dto.field), value);
             }
 
             try {
