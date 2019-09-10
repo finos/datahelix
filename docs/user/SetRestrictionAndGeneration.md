@@ -116,8 +116,6 @@ This set of values is then the permitted set of values for field _foo_.
 | ---- |
 | &#8709; |
 
-See [this page](Contradictions.md) for more information about how contradictions affect the generator.
-
 ### Conditionals (anyOf, allOf, if)
 
 ```
@@ -158,8 +156,6 @@ This set of values is then the permitted set of values for field _foo_.
 | b | d |
 | c | d |
 
-The above set presumes the [exhaustive combination strategy](CombinationStrategies.md) has been used.
-
 ### Contradicting conditionals (_mistakes_)
 ```
 bar not null
@@ -188,7 +184,6 @@ See [this page](Contradictions.md) for more information about how contradictions
 | &#8709; | y |
 | &#8709; | z |
 
-The above set presumes the [exhaustive combination strategy](CombinationStrategies.md) has been used.
 
 ### Negation of constraints
 
