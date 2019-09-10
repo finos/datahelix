@@ -13,8 +13,8 @@ Feature: User can specify that one date should be before another date
       """
         {
           "field": "foo",
-          "is": "beforeOrAtField",
-          "value": "bar"
+          "is": "beforeOrAt",
+          "otherField": "bar"
         }
       """
     Then the following data should be generated:

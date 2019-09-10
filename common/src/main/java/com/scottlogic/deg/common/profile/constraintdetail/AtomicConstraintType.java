@@ -21,7 +21,6 @@ import java.util.Arrays;
 public enum AtomicConstraintType {
 
     IS_EQUAL_TO_CONSTANT("equalTo"),
-    IS_EQUAL_TO_FIELD("equalToField"),
     IS_IN_SET("inSet"),
     IS_NULL("null"),
     IS_UNIQUE("unique"),
@@ -44,13 +43,9 @@ public enum AtomicConstraintType {
 
     // DateTime
     IS_AFTER_CONSTANT_DATE_TIME("after"),
-    IS_AFTER_FIELD_DATE_TIME("afterField"),
     IS_AFTER_OR_EQUAL_TO_CONSTANT_DATE_TIME("afterOrAt"),
-    IS_AFTER_OR_EQUAL_TO_FIELD_DATE_TIME("afterOrAtField"),
     IS_BEFORE_CONSTANT_DATE_TIME("before"),
-    IS_BEFORE_FIELD_DATE_TIME("beforeField"),
     IS_BEFORE_OR_EQUAL_TO_CONSTANT_DATE_TIME("beforeOrAt"),
-    IS_BEFORE_OR_EQUAL_TO_FIELD_DATE_TIME("beforeOrAtField"),
 
     IS_GRANULAR_TO("granularTo");
 
