@@ -175,8 +175,6 @@ effectively (in the ):
 
 This results in no data being created given the scenario where foo has a value in the set _[a, b, c]_. The field `foo` is not restricted from being `null` therefore it is theoretically permitted for the generator to enter the _then_ when `foo` is `null`. This doesn't happen currently as when `foo` is `null` it is ambiguous between the _then_ and the _else_.
 
-See [this page](Contradictions.md) for more information about how contradictions affect the generator.
-
 #### You might expect the following data to be emitted (where foo is not in the set [a, b, c])
 | foo | bar |
 | ---- | ---- |
