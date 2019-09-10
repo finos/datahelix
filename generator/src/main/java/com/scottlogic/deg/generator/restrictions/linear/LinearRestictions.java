@@ -2,12 +2,12 @@ package com.scottlogic.deg.generator.restrictions.linear;
 
 import com.scottlogic.deg.generator.restrictions.TypedRestrictions;
 
-public abstract class LinearRestictions<T> implements TypedRestrictions {
+public class LinearRestictions<T> implements TypedRestrictions {
 
     private final Limit<T> min;
     private final Limit<T> max;
     private final Granularity<T> granularity;
-    private Class<T> clazz;
+    private final Class<T> clazz;
 
     LinearRestictions(Limit<T> min, Limit<T> max, Granularity<T> granularity, Class<T> clazz) {
         this.min = min;
@@ -15,7 +15,6 @@ public abstract class LinearRestictions<T> implements TypedRestrictions {
         this.granularity = granularity;
         this.clazz = clazz;
     }
-
 
     Granularity<T> getGranularity(){
         return granularity;
@@ -56,5 +55,9 @@ public abstract class LinearRestictions<T> implements TypedRestrictions {
 
     public Limit<T> getMin() {
         return min;
+    }
+
+    public Class<T> getType(){
+        return clazz;
     }
 }

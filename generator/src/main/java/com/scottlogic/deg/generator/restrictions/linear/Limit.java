@@ -8,7 +8,5 @@ public interface Limit<T>{
 
     boolean isBefore(T other);
 
-    default boolean isAfter(T other) {
-        return !isBefore(other);
-    }
+    boolean isAfter(T other);
 }

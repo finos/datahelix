@@ -54,16 +54,6 @@ public class ParsedGranularity {
         throw new IllegalArgumentException("Can't interpret granularity expression: " + granularityExpression);
     }
 
-    public static Optional<ParsedGranularity> tryParse(Object granularityExpression){
-        try{
-            ParsedGranularity parsedGranularityToReturn = parse(granularityExpression);
-            return Optional.of(parsedGranularityToReturn);
-        }
-        catch(Exception exp){
-            return Optional.empty();
-        }
-    }
-
     public BigDecimal getNumericGranularity() {
         return this.numericGranularity;
     }

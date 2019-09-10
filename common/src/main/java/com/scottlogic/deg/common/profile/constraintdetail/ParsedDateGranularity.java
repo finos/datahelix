@@ -30,16 +30,6 @@ public class ParsedDateGranularity {
         return new ParsedDateGranularity(Timescale.getByName(granularityExpression));
     }
 
-    public static Optional<ParsedDateGranularity> tryParse(String granularityExpression){
-        try{
-            ParsedDateGranularity parsedGranularityToReturn = parse(granularityExpression);
-            return Optional.of(parsedGranularityToReturn);
-        }
-        catch(Exception exp){
-            return Optional.empty();
-        }
-    }
-
     public Timescale getGranularity() {
         return granularity;
     }
