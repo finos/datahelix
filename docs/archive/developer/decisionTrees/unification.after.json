@@ -1,0 +1,22 @@
+{
+    "schemaVersion": "0.1",
+
+    "fields": [
+		{ "name": "type" },
+		{ "name": "x" },
+		{ "name": "y" }
+    ],
+    "rules": [
+		{
+			"if": { "field": "type", "is": "equalTo", "value": "a" },
+			"then": { "allOf": [
+				{ "field": "x", "is": "equalTo", "value": "0.9" },
+				{ "field": "y", "is": "equalTo", "value": "12" }
+			]},
+			"else": { "allOf": [
+				{ "field": "x", "is": "null" },
+				{ "field": "y", "is": "null" }
+			]}
+		}
+	]
+}
