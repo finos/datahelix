@@ -49,7 +49,11 @@
 
 # Introduction
 
-This guide outlines how to create a profile and contains information on the syntax of the DataHelix schema. If you are new to DataHelix, please read the [Getting Started page](docs/GettingStarted.md). If you would like information on how to contribute to the project as well as a technical overview of the key concepts and structure of the DataHelix then see the [Developer Guide](docs/DeveloperGuide.md).
+This guide outlines how to create a profile and contains information on the syntax of the DataHelix schema. 
+
+* If you are new to DataHelix, please read the [Getting Started page](docs/GettingStarted.md)
+
+* If you would like information on how to contribute to the project as well as a technical overview of the key concepts and structure of   the DataHelix then see the [Developer Guide](docs/DeveloperGuide.md).
 
 # Profiles
 
