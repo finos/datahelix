@@ -22,7 +22,9 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
-public class DateTimeRestrictions extends AbstractTypedRestrictions {
+import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.DATETIME;
+
+public class DateTimeRestrictions implements TypedRestrictions {
     private static final Timescale DEFAULT_GRANULARITY = Timescale.MILLIS;
     private final Timescale granularity;
     public DateTimeLimit min;
@@ -45,10 +47,6 @@ public class DateTimeRestrictions extends AbstractTypedRestrictions {
         return "min=" + min + ", max=" + max + " " + granularity.name();
     }
 
-    @Override
-    protected IsOfTypeConstraint.Types getType() {
-        return IsOfTypeConstraint.Types.DATETIME;
-    }
 
     @Override
     public boolean match(Object o) {
@@ -71,6 +69,11 @@ public class DateTimeRestrictions extends AbstractTypedRestrictions {
         }
 
         return isCorrectGranularity(d);
+    }
+
+    @Override
+    public boolean isInstanceOf(Object o) {
+        return DATETIME.isInstanceOf(o);
     }
 
     private boolean isCorrectGranularity(OffsetDateTime inputDate) {

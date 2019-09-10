@@ -16,12 +16,12 @@
 
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
-
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class NumericRestrictions extends AbstractTypedRestrictions {
+import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.NUMERIC;
+
+public class NumericRestrictions implements TypedRestrictions {
     public static final int DEFAULT_NUMERIC_SCALE = 20;
     private final int numericScale;
     public NumericLimit<BigDecimal> min;
@@ -37,11 +37,6 @@ public class NumericRestrictions extends AbstractTypedRestrictions {
 
     public int getNumericScale() {
         return this.numericScale;
-    }
-
-    @Override
-    protected IsOfTypeConstraint.Types getType() {
-        return IsOfTypeConstraint.Types.NUMERIC;
     }
 
     @Override
@@ -67,6 +62,11 @@ public class NumericRestrictions extends AbstractTypedRestrictions {
         }
 
         return isCorrectScale(n);
+    }
+
+    @Override
+    public boolean isInstanceOf(Object o) {
+        return NUMERIC.isInstanceOf(o);
     }
 
     public BigDecimal getStepSize() {
