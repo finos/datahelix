@@ -164,7 +164,7 @@ Every Decision Tree is rooted by a single Constraint Node.
 
 In our visualisations, we notate constraint nodes with rectangles and decision nodes with triangles.
 
-![](developer/decisionTrees/hoisting.before.svg)
+![](developer/images/hoisting.before.svg)
 
 ### Derivation
 
@@ -201,11 +201,11 @@ The expression of a field may depend on the expression of other fields. For inst
 
 For example, given the below tree:
 
-![](developer/decisionTrees/partitioning.before.svg)
+![](developer/images/partitioning.before.svg)
 
 We can observe that variations in `x` and `y` have no implications on one another, and divide into two trees:
 
-![](developer/decisionTrees/partitioning.after1.svg) ![](developer/decisionTrees/partitioning.after2.svg)
+![](developer/images/partitioning.after1.svg) ![](developer/images/partitioning.after2.svg)
 
 The motivation for partitioning is to determine which fields can vary independently of each other so that streams of values can be generated for them independently (and potentially in parallel execution threads) and then recombined by any preferred [combination strategy](user/CombinationStrategies.md).
 
@@ -213,11 +213,11 @@ The motivation for partitioning is to determine which fields can vary independen
 
 Consider the below tree:
 
-![](developer/decisionTrees/unification.before.svg)
+![](developer/images/unification.before.svg)
 
 It's impossible to [partition](#Partitioning) this tree because the `type` field affects every decision node. However, we can see that the below tree is equivalent:  
 
-![](developer/decisionTrees/unification.after.svg)
+![](developer/images/unification.after.svg)
 
 Formally: If you can identify pairs of sibling, equivalent-valency decision nodes A and B such that for each constraint node in A, there is precisely one mutually satisfiable node in B, you can collapse the decisions. There may be multiple ways to do this; the ordering of combinations affects how extensively the tree can be reduced.
 
@@ -225,21 +225,21 @@ Formally: If you can identify pairs of sibling, equivalent-valency decision node
 
 Consider the below tree:
 
-![](developer/decisionTrees/deletion.before.svg)
+![](developer/images/deletion.before.svg)
 
 Because the leftmost node contradicts the root node, we can delete it. Thereafter, we can pull the content of the other constraint node up to the root node. However, because `¬(x > 12)` is entailed by `x = 3`, we delete it as well. This yields:
 
-![](developer/decisionTrees/deletion.after.svg)
+![](developer/images/deletion.after.svg)
 
 #### Hoisting
 
 Consider the below tree:
 
-![](developer/decisionTrees/hoisting.before.svg)
+![](developer/images/hoisting.before.svg)
 
 We can simplify to:
 
-![](developer/decisionTrees/hoisting.after.svg)
+![](developer/images/hoisting.after.svg)
 
 Formally: If a Decision Node `D` contains a Constraint Node `C` with no constraints and a single Decision Node `E`, `E`'s Constraint Nodes can be added to `D` and `C` removed.
 
