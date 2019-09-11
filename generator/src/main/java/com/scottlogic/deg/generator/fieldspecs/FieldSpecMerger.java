@@ -19,7 +19,7 @@ package com.scottlogic.deg.generator.fieldspecs;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
-import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictionsMerger;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
 
 import java.util.Optional;

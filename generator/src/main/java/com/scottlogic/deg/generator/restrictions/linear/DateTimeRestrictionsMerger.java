@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.restrictions;
+package com.scottlogic.deg.generator.restrictions.linear;
 
 import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
-import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
+import com.scottlogic.deg.generator.restrictions.MergeResult;
 
 import java.time.OffsetDateTime;
 

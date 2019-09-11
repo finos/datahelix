@@ -1,4 +1,4 @@
-package com.scottlogic.deg.generator.restrictions;
+package com.scottlogic.deg.generator.restrictions.linear;
 
 import java.time.OffsetDateTime;
 import java.util.Objects;

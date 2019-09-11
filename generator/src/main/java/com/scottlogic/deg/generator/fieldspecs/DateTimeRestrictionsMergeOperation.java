@@ -19,6 +19,7 @@ package com.scottlogic.deg.generator.fieldspecs;
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictionsMerger;
 
 import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.DATETIME;
 

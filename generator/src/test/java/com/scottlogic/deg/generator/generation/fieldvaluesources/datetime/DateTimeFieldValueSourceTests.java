@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.generation.fieldvaluesources.datetime;
 
-import com.scottlogic.deg.generator.restrictions.DateTimeLimit;
+import com.scottlogic.deg.generator.restrictions.linear.DateTimeLimit;
 import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import org.junit.Assert;

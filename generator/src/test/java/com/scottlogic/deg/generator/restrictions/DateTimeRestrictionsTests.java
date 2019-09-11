@@ -17,6 +17,7 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
+import com.scottlogic.deg.generator.restrictions.linear.DateTimeLimit;
 import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;

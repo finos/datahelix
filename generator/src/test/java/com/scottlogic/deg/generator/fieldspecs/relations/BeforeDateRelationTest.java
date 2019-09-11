@@ -18,7 +18,7 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 
     import com.scottlogic.deg.common.profile.Field;
     import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-    import com.scottlogic.deg.generator.restrictions.DateTimeLimit;
+    import com.scottlogic.deg.generator.restrictions.linear.DateTimeLimit;
     import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
     import org.junit.jupiter.api.Test;
 
