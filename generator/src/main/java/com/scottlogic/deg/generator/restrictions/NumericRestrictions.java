@@ -16,6 +16,8 @@
 
 package com.scottlogic.deg.generator.restrictions;
 
+import com.scottlogic.deg.generator.restrictions.linear.NumericLimit;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -24,8 +26,8 @@ import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConst
 public class NumericRestrictions implements TypedRestrictions {
     public static final int DEFAULT_NUMERIC_SCALE = 20;
     private final int numericScale;
-    public NumericLimit<BigDecimal> min;
-    public NumericLimit<BigDecimal> max;
+    public NumericLimit min;
+    public NumericLimit max;
 
     public NumericRestrictions(){
         numericScale = DEFAULT_NUMERIC_SCALE;
@@ -48,14 +50,14 @@ public class NumericRestrictions implements TypedRestrictions {
         BigDecimal n = new BigDecimal(o.toString());
 
         if(min != null){
-            if(n.compareTo(min.getLimit()) < (min.isInclusive() ? 0 : 1))
+            if(n.compareTo(min.getValue()) < (min.isInclusive() ? 0 : 1))
             {
                 return false;
             }
         }
 
         if(max != null){
-            if(n.compareTo(max.getLimit()) > (max.isInclusive() ? 0 : -1))
+            if(n.compareTo(max.getValue()) > (max.isInclusive() ? 0 : -1))
             {
                 return false;
             }

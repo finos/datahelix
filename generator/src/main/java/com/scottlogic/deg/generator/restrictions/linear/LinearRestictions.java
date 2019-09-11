@@ -7,13 +7,13 @@ public class LinearRestictions<T> implements TypedRestrictions {
     private final Limit<T> min;
     private final Limit<T> max;
     private final Granularity<T> granularity;
-    private final Class<T> clazz;
+    private final Converter<T> converter;
 
-    LinearRestictions(Limit<T> min, Limit<T> max, Granularity<T> granularity, Class<T> clazz) {
+    LinearRestictions(Limit<T> min, Limit<T> max, Granularity<T> granularity, Converter<T> converter) {
         this.min = min;
         this.max = max;
         this.granularity = granularity;
-        this.clazz = clazz;
+        this.converter = converter;
     }
 
     Granularity<T> getGranularity(){
@@ -27,7 +27,7 @@ public class LinearRestictions<T> implements TypedRestrictions {
             return false;
         }
 
-        T t = clazz.cast(o);
+        T t = converter.convert(o);
 
         if (min != null) {
             if (min.isAfter(t)) {
@@ -46,7 +46,7 @@ public class LinearRestictions<T> implements TypedRestrictions {
 
     @Override
     public boolean isInstanceOf(Object o){
-        return clazz.isInstance(o);
+        return converter.isCorrectType(o);
     }
 
     public Limit<T> getMax() {
@@ -57,7 +57,7 @@ public class LinearRestictions<T> implements TypedRestrictions {
         return min;
     }
 
-    public Class<T> getType(){
-        return clazz;
+    public Converter<T> getConverter(){
+        return converter;
     }
 }

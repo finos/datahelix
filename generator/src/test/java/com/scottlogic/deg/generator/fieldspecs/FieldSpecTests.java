@@ -22,6 +22,7 @@ import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.restrictions.linear.NumericLimit;
 import com.scottlogic.deg.generator.utils.SetUtils;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -139,13 +140,13 @@ class FieldSpecTests {
     @Test
     void equals_fieldSpecNumericRestrictionsNotNullAndOtherObjectNumericRestrictionsNotNullAndNumericRestrictionsAreNotEqual_returnsFalse() {
         NumericRestrictions firstFieldSpecRestrictions = new NumericRestrictions();
-        firstFieldSpecRestrictions.min = new NumericLimit<>(new BigDecimal(1), false);
-        firstFieldSpecRestrictions.max = new NumericLimit<>(new BigDecimal(20), false);
+        firstFieldSpecRestrictions.min = new NumericLimit(new BigDecimal(1), false);
+        firstFieldSpecRestrictions.max = new NumericLimit(new BigDecimal(20), false);
         FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(firstFieldSpecRestrictions);
 
         NumericRestrictions secondFieldSpecRestrictions = new NumericRestrictions();
-        secondFieldSpecRestrictions.min = new NumericLimit<>(new BigDecimal(5), false);
-        secondFieldSpecRestrictions.max = new NumericLimit<>(new BigDecimal(20), false);
+        secondFieldSpecRestrictions.min = new NumericLimit(new BigDecimal(5), false);
+        secondFieldSpecRestrictions.max = new NumericLimit(new BigDecimal(20), false);
         boolean result = fieldSpec.equals(
             FieldSpec.Empty.withNumericRestrictions(secondFieldSpecRestrictions)
         );
@@ -424,7 +425,7 @@ class FieldSpecTests {
         NumericRestrictions numeric = new NumericRestrictions();
         FieldSpec spec = FieldSpec.Empty.withNumericRestrictions(numeric);
 
-        numeric.min = new NumericLimit<>(BigDecimal.TEN, true);
+        numeric.min = new NumericLimit(BigDecimal.TEN, true);
 
         assertFalse(spec.permits(BigDecimal.ONE));
     }

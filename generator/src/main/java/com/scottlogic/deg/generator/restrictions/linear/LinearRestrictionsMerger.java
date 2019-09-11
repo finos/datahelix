@@ -17,7 +17,7 @@ public class LinearRestrictionsMerger {
         Limit<T> mergedMin = getHighest(left.getMin(), right.getMin());
         Limit<T> mergedMax = getLowest(left.getMax(), right.getMax());
 
-        LinearRestictions<T> mergedRestriction = new LinearRestictions<>(mergedMin, mergedMax, mergedGranularity, left.getType());
+        LinearRestictions<T> mergedRestriction = new LinearRestictions<>(mergedMin, mergedMax, mergedGranularity, left.getConverter());
 
         if (isContradictory(mergedRestriction)) {
             return MergeResult.unsuccessful();

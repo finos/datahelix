@@ -14,28 +14,42 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.restrictions;
-
-import com.scottlogic.deg.common.util.NumberUtils;
+package com.scottlogic.deg.generator.restrictions.linear;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class NumericLimit<T extends Number> {
-    private final T limit;
+public class NumericLimit implements Limit<BigDecimal> {
+    private final BigDecimal limit;
     private final boolean isInclusive;
 
-    public NumericLimit(T limit, boolean isInclusive) {
+    public NumericLimit(BigDecimal limit, boolean isInclusive) {
         this.limit = limit;
         this.isInclusive = isInclusive;
     }
 
-    public T getLimit() {
+    public BigDecimal getValue() {
         return limit;
     }
 
     public boolean isInclusive() {
         return isInclusive;
+    }
+
+    @Override
+    public boolean isBefore(BigDecimal other) {
+        if (isInclusive){
+            return limit.compareTo(other) <= 0;
+        }
+        return limit.compareTo(other) < 0;
+    }
+
+    @Override
+    public boolean isAfter(BigDecimal other) {
+        if (isInclusive){
+            return limit.compareTo(other) >= 0;
+        }
+        return limit.compareTo(other) > 0;
     }
 
     public String toString(String operator) {
@@ -51,7 +65,7 @@ public class NumericLimit<T extends Number> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        NumericLimit<?> that = (NumericLimit<?>) o;
+        NumericLimit that = (NumericLimit) o;
         return isInclusive == that.isInclusive &&
             Objects.equals(limit, that.limit);
     }

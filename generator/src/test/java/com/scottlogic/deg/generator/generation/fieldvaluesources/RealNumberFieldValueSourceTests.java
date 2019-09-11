@@ -17,7 +17,7 @@
 package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
 import com.scottlogic.deg.common.util.Defaults;
-import com.scottlogic.deg.generator.restrictions.NumericLimit;
+import com.scottlogic.deg.generator.restrictions.linear.NumericLimit;
 import com.scottlogic.deg.generator.restrictions.NumericRestrictions;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.common.util.NumberUtils;
@@ -484,13 +484,13 @@ class RealNumberFieldValueSourceTests {
 
     private NumericRestrictions numericRestrictions(Integer min, Integer max, int scale){
         NumericRestrictions restrictions = new NumericRestrictions(scale);
-        restrictions.min = min == null ? null : new NumericLimit<>(BigDecimal.valueOf(min), true);
-        restrictions.max = max == null ? null : new NumericLimit<>(BigDecimal.valueOf(max), true);
+        restrictions.min = min == null ? null : new NumericLimit(BigDecimal.valueOf(min), true);
+        restrictions.max = max == null ? null : new NumericLimit(BigDecimal.valueOf(max), true);
         return restrictions;
     }
 
-    private NumericLimit<BigDecimal> upperLimit;
-    private NumericLimit<BigDecimal> lowerLimit;
+    private NumericLimit upperLimit;
+    private NumericLimit lowerLimit;
     private int scale;
     private Set<Object> blacklist;
     private RealNumberFieldValueSource objectUnderTest;
@@ -499,14 +499,14 @@ class RealNumberFieldValueSourceTests {
         givenLowerBound(NumberUtils.coerceToBigDecimal(limit), isInclusive);
     }
     private void givenLowerBound(BigDecimal limit, boolean isInclusive) {
-        this.lowerLimit = new NumericLimit<>(limit, isInclusive);
+        this.lowerLimit = new NumericLimit(limit, isInclusive);
     }
 
     private void givenUpperBound(Object limit, boolean isInclusive) {
         givenUpperBound(NumberUtils.coerceToBigDecimal(limit), isInclusive);
     }
     private void givenUpperBound(BigDecimal limit, boolean isInclusive) {
-        this.upperLimit = new NumericLimit<>(limit, isInclusive);
+        this.upperLimit = new NumericLimit(limit, isInclusive);
     }
 
     private void givenScale(int scale) {
@@ -567,7 +567,7 @@ class RealNumberFieldValueSourceTests {
                 // Not sure if this is the most efficient way to test all these values,
                 // I think it'll do for now though.
                 Assert.assertThat(
-                    lowerLimit.getLimit(),
+                    lowerLimit.getValue(),
                     lowerLimit.isInclusive()
                         ? lessThanOrEqualTo(value)
                         : lessThan(value));
@@ -575,8 +575,8 @@ class RealNumberFieldValueSourceTests {
                 Assert.assertThat(
                     value,
                     upperLimit.isInclusive()
-                        ? lessThanOrEqualTo(upperLimit.getLimit())
-                        : lessThan(upperLimit.getLimit()));
+                        ? lessThanOrEqualTo(upperLimit.getValue())
+                        : lessThan(upperLimit.getValue()));
 
                 if (decimalBlacklist.size() != 0) {
                     Assert.assertFalse(decimalBlacklist.contains(value));

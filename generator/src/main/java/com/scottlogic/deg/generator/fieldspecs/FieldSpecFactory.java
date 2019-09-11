@@ -23,6 +23,7 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.T
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.common.util.NumberUtils;
+import com.scottlogic.deg.generator.restrictions.linear.NumericLimit;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -146,11 +147,11 @@ public class FieldSpecFactory {
 
         final BigDecimal limit = NumberUtils.coerceToBigDecimal(limitValue);
         if (negate) {
-            numericRestrictions.max = new NumericLimit<>(
+            numericRestrictions.max = new NumericLimit(
                 limit,
                 !inclusive);
         } else {
-            numericRestrictions.min = new NumericLimit<>(
+            numericRestrictions.min = new NumericLimit(
                 limit,
                 inclusive);
         }
@@ -170,11 +171,11 @@ public class FieldSpecFactory {
         final NumericRestrictions numericRestrictions = new NumericRestrictions();
         final BigDecimal limit = NumberUtils.coerceToBigDecimal(limitValue);
         if (negate) {
-            numericRestrictions.min = new NumericLimit<>(
+            numericRestrictions.min = new NumericLimit(
                 limit,
                 !inclusive);
         } else {
-            numericRestrictions.max = new NumericLimit<>(
+            numericRestrictions.max = new NumericLimit(
                 limit,
                 inclusive);
         }

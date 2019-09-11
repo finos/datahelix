@@ -16,6 +16,8 @@
 
 package com.scottlogic.deg.generator.restrictions;
 
+import com.scottlogic.deg.generator.restrictions.linear.NumericLimit;
+
 import java.math.BigDecimal;
 
 /**
@@ -49,8 +51,8 @@ public class NumericRestrictionsMerger {
     }
 
     private boolean canEmitSomeNumericValues(NumericRestrictions merged) {
-        NumericLimit<BigDecimal> min = merged.min;
-        NumericLimit<BigDecimal> max = merged.max;
+        NumericLimit min = merged.min;
+        NumericLimit max = merged.max;
 
         if (min == null || max == null){
             return true; //no constraints
@@ -68,7 +70,7 @@ public class NumericRestrictionsMerger {
         return isLessThan(min, max);
     }
 
-    private NumericLimit<BigDecimal> getMergedLimitStructure(MergeLimit mergeLimit, NumericLimit<BigDecimal> left, NumericLimit<BigDecimal> right) {
+    private NumericLimit getMergedLimitStructure(MergeLimit mergeLimit, NumericLimit left, NumericLimit right) {
         if (left == null && right == null) {
             return null;
         }
@@ -79,9 +81,9 @@ public class NumericRestrictionsMerger {
             return left;
         }
 
-        if (left.getLimit().compareTo(right.getLimit()) == 0)
-            return new NumericLimit<>(
-                left.getLimit(),
+        if (left.getValue().compareTo(right.getValue()) == 0)
+            return new NumericLimit(
+                left.getValue(),
                 left.isInclusive() && right.isInclusive());
         switch (mergeLimit) {
             case MIN:
@@ -97,18 +99,18 @@ public class NumericRestrictionsMerger {
         }
     }
 
-    private boolean isLessThan(NumericLimit<BigDecimal> min, NumericLimit<BigDecimal> max) {
-        return min.getLimit().compareTo(max.getLimit()) < 0;
+    private boolean isLessThan(NumericLimit min, NumericLimit max) {
+        return min.getValue().compareTo(max.getValue()) < 0;
     }
 
-    private boolean isLessThanOrEqualTo(NumericLimit<BigDecimal> min, NumericLimit<BigDecimal> max) {
-        return min.getLimit().compareTo(max.getLimit()) <= 0;
+    private boolean isLessThanOrEqualTo(NumericLimit min, NumericLimit max) {
+        return min.getValue().compareTo(max.getValue()) <= 0;
     }
 
     private boolean granularityIsWithinRange(NumericRestrictions merged) {
         if (!merged.min.isInclusive()){
-            NumericLimit<BigDecimal> nextNumber = new NumericLimit<>(
-                merged.min.getLimit().add(merged.getStepSize()), true);
+            NumericLimit nextNumber = new NumericLimit(
+                merged.min.getValue().add(merged.getStepSize()), true);
 
             if (merged.max.isInclusive()){
                 return isLessThanOrEqualTo(nextNumber, merged.max);
@@ -118,8 +120,8 @@ public class NumericRestrictionsMerger {
 
 
         if (!merged.max.isInclusive()){
-            NumericLimit<BigDecimal> nextNumber = new NumericLimit<>(
-                merged.max.getLimit().subtract(merged.getStepSize()), true);
+            NumericLimit nextNumber = new NumericLimit(
+                merged.max.getValue().subtract(merged.getStepSize()), true);
 
             if (merged.min.isInclusive()){
                 return isLessThanOrEqualTo(merged.min, nextNumber);

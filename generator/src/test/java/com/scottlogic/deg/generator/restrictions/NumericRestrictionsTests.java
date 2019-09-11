@@ -17,6 +17,7 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
+import com.scottlogic.deg.generator.restrictions.linear.NumericLimit;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -32,10 +33,10 @@ public class NumericRestrictionsTests {
         NumericRestrictions restriction1 = new NumericRestrictions();
         NumericRestrictions restriction2 = new NumericRestrictions();
 
-        restriction1.min = new NumericLimit<>(new BigDecimal(0), false);
-        restriction2.min = new NumericLimit<>(new BigDecimal(0), false);
-        restriction1.max = new NumericLimit<>(new BigDecimal(2), false);
-        restriction2.max = new NumericLimit<>(new BigDecimal(2), false);
+        restriction1.min = new NumericLimit(new BigDecimal(0), false);
+        restriction2.min = new NumericLimit(new BigDecimal(0), false);
+        restriction1.max = new NumericLimit(new BigDecimal(2), false);
+        restriction2.max = new NumericLimit(new BigDecimal(2), false);
 
         boolean result = restriction1.equals(restriction2);
 
@@ -47,10 +48,10 @@ public class NumericRestrictionsTests {
         NumericRestrictions restriction1 = new NumericRestrictions();
         NumericRestrictions restriction2 = new NumericRestrictions();
 
-        restriction1.min = new NumericLimit<>(new BigDecimal(1), false);
-        restriction2.min = new NumericLimit<>(new BigDecimal(0), false);
-        restriction1.max = new NumericLimit<>(new BigDecimal(2), false);
-        restriction2.max = new NumericLimit<>(new BigDecimal(2), false);
+        restriction1.min = new NumericLimit(new BigDecimal(1), false);
+        restriction2.min = new NumericLimit(new BigDecimal(0), false);
+        restriction1.max = new NumericLimit(new BigDecimal(2), false);
+        restriction2.max = new NumericLimit(new BigDecimal(2), false);
 
         boolean result = restriction1.equals(restriction2);
 
@@ -63,9 +64,9 @@ public class NumericRestrictionsTests {
         NumericRestrictions restriction2 = new NumericRestrictions();
 
         restriction1.min = null;
-        restriction2.min = new NumericLimit<>(new BigDecimal(0), false);
-        restriction1.max = new NumericLimit<>(new BigDecimal(2), false);
-        restriction2.max = new NumericLimit<>(new BigDecimal(2), false);
+        restriction2.min = new NumericLimit(new BigDecimal(0), false);
+        restriction1.max = new NumericLimit(new BigDecimal(2), false);
+        restriction2.max = new NumericLimit(new BigDecimal(2), false);
 
         boolean result = restriction1.equals(restriction2);
 
@@ -79,8 +80,8 @@ public class NumericRestrictionsTests {
 
         restriction1.min = null;
         restriction2.min = null;
-        restriction1.max = new NumericLimit<>(new BigDecimal(2), false);
-        restriction2.max = new NumericLimit<>(new BigDecimal(2), false);
+        restriction1.max = new NumericLimit(new BigDecimal(2), false);
+        restriction2.max = new NumericLimit(new BigDecimal(2), false);
 
         boolean result = restriction1.equals(restriction2);
 
@@ -92,10 +93,10 @@ public class NumericRestrictionsTests {
         NumericRestrictions restriction1 = new NumericRestrictions();
         NumericRestrictions restriction2 = new NumericRestrictions();
 
-        restriction1.min = new NumericLimit<>(new BigDecimal(0), true);
-        restriction2.min = new NumericLimit<>(new BigDecimal(0), true);
-        restriction1.max = new NumericLimit<>(new BigDecimal(2), true);
-        restriction2.max = new NumericLimit<>(new BigDecimal(3), true);
+        restriction1.min = new NumericLimit(new BigDecimal(0), true);
+        restriction2.min = new NumericLimit(new BigDecimal(0), true);
+        restriction1.max = new NumericLimit(new BigDecimal(2), true);
+        restriction2.max = new NumericLimit(new BigDecimal(3), true);
 
         boolean result = restriction1.equals(restriction2);
 
@@ -107,10 +108,10 @@ public class NumericRestrictionsTests {
         NumericRestrictions restriction1 = new NumericRestrictions();
         NumericRestrictions restriction2 = new NumericRestrictions();
 
-        restriction1.min = new NumericLimit<>(new BigDecimal(0), false);
-        restriction2.min = new NumericLimit<>(new BigDecimal(0), false);
+        restriction1.min = new NumericLimit(new BigDecimal(0), false);
+        restriction2.min = new NumericLimit(new BigDecimal(0), false);
         restriction1.max = null;
-        restriction2.max = new NumericLimit<>(new BigDecimal(2), false);
+        restriction2.max = new NumericLimit(new BigDecimal(2), false);
 
         boolean result = restriction1.equals(restriction2);
 
@@ -122,8 +123,8 @@ public class NumericRestrictionsTests {
         NumericRestrictions restriction1 = new NumericRestrictions();
         NumericRestrictions restriction2 = new NumericRestrictions();
 
-        restriction1.min = new NumericLimit<>(new BigDecimal(0), false);
-        restriction2.min = new NumericLimit<>(new BigDecimal(0), false);
+        restriction1.min = new NumericLimit(new BigDecimal(0), false);
+        restriction2.min = new NumericLimit(new BigDecimal(0), false);
         restriction1.max = null;
         restriction2.max = null;
 
@@ -137,10 +138,10 @@ public class NumericRestrictionsTests {
         NumericRestrictions restriction1 = new NumericRestrictions();
         NumericRestrictions restriction2 = new NumericRestrictions();
 
-        restriction1.min = new NumericLimit<>(new BigDecimal(0), true);
-        restriction2.min = new NumericLimit<>(new BigDecimal(0), false);
-        restriction1.max = new NumericLimit<>(new BigDecimal(2), false);
-        restriction2.max = new NumericLimit<>(new BigDecimal(2), false);
+        restriction1.min = new NumericLimit(new BigDecimal(0), true);
+        restriction2.min = new NumericLimit(new BigDecimal(0), false);
+        restriction1.max = new NumericLimit(new BigDecimal(2), false);
+        restriction2.max = new NumericLimit(new BigDecimal(2), false);
 
         boolean result = restriction1.equals(restriction2);
 
@@ -152,10 +153,10 @@ public class NumericRestrictionsTests {
         NumericRestrictions restriction1 = new NumericRestrictions();
         NumericRestrictions restriction2 = new NumericRestrictions();
 
-        restriction1.min = new NumericLimit<>(new BigDecimal(0), true);
-        restriction2.min = new NumericLimit<>(new BigDecimal(0), true);
-        restriction1.max = new NumericLimit<>(new BigDecimal(2), false);
-        restriction2.max = new NumericLimit<>(new BigDecimal(2), true);
+        restriction1.min = new NumericLimit(new BigDecimal(0), true);
+        restriction2.min = new NumericLimit(new BigDecimal(0), true);
+        restriction1.max = new NumericLimit(new BigDecimal(2), false);
+        restriction2.max = new NumericLimit(new BigDecimal(2), true);
 
         boolean result = restriction1.equals(restriction2);
 
@@ -168,10 +169,10 @@ public class NumericRestrictionsTests {
         NumericRestrictions restriction1 = new NumericRestrictions();
         NumericRestrictions restriction2 = new NumericRestrictions();
 
-        restriction1.min = new NumericLimit<>(new BigDecimal(-1), false);
-        restriction2.min = new NumericLimit<>(new BigDecimal(-1), false);
-        restriction1.max = new NumericLimit<>(new BigDecimal(-1), false);
-        restriction2.max = new NumericLimit<>(new BigDecimal(-1), false);
+        restriction1.min = new NumericLimit(new BigDecimal(-1), false);
+        restriction2.min = new NumericLimit(new BigDecimal(-1), false);
+        restriction1.max = new NumericLimit(new BigDecimal(-1), false);
+        restriction2.max = new NumericLimit(new BigDecimal(-1), false);
 
         boolean result = restriction1.equals(restriction2);
 
@@ -184,10 +185,10 @@ public class NumericRestrictionsTests {
         NumericRestrictions restriction1 = new NumericRestrictions();
         NumericRestrictions restriction2 = new NumericRestrictions();
 
-        restriction1.min = new NumericLimit<>(new BigDecimal(50), false);
-        restriction2.min = new NumericLimit<>(new BigDecimal(5E1), false);
-        restriction1.max = new NumericLimit<>(new BigDecimal(100), false);
-        restriction2.max = new NumericLimit<>(new BigDecimal(100), false);
+        restriction1.min = new NumericLimit(new BigDecimal(50), false);
+        restriction2.min = new NumericLimit(new BigDecimal(5E1), false);
+        restriction1.max = new NumericLimit(new BigDecimal(100), false);
+        restriction2.max = new NumericLimit(new BigDecimal(100), false);
 
         boolean result = restriction1.equals(restriction2);
 
@@ -199,10 +200,10 @@ public class NumericRestrictionsTests {
         NumericRestrictions restriction1 = new NumericRestrictions();
         NumericRestrictions restriction2 = new NumericRestrictions();
 
-        restriction1.min = new NumericLimit<>(new BigDecimal(10), false);
-        restriction2.min = new NumericLimit<>(new BigDecimal(10), false);
-        restriction1.max = new NumericLimit<>(new BigDecimal(30), false);
-        restriction2.max = new NumericLimit<>(new BigDecimal(30), false);
+        restriction1.min = new NumericLimit(new BigDecimal(10), false);
+        restriction2.min = new NumericLimit(new BigDecimal(10), false);
+        restriction1.max = new NumericLimit(new BigDecimal(30), false);
+        restriction2.max = new NumericLimit(new BigDecimal(30), false);
 
         int hashCode1 = restriction1.hashCode();
         int hashCode2 = restriction2.hashCode();
@@ -215,10 +216,10 @@ public class NumericRestrictionsTests {
         NumericRestrictions restriction1 = new NumericRestrictions();
         NumericRestrictions restriction2 = new NumericRestrictions();
 
-        restriction1.min = new NumericLimit<>(new BigDecimal(10), false);
-        restriction2.min = new NumericLimit<>(new BigDecimal(20), false);
-        restriction1.max = new NumericLimit<>(new BigDecimal(20), false);
-        restriction2.max = new NumericLimit<>(new BigDecimal(10), false);
+        restriction1.min = new NumericLimit(new BigDecimal(10), false);
+        restriction2.min = new NumericLimit(new BigDecimal(20), false);
+        restriction1.max = new NumericLimit(new BigDecimal(20), false);
+        restriction2.max = new NumericLimit(new BigDecimal(10), false);
 
         int hashCode1 = restriction1.hashCode();
         int hashCode2 = restriction2.hashCode();
@@ -231,10 +232,10 @@ public class NumericRestrictionsTests {
         NumericRestrictions restriction1 = new NumericRestrictions();
         NumericRestrictions restriction2 = new NumericRestrictions();
 
-        restriction1.min = new NumericLimit<>(new BigDecimal(0), false);
-        restriction2.min = new NumericLimit<>(new BigDecimal(0), false);
-        restriction1.max = new NumericLimit<>(new BigDecimal(2), false);
-        restriction2.max = new NumericLimit<>(new BigDecimal(2), false);
+        restriction1.min = new NumericLimit(new BigDecimal(0), false);
+        restriction2.min = new NumericLimit(new BigDecimal(0), false);
+        restriction1.max = new NumericLimit(new BigDecimal(2), false);
+        restriction2.max = new NumericLimit(new BigDecimal(2), false);
 
         int hashCode1 = restriction1.hashCode();
         int hashCode2 = restriction2.hashCode();
@@ -247,10 +248,10 @@ public class NumericRestrictionsTests {
         NumericRestrictions restriction1 = new NumericRestrictions();
         NumericRestrictions restriction2 = new NumericRestrictions();
 
-        restriction1.min = new NumericLimit<>(new BigDecimal(1), false);
-        restriction2.min = new NumericLimit<>(new BigDecimal(0), false);
-        restriction1.max = new NumericLimit<>(new BigDecimal(2), false);
-        restriction2.max = new NumericLimit<>(new BigDecimal(2), false);
+        restriction1.min = new NumericLimit(new BigDecimal(1), false);
+        restriction2.min = new NumericLimit(new BigDecimal(0), false);
+        restriction1.max = new NumericLimit(new BigDecimal(2), false);
+        restriction2.max = new NumericLimit(new BigDecimal(2), false);
 
         int hashCode1 = restriction1.hashCode();
         int hashCode2 = restriction2.hashCode();
@@ -264,9 +265,9 @@ public class NumericRestrictionsTests {
         NumericRestrictions restriction2 = new NumericRestrictions();
 
         restriction1.min = null;
-        restriction2.min = new NumericLimit<>(new BigDecimal(0), false);
-        restriction1.max = new NumericLimit<>(new BigDecimal(2), false);
-        restriction2.max = new NumericLimit<>(new BigDecimal(2), false);
+        restriction2.min = new NumericLimit(new BigDecimal(0), false);
+        restriction1.max = new NumericLimit(new BigDecimal(2), false);
+        restriction2.max = new NumericLimit(new BigDecimal(2), false);
 
         int hashCode1 = restriction1.hashCode();
         int hashCode2 = restriction2.hashCode();
@@ -281,8 +282,8 @@ public class NumericRestrictionsTests {
 
         restriction1.min = null;
         restriction2.min = null;
-        restriction1.max = new NumericLimit<>(new BigDecimal(2), false);
-        restriction2.max = new NumericLimit<>(new BigDecimal(2), false);
+        restriction1.max = new NumericLimit(new BigDecimal(2), false);
+        restriction2.max = new NumericLimit(new BigDecimal(2), false);
 
         int hashCode1 = restriction1.hashCode();
         int hashCode2 = restriction2.hashCode();
@@ -295,10 +296,10 @@ public class NumericRestrictionsTests {
         NumericRestrictions restriction1 = new NumericRestrictions();
         NumericRestrictions restriction2 = new NumericRestrictions();
 
-        restriction1.min = new NumericLimit<>(new BigDecimal(0), true);
-        restriction2.min = new NumericLimit<>(new BigDecimal(0), true);
-        restriction1.max = new NumericLimit<>(new BigDecimal(2), true);
-        restriction2.max = new NumericLimit<>(new BigDecimal(3), true);
+        restriction1.min = new NumericLimit(new BigDecimal(0), true);
+        restriction2.min = new NumericLimit(new BigDecimal(0), true);
+        restriction1.max = new NumericLimit(new BigDecimal(2), true);
+        restriction2.max = new NumericLimit(new BigDecimal(3), true);
 
         int hashCode1 = restriction1.hashCode();
         int hashCode2 = restriction2.hashCode();
@@ -311,10 +312,10 @@ public class NumericRestrictionsTests {
         NumericRestrictions restriction1 = new NumericRestrictions();
         NumericRestrictions restriction2 = new NumericRestrictions();
 
-        restriction1.min = new NumericLimit<>(new BigDecimal(0), false);
-        restriction2.min = new NumericLimit<>(new BigDecimal(0), false);
+        restriction1.min = new NumericLimit(new BigDecimal(0), false);
+        restriction2.min = new NumericLimit(new BigDecimal(0), false);
         restriction1.max = null;
-        restriction2.max = new NumericLimit<>(new BigDecimal(2), false);
+        restriction2.max = new NumericLimit(new BigDecimal(2), false);
 
         int hashCode1 = restriction1.hashCode();
         int hashCode2 = restriction2.hashCode();
@@ -327,8 +328,8 @@ public class NumericRestrictionsTests {
         NumericRestrictions restriction1 = new NumericRestrictions();
         NumericRestrictions restriction2 = new NumericRestrictions();
 
-        restriction1.min = new NumericLimit<>(new BigDecimal(0), false);
-        restriction2.min = new NumericLimit<>(new BigDecimal(0), false);
+        restriction1.min = new NumericLimit(new BigDecimal(0), false);
+        restriction2.min = new NumericLimit(new BigDecimal(0), false);
         restriction1.max = null;
         restriction2.max = null;
 
@@ -343,10 +344,10 @@ public class NumericRestrictionsTests {
         NumericRestrictions restriction1 = new NumericRestrictions();
         NumericRestrictions restriction2 = new NumericRestrictions();
 
-        restriction1.min = new NumericLimit<>(new BigDecimal(0), true);
-        restriction2.min = new NumericLimit<>(new BigDecimal(0), false);
-        restriction1.max = new NumericLimit<>(new BigDecimal(2), false);
-        restriction2.max = new NumericLimit<>(new BigDecimal(2), false);
+        restriction1.min = new NumericLimit(new BigDecimal(0), true);
+        restriction2.min = new NumericLimit(new BigDecimal(0), false);
+        restriction1.max = new NumericLimit(new BigDecimal(2), false);
+        restriction2.max = new NumericLimit(new BigDecimal(2), false);
 
         int hashCode1 = restriction1.hashCode();
         int hashCode2 = restriction2.hashCode();
@@ -359,10 +360,10 @@ public class NumericRestrictionsTests {
         NumericRestrictions restriction1 = new NumericRestrictions();
         NumericRestrictions restriction2 = new NumericRestrictions();
 
-        restriction1.min = new NumericLimit<>(new BigDecimal(0), true);
-        restriction2.min = new NumericLimit<>(new BigDecimal(0), true);
-        restriction1.max = new NumericLimit<>(new BigDecimal(2), false);
-        restriction2.max = new NumericLimit<>(new BigDecimal(2), true);
+        restriction1.min = new NumericLimit(new BigDecimal(0), true);
+        restriction2.min = new NumericLimit(new BigDecimal(0), true);
+        restriction1.max = new NumericLimit(new BigDecimal(2), false);
+        restriction2.max = new NumericLimit(new BigDecimal(2), true);
 
         int hashCode1 = restriction1.hashCode();
         int hashCode2 = restriction2.hashCode();
@@ -376,10 +377,10 @@ public class NumericRestrictionsTests {
         NumericRestrictions restriction1 = new NumericRestrictions();
         NumericRestrictions restriction2 = new NumericRestrictions();
 
-        restriction1.min = new NumericLimit<>(new BigDecimal(-1), false);
-        restriction2.min = new NumericLimit<>(new BigDecimal(-1), false);
-        restriction1.max = new NumericLimit<>(new BigDecimal(-1), false);
-        restriction2.max = new NumericLimit<>(new BigDecimal(-1), false);
+        restriction1.min = new NumericLimit(new BigDecimal(-1), false);
+        restriction2.min = new NumericLimit(new BigDecimal(-1), false);
+        restriction1.max = new NumericLimit(new BigDecimal(-1), false);
+        restriction2.max = new NumericLimit(new BigDecimal(-1), false);
 
         int hashCode1 = restriction1.hashCode();
         int hashCode2 = restriction2.hashCode();
@@ -392,10 +393,10 @@ public class NumericRestrictionsTests {
         NumericRestrictions restriction1 = new NumericRestrictions();
         NumericRestrictions restriction2 = new NumericRestrictions();
 
-        restriction1.min = new NumericLimit<>(new BigDecimal(50), false);
-        restriction2.min = new NumericLimit<>(new BigDecimal(5E1), false);
-        restriction1.max = new NumericLimit<>(new BigDecimal(100), false);
-        restriction2.max = new NumericLimit<>(new BigDecimal(100), false);
+        restriction1.min = new NumericLimit(new BigDecimal(50), false);
+        restriction2.min = new NumericLimit(new BigDecimal(5E1), false);
+        restriction1.max = new NumericLimit(new BigDecimal(100), false);
+        restriction2.max = new NumericLimit(new BigDecimal(100), false);
 
         int hashCode1 = restriction1.hashCode();
         int hashCode2 = restriction2.hashCode();
@@ -406,8 +407,8 @@ public class NumericRestrictionsTests {
     @Test
     void areLimitValuesInteger_minAndMaxValueAreWithinIntegerRangeAndDoNotContainDecimalValues_returnsTrue() {
         NumericRestrictions restrictions = new NumericRestrictions();
-        restrictions.min = new NumericLimit<>(new BigDecimal(10), false);
-        restrictions.max = new NumericLimit<>(new BigDecimal(1000), false);
+        restrictions.min = new NumericLimit(new BigDecimal(10), false);
+        restrictions.max = new NumericLimit(new BigDecimal(1000), false);
 
         boolean result = areLimitValuesInteger(restrictions);
 
@@ -417,8 +418,8 @@ public class NumericRestrictionsTests {
     @Test
     void areLimitValuesInteger_minAndMaxValuesHaveEdgeCaseValuesAndDoNotContainDecimalValues_returnsTrue() {
         NumericRestrictions restrictions = new NumericRestrictions();
-        restrictions.min = new NumericLimit<>(new BigDecimal(-2147483648), false);
-        restrictions.max = new NumericLimit<>(new BigDecimal(2147483647), false);
+        restrictions.min = new NumericLimit(new BigDecimal(-2147483648), false);
+        restrictions.max = new NumericLimit(new BigDecimal(2147483647), false);
 
         boolean result = areLimitValuesInteger(restrictions);
 
@@ -428,8 +429,8 @@ public class NumericRestrictionsTests {
     @Test
     void areLimitValuesInteger_minValueIsBelowIntegerMinimumAndMaxValueIsIntegerAndBothDoNotContainDecimalValues_returnsFalse() {
         NumericRestrictions restrictions = new NumericRestrictions();
-        restrictions.min = new NumericLimit<>(new BigDecimal("1E+38"), false);
-        restrictions.max = new NumericLimit<>(new BigDecimal(10), false);
+        restrictions.min = new NumericLimit(new BigDecimal("1E+38"), false);
+        restrictions.max = new NumericLimit(new BigDecimal(10), false);
 
         boolean result = areLimitValuesInteger(restrictions);
 
@@ -439,8 +440,8 @@ public class NumericRestrictionsTests {
     @Test
     void areLimitValuesInteger_maxValueIsAboveIntegerMaximumAndMinValueIsIntegerAndBothDoNotContainDecimalValues_returnsFalse() {
         NumericRestrictions restrictions = new NumericRestrictions();
-        restrictions.min = new NumericLimit<>(new BigDecimal(0), false);
-        restrictions.max = new NumericLimit<>(new BigDecimal("1E+38"), false);
+        restrictions.min = new NumericLimit(new BigDecimal(0), false);
+        restrictions.max = new NumericLimit(new BigDecimal("1E+38"), false);
 
         boolean result = areLimitValuesInteger(restrictions);
 
@@ -450,8 +451,8 @@ public class NumericRestrictionsTests {
     @Test
     void areLimitValuesInteger_minAndMaxValuesAreWithinIntegerRangeAndMinValueContainsDecimalValue_returnsFalse() {
         NumericRestrictions restrictions = new NumericRestrictions();
-        restrictions.min = new NumericLimit<>(new BigDecimal(15.5), false);
-        restrictions.max = new NumericLimit<>(new BigDecimal(100), false);
+        restrictions.min = new NumericLimit(new BigDecimal(15.5), false);
+        restrictions.max = new NumericLimit(new BigDecimal(100), false);
 
         boolean result = areLimitValuesInteger(restrictions);
 
@@ -461,8 +462,8 @@ public class NumericRestrictionsTests {
     @Test
     void areLimitValuesInteger_minAndMaxValuesAreWithinIntegerRangeAndMaxValueContainsDecimalValue_returnsFalse() {
         NumericRestrictions restrictions = new NumericRestrictions();
-        restrictions.min = new NumericLimit<>(new BigDecimal(0), false);
-        restrictions.max = new NumericLimit<>(new BigDecimal(500.25), false);
+        restrictions.min = new NumericLimit(new BigDecimal(0), false);
+        restrictions.max = new NumericLimit(new BigDecimal(500.25), false);
 
         boolean result = areLimitValuesInteger(restrictions);
 
@@ -472,7 +473,7 @@ public class NumericRestrictionsTests {
     @Test
     void areLimitValuesInteger_minValueIsNull_returnsFalse() {
         NumericRestrictions restrictions = new NumericRestrictions();
-        restrictions.max = new NumericLimit<>(new BigDecimal(100), false);
+        restrictions.max = new NumericLimit(new BigDecimal(100), false);
 
         boolean result = areLimitValuesInteger(restrictions);
 
@@ -482,7 +483,7 @@ public class NumericRestrictionsTests {
     @Test
     void areLimitValuesInteger_maxValueIsNull_returnsFalse() {
         NumericRestrictions restrictions = new NumericRestrictions();
-        restrictions.min = new NumericLimit<>(new BigDecimal(100), false);
+        restrictions.min = new NumericLimit(new BigDecimal(100), false);
 
         boolean result = areLimitValuesInteger(restrictions);
 
@@ -492,8 +493,8 @@ public class NumericRestrictionsTests {
     @Test
     void areLimitValuesInteger_minValueIsOneBelowEdgeCaseIntegerValue_returnsFalse() {
         NumericRestrictions restrictions = new NumericRestrictions();
-        restrictions.min = new NumericLimit<>(new BigDecimal("-2147483649"), false);
-        restrictions.max = new NumericLimit<>(new BigDecimal("100"), false);
+        restrictions.min = new NumericLimit(new BigDecimal("-2147483649"), false);
+        restrictions.max = new NumericLimit(new BigDecimal("100"), false);
 
         boolean result = areLimitValuesInteger(restrictions);
 
@@ -503,8 +504,8 @@ public class NumericRestrictionsTests {
     @Test
     void areLimitValuesInteger_maxValueIsOneAboveEdgeCaseIntegerValue_returnsFalse() {
         NumericRestrictions restrictions = new NumericRestrictions();
-        restrictions.min = new NumericLimit<>(new BigDecimal("0"), false);
-        restrictions.max = new NumericLimit<>(new BigDecimal("2147483648"), false);
+        restrictions.min = new NumericLimit(new BigDecimal("0"), false);
+        restrictions.max = new NumericLimit(new BigDecimal("2147483648"), false);
 
         boolean result = areLimitValuesInteger(restrictions);
 
@@ -514,8 +515,8 @@ public class NumericRestrictionsTests {
     @Test
     void areLimitValuesInteger_minAndMaxHaveValuesWithTrailingZeros_returnsFalse() {
         NumericRestrictions restrictions = new NumericRestrictions();
-        restrictions.max = new NumericLimit<>(new BigDecimal(5.00), false);
-        restrictions.max = new NumericLimit<>(new BigDecimal(10.00), false);
+        restrictions.max = new NumericLimit(new BigDecimal(5.00), false);
+        restrictions.max = new NumericLimit(new BigDecimal(10.00), false);
 
         boolean result = areLimitValuesInteger(restrictions);
 
@@ -531,8 +532,8 @@ public class NumericRestrictionsTests {
 
         // If either of the min or max values have decimal points or if the sign differs when converting to an integer
         // the value is not an integer
-        BigDecimal minLimit = restrictions.min.getLimit();
-        BigDecimal maxLimit = restrictions.max.getLimit();
+        BigDecimal minLimit = restrictions.min.getValue();
+        BigDecimal maxLimit = restrictions.max.getValue();
         if (minLimit.scale() > 0 || maxLimit.scale() > 0 ||
             minLimit.signum() != Integer.signum(minLimit.intValue()) ||
             maxLimit.signum() != Integer.signum(maxLimit.intValue())) {
