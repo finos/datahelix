@@ -33,7 +33,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-class RelatedFieldTreePartitionerTests {
+class TreePartitionerTests {
     private static final ConstraintNode emptyConstraint
         = new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Collections.emptySet()).build();
 
@@ -310,7 +310,7 @@ class RelatedFieldTreePartitionerTests {
     }
 
     private void partitionTrees() {
-        partitionedTrees = new RelatedFieldTreePartitioner()
+        partitionedTrees = new TreePartitioner()
             .splitTreeIntoPartitions(decisionTree)
             .collect(Collectors.toList());
     }

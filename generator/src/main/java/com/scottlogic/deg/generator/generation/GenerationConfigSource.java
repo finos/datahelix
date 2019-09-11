@@ -24,7 +24,5 @@ public interface GenerationConfigSource  {
     long getMaxRows();
 
     MonitorType getMonitorType();
-    boolean shouldDoPartitioning();
     boolean requireFieldTyping();
-    boolean dontOptimise();
 }

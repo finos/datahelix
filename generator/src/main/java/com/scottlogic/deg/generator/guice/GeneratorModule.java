@@ -20,14 +20,12 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
-import com.scottlogic.deg.generator.decisiontree.treepartitioning.TreePartitioner;
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
-import com.scottlogic.deg.generator.walker.decisionbased.OptionPicker;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
+import com.scottlogic.deg.generator.walker.decisionbased.OptionPicker;
 
 import java.time.OffsetDateTime;
 
@@ -48,8 +46,6 @@ public class GeneratorModule extends AbstractModule {
         bind(GenerationConfigSource.class).toInstance(generationConfigSource);
 
         // Bind providers - used to retrieve implementations based on user input
-        bind(DecisionTreeOptimiser.class).toProvider(DecisionTreeOptimiserProvider.class);
-        bind(TreePartitioner.class).toProvider(TreePartitioningProvider.class);
         bind(DecisionTreeWalker.class).toProvider(DecisionTreeWalkerProvider.class);
         bind(ProfileValidator.class).toProvider(ProfileValidatorProvider.class);
         bind(AbstractDataGeneratorMonitor.class).toProvider(MonitorProvider.class).in(Singleton.class);
