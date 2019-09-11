@@ -3,14 +3,9 @@ package com.scottlogic.deg.profile.reader.atomic;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.common.profile.constraints.Constraint;
-import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
-import com.scottlogic.deg.profile.dto.ConstraintDTO;
 import com.scottlogic.deg.profile.reader.file.CsvInputStreamReader;
 
 import java.io.*;
@@ -21,7 +16,11 @@ public class FromFileReader {
 
     @Inject
     public FromFileReader(@Named("config:fromFilePath") String fromFilePath) {
-        this.fromFilePath = fromFilePath;
+        if (fromFilePath.endsWith(File.separator) || fromFilePath.isEmpty()) {
+            this.fromFilePath = fromFilePath;
+        } else {
+            this.fromFilePath = fromFilePath + File.separator;
+        }
     }
 
     public DistributedSet<Object> setFromFile(String file) {
