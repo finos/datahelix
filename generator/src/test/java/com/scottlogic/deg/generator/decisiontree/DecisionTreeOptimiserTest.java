@@ -26,9 +26,9 @@ import static com.scottlogic.deg.generator.builders.TestConstraintNodeBuilder.co
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 
-class MostProlificConstraintOptimiserTest {
+class DecisionTreeOptimiserTest {
 
-    MostProlificConstraintOptimiser optimiser = new MostProlificConstraintOptimiser();
+    DecisionTreeOptimiser optimiser = new DecisionTreeOptimiser();
     Field A = new Field("A");
     Field B = new Field("B");
     Field C = new Field("C");
