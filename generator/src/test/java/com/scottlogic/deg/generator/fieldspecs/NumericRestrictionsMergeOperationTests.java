@@ -19,7 +19,7 @@ package com.scottlogic.deg.generator.fieldspecs;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.restrictions.TypeRestrictions;
 import com.scottlogic.deg.generator.restrictions.MergeResult;
-import com.scottlogic.deg.generator.restrictions.NumericRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;

@@ -18,7 +18,7 @@ package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.generator.restrictions.linear.NumericLimit;
-import com.scottlogic.deg.generator.restrictions.NumericRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.common.util.NumberUtils;
 import org.hamcrest.Matcher;

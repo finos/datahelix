@@ -24,6 +24,7 @@ import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.generator.restrictions.linear.NumericLimit;
+import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;

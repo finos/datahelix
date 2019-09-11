@@ -22,6 +22,7 @@ import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.common.util.HeterogeneousTypeContainer;
+import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
 
 import java.util.*;
 import java.util.stream.Collectors;

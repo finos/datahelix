@@ -24,6 +24,7 @@ import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.restrictions.linear.NumericLimit;
+import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;

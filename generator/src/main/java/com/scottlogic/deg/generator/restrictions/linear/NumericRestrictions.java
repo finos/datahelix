@@ -14,14 +14,10 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.restrictions;
-
-import com.scottlogic.deg.generator.restrictions.linear.*;
+package com.scottlogic.deg.generator.restrictions.linear;
 
 import java.math.BigDecimal;
 import java.util.Objects;
-
-import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.NUMERIC;
 
 public class NumericRestrictions extends LinearRestictions<BigDecimal> {
     public static final int DEFAULT_NUMERIC_SCALE = 20;

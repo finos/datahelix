@@ -20,7 +20,7 @@ import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.common.util.FlatMappingSpliterator;
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.generator.restrictions.linear.NumericLimit;
-import com.scottlogic.deg.generator.restrictions.NumericRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
 import com.scottlogic.deg.generator.utils.*;
 
 import java.math.BigDecimal;

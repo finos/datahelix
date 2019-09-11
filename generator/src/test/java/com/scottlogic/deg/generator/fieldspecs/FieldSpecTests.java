@@ -23,6 +23,7 @@ import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.restrictions.linear.NumericLimit;
+import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
 import com.scottlogic.deg.generator.utils.SetUtils;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;

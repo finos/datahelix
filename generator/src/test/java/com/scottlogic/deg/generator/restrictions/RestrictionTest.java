@@ -17,6 +17,7 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.generator.restrictions.linear.NumericLimit;
+import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
 import org.hamcrest.core.Is;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;

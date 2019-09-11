@@ -24,6 +24,7 @@ import com.scottlogic.deg.generator.generation.fieldvaluesources.CannedValuesFie
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.restrictions.linear.NumericLimit;
+import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
