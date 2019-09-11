@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.restrictions.linear.LinearRestictions;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
 import com.scottlogic.deg.generator.restrictions.linear.NumericLimit;
 import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
@@ -37,7 +37,7 @@ class NumericRestrictionsMergerTests {
     public void merge_withNoRestrictions_shouldReturnSuccessWithNoRestrictions(){
         LinearRestrictionsMerger merger = new LinearRestrictionsMerger();
 
-        MergeResult<LinearRestictions<BigDecimal>> result = merger.merge(null, null);
+        MergeResult<LinearRestrictions<BigDecimal>> result = merger.merge(null, null);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.successful, is(true));
@@ -49,7 +49,7 @@ class NumericRestrictionsMergerTests {
         LinearRestrictionsMerger merger = new LinearRestrictionsMerger();
         NumericRestrictions left = new NumericRestrictions(null, null);
 
-        MergeResult<LinearRestictions<BigDecimal>> result = merger.merge(left, null);
+        MergeResult<LinearRestrictions<BigDecimal>> result = merger.merge(left, null);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.successful, is(true));
@@ -61,7 +61,7 @@ class NumericRestrictionsMergerTests {
         LinearRestrictionsMerger merger = new LinearRestrictionsMerger();
         NumericRestrictions right = new NumericRestrictions(null, null);
 
-        MergeResult<LinearRestictions<BigDecimal>> result = merger.merge(null, right);
+        MergeResult<LinearRestrictions<BigDecimal>> result = merger.merge(null, right);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.successful, is(true));
@@ -78,7 +78,7 @@ class NumericRestrictionsMergerTests {
             new NumericLimit(BigDecimal.ONE, false),
             new NumericLimit(BigDecimal.TEN, false));
 
-        MergeResult<LinearRestictions<BigDecimal>> result = merger.merge(left, right);
+        MergeResult<LinearRestrictions<BigDecimal>> result = merger.merge(left, right);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.successful, is(true));
@@ -95,7 +95,7 @@ class NumericRestrictionsMergerTests {
         NumericRestrictions greaterThanOrEqual = new NumericRestrictions(new NumericLimit(BigDecimal.TEN, true), null);
         NumericRestrictions lessThanOrEqual = new NumericRestrictions(null, new NumericLimit(BigDecimal.TEN, true));
 
-        MergeResult<LinearRestictions<BigDecimal>> result = merger.merge(greaterThanOrEqual, lessThanOrEqual);
+        MergeResult<LinearRestrictions<BigDecimal>> result = merger.merge(greaterThanOrEqual, lessThanOrEqual);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.successful, is(true));
@@ -116,7 +116,7 @@ class NumericRestrictionsMergerTests {
             new NumericLimit(BigDecimal.TEN, false),
             new NumericLimit(BigDecimal.valueOf(20), false));
 
-        MergeResult<LinearRestictions<BigDecimal>> result = merger.merge(left, right);
+        MergeResult<LinearRestrictions<BigDecimal>> result = merger.merge(left, right);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.successful, is(false));
@@ -130,7 +130,7 @@ class NumericRestrictionsMergerTests {
             new NumericLimit(BigDecimal.ONE, true));
         NumericRestrictions right = new NumericRestrictions(null, null, 0);
 
-        MergeResult<LinearRestictions<BigDecimal>> result = merger.merge(left, right);
+        MergeResult<LinearRestrictions<BigDecimal>> result = merger.merge(left, right);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.successful, is(true));
@@ -145,7 +145,7 @@ class NumericRestrictionsMergerTests {
 
         NumericRestrictions right = new NumericRestrictions(null, null, 0);
 
-        MergeResult<LinearRestictions<BigDecimal>> result = merger.merge(left, right);
+        MergeResult<LinearRestrictions<BigDecimal>> result = merger.merge(left, right);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.successful, is(true));
@@ -159,7 +159,7 @@ class NumericRestrictionsMergerTests {
             new NumericLimit(BigDecimal.ONE, true));
         NumericRestrictions right = new NumericRestrictions(null, null, 0);
 
-        MergeResult<LinearRestictions<BigDecimal>> result = merger.merge(left, right);
+        MergeResult<LinearRestrictions<BigDecimal>> result = merger.merge(left, right);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.successful, is(true));
@@ -174,7 +174,7 @@ class NumericRestrictionsMergerTests {
             new NumericLimit(BigDecimal.ONE, false));
         NumericRestrictions right = new NumericRestrictions(null, null, 0);
 
-        MergeResult<LinearRestictions<BigDecimal>> result = merger.merge(left, right);
+        MergeResult<LinearRestrictions<BigDecimal>> result = merger.merge(left, right);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.successful, is(false));
@@ -188,7 +188,7 @@ class NumericRestrictionsMergerTests {
             new NumericLimit(BigDecimal.ONE, false));
         NumericRestrictions right = new NumericRestrictions(null, null, 1);
 
-        MergeResult<LinearRestictions<BigDecimal>> result = merger.merge(left, right);
+        MergeResult<LinearRestrictions<BigDecimal>> result = merger.merge(left, right);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.successful, is(true));

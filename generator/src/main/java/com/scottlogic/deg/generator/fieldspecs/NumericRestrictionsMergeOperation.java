@@ -40,7 +40,7 @@ public class NumericRestrictionsMergeOperation implements RestrictionMergeOperat
         NumericRestrictions leftRestriction = left.getNumericRestrictions();
         NumericRestrictions rightRestriction = right.getNumericRestrictions();
 
-        MergeResult<LinearRestictions<BigDecimal>> mergeResult = merger.merge(
+        MergeResult<LinearRestrictions<BigDecimal>> mergeResult = merger.merge(
             leftRestriction, rightRestriction);
 
         if (!mergeResult.successful) {

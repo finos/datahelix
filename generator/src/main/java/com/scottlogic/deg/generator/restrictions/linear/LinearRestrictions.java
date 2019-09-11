@@ -4,14 +4,14 @@ import com.scottlogic.deg.generator.restrictions.TypedRestrictions;
 
 import java.math.BigDecimal;
 
-public class LinearRestictions<T> implements TypedRestrictions {
+public class LinearRestrictions<T> implements TypedRestrictions {
 
     private final Limit<T> min;
     private final Limit<T> max;
     private final Granularity<T> granularity;
     private final Converter<T> converter;
 
-    public LinearRestictions(Limit<T> min, Limit<T> max, Granularity<T> granularity, Converter<T> converter) {
+    public LinearRestrictions(Limit<T> min, Limit<T> max, Granularity<T> granularity, Converter<T> converter) {
         this.min = min;
         this.max = max;
         this.granularity = granularity;

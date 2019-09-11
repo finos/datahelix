@@ -4,7 +4,7 @@ import com.scottlogic.deg.generator.restrictions.MergeResult;
 
 public class LinearRestrictionsMerger {
 
-    public <T> MergeResult<LinearRestictions<T>> merge(LinearRestictions<T> left, LinearRestictions<T> right){
+    public <T> MergeResult<LinearRestrictions<T>> merge(LinearRestrictions<T> left, LinearRestrictions<T> right){
         if (left == null && right == null)
             return new MergeResult<>(null);
         if (left == null)
@@ -17,7 +17,7 @@ public class LinearRestrictionsMerger {
         Limit<T> mergedMin = getHighest(left.getMin(), right.getMin());
         Limit<T> mergedMax = getLowest(left.getMax(), right.getMax());
 
-        LinearRestictions<T> mergedRestriction = new LinearRestictions<>(mergedMin, mergedMax, mergedGranularity, left.getConverter());
+        LinearRestrictions<T> mergedRestriction = new LinearRestrictions<>(mergedMin, mergedMax, mergedGranularity, left.getConverter());
 
         if (isContradictory(mergedRestriction)) {
             return MergeResult.unsuccessful();
@@ -26,7 +26,7 @@ public class LinearRestrictionsMerger {
         return new MergeResult<>(mergedRestriction);
     }
 
-    private static <T> boolean isContradictory(LinearRestictions<T> restictions) {
+    private static <T> boolean isContradictory(LinearRestrictions<T> restictions) {
         Limit<T> min = restictions.getMin();
         Limit<T> max = restictions.getMax();
 
