@@ -16,7 +16,7 @@ public class FromFileReader {
 
     @Inject
     public FromFileReader(@Named("config:fromFilePath") String fromFilePath) {
-        if (fromFilePath.endsWith(File.separator)) {
+        if (fromFilePath.endsWith(File.separator) || fromFilePath.isEmpty()) {
             this.fromFilePath = fromFilePath;
         } else {
             this.fromFilePath = fromFilePath + File.separator;
