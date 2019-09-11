@@ -10,7 +10,7 @@ DataHelix is a proud member of the [Fintech Open Source Foundation](https://www.
 
 * For information on how to get started with DataHelix see our [Getting Started guide](docs/GettingStarted.md)
 
-* For information on the syntax of the DataHelix schema see the [User Guide](docs/user/UserGuide.md)
+* For information on the syntax of the DataHelix schema see the [User Guide](docs/UserGuide.md)
 
 * For information on how to contribute to the project as well as a technical overview of the key concepts and structure of the DataHelix then see the [Developer Guide](docs/DeveloperGuide.md).
 
