@@ -442,7 +442,7 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec datetime restrictions have lower bound",
             outputSpec.getDateTimeRestrictions().min, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec datetime restrictions have correct lower bound limit",
-            outputSpec.getDateTimeRestrictions().min.getLimit(), Is.is(testTimestamp));
+            outputSpec.getDateTimeRestrictions().min.getValue(), Is.is(testTimestamp));
         Assert.assertThat("Fieldspec datetime restrictions have exclusive lower bound",
             outputSpec.getDateTimeRestrictions().min.isInclusive(), Is.is(false));
     }
@@ -477,7 +477,7 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec datetime restrictions have upper bound",
             outputSpec.getDateTimeRestrictions().max, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec datetime restrictions have correct upper bound limit",
-            outputSpec.getDateTimeRestrictions().max.getLimit(), Is.is(testTimestamp));
+            outputSpec.getDateTimeRestrictions().max.getValue(), Is.is(testTimestamp));
         Assert.assertThat("Fieldspec datetime restrictions have inclusive upper bound",
             outputSpec.getDateTimeRestrictions().max.isInclusive(), Is.is(true));
     }
@@ -512,7 +512,7 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec datetime restrictions have lower bound",
             outputSpec.getDateTimeRestrictions().min, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec datetime restrictions have correct lower bound limit",
-            outputSpec.getDateTimeRestrictions().min.getLimit(), Is.is(testTimestamp));
+            outputSpec.getDateTimeRestrictions().min.getValue(), Is.is(testTimestamp));
         Assert.assertThat("Fieldspec datetime restrictions have inclusive lower bound",
             outputSpec.getDateTimeRestrictions().min.isInclusive(), Is.is(true));
     }
@@ -548,7 +548,7 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec datetime restrictions have upper bound",
             outputSpec.getDateTimeRestrictions().max, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec datetime restrictions have correct upper bound limit",
-            outputSpec.getDateTimeRestrictions().max.getLimit(), Is.is(testTimestamp));
+            outputSpec.getDateTimeRestrictions().max.getValue(), Is.is(testTimestamp));
         Assert.assertThat("Fieldspec datetime restrictions have exclusive upper bound",
             outputSpec.getDateTimeRestrictions().max.isInclusive(), Is.is(false));
     }
@@ -584,7 +584,7 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec datetime restrictions have upper bound",
             outputSpec.getDateTimeRestrictions().max, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec datetime restrictions have correct upper bound limit",
-            outputSpec.getDateTimeRestrictions().max.getLimit(), Is.is(testTimestamp));
+            outputSpec.getDateTimeRestrictions().max.getValue(), Is.is(testTimestamp));
         Assert.assertThat("Fieldspec datetime restrictions have exclusive upper bound",
             outputSpec.getDateTimeRestrictions().max.isInclusive(), Is.is(false));
     }
@@ -619,7 +619,7 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec datetime restrictions have lower bound",
             outputSpec.getDateTimeRestrictions().min, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec datetime restrictions have correct lower bound limit",
-            outputSpec.getDateTimeRestrictions().min.getLimit(), Is.is(testTimestamp));
+            outputSpec.getDateTimeRestrictions().min.getValue(), Is.is(testTimestamp));
         Assert.assertThat("Fieldspec datetime restrictions have inclusive lower bound",
             outputSpec.getDateTimeRestrictions().min.isInclusive(), Is.is(true));
     }
@@ -655,7 +655,7 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec datetime restrictions have upper bound",
             outputSpec.getDateTimeRestrictions().max, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec datetime restrictions have correct upper bound limit",
-            outputSpec.getDateTimeRestrictions().max.getLimit(), Is.is(testTimestamp));
+            outputSpec.getDateTimeRestrictions().max.getValue(), Is.is(testTimestamp));
         Assert.assertThat("Fieldspec datetime restrictions have inclusive upper bound",
             outputSpec.getDateTimeRestrictions().max.isInclusive(), Is.is(true));
     }
@@ -690,7 +690,7 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec datetime restrictions have lower bound",
             outputSpec.getDateTimeRestrictions().min, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec datetime restrictions have correct lower bound limit",
-            outputSpec.getDateTimeRestrictions().min.getLimit(), Is.is(testTimestamp));
+            outputSpec.getDateTimeRestrictions().min.getValue(), Is.is(testTimestamp));
         Assert.assertThat("Fieldspec datetime restrictions have exclusive lower bound",
             outputSpec.getDateTimeRestrictions().min.isInclusive(), Is.is(false));
     }
@@ -726,13 +726,13 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec datetime restrictions have lower bound",
             outputSpec.getDateTimeRestrictions().min, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec datetime restrictions have correct lower bound limit",
-            outputSpec.getDateTimeRestrictions().min.getLimit(), Is.is(startTimestamp));
+            outputSpec.getDateTimeRestrictions().min.getValue(), Is.is(startTimestamp));
         Assert.assertThat("Fieldspect datetime restrictions have exclusive lower bound",
             outputSpec.getDateTimeRestrictions().min.isInclusive(), Is.is(false));
         Assert.assertThat("Fieldspec datetime restrictions have upper bound",
             outputSpec.getDateTimeRestrictions().max, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec datetime restrictions have correct upper bound limit",
-            outputSpec.getDateTimeRestrictions().max.getLimit(), Is.is(endTimestamp));
+            outputSpec.getDateTimeRestrictions().max.getValue(), Is.is(endTimestamp));
         Assert.assertThat("Fieldspec datetime restrictions have exclusive upper bound",
             outputSpec.getDateTimeRestrictions().max.isInclusive(), Is.is(false));
     }

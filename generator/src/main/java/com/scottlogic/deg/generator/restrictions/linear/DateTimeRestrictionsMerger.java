@@ -44,7 +44,7 @@ public class DateTimeRestrictionsMerger {
             return new MergeResult<>(merged);
         }
 
-        if (merged.min.isAfter(merged.max)) {
+        if (merged.min.isAfter(merged.max.getValue())) {
             return MergeResult.unsuccessful();
         }
 
@@ -56,7 +56,7 @@ public class DateTimeRestrictionsMerger {
             return null;
         }
 
-        OffsetDateTime limit = limitHolder.getLimit();
+        OffsetDateTime limit = limitHolder.getValue();
         boolean inclusive = limitHolder.isInclusive();
         OffsetDateTime adjusted = granularity.getGranularityFunction().apply(limit);
         switch (mergeLimit) {
@@ -95,29 +95,29 @@ public class DateTimeRestrictionsMerger {
         // if both exclusive
         if (!leftIsInclusive && !rightIsInclusive) {
             // if both datetime's are the same after granularity is applied
-            if (granularity.getGranularityFunction().apply(left.getLimit())
-                .equals(granularity.getGranularityFunction().apply(right.getLimit()))) {
+            if (granularity.getGranularityFunction().apply(left.getValue())
+                .equals(granularity.getGranularityFunction().apply(right.getValue()))) {
                 inclusiveOverride = true;
             }
         }
 
         // if left and right are identical, return new object with same values
-        if (left.getLimit().compareTo(right.getLimit()) == 0)
-            return new DateTimeLimit(left.getLimit(), leftIsInclusive && rightIsInclusive);
+        if (left.getValue().compareTo(right.getValue()) == 0)
+            return new DateTimeLimit(left.getValue(), leftIsInclusive && rightIsInclusive);
 
         inclusiveOverride = inclusiveOverride || leftIsInclusive || rightIsInclusive;
 
         switch (mergeLimit) {
             case MIN:
-                if (left.getLimit().compareTo(right.getLimit()) > 0) {
-                    return new DateTimeLimit(left.getLimit(), inclusiveOverride);
+                if (left.getValue().compareTo(right.getValue()) > 0) {
+                    return new DateTimeLimit(left.getValue(), inclusiveOverride);
                 }
-                return new DateTimeLimit(right.getLimit(), inclusiveOverride);
+                return new DateTimeLimit(right.getValue(), inclusiveOverride);
             case MAX:
-                if (left.getLimit().compareTo(right.getLimit()) < 0) {
-                    return new DateTimeLimit(left.getLimit(), inclusiveOverride);
+                if (left.getValue().compareTo(right.getValue()) < 0) {
+                    return new DateTimeLimit(left.getValue(), inclusiveOverride);
                 }
-                return new DateTimeLimit(right.getLimit(), inclusiveOverride);
+                return new DateTimeLimit(right.getValue(), inclusiveOverride);
             default:
                 throw new UnsupportedOperationException();
         }

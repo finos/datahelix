@@ -57,13 +57,13 @@ public class DateTimeRestrictions implements TypedRestrictions {
         OffsetDateTime d = (OffsetDateTime) o;
 
         if (min != null) {
-            if (d.compareTo(min.getLimit()) < (min.isInclusive() ? 0 : 1)) {
+            if (d.compareTo(min.getValue()) < (min.isInclusive() ? 0 : 1)) {
                 return false;
             }
         }
 
         if (max != null) {
-            if (d.compareTo(max.getLimit()) > (max.isInclusive() ? 0 : -1)) {
+            if (d.compareTo(max.getValue()) > (max.isInclusive() ? 0 : -1)) {
                 return false;
             }
         }

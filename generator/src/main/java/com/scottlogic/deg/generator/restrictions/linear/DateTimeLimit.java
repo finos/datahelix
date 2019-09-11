@@ -3,27 +3,40 @@ package com.scottlogic.deg.generator.restrictions.linear;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
-public class DateTimeLimit {
+public class DateTimeLimit implements Limit<OffsetDateTime> {
     private final OffsetDateTime limit;
+    private final boolean isInclusive;
+    
+    
 
-    @Override
-    public String toString() {
-        return String.format("%s%s",limit, inclusive ? " inclusive" : "");
-    }
-
-    private final boolean inclusive;
-
-    public DateTimeLimit(OffsetDateTime limit, boolean inclusive) {
+    public DateTimeLimit(OffsetDateTime limit, boolean isInclusive) {
         this.limit = limit;
-        this.inclusive = inclusive;
+        this.isInclusive = isInclusive;
     }
-
-    public OffsetDateTime getLimit() {
+    
+    @Override
+    public OffsetDateTime getValue() {
         return limit;
     }
-
+    
     public boolean isInclusive() {
-        return inclusive;
+        return isInclusive;
+    }
+
+    @Override
+    public boolean isBefore(OffsetDateTime other) {
+        if (isInclusive){
+            return limit.compareTo(other) <= 0;
+        }
+        return limit.compareTo(other) < 0;
+    }
+
+    @Override
+    public boolean isAfter(OffsetDateTime other) {
+        if (isInclusive){
+            return limit.compareTo(other) >= 0;
+        }
+        return limit.compareTo(other) > 0;
     }
 
     @Override
@@ -31,27 +44,17 @@ public class DateTimeLimit {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DateTimeLimit that = (DateTimeLimit) o;
-        return inclusive == that.inclusive &&
+        return isInclusive == that.isInclusive &&
             Objects.equals(limit, that.limit);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(limit, inclusive);
+        return Objects.hash(limit, isInclusive);
     }
 
-    public boolean isAfter(DateTimeLimit max) {
-        OffsetDateTime minLimit = getReferenceTime(1);
-        OffsetDateTime maxLimit = max.getReferenceTime(-1);
-
-        return minLimit.isAfter(maxLimit);
-    }
-
-    private OffsetDateTime getReferenceTime(int nanoOffset) {
-        if (inclusive) {
-            return limit;
-        }
-
-        return limit.plusNanos(nanoOffset);
+    @Override
+    public String toString() {
+        return String.format("%s%s",limit, isInclusive ? " inclusive" : "");
     }
 }

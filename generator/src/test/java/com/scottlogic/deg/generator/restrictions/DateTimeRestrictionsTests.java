@@ -252,7 +252,7 @@ class DateTimeRestrictionsTests {
         DateTimeLimit self = new DateTimeLimit(value, true);
         DateTimeLimit other = new DateTimeLimit(value, true);
 
-        boolean result = other.isAfter(self);
+        boolean result = other.isAfter(self.getValue());
 
         Assert.assertThat(result, is(false));
     }
@@ -263,7 +263,7 @@ class DateTimeRestrictionsTests {
         DateTimeLimit self = new DateTimeLimit(value, true);
         DateTimeLimit other = new DateTimeLimit(value, false);
 
-        boolean result = other.isAfter(self);
+        boolean result = other.isAfter(self.getValue());
 
         Assert.assertThat(result, is(true));
     }
@@ -275,7 +275,7 @@ class DateTimeRestrictionsTests {
         DateTimeLimit self = new DateTimeLimit(selfValue, true);
         DateTimeLimit other = new DateTimeLimit(otherValue, true);
 
-        boolean result = other.isAfter(self);
+        boolean result = other.isAfter(self.getValue());
 
         Assert.assertThat(result, is(false));
     }
@@ -287,7 +287,7 @@ class DateTimeRestrictionsTests {
         DateTimeLimit self = new DateTimeLimit(selfValue, true);
         DateTimeLimit other = new DateTimeLimit(otherValue, false);
 
-        boolean result = other.isAfter(self);
+        boolean result = other.isAfter(self.getValue());
 
         Assert.assertThat(result, is(false));
     }
@@ -299,7 +299,7 @@ class DateTimeRestrictionsTests {
         DateTimeLimit self = new DateTimeLimit(selfValue, true);
         DateTimeLimit other = new DateTimeLimit(otherValue, true);
 
-        boolean result = other.isAfter(self);
+        boolean result = other.isAfter(self.getValue());
 
         Assert.assertThat(result, is(false));
     }
@@ -311,7 +311,7 @@ class DateTimeRestrictionsTests {
         DateTimeLimit self = new DateTimeLimit(selfValue, true);
         DateTimeLimit other = new DateTimeLimit(otherValue, false);
 
-        boolean result = other.isAfter(self);
+        boolean result = other.isAfter(self.getValue());
 
         Assert.assertThat(result, is(false));
     }
@@ -323,7 +323,7 @@ class DateTimeRestrictionsTests {
         DateTimeLimit self = new DateTimeLimit(selfValue, true);
         DateTimeLimit other = new DateTimeLimit(otherValue, true);
 
-        boolean result = other.isAfter(self);
+        boolean result = other.isAfter(self.getValue());
 
         Assert.assertThat(result, is(true));
     }
@@ -335,7 +335,7 @@ class DateTimeRestrictionsTests {
         DateTimeLimit self = new DateTimeLimit(selfValue, true);
         DateTimeLimit other = new DateTimeLimit(otherValue, false);
 
-        boolean result = other.isAfter(self);
+        boolean result = other.isAfter(self.getValue());
 
         Assert.assertThat(result, is(true));
     }
@@ -347,7 +347,7 @@ class DateTimeRestrictionsTests {
         DateTimeLimit self = new DateTimeLimit(selfValue, true);
         DateTimeLimit other = new DateTimeLimit(otherValue, true);
 
-        boolean result = other.isAfter(self);
+        boolean result = other.isAfter(self.getValue());
 
         Assert.assertThat(result, is(true));
     }
@@ -359,7 +359,7 @@ class DateTimeRestrictionsTests {
         DateTimeLimit self = new DateTimeLimit(selfValue, false);
         DateTimeLimit other = new DateTimeLimit(otherValue, false);
 
-        boolean result = other.isAfter(self);
+        boolean result = other.isAfter(self.getValue());
 
         Assert.assertThat(result, is(true));
     }

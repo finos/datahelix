@@ -41,7 +41,7 @@ abstract class AbstractDateInequalityRelation implements FieldSpecRelations {
         DateTimeLimit limit = dateTimeLimitExtractingFunction(otherValue.getDateTimeRestrictions());
 
         if (limit != null) {
-            OffsetDateTime value = limit.getLimit();
+            OffsetDateTime value = limit.getValue();
 
             DateTimeRestrictions restrictions = new DateTimeRestrictions();
             appendValueToRestrictions(restrictions, value);

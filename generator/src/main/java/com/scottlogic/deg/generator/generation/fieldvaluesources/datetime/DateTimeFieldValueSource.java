@@ -73,8 +73,8 @@ public class DateTimeFieldValueSource implements FieldValueSource {
 
         ArrayList<Object> interestingValues = new ArrayList<>();
 
-        if (restrictions.min != null && restrictions.min.getLimit() != null) {
-            OffsetDateTime min = restrictions.min.getLimit();
+        if (restrictions.min != null && restrictions.min.getValue() != null) {
+            OffsetDateTime min = restrictions.min.getValue();
             interestingValues.add(restrictions.min.isInclusive() ? min : min.plusNanos(1_000_000));
         } else {
             interestingValues.add(OffsetDateTime.of(
@@ -83,8 +83,8 @@ public class DateTimeFieldValueSource implements FieldValueSource {
                 ZoneOffset.UTC));
         }
 
-        if (restrictions.max != null && restrictions.max.getLimit() != null) {
-            OffsetDateTime max = restrictions.max.getLimit();
+        if (restrictions.max != null && restrictions.max.getValue() != null) {
+            OffsetDateTime max = restrictions.max.getValue();
             interestingValues.add(restrictions.max.isInclusive() ? max : max.minusNanos(1_000_000));
         } else {
             interestingValues.add(OffsetDateTime.of(
@@ -117,13 +117,13 @@ public class DateTimeFieldValueSource implements FieldValueSource {
     }
 
     private OffsetDateTime getExclusiveUpperBound(DateTimeRestrictions upper) {
-        if (upper.max == null || upper.max.getLimit() == null) return null;
-        return upper.max.isInclusive() ? upper.max.getLimit().plusNanos(1_000_000) : upper.max.getLimit();
+        if (upper.max == null || upper.max.getValue() == null) return null;
+        return upper.max.isInclusive() ? upper.max.getValue().plusNanos(1_000_000) : upper.max.getValue();
     }
 
     private OffsetDateTime getInclusiveLowerBounds(DateTimeRestrictions lower) {
-        if (lower.min == null || lower.min.getLimit() == null) return null;
-        return lower.min.isInclusive() ? lower.min.getLimit() : lower.min.getLimit().plusNanos(1_000_000);
+        if (lower.min == null || lower.min.getValue() == null) return null;
+        return lower.min.isInclusive() ? lower.min.getValue() : lower.min.getValue().plusNanos(1_000_000);
     }
 
     @Override
