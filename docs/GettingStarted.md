@@ -14,7 +14,7 @@
 
 The following guide gives a 10 minute introduction to the generator via various practical examples.
 
-* For more detailed documentation please refer to the [User Guide](user/UserGuide.md)
+* For more detailed documentation please refer to the [User Guide](UserGuide.md)
 
 * If you are interested in extending / modifying the generator itself please refer to the [Developer Guide](DeveloperGuide.md)
 
@@ -326,7 +326,7 @@ firstName,age,nationalInsurance
 [...]
 ```
 
-You can find out more about the various constraints the generator supports in the detailed [User Guide](user/UserGuide.md).
+You can find out more about the various constraints the generator supports in the detailed [User Guide](UserGuide.md).
 
 ## Generation modes
 
@@ -341,7 +341,7 @@ The mode is specified via the `--generation-type` option.
 
 That's the end of our getting started guide. Hopefully it has given you a good understanding of what the DataHelix generator is capable of. 
 
-* If you'd like to find out more about the various constraints the tool supports, the [User Guide](user/UserGuide.md) is a good next step. 
+* If you'd like to find out more about the various constraints the tool supports, the [User Guide](UserGuide.md) is a good next step. 
 
 * You might also be interested in the [examples folder](https://github.com/finos/datahelix/tree/master/examples), which illustrates various features of the generator.
 

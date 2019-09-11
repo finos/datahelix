@@ -37,7 +37,7 @@ This guide outlines how to contribute to the project as well as the key concepts
 
 * For information on how to get started with DataHelix see our [Getting Started guide](GettingStarted.md)
 
-* For information on the syntax of the DataHelix schema see the [User Guide](user/UserGuide.md)
+* For information on the syntax of the DataHelix schema see the [User Guide](UserGuide.md)
 
 # Development
 
@@ -328,7 +328,7 @@ Due to the way that the generator computes textual data internally the generatio
 
 ### Anchors
 
-dk.brics.automaton doesn't support start and end anchors `^` & `$` and instead matches the entire word as if the anchors were always present. For some of our use cases though it may be that we want to match the regex in the middle of a string somewhere, so we have two versions of the regex constraint - [matchingRegex](user/UserGuide.md#predicate-matchingregex) and [containingRegex](user/UserGuide.md#predicate-containingregex). If `containingRegex` is used then we simply add a `.*` to the start and end of the regex before passing it into the automaton. Any `^` or `$` characters passed at the start or end of the string respectively are removed, as the automaton will treat them as literal characters.
+dk.brics.automaton doesn't support start and end anchors `^` & `$` and instead matches the entire word as if the anchors were always present. For some of our use cases though it may be that we want to match the regex in the middle of a string somewhere, so we have two versions of the regex constraint - [matchingRegex](UserGuide.md#predicate-matchingregex) and [containingRegex](UserGuide.md#predicate-containingregex). If `containingRegex` is used then we simply add a `.*` to the start and end of the regex before passing it into the automaton. Any `^` or `$` characters passed at the start or end of the string respectively are removed, as the automaton will treat them as literal characters.
 
 ### Automaton data types
 The automaton represents the state machine using the following types:
