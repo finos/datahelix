@@ -143,17 +143,17 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec constructGreaterThanConstraint(Number limitValue, boolean inclusive, boolean negate) {
-        final NumericRestrictions numericRestrictions = new NumericRestrictions();
+        final NumericRestrictions numericRestrictions;
 
         final BigDecimal limit = NumberUtils.coerceToBigDecimal(limitValue);
         if (negate) {
-            numericRestrictions.max = new NumericLimit(
+            numericRestrictions = new NumericRestrictions(null, new NumericLimit(
                 limit,
-                !inclusive);
+                !inclusive));
         } else {
-            numericRestrictions.min = new NumericLimit(
+            numericRestrictions = new NumericRestrictions(new NumericLimit(
                 limit,
-                inclusive);
+                inclusive), null);
         }
 
         return FieldSpec.Empty.withNumericRestrictions(numericRestrictions);
@@ -168,16 +168,17 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec constructLessThanConstraint(Number limitValue, boolean inclusive, boolean negate) {
-        final NumericRestrictions numericRestrictions = new NumericRestrictions();
+        NumericRestrictions numericRestrictions;
+
         final BigDecimal limit = NumberUtils.coerceToBigDecimal(limitValue);
         if (negate) {
-            numericRestrictions.min = new NumericLimit(
+            numericRestrictions = new NumericRestrictions( new NumericLimit(
                 limit,
-                !inclusive);
+                !inclusive), null);
         } else {
-            numericRestrictions.max = new NumericLimit(
+            numericRestrictions = new NumericRestrictions(null, new NumericLimit(
                 limit,
-                inclusive);
+                inclusive));
         }
 
         return FieldSpec.Empty.withNumericRestrictions(numericRestrictions);
@@ -189,7 +190,7 @@ public class FieldSpecFactory {
             return FieldSpec.Empty;
         }
 
-        return FieldSpec.Empty.withNumericRestrictions(new NumericRestrictions(constraint.granularity.getNumericGranularity().scale()));
+        return FieldSpec.Empty.withNumericRestrictions(new NumericRestrictions(null, null, constraint.granularity.getNumericGranularity().scale()));
     }
 
     private FieldSpec construct(IsGranularToDateConstraint constraint, boolean negate) {

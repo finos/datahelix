@@ -112,7 +112,7 @@ class FieldSpecTests {
     @Test
     void equals_fieldSpecNumericRestrictionsNotNullAndOtherObjectNumericRestrictionsNull_returnsFalse() {
         FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(
-            new NumericRestrictions());
+            new NumericRestrictions(null, null));
 
         boolean result = fieldSpec.equals(FieldSpec.Empty);
 
@@ -128,7 +128,7 @@ class FieldSpecTests {
 
         boolean result = fieldSpec.equals(
             FieldSpec.Empty.withNumericRestrictions(
-                new NumericRestrictions())
+                new NumericRestrictions(null, null))
         );
 
         assertFalse(
@@ -139,14 +139,14 @@ class FieldSpecTests {
 
     @Test
     void equals_fieldSpecNumericRestrictionsNotNullAndOtherObjectNumericRestrictionsNotNullAndNumericRestrictionsAreNotEqual_returnsFalse() {
-        NumericRestrictions firstFieldSpecRestrictions = new NumericRestrictions();
-        firstFieldSpecRestrictions.min = new NumericLimit(new BigDecimal(1), false);
-        firstFieldSpecRestrictions.max = new NumericLimit(new BigDecimal(20), false);
+        NumericRestrictions firstFieldSpecRestrictions = new NumericRestrictions(
+            new NumericLimit(new BigDecimal(1), false),
+            new NumericLimit(new BigDecimal(20), false));
         FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(firstFieldSpecRestrictions);
 
-        NumericRestrictions secondFieldSpecRestrictions = new NumericRestrictions();
-        secondFieldSpecRestrictions.min = new NumericLimit(new BigDecimal(5), false);
-        secondFieldSpecRestrictions.max = new NumericLimit(new BigDecimal(20), false);
+        NumericRestrictions secondFieldSpecRestrictions = new NumericRestrictions(
+            new NumericLimit(new BigDecimal(5), false) ,
+            new NumericLimit(new BigDecimal(20), false));
         boolean result = fieldSpec.equals(
             FieldSpec.Empty.withNumericRestrictions(secondFieldSpecRestrictions)
         );
@@ -422,10 +422,8 @@ class FieldSpecTests {
 
     @Test
     void permitsRejectsInvalidNumeric() {
-        NumericRestrictions numeric = new NumericRestrictions();
+        NumericRestrictions numeric = new NumericRestrictions(new NumericLimit(BigDecimal.TEN, true), null);
         FieldSpec spec = FieldSpec.Empty.withNumericRestrictions(numeric);
-
-        numeric.min = new NumericLimit(BigDecimal.TEN, true);
 
         assertFalse(spec.permits(BigDecimal.ONE));
     }
@@ -500,6 +498,7 @@ class FieldSpecTests {
         private final boolean isEqual;
 
         MockNumericRestrictions(boolean isEqual) {
+            super(null, null);
             this.isEqual = isEqual;
         }
 

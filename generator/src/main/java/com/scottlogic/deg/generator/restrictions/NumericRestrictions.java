@@ -26,14 +26,16 @@ import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConst
 public class NumericRestrictions implements TypedRestrictions {
     public static final int DEFAULT_NUMERIC_SCALE = 20;
     private final int numericScale;
-    public NumericLimit min;
-    public NumericLimit max;
+    private final NumericLimit min;
+    private final NumericLimit max;
 
-    public NumericRestrictions(){
-        numericScale = DEFAULT_NUMERIC_SCALE;
+    public NumericRestrictions(NumericLimit min, NumericLimit max){
+        this(min, max, DEFAULT_NUMERIC_SCALE);
     }
 
-    public NumericRestrictions(int numericScale){
+    public NumericRestrictions(NumericLimit min, NumericLimit max, int numericScale){
+        this.min = min;
+        this.max = max;
         this.numericScale = numericScale;
     }
 
@@ -49,15 +51,15 @@ public class NumericRestrictions implements TypedRestrictions {
 
         BigDecimal n = new BigDecimal(o.toString());
 
-        if(min != null){
-            if(n.compareTo(min.getValue()) < (min.isInclusive() ? 0 : 1))
+        if(getMin() != null){
+            if(n.compareTo(getMin().getValue()) < (getMin().isInclusive() ? 0 : 1))
             {
                 return false;
             }
         }
 
-        if(max != null){
-            if(n.compareTo(max.getValue()) > (max.isInclusive() ? 0 : -1))
+        if(getMax() != null){
+            if(n.compareTo(getMax().getValue()) > (getMax().isInclusive() ? 0 : -1))
             {
                 return false;
             }
@@ -83,9 +85,9 @@ public class NumericRestrictions implements TypedRestrictions {
     public String toString() {
         return String.format(
             "%s%s%s%s",
-            min != null ? min.toString(">") : "",
-            min != null && max != null ? " and " : "",
-            max != null ? max.toString("<") : "",
+            getMin() != null ? getMin().toString(">") : "",
+            getMin() != null && getMax() != null ? " and " : "",
+            getMax() != null ? getMax().toString("<") : "",
             numericScale != 20 ? "granular-to " + numericScale : "");
     }
 
@@ -94,13 +96,21 @@ public class NumericRestrictions implements TypedRestrictions {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         NumericRestrictions that = (NumericRestrictions) o;
-        return Objects.equals(min, that.min) &&
-            Objects.equals(max, that.max) &&
+        return Objects.equals(getMin(), that.getMin()) &&
+            Objects.equals(getMax(), that.getMax()) &&
             Objects.equals(numericScale, that.numericScale);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(min, max, numericScale);
+        return Objects.hash(getMin(), getMax(), numericScale);
+    }
+
+    public NumericLimit getMin() {
+        return min;
+    }
+
+    public NumericLimit getMax() {
+        return max;
     }
 }

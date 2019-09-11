@@ -45,9 +45,9 @@ class NumericRestrictionsMergeOperationTests {
         merger = mock(NumericRestrictionsMerger.class);
         operation = new NumericRestrictionsMergeOperation(merger);
         left = FieldSpec.Empty.withNumericRestrictions(
-            new NumericRestrictions());
+            new NumericRestrictions(null, null));
         right = FieldSpec.Empty.withNumericRestrictions(
-            new NumericRestrictions());
+            new NumericRestrictions(null, null));
     }
 
     @Test
@@ -128,7 +128,7 @@ class NumericRestrictionsMergeOperationTests {
     public void applyMergeOperation_withMergableNumericRestrictions_shouldApplyMergedNumericRestrictions(){
         FieldSpec merging = FieldSpec.Empty
             .withTypeRestrictions(TypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.NUMERIC));
-        NumericRestrictions merged = new NumericRestrictions();
+        NumericRestrictions merged = new NumericRestrictions(null, null);
         when(merger.merge(left.getNumericRestrictions(), right.getNumericRestrictions()))
             .thenReturn(new MergeResult<>(merged));
 

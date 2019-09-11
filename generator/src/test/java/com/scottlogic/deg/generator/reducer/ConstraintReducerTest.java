@@ -97,13 +97,13 @@ class ConstraintReducerTest {
         Assert.assertThat("Quantity fieldspec has numeric restrictions", quantityFieldSpec.getNumericRestrictions(),
             Is.is(IsNull.notNullValue()));
         Assert.assertThat("Quantity fieldspec has correct lower bound limit",
-            quantityFieldSpec.getNumericRestrictions().min.getValue(), Is.is(BigDecimal.ZERO));
+            quantityFieldSpec.getNumericRestrictions().getMin().getValue(), Is.is(BigDecimal.ZERO));
         Assert.assertThat("Quantity fieldspec has exclusive lower bound",
-            quantityFieldSpec.getNumericRestrictions().min.isInclusive(), Is.is(false));
+            quantityFieldSpec.getNumericRestrictions().getMin().isInclusive(), Is.is(false));
         Assert.assertThat("Quantity fieldspec has correct upper bound limit",
-            quantityFieldSpec.getNumericRestrictions().max.getValue(), Is.is(BigDecimal.valueOf(5)));
+            quantityFieldSpec.getNumericRestrictions().getMax().getValue(), Is.is(BigDecimal.valueOf(5)));
         Assert.assertThat("Quantity fieldspec has inclusive upper bound",
-            quantityFieldSpec.getNumericRestrictions().max.isInclusive(), Is.is(true));
+            quantityFieldSpec.getNumericRestrictions().getMax().isInclusive(), Is.is(true));
 
         FieldSpec countryFieldSpec = reducedConstraints.getSpecForField(countryField);
         Assert.assertThat("Country fieldspec has no null restrictions", countryFieldSpec.isNullable(),
@@ -160,14 +160,14 @@ class ConstraintReducerTest {
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has numeric restrictions", outputSpec.getNumericRestrictions(),
             Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec numeric restrictions have no upper bound", outputSpec.getNumericRestrictions().max,
+        Assert.assertThat("Fieldspec numeric restrictions have no upper bound", outputSpec.getNumericRestrictions().getMax(),
             Is.is(IsNull.nullValue()));
-        Assert.assertThat("Fieldspec numeric restrictions have lower bound", outputSpec.getNumericRestrictions().min,
+        Assert.assertThat("Fieldspec numeric restrictions have lower bound", outputSpec.getNumericRestrictions().getMin(),
             Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec numeric restriction lower bound is correct",
-            outputSpec.getNumericRestrictions().min.getValue(), Is.is(BigDecimal.valueOf(5)));
+            outputSpec.getNumericRestrictions().getMin().getValue(), Is.is(BigDecimal.valueOf(5)));
         Assert.assertThat("Fieldspec numeric restriction lower bound is exclusive",
-            outputSpec.getNumericRestrictions().min.isInclusive(), Is.is(false));
+            outputSpec.getNumericRestrictions().getMin().isInclusive(), Is.is(false));
     }
 
     @Test
@@ -196,13 +196,13 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec has numeric restrictions", outputSpec.getNumericRestrictions(),
             Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec numeric restrictions have no lower bound",
-            outputSpec.getNumericRestrictions().min, Is.is(IsNull.nullValue()));
+            outputSpec.getNumericRestrictions().getMin(), Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec numeric restrictions have upper bound",
-            outputSpec.getNumericRestrictions().max, Is.is(IsNull.notNullValue()));
+            outputSpec.getNumericRestrictions().getMax(), Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec numeric restrictions upper bound limit is correct",
-            outputSpec.getNumericRestrictions().max.getValue(), Is.is(BigDecimal.valueOf(5)));
+            outputSpec.getNumericRestrictions().getMax().getValue(), Is.is(BigDecimal.valueOf(5)));
         Assert.assertThat("Fieldspec numeric resitrctions upper bound is inclusive",
-            outputSpec.getNumericRestrictions().max.isInclusive(), Is.is(true));
+            outputSpec.getNumericRestrictions().getMax().isInclusive(), Is.is(true));
     }
 
     @Test
@@ -229,14 +229,14 @@ class ConstraintReducerTest {
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has numeric restrictions", outputSpec.getNumericRestrictions(),
             Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec numeric restrictions have no upper bound", outputSpec.getNumericRestrictions().max,
+        Assert.assertThat("Fieldspec numeric restrictions have no upper bound", outputSpec.getNumericRestrictions().getMax(),
             Is.is(IsNull.nullValue()));
-        Assert.assertThat("Fieldspec numeric restrictions have lower bound", outputSpec.getNumericRestrictions().min,
+        Assert.assertThat("Fieldspec numeric restrictions have lower bound", outputSpec.getNumericRestrictions().getMin(),
             Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec numeric restriction lower bound is correct",
-            outputSpec.getNumericRestrictions().min.getValue(), Is.is(BigDecimal.valueOf(5)));
+            outputSpec.getNumericRestrictions().getMin().getValue(), Is.is(BigDecimal.valueOf(5)));
         Assert.assertThat("Fieldspec numeric restriction lower bound is inclusive",
-            outputSpec.getNumericRestrictions().min.isInclusive(), Is.is(true));
+            outputSpec.getNumericRestrictions().getMin().isInclusive(), Is.is(true));
     }
 
     @Test
@@ -265,13 +265,13 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec has numeric restrictions", outputSpec.getNumericRestrictions(),
             Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec numeric restrictions have no lower bound",
-            outputSpec.getNumericRestrictions().min, Is.is(IsNull.nullValue()));
+            outputSpec.getNumericRestrictions().getMin(), Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec numeric restrictions have upper bound",
-            outputSpec.getNumericRestrictions().max, Is.is(IsNull.notNullValue()));
+            outputSpec.getNumericRestrictions().getMax(), Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec numeric restrictions upper bound limit is correct",
-            outputSpec.getNumericRestrictions().max.getValue(), Is.is(BigDecimal.valueOf(5)));
+            outputSpec.getNumericRestrictions().getMax().getValue(), Is.is(BigDecimal.valueOf(5)));
         Assert.assertThat("Fieldspec numeric restrictions upper bound is exclusive",
-            outputSpec.getNumericRestrictions().max.isInclusive(), Is.is(false));
+            outputSpec.getNumericRestrictions().getMax().isInclusive(), Is.is(false));
     }
 
     @Test
@@ -300,13 +300,13 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec has numeric restrictions", outputSpec.getNumericRestrictions(),
             Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec numeric restrictions have no lower bound",
-            outputSpec.getNumericRestrictions().min, Is.is(IsNull.nullValue()));
+            outputSpec.getNumericRestrictions().getMin(), Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec numeric restrictions have upper bound",
-            outputSpec.getNumericRestrictions().max, Is.is(IsNull.notNullValue()));
+            outputSpec.getNumericRestrictions().getMax(), Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec numeric restrictions upper bound limit is correct",
-            outputSpec.getNumericRestrictions().max.getValue(), Is.is(BigDecimal.valueOf(5)));
+            outputSpec.getNumericRestrictions().getMax().getValue(), Is.is(BigDecimal.valueOf(5)));
         Assert.assertThat("Fieldspec numeric restrictions upper bound is exclusive",
-            outputSpec.getNumericRestrictions().max.isInclusive(), Is.is(false));
+            outputSpec.getNumericRestrictions().getMax().isInclusive(), Is.is(false));
     }
 
     @Test
@@ -333,14 +333,14 @@ class ConstraintReducerTest {
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has numeric restrictions", outputSpec.getNumericRestrictions(),
             Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec numeric restrictions have no upper bound", outputSpec.getNumericRestrictions().max,
+        Assert.assertThat("Fieldspec numeric restrictions have no upper bound", outputSpec.getNumericRestrictions().getMax(),
             Is.is(IsNull.nullValue()));
-        Assert.assertThat("Fieldspec numeric restrictions have lower bound", outputSpec.getNumericRestrictions().min,
+        Assert.assertThat("Fieldspec numeric restrictions have lower bound", outputSpec.getNumericRestrictions().getMin(),
             Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec numeric restriction lower bound is correct",
-            outputSpec.getNumericRestrictions().min.getValue(), Is.is(BigDecimal.valueOf(5)));
+            outputSpec.getNumericRestrictions().getMin().getValue(), Is.is(BigDecimal.valueOf(5)));
         Assert.assertThat("Fieldspec numeric restriction lower bound is inclusive",
-            outputSpec.getNumericRestrictions().min.isInclusive(), Is.is(true));
+            outputSpec.getNumericRestrictions().getMin().isInclusive(), Is.is(true));
     }
 
     @Test
@@ -369,13 +369,13 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec has numeric restrictions", outputSpec.getNumericRestrictions(),
             Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec numeric restrictions have no lower bound",
-            outputSpec.getNumericRestrictions().min, Is.is(IsNull.nullValue()));
+            outputSpec.getNumericRestrictions().getMin(), Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec numeric restrictions have upper bound",
-            outputSpec.getNumericRestrictions().max, Is.is(IsNull.notNullValue()));
+            outputSpec.getNumericRestrictions().getMax(), Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec numeric restrictions upper bound limit is correct",
-            outputSpec.getNumericRestrictions().max.getValue(), Is.is(BigDecimal.valueOf(5)));
+            outputSpec.getNumericRestrictions().getMax().getValue(), Is.is(BigDecimal.valueOf(5)));
         Assert.assertThat("Fieldspec numeric restrictions upper bound is inclusive",
-            outputSpec.getNumericRestrictions().max.isInclusive(), Is.is(true));
+            outputSpec.getNumericRestrictions().getMax().isInclusive(), Is.is(true));
     }
 
     @Test
@@ -402,14 +402,14 @@ class ConstraintReducerTest {
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has numeric restrictions", outputSpec.getNumericRestrictions(),
             Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec numeric restrictions have no upper bound", outputSpec.getNumericRestrictions().max,
+        Assert.assertThat("Fieldspec numeric restrictions have no upper bound", outputSpec.getNumericRestrictions().getMax(),
             Is.is(IsNull.nullValue()));
-        Assert.assertThat("Fieldspec numeric restrictions have lower bound", outputSpec.getNumericRestrictions().min,
+        Assert.assertThat("Fieldspec numeric restrictions have lower bound", outputSpec.getNumericRestrictions().getMin(),
             Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec numeric restriction lower bound is correct",
-            outputSpec.getNumericRestrictions().min.getValue(), Is.is(BigDecimal.valueOf(5)));
+            outputSpec.getNumericRestrictions().getMin().getValue(), Is.is(BigDecimal.valueOf(5)));
         Assert.assertThat("Fieldspec numeric restriction lower bound is exclusive",
-            outputSpec.getNumericRestrictions().min.isInclusive(), Is.is(false));
+            outputSpec.getNumericRestrictions().getMin().isInclusive(), Is.is(false));
     }
 
     @Test

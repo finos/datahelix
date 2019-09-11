@@ -483,10 +483,10 @@ class RealNumberFieldValueSourceTests {
     }
 
     private NumericRestrictions numericRestrictions(Integer min, Integer max, int scale){
-        NumericRestrictions restrictions = new NumericRestrictions(scale);
-        restrictions.min = min == null ? null : new NumericLimit(BigDecimal.valueOf(min), true);
-        restrictions.max = max == null ? null : new NumericLimit(BigDecimal.valueOf(max), true);
-        return restrictions;
+        return new NumericRestrictions(
+            min == null ? null : new NumericLimit(BigDecimal.valueOf(min), true),
+            max == null ? null : new NumericLimit(BigDecimal.valueOf(max), true),
+            scale);
     }
 
     private NumericLimit upperLimit;
@@ -542,9 +542,7 @@ class RealNumberFieldValueSourceTests {
 
     private FieldValueSource getObjectUnderTest() {
         if (objectUnderTest == null) {
-            NumericRestrictions restrictions = new NumericRestrictions(scale);
-            restrictions.max = upperLimit;
-            restrictions.min = lowerLimit;
+            NumericRestrictions restrictions = new NumericRestrictions(lowerLimit, upperLimit, scale);
             objectUnderTest = new RealNumberFieldValueSource(restrictions, blacklist);
         }
 

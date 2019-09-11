@@ -75,22 +75,22 @@ public class RealNumberFieldValueSource implements FieldValueSource {
 
     private NumericLimit getUpperLimit(NumericRestrictions restrictions) {
         BigDecimal maxValue = Defaults.NUMERIC_MAX;
-        if (restrictions.max == null) {
+        if (restrictions.getMax() == null) {
             return new NumericLimit(maxValue, true);
         }
 
         // Returns the smaller of the two maximum restrictions
-        return new NumericLimit(maxValue.min(restrictions.max.getValue()), restrictions.max.isInclusive());
+        return new NumericLimit(maxValue.min(restrictions.getMax().getValue()), restrictions.getMax().isInclusive());
     }
 
     private NumericLimit getLowerLimit(NumericRestrictions restrictions) {
         BigDecimal minValue = Defaults.NUMERIC_MIN;
-        if (restrictions.min == null) {
+        if (restrictions.getMin() == null) {
             return new NumericLimit(minValue, true);
         }
 
         // Returns the larger of the two minimum restrictions
-        return new NumericLimit(minValue.max(restrictions.min.getValue()), restrictions.min.isInclusive());
+        return new NumericLimit(minValue.max(restrictions.getMin().getValue()), restrictions.getMin().isInclusive());
     }
 
     @Override

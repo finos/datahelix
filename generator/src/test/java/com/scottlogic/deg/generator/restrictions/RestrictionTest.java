@@ -28,9 +28,9 @@ public class RestrictionTest {
 
     @Test
     public void shouldFilterNumeric() {
-        NumericRestrictions restriction = new NumericRestrictions();
-        restriction.min = new NumericLimit(new BigDecimal("5"), true);
-        restriction.max = new NumericLimit(new BigDecimal("10"), false);
+        NumericRestrictions restriction = new NumericRestrictions(
+            new NumericLimit(new BigDecimal("5"), true),
+            new NumericLimit(new BigDecimal("10"), false));
 
         Assert.assertThat(restriction.match(4), Is.is(false));
         Assert.assertThat(restriction.match(5), Is.is(true));

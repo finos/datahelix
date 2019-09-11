@@ -67,10 +67,9 @@ class FieldSpecValueGeneratorTests {
     void generate_fieldSpecMustContainRestrictionNullAndNumericRestrictionApplied_returnsExpectedDataBagsForNumericRestriction() {
         FieldSpec fieldSpec = FieldSpec.Empty
             .withNumericRestrictions(
-                new NumericRestrictions() {{
-                    min = new NumericLimit(new BigDecimal(10), false);
-                    max = new NumericLimit(new BigDecimal(30), false);
-                }})
+                new NumericRestrictions(
+                    new NumericLimit(new BigDecimal(10), false),
+                    new NumericLimit(new BigDecimal(30), false)))
             .withTypeRestrictions(
                 new TypeRestrictions(
                     Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
