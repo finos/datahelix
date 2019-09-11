@@ -600,6 +600,7 @@ Feature: User can specify that a value either matches or contains a specified re
 
   Scenario: Running a 'matchingRegex' and 'inSet' and 'integer' request nulls are generated last
     Given there is a field bar
+    And bar is of type "string"
     And the combination strategy is exhaustive
     And foo is matching regex /[a]{1}/
     And bar is in set:

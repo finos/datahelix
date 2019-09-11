@@ -107,6 +107,7 @@ Feature: User can generate valid data for all types (string, integer, decimal, o
 
   Scenario: The generator produces valid 'Null' data in random mode
     Given foo is null
+    And foo is of type "string"
     And the generator can generate at most 5 rows
     Then the following data should be generated:
       | foo  |
