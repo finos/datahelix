@@ -4,7 +4,7 @@ import com.scottlogic.deg.generator.restrictions.MergeResult;
 
 public class LinearRestrictionsMerger {
 
-    public static <T> MergeResult<LinearRestictions<T>> merge(LinearRestictions<T> left, LinearRestictions<T> right){
+    public <T> MergeResult<LinearRestictions<T>> merge(LinearRestictions<T> left, LinearRestictions<T> right){
         if (left == null && right == null)
             return new MergeResult<>(null);
         if (left == null)
@@ -30,27 +30,48 @@ public class LinearRestrictionsMerger {
         Limit<T> min = restictions.getMin();
         Limit<T> max = restictions.getMax();
 
+        if (min == null || max == null){
+            return false;
+        }
+
         if (min.getValue().equals(max.getValue())){
-            if (!min.isInclusive() || !max.isInclusive()){
+            if (!min.isInclusive()){
+                return true;
+            }
+            if (!max.isInclusive()){
                 return true;
             }
         }
 
-        return min.isAfter(max.getValue());
+        return !min.isBefore(max.getValue());
     }
 
-    private static <T> Limit<T> getHighest(Limit<T> left, Limit<T> right) {
-        if (left.getValue().equals(right.getValue())) {
-            return getLeastInclusive(left, right);
+    private static <T> Limit<T> getHighest(Limit<T> left, Limit<T> right) { //TODO dry this code up
+        if (left == null){
+            return right;
         }
-        return left.isBefore(right.getValue()) ? left : right;
-    }
+        if (right == null){
+            return left;
+        }
 
-    private static <T> Limit<T> getLowest(Limit<T> left, Limit<T> right) {
         if (left.getValue().equals(right.getValue())) {
             return getLeastInclusive(left, right);
         }
         return left.isAfter(right.getValue()) ? left : right;
+    }
+
+    private static <T> Limit<T> getLowest(Limit<T> left, Limit<T> right) {
+        if (left == null){
+            return right;
+        }
+        if (right == null){
+            return left;
+        }
+
+        if (left.getValue().equals(right.getValue())) {
+            return getLeastInclusive(left, right);
+        }
+        return left.isBefore(right.getValue()) ? left : right;
     }
 
     private static <T> Limit<T> getLeastInclusive(Limit<T> left, Limit<T> right) {

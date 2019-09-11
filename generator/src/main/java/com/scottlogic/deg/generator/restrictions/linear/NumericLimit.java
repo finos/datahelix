@@ -52,12 +52,11 @@ public class NumericLimit implements Limit<BigDecimal> {
         return limit.compareTo(other) > 0;
     }
 
-    public String toString(String operator) {
+    public String toString() {
         return String.format(
-            "%s%s %s",
-            operator,
-            this.isInclusive ? "=" : "",
-            this.limit.toString()
+            "%s%s",
+            limit.toString(),
+            isInclusive ? " inclusive" : ""
         );
     }
 

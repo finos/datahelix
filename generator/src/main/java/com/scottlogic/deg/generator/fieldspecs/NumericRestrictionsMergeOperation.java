@@ -18,14 +18,20 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestictions;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
+import com.scottlogic.deg.generator.restrictions.linear.NumericConverter;
+import com.scottlogic.deg.generator.restrictions.linear.NumericGranularity;
+
+import java.math.BigDecimal;
 
 import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.NUMERIC;
 
 public class NumericRestrictionsMergeOperation implements RestrictionMergeOperation {
-    private final NumericRestrictionsMerger merger;
+    private final LinearRestrictionsMerger merger;
 
     @Inject
-    public NumericRestrictionsMergeOperation(NumericRestrictionsMerger merger) {
+    public NumericRestrictionsMergeOperation(LinearRestrictionsMerger merger) {
         this.merger = merger;
     }
 
@@ -34,15 +40,31 @@ public class NumericRestrictionsMergeOperation implements RestrictionMergeOperat
         if (!merging.isTypeAllowed(NUMERIC)){
             return merging;
         }
+        NumericRestrictions leftRestriction = left.getNumericRestrictions();
+        NumericRestrictions rightRestriction = right.getNumericRestrictions();
 
-        MergeResult<NumericRestrictions> mergeResult = merger.merge(
-            left.getNumericRestrictions(), right.getNumericRestrictions());
+        MergeResult<LinearRestictions<BigDecimal>> mergeResult = merger.merge(
+            leftRestriction, rightRestriction);
 
         if (!mergeResult.successful) {
             return merging.withoutType(NUMERIC);
         }
 
-        return merging.withNumericRestrictions(mergeResult.restrictions);
+        NumericRestrictions numericRestrictions;
+        if (mergeResult.restrictions == null){
+            numericRestrictions = null;
+        }
+        else if (mergeResult.restrictions == leftRestriction){
+            numericRestrictions = leftRestriction;
+        }
+        else if (mergeResult.restrictions == rightRestriction){
+            numericRestrictions = rightRestriction;
+        }
+        else {
+            numericRestrictions = new NumericRestrictions(mergeResult.restrictions.getMin(), mergeResult.restrictions.getMax(), ((NumericGranularity)mergeResult.restrictions.getGranularity()).decimalPlaces);
+        }
+
+        return merging.withNumericRestrictions(numericRestrictions);
     }
 }
 

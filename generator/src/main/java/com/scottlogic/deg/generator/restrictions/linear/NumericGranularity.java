@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 
 public class NumericGranularity implements Granularity<BigDecimal> {
 
-    private final int decimalPlaces;
+    public final int decimalPlaces;
 
     public NumericGranularity(int decimalPlaces) {
         this.decimalPlaces = decimalPlaces;

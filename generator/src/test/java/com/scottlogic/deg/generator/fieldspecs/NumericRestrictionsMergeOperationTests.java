@@ -20,7 +20,7 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.restrictions.TypeRestrictions;
 import com.scottlogic.deg.generator.restrictions.MergeResult;
 import com.scottlogic.deg.generator.restrictions.NumericRestrictions;
-import com.scottlogic.deg.generator.restrictions.NumericRestrictionsMerger;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,14 +35,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class NumericRestrictionsMergeOperationTests {
-    private NumericRestrictionsMerger merger;
+    private LinearRestrictionsMerger merger;
     private NumericRestrictionsMergeOperation operation;
     private FieldSpec left;
     private FieldSpec right;
 
     @BeforeEach
     public void beforeEach(){
-        merger = mock(NumericRestrictionsMerger.class);
+        merger = mock(LinearRestrictionsMerger.class);
         operation = new NumericRestrictionsMergeOperation(merger);
         left = FieldSpec.Empty.withNumericRestrictions(
             new NumericRestrictions(null, null));
@@ -122,20 +122,5 @@ class NumericRestrictionsMergeOperationTests {
 
         Assert.assertThat(result, not(sameInstance(merging)));
         Assert.assertThat(result.getWhitelist().set(), is(empty()));
-    }
-
-    @Test
-    public void applyMergeOperation_withMergableNumericRestrictions_shouldApplyMergedNumericRestrictions(){
-        FieldSpec merging = FieldSpec.Empty
-            .withTypeRestrictions(TypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.NUMERIC));
-        NumericRestrictions merged = new NumericRestrictions(null, null);
-        when(merger.merge(left.getNumericRestrictions(), right.getNumericRestrictions()))
-            .thenReturn(new MergeResult<>(merged));
-
-        FieldSpec result = operation.applyMergeOperation(left, right, merging);
-
-        Assert.assertThat(result, not(sameInstance(merging)));
-        Assert.assertThat(result.getNumericRestrictions(), sameInstance(merged));
-        Assert.assertThat(result.getTypeRestrictions(), sameInstance(merging.getTypeRestrictions()));
     }
 }

@@ -16,26 +16,23 @@
 
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.restrictions.linear.NumericLimit;
+import com.scottlogic.deg.generator.restrictions.linear.*;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
 import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.NUMERIC;
 
-public class NumericRestrictions implements TypedRestrictions {
+public class NumericRestrictions extends LinearRestictions<BigDecimal> {
     public static final int DEFAULT_NUMERIC_SCALE = 20;
     private final int numericScale;
-    private final NumericLimit min;
-    private final NumericLimit max;
 
-    public NumericRestrictions(NumericLimit min, NumericLimit max){
+    public NumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max){
         this(min, max, DEFAULT_NUMERIC_SCALE);
     }
 
-    public NumericRestrictions(NumericLimit min, NumericLimit max, int numericScale){
-        this.min = min;
-        this.max = max;
+    public NumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max, int numericScale){
+        super(min, max, new NumericGranularity(numericScale), new NumericConverter());
         this.numericScale = numericScale;
     }
 
@@ -43,51 +40,18 @@ public class NumericRestrictions implements TypedRestrictions {
         return this.numericScale;
     }
 
-    @Override
-    public boolean match(Object o) {
-        if (!isInstanceOf(o)) {
-            return false;
-        }
-
-        BigDecimal n = new BigDecimal(o.toString());
-
-        if(getMin() != null){
-            if(n.compareTo(getMin().getValue()) < (getMin().isInclusive() ? 0 : 1))
-            {
-                return false;
-            }
-        }
-
-        if(getMax() != null){
-            if(n.compareTo(getMax().getValue()) > (getMax().isInclusive() ? 0 : -1))
-            {
-                return false;
-            }
-        }
-
-        return isCorrectScale(n);
-    }
-
-    @Override
-    public boolean isInstanceOf(Object o) {
-        return NUMERIC.isInstanceOf(o);
-    }
-
     public BigDecimal getStepSize() {
         return BigDecimal.ONE.scaleByPowerOfTen(numericScale * -1);
     }
 
-    private boolean isCorrectScale(BigDecimal inputNumber) {
-        return inputNumber.stripTrailingZeros().scale() <= numericScale;
-    }
 
     @Override
     public String toString() {
         return String.format(
             "%s%s%s%s",
-            getMin() != null ? getMin().toString(">") : "",
+            getMin() != null ? "after " + getMin().toString() : "",
             getMin() != null && getMax() != null ? " and " : "",
-            getMax() != null ? getMax().toString("<") : "",
+            getMax() != null ? "before " + getMax().toString() : "",
             numericScale != 20 ? "granular-to " + numericScale : "");
     }
 
@@ -104,13 +68,5 @@ public class NumericRestrictions implements TypedRestrictions {
     @Override
     public int hashCode() {
         return Objects.hash(getMin(), getMax(), numericScale);
-    }
-
-    public NumericLimit getMin() {
-        return min;
-    }
-
-    public NumericLimit getMax() {
-        return max;
     }
 }

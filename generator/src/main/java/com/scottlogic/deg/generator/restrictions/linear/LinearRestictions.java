@@ -2,6 +2,8 @@ package com.scottlogic.deg.generator.restrictions.linear;
 
 import com.scottlogic.deg.generator.restrictions.TypedRestrictions;
 
+import java.math.BigDecimal;
+
 public class LinearRestictions<T> implements TypedRestrictions {
 
     private final Limit<T> min;
@@ -9,14 +11,14 @@ public class LinearRestictions<T> implements TypedRestrictions {
     private final Granularity<T> granularity;
     private final Converter<T> converter;
 
-    LinearRestictions(Limit<T> min, Limit<T> max, Granularity<T> granularity, Converter<T> converter) {
+    public LinearRestictions(Limit<T> min, Limit<T> max, Granularity<T> granularity, Converter<T> converter) {
         this.min = min;
         this.max = max;
         this.granularity = granularity;
         this.converter = converter;
     }
 
-    Granularity<T> getGranularity(){
+    public Granularity<T> getGranularity(){
         return granularity;
     }
 
@@ -30,13 +32,13 @@ public class LinearRestictions<T> implements TypedRestrictions {
         T t = converter.convert(o);
 
         if (min != null) {
-            if (min.isAfter(t)) {
+            if (!min.isBefore(t)) {
                 return false;
             }
         }
 
         if (max != null) {
-            if (max.isBefore(t)) {
+            if (!max.isAfter(t)) {
                 return false;
             }
         }
