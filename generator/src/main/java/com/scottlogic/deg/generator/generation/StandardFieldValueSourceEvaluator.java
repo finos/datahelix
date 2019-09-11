@@ -27,6 +27,7 @@ import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.DateTi
 import com.scottlogic.deg.generator.generation.string.generators.RegexStringGenerator;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
 
 import java.util.*;

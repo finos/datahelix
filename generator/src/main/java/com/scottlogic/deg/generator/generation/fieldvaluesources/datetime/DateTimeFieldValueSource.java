@@ -18,7 +18,8 @@ package com.scottlogic.deg.generator.generation.fieldvaluesources.datetime;
 
 import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
-import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
+import com.scottlogic.deg.generator.utils.FilteringIterator;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
 import java.time.*;

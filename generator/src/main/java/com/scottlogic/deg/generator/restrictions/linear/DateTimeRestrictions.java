@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.restrictions;
+package com.scottlogic.deg.generator.restrictions.linear;
 
 import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
-import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
+import com.scottlogic.deg.generator.restrictions.DateTimeLimit;
+import com.scottlogic.deg.generator.restrictions.TypedRestrictions;
 
 import java.time.OffsetDateTime;
 import java.util.Objects;

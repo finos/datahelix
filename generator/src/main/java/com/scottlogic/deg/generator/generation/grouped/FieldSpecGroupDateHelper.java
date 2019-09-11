@@ -7,7 +7,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.FieldWithFieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
 import com.scottlogic.deg.generator.restrictions.DateTimeLimit;
-import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
 
 import java.time.OffsetDateTime;
 import java.util.HashMap;

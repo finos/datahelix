@@ -23,6 +23,7 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.T
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.common.util.NumberUtils;
+import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.NumericLimit;
 import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
 

@@ -20,7 +20,7 @@ import com.scottlogic.deg.common.date.TemporalAdjusterGenerator;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.DateTimeLimit;
-import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
 
 import java.time.OffsetDateTime;
 
