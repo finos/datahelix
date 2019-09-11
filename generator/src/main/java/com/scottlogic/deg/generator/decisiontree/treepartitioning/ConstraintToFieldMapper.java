@@ -87,7 +87,9 @@ class ConstraintToFieldMapper {
             .collect(
                 Collectors.toMap(
                     map -> map.constraint,
-                    map -> map.fields
+                    map -> map.fields,
+                    // in the case of the duplicate constraints(keys) use the existing one
+                    (constraint1, constraint2) -> constraint1
                 ));
     }
 }

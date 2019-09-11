@@ -51,7 +51,8 @@ public class DecisionTreeOptimiser {
     }
 
     private ConstraintNode optimiseDecisions(ConstraintNode rootNode){
-        AtomicConstraint mostProlificAtomicConstraint = getMostProlificAtomicConstraint(rootNode.getDecisions());
+        List<DecisionNode> decisions = rootNode.getDecisions().stream().distinct().collect(Collectors.toList());
+        AtomicConstraint mostProlificAtomicConstraint = getMostProlificAtomicConstraint(decisions);
         if (mostProlificAtomicConstraint == null){
             return rootNode;
         }
