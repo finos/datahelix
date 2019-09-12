@@ -18,10 +18,14 @@ package com.scottlogic.deg.profile.dto;
 
 public class FieldDTO {
     public String name;
+    public String formatting;
+    public Boolean unique;
 
     public FieldDTO() {}
 
-    public FieldDTO(String name){
+    public FieldDTO(String name, String formatting, Boolean unique){
         this.name = name;
+        this.formatting = formatting;
+        this.unique = unique;
     }
 }

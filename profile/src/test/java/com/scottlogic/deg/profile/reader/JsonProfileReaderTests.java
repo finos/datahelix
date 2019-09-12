@@ -287,15 +287,12 @@ public class JsonProfileReaderTests {
     public void shouldDeserialiseFormatConstraint() throws IOException {
         givenJson(
                 "{" +
-                        "    \"schemaVersion\": \"0.1\"," +
-                        "    \"fields\": [ { \"name\": \"foo\" } ]," +
-                        "    \"rules\": [" +
-                        "      {" +
-                        "        \"constraints\": [" +
-                        "        { \"field\": \"foo\", \"is\": \"formattedAs\", \"value\": \"%.5s\" }" +
-                        "        ]" +
-                        "      }" +
-                        "    ]" +
+                        "    \"schemaVersion\": \"0.5\"," +
+                        "    \"fields\": [ { " +
+                        "           \"name\": \"foo\"," +
+                        "           \"formatting\": \"%.5s\"" +
+                        "    } ]," +
+                        "    \"rules\": []" +
                         "}");
 
         expectFields(

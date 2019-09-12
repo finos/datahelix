@@ -63,12 +63,9 @@ public class JsonProfileReader implements ProfileReader {
             throw new InvalidProfileException("Profile is invalid: 'rules' have not been defined.");
         }
 
-        Collection<String> uniqueList = getUniqueFields(profileDto);
-        Map<String, String> fieldFormating = getfieldFomatting(profileDto);
-
         ProfileFields profileFields = new ProfileFields(
             profileDto.fields.stream()
-                .map(fDto -> new Field(fDto.name, uniqueList.contains(fDto.name), fieldFormating.get(fDto.name)))
+                .map(fDto -> new Field(fDto.name, fDto.unique == null ? false : fDto.unique, fDto.formatting))
                 .collect(Collectors.toList()));
 
         Collection<Rule> rules = profileDto.rules.stream().map(
@@ -81,35 +78,5 @@ public class JsonProfileReader implements ProfileReader {
             }).collect(Collectors.toList());
 
         return new Profile(profileFields, rules, profileDto.description);
-    }
-
-    private Collection<String> getUniqueFields(ProfileDTO profileDto) {
-        return getTopLevelConstraintsOfType(profileDto, "unique")
-            .map(constraintDTO -> constraintDTO.field)
-            .collect(Collectors.toSet());
-    }
-
-    private Map<String, String> getfieldFomatting(ProfileDTO profileDto) {
-        return getTopLevelConstraintsOfType(profileDto, "formattedAs")
-            .collect(Collectors.toMap(
-                constraintDTO -> constraintDTO.field,
-                constraintDTO -> (String)constraintDTO.value
-            ));
-    }
-
-    private Stream<ConstraintDTO> getTopLevelConstraintsOfType(ProfileDTO profileDto, String constraint) {
-        return profileDto.rules.stream()
-            .flatMap(ruleDTO -> ruleDTO.constraints.stream())
-            .flatMap(this::getConstraintOrAllOfConstraints)
-            .filter(constraintDTO -> constraintDTO.is != null)
-            .filter(constraintDTO -> constraintDTO.is.equals(constraint));
-    }
-
-    private Stream<ConstraintDTO> getConstraintOrAllOfConstraints(ConstraintDTO constraintDTO) {
-        if (constraintDTO.allOf != null){
-            return constraintDTO.allOf.stream();
-        }
-
-        return Stream.of(constraintDTO);
     }
 }
