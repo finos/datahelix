@@ -66,8 +66,10 @@ public class ProfileSchemaImmutabilityTests {
             "1208511af02fcf69285e6d16d1a0caaa3cae3aef95912d1d940d8dfe4eda6031"));
         versionToHash.add(new VersionHash(
             "0.3",
-            "545db9f55228cda6eeff076c4cb1905f6c1a3b061a388dcdeadfbfb6cdd36676"
-        ));
+            "545db9f55228cda6eeff076c4cb1905f6c1a3b061a388dcdeadfbfb6cdd36676"));
+        versionToHash.add(new VersionHash(
+            "0.4",
+            "8ca6a1da96b447d1a5fe7065ca527a5d26c12a07828642333fb1d493960af119"));
         return versionToHash;
     }
 

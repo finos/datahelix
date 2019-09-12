@@ -17,15 +17,15 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
+import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.constraints.delayed.*;
 import com.scottlogic.deg.generator.fieldspecs.relations.*;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class FieldRelationsFactory {
 
    public FieldSpecRelations construct(DelayedAtomicConstraint constraint) {
        if (constraint instanceof DynamicNotConstraint) {
-           throw new NotImplementedException();
+           throw new ValidationException("related field constraints cannot yet be negated");
        }
 
        switch (constraint.getUnderlyingConstraint()) {
