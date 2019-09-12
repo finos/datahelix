@@ -100,10 +100,10 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
     }
 
     private Set<Object> getBlacklist(FieldSpec fieldSpec) {
-        if (fieldSpec.getBlacklistRestrictions() == null)
+        if (fieldSpec.getBlacklist() == null)
             return Collections.emptySet();
 
-        return new HashSet<>(fieldSpec.getBlacklistRestrictions().getBlacklist());
+        return new HashSet<>(fieldSpec.getBlacklist());
     }
 
     private FieldValueSource getStringSource(FieldSpec fieldSpec) {

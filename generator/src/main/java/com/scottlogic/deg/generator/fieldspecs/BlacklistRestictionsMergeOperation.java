@@ -16,30 +16,26 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.generator.restrictions.BlacklistRestrictions;
 import com.scottlogic.deg.generator.utils.SetUtils;
 
-import java.util.Optional;
+import java.util.Set;
 
 public class BlacklistRestictionsMergeOperation implements RestrictionMergeOperation {
     @Override
     public FieldSpec applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merging) {
-        BlacklistRestrictions newBlacklist;
-        if (left.getBlacklistRestrictions() == null) {
-            newBlacklist = right.getBlacklistRestrictions();
+        Set<Object> newBlacklist;
+        if (left.getBlacklist() == null) {
+            newBlacklist = right.getBlacklist();
         }
-        else if (right.getBlacklistRestrictions() == null) {
-            newBlacklist = left.getBlacklistRestrictions();
+        else if (right.getBlacklist() == null) {
+            newBlacklist = left.getBlacklist();
         }
         else {
-            newBlacklist = new BlacklistRestrictions(
-                SetUtils.union(
-                    left.getBlacklistRestrictions().getBlacklist(),
-                    right.getBlacklistRestrictions().getBlacklist()
-                )
-            );
+            newBlacklist = SetUtils.union(
+                left.getBlacklist(),
+                right.getBlacklist());
         }
 
-        return merging.withBlacklistRestrictions(newBlacklist);
+        return merging.withBlacklist(newBlacklist);
     }
 }

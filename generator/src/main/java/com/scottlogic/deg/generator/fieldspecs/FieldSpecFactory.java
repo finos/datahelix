@@ -96,9 +96,7 @@ public class FieldSpecFactory {
 
     private FieldSpec construct(IsInSetConstraint constraint, boolean negate) {
         if (negate) {
-            return FieldSpec.Empty.withBlacklistRestrictions(
-                new BlacklistRestrictions(constraint.legalValuesWithoutFrequency())
-            );
+            return FieldSpec.Empty.withBlacklist(constraint.legalValuesWithoutFrequency());
         }
 
         return FieldSpec.Empty.withWhitelist(constraint.legalValues);
@@ -106,9 +104,7 @@ public class FieldSpecFactory {
 
     private FieldSpec construct(EqualToConstraint constraint, boolean negate) {
         if (negate) {
-            return FieldSpec.Empty.withBlacklistRestrictions(
-                new BlacklistRestrictions(Collections.singleton(constraint.value))
-            );
+            return FieldSpec.Empty.withBlacklist(Collections.singleton(constraint.value));
         }
 
         return FieldSpec.Empty
