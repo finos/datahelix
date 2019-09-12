@@ -178,8 +178,10 @@ Feature:As a  User
 
   Scenario: The one where a user can specify that one decimal number should be greater than another decimal number
     Given foo is of type "decimal"
+    And foo is granular to 0.1
     And foo is greater than 1.0
     And bar is of type "decimal"
+    And bar is granular to 0.1
     And bar is greater than 1.0
     And the generator can generate at most 3 rows
     And there is a constraint:
@@ -200,7 +202,7 @@ Feature:As a  User
 
   Scenario: The one where a user can specify that one number should be greater than another number - exhaustive
     Given the combination strategy is exhaustive
-    And bar is greater than 1
+    And bar is greater than 0
     And bar is less than 5
     And the generator can generate at most 6 rows
     And there is a constraint:
