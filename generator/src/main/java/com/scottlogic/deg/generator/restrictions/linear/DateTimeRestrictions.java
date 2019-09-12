@@ -26,7 +26,7 @@ import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConst
 
 public class DateTimeRestrictions implements TypedRestrictions {
     private static final Timescale DEFAULT_GRANULARITY = Timescale.MILLIS;
-    private final Timescale granularity;
+    private final DateTimeGranularity granularity;
     public DateTimeLimit min;
     public DateTimeLimit max;
 
@@ -35,16 +35,16 @@ public class DateTimeRestrictions implements TypedRestrictions {
     }
 
     public DateTimeRestrictions(final Timescale granularity) {
-        this.granularity = granularity;
+        this.granularity = new DateTimeGranularity(granularity);
     }
 
     public Timescale getGranularity() {
-        return granularity;
+        return granularity.getGranularity();
     }
 
     @Override
     public String toString() {
-        return "min=" + min + ", max=" + max + " " + granularity.name();
+        return "min=" + min + ", max=" + max + " " + granularity.getGranularity().name();
     }
 
 
@@ -77,7 +77,7 @@ public class DateTimeRestrictions implements TypedRestrictions {
     }
 
     private boolean isCorrectGranularity(OffsetDateTime inputDate) {
-        OffsetDateTime granularDate = granularity.getGranularityFunction().apply(inputDate);
+        OffsetDateTime granularDate = granularity.getGranularity().getGranularityFunction().apply(inputDate);
 
         return inputDate.equals(granularDate);
     }
