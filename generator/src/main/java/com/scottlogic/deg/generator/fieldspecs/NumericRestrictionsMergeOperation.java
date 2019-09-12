@@ -58,7 +58,7 @@ public class NumericRestrictionsMergeOperation implements RestrictionMergeOperat
             numericRestrictions = rightRestriction;
         }
         else {
-            numericRestrictions = new NumericRestrictions(mergeResult.restrictions.getMin(), mergeResult.restrictions.getMax(), ((NumericGranularity)mergeResult.restrictions.getGranularity()).decimalPlaces);
+            numericRestrictions = new NumericRestrictions(mergeResult.restrictions.getMin(), mergeResult.restrictions.getMax(), ((NumericGranularity)mergeResult.restrictions.getGranularity()).getDecimalPlaces());
         }
 
         return merging.withNumericRestrictions(numericRestrictions);

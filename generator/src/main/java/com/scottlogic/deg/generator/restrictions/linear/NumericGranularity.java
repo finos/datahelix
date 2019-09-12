@@ -1,12 +1,11 @@
 package com.scottlogic.deg.generator.restrictions.linear;
 
-import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 
 import java.math.BigDecimal;
 
 public class NumericGranularity implements Granularity<BigDecimal> {
 
-    public final int decimalPlaces;
+    private final int decimalPlaces;
 
     public NumericGranularity(int decimalPlaces) {
         this.decimalPlaces = decimalPlaces;
@@ -22,4 +21,9 @@ public class NumericGranularity implements Granularity<BigDecimal> {
         NumericGranularity other = (NumericGranularity) otherGranularity;
         return decimalPlaces <= other.decimalPlaces ? this : other;
     }
+
+    public int getDecimalPlaces() {
+        return decimalPlaces;
+    }
+
 }

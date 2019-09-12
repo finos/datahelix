@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 public class NumericRestrictions extends LinearRestrictions<BigDecimal> {
-    public static final int DEFAULT_NUMERIC_SCALE = 20;
+    private static final int DEFAULT_NUMERIC_SCALE = 20;
     private final int numericScale;
 
     public NumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max){
