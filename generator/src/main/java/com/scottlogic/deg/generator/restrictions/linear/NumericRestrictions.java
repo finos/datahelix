@@ -21,25 +21,21 @@ import java.util.Objects;
 
 public class NumericRestrictions extends LinearRestrictions<BigDecimal> {
     private static final int DEFAULT_NUMERIC_SCALE = 20;
-    private final int numericScale;
-
     public NumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max){
         this(min, max, DEFAULT_NUMERIC_SCALE);
     }
 
     public NumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max, int numericScale){
         super(min, max, new NumericGranularity(numericScale), new NumericConverter());
-        this.numericScale = numericScale;
     }
 
     public int getNumericScale() {
-        return this.numericScale;
+        return ((NumericGranularity)getGranularity()).getDecimalPlaces();
     }
 
     public BigDecimal getStepSize() {
-        return BigDecimal.ONE.scaleByPowerOfTen(numericScale * -1);
+        return BigDecimal.ONE.scaleByPowerOfTen(getNumericScale() * -1);
     }
-
 
     @Override
     public String toString() {
@@ -48,7 +44,7 @@ public class NumericRestrictions extends LinearRestrictions<BigDecimal> {
             getMin() != null ? "after " + getMin().toString() : "",
             getMin() != null && getMax() != null ? " and " : "",
             getMax() != null ? "before " + getMax().toString() : "",
-            numericScale != 20 ? "granular-to " + numericScale : "");
+            getNumericScale() != 20 ? "granular-to " + getNumericScale() : "");
     }
 
     @Override
@@ -58,11 +54,11 @@ public class NumericRestrictions extends LinearRestrictions<BigDecimal> {
         NumericRestrictions that = (NumericRestrictions) o;
         return Objects.equals(getMin(), that.getMin()) &&
             Objects.equals(getMax(), that.getMax()) &&
-            Objects.equals(numericScale, that.numericScale);
+            Objects.equals(getNumericScale(), that.getNumericScale());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getMin(), getMax(), numericScale);
+        return Objects.hash(getMin(), getMax(), getNumericScale());
     }
 }
