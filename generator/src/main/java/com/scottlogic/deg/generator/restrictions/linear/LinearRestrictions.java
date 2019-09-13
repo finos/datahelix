@@ -18,10 +18,6 @@ public class LinearRestrictions<T> implements TypedRestrictions {
         this.converter = converter;
     }
 
-    public Granularity<T> getGranularity(){
-        return granularity;
-    }
-
     @Override
     public boolean match(Object o){
 
@@ -61,5 +57,9 @@ public class LinearRestrictions<T> implements TypedRestrictions {
 
     public Converter<T> getConverter(){
         return converter;
+    }
+
+    public Granularity<T> getGranularity(){
+        return granularity;
     }
 }
