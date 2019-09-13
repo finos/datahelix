@@ -1,3 +1,4 @@
+@ignore #pending development of #1235 - Allow a Numeric Field to Depend On Another Numeric Field
 Feature:As a  User
         I can specify that a numeric value is greater than, less than or equal to a numeric value in a different field
         So that I can setup the test data to meet my requirements
