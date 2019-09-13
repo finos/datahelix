@@ -47,7 +47,7 @@ public class JarExecuteTests {
 
         List<String> collectedOutput = collectOutputAndCloseProcess(p);
 
-        assertEquals(Arrays.asList("foo", "\"Generated successfully from file\""), collectedOutput, errorMessageOnFailure);
+        assertEquals(Arrays.asList("foo", "\"Generated successfully from file\""), collectedOutput, "Either load from file no longer works, or " + errorMessageOnFailure);
     }
 
     private Process setupProcess(final String profile) throws IOException {

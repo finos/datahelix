@@ -1,0 +1,18 @@
+{
+    "schemaVersion": "0.1",
+
+    "fields": [
+		{ "name": "x" },
+		{ "name": "y" }
+    ],
+    "rules": [
+		{ "anyOf": [
+			{ "field": "x", "is": "equalTo", "value": "a" },
+			{ "field": "x", "is": "equalTo", "value": "b" }
+		] },
+		{ "anyOf": [
+			{ "field": "y", "is": "equalTo", "value": 1 },
+			{ "field": "y", "is": "equalTo", "value": 2 }
+		] }
+	]
+}

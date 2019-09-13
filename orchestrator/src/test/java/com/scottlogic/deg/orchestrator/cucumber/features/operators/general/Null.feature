@@ -8,6 +8,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: Using the 'null' operator generates null values
     Given foo is null
+    And foo is of type "string"
     Then the following data should be generated:
       | foo  |
       | null |
@@ -15,6 +16,7 @@ Feature: User can specify that a field is null or absent
   Scenario: Negating the 'null' operator generates non-null values
     Given foo is in set:
       | "string" |
+    And foo is of type "string"
     And foo is anything but null
     Then the following data should be generated:
       | foo      |
@@ -23,6 +25,7 @@ Feature: User can specify that a field is null or absent
   Scenario: Negating the 'null' operator does not generate null values
     Given foo is null
     And foo is anything but null
+    And foo is of type "string"
     Then no data is created
 
 ### null ###
@@ -30,6 +33,7 @@ Feature: User can specify that a field is null or absent
   Scenario: 'Null' with 'null' is successful
     Given foo is null
     And foo is null
+    And foo is of type "string"
     Then the following data should be generated:
       | foo  |
       | null |
@@ -37,15 +41,11 @@ Feature: User can specify that a field is null or absent
   Scenario: Not 'null' with  not 'null' is successful
     Given foo is anything but null
     And foo is anything but null
+    And foo is of type "string"
     And foo is equal to "a"
     Then the following data should be generated:
       | foo |
       | "a" |
-
-  Scenario: 'Null' and not 'null' produces no data
-    Given foo is null
-    And foo is anything but null
-    Then no data is created
 
 ### ofType ###
 
@@ -76,18 +76,6 @@ Feature: User can specify that a field is null or absent
       | "decimal"  |
       | "datetime" |
 
-  Scenario Outline: 'Null' with not 'ofType' emits null
-    Given foo is null
-    And foo is anything but of type <type>
-    Then the following data should be generated:
-      | foo  |
-      | null |
-    Examples:
-      | type       |
-      | "string"   |
-      | "decimal"  |
-      | "datetime" |
-
 ### matchingRegex ###
 
   Scenario: Not 'null' with a non-contradicting 'matchingRegex' is successful
@@ -100,6 +88,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: 'Null' with 'matchingRegex' emits null
     Given foo is null
+    And foo is of type "string"
     And foo is matching regex /[a]{1}/
     Then the following data should be generated:
       | foo  |
@@ -107,6 +96,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: 'Null' with not 'matchingRegex' emits null
     Given foo is null
+    And foo is of type "string"
     And foo is anything but matching regex /[a]{1}/
     Then the following data should be generated:
       | foo  |
@@ -116,6 +106,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: Not 'null' with a non contradicting 'containingRegex' is successful
     Given foo is anything but null
+    And foo is of type "string"
     And foo is containing regex /[a]{1}/
     And foo is in set:
       | "a"  |
@@ -128,6 +119,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: 'Null' with a contradicting 'containingRegex' should only generate null
     Given foo is null
+    And foo is of type "string"
     And foo is containing regex /[a]{1}/
     Then the following data should be generated:
       | foo  |
@@ -135,6 +127,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: 'Null' with a contradicting not 'containingRegex' emits null
     Given foo is null
+    And foo is of type "string"
     And foo is anything but containing regex /[a]{1}/
     Then the following data should be generated:
       | foo  |
@@ -152,6 +145,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: 'Null' with a contradicting 'ofLength' should only generate null
     Given foo is null
+    And foo is of type "string"
     And foo is of length 1
     Then the following data should be generated:
       | foo  |
@@ -159,6 +153,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: 'Null' with a contradicting not 'ofLength' should only generate null
     Given foo is null
+    And foo is of type "string"
     And foo is anything but of length 1
     Then the following data should be generated:
       | foo  |
@@ -168,6 +163,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: Not 'null' with a non contradicting 'longerThan' should be successful
     Given foo is anything but null
+    And foo is of type "string"
     And foo is longer than 0
     And foo is in set:
       | ""  |
@@ -178,6 +174,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: 'Null' with a contradicting 'longerThan' should only generate null
     Given foo is null
+    And foo is of type "string"
     And foo is longer than 1
     Then the following data should be generated:
       | foo  |
@@ -185,6 +182,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: 'Null' with a contradicting not 'longerThan' should only generate null
     Given foo is null
+    And foo is of type "string"
     And foo is anything but longer than 1
     Then the following data should be generated:
       | foo  |
@@ -195,6 +193,7 @@ Feature: User can specify that a field is null or absent
   Scenario: Not 'null' with a non contradicting 'shorterThan' should be successful
     Given foo is anything but null
     And foo is of type "string"
+    And foo is of type "string"
     And foo is shorter than 1
     Then the following data should be generated:
       | foo |
@@ -202,6 +201,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: 'Null' with a contradicting 'shorterThan' should only generate null
     Given foo is null
+    And foo is of type "string"
     And foo is shorter than 1
     Then the following data should be generated:
       | foo  |
@@ -209,6 +209,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: 'Null' with a contradicting not 'shorterThan' should only generate null
     Given foo is null
+    And foo is of type "string"
     And foo is anything but shorter than 1
     Then the following data should be generated:
       | foo  |
@@ -218,6 +219,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: Not null combined with an ISIN constraint generates valid ISINs
     Given foo is anything but null
+    And foo is of type "string"
     And foo is of type "ISIN"
     And foo is in set:
       | "GB0002634946" |
@@ -227,6 +229,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: Null combined with an ISIN constraint generates null
     Given foo is null
+    And foo is of type "string"
     And foo is of type "ISIN"
     Then the following data should be generated:
       | foo  |
@@ -234,6 +237,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: Null combined with a non-ISIN constraint generates null
     Given foo is null
+    And foo is of type "string"
     And foo is anything but of type "ISIN"
     Then the following data should be generated:
       | foo  |
@@ -242,6 +246,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: Not null combined with a SEDOL constraint generates valid SEDOLs
     Given foo is anything but null
+    And foo is of type "string"
     And foo is of type "SEDOL"
     And foo is in set:
       | "0263494" |
@@ -251,6 +256,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: Null combined with a SEDOL constraint generates null
     Given foo is null
+    And foo is of type "string"
     And foo is of type "SEDOL"
     Then the following data should be generated:
       | foo  |
@@ -258,6 +264,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: Null combined with a non-SEDOL constraint generates null
     Given foo is null
+    And foo is of type "string"
     And foo is anything but of type "SEDOL"
     Then the following data should be generated:
       | foo  |
@@ -266,6 +273,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: Not null combined with a CUSIP constraint generates valid CUSIPs
     Given foo is anything but null
+    And foo is of type "string"
     And foo is of type "CUSIP"
     And foo is in set:
       | "38259P508" |
@@ -275,6 +283,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: Null combined with a CUSIP constraint generates null
     Given foo is null
+    And foo is of type "string"
     And foo is of type "CUSIP"
     Then the following data should be generated:
       | foo  |
@@ -282,6 +291,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: Null combined with a non-CUSIP constraint generates null
     Given foo is null
+    And foo is of type "string"
     And foo is anything but of type "CUSIP"
     Then the following data should be generated:
       | foo  |
@@ -310,6 +320,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: 'Null' with a contradicting not 'greaterThan' should only generate null
     Given foo is null
+    And foo is of type "decimal"
     And foo is anything but greater than 1
     Then the following data should be generated:
       | foo  |
@@ -329,6 +340,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: 'Null' with a contradicting 'greaterThanOrEqualTo' should only generate null
     Given foo is null
+    And foo is of type "decimal"
     And foo is greater than or equal to 1
     Then the following data should be generated:
       | foo  |
@@ -336,6 +348,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: 'Null' with a contradicting not 'greaterThanOrEqualTo' should only generate null
     Given foo is null
+    And foo is of type "decimal"
     And foo is anything but greater than or equal to 1
     Then the following data should be generated:
       | foo  |
@@ -356,6 +369,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: 'Null' with a contradicting 'lessThan' should only generate null
     Given foo is null
+    And foo is of type "decimal"
     And foo is less than 1
     Then the following data should be generated:
       | foo  |
@@ -363,6 +377,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: 'Null' with a contradicting not 'lessThan' should only generate null
     Given foo is null
+    And foo is of type "decimal"
     And foo is anything but less than 1
     Then the following data should be generated:
       | foo  |
@@ -383,6 +398,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: 'Null' with a contradicting 'lessThanOrEqualTo' should only generate null
     Given foo is null
+    And foo is of type "decimal"
     And foo is less than or equal to 1
     Then the following data should be generated:
       | foo  |
@@ -390,6 +406,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: 'Null' with a contradicting not 'lessThanOrEqualTo' should only generate null
     Given foo is null
+    And foo is of type "decimal"
     And foo is anything but less than or equal to 1
     Then the following data should be generated:
       | foo  |
@@ -399,6 +416,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: Not 'null' with a non contradicting 'granularTo' should be successful
     Given foo is anything but null
+    And foo is of type "decimal"
     And foo is granular to 1
     And foo is in set:
       | 1   |
@@ -409,6 +427,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: 'Null' with a contradicting 'granularTo' should only generate null
     Given foo is null
+    And foo is of type "decimal"
     And foo is granular to 1
     Then the following data should be generated:
       | foo  |
@@ -416,6 +435,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: 'Null' with a contradicting not 'granularTo' should only generate null
     Given foo is null
+    And foo is of type "decimal"
     And foo is anything but granular to 1
     Then the following data should be generated:
       | foo  |
@@ -434,6 +454,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: 'Null' with a contradicting 'after' should only generate null
     Given foo is null
+    And foo is of type "datetime"
     And foo is after 2019-01-01T00:00:00.000Z
     Then the following data should be generated:
       | foo  |
@@ -441,6 +462,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: 'Null' with a contradicting not 'after' should only generate null
     Given foo is null
+    And foo is of type "datetime"
     And foo is after 2019-01-01T00:00:00.000Z
     Then the following data should be generated:
       | foo  |
@@ -460,6 +482,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: 'Null' with a contradicting 'afterOrAt' should only generate null
     Given foo is null
+    And foo is of type "datetime"
     And foo is after or at 2019-01-01T00:00:00.000Z
     Then the following data should be generated:
       | foo  |
@@ -467,6 +490,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: 'Null' with a contradicting not 'afterOrAt' should only generate null
     Given foo is null
+    And foo is of type "datetime"
     And foo is after or at 2019-01-01T00:00:00.000Z
     Then the following data should be generated:
       | foo  |
@@ -487,6 +511,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: 'Null' with a contradicting 'before' should only generate null
     Given foo is null
+    And foo is of type "datetime"
     And foo is before 2019-01-01T00:00:00.000Z
     Then the following data should be generated:
       | foo  |
@@ -494,6 +519,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: 'Null' with a contradicting not 'before' should only generate null
     Given foo is null
+    And foo is of type "datetime"
     And foo is before 2019-01-01T00:00:00.000Z
     Then the following data should be generated:
       | foo  |
@@ -514,6 +540,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: 'Null' with a contradicting 'beforeOrAt' should only generate null
     Given foo is null
+    And foo is of type "datetime"
     And foo is before or at 2019-01-01T00:00:00.000Z
     Then the following data should be generated:
       | foo  |
@@ -521,6 +548,7 @@ Feature: User can specify that a field is null or absent
 
   Scenario: 'Null' with a contradicting not 'beforeOrAt' should only generate null
     Given foo is null
+    And foo is of type "datetime"
     And foo is before or at 2019-01-01T00:00:00.000Z
     Then the following data should be generated:
       | foo  |

@@ -221,25 +221,6 @@ Feature: User can create data across multiple fields for all combinations availa
     Then the profile is invalid because "Unable to determine correct type for `01-01-2010T00:00:00.000Z`.\nEnsure strings are wrapped in double-quotes."
     And no data is created
 
-  Scenario: Running an exhaustive combination strategy with null values (empty strings) should be successful
-    Given the following fields exist:
-      | foo |
-      | bar |
-    And foo is anything but null
-    And bar is anything but null
-    And foo is in set:
-      | "" |
-      | 1  |
-    And bar is in set:
-      | 2 |
-      | 3 |
-    Then the following data should be generated:
-      | foo | bar |
-      | ""  | 2   |
-      | 1   | 2   |
-      | ""  | 3   |
-      | 1   | 3   |
-
   Scenario: Running an exhaustive combination strategy with null values (null) should be successful
     Given the following fields exist:
       | foo |
@@ -680,46 +661,6 @@ Feature: User can create data across multiple fields for all combinations availa
       | 1    | 20   | 13   |
       | 1    | 20   | 14   |
 
-  Scenario: Running an exhaustive combination strategy across fields with a duplicate data option in different formats (integer & string) in a field should be successful
-    Given the following fields exist:
-      | foo1 |
-      | foo2 |
-      | foo3 |
-    And foo1 is anything but of type "datetime"
-    And foo1 is anything but null
-    And foo2 is anything but of type "datetime"
-    And foo2 is anything but null
-    And foo3 is anything but of type "datetime"
-    And foo3 is anything but null
-    And foo1 is in set:
-      | 1 |
-    And foo2 is in set:
-      | 20   |
-      | "20" |
-      | 20   |
-      | "20" |
-    And foo3 is in set:
-      | 10   |
-      | 11   |
-      | 12   |
-      | 13   |
-      | 14   |
-      | "14" |
-    Then the following data should be generated:
-      | foo1 | foo2 | foo3 |
-      | 1    | 20   | 10   |
-      | 1    | 20   | 11   |
-      | 1    | 20   | 12   |
-      | 1    | 20   | 13   |
-      | 1    | 20   | 14   |
-      | 1    | 20   | "14" |
-      | 1    | "20" | 10   |
-      | 1    | "20" | 11   |
-      | 1    | "20" | 12   |
-      | 1    | "20" | 13   |
-      | 1    | "20" | 14   |
-      | 1    | "20" | "14" |
-
   Scenario: Running an exhaustive combination strategy across fields with non ordered data options should be successful
     Given the following fields exist:
       | foo1 |
@@ -729,7 +670,7 @@ Feature: User can create data across multiple fields for all combinations availa
     And foo1 is anything but null
     And foo2 is of type "string"
     And foo2 is anything but null
-    And foo3 is anything but of type "datetime"
+    And foo3 is of type "string"
     And foo3 is anything but null
     And foo1 is in set:
       | 1 |
@@ -750,32 +691,26 @@ Feature: User can create data across multiple fields for all combinations availa
       | 1    | "zab"  | "testZ" |
       | 1    | "zab"  | "0"     |
       | 1    | "zab"  | "aaa"   |
-      | 1    | "zab"  | 14      |
       | 1    | "zaa"  | "!"     |
       | 1    | "zaa"  | "testZ" |
       | 1    | "zaa"  | "0"     |
       | 1    | "zaa"  | "aaa"   |
-      | 1    | "zaa"  | 14      |
       | 1    | "test" | "!"     |
       | 1    | "test" | "testZ" |
       | 1    | "test" | "0"     |
       | 1    | "test" | "aaa"   |
-      | 1    | "test" | 14      |
       | 0    | "zab"  | "!"     |
       | 0    | "zab"  | "testZ" |
       | 0    | "zab"  | "0"     |
       | 0    | "zab"  | "aaa"   |
-      | 0    | "zab"  | 14      |
       | 0    | "zaa"  | "!"     |
       | 0    | "zaa"  | "testZ" |
       | 0    | "zaa"  | "0"     |
       | 0    | "zaa"  | "aaa"   |
-      | 0    | "zaa"  | 14      |
       | 0    | "test" | "!"     |
       | 0    | "test" | "testZ" |
       | 0    | "test" | "0"     |
       | 0    | "test" | "aaa"   |
-      | 0    | "test" | 14      |
 
   Scenario: Running an exhaustive combination strategy that includes an "if" statement should be successful
     Given the generation strategy is full

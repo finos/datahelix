@@ -33,7 +33,11 @@
 
 # Introduction
 
-This guide outlines how to contribute to the project as well as the key concepts and structure of the DataHelix. For information on how to get started with DataHelix see our [getting started guide](GettingStarted.md) and for information on the syntax of the DataHelix schema see the [user guide](user/UserGuide.md).
+This guide outlines how to contribute to the project as well as the key concepts and structure of the DataHelix. 
+
+* For information on how to get started with DataHelix see our [Getting Started guide](GettingStarted.md)
+
+* For information on the syntax of the DataHelix schema see the [User Guide](UserGuide.md)
 
 # Development
 
@@ -160,7 +164,7 @@ Every Decision Tree is rooted by a single Constraint Node.
 
 In our visualisations, we notate constraint nodes with rectangles and decision nodes with triangles.
 
-![](developer/decisionTrees/hoisting.before.svg)
+![](developer/images/hoisting.before.svg)
 
 ### Derivation
 
@@ -197,11 +201,11 @@ The expression of a field may depend on the expression of other fields. For inst
 
 For example, given the below tree:
 
-![](developer/decisionTrees/partitioning.before.svg)
+![](developer/images/partitioning.before.svg)
 
 We can observe that variations in `x` and `y` have no implications on one another, and divide into two trees:
 
-![](developer/decisionTrees/partitioning.after1.svg) ![](developer/decisionTrees/partitioning.after2.svg)
+![](developer/images/partitioning.after1.svg) ![](developer/images/partitioning.after2.svg)
 
 The motivation for partitioning is to determine which fields can vary independently of each other so that streams of values can be generated for them independently (and potentially in parallel execution threads) and then recombined by any preferred [combination strategy](user/CombinationStrategies.md).
 
@@ -209,11 +213,11 @@ The motivation for partitioning is to determine which fields can vary independen
 
 Consider the below tree:
 
-![](developer/decisionTrees/unification.before.svg)
+![](developer/images/unification.before.svg)
 
 It's impossible to [partition](#Partitioning) this tree because the `type` field affects every decision node. However, we can see that the below tree is equivalent:  
 
-![](developer/decisionTrees/unification.after.svg)
+![](developer/images/unification.after.svg)
 
 Formally: If you can identify pairs of sibling, equivalent-valency decision nodes A and B such that for each constraint node in A, there is precisely one mutually satisfiable node in B, you can collapse the decisions. There may be multiple ways to do this; the ordering of combinations affects how extensively the tree can be reduced.
 
@@ -221,21 +225,21 @@ Formally: If you can identify pairs of sibling, equivalent-valency decision node
 
 Consider the below tree:
 
-![](developer/decisionTrees/deletion.before.svg)
+![](developer/images/deletion.before.svg)
 
 Because the leftmost node contradicts the root node, we can delete it. Thereafter, we can pull the content of the other constraint node up to the root node. However, because `¬(x > 12)` is entailed by `x = 3`, we delete it as well. This yields:
 
-![](developer/decisionTrees/deletion.after.svg)
+![](developer/images/deletion.after.svg)
 
 #### Hoisting
 
 Consider the below tree:
 
-![](developer/decisionTrees/hoisting.before.svg)
+![](developer/images/hoisting.before.svg)
 
 We can simplify to:
 
-![](developer/decisionTrees/hoisting.after.svg)
+![](developer/images/hoisting.after.svg)
 
 Formally: If a Decision Node `D` contains a Constraint Node `C` with no constraints and a single Decision Node `E`, `E`'s Constraint Nodes can be added to `D` and `C` removed.
 
@@ -324,7 +328,7 @@ Due to the way that the generator computes textual data internally the generatio
 
 ### Anchors
 
-dk.brics.automaton doesn't support start and end anchors `^` & `$` and instead matches the entire word as if the anchors were always present. For some of our use cases though it may be that we want to match the regex in the middle of a string somewhere, so we have two versions of the regex constraint - [matchingRegex](user/UserGuide.md#predicate-matchingregex) and [containingRegex](user/UserGuide.md#predicate-containingregex). If `containingRegex` is used then we simply add a `.*` to the start and end of the regex before passing it into the automaton. Any `^` or `$` characters passed at the start or end of the string respectively are removed, as the automaton will treat them as literal characters.
+dk.brics.automaton doesn't support start and end anchors `^` & `$` and instead matches the entire word as if the anchors were always present. For some of our use cases though it may be that we want to match the regex in the middle of a string somewhere, so we have two versions of the regex constraint - [matchingRegex](UserGuide.md#predicate-matchingregex) and [containingRegex](UserGuide.md#predicate-containingregex). If `containingRegex` is used then we simply add a `.*` to the start and end of the regex before passing it into the automaton. Any `^` or `$` characters passed at the start or end of the string respectively are removed, as the automaton will treat them as literal characters.
 
 ### Automaton data types
 The automaton represents the state machine using the following types:

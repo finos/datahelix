@@ -1,0 +1,16 @@
+{
+    "schemaVersion": "0.1",
+
+    "fields": [
+		{ "name": "x" },
+		{ "name": "y" }
+    ],
+    "rules": [
+		{ "field": "x", "is": "equalTo", "value": 3 },
+		
+		{
+			"if": { "field": "x", "is": "greaterThan", "value": 12 },
+			"then": { "field": "y", "is": "equalTo", "value": 5 }
+		}
+	]
+}

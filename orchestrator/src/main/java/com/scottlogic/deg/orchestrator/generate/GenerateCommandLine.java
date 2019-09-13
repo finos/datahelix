@@ -76,12 +76,6 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     private Path outputPath;
 
     @CommandLine.Option(
-        names = {"--no-optimise"},
-        description = "Prevents tree optimisation",
-        hidden = true)
-    boolean dontOptimise;
-
-    @CommandLine.Option(
         names = "--help",
         usageHelp = true,
         description = "Display these available command line options")
@@ -105,12 +99,6 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     @CommandLine.Option(names = {"-c", "--combination-strategy"},
         description = "Determines the type of combination strategy used (${COMPLETION-CANDIDATES})")
     private CombinationStrategyType combinationType = MINIMAL;
-
-    @CommandLine.Option(
-        names = {"--no-partition"},
-        description = "Prevents tree partitioning",
-        hidden = true)
-    private boolean dontPartitionTrees;
 
     @CommandLine.Option(
         names = {"-n", "--max-rows"},
@@ -147,16 +135,7 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
         names = {"--set-from-file-directory"},
         description = "Custom root for loading sets from file."
     )
-    private String fromFilePath;
-
-    public boolean shouldDoPartitioning() {
-        return !this.dontPartitionTrees;
-    }
-
-    @Override
-    public boolean dontOptimise() {
-        return this.dontOptimise;
-    }
+    private String fromFilePath = "";
 
     @Override
     public File getProfileFile() {

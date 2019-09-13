@@ -3,6 +3,7 @@ Feature: User can specify that a numeric value is lower than, but not equal to, 
   Background:
     Given the generation strategy is full
     And there is a field foo
+    And foo is of type "decimal"
 
 # alone
   @ignore #594 - Reverse order of value generation when only upper-bound operators are provided
@@ -63,12 +64,12 @@ Feature: User can specify that a numeric value is lower than, but not equal to, 
 
   Scenario: Running a 'lessThan' request that specifies a string should be unsuccessful
     Given foo is less than "bar"
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be a Number but was a String with value `bar`"
+    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be an Number but was a String with value `bar`"
     And no data is created
 
   Scenario: Running a 'lessThan' request that specifies an empty string should be unsuccessful
     Given foo is less than ""
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be a Number but was a String with value ``"
+    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be an Number but was a String with value ``"
     And no data is created
 
   Scenario: Running a 'lessThan' request that specifies null should be unsuccessful

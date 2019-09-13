@@ -3,6 +3,7 @@ Feature: User can specify that a field must be a type of name
   Background:
     Given the generation strategy is random
     And there is a field foo
+    And foo is of type "string"
     And foo is anything but null
 
   Scenario: Generating with an of type firstname constraint generates valid firstnames

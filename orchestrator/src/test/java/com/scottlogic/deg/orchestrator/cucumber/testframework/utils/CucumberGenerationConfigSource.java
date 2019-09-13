@@ -68,16 +68,6 @@ public class CucumberGenerationConfigSource implements AllConfigSource, ViolateC
     }
 
     @Override
-    public boolean shouldDoPartitioning() {
-        return false;
-    }
-
-    @Override
-    public boolean dontOptimise() {
-        return false;
-    }
-
-    @Override
     public Path getOutputPath() {
         return new File("mockFilePath").toPath();
     }
@@ -108,5 +98,5 @@ public class CucumberGenerationConfigSource implements AllConfigSource, ViolateC
     }
 
     @Override
-    public String fromFilePath() { return null; }
+    public String fromFilePath() { return ""; }
 }

@@ -49,7 +49,11 @@
 
 # Introduction
 
-This guide outlines how to create a profile and contains information on the syntax of the DataHelix schema. If you are new to DataHelix, please read the [Getting Started page](docs/GettingStarted.md). If you would like information on how to contribute to the project as well as a technical overview of the key concepts and structure of the DataHelix then see the [Developer Guide](docs/DeveloperGuide.md).
+This guide outlines how to create a profile and contains information on the syntax of the DataHelix schema. 
+
+* If you are new to DataHelix, please read the [Getting Started page](GettingStarted.md)
+
+* If you would like information on how to contribute to the project as well as a technical overview of the key concepts and structure of   the DataHelix then see the [Developer Guide](DeveloperGuide.md).
 
 # Profiles
 
@@ -76,7 +80,7 @@ interpret the profile fields and rules. The latest version is 0.1.
         }
     ]
 ```
-- **Rules** - an array of constraints defined with a description. Constraints reduce the data in each column from the [universal set](https://github.com/finos/datahelix/blob/master/docs/user/SetRestrictionAndGeneration.md)
+- **Rules** - an array of constraints defined with a description. Constraints reduce the data in each column from the [universal set](user/SetRestrictionAndGeneration.md)
 to the desired range of values. They are formatted as JSON objects. There are three types of constraints: 
 
     - [Predicate Constraints](#Predicate-constraints) - predicates that define any given value as being 
@@ -151,7 +155,7 @@ These three sections are combined to form the [complete profile](#Example-Profil
     ]
     }
 
-* For a larger profile example see [here](https://github.com/finos/datahelix/blob/master/docs/user/Schema.md)
+* For a larger profile example see [here](user/Schema.md)
 * Further examples can be found in the Examples folder [here](https://github.com/finos/datahelix/tree/master/examples)
 
 ## Fields
@@ -181,7 +185,7 @@ Granularities must be powers of ten less than or equal to zero (1, 0.1, 0.01, et
 
 Decimal fields currently default to the maximum granularity of 1E-20 (0.00000000000000000001) which means that numbers can be produced with up to 20 decimal places. This numeric granularity also dictates the smallest possible step between two numeric values, for example the next biggest decimal than _10_ is _10.00000000000000000001_. A user is able to add a `granularTo` constraint for a decimal value with coarser granularity (1, 0.1, 0.01...1E-18, 1E-19) but no finer granularity than 1E-20 is allowed.
 
-Note that granularity concerns which values are valid, not how they're presented. If the goal is to enforce a certain number of decimal places in text output, the `formattedAs` operator is required. See: [What's the difference between formattedAs and granularTo?](./FrequentlyAskedQuestions.md#whats-the-difference-between-formattedas-and-granularto)
+Note that granularity concerns which values are valid, not how they're presented. If the goal is to enforce a certain number of decimal places in text output, the `formattedAs` operator is required. See: [What's the difference between formattedAs and granularTo?](user/FrequentlyAskedQuestions.md#whats-the-difference-between-formattedas-and-granularto)
 
 ## Strings
 
@@ -237,7 +241,7 @@ Data Helix can generate data containing typical real names by defining a field a
 * The **universal set** contains all values that can be generated (`null`, any string, any date, any number, etc)
 * The **denotation** of a constraint is the subset of the universal set that it defines as valid
 
-See [set restriction and generation](SetRestrictionAndGeneration.md) for an in depth explanation of how the constraints are merged and data generated from them.
+See [set restriction and generation](user/SetRestrictionAndGeneration.md) for an in depth explanation of how the constraints are merged and data generated from them.
 
 If no constraints are defined over a field, then it can accept any member of the universal set. Each constraint added to that field progressively limits the universal set.
 
@@ -503,7 +507,7 @@ Is satisfied if `field` has at least the [granularity](#DateTime-granularity) sp
 
 **Grammatical constraints** combine or modify other constraints. They are fully recursive; any grammatical constraint is a valid input to any other grammatical constraint.
 
-See [set restriction and generation](SetRestrictionAndGeneration.md) for an in depth explanation of how the constraints are merged and data generated from them.
+See [set restriction and generation](user/SetRestrictionAndGeneration.md) for an in depth explanation of how the constraints are merged and data generated from them.
 
 ## `not`
 

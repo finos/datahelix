@@ -59,12 +59,12 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
 
   Scenario: Running a 'greaterThanOrEqualTo' request that includes a string should fail
     Given foo is greater than or equal to "Zero"
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be a Number but was a String with value `Zero`"
+    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be an Number but was a String with value `Zero`"
     And no data is created
 
   Scenario: Running a 'greaterThanOrEqualTo' request that includes an empty string should fail
     Given foo is greater than or equal to ""
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be a Number but was a String with value ``"
+    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be an Number but was a String with value ``"
     And no data is created
 
   Scenario: Running a 'greaterThanOrEqualTo' request that specifies null should be unsuccessful
