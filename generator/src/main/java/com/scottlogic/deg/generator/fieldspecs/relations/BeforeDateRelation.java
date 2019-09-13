@@ -40,8 +40,10 @@ public class BeforeDateRelation extends AbstractDateInequalityRelation {
     }
 
     @Override
-    protected void appendValueToRestrictions(DateTimeRestrictions restrictions, OffsetDateTime value) {
+    protected DateTimeRestrictions appendValueToRestrictions(OffsetDateTime value) {
+        DateTimeRestrictions restrictions = new DateTimeRestrictions();
         restrictions.min = new DateTimeLimit(value, inclusive);
+        return restrictions;
     }
 
     @Override

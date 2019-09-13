@@ -41,8 +41,10 @@ public class AfterDateRelation extends AbstractDateInequalityRelation {
     }
 
     @Override
-    protected void appendValueToRestrictions(DateTimeRestrictions restrictions, OffsetDateTime value) {
+    protected DateTimeRestrictions appendValueToRestrictions(OffsetDateTime value) {
+        DateTimeRestrictions restrictions = new DateTimeRestrictions();
         restrictions.max = new DateTimeLimit(value, inclusive);
+        return restrictions;
     }
 
     @Override
