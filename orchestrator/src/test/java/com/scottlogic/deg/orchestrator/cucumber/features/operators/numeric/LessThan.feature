@@ -3,6 +3,7 @@ Feature: User can specify that a numeric value is lower than, but not equal to, 
   Background:
     Given the generation strategy is full
     And there is a field foo
+    And foo is of type "decimal"
 
 # alone
   @ignore #594 - Reverse order of value generation when only upper-bound operators are provided

@@ -63,7 +63,7 @@ public class TypingRequiredPerFieldValidator implements ProfileValidator {
         List<String> untypedFields = profile.getFields().stream()
             .filter(field -> !sufficientlyRestrictsFieldTypes(decisionTree.getRootNode(), field))
             .map(nonCompliantField -> nonCompliantField.name +
-                " is untyped; add an ofType, equalTo or inSet constraint, or mark it as null")
+                " is untyped; add an ofType, or add its type to the field definition")
             .collect(Collectors.toList());
 
         if (!untypedFields.isEmpty()){
@@ -72,28 +72,8 @@ public class TypingRequiredPerFieldValidator implements ProfileValidator {
     }
 
     private static boolean sufficientlyRestrictsFieldTypes(ConstraintNode node, Field fieldToCheck) {
-        // a constraint node is sufficient if any of its constraints, or any of its decision nodes,
-        // are sufficient
-        return
-            node.getAtomicConstraints().stream()
-                .anyMatch(constraint -> sufficientlyRestrictsFieldTypes(constraint, fieldToCheck))
-            ||
-            node.getDecisions().stream()
-                .anyMatch(decisionNode -> sufficientlyRestrictsFieldTypes(decisionNode, fieldToCheck));
-    }
-
-    private static boolean sufficientlyRestrictsFieldTypes(DecisionNode node, Field fieldToCheck) {
-        // a decision node is sufficient if all of its branches are sufficient
-        return node.getOptions().stream()
-            .allMatch(constraintNode -> sufficientlyRestrictsFieldTypes(constraintNode, fieldToCheck));
-    }
-
-    private static boolean sufficientlyRestrictsFieldTypes(AtomicConstraint constraint, Field fieldToCheck) {
-        return
-            constraint.getField().equals(fieldToCheck)
-            && (constraint instanceof IsOfTypeConstraint
-                || constraint instanceof IsNullConstraint
-                || constraint instanceof IsInSetConstraint
-                || constraint instanceof EqualToConstraint);
+        return node.getAtomicConstraints().stream()
+            .filter(atomicConstraint -> atomicConstraint.getField().equals(fieldToCheck))
+            .anyMatch(atomicConstraint -> atomicConstraint instanceof IsOfTypeConstraint);
     }
 }

@@ -18,6 +18,7 @@ Feature: As a user
       And foo is greater than 0
       And foo is anything but null
       And there is a field bar
+      And bar is of type "string"
       And bar is equal to "not unique"
       And the generation strategy is random
       Then the following data should be generated:
