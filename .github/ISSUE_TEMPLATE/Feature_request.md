@@ -54,4 +54,4 @@ Please use the Fibonacci number sequence - 1,2,3,5,8,13 etc
 
 ### Is this feature done?
 
-Please run through the [Definition of Done checklist](../docs/developer/DefinitionOfDone.md)
+Please run through the [Definition of Done checklist](.../docs/developer/DefinitionOfDone.md)
