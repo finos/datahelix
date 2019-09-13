@@ -19,8 +19,7 @@ package com.scottlogic.deg.profile.reader;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.scottlogic.deg.common.profile.*;
-import com.scottlogic.deg.common.profile.constraints.Constraint;
-import com.scottlogic.deg.profile.dto.ConstraintDTO;
+import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.profile.serialisation.ProfileDeserialiser;
 import com.scottlogic.deg.profile.dto.ProfileDTO;
 
@@ -30,6 +29,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.scottlogic.deg.profile.reader.atomic.AtomicConstraintFactory.create;
 
 /**
  * JsonProfileReader is responsible for reading and validating a profile from a path to a profile JSON file.
@@ -78,27 +79,13 @@ public class JsonProfileReader implements ProfileReader {
             }).collect(Collectors.toList());
 
         // add nullable
-        profileDto.fields.stream()
-            .filter(fieldDTO -> fieldDTO.nullable != null && !fieldDTO.nullable)
-            .forEach(fieldDTO -> {
-                rules.add(CreateNotNullRule(fieldDTO.name, profileFields));
-            });
+        rules.add(new Rule(new RuleInformation("nullable-rules"),
+            profileDto.fields.stream()
+                .filter(fieldDTO -> fieldDTO.nullable != null && !fieldDTO.nullable)
+                .map(fieldDTO -> create(AtomicConstraintType.IS_NULL, profileFields.getByName(fieldDTO.name), null).negate())
+                .collect(Collectors.toList())
+        ));
 
         return new Profile(profileFields, rules, profileDto.description);
-    }
-
-    private Rule CreateNotNullRule(String fieldName, ProfileFields profileFields) {
-        ConstraintDTO nullConstraint = new ConstraintDTO();
-        ConstraintDTO not = new ConstraintDTO();
-        Collection<Constraint> constraintArray = new ArrayList<>();
-
-        nullConstraint.is = "null";
-        nullConstraint.field = fieldName;
-        not.not = nullConstraint;
-        Constraint constraint = mainConstraintReader.apply(not, profileFields);
-
-        constraintArray.add(constraint);
-        
-        return new Rule(new RuleInformation(fieldName + "-nullable"), constraintArray);
     }
 }
