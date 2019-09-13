@@ -79,9 +79,7 @@ class EqualToOffsetDateRelationTest {
     private static FieldSpec specEqualToTime(OffsetDateTime time) {
         DateTimeLimit limit = new DateTimeLimit(time, true);
 
-        DateTimeRestrictions restrictions = new DateTimeRestrictions();
-        restrictions.min = limit;
-        restrictions.max = limit;
+        DateTimeRestrictions restrictions = new DateTimeRestrictions(limit, limit);
         return FieldSpec.Empty.withDateTimeRestrictions(restrictions);
     }
 }

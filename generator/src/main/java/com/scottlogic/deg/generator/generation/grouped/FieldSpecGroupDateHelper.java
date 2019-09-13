@@ -21,9 +21,7 @@ public class FieldSpecGroupDateHelper {
     public static FieldSpecGroup adjustBoundsOfDate(Field field, OffsetDateTime value, FieldSpecGroup group) {
 
         DateTimeLimit limit = new DateTimeLimit(value, true);
-        DateTimeRestrictions restrictions = new DateTimeRestrictions();
-        restrictions.min = limit;
-        restrictions.max = limit;
+        DateTimeRestrictions restrictions = new DateTimeRestrictions(limit,limit);
         FieldSpec newSpec = FieldSpec.Empty.withNotNull().withDateTimeRestrictions(restrictions);
 
         return adjustBoundsOfDateFromFieldSpec(field, newSpec, group);

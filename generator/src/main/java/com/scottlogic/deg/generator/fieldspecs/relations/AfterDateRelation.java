@@ -34,7 +34,7 @@ public class AfterDateRelation extends AbstractDateInequalityRelation {
     @Override
     protected DateTimeLimit dateTimeLimitExtractingFunction(DateTimeRestrictions restrictions) {
         if (restrictions != null) {
-            return restrictions.max;
+            return restrictions.getMax();
         } else {
             return null;
         }
@@ -42,9 +42,7 @@ public class AfterDateRelation extends AbstractDateInequalityRelation {
 
     @Override
     protected DateTimeRestrictions appendValueToRestrictions(OffsetDateTime value) {
-        DateTimeRestrictions restrictions = new DateTimeRestrictions();
-        restrictions.max = new DateTimeLimit(value, inclusive);
-        return restrictions;
+        return new DateTimeRestrictions(null, new DateTimeLimit(value, inclusive));
     }
 
     @Override

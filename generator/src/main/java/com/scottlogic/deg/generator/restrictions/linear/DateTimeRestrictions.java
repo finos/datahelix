@@ -27,15 +27,17 @@ import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConst
 public class DateTimeRestrictions implements TypedRestrictions {
     private static final Timescale DEFAULT_GRANULARITY = Timescale.MILLIS;
     private final DateTimeGranularity granularity;
-    public DateTimeLimit min;
-    public DateTimeLimit max;
+    private final DateTimeLimit min;
+    private final DateTimeLimit max;
 
-    public DateTimeRestrictions() {
-        this(DEFAULT_GRANULARITY);
+    public DateTimeRestrictions(DateTimeLimit min, DateTimeLimit max) {
+        this(min, max, DEFAULT_GRANULARITY);
     }
 
-    public DateTimeRestrictions(final Timescale granularity) {
+    public DateTimeRestrictions(DateTimeLimit min, DateTimeLimit max, final Timescale granularity) {
         this.granularity = new DateTimeGranularity(granularity);
+        this.min = min;
+        this.max = max;
     }
 
     public Timescale getGranularity() {
@@ -44,7 +46,7 @@ public class DateTimeRestrictions implements TypedRestrictions {
 
     @Override
     public String toString() {
-        return "min=" + min + ", max=" + max + " " + granularity.getGranularity().name();
+        return "min=" + getMin() + ", max=" + getMax() + " " + granularity.getGranularity().name();
     }
 
 
@@ -56,14 +58,14 @@ public class DateTimeRestrictions implements TypedRestrictions {
 
         OffsetDateTime d = (OffsetDateTime) o;
 
-        if (min != null) {
-            if (d.compareTo(min.getValue()) < (min.isInclusive() ? 0 : 1)) {
+        if (getMin() != null) {
+            if (d.compareTo(getMin().getValue()) < (getMin().isInclusive() ? 0 : 1)) {
                 return false;
             }
         }
 
-        if (max != null) {
-            if (d.compareTo(max.getValue()) > (max.isInclusive() ? 0 : -1)) {
+        if (getMax() != null) {
+            if (d.compareTo(getMax().getValue()) > (getMax().isInclusive() ? 0 : -1)) {
                 return false;
             }
         }
@@ -88,13 +90,20 @@ public class DateTimeRestrictions implements TypedRestrictions {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DateTimeRestrictions that = (DateTimeRestrictions) o;
-        return Objects.equals(min, that.min) &&
-            Objects.equals(max, that.max);
+        return Objects.equals(getMin(), that.getMin()) &&
+            Objects.equals(getMax(), that.getMax());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(min, max);
+        return Objects.hash(getMin(), getMax());
     }
 
+    public DateTimeLimit getMin() {
+        return min;
+    }
+
+    public DateTimeLimit getMax() {
+        return max;
+    }
 }

@@ -35,16 +35,16 @@ public class DateTimeRestrictionsMerger {
             return new MergeResult<>(left);
 
         Timescale granularity = Timescale.getMostCoarse(left.getGranularity(), right.getGranularity());
-        final DateTimeRestrictions merged = new DateTimeRestrictions(granularity);
+        final DateTimeRestrictions merged = new DateTimeRestrictions(
+            granulate(MergeLimit.MIN, granularity, getMergedLimitStructure(MergeLimit.MIN, left.getMin(), right.getMin(), granularity)),
+            granulate(MergeLimit.MAX, granularity, getMergedLimitStructure(MergeLimit.MAX, left.getMax(), right.getMax(), granularity)),
+            granularity);
 
-        merged.min = granulate(MergeLimit.MIN, granularity, getMergedLimitStructure(MergeLimit.MIN, left.min, right.min, granularity));
-        merged.max = granulate(MergeLimit.MAX, granularity, getMergedLimitStructure(MergeLimit.MAX, left.max, right.max, granularity));
-
-        if (merged.min == null || merged.max == null) {
+        if (merged.getMin() == null || merged.getMax() == null) {
             return new MergeResult<>(merged);
         }
 
-        if (merged.min.isAfter(merged.max.getValue())) {
+        if (merged.getMin().isAfter(merged.getMax().getValue())) {
             return MergeResult.unsuccessful();
         }
 

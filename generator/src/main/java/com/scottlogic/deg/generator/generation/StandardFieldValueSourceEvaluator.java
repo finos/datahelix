@@ -122,7 +122,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         DateTimeRestrictions restrictions = fieldSpec.getDateTimeRestrictions();
 
         return new DateTimeFieldValueSource(
-            restrictions != null ? restrictions : new DateTimeRestrictions(),
+            restrictions != null ? restrictions : new DateTimeRestrictions(null, null),
             fieldSpec.getBlacklist());
     }
 }

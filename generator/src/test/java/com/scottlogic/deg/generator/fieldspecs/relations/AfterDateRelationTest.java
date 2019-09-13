@@ -61,16 +61,13 @@ class AfterDateRelationTest {
                 ZoneOffset.UTC),
             true);
 
-        DateTimeRestrictions inRestrictions = new DateTimeRestrictions();
-        inRestrictions.min = lower;
-        inRestrictions.max = upper;
+        DateTimeRestrictions inRestrictions = new DateTimeRestrictions(lower, upper);
 
         FieldSpec inSpec = FieldSpec.Empty.withDateTimeRestrictions(inRestrictions);
 
         FieldSpec reducedSpec = relation.reduceToRelatedFieldSpec(inSpec);
 
-        DateTimeRestrictions expectedRestrictions = new DateTimeRestrictions();
-        expectedRestrictions.max = upper;
+        DateTimeRestrictions expectedRestrictions = new DateTimeRestrictions(null, upper);
         FieldSpec expectedSpec = FieldSpec.Empty.withDateTimeRestrictions(expectedRestrictions);
 
         assertEquals(expectedSpec, reducedSpec);

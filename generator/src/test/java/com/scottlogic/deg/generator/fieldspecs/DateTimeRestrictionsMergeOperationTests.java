@@ -45,8 +45,8 @@ class DateTimeRestrictionsMergeOperationTests {
         merger = mock(DateTimeRestrictionsMerger.class);
         operation = new DateTimeRestrictionsMergeOperation(merger);
 
-        left = FieldSpec.Empty.withDateTimeRestrictions(new DateTimeRestrictions());
-        right = FieldSpec.Empty.withDateTimeRestrictions(new DateTimeRestrictions());
+        left = FieldSpec.Empty.withDateTimeRestrictions(new DateTimeRestrictions(null, null));
+        right = FieldSpec.Empty.withDateTimeRestrictions(new DateTimeRestrictions(null, null));
     }
 
     @Test
@@ -121,7 +121,7 @@ class DateTimeRestrictionsMergeOperationTests {
     public void applyMergeOperation_withMergableDateTimeRestrictions_shouldApplyMergedDateTimeRestrictions() {
         FieldSpec merging = FieldSpec.Empty
             .withTypeRestrictions(TypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.DATETIME));
-        DateTimeRestrictions merged = new DateTimeRestrictions();
+        DateTimeRestrictions merged = new DateTimeRestrictions(null, null);
         when(merger.merge(left.getDateTimeRestrictions(), right.getDateTimeRestrictions()))
             .thenReturn(new MergeResult<>(merged));
 

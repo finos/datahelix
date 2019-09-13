@@ -73,9 +73,9 @@ public class DateTimeFieldValueSource implements FieldValueSource {
 
         ArrayList<Object> interestingValues = new ArrayList<>();
 
-        if (restrictions.min != null && restrictions.min.getValue() != null) {
-            OffsetDateTime min = restrictions.min.getValue();
-            interestingValues.add(restrictions.min.isInclusive() ? min : min.plusNanos(1_000_000));
+        if (restrictions.getMin() != null && restrictions.getMin().getValue() != null) {
+            OffsetDateTime min = restrictions.getMin().getValue();
+            interestingValues.add(restrictions.getMin().isInclusive() ? min : min.plusNanos(1_000_000));
         } else {
             interestingValues.add(OffsetDateTime.of(
                 LocalDate.of(1900, 01, 01),
@@ -83,9 +83,9 @@ public class DateTimeFieldValueSource implements FieldValueSource {
                 ZoneOffset.UTC));
         }
 
-        if (restrictions.max != null && restrictions.max.getValue() != null) {
-            OffsetDateTime max = restrictions.max.getValue();
-            interestingValues.add(restrictions.max.isInclusive() ? max : max.minusNanos(1_000_000));
+        if (restrictions.getMax() != null && restrictions.getMax().getValue() != null) {
+            OffsetDateTime max = restrictions.getMax().getValue();
+            interestingValues.add(restrictions.getMax().isInclusive() ? max : max.minusNanos(1_000_000));
         } else {
             interestingValues.add(OffsetDateTime.of(
                 LocalDate.of(2100, 01, 01),
@@ -117,13 +117,13 @@ public class DateTimeFieldValueSource implements FieldValueSource {
     }
 
     private OffsetDateTime getExclusiveUpperBound(DateTimeRestrictions upper) {
-        if (upper.max == null || upper.max.getValue() == null) return null;
-        return upper.max.isInclusive() ? upper.max.getValue().plusNanos(1_000_000) : upper.max.getValue();
+        if (upper.getMax() == null || upper.getMax().getValue() == null) return null;
+        return upper.getMax().isInclusive() ? upper.getMax().getValue().plusNanos(1_000_000) : upper.getMax().getValue();
     }
 
     private OffsetDateTime getInclusiveLowerBounds(DateTimeRestrictions lower) {
-        if (lower.min == null || lower.min.getValue() == null) return null;
-        return lower.min.isInclusive() ? lower.min.getValue() : lower.min.getValue().plusNanos(1_000_000);
+        if (lower.getMin() == null || lower.getMin().getValue() == null) return null;
+        return lower.getMin().isInclusive() ? lower.getMin().getValue() : lower.getMin().getValue().plusNanos(1_000_000);
     }
 
     @Override

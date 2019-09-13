@@ -43,13 +43,11 @@ public class EqualToOffsetDateRelation implements FieldSpecRelations {
     @Override
     public FieldSpec reduceToRelatedFieldSpec(FieldSpec otherValue) {
         if (otherValue.getDateTimeRestrictions() != null) {
-            DateTimeLimit limit = otherValue.getDateTimeRestrictions().min;
+            DateTimeLimit limit = otherValue.getDateTimeRestrictions().getMin();
             OffsetDateTime time = limit.getValue();
             OffsetDateTime newTime = OffsetDateTime.from(adjuster.adjuster(offset).adjustInto(time));
             DateTimeLimit newLimit = new DateTimeLimit(newTime, true);
-            DateTimeRestrictions newRestrictions = new DateTimeRestrictions();
-            newRestrictions.min = newLimit;
-            newRestrictions.max = newLimit;
+            DateTimeRestrictions newRestrictions = new DateTimeRestrictions(newLimit, newLimit);
             return FieldSpec.Empty.withDateTimeRestrictions(newRestrictions);
         } else {
             return FieldSpec.Empty;

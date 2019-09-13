@@ -433,11 +433,10 @@ class FieldSpecTests {
 
     @Test
     void permitsRejectsInvalidDateTime() {
-        DateTimeRestrictions dateTime = new DateTimeRestrictions();
+        DateTimeRestrictions dateTime = new DateTimeRestrictions(null, null);
         FieldSpec spec = FieldSpec.Empty.withDateTimeRestrictions(dateTime);
 
         OffsetDateTime time = OffsetDateTime.of(100, 1, 1, 1, 1, 1, 1, ZoneOffset.UTC);
-        dateTime.max = new DateTimeLimit(time, true);
 
         assertFalse(spec.permits(time.plusNanos(1_000_000)));
     }
@@ -593,6 +592,7 @@ class FieldSpecTests {
         private final boolean isEqual;
 
         MockDateTimeRestrictions(boolean isEqual) {
+            super(null, null);
             this.isEqual = isEqual;
         }
 

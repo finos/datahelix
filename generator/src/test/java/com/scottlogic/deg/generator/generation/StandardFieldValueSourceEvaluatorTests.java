@@ -120,10 +120,10 @@ public class StandardFieldValueSourceEvaluatorTests {
     @Test
     public void shouldReturnNullSourceLastWithTypedDateTimeRestrictionsAndNullNotDisallowed() {
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
-        DateTimeRestrictions datetimeRestrictions = new DateTimeRestrictions() {{
-            min = new DateTimeLimit(OffsetDateTime.MIN, false);
-            max = new DateTimeLimit(OffsetDateTime.MAX, false);
-        }};
+        DateTimeRestrictions datetimeRestrictions = new DateTimeRestrictions(
+            new DateTimeLimit(OffsetDateTime.MIN, false),
+            new DateTimeLimit(OffsetDateTime.MAX, false)
+        );
         TypeRestrictions typeRestrictions = new TypeRestrictions(Collections.singletonList(
             IsOfTypeConstraint.Types.DATETIME
         ));

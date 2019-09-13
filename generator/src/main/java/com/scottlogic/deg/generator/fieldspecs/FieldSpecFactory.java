@@ -202,7 +202,7 @@ public class FieldSpecFactory {
             return FieldSpec.Empty;
         }
 
-        return FieldSpec.Empty.withDateTimeRestrictions(new DateTimeRestrictions(constraint.granularity.getGranularity()));
+        return FieldSpec.Empty.withDateTimeRestrictions(new DateTimeRestrictions(null, null, constraint.granularity.getGranularity()));
     }
 
     private FieldSpec construct(IsAfterConstantDateTimeConstraint constraint, boolean negate) {
@@ -214,15 +214,13 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec constructIsAfterConstraint(OffsetDateTime limit, boolean inclusive, boolean negate) {
-        final DateTimeRestrictions dateTimeRestrictions = new DateTimeRestrictions();
-
         if (negate) {
-            dateTimeRestrictions.max = new DateTimeLimit(limit, !inclusive);
+            final DateTimeRestrictions dateTimeRestrictions = new DateTimeRestrictions(null, new DateTimeLimit(limit, !inclusive));
+            return FieldSpec.Empty.withDateTimeRestrictions(dateTimeRestrictions);
         } else {
-            dateTimeRestrictions.min = new DateTimeLimit(limit, inclusive);
+            final DateTimeRestrictions dateTimeRestrictions = new DateTimeRestrictions(new DateTimeLimit(limit, inclusive), null);
+            return FieldSpec.Empty.withDateTimeRestrictions(dateTimeRestrictions);
         }
-
-        return FieldSpec.Empty.withDateTimeRestrictions(dateTimeRestrictions);
     }
 
     private FieldSpec construct(IsBeforeConstantDateTimeConstraint constraint, boolean negate) {
@@ -234,15 +232,13 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec constructIsBeforeConstraint(OffsetDateTime limit, boolean inclusive, boolean negate) {
-        final DateTimeRestrictions dateTimeRestrictions = new DateTimeRestrictions();
-
         if (negate) {
-            dateTimeRestrictions.min = new DateTimeLimit(limit, !inclusive);
+            final DateTimeRestrictions dateTimeRestrictions = new DateTimeRestrictions(new DateTimeLimit(limit, !inclusive), null);
+            return FieldSpec.Empty.withDateTimeRestrictions(dateTimeRestrictions);
         } else {
-            dateTimeRestrictions.max = new DateTimeLimit(limit, inclusive);
+            final DateTimeRestrictions dateTimeRestrictions = new DateTimeRestrictions(null, new DateTimeLimit(limit, inclusive));
+            return FieldSpec.Empty.withDateTimeRestrictions(dateTimeRestrictions);
         }
-
-        return FieldSpec.Empty.withDateTimeRestrictions(dateTimeRestrictions);
     }
 
     private FieldSpec construct(MatchesRegexConstraint constraint, boolean negate) {

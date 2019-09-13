@@ -86,10 +86,7 @@ public class DateTimeFieldValueSourceTests {
         givenLowerBound(OffsetDateTime.of(date.atTime(LocalTime.of(12, 0, 0)), ZoneOffset.UTC), true);
         givenUpperBound(OffsetDateTime.of(date.atTime(LocalTime.of(18, 0, 0)), ZoneOffset.UTC), false);
 
-        DateTimeRestrictions restrictions = new DateTimeRestrictions();
-        restrictions.min = lowerLimit;
-        restrictions.max = upperLimit;
-
+        DateTimeRestrictions restrictions = new DateTimeRestrictions(lowerLimit, upperLimit);
         fieldSource = new DateTimeFieldValueSource(restrictions, blackList);
 
         TestRandomNumberGenerator rng = new TestRandomNumberGenerator();
@@ -124,9 +121,8 @@ public class DateTimeFieldValueSourceTests {
         givenLowerBound(OffsetDateTime.of(date.atTime(LocalTime.of(12, 0, 0)), ZoneOffset.UTC), true);
         givenUpperBound(OffsetDateTime.of(date.atTime(LocalTime.of(18, 0, 0)), ZoneOffset.UTC), true);
 
-        DateTimeRestrictions restrictions = new DateTimeRestrictions();
-        restrictions.min = lowerLimit;
-        restrictions.max = upperLimit;
+        DateTimeRestrictions restrictions = new DateTimeRestrictions(lowerLimit, upperLimit);
+
 
         fieldSource = new DateTimeFieldValueSource(restrictions, blackList);
 
@@ -161,9 +157,7 @@ public class DateTimeFieldValueSourceTests {
         givenLowerBound(OffsetDateTime.of(date.atTime(LocalTime.of(12, 0, 0)), ZoneOffset.UTC), false);
         givenUpperBound(OffsetDateTime.of(date.atTime(LocalTime.of(18, 0, 0)), ZoneOffset.UTC), true);
 
-        DateTimeRestrictions restrictions = new DateTimeRestrictions();
-        restrictions.min = lowerLimit;
-        restrictions.max = upperLimit;
+        DateTimeRestrictions restrictions = new DateTimeRestrictions(lowerLimit, upperLimit);
 
         fieldSource = new DateTimeFieldValueSource(restrictions, blackList);
 
@@ -196,9 +190,7 @@ public class DateTimeFieldValueSourceTests {
     public void getRandomValues_withSmallPermittedRangeAtEndOfLegalRange_shouldGenerateCorrectValues() {
         givenLowerBound(OffsetDateTime.of(9999, 12, 31, 23, 0, 0,0, ZoneOffset.UTC), false);
 
-        DateTimeRestrictions restrictions = new DateTimeRestrictions();
-        restrictions.min = lowerLimit;
-        restrictions.max = upperLimit;
+        DateTimeRestrictions restrictions = new DateTimeRestrictions(lowerLimit, upperLimit);
 
         fieldSource = new DateTimeFieldValueSource(restrictions, blackList);
 
@@ -213,7 +205,7 @@ public class DateTimeFieldValueSourceTests {
 
     @Test
     public void getRandomValues_withNoExplicitBounds_shouldGenerateCorrectValues() {
-        DateTimeRestrictions restrictions = new DateTimeRestrictions();
+        DateTimeRestrictions restrictions = new DateTimeRestrictions(null, null);
 
         fieldSource = new DateTimeFieldValueSource(restrictions, blackList);
 
@@ -344,8 +336,7 @@ public class DateTimeFieldValueSourceTests {
     @Test
     public void datetimeGenerateAllValues_withNoMin_startsAtOffsetDateTimeMin(){
         //Arrange
-        DateTimeRestrictions max = new DateTimeRestrictions();
-        max.max = new DateTimeLimit(OffsetDateTime.MAX, false);
+        DateTimeRestrictions max = new DateTimeRestrictions(null, new DateTimeLimit(OffsetDateTime.MAX, false));
         DateTimeFieldValueSource noMin = new DateTimeFieldValueSource(max, Collections.emptySet());
         //Act
         OffsetDateTime firstValue = (OffsetDateTime) noMin.generateAllValues().iterator().next();
@@ -356,8 +347,11 @@ public class DateTimeFieldValueSourceTests {
     @Test
     public void datetimeGenerateAllValues_withMinSetToMaxDate_emitsNoValues(){
         //Arrange
-        DateTimeRestrictions min = new DateTimeRestrictions();
-        min.min = new DateTimeLimit(DateTimeFieldValueSource.ISO_MAX_DATE, false);
+        DateTimeRestrictions min = new DateTimeRestrictions(
+            new DateTimeLimit(DateTimeFieldValueSource.ISO_MAX_DATE, false),
+            null
+        );
+
         DateTimeFieldValueSource datesAfterLastPermittedDate = new DateTimeFieldValueSource(min, Collections.emptySet());
 
         //Act
@@ -369,8 +363,10 @@ public class DateTimeFieldValueSourceTests {
     @Test
     public void datetimeGenerateAllValues_withMaxSetToMinDate_emitsNoValues(){
         //Arrange
-        DateTimeRestrictions max = new DateTimeRestrictions();
-        max.max = new DateTimeLimit(DateTimeFieldValueSource.ISO_MIN_DATE, false);
+        DateTimeRestrictions max = new DateTimeRestrictions(
+            null,
+            new DateTimeLimit(DateTimeFieldValueSource.ISO_MIN_DATE, false)
+        );
         DateTimeFieldValueSource datesBeforeFirstPermittedDate = new DateTimeFieldValueSource(max, Collections.emptySet());
 
         //Act
@@ -380,9 +376,10 @@ public class DateTimeFieldValueSourceTests {
     }
 
     private DateTimeRestrictions restrictions(String min, String max){
-        DateTimeRestrictions restrictions = new DateTimeRestrictions();
-        restrictions.min = min == null ? null : getTimeLimit(min);
-        restrictions.max = max == null ? null : getTimeLimit(max);
+        DateTimeRestrictions restrictions = new DateTimeRestrictions(
+            min == null ? null : getTimeLimit(min),
+            max == null ? null : getTimeLimit(max)
+        );
         return restrictions;
     }
 
@@ -410,10 +407,7 @@ public class DateTimeFieldValueSourceTests {
         List<Object> expectedValues = Arrays.asList(expectedValuesArray);
         List<Object> actualValues = new ArrayList<>();
 
-        DateTimeRestrictions restrictions = new DateTimeRestrictions();
-        restrictions.min = lowerLimit;
-        restrictions.max = upperLimit;
-
+        DateTimeRestrictions restrictions = new DateTimeRestrictions(lowerLimit, upperLimit);
         fieldSource = new DateTimeFieldValueSource(restrictions, blackList);
 
         fieldSource.generateAllValues().forEach(actualValues::add);
@@ -425,9 +419,7 @@ public class DateTimeFieldValueSourceTests {
         List<Object> expectedValues = Arrays.asList(expectedValuesArray);
         List<Object> actualValues = new ArrayList<>();
 
-        DateTimeRestrictions restrictions = new DateTimeRestrictions();
-        restrictions.min = lowerLimit;
-        restrictions.max = upperLimit;
+        DateTimeRestrictions restrictions = new DateTimeRestrictions(lowerLimit, upperLimit);
 
         fieldSource = new DateTimeFieldValueSource(restrictions, blackList);
 
