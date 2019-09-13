@@ -11,11 +11,13 @@ Feature: Values can be specified by using if, then and else constraints
     Given foo is in set:
       | "a" |
       | "b" |
+    And foo is of type "string"
     And foo is anything but null
     And bar is in set:
       | 10 |
       | 20 |
     And bar is anything but null
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -34,7 +36,9 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
     And foo is anything but null
+    And foo is of type "string"
     And bar is anything but null
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -58,6 +62,8 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is in set:
       | "a" |
       | "b" |
+    And foo is of type "decimal"
+    And bar is of type "string"
     And bar is anything but null
     And there is a constraint:
       """
@@ -88,6 +94,8 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is in set:
       | "a" |
       | "b" |
+    And foo is of type "decimal"
+    And bar is of type "string"
     And bar is anything but null
     And there is a constraint:
       """
@@ -118,6 +126,8 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is in set:
       | "a" |
       | "b" |
+    And foo is of type "decimal"
+    And bar is of type "string"
     And bar is anything but null
     And there is a constraint:
       """
@@ -145,6 +155,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
       | "c" |
+    And foo is of type "decimal"
+    And bar is of type "string"
     And bar is anything but null
     And there is a constraint:
       """
@@ -176,6 +188,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
       | "c" |
+    And foo is of type "decimal"
+    And bar is of type "string"
     And bar is anything but null
     And there is a constraint:
       """
@@ -198,6 +212,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
       | "c" |
+    And foo is of type "decimal"
+    And bar is of type "string"
     And bar is anything but null
     And there is a constraint:
       """
@@ -225,6 +241,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
       | "c" |
+    And foo is of type "decimal"
+    And bar is of type "string"
     And bar is anything but null
     And there is a constraint:
       """
@@ -251,6 +269,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
       | "c" |
+    And foo is of type "decimal"
+    And bar is of type "string"
     And bar is anything but null
     And there is a constraint:
       """
@@ -275,6 +295,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
       | "c" |
+    And foo is of type "decimal"
+    And bar is of type "string"
     And bar is anything but null
     And there is a constraint:
       """
@@ -302,6 +324,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
       | "c" |
+    And foo is of type "decimal"
+    And bar is of type "string"
     And bar is anything but null
     And there is a constraint:
       """
@@ -330,6 +354,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
       | "c" |
+    And foo is of type "decimal"
+    And bar is of type "string"
     And bar is anything but null
     And there is a constraint:
       """
@@ -360,6 +386,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
       | "c" |
+    And foo is of type "decimal"
+    And bar is of type "string"
     And bar is anything but null
     And there is a constraint:
       """
@@ -387,6 +415,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
       | "c" |
+    And foo is of type "decimal"
+    And bar is of type "string"
     And bar is anything but null
     And there is a constraint:
       """
@@ -410,6 +440,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
       | "c" |
+    And foo is of type "decimal"
+    And bar is of type "string"
     And bar is anything but null
     And there is a constraint:
       """
@@ -431,6 +463,8 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is in set:
       | "b" |
       | "c" |
+    And foo is of type "decimal"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -454,6 +488,8 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is in set:
       | "b" |
       | "c" |
+    And foo is of type "decimal"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -477,6 +513,8 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is in set:
       | "b" |
       | "c" |
+    And foo is of type "decimal"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -504,6 +542,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "b" |
       | "c" |
     And bar is anything but null
+    And foo is of type "decimal"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -531,6 +571,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "b" |
       | "c" |
     And bar is anything but null
+    And foo is of type "decimal"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -557,180 +599,14 @@ Feature: Values can be specified by using if, then and else constraints
       | "b" |
       | "c" |
     And bar is anything but null
+    And foo is of type "decimal"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
         "if": { "field": "foo", "is": "equalTo", "value": 1},
         "then": { "field": "bar", "is": "equalTo", "value": "a" },
         "else": { "field": "bar", "is": "null" }
-      }
-      """
-    Then the following data should be generated:
-      | foo | bar |
-      | 1   | "a" |
-
-  Scenario: Running an if request that contains a non contradictory ofType constraint within its if statement should be successful
-    Given foo is in set:
-      | 1   |
-      | 2   |
-      | "a" |
-      | "b" |
-    And foo is anything but null
-    And bar is in set:
-      | 10   |
-      | 20   |
-      | "AA" |
-      | "BB" |
-    And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "ofType", "value": "string" },
-        "then": { "field": "bar", "is": "equalTo", "value": "AA" },
-        "else": { "field": "bar", "is": "equalTo", "value": 10 }
-      }
-      """
-    Then the following data should be generated:
-      | foo | bar  |
-      | 1   | 10   |
-      | 2   | 10   |
-      | "a" | "AA" |
-      | "b" | "AA" |
-
-  Scenario: Running an if request that contains a non contradictory ofType constraint within its then statement should be successful
-    Given foo is in set:
-      | 1   |
-      | 2   |
-      | "a" |
-      | "b" |
-    And foo is anything but null
-    And bar is in set:
-      | 10   |
-      | 20   |
-      | "AA" |
-      | "BB" |
-    And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "a" },
-        "then": { "field": "bar", "is": "ofType", "value": "string" },
-        "else": { "field": "bar", "is": "equalTo", "value": 10 }
-      }
-      """
-    Then the following data should be generated:
-      | foo | bar  |
-      | 1   | 10   |
-      | 2   | 10   |
-      | "a" | "AA" |
-      | "a" | "BB" |
-      | "b" | 10   |
-
-  Scenario: Running an if request that contains a non contradictory ofType constraint within its else statement should be successful
-    Given foo is in set:
-      | 1   |
-      | 2   |
-      | "a" |
-      | "b" |
-    And foo is anything but null
-    And bar is in set:
-      | 10   |
-      | 20   |
-      | "AA" |
-      | "BB" |
-    And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "a" },
-        "then": { "field": "bar", "is": "equalTo", "value": "AA" },
-        "else": { "field": "bar", "is": "ofType", "value": "integer" }
-      }
-      """
-    Then the following data should be generated:
-      | foo | bar  |
-      | 1   | 10   |
-      | 1   | 20   |
-      | 2   | 10   |
-      | 2   | 20   |
-      | "a" | "AA" |
-      | "b" | 10   |
-      | "b" | 20   |
-
-  Scenario: Running an if request that contains a contradictory ofType constraint within its if statement should be successful
-    Given foo is in set:
-      | 1 |
-      | 2 |
-      | 3 |
-      | 4 |
-    And foo is anything but null
-    And bar is in set:
-      | "a" |
-      | "b" |
-      | "c" |
-      | "d" |
-    And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "ofType", "value": "string" },
-        "then": { "field": "bar", "is": "equalTo", "value": "a" },
-        "else": { "field": "bar", "is": "equalTo", "value": "c" }
-      }
-      """
-    Then the following data should be generated:
-      | foo | bar |
-      | 1   | "c" |
-      | 2   | "c" |
-      | 3   | "c" |
-      | 4   | "c" |
-
-  Scenario: Running an if request that contains a contradictory ofType constraint within its then statement should be successful
-    Given foo is in set:
-      | 1 |
-      | 2 |
-      | 3 |
-      | 4 |
-    And foo is anything but null
-    And bar is in set:
-      | "a" |
-      | "b" |
-      | "c" |
-      | "d" |
-    And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 1 },
-        "then": { "field": "bar", "is": "ofType", "value": "integer" },
-        "else": { "field": "bar", "is": "equalTo", "value": "c" }
-      }
-      """
-    Then the following data should be generated:
-      | foo | bar |
-      | 2   | "c" |
-      | 3   | "c" |
-      | 4   | "c" |
-
-  Scenario: Running an if request that contains a contradictory ofType constraint within its else statement should be successful
-    Given foo is in set:
-      | 1 |
-      | 2 |
-      | 3 |
-      | 4 |
-    And foo is anything but null
-    And bar is in set:
-      | "a" |
-      | "b" |
-      | "c" |
-      | "d" |
-    And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 1 },
-        "then": { "field": "bar", "is": "equalTo", "value": "a" },
-        "else": { "field": "bar", "is": "ofType", "value": "integer" }
       }
       """
     Then the following data should be generated:
@@ -750,6 +626,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "AA" |
       | "BB" |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -778,6 +656,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "AA" |
       | "BB" |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -801,6 +681,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
     And foo is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And bar is in set:
       | "10" |
       | "20" |
@@ -832,6 +714,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
     And foo is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And bar is in set:
       | "10" |
       | "20" |
@@ -866,6 +750,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "AA" |
       | "BB" |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -893,6 +779,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "AA" |
       | "BB" |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -918,6 +806,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "AA" |
       | "BB" |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -940,6 +830,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "a1" |
       | "b2" |
     And foo is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And bar is in set:
       | "10" |
       | "20" |
@@ -975,6 +867,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "AA" |
       | "BB" |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -1006,6 +900,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "AA" |
       | "BB" |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -1034,6 +930,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "AA" |
       | "BB" |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -1061,6 +959,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "AA" |
       | "BB" |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -1086,6 +986,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "333"  |
       | "4444" |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -1114,6 +1016,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "333"  |
       | "4444" |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -1142,6 +1046,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "333"  |
       | "4444" |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -1170,6 +1076,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "333"  |
       | "4444" |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -1198,6 +1106,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "333"  |
       | "4444" |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -1225,6 +1135,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "333"  |
       | "4444" |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -1250,6 +1162,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "333"  |
       | "4444" |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -1278,6 +1192,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "333"  |
       | "4444" |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -1307,6 +1223,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "333"  |
       | "4444" |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -1338,6 +1256,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "333"  |
       | "4444" |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -1366,6 +1286,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "333"  |
       | "4444" |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -1393,6 +1315,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "333"  |
       | "4444" |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -1418,6 +1342,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "333"  |
       | "4444" |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -1446,6 +1372,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "333"  |
       | "4444" |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -1475,6 +1403,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "333"  |
       | "4444" |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -1509,6 +1439,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "333"  |
       | "4444" |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -1537,6 +1469,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "333"  |
       | "4444" |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -1564,6 +1498,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "333"  |
       | "4444" |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -1589,6 +1525,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "333"          |
       | "4444"         |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -1617,6 +1555,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "333"          |
       | "4444"         |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -1645,6 +1585,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "333"          |
       | "4444"         |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -1667,6 +1609,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "ccc"  |
       | "dddd" |
     And foo is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And bar is in set:
       | "11"   |
       | "22"   |
@@ -1702,6 +1646,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "333"  |
       | "4444" |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -1729,6 +1675,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "333"  |
       | "4444" |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "string"
     And there is a constraint:
       """
       {
@@ -1754,6 +1702,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 333  |
       | 4444 |
     And bar is anything but null
+    And foo is of type "decimal"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -1782,6 +1732,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 333  |
       | 4444 |
     And bar is anything but null
+    And foo is of type "decimal"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -1812,6 +1764,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 333  |
       | 4444 |
     And bar is anything but null
+    And foo is of type "decimal"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -1843,6 +1797,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 333  |
       | 4444 |
     And bar is anything but null
+    And foo is of type "decimal"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -1871,6 +1827,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 333  |
       | 4444 |
     And bar is anything but null
+    And foo is of type "decimal"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -1898,6 +1856,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 333  |
       | 4444 |
     And bar is anything but null
+    And foo is of type "decimal"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -1923,6 +1883,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 333  |
       | 4444 |
     And bar is anything but null
+    And foo is of type "decimal"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -1951,6 +1913,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 333  |
       | 4444 |
     And bar is anything but null
+    And foo is of type "decimal"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -1981,6 +1945,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 333  |
       | 4444 |
     And bar is anything but null
+    And foo is of type "decimal"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -2015,6 +1981,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 333  |
       | 4444 |
     And bar is anything but null
+    And foo is of type "decimal"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -2043,6 +2011,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 333  |
       | 4444 |
     And bar is anything but null
+    And foo is of type "decimal"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -2070,6 +2040,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 333  |
       | 4444 |
     And bar is anything but null
+    And foo is of type "decimal"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -2095,6 +2067,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 333  |
       | 4444 |
     And bar is anything but null
+    And foo is of type "decimal"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -2123,6 +2097,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 333  |
       | 4444 |
     And bar is anything but null
+    And foo is of type "decimal"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -2153,6 +2129,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 333  |
       | 4444 |
     And bar is anything but null
+    And foo is of type "decimal"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -2184,6 +2162,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 333  |
       | 4444 |
     And bar is anything but null
+    And foo is of type "decimal"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -2206,6 +2186,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 30 |
       | 40 |
     And foo is anything but null
+    And foo is of type "decimal"
+    And bar is of type "decimal"
     And bar is in set:
       | 1    |
       | 22   |
@@ -2233,6 +2215,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 30 |
       | 40 |
     And foo is anything but null
+    And foo is of type "decimal"
+    And bar is of type "decimal"
     And bar is in set:
       | 1    |
       | 22   |
@@ -2258,6 +2242,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 30 |
       | 40 |
     And foo is anything but null
+    And foo is of type "decimal"
+    And bar is of type "decimal"
     And bar is in set:
       | 1    |
       | 22   |
@@ -2292,6 +2278,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 333  |
       | 4444 |
     And bar is anything but null
+    And foo is of type "decimal"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -2322,6 +2310,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 333  |
       | 4444 |
     And bar is anything but null
+    And foo is of type "decimal"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -2359,6 +2349,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 333  |
       | 4444 |
     And bar is anything but null
+    And foo is of type "decimal"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -2387,6 +2379,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 333  |
       | 4444 |
     And bar is anything but null
+    And foo is of type "decimal"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -2414,6 +2408,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 333  |
       | 4444 |
     And bar is anything but null
+    And foo is of type "decimal"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -2440,6 +2436,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 3.33  |
       | 4.444 |
     And bar is anything but null
+    And foo is of type "decimal"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -2467,6 +2465,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 3.33  |
       | 4.444 |
     And bar is anything but null
+    And foo is of type "decimal"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -2494,6 +2494,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 3.33  |
       | 4.444 |
     And bar is anything but null
+    And foo is of type "decimal"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -2520,6 +2522,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 3.33  |
       | 4.444 |
     And bar is anything but null
+    And foo is of type "decimal"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -2546,6 +2550,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 3.33  |
       | 4.444 |
     And bar is anything but null
+    And foo is of type "decimal"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -2574,6 +2580,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 2010-01-04T00:00:00.000Z |
       | 2010-01-05T00:00:00.000Z |
     And bar is anything but null
+    And foo is of type "datetime"
+    And bar is of type "datetime"
     And there is a constraint:
       """
       {
@@ -2607,6 +2615,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 2010-01-04T00:00:00.000Z |
       | 2010-01-05T00:00:00.000Z |
     And bar is anything but null
+    And foo is of type "datetime"
+    And bar is of type "datetime"
     And there is a constraint:
       """
       {
@@ -2640,6 +2650,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 2010-01-04T00:00:00.000Z |
       | 2010-01-05T00:00:00.000Z |
     And bar is anything but null
+    And foo is of type "datetime"
+    And bar is of type "datetime"
     And there is a constraint:
       """
       {
@@ -2673,6 +2685,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 2010-01-04T00:00:00.000Z |
       | 2010-01-05T00:00:00.000Z |
     And bar is anything but null
+    And foo is of type "datetime"
+    And bar is of type "datetime"
     And there is a constraint:
       """
       {
@@ -2706,6 +2720,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 2010-01-04T00:00:00.000Z |
       | 2010-01-05T00:00:00.000Z |
     And bar is anything but null
+    And foo is of type "datetime"
+    And bar is of type "datetime"
     And there is a constraint:
       """
       {
@@ -2738,6 +2754,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 2010-01-04T00:00:00.000Z |
       | 2010-01-05T00:00:00.000Z |
     And bar is anything but null
+    And foo is of type "datetime"
+    And bar is of type "datetime"
     And there is a constraint:
       """
       {
@@ -2766,6 +2784,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 2010-01-04T00:00:00.000Z |
       | 2010-01-05T00:00:00.000Z |
     And bar is anything but null
+    And foo is of type "datetime"
+    And bar is of type "datetime"
     And there is a constraint:
       """
       {
@@ -2799,6 +2819,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 2010-01-04T00:00:00.000Z |
       | 2010-01-05T00:00:00.000Z |
     And bar is anything but null
+    And foo is of type "datetime"
+    And bar is of type "datetime"
     And there is a constraint:
       """
       {
@@ -2833,6 +2855,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 2010-01-04T00:00:00.000Z |
       | 2010-01-05T00:00:00.000Z |
     And bar is anything but null
+    And foo is of type "datetime"
+    And bar is of type "datetime"
     And there is a constraint:
       """
       {
@@ -2871,6 +2895,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 2010-01-04T00:00:00.000Z |
       | 2010-01-05T00:00:00.000Z |
     And bar is anything but null
+    And foo is of type "datetime"
+    And bar is of type "datetime"
     And there is a constraint:
       """
       {
@@ -2904,6 +2930,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 2010-01-04T00:00:00.000Z |
       | 2010-01-05T00:00:00.000Z |
     And bar is anything but null
+    And foo is of type "datetime"
+    And bar is of type "datetime"
     And there is a constraint:
       """
       {
@@ -2936,6 +2964,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 2010-01-04T00:00:00.000Z |
       | 2010-01-05T00:00:00.000Z |
     And bar is anything but null
+    And foo is of type "datetime"
+    And bar is of type "datetime"
     And there is a constraint:
       """
       {
@@ -2964,6 +2994,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 2010-01-04T00:00:00.000Z |
       | 2010-01-05T00:00:00.000Z |
     And bar is anything but null
+    And foo is of type "datetime"
+    And bar is of type "datetime"
     And there is a constraint:
       """
       {
@@ -2997,6 +3029,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 2010-01-04T00:00:00.000Z |
       | 2010-01-05T00:00:00.000Z |
     And bar is anything but null
+    And foo is of type "datetime"
+    And bar is of type "datetime"
     And there is a constraint:
       """
       {
@@ -3031,6 +3065,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 2010-01-04T00:00:00.000Z |
       | 2010-01-05T00:00:00.000Z |
     And bar is anything but null
+    And foo is of type "datetime"
+    And bar is of type "datetime"
     And there is a constraint:
       """
       {
@@ -3069,6 +3105,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 2010-01-04T00:00:00.000Z |
       | 2010-01-05T00:00:00.000Z |
     And bar is anything but null
+    And foo is of type "datetime"
+    And bar is of type "datetime"
     And there is a constraint:
       """
       {
@@ -3102,6 +3140,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 2010-01-04T00:00:00.000Z |
       | 2010-01-05T00:00:00.000Z |
     And bar is anything but null
+    And foo is of type "datetime"
+    And bar is of type "datetime"
     And there is a constraint:
       """
       {
@@ -3134,6 +3174,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 2010-01-04T00:00:00.000Z |
       | 2010-01-05T00:00:00.000Z |
     And bar is anything but null
+    And foo is of type "datetime"
+    And bar is of type "datetime"
     And there is a constraint:
       """
       {
@@ -3162,6 +3204,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 2010-01-04T00:00:00.000Z |
       | 2010-01-05T00:00:00.000Z |
     And bar is anything but null
+    And foo is of type "datetime"
+    And bar is of type "datetime"
     And there is a constraint:
       """
       {
@@ -3195,6 +3239,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 2010-01-04T00:00:00.000Z |
       | 2010-01-05T00:00:00.000Z |
     And bar is anything but null
+    And foo is of type "datetime"
+    And bar is of type "datetime"
     And there is a constraint:
       """
       {
@@ -3230,6 +3276,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 2010-01-04T00:00:00.000Z |
       | 2010-01-05T00:00:00.000Z |
     And bar is anything but null
+    And foo is of type "datetime"
+    And bar is of type "datetime"
     And there is a constraint:
       """
       {
@@ -3273,6 +3321,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 2010-01-04T00:00:00.000Z |
       | 2010-01-05T00:00:00.000Z |
     And bar is anything but null
+    And foo is of type "datetime"
+    And bar is of type "datetime"
     And there is a constraint:
       """
       {
@@ -3306,6 +3356,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 2010-01-04T00:00:00.000Z |
       | 2010-01-05T00:00:00.000Z |
     And bar is anything but null
+    And foo is of type "datetime"
+    And bar is of type "datetime"
     And there is a constraint:
       """
       {
@@ -3338,6 +3390,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 2010-01-04T00:00:00.000Z |
       | 2010-01-05T00:00:00.000Z |
     And bar is anything but null
+    And foo is of type "datetime"
+    And bar is of type "datetime"
     And there is a constraint:
       """
       {
@@ -3360,6 +3414,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 20 |
       | 30 |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -3384,6 +3440,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 20 |
       | 30 |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -3408,6 +3466,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 20 |
       | 30 |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -3431,6 +3491,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 20 |
       | 30 |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -3451,6 +3513,8 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is in set:
       | 10 |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -3470,6 +3534,8 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is in set:
       | 10 |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -3497,6 +3563,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 40 |
       | 50 |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -3532,6 +3600,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 40 |
       | 50 |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -3568,6 +3638,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 40 |
       | 50 |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -3607,6 +3679,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 40 |
       | 50 |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -3643,6 +3717,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 40 |
       | 50 |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -3677,6 +3753,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 40 |
       | 50 |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -3708,6 +3786,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 4444  |
       | 55555 |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -3743,6 +3823,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 4444  |
       | 55555 |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -3778,6 +3860,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 4444  |
       | 55555 |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -3813,6 +3897,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 4444  |
       | 55555 |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -3848,6 +3934,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 4444  |
       | 55555 |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
@@ -3874,6 +3962,7 @@ Feature: Values can be specified by using if, then and else constraints
       | "ccc"   |
       | "dddd"  |
       | "eeeee" |
+    And foo is of type "string"
     And foo is anything but null
     And bar is in set:
       | 1     |
@@ -3882,6 +3971,8 @@ Feature: Values can be specified by using if, then and else constraints
       | 4444  |
       | 55555 |
     And bar is anything but null
+    And foo is of type "string"
+    And bar is of type "decimal"
     And there is a constraint:
       """
       {
