@@ -20,6 +20,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.scottlogic.deg.common.profile.*;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
+import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.profile.serialisation.ProfileDeserialiser;
 import com.scottlogic.deg.profile.dto.ProfileDTO;
 
@@ -78,13 +79,16 @@ public class JsonProfileReader implements ProfileReader {
                 return new Rule(constraintRule, mainConstraintReader.getSubConstraints(profileFields, r.constraints));
             }).collect(Collectors.toList());
 
+
         // add nullable
-        rules.add(new Rule(new RuleInformation("nullable-rules"),
-            profileDto.fields.stream()
-                .filter(fieldDTO -> fieldDTO.nullable != null && !fieldDTO.nullable)
-                .map(fieldDTO -> create(AtomicConstraintType.IS_NULL, profileFields.getByName(fieldDTO.name), null).negate())
-                .collect(Collectors.toList())
-        ));
+        Collection<Constraint> nullableRules = profileDto.fields.stream()
+            .filter(fieldDTO -> fieldDTO.nullable != null && !fieldDTO.nullable)
+            .map(fieldDTO -> create(AtomicConstraintType.IS_NULL, profileFields.getByName(fieldDTO.name), null).negate())
+            .collect(Collectors.toList());
+
+        if (nullableRules.size() > 0) {
+            rules.add(new Rule(new RuleInformation("nullable-rules"), nullableRules));
+        }
 
         return new Profile(profileFields, rules, profileDto.description);
     }
