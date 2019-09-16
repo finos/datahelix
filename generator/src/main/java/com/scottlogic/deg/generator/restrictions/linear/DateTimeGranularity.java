@@ -8,6 +8,11 @@ public class DateTimeGranularity implements Granularity<OffsetDateTime> {
 
     private final Timescale granularity;
 
+    @Override
+    public Granularity<OffsetDateTime> copy() {
+        return new DateTimeGranularity(granularity);
+    }
+
     public DateTimeGranularity(Timescale granularity){
         this.granularity = granularity;
     }

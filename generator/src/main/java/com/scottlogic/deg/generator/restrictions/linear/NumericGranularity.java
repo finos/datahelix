@@ -27,6 +27,11 @@ public class NumericGranularity implements Granularity<BigDecimal> {
     }
 
     @Override
+    public NumericGranularity copy() {
+        return new NumericGranularity(decimalPlaces);
+    }
+
+    @Override
     public boolean isCorrectScale(BigDecimal value) {
         return value.stripTrailingZeros().scale() <= decimalPlaces;
     }

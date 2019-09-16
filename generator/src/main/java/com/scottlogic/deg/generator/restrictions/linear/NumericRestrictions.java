@@ -29,6 +29,14 @@ public class NumericRestrictions extends LinearRestrictions<BigDecimal> {
         super(min, max, new NumericGranularity(numericScale), new NumericConverter());
     }
 
+    private NumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max, Granularity<BigDecimal> granularity){
+        super(min, max, granularity.copy(), new NumericConverter());
+    }
+
+    public NumericRestrictions copy() {
+        return new NumericRestrictions(getMin(), getMax(), getGranularity().copy());
+    }
+
     public int getNumericScale() {
         return ((NumericGranularity)getGranularity()).getDecimalPlaces();
     }
