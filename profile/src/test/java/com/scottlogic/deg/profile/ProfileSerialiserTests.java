@@ -82,8 +82,8 @@ public class ProfileSerialiserTests {
                 "{" +
                     "\"schemaVersion\" : \"0.1\"," +
                     "\"fields\" : [" +
-                    "   { \"name\" : \"typecode\", \"unique\": false  }," +
-                    "   { \"name\" : \"price\", \"unique\": false  }" +
+                    "   { \"name\" : \"typecode\", \"unique\": false, \"nullable\": true }," +
+                    "   { \"name\" : \"price\", \"unique\": false, \"nullable\": true }" +
                     "]," +
                     "\"rules\" : [" +
                     " { \"rule\" : null," +
@@ -144,8 +144,8 @@ public class ProfileSerialiserTests {
                 "{" +
                     "\"schemaVersion\" : \"0.1\"," +
                     "\"fields\" : [" +
-                    "   { \"name\" : \"typecode\", \"unique\": false  }," +
-                    "   { \"name\" : \"price\", \"unique\": false  }" +
+                    "   { \"name\" : \"typecode\", \"unique\": false, \"nullable\": true  }," +
+                    "   { \"name\" : \"price\", \"unique\": false, \"nullable\": true  }" +
                     "]," +
                     "\"rules\" : [" +
                     " { " +
@@ -191,8 +191,8 @@ public class ProfileSerialiserTests {
                 "{" +
                     "\"schemaVersion\" : \"0.1\"," +
                     "\"fields\" : [" +
-                    "   { \"name\" : \"typecode\", \"unique\": false }," +
-                    "   { \"name\" : \"price\", \"unique\": false  }" +
+                    "   { \"name\" : \"typecode\", \"unique\": false, \"nullable\": true }," +
+                    "   { \"name\" : \"price\", \"unique\": false, \"nullable\": true  }" +
                     "]," +
                     "\"rules\" : [" +
                     " { " +

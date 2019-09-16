@@ -77,6 +77,7 @@ A field in the data set.
 * `"name"`: The field's name. Should be unique, as constraints will reference fields by name. This property is used for, eg, column headers in CSV output
 * `"formatting"`: The formatting used for the output of the field. (Optional)
 * `"unique"`: Sets if the field is unique. (Optional)
+* `"nullable"`: Sets if null is an allowed output of the field. (Optional)
 
 ### `Rule`
 A named collection of constraints. Test case generation revolves around rules, in that the generator will output a separate dataset for each rule, wherein each row violates the rule in a different way.

@@ -19,7 +19,8 @@ package com.scottlogic.deg.profile.reader;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.scottlogic.deg.common.profile.*;
-import com.scottlogic.deg.profile.dto.ConstraintDTO;
+import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
+import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.profile.serialisation.ProfileDeserialiser;
 import com.scottlogic.deg.profile.dto.ProfileDTO;
 
@@ -29,7 +30,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import static com.scottlogic.deg.profile.reader.atomic.AtomicConstraintFactory.create;
 
 /**
  * JsonProfileReader is responsible for reading and validating a profile from a path to a profile JSON file.
@@ -76,6 +78,17 @@ public class JsonProfileReader implements ProfileReader {
                 RuleInformation constraintRule = new RuleInformation(r.rule);
                 return new Rule(constraintRule, mainConstraintReader.getSubConstraints(profileFields, r.constraints));
             }).collect(Collectors.toList());
+
+
+        // add nullable
+        Collection<Constraint> nullableRules = profileDto.fields.stream()
+            .filter(fieldDTO -> !fieldDTO.nullable)
+            .map(fieldDTO -> create(AtomicConstraintType.IS_NULL, profileFields.getByName(fieldDTO.name), null).negate())
+            .collect(Collectors.toList());
+
+        if (nullableRules.size() > 0) {
+            rules.add(new Rule(new RuleInformation("nullable-rules"), nullableRules));
+        }
 
         return new Profile(profileFields, rules, profileDto.description);
     }

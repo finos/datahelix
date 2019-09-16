@@ -6,9 +6,10 @@
     2. [Example Profile](#Example-Profile)
     
 3. [Fields](#Fields)
-    1. [Name](fields-name)
-    1. [Unique](fields-unique)
-    1. [Formatting](fields-formatting)
+    1. [Name](#fields-name)
+    1. [Nullable](#fields-nullable)
+    1. [Formatting](#fields-formatting)
+    1. [Unique](#fields-unique)
 
 4. [Data types](#Data-Types)
     1. [Integer/Decimal](#Integer/Decimal)
@@ -166,6 +167,7 @@ Fields are the "slots" of data that can take values. Typical fields might be _em
 ```javascript
 {
     "name": "field1",
+    "nullable": false,
     "formatting": "%.5s",
     "unique": true
 }
@@ -178,6 +180,13 @@ Each of the field properties are outlined below:
 ## `name`
 
 Name of the field in the output which has to be unique within the `Fields` array. If generating into a CSV or database, the name is used as a column name. If generating into JSON, the name is used as the key for object properties.
+
+
+<div id="fields-nullable"></div>
+
+## `nullable`
+
+Sets the field as nullable. This is an optional property of the field and will default to true. When set to false it is the same as a [not](#not) [null](#predicate-null) constraint for the field.
 
 <div id="fields-formatting"></div>
 
