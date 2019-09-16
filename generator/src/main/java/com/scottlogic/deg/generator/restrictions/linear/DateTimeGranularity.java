@@ -22,14 +22,19 @@ public class DateTimeGranularity implements Granularity<OffsetDateTime> {
     @Override
     public Granularity<OffsetDateTime> merge(Granularity<OffsetDateTime> otherGranularity) {
         DateTimeGranularity other = (DateTimeGranularity) otherGranularity;
-        if(granularity == Timescale.getMostCoarse(granularity,other.getGranularity())) {
+        if(granularity == Timescale.getMostCoarse(granularity,other.getTimeScale())) {
             return this;
         } else {
             return otherGranularity;
         }
     }
 
-    public Timescale getGranularity() {
+    public Timescale getTimeScale() {
         return granularity;
+    }
+
+    @Override
+    public String toString() {
+        return "granularity=" + granularity;
     }
 }

@@ -19,7 +19,8 @@ package com.scottlogic.deg.generator.restrictions;
 import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
 import com.scottlogic.deg.generator.restrictions.linear.DateTimeLimit;
 import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
-import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictionsMerger;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,18 +38,14 @@ import static org.hamcrest.core.IsSame.sameInstance;
 
 class DateTimeRestrictionsMergerTests {
 
-    private DateTimeRestrictionsMerger merger;
+    private LinearRestrictionsMerger merger = new LinearRestrictionsMerger();
 
     private static final OffsetDateTime REFERENCE_TIME = OffsetDateTime.of(2000, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
 
-    @BeforeEach
-    void setUp() {
-        merger = new DateTimeRestrictionsMerger();
-    }
 
     @Test
     void merge_dateTimeRestrictionsAreBothNull_returnsNull() {
-        MergeResult<DateTimeRestrictions> result = merger.merge(null, null);
+        MergeResult<LinearRestrictions<Object>> result = merger.merge(null, null);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.successful, is(true));
@@ -59,7 +56,7 @@ class DateTimeRestrictionsMergerTests {
     void merge_leftIsNullAndRightHasAValue_returnsRight() {
         DateTimeRestrictions right = new DateTimeRestrictions(null, null);
 
-        MergeResult<DateTimeRestrictions> result = merger.merge(null, right);
+        MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(null, right);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.successful, is(true));
@@ -70,7 +67,7 @@ class DateTimeRestrictionsMergerTests {
     void merge_rightIsNullAndLeftHasAValue_returnsLeft() {
         DateTimeRestrictions left = new DateTimeRestrictions(null, null);
 
-        MergeResult<DateTimeRestrictions> result = merger.merge(left, null);
+        MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, null);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.successful, is(true));
@@ -88,7 +85,7 @@ class DateTimeRestrictionsMergerTests {
         DateTimeRestrictions left = new DateTimeRestrictions(minDateTimeLimit, null);
         DateTimeRestrictions right = new DateTimeRestrictions(null, maxDateTimeLimit);
 
-        MergeResult<DateTimeRestrictions> result = merger.merge(left, right);
+        MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.successful, is(true));
@@ -269,7 +266,7 @@ class DateTimeRestrictionsMergerTests {
         Assert.assertEquals(true, result.successful);
 
         Assert.assertThat(restrictions, not(nullValue()));
-        Assert.assertEquals(Timescale.HOURS, restrictions.getGranularity());
+        Assert.assertEquals(Timescale.HOURS, restrictions.getTimeScale());
 
         Assert.assertEquals(restrictions.getMin(), new DateTimeLimit(REFERENCE_TIME.plusHours(1), true));
     }
@@ -297,7 +294,7 @@ class DateTimeRestrictionsMergerTests {
 
         // assert that we get the correct level of granularity
         Assert.assertNotNull(restrictions);
-        Assert.assertEquals(Timescale.HOURS, restrictions.getGranularity());
+        Assert.assertEquals(Timescale.HOURS, restrictions.getTimeScale());
 
         // assert that we return an inclusive restriction for this edge case.
         Assert.assertEquals(restrictions.getMin(), new DateTimeLimit(REFERENCE_TIME.plusHours(1), true));

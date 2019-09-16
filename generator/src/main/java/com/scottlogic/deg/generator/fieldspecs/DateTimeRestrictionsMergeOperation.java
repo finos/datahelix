@@ -18,16 +18,20 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.restrictions.linear.DateTimeGranularity;
 import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
-import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictionsMerger;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
+
+import java.time.OffsetDateTime;
 
 import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.DATETIME;
 
 public class DateTimeRestrictionsMergeOperation implements RestrictionMergeOperation {
-    private final DateTimeRestrictionsMerger merger;
+    private final LinearRestrictionsMerger merger;
 
     @Inject
-    public DateTimeRestrictionsMergeOperation(DateTimeRestrictionsMerger merger) {
+    public DateTimeRestrictionsMergeOperation(LinearRestrictionsMerger merger) {
         this.merger = merger;
     }
 
@@ -37,13 +41,33 @@ public class DateTimeRestrictionsMergeOperation implements RestrictionMergeOpera
             return merging;
         }
 
-        MergeResult<DateTimeRestrictions> mergeResult = merger.merge(
-            left.getDateTimeRestrictions(), right.getDateTimeRestrictions());
+        DateTimeRestrictions leftRestriction = left.getDateTimeRestrictions();
+        DateTimeRestrictions rightRestriction = right.getDateTimeRestrictions();
+
+        MergeResult<LinearRestrictions<OffsetDateTime>> mergeResult = merger.merge(
+            leftRestriction, rightRestriction);
 
         if (!mergeResult.successful){
             return merging.withoutType(DATETIME);
         }
 
-        return merging.withDateTimeRestrictions(mergeResult.restrictions);
+        DateTimeRestrictions dateTimeRestrictions;
+        if (mergeResult.restrictions == null){
+            dateTimeRestrictions = null;
+        }
+        else if (mergeResult.restrictions == leftRestriction){
+            dateTimeRestrictions = leftRestriction;
+        }
+        else if (mergeResult.restrictions == rightRestriction){
+            dateTimeRestrictions = rightRestriction;
+        }
+        else {
+            dateTimeRestrictions = new DateTimeRestrictions(
+                mergeResult.restrictions.getMin(),
+                mergeResult.restrictions.getMax(),
+                ((DateTimeGranularity)mergeResult.restrictions.getGranularity()).getTimeScale());
+        }
+
+        return merging.withDateTimeRestrictions(dateTimeRestrictions);
     }
 }

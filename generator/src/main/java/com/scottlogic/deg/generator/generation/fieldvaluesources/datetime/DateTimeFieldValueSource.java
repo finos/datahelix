@@ -18,6 +18,7 @@ package com.scottlogic.deg.generator.generation.fieldvaluesources.datetime;
 
 import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
+import com.scottlogic.deg.generator.restrictions.linear.DateTimeGranularity;
 import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
 import com.scottlogic.deg.generator.utils.FilteringIterator;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
@@ -48,7 +49,7 @@ public class DateTimeFieldValueSource implements FieldValueSource {
         Set<Object> blacklist) {
 
         this.restrictions = restrictions;
-        this.granularity = this.restrictions.getGranularity();
+        this.granularity = ((DateTimeGranularity)restrictions.getGranularity()).getTimeScale();
 
         this.inclusiveLower = getInclusiveLowerBounds(restrictions);
         this.exclusiveUpper = getExclusiveUpperBound(restrictions);
