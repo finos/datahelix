@@ -29,6 +29,11 @@ public class DateTimeGranularity implements Granularity<OffsetDateTime> {
         }
     }
 
+    @Override
+    public OffsetDateTime getNext(OffsetDateTime dateTime) {
+        return granularity.getNext().apply(dateTime);
+    }
+
     public Timescale getTimeScale() {
         return granularity;
     }
