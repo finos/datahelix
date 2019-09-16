@@ -1,8 +1,9 @@
 {
-	"schemaVersion": "0.1",
+	"schemaVersion": "0.6",
 	"fields": [
 		{
-			"name": "an_integer"
+			"name": "an_integer",
+			"formatting": "%,d"
 		}
 	],
 	"rules": [
@@ -23,11 +24,6 @@
 					"field": "an_integer",
 					"is": "equalTo",
 					"value": 1000
-				},
-				{
-					"field": "an_integer",
-					"is": "formattedAs",
-					"value": "%,d"
 				}
 			]
 		}

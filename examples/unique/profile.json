@@ -1,8 +1,9 @@
 {
-  "schemaVersion": "0.3",
+  "schemaVersion": "0.6",
   "fields": [
     {
-      "name": "id"
+      "name": "id",
+      "unique": true
     },
     {
       "name": "number"
@@ -33,10 +34,6 @@
           "field": "number",
           "is": "ofType",
           "value": "integer"
-        },
-        {
-          "field": "id",
-          "is": "unique"
         },
         {
           "field": "id",

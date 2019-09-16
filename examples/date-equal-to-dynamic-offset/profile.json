@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.2",
+  "schemaVersion": "0.6",
   "fields": [
     {
       "name": "first"
@@ -79,15 +79,15 @@
         },
         {
           "field": "second",
-          "is": "equalToField",
-          "value": "first",
+          "is": "equalTo",
+          "otherField": "first",
           "offset": 3,
           "offsetUnit": "days"
         },
         {
           "field": "third",
-          "is": "equalToField",
-          "value": "fourth",
+          "is": "equalTo",
+          "otherField": "fourth",
           "offset": -3,
           "offsetUnit": "days"
         },
@@ -111,8 +111,8 @@
         },
         {
           "field": "secondWorking",
-          "is": "equalToField",
-          "value": "firstWorking",
+          "is": "equalTo",
+          "otherField": "firstWorking",
           "offset": -8,
           "offsetUnit": "working days"
         },
