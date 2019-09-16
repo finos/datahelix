@@ -65,7 +65,7 @@ public class JsonProfileReader implements ProfileReader {
 
         ProfileFields profileFields = new ProfileFields(
             profileDto.fields.stream()
-                .map(fDto -> new Field(fDto.name, fDto.unique == null ? false : fDto.unique, fDto.formatting))
+                .map(fDto -> new Field(fDto.name, fDto.unique, fDto.formatting))
                 .collect(Collectors.toList()));
 
         Collection<Rule> rules = profileDto.rules.stream().map(
