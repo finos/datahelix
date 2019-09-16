@@ -540,9 +540,11 @@ Is satisfied if `field` is a datetime occurring before or simultaneously with `v
 Is satisfied if `field` has at least the [granularity](#DateTime-granularity) specified in `value`.
 
 <div id="otherfield-constraints"></div>
+
 ## Dependant field constraints
 
 <div id="predicate-otherfield"></div>
+
 ### `otherField`
 allows a date field to be dependant on the output of another date field
 
@@ -554,6 +556,7 @@ supported operators are currently
 "after", "afterOrAt", "before", "beforeOrAt", "equalTo"
 
 <div id="predicate-offset"></div>
+
 ### `offset`
 Allows a dependant date to always be a certain offset away from another date
 
