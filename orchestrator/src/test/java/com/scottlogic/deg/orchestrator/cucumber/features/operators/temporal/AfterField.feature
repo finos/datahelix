@@ -14,8 +14,8 @@ Feature: User can specify that one date should be after another date
       """
         {
           "field": "bar",
-          "is": "afterField",
-          "value": "foo"
+          "is": "after",
+          "otherField": "foo"
         }
       """
     Then the following data should be generated:

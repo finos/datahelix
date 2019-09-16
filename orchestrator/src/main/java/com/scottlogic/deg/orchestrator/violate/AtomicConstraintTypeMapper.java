@@ -17,7 +17,7 @@
 package com.scottlogic.deg.orchestrator.violate;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
-import com.scottlogic.deg.profile.dto.AtomicConstraintType;
+import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 
 public class AtomicConstraintTypeMapper {
     public Class toConstraintClass(AtomicConstraintType type) {

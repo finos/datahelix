@@ -38,6 +38,9 @@
         3. [before](#predicate-before)
         4. [beforeOrAt](#predicate-beforeorat)
         5. [granularTo](#predicate-granularto-datetime)
+    6. [Dependent field constraints](#otherfield-constraints)
+        1. [otherField](#predicate-otherfield)
+        2. [offset](#predicate-offset)
 
 5. [Grammatical constraints](#Grammatical-Constraints)
     1. [not](#not)
@@ -501,6 +504,28 @@ Is satisfied if `field` is a datetime occurring before or simultaneously with `v
 ```
 
 Is satisfied if `field` has at least the [granularity](#DateTime-granularity) specified in `value`.
+
+<div id="otherfield-constraints"></div>
+## Dependant field constraints
+
+<div id="predicate-otherfield"></div>
+### `otherField`
+allows a date field to be dependant on the output of another date field
+
+```javascript
+{ "field": "laterDateField", "is": "after", "otherField": "previousDateField" }
+```
+
+supported operators are currently
+"after", "afterOrAt", "before", "beforeOrAt", "equalTo"
+
+<div id="predicate-offset"></div>
+### `offset`
+Allows a dependant date to always be a certain offset away from another date
+
+```javascript
+{ "field": "threeDaysAfterField", "is": "equalTo", "otherField": "previousDateField", "offset": 3, "offsetUnit": "days" }
+```
 
 # Grammatical constraints
 <div id="Grammatical-constraints"></div>
