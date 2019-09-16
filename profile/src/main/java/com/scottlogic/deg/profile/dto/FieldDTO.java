@@ -20,5 +20,5 @@ public class FieldDTO {
     public String name;
     public String formatting;
     public boolean unique;
-    public boolean nullable;
+    public boolean nullable = true;
 }

@@ -933,6 +933,20 @@ public class JsonProfileReaderTests {
     }
 
     @Test
+    public void nullable_DoesNotAddConstraintForField_whenNotSet() throws IOException  {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": " + schemaVersion + "," +
+                "    \"fields\": [ { " +
+                "       \"name\": \"foo\" " +
+                "    } ]," +
+                "    \"rules\": []" +
+                "}");
+
+        Assert.assertEquals(this.getResultingProfile().getRules().size(), 0);
+    }
+
+    @Test
     public void nullable_addsConstraintForFields_whenSetToFalse() throws IOException  {
         givenJson(
             "{" +

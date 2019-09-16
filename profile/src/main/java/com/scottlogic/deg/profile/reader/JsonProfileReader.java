@@ -82,7 +82,7 @@ public class JsonProfileReader implements ProfileReader {
 
         // add nullable
         Collection<Constraint> nullableRules = profileDto.fields.stream()
-            .filter(fieldDTO -> fieldDTO.nullable != null && !fieldDTO.nullable)
+            .filter(fieldDTO -> !fieldDTO.nullable)
             .map(fieldDTO -> create(AtomicConstraintType.IS_NULL, profileFields.getByName(fieldDTO.name), null).negate())
             .collect(Collectors.toList());
 
