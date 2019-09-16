@@ -17,30 +17,30 @@
 package com.scottlogic.deg.profile.reader;
 
 import com.google.inject.Inject;
+import com.scottlogic.deg.common.date.TemporalAdjusterGenerator;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.constraints.delayed.DelayedAtomicConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
-import com.scottlogic.deg.profile.dto.AtomicConstraintType;
+import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintValueReader;
 import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintFactory;
 import com.scottlogic.deg.profile.reader.atomic.ConstraintValueValidator;
 
+import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MainConstraintReader {
 
-    private final AtomicConstraintTypeReaderMap constraintReaderMap;
     private final AtomicConstraintValueReader atomicConstraintValueReader;
 
     @Inject
-    public MainConstraintReader(AtomicConstraintTypeReaderMap constraintReaderMap,
-                                AtomicConstraintValueReader atomicConstraintValueReader) {
-        this.constraintReaderMap = constraintReaderMap;
+    public MainConstraintReader(AtomicConstraintValueReader atomicConstraintValueReader) {
         this.atomicConstraintValueReader = atomicConstraintValueReader;
     }
 
@@ -58,24 +58,18 @@ public class MainConstraintReader {
 
         if (dto.is != ConstraintDTO.undefined) {
 
-            Object value = atomicConstraintValueReader.getValue(dto);
+            if (dto.otherField != null){
+                return createDelayedAtomicConstraint(dto, fields);
+            }
 
             AtomicConstraintType atomicConstraintType = AtomicConstraintType.fromText((String) dto.is);
 
+            Object value = atomicConstraintValueReader.getValue(dto);
+
             ConstraintValueValidator.validate(dto.field, atomicConstraintType, value);
 
-            AtomicConstraintReader subReader = constraintReaderMap.getDelayedMapEntries()
-                .get(atomicConstraintType);
+            return AtomicConstraintFactory.create(atomicConstraintType, fields.getByName(dto.field), value);
 
-            if (subReader == null) {
-                return AtomicConstraintFactory.create(atomicConstraintType, fields.getByName(dto.field), value);
-            }
-
-            try {
-                return subReader.apply(dto, fields);
-            } catch (IllegalArgumentException e) {
-                throw new InvalidProfileException(e.getMessage());
-            }
         }
 
         if (dto.not != null) {
@@ -115,6 +109,27 @@ public class MainConstraintReader {
         }
 
         throw new InvalidProfileException("Couldn't interpret constraint");
+    }
+
+    private DelayedAtomicConstraint createDelayedAtomicConstraint(ConstraintDTO dto, ProfileFields fields) {
+        return new DelayedAtomicConstraint(
+            fields.getByName(dto.field),
+            AtomicConstraintType.fromText((String) dto.is),
+            fields.getByName(dto.otherField),
+            getOffsetUnit(dto),
+            dto.offset);
+    }
+
+    private TemporalAdjusterGenerator getOffsetUnit(ConstraintDTO dto) {
+        if (dto.offsetUnit == null) {
+            return null;
+        }
+
+        String offsetUnitUpperCase = dto.offsetUnit.toUpperCase();
+        boolean workingDay = offsetUnitUpperCase.equals("WORKING DAYS");
+        return new TemporalAdjusterGenerator(
+            ChronoUnit.valueOf(ChronoUnit.class, workingDay ? "DAYS" : offsetUnitUpperCase),
+            workingDay);
     }
 
     Set<Constraint> getSubConstraints(ProfileFields fields, Collection<ConstraintDTO> allOf) {
