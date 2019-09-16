@@ -6,12 +6,28 @@ about: I have a suggestion (and may want to implement it 🙂)!
 
 ## Feature Request
 
-### Description of Problem:
-...what *problem* are you trying to solve that the project doesn't currently solve?
+### Description of Problem - *As a DataHelix user, I want..., so that...*
 
-...please resist the temptation to describe your request in terms of a solution.  Job Story form ("When [triggering condition], I want to [motivation/goal], so I can [outcome].") can help ensure you're expressing a problem statement.
+### Potential Solutions
 
-### Potential Solutions:
-...clearly and concisely describe what you want to happen. Add any considered drawbacks.
+## Before bringing the story into 'Ready' please consider the following:
 
-... if you've considered alternatives, clearly and concisely describe those too.
+### Acceptance Criteria - *Given, When, Then*
+
+### Estimate - *Fibonacci number sequence 1,2,3,5,8,13 etc*
+
+### Tasks
+
+### Dependencies
+
+### Testing - *Can any tests be written up front?*
+
+### Risks - *Likelihood of a bug and impact*
+
+### Documentation - *Does it need updating?*
+
+### Demo - *Should we demo this change? To who?*
+
+## Is this feature done?
+
+Please run through the [Definition of Done checklist](https://github.com/finos/datahelix/blob/master/docs/developer/DefinitionOfDone.md)
