@@ -14,8 +14,8 @@ Feature: User can specify that one date should be equal to another date
       """
         {
           "field": "foo",
-          "is": "equalToField",
-          "value": "bar"
+          "is": "equalTo",
+          "otherField": "bar"
         }
       """
     Then the following data should be generated:
@@ -28,8 +28,8 @@ Feature: User can specify that one date should be equal to another date
       """
         {
           "field": "bar",
-          "is": "equalToField",
-          "value": "foo",
+          "is": "equalTo",
+          "otherField": "foo",
           "offset": 3,
           "offsetUnit": "days"
         }
@@ -45,8 +45,8 @@ Feature: User can specify that one date should be equal to another date
       """
         {
           "field": "foo",
-          "is": "equalToField",
-          "value": "bar",
+          "is": "equalTo",
+          "otherField": "bar",
           "offset": -3,
           "offsetUnit": "days"
         }
@@ -62,8 +62,8 @@ Feature: User can specify that one date should be equal to another date
       """
         {
           "field": "bar",
-          "is": "equalToField",
-          "value": "foo",
+          "is": "equalTo",
+          "otherField": "foo",
           "offset": 5,
           "offsetUnit": "working days"
         }
@@ -79,8 +79,8 @@ Feature: User can specify that one date should be equal to another date
       """
         {
           "field": "foo",
-          "is": "equalToField",
-          "value": "bar",
+          "is": "equalTo",
+          "otherField": "bar",
           "offset": -5,
           "offsetUnit": "working days"
         }

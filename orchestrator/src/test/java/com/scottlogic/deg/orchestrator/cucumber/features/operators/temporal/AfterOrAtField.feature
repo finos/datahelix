@@ -14,8 +14,8 @@ Feature: User can specify that one date should be after or equal to another date
       """
         {
           "field": "bar",
-          "is": "afterOrAtField",
-          "value": "foo"
+          "is": "afterOrAt",
+          "otherField": "foo"
         }
       """
     Then the following data should be generated:

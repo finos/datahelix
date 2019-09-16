@@ -36,12 +36,9 @@ public class CucumberProfileReader implements ProfileReader {
 
     private final CucumberTestState state;
 
-    private final AtomicConstraintTypeReaderMap constraintReaderMap;
-
     @Inject
-    public CucumberProfileReader(CucumberTestState state, AtomicConstraintTypeReaderMap constraintReaderMap) {
+    public CucumberProfileReader(CucumberTestState state) {
         this.state = state;
-        this.constraintReaderMap = constraintReaderMap;
     }
 
     @Override
@@ -51,7 +48,7 @@ public class CucumberProfileReader implements ProfileReader {
 
     private Profile getProfile() {
         try {
-            MainConstraintReader constraintReader = new MainConstraintReader(constraintReaderMap, new AtomicConstraintValueReader(new FromFileReader("")));
+            MainConstraintReader constraintReader = new MainConstraintReader(new AtomicConstraintValueReader(new FromFileReader("")));
             ProfileFields profileFields = new ProfileFields(state.profileFields);
             AtomicBoolean exceptionInMapping = new AtomicBoolean();
 

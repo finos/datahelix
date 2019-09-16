@@ -29,8 +29,10 @@ Feature: The violations mode of the Data Helix app can be run in violations mode
 
   Scenario: Running the generator in violate mode where equal to is not violated is successful
     Given foo is equal to 8
+    And foo is of type "decimal"
     And the generation strategy is full
     And we do not violate any equal to constraints
+    And we do not violate any of type constraints
     Then the following data should be generated:
       | foo  |
       | 8    |
@@ -77,8 +79,10 @@ Feature: The violations mode of the Data Helix app can be run in violations mode
 
   Scenario: The generator produces violating 'Null' data in random mode
     Given foo is null
+    And foo is of type "decimal"
     And the generation strategy is random
     And the data requested is violating
+    And we do not violate any of type constraints
     Then 5 rows of data are generated
     And foo contains anything but null
 
@@ -137,17 +141,3 @@ Feature: The violations mode of the Data Helix app can be run in violations mode
     And foo contains only string data
     And foo contains strings matching /[a-z]{0,9}/
 
-  Scenario: The generator should produce correct violating data for anyOf construction
-    Given there is a constraint:
-      """
-      { "anyOf": [
-        { "field": "foo", "is": "ofType", "value": "string" },
-        { "field": "foo", "is": "ofType", "value": "decimal" }
-      ]}
-      """
-    And the generation strategy is random
-    And the data requested is violating
-    Then some data should be generated
-    And foo contains anything but string data
-    And foo contains anything but numeric data
-    
