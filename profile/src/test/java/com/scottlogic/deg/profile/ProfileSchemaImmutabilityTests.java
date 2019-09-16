@@ -22,6 +22,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
+import org.leadpony.justify.api.JsonSchema;
+import org.leadpony.justify.api.JsonValidationService;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,6 +36,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ProfileSchemaImmutabilityTests {
 
@@ -79,38 +82,39 @@ public class ProfileSchemaImmutabilityTests {
         return versionToHash;
     }
 
-    private static class VersionHashesProvider implements ArgumentsProvider {
-
-        @Override
-        public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
-            return versionToHash().stream().map(Arguments::of);
-        }
-    }
-
     // If this test fails, you have added a new version of the schema or modified an existing one.
     // You need to include the hash of the new schema in the map in this file.
     // Do not modify existing hashes.
     @Test
     public void hashesMustBeAddedToThisFileForAnyNewSchemas() {
         Set<String> existingSchemas = new HashSet<>(new SupportedVersionsGetter().getSupportedSchemaVersions());
-        assertEquals(
-            existingSchemas,
-            versionToHash().stream().map(VersionHash::version).collect(Collectors.toSet()),
+        assertTrue(
+            versionToHash().stream().map(VersionHash::version).collect(Collectors.toSet()).containsAll(existingSchemas),
             "At least one version is either missing or erroneously present in this test's list of checksums. " +
             "The new checksum must be added to the map of checksum hashes in this test file.");
     }
 
-    @ParameterizedTest
-    @ArgumentsSource(VersionHashesProvider.class)
-    public void oldSchemasMustNotBeModified(VersionHash wrapper) throws NoSuchAlgorithmException {
-        String location = "profileschema/" + wrapper.version + "/datahelix.schema.json";
+    @Test
+    public void schemasMustNotBeModifiedWithoutNewVersion() throws NoSuchAlgorithmException {
+        String location = "profileschema/datahelix.schema.json";
         byte[] bytes = normaliseLineEndings(readClassResourceAsBytes(location));
+
+        InputStream schemaPath = getClass().getClassLoader().getResourceAsStream(location);
+        JsonValidationService service = JsonValidationService.newInstance();
+        JsonSchema schema = service.readSchema(schemaPath);
+        String version = schema.getSubschemaAt("/definitions/schemaVersion")
+                .toJson().asJsonObject().get("const").toString().replace("\"", "");
 
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] encoded = digest.digest(bytes);
 
+
+        Optional<VersionHash> versionHash = versionToHash().stream()
+            .filter(v -> v.version.equals(version))
+            .findFirst();
+        assertTrue(versionHash.isPresent());
         assertEquals(
-            wrapper.hash,
+            versionHash.get().hash,
             bytesToHex(encoded),
             "The expected hash for version %s does not match the hash supplied." +
             "If you weren't testing for a new hash, you probably modified an existing schema. Do not do this. " +

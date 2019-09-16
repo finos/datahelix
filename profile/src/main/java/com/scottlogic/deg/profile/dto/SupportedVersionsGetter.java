@@ -23,13 +23,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SupportedVersionsGetter {
-    private final static String RESOURCES_PATH = "profileschema/";
+    private final static String RESOURCES_PATH = "profileschema/datahelix.schema.json";
     /**
      * @return all valid schema versions
      **/
     public List<String> getSupportedSchemaVersions() {
         List<String> supportedSchemaVersions = new ArrayList<>();
-        InputStream schemaPath = getClass().getClassLoader().getResourceAsStream("profileschema/datahelix.schema.json");
+        InputStream schemaPath = getClass().getClassLoader().getResourceAsStream(RESOURCES_PATH);
 
         JsonValidationService service = JsonValidationService.newInstance();
         JsonSchema schema = service.readSchema(schemaPath);
