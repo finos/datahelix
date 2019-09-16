@@ -77,11 +77,12 @@ public final class DecisionNode implements Node {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DecisionNode that = (DecisionNode) o;
-        return Objects.equals(options, that.options);
+        return options.containsAll(that.options) && that.options.containsAll(options);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(options);
+        List<ConstraintNode> optionsList = new ArrayList<>(options);
+        return Objects.hash(optionsList);
     }
 }
