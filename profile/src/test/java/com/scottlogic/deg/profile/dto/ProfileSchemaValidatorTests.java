@@ -17,7 +17,6 @@
 package com.scottlogic.deg.profile.dto;
 
 import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.profile.serialisation.SchemaVersionGetter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DynamicTest;
 
@@ -57,9 +56,8 @@ public class ProfileSchemaValidatorTests {
                     this.getClass().getResource(
                         TEST_PROFILE_DIR + INVALID_PROFILE_DIR + "/" + file.getName()
                     );
-                String schemaVersion = new SchemaVersionGetter().getSchemaVersionOfJson(file.toPath());
                 URL schemaUrl =
-                    Thread.currentThread().getContextClassLoader().getResource(getSchemaPath(schemaVersion));
+                    Thread.currentThread().getContextClassLoader().getResource(getSchemaPath());
                 try {
                     profileValidator.validateProfile(new File(testProfileUrl.getPath()), schemaUrl);
 
@@ -85,9 +83,8 @@ public class ProfileSchemaValidatorTests {
                     this.getClass().getResource(
                         TEST_PROFILE_DIR + VALID_PROFILE_DIR + "/" + profileFilename
                     );
-                String schemaVersion = new SchemaVersionGetter().getSchemaVersionOfJson(file.toPath());
                 URL schemaUrl =
-                    Thread.currentThread().getContextClassLoader().getResource(getSchemaPath(schemaVersion));
+                    Thread.currentThread().getContextClassLoader().getResource(getSchemaPath());
                 try {
                     profileValidator.validateProfile(new File(testProfileUrl.getPath()), schemaUrl);
                 } catch (ValidationException e) {
@@ -101,7 +98,7 @@ public class ProfileSchemaValidatorTests {
         return dynTsts;
     }
 
-    private String getSchemaPath(String schemaVersion) {
-        return "profileschema/" + schemaVersion + "/datahelix.schema.json";
+    private String getSchemaPath() {
+        return "profileschema/datahelix.schema.json";
     }
 }

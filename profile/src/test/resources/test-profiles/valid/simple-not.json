@@ -1,16 +1,9 @@
 {
-  "schemaVersion": "0.1",
+  "schemaVersion": "0.6",
   "rules": [
     {
       "rule": "rule 1",
       "constraints": [
-        {
-          "not": {
-            "field": "field1",
-            "is": "formattedAs",
-            "value": "%ggg"
-          }
-        },
         {
           "not": {
             "field": "field1",

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.2",
+  "schemaVersion": "0.6",
   "fields": [
     {
       "name": "field1"
@@ -67,13 +67,13 @@
         },
         {
           "field": "field2",
-          "is": "afterField",
-          "value": "field1"
+          "is": "after",
+          "otherField": "field1"
         },
         {
           "field": "field3",
-          "is": "beforeOrAtField",
-          "value": "field4"
+          "is": "beforeOrAt",
+          "otherField": "field4"
         }
       ]
     }

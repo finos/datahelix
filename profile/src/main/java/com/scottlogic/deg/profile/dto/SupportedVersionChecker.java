@@ -43,7 +43,7 @@ public class SupportedVersionChecker implements SchemaVersionValidator {
     public URL getSchemaFile() throws IOException {
         String schemaVersion = schemaVersionGetter.getSchemaVersionOfJson(configSource.getProfileFile().toPath());
         validateSchemaVersion(schemaVersion);
-        return this.getClass().getResource("/profileschema/" + schemaVersion + "/datahelix.schema.json");
+        return this.getClass().getResource("/profileschema/datahelix.schema.json");
     }
 
     private void validateSchemaVersion(String schemaVersion) {

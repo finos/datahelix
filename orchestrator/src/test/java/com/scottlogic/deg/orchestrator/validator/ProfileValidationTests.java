@@ -16,7 +16,6 @@
 
 package com.scottlogic.deg.orchestrator.validator;
 
-import com.scottlogic.deg.profile.serialisation.SchemaVersionGetter;
 import com.scottlogic.deg.profile.dto.ProfileSchemaValidatorLeadPony;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -41,8 +40,7 @@ public class ProfileValidationTests {
         for (File dir : directoriesArray) {
             File profileFile = Paths.get(dir.getCanonicalPath(), "profile.json").toFile();
 
-            String schemaVersion = new SchemaVersionGetter().getSchemaVersionOfJson(profileFile.toPath());
-            String schemaVersionPath = "profileschema/" + schemaVersion + "/datahelix.schema.json";
+            String schemaVersionPath = "profileschema/datahelix.schema.json";
             URL schemaUrl =
                 Thread.currentThread().getContextClassLoader().getResource(schemaVersionPath);
             DynamicTest test = DynamicTest.dynamicTest(

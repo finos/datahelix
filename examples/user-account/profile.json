@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1",
+  "schemaVersion": "0.6",
   "fields": [
     {
       "name": "user_id"
@@ -8,7 +8,8 @@
       "name": "email_address"
     },
     {
-      "name": "creation_date"
+      "name": "creation_date",
+      "formatting": "%tF"
     }
   ],
   "rules": [
@@ -105,11 +106,6 @@
           "value": {
             "date": "2020-01-01T00:00:00.000"
           }
-        },
-        {
-          "field": "creation_date",
-          "is": "formattedAs",
-          "value": "%tF"
         }
       ]
     }

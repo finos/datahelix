@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.2",
+  "schemaVersion": "0.6",
   "fields": [
     { "name": "tradeId" },
     { "name": "stock" },
@@ -96,7 +96,7 @@
       "constraints": [
         { "not": { "field": "settlementDate", "is": "null" } },
         { "field": "settlementDate", "is": "ofType", "value": "datetime" },
-        { "field": "settlementDate", "is": "equalToField", "value": "tradeDate", "offset": 5, "offsetUnit": "working days" }
+        { "field": "settlementDate", "is": "equalTo", "otherField": "tradeDate", "offset": 5, "offsetUnit": "working days" }
       ]
     }
   ]
