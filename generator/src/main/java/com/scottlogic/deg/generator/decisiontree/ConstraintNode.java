@@ -99,13 +99,26 @@ public class ConstraintNode implements Node {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ConstraintNode that = (ConstraintNode) o;
-        return Objects.equals(atomicConstraints, that.atomicConstraints) &&
-            Objects.equals(decisions, that.decisions);
+
+        boolean atomicConstraintsEqual = atomicConstraints.containsAll(that.atomicConstraints) &&
+                that.atomicConstraints.containsAll(atomicConstraints);
+        boolean delayedAtomicConstraintsEqual = delayedAtomicConstraints.containsAll(that.delayedAtomicConstraints) &&
+            that.delayedAtomicConstraints.containsAll(delayedAtomicConstraints);
+        boolean decisionsEqual = decisions.containsAll(that.decisions) &&
+            that.decisions.containsAll(decisions);
+
+        return atomicConstraintsEqual &&
+            delayedAtomicConstraintsEqual &&
+            decisionsEqual;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(atomicConstraints, decisions);
+        List<AtomicConstraint> atomicConstraintsList = new ArrayList<>(atomicConstraints);
+        List<DelayedAtomicConstraint> delayedAtomicConstraintsList = new ArrayList<>(delayedAtomicConstraints);
+        List<DecisionNode> decisionsList = new ArrayList<>(decisions);
+
+        return Objects.hash(atomicConstraintsList, delayedAtomicConstraintsList, decisionsList);
     }
 
     static ConstraintNode merge(Iterator<ConstraintNode> constraintNodeIterator) {
