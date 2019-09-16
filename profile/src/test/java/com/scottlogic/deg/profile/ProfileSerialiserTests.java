@@ -82,8 +82,8 @@ public class ProfileSerialiserTests {
                 "{" +
                     "\"schemaVersion\" : \"0.1\"," +
                     "\"fields\" : [" +
-                    "   { \"name\" : \"typecode\" }," +
-                    "   { \"name\" : \"price\" }" +
+                    "   { \"name\" : \"typecode\", \"unique\": false  }," +
+                    "   { \"name\" : \"price\", \"unique\": false  }" +
                     "]," +
                     "\"rules\" : [" +
                     " { \"rule\" : null," +
@@ -144,8 +144,8 @@ public class ProfileSerialiserTests {
                 "{" +
                     "\"schemaVersion\" : \"0.1\"," +
                     "\"fields\" : [" +
-                    "   { \"name\" : \"typecode\" }," +
-                    "   { \"name\" : \"price\" }" +
+                    "   { \"name\" : \"typecode\", \"unique\": false  }," +
+                    "   { \"name\" : \"price\", \"unique\": false  }" +
                     "]," +
                     "\"rules\" : [" +
                     " { " +
@@ -191,8 +191,8 @@ public class ProfileSerialiserTests {
                 "{" +
                     "\"schemaVersion\" : \"0.1\"," +
                     "\"fields\" : [" +
-                    "   { \"name\" : \"typecode\" }," +
-                    "   { \"name\" : \"price\" }" +
+                    "   { \"name\" : \"typecode\", \"unique\": false }," +
+                    "   { \"name\" : \"price\", \"unique\": false  }" +
                     "]," +
                     "\"rules\" : [" +
                     " { " +

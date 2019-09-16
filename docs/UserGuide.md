@@ -4,22 +4,25 @@
 2. [Profiles](#Profiles)
     1. [Creating a Profile](#Creating-a-Profile)
     2. [Example Profile](#Example-Profile)
-    3. [Fields](#Fields)
+    
+3. [Fields](#Fields)
+    1. [Name](fields-name)
+    1. [Unique](fields-unique)
+    1. [Formatting](fields-formatting)
 
-3. [Data types](#Data-Types)
+4. [Data types](#Data-Types)
     1. [Integer/Decimal](#Integer/Decimal)
     2. [Strings](#Strings)
     3. [DateTime](#DateTime)
     4. [Custom Data Types](#Custom-Data-Types)
    
-4. [Predicate constraints](#Predicate-constraints)
+5. [Predicate constraints](#Predicate-constraints)
     1. [Theory](#Theory)
     2. [General constraints](#General-constraints)
         1. [equalTo](#predicate-equalto)
         2. [inSet](#predicate-inset)
         3. [null](#predicate-null)
         4. [ofType](#predicate-oftype)
-        5. [unique](#predicate-unique)
     3. [Textual constraints](#Textual-constraints)
         1. [matchingRegex](#predicate-matchingregex)
         2. [containingRegex](#predicate-containingregex)
@@ -42,13 +45,11 @@
         1. [otherField](#predicate-otherfield)
         2. [offset](#predicate-offset)
 
-5. [Grammatical constraints](#Grammatical-Constraints)
+6. [Grammatical constraints](#Grammatical-Constraints)
     1. [not](#not)
     2. [anyOf](#anyOf)
     3. [allOf](#allOf)
     4. [if](#if)
-
-6. [Presentational constraints](#Presentational-Constraints)
 
 # Introduction
 
@@ -64,8 +65,7 @@ This guide outlines how to create a profile and contains information on the synt
 
 This section will walk you through creating basic profiles with which you can generate data.
 
-Profiles are JSON documents consisting of three sections, the schema version, the list 
-of fields and the rules.
+Profiles are JSON documents consisting of three sections, the schema version, the list of fields and the rules.
 
 - **Schema Version** - Dictates the method of serialisation of the profile in order for the generator to 
 interpret the profile fields and rules. The latest version is 0.1.
@@ -89,8 +89,6 @@ to the desired range of values. They are formatted as JSON objects. There are th
     - [Predicate Constraints](#Predicate-constraints) - predicates that define any given value as being 
     _valid_ or _invalid_
     - [Grammatical Constraints](#Grammatical-constraints) - used to combine or modify other constraints
-    - [Presentational Constraints](#Presentational-constraints) - used by output serialisers where
-     string output is required 
      
 Here is a list of two rules comprised of one constraint each:
     
@@ -161,9 +159,46 @@ These three sections are combined to form the [complete profile](#Example-Profil
 * For a larger profile example see [here](user/Schema.md)
 * Further examples can be found in the Examples folder [here](https://github.com/finos/datahelix/tree/master/examples)
 
-## Fields
+# Fields
 
-Fields are the "slots" of data that can take values. If generating into a CSV or database, fields are columns. If generating into JSON, fields are object properties. Typical fields might be _email_address_ or _user_id_. By default, any piece of data is valid for a field. 
+Fields are the "slots" of data that can take values. Typical fields might be _email_address_ or _user_id_. By default, any piece of data is valid for a field. This is an example field object for the profile:
+
+```javascript
+{
+    "name": "field1",
+    "formatting": "%.5s",
+    "unique": true
+}
+```
+
+Each of the field properties are outlined below:
+
+<div id="fields-name"></div>
+
+## `name`
+
+Name of the field in the output which has to be unique within the `Fields` array. If generating into a CSV or database, the name is used as a column name. If generating into JSON, the name is used as the key for object properties.
+
+<div id="fields-formatting"></div>
+
+## `formatting`
+
+Used by output serialisers where string output is required. This is an optional property of the field object and will default to use no formatting.
+
+For the formatting to be applied, the generated data must be applicable, and the `value` must be:
+
+* a string recognised by Java's `String.format` method
+* appropriate for the data type of `field`
+* not `null` (formatting will not be applied for null values)
+
+Formatting will not be applied if not applicable to the field's value
+
+<div id="fields-unique"></div>
+
+## `unique`
+
+Sets the field as unique. This is an optional property of the field object and will default to false. Unique fields can not be used within [grammatical constraints](#Grammatical-Constraints).
+
 
 # Data Types
 
@@ -327,16 +362,6 @@ Is satisfied if `field` is null or absent.
 ```
 
 Is satisfied if `field` is of type represented by `value` (valid options: `decimal`, `integer`, `string`, `datetime`, `ISIN`, `SEDOL`, `CUSIP`, `RIC`, `firstname`, `lastname` or `fullname`)
-
-<div id="predicate-unique"></div>
-
-### `unique` _(field)_
-
-```javascript
-{ "field": "price", "is": "unique" }
-```
-
-Is satisfied if `field`'s values are unique.
 
 ## Textual constraints
 
@@ -580,22 +605,3 @@ Is satisfied if either:
 - The `if` constraint is not satisfied, and the `else` constraint is
 
 While it's not prohibited, wrapping conditional constraints in any other kind of constraint (eg, a `not`) may cause unintuitive results.
-
-# Presentational Constraints
-<div id="Presentational-constraints"></div>
-
-### `formattedAs` _(field, value)_
-
-```javascript
-{ "field": "price", "is": "formattedAs", "value": "%.5s" }
-```
-
-Used by output serialisers where string output is required.
-
-For the formatting to be applied, the generated data must be applicable, and the `value` must be:
-
-* a string recognised by Java's `String.format` method
-* appropriate for the data type of `field`
-* not `null` (formatting will not be applied for null values)
-
-Formatting will not be applied if not applicable to the field's value

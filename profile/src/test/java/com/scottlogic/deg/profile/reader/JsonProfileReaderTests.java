@@ -287,15 +287,12 @@ public class JsonProfileReaderTests {
     public void shouldDeserialiseFormatConstraint() throws IOException {
         givenJson(
                 "{" +
-                        "    \"schemaVersion\": \"0.1\"," +
-                        "    \"fields\": [ { \"name\": \"foo\" } ]," +
-                        "    \"rules\": [" +
-                        "      {" +
-                        "        \"constraints\": [" +
-                        "        { \"field\": \"foo\", \"is\": \"formattedAs\", \"value\": \"%.5s\" }" +
-                        "        ]" +
-                        "      }" +
-                        "    ]" +
+                        "    \"schemaVersion\": \"0.5\"," +
+                        "    \"fields\": [ { " +
+                        "           \"name\": \"foo\"," +
+                        "           \"formatting\": \"%.5s\"" +
+                        "    } ]," +
+                        "    \"rules\": []" +
                         "}");
 
         expectFields(
@@ -830,5 +827,64 @@ public class JsonProfileReaderTests {
                 "}");
 
         expectInvalidProfileException();
+    }
+
+    @Test
+    public void unique_setsFieldPropertyToTrue_whenSetToTrue() throws IOException {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"0.5\"," +
+                "    \"fields\": [ { " +
+                "           \"name\": \"foo\"," +
+                "           \"unique\": true" +
+                "    } ]," +
+                "    \"rules\": []" +
+                "}");
+
+        expectFields(
+            field -> {
+                Assert.assertThat(field.name, equalTo("foo"));
+                Assert.assertTrue(field.isUnique());
+            }
+        );
+    }
+
+    @Test
+    public void unique_setsFieldPropertyToFalse_whenOmitted() throws IOException {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"0.5\"," +
+                "    \"fields\": [ { " +
+                "           \"name\": \"foo\"" +
+                "    } ]," +
+                "    \"rules\": []" +
+                "}");
+
+        expectFields(
+            field -> {
+                Assert.assertThat(field.name, equalTo("foo"));
+                Assert.assertFalse(field.isUnique());
+            }
+        );
+    }
+
+    @Test
+    public void unique_setsFieldPropertyToFalse_whenSetToFalse() throws IOException {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": \"0.5\"," +
+                "    \"fields\": [ { " +
+                "           \"name\": \"foo\"," +
+                "           \"unique\": false" +
+                "    } ]," +
+                "    \"rules\": []" +
+                "}");
+
+        expectFields(
+            field -> {
+                Assert.assertThat(field.name, equalTo("foo"));
+                Assert.assertFalse(field.isUnique());
+            }
+        );
     }
 }
