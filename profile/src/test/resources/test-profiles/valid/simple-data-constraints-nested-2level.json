@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1",
+  "schemaVersion": "0.6",
   "description": "profile description",
   "rules": [
     {
@@ -7,11 +7,6 @@
       "constraints": [
         {
           "anyOf": [
-            {
-              "field": "field1",
-              "is": "formattedAs",
-              "value": "%ggg"
-            },
             {
               "field": "field1",
               "is": "shorterThan",
@@ -281,7 +276,8 @@
   ],
   "fields": [
     {
-      "name": "field1"
+      "name": "field1",
+      "formatting": "%ggg"
     },
     {
       "name": "field2"

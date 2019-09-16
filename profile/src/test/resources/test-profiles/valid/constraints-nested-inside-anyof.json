@@ -1,16 +1,16 @@
 {
-  "schemaVersion": "0.1",
+  "schemaVersion": "0.6",
   "description": "profile description",
   "rules": [
     {
       "rule": "rule 1",
       "constraints": [
         {
-          "anyOf": [
+          "anyOf":[
             {
               "field": "field1",
-              "is": "formattedAs",
-              "value": "%ggg"
+              "is": "longerThan",
+              "value": 5
             },
             {
               "field": "field1",
@@ -24,7 +24,8 @@
   ],
   "fields": [
     {
-      "name": "field1"
+      "name": "field1",
+      "formatting": "%ggg"
     }
   ]
 }
