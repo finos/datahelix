@@ -1,38 +1,20 @@
 {
-  "schemaVersion": "0.6",
+  "schemaVersion": "0.7",
   "fields": [
     {
-      "name": "foo"
+      "name": "foo",
+      "type": "datetime",
+      "nullable": false
     },
     {
-      "name": "bar"
+      "name": "bar",
+      "type": "datetime",
+      "nullable": false
     }
   ],
   "rules": [
     {
       "constraints": [
-        {
-          "not": {
-            "field": "foo",
-            "is": "null"
-          }
-        },
-        {
-          "not": {
-            "field": "bar",
-            "is": "null"
-          }
-        },
-        {
-          "field": "foo",
-          "is": "ofType",
-          "value": "datetime"
-        },
-        {
-          "field": "bar",
-          "is": "ofType",
-          "value": "datetime"
-        },
         {
           "field": "bar",
           "is": "equalTo",

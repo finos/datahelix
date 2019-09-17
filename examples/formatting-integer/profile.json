@@ -1,25 +1,16 @@
 {
-	"schemaVersion": "0.6",
+	"schemaVersion": "0.7",
 	"fields": [
 		{
 			"name": "an_integer",
+      "type": "integer",
+      "nullable": false,
 			"formatting": "%,d"
 		}
 	],
 	"rules": [
 		{
 			"constraints": [
-				{
-					"not": {
-						"field": "an_integer",
-						"is": "null"
-					}
-				},
-				{
-					"field": "an_integer",
-					"is": "ofType",
-					"value": "integer"
-				},
 				{
 					"field": "an_integer",
 					"is": "equalTo",

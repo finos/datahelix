@@ -1,40 +1,22 @@
 {
-  "schemaVersion": "0.6",
+  "schemaVersion": "0.7",
   "fields": [
     {
       "name": "id",
+      "type": "integer",
+      "nullable": false,
       "unique": true
     },
     {
-      "name": "number"
+      "name": "number",
+      "type": "integer",
+      "nullable": false
     }
   ],
   "rules": [
     {
       "rule": "rule 1",
       "constraints": [
-        {
-          "not": {
-            "field": "id",
-            "is": "null"
-          }
-        },
-        {
-          "not": {
-            "field": "number",
-            "is": "null"
-          }
-        },
-        {
-          "field": "id",
-          "is": "ofType",
-          "value": "integer"
-        },
-        {
-          "field": "number",
-          "is": "ofType",
-          "value": "integer"
-        },
         {
           "field": "id",
           "is": "greaterThanOrEqualTo",

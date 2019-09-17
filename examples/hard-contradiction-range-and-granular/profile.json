@@ -1,21 +1,13 @@
 {
-  "schemaVersion": "0.6",
+  "schemaVersion": "0.7",
   "fields": [
     {
-      "name": "Column 1"
+      "name": "Column 1",
+      "type": "decimal",
+      "nullable": false
     }
   ],
   "rules": [
-    {
-      "rule": "Column 1 is ofType decimal",
-      "constraints": [
-        {
-          "field": "Column 1",
-          "is": "ofType",
-          "value": "decimal"
-        }
-      ]
-    },
     {
       "rule": "Column 1 is greaterThan 0",
       "constraints": [
@@ -43,17 +35,6 @@
           "field": "Column 1",
           "is": "granularTo",
           "value": 1
-        }
-      ]
-    },
-    {
-      "rule": "Column 1 is not null",
-      "constraints": [
-        {
-          "not": {
-            "field": "Column 1",
-            "is": "null"
-          }
         }
       ]
     }

@@ -1,14 +1,19 @@
 {
-  "schemaVersion": "0.6",
+  "schemaVersion": "0.7",
   "fields": [
     {
-      "name": "user_id"
+      "name": "user_id",
+      "type": "string",
+      "nullable": false
     },
     {
-      "name": "email_address"
+      "name": "email_address",
+      "type": "string"
     },
     {
       "name": "creation_date",
+      "type": "datetime",
+      "nullable": false,
       "formatting": "%tF"
     }
   ],
@@ -16,17 +21,6 @@
     {
       "rule": "user_id",
       "constraints": [
-        {
-          "field": "user_id",
-          "is": "ofType",
-          "value": "string"
-        },
-        {
-          "not": {
-            "field": "user_id",
-            "is": "null"
-          }
-        },
         {
           "anyOf": [
             {
@@ -46,11 +40,6 @@
     {
       "rule": "email_address",
       "constraints": [
-        {
-          "field": "email_address",
-          "is": "ofType",
-          "value": "string"
-        },
         {
           "if": {
             "field": "user_id",
@@ -82,17 +71,6 @@
     {
       "rule": "creation_date",
       "constraints": [
-        {
-          "field": "creation_date",
-          "is": "ofType",
-          "value": "datetime"
-        },
-        {
-          "not": {
-            "field": "creation_date",
-            "is": "null"
-          }
-        },
         {
           "field": "creation_date",
           "is": "afterOrAt",

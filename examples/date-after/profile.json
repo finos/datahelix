@@ -1,24 +1,15 @@
 {
-  "schemaVersion": "0.6",
+  "schemaVersion": "0.7",
   "fields": [
     {
-      "name": "date"
+      "name": "date",
+      "type": "datetime",
+      "nullable": false
     }
   ],
   "rules": [
     {
       "constraints": [
-        {
-          "not": {
-            "field": "date",
-            "is": "null"
-          }
-        },
-        {
-          "field": "date",
-          "is": "ofType",
-          "value": "datetime"
-        },
         {
           "field": "date",
           "is": "after",
