@@ -5,7 +5,8 @@
 1. [Development](#Development)
 
     1. [Bugs And Issues](#bugs-and-issues)
-    1. [Building and Testing](#Building-and-Testing)
+    1. [Building](#Building)
+    1. [Testing](#Testing)
     1. [Contributing](#Contributing)
     1. [Adding Schema Versions](#Adding-Schema-Versions)
 
@@ -59,7 +60,7 @@ Checklist before raising an issue:
 liberally to assist in readability.
   * [Code fences](https://help.github.com/articles/creating-and-highlighting-code-blocks/) for exception stack traces and log entries, for example, massively improve readability.
 
-## Building and Testing
+## Building
 
 DataHelix uses Java 1.8 which can be downloaded from this [link](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 
@@ -67,9 +68,21 @@ DataHelix uses [gradle](https://gradle.org/) to automate the build and test proc
 
 [Guice](https://github.com/google/guice) is used in DataHelix for Dependency Injection (DI). It is configured in the 'module' classes, which all extend `AbstractModule`, and injected with the `@inject` annotation.
 
+## Testing
+
+Our strategy is to ensure all aspects of the generator are tested through some form of automation testing as we strive to ensure correctness, quality and prevent against regression issues.
+
+* For all new classes and methods that are developed, unit or component tests should be added to the code base
+
+* If a change is made to existing class implementations and a test does not exist, then a test should be added
+
+* If it's a brand new feature, a Schema validation test should be added as well as an appropriate Cucumber test
+
+[JUnit (Jupiter)](https://junit.org/junit5/docs/current/user-guide/) is used for unit and integration tests. An outline of how unit tests should be written within DataHelix can be found [here](./developer/JUnitCookbook.md).
+
 [Cucumber](https://cucumber.io/) is used for behaviour driven development and testing, with [gherkin](https://docs.cucumber.io/gherkin/)-based tests. To run the tests for DataHelix run `gradle test` from the root folder of the project.
 
-Below is an example of a cucumber test:
+Below is an example of a Cucumber test:
 
 ```gherkin
 Feature: the name of my feature
@@ -86,7 +99,7 @@ Feature: the name of my feature
       | null |
 ```
 
-More examples can be seen in the [generator cucumber features](https://github.com/finos/datahelix/tree/master/orchestrator/src/test/java/com/scottlogic/deg/orchestrator/cucumber). An outline of how Cucumber is used within DataHelix can be found [here](./developer/CucumberCookbook.md).
+More examples can be seen in the [generator Cucumber features](https://github.com/finos/datahelix/tree/master/orchestrator/src/test/java/com/scottlogic/deg/orchestrator/cucumber). An outline of how Cucumber is used within DataHelix can be found [here](./developer/CucumberCookbook.md).
 
 ## Contributing
 
