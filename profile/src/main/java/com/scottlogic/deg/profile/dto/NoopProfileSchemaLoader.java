@@ -16,22 +16,13 @@
 
 package com.scottlogic.deg.profile.dto;
 
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.TestFactory;
+import java.io.File;
+import java.net.URL;
 
-import java.util.Collection;
+public class NoopProfileSchemaLoader implements ProfileSchemaLoader {
 
-class ProfileSchemaValidatorMedeiaTests extends ProfileSchemaValidatorTests {
-
-    private ProfileSchemaValidator profileValidator = new ProfileSchemaValidatorMedeia();
-
-    @TestFactory
-    Collection<DynamicTest> testInvalidProfiles() {
-        return super.testInvalidProfiles(new ProfileSchemaFileLoader(profileValidator));
-    }
-
-    @TestFactory
-    Collection<DynamicTest> testValidProfiles() {
-        return super.testValidProfiles(new ProfileSchemaFileLoader(profileValidator));
+    @Override
+    public void validateProfile(File profileFile, URL schema) {
+        return;
     }
 }

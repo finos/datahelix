@@ -22,7 +22,6 @@ import org.junit.jupiter.api.DynamicTest;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
@@ -46,7 +45,7 @@ public class ProfileSchemaValidatorTests {
         return file;
     }
 
-    Collection<DynamicTest> testInvalidProfiles(ProfileSchemaValidator profileValidator) {
+    Collection<DynamicTest> testInvalidProfiles(ProfileSchemaLoader profileValidator) {
         File[] arrayOfFiles = getFileFromURL(INVALID_PROFILE_DIR).listFiles(jsonFilter);
         Collection<DynamicTest> dynTsts = new ArrayList<>();
 
@@ -72,7 +71,7 @@ public class ProfileSchemaValidatorTests {
         return dynTsts;
     }
 
-    Collection<DynamicTest> testValidProfiles(ProfileSchemaValidator profileValidator) {
+    Collection<DynamicTest> testValidProfiles(ProfileSchemaLoader profileValidator) {
         File[] arrayOfFiles = getFileFromURL(VALID_PROFILE_DIR).listFiles(jsonFilter);
         Collection<DynamicTest> dynTsts = new ArrayList<>();
 

@@ -20,7 +20,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 import com.scottlogic.deg.profile.reader.JsonProfileReader;
 import com.scottlogic.deg.profile.reader.ProfileReader;
-import com.scottlogic.deg.profile.dto.ProfileSchemaValidator;
+import com.scottlogic.deg.profile.dto.ProfileSchemaLoader;
 import com.scottlogic.deg.profile.dto.SchemaVersionValidator;
 import com.scottlogic.deg.profile.dto.SupportedVersionChecker;
 
@@ -39,7 +39,7 @@ public class ProfileModule extends AbstractModule {
         // Bind command line to correct implementation
         bind(ProfileConfigSource.class).toInstance(profileConfigSource);
 
-        bind(ProfileSchemaValidator.class).toProvider(ProfileSchemaValidatorProvider.class);
+        bind(ProfileSchemaLoader.class).toProvider(ProfileSchemaValidatorProvider.class);
         bind(SchemaVersionValidator.class).to(SupportedVersionChecker.class);
 
         bind(ProfileReader.class).to(JsonProfileReader.class);
