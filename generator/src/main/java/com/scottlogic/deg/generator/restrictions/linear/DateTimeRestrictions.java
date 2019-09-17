@@ -40,9 +40,6 @@ public class DateTimeRestrictions extends LinearRestrictions<OffsetDateTime> {
         return new DateTimeRestrictions(getMin(), getMax(), getGranularity());
     }
 
-    public Timescale getTimeScale() {//TODO address granularity
-        return ((DateTimeGranularity)getGranularity()).getTimeScale();
-    }
 
     @Override
     public String toString() {
