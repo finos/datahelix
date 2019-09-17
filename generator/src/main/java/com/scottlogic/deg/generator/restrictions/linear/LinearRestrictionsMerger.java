@@ -14,7 +14,7 @@ public class LinearRestrictionsMerger {
 
         Granularity<T> mergedGranularity = left.getGranularity().merge(right.getGranularity());
 
-        Limit<T> mergedMin = getHighest(left.getMin(), right.getMin());
+        Limit<T> mergedMin = getHighest(left.getMin(), right.getMin(), mergedGranularity);
         Limit<T> mergedMax = getLowest(left.getMax(), right.getMax());
 
         LinearRestrictions<T> mergedRestriction = new LinearRestrictions<>(mergedMin, mergedMax, mergedGranularity, left.getConverter());
@@ -46,7 +46,7 @@ public class LinearRestrictionsMerger {
         return !min.isBefore(max.getValue());
     }
 
-    private static <T> Limit<T> getHighest(Limit<T> left, Limit<T> right) { //TODO dry this code up
+    private static <T> Limit<T> getHighest(Limit<T> left, Limit<T> right, Granularity<T> granularity ) { //TODO dry this code up
         if (left == null){
             return right;
         }
@@ -60,7 +60,7 @@ public class LinearRestrictionsMerger {
         return left.isAfter(right.getValue()) ? left : right;
     }
 
-    private static <T> Limit<T> getLowest(Limit<T> left, Limit<T> right) {
+    private static <T> Limit<T> getLowest(Limit<T> left, Limit<T> right, Granularity<T> granularity) {
         if (left == null){
             return right;
         }
@@ -69,7 +69,11 @@ public class LinearRestrictionsMerger {
         }
 
         if (left.getValue().equals(right.getValue())) {
-            return getLeastInclusive(left, right);
+            if(granularity.isCorrectScale(left.getValue())) {
+                return getLeastInclusive(left, right);
+            }
+            return new Limit<T>()
+
         }
         return left.isBefore(right.getValue()) ? left : right;
     }

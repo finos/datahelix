@@ -19,8 +19,8 @@ package com.scottlogic.deg.generator.fieldspecs;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.restrictions.TypeRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
-import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictionsMerger;
 import com.scottlogic.deg.generator.restrictions.MergeResult;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,14 +35,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class DateTimeRestrictionsMergeOperationTests {
-    private DateTimeRestrictionsMerger merger;
+    private LinearRestrictionsMerger merger;
     private DateTimeRestrictionsMergeOperation operation;
     private FieldSpec left;
     private FieldSpec right;
 
     @BeforeEach
     public void beforeEach() {
-        merger = mock(DateTimeRestrictionsMerger.class);
+        merger = mock(LinearRestrictionsMerger.class);
         operation = new DateTimeRestrictionsMergeOperation(merger);
 
         left = FieldSpec.Empty.withDateTimeRestrictions(new DateTimeRestrictions(null, null));
