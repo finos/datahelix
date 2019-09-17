@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.6",
+  "schemaVersion": "0.7",
   "description": "profile description",
   "rules": [
     {
@@ -21,18 +21,8 @@
         },
         {
           "field": "field1",
-          "is": "ofType",
-          "value": "ISIN"
-        },
-        {
-          "field": "field1",
           "is": "inSet",
           "values": ["1", 2]
-        },
-        {
-          "field": "field1",
-          "is": "ofType",
-          "value": "string"
         },
         {
           "field": "field2",
@@ -75,10 +65,12 @@
   "fields": [
     {
       "name": "field1",
+      "type": "ISIN",
       "formatting": "%ggg"
     },
     {
-      "name": "field2"
+      "name": "field2",
+      "type": "integer"
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.6",
+  "schemaVersion": "0.7",
   "description": "profile description",
   "rules": [
     {
@@ -25,6 +25,7 @@
   "fields": [
     {
       "name": "field1",
+      "type": "integer",
       "formatting": "%ggg"
     }
   ]

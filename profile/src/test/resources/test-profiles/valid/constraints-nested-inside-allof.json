@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.6",
+  "schemaVersion": "0.7",
   "description": "profile description",
   "rules": [
     {
@@ -9,8 +9,8 @@
           "allOf": [
             {
               "field": "field1",
-              "is": "ofType",
-              "value": "string"
+              "is": "equalTo",
+              "value": "foobar"
             },
             {
               "field": "field2",
@@ -24,10 +24,12 @@
   ],
   "fields": [
     {
-      "name": "field1"
+      "name": "field1",
+      "type": "string"
     },
     {
-      "name": "field2"
+      "name": "field2",
+      "type": "integer"
     }
   ]
 }

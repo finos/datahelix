@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.6",
+  "schemaVersion": "0.7",
   "rules": [
     {
       "rule": "rule 1",
@@ -33,20 +33,6 @@
         {
           "not": {
             "field": "field1",
-            "is": "ofType",
-            "value": "ISIN"
-          }
-        },
-        {
-          "not": {
-            "field": "field1",
-            "is": "ofType",
-            "value": "ISIN"
-          }
-        },
-        {
-          "not": {
-            "field": "field1",
             "is": "inSet",
             "values": ["1", 2]
           }
@@ -56,13 +42,6 @@
             "field": "field1",
             "is": "inSet",
             "values": ["1", 2]
-          }
-        },
-        {
-          "not": {
-            "field": "field1",
-            "is": "ofType",
-            "value": "string"
           }
         },
         {
@@ -119,10 +98,12 @@
   ],
   "fields": [
     {
-      "name": "field1"
+      "name": "field1",
+      "type": "string"
     },
     {
-      "name": "field2"
+      "name": "field2",
+      "type": "string"
     }
   ]
 }
