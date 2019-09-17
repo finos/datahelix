@@ -51,7 +51,7 @@
   "definitions": {
     "schemaVersion": {
       "title": "The version of the DataHelix profile schema",
-      "const": "0.6"
+      "const": "0.7"
     },
     "dataType": {
       "oneOf": [
@@ -108,9 +108,10 @@
       "title": "The field definitions of a field to generate data for",
       "type": "object",
       "additionalProperties": false,
-      "required": ["name"],
+      "required": ["name", "type"],
       "default": {
         "name": "fieldName",
+        "type": "string",
         "formatting": "",
         "unique": false,
         "nullable": true
@@ -118,6 +119,22 @@
       "properties": {
         "name": {
           "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "decimal",
+            "integer",
+            "string",
+            "datetime",
+            "ISIN",
+            "SEDOL",
+            "CUSIP",
+            "RIC",
+            "firstname",
+            "lastname",
+            "fullname"
+          ]
         },
         "formatting": {
           "type": "string"
@@ -174,7 +191,6 @@
         },
         "is": {
           "enum": [
-            "ofType",
             "equalTo",
             "matchingRegex",
             "containingRegex",
@@ -235,22 +251,6 @@
             "properties": {
               "value": {
                 "$ref": "#/definitions/dataType"
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "is": {
-                "const": "ofType"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "value": {
-                "enum": ["decimal", "integer", "string", "datetime","ISIN","SEDOL","CUSIP","RIC","firstname","lastname","fullname"]
               }
             }
           }
