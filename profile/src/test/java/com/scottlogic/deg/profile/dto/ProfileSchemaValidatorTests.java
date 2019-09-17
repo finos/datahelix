@@ -16,88 +16,139 @@
 
 package com.scottlogic.deg.profile.dto;
 
-import com.scottlogic.deg.common.ValidationException;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.leadpony.justify.api.JsonSchema;
+import org.leadpony.justify.api.JsonValidationService;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.net.URISyntaxException;
+import java.io.*;
 import java.net.URL;
-import java.util.*;
-import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
-public class ProfileSchemaValidatorTests {
-    private final String TEST_PROFILE_DIR = "/test-profiles/";
-    private final String INVALID_PROFILE_DIR = "invalid";
-    private final String VALID_PROFILE_DIR = "valid";
+public abstract class ProfileSchemaValidatorTests {
+    private static final String SCHEMA_LOCATION = "profileschema/datahelix.schema.json";
+    protected ProfileSchemaValidator validator;
+    protected String schema;
+    protected String schemaVersion;
 
-    private FilenameFilter jsonFilter = (dir, name) -> name.toLowerCase().endsWith(".json");
+    protected abstract ProfileSchemaValidator setValidator();
 
-    private File getFileFromURL(String profileDirName) {
-        URL url = this.getClass().getResource(TEST_PROFILE_DIR + profileDirName);
-        File file;
-        try {
-            file = new File(url.toURI());
-        } catch (URISyntaxException e) {
-            file = new File(url.getPath());
+    private String getProfileSchema() throws IOException {
+        String schema;
+        URL schemaUrl = Thread.currentThread()
+            .getContextClassLoader()
+            .getResource(SCHEMA_LOCATION);
+
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(schemaUrl.openStream()))) {
+            schema = br.lines().collect(Collectors.joining(System.lineSeparator()));
         }
-        return file;
+
+        return schema;
     }
 
-    Collection<DynamicTest> testInvalidProfiles(ProfileSchemaLoader profileValidator) {
-        File[] arrayOfFiles = getFileFromURL(INVALID_PROFILE_DIR).listFiles(jsonFilter);
-        Collection<DynamicTest> dynTsts = new ArrayList<>();
+    private String getProfileSchemaVersion() {
+        InputStream schemaPath = Thread.currentThread()
+            .getContextClassLoader()
+            .getResourceAsStream(SCHEMA_LOCATION);
 
-        for (File file : arrayOfFiles) {
-            DynamicTest test = DynamicTest.dynamicTest(file.getName(), () -> {
-                URL testProfileUrl =
-                    this.getClass().getResource(
-                        TEST_PROFILE_DIR + INVALID_PROFILE_DIR + "/" + file.getName()
-                    );
-                URL schemaUrl =
-                    Thread.currentThread().getContextClassLoader().getResource(getSchemaPath());
-                try {
-                    profileValidator.validateProfile(new File(testProfileUrl.getPath()), schemaUrl);
+        JsonValidationService service = JsonValidationService.newInstance();
+        JsonSchema schema = service.readSchema(schemaPath);
 
-                    Supplier<String> msgSupplier = () -> "Profile ["
-                        + file.getName() + "] should not be valid";
-                    Assertions.fail(msgSupplier);
-                } catch (ValidationException e) {
-                }
-            });
-            dynTsts.add(test);
-        }
-        return dynTsts;
+        return schema.getSubschemaAt("/definitions/schemaVersion").toJson().asJsonObject().get("const").toString();
     }
 
-    Collection<DynamicTest> testValidProfiles(ProfileSchemaLoader profileValidator) {
-        File[] arrayOfFiles = getFileFromURL(VALID_PROFILE_DIR).listFiles(jsonFilter);
-        Collection<DynamicTest> dynTsts = new ArrayList<>();
-
-        for (File file : arrayOfFiles) {
-            String profileFilename = file.getName();
-            DynamicTest test = DynamicTest.dynamicTest(profileFilename, () -> {
-                URL testProfileUrl =
-                    this.getClass().getResource(
-                        TEST_PROFILE_DIR + VALID_PROFILE_DIR + "/" + profileFilename
-                    );
-                URL schemaUrl =
-                    Thread.currentThread().getContextClassLoader().getResource(getSchemaPath());
-                try {
-                    profileValidator.validateProfile(new File(testProfileUrl.getPath()), schemaUrl);
-                } catch (ValidationException e) {
-                    Assertions.fail(
-                        "Profile [" + profileFilename + "] should be valid [" + e.errorMessages + "]"
-                    );
-                }
-            });
-            dynTsts.add(test);
-        }
-        return dynTsts;
+    @BeforeEach
+    void setUp() throws IOException {
+        validator = setValidator();
+        schema = getProfileSchema();
+        schemaVersion = getProfileSchemaVersion();
     }
 
-    private String getSchemaPath() {
-        return "profileschema/datahelix.schema.json";
+    @Test
+    void validate_greaterThanMaxValue_isValid() {
+        String profile = "{" +
+            "  \"schemaVersion\": " + schemaVersion + "," +
+            "  \"rules\": [" +
+            "    {" +
+            "      \"rule\": \"rule 1\"," +
+            "      \"constraints\": [" +
+            "        {" +
+            "          \"field\": \"field1\"," +
+            "          \"is\": \"greaterThan\"," +
+            "          \"value\": 1E20 " +
+            "        }" +
+            "      ]" +
+            "    }" +
+            "  ]," +
+            "  \"fields\": [ { \"name\": \"field1\", \"type\": \"integer\" } ]" +
+            "}";
+
+        validator.validateProfile(profile, schema);
+    }
+
+    @Test
+    public void validate_greaterThanOrEqualToMaxValue_isValid() {
+        String profile = "{" +
+            "  \"schemaVersion\": " + schemaVersion + "," +
+            "  \"rules\": [" +
+            "    {" +
+            "      \"rule\": \"rule 1\"," +
+            "      \"constraints\": [" +
+            "        {" +
+            "          \"field\": \"field1\"," +
+            "          \"is\": \"greaterThanOrEqualTo\"," +
+            "          \"value\": 1E20 " +
+            "        }" +
+            "      ]" +
+            "    }" +
+            "  ]," +
+            "  \"fields\": [ { \"name\": \"field1\", \"type\": \"integer\" } ]" +
+            "}";
+
+        validator.validateProfile(profile, schema);
+    }
+
+    @Test
+    void validate_greaterThanMinValue_isValid() {
+        String profile = "{" +
+            "  \"schemaVersion\": " + schemaVersion + "," +
+            "  \"rules\": [" +
+            "    {" +
+            "      \"rule\": \"rule 1\"," +
+            "      \"constraints\": [" +
+            "        {" +
+            "          \"field\": \"field1\"," +
+            "          \"is\": \"lessThan\"," +
+            "          \"value\": -1E20 " +
+            "        }" +
+            "      ]" +
+            "    }" +
+            "  ]," +
+            "  \"fields\": [ { \"name\": \"field1\", \"type\": \"integer\" } ]" +
+            "}";
+
+        validator.validateProfile(profile, schema);
+    }
+
+    @Test
+    public void validate_lessThanOrEqualToMinValue_isValid() {
+        String profile = "{" +
+            "  \"schemaVersion\": " + schemaVersion + "," +
+            "  \"rules\": [" +
+            "    {" +
+            "      \"rule\": \"rule 1\"," +
+            "      \"constraints\": [" +
+            "        {" +
+            "          \"field\": \"field1\"," +
+            "          \"is\": \"lessThanOrEqualTo\"," +
+            "          \"value\": -1E20 " +
+            "        }" +
+            "      ]" +
+            "    }" +
+            "  ]," +
+            "  \"fields\": [ { \"name\": \"field1\", \"type\": \"integer\" } ]" +
+            "}";
+
+        validator.validateProfile(profile, schema);
     }
 }

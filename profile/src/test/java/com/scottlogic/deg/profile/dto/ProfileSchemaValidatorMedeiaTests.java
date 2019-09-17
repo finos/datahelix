@@ -25,13 +25,8 @@ class ProfileSchemaValidatorMedeiaTests extends ProfileSchemaValidatorTests {
 
     private ProfileSchemaValidator profileValidator = new ProfileSchemaValidatorMedeia();
 
-    @TestFactory
-    Collection<DynamicTest> testInvalidProfiles() {
-        return super.testInvalidProfiles(new ProfileSchemaFileLoader(profileValidator));
-    }
-
-    @TestFactory
-    Collection<DynamicTest> testValidProfiles() {
-        return super.testValidProfiles(new ProfileSchemaFileLoader(profileValidator));
+    @Override
+    protected ProfileSchemaValidator setValidator() {
+        return profileValidator;
     }
 }
