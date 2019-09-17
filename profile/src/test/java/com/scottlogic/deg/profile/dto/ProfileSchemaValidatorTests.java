@@ -151,4 +151,146 @@ public abstract class ProfileSchemaValidatorTests {
 
         validator.validateProfile(profile, schema);
     }
+
+    @Test
+    public void validate_constraintsNestedInsideAllOf_isValid() {
+        String profile = "{" +
+            "  \"schemaVersion\": " + schemaVersion + "," +
+            "  \"rules\": [" +
+            "    {" +
+            "      \"rule\": \"rule 1\"," +
+            "      \"constraints\": [" +
+            "        {" +
+            "          \"allOf\": [" +
+            "            { \"field\": \"field1\", \"is\": \"equalTo\", \"value\": \"foobar\" }," +
+            "            { \"field\": \"field2\", \"is\": \"greaterThan\", \"value\": 43 } ] } ] } ]," +
+            "  \"fields\": [" +
+            "    { \"name\": \"field1\", \"type\": \"string\" }," +
+            "    { \"name\": \"field2\", \"type\": \"integer\" } ]" +
+            "}";
+
+        validator.validateProfile(profile, schema);
+    }
+
+    @Test
+    public void validate_constraintsNestedInsideAnyOf_isValid() {
+        String profile = "{" +
+            "  \"schemaVersion\": " + schemaVersion + "," +
+            "  \"rules\": [" +
+            "    {" +
+            "      \"rule\": \"rule 1\"," +
+            "      \"constraints\": [" +
+            "        {" +
+            "          \"anyOf\":[" +
+            "            { \"field\": \"field1\", \"is\": \"longerThan\", \"value\": 5 }," +
+            "            { \"field\": \"field1\", \"is\": \"shorterThan\", \"value\": 19 } ] } ] } ]," +
+            "  \"fields\": [ { \"name\": \"field1\", \"type\": \"integer\", \"formatting\": \"%ggg\" } ]" +
+            "}";
+
+        validator.validateProfile(profile, schema);
+    }
+
+    @Test
+    public void validate_dateEqualToDynamicOffset_isValid() {
+        String profile = "{" +
+            "  \"schemaVersion\": " + schemaVersion + "," +
+            "  \"fields\": [" +
+            "    { \"name\": \"first\", \"type\": \"datetime\", \"nullable\": false }," +
+            "    { \"name\": \"second\", \"type\": \"datetime\", \"nullable\": false }," +
+            "    { \"name\": \"firstWorking\", \"type\": \"datetime\", \"nullable\": false }," +
+            "    { \"name\": \"secondWorking\", \"type\": \"datetime\", \"nullable\": false }," +
+            "    { \"name\": \"current\", \"type\": \"datetime\", \"nullable\": false }" +
+            "  ]," +
+            "  \"rules\": [" +
+            "    {" +
+            "      \"constraints\": [" +
+            "        { \"field\": \"first\", \"is\": \"after\", \"value\": {" +
+            "            \"date\": \"8001-02-03T04:05:06.007\" }" +
+            "        }," +
+            "        { \"field\": \"second\", \"is\": \"equalTo\", \"otherField\": \"first\", \"offset\": 3, \"offsetUnit\": \"days\" }," +
+            "        { \"field\": \"firstWorking\", \"is\": \"equalTo\", \"value\": {" +
+            "            \"date\": \"2019-08-12T12:00:00.000\" }" +
+            "        }," +
+            "        { \"field\": \"secondWorking\", \"is\": \"equalTo\", \"otherField\": \"firstWorking\", \"offset\": 8, \"offsetUnit\": \"working days\" }," +
+            "        { \"field\": \"current\", \"is\": \"before\", \"value\": {" +
+            "            \"date\": \"now\" }" +
+            "        }," +
+            "        { \"field\": \"current\", \"is\": \"after\", \"value\": {" +
+            "            \"date\": \"2019-06-01T12:00:00.000\" }" +
+            "        } ] } ]" +
+            "}";
+
+        validator.validateProfile(profile, schema);
+    }
+
+    @Test
+    public void validate_emptyRuleArray_isValid() {
+        String profile = "{" +
+            "  \"schemaVersion\": " + schemaVersion + "," +
+            "  \"fields\": [" +
+            "    { \"name\": \"first\", \"type\": \"datetime\" }," +
+            "    { \"name\": \"second\", \"type\": \"datetime\" }" +
+            "  ]," +
+            "  \"rules\": []" +
+            "}";
+
+        validator.validateProfile(profile, schema);
+    }
+
+    @Test
+    public void validate_simpleAnyOfAllOf_isValid() {
+        String profile = "{" +
+            "  \"schemaVersion\": " + schemaVersion + "," +
+            "  \"fields\": [" +
+            "    { \"name\": \"first\", \"type\": \"string\" }," +
+            "    { \"name\": \"second\", \"type\": \"string\" }" +
+            "  ]," +
+            "  \"rules\": [" +
+            "    {" +
+            "      \"rule\": \"rule 1\"," +
+            "      \"constraints\": [" +
+            "        {" +
+            "          \"anyOf\": [" +
+            "            { \"field\": \"field1\", \"is\": \"shorterThan\", \"value\": 19 }," +
+            "            { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [\"1\", 2] } ]" +
+            "        }," +
+            "        {" +
+            "          \"allOf\": [" +
+            "            { \"field\": \"field2\", \"is\": \"null\" }," +
+            "            { \"not\": { \"field\": \"field1\", \"is\": \"null\" } }" +
+            "          ]" +
+            "        } ] } ]" +
+            "}";
+
+        validator.validateProfile(profile, schema);
+    }
+
+    @Test
+    public void validate_simpleIf_isValid() {
+        String profile = "{" +
+            "  \"schemaVersion\": " + schemaVersion + "," +
+            "  \"fields\": [" +
+            "    { \"name\": \"first\", \"type\": \"string\" }," +
+            "    { \"name\": \"second\", \"type\": \"string\" }" +
+            "  ]," +
+            "  \"rules\": [" +
+            "    {" +
+            "      \"rule\": \"rule 1\"," +
+            "      \"constraints\": [" +
+            "        {" +
+            "          \"if\": {\"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"integer\"}," +
+            "          \"then\": {\"field\": \"foo\", \"is\": \"greaterThan\", \"value\": 0}," +
+            "          \"else\": {\"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"N/A\"}" +
+            "        }," +
+            "        {" +
+            "          \"if\": {\"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"integer\"}," +
+            "          \"then\": {\"field\": \"foo\", \"is\": \"greaterThan\", \"value\": 0}" +
+            "        }" +
+            "      ]" +
+            "    }" +
+            "  ]" +
+            "}";
+
+        validator.validateProfile(profile, schema);
+    }
 }
