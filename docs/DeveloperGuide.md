@@ -76,7 +76,7 @@ Our strategy is to ensure all aspects of the generator are tested through some f
 
 * If a change is made to existing class implementations and a test does not exist, then a test should be added
 
-* If it's a brand new feature, a Schema validation test should be added as well as an appropriate Cucumber test
+* If it's a brand new feature, a [Schema validation](https://github.com/finos/datahelix/tree/master/profile/src/test/resources/test-profiles) test should be added as well as an appropriate Cucumber test
 
 [JUnit (Jupiter)](https://junit.org/junit5/docs/current/user-guide/) is used for unit and integration tests. An outline of how unit tests should be written within DataHelix can be found [here](./developer/JUnitCookbook.md).
 
