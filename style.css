@@ -2,7 +2,7 @@ body {
   font-family: "Roboto", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 1.6em;
   color: #595959;
-  padding-top: 60px;
+  padding-top: 3.2rem;
 }
 
 h2 {
@@ -63,18 +63,43 @@ kbd {
   vertical-align: middle;
 }
 
-.sidebar {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 60px;
+.container {
+  width: 100%;
+}
+
+.sidebar nav {
+  display: none;
+}
+
+@media (min-width: 550px) {
+  .sidebar {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 3.2rem;
+  }
+  .sidebar nav {
+    display: block;
+  }
 }
 
 .title {
   text-indent: -9999px;
   width: 100%;
   height: 155px;
-  margin-bottom: 5rem;
-  background: url("logo.svg") left center transparent no-repeat;
+  margin-bottom: 2rem;
+  background: url("logo.svg") center center transparent no-repeat;
+}
+
+@media (min-width: 550px) {
+  .title {
+    background-position: left center;
+  }
+}
+
+@media (min-width: 750px) {
+  .title {
+    margin-bottom: 5rem;
+  }
 }
 
 nav {
@@ -98,7 +123,30 @@ nav ul ul {
   margin-top: 1rem;
 }
 
-.attribution {
+.attributions {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+@media (min-width: 550px) {
+  .attributions {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: start;
+        -ms-flex-align: start;
+            align-items: flex-start;
+  }
+}
+
+.attributions .attribution {
   height: 32px;
   font-size: 1.4rem;
   display: -webkit-box;
@@ -112,7 +160,7 @@ nav ul ul {
   margin: 1rem 0;
 }
 
-.attribution > .logo {
+.attributions .attribution > .logo {
   height: 100%;
   display: inline-block;
   margin-right: 9px;
