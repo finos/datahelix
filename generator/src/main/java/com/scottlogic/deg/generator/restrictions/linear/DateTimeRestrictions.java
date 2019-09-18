@@ -32,15 +32,6 @@ public class DateTimeRestrictions extends LinearRestrictions<OffsetDateTime> {
         super(min, max, new DateTimeGranularity(granularity), new DateTimeConverter());
     }
 
-    private DateTimeRestrictions(Limit<OffsetDateTime> min, Limit<OffsetDateTime> max, Granularity<OffsetDateTime> granularity) {
-        super(min, max, granularity.copy(), new DateTimeConverter());
-    }
-
-    public DateTimeRestrictions copy() {
-        return new DateTimeRestrictions(getMin(), getMax(), getGranularity());
-    }
-
-
     @Override
     public String toString() {
         return "min=" + getMin() + ", max=" + getMax() + " " + getGranularity().toString();
