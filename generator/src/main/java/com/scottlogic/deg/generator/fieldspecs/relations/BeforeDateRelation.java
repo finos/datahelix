@@ -42,7 +42,7 @@ public class BeforeDateRelation extends AbstractDateInequalityRelation {
 
     @Override
     protected DateTimeRestrictions appendValueToRestrictions(OffsetDateTime value) {
-        return new DateTimeRestrictions(new DateTimeLimit(value, inclusive), null);
+        return new DateTimeRestrictions(new DateTimeLimit(value, inclusive), DateTimeRestrictions.DATETIME_MAX_LIMIT);
     }
 
     @Override

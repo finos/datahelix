@@ -67,7 +67,7 @@ public class DateTimeFieldValueSource implements FieldValueSource {
 
         ArrayList<Object> interestingValues = new ArrayList<>();
 
-        if (restrictions.getMin() != DateTimeRestrictions.MIN_LIMIT
+        if (restrictions.getMin() != DateTimeRestrictions.DATETIME_MIN_LIMIT
             && restrictions.getMin().getValue() != Defaults.ISO_MIN_DATE) {
             OffsetDateTime min = restrictions.getMin().getValue();
             interestingValues.add(restrictions.getMin().isInclusive() ? min : min.plusNanos(1_000_000));
@@ -78,7 +78,7 @@ public class DateTimeFieldValueSource implements FieldValueSource {
                 ZoneOffset.UTC));
         }
 
-        if (restrictions.getMax() != DateTimeRestrictions.MAX_LIMIT
+        if (restrictions.getMax() != DateTimeRestrictions.DATETIME_MAX_LIMIT
             && restrictions.getMax().getValue() != Defaults.ISO_MAX_DATE) {
             OffsetDateTime max = restrictions.getMax().getValue();
             interestingValues.add(restrictions.getMax().isInclusive() ? max : max.minusNanos(1_000_000));

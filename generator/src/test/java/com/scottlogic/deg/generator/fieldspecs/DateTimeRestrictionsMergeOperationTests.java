@@ -26,6 +26,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import static com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions.DATETIME_MAX_LIMIT;
+import static com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions.DATETIME_MIN_LIMIT;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
@@ -46,8 +48,8 @@ class DateTimeRestrictionsMergeOperationTests {
         merger = mock(LinearRestrictionsMerger.class);
         operation = new DateTimeRestrictionsMergeOperation(merger);
 
-        left = FieldSpec.Empty.withDateTimeRestrictions(new DateTimeRestrictions(null, null));
-        right = FieldSpec.Empty.withDateTimeRestrictions(new DateTimeRestrictions(null, null));
+        left = FieldSpec.Empty.withDateTimeRestrictions(new DateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT));
+        right = FieldSpec.Empty.withDateTimeRestrictions(new DateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT));
     }
 
     @Test
@@ -122,7 +124,7 @@ class DateTimeRestrictionsMergeOperationTests {
     public void applyMergeOperation_withMergableDateTimeRestrictions_shouldApplyMergedDateTimeRestrictions() {
         FieldSpec merging = FieldSpec.Empty
             .withTypeRestrictions(TypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.DATETIME));
-        DateTimeRestrictions merged = new DateTimeRestrictions(null, null);
+        DateTimeRestrictions merged = new DateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT);
         when(merger.merge(left.getDateTimeRestrictions(), right.getDateTimeRestrictions()))
             .thenReturn(new MergeResult<>(merged));
 

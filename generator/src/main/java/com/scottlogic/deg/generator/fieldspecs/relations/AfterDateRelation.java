@@ -23,6 +23,8 @@ import com.scottlogic.deg.generator.restrictions.linear.Limit;
 
 import java.time.OffsetDateTime;
 
+import static com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions.DATETIME_MIN_LIMIT;
+
 
 public class AfterDateRelation extends AbstractDateInequalityRelation {
     private final boolean inclusive;
@@ -43,7 +45,7 @@ public class AfterDateRelation extends AbstractDateInequalityRelation {
 
     @Override
     protected DateTimeRestrictions appendValueToRestrictions(OffsetDateTime value) {
-        return new DateTimeRestrictions(null, new DateTimeLimit(value, inclusive));
+        return new DateTimeRestrictions(DATETIME_MIN_LIMIT, new DateTimeLimit(value, inclusive));
     }
 
     @Override

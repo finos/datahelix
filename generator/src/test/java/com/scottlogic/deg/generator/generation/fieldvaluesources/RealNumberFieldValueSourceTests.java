@@ -35,6 +35,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
+import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MAX_LIMIT;
+import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MIN_LIMIT;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.*;
 
@@ -489,10 +492,10 @@ class RealNumberFieldValueSourceTests {
             scale);
     }
 
-    private NumericLimit upperLimit;
-    private NumericLimit lowerLimit;
+    private NumericLimit upperLimit = NUMERIC_MAX_LIMIT;
+    private NumericLimit lowerLimit = NUMERIC_MIN_LIMIT;
     private int scale;
-    private Set<Object> blacklist;
+    private Set<Object> blacklist = new HashSet<>();
     private RealNumberFieldValueSource objectUnderTest;
 
     private void givenLowerBound(Object limit, boolean isInclusive) {
@@ -582,15 +585,6 @@ class RealNumberFieldValueSourceTests {
 
                 Assert.assertThat(value.scale(), equalTo(scale));
             });
-    }
-
-    @BeforeEach
-    void beforeEach() {
-        this.upperLimit = null;
-        this.lowerLimit = null;
-        this.scale = 0;
-        this.blacklist = Collections.emptySet();
-        this.objectUnderTest = null;
     }
 }
 

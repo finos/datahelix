@@ -25,6 +25,8 @@ import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MAX_LIMIT;
+import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MIN_LIMIT;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
@@ -45,9 +47,9 @@ class NumericRestrictionsMergeOperationTests {
         merger = mock(LinearRestrictionsMerger.class);
         operation = new NumericRestrictionsMergeOperation(merger);
         left = FieldSpec.Empty.withNumericRestrictions(
-            new NumericRestrictions(null, null));
+            new NumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT));
         right = FieldSpec.Empty.withNumericRestrictions(
-            new NumericRestrictions(null, null));
+            new NumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT));
     }
 
     @Test

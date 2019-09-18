@@ -5,10 +5,8 @@ import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import java.util.Iterator;
 
 public class LinearIterator<T> implements Iterator<T> {
-
-    private T next;
     private final LinearRestrictions<T> linearRestrictions;
-
+    private T next;
 
     public LinearIterator(LinearRestrictions<T> linearRestrictions) {
         this.linearRestrictions = linearRestrictions;

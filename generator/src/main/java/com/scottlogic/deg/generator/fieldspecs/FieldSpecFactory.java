@@ -35,6 +35,10 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import static com.scottlogic.deg.common.profile.constraints.atomic.StandardConstraintTypes.RIC;
+import static com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions.DATETIME_MAX_LIMIT;
+import static com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions.DATETIME_MIN_LIMIT;
+import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MAX_LIMIT;
+import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MIN_LIMIT;
 
 public class FieldSpecFactory {
     private final StringRestrictionsFactory stringRestrictionsFactory;
@@ -150,13 +154,14 @@ public class FieldSpecFactory {
 
         final BigDecimal limit = NumberUtils.coerceToBigDecimal(limitValue);
         if (negate) {
-            numericRestrictions = new NumericRestrictions(null, new NumericLimit(
+            numericRestrictions = new NumericRestrictions(NUMERIC_MIN_LIMIT, new NumericLimit(
                 limit,
                 !inclusive));
         } else {
             numericRestrictions = new NumericRestrictions(new NumericLimit(
                 limit,
-                inclusive), null);
+                inclusive),
+                NUMERIC_MAX_LIMIT);
         }
 
         return FieldSpec.Empty.withNumericRestrictions(numericRestrictions);
@@ -175,11 +180,11 @@ public class FieldSpecFactory {
 
         final BigDecimal limit = NumberUtils.coerceToBigDecimal(limitValue);
         if (negate) {
-            numericRestrictions = new NumericRestrictions( new NumericLimit(
+            numericRestrictions = new NumericRestrictions(new NumericLimit(
                 limit,
-                !inclusive), null);
+                !inclusive), NUMERIC_MAX_LIMIT);
         } else {
-            numericRestrictions = new NumericRestrictions(null, new NumericLimit(
+            numericRestrictions = new NumericRestrictions(NUMERIC_MIN_LIMIT, new NumericLimit(
                 limit,
                 inclusive));
         }
@@ -193,7 +198,7 @@ public class FieldSpecFactory {
             return FieldSpec.Empty;
         }
 
-        return FieldSpec.Empty.withNumericRestrictions(new NumericRestrictions(null, null, constraint.granularity.getNumericGranularity().scale()));
+        return FieldSpec.Empty.withNumericRestrictions(new NumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT, constraint.granularity.getNumericGranularity().scale()));
     }
 
     private FieldSpec construct(IsGranularToDateConstraint constraint, boolean negate) {
@@ -202,7 +207,7 @@ public class FieldSpecFactory {
             return FieldSpec.Empty;
         }
 
-        return FieldSpec.Empty.withDateTimeRestrictions(new DateTimeRestrictions(null, null, constraint.granularity.getGranularity()));
+        return FieldSpec.Empty.withDateTimeRestrictions(new DateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT, constraint.granularity.getGranularity()));
     }
 
     private FieldSpec construct(IsAfterConstantDateTimeConstraint constraint, boolean negate) {
@@ -215,10 +220,10 @@ public class FieldSpecFactory {
 
     private FieldSpec constructIsAfterConstraint(OffsetDateTime limit, boolean inclusive, boolean negate) {
         if (negate) {
-            final DateTimeRestrictions dateTimeRestrictions = new DateTimeRestrictions(null, new DateTimeLimit(limit, !inclusive));
+            final DateTimeRestrictions dateTimeRestrictions = new DateTimeRestrictions(DATETIME_MIN_LIMIT, new DateTimeLimit(limit, !inclusive));
             return FieldSpec.Empty.withDateTimeRestrictions(dateTimeRestrictions);
         } else {
-            final DateTimeRestrictions dateTimeRestrictions = new DateTimeRestrictions(new DateTimeLimit(limit, inclusive), null);
+            final DateTimeRestrictions dateTimeRestrictions = new DateTimeRestrictions(new DateTimeLimit(limit, inclusive), DATETIME_MAX_LIMIT);
             return FieldSpec.Empty.withDateTimeRestrictions(dateTimeRestrictions);
         }
     }
@@ -233,10 +238,10 @@ public class FieldSpecFactory {
 
     private FieldSpec constructIsBeforeConstraint(OffsetDateTime limit, boolean inclusive, boolean negate) {
         if (negate) {
-            final DateTimeRestrictions dateTimeRestrictions = new DateTimeRestrictions(new DateTimeLimit(limit, !inclusive), null);
+            final DateTimeRestrictions dateTimeRestrictions = new DateTimeRestrictions(new DateTimeLimit(limit, !inclusive), DATETIME_MAX_LIMIT);
             return FieldSpec.Empty.withDateTimeRestrictions(dateTimeRestrictions);
         } else {
-            final DateTimeRestrictions dateTimeRestrictions = new DateTimeRestrictions(null, new DateTimeLimit(limit, inclusive));
+            final DateTimeRestrictions dateTimeRestrictions = new DateTimeRestrictions(DATETIME_MIN_LIMIT, new DateTimeLimit(limit, inclusive));
             return FieldSpec.Empty.withDateTimeRestrictions(dateTimeRestrictions);
         }
     }

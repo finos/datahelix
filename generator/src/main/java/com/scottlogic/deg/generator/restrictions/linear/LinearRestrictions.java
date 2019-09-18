@@ -30,16 +30,12 @@ public class LinearRestrictions<T> implements TypedRestrictions {
 
         T t = converter.convert(o);
 
-        if (min != null) {
-            if (!min.isBefore(t)) {
-                return false;
-            }
+        if (!min.isBefore(t)) {
+            return false;
         }
 
-        if (max != null) {
-            if (!max.isAfter(t)) {
-                return false;
-            }
+        if (!max.isAfter(t)) {
+            return false;
         }
 
         return granularity.isCorrectScale(t);

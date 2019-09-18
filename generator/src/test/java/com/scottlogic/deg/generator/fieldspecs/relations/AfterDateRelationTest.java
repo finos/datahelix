@@ -26,6 +26,7 @@ import org.junit.jupiter.api.Test;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
+import static com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions.DATETIME_MIN_LIMIT;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AfterDateRelationTest {
@@ -67,7 +68,7 @@ class AfterDateRelationTest {
 
         FieldSpec reducedSpec = relation.reduceToRelatedFieldSpec(inSpec);
 
-        DateTimeRestrictions expectedRestrictions = new DateTimeRestrictions(null, upper);
+        DateTimeRestrictions expectedRestrictions = new DateTimeRestrictions(DATETIME_MIN_LIMIT, upper);
         FieldSpec expectedSpec = FieldSpec.Empty.withDateTimeRestrictions(expectedRestrictions);
 
         assertEquals(expectedSpec, reducedSpec);

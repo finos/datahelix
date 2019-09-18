@@ -24,6 +24,8 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
+import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MAX_LIMIT;
+import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MIN_LIMIT;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 
@@ -61,7 +63,7 @@ public class NumericRestrictionsTests {
     @Test
     void equals_whenOneNumericRestrictionsLimitMinValueIsNull_returnsFalse() {
         NumericRestrictions restriction1 = new NumericRestrictions(
-            null,
+            NUMERIC_MIN_LIMIT,
             new NumericLimit(new BigDecimal(2), false));
         NumericRestrictions restriction2 = new NumericRestrictions(
             new NumericLimit(new BigDecimal(0), false),
@@ -70,20 +72,6 @@ public class NumericRestrictionsTests {
         boolean result = restriction1.equals(restriction2);
 
         Assert.assertFalse(result);
-    }
-
-    @Test
-    void equals_whenNumericRestrictionsLimitMinValuesAreNull_returnsTrue() {
-        NumericRestrictions restriction1 = new NumericRestrictions(
-            null,
-            new NumericLimit(new BigDecimal(2), false));
-        NumericRestrictions restriction2 = new NumericRestrictions(
-            null,
-            new NumericLimit(new BigDecimal(2), false));
-
-        boolean result = restriction1.equals(restriction2);
-
-        Assert.assertTrue(result);
     }
 
     @Test
@@ -105,7 +93,7 @@ public class NumericRestrictionsTests {
     void equals_whenOneNumericRestrictionsLimitMaxValueIsNull_returnsFalse() {
         NumericRestrictions restriction1 = new NumericRestrictions(
             new NumericLimit(new BigDecimal(0), false),
-            null);
+            NUMERIC_MAX_LIMIT);
         NumericRestrictions restriction2 = new NumericRestrictions(
             new NumericLimit(new BigDecimal(0), false),
             new NumericLimit(new BigDecimal(2), false));
@@ -113,20 +101,6 @@ public class NumericRestrictionsTests {
         boolean result = restriction1.equals(restriction2);
 
         Assert.assertFalse(result);
-    }
-
-    @Test
-    void equals_whenNumericRestrictionsLimitMaxValuesAreNull_returnsTrue() {
-        NumericRestrictions restriction1 = new NumericRestrictions(
-            new NumericLimit(new BigDecimal(0), false),
-            null);
-        NumericRestrictions restriction2 = new NumericRestrictions(
-            new NumericLimit(new BigDecimal(0), false),
-            null);
-
-        boolean result = restriction1.equals(restriction2);
-
-        Assert.assertTrue(result);
     }
 
     @Test
@@ -217,37 +191,6 @@ public class NumericRestrictionsTests {
         Assert.assertNotEquals(hashCode1, hashCode2);
     }
 
-
-    @Test
-    void hashCode_whenOneNumericRestrictionsLimitMinValueIsNull_returnsFalse() {
-        NumericRestrictions restriction1 = new NumericRestrictions(
-            null,
-            new NumericLimit(new BigDecimal(2), false));
-        NumericRestrictions restriction2 = new NumericRestrictions(
-            new NumericLimit(new BigDecimal(0), false),
-            new NumericLimit(new BigDecimal(2), false));
-
-        int hashCode1 = restriction1.hashCode();
-        int hashCode2 = restriction2.hashCode();
-
-        Assert.assertNotEquals(hashCode1, hashCode2);
-    }
-
-    @Test
-    void hashCode_whenNumericRestrictionsLimitMinValuesAreNull_returnsTrue() {
-        NumericRestrictions restriction1 = new NumericRestrictions(
-            null,
-            new NumericLimit(new BigDecimal(2), false));
-        NumericRestrictions restriction2 = new NumericRestrictions(
-            null,
-            new NumericLimit(new BigDecimal(2), false));
-
-        int hashCode1 = restriction1.hashCode();
-        int hashCode2 = restriction2.hashCode();
-
-        Assert.assertEquals(hashCode1, hashCode2);
-    }
-
     @Test
     void hashCode_whenNumericRestrictionsLimitsMinInclusiveValuesAreNotEqual_returnsFalse() {
         NumericRestrictions restriction1 = new NumericRestrictions(
@@ -312,7 +255,7 @@ public class NumericRestrictionsTests {
 
     private static NumericRestrictions restrictions(double numericScale){
         NumericRestrictions restrictions = new NumericRestrictions(
-            null, null,
+            NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT,
             ParsedGranularity.parse(BigDecimal.valueOf(numericScale)).getNumericGranularity().scale()
         );
 

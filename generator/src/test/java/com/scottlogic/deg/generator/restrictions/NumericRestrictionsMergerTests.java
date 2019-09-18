@@ -26,6 +26,8 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
+import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MAX_LIMIT;
+import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MIN_LIMIT;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
@@ -47,7 +49,7 @@ class NumericRestrictionsMergerTests {
     @Test
     public void merge_withOnlyLeftNumericRestrictions_shouldReturnLeftRestrictions(){
         LinearRestrictionsMerger merger = new LinearRestrictionsMerger();
-        NumericRestrictions left = new NumericRestrictions(null, null);
+        NumericRestrictions left = new NumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT);
 
         MergeResult<LinearRestrictions<BigDecimal>> result = merger.merge(left, null);
 
@@ -59,7 +61,7 @@ class NumericRestrictionsMergerTests {
     @Test
     public void merge_withOnlyRightNumericRestrictions_shouldReturnLeftRestrictions(){
         LinearRestrictionsMerger merger = new LinearRestrictionsMerger();
-        NumericRestrictions right = new NumericRestrictions(null, null);
+        NumericRestrictions right = new NumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT);
 
         MergeResult<LinearRestrictions<BigDecimal>> result = merger.merge(null, right);
 
@@ -92,8 +94,8 @@ class NumericRestrictionsMergerTests {
     @Test
     public void merge_withLessThanOrEqualAndGreaterThanOrEqualSameNumber_shouldReturnMergedRestrictions(){
         LinearRestrictionsMerger merger = new LinearRestrictionsMerger();
-        NumericRestrictions greaterThanOrEqual = new NumericRestrictions(new NumericLimit(BigDecimal.TEN, true), null);
-        NumericRestrictions lessThanOrEqual = new NumericRestrictions(null, new NumericLimit(BigDecimal.TEN, true));
+        NumericRestrictions greaterThanOrEqual = new NumericRestrictions(new NumericLimit(BigDecimal.TEN, true), NUMERIC_MAX_LIMIT);
+        NumericRestrictions lessThanOrEqual = new NumericRestrictions(NUMERIC_MIN_LIMIT, new NumericLimit(BigDecimal.TEN, true));
 
         MergeResult<LinearRestrictions<BigDecimal>> result = merger.merge(greaterThanOrEqual, lessThanOrEqual);
 
@@ -128,7 +130,7 @@ class NumericRestrictionsMergerTests {
         NumericRestrictions left = new NumericRestrictions(
             new NumericLimit(BigDecimal.ZERO, true),
             new NumericLimit(BigDecimal.ONE, true));
-        NumericRestrictions right = new NumericRestrictions(null, null, 0);
+        NumericRestrictions right = new NumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT, 0);
 
         MergeResult<LinearRestrictions<BigDecimal>> result = merger.merge(left, right);
 
@@ -143,7 +145,7 @@ class NumericRestrictionsMergerTests {
             new NumericLimit(BigDecimal.ZERO, true),
             new NumericLimit(BigDecimal.ONE, false));
 
-        NumericRestrictions right = new NumericRestrictions(null, null, 0);
+        NumericRestrictions right = new NumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT, 0);
 
         MergeResult<LinearRestrictions<BigDecimal>> result = merger.merge(left, right);
 
@@ -157,7 +159,7 @@ class NumericRestrictionsMergerTests {
         NumericRestrictions left = new NumericRestrictions(
             new NumericLimit(BigDecimal.ZERO, false),
             new NumericLimit(BigDecimal.ONE, true));
-        NumericRestrictions right = new NumericRestrictions(null, null, 0);
+        NumericRestrictions right = new NumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT, 0);
 
         MergeResult<LinearRestrictions<BigDecimal>> result = merger.merge(left, right);
 
@@ -172,7 +174,7 @@ class NumericRestrictionsMergerTests {
         NumericRestrictions left = new NumericRestrictions(
             new NumericLimit(BigDecimal.ZERO, false),
             new NumericLimit(BigDecimal.ONE, false));
-        NumericRestrictions right = new NumericRestrictions(null, null, 0);
+        NumericRestrictions right = new NumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT, 0);
 
         MergeResult<LinearRestrictions<BigDecimal>> result = merger.merge(left, right);
 
@@ -186,7 +188,7 @@ class NumericRestrictionsMergerTests {
         NumericRestrictions left = new NumericRestrictions(
             new NumericLimit(BigDecimal.ZERO, false),
             new NumericLimit(BigDecimal.ONE, false));
-        NumericRestrictions right = new NumericRestrictions(null, null, 1);
+        NumericRestrictions right = new NumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT, 1);
 
         MergeResult<LinearRestrictions<BigDecimal>> result = merger.merge(left, right);
 

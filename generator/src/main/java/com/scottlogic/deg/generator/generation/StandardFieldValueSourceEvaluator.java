@@ -34,6 +34,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions.DATETIME_MAX_LIMIT;
+import static com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions.DATETIME_MIN_LIMIT;
+import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MAX_LIMIT;
+import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MIN_LIMIT;
+
 public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvaluator {
     private static final CannedValuesFieldValueSource NULL_ONLY_SOURCE = setupNullOnlySource();
 
@@ -93,7 +98,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
 
     private FieldValueSource getNumericSource(FieldSpec fieldSpec) {
         NumericRestrictions restrictions = fieldSpec.getNumericRestrictions() == null
-            ? new NumericRestrictions(null, null)
+            ? new NumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT)
             : fieldSpec.getNumericRestrictions();
 
         return new RealNumberFieldValueSource(
@@ -122,7 +127,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         DateTimeRestrictions restrictions = fieldSpec.getDateTimeRestrictions();
 
         return new DateTimeFieldValueSource(
-            restrictions != null ? restrictions : new DateTimeRestrictions(null, null),
+            restrictions != null ? restrictions : new DateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT),
             fieldSpec.getBlacklist());
     }
 }

@@ -42,6 +42,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import static com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions.DATETIME_MAX_LIMIT;
+import static com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions.DATETIME_MIN_LIMIT;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
@@ -108,34 +110,6 @@ class FieldSpecTests {
 
         assertFalse(
             "Expected that when the items in the set restrictions are not equal a false value is returned but was true",
-            result
-        );
-    }
-
-    @Test
-    void equals_fieldSpecNumericRestrictionsNotNullAndOtherObjectNumericRestrictionsNull_returnsFalse() {
-        FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(
-            new NumericRestrictions(null, null));
-
-        boolean result = fieldSpec.equals(FieldSpec.Empty);
-
-        assertFalse(
-            "Expected that when the field spec numeric restrictions is not null and the other object numeric restrictions are null a false value is returned but was true",
-            result
-        );
-    }
-
-    @Test
-    void equals_fieldSpecNumericRestrictionsNullAndOtherObjectNumericRestrictionsNotNull_returnsFalse() {
-        FieldSpec fieldSpec = FieldSpec.Empty;
-
-        boolean result = fieldSpec.equals(
-            FieldSpec.Empty.withNumericRestrictions(
-                new NumericRestrictions(null, null))
-        );
-
-        assertFalse(
-            "Expected that when the field spec does not have numeric restrictions and the other object has numeric restricitons are false value should be returned but was true",
             result
         );
     }
@@ -425,7 +399,7 @@ class FieldSpecTests {
 
     @Test
     void permitsRejectsInvalidNumeric() {
-        NumericRestrictions numeric = new NumericRestrictions(new NumericLimit(BigDecimal.TEN, true), null);
+        NumericRestrictions numeric = new NumericRestrictions(new NumericLimit(BigDecimal.TEN, true), NumericRestrictions.NUMERIC_MAX_LIMIT);
         FieldSpec spec = FieldSpec.Empty.withNumericRestrictions(numeric);
 
         assertFalse(spec.permits(BigDecimal.ONE));
@@ -433,7 +407,7 @@ class FieldSpecTests {
 
     @Test
     void permitsRejectsInvalidDateTime() {
-        DateTimeRestrictions dateTime = new DateTimeRestrictions(null, null);
+        DateTimeRestrictions dateTime = new DateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT);
         FieldSpec spec = FieldSpec.Empty.withDateTimeRestrictions(dateTime);
 
         OffsetDateTime time = OffsetDateTime.of(100, 1, 1, 1, 1, 1, 1, ZoneOffset.UTC);
@@ -500,7 +474,7 @@ class FieldSpecTests {
         private final boolean isEqual;
 
         MockNumericRestrictions(boolean isEqual) {
-            super(null, null);
+            super(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT);
             this.isEqual = isEqual;
         }
 
@@ -592,7 +566,7 @@ class FieldSpecTests {
         private final boolean isEqual;
 
         MockDateTimeRestrictions(boolean isEqual) {
-            super(null, null);
+            super(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT);
             this.isEqual = isEqual;
         }
 

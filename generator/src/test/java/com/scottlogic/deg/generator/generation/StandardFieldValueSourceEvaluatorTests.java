@@ -35,6 +35,8 @@ import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.regex.Pattern;
 
+import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MAX_LIMIT;
+import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MIN_LIMIT;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 
 public class StandardFieldValueSourceEvaluatorTests {
@@ -238,7 +240,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     @Test
     void getFieldValueSources_fieldSpecContainsNumericRestrictionsWithMinAndMaxNull_generatesBoundaryValues() {
         FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(
-            new NumericRestrictions(null, null)
+            new NumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT)
         ).withTypeRestrictions(
             new TypeRestrictions(
                 Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
@@ -268,7 +270,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     @Test
     void getFieldValueSources_fieldSpecContainsNumericRestrictionWithNullMinAndMaxIsDecimal_generatesDecimalValues() {
         FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(
-            new NumericRestrictions(null, new NumericLimit(new BigDecimal("150.5"), false))
+            new NumericRestrictions(NUMERIC_MIN_LIMIT, new NumericLimit(new BigDecimal("150.5"), false))
         ).withTypeRestrictions(
             new TypeRestrictions(
                 Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)

@@ -28,14 +28,16 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions.DATETIME_MAX_LIMIT;
+import static com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions.DATETIME_MIN_LIMIT;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 
 public class DateTimeFieldValueSourceTests {
 
-    private DateTimeLimit lowerLimit = DateTimeRestrictions.MIN_LIMIT;
-    private DateTimeLimit upperLimit = DateTimeRestrictions.MAX_LIMIT;
+    private DateTimeLimit lowerLimit = DATETIME_MIN_LIMIT;
+    private DateTimeLimit upperLimit = DateTimeRestrictions.DATETIME_MAX_LIMIT;
     private Set<Object> blackList = new HashSet<>();
     private DateTimeFieldValueSource fieldSource;
 
@@ -205,37 +207,6 @@ public class DateTimeFieldValueSourceTests {
     }
 
     @Test
-    public void getRandomValues_withNoExplicitBounds_shouldGenerateCorrectValues() {
-        DateTimeRestrictions restrictions = new DateTimeRestrictions(null, null);
-
-        fieldSource = new DateTimeFieldValueSource(restrictions, blackList);
-
-        TestRandomNumberGenerator rng = new TestRandomNumberGenerator();
-        rng.setNextDouble(0);
-
-        Iterator<Object> iterator = fieldSource.generateRandomValues(rng).iterator();
-
-        Assert.assertThat(iterator.next(),
-            equalTo(Defaults.ISO_MIN_DATE));
-
-        rng.setNextDouble(1);
-
-        // Because internally the filteringIterator pre-generates the first value before we can set
-        // the new "random" value we have re-create the iterator
-        iterator = fieldSource.generateRandomValues(rng).iterator();
-
-        Assert.assertThat(iterator.next(),
-            equalTo(OffsetDateTime.of(9999, 12, 31, 23, 59, 59, 999_000_000, ZoneOffset.UTC)));
-
-        rng.setNextDouble(0.5);
-
-        iterator = fieldSource.generateRandomValues(rng).iterator();
-
-        Assert.assertThat(iterator.next(),
-            equalTo(OffsetDateTime.of(5000, 07, 02, 11, 59, 59, 999_000_000, ZoneOffset.UTC)));
-    }
-
-    @Test
     public void shouldBeEqualWhenAllPropertiesMatch(){
         DateTimeFieldValueSource a = new DateTimeFieldValueSource(
             restrictions("2001-02-03", "2010-11-12"),
@@ -335,22 +306,11 @@ public class DateTimeFieldValueSourceTests {
     }
 
     @Test
-    public void datetimeGenerateAllValues_withNoMin_startsAtOffsetDateTimeMin(){
-        //Arrange
-        DateTimeRestrictions max = new DateTimeRestrictions(null, new DateTimeLimit(OffsetDateTime.MAX, false));
-        DateTimeFieldValueSource noMin = new DateTimeFieldValueSource(max, Collections.emptySet());
-        //Act
-        OffsetDateTime firstValue = (OffsetDateTime) noMin.generateAllValues().iterator().next();
-        //Assert
-        Assert.assertThat(firstValue, equalTo(Defaults.ISO_MIN_DATE));
-    }
-
-    @Test
     public void datetimeGenerateAllValues_withMinSetToMaxDate_emitsNoValues(){
         //Arrange
         DateTimeRestrictions min = new DateTimeRestrictions(
             new DateTimeLimit(Defaults.ISO_MAX_DATE, false),
-            null
+            DATETIME_MAX_LIMIT
         );
 
         DateTimeFieldValueSource datesAfterLastPermittedDate = new DateTimeFieldValueSource(min, Collections.emptySet());
@@ -365,7 +325,7 @@ public class DateTimeFieldValueSourceTests {
     public void datetimeGenerateAllValues_withMaxSetToMinDate_emitsNoValues(){
         //Arrange
         DateTimeRestrictions max = new DateTimeRestrictions(
-            null,
+            DATETIME_MIN_LIMIT,
             new DateTimeLimit(Defaults.ISO_MIN_DATE, false)
         );
         DateTimeFieldValueSource datesBeforeFirstPermittedDate = new DateTimeFieldValueSource(max, Collections.emptySet());
