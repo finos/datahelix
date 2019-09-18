@@ -62,19 +62,16 @@ public class FieldSpecValueGenerator {
             return source.generateAllValues();
         }
 
-        Iterable<Object> iterable;
         switch (dataType) {
             case FULL_SEQUENTIAL:
                 return source.generateAllValues();
             case INTERESTING:
-                iterable = source.generateInterestingValues();
-                break;
+                return source.generateInterestingValues();
             case RANDOM:
                 return source.generateRandomValues(randomNumberGenerator);
             default:
                 throw new UnsupportedOperationException("No data generation type set.");
         }
-        return StreamSupport.stream(iterable.spliterator(), false);
     }
 }
 

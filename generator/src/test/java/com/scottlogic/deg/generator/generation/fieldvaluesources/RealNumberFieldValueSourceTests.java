@@ -517,22 +517,20 @@ class RealNumberFieldValueSourceTests {
         blacklist = new HashSet<>(Arrays.asList(values));
     }
     private void expectAllValues(Object... expectedValuesArray) {
-        expectValues(getObjectUnderTest().generateAllValues()::iterator, true, expectedValuesArray);
+        expectValues(getObjectUnderTest().generateAllValues(), true, expectedValuesArray);
     }
 
     private void expectInterestingValues(Object... expectedValuesArray) {
         expectValues(getObjectUnderTest().generateInterestingValues(), false, expectedValuesArray);
     }
 
-    private void expectValues(Iterable<Object> values, boolean assertCount, Object... expectedValuesArray) {
+    private void expectValues(Stream<Object> values, boolean assertCount, Object... expectedValuesArray) {
         Collection<Matcher<? super BigDecimal>> expectedValuesMatchers = Stream.of(expectedValuesArray)
             .map(NumberUtils::coerceToBigDecimal)
             .map(Matchers::comparesEqualTo) // we have to use compare otherwise it fails if the scale is different
             .collect(Collectors.toList());
 
-        BigDecimal[] actualValues = StreamSupport
-            .stream(values.spliterator(), false)
-            .toArray(BigDecimal[]::new);
+        BigDecimal[] actualValues = values.toArray(BigDecimal[]::new);
 
         // ASSERT
         Assert.assertThat(actualValues, arrayContainingInAnyOrder(expectedValuesMatchers));

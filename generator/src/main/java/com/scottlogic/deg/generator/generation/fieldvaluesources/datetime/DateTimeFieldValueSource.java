@@ -70,7 +70,7 @@ public class DateTimeFieldValueSource implements FieldValueSource {
     }
 
     @Override
-    public Iterable<Object> generateInterestingValues() {
+    public Stream<Object> generateInterestingValues() {
 
         ArrayList<Object> interestingValues = new ArrayList<>();
 
@@ -94,9 +94,8 @@ public class DateTimeFieldValueSource implements FieldValueSource {
                 ZoneOffset.UTC));
         }
 
-        return () -> new UpCastingIterator<>(
-            new FilteringIterator<>(interestingValues.iterator(),
-                i -> !blacklist.contains(i)));
+        return interestingValues.stream()
+            .filter(i -> !blacklist.contains(i));
     }
 
     @Override

@@ -21,7 +21,7 @@ import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import java.util.stream.Stream;
 
 public interface FieldValueSource {
-    Iterable<Object> generateInterestingValues();
+    Stream<Object> generateInterestingValues();
 
     Stream<Object> generateAllValues();
 

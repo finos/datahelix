@@ -27,6 +27,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.scottlogic.deg.common.util.FlatMappingSpliterator.flatMap;
 import static com.scottlogic.deg.generator.utils.SetUtils.stream;
 
 public class CombiningFieldValueSource implements FieldValueSource {
@@ -37,16 +38,15 @@ public class CombiningFieldValueSource implements FieldValueSource {
     }
 
     @Override
-    public Iterable<Object> generateInterestingValues() {
-        return new ConcatenatingIterable<>(
-                underlyingSources.stream()
-                        .map(FieldValueSource::generateInterestingValues)
-                        .collect(Collectors.toList()));
+    public Stream<Object> generateInterestingValues() {
+        return flatMap(
+            underlyingSources.stream().map(FieldValueSource::generateInterestingValues),
+            Function.identity());
     }
 
     @Override
     public Stream<Object> generateAllValues() {
-        return FlatMappingSpliterator.flatMap(
+        return flatMap(
             underlyingSources.stream().map(FieldValueSource::generateAllValues),
             Function.identity());
     }

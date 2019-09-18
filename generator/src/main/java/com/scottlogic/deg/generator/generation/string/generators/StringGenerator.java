@@ -50,9 +50,9 @@ public interface StringGenerator {
         }
 
         @Override
-        public Iterable<Object> generateInterestingValues() {
-            return () -> new UpCastingIterator<>(
-                underlyingGenerator.generateInterestingValues().iterator());
+        public Stream<Object> generateInterestingValues() {
+            return underlyingGenerator.generateInterestingValues()
+                .map(Function.identity());
         }
 
         @Override

@@ -94,16 +94,14 @@ public class RealNumberFieldValueSource implements FieldValueSource {
     }
 
     @Override
-    public Iterable<Object> generateInterestingValues() {
-        return () -> new UpCastingIterator<>(
-            FlatMappingSpliterator.flatMap(
+    public Stream<Object> generateInterestingValues() {
+        return FlatMappingSpliterator.flatMap(
             Stream.of(
                 streamOf(() -> new RealNumberIterator()).limit(2),
                 streamOf(() -> new RealNumberIterator(new BigDecimal(0))).limit(1),
-                streamOf(() -> new RealNumberIterator(inclusiveUpperLimit.subtract(stepSize))).limit(2))
-            , Function.identity())
-            .distinct()
-            .iterator());
+                streamOf(() -> new RealNumberIterator(inclusiveUpperLimit.subtract(stepSize))).limit(2)
+            ), Function.identity())
+            .distinct();
     }
 
     @Override

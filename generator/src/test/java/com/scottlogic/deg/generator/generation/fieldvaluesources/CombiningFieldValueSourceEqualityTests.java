@@ -74,7 +74,7 @@ class CombiningFieldValueSourceEqualityTests {
         }
 
         @Override
-        public Iterable<Object> generateInterestingValues() {
+        public Stream<Object> generateInterestingValues() {
             throw new UnsupportedOperationException("Not supported");
         }
 

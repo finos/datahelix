@@ -18,23 +18,20 @@ package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
-import com.scottlogic.deg.generator.utils.SupplierBasedIterator;
 
 import java.util.Objects;
 import java.util.stream.Stream;
 
 public class CannedValuesFieldValueSource implements FieldValueSource {
     private final DistributedSet<Object> allValues;
-    private final DistributedSet<Object> interestingValues;
 
     public CannedValuesFieldValueSource(DistributedSet<Object> values) {
         this.allValues = values;
-        this.interestingValues = values;
     }
 
     @Override
-    public Iterable<Object> generateInterestingValues() {
-        return interestingValues.set();
+    public Stream<Object> generateInterestingValues() {
+        return generateAllValues();
     }
 
     @Override
@@ -57,11 +54,11 @@ public class CannedValuesFieldValueSource implements FieldValueSource {
         if (obj == null || getClass() != obj.getClass()) return false;
 
         CannedValuesFieldValueSource otherSource = (CannedValuesFieldValueSource) obj;
-        return allValues.equals(otherSource.allValues) && interestingValues.equals(otherSource.interestingValues);
+        return allValues.equals(otherSource.allValues);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(allValues, interestingValues);
+        return Objects.hash(allValues);
     }
 }
