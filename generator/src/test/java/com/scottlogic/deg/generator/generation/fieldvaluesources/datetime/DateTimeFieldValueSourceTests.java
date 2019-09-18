@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.generator.generation.fieldvaluesources.datetime;
 
+import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.generator.restrictions.linear.DateTimeLimit;
 import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
@@ -215,7 +216,7 @@ public class DateTimeFieldValueSourceTests {
         Iterator<Object> iterator = fieldSource.generateRandomValues(rng).iterator();
 
         Assert.assertThat(iterator.next(),
-            equalTo(DateTimeFieldValueSource.ISO_MIN_DATE));
+            equalTo(Defaults.ISO_MIN_DATE));
 
         rng.setNextDouble(1);
 
@@ -341,14 +342,14 @@ public class DateTimeFieldValueSourceTests {
         //Act
         OffsetDateTime firstValue = (OffsetDateTime) noMin.generateAllValues().iterator().next();
         //Assert
-        Assert.assertThat(firstValue, equalTo(DateTimeFieldValueSource.ISO_MIN_DATE));
+        Assert.assertThat(firstValue, equalTo(Defaults.ISO_MIN_DATE));
     }
 
     @Test
     public void datetimeGenerateAllValues_withMinSetToMaxDate_emitsNoValues(){
         //Arrange
         DateTimeRestrictions min = new DateTimeRestrictions(
-            new DateTimeLimit(DateTimeFieldValueSource.ISO_MAX_DATE, false),
+            new DateTimeLimit(Defaults.ISO_MAX_DATE, false),
             null
         );
 
@@ -365,7 +366,7 @@ public class DateTimeFieldValueSourceTests {
         //Arrange
         DateTimeRestrictions max = new DateTimeRestrictions(
             null,
-            new DateTimeLimit(DateTimeFieldValueSource.ISO_MIN_DATE, false)
+            new DateTimeLimit(Defaults.ISO_MIN_DATE, false)
         );
         DateTimeFieldValueSource datesBeforeFirstPermittedDate = new DateTimeFieldValueSource(max, Collections.emptySet());
 

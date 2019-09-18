@@ -19,8 +19,9 @@ package com.scottlogic.deg.generator.restrictions.linear;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+import static com.scottlogic.deg.common.util.Defaults.DEFAULT_NUMERIC_SCALE;
+
 public class NumericRestrictions extends LinearRestrictions<BigDecimal> {
-    private static final int DEFAULT_NUMERIC_SCALE = 20;
     public NumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max){
         this(min, max, DEFAULT_NUMERIC_SCALE);
     }
