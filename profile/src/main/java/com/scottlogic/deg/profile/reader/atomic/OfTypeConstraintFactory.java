@@ -44,7 +44,10 @@ public class OfTypeConstraintFactory {
         try {
             NameConstraintTypes nameType = NameConstraintTypes.lookupProfileText(value);
             DistributedSet<Object> objectDistributedSet = NameRetriever.loadNamesFromFile(nameType);
-            return new IsInSetConstraint(field, objectDistributedSet);
+            return new AndConstraint(
+                new IsInSetConstraint(field, objectDistributedSet),
+                new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.STRING)
+            );
         } catch (UnsupportedOperationException e){
             throw new InvalidProfileException("Profile is invalid: no constraints known for \"is\": \"ofType\", \"value\": \"" + value + "\"");
         }
