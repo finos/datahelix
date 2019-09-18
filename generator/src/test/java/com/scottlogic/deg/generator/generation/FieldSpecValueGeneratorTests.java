@@ -123,7 +123,7 @@ class FieldSpecValueGeneratorTests {
             when(fieldValueSourceEvaluator.getFieldValueSources(any())).thenReturn(list);
             when(fieldValueSource.generateAllValues()).thenReturn(Stream.empty());
             when(fieldValueSource.generateInterestingValues()).thenReturn(new ArrayList<>());
-            when(fieldValueSource.generateRandomValues(randomNumberGenerator)).thenReturn(new ArrayList<>());
+            when(fieldValueSource.generateRandomValues(randomNumberGenerator)).thenReturn(Stream.empty());
         }
 
         @Test

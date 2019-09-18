@@ -62,9 +62,9 @@ public interface StringGenerator {
         }
 
         @Override
-        public Iterable<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
-            return () -> new UpCastingIterator<>(
-                underlyingGenerator.generateRandomValues(randomNumberGenerator).iterator());
+        public Stream<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
+            return underlyingGenerator.generateRandomValues(randomNumberGenerator)
+                .map(Function.identity());
         }
     }
 }

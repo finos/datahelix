@@ -112,15 +112,14 @@ public class RealNumberFieldValueSource implements FieldValueSource {
     }
 
     @Override
-    public Iterable<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
-        return () -> new UpCastingIterator<>(
-            new FilteringIterator<>(
-                new SupplierBasedIterator<>(() ->
-                    randomNumberGenerator.nextBigDecimal(
-                        inclusiveLowerLimit,
-                        inclusiveUpperLimit,
-                        scale)),
-                i -> !blacklist.contains(i)));
+    public Stream<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
+        return Stream.generate(() ->
+            randomNumberGenerator.nextBigDecimal(
+                inclusiveLowerLimit,
+                inclusiveUpperLimit,
+                scale))
+            .filter(i -> !blacklist.contains(i))
+            .map(Function.identity());
     }
 
     @Override

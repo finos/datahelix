@@ -27,6 +27,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.scottlogic.deg.generator.utils.SetUtils.stream;
+
 public class CombiningFieldValueSource implements FieldValueSource {
     private final List<FieldValueSource> underlyingSources;
 
@@ -50,12 +52,12 @@ public class CombiningFieldValueSource implements FieldValueSource {
     }
 
     @Override
-    public Iterable<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
-        return () -> new InternalRandomIterator(
+    public Stream<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
+        return stream(new InternalRandomIterator(
             underlyingSources.stream()
                 .map(source -> source.generateRandomValues(randomNumberGenerator).iterator())
                 .collect(Collectors.toList()),
-            randomNumberGenerator);
+            randomNumberGenerator));
     }
 
     @Override

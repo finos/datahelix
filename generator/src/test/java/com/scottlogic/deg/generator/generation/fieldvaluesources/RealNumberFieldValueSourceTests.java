@@ -554,7 +554,7 @@ class RealNumberFieldValueSourceTests {
     }
 
     private void expectCorrectRandomValues() {
-        Iterable<Object> resultsIterable = getObjectUnderTest().generateRandomValues(new JavaUtilRandomNumberGenerator(0));
+        Stream<Object> resultsIterable = getObjectUnderTest().generateRandomValues(new JavaUtilRandomNumberGenerator(0));
 
         Set<BigDecimal> decimalBlacklist = blacklist
             .stream()
@@ -562,9 +562,7 @@ class RealNumberFieldValueSourceTests {
             .map(value -> value.setScale(scale, RoundingMode.HALF_UP))
             .collect(Collectors.toCollection(TreeSet::new));
 
-        StreamSupport
-            .stream(resultsIterable.spliterator(), false)
-            .limit(1000)
+        resultsIterable.limit(1000)
             .map(value -> (BigDecimal)value)
             .forEach(value ->
             {

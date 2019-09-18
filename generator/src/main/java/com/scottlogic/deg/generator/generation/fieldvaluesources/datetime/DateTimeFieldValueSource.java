@@ -100,7 +100,7 @@ public class DateTimeFieldValueSource implements FieldValueSource {
     }
 
     @Override
-    public Iterable<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
+    public Stream<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
 
         OffsetDateTime lower = inclusiveLower != null
             ? inclusiveLower
@@ -111,10 +111,10 @@ public class DateTimeFieldValueSource implements FieldValueSource {
             ? exclusiveUpper
             : ISO_MAX_DATE.plusNanos(1_000_000);
 
-
-        return () -> new UpCastingIterator<>(
-            new FilteringIterator<>(new RandomDateIterator(lower, upper, randomNumberGenerator, granularity),
-                i -> !blacklist.contains(i)));
+        RandomDateGenerator randomDateGenerator = new RandomDateGenerator(lower, upper, randomNumberGenerator, granularity);
+        return Stream.generate(() -> randomDateGenerator.next())
+            .filter(i -> !blacklist.contains(i))
+            .map(Function.identity());
 
     }
 

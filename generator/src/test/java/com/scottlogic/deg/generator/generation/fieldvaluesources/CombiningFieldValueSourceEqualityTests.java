@@ -84,7 +84,7 @@ class CombiningFieldValueSourceEqualityTests {
         }
 
         @Override
-        public Iterable<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
+        public Stream<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
             throw new UnsupportedOperationException("Not supported");
         }
     }

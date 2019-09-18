@@ -70,8 +70,7 @@ public class FieldSpecValueGenerator {
                 iterable = source.generateInterestingValues();
                 break;
             case RANDOM:
-                iterable = source.generateRandomValues(randomNumberGenerator);
-                break;
+                return source.generateRandomValues(randomNumberGenerator);
             default:
                 throw new UnsupportedOperationException("No data generation type set.");
         }
