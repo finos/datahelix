@@ -160,7 +160,7 @@ class DateTimeRestrictionsMergerTests {
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.successful, is(true));
         Assert.assertThat(result.restrictions.getMin(), equalTo(minDateTimeLimit));
-        Assert.assertThat(result.restrictions.getMax(), is(nullValue()));
+        Assert.assertThat(result.restrictions.getMax(), is(DateTimeRestrictions.MAX_LIMIT));
     }
 
     @Test
@@ -245,7 +245,8 @@ class DateTimeRestrictionsMergerTests {
         Assert.assertThat(result.successful, is(false));
     }
 
-    @Test @Disabled("Todo think about how to implement changes in the lower limit when there are different granularities")
+    @Test
+    @Disabled("Todo think about how to implement changes in the lower limit when there are different granularities")
     void merge_minOfDifferentGranularity_shouldReturnMostCoarse() {
         OffsetDateTime laterTime = REFERENCE_TIME.plusSeconds(1);
 
@@ -271,7 +272,8 @@ class DateTimeRestrictionsMergerTests {
     }
 
 
-    @Test @Disabled("Todo think about how to implement changes in the lower limit when there are different granularities")
+    @Test
+    @Disabled("Todo think about how to implement changes in the lower limit when there are different granularities")
     void merge_minOfDifferentGranularity_shouldReturnMostCoarseAndBeInclusiveWhenWeWouldOtherwiseLoseAValidResult() {
         // edge case example
         // constraint later than 00:00:00 (exclusive / inclusive = false, granularity = HOURS)
@@ -299,7 +301,8 @@ class DateTimeRestrictionsMergerTests {
         Assert.assertEquals(restrictions.getMin(), new DateTimeLimit(REFERENCE_TIME.plusHours(1), true));
     }
 
-    @Test @Disabled("Todo think about how to implement changes in the lower limit when there are different granularities")
+    @Test
+    @Disabled("Todo think about how to implement changes in the lower limit when there are different granularities")
     void merge_inclusiveOnLeftIsPassedIn_shouldReturnInclusive() {
         // ARRANGE
         DateTimeRestrictions left = new DateTimeRestrictions(

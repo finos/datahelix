@@ -34,8 +34,8 @@ import static org.hamcrest.core.IsNot.not;
 
 public class DateTimeFieldValueSourceTests {
 
-    private DateTimeLimit lowerLimit = null;
-    private DateTimeLimit upperLimit = null;
+    private DateTimeLimit lowerLimit = DateTimeRestrictions.MIN_LIMIT;
+    private DateTimeLimit upperLimit = DateTimeRestrictions.MAX_LIMIT;
     private Set<Object> blackList = new HashSet<>();
     private DateTimeFieldValueSource fieldSource;
 

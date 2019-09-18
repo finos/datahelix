@@ -17,6 +17,7 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
+import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.generator.restrictions.linear.DateTimeLimit;
 import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
 import org.junit.Assert;
@@ -33,9 +34,9 @@ import static org.junit.Assert.assertTrue;
 
 class DateTimeRestrictionsTests {
 
-    private static final OffsetDateTime MIN = granularToMillis(OffsetDateTime.MIN);
+    private static final OffsetDateTime MIN = granularToMillis(Defaults.ISO_MIN_DATE);
 
-    private static final OffsetDateTime MAX = granularToMillis(OffsetDateTime.MAX);
+    private static final OffsetDateTime MAX = granularToMillis(Defaults.ISO_MAX_DATE);
 
     private static OffsetDateTime granularToMillis(OffsetDateTime date) {
         return Timescale.MILLIS.getGranularityFunction().apply(date);
@@ -268,21 +269,10 @@ class DateTimeRestrictionsTests {
     }
 
     @Test
-    public void isAfter_whenSameDateAndBothInclusive_shouldBeFalse(){
+    public void isAfter_whenSameDateAndBothInclusive_shouldBeTrue(){
         OffsetDateTime value = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         DateTimeLimit self = new DateTimeLimit(value, true);
         DateTimeLimit other = new DateTimeLimit(value, true);
-
-        boolean result = other.isAfter(self.getValue());
-
-        Assert.assertThat(result, is(false));
-    }
-
-    @Test
-    public void isAfter_whenSameDateAndOtherIsExclusive_shouldBeTrue(){
-        OffsetDateTime value = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
-        DateTimeLimit self = new DateTimeLimit(value, true);
-        DateTimeLimit other = new DateTimeLimit(value, false);
 
         boolean result = other.isAfter(self.getValue());
 
