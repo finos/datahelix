@@ -63,7 +63,7 @@ public class TypingRequiredPerFieldValidator implements ProfileValidator {
         List<String> untypedFields = profile.getFields().stream()
             .filter(field -> !sufficientlyRestrictsFieldTypes(decisionTree.getRootNode(), field))
             .map(nonCompliantField -> nonCompliantField.name +
-                " is untyped; add an ofType, or add its type to the field definition")
+                " is incorrectly typed; add its type to the field definition")
             .collect(Collectors.toList());
 
         if (!untypedFields.isEmpty()){
@@ -74,6 +74,8 @@ public class TypingRequiredPerFieldValidator implements ProfileValidator {
     private static boolean sufficientlyRestrictsFieldTypes(ConstraintNode node, Field fieldToCheck) {
         return node.getAtomicConstraints().stream()
             .filter(atomicConstraint -> atomicConstraint.getField().equals(fieldToCheck))
-            .anyMatch(atomicConstraint -> atomicConstraint instanceof IsOfTypeConstraint);
+            .filter(atomicConstraint -> atomicConstraint instanceof IsOfTypeConstraint)
+            .distinct()
+            .count() == 1;
     }
 }

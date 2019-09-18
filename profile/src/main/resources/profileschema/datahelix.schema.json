@@ -108,7 +108,7 @@
       "title": "The field definitions of a field to generate data for",
       "type": "object",
       "additionalProperties": false,
-      "required": ["name", "type"],
+      "required": ["name"],
       "default": {
         "name": "fieldName",
         "type": "string",
@@ -191,6 +191,7 @@
         },
         "is": {
           "enum": [
+            "ofType",
             "equalTo",
             "matchingRegex",
             "containingRegex",
@@ -251,6 +252,22 @@
             "properties": {
               "value": {
                 "$ref": "#/definitions/dataType"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "is": {
+                "const": "ofType"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "enum": ["decimal", "integer", "string", "datetime","ISIN","SEDOL","CUSIP","RIC","firstname","lastname","fullname"]
               }
             }
           }

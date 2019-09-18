@@ -92,9 +92,13 @@ public class JsonProfileReader implements ProfileReader {
 
         // add types
         Collection<Constraint> typeRules = profileDto.fields.stream()
+            .filter(fieldDTO -> fieldDTO.type != null )
             .map(fieldDTO -> create(AtomicConstraintType.IS_OF_TYPE, profileFields.getByName(fieldDTO.name), fieldDTO.type))
             .collect(Collectors.toList());
-        rules.add(new Rule(new RuleInformation("type-rules"), typeRules));
+
+        if (typeRules.size() > 0) {
+            rules.add(new Rule(new RuleInformation("type-rules"), typeRules));
+        }
 
         return new Profile(profileFields, rules, profileDto.description);
     }
