@@ -293,4 +293,230 @@ public abstract class ProfileSchemaValidatorTests {
 
         validator.validateProfile(profile, schema);
     }
+
+    @Test
+    public void validate_simpleInSet_isValid() {
+        String profile = "{" +
+            "  \"schemaVersion\": " + schemaVersion + "," +
+            "  \"fields\": [" +
+            "    { \"name\": \"field1\", \"type\": \"string\" }" +
+            "  ]," +
+            "  \"rules\": [" +
+            "    {" +
+            "      \"rule\": \"rule 1\"," +
+            "      \"constraints\": [" +
+            "        { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [\"%ggg\", \"test\"] }," +
+            "        { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [3, 32] }," +
+            "        { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [\"%ggg\", 32] }," +
+            "        { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [\"%ggg\", {\"date\": \"2000-01-01T09:00:00.000\"}] }," +
+            "        { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [4, {\"date\": \"2000-01-01T09:00:00.000\"}] }," +
+            "        { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [{\"date\": \"2000-01-01T09:00:00.000\"}, {\"date\": \"2000-01-01T09:00:00.000\"}] }," +
+            "        { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [\"%ggg\", {\"date\": \"2000-01-01T09:00:00.000\"}, 54] }" +
+            "       ] } ]" +
+            "}";
+
+        validator.validateProfile(profile, schema);
+    }
+
+    @Test
+    public void validate_simpleRegex_isValid() {
+        String profile = "{" +
+            "  \"schemaVersion\": " + schemaVersion + "," +
+            "  \"fields\": [" +
+            "    { \"name\": \"field1\", \"type\": \"string\" }" +
+            "  ]," +
+            "  \"rules\": [" +
+            "    {" +
+            "      \"rule\": \"rule 1\"," +
+            "      \"constraints\": [" +
+            "        { \"field\": \"field1\", \"is\": \"matchingRegex\", \"value\": \"2000-01-01T09:00:00.000\" }," +
+            "        { \"field\": \"field1\", \"is\": \"containingRegex\", \"value\": \"2000-01-01T09:00:00.000\" }," +
+            "        { \"not\": { \"field\": \"field1\", \"is\": \"matchingRegex\", \"value\": \"^simpleregex$\" } }," +
+            "        { \"not\": { \"field\": \"field1\", \"is\": \"containingRegex\", \"value\": \"^.*$\" } }" +
+            "      ] } ]" +
+            "}";
+
+        validator.validateProfile(profile, schema);
+    }
+
+    @Test
+    public void validate_simpleNot_isValid() {
+        String profile = "{" +
+            "  \"schemaVersion\": " + schemaVersion + "," +
+            "  \"fields\": [" +
+            "    { \"name\": \"field1\", \"type\": \"string\" }" +
+            "  ]," +
+            "  \"rules\": [" +
+            "    {" +
+            "      \"rule\": \"rule 1\"," +
+            "      \"constraints\": [" +
+            "        { \"not\": { \"field\": \"field1\", \"is\": \"shorterThan\", \"value\": 19 } }," +
+            "        { \"not\": { \"field\": \"field1\", \"is\": \"longerThan\", \"value\": 6 } }," +
+            "        { \"not\": { \"field\": \"field1\", \"is\": \"null\" } }," +
+            "        { \"not\": { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [\"1\", 2] } }," +
+            "        { \"not\": { \"field\": \"field2\", \"is\": \"greaterThan\", \"value\": 43 } }," +
+            "        { \"not\": { \"field\": \"field1\", \"is\": \"lessThan\", \"value\": 78 } }," +
+            "        { \"not\": { \"field\": \"field1\", \"is\": \"greaterThanOrEqualTo\", \"value\": 44 } }," +
+            "        { \"not\": { \"field\": \"field1\", \"is\": \"lessThanOrEqualTo\", \"value\": 77 } }," +
+            "        { \"not\": { \"field\": \"field1\", \"is\": \"\", \"value\": 0.1 } }," +
+            "        { \"not\": { \"field\": \"field1\", \"is\": \"equalTo\", \"value\": 0.004003 } }" +
+            "      ]" +
+            "    }" +
+            "  ]" +
+            "}";
+
+        validator.validateProfile(profile, schema);
+    }
+
+    @Test
+    public void validate_simpleDataConstraints_isValid() {
+        String profile = "{" +
+            "  \"schemaVersion\": " + schemaVersion + "," +
+            "  \"fields\": [" +
+            "    { \"name\": \"field1\", \"type\": \"string\" }" +
+            "  ]," +
+            "  \"rules\": [" +
+            "    {" +
+            "      \"rule\": \"rule 1\"," +
+            "      \"constraints\": [" +
+            "        { \"field\": \"field1\", \"is\": \"shorterThan\", \"value\": 19 }," +
+            "        { \"field\": \"field1\", \"is\": \"longerThan\", \"value\": 6 }," +
+            "        { \"field\": \"field1\", \"is\": \"null\" }," +
+            "        { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [\"1\", 2] }," +
+            "        { \"field\": \"field2\", \"is\": \"greaterThan\", \"value\": 43 }," +
+            "        { \"field\": \"field1\", \"is\": \"lessThan\", \"value\": 78 }," +
+            "        { \"field\": \"field1\", \"is\": \"greaterThanOrEqualTo\", \"value\": 44 }," +
+            "        { \"field\": \"field1\", \"is\": \"lessThanOrEqualTo\", \"value\": 77 }," +
+            "        { \"field\": \"field1\", \"is\": \"\", \"value\": 0.1 }," +
+            "        { \"field\": \"field1\", \"is\": \"equalTo\", \"value\": 0.004003 }" +
+            "      ]" +
+            "    }" +
+            "  ]" +
+            "}";
+
+        validator.validateProfile(profile, schema);
+    }
+
+    @Test
+    public void validate_simpleNestedDataConstraints_isValid() {
+        String profile = "{" +
+            "  \"schemaVersion\": " + schemaVersion + "," +
+            "  \"fields\": [" +
+            "    { \"name\": \"field1\", \"type\": \"string\" }" +
+            "  ]," +
+            "  \"rules\": [" +
+            "    {" +
+            "      \"rule\": \"rule 1\"," +
+            "      \"constraints\": [" +
+            "        { \"allOf\": [" +
+            "            { \"field\": \"field1\", \"is\": \"shorterThan\", \"value\": 19 }," +
+            "            { \"field\": \"field1\", \"is\": \"longerThan\", \"value\": 6 }," +
+            "            { \"field\": \"field1\", \"is\": \"null\" }," +
+            "            { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [\"1\", 2] }," +
+            "            { \"field\": \"field2\", \"is\": \"greaterThan\", \"value\": 43 }," +
+            "            { \"field\": \"field1\", \"is\": \"lessThan\", \"value\": 78 }," +
+            "            { \"field\": \"field1\", \"is\": \"greaterThanOrEqualTo\", \"value\": 44 }," +
+            "            { \"field\": \"field1\", \"is\": \"lessThanOrEqualTo\", \"value\": 77 }," +
+            "            { \"field\": \"field1\", \"is\": \"\", \"value\": 0.1 }," +
+            "            { \"field\": \"field1\", \"is\": \"equalTo\", \"value\": 0.004003 }," +
+            "            { \"allOf\": [" +
+            "              { \"field\": \"field1\", \"is\": \"shorterThan\", \"value\": 19 }," +
+            "              { \"field\": \"field1\", \"is\": \"longerThan\", \"value\": 6 }" +
+            "             ] }," +
+            "            { \"anyOf\": [" +
+            "              { \"field\": \"field1\", \"is\": \"shorterThan\", \"value\": 19 }," +
+            "              { \"field\": \"field1\", \"is\": \"longerThan\", \"value\": 6 }" +
+            "             ] }" +
+            "           ] }," +
+            "        { \"anyOf\": [" +
+            "            { \"field\": \"field1\", \"is\": \"shorterThan\", \"value\": 19 }," +
+            "            { \"field\": \"field1\", \"is\": \"longerThan\", \"value\": 6 }," +
+            "            { \"field\": \"field1\", \"is\": \"null\" }," +
+            "            { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [\"1\", 2] }," +
+            "            { \"field\": \"field2\", \"is\": \"greaterThan\", \"value\": 43 }," +
+            "            { \"field\": \"field1\", \"is\": \"lessThan\", \"value\": 78 }," +
+            "            { \"field\": \"field1\", \"is\": \"greaterThanOrEqualTo\", \"value\": 44 }," +
+            "            { \"field\": \"field1\", \"is\": \"lessThanOrEqualTo\", \"value\": 77 }," +
+            "            { \"field\": \"field1\", \"is\": \"\", \"value\": 0.1 }," +
+            "            { \"field\": \"field1\", \"is\": \"equalTo\", \"value\": 0.004003 }," +
+            "            { \"allOf\": [" +
+            "              { \"field\": \"field1\", \"is\": \"shorterThan\", \"value\": 19 }," +
+            "              { \"field\": \"field1\", \"is\": \"longerThan\", \"value\": 6 }" +
+            "             ] }," +
+            "            { \"anyOf\": [" +
+            "              { \"field\": \"field1\", \"is\": \"shorterThan\", \"value\": 19 }," +
+            "              { \"field\": \"field1\", \"is\": \"longerThan\", \"value\": 6 }" +
+            "             ] }" +
+            "           ] }" +
+            "      ]" +
+            "    }" +
+            "  ]" +
+            "}";
+
+        validator.validateProfile(profile, schema);
+    }
+
+    @Test
+    public void validate_simpleDateTimes_isValid() {
+        String profile = "{" +
+            "  \"schemaVersion\": " + schemaVersion + "," +
+            "  \"fields\": [" +
+            "    { \"name\": \"field1\", \"type\": \"string\" }" +
+            "  ]," +
+            "  \"rules\": [" +
+            "    {" +
+            "      \"rule\": \"rule 1\"," +
+            "      \"constraints\": [" +
+            "        { \"field\": \"field1\", \"is\": \"after\", \"value\": {\"date\": \"2000-01-01T09:00:00.000\"} }," +
+            "        { \"field\": \"field1\", \"is\": \"afterOrAt\", \"value\": {\"date\": \"2000-01-01T09:00:00.000\"} }," +
+            "        { \"field\": \"field1\", \"is\": \"before\", \"value\": {\"date\": \"2000-01-01T09:00:00.000\"} }," +
+            "        { \"field\": \"field1\", \"is\": \"beforeOrAt\", \"value\": {\"date\": \"0001-01-01T09:00:00.000\"} }," +
+            "        { \"field\": \"field1\", \"is\": \"equalTo\", \"value\": {\"date\": \"0001-01-01T09:00:00.000\"} }," +
+            "        { \"not\": { \"field\": \"field1\", \"is\": \"after\", \"value\": {\"date\": \"2000-01-01T09:00:00.000\"} } }," +
+            "        { \"not\": { \"field\": \"field1\", \"is\": \"afterOrAt\", \"value\": {\"date\": \"2000-01-01T09:00:00.000\"} } }," +
+            "        { \"not\": { \"field\": \"field1\", \"is\": \"before\", \"value\": {\"date\": \"2000-01-01T09:00:00.000\"} } }," +
+            "        { \"not\": { \"field\": \"field1\", \"is\": \"beforeOrAt\", \"value\": {\"date\": \"0001-01-01T09:00:00.000\"} } }," +
+            "        { \"not\": { \"field\": \"field1\", \"is\": \"equalTo\", \"value\": {\"date\": \"0001-01-01T09:00:00.000\"} } }" +
+            "      ]" +
+            "    }" +
+            "  ]" +
+            "}";
+
+        validator.validateProfile(profile, schema);
+    }
+
+    @Test
+    public void validate_stringLengthInsideBounds_isValid() {
+        String profile = "{" +
+            "  \"schemaVersion\": " + schemaVersion + "," +
+            "  \"fields\": [" +
+            "    { \"name\": \"field1\", \"type\": \"string\" }" +
+            "  ]," +
+            "  \"rules\": [" +
+            "    {" +
+            "      \"rule\": \"shorterThan constraint inside bounds\"," +
+            "      \"constraints\": [" +
+            "        { \"field\": \"field1\", \"is\": \"shorterThan\", \"value\": 1 }," +
+            "        { \"field\": \"field1\", \"is\": \"shorterThan\", \"value\": 1001 }" +
+            "      ]" +
+            "    }," +
+            "    {" +
+            "      \"rule\": \"longerThan constraint inside bounds\"," +
+            "      \"constraints\": [" +
+            "        { \"field\": \"field1\", \"is\": \"longerThan\", \"value\": -1 }," +
+            "        { \"field\": \"field1\", \"is\": \"longerThan\", \"value\": 999 }" +
+            "      ]" +
+            "    }," +
+            "    {" +
+            "      \"rule\": \"ofLength constraint inside bounds\"," +
+            "      \"constraints\": [" +
+            "        { \"field\": \"field1\", \"is\": \"ofLength\", \"value\": 0 }," +
+            "        { \"field\": \"field1\", \"is\": \"ofLength\", \"value\": 1000 }" +
+            "      ]" +
+            "    }" +
+            "  ]" +
+            "}";
+
+        validator.validateProfile(profile, schema);
+    }
 }
