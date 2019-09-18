@@ -18,11 +18,19 @@ package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
+import java.util.Iterator;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
 public interface FieldValueSource {
     Iterable<Object> generateInterestingValues();
 
-    Iterable<Object> generateAllValues();
+    Stream<Object> generateAllValues();
 
     Iterable<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator);
+
+
 }
 

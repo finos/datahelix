@@ -21,6 +21,7 @@ import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.SupplierBasedIterator;
 
 import java.util.Objects;
+import java.util.stream.Stream;
 
 public class CannedValuesFieldValueSource implements FieldValueSource {
     private final DistributedSet<Object> allValues;
@@ -37,8 +38,8 @@ public class CannedValuesFieldValueSource implements FieldValueSource {
     }
 
     @Override
-    public Iterable<Object> generateAllValues() {
-        return allValues.set();
+    public Stream<Object> generateAllValues() {
+        return allValues.stream();
     }
 
     @Override

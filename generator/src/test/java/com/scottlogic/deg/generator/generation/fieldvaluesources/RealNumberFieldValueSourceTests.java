@@ -517,7 +517,7 @@ class RealNumberFieldValueSourceTests {
         blacklist = new HashSet<>(Arrays.asList(values));
     }
     private void expectAllValues(Object... expectedValuesArray) {
-        expectValues(getObjectUnderTest().generateAllValues(), true, expectedValuesArray);
+        expectValues(getObjectUnderTest().generateAllValues()::iterator, true, expectedValuesArray);
     }
 
     private void expectInterestingValues(Object... expectedValuesArray) {

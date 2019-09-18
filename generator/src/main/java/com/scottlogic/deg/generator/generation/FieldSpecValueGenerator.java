@@ -53,26 +53,29 @@ public class FieldSpecValueGenerator {
 
         FieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
 
-        Iterable<Object> iterable = getDataValues(combinedFieldValueSource, field.isUnique());
-
-        return StreamSupport.stream(iterable.spliterator(), false)
+        return getDataValues(combinedFieldValueSource, field.isUnique())
             .map(DataBagValue::new);
     }
 
-    private Iterable<Object> getDataValues(FieldValueSource source, boolean unique) {
+    private Stream<Object> getDataValues(FieldValueSource source, boolean unique) {
         if (unique) {
             return source.generateAllValues();
         }
+
+        Iterable<Object> iterable;
         switch (dataType) {
             case FULL_SEQUENTIAL:
                 return source.generateAllValues();
             case INTERESTING:
-                return source.generateInterestingValues();
+                iterable = source.generateInterestingValues();
+                break;
             case RANDOM:
-                return source.generateRandomValues(randomNumberGenerator);
+                iterable = source.generateRandomValues(randomNumberGenerator);
+                break;
             default:
                 throw new UnsupportedOperationException("No data generation type set.");
         }
+        return StreamSupport.stream(iterable.spliterator(), false);
     }
 }
 

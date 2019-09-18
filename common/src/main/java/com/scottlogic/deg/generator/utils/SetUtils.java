@@ -19,6 +19,7 @@ package com.scottlogic.deg.generator.utils;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class SetUtils {
 
@@ -58,4 +59,9 @@ public class SetUtils {
         return Collections.unmodifiableSet(Arrays.stream(elements).collect(Collectors.toSet()));
     }
 
+    public static <T> Stream<T> stream(Iterator<T> iterator){
+        return StreamSupport.stream(
+            Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED),
+            false);
+    }
 }

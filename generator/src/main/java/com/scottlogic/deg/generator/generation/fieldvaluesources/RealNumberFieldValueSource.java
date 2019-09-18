@@ -33,6 +33,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import static com.scottlogic.deg.generator.utils.SetUtils.stream;
+
 public class RealNumberFieldValueSource implements FieldValueSource {
     private final BigDecimal inclusiveUpperLimit;
     private final BigDecimal inclusiveLowerLimit;
@@ -105,8 +107,8 @@ public class RealNumberFieldValueSource implements FieldValueSource {
     }
 
     @Override
-    public Iterable<Object> generateAllValues() {
-        return RealNumberIterator::new;
+    public Stream<Object> generateAllValues() {
+        return stream(new RealNumberIterator());
     }
 
     @Override

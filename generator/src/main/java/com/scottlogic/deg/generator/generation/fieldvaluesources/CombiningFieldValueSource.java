@@ -16,13 +16,16 @@
 
 package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
+import com.scottlogic.deg.common.util.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.utils.ConcatenatingIterable;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CombiningFieldValueSource implements FieldValueSource {
     private final List<FieldValueSource> underlyingSources;
@@ -40,11 +43,10 @@ public class CombiningFieldValueSource implements FieldValueSource {
     }
 
     @Override
-    public Iterable<Object> generateAllValues() {
-        return new ConcatenatingIterable<>(
-            underlyingSources.stream()
-                .map(FieldValueSource::generateAllValues)
-                .collect(Collectors.toList()));
+    public Stream<Object> generateAllValues() {
+        return FlatMappingSpliterator.flatMap(
+            underlyingSources.stream().map(FieldValueSource::generateAllValues),
+            Function.identity());
     }
 
     @Override

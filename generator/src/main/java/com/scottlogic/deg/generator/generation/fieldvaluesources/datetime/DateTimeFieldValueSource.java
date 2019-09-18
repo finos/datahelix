@@ -25,8 +25,13 @@ import com.scottlogic.deg.generator.utils.UpCastingIterator;
 
 import java.time.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Stream;
+
+import static com.scottlogic.deg.generator.utils.SetUtils.stream;
 
 public class DateTimeFieldValueSource implements FieldValueSource {
 
@@ -53,14 +58,15 @@ public class DateTimeFieldValueSource implements FieldValueSource {
     }
 
     @Override
-    public Iterable<Object> generateAllValues() {
-        return () -> new UpCastingIterator<>(
-            new FilteringIterator<>(
-                new SequentialDateIterator(
-                    inclusiveLower != null ? inclusiveLower : ISO_MIN_DATE,
-                    exclusiveUpper != null ? exclusiveUpper : ISO_MAX_DATE,
-                    granularity),
-                i -> !blacklist.contains(i)));
+    public Stream<Object> generateAllValues() {
+        Iterator<OffsetDateTime> sequentialDateIterator = new SequentialDateIterator(
+            inclusiveLower != null ? inclusiveLower : ISO_MIN_DATE,
+            exclusiveUpper != null ? exclusiveUpper : ISO_MAX_DATE,
+            granularity);
+
+        return stream(sequentialDateIterator)
+            .filter(i -> !blacklist.contains(i))
+            .map(Function.identity());
     }
 
     @Override

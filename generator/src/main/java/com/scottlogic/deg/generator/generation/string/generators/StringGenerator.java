@@ -19,6 +19,7 @@ import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSourc
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import com.scottlogic.deg.generator.utils.UpCastingIterator;
 
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 public interface StringGenerator {
@@ -55,9 +56,9 @@ public interface StringGenerator {
         }
 
         @Override
-        public Iterable<Object> generateAllValues() {
-            return () -> new UpCastingIterator<>(
-                underlyingGenerator.generateAllValues().iterator());
+        public Stream<Object> generateAllValues() {
+            return underlyingGenerator.generateAllValues()
+                .map(Function.identity());
         }
 
         @Override
