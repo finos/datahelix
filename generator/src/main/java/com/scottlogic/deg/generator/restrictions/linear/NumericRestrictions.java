@@ -19,15 +19,24 @@ package com.scottlogic.deg.generator.restrictions.linear;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-import static com.scottlogic.deg.common.util.Defaults.DEFAULT_NUMERIC_SCALE;
+import static com.scottlogic.deg.common.util.Defaults.*;
 
 public class NumericRestrictions extends LinearRestrictions<BigDecimal> {
+
+    public static final NumericLimit MIN_LIMIT = new NumericLimit(NUMERIC_MIN, true);
+    public static final NumericLimit MAX_LIMIT = new NumericLimit(NUMERIC_MAX, true);
+
     public NumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max){
         this(min, max, DEFAULT_NUMERIC_SCALE);
     }
 
     public NumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max, int numericScale){
-        super(min, max, new NumericGranularity(numericScale), new NumericConverter());
+        super(
+            min != null ? min : MIN_LIMIT,
+            max != null ? max : MAX_LIMIT,
+            new NumericGranularity(numericScale),
+            new NumericConverter()
+        );
     }
 
     public int getNumericScale() {

@@ -21,16 +21,25 @@ import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
-import static com.scottlogic.deg.common.util.Defaults.DEFAULT_DATETIME_GRANULARITY;
+import static com.scottlogic.deg.common.util.Defaults.*;
 
 public class DateTimeRestrictions extends LinearRestrictions<OffsetDateTime> {
+
+    public static final DateTimeLimit MIN_LIMIT = new DateTimeLimit(ISO_MIN_DATE, true);
+    public static final DateTimeLimit MAX_LIMIT = new DateTimeLimit(ISO_MAX_DATE, true);
 
     public DateTimeRestrictions(Limit<OffsetDateTime> min, Limit<OffsetDateTime> max) {
         this(min, max, DEFAULT_DATETIME_GRANULARITY);
     }
 
     public DateTimeRestrictions(Limit<OffsetDateTime> min, Limit<OffsetDateTime> max, Timescale granularity) {
-        super(min, max, new DateTimeGranularity(granularity), new DateTimeConverter());
+        super(
+            min != null ? min : MIN_LIMIT,
+            max != null ? max : MAX_LIMIT,
+            new DateTimeGranularity(granularity),
+            new DateTimeConverter()
+        );
+
     }
 
     @Override

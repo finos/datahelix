@@ -12,6 +12,9 @@ public class LinearRestrictions<T> implements TypedRestrictions {
     private final Converter<T> converter;
 
     public LinearRestrictions(Limit<T> min, Limit<T> max, Granularity<T> granularity, Converter<T> converter) {
+        if (min == null || max == null) {
+            throw new IllegalArgumentException("linear restrictions cannot have null limits");
+        }
         this.min = min;
         this.max = max;
         this.granularity = granularity;
