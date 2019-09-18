@@ -242,7 +242,7 @@ Finally, we'll add a field for National Insurance number. In this case, the cons
     "schemaVersion": "0.7",
     "fields": [
         { "name": "firstName", "type": "string" }, 
-        { "name": "age", "type": "integer"  }
+        { "name": "age", "type": "integer"  },
         { "name": "nationalInsurance", "type": "string"  }
     ],
     "rules": [
