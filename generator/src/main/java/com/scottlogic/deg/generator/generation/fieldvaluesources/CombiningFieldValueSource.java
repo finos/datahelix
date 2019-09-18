@@ -17,7 +17,6 @@
 package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
 import com.scottlogic.deg.common.util.FlatMappingSpliterator;
-import com.scottlogic.deg.generator.utils.ConcatenatingIterable;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
 import java.util.Iterator;

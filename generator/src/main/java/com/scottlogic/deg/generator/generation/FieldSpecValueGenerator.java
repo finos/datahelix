@@ -51,7 +51,10 @@ public class FieldSpecValueGenerator {
     public Stream<DataBagValue> generate(Field field, FieldSpec spec) {
         List<FieldValueSource> fieldValueSources = sourceFactory.getFieldValueSources(spec);
 
-        FieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
+        FieldValueSource combinedFieldValueSource =
+            fieldValueSources.size() == 1
+                ? fieldValueSources.get(0)
+                : new CombiningFieldValueSource(fieldValueSources);
 
         return getDataValues(combinedFieldValueSource, field.isUnique())
             .map(DataBagValue::new);
