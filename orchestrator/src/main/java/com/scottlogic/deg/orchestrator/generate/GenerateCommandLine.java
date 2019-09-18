@@ -127,11 +127,6 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     private OutputFormat outputFormat = CSV;
 
     @CommandLine.Option(
-        names = {"--allow-untyped-fields"},
-        description = "Remove the need for each field to have at least one compliant typing constraint applied")
-    private boolean allowUntypedFields = false;
-
-    @CommandLine.Option(
         names = {"--set-from-file-directory"},
         description = "Custom root for loading sets from file."
     )
@@ -170,11 +165,6 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     @Override
     public CombinationStrategyType getCombinationStrategyType() {
         return this.combinationType;
-    }
-
-    @Override
-    public boolean requireFieldTyping(){
-        return !allowUntypedFields;
     }
 
     @Override

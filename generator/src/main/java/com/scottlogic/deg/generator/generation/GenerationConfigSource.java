@@ -24,5 +24,4 @@ public interface GenerationConfigSource  {
     long getMaxRows();
 
     MonitorType getMonitorType();
-    boolean requireFieldTyping();
 }

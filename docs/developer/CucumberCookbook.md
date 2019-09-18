@@ -30,7 +30,6 @@ Operators are converted to English language equivalents for use in cucumber, so 
 * _`{field}` is anything but `{operator}` `{operand}`_, adds a negated `operator` constraint to the field `field` with the data `operand`, see **operators** and **operands** sections below
 * _there is a constraint:_, adds the given JSON block as a constraint as if it was read from the profile file itself. It should only be used where the constraint cannot otherwise be expressed, e.g. for `anyOf`, `allOf` and `if`.
 * _the maximum string length is {length}_, sets the maximum length for strings to the _max_ for the given scenario. The default is _200_ (for performance reasons), however in production the limit is _1000_.
-* _untyped fields are allowed_, sets the --allow-untyped-fields flag to false - default: flag is true
 
 #### Operands
 When specifying the operator/s for a field, ensure to format the value as in the table below:

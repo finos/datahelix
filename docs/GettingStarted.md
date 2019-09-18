@@ -40,8 +40,8 @@ We'll start by generating data for a trivial schema. Using your favourite text e
 
 ```json
 {
-    "schemaVersion": "0.1",
-    "fields": [{ "name": "firstName" }],
+    "schemaVersion": "0.7",
+    "fields": [{ "name": "firstName", "type": "string" }],
     "rules": []
 }
 ```
@@ -69,7 +69,7 @@ To do this:
           "fileMatch": [
             "<datahelix_projectroot>/*"
           ],
-          "url": "file:///<datahelix_projectroot>/profile/src/main/resources/profileschema/0.1/datahelix.schema.json"
+          "url": "file:///<datahelix_projectroot>/profile/src/main/resources/profileschema/datahelix.schema.json"
         }
       ]
     ```
@@ -82,7 +82,7 @@ To verify that the url to the `datahelix.schema.json` is valid you can `ctrl-cli
 Now place the `generator.jar` file (downloaded from the [GitHub releases page](https://github.com/finos/datahelix/releases/)) in the same folder as the profile, open up a terminal, and execute the following:
 
 ```
-$ java -jar generator.jar generate --max-rows=100 --allow-untyped-fields --replace --profile-file=profile.json --output-path=output.csv
+$ java -jar generator.jar generate --max-rows=100 --replace --profile-file=profile.json --output-path=output.csv
 ```
 
 The generator is a command line tool which reads a profile, and outputs data in CSV format. The `--max-rows=100` option tells the generator to create 100 rows of data, and the `--replace` option tells it to overwrite previously generated files. The compulsary `--profile-file` option specifies the name of the input profile, and the `--output-path` option specifies the location to write the output to. In `generate` mode `--output-path` is optional; the generator will default to standard output if it is not supplied. By default the generator outputs progress, in rows per second, to the standard error output. This can be useful when generating large volumes of data.
@@ -91,19 +91,19 @@ If you open up `output.csv` you'll see something like the following:
 
 ```
 firstName
-15-09-1971 04:30:18
-28-10-2087 09:23:30
-1876153676
-334227637
+"$N!R"
+"_$"
 
-03-04-2053 04:57:06
-"Lorem Ipsum"
+"n"
+
+
+"y"
 [...]
 ```
 
-The generator has successfully created 100 rows of random data. However, in most cases this data will not be terribly useful. It is likely that `firstName` will only allow string values, with this constraint enforced via a database schema for example. If you don't provide any constraints, the generator will output values from the 'universal set', which contains all generatable values (null, any string, any date, any number, etc).
+The generator has successfully created 100 rows of random data. However, in most cases this data will not be terribly useful. It is likely that `firstName` will only allow a subset of possible string values. If you don't provide any constraints, the generator will output random strings containing basic latin characters and punctuation.
 
-Let's assume you only want to generate string values for the `firstName` field; this can be achieved by adding an `ofType` constraint for the field. With this constraint alone, the generator will output random strings containing basic latin characters and punctuation. If you want a more restrictive character set, ths can be achieved by adding `matchingRegex`.
+Let's assume you only want to generate characters between a to z for the `firstName` field; this can be achieved by adding a `matchingRegex` constraint for the field. With this constraint alone, the generator will only output strings valid for the regex.
 
 ## Adding constraints
 
@@ -111,13 +111,12 @@ Update the JSON profile as follows:
 
 ```json
 {
-    "schemaVersion": "0.1",
-    "fields": [{ "name": "firstName" }],
+    "schemaVersion": "0.7",
+    "fields": [{ "name": "firstName", "type": "string" }],
     "rules": [
         {
             "rule": "first name constraints",
             "constraints": [
-                { "field": "firstName", "is": "ofType", "value": "string" },
                 {
                     "field": "firstName",
                     "is": "matchingRegex",
@@ -148,7 +147,6 @@ Fields are nullable by default, however, you can add a further constraint to a f
 
 ```json
 "constraints": [
-  { "field": "firstName", "is": "ofType", "value": "string" },
   { "field": "firstName", "is": "matchingRegex", "value": "[a-z]{1,10}" },
   { "not": { "field": "firstName", "is": "null" } }
 ]
@@ -193,12 +191,14 @@ We'll expand the example profile to add a new `age` field, a not-null integer in
 
 ```json
 {
-    "schemaVersion": "0.1",
-    "fields": [{ "name": "firstName" }, { "name": "age" }],
+    "schemaVersion": "0.7",
+    "fields": [
+        { "name": "firstName", "type": "string" }, 
+        { "name": "age", "type": "integer"  }
+    ],
     "rules": [
         {
             "constraints": [
-                { "field": "firstName", "is": "ofType", "value": "string" },
                 { "not": { "field": "firstName", "is": "null" } },
                 {
                     "field": "firstName",
@@ -209,7 +209,6 @@ We'll expand the example profile to add a new `age` field, a not-null integer in
         },
         {
             "constraints": [
-                { "field": "age", "is": "ofType", "value": "integer" },
                 { "field": "age", "is": "greaterThan", "value": 0 },
                 { "field": "age", "is": "lessThan", "value": 100 },
                 { "not": { "field": "age", "is": "null" } }
@@ -240,17 +239,16 @@ Finally, we'll add a field for National Insurance number. In this case, the cons
 
 ```json
 {
-    "schemaVersion": "0.1",
+    "schemaVersion": "0.7",
     "fields": [
-        { "name": "firstName" },
-        { "name": "age" },
-        { "name": "nationalInsurance" }
+        { "name": "firstName", "type": "string" }, 
+        { "name": "age", "type": "integer"  }
+        { "name": "nationalInsurance", "type": "string"  }
     ],
     "rules": [
         {
             "rule": "first name",
             "constraints": [
-                { "field": "firstName", "is": "ofType", "value": "string" },
                 { "not": { "field": "firstName", "is": "null" } },
                 {
                     "field": "firstName",
@@ -262,7 +260,6 @@ Finally, we'll add a field for National Insurance number. In this case, the cons
         {
             "rule": "age",
             "constraints": [
-                { "field": "age", "is": "ofType", "value": "integer" },
                 { "field": "age", "is": "greaterThan", "value": 0 },
                 { "field": "age", "is": "lessThan", "value": 100 },
                 { "not": { "field": "age", "is": "null" } }
@@ -271,11 +268,6 @@ Finally, we'll add a field for National Insurance number. In this case, the cons
         {
             "rule": "national insurance",
             "constraints": [
-                {
-                    "field": "nationalInsurance",
-                    "is": "ofType",
-                    "value": "string"
-                },
                 {
                     "if": {
                         "field": "age",
