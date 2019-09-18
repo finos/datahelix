@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.profile.dto;
 
+import com.scottlogic.deg.common.ValidationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.leadpony.justify.api.JsonSchema;
@@ -24,6 +25,8 @@ import org.leadpony.justify.api.JsonValidationService;
 import java.io.*;
 import java.net.URL;
 import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public abstract class ProfileSchemaValidatorTests {
     private static final String SCHEMA_LOCATION = "profileschema/datahelix.schema.json";
@@ -87,7 +90,7 @@ public abstract class ProfileSchemaValidatorTests {
     }
 
     @Test
-    public void validate_greaterThanOrEqualToMaxValue_isValid() {
+    void validate_greaterThanOrEqualToMaxValue_isValid() {
         String profile = "{" +
             "  \"schemaVersion\": " + schemaVersion + "," +
             "  \"rules\": [" +
@@ -131,7 +134,7 @@ public abstract class ProfileSchemaValidatorTests {
     }
 
     @Test
-    public void validate_lessThanOrEqualToMinValue_isValid() {
+    void validate_lessThanOrEqualToMinValue_isValid() {
         String profile = "{" +
             "  \"schemaVersion\": " + schemaVersion + "," +
             "  \"rules\": [" +
@@ -153,7 +156,7 @@ public abstract class ProfileSchemaValidatorTests {
     }
 
     @Test
-    public void validate_constraintsNestedInsideAllOf_isValid() {
+    void validate_constraintsNestedInsideAllOf_isValid() {
         String profile = "{" +
             "  \"schemaVersion\": " + schemaVersion + "," +
             "  \"rules\": [" +
@@ -173,7 +176,7 @@ public abstract class ProfileSchemaValidatorTests {
     }
 
     @Test
-    public void validate_constraintsNestedInsideAnyOf_isValid() {
+    void validate_constraintsNestedInsideAnyOf_isValid() {
         String profile = "{" +
             "  \"schemaVersion\": " + schemaVersion + "," +
             "  \"rules\": [" +
@@ -191,7 +194,7 @@ public abstract class ProfileSchemaValidatorTests {
     }
 
     @Test
-    public void validate_dateEqualToDynamicOffset_isValid() {
+    void validate_dateEqualToDynamicOffset_isValid() {
         String profile = "{" +
             "  \"schemaVersion\": " + schemaVersion + "," +
             "  \"fields\": [" +
@@ -224,7 +227,7 @@ public abstract class ProfileSchemaValidatorTests {
     }
 
     @Test
-    public void validate_emptyRuleArray_isValid() {
+    void validate_emptyRuleArray_isValid() {
         String profile = "{" +
             "  \"schemaVersion\": " + schemaVersion + "," +
             "  \"fields\": [" +
@@ -238,7 +241,7 @@ public abstract class ProfileSchemaValidatorTests {
     }
 
     @Test
-    public void validate_simpleAnyOfAllOf_isValid() {
+    void validate_simpleAnyOfAllOf_isValid() {
         String profile = "{" +
             "  \"schemaVersion\": " + schemaVersion + "," +
             "  \"fields\": [" +
@@ -266,7 +269,7 @@ public abstract class ProfileSchemaValidatorTests {
     }
 
     @Test
-    public void validate_simpleIf_isValid() {
+    void validate_simpleIf_isValid() {
         String profile = "{" +
             "  \"schemaVersion\": " + schemaVersion + "," +
             "  \"fields\": [" +
@@ -295,7 +298,7 @@ public abstract class ProfileSchemaValidatorTests {
     }
 
     @Test
-    public void validate_simpleInSet_isValid() {
+    void validate_simpleInSet_isValid() {
         String profile = "{" +
             "  \"schemaVersion\": " + schemaVersion + "," +
             "  \"fields\": [" +
@@ -319,7 +322,7 @@ public abstract class ProfileSchemaValidatorTests {
     }
 
     @Test
-    public void validate_simpleRegex_isValid() {
+    void validate_simpleRegex_isValid() {
         String profile = "{" +
             "  \"schemaVersion\": " + schemaVersion + "," +
             "  \"fields\": [" +
@@ -340,7 +343,7 @@ public abstract class ProfileSchemaValidatorTests {
     }
 
     @Test
-    public void validate_simpleNot_isValid() {
+    void validate_simpleNot_isValid() {
         String profile = "{" +
             "  \"schemaVersion\": " + schemaVersion + "," +
             "  \"fields\": [" +
@@ -358,7 +361,7 @@ public abstract class ProfileSchemaValidatorTests {
             "        { \"not\": { \"field\": \"field1\", \"is\": \"lessThan\", \"value\": 78 } }," +
             "        { \"not\": { \"field\": \"field1\", \"is\": \"greaterThanOrEqualTo\", \"value\": 44 } }," +
             "        { \"not\": { \"field\": \"field1\", \"is\": \"lessThanOrEqualTo\", \"value\": 77 } }," +
-            "        { \"not\": { \"field\": \"field1\", \"is\": \"\", \"value\": 0.1 } }," +
+            "        { \"not\": { \"field\": \"field1\", \"is\": \"granularTo\", \"value\": 0.1 } }," +
             "        { \"not\": { \"field\": \"field1\", \"is\": \"equalTo\", \"value\": 0.004003 } }" +
             "      ]" +
             "    }" +
@@ -369,7 +372,7 @@ public abstract class ProfileSchemaValidatorTests {
     }
 
     @Test
-    public void validate_simpleDataConstraints_isValid() {
+    void validate_simpleDataConstraints_isValid() {
         String profile = "{" +
             "  \"schemaVersion\": " + schemaVersion + "," +
             "  \"fields\": [" +
@@ -387,7 +390,7 @@ public abstract class ProfileSchemaValidatorTests {
             "        { \"field\": \"field1\", \"is\": \"lessThan\", \"value\": 78 }," +
             "        { \"field\": \"field1\", \"is\": \"greaterThanOrEqualTo\", \"value\": 44 }," +
             "        { \"field\": \"field1\", \"is\": \"lessThanOrEqualTo\", \"value\": 77 }," +
-            "        { \"field\": \"field1\", \"is\": \"\", \"value\": 0.1 }," +
+            "        { \"field\": \"field1\", \"is\": \"granularTo\", \"value\": 0.1 }," +
             "        { \"field\": \"field1\", \"is\": \"equalTo\", \"value\": 0.004003 }" +
             "      ]" +
             "    }" +
@@ -398,7 +401,7 @@ public abstract class ProfileSchemaValidatorTests {
     }
 
     @Test
-    public void validate_simpleNestedDataConstraints_isValid() {
+    void validate_simpleNestedDataConstraints_isValid() {
         String profile = "{" +
             "  \"schemaVersion\": " + schemaVersion + "," +
             "  \"fields\": [" +
@@ -417,7 +420,7 @@ public abstract class ProfileSchemaValidatorTests {
             "            { \"field\": \"field1\", \"is\": \"lessThan\", \"value\": 78 }," +
             "            { \"field\": \"field1\", \"is\": \"greaterThanOrEqualTo\", \"value\": 44 }," +
             "            { \"field\": \"field1\", \"is\": \"lessThanOrEqualTo\", \"value\": 77 }," +
-            "            { \"field\": \"field1\", \"is\": \"\", \"value\": 0.1 }," +
+            "            { \"field\": \"field1\", \"is\": \"granularTo\", \"value\": 0.1 }," +
             "            { \"field\": \"field1\", \"is\": \"equalTo\", \"value\": 0.004003 }," +
             "            { \"allOf\": [" +
             "              { \"field\": \"field1\", \"is\": \"shorterThan\", \"value\": 19 }," +
@@ -437,7 +440,7 @@ public abstract class ProfileSchemaValidatorTests {
             "            { \"field\": \"field1\", \"is\": \"lessThan\", \"value\": 78 }," +
             "            { \"field\": \"field1\", \"is\": \"greaterThanOrEqualTo\", \"value\": 44 }," +
             "            { \"field\": \"field1\", \"is\": \"lessThanOrEqualTo\", \"value\": 77 }," +
-            "            { \"field\": \"field1\", \"is\": \"\", \"value\": 0.1 }," +
+            "            { \"field\": \"field1\", \"is\": \"granularTo\", \"value\": 0.1 }," +
             "            { \"field\": \"field1\", \"is\": \"equalTo\", \"value\": 0.004003 }," +
             "            { \"allOf\": [" +
             "              { \"field\": \"field1\", \"is\": \"shorterThan\", \"value\": 19 }," +
@@ -457,7 +460,7 @@ public abstract class ProfileSchemaValidatorTests {
     }
 
     @Test
-    public void validate_simpleDateTimes_isValid() {
+    void validate_simpleDateTimes_isValid() {
         String profile = "{" +
             "  \"schemaVersion\": " + schemaVersion + "," +
             "  \"fields\": [" +
@@ -486,7 +489,7 @@ public abstract class ProfileSchemaValidatorTests {
     }
 
     @Test
-    public void validate_stringLengthInsideBounds_isValid() {
+    void validate_stringLengthInsideBounds_isValid() {
         String profile = "{" +
             "  \"schemaVersion\": " + schemaVersion + "," +
             "  \"fields\": [" +
@@ -518,5 +521,29 @@ public abstract class ProfileSchemaValidatorTests {
             "}";
 
         validator.validateProfile(profile, schema);
+    }
+
+
+    @Test
+    void validate_allOfMisspelled_isInvalid() {
+        String profile = "{" +
+            "  \"schemaVersion\": " + schemaVersion + "," +
+            "  \"fields\": [" +
+            "    { \"name\": \"field1\", \"type\": \"string\" }" +
+            "  ]," +
+            "  \"rules\": [" +
+            "    {" +
+            "      \"rule\": \"rule 1\"," +
+            "      \"constraints\": [" +
+            "        { \"nallOf\": [" +
+            "            { \"field\": \"field1\", \"is\": \"shorterThan\", \"value\": 19 }," +
+            "            { \"field\": \"field1\", \"is\": \"longerThan\", \"value\": 6 }" +
+            "           ] }" +
+            "      ]" +
+            "    }" +
+            "  ]" +
+            "}";
+
+        Throwable thrown = assertThrows(ValidationException.class, () -> validator.validateProfile(profile, schema));
     }
 }
