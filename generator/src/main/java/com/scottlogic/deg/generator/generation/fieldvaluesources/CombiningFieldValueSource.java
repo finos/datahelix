@@ -16,13 +16,18 @@
 
 package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
-import com.scottlogic.deg.generator.utils.ConcatenatingIterable;
+import com.scottlogic.deg.common.util.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static com.scottlogic.deg.common.util.FlatMappingSpliterator.flatMap;
+import static com.scottlogic.deg.generator.utils.SetUtils.stream;
 
 public class CombiningFieldValueSource implements FieldValueSource {
     private final List<FieldValueSource> underlyingSources;
@@ -32,28 +37,26 @@ public class CombiningFieldValueSource implements FieldValueSource {
     }
 
     @Override
-    public Iterable<Object> generateInterestingValues() {
-        return new ConcatenatingIterable<>(
-                underlyingSources.stream()
-                        .map(FieldValueSource::generateInterestingValues)
-                        .collect(Collectors.toList()));
+    public Stream<Object> generateInterestingValues() {
+        return flatMap(
+            underlyingSources.stream().map(FieldValueSource::generateInterestingValues),
+            Function.identity());
     }
 
     @Override
-    public Iterable<Object> generateAllValues() {
-        return new ConcatenatingIterable<>(
-            underlyingSources.stream()
-                .map(FieldValueSource::generateAllValues)
-                .collect(Collectors.toList()));
+    public Stream<Object> generateAllValues() {
+        return flatMap(
+            underlyingSources.stream().map(FieldValueSource::generateAllValues),
+            Function.identity());
     }
 
     @Override
-    public Iterable<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
-        return () -> new InternalRandomIterator(
+    public Stream<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
+        return stream(new InternalRandomIterator(
             underlyingSources.stream()
                 .map(source -> source.generateRandomValues(randomNumberGenerator).iterator())
                 .collect(Collectors.toList()),
-            randomNumberGenerator);
+            randomNumberGenerator));
     }
 
     @Override

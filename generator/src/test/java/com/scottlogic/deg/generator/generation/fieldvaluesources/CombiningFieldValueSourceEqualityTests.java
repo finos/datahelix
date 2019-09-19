@@ -21,6 +21,7 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
@@ -73,17 +74,17 @@ class CombiningFieldValueSourceEqualityTests {
         }
 
         @Override
-        public Iterable<Object> generateInterestingValues() {
+        public Stream<Object> generateInterestingValues() {
             throw new UnsupportedOperationException("Not supported");
         }
 
         @Override
-        public Iterable<Object> generateAllValues() {
+        public Stream<Object> generateAllValues() {
             throw new UnsupportedOperationException("Not supported");
         }
 
         @Override
-        public Iterable<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
+        public Stream<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
             throw new UnsupportedOperationException("Not supported");
         }
     }

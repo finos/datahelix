@@ -21,7 +21,6 @@ import com.scottlogic.deg.generator.generation.string.iterators.FiniteStringAuto
 import com.scottlogic.deg.generator.generation.string.factorys.InterestingStringFactory;
 import com.scottlogic.deg.generator.generation.string.factorys.RandomStringFactory;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
-import com.scottlogic.deg.generator.utils.SupplierBasedIterator;
 import dk.brics.automaton.Automaton;
 
 import java.util.*;
@@ -149,14 +148,13 @@ public class RegexStringGenerator implements StringGenerator {
 
     @Override
     public Stream<String> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
-        final Iterable<String> iterable = () -> new SupplierBasedIterator<>(
+        return Stream.generate(
             () -> randomStringFactory.createRandomString(
                 "",
                 automaton.getInitialState(),
                 1,
                 Integer.MAX_VALUE,
                 randomNumberGenerator));
-        return StreamSupport.stream(iterable.spliterator(), false);
     }
 
     public boolean matches(String subject) {

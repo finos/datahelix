@@ -31,6 +31,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.scottlogic.deg.generator.config.detail.DataGenerationType.*;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
@@ -120,9 +121,9 @@ class FieldSpecValueGeneratorTests {
             list.add(fieldValueSource);
 
             when(fieldValueSourceEvaluator.getFieldValueSources(any())).thenReturn(list);
-            when(fieldValueSource.generateAllValues()).thenReturn(new ArrayList<>());
-            when(fieldValueSource.generateInterestingValues()).thenReturn(new ArrayList<>());
-            when(fieldValueSource.generateRandomValues(randomNumberGenerator)).thenReturn(new ArrayList<>());
+            when(fieldValueSource.generateAllValues()).thenReturn(Stream.empty());
+            when(fieldValueSource.generateInterestingValues()).thenReturn(Stream.empty());
+            when(fieldValueSource.generateRandomValues(randomNumberGenerator)).thenReturn(Stream.empty());
         }
 
         @Test
