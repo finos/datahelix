@@ -38,11 +38,6 @@ public class CucumberGenerationConfigSource implements AllConfigSource, ViolateC
     }
 
     @Override
-    public boolean requireFieldTyping() {
-        return state.requireFieldTyping;
-    }
-
-    @Override
     public DataGenerationType getGenerationType() {
         return state.dataGenerationType;
     }

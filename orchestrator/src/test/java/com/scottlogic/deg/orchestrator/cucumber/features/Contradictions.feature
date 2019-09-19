@@ -17,13 +17,3 @@ Feature: Hard contradictions produce nothing, soft contradictions produce only n
     And foo is less than 1
     And foo is greater than 0
     Then no data is created
-
-### Soft Contradictions ###
-  Scenario: Contradicting types, but allowing 'null', should produce only 'null' values.
-    Given foo is of type "string"
-    And foo is of type "integer"
-    And the generator can generate at most 2 rows
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | null |

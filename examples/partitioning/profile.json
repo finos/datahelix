@@ -1,32 +1,41 @@
 {
-  "schemaVersion": "0.6",
+  "schemaVersion": "0.7",
   "fields": [
     {
-      "name": "p1f1"
+      "name": "p1f1",
+      "type": "string"
     },
     {
-      "name": "p1f2"
+      "name": "p1f2",
+      "type": "string"
     },
     {
-      "name": "p1f3"
+      "name": "p1f3",
+      "type": "string"
     },
     {
-      "name": "p2f1"
+      "name": "p2f1",
+      "type": "string"
     },
     {
-      "name": "p2f2"
+      "name": "p2f2",
+      "type": "string"
     },
     {
-      "name": "p2f3"
+      "name": "p2f3",
+      "type": "string"
     },
     {
-      "name": "p3f1"
+      "name": "p3f1",
+      "type": "string"
     },
     {
-      "name": "p3f2"
+      "name": "p3f2",
+      "type": "string"
     },
     {
-      "name": "p3f3"
+      "name": "p3f3",
+      "type": "string"
     }
   ],
   "rules": [

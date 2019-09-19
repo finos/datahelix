@@ -39,14 +39,16 @@ public class OfTypeConstraintFactory {
                     new MatchesStandardConstraint(field, StandardConstraintTypes.valueOf(value)),
                     new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.STRING)
                 );
+
+            case "firstname":
+            case "lastname":
+            case "fullname":
+                return new AndConstraint(
+                    new IsInSetConstraint(field, NameRetriever.loadNamesFromFile(NameConstraintTypes.lookupProfileText(value))),
+                    new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.STRING)
+                );
         }
 
-        try {
-            NameConstraintTypes nameType = NameConstraintTypes.lookupProfileText(value);
-            DistributedSet<Object> objectDistributedSet = NameRetriever.loadNamesFromFile(nameType);
-            return new IsInSetConstraint(field, objectDistributedSet);
-        } catch (UnsupportedOperationException e){
-            throw new InvalidProfileException("Profile is invalid: no constraints known for \"is\": \"ofType\", \"value\": \"" + value + "\"");
-        }
+        throw new InvalidProfileException("Profile is invalid: no constraints known for \"is\": \"ofType\", \"value\": \"" + value + "\"");
     }
 }

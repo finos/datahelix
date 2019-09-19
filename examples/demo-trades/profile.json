@@ -1,21 +1,52 @@
 {
-  "schemaVersion": "0.6",
+  "schemaVersion": "0.7",
   "fields": [
-    { "name": "tradeId" },
-    { "name": "stock" },
-    { "name": "side" },
-    { "name": "tradePrice" },
-    { "name": "volume" },
-    { "name": "tradeDatetime" },
-    { "name": "tradeDate" },
-    { "name": "settlementDate" }
+    {
+      "name": "tradeId",
+      "type": "integer",
+      "nullable": false,
+      "unique": true
+    },
+    {
+      "name": "stock",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "side",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "tradePrice",
+      "type": "decimal",
+      "nullable": false
+    },
+    {
+      "name": "volume",
+      "type": "integer",
+      "nullable": false
+    },
+    {
+      "name": "tradeDatetime",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "tradeDate",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "settlementDate",
+      "type": "datetime",
+      "nullable": false
+    }
   ],
   "rules": [
     {
       "rule": "tradeId",
       "constraints": [
-        { "not": { "field": "tradeId", "is": "null" } },
-        { "field": "tradeId", "is": "ofType", "value": "integer" },
         { "field": "tradeId", "is": "greaterThanOrEqualTo", "value": 10000 },
         { "field": "tradeId", "is": "lessThanOrEqualTo", "value": 99999 }
       ]
@@ -23,22 +54,18 @@
     {
       "rule": "stock",
       "constraints": [
-        { "not": { "field": "stock", "is": "null" } },
         { "field": "stock", "is": "inSet", "file": "examples/demo-trades/stockCodes.csv" }
       ]
     },
     {
       "rule": "side",
       "constraints": [
-        { "not": { "field": "side", "is": "null" } },
         { "field": "side", "is": "inSet", "values": [ "BUY", "SELL" ] }
       ]
     },
     {
       "rule": "tradePrice",
       "constraints": [
-        { "not": { "field": "tradePrice", "is": "null" } },
-        { "field": "tradePrice", "is": "ofType", "value": "decimal" },
         { "field": "tradePrice", "is": "granularTo", "value": 0.1 },
         {
           "if": { "field": "stock", "is": "equalTo", "value": "LLOY" },
@@ -66,8 +93,6 @@
     {
       "rule": "volume",
       "constraints": [
-        { "not": { "field": "volume", "is": "null" } },
-        { "field": "volume", "is": "ofType", "value": "integer" },
         { "field": "volume", "is": "greaterThanOrEqualTo", "value": 1 },
         { "field": "volume", "is": "lessThanOrEqualTo", "value": 20 }
       ]
@@ -75,9 +100,7 @@
     {
       "rule": "tradeDatetime",
       "constraints": [
-        { "not": { "field": "tradeDatetime", "is": "null" } },
         { "field": "tradeDatetime", "is": "granularTo", "value": "millis" },
-        { "field": "tradeDatetime", "is": "ofType", "value": "datetime" },
         { "field": "tradeDatetime", "is": "after", "value": { "date": "2019-09-02T09:30:00.000" } },
         { "field": "tradeDatetime", "is": "before", "value": { "date": "2019-09-02T16:30:00.000" } }
       ]
@@ -85,17 +108,13 @@
     {
       "rule": "tradeDate",
       "constraints": [
-        { "not": { "field": "tradeDate", "is": "null" } },
         { "field": "tradeDate", "is": "granularTo", "value": "days" },
-        { "field": "tradeDate", "is": "ofType", "value": "datetime" },
         { "field": "tradeDate", "is": "equalTo", "value": { "date": "2019-09-02T00:00:00.000" } }
       ]
     },
     {
       "rule": "settlementDate",
       "constraints": [
-        { "not": { "field": "settlementDate", "is": "null" } },
-        { "field": "settlementDate", "is": "ofType", "value": "datetime" },
         { "field": "settlementDate", "is": "equalTo", "otherField": "tradeDate", "offset": 5, "offsetUnit": "working days" }
       ]
     }

@@ -43,10 +43,8 @@ public class ProfileValidatorProvider implements Provider<ProfileValidator> {
     public ProfileValidator get() {
         ArrayList<ProfileValidator> validators = new ArrayList<>();
         validators.add(uniquenessValidator);
+        validators.add(untypedValidator);
 
-        if(configSource.requireFieldTyping()) {
-            validators.add(untypedValidator);
-        }
         return new MultipleProfileValidator(validators);
     }
 }

@@ -1,22 +1,20 @@
 {
-  "schemaVersion": "0.6",
+  "schemaVersion": "0.7",
   "fields": [
     {
-      "name": "a"
+      "name": "a",
+      "type": "string",
+      "nullable": false
     },
     {
-      "name": "b"
+      "name": "b",
+      "type": "string",
+      "nullable": false
     }
   ],
   "rules": [
     {
       "constraints": [
-        {
-          "not": {
-            "field": "a",
-            "is": "null"
-          }
-        },
         {
           "field": "a",
           "is": "inSet",
@@ -25,12 +23,6 @@
             "Y",
             "Z"
           ]
-        },
-        {
-          "not": {
-            "field": "b",
-            "is": "null"
-          }
         },
         {
           "field": "b",

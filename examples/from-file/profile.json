@@ -1,22 +1,13 @@
 {
-  "schemaVersion": "0.6",
+  "schemaVersion": "0.7",
   "fields": [
     {
-      "name": "name"
+      "name": "name",
+      "type": "string",
+      "nullable": false
     }
   ],
   "rules": [
-    {
-      "rule": "notnull",
-      "constraints": [
-        {
-          "not": {
-            "field": "name",
-            "is": "null"
-          }
-        }
-      ]
-    },
     {
       "rule": "name",
       "constraints": [

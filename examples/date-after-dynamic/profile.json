@@ -1,63 +1,27 @@
 {
-  "schemaVersion": "0.6",
+  "schemaVersion": "0.7",
   "fields": [
     {
-      "name": "field1"
+      "name": "field1",
+      "type": "datetime",
+      "nullable": false
     }, {
-      "name": "field2"
+      "name": "field2",
+      "type": "datetime",
+      "nullable": false
     }, {
-      "name": "field3"
+      "name": "field3",
+      "type": "datetime",
+      "nullable": false
     }, {
-      "name": "field4"
+      "name": "field4",
+      "type": "datetime",
+      "nullable": false
     }
   ],
   "rules": [
     {
       "constraints": [
-        {
-          "not": {
-            "field": "field1",
-            "is": "null"
-          }
-        },
-        {
-          "not": {
-            "field": "field2",
-            "is": "null"
-          }
-        },
-        {
-          "not": {
-            "field": "field3",
-            "is": "null"
-          }
-        },
-        {
-          "not": {
-            "field": "field4",
-            "is": "null"
-          }
-        },
-        {
-          "field": "field1",
-          "is": "ofType",
-          "value": "datetime"
-        },
-        {
-          "field": "field2",
-          "is": "ofType",
-          "value": "datetime"
-        },
-        {
-          "field": "field3",
-          "is": "ofType",
-          "value": "datetime"
-        },
-        {
-          "field": "field4",
-          "is": "ofType",
-          "value": "datetime"
-        },
         {
           "field": "field1",
           "is": "after",

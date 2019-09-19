@@ -3,33 +3,43 @@
 ## Sample file
 ```javascript
 {
-	"schemaVersion": "0.1",
+	"schemaVersion": "0.7",
 	"description": "A dataset about financial products",
 	"fields":
 	[
-		{ "name": "id" },
-		{ "name": "time" },
-		{ "name": "country" },
-		{ "name": "tariff" },
-		{ "name": "low_price" },
-		{ "name": "high_price" }
+		{ 
+			"name": "id",
+			"type": "string",
+			"nullable": false
+		},
+		{
+			"name": "time",
+			"type": "datetime"
+		},
+		{
+			"name": "country",
+			"type": "string"
+		},
+		{
+			"name": "tariff",
+			"type": "decimal"
+		},
+		{
+			"name": "low_price",
+			"type": "integer",
+			"nullable": false
+		},
+		{
+			"name": "high_price",
+			"type": "integer"
+		}
 	],
 	"rules":
 	[
-		{
-			"rule": "id is a non-nullable string",
-			"constraints":
-			[
-				{ "field": "id", "is": "ofType", "value": "string" },
-				{ "not": { "field": "id", "is": "null" } }
-			]
-		},
 
 		{
-			"rule": "low_price is a non-nullable positive integer",
+			"rule": "low_price is a positive integer",
 			"constraints": [
-				{ "field": "low_price", "is": "ofType", "value": "integer" },
-				{ "not": { "field": "low_price", "is": "null" } },
 				{ "field": "low_price", "is": "greaterThanOrEqualTo", "value": 0 }
 			]
 		},
@@ -75,6 +85,7 @@
 A field in the data set.
 
 * `"name"`: The field's name. Should be unique, as constraints will reference fields by name. This property is used for, eg, column headers in CSV output
+* `"type"`: The field's data type.
 * `"formatting"`: The formatting used for the output of the field. (Optional)
 * `"unique"`: Sets if the field is unique. (Optional)
 * `"nullable"`: Sets if null is an allowed output of the field. (Optional)

@@ -1,19 +1,42 @@
 {
-  "schemaVersion": "0.6",
+  "schemaVersion": "0.7",
   "fields": [
-    { "name": "tradeId" },
-    { "name": "stock" },
-    { "name": "side" },
-    { "name": "tradePrice" },
-    { "name": "volume" },
-    { "name": "tradeDatetime" }
+    {
+      "name": "tradeId",
+      "type": "integer",
+      "nullable": false,
+      "unique": true
+    },
+    {
+      "name": "stock",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "side",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "tradePrice",
+      "type": "decimal",
+      "nullable": false
+    },
+    {
+      "name": "volume",
+      "type": "integer",
+      "nullable": false
+    },
+    {
+      "name": "tradeDatetime",
+      "type": "datetime",
+      "nullable": false
+    }
   ],
   "rules": [
     {
       "rule": "tradeId",
       "constraints": [
-        { "not": { "field": "tradeId", "is": "null" } },
-        { "field": "tradeId", "is": "ofType", "value": "integer" },
         { "field": "tradeId", "is": "greaterThanOrEqualTo", "value": 10000 },
         { "field": "tradeId", "is": "lessThanOrEqualTo", "value": 99999 }
       ]
@@ -21,22 +44,18 @@
     {
       "rule": "stock",
       "constraints": [
-        { "not": { "field": "stock", "is": "null" } },
         { "field": "stock", "is": "inSet", "file": "examples/demo-trades/stockCodes.csv" }
       ]
     },
     {
       "rule": "side",
       "constraints": [
-        { "not": { "field": "side", "is": "null" } },
         { "field": "side", "is": "inSet", "values": [ "BUY", "SELL" ] }
       ]
     },
     {
       "rule": "tradePrice",
       "constraints": [
-        { "not": { "field": "tradePrice", "is": "null" } },
-        { "field": "tradePrice", "is": "ofType", "value": "decimal" },
         { "field": "tradePrice", "is": "granularTo", "value": 0.01 },
         { "field": "tradePrice", "is": "greaterThan", "value": 140.0 },
         { "field": "tradePrice", "is": "lessThan", "value": 150.0 }
@@ -45,8 +64,6 @@
     {
       "rule": "volume",
       "constraints": [
-        { "not": { "field": "volume", "is": "null" } },
-        { "field": "volume", "is": "ofType", "value": "integer" },
         { "field": "volume", "is": "greaterThanOrEqualTo", "value": 1 },
         { "field": "volume", "is": "lessThanOrEqualTo", "value": 200 }
       ]
@@ -54,8 +71,6 @@
     {
       "rule": "tradeDatetime",
       "constraints": [
-        { "not": { "field": "tradeDatetime", "is": "null" } },
-        { "field": "tradeDatetime", "is": "ofType", "value": "datetime" },
         { "field": "tradeDatetime", "is": "after", "value": { "date": "2019-09-02T09:30:00.000" } },
         { "field": "tradeDatetime", "is": "before", "value": { "date": "2019-09-02T16:30:00.000" } }
       ]

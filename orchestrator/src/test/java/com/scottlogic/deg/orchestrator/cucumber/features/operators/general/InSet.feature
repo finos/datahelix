@@ -1501,30 +1501,6 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 2    |
       | 3    |
 
-  Scenario: Running a 'inSet' request alongside a contradicting ofType = integer should produce null
-    Given there is a field foo
-    And foo is of type "string"
-    And foo is in set:
-      | "1" |
-      | "2" |
-      | "3" |
-    And foo is of type "integer"
-    Then the following data should be generated:
-      | foo  |
-      | null |
-
-  Scenario: Running a 'inSet' request alongside a contradicting ofType = decimal should produce null
-    Given there is a field foo
-    And foo is of type "string"
-    And foo is in set:
-      | "1" |
-      | "2" |
-      | "3" |
-    And foo is of type "decimal"
-    Then the following data should be generated:
-      | foo  |
-      | null |
-
   Scenario: Running a 'inSet' request alongside an ofType = datetime should be successful
     Given there is a field foo
     And foo is of type "datetime"
@@ -1539,18 +1515,6 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 2010-01-01T00:00:00.000Z |
       | 2010-01-01T00:00:00.001Z |
       | 2011-01-01T00:00:00.000Z |
-
-  Scenario: Running a 'inSet' request alongside a contradicting ofType = datetime should produce null
-    Given there is a field foo
-    And foo is of type "string"
-    And foo is in set:
-      | "2010-01-01T00:00:00.000" |
-      | "2010-01-01T00:00:00.001" |
-      | "2011-01-01T00:00:00.000" |
-    And foo is of type "datetime"
-    Then the following data should be generated:
-      | foo  |
-      | null |
 
   Scenario: Running a 'inSet' request alongside a non-contradicting matchingRegex constraint should be successful
     Given there is a field foo

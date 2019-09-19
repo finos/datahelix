@@ -7,6 +7,7 @@
     
 3. [Fields](#Fields)
     1. [Name](#fields-name)
+    1. [Type](#fields-type)
     1. [Nullable](#fields-nullable)
     1. [Formatting](#fields-formatting)
     1. [Unique](#fields-unique)
@@ -23,7 +24,6 @@
         1. [equalTo](#predicate-equalto)
         2. [inSet](#predicate-inset)
         3. [null](#predicate-null)
-        4. [ofType](#predicate-oftype)
     3. [Textual constraints](#Textual-constraints)
         1. [matchingRegex](#predicate-matchingregex)
         2. [containingRegex](#predicate-containingregex)
@@ -100,8 +100,8 @@ Here is a list of two rules comprised of one constraint each:
           "constraints": [
             {
               "field": "Column 1",
-              "is": "ofType",
-              "value": "string"
+              "is": "equalTo",
+              "value": "foo"
             }
           ]
         },
@@ -110,8 +110,8 @@ Here is a list of two rules comprised of one constraint each:
           "constraints": [
             {
               "field": "Column 2",
-              "is": "ofType",
-              "value": "integer"
+              "is": "equalTo",
+              "value": "bar"
             }
           ]
         }
@@ -127,30 +127,22 @@ These three sections are combined to form the [complete profile](#Example-Profil
     "schemaVersion": "0.1",
     "fields": [
         {
-        "name": "Column 1"
+            "name": "Column 1",
+            "type": "string"
         },
         {
-        "name": "Column 2"
+            "name": "Column 2",
+            "type": "integer"
         }
     ],
     "rules": [
         {
-        "rule": "Column 1 is a string",
+        "rule": "Column 1 is foo",
         "constraints": [
             {
             "field": "Column 1",
-            "is": "ofType",
-            "value": "string"
-            }
-        ]
-        },
-        {
-        "rule": "Column 2 is a number",
-        "constraints": [
-            {
-            "field": "Column 2",
-            "is": "ofType",
-            "value": "integer"
+            "is": "equalTo",
+            "value": "foo"
             }
         ]
         }
@@ -167,6 +159,7 @@ Fields are the "slots" of data that can take values. Typical fields might be _em
 ```javascript
 {
     "name": "field1",
+    "type": "decimal",
     "nullable": false,
     "formatting": "%.5s",
     "unique": true
@@ -180,6 +173,13 @@ Each of the field properties are outlined below:
 ## `name`
 
 Name of the field in the output which has to be unique within the `Fields` array. If generating into a CSV or database, the name is used as a column name. If generating into JSON, the name is used as the key for object properties.
+
+
+<div id="fields-type"></div>
+
+## `type`
+
+The data type of the field. See [Data types](#Data-Types) for more on how types work within DataHelix. Valid options are `decimal`, `integer`, `string`, `datetime`, `ISIN`, `SEDOL`, `CUSIP`, `RIC`, `firstname`, `lastname` or `fullname`. This is a required property.
 
 
 <div id="fields-nullable"></div>
@@ -361,16 +361,6 @@ After loading the set from the file, this constraint behaves identically to the 
 ```
 
 Is satisfied if `field` is null or absent.
-
-<div id="predicate-oftype"></div>
-
-### `ofType` _(field, value)_
-
-```javascript
-{ "field": "price", "is": "ofType", "value": "string" }
-```
-
-Is satisfied if `field` is of type represented by `value` (valid options: `decimal`, `integer`, `string`, `datetime`, `ISIN`, `SEDOL`, `CUSIP`, `RIC`, `firstname`, `lastname` or `fullname`)
 
 ## Textual constraints
 
@@ -594,8 +584,8 @@ Contains a number of sub-constraints. Is satisfied if any of the inner constrain
 
 ```javascript
 { "allOf": [
-    { "field": "foo", "is": "ofType", "value": "integer" },
-    { "field": "foo", "is": "equalTo", "value": 0 }
+    { "field": "foo", "is": "greaterThan", "value": 15 },
+    { "field": "foo", "is": "lessThan", "value": 100 }
 ]}
 ```
 
@@ -605,9 +595,9 @@ Contains a number of sub-constraints. Is satisfied if all of the inner constrain
 
 ```javascript
 {
-    "if":   { "field": "foo", "is": "ofType", "value": "integer" },
-    "then": { "field": "foo", "is": "greaterThan", "value": 0 },
-    "else": { "field": "foo", "is": "equalTo", "value": "N/A" }
+    "if":   { "field": "foo", "is": "lessThan", "value": 100 },
+    "then": { "field": "bar", "is": "greaterThan", "value": 0 },
+    "else": { "field": "bar", "is": "equalTo", "value": "N/A" }
 }
 ```
 

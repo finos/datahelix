@@ -1,24 +1,15 @@
 {
-  "schemaVersion": "0.6",
+  "schemaVersion": "0.7",
   "fields": [
     {
-      "name": "first_name"
+      "name": "first_name",
+      "type": "string",
+      "nullable": false
     }
   ],
   "rules": [
     {
       "constraints": [
-        {
-          "not": {
-            "field": "first_name",
-            "is": "null"
-          }
-        },
-        {
-          "field": "first_name",
-          "is": "ofType",
-          "value": "string"
-        },
         {
           "field": "first_name",
           "is": "matchingRegex",

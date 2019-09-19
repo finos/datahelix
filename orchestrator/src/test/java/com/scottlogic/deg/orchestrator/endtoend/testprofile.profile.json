@@ -1,9 +1,11 @@
 {
-    "schemaVersion": "0.6",
+    "schemaVersion": "0.7",
     "description": "Testing Profile",
     "fields": [
         {
-            "name": "foo"
+          "name": "foo",
+          "type": "string",
+          "nullable": false
         }
     ],
     "rules": [
@@ -15,21 +17,6 @@
                     "is": "equalTo",
                     "value": "Generation successful"
                 }
-            ]
-        },
-        {
-            "rule": "rule2",
-            "constraints": [
-                {
-                        "field": "foo",
-                        "is": "ofType",
-                        "value": "string"
-                },
-                {"not": {
-                    "field": "foo",
-                    "is": "null"
-            }
-        }
             ]
         }
     ]

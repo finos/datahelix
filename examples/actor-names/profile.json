@@ -1,40 +1,18 @@
 {
-  "schemaVersion": "0.6",
+  "schemaVersion": "0.7",
   "fields": [
     {
-      "name": "forename"
+      "name": "forename",
+      "type": "string",
+      "nullable": false
     },
     {
-      "name": "surname"
+      "name": "surname",
+      "type": "string",
+      "nullable": false
     }
   ],
   "rules": [
-    {
-      "constraints": [
-        {
-          "field": "forename",
-          "is": "ofType",
-          "value": "string"
-        },
-        {
-          "field": "surname",
-          "is": "ofType",
-          "value": "string"
-        },
-        {
-          "not": {
-            "field": "forename",
-            "is": "null"
-          }
-        },
-        {
-          "not": {
-            "field": "surname",
-            "is": "null"
-          }
-        }
-      ]
-    },
     {
       "constraints": [
         {

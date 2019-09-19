@@ -1,1 +1,0 @@
-When a particular type is disallowed (but there are no other constraints), we should see sample data for other, non-forbidden types. To run this profile it is necessary to use the command line option `--allow-untyped-fields`.

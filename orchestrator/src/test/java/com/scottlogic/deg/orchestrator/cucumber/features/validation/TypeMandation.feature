@@ -7,7 +7,7 @@ Feature: Type mandation validation
     And user_id is less than 10
     And user_id is granular to 1
     # ideally I guess we'd have more here - what's a sensible amount? maybe we should use scenario outlines?
-    Then the profile is invalid because "user_id is untyped; add an ofType, or add its type to the field definition"
+    Then the profile is invalid because "user_id is incorrectly typed; add its type to the field definition"
 
   Scenario: An explicit type constraint should satisfy type mandation
     Given there is a field user_id
@@ -17,14 +17,14 @@ Feature: Type mandation validation
   Scenario: An equalTo constraint should satisfy type mandation
     Given there is a field user_id
     And user_id is equal to "banana"
-    Then the profile is invalid because "user_id is untyped; add an ofType, or add its type to the field definition"
+    Then the profile is invalid because "user_id is incorrectly typed; add its type to the field definition"
 
   Scenario: An inSet constraint should satisfy type mandation
     Given there is a field user_id
     And user_id is in set:
       | "banana" |
       | "cactus" |
-    Then the profile is invalid because "user_id is untyped; add an ofType, or add its type to the field definition"
+    Then the profile is invalid because "user_id is incorrectly typed; add its type to the field definition"
 
   Scenario: An ISIN constraint should satisfy type mandation
     Given there is a field foo
@@ -44,15 +44,15 @@ Feature: Type mandation validation
   Scenario: A mandatorily absent field should satisfy type mandation
     Given there is a field user_id
     And user_id is null
-    Then the profile is invalid because "user_id is untyped; add an ofType, or add its type to the field definition"
+    Then the profile is invalid because "user_id is incorrectly typed; add its type to the field definition"
 
   Scenario: When only some fields fail type mandation, the errors should be specific to which
     Given there is a field user_id
     And user_id is of type "string"
     And there is a field price
     And there is a field purchase_time
-    Then the profile is invalid because "price is untyped; add an ofType, or add its type to the field definition"
-    And the profile is invalid because "purchase_time is untyped; add an ofType, or add its type to the field definition"
+    Then the profile is invalid because "price is incorrectly typed; add its type to the field definition"
+    And the profile is invalid because "purchase_time is incorrectly typed; add its type to the field definition"
 
   Scenario: An anyOf constraint whose branches don't all satisfy type mandation should not satisfy type mandation
     Given there is a field user_id
@@ -63,4 +63,11 @@ Feature: Type mandation validation
         { "not": { "field": "user_id", "is": "null" } }
       ]}
       """
-    Then the profile is invalid because "user_id is untyped; add an ofType, or add its type to the field definition"
+    Then the profile is invalid because "user_id is incorrectly typed; add its type to the field definition"
+
+  Scenario: When only a field has two types it fails validation
+    Given there is a field user_id
+    And user_id is of type "string"
+    And user_id is of type "integer"
+    Then the profile is invalid because "user_id is incorrectly typed; add its type to the field definition"
+

@@ -51,7 +51,7 @@
   "definitions": {
     "schemaVersion": {
       "title": "The version of the DataHelix profile schema",
-      "const": "0.6"
+      "const": "0.7"
     },
     "dataType": {
       "oneOf": [
@@ -111,6 +111,7 @@
       "required": ["name"],
       "default": {
         "name": "fieldName",
+        "type": "string",
         "formatting": "",
         "unique": false,
         "nullable": true
@@ -118,6 +119,22 @@
       "properties": {
         "name": {
           "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "decimal",
+            "integer",
+            "string",
+            "datetime",
+            "ISIN",
+            "SEDOL",
+            "CUSIP",
+            "RIC",
+            "firstname",
+            "lastname",
+            "fullname"
+          ]
         },
         "formatting": {
           "type": "string"

@@ -1,25 +1,11 @@
 {
-  "schemaVersion": "0.6",
+  "schemaVersion": "0.7",
   "fields": [
     {
-      "name": "isin"
+      "name": "isin",
+      "type": "ISIN",
+      "nullable": false
     }
   ],
-  "rules": [
-    {
-      "constraints": [
-        {
-          "field": "isin",
-          "is": "ofType",
-          "value": "ISIN"
-        },
-        {
-          "not": {
-            "field": "isin",
-            "is": "null"
-          }
-        }
-      ]
-    }
-  ]
+  "rules": []
 }

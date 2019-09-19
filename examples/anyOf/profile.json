@@ -1,26 +1,20 @@
 {
-  "schemaVersion": "0.6",
+  "schemaVersion": "0.7",
   "rules": [
     {
       "rule": "rule 1",
       "constraints": [
         {
-          "not": {
-            "field": "field1",
-            "is": "null"
-          }
-        },
-        {
           "anyOf": [
             {
               "field": "field1",
-              "is": "ofType",
-              "value": "string"
+              "is": "equalTo",
+              "value": "foo"
             },
             {
               "field": "field1",
-              "is": "ofType",
-              "value": "integer"
+              "is": "equalTo",
+              "value": "bar"
             }
           ]
         }
@@ -29,7 +23,9 @@
   ],
   "fields": [
     {
-      "name": "field1"
+      "name": "field1",
+      "type": "string",
+      "nullable": false
     }
   ]
 }

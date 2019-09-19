@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.6",
+  "schemaVersion": "0.7",
   "rules": [
     {
       "rule": "rule 1",
@@ -44,10 +44,12 @@
   ],
   "fields": [
     {
-      "name": "field1"
+      "name": "field1",
+      "type": "string"
     },
     {
-      "name": "field2"
+      "name": "field2",
+      "type": "string"
     }
   ]
 }
