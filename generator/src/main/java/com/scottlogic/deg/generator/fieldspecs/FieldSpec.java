@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
  * This is enforced during merging.
  */
 public class FieldSpec {
-    public static final FieldSpec Empty = new FieldSpec(null, new HeterogeneousTypeContainer<>(), true, null);
+    public static final FieldSpec Empty = new FieldSpec(null, new HeterogeneousTypeContainer<>(), true, Collections.emptySet());
     public static final FieldSpec NullOnly = Empty.withWhitelist(FrequencyDistributedSet.empty());
 
     private final boolean nullable;
@@ -80,7 +80,7 @@ public class FieldSpec {
         return restrictions.get(DateTimeRestrictions.class).orElse(null);
     }
 
-    public FieldSpec withWhitelist(DistributedSet<Object> whitelist) {//todo remove blacklist
+    public FieldSpec withWhitelist(DistributedSet<Object> whitelist) {
         return new FieldSpec(whitelist, new HeterogeneousTypeContainer<>(), nullable, blacklist);
     }
 
@@ -168,7 +168,7 @@ public class FieldSpec {
      * Create a predicate that returns TRUE for all (and only) values permitted by this FieldSpec
      */
     public boolean permits(Object value) {
-        if (blacklist != null && blacklist.contains(value)){
+        if (blacklist.contains(value)){
             return false;
         }
 

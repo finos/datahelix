@@ -23,19 +23,9 @@ import java.util.Set;
 public class BlacklistRestictionsMergeOperation implements RestrictionMergeOperation {
     @Override
     public FieldSpec applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merging) {
-        Set<Object> newBlacklist;
-        if (left.getBlacklist() == null) {
-            newBlacklist = right.getBlacklist();
-        }
-        else if (right.getBlacklist() == null) {
-            newBlacklist = left.getBlacklist();
-        }
-        else {
-            newBlacklist = SetUtils.union(
+        return merging.withBlacklist(
+            SetUtils.union(
                 left.getBlacklist(),
-                right.getBlacklist());
-        }
-
-        return merging.withBlacklist(newBlacklist);
+                right.getBlacklist()));
     }
 }
