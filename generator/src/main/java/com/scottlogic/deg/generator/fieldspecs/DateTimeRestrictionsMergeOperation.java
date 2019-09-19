@@ -65,7 +65,7 @@ public class DateTimeRestrictionsMergeOperation implements RestrictionMergeOpera
             dateTimeRestrictions = new DateTimeRestrictions(
                 mergeResult.restrictions.getMin(),
                 mergeResult.restrictions.getMax(),
-                ((DateTimeGranularity)mergeResult.restrictions.getGranularity()).getTimeScale());
+                mergeResult.restrictions.getGranularity());
         }
 
         return merging.withDateTimeRestrictions(dateTimeRestrictions);

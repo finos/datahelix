@@ -25,18 +25,17 @@ public class NumericRestrictions extends LinearRestrictions<BigDecimal> {
 
     public static final NumericLimit NUMERIC_MIN_LIMIT = new NumericLimit(NUMERIC_MIN, true);
     public static final NumericLimit NUMERIC_MAX_LIMIT = new NumericLimit(NUMERIC_MAX, true);
+    public static final NumericConverter CONVERTER = new NumericConverter();
 
     public NumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max){
         this(min, max, DEFAULT_NUMERIC_SCALE);
     }
 
     public NumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max, int numericScale){
-        super(
-            min,
-            max,
-            new NumericGranularity(numericScale),
-            new NumericConverter()
-        );
+        this(min, max, new NumericGranularity(numericScale));
+    }
+    public NumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max, Granularity<BigDecimal> granularity){
+        super(min, max, granularity, CONVERTER);
     }
 
     public int getNumericScale() {

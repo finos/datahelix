@@ -27,19 +27,18 @@ public class DateTimeRestrictions extends LinearRestrictions<OffsetDateTime> {
 
     public static final DateTimeLimit DATETIME_MIN_LIMIT = new DateTimeLimit(ISO_MIN_DATE, true);
     public static final DateTimeLimit DATETIME_MAX_LIMIT = new DateTimeLimit(ISO_MAX_DATE, true);
+    private static final DateTimeConverter CONVERTER = new DateTimeConverter();
 
     public DateTimeRestrictions(Limit<OffsetDateTime> min, Limit<OffsetDateTime> max) {
         this(min, max, DEFAULT_DATETIME_GRANULARITY);
     }
 
     public DateTimeRestrictions(Limit<OffsetDateTime> min, Limit<OffsetDateTime> max, Timescale granularity) {
-        super(
-            min,
-            max,
-            new DateTimeGranularity(granularity),
-            new DateTimeConverter()
-        );
+        this(min, max, new DateTimeGranularity(granularity));
+    }
 
+    public DateTimeRestrictions(Limit<OffsetDateTime> min, Limit<OffsetDateTime> max, Granularity<OffsetDateTime> granularity){
+        super(min, max, granularity, CONVERTER);
     }
 
     @Override

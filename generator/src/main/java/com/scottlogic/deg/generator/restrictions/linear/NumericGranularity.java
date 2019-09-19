@@ -16,6 +16,8 @@
 
 package com.scottlogic.deg.generator.restrictions.linear;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import java.math.BigDecimal;
 
 public class NumericGranularity implements Granularity<BigDecimal> {
@@ -40,6 +42,11 @@ public class NumericGranularity implements Granularity<BigDecimal> {
     @Override
     public BigDecimal getNext(BigDecimal value) {
         return value.add(BigDecimal.ONE.scaleByPowerOfTen(decimalPlaces * -1));
+    }
+
+    @Override
+    public BigDecimal trimToGranularity(BigDecimal value) {
+        throw new NotImplementedException();
     }
 
     public int getDecimalPlaces() {

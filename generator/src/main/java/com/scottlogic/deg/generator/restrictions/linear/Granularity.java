@@ -7,4 +7,6 @@ public interface Granularity<T> {
     Granularity<T> merge(Granularity<T> otherGranularity);
 
     T getNext(T value);
+
+    T trimToGranularity(T value);
 }

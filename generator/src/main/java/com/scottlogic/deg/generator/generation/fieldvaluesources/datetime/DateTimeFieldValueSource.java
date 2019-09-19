@@ -36,23 +36,21 @@ import static com.scottlogic.deg.generator.utils.SetUtils.stream;
 
 public class DateTimeFieldValueSource implements FieldValueSource {
 
-    private final Timescale granularity;
     private final DateTimeRestrictions restrictions;
     private final Set<Object> blacklist;
-    private final OffsetDateTime inclusiveLower;
-    private final OffsetDateTime exclusiveUpper;
+
+    private final RandomDateGenerator randomDateGenerator;
 
     public DateTimeFieldValueSource(
         DateTimeRestrictions restrictions,
         Set<Object> blacklist) {
-
         this.restrictions = restrictions;
-        this.granularity = ((DateTimeGranularity)restrictions.getGranularity()).getTimeScale();
-
-        this.inclusiveLower = getInclusiveLowerBounds(restrictions);
-        this.exclusiveUpper = getExclusiveUpperBound(restrictions);
-
         this.blacklist = blacklist;
+
+        this.randomDateGenerator = new RandomDateGenerator(
+            getInclusiveLowerBounds(restrictions),
+            getExclusiveUpperBound(restrictions),
+            (DateTimeGranularity)restrictions.getGranularity());
     }
 
     @Override
@@ -95,18 +93,7 @@ public class DateTimeFieldValueSource implements FieldValueSource {
 
     @Override
     public Stream<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
-
-        OffsetDateTime lower = inclusiveLower != null
-            ? inclusiveLower
-            : Defaults.ISO_MIN_DATE;
-
-
-        OffsetDateTime upper = exclusiveUpper != null
-            ? exclusiveUpper
-            : Defaults.ISO_MAX_DATE.plusNanos(1_000_000);
-
-        RandomDateGenerator randomDateGenerator = new RandomDateGenerator(lower, upper, randomNumberGenerator, granularity);
-        return Stream.generate(() -> randomDateGenerator.next())
+        return Stream.generate(() -> randomDateGenerator.next(randomNumberGenerator))
             .filter(i -> !blacklist.contains(i))
             .map(Function.identity());
 
@@ -129,9 +116,7 @@ public class DateTimeFieldValueSource implements FieldValueSource {
 
         DateTimeFieldValueSource otherSource = (DateTimeFieldValueSource) obj;
         return restrictions.equals(otherSource.restrictions) &&
-            blacklist.equals(otherSource.blacklist) &&
-            equals(inclusiveLower, otherSource.inclusiveLower) &&
-            equals(exclusiveUpper, otherSource.exclusiveUpper);
+            blacklist.equals(otherSource.blacklist);
     }
 
     private static boolean equals(OffsetDateTime x, OffsetDateTime y) {
@@ -148,6 +133,6 @@ public class DateTimeFieldValueSource implements FieldValueSource {
 
     @Override
     public int hashCode() {
-        return Objects.hash(restrictions, blacklist, inclusiveLower, exclusiveUpper);
+        return Objects.hash(restrictions, blacklist);
     }
 }
