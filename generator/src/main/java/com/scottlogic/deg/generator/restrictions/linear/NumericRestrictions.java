@@ -42,18 +42,13 @@ public class NumericRestrictions extends LinearRestrictions<BigDecimal> {
         return ((NumericGranularity)getGranularity()).getDecimalPlaces();
     }
 
-    public BigDecimal getStepSize() {
-        return BigDecimal.ONE.scaleByPowerOfTen(getNumericScale() * -1);
-    }
-
     @Override
     public String toString() {
-        return String.format(
-            "%s%s%s%s",
-            getMin() != null ? "after " + getMin().toString() : "",
-            getMin() != null && getMax() != null ? " and " : "",
-            getMax() != null ? "before " + getMax().toString() : "",
-            getNumericScale() != 20 ? "granular-to " + getNumericScale() : "");
+        return
+            "after " + getMin().toString() +
+            " and " +
+            "before " + getMax().toString() +
+            getGranularity().toString();
     }
 
     @Override
@@ -63,11 +58,11 @@ public class NumericRestrictions extends LinearRestrictions<BigDecimal> {
         NumericRestrictions that = (NumericRestrictions) o;
         return Objects.equals(getMin(), that.getMin()) &&
             Objects.equals(getMax(), that.getMax()) &&
-            Objects.equals(getNumericScale(), that.getNumericScale());
+            Objects.equals(getGranularity(), that.getGranularity());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getMin(), getMax(), getNumericScale());
+        return Objects.hash(getMin(), getMax(), getGranularity());
     }
 }

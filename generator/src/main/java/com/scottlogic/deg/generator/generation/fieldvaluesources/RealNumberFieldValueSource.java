@@ -25,9 +25,7 @@ import com.scottlogic.deg.generator.utils.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Iterator;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -38,16 +36,18 @@ import static com.scottlogic.deg.generator.utils.SetUtils.stream;
 public class RealNumberFieldValueSource implements FieldValueSource {
     private final BigDecimal inclusiveUpperLimit;
     private final BigDecimal inclusiveLowerLimit;
-    private final BigDecimal stepSize;
     private final Set<BigDecimal> blacklist;
     private final int scale;
     private final static BigDecimal exclusivityAdjuster = BigDecimal.valueOf(Double.MIN_VALUE);
+
+    private final NumericRestrictions restrictions;
+
 
     public RealNumberFieldValueSource(
         NumericRestrictions restrictions,
         Set<Object> blacklist) {
         this.scale = restrictions.getNumericScale();
-        this.stepSize = restrictions.getStepSize();
+        this.restrictions = restrictions;
 
         NumericLimit lowerLimit = getLowerLimit(restrictions);
 
@@ -95,18 +95,24 @@ public class RealNumberFieldValueSource implements FieldValueSource {
 
     @Override
     public Stream<Object> generateInterestingValues() {
-        return FlatMappingSpliterator.flatMap(
-            Stream.of(
-                streamOf(() -> new RealNumberIterator()).limit(1),
-                streamOf(() -> new RealNumberIterator(new BigDecimal(0))).limit(1),
-                streamOf(() -> new RealNumberIterator(inclusiveUpperLimit)).limit(1)
-            ), Function.identity())
-            .distinct();
+        List<BigDecimal> list = new ArrayList<>();
+        list.add(inclusiveLowerLimit);
+        if (restrictions.getMin().isBefore(BigDecimal.ZERO)){
+            list.add(restrictions.getGranularity().trimToGranularity(new BigDecimal(0)));
+        }
+        list.add(inclusiveUpperLimit);
+
+        return list.stream()
+            .distinct()
+            .filter(i -> !blacklist.contains(i))
+            .map(Function.identity());
     }
 
     @Override
     public Stream<Object> generateAllValues() {
-        return stream(new RealNumberIterator());
+        return stream(new RealNumberIterator())
+            .filter(i -> !blacklist.contains(i))
+            .map(Function.identity());
     }
 
     @Override
@@ -128,14 +134,13 @@ public class RealNumberFieldValueSource implements FieldValueSource {
         RealNumberFieldValueSource otherSource = (RealNumberFieldValueSource) obj;
         return inclusiveUpperLimit.equals(otherSource.inclusiveUpperLimit) &&
             inclusiveLowerLimit.equals(otherSource.inclusiveLowerLimit) &&
-            stepSize.equals(otherSource.stepSize) &&
             blacklist.equals(otherSource.blacklist) &&
             scale == otherSource.scale;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(inclusiveLowerLimit, inclusiveUpperLimit, stepSize, blacklist, scale);
+        return Objects.hash(inclusiveLowerLimit, inclusiveUpperLimit, blacklist, scale);
     }
 
     private class RealNumberIterator implements Iterator<Object> {
@@ -167,7 +172,7 @@ public class RealNumberFieldValueSource implements FieldValueSource {
             BigDecimal currentValue = nextValue;
 
             do {
-                nextValue = nextValue.add(stepSize);
+                nextValue = restrictions.getGranularity().getNext(nextValue);
             } while (blacklist.contains(nextValue));
 
             return currentValue;

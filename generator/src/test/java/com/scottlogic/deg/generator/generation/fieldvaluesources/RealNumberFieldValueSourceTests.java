@@ -198,11 +198,11 @@ class RealNumberFieldValueSourceTests {
     void shouldSupplyInterestingNonBlacklistedValues() {
         givenLowerBound(-10, true);
         givenUpperBound(10, true);
-        givenScale(1);
+        givenScale(0);
 
         givenBlacklist(-10, 0, 9.9);
 
-        expectInterestingValues("-9.9", "0.1", "10");
+        expectInterestingValues();
     }
 
     @Test
