@@ -163,8 +163,6 @@ public class StandardFieldValueSourceEvaluatorTests {
 
         final List<BigDecimal> expectedValues = Arrays.asList(
             new BigDecimal("1E-20"),
-            new BigDecimal("2E-20"),
-            new BigDecimal("999999999999999999.99999999999999999998"),
             new BigDecimal("999999999999999999.99999999999999999999")
         );
         Assert.assertEquals(expectedValues, valuesFromResult);
@@ -230,8 +228,6 @@ public class StandardFieldValueSourceEvaluatorTests {
 
         final List<BigDecimal> expectedValues = Arrays.asList(
             new BigDecimal("15.01"),
-            new BigDecimal("15.02"),
-            new BigDecimal("15.98"),
             new BigDecimal("15.99")
         );
         Assert.assertEquals(expectedValues, valuesFromResult);
@@ -259,9 +255,7 @@ public class StandardFieldValueSourceEvaluatorTests {
 
         final List<BigDecimal> expectedValues = Arrays.asList(
             new BigDecimal("-100000000000000000000.00000000000000000000"),
-            new BigDecimal("-99999999999999999999.99999999999999999999"),
             new BigDecimal("0E-20"),
-            new BigDecimal("99999999999999999999.99999999999999999999"),
             new BigDecimal("100000000000000000000.00000000000000000000")
         );
         Assert.assertEquals(expectedValues, valuesFromResult);

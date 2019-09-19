@@ -164,7 +164,7 @@ class RealNumberFieldValueSourceTests {
         givenUpperBound(10, true);
         givenScale(1);
 
-        expectInterestingValues("-10", "-9.9", "0", "9.9", "10");
+        expectInterestingValues("-10", "0", "10");
     }
 
     @Test
@@ -173,7 +173,7 @@ class RealNumberFieldValueSourceTests {
         givenUpperBound("2.59", true);
         givenScale(2);
 
-        expectInterestingValues("1.9", "1.91", "2.58", "2.59");
+        expectInterestingValues("1.9", "2.59");
     }
 
     @Test
@@ -202,7 +202,7 @@ class RealNumberFieldValueSourceTests {
 
         givenBlacklist(-10, 0, 9.9);
 
-        expectInterestingValues("-9.9", "-9.8", "0.1", "10");
+        expectInterestingValues("-9.9", "0.1", "10");
     }
 
     @Test
@@ -248,8 +248,7 @@ class RealNumberFieldValueSourceTests {
         givenLowerBound(4, true);
 
         expectInterestingValues(
-            4, 5,
-            Defaults.NUMERIC_MAX.subtract(BigDecimal.ONE),
+            4,
             Defaults.NUMERIC_MAX);
     }
 
@@ -259,17 +258,14 @@ class RealNumberFieldValueSourceTests {
 
         expectInterestingValues(
             Defaults.NUMERIC_MIN,
-            Defaults.NUMERIC_MIN.add(BigDecimal.ONE),
-            0, 3, 4);
+            0, 4);
     }
 
     @Test
     void shouldSupplyToBoundary() {
         expectInterestingValues(
             Defaults.NUMERIC_MIN,
-            Defaults.NUMERIC_MIN.add(BigDecimal.ONE),
             0,
-            Defaults.NUMERIC_MAX.subtract(BigDecimal.ONE),
             Defaults.NUMERIC_MAX
         );
     }
@@ -279,7 +275,7 @@ class RealNumberFieldValueSourceTests {
         givenLowerBound(0, true);
         givenUpperBound(Integer.MAX_VALUE, false);
 
-        expectInterestingValues(0, 1, Integer.MAX_VALUE - 2, Integer.MAX_VALUE - 1);
+        expectInterestingValues(0, Integer.MAX_VALUE - 1);
     }
 
     @Test
@@ -415,7 +411,7 @@ class RealNumberFieldValueSourceTests {
         givenUpperBound(1e30, true);
         givenScale(0);
 
-        expectInterestingValues(new BigDecimal("1e20"), "99999999999999999999", "0", "-9", "-10");
+        expectInterestingValues(new BigDecimal("1e20"), "0", "-10");
     }
 
     @Test
@@ -434,7 +430,7 @@ class RealNumberFieldValueSourceTests {
         givenUpperBound(1e30, false);
         givenScale(0);
 
-        expectInterestingValues("99999999999999999999", "99999999999999999998", "0", "-8", "-9");
+        expectInterestingValues("99999999999999999999", "0", "-9");
     }
 
     @Test
@@ -453,7 +449,7 @@ class RealNumberFieldValueSourceTests {
         givenUpperBound(10, true);
         givenScale(0);
 
-        expectInterestingValues(new BigDecimal("-1e20"), "-99999999999999999999", "0", "9", "10");
+        expectInterestingValues(new BigDecimal("-1e20"), "0", "10");
     }
 
     @Test
@@ -472,7 +468,7 @@ class RealNumberFieldValueSourceTests {
         givenUpperBound(10, false);
         givenScale(0);
 
-        expectInterestingValues("-99999999999999999999", "-99999999999999999998", "0", "8", "9");
+        expectInterestingValues("-99999999999999999999", "0", "9");
     }
 
     @Test

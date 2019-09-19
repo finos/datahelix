@@ -90,12 +90,6 @@ class FieldSpecValueGeneratorTests {
                     new BigDecimal("10.00000000000000000001")
                 ),
                 new DataBagValue(
-                    new BigDecimal("10.00000000000000000002")
-                ),
-                new DataBagValue(
-                    new BigDecimal("29.99999999999999999998")
-                ),
-                new DataBagValue(
                     new BigDecimal("29.99999999999999999999")
                 ),
                 new DataBagValue(null)

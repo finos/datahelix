@@ -97,9 +97,9 @@ public class RealNumberFieldValueSource implements FieldValueSource {
     public Stream<Object> generateInterestingValues() {
         return FlatMappingSpliterator.flatMap(
             Stream.of(
-                streamOf(() -> new RealNumberIterator()).limit(2),
+                streamOf(() -> new RealNumberIterator()).limit(1),
                 streamOf(() -> new RealNumberIterator(new BigDecimal(0))).limit(1),
-                streamOf(() -> new RealNumberIterator(inclusiveUpperLimit.subtract(stepSize))).limit(2)
+                streamOf(() -> new RealNumberIterator(inclusiveUpperLimit)).limit(1)
             ), Function.identity())
             .distinct();
     }
