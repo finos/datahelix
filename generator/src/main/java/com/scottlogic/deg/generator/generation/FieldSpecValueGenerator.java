@@ -51,18 +51,20 @@ public class FieldSpecValueGenerator {
     public Stream<DataBagValue> generate(Field field, FieldSpec spec) {
         List<FieldValueSource> fieldValueSources = sourceFactory.getFieldValueSources(spec);
 
-        FieldValueSource combinedFieldValueSource = new CombiningFieldValueSource(fieldValueSources);
+        FieldValueSource combinedFieldValueSource =
+            fieldValueSources.size() == 1
+                ? fieldValueSources.get(0)
+                : new CombiningFieldValueSource(fieldValueSources);
 
-        Iterable<Object> iterable = getDataValues(combinedFieldValueSource, field.isUnique());
-
-        return StreamSupport.stream(iterable.spliterator(), false)
+        return getDataValues(combinedFieldValueSource, field.isUnique())
             .map(DataBagValue::new);
     }
 
-    private Iterable<Object> getDataValues(FieldValueSource source, boolean unique) {
+    private Stream<Object> getDataValues(FieldValueSource source, boolean unique) {
         if (unique) {
             return source.generateAllValues();
         }
+
         switch (dataType) {
             case FULL_SEQUENTIAL:
                 return source.generateAllValues();

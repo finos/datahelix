@@ -33,22 +33,23 @@ import java.util.stream.Collectors;
  * This is enforced during merging.
  */
 public class FieldSpec {
-    public static final FieldSpec Empty =
-        new FieldSpec(null, new HeterogeneousTypeContainer<>(), true);
+    public static final FieldSpec Empty = new FieldSpec(null, new HeterogeneousTypeContainer<>(), true, Collections.emptySet());
     public static final FieldSpec NullOnly = Empty.withWhitelist(FrequencyDistributedSet.empty());
 
     private final boolean nullable;
     private final DistributedSet<Object> whitelist;
+    private final Set<Object> blacklist;
     private final HeterogeneousTypeContainer<Restrictions> restrictions;
 
     private FieldSpec(
         DistributedSet<Object> whitelist,
         HeterogeneousTypeContainer<Restrictions> restrictions,
-        boolean nullable
-    ) {
+        boolean nullable,
+        Set<Object> blacklist) {
         this.whitelist = whitelist;
         this.restrictions = restrictions;
         this.nullable = nullable;
+        this.blacklist = blacklist;
     }
 
     public boolean isNullable() {
@@ -59,8 +60,8 @@ public class FieldSpec {
         return whitelist;
     }
 
-    public BlacklistRestrictions getBlacklistRestrictions() {
-        return restrictions.get(BlacklistRestrictions.class).orElse(null);
+    public Set<Object> getBlacklist() {
+        return blacklist;
     }
 
     public NumericRestrictions getNumericRestrictions() {
@@ -80,15 +81,15 @@ public class FieldSpec {
     }
 
     public FieldSpec withWhitelist(DistributedSet<Object> whitelist) {
-        return new FieldSpec(whitelist, new HeterogeneousTypeContainer<>(), nullable);
+        return new FieldSpec(whitelist, new HeterogeneousTypeContainer<>(), nullable, blacklist);
     }
 
     public FieldSpec withNumericRestrictions(NumericRestrictions numericRestrictions) {
         return withConstraint(NumericRestrictions.class, numericRestrictions);
     }
 
-    public FieldSpec withBlacklistRestrictions(BlacklistRestrictions blacklistRestrictions) {
-        return withConstraint(BlacklistRestrictions.class, blacklistRestrictions);
+    public FieldSpec withBlacklist(Set<Object> blacklist) {
+        return new FieldSpec(whitelist, restrictions, nullable, blacklist);
     }
 
     public FieldSpec withTypeRestrictions(TypeRestrictions typeRestrictions) {
@@ -100,7 +101,7 @@ public class FieldSpec {
     }
 
     public FieldSpec withNotNull() {
-        return new FieldSpec(whitelist, restrictions, false);
+        return new FieldSpec(whitelist, restrictions, false, blacklist);
     }
 
     public FieldSpec withDateTimeRestrictions(DateTimeRestrictions dateTimeRestrictions) {
@@ -127,7 +128,7 @@ public class FieldSpec {
         if (restriction == null){
             return this;
         }
-        return new FieldSpec(null, restrictions.put(type, restriction), nullable);
+        return new FieldSpec(null, restrictions.put(type, restriction), nullable, blacklist);
     }
 
     public boolean isTypeAllowed(Types type){
@@ -167,6 +168,10 @@ public class FieldSpec {
      * Create a predicate that returns TRUE for all (and only) values permitted by this FieldSpec
      */
     public boolean permits(Object value) {
+        if (blacklist.contains(value)){
+            return false;
+        }
+
         TypeRestrictions typeRestrictions = getTypeRestrictions();
         if (typeRestrictions != null) {
             for (Types type : Types.values()) {
@@ -180,7 +185,6 @@ public class FieldSpec {
         keys.add(NumericRestrictions.class);
         keys.add(DateTimeRestrictions.class);
         keys.add(StringRestrictions.class);
-        keys.add(BlacklistRestrictions.class);
 
         Set<TypedRestrictions> toCheckForMatch = restrictions.getMultiple(keys)
             .stream()

@@ -22,25 +22,19 @@ import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import java.time.*;
 import java.util.Iterator;
 
-class RandomDateIterator implements Iterator<OffsetDateTime> {
+class RandomDateGenerator {
     private final OffsetDateTime minDate;
     private final OffsetDateTime maxDate;
     private final RandomNumberGenerator random;
     private final Timescale granularity;
 
-    RandomDateIterator(OffsetDateTime minDate, OffsetDateTime maxDate, RandomNumberGenerator randomNumberGenerator, Timescale granularity) {
+    RandomDateGenerator(OffsetDateTime minDate, OffsetDateTime maxDate, RandomNumberGenerator randomNumberGenerator, Timescale granularity) {
         this.minDate = minDate;
         this.maxDate = maxDate;
         this.random = randomNumberGenerator;
         this.granularity = granularity;
     }
 
-    @Override
-    public boolean hasNext() {
-        return true;
-    }
-
-    @Override
     public OffsetDateTime next() {
         long min = getMilli(minDate);
         long max = getMilli(maxDate) - 1;

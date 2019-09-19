@@ -524,15 +524,13 @@ class RealNumberFieldValueSourceTests {
         expectValues(getObjectUnderTest().generateInterestingValues(), false, expectedValuesArray);
     }
 
-    private void expectValues(Iterable<Object> values, boolean assertCount, Object... expectedValuesArray) {
+    private void expectValues(Stream<Object> values, boolean assertCount, Object... expectedValuesArray) {
         Collection<Matcher<? super BigDecimal>> expectedValuesMatchers = Stream.of(expectedValuesArray)
             .map(NumberUtils::coerceToBigDecimal)
             .map(Matchers::comparesEqualTo) // we have to use compare otherwise it fails if the scale is different
             .collect(Collectors.toList());
 
-        BigDecimal[] actualValues = StreamSupport
-            .stream(values.spliterator(), false)
-            .toArray(BigDecimal[]::new);
+        BigDecimal[] actualValues = values.toArray(BigDecimal[]::new);
 
         // ASSERT
         Assert.assertThat(actualValues, arrayContainingInAnyOrder(expectedValuesMatchers));
@@ -554,7 +552,7 @@ class RealNumberFieldValueSourceTests {
     }
 
     private void expectCorrectRandomValues() {
-        Iterable<Object> resultsIterable = getObjectUnderTest().generateRandomValues(new JavaUtilRandomNumberGenerator(0));
+        Stream<Object> resultsIterable = getObjectUnderTest().generateRandomValues(new JavaUtilRandomNumberGenerator(0));
 
         Set<BigDecimal> decimalBlacklist = blacklist
             .stream()
@@ -562,9 +560,7 @@ class RealNumberFieldValueSourceTests {
             .map(value -> value.setScale(scale, RoundingMode.HALF_UP))
             .collect(Collectors.toCollection(TreeSet::new));
 
-        StreamSupport
-            .stream(resultsIterable.spliterator(), false)
-            .limit(1000)
+        resultsIterable.limit(1000)
             .map(value -> (BigDecimal)value)
             .forEach(value ->
             {

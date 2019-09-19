@@ -96,14 +96,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
 
         return new RealNumberFieldValueSource(
             restrictions,
-            getBlacklist(fieldSpec));
-    }
-
-    private Set<Object> getBlacklist(FieldSpec fieldSpec) {
-        if (fieldSpec.getBlacklistRestrictions() == null)
-            return Collections.emptySet();
-
-        return new HashSet<>(fieldSpec.getBlacklistRestrictions().getBlacklist());
+            fieldSpec.getBlacklist());
     }
 
     private FieldValueSource getStringSource(FieldSpec fieldSpec) {
@@ -113,11 +106,9 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             stringRestrictions = new StringRestrictionsFactory().forMaxLength(1000);
         }
 
-        Set<Object> blacklist = getBlacklist(fieldSpec);
-
         StringGenerator generator = stringRestrictions.createGenerator();
-        if (!blacklist.isEmpty()) {
-            RegexStringGenerator blacklistGenerator = RegexStringGenerator.createFromBlacklist(blacklist);
+        if (!fieldSpec.getBlacklist().isEmpty()) {
+            RegexStringGenerator blacklistGenerator = RegexStringGenerator.createFromBlacklist(fieldSpec.getBlacklist());
 
             generator = generator.intersect(blacklistGenerator);
         }
@@ -130,6 +121,6 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
 
         return new DateTimeFieldValueSource(
             restrictions != null ? restrictions : new DateTimeRestrictions(),
-            getBlacklist(fieldSpec));
+            fieldSpec.getBlacklist());
     }
 }

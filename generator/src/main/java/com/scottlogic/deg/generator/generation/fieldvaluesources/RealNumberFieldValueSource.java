@@ -33,6 +33,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import static com.scottlogic.deg.generator.utils.SetUtils.stream;
+
 public class RealNumberFieldValueSource implements FieldValueSource {
     private final BigDecimal inclusiveUpperLimit;
     private final BigDecimal inclusiveLowerLimit;
@@ -92,33 +94,30 @@ public class RealNumberFieldValueSource implements FieldValueSource {
     }
 
     @Override
-    public Iterable<Object> generateInterestingValues() {
-        return () -> new UpCastingIterator<>(
-            FlatMappingSpliterator.flatMap(
+    public Stream<Object> generateInterestingValues() {
+        return FlatMappingSpliterator.flatMap(
             Stream.of(
                 streamOf(() -> new RealNumberIterator()).limit(2),
                 streamOf(() -> new RealNumberIterator(new BigDecimal(0))).limit(1),
-                streamOf(() -> new RealNumberIterator(inclusiveUpperLimit.subtract(stepSize))).limit(2))
-            , Function.identity())
-            .distinct()
-            .iterator());
+                streamOf(() -> new RealNumberIterator(inclusiveUpperLimit.subtract(stepSize))).limit(2)
+            ), Function.identity())
+            .distinct();
     }
 
     @Override
-    public Iterable<Object> generateAllValues() {
-        return RealNumberIterator::new;
+    public Stream<Object> generateAllValues() {
+        return stream(new RealNumberIterator());
     }
 
     @Override
-    public Iterable<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
-        return () -> new UpCastingIterator<>(
-            new FilteringIterator<>(
-                new SupplierBasedIterator<>(() ->
-                    randomNumberGenerator.nextBigDecimal(
-                        inclusiveLowerLimit,
-                        inclusiveUpperLimit,
-                        scale)),
-                i -> !blacklist.contains(i)));
+    public Stream<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
+        return Stream.generate(() ->
+            randomNumberGenerator.nextBigDecimal(
+                inclusiveLowerLimit,
+                inclusiveUpperLimit,
+                scale))
+            .filter(i -> !blacklist.contains(i))
+            .map(Function.identity());
     }
 
     @Override
