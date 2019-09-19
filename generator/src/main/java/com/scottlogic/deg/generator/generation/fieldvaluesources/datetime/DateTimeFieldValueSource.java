@@ -19,14 +19,17 @@ package com.scottlogic.deg.generator.generation.fieldvaluesources.datetime;
 import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
-import com.scottlogic.deg.generator.utils.FilteringIterator;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
-import com.scottlogic.deg.generator.utils.UpCastingIterator;
 
 import java.time.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Stream;
+
+import static com.scottlogic.deg.generator.utils.SetUtils.stream;
 
 public class DateTimeFieldValueSource implements FieldValueSource {
 
@@ -53,18 +56,19 @@ public class DateTimeFieldValueSource implements FieldValueSource {
     }
 
     @Override
-    public Iterable<Object> generateAllValues() {
-        return () -> new UpCastingIterator<>(
-            new FilteringIterator<>(
-                new SequentialDateIterator(
-                    inclusiveLower != null ? inclusiveLower : ISO_MIN_DATE,
-                    exclusiveUpper != null ? exclusiveUpper : ISO_MAX_DATE,
-                    granularity),
-                i -> !blacklist.contains(i)));
+    public Stream<Object> generateAllValues() {
+        Iterator<OffsetDateTime> sequentialDateIterator = new SequentialDateIterator(
+            inclusiveLower != null ? inclusiveLower : ISO_MIN_DATE,
+            exclusiveUpper != null ? exclusiveUpper : ISO_MAX_DATE,
+            granularity);
+
+        return stream(sequentialDateIterator)
+            .filter(i -> !blacklist.contains(i))
+            .map(Function.identity());
     }
 
     @Override
-    public Iterable<Object> generateInterestingValues() {
+    public Stream<Object> generateInterestingValues() {
 
         ArrayList<Object> interestingValues = new ArrayList<>();
 
@@ -88,13 +92,12 @@ public class DateTimeFieldValueSource implements FieldValueSource {
                 ZoneOffset.UTC));
         }
 
-        return () -> new UpCastingIterator<>(
-            new FilteringIterator<>(interestingValues.iterator(),
-                i -> !blacklist.contains(i)));
+        return interestingValues.stream()
+            .filter(i -> !blacklist.contains(i));
     }
 
     @Override
-    public Iterable<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
+    public Stream<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
 
         OffsetDateTime lower = inclusiveLower != null
             ? inclusiveLower
@@ -105,10 +108,10 @@ public class DateTimeFieldValueSource implements FieldValueSource {
             ? exclusiveUpper
             : ISO_MAX_DATE.plusNanos(1_000_000);
 
-
-        return () -> new UpCastingIterator<>(
-            new FilteringIterator<>(new RandomDateIterator(lower, upper, randomNumberGenerator, granularity),
-                i -> !blacklist.contains(i)));
+        RandomDateGenerator randomDateGenerator = new RandomDateGenerator(lower, upper, randomNumberGenerator, granularity);
+        return Stream.generate(() -> randomDateGenerator.next())
+            .filter(i -> !blacklist.contains(i))
+            .map(Function.identity());
 
     }
 
