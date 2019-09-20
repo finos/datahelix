@@ -235,15 +235,6 @@ Feature: User can specify that a field is null or absent
       | foo  |
       | null |
 
-  Scenario: Null combined with a non-ISIN constraint generates null
-    Given foo is null
-    And foo is of type "string"
-    And foo is anything but of type "ISIN"
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | null |
-
   Scenario: Not null combined with a SEDOL constraint generates valid SEDOLs
     Given foo is anything but null
     And foo is of type "string"
@@ -262,15 +253,6 @@ Feature: User can specify that a field is null or absent
       | foo  |
       | null |
 
-  Scenario: Null combined with a non-SEDOL constraint generates null
-    Given foo is null
-    And foo is of type "string"
-    And foo is anything but of type "SEDOL"
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | null |
-
   Scenario: Not null combined with a CUSIP constraint generates valid CUSIPs
     Given foo is anything but null
     And foo is of type "string"
@@ -287,15 +269,6 @@ Feature: User can specify that a field is null or absent
     And foo is of type "CUSIP"
     Then the following data should be generated:
       | foo  |
-      | null |
-
-  Scenario: Null combined with a non-CUSIP constraint generates null
-    Given foo is null
-    And foo is of type "string"
-    And foo is anything but of type "CUSIP"
-    Then the following data should be generated:
-      | foo  |
-      | null |
       | null |
 
 ### greaterThan ###

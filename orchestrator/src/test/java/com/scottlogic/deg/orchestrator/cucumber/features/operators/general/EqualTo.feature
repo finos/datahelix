@@ -214,15 +214,6 @@ Feature: User can specify that a value is equalTo a required value
       | foo            |
       | "GB0002634946" |
 
-  Scenario: Equal to something that is not a valid ISIN combined with a non-ISIN constraint should generate the equal to value
-    Given there is a field foo
-    And foo is of type "string"
-    And foo is equal to "a"
-    And foo is anything but of type "ISIN"
-    Then the following data should be generated:
-      | foo  |
-      | "a"  |
-
   Scenario: Equal to something that is not a valid ISIN because its check digit is wrong combined with an ISIN constraint should generate no data
     Given there is a field foo
     And foo is of type "string"
@@ -236,15 +227,6 @@ Feature: User can specify that a value is equalTo a required value
     And foo is equal to "aa"
     And foo is of type "ISIN"
     Then no data is created
-
-  Scenario: 'EqualTo' something that is not a valid SEDOL combined with a non-SEDOL constraint should be successful
-    Given there is a field foo
-    And foo is of type "string"
-    And foo is equal to "a"
-    And foo is anything but of type "SEDOL"
-    Then the following data should be generated:
-      | foo  |
-      | "a"  |
 
   Scenario: Not equal to something that is not a valid SEDOL combined with a SEDOL constraint should generate SEDOLs
     Given there is a field foo
@@ -274,22 +256,6 @@ Feature: User can specify that a value is equalTo a required value
     And foo is of type "SEDOL"
     Then no data is created
 
-  Scenario: Equal to a valid SEDOL combined with a non-SEDOL constraint should generate no data
-    Given there is a field foo
-    And foo is of type "string"
-    And foo is equal to "0263494"
-    And foo is anything but of type "SEDOL"
-    Then no data is created
-
-  Scenario: Equal to something that is not a valid CUSIP combined with a non-CUSIP constraint should be successful
-    Given there is a field foo
-    And foo is of type "string"
-    And foo is equal to "a"
-    And foo is anything but of type "CUSIP"
-    Then the following data should be generated:
-      | foo  |
-      | "a"  |
-
   Scenario: Not equal to something that is not a valid CUSIP combined with a CUSIP constraint should generate valid CUSIPs
     Given there is a field foo
     And foo is of type "string"
@@ -316,13 +282,6 @@ Feature: User can specify that a value is equalTo a required value
     And foo is of type "string"
     And foo is equal to "aa"
     And foo is of type "CUSIP"
-    Then no data is created
-
-  Scenario: Equal to a valid CUSIP combined with a non-CUSIP constraint should generate no data
-    Given there is a field foo
-    And foo is of type "string"
-    And foo is equal to "38259P508"
-    And foo is anything but of type "CUSIP"
     Then no data is created
 
   Scenario: Equal to a valid RIC combined with an RIC constraint should generate the equal to value

@@ -122,15 +122,11 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec construct(IsOfTypeConstraint constraint, boolean negate) {
-        List<Types> types;
         if (negate) {
-            types = Lists.newArrayList(Types.values());
-            types.remove(constraint.requiredType);
-        } else {
-            types = Collections.singletonList(constraint.requiredType);
+            throw new UnsupportedOperationException("cannot negate types");
         }
 
-        return FieldSpec.Empty.withTypeRestrictions(types);
+        return FieldSpec.Empty.withTypeRestrictions(Collections.singleton(constraint.requiredType));
     }
 
     private FieldSpec construct(IsGreaterThanConstantConstraint constraint, boolean negate) {

@@ -1512,36 +1512,6 @@ Feature: Values can be specified by using if, then and else constraints
       | foo    | bar    |
       | "dddd" | "4444" |
 
-  Scenario: An if constraint that contains an ISIN constraint in the if clause generates the expected output
-    Given foo is in set:
-      | "GB0002634946" |
-      | "bb"           |
-      | "ccc"          |
-      | "dddd"         |
-    And foo is anything but null
-    And bar is in set:
-      | "GB0002634946" |
-      | "22"           |
-      | "333"          |
-      | "4444"         |
-    And bar is anything but null
-    And foo is of type "string"
-    And bar is of type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "ofType", "value": "ISIN" },
-        "then": { "field": "bar", "is": "equalTo", "value": "22" },
-        "else": { "field": "bar", "is": "equalTo", "value": "4444" }
-      }
-      """
-    Then the following data should be generated:
-      | foo            | bar    |
-      | "GB0002634946" | "22"   |
-      | "bb"           | "4444" |
-      | "ccc"          | "4444" |
-      | "dddd"         | "4444" |
-
   Scenario: An if constraint that contains an ISIN constraint in the then clause generates valid ISINs when the if clause applies
     Given foo is in set:
       | "GB0002634946" |
@@ -1601,37 +1571,6 @@ Feature: Values can be specified by using if, then and else constraints
       | "bb"           | "22"           |
       | "ccc"          | "GB0002634946" |
       | "dddd"         | "GB0002634946" |
-
-  Scenario: An if constraint that contains an ISIN constraint in the if clause and is combined with an in set constraint that does not contain any valid ISINs only generates data that matches the else clause
-    Given foo is in set:
-      | "aa"   |
-      | "bb"   |
-      | "ccc"  |
-      | "dddd" |
-    And foo is anything but null
-    And foo is of type "string"
-    And bar is of type "string"
-    And bar is in set:
-      | "11"   |
-      | "22"   |
-      | "333"  |
-      | "4444" |
-    And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "ofType", "value": "ISIN" },
-        "then": { "field": "bar", "is": "equalTo", "value": "22" },
-        "else": { "field": "bar", "is": "equalTo", "value": "333" }
-      }
-      """
-    Then the following data should be generated:
-      | foo    | bar   |
-      | "aa"   | "333" |
-      | "bb"   | "333" |
-      | "ccc"  | "333" |
-      | "dddd" | "333" |
-
 
   Scenario: An if constraint that contains an ISIN constraint in the then clause combined with an in set constraint that does not contain any valid ISINs only generates data that matches the else clause
     Given foo is in set:
