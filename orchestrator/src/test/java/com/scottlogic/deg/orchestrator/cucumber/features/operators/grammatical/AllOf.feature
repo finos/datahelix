@@ -83,17 +83,3 @@ Feature: User can specify that data must be created to conform to each of multip
       ]}
       """
     Then no data is created
-
-  Scenario: User constrains type with not allOf construction should generate only datetimes
-    Given there is a field foo
-    And untyped fields are allowed
-    And there is a constraint:
-      """
-      { "allOf": [
-        { "not": { "field": "foo", "is": "ofType", "value": "string" }},
-        { "not": { "field": "foo", "is": "ofType", "value": "decimal" }}
-      ]}
-      """
-    Then some data should be generated
-    And foo contains anything but string data
-    And foo contains anything but numeric data

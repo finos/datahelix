@@ -4,17 +4,7 @@ Feature: The violations mode of the Data Helix app can be run in violations mode
     Given there is a field foo
     And the data requested is violating
     And the generator can generate at most 5 rows
-
-  @ignore #584, conditional violation doesn't work with 'ofType integer'
-  Scenario: Running the generator in violate mode for not equal to is successful (integer)
-    Given foo is anything but equal to 8
-    And foo is of type "integer"
     And we do not violate any of type constraints
-    And the generation strategy is full
-    Then the following data should be generated:
-      | foo  |
-      | 8    |
-      | null |
 
   Scenario: Running the generator in violate mode for not equal to is successful (decimal)
     Given foo is anything but equal to 8
@@ -45,37 +35,8 @@ Feature: The violations mode of the Data Helix app can be run in violations mode
     Then the following data should be included in what is generated:
       | foo                                         |
       | "hello"                                     |
-      | 0                                           |
-      | -100000000000000000000.00000000000000000000 |
-      | -99999999999999999999.99999999999999999999  |
-      | 99999999999999999999.99999999999999999999   |
-      | 100000000000000000000.00000000000000000000  |
-      | 1900-01-01T00:00:00.000Z                    |
-      | 2100-01-01T00:00:00.000Z                    |
-      | null                                        |
 
 ### Random
-
-  Scenario: The generator produces violating (incorrect type) data in random mode for type 'String'
-    Given foo is of type "string"
-    And the generation strategy is random
-    And the data requested is violating
-    Then 5 rows of data are generated
-    And foo contains anything but string data
-
-  Scenario: The generator produces violating (incorrect type) data in random mode for type 'DateTime'
-    Given foo is of type "datetime"
-    And the generation strategy is random
-    And the data requested is violating
-    Then 5 rows of data are generated
-    And foo contains anything but datetime data
-
-  Scenario: The generator produces violating (incorrect type) data in random mode for type 'Decimal'
-    Given foo is of type "decimal"
-    And the generation strategy is random
-    And the data requested is violating
-    Then 5 rows of data are generated
-    And foo contains anything but numeric data
 
   Scenario: The generator produces violating 'Null' data in random mode
     Given foo is null
