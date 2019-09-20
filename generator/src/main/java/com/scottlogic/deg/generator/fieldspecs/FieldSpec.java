@@ -122,7 +122,9 @@ public class FieldSpec {
             throw new UnsupportedOperationException("Cannot give the wrong restriction type to a Field spec");
         }
 
-        return new FieldSpec(null, restrictions.put(type, restriction), nullable, blacklist, types);
+        Collection<Types> newType = types.size() == 1 ? types : Collections.singleton(constraintType);
+
+        return new FieldSpec(null, restrictions.put(type, restriction), nullable, blacklist, newType);
     }
 
     public boolean isTypeAllowed(Types type){
