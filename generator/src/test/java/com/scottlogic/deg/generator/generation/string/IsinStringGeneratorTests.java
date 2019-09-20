@@ -120,21 +120,6 @@ public class IsinStringGeneratorTests {
     }
 
     @Test
-    @Disabled("Standard constraints e.g. ISINs currently cannot be negated")
-    public void complementShouldProduceNoRandomValidIsins() {
-        StringGenerator target = createIsinGenerator().complement();
-
-        final int NumberOfTests = 100;
-
-        final Iterator<String> allIsins = target.generateRandomValues(new JavaUtilRandomNumberGenerator()).iterator();
-
-        for (int ii = 0; ii < NumberOfTests; ++ii) {
-            final String nextIsin = allIsins.next();
-            assertThat(FinancialCodeUtils.isValidIsin(nextIsin), is(false));
-        }
-    }
-
-    @Test
     public void shouldMatchAValidIsinCodeWhenNotNegated(){
         StringGenerator isinGenerator = createIsinGenerator();
 
@@ -150,25 +135,5 @@ public class IsinStringGeneratorTests {
         boolean matches = isinGenerator.matches("not an isin");
 
         Assert.assertFalse(matches);
-    }
-
-    @Test
-    @Disabled("Standard constraints e.g. ISINs currently cannot be negated")
-    public void shouldNotMatchAValidIsinCodeWhenNegated(){
-        StringGenerator isinGenerator = createIsinGenerator().complement();
-
-        boolean matches = isinGenerator.matches("GB0002634946");
-
-        Assert.assertFalse(matches);
-    }
-
-    @Test
-    @Disabled("Standard constraints e.g. ISINs currently cannot be negated")
-    public void shouldMatchAnInvalidIsinCodeWhenNegated(){
-        StringGenerator isinGenerator = createIsinGenerator().complement();
-
-        boolean matches = isinGenerator.matches("not an isin");
-
-        Assert.assertTrue(matches);
     }
 }

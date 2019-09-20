@@ -77,24 +77,4 @@ public class CusipStringGeneratorTests {
 
         assertFalse(matches);
     }
-
-    @Test
-    @Disabled("Standard constraints e.g. ISINs currently cannot be negated")
-    public void shouldNotMatchAValidCusipCodeWhenNegated(){
-        StringGenerator cusipGenerator = createCusipGenerator().complement();
-
-        boolean matches = cusipGenerator.matches("38259P508");
-
-        assertFalse(matches);
-    }
-
-    @Test
-    @Disabled("Standard constraints e.g. ISINs currently cannot be negated")
-    public void shouldMatchAnInvalidCusipCodeWhenNegated(){
-        StringGenerator cusipGenerator = createCusipGenerator().complement();
-
-        boolean matches = cusipGenerator.matches("not a cusip");
-
-        assertTrue(matches);
-    }
 }
