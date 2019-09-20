@@ -42,6 +42,7 @@ import java.util.stream.Stream;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ConstraintValidationAndReadingTests {
@@ -52,7 +53,7 @@ public class ConstraintValidationAndReadingTests {
     public void before() {
         List<Field> fields = new ArrayList<>();
 
-        fields.add(new Field("test"));
+        fields.add(createField("test"));
 
         profileFields = new ProfileFields(fields);
     }
@@ -220,7 +221,7 @@ public class ConstraintValidationAndReadingTests {
 
             ConstraintValueValidator.validate(dto.field, type, value);
 
-            Constraint constraint = AtomicConstraintFactory.create(type, new Field(dto.field), value);
+            Constraint constraint = AtomicConstraintFactory.create(type, createField(dto.field), value);
 
             Assert.assertThat("Expected " + constraintType.getName() + " but got " + constraint.getClass().getName(),
                     constraint,

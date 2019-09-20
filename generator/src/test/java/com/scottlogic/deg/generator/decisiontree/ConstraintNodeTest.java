@@ -21,12 +21,13 @@ import org.junit.jupiter.api.Test;
 
 import static com.scottlogic.deg.generator.builders.TestConstraintNodeBuilder.constraintNode;
 import static org.junit.jupiter.api.Assertions.*;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 
 class ConstraintNodeTest {
 
-    Field A = new Field("A");
-    Field B = new Field("B");
+    Field A = createField("A");
+    Field B = createField("B");
 
     @Test
     public void equals_identicalConstraintNodesDifferentReferences_isTrue(){
