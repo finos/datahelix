@@ -3,7 +3,6 @@ package com.scottlogic.deg.generator.fieldspecs;
 import com.google.common.collect.ImmutableMap;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.generator.restrictions.TypeRestrictions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -16,7 +15,7 @@ class RowSpecMergerTest {
     RowSpecMerger rowSpecMerger = new RowSpecMerger(new FieldSpecMerger());
 
     FieldSpec isNull = FieldSpec.NullOnly;
-    FieldSpec notNull = FieldSpec.Empty.withNotNull().withTypeRestrictions(TypeRestrictions.ALL_TYPES_PERMITTED);
+    FieldSpec notNull = FieldSpec.Empty.withNotNull();
     Field A = new Field("A");
     Field B = new Field("B");
     ProfileFields fields = new ProfileFields(Arrays.asList(A, B));

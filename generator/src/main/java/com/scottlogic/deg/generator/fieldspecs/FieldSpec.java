@@ -76,8 +76,8 @@ public class FieldSpec {
         return restrictions.get(StringRestrictions.class).orElse(null);
     }
 
-    public TypeRestrictions getTypeRestrictions() {
-        return restrictions.get(TypeRestrictions.class).orElse(null);
+    public Collection<Types> getTypeRestrictions() {
+        return types;
     }
 
     public DateTimeRestrictions getDateTimeRestrictions() {
@@ -96,8 +96,8 @@ public class FieldSpec {
         return new FieldSpec(whitelist, restrictions, nullable, blacklist, types);
     }
 
-    public FieldSpec withTypeRestrictions(TypeRestrictions typeRestrictions) {
-        return withConstraint(TypeRestrictions.class, typeRestrictions);
+    public FieldSpec withTypeRestrictions(Collection<Types> typeRestrictions) {
+        return new FieldSpec(whitelist, restrictions, nullable, blacklist, typeRestrictions);
     }
 
     public FieldSpec withStringRestrictions(StringRestrictions stringRestrictions) {
@@ -123,7 +123,7 @@ public class FieldSpec {
         if (whitelist != null){
             return false;
         }
-        return getTypeRestrictions() == null || getTypeRestrictions().isTypeAllowed(type);
+        return types.contains(type);
     }
 
     @Override
@@ -160,10 +160,10 @@ public class FieldSpec {
             return false;
         }
 
-        TypeRestrictions typeRestrictions = getTypeRestrictions();
+        Collection<Types> typeRestrictions = getTypeRestrictions();
         if (typeRestrictions != null) {
             for (Types type : Types.values()) {
-                if (!typeRestrictions.isTypeAllowed(type) && type.isInstanceOf(value)) {
+                if (!typeRestrictions.contains(type) && type.isInstanceOf(value)) {
                     return false;
                 }
             }
