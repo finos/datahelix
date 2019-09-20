@@ -25,6 +25,7 @@ import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static com.scottlogic.deg.generator.fieldspecs.FieldSpec.NullOnly;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
@@ -69,10 +70,7 @@ class NumericRestrictionsMergeOperationTests {
 
         FieldSpec result = operation.applyMergeOperation(left, right, merging);
 
-        Assert.assertThat(result, not(sameInstance(merging)));
-        Assert.assertThat(result.getNumericRestrictions(), is(nullValue()));
-        Assert.assertThat(result.getTypeRestrictions(), not(nullValue()));
-        Assert.assertThat(result.getTypeRestrictions().getAllowedTypes(), not(hasItem(IsOfTypeConstraint.Types.NUMERIC)));
+        Assert.assertThat(result, sameInstance(NullOnly));
     }
 
     @Test
@@ -88,10 +86,7 @@ class NumericRestrictionsMergeOperationTests {
 
         FieldSpec result = operation.applyMergeOperation(left, right, merging);
 
-        Assert.assertThat(result, not(sameInstance(merging)));
-        Assert.assertThat(result.getNumericRestrictions(), is(nullValue()));
-        Assert.assertThat(result.getTypeRestrictions(), not(nullValue()));
-        Assert.assertThat(result.getTypeRestrictions().getAllowedTypes(), not(hasItem(IsOfTypeConstraint.Types.NUMERIC)));
+        Assert.assertThat(result, sameInstance(NullOnly));
     }
 
     @Test

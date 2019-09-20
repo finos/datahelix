@@ -108,22 +108,6 @@ public class FieldSpec {
         return withConstraint(DateTimeRestrictions.class, dateTimeRestrictions);
     }
 
-    public FieldSpec withoutType(Types type){
-        TypeRestrictions typeRestrictions = getTypeRestrictions();
-
-        Set<Types> types = typeRestrictions == null
-            ? new HashSet<>(Arrays.asList(Types.values()))
-            : new HashSet<>(typeRestrictions.getAllowedTypes());
-
-        types.remove(type);
-
-        if (types.isEmpty()){
-            return NullOnly;
-        }
-
-        return withTypeRestrictions(new TypeRestrictions(types));
-    }
-
     private <T extends Restrictions> FieldSpec withConstraint(Class<T> type, T restriction) {
         if (restriction == null){
             return this;
