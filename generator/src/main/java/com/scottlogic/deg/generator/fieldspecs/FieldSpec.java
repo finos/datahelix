@@ -33,23 +33,27 @@ import java.util.stream.Collectors;
  * This is enforced during merging.
  */
 public class FieldSpec {
-    public static final FieldSpec Empty = new FieldSpec(null, new HeterogeneousTypeContainer<>(), true, Collections.emptySet());
+    public static final Collection<Types> ALL_TYPES_PERMITTED = Arrays.asList(Types.values());
+    public static final FieldSpec Empty = new FieldSpec(null, new HeterogeneousTypeContainer<>(), true, Collections.emptySet(), ALL_TYPES_PERMITTED);
     public static final FieldSpec NullOnly = Empty.withWhitelist(FrequencyDistributedSet.empty());
 
     private final boolean nullable;
     private final DistributedSet<Object> whitelist;
     private final Set<Object> blacklist;
     private final HeterogeneousTypeContainer<Restrictions> restrictions;
+    private final Collection<Types> types;
 
     private FieldSpec(
         DistributedSet<Object> whitelist,
         HeterogeneousTypeContainer<Restrictions> restrictions,
         boolean nullable,
-        Set<Object> blacklist) {
+        Set<Object> blacklist,
+        Collection<Types> types) {
         this.whitelist = whitelist;
         this.restrictions = restrictions;
         this.nullable = nullable;
         this.blacklist = blacklist;
+        this.types = types;
     }
 
     public boolean isNullable() {
@@ -81,7 +85,7 @@ public class FieldSpec {
     }
 
     public FieldSpec withWhitelist(DistributedSet<Object> whitelist) {
-        return new FieldSpec(whitelist, new HeterogeneousTypeContainer<>(), nullable, blacklist);
+        return new FieldSpec(whitelist, new HeterogeneousTypeContainer<>(), nullable, blacklist, types);
     }
 
     public FieldSpec withNumericRestrictions(NumericRestrictions numericRestrictions) {
@@ -89,7 +93,7 @@ public class FieldSpec {
     }
 
     public FieldSpec withBlacklist(Set<Object> blacklist) {
-        return new FieldSpec(whitelist, restrictions, nullable, blacklist);
+        return new FieldSpec(whitelist, restrictions, nullable, blacklist, types);
     }
 
     public FieldSpec withTypeRestrictions(TypeRestrictions typeRestrictions) {
@@ -101,7 +105,7 @@ public class FieldSpec {
     }
 
     public FieldSpec withNotNull() {
-        return new FieldSpec(whitelist, restrictions, false, blacklist);
+        return new FieldSpec(whitelist, restrictions, false, blacklist, types);
     }
 
     public FieldSpec withDateTimeRestrictions(DateTimeRestrictions dateTimeRestrictions) {
@@ -112,7 +116,7 @@ public class FieldSpec {
         if (restriction == null){
             return this;
         }
-        return new FieldSpec(null, restrictions.put(type, restriction), nullable, blacklist);
+        return new FieldSpec(null, restrictions.put(type, restriction), nullable, blacklist, types);
     }
 
     public boolean isTypeAllowed(Types type){
@@ -184,7 +188,7 @@ public class FieldSpec {
     }
 
     public int hashCode() {
-        return Objects.hash(nullable, whitelist, restrictions);
+        return Objects.hash(nullable, whitelist, restrictions, blacklist, types);
     }
 
     @Override
@@ -197,6 +201,8 @@ public class FieldSpec {
         FieldSpec other = (FieldSpec) obj;
         return Objects.equals(nullable, other.nullable)
             && Objects.equals(whitelist, other.whitelist)
-            && Objects.equals(restrictions, other.restrictions);
+            && Objects.equals(restrictions, other.restrictions)
+            && Objects.equals(blacklist, other.blacklist)
+            && Objects.equals(types, other.types);
     }
 }
