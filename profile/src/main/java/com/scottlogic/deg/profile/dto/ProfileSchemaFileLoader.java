@@ -39,21 +39,17 @@ public class ProfileSchemaFileLoader implements ProfileSchemaLoader {
 
     @Override
     public void validateProfile(File profileFile, URL schemaUrl) {
-        String profile;
-        String schema;
-
         if (schemaUrl == null) {
             throw new ValidationException("Null Schema");
         }
 
         try {
-            profile = readProfile(profileFile);
-            schema = readSchema(schemaUrl);
+            String profile = readProfile(profileFile);
+            String schema = readSchema(schemaUrl);
+            validator.validateProfile(profile, schema);
         } catch (IOException e) {
             throw new ValidationException(e.getClass() + " when looking for schema with URL " + schemaUrl);
         }
-
-        validator.validateProfile(profile, schema);
     }
 
     private String readProfile(File profileFile) throws IOException {
