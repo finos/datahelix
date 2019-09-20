@@ -64,14 +64,6 @@ class ParsedGranularityTests {
         Assert.assertThat(parsed.getNumericGranularity(), equalTo(BigDecimal.valueOf(1)));
     }
 
-    @Disabled("Converting 0.01f (or other fractions) to a BigDecimal results in rounding errors, BigDecimal holds the value 0.009999999776482582, which isn't a fractional power of ten.")
-    @Test
-    public void shouldBeAbleToParseFloatGranularity(){
-        ParsedGranularity parsed = ParsedGranularity.parse(0.01f);
-
-        Assert.assertThat(parsed.getNumericGranularity(), equalTo(BigDecimal.valueOf(0.01)));
-    }
-
     @Test
     public void shouldBeAbleToParseDoubleGranularity(){
         ParsedGranularity parsed = ParsedGranularity.parse(0.1d);

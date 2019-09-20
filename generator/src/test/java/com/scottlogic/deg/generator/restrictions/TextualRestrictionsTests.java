@@ -442,28 +442,6 @@ class TextualRestrictionsTests {
     }
 
     @Test
-    @Disabled("Regex constraints cannot currently be combined with standard constraints e.g. ISINs")
-    void createGenerator_withMatchingRegexAndMatchingStandardConstraint_shouldCreateStrings() {
-        MergeResult<StringRestrictions> result = aValid(StandardConstraintTypes.ISIN)
-            .intersect(matchingRegex("[a-zA-Z0-9]{12}", false));
-
-        StringGenerator generator = result.restrictions.createGenerator();
-
-        assertGeneratorCanGenerateAtLeastOneString(generator);
-    }
-
-    @Test
-    @Disabled("Regex constraints cannot currently be combined with standard constraints e.g. ISINs")
-    void createGenerator_withContainingRegexAndMatchingStandardConstraint_shouldCreateStrings() {
-        MergeResult<StringRestrictions> result = aValid(StandardConstraintTypes.ISIN)
-            .intersect(containsRegex("[a-zA-Z0-9]{12}", false));
-
-        StringGenerator generator = result.restrictions.createGenerator();
-
-        assertGeneratorCanGenerateAtLeastOneString(generator);
-    }
-
-    @Test
     void createGenerator_withNegatedMaxLengthConstraint_shouldCreateStringsFromLength() {
         StringRestrictions restrictions = minLength(10);
 

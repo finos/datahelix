@@ -59,6 +59,7 @@ public class SedolStringGeneratorTests {
             assertThat(nextSedol.charAt(6), equalTo(checkDigit));
         }
     }
+    
     @Test
     public void shouldMatchAValidSedolCodeWhenNotNegated(){
         StringGenerator SedolGenerator = createSedolGenerator();
@@ -75,25 +76,5 @@ public class SedolStringGeneratorTests {
         boolean matches = SedolGenerator.matches("not a sedol");
 
         assertFalse(matches);
-    }
-
-    @Test
-    @Disabled("Standard constraints e.g. ISINs currently cannot be negated")
-    public void shouldNotMatchAValidSedolCodeWhenNegated(){
-        StringGenerator SedolGenerator = createSedolGenerator().complement();
-
-        boolean matches = SedolGenerator.matches("2634946");
-
-        assertFalse(matches);
-    }
-
-    @Test
-    @Disabled("Standard constraints e.g. ISINs currently cannot be negated")
-    public void shouldMatchAnInvalidSedolCodeWhenNegated(){
-        StringGenerator SedolGenerator = createSedolGenerator().complement();
-
-        boolean matches = SedolGenerator.matches("not a sedol");
-
-        assertTrue(matches);
     }
 }
