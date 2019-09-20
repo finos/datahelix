@@ -96,11 +96,3 @@ Feature: User can specify that datetime fields are granular to a certain unit
     Given foo is granular to "decades"
     Then the profile is invalid because "Field \[foo\]: Must be one of the supported datetime units \(millis, seconds, minutes, hours, days, months, years\)"
     And no data is created
-
-  Scenario: Applying a decimal granularTo constraint does not affect granularity
-    Given foo is granular to 0.1
-    And the generator can generate at most 1 rows
-    And foo is after 2000-01-01T00:00:00.000Z
-    Then the following data should be generated:
-      | foo                       |
-      | 2000-01-01T00:00:00.001Z  |
