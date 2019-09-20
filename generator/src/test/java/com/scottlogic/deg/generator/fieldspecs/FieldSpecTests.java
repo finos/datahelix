@@ -340,40 +340,6 @@ class FieldSpecTests {
 
 
     @Test
-    public void fieldSpecsShouldBeEntirelyEqual() {
-        FieldSpec a = FieldSpec.Empty
-            .withNumericRestrictions(new MockNumericRestrictions(true))
-            .withStringRestrictions(new MockStringRestrictions(true))
-            .withTypeRestrictions(Collections.singleton(Types.STRING))
-            .withDateTimeRestrictions(new MockDateTimeRestrictions(true));
-        FieldSpec b = FieldSpec.Empty
-            .withNumericRestrictions(new MockNumericRestrictions(true))
-            .withStringRestrictions(new MockStringRestrictions(true))
-            .withTypeRestrictions(Collections.singleton(Types.STRING))
-            .withDateTimeRestrictions(new MockDateTimeRestrictions(true));
-
-        Assert.assertThat(a, equalTo(b));
-        Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
-    }
-
-    @Test
-    public void fieldSpecsShouldBeEntirelyUnequal() {
-        FieldSpec a = FieldSpec.Empty
-            .withNumericRestrictions(new MockNumericRestrictions(false))
-            .withStringRestrictions(new MockStringRestrictions(false))
-            .withTypeRestrictions(Collections.singleton(Types.STRING))
-            .withDateTimeRestrictions(new MockDateTimeRestrictions(false));
-        FieldSpec b = FieldSpec.Empty
-            .withNumericRestrictions(new MockNumericRestrictions(false))
-            .withStringRestrictions(new MockStringRestrictions(false))
-            .withTypeRestrictions(Collections.singleton(Types.DATETIME))
-            .withDateTimeRestrictions(new MockDateTimeRestrictions(false));
-
-        Assert.assertThat(a, not(equalTo(b)));
-    }
-
-
-    @Test
     void permitsRejectsInvalidNumeric() {
         NumericRestrictions numeric = new NumericRestrictions();
         FieldSpec spec = FieldSpec.Empty.withNumericRestrictions(numeric);
@@ -416,34 +382,6 @@ class FieldSpecTests {
 
         assertFalse(spec.permits("Anything"));
     }
-
-    @ParameterizedTest()
-    @MethodSource("partiallyUnequalProvider")
-    public void fieldSpecsThatArePartiallyEqualShouldBeReportedAsUnequal(
-        boolean numericRestrictionsEqual,
-        boolean stringRestrictionsEqual,
-        boolean dateTimeRestrictionsEqual) {
-
-        FieldSpec a = FieldSpec.Empty
-            .withNumericRestrictions(new MockNumericRestrictions(numericRestrictionsEqual))
-            .withStringRestrictions(new MockStringRestrictions(stringRestrictionsEqual))
-            .withDateTimeRestrictions(new MockDateTimeRestrictions(dateTimeRestrictionsEqual));
-        FieldSpec b = FieldSpec.Empty
-            .withNumericRestrictions(new MockNumericRestrictions(numericRestrictionsEqual))
-            .withStringRestrictions(new MockStringRestrictions(stringRestrictionsEqual))
-            .withDateTimeRestrictions(new MockDateTimeRestrictions(dateTimeRestrictionsEqual));
-
-        Assert.assertThat(a, not(equalTo(b)));
-    }
-
-    private static Stream<Arguments> partiallyUnequalProvider() {
-        return Stream.of(
-            Arguments.of(false, true, true),
-            Arguments.of(true, false, true),
-            Arguments.of(true, true, false)
-        );
-    }
-
 
     private class MockNumericRestrictions extends NumericRestrictions {
         private final boolean isEqual;

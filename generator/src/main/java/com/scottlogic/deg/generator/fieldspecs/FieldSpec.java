@@ -26,6 +26,8 @@ import com.scottlogic.deg.common.util.HeterogeneousTypeContainer;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.*;
+
 /**
  * Details a column's atomic constraints
  * A fieldSpec can either be a whitelist of allowed values, or a set of restrictions.
@@ -89,7 +91,7 @@ public class FieldSpec {
     }
 
     public FieldSpec withNumericRestrictions(NumericRestrictions numericRestrictions) {
-        return withConstraint(NumericRestrictions.class, numericRestrictions);
+        return withConstraint(NumericRestrictions.class, numericRestrictions, NUMERIC);
     }
 
     public FieldSpec withBlacklist(Set<Object> blacklist) {
@@ -101,7 +103,7 @@ public class FieldSpec {
     }
 
     public FieldSpec withStringRestrictions(StringRestrictions stringRestrictions) {
-        return withConstraint(StringRestrictions.class, stringRestrictions);
+        return withConstraint(StringRestrictions.class, stringRestrictions, STRING);
     }
 
     public FieldSpec withNotNull() {
@@ -109,13 +111,17 @@ public class FieldSpec {
     }
 
     public FieldSpec withDateTimeRestrictions(DateTimeRestrictions dateTimeRestrictions) {
-        return withConstraint(DateTimeRestrictions.class, dateTimeRestrictions);
+        return withConstraint(DateTimeRestrictions.class, dateTimeRestrictions, DATETIME);
     }
 
-    private <T extends Restrictions> FieldSpec withConstraint(Class<T> type, T restriction) {
+    private <T extends Restrictions> FieldSpec withConstraint(Class<T> type, T restriction, Types constraintType) {
         if (restriction == null){
             return this;
         }
+        if (!types.contains(constraintType)){
+            throw new UnsupportedOperationException("Cannot give the wrong restriction type to a Field spec");
+        }
+
         return new FieldSpec(null, restrictions.put(type, restriction), nullable, blacklist, types);
     }
 
