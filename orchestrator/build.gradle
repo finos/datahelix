@@ -36,6 +36,7 @@ dependencies {
     compile group: "info.picocli", name: "picocli", version: "${PICOCLI_VERSION}"
     compile group: "com.google.code.gson", name: "gson", version: "${GSON_VERSION}"
 
+    testCompile project(":common").sourceSets.test.output
     testCompile "org.hamcrest:java-hamcrest:${HAMCREST_VERSION}"
     testCompile "org.junit.jupiter:junit-jupiter-api:${JUNIT_JUPITER_VERSION}"
     testCompile "org.junit.platform:junit-platform-runner:${JUNIT_PLATFORM_RUNNER_VERSION}"

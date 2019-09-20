@@ -114,7 +114,7 @@ public class ConstraintValueValidator {
     }
 
     private static void validateTypes(Object value) {
-        OfTypeConstraintFactory.create(new Field("validation"), (String)value);
+        OfTypeConstraintFactory.create(new Field("validation", "", false, ""), (String)value);
     }
 
     private static void validatePattern(Object value) {

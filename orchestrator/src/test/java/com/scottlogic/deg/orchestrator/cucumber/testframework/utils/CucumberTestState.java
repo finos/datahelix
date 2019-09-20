@@ -27,6 +27,7 @@ import com.scottlogic.deg.profile.dto.ConstraintDTO;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 /**
  * Class to represent the state during cucumber test running and execution
@@ -122,7 +123,7 @@ public class CucumberTestState {
     }
 
     public void addField(String fieldName) {
-        this.profileFields.add(new Field(fieldName));
+        this.profileFields.add(createField(fieldName));
     }
 
     public void addException(Exception e){
@@ -180,7 +181,7 @@ public class CucumberTestState {
             .findFirst()
             .orElseThrow(UnsupportedOperationException::new);
 
-        Field newField = new Field(fieldName, true, oldField.getFormatting());
+        Field newField = new Field(fieldName, "String", true, oldField.getFormatting());
 
         profileFields.remove(oldField);
         profileFields.add(newField);
@@ -192,7 +193,7 @@ public class CucumberTestState {
             .findFirst()
             .orElseThrow(UnsupportedOperationException::new);
 
-        Field newField = new Field(fieldName, oldField.isUnique(), formatting);
+        Field newField = new Field(fieldName, "String", oldField.isUnique(), formatting);
 
         profileFields.remove(oldField);
         profileFields.add(newField);

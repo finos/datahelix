@@ -20,7 +20,8 @@ dependencies {
     compile "com.google.inject:guice:${GUICE_VERSION}"
     compile "dk.brics.automaton:automaton:${AUTOMATON_VERSION}"
     compile "org.apache.commons:commons-csv:${COMMONS_CSV_VERSION}"
-    
+
+    testCompile project(":common").sourceSets.test.output
     testCompile "org.junit.jupiter:junit-jupiter-api:${JUNIT_JUPITER_VERSION}"
     testCompile "junit:junit:${JUNIT_4_VERSION}"
     testCompile "org.junit.platform:junit-platform-runner:${JUNIT_PLATFORM_RUNNER_VERSION}"
