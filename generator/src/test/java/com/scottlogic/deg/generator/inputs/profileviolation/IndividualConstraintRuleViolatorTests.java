@@ -43,6 +43,7 @@ import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 /**
  * Tests the behaviour of the IndividualConstraintRuleViolator class.
@@ -69,9 +70,9 @@ public class IndividualConstraintRuleViolatorTests {
 
         target = new IndividualConstraintRuleViolator(inputFilters);
 
-        atomicConstraint1 = new IsLessThanConstantConstraint(new Field("foo"), 10);
-        atomicConstraint2 = new IsLessThanConstantConstraint(new Field("bar"), 20);
-        atomicConstraint3 = new IsLessThanConstantConstraint(new Field("foobar"), 30);
+        atomicConstraint1 = new IsLessThanConstantConstraint(createField("foo"), 10);
+        atomicConstraint2 = new IsLessThanConstantConstraint(createField("bar"), 20);
+        atomicConstraint3 = new IsLessThanConstantConstraint(createField("foobar"), 30);
         ruleInformation = new RuleInformation();
     }
 

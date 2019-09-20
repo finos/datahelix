@@ -26,13 +26,14 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
     import java.time.ZoneOffset;
 
     import static org.junit.jupiter.api.Assertions.*;
-
+    import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+    
 class BeforeDateRelationTest {
 
     @Test
     public void reduceToRelatedFieldSpec_comparingTwoFields_givesAnEarlierFieldSpec() {
-        Field first = new Field("first");
-        Field second = new Field("second");
+        Field first = createField("first");
+        Field second = createField("second");
 
         FieldSpecRelations relation = new BeforeDateRelation(first, second, true);
 

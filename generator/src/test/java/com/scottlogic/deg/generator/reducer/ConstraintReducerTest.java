@@ -44,6 +44,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.*;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 class ConstraintReducerTest {
 
@@ -59,9 +60,9 @@ class ConstraintReducerTest {
     @Test
     void shouldProduceCorrectFieldSpecsForExample() {
         // ARRANGE
-        final Field quantityField = new Field("quantity");
-        final Field countryField = new Field("country");
-        final Field cityField = new Field("city");
+        final Field quantityField = createField("quantity");
+        final Field countryField = createField("country");
+        final Field cityField = createField("city");
 
         ProfileFields fieldList = new ProfileFields(
             Arrays.asList(quantityField, countryField, cityField));
@@ -138,7 +139,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldReduceIsGreaterThanConstantConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0");
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsGreaterThanConstantConstraint(field, 5));
@@ -172,7 +173,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldReduceNegatedIsGreaterThanConstantConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0");
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsGreaterThanConstantConstraint(field, 5).negate());
@@ -207,7 +208,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldReduceIsGreaterThanOrEqualToConstantConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0");
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsGreaterThanOrEqualToConstantConstraint(field, 5));
@@ -241,7 +242,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldReduceNegatedIsGreaterThanOrEqualToConstantConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0");
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsGreaterThanOrEqualToConstantConstraint(field, 5).negate());
@@ -276,7 +277,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldReduceIsLessThanConstantConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0");
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsLessThanConstantConstraint(field, 5));
@@ -311,7 +312,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldReduceNegatedIsLessThanConstantConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0");
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsLessThanConstantConstraint(field, 5).negate());
@@ -345,7 +346,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldReduceIsLessThanOrEqualToConstantConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0");
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsLessThanOrEqualToConstantConstraint(field, 5));
@@ -380,7 +381,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldReduceNegatedIsLessThanOrEqualToConstantConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0");
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsLessThanOrEqualToConstantConstraint(field, 5).negate());
@@ -414,7 +415,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldreduceIsAfterConstantDateTimeConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0");
         final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
@@ -449,7 +450,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldreduceNegatedIsAfterConstantDateTimeConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0");
         final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16,0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
@@ -484,7 +485,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldreduceIsAfterOrEqualToConstantDateTimeConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0");
         final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
@@ -519,7 +520,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldreduceNegatedIsAfterOrEqualToConstantDateTimeConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0");
         final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
@@ -555,7 +556,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldreduceIsBeforeConstantDateTimeConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0");
         final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
@@ -591,7 +592,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldreduceNegatedIsBeforeConstantDateTimeConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0");
         final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
@@ -626,7 +627,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldreduceIsBeforeOrEqualToConstantDateTimeConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0");
         final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
@@ -662,7 +663,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldreduceNegatedIsBeforeorEqualToConstantDateTimeConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0");
         final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
@@ -697,7 +698,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldMergeAndReduceIsAfterConstantDateTimeConstraintWithIsBeforeConstantDateTimeConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0");
         final OffsetDateTime startTimestamp = OffsetDateTime.of(2013, 11, 19, 10, 43, 12, 0, ZoneOffset.UTC);
         final OffsetDateTime endTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 8, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
@@ -739,7 +740,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldReduceMatchesRegexConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0");
         String pattern = ".*\\..*";
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
@@ -767,7 +768,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldReduceStringLongerThanConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0");
 
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
@@ -796,7 +797,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldReduceStringShorterThanConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0");
 
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
@@ -824,7 +825,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldReduceStringHasLengthConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0");
 
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
@@ -853,7 +854,7 @@ class ConstraintReducerTest {
     @Test
     void whenHasNumericRestrictions_shouldFilterSet() {
 
-        final Field field = new Field("test0");
+        final Field field = createField("test0");
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
 
         List<AtomicConstraint> constraints = Arrays.asList(
@@ -873,7 +874,7 @@ class ConstraintReducerTest {
     @Test
     void whenHasStringRestrictions_shouldOnlyFilterStringsInSet() {
 
-        final Field field = new Field("test0");
+        final Field field = createField("test0");
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
 
         OffsetDateTime datetimeValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
@@ -894,7 +895,7 @@ class ConstraintReducerTest {
     @Test
     void whenHasNumericRestrictions_shouldOnlyFilterNumericValuesInSet() {
 
-        final Field field = new Field("test0");
+        final Field field = createField("test0");
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
 
         OffsetDateTime datetimeValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
@@ -915,7 +916,7 @@ class ConstraintReducerTest {
     @Test
     void whenHasDateTimeRestrictions_shouldOnlyFilterDateTimeValuesInSet() {
 
-        final Field field = new Field("test0");
+        final Field field = createField("test0");
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
 
         OffsetDateTime datetimeValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);

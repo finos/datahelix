@@ -39,6 +39,7 @@ import static com.scottlogic.deg.generator.inputs.profileviolation.TypeEqualityH
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.mockito.Mockito.*;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 public class IndividualRuleProfileViolatorTests {
 
@@ -146,8 +147,8 @@ public class IndividualRuleProfileViolatorTests {
     private void initRules() {
         //Rule 1 consists of 2 constraints, "foo is greater than 100" and "bar is greater than 50"
         RuleInformation ruleInformation1 = new RuleInformation("Rule 1 description");
-        fooField = new Field("foo");
-        barField = new Field("bar");
+        fooField = createField("foo");
+        barField = createField("bar");
         Constraint constraint1 = new IsGreaterThanConstantConstraint(
             fooField,
             100

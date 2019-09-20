@@ -10,14 +10,15 @@ import java.util.Collections;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 class RowSpecMergerTest {
     RowSpecMerger rowSpecMerger = new RowSpecMerger(new FieldSpecMerger());
 
     FieldSpec isNull = FieldSpec.NullOnly;
     FieldSpec notNull = FieldSpec.Empty.withNotNull();
-    Field A = new Field("A");
-    Field B = new Field("B");
+    Field A = createField("A");
+    Field B = createField("B");
     ProfileFields fields = new ProfileFields(Arrays.asList(A, B));
 
     @Test

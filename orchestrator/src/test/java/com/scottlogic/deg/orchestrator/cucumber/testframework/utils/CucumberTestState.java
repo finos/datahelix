@@ -19,6 +19,7 @@ package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
 import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
@@ -27,6 +28,7 @@ import com.scottlogic.deg.profile.dto.ConstraintDTO;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 /**
  * Class to represent the state during cucumber test running and execution
@@ -122,7 +124,7 @@ public class CucumberTestState {
     }
 
     public void addField(String fieldName) {
-        this.profileFields.add(new Field(fieldName));
+        this.profileFields.add(createField(fieldName));
     }
 
     public void addException(Exception e){
@@ -180,7 +182,7 @@ public class CucumberTestState {
             .findFirst()
             .orElseThrow(UnsupportedOperationException::new);
 
-        Field newField = new Field(fieldName, true, oldField.getFormatting());
+        Field newField = new Field(fieldName, Types.STRING, true, oldField.getFormatting());
 
         profileFields.remove(oldField);
         profileFields.add(newField);
@@ -192,7 +194,7 @@ public class CucumberTestState {
             .findFirst()
             .orElseThrow(UnsupportedOperationException::new);
 
-        Field newField = new Field(fieldName, oldField.isUnique(), formatting);
+        Field newField = new Field(fieldName, Types.STRING, oldField.isUnique(), formatting);
 
         profileFields.remove(oldField);
         profileFields.add(newField);

@@ -50,6 +50,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.scottlogic.deg.generator.inputs.profileviolation.TypeEqualityHelper.assertProfileListsAreEquivalent;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 /**
  * Defines tests for all business logic involved in Profile Violation.
@@ -63,7 +64,7 @@ public class ProfileViolationTests {
     private Field field3;
     private Field field4;
     private Field field5;
-    private static final Field STATIC_FIELD = new Field("static field");
+    private static final Field STATIC_FIELD = createField("static field");
 
     private ConstraintChainBuilder<Constraint> A;
     private ConstraintChainBuilder<Constraint> B;
@@ -172,11 +173,11 @@ public class ProfileViolationTests {
         constraintsToNotViolate = new ArrayList<>();
         IndividualConstraintRuleViolator ruleViolator = new IndividualConstraintRuleViolator(constraintsToNotViolate);
         profileViolator = new IndividualRuleProfileViolator(ruleViolator);
-        field1 = new Field("field1");
-        field2 = new Field("field2");
-        field3 = new Field("field3");
-        field4 = new Field("field4");
-        field5 = new Field("field5");
+        field1 = createField("field1");
+        field2 = createField("field2");
+        field3 = createField("field3");
+        field4 = createField("field4");
+        field5 = createField("field5");
 
 
         A = new SingleConstraintBuilder().withEqualToConstraint(field1, "A");

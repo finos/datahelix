@@ -33,6 +33,7 @@ import java.util.stream.Stream;
 import static org.mockito.Mockito.*;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 class RowSpecDataBagGeneratorTests {
 
@@ -40,9 +41,9 @@ class RowSpecDataBagGeneratorTests {
     private FieldSpecValueGenerator mockGeneratorFactory = mock(FieldSpecValueGenerator.class);
     private CombinationStrategy mockCombinationStrategy = mock(CombinationStrategy.class);
 
-    private Field field = new Field("Field1");
-    Field field2 = new Field("field2");
-    Field field3 = new Field("field3");
+    private Field field = createField("Field1");
+    Field field2 = createField("field2");
+    Field field3 = createField("field3");
     private ProfileFields fields = new ProfileFields(Collections.singletonList(field));
     private FieldSpec fieldSpec = mock(FieldSpec.class);
     private FieldSpec fieldSpec2 = mock(FieldSpec.class);
