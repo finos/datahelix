@@ -19,7 +19,7 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.profile.guice.ProfileConfigSource;
 import com.scottlogic.deg.profile.reader.validation.ConfigValidator;
-import com.scottlogic.deg.profile.dto.ProfileSchemaValidator;
+import com.scottlogic.deg.profile.dto.ProfileSchemaLoader;
 import com.scottlogic.deg.profile.dto.SchemaVersionValidator;
 
 import java.io.IOException;
@@ -30,26 +30,26 @@ public class ValidatingProfileReader {
     private final ProfileConfigSource configSource;
     private final ConfigValidator configValidator;
     private final ProfileReader profileReader;
-    private final ProfileSchemaValidator profileSchemaValidator;
+    private final ProfileSchemaLoader profileSchemaLoader;
     private final SchemaVersionValidator schemaVersionValidator;
 
     @Inject
     public ValidatingProfileReader(ProfileConfigSource configSource,
                                    ConfigValidator configValidator,
                                    ProfileReader profileReader,
-                                   ProfileSchemaValidator profileSchemaValidator,
+                                   ProfileSchemaLoader profileSchemaLoader,
                                    SchemaVersionValidator schemaVersionValidator) {
         this.configSource = configSource;
         this.configValidator = configValidator;
         this.profileReader = profileReader;
-        this.profileSchemaValidator = profileSchemaValidator;
+        this.profileSchemaLoader = profileSchemaLoader;
         this.schemaVersionValidator = schemaVersionValidator;
     }
 
     public Profile read() throws IOException {
         configValidator.checkProfileInputFile();
         URL schema = schemaVersionValidator.getSchemaFile();
-        profileSchemaValidator.validateProfile(configSource.getProfileFile(), schema);
+        profileSchemaLoader.validateProfile(configSource.getProfileFile(), schema);
         return profileReader.read();
     }
 }
