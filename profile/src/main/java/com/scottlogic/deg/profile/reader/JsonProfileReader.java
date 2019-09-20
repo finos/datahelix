@@ -69,7 +69,7 @@ public class JsonProfileReader implements ProfileReader {
         }
 
         //This is the types of the field that have not been set by the field def
-        Map<String, String> fieldTypes = getfieldType(profileDto);
+        Map<String, String> fieldTypes = getTypesFromConstraints(profileDto);
 
         ProfileFields profileFields = new ProfileFields(
             profileDto.fields.stream()
@@ -114,7 +114,7 @@ public class JsonProfileReader implements ProfileReader {
 
         return new Profile(profileFields, rules, profileDto.description);
     }
-    private Map<String, String> getfieldType(ProfileDTO profileDto) {
+    private Map<String, String> getTypesFromConstraints(ProfileDTO profileDto) {
         return getTopLevelConstraintsOfType(profileDto, "ofType")
             .collect(Collectors.toMap(
                 constraintDTO -> constraintDTO.field,
