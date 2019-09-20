@@ -16,6 +16,8 @@
 
 package com.scottlogic.deg.generator.restrictions.linear;
 
+import com.scottlogic.deg.common.util.Defaults;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -24,8 +26,17 @@ public class NumericLimit implements Limit<BigDecimal> {
     private final boolean isInclusive;
 
     public NumericLimit(BigDecimal limit, boolean isInclusive) {
-        this.limit = limit;
+        this.limit = capLimit(limit);
         this.isInclusive = isInclusive;
+    }
+
+    private BigDecimal capLimit(BigDecimal limit) {
+        if (limit.compareTo(Defaults.NUMERIC_MAX) > 0) {
+            return Defaults.NUMERIC_MAX;
+        } else if (limit.compareTo(Defaults.NUMERIC_MIN) < 0){
+            return Defaults.NUMERIC_MIN;
+        }
+        return limit;
     }
 
     public BigDecimal getValue() {

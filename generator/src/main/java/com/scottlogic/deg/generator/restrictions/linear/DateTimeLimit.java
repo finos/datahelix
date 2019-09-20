@@ -1,5 +1,7 @@
 package com.scottlogic.deg.generator.restrictions.linear;
 
+import com.scottlogic.deg.common.util.Defaults;
+
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
@@ -8,8 +10,17 @@ public class DateTimeLimit implements Limit<OffsetDateTime> {
     private final boolean isInclusive;
 
     public DateTimeLimit(OffsetDateTime limit, boolean isInclusive) {
-        this.limit = limit;
+        this.limit = capLimit(limit);
         this.isInclusive = isInclusive;
+    }
+
+    private OffsetDateTime capLimit(OffsetDateTime dateTime) {
+        if (dateTime.isAfter(Defaults.ISO_MAX_DATE)) {
+            return Defaults.ISO_MAX_DATE;
+        } else if (dateTime.isBefore(Defaults.ISO_MIN_DATE)){
+         return Defaults.ISO_MIN_DATE;
+        }
+        return dateTime;
     }
     
     @Override
