@@ -588,22 +588,19 @@ public class JsonProfileReaderTests {
                 "}");
 
         expectRules(
-            ruleWithConstraints(
-                typedConstraint(
-                    IsBeforeConstantDateTimeConstraint.class,
-                    c -> {
-                        Assert.assertThat(
-                            c.referenceValue,
-                            equalTo(OffsetDateTime.parse("2019-01-03T00:00:00.000Z")));
-                    }),
-                typedConstraint(
-                    IsAfterOrEqualToConstantDateTimeConstraint.class,
-                    c -> {
-                        Assert.assertThat(
-                            c.referenceValue,
-                            equalTo(OffsetDateTime.parse("2019-01-01T00:00:00.000Z")));
-                    })
-            ),
+            rule -> {
+                // This is different because the ordering would switch depending on if the whole file was run or just this test
+                IsAfterOrEqualToConstantDateTimeConstraint isAfter = (IsAfterOrEqualToConstantDateTimeConstraint) rule.getConstraints().stream()
+                    .filter(f -> f.getClass() == IsAfterOrEqualToConstantDateTimeConstraint.class)
+                    .findFirst()
+                    .get();
+                IsBeforeConstantDateTimeConstraint isBefore = (IsBeforeConstantDateTimeConstraint) rule.getConstraints().stream()
+                    .filter(f -> f.getClass() == IsBeforeConstantDateTimeConstraint.class)
+                    .findFirst()
+                    .get();
+                Assert.assertEquals(OffsetDateTime.parse("2019-01-01T00:00:00.000Z"), isAfter.referenceValue);
+                Assert.assertEquals(OffsetDateTime.parse("2019-01-03T00:00:00.000Z"), isBefore.referenceValue);
+            },
             ruleWithDescription("type-rules")
         );
     }
