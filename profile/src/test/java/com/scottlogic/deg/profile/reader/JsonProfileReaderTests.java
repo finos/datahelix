@@ -22,6 +22,7 @@ import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
@@ -249,7 +250,7 @@ public class JsonProfileReaderTests {
                     IsOfTypeConstraint.class,
                     c -> Assert.assertThat(
                         c.requiredType,
-                        equalTo(IsOfTypeConstraint.Types.STRING)))));
+                        equalTo(Types.STRING)))));
     }
 
     @Test
@@ -589,18 +590,18 @@ public class JsonProfileReaderTests {
         expectRules(
             ruleWithConstraints(
                 typedConstraint(
-                    IsAfterOrEqualToConstantDateTimeConstraint.class,
-                    c -> {
-                        Assert.assertThat(
-                            c.referenceValue,
-                            equalTo(OffsetDateTime.parse("2019-01-01T00:00:00.000Z")));
-                    }),
-                typedConstraint(
                     IsBeforeConstantDateTimeConstraint.class,
                     c -> {
                         Assert.assertThat(
                             c.referenceValue,
                             equalTo(OffsetDateTime.parse("2019-01-03T00:00:00.000Z")));
+                    }),
+                typedConstraint(
+                    IsAfterOrEqualToConstantDateTimeConstraint.class,
+                    c -> {
+                        Assert.assertThat(
+                            c.referenceValue,
+                            equalTo(OffsetDateTime.parse("2019-01-01T00:00:00.000Z")));
                     })
             ),
             ruleWithDescription("type-rules")
@@ -1041,10 +1042,10 @@ public class JsonProfileReaderTests {
 
         expectFields(
             field -> {
-                Assert.assertThat(field.type, equalTo("decimal"));
+                Assert.assertThat(field.type, equalTo(Types.NUMERIC));
             },
             field -> {
-                Assert.assertThat(field.type, equalTo("string"));
+                Assert.assertThat(field.type, equalTo(Types.STRING));
             }
         );
         expectRules(
@@ -1054,7 +1055,7 @@ public class JsonProfileReaderTests {
                     c -> {
                         Assert.assertEquals(
                             c.requiredType,
-                            IsOfTypeConstraint.Types.NUMERIC
+                            Types.NUMERIC
                             );
                         Assert.assertEquals(
                             c.field.name,
@@ -1066,7 +1067,7 @@ public class JsonProfileReaderTests {
                     c -> {
                         Assert.assertEquals(
                             c.requiredType,
-                            IsOfTypeConstraint.Types.STRING
+                            Types.STRING
                         );
                         Assert.assertEquals(
                             c.field.name,
@@ -1098,10 +1099,10 @@ public class JsonProfileReaderTests {
 
         expectFields(
             field -> {
-                Assert.assertThat(field.type, equalTo("decimal"));
+                Assert.assertThat(field.type, equalTo(Types.NUMERIC));
             },
             field -> {
-                Assert.assertThat(field.type, equalTo("string"));
+                Assert.assertThat(field.type, equalTo(Types.STRING));
             }
         );
     }
@@ -1132,10 +1133,10 @@ public class JsonProfileReaderTests {
 
         expectFields(
             field -> {
-                Assert.assertThat(field.type, equalTo("decimal"));
+                Assert.assertThat(field.type, equalTo(Types.NUMERIC));
             },
             field -> {
-                Assert.assertThat(field.type, equalTo("string"));
+                Assert.assertThat(field.type, equalTo(Types.STRING));
             }
         );
     }
@@ -1156,7 +1157,7 @@ public class JsonProfileReaderTests {
                 "        \"rule\": \"fooRule\"," +
                 "        \"constraints\": [" +
                 "           { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"decimal\" }," +
-                "           { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"integer\" }" +
+                "           { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"datetime\" }" +
                 "          ]" +
                 "       }" +
                 "    ]" +
@@ -1164,10 +1165,10 @@ public class JsonProfileReaderTests {
 
         expectFields(
             field -> {
-                Assert.assertThat(field.type, equalTo("decimal"));
+                Assert.assertThat(field.type, equalTo(Types.NUMERIC));
             },
             field -> {
-                Assert.assertThat(field.type, equalTo("string"));
+                Assert.assertThat(field.type, equalTo(Types.STRING));
             }
         );
     }

@@ -16,8 +16,10 @@
 
 package com.scottlogic.deg.common.profile;
 
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
+
 public class FieldBuilder {
     public static Field createField(String name) {
-        return new Field(name, "type", false, null);
+        return new Field(name, Types.STRING, false, null);
     }
 }

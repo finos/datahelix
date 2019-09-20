@@ -19,6 +19,7 @@ package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
 import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
@@ -181,7 +182,7 @@ public class CucumberTestState {
             .findFirst()
             .orElseThrow(UnsupportedOperationException::new);
 
-        Field newField = new Field(fieldName, "String", true, oldField.getFormatting());
+        Field newField = new Field(fieldName, Types.STRING, true, oldField.getFormatting());
 
         profileFields.remove(oldField);
         profileFields.add(newField);
@@ -193,7 +194,7 @@ public class CucumberTestState {
             .findFirst()
             .orElseThrow(UnsupportedOperationException::new);
 
-        Field newField = new Field(fieldName, "String", oldField.isUnique(), formatting);
+        Field newField = new Field(fieldName, Types.STRING, oldField.isUnique(), formatting);
 
         profileFields.remove(oldField);
         profileFields.add(newField);

@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.scottlogic.deg.profile.reader.atomic.AtomicConstraintFactory.create;
+import static com.scottlogic.deg.profile.reader.atomic.ConstraintReaderHelpers.getFieldType;
 
 /**
  * JsonProfileReader is responsible for reading and validating a profile from a path to a profile JSON file.
@@ -72,7 +73,13 @@ public class JsonProfileReader implements ProfileReader {
 
         ProfileFields profileFields = new ProfileFields(
             profileDto.fields.stream()
-                .map(fDto -> new Field(fDto.name, fieldTypes.getOrDefault(fDto.name, fDto.type), fDto.unique, fDto.formatting))
+                .map(fDto ->
+                    new Field(
+                        fDto.name,
+                        getFieldType(fieldTypes.getOrDefault(fDto.name, fDto.type)),
+                        fDto.unique,
+                        fDto.formatting)
+                )
                 .collect(Collectors.toList()));
 
         Collection<Rule> rules = profileDto.rules.stream().map(

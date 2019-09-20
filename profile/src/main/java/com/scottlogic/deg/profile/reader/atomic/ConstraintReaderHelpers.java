@@ -16,12 +16,9 @@
 
 package com.scottlogic.deg.profile.reader.atomic;
 
-import com.scottlogic.deg.common.util.Defaults;
-import com.scottlogic.deg.common.util.NumberUtils;
-import com.scottlogic.deg.profile.dto.ConstraintDTO;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -31,7 +28,6 @@ import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
-import java.util.*;
 
 public class ConstraintReaderHelpers {
 
@@ -62,6 +58,30 @@ public class ConstraintReaderHelpers {
                 value
             ));
         }
+    }
+
+    public static Types getFieldType(String type) {
+        switch (type) {
+            case "decimal":
+            case "integer":
+                return Types.NUMERIC;
+
+            case "string":
+            case "ISIN":
+            case "SEDOL":
+            case "CUSIP":
+            case "RIC":
+            case "firstname":
+            case "lastname":
+            case "fullname":
+                return Types.STRING;
+
+            case "datetime":
+                return Types.DATETIME;
+        }
+
+        throw new InvalidProfileException("Profile is invalid: no type known for \"is\": \"ofType\", \"value\": \"" + type + "\"");
+
     }
 
 }

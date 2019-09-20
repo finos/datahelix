@@ -16,15 +16,17 @@
 
 package com.scottlogic.deg.common.profile;
 
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
+
 import java.util.Objects;
 
 public class Field {
     public final String name;
-    public final String type;
+    public final Types type;
     private final boolean unique;
     private final String formatting;
 
-    public Field(String name, String type, Boolean unique, String formatting) {
+    public Field(String name, Types type, Boolean unique, String formatting) {
         this.name = name;
         this.type = type;
         this.unique = unique;
@@ -60,7 +62,7 @@ public class Field {
         return formatting;
     }
 
-    public String getType() {
+    public Types getType() {
         return type;
     }
 

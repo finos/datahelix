@@ -17,7 +17,7 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
@@ -72,7 +72,7 @@ class FieldSpecValueGeneratorTests {
                     max = new NumericLimit<>(new BigDecimal(30), false);
                 }})
             .withTypeRestrictions(
-                    Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
+                    Collections.singletonList(Types.NUMERIC)
             );
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
             INTERESTING,
@@ -135,7 +135,7 @@ class FieldSpecValueGeneratorTests {
                 randomNumberGenerator
             );
 
-            fieldSpecFulfiller.generate(new Field(null, "String", true, null), fieldSpec).collect(Collectors.toSet());
+            fieldSpecFulfiller.generate(new Field(null, Types.STRING, true, null), fieldSpec).collect(Collectors.toSet());
 
             verify(fieldValueSource, times(1)).generateAllValues();
             verify(fieldValueSource, times(0)).generateInterestingValues();
@@ -169,7 +169,7 @@ class FieldSpecValueGeneratorTests {
                 randomNumberGenerator
             );
 
-            fieldSpecFulfiller.generate(new Field(null, "String", true, null), fieldSpec).collect(Collectors.toSet());
+            fieldSpecFulfiller.generate(new Field(null, Types.STRING, true, null), fieldSpec).collect(Collectors.toSet());
 
             verify(fieldValueSource, times(1)).generateAllValues();
             verify(fieldValueSource, times(0)).generateInterestingValues();
