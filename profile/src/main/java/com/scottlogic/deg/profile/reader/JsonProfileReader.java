@@ -21,6 +21,7 @@ import com.google.inject.name.Named;
 import com.scottlogic.deg.common.profile.*;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
+import com.scottlogic.deg.profile.dto.ConstraintDTO;
 import com.scottlogic.deg.profile.serialisation.ProfileDeserialiser;
 import com.scottlogic.deg.profile.dto.ProfileDTO;
 
@@ -30,6 +31,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.scottlogic.deg.profile.reader.atomic.AtomicConstraintFactory.create;
 
@@ -65,9 +67,12 @@ public class JsonProfileReader implements ProfileReader {
             throw new InvalidProfileException("Profile is invalid: 'rules' have not been defined.");
         }
 
+        //This is the types of the field that have not been set by the field def
+        Map<String, String> fieldTypes = getfieldType(profileDto);
+
         ProfileFields profileFields = new ProfileFields(
             profileDto.fields.stream()
-                .map(fDto -> new Field(fDto.name, "String", fDto.unique, fDto.formatting))
+                .map(fDto -> new Field(fDto.name, fieldTypes.getOrDefault(fDto.name, fDto.type), fDto.unique, fDto.formatting))
                 .collect(Collectors.toList()));
 
         Collection<Rule> rules = profileDto.rules.stream().map(
@@ -101,5 +106,29 @@ public class JsonProfileReader implements ProfileReader {
         }
 
         return new Profile(profileFields, rules, profileDto.description);
+    }
+    private Map<String, String> getfieldType(ProfileDTO profileDto) {
+        return getTopLevelConstraintsOfType(profileDto, "ofType")
+            .collect(Collectors.toMap(
+                constraintDTO -> constraintDTO.field,
+                constraintDTO -> (String)constraintDTO.value,
+                (a, b) -> a
+            ));
+    }
+
+    private Stream<ConstraintDTO> getTopLevelConstraintsOfType(ProfileDTO profileDto, String constraint) {
+        return profileDto.rules.stream()
+            .flatMap(ruleDTO -> ruleDTO.constraints.stream())
+            .flatMap(this::getConstraintOrAllOfConstraints)
+            .filter(constraintDTO -> constraintDTO.is != null)
+            .filter(constraintDTO -> constraintDTO.is.equals(constraint));
+    }
+
+    private Stream<ConstraintDTO> getConstraintOrAllOfConstraints(ConstraintDTO constraintDTO) {
+        if (constraintDTO.allOf != null){
+            return constraintDTO.allOf.stream();
+        }
+
+        return Stream.of(constraintDTO);
     }
 }

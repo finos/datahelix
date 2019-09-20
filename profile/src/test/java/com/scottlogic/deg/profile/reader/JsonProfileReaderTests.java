@@ -1024,4 +1024,152 @@ public class JsonProfileReaderTests {
             ruleWithDescription("type-rules")
         );
     }
+
+    @Test
+    public void type_setsFieldTypeProperty_whenSetInFieldDefinition() throws IOException  {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": " + schemaVersion + "," +
+                "    \"fields\": [ { " +
+                "       \"name\": \"foo\" ," +
+                "       \"type\": \"decimal\"" +
+                "    }, { " +
+                "       \"name\": \"bar\" ," +
+                "       \"type\": \"string\"" +
+                "    }]," +
+                "    \"rules\": []" +
+                "}");
+
+        expectFields(
+            field -> {
+                Assert.assertThat(field.type, equalTo("decimal"));
+            },
+            field -> {
+                Assert.assertThat(field.type, equalTo("string"));
+            }
+        );
+        expectRules(
+            ruleWithConstraints(
+                typedConstraint(
+                    IsOfTypeConstraint.class,
+                    c -> {
+                        Assert.assertEquals(
+                            c.requiredType,
+                            IsOfTypeConstraint.Types.NUMERIC
+                            );
+                        Assert.assertEquals(
+                            c.field.name,
+                            "foo");
+                    }
+                ),
+                typedConstraint(
+                    IsOfTypeConstraint.class,
+                    c -> {
+                        Assert.assertEquals(
+                            c.requiredType,
+                            IsOfTypeConstraint.Types.STRING
+                        );
+                        Assert.assertEquals(
+                            c.field.name,
+                            "bar");
+                    }
+                )
+            )
+        );
+    }
+
+    @Test
+    public void type_setsFieldTypeProperty_whenSetInConstraintDefinition() throws IOException  {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": " + schemaVersion + "," +
+                "    \"fields\": [ { " +
+                "       \"name\": \"foo\"" +
+                "    }, { " +
+                "       \"name\": \"bar\" ," +
+                "       \"type\": \"string\"" +
+                "    }]," +
+                "    \"rules\": [" +
+                "       {" +
+                "        \"rule\": \"fooRule\"," +
+                "        \"constraints\": [{ \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"decimal\" }]" +
+                "       }" +
+                "    ]" +
+                "}");
+
+        expectFields(
+            field -> {
+                Assert.assertThat(field.type, equalTo("decimal"));
+            },
+            field -> {
+                Assert.assertThat(field.type, equalTo("string"));
+            }
+        );
+    }
+
+    @Test
+    public void type_setsFieldTypeProperty_whenSetInNestedConstraintDefinition() throws IOException {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": " + schemaVersion + "," +
+                "    \"fields\": [ { " +
+                "       \"name\": \"foo\"" +
+                "    }, { " +
+                "       \"name\": \"bar\" ," +
+                "       \"type\": \"string\"" +
+                "    }]," +
+                "    \"rules\": [" +
+                "       {" +
+                "        \"rule\": \"fooRule\"," +
+                "        \"constraints\": [" +
+                "           { \"allOf\": [" +
+                "             { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"decimal\" }," +
+                "             { \"not\": { \"field\": \"foo\", \"is\": \"null\" } }" +
+                "            ] }" +
+                "          ]" +
+                "       }" +
+                "    ]" +
+                "}");
+
+        expectFields(
+            field -> {
+                Assert.assertThat(field.type, equalTo("decimal"));
+            },
+            field -> {
+                Assert.assertThat(field.type, equalTo("string"));
+            }
+        );
+    }
+
+    @Test
+    public void type_setsFieldTypeProperty_whenSetInMultipleConstraintDefinitions() throws IOException {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": " + schemaVersion + "," +
+                "    \"fields\": [ { " +
+                "       \"name\": \"foo\"" +
+                "    }, { " +
+                "       \"name\": \"bar\" ," +
+                "       \"type\": \"string\"" +
+                "    }]," +
+                "    \"rules\": [" +
+                "       {" +
+                "        \"rule\": \"fooRule\"," +
+                "        \"constraints\": [" +
+                "           { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"decimal\" }," +
+                "           { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"integer\" }" +
+                "          ]" +
+                "       }" +
+                "    ]" +
+                "}");
+
+        expectFields(
+            field -> {
+                Assert.assertThat(field.type, equalTo("decimal"));
+            },
+            field -> {
+                Assert.assertThat(field.type, equalTo("string"));
+            }
+        );
+    }
 }
