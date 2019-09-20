@@ -20,6 +20,7 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.generator.restrictions.*;
 
 import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.DATETIME;
+import static com.scottlogic.deg.generator.fieldspecs.FieldSpec.NullOnly;
 
 public class DateTimeRestrictionsMergeOperation implements RestrictionMergeOperation {
     private final DateTimeRestrictionsMerger merger;
@@ -39,7 +40,7 @@ public class DateTimeRestrictionsMergeOperation implements RestrictionMergeOpera
             left.getDateTimeRestrictions(), right.getDateTimeRestrictions());
 
         if (!mergeResult.successful){
-            return merging.withoutType(DATETIME);
+            return NullOnly;
         }
 
         return merging.withDateTimeRestrictions(mergeResult.restrictions);

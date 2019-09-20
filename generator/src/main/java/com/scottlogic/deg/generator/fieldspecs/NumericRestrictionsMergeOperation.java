@@ -20,6 +20,7 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.generator.restrictions.*;
 
 import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.NUMERIC;
+import static com.scottlogic.deg.generator.fieldspecs.FieldSpec.NullOnly;
 
 public class NumericRestrictionsMergeOperation implements RestrictionMergeOperation {
     private final NumericRestrictionsMerger merger;
@@ -39,7 +40,7 @@ public class NumericRestrictionsMergeOperation implements RestrictionMergeOperat
             left.getNumericRestrictions(), right.getNumericRestrictions());
 
         if (!mergeResult.successful) {
-            return merging.withoutType(NUMERIC);
+            return NullOnly;
         }
 
         return merging.withNumericRestrictions(mergeResult.restrictions);

@@ -19,6 +19,7 @@ package com.scottlogic.deg.generator.fieldspecs;
 import com.scottlogic.deg.generator.restrictions.*;
 
 import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.STRING;
+import static com.scottlogic.deg.generator.fieldspecs.FieldSpec.NullOnly;
 
 public class StringRestrictionsMergeOperation implements RestrictionMergeOperation {
     private static final StringRestrictionsMerger stringRestrictionsMerger = new StringRestrictionsMerger();
@@ -33,7 +34,7 @@ public class StringRestrictionsMergeOperation implements RestrictionMergeOperati
             left.getStringRestrictions(), right.getStringRestrictions());
 
         if (!mergeResult.successful) {
-            return merging.withoutType(STRING);
+            return NullOnly;
         }
 
         return merging.withStringRestrictions(mergeResult.restrictions);
