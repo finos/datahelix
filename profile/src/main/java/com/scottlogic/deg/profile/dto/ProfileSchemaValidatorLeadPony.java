@@ -24,9 +24,6 @@ import org.leadpony.justify.api.ProblemHandler;
 
 import javax.json.stream.JsonParser;
 import java.io.*;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
 
 /**
@@ -36,75 +33,42 @@ import java.util.*;
  */
 public class ProfileSchemaValidatorLeadPony implements ProfileSchemaValidator {
     private List<String> profileJsonLines;
-    private Path profilePath;
 
     @Override
-    public void validateProfile(File profileFile, URL schema) {
-        if (schema == null) {
-            throw new ValidationException("Null Schema");
-        }
-        try {
-            byte[] data = Files.readAllBytes(profilePath = profileFile.toPath());
-            profileJsonLines = readAllLines(data);
-            validateProfile(schema.openStream(), new ByteArrayInputStream(data));
-        } catch (IOException e) {
-            throw new ValidationException(e.getClass() + " when looking for schema with URL " + schema);
-        }
-    }
-
-    private List<String> readAllLines(byte[] data) throws IOException {
-        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(data)));
-        List<String> lines = new ArrayList<>();
-
-        String line;
-        while ((line = bufferedReader.readLine()) != null){
-            lines.add(line);
-        }
-
-        return lines;
-    }
-
-    /**
-     * @return the result of validating the provided DataHelix Profile
-     */
-    private void validateProfile(InputStream schemaStream, InputStream profileStream) {
+    public void validateProfile(String profile, String schema) {
         List<String> errorMessages = new ArrayList<>();
-        if (schemaStream == null) {
-            errorMessages.add("Null Schema Stream");
-        } else if (profileStream == null) {
-            errorMessages.add("Null Profile Stream");
-        } else {
-            JsonValidationService service = JsonValidationService.newInstance();
 
-            // Reads the JSON schema
-            JsonSchema schema = service.readSchema(schemaStream);
+        profileJsonLines = Arrays.asList(profile.split(System.lineSeparator()));
 
-            // Problem handler which will print problems found.
-            List<Problem> problems = new ArrayList<>();
-            ProblemHandler handler = ProblemHandler.collectingTo(problems);
+        JsonValidationService service = JsonValidationService.newInstance();
 
-            // We have to step over the profile otherwise it is not checked against the schema.
-            try (JsonParser parser = service.createParser(profileStream, schema, handler)) {
-                while (parser.hasNext()) {
-                    JsonParser.Event event = parser.next();
-                    // Do something useful here
-                }
+        // Reads the JSON schema
+        JsonSchema jsonSchema = service.readSchema(new ByteArrayInputStream(schema.getBytes()));
+
+        // Problem handler which will print problems found.
+        List<Problem> problems = new ArrayList<>();
+        ProblemHandler handler = ProblemHandler.collectingTo(problems);
+
+        // We have to step over the profile otherwise it is not checked against the schema.
+        try (JsonParser parser = service.createParser(new ByteArrayInputStream(profile.getBytes()), jsonSchema, handler)) {
+            while (parser.hasNext()) {
+                JsonParser.Event event = parser.next();
+                // Do something useful here
             }
+        }
 
-            //Add all of the problems as error messages
-            if(!problems.isEmpty()) {
-                TreeMap<Integer, String> problemDictionary = new TreeMap<>();
-                extractProblems(problems, problemDictionary);
-                errorMessages.addAll(formatProblems(problemDictionary));
-            }
+        //Add all of the problems as error messages
+        if(!problems.isEmpty()) {
+            TreeMap<Integer, String> problemDictionary = new TreeMap<>();
+            extractProblems(problems, problemDictionary);
+            errorMessages.addAll(formatProblems(problemDictionary));
         }
 
         if(!errorMessages.isEmpty()) {
             errorMessages.add(0,
                 "Error(s) occurred during schema validation." +
-                "\nFile path: " + profilePath.toString() +
-                "\nFor full details try opening the profile in a json schema-enabled IDE." +
-                "\nSee https://github.com/finos/datahelix/blob/master/docs/user/UserGuide.md#Microsoft-Visual-Studio-Code\n");
+                    "\nFor full details try opening the profile in a json schema-enabled IDE." +
+                    "\nSee https://github.com/finos/datahelix/blob/master/docs/user/UserGuide.md#Microsoft-Visual-Studio-Code\n");
 
             throw new ValidationException(errorMessages);
         }
