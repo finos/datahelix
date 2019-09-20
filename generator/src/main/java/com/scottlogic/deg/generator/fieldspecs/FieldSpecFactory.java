@@ -26,6 +26,7 @@ import com.scottlogic.deg.common.util.NumberUtils;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -129,8 +130,7 @@ public class FieldSpecFactory {
             types = Collections.singletonList(constraint.requiredType);
         }
 
-        return FieldSpec.Empty.withTypeRestrictions(
-            new TypeRestrictions(types));
+        return FieldSpec.Empty.withTypeRestrictions(types);
     }
 
     private FieldSpec construct(IsGreaterThanConstantConstraint constraint, boolean negate) {

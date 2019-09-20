@@ -17,6 +17,7 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.NullDistributedSet;
@@ -53,19 +54,17 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
 
         List<FieldValueSource> validSources = new ArrayList<>();
 
-        TypeRestrictions typeRestrictions = fieldSpec.getTypeRestrictions() != null
-            ? fieldSpec.getTypeRestrictions()
-            : TypeRestrictions.ALL_TYPES_PERMITTED;
+        Collection<Types> typeRestrictions = fieldSpec.getTypeRestrictions();
 
-        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.NUMERIC)) {
+        if (typeRestrictions.contains(Types.NUMERIC)) {
             validSources.add(getNumericSource(fieldSpec));
         }
 
-        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.STRING)) {
+        if (typeRestrictions.contains(Types.STRING)) {
             validSources.add(getStringSource(fieldSpec));
         }
 
-        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.DATETIME)) {
+        if (typeRestrictions.contains(Types.DATETIME)) {
             validSources.add(getDateTimeSource(fieldSpec));
         }
 

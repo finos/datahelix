@@ -16,23 +16,30 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.utils.SetUtils;
+
+import java.util.Set;
+
+import static com.scottlogic.deg.generator.fieldspecs.FieldSpec.NullOnly;
 
 public class TypesRestrictionMergeOperation implements RestrictionMergeOperation {
-    private static final TypeRestrictionsMerger typeRestrictionsMerger = new TypeRestrictionsMerger();
 
     @Override
     public FieldSpec applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merging) {
-        MergeResult<TypeRestrictions> mergeResult = typeRestrictionsMerger.merge(
-            left.getTypeRestrictions(),
-            right.getTypeRestrictions());
-
-        if (!mergeResult.successful) {
-            return FieldSpec.Empty.withWhitelist(FrequencyDistributedSet.empty());
+        if (left.getTypeRestrictions() == right.getTypeRestrictions()){
+            return merging.withTypeRestrictions(left.getTypeRestrictions());
         }
 
-        return merging.withTypeRestrictions(mergeResult.restrictions);
+        Set<IsOfTypeConstraint.Types> intersect = SetUtils.intersect(left.getTypeRestrictions(), right.getTypeRestrictions());
+
+        if (intersect.isEmpty()) {
+            return NullOnly;
+        }
+
+        return merging.withTypeRestrictions(intersect);
     }
 }
 

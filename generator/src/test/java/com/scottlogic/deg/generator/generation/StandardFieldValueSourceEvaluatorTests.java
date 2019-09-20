@@ -18,6 +18,7 @@ package com.scottlogic.deg.generator.generation;
 
 import com.google.common.collect.Iterators;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.CannedValuesFieldValueSource;
@@ -86,9 +87,9 @@ public class StandardFieldValueSourceEvaluatorTests {
             min = new NumericLimit<>(new BigDecimal(10), false);
             max = new NumericLimit<>(new BigDecimal(30), false);
         }};
-        TypeRestrictions typeRestrictions = new TypeRestrictions(Collections.singletonList(
-            IsOfTypeConstraint.Types.NUMERIC
-        ));
+        Collection<Types> typeRestrictions = Collections.singletonList(
+            Types.NUMERIC
+        );
         FieldSpec fieldSpecWithTypedNumericRestrictionsAndNullNotDisallowed = FieldSpec.Empty
             .withNumericRestrictions(numericRestrictions)
             .withTypeRestrictions(typeRestrictions);
@@ -102,8 +103,8 @@ public class StandardFieldValueSourceEvaluatorTests {
     public void shouldReturnNullSourceLastWithTypedStringRestrictionsAndNullNotDisallowed() {
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
         StringRestrictions stringRestrictions = matchesRegex("/[ab]{2}/", false);
-        TypeRestrictions typeRestrictions = new TypeRestrictions(Collections.singletonList(
-            IsOfTypeConstraint.Types.STRING
+        Collection<Types> typeRestrictions = (Collections.singletonList(
+            Types.STRING
         ));
         FieldSpec fieldSpecInSetWithTypedStringRestrictionsAndNullNotDisallowedd = FieldSpec.Empty
             .withStringRestrictions(stringRestrictions)
@@ -121,8 +122,8 @@ public class StandardFieldValueSourceEvaluatorTests {
             min = new DateTimeLimit(OffsetDateTime.MIN, false);
             max = new DateTimeLimit(OffsetDateTime.MAX, false);
         }};
-        TypeRestrictions typeRestrictions = new TypeRestrictions(Collections.singletonList(
-            IsOfTypeConstraint.Types.DATETIME
+        Collection<Types> typeRestrictions = (Collections.singletonList(
+            Types.DATETIME
         ));
         FieldSpec fieldSpecInSetWithTypedDateTimeRestrictionsAndNullNotDisallowed = FieldSpec.Empty
             .withDateTimeRestrictions(datetimeRestrictions)
@@ -141,8 +142,8 @@ public class StandardFieldValueSourceEvaluatorTests {
                 max = new NumericLimit<>(new BigDecimal("1E+18"), false);
             }}
         ).withTypeRestrictions(
-            new TypeRestrictions(
-                Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
+            (
+                Collections.singletonList(Types.NUMERIC)
             )
         ).withNotNull(
 
@@ -175,8 +176,8 @@ public class StandardFieldValueSourceEvaluatorTests {
                 max = new NumericLimit<>(new BigDecimal("15.00000000000000000010"), false);
             }}
         ).withTypeRestrictions(
-            new TypeRestrictions(
-                Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
+            (
+                Collections.singletonList(Types.NUMERIC)
             )
         ).withNotNull();
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
@@ -211,8 +212,8 @@ public class StandardFieldValueSourceEvaluatorTests {
         FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(
             restrictions
         ).withTypeRestrictions(
-            new TypeRestrictions(
-                Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
+            (
+                Collections.singletonList(Types.NUMERIC)
             )
         ).withNotNull();
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
@@ -240,8 +241,8 @@ public class StandardFieldValueSourceEvaluatorTests {
         FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(
             new NumericRestrictions()
         ).withTypeRestrictions(
-            new TypeRestrictions(
-                Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
+            (
+                Collections.singletonList(Types.NUMERIC)
             )
         ).withNotNull();
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
@@ -272,8 +273,8 @@ public class StandardFieldValueSourceEvaluatorTests {
                 max = new NumericLimit<>(new BigDecimal("150.5"), false);
             }}
         ).withTypeRestrictions(
-            new TypeRestrictions(
-                Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
+            (
+                Collections.singletonList(Types.NUMERIC)
             )
         ).withNotNull();
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
@@ -299,8 +300,8 @@ public class StandardFieldValueSourceEvaluatorTests {
                 max = new NumericLimit<>(new BigDecimal("1.5E-20"), false);
             }}
         ).withTypeRestrictions(
-            new TypeRestrictions(
-                Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
+            (
+                Collections.singletonList(Types.NUMERIC)
             )
         ).withNotNull();
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
@@ -326,8 +327,8 @@ public class StandardFieldValueSourceEvaluatorTests {
                 max = new NumericLimit<>(new BigDecimal("3E-20"), false);
             }}
         ).withTypeRestrictions(
-            new TypeRestrictions(
-                Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
+            (
+                Collections.singletonList(Types.NUMERIC)
             )
         ).withNotNull();
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
