@@ -253,6 +253,24 @@ public class NumericRestrictionsTests {
         Assert.assertThat(a, not(equalTo(b)));
     }
 
+    @Test
+    public void limitsShouldBeCappedAtTheMaximumValueAllowedForBigDecimal() {
+        NumericLimit limit = new NumericLimit(new BigDecimal("1e21"),true);
+        NumericRestrictions restrictions = new NumericRestrictions(NUMERIC_MIN_LIMIT, limit,  1);
+
+        Assert.assertFalse(restrictions.getMax().getValue().compareTo(NUMERIC_MAX_LIMIT.getValue()) > 0);
+
+    }
+
+    @Test
+    public void limitsShouldBeCappedAtTheMinimumValueAllowedForBigDecimal() {
+        NumericLimit limit = new NumericLimit(new BigDecimal("-1e21"),true);
+        NumericRestrictions restrictions = new NumericRestrictions(limit, NUMERIC_MAX_LIMIT,  1);
+
+        Assert.assertFalse(restrictions.getMin().getValue().compareTo(NUMERIC_MIN_LIMIT.getValue()) < 0);
+
+    }
+
     private static NumericRestrictions restrictions(double numericScale){
         NumericRestrictions restrictions = new NumericRestrictions(
             NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT,

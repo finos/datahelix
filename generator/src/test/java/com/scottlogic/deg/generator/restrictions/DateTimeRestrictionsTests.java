@@ -400,6 +400,24 @@ class DateTimeRestrictionsTests {
         Assert.assertTrue(restrictions.match(time));
     }
 
+    @Test
+    public void limitsShouldBeCappedAtTheMaximumValueAllowedForDateTime() {
+        DateTimeLimit limit = new DateTimeLimit(OffsetDateTime.MAX,true);
+        DateTimeRestrictions restrictions = new DateTimeRestrictions(DATETIME_MIN_LIMIT, limit,  Timescale.YEARS);
+
+        Assert.assertFalse(restrictions.getMax().getValue().isAfter(DATETIME_MAX_LIMIT.getValue()));
+
+    }
+
+    @Test
+    public void limitsShouldBeCappedAtTheMinimumValueAllowedForDateTime() {
+        DateTimeLimit limit = new DateTimeLimit(OffsetDateTime.MIN,true);
+        DateTimeRestrictions restrictions = new DateTimeRestrictions(limit, DATETIME_MAX_LIMIT,  Timescale.YEARS);
+
+        Assert.assertFalse(restrictions.getMax().getValue().isBefore(DATETIME_MIN_LIMIT.getValue()));
+
+    }
+
     private DateTimeRestrictions restrictions(MockDateTimeLimit min, MockDateTimeLimit max){
         return new DateTimeRestrictions(min, max);
     }
