@@ -39,22 +39,34 @@ public class ProfileSchemaFileLoader implements ProfileSchemaLoader {
 
     @Override
     public void validateProfile(File profileFile, URL schemaUrl) {
+        String profile;
         String schema;
+
         if (schemaUrl == null) {
             throw new ValidationException("Null Schema");
         }
+
         try {
-            byte[] data = Files.readAllBytes(profileFile.toPath());
-            String profile = readAllLines(data).stream().collect(Collectors.joining(System.lineSeparator()));
-
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(schemaUrl.openStream()))) {
-                schema = br.lines().collect(Collectors.joining(System.lineSeparator()));
-            }
-
-            validator.validateProfile(profile, schema);
+            profile = readProfile(profileFile);
+            schema = readSchema(schemaUrl);
         } catch (IOException e) {
             throw new ValidationException(e.getClass() + " when looking for schema with URL " + schemaUrl);
         }
+
+        validator.validateProfile(profile, schema);
+    }
+
+    private String readProfile(File profileFile) throws IOException {
+        byte[] data = Files.readAllBytes(profileFile.toPath());
+        return readAllLines(data).stream().collect(Collectors.joining(System.lineSeparator()));
+    }
+
+    private String readSchema(URL schemaUrl) throws IOException {
+        String schema;
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(schemaUrl.openStream()))) {
+            schema = br.lines().collect(Collectors.joining(System.lineSeparator()));
+        }
+        return schema;
     }
 
     private List<String> readAllLines(byte[] data) throws IOException {
