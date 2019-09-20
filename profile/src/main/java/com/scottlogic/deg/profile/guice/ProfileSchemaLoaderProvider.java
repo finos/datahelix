@@ -18,27 +18,25 @@ package com.scottlogic.deg.profile.guice;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.scottlogic.deg.profile.dto.NoopProfileSchemaValidator;
-import com.scottlogic.deg.profile.dto.ProfileSchemaValidator;
-import com.scottlogic.deg.profile.dto.ProfileSchemaValidatorLeadPony;
+import com.scottlogic.deg.profile.dto.*;
 
-public class ProfileSchemaValidatorProvider implements Provider<ProfileSchemaValidator> {
+public class ProfileSchemaLoaderProvider implements Provider<ProfileSchemaLoader> {
 
     private final ProfileConfigSource profileConfigSource;
-    private final ProfileSchemaValidatorLeadPony leadPonyValidator;
+    private final ProfileSchemaValidator validator;
 
     @Inject
-    public ProfileSchemaValidatorProvider(ProfileConfigSource profileConfigSource, ProfileSchemaValidatorLeadPony leadPonyValidator) {
+    public ProfileSchemaLoaderProvider(ProfileConfigSource profileConfigSource, ProfileSchemaValidator validator) {
         this.profileConfigSource = profileConfigSource;
-        this.leadPonyValidator = leadPonyValidator;
+        this.validator = validator;
     }
 
     @Override
-    public ProfileSchemaValidator get() {
+    public ProfileSchemaLoader get() {
         if (profileConfigSource.isSchemaValidationDisabled()) {
-            return new NoopProfileSchemaValidator();
+            return new NoopProfileSchemaLoader();
         }
 
-        return leadPonyValidator;
+        return new ProfileSchemaFileLoader(validator);
     }
 }

@@ -24,6 +24,7 @@ import org.junit.Assert;
 
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 class CombinationStrategyTester {
     private CombinationStrategy strategy;
@@ -59,7 +60,7 @@ class CombinationStrategyTester {
         DataBagBuilder builder = new DataBagBuilder();
 
         for (String fieldName : fieldNames) {
-            builder.set(new Field(fieldName), "whatever");
+            builder.set(createField(fieldName), "whatever");
         }
 
         return builder.build();

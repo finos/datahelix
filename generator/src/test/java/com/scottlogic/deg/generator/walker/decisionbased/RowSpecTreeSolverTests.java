@@ -20,10 +20,11 @@ import java.util.stream.Stream;
 
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 class RowSpecTreeSolverTests {
-    private Field fieldA = new Field("A");
-    private Field fieldB = new Field("B");
+    private Field fieldA = createField("A");
+    private Field fieldB = createField("B");
     private List<Field> fields = new ArrayList<>();
     private ProfileFields profileFields;
     private ConstraintReducer constraintReducer;

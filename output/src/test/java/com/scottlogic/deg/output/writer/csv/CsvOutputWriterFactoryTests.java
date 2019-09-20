@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.output.writer.csv;
 
-import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.FieldBuilder;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.output.GeneratedObject;
 import com.scottlogic.deg.output.writer.DataSetWriter;
@@ -97,7 +97,7 @@ class CsvOutputWriterFactoryTests {
     private static ProfileFields fields(String ...names) {
         return new ProfileFields(
             Arrays.stream(names)
-                .map(name -> new Field(name))
+                .map(FieldBuilder::createField)
                 .collect(Collectors.toList()));
     }
 

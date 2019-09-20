@@ -37,13 +37,14 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 class TreePrunerTests {
 
     private static final FieldSpec notNull = FieldSpec.Empty
         .withNotNull();
-    private Field field = new Field("foo");
-    private Field unrelatedField = new Field("unrelated");
+    private Field field = createField("foo");
+    private Field unrelatedField = createField("unrelated");
     private FieldSpecHelper fieldSpecHelper = mock(FieldSpecHelper.class);
     private TreePruner treePruner = new TreePruner(
         new FieldSpecMerger(),

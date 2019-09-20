@@ -22,6 +22,7 @@ import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
@@ -249,7 +250,7 @@ public class JsonProfileReaderTests {
                     IsOfTypeConstraint.class,
                     c -> Assert.assertThat(
                         c.requiredType,
-                        equalTo(IsOfTypeConstraint.Types.STRING)))));
+                        equalTo(Types.STRING)))));
     }
 
     @Test
@@ -587,23 +588,19 @@ public class JsonProfileReaderTests {
                 "}");
 
         expectRules(
-            ruleWithConstraints(
-
-                typedConstraint(
-                    IsBeforeConstantDateTimeConstraint.class,
-                    c -> {
-                        Assert.assertThat(
-                            c.referenceValue,
-                            equalTo(OffsetDateTime.parse("2019-01-03T00:00:00.000Z")));
-                    }),
-                typedConstraint(
-                    IsAfterOrEqualToConstantDateTimeConstraint.class,
-                    c -> {
-                        Assert.assertThat(
-                            c.referenceValue,
-                            equalTo(OffsetDateTime.parse("2019-01-01T00:00:00.000Z")));
-                    })
-            ),
+            rule -> {
+                // This is different because the ordering would switch depending on if the whole file was run or just this test
+                IsAfterOrEqualToConstantDateTimeConstraint isAfter = (IsAfterOrEqualToConstantDateTimeConstraint) rule.getConstraints().stream()
+                    .filter(f -> f.getClass() == IsAfterOrEqualToConstantDateTimeConstraint.class)
+                    .findFirst()
+                    .get();
+                IsBeforeConstantDateTimeConstraint isBefore = (IsBeforeConstantDateTimeConstraint) rule.getConstraints().stream()
+                    .filter(f -> f.getClass() == IsBeforeConstantDateTimeConstraint.class)
+                    .findFirst()
+                    .get();
+                Assert.assertEquals(OffsetDateTime.parse("2019-01-01T00:00:00.000Z"), isAfter.referenceValue);
+                Assert.assertEquals(OffsetDateTime.parse("2019-01-03T00:00:00.000Z"), isBefore.referenceValue);
+            },
             ruleWithDescription("type-rules")
         );
     }
@@ -1022,6 +1019,154 @@ public class JsonProfileReaderTests {
                 )
             ),
             ruleWithDescription("type-rules")
+        );
+    }
+
+    @Test
+    public void type_setsFieldTypeProperty_whenSetInFieldDefinition() throws IOException  {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": " + schemaVersion + "," +
+                "    \"fields\": [ { " +
+                "       \"name\": \"foo\" ," +
+                "       \"type\": \"decimal\"" +
+                "    }, { " +
+                "       \"name\": \"bar\" ," +
+                "       \"type\": \"string\"" +
+                "    }]," +
+                "    \"rules\": []" +
+                "}");
+
+        expectFields(
+            field -> {
+                Assert.assertThat(field.type, equalTo(Types.NUMERIC));
+            },
+            field -> {
+                Assert.assertThat(field.type, equalTo(Types.STRING));
+            }
+        );
+        expectRules(
+            ruleWithConstraints(
+                typedConstraint(
+                    IsOfTypeConstraint.class,
+                    c -> {
+                        Assert.assertEquals(
+                            c.requiredType,
+                            Types.NUMERIC
+                            );
+                        Assert.assertEquals(
+                            c.field.name,
+                            "foo");
+                    }
+                ),
+                typedConstraint(
+                    IsOfTypeConstraint.class,
+                    c -> {
+                        Assert.assertEquals(
+                            c.requiredType,
+                            Types.STRING
+                        );
+                        Assert.assertEquals(
+                            c.field.name,
+                            "bar");
+                    }
+                )
+            )
+        );
+    }
+
+    @Test
+    public void type_setsFieldTypeProperty_whenSetInConstraintDefinition() throws IOException  {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": " + schemaVersion + "," +
+                "    \"fields\": [ { " +
+                "       \"name\": \"foo\"" +
+                "    }, { " +
+                "       \"name\": \"bar\" ," +
+                "       \"type\": \"string\"" +
+                "    }]," +
+                "    \"rules\": [" +
+                "       {" +
+                "        \"rule\": \"fooRule\"," +
+                "        \"constraints\": [{ \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"decimal\" }]" +
+                "       }" +
+                "    ]" +
+                "}");
+
+        expectFields(
+            field -> {
+                Assert.assertThat(field.type, equalTo(Types.NUMERIC));
+            },
+            field -> {
+                Assert.assertThat(field.type, equalTo(Types.STRING));
+            }
+        );
+    }
+
+    @Test
+    public void type_setsFieldTypeProperty_whenSetInNestedConstraintDefinition() throws IOException {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": " + schemaVersion + "," +
+                "    \"fields\": [ { " +
+                "       \"name\": \"foo\"" +
+                "    }, { " +
+                "       \"name\": \"bar\" ," +
+                "       \"type\": \"string\"" +
+                "    }]," +
+                "    \"rules\": [" +
+                "       {" +
+                "        \"rule\": \"fooRule\"," +
+                "        \"constraints\": [" +
+                "           { \"allOf\": [" +
+                "             { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"decimal\" }," +
+                "             { \"not\": { \"field\": \"foo\", \"is\": \"null\" } }" +
+                "            ] }" +
+                "          ]" +
+                "       }" +
+                "    ]" +
+                "}");
+
+        expectFields(
+            field -> {
+                Assert.assertThat(field.type, equalTo(Types.NUMERIC));
+            },
+            field -> {
+                Assert.assertThat(field.type, equalTo(Types.STRING));
+            }
+        );
+    }
+
+    @Test
+    public void type_setsFieldTypeProperty_whenSetInMultipleConstraintDefinitions() throws IOException {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": " + schemaVersion + "," +
+                "    \"fields\": [ { " +
+                "       \"name\": \"foo\"" +
+                "    }, { " +
+                "       \"name\": \"bar\" ," +
+                "       \"type\": \"string\"" +
+                "    }]," +
+                "    \"rules\": [" +
+                "       {" +
+                "        \"rule\": \"fooRule\"," +
+                "        \"constraints\": [" +
+                "           { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"decimal\" }," +
+                "           { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"datetime\" }" +
+                "          ]" +
+                "       }" +
+                "    ]" +
+                "}");
+
+        expectFields(
+            field -> {
+                Assert.assertThat(field.type, equalTo(Types.NUMERIC));
+            },
+            field -> {
+                Assert.assertThat(field.type, equalTo(Types.STRING));
+            }
         );
     }
 }

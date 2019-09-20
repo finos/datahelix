@@ -20,6 +20,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 class FieldSpecGroupValueGeneratorTest {
 
@@ -27,7 +28,7 @@ class FieldSpecGroupValueGeneratorTest {
     public void generate_withGroupOfSingleField_returnsCorrectStream() {
         Map<Field, FieldSpec> specMap = new HashMap<>();
         FieldSpec firstSpec = FieldSpec.Empty;
-        Field firstField = new Field("first");
+        Field firstField = createField("first");
         specMap.put(firstField, FieldSpec.Empty);
 
         FieldSpecValueGenerator underlyingGenerator = mock(FieldSpecValueGenerator.class);

@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.orchestrator.validator;
 
+import com.scottlogic.deg.profile.dto.ProfileSchemaFileLoader;
 import com.scottlogic.deg.profile.dto.ProfileSchemaValidatorLeadPony;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -45,7 +46,7 @@ public class ProfileValidationTests {
                 Thread.currentThread().getContextClassLoader().getResource(schemaVersionPath);
             DynamicTest test = DynamicTest.dynamicTest(
                 dir.getName(),
-                () -> new ProfileSchemaValidatorLeadPony().validateProfile(profileFile, schemaUrl));
+                () -> new ProfileSchemaFileLoader(new ProfileSchemaValidatorLeadPony()).validateProfile(profileFile, schemaUrl));
 
             dynamicTests.add(test);
         }

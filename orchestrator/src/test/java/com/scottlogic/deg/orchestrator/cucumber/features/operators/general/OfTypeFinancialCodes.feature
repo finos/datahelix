@@ -82,13 +82,6 @@ Feature: User can specify that a field must be a financial code type
       | null           |
       | "GB0002634946" |
 
-  @ignore "Standard constraints e.g. ISINs cannot yet be negated."
-  Scenario: An ISIN constraint combined with a non-ISIN constraint generates no data
-    Given foo is of type "ISIN"
-    And foo is anything but null
-    And foo is anything but of type "ISIN"
-    Then no data is created
-
   Scenario: An ISIN constraint combined with a greater than constraint generates valid ISINs
     Given foo is of type "ISIN"
     And foo is greater than 0
@@ -357,13 +350,6 @@ Feature: User can specify that a field must be a financial code type
       | foo       |
       | null      |
       | "0263494" |
-
-  @ignore "Standard constraints e.g. ISINs cannot yet be negated."
-  Scenario: A SEDOL constraint combined with a non-SEDOL constraint generates no data
-    Given foo is of type "SEDOL"
-    And foo is anything but null
-    And foo is anything but of type "SEDOL"
-    Then no data is created
 
   Scenario: A SEDOL constraint combined with a greater than constraint generates valid SEDOLs
     Given foo is of type "SEDOL"
@@ -642,13 +628,6 @@ Feature: User can specify that a field must be a financial code type
       | foo         |
       | null        |
       | "38259P508" |
-
-  @ignore "Standard constraints e.g. ISINs cannot yet be negated."
-  Scenario: A CUSIP constraint combined with a non-CUSIP constraint generates no data
-    Given foo is of type "CUSIP"
-    And foo is anything but null
-    And foo is anything but of type "CUSIP"
-    Then no data is created
 
   Scenario: A CUSIP constraint combined with a greater than constraint generates valid CUSIPs
     Given foo is of type "CUSIP"

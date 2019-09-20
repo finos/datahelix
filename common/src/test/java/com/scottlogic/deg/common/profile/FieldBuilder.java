@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.dto;
+package com.scottlogic.deg.common.profile;
 
-class ProfileSchemaValidatorLeadPonyTests extends ProfileSchemaValidatorTests {
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
 
-    private ProfileSchemaValidator profileValidator = new ProfileSchemaValidatorLeadPony();
-
-
-    @Override
-    protected ProfileSchemaValidator setValidator() {
-        return profileValidator;
+public class FieldBuilder {
+    public static Field createField(String name) {
+        return new Field(name, Types.STRING, false, null);
     }
 }

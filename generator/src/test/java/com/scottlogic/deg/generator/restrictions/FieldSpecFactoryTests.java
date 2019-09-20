@@ -23,6 +23,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertEquals;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 class FieldSpecFactoryTests {
     private static final StringRestrictionsFactory stringRestrictionsFactory = new StringRestrictionsFactory();
@@ -32,7 +33,7 @@ class FieldSpecFactoryTests {
     @Test
     void construct_stringHasLengthConstraintRetrievedTwice_returnsTheSameGeneratorInstance() {
         StringHasLengthConstraint constraint = new StringHasLengthConstraint(
-            new Field("Test"),
+            createField("Test"),
             10
         );
 
@@ -46,7 +47,7 @@ class FieldSpecFactoryTests {
     void construct_stringHasLengthConstraintViolatedTwice_returnsTheSameGeneratorInstance() {
         ViolatedAtomicConstraint constraint = new ViolatedAtomicConstraint(
             new StringHasLengthConstraint(
-                new Field("Test"),
+                createField("Test"),
                 10
             )
         );
@@ -60,11 +61,11 @@ class FieldSpecFactoryTests {
     @Test
     void construct_twoInstancesOfStringHasLengthConstraintCalledWithEqualValues_returnsTheSameGeneratorInstance() {
         StringHasLengthConstraint firstConstraint = new StringHasLengthConstraint(
-            new Field("Test"),
+            createField("Test"),
             20
         );
         StringHasLengthConstraint secondConstraint = new StringHasLengthConstraint(
-            new Field("Test"),
+            createField("Test"),
             20
         );
 
@@ -77,7 +78,7 @@ class FieldSpecFactoryTests {
     @Test
     void construct_isStringLongerThanConstraintRetrievedTwice_returnsTheSameGeneratorInstance() {
         IsStringLongerThanConstraint constraint = new IsStringLongerThanConstraint(
-            new Field("Test"),
+            createField("Test"),
             15
         );
 
@@ -91,7 +92,7 @@ class FieldSpecFactoryTests {
     void construct_isStringLongerThanConstraintViolatedTwice_returnsTheSameGeneratorInstance() {
         ViolatedAtomicConstraint constraint = new ViolatedAtomicConstraint(
             new IsStringLongerThanConstraint(
-                new Field("Test"),
+                createField("Test"),
                 10
             )
         );
@@ -105,11 +106,11 @@ class FieldSpecFactoryTests {
     @Test
     void construct_twoInstancesOfIsStringLongerThanConstraintCalledWithEqualValues_returnsTheSameGeneratorInstance() {
         IsStringLongerThanConstraint firstConstraint = new IsStringLongerThanConstraint(
-            new Field("Test"),
+            createField("Test"),
             20
         );
         IsStringLongerThanConstraint secondConstraint = new IsStringLongerThanConstraint(
-            new Field("Test"),
+            createField("Test"),
             20
         );
 
@@ -122,7 +123,7 @@ class FieldSpecFactoryTests {
     @Test
     void construct_isStringShorterThanConstraintRetrievedTwice_returnsTheSameGeneratorInstance() {
         IsStringShorterThanConstraint constraint = new IsStringShorterThanConstraint(
-            new Field("Test"),
+            createField("Test"),
             25
         );
 
@@ -136,7 +137,7 @@ class FieldSpecFactoryTests {
     void construct_isStringShorterThanConstraintViolatedTwice_returnsTheSameGeneratorInstance() {
         ViolatedAtomicConstraint constraint = new ViolatedAtomicConstraint(
             new IsStringShorterThanConstraint(
-                new Field("Test"),
+                createField("Test"),
                 10
             )
         );
@@ -150,11 +151,11 @@ class FieldSpecFactoryTests {
     @Test
     void construct_twoInstancesOfIsStringShorterThanConstraintCalledWithEqualValues_returnsTheSameGeneratorInstance() {
         IsStringShorterThanConstraint firstConstraint = new IsStringShorterThanConstraint(
-            new Field("Test"),
+            createField("Test"),
             20
         );
         IsStringShorterThanConstraint secondConstraint = new IsStringShorterThanConstraint(
-            new Field("Test"),
+            createField("Test"),
             20
         );
 
