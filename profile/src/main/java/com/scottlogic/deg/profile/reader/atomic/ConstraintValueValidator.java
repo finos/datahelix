@@ -88,6 +88,9 @@ public class ConstraintValueValidator {
     }
 
     private static void validateTypeIs(Field field, AtomicConstraintType type, Types s) {
+        if (field.type == null){
+            throw new ValidationException("is not typed; add its type to the field definition");
+        }
         if (field.type != s){
             throw new ValidationException("is type " + field.type + " , but you are trying to apply a " + type + " constraint which requires " + s);
         }

@@ -98,6 +98,6 @@ Feature: User can specify that a field is of a specific type (string, integer, d
 
   Scenario: Running a 'ofType' request that specifies null should be unsuccessful
     Given there is a field foo
-    Then the profile is invalid because "foo is incorrectly typed; add its type to the field definition"
+    Then the profile is invalid because "Field \[foo\]: is not typed; add its type to the field definition"
     And no data is created
 

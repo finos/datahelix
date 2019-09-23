@@ -42,10 +42,6 @@ Feature: User can specify that a field must be a financial code type
       | null        |
       | "38259P508" |
 
-  Scenario: An ofType constraint with a null value fails with an error message
-    Then the profile is invalid because "foo is incorrectly typed; add its type to the field definition"
-    And no data is created
-
   Scenario: Two ISIN constraints combined generate valid ISINs
     Given foo has type "ISIN"
     And foo has type "ISIN"

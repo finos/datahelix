@@ -400,74 +400,6 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null                     |
       | 2019-01-01T00:00:00.000Z |
 
-  Scenario Outline: Not 'inSet' type values with non-contradicting 'ofType' are successful
-    Given there is a field foo
-    And foo is anything but in set:
-      | <setValue> |
-    And foo has type <type>
-    And foo is in set:
-      | 1                        |
-      | "a"                      |
-      | 2019-01-01T00:00:00.000Z |
-    Then the following data should be generated:
-      | foo             |
-      | null            |
-      | <expectedValue> |
-    Examples:
-      | setValue                 | type       | expectedValue            |
-      | 1                        | "string"   | "a"                      |
-      | 2019-01-01T00:00:00.000Z | "string"   | "a"                      |
-      | "a"                      | "decimal"  | 1                        |
-      | 2019-01-01T00:00:00.000Z | "decimal"  | 1                        |
-      | 1                        | "datetime" | 2019-01-01T00:00:00.000Z |
-      | "a"                      | "datetime" | 2019-01-01T00:00:00.000Z |
-
-
-  Scenario Outline: Running a 'inSet' of string values with a contradicting ofType emits null
-    Given there is a field foo
-    And foo is in set:
-      | "1" |
-      | "2" |
-      | "3" |
-    And foo has type <type>
-    Then the following data should be generated:
-      | foo  |
-      | null |
-    Examples:
-      | type       |
-      | "integer"  |
-      | "decimal"  |
-      | "datetime" |
-
-  Scenario Outline: Running a 'inSet' of numeric values with a contradicting ofType emits null
-    Given there is a field foo
-    And foo is in set:
-      | 1 |
-    And foo has type <type>
-    Then the following data should be generated:
-      | foo  |
-      | null |
-    Examples:
-      | type       |
-      | "string"   |
-      | "datetime" |
-
-  Scenario Outline: Running a 'inSet' of date values with a contradicting ofType emits null
-    Given there is a field foo
-    And foo is in set:
-      | 2010-01-01T00:00:00.000Z |
-      | 2010-01-01T00:00:00.001Z |
-      | 2011-01-01T00:00:00.000Z |
-    And foo has type <type>
-    Then the following data should be generated:
-      | foo  |
-      | null |
-    Examples:
-      | type      |
-      | "integer" |
-      | "decimal" |
-      | "string"  |
-
 ### matchingRegex ###
 
   Scenario: Running a 'inSet' request alongside a non-contradicting 'matchingRegex' constraint should be successful
@@ -1399,17 +1331,6 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "Test 2" |
       | "Test 3" |
 
-  Scenario: Running a 'inSet' request alongside a contradicting ofType = string should produce null
-    Given there is a field foo
-    And foo has type "string"
-    And foo is in set:
-      | 1 |
-      | 2 |
-      | 3 |
-    And foo has type "string"
-    Then the following data should be generated:
-      | foo  |
-      | null |
 
   Scenario: Running a 'inSet' request alongside an ofType = integer should be successful
     Given there is a field foo
