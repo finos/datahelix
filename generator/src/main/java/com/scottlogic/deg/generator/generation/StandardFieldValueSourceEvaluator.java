@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
+import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.NullDistributedSet;
@@ -32,7 +32,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.*;
+import static com.scottlogic.deg.common.profile.Types.*;
 
 public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvaluator {
     private static final CannedValuesFieldValueSource NULL_ONLY_SOURCE = setupNullOnlySource();

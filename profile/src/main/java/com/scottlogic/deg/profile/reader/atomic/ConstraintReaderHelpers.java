@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.profile.reader.atomic;
 
-import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
+import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 
 import java.time.LocalDateTime;

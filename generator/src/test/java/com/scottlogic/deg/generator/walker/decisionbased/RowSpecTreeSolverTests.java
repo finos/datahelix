@@ -21,7 +21,6 @@ import java.util.stream.Stream;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
-import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.*;
 
 class RowSpecTreeSolverTests {
     private Field fieldA = createField("A");

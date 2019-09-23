@@ -25,7 +25,7 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
     import java.time.OffsetDateTime;
     import java.time.ZoneOffset;
 
-    import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.DATETIME;
+    import static com.scottlogic.deg.common.profile.Types.DATETIME;
     import static org.junit.jupiter.api.Assertions.*;
     import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
     

@@ -5,14 +5,12 @@ import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import com.scottlogic.deg.profile.reader.file.names.NameRetriever;
 
 import java.math.BigDecimal;
 
-import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.*;
-import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.NUMERIC;
+import static com.scottlogic.deg.common.profile.Types.*;
 
 public class OfTypeConstraintFactory {
     public static Constraint create(Field field, String value){
@@ -37,7 +35,7 @@ public class OfTypeConstraintFactory {
             case "RIC":
                 return new AndConstraint(
                     new MatchesStandardConstraint(field, StandardConstraintTypes.valueOf(value)),
-                    new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.STRING)
+                    new IsOfTypeConstraint(field, STRING)
                 );
 
             case "firstname":
@@ -45,7 +43,7 @@ public class OfTypeConstraintFactory {
             case "fullname":
                 return new AndConstraint(
                     new IsInSetConstraint(field, NameRetriever.loadNamesFromFile(NameConstraintTypes.lookupProfileText(value))),
-                    new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.STRING)
+                    new IsOfTypeConstraint(field, STRING)
                 );
         }
 

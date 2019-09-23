@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.profile.reader;
 
+import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
@@ -41,7 +42,7 @@ import java.util.stream.Stream;
 
 import static com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType.*;
 import static com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType.IS_EQUAL_TO_CONSTANT;
-import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.*;
+import static com.scottlogic.deg.common.profile.Types.*;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -217,7 +218,7 @@ public class ConstraintValidationAndReadingTests {
     @DisplayName("Should return correct constraint type")
     @ParameterizedTest(name = "{0} should return {1}")
     @MethodSource("testProvider")
-    public void testAtomicConstraintReader(AtomicConstraintType type, ConstraintDTO dto, Class<?> constraintType, IsOfTypeConstraint.Types types) {
+    public void testAtomicConstraintReader(AtomicConstraintType type, ConstraintDTO dto, Class<?> constraintType, Types types) {
 
         try {
             Object value = new AtomicConstraintValueReader(null).getValue(dto);

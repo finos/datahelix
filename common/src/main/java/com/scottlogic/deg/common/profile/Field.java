@@ -16,8 +16,6 @@
 
 package com.scottlogic.deg.common.profile;
 
-import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
-
 import java.util.Objects;
 
 public class Field {
