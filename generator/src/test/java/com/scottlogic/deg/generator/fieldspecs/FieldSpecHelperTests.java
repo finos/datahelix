@@ -18,7 +18,6 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.FieldBuilder;
-import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import org.junit.jupiter.api.Test;
@@ -51,7 +50,7 @@ class FieldSpecHelperTests {
 
         FieldSpec actual = fieldSpecHelper.getFieldSpecForValue(field, input);
 
-        FieldSpec expected = FieldSpec.NullOnly;
+        FieldSpec expected = FieldSpec.nullOnlyFromType(field.getType());
 
         assertEquals(actual, expected);
     }

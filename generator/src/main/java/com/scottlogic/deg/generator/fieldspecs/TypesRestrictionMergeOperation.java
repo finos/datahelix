@@ -16,14 +16,6 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
-import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
-import com.scottlogic.deg.generator.utils.SetUtils;
-
-import java.util.Set;
-
-import static com.scottlogic.deg.generator.fieldspecs.FieldSpec.NullOnly;
-
 public class TypesRestrictionMergeOperation implements RestrictionMergeOperation {
 
     @Override
@@ -38,7 +30,7 @@ public class TypesRestrictionMergeOperation implements RestrictionMergeOperation
             return merging.withType(left.getType());
         }
 
-        return NullOnly;
+        return FieldSpec.nullOnlyFromType(null);
 
     }
 }

@@ -115,7 +115,7 @@ public class FieldSpecFactory {
             return FieldSpec.fromType(field.getType()).withNotNull();
         }
 
-        return FieldSpec.NullOnly;
+        return FieldSpec.nullOnlyFromType(field.getType());
     }
 
     private FieldSpec construct(Field field, IsOfTypeConstraint constraint, boolean negate) {

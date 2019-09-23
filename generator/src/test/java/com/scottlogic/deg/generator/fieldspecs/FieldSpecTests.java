@@ -303,7 +303,7 @@ class FieldSpecTests {
     @Test
     public void fieldSpecsWithUnequalNullRestrictionsShouldBeUnequal() {
         FieldSpec a = FieldSpec.fromType(STRING).withNotNull();
-        FieldSpec b = FieldSpec.NullOnly;
+        FieldSpec b = FieldSpec.nullOnlyFromType(STRING);
 
         Assert.assertThat(a, not(equalTo(b)));
     }

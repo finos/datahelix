@@ -23,15 +23,11 @@ import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 public class FieldSpecHelper {
     public FieldSpec getFieldSpecForValue(Field field, DataBagValue fieldValue) {
         if (fieldValue.getValue() == null) {
-            return getNullRequiredFieldSpec();
+            return FieldSpec.nullOnlyFromType(field.getType());
         }
 
         return FieldSpec.fromType(field.getType())
             .withWhitelist(FrequencyDistributedSet.singleton(fieldValue.getValue()))
             .withNotNull();
-    }
-
-    private FieldSpec getNullRequiredFieldSpec() {
-        return FieldSpec.NullOnly;
     }
 }

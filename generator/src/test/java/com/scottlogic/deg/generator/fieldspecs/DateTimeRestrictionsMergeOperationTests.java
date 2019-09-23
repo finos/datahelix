@@ -25,14 +25,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-
 import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.DATETIME;
 import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.NUMERIC;
-import static com.scottlogic.deg.generator.fieldspecs.FieldSpec.NullOnly;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.hamcrest.core.IsSame.sameInstance;
@@ -73,7 +69,7 @@ class DateTimeRestrictionsMergeOperationTests {
 
         FieldSpec result = operation.applyMergeOperation(left, right, merging);
 
-        Assert.assertThat(result, sameInstance(NullOnly));
+        Assert.assertEquals(result, FieldSpec.nullOnlyFromType(DATETIME));
     }
 
     @Test
@@ -84,7 +80,7 @@ class DateTimeRestrictionsMergeOperationTests {
 
         FieldSpec result = operation.applyMergeOperation(left, right, merging);
 
-        Assert.assertThat(result, sameInstance(NullOnly));
+        Assert.assertEquals(result, FieldSpec.nullOnlyFromType(DATETIME));
     }
 
     @Test

@@ -26,7 +26,6 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.*;
-import static com.scottlogic.deg.generator.fieldspecs.FieldSpec.NullOnly;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
@@ -70,7 +69,7 @@ class NumericRestrictionsMergeOperationTests {
 
         FieldSpec result = operation.applyMergeOperation(left, right, merging);
 
-        Assert.assertThat(result, sameInstance(NullOnly));
+        Assert.assertEquals(result, FieldSpec.nullOnlyFromType(NUMERIC));
     }
 
     @Test
@@ -83,7 +82,7 @@ class NumericRestrictionsMergeOperationTests {
 
         FieldSpec result = operation.applyMergeOperation(left, right, merging);
 
-        Assert.assertThat(result, sameInstance(NullOnly));
+        Assert.assertEquals(result, FieldSpec.nullOnlyFromType(NUMERIC));
     }
 
     @Test
