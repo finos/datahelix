@@ -35,21 +35,21 @@ import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConst
  */
 public class FieldSpec {
     public static final Collection<Types> ALL_TYPES_PERMITTED = Arrays.asList(Types.values());
-    public static final FieldSpec Empty = new FieldSpec(null, null, true, Collections.emptySet(), ALL_TYPES_PERMITTED);
+    public static final FieldSpec Empty = new FieldSpec(null, null, true, Collections.emptySet(), null);
     public static final FieldSpec NullOnly = Empty.withWhitelist(FrequencyDistributedSet.empty());
 
     private final boolean nullable;
     private final DistributedSet<Object> whitelist;
     private final Set<Object> blacklist;
     private final TypedRestrictions restrictions;
-    private final Collection<Types> types;
+    private final Types types;
 
     private FieldSpec(
         DistributedSet<Object> whitelist,
         TypedRestrictions restrictions,
         boolean nullable,
         Set<Object> blacklist,
-        Collection<Types> types) {
+        Types types) {
         this.whitelist = whitelist;
         this.restrictions = restrictions;
         this.nullable = nullable;
@@ -70,25 +70,25 @@ public class FieldSpec {
     }
 
     public NumericRestrictions getNumericRestrictions() {
-        if (types.contains(NUMERIC)) {
+        if (types == NUMERIC) {
             return (NumericRestrictions) restrictions;
         }
         return null;
     }
 
     public StringRestrictions getStringRestrictions() {
-        if (types.contains(STRING)) {
+        if (types == STRING) {
             return (StringRestrictions) restrictions;
         }
         return null;
     }
 
     public Collection<Types> getTypeRestrictions() {
-        return types;
+        return types == null ? ALL_TYPES_PERMITTED : Collections.singleton(types);
     }
 
     public DateTimeRestrictions getDateTimeRestrictions() {
-        if (types.contains(DATETIME)) {
+        if (types == DATETIME) {
             return (DateTimeRestrictions) restrictions;
         }
         return null;
@@ -99,7 +99,7 @@ public class FieldSpec {
     }
 
     public FieldSpec withNumericRestrictions(NumericRestrictions numericRestrictions) {
-        return new FieldSpec(null, numericRestrictions, nullable, blacklist, Collections.singleton(NUMERIC));
+        return new FieldSpec(null, numericRestrictions, nullable, blacklist, NUMERIC);
     }
 
     public FieldSpec withBlacklist(Set<Object> blacklist) {
@@ -107,11 +107,11 @@ public class FieldSpec {
     }
 
     public FieldSpec withTypeRestrictions(Collection<Types> typeRestrictions) {
-        return new FieldSpec(whitelist, restrictions, nullable, blacklist, typeRestrictions);
+        return new FieldSpec(whitelist, restrictions, nullable, blacklist, typeRestrictions == ALL_TYPES_PERMITTED ? null : typeRestrictions.iterator().next());
     }
 
     public FieldSpec withStringRestrictions(StringRestrictions stringRestrictions) {
-        return new FieldSpec(null, stringRestrictions, nullable, blacklist, Collections.singleton(STRING));
+        return new FieldSpec(null, stringRestrictions, nullable, blacklist, STRING);
     }
 
     public FieldSpec withNotNull() {
@@ -119,11 +119,11 @@ public class FieldSpec {
     }
 
     public FieldSpec withDateTimeRestrictions(DateTimeRestrictions dateTimeRestrictions) {
-        return new FieldSpec(null, dateTimeRestrictions, nullable, blacklist, Collections.singleton(DATETIME));
+        return new FieldSpec(null, dateTimeRestrictions, nullable, blacklist, DATETIME);
     }
 
     public boolean isType(Types type){
-        return types.size() == 1 && types.contains(type);
+        return types == type;
     }
 
     @Override
@@ -136,9 +136,9 @@ public class FieldSpec {
         }
 
         return String.format("%s%s%s",
-            types.size() == 1 ? types.iterator().next().toString() : "<all values>",
+            types == null  ? "<all values>" : types,
             nullable ? " " : " Not Null ",
-            restrictions == null ? "" : restrictions.toString());
+            restrictions == null ? "" : restrictions);
     }
 
     /**
@@ -149,7 +149,7 @@ public class FieldSpec {
             return false;
         }
 
-        if (types.size() == 1 && !types.iterator().next().isInstanceOf(value)) {
+        if (types != null && !types.isInstanceOf(value)) {
             return false;
         }
 
