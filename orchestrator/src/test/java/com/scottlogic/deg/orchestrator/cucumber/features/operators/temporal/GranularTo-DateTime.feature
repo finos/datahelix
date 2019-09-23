@@ -4,7 +4,7 @@ Feature: User can specify that datetime fields are granular to a certain unit
     Given the generation strategy is full
     And there is a field foo
     And foo is anything but null
-    And foo is of type "datetime"
+    And foo has type "datetime"
 
 
   Scenario Outline: User is able to specify supported temporal granularities with after operator

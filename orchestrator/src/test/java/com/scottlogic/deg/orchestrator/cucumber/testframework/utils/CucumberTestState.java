@@ -42,8 +42,6 @@ public class CucumberTestState {
      * If true, generation is in violate mode.
      */
     public Boolean shouldViolate;
-    // Sets or unsets flag --allow-untyped-fields
-    boolean requireFieldTyping;
 
     /** If true, we inject a no-op generation engine during the test (e.g. because we're just testing profile validation) */
     private Boolean shouldSkipGeneration;
@@ -74,7 +72,6 @@ public class CucumberTestState {
         contstraintsToNotViolate.clear();
         generationHasAlreadyOccured = false;
         shouldSkipGeneration = false;
-        requireFieldTyping = true;
         shouldViolate = false;
     }
 
@@ -124,7 +121,7 @@ public class CucumberTestState {
     }
 
     public void addField(String fieldName) {
-        this.profileFields.add(createField(fieldName));
+        this.profileFields.add(new Field(fieldName, null, false, null));
     }
 
     public void addException(Exception e){
@@ -172,17 +169,25 @@ public class CucumberTestState {
         return mapper.readerFor(ConstraintHolder.class).readValue(json);
     }
 
-    public void setRequireFieldTyping(boolean requireFieldTyping) {
-        this.requireFieldTyping = requireFieldTyping;
-    }
-
     public void setFieldUnique(String fieldName) {
         Field oldField = profileFields.stream()
             .filter(f -> f.name.equals(fieldName))
             .findFirst()
             .orElseThrow(UnsupportedOperationException::new);
 
-        Field newField = new Field(fieldName, Types.STRING, true, oldField.getFormatting());
+        Field newField = new Field(oldField.name, oldField.type, true, oldField.getFormatting());
+
+        profileFields.remove(oldField);
+        profileFields.add(newField);
+    }
+
+    public void setFieldType(String fieldName, Types types) {
+        Field oldField = profileFields.stream()
+            .filter(f -> f.name.equals(fieldName))
+            .findFirst()
+            .orElseThrow(UnsupportedOperationException::new);
+
+        Field newField = new Field(oldField.name, types, oldField.isUnique(), oldField.getFormatting());
 
         profileFields.remove(oldField);
         profileFields.add(newField);
@@ -194,7 +199,7 @@ public class CucumberTestState {
             .findFirst()
             .orElseThrow(UnsupportedOperationException::new);
 
-        Field newField = new Field(fieldName, Types.STRING, oldField.isUnique(), formatting);
+        Field newField = new Field(oldField.name, oldField.type, oldField.isUnique(), formatting);
 
         profileFields.remove(oldField);
         profileFields.add(newField);

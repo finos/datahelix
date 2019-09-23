@@ -11,7 +11,7 @@ Feature: Type mandation validation
 
   Scenario: An explicit type constraint should satisfy type mandation
     Given there is a field user_id
-    And user_id is of type "string"
+    And user_id has type "string"
     Then the profile should be considered valid
 
   Scenario: An equalTo constraint should satisfy type mandation
@@ -28,17 +28,17 @@ Feature: Type mandation validation
 
   Scenario: An ISIN constraint should satisfy type mandation
     Given there is a field foo
-    And foo is of type "ISIN"
+    And foo has type "ISIN"
     Then the profile should be considered valid
 
   Scenario: A SEDOL constraint should satisfy type mandation
     Given there is a field foo
-    And foo is of type "SEDOL"
+    And foo has type "SEDOL"
     Then the profile should be considered valid
 
   Scenario: A CUSIP constraint should satisfy type mandation
     Given there is a field foo
-    And foo is of type "CUSIP"
+    And foo has type "CUSIP"
     Then the profile should be considered valid
 
   Scenario: A mandatorily absent field should satisfy type mandation
@@ -48,7 +48,7 @@ Feature: Type mandation validation
 
   Scenario: When only some fields fail type mandation, the errors should be specific to which
     Given there is a field user_id
-    And user_id is of type "string"
+    And user_id has type "string"
     And there is a field price
     And there is a field purchase_time
     Then the profile is invalid because "price is incorrectly typed; add its type to the field definition"
@@ -67,7 +67,7 @@ Feature: Type mandation validation
 
   Scenario: When only a field has two types it fails validation
     Given there is a field user_id
-    And user_id is of type "string"
-    And user_id is of type "integer"
+    And user_id has type "string"
+    And user_id has type "integer"
     Then the profile is invalid because "user_id is incorrectly typed; add its type to the field definition"
 

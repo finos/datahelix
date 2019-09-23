@@ -3,9 +3,9 @@ Feature: User can specify that one date should be equal to another date
   Background:
     Given the generation strategy is full
     And there is a field foo
-    And foo is of type "datetime"
+    And foo has type "datetime"
     And there is a field bar
-    And bar is of type "datetime"
+    And bar has type "datetime"
 
   Scenario: Running an "equalToField" constraint allows one date to be always equal to another
     Given foo is equal to 2018-09-01T00:00:00.000Z

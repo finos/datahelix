@@ -26,7 +26,7 @@ Feature: User can specify that data must be created to conform to each of multip
   @ignore  #91 Reduce duplication where (eg) decisions have overlapping options
   Scenario: Running an 'allOf' request that contains a valid nested anyOf request should be successful
     Given there is a field foo
-    And foo is of type "string"
+    And foo has type "string"
     And there is a constraint:
       """
       { "allOf": [
@@ -61,7 +61,7 @@ Feature: User can specify that data must be created to conform to each of multip
 
   Scenario: Running a 'allOf' request that includes multiple values within the same statement should be successful
     Given there is a field foo
-    And foo is of type "string"
+    And foo has type "string"
     And there is a constraint:
       """
       { "allOf": [

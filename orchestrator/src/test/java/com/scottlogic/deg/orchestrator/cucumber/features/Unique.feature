@@ -5,7 +5,7 @@ Feature: As a user
   Background:
     Given there is a field unique
     And unique is unique
-    And unique is of type "integer"
+    And unique has type "integer"
     And unique is greater than 0
     And unique is anything but null
     And the combination strategy is minimal
@@ -14,11 +14,11 @@ Feature: As a user
     Scenario: The one where there are 2 unique fields and 1 non unique field
       Given there is a field foo
       And foo is unique
-      And foo is of type "integer"
+      And foo has type "integer"
       And foo is greater than 0
       And foo is anything but null
       And there is a field bar
-      And bar is of type "string"
+      And bar has type "string"
       And bar is equal to "not unique"
       And the generation strategy is random
       Then the following data should be generated:
@@ -32,7 +32,7 @@ Feature: As a user
     Scenario: The one where the range is exceeded
       Given unique is less than 3
       And there is a field foo
-      And foo is of type "integer"
+      And foo has type "integer"
       And foo is greater than 0
       And foo is anything but null
       Then the following data should be generated:
@@ -42,12 +42,12 @@ Feature: As a user
 
     Scenario: The one where combination strategy is minimal
       And there is a field foo
-      And foo is of type "integer"
+      And foo has type "integer"
       And foo is greater than 0
       And foo is less than 4
       And foo is anything but null
       And there is a field bar
-      And bar is of type "integer"
+      And bar has type "integer"
       And bar is greater than 0
       And bar is less than 4
       And bar is anything but null
@@ -62,12 +62,12 @@ Feature: As a user
   Scenario: The one where combination strategy is exhaustive
     Given the combination strategy is exhaustive
     And there is a field foo
-    And foo is of type "integer"
+    And foo has type "integer"
     And foo is greater than 0
     And foo is less than 4
     And foo is anything but null
     And there is a field bar
-    And bar is of type "integer"
+    And bar has type "integer"
     And bar is greater than 0
     And bar is less than 4
     And bar is anything but null
