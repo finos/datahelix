@@ -21,13 +21,13 @@ public class TypesRestrictionMergeOperation implements RestrictionMergeOperation
     @Override
     public FieldSpec applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merging) {
         if (left.getType() == null){
-            return merging.withType(right.getType());
+            return FieldSpec.fromType(right.getType());
         }
         if (right.getType() == null){
-            return merging.withType(left.getType());
+            return FieldSpec.fromType(left.getType());
         }
         if (left.getType() == right.getType()){
-            return merging.withType(left.getType());
+            return FieldSpec.fromType(left.getType());
         }
 
         return FieldSpec.nullOnlyFromType(null);

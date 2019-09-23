@@ -63,7 +63,7 @@ class NumericRestrictionsMergeOperationTests {
 
     @Test
     public void applyMergeOperation_withContradictoryNumericRestrictionsAndNoTypeRestrictions_shouldPreventAnyNumericValues(){
-        FieldSpec merging = FieldSpec.fromType(NUMERIC).withType((IsOfTypeConstraint.Types.NUMERIC));
+        FieldSpec merging = FieldSpec.fromType(NUMERIC);
         when(merger.merge(left.getNumericRestrictions(), right.getNumericRestrictions()))
             .thenReturn(MergeResult.unsuccessful());
 
@@ -74,8 +74,7 @@ class NumericRestrictionsMergeOperationTests {
 
     @Test
     public void applyMergeOperation_withContradictoryNumericRestrictions_shouldPreventAnyNumericValues(){
-        FieldSpec merging = FieldSpec.fromType(NUMERIC)
-            .withType((IsOfTypeConstraint.Types.NUMERIC));
+        FieldSpec merging = FieldSpec.fromType(NUMERIC);
 
         when(merger.merge(left.getNumericRestrictions(), right.getNumericRestrictions()))
             .thenReturn(MergeResult.unsuccessful());
@@ -87,8 +86,7 @@ class NumericRestrictionsMergeOperationTests {
 
     @Test
     public void applyMergeOperation_withContradictoryNumericRestrictionsAndNumericTypeAlreadyNotPermitted_shouldPreventAnyNumericValues(){
-        FieldSpec merging = FieldSpec.fromType(NUMERIC)
-            .withType((IsOfTypeConstraint.Types.STRING));
+        FieldSpec merging = FieldSpec.fromType(STRING);
 
         when(merger.merge(left.getNumericRestrictions(), right.getNumericRestrictions()))
             .thenReturn(MergeResult.unsuccessful());
@@ -103,8 +101,7 @@ class NumericRestrictionsMergeOperationTests {
 
     @Test
     public void applyMergeOperation_withContradictoryNumericRestrictionsAndNumericTypeOnlyPermittedType_shouldPreventAnyNumericValues(){
-        FieldSpec merging = FieldSpec.fromType(NUMERIC)
-            .withType((IsOfTypeConstraint.Types.NUMERIC));
+        FieldSpec merging = FieldSpec.fromType(NUMERIC);
 
         when(merger.merge(left.getNumericRestrictions(), right.getNumericRestrictions()))
             .thenReturn(MergeResult.unsuccessful());
@@ -118,8 +115,7 @@ class NumericRestrictionsMergeOperationTests {
     @Disabled("same instance check not working due to being casted")
     @Test
     public void applyMergeOperation_withMergableNumericRestrictions_shouldApplyMergedNumericRestrictions(){
-        FieldSpec merging = FieldSpec.fromType(NUMERIC)
-            .withType((IsOfTypeConstraint.Types.NUMERIC));
+        FieldSpec merging = FieldSpec.fromType(NUMERIC);
         NumericRestrictions merged = new NumericRestrictions();
         when(merger.merge(left.getNumericRestrictions(), right.getNumericRestrictions()))
             .thenReturn(new MergeResult<>(merged));

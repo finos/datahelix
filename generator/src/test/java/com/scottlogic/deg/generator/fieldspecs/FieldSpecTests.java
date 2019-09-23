@@ -179,16 +179,6 @@ class FieldSpecTests {
     }
 
     @Test
-    public void shouldCreateNewInstanceWithTypeRestrictions() {
-        FieldSpec original = FieldSpec.fromType(STRING);
-        Types restrictions = STRING;
-        FieldSpec augmentedFieldSpec = original.withType(restrictions);
-
-        Assert.assertNotSame(original, augmentedFieldSpec);
-        Assert.assertSame(augmentedFieldSpec.getType(), restrictions);
-    }
-
-    @Test
     public void shouldCreateNewInstanceWithNullRestrictions() {
         FieldSpec original = FieldSpec.fromType(NUMERIC);
         FieldSpec augmentedFieldSpec = original.withNotNull();
@@ -276,8 +266,8 @@ class FieldSpecTests {
 
     @Test
     public void fieldSpecsWithEqualTypeRestrictionsShouldBeEqual() {
-        FieldSpec a = FieldSpec.fromType(STRING).withType(STRING);
-        FieldSpec b = FieldSpec.fromType(STRING).withType(STRING);
+        FieldSpec a = FieldSpec.fromType(STRING);
+        FieldSpec b = FieldSpec.fromType(STRING);
 
         Assert.assertThat(a, equalTo(b));
         Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
@@ -285,8 +275,8 @@ class FieldSpecTests {
 
     @Test
     public void fieldSpecsWithUnequalTypeRestrictionsShouldBeUnequal() {
-        FieldSpec a = FieldSpec.fromType(STRING).withType(STRING);
-        FieldSpec b = FieldSpec.fromType(DATETIME).withType(DATETIME);
+        FieldSpec a = FieldSpec.fromType(STRING);
+        FieldSpec b = FieldSpec.fromType(DATETIME);
 
         Assert.assertThat(a, not(equalTo(b)));
     }

@@ -122,8 +122,11 @@ public class FieldSpecFactory {
         if (negate) {
             throw new UnsupportedOperationException("cannot negate types");
         }
+        if (field.getType() != constraint.requiredType) {
+            return FieldSpec.nullOnlyFromType(null);
+        }
 
-        return FieldSpec.fromType(field.getType()).withType(constraint.requiredType);
+        return FieldSpec.fromType(field.getType());
     }
 
     private FieldSpec construct(Field field, IsGreaterThanConstantConstraint constraint, boolean negate) {
