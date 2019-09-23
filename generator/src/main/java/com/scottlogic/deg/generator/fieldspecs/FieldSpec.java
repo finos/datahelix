@@ -23,7 +23,6 @@ import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet
 import com.scottlogic.deg.generator.restrictions.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.*;
 
@@ -34,8 +33,8 @@ import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConst
  * This is enforced during merging.
  */
 public class FieldSpec {
-    public static final Collection<Types> ALL_TYPES_PERMITTED = Arrays.asList(Types.values());
-    public static final FieldSpec Empty = new FieldSpec(null, null, true, Collections.emptySet(), null);
+    public static final Types ALL_TYPES_PERMITTED = null;
+    public static final FieldSpec Empty = new FieldSpec(null, null, true, Collections.emptySet(), ALL_TYPES_PERMITTED);
     public static final FieldSpec NullOnly = Empty.withWhitelist(FrequencyDistributedSet.empty());
 
     private final boolean nullable;
@@ -83,8 +82,8 @@ public class FieldSpec {
         return null;
     }
 
-    public Collection<Types> getTypeRestrictions() {
-        return types == null ? ALL_TYPES_PERMITTED : Collections.singleton(types);
+    public Types getType() {
+        return types;
     }
 
     public DateTimeRestrictions getDateTimeRestrictions() {
@@ -106,8 +105,8 @@ public class FieldSpec {
         return new FieldSpec(whitelist, restrictions, nullable, blacklist, types);
     }
 
-    public FieldSpec withTypeRestrictions(Collection<Types> typeRestrictions) {
-        return new FieldSpec(whitelist, restrictions, nullable, blacklist, typeRestrictions == ALL_TYPES_PERMITTED ? null : typeRestrictions.iterator().next());
+    public FieldSpec withType(Types type) {
+        return new FieldSpec(whitelist, restrictions, nullable, blacklist, type);
     }
 
     public FieldSpec withStringRestrictions(StringRestrictions stringRestrictions) {
@@ -120,10 +119,6 @@ public class FieldSpec {
 
     public FieldSpec withDateTimeRestrictions(DateTimeRestrictions dateTimeRestrictions) {
         return new FieldSpec(null, dateTimeRestrictions, nullable, blacklist, DATETIME);
-    }
-
-    public boolean isType(Types type){
-        return types == type;
     }
 
     @Override

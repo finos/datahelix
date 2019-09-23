@@ -22,19 +22,16 @@ import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
-import com.scottlogic.deg.generator.utils.SetUtils;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
-import java.util.stream.Stream;
 
+import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.DATETIME;
+import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.STRING;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
@@ -186,11 +183,11 @@ class FieldSpecTests {
     @Test
     public void shouldCreateNewInstanceWithTypeRestrictions() {
         FieldSpec original = FieldSpec.Empty;
-        Collection<Types> restrictions = Collections.singleton(Types.STRING);
-        FieldSpec augmentedFieldSpec = original.withTypeRestrictions(restrictions);
+        Types restrictions = STRING;
+        FieldSpec augmentedFieldSpec = original.withType(restrictions);
 
         Assert.assertNotSame(original, augmentedFieldSpec);
-        Assert.assertSame(augmentedFieldSpec.getTypeRestrictions(), restrictions);
+        Assert.assertSame(augmentedFieldSpec.getType(), restrictions);
     }
 
     @Test
@@ -281,10 +278,8 @@ class FieldSpecTests {
 
     @Test
     public void fieldSpecsWithEqualTypeRestrictionsShouldBeEqual() {
-        Collection<Types> aRestrictions = Collections.singleton(Types.STRING);
-        Collection<Types> bRestrictions = Collections.singleton(Types.STRING);
-        FieldSpec a = FieldSpec.Empty.withTypeRestrictions(aRestrictions);
-        FieldSpec b = FieldSpec.Empty.withTypeRestrictions(bRestrictions);
+        FieldSpec a = FieldSpec.Empty.withType(STRING);
+        FieldSpec b = FieldSpec.Empty.withType(STRING);
 
         Assert.assertThat(a, equalTo(b));
         Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
@@ -292,10 +287,8 @@ class FieldSpecTests {
 
     @Test
     public void fieldSpecsWithUnequalTypeRestrictionsShouldBeUnequal() {
-        Collection<Types> aRestrictions = Collections.singleton(Types.STRING);
-        Collection<Types> bRestrictions = Collections.singleton(Types.DATETIME);
-        FieldSpec a = FieldSpec.Empty.withTypeRestrictions(aRestrictions);
-        FieldSpec b = FieldSpec.Empty.withTypeRestrictions(bRestrictions);
+        FieldSpec a = FieldSpec.Empty.withType(STRING);
+        FieldSpec b = FieldSpec.Empty.withType(DATETIME);
 
         Assert.assertThat(a, not(equalTo(b)));
     }
@@ -430,7 +423,7 @@ class FieldSpecTests {
 
         @Override
         public boolean isInstanceOf(Object o) {
-            return IsOfTypeConstraint.Types.DATETIME.isInstanceOf(o);
+            return DATETIME.isInstanceOf(o);
         }
 
         @Override
