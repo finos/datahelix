@@ -85,6 +85,11 @@ jar {
 project.ext.ghToken = project.hasProperty('ghToken') ? project.getProperty('ghToken') : System.getenv('GH_TOKEN') ?: null
 
 semanticRelease {
+    release {
+        versionStrategy semanticRelease.releaseStrategy.copyWith(preReleaseStrategy: {
+            it.copyWith(inferredPreRelease: 'beta')
+        })
+    }
     repo {
         ghToken = project.ghToken
         releaseAsset fatJar
