@@ -24,7 +24,7 @@ public class FieldSpecGroupDateHelper {
         DateTimeRestrictions restrictions = new DateTimeRestrictions();
         restrictions.min = limit;
         restrictions.max = limit;
-        FieldSpec newSpec = FieldSpec.Empty.withNotNull().withDateTimeRestrictions(restrictions);
+        FieldSpec newSpec = FieldSpec.fromType(field.type).withNotNull().withDateTimeRestrictions(restrictions);
 
         return adjustBoundsOfDateFromFieldSpec(field, newSpec, group);
     }

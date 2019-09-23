@@ -11,6 +11,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 
+import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.DATETIME;
 import static org.junit.jupiter.api.Assertions.*;
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
@@ -83,6 +84,6 @@ class EqualToOffsetDateRelationTest {
         DateTimeRestrictions restrictions = new DateTimeRestrictions();
         restrictions.min = limit;
         restrictions.max = limit;
-        return FieldSpec.Empty.withDateTimeRestrictions(restrictions);
+        return FieldSpec.fromType(DATETIME).withDateTimeRestrictions(restrictions);
     }
 }

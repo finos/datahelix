@@ -48,8 +48,9 @@ public class RowSpec {
     public FieldSpec getSpecForField(Field field) {
         FieldSpec ownFieldSpec = this.fieldToFieldSpec.get(field);
 
-        if (ownFieldSpec == null)
-            return FieldSpec.Empty;
+        if (ownFieldSpec == null) {
+            return FieldSpec.fromType(field.getType());
+        }
 
         return ownFieldSpec;
     }

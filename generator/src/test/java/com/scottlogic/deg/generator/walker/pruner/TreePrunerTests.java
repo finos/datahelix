@@ -41,9 +41,9 @@ import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 class TreePrunerTests {
 
-    private static final FieldSpec notNull = FieldSpec.Empty
-        .withNotNull();
     private Field field = createField("foo");
+    private final FieldSpec notNull = FieldSpec.fromType(field.getType())
+        .withNotNull();
     private Field unrelatedField = createField("unrelated");
     private FieldSpecHelper fieldSpecHelper = mock(FieldSpecHelper.class);
     private TreePruner treePruner = new TreePruner(
@@ -67,7 +67,7 @@ class TreePrunerTests {
         FieldSpec inputFieldSpec = notNull.withWhitelist(
             (FrequencyDistributedSet.uniform(inputWhitelist)));
 
-        when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
+        when(fieldSpecHelper.getFieldSpecForValue(any(), any())).thenReturn(inputFieldSpec);
 
         //Act
         Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, field, fieldValue());
@@ -83,10 +83,10 @@ class TreePrunerTests {
         //Arrange
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList(1, 2));
         ConstraintNode tree = new ConstraintNodeBuilder().addAtomicConstraints(new IsLessThanConstantConstraint(field, 5)).build();
-        FieldSpec inputFieldSpec = FieldSpec.Empty.withWhitelist(
+        FieldSpec inputFieldSpec = FieldSpec.fromType(field.getType()).withWhitelist(
             (FrequencyDistributedSet.uniform(inputWhitelist)));
 
-        when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
+        when(fieldSpecHelper.getFieldSpecForValue(any(), any())).thenReturn(inputFieldSpec);
 
         //Act
         ConstraintNode actual = treePruner.pruneConstraintNode(tree, field, fieldValue()).get();
@@ -110,7 +110,7 @@ class TreePrunerTests {
         FieldSpec inputFieldSpec = notNull.withWhitelist(
             (FrequencyDistributedSet.uniform(inputWhitelist)));
 
-        when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
+        when(fieldSpecHelper.getFieldSpecForValue(any(), any())).thenReturn(inputFieldSpec);
 
         //Act
         Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, field, fieldValue());
@@ -133,7 +133,7 @@ class TreePrunerTests {
         DistributedSet<Object> inputWhitelist = FrequencyDistributedSet.uniform(new HashSet<>(Arrays.asList("a", "b")));
         FieldSpec inputFieldSpec = notNull.withWhitelist((inputWhitelist));
 
-        when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
+        when(fieldSpecHelper.getFieldSpecForValue(any(), any())).thenReturn(inputFieldSpec);
 
         //Act
         ConstraintNode actual = treePruner.pruneConstraintNode(tree, field, fieldValue()).get();
@@ -157,7 +157,7 @@ class TreePrunerTests {
         FieldSpec inputFieldSpec = notNull.withWhitelist(
             (FrequencyDistributedSet.uniform(inputWhitelist)));
 
-        when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
+        when(fieldSpecHelper.getFieldSpecForValue(any(), any())).thenReturn(inputFieldSpec);
 
         //Act
         ConstraintNode actual = treePruner.pruneConstraintNode(tree, field, fieldValue()).get();
@@ -184,7 +184,7 @@ class TreePrunerTests {
         FieldSpec inputFieldSpec = notNull.withWhitelist(
             (FrequencyDistributedSet.uniform(inputWhitelist)));
 
-        when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
+        when(fieldSpecHelper.getFieldSpecForValue(any(), any())).thenReturn(inputFieldSpec);
 
         //Act
         ConstraintNode actual = treePruner.pruneConstraintNode(tree, field, fieldValue()).get();
@@ -212,7 +212,7 @@ class TreePrunerTests {
         FieldSpec inputFieldSpec = notNull.withWhitelist(
             (FrequencyDistributedSet.uniform(inputWhitelist)));
 
-        when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
+        when(fieldSpecHelper.getFieldSpecForValue(any(), any())).thenReturn(inputFieldSpec);
 
         //Act
         ConstraintNode actual = treePruner.pruneConstraintNode(tree, field, fieldValue()).get();
@@ -244,7 +244,7 @@ class TreePrunerTests {
         FieldSpec inputFieldSpec = notNull.withWhitelist(
             (FrequencyDistributedSet.uniform(inputWhitelist)));
 
-        when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
+        when(fieldSpecHelper.getFieldSpecForValue(any(), any())).thenReturn(inputFieldSpec);
 
         //Act
         Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, field, fieldValue());
@@ -274,7 +274,7 @@ class TreePrunerTests {
         FieldSpec inputFieldSpec = notNull.withWhitelist(
             (FrequencyDistributedSet.uniform(inputWhitelist)));
 
-        when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
+        when(fieldSpecHelper.getFieldSpecForValue(any(), any())).thenReturn(inputFieldSpec);
 
         //Act
         ConstraintNode actual = treePruner.pruneConstraintNode(tree, field, fieldValue()).get();
@@ -305,7 +305,7 @@ class TreePrunerTests {
         FieldSpec inputFieldSpec = notNull.withWhitelist(
             (FrequencyDistributedSet.uniform(inputWhitelist)));
 
-        when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
+        when(fieldSpecHelper.getFieldSpecForValue(any(), any())).thenReturn(inputFieldSpec);
 
         //Act
         ConstraintNode actual = treePruner.pruneConstraintNode(tree, field, fieldValue()).get();
@@ -338,7 +338,7 @@ class TreePrunerTests {
         FieldSpec inputFieldSpec = notNull.withWhitelist(
             (FrequencyDistributedSet.uniform(inputWhitelist)));
 
-        when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
+        when(fieldSpecHelper.getFieldSpecForValue(any(), any())).thenReturn(inputFieldSpec);
 
         //Act
         ConstraintNode actual = treePruner.pruneConstraintNode(tree, field, fieldValue()).get();
@@ -372,7 +372,7 @@ class TreePrunerTests {
         FieldSpec inputFieldSpec = notNull.withWhitelist(
             (FrequencyDistributedSet.uniform(inputWhitelist)));
 
-        when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
+        when(fieldSpecHelper.getFieldSpecForValue(any(), any())).thenReturn(inputFieldSpec);
 
         //Act
         Merged<ConstraintNode> actual = treePruner.pruneConstraintNode(tree, field, fieldValue());
@@ -400,7 +400,7 @@ class TreePrunerTests {
         FieldSpec inputFieldSpec = notNull.withWhitelist(
             (FrequencyDistributedSet.uniform(inputWhitelist)));
 
-        when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
+        when(fieldSpecHelper.getFieldSpecForValue(any(), any())).thenReturn(inputFieldSpec);
 
         //Act
         ConstraintNode actual = treePruner.pruneConstraintNode(tree, field, fieldValue()).get();

@@ -16,15 +16,17 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
+import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 
 public class FieldSpecHelper {
-    public FieldSpec getFieldSpecForValue(DataBagValue fieldValue) {
+    public FieldSpec getFieldSpecForValue(Field field, DataBagValue fieldValue) {
         if (fieldValue.getValue() == null) {
             return getNullRequiredFieldSpec();
         }
-        return FieldSpec.Empty
+
+        return FieldSpec.fromType(field.getType())
             .withWhitelist(FrequencyDistributedSet.singleton(fieldValue.getValue()))
             .withNotNull();
     }

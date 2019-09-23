@@ -33,9 +33,15 @@ import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConst
  * This is enforced during merging.
  */
 public class FieldSpec {
-    public static final Types ALL_TYPES_PERMITTED = null;
-    public static final FieldSpec Empty = new FieldSpec(null, null, true, Collections.emptySet(), ALL_TYPES_PERMITTED);
-    public static final FieldSpec NullOnly = Empty.withWhitelist(FrequencyDistributedSet.empty());
+    public static final FieldSpec NullOnly = new FieldSpec(FrequencyDistributedSet.empty(), null, true, Collections.emptySet(), null);
+
+    public static FieldSpec fromType(Types type) {
+        return new FieldSpec(null, null, true, Collections.emptySet(), type);
+    }
+
+    public static FieldSpec nullOnlyFromType(Types type) {
+        return new FieldSpec(FrequencyDistributedSet.empty(), null, true, Collections.emptySet(), type);
+    }
 
     private final boolean nullable;
     private final DistributedSet<Object> whitelist;

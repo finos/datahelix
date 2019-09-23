@@ -25,12 +25,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-
+import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.*;
 import static com.scottlogic.deg.generator.fieldspecs.FieldSpec.NullOnly;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.hamcrest.core.IsSame.sameInstance;
@@ -47,26 +45,26 @@ class NumericRestrictionsMergeOperationTests {
     public void beforeEach(){
         merger = mock(NumericRestrictionsMerger.class);
         operation = new NumericRestrictionsMergeOperation(merger);
-        left = FieldSpec.Empty.withNumericRestrictions(
+        left = FieldSpec.fromType(NUMERIC).withNumericRestrictions(
             new NumericRestrictions());
-        right = FieldSpec.Empty.withNumericRestrictions(
+        right = FieldSpec.fromType(NUMERIC).withNumericRestrictions(
             new NumericRestrictions());
     }
 
     @Test
     public void applyMergeOperation_withNoNumericRestrictions_shouldNotApplyAnyRestriction(){
-        FieldSpec merging = FieldSpec.Empty;
+        FieldSpec merging = FieldSpec.fromType(NUMERIC);
         when(merger.merge(left.getNumericRestrictions(), right.getNumericRestrictions()))
             .thenReturn(new MergeResult<>(null));
 
         FieldSpec result = operation.applyMergeOperation(left, right, merging);
 
-        Assert.assertThat(result, sameInstance(merging));
+        Assert.assertEquals(result, merging);
     }
 
     @Test
     public void applyMergeOperation_withContradictoryNumericRestrictionsAndNoTypeRestrictions_shouldPreventAnyNumericValues(){
-        FieldSpec merging = FieldSpec.Empty.withType((IsOfTypeConstraint.Types.NUMERIC));
+        FieldSpec merging = FieldSpec.fromType(NUMERIC).withType((IsOfTypeConstraint.Types.NUMERIC));
         when(merger.merge(left.getNumericRestrictions(), right.getNumericRestrictions()))
             .thenReturn(MergeResult.unsuccessful());
 
@@ -77,7 +75,7 @@ class NumericRestrictionsMergeOperationTests {
 
     @Test
     public void applyMergeOperation_withContradictoryNumericRestrictions_shouldPreventAnyNumericValues(){
-        FieldSpec merging = FieldSpec.Empty
+        FieldSpec merging = FieldSpec.fromType(NUMERIC)
             .withType((IsOfTypeConstraint.Types.NUMERIC));
 
         when(merger.merge(left.getNumericRestrictions(), right.getNumericRestrictions()))
@@ -90,7 +88,7 @@ class NumericRestrictionsMergeOperationTests {
 
     @Test
     public void applyMergeOperation_withContradictoryNumericRestrictionsAndNumericTypeAlreadyNotPermitted_shouldPreventAnyNumericValues(){
-        FieldSpec merging = FieldSpec.Empty
+        FieldSpec merging = FieldSpec.fromType(NUMERIC)
             .withType((IsOfTypeConstraint.Types.STRING));
 
         when(merger.merge(left.getNumericRestrictions(), right.getNumericRestrictions()))
@@ -106,7 +104,7 @@ class NumericRestrictionsMergeOperationTests {
 
     @Test
     public void applyMergeOperation_withContradictoryNumericRestrictionsAndNumericTypeOnlyPermittedType_shouldPreventAnyNumericValues(){
-        FieldSpec merging = FieldSpec.Empty
+        FieldSpec merging = FieldSpec.fromType(NUMERIC)
             .withType((IsOfTypeConstraint.Types.NUMERIC));
 
         when(merger.merge(left.getNumericRestrictions(), right.getNumericRestrictions()))
@@ -121,7 +119,7 @@ class NumericRestrictionsMergeOperationTests {
     @Disabled("same instance check not working due to being casted")
     @Test
     public void applyMergeOperation_withMergableNumericRestrictions_shouldApplyMergedNumericRestrictions(){
-        FieldSpec merging = FieldSpec.Empty
+        FieldSpec merging = FieldSpec.fromType(NUMERIC)
             .withType((IsOfTypeConstraint.Types.NUMERIC));
         NumericRestrictions merged = new NumericRestrictions();
         when(merger.merge(left.getNumericRestrictions(), right.getNumericRestrictions()))
