@@ -7,7 +7,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
 ###Integer
 
   Scenario: Running a 'greaterThan' request that specifies an integer should be successful
-    Given foo is of type "integer"
+    Given foo has type "integer"
     And foo is greater than 1
     And foo is anything but null
     And the generator can generate at most 5 rows
@@ -21,7 +21,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
 
   Scenario: Running a 'greaterThan' request that specifies an integer with trailing zeros should be successful
     Given foo is greater than 100
-    And foo is of type "integer"
+    And foo has type "integer"
     And foo is anything but null
     And the generator can generate at most 5 rows
     Then the following data should be generated:
@@ -35,7 +35,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
   Scenario: Running a 'greaterThan' request that specifies a decimal should be successful
     Given foo is greater than 100
     And foo is anything but null
-    And foo is of type "decimal"
+    And foo has type "decimal"
     And the generator can generate at most 5 rows
     Then the following data should be generated:
       | foo                      |
@@ -48,7 +48,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
   Scenario: Running a 'greaterThan' request that specifies a decimal with trailing zeros should be successful
     Given foo is greater than 100.0
     And foo is anything but null
-    And foo is of type "decimal"
+    And foo has type "decimal"
     And the generator can generate at most 5 rows
     Then the following data should be generated:
       | foo                      |
@@ -75,7 +75,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
 
   Scenario: Running a 'greaterThan' request that specifies a negative should be successful for type integer
     Given foo is greater than -100
-    And foo is of type "integer"
+    And foo has type "integer"
     And foo is anything but null
     And the generator can generate at most 5 rows
     Then the following data should be generated:
@@ -88,7 +88,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
 
   Scenario: Running a 'greaterThan' request that specifies a negative should be successful for type decimal
     Given foo is greater than -100
-    And foo is of type "decimal"
+    And foo has type "decimal"
     And foo is anything but null
     And the generator can generate at most 5 rows
     Then the following data should be generated:
@@ -101,7 +101,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
 
   Scenario: Running a 'greaterThan' request that includes the value zero should be successful for type integer
     Given foo is greater than -1
-    And foo is of type "integer"
+    And foo has type "integer"
     And foo is anything but null
     And the generator can generate at most 5 rows
     Then the following data should be generated:
@@ -114,7 +114,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
 
   Scenario: Running a 'greaterThan' request that includes the value zero should be successful for type decimal
     Given foo is greater than -0.00000000000000000001
-    And foo is of type "decimal"
+    And foo has type "decimal"
     And foo is anything but null
     And the generator can generate at most 5 rows
     Then the following data should be generated:
@@ -129,7 +129,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
   Scenario: greaterThan run against a non contradicting greaterThan should be successful (greaterThan 2 AND greaterThan 1)
     Given foo is greater than 2
     And foo is greater than 1
-    And foo is of type "integer"
+    And foo has type "integer"
     And foo is anything but null
     And the generator can generate at most 5 rows
     Then the following data should be generated:
@@ -144,7 +144,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
     Given foo is greater than 1
     And foo is anything but greater than 5
     And foo is anything but null
-    And foo is of type "integer"
+    And foo has type "integer"
     Then the following data should be generated:
       | foo |
       | 2   |
@@ -157,7 +157,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
     Given foo is anything but greater than 5
     And foo is anything but greater than 4
     And foo is anything but null
-    And foo is of type "integer"
+    And foo has type "integer"
     And the generator can generate at most 5 rows
     Then the following data should be generated:
       | foo |
@@ -170,7 +170,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
   Scenario: greaterThan run against a contradicting not greaterThan should only only generate string, datetime and null (greaterThan 2 AND not greaterThan 2)
     Given foo is greater than 2
     And foo is anything but greater than 2
-    And foo is of type "integer"
+    And foo has type "integer"
     Then the following data should be generated:
       | foo  |
       | null |
@@ -180,7 +180,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
     Given foo is greater than 2
     And foo is greater than or equal to 1
     And foo is anything but null
-    And foo is of type "integer"
+    And foo has type "integer"
     And the generator can generate at most 5 rows
     Then the following data should be generated:
       | foo |
@@ -193,7 +193,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
   Scenario: greaterThan run against a non contradicting not greaterThanOrEqualTo should be successful (greaterThan 1 AND not greaterThanOrEqualTo 5)
     Given foo is greater than 1
     And foo is anything but greater than or equal to 5
-    And foo is of type "integer"
+    And foo has type "integer"
     And foo is anything but null
     Then the following data should be generated:
       | foo |
@@ -205,7 +205,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
   Scenario: not greaterThan run against a non contradicting not greaterThanOrEqualTo should be successful (not greaterThan 5 AND not greaterThanOrEqualTo 4)
     Given foo is anything but greater than 5
     And foo is anything but greater than or equal to 4
-    And foo is of type "integer"
+    And foo has type "integer"
     And foo is anything but null
     And the generator can generate at most 5 rows
     Then the following data should be generated:
@@ -219,7 +219,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
   Scenario: greaterThan run against a contradicting not greaterThan should only only generate string, datetime and null (greaterThan 2 AND not greaterThanOrEqualTo 3)
     Given foo is greater than 2
     And foo is anything but greater than or equal to 3
-    And foo is of type "integer"
+    And foo has type "integer"
     Then the following data should be generated:
       | foo  |
       | null |
@@ -228,7 +228,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
   Scenario: greaterThan run against a non contradicting lessThan should be successful (greaterThan 2 AND lessThan 5)
     Given foo is greater than 2
     And foo is less than 5
-    And foo is of type "integer"
+    And foo has type "integer"
     And foo is anything but null
     Then the following data should be generated:
       | foo |
@@ -239,7 +239,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
     Given foo is greater than 1
     And foo is anything but less than 2
     And foo is anything but null
-    And foo is of type "integer"
+    And foo has type "integer"
     And the generator can generate at most 5 rows
     Then the following data should be generated:
       | foo |
@@ -253,7 +253,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
   Scenario: not greaterThan run against a non contradicting lessThan should be successful (not greaterThan 4 AND lessThan 2)
     Given foo is anything but greater than 4
     And foo is less than 2
-    And foo is of type "integer"
+    And foo has type "integer"
     And foo is anything but null
     And the generator can generate at most 5 rows
     Then the following data should be generated:
@@ -267,7 +267,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
   Scenario: not greaterThan run against a non contradicting not lessThan should be successful (not greaterThan 5 AND not lessThan 4)
     Given foo is anything but greater than 5
     And foo is anything but less than 4
-    And foo is of type "integer"
+    And foo has type "integer"
     And foo is anything but null
     Then the following data should be generated:
       | foo |
@@ -277,7 +277,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
   Scenario: greaterThan run against a contradicting lessThan should only only generate string, datetime and null (greaterThan 2 AND lessThan 2)
     Given foo is greater than 2
     And foo is less than 2
-    And foo is of type "integer"
+    And foo has type "integer"
     Then the following data should be generated:
       | foo  |
       | null |
@@ -285,7 +285,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
   Scenario: not greaterThan run against a contradicting not lessThan should only only generate string, datetime and null (not greaterThan 2 AND not lessThan 2)
     Given foo is anything but greater than 2
     And foo is anything but less than 2
-    And foo is of type "integer"
+    And foo has type "integer"
     And foo is anything but null
     Then the following data should be generated:
       | foo |
@@ -295,7 +295,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
   Scenario: greaterThan run against a non contradicting lessThanOrEqualTo should be successful (greaterThan 2 AND lessThanOrEqualTo 5)
     Given foo is greater than 2
     And foo is less than or equal to 5
-    And foo is of type "integer"
+    And foo has type "integer"
     And foo is anything but null
     Then the following data should be generated:
       | foo |
@@ -306,7 +306,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
   Scenario: greaterThan run against a non contradicting not lessThanOrEqualTo should be successful
     Given foo is greater than 1
     And foo is anything but less than or equal to 2
-    And foo is of type "integer"
+    And foo has type "integer"
     And foo is anything but null
     And the generator can generate at most 5 rows
     Then the following data should be generated:
@@ -322,7 +322,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
     Given foo is anything but greater than 4
     And foo is less than or equal to 2
     And foo is anything but null
-    And foo is of type "integer"
+    And foo has type "integer"
     And the generator can generate at most 5 rows
     Then the following data should be generated:
       | foo |
@@ -336,7 +336,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
     Given foo is anything but greater than 5
     And foo is anything but less than or equal to 4
     And foo is anything but null
-    And foo is of type "integer"
+    And foo has type "integer"
     And the generator can generate at most 5 rows
     Then the following data should be generated:
       | foo |
@@ -345,7 +345,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
   Scenario: greaterThan run against a contradicting lessThanOrEqualTo should only only generate string, datetime and null (greaterThan 2 AND lessThanOrEqualTo 1)
     Given foo is greater than 2
     And foo is less than or equal to 1
-    And foo is of type "integer"
+    And foo has type "integer"
     Then the following data should be generated:
       | foo  |
       | null |
@@ -354,7 +354,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
     Given foo is anything but greater than 2
     And foo is anything but less than or equal to 1
     And foo is anything but null
-    And foo is of type "integer"
+    And foo has type "integer"
     Then the following data should be generated:
       | foo |
       | 2   |
@@ -365,7 +365,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
     Given foo is greater than 2
     And foo is granular to 0.1
     And foo is anything but null
-    And foo is of type "decimal"
+    And foo has type "decimal"
     And the generator can generate at most 5 rows
     Then the following data should be generated:
       | foo |
@@ -380,7 +380,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
     Given foo is anything but greater than 4
     And foo is granular to 0.1
     And foo is anything but null
-    And foo is of type "decimal"
+    And foo has type "decimal"
     And the generator can generate at most 5 rows
     Then the following data should be generated:
       | foo |

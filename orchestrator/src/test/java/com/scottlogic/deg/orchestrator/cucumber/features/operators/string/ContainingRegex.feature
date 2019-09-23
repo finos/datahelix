@@ -3,7 +3,7 @@ Feature: User can specify that contains a specified regex
   Background:
     Given the generation strategy is full
     And there is a field foo
-    And foo is of type "string"
+    And foo has type "string"
 
   Scenario: Running a 'containingRegex' request that includes roman alphabet lowercase chars (a-z) only should be successful
     Given foo is containing regex /[a-z]{1}/

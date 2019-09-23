@@ -3,7 +3,7 @@ Feature: User can specify that a value either matches or contains a specified re
   Background:
     Given the generation strategy is full
     And there is a field foo
-    And foo is of type "string"
+    And foo has type "string"
 
   Scenario: Running a 'matchingRegex' request that includes roman alphabet lowercase chars (a-z) only should be successful
     Given foo is matching regex /[a-z]{1}/
@@ -600,13 +600,13 @@ Feature: User can specify that a value either matches or contains a specified re
 
   Scenario: Running a 'matchingRegex' and 'inSet' and 'integer' request nulls are generated last
     Given there is a field bar
-    And bar is of type "string"
+    And bar has type "string"
     And the combination strategy is exhaustive
     And foo is matching regex /[a]{1}/
     And bar is in set:
       | "AA" |
     And there is a field lee
-    And lee is of type "integer"
+    And lee has type "integer"
     And lee is granular to 1
     And lee is less than 2
     And lee is greater than 0

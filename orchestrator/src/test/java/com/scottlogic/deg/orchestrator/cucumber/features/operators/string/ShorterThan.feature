@@ -3,7 +3,7 @@ Feature: User can specify that a string length is lower than, a specified number
   Background:
     Given the generation strategy is full
     And there is a field foo
-    And foo is of type "string"
+    And foo has type "string"
 
   Scenario: Running a 'shorterThan' request using a number to specify a the length of a generated string should be successful
     Given foo is shorter than 5
@@ -259,13 +259,13 @@ Feature: User can specify that a string length is lower than, a specified number
     Then the profile is invalid because "Field \[foo\]: shorterThan constraint must have an operand/value <= 1000, currently is 1002"
 
   Scenario: Running a 'shorterThan' request with a value less than implicit max (255) should generate data of length between 0 and value
-    Given foo is of type "string"
+    Given foo has type "string"
     And foo is shorter than 254
     And the generator can generate at most 20 rows
     Then foo contains strings of length between 0 and 253 inclusively
 
   Scenario: Running a 'shorterThan' request with a value at the implicit max (255) should generate data of length between 0 and value
-    Given foo is of type "string"
+    Given foo has type "string"
     And foo is shorter than 256
     And the generator can generate at most 20 rows
     Then foo contains strings of length between 0 and 255 inclusively
@@ -276,13 +276,13 @@ Feature: User can specify that a string length is lower than, a specified number
     Then foo contains strings of length between 0 and 256 inclusively
 
   Scenario: Running a 'shorterThan' request with a value less than implicit max (255) should generate data of length between 0 and value
-    Given foo is of type "string"
+    Given foo has type "string"
     And foo is shorter than 254
     And the generator can generate at most 20 rows
     Then foo contains strings of length between 0 and 253 inclusively
 
   Scenario: Running a 'shorterThan' request with a value greater than implicit max (255) should generate data of length between 0 and value
-    Given foo is of type "string"
+    Given foo has type "string"
     And foo is shorter than 256
     And the generator can generate at most 20 rows
     Then foo contains strings of length between 0 and 255 inclusively

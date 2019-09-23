@@ -5,7 +5,7 @@ Feature: Whilst including non-latin characters, user can specify that a value ei
   Background:
     Given the generation strategy is full
     And there is a field foo
-    And foo is of type "string"
+    And foo has type "string"
 
   Scenario: Running a 'matchingRegex' request that includes special characters (non roman character maps: Hiragana) should be successful
     Given foo is matching regex /[あ-げ]{1}/

@@ -63,7 +63,7 @@ When specifying the operator/s for a field, ensure to format the value as in the
 datetimes must be expressed as above (i.e. `yyyy-MM-ddTHH:mm:ss.fff`)
 
 #### Examples
-* `ofType` &rarr; `Given foo is of type "string"`
+* `ofType` &rarr; `Given foo has type "string"`
 * `equalTo` &rarr; `Given foo is equal to 5`
 * `inSet` &rarr; 
 ```

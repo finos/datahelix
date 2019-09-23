@@ -64,9 +64,7 @@ public class CucumberTestModule extends AbstractModule {
 
         Collection<ProfileValidator> validators = new ArrayList<>();
         validators.add(new UniquenessValidator(new CucumberGenerationConfigSource(testState)));
-        if (testState.requireFieldTyping) {
-            validators.add(new TypingRequiredPerFieldValidator(new DecisionTreeFactory()));
-        }
+        validators.add(new TypingRequiredPerFieldValidator(new DecisionTreeFactory()));
 
         bind(ProfileValidator.class).toInstance(new MultipleProfileValidator(validators));
         bind(ErrorReporter.class).toInstance(new CucumberErrorReporter(testState));

@@ -80,7 +80,7 @@ public class ConstraintReaderHelpers {
                 return Types.DATETIME;
         }
 
-        throw new InvalidProfileException("Profile is invalid: no type known for \"is\": \"ofType\", \"value\": \"" + type + "\"");
+        throw new InvalidProfileException("Profile is invalid: no type known for " + type);
 
     }
 

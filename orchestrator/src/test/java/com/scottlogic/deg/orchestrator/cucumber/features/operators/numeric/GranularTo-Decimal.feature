@@ -4,7 +4,7 @@ Feature: User can specify that decimal fields are granular to a certain number o
     Given the generation strategy is full
     And there is a field foo
     And foo is anything but null
-    And foo is of type "decimal"
+    And foo has type "decimal"
 
   Scenario: User requires to create a numeric field with data values that include a decimal value to one decimal point
     Given foo is granular to 0.1

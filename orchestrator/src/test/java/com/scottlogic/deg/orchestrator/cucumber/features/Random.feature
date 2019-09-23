@@ -5,7 +5,7 @@ Feature: User can generate valid data for all types (string, integer, decimal, o
     And there is a field foo
 
   Scenario: The generator produces valid 'DateTime' data in random mode
-    Given foo is of type "datetime"
+    Given foo has type "datetime"
     And foo is anything but null
     And the generator can generate at most 5 rows
     And foo is before or at 2019-01-01T00:00:00.000Z
@@ -14,7 +14,7 @@ Feature: User can generate valid data for all types (string, integer, decimal, o
     And foo contains datetimes between 0001-01-01T00:00:00.000Z and 2019-01-01T00:00:00.000Z inclusively
 
   Scenario: The generator produces valid 'Integer' data in random mode
-    Given foo is of type "integer"
+    Given foo has type "integer"
     And foo is anything but null
     And the generator can generate at most 5 rows
     And foo is less than or equal to 10
@@ -23,7 +23,7 @@ Feature: User can generate valid data for all types (string, integer, decimal, o
     And foo contains anything but null
 
   Scenario: The generator produces valid 'Decimal' data in random mode
-    Given foo is of type "decimal"
+    Given foo has type "decimal"
     And foo is anything but null
     And the generator can generate at most 5 rows
     And foo is less than or equal to 10
@@ -32,7 +32,7 @@ Feature: User can generate valid data for all types (string, integer, decimal, o
     And foo contains anything but null
 
   Scenario: The generator produces valid 'String' data in random mode
-    Given foo is of type "string"
+    Given foo has type "string"
     And foo is anything but null
     And the generator can generate at most 5 rows
     And foo is shorter than 10
@@ -41,7 +41,7 @@ Feature: User can generate valid data for all types (string, integer, decimal, o
     And foo contains anything but null
 
   Scenario: The generator produces valid RegEx restricted 'String' data in random mode
-    Given foo is of type "string"
+    Given foo has type "string"
     And foo is anything but null
     And the generator can generate at most 5 rows
     And foo is matching regex /[a-z]{0,9}/
@@ -50,7 +50,7 @@ Feature: User can generate valid data for all types (string, integer, decimal, o
     And foo contains anything but null
 
   Scenario: The generator produces valid inverted RegEx restricted 'String' data in random mode
-    Given foo is of type "string"
+    Given foo has type "string"
     And foo is anything but null
     And the generator can generate at most 5 rows
     And foo is anything but matching regex /[a-z]{0,9}/
@@ -60,7 +60,7 @@ Feature: User can generate valid data for all types (string, integer, decimal, o
     And foo contains anything but null
 
   Scenario: The generator produces valid ISIN data in random mode (general format is checked here, not the checksum)
-    Given foo is of type "ISIN"
+    Given foo has type "ISIN"
     And foo is anything but null
     And the generator can generate at most 5 rows
     Then 5 rows of data are generated
@@ -68,14 +68,14 @@ Feature: User can generate valid data for all types (string, integer, decimal, o
 
   @ignore "Standard constraints e.g. ISINs cannot yet be combined with not equal to constraints."
   Scenario: The generator produces valid ISIN data in random mode when combined with a not equal to constraint
-    Given foo is of type "ISIN"
+    Given foo has type "ISIN"
     And foo is anything but equal to "GB009CJ9GB62"
     And the generator can generate at most 5 rows
     Then 5 rows of data are generated
     And foo contains strings matching /[A-Z]{2}[A-Z0-9]{9}[0-9]{1}/
 
   Scenario: The generator produces valid SEDOL data in random mode (general format is checked here, not the checksum)
-    Given foo is of type "SEDOL"
+    Given foo has type "SEDOL"
     And foo is anything but null
     And the generator can generate at most 5 rows
     Then 5 rows of data are generated
@@ -83,14 +83,14 @@ Feature: User can generate valid data for all types (string, integer, decimal, o
 
   @ignore "Standard constraints e.g. ISINs cannot yet be combined with not equal to constraints."
   Scenario: The generator produces valid SEDOL data in random mode when combined with a not equal to constraint
-    Given foo is of type "SEDOL"
+    Given foo has type "SEDOL"
     And foo is anything but equal to "3091357"
     And the generator can generate at most 5 rows
     Then 5 rows of data are generated
     And foo contains strings matching /[B-DF-HJ-NP-TV-Z0-9]{6}[0-9]/
 
   Scenario: The generator produces valid CUSIP data in random mode (general format is checked here, not the checksum)
-    Given foo is of type "CUSIP"
+    Given foo has type "CUSIP"
     And foo is anything but null
     And the generator can generate at most 5 rows
     Then 5 rows of data are generated
@@ -98,7 +98,7 @@ Feature: User can generate valid data for all types (string, integer, decimal, o
 
   @ignore "Standard constraints e.g. ISINs cannot yet be combined with not equal to constraints."
   Scenario: The generator produces valid CUSIP data in random mode when combined with a not equal to constraint
-    Given foo is of type "CUSIP"
+    Given foo has type "CUSIP"
     And foo is anything but equal to "594918104"
     And the generator can generate at most 5 rows
     Then 5 rows of data are generated
@@ -107,7 +107,7 @@ Feature: User can generate valid data for all types (string, integer, decimal, o
 
   Scenario: The generator produces valid 'Null' data in random mode
     Given foo is null
-    And foo is of type "string"
+    And foo has type "string"
     And the generator can generate at most 5 rows
     Then the following data should be generated:
       | foo  |

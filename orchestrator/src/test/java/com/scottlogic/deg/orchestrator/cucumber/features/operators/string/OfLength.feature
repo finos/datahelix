@@ -3,7 +3,7 @@ Feature: User can specify the length of generated string data using 'ofLength'
   Background:
     Given the generation strategy is full
     And there is a field foo
-    And foo is of type "string"
+    And foo has type "string"
 
   Scenario Outline: Running an 'ofLength' request on a roman alphabet character string should be successful
     Given foo is of length <length>

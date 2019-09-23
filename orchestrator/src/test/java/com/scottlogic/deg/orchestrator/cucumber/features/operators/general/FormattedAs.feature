@@ -7,7 +7,7 @@ Feature: User can specify that a value is so formatted
   Scenario Outline: Running a valid 'formattedAs' request on numbers should be successful
     Given foo is in set:
       | <input> |
-    And foo is of type "decimal"
+    And foo has type "decimal"
     And foo has formatting <format>
     And foo is anything but null
     Then the following data should be generated:
@@ -58,7 +58,7 @@ Feature: User can specify that a value is so formatted
   Scenario Outline: Running a valid 'formattedAs' request on strings should be successful
     Given foo is in set:
       | <input> |
-    And foo is of type "string"
+    And foo has type "string"
     And foo has formatting <format>
     And foo is anything but null
     Then the following data should be generated:
@@ -76,7 +76,7 @@ Feature: User can specify that a value is so formatted
   Scenario Outline: Running a valid 'formattedAs' request on datetime should be successful
     Given foo is in set:
       | <input> |
-    And foo is of type "datetime"
+    And foo has type "datetime"
     And foo has formatting <format>
     And foo is anything but null
     Then the following data should be generated:

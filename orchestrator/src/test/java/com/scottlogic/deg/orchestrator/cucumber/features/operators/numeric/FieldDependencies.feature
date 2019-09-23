@@ -7,11 +7,11 @@ Feature:As a  User
     Given the generation strategy is full
     And the combination strategy is minimal
     And there is a field foo
-    And foo is of type "integer"
+    And foo has type "integer"
     And foo is greater than 1
     And foo is anything but null
     And there is a field bar
-    And bar is of type "integer"
+    And bar has type "integer"
     And bar is anything but null
 
 
@@ -178,10 +178,10 @@ Feature:As a  User
       ###Decimal
 
   Scenario: The one where a user can specify that one decimal number should be greater than another decimal number
-    Given foo is of type "decimal"
+    Given foo has type "decimal"
     And foo is granular to 0.1
     And foo is greater than 1.0
-    And bar is of type "decimal"
+    And bar has type "decimal"
     And bar is granular to 0.1
     And bar is greater than 1.0
     And the generator can generate at most 3 rows
