@@ -51,7 +51,7 @@ Feature: Type mandation validation
     And user_id has type "string"
     And there is a field price
     And there is a field purchase_time
-    Then the profile is invalid because "Field \[price\]: is not typed; add its type to the field definition"
+    Then the profile is invalid because "Fields price, purchase_time are not typed; add their type to the field definition"
 
   Scenario: An anyOf constraint whose branches don't all satisfy type mandation should not satisfy type mandation
     Given there is a field user_id

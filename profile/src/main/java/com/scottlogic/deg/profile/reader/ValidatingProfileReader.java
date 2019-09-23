@@ -26,7 +26,9 @@ import com.scottlogic.deg.profile.dto.SchemaVersionValidator;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class ValidatingProfileReader {
 
@@ -61,9 +63,14 @@ public class ValidatingProfileReader {
     }
 
     private void validateFieldsAreTyped(ProfileFields fields) {
-        Optional<Field> untyped = fields.stream().filter(field -> field.type == null).findFirst();
-        if (untyped.isPresent()){
-            throw new InvalidProfileException("Field [" + untyped.get().name + "]: is not typed; add its type to the field definition");
+        List<Field> untyped = fields.stream().filter(field -> field.type == null).collect(Collectors.toList());
+        if (untyped.size() == 1) {
+            throw new InvalidProfileException("Field [" + untyped.get(0).name + "]: is not typed; add its type to the field definition");
+        }
+        if (!untyped.isEmpty()) {
+            throw new InvalidProfileException("Fields "
+                + untyped.stream().map(f->f.name).reduce((s, z) -> s + ", " + z).get()
+                + " are not typed; add their type to the field definition");
         }
     }
 }
