@@ -16,7 +16,6 @@
 
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
@@ -33,6 +32,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.*;
+
 public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvaluator {
     private static final CannedValuesFieldValueSource NULL_ONLY_SOURCE = setupNullOnlySource();
 
@@ -43,7 +44,6 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
     public List<FieldValueSource> getFieldValueSources(FieldSpec fieldSpec){
 
         if (fieldSpec.getWhitelist() != null) {
-
             List<FieldValueSource> setRestrictionSources =
                 getSetRestrictionSources(fieldSpec.getWhitelist());
             if (fieldSpec.isNullable()) {
@@ -54,17 +54,17 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
 
         List<FieldValueSource> validSources = new ArrayList<>();
 
-        Collection<Types> typeRestrictions = fieldSpec.getTypeRestrictions();
+        Types typeRestrictions = fieldSpec.getType();
 
-        if (typeRestrictions.contains(Types.NUMERIC)) {
+        if (typeRestrictions == NUMERIC) {
             validSources.add(getNumericSource(fieldSpec));
         }
 
-        if (typeRestrictions.contains(Types.STRING)) {
+        if (typeRestrictions == STRING) {
             validSources.add(getStringSource(fieldSpec));
         }
 
-        if (typeRestrictions.contains(Types.DATETIME)) {
+        if (typeRestrictions == DATETIME) {
             validSources.add(getDateTimeSource(fieldSpec));
         }
 

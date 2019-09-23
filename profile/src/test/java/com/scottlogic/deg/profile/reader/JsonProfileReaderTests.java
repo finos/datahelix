@@ -364,7 +364,7 @@ public class JsonProfileReaderTests {
                         "        \"constraints\": [" +
                         "          {" +
                         "            \"anyOf\": [" +
-                        "              { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"1\" }," +
+                        "              { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": 1 }," +
                         "              { \"field\": \"foo\", \"is\": \"null\" }" +
                         "            ]" +
                         "          }" +
@@ -394,7 +394,7 @@ public class JsonProfileReaderTests {
                         "        \"constraints\": [" +
                         "          {" +
                         "           \"allOf\": [" +
-                        "             { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"1\" }," +
+                        "             { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": 1 }," +
                         "             { \"field\": \"foo\", \"is\": \"null\" }" +
                         "            ]" +
                         "          }" +
@@ -425,7 +425,7 @@ public class JsonProfileReaderTests {
                         "          {" +
                         "            \"if\": { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"string\" }," +
                         "            \"then\": { \"field\": \"foo\", \"is\": \"inSet\", \"values\": [ \"str!\" ] }," +
-                        "            \"else\": { \"field\": \"foo\", \"is\": \"greaterThan\", \"value\": 3 }" +
+                        "            \"else\": { \"field\": \"foo\", \"is\": \"longerThan\", \"value\": 3 }" +
                         "          }" +
                         "        ]" +
                         "      }" +
@@ -447,7 +447,7 @@ public class JsonProfileReaderTests {
 
                                     Assert.assertThat(
                                             c.whenConditionIsFalse,
-                                            instanceOf(IsGreaterThanConstantConstraint.class));
+                                            instanceOf(IsStringLongerThanConstraint.class));
                                 })),
             ruleWithDescription("type-rules"));
     }
@@ -457,7 +457,7 @@ public class JsonProfileReaderTests {
         givenJson(
                 "{" +
                         "    \"schemaVersion\": " + schemaVersion + "," +
-                        "    \"fields\": [ { \"name\": \"foo\", \"type\": \"integer\" } ]," +
+                        "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\" } ]," +
                         "    \"rules\": [" +
                         "      {" +
                         "        \"constraints\": [" +

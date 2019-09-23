@@ -256,7 +256,7 @@ Feature: Values can be specified by using any of to set multiple constraints
     Then the profile is invalid because "Field \[foo\]: ofLength constraint must have an operand/value >= 0, currently is -1"
     And no data is created
 
-  Scenario: Running an 'anyOf' request that contains an invalid nested allOf request should fail with an error message
+  Scenario: Running an 'anyOf' request that contains an valid nested allOf request should generate data
     Given there is a constraint:
       """
       { "anyOf": [
@@ -270,7 +270,6 @@ Feature: Values can be specified by using any of to set multiple constraints
     And foo has type "string"
     And foo is in set:
       | "a"  |
-      | 1    |
       | "aa" |
       | "9"  |
       | "a1" |

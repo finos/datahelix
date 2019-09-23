@@ -16,19 +16,15 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
-import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.common.util.NumberUtils;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.regex.Pattern;
 
 import static com.scottlogic.deg.common.profile.constraints.atomic.StandardConstraintTypes.RIC;
@@ -126,7 +122,7 @@ public class FieldSpecFactory {
             throw new UnsupportedOperationException("cannot negate types");
         }
 
-        return FieldSpec.Empty.withTypeRestrictions(Collections.singleton(constraint.requiredType));
+        return FieldSpec.Empty.withType(constraint.requiredType);
     }
 
     private FieldSpec construct(IsGreaterThanConstantConstraint constraint, boolean negate) {

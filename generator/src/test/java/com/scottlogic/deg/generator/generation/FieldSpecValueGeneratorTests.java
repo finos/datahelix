@@ -70,10 +70,7 @@ class FieldSpecValueGeneratorTests {
                 new NumericRestrictions() {{
                     min = new NumericLimit<>(new BigDecimal(10), false);
                     max = new NumericLimit<>(new BigDecimal(30), false);
-                }})
-            .withTypeRestrictions(
-                    Collections.singletonList(Types.NUMERIC)
-            );
+                }});
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
             INTERESTING,
             new StandardFieldValueSourceEvaluator(),
