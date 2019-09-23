@@ -19,14 +19,14 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.restrictions.linear.DateTimeLimit;
 import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import org.junit.jupiter.api.Test;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
-import static com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions.DATETIME_MIN_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AfterDateRelationTest {
@@ -38,7 +38,7 @@ class AfterDateRelationTest {
 
         FieldSpecRelations relation = new AfterDateRelation(first, second, true);
 
-        DateTimeLimit lower = new DateTimeLimit(
+        Limit<OffsetDateTime> lower = new Limit<>(
             OffsetDateTime.of(
                 2005,
                 6,
@@ -50,7 +50,7 @@ class AfterDateRelationTest {
                 ZoneOffset.UTC),
             true);
 
-        DateTimeLimit upper = new DateTimeLimit(
+        Limit<OffsetDateTime> upper = new Limit<>(
             OffsetDateTime.of(
                 2006,
                 6,

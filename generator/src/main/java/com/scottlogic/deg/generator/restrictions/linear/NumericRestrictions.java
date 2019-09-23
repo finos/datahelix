@@ -23,8 +23,8 @@ import static com.scottlogic.deg.common.util.Defaults.*;
 
 public class NumericRestrictions extends LinearRestrictions<BigDecimal> {
 
-    public static final NumericLimit NUMERIC_MIN_LIMIT = new NumericLimit(NUMERIC_MIN, true);
-    public static final NumericLimit NUMERIC_MAX_LIMIT = new NumericLimit(NUMERIC_MAX, true);
+    public static final Limit<BigDecimal> NUMERIC_MIN_LIMIT = new Limit<>(NUMERIC_MIN, true);
+    public static final Limit<BigDecimal> NUMERIC_MAX_LIMIT = new Limit<>(NUMERIC_MAX, true);
     public static final NumericConverter CONVERTER = new NumericConverter();
 
     public NumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max){
@@ -35,7 +35,27 @@ public class NumericRestrictions extends LinearRestrictions<BigDecimal> {
         this(min, max, new NumericGranularity(numericScale));
     }
     public NumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max, Granularity<BigDecimal> granularity){
-        super(min, max, granularity, CONVERTER);
+        super(capMin(min), capMax(max), granularity, CONVERTER);
+    }
+
+    private static Limit<BigDecimal> capMax(Limit<BigDecimal> max) {
+        if (max.isAfter(NUMERIC_MAX)) {
+            return new Limit<>(NUMERIC_MAX, true);
+        } else if (max.isBefore(NUMERIC_MIN)) {
+            return new Limit<>(NUMERIC_MIN, false);
+        } else {
+            return max;
+        }
+    }
+
+    private static Limit<BigDecimal> capMin(Limit<BigDecimal> min) {
+        if (min.isBefore(NUMERIC_MIN)) {
+            return new Limit<>(NUMERIC_MIN, true);
+        } else if (min.isAfter(NUMERIC_MAX)) {
+            return new Limit<>(NUMERIC_MAX, false);
+        } else {
+            return min;
+        }
     }
 
     public int getNumericScale() {
@@ -65,4 +85,6 @@ public class NumericRestrictions extends LinearRestrictions<BigDecimal> {
     public int hashCode() {
         return Objects.hash(getMin(), getMax(), getGranularity());
     }
+
+
 }

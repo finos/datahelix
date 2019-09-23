@@ -19,7 +19,6 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
-import com.scottlogic.deg.generator.restrictions.linear.DateTimeLimit;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
 
 import java.time.OffsetDateTime;
@@ -39,7 +38,7 @@ abstract class AbstractDateInequalityRelation implements FieldSpecRelations {
 
     @Override
     public FieldSpec reduceToRelatedFieldSpec(FieldSpec otherValue) {
-        DateTimeLimit limit = (DateTimeLimit) dateTimeLimitExtractingFunction(otherValue.getDateTimeRestrictions());
+        Limit<OffsetDateTime> limit = dateTimeLimitExtractingFunction(otherValue.getDateTimeRestrictions());
 
         if (limit != null) {
             OffsetDateTime value = limit.getValue();

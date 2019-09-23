@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.restrictions.linear;
 import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
 
 import java.time.OffsetDateTime;
+import java.util.Objects;
 
 public class DateTimeGranularity implements Granularity<OffsetDateTime> {
 
@@ -42,5 +43,18 @@ public class DateTimeGranularity implements Granularity<OffsetDateTime> {
     @Override
     public String toString() {
         return "granularity=" + granularity;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DateTimeGranularity that = (DateTimeGranularity) o;
+        return granularity == that.granularity;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(granularity);
     }
 }

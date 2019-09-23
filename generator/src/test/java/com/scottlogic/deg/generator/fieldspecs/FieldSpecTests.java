@@ -22,9 +22,8 @@ import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
-import com.scottlogic.deg.generator.restrictions.linear.DateTimeLimit;
 import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
-import com.scottlogic.deg.generator.restrictions.linear.NumericLimit;
+import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
 import com.scottlogic.deg.generator.utils.SetUtils;
 import org.junit.Assert;
@@ -42,8 +41,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions.DATETIME_MAX_LIMIT;
-import static com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions.DATETIME_MIN_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
@@ -117,13 +116,13 @@ class FieldSpecTests {
     @Test
     void equals_fieldSpecNumericRestrictionsNotNullAndOtherObjectNumericRestrictionsNotNullAndNumericRestrictionsAreNotEqual_returnsFalse() {
         NumericRestrictions firstFieldSpecRestrictions = new NumericRestrictions(
-            new NumericLimit(new BigDecimal(1), false),
-            new NumericLimit(new BigDecimal(20), false));
+            new Limit<>(new BigDecimal(1), false),
+            new Limit<>(new BigDecimal(20), false));
         FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(firstFieldSpecRestrictions);
 
         NumericRestrictions secondFieldSpecRestrictions = new NumericRestrictions(
-            new NumericLimit(new BigDecimal(5), false) ,
-            new NumericLimit(new BigDecimal(20), false));
+            new Limit<>(new BigDecimal(5), false) ,
+            new Limit<>(new BigDecimal(20), false));
         boolean result = fieldSpec.equals(
             FieldSpec.Empty.withNumericRestrictions(secondFieldSpecRestrictions)
         );
@@ -399,7 +398,7 @@ class FieldSpecTests {
 
     @Test
     void permitsRejectsInvalidNumeric() {
-        NumericRestrictions numeric = new NumericRestrictions(new NumericLimit(BigDecimal.TEN, true), NumericRestrictions.NUMERIC_MAX_LIMIT);
+        NumericRestrictions numeric = new NumericRestrictions(new Limit<>(BigDecimal.TEN, true), NumericRestrictions.NUMERIC_MAX_LIMIT);
         FieldSpec spec = FieldSpec.Empty.withNumericRestrictions(numeric);
 
         assertFalse(spec.permits(BigDecimal.ONE));

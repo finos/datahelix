@@ -34,10 +34,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions.DATETIME_MAX_LIMIT;
-import static com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions.DATETIME_MIN_LIMIT;
 import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MAX_LIMIT;
 import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MIN_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
 
 public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvaluator {
     private static final CannedValuesFieldValueSource NULL_ONLY_SOURCE = setupNullOnlySource();

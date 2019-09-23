@@ -4,7 +4,7 @@ import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 
 import java.util.Iterator;
 
-public class LinearIterator<T> implements Iterator<T> {
+public class LinearIterator<T extends Comparable<T>> implements Iterator<T> {
     private final LinearRestrictions<T> linearRestrictions;
     private T next;
 

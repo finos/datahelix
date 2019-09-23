@@ -17,14 +17,13 @@
 package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
 import com.scottlogic.deg.common.util.Defaults;
-import com.scottlogic.deg.generator.restrictions.linear.NumericLimit;
+import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.common.util.NumberUtils;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -34,7 +33,6 @@ import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MAX_LIMIT;
 import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MIN_LIMIT;
@@ -420,7 +418,7 @@ class RealNumberFieldValueSourceTests {
         givenUpperBound(1e30, true);
         givenScale(0);
 
-        expectAllValues(new BigDecimal("1e20"), "99999999999999999999",
+        expectAllValues( "1e20", "99999999999999999999",
             "99999999999999999998", "99999999999999999997", "99999999999999999996", "99999999999999999995");
     }
 
@@ -464,7 +462,7 @@ class RealNumberFieldValueSourceTests {
 
     @Test
     public void interestingValuesExclusively_LowerLimitSmallerThanConfig_IncludesConfigMinPlusOne() {
-        givenLowerBound(-1e30, false);
+        givenLowerBound(-1e20, false);
         givenUpperBound(10, false);
         givenScale(0);
 
@@ -483,13 +481,13 @@ class RealNumberFieldValueSourceTests {
 
     private NumericRestrictions numericRestrictions(Integer min, Integer max, int scale){
         return new NumericRestrictions(
-            min == null ? null : new NumericLimit(BigDecimal.valueOf(min), true),
-            max == null ? null : new NumericLimit(BigDecimal.valueOf(max), true),
+            min == null ? null : new Limit<>(BigDecimal.valueOf(min), true),
+            max == null ? null : new Limit<>(BigDecimal.valueOf(max), true),
             scale);
     }
 
-    private NumericLimit upperLimit = NUMERIC_MAX_LIMIT;
-    private NumericLimit lowerLimit = NUMERIC_MIN_LIMIT;
+    private Limit<BigDecimal> upperLimit = NUMERIC_MAX_LIMIT;
+    private Limit<BigDecimal> lowerLimit = NUMERIC_MIN_LIMIT;
     private int scale;
     private Set<Object> blacklist = new HashSet<>();
     private RealNumberFieldValueSource objectUnderTest;
@@ -498,14 +496,14 @@ class RealNumberFieldValueSourceTests {
         givenLowerBound(NumberUtils.coerceToBigDecimal(limit), isInclusive);
     }
     private void givenLowerBound(BigDecimal limit, boolean isInclusive) {
-        this.lowerLimit = new NumericLimit(limit, isInclusive);
+        this.lowerLimit = new Limit<>(limit, isInclusive);
     }
 
     private void givenUpperBound(Object limit, boolean isInclusive) {
         givenUpperBound(NumberUtils.coerceToBigDecimal(limit), isInclusive);
     }
     private void givenUpperBound(BigDecimal limit, boolean isInclusive) {
-        this.upperLimit = new NumericLimit(limit, isInclusive);
+        this.upperLimit = new Limit<>(limit, isInclusive);
     }
 
     private void givenScale(int scale) {

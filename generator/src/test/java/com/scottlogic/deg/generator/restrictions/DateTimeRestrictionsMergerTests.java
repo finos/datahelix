@@ -17,8 +17,8 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
-import com.scottlogic.deg.generator.restrictions.linear.DateTimeLimit;
 import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
 import org.junit.Assert;
@@ -28,8 +28,8 @@ import org.junit.jupiter.api.Test;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
-import static com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions.DATETIME_MAX_LIMIT;
-import static com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions.DATETIME_MIN_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.hamcrest.core.Is.is;
@@ -47,7 +47,7 @@ class DateTimeRestrictionsMergerTests {
 
     @Test
     void merge_dateTimeRestrictionsAreBothNull_returnsNull() {
-        MergeResult<LinearRestrictions<Object>> result = merger.merge(null, null);
+        MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(null, null);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.successful, is(true));
@@ -78,10 +78,10 @@ class DateTimeRestrictionsMergerTests {
 
     @Test
     void merge_leftHasMinAndRightHasMax_returnsDateTimeRestrictionsWithMergedMinAndMax() {
-        DateTimeLimit minDateTimeLimit = new DateTimeLimit(
+        Limit<OffsetDateTime> minDateTimeLimit = new Limit<>(
             REFERENCE_TIME.minusDays(7), false
         );
-        DateTimeLimit maxDateTimeLimit = new DateTimeLimit(
+        Limit <OffsetDateTime>maxDateTimeLimit = new Limit<>(
             REFERENCE_TIME, false
         );
         DateTimeRestrictions left = new DateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
@@ -97,10 +97,10 @@ class DateTimeRestrictionsMergerTests {
 
     @Test
     void merge_leftHasMaxAndRightHasMin_returnsDateTimeRestrictionsWithMergedMinAndMax() {
-        DateTimeLimit minDateTimeLimit = new DateTimeLimit(
+        Limit <OffsetDateTime>minDateTimeLimit = new Limit<>(
             REFERENCE_TIME.minusDays(7), false
         );
-        DateTimeLimit maxDateTimeLimit = new DateTimeLimit(
+        Limit <OffsetDateTime>maxDateTimeLimit = new Limit<>(
             REFERENCE_TIME, false
         );
         DateTimeRestrictions left = new DateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
@@ -116,10 +116,10 @@ class DateTimeRestrictionsMergerTests {
 
     @Test
     void merge_leftHasMinGreaterThanRightMax_returnsNull() {
-        DateTimeLimit minDateTimeLimit = new DateTimeLimit(
+        Limit <OffsetDateTime>minDateTimeLimit = new Limit<>(
             OffsetDateTime.now(), false
         );
-        DateTimeLimit maxDateTimeLimit = new DateTimeLimit(
+        Limit <OffsetDateTime>maxDateTimeLimit = new Limit<>(
             OffsetDateTime.now().minusDays(10), false
         );
         DateTimeRestrictions left = new DateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
@@ -133,10 +133,10 @@ class DateTimeRestrictionsMergerTests {
 
     @Test
     void merge_rightHasMinGreaterThanLeftMax_returnsNull() {
-        DateTimeLimit minDateTimeLimit = new DateTimeLimit(
+        Limit <OffsetDateTime>minDateTimeLimit = new Limit<>(
             OffsetDateTime.now(), false
         );
-        DateTimeLimit maxDateTimeLimit = new DateTimeLimit(
+        Limit <OffsetDateTime>maxDateTimeLimit = new Limit<>(
             OffsetDateTime.now().minusDays(10), false
         );
         DateTimeRestrictions left = new DateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
@@ -150,7 +150,7 @@ class DateTimeRestrictionsMergerTests {
 
     @Test
     void merge_rightAndLeftHaveNoMax_shouldNotReturnNull() {
-        DateTimeLimit minDateTimeLimit = new DateTimeLimit(
+        Limit <OffsetDateTime>minDateTimeLimit = new Limit<>(
             REFERENCE_TIME, false
         );
 
@@ -167,7 +167,7 @@ class DateTimeRestrictionsMergerTests {
 
     @Test
     void merge_rightAndLeftHaveNoMin_shouldNotReturnNull() {
-        DateTimeLimit maxDateTimeLimit = new DateTimeLimit(
+        Limit <OffsetDateTime>maxDateTimeLimit = new Limit<>(
             REFERENCE_TIME, false
         );
 
@@ -191,10 +191,10 @@ class DateTimeRestrictionsMergerTests {
     void merge_minExclusiveSameAsMaxInclusive_shouldReturnAsUnsuccessful() {
         OffsetDateTime referenceTime = OffsetDateTime.now();
 
-        DateTimeLimit minDateTimeLimit = new DateTimeLimit(
+        Limit <OffsetDateTime>minDateTimeLimit = new Limit<>(
             referenceTime, false
         );
-        DateTimeLimit maxDateTimeLimit = new DateTimeLimit(
+        Limit <OffsetDateTime>maxDateTimeLimit = new Limit<>(
             referenceTime, true
         );
 
@@ -211,10 +211,10 @@ class DateTimeRestrictionsMergerTests {
     void merge_minExclusiveSameAsMaxExclusive_shouldReturnAsUnsuccessful() {
         OffsetDateTime referenceTime = OffsetDateTime.now();
 
-        DateTimeLimit minDateTimeLimit = new DateTimeLimit(
+        Limit <OffsetDateTime>minDateTimeLimit = new Limit<>(
             referenceTime, false
         );
-        DateTimeLimit maxDateTimeLimit = new DateTimeLimit(
+        Limit <OffsetDateTime>maxDateTimeLimit = new Limit<>(
             referenceTime, false
         );
 
@@ -232,10 +232,10 @@ class DateTimeRestrictionsMergerTests {
     void merge_minInclusiveSameAsMaxExclusive_shouldReturnAsUnsuccessful() {
         OffsetDateTime referenceTime = OffsetDateTime.now();
 
-        DateTimeLimit minDateTimeLimit = new DateTimeLimit(
+        Limit <OffsetDateTime>minDateTimeLimit = new Limit<>(
             referenceTime, true
         );
-        DateTimeLimit maxDateTimeLimit = new DateTimeLimit(
+        Limit <OffsetDateTime>maxDateTimeLimit = new Limit<>(
             referenceTime, false
         );
         DateTimeRestrictions left = new DateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
@@ -248,14 +248,14 @@ class DateTimeRestrictionsMergerTests {
     }
 
     @Test
-    @Disabled("Todo think about how to implement changes in the lower limit when there are different granularities")
+    @Disabled("Todo think about how to implement changes in the lower Limit <OffsetDateTime>when there are different granularities")
     void merge_minOfDifferentGranularity_shouldReturnMostCoarse() {
         OffsetDateTime laterTime = REFERENCE_TIME.plusSeconds(1);
 
-        DateTimeLimit lowerDateTimeLimit = new DateTimeLimit(
+        Limit <OffsetDateTime>lowerDateTimeLimit = new Limit<>(
             REFERENCE_TIME, true
         );
-        DateTimeLimit upperDateTimeLimit = new DateTimeLimit(
+        Limit <OffsetDateTime>upperDateTimeLimit = new Limit<>(
             laterTime, false
         );
 
@@ -270,12 +270,12 @@ class DateTimeRestrictionsMergerTests {
 
         Assert.assertThat(restrictions, not(nullValue()));
 
-        Assert.assertEquals(restrictions.getMin(), new DateTimeLimit(REFERENCE_TIME.plusHours(1), true));
+        Assert.assertEquals(restrictions.getMin(), new Limit<>(REFERENCE_TIME.plusHours(1), true));
     }
 
 
     @Test
-    @Disabled("Todo think about how to implement changes in the lower limit when there are different granularities")
+    @Disabled("Todo think about how to implement changes in the lower Limit <OffsetDateTime>when there are different granularities")
     void merge_minOfDifferentGranularity_shouldReturnMostCoarseAndBeInclusiveWhenWeWouldOtherwiseLoseAValidResult() {
         // edge case example
         // constraint later than 00:00:00 (exclusive / inclusive = false, granularity = HOURS)
@@ -287,8 +287,8 @@ class DateTimeRestrictionsMergerTests {
         OffsetDateTime earlyTime = REFERENCE_TIME;
         OffsetDateTime laterTime = REFERENCE_TIME.plusSeconds(1);
 
-        DateTimeLimit lowerDateTimeLimit = new DateTimeLimit(earlyTime, false);
-        DateTimeLimit upperDateTimeLimit = new DateTimeLimit(laterTime, false);
+        Limit <OffsetDateTime>lowerDateTimeLimit = new Limit<>(earlyTime, false);
+        Limit <OffsetDateTime>upperDateTimeLimit = new Limit<>(laterTime, false);
 
         DateTimeRestrictions early = new DateTimeRestrictions(lowerDateTimeLimit, null, Timescale.HOURS);
         DateTimeRestrictions later = new DateTimeRestrictions(upperDateTimeLimit, null, Timescale.SECONDS);
@@ -300,19 +300,19 @@ class DateTimeRestrictionsMergerTests {
         Assert.assertNotNull(restrictions);
 
         // assert that we return an inclusive restriction for this edge case.
-        Assert.assertEquals(restrictions.getMin(), new DateTimeLimit(REFERENCE_TIME.plusHours(1), true));
+        Assert.assertEquals(restrictions.getMin(), new Limit<>(REFERENCE_TIME.plusHours(1), true));
     }
 
     @Test
-    @Disabled("Todo think about how to implement changes in the lower limit when there are different granularities")
+    @Disabled("Todo think about how to implement changes in the lower Limit <OffsetDateTime>when there are different granularities")
     void merge_inclusiveOnLeftIsPassedIn_shouldReturnInclusive() {
         // ARRANGE
         DateTimeRestrictions left = new DateTimeRestrictions(
-            new DateTimeLimit(REFERENCE_TIME, true),
+            new Limit<>(REFERENCE_TIME, true),
             null, Timescale.HOURS
         );
         DateTimeRestrictions right = new DateTimeRestrictions(
-            new DateTimeLimit(REFERENCE_TIME.plusSeconds(1), false),
+            new Limit<>(REFERENCE_TIME.plusSeconds(1), false),
             null, Timescale.SECONDS
         );
 
@@ -321,7 +321,7 @@ class DateTimeRestrictionsMergerTests {
 
         // ASSERT
         DateTimeRestrictions expecteddt = new DateTimeRestrictions(
-            new DateTimeLimit(REFERENCE_TIME.plusHours(1), true),
+            new Limit<>(REFERENCE_TIME.plusHours(1), true),
             null,
             Timescale.HOURS);
         MergeResult<DateTimeRestrictions> expected = new MergeResult<>(expecteddt);
@@ -332,13 +332,13 @@ class DateTimeRestrictionsMergerTests {
     @Test
     void merge_inclusiveOnRightIsPassedIn_shouldReturnInclusive() {
         // ARRANGE
-        DateTimeRestrictions left = new DateTimeRestrictions(new DateTimeLimit(REFERENCE_TIME, false),
+        DateTimeRestrictions left = new DateTimeRestrictions(new Limit<>(REFERENCE_TIME, false),
             DATETIME_MAX_LIMIT,
             Timescale.HOURS
         );
 
         DateTimeRestrictions right = new DateTimeRestrictions(
-            new DateTimeLimit(REFERENCE_TIME.plusSeconds(1), true),
+            new Limit<>(REFERENCE_TIME.plusSeconds(1), true),
             DATETIME_MAX_LIMIT,
             Timescale.MILLIS);
 
@@ -346,7 +346,7 @@ class DateTimeRestrictionsMergerTests {
         MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
 
         // ASSERT
-        DateTimeRestrictions expecteddt = new DateTimeRestrictions(new DateTimeLimit(
+        DateTimeRestrictions expecteddt = new DateTimeRestrictions(new Limit<>(
             REFERENCE_TIME.plusHours(1), true),
             DATETIME_MAX_LIMIT,
             Timescale.HOURS);
@@ -359,12 +359,12 @@ class DateTimeRestrictionsMergerTests {
     void merge_notInclusivePassedIn_shouldReturnNotInclusive() {
         // ARRANGE
         DateTimeRestrictions left = new DateTimeRestrictions(
-            new DateTimeLimit(REFERENCE_TIME, false),
+            new Limit<>(REFERENCE_TIME, false),
             DATETIME_MAX_LIMIT,
             Timescale.HOURS);
 
         DateTimeRestrictions right = new DateTimeRestrictions(
-            new DateTimeLimit(REFERENCE_TIME.plusHours(1), false),
+            new Limit<>(REFERENCE_TIME.plusHours(1), false),
             DATETIME_MAX_LIMIT,
             Timescale.MILLIS);
 
@@ -373,7 +373,7 @@ class DateTimeRestrictionsMergerTests {
 
         // ASSERT
         DateTimeRestrictions expecteddt = new DateTimeRestrictions(
-            new DateTimeLimit(REFERENCE_TIME.plusHours(1), false),
+            new Limit<>(REFERENCE_TIME.plusHours(1), false),
             DATETIME_MAX_LIMIT,
             Timescale.HOURS);
         MergeResult<DateTimeRestrictions> expected = new MergeResult<>(expecteddt);

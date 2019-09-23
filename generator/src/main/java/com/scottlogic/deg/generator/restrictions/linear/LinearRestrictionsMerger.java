@@ -2,9 +2,9 @@ package com.scottlogic.deg.generator.restrictions.linear;
 
 import com.scottlogic.deg.generator.restrictions.MergeResult;
 
-public class LinearRestrictionsMerger {
+public class LinearRestrictionsMerger<T extends Comparable<T>> {
 
-    public <T> MergeResult<LinearRestrictions<T>> merge(LinearRestrictions<T> left, LinearRestrictions<T> right){
+    public MergeResult<LinearRestrictions<T>> merge(LinearRestrictions<T> left, LinearRestrictions<T> right){
         if (left == null && right == null)
             return new MergeResult<>(null);
         if (left == null)
@@ -26,7 +26,7 @@ public class LinearRestrictionsMerger {
         return new MergeResult<>(mergedRestriction);
     }
 
-    private static <T> boolean isContradictory(LinearRestrictions<T> restictions) {
+    private boolean isContradictory(LinearRestrictions<T> restictions) {
         Limit<T> min = restictions.getMin();
         Limit<T> max = restictions.getMax();
 
@@ -46,7 +46,7 @@ public class LinearRestrictionsMerger {
         return !min.isBefore(max.getValue());
     }
 
-    private static <T> Limit<T> getHighest(Limit<T> left, Limit<T> right) { //TODO dry this code up
+    private Limit<T> getHighest(Limit<T> left, Limit<T> right) { //TODO dry this code up
         if (left == null){
             return right;
         }
@@ -60,7 +60,7 @@ public class LinearRestrictionsMerger {
         return left.isAfter(right.getValue()) ? left : right;
     }
 
-    private static <T> Limit<T> getLowest(Limit<T> left, Limit<T> right) {
+    private Limit<T> getLowest(Limit<T> left, Limit<T> right) {
         if (left == null){
             return right;
         }
@@ -74,7 +74,7 @@ public class LinearRestrictionsMerger {
         return left.isBefore(right.getValue()) ? left : right;
     }
 
-    private static <T> Limit<T> getLeastInclusive(Limit<T> left, Limit<T> right) {
+    private Limit<T> getLeastInclusive(Limit<T> left, Limit<T> right) {
         return left.isInclusive() ? right : left;
     }
 }

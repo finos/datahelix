@@ -23,10 +23,9 @@ import java.util.Objects;
 
 import static com.scottlogic.deg.common.util.Defaults.*;
 
+
 public class DateTimeRestrictions extends LinearRestrictions<OffsetDateTime> {
 
-    public static final DateTimeLimit DATETIME_MIN_LIMIT = new DateTimeLimit(ISO_MIN_DATE, true);
-    public static final DateTimeLimit DATETIME_MAX_LIMIT = new DateTimeLimit(ISO_MAX_DATE, true);
     private static final DateTimeConverter CONVERTER = new DateTimeConverter();
 
     public DateTimeRestrictions(Limit<OffsetDateTime> min, Limit<OffsetDateTime> max) {
@@ -38,7 +37,28 @@ public class DateTimeRestrictions extends LinearRestrictions<OffsetDateTime> {
     }
 
     public DateTimeRestrictions(Limit<OffsetDateTime> min, Limit<OffsetDateTime> max, Granularity<OffsetDateTime> granularity){
-        super(min, max, granularity, CONVERTER);
+        super(capMin(min), capMax(max), granularity, CONVERTER);
+    }
+
+
+    private static Limit<OffsetDateTime> capMax(Limit<OffsetDateTime> max) {
+        if (max.isAfter(ISO_MAX_DATE)) {
+            return new Limit<>(ISO_MAX_DATE, true);
+        } else if (max.isBefore(ISO_MIN_DATE)) {
+            return new Limit<>(ISO_MIN_DATE, false);
+        } else {
+            return max;
+        }
+    }
+
+    private static Limit<OffsetDateTime> capMin(Limit<OffsetDateTime> min) {
+        if (min.isBefore(ISO_MIN_DATE)) {
+            return new Limit<>(ISO_MIN_DATE, true);
+        } else if (min.isAfter(ISO_MAX_DATE)) {
+            return new Limit<>(ISO_MAX_DATE, false);
+        } else {
+            return min;
+        }
     }
 
     @Override
@@ -46,17 +66,14 @@ public class DateTimeRestrictions extends LinearRestrictions<OffsetDateTime> {
         return "min=" + getMin() + ", max=" + getMax() + " " + getGranularity().toString();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        DateTimeRestrictions that = (DateTimeRestrictions) o;
-        return Objects.equals(getMin(), that.getMin()) &&
-            Objects.equals(getMax(), that.getMax());
-    }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getMin(), getMax());
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
     }
 }

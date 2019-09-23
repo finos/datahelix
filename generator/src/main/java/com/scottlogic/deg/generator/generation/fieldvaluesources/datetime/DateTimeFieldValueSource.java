@@ -16,7 +16,6 @@
 
 package com.scottlogic.deg.generator.generation.fieldvaluesources.datetime;
 
-import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.LinearIterator;
@@ -26,12 +25,13 @@ import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
 import java.time.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
 import static com.scottlogic.deg.generator.utils.SetUtils.stream;
 
 public class DateTimeFieldValueSource implements FieldValueSource {
@@ -65,7 +65,7 @@ public class DateTimeFieldValueSource implements FieldValueSource {
 
         ArrayList<Object> interestingValues = new ArrayList<>();
 
-        if (restrictions.getMin() != DateTimeRestrictions.DATETIME_MIN_LIMIT
+        if (restrictions.getMin() != DATETIME_MIN_LIMIT
             && restrictions.getMin().getValue() != Defaults.ISO_MIN_DATE) {
             OffsetDateTime min = restrictions.getMin().getValue();
             interestingValues.add(restrictions.getMin().isInclusive() ? min : min.plusNanos(1_000_000));
@@ -76,7 +76,7 @@ public class DateTimeFieldValueSource implements FieldValueSource {
                 ZoneOffset.UTC));
         }
 
-        if (restrictions.getMax() != DateTimeRestrictions.DATETIME_MAX_LIMIT
+        if (restrictions.getMax() != DATETIME_MAX_LIMIT
             && restrictions.getMax().getValue() != Defaults.ISO_MAX_DATE) {
             OffsetDateTime max = restrictions.getMax().getValue();
             interestingValues.add(restrictions.getMax().isInclusive() ? max : max.minusNanos(1_000_000));
