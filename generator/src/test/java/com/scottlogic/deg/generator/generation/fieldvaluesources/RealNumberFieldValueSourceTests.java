@@ -418,7 +418,7 @@ class RealNumberFieldValueSourceTests {
         givenUpperBound(1e30, true);
         givenScale(0);
 
-        expectAllValues( "1e20", "99999999999999999999",
+        expectAllValues( "100000000000000000000", "99999999999999999999",
             "99999999999999999998", "99999999999999999997", "99999999999999999996", "99999999999999999995");
     }
 
@@ -428,7 +428,7 @@ class RealNumberFieldValueSourceTests {
         givenUpperBound(1e30, false);
         givenScale(0);
 
-        expectInterestingValues("99999999999999999999", "0", "-9");
+        expectInterestingValues("100000000000000000000", "0", "-9");
     }
 
     @Test
@@ -437,7 +437,7 @@ class RealNumberFieldValueSourceTests {
         givenUpperBound(1e30, false);
         givenScale(0);
 
-        expectAllValues("99999999999999999999", "99999999999999999998", "99999999999999999997",
+        expectAllValues("100000000000000000000", "99999999999999999999", "99999999999999999998", "99999999999999999997",
             "99999999999999999996");
     }
 
@@ -475,7 +475,7 @@ class RealNumberFieldValueSourceTests {
         givenUpperBound(new BigDecimal("-99999999999999999995"), false);
         givenScale(0);
 
-        expectAllValues( "-99999999999999999999", "-99999999999999999998", "-99999999999999999997",
+        expectAllValues( "-100000000000000000000", "-99999999999999999999", "-99999999999999999998", "-99999999999999999997",
             "-99999999999999999996");
     }
 
