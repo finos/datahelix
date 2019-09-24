@@ -684,7 +684,6 @@ Feature: User can create data across multiple fields for all combinations availa
       | "testZ" |
       | "0"     |
       | "aaa"   |
-      | 14      |
     Then the following data should be generated:
       | foo1 | foo2   | foo3    |
       | 1    | "zab"  | "!"     |

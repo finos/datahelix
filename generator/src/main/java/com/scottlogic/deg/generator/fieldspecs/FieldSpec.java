@@ -21,10 +21,10 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.T
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.restrictions.*;
-import com.scottlogic.deg.common.util.HeterogeneousTypeContainer;
 
 import java.util.*;
-import java.util.stream.Collectors;
+
+import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.*;
 
 /**
  * Details a column's atomic constraints
@@ -33,22 +33,22 @@ import java.util.stream.Collectors;
  * This is enforced during merging.
  */
 public class FieldSpec {
-    public static final Collection<Types> ALL_TYPES_PERMITTED = Arrays.asList(Types.values());
-    public static final FieldSpec Empty = new FieldSpec(null, new HeterogeneousTypeContainer<>(), true, Collections.emptySet(), ALL_TYPES_PERMITTED);
+    public static final Types ALL_TYPES_PERMITTED = null;
+    public static final FieldSpec Empty = new FieldSpec(null, null, true, Collections.emptySet(), ALL_TYPES_PERMITTED);
     public static final FieldSpec NullOnly = Empty.withWhitelist(FrequencyDistributedSet.empty());
 
     private final boolean nullable;
     private final DistributedSet<Object> whitelist;
     private final Set<Object> blacklist;
-    private final HeterogeneousTypeContainer<Restrictions> restrictions;
-    private final Collection<Types> types;
+    private final TypedRestrictions restrictions;
+    private final Types types;
 
     private FieldSpec(
         DistributedSet<Object> whitelist,
-        HeterogeneousTypeContainer<Restrictions> restrictions,
+        TypedRestrictions restrictions,
         boolean nullable,
         Set<Object> blacklist,
-        Collection<Types> types) {
+        Types types) {
         this.whitelist = whitelist;
         this.restrictions = restrictions;
         this.nullable = nullable;
@@ -69,39 +69,48 @@ public class FieldSpec {
     }
 
     public NumericRestrictions getNumericRestrictions() {
-        return restrictions.get(NumericRestrictions.class).orElse(null);
+        if (types == NUMERIC) {
+            return (NumericRestrictions) restrictions;
+        }
+        return null;
     }
 
     public StringRestrictions getStringRestrictions() {
-        return restrictions.get(StringRestrictions.class).orElse(null);
+        if (types == STRING) {
+            return (StringRestrictions) restrictions;
+        }
+        return null;
     }
 
-    public Collection<Types> getTypeRestrictions() {
+    public Types getType() {
         return types;
     }
 
     public DateTimeRestrictions getDateTimeRestrictions() {
-        return restrictions.get(DateTimeRestrictions.class).orElse(null);
+        if (types == DATETIME) {
+            return (DateTimeRestrictions) restrictions;
+        }
+        return null;
     }
 
     public FieldSpec withWhitelist(DistributedSet<Object> whitelist) {
-        return new FieldSpec(whitelist, new HeterogeneousTypeContainer<>(), nullable, blacklist, types);
+        return new FieldSpec(whitelist, null, nullable, blacklist, types);
     }
 
     public FieldSpec withNumericRestrictions(NumericRestrictions numericRestrictions) {
-        return withConstraint(NumericRestrictions.class, numericRestrictions);
+        return new FieldSpec(null, numericRestrictions, nullable, blacklist, NUMERIC);
     }
 
     public FieldSpec withBlacklist(Set<Object> blacklist) {
         return new FieldSpec(whitelist, restrictions, nullable, blacklist, types);
     }
 
-    public FieldSpec withTypeRestrictions(Collection<Types> typeRestrictions) {
-        return new FieldSpec(whitelist, restrictions, nullable, blacklist, typeRestrictions);
+    public FieldSpec withType(Types type) {
+        return new FieldSpec(whitelist, restrictions, nullable, blacklist, type);
     }
 
     public FieldSpec withStringRestrictions(StringRestrictions stringRestrictions) {
-        return withConstraint(StringRestrictions.class, stringRestrictions);
+        return new FieldSpec(null, stringRestrictions, nullable, blacklist, STRING);
     }
 
     public FieldSpec withNotNull() {
@@ -109,21 +118,7 @@ public class FieldSpec {
     }
 
     public FieldSpec withDateTimeRestrictions(DateTimeRestrictions dateTimeRestrictions) {
-        return withConstraint(DateTimeRestrictions.class, dateTimeRestrictions);
-    }
-
-    private <T extends Restrictions> FieldSpec withConstraint(Class<T> type, T restriction) {
-        if (restriction == null){
-            return this;
-        }
-        return new FieldSpec(null, restrictions.put(type, restriction), nullable, blacklist, types);
-    }
-
-    public boolean isTypeAllowed(Types type){
-        if (whitelist != null){
-            return false;
-        }
-        return types.contains(type);
+        return new FieldSpec(null, dateTimeRestrictions, nullable, blacklist, DATETIME);
     }
 
     @Override
@@ -135,21 +130,10 @@ public class FieldSpec {
             return (nullable ? "" : "Not Null") + String.format("IN %s", whitelist);
         }
 
-        List<String> propertyStrings = restrictions.values()
-                .stream()
-                .filter(Objects::nonNull)
-                .map(Object::toString)
-                .collect(Collectors.toList());
-
-        if (propertyStrings.isEmpty()) {
-            return "<all values>";
-        }
-
-        if (!nullable){
-            propertyStrings.add(0, "Not Null");
-        }
-
-        return String.join(" & ", propertyStrings);
+        return String.format("%s%s%s",
+            types == null  ? "<all values>" : types,
+            nullable ? " " : " Not Null ",
+            restrictions == null ? "" : restrictions);
     }
 
     /**
@@ -160,28 +144,12 @@ public class FieldSpec {
             return false;
         }
 
-        Collection<Types> typeRestrictions = getTypeRestrictions();
-        if (typeRestrictions != null) {
-            for (Types type : Types.values()) {
-                if (!typeRestrictions.contains(type) && type.isInstanceOf(value)) {
-                    return false;
-                }
-            }
+        if (types != null && !types.isInstanceOf(value)) {
+            return false;
         }
 
-        Set<Class<? extends Restrictions>> keys = new HashSet<>();
-        keys.add(NumericRestrictions.class);
-        keys.add(DateTimeRestrictions.class);
-        keys.add(StringRestrictions.class);
-
-        Set<TypedRestrictions> toCheckForMatch = restrictions.getMultiple(keys)
-            .stream()
-            .map(r -> (TypedRestrictions) r)
-            .collect(Collectors.toSet());
-        for (TypedRestrictions restriction : toCheckForMatch) {
-            if (restriction != null && restriction.isInstanceOf(value) && !restriction.match(value)) {
-                return false;
-            }
+        if (restrictions != null && !restrictions.match(value)) {
+            return false;
         }
 
         return true;

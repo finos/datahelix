@@ -194,8 +194,8 @@ Feature: Values can be specified by using if, then and else constraints
     And there is a constraint:
       """
       {
-        "if": { "field": "foo", "is": "equalTo", "value": "1" },
-        "else": { "field": "bar", "is": "equalTo", "value": 10 }
+        "if": { "field": "foo", "is": "equalTo", "value": 1 },
+        "else": { "field": "bar", "is": "equalTo", "value": "a" }
       }
       """
     Then the profile is invalid because "Constraint is null"
@@ -218,7 +218,7 @@ Feature: Values can be specified by using if, then and else constraints
     And there is a constraint:
       """
       {
-        "if": { "field": "foo", "is": "equalTo", "value": "a" },
+        "if": { "field": "foo", "is": "equalTo", "value": 5 },
         "then": { "field": "bar", "is": "equalTo", "value": "a" },
         "else": { "field": "bar", "is": "equalTo", "value": "b" }
       }
@@ -392,7 +392,7 @@ Feature: Values can be specified by using if, then and else constraints
     And there is a constraint:
       """
       {
-        "if": { "field": "foo", "is": "inSet", "values": [ "X", "Y" ] },
+        "if": { "field": "foo", "is": "inSet", "values": [ 8, 9 ] },
         "then": { "field": "bar", "is": "equalTo", "value": "a" },
         "else": { "field": "bar", "is": "equalTo", "value": "b" }
       }
@@ -3664,8 +3664,8 @@ Feature: Values can be specified by using if, then and else constraints
         "if":  { "field": "foo", "is": "equalTo", "value": "a" },
         "then":
           { "anyOf": [
-            { "field": "bar", "is": "equalTo", "value": "Test1" },
-            { "field": "bar", "is": "equalTo", "value": "Test2" }
+            { "field": "bar", "is": "equalTo", "value": 1 },
+            { "field": "bar", "is": "equalTo", "value": 2 }
           ]},
         "else": { "field": "bar", "is": "equalTo", "value": 50 }
       }
@@ -3701,8 +3701,8 @@ Feature: Values can be specified by using if, then and else constraints
         "then": { "field": "bar", "is": "equalTo", "value": 10 },
         "else": {
           "anyOf": [
-            { "field": "bar", "is": "equalTo", "value": "Test1" },
-            { "field": "bar", "is": "equalTo", "value": "Test2" }
+            { "field": "bar", "is": "equalTo", "value": 1 },
+            { "field": "bar", "is": "equalTo", "value": 2 }
           ]}
       }
       """

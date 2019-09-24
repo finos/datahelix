@@ -23,6 +23,7 @@ import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
+import com.scottlogic.deg.generator.inputs.validation.UniquenessValidator;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.decisionbased.OptionPicker;
@@ -47,7 +48,6 @@ public class GeneratorModule extends AbstractModule {
 
         // Bind providers - used to retrieve implementations based on user input
         bind(DecisionTreeWalker.class).toProvider(DecisionTreeWalkerProvider.class);
-        bind(ProfileValidator.class).toProvider(ProfileValidatorProvider.class);
         bind(AbstractDataGeneratorMonitor.class).toProvider(MonitorProvider.class).in(Singleton.class);
         bind(CombinationStrategy.class).toProvider(CombinationStrategyProvider.class);
         bind(OptionPicker.class).toProvider(OptionPickerProvider.class);
@@ -60,6 +60,7 @@ public class GeneratorModule extends AbstractModule {
             .toInstance(generationConfigSource.getMaxRows());
 
         // Bind known implementations - no user input required
+        bind(ProfileValidator.class).to(UniquenessValidator.class);
         bind(DataGeneratorMonitor.class).to(AbstractDataGeneratorMonitor.class);
         bind(DataGenerator.class).to(DecisionTreeDataGenerator.class);
         bind(FieldValueSourceEvaluator.class).to(StandardFieldValueSourceEvaluator.class);

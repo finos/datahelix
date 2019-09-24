@@ -24,7 +24,6 @@ import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.AbstractDataGeneratorMonitor;
 import com.scottlogic.deg.generator.inputs.validation.MultipleProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
-import com.scottlogic.deg.generator.inputs.validation.TypingRequiredPerFieldValidator;
 import com.scottlogic.deg.generator.inputs.validation.UniquenessValidator;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.output.manifest.ManifestWriter;
@@ -62,11 +61,7 @@ public class CucumberTestModule extends AbstractModule {
         bind(ProfileReader.class).to(CucumberProfileReader.class);
         bind(SchemaVersionValidator.class).to(NoopVersionChecker.class);
 
-        Collection<ProfileValidator> validators = new ArrayList<>();
-        validators.add(new UniquenessValidator(new CucumberGenerationConfigSource(testState)));
-        validators.add(new TypingRequiredPerFieldValidator(new DecisionTreeFactory()));
-
-        bind(ProfileValidator.class).toInstance(new MultipleProfileValidator(validators));
+        bind(ProfileValidator.class).toInstance(new UniquenessValidator(new CucumberGenerationConfigSource(testState)));
         bind(ErrorReporter.class).toInstance(new CucumberErrorReporter(testState));
 
         bind(ConfigValidator.class).toInstance(mock(ConfigValidator.class));
