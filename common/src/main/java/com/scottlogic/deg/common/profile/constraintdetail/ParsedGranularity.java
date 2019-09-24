@@ -19,7 +19,6 @@ package com.scottlogic.deg.common.profile.constraintdetail;
 import com.scottlogic.deg.common.util.NumberUtils;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 /**
  * Granularity expressions could be interpreted differently depending on other constraints on a field (eg, type constraints),

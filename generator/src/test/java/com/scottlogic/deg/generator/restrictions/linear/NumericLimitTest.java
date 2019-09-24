@@ -18,10 +18,9 @@ package com.scottlogic.deg.generator.restrictions.linear;
 
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
-
 import static java.math.BigDecimal.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LimitTest {
 

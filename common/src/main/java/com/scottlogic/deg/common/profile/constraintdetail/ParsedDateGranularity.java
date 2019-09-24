@@ -17,7 +17,6 @@
 package com.scottlogic.deg.common.profile.constraintdetail;
 
 import java.util.Objects;
-import java.util.Optional;
 
 public class ParsedDateGranularity {
     private final Timescale granularity;
