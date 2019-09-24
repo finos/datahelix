@@ -130,10 +130,6 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
         return saveAndSet(new StringHasLengthConstraint(fooField, length));
     }
 
-    public ConstraintChainBuilder<T> withOfTypeConstraint(Field fooField, Types requiredType) {
-        return saveAndSet(new IsOfTypeConstraint(fooField, requiredType));
-    }
-
     public ConstraintChainBuilder<T> withAfterConstraint(Field field, OffsetDateTime dateTime) {
         return saveAndSet(new IsAfterConstantDateTimeConstraint(field, dateTime));
     }

@@ -74,8 +74,7 @@ class ConstraintReducerTest {
         final List<AtomicConstraint> constraints = Arrays.asList(
             new IsGreaterThanConstantConstraint(quantityField, 0),
             new IsGreaterThanConstantConstraint(quantityField, 5).negate(),
-            new IsInSetConstraint(countryField, countryAmong),
-            new IsOfTypeConstraint(cityField, STRING));
+            new IsInSetConstraint(countryField, countryAmong));
 
         // ACT
         final RowSpec reducedConstraints = constraintReducer.reduceConstraintsToRowSpec(
@@ -857,7 +856,6 @@ class ConstraintReducerTest {
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
 
         List<AtomicConstraint> constraints = Arrays.asList(
-            new IsOfTypeConstraint(field, NUMERIC),
             new IsInSetConstraint(field, new FrequencyDistributedSet<>(Stream.of(1, "lorem", 5, "ipsum", 2)
             .map(element -> new WeightedElement<Object>(element, 1.0F))
             .collect(Collectors.toSet())))

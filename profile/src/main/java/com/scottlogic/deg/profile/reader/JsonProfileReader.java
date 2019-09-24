@@ -106,6 +106,7 @@ public class JsonProfileReader implements ProfileReader {
         Collection<Constraint> typeRules = profileDto.fields.stream()
             .filter(fieldDTO -> fieldDTO.type != null )
             .map(fieldDTO -> create(AtomicConstraintType.IS_OF_TYPE, profileFields.getByName(fieldDTO.name), fieldDTO.type))
+            .filter(constraint -> !(constraint instanceof RemoveFromTree))
             .collect(Collectors.toList());
 
         if (typeRules.size() > 0) {

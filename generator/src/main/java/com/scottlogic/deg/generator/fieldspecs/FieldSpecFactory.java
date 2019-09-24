@@ -79,8 +79,6 @@ public class FieldSpecFactory {
             return construct(field, (ContainsRegexConstraint) constraint, negate);
         } else if (constraint instanceof MatchesStandardConstraint) {
             return construct(field, (MatchesStandardConstraint) constraint, negate);
-        } else if (constraint instanceof IsOfTypeConstraint) {
-            return construct(field, (IsOfTypeConstraint) constraint, negate);
         } else if (constraint instanceof StringHasLengthConstraint) {
             return construct(field, (StringHasLengthConstraint) constraint, negate);
         } else if (constraint instanceof IsStringLongerThanConstraint) {
@@ -116,17 +114,6 @@ public class FieldSpecFactory {
         }
 
         return FieldSpec.nullOnlyFromType(field.getType());
-    }
-
-    private FieldSpec construct(Field field, IsOfTypeConstraint constraint, boolean negate) {
-        if (negate) {
-            throw new UnsupportedOperationException("cannot negate types");
-        }
-        if (field.getType() != constraint.requiredType) {
-            return FieldSpec.nullOnlyFromType(null);
-        }
-
-        return FieldSpec.fromType(field.getType());
     }
 
     private FieldSpec construct(Field field, IsGreaterThanConstantConstraint constraint, boolean negate) {

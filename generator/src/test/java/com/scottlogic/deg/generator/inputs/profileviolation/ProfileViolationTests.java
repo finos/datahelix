@@ -79,7 +79,6 @@ public class ProfileViolationTests {
         return Stream.of(
             Arguments.of(IsInSetConstraint.class, sampleSet),
             Arguments.of(IsNullConstraint.class, null),
-            Arguments.of(IsOfTypeConstraint.class, Types.STRING),
             Arguments.of(MatchesStandardConstraint.class, StandardConstraintTypes.ISIN),
 
             Arguments.of(ContainsRegexConstraint.class, Pattern.compile("\\w+")),
@@ -131,11 +130,11 @@ public class ProfileViolationTests {
             .withBeforeConstraint(STATIC_FIELD, OffsetDateTime.of(2019, 1, 15, 12, 0, 0, 0, ZoneOffset.UTC)).negate().wrapAtomicWithViolate();
 
         BaseConstraintBuilder<ConditionalConstraint> ifThenConstraintBuilder = new IfBuilder()
-            .withIf(new SingleConstraintBuilder().withOfTypeConstraint(STATIC_FIELD, Types.NUMERIC))
+            .withIf(new SingleConstraintBuilder().withGreaterThanConstraint(STATIC_FIELD, 100))
             .withThen(new SingleConstraintBuilder().withInSetConstraint(STATIC_FIELD, new Object[]{10, 100}));
 
         BaseConstraintBuilder<AndConstraint> violatedIfThenConstraintBuilder = new AndBuilder()
-            .withOfTypeConstraint(STATIC_FIELD, Types.NUMERIC)
+            .withGreaterThanConstraint(STATIC_FIELD, 100)
             .withInSetConstraint(STATIC_FIELD, new Object[]{10, 100}).negate().wrapAtomicWithViolate();
 
         BaseConstraintBuilder<ConditionalConstraint> ifThenElseConstraintBuilder = new IfBuilder()
@@ -179,7 +178,7 @@ public class ProfileViolationTests {
         A = new SingleConstraintBuilder().withEqualToConstraint(field1, "A");
         B = new SingleConstraintBuilder().withGreaterThanConstraint(field2, 100);
         C = new SingleConstraintBuilder().withOfLengthConstraint(field3, 10);
-        D = new SingleConstraintBuilder().withOfTypeConstraint(field4, Types.NUMERIC);
+        D = new SingleConstraintBuilder().withGreaterThanConstraint(field4, 100);
         E = new SingleConstraintBuilder().withLessThanConstraint(field5, 200);
     }
 
