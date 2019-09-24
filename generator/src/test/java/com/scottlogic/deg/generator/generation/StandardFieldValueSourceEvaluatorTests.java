@@ -225,9 +225,9 @@ public class StandardFieldValueSourceEvaluatorTests {
         }
 
         final List<BigDecimal> expectedValues = Arrays.asList(
-            new BigDecimal("-100000000000000000000.00000000000000000000"),
+            new BigDecimal("-1E+20"),
             new BigDecimal("0E-20"),
-            new BigDecimal("100000000000000000000.00000000000000000000")
+            new BigDecimal("1E+20")
         );
         Assert.assertEquals(expectedValues, valuesFromResult);
     }
@@ -250,28 +250,6 @@ public class StandardFieldValueSourceEvaluatorTests {
 
         Assert.assertTrue(valuesFromResult.size() > 0);
         Assert.assertTrue(valuesFromResult.stream().allMatch(Objects::nonNull));
-    }
-
-    @Test
-    void getFieldValueSources_fieldSpecContainsNumericRestrictionWithHighGranularity_generates20DecimalGranularity() {
-        FieldSpec fieldSpec = FieldSpec.fromType(NUMERIC).withNumericRestrictions(
-            new NumericRestrictions(
-                new Limit<>(new BigDecimal("1.1E-30"), false),
-                new Limit<>(new BigDecimal("1.5E-20"), false))
-        ).withNotNull();
-        StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
-
-        final List<FieldValueSource> result = evaluator.getFieldValueSources(fieldSpec);
-
-        Assert.assertEquals(1, result.size());
-        Iterator interestingValuesIterator = result.get(0).generateInterestingValues().iterator();
-        List<BigDecimal> valuesFromResult = new ArrayList<>();
-        while (interestingValuesIterator.hasNext()) {
-            valuesFromResult.add((BigDecimal) interestingValuesIterator.next());
-        }
-
-        List<BigDecimal> expectedValues = Collections.singletonList(new BigDecimal("1E-20"));
-        Assert.assertEquals(expectedValues, valuesFromResult);
     }
 
     @Test

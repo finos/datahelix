@@ -46,17 +46,10 @@ public class LinearRestrictionsMerger<T extends Comparable<T>> {
         return !min.isBefore(max.getValue());
     }
 
-    private Limit<T> getHighest(Limit<T> left, Limit<T> right, Granularity<T> granularity) { //TODO dry this code up
-        if (left == null){
-            return right;
-        }
-        if (right == null){
-            return left;
-        }
+    private Limit<T> getHighest(Limit<T> left, Limit<T> right, Granularity<T> granularity) {
         if (left.getValue().equals(right.getValue())) {
             return getLeastInclusive(left, right);
         }
-
 
         return roundUpToNextValidValue(
             left.isAfter(right.getValue()) ? left : right,
@@ -65,13 +58,6 @@ public class LinearRestrictionsMerger<T extends Comparable<T>> {
     }
 
     private Limit<T> getLowest(Limit<T> left, Limit<T> right, Granularity<T> granularity) {
-        if (left == null){
-            return right;
-        }
-        if (right == null){
-            return left;
-        }
-
         if (left.getValue().equals(right.getValue())) {
             return getLeastInclusive(left, right);
         }
@@ -86,7 +72,7 @@ public class LinearRestrictionsMerger<T extends Comparable<T>> {
             return limit;
         }
         else {
-            return new Limit<>(granularity.getNext(limit.getValue()), limit.isInclusive());
+            return new Limit<>(granularity.getNext(granularity.trimToGranularity(limit.getValue())), true);
         }
     }
 
@@ -95,7 +81,7 @@ public class LinearRestrictionsMerger<T extends Comparable<T>> {
             return limit;
         }
         else {
-            return new Limit<>(granularity.trimToGranularity(limit.getValue()), limit.isInclusive());
+            return new Limit<>(granularity.trimToGranularity(limit.getValue()), true);
         }
     }
 

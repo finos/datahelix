@@ -17,7 +17,10 @@
 package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
 import com.scottlogic.deg.common.util.Defaults;
+import com.scottlogic.deg.generator.fieldspecs.NumericRestrictionsMergeOperation;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
 import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.common.util.NumberUtils;
@@ -134,18 +137,6 @@ class RealNumberFieldValueSourceTests {
     }
 
     @Test
-    void whenBlacklistRounded() {
-        givenLowerBound(0, true);
-        givenUpperBound(100, true);
-        givenScale(-1);
-
-        givenBlacklist(8, 31, 56, 64);
-        // should filter out 10, 30, 60 (twice)
-
-        expectAllValues(0, 20, 40, 50, 70, 80, 90, 100);
-    }
-
-    @Test
     void whenSmallWithBlacklist() {
         givenLowerBound("-0.05", false);
         givenUpperBound("0.05", false);
@@ -200,7 +191,7 @@ class RealNumberFieldValueSourceTests {
 
         givenBlacklist(-10, 0, 9.9);
 
-        expectInterestingValues();
+        expectInterestingValues(10);
     }
 
     @Test
@@ -461,15 +452,6 @@ class RealNumberFieldValueSourceTests {
     }
 
     @Test
-    public void interestingValuesExclusively_LowerLimitSmallerThanConfig_IncludesConfigMinPlusOne() {
-        givenLowerBound(-1e20, false);
-        givenUpperBound(10, false);
-        givenScale(0);
-
-        expectInterestingValues("-99999999999999999999", "0", "9");
-    }
-
-    @Test
     public void exhaustiveValuesExclusively_LowerLimitSmallerThanConfig_IncludesConfigMinPlusOne() {
         givenLowerBound(-1e30, false);
         givenUpperBound(new BigDecimal("-99999999999999999995"), false);
@@ -539,7 +521,8 @@ class RealNumberFieldValueSourceTests {
 
     private FieldValueSource getObjectUnderTest() {
         if (objectUnderTest == null) {
-            NumericRestrictions restrictions = new NumericRestrictions(lowerLimit, upperLimit, scale);
+            LinearRestrictions<BigDecimal> restrictions = new NumericRestrictions(lowerLimit, upperLimit, scale);
+            restrictions = (LinearRestrictions<BigDecimal>) new LinearRestrictionsMerger().merge(restrictions, new NumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT)).restrictions;
             objectUnderTest = new RealNumberFieldValueSource(restrictions, blacklist);
         }
 

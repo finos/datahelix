@@ -44,6 +44,6 @@ public class DateTimeRestrictionsMergeOperation implements RestrictionMergeOpera
             return FieldSpec.nullOnlyFromType(DATETIME);
         }
 
-        return FieldSpec.fromType(DATETIME).withDateTimeRestrictions((DateTimeRestrictions) mergeResult.restrictions);
+        return FieldSpec.fromType(DATETIME).withDateTimeRestrictions(mergeResult.restrictions);
     }
 }

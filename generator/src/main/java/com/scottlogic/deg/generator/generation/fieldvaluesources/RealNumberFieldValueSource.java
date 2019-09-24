@@ -18,6 +18,7 @@ package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
 import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.common.util.Defaults;
+import com.scottlogic.deg.generator.restrictions.linear.Granularity;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
@@ -47,16 +48,17 @@ public class RealNumberFieldValueSource implements FieldValueSource {
         Limit<BigDecimal> lowerLimit = getLowerLimit(restrictions);
 
         this.inclusiveLowerLimit =
-            (lowerLimit.isInclusive()
+            lowerLimit.isInclusive()
                 ? lowerLimit.getValue()
-                : lowerLimit.getValue().add(exclusivityAdjuster));
+                : restrictions.getGranularity().getNext(lowerLimit.getValue());
 
         Limit<BigDecimal> upperLimit = getUpperLimit(restrictions);
 
         this.inclusiveUpperLimit =
-            (upperLimit.isInclusive()
+            upperLimit.isInclusive()
                 ? upperLimit.getValue()
-                : upperLimit.getValue().subtract(exclusivityAdjuster));
+                : restrictions.getGranularity().trimToGranularity(
+                    upperLimit.getValue().subtract(exclusivityAdjuster));
 
         this.blacklist = blacklist.stream()
             .map(NumberUtils::coerceToBigDecimal)

@@ -42,7 +42,7 @@ public class NumericRestrictionsMergeOperation implements RestrictionMergeOperat
             return FieldSpec.nullOnlyFromType(NUMERIC);
         }
 
-        return FieldSpec.fromType(NUMERIC).withNumericRestrictions((NumericRestrictions) mergeResult.restrictions);
+        return FieldSpec.fromType(NUMERIC).withNumericRestrictions(mergeResult.restrictions);
     }
 }
 
