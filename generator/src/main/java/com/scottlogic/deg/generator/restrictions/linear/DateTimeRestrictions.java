@@ -44,7 +44,7 @@ public class DateTimeRestrictions extends LinearRestrictions<OffsetDateTime> {
     private static Limit<OffsetDateTime> capMax(Limit<OffsetDateTime> max) {
         if (max.isAfter(ISO_MAX_DATE)) {
             return new Limit<>(ISO_MAX_DATE, true);
-        } else if (max.isBefore(ISO_MIN_DATE)) {
+        } else if (!max.isAfter(ISO_MIN_DATE)) {
             return new Limit<>(ISO_MIN_DATE, false);
         } else {
             return max;
@@ -54,7 +54,7 @@ public class DateTimeRestrictions extends LinearRestrictions<OffsetDateTime> {
     private static Limit<OffsetDateTime> capMin(Limit<OffsetDateTime> min) {
         if (min.isBefore(ISO_MIN_DATE)) {
             return new Limit<>(ISO_MIN_DATE, true);
-        } else if (min.isAfter(ISO_MAX_DATE)) {
+        } else if (!min.isBefore(ISO_MAX_DATE)) {
             return new Limit<>(ISO_MAX_DATE, false);
         } else {
             return min;
