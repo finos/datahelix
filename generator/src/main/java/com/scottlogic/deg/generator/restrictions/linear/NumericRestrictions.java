@@ -41,7 +41,7 @@ public class NumericRestrictions extends LinearRestrictions<BigDecimal> {
     private static Limit<BigDecimal> capMax(Limit<BigDecimal> max) {
         if (max.isAfter(NUMERIC_MAX)) {
             return new Limit<>(NUMERIC_MAX, true);
-        } else if (max.isBefore(NUMERIC_MIN)) {
+        } else if (!max.isAfter(NUMERIC_MIN)) {
             return new Limit<>(NUMERIC_MIN, false);
         } else {
             return max;
@@ -51,16 +51,13 @@ public class NumericRestrictions extends LinearRestrictions<BigDecimal> {
     private static Limit<BigDecimal> capMin(Limit<BigDecimal> min) {
         if (min.isBefore(NUMERIC_MIN)) {
             return new Limit<>(NUMERIC_MIN, true);
-        } else if (min.isAfter(NUMERIC_MAX)) {
+        } else if (!min.isBefore(NUMERIC_MAX)) {
             return new Limit<>(NUMERIC_MAX, false);
         } else {
             return min;
         }
     }
 
-    public int getNumericScale() {
-        return ((NumericGranularity)getGranularity()).getDecimalPlaces();
-    }
 
     @Override
     public String toString() {
