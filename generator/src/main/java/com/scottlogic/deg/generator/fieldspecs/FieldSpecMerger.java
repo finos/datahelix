@@ -21,6 +21,7 @@ import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,14 +30,9 @@ import java.util.stream.Collectors;
  * Returns a FieldSpec that permits only data permitted by all of its inputs
  */
 public class FieldSpecMerger {
-    private static final RestrictionMergeOperation initialMergeOperation = new TypesRestrictionMergeOperation();
-    private static final RestrictionMergeOperation[] mergeOperations = new RestrictionMergeOperation[]{
-        initialMergeOperation,
-        new StringRestrictionsMergeOperation(),
-        new NumericRestrictionsMergeOperation(new NumericRestrictionsMerger()),
-        new DateTimeRestrictionsMergeOperation(new DateTimeRestrictionsMerger()),
-        new BlacklistRestictionsMergeOperation()
-    };
+        StringRestrictionsMergeOperation stringRestrictionsMergeOperation = new StringRestrictionsMergeOperation();
+        NumericRestrictionsMergeOperation numericRestrictionsMergeOperation = new NumericRestrictionsMergeOperation(new NumericRestrictionsMerger());
+        DateTimeRestrictionsMergeOperation dateTimeRestrictionsMergeOperation = new DateTimeRestrictionsMergeOperation(new DateTimeRestrictionsMerger());
 
     /**
      * Null parameters are permitted, and are synonymous with an empty FieldSpec
@@ -113,12 +109,24 @@ public class FieldSpecMerger {
     }
 
     private Optional<FieldSpec> combineRestrictions(FieldSpec left, FieldSpec right) {
-        FieldSpec merging = FieldSpec.fromType(left.getType());
+        RestrictionMergeOperation restrictionMergeOperation = getRestrictionMerger(left.getType());
 
-        for (RestrictionMergeOperation operation : mergeOperations) {
-            merging = operation.applyMergeOperation(left, right, merging);
+        FieldSpec merged = restrictionMergeOperation.applyMergeOperation(left, right);
+
+        merged = merged.withBlacklist(SetUtils.union(left.getBlacklist(), right.getBlacklist()));
+
+        return addNullable(left, right, merged);
+    }
+
+    private RestrictionMergeOperation getRestrictionMerger(Types type) {
+        switch (type) {
+            case NUMERIC:
+                return numericRestrictionsMergeOperation;
+            case STRING:
+                return stringRestrictionsMergeOperation;
+            case DATETIME:
+                return dateTimeRestrictionsMergeOperation;
         }
-
-        return addNullable(left, right, merging);
+        throw new UnsupportedOperationException("type not recognised");
     }
 }

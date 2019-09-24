@@ -16,7 +16,6 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
 import com.scottlogic.deg.generator.restrictions.DateTimeRestrictionsMerger;
 import com.scottlogic.deg.generator.restrictions.MergeResult;
@@ -56,7 +55,7 @@ class DateTimeRestrictionsMergeOperationTests {
         when(merger.merge(left.getDateTimeRestrictions(), right.getDateTimeRestrictions()))
             .thenReturn(new MergeResult<>(null));
 
-        FieldSpec result = operation.applyMergeOperation(left, right, merging);
+        FieldSpec result = operation.applyMergeOperation(left, right);
 
         Assert.assertEquals(result, merging);
     }
@@ -67,7 +66,7 @@ class DateTimeRestrictionsMergeOperationTests {
         when(merger.merge(left.getDateTimeRestrictions(), right.getDateTimeRestrictions()))
             .thenReturn(MergeResult.unsuccessful());
 
-        FieldSpec result = operation.applyMergeOperation(left, right, merging);
+        FieldSpec result = operation.applyMergeOperation(left, right);
 
         Assert.assertEquals(result, FieldSpec.nullOnlyFromType(DATETIME));
     }
@@ -78,24 +77,11 @@ class DateTimeRestrictionsMergeOperationTests {
         when(merger.merge(left.getDateTimeRestrictions(), right.getDateTimeRestrictions()))
             .thenReturn(MergeResult.unsuccessful());
 
-        FieldSpec result = operation.applyMergeOperation(left, right, merging);
+        FieldSpec result = operation.applyMergeOperation(left, right);
 
         Assert.assertEquals(result, FieldSpec.nullOnlyFromType(DATETIME));
     }
 
-    @Test
-    public void applyMergeOperation_withContradictoryDateTimeRestrictionsAndDateTimeTypeAlreadyNotPermitted_shouldPreventAnyDateTimeValues() {
-        FieldSpec merging = FieldSpec.fromType(NUMERIC);
-        when(merger.merge(left.getDateTimeRestrictions(), right.getDateTimeRestrictions()))
-            .thenReturn(MergeResult.unsuccessful());
-
-        FieldSpec result = operation.applyMergeOperation(left, right, merging);
-
-        Assert.assertThat(result, sameInstance(merging));
-        Assert.assertThat(result.getDateTimeRestrictions(), is(nullValue()));
-        Assert.assertThat(result.getType(), not(nullValue()));
-        Assert.assertThat(result.getType(), not(is(DATETIME)));
-    }
 
     @Test
     public void applyMergeOperation_withContradictoryDateTimeRestrictionsAndDateTimeTypeOnlyPermittedType_shouldPreventAnyDateTimeValues() {
@@ -103,7 +89,7 @@ class DateTimeRestrictionsMergeOperationTests {
         when(merger.merge(left.getDateTimeRestrictions(), right.getDateTimeRestrictions()))
             .thenReturn(MergeResult.unsuccessful());
 
-        FieldSpec result = operation.applyMergeOperation(left, right, merging);
+        FieldSpec result = operation.applyMergeOperation(left, right);
 
         Assert.assertThat(result, not(sameInstance(merging)));
         Assert.assertThat(result.getWhitelist().set(), is(empty()));
@@ -117,7 +103,7 @@ class DateTimeRestrictionsMergeOperationTests {
         when(merger.merge(left.getDateTimeRestrictions(), right.getDateTimeRestrictions()))
             .thenReturn(new MergeResult<>(merged));
 
-        FieldSpec result = operation.applyMergeOperation(left, right, merging);
+        FieldSpec result = operation.applyMergeOperation(left, right);
 
         Assert.assertThat(result, not(sameInstance(merging)));
         Assert.assertThat(result.getDateTimeRestrictions(), sameInstance(merged));
