@@ -30,18 +30,14 @@ public class DateTimeRestrictionsMergeOperation implements RestrictionMergeOpera
     }
 
     @Override
-    public FieldSpec applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merging) {
-        if (merging.getType() != DATETIME) {
-            return merging;
-        }
-
+    public FieldSpec applyMergeOperation(FieldSpec left, FieldSpec right) {
         MergeResult<DateTimeRestrictions> mergeResult = merger.merge(
             left.getDateTimeRestrictions(), right.getDateTimeRestrictions());
 
         if (!mergeResult.successful){
-            return FieldSpec.nullOnlyFromType(merging.getType());
+            return FieldSpec.nullOnlyFromType(DATETIME);
         }
 
-        return merging.withDateTimeRestrictions(mergeResult.restrictions);
+        return FieldSpec.fromType(DATETIME).withDateTimeRestrictions(mergeResult.restrictions);
     }
 }

@@ -18,6 +18,8 @@ package com.scottlogic.deg.generator.walker.pruner;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsLessThanConstantConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsStringLongerThanConstraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsStringShorterThanConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder;
 import com.scottlogic.deg.generator.fieldspecs.*;
@@ -62,8 +64,8 @@ class TreePrunerTests {
     @Test
     public void pruneConstraintNode_leafNodeContradictionsWithParent_returnsContradictory() {
         //Arrange
-        Set<Object> inputWhitelist = new HashSet<>(Arrays.asList(10, 20));
-        ConstraintNode tree = new ConstraintNodeBuilder().addAtomicConstraints(new IsLessThanConstantConstraint(field, 5)).build();
+        Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("a", "b"));
+        ConstraintNode tree = new ConstraintNodeBuilder().addAtomicConstraints(new IsStringLongerThanConstraint(field, 5)).build();
         FieldSpec inputFieldSpec = notNull.withWhitelist(
             (FrequencyDistributedSet.uniform(inputWhitelist)));
 
@@ -81,8 +83,8 @@ class TreePrunerTests {
     @Test
     public void pruneConstraintNode_leafNodeNoContradictionsWithParent_returnsLeafNode() {
         //Arrange
-        Set<Object> inputWhitelist = new HashSet<>(Arrays.asList(1, 2));
-        ConstraintNode tree = new ConstraintNodeBuilder().addAtomicConstraints(new IsLessThanConstantConstraint(field, 5)).build();
+        Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("a", "b"));
+        ConstraintNode tree = new ConstraintNodeBuilder().addAtomicConstraints(new IsStringShorterThanConstraint(field, 5)).build();
         FieldSpec inputFieldSpec = FieldSpec.fromType(field.getType()).withWhitelist(
             (FrequencyDistributedSet.uniform(inputWhitelist)));
 

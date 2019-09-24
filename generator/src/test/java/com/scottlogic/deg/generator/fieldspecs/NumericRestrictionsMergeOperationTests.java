@@ -56,7 +56,7 @@ class NumericRestrictionsMergeOperationTests {
         when(merger.merge(left.getNumericRestrictions(), right.getNumericRestrictions()))
             .thenReturn(new MergeResult<>(null));
 
-        FieldSpec result = operation.applyMergeOperation(left, right, merging);
+        FieldSpec result = operation.applyMergeOperation(left, right);
 
         Assert.assertEquals(result, merging);
     }
@@ -67,7 +67,7 @@ class NumericRestrictionsMergeOperationTests {
         when(merger.merge(left.getNumericRestrictions(), right.getNumericRestrictions()))
             .thenReturn(MergeResult.unsuccessful());
 
-        FieldSpec result = operation.applyMergeOperation(left, right, merging);
+        FieldSpec result = operation.applyMergeOperation(left, right);
 
         Assert.assertEquals(result, FieldSpec.nullOnlyFromType(NUMERIC));
     }
@@ -79,24 +79,9 @@ class NumericRestrictionsMergeOperationTests {
         when(merger.merge(left.getNumericRestrictions(), right.getNumericRestrictions()))
             .thenReturn(MergeResult.unsuccessful());
 
-        FieldSpec result = operation.applyMergeOperation(left, right, merging);
+        FieldSpec result = operation.applyMergeOperation(left, right);
 
         Assert.assertEquals(result, FieldSpec.nullOnlyFromType(NUMERIC));
-    }
-
-    @Test
-    public void applyMergeOperation_withContradictoryNumericRestrictionsAndNumericTypeAlreadyNotPermitted_shouldPreventAnyNumericValues(){
-        FieldSpec merging = FieldSpec.fromType(STRING);
-
-        when(merger.merge(left.getNumericRestrictions(), right.getNumericRestrictions()))
-            .thenReturn(MergeResult.unsuccessful());
-
-        FieldSpec result = operation.applyMergeOperation(left, right, merging);
-
-        Assert.assertThat(result, is(sameInstance(merging)));
-        Assert.assertThat(result.getNumericRestrictions(), is(nullValue()));
-        Assert.assertThat(result.getType(), not(nullValue()));
-        Assert.assertThat(result.getType(), not(is(IsOfTypeConstraint.Types.NUMERIC)));
     }
 
     @Test
@@ -106,7 +91,7 @@ class NumericRestrictionsMergeOperationTests {
         when(merger.merge(left.getNumericRestrictions(), right.getNumericRestrictions()))
             .thenReturn(MergeResult.unsuccessful());
 
-        FieldSpec result = operation.applyMergeOperation(left, right, merging);
+        FieldSpec result = operation.applyMergeOperation(left, right);
 
         Assert.assertThat(result, not(sameInstance(merging)));
         Assert.assertThat(result.getWhitelist().set(), is(empty()));
@@ -120,7 +105,7 @@ class NumericRestrictionsMergeOperationTests {
         when(merger.merge(left.getNumericRestrictions(), right.getNumericRestrictions()))
             .thenReturn(new MergeResult<>(merged));
 
-        FieldSpec result = operation.applyMergeOperation(left, right, merging);
+        FieldSpec result = operation.applyMergeOperation(left, right);
 
         Assert.assertThat(result, not(sameInstance(merging)));
         Assert.assertThat(result.getNumericRestrictions(), sameInstance(merged));

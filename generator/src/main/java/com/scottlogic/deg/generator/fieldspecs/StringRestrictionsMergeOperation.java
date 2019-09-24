@@ -24,19 +24,15 @@ public class StringRestrictionsMergeOperation implements RestrictionMergeOperati
     private static final StringRestrictionsMerger stringRestrictionsMerger = new StringRestrictionsMerger();
 
     @Override
-    public FieldSpec applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merging) {
-        if (merging.getType() != STRING){
-            return merging;
-        }
-
+    public FieldSpec applyMergeOperation(FieldSpec left, FieldSpec right) {
         MergeResult<StringRestrictions> mergeResult = stringRestrictionsMerger.merge(
             left.getStringRestrictions(), right.getStringRestrictions());
 
         if (!mergeResult.successful) {
-            return FieldSpec.nullOnlyFromType(merging.getType());
+            return FieldSpec.nullOnlyFromType(STRING);
         }
 
-        return merging.withStringRestrictions(mergeResult.restrictions);
+        return FieldSpec.fromType(STRING).withStringRestrictions(mergeResult.restrictions);
     }
 }
 

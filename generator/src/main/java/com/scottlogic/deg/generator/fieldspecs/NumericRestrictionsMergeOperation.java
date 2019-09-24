@@ -30,19 +30,15 @@ public class NumericRestrictionsMergeOperation implements RestrictionMergeOperat
     }
 
     @Override
-    public FieldSpec applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merging) {
-        if (merging.getType() != NUMERIC){
-            return merging;
-        }
-
+    public FieldSpec applyMergeOperation(FieldSpec left, FieldSpec right) {
         MergeResult<NumericRestrictions> mergeResult = merger.merge(
             left.getNumericRestrictions(), right.getNumericRestrictions());
 
         if (!mergeResult.successful) {
-            return FieldSpec.nullOnlyFromType(merging.getType());
+            return FieldSpec.nullOnlyFromType(NUMERIC);
         }
 
-        return merging.withNumericRestrictions(mergeResult.restrictions);
+        return FieldSpec.fromType(NUMERIC).withNumericRestrictions(mergeResult.restrictions);
     }
 }
 
