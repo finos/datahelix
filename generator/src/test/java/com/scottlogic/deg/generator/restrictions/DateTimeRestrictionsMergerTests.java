@@ -28,8 +28,7 @@ import org.junit.jupiter.api.Test;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
-import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
-import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.*;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.hamcrest.core.Is.is;
@@ -248,7 +247,6 @@ class DateTimeRestrictionsMergerTests {
     }
 
     @Test
-    @Disabled("Todo think about how to implement changes in the lower Limit <OffsetDateTime>when there are different granularities")
     void merge_minOfDifferentGranularity_shouldReturnMostCoarse() {
         OffsetDateTime laterTime = REFERENCE_TIME.plusSeconds(1);
 
@@ -259,8 +257,8 @@ class DateTimeRestrictionsMergerTests {
             laterTime, false
         );
 
-        DateTimeRestrictions left = new DateTimeRestrictions(lowerDateTimeLimit, null, Timescale.HOURS);
-        DateTimeRestrictions right = new DateTimeRestrictions(upperDateTimeLimit, null, Timescale.MILLIS);
+        DateTimeRestrictions left = new DateTimeRestrictions(lowerDateTimeLimit, DATETIME_MAX_LIMIT, Timescale.HOURS);
+        DateTimeRestrictions right = new DateTimeRestrictions(upperDateTimeLimit, DATETIME_MAX_LIMIT, Timescale.MILLIS);
 
         MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
         LinearRestrictions<OffsetDateTime> restrictions = result.restrictions;
@@ -275,7 +273,6 @@ class DateTimeRestrictionsMergerTests {
 
 
     @Test
-    @Disabled("Todo think about how to implement changes in the lower Limit <OffsetDateTime>when there are different granularities")
     void merge_minOfDifferentGranularity_shouldReturnMostCoarseAndBeInclusiveWhenWeWouldOtherwiseLoseAValidResult() {
         // edge case example
         // constraint later than 00:00:00 (exclusive / inclusive = false, granularity = HOURS)
@@ -290,8 +287,8 @@ class DateTimeRestrictionsMergerTests {
         Limit <OffsetDateTime>lowerDateTimeLimit = new Limit<>(earlyTime, false);
         Limit <OffsetDateTime>upperDateTimeLimit = new Limit<>(laterTime, false);
 
-        DateTimeRestrictions early = new DateTimeRestrictions(lowerDateTimeLimit, null, Timescale.HOURS);
-        DateTimeRestrictions later = new DateTimeRestrictions(upperDateTimeLimit, null, Timescale.SECONDS);
+        DateTimeRestrictions early = new DateTimeRestrictions(lowerDateTimeLimit, DATETIME_MAX_LIMIT, Timescale.HOURS);
+        DateTimeRestrictions later = new DateTimeRestrictions(upperDateTimeLimit, DATETIME_MAX_LIMIT, Timescale.SECONDS);
 
         MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(early, later);
         LinearRestrictions<OffsetDateTime> restrictions = result.restrictions;
@@ -304,16 +301,15 @@ class DateTimeRestrictionsMergerTests {
     }
 
     @Test
-    @Disabled("Todo think about how to implement changes in the lower Limit <OffsetDateTime>when there are different granularities")
     void merge_inclusiveOnLeftIsPassedIn_shouldReturnInclusive() {
         // ARRANGE
         DateTimeRestrictions left = new DateTimeRestrictions(
             new Limit<>(REFERENCE_TIME, true),
-            null, Timescale.HOURS
+            DATETIME_MAX_LIMIT, Timescale.HOURS
         );
         DateTimeRestrictions right = new DateTimeRestrictions(
             new Limit<>(REFERENCE_TIME.plusSeconds(1), false),
-            null, Timescale.SECONDS
+            DATETIME_MAX_LIMIT, Timescale.SECONDS
         );
 
         // ACT
@@ -322,7 +318,7 @@ class DateTimeRestrictionsMergerTests {
         // ASSERT
         DateTimeRestrictions expecteddt = new DateTimeRestrictions(
             new Limit<>(REFERENCE_TIME.plusHours(1), true),
-            null,
+            DATETIME_MAX_LIMIT,
             Timescale.HOURS);
         MergeResult<DateTimeRestrictions> expected = new MergeResult<>(expecteddt);
 

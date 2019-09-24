@@ -168,7 +168,6 @@ class NumericRestrictionsMergerTests {
         Assert.assertThat(result.successful, is(true));
     }
 
-    @Disabled("fix this before merge into master")
     @Test
     public void merge_withScaleLargerThan_shouldReturnUnsuccessful(){
         LinearRestrictionsMerger merger = new LinearRestrictionsMerger();
