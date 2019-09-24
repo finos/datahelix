@@ -19,31 +19,34 @@ package com.scottlogic.deg.generator.generation.fieldvaluesources.datetime;
 import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
 import com.scottlogic.deg.generator.restrictions.linear.DateTimeGranularity;
 import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
+import java.math.BigDecimal;
 import java.time.*;
 import java.util.Iterator;
 
 class RandomDateGenerator {
-    private final OffsetDateTime minDate;
-    private final OffsetDateTime maxDate;
-    private final DateTimeGranularity granularity;
 
-    RandomDateGenerator(OffsetDateTime minDate, OffsetDateTime maxDate, DateTimeGranularity granularity) {
-        this.minDate = minDate;
-        this.maxDate = maxDate;
-        this.granularity = granularity;
+    private final LinearRestrictions<OffsetDateTime> restrictions;
+
+    RandomDateGenerator(LinearRestrictions<OffsetDateTime> restrictions) {
+        this.restrictions = restrictions;
     }
 
     public OffsetDateTime next(RandomNumberGenerator random) {
-        long min = getMilli(minDate);
-        long max = getMilli(maxDate) - 1;
+        long min = restrictions.getMin().isInclusive()
+            ? getMilli(restrictions.getMin().getValue())
+            : getMilli(restrictions.getMin().getValue()) + 1;
+        long max = restrictions.getMax().isInclusive()
+            ? getMilli(restrictions.getMax().getValue())
+            : getMilli(restrictions.getMax().getValue()) - 1;
 
         long generatedLong = (long) random.nextDouble(min, max);
 
         OffsetDateTime generatedDate = Instant.ofEpochMilli(generatedLong).atZone(ZoneOffset.UTC).toOffsetDateTime();
 
-        return granularity.trimToGranularity(generatedDate);
+        return restrictions.getGranularity().trimToGranularity(generatedDate);
     }
 
     private long getMilli(OffsetDateTime date) {

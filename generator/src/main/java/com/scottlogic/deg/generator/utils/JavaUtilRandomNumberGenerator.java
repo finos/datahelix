@@ -68,10 +68,9 @@ public class JavaUtilRandomNumberGenerator implements RandomNumberGenerator {
     }
 
     @Override
-    public BigDecimal nextBigDecimal(BigDecimal lowerInclusive, BigDecimal upperExclusive, int scale) {
+    public BigDecimal nextBigDecimal(BigDecimal lowerInclusive, BigDecimal upperExclusive) {
         return new BigDecimal(random.nextDouble())
             .multiply(upperExclusive.subtract(lowerInclusive))
-            .add(lowerInclusive)
-            .setScale(scale, RoundingMode.HALF_UP);
+            .add(lowerInclusive);
     }
 }

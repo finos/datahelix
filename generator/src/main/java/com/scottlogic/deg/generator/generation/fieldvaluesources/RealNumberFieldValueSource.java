@@ -19,6 +19,7 @@ package com.scottlogic.deg.generator.generation.fieldvaluesources;
 import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
 import com.scottlogic.deg.generator.utils.*;
 
@@ -36,14 +37,11 @@ public class RealNumberFieldValueSource implements FieldValueSource {
     private final BigDecimal inclusiveUpperLimit;
     private final BigDecimal inclusiveLowerLimit;
     private final Set<BigDecimal> blacklist;
-    private final int scale;
     private final static BigDecimal exclusivityAdjuster = BigDecimal.valueOf(Double.MIN_VALUE);
 
-    private final NumericRestrictions restrictions;
+    private final LinearRestrictions<BigDecimal> restrictions;
 
-
-    public RealNumberFieldValueSource(NumericRestrictions restrictions, Set<Object> blacklist) {
-        this.scale = restrictions.getNumericScale();
+    public RealNumberFieldValueSource(LinearRestrictions<BigDecimal> restrictions, Set<Object> blacklist) {
         this.restrictions = restrictions;
 
         Limit<BigDecimal> lowerLimit = getLowerLimit(restrictions);
@@ -51,26 +49,24 @@ public class RealNumberFieldValueSource implements FieldValueSource {
         this.inclusiveLowerLimit =
             (lowerLimit.isInclusive()
                 ? lowerLimit.getValue()
-                : lowerLimit.getValue().add(exclusivityAdjuster))
-            .setScale(scale, RoundingMode.CEILING);
+                : lowerLimit.getValue().add(exclusivityAdjuster));
 
         Limit<BigDecimal> upperLimit = getUpperLimit(restrictions);
 
         this.inclusiveUpperLimit =
             (upperLimit.isInclusive()
                 ? upperLimit.getValue()
-                : upperLimit.getValue().subtract(exclusivityAdjuster))
-            .setScale(scale, RoundingMode.FLOOR);
+                : upperLimit.getValue().subtract(exclusivityAdjuster));
 
         this.blacklist = blacklist.stream()
             .map(NumberUtils::coerceToBigDecimal)
             .filter(Objects::nonNull)
-            .map(i -> i.setScale(scale, RoundingMode.HALF_UP))
+            .map(i -> restrictions.getGranularity().trimToGranularity(i))
             .filter(i -> this.inclusiveLowerLimit.compareTo(i) <= 0 && i.compareTo(this.inclusiveUpperLimit) <= 0)
             .collect(Collectors.toSet());
     }
 
-    private Limit<BigDecimal> getUpperLimit(NumericRestrictions restrictions) {
+    private Limit<BigDecimal> getUpperLimit(LinearRestrictions<BigDecimal> restrictions) {
         BigDecimal maxValue = Defaults.NUMERIC_MAX;
         if (restrictions.getMax() == null) {
             return new Limit<>(maxValue, true);
@@ -80,7 +76,7 @@ public class RealNumberFieldValueSource implements FieldValueSource {
         return new Limit<>(maxValue.min(restrictions.getMax().getValue()), restrictions.getMax().isInclusive());
     }
 
-    private Limit<BigDecimal> getLowerLimit(NumericRestrictions restrictions) {
+    private Limit<BigDecimal> getLowerLimit(LinearRestrictions<BigDecimal> restrictions) {
         BigDecimal minValue = Defaults.NUMERIC_MIN;
         if (restrictions.getMin() == null) {
             return new Limit<>(minValue, true);
@@ -107,7 +103,7 @@ public class RealNumberFieldValueSource implements FieldValueSource {
 
     @Override
     public Stream<Object> generateAllValues() {
-        return stream(new RealNumberIterator())
+        return stream(new LinearIterator<>(restrictions))
             .filter(i -> !blacklist.contains(i))
             .map(Function.identity());
     }
@@ -117,8 +113,8 @@ public class RealNumberFieldValueSource implements FieldValueSource {
         return Stream.generate(() ->
             randomNumberGenerator.nextBigDecimal(
                 inclusiveLowerLimit,
-                inclusiveUpperLimit,
-                scale))
+                inclusiveUpperLimit))
+            .map(val -> restrictions.getGranularity().trimToGranularity(val))
             .filter(i -> !blacklist.contains(i))
             .map(Function.identity());
     }
@@ -131,49 +127,12 @@ public class RealNumberFieldValueSource implements FieldValueSource {
         RealNumberFieldValueSource otherSource = (RealNumberFieldValueSource) obj;
         return inclusiveUpperLimit.equals(otherSource.inclusiveUpperLimit) &&
             inclusiveLowerLimit.equals(otherSource.inclusiveLowerLimit) &&
-            blacklist.equals(otherSource.blacklist) &&
-            scale == otherSource.scale;
+            blacklist.equals(otherSource.blacklist);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(inclusiveLowerLimit, inclusiveUpperLimit, blacklist, scale);
-    }
-
-    private class RealNumberIterator implements Iterator<Object> {
-        private BigDecimal nextValue;
-
-        RealNumberIterator() {
-            this(inclusiveLowerLimit); // we can say always exclusive because it will have been adjusted if not
-        }
-
-        RealNumberIterator(BigDecimal startingPoint) {
-            if (startingPoint.compareTo(inclusiveLowerLimit) < 0) {
-                startingPoint = inclusiveLowerLimit;
-            }
-
-            nextValue = startingPoint.setScale(scale);
-
-            if (blacklist.contains(nextValue)) {
-                next();
-            }
-        }
-
-        @Override
-        public boolean hasNext() {
-            return nextValue.compareTo(inclusiveUpperLimit) <= 0;
-        }
-
-        @Override
-        public BigDecimal next() {
-            BigDecimal currentValue = nextValue;
-
-            do {
-                nextValue = restrictions.getGranularity().getNext(nextValue);
-            } while (blacklist.contains(nextValue));
-
-            return currentValue;
-        }
+        return Objects.hash(inclusiveLowerLimit, inclusiveUpperLimit, blacklist);
     }
 
     private Stream<Object> streamOf(Iterable<Object> iterable){

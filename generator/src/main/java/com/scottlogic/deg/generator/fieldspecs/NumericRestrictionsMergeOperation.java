@@ -35,14 +35,14 @@ public class NumericRestrictionsMergeOperation implements RestrictionMergeOperat
 
     @Override
     public FieldSpec applyMergeOperation(FieldSpec left, FieldSpec right) {
-        MergeResult<NumericRestrictions> mergeResult = merger.merge(
+        MergeResult<LinearRestrictions<BigDecimal>> mergeResult = merger.merge(
             left.getNumericRestrictions(), right.getNumericRestrictions());
 
         if (!mergeResult.successful) {
             return FieldSpec.nullOnlyFromType(NUMERIC);
         }
 
-        return FieldSpec.fromType(NUMERIC).withNumericRestrictions(mergeResult.restrictions);
+        return FieldSpec.fromType(NUMERIC).withNumericRestrictions((NumericRestrictions) mergeResult.restrictions);
     }
 }
 

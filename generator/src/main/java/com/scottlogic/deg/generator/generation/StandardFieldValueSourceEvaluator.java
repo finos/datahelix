@@ -28,8 +28,11 @@ import com.scottlogic.deg.generator.generation.string.generators.RegexStringGene
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
 
+import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -95,7 +98,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
     }
 
     private FieldValueSource getNumericSource(FieldSpec fieldSpec) {
-        NumericRestrictions restrictions = fieldSpec.getNumericRestrictions() == null
+        LinearRestrictions<BigDecimal> restrictions = fieldSpec.getNumericRestrictions() == null
             ? new NumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT)
             : fieldSpec.getNumericRestrictions();
 
@@ -122,7 +125,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
     }
 
     private FieldValueSource getDateTimeSource(FieldSpec fieldSpec) {
-        DateTimeRestrictions restrictions = fieldSpec.getDateTimeRestrictions();
+        LinearRestrictions<OffsetDateTime> restrictions = fieldSpec.getDateTimeRestrictions();
 
         return new DateTimeFieldValueSource(
             restrictions != null ? restrictions : new DateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT),

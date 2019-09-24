@@ -37,13 +37,13 @@ public class DateTimeRestrictionsMergeOperation implements RestrictionMergeOpera
 
     @Override
     public FieldSpec applyMergeOperation(FieldSpec left, FieldSpec right) {
-        MergeResult<DateTimeRestrictions> mergeResult = merger.merge(
+        MergeResult<LinearRestrictions<OffsetDateTime>> mergeResult = merger.merge(
             left.getDateTimeRestrictions(), right.getDateTimeRestrictions());
 
         if (!mergeResult.successful){
             return FieldSpec.nullOnlyFromType(DATETIME);
         }
 
-        return FieldSpec.fromType(DATETIME).withDateTimeRestrictions(mergeResult.restrictions);
+        return FieldSpec.fromType(DATETIME).withDateTimeRestrictions((DateTimeRestrictions) mergeResult.restrictions);
     }
 }

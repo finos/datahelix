@@ -23,5 +23,5 @@ public interface RandomNumberGenerator {
     int nextInt(int bound);
     int nextInt(int lowerInclusive, int upperExclusive);
     double nextDouble(double lowerInclusive, double upperExclusive);
-    BigDecimal nextBigDecimal(BigDecimal lowerInclusive, BigDecimal upperExclusive, int scale);
+    BigDecimal nextBigDecimal(BigDecimal lowerInclusive, BigDecimal upperExclusive);
 }

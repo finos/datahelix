@@ -21,8 +21,10 @@ import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSourc
 import com.scottlogic.deg.generator.generation.fieldvaluesources.LinearIterator;
 import com.scottlogic.deg.generator.restrictions.linear.DateTimeGranularity;
 import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
+import java.math.BigDecimal;
 import java.time.*;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -36,21 +38,18 @@ import static com.scottlogic.deg.generator.utils.SetUtils.stream;
 
 public class DateTimeFieldValueSource implements FieldValueSource {
 
-    private final DateTimeRestrictions restrictions;
+    private final LinearRestrictions<OffsetDateTime> restrictions;
     private final Set<Object> blacklist;
 
     private final RandomDateGenerator randomDateGenerator;
 
     public DateTimeFieldValueSource(
-        DateTimeRestrictions restrictions,
+        LinearRestrictions<OffsetDateTime> restrictions,
         Set<Object> blacklist) {
         this.restrictions = restrictions;
         this.blacklist = blacklist;
 
-        this.randomDateGenerator = new RandomDateGenerator(
-            getInclusiveLowerBounds(restrictions),
-            getExclusiveUpperBound(restrictions),
-            (DateTimeGranularity)restrictions.getGranularity());
+        this.randomDateGenerator = new RandomDateGenerator(restrictions);
     }
 
     @Override
@@ -97,16 +96,6 @@ public class DateTimeFieldValueSource implements FieldValueSource {
             .filter(i -> !blacklist.contains(i))
             .map(Function.identity());
 
-    }
-
-    private OffsetDateTime getExclusiveUpperBound(DateTimeRestrictions upper) {
-        if (upper.getMax() == null || upper.getMax().getValue() == null) return null;
-        return upper.getMax().isInclusive() ? upper.getMax().getValue().plusNanos(1_000_000) : upper.getMax().getValue();
-    }
-
-    private OffsetDateTime getInclusiveLowerBounds(DateTimeRestrictions lower) {
-        if (lower.getMin() == null || lower.getMin().getValue() == null) return null;
-        return lower.getMin().isInclusive() ? lower.getMin().getValue() : lower.getMin().getValue().plusNanos(1_000_000);
     }
 
     @Override
