@@ -17,19 +17,15 @@
 
 package com.scottlogic.deg.generator.restrictions.linear;
 
-import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
 import org.junit.jupiter.api.Test;
 
-
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
-import java.time.temporal.TemporalAmount;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class GranularityTest {
     @Test
-    public void dateTimeRestrictions_getsGranularity(){
+    public void dateTimeRestrictions_nextCorrectlyGetsNextValidValue(){
         NumericGranularity granularity = new NumericGranularity(0);
         BigDecimal num = new BigDecimal(5);
         BigDecimal result = granularity.getNext(num);
