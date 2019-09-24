@@ -14,8 +14,8 @@ public class LinearRestrictionsMerger<T extends Comparable<T>> {
 
         Granularity<T> mergedGranularity = left.getGranularity().merge(right.getGranularity());
 
-        Limit<T> mergedMin = getHighest(left.getMin(), right.getMin());
-        Limit<T> mergedMax = getLowest(left.getMax(), right.getMax());
+        Limit<T> mergedMin = getHighest(left.getMin(), right.getMin(), mergedGranularity);
+        Limit<T> mergedMax = getLowest(left.getMax(), right.getMax(), mergedGranularity);
 
         LinearRestrictions<T> mergedRestriction = new LinearRestrictions<>(mergedMin, mergedMax, mergedGranularity, left.getConverter());
 
@@ -46,21 +46,25 @@ public class LinearRestrictionsMerger<T extends Comparable<T>> {
         return !min.isBefore(max.getValue());
     }
 
-    private Limit<T> getHighest(Limit<T> left, Limit<T> right) { //TODO dry this code up
+    private Limit<T> getHighest(Limit<T> left, Limit<T> right, Granularity<T> granularity) { //TODO dry this code up
         if (left == null){
             return right;
         }
         if (right == null){
             return left;
         }
-
         if (left.getValue().equals(right.getValue())) {
             return getLeastInclusive(left, right);
         }
-        return left.isAfter(right.getValue()) ? left : right;
+
+
+        return roundUpToNextValidValue(
+            left.isAfter(right.getValue()) ? left : right,
+            granularity
+        );
     }
 
-    private Limit<T> getLowest(Limit<T> left, Limit<T> right) {
+    private Limit<T> getLowest(Limit<T> left, Limit<T> right, Granularity<T> granularity) {
         if (left == null){
             return right;
         }
@@ -71,7 +75,28 @@ public class LinearRestrictionsMerger<T extends Comparable<T>> {
         if (left.getValue().equals(right.getValue())) {
             return getLeastInclusive(left, right);
         }
-        return left.isBefore(right.getValue()) ? left : right;
+        return roundDownToNextValidValue(
+            left.isBefore(right.getValue()) ? left : right,
+            granularity
+        );
+    }
+
+    private Limit<T> roundUpToNextValidValue(Limit<T> limit, Granularity<T> granularity) {
+        if (granularity.isCorrectScale(limit.getValue())){
+            return limit;
+        }
+        else {
+            return new Limit<>(granularity.getNext(limit.getValue()), limit.isInclusive());
+        }
+    }
+
+    private Limit<T> roundDownToNextValidValue(Limit<T> limit, Granularity<T> granularity) {
+        if (granularity.isCorrectScale(limit.getValue())){
+            return limit;
+        }
+        else {
+            return new Limit<>(granularity.trimToGranularity(limit.getValue()), limit.isInclusive());
+        }
     }
 
     private Limit<T> getLeastInclusive(Limit<T> left, Limit<T> right) {
