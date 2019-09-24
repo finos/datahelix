@@ -69,7 +69,7 @@ Feature: User can specify that decimal fields are granular to a certain number o
       | -0.7 |
       | -0.8 |
       | -0.9 |
-      | -1.0 |
+      | -1   |
 
   Scenario: User attempts to create a numeric field with data value that include a decimal value to one decimal point incorrectly using a string to set the granularity
     Given foo is granular to "0.1"

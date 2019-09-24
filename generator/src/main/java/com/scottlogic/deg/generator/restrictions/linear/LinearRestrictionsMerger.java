@@ -27,23 +27,11 @@ public class LinearRestrictionsMerger<T extends Comparable<T>> {
     }
 
     private boolean isContradictory(LinearRestrictions<T> restictions) {
-        Limit<T> min = restictions.getMin();
-        Limit<T> max = restictions.getMax();
+        T inclusiveMinValue = restictions.getMin().isInclusive()
+            ? restictions.getMin().getValue()
+            : restictions.getGranularity().getNext(restictions.getMin().getValue());
 
-        if (min == null || max == null){
-            return false;
-        }
-
-        if (min.getValue().equals(max.getValue())){
-            if (!min.isInclusive()){
-                return true;
-            }
-            if (!max.isInclusive()){
-                return true;
-            }
-        }
-
-        return !min.isBefore(max.getValue());
+        return !restictions.getMax().isAfter(inclusiveMinValue);
     }
 
     private Limit<T> getHighest(Limit<T> left, Limit<T> right, Granularity<T> granularity) {
