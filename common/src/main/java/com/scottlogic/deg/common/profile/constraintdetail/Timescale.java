@@ -97,7 +97,7 @@ public enum Timescale {
     }
 
     public Function<OffsetDateTime, OffsetDateTime> getNext() {
-        return next;
+        return granularityFunction.andThen(next);
     }
 
     public Function<OffsetDateTime, OffsetDateTime> getGranularityFunction() {
