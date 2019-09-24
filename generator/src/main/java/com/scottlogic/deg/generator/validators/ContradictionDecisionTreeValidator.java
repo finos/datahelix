@@ -96,7 +96,7 @@ public class ContradictionDecisionTreeValidator {
 
     private RowSpec getIdentityRowSpec(ProfileFields profileFields) {
         final Map<Field, FieldSpec> fieldToFieldSpec = profileFields.stream()
-            .collect(Collectors.toMap(Function.identity(), field -> FieldSpec.Empty));
+            .collect(Collectors.toMap(Function.identity(), field -> FieldSpec.fromType(field.type)));
 
         return new RowSpec(profileFields, fieldToFieldSpec, Collections.emptyList());
     }

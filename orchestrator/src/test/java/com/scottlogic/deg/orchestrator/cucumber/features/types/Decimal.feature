@@ -1,9 +1,9 @@
-Feature: User can specify that a number is of type decimal and can have varying numbers of decimal places
+Feature: User can specify that a number has type decimal and can have varying numbers of decimal places
 
   Background:
     Given the generation strategy is full
     And there is a field foo
-    And foo is of type "decimal"
+    And foo has type "decimal"
     And foo is anything but null
 
 ### Numeric Constraints

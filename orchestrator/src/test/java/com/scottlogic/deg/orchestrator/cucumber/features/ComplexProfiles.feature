@@ -6,9 +6,9 @@ Feature: Generator can produce correct data for complex profiles.
     And the following fields exist:
       | foo |
       | bar |
-    And foo is of type "integer"
+    And foo has type "integer"
     And foo is anything but null
-    And bar is of type "integer"
+    And bar has type "integer"
     And bar is anything but null
     And there is a constraint:
       """

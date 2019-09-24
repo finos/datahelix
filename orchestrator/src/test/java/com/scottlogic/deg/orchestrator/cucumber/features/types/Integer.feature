@@ -1,9 +1,9 @@
-Feature: User can specify that a number is of type integer and does not have any decimal places
+Feature: User can specify that a number has type integer and does not have any decimal places
 
   Background:
     Given the generation strategy is full
     And there is a field foo
-    And foo is of type "integer"
+    And foo has type "integer"
     And foo is anything but null
 
 ### Numeric Constraints

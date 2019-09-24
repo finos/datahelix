@@ -12,14 +12,16 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 
+import static com.scottlogic.deg.common.profile.Types.DATETIME;
 import static org.junit.jupiter.api.Assertions.*;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 class EqualToOffsetDateRelationTest {
 
     @Test
     public void reduceToRelatedFieldSpec_comparingTwoFields_givesEquivalentFieldSpec() {
-        Field first = new Field("first");
-        Field second = new Field("second");
+        Field first = createField("first");
+        Field second = createField("second");
 
         TemporalAdjusterGenerator wrapper = new TemporalAdjusterGenerator(ChronoUnit.DAYS, false);
         int days = 3;
@@ -49,8 +51,8 @@ class EqualToOffsetDateRelationTest {
 
     @Test
     void reduceToRelatedFieldSpec_comparingTwoFieldsNegativeCase_givesEquivalentFieldSpec() {
-        Field first = new Field("first");
-        Field second = new Field("second");
+        Field first = createField("first");
+        Field second = createField("second");
 
         int days = -3;
 
@@ -81,6 +83,6 @@ class EqualToOffsetDateRelationTest {
         Limit<OffsetDateTime> limit = new Limit<>(time, true);
 
         DateTimeRestrictions restrictions = new DateTimeRestrictions(limit, limit);
-        return FieldSpec.Empty.withDateTimeRestrictions(restrictions);
+        return FieldSpec.fromType(DATETIME).withDateTimeRestrictions(restrictions);
     }
 }

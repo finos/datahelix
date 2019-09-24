@@ -3,7 +3,7 @@ Feature: User can specify that a string length is lower than, a specified number
   Background:
     Given the generation strategy is full
     And there is a field foo
-    And foo is of type "string"
+    And foo has type "string"
 
   Scenario: Running a 'shorterThan' request using a number to specify a the length of a generated string should be successful
     Given foo is shorter than 5
@@ -85,168 +85,6 @@ Feature: User can specify that a string length is lower than, a specified number
       | foo  |
       | null |
 
-  Scenario: shorterThan run against a non contradicting greaterThan should be successful
-    Given foo is shorter than 2
-    And foo is greater than 3
-    And foo is matching regex /[x]{1,5}/
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "x"  |
-
-  Scenario: shorterThan run against a non contradicting not greaterThan should be successful
-    Given foo is shorter than 2
-    And foo is anything but greater than 3
-    And foo is matching regex /[x]{1,5}/
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "x"  |
-
-  Scenario: shorterThan run against a non contradicting greaterThanOrEqualTo should be successful
-    Given foo is shorter than 2
-    And foo is greater than or equal to 3
-    And foo is matching regex /[x]{1,5}/
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "x"  |
-
-  Scenario: shorterThan run against a non contradicting not greaterThanOrEqualTo should be successful
-    Given foo is shorter than 2
-    And foo is anything but greater than or equal to 3
-    And foo is matching regex /[x]{1,5}/
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "x"  |
-
-  Scenario: shorterThan run against a non contradicting lessThan should be successful
-    Given foo is shorter than 2
-    And foo is less than 3
-    And foo is matching regex /[x]{1,5}/
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "x"  |
-
-  Scenario: shorterThan run against a non contradicting not lessThan should be successful
-    Given foo is shorter than 2
-    And foo is anything but less than 3
-    And foo is matching regex /[x]{1,5}/
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "x"  |
-
-  Scenario: shorterThan run against a non contradicting lessThanOrEqualTo should be successful
-    Given foo is shorter than 2
-    And foo is less than or equal to 3
-    And foo is matching regex /[x]{1,5}/
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "x"  |
-
-  Scenario: shorterThan run against a non contradicting not lessThanOrEqualTo should be successful
-    Given foo is shorter than 2
-    And foo is anything but less than or equal to 3
-    And foo is matching regex /[x]{1,5}/
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "x"  |
-
-  Scenario: shorterThan run against a non contradicting granularTo should be successful
-    Given foo is shorter than 2
-    And foo is granular to 1
-    And foo is matching regex /[x]{1,5}/
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "x"  |
-
-  Scenario: shorterThan run against a non contradicting not granularTo should be successful
-    Given foo is shorter than 2
-    And foo is anything but granular to 1
-    And foo is matching regex /[x]{1,5}/
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "x"  |
-
-  Scenario: shorterThan run against a non contradicting after should be successful
-    Given foo is shorter than 2
-    And foo is after 2019-01-01T00:00:00.000Z
-    And foo is matching regex /[x]{1,5}/
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "x"  |
-
-  Scenario: shorterThan run against a non contradicting not after should be successful
-    Given foo is shorter than 2
-    And foo is anything but after 2019-01-01T00:00:00.000Z
-    And foo is matching regex /[x]{1,5}/
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "x"  |
-
-  Scenario: shorterThan run against a non contradicting afterOrAt should be successful
-    Given foo is shorter than 2
-    And foo is after or at 2019-01-01T00:00:00.000Z
-    And foo is matching regex /[x]{1,5}/
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "x"  |
-
-  Scenario: shorterThan run against a non contradicting not afterOrAt should be successful
-    Given foo is shorter than 2
-    And foo is anything but after or at 2019-01-01T00:00:00.000Z
-    And foo is matching regex /[x]{1,5}/
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "x"  |
-
-  Scenario: shorterThan run against a non contradicting before should be successful
-    Given foo is shorter than 2
-    And foo is before 2019-01-01T00:00:00.000Z
-    And foo is matching regex /[x]{1,5}/
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "x"  |
-
-  Scenario: shorterThan run against a non contradicting not before should be successful
-    Given foo is shorter than 2
-    And foo is anything but before 2019-01-01T00:00:00.000Z
-    And foo is matching regex /[x]{1,5}/
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "x"  |
-
-  Scenario: shorterThan run against a non contradicting beforeOrAt should be successful
-    Given foo is shorter than 2
-    And foo is before or at 2019-01-01T00:00:00.000Z
-    And foo is matching regex /[x]{1,5}/
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "x"  |
-
-  Scenario: shorterThan run against a non contradicting not beforeOrAt should be successful
-    Given foo is shorter than 2
-    And foo is anything but before or at 2019-01-01T00:00:00.000Z
-    And foo is matching regex /[x]{1,5}/
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "x"  |
-
   Scenario: shorterThan with maximum permitted value should be successful
     Given foo is shorter than 1001
     And the generation strategy is random
@@ -259,13 +97,13 @@ Feature: User can specify that a string length is lower than, a specified number
     Then the profile is invalid because "Field \[foo\]: shorterThan constraint must have an operand/value <= 1000, currently is 1002"
 
   Scenario: Running a 'shorterThan' request with a value less than implicit max (255) should generate data of length between 0 and value
-    Given foo is of type "string"
+    Given foo has type "string"
     And foo is shorter than 254
     And the generator can generate at most 20 rows
     Then foo contains strings of length between 0 and 253 inclusively
 
   Scenario: Running a 'shorterThan' request with a value at the implicit max (255) should generate data of length between 0 and value
-    Given foo is of type "string"
+    Given foo has type "string"
     And foo is shorter than 256
     And the generator can generate at most 20 rows
     Then foo contains strings of length between 0 and 255 inclusively
@@ -276,13 +114,13 @@ Feature: User can specify that a string length is lower than, a specified number
     Then foo contains strings of length between 0 and 256 inclusively
 
   Scenario: Running a 'shorterThan' request with a value less than implicit max (255) should generate data of length between 0 and value
-    Given foo is of type "string"
+    Given foo has type "string"
     And foo is shorter than 254
     And the generator can generate at most 20 rows
     Then foo contains strings of length between 0 and 253 inclusively
 
   Scenario: Running a 'shorterThan' request with a value greater than implicit max (255) should generate data of length between 0 and value
-    Given foo is of type "string"
+    Given foo has type "string"
     And foo is shorter than 256
     And the generator can generate at most 20 rows
     Then foo contains strings of length between 0 and 255 inclusively

@@ -14,18 +14,13 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.fieldspecs;
+package com.scottlogic.deg.common.profile;
 
-import com.scottlogic.deg.generator.utils.SetUtils;
-
-import java.util.Set;
-
-public class BlacklistRestictionsMergeOperation implements RestrictionMergeOperation {
-    @Override
-    public FieldSpec applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merging) {
-        return merging.withBlacklist(
-            SetUtils.union(
-                left.getBlacklist(),
-                right.getBlacklist()));
+public class FieldBuilder {
+    public static Field createField(String name) {
+        return createField(name, Types.STRING);
+    }
+    public static Field createField(String name, Types type) {
+        return new Field(name, type, false, null);
     }
 }

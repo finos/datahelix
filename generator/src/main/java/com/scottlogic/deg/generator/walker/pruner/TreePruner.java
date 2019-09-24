@@ -49,7 +49,7 @@ public class TreePruner {
      */
     public Merged<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, Field field, DataBagValue value) {
         Map<Field, FieldSpec> fieldToSpec = new HashMap<>();
-        fieldToSpec.put(field, fieldSpecHelper.getFieldSpecForValue(value));
+        fieldToSpec.put(field, fieldSpecHelper.getFieldSpecForValue(field, value));
         return pruneConstraintNode(constraintNode, fieldToSpec);
     }
 
@@ -117,7 +117,7 @@ public class TreePruner {
         Map<Field, FieldSpec> newFieldSpecs = new HashMap<>();
         for (Map.Entry<Field, Collection<AtomicConstraint>> fieldToConstraints : relevantConstraints.entrySet()) {
 
-            Optional<FieldSpec> fieldSpec = constraintReducer.reduceConstraintsToFieldSpec(fieldToConstraints.getValue());
+            Optional<FieldSpec> fieldSpec = constraintReducer.reduceConstraintsToFieldSpec(fieldToConstraints.getKey(), fieldToConstraints.getValue());
             if (!fieldSpec.isPresent()){
                 return Merged.contradictory();
             }

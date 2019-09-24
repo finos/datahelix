@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.profile.reader.atomic;
 
+import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 
 import java.time.LocalDateTime;
@@ -57,6 +58,30 @@ public class ConstraintReaderHelpers {
                 value
             ));
         }
+    }
+
+    public static Types getFieldType(String type) {
+        switch (type) {
+            case "decimal":
+            case "integer":
+                return Types.NUMERIC;
+
+            case "string":
+            case "ISIN":
+            case "SEDOL":
+            case "CUSIP":
+            case "RIC":
+            case "firstname":
+            case "lastname":
+            case "fullname":
+                return Types.STRING;
+
+            case "datetime":
+                return Types.DATETIME;
+        }
+
+        throw new InvalidProfileException("Profile is invalid: no type known for " + type);
+
     }
 
 }

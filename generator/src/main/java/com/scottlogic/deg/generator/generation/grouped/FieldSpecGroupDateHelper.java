@@ -22,7 +22,7 @@ public class FieldSpecGroupDateHelper {
 
         Limit<OffsetDateTime> limit = new Limit<>(value, true);
         DateTimeRestrictions restrictions = new DateTimeRestrictions(limit,limit);
-        FieldSpec newSpec = FieldSpec.Empty.withNotNull().withDateTimeRestrictions(restrictions);
+        FieldSpec newSpec = FieldSpec.fromType(field.type).withNotNull().withDateTimeRestrictions(restrictions);
 
         return adjustBoundsOfDateFromFieldSpec(field, newSpec, group);
     }

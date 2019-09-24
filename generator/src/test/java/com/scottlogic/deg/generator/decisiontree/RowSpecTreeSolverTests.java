@@ -44,6 +44,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 class RowSpecTreeSolverTests {
     private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
@@ -81,9 +82,9 @@ class RowSpecTreeSolverTests {
                 Stream.of(mock(DataBag.class)),
                 Stream.of(mock(DataBag.class))
             );
-        final Field country = new Field("country");
-        final Field currency = new Field("currency");
-        final Field city = new Field("city");
+        final Field country = createField("country");
+        final Field currency = createField("currency");
+        final Field city = createField("city");
 
         ProfileFields fields = new ProfileFields(Arrays.asList(country, currency, city));
 

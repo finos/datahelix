@@ -5,6 +5,7 @@ Feature: User can specify that data must be created to conform to each of multip
 
   Scenario: Running an 'allOf' request that contains a valid nested allOf request should be successful
     Given there is a field foo
+    And foo has type "string"
     And there is a constraint:
       """
       { "allOf": [
@@ -12,7 +13,7 @@ Feature: User can specify that data must be created to conform to each of multip
           { "field": "foo", "is": "matchingRegex", "value": "[a-b]{2}" },
           { "field": "foo", "is": "ofLength", "value": 2 }
         ]},
-        { "field": "foo", "is": "ofType", "value": "string" }
+        { "field": "foo", "is": "shorterThan", "value": 3 }
       ]}
       """
     Then the following data should be generated:
@@ -26,7 +27,7 @@ Feature: User can specify that data must be created to conform to each of multip
   @ignore  #91 Reduce duplication where (eg) decisions have overlapping options
   Scenario: Running an 'allOf' request that contains a valid nested anyOf request should be successful
     Given there is a field foo
-    And foo is of type "string"
+    And foo has type "string"
     And there is a constraint:
       """
       { "allOf": [
@@ -45,6 +46,7 @@ Feature: User can specify that data must be created to conform to each of multip
 
   Scenario: Running an 'allOf' request that contains an invalid nested allOf request should generate null
     Given there is a field foo
+    And foo has type "string"
     And there is a constraint:
       """
       { "allOf": [
@@ -52,7 +54,7 @@ Feature: User can specify that data must be created to conform to each of multip
           {"field": "foo", "is": "matchingRegex", "value": "[a-k]{3}" },
           {"field": "foo", "is": "matchingRegex", "value": "[1-5]{3}" }
         ]},
-        { "field": "foo", "is": "ofType", "value": "string" }
+        { "field": "foo", "is": "longerThan", "value": 4 }
       ]}
       """
     Then the following data should be generated:
@@ -61,7 +63,7 @@ Feature: User can specify that data must be created to conform to each of multip
 
   Scenario: Running a 'allOf' request that includes multiple values within the same statement should be successful
     Given there is a field foo
-    And foo is of type "string"
+    And foo has type "string"
     And there is a constraint:
       """
       { "allOf": [
@@ -83,17 +85,3 @@ Feature: User can specify that data must be created to conform to each of multip
       ]}
       """
     Then no data is created
-
-  Scenario: User constrains type with not allOf construction should generate only datetimes
-    Given there is a field foo
-    And untyped fields are allowed
-    And there is a constraint:
-      """
-      { "allOf": [
-        { "not": { "field": "foo", "is": "ofType", "value": "string" }},
-        { "not": { "field": "foo", "is": "ofType", "value": "decimal" }}
-      ]}
-      """
-    Then some data should be generated
-    And foo contains anything but string data
-    And foo contains anything but numeric data

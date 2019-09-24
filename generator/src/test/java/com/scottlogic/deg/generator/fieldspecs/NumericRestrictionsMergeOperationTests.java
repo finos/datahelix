@@ -16,20 +16,20 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
-import com.scottlogic.deg.generator.restrictions.TypeRestrictions;
+import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.generator.restrictions.MergeResult;
 import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MAX_LIMIT;
 import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MIN_LIMIT;
+import static com.scottlogic.deg.common.profile.Types.*;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.hamcrest.core.IsSame.sameInstance;
@@ -46,81 +46,54 @@ class NumericRestrictionsMergeOperationTests {
     public void beforeEach(){
         merger = mock(LinearRestrictionsMerger.class);
         operation = new NumericRestrictionsMergeOperation(merger);
-        left = FieldSpec.Empty.withNumericRestrictions(
+        left = FieldSpec.fromType(NUMERIC).withNumericRestrictions(
             new NumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT));
-        right = FieldSpec.Empty.withNumericRestrictions(
+        right = FieldSpec.fromType(NUMERIC).withNumericRestrictions(
             new NumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT));
     }
 
     @Test
     public void applyMergeOperation_withNoNumericRestrictions_shouldNotApplyAnyRestriction(){
-        FieldSpec merging = FieldSpec.Empty;
+        FieldSpec merging = FieldSpec.fromType(NUMERIC);
         when(merger.merge(left.getNumericRestrictions(), right.getNumericRestrictions()))
             .thenReturn(new MergeResult<>(null));
 
-        FieldSpec result = operation.applyMergeOperation(left, right, merging);
+        FieldSpec result = operation.applyMergeOperation(left, right);
 
-        Assert.assertThat(result, sameInstance(merging));
+        Assert.assertEquals(result, merging);
     }
 
     @Test
     public void applyMergeOperation_withContradictoryNumericRestrictionsAndNoTypeRestrictions_shouldPreventAnyNumericValues(){
-        FieldSpec merging = FieldSpec.Empty;
+        FieldSpec merging = FieldSpec.fromType(NUMERIC);
         when(merger.merge(left.getNumericRestrictions(), right.getNumericRestrictions()))
             .thenReturn(MergeResult.unsuccessful());
 
-        FieldSpec result = operation.applyMergeOperation(left, right, merging);
+        FieldSpec result = operation.applyMergeOperation(left, right);
 
-        Assert.assertThat(result, not(sameInstance(merging)));
-        Assert.assertThat(result.getNumericRestrictions(), is(nullValue()));
-        Assert.assertThat(result.getTypeRestrictions(), not(nullValue()));
-        Assert.assertThat(result.getTypeRestrictions().getAllowedTypes(), not(hasItem(IsOfTypeConstraint.Types.NUMERIC)));
+        Assert.assertEquals(result, FieldSpec.nullOnlyFromType(NUMERIC));
     }
 
     @Test
     public void applyMergeOperation_withContradictoryNumericRestrictions_shouldPreventAnyNumericValues(){
-        FieldSpec merging = FieldSpec.Empty
-            .withTypeRestrictions(
-                TypeRestrictions.createFromWhiteList(
-                    IsOfTypeConstraint.Types.STRING,
-                    IsOfTypeConstraint.Types.NUMERIC));
+        FieldSpec merging = FieldSpec.fromType(NUMERIC);
 
         when(merger.merge(left.getNumericRestrictions(), right.getNumericRestrictions()))
             .thenReturn(MergeResult.unsuccessful());
 
-        FieldSpec result = operation.applyMergeOperation(left, right, merging);
+        FieldSpec result = operation.applyMergeOperation(left, right);
 
-        Assert.assertThat(result, not(sameInstance(merging)));
-        Assert.assertThat(result.getNumericRestrictions(), is(nullValue()));
-        Assert.assertThat(result.getTypeRestrictions(), not(nullValue()));
-        Assert.assertThat(result.getTypeRestrictions().getAllowedTypes(), not(hasItem(IsOfTypeConstraint.Types.NUMERIC)));
-    }
-
-    @Test
-    public void applyMergeOperation_withContradictoryNumericRestrictionsAndNumericTypeAlreadyNotPermitted_shouldPreventAnyNumericValues(){
-        FieldSpec merging = FieldSpec.Empty
-            .withTypeRestrictions(TypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.STRING));
-
-        when(merger.merge(left.getNumericRestrictions(), right.getNumericRestrictions()))
-            .thenReturn(MergeResult.unsuccessful());
-
-        FieldSpec result = operation.applyMergeOperation(left, right, merging);
-
-        Assert.assertThat(result, is(sameInstance(merging)));
-        Assert.assertThat(result.getNumericRestrictions(), is(nullValue()));
-        Assert.assertThat(result.getTypeRestrictions(), not(nullValue()));
-        Assert.assertThat(result.getTypeRestrictions().getAllowedTypes(), not(hasItem(IsOfTypeConstraint.Types.NUMERIC)));
+        Assert.assertEquals(result, FieldSpec.nullOnlyFromType(NUMERIC));
     }
 
     @Test
     public void applyMergeOperation_withContradictoryNumericRestrictionsAndNumericTypeOnlyPermittedType_shouldPreventAnyNumericValues(){
-        FieldSpec merging = FieldSpec.Empty
-            .withTypeRestrictions(TypeRestrictions.createFromWhiteList(IsOfTypeConstraint.Types.NUMERIC));
+        FieldSpec merging = FieldSpec.fromType(NUMERIC);
 
         when(merger.merge(left.getNumericRestrictions(), right.getNumericRestrictions()))
             .thenReturn(MergeResult.unsuccessful());
 
-        FieldSpec result = operation.applyMergeOperation(left, right, merging);
+        FieldSpec result = operation.applyMergeOperation(left, right);
 
         Assert.assertThat(result, not(sameInstance(merging)));
         Assert.assertThat(result.getWhitelist().set(), is(empty()));

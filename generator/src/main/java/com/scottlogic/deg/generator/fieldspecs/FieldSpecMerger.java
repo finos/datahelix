@@ -16,10 +16,13 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
+import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
+import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,14 +31,9 @@ import java.util.stream.Collectors;
  * Returns a FieldSpec that permits only data permitted by all of its inputs
  */
 public class FieldSpecMerger {
-    private static final RestrictionMergeOperation initialMergeOperation = new TypesRestrictionMergeOperation();
-    private static final RestrictionMergeOperation[] mergeOperations = new RestrictionMergeOperation[]{
-        initialMergeOperation,
-        new StringRestrictionsMergeOperation(),
-        new NumericRestrictionsMergeOperation(new LinearRestrictionsMerger()),
-        new DateTimeRestrictionsMergeOperation(new LinearRestrictionsMerger()),
-        new BlacklistRestictionsMergeOperation()
-    };
+    StringRestrictionsMergeOperation stringRestrictionsMergeOperation = new StringRestrictionsMergeOperation();
+    NumericRestrictionsMergeOperation numericRestrictionsMergeOperation = new NumericRestrictionsMergeOperation(new LinearRestrictionsMerger());
+    DateTimeRestrictionsMergeOperation dateTimeRestrictionsMergeOperation = new DateTimeRestrictionsMergeOperation(new LinearRestrictionsMerger());
 
     /**
      * Null parameters are permitted, and are synonymous with an empty FieldSpec
@@ -67,7 +65,7 @@ public class FieldSpecMerger {
                 .map(rightHolder -> mergeElements(leftHolder, rightHolder)))
             .collect(Collectors.toSet()));
 
-        return addNullable(left, right, setRestriction(set));
+        return addNullable(left, right, setRestriction(left.getType(), set));
     }
 
     private static <T> boolean elementsEqual(WeightedElement<T> left, WeightedElement<T> right) {
@@ -80,7 +78,7 @@ public class FieldSpecMerger {
                 .filter(holder -> restrictions.permits(holder.element()))
                 .collect(Collectors.toSet()));
 
-        return addNullable(set, restrictions, setRestriction(newSet));
+        return addNullable(set, restrictions, setRestriction(set.getType(), newSet));
     }
 
     private Optional<FieldSpec> addNullable(FieldSpec left, FieldSpec right, FieldSpec newFieldSpec) {
@@ -99,8 +97,8 @@ public class FieldSpecMerger {
         return (fieldSpec.getWhitelist() != null && fieldSpec.getWhitelist().isEmpty());
     }
 
-    private FieldSpec setRestriction(DistributedSet<Object> set) {
-        return FieldSpec.Empty.withWhitelist(set);
+    private FieldSpec setRestriction(Types type, DistributedSet<Object> set) {
+        return FieldSpec.fromType(type).withWhitelist(set);
     }
 
     private boolean hasSet(FieldSpec fieldSpec) {
@@ -112,12 +110,24 @@ public class FieldSpecMerger {
     }
 
     private Optional<FieldSpec> combineRestrictions(FieldSpec left, FieldSpec right) {
-        FieldSpec merging = FieldSpec.Empty;
+        RestrictionMergeOperation restrictionMergeOperation = getRestrictionMerger(left.getType());
 
-        for (RestrictionMergeOperation operation : mergeOperations) {
-            merging = operation.applyMergeOperation(left, right, merging);
+        FieldSpec merged = restrictionMergeOperation.applyMergeOperation(left, right);
+
+        merged = merged.withBlacklist(SetUtils.union(left.getBlacklist(), right.getBlacklist()));
+
+        return addNullable(left, right, merged);
+    }
+
+    private RestrictionMergeOperation getRestrictionMerger(Types type) {
+        switch (type) {
+            case NUMERIC:
+                return numericRestrictionsMergeOperation;
+            case STRING:
+                return stringRestrictionsMergeOperation;
+            case DATETIME:
+                return dateTimeRestrictionsMergeOperation;
         }
-
-        return addNullable(left, right, merging);
+        throw new UnsupportedOperationException("type not recognised");
     }
 }

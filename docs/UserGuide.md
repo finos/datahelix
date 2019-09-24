@@ -69,9 +69,9 @@ This section will walk you through creating basic profiles with which you can ge
 Profiles are JSON documents consisting of three sections, the schema version, the list of fields and the rules.
 
 - **Schema Version** - Dictates the method of serialisation of the profile in order for the generator to 
-interpret the profile fields and rules. The latest version is 0.1.
+interpret the profile fields and rules. The latest version is 0.7.
 ```
-    "schemaVersion": "0.1",
+    "schemaVersion": "0.7",
 ```
 - **List of Fields** - An array of column headings is defined with unique "name" keys.
 ```
@@ -124,7 +124,7 @@ These three sections are combined to form the [complete profile](#Example-Profil
 ## Example Profile
 
     {
-    "schemaVersion": "0.1",
+    "schemaVersion": "0.7",
     "fields": [
         {
             "name": "Column 1",

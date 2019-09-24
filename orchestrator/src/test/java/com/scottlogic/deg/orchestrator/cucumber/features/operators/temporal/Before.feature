@@ -3,7 +3,7 @@ Feature: User can specify that a datetime date is lower than, but not equal to, 
   Background:
     Given the generation strategy is full
     And there is a field foo
-    And foo is of type "datetime"
+    And foo has type "datetime"
 
 #Alone
   @ignore #594 "Reverse order of value generation when only upper-bound operators are provided" related to this scenario

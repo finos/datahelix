@@ -17,7 +17,6 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.google.common.collect.Iterators;
-import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.CannedValuesFieldValueSource;
@@ -34,6 +33,7 @@ import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.regex.Pattern;
 
+import static com.scottlogic.deg.common.profile.Types.*;
 import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MAX_LIMIT;
 import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MIN_LIMIT;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -43,7 +43,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     @Test
     public void shouldReturnNullSourceOnlyWithMustBeNullRestrictions() {
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
-        FieldSpec fieldSpecMustBeNull = FieldSpec.NullOnly;
+        FieldSpec fieldSpecMustBeNull = FieldSpec.nullOnlyFromType(STRING);
 
         List<FieldValueSource> sources = evaluator.getFieldValueSources(fieldSpecMustBeNull);
 
@@ -54,7 +54,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     @Test
     public void returnsNullSourceOnlyWithSetRestrictionWithEmptyWhitelist() {
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
-        FieldSpec fieldSpecMustBeNull = FieldSpec.Empty
+        FieldSpec fieldSpecMustBeNull = FieldSpec.fromType(STRING)
             .withWhitelist((new FrequencyDistributedSet<>(Collections.emptySet())));
 
         List<FieldValueSource> sources = evaluator.getFieldValueSources(fieldSpecMustBeNull);
@@ -66,7 +66,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     @Test
     public void shouldReturnNullSourceLastWithNoRestrictions() {
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
-        FieldSpec fieldSpecWithNoRestrictions = FieldSpec.Empty;
+        FieldSpec fieldSpecWithNoRestrictions = FieldSpec.fromType(STRING);
 
         List<FieldValueSource> sources = evaluator.getFieldValueSources(fieldSpecWithNoRestrictions);
 
@@ -76,7 +76,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     @Test
     public void shouldReturnNullSourceLastWithInSetRestrictionsAndNullNotDisallowed() {
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
-        FieldSpec fieldSpecInSetAndNullNotDisallowed = FieldSpec.Empty
+        FieldSpec fieldSpecInSetAndNullNotDisallowed = FieldSpec.fromType(NUMERIC)
             .withWhitelist(FrequencyDistributedSet.uniform(new HashSet<>(Arrays.asList(15, 25))));
 
         List<FieldValueSource> sources = evaluator.getFieldValueSources(fieldSpecInSetAndNullNotDisallowed);
@@ -90,12 +90,8 @@ public class StandardFieldValueSourceEvaluatorTests {
         NumericRestrictions numericRestrictions = new NumericRestrictions(
             new Limit<>(new BigDecimal(10), false),
             new Limit<>(new BigDecimal(30), false));
-        TypeRestrictions typeRestrictions = new TypeRestrictions(Collections.singletonList(
-            IsOfTypeConstraint.Types.NUMERIC
-        ));
-        FieldSpec fieldSpecWithTypedNumericRestrictionsAndNullNotDisallowed = FieldSpec.Empty
-            .withNumericRestrictions(numericRestrictions)
-            .withTypeRestrictions(typeRestrictions);
+        FieldSpec fieldSpecWithTypedNumericRestrictionsAndNullNotDisallowed = FieldSpec.fromType(NUMERIC)
+            .withNumericRestrictions(numericRestrictions);
 
         List<FieldValueSource> sources = evaluator.getFieldValueSources(fieldSpecWithTypedNumericRestrictionsAndNullNotDisallowed);
 
@@ -106,12 +102,8 @@ public class StandardFieldValueSourceEvaluatorTests {
     public void shouldReturnNullSourceLastWithTypedStringRestrictionsAndNullNotDisallowed() {
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
         StringRestrictions stringRestrictions = matchesRegex("/[ab]{2}/", false);
-        TypeRestrictions typeRestrictions = new TypeRestrictions(Collections.singletonList(
-            IsOfTypeConstraint.Types.STRING
-        ));
-        FieldSpec fieldSpecInSetWithTypedStringRestrictionsAndNullNotDisallowedd = FieldSpec.Empty
-            .withStringRestrictions(stringRestrictions)
-            .withTypeRestrictions(typeRestrictions);
+        FieldSpec fieldSpecInSetWithTypedStringRestrictionsAndNullNotDisallowedd = FieldSpec.fromType(NUMERIC)
+            .withStringRestrictions(stringRestrictions);
 
         List<FieldValueSource> sources = evaluator.getFieldValueSources(fieldSpecInSetWithTypedStringRestrictionsAndNullNotDisallowedd);
 
@@ -125,12 +117,8 @@ public class StandardFieldValueSourceEvaluatorTests {
             new Limit<>(OffsetDateTime.MIN, false),
             new Limit<>(OffsetDateTime.MAX, false)
         );
-        TypeRestrictions typeRestrictions = new TypeRestrictions(Collections.singletonList(
-            IsOfTypeConstraint.Types.DATETIME
-        ));
-        FieldSpec fieldSpecInSetWithTypedDateTimeRestrictionsAndNullNotDisallowed = FieldSpec.Empty
-            .withDateTimeRestrictions(datetimeRestrictions)
-            .withTypeRestrictions(typeRestrictions);
+        FieldSpec fieldSpecInSetWithTypedDateTimeRestrictionsAndNullNotDisallowed = FieldSpec.fromType(DATETIME)
+            .withDateTimeRestrictions(datetimeRestrictions);
 
         List<FieldValueSource> sources = evaluator.getFieldValueSources(fieldSpecInSetWithTypedDateTimeRestrictionsAndNullNotDisallowed);
 
@@ -139,13 +127,9 @@ public class StandardFieldValueSourceEvaluatorTests {
 
     @Test
     void getFieldValueSources_fieldSpecContainsNumericRestrictionsWithValueTooLargeForInteger_generatesExpectedValues() {
-        FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(
+        FieldSpec fieldSpec = FieldSpec.fromType(NUMERIC).withNumericRestrictions(
             new NumericRestrictions(new Limit<>(new BigDecimal(0), false),
                 new Limit<>(new BigDecimal("1E+18"), false))
-        ).withTypeRestrictions(
-            new TypeRestrictions(
-                Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
-            )
         ).withNotNull(
 
         );
@@ -169,13 +153,9 @@ public class StandardFieldValueSourceEvaluatorTests {
 
     @Test
     void getFieldValueSources_fieldSpecContainsNumericRestrictionsWithDecimalValues_generatesDecimalValues() {
-        FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(
+        FieldSpec fieldSpec = FieldSpec.fromType(NUMERIC).withNumericRestrictions(
             new NumericRestrictions(new Limit<>(new BigDecimal("15.00000000000000000001"), false),
             new Limit<>(new BigDecimal("15.00000000000000000010"), false))
-        ).withTypeRestrictions(
-            new TypeRestrictions(
-                Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
-            )
         ).withNotNull();
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
 
@@ -207,12 +187,8 @@ public class StandardFieldValueSourceEvaluatorTests {
             new Limit<>(new BigDecimal("15"), false),
             new Limit<>(new BigDecimal("16"), false),
             2);
-        FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(
+        FieldSpec fieldSpec = FieldSpec.fromType(NUMERIC).withNumericRestrictions(
             restrictions
-        ).withTypeRestrictions(
-            new TypeRestrictions(
-                Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
-            )
         ).withNotNull();
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
 
@@ -234,12 +210,8 @@ public class StandardFieldValueSourceEvaluatorTests {
 
     @Test
     void getFieldValueSources_fieldSpecContainsNumericRestrictionsWithMinAndMaxNull_generatesBoundaryValues() {
-        FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(
+        FieldSpec fieldSpec = FieldSpec.fromType(NUMERIC).withNumericRestrictions(
             new NumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT)
-        ).withTypeRestrictions(
-            new TypeRestrictions(
-                Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
-            )
         ).withNotNull();
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
 
@@ -262,12 +234,8 @@ public class StandardFieldValueSourceEvaluatorTests {
 
     @Test
     void getFieldValueSources_fieldSpecContainsNumericRestrictionWithNullMinAndMaxIsDecimal_generatesDecimalValues() {
-        FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(
+        FieldSpec fieldSpec = FieldSpec.fromType(NUMERIC).withNumericRestrictions(
             new NumericRestrictions(NUMERIC_MIN_LIMIT, new Limit<>(new BigDecimal("150.5"), false))
-        ).withTypeRestrictions(
-            new TypeRestrictions(
-                Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
-            )
         ).withNotNull();
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
 
@@ -286,14 +254,10 @@ public class StandardFieldValueSourceEvaluatorTests {
 
     @Test
     void getFieldValueSources_fieldSpecContainsNumericRestrictionWithHighGranularity_generates20DecimalGranularity() {
-        FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(
+        FieldSpec fieldSpec = FieldSpec.fromType(NUMERIC).withNumericRestrictions(
             new NumericRestrictions(
                 new Limit<>(new BigDecimal("1.1E-30"), false),
                 new Limit<>(new BigDecimal("1.5E-20"), false))
-        ).withTypeRestrictions(
-            new TypeRestrictions(
-                Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
-            )
         ).withNotNull();
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
 
@@ -312,14 +276,10 @@ public class StandardFieldValueSourceEvaluatorTests {
 
     @Test
     void getFieldValueSources_fieldSpecContainsNegativeMinAndPositiveMax_generatesExpectedNegativeToPositiveValues() {
-        FieldSpec fieldSpec = FieldSpec.Empty.withNumericRestrictions(
+        FieldSpec fieldSpec = FieldSpec.fromType(NUMERIC).withNumericRestrictions(
             new NumericRestrictions(
                 new Limit<>(new BigDecimal("-3E-20"), false),
                 new Limit<>(new BigDecimal("3E-20"), false))
-        ).withTypeRestrictions(
-            new TypeRestrictions(
-                Collections.singletonList(IsOfTypeConstraint.Types.NUMERIC)
-            )
         ).withNotNull();
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
 

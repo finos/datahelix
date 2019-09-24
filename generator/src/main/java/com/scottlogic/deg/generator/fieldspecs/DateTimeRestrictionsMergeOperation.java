@@ -25,7 +25,7 @@ import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger
 
 import java.time.OffsetDateTime;
 
-import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.DATETIME;
+import static com.scottlogic.deg.common.profile.Types.DATETIME;
 
 public class DateTimeRestrictionsMergeOperation implements RestrictionMergeOperation {
     private final LinearRestrictionsMerger merger;
@@ -36,38 +36,14 @@ public class DateTimeRestrictionsMergeOperation implements RestrictionMergeOpera
     }
 
     @Override
-    public FieldSpec applyMergeOperation(FieldSpec left, FieldSpec right, FieldSpec merging) {
-        if (!merging.isTypeAllowed(DATETIME)){
-            return merging;
-        }
-
-        DateTimeRestrictions leftRestriction = left.getDateTimeRestrictions();
-        DateTimeRestrictions rightRestriction = right.getDateTimeRestrictions();
-
-        MergeResult<LinearRestrictions<OffsetDateTime>> mergeResult = merger.merge(
-            leftRestriction, rightRestriction);
+    public FieldSpec applyMergeOperation(FieldSpec left, FieldSpec right) {
+        MergeResult<DateTimeRestrictions> mergeResult = merger.merge(
+            left.getDateTimeRestrictions(), right.getDateTimeRestrictions());
 
         if (!mergeResult.successful){
-            return merging.withoutType(DATETIME);
+            return FieldSpec.nullOnlyFromType(DATETIME);
         }
 
-        DateTimeRestrictions dateTimeRestrictions;
-        if (mergeResult.restrictions == null){
-            dateTimeRestrictions = null;
-        }
-        else if (mergeResult.restrictions == leftRestriction){
-            dateTimeRestrictions = leftRestriction;
-        }
-        else if (mergeResult.restrictions == rightRestriction){
-            dateTimeRestrictions = rightRestriction;
-        }
-        else {
-            dateTimeRestrictions = new DateTimeRestrictions(
-                mergeResult.restrictions.getMin(),
-                mergeResult.restrictions.getMax(),
-                mergeResult.restrictions.getGranularity());
-        }
-
-        return merging.withDateTimeRestrictions(dateTimeRestrictions);
+        return FieldSpec.fromType(DATETIME).withDateTimeRestrictions(mergeResult.restrictions);
     }
 }

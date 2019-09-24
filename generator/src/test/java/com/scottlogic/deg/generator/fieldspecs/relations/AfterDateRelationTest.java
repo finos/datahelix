@@ -28,13 +28,15 @@ import java.time.ZoneOffset;
 
 import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
 import static org.junit.jupiter.api.Assertions.*;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.deg.common.profile.Types.*;
 
 class AfterDateRelationTest {
 
     @Test
     public void reduceToRelatedFieldSpec_comparingTwoFields_givesALaterFieldSpec() {
-        Field first = new Field("first");
-        Field second = new Field("second");
+        Field first = createField("first");
+        Field second = createField("second");
 
         FieldSpecRelations relation = new AfterDateRelation(first, second, true);
 
@@ -64,12 +66,12 @@ class AfterDateRelationTest {
 
         DateTimeRestrictions inRestrictions = new DateTimeRestrictions(lower, upper);
 
-        FieldSpec inSpec = FieldSpec.Empty.withDateTimeRestrictions(inRestrictions);
+        FieldSpec inSpec = FieldSpec.fromType(DATETIME).withDateTimeRestrictions(inRestrictions);
 
         FieldSpec reducedSpec = relation.reduceToRelatedFieldSpec(inSpec);
 
         DateTimeRestrictions expectedRestrictions = new DateTimeRestrictions(DATETIME_MIN_LIMIT, upper);
-        FieldSpec expectedSpec = FieldSpec.Empty.withDateTimeRestrictions(expectedRestrictions);
+        FieldSpec expectedSpec = FieldSpec.fromType(DATETIME).withDateTimeRestrictions(expectedRestrictions);
 
         assertEquals(expectedSpec, reducedSpec);
     }

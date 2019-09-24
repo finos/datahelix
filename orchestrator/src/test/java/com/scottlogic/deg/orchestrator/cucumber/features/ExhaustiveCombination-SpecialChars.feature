@@ -10,9 +10,9 @@ Feature: Whilst including non-latin characters, user can create data across mult
     Given the following fields exist:
       | foo |
       | bar |
-    And foo is of type "string"
+    And foo has type "string"
     And foo is anything but null
-    And bar is of type "string"
+    And bar has type "string"
     And bar is anything but null
     And foo is in set:
       | "😐" |
@@ -31,9 +31,9 @@ Feature: Whilst including non-latin characters, user can create data across mult
     Given the following fields exist:
       | foo |
       | bar |
-    And foo is of type "string"
+    And foo has type "string"
     And foo is anything but null
-    And bar is of type "string"
+    And bar has type "string"
     And bar is anything but null
     And foo is in set:
       | " " |

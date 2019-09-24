@@ -16,13 +16,13 @@
 
 package com.scottlogic.deg.profile.dto;
 
-class ProfileSchemaValidatorLeadPonyTests extends ProfileSchemaValidatorTests {
+import java.io.File;
+import java.net.URL;
 
-    private ProfileSchemaValidator profileValidator = new ProfileSchemaValidatorLeadPony();
-
+public class NoopProfileSchemaLoader implements ProfileSchemaLoader {
 
     @Override
-    protected ProfileSchemaValidator setValidator() {
-        return profileValidator;
+    public void validateProfile(File profileFile, URL schema) {
+        return;
     }
 }

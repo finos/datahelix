@@ -21,6 +21,7 @@ import com.google.inject.name.Named;
 import com.scottlogic.deg.common.profile.*;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
+import com.scottlogic.deg.profile.dto.ConstraintDTO;
 import com.scottlogic.deg.profile.serialisation.ProfileDeserialiser;
 import com.scottlogic.deg.profile.dto.ProfileDTO;
 
@@ -30,8 +31,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.scottlogic.deg.profile.reader.atomic.AtomicConstraintFactory.create;
+import static com.scottlogic.deg.profile.reader.atomic.ConstraintReaderHelpers.getFieldType;
 
 /**
  * JsonProfileReader is responsible for reading and validating a profile from a path to a profile JSON file.
@@ -65,9 +68,18 @@ public class JsonProfileReader implements ProfileReader {
             throw new InvalidProfileException("Profile is invalid: 'rules' have not been defined.");
         }
 
+        //This is the types of the field that have not been set by the field def
+        Map<String, String> fieldTypes = getTypesFromConstraints(profileDto);
+
         ProfileFields profileFields = new ProfileFields(
             profileDto.fields.stream()
-                .map(fDto -> new Field(fDto.name, fDto.unique, fDto.formatting))
+                .map(fDto ->
+                    new Field(
+                        fDto.name,
+                        getFieldType(fieldTypes.getOrDefault(fDto.name, fDto.type)),
+                        fDto.unique,
+                        fDto.formatting)
+                )
                 .collect(Collectors.toList()));
 
         Collection<Rule> rules = profileDto.rules.stream().map(
@@ -94,6 +106,7 @@ public class JsonProfileReader implements ProfileReader {
         Collection<Constraint> typeRules = profileDto.fields.stream()
             .filter(fieldDTO -> fieldDTO.type != null )
             .map(fieldDTO -> create(AtomicConstraintType.IS_OF_TYPE, profileFields.getByName(fieldDTO.name), fieldDTO.type))
+            .filter(constraint -> !(constraint instanceof RemoveFromTree))
             .collect(Collectors.toList());
 
         if (typeRules.size() > 0) {
@@ -101,5 +114,29 @@ public class JsonProfileReader implements ProfileReader {
         }
 
         return new Profile(profileFields, rules, profileDto.description);
+    }
+    private Map<String, String> getTypesFromConstraints(ProfileDTO profileDto) {
+        return getTopLevelConstraintsOfType(profileDto, AtomicConstraintType.IS_OF_TYPE.getText())
+            .collect(Collectors.toMap(
+                constraintDTO -> constraintDTO.field,
+                constraintDTO -> (String)constraintDTO.value,
+                (a, b) -> a
+            ));
+    }
+
+    private Stream<ConstraintDTO> getTopLevelConstraintsOfType(ProfileDTO profileDto, String constraint) {
+        return profileDto.rules.stream()
+            .flatMap(ruleDTO -> ruleDTO.constraints.stream())
+            .flatMap(this::getConstraintOrAllOfConstraints)
+            .filter(constraintDTO -> constraintDTO.is != null)
+            .filter(constraintDTO -> constraintDTO.is.equals(constraint));
+    }
+
+    private Stream<ConstraintDTO> getConstraintOrAllOfConstraints(ConstraintDTO constraintDTO) {
+        if (constraintDTO.allOf != null){
+            return constraintDTO.allOf.stream();
+        }
+
+        return Stream.of(constraintDTO);
     }
 }

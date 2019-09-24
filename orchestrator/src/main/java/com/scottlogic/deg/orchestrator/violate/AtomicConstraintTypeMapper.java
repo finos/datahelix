@@ -24,8 +24,6 @@ public class AtomicConstraintTypeMapper {
         switch (type) {
             case IS_NULL:
                 return IsNullConstraint.class;
-            case IS_OF_TYPE:
-                return IsOfTypeConstraint.class;
             case MATCHES_REGEX:
                 return MatchesRegexConstraint.class;
             case CONTAINS_REGEX:

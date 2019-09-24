@@ -34,7 +34,6 @@ import java.util.Set;
 @JsonSubTypes({
     @JsonSubTypes.Type(value = IsInSetConstraint.class, name = "IsInSetConstraint"),
     @JsonSubTypes.Type(value = IsStringShorterThanConstraint.class, name = "IsStringShorterThanConstraint"),
-    @JsonSubTypes.Type(value = IsOfTypeConstraint.class, name = "IsOfTypeConstraint"),
     @JsonSubTypes.Type(value = NotConstraint.class, name = "NotConstraint"),
     @JsonSubTypes.Type(value = IsNullConstraint.class, name = "IsNullConstraint"),
     @JsonSubTypes.Type(value = IsLessThanConstantConstraint.class, name = "IsLessThanConstantConstraint")

@@ -18,6 +18,7 @@ package com.scottlogic.deg.profile.reader;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.date.TemporalAdjusterGenerator;
+import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.profile.constraints.delayed.DelayedAtomicConstraint;
@@ -63,12 +64,13 @@ public class MainConstraintReader {
             }
 
             AtomicConstraintType atomicConstraintType = AtomicConstraintType.fromText((String) dto.is);
+            Field field = fields.getByName(dto.field);
 
             Object value = atomicConstraintValueReader.getValue(dto);
 
-            ConstraintValueValidator.validate(dto.field, atomicConstraintType, value);
+            ConstraintValueValidator.validate(field, atomicConstraintType, value);
 
-            return AtomicConstraintFactory.create(atomicConstraintType, fields.getByName(dto.field), value);
+            return AtomicConstraintFactory.create(atomicConstraintType, field, value);
 
         }
 

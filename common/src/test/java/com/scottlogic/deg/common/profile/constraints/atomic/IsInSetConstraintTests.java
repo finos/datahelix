@@ -20,12 +20,13 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 public class IsInSetConstraintTests {
 
     @Test
     public void testConstraintThrowsIfGivenEmptySet(){
-        Field field1 = new Field("TestField");
+        Field field1 = createField("TestField");
 
         Assertions.assertThrows(
             IllegalArgumentException.class,
@@ -34,7 +35,7 @@ public class IsInSetConstraintTests {
 
     @Test
     public void testConstraintThrowsIfGivenNullInASet(){
-        Field field1 = new Field("TestField");
+        Field field1 = createField("TestField");
 
         Assertions.assertThrows(
             IllegalArgumentException.class,
@@ -43,7 +44,7 @@ public class IsInSetConstraintTests {
 
     @Test
     public void testConstraintThrowsNothingIfGivenAValidSet(){
-        Field field1 = new Field("TestField");
+        Field field1 = createField("TestField");
         Assertions.assertDoesNotThrow(
             () -> new IsInSetConstraint(field1, FrequencyDistributedSet.singleton("foo")));
     }

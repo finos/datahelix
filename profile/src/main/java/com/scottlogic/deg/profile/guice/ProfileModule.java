@@ -18,11 +18,9 @@ package com.scottlogic.deg.profile.guice;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
+import com.scottlogic.deg.profile.dto.*;
 import com.scottlogic.deg.profile.reader.JsonProfileReader;
 import com.scottlogic.deg.profile.reader.ProfileReader;
-import com.scottlogic.deg.profile.dto.ProfileSchemaValidator;
-import com.scottlogic.deg.profile.dto.SchemaVersionValidator;
-import com.scottlogic.deg.profile.dto.SupportedVersionChecker;
 
 import java.io.File;
 
@@ -39,7 +37,8 @@ public class ProfileModule extends AbstractModule {
         // Bind command line to correct implementation
         bind(ProfileConfigSource.class).toInstance(profileConfigSource);
 
-        bind(ProfileSchemaValidator.class).toProvider(ProfileSchemaValidatorProvider.class);
+        bind(ProfileSchemaValidator.class).to(ProfileSchemaValidatorLeadPony.class);
+        bind(ProfileSchemaLoader.class).toProvider(ProfileSchemaLoaderProvider.class);
         bind(SchemaVersionValidator.class).to(SupportedVersionChecker.class);
 
         bind(ProfileReader.class).to(JsonProfileReader.class);

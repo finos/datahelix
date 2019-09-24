@@ -6,7 +6,6 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
-import com.scottlogic.deg.generator.generation.grouped.FieldSpecGroupValueGenerator;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -15,20 +14,22 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.scottlogic.deg.common.profile.Types.STRING;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 class FieldSpecGroupValueGeneratorTest {
 
     @Test
     public void generate_withGroupOfSingleField_returnsCorrectStream() {
         Map<Field, FieldSpec> specMap = new HashMap<>();
-        FieldSpec firstSpec = FieldSpec.Empty;
-        Field firstField = new Field("first");
-        specMap.put(firstField, FieldSpec.Empty);
+        FieldSpec firstSpec = FieldSpec.fromType(STRING);
+        Field firstField = createField("first");
+        specMap.put(firstField, FieldSpec.fromType(STRING));
 
         FieldSpecValueGenerator underlyingGenerator = mock(FieldSpecValueGenerator.class);
         String result = "result";

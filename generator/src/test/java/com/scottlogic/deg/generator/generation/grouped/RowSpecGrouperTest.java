@@ -33,13 +33,14 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 class RowSpecGrouperTest {
 
     @Test
     void createGroups_withTwoRelatedFields_givesOneGroupOfSizeOne() {
-        Field first = new Field("first");
-        Field second = new Field("second");
+        Field first = createField("first");
+        Field second = createField("second");
         ProfileFields fields = new ProfileFields(Arrays.asList(first, second));
 
         Map<Field, FieldSpec> fieldSpecMap = fieldSpecMapOf(first, second);
@@ -56,9 +57,9 @@ class RowSpecGrouperTest {
 
     @Test
     void createGroups_withTwoAndOneFields_givesTwoGroups() {
-        Field first = new Field("first");
-        Field second = new Field("second");
-        Field third = new Field("third");
+        Field first = createField("first");
+        Field second = createField("second");
+        Field third = createField("third");
         ProfileFields fields = new ProfileFields(Arrays.asList(first, second, third));
 
         Map<Field, FieldSpec> fieldSpecMap = fieldSpecMapOf(first, second, third);
@@ -75,9 +76,9 @@ class RowSpecGrouperTest {
 
     @Test
     void createGroups_withThreeIndependentFields_givesThreeGroups() {
-        Field first = new Field("first");
-        Field second = new Field("second");
-        Field third = new Field("third");
+        Field first = createField("first");
+        Field second = createField("second");
+        Field third = createField("third");
         ProfileFields fields = new ProfileFields(Arrays.asList(first, second, third));
 
         Map<Field, FieldSpec> fieldSpecMap = fieldSpecMapOf(first, second, third);
@@ -93,9 +94,9 @@ class RowSpecGrouperTest {
 
     @Test
     void createGroups_withThreeCodependentFields_givesOneGroup() {
-        Field first = new Field("first");
-        Field second = new Field("second");
-        Field third = new Field("third");
+        Field first = createField("first");
+        Field second = createField("second");
+        Field third = createField("third");
         ProfileFields fields = new ProfileFields(Arrays.asList(first, second, third));
 
         Map<Field, FieldSpec> fieldSpecMap = fieldSpecMapOf(first, second, third);
@@ -111,9 +112,9 @@ class RowSpecGrouperTest {
 
     @Test
     void createGroups_withThreeRelatedFieldsWithACircularLink_givesOneGroup() {
-        Field first = new Field("first");
-        Field second = new Field("second");
-        Field third = new Field("third");
+        Field first = createField("first");
+        Field second = createField("second");
+        Field third = createField("third");
         ProfileFields fields = new ProfileFields(Arrays.asList(first, second, third));
 
         Map<Field, FieldSpec> fieldSpecMap = fieldSpecMapOf(first, second, third);
@@ -132,11 +133,11 @@ class RowSpecGrouperTest {
 
     @Test
     void createGroups_withFiveFields_correctlyGroups() {
-        Field first = new Field("first");
-        Field second = new Field("second");
-        Field third = new Field("third");
-        Field fourth = new Field("fourth");
-        Field fifth = new Field("fifth");
+        Field first = createField("first");
+        Field second = createField("second");
+        Field third = createField("third");
+        Field fourth = createField("fourth");
+        Field fifth = createField("fifth");
 
         ProfileFields fields = new ProfileFields(Arrays.asList(first, second, third, fourth, fifth));
 
@@ -156,8 +157,8 @@ class RowSpecGrouperTest {
 
     @Test
     void createGroups_withMultipleLinksBetweenTwoFields_givesOneGroup() {
-        Field first = new Field("first");
-        Field second = new Field("second");
+        Field first = createField("first");
+        Field second = createField("second");
 
         ProfileFields fields = new ProfileFields(Arrays.asList(first, second));
 
@@ -182,6 +183,6 @@ class RowSpecGrouperTest {
     }
 
     private static Map<Field, FieldSpec> fieldSpecMapOf(Field... fields) {
-        return Arrays.stream(fields).collect(Collectors.toMap(Function.identity(), x -> FieldSpec.Empty));
+        return Arrays.stream(fields).collect(Collectors.toMap(Function.identity(), x -> FieldSpec.fromType(x.getType())));
     }
 }

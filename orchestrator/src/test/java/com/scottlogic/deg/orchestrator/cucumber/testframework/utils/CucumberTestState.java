@@ -19,6 +19,7 @@ package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
@@ -27,6 +28,7 @@ import com.scottlogic.deg.profile.dto.ConstraintDTO;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 /**
  * Class to represent the state during cucumber test running and execution
@@ -40,8 +42,6 @@ public class CucumberTestState {
      * If true, generation is in violate mode.
      */
     public Boolean shouldViolate;
-    // Sets or unsets flag --allow-untyped-fields
-    boolean requireFieldTyping;
 
     /** If true, we inject a no-op generation engine during the test (e.g. because we're just testing profile validation) */
     private Boolean shouldSkipGeneration;
@@ -72,7 +72,6 @@ public class CucumberTestState {
         contstraintsToNotViolate.clear();
         generationHasAlreadyOccured = false;
         shouldSkipGeneration = false;
-        requireFieldTyping = true;
         shouldViolate = false;
     }
 
@@ -122,7 +121,7 @@ public class CucumberTestState {
     }
 
     public void addField(String fieldName) {
-        this.profileFields.add(new Field(fieldName));
+        this.profileFields.add(new Field(fieldName, null, false, null));
     }
 
     public void addException(Exception e){
@@ -170,17 +169,25 @@ public class CucumberTestState {
         return mapper.readerFor(ConstraintHolder.class).readValue(json);
     }
 
-    public void setRequireFieldTyping(boolean requireFieldTyping) {
-        this.requireFieldTyping = requireFieldTyping;
-    }
-
     public void setFieldUnique(String fieldName) {
         Field oldField = profileFields.stream()
             .filter(f -> f.name.equals(fieldName))
             .findFirst()
             .orElseThrow(UnsupportedOperationException::new);
 
-        Field newField = new Field(fieldName, true, oldField.getFormatting());
+        Field newField = new Field(oldField.name, oldField.type, true, oldField.getFormatting());
+
+        profileFields.remove(oldField);
+        profileFields.add(newField);
+    }
+
+    public void setFieldType(String fieldName, Types types) {
+        Field oldField = profileFields.stream()
+            .filter(f -> f.name.equals(fieldName))
+            .findFirst()
+            .orElseThrow(UnsupportedOperationException::new);
+
+        Field newField = new Field(oldField.name, types, oldField.isUnique(), oldField.getFormatting());
 
         profileFields.remove(oldField);
         profileFields.add(newField);
@@ -192,7 +199,7 @@ public class CucumberTestState {
             .findFirst()
             .orElseThrow(UnsupportedOperationException::new);
 
-        Field newField = new Field(fieldName, oldField.isUnique(), formatting);
+        Field newField = new Field(oldField.name, oldField.type, oldField.isUnique(), formatting);
 
         profileFields.remove(oldField);
         profileFields.add(newField);

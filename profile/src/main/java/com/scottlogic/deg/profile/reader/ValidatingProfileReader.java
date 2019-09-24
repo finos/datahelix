@@ -16,40 +16,61 @@
 package com.scottlogic.deg.profile.reader;
 
 import com.google.inject.Inject;
+import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.Profile;
+import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.profile.guice.ProfileConfigSource;
 import com.scottlogic.deg.profile.reader.validation.ConfigValidator;
-import com.scottlogic.deg.profile.dto.ProfileSchemaValidator;
+import com.scottlogic.deg.profile.dto.ProfileSchemaLoader;
 import com.scottlogic.deg.profile.dto.SchemaVersionValidator;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class ValidatingProfileReader {
 
     private final ProfileConfigSource configSource;
     private final ConfigValidator configValidator;
     private final ProfileReader profileReader;
-    private final ProfileSchemaValidator profileSchemaValidator;
+    private final ProfileSchemaLoader profileSchemaLoader;
     private final SchemaVersionValidator schemaVersionValidator;
 
     @Inject
     public ValidatingProfileReader(ProfileConfigSource configSource,
                                    ConfigValidator configValidator,
                                    ProfileReader profileReader,
-                                   ProfileSchemaValidator profileSchemaValidator,
+                                   ProfileSchemaLoader profileSchemaLoader,
                                    SchemaVersionValidator schemaVersionValidator) {
         this.configSource = configSource;
         this.configValidator = configValidator;
         this.profileReader = profileReader;
-        this.profileSchemaValidator = profileSchemaValidator;
+        this.profileSchemaLoader = profileSchemaLoader;
         this.schemaVersionValidator = schemaVersionValidator;
     }
 
     public Profile read() throws IOException {
         configValidator.checkProfileInputFile();
         URL schema = schemaVersionValidator.getSchemaFile();
-        profileSchemaValidator.validateProfile(configSource.getProfileFile(), schema);
-        return profileReader.read();
+        profileSchemaLoader.validateProfile(configSource.getProfileFile(), schema);
+
+        Profile profile = profileReader.read();
+
+        validateFieldsAreTyped(profile.getFields());
+        return profile;
+    }
+
+    private void validateFieldsAreTyped(ProfileFields fields) {
+        List<Field> untyped = fields.stream().filter(field -> field.type == null).collect(Collectors.toList());
+        if (untyped.size() == 1) {
+            throw new InvalidProfileException("Field [" + untyped.get(0).name + "]: is not typed; add its type to the field definition");
+        }
+        if (!untyped.isEmpty()) {
+            throw new InvalidProfileException("Fields "
+                + untyped.stream().map(f->f.name).reduce((s, z) -> s + ", " + z).get()
+                + " are not typed; add their type to the field definition");
+        }
     }
 }

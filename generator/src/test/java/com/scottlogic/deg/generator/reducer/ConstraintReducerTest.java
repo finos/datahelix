@@ -32,7 +32,6 @@ import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
 import org.hamcrest.core.Is;
-import org.hamcrest.core.IsEqual;
 import org.hamcrest.core.IsNull;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -47,7 +46,9 @@ import java.util.stream.Stream;
 
 import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
 import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
+import static com.scottlogic.deg.common.profile.Types.*;
 import static org.hamcrest.Matchers.*;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 class ConstraintReducerTest {
 
@@ -63,9 +64,9 @@ class ConstraintReducerTest {
     @Test
     void shouldProduceCorrectFieldSpecsForExample() {
         // ARRANGE
-        final Field quantityField = new Field("quantity");
-        final Field countryField = new Field("country");
-        final Field cityField = new Field("city");
+        final Field quantityField = createField("quantity", NUMERIC);
+        final Field countryField = createField("country");
+        final Field cityField = createField("city");
 
         ProfileFields fieldList = new ProfileFields(
             Arrays.asList(quantityField, countryField, cityField));
@@ -77,8 +78,7 @@ class ConstraintReducerTest {
         final List<AtomicConstraint> constraints = Arrays.asList(
             new IsGreaterThanConstantConstraint(quantityField, 0),
             new IsGreaterThanConstantConstraint(quantityField, 5).negate(),
-            new IsInSetConstraint(countryField, countryAmong),
-            new IsOfTypeConstraint(cityField, IsOfTypeConstraint.Types.STRING));
+            new IsInSetConstraint(countryField, countryAmong));
 
         // ACT
         final RowSpec reducedConstraints = constraintReducer.reduceConstraintsToRowSpec(
@@ -94,8 +94,8 @@ class ConstraintReducerTest {
         Assert.assertThat("Quantity fieldspec has no null restrictions", quantityFieldSpec.isNullable(),
             Is.is(true));
         Assert.assertThat("Fieldspec has a Numeric type constraint",
-            quantityFieldSpec.getTypeRestrictions().getAllowedTypes(),
-            containsInAnyOrder(IsOfTypeConstraint.Types.values()));
+            quantityFieldSpec.getType(),
+            is(NUMERIC));
         Assert.assertThat("Quantity fieldspec has no datetime restrictions",
             quantityFieldSpec.getDateTimeRestrictions(), Is.is(IsNull.nullValue()));
         Assert.assertThat("Quantity fieldspec has numeric restrictions", quantityFieldSpec.getNumericRestrictions(),
@@ -132,17 +132,16 @@ class ConstraintReducerTest {
             Is.is(IsNull.nullValue()));
         Assert.assertThat("City fieldspec has no numeric restrictions", cityFieldSpec.getNumericRestrictions(),
             Is.is(IsNull.nullValue()));
-        Assert.assertThat("City fieldspec has type restrictions", cityFieldSpec.getTypeRestrictions(),
+        Assert.assertThat("City fieldspec has type restrictions", cityFieldSpec.getType(),
             Is.is(IsNull.notNullValue()));
         Assert.assertThat(
-            "City fieldspec has string type restriction",
-            cityFieldSpec.getTypeRestrictions().getAllowedTypes(),
-            IsEqual.equalTo(Collections.singleton(IsOfTypeConstraint.Types.STRING)));
+            cityFieldSpec.getType(),
+            is(STRING));
     }
 
     @Test
     void shouldReduceIsGreaterThanConstantConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0", NUMERIC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsGreaterThanConstantConstraint(field, 5));
@@ -152,8 +151,8 @@ class ConstraintReducerTest {
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec has a numeric type constraint", outputSpec.getTypeRestrictions().getAllowedTypes(),
-            containsInAnyOrder(IsOfTypeConstraint.Types.values()));
+        Assert.assertThat("Fieldspec has a numeric type constraint", outputSpec.getType(),
+            is(NUMERIC));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getWhitelist(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
@@ -176,7 +175,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldReduceNegatedIsGreaterThanConstantConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0", NUMERIC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsGreaterThanConstantConstraint(field, 5).negate());
@@ -187,8 +186,8 @@ class ConstraintReducerTest {
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec has a Numeric type constraint",
-            outputSpec.getTypeRestrictions().getAllowedTypes(),
-            containsInAnyOrder(IsOfTypeConstraint.Types.values()));
+            outputSpec.getType(),
+            is(NUMERIC));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getWhitelist(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
@@ -211,7 +210,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldReduceIsGreaterThanOrEqualToConstantConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0", NUMERIC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsGreaterThanOrEqualToConstantConstraint(field, 5));
@@ -221,8 +220,8 @@ class ConstraintReducerTest {
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec has a numeric type restriction", outputSpec.getTypeRestrictions().getAllowedTypes(),
-            containsInAnyOrder(IsOfTypeConstraint.Types.values()));
+        Assert.assertThat("Fieldspec has a numeric type restriction", outputSpec.getType(),
+            is(NUMERIC));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getWhitelist(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
@@ -245,7 +244,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldReduceNegatedIsGreaterThanOrEqualToConstantConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0", NUMERIC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsGreaterThanOrEqualToConstantConstraint(field, 5).negate());
@@ -256,8 +255,8 @@ class ConstraintReducerTest {
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec has a Numeric type constraint",
-            outputSpec.getTypeRestrictions().getAllowedTypes(),
-            containsInAnyOrder(IsOfTypeConstraint.Types.values()));
+            outputSpec.getType(),
+            is(NUMERIC));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getWhitelist(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
@@ -280,7 +279,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldReduceIsLessThanConstantConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0", NUMERIC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsLessThanConstantConstraint(field, 5));
@@ -291,8 +290,8 @@ class ConstraintReducerTest {
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec has a Numeric type constraint",
-            outputSpec.getTypeRestrictions().getAllowedTypes(),
-            containsInAnyOrder(IsOfTypeConstraint.Types.values()));
+            outputSpec.getType(),
+            is(NUMERIC));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getWhitelist(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
@@ -315,7 +314,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldReduceNegatedIsLessThanConstantConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0", NUMERIC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsLessThanConstantConstraint(field, 5).negate());
@@ -325,8 +324,8 @@ class ConstraintReducerTest {
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec has a numeric type constraint", outputSpec.getTypeRestrictions().getAllowedTypes(),
-            containsInAnyOrder(IsOfTypeConstraint.Types.values()));
+        Assert.assertThat("Fieldspec has a numeric type constraint", outputSpec.getType(),
+            is(NUMERIC));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getWhitelist(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
@@ -349,7 +348,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldReduceIsLessThanOrEqualToConstantConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0", NUMERIC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsLessThanOrEqualToConstantConstraint(field, 5));
@@ -360,8 +359,8 @@ class ConstraintReducerTest {
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec has a Numeric type constraint",
-            outputSpec.getTypeRestrictions().getAllowedTypes(),
-            containsInAnyOrder(IsOfTypeConstraint.Types.values()));
+            outputSpec.getType(),
+            is(NUMERIC));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getWhitelist(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
@@ -384,7 +383,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldReduceNegatedIsLessThanOrEqualToConstantConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0", NUMERIC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
             new IsLessThanOrEqualToConstantConstraint(field, 5).negate());
@@ -394,8 +393,8 @@ class ConstraintReducerTest {
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec has a numeric type constraint", outputSpec.getTypeRestrictions().getAllowedTypes(),
-            containsInAnyOrder(IsOfTypeConstraint.Types.values()));
+        Assert.assertThat("Fieldspec has a numeric type constraint", outputSpec.getType(),
+            is(NUMERIC));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getWhitelist(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
@@ -418,7 +417,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldreduceIsAfterConstantDateTimeConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0", DATETIME);
         final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
@@ -429,8 +428,8 @@ class ConstraintReducerTest {
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec has a datetime type constraint", outputSpec.getTypeRestrictions().getAllowedTypes(),
-            containsInAnyOrder(IsOfTypeConstraint.Types.values()));
+        Assert.assertThat("Fieldspec has a datetime type constraint", outputSpec.getType(),
+            is(DATETIME));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getWhitelist(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
@@ -453,7 +452,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldreduceNegatedIsAfterConstantDateTimeConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0", DATETIME);
         final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16,0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
@@ -464,8 +463,8 @@ class ConstraintReducerTest {
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec has a datetime type constraint", outputSpec.getTypeRestrictions().getAllowedTypes(),
-            containsInAnyOrder(IsOfTypeConstraint.Types.values()));
+        Assert.assertThat("Fieldspec has a datetime type constraint", outputSpec.getType(),
+            is(DATETIME));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getWhitelist(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
@@ -488,7 +487,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldreduceIsAfterOrEqualToConstantDateTimeConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0", DATETIME);
         final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
@@ -499,8 +498,8 @@ class ConstraintReducerTest {
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec has no type restrictions", outputSpec.getTypeRestrictions().getAllowedTypes(),
-            containsInAnyOrder(IsOfTypeConstraint.Types.values()));
+        Assert.assertThat("Fieldspec has no type restrictions", outputSpec.getType(),
+            is(DATETIME));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getWhitelist(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
@@ -523,7 +522,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldreduceNegatedIsAfterOrEqualToConstantDateTimeConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0", DATETIME);
         final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
@@ -535,8 +534,8 @@ class ConstraintReducerTest {
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec has a DateTime type constraint",
-            outputSpec.getTypeRestrictions().getAllowedTypes(),
-            containsInAnyOrder(IsOfTypeConstraint.Types.values()));
+            outputSpec.getType(),
+            is(DATETIME));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getWhitelist(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
@@ -559,7 +558,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldreduceIsBeforeConstantDateTimeConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0", DATETIME);
         final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
@@ -571,8 +570,8 @@ class ConstraintReducerTest {
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec has a DateTime type constraint",
-            outputSpec.getTypeRestrictions().getAllowedTypes(),
-            containsInAnyOrder(IsOfTypeConstraint.Types.values()));
+            outputSpec.getType(),
+            is(DATETIME));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getWhitelist(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
@@ -595,7 +594,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldreduceNegatedIsBeforeConstantDateTimeConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0", DATETIME);
         final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
@@ -606,8 +605,8 @@ class ConstraintReducerTest {
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec has a datetime type constraint", outputSpec.getTypeRestrictions().getAllowedTypes(),
-            containsInAnyOrder(IsOfTypeConstraint.Types.values()));
+        Assert.assertThat("Fieldspec has a datetime type constraint", outputSpec.getType(),
+            is(DATETIME));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getWhitelist(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
@@ -630,7 +629,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldreduceIsBeforeOrEqualToConstantDateTimeConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0", DATETIME);
         final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
@@ -642,8 +641,8 @@ class ConstraintReducerTest {
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec has a DateTime type constraint",
-            outputSpec.getTypeRestrictions().getAllowedTypes(),
-            containsInAnyOrder(IsOfTypeConstraint.Types.values()));
+            outputSpec.getType(),
+            is(DATETIME));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getWhitelist(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
@@ -666,7 +665,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldreduceNegatedIsBeforeorEqualToConstantDateTimeConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0", DATETIME);
         final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
@@ -677,8 +676,8 @@ class ConstraintReducerTest {
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec has a datetime type constraint", outputSpec.getTypeRestrictions().getAllowedTypes(),
-            containsInAnyOrder(IsOfTypeConstraint.Types.values()));
+        Assert.assertThat("Fieldspec has a datetime type constraint", outputSpec.getType(),
+            is(DATETIME));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getWhitelist(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
@@ -701,7 +700,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldMergeAndReduceIsAfterConstantDateTimeConstraintWithIsBeforeConstantDateTimeConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0", DATETIME);
         final OffsetDateTime startTimestamp = OffsetDateTime.of(2013, 11, 19, 10, 43, 12, 0, ZoneOffset.UTC);
         final OffsetDateTime endTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 8, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
@@ -715,8 +714,8 @@ class ConstraintReducerTest {
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec has a DateTime type constraint",
-            outputSpec.getTypeRestrictions().getAllowedTypes(),
-            containsInAnyOrder(IsOfTypeConstraint.Types.values()));
+            outputSpec.getType(),
+            is(DATETIME));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getWhitelist(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
@@ -743,7 +742,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldReduceMatchesRegexConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0");
         String pattern = ".*\\..*";
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
@@ -755,8 +754,8 @@ class ConstraintReducerTest {
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec has a String type constraint",
-            outputSpec.getTypeRestrictions().getAllowedTypes(),
-            containsInAnyOrder(IsOfTypeConstraint.Types.values()));
+            outputSpec.getType(),
+            is(STRING));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getWhitelist(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
@@ -771,7 +770,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldReduceStringLongerThanConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0");
 
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
@@ -784,8 +783,8 @@ class ConstraintReducerTest {
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec has a String type constraint",
-            outputSpec.getTypeRestrictions().getAllowedTypes(),
-            containsInAnyOrder(IsOfTypeConstraint.Types.values()));
+            outputSpec.getType(),
+            is(STRING));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getWhitelist(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
@@ -800,7 +799,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldReduceStringShorterThanConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0");
 
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
@@ -812,8 +811,8 @@ class ConstraintReducerTest {
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec is not null", outputSpec, Is.is(IsNull.notNullValue()));
-        Assert.assertThat("Fieldspec has a string constrint", outputSpec.getTypeRestrictions().getAllowedTypes(),
-            containsInAnyOrder(IsOfTypeConstraint.Types.values()));
+        Assert.assertThat("Fieldspec has a string constrint", outputSpec.getType(),
+            is(STRING));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getWhitelist(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
@@ -828,7 +827,7 @@ class ConstraintReducerTest {
 
     @Test
     void shouldReduceStringHasLengthConstraint() {
-        final Field field = new Field("test0");
+        final Field field = createField("test0");
 
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
@@ -840,8 +839,8 @@ class ConstraintReducerTest {
         Assert.assertThat("Output is not null", testOutput, Is.is(IsNull.notNullValue()));
         FieldSpec outputSpec = testOutput.getSpecForField(field);
         Assert.assertThat("Fieldspec has a String type constraint",
-            outputSpec.getTypeRestrictions().getAllowedTypes(),
-            containsInAnyOrder(IsOfTypeConstraint.Types.values()));
+            outputSpec.getType(),
+            is(STRING));
         Assert.assertThat("Fieldspec has no set restrictions", outputSpec.getWhitelist(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("Fieldspec has no null restrictions", outputSpec.isNullable(),
@@ -857,11 +856,10 @@ class ConstraintReducerTest {
     @Test
     void whenHasNumericRestrictions_shouldFilterSet() {
 
-        final Field field = new Field("test0");
+        final Field field = createField("test0", NUMERIC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
 
         List<AtomicConstraint> constraints = Arrays.asList(
-            new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.NUMERIC),
             new IsInSetConstraint(field, new FrequencyDistributedSet<>(Stream.of(1, "lorem", 5, "ipsum", 2)
             .map(element -> new WeightedElement<Object>(element, 1.0F))
             .collect(Collectors.toSet())))
@@ -877,7 +875,7 @@ class ConstraintReducerTest {
     @Test
     void whenHasStringRestrictions_shouldOnlyFilterStringsInSet() {
 
-        final Field field = new Field("test0");
+        final Field field = createField("test0");
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
 
         OffsetDateTime datetimeValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
@@ -892,13 +890,13 @@ class ConstraintReducerTest {
 
         FieldSpec spec = testOutput.get().getSpecForField(field);
 
-        Assert.assertThat(spec.getWhitelist().set(), containsInAnyOrder("lorem", "ipsum", 1, 5, 2, datetimeValue));
+        Assert.assertThat(spec.getWhitelist().set(), containsInAnyOrder("lorem", "ipsum"));
     }
 
     @Test
     void whenHasNumericRestrictions_shouldOnlyFilterNumericValuesInSet() {
 
-        final Field field = new Field("test0");
+        final Field field = createField("test0", NUMERIC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
 
         OffsetDateTime datetimeValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
@@ -913,13 +911,13 @@ class ConstraintReducerTest {
 
         FieldSpec spec = testOutput.get().getSpecForField(field);
 
-        Assert.assertThat(spec.getWhitelist().set(), containsInAnyOrder("lorem", "ipsum", 5, 2, datetimeValue));
+        Assert.assertThat(spec.getWhitelist().set(), containsInAnyOrder( 5, 2));
     }
 
     @Test
     void whenHasDateTimeRestrictions_shouldOnlyFilterDateTimeValuesInSet() {
 
-        final Field field = new Field("test0");
+        final Field field = createField("test0", DATETIME);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
 
         OffsetDateTime datetimeValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
@@ -936,34 +934,6 @@ class ConstraintReducerTest {
 
         FieldSpec spec = testOutput.get().getSpecForField(field);
 
-        Assert.assertThat(spec.getWhitelist().set(), containsInAnyOrder("lorem", "ipsum", 1, 5, 2, oneHourLaterDateTimeValue));
-    }
-    
-    @Test
-    public void shouldReduceConstraintsCorrectlyWhereOneIsViolated(){
-        Field field = new Field("field");
-        AtomicConstraint violatedConstraint = new ViolatedAtomicConstraint(new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.STRING).negate());
-        AtomicConstraint ofLengthConstraint = new IsStringShorterThanConstraint(field, 100);
-        AtomicConstraint matchesRegexConstraint = new MatchesRegexConstraint(field, Pattern.compile("[a-z]{2,}"));
-
-        Optional<FieldSpec> result = this.constraintReducer.reduceConstraintsToFieldSpec(
-            Arrays.asList(violatedConstraint, ofLengthConstraint, matchesRegexConstraint));
-
-        Assert.assertThat(result.isPresent(), is(true));
-        Assert.assertThat(result.get().getTypeRestrictions().getAllowedTypes(), not(hasItem(IsOfTypeConstraint.Types.STRING)));
-        Assert.assertThat(result.get().getTypeRestrictions().getAllowedTypes(), not(empty()));
-    }
-
-    @Test
-    public void shouldReduceConstraintsToNullAllowedFieldSpecOnly() {
-        Field field = new Field("field");
-        AtomicConstraint ofTypeString = new IsOfTypeConstraint(field, IsOfTypeConstraint.Types.STRING);
-
-        Optional<FieldSpec> result = this.constraintReducer.reduceConstraintsToFieldSpec(
-            Arrays.asList(ofTypeString, ofTypeString.negate()));
-
-        Assert.assertThat(result.isPresent(), is(true));
-        Assert.assertThat(result.get().getWhitelist().set(), empty());
-        Assert.assertTrue(result.get().isNullable());
+        Assert.assertThat(spec.getWhitelist().set(), containsInAnyOrder(oneHourLaterDateTimeValue));
     }
 }

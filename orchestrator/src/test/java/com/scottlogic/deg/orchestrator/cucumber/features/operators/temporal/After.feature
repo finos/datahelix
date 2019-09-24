@@ -3,7 +3,7 @@ Feature: User can specify that a datetime date is after, but not equal to, a spe
   Background:
     Given the generation strategy is full
     And there is a field foo
-    And foo is of type "datetime"
+    And foo has type "datetime"
 
   Scenario: 'After' valid date is successful for a single row
     Given foo is after 2018-09-01T00:00:00.000Z

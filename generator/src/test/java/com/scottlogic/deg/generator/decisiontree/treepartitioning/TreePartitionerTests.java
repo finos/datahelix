@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.decisiontree.treepartitioning;
 
-import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.FieldBuilder;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
@@ -32,6 +32,7 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 class TreePartitionerTests {
     private static final ConstraintNode emptyConstraint
@@ -269,7 +270,7 @@ class TreePartitionerTests {
 
         if (constraint == null) {
             constraint = new IsInSetConstraint(
-                new Field(fieldName),
+                createField(fieldName),
                 new FrequencyDistributedSet<>(
                     Collections.singleton(
                         new WeightedElement<>("sample-value", 1.0F))));
@@ -286,7 +287,7 @@ class TreePartitionerTests {
     private ProfileFields fields(String... fieldNames) {
         return new ProfileFields(
             Stream.of(fieldNames)
-                .map(Field::new)
+                .map(FieldBuilder::createField)
                 .collect(Collectors.toList()));
     }
 

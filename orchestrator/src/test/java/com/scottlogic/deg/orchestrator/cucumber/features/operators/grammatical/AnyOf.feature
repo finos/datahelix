@@ -13,7 +13,7 @@ Feature: Values can be specified by using any of to set multiple constraints
         { "field": "foo", "is": "matchingRegex", "value": "[a-b]{4}" }
       ]}
       """
-    And foo is of type "string"
+    And foo has type "string"
     And foo is anything but null
     Then the following data should be generated:
       | foo     |
@@ -56,7 +56,7 @@ Feature: Values can be specified by using any of to set multiple constraints
         { "field": "foo", "is": "inSet", "values": ["Test7", "Test8", "Test9"] }
       ]}
       """
-    And foo is of type "string"
+    And foo has type "string"
     And foo is anything but null
     Then no data is created
 
@@ -69,7 +69,7 @@ Feature: Values can be specified by using any of to set multiple constraints
         { "field": "foo", "is": "greaterThanOrEqualTo", "value": 2 }
       ]}
       """
-    And foo is of type "integer"
+    And foo has type "integer"
     And foo is less than 11
     Then the following data should be generated:
       | foo  |
@@ -101,7 +101,7 @@ Feature: Values can be specified by using any of to set multiple constraints
         { "field": "foo", "is": "greaterThanOrEqualTo", "value": 2 }
       ]}
       """
-    And foo is of type "integer"
+    And foo has type "integer"
     And foo is less than 20
     Then the following data should be generated:
       | foo  |
@@ -127,7 +127,7 @@ Feature: Values can be specified by using any of to set multiple constraints
         { "field": "foo", "is": "afterOrAt", "value": { "date": "2018-10-02T00:00:00.000" } }
       ]}
       """
-    And foo is of type "datetime"
+    And foo has type "datetime"
     And foo is before 2018-10-10T00:00:00.000
     Then the following data should be generated:
       | foo                     |
@@ -158,7 +158,7 @@ Feature: Values can be specified by using any of to set multiple constraints
         { "field": "foo", "is": "afterOrAt", "value": { "date": "2018-10-04T00:00:00.000" } }
       ]}
       """
-    And foo is of type "datetime"
+    And foo has type "datetime"
     And foo is before 2018-10-09T00:00:00.000
     Then the following data should be generated:
       | foo                     |
@@ -187,7 +187,7 @@ Feature: Values can be specified by using any of to set multiple constraints
       | "333"   |
       | "4444"  |
       | "55555" |
-    And foo is of type "string"
+    And foo has type "string"
     And foo is anything but null
     Then the following data should be generated:
       | foo     |
@@ -215,7 +215,7 @@ Feature: Values can be specified by using any of to set multiple constraints
       | "333"   |
       | "4444"  |
       | "55555" |
-    And foo is of type "string"
+    And foo has type "string"
     And foo is anything but null
     Then the following data should be generated:
       | foo    |
@@ -236,7 +236,7 @@ Feature: Values can be specified by using any of to set multiple constraints
         ]}
       ]}
       """
-    And foo is of type "string"
+    And foo has type "string"
     And foo is anything but null
     Then the profile is invalid because "Field \[foo\]: ofLength constraint must have an operand/value >= 0, currently is -1"
     And no data is created
@@ -251,12 +251,12 @@ Feature: Values can be specified by using any of to set multiple constraints
         ]}
       ]}
       """
-    And foo is of type "string"
+    And foo has type "string"
     And foo is anything but null
     Then the profile is invalid because "Field \[foo\]: ofLength constraint must have an operand/value >= 0, currently is -1"
     And no data is created
 
-  Scenario: Running an 'anyOf' request that contains an invalid nested allOf request should fail with an error message
+  Scenario: Running an 'anyOf' request that contains an valid nested allOf request should generate data
     Given there is a constraint:
       """
       { "anyOf": [
@@ -267,10 +267,9 @@ Feature: Values can be specified by using any of to set multiple constraints
         ]}
       ]}
       """
-    And foo is of type "string"
+    And foo has type "string"
     And foo is in set:
       | "a"  |
-      | 1    |
       | "aa" |
       | "9"  |
       | "a1" |

@@ -16,18 +16,14 @@
 
 package com.scottlogic.deg.generator.inputs.profileviolation;
 
+import com.scottlogic.deg.common.profile.*;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.builders.*;
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
-import com.scottlogic.deg.common.profile.ViolatedProfile;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
@@ -50,6 +46,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.scottlogic.deg.generator.inputs.profileviolation.TypeEqualityHelper.assertProfileListsAreEquivalent;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 /**
  * Defines tests for all business logic involved in Profile Violation.
@@ -63,7 +60,7 @@ public class ProfileViolationTests {
     private Field field3;
     private Field field4;
     private Field field5;
-    private static final Field STATIC_FIELD = new Field("static field");
+    private static final Field STATIC_FIELD = createField("static field");
 
     private ConstraintChainBuilder<Constraint> A;
     private ConstraintChainBuilder<Constraint> B;
@@ -82,7 +79,6 @@ public class ProfileViolationTests {
         return Stream.of(
             Arguments.of(IsInSetConstraint.class, sampleSet),
             Arguments.of(IsNullConstraint.class, null),
-            Arguments.of(IsOfTypeConstraint.class, IsOfTypeConstraint.Types.STRING),
             Arguments.of(MatchesStandardConstraint.class, StandardConstraintTypes.ISIN),
 
             Arguments.of(ContainsRegexConstraint.class, Pattern.compile("\\w+")),
@@ -134,11 +130,11 @@ public class ProfileViolationTests {
             .withBeforeConstraint(STATIC_FIELD, OffsetDateTime.of(2019, 1, 15, 12, 0, 0, 0, ZoneOffset.UTC)).negate().wrapAtomicWithViolate();
 
         BaseConstraintBuilder<ConditionalConstraint> ifThenConstraintBuilder = new IfBuilder()
-            .withIf(new SingleConstraintBuilder().withOfTypeConstraint(STATIC_FIELD, IsOfTypeConstraint.Types.NUMERIC))
+            .withIf(new SingleConstraintBuilder().withGreaterThanConstraint(STATIC_FIELD, 100))
             .withThen(new SingleConstraintBuilder().withInSetConstraint(STATIC_FIELD, new Object[]{10, 100}));
 
         BaseConstraintBuilder<AndConstraint> violatedIfThenConstraintBuilder = new AndBuilder()
-            .withOfTypeConstraint(STATIC_FIELD, IsOfTypeConstraint.Types.NUMERIC)
+            .withGreaterThanConstraint(STATIC_FIELD, 100)
             .withInSetConstraint(STATIC_FIELD, new Object[]{10, 100}).negate().wrapAtomicWithViolate();
 
         BaseConstraintBuilder<ConditionalConstraint> ifThenElseConstraintBuilder = new IfBuilder()
@@ -172,17 +168,17 @@ public class ProfileViolationTests {
         constraintsToNotViolate = new ArrayList<>();
         IndividualConstraintRuleViolator ruleViolator = new IndividualConstraintRuleViolator(constraintsToNotViolate);
         profileViolator = new IndividualRuleProfileViolator(ruleViolator);
-        field1 = new Field("field1");
-        field2 = new Field("field2");
-        field3 = new Field("field3");
-        field4 = new Field("field4");
-        field5 = new Field("field5");
+        field1 = createField("field1");
+        field2 = createField("field2");
+        field3 = createField("field3");
+        field4 = createField("field4");
+        field5 = createField("field5");
 
 
         A = new SingleConstraintBuilder().withEqualToConstraint(field1, "A");
         B = new SingleConstraintBuilder().withGreaterThanConstraint(field2, 100);
         C = new SingleConstraintBuilder().withOfLengthConstraint(field3, 10);
-        D = new SingleConstraintBuilder().withOfTypeConstraint(field4, IsOfTypeConstraint.Types.NUMERIC);
+        D = new SingleConstraintBuilder().withGreaterThanConstraint(field4, 100);
         E = new SingleConstraintBuilder().withLessThanConstraint(field5, 200);
     }
 

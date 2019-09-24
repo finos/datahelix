@@ -3,7 +3,7 @@ Feature: User can specify that a value either matches or contains a specified re
   Background:
     Given the generation strategy is full
     And there is a field foo
-    And foo is of type "string"
+    And foo has type "string"
 
   Scenario: Running a 'matchingRegex' request that includes roman alphabet lowercase chars (a-z) only should be successful
     Given foo is matching regex /[a-z]{1}/
@@ -424,189 +424,15 @@ Feature: User can specify that a value either matches or contains a specified re
       | foo  |
       | null |
 
-  Scenario: matchingRegex string run against a non contradicting greaterThan should be successful
-    Given foo is matching regex /[b]{2}/
-    And foo is greater than 1
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "bb" |
-
-  Scenario: matchingRegex string run against a non contradicting not greaterThan should be successful
-    Given foo is matching regex /[b]{2}/
-    And foo is anything but greater than 1
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "bb" |
-
-  Scenario: matchingRegex string run against a non contradicting greaterThanOrEqualTo should be successful
-    Given foo is matching regex /[b]{2}/
-    And foo is greater than or equal to 1
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "bb" |
-
-  Scenario: matchingRegex string run against a non contradicting not greaterThanOrEqualTo should be successful
-    Given foo is matching regex /[b]{2}/
-    And foo is anything but greater than or equal to 1
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "bb" |
-
-  Scenario: matchingRegex string run against a non contradicting lessThan should be successful
-    Given foo is matching regex /[b]{2}/
-    And foo is less than 3
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "bb" |
-
-  Scenario: matchingRegex string run against a non contradicting not lessThan should be successful
-    Given foo is matching regex /[b]{2}/
-    And foo is anything but less than 3
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "bb" |
-
-  Scenario: matchingRegex string run against a non contradicting lessThanOrEqualTo should be successful
-    Given foo is matching regex /[b]{2}/
-    And foo is less than or equal to 3
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "bb" |
-
-  Scenario: matchingRegex string run against a non contradicting not lessThanOrEqualTo should be successful
-    Given foo is matching regex /[b]{2}/
-    And foo is anything but less than or equal to 3
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "bb" |
-
-  Scenario: Running a 'matchingRegex' request alongside a granularTo constraint should should be successful
-    Given foo is matching regex /[0-1]{2}/
-    And foo is granular to 1
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "00" |
-      | "11" |
-      | "01" |
-      | "10" |
-
-  Scenario: matchingRegex string run against a non contradicting not granularTo should be successful
-    Given foo is matching regex /[0-1]{2}/
-    And foo is anything but granular to 1
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | "00" |
-      | "11" |
-      | "01" |
-      | "10" |
-
-  Scenario: matchingRegex string run against a non contradicting after should be successful
-    Given foo is matching regex /[a-e]{2}/
-    And foo is after 2018-10-10T00:00:00.000Z
-    And the generator can generate at most 4 rows
-    Then the following data should be generated:
-      | foo  |
-      | "aa" |
-      | "ab" |
-      | "ac" |
-      | "ad" |
-
-  Scenario: matchingRegex string run against a non contradicting not after should be successful
-    Given foo is matching regex /[a-e]{2}/
-    And foo is anything but after 2018-10-10T00:00:00.000Z
-    And the generator can generate at most 4 rows
-    Then the following data should be generated:
-      | foo  |
-      | "aa" |
-      | "ab" |
-      | "ac" |
-      | "ad" |
-
-  Scenario: matchingRegex string run against a non contradicting afterOrAt should be successful
-    Given foo is matching regex /[a-e]{2}/
-    And foo is after or at 2018-10-10T00:00:00.000Z
-    And the generator can generate at most 4 rows
-    Then the following data should be generated:
-      | foo  |
-      | "aa" |
-      | "ab" |
-      | "ac" |
-      | "ad" |
-
-  Scenario: matchingRegex string run against a non contradicting not afterOrAt should be successful
-    Given foo is matching regex /[a-e]{2}/
-    And foo is anything but after or at 2018-10-10T00:00:00.000Z
-    And the generator can generate at most 4 rows
-    Then the following data should be generated:
-      | foo  |
-      | "aa" |
-      | "ab" |
-      | "ac" |
-      | "ad" |
-
-  Scenario: matchingRegex string run against a non contradicting before should be successful
-    Given foo is matching regex /[a-e]{2}/
-    And foo is before 2018-10-10T00:00:00.000Z
-    And the generator can generate at most 4 rows
-    Then the following data should be generated:
-      | foo  |
-      | "aa" |
-      | "ab" |
-      | "ac" |
-      | "ad" |
-
-  Scenario: matchingRegex string run against a non contradicting not before should be successful
-    Given foo is matching regex /[a-e]{2}/
-    And foo is anything but before 2018-10-10T00:00:00.000Z
-    And the generator can generate at most 4 rows
-    Then the following data should be generated:
-      | foo  |
-      | "aa" |
-      | "ab" |
-      | "ac" |
-      | "ad" |
-
-  Scenario: matchingRegex string run against a non contradicting beforeOrAt should be successful
-    Given foo is matching regex /[a-e]{2}/
-    And foo is before or at 2018-10-10T00:00:00.000Z
-    And the generator can generate at most 4 rows
-    Then the following data should be generated:
-      | foo  |
-      | "aa" |
-      | "ab" |
-      | "ac" |
-      | "ad" |
-
-  Scenario: matchingRegex string run against a non contradicting not beforeOrAt should be successful
-    Given foo is matching regex /[a-e]{2}/
-    And foo is before or at 2018-10-10T00:00:00.000Z
-    And the generator can generate at most 4 rows
-    Then the following data should be generated:
-      | foo  |
-      | "aa" |
-      | "ab" |
-      | "ac" |
-      | "ad" |
-
   Scenario: Running a 'matchingRegex' and 'inSet' and 'integer' request nulls are generated last
     Given there is a field bar
-    And bar is of type "string"
+    And bar has type "string"
     And the combination strategy is exhaustive
     And foo is matching regex /[a]{1}/
     And bar is in set:
       | "AA" |
     And there is a field lee
-    And lee is of type "integer"
+    And lee has type "integer"
     And lee is granular to 1
     And lee is less than 2
     And lee is greater than 0

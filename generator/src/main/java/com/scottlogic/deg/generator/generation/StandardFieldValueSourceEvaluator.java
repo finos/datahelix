@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
+import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.NullDistributedSet;
@@ -38,6 +38,7 @@ import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictio
 import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MIN_LIMIT;
 import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
 import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
+import static com.scottlogic.deg.common.profile.Types.*;
 
 public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvaluator {
     private static final CannedValuesFieldValueSource NULL_ONLY_SOURCE = setupNullOnlySource();
@@ -49,7 +50,6 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
     public List<FieldValueSource> getFieldValueSources(FieldSpec fieldSpec){
 
         if (fieldSpec.getWhitelist() != null) {
-
             List<FieldValueSource> setRestrictionSources =
                 getSetRestrictionSources(fieldSpec.getWhitelist());
             if (fieldSpec.isNullable()) {
@@ -60,19 +60,17 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
 
         List<FieldValueSource> validSources = new ArrayList<>();
 
-        TypeRestrictions typeRestrictions = fieldSpec.getTypeRestrictions() != null
-            ? fieldSpec.getTypeRestrictions()
-            : TypeRestrictions.ALL_TYPES_PERMITTED;
+        Types typeRestrictions = fieldSpec.getType();
 
-        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.NUMERIC)) {
+        if (typeRestrictions == NUMERIC) {
             validSources.add(getNumericSource(fieldSpec));
         }
 
-        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.STRING)) {
+        if (typeRestrictions == STRING) {
             validSources.add(getStringSource(fieldSpec));
         }
 
-        if (typeRestrictions.isTypeAllowed(IsOfTypeConstraint.Types.DATETIME)) {
+        if (typeRestrictions == DATETIME) {
             validSources.add(getDateTimeSource(fieldSpec));
         }
 

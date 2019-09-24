@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.scottlogic.deg.profile.reader.atomic.ConstraintReaderHelpers.getFieldType;
 import static org.hamcrest.Matchers.*;
 
 public class GeneralTestStep {
@@ -103,10 +104,7 @@ public class GeneralTestStep {
         this.state.setFieldUnique(fieldName);
     }
 
-    @And("untyped fields are allowed")
-    public void fieldCanBeUntyped() {
-        this.state.setRequireFieldTyping(false);
-    }
+
 
     @Then("^the profile should be considered valid$")
     public void theProfileIsValid() {
@@ -257,6 +255,12 @@ public class GeneralTestStep {
     @And("^(.+) has formatting \"(.+)\"$")
     public void fooHasFormattingFormat(String fieldName, String formatting) {
         state.setFieldFormatting(fieldName, formatting);
+    }
+
+    @And("^(.+) has type \"(.+)\"$")
+    public void fooHasType(String fieldName, String type) {
+        state.setFieldType(fieldName, getFieldType(type));
+        state.addConstraint(fieldName, "ofType", type);
     }
 
 

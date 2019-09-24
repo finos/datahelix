@@ -3,7 +3,7 @@ Feature: User can specify that a datetime date is lower than, or the same as, a 
   Background:
     Given the generation strategy is full
     And there is a field foo
-    And foo is of type "datetime"
+    And foo has type "datetime"
     And foo is anything but null
 
   @ignore #594 As a user I expect values to be emitted in descending order

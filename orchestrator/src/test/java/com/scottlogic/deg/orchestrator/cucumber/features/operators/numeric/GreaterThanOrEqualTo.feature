@@ -8,7 +8,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
     Given foo is greater than or equal to 0
     And the generator can generate at most 5 rows
     And foo is anything but null
-    And foo is of type "integer"
+    And foo has type "integer"
     Then the following data should be generated:
       | foo |
       | 0   |
@@ -21,7 +21,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
     Given foo is greater than or equal to 0.0
     And the generator can generate at most 5 rows
     And foo is anything but null
-    And foo is of type "decimal"
+    And foo has type "decimal"
     Then the following data should be generated:
       | foo                    |
       | 0                      |
@@ -35,7 +35,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
     Given foo is greater than or equal to -10
     And the generator can generate at most 5 rows
     And foo is anything but null
-    And foo is of type "integer"
+    And foo has type "integer"
     Then the following data should be generated:
       | foo |
       | -10 |
@@ -48,7 +48,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
     Given foo is greater than or equal to 0
     And the generator can generate at most 5 rows
     And foo is anything but null
-    And foo is of type "integer"
+    And foo has type "integer"
     Then the following data should be generated:
       | foo |
       | 0   |
@@ -77,7 +77,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
     And foo is greater than or equal to 5
     And the generator can generate at most 5 rows
     And foo is anything but null
-    And foo is of type "integer"
+    And foo has type "integer"
     Then the following data should be generated:
       | foo |
       | 5   |
@@ -89,7 +89,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
   Scenario: greaterThanOrEqualTo run against a non contradicting not greaterThanOrEqualTo should be successful
     Given foo is greater than or equal to 5
     And foo is anything but greater than or equal to 10
-    And foo is of type "integer"
+    And foo has type "integer"
     Then the following data should be generated:
       | foo  |
       | null |
@@ -104,7 +104,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
     Given foo is anything but greater than or equal to 5
     And foo is anything but greater than or equal to 5
     And the generator can generate at most 5 rows
-    And foo is of type "integer"
+    And foo has type "integer"
     Then the following data should be generated:
       | foo |
       | 4   |
@@ -117,7 +117,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
     Given foo is greater than or equal to 5
     And foo is anything but greater than or equal to 5
     And the generator can generate at most 5 rows
-    And foo is of type "integer"
+    And foo has type "integer"
     Then the following data should be generated:
       | foo  |
       | null |
@@ -125,7 +125,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
   Scenario: greaterThanOrEqualTo run against a non contradicting lessThan should be successful
     Given foo is greater than or equal to 5
     And foo is less than 10
-    And foo is of type "integer"
+    And foo has type "integer"
     Then the following data should be generated:
       | foo  |
       | null |
@@ -140,7 +140,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
     And foo is anything but less than 10
     And the generator can generate at most 5 rows
     And foo is anything but null
-    And foo is of type "integer"
+    And foo has type "integer"
     Then the following data should be generated:
       | foo |
       | 10  |
@@ -153,7 +153,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
   Scenario: not greaterThanOrEqualTo run against a non contradicting lessThan should be successful
     Given foo is anything but greater than or equal to 10
     And foo is less than 10
-    And foo is of type "integer"
+    And foo has type "integer"
     And the generator can generate at most 5 rows
     And foo is anything but null
     Then the following data should be generated:
@@ -167,7 +167,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
     Given foo is anything but greater than or equal to 10
     And foo is anything but less than 5
     And foo is anything but null
-    And foo is of type "integer"
+    And foo has type "integer"
     Then the following data should be generated:
       | foo |
       | 5   |
@@ -179,7 +179,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
   Scenario: greaterThanOrEqualTo run against a contradicting lessThan should only only generate null
     Given foo is greater than or equal to 10
     And foo is less than 10
-    And foo is of type "integer"
+    And foo has type "integer"
     Then the following data should be generated:
       | foo  |
       | null |
@@ -187,7 +187,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
   Scenario: greaterThanOrEqualTo run against a contradicting lessThan should only only generate null
     Given foo is anything but greater than or equal to 10
     And foo is anything but less than 10
-    And foo is of type "integer"
+    And foo has type "integer"
     Then the following data should be generated:
       | foo  |
       | null |
@@ -195,7 +195,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
   Scenario: greaterThanOrEqualTo run against a non contradicting lessThanOrEqualTo should be successful
     Given foo is greater than or equal to 5
     And foo is less than or equal to 10
-    And foo is of type "integer"
+    And foo has type "integer"
     Then the following data should be generated:
       | foo  |
       | null |
@@ -211,7 +211,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
     And foo is anything but less than or equal to 5
     And the generator can generate at most 5 rows
     And foo is anything but null
-    And foo is of type "integer"
+    And foo has type "integer"
     Then the following data should be generated:
       | foo |
       | 6   |
@@ -226,7 +226,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
     And foo is less than or equal to 5
     And the generator can generate at most 5 rows
     And foo is anything but null
-    And foo is of type "integer"
+    And foo has type "integer"
     Then the following data should be generated:
       | foo |
       | 4   |
@@ -239,7 +239,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
     Given foo is anything but greater than or equal to 10
     And foo is anything but less than or equal to 5
     And the generator can generate at most 5 rows
-    And foo is of type "integer"
+    And foo has type "integer"
     Then the following data should be generated:
       | foo  |
       | null |
@@ -251,7 +251,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
   Scenario: greaterThanOrEqualTo run against a contradicting lessThanOrEqualTo should only only generate null
     Given foo is greater than or equal to 6
     And foo is less than or equal to 5
-    And foo is of type "integer"
+    And foo has type "integer"
     Then the following data should be generated:
       | foo  |
       | null |
@@ -259,7 +259,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
   Scenario: not greaterThanOrEqualTo run against a contradicting not lessThanOrEqualTo should only only generate null
     Given foo is anything but greater than or equal to 5
     And foo is anything but less than or equal to 6
-    And foo is of type "integer"
+    And foo has type "integer"
     Then the following data should be generated:
       | foo  |
       | null |
@@ -267,7 +267,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
   Scenario: greaterThanOrEqualTo run against a non contradicting granularTo should be successful
     Given foo is greater than or equal to 5
     And foo is granular to 1
-    And foo is of type "integer"
+    And foo has type "integer"
     And the generator can generate at most 5 rows
     And foo is anything but null
     Then the following data should be generated:
@@ -283,7 +283,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
     And foo is anything but granular to 0.1
     And the generator can generate at most 5 rows
     And foo is anything but null
-    And foo is of type "integer"
+    And foo has type "integer"
     Then the following data should be generated:
       | foo |
       | 9   |
@@ -298,7 +298,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
     And foo is granular to 1
     And the generator can generate at most 5 rows
     And foo is anything but null
-    And foo is of type "integer"
+    And foo has type "integer"
     Then the following data should be generated:
       | foo |
       | 4   |
@@ -313,7 +313,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
     And foo is anything but granular to 0.1
     And the generator can generate at most 5 rows
     And foo is anything but null
-    And foo is of type "integer"
+    And foo has type "integer"
     Then the following data should be generated:
       | foo |
       | 4   |
@@ -321,115 +321,3 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
       | 2   |
       | 1   |
       | 0   |
-
-  Scenario: greaterThanOrEqualTo run against a non contradicting after should be successful
-    Given foo is greater than or equal to 5
-    And foo is after 2019-01-01T00:00:00.000Z
-    And the generator can generate at most 5 rows
-    And foo is anything but null
-    And foo is of type "integer"
-    Then the following data should be generated:
-      | foo |
-      | 9   |
-      | 8   |
-      | 7   |
-      | 6   |
-      | 5   |
-
-  Scenario: greaterThanOrEqualTo run against a non contradicting not after should be successful
-    Given foo is greater than or equal to 5
-    And foo is anything but after 2019-01-01T00:00:00.000Z
-    And the generator can generate at most 5 rows
-    And foo is anything but null
-    And foo is of type "integer"
-    Then the following data should be generated:
-      | foo |
-      | 9   |
-      | 8   |
-      | 7   |
-      | 6   |
-      | 5   |
-
-  Scenario: greaterThanOrEqualTo run against a non contradicting afterOrAt should be successful
-    Given foo is greater than or equal to 5
-    And foo is after or at 2019-01-01T00:00:00.000Z
-    And the generator can generate at most 5 rows
-    And foo is anything but null
-    And foo is of type "integer"
-    Then the following data should be generated:
-      | foo |
-      | 9   |
-      | 8   |
-      | 7   |
-      | 6   |
-      | 5   |
-
-  Scenario: greaterThanOrEqualTo run against a non contradicting not afterOrAt should be successful
-    Given foo is greater than or equal to 5
-    And foo is anything but after or at 2019-01-01T00:00:00.000Z
-    And the generator can generate at most 5 rows
-    And foo is anything but null
-    And foo is of type "integer"
-    Then the following data should be generated:
-      | foo |
-      | 9   |
-      | 8   |
-      | 7   |
-      | 6   |
-      | 5   |
-
-  Scenario: greaterThanOrEqualTo run against a non contradicting before should be successful
-    Given foo is greater than or equal to 5
-    And foo is before 2019-01-01T00:00:00.000Z
-    And the generator can generate at most 5 rows
-    And foo is anything but null
-    And foo is of type "integer"
-    Then the following data should be generated:
-      | foo |
-      | 9   |
-      | 8   |
-      | 7   |
-      | 6   |
-      | 5   |
-
-  Scenario: greaterThanOrEqualTo run against a non contradicting not before should be successful
-    Given foo is greater than or equal to 5
-    And foo is anything but before 2019-01-01T00:00:00.000Z
-    And the generator can generate at most 5 rows
-    And foo is anything but null
-    And foo is of type "integer"
-    Then the following data should be generated:
-      | foo |
-      | 9   |
-      | 8   |
-      | 7   |
-      | 6   |
-      | 5   |
-
-  Scenario: greaterThanOrEqualTo run against a non contradicting beforeOrAt should be successful
-    Given foo is greater than or equal to 5
-    And foo is before or at 2019-01-01T00:00:00.000Z
-    And the generator can generate at most 5 rows
-    And foo is anything but null
-    And foo is of type "integer"
-    Then the following data should be generated:
-      | foo |
-      | 9   |
-      | 8   |
-      | 7   |
-      | 6   |
-      | 5   |
-
-  Scenario: greaterThanOrEqualTo run against a non contradicting not beforeOrAt should be successful
-    Given foo is greater than or equal to 5
-    And foo is anything but before or at 2019-01-01T00:00:00.000Z
-    And the generator can generate at most 5 rows
-    And foo is anything but null
-    And foo is of type "integer"
-    Then the following data should be generated:
-      | foo |
-      | 9   |
-      | 8   |
-      | 7   |
-      | 6   |
-      | 5   |

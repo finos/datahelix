@@ -22,6 +22,7 @@ import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
+import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
@@ -169,8 +170,12 @@ public class JsonProfileReaderTests {
                         "}");
 
         expectRules(
-            ruleWithDescription("Unnamed rule"),
-            ruleWithDescription("type-rules"));
+            ruleWithDescription("Unnamed rule"));
+        expectFields(
+            field -> {
+                Assert.assertThat(field.name, equalTo("foo"));
+                Assert.assertEquals(field.getType(), Types.STRING);
+            });
     }
 
     @Test
@@ -190,8 +195,7 @@ public class JsonProfileReaderTests {
                         "}");
 
         expectRules(
-            ruleWithDescription("Too rule for school"),
-            ruleWithDescription("type-rules"));
+            ruleWithDescription("Too rule for school"));
     }
 
     @Test
@@ -243,13 +247,32 @@ public class JsonProfileReaderTests {
                 "    \"rules\": []" +
                 "}");
 
+        expectRules();
+        expectFields(
+            field -> {
+                Assert.assertThat(field.name, equalTo("foo"));
+                Assert.assertEquals(field.getType(), Types.STRING);
+            });
+    }
+
+    @Test
+    public void shouldDeserialiseIsOfTypeConstraint_whenInteger() throws IOException {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": " + schemaVersion + "," +
+                "    \"fields\": [ { \"name\": \"foo\", \"type\": \"integer\" } ]," +
+                "    \"rules\": []" +
+                "}");
+
         expectRules(
             ruleWithConstraints(
                 typedConstraint(
-                    IsOfTypeConstraint.class,
-                    c -> Assert.assertThat(
-                        c.requiredType,
-                        equalTo(IsOfTypeConstraint.Types.STRING)))));
+                    IsGranularToNumericConstraint.class,
+                    c -> {
+                        Assert.assertThat(
+                            c.granularity.getNumericGranularity(),
+                            equalTo(new BigDecimal(1)));
+                    })));
     }
 
     @Test
@@ -275,8 +298,7 @@ public class JsonProfileReaderTests {
                     EqualToConstraint.class,
                     c -> Assert.assertThat(
                         c.value,
-                        equalTo("equal")))),
-            ruleWithDescription("type-rules"));
+                        equalTo("equal")))));
 
     }
 
@@ -320,8 +342,7 @@ public class JsonProfileReaderTests {
             ruleWithConstraints(
                 typedConstraint(
                     StringHasLengthConstraint.class,
-                    c -> Assert.assertThat(c.referenceValue, equalTo(5)))),
-            ruleWithDescription("type-rules"));
+                    c -> Assert.assertThat(c.referenceValue, equalTo(5)))));
     }
 
     @Test
@@ -348,8 +369,7 @@ public class JsonProfileReaderTests {
                                     Assert.assertThat(
                                             c.negatedConstraint,
                                             instanceOf(EqualToConstraint.class));
-                                })),
-            ruleWithDescription("type-rules"));
+                                })));
     }
 
     @Test
@@ -363,7 +383,7 @@ public class JsonProfileReaderTests {
                         "        \"constraints\": [" +
                         "          {" +
                         "            \"anyOf\": [" +
-                        "              { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"1\" }," +
+                        "              { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": 1 }," +
                         "              { \"field\": \"foo\", \"is\": \"null\" }" +
                         "            ]" +
                         "          }" +
@@ -378,8 +398,7 @@ public class JsonProfileReaderTests {
                     OrConstraint.class,
                     c -> Assert.assertThat(
                         c.subConstraints.size(),
-                        equalTo(2)))),
-            ruleWithDescription("type-rules"));
+                        equalTo(2)))));
     }
 
     @Test
@@ -393,7 +412,7 @@ public class JsonProfileReaderTests {
                         "        \"constraints\": [" +
                         "          {" +
                         "           \"allOf\": [" +
-                        "             { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"1\" }," +
+                        "             { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": 1 }," +
                         "             { \"field\": \"foo\", \"is\": \"null\" }" +
                         "            ]" +
                         "          }" +
@@ -408,8 +427,7 @@ public class JsonProfileReaderTests {
                     AndConstraint.class,
                     c -> Assert.assertThat(
                         c.getSubConstraints().size(),
-                        equalTo(2)))),
-            ruleWithDescription("type-rules"));
+                        equalTo(2)))));
     }
 
     @Test
@@ -424,7 +442,7 @@ public class JsonProfileReaderTests {
                         "          {" +
                         "            \"if\": { \"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"string\" }," +
                         "            \"then\": { \"field\": \"foo\", \"is\": \"inSet\", \"values\": [ \"str!\" ] }," +
-                        "            \"else\": { \"field\": \"foo\", \"is\": \"greaterThan\", \"value\": 3 }" +
+                        "            \"else\": { \"field\": \"foo\", \"is\": \"longerThan\", \"value\": 3 }" +
                         "          }" +
                         "        ]" +
                         "      }" +
@@ -446,9 +464,8 @@ public class JsonProfileReaderTests {
 
                                     Assert.assertThat(
                                             c.whenConditionIsFalse,
-                                            instanceOf(IsGreaterThanConstantConstraint.class));
-                                })),
-            ruleWithDescription("type-rules"));
+                                            instanceOf(IsStringLongerThanConstraint.class));
+                                })));
     }
 
     @Test
@@ -456,7 +473,7 @@ public class JsonProfileReaderTests {
         givenJson(
                 "{" +
                         "    \"schemaVersion\": " + schemaVersion + "," +
-                        "    \"fields\": [ { \"name\": \"foo\", \"type\": \"integer\" } ]," +
+                        "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\" } ]," +
                         "    \"rules\": [" +
                         "      {" +
                         "        \"constraints\": [" +
@@ -485,8 +502,7 @@ public class JsonProfileReaderTests {
                                     Assert.assertThat(
                                             c.whenConditionIsFalse,
                                             nullValue());
-                                })),
-            ruleWithDescription("type-rules"));
+                                })));
     }
 
     @Test
@@ -512,8 +528,7 @@ public class JsonProfileReaderTests {
                         Assert.assertThat(
                             c.granularity.getNumericGranularity(),
                             equalTo(new BigDecimal(1)));
-                    })),
-            ruleWithDescription("type-rules"));
+                    })));
     }
 
     @Test
@@ -539,8 +554,7 @@ public class JsonProfileReaderTests {
                         Assert.assertThat(
                             c.granularity.getNumericGranularity(),
                             equalTo(BigDecimal.valueOf(0.1)));
-                    })),
-            ruleWithDescription("type-rules"));
+                    })));
     }
 
     @Test
@@ -566,8 +580,7 @@ public class JsonProfileReaderTests {
                         Assert.assertThat(
                             c.granularity.getNumericGranularity(),
                             equalTo(BigDecimal.valueOf(0.1)));
-                    })),
-            ruleWithDescription("type-rules"));
+                    })));
     }
 
     @Test
@@ -587,24 +600,19 @@ public class JsonProfileReaderTests {
                 "}");
 
         expectRules(
-            ruleWithConstraints(
-
-                typedConstraint(
-                    IsBeforeConstantDateTimeConstraint.class,
-                    c -> {
-                        Assert.assertThat(
-                            c.referenceValue,
-                            equalTo(OffsetDateTime.parse("2019-01-03T00:00:00.000Z")));
-                    }),
-                typedConstraint(
-                    IsAfterOrEqualToConstantDateTimeConstraint.class,
-                    c -> {
-                        Assert.assertThat(
-                            c.referenceValue,
-                            equalTo(OffsetDateTime.parse("2019-01-01T00:00:00.000Z")));
-                    })
-            ),
-            ruleWithDescription("type-rules")
+            rule -> {
+                // This is different because the ordering would switch depending on if the whole file was run or just this test
+                IsAfterOrEqualToConstantDateTimeConstraint isAfter = (IsAfterOrEqualToConstantDateTimeConstraint) rule.getConstraints().stream()
+                    .filter(f -> f.getClass() == IsAfterOrEqualToConstantDateTimeConstraint.class)
+                    .findFirst()
+                    .get();
+                IsBeforeConstantDateTimeConstraint isBefore = (IsBeforeConstantDateTimeConstraint) rule.getConstraints().stream()
+                    .filter(f -> f.getClass() == IsBeforeConstantDateTimeConstraint.class)
+                    .findFirst()
+                    .get();
+                Assert.assertEquals(OffsetDateTime.parse("2019-01-01T00:00:00.000Z"), isAfter.referenceValue);
+                Assert.assertEquals(OffsetDateTime.parse("2019-01-03T00:00:00.000Z"), isBefore.referenceValue);
+            }
         );
     }
 
@@ -1022,6 +1030,127 @@ public class JsonProfileReaderTests {
                 )
             ),
             ruleWithDescription("type-rules")
+        );
+    }
+
+    @Test
+    public void type_setsFieldTypeProperty_whenSetInFieldDefinition() throws IOException  {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": " + schemaVersion + "," +
+                "    \"fields\": [ { " +
+                "       \"name\": \"foo\" ," +
+                "       \"type\": \"decimal\"" +
+                "    }, { " +
+                "       \"name\": \"bar\" ," +
+                "       \"type\": \"string\"" +
+                "    }]," +
+                "    \"rules\": []" +
+                "}");
+
+        expectFields(
+            field -> {
+                Assert.assertThat(field.type, equalTo(Types.NUMERIC));
+            },
+            field -> {
+                Assert.assertThat(field.type, equalTo(Types.STRING));
+            }
+        );
+        expectRules();
+    }
+
+    @Test
+    public void type_setsFieldTypeProperty_whenSetInConstraintDefinition() throws IOException  {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": " + schemaVersion + "," +
+                "    \"fields\": [ { " +
+                "       \"name\": \"foo\"" +
+                "    }, { " +
+                "       \"name\": \"bar\" ," +
+                "       \"type\": \"string\"" +
+                "    }]," +
+                "    \"rules\": [" +
+                "       {" +
+                "        \"rule\": \"fooRule\"," +
+                "        \"constraints\": [{ \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"decimal\" }]" +
+                "       }" +
+                "    ]" +
+                "}");
+
+        expectFields(
+            field -> {
+                Assert.assertThat(field.type, equalTo(Types.NUMERIC));
+            },
+            field -> {
+                Assert.assertThat(field.type, equalTo(Types.STRING));
+            }
+        );
+    }
+
+    @Test
+    public void type_setsFieldTypeProperty_whenSetInNestedConstraintDefinition() throws IOException {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": " + schemaVersion + "," +
+                "    \"fields\": [ { " +
+                "       \"name\": \"foo\"" +
+                "    }, { " +
+                "       \"name\": \"bar\" ," +
+                "       \"type\": \"string\"" +
+                "    }]," +
+                "    \"rules\": [" +
+                "       {" +
+                "        \"rule\": \"fooRule\"," +
+                "        \"constraints\": [" +
+                "           { \"allOf\": [" +
+                "             { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"decimal\" }," +
+                "             { \"not\": { \"field\": \"foo\", \"is\": \"null\" } }" +
+                "            ] }" +
+                "          ]" +
+                "       }" +
+                "    ]" +
+                "}");
+
+        expectFields(
+            field -> {
+                Assert.assertThat(field.type, equalTo(Types.NUMERIC));
+            },
+            field -> {
+                Assert.assertThat(field.type, equalTo(Types.STRING));
+            }
+        );
+    }
+
+    @Test
+    public void type_setsFieldTypeProperty_whenSetInMultipleConstraintDefinitions() throws IOException {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": " + schemaVersion + "," +
+                "    \"fields\": [ { " +
+                "       \"name\": \"foo\"" +
+                "    }, { " +
+                "       \"name\": \"bar\" ," +
+                "       \"type\": \"string\"" +
+                "    }]," +
+                "    \"rules\": [" +
+                "       {" +
+                "        \"rule\": \"fooRule\"," +
+                "        \"constraints\": [" +
+                "           { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"decimal\" }," +
+                "           { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"datetime\" }" +
+                "          ]" +
+                "       }" +
+                "    ]" +
+                "}");
+
+        expectFields(
+            field -> {
+                Assert.assertThat(field.type, equalTo(Types.NUMERIC));
+            },
+            field -> {
+                Assert.assertThat(field.type, equalTo(Types.STRING));
+            }
         );
     }
 }

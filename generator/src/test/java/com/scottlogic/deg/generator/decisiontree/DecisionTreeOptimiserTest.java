@@ -25,16 +25,17 @@ import java.util.Collections;
 import static com.scottlogic.deg.generator.builders.TestConstraintNodeBuilder.constraintNode;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 class DecisionTreeOptimiserTest {
 
     DecisionTreeOptimiser optimiser = new DecisionTreeOptimiser();
-    Field A = new Field("A");
-    Field B = new Field("B");
-    Field C = new Field("C");
-    Field D = new Field("D");
-    Field E = new Field("E");
-    Field F = new Field("F");
+    Field A = createField("A");
+    Field B = createField("B");
+    Field C = createField("C");
+    Field D = createField("D");
+    Field E = createField("E");
+    Field F = createField("F");
 
     @Test
     public void optimise_circularDependency(){

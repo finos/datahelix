@@ -20,13 +20,12 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scottlogic.deg.common.ValidationException;
 import com.worldturner.medeia.api.SchemaSource;
-import com.worldturner.medeia.api.UrlSchemaSource;
+import com.worldturner.medeia.api.StringSchemaSource;
 import com.worldturner.medeia.api.ValidationFailedException;
 import com.worldturner.medeia.api.jackson.MedeiaJacksonApi;
 import com.worldturner.medeia.schema.validation.SchemaValidator;
 
 import java.io.*;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,39 +35,21 @@ public class ProfileSchemaValidatorMedeia implements ProfileSchemaValidator {
     private static ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public void validateProfile(File profileFile, URL schema) {
-        try {
-            validateProfile(schema, new FileInputStream(profileFile));
-        } catch (FileNotFoundException e) {
-            throw new ValidationException(e.getLocalizedMessage());
-        }
-    }
-
-    private void validateProfile(URL schema, InputStream profileStream) {
+    public void validateProfile(String profile, String schema) {
         List<String> errorMessages = new ArrayList<>();
-        if (schema == null) {
-            errorMessages.add("Null Schema");
-        } else if (profileStream == null) {
-            errorMessages.add("Null Profile Stream");
-        } else {
-            try {
-                SchemaValidator validator = loadSchema(schema);
+        try {
+            SchemaSource source = new StringSchemaSource(schema);
+            SchemaValidator validator = api.loadSchema(source);
 
-                JsonParser unvalidatedParser = objectMapper.getFactory().createParser(profileStream);
-                JsonParser validatedParser = api.decorateJsonParser(validator, unvalidatedParser);
-                api.parseAll(validatedParser);
-            } catch (ValidationFailedException | IOException e) {
-                errorMessages.add("Exception validating profile:" + e);
-            }
+            JsonParser unvalidatedParser = objectMapper.getFactory().createParser(profile);
+            JsonParser validatedParser = api.decorateJsonParser(validator, unvalidatedParser);
+            api.parseAll(validatedParser);
+        } catch (ValidationFailedException | IOException e) {
+            errorMessages.add("Exception validating profile:" + e);
         }
 
         if (!errorMessages.isEmpty()) {
             throw new ValidationException(errorMessages);
         }
-    }
-
-    private SchemaValidator loadSchema(URL schema) {
-        SchemaSource source = new UrlSchemaSource(schema);
-        return api.loadSchema(source);
     }
 }
