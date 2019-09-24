@@ -19,7 +19,6 @@ package com.scottlogic.deg.profile.reader.file.names;
 import com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.profile.reader.file.CsvInputStreamReader;
 
 import java.io.IOException;
@@ -46,7 +45,7 @@ public final class NameRetriever {
     }
 
     private static <T> DistributedSet<Object> downcastToObject(DistributedSet<T> higher) {
-        return new FrequencyDistributedSet<>(
+        return new DistributedSet<>(
             higher.distributedSet().stream()
                 .map(holder -> new WeightedElement<Object>(holder.element(), holder.weight()))
                 .collect(Collectors.toSet()));
@@ -67,7 +66,7 @@ public final class NameRetriever {
 
     private static DistributedSet<String> combineFirstWithLastNames(DistributedSet<String> firstNames,
                                                                     DistributedSet<String> lastNames) {
-        return new FrequencyDistributedSet<>(firstNames.distributedSet().stream()
+        return new DistributedSet<>(firstNames.distributedSet().stream()
             .flatMap(
                 first -> lastNames.distributedSet().stream()
                     .map(last -> mergeFrequencies(first, last))

@@ -20,7 +20,7 @@ import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsGreaterThanConstantConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,7 +48,7 @@ public class ConstraintTypeViolationFilterTests {
         //Arrange
         Constraint inputConstraint = new IsInSetConstraint(
             null,
-            new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>("", 1.0F))));
+            new DistributedSet<>(Collections.singleton(new WeightedElement<>("", 1.0F))));
 
         //Act
         boolean actual = target.canViolate(inputConstraint);

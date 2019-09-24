@@ -22,8 +22,7 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsNullConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -42,14 +41,14 @@ public class ConstraintBuilder {
 
     public ConstraintBuilder addInSetConstraint(String fieldname, List<Object> values) {
         constraints.add(new IsInSetConstraint(fields.get(fieldname),
-            FrequencyDistributedSet.uniform(values)));
+            DistributedSet.uniform(values)));
         return this;
     }
 
     public ConstraintBuilder addEqualToConstraint(String fieldname, Object value) {
         constraints.add(new IsInSetConstraint(
             fields.get(fieldname),
-            FrequencyDistributedSet.singleton(value)));
+            DistributedSet.singleton(value)));
         return this;
     }
 

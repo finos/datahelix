@@ -26,7 +26,6 @@ import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,7 +38,7 @@ import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 class ConstraintToFieldMapperTests {
 
     private DistributedSet<Object> whitelistOf(Object element) {
-        return new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>(element, 1.0F)));
+        return new DistributedSet<>(Collections.singleton(new WeightedElement<>(element, 1.0F)));
     }
 
     @Test

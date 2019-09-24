@@ -31,8 +31,8 @@ import com.scottlogic.deg.common.profile.constraints.grammatical.NegatedGrammati
 import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.decisiontree.testutils.*;
 import com.scottlogic.deg.common.profile.RuleInformation;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.Assert;
@@ -117,7 +117,7 @@ class DecisionTreeFactoryTests {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
         IsInSetConstraint constraint0 = new IsInSetConstraint(
             inputFieldList.get(0),
-            new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>(10, 1.0F))));
+            new DistributedSet<>(Collections.singleton(new WeightedElement<>(10, 1.0F))));
         IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
         MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
         Rule testRule = new Rule(rule("test"), Arrays.asList(constraint0, constraint1, constraint2));
@@ -139,7 +139,7 @@ class DecisionTreeFactoryTests {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
         IsInSetConstraint constraint0 = new IsInSetConstraint(
             inputFieldList.get(0),
-            new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>(10, 1.0F))));
+            new DistributedSet<>(Collections.singleton(new WeightedElement<>(10, 1.0F))));
         IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
         MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
         List<Constraint> inputConstraints = Arrays.asList(constraint0, constraint1, constraint2);
@@ -162,7 +162,7 @@ class DecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithNoDecisions_IfProfileContainsOnlyAtomicConstraintsAndAndConstraints() {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
-        IsInSetConstraint constraint0 = new IsInSetConstraint(inputFieldList.get(0), new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>(10, 1.0F))));
+        IsInSetConstraint constraint0 = new IsInSetConstraint(inputFieldList.get(0), new DistributedSet<>(Collections.singleton(new WeightedElement<>(10, 1.0F))));
         IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
         AndConstraint andConstraint0 = new AndConstraint(Arrays.asList(constraint0, constraint1));
         MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
@@ -182,7 +182,7 @@ class DecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithAllAtomicConstraintsInAtomicConstraintsCollection_IfProfileContainsOnlyAtomicConstraintsAndAndConstraints() {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
-        IsInSetConstraint constraint0 = new IsInSetConstraint(inputFieldList.get(0), new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>(10, 1.0F))));
+        IsInSetConstraint constraint0 = new IsInSetConstraint(inputFieldList.get(0), new DistributedSet<>(Collections.singleton(new WeightedElement<>(10, 1.0F))));
         IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
         AndConstraint andConstraint0 = new AndConstraint(Arrays.asList(constraint0, constraint1));
         MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
@@ -207,15 +207,15 @@ class DecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithDecisionForEachOrConstraint() {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
-        IsInSetConstraint constraint0 = new IsInSetConstraint(inputFieldList.get(0), new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>(10, 1.0F))));
+        IsInSetConstraint constraint0 = new IsInSetConstraint(inputFieldList.get(0), new DistributedSet<>(Collections.singleton(new WeightedElement<>(10, 1.0F))));
         IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
         OrConstraint orConstraint0 = new OrConstraint(Arrays.asList(constraint0, constraint1));
         IsInSetConstraint constraint2 = new IsInSetConstraint(
             inputFieldList.get(1),
-            new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>("steam", 1.0F))));
+            new DistributedSet<>(Collections.singleton(new WeightedElement<>("steam", 1.0F))));
         IsInSetConstraint constraint3 = new IsInSetConstraint(
             inputFieldList.get(1),
-            new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>("diesel", 1.0F))));
+            new DistributedSet<>(Collections.singleton(new WeightedElement<>("diesel", 1.0F))));
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraint2, constraint3));
         Rule testRule = new Rule(rule("test"), Arrays.asList(orConstraint0, orConstraint1));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
@@ -232,15 +232,15 @@ class DecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithNoAtomicConstraints_IfAllAtomicConstraintsInProfileAreChildrenOfOrConstraints() {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
-        IsInSetConstraint constraintA = new IsInSetConstraint(inputFieldList.get(0), new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>(10, 1.0F))));
+        IsInSetConstraint constraintA = new IsInSetConstraint(inputFieldList.get(0), new DistributedSet<>(Collections.singleton(new WeightedElement<>(10, 1.0F))));
         IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
         OrConstraint orConstraint0 = new OrConstraint(Arrays.asList(constraintA, constraintB));
         IsInSetConstraint constraintC = new IsInSetConstraint(
             inputFieldList.get(1),
-            new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>("steam", 1.0F))));
+            new DistributedSet<>(Collections.singleton(new WeightedElement<>("steam", 1.0F))));
         IsInSetConstraint constraintD = new IsInSetConstraint(
             inputFieldList.get(1),
-            new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>("diesel", 1.0F))));
+            new DistributedSet<>(Collections.singleton(new WeightedElement<>("diesel", 1.0F))));
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraintC, constraintD));
         Rule testRule = new Rule(rule("test"), Arrays.asList(orConstraint0, orConstraint1));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
@@ -257,15 +257,15 @@ class DecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfAllAtomicConstraintsInProfileAreChildrenOfOrConstraints() {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
-        IsInSetConstraint constraintA = new IsInSetConstraint(inputFieldList.get(0), new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>(10, 1.0F))));
+        IsInSetConstraint constraintA = new IsInSetConstraint(inputFieldList.get(0), new DistributedSet<>(Collections.singleton(new WeightedElement<>(10, 1.0F))));
         IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
         OrConstraint orConstraint0 = new OrConstraint(Arrays.asList(constraintA, constraintB));
         IsInSetConstraint constraintC = new IsInSetConstraint(
             inputFieldList.get(1),
-            new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>("steam", 1.0F))));
+            new DistributedSet<>(Collections.singleton(new WeightedElement<>("steam", 1.0F))));
         IsInSetConstraint constraintD = new IsInSetConstraint(
             inputFieldList.get(1),
-            new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>("diesel", 1.0F))));
+            new DistributedSet<>(Collections.singleton(new WeightedElement<>("diesel", 1.0F))));
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraintC, constraintD));
         Rule testRule = new Rule(rule("test"), Arrays.asList(orConstraint0, orConstraint1));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
@@ -293,17 +293,17 @@ class DecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfAllAtomicConstraintsInProfileAreChildrenOfOrAndAndConstraints() {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
-        IsInSetConstraint constraintA = new IsInSetConstraint(inputFieldList.get(0), new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>(10, 1.0F))));
+        IsInSetConstraint constraintA = new IsInSetConstraint(inputFieldList.get(0), new DistributedSet<>(Collections.singleton(new WeightedElement<>(10, 1.0F))));
         IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 0);
         IsGreaterThanConstantConstraint constraintC = new IsGreaterThanConstantConstraint(inputFieldList.get(0), 5);
         AndConstraint andConstraint0 = new AndConstraint(Arrays.asList(constraintC, constraintB));
         OrConstraint orConstraint0 = new OrConstraint(Arrays.asList(constraintA, andConstraint0));
         IsInSetConstraint constraintD = new IsInSetConstraint(
             inputFieldList.get(1),
-            new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>("steam", 1.0F))));
+            new DistributedSet<>(Collections.singleton(new WeightedElement<>("steam", 1.0F))));
         IsInSetConstraint constraintE = new IsInSetConstraint(
             inputFieldList.get(1),
-            new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>("diesel", 1.0F))));
+            new DistributedSet<>(Collections.singleton(new WeightedElement<>("diesel", 1.0F))));
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraintD, constraintE));
         Rule testRule = new Rule(rule("test"), Arrays.asList(orConstraint0, orConstraint1));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
@@ -331,7 +331,7 @@ class DecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfConditionalConstraintIsPresent() {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
-        IsInSetConstraint constraintA = new IsInSetConstraint(inputFieldList.get(0), new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>(10, 1.0F))));
+        IsInSetConstraint constraintA = new IsInSetConstraint(inputFieldList.get(0), new DistributedSet<>(Collections.singleton(new WeightedElement<>(10, 1.0F))));
         IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 10);
         IsGreaterThanConstantConstraint constraintC = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 20);
         ConditionalConstraint conditionalConstraint = new ConditionalConstraint(constraintA, constraintB, constraintC);
@@ -361,7 +361,7 @@ class DecisionTreeFactoryTests {
     // Checks IF (A OR B) THEN C
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfConditionalConstraintWithNestedOrIsPresent() {
-        AtomicConstraint aEquals10 = new IsInSetConstraint(fieldA, new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>(10, 1.0F))));
+        AtomicConstraint aEquals10 = new IsInSetConstraint(fieldA, new DistributedSet<>(Collections.singleton(new WeightedElement<>(10, 1.0F))));
         AtomicConstraint aGreaterThan10 = new IsGreaterThanConstantConstraint(fieldA, 10);
         AtomicConstraint bGreaterThan20 = new IsGreaterThanConstantConstraint(fieldB, 20);
 
@@ -393,7 +393,7 @@ class DecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfNegatedConditionalConstraintIsPresent() {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
-        IsInSetConstraint constraintA = new IsInSetConstraint(inputFieldList.get(0), new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>(10, 1.0F))));
+        IsInSetConstraint constraintA = new IsInSetConstraint(inputFieldList.get(0), new DistributedSet<>(Collections.singleton(new WeightedElement<>(10, 1.0F))));
         IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 20);
         IsGreaterThanConstantConstraint constraintC = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 10);
         ConditionalConstraint conditionalConstraint = new ConditionalConstraint(constraintA, constraintB, constraintC);
@@ -429,7 +429,7 @@ class DecisionTreeFactoryTests {
         // is equivalent to
         // A ^ ¬B
 
-        AtomicConstraint aEqualTo10 = new IsInSetConstraint(fieldA, new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>(10, 1.0F))));
+        AtomicConstraint aEqualTo10 = new IsInSetConstraint(fieldA, new DistributedSet<>(Collections.singleton(new WeightedElement<>(10, 1.0F))));
         AtomicConstraint bGreaterThan20 = new IsGreaterThanConstantConstraint(fieldB, 20);
 
         Constraint inputRule = new ConditionalConstraint(aEqualTo10, bGreaterThan20).negate();
@@ -449,7 +449,7 @@ class DecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfDoubleNegationIsPresent() {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
-        IsInSetConstraint constraintA = new IsInSetConstraint(inputFieldList.get(0), new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>(10, 1.0F))));
+        IsInSetConstraint constraintA = new IsInSetConstraint(inputFieldList.get(0), new DistributedSet<>(Collections.singleton(new WeightedElement<>(10, 1.0F))));
         Constraint notConstraint0 = constraintA.negate();
         Constraint notConstraint1 = notConstraint0.negate();
         Rule testRule = new Rule(rule("test"), Collections.singletonList(notConstraint1));
@@ -472,7 +472,7 @@ class DecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfNegatedAndIsPresent() {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
-        IsInSetConstraint constraintA = new IsInSetConstraint(inputFieldList.get(0), new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>(10, 1.0F))));
+        IsInSetConstraint constraintA = new IsInSetConstraint(inputFieldList.get(0), new DistributedSet<>(Collections.singleton(new WeightedElement<>(10, 1.0F))));
         IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(1), 5);
         NegatedGrammaticalConstraint notConstraint = (NegatedGrammaticalConstraint) new AndConstraint(Arrays.asList(constraintA, constraintB)).negate();
         Rule testRule = new Rule(rule("test"), Collections.singletonList(notConstraint));
@@ -497,7 +497,7 @@ class DecisionTreeFactoryTests {
     // (A OR B) OR C
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfNestedOrsArePresent() {
-        AtomicConstraint constraintA = new IsInSetConstraint(fieldA, new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>(10, 1.0F))));
+        AtomicConstraint constraintA = new IsInSetConstraint(fieldA, new DistributedSet<>(Collections.singleton(new WeightedElement<>(10, 1.0F))));
         AtomicConstraint constraintB = new IsGreaterThanConstantConstraint(fieldB, 20);
         AtomicConstraint constraintC = new IsGreaterThanConstantConstraint(fieldB, 10);
 

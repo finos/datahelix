@@ -21,7 +21,6 @@ import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsNullConstraint;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.utils.SetUtils;
 
 public class TestAtomicConstraintBuilder {
@@ -34,7 +33,7 @@ public class TestAtomicConstraintBuilder {
     }
 
     private DistributedSet<Object> whitelistOf(Object... values) {
-        return FrequencyDistributedSet.uniform(SetUtils.setOf(values));
+        return DistributedSet.uniform(SetUtils.setOf(values));
     }
 
     public TestConstraintNodeBuilder isInSet(Object... legalValues) {
