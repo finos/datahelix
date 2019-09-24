@@ -52,30 +52,6 @@ class DateTimeRestrictionsTests {
     }
 
     @Test
-    public void shouldBeUnequalIfOnlyMinMatches(){
-        DateTimeRestrictions a = restrictions(new MockDateTimeLimit(true), new MockDateTimeLimit(false));
-        DateTimeRestrictions b = restrictions(new MockDateTimeLimit(true), new MockDateTimeLimit(false));
-
-        Assert.assertThat(a, not(equalTo(b)));
-    }
-
-    @Test
-    public void shouldBeUnequalIfOnlyMaxMatches(){
-        DateTimeRestrictions a = restrictions(new MockDateTimeLimit(false), new MockDateTimeLimit(true));
-        DateTimeRestrictions b = restrictions(new MockDateTimeLimit(false), new MockDateTimeLimit(true));
-
-        Assert.assertThat(a, not(equalTo(b)));
-    }
-
-    @Test
-    public void shouldBeUnequalIfNeitherMinNorMaxMatch(){
-        DateTimeRestrictions a = restrictions(new MockDateTimeLimit(false), new MockDateTimeLimit(false));
-        DateTimeRestrictions b = restrictions(new MockDateTimeLimit(false), new MockDateTimeLimit(false));
-
-        Assert.assertThat(a, not(equalTo(b)));
-    }
-
-    @Test
     public void DateTimeLimitShouldBeEqualIfInclusiveAndLimitMatch(){
        Limit<OffsetDateTime> a = new Limit<>(OffsetDateTime.MIN, true);
        Limit<OffsetDateTime>b = new Limit<>(OffsetDateTime.MIN, true);
@@ -425,7 +401,7 @@ class DateTimeRestrictionsTests {
         private final boolean equalToOther;
 
         public MockDateTimeLimit(boolean equalToOther) {
-            super(OffsetDateTime.MIN, true);
+            super(Defaults.ISO_MAX_DATE, true);
             this.equalToOther = equalToOther;
         }
 
