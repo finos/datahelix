@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
+import com.scottlogic.deg.common.profile.Types;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -40,8 +40,8 @@ public class NumericRestrictions extends AbstractTypedRestrictions {
     }
 
     @Override
-    protected IsOfTypeConstraint.Types getType() {
-        return IsOfTypeConstraint.Types.NUMERIC;
+    protected Types getType() {
+        return Types.NUMERIC;
     }
 
     @Override

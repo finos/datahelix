@@ -106,6 +106,7 @@ public class JsonProfileReader implements ProfileReader {
         Collection<Constraint> typeRules = profileDto.fields.stream()
             .filter(fieldDTO -> fieldDTO.type != null )
             .map(fieldDTO -> create(AtomicConstraintType.IS_OF_TYPE, profileFields.getByName(fieldDTO.name), fieldDTO.type))
+            .filter(constraint -> !(constraint instanceof RemoveFromTree))
             .collect(Collectors.toList());
 
         if (typeRules.size() > 0) {
@@ -115,7 +116,7 @@ public class JsonProfileReader implements ProfileReader {
         return new Profile(profileFields, rules, profileDto.description);
     }
     private Map<String, String> getTypesFromConstraints(ProfileDTO profileDto) {
-        return getTopLevelConstraintsOfType(profileDto, "ofType")
+        return getTopLevelConstraintsOfType(profileDto, AtomicConstraintType.IS_OF_TYPE.getText())
             .collect(Collectors.toMap(
                 constraintDTO -> constraintDTO.field,
                 constraintDTO -> (String)constraintDTO.value,

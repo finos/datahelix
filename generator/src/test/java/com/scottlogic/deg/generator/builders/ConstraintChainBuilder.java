@@ -16,13 +16,13 @@
 
 package com.scottlogic.deg.generator.builders;
 
+import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.utils.SetUtils;
 
@@ -31,8 +31,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Defines a builder for a class that can contain constraints.
@@ -130,10 +128,6 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
 
     public ConstraintChainBuilder<T> withOfLengthConstraint(Field fooField, int length) {
         return saveAndSet(new StringHasLengthConstraint(fooField, length));
-    }
-
-    public ConstraintChainBuilder<T> withOfTypeConstraint(Field fooField, IsOfTypeConstraint.Types requiredType) {
-        return saveAndSet(new IsOfTypeConstraint(fooField, requiredType));
     }
 
     public ConstraintChainBuilder<T> withAfterConstraint(Field field, OffsetDateTime dateTime) {

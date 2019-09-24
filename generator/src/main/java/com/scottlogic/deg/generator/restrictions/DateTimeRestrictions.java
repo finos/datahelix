@@ -17,7 +17,7 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
-import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
+import com.scottlogic.deg.common.profile.Types;
 
 import java.time.OffsetDateTime;
 import java.util.Objects;
@@ -46,8 +46,8 @@ public class DateTimeRestrictions extends AbstractTypedRestrictions {
     }
 
     @Override
-    protected IsOfTypeConstraint.Types getType() {
-        return IsOfTypeConstraint.Types.DATETIME;
+    protected Types getType() {
+        return Types.DATETIME;
     }
 
     @Override

@@ -16,11 +16,11 @@
 
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
+import com.scottlogic.deg.common.profile.Types;
 
 abstract class AbstractTypedRestrictions implements TypedRestrictions {
 
-    protected abstract IsOfTypeConstraint.Types getType();
+    protected abstract Types getType();
 
     @Override
     public boolean isInstanceOf(Object o) {

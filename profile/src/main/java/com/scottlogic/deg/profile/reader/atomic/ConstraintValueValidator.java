@@ -4,8 +4,7 @@ import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedDateGranularity;
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
-import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint;
-import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
+import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
@@ -18,7 +17,7 @@ import java.util.regex.Pattern;
 
 import static com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType.IS_GRANULAR_TO;
 import static com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType.IS_NULL;
-import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.*;
+import static com.scottlogic.deg.common.profile.Types.*;
 
 public class ConstraintValueValidator {
 

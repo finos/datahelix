@@ -9,8 +9,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 
-import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.DATETIME;
-import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.STRING;
+import static com.scottlogic.deg.common.profile.Types.STRING;
 import static org.junit.jupiter.api.Assertions.*;
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 

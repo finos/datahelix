@@ -22,7 +22,7 @@ import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
-import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
+import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
@@ -170,8 +170,12 @@ public class JsonProfileReaderTests {
                         "}");
 
         expectRules(
-            ruleWithDescription("Unnamed rule"),
-            ruleWithDescription("type-rules"));
+            ruleWithDescription("Unnamed rule"));
+        expectFields(
+            field -> {
+                Assert.assertThat(field.name, equalTo("foo"));
+                Assert.assertEquals(field.getType(), Types.STRING);
+            });
     }
 
     @Test
@@ -191,8 +195,7 @@ public class JsonProfileReaderTests {
                         "}");
 
         expectRules(
-            ruleWithDescription("Too rule for school"),
-            ruleWithDescription("type-rules"));
+            ruleWithDescription("Too rule for school"));
     }
 
     @Test
@@ -244,13 +247,32 @@ public class JsonProfileReaderTests {
                 "    \"rules\": []" +
                 "}");
 
+        expectRules();
+        expectFields(
+            field -> {
+                Assert.assertThat(field.name, equalTo("foo"));
+                Assert.assertEquals(field.getType(), Types.STRING);
+            });
+    }
+
+    @Test
+    public void shouldDeserialiseIsOfTypeConstraint_whenInteger() throws IOException {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": " + schemaVersion + "," +
+                "    \"fields\": [ { \"name\": \"foo\", \"type\": \"integer\" } ]," +
+                "    \"rules\": []" +
+                "}");
+
         expectRules(
             ruleWithConstraints(
                 typedConstraint(
-                    IsOfTypeConstraint.class,
-                    c -> Assert.assertThat(
-                        c.requiredType,
-                        equalTo(Types.STRING)))));
+                    IsGranularToNumericConstraint.class,
+                    c -> {
+                        Assert.assertThat(
+                            c.granularity.getNumericGranularity(),
+                            equalTo(new BigDecimal(1)));
+                    })));
     }
 
     @Test
@@ -276,8 +298,7 @@ public class JsonProfileReaderTests {
                     EqualToConstraint.class,
                     c -> Assert.assertThat(
                         c.value,
-                        equalTo("equal")))),
-            ruleWithDescription("type-rules"));
+                        equalTo("equal")))));
 
     }
 
@@ -321,8 +342,7 @@ public class JsonProfileReaderTests {
             ruleWithConstraints(
                 typedConstraint(
                     StringHasLengthConstraint.class,
-                    c -> Assert.assertThat(c.referenceValue, equalTo(5)))),
-            ruleWithDescription("type-rules"));
+                    c -> Assert.assertThat(c.referenceValue, equalTo(5)))));
     }
 
     @Test
@@ -349,8 +369,7 @@ public class JsonProfileReaderTests {
                                     Assert.assertThat(
                                             c.negatedConstraint,
                                             instanceOf(EqualToConstraint.class));
-                                })),
-            ruleWithDescription("type-rules"));
+                                })));
     }
 
     @Test
@@ -379,8 +398,7 @@ public class JsonProfileReaderTests {
                     OrConstraint.class,
                     c -> Assert.assertThat(
                         c.subConstraints.size(),
-                        equalTo(2)))),
-            ruleWithDescription("type-rules"));
+                        equalTo(2)))));
     }
 
     @Test
@@ -409,8 +427,7 @@ public class JsonProfileReaderTests {
                     AndConstraint.class,
                     c -> Assert.assertThat(
                         c.getSubConstraints().size(),
-                        equalTo(2)))),
-            ruleWithDescription("type-rules"));
+                        equalTo(2)))));
     }
 
     @Test
@@ -448,8 +465,7 @@ public class JsonProfileReaderTests {
                                     Assert.assertThat(
                                             c.whenConditionIsFalse,
                                             instanceOf(IsStringLongerThanConstraint.class));
-                                })),
-            ruleWithDescription("type-rules"));
+                                })));
     }
 
     @Test
@@ -486,8 +502,7 @@ public class JsonProfileReaderTests {
                                     Assert.assertThat(
                                             c.whenConditionIsFalse,
                                             nullValue());
-                                })),
-            ruleWithDescription("type-rules"));
+                                })));
     }
 
     @Test
@@ -513,8 +528,7 @@ public class JsonProfileReaderTests {
                         Assert.assertThat(
                             c.granularity.getNumericGranularity(),
                             equalTo(new BigDecimal(1)));
-                    })),
-            ruleWithDescription("type-rules"));
+                    })));
     }
 
     @Test
@@ -540,8 +554,7 @@ public class JsonProfileReaderTests {
                         Assert.assertThat(
                             c.granularity.getNumericGranularity(),
                             equalTo(BigDecimal.valueOf(0.1)));
-                    })),
-            ruleWithDescription("type-rules"));
+                    })));
     }
 
     @Test
@@ -567,8 +580,7 @@ public class JsonProfileReaderTests {
                         Assert.assertThat(
                             c.granularity.getNumericGranularity(),
                             equalTo(BigDecimal.valueOf(0.1)));
-                    })),
-            ruleWithDescription("type-rules"));
+                    })));
     }
 
     @Test
@@ -600,8 +612,7 @@ public class JsonProfileReaderTests {
                     .get();
                 Assert.assertEquals(OffsetDateTime.parse("2019-01-01T00:00:00.000Z"), isAfter.referenceValue);
                 Assert.assertEquals(OffsetDateTime.parse("2019-01-03T00:00:00.000Z"), isBefore.referenceValue);
-            },
-            ruleWithDescription("type-rules")
+            }
         );
     }
 
@@ -1045,34 +1056,7 @@ public class JsonProfileReaderTests {
                 Assert.assertThat(field.type, equalTo(Types.STRING));
             }
         );
-        expectRules(
-            ruleWithConstraints(
-                typedConstraint(
-                    IsOfTypeConstraint.class,
-                    c -> {
-                        Assert.assertEquals(
-                            c.requiredType,
-                            Types.NUMERIC
-                            );
-                        Assert.assertEquals(
-                            c.field.name,
-                            "foo");
-                    }
-                ),
-                typedConstraint(
-                    IsOfTypeConstraint.class,
-                    c -> {
-                        Assert.assertEquals(
-                            c.requiredType,
-                            Types.STRING
-                        );
-                        Assert.assertEquals(
-                            c.field.name,
-                            "bar");
-                    }
-                )
-            )
-        );
+        expectRules();
     }
 
     @Test

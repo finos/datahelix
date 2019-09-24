@@ -17,7 +17,6 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.google.common.collect.Iterators;
-import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.CannedValuesFieldValueSource;
@@ -31,7 +30,7 @@ import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.*;
+import static com.scottlogic.deg.common.profile.Types.*;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 
 public class StandardFieldValueSourceEvaluatorTests {

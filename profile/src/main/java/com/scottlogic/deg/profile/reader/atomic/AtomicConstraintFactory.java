@@ -11,6 +11,7 @@ import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.profile.reader.RemoveFromTree;
 
 import java.time.OffsetDateTime;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 public class AtomicConstraintFactory {
@@ -22,8 +23,6 @@ public class AtomicConstraintFactory {
                 return new IsInSetConstraint(field, (DistributedSet<Object>)value);
             case IS_NULL:
                 return new IsNullConstraint(field);
-            case IS_OF_TYPE:
-                return OfTypeConstraintFactory.create(field, (String)value);
 
             case MATCHES_REGEX:
                 return new MatchesRegexConstraint(field, pattern(value));
@@ -64,6 +63,11 @@ public class AtomicConstraintFactory {
             case IS_UNIQUE:
             case FORMATTED_AS:
                 return new RemoveFromTree();
+
+            case IS_OF_TYPE: {
+                Optional<Constraint> constraint = OfTypeConstraintFactory.create(field, (String) value);
+                return constraint.orElseGet(RemoveFromTree::new);
+            }
 
             default:
                 throw new IllegalArgumentException("constraint type not found");

@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.profile.reader;
 
+import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
@@ -41,7 +42,7 @@ import java.util.stream.Stream;
 
 import static com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType.*;
 import static com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType.IS_EQUAL_TO_CONSTANT;
-import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.*;
+import static com.scottlogic.deg.common.profile.Types.*;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -87,17 +88,9 @@ public class ConstraintValidationAndReadingTests {
         multipleValuesDto.field = "test";
         multipleValuesDto.values = Arrays.asList("A", "B");
 
-        ConstraintDTO typeValueDto = new ConstraintDTO();
-        typeValueDto.field = "test";
-        typeValueDto.value = "string";
-
         ConstraintDTO integerTypeValueDto = new ConstraintDTO();
         integerTypeValueDto.field = "test";
-        integerTypeValueDto.value = "integer";
-
-        ConstraintDTO decimalTypeValueDto = new ConstraintDTO();
-        decimalTypeValueDto.field = "test";
-        decimalTypeValueDto.value = "decimal";
+        integerTypeValueDto.value = 1;
 
         ConstraintDTO notValueDto = new ConstraintDTO();
         notValueDto.field = "test";
@@ -107,9 +100,7 @@ public class ConstraintValidationAndReadingTests {
                 Arguments.of(IS_EQUAL_TO_CONSTANT, stringValueDto, EqualToConstraint.class, STRING),
                 Arguments.of(IS_IN_SET, multipleValuesDto, IsInSetConstraint.class, STRING),
                 Arguments.of(IS_NULL, stringValueDto, IsNullConstraint.class, STRING),
-                Arguments.of(IS_OF_TYPE, typeValueDto, IsOfTypeConstraint.class, STRING),
-                Arguments.of(IS_OF_TYPE, integerTypeValueDto, AndConstraint.class, NUMERIC),
-                Arguments.of(IS_OF_TYPE, decimalTypeValueDto, IsOfTypeConstraint.class, NUMERIC),
+                Arguments.of(IS_GRANULAR_TO, integerTypeValueDto, IsGranularToNumericConstraint.class, NUMERIC),
                 Arguments.of(MATCHES_REGEX, stringValueDto, MatchesRegexConstraint.class, STRING),
                 Arguments.of(HAS_LENGTH, numberValueDto, StringHasLengthConstraint.class, STRING),
                 Arguments.of(IS_STRING_LONGER_THAN, numberValueDto, IsStringLongerThanConstraint.class, STRING),
@@ -217,7 +208,7 @@ public class ConstraintValidationAndReadingTests {
     @DisplayName("Should return correct constraint type")
     @ParameterizedTest(name = "{0} should return {1}")
     @MethodSource("testProvider")
-    public void testAtomicConstraintReader(AtomicConstraintType type, ConstraintDTO dto, Class<?> constraintType, IsOfTypeConstraint.Types types) {
+    public void testAtomicConstraintReader(AtomicConstraintType type, ConstraintDTO dto, Class<?> constraintType, Types types) {
 
         try {
             Object value = new AtomicConstraintValueReader(null).getValue(dto);

@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
+import com.scottlogic.deg.common.profile.Types;
 
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
@@ -24,7 +24,7 @@ import com.scottlogic.deg.generator.restrictions.*;
 
 import java.util.*;
 
-import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.*;
+import static com.scottlogic.deg.common.profile.Types.*;
 
 /**
  * Details a column's atomic constraints

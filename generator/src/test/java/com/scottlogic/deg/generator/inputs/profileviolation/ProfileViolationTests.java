@@ -16,18 +16,14 @@
 
 package com.scottlogic.deg.generator.inputs.profileviolation;
 
+import com.scottlogic.deg.common.profile.*;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.builders.*;
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
-import com.scottlogic.deg.common.profile.ViolatedProfile;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
@@ -83,7 +79,6 @@ public class ProfileViolationTests {
         return Stream.of(
             Arguments.of(IsInSetConstraint.class, sampleSet),
             Arguments.of(IsNullConstraint.class, null),
-            Arguments.of(IsOfTypeConstraint.class, IsOfTypeConstraint.Types.STRING),
             Arguments.of(MatchesStandardConstraint.class, StandardConstraintTypes.ISIN),
 
             Arguments.of(ContainsRegexConstraint.class, Pattern.compile("\\w+")),
@@ -135,11 +130,11 @@ public class ProfileViolationTests {
             .withBeforeConstraint(STATIC_FIELD, OffsetDateTime.of(2019, 1, 15, 12, 0, 0, 0, ZoneOffset.UTC)).negate().wrapAtomicWithViolate();
 
         BaseConstraintBuilder<ConditionalConstraint> ifThenConstraintBuilder = new IfBuilder()
-            .withIf(new SingleConstraintBuilder().withOfTypeConstraint(STATIC_FIELD, IsOfTypeConstraint.Types.NUMERIC))
+            .withIf(new SingleConstraintBuilder().withGreaterThanConstraint(STATIC_FIELD, 100))
             .withThen(new SingleConstraintBuilder().withInSetConstraint(STATIC_FIELD, new Object[]{10, 100}));
 
         BaseConstraintBuilder<AndConstraint> violatedIfThenConstraintBuilder = new AndBuilder()
-            .withOfTypeConstraint(STATIC_FIELD, IsOfTypeConstraint.Types.NUMERIC)
+            .withGreaterThanConstraint(STATIC_FIELD, 100)
             .withInSetConstraint(STATIC_FIELD, new Object[]{10, 100}).negate().wrapAtomicWithViolate();
 
         BaseConstraintBuilder<ConditionalConstraint> ifThenElseConstraintBuilder = new IfBuilder()
@@ -183,7 +178,7 @@ public class ProfileViolationTests {
         A = new SingleConstraintBuilder().withEqualToConstraint(field1, "A");
         B = new SingleConstraintBuilder().withGreaterThanConstraint(field2, 100);
         C = new SingleConstraintBuilder().withOfLengthConstraint(field3, 10);
-        D = new SingleConstraintBuilder().withOfTypeConstraint(field4, IsOfTypeConstraint.Types.NUMERIC);
+        D = new SingleConstraintBuilder().withGreaterThanConstraint(field4, 100);
         E = new SingleConstraintBuilder().withLessThanConstraint(field5, 200);
     }
 
