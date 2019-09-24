@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.restrictions;
 
-public interface TypedRestrictions extends Restrictions {
+public interface TypedRestrictions {
 
     boolean match(Object o);
 
