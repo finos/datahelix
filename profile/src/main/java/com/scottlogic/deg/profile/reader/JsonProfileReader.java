@@ -116,7 +116,7 @@ public class JsonProfileReader implements ProfileReader {
         return new Profile(profileFields, rules, profileDto.description);
     }
     private Map<String, String> getTypesFromConstraints(ProfileDTO profileDto) {
-        return getTopLevelConstraintsOfType(profileDto, "ofType")
+        return getTopLevelConstraintsOfType(profileDto, AtomicConstraintType.IS_OF_TYPE.getText())
             .collect(Collectors.toMap(
                 constraintDTO -> constraintDTO.field,
                 constraintDTO -> (String)constraintDTO.value,
