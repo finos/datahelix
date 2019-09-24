@@ -21,6 +21,7 @@ import java.util.stream.Stream;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.*;
 
 class RowSpecTreeSolverTests {
     private Field fieldA = createField("A");
@@ -56,8 +57,8 @@ class RowSpecTreeSolverTests {
         //Assert
         List<RowSpec> expectedRowSpecs = new ArrayList<>();
         Map<Field, FieldSpec> fieldToFieldSpec = new HashMap<>();
-        fieldToFieldSpec.put(fieldA, FieldSpec.Empty);
-        fieldToFieldSpec.put(fieldB, FieldSpec.Empty);
+        fieldToFieldSpec.put(fieldA, FieldSpec.fromType(fieldA.getType()));
+        fieldToFieldSpec.put(fieldB, FieldSpec.fromType(fieldB.getType()));
         expectedRowSpecs.add(new RowSpec(profileFields, fieldToFieldSpec, Collections.emptyList()));
 
         assertThat(expectedRowSpecs, sameBeanAs(rowSpecs.collect(Collectors.toList())));
@@ -76,8 +77,8 @@ class RowSpecTreeSolverTests {
         List<RowSpec> expectedRowSpecs = new ArrayList<>();
         Map<Field, FieldSpec> fieldToFieldSpec = new HashMap<>();
         DistributedSet<Object> whitelist = new NullDistributedSet<>();
-        fieldToFieldSpec.put(fieldA, FieldSpec.Empty.withWhitelist(whitelist));
-        fieldToFieldSpec.put(fieldB, FieldSpec.Empty);
+        fieldToFieldSpec.put(fieldA, FieldSpec.fromType(fieldA.getType()).withWhitelist(whitelist));
+        fieldToFieldSpec.put(fieldB, FieldSpec.fromType(fieldB.getType()));
         expectedRowSpecs.add(new RowSpec(profileFields, fieldToFieldSpec, Collections.emptyList()));
 
         assertThat(expectedRowSpecs, sameBeanAs(rowSpecs.collect(Collectors.toList())));
@@ -96,20 +97,20 @@ class RowSpecTreeSolverTests {
         DecisionTree tree = new DecisionTree(root, profileFields);
 
         //Act
-        Stream<RowSpec> rowSpecs = rowSpecTreeSolver.createRowSpecs(tree);
+        List<RowSpec> rowSpecs = rowSpecTreeSolver.createRowSpecs(tree).collect(Collectors.toList());
 
         //Assert
         List<RowSpec> expectedRowSpecs = new ArrayList<>();
         Map<Field, FieldSpec> option0 = new HashMap<>();
         DistributedSet<Object> whitelist = new NullDistributedSet<>();
-        option0.put(fieldA, FieldSpec.Empty);
-        option0.put(fieldB, FieldSpec.Empty.withWhitelist(whitelist));
+        option0.put(fieldA, FieldSpec.fromType(fieldA.getType()));
+        option0.put(fieldB, FieldSpec.fromType(fieldB.getType()).withWhitelist(whitelist));
         expectedRowSpecs.add(new RowSpec(profileFields, option0, Collections.emptyList()));
         Map<Field, FieldSpec> option1 = new HashMap<>();
-        option1.put(fieldA, FieldSpec.Empty);
-        option1.put(fieldB, FieldSpec.NullOnly);
+        option1.put(fieldA, FieldSpec.fromType(fieldA.getType()));
+        option1.put(fieldB, FieldSpec.nullOnlyFromType(fieldB.getType()));
         expectedRowSpecs.add(new RowSpec(profileFields, option1, Collections.emptyList()));
 
-        assertThat(expectedRowSpecs, sameBeanAs(rowSpecs.collect(Collectors.toList())));
+        assertThat(expectedRowSpecs, sameBeanAs(rowSpecs));
     }
 }

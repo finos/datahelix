@@ -50,9 +50,9 @@ public class EqualToOffsetDateRelation implements FieldSpecRelations {
             DateTimeRestrictions newRestrictions = new DateTimeRestrictions();
             newRestrictions.min = newLimit;
             newRestrictions.max = newLimit;
-            return FieldSpec.Empty.withDateTimeRestrictions(newRestrictions);
+            return FieldSpec.fromType(otherValue.getType()).withDateTimeRestrictions(newRestrictions);
         } else {
-            return FieldSpec.Empty;
+            return FieldSpec.fromType(otherValue.getType());
         }
     }
 

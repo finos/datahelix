@@ -20,6 +20,9 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.T
 
 public class FieldBuilder {
     public static Field createField(String name) {
-        return new Field(name, Types.STRING, false, null);
+        return createField(name, Types.STRING);
+    }
+    public static Field createField(String name, Types type) {
+        return new Field(name, type, false, null);
     }
 }

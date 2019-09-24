@@ -25,13 +25,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-
 import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.DATETIME;
-import static com.scottlogic.deg.generator.fieldspecs.FieldSpec.NullOnly;
+import static com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types.NUMERIC;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.hamcrest.core.IsSame.sameInstance;
@@ -49,48 +46,46 @@ class DateTimeRestrictionsMergeOperationTests {
         merger = mock(DateTimeRestrictionsMerger.class);
         operation = new DateTimeRestrictionsMergeOperation(merger);
 
-        left = FieldSpec.Empty.withDateTimeRestrictions(new DateTimeRestrictions());
-        right = FieldSpec.Empty.withDateTimeRestrictions(new DateTimeRestrictions());
+        left = FieldSpec.fromType(DATETIME).withDateTimeRestrictions(new DateTimeRestrictions());
+        right = FieldSpec.fromType(DATETIME).withDateTimeRestrictions(new DateTimeRestrictions());
     }
 
     @Test
     public void applyMergeOperation_withNoDateTimeRestrictions_shouldNotApplyAnyRestrictions() {
-        FieldSpec merging = FieldSpec.Empty;
+        FieldSpec merging = FieldSpec.fromType(DATETIME);
         when(merger.merge(left.getDateTimeRestrictions(), right.getDateTimeRestrictions()))
             .thenReturn(new MergeResult<>(null));
 
         FieldSpec result = operation.applyMergeOperation(left, right, merging);
 
-        Assert.assertThat(result, sameInstance(merging));
+        Assert.assertEquals(result, merging);
     }
 
     @Test
     public void applyMergeOperation_withContradictoryDateTimeRestrictionsAndNoTypeRestrictions_shouldPreventAnyDateTimeValues() {
-        FieldSpec merging = FieldSpec.Empty.withType((DATETIME));
+        FieldSpec merging = FieldSpec.fromType(DATETIME);
         when(merger.merge(left.getDateTimeRestrictions(), right.getDateTimeRestrictions()))
             .thenReturn(MergeResult.unsuccessful());
 
         FieldSpec result = operation.applyMergeOperation(left, right, merging);
 
-        Assert.assertThat(result, sameInstance(NullOnly));
+        Assert.assertEquals(result, FieldSpec.nullOnlyFromType(DATETIME));
     }
 
     @Test
     public void applyMergeOperation_withContradictoryDateTimeRestrictions_shouldPreventAnyDateTimeValues() {
-        FieldSpec merging = FieldSpec.Empty
-            .withType((DATETIME));
+        FieldSpec merging = FieldSpec.fromType(DATETIME);
         when(merger.merge(left.getDateTimeRestrictions(), right.getDateTimeRestrictions()))
             .thenReturn(MergeResult.unsuccessful());
 
         FieldSpec result = operation.applyMergeOperation(left, right, merging);
 
-        Assert.assertThat(result, sameInstance(NullOnly));
+        Assert.assertEquals(result, FieldSpec.nullOnlyFromType(DATETIME));
     }
 
     @Test
     public void applyMergeOperation_withContradictoryDateTimeRestrictionsAndDateTimeTypeAlreadyNotPermitted_shouldPreventAnyDateTimeValues() {
-        FieldSpec merging = FieldSpec.Empty
-            .withType((IsOfTypeConstraint.Types.NUMERIC));
+        FieldSpec merging = FieldSpec.fromType(NUMERIC);
         when(merger.merge(left.getDateTimeRestrictions(), right.getDateTimeRestrictions()))
             .thenReturn(MergeResult.unsuccessful());
 
@@ -104,8 +99,7 @@ class DateTimeRestrictionsMergeOperationTests {
 
     @Test
     public void applyMergeOperation_withContradictoryDateTimeRestrictionsAndDateTimeTypeOnlyPermittedType_shouldPreventAnyDateTimeValues() {
-        FieldSpec merging = FieldSpec.Empty
-            .withType((DATETIME));
+        FieldSpec merging = FieldSpec.fromType(DATETIME);
         when(merger.merge(left.getDateTimeRestrictions(), right.getDateTimeRestrictions()))
             .thenReturn(MergeResult.unsuccessful());
 
@@ -118,8 +112,7 @@ class DateTimeRestrictionsMergeOperationTests {
     @Disabled("same instance check not working due to being casted")
     @Test
     public void applyMergeOperation_withMergableDateTimeRestrictions_shouldApplyMergedDateTimeRestrictions() {
-        FieldSpec merging = FieldSpec.Empty
-            .withType((DATETIME));
+        FieldSpec merging = FieldSpec.fromType(DATETIME);
         DateTimeRestrictions merged = new DateTimeRestrictions();
         when(merger.merge(left.getDateTimeRestrictions(), right.getDateTimeRestrictions()))
             .thenReturn(new MergeResult<>(merged));

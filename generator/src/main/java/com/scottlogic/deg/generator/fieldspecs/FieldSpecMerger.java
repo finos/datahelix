@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
+import com.scottlogic.deg.common.profile.constraints.atomic.IsOfTypeConstraint.Types;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
@@ -67,7 +68,7 @@ public class FieldSpecMerger {
                 .map(rightHolder -> mergeElements(leftHolder, rightHolder)))
             .collect(Collectors.toSet()));
 
-        return addNullable(left, right, setRestriction(set));
+        return addNullable(left, right, setRestriction(left.getType(), set));
     }
 
     private static <T> boolean elementsEqual(WeightedElement<T> left, WeightedElement<T> right) {
@@ -80,7 +81,7 @@ public class FieldSpecMerger {
                 .filter(holder -> restrictions.permits(holder.element()))
                 .collect(Collectors.toSet()));
 
-        return addNullable(set, restrictions, setRestriction(newSet));
+        return addNullable(set, restrictions, setRestriction(set.getType(), newSet));
     }
 
     private Optional<FieldSpec> addNullable(FieldSpec left, FieldSpec right, FieldSpec newFieldSpec) {
@@ -99,8 +100,8 @@ public class FieldSpecMerger {
         return (fieldSpec.getWhitelist() != null && fieldSpec.getWhitelist().isEmpty());
     }
 
-    private FieldSpec setRestriction(DistributedSet<Object> set) {
-        return FieldSpec.Empty.withWhitelist(set);
+    private FieldSpec setRestriction(Types type, DistributedSet<Object> set) {
+        return FieldSpec.fromType(type).withWhitelist(set);
     }
 
     private boolean hasSet(FieldSpec fieldSpec) {
@@ -112,7 +113,7 @@ public class FieldSpecMerger {
     }
 
     private Optional<FieldSpec> combineRestrictions(FieldSpec left, FieldSpec right) {
-        FieldSpec merging = FieldSpec.Empty;
+        FieldSpec merging = FieldSpec.fromType(left.getType());
 
         for (RestrictionMergeOperation operation : mergeOperations) {
             merging = operation.applyMergeOperation(left, right, merging);

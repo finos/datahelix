@@ -26,9 +26,7 @@ import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
 
 import java.util.*;
-import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -63,7 +61,7 @@ public class ConstraintReducer {
             .collect(
                 Collectors.toMap(
                     Function.identity(),
-                    field -> reduceConstraintsToFieldSpec(fieldToConstraints.get(field))));
+                    field -> reduceConstraintsToFieldSpec(field, fieldToConstraints.get(field))));
 
         final Optional<Map<Field, FieldSpec>> optionalMap = Optional.of(fieldToFieldSpec)
             .filter(map -> map.values().stream().allMatch(Optional::isPresent))
@@ -86,22 +84,22 @@ public class ConstraintReducer {
                 relations));
     }
 
-    public Optional<FieldSpec> reduceConstraintsToFieldSpec(Iterable<AtomicConstraint> constraints) {
+    public Optional<FieldSpec> reduceConstraintsToFieldSpec(Field field, Iterable<AtomicConstraint> constraints) {
         return constraints == null
-            ? Optional.of(FieldSpec.Empty)
-            : getRootFieldSpec(constraints);
+            ? Optional.of(FieldSpec.fromType(field.getType()))
+            : getRootFieldSpec(field, constraints);
     }
 
-    private Optional<FieldSpec> getRootFieldSpec(Iterable<AtomicConstraint> rootConstraints) {
+    private Optional<FieldSpec> getRootFieldSpec(Field field, Iterable<AtomicConstraint> rootConstraints) {
         final Stream<FieldSpec> rootConstraintsStream =
             StreamSupport
                 .stream(rootConstraints.spliterator(), false)
-                .map(fieldSpecFactory::construct);
+                .map(atomicConstraint -> fieldSpecFactory.construct(field, atomicConstraint));
 
         return rootConstraintsStream
             .map(Optional::of)
             .reduce(
-                Optional.of(FieldSpec.Empty),
+                Optional.of(FieldSpec.fromType(field.getType())),
                 (optSpec1, optSpec2) -> optSpec1.flatMap(
                     spec1 -> optSpec2.flatMap(
                         spec2 -> fieldSpecMerger.merge(spec1, spec2))));
