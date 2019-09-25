@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 
 import static com.scottlogic.deg.common.profile.Types.*;
-import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MAX_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MAX_LIMIT;
 import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
 import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
 import static org.mockito.Mockito.*;
