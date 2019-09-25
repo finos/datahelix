@@ -19,16 +19,14 @@ package com.scottlogic.deg.generator.restrictions;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
-
 import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
 import org.junit.Assert;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
-import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MAX_LIMIT;
-import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MIN_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MAX_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MIN_LIMIT;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;

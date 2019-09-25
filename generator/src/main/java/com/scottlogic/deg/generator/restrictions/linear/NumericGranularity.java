@@ -49,10 +49,6 @@ public class NumericGranularity implements Granularity<BigDecimal> {
         return value.setScale(decimalPlaces, RoundingMode.DOWN);
     }
 
-    public int getDecimalPlaces() {
-        return decimalPlaces;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
