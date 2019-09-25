@@ -163,7 +163,7 @@ class FieldSpecTests {
     @Test
     public void shouldCreateNewInstanceWithDateTimeRestrictions() {
         FieldSpec original = FieldSpec.fromType(DATETIME);
-        DateTimeRestrictions restrictions = mock(DateTimeRestrictions.class);
+        LinearRestrictions<OffsetDateTime> restrictions = mock(LinearRestrictions.class);
         FieldSpec augmentedFieldSpec = original.withDateTimeRestrictions(restrictions);
 
         Assert.assertNotSame(original, augmentedFieldSpec);
@@ -273,28 +273,6 @@ class FieldSpecTests {
     }
 
     @Test
-    public void fieldSpecsWithEqualDateTimeRestrictionsShouldBeEqual() {
-        DateTimeRestrictions aRestrictions = new MockDateTimeRestrictions(true);
-        DateTimeRestrictions bRestrictions = new MockDateTimeRestrictions(true);
-        FieldSpec a = FieldSpec.fromType(DATETIME).withDateTimeRestrictions(aRestrictions);
-        FieldSpec b = FieldSpec.fromType(DATETIME).withDateTimeRestrictions(bRestrictions);
-
-        Assert.assertThat(a, equalTo(b));
-        Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
-    }
-
-    @Test
-    public void fieldSpecsWithUnequalDateTimeRestrictionsShouldBeUnequal() {
-        DateTimeRestrictions aRestrictions = new MockDateTimeRestrictions(false);
-        DateTimeRestrictions bRestrictions = new MockDateTimeRestrictions(false);
-        FieldSpec a = FieldSpec.fromType(DATETIME).withDateTimeRestrictions(aRestrictions);
-        FieldSpec b = FieldSpec.fromType(DATETIME).withDateTimeRestrictions(bRestrictions);
-
-        Assert.assertThat(a, not(equalTo(b)));
-    }
-
-
-    @Test
     void permitsRejectsInvalidNumeric() {
         NumericRestrictions numeric = new NumericRestrictions(new Limit<>(BigDecimal.TEN, true), NumericRestrictions.NUMERIC_MAX_LIMIT);
         FieldSpec spec = FieldSpec.fromType(NUMERIC).withNumericRestrictions(numeric);
@@ -304,7 +282,7 @@ class FieldSpecTests {
 
     @Test
     void permitsRejectsInvalidDateTime() {
-        DateTimeRestrictions dateTime = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT);
+        LinearRestrictions<OffsetDateTime> dateTime = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT);
         FieldSpec spec = FieldSpec.fromType(DATETIME).withDateTimeRestrictions(dateTime);
 
         OffsetDateTime time = OffsetDateTime.of(100, 1, 1, 1, 1, 1, 1, ZoneOffset.UTC);
@@ -396,24 +374,4 @@ class FieldSpecTests {
             throw new UnsupportedOperationException("Not implemented");
         }
     }
-
-    private class MockDateTimeRestrictions extends DateTimeRestrictions {
-        private final boolean isEqual;
-
-        MockDateTimeRestrictions(boolean isEqual) {
-            super(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT, new DateTimeGranularity(Timescale.HOURS), new DateTimeConverter());
-            this.isEqual = isEqual;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            return isEqual;
-        }
-
-        @Override
-        public int hashCode() {
-            return 1234;
-        }
-    }
-
 }

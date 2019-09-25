@@ -52,7 +52,7 @@ class DateTimeRestrictionsMergerTests {
 
     @Test
     void merge_leftIsNullAndRightHasAValue_returnsRight() {
-        DateTimeRestrictions right = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT);
+        LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT);
 
         MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(null, right);
 
@@ -63,7 +63,7 @@ class DateTimeRestrictionsMergerTests {
 
     @Test
     void merge_rightIsNullAndLeftHasAValue_returnsLeft() {
-        DateTimeRestrictions left = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT);
+        LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT);
 
         MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, null);
 
@@ -80,8 +80,8 @@ class DateTimeRestrictionsMergerTests {
         Limit <OffsetDateTime>maxDateTimeLimit = new Limit<>(
             REFERENCE_TIME, false
         );
-        DateTimeRestrictions left = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
-        DateTimeRestrictions right = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
+        LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
+        LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
 
         MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
 
@@ -99,8 +99,8 @@ class DateTimeRestrictionsMergerTests {
         Limit <OffsetDateTime>maxDateTimeLimit = new Limit<>(
             REFERENCE_TIME, false
         );
-        DateTimeRestrictions left = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
-        DateTimeRestrictions right = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
+        LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
+        LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
 
         MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
 
@@ -118,8 +118,8 @@ class DateTimeRestrictionsMergerTests {
         Limit <OffsetDateTime>maxDateTimeLimit = new Limit<>(
             OffsetDateTime.now().minusDays(10), false
         );
-        DateTimeRestrictions left = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
-        DateTimeRestrictions right = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
+        LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
+        LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
 
         MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
 
@@ -135,8 +135,8 @@ class DateTimeRestrictionsMergerTests {
         Limit <OffsetDateTime>maxDateTimeLimit = new Limit<>(
             OffsetDateTime.now().minusDays(10), false
         );
-        DateTimeRestrictions left = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
-        DateTimeRestrictions right = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
+        LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
+        LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
 
         MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
 
@@ -150,8 +150,8 @@ class DateTimeRestrictionsMergerTests {
             REFERENCE_TIME, false
         );
 
-        DateTimeRestrictions left = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
-        DateTimeRestrictions right = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
+        LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
+        LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
 
         MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
 
@@ -167,8 +167,8 @@ class DateTimeRestrictionsMergerTests {
             REFERENCE_TIME, false
         );
 
-        DateTimeRestrictions left = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
-        DateTimeRestrictions right = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
+        LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
+        LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
 
         MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
 
@@ -194,8 +194,8 @@ class DateTimeRestrictionsMergerTests {
             referenceTime, true
         );
 
-        DateTimeRestrictions left = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
-        DateTimeRestrictions right = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
+        LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
+        LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
 
         MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
 
@@ -214,8 +214,8 @@ class DateTimeRestrictionsMergerTests {
             referenceTime, false
         );
 
-        DateTimeRestrictions left = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
-        DateTimeRestrictions right = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
+        LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
+        LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
 
 
         MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
@@ -234,8 +234,8 @@ class DateTimeRestrictionsMergerTests {
         Limit <OffsetDateTime>maxDateTimeLimit = new Limit<>(
             referenceTime, false
         );
-        DateTimeRestrictions left = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
-        DateTimeRestrictions right = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
+        LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
+        LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
 
         MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
 
@@ -253,9 +253,9 @@ class DateTimeRestrictionsMergerTests {
         Limit <OffsetDateTime>upperDateTimeLimit = new Limit<>(
             laterTime, false
         );
-
-        DateTimeRestrictions left = LinearRestrictionsFactory.createDateTimeRestrictions(lowerDateTimeLimit, DATETIME_MAX_LIMIT, Timescale.HOURS);
-        DateTimeRestrictions right = LinearRestrictionsFactory.createDateTimeRestrictions(upperDateTimeLimit, DATETIME_MAX_LIMIT, Timescale.MILLIS);
+        
+        LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(lowerDateTimeLimit, DATETIME_MAX_LIMIT, Timescale.HOURS);
+        LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(upperDateTimeLimit, DATETIME_MAX_LIMIT, Timescale.MILLIS);
 
         MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
         LinearRestrictions<OffsetDateTime> restrictions = result.restrictions;
@@ -284,8 +284,8 @@ class DateTimeRestrictionsMergerTests {
         Limit <OffsetDateTime>lowerDateTimeLimit = new Limit<>(earlyTime, false);
         Limit <OffsetDateTime>upperDateTimeLimit = new Limit<>(laterTime, false);
 
-        DateTimeRestrictions early = LinearRestrictionsFactory.createDateTimeRestrictions(lowerDateTimeLimit, DATETIME_MAX_LIMIT, Timescale.HOURS);
-        DateTimeRestrictions later = LinearRestrictionsFactory.createDateTimeRestrictions(upperDateTimeLimit, DATETIME_MAX_LIMIT, Timescale.SECONDS);
+        LinearRestrictions<OffsetDateTime> early = LinearRestrictionsFactory.createDateTimeRestrictions(lowerDateTimeLimit, DATETIME_MAX_LIMIT, Timescale.HOURS);
+        LinearRestrictions<OffsetDateTime> later = LinearRestrictionsFactory.createDateTimeRestrictions(upperDateTimeLimit, DATETIME_MAX_LIMIT, Timescale.SECONDS);
 
         MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(early, later);
         LinearRestrictions<OffsetDateTime> restrictions = result.restrictions;
@@ -300,11 +300,11 @@ class DateTimeRestrictionsMergerTests {
     @Test
     void merge_inclusiveOnLeftIsPassedIn_shouldReturnInclusive() {
         // ARRANGE
-        DateTimeRestrictions left = LinearRestrictionsFactory.createDateTimeRestrictions(
+        LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(
             new Limit<>(REFERENCE_TIME, true),
             DATETIME_MAX_LIMIT, Timescale.HOURS
         );
-        DateTimeRestrictions right = LinearRestrictionsFactory.createDateTimeRestrictions(
+        LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(
             new Limit<>(REFERENCE_TIME.plusSeconds(1), false),
             DATETIME_MAX_LIMIT, Timescale.SECONDS
         );
@@ -313,11 +313,11 @@ class DateTimeRestrictionsMergerTests {
         MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
 
         // ASSERT
-        DateTimeRestrictions expecteddt = LinearRestrictionsFactory.createDateTimeRestrictions(
+        LinearRestrictions<OffsetDateTime> expecteddt = LinearRestrictionsFactory.createDateTimeRestrictions(
             new Limit<>(REFERENCE_TIME.plusHours(1), true),
             DATETIME_MAX_LIMIT,
             Timescale.HOURS);
-        MergeResult<DateTimeRestrictions> expected = new MergeResult<>(expecteddt);
+        MergeResult<LinearRestrictions<OffsetDateTime>> expected = new MergeResult<>(expecteddt);
 
         assertThat(result, sameBeanAs(expected));
     }
@@ -325,12 +325,12 @@ class DateTimeRestrictionsMergerTests {
     @Test
     void merge_inclusiveOnRightIsPassedIn_shouldReturnInclusive() {
         // ARRANGE
-        DateTimeRestrictions left = LinearRestrictionsFactory.createDateTimeRestrictions(new Limit<>(REFERENCE_TIME, false),
+        LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(new Limit<>(REFERENCE_TIME, false),
             DATETIME_MAX_LIMIT,
             Timescale.HOURS
         );
 
-        DateTimeRestrictions right = LinearRestrictionsFactory.createDateTimeRestrictions(
+        LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(
             new Limit<>(REFERENCE_TIME.plusSeconds(1), true),
             DATETIME_MAX_LIMIT,
             Timescale.MILLIS);
@@ -339,11 +339,11 @@ class DateTimeRestrictionsMergerTests {
         MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
 
         // ASSERT
-        DateTimeRestrictions expecteddt = LinearRestrictionsFactory.createDateTimeRestrictions(new Limit<>(
+        LinearRestrictions<OffsetDateTime> expecteddt = LinearRestrictionsFactory.createDateTimeRestrictions(new Limit<>(
             REFERENCE_TIME.plusHours(1), true),
             DATETIME_MAX_LIMIT,
             Timescale.HOURS);
-        MergeResult<DateTimeRestrictions> expected = new MergeResult<>(expecteddt);
+        MergeResult<LinearRestrictions<OffsetDateTime>> expected = new MergeResult<>(expecteddt);
 
         assertThat(result, sameBeanAs(expected));
     }
@@ -351,12 +351,12 @@ class DateTimeRestrictionsMergerTests {
     @Test
     void merge_notInclusivePassedIn_shouldReturnNotInclusive() {
         // ARRANGE
-        DateTimeRestrictions left = LinearRestrictionsFactory.createDateTimeRestrictions(
+        LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(
             new Limit<>(REFERENCE_TIME, false),
             DATETIME_MAX_LIMIT,
             Timescale.HOURS);
 
-        DateTimeRestrictions right = LinearRestrictionsFactory.createDateTimeRestrictions(
+        LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(
             new Limit<>(REFERENCE_TIME.plusHours(1), false),
             DATETIME_MAX_LIMIT,
             Timescale.MILLIS);
@@ -365,11 +365,11 @@ class DateTimeRestrictionsMergerTests {
         MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
 
         // ASSERT
-        DateTimeRestrictions expecteddt = LinearRestrictionsFactory.createDateTimeRestrictions(
+        LinearRestrictions<OffsetDateTime> expecteddt = LinearRestrictionsFactory.createDateTimeRestrictions(
             new Limit<>(REFERENCE_TIME.plusHours(1), false),
             DATETIME_MAX_LIMIT,
             Timescale.HOURS);
-        MergeResult<DateTimeRestrictions> expected = new MergeResult<>(expecteddt);
+        MergeResult<LinearRestrictions<OffsetDateTime>> expected = new MergeResult<>(expecteddt);
 
         assertThat(result, sameBeanAs(expected));
     }

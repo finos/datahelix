@@ -19,8 +19,8 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
 import org.junit.jupiter.api.Test;
 
@@ -65,13 +65,13 @@ class AfterDateRelationTest {
                 ZoneOffset.UTC),
             true);
 
-        DateTimeRestrictions inRestrictions = LinearRestrictionsFactory.createDateTimeRestrictions(lower, upper);
+        LinearRestrictions<OffsetDateTime> inRestrictions = LinearRestrictionsFactory.createDateTimeRestrictions(lower, upper);
 
         FieldSpec inSpec = FieldSpec.fromType(DATETIME).withDateTimeRestrictions(inRestrictions);
 
         FieldSpec reducedSpec = relation.reduceToRelatedFieldSpec(inSpec);
 
-        DateTimeRestrictions expectedRestrictions = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, upper);
+        LinearRestrictions<OffsetDateTime> expectedRestrictions = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, upper);
         FieldSpec expectedSpec = FieldSpec.fromType(DATETIME).withDateTimeRestrictions(expectedRestrictions);
 
         assertEquals(expectedSpec, reducedSpec);

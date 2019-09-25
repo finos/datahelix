@@ -22,10 +22,7 @@ import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.common.util.NumberUtils;
-import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
-import com.scottlogic.deg.generator.restrictions.linear.Limit;
-import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
-import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.*;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -207,10 +204,10 @@ public class FieldSpecFactory {
 
     private FieldSpec constructIsAfterConstraint(Field field, OffsetDateTime limit, boolean inclusive, boolean negate) {
         if (negate) {
-            final DateTimeRestrictions dateTimeRestrictions = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, new Limit<>(limit, !inclusive));
+            final LinearRestrictions<OffsetDateTime> dateTimeRestrictions = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, new Limit<>(limit, !inclusive));
             return FieldSpec.fromType(field.getType()).withDateTimeRestrictions(dateTimeRestrictions);
         } else {
-            final DateTimeRestrictions dateTimeRestrictions = LinearRestrictionsFactory.createDateTimeRestrictions(new Limit<>(limit, inclusive), DATETIME_MAX_LIMIT);
+            final LinearRestrictions<OffsetDateTime> dateTimeRestrictions = LinearRestrictionsFactory.createDateTimeRestrictions(new Limit<>(limit, inclusive), DATETIME_MAX_LIMIT);
             return FieldSpec.fromType(field.getType()).withDateTimeRestrictions(dateTimeRestrictions);
         }
     }
@@ -225,10 +222,10 @@ public class FieldSpecFactory {
 
     private FieldSpec constructIsBeforeConstraint(Field field, OffsetDateTime limit, boolean inclusive, boolean negate) {
         if (negate) {
-            final DateTimeRestrictions dateTimeRestrictions = LinearRestrictionsFactory.createDateTimeRestrictions(new Limit<>(limit, !inclusive), DATETIME_MAX_LIMIT);
+            final LinearRestrictions<OffsetDateTime> dateTimeRestrictions = LinearRestrictionsFactory.createDateTimeRestrictions(new Limit<>(limit, !inclusive), DATETIME_MAX_LIMIT);
             return FieldSpec.fromType(field.getType()).withDateTimeRestrictions(dateTimeRestrictions);
         } else {
-            final DateTimeRestrictions dateTimeRestrictions = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, new Limit<>(limit, inclusive));
+            final LinearRestrictions<OffsetDateTime> dateTimeRestrictions = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, new Limit<>(limit, inclusive));
             return FieldSpec.fromType(field.getType()).withDateTimeRestrictions(dateTimeRestrictions);
         }
     }

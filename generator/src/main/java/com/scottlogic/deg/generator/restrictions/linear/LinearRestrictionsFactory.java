@@ -10,12 +10,12 @@ import static com.scottlogic.deg.common.util.Defaults.ISO_MAX_DATE;
 public class LinearRestrictionsFactory {
     private static final DateTimeConverter DATE_TIME_CONVERTER = new DateTimeConverter();
 
-    public static DateTimeRestrictions createDateTimeRestrictions(Limit<OffsetDateTime> min, Limit<OffsetDateTime> max) {
+    public static LinearRestrictions<OffsetDateTime> createDateTimeRestrictions(Limit<OffsetDateTime> min, Limit<OffsetDateTime> max) {
         return createDateTimeRestrictions(min, max, DEFAULT_DATETIME_GRANULARITY);
     }
 
-    public static DateTimeRestrictions createDateTimeRestrictions(Limit<OffsetDateTime> min, Limit<OffsetDateTime> max, Timescale granularity) {
-        return new DateTimeRestrictions(capMin(min), capMax(max), new DateTimeGranularity(granularity), DATE_TIME_CONVERTER);
+    public static LinearRestrictions<OffsetDateTime> createDateTimeRestrictions(Limit<OffsetDateTime> min, Limit<OffsetDateTime> max, Timescale granularity) {
+        return new LinearRestrictions<>(capMin(min), capMax(max), new DateTimeGranularity(granularity), DATE_TIME_CONVERTER);
     }
 
     private static Limit<OffsetDateTime> capMax(Limit<OffsetDateTime> max) {
