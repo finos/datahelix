@@ -18,7 +18,6 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
-import com.scottlogic.deg.generator.restrictions.MergeResult;
 import com.scottlogic.deg.generator.restrictions.StringRestrictions;
 import com.scottlogic.deg.generator.restrictions.TypedRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
@@ -33,6 +32,7 @@ import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 
 import static com.scottlogic.deg.common.profile.Types.*;
 import static com.scottlogic.deg.generator.utils.Defaults.*;
@@ -319,7 +319,7 @@ class FieldSpecTests {
     void permitsRejectsInvalidString() {
         StringRestrictions string = new StringRestrictions() {
             @Override
-            public MergeResult<StringRestrictions> intersect(StringRestrictions other) {
+            public Optional<StringRestrictions> intersect(StringRestrictions other) {
                 return null;
             }
 
@@ -375,7 +375,7 @@ class FieldSpecTests {
         }
 
         @Override
-        public MergeResult<StringRestrictions> intersect(StringRestrictions other) {
+        public Optional<StringRestrictions> intersect(StringRestrictions other) {
             throw new UnsupportedOperationException("Not implemented");
         }
 

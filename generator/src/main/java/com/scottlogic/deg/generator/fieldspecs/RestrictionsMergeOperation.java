@@ -20,6 +20,8 @@ import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
 
+import java.util.Optional;
+
 public class RestrictionsMergeOperation {
     private final RestrictionsMerger linearMerger;
     private final RestrictionsMerger stringMerger;
@@ -43,13 +45,13 @@ public class RestrictionsMergeOperation {
             return FieldSpec.fromType(left.getType()).withRestrictions(leftRestriction);
         }
 
-        MergeResult<TypedRestrictions> mergeResult = getMerger(left.getType()).merge(leftRestriction, rightRestriction);
+        Optional<TypedRestrictions> mergeResult = getMerger(left.getType()).merge(leftRestriction, rightRestriction);
 
-        if (!mergeResult.successful){
+        if (!mergeResult.isPresent()){
             return FieldSpec.nullOnlyFromType(left.getType());
         }
 
-        return FieldSpec.fromType(left.getType()).withRestrictions(mergeResult.restrictions);
+        return FieldSpec.fromType(left.getType()).withRestrictions(mergeResult.get());
     }
 
     private RestrictionsMerger getMerger(Types type) {

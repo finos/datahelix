@@ -16,6 +16,8 @@
 
 package com.scottlogic.deg.generator.restrictions;
 
+import java.util.Optional;
+
 public interface RestrictionsMerger<T extends TypedRestrictions> {
-    MergeResult<T> merge(T left, T right);
+    Optional<T> merge(T left, T right);
 }
