@@ -16,18 +16,16 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
 import com.scottlogic.deg.generator.restrictions.MergeResult;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
 import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
 import static com.scottlogic.deg.common.profile.Types.DATETIME;
-import static com.scottlogic.deg.common.profile.Types.NUMERIC;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
@@ -47,8 +45,8 @@ class DateTimeRestrictionsMergeOperationTests {
         merger = mock(LinearRestrictionsMerger.class);
         operation = new DateTimeRestrictionsMergeOperation(merger);
 
-        left = FieldSpec.fromType(DATETIME).withDateTimeRestrictions(new DateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT));
-        right = FieldSpec.fromType(DATETIME).withDateTimeRestrictions(new DateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT));
+        left = FieldSpec.fromType(DATETIME).withDateTimeRestrictions(LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT));
+        right = FieldSpec.fromType(DATETIME).withDateTimeRestrictions(LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT));
     }
 
     @Test

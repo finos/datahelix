@@ -71,6 +71,10 @@ public class LinearRestrictions<T extends Comparable<T>> implements TypedRestric
         return min;
     }
 
+    public Granularity<T> getGranularity(){
+        return granularity;
+    }
+
     public Converter<T> getConverter(){
         return converter;
     }
@@ -91,7 +95,8 @@ public class LinearRestrictions<T extends Comparable<T>> implements TypedRestric
         return Objects.hash(min, max, granularity, converter);
     }
 
-    public Granularity<T> getGranularity(){
-        return granularity;
+    @Override
+    public String toString() {
+        return "min=" + getMin() + ", max=" + getMax() + " " + getGranularity().toString();
     }
 }

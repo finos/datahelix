@@ -16,13 +16,11 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
+import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
-import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
-import com.scottlogic.deg.generator.restrictions.linear.Limit;
-import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
-import com.scottlogic.deg.generator.utils.SetUtils;
+import com.scottlogic.deg.generator.restrictions.linear.*;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -306,7 +304,7 @@ class FieldSpecTests {
 
     @Test
     void permitsRejectsInvalidDateTime() {
-        DateTimeRestrictions dateTime = new DateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT);
+        DateTimeRestrictions dateTime = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT);
         FieldSpec spec = FieldSpec.fromType(DATETIME).withDateTimeRestrictions(dateTime);
 
         OffsetDateTime time = OffsetDateTime.of(100, 1, 1, 1, 1, 1, 1, ZoneOffset.UTC);
@@ -403,7 +401,7 @@ class FieldSpecTests {
         private final boolean isEqual;
 
         MockDateTimeRestrictions(boolean isEqual) {
-            super(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT);
+            super(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT, new DateTimeGranularity(Timescale.HOURS), new DateTimeConverter());
             this.isEqual = isEqual;
         }
 

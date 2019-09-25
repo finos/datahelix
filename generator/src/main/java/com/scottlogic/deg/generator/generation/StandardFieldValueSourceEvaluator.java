@@ -27,8 +27,8 @@ import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.DateTi
 import com.scottlogic.deg.generator.generation.string.generators.RegexStringGenerator;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
-import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
 import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
 
 import java.math.BigDecimal;
@@ -124,7 +124,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         LinearRestrictions<OffsetDateTime> restrictions = fieldSpec.getDateTimeRestrictions();
 
         return new DateTimeFieldValueSource(
-            restrictions != null ? restrictions : new DateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT),
+            restrictions != null ? restrictions : LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT),
             fieldSpec.getBlacklist());
     }
 }

@@ -25,6 +25,7 @@ import com.scottlogic.deg.generator.generation.fieldvaluesources.NullOnlySource;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
 import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -114,7 +115,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     @Test
     public void shouldReturnNullSourceLastWithTypedDateTimeRestrictionsAndNullNotDisallowed() {
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
-        DateTimeRestrictions datetimeRestrictions = new DateTimeRestrictions(
+        DateTimeRestrictions datetimeRestrictions = LinearRestrictionsFactory.createDateTimeRestrictions(
             new Limit<>(OffsetDateTime.MIN, false),
             new Limit<>(OffsetDateTime.MAX, false)
         );

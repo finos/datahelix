@@ -25,44 +25,7 @@ import static com.scottlogic.deg.common.util.Defaults.*;
 
 
 public class DateTimeRestrictions extends LinearRestrictions<OffsetDateTime> {
-
-    private static final DateTimeConverter CONVERTER = new DateTimeConverter();
-
-    public DateTimeRestrictions(Limit<OffsetDateTime> min, Limit<OffsetDateTime> max) {
-        this(min, max, DEFAULT_DATETIME_GRANULARITY);
-    }
-
-    public DateTimeRestrictions(Limit<OffsetDateTime> min, Limit<OffsetDateTime> max, Timescale granularity) {
-        this(min, max, new DateTimeGranularity(granularity));
-    }
-
-    public DateTimeRestrictions(Limit<OffsetDateTime> min, Limit<OffsetDateTime> max, Granularity<OffsetDateTime> granularity){
-        super(capMin(min), capMax(max), granularity, CONVERTER);
-    }
-
-
-    private static Limit<OffsetDateTime> capMax(Limit<OffsetDateTime> max) {
-        if (max.isAfter(ISO_MAX_DATE)) {
-            return new Limit<>(ISO_MAX_DATE, true);
-        } else if (!max.isAfter(ISO_MIN_DATE)) {
-            return new Limit<>(ISO_MIN_DATE, false);
-        } else {
-            return max;
-        }
-    }
-
-    private static Limit<OffsetDateTime> capMin(Limit<OffsetDateTime> min) {
-        if (min.isBefore(ISO_MIN_DATE)) {
-            return new Limit<>(ISO_MIN_DATE, true);
-        } else if (!min.isBefore(ISO_MAX_DATE)) {
-            return new Limit<>(ISO_MAX_DATE, false);
-        } else {
-            return min;
-        }
-    }
-
-    @Override
-    public String toString() {
-        return "min=" + getMin() + ", max=" + getMax() + " " + getGranularity().toString();
+    public DateTimeRestrictions(Limit<OffsetDateTime> capMin, Limit<OffsetDateTime> capMax, Granularity<OffsetDateTime> dateTimeGranularity, Converter<OffsetDateTime> dateTimeConverter) {
+        super(capMin, capMax, dateTimeGranularity, dateTimeConverter);
     }
 }
