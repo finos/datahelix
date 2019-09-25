@@ -122,6 +122,7 @@ public class GeneralTestStep {
 
     @But("^the profile is invalid because \"(.+)\"$")
     public void profileIsInvalidWithError(String expectedError) {
+        state.expectExceptions = true;
         cucumberTestHelper.generateAndGetData();
 
         List<String> errors = this.cucumberTestHelper
