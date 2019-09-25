@@ -19,7 +19,6 @@ package com.scottlogic.deg.generator.fieldspecs;
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.restrictions.linear.*;
-import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
 
 import java.math.BigDecimal;
 

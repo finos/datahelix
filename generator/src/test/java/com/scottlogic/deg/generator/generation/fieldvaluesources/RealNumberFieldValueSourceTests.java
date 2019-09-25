@@ -459,7 +459,7 @@ class RealNumberFieldValueSourceTests {
             "-99999999999999999996");
     }
 
-    private NumericRestrictions numericRestrictions(Integer min, Integer max, int scale){
+    private LinearRestrictions<BigDecimal> numericRestrictions(Integer min, Integer max, int scale){
         return LinearRestrictionsFactory.createNumericRestrictions(
             min == null ? null : new Limit<>(BigDecimal.valueOf(min), true),
             max == null ? null : new Limit<>(BigDecimal.valueOf(max), true),

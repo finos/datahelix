@@ -86,7 +86,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     @Test
     public void shouldReturnNullSourceLastWithTypedNumericRestrictionsAndNullNotDisallowed() {
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
-        NumericRestrictions numericRestrictions = LinearRestrictionsFactory.createNumericRestrictions(
+        LinearRestrictions<BigDecimal> numericRestrictions = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(10), false),
             new Limit<>(new BigDecimal(30), false));
         FieldSpec fieldSpecWithTypedNumericRestrictionsAndNullNotDisallowed = FieldSpec.fromType(NUMERIC)
@@ -182,7 +182,7 @@ public class StandardFieldValueSourceEvaluatorTests {
 
     @Test
     void getFieldValueSources_fieldSpecContainsNumericRestrictionsWithNoScaleAndGranularityHasRestrictionOfTwo_generatesValuesWithTwoDecimalPlaces() {
-        NumericRestrictions restrictions = LinearRestrictionsFactory.createNumericRestrictions(
+        LinearRestrictions<BigDecimal> restrictions = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal("15"), false),
             new Limit<>(new BigDecimal("16"), false),
             2);

@@ -22,14 +22,14 @@ public class LinearRestrictionsFactory {
         return new LinearRestrictions<>(cappedMin, cappedMax, new DateTimeGranularity(granularity), DATE_TIME_CONVERTER);
     }
 
-    public static NumericRestrictions createNumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max) {
+    public static LinearRestrictions<BigDecimal> createNumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max) {
         return createNumericRestrictions(min, max, DEFAULT_NUMERIC_SCALE);
     }
 
-    public static NumericRestrictions createNumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max, int numericScale) {
+    public static LinearRestrictions<BigDecimal> createNumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max, int numericScale) {
         Limit<BigDecimal> cappedMin = capMin(min, NUMERIC_MIN, NUMERIC_MAX);
         Limit<BigDecimal> cappedMax = capMax(max, NUMERIC_MIN, NUMERIC_MAX);
-        return new NumericRestrictions(cappedMin, cappedMax, new NumericGranularity(numericScale), NUMERIC_CONVERTER);
+        return new LinearRestrictions<>(cappedMin, cappedMax, new NumericGranularity(numericScale), NUMERIC_CONVERTER);
     }
 
 

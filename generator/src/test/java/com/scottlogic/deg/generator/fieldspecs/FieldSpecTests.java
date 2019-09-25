@@ -102,12 +102,12 @@ class FieldSpecTests {
 
     @Test
     void equals_fieldSpecNumericRestrictionsNotNullAndOtherObjectNumericRestrictionsNotNullAndNumericRestrictionsAreNotEqual_returnsFalse() {
-        NumericRestrictions firstFieldSpecRestrictions = LinearRestrictionsFactory.createNumericRestrictions(
+        LinearRestrictions<BigDecimal> firstFieldSpecRestrictions = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(1), false),
             new Limit<>(new BigDecimal(20), false));
         FieldSpec fieldSpec = FieldSpec.fromType(NUMERIC).withNumericRestrictions(firstFieldSpecRestrictions);
 
-        NumericRestrictions secondFieldSpecRestrictions = LinearRestrictionsFactory.createNumericRestrictions(
+        LinearRestrictions<BigDecimal> secondFieldSpecRestrictions = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(5), false) ,
             new Limit<>(new BigDecimal(20), false));
         boolean result = fieldSpec.equals(
@@ -133,7 +133,7 @@ class FieldSpecTests {
     @Test
     public void shouldCreateNewInstanceWithNumericRestrictions() {
         FieldSpec original = FieldSpec.fromType(NUMERIC);
-        NumericRestrictions restrictions = mock(NumericRestrictions.class);
+        LinearRestrictions<BigDecimal> restrictions = mock(LinearRestrictions.class);
         FieldSpec augmentedFieldSpec = original.withNumericRestrictions(restrictions);
 
         Assert.assertNotSame(original, augmentedFieldSpec);
@@ -251,7 +251,7 @@ class FieldSpecTests {
 
     @Test
     void permitsRejectsInvalidNumeric() {
-        NumericRestrictions numeric = LinearRestrictionsFactory.createNumericRestrictions(new Limit<>(BigDecimal.TEN, true), NUMERIC_MAX_LIMIT);
+        LinearRestrictions<BigDecimal> numeric = LinearRestrictionsFactory.createNumericRestrictions(new Limit<>(BigDecimal.TEN, true), NUMERIC_MAX_LIMIT);
         FieldSpec spec = FieldSpec.fromType(NUMERIC).withNumericRestrictions(numeric);
 
         assertFalse(spec.permits(BigDecimal.ONE));

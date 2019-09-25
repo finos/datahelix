@@ -130,7 +130,7 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec constructGreaterThanConstraint(Field field, Number limitValue, boolean inclusive, boolean negate) {
-        NumericRestrictions numericRestrictions;
+        LinearRestrictions<BigDecimal> numericRestrictions;
         final BigDecimal limit = NumberUtils.coerceToBigDecimal(limitValue);
         if (negate) {
             numericRestrictions = LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, new Limit<>(
@@ -155,7 +155,7 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec constructLessThanConstraint(Field field, Number limitValue, boolean inclusive, boolean negate) {
-        final NumericRestrictions numericRestrictions;
+        final LinearRestrictions<BigDecimal> numericRestrictions;
 
         final BigDecimal limit = NumberUtils.coerceToBigDecimal(limitValue);
         if (negate) {

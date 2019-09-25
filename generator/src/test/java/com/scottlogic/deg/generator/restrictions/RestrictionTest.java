@@ -17,8 +17,8 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
-import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
 import org.hamcrest.core.Is;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ public class RestrictionTest {
 
     @Test
     public void shouldFilterNumeric() {
-        NumericRestrictions restriction = LinearRestrictionsFactory.createNumericRestrictions(
+        LinearRestrictions<BigDecimal> restriction = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal("5"), true),
             new Limit<>(new BigDecimal("10"), false));
 
