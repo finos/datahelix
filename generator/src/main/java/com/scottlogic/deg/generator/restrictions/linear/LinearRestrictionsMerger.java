@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.generator.restrictions.linear;
 
+import com.scottlogic.deg.common.profile.constraintdetail.Granularity;
 import com.scottlogic.deg.generator.restrictions.MergeResult;
 
 public class LinearRestrictionsMerger<T extends Comparable<T>> {

@@ -16,6 +16,8 @@
 
 package com.scottlogic.deg.generator.restrictions.linear;
 
+import com.scottlogic.deg.common.profile.constraintdetail.Granularity;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;

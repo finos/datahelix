@@ -19,7 +19,6 @@ package com.scottlogic.deg.generator.generation.fieldvaluesources.datetime;
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.LinearIterator;
-import com.scottlogic.deg.generator.restrictions.linear.DateTimeGranularity;
 import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;

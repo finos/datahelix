@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.restrictions.linear;
+package com.scottlogic.deg.common.profile.constraintdetail;
 
 public interface Granularity<T> {
 

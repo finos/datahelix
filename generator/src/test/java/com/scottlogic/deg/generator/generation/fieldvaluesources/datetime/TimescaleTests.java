@@ -26,17 +26,17 @@ import static org.junit.jupiter.api.Assertions.*;
 class TimescaleTests {
     @Test
     public void mostCoarseTest() {
-        Assert.assertEquals(Timescale.DAYS, Timescale.getMostCoarse(Timescale.MILLIS, Timescale.DAYS));
+        Assert.assertEquals(Timescale.DAYS, Timescale.MILLIS.merge(Timescale.DAYS));
     }
 
     @Test
     public void mostCoarseTestYear() {
-        Assert.assertEquals(Timescale.YEARS, Timescale.getMostCoarse(Timescale.MINUTES, Timescale.YEARS));
+        Assert.assertEquals(Timescale.YEARS, Timescale.MINUTES.merge(Timescale.YEARS));
     }
 
     @Test
     public void mostCoarseTestSame() {
-        Assert.assertEquals(Timescale.MONTHS, Timescale.getMostCoarse(Timescale.MONTHS, Timescale.MONTHS));
+        Assert.assertEquals(Timescale.MONTHS, Timescale.MONTHS.merge(Timescale.MONTHS));
     }
 
     @Test
