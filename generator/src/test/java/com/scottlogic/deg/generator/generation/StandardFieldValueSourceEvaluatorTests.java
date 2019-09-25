@@ -101,19 +101,6 @@ public class StandardFieldValueSourceEvaluatorTests {
     }
 
     @Test
-    @Disabled("TODO: Work out if this is a valid test case")
-    public void shouldReturnNullSourceLastWithTypedStringRestrictionsAndNullNotDisallowed() {
-        StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
-        StringRestrictions stringRestrictions = matchesRegex("/[ab]{2}/", false);
-        FieldSpec fieldSpecInSetWithTypedStringRestrictionsAndNullNotDisallowedd = FieldSpec.fromType(NUMERIC)
-            .withRestrictions(stringRestrictions);
-
-        List<FieldValueSource> sources = evaluator.getFieldValueSources(fieldSpecInSetWithTypedStringRestrictionsAndNullNotDisallowedd);
-
-        AssertLastSourceIsNullOnlySource(sources);
-    }
-
-    @Test
     public void shouldReturnNullSourceLastWithTypedDateTimeRestrictionsAndNullNotDisallowed() {
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
         DateTimeRestrictions datetimeRestrictions = new DateTimeRestrictions(
