@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.restrictions.MergeResult;
+import com.scottlogic.deg.generator.restrictions.StringRestrictions;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsMerger;
 import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
@@ -130,8 +131,8 @@ class RestrictionsMergeOperationTest {
     @Test
     void applyMergeOperation_withNoStringRestrictions_shouldNotApplyAnyRestriction(){
         FieldSpec merging = FieldSpec.fromType(STRING);
-        when(StringMerger.merge(leftString.getRestrictions(), rightString.getRestrictions()))
-            .thenReturn(new MergeResult<>(null));
+        when(StringMerger.merge((StringRestrictions)leftString.getRestrictions(), (StringRestrictions)rightString.getRestrictions()))
+            .thenReturn(new MergeResult<StringRestrictions>(null));
 
         FieldSpec result = operation.applyMergeOperation(leftString, rightString);
 
@@ -142,8 +143,8 @@ class RestrictionsMergeOperationTest {
 
     @Test
     void applyMergeOperation_withStringRestrictions_shouldApplyRestriction(){
-        when(StringMerger.merge(leftString.getRestrictions(), rightString.getRestrictions()))
-            .thenReturn(new MergeResult<>(leftString.getRestrictions()));
+        when(StringMerger.merge((StringRestrictions)leftString.getRestrictions(), (StringRestrictions)rightString.getRestrictions()))
+            .thenReturn(new MergeResult<>((StringRestrictions)leftString.getRestrictions()));
 
         FieldSpec result = operation.applyMergeOperation(leftString, rightString);
 
@@ -155,7 +156,7 @@ class RestrictionsMergeOperationTest {
     @Test
     void applyMergeOperation_withContradictoryStringRestrictions_shouldPreventAnyValues(){
         FieldSpec merging = FieldSpec.nullOnlyFromType(STRING);
-        when(StringMerger.merge(leftString.getRestrictions(), rightString.getRestrictions()))
+        when(StringMerger.merge((StringRestrictions)leftString.getRestrictions(), (StringRestrictions)rightString.getRestrictions()))
             .thenReturn(MergeResult.unsuccessful());
 
         FieldSpec result = operation.applyMergeOperation(leftString, rightString);

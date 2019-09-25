@@ -81,7 +81,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withMinAndNonContradictingMaxLengthConstraint_shouldCreateStringsBetweenLengths() {
-        MergeResult<TypedRestrictions> result =
+        MergeResult<StringRestrictions> result =
             minLength(6)
                 .intersect(maxLength(9));
 
@@ -92,7 +92,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withMinAndContradictingMaxLengthConstraint_shouldCreateNoStrings() {
-        MergeResult<TypedRestrictions> result =
+        MergeResult<StringRestrictions> result =
             minLength(11)
                 .intersect(maxLength(4));
 
@@ -101,7 +101,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withMinAndNonContradictingOfLengthConstraint_shouldCreateStringsOfLength() {
-        MergeResult<TypedRestrictions> result =
+        MergeResult<StringRestrictions> result =
             minLength(5)
                 .intersect(ofLength(10, false));
 
@@ -112,7 +112,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withMinAndContradictingOfLengthConstraint_shouldCreateNoStrings() {
-        MergeResult<TypedRestrictions> result =
+        MergeResult<StringRestrictions> result =
             minLength(10)
                 .intersect(ofLength(5, false));
 
@@ -121,7 +121,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withMaxAndNonContradictingOfLengthConstraint_shouldCreateStringsOfLength() {
-        MergeResult<TypedRestrictions> result =
+        MergeResult<StringRestrictions> result =
             maxLength(10)
                 .intersect(ofLength(5, false));
 
@@ -132,7 +132,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withMaxAndContradictingOfLengthConstraint_shouldCreateNoStrings() {
-        MergeResult<TypedRestrictions> result =
+        MergeResult<StringRestrictions> result =
             maxLength(5)
                 .intersect(ofLength(10, false));
 
@@ -144,7 +144,7 @@ class TextualRestrictionsTests {
         TypedRestrictions intermediateResult =
             minLength(5)
                 .intersect(maxLength(10)).restrictions;
-        MergeResult<TypedRestrictions> result =
+        MergeResult<StringRestrictions> result =
             ((StringRestrictions)intermediateResult).intersect(ofLength(7, false));
 
 
@@ -155,7 +155,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_with2MinLengthConstraints_shouldCreateStringsOfLongerThatGreatestMin() {
-        MergeResult<TypedRestrictions> result =
+        MergeResult<StringRestrictions> result =
             minLength(5)
                 .intersect(minLength(11));
 
@@ -166,7 +166,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_with2MaxLengthConstraints_shouldCreateStringsOfShortestThatLowestMax() {
-        MergeResult<TypedRestrictions> result =
+        MergeResult<StringRestrictions> result =
             maxLength(4)
                 .intersect(maxLength(10));
 
@@ -177,7 +177,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_with2OfLengthConstraints_shouldCreateNoStrings() {
-        MergeResult<TypedRestrictions> result =
+        MergeResult<StringRestrictions> result =
             ofLength(5, false)
                 .intersect(ofLength(10, false));
 
@@ -195,7 +195,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withNonContradictingMinLengthAndMatchingRegexConstraint_shouldCreateStringsMatchingRegexAndLongerThanMinLength() {
-        MergeResult<TypedRestrictions> result =
+        MergeResult<StringRestrictions> result =
             matchingRegex("[a-z]{0,9}", false)
             .intersect(minLength(6));
 
@@ -206,7 +206,7 @@ class TextualRestrictionsTests {
 
     @Test
     void intersect_withContradictingMinLengthAndMatchingRegexConstraint_shouldReturnUnsuccessful() {
-        MergeResult<TypedRestrictions> intersect = matchingRegex("[a-z]{0,9}", false)
+        MergeResult<StringRestrictions> intersect = matchingRegex("[a-z]{0,9}", false)
             .intersect(minLength(100));
 
         Assert.assertThat(intersect, equalTo(MergeResult.unsuccessful()));
@@ -214,7 +214,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withNonContradictingMaxLengthAndMatchingRegexConstraint_shouldCreateStringsMatchingRegexAndShorterThanMinLength() {
-        MergeResult<TypedRestrictions> result = matchingRegex("[a-z]{0,9}", false)
+        MergeResult<StringRestrictions> result = matchingRegex("[a-z]{0,9}", false)
             .intersect(maxLength(4));
 
         StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
@@ -224,7 +224,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withContradictingMaxLengthAndMatchingRegexConstraint_shouldReturnUnsuccessful() {
-        MergeResult<TypedRestrictions> intersect = matchingRegex("[a-z]{5,9}", false)
+        MergeResult<StringRestrictions> intersect = matchingRegex("[a-z]{5,9}", false)
             .intersect(maxLength(2));
 
         Assert.assertThat(intersect, equalTo(MergeResult.unsuccessful()));
@@ -232,7 +232,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withContradictingLength10AndMatchingRegexConstraintThatIsShorter_shouldCreateNoStrings() {
-        MergeResult<TypedRestrictions> intersect = matchingRegex("[a-z]{5,9}", false)
+        MergeResult<StringRestrictions> intersect = matchingRegex("[a-z]{5,9}", false)
             .intersect(ofLength(10, false));
 
         Assert.assertThat(intersect, equalTo(MergeResult.unsuccessful()));
@@ -240,7 +240,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withContradictingLength15AndMatchingRegexConstraintThatIsShorter_shouldCreateNoStrings() {
-        MergeResult<TypedRestrictions> intersect = matchingRegex("[a-z]{5,9}", false)
+        MergeResult<StringRestrictions> intersect = matchingRegex("[a-z]{5,9}", false)
             .intersect(ofLength(15, false));
 
         Assert.assertThat(intersect, equalTo(MergeResult.unsuccessful()));
@@ -248,7 +248,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withNonContradictingOfLengthAndMatchingRegexConstraint_shouldCreateStringsMatchingRegexAndOfPrescribedLength() {
-        MergeResult<TypedRestrictions> result = matchingRegex("[a-z]{0,9}", false)
+        MergeResult<StringRestrictions> result = matchingRegex("[a-z]{0,9}", false)
             .intersect(ofLength(5, false));
 
         StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
@@ -258,7 +258,7 @@ class TextualRestrictionsTests {
 
     @Test
     void intersect_withContradictingOfLengthAndMatchingRegexConstraint_shouldReturnUnsuccessful() {
-        MergeResult<TypedRestrictions> intersect = matchingRegex("[a-z]{0,9}", false)
+        MergeResult<StringRestrictions> intersect = matchingRegex("[a-z]{0,9}", false)
             .intersect(ofLength(100, false));
 
         Assert.assertThat(intersect, equalTo(MergeResult.unsuccessful()));
@@ -269,7 +269,7 @@ class TextualRestrictionsTests {
         TypedRestrictions intermediateResult =
             matchingRegex("[a-z]{0,9}", false)
                 .intersect(minLength(3)).restrictions;
-        MergeResult<TypedRestrictions> result =
+        MergeResult<StringRestrictions> result =
             ((StringRestrictions)intermediateResult).intersect(maxLength(7));
 
         StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
@@ -288,7 +288,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withNonContradictingMinLengthAndContainingRegexConstraint_shouldCreateStringsContainingRegexAndLongerThanMinLength() {
-        MergeResult<TypedRestrictions> result = containsRegex("[a-z]{0,9}", false)
+        MergeResult<StringRestrictions> result = containsRegex("[a-z]{0,9}", false)
             .intersect(minLength(6));
 
         StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
@@ -298,7 +298,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withContradictingMinLengthAndContainingRegexConstraint_shouldCreateNoStrings() {
-        MergeResult<TypedRestrictions> result = containsRegex("[a-z]{0,9}", false)
+        MergeResult<StringRestrictions> result = containsRegex("[a-z]{0,9}", false)
             .intersect(minLength(100));
 
         StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
@@ -308,7 +308,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withNonContradictingMaxLengthAndContainingRegexConstraint_shouldCreateStringsContainingRegexAndShorterThanMinLength() {
-        MergeResult<TypedRestrictions> result = containsRegex("[a-z]{0,9}", false)
+        MergeResult<StringRestrictions> result = containsRegex("[a-z]{0,9}", false)
             .intersect(maxLength(4));
 
         StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
@@ -318,7 +318,7 @@ class TextualRestrictionsTests {
 
     @Test
     void intersect_withContradictingMaxLengthAndContainingRegexConstraint_shouldReturnUnsuccessful() {
-        MergeResult<TypedRestrictions> intersect = containsRegex("[a-z]{5,9}", false)
+        MergeResult<StringRestrictions> intersect = containsRegex("[a-z]{5,9}", false)
             .intersect(maxLength(2));
 
 
@@ -327,7 +327,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withNonContradictingOfLengthAndContainingRegexConstraint_shouldCreateStringsContainingRegexAndOfPrescribedLength() {
-        MergeResult<TypedRestrictions> result = containsRegex("[a-z]{0,9}", false)
+        MergeResult<StringRestrictions> result = containsRegex("[a-z]{0,9}", false)
             .intersect(ofLength(5, false));
 
         StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
@@ -337,7 +337,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withContradictingOfLengthAndContainingRegexConstraint_shouldCreateNoStrings() {
-        MergeResult<TypedRestrictions> intersect = containsRegex("[a-z]{102}", false)
+        MergeResult<StringRestrictions> intersect = containsRegex("[a-z]{102}", false)
             .intersect(ofLength(100, false));
         Assert.assertThat(intersect, equalTo(MergeResult.unsuccessful()));
     }
@@ -362,7 +362,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withContradictingOfLength10AndContainingRegexConstraint_shouldCreateNoStrings() {
-        MergeResult<TypedRestrictions> intersect = containsRegex("[a-z]{11,12}", false)
+        MergeResult<StringRestrictions> intersect = containsRegex("[a-z]{11,12}", false)
             .intersect(ofLength(10, false));
 
         Assert.assertThat(intersect, equalTo(MergeResult.unsuccessful()));
@@ -370,7 +370,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withContradictingOfLength100AndContainingRegexConstraint_shouldCreateNoStrings() {
-        MergeResult<TypedRestrictions> intersect = containsRegex("[a-z]{102,103}", false)
+        MergeResult<StringRestrictions> intersect = containsRegex("[a-z]{102,103}", false)
             .intersect(ofLength(100, false));
 
         Assert.assertThat(intersect, equalTo(MergeResult.unsuccessful()));
@@ -381,7 +381,7 @@ class TextualRestrictionsTests {
         TypedRestrictions intermediateResult =
             containsRegex("[a-z]{0,9}", false)
                 .intersect(minLength(3)).restrictions;
-        MergeResult<TypedRestrictions> result =
+        MergeResult<StringRestrictions> result =
             ((StringRestrictions)intermediateResult).intersect(maxLength(7));
 
         StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
@@ -401,7 +401,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withMinLengthAndMatchingStandardConstraint_shouldCreateSomeStrings() {
-        MergeResult<TypedRestrictions> result = aValid(StandardConstraintTypes.ISIN)
+        MergeResult<StringRestrictions> result = aValid(StandardConstraintTypes.ISIN)
             .intersect(minLength(1));
 
         StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
@@ -411,7 +411,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withMaxLengthShorterThanCodeLengthAndMatchingStandardConstraint_shouldCreateNoStrings() {
-        MergeResult<TypedRestrictions> intersect = aValid(StandardConstraintTypes.ISIN)
+        MergeResult<StringRestrictions> intersect = aValid(StandardConstraintTypes.ISIN)
             .intersect(maxLength(10));
 
         Assert.assertFalse(intersect.successful);
@@ -419,7 +419,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withMaxLengthAtLengthOfCodeLengthAndMatchingStandardConstraint_shouldCreateSomeStrings() {
-        MergeResult<TypedRestrictions> result = aValid(StandardConstraintTypes.ISIN)
+        MergeResult<StringRestrictions> result = aValid(StandardConstraintTypes.ISIN)
             .intersect(maxLength(12));
 
         StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
@@ -429,7 +429,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withMaxLengthLongerThanCodeLengthAndMatchingStandardConstraint_shouldCreateSomeStrings() {
-        MergeResult<TypedRestrictions> result = aValid(StandardConstraintTypes.ISIN)
+        MergeResult<StringRestrictions> result = aValid(StandardConstraintTypes.ISIN)
             .intersect(maxLength(100));
 
         StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
@@ -439,7 +439,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withOfLengthAndMatchingStandardConstraint_shouldCreateSomeStrings() {
-        MergeResult<TypedRestrictions> result = aValid(StandardConstraintTypes.ISIN)
+        MergeResult<StringRestrictions> result = aValid(StandardConstraintTypes.ISIN)
             .intersect(ofLength(12, false));
 
         StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
@@ -476,7 +476,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withNegatedMinAndNonContradictingMaxLengthConstraint_shouldCreateStringsBetweenLengths() {
-        MergeResult<TypedRestrictions> result =
+        MergeResult<StringRestrictions> result =
             maxLength(5)
                 .intersect(maxLength(10));
 
@@ -487,7 +487,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withNegatedMinAndContradictingMaxLengthConstraint_shouldCreateShorterThanLowestLength() {
-        MergeResult<TypedRestrictions> result =
+        MergeResult<StringRestrictions> result =
             maxLength(10)
                 .intersect(maxLength(4));
 
@@ -498,7 +498,7 @@ class TextualRestrictionsTests {
 
     @Test
     void intersect_withNegatedMinAndNonContradictingOfLengthConstraint_shouldBeUnsuccessful() {
-        MergeResult<TypedRestrictions> result =
+        MergeResult<StringRestrictions> result =
             maxLength(5)
                 .intersect(ofLength(10, false));
 
@@ -507,7 +507,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withNegatedMinAndContradictingOfLengthConstraint_shouldCreateStringsOfLength() {
-        MergeResult<TypedRestrictions> result =
+        MergeResult<StringRestrictions> result =
             maxLength(10)
                 .intersect(ofLength(5, false));
 
@@ -518,7 +518,7 @@ class TextualRestrictionsTests {
 
     @Test
     void intersect_withNegatedMaxAndNonContradictingOfLengthConstraint_shouldCreateNoStrings() {
-        MergeResult<TypedRestrictions> result =
+        MergeResult<StringRestrictions> result =
             minLength(10)
                 .intersect(ofLength(5, false));
 
@@ -527,7 +527,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withNegatedMaxAndContradictingOfLengthConstraint_shouldCreateStringsShorterThanMaximumLength() {
-        MergeResult<TypedRestrictions> result =
+        MergeResult<StringRestrictions> result =
             maxLength(4)
                 .intersect(ofLength(10, true));
 
@@ -538,7 +538,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withNegated2MinLengthConstraints_shouldCreateStringsUptoShortestLength() {
-        MergeResult<TypedRestrictions> result =
+        MergeResult<StringRestrictions> result =
             maxLength(5)
                 .intersect(maxLength(10));
 
@@ -549,7 +549,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withNegated2MaxLengthConstraints_shouldCreateStringsFromShortestLengthToDefaultMax() {
-        MergeResult<TypedRestrictions> result =
+        MergeResult<StringRestrictions> result =
             minLength(5)
                 .intersect(minLength(10));
 
@@ -560,7 +560,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_with2OfDifferentLengthConstraintsWhereOneIsNegated_shouldCreateStringsOfNonNegatedLength() {
-        MergeResult<TypedRestrictions> result =
+        MergeResult<StringRestrictions> result =
             ofLength(5, false)
                 .intersect(ofLength(10, true));
 
@@ -571,7 +571,7 @@ class TextualRestrictionsTests {
 
     @Test
     void intersect_with2OfLengthConstraintsWhereOneIsNegated_should() {
-        MergeResult<TypedRestrictions> result =
+        MergeResult<StringRestrictions> result =
             ofLength(5, false)
                 .intersect(ofLength(5, true));
 
@@ -580,7 +580,7 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withNotOfLengthSameAsMaxLength_shouldPermitStringsUpToMaxLengthLess1() {
-        MergeResult<TypedRestrictions> result =
+        MergeResult<StringRestrictions> result =
             maxLength(5)
                 .intersect(ofLength(4, true));
 
@@ -593,7 +593,7 @@ class TextualRestrictionsTests {
     void intersect_withStringRestrictionLengthNotSet_shouldReturnUnsuccessful() {
         StringRestrictions left = setLength(0, 0);
         StringRestrictions right = setLength(1, 1000);
-        MergeResult<TypedRestrictions> intersect = left.intersect(right);
+        MergeResult<StringRestrictions> intersect = left.intersect(right);
 
         Assert.assertThat(intersect, equalTo(MergeResult.unsuccessful()));
     }

@@ -319,7 +319,7 @@ class FieldSpecTests {
     void permitsRejectsInvalidString() {
         StringRestrictions string = new StringRestrictions() {
             @Override
-            public MergeResult<TypedRestrictions> intersect(TypedRestrictions other) {
+            public MergeResult<StringRestrictions> intersect(StringRestrictions other) {
                 return null;
             }
 
@@ -375,7 +375,7 @@ class FieldSpecTests {
         }
 
         @Override
-        public MergeResult<TypedRestrictions> intersect(TypedRestrictions other) {
+        public MergeResult<StringRestrictions> intersect(StringRestrictions other) {
             throw new UnsupportedOperationException("Not implemented");
         }
 

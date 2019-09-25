@@ -64,13 +64,13 @@ public class TextualRestrictions implements StringRestrictions {
      * Produce a new string restrictions instance that represents the intersection of this and the other given restrictions
      * See MatchesStandardStringRestrictions.intersect() for more details on how the `aValid` operator can be merged
      */
-    public MergeResult<TypedRestrictions> intersect(TypedRestrictions other){
+    public MergeResult<StringRestrictions> intersect(StringRestrictions other){
         if (other == null){
             throw new IllegalArgumentException("Other StringRestrictions must not be null");
         }
 
         if (other instanceof MatchesStandardStringRestrictions){
-            return ((MatchesStandardStringRestrictions) other).intersect(this);
+            return other.intersect(this);
         }
 
         if (!(other instanceof TextualRestrictions)){
