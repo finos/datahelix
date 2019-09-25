@@ -31,44 +31,8 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
-import static org.hamcrest.core.IsSame.sameInstance;
 
 class NumericRestrictionsMergerTests {
-    @Test
-    public void merge_withNoRestrictions_shouldReturnSuccessWithNoRestrictions(){
-        LinearRestrictionsMerger merger = new LinearRestrictionsMerger();
-
-        MergeResult<LinearRestrictions<BigDecimal>> result = merger.merge(null, null);
-
-        Assert.assertThat(result, not(nullValue()));
-        Assert.assertThat(result.successful, is(true));
-        Assert.assertThat(result.restrictions, is(nullValue()));
-    }
-
-    @Test
-    public void merge_withOnlyLeftNumericRestrictions_shouldReturnLeftRestrictions(){
-        LinearRestrictionsMerger merger = new LinearRestrictionsMerger();
-        NumericRestrictions left = new NumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT);
-
-        MergeResult<LinearRestrictions<BigDecimal>> result = merger.merge(left, null);
-
-        Assert.assertThat(result, not(nullValue()));
-        Assert.assertThat(result.successful, is(true));
-        Assert.assertThat(result.restrictions, is(sameInstance(left)));
-    }
-
-    @Test
-    public void merge_withOnlyRightNumericRestrictions_shouldReturnLeftRestrictions(){
-        LinearRestrictionsMerger merger = new LinearRestrictionsMerger();
-        NumericRestrictions right = new NumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT);
-
-        MergeResult<LinearRestrictions<BigDecimal>> result = merger.merge(null, right);
-
-        Assert.assertThat(result, not(nullValue()));
-        Assert.assertThat(result.successful, is(true));
-        Assert.assertThat(result.restrictions, is(sameInstance(right)));
-    }
-
     @Test
     public void merge_withNonContradictoryNumericRestrictions_shouldReturnMergedRestrictions(){
         LinearRestrictionsMerger merger = new LinearRestrictionsMerger();

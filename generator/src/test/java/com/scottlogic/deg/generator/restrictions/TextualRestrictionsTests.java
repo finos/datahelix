@@ -85,7 +85,7 @@ class TextualRestrictionsTests {
             minLength(6)
                 .intersect(maxLength(9));
 
-        StringGenerator generator = result.restrictions.createGenerator();
+        StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
 
         Assert.assertThat(generator.toString(), equalTo("/^.{6,9}$/"));
     }
@@ -105,7 +105,7 @@ class TextualRestrictionsTests {
             minLength(5)
                 .intersect(ofLength(10, false));
 
-        StringGenerator generator = result.restrictions.createGenerator();
+        StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
 
         Assert.assertThat(generator.toString(), equalTo("/^.{10}$/"));
     }
@@ -125,7 +125,7 @@ class TextualRestrictionsTests {
             maxLength(10)
                 .intersect(ofLength(5, false));
 
-        StringGenerator generator = result.restrictions.createGenerator();
+        StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
 
         Assert.assertThat(generator.toString(), equalTo("/^.{5}$/"));
     }
@@ -141,12 +141,14 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withMinMaxAndNonContradictingOfLengthConstraint_shouldCreateStringsOfLength() {
-        MergeResult<StringRestrictions> result =
+        TypedRestrictions intermediateResult =
             minLength(5)
-                .intersect(maxLength(10)).restrictions
-                .intersect(ofLength(7, false));
+                .intersect(maxLength(10)).restrictions;
+        MergeResult<StringRestrictions> result =
+            ((StringRestrictions)intermediateResult).intersect(ofLength(7, false));
 
-        StringGenerator generator = result.restrictions.createGenerator();
+
+        StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
 
         Assert.assertThat(generator.toString(), equalTo("/^.{7}$/"));
     }
@@ -157,7 +159,7 @@ class TextualRestrictionsTests {
             minLength(5)
                 .intersect(minLength(11));
 
-        StringGenerator generator = result.restrictions.createGenerator();
+        StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
 
         Assert.assertThat(generator.toString(), equalTo("/^.{11,}$/"));
     }
@@ -168,7 +170,7 @@ class TextualRestrictionsTests {
             maxLength(4)
                 .intersect(maxLength(10));
 
-        StringGenerator generator = result.restrictions.createGenerator();
+        StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
 
         Assert.assertThat(generator.toString(), equalTo("/^.{0,4}$/"));
     }
@@ -197,7 +199,7 @@ class TextualRestrictionsTests {
             matchingRegex("[a-z]{0,9}", false)
             .intersect(minLength(6));
 
-        StringGenerator generator = result.restrictions.createGenerator();
+        StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
 
         Assert.assertThat(generator.toString(), equalTo("(/^.{6,}$/ ∩ /[a-z]{0,9}/)"));
     }
@@ -215,7 +217,7 @@ class TextualRestrictionsTests {
         MergeResult<StringRestrictions> result = matchingRegex("[a-z]{0,9}", false)
             .intersect(maxLength(4));
 
-        StringGenerator generator = result.restrictions.createGenerator();
+        StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
 
         Assert.assertThat(generator.toString(), equalTo("(/^.{0,4}$/ ∩ /[a-z]{0,9}/)"));
     }
@@ -249,7 +251,7 @@ class TextualRestrictionsTests {
         MergeResult<StringRestrictions> result = matchingRegex("[a-z]{0,9}", false)
             .intersect(ofLength(5, false));
 
-        StringGenerator generator = result.restrictions.createGenerator();
+        StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
 
         Assert.assertThat(generator.toString(), equalTo("(/^.{5}$/ ∩ /[a-z]{0,9}/)"));
     }
@@ -264,11 +266,13 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withMinAndMaxLengthAndMatchingRegexConstraint_shouldCreateStringsMatchingRegexAndBetweenLengths() {
-        MergeResult<StringRestrictions> result = matchingRegex("[a-z]{0,9}", false)
-            .intersect(minLength(3)).restrictions
-            .intersect(maxLength(7));
+        TypedRestrictions intermediateResult =
+            matchingRegex("[a-z]{0,9}", false)
+                .intersect(minLength(3)).restrictions;
+        MergeResult<StringRestrictions> result =
+            ((StringRestrictions)intermediateResult).intersect(maxLength(7));
 
-        StringGenerator generator = result.restrictions.createGenerator();
+        StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
 
         Assert.assertThat(generator.toString(), equalTo("(/^.{3,7}$/ ∩ /[a-z]{0,9}/)"));
     }
@@ -287,7 +291,7 @@ class TextualRestrictionsTests {
         MergeResult<StringRestrictions> result = containsRegex("[a-z]{0,9}", false)
             .intersect(minLength(6));
 
-        StringGenerator generator = result.restrictions.createGenerator();
+        StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
 
         Assert.assertThat(generator.toString(), equalTo("(/^.{6,}$/ ∩ */[a-z]{0,9}/*)"));
     }
@@ -297,7 +301,7 @@ class TextualRestrictionsTests {
         MergeResult<StringRestrictions> result = containsRegex("[a-z]{0,9}", false)
             .intersect(minLength(100));
 
-        StringGenerator generator = result.restrictions.createGenerator();
+        StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
 
         Assert.assertThat(generator, instanceOf(RegexStringGenerator.class));//???
     }
@@ -307,7 +311,7 @@ class TextualRestrictionsTests {
         MergeResult<StringRestrictions> result = containsRegex("[a-z]{0,9}", false)
             .intersect(maxLength(4));
 
-        StringGenerator generator = result.restrictions.createGenerator();
+        StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
 
         Assert.assertThat(generator.toString(), equalTo("(/^.{0,4}$/ ∩ */[a-z]{0,9}/*)"));
     }
@@ -326,7 +330,7 @@ class TextualRestrictionsTests {
         MergeResult<StringRestrictions> result = containsRegex("[a-z]{0,9}", false)
             .intersect(ofLength(5, false));
 
-        StringGenerator generator = result.restrictions.createGenerator();
+        StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
 
         Assert.assertThat(generator.toString(), equalTo("(/^.{5}$/ ∩ */[a-z]{0,9}/*)"));
     }
@@ -374,11 +378,13 @@ class TextualRestrictionsTests {
 
     @Test
     void createGenerator_withMinAndMaxLengthAndContainingRegexConstraint_shouldCreateStringsContainingRegexAndBetweenLengths() {
-        MergeResult<StringRestrictions> result = containsRegex("[a-z]{0,9}", false)
-            .intersect(minLength(3)).restrictions
-            .intersect(maxLength(7));
+        TypedRestrictions intermediateResult =
+            containsRegex("[a-z]{0,9}", false)
+                .intersect(minLength(3)).restrictions;
+        MergeResult<StringRestrictions> result =
+            ((StringRestrictions)intermediateResult).intersect(maxLength(7));
 
-        StringGenerator generator = result.restrictions.createGenerator();
+        StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
 
         Assert.assertThat(generator.toString(), equalTo("(/^.{3,7}$/ ∩ */[a-z]{0,9}/*)"));
         assertGeneratorCanGenerateAtLeastOneStringWithinLengthBounds(generator, 3, 7);
@@ -398,7 +404,7 @@ class TextualRestrictionsTests {
         MergeResult<StringRestrictions> result = aValid(StandardConstraintTypes.ISIN)
             .intersect(minLength(1));
 
-        StringGenerator generator = result.restrictions.createGenerator();
+        StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
 
         assertTrue(generator.generateAllValues().limit(1).count() > 0);
     }
@@ -416,7 +422,7 @@ class TextualRestrictionsTests {
         MergeResult<StringRestrictions> result = aValid(StandardConstraintTypes.ISIN)
             .intersect(maxLength(12));
 
-        StringGenerator generator = result.restrictions.createGenerator();
+        StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
 
         assertTrue(generator.generateAllValues().limit(1).count() > 0);
     }
@@ -426,7 +432,7 @@ class TextualRestrictionsTests {
         MergeResult<StringRestrictions> result = aValid(StandardConstraintTypes.ISIN)
             .intersect(maxLength(100));
 
-        StringGenerator generator = result.restrictions.createGenerator();
+        StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
 
         assertTrue(generator.generateAllValues().limit(1).count() > 0);
     }
@@ -436,7 +442,7 @@ class TextualRestrictionsTests {
         MergeResult<StringRestrictions> result = aValid(StandardConstraintTypes.ISIN)
             .intersect(ofLength(12, false));
 
-        StringGenerator generator = result.restrictions.createGenerator();
+        StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
 
         assertTrue(generator.generateAllValues().limit(1).count() > 0);
     }
@@ -474,7 +480,7 @@ class TextualRestrictionsTests {
             maxLength(5)
                 .intersect(maxLength(10));
 
-        StringGenerator generator = result.restrictions.createGenerator();
+        StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
 
         Assert.assertThat(generator.toString(), equalTo("/^.{0,5}$/"));
     }
@@ -485,7 +491,7 @@ class TextualRestrictionsTests {
             maxLength(10)
                 .intersect(maxLength(4));
 
-        StringGenerator generator = result.restrictions.createGenerator();
+        StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
 
         Assert.assertThat(generator.toString(), equalTo("/^.{0,4}$/"));
     }
@@ -505,7 +511,7 @@ class TextualRestrictionsTests {
             maxLength(10)
                 .intersect(ofLength(5, false));
 
-        StringGenerator generator = result.restrictions.createGenerator();
+        StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
 
         Assert.assertThat(generator.toString(), equalTo("/^.{5}$/"));
     }
@@ -525,7 +531,7 @@ class TextualRestrictionsTests {
             maxLength(4)
                 .intersect(ofLength(10, true));
 
-        StringGenerator generator = result.restrictions.createGenerator();
+        StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
 
         Assert.assertThat(generator.toString(), equalTo("/^.{0,4}$/"));
     }
@@ -536,7 +542,7 @@ class TextualRestrictionsTests {
             maxLength(5)
                 .intersect(maxLength(10));
 
-        StringGenerator generator = result.restrictions.createGenerator();
+        StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
 
         Assert.assertThat(generator.toString(), equalTo("/^.{0,5}$/"));
     }
@@ -547,7 +553,7 @@ class TextualRestrictionsTests {
             minLength(5)
                 .intersect(minLength(10));
 
-        StringGenerator generator = result.restrictions.createGenerator();
+        StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
 
         Assert.assertThat(generator.toString(), equalTo("/^.{10,}$/"));
     }
@@ -558,7 +564,7 @@ class TextualRestrictionsTests {
             ofLength(5, false)
                 .intersect(ofLength(10, true));
 
-        StringGenerator generator = result.restrictions.createGenerator();
+        StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
 
         Assert.assertThat(generator.toString(), equalTo("/^.{5}$/"));
     }
@@ -578,7 +584,7 @@ class TextualRestrictionsTests {
             maxLength(5)
                 .intersect(ofLength(4, true));
 
-        StringGenerator generator = result.restrictions.createGenerator();
+        StringGenerator generator = ((StringRestrictions)result.restrictions).createGenerator();
 
         Assert.assertThat(generator.toString(), equalTo("/^.{0,3}$/"));
     }

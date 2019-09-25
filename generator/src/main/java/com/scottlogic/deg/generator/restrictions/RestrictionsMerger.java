@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.fieldspecs;
+package com.scottlogic.deg.generator.restrictions;
 
-public interface RestrictionMergeOperation {
-    FieldSpec applyMergeOperation(FieldSpec left, FieldSpec right);
+public interface RestrictionsMerger<T extends TypedRestrictions> {
+    MergeResult<T> merge(T left, T right);
 }
-

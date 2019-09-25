@@ -35,45 +35,12 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
-import static org.hamcrest.core.IsSame.sameInstance;
 
 class DateTimeRestrictionsMergerTests {
 
     private LinearRestrictionsMerger merger = new LinearRestrictionsMerger();
 
     private static final OffsetDateTime REFERENCE_TIME = OffsetDateTime.of(2000, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
-
-
-    @Test
-    void merge_dateTimeRestrictionsAreBothNull_returnsNull() {
-        MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(null, null);
-
-        Assert.assertThat(result, not(nullValue()));
-        Assert.assertThat(result.successful, is(true));
-        Assert.assertThat(result.restrictions, is(nullValue()));
-    }
-
-    @Test
-    void merge_leftIsNullAndRightHasAValue_returnsRight() {
-        DateTimeRestrictions right = new DateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT);
-
-        MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(null, right);
-
-        Assert.assertThat(result, not(nullValue()));
-        Assert.assertThat(result.successful, is(true));
-        Assert.assertThat(result.restrictions, sameInstance(right));
-    }
-
-    @Test
-    void merge_rightIsNullAndLeftHasAValue_returnsLeft() {
-        DateTimeRestrictions left = new DateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT);
-
-        MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, null);
-
-        Assert.assertThat(result, not(nullValue()));
-        Assert.assertThat(result.successful, is(true));
-        Assert.assertThat(result.restrictions, sameInstance(left));
-    }
 
     @Test
     void merge_leftHasMinAndRightHasMax_returnsDateTimeRestrictionsWithMergedMinAndMax() {

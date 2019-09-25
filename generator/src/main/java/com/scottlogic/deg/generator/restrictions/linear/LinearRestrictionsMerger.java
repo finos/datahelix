@@ -17,23 +17,23 @@
 package com.scottlogic.deg.generator.restrictions.linear;
 
 import com.scottlogic.deg.generator.restrictions.MergeResult;
+import com.scottlogic.deg.generator.restrictions.RestrictionsMerger;
+import com.scottlogic.deg.generator.restrictions.StringRestrictions;
+import com.scottlogic.deg.generator.restrictions.TypedRestrictions;
 
-public class LinearRestrictionsMerger<T extends Comparable<T>> {
+public class LinearRestrictionsMerger<T extends Comparable<T>> implements RestrictionsMerger {
 
-    public MergeResult<LinearRestrictions<T>> merge(LinearRestrictions<T> left, LinearRestrictions<T> right){
-        if (left == null && right == null)
-            return new MergeResult<>(null);
-        if (left == null)
-            return new MergeResult<>(right);
-        if (right == null)
-            return new MergeResult<>(left);
+    @Override
+    public MergeResult<TypedRestrictions> merge(TypedRestrictions left, TypedRestrictions right){
+        LinearRestrictions<T> leftCast = (LinearRestrictions<T>) left;
+        LinearRestrictions<T> rightCast = (LinearRestrictions<T>) right;
 
-        Granularity<T> mergedGranularity = left.getGranularity().merge(right.getGranularity());
+        Granularity<T> mergedGranularity = leftCast.getGranularity().merge(rightCast.getGranularity());
 
-        Limit<T> mergedMin = getHighest(left.getMin(), right.getMin(), mergedGranularity);
-        Limit<T> mergedMax = getLowest(left.getMax(), right.getMax(), mergedGranularity);
+        Limit<T> mergedMin = getHighest(leftCast.getMin(), rightCast.getMin(), mergedGranularity);
+        Limit<T> mergedMax = getLowest(leftCast.getMax(), rightCast.getMax(), mergedGranularity);
 
-        LinearRestrictions<T> mergedRestriction = new LinearRestrictions<>(mergedMin, mergedMax, mergedGranularity, left.getConverter());
+        LinearRestrictions<T> mergedRestriction = new LinearRestrictions<>(mergedMin, mergedMax, mergedGranularity, leftCast.getConverter());
 
         if (isContradictory(mergedRestriction)) {
             return MergeResult.unsuccessful();
