@@ -23,8 +23,8 @@ import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.decisiontree.testutils.*;
 import com.scottlogic.deg.generator.decisiontree.testutils.EqualityComparer;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -271,7 +271,7 @@ class TreePartitionerTests {
         if (constraint == null) {
             constraint = new IsInSetConstraint(
                 createField(fieldName),
-                new FrequencyDistributedSet<>(
+                new DistributedSet<>(
                     Collections.singleton(
                         new WeightedElement<>("sample-value", 1.0F))));
             this.constraints.put(fieldName, constraint);

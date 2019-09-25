@@ -2,7 +2,7 @@ package com.scottlogic.deg.profile.reader.atomic;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 
@@ -42,11 +42,11 @@ public class AtomicConstraintValueReader {
         return getValue(dto.value);
     }
 
-    private FrequencyDistributedSet getSet(Collection<Object> values) {
+    private DistributedSet getSet(Collection<Object> values) {
         List collect = values.stream()
             .map(val -> getValue(val))
             .collect(Collectors.toList());
-        return FrequencyDistributedSet.uniform(collect);
+        return DistributedSet.uniform(collect);
     }
 
     private Object getValue(Object value) {

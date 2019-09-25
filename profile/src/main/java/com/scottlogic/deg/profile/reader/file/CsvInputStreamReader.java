@@ -18,7 +18,6 @@ package com.scottlogic.deg.profile.reader.file;
 
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -38,7 +37,7 @@ public final class CsvInputStreamReader {
 
     public static DistributedSet<String> retrieveLines(InputStream stream) {
         List<CSVRecord> records = parse(stream);
-        return new FrequencyDistributedSet<>(records.stream()
+        return new DistributedSet<>(records.stream()
             .map(CsvInputStreamReader::createWeightedElement)
             .collect(Collectors.toSet()));
     }

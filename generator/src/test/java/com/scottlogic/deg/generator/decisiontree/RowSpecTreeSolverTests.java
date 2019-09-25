@@ -25,7 +25,7 @@ import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalCons
 import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagGenerator;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
@@ -95,11 +95,11 @@ class RowSpecTreeSolverTests {
                     new ConditionalConstraint(
                         new IsInSetConstraint(
                             country,
-                            new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>("US", 1.0F)))
+                            new DistributedSet<>(Collections.singleton(new WeightedElement<>("US", 1.0F)))
                         ),
                         new IsInSetConstraint(
                             city,
-                            new FrequencyDistributedSet<>(new HashSet<>(Arrays.asList(
+                            new DistributedSet<>(new HashSet<>(Arrays.asList(
                                 new WeightedElement<>("New York", 1.0F),
                                 new WeightedElement<>("Washington DC", 1.0F)))
                         ))))),
@@ -109,11 +109,11 @@ class RowSpecTreeSolverTests {
                     new ConditionalConstraint(
                         new IsInSetConstraint(
                             country,
-                            new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>("GB", 1.0F)))
+                            new DistributedSet<>(Collections.singleton(new WeightedElement<>("GB", 1.0F)))
                         ),
                         new IsInSetConstraint(
                             city,
-                            new FrequencyDistributedSet<>(new HashSet<>(Arrays.asList(
+                            new DistributedSet<>(new HashSet<>(Arrays.asList(
                                 new WeightedElement<>("Bristol", 1.0F),
                                 new WeightedElement<>("London", 1.0F)))
                         ))))),
@@ -123,11 +123,11 @@ class RowSpecTreeSolverTests {
                     new ConditionalConstraint(
                         new IsInSetConstraint(
                             country,
-                            new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>("US", 1.0F)))
+                            new DistributedSet<>(Collections.singleton(new WeightedElement<>("US", 1.0F)))
                         ),
                         new IsInSetConstraint(
                             currency,
-                            new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>("USD", 1.0F)))
+                            new DistributedSet<>(Collections.singleton(new WeightedElement<>("USD", 1.0F)))
                         )))),
             new Rule(
                 rule("GB country constrains currency"),
@@ -135,11 +135,11 @@ class RowSpecTreeSolverTests {
                     new ConditionalConstraint(
                         new IsInSetConstraint(
                             country,
-                            new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>("GB", 1.0F)))
+                            new DistributedSet<>(Collections.singleton(new WeightedElement<>("GB", 1.0F)))
                         ),
                         new IsInSetConstraint(
                             currency,
-                            new FrequencyDistributedSet<>(Collections.singleton(new WeightedElement<>("GBP", 1.0F)))
+                            new DistributedSet<>(Collections.singleton(new WeightedElement<>("GBP", 1.0F)))
                         )))));
 
         Profile profile = new Profile(fields, dummyRules);

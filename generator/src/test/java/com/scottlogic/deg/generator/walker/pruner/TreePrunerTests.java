@@ -24,7 +24,6 @@ import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder;
 import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
@@ -67,7 +66,7 @@ class TreePrunerTests {
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("a", "b"));
         ConstraintNode tree = new ConstraintNodeBuilder().addAtomicConstraints(new IsStringLongerThanConstraint(field, 5)).build();
         FieldSpec inputFieldSpec = notNull.withWhitelist(
-            (FrequencyDistributedSet.uniform(inputWhitelist)));
+            (DistributedSet.uniform(inputWhitelist)));
 
         when(fieldSpecHelper.getFieldSpecForValue(any(), any())).thenReturn(inputFieldSpec);
 
@@ -86,7 +85,7 @@ class TreePrunerTests {
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("a", "b"));
         ConstraintNode tree = new ConstraintNodeBuilder().addAtomicConstraints(new IsStringShorterThanConstraint(field, 5)).build();
         FieldSpec inputFieldSpec = FieldSpec.fromType(field.getType()).withWhitelist(
-            (FrequencyDistributedSet.uniform(inputWhitelist)));
+            (DistributedSet.uniform(inputWhitelist)));
 
         when(fieldSpecHelper.getFieldSpecForValue(any(), any())).thenReturn(inputFieldSpec);
 
@@ -110,7 +109,7 @@ class TreePrunerTests {
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("c"));
         FieldSpec inputFieldSpec = notNull.withWhitelist(
-            (FrequencyDistributedSet.uniform(inputWhitelist)));
+            (DistributedSet.uniform(inputWhitelist)));
 
         when(fieldSpecHelper.getFieldSpecForValue(any(), any())).thenReturn(inputFieldSpec);
 
@@ -132,7 +131,7 @@ class TreePrunerTests {
                     constraintNode().where(field).isInSet("a"),
                     constraintNode().where(field).isInSet("b"))
                 .build();
-        DistributedSet<Object> inputWhitelist = FrequencyDistributedSet.uniform(new HashSet<>(Arrays.asList("a", "b")));
+        DistributedSet<Object> inputWhitelist = DistributedSet.uniform(new HashSet<>(Arrays.asList("a", "b")));
         FieldSpec inputFieldSpec = notNull.withWhitelist((inputWhitelist));
 
         when(fieldSpecHelper.getFieldSpecForValue(any(), any())).thenReturn(inputFieldSpec);
@@ -157,7 +156,7 @@ class TreePrunerTests {
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("a"));
         FieldSpec inputFieldSpec = notNull.withWhitelist(
-            (FrequencyDistributedSet.uniform(inputWhitelist)));
+            (DistributedSet.uniform(inputWhitelist)));
 
         when(fieldSpecHelper.getFieldSpecForValue(any(), any())).thenReturn(inputFieldSpec);
 
@@ -184,7 +183,7 @@ class TreePrunerTests {
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("a"));
         FieldSpec inputFieldSpec = notNull.withWhitelist(
-            (FrequencyDistributedSet.uniform(inputWhitelist)));
+            (DistributedSet.uniform(inputWhitelist)));
 
         when(fieldSpecHelper.getFieldSpecForValue(any(), any())).thenReturn(inputFieldSpec);
 
@@ -212,7 +211,7 @@ class TreePrunerTests {
 
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("a", "b"));
         FieldSpec inputFieldSpec = notNull.withWhitelist(
-            (FrequencyDistributedSet.uniform(inputWhitelist)));
+            (DistributedSet.uniform(inputWhitelist)));
 
         when(fieldSpecHelper.getFieldSpecForValue(any(), any())).thenReturn(inputFieldSpec);
 
@@ -244,7 +243,7 @@ class TreePrunerTests {
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("valid"));
         FieldSpec inputFieldSpec = notNull.withWhitelist(
-            (FrequencyDistributedSet.uniform(inputWhitelist)));
+            (DistributedSet.uniform(inputWhitelist)));
 
         when(fieldSpecHelper.getFieldSpecForValue(any(), any())).thenReturn(inputFieldSpec);
 
@@ -274,7 +273,7 @@ class TreePrunerTests {
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("valid"));
         FieldSpec inputFieldSpec = notNull.withWhitelist(
-            (FrequencyDistributedSet.uniform(inputWhitelist)));
+            (DistributedSet.uniform(inputWhitelist)));
 
         when(fieldSpecHelper.getFieldSpecForValue(any(), any())).thenReturn(inputFieldSpec);
 
@@ -305,7 +304,7 @@ class TreePrunerTests {
                 .build();
         Set<Object> inputWhitelist = Collections.singleton("valid");
         FieldSpec inputFieldSpec = notNull.withWhitelist(
-            (FrequencyDistributedSet.uniform(inputWhitelist)));
+            (DistributedSet.uniform(inputWhitelist)));
 
         when(fieldSpecHelper.getFieldSpecForValue(any(), any())).thenReturn(inputFieldSpec);
 
@@ -338,7 +337,7 @@ class TreePrunerTests {
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("valid"));
         FieldSpec inputFieldSpec = notNull.withWhitelist(
-            (FrequencyDistributedSet.uniform(inputWhitelist)));
+            (DistributedSet.uniform(inputWhitelist)));
 
         when(fieldSpecHelper.getFieldSpecForValue(any(), any())).thenReturn(inputFieldSpec);
 
@@ -372,7 +371,7 @@ class TreePrunerTests {
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("valid"));
         FieldSpec inputFieldSpec = notNull.withWhitelist(
-            (FrequencyDistributedSet.uniform(inputWhitelist)));
+            (DistributedSet.uniform(inputWhitelist)));
 
         when(fieldSpecHelper.getFieldSpecForValue(any(), any())).thenReturn(inputFieldSpec);
 
@@ -400,7 +399,7 @@ class TreePrunerTests {
                 .build();
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("valid"));
         FieldSpec inputFieldSpec = notNull.withWhitelist(
-            (FrequencyDistributedSet.uniform(inputWhitelist)));
+            (DistributedSet.uniform(inputWhitelist)));
 
         when(fieldSpecHelper.getFieldSpecForValue(any(), any())).thenReturn(inputFieldSpec);
 

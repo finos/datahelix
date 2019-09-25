@@ -19,7 +19,7 @@ package com.scottlogic.deg.generator.generation;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.restrictions.*;
@@ -46,7 +46,7 @@ class FieldSpecValueGeneratorTests {
     void generate_fieldSpecMustContainRestrictionNullAndSetRestrictionsHasValues_returnsDataBagsWithValuesInSetRestrictions() {
         FieldSpec fieldSpec = FieldSpec.fromType(NUMERIC).withNotNull()
             .withWhitelist(
-                (FrequencyDistributedSet.uniform(
+                (DistributedSet.uniform(
                     new HashSet<>(
                         Arrays.asList(10, 20, 30)))));
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(

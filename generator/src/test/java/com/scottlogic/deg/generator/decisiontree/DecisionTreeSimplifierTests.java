@@ -23,7 +23,6 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsNullConstraint;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -36,7 +35,7 @@ class DecisionTreeSimplifierTests {
     // TODO: Simplifier tests needs fleshing out
 
     private static DistributedSet<Object> setOf(Object... objects) {
-        return new FrequencyDistributedSet<>(Stream.of(objects)
+        return new DistributedSet<>(Stream.of(objects)
             .map(element -> new WeightedElement<>(element, 1.0F))
             .collect(Collectors.toSet()));
     }

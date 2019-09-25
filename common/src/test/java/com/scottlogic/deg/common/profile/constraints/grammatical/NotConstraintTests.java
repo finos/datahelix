@@ -20,7 +20,7 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsNullConstraint;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -70,11 +70,11 @@ public class NotConstraintTests {
         Field field2 = createField("TestField");
         Constraint constraint1 = new IsInSetConstraint(
             field1,
-            FrequencyDistributedSet.singleton("abc")
+            DistributedSet.singleton("abc")
             ).negate();
         Constraint constraint2 = new IsInSetConstraint(
             field2,
-            FrequencyDistributedSet.singleton("abcd")
+            DistributedSet.singleton("abcd")
             ).negate();
         Assert.assertNotEquals(constraint1, constraint2);
     }

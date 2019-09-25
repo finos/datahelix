@@ -18,9 +18,10 @@ package com.scottlogic.deg.generator.generation;
 
 import com.google.common.collect.Iterators;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.CannedValuesFieldValueSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
+import com.scottlogic.deg.generator.generation.fieldvaluesources.NullOnlySource;
 import com.scottlogic.deg.generator.restrictions.*;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -50,7 +51,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     public void returnsNullSourceOnlyWithSetRestrictionWithEmptyWhitelist() {
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
         FieldSpec fieldSpecMustBeNull = FieldSpec.fromType(STRING)
-            .withWhitelist((new FrequencyDistributedSet<>(Collections.emptySet())));
+            .withWhitelist((new DistributedSet<>(Collections.emptySet())));
 
         List<FieldValueSource> sources = evaluator.getFieldValueSources(fieldSpecMustBeNull);
 
@@ -72,7 +73,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     public void shouldReturnNullSourceLastWithInSetRestrictionsAndNullNotDisallowed() {
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
         FieldSpec fieldSpecInSetAndNullNotDisallowed = FieldSpec.fromType(NUMERIC)
-            .withWhitelist(FrequencyDistributedSet.uniform(new HashSet<>(Arrays.asList(15, 25))));
+            .withWhitelist(DistributedSet.uniform(new HashSet<>(Arrays.asList(15, 25))));
 
         List<FieldValueSource> sources = evaluator.getFieldValueSources(fieldSpecInSetAndNullNotDisallowed);
 
@@ -313,7 +314,7 @@ public class StandardFieldValueSourceEvaluatorTests {
 
     private void AssertLastSourceIsNullOnlySource(List<FieldValueSource> sources) {
         int lastSourceIndex = sources.size() - 1;
-        Assert.assertTrue(sources.get(lastSourceIndex) instanceof CannedValuesFieldValueSource);
+        Assert.assertTrue(sources.get(lastSourceIndex) instanceof NullOnlySource);
         Assert.assertNull(Iterators.get(sources.get(lastSourceIndex).generateAllValues().iterator(), 0));
     }
 

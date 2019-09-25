@@ -19,7 +19,6 @@ package com.scottlogic.deg.generator.fieldspecs;
 import com.scottlogic.deg.common.profile.Types;
 
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.restrictions.*;
 
 import java.util.*;
@@ -34,7 +33,7 @@ import static com.scottlogic.deg.common.profile.Types.*;
  */
 public class FieldSpec {
 
-    private static final FrequencyDistributedSet<Object> NO_VALUES = FrequencyDistributedSet.empty();
+    private static final DistributedSet<Object> NO_VALUES = DistributedSet.empty();
 
     public static FieldSpec fromType(Types type) {
         return new FieldSpec(null, null, true, Collections.emptySet(), type);

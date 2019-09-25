@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.profile.reader.file.CsvInputStreamReader;
 
@@ -29,7 +28,7 @@ public class FromFileReader {
         DistributedSet<String> names = CsvInputStreamReader.retrieveLines(streamFromPath);
         closeStream(streamFromPath);
 
-        return new FrequencyDistributedSet<>(
+        return new DistributedSet<>(
             names.distributedSet().stream()
                 .map(holder -> new WeightedElement<>((Object) holder.element(), holder.weight()))
                 .collect(Collectors.toSet()));

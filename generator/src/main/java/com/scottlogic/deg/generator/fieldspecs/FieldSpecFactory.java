@@ -19,7 +19,7 @@ package com.scottlogic.deg.generator.fieldspecs;
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.common.util.NumberUtils;
 
@@ -104,7 +104,7 @@ public class FieldSpecFactory {
         }
 
         return FieldSpec.fromType(field.getType())
-            .withWhitelist(FrequencyDistributedSet.singleton(constraint.value))
+            .withWhitelist(DistributedSet.singleton(constraint.value))
             .withNotNull();
     }
 
