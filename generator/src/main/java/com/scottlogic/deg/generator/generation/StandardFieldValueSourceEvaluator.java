@@ -37,11 +37,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MAX_LIMIT;
-import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MIN_LIMIT;
-import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
-import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
 import static com.scottlogic.deg.common.profile.Types.*;
+import static com.scottlogic.deg.generator.utils.Defaults.*;
 
 public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvaluator {
     private static final FieldValueSource NULL_ONLY_SOURCE = new NullOnlySource();

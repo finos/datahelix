@@ -35,8 +35,8 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 import static com.scottlogic.deg.common.profile.Types.*;
-import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MAX_LIMIT;
-import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MIN_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MAX_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MIN_LIMIT;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 
 public class StandardFieldValueSourceEvaluatorTests {

@@ -18,25 +18,25 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
-import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.restrictions.MergeResult;
+import com.scottlogic.deg.generator.restrictions.StringRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
-import com.scottlogic.deg.generator.utils.SetUtils;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 
 import static com.scottlogic.deg.common.profile.Types.*;
-import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
-import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.*;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
 
@@ -298,7 +298,7 @@ class FieldSpecTests {
 
     @Test
     void permitsRejectsInvalidNumeric() {
-        NumericRestrictions numeric = new NumericRestrictions(new Limit<>(BigDecimal.TEN, true), NumericRestrictions.NUMERIC_MAX_LIMIT);
+        NumericRestrictions numeric = new NumericRestrictions(new Limit<>(BigDecimal.TEN, true), NUMERIC_MAX_LIMIT);
         FieldSpec spec = FieldSpec.fromType(NUMERIC).withNumericRestrictions(numeric);
 
         assertFalse(spec.permits(BigDecimal.ONE));
