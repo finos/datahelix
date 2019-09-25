@@ -30,11 +30,8 @@ import java.util.stream.Collectors;
  * Returns a FieldSpec that permits only data permitted by all of its inputs
  */
 public class FieldSpecMerger {
-    private final RestrictionsMergeOperation restrictionMergeOperation;
-
-    public FieldSpecMerger() {
-        restrictionMergeOperation = new RestrictionsMergeOperation(new LinearRestrictionsMerger(), new StringRestrictionsMerger());
-    }
+    private final RestrictionsMergeOperation restrictionMergeOperation =
+        new RestrictionsMergeOperation(new LinearRestrictionsMerger(), new StringRestrictionsMerger());
 
     /**
      * Null parameters are permitted, and are synonymous with an empty FieldSpec
