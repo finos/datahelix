@@ -33,8 +33,8 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 import static com.scottlogic.deg.common.profile.Types.*;
-import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MAX_LIMIT;
-import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MIN_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MAX_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MIN_LIMIT;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 
 public class StandardFieldValueSourceEvaluatorTests {
@@ -86,7 +86,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     @Test
     public void shouldReturnNullSourceLastWithTypedNumericRestrictionsAndNullNotDisallowed() {
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
-        NumericRestrictions numericRestrictions = new NumericRestrictions(
+        NumericRestrictions numericRestrictions = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(10), false),
             new Limit<>(new BigDecimal(30), false));
         FieldSpec fieldSpecWithTypedNumericRestrictionsAndNullNotDisallowed = FieldSpec.fromType(NUMERIC)
@@ -127,7 +127,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     @Test
     void getFieldValueSources_fieldSpecContainsNumericRestrictionsWithValueTooLargeForInteger_generatesExpectedValues() {
         FieldSpec fieldSpec = FieldSpec.fromType(NUMERIC).withNumericRestrictions(
-            new NumericRestrictions(new Limit<>(new BigDecimal(0), false),
+            LinearRestrictionsFactory.createNumericRestrictions(new Limit<>(new BigDecimal(0), false),
                 new Limit<>(new BigDecimal("1E+18"), false))
         ).withNotNull(
 
@@ -153,7 +153,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     @Test
     void getFieldValueSources_fieldSpecContainsNumericRestrictionsWithDecimalValues_generatesDecimalValues() {
         FieldSpec fieldSpec = FieldSpec.fromType(NUMERIC).withNumericRestrictions(
-            new NumericRestrictions(new Limit<>(new BigDecimal("15.00000000000000000001"), false),
+            LinearRestrictionsFactory.createNumericRestrictions(new Limit<>(new BigDecimal("15.00000000000000000001"), false),
             new Limit<>(new BigDecimal("15.00000000000000000010"), false))
         ).withNotNull();
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
@@ -182,7 +182,7 @@ public class StandardFieldValueSourceEvaluatorTests {
 
     @Test
     void getFieldValueSources_fieldSpecContainsNumericRestrictionsWithNoScaleAndGranularityHasRestrictionOfTwo_generatesValuesWithTwoDecimalPlaces() {
-        NumericRestrictions restrictions = new NumericRestrictions(
+        NumericRestrictions restrictions = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal("15"), false),
             new Limit<>(new BigDecimal("16"), false),
             2);
@@ -210,7 +210,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     @Test
     void getFieldValueSources_fieldSpecContainsNumericRestrictionsWithMinAndMaxNull_generatesBoundaryValues() {
         FieldSpec fieldSpec = FieldSpec.fromType(NUMERIC).withNumericRestrictions(
-            new NumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT)
+            LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT)
         ).withNotNull();
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
 
@@ -234,7 +234,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     @Test
     void getFieldValueSources_fieldSpecContainsNumericRestrictionWithNullMinAndMaxIsDecimal_generatesDecimalValues() {
         FieldSpec fieldSpec = FieldSpec.fromType(NUMERIC).withNumericRestrictions(
-            new NumericRestrictions(NUMERIC_MIN_LIMIT, new Limit<>(new BigDecimal("150.5"), false))
+            LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, new Limit<>(new BigDecimal("150.5"), false))
         ).withNotNull();
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
 
@@ -254,7 +254,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     @Test
     void getFieldValueSources_fieldSpecContainsNegativeMinAndPositiveMax_generatesExpectedNegativeToPositiveValues() {
         FieldSpec fieldSpec = FieldSpec.fromType(NUMERIC).withNumericRestrictions(
-            new NumericRestrictions(
+            LinearRestrictionsFactory.createNumericRestrictions(
                 new Limit<>(new BigDecimal("-3E-20"), false),
                 new Limit<>(new BigDecimal("3E-20"), false))
         ).withNotNull();

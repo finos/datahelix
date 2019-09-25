@@ -17,11 +17,7 @@
 package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
 import com.scottlogic.deg.common.util.Defaults;
-import com.scottlogic.deg.generator.fieldspecs.NumericRestrictionsMergeOperation;
-import com.scottlogic.deg.generator.restrictions.linear.Limit;
-import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
-import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
-import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.*;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.common.util.NumberUtils;
 import org.hamcrest.Matcher;
@@ -38,8 +34,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MAX_LIMIT;
-import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MIN_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MAX_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MIN_LIMIT;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.*;
 
@@ -464,7 +460,7 @@ class RealNumberFieldValueSourceTests {
     }
 
     private NumericRestrictions numericRestrictions(Integer min, Integer max, int scale){
-        return new NumericRestrictions(
+        return LinearRestrictionsFactory.createNumericRestrictions(
             min == null ? null : new Limit<>(BigDecimal.valueOf(min), true),
             max == null ? null : new Limit<>(BigDecimal.valueOf(max), true),
             scale);
@@ -523,8 +519,8 @@ class RealNumberFieldValueSourceTests {
 
     private FieldValueSource getObjectUnderTest() {
         if (objectUnderTest == null) {
-            LinearRestrictions<BigDecimal> restrictions = new NumericRestrictions(lowerLimit, upperLimit, scale);
-            restrictions = (LinearRestrictions<BigDecimal>) new LinearRestrictionsMerger().merge(restrictions, new NumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT)).restrictions;
+            LinearRestrictions<BigDecimal> restrictions = LinearRestrictionsFactory.createNumericRestrictions(lowerLimit, upperLimit, scale);
+            restrictions = (LinearRestrictions<BigDecimal>) new LinearRestrictionsMerger().merge(restrictions, LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT)).restrictions;
             objectUnderTest = new RealNumberFieldValueSource(restrictions, blacklist);
         }
 

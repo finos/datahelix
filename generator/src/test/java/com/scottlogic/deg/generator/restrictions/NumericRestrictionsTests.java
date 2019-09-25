@@ -18,15 +18,15 @@ package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
 import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 
 import java.math.BigDecimal;
 
-import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MAX_LIMIT;
-import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MIN_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MAX_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MIN_LIMIT;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 
@@ -34,10 +34,10 @@ public class NumericRestrictionsTests {
 
     @Test
     void equals_whenNumericRestrictionsAreEqual_returnsTrue() {
-        NumericRestrictions restriction1 = new NumericRestrictions(
+        NumericRestrictions restriction1 = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(0), false),
             new Limit<>(new BigDecimal(2), false));
-        NumericRestrictions restriction2 = new NumericRestrictions(
+        NumericRestrictions restriction2 = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(0), false),
             new Limit<>(new BigDecimal(2), false));
 
@@ -49,10 +49,10 @@ public class NumericRestrictionsTests {
 
     @Test
     void equals_whenNumericRestrictionsNumericLimitMinValuesAreNotEqual_returnsFalse() {
-        NumericRestrictions restriction1 = new NumericRestrictions(
+        NumericRestrictions restriction1 = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(1), false),
             new Limit<>(new BigDecimal(2), false));
-        NumericRestrictions restriction2 = new NumericRestrictions(
+        NumericRestrictions restriction2 = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(0), false),
             new Limit<>(new BigDecimal(2), false));
 
@@ -63,10 +63,10 @@ public class NumericRestrictionsTests {
 
     @Test
     void equals_whenOneNumericRestrictionsLimitMinValueIsNull_returnsFalse() {
-        NumericRestrictions restriction1 = new NumericRestrictions(
+        NumericRestrictions restriction1 = LinearRestrictionsFactory.createNumericRestrictions(
             NUMERIC_MIN_LIMIT,
             new Limit<>(new BigDecimal(2), false));
-        NumericRestrictions restriction2 = new NumericRestrictions(
+        NumericRestrictions restriction2 = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(0), false),
             new Limit<>(new BigDecimal(2), false));
 
@@ -77,10 +77,10 @@ public class NumericRestrictionsTests {
 
     @Test
     void equals_whenNumericRestrictionsLimitMaxValuesAreNotEqual_returnsFalse() {
-        NumericRestrictions restriction1 = new NumericRestrictions(
+        NumericRestrictions restriction1 = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(0), false),
             new Limit<>(new BigDecimal(2), false));
-        NumericRestrictions restriction2 = new NumericRestrictions(
+        NumericRestrictions restriction2 = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(0), false),
             new Limit<>(new BigDecimal(3), false));
 
@@ -92,10 +92,10 @@ public class NumericRestrictionsTests {
 
     @Test
     void equals_whenOneNumericRestrictionsLimitMaxValueIsNull_returnsFalse() {
-        NumericRestrictions restriction1 = new NumericRestrictions(
+        NumericRestrictions restriction1 = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(0), false),
             NUMERIC_MAX_LIMIT);
-        NumericRestrictions restriction2 = new NumericRestrictions(
+        NumericRestrictions restriction2 = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(0), false),
             new Limit<>(new BigDecimal(2), false));
 
@@ -106,10 +106,10 @@ public class NumericRestrictionsTests {
 
     @Test
     void equals_whenNumericRestrictionsLimitsMinInclusiveValuesAreNotEqual_returnsFalse() {
-        NumericRestrictions restriction1 = new NumericRestrictions(
+        NumericRestrictions restriction1 = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(0), true),
             new Limit<>(new BigDecimal(2), false));
-        NumericRestrictions restriction2 = new NumericRestrictions(
+        NumericRestrictions restriction2 = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(0), false),
             new Limit<>(new BigDecimal(2), false));
 
@@ -120,10 +120,10 @@ public class NumericRestrictionsTests {
 
     @Test
     void equals_whenNumericRestrictionsLimitsMaxInclusiveValuesAreNotEqual_returnsFalse() {
-        NumericRestrictions restriction1 = new NumericRestrictions(
+        NumericRestrictions restriction1 = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(0), true),
             new Limit<>(new BigDecimal(2), false));
-        NumericRestrictions restriction2 = new NumericRestrictions(
+        NumericRestrictions restriction2 = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(0), true),
             new Limit<>(new BigDecimal(2), true));
 
@@ -135,10 +135,10 @@ public class NumericRestrictionsTests {
 
     @Test
     void equals_whenNumericRestrictionsLimitsAreEqualAndNegative_returnsTrue() {
-        NumericRestrictions restriction1 = new NumericRestrictions(
+        NumericRestrictions restriction1 = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(-1), false),
             new Limit<>(new BigDecimal(-1), false));
-        NumericRestrictions restriction2 = new NumericRestrictions(
+        NumericRestrictions restriction2 = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(-1), false),
             new Limit<>(new BigDecimal(-1), false));
 
@@ -150,10 +150,10 @@ public class NumericRestrictionsTests {
 
     @Test
     void equals_whenOneNumericRestrictionsLimitIsOfScientificNotationButAllValuesAreEqual_returnsTrue() {
-        NumericRestrictions restriction1 = new NumericRestrictions(
+        NumericRestrictions restriction1 = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(50), false),
             new Limit<>(new BigDecimal(100), false));
-        NumericRestrictions restriction2 = new NumericRestrictions(
+        NumericRestrictions restriction2 = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(5E1), false),
             new Limit<>(new BigDecimal(100), false));
 
@@ -164,10 +164,10 @@ public class NumericRestrictionsTests {
 
     @Test
     void hashCode_whenNumericRestrictionsAreEqual_returnsEqualHashCode() {
-        NumericRestrictions restriction1 = new NumericRestrictions(
+        NumericRestrictions restriction1 = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(10), false),
             new Limit<>(new BigDecimal(30), false));
-        NumericRestrictions restriction2 = new NumericRestrictions(
+        NumericRestrictions restriction2 = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(10), false),
             new Limit<>(new BigDecimal(30), false));
 
@@ -179,10 +179,10 @@ public class NumericRestrictionsTests {
 
     @Test
     void hashCode_whenNumericRestrictionLimitsAreInverted_returnsFalse() {
-        NumericRestrictions restriction1 = new NumericRestrictions(
+        NumericRestrictions restriction1 = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(10), false),
             new Limit<>(new BigDecimal(20), false));
-        NumericRestrictions restriction2 = new NumericRestrictions(
+        NumericRestrictions restriction2 = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(20), false),
             new Limit<>(new BigDecimal(10), false));
 
@@ -194,10 +194,10 @@ public class NumericRestrictionsTests {
 
     @Test
     void hashCode_whenNumericRestrictionsLimitsMinInclusiveValuesAreNotEqual_returnsFalse() {
-        NumericRestrictions restriction1 = new NumericRestrictions(
+        NumericRestrictions restriction1 = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(0), true),
             new Limit<>(new BigDecimal(2), false));
-        NumericRestrictions restriction2 = new NumericRestrictions(
+        NumericRestrictions restriction2 = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(0), false),
             new Limit<>(new BigDecimal(2), false));
 
@@ -209,10 +209,10 @@ public class NumericRestrictionsTests {
 
     @Test
     void hashCode_whenNumericRestrictionsLimitsMaxInclusiveValuesAreNotEqual_returnsFalse() {
-        NumericRestrictions restriction1 = new NumericRestrictions(
+        NumericRestrictions restriction1 = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(0), false),
             new Limit<>(new BigDecimal(2), true));
-        NumericRestrictions restriction2 = new NumericRestrictions(
+        NumericRestrictions restriction2 = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(0), false),
             new Limit<>(new BigDecimal(2), false));
 
@@ -224,10 +224,10 @@ public class NumericRestrictionsTests {
 
     @Test
     void hashCode_whenOneNumericRestrictionsLimitIsOfScientificNotationButAllValuesAreEqual_returnsTrue() {
-        NumericRestrictions restriction1 = new NumericRestrictions(
+        NumericRestrictions restriction1 = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(50), false),
             new Limit<>(new BigDecimal(2), false));
-        NumericRestrictions restriction2 = new NumericRestrictions(
+        NumericRestrictions restriction2 = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(5E1), false),
             new Limit<>(new BigDecimal(2), false));
 
@@ -257,7 +257,7 @@ public class NumericRestrictionsTests {
     @Test
     public void limitsShouldBeCappedAtTheMaximumValueAllowedForBigDecimal() {
         Limit<BigDecimal> limit = new Limit<>(new BigDecimal("1e21"),true);
-        NumericRestrictions restrictions = new NumericRestrictions(NUMERIC_MIN_LIMIT, limit,  1);
+        NumericRestrictions restrictions = LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, limit,  1);
 
         Assert.assertFalse(restrictions.getMax().getValue().compareTo(NUMERIC_MAX_LIMIT.getValue()) > 0);
 
@@ -266,14 +266,14 @@ public class NumericRestrictionsTests {
     @Test
     public void limitsShouldBeCappedAtTheMinimumValueAllowedForBigDecimal() {
         Limit<BigDecimal> limit = new Limit<>(new BigDecimal("-1e21"),true);
-        NumericRestrictions restrictions = new NumericRestrictions(limit, NUMERIC_MAX_LIMIT,  1);
+        NumericRestrictions restrictions = LinearRestrictionsFactory.createNumericRestrictions(limit, NUMERIC_MAX_LIMIT,  1);
 
         Assert.assertFalse(restrictions.getMin().getValue().compareTo(NUMERIC_MIN_LIMIT.getValue()) < 0);
 
     }
 
     private static NumericRestrictions restrictions(double numericScale){
-        NumericRestrictions restrictions = new NumericRestrictions(
+        NumericRestrictions restrictions = LinearRestrictionsFactory.createNumericRestrictions(
             NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT,
             ParsedGranularity.parse(BigDecimal.valueOf(numericScale)).getNumericGranularity().scale()
         );

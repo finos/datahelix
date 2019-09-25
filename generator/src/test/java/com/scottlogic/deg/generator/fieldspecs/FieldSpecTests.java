@@ -16,7 +16,6 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
@@ -30,8 +29,7 @@ import java.time.ZoneOffset;
 import java.util.*;
 
 import static com.scottlogic.deg.common.profile.Types.*;
-import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
-import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.*;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
@@ -104,12 +102,12 @@ class FieldSpecTests {
 
     @Test
     void equals_fieldSpecNumericRestrictionsNotNullAndOtherObjectNumericRestrictionsNotNullAndNumericRestrictionsAreNotEqual_returnsFalse() {
-        NumericRestrictions firstFieldSpecRestrictions = new NumericRestrictions(
+        NumericRestrictions firstFieldSpecRestrictions = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(1), false),
             new Limit<>(new BigDecimal(20), false));
         FieldSpec fieldSpec = FieldSpec.fromType(NUMERIC).withNumericRestrictions(firstFieldSpecRestrictions);
 
-        NumericRestrictions secondFieldSpecRestrictions = new NumericRestrictions(
+        NumericRestrictions secondFieldSpecRestrictions = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(5), false) ,
             new Limit<>(new BigDecimal(20), false));
         boolean result = fieldSpec.equals(
@@ -197,27 +195,6 @@ class FieldSpecTests {
     }
 
     @Test
-    public void fieldSpecsWithEqualNumericRestrictionsShouldBeEqual() {
-        NumericRestrictions aRestrictions = new MockNumericRestrictions(true);
-        NumericRestrictions bRestrictions = new MockNumericRestrictions(true);
-        FieldSpec a = FieldSpec.fromType(NUMERIC).withNumericRestrictions(aRestrictions);
-        FieldSpec b = FieldSpec.fromType(NUMERIC).withNumericRestrictions(bRestrictions);
-
-        Assert.assertThat(a, equalTo(b));
-        Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
-    }
-
-    @Test
-    public void fieldSpecsWithUnequalNumericRestrictionsShouldBeUnequal() {
-        NumericRestrictions aRestrictions = new MockNumericRestrictions(false);
-        NumericRestrictions bRestrictions = new MockNumericRestrictions(false);
-        FieldSpec a = FieldSpec.fromType(NUMERIC).withNumericRestrictions(aRestrictions);
-        FieldSpec b = FieldSpec.fromType(NUMERIC).withNumericRestrictions(bRestrictions);
-
-        Assert.assertThat(a, not(equalTo(b)));
-    }
-
-    @Test
     public void fieldSpecsWithEqualStringRestrictionsShouldBeEqual() {
         StringRestrictions aRestrictions = new MockStringRestrictions(true);
         StringRestrictions bRestrictions = new MockStringRestrictions(true);
@@ -274,7 +251,7 @@ class FieldSpecTests {
 
     @Test
     void permitsRejectsInvalidNumeric() {
-        NumericRestrictions numeric = new NumericRestrictions(new Limit<>(BigDecimal.TEN, true), NumericRestrictions.NUMERIC_MAX_LIMIT);
+        NumericRestrictions numeric = LinearRestrictionsFactory.createNumericRestrictions(new Limit<>(BigDecimal.TEN, true), NUMERIC_MAX_LIMIT);
         FieldSpec spec = FieldSpec.fromType(NUMERIC).withNumericRestrictions(numeric);
 
         assertFalse(spec.permits(BigDecimal.ONE));
@@ -311,25 +288,6 @@ class FieldSpecTests {
         FieldSpec spec = FieldSpec.fromType(STRING).withStringRestrictions(string);
 
         assertFalse(spec.permits("Anything"));
-    }
-
-    private class MockNumericRestrictions extends NumericRestrictions {
-        private final boolean isEqual;
-
-        MockNumericRestrictions(boolean isEqual) {
-            super(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT);
-            this.isEqual = isEqual;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            return isEqual;
-        }
-
-        @Override
-        public int hashCode() {
-            return 1234;
-        }
     }
 
     private class MockStringRestrictions implements StringRestrictions {

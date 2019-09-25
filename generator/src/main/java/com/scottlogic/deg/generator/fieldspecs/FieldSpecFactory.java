@@ -30,10 +30,10 @@ import java.util.Collections;
 import java.util.regex.Pattern;
 
 import static com.scottlogic.deg.common.profile.constraints.atomic.StandardConstraintTypes.RIC;
-import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MAX_LIMIT;
-import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MIN_LIMIT;
 import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
 import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MAX_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MIN_LIMIT;
 
 public class FieldSpecFactory {
     private final StringRestrictionsFactory stringRestrictionsFactory;
@@ -133,11 +133,11 @@ public class FieldSpecFactory {
         NumericRestrictions numericRestrictions;
         final BigDecimal limit = NumberUtils.coerceToBigDecimal(limitValue);
         if (negate) {
-            numericRestrictions = new NumericRestrictions(NUMERIC_MIN_LIMIT, new Limit<>(
+            numericRestrictions = LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, new Limit<>(
                 limit,
                 !inclusive));
         } else {
-            numericRestrictions = new NumericRestrictions(new Limit<>(
+            numericRestrictions = LinearRestrictionsFactory.createNumericRestrictions(new Limit<>(
                 limit,
                 inclusive),
                 NUMERIC_MAX_LIMIT);
@@ -159,11 +159,11 @@ public class FieldSpecFactory {
 
         final BigDecimal limit = NumberUtils.coerceToBigDecimal(limitValue);
         if (negate) {
-            numericRestrictions = new NumericRestrictions(new Limit<>(
+            numericRestrictions = LinearRestrictionsFactory.createNumericRestrictions(new Limit<>(
                 limit,
                 !inclusive), NUMERIC_MAX_LIMIT);
         } else {
-            numericRestrictions = new NumericRestrictions(NUMERIC_MIN_LIMIT, new Limit<>(
+            numericRestrictions = LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, new Limit<>(
                 limit,
                 inclusive));
         }
@@ -179,7 +179,7 @@ public class FieldSpecFactory {
 
         return FieldSpec.fromType(field.getType())
             .withNumericRestrictions(
-                new NumericRestrictions(
+                LinearRestrictionsFactory.createNumericRestrictions(
                     NUMERIC_MIN_LIMIT,
                     NUMERIC_MAX_LIMIT,
                     constraint.granularity.getNumericGranularity().scale()));
