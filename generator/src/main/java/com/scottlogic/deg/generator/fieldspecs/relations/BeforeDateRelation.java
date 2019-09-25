@@ -17,10 +17,13 @@
 package com.scottlogic.deg.generator.fieldspecs.relations;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.generator.restrictions.DateTimeLimit;
-import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.Limit;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 
 import java.time.OffsetDateTime;
+
+import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
 
 public class BeforeDateRelation extends AbstractDateInequalityRelation {
     private final boolean inclusive;
@@ -31,17 +34,17 @@ public class BeforeDateRelation extends AbstractDateInequalityRelation {
     }
 
     @Override
-    public DateTimeLimit dateTimeLimitExtractingFunction(DateTimeRestrictions restrictions) {
+    public Limit<OffsetDateTime> dateTimeLimitExtractingFunction(LinearRestrictions<OffsetDateTime> restrictions) {
         if (restrictions != null) {
-            return restrictions.min;
+            return restrictions.getMin();
         } else {
             return null;
         }
     }
 
     @Override
-    protected void appendValueToRestrictions(DateTimeRestrictions restrictions, OffsetDateTime value) {
-        restrictions.min = new DateTimeLimit(value, inclusive);
+    protected DateTimeRestrictions appendValueToRestrictions(OffsetDateTime value) {
+        return new DateTimeRestrictions(new Limit<>(value, inclusive), DATETIME_MAX_LIMIT);
     }
 
     @Override

@@ -16,8 +16,9 @@
 
 package com.scottlogic.deg.generator.generation.fieldvaluesources.datetime;
 
-import com.scottlogic.deg.generator.restrictions.DateTimeLimit;
-import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
+import com.scottlogic.deg.common.util.Defaults;
+import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -27,14 +28,16 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 
 public class DateTimeFieldValueSourceTests {
 
-    private DateTimeLimit lowerLimit = null;
-    private DateTimeLimit upperLimit = null;
+    private Limit<OffsetDateTime> lowerLimit = DATETIME_MIN_LIMIT;
+    private Limit<OffsetDateTime> upperLimit = DATETIME_MAX_LIMIT;
     private Set<Object> blackList = new HashSet<>();
     private DateTimeFieldValueSource fieldSource;
 
@@ -86,10 +89,7 @@ public class DateTimeFieldValueSourceTests {
         givenLowerBound(OffsetDateTime.of(date.atTime(LocalTime.of(12, 0, 0)), ZoneOffset.UTC), true);
         givenUpperBound(OffsetDateTime.of(date.atTime(LocalTime.of(18, 0, 0)), ZoneOffset.UTC), false);
 
-        DateTimeRestrictions restrictions = new DateTimeRestrictions();
-        restrictions.min = lowerLimit;
-        restrictions.max = upperLimit;
-
+        DateTimeRestrictions restrictions = new DateTimeRestrictions(lowerLimit, upperLimit);
         fieldSource = new DateTimeFieldValueSource(restrictions, blackList);
 
         TestRandomNumberGenerator rng = new TestRandomNumberGenerator();
@@ -124,9 +124,8 @@ public class DateTimeFieldValueSourceTests {
         givenLowerBound(OffsetDateTime.of(date.atTime(LocalTime.of(12, 0, 0)), ZoneOffset.UTC), true);
         givenUpperBound(OffsetDateTime.of(date.atTime(LocalTime.of(18, 0, 0)), ZoneOffset.UTC), true);
 
-        DateTimeRestrictions restrictions = new DateTimeRestrictions();
-        restrictions.min = lowerLimit;
-        restrictions.max = upperLimit;
+        DateTimeRestrictions restrictions = new DateTimeRestrictions(lowerLimit, upperLimit);
+
 
         fieldSource = new DateTimeFieldValueSource(restrictions, blackList);
 
@@ -161,9 +160,7 @@ public class DateTimeFieldValueSourceTests {
         givenLowerBound(OffsetDateTime.of(date.atTime(LocalTime.of(12, 0, 0)), ZoneOffset.UTC), false);
         givenUpperBound(OffsetDateTime.of(date.atTime(LocalTime.of(18, 0, 0)), ZoneOffset.UTC), true);
 
-        DateTimeRestrictions restrictions = new DateTimeRestrictions();
-        restrictions.min = lowerLimit;
-        restrictions.max = upperLimit;
+        DateTimeRestrictions restrictions = new DateTimeRestrictions(lowerLimit, upperLimit);
 
         fieldSource = new DateTimeFieldValueSource(restrictions, blackList);
 
@@ -196,9 +193,7 @@ public class DateTimeFieldValueSourceTests {
     public void getRandomValues_withSmallPermittedRangeAtEndOfLegalRange_shouldGenerateCorrectValues() {
         givenLowerBound(OffsetDateTime.of(9999, 12, 31, 23, 0, 0,0, ZoneOffset.UTC), false);
 
-        DateTimeRestrictions restrictions = new DateTimeRestrictions();
-        restrictions.min = lowerLimit;
-        restrictions.max = upperLimit;
+        DateTimeRestrictions restrictions = new DateTimeRestrictions(lowerLimit, upperLimit);
 
         fieldSource = new DateTimeFieldValueSource(restrictions, blackList);
 
@@ -209,37 +204,6 @@ public class DateTimeFieldValueSourceTests {
 
         Assert.assertThat(iterator.next(),
             equalTo(OffsetDateTime.of(9999, 12, 31, 23, 59, 23, 999_000_000, ZoneOffset.UTC)));
-    }
-
-    @Test
-    public void getRandomValues_withNoExplicitBounds_shouldGenerateCorrectValues() {
-        DateTimeRestrictions restrictions = new DateTimeRestrictions();
-
-        fieldSource = new DateTimeFieldValueSource(restrictions, blackList);
-
-        TestRandomNumberGenerator rng = new TestRandomNumberGenerator();
-        rng.setNextDouble(0);
-
-        Iterator<Object> iterator = fieldSource.generateRandomValues(rng).iterator();
-
-        Assert.assertThat(iterator.next(),
-            equalTo(DateTimeFieldValueSource.ISO_MIN_DATE));
-
-        rng.setNextDouble(1);
-
-        // Because internally the filteringIterator pre-generates the first value before we can set
-        // the new "random" value we have re-create the iterator
-        iterator = fieldSource.generateRandomValues(rng).iterator();
-
-        Assert.assertThat(iterator.next(),
-            equalTo(OffsetDateTime.of(9999, 12, 31, 23, 59, 59, 999_000_000, ZoneOffset.UTC)));
-
-        rng.setNextDouble(0.5);
-
-        iterator = fieldSource.generateRandomValues(rng).iterator();
-
-        Assert.assertThat(iterator.next(),
-            equalTo(OffsetDateTime.of(5000, 07, 02, 11, 59, 59, 999_000_000, ZoneOffset.UTC)));
     }
 
     @Test
@@ -342,22 +306,13 @@ public class DateTimeFieldValueSourceTests {
     }
 
     @Test
-    public void datetimeGenerateAllValues_withNoMin_startsAtOffsetDateTimeMin(){
-        //Arrange
-        DateTimeRestrictions max = new DateTimeRestrictions();
-        max.max = new DateTimeLimit(OffsetDateTime.MAX, false);
-        DateTimeFieldValueSource noMin = new DateTimeFieldValueSource(max, Collections.emptySet());
-        //Act
-        OffsetDateTime firstValue = (OffsetDateTime) noMin.generateAllValues().iterator().next();
-        //Assert
-        Assert.assertThat(firstValue, equalTo(DateTimeFieldValueSource.ISO_MIN_DATE));
-    }
-
-    @Test
     public void datetimeGenerateAllValues_withMinSetToMaxDate_emitsNoValues(){
         //Arrange
-        DateTimeRestrictions min = new DateTimeRestrictions();
-        min.min = new DateTimeLimit(DateTimeFieldValueSource.ISO_MAX_DATE, false);
+        DateTimeRestrictions min = new DateTimeRestrictions(
+            new Limit<>(Defaults.ISO_MAX_DATE, false),
+            DATETIME_MAX_LIMIT
+        );
+
         DateTimeFieldValueSource datesAfterLastPermittedDate = new DateTimeFieldValueSource(min, Collections.emptySet());
 
         //Act
@@ -369,8 +324,10 @@ public class DateTimeFieldValueSourceTests {
     @Test
     public void datetimeGenerateAllValues_withMaxSetToMinDate_emitsNoValues(){
         //Arrange
-        DateTimeRestrictions max = new DateTimeRestrictions();
-        max.max = new DateTimeLimit(DateTimeFieldValueSource.ISO_MIN_DATE, false);
+        DateTimeRestrictions max = new DateTimeRestrictions(
+            DATETIME_MIN_LIMIT,
+            new Limit<>(Defaults.ISO_MIN_DATE, false)
+        );
         DateTimeFieldValueSource datesBeforeFirstPermittedDate = new DateTimeFieldValueSource(max, Collections.emptySet());
 
         //Act
@@ -380,26 +337,27 @@ public class DateTimeFieldValueSourceTests {
     }
 
     private DateTimeRestrictions restrictions(String min, String max){
-        DateTimeRestrictions restrictions = new DateTimeRestrictions();
-        restrictions.min = min == null ? null : getTimeLimit(min);
-        restrictions.max = max == null ? null : getTimeLimit(max);
+        DateTimeRestrictions restrictions = new DateTimeRestrictions(
+            min == null ? null : getTimeLimit(min),
+            max == null ? null : getTimeLimit(max)
+        );
         return restrictions;
     }
 
-    private DateTimeLimit getTimeLimit(String dateString) {
+    private Limit<OffsetDateTime> getTimeLimit(String dateString) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        return new DateTimeLimit(
+        return new Limit<>(
             LocalDate.parse(dateString, formatter).atStartOfDay().atOffset(ZoneOffset.UTC),
             true);
     }
 
     private void givenLowerBound(OffsetDateTime value, boolean inclusive) {
-        lowerLimit = new DateTimeLimit(value, inclusive);
+        lowerLimit = new Limit<>(value, inclusive);
     }
 
     private void givenUpperBound(OffsetDateTime value, boolean inclusive) {
-        upperLimit = new DateTimeLimit(value, inclusive);
+        upperLimit = new Limit<>(value, inclusive);
     }
 
     private void givenBlacklist(Object... list) {
@@ -410,10 +368,7 @@ public class DateTimeFieldValueSourceTests {
         List<Object> expectedValues = Arrays.asList(expectedValuesArray);
         List<Object> actualValues = new ArrayList<>();
 
-        DateTimeRestrictions restrictions = new DateTimeRestrictions();
-        restrictions.min = lowerLimit;
-        restrictions.max = upperLimit;
-
+        DateTimeRestrictions restrictions = new DateTimeRestrictions(lowerLimit, upperLimit);
         fieldSource = new DateTimeFieldValueSource(restrictions, blackList);
 
         fieldSource.generateAllValues().forEach(actualValues::add);
@@ -425,9 +380,7 @@ public class DateTimeFieldValueSourceTests {
         List<Object> expectedValues = Arrays.asList(expectedValuesArray);
         List<Object> actualValues = new ArrayList<>();
 
-        DateTimeRestrictions restrictions = new DateTimeRestrictions();
-        restrictions.min = lowerLimit;
-        restrictions.max = upperLimit;
+        DateTimeRestrictions restrictions = new DateTimeRestrictions(lowerLimit, upperLimit);
 
         fieldSource = new DateTimeFieldValueSource(restrictions, blackList);
 
@@ -469,7 +422,7 @@ public class DateTimeFieldValueSourceTests {
         }
 
         @Override
-        public BigDecimal nextBigDecimal(BigDecimal lowerInclusive, BigDecimal upperExclusive, int scale) {
+        public BigDecimal nextBigDecimal(BigDecimal lowerInclusive, BigDecimal upperExclusive) {
             return new BigDecimal(nextDouble(lowerInclusive.doubleValue(), upperExclusive.doubleValue()));
         }
     }

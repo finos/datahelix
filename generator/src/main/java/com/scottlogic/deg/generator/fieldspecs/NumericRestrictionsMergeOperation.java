@@ -18,20 +18,24 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.restrictions.linear.*;
+import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
+
+import java.math.BigDecimal;
 
 import static com.scottlogic.deg.common.profile.Types.NUMERIC;
 
 public class NumericRestrictionsMergeOperation implements RestrictionMergeOperation {
-    private final NumericRestrictionsMerger merger;
+    private final LinearRestrictionsMerger merger;
 
     @Inject
-    public NumericRestrictionsMergeOperation(NumericRestrictionsMerger merger) {
+    public NumericRestrictionsMergeOperation(LinearRestrictionsMerger merger) {
         this.merger = merger;
     }
 
     @Override
     public FieldSpec applyMergeOperation(FieldSpec left, FieldSpec right) {
-        MergeResult<NumericRestrictions> mergeResult = merger.merge(
+        MergeResult<LinearRestrictions<BigDecimal>> mergeResult = merger.merge(
             left.getNumericRestrictions(), right.getNumericRestrictions());
 
         if (!mergeResult.successful) {

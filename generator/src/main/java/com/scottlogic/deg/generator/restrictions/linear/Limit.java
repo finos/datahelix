@@ -14,23 +14,21 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.restrictions;
+package com.scottlogic.deg.generator.restrictions.linear;
 
-import com.scottlogic.deg.common.util.NumberUtils;
-
-import java.math.BigDecimal;
 import java.util.Objects;
 
-public class NumericLimit<T extends Number> {
+public class Limit<T extends Comparable<? super T>> {
+
     private final T limit;
     private final boolean isInclusive;
 
-    public NumericLimit(T limit, boolean isInclusive) {
+    public Limit(T limit, boolean isInclusive) {
         this.limit = limit;
         this.isInclusive = isInclusive;
     }
 
-    public T getLimit() {
+    public T getValue() {
         return limit;
     }
 
@@ -38,12 +36,25 @@ public class NumericLimit<T extends Number> {
         return isInclusive;
     }
 
-    public String toString(String operator) {
+    public boolean isBefore(T other) {
+        if (isInclusive){
+            return limit.compareTo(other) <= 0;
+        }
+        return limit.compareTo(other) < 0;
+    }
+
+    public boolean isAfter(T other) {
+        if (isInclusive){
+            return limit.compareTo(other) >= 0;
+        }
+        return limit.compareTo(other) > 0;
+    }
+
+    public String toString() {
         return String.format(
-            "%s%s %s",
-            operator,
-            this.isInclusive ? "=" : "",
-            this.limit.toString()
+            "%s%s",
+            limit.toString(),
+            isInclusive ? " inclusive" : ""
         );
     }
 
@@ -51,9 +62,9 @@ public class NumericLimit<T extends Number> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        NumericLimit<?> that = (NumericLimit<?>) o;
-        return isInclusive == that.isInclusive &&
-            Objects.equals(limit, that.limit);
+        Limit<?> limit1 = (Limit<?>) o;
+        return isInclusive == limit1.isInclusive &&
+            Objects.equals(limit, limit1.limit);
     }
 
     @Override

@@ -19,7 +19,7 @@ package com.scottlogic.deg.generator.fieldspecs;
 import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
-import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
 import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.util.Optional;
@@ -29,9 +29,9 @@ import java.util.stream.Collectors;
  * Returns a FieldSpec that permits only data permitted by all of its inputs
  */
 public class FieldSpecMerger {
-        StringRestrictionsMergeOperation stringRestrictionsMergeOperation = new StringRestrictionsMergeOperation();
-        NumericRestrictionsMergeOperation numericRestrictionsMergeOperation = new NumericRestrictionsMergeOperation(new NumericRestrictionsMerger());
-        DateTimeRestrictionsMergeOperation dateTimeRestrictionsMergeOperation = new DateTimeRestrictionsMergeOperation(new DateTimeRestrictionsMerger());
+    StringRestrictionsMergeOperation stringRestrictionsMergeOperation = new StringRestrictionsMergeOperation();
+    NumericRestrictionsMergeOperation numericRestrictionsMergeOperation = new NumericRestrictionsMergeOperation(new LinearRestrictionsMerger());
+    DateTimeRestrictionsMergeOperation dateTimeRestrictionsMergeOperation = new DateTimeRestrictionsMergeOperation(new LinearRestrictionsMerger());
 
     /**
      * Null parameters are permitted, and are synonymous with an empty FieldSpec

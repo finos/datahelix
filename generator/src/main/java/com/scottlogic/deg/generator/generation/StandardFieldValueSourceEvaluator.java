@@ -27,11 +27,20 @@ import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.DateTi
 import com.scottlogic.deg.generator.generation.string.generators.RegexStringGenerator;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
 
+import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MAX_LIMIT;
+import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MIN_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
 import static com.scottlogic.deg.common.profile.Types.*;
 
 public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvaluator {
@@ -85,8 +94,8 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
     }
 
     private FieldValueSource getNumericSource(FieldSpec fieldSpec) {
-        NumericRestrictions restrictions = fieldSpec.getNumericRestrictions() == null
-            ? new NumericRestrictions()
+        LinearRestrictions<BigDecimal> restrictions = fieldSpec.getNumericRestrictions() == null
+            ? new NumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT)
             : fieldSpec.getNumericRestrictions();
 
         return new RealNumberFieldValueSource(
@@ -112,10 +121,10 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
     }
 
     private FieldValueSource getDateTimeSource(FieldSpec fieldSpec) {
-        DateTimeRestrictions restrictions = fieldSpec.getDateTimeRestrictions();
+        LinearRestrictions<OffsetDateTime> restrictions = fieldSpec.getDateTimeRestrictions();
 
         return new DateTimeFieldValueSource(
-            restrictions != null ? restrictions : new DateTimeRestrictions(),
+            restrictions != null ? restrictions : new DateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT),
             fieldSpec.getBlacklist());
     }
 }

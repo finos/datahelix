@@ -19,13 +19,14 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.restrictions.DateTimeLimit;
-import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import org.junit.jupiter.api.Test;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
+import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
 import static org.junit.jupiter.api.Assertions.*;
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 import static com.scottlogic.deg.common.profile.Types.*;
@@ -39,7 +40,7 @@ class AfterDateRelationTest {
 
         FieldSpecRelations relation = new AfterDateRelation(first, second, true);
 
-        DateTimeLimit lower = new DateTimeLimit(
+        Limit<OffsetDateTime> lower = new Limit<>(
             OffsetDateTime.of(
                 2005,
                 6,
@@ -51,7 +52,7 @@ class AfterDateRelationTest {
                 ZoneOffset.UTC),
             true);
 
-        DateTimeLimit upper = new DateTimeLimit(
+        Limit<OffsetDateTime> upper = new Limit<>(
             OffsetDateTime.of(
                 2006,
                 6,
@@ -63,16 +64,13 @@ class AfterDateRelationTest {
                 ZoneOffset.UTC),
             true);
 
-        DateTimeRestrictions inRestrictions = new DateTimeRestrictions();
-        inRestrictions.min = lower;
-        inRestrictions.max = upper;
+        DateTimeRestrictions inRestrictions = new DateTimeRestrictions(lower, upper);
 
         FieldSpec inSpec = FieldSpec.fromType(DATETIME).withDateTimeRestrictions(inRestrictions);
 
         FieldSpec reducedSpec = relation.reduceToRelatedFieldSpec(inSpec);
 
-        DateTimeRestrictions expectedRestrictions = new DateTimeRestrictions();
-        expectedRestrictions.max = upper;
+        DateTimeRestrictions expectedRestrictions = new DateTimeRestrictions(DATETIME_MIN_LIMIT, upper);
         FieldSpec expectedSpec = FieldSpec.fromType(DATETIME).withDateTimeRestrictions(expectedRestrictions);
 
         assertEquals(expectedSpec, reducedSpec);

@@ -14,8 +14,15 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.restrictions;
+package com.scottlogic.deg.generator.restrictions.linear;
 
-public interface Restrictions {
+public interface Granularity<T> {
 
+    boolean isCorrectScale(T value);
+
+    Granularity<T> merge(Granularity<T> otherGranularity);
+
+    T getNext(T value);
+
+    T trimToGranularity(T value);
 }

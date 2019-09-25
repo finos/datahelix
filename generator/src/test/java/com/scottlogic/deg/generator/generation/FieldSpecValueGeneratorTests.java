@@ -22,7 +22,8 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
-import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.restrictions.linear.Limit;
+import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -33,12 +34,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.scottlogic.deg.common.profile.Types.*;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.deg.common.profile.Types.NUMERIC;
+import static com.scottlogic.deg.common.profile.Types.STRING;
 import static com.scottlogic.deg.generator.config.detail.DataGenerationType.*;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.mockito.Mockito.*;
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 class FieldSpecValueGeneratorTests {
 
@@ -68,10 +70,9 @@ class FieldSpecValueGeneratorTests {
     void generate_fieldSpecMustContainRestrictionNullAndNumericRestrictionApplied_returnsExpectedDataBagsForNumericRestriction() {
         FieldSpec fieldSpec = FieldSpec.fromType(NUMERIC)
             .withNumericRestrictions(
-                new NumericRestrictions() {{
-                    min = new NumericLimit<>(new BigDecimal(10), false);
-                    max = new NumericLimit<>(new BigDecimal(30), false);
-                }});
+                new NumericRestrictions(
+                    new Limit<>(new BigDecimal(10), false),
+                    new Limit<>(new BigDecimal(30), false)));
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
             INTERESTING,
             new StandardFieldValueSourceEvaluator(),
@@ -85,12 +86,7 @@ class FieldSpecValueGeneratorTests {
                 new DataBagValue(
                     new BigDecimal("10.00000000000000000001")
                 ),
-                new DataBagValue(
-                    new BigDecimal("10.00000000000000000002")
-                ),
-                new DataBagValue(
-                    new BigDecimal("29.99999999999999999998")
-                ),
+
                 new DataBagValue(
                     new BigDecimal("29.99999999999999999999")
                 ),

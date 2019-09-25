@@ -16,14 +16,16 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.generator.restrictions.DateTimeRestrictions;
-import com.scottlogic.deg.generator.restrictions.DateTimeRestrictionsMerger;
+import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
 import com.scottlogic.deg.generator.restrictions.MergeResult;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
 import static com.scottlogic.deg.common.profile.Types.DATETIME;
 import static com.scottlogic.deg.common.profile.Types.NUMERIC;
 import static org.hamcrest.Matchers.empty;
@@ -35,18 +37,18 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class DateTimeRestrictionsMergeOperationTests {
-    private DateTimeRestrictionsMerger merger;
+    private LinearRestrictionsMerger merger;
     private DateTimeRestrictionsMergeOperation operation;
     private FieldSpec left;
     private FieldSpec right;
 
     @BeforeEach
     public void beforeEach() {
-        merger = mock(DateTimeRestrictionsMerger.class);
+        merger = mock(LinearRestrictionsMerger.class);
         operation = new DateTimeRestrictionsMergeOperation(merger);
 
-        left = FieldSpec.fromType(DATETIME).withDateTimeRestrictions(new DateTimeRestrictions());
-        right = FieldSpec.fromType(DATETIME).withDateTimeRestrictions(new DateTimeRestrictions());
+        left = FieldSpec.fromType(DATETIME).withDateTimeRestrictions(new DateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT));
+        right = FieldSpec.fromType(DATETIME).withDateTimeRestrictions(new DateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT));
     }
 
     @Test
@@ -93,20 +95,5 @@ class DateTimeRestrictionsMergeOperationTests {
 
         Assert.assertThat(result, not(sameInstance(merging)));
         Assert.assertThat(result.getWhitelist().set(), is(empty()));
-    }
-
-    @Disabled("same instance check not working due to being casted")
-    @Test
-    public void applyMergeOperation_withMergableDateTimeRestrictions_shouldApplyMergedDateTimeRestrictions() {
-        FieldSpec merging = FieldSpec.fromType(DATETIME);
-        DateTimeRestrictions merged = new DateTimeRestrictions();
-        when(merger.merge(left.getDateTimeRestrictions(), right.getDateTimeRestrictions()))
-            .thenReturn(new MergeResult<>(merged));
-
-        FieldSpec result = operation.applyMergeOperation(left, right);
-
-        Assert.assertThat(result, not(sameInstance(merging)));
-        Assert.assertThat(result.getDateTimeRestrictions(), sameInstance(merged));
-        Assert.assertThat(result.getType(), sameInstance(merging.getType()));
     }
 }

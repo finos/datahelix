@@ -14,14 +14,21 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.utils;
+package com.scottlogic.deg.generator.restrictions.linear;
 
-import java.math.BigDecimal;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 
-public interface RandomNumberGenerator {
-    int nextInt();
-    int nextInt(int bound);
-    int nextInt(int lowerInclusive, int upperExclusive);
-    double nextDouble(double lowerInclusive, double upperExclusive);
-    BigDecimal nextBigDecimal(BigDecimal lowerInclusive, BigDecimal upperExclusive);
+public class DateTimeConverter implements Converter<OffsetDateTime> {
+
+    @Override
+    public OffsetDateTime convert(Object value) {
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+        return OffsetDateTime.parse(value.toString(), formatter);
+    }
+
+    @Override
+    public boolean isCorrectType(Object value) {
+        return value instanceof OffsetDateTime;
+    }
 }

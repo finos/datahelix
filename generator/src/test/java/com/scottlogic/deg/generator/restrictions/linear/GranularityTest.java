@@ -14,14 +14,23 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.utils;
+
+package com.scottlogic.deg.generator.restrictions.linear;
+
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
-public interface RandomNumberGenerator {
-    int nextInt();
-    int nextInt(int bound);
-    int nextInt(int lowerInclusive, int upperExclusive);
-    double nextDouble(double lowerInclusive, double upperExclusive);
-    BigDecimal nextBigDecimal(BigDecimal lowerInclusive, BigDecimal upperExclusive);
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class GranularityTest {
+    @Test
+    public void dateTimeRestrictions_nextCorrectlyGetsNextValidValue(){
+        NumericGranularity granularity = new NumericGranularity(0);
+        BigDecimal num = new BigDecimal(5);
+        BigDecimal result = granularity.getNext(num);
+        BigDecimal expectedResult = new BigDecimal(6);
+        assertTrue(expectedResult.compareTo(result) == 0);
+    }
+
 }

@@ -17,21 +17,25 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.restrictions.MergeResult;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
+
+import java.time.OffsetDateTime;
 
 import static com.scottlogic.deg.common.profile.Types.DATETIME;
 
 public class DateTimeRestrictionsMergeOperation implements RestrictionMergeOperation {
-    private final DateTimeRestrictionsMerger merger;
+    private final LinearRestrictionsMerger merger;
 
     @Inject
-    public DateTimeRestrictionsMergeOperation(DateTimeRestrictionsMerger merger) {
+    public DateTimeRestrictionsMergeOperation(LinearRestrictionsMerger merger) {
         this.merger = merger;
     }
 
     @Override
     public FieldSpec applyMergeOperation(FieldSpec left, FieldSpec right) {
-        MergeResult<DateTimeRestrictions> mergeResult = merger.merge(
+        MergeResult<LinearRestrictions<OffsetDateTime>> mergeResult = merger.merge(
             left.getDateTimeRestrictions(), right.getDateTimeRestrictions());
 
         if (!mergeResult.successful){

@@ -20,7 +20,10 @@ import com.scottlogic.deg.common.profile.Types;
 
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 
+import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.*;
 
 import static com.scottlogic.deg.common.profile.Types.*;
@@ -74,9 +77,9 @@ public class FieldSpec {
         return blacklist;
     }
 
-    public NumericRestrictions getNumericRestrictions() {
+    public LinearRestrictions<BigDecimal> getNumericRestrictions() {
         if (types == NUMERIC) {
-            return (NumericRestrictions) restrictions;
+            return (LinearRestrictions<BigDecimal>) restrictions;
         }
         return null;
     }
@@ -92,9 +95,9 @@ public class FieldSpec {
         return types;
     }
 
-    public DateTimeRestrictions getDateTimeRestrictions() {
+    public LinearRestrictions<OffsetDateTime> getDateTimeRestrictions() {
         if (types == DATETIME) {
-            return (DateTimeRestrictions) restrictions;
+            return (LinearRestrictions<OffsetDateTime>) restrictions;
         }
         return null;
     }
@@ -103,7 +106,7 @@ public class FieldSpec {
         return new FieldSpec(whitelist, null, nullable, blacklist, types);
     }
 
-    public FieldSpec withNumericRestrictions(NumericRestrictions numericRestrictions) {
+    public FieldSpec withNumericRestrictions(LinearRestrictions<BigDecimal> numericRestrictions) {
         return new FieldSpec(null, numericRestrictions, nullable, blacklist, NUMERIC);
     }
 
@@ -119,7 +122,7 @@ public class FieldSpec {
         return new FieldSpec(whitelist, restrictions, false, blacklist, types);
     }
 
-    public FieldSpec withDateTimeRestrictions(DateTimeRestrictions dateTimeRestrictions) {
+    public FieldSpec withDateTimeRestrictions(LinearRestrictions<OffsetDateTime> dateTimeRestrictions) {
         return new FieldSpec(null, dateTimeRestrictions, nullable, blacklist, DATETIME);
     }
 

@@ -14,14 +14,9 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.utils;
+package com.scottlogic.deg.generator.restrictions.linear;
 
-import java.math.BigDecimal;
-
-public interface RandomNumberGenerator {
-    int nextInt();
-    int nextInt(int bound);
-    int nextInt(int lowerInclusive, int upperExclusive);
-    double nextDouble(double lowerInclusive, double upperExclusive);
-    BigDecimal nextBigDecimal(BigDecimal lowerInclusive, BigDecimal upperExclusive);
+public interface Converter<T> {
+    public T convert(Object value);
+    public boolean isCorrectType(Object value);
 }

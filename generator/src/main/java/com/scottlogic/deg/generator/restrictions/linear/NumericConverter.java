@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.restrictions;
+package com.scottlogic.deg.generator.restrictions.linear;
 
-import com.scottlogic.deg.common.profile.Types;
+import java.math.BigDecimal;
 
-abstract class AbstractTypedRestrictions implements TypedRestrictions {
-
-    protected abstract Types getType();
+public class NumericConverter implements Converter<BigDecimal> {
+    @Override
+    public BigDecimal convert(Object value) {
+        return new BigDecimal(value.toString());
+    }
 
     @Override
-    public boolean isInstanceOf(Object o) {
-        return getType().isInstanceOf(o);
+    public boolean isCorrectType(Object value) {
+        return value instanceof Number;
     }
 }

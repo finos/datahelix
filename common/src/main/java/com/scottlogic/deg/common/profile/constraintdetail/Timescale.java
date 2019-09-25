@@ -105,4 +105,9 @@ public enum Timescale {
         int factor = NANOS_IN_MILLIS;
         return (nano / factor) * factor;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }
