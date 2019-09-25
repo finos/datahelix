@@ -185,7 +185,6 @@ class RealNumberFieldValueSourceTests {
     }
 
     @Test
-    @Disabled("This should be looked at but appears to not be an issue when using a similar setup with a profile")
     void shouldSupplyInterestingNonBlacklistedValues() {
         givenLowerBound(-10, true);
         givenUpperBound(10, true);
