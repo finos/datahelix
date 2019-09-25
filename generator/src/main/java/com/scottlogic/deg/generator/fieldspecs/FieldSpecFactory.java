@@ -131,9 +131,8 @@ public class FieldSpecFactory {
         return constructGreaterThanConstraint(field, constraint.referenceValue, true, negate);
     }
 
-    private FieldSpec constructGreaterThanConstraint(Field field, Number limitValue, boolean inclusive, boolean negate) {
+    private FieldSpec constructGreaterThanConstraint(Field field, BigDecimal limit, boolean inclusive, boolean negate) {
         NumericRestrictions numericRestrictions;
-        final BigDecimal limit = NumberUtils.coerceToBigDecimal(limitValue);
         if (negate) {
             numericRestrictions = new NumericRestrictions(NUMERIC_MIN_LIMIT, new Limit<>(
                 limit,
@@ -156,10 +155,8 @@ public class FieldSpecFactory {
         return constructLessThanConstraint(field, constraint.referenceValue, true, negate);
     }
 
-    private FieldSpec constructLessThanConstraint(Field field, Number limitValue, boolean inclusive, boolean negate) {
+    private FieldSpec constructLessThanConstraint(Field field, BigDecimal limit, boolean inclusive, boolean negate) {
         final NumericRestrictions numericRestrictions;
-
-        final BigDecimal limit = NumberUtils.coerceToBigDecimal(limitValue);
         if (negate) {
             numericRestrictions = new NumericRestrictions(new Limit<>(
                 limit,

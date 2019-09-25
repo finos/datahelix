@@ -10,6 +10,7 @@ import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.profile.reader.RemoveFromTree;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -37,13 +38,13 @@ public class AtomicConstraintFactory {
                 return new IsStringLongerThanConstraint(field, integer(value));
 
             case IS_GREATER_THAN_CONSTANT:
-                return new IsGreaterThanConstantConstraint(field, (Number)value);
+                return new IsGreaterThanConstantConstraint(field, (BigDecimal) value);
             case IS_GREATER_THAN_OR_EQUAL_TO_CONSTANT:
-                return new IsGreaterThanOrEqualToConstantConstraint(field, (Number)value);
+                return new IsGreaterThanOrEqualToConstantConstraint(field, (BigDecimal)value);
             case IS_LESS_THAN_CONSTANT:
-                return new IsLessThanConstantConstraint(field, (Number)value);
+                return new IsLessThanConstantConstraint(field, (BigDecimal)value);
             case IS_LESS_THAN_OR_EQUAL_TO_CONSTANT:
-                return new IsLessThanOrEqualToConstantConstraint(field, (Number)value);
+                return new IsLessThanOrEqualToConstantConstraint(field, (BigDecimal) value);
 
             case IS_AFTER_CONSTANT_DATE_TIME:
                 return new IsAfterConstantDateTimeConstraint(field, (OffsetDateTime)value);
