@@ -25,6 +25,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -63,7 +64,7 @@ public class ConstraintTypeViolationFilterTests {
     @Test
     public void canViolate_withNonMatchingTypeConstraint_returnsTrue() {
         //Arrange
-        Constraint inputConstraint = new IsGreaterThanConstantConstraint(null, 100);
+        Constraint inputConstraint = new IsGreaterThanConstantConstraint(null, BigDecimal.valueOf(100));
 
         //Act
         boolean actual = target.canViolate(inputConstraint);

@@ -35,6 +35,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 import static com.scottlogic.deg.generator.inputs.profileviolation.TypeEqualityHelper.assertRuleTypeEquality;
@@ -70,9 +71,9 @@ public class IndividualConstraintRuleViolatorTests {
 
         target = new IndividualConstraintRuleViolator(inputFilters);
 
-        atomicConstraint1 = new IsLessThanConstantConstraint(createField("foo"), 10);
-        atomicConstraint2 = new IsLessThanConstantConstraint(createField("bar"), 20);
-        atomicConstraint3 = new IsLessThanConstantConstraint(createField("foobar"), 30);
+        atomicConstraint1 = new IsLessThanConstantConstraint(createField("foo"), BigDecimal.valueOf(10));
+        atomicConstraint2 = new IsLessThanConstantConstraint(createField("bar"), BigDecimal.valueOf(20));
+        atomicConstraint3 = new IsLessThanConstantConstraint(createField("foobar"), BigDecimal.valueOf(30));
         ruleInformation = new RuleInformation();
     }
 
