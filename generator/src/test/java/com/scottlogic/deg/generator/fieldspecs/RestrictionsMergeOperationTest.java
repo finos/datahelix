@@ -115,6 +115,19 @@ class RestrictionsMergeOperationTest {
     }
 
     @Test
+    void applyMergeOperation_withContradictoryNumericRestrictions_shouldPreventAnyValues(){
+        FieldSpec merging = FieldSpec.nullOnlyFromType(NUMERIC);
+        when(linearMerger.merge(leftNumeric.getRestrictions(), rightNumeric.getRestrictions()))
+            .thenReturn(MergeResult.unsuccessful());
+
+        FieldSpec result = operation.applyMergeOperation(leftNumeric, rightNumeric);
+
+        Assert.assertEquals(result, merging);
+        verify(linearMerger, times(1)).merge(any(), any());
+        verify(StringMerger, times(0)).merge(any(), any());
+    }
+
+    @Test
     void applyMergeOperation_withNoStringRestrictions_shouldNotApplyAnyRestriction(){
         FieldSpec merging = FieldSpec.fromType(STRING);
         when(StringMerger.merge(leftString.getRestrictions(), rightString.getRestrictions()))
@@ -135,6 +148,19 @@ class RestrictionsMergeOperationTest {
         FieldSpec result = operation.applyMergeOperation(leftString, rightString);
 
         Assert.assertEquals(result, leftString);
+        verify(linearMerger, times(0)).merge(any(), any());
+        verify(StringMerger, times(1)).merge(any(), any());
+    }
+
+    @Test
+    void applyMergeOperation_withContradictoryStringRestrictions_shouldPreventAnyValues(){
+        FieldSpec merging = FieldSpec.nullOnlyFromType(STRING);
+        when(StringMerger.merge(leftString.getRestrictions(), rightString.getRestrictions()))
+            .thenReturn(MergeResult.unsuccessful());
+
+        FieldSpec result = operation.applyMergeOperation(leftString, rightString);
+
+        Assert.assertEquals(result, merging);
         verify(linearMerger, times(0)).merge(any(), any());
         verify(StringMerger, times(1)).merge(any(), any());
     }
@@ -161,6 +187,19 @@ class RestrictionsMergeOperationTest {
         FieldSpec result = operation.applyMergeOperation(leftDateTime, rightDateTime);
 
         Assert.assertEquals(result, rightDateTime);
+        verify(linearMerger, times(1)).merge(any(), any());
+        verify(StringMerger, times(0)).merge(any(), any());
+    }
+
+    @Test
+    void applyMergeOperation_withContradictoryDateTimeRestrictions_shouldPreventAnyValues(){
+        FieldSpec merging = FieldSpec.nullOnlyFromType(DATETIME);
+        when(linearMerger.merge(leftDateTime.getRestrictions(), rightDateTime.getRestrictions()))
+            .thenReturn(MergeResult.unsuccessful());
+
+        FieldSpec result = operation.applyMergeOperation(leftDateTime, rightDateTime);
+
+        Assert.assertEquals(result, merging);
         verify(linearMerger, times(1)).merge(any(), any());
         verify(StringMerger, times(0)).merge(any(), any());
     }
