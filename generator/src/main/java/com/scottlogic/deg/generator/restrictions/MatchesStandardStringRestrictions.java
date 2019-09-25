@@ -61,7 +61,7 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
     }
 
     @Override
-    public MergeResult<StringRestrictions> intersect(StringRestrictions other) {
+    public MergeResult<TypedRestrictions> intersect(TypedRestrictions other) {
 
         if (other instanceof TextualRestrictions){
             return isLengthAcceptable((TextualRestrictions) other);
@@ -75,7 +75,7 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
         return new MergeResult<>(this);
     }
 
-    private MergeResult<StringRestrictions> isLengthAcceptable(TextualRestrictions other) {
+    private MergeResult<TypedRestrictions> isLengthAcceptable(TextualRestrictions other) {
         if (anyRegexes(other)){
             throw new ValidationException("Combining a regex constraint with a " + this.toString() + " constraint is not supported.");
         }

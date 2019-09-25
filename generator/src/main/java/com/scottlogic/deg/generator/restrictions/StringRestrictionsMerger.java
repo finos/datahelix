@@ -20,16 +20,14 @@ package com.scottlogic.deg.generator.restrictions;
  * For a given combination of choices over the decision tree
  * Details every column's atomic constraints
  */
-public class StringRestrictionsMerger {
-    public MergeResult<StringRestrictions> merge(StringRestrictions left, StringRestrictions right) {
-        if (left == null && right == null)
-            return new MergeResult<>(null);
-        if (left == null)
-            return new MergeResult<>(right);
-        if (right == null)
-            return new MergeResult<>(left);
+public class StringRestrictionsMerger implements RestrictionsMerger {
 
-        return left.intersect(right);
+    @Override
+    public MergeResult<TypedRestrictions> merge(TypedRestrictions left, TypedRestrictions right) {
+        StringRestrictions leftCast = (StringRestrictions) left;
+        StringRestrictions rightCast = (StringRestrictions) right;
+
+        return leftCast.intersect(rightCast);
     }
 }
 
