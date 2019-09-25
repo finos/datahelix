@@ -16,17 +16,17 @@
 
 package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
-import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.common.util.Defaults;
-import com.scottlogic.deg.generator.restrictions.linear.Granularity;
+import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
-import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
-import com.scottlogic.deg.generator.utils.*;
+import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -99,14 +99,14 @@ public class RealNumberFieldValueSource implements FieldValueSource {
 
         return list.stream()
             .distinct()
-            .filter(i -> !blacklist.contains(i))
+            .filter(this::notInBlacklist)
             .map(Function.identity());
     }
 
     @Override
     public Stream<Object> generateAllValues() {
         return stream(new LinearIterator<>(restrictions))
-            .filter(i -> !blacklist.contains(i))
+            .filter(this::notInBlacklist)
             .map(Function.identity());
     }
 
@@ -117,8 +117,13 @@ public class RealNumberFieldValueSource implements FieldValueSource {
                 inclusiveLowerLimit,
                 inclusiveUpperLimit))
             .map(val -> restrictions.getGranularity().trimToGranularity(val))
-            .filter(i -> !blacklist.contains(i))
+            .filter(this::notInBlacklist)
             .map(Function.identity());
+    }
+
+
+    private boolean notInBlacklist(BigDecimal i) {
+        return blacklist.stream().noneMatch(x->x.compareTo(i)==0);
     }
 
     @Override

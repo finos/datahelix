@@ -17,17 +17,15 @@
 package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
 import com.scottlogic.deg.common.util.Defaults;
-import com.scottlogic.deg.generator.fieldspecs.NumericRestrictionsMergeOperation;
+import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
 import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
-import com.scottlogic.deg.common.util.NumberUtils;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -38,8 +36,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MAX_LIMIT;
-import static com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions.NUMERIC_MIN_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MAX_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MIN_LIMIT;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.*;
 
@@ -185,7 +183,6 @@ class RealNumberFieldValueSourceTests {
     }
 
     @Test
-    @Disabled("This should be looked at but appears to not be an issue when using a similar setup with a profile")
     void shouldSupplyInterestingNonBlacklistedValues() {
         givenLowerBound(-10, true);
         givenUpperBound(10, true);
