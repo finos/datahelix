@@ -29,19 +29,19 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class FrequencyDistributedSetTest {
+class DistributedSetTest {
 
     @Test
     public void testEmptyIsEmpty() {
-        DistributedSet<String> empty = FrequencyDistributedSet.empty();
-        DistributedSet<String> manualEmpty = new FrequencyDistributedSet<>(Collections.emptySet());
+        DistributedSet<String> empty = DistributedSet.empty();
+        DistributedSet<String> manualEmpty = new DistributedSet<>(Collections.emptySet());
 
         assertEquals(manualEmpty, empty);
     }
 
     @Test
     public void testNullSetIsRejected() {
-        assertThrows(IllegalArgumentException.class, () -> new FrequencyDistributedSet<>(Collections.singleton(null)));
+        assertThrows(IllegalArgumentException.class, () -> new DistributedSet<>(Collections.singleton(null)));
     }
 
     @Test
@@ -53,10 +53,10 @@ class FrequencyDistributedSetTest {
 
         Set<WeightedElement<String>> weightedElements = SetUtils.setOf(first, second, third);
 
-        DistributedSet<String> manualSet = new FrequencyDistributedSet<>(weightedElements);
+        DistributedSet<String> manualSet = new DistributedSet<>(weightedElements);
 
         Set<String> elements = SetUtils.setOf("first", "second", "third");
-        DistributedSet<String> uniformSet = FrequencyDistributedSet.uniform(elements);
+        DistributedSet<String> uniformSet = DistributedSet.uniform(elements);
 
         assertEquals(manualSet, uniformSet);
     }
@@ -65,7 +65,7 @@ class FrequencyDistributedSetTest {
         Set<WeightedElement<String>> holders = Stream.of("first", "second", "third", "fourth")
             .map(WeightedElement::withDefaultWeight)
             .collect(Collectors.toSet());
-        return new FrequencyDistributedSet<>(holders);
+        return new DistributedSet<>(holders);
     }
 
     @Test

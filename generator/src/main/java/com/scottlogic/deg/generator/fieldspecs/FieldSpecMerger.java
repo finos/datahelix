@@ -19,9 +19,7 @@ package com.scottlogic.deg.generator.fieldspecs;
 import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
-import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.util.Optional;
@@ -59,7 +57,7 @@ public class FieldSpecMerger {
     }
 
     private Optional<FieldSpec> mergeSets(FieldSpec left, FieldSpec right) {
-        DistributedSet<Object> set = new FrequencyDistributedSet<>(left.getWhitelist().distributedSet().stream()
+        DistributedSet<Object> set = new DistributedSet<>(left.getWhitelist().distributedSet().stream()
             .flatMap(leftHolder -> right.getWhitelist().distributedSet().stream()
                 .filter(rightHolder -> elementsEqual(leftHolder, rightHolder))
                 .map(rightHolder -> mergeElements(leftHolder, rightHolder)))
@@ -73,7 +71,7 @@ public class FieldSpecMerger {
     }
 
     private Optional<FieldSpec> combineSetWithRestrictions(FieldSpec set, FieldSpec restrictions) {
-        DistributedSet<Object> newSet = new FrequencyDistributedSet<>(
+        DistributedSet<Object> newSet = new DistributedSet<>(
             set.getWhitelist().distributedSet().stream()
                 .filter(holder -> restrictions.permits(holder.element()))
                 .collect(Collectors.toSet()));

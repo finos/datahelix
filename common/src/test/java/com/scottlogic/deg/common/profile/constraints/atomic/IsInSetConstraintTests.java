@@ -17,7 +17,7 @@
 package com.scottlogic.deg.common.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.FrequencyDistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
@@ -30,7 +30,7 @@ public class IsInSetConstraintTests {
 
         Assertions.assertThrows(
             IllegalArgumentException.class,
-            () -> new IsInSetConstraint(field1, FrequencyDistributedSet.empty()));
+            () -> new IsInSetConstraint(field1, DistributedSet.empty()));
     }
 
     @Test
@@ -39,14 +39,14 @@ public class IsInSetConstraintTests {
 
         Assertions.assertThrows(
             IllegalArgumentException.class,
-            () -> new IsInSetConstraint(field1, FrequencyDistributedSet.singleton(null)));
+            () -> new IsInSetConstraint(field1, DistributedSet.singleton(null)));
     }
 
     @Test
     public void testConstraintThrowsNothingIfGivenAValidSet(){
         Field field1 = createField("TestField");
         Assertions.assertDoesNotThrow(
-            () -> new IsInSetConstraint(field1, FrequencyDistributedSet.singleton("foo")));
+            () -> new IsInSetConstraint(field1, DistributedSet.singleton("foo")));
     }
 
 }
