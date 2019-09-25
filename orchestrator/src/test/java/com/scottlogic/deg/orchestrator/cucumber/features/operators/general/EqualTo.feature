@@ -151,19 +151,6 @@ Feature: User can specify that a value is equalTo a required value
       | "datetime" | 2000-01-01T00:00:00.001Z |
       | "decimal"  | 1.1                      |
 
-
-  Scenario Outline: 'EqualTo' should contradict with incorrect type <type>
-    Given there is a field foo
-    And foo is equal to <value>
-    And foo has type <type>
-    Then no data is created
-    Examples:
-      | type | value |
-      | "integer"  | 1.1   |
-      | "string"   | 1.1   |
-      | "datetime" | 1.1   |
-      | "decimal"  | "1.1" |
-
 ### constraints ###
 
   Scenario Outline: 'EqualTo' alongside a non-contradicting <operator> should be successful

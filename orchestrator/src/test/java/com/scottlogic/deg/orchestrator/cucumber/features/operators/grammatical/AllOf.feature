@@ -77,11 +77,12 @@ Feature: User can specify that data must be created to conform to each of multip
 
   Scenario: User attempts to combine two constraints that only intersect at the empty set within an allOf operator should not generate data
     Given there is a field foo
+    And foo has type "string"
     And there is a constraint:
       """
       { "allOf": [
         { "field": "foo", "is": "equalTo", "value": "Test0" },
-        { "field": "foo", "is": "equalTo", "value": 5 }
+        { "field": "foo", "is": "equalTo", "value": "5" }
       ]}
       """
     Then no data is created

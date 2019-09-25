@@ -42,6 +42,7 @@ public class CucumberTestState {
      * If true, generation is in violate mode.
      */
     public Boolean shouldViolate;
+    public boolean expectExceptions;
 
     /** If true, we inject a no-op generation engine during the test (e.g. because we're just testing profile validation) */
     private Boolean shouldSkipGeneration;
