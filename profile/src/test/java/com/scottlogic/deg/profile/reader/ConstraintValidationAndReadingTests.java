@@ -208,7 +208,7 @@ public class ConstraintValidationAndReadingTests {
     public void testAtomicConstraintReader(AtomicConstraintType type, ConstraintDTO dto, Class<?> constraintType, Types types) {
 
         try {
-            Object value = new AtomicConstraintValueReader(null).getValue(dto);
+            Object value = new AtomicConstraintValueReader(null).getValue(dto, types);
 
             ConstraintValueValidator.validate(new Field(dto.field, types, false, null), type, value);
 
@@ -341,7 +341,7 @@ public class ConstraintValidationAndReadingTests {
         dateDto.field = "test";
         dateDto.value = value;
 
-        Object val = new AtomicConstraintValueReader(null).getValue(dateDto);
+        Object val = new AtomicConstraintValueReader(null).getValue(dateDto, DATETIME);
         ConstraintValueValidator.validate(new Field("test", DATETIME, false, null), IS_AFTER_CONSTANT_DATE_TIME, val);
 
         return (OffsetDateTime)val;
