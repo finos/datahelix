@@ -10,6 +10,13 @@ Feature: User can specify that a field is of a specific type (string, integer, d
     Then the following data should be generated:
       | foo  |
       | 1    |
+  Scenario: Running an 'ofType' = integer request that includes a number value (as a string) should be successful
+    Given there is a field foo
+    And foo is equal to "1"
+    And foo has type "integer"
+    Then the following data should be generated:
+      | foo  |
+      | 1    |
 
   Scenario: Running an 'ofType' = decimal request that includes a decimal number value should be successful
     Given there is a field foo
