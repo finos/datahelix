@@ -25,8 +25,6 @@ import static com.scottlogic.deg.common.util.Defaults.*;
 
 public class NumericRestrictions extends LinearRestrictions<BigDecimal> {
 
-    private static final NumericConverter CONVERTER = new NumericConverter();
-
     public NumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max){
         this(min, max, DEFAULT_NUMERIC_SCALE);
     }
@@ -35,7 +33,7 @@ public class NumericRestrictions extends LinearRestrictions<BigDecimal> {
         this(min, max, new NumericGranularity(numericScale));
     }
     public NumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max, Granularity<BigDecimal> granularity){
-        super(capMin(min), capMax(max), granularity, CONVERTER);
+        super(capMin(min), capMax(max), granularity);
     }
 
     private static Limit<BigDecimal> capMax(Limit<BigDecimal> max) {

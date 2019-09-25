@@ -21,46 +21,31 @@ import com.scottlogic.deg.generator.restrictions.TypedRestrictions;
 
 import java.util.Objects;
 
-public class LinearRestrictions<T extends Comparable<T>> implements TypedRestrictions {
-
+public class LinearRestrictions<T extends Comparable<T>> implements TypedRestrictions<T> {
     private final Limit<T> min;
     private final Limit<T> max;
     private final Granularity<T> granularity;
-    private final Converter<T> converter;
 
-    LinearRestrictions(Limit<T> min, Limit<T> max, Granularity<T> granularity, Converter<T> converter) {
+    LinearRestrictions(Limit<T> min, Limit<T> max, Granularity<T> granularity) {
         if (min == null || max == null) {
             throw new IllegalArgumentException("linear restrictions cannot have null limits");
         }
         this.min = min;
         this.max = max;
         this.granularity = granularity;
-        this.converter = converter;
     }
 
     @Override
-    public boolean match(Object o){
-
-        if (!isInstanceOf(o)) {
+    public boolean match(T o){
+        if (!min.isBefore(o)) {
             return false;
         }
 
-        T t = converter.convert(o);
-
-        if (!min.isBefore(t)) {
+        if (!max.isAfter(o)) {
             return false;
         }
 
-        if (!max.isAfter(t)) {
-            return false;
-        }
-
-        return granularity.isCorrectScale(t);
-    }
-
-    @Override
-    public boolean isInstanceOf(Object o){
-        return converter.isCorrectType(o);
+        return granularity.isCorrectScale(o);
     }
 
     public Limit<T> getMax() {
@@ -71,10 +56,6 @@ public class LinearRestrictions<T extends Comparable<T>> implements TypedRestric
         return min;
     }
 
-    public Converter<T> getConverter(){
-        return converter;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -82,13 +63,12 @@ public class LinearRestrictions<T extends Comparable<T>> implements TypedRestric
         LinearRestrictions<?> that = (LinearRestrictions<?>) o;
         return Objects.equals(min, that.min) &&
             Objects.equals(max, that.max) &&
-            Objects.equals(granularity, that.granularity) &&
-            Objects.equals(converter, that.converter);
+            Objects.equals(granularity, that.granularity);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(min, max, granularity, converter);
+        return Objects.hash(min, max, granularity);
     }
 
     public Granularity<T> getGranularity(){

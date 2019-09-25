@@ -33,13 +33,10 @@ public class RestrictionTest {
             new Limit<>(new BigDecimal("5"), true),
             new Limit<>(new BigDecimal("10"), false));
 
-        Assert.assertThat(restriction.match(4), Is.is(false));
-        Assert.assertThat(restriction.match(5), Is.is(true));
-        Assert.assertThat(restriction.match(9), Is.is(true));
-        Assert.assertThat(restriction.match(10), Is.is(false));
-
-        Assert.assertThat(restriction.match("lorem ipsum"), Is.is(false));
-        Assert.assertThat(restriction.match("5"), Is.is(false));
+        Assert.assertThat(restriction.match(BigDecimal.valueOf(4)), Is.is(false));
+        Assert.assertThat(restriction.match(BigDecimal.valueOf(5)), Is.is(true));
+        Assert.assertThat(restriction.match(BigDecimal.valueOf(9)), Is.is(true));
+        Assert.assertThat(restriction.match(BigDecimal.valueOf(10)), Is.is(false));
     }
 
     @Test
@@ -50,7 +47,7 @@ public class RestrictionTest {
         Assert.assertThat(restriction.match("Hi World"), Is.is(true));
         Assert.assertThat(restriction.match("Goodbye"), Is.is(false));
 
-        Assert.assertThat(restriction.match(5), Is.is(false));
+        Assert.assertThat(restriction.match("5"), Is.is(false));
     }
 
 }

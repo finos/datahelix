@@ -34,7 +34,7 @@ public class LinearRestrictionsMerger<T extends Comparable<T>> implements Restri
         Limit<T> mergedMin = getHighest(leftCast.getMin(), rightCast.getMin(), mergedGranularity);
         Limit<T> mergedMax = getLowest(leftCast.getMax(), rightCast.getMax(), mergedGranularity);
 
-        LinearRestrictions<T> mergedRestriction = new LinearRestrictions<>(mergedMin, mergedMax, mergedGranularity, leftCast.getConverter());
+        LinearRestrictions<T> mergedRestriction = new LinearRestrictions<>(mergedMin, mergedMax, mergedGranularity);
 
         if (isContradictory(mergedRestriction)) {
             return Optional.empty();

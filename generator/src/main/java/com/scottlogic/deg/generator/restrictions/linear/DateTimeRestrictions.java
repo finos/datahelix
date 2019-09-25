@@ -26,14 +26,12 @@ import static com.scottlogic.deg.common.util.Defaults.*;
 
 public class DateTimeRestrictions extends LinearRestrictions<OffsetDateTime> {
 
-    private static final DateTimeConverter CONVERTER = new DateTimeConverter();
-
     public DateTimeRestrictions(Limit<OffsetDateTime> min, Limit<OffsetDateTime> max) {
         this(min, max, DEFAULT_DATETIME_GRANULARITY);
     }
 
     public DateTimeRestrictions(Limit<OffsetDateTime> min, Limit<OffsetDateTime> max, Granularity<OffsetDateTime> granularity){
-        super(capMin(min), capMax(max), granularity, CONVERTER);
+        super(capMin(min), capMax(max), granularity);
     }
 
 

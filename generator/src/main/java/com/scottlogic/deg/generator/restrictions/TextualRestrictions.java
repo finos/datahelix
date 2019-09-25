@@ -55,11 +55,6 @@ public class TextualRestrictions implements StringRestrictions {
         this.notContainingRegex = notContainingRegex;
     }
 
-    @Override
-    public boolean match(String x) {
-        return createGenerator().matches(x);
-    }
-
     /**
      * Produce a new string restrictions instance that represents the intersection of this and the other given restrictions
      * See MatchesStandardStringRestrictions.intersect() for more details on how the `aValid` operator can be merged
@@ -137,14 +132,9 @@ public class TextualRestrictions implements StringRestrictions {
         return Math.min(maxLength, otherMaxLength);
     }
 
-    public boolean match(Object o) {
-        if (!isInstanceOf(o)) {
-            return false;
-        }
-
-        String s = (String) o;
+    public boolean match(String o) {
         StringGenerator generator = createGenerator();
-        return generator == null || generator.matches(s);
+        return generator == null || generator.matches(o);
     }
 
     /**
