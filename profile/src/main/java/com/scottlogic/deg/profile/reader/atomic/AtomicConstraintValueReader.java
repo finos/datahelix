@@ -3,6 +3,7 @@ package com.scottlogic.deg.profile.reader.atomic;
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Types;
+import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
@@ -38,8 +39,12 @@ public class AtomicConstraintValueReader {
             return getSet(dto.values, type);
         }
 
-        if (dto.file != null){
+        if (dto.file != null && dto.is.equals(AtomicConstraintType.IS_IN_SET.getText())){
             return fromFileReader.setFromFile(dto.file);
+        }
+
+        if (dto.file != null && dto.is.equals(AtomicConstraintType.IS_IN_MAP.getText())){
+            throw new UnsupportedOperationException("inMap is unsupported");
         }
 
         return getValue(dto.value, type);

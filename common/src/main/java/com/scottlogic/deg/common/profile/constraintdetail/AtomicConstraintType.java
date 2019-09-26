@@ -22,6 +22,7 @@ public enum AtomicConstraintType {
 
     IS_EQUAL_TO_CONSTANT("equalTo"),
     IS_IN_SET("inSet"),
+    IS_IN_MAP("inMap"),
     IS_NULL("null"),
     IS_UNIQUE("unique"),
     IS_OF_TYPE("ofType"),
