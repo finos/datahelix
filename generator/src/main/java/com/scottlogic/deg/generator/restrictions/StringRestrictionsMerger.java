@@ -16,6 +16,8 @@
 
 package com.scottlogic.deg.generator.restrictions;
 
+import java.util.Optional;
+
 /**
  * For a given combination of choices over the decision tree
  * Details every column's atomic constraints
@@ -23,7 +25,7 @@ package com.scottlogic.deg.generator.restrictions;
 public class StringRestrictionsMerger implements RestrictionsMerger<StringRestrictions> {
 
     @Override
-    public MergeResult<StringRestrictions> merge(StringRestrictions left, StringRestrictions right) {
+    public Optional<StringRestrictions> merge(StringRestrictions left, StringRestrictions right) {
 
         return left.intersect(right);
     }

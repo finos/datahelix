@@ -16,15 +16,15 @@
 
 package com.scottlogic.deg.generator.restrictions.linear;
 
-import com.scottlogic.deg.generator.restrictions.MergeResult;
 import com.scottlogic.deg.generator.restrictions.RestrictionsMerger;
-import com.scottlogic.deg.generator.restrictions.StringRestrictions;
 import com.scottlogic.deg.generator.restrictions.TypedRestrictions;
+
+import java.util.Optional;
 
 public class LinearRestrictionsMerger<T extends Comparable<T>> implements RestrictionsMerger {
 
     @Override
-    public MergeResult<TypedRestrictions> merge(TypedRestrictions left, TypedRestrictions right){
+    public Optional merge(TypedRestrictions left, TypedRestrictions right){
         LinearRestrictions<T> leftCast = (LinearRestrictions<T>) left;
         LinearRestrictions<T> rightCast = (LinearRestrictions<T>) right;
 
@@ -36,10 +36,10 @@ public class LinearRestrictionsMerger<T extends Comparable<T>> implements Restri
         LinearRestrictions<T> mergedRestriction = new LinearRestrictions<>(mergedMin, mergedMax, mergedGranularity, leftCast.getConverter());
 
         if (isContradictory(mergedRestriction)) {
-            return MergeResult.unsuccessful();
+            return Optional.empty();
         }
 
-        return new MergeResult<>(mergedRestriction);
+        return Optional.of(mergedRestriction);
     }
 
     private boolean isContradictory(LinearRestrictions<T> restictions) {

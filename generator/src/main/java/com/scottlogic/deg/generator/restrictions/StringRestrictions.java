@@ -19,8 +19,10 @@ package com.scottlogic.deg.generator.restrictions;
 import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 
+import java.util.Optional;
+
 public interface StringRestrictions extends TypedRestrictions {
-    MergeResult<StringRestrictions> intersect(StringRestrictions other);
+    Optional<StringRestrictions> intersect(StringRestrictions other);
 
     @Override
     default boolean isInstanceOf(Object o) {

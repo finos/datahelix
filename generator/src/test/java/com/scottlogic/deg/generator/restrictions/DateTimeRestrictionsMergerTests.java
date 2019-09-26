@@ -27,6 +27,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.Optional;
 
 import static com.scottlogic.deg.generator.utils.Defaults.*;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
@@ -53,12 +54,12 @@ class DateTimeRestrictionsMergerTests {
         DateTimeRestrictions left = new DateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
         DateTimeRestrictions right = new DateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
 
-        MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
+        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
 
         Assert.assertThat(result, not(nullValue()));
-        Assert.assertThat(result.successful, is(true));
-        Assert.assertThat(result.restrictions.getMin(), equalTo(minDateTimeLimit));
-        Assert.assertThat(result.restrictions.getMax(), equalTo(maxDateTimeLimit));
+        Assert.assertThat(result.isPresent(), is(true));
+        Assert.assertThat(result.get().getMin(), equalTo(minDateTimeLimit));
+        Assert.assertThat(result.get().getMax(), equalTo(maxDateTimeLimit));
     }
 
     @Test
@@ -72,12 +73,12 @@ class DateTimeRestrictionsMergerTests {
         DateTimeRestrictions left = new DateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
         DateTimeRestrictions right = new DateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
 
-        MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
+        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
 
         Assert.assertThat(result, not(nullValue()));
-        Assert.assertThat(result.successful, is(true));
-        Assert.assertThat(result.restrictions.getMin(), equalTo(minDateTimeLimit));
-        Assert.assertThat(result.restrictions.getMax(), equalTo(maxDateTimeLimit));
+        Assert.assertThat(result.isPresent(), is(true));
+        Assert.assertThat(result.get().getMin(), equalTo(minDateTimeLimit));
+        Assert.assertThat(result.get().getMax(), equalTo(maxDateTimeLimit));
     }
 
     @Test
@@ -91,10 +92,10 @@ class DateTimeRestrictionsMergerTests {
         DateTimeRestrictions left = new DateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
         DateTimeRestrictions right = new DateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
 
-        MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
+        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
 
         Assert.assertThat(result, not(nullValue()));
-        Assert.assertThat(result.successful, is(false));
+        Assert.assertThat(result.isPresent(), is(false));
     }
 
     @Test
@@ -108,10 +109,10 @@ class DateTimeRestrictionsMergerTests {
         DateTimeRestrictions left = new DateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
         DateTimeRestrictions right = new DateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
 
-        MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
+        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
 
         Assert.assertThat(result, not(nullValue()));
-        Assert.assertThat(result.successful, is(false));
+        Assert.assertThat(result.isPresent(), is(false));
     }
 
     @Test
@@ -123,12 +124,12 @@ class DateTimeRestrictionsMergerTests {
         DateTimeRestrictions left = new DateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
         DateTimeRestrictions right = new DateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
 
-        MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
+        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
 
         Assert.assertThat(result, not(nullValue()));
-        Assert.assertThat(result.successful, is(true));
-        Assert.assertThat(result.restrictions.getMin(), equalTo(minDateTimeLimit));
-        Assert.assertThat(result.restrictions.getMax(), is(DATETIME_MAX_LIMIT));
+        Assert.assertThat(result.isPresent(), is(true));
+        Assert.assertThat(result.get().getMin(), equalTo(minDateTimeLimit));
+        Assert.assertThat(result.get().getMax(), is(DATETIME_MAX_LIMIT));
     }
 
     @Test
@@ -140,11 +141,11 @@ class DateTimeRestrictionsMergerTests {
         DateTimeRestrictions left = new DateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
         DateTimeRestrictions right = new DateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
 
-        MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
+        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
 
         Assert.assertNotEquals(result, nullValue());
 
-        LinearRestrictions<OffsetDateTime> restrictions = result.restrictions;
+        LinearRestrictions<OffsetDateTime> restrictions = result.get();
         Assert.assertNotEquals(restrictions, nullValue());
 
 
@@ -167,10 +168,10 @@ class DateTimeRestrictionsMergerTests {
         DateTimeRestrictions left = new DateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
         DateTimeRestrictions right = new DateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
 
-        MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
+        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
 
         Assert.assertThat(result, not(nullValue()));
-        Assert.assertThat(result.successful, is(false));
+        Assert.assertThat(result.isPresent(), is(false));
     }
 
     @Test
@@ -188,10 +189,10 @@ class DateTimeRestrictionsMergerTests {
         DateTimeRestrictions right = new DateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
 
 
-        MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
+        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
 
         Assert.assertThat(result, not(nullValue()));
-        Assert.assertThat(result.successful, is(false));
+        Assert.assertThat(result.isPresent(), is(false));
     }
 
     @Test
@@ -207,10 +208,10 @@ class DateTimeRestrictionsMergerTests {
         DateTimeRestrictions left = new DateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
         DateTimeRestrictions right = new DateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
 
-        MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
+        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
 
         Assert.assertThat(result, not(nullValue()));
-        Assert.assertThat(result.successful, is(false));
+        Assert.assertThat(result.isPresent(), is(false));
     }
 
     @Test
@@ -227,11 +228,11 @@ class DateTimeRestrictionsMergerTests {
         DateTimeRestrictions left = new DateTimeRestrictions(lowerDateTimeLimit, DATETIME_MAX_LIMIT, Timescale.HOURS);
         DateTimeRestrictions right = new DateTimeRestrictions(upperDateTimeLimit, DATETIME_MAX_LIMIT, Timescale.MILLIS);
 
-        MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
-        LinearRestrictions<OffsetDateTime> restrictions = result.restrictions;
+        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
+        LinearRestrictions<OffsetDateTime> restrictions = result.get();
 
         Assert.assertThat(result, not(nullValue()));
-        Assert.assertEquals(true, result.successful);
+        Assert.assertEquals(true, result.isPresent());
 
         Assert.assertThat(restrictions, not(nullValue()));
 
@@ -257,8 +258,8 @@ class DateTimeRestrictionsMergerTests {
         DateTimeRestrictions early = new DateTimeRestrictions(lowerDateTimeLimit, DATETIME_MAX_LIMIT, Timescale.HOURS);
         DateTimeRestrictions later = new DateTimeRestrictions(upperDateTimeLimit, DATETIME_MAX_LIMIT, Timescale.SECONDS);
 
-        MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(early, later);
-        LinearRestrictions<OffsetDateTime> restrictions = result.restrictions;
+        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(early, later);
+        LinearRestrictions<OffsetDateTime> restrictions = result.get();
 
         // assert that we get the correct level of granularity
         Assert.assertNotNull(restrictions);
@@ -280,14 +281,14 @@ class DateTimeRestrictionsMergerTests {
         );
 
         // ACT
-        MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
+        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
 
         // ASSERT
         DateTimeRestrictions expecteddt = new DateTimeRestrictions(
             new Limit<>(REFERENCE_TIME.plusHours(1), true),
             DATETIME_MAX_LIMIT,
             Timescale.HOURS);
-        MergeResult<DateTimeRestrictions> expected = new MergeResult<>(expecteddt);
+        Optional<DateTimeRestrictions> expected = Optional.of(expecteddt);
 
         assertThat(result, sameBeanAs(expected));
     }
@@ -306,14 +307,14 @@ class DateTimeRestrictionsMergerTests {
             Timescale.MILLIS);
 
         // ACT
-        MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
+        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
 
         // ASSERT
         DateTimeRestrictions expecteddt = new DateTimeRestrictions(new Limit<>(
             REFERENCE_TIME.plusHours(1), true),
             DATETIME_MAX_LIMIT,
             Timescale.HOURS);
-        MergeResult<DateTimeRestrictions> expected = new MergeResult<>(expecteddt);
+        Optional<DateTimeRestrictions> expected = Optional.of(expecteddt);
 
         assertThat(result, sameBeanAs(expected));
     }
@@ -332,14 +333,14 @@ class DateTimeRestrictionsMergerTests {
             Timescale.MILLIS);
 
         // ACT
-        MergeResult<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
+        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
 
         // ASSERT
         DateTimeRestrictions expecteddt = new DateTimeRestrictions(
             new Limit<>(REFERENCE_TIME.plusHours(1), false),
             DATETIME_MAX_LIMIT,
             Timescale.HOURS);
-        MergeResult<DateTimeRestrictions> expected = new MergeResult<>(expecteddt);
+        Optional<DateTimeRestrictions> expected = Optional.of(expecteddt);
 
         assertThat(result, sameBeanAs(expected));
     }

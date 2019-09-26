@@ -16,7 +16,6 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.generator.restrictions.MergeResult;
 import com.scottlogic.deg.generator.restrictions.StringRestrictions;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsMerger;
@@ -30,6 +29,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import static com.scottlogic.deg.common.profile.Types.*;
 import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MAX_LIMIT;
@@ -107,22 +107,9 @@ class RestrictionsMergeOperationTest {
     }
 
     @Test
-    void applyMergeOperation_withNoNumericRestrictions_shouldNotApplyAnyRestriction(){
-        FieldSpec merging = FieldSpec.fromType(NUMERIC);
-        when(linearMerger.merge(leftNumeric.getRestrictions(), rightNumeric.getRestrictions()))
-            .thenReturn(new MergeResult<>(null));
-
-        FieldSpec result = operation.applyMergeOperation(leftNumeric, rightNumeric);
-
-        Assert.assertEquals(result, merging);
-        verify(linearMerger, times(1)).merge(any(), any());
-        verify(StringMerger, times(0)).merge(any(), any());
-    }
-
-    @Test
     void applyMergeOperation_withNumericRestrictions_shouldApplyRestriction(){
         when(linearMerger.merge(leftNumeric.getRestrictions(), rightNumeric.getRestrictions()))
-            .thenReturn(new MergeResult<>(rightNumeric.getRestrictions()));
+            .thenReturn(Optional.of(rightNumeric.getRestrictions()));
 
         FieldSpec result = operation.applyMergeOperation(leftNumeric, rightNumeric);
 
@@ -135,7 +122,7 @@ class RestrictionsMergeOperationTest {
     void applyMergeOperation_withContradictoryNumericRestrictions_shouldPreventAnyValues(){
         FieldSpec merging = FieldSpec.nullOnlyFromType(NUMERIC);
         when(linearMerger.merge(leftNumeric.getRestrictions(), rightNumeric.getRestrictions()))
-            .thenReturn(MergeResult.unsuccessful());
+            .thenReturn(Optional.empty());
 
         FieldSpec result = operation.applyMergeOperation(leftNumeric, rightNumeric);
 
@@ -145,22 +132,20 @@ class RestrictionsMergeOperationTest {
     }
 
     @Test
-    void applyMergeOperation_withNoStringRestrictions_shouldNotApplyAnyRestriction(){
+    void applyMergeOperation_withNoRestrictions_shouldNotApplyAnyRestriction(){
         FieldSpec merging = FieldSpec.fromType(STRING);
-        when(StringMerger.merge((StringRestrictions)leftString.getRestrictions(), (StringRestrictions)rightString.getRestrictions()))
-            .thenReturn(new MergeResult<StringRestrictions>(null));
 
-        FieldSpec result = operation.applyMergeOperation(leftString, rightString);
+        FieldSpec result = operation.applyMergeOperation(FieldSpec.fromType(STRING), merging);
 
         Assert.assertEquals(result, merging);
         verify(linearMerger, times(0)).merge(any(), any());
-        verify(StringMerger, times(1)).merge(any(), any());
+        verify(StringMerger, times(0)).merge(any(), any());
     }
 
     @Test
     void applyMergeOperation_withStringRestrictions_shouldApplyRestriction(){
         when(StringMerger.merge((StringRestrictions)leftString.getRestrictions(), (StringRestrictions)rightString.getRestrictions()))
-            .thenReturn(new MergeResult<>((StringRestrictions)leftString.getRestrictions()));
+            .thenReturn(Optional.of((StringRestrictions)leftString.getRestrictions()));
 
         FieldSpec result = operation.applyMergeOperation(leftString, rightString);
 
@@ -173,7 +158,7 @@ class RestrictionsMergeOperationTest {
     void applyMergeOperation_withContradictoryStringRestrictions_shouldPreventAnyValues(){
         FieldSpec merging = FieldSpec.nullOnlyFromType(STRING);
         when(StringMerger.merge((StringRestrictions)leftString.getRestrictions(), (StringRestrictions)rightString.getRestrictions()))
-            .thenReturn(MergeResult.unsuccessful());
+            .thenReturn(Optional.empty());
 
         FieldSpec result = operation.applyMergeOperation(leftString, rightString);
 
@@ -182,24 +167,10 @@ class RestrictionsMergeOperationTest {
         verify(StringMerger, times(1)).merge(any(), any());
     }
 
-
-    @Test
-    void applyMergeOperation_withNoDateTimeRestrictions_shouldNotApplyAnyRestriction(){
-        FieldSpec merging = FieldSpec.fromType(DATETIME);
-        when(linearMerger.merge(leftDateTime.getRestrictions(), rightDateTime.getRestrictions()))
-            .thenReturn(new MergeResult<>(null));
-
-        FieldSpec result = operation.applyMergeOperation(leftDateTime, rightDateTime);
-
-        Assert.assertEquals(result, merging);
-        verify(linearMerger, times(1)).merge(any(), any());
-        verify(StringMerger, times(0)).merge(any(), any());
-    }
-
     @Test
     void applyMergeOperation_withDateTimeRestrictions_shouldApplyRestriction(){
         when(linearMerger.merge(leftDateTime.getRestrictions(), rightDateTime.getRestrictions()))
-            .thenReturn(new MergeResult<>(rightDateTime.getRestrictions()));
+            .thenReturn(Optional.of(rightDateTime.getRestrictions()));
 
         FieldSpec result = operation.applyMergeOperation(leftDateTime, rightDateTime);
 
@@ -212,7 +183,7 @@ class RestrictionsMergeOperationTest {
     void applyMergeOperation_withContradictoryDateTimeRestrictions_shouldPreventAnyValues(){
         FieldSpec merging = FieldSpec.nullOnlyFromType(DATETIME);
         when(linearMerger.merge(leftDateTime.getRestrictions(), rightDateTime.getRestrictions()))
-            .thenReturn(MergeResult.unsuccessful());
+            .thenReturn(Optional.empty());
 
         FieldSpec result = operation.applyMergeOperation(leftDateTime, rightDateTime);
 
