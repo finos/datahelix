@@ -51,7 +51,7 @@
   "definitions": {
     "schemaVersion": {
       "title": "The version of the DataHelix profile schema",
-      "const": "0.7"
+      "const": "0.8"
     },
     "dataType": {
       "oneOf": [
@@ -166,6 +166,9 @@
         },
         {
           "$ref": "#/definitions/inSetConstraint"
+        },
+        {
+          "$ref": "#/definitions/inMapConstraint"
         },
         {
           "$ref": "#/definitions/fromFileConstraint"
@@ -561,6 +564,25 @@
               }
             ]
           }
+        }
+      }
+    },
+    "inMapConstraint": {
+      "type": "object",
+      "required": ["field", "is", "file", "key"],
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "is": {
+          "const": "inMap"
+        },
+        "file": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string"
         }
       }
     }
