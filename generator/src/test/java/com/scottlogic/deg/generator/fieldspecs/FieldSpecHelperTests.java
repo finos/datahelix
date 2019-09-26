@@ -37,8 +37,7 @@ class FieldSpecHelperTests {
 
         FieldSpec actual = fieldSpecHelper.getFieldSpecForValue(field, input);
 
-        FieldSpec expected = FieldSpec.fromType(field.getType())
-            .withWhitelist((DistributedSet.uniform(Collections.singleton("value"))))
+        FieldSpec expected = FieldSpec.fromSet(DistributedSet.singleton("value"))
             .withNotNull();
 
         assertEquals(actual, expected);
@@ -50,7 +49,7 @@ class FieldSpecHelperTests {
 
         FieldSpec actual = fieldSpecHelper.getFieldSpecForValue(field, input);
 
-        FieldSpec expected = FieldSpec.nullOnlyFromType(field.getType());
+        FieldSpec expected = FieldSpec.nullOnly();
 
         assertEquals(actual, expected);
     }

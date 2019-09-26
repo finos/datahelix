@@ -44,9 +44,9 @@ abstract class AbstractDateInequalityRelation implements FieldSpecRelations {
             OffsetDateTime value = limit.getValue();
 
             LinearRestrictions<OffsetDateTime> restrictions = appendValueToRestrictions(value);
-            return FieldSpec.fromType(otherValue.getType()).withRestrictions(restrictions);
+            return FieldSpec.empty().withRestrictions(restrictions);
         } else {
-            return FieldSpec.fromType(otherValue.getType());
+            return FieldSpec.empty();
         }
     }
 

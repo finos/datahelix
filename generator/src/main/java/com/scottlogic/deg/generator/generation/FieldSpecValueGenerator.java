@@ -49,7 +49,7 @@ public class FieldSpecValueGenerator {
     }
 
     public Stream<DataBagValue> generate(Field field, FieldSpec spec) {
-        List<FieldValueSource> fieldValueSources = sourceFactory.getFieldValueSources(spec);
+        List<FieldValueSource> fieldValueSources = sourceFactory.getFieldValueSources(field.type, spec);
 
         FieldValueSource combinedFieldValueSource =
             fieldValueSources.size() == 1

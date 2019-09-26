@@ -20,14 +20,15 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 
+import static com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet.singleton;
+
 public class FieldSpecHelper {
     public FieldSpec getFieldSpecForValue(Field field, DataBagValue fieldValue) {
         if (fieldValue.getValue() == null) {
-            return FieldSpec.nullOnlyFromType(field.getType());
+            return FieldSpec.nullOnly();
         }
 
-        return FieldSpec.fromType(field.getType())
-            .withWhitelist(DistributedSet.singleton(fieldValue.getValue()))
+        return FieldSpec.fromSet(singleton(fieldValue.getValue()))
             .withNotNull();
     }
 }

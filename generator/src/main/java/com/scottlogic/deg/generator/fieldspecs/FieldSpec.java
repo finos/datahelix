@@ -16,17 +16,10 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.common.profile.Types;
-
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.restrictions.*;
-import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 
-import java.math.BigDecimal;
-import java.time.OffsetDateTime;
 import java.util.*;
-
-import static com.scottlogic.deg.common.profile.Types.*;
 
 /**
  * Details a column's atomic constraints
@@ -38,31 +31,32 @@ public class FieldSpec {
 
     private static final DistributedSet<Object> NO_VALUES = DistributedSet.empty();
 
-    public static FieldSpec fromType(Types type) {
-        return new FieldSpec(null, null, true, Collections.emptySet(), type);
+    public static FieldSpec fromSet(DistributedSet<Object> whitelist) {
+        return new FieldSpec(whitelist, null, true, Collections.emptySet());
     }
 
-    public static FieldSpec nullOnlyFromType(Types type) {
-        return new FieldSpec(NO_VALUES, null, true, Collections.emptySet(), type);
+    public static FieldSpec empty() {
+        return new FieldSpec(null, null, true, Collections.emptySet());
     }
 
+    public static FieldSpec nullOnly() {
+        return new FieldSpec(NO_VALUES, null, true, Collections.emptySet());
+    }
     private final boolean nullable;
     private final DistributedSet<Object> whitelist;
     private final Set<Object> blacklist;
+
     private final TypedRestrictions restrictions;
-    private final Types types;
 
     private FieldSpec(
         DistributedSet<Object> whitelist,
         TypedRestrictions restrictions,
         boolean nullable,
-        Set<Object> blacklist,
-        Types types) {
+        Set<Object> blacklist) {
         this.whitelist = whitelist;
         this.restrictions = restrictions;
         this.nullable = nullable;
         this.blacklist = blacklist;
-        this.types = types;
     }
 
     public boolean isNullable() {
@@ -81,24 +75,16 @@ public class FieldSpec {
         return restrictions;
     }
 
-    public Types getType() {
-        return types;
-    }
-
-    public FieldSpec withWhitelist(DistributedSet<Object> whitelist) {
-        return new FieldSpec(whitelist, null, nullable, blacklist, types);
-    }
-
     public FieldSpec withRestrictions(TypedRestrictions restrictions) {
-        return new FieldSpec(null, restrictions, nullable, blacklist, types);
+        return new FieldSpec(null, restrictions, nullable, blacklist);
     }
 
     public FieldSpec withBlacklist(Set<Object> blacklist) {
-        return new FieldSpec(whitelist, restrictions, nullable, blacklist, types);
+        return new FieldSpec(whitelist, restrictions, nullable, blacklist);
     }
 
     public FieldSpec withNotNull() {
-        return new FieldSpec(whitelist, restrictions, false, blacklist, types);
+        return new FieldSpec(whitelist, restrictions, false, blacklist);
     }
 
     @Override
@@ -110,8 +96,7 @@ public class FieldSpec {
             return (nullable ? "" : "Not Null") + String.format("IN %s", whitelist);
         }
 
-        return String.format("%s%s%s",
-            types == null  ? "<all values>" : types,
+        return String.format("%s%s",
             nullable ? " " : " Not Null ",
             restrictions == null ? "" : restrictions);
     }
@@ -124,10 +109,6 @@ public class FieldSpec {
             return false;
         }
 
-        if (types != null && !types.isInstanceOf(value)) {
-            return false;
-        }
-
         if (restrictions != null && !restrictions.match(value)) {
             return false;
         }
@@ -136,7 +117,7 @@ public class FieldSpec {
     }
 
     public int hashCode() {
-        return Objects.hash(nullable, whitelist, restrictions, blacklist, types);
+        return Objects.hash(nullable, whitelist, restrictions, blacklist);
     }
 
     @Override
@@ -150,7 +131,6 @@ public class FieldSpec {
         return Objects.equals(nullable, other.nullable)
             && Objects.equals(whitelist, other.whitelist)
             && Objects.equals(restrictions, other.restrictions)
-            && Objects.equals(blacklist, other.blacklist)
-            && Objects.equals(types, other.types);
+            && Objects.equals(blacklist, other.blacklist);
     }
 }

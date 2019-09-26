@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.scottlogic.deg.common.profile.Types.STRING;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -27,9 +26,9 @@ class FieldSpecGroupValueGeneratorTest {
     @Test
     public void generate_withGroupOfSingleField_returnsCorrectStream() {
         Map<Field, FieldSpec> specMap = new HashMap<>();
-        FieldSpec firstSpec = FieldSpec.fromType(STRING);
+        FieldSpec firstSpec = FieldSpec.empty();
         Field firstField = createField("first");
-        specMap.put(firstField, FieldSpec.fromType(STRING));
+        specMap.put(firstField, FieldSpec.empty());
 
         FieldSpecValueGenerator underlyingGenerator = mock(FieldSpecValueGenerator.class);
         String result = "result";

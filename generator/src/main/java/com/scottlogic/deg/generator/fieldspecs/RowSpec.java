@@ -49,7 +49,7 @@ public class RowSpec {
         FieldSpec ownFieldSpec = this.fieldToFieldSpec.get(field);
 
         if (ownFieldSpec == null) {
-            return FieldSpec.fromType(field.getType());
+            return FieldSpec.empty();
         }
 
         return ownFieldSpec;

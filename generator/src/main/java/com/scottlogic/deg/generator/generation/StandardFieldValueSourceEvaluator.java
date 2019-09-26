@@ -42,7 +42,7 @@ import static com.scottlogic.deg.generator.utils.Defaults.*;
 public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvaluator {
     private static final FieldValueSource NULL_ONLY_SOURCE = new NullOnlySource();
 
-    public List<FieldValueSource> getFieldValueSources(FieldSpec fieldSpec){
+    public List<FieldValueSource> getFieldValueSources(Types type, FieldSpec fieldSpec){
 
         if (fieldSpec.getWhitelist() != null) {
             List<FieldValueSource> setRestrictionSources =
@@ -55,17 +55,15 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
 
         List<FieldValueSource> validSources = new ArrayList<>();
 
-        Types typeRestrictions = fieldSpec.getType();
-
-        if (typeRestrictions == NUMERIC) {
+        if (type == NUMERIC) {
             validSources.add(getNumericSource(fieldSpec));
         }
 
-        if (typeRestrictions == STRING) {
+        if (type == STRING) {
             validSources.add(getStringSource(fieldSpec));
         }
 
-        if (typeRestrictions == DATETIME) {
+        if (type == DATETIME) {
             validSources.add(getDateTimeSource(fieldSpec));
         }
 

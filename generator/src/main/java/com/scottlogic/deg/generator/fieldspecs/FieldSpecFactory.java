@@ -31,6 +31,7 @@ import java.util.regex.Pattern;
 
 import static com.scottlogic.deg.common.profile.constraints.atomic.StandardConstraintTypes.RIC;
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDateTimeRestrictions;
+import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createNumericRestrictions;
 import static com.scottlogic.deg.generator.utils.Defaults.*;
 
 public class FieldSpecFactory {
@@ -95,28 +96,27 @@ public class FieldSpecFactory {
 
     private FieldSpec construct(Field field, IsInSetConstraint constraint, boolean negate) {
         if (negate) {
-            return FieldSpec.fromType(field.getType()).withBlacklist(constraint.legalValuesWithoutFrequency());
+            return FieldSpec.empty().withBlacklist(constraint.legalValuesWithoutFrequency());
         }
 
-        return FieldSpec.fromType(field.getType()).withWhitelist(constraint.legalValues);
+        return FieldSpec.fromSet(constraint.legalValues);
     }
 
     private FieldSpec construct(Field field, EqualToConstraint constraint, boolean negate) {
         if (negate) {
-            return FieldSpec.fromType(field.getType()).withBlacklist(Collections.singleton(constraint.value));
+            return FieldSpec.empty().withBlacklist(Collections.singleton(constraint.value));
         }
 
-        return FieldSpec.fromType(field.getType())
-            .withWhitelist(DistributedSet.singleton(constraint.value))
+        return FieldSpec.fromSet(DistributedSet.singleton(constraint.value))
             .withNotNull();
     }
 
     private FieldSpec constructIsNull(Field field, boolean negate) {
         if (negate) {
-            return FieldSpec.fromType(field.getType()).withNotNull();
+            return FieldSpec.empty().withNotNull();
         }
 
-        return FieldSpec.nullOnlyFromType(field.getType());
+        return FieldSpec.nullOnly();
     }
 
     private FieldSpec construct(Field field, IsGreaterThanConstantConstraint constraint, boolean negate) {
@@ -130,17 +130,17 @@ public class FieldSpecFactory {
     private FieldSpec constructGreaterThanConstraint(Field field, BigDecimal limit, boolean inclusive, boolean negate) {
         LinearRestrictions<BigDecimal> numericRestrictions;
         if (negate) {
-            numericRestrictions = LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, new Limit<>(
+            numericRestrictions = createNumericRestrictions(NUMERIC_MIN_LIMIT, new Limit<>(
                 limit,
                 !inclusive));
         } else {
-            numericRestrictions = LinearRestrictionsFactory.createNumericRestrictions(new Limit<>(
+            numericRestrictions = createNumericRestrictions(new Limit<>(
                 limit,
                 inclusive),
                 NUMERIC_MAX_LIMIT);
         }
 
-        return FieldSpec.fromType(field.getType()).withRestrictions(numericRestrictions);
+        return FieldSpec.empty().withRestrictions(numericRestrictions);
     }
 
     private FieldSpec construct(Field field, IsLessThanConstantConstraint constraint, boolean negate) {
@@ -154,27 +154,27 @@ public class FieldSpecFactory {
     private FieldSpec constructLessThanConstraint(Field field, BigDecimal limit, boolean inclusive, boolean negate) {
         final LinearRestrictions<BigDecimal> numericRestrictions;
         if (negate) {
-            numericRestrictions = LinearRestrictionsFactory.createNumericRestrictions(new Limit<>(
+            numericRestrictions = createNumericRestrictions(new Limit<>(
                 limit,
                 !inclusive), NUMERIC_MAX_LIMIT);
         } else {
-            numericRestrictions = LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, new Limit<>(
+            numericRestrictions = createNumericRestrictions(NUMERIC_MIN_LIMIT, new Limit<>(
                 limit,
                 inclusive));
         }
 
-        return FieldSpec.fromType(field.getType()).withRestrictions(numericRestrictions);
+        return FieldSpec.empty().withRestrictions(numericRestrictions);
     }
 
     private FieldSpec construct(Field field, IsGranularToNumericConstraint constraint, boolean negate) {
         if (negate) {
             // negated granularity is a future enhancement
-            return FieldSpec.fromType(field.getType());
+            return FieldSpec.empty();
         }
 
-        return FieldSpec.fromType(field.getType())
+        return FieldSpec.empty()
             .withRestrictions(
-                LinearRestrictionsFactory.createNumericRestrictions(
+                createNumericRestrictions(
                     NUMERIC_MIN_LIMIT,
                     NUMERIC_MAX_LIMIT,
                     constraint.granularity.getNumericGranularity().scale()));
@@ -183,10 +183,10 @@ public class FieldSpecFactory {
     private FieldSpec construct(Field field, IsGranularToDateConstraint constraint, boolean negate) {
         if (negate) {
             // negated granularity is a future enhancement
-            return FieldSpec.fromType(field.getType());
+            return FieldSpec.empty();
         }
 
-        return FieldSpec.fromType(field.getType()).withRestrictions(createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT, constraint.granularity.getGranularity()));
+        return FieldSpec.empty().withRestrictions(createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT, constraint.granularity.getGranularity()));
     }
 
     private FieldSpec construct(Field field, IsAfterConstantDateTimeConstraint constraint, boolean negate) {
@@ -200,10 +200,10 @@ public class FieldSpecFactory {
     private FieldSpec constructIsAfterConstraint(Field field, OffsetDateTime limit, boolean inclusive, boolean negate) {
         if (negate) {
             final LinearRestrictions<OffsetDateTime> dateTimeRestrictions = createDateTimeRestrictions(DATETIME_MIN_LIMIT, new Limit<>(limit, !inclusive));
-            return FieldSpec.fromType(field.getType()).withRestrictions(dateTimeRestrictions);
+            return FieldSpec.empty().withRestrictions(dateTimeRestrictions);
         } else {
             final LinearRestrictions<OffsetDateTime> dateTimeRestrictions = createDateTimeRestrictions(new Limit<>(limit, inclusive), DATETIME_MAX_LIMIT);
-            return FieldSpec.fromType(field.getType()).withRestrictions(dateTimeRestrictions);
+            return FieldSpec.empty().withRestrictions(dateTimeRestrictions);
         }
     }
 
@@ -218,20 +218,20 @@ public class FieldSpecFactory {
     private FieldSpec constructIsBeforeConstraint(Field field, OffsetDateTime limit, boolean inclusive, boolean negate) {
         if (negate) {
             final LinearRestrictions<OffsetDateTime> dateTimeRestrictions = createDateTimeRestrictions(new Limit<>(limit, !inclusive), DATETIME_MAX_LIMIT);
-            return FieldSpec.fromType(field.getType()).withRestrictions(dateTimeRestrictions);
+            return FieldSpec.empty().withRestrictions(dateTimeRestrictions);
         } else {
             final LinearRestrictions<OffsetDateTime> dateTimeRestrictions = createDateTimeRestrictions(DATETIME_MIN_LIMIT, new Limit<>(limit, inclusive));
-            return FieldSpec.fromType(field.getType()).withRestrictions(dateTimeRestrictions);
+            return FieldSpec.empty().withRestrictions(dateTimeRestrictions);
         }
     }
 
     private FieldSpec construct(Field field, MatchesRegexConstraint constraint, boolean negate) {
-        return FieldSpec.fromType(field.getType())
+        return FieldSpec.empty()
             .withRestrictions(stringRestrictionsFactory.forStringMatching(constraint.regex, negate));
     }
 
     private FieldSpec construct(Field field, ContainsRegexConstraint constraint, boolean negate) {
-        return FieldSpec.fromType(field.getType())
+        return FieldSpec.empty()
             .withRestrictions(stringRestrictionsFactory.forStringContaining(constraint.regex, negate));
     }
 
@@ -244,17 +244,17 @@ public class FieldSpecFactory {
             return construct(field, new MatchesRegexConstraint(constraint.field, Pattern.compile(constraint.standard.getRegex())), negate);
         }
 
-        return FieldSpec.fromType(field.getType())
+        return FieldSpec.empty()
             .withRestrictions(new MatchesStandardStringRestrictions(constraint.standard));
     }
 
     private FieldSpec construct(Field field, StringHasLengthConstraint constraint, boolean negate) {
-        return FieldSpec.fromType(field.getType())
+        return FieldSpec.empty()
             .withRestrictions(stringRestrictionsFactory.forLength(constraint.referenceValue, negate));
     }
 
     private FieldSpec construct(Field field, IsStringShorterThanConstraint constraint, boolean negate) {
-        return FieldSpec.fromType(field.getType())
+        return FieldSpec.empty()
             .withRestrictions(
                 negate
                     ? stringRestrictionsFactory.forMinLength(constraint.referenceValue)
@@ -263,7 +263,7 @@ public class FieldSpecFactory {
     }
 
     private FieldSpec construct(Field field, IsStringLongerThanConstraint constraint, boolean negate) {
-        return FieldSpec.fromType(field.getType())
+        return FieldSpec.empty()
             .withRestrictions(
                 negate
                     ? stringRestrictionsFactory.forMaxLength(constraint.referenceValue)
