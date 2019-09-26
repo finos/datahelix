@@ -16,10 +16,8 @@ public class LinearRestrictionsFactory {
     }
 
     public static LinearRestrictions<OffsetDateTime> createDateTimeRestrictions(Limit<OffsetDateTime> min, Limit<OffsetDateTime> max, Timescale granularity) {
-        Limit<OffsetDateTime> cappedMin = capMin(min, ISO_MIN_DATE, ISO_MAX_DATE);
-        Limit<OffsetDateTime> cappedMax = capMax(max, ISO_MIN_DATE, ISO_MAX_DATE);
-        OffsetDateTime inclusiveMin = getInclusiveMin(cappedMin, granularity);
-        OffsetDateTime inclusiveMax = getInclusiveMax(cappedMax, granularity, b->b.minusNanos(1));
+        OffsetDateTime inclusiveMin = getInclusiveMin(min, granularity, ISO_MIN_DATE);
+        OffsetDateTime inclusiveMax = getInclusiveMax(max, granularity, ISO_MAX_DATE, b->b.minusNanos(100));
         return new LinearRestrictions<>(inclusiveMin, inclusiveMax, granularity);
     }
 
@@ -29,42 +27,28 @@ public class LinearRestrictionsFactory {
 
     public static LinearRestrictions<BigDecimal> createNumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max, int numericScale) {
         NumericGranularity granularity = new NumericGranularity(numericScale);
-        Limit<BigDecimal> cappedMin = capMin(min, NUMERIC_MIN, NUMERIC_MAX);
-        Limit<BigDecimal> cappedMax = capMax(max, NUMERIC_MIN, NUMERIC_MAX);
-        BigDecimal inclusiveMin = getInclusiveMin(cappedMin, granularity);
-        BigDecimal inclusiveMax = getInclusiveMax(cappedMax, granularity, b->b.subtract(new BigDecimal("0.0000000000000000000001")));
+        BigDecimal inclusiveMin = getInclusiveMin(min, granularity, NUMERIC_MIN);
+        BigDecimal inclusiveMax = getInclusiveMax(max, granularity, NUMERIC_MAX, b->b.subtract(new BigDecimal("0.000000000000000000001")));
         return new LinearRestrictions<>(inclusiveMin, inclusiveMax, granularity);
     }
 
-    private static <T extends Comparable<? super T>> T getInclusiveMin(Limit<T> min, Granularity<T> granularity) {
+    private static <T extends Comparable<? super T>> T getInclusiveMin(Limit<T> min, Granularity<T> granularity, T actualMin) {
+        if (min.getValue().compareTo(actualMin) < 0){
+            return actualMin;
+        }
+
         return min.isInclusive()
             ? min.getValue()
             : granularity.getNext(granularity.trimToGranularity(min.getValue()));
     }
 
-    private static <T extends Comparable<? super T>> T getInclusiveMax(Limit<T> max, Granularity<T> granularity, Function<T, T> reduction) {
+    private static <T extends Comparable<? super T>> T getInclusiveMax(Limit<T> max, Granularity<T> granularity, T actualMax, Function<T, T> reduction) {
+        if (max.getValue().compareTo(actualMax) > 0) {
+            return actualMax;
+        }
+
         return max.isInclusive()
             ? max.getValue()
             : granularity.trimToGranularity(reduction.apply(max.getValue()));
-    }
-
-    private static <T extends Comparable<? super T>> Limit<T> capMin(Limit<T> min, T minCap, T maxCap) {
-        if (min.isBefore(minCap)) {
-            return new Limit<>(minCap, true);
-        } else if (!min.isBefore(maxCap)) {
-            return new Limit<>(maxCap, false);
-        } else {
-            return min;
-        }
-    }
-
-    private static <T extends Comparable<? super T>> Limit<T> capMax(Limit<T> max, T minCap, T maxCap) {
-        if (max.isAfter(maxCap)) {
-            return new Limit<>(maxCap, true);
-        } else if (!max.isAfter(minCap)) {
-            return new Limit<>(minCap, false);
-        } else {
-            return max;
-        }
     }
 }

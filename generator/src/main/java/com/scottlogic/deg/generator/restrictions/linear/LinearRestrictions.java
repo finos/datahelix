@@ -26,12 +26,9 @@ public class LinearRestrictions<T extends Comparable<T>> implements TypedRestric
     private final T max;
     private final Granularity<T> granularity;
 
-    public LinearRestrictions(T min, T max, Granularity<T> granularity) {
-        if (min == null || max == null) {
-            throw new IllegalArgumentException("linear restrictions cannot have null limits");
-        }
-        this.min = min;
-        this.max = max;
+    public LinearRestrictions(T inclusiveMin, T inclusiveMax, Granularity<T> granularity) {
+        this.min = inclusiveMin;
+        this.max = inclusiveMax;
         this.granularity = granularity;
     }
 

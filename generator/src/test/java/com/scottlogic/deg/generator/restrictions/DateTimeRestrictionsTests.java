@@ -22,6 +22,7 @@ import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
 import org.junit.Assert;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.time.OffsetDateTime;
@@ -52,39 +53,6 @@ class DateTimeRestrictionsTests {
 
         Assert.assertThat(a, equalTo(b));
         Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
-    }
-
-    @Test
-    public void DateTimeLimitShouldBeEqualIfInclusiveAndLimitMatch(){
-       Limit<OffsetDateTime> a = new Limit<>(OffsetDateTime.MIN, true);
-       Limit<OffsetDateTime>b = new Limit<>(OffsetDateTime.MIN, true);
-
-        Assert.assertThat(a, equalTo(b));
-        Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
-    }
-
-    @Test
-    public void DateTimeLimitShouldBeUnequalIfOnlyInclusiveMatches(){
-       Limit<OffsetDateTime>a = new Limit<>(OffsetDateTime.MIN, true);
-       Limit<OffsetDateTime>b = new Limit<>(OffsetDateTime.MAX, true);
-
-        Assert.assertThat(a, not(equalTo(b)));
-    }
-
-    @Test
-    public void DateTimeLimitShouldBeUnequalIfOnlyLimitMatches(){
-       Limit<OffsetDateTime>a = new Limit<>(OffsetDateTime.MIN, true);
-       Limit<OffsetDateTime>b = new Limit<>(OffsetDateTime.MIN, false);
-
-        Assert.assertThat(a, not(equalTo(b)));
-    }
-
-    @Test
-    public void DateTimeLimitShouldBeUnequalIfNeitherLimitNotInclusiveMatch(){
-       Limit<OffsetDateTime>a = new Limit<>(OffsetDateTime.MIN, true);
-       Limit<OffsetDateTime>b = new Limit<>(OffsetDateTime.MAX, false);
-
-        Assert.assertThat(a, not(equalTo(b)));
     }
 
     @Test
@@ -132,17 +100,6 @@ class DateTimeRestrictionsTests {
         boolean result = restrictions.match(MAX);
 
         Assert.assertTrue(result);
-    }
-
-    @Test
-    public void matchShouldReturnFalseIfGivenDateIsEqualToMinWhenExclusive(){
-        LinearRestrictions<OffsetDateTime> restrictions = LinearRestrictionsFactory.createDateTimeRestrictions(
-            DATETIME_MIN_LIMIT,
-            new Limit<>(OffsetDateTime.MIN, false)
-        );
-        boolean result = restrictions.match(OffsetDateTime.MIN);
-
-        Assert.assertFalse(result);
     }
 
     @Test
@@ -224,113 +181,6 @@ class DateTimeRestrictionsTests {
         boolean result = restrictions.match(min);
 
         Assert.assertFalse(result);
-    }
-
-    @Test
-    public void isAfter_whenSameDateAndBothInclusive_shouldBeTrue(){
-        OffsetDateTime value = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
-       Limit<OffsetDateTime>self = new Limit<>(value, true);
-       Limit<OffsetDateTime>other = new Limit<>(value, true);
-
-        boolean result = other.isAfter(self.getValue());
-
-        Assert.assertThat(result, is(true));
-    }
-
-    @Test
-    public void isAfter_whenOtherIsBeforeByOneNanoSecondInclusive_shouldBeFalse(){
-        OffsetDateTime selfValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
-        OffsetDateTime otherValue = selfValue.plusNanos(-1);
-       Limit<OffsetDateTime>self = new Limit<>(selfValue, true);
-       Limit<OffsetDateTime>other = new Limit<>(otherValue, true);
-
-        boolean result = other.isAfter(self.getValue());
-
-        Assert.assertThat(result, is(false));
-    }
-
-    @Test
-    public void isAfter_whenOtherIsBeforeByOneNanoSecondExclusive_shouldBeFalse(){
-        OffsetDateTime selfValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
-        OffsetDateTime otherValue = selfValue.plusNanos(-1);
-       Limit<OffsetDateTime>self = new Limit<>(selfValue, true);
-       Limit<OffsetDateTime>other = new Limit<>(otherValue, false);
-
-        boolean result = other.isAfter(self.getValue());
-
-        Assert.assertThat(result, is(false));
-    }
-
-    @Test
-    public void isAfter_whenOtherIsBeforeInclusive_shouldBeFalse(){
-        OffsetDateTime selfValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
-        OffsetDateTime otherValue = OffsetDateTime.of(2000, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
-       Limit<OffsetDateTime>self = new Limit<>(selfValue, true);
-       Limit<OffsetDateTime>other = new Limit<>(otherValue, true);
-
-        boolean result = other.isAfter(self.getValue());
-
-        Assert.assertThat(result, is(false));
-    }
-
-    @Test
-    public void isAfter_whenOtherIsBeforeExclusive_shouldBeFalse(){
-        OffsetDateTime selfValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
-        OffsetDateTime otherValue = OffsetDateTime.of(2000, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
-       Limit<OffsetDateTime>self = new Limit<>(selfValue, true);
-       Limit<OffsetDateTime>other = new Limit<>(otherValue, false);
-
-        boolean result = other.isAfter(self.getValue());
-
-        Assert.assertThat(result, is(false));
-    }
-
-    @Test
-    public void isAfter_whenOtherIsAfterInclusive_shouldBeTrue(){
-        OffsetDateTime selfValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
-        OffsetDateTime otherValue = OffsetDateTime.of(2002, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
-       Limit<OffsetDateTime>self = new Limit<>(selfValue, true);
-       Limit<OffsetDateTime>other = new Limit<>(otherValue, true);
-
-        boolean result = other.isAfter(self.getValue());
-
-        Assert.assertThat(result, is(true));
-    }
-
-    @Test
-    public void isAfter_whenOtherIsAfterExclusive_shouldBeTrue(){
-        OffsetDateTime selfValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
-        OffsetDateTime otherValue = OffsetDateTime.of(2002, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
-       Limit<OffsetDateTime>self = new Limit<>(selfValue, true);
-       Limit<OffsetDateTime>other = new Limit<>(otherValue, false);
-
-        boolean result = other.isAfter(self.getValue());
-
-        Assert.assertThat(result, is(true));
-    }
-
-    @Test
-    public void isAfter_whenOtherIsAfterByOneNanoSecondInclusive_shouldBeTrue(){
-        OffsetDateTime selfValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
-        OffsetDateTime otherValue = selfValue.plusNanos(1);
-       Limit<OffsetDateTime>self = new Limit<>(selfValue, true);
-       Limit<OffsetDateTime>other = new Limit<>(otherValue, true);
-
-        boolean result = other.isAfter(self.getValue());
-
-        Assert.assertThat(result, is(true));
-    }
-
-    @Test
-    public void isAfter_whenOtherIsAfterByOneNanoSecondExclusive_shouldBeTrue(){
-        OffsetDateTime selfValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
-        OffsetDateTime otherValue = selfValue.plusNanos(1);
-       Limit<OffsetDateTime>self = new Limit<>(selfValue, false);
-       Limit<OffsetDateTime>other = new Limit<>(otherValue, false);
-
-        boolean result = other.isAfter(self.getValue());
-
-        Assert.assertThat(result, is(true));
     }
 
     @Test
