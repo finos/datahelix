@@ -4,7 +4,7 @@
 2. [Profiles](#Profiles)
     1. [Creating a Profile](#Creating-a-Profile)
     2. [Example Profile](#Example-Profile)
-    
+
 3. [Fields](#Fields)
     1. [Name](#fields-name)
     1. [Type](#fields-type)
@@ -17,7 +17,7 @@
     2. [Strings](#Strings)
     3. [DateTime](#DateTime)
     4. [Custom Data Types](#Custom-Data-Types)
-   
+
 5. [Predicate constraints](#Predicate-constraints)
     1. [Theory](#Theory)
     2. [General constraints](#General-constraints)
@@ -54,7 +54,7 @@
 
 # Introduction
 
-This guide outlines how to create a profile and contains information on the syntax of the DataHelix schema. 
+This guide outlines how to create a profile and contains information on the syntax of the DataHelix schema.
 
 * If you are new to DataHelix, please read the [Getting Started page](GettingStarted.md)
 
@@ -68,7 +68,7 @@ This section will walk you through creating basic profiles with which you can ge
 
 Profiles are JSON documents consisting of three sections, the schema version, the list of fields and the rules.
 
-- **Schema Version** - Dictates the method of serialisation of the profile in order for the generator to 
+- **Schema Version** - Dictates the method of serialisation of the profile in order for the generator to
 interpret the profile fields and rules. The latest version is 0.7.
 ```
     "schemaVersion": "0.7",
@@ -85,14 +85,14 @@ interpret the profile fields and rules. The latest version is 0.7.
     ]
 ```
 - **Rules** - an array of constraints defined with a description. Constraints reduce the data in each column from the [universal set](user/SetRestrictionAndGeneration.md)
-to the desired range of values. They are formatted as JSON objects. There are three types of constraints: 
+to the desired range of values. They are formatted as JSON objects. There are three types of constraints:
 
-    - [Predicate Constraints](#Predicate-constraints) - predicates that define any given value as being 
+    - [Predicate Constraints](#Predicate-constraints) - predicates that define any given value as being
     _valid_ or _invalid_
     - [Grammatical Constraints](#Grammatical-constraints) - used to combine or modify other constraints
-     
+
 Here is a list of two rules comprised of one constraint each:
-    
+
 ```
     "rules": [
         {
@@ -174,25 +174,31 @@ Each of the field properties are outlined below:
 
 Name of the field in the output which has to be unique within the `Fields` array. If generating into a CSV or database, the name is used as a column name. If generating into JSON, the name is used as the key for object properties.
 
+This is a required property.
+
 
 <div id="fields-type"></div>
 
 ## `type`
 
-The data type of the field. See [Data types](#Data-Types) for more on how types work within DataHelix. Valid options are `decimal`, `integer`, `string`, `datetime`, `ISIN`, `SEDOL`, `CUSIP`, `RIC`, `firstname`, `lastname` or `fullname`. This is a required property.
+The data type of the field. See [Data types](#Data-Types) for more on how types work within DataHelix. Valid options are `decimal`, `integer`, `string`, `datetime`, `ISIN`, `SEDOL`, `CUSIP`, `RIC`, `firstname`, `lastname` or `fullname`.
+
+ This is a required property.
 
 
 <div id="fields-nullable"></div>
 
 ## `nullable`
 
-Sets the field as nullable. This is an optional property of the field and will default to true. When set to false it is the same as a [not](#not) [null](#predicate-null) constraint for the field.
+Sets the field as nullable. When set to false it is the same as a [not](#not) [null](#predicate-null) constraint for the field.
+
+This is an optional property of the field and will default to true.
 
 <div id="fields-formatting"></div>
 
 ## `formatting`
 
-Used by output serialisers where string output is required. This is an optional property of the field object and will default to use no formatting.
+Used by output serialisers where string output is required.
 
 For the formatting to be applied, the generated data must be applicable, and the `value` must be:
 
@@ -202,11 +208,15 @@ For the formatting to be applied, the generated data must be applicable, and the
 
 Formatting will not be applied if not applicable to the field's value
 
+This is an optional property of the field object and will default to use no formatting.
+
 <div id="fields-unique"></div>
 
 ## `unique`
 
-Sets the field as unique. This is an optional property of the field object and will default to false. Unique fields can not be used within [grammatical constraints](#Grammatical-Constraints).
+Sets the field as unique. Unique fields can not be used within [grammatical constraints](#Grammatical-Constraints).
+
+ This is an optional property of the field object and will default to false.
 
 
 # Data Types
@@ -228,7 +238,7 @@ The granularity of a numeric field is a measure of how small the distinctions in
 - if a numeric field has a granularity of 1, it can only be satisfied with multiples of 1; the integer data type adds this constraint by default
 - if a decimal field has a granularity of 0.1, it can be satisfied by (for example) 1, 2, 1.1 or 1.2, but not 1.11 or 1.12
 
-Granularities must be powers of ten less than or equal to zero (1, 0.1, 0.01, etc). Note that it is possible to specify these granularities in scientific format eg 1E-10, 1E-15 where the _10_ and _15_ clearly distinguish that these numbers can have up to _10_ or _15_ decimal places respectively. Granularities outside these restrictions could be potentially useful (e.g. a granularity of 2 would permit only even numbers) but are not currently supported. 
+Granularities must be powers of ten less than or equal to zero (1, 0.1, 0.01, etc). Note that it is possible to specify these granularities in scientific format eg 1E-10, 1E-15 where the _10_ and _15_ clearly distinguish that these numbers can have up to _10_ or _15_ decimal places respectively. Granularities outside these restrictions could be potentially useful (e.g. a granularity of 2 would permit only even numbers) but are not currently supported.
 
 Decimal fields currently default to the maximum granularity of 1E-20 (0.00000000000000000001) which means that numbers can be produced with up to 20 decimal places. This numeric granularity also dictates the smallest possible step between two numeric values, for example the next biggest decimal than _10_ is _10.00000000000000000001_. A user is able to add a `granularTo` constraint for a decimal value with coarser granularity (1, 0.1, 0.01...1E-18, 1E-19) but no finer granularity than 1E-20 is allowed.
 
