@@ -19,7 +19,6 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 import com.scottlogic.deg.common.date.TemporalAdjusterGenerator;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.restrictions.linear.DateTimeConverter;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
@@ -49,7 +48,7 @@ public class EqualToOffsetDateRelation implements FieldSpecRelations {
             OffsetDateTime time = limit.getValue();
             OffsetDateTime newTime = OffsetDateTime.from(adjuster.adjuster(offset).adjustInto(time));
             Limit<OffsetDateTime> newLimit = new Limit<>(newTime, true);
-            LinearRestrictions<OffsetDateTime> newRestrictions = new LinearRestrictions<>(newLimit, newLimit, ((LinearRestrictions<OffsetDateTime>) otherValue.getRestrictions()).getGranularity(), new DateTimeConverter());
+            LinearRestrictions<OffsetDateTime> newRestrictions = new LinearRestrictions<>(newLimit, newLimit, ((LinearRestrictions<OffsetDateTime>) otherValue.getRestrictions()).getGranularity());
             return FieldSpec.fromType(otherValue.getType()).withRestrictions(newRestrictions);
         } else {
             return FieldSpec.fromType(otherValue.getType());

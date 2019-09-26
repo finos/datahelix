@@ -86,18 +86,6 @@ class DateTimeRestrictionsTests {
     }
 
     @Test
-    public void matchShouldReturnFalseIfGivenSomethingThatIsntADateTime(){
-        LinearRestrictions<OffsetDateTime> restrictions = LinearRestrictionsFactory.createDateTimeRestrictions(
-            new Limit<>(OffsetDateTime.MIN, true),
-            new Limit<>(OffsetDateTime.MIN, true)
-        );
-
-        boolean result = restrictions.match(123);
-
-        Assert.assertFalse(result);
-    }
-
-    @Test
     public void matchShouldReturnTrueIfGivenDateIsGreaterThanMin(){
         LinearRestrictions<OffsetDateTime> restrictions = LinearRestrictionsFactory.createDateTimeRestrictions(
             new Limit<>(OffsetDateTime.MIN, true),

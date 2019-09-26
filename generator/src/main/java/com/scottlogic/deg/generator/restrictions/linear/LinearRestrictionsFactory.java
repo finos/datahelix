@@ -9,8 +9,6 @@ import static com.scottlogic.deg.common.util.Defaults.*;
 import static com.scottlogic.deg.common.util.Defaults.ISO_MAX_DATE;
 
 public class LinearRestrictionsFactory {
-    private static final DateTimeConverter DATE_TIME_CONVERTER = new DateTimeConverter();
-    public static final NumericConverter NUMERIC_CONVERTER = new NumericConverter();
 
     public static LinearRestrictions<OffsetDateTime> createDateTimeRestrictions(Limit<OffsetDateTime> min, Limit<OffsetDateTime> max) {
         return createDateTimeRestrictions(min, max, DEFAULT_DATETIME_GRANULARITY);
@@ -19,7 +17,7 @@ public class LinearRestrictionsFactory {
     public static LinearRestrictions<OffsetDateTime> createDateTimeRestrictions(Limit<OffsetDateTime> min, Limit<OffsetDateTime> max, Timescale granularity) {
         Limit<OffsetDateTime> cappedMin = capMin(min, ISO_MIN_DATE, ISO_MAX_DATE);
         Limit<OffsetDateTime> cappedMax = capMax(max, ISO_MIN_DATE, ISO_MAX_DATE);
-        return new LinearRestrictions<>(cappedMin, cappedMax, granularity, DATE_TIME_CONVERTER);
+        return new LinearRestrictions<>(cappedMin, cappedMax, granularity);
     }
 
     public static LinearRestrictions<BigDecimal> createNumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max) {
@@ -29,7 +27,7 @@ public class LinearRestrictionsFactory {
     public static LinearRestrictions<BigDecimal> createNumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max, int numericScale) {
         Limit<BigDecimal> cappedMin = capMin(min, NUMERIC_MIN, NUMERIC_MAX);
         Limit<BigDecimal> cappedMax = capMax(max, NUMERIC_MIN, NUMERIC_MAX);
-        return new LinearRestrictions<>(cappedMin, cappedMax, new NumericGranularity(numericScale), NUMERIC_CONVERTER);
+        return new LinearRestrictions<>(cappedMin, cappedMax, new NumericGranularity(numericScale));
     }
 
 

@@ -32,6 +32,7 @@ import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.Assert;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -800,27 +801,6 @@ class ConstraintReducerTest {
         FieldSpec spec = testOutput.get().getSpecForField(field);
 
         Assert.assertThat(spec.getWhitelist().set(), containsInAnyOrder("lorem", "ipsum"));
-    }
-
-    @Test
-    void whenHasNumericRestrictions_shouldOnlyFilterNumericValuesInSet() {
-
-        final Field field = createField("test0", NUMERIC);
-        ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
-
-        OffsetDateTime datetimeValue = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
-        List<AtomicConstraint> constraints = Arrays.asList(
-            new IsGreaterThanOrEqualToConstantConstraint(field, BigDecimal.valueOf(2)),
-            new IsInSetConstraint(field, new DistributedSet<>(Stream.of(1, "lorem", 5, "ipsum", 2, datetimeValue)
-            .map(element -> new WeightedElement<Object>(element, 1.0F))
-            .collect(Collectors.toSet())))
-        );
-
-        Optional<RowSpec> testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, nodeFromConstraints(constraints));
-
-        FieldSpec spec = testOutput.get().getSpecForField(field);
-
-        Assert.assertThat(spec.getWhitelist().set(), containsInAnyOrder( 5, 2));
     }
 
     @Test

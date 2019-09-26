@@ -21,20 +21,8 @@ import com.scottlogic.deg.generator.generation.string.generators.StringGenerator
 
 import java.util.Optional;
 
-public interface StringRestrictions extends TypedRestrictions {
+public interface StringRestrictions extends TypedRestrictions<String> {
     Optional<StringRestrictions> intersect(StringRestrictions other);
-
-    @Override
-    default boolean isInstanceOf(Object o) {
-        return Types.STRING.isInstanceOf(o);
-    }
-
-    boolean match(String x);
-
-    @Override
-    default boolean match(Object x) {
-        return isInstanceOf(x) && match((String) x);
-    }
 
     StringGenerator createGenerator();
 }
