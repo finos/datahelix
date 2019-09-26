@@ -27,6 +27,8 @@ import org.junit.jupiter.api.Test;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
+import static com.scottlogic.deg.common.util.Defaults.ISO_MAX_DATE;
+import static com.scottlogic.deg.common.util.Defaults.ISO_MIN_DATE;
 import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
 import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
 import static org.hamcrest.core.Is.is;
@@ -368,7 +370,7 @@ class DateTimeRestrictionsTests {
        Limit<OffsetDateTime>limit = new Limit<>(OffsetDateTime.MAX,true);
         LinearRestrictions<OffsetDateTime> restrictions = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, limit,  Timescale.YEARS);
 
-        Assert.assertFalse(restrictions.getMax().getValue().isAfter(DATETIME_MAX_LIMIT.getValue()));
+        Assert.assertEquals(restrictions.getMax(), ISO_MAX_DATE);
 
     }
 
@@ -377,8 +379,7 @@ class DateTimeRestrictionsTests {
        Limit<OffsetDateTime>limit = new Limit<>(OffsetDateTime.MIN,true);
         LinearRestrictions<OffsetDateTime> restrictions = LinearRestrictionsFactory.createDateTimeRestrictions(limit, DATETIME_MAX_LIMIT,  Timescale.YEARS);
 
-        Assert.assertFalse(restrictions.getMax().getValue().isBefore(DATETIME_MIN_LIMIT.getValue()));
-
+        Assert.assertEquals(restrictions.getMin(), ISO_MIN_DATE);
     }
 
     private LinearRestrictions<OffsetDateTime> restrictions(MockDateTimeLimit min, MockDateTimeLimit max){

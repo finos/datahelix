@@ -32,17 +32,15 @@ abstract class AbstractDateInequalityRelation implements FieldSpecRelations {
         this.other = other;
     }
 
-    protected abstract Limit<OffsetDateTime> dateTimeLimitExtractingFunction(LinearRestrictions<OffsetDateTime> restrictions);
+    protected abstract OffsetDateTime dateTimeLimitExtractingFunction(LinearRestrictions<OffsetDateTime> restrictions);
 
     protected abstract LinearRestrictions<OffsetDateTime> appendValueToRestrictions(OffsetDateTime value);
 
     @Override
     public FieldSpec reduceToRelatedFieldSpec(FieldSpec otherValue) {
-        Limit<OffsetDateTime> limit = dateTimeLimitExtractingFunction((LinearRestrictions<OffsetDateTime>) otherValue.getRestrictions());
+        OffsetDateTime value = dateTimeLimitExtractingFunction((LinearRestrictions<OffsetDateTime>) otherValue.getRestrictions());
 
-        if (limit != null) {
-            OffsetDateTime value = limit.getValue();
-
+        if (value != null) {
             LinearRestrictions<OffsetDateTime> restrictions = appendValueToRestrictions(value);
             return FieldSpec.fromType(otherValue.getType()).withRestrictions(restrictions);
         } else {

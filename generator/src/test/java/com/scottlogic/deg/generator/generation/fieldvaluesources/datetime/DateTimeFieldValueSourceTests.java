@@ -29,6 +29,8 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static com.scottlogic.deg.common.util.Defaults.ISO_MAX_DATE;
+import static com.scottlogic.deg.common.util.Defaults.ISO_MIN_DATE;
 import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
 import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
 import static org.hamcrest.Matchers.equalTo;
@@ -45,22 +47,22 @@ public class DateTimeFieldValueSourceTests {
     @Test
     public void whenGeneratingUnboundSet() {
         expectInterestingValues(
-                createDate(1900, 1, 1),
-                createDate(2100, 1, 1));
+                ISO_MIN_DATE,
+                ISO_MAX_DATE);
     }
 
     @Test
     public void whenGeneratingUnboundSetWithBlacklist() {
-        givenBlacklist(createDate(2100, 1, 1));
+        givenBlacklist(ISO_MAX_DATE);
         expectInterestingValues(
-                createDate(1900, 1, 1));
+                ISO_MIN_DATE);
     }
 
     @Test
     public void whenGivenUpperBound() {
         givenUpperBound(createDate(2018, 01, 01), true);
         expectInterestingValues(
-                createDate(1900, 1, 1),
+                ISO_MIN_DATE,
                 createDate(2018, 1, 1));
     }
 
@@ -69,7 +71,7 @@ public class DateTimeFieldValueSourceTests {
         givenLowerBound(createDate(2018, 01, 01), true);
         expectInterestingValues(
                 createDate(2018, 1, 1),
-                createDate(2100, 1, 1));
+                ISO_MAX_DATE);
     }
 
     @Test
@@ -327,7 +329,7 @@ public class DateTimeFieldValueSourceTests {
         //Arrange
         LinearRestrictions<OffsetDateTime> max = LinearRestrictionsFactory.createDateTimeRestrictions(
             DATETIME_MIN_LIMIT,
-            new Limit<>(Defaults.ISO_MIN_DATE, false)
+            new Limit<>(ISO_MIN_DATE, false)
         );
         DateTimeFieldValueSource datesBeforeFirstPermittedDate = new DateTimeFieldValueSource(max, Collections.emptySet());
 

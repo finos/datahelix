@@ -49,10 +49,8 @@ class NumericRestrictionsMergerTests {
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.isPresent(), is(true));
         Assert.assertThat(result.get(), not(nullValue()));
-        Assert.assertThat(result.get().getMin().getValue(), is(greaterThan(BigDecimal.ONE)));
-        Assert.assertThat(result.get().getMin().isInclusive(), is(true));
-        Assert.assertThat(result.get().getMax().getValue(), is(lessThan(BigDecimal.TEN)));
-        Assert.assertThat(result.get().getMax().isInclusive(), is(true));
+        Assert.assertThat(result.get().getMin(), is(greaterThan(BigDecimal.ONE)));
+        Assert.assertThat(result.get().getMax(), is(lessThan(BigDecimal.TEN)));
     }
 
     @Test
@@ -66,10 +64,8 @@ class NumericRestrictionsMergerTests {
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.isPresent(), is(true));
         Assert.assertThat(result.get(), not(nullValue()));
-        Assert.assertThat(result.get().getMin().getValue(), is(equalTo(BigDecimal.TEN)));
-        Assert.assertThat(result.get().getMin().isInclusive(), is(true));
-        Assert.assertThat(result.get().getMax().getValue(), is(equalTo(BigDecimal.TEN)));
-        Assert.assertThat(result.get().getMax().isInclusive(), is(true));
+        Assert.assertThat(result.get().getMin(), is(equalTo(BigDecimal.TEN)));
+        Assert.assertThat(result.get().getMax(), is(equalTo(BigDecimal.TEN)));
     }
 
     @Test
