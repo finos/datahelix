@@ -208,7 +208,7 @@ For the formatting to be applied, the generated data must be applicable, and the
 
 Formatting will not be applied if not applicable to the field's value.
 
-[This](https://github.com/finos/datahelix/tree/master/examples/formatting) example shows a few different ways of formatting fields.
+Note that currently integer datatypes must be formatted as if they were decimals. For example to format a integer field to be used as part of a string a `value` like `"number: %.0f"` should be used. See [this](https://github.com/finos/datahelix/tree/master/examples/formatting) example to see another example of formatting integers as well as examples of formatting other datatypes.
 
 This is an optional property of the field object and will default to use no formatting.
 
