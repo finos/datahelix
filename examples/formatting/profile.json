@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "0.7",
+  "fields": [
+    {
+      "name": "decimal",
+      "type": "decimal",
+      "nullable": false,
+      "formatting": "£%.2f",
+      "unique": true
+    },
+    {
+      "name": "date1",
+      "type": "datetime",
+      "nullable": false,
+      "formatting": "%tF",
+      "unique": true
+    },
+    {
+      "name": "date2",
+      "type": "datetime",
+      "nullable": false,
+      "formatting": "Issued: %1$tb %1$tY",
+      "unique": true
+    },
+    {
+      "name": "an_integer",
+      "type": "integer",
+      "nullable": false,
+      "formatting": "%,.0f"
+    }
+  ],
+  "rules": [
+    {
+      "constraints": [
+        {
+          "field": "decimal",
+          "is": "equalTo",
+          "value": 14.1
+        },
+        {
+          "field": "date1",
+          "is": "equalTo",
+          "value": {
+            "date": "2001-02-03T04:05:06.007"
+          }
+        },
+        {
+          "field": "date2",
+          "is": "equalTo",
+          "value": {
+            "date": "2001-02-03T04:05:06.007"
+          }
+        },
+        {
+          "field": "an_integer",
+          "is": "equalTo",
+          "value": 1234567890
+        }
+      ]
+    }
+  ]
+}
