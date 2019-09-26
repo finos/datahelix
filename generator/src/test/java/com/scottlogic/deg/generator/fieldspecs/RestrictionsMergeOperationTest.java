@@ -19,10 +19,8 @@ package com.scottlogic.deg.generator.fieldspecs;
 import com.scottlogic.deg.generator.restrictions.StringRestrictions;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsMerger;
-import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
-import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +30,8 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 import static com.scottlogic.deg.common.profile.Types.*;
+import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDateTimeRestrictions;
+import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createNumericRestrictions;
 import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MAX_LIMIT;
 import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
 import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
@@ -51,12 +51,12 @@ class RestrictionsMergeOperationTest {
     @BeforeAll
     static void beforeAll() {
         leftNumeric = FieldSpec.fromType(NUMERIC).withRestrictions(
-            new NumericRestrictions(
+            createNumericRestrictions(
                 new Limit<>(new BigDecimal("-1e10"), true),
                 NUMERIC_MAX_LIMIT)
         );
         rightNumeric = FieldSpec.fromType(NUMERIC).withRestrictions(
-            new NumericRestrictions(
+            createNumericRestrictions(
                 new Limit<>(new BigDecimal("-1e15"), true),
                 NUMERIC_MAX_LIMIT)
         );
@@ -67,9 +67,9 @@ class RestrictionsMergeOperationTest {
             .withRestrictions(new StringRestrictionsFactory().forMaxLength(12));
 
         leftDateTime = FieldSpec.fromType(DATETIME)
-            .withRestrictions(new DateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT));
+            .withRestrictions(createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT));
         rightDateTime = FieldSpec.fromType(DATETIME)
-            .withRestrictions(new DateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT));
+            .withRestrictions(createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT));
     }
 
     @BeforeEach

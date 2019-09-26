@@ -23,9 +23,7 @@ import com.scottlogic.deg.generator.generation.fieldvaluesources.CannedValuesFie
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.NullOnlySource;
 import com.scottlogic.deg.generator.restrictions.*;
-import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
-import com.scottlogic.deg.generator.restrictions.linear.Limit;
-import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.*;
 import org.junit.Assert;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -36,6 +34,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 import static com.scottlogic.deg.common.profile.Types.*;
+import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createNumericRestrictions;
 import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MAX_LIMIT;
 import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MIN_LIMIT;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -89,7 +88,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     @Test
     public void shouldReturnNullSourceLastWithTypedNumericRestrictionsAndNullNotDisallowed() {
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
-        NumericRestrictions numericRestrictions = new NumericRestrictions(
+        LinearRestrictions<BigDecimal> numericRestrictions = createNumericRestrictions(
             new Limit<>(new BigDecimal(10), false),
             new Limit<>(new BigDecimal(30), false));
         FieldSpec fieldSpecWithTypedNumericRestrictionsAndNullNotDisallowed = FieldSpec.fromType(NUMERIC)
@@ -103,12 +102,12 @@ public class StandardFieldValueSourceEvaluatorTests {
     @Test
     public void shouldReturnNullSourceLastWithTypedDateTimeRestrictionsAndNullNotDisallowed() {
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
-        DateTimeRestrictions datetimeRestrictions = new DateTimeRestrictions(
+        LinearRestrictions<OffsetDateTime> dateTimeRestrictions = LinearRestrictionsFactory.createDateTimeRestrictions(
             new Limit<>(OffsetDateTime.MIN, false),
             new Limit<>(OffsetDateTime.MAX, false)
         );
         FieldSpec fieldSpecInSetWithTypedDateTimeRestrictionsAndNullNotDisallowed = FieldSpec.fromType(DATETIME)
-            .withRestrictions(datetimeRestrictions);
+            .withRestrictions(dateTimeRestrictions);
 
         List<FieldValueSource> sources = evaluator.getFieldValueSources(fieldSpecInSetWithTypedDateTimeRestrictionsAndNullNotDisallowed);
 
@@ -118,7 +117,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     @Test
     void getFieldValueSources_fieldSpecContainsNumericRestrictionsWithValueTooLargeForInteger_generatesExpectedValues() {
         FieldSpec fieldSpec = FieldSpec.fromType(NUMERIC).withRestrictions(
-            new NumericRestrictions(new Limit<>(new BigDecimal(0), false),
+            createNumericRestrictions(new Limit<>(new BigDecimal(0), false),
                 new Limit<>(new BigDecimal("1E+18"), false))
         ).withNotNull(
 
@@ -144,8 +143,9 @@ public class StandardFieldValueSourceEvaluatorTests {
     @Test
     void getFieldValueSources_fieldSpecContainsNumericRestrictionsWithDecimalValues_generatesDecimalValues() {
         FieldSpec fieldSpec = FieldSpec.fromType(NUMERIC).withRestrictions(
-            new NumericRestrictions(new Limit<>(new BigDecimal("15.00000000000000000001"), false),
-            new Limit<>(new BigDecimal("15.00000000000000000010"), false))
+            createNumericRestrictions(
+                new Limit<>(new BigDecimal("15.00000000000000000001"), false),
+                new Limit<>(new BigDecimal("15.00000000000000000010"), false))
         ).withNotNull();
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
 
@@ -173,7 +173,7 @@ public class StandardFieldValueSourceEvaluatorTests {
 
     @Test
     void getFieldValueSources_fieldSpecContainsNumericRestrictionsWithNoScaleAndGranularityHasRestrictionOfTwo_generatesValuesWithTwoDecimalPlaces() {
-        NumericRestrictions restrictions = new NumericRestrictions(
+        LinearRestrictions<BigDecimal> restrictions = createNumericRestrictions(
             new Limit<>(new BigDecimal("15"), false),
             new Limit<>(new BigDecimal("16"), false),
             2);
@@ -201,7 +201,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     @Test
     void getFieldValueSources_fieldSpecContainsNumericRestrictionsWithMinAndMaxNull_generatesBoundaryValues() {
         FieldSpec fieldSpec = FieldSpec.fromType(NUMERIC).withRestrictions(
-            new NumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT)
+            LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT)
         ).withNotNull();
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
 
@@ -225,7 +225,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     @Test
     void getFieldValueSources_fieldSpecContainsNumericRestrictionWithNullMinAndMaxIsDecimal_generatesDecimalValues() {
         FieldSpec fieldSpec = FieldSpec.fromType(NUMERIC).withRestrictions(
-            new NumericRestrictions(NUMERIC_MIN_LIMIT, new Limit<>(new BigDecimal("150.5"), false))
+            createNumericRestrictions(NUMERIC_MIN_LIMIT, new Limit<>(new BigDecimal("150.5"), false))
         ).withNotNull();
         StandardFieldValueSourceEvaluator evaluator = new StandardFieldValueSourceEvaluator();
 
@@ -245,7 +245,7 @@ public class StandardFieldValueSourceEvaluatorTests {
     @Test
     void getFieldValueSources_fieldSpecContainsNegativeMinAndPositiveMax_generatesExpectedNegativeToPositiveValues() {
         FieldSpec fieldSpec = FieldSpec.fromType(NUMERIC).withRestrictions(
-            new NumericRestrictions(
+            createNumericRestrictions(
                 new Limit<>(new BigDecimal("-3E-20"), false),
                 new Limit<>(new BigDecimal("3E-20"), false))
         ).withNotNull();

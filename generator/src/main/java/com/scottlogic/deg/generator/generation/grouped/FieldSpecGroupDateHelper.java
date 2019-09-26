@@ -6,8 +6,9 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.FieldWithFieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
-import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
 
 import java.time.OffsetDateTime;
 import java.util.HashMap;
@@ -21,7 +22,7 @@ public class FieldSpecGroupDateHelper {
     public static FieldSpecGroup adjustBoundsOfDate(Field field, OffsetDateTime value, FieldSpecGroup group) {
 
         Limit<OffsetDateTime> limit = new Limit<>(value, true);
-        DateTimeRestrictions restrictions = new DateTimeRestrictions(limit,limit);
+        LinearRestrictions<OffsetDateTime> restrictions = LinearRestrictionsFactory.createDateTimeRestrictions(limit,limit);
         FieldSpec newSpec = FieldSpec.fromType(field.type).withNotNull().withRestrictions(restrictions);
 
         return adjustBoundsOfDateFromFieldSpec(field, newSpec, group);

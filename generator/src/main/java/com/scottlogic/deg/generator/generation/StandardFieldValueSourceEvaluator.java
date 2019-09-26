@@ -27,9 +27,8 @@ import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.DateTi
 import com.scottlogic.deg.generator.generation.string.generators.RegexStringGenerator;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
-import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
-import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -92,7 +91,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
 
     private FieldValueSource getNumericSource(FieldSpec fieldSpec) {
         LinearRestrictions<BigDecimal> restrictions = fieldSpec.getRestrictions() == null
-            ? new NumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT)
+            ? LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT)
             : (LinearRestrictions<BigDecimal>) fieldSpec.getRestrictions();
 
         return new RealNumberFieldValueSource(
@@ -121,7 +120,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
         LinearRestrictions<OffsetDateTime> restrictions = (LinearRestrictions<OffsetDateTime>) fieldSpec.getRestrictions();
 
         return new DateTimeFieldValueSource(
-            restrictions != null ? restrictions : new DateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT),
+            restrictions != null ? restrictions : LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT),
             fieldSpec.getBlacklist());
     }
 }

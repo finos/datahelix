@@ -18,11 +18,8 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
-import com.scottlogic.deg.generator.restrictions.StringRestrictions;
-import com.scottlogic.deg.generator.restrictions.TypedRestrictions;
-import com.scottlogic.deg.generator.restrictions.linear.DateTimeRestrictions;
-import com.scottlogic.deg.generator.restrictions.linear.Limit;
-import com.scottlogic.deg.generator.restrictions.linear.NumericRestrictions;
+import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.restrictions.linear.*;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -107,12 +104,12 @@ class FieldSpecTests {
 
     @Test
     void equals_fieldSpecNumericRestrictionsNotNullAndOtherObjectNumericRestrictionsNotNullAndNumericRestrictionsAreNotEqual_returnsFalse() {
-        NumericRestrictions firstFieldSpecRestrictions = new NumericRestrictions(
+        LinearRestrictions<BigDecimal> firstFieldSpecRestrictions = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(1), false),
             new Limit<>(new BigDecimal(20), false));
         FieldSpec fieldSpec = FieldSpec.fromType(NUMERIC).withRestrictions(firstFieldSpecRestrictions);
 
-        NumericRestrictions secondFieldSpecRestrictions = new NumericRestrictions(
+        LinearRestrictions<BigDecimal> secondFieldSpecRestrictions = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(5), false) ,
             new Limit<>(new BigDecimal(20), false));
         boolean result = fieldSpec.equals(
@@ -138,7 +135,7 @@ class FieldSpecTests {
     @Test
     public void shouldCreateNewInstanceWithNumericRestrictions() {
         FieldSpec original = FieldSpec.fromType(NUMERIC);
-        NumericRestrictions restrictions = mock(NumericRestrictions.class);
+        LinearRestrictions<BigDecimal> restrictions = mock(LinearRestrictions.class);
         FieldSpec augmentedFieldSpec = original.withRestrictions(restrictions);
 
         Assert.assertNotSame(original, augmentedFieldSpec);
@@ -166,7 +163,7 @@ class FieldSpecTests {
     @Test
     public void shouldCreateNewInstanceWithDateTimeRestrictions() {
         FieldSpec original = FieldSpec.fromType(DATETIME);
-        DateTimeRestrictions restrictions = mock(DateTimeRestrictions.class);
+        LinearRestrictions<OffsetDateTime> restrictions = mock(LinearRestrictions.class);
         FieldSpec augmentedFieldSpec = original.withRestrictions(restrictions);
 
         Assert.assertNotSame(original, augmentedFieldSpec);
@@ -195,27 +192,6 @@ class FieldSpecTests {
     public void fieldSpecsWithUnequalSetRestrictionsShouldBeUnequal() {
         FieldSpec a = FieldSpec.fromType(STRING).withWhitelist(DistributedSet.uniform(Collections.singleton("not same")));
         FieldSpec b = FieldSpec.fromType(STRING).withWhitelist(DistributedSet.uniform(Collections.singleton("different")));
-
-        Assert.assertThat(a, not(equalTo(b)));
-    }
-
-    @Test
-    public void fieldSpecsWithEqualNumericRestrictionsShouldBeEqual() {
-        NumericRestrictions aRestrictions = new MockNumericRestrictions(true);
-        NumericRestrictions bRestrictions = new MockNumericRestrictions(true);
-        FieldSpec a = FieldSpec.fromType(NUMERIC).withRestrictions(aRestrictions);
-        FieldSpec b = FieldSpec.fromType(NUMERIC).withRestrictions(bRestrictions);
-
-        Assert.assertThat(a, equalTo(b));
-        Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
-    }
-
-    @Test
-    public void fieldSpecsWithUnequalNumericRestrictionsShouldBeUnequal() {
-        NumericRestrictions aRestrictions = new MockNumericRestrictions(false);
-        NumericRestrictions bRestrictions = new MockNumericRestrictions(false);
-        FieldSpec a = FieldSpec.fromType(NUMERIC).withRestrictions(aRestrictions);
-        FieldSpec b = FieldSpec.fromType(NUMERIC).withRestrictions(bRestrictions);
 
         Assert.assertThat(a, not(equalTo(b)));
     }
@@ -276,30 +252,8 @@ class FieldSpecTests {
     }
 
     @Test
-    public void fieldSpecsWithEqualDateTimeRestrictionsShouldBeEqual() {
-        DateTimeRestrictions aRestrictions = new MockDateTimeRestrictions(true);
-        DateTimeRestrictions bRestrictions = new MockDateTimeRestrictions(true);
-        FieldSpec a = FieldSpec.fromType(DATETIME).withRestrictions(aRestrictions);
-        FieldSpec b = FieldSpec.fromType(DATETIME).withRestrictions(bRestrictions);
-
-        Assert.assertThat(a, equalTo(b));
-        Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
-    }
-
-    @Test
-    public void fieldSpecsWithUnequalDateTimeRestrictionsShouldBeUnequal() {
-        DateTimeRestrictions aRestrictions = new MockDateTimeRestrictions(false);
-        DateTimeRestrictions bRestrictions = new MockDateTimeRestrictions(false);
-        FieldSpec a = FieldSpec.fromType(DATETIME).withRestrictions(aRestrictions);
-        FieldSpec b = FieldSpec.fromType(DATETIME).withRestrictions(bRestrictions);
-
-        Assert.assertThat(a, not(equalTo(b)));
-    }
-
-
-    @Test
     void permitsRejectsInvalidNumeric() {
-        NumericRestrictions numeric = new NumericRestrictions(new Limit<>(BigDecimal.TEN, true), NUMERIC_MAX_LIMIT);
+        LinearRestrictions<BigDecimal> numeric = LinearRestrictionsFactory.createNumericRestrictions(new Limit<>(BigDecimal.TEN, true), NUMERIC_MAX_LIMIT);
         FieldSpec spec = FieldSpec.fromType(NUMERIC).withRestrictions(numeric);
 
         assertFalse(spec.permits(BigDecimal.ONE));
@@ -307,7 +261,7 @@ class FieldSpecTests {
 
     @Test
     void permitsRejectsInvalidDateTime() {
-        DateTimeRestrictions dateTime = new DateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT);
+        LinearRestrictions<OffsetDateTime> dateTime = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT);
         FieldSpec spec = FieldSpec.fromType(DATETIME).withRestrictions(dateTime);
 
         OffsetDateTime time = OffsetDateTime.of(100, 1, 1, 1, 1, 1, 1, ZoneOffset.UTC);
@@ -336,25 +290,6 @@ class FieldSpecTests {
         FieldSpec spec = FieldSpec.fromType(STRING).withRestrictions(string);
 
         assertFalse(spec.permits("Anything"));
-    }
-
-    private class MockNumericRestrictions extends NumericRestrictions {
-        private final boolean isEqual;
-
-        MockNumericRestrictions(boolean isEqual) {
-            super(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT);
-            this.isEqual = isEqual;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            return isEqual;
-        }
-
-        @Override
-        public int hashCode() {
-            return 1234;
-        }
     }
 
     private class MockStringRestrictions implements StringRestrictions {
@@ -389,24 +324,4 @@ class FieldSpecTests {
             throw new UnsupportedOperationException("Not implemented");
         }
     }
-
-    private class MockDateTimeRestrictions extends DateTimeRestrictions {
-        private final boolean isEqual;
-
-        MockDateTimeRestrictions(boolean isEqual) {
-            super(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT);
-            this.isEqual = isEqual;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            return isEqual;
-        }
-
-        @Override
-        public int hashCode() {
-            return 1234;
-        }
-    }
-
 }

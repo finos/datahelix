@@ -20,7 +20,7 @@ import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
-import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
+import com.scottlogic.deg.generator.utils.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

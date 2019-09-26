@@ -26,7 +26,7 @@ public class LinearRestrictions<T extends Comparable<T>> implements TypedRestric
     private final Limit<T> max;
     private final Granularity<T> granularity;
 
-    LinearRestrictions(Limit<T> min, Limit<T> max, Granularity<T> granularity) {
+    public LinearRestrictions(Limit<T> min, Limit<T> max, Granularity<T> granularity) {
         if (min == null || max == null) {
             throw new IllegalArgumentException("linear restrictions cannot have null limits");
         }
@@ -56,6 +56,10 @@ public class LinearRestrictions<T extends Comparable<T>> implements TypedRestric
         return min;
     }
 
+    public Granularity<T> getGranularity(){
+        return granularity;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -71,7 +75,8 @@ public class LinearRestrictions<T extends Comparable<T>> implements TypedRestric
         return Objects.hash(min, max, granularity);
     }
 
-    public Granularity<T> getGranularity(){
-        return granularity;
+    @Override
+    public String toString() {
+        return "min=" + getMin() + ", max=" + getMax() + " " + getGranularity().toString();
     }
 }
