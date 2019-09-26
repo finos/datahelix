@@ -140,7 +140,7 @@ public class FieldSpecFactory {
                 NUMERIC_MAX_LIMIT);
         }
 
-        return FieldSpec.empty().withRestrictions(numericRestrictions);
+        return FieldSpec.fromRestriction(numericRestrictions);
     }
 
     private FieldSpec construct(Field field, IsLessThanConstantConstraint constraint, boolean negate) {
@@ -163,7 +163,7 @@ public class FieldSpecFactory {
                 inclusive));
         }
 
-        return FieldSpec.empty().withRestrictions(numericRestrictions);
+        return FieldSpec.fromRestriction(numericRestrictions);
     }
 
     private FieldSpec construct(Field field, IsGranularToNumericConstraint constraint, boolean negate) {
@@ -172,8 +172,7 @@ public class FieldSpecFactory {
             return FieldSpec.empty();
         }
 
-        return FieldSpec.empty()
-            .withRestrictions(
+        return FieldSpec.fromRestriction(
                 createNumericRestrictions(
                     NUMERIC_MIN_LIMIT,
                     NUMERIC_MAX_LIMIT,
@@ -186,7 +185,7 @@ public class FieldSpecFactory {
             return FieldSpec.empty();
         }
 
-        return FieldSpec.empty().withRestrictions(createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT, constraint.granularity.getGranularity()));
+        return FieldSpec.fromRestriction(createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT, constraint.granularity.getGranularity()));
     }
 
     private FieldSpec construct(Field field, IsAfterConstantDateTimeConstraint constraint, boolean negate) {
@@ -200,10 +199,10 @@ public class FieldSpecFactory {
     private FieldSpec constructIsAfterConstraint(Field field, OffsetDateTime limit, boolean inclusive, boolean negate) {
         if (negate) {
             final LinearRestrictions<OffsetDateTime> dateTimeRestrictions = createDateTimeRestrictions(DATETIME_MIN_LIMIT, new Limit<>(limit, !inclusive));
-            return FieldSpec.empty().withRestrictions(dateTimeRestrictions);
+            return FieldSpec.fromRestriction(dateTimeRestrictions);
         } else {
             final LinearRestrictions<OffsetDateTime> dateTimeRestrictions = createDateTimeRestrictions(new Limit<>(limit, inclusive), DATETIME_MAX_LIMIT);
-            return FieldSpec.empty().withRestrictions(dateTimeRestrictions);
+            return FieldSpec.fromRestriction(dateTimeRestrictions);
         }
     }
 
@@ -218,21 +217,19 @@ public class FieldSpecFactory {
     private FieldSpec constructIsBeforeConstraint(Field field, OffsetDateTime limit, boolean inclusive, boolean negate) {
         if (negate) {
             final LinearRestrictions<OffsetDateTime> dateTimeRestrictions = createDateTimeRestrictions(new Limit<>(limit, !inclusive), DATETIME_MAX_LIMIT);
-            return FieldSpec.empty().withRestrictions(dateTimeRestrictions);
+            return FieldSpec.fromRestriction(dateTimeRestrictions);
         } else {
             final LinearRestrictions<OffsetDateTime> dateTimeRestrictions = createDateTimeRestrictions(DATETIME_MIN_LIMIT, new Limit<>(limit, inclusive));
-            return FieldSpec.empty().withRestrictions(dateTimeRestrictions);
+            return FieldSpec.fromRestriction(dateTimeRestrictions);
         }
     }
 
     private FieldSpec construct(Field field, MatchesRegexConstraint constraint, boolean negate) {
-        return FieldSpec.empty()
-            .withRestrictions(stringRestrictionsFactory.forStringMatching(constraint.regex, negate));
+        return FieldSpec.fromRestriction(stringRestrictionsFactory.forStringMatching(constraint.regex, negate));
     }
 
     private FieldSpec construct(Field field, ContainsRegexConstraint constraint, boolean negate) {
-        return FieldSpec.empty()
-            .withRestrictions(stringRestrictionsFactory.forStringContaining(constraint.regex, negate));
+        return FieldSpec.fromRestriction(stringRestrictionsFactory.forStringContaining(constraint.regex, negate));
     }
 
     private FieldSpec construct(Field field, MatchesStandardConstraint constraint, boolean negate) {
@@ -244,31 +241,27 @@ public class FieldSpecFactory {
             return construct(field, new MatchesRegexConstraint(constraint.field, Pattern.compile(constraint.standard.getRegex())), negate);
         }
 
-        return FieldSpec.empty()
-            .withRestrictions(new MatchesStandardStringRestrictions(constraint.standard));
+        return FieldSpec.fromRestriction(new MatchesStandardStringRestrictions(constraint.standard));
     }
 
     private FieldSpec construct(Field field, StringHasLengthConstraint constraint, boolean negate) {
-        return FieldSpec.empty()
-            .withRestrictions(stringRestrictionsFactory.forLength(constraint.referenceValue, negate));
+        return FieldSpec.fromRestriction(stringRestrictionsFactory.forLength(constraint.referenceValue, negate));
     }
 
     private FieldSpec construct(Field field, IsStringShorterThanConstraint constraint, boolean negate) {
-        return FieldSpec.empty()
-            .withRestrictions(
-                negate
-                    ? stringRestrictionsFactory.forMinLength(constraint.referenceValue)
-                    : stringRestrictionsFactory.forMaxLength(constraint.referenceValue - 1)
-            );
+        return FieldSpec.fromRestriction(
+            negate
+                ? stringRestrictionsFactory.forMinLength(constraint.referenceValue)
+                : stringRestrictionsFactory.forMaxLength(constraint.referenceValue - 1)
+        );
     }
 
     private FieldSpec construct(Field field, IsStringLongerThanConstraint constraint, boolean negate) {
-        return FieldSpec.empty()
-            .withRestrictions(
-                negate
-                    ? stringRestrictionsFactory.forMaxLength(constraint.referenceValue)
-                    : stringRestrictionsFactory.forMinLength(constraint.referenceValue + 1)
-            );
+        return FieldSpec.fromRestriction(
+            negate
+                ? stringRestrictionsFactory.forMaxLength(constraint.referenceValue)
+                : stringRestrictionsFactory.forMinLength(constraint.referenceValue + 1)
+        );
     }
 
 }

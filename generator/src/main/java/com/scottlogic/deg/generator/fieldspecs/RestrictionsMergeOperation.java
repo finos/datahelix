@@ -36,13 +36,13 @@ public class RestrictionsMergeOperation {
         TypedRestrictions rightRestriction = right.getRestrictions();
 
         if (leftRestriction == null && rightRestriction == null) {
-            return FieldSpec.empty().withRestrictions(null);
+            return FieldSpec.fromRestriction(null);
         }
         if (leftRestriction == null) {
-            return FieldSpec.empty().withRestrictions(rightRestriction);
+            return FieldSpec.fromRestriction(rightRestriction);
         }
         if (rightRestriction == null) {
-            return FieldSpec.empty().withRestrictions(leftRestriction);
+            return FieldSpec.fromRestriction(leftRestriction);
         }
 
         Optional<TypedRestrictions> mergeResult = getMerger(left.getRestrictions()).merge(leftRestriction, rightRestriction);
@@ -51,7 +51,7 @@ public class RestrictionsMergeOperation {
             return FieldSpec.nullOnly();
         }
 
-        return FieldSpec.empty().withRestrictions(mergeResult.get());
+        return FieldSpec.fromRestriction(mergeResult.get());
     }
 
     private RestrictionsMerger getMerger(TypedRestrictions restrictions) {

@@ -23,7 +23,7 @@ public class FieldSpecGroupDateHelper {
 
         Limit<OffsetDateTime> limit = new Limit<>(value, true);
         LinearRestrictions<OffsetDateTime> restrictions = LinearRestrictionsFactory.createDateTimeRestrictions(limit,limit);
-        FieldSpec newSpec = FieldSpec.empty().withNotNull().withRestrictions(restrictions);
+        FieldSpec newSpec = FieldSpec.fromRestriction(restrictions).withNotNull();
 
         return adjustBoundsOfDateFromFieldSpec(field, newSpec, group);
     }

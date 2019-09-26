@@ -65,12 +65,12 @@ class BeforeDateRelationTest {
 
         LinearRestrictions<OffsetDateTime> inRestrictions = LinearRestrictionsFactory.createDateTimeRestrictions(lower, upper);
 
-        FieldSpec inSpec = FieldSpec.empty().withRestrictions(inRestrictions);
+        FieldSpec inSpec = FieldSpec.fromRestriction(inRestrictions);
 
         FieldSpec reducedSpec = relation.reduceToRelatedFieldSpec(inSpec);
 
         LinearRestrictions<OffsetDateTime> expectedRestrictions = LinearRestrictionsFactory.createDateTimeRestrictions(lower, DATETIME_MAX_LIMIT);
-        FieldSpec expectedSpec = FieldSpec.empty().withRestrictions(expectedRestrictions);
+        FieldSpec expectedSpec = FieldSpec.fromRestriction(expectedRestrictions);
 
         assertEquals(expectedSpec, reducedSpec);
     }

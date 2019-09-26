@@ -34,6 +34,9 @@ public class FieldSpec {
     public static FieldSpec fromSet(DistributedSet<Object> whitelist) {
         return new FieldSpec(whitelist, null, true, Collections.emptySet());
     }
+    public static FieldSpec fromRestriction(TypedRestrictions restrictions) {
+        return new FieldSpec(null, restrictions, true, Collections.emptySet());
+    }
 
     public static FieldSpec empty() {
         return new FieldSpec(null, null, true, Collections.emptySet());
@@ -73,10 +76,6 @@ public class FieldSpec {
 
     public TypedRestrictions getRestrictions() {
         return restrictions;
-    }
-
-    public FieldSpec withRestrictions(TypedRestrictions restrictions) {
-        return new FieldSpec(null, restrictions, nullable, blacklist);
     }
 
     public FieldSpec withBlacklist(Set<Object> blacklist) {

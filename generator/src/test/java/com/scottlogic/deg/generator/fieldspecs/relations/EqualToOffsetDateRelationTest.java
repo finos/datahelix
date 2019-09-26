@@ -84,6 +84,6 @@ class EqualToOffsetDateRelationTest {
         Limit<OffsetDateTime> limit = new Limit<>(time, true);
 
         LinearRestrictions<OffsetDateTime> restrictions = LinearRestrictionsFactory.createDateTimeRestrictions(limit, limit);
-        return FieldSpec.empty().withRestrictions(restrictions);
+        return FieldSpec.fromRestriction(restrictions);
     }
 }
