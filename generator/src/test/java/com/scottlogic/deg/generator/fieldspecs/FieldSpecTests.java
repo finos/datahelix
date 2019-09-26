@@ -105,13 +105,13 @@ class FieldSpecTests {
     @Test
     void equals_fieldSpecNumericRestrictionsNotNullAndOtherObjectNumericRestrictionsNotNullAndNumericRestrictionsAreNotEqual_returnsFalse() {
         LinearRestrictions<BigDecimal> firstFieldSpecRestrictions = LinearRestrictionsFactory.createNumericRestrictions(
-            new Limit<>(new BigDecimal(1), false),
-            new Limit<>(new BigDecimal(20), false));
+            new Limit<>(new BigDecimal(1), true),
+            new Limit<>(new BigDecimal(20), true));
         FieldSpec fieldSpec = FieldSpec.fromType(NUMERIC).withRestrictions(firstFieldSpecRestrictions);
 
         LinearRestrictions<BigDecimal> secondFieldSpecRestrictions = LinearRestrictionsFactory.createNumericRestrictions(
-            new Limit<>(new BigDecimal(5), false) ,
-            new Limit<>(new BigDecimal(20), false));
+            new Limit<>(new BigDecimal(5), true) ,
+            new Limit<>(new BigDecimal(20), true));
         boolean result = fieldSpec.equals(
             FieldSpec.fromType(NUMERIC).withRestrictions(secondFieldSpecRestrictions)
         );

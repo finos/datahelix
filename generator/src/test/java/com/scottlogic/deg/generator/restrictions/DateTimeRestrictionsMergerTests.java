@@ -43,10 +43,10 @@ class DateTimeRestrictionsMergerTests {
     @Test
     void merge_leftHasMinAndRightHasMax_returnsDateTimeRestrictionsWithMergedMinAndMax() {
         Limit<OffsetDateTime> minDateTimeLimit = new Limit<>(
-            REFERENCE_TIME.minusDays(7), false
+            REFERENCE_TIME.minusDays(7), true
         );
         Limit <OffsetDateTime>maxDateTimeLimit = new Limit<>(
-            REFERENCE_TIME, false
+            REFERENCE_TIME, true
         );
         LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
         LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
@@ -62,10 +62,10 @@ class DateTimeRestrictionsMergerTests {
     @Test
     void merge_leftHasMaxAndRightHasMin_returnsDateTimeRestrictionsWithMergedMinAndMax() {
         Limit <OffsetDateTime>minDateTimeLimit = new Limit<>(
-            REFERENCE_TIME.minusDays(7), false
+            REFERENCE_TIME.minusDays(7), true
         );
         Limit <OffsetDateTime>maxDateTimeLimit = new Limit<>(
-            REFERENCE_TIME, false
+            REFERENCE_TIME, true
         );
         LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
         LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
@@ -115,7 +115,7 @@ class DateTimeRestrictionsMergerTests {
     @Test
     void merge_rightAndLeftHaveNoMax_shouldNotReturnNull() {
         Limit <OffsetDateTime>minDateTimeLimit = new Limit<>(
-            REFERENCE_TIME, false
+            REFERENCE_TIME, true
         );
 
         LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
@@ -132,7 +132,7 @@ class DateTimeRestrictionsMergerTests {
     @Test
     void merge_rightAndLeftHaveNoMin_shouldNotReturnNull() {
         Limit <OffsetDateTime>maxDateTimeLimit = new Limit<>(
-            REFERENCE_TIME, false
+            REFERENCE_TIME, true
         );
 
         LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);

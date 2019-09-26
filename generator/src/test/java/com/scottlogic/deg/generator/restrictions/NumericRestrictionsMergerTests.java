@@ -26,6 +26,8 @@ import java.util.Optional;
 
 import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MAX_LIMIT;
 import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MIN_LIMIT;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
@@ -47,10 +49,10 @@ class NumericRestrictionsMergerTests {
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.isPresent(), is(true));
         Assert.assertThat(result.get(), not(nullValue()));
-        Assert.assertThat(result.get().getMin().getValue(), is(equalTo(BigDecimal.ONE)));
-        Assert.assertThat(result.get().getMin().isInclusive(), is(false));
-        Assert.assertThat(result.get().getMax().getValue(), is(equalTo(BigDecimal.TEN)));
-        Assert.assertThat(result.get().getMax().isInclusive(), is(false));
+        Assert.assertThat(result.get().getMin().getValue(), is(greaterThan(BigDecimal.ONE)));
+        Assert.assertThat(result.get().getMin().isInclusive(), is(true));
+        Assert.assertThat(result.get().getMax().getValue(), is(lessThan(BigDecimal.TEN)));
+        Assert.assertThat(result.get().getMax().isInclusive(), is(true));
     }
 
     @Test

@@ -48,7 +48,7 @@ public class NumericGranularity implements Granularity<BigDecimal> {
 
     @Override
     public BigDecimal trimToGranularity(BigDecimal value) {
-        return value.setScale(decimalPlaces, RoundingMode.DOWN);
+        return value.setScale(decimalPlaces, RoundingMode.FLOOR);
     }
 
     @Override
@@ -57,6 +57,12 @@ public class NumericGranularity implements Granularity<BigDecimal> {
         if (o == null || getClass() != o.getClass()) return false;
         NumericGranularity that = (NumericGranularity) o;
         return decimalPlaces == that.decimalPlaces;
+    }
+
+    @Override
+    public String toString() {
+        return decimalPlaces +
+            " decimal places=";
     }
 
     @Override
