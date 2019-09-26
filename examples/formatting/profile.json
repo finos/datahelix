@@ -9,6 +9,12 @@
       "unique": true
     },
     {
+      "name": "an_integer",
+      "type": "integer",
+      "nullable": false,
+      "formatting": "%,.0f"
+    },
+    {
       "name": "date1",
       "type": "datetime",
       "nullable": false,
@@ -21,12 +27,6 @@
       "nullable": false,
       "formatting": "Issued: %1$tb %1$tY",
       "unique": true
-    },
-    {
-      "name": "an_integer",
-      "type": "integer",
-      "nullable": false,
-      "formatting": "%,.0f"
     }
   ],
   "rules": [
