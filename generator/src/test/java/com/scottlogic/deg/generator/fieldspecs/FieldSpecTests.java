@@ -385,16 +385,6 @@ class FieldSpecTests {
         }
 
         @Override
-        public boolean isInstanceOf(Object o) {
-            return DATETIME.isInstanceOf(o);
-        }
-
-        @Override
-        public boolean match(Object x) {
-            return false;
-        }
-
-        @Override
         public StringGenerator createGenerator() {
             throw new UnsupportedOperationException("Not implemented");
         }

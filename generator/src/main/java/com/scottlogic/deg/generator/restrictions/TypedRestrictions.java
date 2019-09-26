@@ -16,9 +16,7 @@
 
 package com.scottlogic.deg.generator.restrictions;
 
-public interface TypedRestrictions {
+public interface TypedRestrictions<T> {
 
-    boolean match(Object o);
-
-    boolean isInstanceOf(Object o);
+    boolean match(T o);
 }
