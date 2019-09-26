@@ -111,7 +111,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
             generator = generator.intersect(blacklistGenerator);
         }
 
-        return generator.asFieldValueSource();
+        return generator;
     }
 
     private FieldValueSource getDateTimeSource(FieldSpec fieldSpec) {

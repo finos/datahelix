@@ -30,10 +30,12 @@ import static com.scottlogic.deg.common.util.FlatMappingSpliterator.flatMap;
 import static com.scottlogic.deg.generator.utils.SetUtils.stream;
 
 public class CombiningFieldValueSource implements FieldValueSource {
-    private final List<FieldValueSource> underlyingSources;
+    private final List<FieldValueSource<Object>> underlyingSources;
 
     public CombiningFieldValueSource(List<FieldValueSource> underlyingSources) {
-        this.underlyingSources = underlyingSources;
+        this.underlyingSources = underlyingSources.stream()
+            .map(s->(FieldValueSource<Object>)s)
+            .collect(Collectors.toList());
     }
 
     @Override
@@ -52,11 +54,15 @@ public class CombiningFieldValueSource implements FieldValueSource {
 
     @Override
     public Stream<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
-        return stream(new InternalRandomIterator(
-            underlyingSources.stream()
-                .map(source -> source.generateRandomValues(randomNumberGenerator).iterator())
-                .collect(Collectors.toList()),
-            randomNumberGenerator));
+        return flatMap(
+            Stream.generate(() -> getRandomSource(randomNumberGenerator)
+                .generateRandomValues(randomNumberGenerator)
+                .limit(1)),
+            Function.identity());
+    }
+
+    private FieldValueSource<Object> getRandomSource(RandomNumberGenerator randomNumberGenerator) {
+        return underlyingSources.get(randomNumberGenerator.nextInt(underlyingSources.size()));
     }
 
     @Override
@@ -71,41 +77,5 @@ public class CombiningFieldValueSource implements FieldValueSource {
     @Override
     public int hashCode() {
         return Objects.hash(underlyingSources);
-    }
-
-    private class InternalRandomIterator implements Iterator<Object> {
-        private final List<Iterator<Object>> iterators;
-        private final RandomNumberGenerator randomNumberGenerator;
-
-        InternalRandomIterator(
-            List<Iterator<Object>> iterators,
-            RandomNumberGenerator randomNumberGenerator) {
-
-            this.iterators = iterators.stream()
-                .filter(Iterator::hasNext)
-                .collect(Collectors.toList());
-
-            this.randomNumberGenerator = randomNumberGenerator;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return !this.iterators.isEmpty();
-        }
-
-        @Override
-        public Object next() {
-            int iteratorIndex = randomNumberGenerator.nextInt(
-                iterators.size());
-
-            Iterator<Object> iterator = iterators.get(iteratorIndex);
-
-            Object value = iterator.next();
-
-            if (!iterator.hasNext())
-                this.iterators.remove(iteratorIndex);
-
-            return value;
-        }
     }
 }

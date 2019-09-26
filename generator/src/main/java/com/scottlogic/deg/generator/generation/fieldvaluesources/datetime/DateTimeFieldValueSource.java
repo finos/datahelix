@@ -34,7 +34,7 @@ import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
 import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
 import static com.scottlogic.deg.generator.utils.SetUtils.stream;
 
-public class DateTimeFieldValueSource implements FieldValueSource {
+public class DateTimeFieldValueSource implements FieldValueSource<OffsetDateTime> {
 
     private final LinearRestrictions<OffsetDateTime> restrictions;
     private final Set<Object> blacklist;
@@ -51,16 +51,15 @@ public class DateTimeFieldValueSource implements FieldValueSource {
     }
 
     @Override
-    public Stream<Object> generateAllValues() {
+    public Stream<OffsetDateTime> generateAllValues() {
         return stream(new LinearIterator<>(restrictions))
-            .filter(i -> !blacklist.contains(i))
-            .map(Function.identity());
+            .filter(i -> !blacklist.contains(i));
     }
 
     @Override
-    public Stream<Object> generateInterestingValues() {
+    public Stream<OffsetDateTime> generateInterestingValues() {
 
-        ArrayList<Object> interestingValues = new ArrayList<>();
+        ArrayList<OffsetDateTime> interestingValues = new ArrayList<>();
 
         if (restrictions.getMin() != DATETIME_MIN_LIMIT
             && restrictions.getMin().getValue() != Defaults.ISO_MIN_DATE) {
@@ -89,11 +88,9 @@ public class DateTimeFieldValueSource implements FieldValueSource {
     }
 
     @Override
-    public Stream<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
+    public Stream<OffsetDateTime> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
         return Stream.generate(() -> randomDateGenerator.next(randomNumberGenerator))
-            .filter(i -> !blacklist.contains(i))
-            .map(Function.identity());
-
+            .filter(i -> !blacklist.contains(i));
     }
 
     @Override
