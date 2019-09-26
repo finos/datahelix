@@ -206,7 +206,9 @@ For the formatting to be applied, the generated data must be applicable, and the
 * appropriate for the data type of `field`
 * not `null` (formatting will not be applied for null values)
 
-Formatting will not be applied if not applicable to the field's value
+Formatting will not be applied if not applicable to the field's value.
+
+[This](https://github.com/finos/datahelix/tree/master/examples/formatting) example shows a few different ways of formatting fields.
 
 This is an optional property of the field object and will default to use no formatting.
 
