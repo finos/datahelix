@@ -28,6 +28,7 @@ import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -94,11 +95,11 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
     }
 
     public ConstraintChainBuilder<T> withLessThanConstraint(Field field, int referenceValue) {
-        return saveAndSet(new IsLessThanConstantConstraint(field, referenceValue));
+        return saveAndSet(new IsLessThanConstantConstraint(field, BigDecimal.valueOf(referenceValue)));
     }
 
     public ConstraintChainBuilder<T> withGreaterThanConstraint(Field field, int referenceValue) {
-        return saveAndSet(new IsGreaterThanConstantConstraint(field, referenceValue));
+        return saveAndSet(new IsGreaterThanConstantConstraint(field, BigDecimal.valueOf(referenceValue)));
     }
 
     public ConstraintChainBuilder<T> withEqualToConstraint(Field barField, Object referenceValue) {

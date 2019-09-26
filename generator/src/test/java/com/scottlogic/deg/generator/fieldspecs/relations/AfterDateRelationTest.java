@@ -66,12 +66,12 @@ class AfterDateRelationTest {
 
         DateTimeRestrictions inRestrictions = new DateTimeRestrictions(lower, upper);
 
-        FieldSpec inSpec = FieldSpec.fromType(DATETIME).withDateTimeRestrictions(inRestrictions);
+        FieldSpec inSpec = FieldSpec.fromType(DATETIME).withRestrictions(inRestrictions);
 
         FieldSpec reducedSpec = relation.reduceToRelatedFieldSpec(inSpec);
 
         DateTimeRestrictions expectedRestrictions = new DateTimeRestrictions(DATETIME_MIN_LIMIT, upper);
-        FieldSpec expectedSpec = FieldSpec.fromType(DATETIME).withDateTimeRestrictions(expectedRestrictions);
+        FieldSpec expectedSpec = FieldSpec.fromType(DATETIME).withRestrictions(expectedRestrictions);
 
         assertEquals(expectedSpec, reducedSpec);
     }

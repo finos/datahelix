@@ -20,14 +20,15 @@ import com.scottlogic.deg.common.profile.Field;
 
 import com.scottlogic.deg.common.profile.RuleInformation;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.Set;
 
 public class IsGreaterThanOrEqualToConstantConstraint implements AtomicConstraint {
     public final Field field;
-    public final Number referenceValue;
+    public final BigDecimal referenceValue;
 
-    public IsGreaterThanOrEqualToConstantConstraint(Field field, Number referenceValue) {
+    public IsGreaterThanOrEqualToConstantConstraint(Field field, BigDecimal referenceValue) {
         this.referenceValue = referenceValue;
         this.field = field;
     }

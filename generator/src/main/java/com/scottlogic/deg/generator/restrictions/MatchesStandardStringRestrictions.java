@@ -22,6 +22,8 @@ import com.scottlogic.deg.generator.generation.string.generators.NoStringsString
 import com.scottlogic.deg.generator.generation.string.generators.RegexStringGenerator;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 
+import java.util.Optional;
+
 import static com.scottlogic.deg.generator.generation.string.generators.ChecksumStringGeneratorFactory.*;
 
 /**
@@ -61,7 +63,7 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
     }
 
     @Override
-    public MergeResult<StringRestrictions> intersect(StringRestrictions other) {
+    public Optional<StringRestrictions> intersect(StringRestrictions other) {
 
         if (other instanceof TextualRestrictions){
             return isLengthAcceptable((TextualRestrictions) other);
@@ -69,13 +71,13 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
 
         MatchesStandardStringRestrictions that = (MatchesStandardStringRestrictions) other;
         if (that.type != type) {
-            return MergeResult.unsuccessful();
+            return Optional.empty();
         }
 
-        return new MergeResult<>(this);
+        return Optional.of(this);
     }
 
-    private MergeResult<StringRestrictions> isLengthAcceptable(TextualRestrictions other) {
+    private Optional<StringRestrictions> isLengthAcceptable(TextualRestrictions other) {
         if (anyRegexes(other)){
             throw new ValidationException("Combining a regex constraint with a " + this.toString() + " constraint is not supported.");
         }
@@ -83,10 +85,10 @@ public class MatchesStandardStringRestrictions implements StringRestrictions{
         StringGenerator intersect = other.createGenerator().intersect(new RegexStringGenerator(type.getRegex(), true));
 
         if (intersect instanceof NoStringsStringGenerator){
-            return MergeResult.unsuccessful();
+            return Optional.empty();
         }
 
-        return new MergeResult<>(this);
+        return Optional.of(this);
     }
 
     private boolean anyRegexes(TextualRestrictions other) {
