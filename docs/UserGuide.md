@@ -202,7 +202,7 @@ Used by output serialisers where string output is required.
 
 For the formatting to be applied, the generated data must be applicable, and the `value` must be:
 
-* a string recognised by Java's `String.format` method
+* a string recognised by Java's [`String.format` method](https://docs.oracle.com/javase/8/docs/api/java/util/Formatter.html)
 * appropriate for the data type of `field`
 * not `null` (formatting will not be applied for null values)
 
