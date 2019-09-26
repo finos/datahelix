@@ -15,6 +15,8 @@ import java.time.temporal.ChronoUnit;
 import static com.scottlogic.deg.common.profile.Types.DATETIME;
 import static org.junit.jupiter.api.Assertions.*;
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.shazam.shazamcrest.MatcherAssert.assertThat;
+import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 
 class EqualToOffsetDateRelationTest {
 
@@ -44,7 +46,7 @@ class EqualToOffsetDateRelationTest {
 
         FieldSpec newSpec = relation.reduceToRelatedFieldSpec(initialSpec);
 
-        assertEquals(expectedSpec, newSpec);
+        assertThat(expectedSpec, sameBeanAs(newSpec));
     }
 
 
@@ -83,6 +85,6 @@ class EqualToOffsetDateRelationTest {
         Limit<OffsetDateTime> limit = new Limit<>(time, true);
 
         LinearRestrictions<OffsetDateTime> restrictions = LinearRestrictionsFactory.createDateTimeRestrictions(limit, limit);
-        return FieldSpec.fromType(DATETIME).withDateTimeRestrictions(restrictions);
+        return FieldSpec.fromType(DATETIME).withRestrictions(restrictions);
     }
 }

@@ -19,6 +19,7 @@ package com.scottlogic.deg.generator.fieldspecs;
 import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
+import com.scottlogic.deg.generator.restrictions.StringRestrictionsMerger;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
 import com.scottlogic.deg.generator.utils.SetUtils;
 
@@ -29,9 +30,8 @@ import java.util.stream.Collectors;
  * Returns a FieldSpec that permits only data permitted by all of its inputs
  */
 public class FieldSpecMerger {
-    StringRestrictionsMergeOperation stringRestrictionsMergeOperation = new StringRestrictionsMergeOperation();
-    NumericRestrictionsMergeOperation numericRestrictionsMergeOperation = new NumericRestrictionsMergeOperation(new LinearRestrictionsMerger());
-    DateTimeRestrictionsMergeOperation dateTimeRestrictionsMergeOperation = new DateTimeRestrictionsMergeOperation(new LinearRestrictionsMerger());
+    private final RestrictionsMergeOperation restrictionMergeOperation =
+        new RestrictionsMergeOperation(new LinearRestrictionsMerger(), new StringRestrictionsMerger());
 
     /**
      * Null parameters are permitted, and are synonymous with an empty FieldSpec
@@ -108,24 +108,10 @@ public class FieldSpecMerger {
     }
 
     private Optional<FieldSpec> combineRestrictions(FieldSpec left, FieldSpec right) {
-        RestrictionMergeOperation restrictionMergeOperation = getRestrictionMerger(left.getType());
-
         FieldSpec merged = restrictionMergeOperation.applyMergeOperation(left, right);
 
         merged = merged.withBlacklist(SetUtils.union(left.getBlacklist(), right.getBlacklist()));
 
         return addNullable(left, right, merged);
-    }
-
-    private RestrictionMergeOperation getRestrictionMerger(Types type) {
-        switch (type) {
-            case NUMERIC:
-                return numericRestrictionsMergeOperation;
-            case STRING:
-                return stringRestrictionsMergeOperation;
-            case DATETIME:
-                return dateTimeRestrictionsMergeOperation;
-        }
-        throw new UnsupportedOperationException("type not recognised");
     }
 }

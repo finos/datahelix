@@ -69,7 +69,7 @@ class FieldSpecValueGeneratorTests {
     @Test
     void generate_fieldSpecMustContainRestrictionNullAndNumericRestrictionApplied_returnsExpectedDataBagsForNumericRestriction() {
         FieldSpec fieldSpec = FieldSpec.fromType(NUMERIC)
-            .withNumericRestrictions(
+            .withRestrictions(
                 LinearRestrictionsFactory.createNumericRestrictions(
                     new Limit<>(new BigDecimal(10), false),
                     new Limit<>(new BigDecimal(30), false)));

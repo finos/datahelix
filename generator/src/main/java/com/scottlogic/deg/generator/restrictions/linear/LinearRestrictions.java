@@ -16,9 +16,9 @@
 
 package com.scottlogic.deg.generator.restrictions.linear;
 
+import com.scottlogic.deg.common.profile.constraintdetail.Granularity;
 import com.scottlogic.deg.generator.restrictions.TypedRestrictions;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 
 public class LinearRestrictions<T extends Comparable<T>> implements TypedRestrictions {
@@ -28,7 +28,7 @@ public class LinearRestrictions<T extends Comparable<T>> implements TypedRestric
     private final Granularity<T> granularity;
     private final Converter<T> converter;
 
-    LinearRestrictions(Limit<T> min, Limit<T> max, Granularity<T> granularity, Converter<T> converter) {
+    public LinearRestrictions(Limit<T> min, Limit<T> max, Granularity<T> granularity, Converter<T> converter) {
         if (min == null || max == null) {
             throw new IllegalArgumentException("linear restrictions cannot have null limits");
         }
@@ -86,13 +86,12 @@ public class LinearRestrictions<T extends Comparable<T>> implements TypedRestric
         LinearRestrictions<?> that = (LinearRestrictions<?>) o;
         return Objects.equals(min, that.min) &&
             Objects.equals(max, that.max) &&
-            Objects.equals(granularity, that.granularity) &&
-            Objects.equals(converter, that.converter);
+            Objects.equals(granularity, that.granularity);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(min, max, granularity, converter);
+        return Objects.hash(min, max, granularity);
     }
 
     @Override

@@ -66,7 +66,7 @@ public class MainConstraintReader {
             AtomicConstraintType atomicConstraintType = AtomicConstraintType.fromText((String) dto.is);
             Field field = fields.getByName(dto.field);
 
-            Object value = atomicConstraintValueReader.getValue(dto);
+            Object value = atomicConstraintValueReader.getValue(dto, field.type);
 
             ConstraintValueValidator.validate(field, atomicConstraintType, value);
 

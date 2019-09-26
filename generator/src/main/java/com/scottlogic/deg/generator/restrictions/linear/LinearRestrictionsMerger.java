@@ -16,30 +16,31 @@
 
 package com.scottlogic.deg.generator.restrictions.linear;
 
-import com.scottlogic.deg.generator.restrictions.MergeResult;
+import com.scottlogic.deg.common.profile.constraintdetail.Granularity;
+import com.scottlogic.deg.generator.restrictions.RestrictionsMerger;
+import com.scottlogic.deg.generator.restrictions.TypedRestrictions;
 
-public class LinearRestrictionsMerger<T extends Comparable<T>> {
+import java.util.Optional;
 
-    public MergeResult<LinearRestrictions<T>> merge(LinearRestrictions<T> left, LinearRestrictions<T> right){
-        if (left == null && right == null)
-            return new MergeResult<>(null);
-        if (left == null)
-            return new MergeResult<>(right);
-        if (right == null)
-            return new MergeResult<>(left);
+public class LinearRestrictionsMerger<T extends Comparable<T>> implements RestrictionsMerger {
 
-        Granularity<T> mergedGranularity = left.getGranularity().merge(right.getGranularity());
+    @Override
+    public Optional merge(TypedRestrictions left, TypedRestrictions right){
+        LinearRestrictions<T> leftCast = (LinearRestrictions<T>) left;
+        LinearRestrictions<T> rightCast = (LinearRestrictions<T>) right;
 
-        Limit<T> mergedMin = getHighest(left.getMin(), right.getMin(), mergedGranularity);
-        Limit<T> mergedMax = getLowest(left.getMax(), right.getMax(), mergedGranularity);
+        Granularity<T> mergedGranularity = leftCast.getGranularity().merge(rightCast.getGranularity());
 
-        LinearRestrictions<T> mergedRestriction = new LinearRestrictions<>(mergedMin, mergedMax, mergedGranularity, left.getConverter());
+        Limit<T> mergedMin = getHighest(leftCast.getMin(), rightCast.getMin(), mergedGranularity);
+        Limit<T> mergedMax = getLowest(leftCast.getMax(), rightCast.getMax(), mergedGranularity);
+
+        LinearRestrictions<T> mergedRestriction = new LinearRestrictions<>(mergedMin, mergedMax, mergedGranularity, leftCast.getConverter());
 
         if (isContradictory(mergedRestriction)) {
-            return MergeResult.unsuccessful();
+            return Optional.empty();
         }
 
-        return new MergeResult<>(mergedRestriction);
+        return Optional.of(mergedRestriction);
     }
 
     private boolean isContradictory(LinearRestrictions<T> restictions) {

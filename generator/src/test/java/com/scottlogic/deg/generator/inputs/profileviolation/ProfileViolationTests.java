@@ -92,10 +92,10 @@ public class ProfileViolationTests {
             Arguments.of(IsBeforeOrEqualToConstantDateTimeConstraint.class, sampleDate.plusDays(2)),
 
             Arguments.of(IsGranularToNumericConstraint.class, new ParsedGranularity(BigDecimal.ONE)),
-            Arguments.of(IsGreaterThanConstantConstraint.class, 100),
-            Arguments.of(IsGreaterThanOrEqualToConstantConstraint.class, 200),
-            Arguments.of(IsLessThanConstantConstraint.class, 300),
-            Arguments.of(IsLessThanOrEqualToConstantConstraint.class, 400)
+            Arguments.of(IsGreaterThanConstantConstraint.class, BigDecimal.valueOf(100)),
+            Arguments.of(IsGreaterThanOrEqualToConstantConstraint.class, BigDecimal.valueOf(200)),
+            Arguments.of(IsLessThanConstantConstraint.class, BigDecimal.valueOf(300)),
+            Arguments.of(IsLessThanOrEqualToConstantConstraint.class, BigDecimal.valueOf(400))
         );
     }
 

@@ -90,9 +90,9 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
     }
 
     private FieldValueSource getNumericSource(FieldSpec fieldSpec) {
-        LinearRestrictions<BigDecimal> restrictions = fieldSpec.getNumericRestrictions() == null
+        LinearRestrictions<BigDecimal> restrictions = fieldSpec.getRestrictions() == null
             ? LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT)
-            : fieldSpec.getNumericRestrictions();
+            : (LinearRestrictions<BigDecimal>) fieldSpec.getRestrictions();
 
         return new RealNumberFieldValueSource(
             restrictions,
@@ -100,7 +100,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
     }
 
     private FieldValueSource getStringSource(FieldSpec fieldSpec) {
-        StringRestrictions stringRestrictions = fieldSpec.getStringRestrictions();
+        StringRestrictions stringRestrictions = (StringRestrictions) fieldSpec.getRestrictions();
 
         if (stringRestrictions == null) {
             stringRestrictions = new StringRestrictionsFactory().forMaxLength(1000);
@@ -117,7 +117,7 @@ public class StandardFieldValueSourceEvaluator implements FieldValueSourceEvalua
     }
 
     private FieldValueSource getDateTimeSource(FieldSpec fieldSpec) {
-        LinearRestrictions<OffsetDateTime> restrictions = fieldSpec.getDateTimeRestrictions();
+        LinearRestrictions<OffsetDateTime> restrictions = (LinearRestrictions<OffsetDateTime>) fieldSpec.getRestrictions();
 
         return new DateTimeFieldValueSource(
             restrictions != null ? restrictions : LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT),

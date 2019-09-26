@@ -77,53 +77,28 @@ public class FieldSpec {
         return blacklist;
     }
 
-    public LinearRestrictions<BigDecimal> getNumericRestrictions() {
-        if (types == NUMERIC) {
-            return (LinearRestrictions<BigDecimal>) restrictions;
-        }
-        return null;
-    }
-
-    public StringRestrictions getStringRestrictions() {
-        if (types == STRING) {
-            return (StringRestrictions) restrictions;
-        }
-        return null;
+    public TypedRestrictions getRestrictions() {
+        return restrictions;
     }
 
     public Types getType() {
         return types;
     }
 
-    public LinearRestrictions<OffsetDateTime> getDateTimeRestrictions() {
-        if (types == DATETIME) {
-            return (LinearRestrictions<OffsetDateTime>) restrictions;
-        }
-        return null;
-    }
-
     public FieldSpec withWhitelist(DistributedSet<Object> whitelist) {
         return new FieldSpec(whitelist, null, nullable, blacklist, types);
     }
 
-    public FieldSpec withNumericRestrictions(LinearRestrictions<BigDecimal> numericRestrictions) {
-        return new FieldSpec(null, numericRestrictions, nullable, blacklist, NUMERIC);
+    public FieldSpec withRestrictions(TypedRestrictions restrictions) {
+        return new FieldSpec(null, restrictions, nullable, blacklist, types);
     }
 
     public FieldSpec withBlacklist(Set<Object> blacklist) {
         return new FieldSpec(whitelist, restrictions, nullable, blacklist, types);
     }
 
-    public FieldSpec withStringRestrictions(StringRestrictions stringRestrictions) {
-        return new FieldSpec(null, stringRestrictions, nullable, blacklist, STRING);
-    }
-
     public FieldSpec withNotNull() {
         return new FieldSpec(whitelist, restrictions, false, blacklist, types);
-    }
-
-    public FieldSpec withDateTimeRestrictions(LinearRestrictions<OffsetDateTime> dateTimeRestrictions) {
-        return new FieldSpec(null, dateTimeRestrictions, nullable, blacklist, DATETIME);
     }
 
     @Override

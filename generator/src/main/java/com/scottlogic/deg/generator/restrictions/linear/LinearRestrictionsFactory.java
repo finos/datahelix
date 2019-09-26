@@ -19,7 +19,7 @@ public class LinearRestrictionsFactory {
     public static LinearRestrictions<OffsetDateTime> createDateTimeRestrictions(Limit<OffsetDateTime> min, Limit<OffsetDateTime> max, Timescale granularity) {
         Limit<OffsetDateTime> cappedMin = capMin(min, ISO_MIN_DATE, ISO_MAX_DATE);
         Limit<OffsetDateTime> cappedMax = capMax(max, ISO_MIN_DATE, ISO_MAX_DATE);
-        return new LinearRestrictions<>(cappedMin, cappedMax, new DateTimeGranularity(granularity), DATE_TIME_CONVERTER);
+        return new LinearRestrictions<>(cappedMin, cappedMax, granularity, DATE_TIME_CONVERTER);
     }
 
     public static LinearRestrictions<BigDecimal> createNumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max) {

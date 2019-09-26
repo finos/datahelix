@@ -29,6 +29,7 @@ import com.scottlogic.deg.orchestrator.violate.ViolateModule;
 import org.junit.Assert;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -48,6 +49,19 @@ public class CucumberTestHelper {
     }
 
     public void runGenerationProcess() {
+        if (testState.expectExceptions){
+            generateAndExpectExceptions();
+        }
+        else {
+            try {
+                doGeneration();
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
+        }
+    }
+
+    private void generateAndExpectExceptions() {
         try {
             doGeneration();
         } catch (IOException e) {

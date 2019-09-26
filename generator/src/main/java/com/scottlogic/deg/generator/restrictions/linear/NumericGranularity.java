@@ -16,6 +16,8 @@
 
 package com.scottlogic.deg.generator.restrictions.linear;
 
+import com.scottlogic.deg.common.profile.constraintdetail.Granularity;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
@@ -47,10 +49,6 @@ public class NumericGranularity implements Granularity<BigDecimal> {
     @Override
     public BigDecimal trimToGranularity(BigDecimal value) {
         return value.setScale(decimalPlaces, RoundingMode.DOWN);
-    }
-
-    public int getDecimalPlaces() {
-        return decimalPlaces;
     }
 
     @Override

@@ -40,7 +40,7 @@ class DateTimeRestrictionsTests {
     private static final OffsetDateTime MAX = granularToMillis(Defaults.ISO_MAX_DATE);
 
     private static OffsetDateTime granularToMillis(OffsetDateTime date) {
-        return Timescale.MILLIS.getGranularityFunction().apply(date);
+        return Timescale.MILLIS.trimToGranularity(date);
     }
 
     @Test
