@@ -16,9 +16,9 @@
 
 package com.scottlogic.deg.generator.restrictions.linear;
 
+import com.scottlogic.deg.common.profile.constraintdetail.Granularity;
 import com.scottlogic.deg.generator.restrictions.TypedRestrictions;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 
 public class LinearRestrictions<T extends Comparable<T>> implements TypedRestrictions {

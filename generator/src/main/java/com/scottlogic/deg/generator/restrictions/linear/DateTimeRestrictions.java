@@ -16,10 +16,10 @@
 
 package com.scottlogic.deg.generator.restrictions.linear;
 
+import com.scottlogic.deg.common.profile.constraintdetail.Granularity;
 import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
 
 import java.time.OffsetDateTime;
-import java.util.Objects;
 
 import static com.scottlogic.deg.common.util.Defaults.*;
 
@@ -30,10 +30,6 @@ public class DateTimeRestrictions extends LinearRestrictions<OffsetDateTime> {
 
     public DateTimeRestrictions(Limit<OffsetDateTime> min, Limit<OffsetDateTime> max) {
         this(min, max, DEFAULT_DATETIME_GRANULARITY);
-    }
-
-    public DateTimeRestrictions(Limit<OffsetDateTime> min, Limit<OffsetDateTime> max, Timescale granularity) {
-        this(min, max, new DateTimeGranularity(granularity));
     }
 
     public DateTimeRestrictions(Limit<OffsetDateTime> min, Limit<OffsetDateTime> max, Granularity<OffsetDateTime> granularity){

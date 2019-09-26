@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.generator.restrictions.linear;
 
+import com.scottlogic.deg.common.profile.constraintdetail.Granularity;
 import com.scottlogic.deg.generator.restrictions.RestrictionsMerger;
 import com.scottlogic.deg.generator.restrictions.TypedRestrictions;
 

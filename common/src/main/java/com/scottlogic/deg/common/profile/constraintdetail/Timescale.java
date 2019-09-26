@@ -28,7 +28,7 @@ import java.util.stream.Stream;
  * See getMostCoarse(Timescale, Timescale) for more info.
  *
  */
-public enum Timescale {
+public enum Timescale implements Granularity<OffsetDateTime> {
 
     MILLIS("millis",
         current -> current.plusNanos(1_000_000),
@@ -72,14 +72,6 @@ public enum Timescale {
         this.granularityFunction = granularityFunction;
     }
 
-    public static Timescale getMostCoarse(Timescale a, Timescale b) {
-        if (a == null || b == null) {
-            throw new IllegalArgumentException("Requires not null arguments.");
-        }
-        OffsetDateTime initial = OffsetDateTime.MIN;
-        return a.getNext().apply(initial).compareTo(b.getNext().apply(initial)) <= 0 ? b : a;
-    }
-
     public static Timescale getByName(String name) {
 
         String enumNames = Stream.of(Timescale.values())
@@ -93,17 +85,32 @@ public enum Timescale {
             .orElseThrow(() -> new IllegalArgumentException(String.format("Must be one of the supported datetime units (%s)", enumNames)));
     }
 
-    public Function<OffsetDateTime, OffsetDateTime> getNext() {
-        return next;
-    }
-
-    public Function<OffsetDateTime, OffsetDateTime> getGranularityFunction() {
-        return granularityFunction;
-    }
-
     private static int nanoToMilli(int nano) {
         int factor = NANOS_IN_MILLIS;
         return (nano / factor) * factor;
+    }
+
+    @Override
+    public boolean isCorrectScale(OffsetDateTime value) {
+        OffsetDateTime trimmed = trimToGranularity(value);
+        return value.equals(trimmed);
+    }
+
+    @Override
+    public Granularity<OffsetDateTime> merge(Granularity<OffsetDateTime> otherGranularity) {
+        Timescale other = (Timescale) otherGranularity;
+        OffsetDateTime initial = OffsetDateTime.MIN;
+        return getNext(initial).compareTo(other.getNext(initial)) <= 0 ? other : this;
+    }
+
+    @Override
+    public OffsetDateTime getNext(OffsetDateTime value) {
+        return next.apply(value);
+    }
+
+    @Override
+    public OffsetDateTime trimToGranularity(OffsetDateTime value) {
+        return granularityFunction.apply(value);
     }
 
     @Override
