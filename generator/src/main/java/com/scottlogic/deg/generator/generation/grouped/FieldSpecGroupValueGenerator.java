@@ -38,21 +38,30 @@ import static com.scottlogic.deg.generator.generation.grouped.FieldSpecGroupDate
 public class FieldSpecGroupValueGenerator {
 
     private final FieldSpecValueGenerator underlyingGenerator;
+    private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
 
     public FieldSpecGroupValueGenerator(FieldSpecValueGenerator underlyingGenerator) {
         this.underlyingGenerator = underlyingGenerator;
     }
 
     public Stream<DataBag> generate(FieldSpecGroup group) {
+        checkOnlyPairwiseRelationsExist(group.relations());
+
         Field first = SetUtils.firstIteratorElement(group.fieldSpecs().keySet());
 
-        FieldSpecGroup groupRespectingFirstField = initialAdjustments(first, group);
-        FieldSpec firstSpec = groupRespectingFirstField.fieldSpecs().get(first);
+        FieldSpec firstSpec = updateFirstSpecFromRelations(first, group);
 
         Stream<DataBag> firstDataBagValues = underlyingGenerator.generate(first, firstSpec)
             .map(value -> toDataBag(first, value));
 
-        return createRemainingDataBags(firstDataBagValues, first, groupRespectingFirstField);
+        FieldSpecGroup updatedGroup = updateGroup(first, firstSpec, group);
+        return createRemainingDataBags(firstDataBagValues, first, updatedGroup);
+    }
+
+    private FieldSpecGroup updateGroup(Field first, FieldSpec firstSpec, FieldSpecGroup group) {
+        HashMap<Field, FieldSpec> newFieldSpecs = new HashMap<>(group.fieldSpecs());
+        newFieldSpecs.replace(first, firstSpec);
+        return new FieldSpecGroup(newFieldSpecs, group.relations());
     }
 
     private static DataBag toDataBag(Field field, DataBagValue value) {
@@ -61,29 +70,24 @@ public class FieldSpecGroupValueGenerator {
         return new DataBag(map);
     }
 
-    private static FieldSpecGroup initialAdjustments(Field first, FieldSpecGroup group) {
-        checkOnlyPairwiseRelationsExist(group.relations());
-
-        Map<Field, FieldSpec> mutatingSpecs = new HashMap<>(group.fieldSpecs());
+    private  FieldSpec updateFirstSpecFromRelations(Field first, FieldSpecGroup group) {
+        FieldSpec mutatingSpec = group.fieldSpecs().get(first);
 
         for (FieldSpecRelations relation : group.relations()) {
-            FieldSpec merged = createMergedSpecFromRelation(first, relation, group)
+            FieldSpec reduced = createMergedSpecFromRelation(first, relation, group);
+
+            mutatingSpec = fieldSpecMerger.merge(reduced, mutatingSpec)
                 .orElseThrow(() -> new IllegalStateException("Failed to merge field specs in related fields"));
-            mutatingSpecs.replace(first, merged);
         }
 
-        return new FieldSpecGroup(mutatingSpecs, group.relations());
+        return mutatingSpec;
     }
 
-    private static Optional<FieldSpec> createMergedSpecFromRelation(Field first,
-                                                                    FieldSpecRelations relation,
-                                                                    FieldSpecGroup group) {
+    private static FieldSpec createMergedSpecFromRelation(Field first,
+                                                          FieldSpecRelations relation,
+                                                          FieldSpecGroup group) {
         Field other = relation.main().equals(first) ? relation.other() : relation.main();
-
-        FieldSpecMerger merger = new FieldSpecMerger();
-
-        FieldSpec reduced = relation.inverse().reduceToRelatedFieldSpec(group.fieldSpecs().get(other));
-        return merger.merge(reduced, group.fieldSpecs().get(first));
+        return relation.inverse().reduceToRelatedFieldSpec(group.fieldSpecs().get(other));
     }
 
     private static void checkOnlyPairwiseRelationsExist(Collection<FieldSpecRelations> relations) {
