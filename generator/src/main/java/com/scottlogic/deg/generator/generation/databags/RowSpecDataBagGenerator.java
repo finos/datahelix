@@ -18,6 +18,7 @@ package com.scottlogic.deg.generator.generation.databags;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
@@ -35,14 +36,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class RowSpecDataBagGenerator {
-    private final FieldSpecValueGenerator generator;
+    private final FieldSpecGroupValueGenerator groupGenerator;
     private final CombinationStrategy combinationStrategy;
 
     @Inject
     public RowSpecDataBagGenerator(
-        FieldSpecValueGenerator generator,
+        FieldSpecGroupValueGenerator groupGenerator ,
         CombinationStrategy combinationStrategy) {
-        this.generator = generator;
+        this.groupGenerator = groupGenerator;
         this.combinationStrategy = combinationStrategy;
     }
 
@@ -63,8 +64,6 @@ public class RowSpecDataBagGenerator {
             .collect(Collectors.toMap(field -> field, rowSpec::getSpecForField));
 
         FieldSpecGroup specGroup = new FieldSpecGroup(fieldSpecMap, relations);
-
-        FieldSpecGroupValueGenerator groupGenerator = new FieldSpecGroupValueGenerator(generator);
 
         return groupGenerator.generate(specGroup);
     }

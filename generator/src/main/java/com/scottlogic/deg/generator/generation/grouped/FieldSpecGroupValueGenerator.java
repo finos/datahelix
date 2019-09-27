@@ -17,37 +17,42 @@
 
 package com.scottlogic.deg.generator.generation.grouped;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.util.FlatMappingSpliterator;
+import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
-import com.scottlogic.deg.generator.generation.FieldPair;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.databags.*;
 import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.time.OffsetDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.scottlogic.deg.common.util.FlatMappingSpliterator.flatMap;
 import static com.scottlogic.deg.generator.generation.grouped.FieldSpecGroupDateHelper.adjustBoundsOfDate;
 
 public class FieldSpecGroupValueGenerator {
 
+    private final CombinationStrategyType combinationStrategy;
     private final FieldSpecValueGenerator underlyingGenerator;
     private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
 
-    public FieldSpecGroupValueGenerator(FieldSpecValueGenerator underlyingGenerator) {
+    @Inject
+    public FieldSpecGroupValueGenerator(FieldSpecValueGenerator underlyingGenerator, CombinationStrategyType combinationStrategy) {
         this.underlyingGenerator = underlyingGenerator;
+        this.combinationStrategy = combinationStrategy;
     }
 
     public Stream<DataBag> generate(FieldSpecGroup group) {
-        checkOnlyPairwiseRelationsExist(group.relations());
-
         Field first = SetUtils.firstIteratorElement(group.fieldSpecs().keySet());
+        if (group.fieldSpecs().size() == 1){
+            return underlyingGenerator.generate(first, group.fieldSpecs().get(first))
+                .map(val -> toDataBag(first, val));
+        }
 
         FieldSpec firstSpec = updateFirstSpecFromRelations(first, group);
         FieldSpecGroup updatedGroup = removeSpecFromGroup(first, group);
@@ -58,22 +63,11 @@ public class FieldSpecGroupValueGenerator {
         return createRemainingDataBags(firstDataBagValues, first, updatedGroup);
     }
 
-    private FieldSpecGroup removeSpecFromGroup(Field first, FieldSpecGroup group) {
-        HashMap<Field, FieldSpec> newFieldSpecs = new HashMap<>(group.fieldSpecs());
-        newFieldSpecs.remove(first);
-        return new FieldSpecGroup(newFieldSpecs, group.relations());
-    }
-
-    private DataBag toDataBag(Field field, DataBagValue value) {
-        Map<Field, DataBagValue> map = new HashMap<>();
-        map.put(field, value);
-        return new DataBag(map);
-    }
-
     private FieldSpec updateFirstSpecFromRelations(Field first, FieldSpecGroup group) {
         FieldSpec mutatingSpec = group.fieldSpecs().get(first);
 
         for (FieldSpecRelations relation : group.relations()) {
+            //TODO only works pairwise
             FieldSpec reduced = createMergedSpecFromRelation(first, relation, group);
 
             mutatingSpec = fieldSpecMerger.merge(reduced, mutatingSpec)
@@ -90,103 +84,49 @@ public class FieldSpecGroupValueGenerator {
         return relation.inverse().reduceToRelatedFieldSpec(group.fieldSpecs().get(other));
     }
 
-    private void checkOnlyPairwiseRelationsExist(Collection<FieldSpecRelations> relations) {
-        Set<FieldPair> pairs = new HashSet<>();
-        Set<Field> usedFields = new HashSet<>();
-        for (FieldSpecRelations relation : relations) {
-            FieldPair pair = new FieldPair(relation.main(), relation.other());
-            if (!pairs.contains(pair) &&
-                (usedFields.contains(relation.main()) || usedFields.contains(relation.other()))) {
-                throw new UnsupportedOperationException("Using more than two fields in a related dependency"
-                    + " is currently unsupported.");
-            }
-            pairs.add(pair);
-            usedFields.add(relation.main());
-            usedFields.add(relation.other());
-        }
+
+    private Stream<DataBag> createRemainingDataBags(Stream<DataBag> generatedDataBsgs, Field field, FieldSpecGroup group) {
+        return flatMap(
+            generatedDataBsgs,
+            dataBag -> generateRemainingData(field, dataBag, group));
+    }
+
+    private Stream<DataBag> generateRemainingData(Field field, DataBag dataBag, FieldSpecGroup group) {
+        FieldSpecGroup newGroup = adjustBounds(field, dataBag.getDataBagValue(field), group);
+
+        Stream<DataBag> dataBagStream = generate(newGroup)
+            .map(otherData -> DataBag.merge(dataBag, otherData));
+        return applyCombinationStrategy(dataBagStream);
     }
 
     private FieldSpecGroup adjustBounds(Field field, DataBagValue value, FieldSpecGroup group) {
-        Object object = value.getValue();
-
-        if (object instanceof OffsetDateTime) {
-            return adjustBoundsOfDate(field, (OffsetDateTime) object, group);
+        if (value.getValue() instanceof OffsetDateTime) {
+            return adjustBoundsOfDate(field, (OffsetDateTime) value.getValue(), group);
         }
-
         return group;
     }
 
-
-    private Stream<DataBag> createRemainingDataBags(Stream<DataBag> stream, Field field, FieldSpecGroup group) {
-        Stream<DataBagGroupWrapper> initial = stream
-            .map(dataBag -> new DataBagGroupWrapper(dataBag, group))
-            .map(wrapper -> adjustWrapperBounds(wrapper, field));
-        Set<Field> toProcess = filterFromSet(group.fieldSpecs().keySet(), field);
-
-        Stream<DataBagGroupWrapper> wrappedStream = recursiveMap(initial, toProcess);
-
-        return wrappedStream.map(DataBagGroupWrapper::dataBag);
-    }
-
-    private DataBagGroupWrapper adjustWrapperBounds(DataBagGroupWrapper wrapper, Field field) {
-        DataBagValue value = wrapper.dataBag().getDataBagValue(field);
-        FieldSpecGroup newGroup = adjustBounds(field, value, wrapper.group());
-        return new DataBagGroupWrapper(wrapper.dataBag(), newGroup);
-
-    }
-
-    private Stream<DataBagGroupWrapper> recursiveMap(Stream<DataBagGroupWrapper> wrapperStream,
-                                                            Set<Field> fieldsToProcess) {
-        if (fieldsToProcess.isEmpty()) {
-            return wrapperStream;
-        }
-
-        Field field = SetUtils.firstIteratorElement(fieldsToProcess);
-
-        Stream<DataBagGroupWrapper> mappedStream =
-            FlatMappingSpliterator.flatMap(wrapperStream, wrapper -> acceptNextValue(wrapper, field));
-
-        Set<Field> remainingFields = filterFromSet(fieldsToProcess, field);
-
-        return recursiveMap(mappedStream, remainingFields);
-    }
-
-    private <T> Set<T> filterFromSet(Set<T> original, T element) {
-        return original.stream()
-            .filter(f -> !f.equals(element))
-            .collect(Collectors.toSet());
-    }
-
-    private Stream<DataBagGroupWrapper> acceptNextValue(DataBagGroupWrapper wrapper, Field field) {
-        if (underlyingGenerator.isRandom()) {//TODO replace with combination strategy
-            return Stream.of(acceptNextRandomValue(wrapper, field));
-        } else {
-            return acceptNextNonRandomValue(wrapper, field);
+    private Stream<DataBag> applyCombinationStrategy(Stream<DataBag> dataBagStream) {
+        switch (combinationStrategy) {
+            case EXHAUSTIVE:
+                return dataBagStream;
+            case MINIMAL:
+            case PINNING:
+                return dataBagStream.limit(1);
+            default:
+                throw new UnsupportedOperationException("no combination strategy provided");
         }
     }
 
-    private DataBagGroupWrapper acceptNextRandomValue(DataBagGroupWrapper wrapper, Field field) {
-        FieldSpecGroup group = wrapper.group();
-
-        DataBagValue nextValue = underlyingGenerator.generate(field, group.fieldSpecs().get(field)).findFirst().get();
-
-        DataBag combined = DataBag.merge(toDataBag(field, nextValue), wrapper.dataBag());
-
-        FieldSpecGroup newGroup = adjustBounds(field, nextValue, group);
-
-        return new DataBagGroupWrapper(combined, newGroup);
+    private DataBag toDataBag(Field field, DataBagValue value) {
+        Map<Field, DataBagValue> map = new HashMap<>();
+        map.put(field, value);
+        return new DataBag(map);
     }
 
-    private Stream<DataBagGroupWrapper> acceptNextNonRandomValue(DataBagGroupWrapper wrapper, Field field) {
-        return underlyingGenerator
-            .generate(field, wrapper.group().fieldSpecs().get(field))
-            .map(value -> getWrappedDataBag(wrapper, field, value));
-    }
-
-    private DataBagGroupWrapper getWrappedDataBag(DataBagGroupWrapper wrapper, Field field, DataBagValue value) {
-        DataBag dataBag = toDataBag(field, value);
-        DataBag merged = DataBag.merge(dataBag, wrapper.dataBag());
-
-        return new DataBagGroupWrapper(merged, adjustBounds(field, value, wrapper.group()));
+    private FieldSpecGroup removeSpecFromGroup(Field first, FieldSpecGroup group) {
+        HashMap<Field, FieldSpec> newFieldSpecs = new HashMap<>(group.fieldSpecs());
+        newFieldSpecs.remove(first);
+        return new FieldSpecGroup(newFieldSpecs, group.relations());
     }
 }
