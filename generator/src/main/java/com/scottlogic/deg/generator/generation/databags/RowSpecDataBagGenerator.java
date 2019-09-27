@@ -23,7 +23,6 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
-import com.scottlogic.deg.generator.generation.grouped.FieldGroup;
 import com.scottlogic.deg.generator.generation.grouped.FieldSpecGroupValueGenerator;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.grouped.RowSpecGrouper;
@@ -36,35 +35,23 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class RowSpecDataBagGenerator {
-    private final FieldSpecGroupValueGenerator groupGenerator;
+    private final FieldSpecGroupValueGenerator generator;
     private final CombinationStrategy combinationStrategy;
 
     @Inject
     public RowSpecDataBagGenerator(
-        FieldSpecGroupValueGenerator groupGenerator ,
+        FieldSpecGroupValueGenerator generator,
         CombinationStrategy combinationStrategy) {
-        this.groupGenerator = groupGenerator;
+        this.generator = generator;
         this.combinationStrategy = combinationStrategy;
     }
 
     public Stream<DataBag> createDataBags(RowSpec rowSpec) {
-        Stream<Supplier<Stream<DataBag>>> dataBagsForGroups = RowSpecGrouper.createGroups(rowSpec).stream()
-            .map(group -> () -> generateDataForGroup(rowSpec, group));
+        Stream<Supplier<Stream<DataBag>>> dataBagsForGroups =
+            RowSpecGrouper.createGroups(rowSpec).stream()
+                .map(group -> () -> generator.generate(group));
 
         return combinationStrategy.permute(dataBagsForGroups);
     }
 
-    private Stream<DataBag> generateDataForGroup(RowSpec rowSpec, FieldGroup group) {
-        List<Field> fields = group.fields();
-        List<FieldSpecRelations> relations = rowSpec.getRelations().stream()
-            .filter(relation -> fields.contains(relation.main()) || fields.contains(relation.other()))
-            .collect(Collectors.toList());
-
-        Map<Field, FieldSpec> fieldSpecMap = fields.stream()
-            .collect(Collectors.toMap(field -> field, rowSpec::getSpecForField));
-
-        FieldSpecGroup specGroup = new FieldSpecGroup(fieldSpecMap, relations);
-
-        return groupGenerator.generate(specGroup);
-    }
 }

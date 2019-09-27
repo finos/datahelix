@@ -20,6 +20,7 @@ package com.scottlogic.deg.generator.generation.grouped;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
 import org.junit.jupiter.api.Test;
@@ -48,7 +49,7 @@ class RowSpecGrouperTest {
 
         RowSpec spec = new RowSpec(fields, fieldSpecMap, relations);
 
-        Set<FieldGroup> groups = RowSpecGrouper.createGroups(spec);
+        Set<FieldSpecGroup> groups = RowSpecGrouper.createGroups(spec);
 
         assertEquals(1, groups.size());
     }
@@ -67,7 +68,7 @@ class RowSpecGrouperTest {
 
         RowSpec spec = new RowSpec(fields, fieldSpecMap, relations);
 
-        Set<FieldGroup> groups = RowSpecGrouper.createGroups(spec);
+        Set<FieldSpecGroup> groups = RowSpecGrouper.createGroups(spec);
 
         assertEquals(2, groups.size());
     }
@@ -85,7 +86,7 @@ class RowSpecGrouperTest {
 
         RowSpec spec = new RowSpec(fields, fieldSpecMap, relations);
 
-        Set<FieldGroup> groups = RowSpecGrouper.createGroups(spec);
+        Set<FieldSpecGroup> groups = RowSpecGrouper.createGroups(spec);
 
         assertEquals(3, groups.size());
     }
@@ -103,7 +104,7 @@ class RowSpecGrouperTest {
 
         RowSpec spec = new RowSpec(fields, fieldSpecMap, relations);
 
-        Set<FieldGroup> groups = RowSpecGrouper.createGroups(spec);
+        Set<FieldSpecGroup> groups = RowSpecGrouper.createGroups(spec);
 
         assertEquals(1, groups.size());
     }
@@ -124,7 +125,7 @@ class RowSpecGrouperTest {
 
         RowSpec spec = new RowSpec(fields, fieldSpecMap, relations);
 
-        Set<FieldGroup> groups = RowSpecGrouper.createGroups(spec);
+        Set<FieldSpecGroup> groups = RowSpecGrouper.createGroups(spec);
 
         assertEquals(1, groups.size());
     }
@@ -148,7 +149,7 @@ class RowSpecGrouperTest {
 
         RowSpec spec = new RowSpec(fields, fieldSpecMap, relations);
 
-        Set<FieldGroup> groups = RowSpecGrouper.createGroups(spec);
+        Set<FieldSpecGroup> groups = RowSpecGrouper.createGroups(spec);
 
         assertEquals(2, groups.size());
     }
@@ -168,7 +169,7 @@ class RowSpecGrouperTest {
 
         RowSpec spec = new RowSpec(fields, fieldSpecMap, relations);
 
-        Set<FieldGroup> groups = RowSpecGrouper.createGroups(spec);
+        Set<FieldSpecGroup> groups = RowSpecGrouper.createGroups(spec);
 
         assertEquals(1, groups.size());
     }
