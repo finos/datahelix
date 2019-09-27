@@ -78,4 +78,8 @@ public class CombiningFieldValueSource implements FieldValueSource {
     public int hashCode() {
         return Objects.hash(underlyingSources);
     }
+
+    public List<FieldValueSource<Object>> getUnderlyingSources() {
+        return underlyingSources;
+    }
 }

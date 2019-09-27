@@ -50,7 +50,7 @@ class FieldSpecValueGeneratorTests {
             .withNotNull();
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
             INTERESTING,
-            new StandardFieldValueSourceEvaluator(),
+            new FieldValueSourceEvaluator(),
             new JavaUtilRandomNumberGenerator());
 
         final Set<DataBagValue> result = fieldSpecFulfiller.generate(createField(null), fieldSpec).collect(Collectors.toSet());
@@ -71,7 +71,7 @@ class FieldSpecValueGeneratorTests {
                     new Limit<>(new BigDecimal(30), false)));
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
             INTERESTING,
-            new StandardFieldValueSourceEvaluator(),
+            new FieldValueSourceEvaluator(),
             new JavaUtilRandomNumberGenerator());
 
         final Set<DataBagValue> result =
@@ -105,11 +105,7 @@ class FieldSpecValueGeneratorTests {
             fieldValueSource = mock(FieldValueSource.class);
 
             randomNumberGenerator = mock(JavaUtilRandomNumberGenerator.class);
-
-            List<FieldValueSource> list = new ArrayList<>();
-            list.add(fieldValueSource);
-
-            when(fieldValueSourceEvaluator.getFieldValueSources(any(), any())).thenReturn(list);
+            when(fieldValueSourceEvaluator.getFieldValueSources(any(), any())).thenReturn(fieldValueSource);
             when(fieldValueSource.generateAllValues()).thenReturn(Stream.empty());
             when(fieldValueSource.generateInterestingValues()).thenReturn(Stream.empty());
             when(fieldValueSource.generateRandomValues(randomNumberGenerator)).thenReturn(Stream.empty());

@@ -63,7 +63,6 @@ public class GeneratorModule extends AbstractModule {
         bind(ProfileValidator.class).to(UniquenessValidator.class);
         bind(DataGeneratorMonitor.class).to(AbstractDataGeneratorMonitor.class);
         bind(DataGenerator.class).to(DecisionTreeDataGenerator.class);
-        bind(FieldValueSourceEvaluator.class).to(StandardFieldValueSourceEvaluator.class);
 
         bind(JavaUtilRandomNumberGenerator.class)
             .toInstance(new JavaUtilRandomNumberGenerator(OffsetDateTime.now().getNano()));
