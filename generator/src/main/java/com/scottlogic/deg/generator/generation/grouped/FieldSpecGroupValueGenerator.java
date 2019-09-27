@@ -50,17 +50,17 @@ public class FieldSpecGroupValueGenerator {
         Field first = SetUtils.firstIteratorElement(group.fieldSpecs().keySet());
 
         FieldSpec firstSpec = updateFirstSpecFromRelations(first, group);
+        FieldSpecGroup updatedGroup = removeSpecFromGroup(first, group);
 
         Stream<DataBag> firstDataBagValues = underlyingGenerator.generate(first, firstSpec)
             .map(value -> toDataBag(first, value));
 
-        FieldSpecGroup updatedGroup = updateGroup(first, firstSpec, group);
         return createRemainingDataBags(firstDataBagValues, first, updatedGroup);
     }
 
-    private FieldSpecGroup updateGroup(Field first, FieldSpec firstSpec, FieldSpecGroup group) {
+    private FieldSpecGroup removeSpecFromGroup(Field first, FieldSpecGroup group) {
         HashMap<Field, FieldSpec> newFieldSpecs = new HashMap<>(group.fieldSpecs());
-        newFieldSpecs.replace(first, firstSpec);
+        newFieldSpecs.remove(first);
         return new FieldSpecGroup(newFieldSpecs, group.relations());
     }
 
