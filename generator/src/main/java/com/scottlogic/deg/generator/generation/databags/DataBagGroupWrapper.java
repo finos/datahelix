@@ -17,29 +17,22 @@
 package com.scottlogic.deg.generator.generation.databags;
 
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
-import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 
 public final class DataBagGroupWrapper {
 
     private final DataBag dataBag;
     private final FieldSpecGroup group;
-    private final FieldSpecValueGenerator generator;
 
     public DataBagGroupWrapper(DataBag databag,
-                               FieldSpecGroup group,
-                               FieldSpecValueGenerator generator) {
+                               FieldSpecGroup group) {
         this.dataBag = databag;
         this.group = group;
-        this.generator = generator;
     }
 
     public DataBag dataBag() {
         return dataBag;
     }
 
-    public FieldSpecValueGenerator generator() {
-        return generator;
-    }
 
     public FieldSpecGroup group() {
         return group;
