@@ -45,7 +45,8 @@ public class RestrictionsMergeOperation {
             return FieldSpec.fromRestriction(leftRestriction);
         }
 
-        Optional<TypedRestrictions> mergeResult = getMerger(left.getRestrictions()).merge(leftRestriction, rightRestriction);
+        Optional<TypedRestrictions> mergeResult = getMerger(leftRestriction)
+            .merge(leftRestriction, rightRestriction);
 
         if (!mergeResult.isPresent()){
             return FieldSpec.nullOnly();

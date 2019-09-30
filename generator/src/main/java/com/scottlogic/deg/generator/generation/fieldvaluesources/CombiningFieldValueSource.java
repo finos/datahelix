@@ -16,10 +16,8 @@
 
 package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
-import com.scottlogic.deg.common.util.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
@@ -27,7 +25,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.scottlogic.deg.common.util.FlatMappingSpliterator.flatMap;
-import static com.scottlogic.deg.generator.utils.SetUtils.stream;
 
 public class CombiningFieldValueSource implements FieldValueSource {
     private final List<FieldValueSource<Object>> underlyingSources;
@@ -55,10 +52,15 @@ public class CombiningFieldValueSource implements FieldValueSource {
     @Override
     public Stream<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
         return flatMap(
-            Stream.generate(() -> getRandomSource(randomNumberGenerator)
-                .generateRandomValues(randomNumberGenerator)
-                .limit(1)),
+            Stream.generate(() -> getOneRandomValue(randomNumberGenerator)),
             Function.identity());
+    }
+
+    private Stream<Object> getOneRandomValue(RandomNumberGenerator randomNumberGenerator) {
+        //limit(1) instead of findFirst required so null can be returned
+        return getRandomSource(randomNumberGenerator)
+            .generateRandomValues(randomNumberGenerator)
+            .limit(1);
     }
 
     private FieldValueSource<Object> getRandomSource(RandomNumberGenerator randomNumberGenerator) {

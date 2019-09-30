@@ -94,7 +94,7 @@ public class ConstraintReducer {
         final Stream<FieldSpec> rootConstraintsStream =
             StreamSupport
                 .stream(rootConstraints.spliterator(), false)
-                .map(atomicConstraint -> fieldSpecFactory.construct(field, atomicConstraint));
+                .map(fieldSpecFactory::construct);
 
         return rootConstraintsStream
             .map(Optional::of)

@@ -18,9 +18,6 @@ package com.scottlogic.deg.generator.generation.string.generators;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
-import java.util.function.Function;
-import java.util.stream.Stream;
-
 public interface StringGenerator extends FieldValueSource<String> {
     boolean matches(String string);
 

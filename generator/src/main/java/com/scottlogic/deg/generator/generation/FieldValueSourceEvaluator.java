@@ -46,7 +46,7 @@ public class FieldValueSourceEvaluator {
         Optional<FieldValueSource> source = getSource(type, fieldSpec);
 
         if (!fieldSpec.isNullable()){
-            return source.get();
+            return source.orElseThrow(() -> new UnsupportedOperationException("Cannot get fieldValueSource for contradictory fieldspec"));
         }
 
         if (!source.isPresent()){

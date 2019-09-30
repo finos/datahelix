@@ -49,7 +49,7 @@ public class TreePruner {
      */
     public Merged<ConstraintNode> pruneConstraintNode(ConstraintNode constraintNode, Field field, DataBagValue value) {
         Map<Field, FieldSpec> fieldToSpec = new HashMap<>();
-        fieldToSpec.put(field, fieldSpecHelper.getFieldSpecForValue(field, value));
+        fieldToSpec.put(field, fieldSpecHelper.getFieldSpecForValue(value));
         return pruneConstraintNode(constraintNode, fieldToSpec);
     }
 

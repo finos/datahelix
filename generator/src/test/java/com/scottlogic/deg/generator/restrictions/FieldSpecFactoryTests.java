@@ -38,8 +38,8 @@ class FieldSpecFactoryTests {
             10
         );
 
-        final FieldSpec firstInstance = fieldSpecFactory.construct(testField, constraint);
-        final FieldSpec secondInstance = fieldSpecFactory.construct(testField, constraint);
+        final FieldSpec firstInstance = fieldSpecFactory.construct(constraint);
+        final FieldSpec secondInstance = fieldSpecFactory.construct(constraint);
 
         assertEquals(firstInstance.getRestrictions(), secondInstance.getRestrictions());
     }
@@ -53,8 +53,8 @@ class FieldSpecFactoryTests {
             )
         );
 
-        final FieldSpec firstInstance = fieldSpecFactory.construct(testField, constraint);
-        final FieldSpec secondInstance = fieldSpecFactory.construct(testField, constraint);
+        final FieldSpec firstInstance = fieldSpecFactory.construct(constraint);
+        final FieldSpec secondInstance = fieldSpecFactory.construct(constraint);
 
         assertEquals(firstInstance.getRestrictions(), secondInstance.getRestrictions());
     }
@@ -70,8 +70,8 @@ class FieldSpecFactoryTests {
             20
         );
 
-        final FieldSpec firstInstance = fieldSpecFactory.construct(testField, firstConstraint);
-        final FieldSpec secondInstance = fieldSpecFactory.construct(testField, secondConstraint);
+        final FieldSpec firstInstance = fieldSpecFactory.construct(firstConstraint);
+        final FieldSpec secondInstance = fieldSpecFactory.construct(secondConstraint);
 
         assertEquals(firstInstance.getRestrictions(), secondInstance.getRestrictions());
     }
@@ -83,8 +83,8 @@ class FieldSpecFactoryTests {
             15
         );
 
-        final FieldSpec firstInstance = fieldSpecFactory.construct(testField, constraint);
-        final FieldSpec secondInstance = fieldSpecFactory.construct(testField, constraint);
+        final FieldSpec firstInstance = fieldSpecFactory.construct(constraint);
+        final FieldSpec secondInstance = fieldSpecFactory.construct(constraint);
 
         assertEquals(firstInstance.getRestrictions(), secondInstance.getRestrictions());
     }
@@ -98,8 +98,8 @@ class FieldSpecFactoryTests {
             )
         );
 
-        final FieldSpec firstInstance = fieldSpecFactory.construct(testField, constraint);
-        final FieldSpec secondInstance = fieldSpecFactory.construct(testField, constraint);
+        final FieldSpec firstInstance = fieldSpecFactory.construct(constraint);
+        final FieldSpec secondInstance = fieldSpecFactory.construct(constraint);
 
         assertEquals(firstInstance.getRestrictions(), secondInstance.getRestrictions());
     }
@@ -115,8 +115,8 @@ class FieldSpecFactoryTests {
             20
         );
 
-        final FieldSpec firstInstance = fieldSpecFactory.construct(testField, firstConstraint);
-        final FieldSpec secondInstance = fieldSpecFactory.construct(testField, secondConstraint);
+        final FieldSpec firstInstance = fieldSpecFactory.construct(firstConstraint);
+        final FieldSpec secondInstance = fieldSpecFactory.construct(secondConstraint);
 
         assertEquals(firstInstance.getRestrictions(), secondInstance.getRestrictions());
     }
@@ -128,8 +128,8 @@ class FieldSpecFactoryTests {
             25
         );
 
-        final FieldSpec firstInstance = fieldSpecFactory.construct(testField, constraint);
-        final FieldSpec secondInstance = fieldSpecFactory.construct(testField, constraint);
+        final FieldSpec firstInstance = fieldSpecFactory.construct(constraint);
+        final FieldSpec secondInstance = fieldSpecFactory.construct(constraint);
 
         assertEquals(firstInstance.getRestrictions(), secondInstance.getRestrictions());
     }
@@ -143,8 +143,8 @@ class FieldSpecFactoryTests {
             )
         );
 
-        final FieldSpec firstInstance = fieldSpecFactory.construct(testField, constraint);
-        final FieldSpec secondInstance = fieldSpecFactory.construct(testField, constraint);
+        final FieldSpec firstInstance = fieldSpecFactory.construct(constraint);
+        final FieldSpec secondInstance = fieldSpecFactory.construct(constraint);
 
         assertEquals(firstInstance.getRestrictions(), secondInstance.getRestrictions());
     }
@@ -160,8 +160,8 @@ class FieldSpecFactoryTests {
             20
         );
 
-        final FieldSpec firstInstance = fieldSpecFactory.construct(testField, firstConstraint);
-        final FieldSpec secondInstance = fieldSpecFactory.construct(testField, secondConstraint);
+        final FieldSpec firstInstance = fieldSpecFactory.construct(firstConstraint);
+        final FieldSpec secondInstance = fieldSpecFactory.construct(secondConstraint);
 
         assertEquals(firstInstance.getRestrictions(), secondInstance.getRestrictions());
     }
