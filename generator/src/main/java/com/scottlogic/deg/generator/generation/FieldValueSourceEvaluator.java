@@ -18,22 +18,17 @@ package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.*;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.DateTimeFieldValueSource;
 import com.scottlogic.deg.generator.generation.string.generators.RegexStringGenerator;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
-import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static com.scottlogic.deg.common.profile.Types.*;
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDateTimeRestrictions;
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createNumericRestrictions;
 import static com.scottlogic.deg.generator.utils.Defaults.*;
@@ -46,14 +41,15 @@ public class FieldValueSourceEvaluator {
         Optional<FieldValueSource> source = getSource(type, fieldSpec);
 
         if (!fieldSpec.isNullable()){
-            return source.orElseThrow(() -> new UnsupportedOperationException("Cannot get fieldValueSource for contradictory fieldspec"));
+            return source
+                .orElseThrow(() -> new UnsupportedOperationException("Cannot get fieldValueSource for contradictory fieldspec"));
         }
 
         if (!source.isPresent()){
             return NULL_ONLY_SOURCE;
         }
 
-        return new CombiningFieldValueSource(Arrays.asList(source.get(), NULL_ONLY_SOURCE));
+        return new NullAppendingValueSource(source.get());
     }
 
     private Optional<FieldValueSource> getSource(Types type, FieldSpec fieldSpec) {

@@ -19,7 +19,7 @@ package com.scottlogic.deg.generator.generation;
 import com.google.common.collect.Iterators;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
-import com.scottlogic.deg.generator.generation.fieldvaluesources.CombiningFieldValueSource;
+import com.scottlogic.deg.generator.generation.fieldvaluesources.NullAppendingValueSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.NullOnlySource;
 import com.scottlogic.deg.generator.restrictions.*;
@@ -31,6 +31,8 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.scottlogic.deg.common.profile.Types.*;
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createNumericRestrictions;
@@ -259,11 +261,10 @@ public class FieldValueSourceEvaluatorTests {
         if (source instanceof NullOnlySource){
             return;
         }
-        CombiningFieldValueSource combi = (CombiningFieldValueSource) source;
-        List<FieldValueSource<Object>> sources = combi.getUnderlyingSources();
+        NullAppendingValueSource combi = (NullAppendingValueSource) source;
+        List<Object> sources = (List<Object>) combi.generateInterestingValues().collect(Collectors.toList());
         int lastSourceIndex = sources.size() - 1;
-        Assert.assertTrue(sources.get(lastSourceIndex) instanceof NullOnlySource);
-        Assert.assertNull(Iterators.get(sources.get(lastSourceIndex).generateAllValues().iterator(), 0));
+        Assert.assertTrue(sources.get(sources.size()-1) == null);
     }
 
     private static StringRestrictions matchesRegex(String regex, boolean negate){
