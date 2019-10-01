@@ -26,15 +26,12 @@ public class LinearIterator<T extends Comparable<T>> implements Iterator<T> {
 
     public LinearIterator(LinearRestrictions<T> linearRestrictions) {
         this.linearRestrictions = linearRestrictions;
-        next = linearRestrictions.getMin().getValue();
-        if(!linearRestrictions.getMin().isInclusive()){
-            next();
-        }
+        next = linearRestrictions.getMin();
     }
 
     @Override
     public boolean hasNext() {
-        return linearRestrictions.getMax().isAfter(next);
+        return linearRestrictions.getMax().compareTo(next) >= 0;
     }
 
     @Override

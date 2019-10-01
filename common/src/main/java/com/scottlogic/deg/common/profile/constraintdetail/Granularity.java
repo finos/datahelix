@@ -24,5 +24,10 @@ public interface Granularity<T> {
 
     T getNext(T value);
 
+    /**
+     * potentially slow, avoid using repeatedly
+     */
+    T getPrevious(T value);
+
     T trimToGranularity(T value);
 }

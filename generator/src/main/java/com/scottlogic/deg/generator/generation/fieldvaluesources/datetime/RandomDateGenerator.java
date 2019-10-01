@@ -33,12 +33,8 @@ class RandomDateGenerator {
     }
 
     public OffsetDateTime next(RandomNumberGenerator random) {
-        long min = restrictions.getMin().isInclusive()
-            ? getMilli(restrictions.getMin().getValue())
-            : getMilli(restrictions.getMin().getValue()) + 1;
-        long max = restrictions.getMax().isInclusive()
-            ? getMilli(restrictions.getMax().getValue())
-            : getMilli(restrictions.getMax().getValue()) - 1;
+        long min = getMilli(restrictions.getMin());
+        long max =  getMilli(restrictions.getMax());
 
         long generatedLong = (long) random.nextDouble(min, max);
 

@@ -44,6 +44,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.scottlogic.deg.common.profile.Types.*;
+import static com.scottlogic.deg.common.util.Defaults.*;
 import static com.scottlogic.deg.generator.utils.Defaults.*;
 import static org.hamcrest.Matchers.*;
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
@@ -74,7 +75,7 @@ class ConstraintReducerTest {
             .collect(Collectors.toSet()));
 
         final List<AtomicConstraint> constraints = Arrays.asList(
-            new IsGreaterThanConstantConstraint(quantityField, BigDecimal.valueOf(0)),
+            new IsGreaterThanOrEqualToConstantConstraint(quantityField, BigDecimal.valueOf(0)),
             new IsGreaterThanConstantConstraint(quantityField, BigDecimal.valueOf(5)).negate(),
             new IsInSetConstraint(countryField, countryAmong));
 
@@ -92,13 +93,9 @@ class ConstraintReducerTest {
         Assert.assertThat("Quantity fieldspec has numeric restrictions", quantityFieldSpec.getRestrictions(),
             Is.is(IsNull.notNullValue()));
         Assert.assertThat("Quantity fieldspec has correct lower bound limit",
-            ((LinearRestrictions<BigDecimal>) quantityFieldSpec.getRestrictions()).getMin().getValue(), Is.is(BigDecimal.ZERO));
-        Assert.assertThat("Quantity fieldspec has exclusive lower bound",
-            ((LinearRestrictions<BigDecimal>) quantityFieldSpec.getRestrictions()).getMin().isInclusive(), Is.is(false));
+            ((LinearRestrictions<BigDecimal>) quantityFieldSpec.getRestrictions()).getMin(), Is.is(BigDecimal.ZERO));
         Assert.assertThat("Quantity fieldspec has correct upper bound limit",
-            ((LinearRestrictions<BigDecimal>) quantityFieldSpec.getRestrictions()).getMax().getValue(), Is.is(BigDecimal.valueOf(5)));
-        Assert.assertThat("Quantity fieldspec has inclusive upper bound",
-            ((LinearRestrictions<BigDecimal>) quantityFieldSpec.getRestrictions()).getMax().isInclusive(), Is.is(true));
+            ((LinearRestrictions<BigDecimal>) quantityFieldSpec.getRestrictions()).getMax(), Is.is(BigDecimal.valueOf(5)));
 
         FieldSpec countryFieldSpec = reducedConstraints.getSpecForField(countryField);
         Assert.assertThat("Country fieldspec has no null restrictions", countryFieldSpec.isNullable(),
@@ -126,7 +123,7 @@ class ConstraintReducerTest {
         final Field field = createField("test0", NUMERIC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
-            new IsGreaterThanConstantConstraint(field, BigDecimal.valueOf(5)));
+            new IsGreaterThanOrEqualToConstantConstraint(field, BigDecimal.valueOf(5)));
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, nodeFromConstraints(constraints)).get();
 
@@ -141,14 +138,12 @@ class ConstraintReducerTest {
             Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec numeric restrictions have no upper bound",
             ((LinearRestrictions) outputSpec.getRestrictions()).getMax(),
-            Is.is(equalTo(NUMERIC_MAX_LIMIT)));
+            Is.is(equalTo(NUMERIC_MAX)));
         Assert.assertThat("Fieldspec numeric restrictions have lower bound",
             ((LinearRestrictions) outputSpec.getRestrictions()).getMin(),
-            Is.is(not(equalTo(NUMERIC_MIN_LIMIT))));
+            Is.is(not(equalTo(NUMERIC_MIN))));
         Assert.assertThat("Fieldspec numeric restriction lower bound is correct",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMin().getValue(), Is.is(BigDecimal.valueOf(5)));
-        Assert.assertThat("Fieldspec numeric restriction lower bound is exclusive",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMin().isInclusive(), Is.is(false));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(BigDecimal.valueOf(5)));
     }
 
     @Test
@@ -170,13 +165,11 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec has numeric restrictions", outputSpec.getRestrictions(),
             Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec numeric restrictions have no lower bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(equalTo(NUMERIC_MIN_LIMIT)));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(equalTo(NUMERIC_MIN)));
         Assert.assertThat("Fieldspec numeric restrictions have upper bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(not(equalTo(NUMERIC_MAX_LIMIT))));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(not(equalTo(NUMERIC_MAX))));
         Assert.assertThat("Fieldspec numeric restrictions upper bound limit is correct",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMax().getValue(), Is.is(BigDecimal.valueOf(5)));
-        Assert.assertThat("Fieldspec numeric resitrctions upper bound is inclusive",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMax().isInclusive(), Is.is(true));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(BigDecimal.valueOf(5)));
     }
 
     @Test
@@ -199,14 +192,12 @@ class ConstraintReducerTest {
             Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec numeric restrictions have no upper bound",
             ((LinearRestrictions) outputSpec.getRestrictions()).getMax(),
-            Is.is(NUMERIC_MAX_LIMIT));
+            Is.is(NUMERIC_MAX));
         Assert.assertThat("Fieldspec numeric restrictions have lower bound",
             ((LinearRestrictions) outputSpec.getRestrictions()).getMin(),
-            Is.is(not(NUMERIC_MIN_LIMIT)));
+            Is.is(not(NUMERIC_MIN)));
         Assert.assertThat("Fieldspec numeric restriction lower bound is correct",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMin().getValue(), Is.is(BigDecimal.valueOf(5)));
-        Assert.assertThat("Fieldspec numeric restriction lower bound is inclusive",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMin().isInclusive(), Is.is(true));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(BigDecimal.valueOf(5)));
     }
 
     @Test
@@ -214,7 +205,7 @@ class ConstraintReducerTest {
         final Field field = createField("test0", NUMERIC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
-            new IsGreaterThanOrEqualToConstantConstraint(field, BigDecimal.valueOf(5)).negate());
+            new IsGreaterThanConstantConstraint(field, BigDecimal.valueOf(5)).negate());
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, nodeFromConstraints(constraints)).get();
 
@@ -228,13 +219,11 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec has numeric restrictions", outputSpec.getRestrictions(),
             Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec numeric restrictions have no lower bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(NUMERIC_MIN_LIMIT));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(NUMERIC_MIN));
         Assert.assertThat("Fieldspec numeric restrictions have upper bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(not(NUMERIC_MAX_LIMIT)));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(not(NUMERIC_MAX)));
         Assert.assertThat("Fieldspec numeric restrictions upper bound limit is correct",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMax().getValue(), Is.is(BigDecimal.valueOf(5)));
-        Assert.assertThat("Fieldspec numeric restrictions upper bound is exclusive",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMax().isInclusive(), Is.is(false));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(BigDecimal.valueOf(5)));
     }
 
     @Test
@@ -242,7 +231,7 @@ class ConstraintReducerTest {
         final Field field = createField("test0", NUMERIC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
-            new IsLessThanConstantConstraint(field, BigDecimal.valueOf(5)));
+            new IsLessThanOrEqualToConstantConstraint(field, BigDecimal.valueOf(5)));
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, nodeFromConstraints(constraints)).get();
 
@@ -256,13 +245,11 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec has numeric restrictions", outputSpec.getRestrictions(),
             Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec numeric restrictions have no lower bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(NUMERIC_MIN_LIMIT));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(NUMERIC_MIN));
         Assert.assertThat("Fieldspec numeric restrictions have upper bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(not(NUMERIC_MAX_LIMIT)));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(not(NUMERIC_MAX)));
         Assert.assertThat("Fieldspec numeric restrictions upper bound limit is correct",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMax().getValue(), Is.is(BigDecimal.valueOf(5)));
-        Assert.assertThat("Fieldspec numeric restrictions upper bound is exclusive",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMax().isInclusive(), Is.is(false));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(BigDecimal.valueOf(5)));
     }
 
     @Test
@@ -284,13 +271,11 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec has numeric restrictions", outputSpec.getRestrictions(),
             Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec numeric restrictions have no upper bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(NUMERIC_MAX_LIMIT));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(NUMERIC_MAX));
         Assert.assertThat("Fieldspec numeric restrictions have lower bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(not(NUMERIC_MIN_LIMIT)));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(not(NUMERIC_MIN)));
         Assert.assertThat("Fieldspec numeric restriction lower bound is correct",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMin().getValue(), Is.is(BigDecimal.valueOf(5)));
-        Assert.assertThat("Fieldspec numeric restriction lower bound is inclusive",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMin().isInclusive(), Is.is(true));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(BigDecimal.valueOf(5)));
     }
 
     @Test
@@ -312,13 +297,11 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec has numeric restrictions", outputSpec.getRestrictions(),
             Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec numeric restrictions have no lower bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(NUMERIC_MIN_LIMIT));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(NUMERIC_MIN));
         Assert.assertThat("Fieldspec numeric restrictions have upper bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(not(NUMERIC_MAX_LIMIT)));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(not(NUMERIC_MAX)));
         Assert.assertThat("Fieldspec numeric restrictions upper bound limit is correct",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMax().getValue(), Is.is(BigDecimal.valueOf(5)));
-        Assert.assertThat("Fieldspec numeric restrictions upper bound is inclusive",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMax().isInclusive(), Is.is(true));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(BigDecimal.valueOf(5)));
     }
 
     @Test
@@ -326,7 +309,7 @@ class ConstraintReducerTest {
         final Field field = createField("test0", NUMERIC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
-            new IsLessThanOrEqualToConstantConstraint(field, BigDecimal.valueOf(5)).negate());
+            new IsLessThanConstantConstraint(field, BigDecimal.valueOf(5)).negate());
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, nodeFromConstraints(constraints)).get();
 
@@ -340,13 +323,11 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec has numeric restrictions", outputSpec.getRestrictions(),
             Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec numeric restrictions have no upper bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(equalTo(NUMERIC_MAX_LIMIT)));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(equalTo(NUMERIC_MAX)));
         Assert.assertThat("Fieldspec numeric restrictions have lower bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(not(equalTo(NUMERIC_MIN_LIMIT))));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(not(equalTo(NUMERIC_MIN))));
         Assert.assertThat("Fieldspec numeric restriction lower bound is correct",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMin().getValue(), Is.is(BigDecimal.valueOf(5)));
-        Assert.assertThat("Fieldspec numeric restriction lower bound is exclusive",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMin().isInclusive(), Is.is(false));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(BigDecimal.valueOf(5)));
     }
 
     @Test
@@ -355,7 +336,7 @@ class ConstraintReducerTest {
         final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
-            new IsAfterConstantDateTimeConstraint(field, testTimestamp));
+            new IsAfterOrEqualToConstantDateTimeConstraint(field, testTimestamp));
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, nodeFromConstraints(constraints)).get();
 
@@ -369,13 +350,11 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec has datetime restrictions", outputSpec.getRestrictions(),
             Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec datetime restrictions have no upper bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(equalTo(DATETIME_MAX_LIMIT)));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(equalTo(ISO_MAX_DATE)));
         Assert.assertThat("Fieldspec datetime restrictions have lower bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(not(equalTo(DATETIME_MIN_LIMIT))));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(not(equalTo(ISO_MIN_DATE))));
         Assert.assertThat("Fieldspec datetime restrictions have correct lower bound limit",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMin().getValue(), Is.is(testTimestamp));
-        Assert.assertThat("Fieldspec datetime restrictions have exclusive lower bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMin().isInclusive(), Is.is(false));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(testTimestamp));
     }
 
     @Test
@@ -398,13 +377,11 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec has datetime restrictions", outputSpec.getRestrictions(),
             Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec datetime restrictions have no lower bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(equalTo(DATETIME_MIN_LIMIT)));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(equalTo(ISO_MIN_DATE)));
         Assert.assertThat("Fieldspec datetime restrictions have upper bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(not(equalTo(DATETIME_MAX_LIMIT))));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(not(equalTo(ISO_MAX_DATE))));
         Assert.assertThat("Fieldspec datetime restrictions have correct upper bound limit",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMax().getValue(), Is.is(testTimestamp));
-        Assert.assertThat("Fieldspec datetime restrictions have inclusive upper bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMax().isInclusive(), Is.is(true));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(testTimestamp));
     }
 
     @Test
@@ -427,13 +404,11 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec has datetime restrictions", outputSpec.getRestrictions(),
             Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec datetime restrictions have no upper bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(equalTo(DATETIME_MAX_LIMIT)));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(equalTo(ISO_MAX_DATE)));
         Assert.assertThat("Fieldspec datetime restrictions have lower bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(not(equalTo(DATETIME_MAX_LIMIT))));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(not(equalTo(ISO_MAX_DATE))));
         Assert.assertThat("Fieldspec datetime restrictions have correct lower bound limit",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMin().getValue(), Is.is(testTimestamp));
-        Assert.assertThat("Fieldspec datetime restrictions have inclusive lower bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMin().isInclusive(), Is.is(true));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(testTimestamp));
     }
 
     @Test
@@ -442,7 +417,7 @@ class ConstraintReducerTest {
         final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
-            new IsAfterOrEqualToConstantDateTimeConstraint(field, testTimestamp).negate());
+            new IsAfterConstantDateTimeConstraint(field, testTimestamp).negate());
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, nodeFromConstraints(constraints)).get();
 
@@ -456,13 +431,11 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec has datetime restrictions", outputSpec.getRestrictions(),
             Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec datetime restrictions have no lower bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(equalTo(DATETIME_MIN_LIMIT)));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(equalTo(ISO_MIN_DATE)));
         Assert.assertThat("Fieldspec datetime restrictions have upper bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(not(equalTo(DATETIME_MAX_LIMIT))));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(not(equalTo(ISO_MAX_DATE))));
         Assert.assertThat("Fieldspec datetime restrictions have correct upper bound limit",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMax().getValue(), Is.is(testTimestamp));
-        Assert.assertThat("Fieldspec datetime restrictions have exclusive upper bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMax().isInclusive(), Is.is(false));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(testTimestamp));
     }
 
     @Test
@@ -471,7 +444,7 @@ class ConstraintReducerTest {
         final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
-            new IsBeforeConstantDateTimeConstraint(field, testTimestamp));
+            new IsBeforeOrEqualToConstantDateTimeConstraint(field, testTimestamp));
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, nodeFromConstraints(constraints)).get();
 
@@ -485,13 +458,11 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec has datetime restrictions", outputSpec.getRestrictions(),
             Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec datetime restrictions have no lower bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(equalTo(DATETIME_MIN_LIMIT)));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(equalTo(ISO_MIN_DATE)));
         Assert.assertThat("Fieldspec datetime restrictions have upper bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(not(equalTo(DATETIME_MAX_LIMIT))));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(not(equalTo(ISO_MAX_DATE))));
         Assert.assertThat("Fieldspec datetime restrictions have correct upper bound limit",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMax().getValue(), Is.is(testTimestamp));
-        Assert.assertThat("Fieldspec datetime restrictions have exclusive upper bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMax().isInclusive(), Is.is(false));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(testTimestamp));
     }
 
     @Test
@@ -514,13 +485,11 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec has datetime restrictions", outputSpec.getRestrictions(),
             Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec datetime restrictions have no upper bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(equalTo(DATETIME_MAX_LIMIT)));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(equalTo(ISO_MAX_DATE)));
         Assert.assertThat("Fieldspec datetime restrictions have lower bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(not(equalTo(DATETIME_MIN_LIMIT))));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(not(equalTo(ISO_MIN_DATE))));
         Assert.assertThat("Fieldspec datetime restrictions have correct lower bound limit",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMin().getValue(), Is.is(testTimestamp));
-        Assert.assertThat("Fieldspec datetime restrictions have inclusive lower bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMin().isInclusive(), Is.is(true));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(testTimestamp));
     }
 
     @Test
@@ -543,13 +512,11 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec has datetime restrictions", outputSpec.getRestrictions(),
             Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec datetime restrictions have no lower bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is((equalTo(DATETIME_MIN_LIMIT))));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is((equalTo(ISO_MIN_DATE))));
         Assert.assertThat("Fieldspec datetime restrictions have upper bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(not(equalTo(DATETIME_MAX_LIMIT))));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(not(equalTo(ISO_MAX_DATE))));
         Assert.assertThat("Fieldspec datetime restrictions have correct upper bound limit",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMax().getValue(), Is.is(testTimestamp));
-        Assert.assertThat("Fieldspec datetime restrictions have inclusive upper bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMax().isInclusive(), Is.is(true));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(testTimestamp));
     }
 
     @Test
@@ -558,7 +525,7 @@ class ConstraintReducerTest {
         final OffsetDateTime testTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 16, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Collections.singletonList(
-            new IsBeforeOrEqualToConstantDateTimeConstraint(field, testTimestamp).negate());
+            new IsBeforeConstantDateTimeConstraint(field, testTimestamp).negate());
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, nodeFromConstraints(constraints)).get();
 
@@ -572,13 +539,11 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec has datetime restrictions", outputSpec.getRestrictions(),
             Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec datetime restrictions have no upper bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(equalTo(DATETIME_MAX_LIMIT)));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMax(), Is.is(equalTo(ISO_MAX_DATE)));
         Assert.assertThat("Fieldspec datetime restrictions have lower bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(not(equalTo(DATETIME_MIN_LIMIT))));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(not(equalTo(ISO_MIN_DATE))));
         Assert.assertThat("Fieldspec datetime restrictions have correct lower bound limit",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMin().getValue(), Is.is(testTimestamp));
-        Assert.assertThat("Fieldspec datetime restrictions have exclusive lower bound",
-            ((LinearRestrictions) outputSpec.getRestrictions()).getMin().isInclusive(), Is.is(false));
+            ((LinearRestrictions) outputSpec.getRestrictions()).getMin(), Is.is(testTimestamp));
     }
 
     @Test
@@ -588,8 +553,8 @@ class ConstraintReducerTest {
         final OffsetDateTime endTimestamp = OffsetDateTime.of(2018, 2, 4, 23, 25, 8, 0, ZoneOffset.UTC);
         ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
         List<AtomicConstraint> constraints = Arrays.asList(
-            new IsAfterConstantDateTimeConstraint(field, startTimestamp),
-            new IsBeforeConstantDateTimeConstraint(field, endTimestamp));
+            new IsAfterOrEqualToConstantDateTimeConstraint(field, startTimestamp),
+            new IsBeforeOrEqualToConstantDateTimeConstraint(field, endTimestamp));
 
         RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, nodeFromConstraints(constraints)).get();
 
@@ -605,15 +570,11 @@ class ConstraintReducerTest {
         Assert.assertThat("Fieldspec datetime restrictions have lower bound",
             ((LinearRestrictions<OffsetDateTime>) outputSpec.getRestrictions()).getMin(), Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec datetime restrictions have correct lower bound limit",
-            ((LinearRestrictions<OffsetDateTime>) outputSpec.getRestrictions()).getMin().getValue(), Is.is(startTimestamp));
-        Assert.assertThat("Fieldspect datetime restrictions have exclusive lower bound",
-            ((LinearRestrictions<OffsetDateTime>) outputSpec.getRestrictions()).getMin().isInclusive(), Is.is(false));
+            ((LinearRestrictions<OffsetDateTime>) outputSpec.getRestrictions()).getMin(), Is.is(startTimestamp));
         Assert.assertThat("Fieldspec datetime restrictions have upper bound",
             ((LinearRestrictions<OffsetDateTime>) outputSpec.getRestrictions()).getMax(), Is.is(IsNull.notNullValue()));
         Assert.assertThat("Fieldspec datetime restrictions have correct upper bound limit",
-            ((LinearRestrictions<OffsetDateTime>) outputSpec.getRestrictions()).getMax().getValue(), Is.is(endTimestamp));
-        Assert.assertThat("Fieldspec datetime restrictions have exclusive upper bound",
-            ((LinearRestrictions<OffsetDateTime>) outputSpec.getRestrictions()).getMax().isInclusive(), Is.is(false));
+            ((LinearRestrictions<OffsetDateTime>) outputSpec.getRestrictions()).getMax(), Is.is(endTimestamp));
     }
 
     @Test
