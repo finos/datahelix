@@ -22,8 +22,6 @@ import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
-
 import static org.junit.Assert.assertEquals;
 
 class FieldSpecHelperTests {
@@ -35,10 +33,9 @@ class FieldSpecHelperTests {
     void getFieldSpecForValue() {
         DataBagValue input = new DataBagValue("value");
 
-        FieldSpec actual = fieldSpecHelper.getFieldSpecForValue(field, input);
+        FieldSpec actual = fieldSpecHelper.getFieldSpecForValue(input);
 
-        FieldSpec expected = FieldSpec.fromType(field.getType())
-            .withWhitelist((DistributedSet.uniform(Collections.singleton("value"))))
+        FieldSpec expected = FieldSpec.fromSet(DistributedSet.singleton("value"))
             .withNotNull();
 
         assertEquals(actual, expected);
@@ -48,9 +45,9 @@ class FieldSpecHelperTests {
     void getFieldSpecForNullValue() {
         DataBagValue input = new DataBagValue(null);
 
-        FieldSpec actual = fieldSpecHelper.getFieldSpecForValue(field, input);
+        FieldSpec actual = fieldSpecHelper.getFieldSpecForValue(input);
 
-        FieldSpec expected = FieldSpec.nullOnlyFromType(field.getType());
+        FieldSpec expected = FieldSpec.nullOnly();
 
         assertEquals(actual, expected);
     }

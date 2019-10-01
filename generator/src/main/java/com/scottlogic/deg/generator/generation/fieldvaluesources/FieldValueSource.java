@@ -20,12 +20,12 @@ import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
 import java.util.stream.Stream;
 
-public interface FieldValueSource {
-    Stream<Object> generateInterestingValues();
+public interface FieldValueSource<T> {
+    Stream<T> generateInterestingValues();
 
-    Stream<Object> generateAllValues();
+    Stream<T> generateAllValues();
 
-    Stream<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator);
+    Stream<T> generateRandomValues(RandomNumberGenerator randomNumberGenerator);
 
 
 }

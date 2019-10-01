@@ -98,7 +98,7 @@ public class DateTimeFieldValueSourceTests {
         TestRandomNumberGenerator rng = new TestRandomNumberGenerator();
         rng.setNextDouble(0);
 
-        Iterator<Object> iterator = fieldSource.generateRandomValues(rng).iterator();
+        Iterator<OffsetDateTime> iterator = fieldSource.generateRandomValues(rng).iterator();
 
         Assert.assertThat(iterator.next(),
             equalTo(OffsetDateTime.of(date.atTime(LocalTime.of(12, 0, 0)), ZoneOffset.UTC)));
@@ -135,7 +135,7 @@ public class DateTimeFieldValueSourceTests {
         TestRandomNumberGenerator rng = new TestRandomNumberGenerator();
         rng.setNextDouble(0);
 
-        Iterator<Object> iterator = fieldSource.generateRandomValues(rng).iterator();
+        Iterator<OffsetDateTime> iterator = fieldSource.generateRandomValues(rng).iterator();
 
         Assert.assertThat(iterator.next(),
             equalTo(OffsetDateTime.of(date.atTime(LocalTime.of(12, 0, 0)), ZoneOffset.UTC)));
@@ -170,7 +170,7 @@ public class DateTimeFieldValueSourceTests {
         TestRandomNumberGenerator rng = new TestRandomNumberGenerator();
         rng.setNextDouble(0);
 
-        Iterator<Object> iterator = fieldSource.generateRandomValues(rng).iterator();
+        Iterator<OffsetDateTime> iterator = fieldSource.generateRandomValues(rng).iterator();
 
         Assert.assertThat(iterator.next(),
             equalTo(OffsetDateTime.of(date.atTime(LocalTime.of(12, 0, 0, 1_000_000)), ZoneOffset.UTC)));
@@ -203,7 +203,7 @@ public class DateTimeFieldValueSourceTests {
         TestRandomNumberGenerator rng = new TestRandomNumberGenerator();
         rng.setNextDouble(0.99);
 
-        Iterator<Object> iterator = fieldSource.generateRandomValues(rng).iterator();
+        Iterator<OffsetDateTime> iterator = fieldSource.generateRandomValues(rng).iterator();
 
         Assert.assertThat(iterator.next(),
             equalTo(OffsetDateTime.of(9999, 12, 31, 23, 59, 23, 999_000_000, ZoneOffset.UTC)));

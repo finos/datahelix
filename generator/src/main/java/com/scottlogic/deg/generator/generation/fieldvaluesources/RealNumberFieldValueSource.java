@@ -34,7 +34,7 @@ import java.util.stream.StreamSupport;
 
 import static com.scottlogic.deg.generator.utils.SetUtils.stream;
 
-public class RealNumberFieldValueSource implements FieldValueSource {
+public class RealNumberFieldValueSource implements FieldValueSource<BigDecimal> {
     private final Set<BigDecimal> blacklist;
     private final LinearRestrictions<BigDecimal> restrictions;
 
@@ -50,30 +50,27 @@ public class RealNumberFieldValueSource implements FieldValueSource {
     }
 
     @Override
-    public Stream<Object> generateInterestingValues() {
+    public Stream<BigDecimal> generateInterestingValues() {
         return Stream.of(restrictions.getMin(), BigDecimal.ZERO, restrictions.getMax())
             .distinct()
             .filter(restrictions::match)
-            .filter(this::notInBlacklist)
-            .map(Function.identity());
+            .filter(this::notInBlacklist);
     }
 
     @Override
-    public Stream<Object> generateAllValues() {
+    public Stream<BigDecimal> generateAllValues() {
         return stream(new LinearIterator<>(restrictions))
-            .filter(this::notInBlacklist)
-            .map(Function.identity());
+            .filter(this::notInBlacklist);
     }
 
     @Override
-    public Stream<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
+    public Stream<BigDecimal> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
         return Stream.generate(() ->
             randomNumberGenerator.nextBigDecimal(
                 restrictions.getMin(),
                 restrictions.getMax()))
             .map(val -> restrictions.getGranularity().trimToGranularity(val))
-            .filter(this::notInBlacklist)
-            .map(Function.identity());
+            .filter(this::notInBlacklist);
     }
 
     private boolean notInBlacklist(BigDecimal i) {
