@@ -23,6 +23,7 @@ import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactor
 
 import java.time.OffsetDateTime;
 
+import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
 import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
 
 
@@ -37,7 +38,7 @@ public class AfterDateRelation extends AbstractDateInequalityRelation {
     @Override
     protected OffsetDateTime dateTimeLimitExtractingFunction(LinearRestrictions<OffsetDateTime> restrictions) {
         if (restrictions != null) {
-            return restrictions.getMax();
+            return restrictions.getMin();
         } else {
             return null;
         }
@@ -45,7 +46,7 @@ public class AfterDateRelation extends AbstractDateInequalityRelation {
 
     @Override
     protected LinearRestrictions<OffsetDateTime> appendValueToRestrictions(OffsetDateTime value) {
-        return LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, new Limit<>(value, inclusive));
+        return LinearRestrictionsFactory.createDateTimeRestrictions(new Limit<>(value, inclusive), DATETIME_MAX_LIMIT);
     }
 
     @Override

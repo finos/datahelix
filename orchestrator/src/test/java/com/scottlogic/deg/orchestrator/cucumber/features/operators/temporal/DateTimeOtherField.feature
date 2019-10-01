@@ -1,12 +1,14 @@
 Feature: running datetimes related to otherfield datetimes
 
-
   Background:
     Given the generation strategy is full
     And there is a field foo
     And foo has type "datetime"
+    And foo is anything but null
     And there is a field bar
     And bar has type "datetime"
+    And bar is anything but null
+    And the combination strategy is exhaustive
 
   Scenario: Running an "afterField" constraint allows one date to be always later than another
     Given foo is after 2018-09-01T00:00:00.000Z
