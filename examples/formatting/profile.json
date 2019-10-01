@@ -40,16 +40,12 @@
         {
           "field": "date1",
           "is": "equalTo",
-          "value": {
-            "date": "2001-02-03T04:05:06.007"
-          }
+          "value": "2001-02-03T04:05:06.007"
         },
         {
           "field": "date2",
           "is": "equalTo",
-          "value": {
-            "date": "2001-02-03T04:05:06.007"
-          }
+          "value":  "2001-02-03T04:05:06.007"
         },
         {
           "field": "an_integer",

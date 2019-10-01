@@ -58,14 +58,16 @@ public class AtomicConstraintValueReader {
     }
 
     private Object getValue(Object value, Types type) {
-        if (value instanceof Map){
-            return getDate((Map) value);
+        switch (type) {
+            case NUMERIC:
+                return getBigDecimal(value);
+            case STRING:
+                return value;
+            case DATETIME:
+                return ConstraintReaderHelpers.parseDate((String) value);
+            default:
+                throw new IllegalStateException("Unexpected value: " + type);
         }
-        if (type == Types.NUMERIC){
-            return getBigDecimal(value);
-        }
-
-        return value;
     }
 
     private Object getBigDecimal(Object value) {
@@ -76,10 +78,5 @@ public class AtomicConstraintValueReader {
         }
 
         return bigDecimal;
-    }
-
-
-    private OffsetDateTime getDate(Map value) {
-        return ConstraintReaderHelpers.parseDate((String) (value).get("date"));
     }
 }

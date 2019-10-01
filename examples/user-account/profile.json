@@ -74,16 +74,12 @@
         {
           "field": "creation_date",
           "is": "afterOrAt",
-          "value": {
-            "date": "2003-01-01T00:00:00.000"
-          }
+          "value": "2003-01-01T00:00:00.000"
         },
         {
           "field": "creation_date",
           "is": "beforeOrAt",
-          "value": {
-            "date": "2020-01-01T00:00:00.000"
-          }
+          "value": "2020-01-01T00:00:00.000"
         }
       ]
     }
