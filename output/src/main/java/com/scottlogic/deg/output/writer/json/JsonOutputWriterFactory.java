@@ -16,6 +16,12 @@
 
 package com.scottlogic.deg.output.writer.json;
 
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SequenceWriter;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.output.writer.DataSetWriter;
 import com.scottlogic.deg.output.writer.OutputWriterFactory;
@@ -25,9 +31,20 @@ import java.io.OutputStream;
 import java.util.Optional;
 
 public class JsonOutputWriterFactory implements OutputWriterFactory {
+    private boolean useNdJson;
+    private static final String NEW_LINE_DELIMITER = "\n";
+    @Inject
+    public JsonOutputWriterFactory(@Named("config:useNdJson") boolean useNdJson) {
+        this.useNdJson = useNdJson;
+    }
+
     @Override
     public DataSetWriter createWriter(OutputStream stream, ProfileFields profileFields) throws IOException {
-        return JsonDataSetWriter.open(stream, profileFields);
+        ObjectWriter objectWriter = new ObjectMapper().writer(new DefaultPrettyPrinter(NEW_LINE_DELIMITER));
+        SequenceWriter writer = objectWriter.writeValues(stream);
+        writer.init(!useNdJson);
+
+        return new JsonDataSetWriter(writer, profileFields);
     }
 
     @Override
