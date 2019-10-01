@@ -34,7 +34,7 @@ import java.util.stream.StreamSupport;
 
 import static com.scottlogic.deg.generator.utils.SetUtils.stream;
 
-public class RealNumberFieldValueSource implements FieldValueSource {
+public class RealNumberFieldValueSource implements FieldValueSource<BigDecimal> {
     private final BigDecimal inclusiveUpperLimit;
     private final BigDecimal inclusiveLowerLimit;
     private final Set<BigDecimal> blacklist;
@@ -89,7 +89,7 @@ public class RealNumberFieldValueSource implements FieldValueSource {
     }
 
     @Override
-    public Stream<Object> generateInterestingValues() {
+    public Stream<BigDecimal> generateInterestingValues() {
         List<BigDecimal> list = new ArrayList<>();
         list.add(inclusiveLowerLimit);
         if (restrictions.getMin().isBefore(BigDecimal.ZERO)){
@@ -99,26 +99,23 @@ public class RealNumberFieldValueSource implements FieldValueSource {
 
         return list.stream()
             .distinct()
-            .filter(this::notInBlacklist)
-            .map(Function.identity());
+            .filter(this::notInBlacklist);
     }
 
     @Override
-    public Stream<Object> generateAllValues() {
+    public Stream<BigDecimal> generateAllValues() {
         return stream(new LinearIterator<>(restrictions))
-            .filter(this::notInBlacklist)
-            .map(Function.identity());
+            .filter(this::notInBlacklist);
     }
 
     @Override
-    public Stream<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
+    public Stream<BigDecimal> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
         return Stream.generate(() ->
             randomNumberGenerator.nextBigDecimal(
                 inclusiveLowerLimit,
                 inclusiveUpperLimit))
             .map(val -> restrictions.getGranularity().trimToGranularity(val))
-            .filter(this::notInBlacklist)
-            .map(Function.identity());
+            .filter(this::notInBlacklist);
     }
 
 

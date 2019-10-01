@@ -26,11 +26,11 @@ import java.util.stream.Stream;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 
-class CombiningFieldValueSourceEqualityTests {
+class NullAppendingFieldValueSourceEqualityTests {
     @Test
     public void shouldBeEqualIfUnderlyingSourcesAreTheSame(){
-        CombiningFieldValueSource a = new CombiningFieldValueSource(Arrays.asList(source(1), source(2)));
-        CombiningFieldValueSource b = new CombiningFieldValueSource(Arrays.asList(source(1), source(2)));
+        NullAppendingValueSource a = new NullAppendingValueSource(source(1));
+        NullAppendingValueSource b = new NullAppendingValueSource(source(1));
 
         Assert.assertThat(a, equalTo(b));
         Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
@@ -38,16 +38,8 @@ class CombiningFieldValueSourceEqualityTests {
 
     @Test
     public void shouldBeUnequalIfUnderlyingSourcesAreTheSameButDifferentOrder(){
-        CombiningFieldValueSource a = new CombiningFieldValueSource(Arrays.asList(source(1), source(2)));
-        CombiningFieldValueSource b = new CombiningFieldValueSource(Arrays.asList(source(2), source(1)));
-
-        Assert.assertThat(a, not(equalTo(b)));
-    }
-
-    @Test
-    public void shouldBeUnequalIfUnderlyingSourcesAreDifferent(){
-        CombiningFieldValueSource a = new CombiningFieldValueSource(Arrays.asList(source(1), source(2)));
-        CombiningFieldValueSource b = new CombiningFieldValueSource(Arrays.asList(source(2), source(3)));
+        NullAppendingValueSource a = new NullAppendingValueSource(source(1));
+        NullAppendingValueSource b = new NullAppendingValueSource(source(2));
 
         Assert.assertThat(a, not(equalTo(b)));
     }
