@@ -17,7 +17,7 @@ public class LinearRestrictionsFactory {
 
     public static LinearRestrictions<OffsetDateTime> createDateTimeRestrictions(Limit<OffsetDateTime> min, Limit<OffsetDateTime> max, Timescale granularity) {
         OffsetDateTime inclusiveMin = getInclusiveMin(min, granularity, ISO_MIN_DATE);
-        OffsetDateTime inclusiveMax = getInclusiveMax(max, granularity, ISO_MAX_DATE, b->b.minusNanos(100));
+        OffsetDateTime inclusiveMax = getInclusiveMax(max, granularity, ISO_MAX_DATE);
         return new LinearRestrictions<>(inclusiveMin, inclusiveMax, granularity);
     }
 
@@ -28,7 +28,7 @@ public class LinearRestrictionsFactory {
     public static LinearRestrictions<BigDecimal> createNumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max, int numericScale) {
         NumericGranularity granularity = new NumericGranularity(numericScale);
         BigDecimal inclusiveMin = getInclusiveMin(min, granularity, NUMERIC_MIN);
-        BigDecimal inclusiveMax = getInclusiveMax(max, granularity, NUMERIC_MAX, b->b.subtract(new BigDecimal("0.000000000000000000001")));
+        BigDecimal inclusiveMax = getInclusiveMax(max, granularity, NUMERIC_MAX);
         return new LinearRestrictions<>(inclusiveMin, inclusiveMax, granularity);
     }
 
@@ -42,13 +42,13 @@ public class LinearRestrictionsFactory {
             : granularity.getNext(granularity.trimToGranularity(min.getValue()));
     }
 
-    private static <T extends Comparable<? super T>> T getInclusiveMax(Limit<T> max, Granularity<T> granularity, T actualMax, Function<T, T> reduction) {
+    private static <T extends Comparable<? super T>> T getInclusiveMax(Limit<T> max, Granularity<T> granularity, T actualMax) {
         if (max.getValue().compareTo(actualMax) > 0) {
             return actualMax;
         }
 
         return max.isInclusive()
             ? max.getValue()
-            : granularity.trimToGranularity(reduction.apply(max.getValue()));
+            : granularity.getPrevious(max.getValue());
     }
 }
