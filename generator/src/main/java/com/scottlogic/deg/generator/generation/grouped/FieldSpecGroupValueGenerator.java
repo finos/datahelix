@@ -26,14 +26,18 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.databags.*;
+import com.scottlogic.deg.generator.restrictions.linear.Limit;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
 import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.function.BinaryOperator;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.scottlogic.deg.common.util.FlatMappingSpliterator.flatMap;
-import static com.scottlogic.deg.generator.generation.grouped.FieldSpecGroupDateHelper.adjustBoundsOfDate;
 
 public class FieldSpecGroupValueGenerator {
 
@@ -48,62 +52,108 @@ public class FieldSpecGroupValueGenerator {
     }
 
     public Stream<DataBag> generate(FieldSpecGroup group) {
-        Field first = SetUtils.firstIteratorElement(group.fieldSpecs().keySet());
+        Field first = SetUtils.firstIteratorElement(
+            Stream.concat(
+            group.fieldSpecs().keySet().stream(), group.fieldSpecs().keySet().stream()).skip(1).collect(Collectors.toList()));
         if (group.fieldSpecs().size() == 1){
             return underlyingGenerator.generate(first, group.fieldSpecs().get(first))
                 .map(val -> toDataBag(first, val));
         }
 
         FieldSpec firstSpec = updateFirstSpecFromRelations(first, group);
-        FieldSpecGroup updatedGroup = removeSpecFromGroup(first, group);
 
         Stream<DataBag> firstDataBagValues = underlyingGenerator.generate(first, firstSpec)
             .map(value -> toDataBag(first, value));
 
-        return createRemainingDataBags(firstDataBagValues, first, updatedGroup);
+        return flatMap(
+            firstDataBagValues,
+            dataBag -> generateRemainingData(first, dataBag, removeSpecFromGroup(first, group)));
     }
 
     private FieldSpec updateFirstSpecFromRelations(Field first, FieldSpecGroup group) {
-        FieldSpec mutatingSpec = group.fieldSpecs().get(first);
+        Optional<FieldSpec> optionalFirstFieldSpec = Optional.of(group.fieldSpecs().get(first));
 
-        for (FieldSpecRelations relation : group.relations()) {
-            //TODO only works pairwise
-            FieldSpec reduced = createMergedSpecFromRelation(first, relation, group);
+        return group.relations().stream()
+            .filter(relation -> isRelatedToField(first, relation))
+            .map(relation -> createMergedSpecFromRelation(first, relation, group))
+            .map(Optional::of)
+            .reduce(optionalFirstFieldSpec, this::mergeOptionalFieldspecs)
+            .orElseThrow(() -> new IllegalStateException("Failed to merge field specs in related fields"));
+    }
 
-            mutatingSpec = fieldSpecMerger.merge(reduced, mutatingSpec)
-                .orElseThrow(() -> new IllegalStateException("Failed to merge field specs in related fields"));
-        }
+    private Optional<FieldSpec> mergeOptionalFieldspecs(Optional<FieldSpec> left, Optional<FieldSpec> right) {
+        return left.flatMap(
+            (leftFieldSpec) -> fieldSpecMerger.merge(leftFieldSpec, right.get()));
+    }
 
-        return mutatingSpec;
+    private boolean isRelatedToField(Field field, FieldSpecRelations relation) {
+        return relation.main().equals(field) || relation.other().equals(field);
     }
 
     private FieldSpec createMergedSpecFromRelation(Field first,
                                                    FieldSpecRelations relation,
                                                    FieldSpecGroup group) {
-        Field other = relation.main().equals(first) ? relation.other() : relation.main();
-        return relation.inverse().reduceToRelatedFieldSpec(group.fieldSpecs().get(other));
+        if (relation.main().equals(first)){
+            FieldSpec otherFieldSpec = group.fieldSpecs().get(relation.other());
+            return relation.reduceToRelatedFieldSpec(otherFieldSpec);
+        }
+        else {
+            FieldSpec otherFieldSpec = group.fieldSpecs().get(relation.main());
+            return relation.inverse().reduceToRelatedFieldSpec(otherFieldSpec);
+        }
     }
 
-
-    private Stream<DataBag> createRemainingDataBags(Stream<DataBag> generatedDataBsgs, Field field, FieldSpecGroup group) {
-        return flatMap(
-            generatedDataBsgs,
-            dataBag -> generateRemainingData(field, dataBag, group));
-    }
-
-    private Stream<DataBag> generateRemainingData(Field field, DataBag dataBag, FieldSpecGroup group) {
-        FieldSpecGroup newGroup = adjustBounds(field, dataBag.getDataBagValue(field), group);
+    private Stream<DataBag> generateRemainingData(Field generatedField, DataBag dataBag, FieldSpecGroup group) {
+        FieldSpecGroup newGroup = adjustBounds(generatedField, dataBag.getDataBagValue(generatedField), group);
 
         Stream<DataBag> dataBagStream = generate(newGroup)
             .map(otherData -> DataBag.merge(dataBag, otherData));
+
         return applyCombinationStrategy(dataBagStream);
     }
 
     private FieldSpecGroup adjustBounds(Field field, DataBagValue value, FieldSpecGroup group) {
         if (value.getValue() instanceof OffsetDateTime) {
-            return adjustBoundsOfDate(field, (OffsetDateTime) value.getValue(), group);
+
+            Limit<OffsetDateTime> limit = new Limit<>((OffsetDateTime)value.getValue(), true);
+            LinearRestrictions<OffsetDateTime> restrictions = LinearRestrictionsFactory.createDateTimeRestrictions(limit,limit);
+            FieldSpec newSpec = FieldSpec.fromRestriction(restrictions).withNotNull();
+
+            return adjustBoundsOfDate(field, newSpec, group);
         }
         return group;
+    }
+
+    private FieldSpecGroup adjustBoundsOfDate(Field field, FieldSpec newSpec, FieldSpecGroup group) {
+        Set<FieldSpecRelations> nonUpdatedRelations = group.relations().stream()
+            .filter(relation -> !relation.main().equals(field) && !relation.other().equals(field))
+            .collect(Collectors.toSet());
+
+        Map<Field, FieldSpec> fieldUpdates = group.relations().stream()
+            .filter(relation -> relation.main().equals(field) || relation.other().equals(field))
+            .map(relations -> relations.other().equals(field) ? relations : relations.inverse())
+            .collect(Collectors.toMap(
+                relation -> relation.main(),
+                relation -> relation.reduceToRelatedFieldSpec(newSpec),
+                (l, r) -> fieldSpecMerger.merge(l, r)
+                    .orElseThrow(() -> new IllegalStateException("Failed to merge field specs in related fields"))));
+
+        Map<Field, FieldSpec> newFieldSpecs = group.fieldSpecs().entrySet().stream()
+            .collect(Collectors.toMap(
+                e -> e.getKey(),
+                e -> updateSpec(e.getKey(), e.getValue(), fieldUpdates)));
+
+        return new FieldSpecGroup(newFieldSpecs, nonUpdatedRelations);
+    }
+
+    private FieldSpec updateSpec(Field key, FieldSpec previous, Map<Field, FieldSpec> fieldUpdates){
+        if (!fieldUpdates.containsKey(key)){
+            return previous;
+        }
+
+        return fieldSpecMerger.merge(previous, fieldUpdates.get(key))
+            .orElseThrow(() ->
+                new IllegalStateException("Failed to merge field specs in related fields"));
     }
 
     private Stream<DataBag> applyCombinationStrategy(Stream<DataBag> dataBagStream) {
