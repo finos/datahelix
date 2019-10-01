@@ -58,32 +58,8 @@ public class DateTimeFieldValueSource implements FieldValueSource<OffsetDateTime
 
     @Override
     public Stream<OffsetDateTime> generateInterestingValues() {
-
-        ArrayList<OffsetDateTime> interestingValues = new ArrayList<>();
-
-        if (restrictions.getMin() != DATETIME_MIN_LIMIT
-            && restrictions.getMin().getValue() != Defaults.ISO_MIN_DATE) {
-            OffsetDateTime min = restrictions.getMin().getValue();
-            interestingValues.add(restrictions.getMin().isInclusive() ? min : min.plusNanos(1_000_000));
-        } else {
-            interestingValues.add(OffsetDateTime.of(
-                LocalDate.of(1900, 01, 01),
-                LocalTime.MIDNIGHT,
-                ZoneOffset.UTC));
-        }
-
-        if (restrictions.getMax() != DATETIME_MAX_LIMIT
-            && restrictions.getMax().getValue() != Defaults.ISO_MAX_DATE) {
-            OffsetDateTime max = restrictions.getMax().getValue();
-            interestingValues.add(restrictions.getMax().isInclusive() ? max : max.minusNanos(1_000_000));
-        } else {
-            interestingValues.add(OffsetDateTime.of(
-                LocalDate.of(2100, 01, 01),
-                LocalTime.MIDNIGHT,
-                ZoneOffset.UTC));
-        }
-
-        return interestingValues.stream()
+        return Stream.of(restrictions.getMin(), restrictions.getMax())
+            .distinct()
             .filter(i -> !blacklist.contains(i));
     }
 
