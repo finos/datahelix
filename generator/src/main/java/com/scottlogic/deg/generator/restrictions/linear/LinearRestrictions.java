@@ -22,37 +22,34 @@ import com.scottlogic.deg.generator.restrictions.TypedRestrictions;
 import java.util.Objects;
 
 public class LinearRestrictions<T extends Comparable<T>> implements TypedRestrictions<T> {
-    private final Limit<T> min;
-    private final Limit<T> max;
+    private final T min;
+    private final T max;
     private final Granularity<T> granularity;
 
-    public LinearRestrictions(Limit<T> min, Limit<T> max, Granularity<T> granularity) {
-        if (min == null || max == null) {
-            throw new IllegalArgumentException("linear restrictions cannot have null limits");
-        }
-        this.min = min;
-        this.max = max;
+    public LinearRestrictions(T inclusiveMin, T inclusiveMax, Granularity<T> granularity) {
+        this.min = inclusiveMin;
+        this.max = inclusiveMax;
         this.granularity = granularity;
     }
 
     @Override
     public boolean match(T o){
-        if (!min.isBefore(o)) {
+        if (min.compareTo(o) > 0) {
             return false;
         }
 
-        if (!max.isAfter(o)) {
+        if (max.compareTo(o) < 0) {
             return false;
         }
 
         return granularity.isCorrectScale(o);
     }
 
-    public Limit<T> getMax() {
+    public T getMax() {
         return max;
     }
 
-    public Limit<T> getMin() {
+    public T getMin() {
         return min;
     }
 

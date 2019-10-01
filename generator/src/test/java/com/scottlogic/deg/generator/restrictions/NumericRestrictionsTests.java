@@ -259,7 +259,7 @@ public class NumericRestrictionsTests {
         Limit<BigDecimal> limit = new Limit<>(new BigDecimal("1e21"),true);
         LinearRestrictions<BigDecimal> restrictions = LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, limit,  1);
 
-        Assert.assertFalse(restrictions.getMax().getValue().compareTo(NUMERIC_MAX_LIMIT.getValue()) > 0);
+        Assert.assertFalse(restrictions.getMax().compareTo(NUMERIC_MAX_LIMIT.getValue()) > 0);
 
     }
 
@@ -268,7 +268,7 @@ public class NumericRestrictionsTests {
         Limit<BigDecimal> limit = new Limit<>(new BigDecimal("-1e21"),true);
         LinearRestrictions<BigDecimal> restrictions = LinearRestrictionsFactory.createNumericRestrictions(limit, NUMERIC_MAX_LIMIT,  1);
 
-        Assert.assertFalse(restrictions.getMin().getValue().compareTo(NUMERIC_MIN_LIMIT.getValue()) < 0);
+        Assert.assertFalse(restrictions.getMin().compareTo(NUMERIC_MIN_LIMIT.getValue()) < 0);
 
     }
 

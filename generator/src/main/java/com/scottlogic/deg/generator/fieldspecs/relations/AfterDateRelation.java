@@ -35,7 +35,7 @@ public class AfterDateRelation extends AbstractDateInequalityRelation {
     }
 
     @Override
-    protected Limit<OffsetDateTime> dateTimeLimitExtractingFunction(LinearRestrictions<OffsetDateTime> restrictions) {
+    protected OffsetDateTime dateTimeLimitExtractingFunction(LinearRestrictions<OffsetDateTime> restrictions) {
         if (restrictions != null) {
             return restrictions.getMax();
         } else {
