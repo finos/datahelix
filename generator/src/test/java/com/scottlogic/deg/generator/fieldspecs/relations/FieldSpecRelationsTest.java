@@ -7,6 +7,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.time.OffsetDateTime;
@@ -51,7 +52,7 @@ class FieldSpecRelationsTest {
         AfterDateRelation relation = new AfterDateRelation(main, other, true);
 
         FieldSpec actual = relation.reduceToRelatedFieldSpec(fieldSpec);
-        FieldSpec expected = fromMin(2018, true);
+        FieldSpec expected = fromMin(2018);
 
         assertThat(actual, sameBeanAs(expected));
     }
@@ -62,7 +63,19 @@ class FieldSpecRelationsTest {
         AfterDateRelation relation = new AfterDateRelation(main, other, true);
 
         FieldSpec actual = relation.reduceToRelatedFieldSpec(fieldSpec);
-        FieldSpec expected = fromMin(2018, true);
+        FieldSpec expected = fromMin(2018);
+
+        assertThat(actual, sameBeanAs(expected));
+    }
+
+    @Disabled //TODO PAUL
+    @Test
+    public void after_range_returnsFromMin(){
+        FieldSpec fieldSpec = forYears(2018, 2021);
+        AfterDateRelation relation = new AfterDateRelation(main, other, false);
+
+        FieldSpec actual = relation.reduceToRelatedFieldSpec(fieldSpec);
+        FieldSpec expected = fromMin(2019);
 
         assertThat(actual, sameBeanAs(expected));
     }
@@ -73,7 +86,7 @@ class FieldSpecRelationsTest {
         BeforeDateRelation relation = new BeforeDateRelation(main, other, true);
 
         FieldSpec actual = relation.reduceToRelatedFieldSpec(fieldSpec);
-        FieldSpec expected = fromMax(2018, true);
+        FieldSpec expected = fromMax(2018);
 
         assertThat(actual, sameBeanAs(expected));
     }
@@ -84,27 +97,39 @@ class FieldSpecRelationsTest {
         BeforeDateRelation relation = new BeforeDateRelation(main, other, true);
 
         FieldSpec actual = relation.reduceToRelatedFieldSpec(fieldSpec);
-        FieldSpec expected = fromMax(2020, true);
+        FieldSpec expected = fromMax(2020);
 
         assertThat(actual, sameBeanAs(expected));
     }
 
-    private FieldSpec fromMin(int year, boolean inclusive) {
+    @Disabled //TODO paul
+    @Test
+    public void before_range_returnsFromMin(){
+        FieldSpec fieldSpec = forYears(2017, 2020);
+        BeforeDateRelation relation = new BeforeDateRelation(main, other, false);
+
+        FieldSpec actual = relation.reduceToRelatedFieldSpec(fieldSpec);
+        FieldSpec expected = fromMax(2019);
+
+        assertThat(actual, sameBeanAs(expected));
+    }
+
+    private FieldSpec fromMin(int year) {
         OffsetDateTime min = OffsetDateTime.of(year, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
-        LinearRestrictions restrictions = createDateTimeRestrictions(new Limit<>(min, inclusive), new Limit(ISO_MAX_DATE, true));
+        LinearRestrictions restrictions = new LinearRestrictions(min, ISO_MAX_DATE, Timescale.MILLIS);
         return FieldSpec.fromRestriction(restrictions);
     }
 
-    private FieldSpec fromMax(int year, boolean inclusive) {
+    private FieldSpec fromMax(int year) {
         OffsetDateTime max = OffsetDateTime.of(year, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
-        LinearRestrictions restrictions = createDateTimeRestrictions(new Limit(ISO_MIN_DATE, true), new Limit<>(max, inclusive));
+        LinearRestrictions restrictions = new LinearRestrictions(ISO_MIN_DATE, max, Timescale.MILLIS);
         return FieldSpec.fromRestriction(restrictions);
     }
 
     private FieldSpec forYears(int minYear, int maxYear) {
         OffsetDateTime min = OffsetDateTime.of(minYear, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
         OffsetDateTime max = OffsetDateTime.of(maxYear, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
-        LinearRestrictions<OffsetDateTime> restrictions = new LinearRestrictions<>(new Limit<>(min, true), new Limit<>(max, true), Timescale.YEARS);
+        LinearRestrictions<OffsetDateTime> restrictions = new LinearRestrictions(min, max, Timescale.YEARS);
         return FieldSpec.fromRestriction(restrictions).withNotNull();
     }
 }

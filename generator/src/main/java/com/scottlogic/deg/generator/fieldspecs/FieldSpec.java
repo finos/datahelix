@@ -37,18 +37,16 @@ public class FieldSpec {
     public static FieldSpec fromRestriction(TypedRestrictions restrictions) {
         return new FieldSpec(null, restrictions, true, Collections.emptySet());
     }
-
     public static FieldSpec empty() {
         return new FieldSpec(null, null, true, Collections.emptySet());
     }
-
     public static FieldSpec nullOnly() {
         return new FieldSpec(NO_VALUES, null, true, Collections.emptySet());
     }
+
     private final boolean nullable;
     private final DistributedList<Object> whitelist;
     private final Set<Object> blacklist;
-
     private final TypedRestrictions restrictions;
 
     private FieldSpec(

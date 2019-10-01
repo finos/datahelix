@@ -36,7 +36,7 @@ public class AfterDateRelation extends AbstractDateInequalityRelation {
     }
 
     @Override
-    protected OffsetDateTime dateTimeLimitExtractingFunction(LinearRestrictions<OffsetDateTime> restrictions) {
+    protected OffsetDateTime getRelevantValue(LinearRestrictions<OffsetDateTime> restrictions) {
         if (restrictions != null) {
             return restrictions.getMin();
         } else {
@@ -54,4 +54,8 @@ public class AfterDateRelation extends AbstractDateInequalityRelation {
         return new BeforeDateRelation(other(), main(), inclusive);
     }
 
+    @Override
+    public String toString() {
+        return String.format("%s is after %s%s", main(), inclusive ? "or equal to " : "", other());
+    }
 }
