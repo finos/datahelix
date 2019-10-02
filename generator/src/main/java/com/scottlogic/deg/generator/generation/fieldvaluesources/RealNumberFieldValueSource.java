@@ -34,93 +34,44 @@ import java.util.stream.StreamSupport;
 
 import static com.scottlogic.deg.generator.utils.SetUtils.stream;
 
-public class RealNumberFieldValueSource implements FieldValueSource {
-    private final BigDecimal inclusiveUpperLimit;
-    private final BigDecimal inclusiveLowerLimit;
+public class RealNumberFieldValueSource implements FieldValueSource<BigDecimal> {
     private final Set<BigDecimal> blacklist;
-    private final static BigDecimal exclusivityAdjuster = BigDecimal.valueOf(Double.MIN_VALUE);
-
     private final LinearRestrictions<BigDecimal> restrictions;
 
     public RealNumberFieldValueSource(LinearRestrictions<BigDecimal> restrictions, Set<Object> blacklist) {
         this.restrictions = restrictions;
 
-        Limit<BigDecimal> lowerLimit = getLowerLimit(restrictions);
-
-        this.inclusiveLowerLimit =
-            lowerLimit.isInclusive()
-                ? lowerLimit.getValue()
-                : restrictions.getGranularity().getNext(lowerLimit.getValue());
-
-        Limit<BigDecimal> upperLimit = getUpperLimit(restrictions);
-
-        this.inclusiveUpperLimit =
-            upperLimit.isInclusive()
-                ? upperLimit.getValue()
-                : restrictions.getGranularity().trimToGranularity(
-                    upperLimit.getValue().subtract(exclusivityAdjuster));
-
         this.blacklist = blacklist.stream()
             .map(NumberUtils::coerceToBigDecimal)
             .filter(Objects::nonNull)
             .map(i -> restrictions.getGranularity().trimToGranularity(i))
-            .filter(i -> this.inclusiveLowerLimit.compareTo(i) <= 0 && i.compareTo(this.inclusiveUpperLimit) <= 0)
+            .filter(i -> restrictions.getMin().compareTo(i) <= 0 && i.compareTo(restrictions.getMax()) <= 0)
             .collect(Collectors.toSet());
     }
 
-    private Limit<BigDecimal> getUpperLimit(LinearRestrictions<BigDecimal> restrictions) {
-        BigDecimal maxValue = Defaults.NUMERIC_MAX;
-        if (restrictions.getMax() == null) {
-            return new Limit<>(maxValue, true);
-        }
-
-        // Returns the smaller of the two maximum restrictions
-        return new Limit<>(maxValue.min(restrictions.getMax().getValue()), restrictions.getMax().isInclusive());
-    }
-
-    private Limit<BigDecimal> getLowerLimit(LinearRestrictions<BigDecimal> restrictions) {
-        BigDecimal minValue = Defaults.NUMERIC_MIN;
-        if (restrictions.getMin() == null) {
-            return new Limit<>(minValue, true);
-        }
-
-        // Returns the larger of the two minimum restrictions
-        return new Limit<>(minValue.max(restrictions.getMin().getValue()), restrictions.getMin().isInclusive());
-    }
-
     @Override
-    public Stream<Object> generateInterestingValues() {
-        List<BigDecimal> list = new ArrayList<>();
-        list.add(inclusiveLowerLimit);
-        if (restrictions.getMin().isBefore(BigDecimal.ZERO)){
-            list.add(restrictions.getGranularity().trimToGranularity(new BigDecimal(0)));
-        }
-        list.add(inclusiveUpperLimit);
-
-        return list.stream()
+    public Stream<BigDecimal> generateInterestingValues() {
+        return Stream.of(restrictions.getMin(), BigDecimal.ZERO, restrictions.getMax())
             .distinct()
-            .filter(this::notInBlacklist)
-            .map(Function.identity());
+            .filter(restrictions::match)
+            .filter(this::notInBlacklist);
     }
 
     @Override
-    public Stream<Object> generateAllValues() {
+    public Stream<BigDecimal> generateAllValues() {
         return stream(new LinearIterator<>(restrictions))
-            .filter(this::notInBlacklist)
-            .map(Function.identity());
+            .filter(this::notInBlacklist);
     }
 
     @Override
-    public Stream<Object> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
+    public Stream<BigDecimal> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
         return Stream.generate(() ->
             randomNumberGenerator.nextBigDecimal(
-                inclusiveLowerLimit,
-                inclusiveUpperLimit))
+                restrictions.getMin(),
+                restrictions.getMax()))
             .map(val -> restrictions.getGranularity().trimToGranularity(val))
-            .filter(this::notInBlacklist)
-            .map(Function.identity());
+            .filter(this::notInBlacklist);
     }
-
 
     private boolean notInBlacklist(BigDecimal i) {
         return blacklist.stream().noneMatch(x->x.compareTo(i)==0);
@@ -132,14 +83,12 @@ public class RealNumberFieldValueSource implements FieldValueSource {
         if (obj == null || getClass() != obj.getClass()) return false;
 
         RealNumberFieldValueSource otherSource = (RealNumberFieldValueSource) obj;
-        return inclusiveUpperLimit.equals(otherSource.inclusiveUpperLimit) &&
-            inclusiveLowerLimit.equals(otherSource.inclusiveLowerLimit) &&
-            blacklist.equals(otherSource.blacklist);
+        return Objects.equals(restrictions, otherSource.restrictions) && Objects.equals(blacklist, otherSource.blacklist);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(inclusiveLowerLimit, inclusiveUpperLimit, blacklist);
+        return Objects.hash(restrictions, blacklist);
     }
 
     private Stream<Object> streamOf(Iterable<Object> iterable){

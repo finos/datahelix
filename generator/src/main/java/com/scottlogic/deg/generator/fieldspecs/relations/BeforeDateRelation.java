@@ -34,7 +34,7 @@ public class BeforeDateRelation extends AbstractDateInequalityRelation {
     }
 
     @Override
-    public Limit<OffsetDateTime> dateTimeLimitExtractingFunction(LinearRestrictions<OffsetDateTime> restrictions) {
+    public OffsetDateTime dateTimeLimitExtractingFunction(LinearRestrictions<OffsetDateTime> restrictions) {
         if (restrictions != null) {
             return restrictions.getMin();
         } else {

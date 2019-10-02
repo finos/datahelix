@@ -17,20 +17,83 @@
 
 package com.scottlogic.deg.generator.restrictions.linear;
 
+import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static com.shazam.shazamcrest.MatcherAssert.assertThat;
+import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 
 class GranularityTest {
+
     @Test
-    public void dateTimeRestrictions_nextCorrectlyGetsNextValidValue(){
+    public void numericRestrictions_nextCorrectlyGetsNextValidValue(){
         NumericGranularity granularity = new NumericGranularity(0);
         BigDecimal num = new BigDecimal(5);
+
         BigDecimal result = granularity.getNext(num);
+
         BigDecimal expectedResult = new BigDecimal(6);
-        assertTrue(expectedResult.compareTo(result) == 0);
+        assertThat(result, sameBeanAs(expectedResult));
     }
+
+    @Test
+    public void numericRestrictions_getPrevious(){
+        NumericGranularity granularity = new NumericGranularity(0);
+        BigDecimal num = new BigDecimal(5);
+
+        BigDecimal result = granularity.getPrevious(num);
+
+        BigDecimal expectedResult = new BigDecimal(4);
+        assertThat(result, sameBeanAs(expectedResult));
+    }
+
+    @Test
+    public void numericRestrictions_getPreviousBetweenGranularity(){
+        NumericGranularity granularity = new NumericGranularity(0);
+        BigDecimal num = new BigDecimal(5.5);
+
+        BigDecimal result = granularity.getPrevious(num);
+
+        BigDecimal expectedResult = new BigDecimal(5);
+        assertThat(result, sameBeanAs(expectedResult));
+    }
+
+    @Test
+    public void dateTimeRestrictions_getPrevious(){
+        Timescale granularity = Timescale.YEARS;
+        OffsetDateTime offsetDateTime = OffsetDateTime.of(2018, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
+
+        OffsetDateTime result = granularity.getPrevious(offsetDateTime);
+        OffsetDateTime expectedResult = OffsetDateTime.of(2017, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
+
+        assertThat(result, sameBeanAs(expectedResult));
+    }
+
+    @Test
+    public void dateTimeRestrictionsMillis_getPrevious(){
+        Timescale granularity = Timescale.MILLIS;
+        OffsetDateTime offsetDateTime = OffsetDateTime.of(2018, 1, 1, 0, 0, 0, 1_000_000, ZoneOffset.UTC);
+
+        OffsetDateTime result = granularity.getPrevious(offsetDateTime);
+        OffsetDateTime expectedResult = OffsetDateTime.of(2018, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
+
+        assertThat(result, sameBeanAs(expectedResult));
+    }
+
+    @Test
+    public void dateTimeRestrictions_getPreviousBetweenGranularity(){
+        Timescale granularity = Timescale.YEARS;
+        OffsetDateTime offsetDateTime = OffsetDateTime.of(2018, 7, 1, 0, 0, 0, 0, ZoneOffset.UTC);
+
+        OffsetDateTime result = granularity.getPrevious(offsetDateTime);
+        OffsetDateTime expectedResult = OffsetDateTime.of(2018, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
+
+        assertThat(result, sameBeanAs(expectedResult));
+    }
+
 
 }

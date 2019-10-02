@@ -1,6 +1,6 @@
 package com.scottlogic.deg.profile.reader.file;
 
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import org.junit.jupiter.api.Test;
 
@@ -18,11 +18,11 @@ class CsvInputStreamReaderTest {
         final ClassLoader loader = Thread.currentThread().getContextClassLoader();
         final InputStream is = loader.getResourceAsStream("names/firstname.csv");
 
-        final DistributedSet<String> names = CsvInputStreamReader.retrieveLines(is);
+        final DistributedList<String> names = CsvInputStreamReader.retrieveLines(is);
 
         final Set<String> sampleNames = Stream.of("Rory", "Kyle", "Grace").collect(Collectors.toSet());
 
-        assertTrue(names.set().containsAll(sampleNames));
+        assertTrue(names.list().containsAll(sampleNames));
     }
 
     @Test
@@ -30,13 +30,13 @@ class CsvInputStreamReaderTest {
         final ClassLoader loader = Thread.currentThread().getContextClassLoader();
         final InputStream is = loader.getResourceAsStream("csv/without-frequencies.csv");
 
-        final DistributedSet<String> set = CsvInputStreamReader.retrieveLines(is);
+        final DistributedList<String> set = CsvInputStreamReader.retrieveLines(is);
 
         assertTrue(checkAllWeightsAreEquals(set));
     }
 
-    private <T> boolean checkAllWeightsAreEquals(DistributedSet<T> set) {
-        return set.distributedSet().stream()
+    private <T> boolean checkAllWeightsAreEquals(DistributedList<T> set) {
+        return set.distributedList().stream()
             .map(WeightedElement::weight)
             .distinct()
             .limit(2).count() <= 1;

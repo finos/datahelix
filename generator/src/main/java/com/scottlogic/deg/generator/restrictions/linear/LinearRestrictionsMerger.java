@@ -31,8 +31,8 @@ public class LinearRestrictionsMerger<T extends Comparable<T>> implements Restri
 
         Granularity<T> mergedGranularity = leftCast.getGranularity().merge(rightCast.getGranularity());
 
-        Limit<T> mergedMin = getHighest(leftCast.getMin(), rightCast.getMin(), mergedGranularity);
-        Limit<T> mergedMax = getLowest(leftCast.getMax(), rightCast.getMax(), mergedGranularity);
+        T mergedMin = getHighest(leftCast.getMin(), rightCast.getMin(), mergedGranularity);
+        T mergedMax = getLowest(leftCast.getMax(), rightCast.getMax(), mergedGranularity);
 
         LinearRestrictions<T> mergedRestriction = new LinearRestrictions<>(mergedMin, mergedMax, mergedGranularity);
 
@@ -44,53 +44,38 @@ public class LinearRestrictionsMerger<T extends Comparable<T>> implements Restri
     }
 
     private boolean isContradictory(LinearRestrictions<T> restictions) {
-        T inclusiveMinValue = restictions.getMin().isInclusive()
-            ? restictions.getMin().getValue()
-            : restictions.getGranularity().getNext(restictions.getMin().getValue());
-
-        return !restictions.getMax().isAfter(inclusiveMinValue);
+        return restictions.getMax().compareTo(restictions.getMin()) < 0;
     }
 
-    private Limit<T> getHighest(Limit<T> left, Limit<T> right, Granularity<T> granularity) {
-        if (left.getValue().equals(right.getValue())) {
-            return getLeastInclusive(left, right);
-        }
-
+    private T getHighest(T left, T right, Granularity<T> granularity) {
         return roundUpToNextValidValue(
-            left.isAfter(right.getValue()) ? left : right,
+            (left.compareTo(right) >= 0) ? left : right,
             granularity
         );
     }
 
-    private Limit<T> getLowest(Limit<T> left, Limit<T> right, Granularity<T> granularity) {
-        if (left.getValue().equals(right.getValue())) {
-            return getLeastInclusive(left, right);
-        }
+    private T getLowest(T left, T right, Granularity<T> granularity) {
         return roundDownToNextValidValue(
-            left.isBefore(right.getValue()) ? left : right,
+            (left.compareTo(right) <= 0) ? left : right,
             granularity
         );
     }
 
-    private Limit<T> roundUpToNextValidValue(Limit<T> limit, Granularity<T> granularity) {
-        if (granularity.isCorrectScale(limit.getValue())){
+    private T roundUpToNextValidValue(T limit, Granularity<T> granularity) {
+        if (granularity.isCorrectScale(limit)){
             return limit;
         }
         else {
-            return new Limit<>(granularity.getNext(granularity.trimToGranularity(limit.getValue())), true);
+            return granularity.getNext(granularity.trimToGranularity(limit));
         }
     }
 
-    private Limit<T> roundDownToNextValidValue(Limit<T> limit, Granularity<T> granularity) {
-        if (granularity.isCorrectScale(limit.getValue())){
+    private T roundDownToNextValidValue(T limit, Granularity<T> granularity) {
+        if (granularity.isCorrectScale(limit)){
             return limit;
         }
         else {
-            return new Limit<>(granularity.trimToGranularity(limit.getValue()), true);
+            return granularity.trimToGranularity(limit);
         }
-    }
-
-    private Limit<T> getLeastInclusive(Limit<T> left, Limit<T> right) {
-        return left.isInclusive() ? right : left;
     }
 }

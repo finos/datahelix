@@ -3,7 +3,7 @@ package com.scottlogic.deg.profile.reader.atomic;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.profile.reader.file.CsvInputStreamReader;
 
@@ -22,16 +22,17 @@ public class FromFileReader {
         }
     }
 
-    public DistributedSet<Object> setFromFile(String file) {
+    public DistributedList<Object> setFromFile(String file) {
         InputStream streamFromPath = createStreamFromPath(appendPath(file));
 
-        DistributedSet<String> names = CsvInputStreamReader.retrieveLines(streamFromPath);
+        DistributedList<String> names = CsvInputStreamReader.retrieveLines(streamFromPath);
         closeStream(streamFromPath);
 
-        return new DistributedSet<>(
-            names.distributedSet().stream()
+        return new DistributedList<>(
+            names.distributedList().stream()
                 .map(holder -> new WeightedElement<>((Object) holder.element(), holder.weight()))
-                .collect(Collectors.toSet()));
+                .distinct()
+                .collect(Collectors.toList()));
     }
 
     private String appendPath(String path) {

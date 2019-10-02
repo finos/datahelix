@@ -9,15 +9,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 
-import static com.scottlogic.deg.common.profile.Types.STRING;
 import static org.junit.jupiter.api.Assertions.*;
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 class RowSpecMergerTest {
     RowSpecMerger rowSpecMerger = new RowSpecMerger(new FieldSpecMerger());
 
-    FieldSpec isNull = FieldSpec.nullOnlyFromType(STRING);
-    FieldSpec notNull = FieldSpec.fromType(STRING).withNotNull();
+    FieldSpec isNull = FieldSpec.nullOnly();
+    FieldSpec notNull = FieldSpec.empty().withNotNull();
     Field A = createField("A");
     Field B = createField("B");
     ProfileFields fields = new ProfileFields(Arrays.asList(A, B));

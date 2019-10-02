@@ -17,11 +17,11 @@
 package com.scottlogic.deg.generator.fieldspecs.whitelist;
 
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
-import com.scottlogic.deg.generator.utils.SetUtils;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -29,19 +29,19 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class DistributedSetTest {
+class DistributedListTest {
 
     @Test
     public void testEmptyIsEmpty() {
-        DistributedSet<String> empty = DistributedSet.empty();
-        DistributedSet<String> manualEmpty = new DistributedSet<>(Collections.emptySet());
+        DistributedList<String> empty = DistributedList.empty();
+        DistributedList<String> manualEmpty = new DistributedList<>(Collections.emptyList());
 
         assertEquals(manualEmpty, empty);
     }
 
     @Test
     public void testNullSetIsRejected() {
-        assertThrows(IllegalArgumentException.class, () -> new DistributedSet<>(Collections.singleton(null)));
+        assertThrows(IllegalArgumentException.class, () -> new DistributedList<>(Collections.singletonList(null)));
     }
 
     @Test
@@ -51,26 +51,26 @@ class DistributedSetTest {
         WeightedElement<String> second = new WeightedElement<>("second", uniformWeight);
         WeightedElement<String> third = new WeightedElement<>("third", uniformWeight);
 
-        Set<WeightedElement<String>> weightedElements = SetUtils.setOf(first, second, third);
+        List<WeightedElement<String>> weightedElements = Arrays.asList(first, second, third);
 
-        DistributedSet<String> manualSet = new DistributedSet<>(weightedElements);
+        DistributedList<String> manualSet = new DistributedList<>(weightedElements);
 
-        Set<String> elements = SetUtils.setOf("first", "second", "third");
-        DistributedSet<String> uniformSet = DistributedSet.uniform(elements);
+        List<String> elements = Arrays.asList("first", "second", "third");
+        DistributedList<String> uniformSet = DistributedList.uniform(elements);
 
         assertEquals(manualSet, uniformSet);
     }
 
-    private DistributedSet<String> prepareTwoElementSet() {
-        Set<WeightedElement<String>> holders = Stream.of("first", "second", "third", "fourth")
+    private DistributedList<String> prepareTwoElementSet() {
+        List<WeightedElement<String>> holders = Stream.of("first", "second", "third", "fourth")
             .map(WeightedElement::withDefaultWeight)
-            .collect(Collectors.toSet());
-        return new DistributedSet<>(holders);
+            .collect(Collectors.toList());
+        return new DistributedList<>(holders);
     }
 
     @Test
     public void testRandomPick() {
-        DistributedSet<String> set = prepareTwoElementSet();
+        DistributedList<String> set = prepareTwoElementSet();
 
         String firstValue = set.pickRandomly(mockOfRandom(0.0D));
         String otherFirstValue = set.pickRandomly(mockOfRandom(0.24D));

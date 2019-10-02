@@ -29,7 +29,7 @@ public class Defaults {
     public static final BigDecimal NUMERIC_MAX = new BigDecimal("1e20");
     public static final BigDecimal NUMERIC_MIN = new BigDecimal("-1e20");
     public static final int MAX_STRING_LENGTH = 1000;
-    public static final OffsetDateTime ISO_MAX_DATE = OffsetDateTime.of(9999, 12, 31, 23, 59, 59, 999_999_999, ZoneOffset.UTC);
+    public static final OffsetDateTime ISO_MAX_DATE = OffsetDateTime.of(9999, 12, 31, 23, 59, 59, 999_000_000, ZoneOffset.UTC);
     public static final OffsetDateTime ISO_MIN_DATE = OffsetDateTime.of(1, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
     public static final Timescale DEFAULT_DATETIME_GRANULARITY = Timescale.MILLIS;
     public static final int DEFAULT_NUMERIC_SCALE = 20;

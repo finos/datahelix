@@ -18,6 +18,8 @@ package com.scottlogic.deg.common.profile.constraintdetail;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.time.temporal.TemporalAmount;
+import java.time.temporal.TemporalUnit;
 import java.util.Arrays;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -106,6 +108,11 @@ public enum Timescale implements Granularity<OffsetDateTime> {
     @Override
     public OffsetDateTime getNext(OffsetDateTime value) {
         return next.apply(value);
+    }
+
+    @Override
+    public OffsetDateTime getPrevious(OffsetDateTime value) {
+        return trimToGranularity(value.minusNanos(100_000));
     }
 
     @Override
