@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.output.manifest;
+package com.scottlogic.deg.orchestrator.violate.manifest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import com.google.inject.Inject;
-import com.scottlogic.deg.common.profile.ViolatedProfile;
+import com.scottlogic.deg.orchestrator.violate.ViolatedProfile;
 import com.scottlogic.deg.common.util.FileUtils;
 import com.scottlogic.deg.output.OutputPath;
 
@@ -36,11 +36,11 @@ import java.util.stream.Collectors;
  * write out a JSON manifest file during violation.
  * This file shows which rule has been violated in which output file.
  */
-public class JsonManifestWriter implements ManifestWriter {
+public class ManifestWriter {
     private final Path outputPath;
 
     @Inject
-    public JsonManifestWriter(OutputPath outputPath){
+    public ManifestWriter(OutputPath outputPath){
         this.outputPath = outputPath.getPath();
     }
 

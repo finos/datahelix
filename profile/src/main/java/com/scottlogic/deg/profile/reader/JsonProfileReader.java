@@ -78,7 +78,8 @@ public class JsonProfileReader implements ProfileReader {
                         fDto.name,
                         getFieldType(fieldTypes.getOrDefault(fDto.name, fDto.type)),
                         fDto.unique,
-                        fDto.formatting)
+                        fDto.formatting,
+                        false)
                 )
                 .collect(Collectors.toList()));
 
