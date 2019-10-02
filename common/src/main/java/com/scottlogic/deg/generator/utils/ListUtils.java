@@ -19,7 +19,6 @@ package com.scottlogic.deg.generator.utils;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ListUtils {
 
@@ -29,6 +28,6 @@ public class ListUtils {
 
     @SafeVarargs
     public static <T> List<T> listOf(T... elements) {
-        return Collections.unmodifiableList(Arrays.stream(elements).collect(Collectors.toList()));
+        return Collections.unmodifiableList(Arrays.asList(elements));
     }
 }
