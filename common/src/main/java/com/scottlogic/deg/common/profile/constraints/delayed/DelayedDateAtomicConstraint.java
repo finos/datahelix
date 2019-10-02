@@ -59,7 +59,7 @@ public class DelayedDateAtomicConstraint implements DelayedAtomicConstraint {
 
     @Override
     public DelayedAtomicConstraint negate() {
-        return new DynamicNotConstraint(this);
+        throw new UnsupportedOperationException("negate is unsupported on a DelayedDateAtomicConstraint");
     }
 
     public TemporalAdjusterGenerator getOffsetGenerator() {

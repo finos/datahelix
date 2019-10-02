@@ -24,10 +24,6 @@ import com.scottlogic.deg.generator.fieldspecs.relations.*;
 public class FieldRelationsFactory {
 
    public FieldSpecRelations construct(DelayedAtomicConstraint constraint) {
-       if (constraint instanceof DynamicNotConstraint) {
-           throw new ValidationException("related field constraints cannot yet be negated");
-       }
-
        switch (constraint.getUnderlyingConstraint()) {
            case IS_EQUAL_TO_CONSTANT:
                return constructEqualToDate((DelayedDateAtomicConstraint)constraint);
