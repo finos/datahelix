@@ -159,7 +159,7 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
 
     @Override
     public boolean useNdJson() {
-        return (ndjson == null && this.useStdOut()) || ndjson;
+        return ndjson == null ? this.useStdOut() : ndjson;
     }
 
     @Override
