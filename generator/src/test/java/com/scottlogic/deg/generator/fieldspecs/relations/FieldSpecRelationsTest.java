@@ -68,7 +68,6 @@ class FieldSpecRelationsTest {
         assertThat(actual, sameBeanAs(expected));
     }
 
-    @Disabled //TODO PAUL
     @Test
     public void after_range_returnsFromMin(){
         FieldSpec fieldSpec = forYears(2018, 2021);
@@ -102,7 +101,6 @@ class FieldSpecRelationsTest {
         assertThat(actual, sameBeanAs(expected));
     }
 
-    @Disabled //TODO paul
     @Test
     public void before_range_returnsFromMin(){
         FieldSpec fieldSpec = forYears(2017, 2020);

@@ -153,9 +153,9 @@ Feature: running datetimes related to otherfield datetimes
       | 0001-01-01T00:00:00.000Z | 0001-01-08T00:00:00.000Z |
 
     # Results accomodate for the fact that the 5 working days include non-working days
-  @Ignore # offset does not respect our normal boundary conditions
   Scenario: Running an "equalToField" constraint allows one date to be always equal to another minus a value in working days
     Given the generator can generate at most 1 rows
+    And foo is after or at 0001-01-01T00:00:00.000Z
     And there is a constraint:
       """
         {
