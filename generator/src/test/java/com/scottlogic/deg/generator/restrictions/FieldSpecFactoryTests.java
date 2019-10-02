@@ -17,9 +17,12 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
+import com.scottlogic.deg.generator.profile.constraints.atomic.IsStringLongerThanConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.IsStringShorterThanConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.StringHasLengthConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.ViolatedAtomicConstraint;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertEquals;
