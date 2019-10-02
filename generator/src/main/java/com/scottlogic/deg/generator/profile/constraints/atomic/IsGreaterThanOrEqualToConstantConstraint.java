@@ -18,8 +18,6 @@ package com.scottlogic.deg.generator.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
 
-import com.scottlogic.deg.common.profile.RuleInformation;
-
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -35,6 +33,11 @@ public class IsGreaterThanOrEqualToConstantConstraint implements AtomicConstrain
     @Override
     public Field getField() {
         return field;
+    }
+
+    @Override
+    public AtomicConstraint negate() {
+        return new IsLessThanConstantConstraint(field, referenceValue);
     }
 
     @Override

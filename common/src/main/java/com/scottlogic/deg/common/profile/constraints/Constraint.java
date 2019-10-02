@@ -14,14 +14,10 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.profile.constraints.atomic;
+package com.scottlogic.deg.common.profile.constraints;
 
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.generator.profile.constraints.Constraint;
-
-public interface AtomicConstraint extends Constraint {
-
-    Field getField();
-
-    AtomicConstraint negate();
+public interface Constraint
+{
+    Constraint negate();
 }
+

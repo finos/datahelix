@@ -364,11 +364,11 @@ public class JsonProfileReaderTests {
         expectRules(
                 ruleWithConstraints(
                         typedConstraint(
-                                NotConstraint.class,
+                                NotEqualToConstraint.class,
                                 c -> {
                                     Assert.assertThat(
-                                            c.negatedConstraint,
-                                            instanceOf(EqualToConstraint.class));
+                                            c.value,
+                                            equalTo("string"));
                                 })));
     }
 
@@ -906,13 +906,10 @@ public class JsonProfileReaderTests {
         expectRules(
             ruleWithConstraints(
                 typedConstraint(
-                    NotConstraint.class,
+                    NotNullConstraint.class,
                     c -> {
-                        Assert.assertThat(
-                            c.negatedConstraint,
-                            instanceOf(IsNullConstraint.class));
                         Assert.assertEquals(
-                            c.negatedConstraint.getField().name,
+                            c.getField().name,
                             "foo");
                     }
                 )
@@ -972,24 +969,18 @@ public class JsonProfileReaderTests {
         expectRules(
             ruleWithConstraints(
                 typedConstraint(
-                    NotConstraint.class,
+                    NotNullConstraint.class,
                     c -> {
-                        Assert.assertThat(
-                            c.negatedConstraint,
-                            instanceOf(IsNullConstraint.class));
                         Assert.assertEquals(
-                            c.negatedConstraint.getField().name,
+                            c.getField().name,
                             "foo");
                     }
                 ),
                 typedConstraint(
-                    NotConstraint.class,
+                    NotNullConstraint.class,
                     c -> {
-                        Assert.assertThat(
-                            c.negatedConstraint,
-                            instanceOf(IsNullConstraint.class));
                         Assert.assertEquals(
-                            c.negatedConstraint.getField().name,
+                            c.getField().name,
                             "bar");
                     }
                 )
@@ -1018,13 +1009,10 @@ public class JsonProfileReaderTests {
         expectRules(
             ruleWithConstraints(
                 typedConstraint(
-                    NotConstraint.class,
+                    NotNullConstraint.class,
                     c -> {
-                        Assert.assertThat(
-                            c.negatedConstraint,
-                            instanceOf(IsNullConstraint.class));
                         Assert.assertEquals(
-                            c.negatedConstraint.getField().name,
+                            c.getField().name,
                             "bar");
                     }
                 )

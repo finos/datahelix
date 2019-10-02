@@ -4,12 +4,12 @@ import com.scottlogic.deg.common.profile.Field;
 
 import java.util.Objects;
 
-public class EqualToConstraint implements AtomicConstraint {
+public class NotEqualToConstraint implements AtomicConstraint {
 
     private final Field field;
     public final Object value;
 
-    public EqualToConstraint(Field field, Object value) {
+    public NotEqualToConstraint(Field field, Object value) {
         this.field = field;
         this.value = value;
     }
@@ -21,7 +21,7 @@ public class EqualToConstraint implements AtomicConstraint {
 
     @Override
     public AtomicConstraint negate() {
-        return new NotEqualToConstraint(field, value);
+        return new EqualToConstraint(field, value);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class EqualToConstraint implements AtomicConstraint {
             return o.equals(this);
         }
         if (o == null || getClass() != o.getClass()) return false;
-        EqualToConstraint constraint = (EqualToConstraint) o;
+        NotEqualToConstraint constraint = (NotEqualToConstraint) o;
         return Objects.equals(field, constraint.field) && Objects.equals(value, constraint.value);
     }
 

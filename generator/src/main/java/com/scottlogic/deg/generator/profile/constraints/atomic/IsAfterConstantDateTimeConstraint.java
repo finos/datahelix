@@ -36,6 +36,11 @@ public class IsAfterConstantDateTimeConstraint implements AtomicConstraint {
     }
 
     @Override
+    public AtomicConstraint negate() {
+        return new IsBeforeOrEqualToConstantDateTimeConstraint(field, referenceValue);
+    }
+
+    @Override
     public boolean equals(Object o){
         if (this == o) return true;
         if (o instanceof ViolatedAtomicConstraint) {

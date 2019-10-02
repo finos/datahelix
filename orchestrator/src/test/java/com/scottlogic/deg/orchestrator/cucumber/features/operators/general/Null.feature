@@ -406,14 +406,6 @@ Feature: User can specify that a field is null or absent
       | foo  |
       | null |
 
-  Scenario: 'Null' with a contradicting not 'granularTo' should only generate null
-    Given foo is null
-    And foo has type "decimal"
-    And foo is anything but granular to 1
-    Then the following data should be generated:
-      | foo  |
-      | null |
-
 ### after ###
   Scenario: Not 'null' with a non contradicting 'after' should be successful
     Given foo is anything but null

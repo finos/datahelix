@@ -18,8 +18,6 @@ package com.scottlogic.deg.generator.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
 
-import com.scottlogic.deg.common.profile.RuleInformation;
-
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
@@ -35,6 +33,11 @@ public class IsBeforeConstantDateTimeConstraint implements AtomicConstraint {
     @Override
     public Field getField() {
         return field;
+    }
+
+    @Override
+    public AtomicConstraint negate() {
+        return new IsAfterOrEqualToConstantDateTimeConstraint(field, referenceValue);
     }
 
     @Override
