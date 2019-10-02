@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.restrictions.*;
 
 import java.util.*;
@@ -29,9 +29,9 @@ import java.util.*;
  */
 public class FieldSpec {
 
-    private static final DistributedSet<Object> NO_VALUES = DistributedSet.empty();
+    private static final DistributedList<Object> NO_VALUES = DistributedList.empty();
 
-    public static FieldSpec fromSet(DistributedSet<Object> whitelist) {
+    public static FieldSpec fromList(DistributedList<Object> whitelist) {
         return new FieldSpec(whitelist, null, true, Collections.emptySet());
     }
     public static FieldSpec fromRestriction(TypedRestrictions restrictions) {
@@ -46,13 +46,13 @@ public class FieldSpec {
         return new FieldSpec(NO_VALUES, null, true, Collections.emptySet());
     }
     private final boolean nullable;
-    private final DistributedSet<Object> whitelist;
+    private final DistributedList<Object> whitelist;
     private final Set<Object> blacklist;
 
     private final TypedRestrictions restrictions;
 
     private FieldSpec(
-        DistributedSet<Object> whitelist,
+        DistributedList<Object> whitelist,
         TypedRestrictions restrictions,
         boolean nullable,
         Set<Object> blacklist) {
@@ -66,7 +66,7 @@ public class FieldSpec {
         return nullable;
     }
 
-    public DistributedSet<Object> getWhitelist() {
+    public DistributedList<Object> getWhitelist() {
         return whitelist;
     }
 

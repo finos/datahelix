@@ -24,7 +24,7 @@ import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalCons
 import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.builders.*;
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.generator.violations.filters.ConstraintTypeViolationFilter;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
@@ -70,10 +70,10 @@ public class ProfileViolationTests {
 
     private static Stream<Arguments> allAtomicConstraints() {
         OffsetDateTime sampleDate = OffsetDateTime.of(2019, 1, 15, 12, 0, 0, 0, ZoneOffset.UTC);
-        final DistributedSet<Object> sampleSet = new DistributedSet<>(
+        final DistributedList<Object> sampleSet = new DistributedList<>(
             Stream.of("hello", 10)
                 .map(element -> new WeightedElement<>((Object) element, 1.0F))
-                .collect(Collectors.toSet()));
+                .collect(Collectors.toList()));
 
         return Stream.of(
             Arguments.of(IsInSetConstraint.class, sampleSet),

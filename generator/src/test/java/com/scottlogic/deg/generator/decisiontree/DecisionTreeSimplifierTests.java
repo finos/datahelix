@@ -21,7 +21,7 @@ import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsNullConstraint;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -34,10 +34,10 @@ import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 class DecisionTreeSimplifierTests {
     // TODO: Simplifier tests needs fleshing out
 
-    private static DistributedSet<Object> setOf(Object... objects) {
-        return new DistributedSet<>(Stream.of(objects)
+    private static DistributedList<Object> setOf(Object... objects) {
+        return new DistributedList<>(Stream.of(objects)
             .map(element -> new WeightedElement<>(element, 1.0F))
-            .collect(Collectors.toSet()));
+            .collect(Collectors.toList()));
     }
 
     @Test

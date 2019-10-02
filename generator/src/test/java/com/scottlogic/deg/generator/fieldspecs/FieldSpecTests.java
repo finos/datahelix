@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.restrictions.linear.*;
@@ -51,7 +51,7 @@ class FieldSpecTests {
 
     @Test
     void equals_fieldSpecHasSetRestrictionsAndOtherObjectSetRestrictionsNull_returnsFalse() {
-        FieldSpec fieldSpec = FieldSpec.fromSet(DistributedSet.singleton("whitelist"));
+        FieldSpec fieldSpec = FieldSpec.fromList(DistributedList.singleton("whitelist"));
 
         boolean result = fieldSpec.equals(FieldSpec.empty());
 
@@ -66,7 +66,7 @@ class FieldSpecTests {
         FieldSpec fieldSpec = FieldSpec.empty();
 
         boolean result = fieldSpec.equals(
-            FieldSpec.fromSet(DistributedSet.singleton("whitelist")));
+            FieldSpec.fromList(DistributedList.singleton("whitelist")));
 
         assertFalse(
             "Expected that when the field spec does not have set restrictions and the other object has set restrictions a false value is returned but was true",
@@ -76,10 +76,10 @@ class FieldSpecTests {
 
     @Test
     void equals_fieldSpecSetRestrictionsNotNullAndOtherObjectSetRestrictionsNotNullAndSetRestrictionsAreNotEqual_returnsFalse() {
-        FieldSpec fieldSpec = FieldSpec.fromSet(DistributedSet.uniform(Arrays.asList(1, 2, 3)));
+        FieldSpec fieldSpec = FieldSpec.fromList(DistributedList.uniform(Arrays.asList(1, 2, 3)));
 
         boolean result = fieldSpec.equals(
-            FieldSpec.fromSet(DistributedSet.uniform(Arrays.asList(1, 2, 3, 4))));
+            FieldSpec.fromList(DistributedList.uniform(Arrays.asList(1, 2, 3, 4))));
 
         assertFalse(
             "Expected that when the items in the set restrictions are not equal a false value is returned but was true",
@@ -126,8 +126,8 @@ class FieldSpecTests {
 
     @Test
     public void fieldSpecsWithEqualSetRestrictionsShouldBeEqual() {
-        FieldSpec a = FieldSpec.fromSet(DistributedSet.singleton("same"));
-        FieldSpec b = FieldSpec.fromSet(DistributedSet.singleton("same"));
+        FieldSpec a = FieldSpec.fromList(DistributedList.singleton("same"));
+        FieldSpec b = FieldSpec.fromList(DistributedList.singleton("same"));
 
         Assert.assertThat(a, equalTo(b));
         Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
@@ -135,8 +135,8 @@ class FieldSpecTests {
 
     @Test
     public void fieldSpecsWithUnequalSetRestrictionsShouldBeUnequal() {
-        FieldSpec a = FieldSpec.fromSet(DistributedSet.singleton("not same"));
-        FieldSpec b = FieldSpec.fromSet(DistributedSet.singleton("different"));
+        FieldSpec a = FieldSpec.fromList(DistributedList.singleton("not same"));
+        FieldSpec b = FieldSpec.fromList(DistributedList.singleton("different"));
 
         Assert.assertThat(a, not(equalTo(b)));
     }

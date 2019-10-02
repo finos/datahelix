@@ -14,19 +14,21 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.fieldspecs;
+package com.scottlogic.deg.generator.utils;
 
-import com.scottlogic.deg.generator.generation.databags.DataBagValue;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import static com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList.singleton;
+public class ListUtils {
 
-public class FieldSpecHelper {
-    public FieldSpec getFieldSpecForValue(DataBagValue fieldValue) {
-        if (fieldValue.getValue() == null) {
-            return FieldSpec.nullOnly();
-        }
+    private ListUtils() {
+        throw new IllegalStateException("Do not instantiate utility class");
+    }
 
-        return FieldSpec.fromList(singleton(fieldValue.getValue()))
-            .withNotNull();
+    @SafeVarargs
+    public static <T> List<T> listOf(T... elements) {
+        return Collections.unmodifiableList(Arrays.stream(elements).collect(Collectors.toList()));
     }
 }
