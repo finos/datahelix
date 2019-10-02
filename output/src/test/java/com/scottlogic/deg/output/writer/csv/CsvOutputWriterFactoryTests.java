@@ -34,6 +34,8 @@ import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createInternalField;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -92,6 +94,21 @@ class CsvOutputWriterFactoryTests {
             (date),
 
             Matchers.containsString("2001-02-03T04:05:06.777Z"));
+    }
+
+    @Test
+    void writeRow_withInternalFields_shouldNotWriteInternalFields() throws IOException {
+        ProfileFields fields = new ProfileFields(
+            Arrays.asList(
+                createField("External"),
+                createInternalField("Internal")
+            )
+        );
+        expectCsv(
+            fields,
+            (100),
+            Matchers.equalTo("External\n100\n")
+        );
     }
 
     private static ProfileFields fields(String ...names) {

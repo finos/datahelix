@@ -16,8 +16,8 @@
 
 package com.scottlogic.deg.output.writer.csv;
 
-import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.output.GeneratedObject;
+import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.output.writer.DataSetWriter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -51,7 +51,7 @@ class CsvDataSetWriter implements DataSetWriter {
         CSVPrinter csvPrinter = writerFormat
             .withEscape('\0') //Dont escape any character, we're formatting strings ourselves
             .withQuoteMode(QuoteMode.NONE)
-            .withHeader(fields.stream()
+            .withHeader(fields.getExternalStream()
                 .map(f -> f.name)
                 .toArray(String[]::new))
             .print(outputStreamAsAppendable);
@@ -61,7 +61,7 @@ class CsvDataSetWriter implements DataSetWriter {
 
     @Override
     public void writeRow(GeneratedObject row) throws IOException {
-        csvPrinter.printRecord(fieldOrder.stream()
+        csvPrinter.printRecord(fieldOrder.getExternalStream()
                 .map(row::getFormattedValue)
                 .map(CsvDataSetWriter::wrapInQuotesIfString)
                 .collect(Collectors.toList()));
@@ -74,8 +74,8 @@ class CsvDataSetWriter implements DataSetWriter {
         csvPrinter.close();
     }
 
-    private static Object wrapInQuotesIfString(Object value){
-        if (value == null){
+    private static Object wrapInQuotesIfString(Object value) {
+        if (value == null) {
             return null;
         }
 
@@ -83,11 +83,11 @@ class CsvDataSetWriter implements DataSetWriter {
             return ((BigDecimal) value).toPlainString();
         }
 
-        if (value instanceof OffsetDateTime){
+        if (value instanceof OffsetDateTime) {
             return standardDateFormat.format((OffsetDateTime) value);
         }
 
-        if (value instanceof String){
+        if (value instanceof String) {
             return csvStringFormatter.format(value);
         }
 
