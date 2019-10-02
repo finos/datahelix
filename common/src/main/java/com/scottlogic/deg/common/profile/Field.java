@@ -25,14 +25,6 @@ public class Field {
     private final String formatting;
     private final boolean internal;
 
-    public Field(String name, Types type, Boolean unique, String formatting) {
-        this.name = name;
-        this.type = type;
-        this.unique = unique;
-        this.formatting = formatting;
-        this.internal = false;
-    }
-
     public Field(String name, Types type, boolean unique, String formatting, boolean internal) {
         this.name = name;
         this.type = type;

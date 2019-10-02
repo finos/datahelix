@@ -122,7 +122,7 @@ public class CucumberTestState {
     }
 
     public void addField(String fieldName) {
-        this.profileFields.add(new Field(fieldName, null, false, null));
+        this.profileFields.add(createField(fieldName, null));
     }
 
     public void addException(Exception e){
@@ -176,7 +176,7 @@ public class CucumberTestState {
             .findFirst()
             .orElseThrow(UnsupportedOperationException::new);
 
-        Field newField = new Field(oldField.name, oldField.type, true, oldField.getFormatting());
+        Field newField = new Field(oldField.name, oldField.type, true, oldField.getFormatting(), oldField.isInternal());
 
         profileFields.remove(oldField);
         profileFields.add(newField);
@@ -188,7 +188,7 @@ public class CucumberTestState {
             .findFirst()
             .orElseThrow(UnsupportedOperationException::new);
 
-        Field newField = new Field(oldField.name, types, oldField.isUnique(), oldField.getFormatting());
+        Field newField = new Field(oldField.name, types, oldField.isUnique(), oldField.getFormatting(), oldField.isInternal());
 
         profileFields.remove(oldField);
         profileFields.add(newField);
@@ -200,7 +200,7 @@ public class CucumberTestState {
             .findFirst()
             .orElseThrow(UnsupportedOperationException::new);
 
-        Field newField = new Field(oldField.name, oldField.type, oldField.isUnique(), formatting);
+        Field newField = new Field(oldField.name, oldField.type, oldField.isUnique(), formatting, oldField.isInternal());
 
         profileFields.remove(oldField);
         profileFields.add(newField);

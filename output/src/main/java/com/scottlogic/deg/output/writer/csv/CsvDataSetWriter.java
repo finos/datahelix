@@ -30,7 +30,6 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.stream.Collectors;
 
 class CsvDataSetWriter implements DataSetWriter {

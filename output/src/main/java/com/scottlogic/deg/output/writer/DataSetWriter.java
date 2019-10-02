@@ -17,11 +17,9 @@
 package com.scottlogic.deg.output.writer;
 
 import com.scottlogic.deg.common.output.GeneratedObject;
-import com.scottlogic.deg.common.profile.Field;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.util.stream.Stream;
 
 /**
  * An object that can persist generated data to some destination (whether that be memory, a filesystem, a service, etc).
