@@ -19,8 +19,13 @@ package com.scottlogic.deg.generator.profile.constraints.atomic;
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 
 import java.util.Objects;
+
+import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createNumericRestrictions;
+import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MAX_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MIN_LIMIT;
 
 public class IsGranularToNumericConstraint implements AtomicConstraint {
     public final Field field;
@@ -44,6 +49,11 @@ public class IsGranularToNumericConstraint implements AtomicConstraint {
     @Override
     public AtomicConstraint negate() {
         throw new ValidationException("Numeric Granularity cannot be negated or used in if statements");
+    }
+
+    @Override
+    public FieldSpec toFieldSpec() {
+        return FieldSpec.fromRestriction(createNumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT, granularity.getNumericGranularity().scale()));
     }
 
     @Override

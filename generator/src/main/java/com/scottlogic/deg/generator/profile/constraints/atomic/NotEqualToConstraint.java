@@ -1,7 +1,9 @@
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 
+import java.util.Collections;
 import java.util.Objects;
 
 public class NotEqualToConstraint implements AtomicConstraint {
@@ -22,6 +24,11 @@ public class NotEqualToConstraint implements AtomicConstraint {
     @Override
     public AtomicConstraint negate() {
         return new EqualToConstraint(field, value);
+    }
+
+    @Override
+    public FieldSpec toFieldSpec() {
+        return FieldSpec.empty().withBlacklist(Collections.singleton(value));
     }
 
     @Override
