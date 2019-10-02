@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.inputs.profileviolation;
+package com.scottlogic.deg.orchestrator.violate.violator;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
@@ -37,15 +37,14 @@ import java.util.stream.Collectors;
  * Rule violator which violates rules by individually violating each constraint within the rule.
  * I.E. VIOLATE(A,B,C) => VIOLATE(A),B,C OR A,VIOLATE(B),C OR A,B,VIOLATE(C)
  */
-public class IndividualConstraintRuleViolator implements RuleViolator {
+public class RuleViolator {
     private final List<ViolationFilter> constraintsToNotViolate;
 
     @Inject
-    public IndividualConstraintRuleViolator(List<ViolationFilter> constraintsToNotViolate) {
+    public RuleViolator(List<ViolationFilter> constraintsToNotViolate) {
         this.constraintsToNotViolate = constraintsToNotViolate;
     }
 
-    @Override
     public Rule violateRule(Rule rule) {
         List<Constraint> newConstraints = new ArrayList<>();
         List<Constraint> violate = new ArrayList<>();

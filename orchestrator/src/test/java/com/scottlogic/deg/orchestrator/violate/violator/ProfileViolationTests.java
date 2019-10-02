@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.inputs.profileviolation;
+package com.scottlogic.deg.orchestrator.violate.violator;
 
 import com.scottlogic.deg.common.profile.*;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
@@ -28,6 +28,7 @@ import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.generator.violations.filters.ConstraintTypeViolationFilter;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
+import com.scottlogic.deg.orchestrator.violate.ViolatedProfile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -44,14 +45,14 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.scottlogic.deg.generator.inputs.profileviolation.TypeEqualityHelper.assertProfileListsAreEquivalent;
+import static com.scottlogic.deg.orchestrator.violate.violator.TypeEqualityHelper.assertProfileListsAreEquivalent;
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 /**
  * Defines tests for all business logic involved in Profile Violation.
  */
 public class ProfileViolationTests {
-    private IndividualRuleProfileViolator profileViolator;
+    private ProfileViolator profileViolator;
     private ArrayList<ViolationFilter> constraintsToNotViolate;
 
     private Field field1;
@@ -165,8 +166,8 @@ public class ProfileViolationTests {
         MockitoAnnotations.initMocks(this);
 
         constraintsToNotViolate = new ArrayList<>();
-        IndividualConstraintRuleViolator ruleViolator = new IndividualConstraintRuleViolator(constraintsToNotViolate);
-        profileViolator = new IndividualRuleProfileViolator(ruleViolator);
+        RuleViolator ruleViolator = new RuleViolator(constraintsToNotViolate);
+        profileViolator = new ProfileViolator(ruleViolator);
         field1 = createField("field1");
         field2 = createField("field2");
         field3 = createField("field3");
