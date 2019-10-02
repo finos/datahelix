@@ -12,8 +12,11 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Collections;
 
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createInternalField;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -22,23 +25,40 @@ class JsonOutputWriterFactoryTest {
 
     @Test
     void writer_withNDJSONTrue__shouldOutputNewLineDelimiterRows() throws IOException {
+        ProfileFields fields = new ProfileFields(Collections.singletonList(FieldBuilder.createField("my_field")));
+
         expectJson(
+            fields,
             true,
             Matchers.equalTo("{\n  \"my_field\" : \"my_value\"\n}\n{\n  \"my_field\" : \"my_value\"\n}"));
     }
 
     @Test
     void writer_withNDJSONFalse__shouldOutputRowsWrappedInAnArray() throws IOException {
+        ProfileFields fields = new ProfileFields(Collections.singletonList(FieldBuilder.createField("my_field")));
+
         expectJson(
+            fields,
             false,
             Matchers.equalTo("[ {\n  \"my_field\" : \"my_value\"\n}, {\n  \"my_field\" : \"my_value\"\n} ]"));
     }
 
-    private static void expectJson(boolean useNdJson, Matcher<String> matcher) throws IOException {
-        //Arrange
-        ProfileFields fields = new ProfileFields(Collections.singletonList(FieldBuilder.createField("my_field")));
+    @Test
+    void writeRow_withInternalFields_shouldNotWriteInternalFields() throws IOException {
+        ProfileFields fields = new ProfileFields(
+            Arrays.asList(
+                createField("External"),
+                createInternalField("Internal")
+            )
+        );
+        expectJson(
+            fields,
+            true,
+            Matchers.equalTo("{\n  \"External\" : \"my_value\"\n}\n{\n  \"External\" : \"my_value\"\n}")
+        );
+    }
 
-
+    private static void expectJson(ProfileFields fields, boolean useNdJson, Matcher<String> matcher) throws IOException {
         // Act
         GeneratedObject mockGeneratedObject = mock(GeneratedObject.class);
         when(mockGeneratedObject.getFormattedValue(eq(fields.iterator().next()))).thenReturn("my_value");
