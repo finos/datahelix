@@ -17,9 +17,15 @@
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.restrictions.linear.Limit;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 
 import java.time.OffsetDateTime;
 import java.util.Objects;
+
+import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDateTimeRestrictions;
+import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
 
 public class IsAfterConstantDateTimeConstraint implements AtomicConstraint {
     public final Field field;
@@ -38,6 +44,12 @@ public class IsAfterConstantDateTimeConstraint implements AtomicConstraint {
     @Override
     public AtomicConstraint negate() {
         return new IsBeforeOrEqualToConstantDateTimeConstraint(field, referenceValue);
+    }
+
+    @Override
+    public FieldSpec toFieldSpec() {
+        final LinearRestrictions<OffsetDateTime> dateTimeRestrictions = createDateTimeRestrictions(new Limit<>(referenceValue, false), DATETIME_MAX_LIMIT);
+        return FieldSpec.fromRestriction(dateTimeRestrictions);
     }
 
     @Override

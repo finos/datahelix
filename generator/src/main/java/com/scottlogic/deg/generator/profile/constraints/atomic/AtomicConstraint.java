@@ -17,6 +17,7 @@
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 
 public interface AtomicConstraint extends Constraint {
@@ -24,4 +25,6 @@ public interface AtomicConstraint extends Constraint {
     Field getField();
 
     AtomicConstraint negate();
+
+    FieldSpec toFieldSpec();
 }

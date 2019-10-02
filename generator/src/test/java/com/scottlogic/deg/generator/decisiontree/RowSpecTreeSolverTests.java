@@ -49,7 +49,7 @@ import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 class RowSpecTreeSolverTests {
     private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
     private RowSpecDataBagGenerator dataBagSourceFactory = mock(RowSpecDataBagGenerator.class);
-    ConstraintReducer constraintReducer = new ConstraintReducer(new FieldSpecFactory(new StringRestrictionsFactory()), fieldSpecMerger);
+    ConstraintReducer constraintReducer = new ConstraintReducer(fieldSpecMerger);
     private final RowSpecTreeSolver dTreeWalker = new RowSpecTreeSolver(
         constraintReducer,
         new TreePruner(new FieldSpecMerger(), constraintReducer, new FieldSpecHelper()),

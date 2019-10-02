@@ -1,6 +1,8 @@
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -22,6 +24,11 @@ public class NotMatchesRegexConstraint implements AtomicConstraint {
     @Override
     public AtomicConstraint negate() {
         return new MatchesRegexConstraint(field, regex);
+    }
+
+    @Override
+    public FieldSpec toFieldSpec() {
+        return FieldSpec.fromRestriction(StringRestrictionsFactory.forStringMatching(regex, true));
     }
 
     @Override

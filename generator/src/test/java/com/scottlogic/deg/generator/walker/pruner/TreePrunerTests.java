@@ -49,7 +49,6 @@ class TreePrunerTests {
     private TreePruner treePruner = new TreePruner(
         new FieldSpecMerger(),
         new ConstraintReducer(
-            new FieldSpecFactory(new StringRestrictionsFactory()),
             new FieldSpecMerger()),
         fieldSpecHelper);
 

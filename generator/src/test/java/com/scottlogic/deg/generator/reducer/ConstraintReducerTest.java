@@ -21,7 +21,6 @@ import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
@@ -50,7 +49,6 @@ import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 class ConstraintReducerTest {
 
     private final ConstraintReducer constraintReducer = new ConstraintReducer(
-        new FieldSpecFactory(new StringRestrictionsFactory()),
         new FieldSpecMerger()
     );
 

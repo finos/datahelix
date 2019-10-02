@@ -1,6 +1,8 @@
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 
 import java.util.Objects;
 
@@ -26,6 +28,11 @@ public class NotStringLengthConstraint implements AtomicConstraint {
     @Override
     public AtomicConstraint negate() {
         return new StringHasLengthConstraint(field, referenceValue);
+    }
+
+    @Override
+    public FieldSpec toFieldSpec() {
+        return FieldSpec.fromRestriction(StringRestrictionsFactory.forLength(referenceValue, true));
     }
 
     @Override

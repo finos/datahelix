@@ -17,6 +17,7 @@
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 
 public class ViolatedAtomicConstraint implements AtomicConstraint {
     public final AtomicConstraint violatedConstraint;
@@ -33,6 +34,11 @@ public class ViolatedAtomicConstraint implements AtomicConstraint {
     @Override
     public AtomicConstraint negate() {
         return new ViolatedAtomicConstraint(violatedConstraint.negate());
+    }
+
+    @Override
+    public FieldSpec toFieldSpec() {
+        return violatedConstraint.toFieldSpec();
     }
 
     @Override

@@ -17,8 +17,14 @@
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.restrictions.MatchesStandardStringRestrictions;
+import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 
 import java.util.Objects;
+import java.util.regex.Pattern;
+
+import static com.scottlogic.deg.generator.profile.constraints.atomic.StandardConstraintTypes.RIC;
 
 public class MatchesStandardConstraint implements AtomicConstraint {
     public final Field field;
@@ -42,6 +48,15 @@ public class MatchesStandardConstraint implements AtomicConstraint {
     @Override
     public AtomicConstraint negate() {
         return new NotMatchesStandardConstraint(field, standard);
+    }
+
+    @Override
+    public FieldSpec toFieldSpec() {
+        if (standard.equals(RIC)) {
+            return FieldSpec.fromRestriction(StringRestrictionsFactory.forStringMatching(Pattern.compile(RIC.getRegex()), false));
+        }
+
+        return FieldSpec.fromRestriction(new MatchesStandardStringRestrictions(standard));
     }
 
     @Override

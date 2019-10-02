@@ -1,8 +1,10 @@
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -34,6 +36,11 @@ public class BlacklistConstraint implements AtomicConstraint {
     @Override
     public AtomicConstraint negate() {
         return new IsInSetConstraint(field, legalValues);
+    }
+
+    @Override
+    public FieldSpec toFieldSpec() {
+        return FieldSpec.empty().withBlacklist(new HashSet<>(legalValues.list()));
     }
 
     public String toString(){

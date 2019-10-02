@@ -17,9 +17,15 @@
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.restrictions.linear.Limit;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+
+import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createNumericRestrictions;
+import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MAX_LIMIT;
 
 public class IsGreaterThanOrEqualToConstantConstraint implements AtomicConstraint {
     public final Field field;
@@ -38,6 +44,12 @@ public class IsGreaterThanOrEqualToConstantConstraint implements AtomicConstrain
     @Override
     public AtomicConstraint negate() {
         return new IsLessThanConstantConstraint(field, referenceValue);
+    }
+
+    @Override
+    public FieldSpec toFieldSpec() {
+        LinearRestrictions<BigDecimal> numericRestrictions = createNumericRestrictions(new Limit<>(referenceValue, true), NUMERIC_MAX_LIMIT);
+        return FieldSpec.fromRestriction(numericRestrictions);
     }
 
     @Override

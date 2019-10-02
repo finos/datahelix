@@ -21,7 +21,6 @@ import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.visualisation.DecisionTreeVisualisationWriter;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
@@ -46,7 +45,6 @@ import java.util.stream.Stream;
 public class VisualiseExecute {
 
     private final DecisionTreeFactory profileAnalyser;
-    private final FieldSpecFactory fieldSpecFactory;
     private final FieldSpecMerger fieldSpecMerger;
     private final Path outputPath;
     private final ValidatingProfileReader validatingProfileReader;
@@ -55,14 +53,12 @@ public class VisualiseExecute {
 
     @Inject
     public VisualiseExecute(DecisionTreeFactory profileAnalyser,
-                            FieldSpecFactory fieldSpecFactory,
                             FieldSpecMerger fieldSpecMerger,
                             OutputPath outputPath,
                             ValidatingProfileReader validatingProfileReader,
                             AllConfigSource configSource,
                             VisualisationConfigValidator validator) {
         this.profileAnalyser = profileAnalyser;
-        this.fieldSpecFactory = fieldSpecFactory;
         this.fieldSpecMerger = fieldSpecMerger;
         this.validatingProfileReader = validatingProfileReader;
         this.configSource = configSource;
@@ -83,7 +79,7 @@ public class VisualiseExecute {
         ContradictionDecisionTreeValidator treeValidator =
             new ContradictionDecisionTreeValidator(
                 new RowSpecMerger(fieldSpecMerger),
-                new ConstraintReducer(fieldSpecFactory, fieldSpecMerger));
+                new ConstraintReducer(fieldSpecMerger));
 
         DecisionTree validatedTree = treeValidator.markContradictions(mergedTree);
 
