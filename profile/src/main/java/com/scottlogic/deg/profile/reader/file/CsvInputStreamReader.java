@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.profile.reader.file;
 
+import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import org.apache.commons.csv.CSVFormat;
@@ -26,7 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public final class CsvInputStreamReader {
@@ -38,16 +39,40 @@ public final class CsvInputStreamReader {
     public static DistributedList<String> retrieveLines(InputStream stream) {
         List<CSVRecord> records = parse(stream);
         return new DistributedList<>(records.stream()
-            .map(CsvInputStreamReader::createWeightedElement)
+            .map(CsvInputStreamReader::createWeightedElementFromRecord)
             .collect(Collectors.toList()));
     }
 
-    private static WeightedElement<String> createWeightedElement(CSVRecord record) {
-        if (record.size() > 1) {
-            return new WeightedElement<>(record.get(0), Double.parseDouble(record.get(1)));
-        } else {
-            return WeightedElement.withDefaultWeight(record.get(0));
+    public static DistributedList<String> retrieveLines(InputStream stream, String key) {
+        List<CSVRecord> records = parse(stream);
+
+        int index = getIndexForKey(records.get(0), key);
+
+        return new DistributedList<>(records.stream()
+            .map(record -> record.get(index))
+            .map(record -> createWeightedElement(record, Optional.empty()))
+            .collect(Collectors.toList()));
+    }
+
+    private static int getIndexForKey(CSVRecord header, String key) {
+        List<String> list = new ArrayList<>();
+        header.iterator().forEachRemaining(list::add);
+
+        if (!list.contains(key)) {
+            throw new ValidationException("unable to find data for key " + key);
         }
+
+        return list.indexOf(key);
+    }
+
+    private static WeightedElement<String> createWeightedElementFromRecord(CSVRecord record) {
+        return createWeightedElement(record.get(0), record.size() == 1 ? Optional.empty() :  Optional.of(Double.parseDouble(record.get(1))));
+    }
+
+
+    private static WeightedElement<String> createWeightedElement(String element, Optional<Double> weight) {
+        return weight.map(integer -> new WeightedElement<>(element, integer))
+            .orElseGet(() -> WeightedElement.withDefaultWeight(element));
     }
 
     private static List<CSVRecord> parse(InputStream stream) {
