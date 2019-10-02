@@ -16,10 +16,10 @@
 
 package com.scottlogic.deg.generator.fieldspecs.whitelist;
 
-import com.scottlogic.deg.generator.utils.ListUtils;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,11 +51,11 @@ class DistributedListTest {
         WeightedElement<String> second = new WeightedElement<>("second", uniformWeight);
         WeightedElement<String> third = new WeightedElement<>("third", uniformWeight);
 
-        List<WeightedElement<String>> weightedElements = ListUtils.listOf(first, second, third);
+        List<WeightedElement<String>> weightedElements = Arrays.asList(first, second, third);
 
         DistributedList<String> manualSet = new DistributedList<>(weightedElements);
 
-        List<String> elements = ListUtils.listOf("first", "second", "third");
+        List<String> elements = Arrays.asList("first", "second", "third");
         DistributedList<String> uniformSet = DistributedList.uniform(elements);
 
         assertEquals(manualSet, uniformSet);
