@@ -58,20 +58,18 @@ public class AtomicConstraintValueReader {
     }
 
     private Object getValue(Object value, Types type) {
-        if(value == null || type == null) return value;
-        switch (type) {
-            case NUMERIC:
-                return getBigDecimal(value);
-            case STRING:
-                return value;
-            case DATETIME:
-                if(!(value instanceof String) || value.equals("datetime") || value.equals("years") || value.equals("months")
-                    || value.equals("days") || value.equals("hours")  || value.equals("minutes")
-                    || value.equals("seconds")  || value.equals("millis")) return value;
-                return ConstraintReaderHelpers.parseDate((String) value);
-            default:
-                throw new IllegalStateException("Unexpected value: " + type);
+        if (type != null) {
+            switch (type) {
+                case NUMERIC:
+                    return getBigDecimal(value);
+                case DATETIME:
+                    if (!(value instanceof String) || value.equals("datetime") || value.equals("years") || value.equals("months")
+                        || value.equals("days") || value.equals("hours") || value.equals("minutes")
+                        || value.equals("seconds") || value.equals("millis")) return value;
+                    return ConstraintReaderHelpers.parseDate((String) value);
+            }
         }
+        return value;
     }
 
     private Object getBigDecimal(Object value) {
