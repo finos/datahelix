@@ -18,8 +18,6 @@ package com.scottlogic.deg.generator.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
 
-import com.scottlogic.deg.common.profile.RuleInformation;
-
 import java.util.Objects;
 
 public class IsStringShorterThanConstraint implements AtomicConstraint {
@@ -39,6 +37,11 @@ public class IsStringShorterThanConstraint implements AtomicConstraint {
     @Override
     public Field getField() {
         return field;
+    }
+
+    @Override
+    public AtomicConstraint negate() {
+        return new IsStringLongerThanConstraint(field, referenceValue - 1);
     }
 
     @Override

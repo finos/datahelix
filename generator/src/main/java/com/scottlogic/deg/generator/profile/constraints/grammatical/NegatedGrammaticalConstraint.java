@@ -16,8 +16,6 @@
 
 package com.scottlogic.deg.generator.profile.constraints.grammatical;
 
-import com.scottlogic.deg.common.profile.RuleInformation;
-
 import java.util.Objects;
 
 public class NegatedGrammaticalConstraint implements GrammaticalConstraint {

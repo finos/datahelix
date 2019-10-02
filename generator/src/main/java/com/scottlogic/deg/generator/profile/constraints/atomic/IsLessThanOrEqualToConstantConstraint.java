@@ -36,6 +36,11 @@ public class IsLessThanOrEqualToConstantConstraint implements AtomicConstraint {
     }
 
     @Override
+    public AtomicConstraint negate() {
+        return new IsGreaterThanConstantConstraint(field, referenceValue);
+    }
+
+    @Override
     public boolean equals(Object o){
         if (this == o) return true;
         if (o instanceof ViolatedAtomicConstraint) {

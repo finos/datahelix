@@ -253,17 +253,6 @@ Feature: User can specify that a numeric value is lower than, but not equal to, 
       | -2  |
       | -3  |
 
-  @ignore #588: unsure on what the output should be here
-  @ignore #594 - Reverse order of value generation when only upper-bound operators are provided
-  Scenario: lessThan run against a non contradicting not granularTo should be successful (lessThan 1 AND not granularTo 1)
-    Given foo is less than 1
-    And foo is anything but granular to 1
-    And foo has type "integer"
-    And the generator can generate at most 5 rows
-    Then the following data should be generated:
-      | foo  |
-      | null |
-
   Scenario: not lessThan run against a non contradicting granularTo should be successful (not lessThan 4 AND granularTo 1)
     Given foo is anything but less than 4
     And foo is granular to 1
@@ -277,15 +266,6 @@ Feature: User can specify that a numeric value is lower than, but not equal to, 
       | 6   |
       | 7   |
       | 8   |
-
-  @ignore #588: unsure on what the output should be here
-  @ignore #594 - Reverse order of value generation when only upper-bound operators are provided
-  Scenario: not lessThan run against a non contradicting not granularTo should be successful (not lessThan 5 AND not granularTo 1)
-    Given foo is anything but less than 5
-    And foo is anything but granular to 1
-    And foo has type "decimal"
-    And the generator can generate at most 5 rows
-    Then some data should be generated
 
 #after
   @ignore #594 - Reverse order of value generation when only upper-bound operators are provided

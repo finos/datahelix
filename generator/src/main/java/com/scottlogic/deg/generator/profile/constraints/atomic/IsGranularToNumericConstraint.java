@@ -16,10 +16,9 @@
 
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
+import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import com.scottlogic.deg.common.profile.Field;
-
-import com.scottlogic.deg.common.profile.RuleInformation;
 
 import java.util.Objects;
 
@@ -40,6 +39,11 @@ public class IsGranularToNumericConstraint implements AtomicConstraint {
     @Override
     public Field getField() {
         return field;
+    }
+
+    @Override
+    public AtomicConstraint negate() {
+        throw new ValidationException("Numeric Granularity cannot be negated or used in if statements");
     }
 
     @Override

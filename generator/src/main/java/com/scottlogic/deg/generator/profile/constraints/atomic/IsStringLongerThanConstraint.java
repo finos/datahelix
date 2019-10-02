@@ -40,6 +40,11 @@ public class IsStringLongerThanConstraint implements AtomicConstraint {
     }
 
     @Override
+    public AtomicConstraint negate() {
+        return new IsStringShorterThanConstraint(field, referenceValue + 1);
+    }
+
+    @Override
     public boolean equals(Object o){
         if (this == o) return true;
         if (o instanceof ViolatedAtomicConstraint) {
