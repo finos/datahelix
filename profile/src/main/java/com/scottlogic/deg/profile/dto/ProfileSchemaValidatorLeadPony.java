@@ -68,7 +68,7 @@ public class ProfileSchemaValidatorLeadPony implements ProfileSchemaValidator {
             errorMessages.add(0,
                 "Error(s) occurred during schema validation." +
                     "\nFor full details try opening the profile in a json schema-enabled IDE." +
-                    "\nSee https://github.com/finos/datahelix/blob/master/docs/UserGuide.md\n");
+                    "\nSee https://github.com/finos/datahelix/blob/master/docs/GettingStarted.md#Profile-Validation\n");
 
             throw new ValidationException(errorMessages);
         }
