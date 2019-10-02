@@ -72,20 +72,20 @@ public class FieldSpecGroupValueGenerator {
 
     private Field getFirst(FieldSpecGroup keySet) {
         Map<Field, Integer> otherCount = keySet.relations().stream().collect(Collectors.toMap(
-            r -> r.other(),
-            r -> 1, (l, r) -> l + r));
+            FieldSpecRelations::other,
+            r -> 1, Integer::sum));
         return otherCount.keySet().stream().reduce((l,r)->otherCount.get(l)>otherCount.get(r)?l:r)
             .orElse(keySet.fieldSpecs().keySet().iterator().next());
     }
 
     private FieldSpec updateFirstSpecFromRelations(Field first, FieldSpecGroup group) {
-        Optional<FieldSpec> optionalFirstFieldSpec = Optional.of(group.fieldSpecs().get(first));
+        FieldSpec firstFieldSpec = group.fieldSpecs().get(first);
 
         return group.relations().stream()
             .filter(relation -> isRelatedToField(first, relation))
             .map(relation -> createMergedSpecFromRelation(first, relation, group))
             .map(Optional::of)
-            .reduce(optionalFirstFieldSpec, this::mergeOptionalFieldspecs)
+            .reduce(Optional.of(firstFieldSpec), this::mergeOptionalFieldspecs)
             .orElseThrow(() -> new IllegalStateException("Failed to merge field specs in related fields"));
     }
 
@@ -134,11 +134,11 @@ public class FieldSpecGroupValueGenerator {
 
     private FieldSpecGroup adjustBoundsOfDate(Field generatedField, FieldSpec generatedValue, FieldSpecGroup group) {
         Set<FieldSpecRelations> nonUpdatedRelations = group.relations().stream()
-            .filter(relation -> !relation.main().equals(generatedField) && !relation.other().equals(generatedField))
+            .filter(relation -> !isRelatedToField(generatedField, relation))
             .collect(Collectors.toSet());
 
         List<FieldSpecRelations> updatableRelations = group.relations().stream()
-            .filter(relation -> relation.main().equals(generatedField) || relation.other().equals(generatedField))
+            .filter(relation -> isRelatedToField(generatedField, relation))
             .map(relations -> relations.other().equals(generatedField) ? relations : relations.inverse())
             .collect(Collectors.toList());
 

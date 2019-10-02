@@ -17,21 +17,12 @@
 package com.scottlogic.deg.generator.generation.databags;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
-import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
-import com.scottlogic.deg.generator.generation.grouped.FieldSpecGroupValueGenerator;
-import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
-import com.scottlogic.deg.generator.generation.grouped.RowSpecGrouper;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
+import com.scottlogic.deg.generator.generation.grouped.FieldSpecGroupValueGenerator;
+import com.scottlogic.deg.generator.generation.grouped.RowSpecGrouper;
 
-import java.util.Map;
-import java.util.*;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class RowSpecDataBagGenerator {
