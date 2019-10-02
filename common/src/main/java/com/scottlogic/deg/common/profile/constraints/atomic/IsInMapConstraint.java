@@ -42,10 +42,6 @@ public class IsInMapConstraint implements AtomicConstraint {
         }
     }
 
-    public List<Object> legalValuesWithoutFrequency() {
-        return legalValues.list();
-    }
-
     @Override
     public Field getField() {
         return field;
