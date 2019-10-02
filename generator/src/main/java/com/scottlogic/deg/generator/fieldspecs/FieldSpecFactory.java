@@ -17,16 +17,15 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.restrictions.*;
-import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.generator.restrictions.linear.*;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.regex.Pattern;
 
 import static com.scottlogic.deg.common.profile.constraints.atomic.StandardConstraintTypes.RIC;
@@ -96,10 +95,10 @@ public class FieldSpecFactory {
 
     private FieldSpec construct(IsInSetConstraint constraint, boolean negate) {
         if (negate) {
-            return FieldSpec.empty().withBlacklist(constraint.legalValuesWithoutFrequency());
+            return FieldSpec.empty().withBlacklist(new HashSet<>(constraint.legalValuesWithoutFrequency()));
         }
 
-        return FieldSpec.fromSet(constraint.legalValues);
+        return FieldSpec.fromList(constraint.legalValues);
     }
 
     private FieldSpec construct(EqualToConstraint constraint, boolean negate) {
@@ -107,7 +106,7 @@ public class FieldSpecFactory {
             return FieldSpec.empty().withBlacklist(Collections.singleton(constraint.value));
         }
 
-        return FieldSpec.fromSet(DistributedSet.singleton(constraint.value))
+        return FieldSpec.fromList(DistributedList.singleton(constraint.value))
             .withNotNull();
     }
 

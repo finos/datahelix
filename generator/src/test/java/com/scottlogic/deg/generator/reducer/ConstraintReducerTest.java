@@ -25,14 +25,13 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.Assert;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -45,7 +44,6 @@ import java.util.stream.Stream;
 
 import static com.scottlogic.deg.common.profile.Types.*;
 import static com.scottlogic.deg.common.util.Defaults.*;
-import static com.scottlogic.deg.generator.utils.Defaults.*;
 import static org.hamcrest.Matchers.*;
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
@@ -70,9 +68,9 @@ class ConstraintReducerTest {
         ProfileFields fieldList = new ProfileFields(
             Arrays.asList(quantityField, countryField, cityField));
 
-        final DistributedSet<Object> countryAmong = new DistributedSet<>(Stream.of("UK", "US")
+        final DistributedList<Object> countryAmong = new DistributedList<>(Stream.of("UK", "US")
             .map(string -> new WeightedElement<>((Object) string, 1.0F))
-            .collect(Collectors.toSet()));
+            .collect(Collectors.toList()));
 
         final List<AtomicConstraint> constraints = Arrays.asList(
             new IsGreaterThanOrEqualToConstantConstraint(quantityField, BigDecimal.valueOf(0)),
@@ -101,13 +99,13 @@ class ConstraintReducerTest {
         Assert.assertThat("Country fieldspec has no null restrictions", countryFieldSpec.isNullable(),
             Is.is(true));
         Assert.assertThat("Country fieldspec set restrictions have whitelist",
-            countryFieldSpec.getWhitelist().set(), notNullValue());
+            countryFieldSpec.getWhitelist().list(), notNullValue());
         Assert.assertThat("Country fieldspec set restrictions whitelist has correct size",
-            countryFieldSpec.getWhitelist().set().size(), Is.is(2));
+            countryFieldSpec.getWhitelist().list().size(), Is.is(2));
         Assert.assertThat("Country fieldspec set restrictions whitelist contains 'UK'",
-            countryFieldSpec.getWhitelist().set().contains("UK"), Is.is(true));
+            countryFieldSpec.getWhitelist().list().contains("UK"), Is.is(true));
         Assert.assertThat("Country fieldspec set restrictions whitelist contains 'US'",
-            countryFieldSpec.getWhitelist().set().contains("US"), Is.is(true));
+            countryFieldSpec.getWhitelist().list().contains("US"), Is.is(true));
 
         FieldSpec cityFieldSpec = reducedConstraints.getSpecForField(cityField);
         Assert.assertThat("City fieldspec has no set restrictions", cityFieldSpec.getWhitelist(),

@@ -7,7 +7,7 @@ import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.common.util.NumberUtils;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 
@@ -119,16 +119,16 @@ public class ConstraintValueValidator {
     }
 
     private static void validateSet(Field field, AtomicConstraintType type, Object value) {
-        if (!(value instanceof DistributedSet)){
+        if (!(value instanceof DistributedList)){
             throw new ValidationException("Couldn't recognise 'values' property, it must not contain 'null'");
         }
 
-        DistributedSet distributedSet = (DistributedSet) value;
-        if (distributedSet.isEmpty()) {
+        DistributedList distributedList = (DistributedList) value;
+        if (distributedList.isEmpty()) {
             throw new ValidationException("Cannot create an IsInSetConstraint with an empty set.");
         }
 
-        distributedSet.stream()
+        distributedList.stream()
             .peek(val->{if (val == null) throw new ValidationException("Set must not contain null");})
             .forEach(val->validateAny(field, type, val));
     }
