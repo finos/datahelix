@@ -48,6 +48,9 @@ public final class CsvInputStreamReader {
 
         int index = getIndexForKey(records.get(0), key);
 
+        //Remove the header
+        records.remove(0);
+
         return new DistributedList<>(records.stream()
             .map(record -> record.get(index))
             .map(record -> createWeightedElement(record, Optional.empty()))
