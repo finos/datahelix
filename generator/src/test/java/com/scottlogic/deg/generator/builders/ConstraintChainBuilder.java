@@ -16,14 +16,13 @@
 
 package com.scottlogic.deg.generator.builders;
 
-import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.lang.reflect.Constructor;
@@ -106,7 +105,7 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
         return saveAndSet(
             new IsInSetConstraint(
                 barField,
-                DistributedSet.singleton(referenceValue)));
+                DistributedList.singleton(referenceValue)));
     }
 
     public ConstraintChainBuilder<T> withOrConstraint(ConstraintChainBuilder<OrConstraint> orBuilder) {
@@ -124,7 +123,7 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
     public ConstraintChainBuilder<T> withInSetConstraint(Field field, Object[] legalArray) {
         return saveAndSet(new IsInSetConstraint(
             field,
-            DistributedSet.uniform(SetUtils.setOf(legalArray))));
+            DistributedList.uniform(SetUtils.setOf(legalArray))));
     }
 
     public ConstraintChainBuilder<T> withOfLengthConstraint(Field fooField, int length) {

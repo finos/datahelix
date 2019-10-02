@@ -17,7 +17,7 @@
 package com.scottlogic.deg.profile.reader.file.names;
 
 import com.scottlogic.deg.common.profile.constraints.atomic.NameConstraintTypes;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.profile.reader.file.CsvInputStreamReader;
 
@@ -34,7 +34,7 @@ public final class NameRetriever {
         throw new UnsupportedOperationException("No static class instantiation");
     }
 
-    public static DistributedSet<Object> loadNamesFromFile(NameConstraintTypes configuration) {
+    public static DistributedList<Object> loadNamesFromFile(NameConstraintTypes configuration) {
         if (configuration == FULL) {
             return downcastToObject(combineFirstWithLastNames(
                 generateNamesFromSingleFile(FIRST.getFilePath()),
@@ -44,18 +44,19 @@ public final class NameRetriever {
         }
     }
 
-    private static <T> DistributedSet<Object> downcastToObject(DistributedSet<T> higher) {
-        return new DistributedSet<>(
-            higher.distributedSet().stream()
+    private static <T> DistributedList<Object> downcastToObject(DistributedList<T> higher) {
+        return new DistributedList<>(
+            higher.distributedList().stream()
                 .map(holder -> new WeightedElement<Object>(holder.element(), holder.weight()))
-                .collect(Collectors.toSet()));
+                .distinct()
+                .collect(Collectors.toList()));
     }
 
     ;
 
-    private static DistributedSet<String> generateNamesFromSingleFile(String source) {
+    private static DistributedList<String> generateNamesFromSingleFile(String source) {
         InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(source);
-        DistributedSet<String> result = CsvInputStreamReader.retrieveLines(stream);
+        DistributedList<String> result = CsvInputStreamReader.retrieveLines(stream);
         try {
             stream.close();
         } catch (IOException e) {
@@ -64,13 +65,14 @@ public final class NameRetriever {
         return result;
     }
 
-    private static DistributedSet<String> combineFirstWithLastNames(DistributedSet<String> firstNames,
-                                                                    DistributedSet<String> lastNames) {
-        return new DistributedSet<>(firstNames.distributedSet().stream()
+    private static DistributedList<String> combineFirstWithLastNames(DistributedList<String> firstNames,
+                                                                     DistributedList<String> lastNames) {
+        return new DistributedList<>(firstNames.distributedList().stream()
             .flatMap(
-                first -> lastNames.distributedSet().stream()
-                    .map(last -> mergeFrequencies(first, last))
-            ).collect(Collectors.toSet()));
+                first -> lastNames.distributedList().stream()
+                    .map(last -> mergeFrequencies(first, last)))
+            .distinct()
+            .collect(Collectors.toList()));
     }
 
     private static WeightedElement<String> mergeFrequencies(WeightedElement<String> first,

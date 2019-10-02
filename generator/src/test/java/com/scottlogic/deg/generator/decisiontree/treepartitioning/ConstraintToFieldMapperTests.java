@@ -24,7 +24,7 @@ import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -37,8 +37,8 @@ import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 class ConstraintToFieldMapperTests {
 
-    private DistributedSet<Object> whitelistOf(Object element) {
-        return new DistributedSet<>(Collections.singleton(new WeightedElement<>(element, 1.0F)));
+    private DistributedList<Object> whitelistOf(Object element) {
+        return new DistributedList<>(Collections.singletonList(new WeightedElement<>(element, 1.0F)));
     }
 
     @Test

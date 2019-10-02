@@ -20,28 +20,27 @@ import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
 
-public class DistributedSet<T> {
+public class DistributedList<T> {
 
-    private static final DistributedSet<?> EMPTY = new DistributedSet<>(Collections.emptySet());
+    private static final DistributedList<?> EMPTY = new DistributedList<>(Collections.emptyList());
 
-    private final Set<WeightedElement<T>> underlyingWeights;
+    private final List<WeightedElement<T>> underlyingWeights;
 
     private final List<WeightedElement<T>> underlyingCumulativeWeights;
 
-    public DistributedSet(final Set<WeightedElement<T>> underlyingWeights) {
+    public DistributedList(final List<WeightedElement<T>> underlyingWeights) {
         if (underlyingWeights.contains(null)) {
             throw new IllegalArgumentException("DistributedSet should not contain null elements");
         }
 
-        Set<WeightedElement<T>> normalisedWeights = normalise(underlyingWeights);
-        this.underlyingWeights = Collections.unmodifiableSet(normalisedWeights);
+        List<WeightedElement<T>> normalisedWeights = normalise(underlyingWeights);
+        this.underlyingWeights = Collections.unmodifiableList(normalisedWeights);
         this.underlyingCumulativeWeights = cumulative(normalisedWeights);
     }
 
-    private static <T> Set<WeightedElement<T>> normalise(final Set<WeightedElement<T>> denormalised) {
+    private static <T> List<WeightedElement<T>> normalise(final List<WeightedElement<T>> denormalised) {
         final double total = denormalised.stream()
             .map(WeightedElement::weight)
             .reduce(0.0D, Double::sum);
@@ -49,21 +48,21 @@ public class DistributedSet<T> {
         // Stream (even with 0 elements) ensure a copy of the original set is returned
         return denormalised.stream()
             .map(holder -> new WeightedElement<>(holder.element(), holder.weight() / total))
-            .collect(Collectors.toSet());
+            .collect(Collectors.toList());
     }
 
-    public static <T> DistributedSet<T> singleton(final T element) {
-        return DistributedSet.uniform(Collections.singleton(element));
+    public static <T> DistributedList<T> singleton(final T element) {
+        return DistributedList.uniform(Collections.singleton(element));
     }
 
-    public static <T> DistributedSet<T> uniform(final Collection<T> underlyingSet) {
-        return new DistributedSet<>(
+    public static <T> DistributedList<T> uniform(final Collection<T> underlyingSet) {
+        return new DistributedList<>(
             underlyingSet.stream()
                 .map(WeightedElement::withDefaultWeight)
-                .collect(Collectors.toSet()));
+                .collect(Collectors.toList()));
     }
 
-    private static <T> List<WeightedElement<T>> cumulative(Set<WeightedElement<T>> nonCumulative) {
+    private static <T> List<WeightedElement<T>> cumulative(List<WeightedElement<T>> nonCumulative) {
         List<WeightedElement<T>> cumulative = new LinkedList<>();
         double runningTotal = 0.0D;
         for (WeightedElement<T> holder : nonCumulative) {
@@ -86,11 +85,11 @@ public class DistributedSet<T> {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> DistributedSet<T> empty() {
-        return (DistributedSet<T>) EMPTY;
+    public static <T> DistributedList<T> empty() {
+        return (DistributedList<T>) EMPTY;
     }
 
-    public Set<WeightedElement<T>> distributedSet() {
+    public List<WeightedElement<T>> distributedList() {
         return underlyingWeights;
     }
 
@@ -126,7 +125,7 @@ public class DistributedSet<T> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        DistributedSet<?> that = (DistributedSet<?>) o;
+        DistributedList<?> that = (DistributedList<?>) o;
         return Objects.equals(underlyingWeights, that.underlyingWeights);
     }
 
@@ -143,14 +142,14 @@ public class DistributedSet<T> {
     }
 
     public Stream<T> stream() {
-        return distributedSet().stream().map(WeightedElement::element);
+        return distributedList().stream().map(WeightedElement::element);
     }
 
-    public Set<T> set() {
-        return stream().collect(Collectors.toSet());
+    public List<T> list() {
+        return stream().collect(Collectors.toList());
     }
 
     public boolean isEmpty(){
-        return distributedSet().isEmpty();
+        return distributedList().isEmpty();
     }
 }
