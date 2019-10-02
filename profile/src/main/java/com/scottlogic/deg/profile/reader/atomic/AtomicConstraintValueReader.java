@@ -34,7 +34,7 @@ public class AtomicConstraintValueReader {
         }
     }
 
-    public Object tryGetValue(ConstraintDTO dto, Types type){
+    private Object tryGetValue(ConstraintDTO dto, Types type){
         if (dto.values != null){
             return getSet(dto.values, type);
         }

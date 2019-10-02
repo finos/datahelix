@@ -33,7 +33,7 @@ Need an ICLA? Unsure if you are covered under an existing CCLA? Email [help@fino
 * Please use [Markdown formatting](https://help.github.com/categories/writing-on-github/)
 liberally to assist in readability.
 * [Code fences](https://help.github.com/articles/creating-and-highlighting-code-blocks/) for exception stack traces and log entries, for example, massively improve readability.
-* Further information regarding our Definition of Ready can be found [here] (https://github.com/finos/datahelix/blob/master/docs/developer/DefinitionOfReady.md)
+* Further information regarding our Definition of Ready can be found [here](https://github.com/finos/datahelix/blob/master/docs/developer/DefinitionOfReady.md)
 
 # Contributing Pull Requests (Code & Docs)
 To make review of PRs easier, please:
@@ -46,7 +46,7 @@ To make review of PRs easier, please:
  * Minimise non-functional changes (e.g. whitespace).
  * Ensure all new files include a header comment block containing the [Apache License v2.0 and your copyright information](http://www.apache.org/licenses/LICENSE-2.0#apply).
  * If necessary (e.g. due to 3rd party dependency licensing requirements), update the [NOTICE file](https://github.com/finos/datahelix/blob/master/NOTICE) with any new attribution or other notices
- * Further information regarding our Definition of Done can be found [here] (https://github.com/finos/datahelix/blob/master/docs/developer/DefinitionOfDone.md) 
+ * Further information regarding our Definition of Done can be found [here](https://github.com/finos/datahelix/blob/master/docs/developer/DefinitionOfDone.md) 
 
 ## Commit and PR Messages
 

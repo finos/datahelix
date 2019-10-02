@@ -17,20 +17,15 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.constraints.delayed.*;
 import com.scottlogic.deg.generator.fieldspecs.relations.*;
 
 public class FieldRelationsFactory {
 
    public FieldSpecRelations construct(DelayedAtomicConstraint constraint) {
-       if (constraint instanceof DynamicNotConstraint) {
-           throw new ValidationException("related field constraints cannot yet be negated");
-       }
-
        switch (constraint.getUnderlyingConstraint()) {
            case IS_EQUAL_TO_CONSTANT:
-               return constructEqualToDate(constraint);
+               return constructEqualToDate((DelayedDateAtomicConstraint)constraint);
            case IS_BEFORE_CONSTANT_DATE_TIME:
                return constructBeforeDate(constraint, false);
            case IS_BEFORE_OR_EQUAL_TO_CONSTANT_DATE_TIME:
@@ -59,7 +54,7 @@ public class FieldRelationsFactory {
            inclusive);
    }
 
-   private FieldSpecRelations constructEqualToDate(DelayedAtomicConstraint constraint) {
+   private FieldSpecRelations constructEqualToDate(DelayedDateAtomicConstraint constraint) {
        if (constraint.getOffsetUnit() != null) {
            return new EqualToOffsetDateRelation(
                constraint.getField(),
