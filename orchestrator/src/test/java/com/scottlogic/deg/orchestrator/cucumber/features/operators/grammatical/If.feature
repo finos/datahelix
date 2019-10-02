@@ -2524,9 +2524,9 @@ Feature: Values can be specified by using if, then and else constraints
     And there is a constraint:
       """
       {
-        "if": { "field": "foo", "is": "after", "value": { "date": "2018-01-02T00:00:00.000Z" } },
-        "then": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-01T00:00:00.000Z" } },
-        "else": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-05T00:00:00.000Z" } }
+        "if": { "field": "foo", "is": "after", "value": "2018-01-02T00:00:00.000Z" },
+        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-01T00:00:00.000Z" },
+        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-05T00:00:00.000Z" }
       }
       """
     Then the following data should be generated:
@@ -2559,9 +2559,9 @@ Feature: Values can be specified by using if, then and else constraints
     And there is a constraint:
       """
       {
-        "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-02-01T00:00:00.000Z" } },
-        "then": { "field": "bar", "is": "after", "value": { "date": "2010-01-04T00:00:00.000Z" } },
-        "else": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-01T00:00:00.000Z" } }
+        "if": { "field": "foo", "is": "equalTo", "value": "2018-02-01T00:00:00.000Z" },
+        "then": { "field": "bar", "is": "after", "value": "2010-01-04T00:00:00.000Z" },
+        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-01T00:00:00.000Z" }
       }
       """
     Then the following data should be generated:
@@ -2594,9 +2594,9 @@ Feature: Values can be specified by using if, then and else constraints
     And there is a constraint:
       """
       {
-        "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-01-01T00:00:00.000Z" } },
-        "then": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-01T00:00:00.000Z" } },
-        "else": { "field": "bar", "is": "after", "value": { "date": "2010-01-04T00:00:00.000Z" } }
+        "if": { "field": "foo", "is": "equalTo", "value": "2018-01-01T00:00:00.000Z" },
+        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-01T00:00:00.000Z" },
+        "else": { "field": "bar", "is": "after", "value": "2010-01-04T00:00:00.000Z" }
       }
       """
     Then the following data should be generated:
@@ -2629,9 +2629,9 @@ Feature: Values can be specified by using if, then and else constraints
     And there is a constraint:
       """
       {
-        "if": { "field": "foo", "is": "after", "value": { "date": "2020-01-01T00:00:00.000Z" } },
-        "then": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-01T00:00:00.000Z" } },
-        "else": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-04T00:00:00.000Z" } }
+        "if": { "field": "foo", "is": "after", "value": "2020-01-01T00:00:00.000Z" },
+        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-01T00:00:00.000Z" },
+        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-04T00:00:00.000Z" }
       }
       """
     Then the following data should be generated:
@@ -2664,9 +2664,9 @@ Feature: Values can be specified by using if, then and else constraints
     And there is a constraint:
       """
       {
-        "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-01-01T00:00:00.000Z" } },
-        "then": { "field": "bar", "is": "after", "value": { "date": "2020-01-01T00:00:00.000Z" } },
-        "else": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-04T00:00:00.000Z" } }
+        "if": { "field": "foo", "is": "equalTo", "value": "2018-01-01T00:00:00.000Z" },
+        "then": { "field": "bar", "is": "after", "value": "2020-01-01T00:00:00.000Z" },
+        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-04T00:00:00.000Z" }
       }
       """
     Then the following data should be generated:
@@ -2698,9 +2698,9 @@ Feature: Values can be specified by using if, then and else constraints
     And there is a constraint:
       """
       {
-        "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-01-01T00:00:00.000Z" } },
-        "then": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-01T00:00:00.000Z" } },
-        "else": { "field": "bar", "is": "after", "value": { "date": "2020-01-01T00:00:00.000Z" } }
+        "if": { "field": "foo", "is": "equalTo", "value": "2018-01-01T00:00:00.000Z" },
+        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-01T00:00:00.000Z" },
+        "else": { "field": "bar", "is": "after", "value": "2020-01-01T00:00:00.000Z" }
       }
       """
     Then the following data should be generated:
@@ -2728,9 +2728,9 @@ Feature: Values can be specified by using if, then and else constraints
     And there is a constraint:
       """
       {
-        "if": { "field": "foo", "is": "afterOrAt", "value": { "date": "2018-05-01T00:00:00.000Z" } },
-        "then": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-05T00:00:00.000Z" } },
-        "else": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-01T00:00:00.000Z" } }
+        "if": { "field": "foo", "is": "afterOrAt", "value": "2018-05-01T00:00:00.000Z" },
+        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-05T00:00:00.000Z" },
+        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-01T00:00:00.000Z" }
       }
       """
     Then the following data should be generated:
@@ -2763,9 +2763,9 @@ Feature: Values can be specified by using if, then and else constraints
     And there is a constraint:
       """
       {
-        "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-05-01T00:00:00.000Z" } },
-        "then": { "field": "bar", "is": "afterOrAt", "value": { "date": "2010-01-04T00:00:00.000Z" } },
-        "else": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-01T00:00:00.000Z" } }
+        "if": { "field": "foo", "is": "equalTo", "value": "2018-05-01T00:00:00.000Z" },
+        "then": { "field": "bar", "is": "afterOrAt", "value": "2010-01-04T00:00:00.000Z" },
+        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-01T00:00:00.000Z" }
       }
       """
     Then the following data should be generated:
@@ -2799,9 +2799,9 @@ Feature: Values can be specified by using if, then and else constraints
     And there is a constraint:
       """
       {
-        "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-06-01T00:00:00.000Z" } },
-        "then": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-01T00:00:00.000Z" } },
-        "else": { "field": "bar", "is": "afterOrAt", "value": { "date": "2010-01-04T00:00:00.000Z" } }
+        "if": { "field": "foo", "is": "equalTo", "value": "2018-06-01T00:00:00.000Z" },
+        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-01T00:00:00.000Z" },
+        "else": { "field": "bar", "is": "afterOrAt", "value": "2010-01-04T00:00:00.000Z" }
       }
       """
     Then the following data should be generated:
@@ -2839,9 +2839,9 @@ Feature: Values can be specified by using if, then and else constraints
     And there is a constraint:
       """
       {
-        "if": { "field": "foo", "is": "afterOrAt", "value": { "date": "2020-01-01T00:00:00.000Z" } },
-        "then": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-01T00:00:00.000Z" } },
-        "else": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-05T00:00:00.000Z" } }
+        "if": { "field": "foo", "is": "afterOrAt", "value": "2020-01-01T00:00:00.000Z" },
+        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-01T00:00:00.000Z" },
+        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-05T00:00:00.000Z" }
       }
       """
     Then the following data should be generated:
@@ -2874,9 +2874,9 @@ Feature: Values can be specified by using if, then and else constraints
     And there is a constraint:
       """
       {
-        "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-01-01T00:00:00.000Z" } },
-        "then": { "field": "bar", "is": "afterOrAt", "value": { "date": "2020-01-01T00:00:00.000Z" } },
-        "else": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-05T00:00:00.000Z" } }
+        "if": { "field": "foo", "is": "equalTo", "value": "2018-01-01T00:00:00.000Z" },
+        "then": { "field": "bar", "is": "afterOrAt", "value": "2020-01-01T00:00:00.000Z" },
+        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-05T00:00:00.000Z" }
       }
       """
     Then the following data should be generated:
@@ -2908,9 +2908,9 @@ Feature: Values can be specified by using if, then and else constraints
     And there is a constraint:
       """
       {
-        "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-01-01T00:00:00.000Z" } },
-        "then": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-01T00:00:00.000Z" } },
-        "else": { "field": "bar", "is": "afterOrAt", "value": { "date": "2020-01-05T00:00:00.000Z" } }
+        "if": { "field": "foo", "is": "equalTo", "value": "2018-01-01T00:00:00.000Z" },
+        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-01T00:00:00.000Z" },
+        "else": { "field": "bar", "is": "afterOrAt", "value": "2020-01-05T00:00:00.000Z" }
       }
       """
     Then the following data should be generated:
@@ -2938,9 +2938,9 @@ Feature: Values can be specified by using if, then and else constraints
     And there is a constraint:
       """
       {
-        "if": { "field": "foo", "is": "before", "value": { "date": "2018-02-01T00:00:00.000Z" } },
-        "then": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-01T00:00:00.000Z" } },
-        "else": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-05T00:00:00.000Z" } }
+        "if": { "field": "foo", "is": "before", "value": "2018-02-01T00:00:00.000Z" },
+        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-01T00:00:00.000Z" },
+        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-05T00:00:00.000Z" }
       }
       """
     Then the following data should be generated:
@@ -2973,9 +2973,9 @@ Feature: Values can be specified by using if, then and else constraints
     And there is a constraint:
       """
       {
-        "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-01-01T00:00:00.000Z" } },
-        "then": { "field": "bar", "is": "before", "value": { "date": "2010-01-03T00:00:00.000Z" } },
-        "else": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-05T00:00:00.000Z" } }
+        "if": { "field": "foo", "is": "equalTo", "value": "2018-01-01T00:00:00.000Z" },
+        "then": { "field": "bar", "is": "before", "value": "2010-01-03T00:00:00.000Z" },
+        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-05T00:00:00.000Z" }
       }
       """
     Then the following data should be generated:
@@ -3009,9 +3009,9 @@ Feature: Values can be specified by using if, then and else constraints
     And there is a constraint:
       """
       {
-        "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-01-01T00:00:00.000Z" } },
-        "then": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-05T00:00:00.000Z" } },
-        "else": { "field": "bar", "is": "before", "value": { "date": "2010-01-03T00:00:00.000Z" } }
+        "if": { "field": "foo", "is": "equalTo", "value": "2018-01-01T00:00:00.000Z" },
+        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-05T00:00:00.000Z" },
+        "else": { "field": "bar", "is": "before", "value": "2010-01-03T00:00:00.000Z" }
       }
       """
     Then the following data should be generated:
@@ -3049,9 +3049,9 @@ Feature: Values can be specified by using if, then and else constraints
     And there is a constraint:
       """
       {
-        "if": { "field": "foo", "is": "before", "value": { "date": "2010-01-01T00:00:00.000Z" } },
-        "then": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-05T00:00:00.000Z" } },
-        "else": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-03T00:00:00.000Z" } }
+        "if": { "field": "foo", "is": "before", "value": "2010-01-01T00:00:00.000Z" },
+        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-05T00:00:00.000Z" },
+        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-03T00:00:00.000Z" }
       }
       """
     Then the following data should be generated:
@@ -3084,9 +3084,9 @@ Feature: Values can be specified by using if, then and else constraints
     And there is a constraint:
       """
       {
-        "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-01-01T00:00:00.000Z" } },
-        "then": { "field": "bar", "is": "before", "value": { "date": "2010-01-01T00:00:00.000Z" } },
-        "else": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-03T00:00:00.000Z" } }
+        "if": { "field": "foo", "is": "equalTo", "value": "2018-01-01T00:00:00.000Z" },
+        "then": { "field": "bar", "is": "before", "value": "2010-01-01T00:00:00.000Z" },
+        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-03T00:00:00.000Z" }
       }
       """
     Then the following data should be generated:
@@ -3118,9 +3118,9 @@ Feature: Values can be specified by using if, then and else constraints
     And there is a constraint:
       """
       {
-        "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-01-01T00:00:00.000Z" } },
-        "then": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-01T00:00:00.000Z" } },
-        "else": { "field": "bar", "is": "before", "value": { "date": "2010-01-01T00:00:00.000Z" } }
+        "if": { "field": "foo", "is": "equalTo", "value": "2018-01-01T00:00:00.000Z" },
+        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-01T00:00:00.000Z" },
+        "else": { "field": "bar", "is": "before", "value": "2010-01-01T00:00:00.000Z" }
       }
       """
     Then the following data should be generated:
@@ -3148,9 +3148,9 @@ Feature: Values can be specified by using if, then and else constraints
     And there is a constraint:
       """
       {
-        "if": { "field": "foo", "is": "beforeOrAt", "value": { "date": "2018-02-01T00:00:00.000Z" } },
-        "then": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-01T00:00:00.000Z" } },
-        "else": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-05T00:00:00.000Z" } }
+        "if": { "field": "foo", "is": "beforeOrAt", "value": "2018-02-01T00:00:00.000Z" },
+        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-01T00:00:00.000Z" },
+        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-05T00:00:00.000Z" }
       }
       """
     Then the following data should be generated:
@@ -3183,9 +3183,9 @@ Feature: Values can be specified by using if, then and else constraints
     And there is a constraint:
       """
       {
-        "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-01-01T00:00:00.000Z" } },
-        "then": { "field": "bar", "is": "beforeOrAt", "value": { "date": "2010-01-03T00:00:00.000Z" } },
-        "else": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-05T00:00:00.000Z" } }
+        "if": { "field": "foo", "is": "equalTo", "value": "2018-01-01T00:00:00.000Z" },
+        "then": { "field": "bar", "is": "beforeOrAt", "value": "2010-01-03T00:00:00.000Z" },
+        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-05T00:00:00.000Z" }
       }
       """
     Then the following data should be generated:
@@ -3220,9 +3220,9 @@ Feature: Values can be specified by using if, then and else constraints
     And there is a constraint:
       """
       {
-        "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-01-01T00:00:00.000Z" } },
-        "then": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-05T00:00:00.000Z" } },
-        "else": { "field": "bar", "is": "beforeOrAt", "value": { "date": "2010-01-03T00:00:00.000Z" } }
+        "if": { "field": "foo", "is": "equalTo", "value": "2018-01-01T00:00:00.000Z" },
+        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-05T00:00:00.000Z" },
+        "else": { "field": "bar", "is": "beforeOrAt", "value": "2010-01-03T00:00:00.000Z" }
       }
       """
     Then the following data should be generated:
@@ -3265,9 +3265,9 @@ Feature: Values can be specified by using if, then and else constraints
     And there is a constraint:
       """
       {
-        "if": { "field": "foo", "is": "beforeOrAt", "value": { "date": "2009-01-01T00:00:00.000Z" } },
-        "then": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-05T00:00:00.000Z" } },
-        "else": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-03T00:00:00.000Z" } }
+        "if": { "field": "foo", "is": "beforeOrAt", "value": "2009-01-01T00:00:00.000Z" },
+        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-05T00:00:00.000Z" },
+        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-03T00:00:00.000Z" }
       }
       """
     Then the following data should be generated:
@@ -3300,9 +3300,9 @@ Feature: Values can be specified by using if, then and else constraints
     And there is a constraint:
       """
       {
-        "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-01-01T00:00:00.000Z" } },
-        "then": { "field": "bar", "is": "beforeOrAt", "value": { "date": "2009-01-01T00:00:00.000Z" } },
-        "else": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-03T00:00:00.000Z" } }
+        "if": { "field": "foo", "is": "equalTo", "value": "2018-01-01T00:00:00.000Z" },
+        "then": { "field": "bar", "is": "beforeOrAt", "value": "2009-01-01T00:00:00.000Z" },
+        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-03T00:00:00.000Z" }
       }
       """
     Then the following data should be generated:
@@ -3334,9 +3334,9 @@ Feature: Values can be specified by using if, then and else constraints
     And there is a constraint:
       """
       {
-        "if": { "field": "foo", "is": "equalTo", "value": { "date": "2018-01-01T00:00:00.000Z" } },
-        "then": { "field": "bar", "is": "equalTo", "value": { "date": "2010-01-01T00:00:00.000Z" } },
-        "else": { "field": "bar", "is": "beforeOrAt", "value": { "date": "2009-01-01T00:00:00.000Z" } }
+        "if": { "field": "foo", "is": "equalTo", "value": "2018-01-01T00:00:00.000Z" },
+        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-01T00:00:00.000Z" },
+        "else": { "field": "bar", "is": "beforeOrAt", "value": "2009-01-01T00:00:00.000Z" }
       }
       """
     Then the following data should be generated:
