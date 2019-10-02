@@ -58,18 +58,19 @@ public final class CsvInputStreamReader {
     }
 
     private static int getIndexForKey(CSVRecord header, String key) {
-        List<String> list = new ArrayList<>();
-        header.iterator().forEachRemaining(list::add);
-
-        if (!list.contains(key)) {
-            throw new ValidationException("unable to find data for key " + key);
+        int index = 0;
+        for (String title : header) {
+            if (title.equals(key)) {
+                return index;
+            }
+            index++;
         }
-
-        return list.indexOf(key);
+        throw new ValidationException("unable to find data for key " + key);
     }
 
     private static WeightedElement<String> createWeightedElementFromRecord(CSVRecord record) {
-        return createWeightedElement(record.get(0), record.size() == 1 ? Optional.empty() :  Optional.of(Double.parseDouble(record.get(1))));
+        return createWeightedElement(record.get(0),
+            record.size() == 1 ? Optional.empty() :  Optional.of(Double.parseDouble(record.get(1))));
     }
 
 
