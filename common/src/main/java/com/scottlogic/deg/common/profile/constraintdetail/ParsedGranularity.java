@@ -19,6 +19,7 @@ package com.scottlogic.deg.common.profile.constraintdetail;
 import com.scottlogic.deg.common.util.NumberUtils;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * Granularity expressions could be interpreted differently depending on other constraints on a field (eg, type constraints),
@@ -56,4 +57,18 @@ public class ParsedGranularity {
     public BigDecimal getNumericGranularity() {
         return this.numericGranularity;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ParsedGranularity that = (ParsedGranularity) o;
+        return Objects.equals(numericGranularity, that.numericGranularity);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(numericGranularity);
+    }
+
 }
