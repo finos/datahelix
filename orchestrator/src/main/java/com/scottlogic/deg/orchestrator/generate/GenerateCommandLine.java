@@ -87,6 +87,11 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     boolean overwriteOutputFiles = false;
 
     @CommandLine.Option(
+        names = {"--ndjson"},
+        description =  "Defines whether JSON output is in NDJ (newline-delimited JSON) format- defaults true for stdOut")
+    private Boolean ndjson;
+
+    @CommandLine.Option(
         names = { "--disable-schema-validation" },
         description = "Disables schema validation")
     boolean disableSchemaValidation = false;
@@ -150,6 +155,11 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     @Override
     public boolean useStdOut() {
         return outputPath == null;
+    }
+
+    @Override
+    public boolean useNdJson() {
+        return (ndjson == null && this.useStdOut()) || ndjson;
     }
 
     @Override
