@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.inputs.profileviolation;
+package com.scottlogic.deg.orchestrator.violate.violator;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.Rule;
-import com.scottlogic.deg.common.profile.ViolatedProfile;
+import com.scottlogic.deg.orchestrator.violate.ViolatedProfile;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,12 +32,12 @@ import java.util.stream.Collectors;
  * Within each violated ruleInformation we violate each constraint independently. This is consistent with the current
  * implementation of violation.
  */
-public class IndividualRuleProfileViolator implements ProfileViolator {
+public class ProfileViolator {
 
     private final RuleViolator ruleViolator;
 
     @Inject
-    public IndividualRuleProfileViolator(RuleViolator ruleViolator) {
+    public ProfileViolator(RuleViolator ruleViolator) {
         this.ruleViolator = ruleViolator;
     }
 
@@ -52,7 +52,6 @@ public class IndividualRuleProfileViolator implements ProfileViolator {
      * @return List of profiles each with a different rule violated.
      * @throws IOException if the manifest writer fails to write
      */
-    @Override
     public List<ViolatedProfile> violate(Profile profile) throws IOException {
         // For each rule in the profile generate a profile with this one rule violated
         List<ViolatedProfile> violatedProfiles =

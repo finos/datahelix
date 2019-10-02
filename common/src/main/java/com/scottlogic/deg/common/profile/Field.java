@@ -23,12 +23,18 @@ public class Field {
     public final Types type;
     private final boolean unique;
     private final String formatting;
+    private final boolean internal;
 
-    public Field(String name, Types type, Boolean unique, String formatting) {
+    public Field(String name, Types type, boolean unique, String formatting, boolean internal) {
         this.name = name;
         this.type = type;
         this.unique = unique;
         this.formatting = formatting;
+        this.internal = internal;
+    }
+
+    public boolean isInternal() {
+        return internal;
     }
 
     public boolean isUnique() {

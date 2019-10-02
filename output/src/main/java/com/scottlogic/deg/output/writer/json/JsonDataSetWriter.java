@@ -44,8 +44,10 @@ class JsonDataSetWriter implements DataSetWriter {
     @Override
     public void writeRow(GeneratedObject row) throws IOException {
         Map<Field, Object> jsonObject = new HashMap<>();
-        fields.forEach(field -> jsonObject
-            .put(field, convertValue(row.getFormattedValue(field))));
+
+        fields.getExternalStream()
+            .forEach(field -> jsonObject
+            .put(field , convertValue(row.getFormattedValue(field))));
 
         writer.write(jsonObject);
     }

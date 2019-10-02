@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.inputs.profileviolation;
+package com.scottlogic.deg.orchestrator.violate.violator;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.Profile;
@@ -24,7 +24,7 @@ import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsGreaterThanConstantConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsLessThanConstantConstraint;
 import com.scottlogic.deg.common.profile.RuleInformation;
-import com.scottlogic.deg.common.profile.ViolatedProfile;
+import com.scottlogic.deg.orchestrator.violate.ViolatedProfile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -36,15 +36,15 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static com.scottlogic.deg.generator.inputs.profileviolation.TypeEqualityHelper.assertListProfileTypeEquality;
+import static com.scottlogic.deg.orchestrator.violate.violator.TypeEqualityHelper.assertListProfileTypeEquality;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.mockito.Mockito.*;
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
-public class IndividualRuleProfileViolatorTests {
+public class ProfileViolatorTests {
 
-    private IndividualRuleProfileViolator target;
+    private ProfileViolator target;
 
     @Mock private RuleViolator mockRuleViolator;
 
@@ -59,7 +59,7 @@ public class IndividualRuleProfileViolatorTests {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
-        target = new IndividualRuleProfileViolator(
+        target = new ProfileViolator(
             mockRuleViolator
         );
 

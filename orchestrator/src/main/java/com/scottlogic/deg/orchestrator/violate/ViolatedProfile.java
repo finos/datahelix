@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.common.profile;
+package com.scottlogic.deg.orchestrator.violate;
+
+import com.scottlogic.deg.common.profile.Profile;
+import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Rule;
 
 import java.util.Collection;
 

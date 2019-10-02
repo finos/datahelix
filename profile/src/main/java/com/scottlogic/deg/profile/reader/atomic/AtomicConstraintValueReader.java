@@ -44,7 +44,7 @@ public class AtomicConstraintValueReader {
         }
 
         if (dto.file != null && dto.is.equals(AtomicConstraintType.IS_IN_MAP.getText())){
-            throw new UnsupportedOperationException("inMap is unsupported");
+            return fromFileReader.listFromMapFile(dto.file, dto.key);
         }
 
         return getValue(dto.value, type);
