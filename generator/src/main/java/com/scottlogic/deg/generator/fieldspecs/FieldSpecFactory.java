@@ -52,6 +52,8 @@ public class FieldSpecFactory {
             return construct(((NotConstraint) constraint).negatedConstraint, !negate);
         } else if (constraint instanceof IsInSetConstraint) {
             return construct((IsInSetConstraint) constraint, negate);
+        } else if (constraint instanceof IsInMapConstraint) {
+            return construct((IsInMapConstraint) constraint, negate);
         } else if (constraint instanceof EqualToConstraint) {
             return construct((EqualToConstraint) constraint, negate);
         } else if (constraint instanceof IsGreaterThanConstantConstraint) {
@@ -96,6 +98,14 @@ public class FieldSpecFactory {
     private FieldSpec construct(IsInSetConstraint constraint, boolean negate) {
         if (negate) {
             return FieldSpec.empty().withBlacklist(new HashSet<>(constraint.legalValuesWithoutFrequency()));
+        }
+
+        return FieldSpec.fromList(constraint.legalValues);
+    }
+
+    private FieldSpec construct(IsInMapConstraint constraint, boolean negate) {
+        if (negate) {
+            throw new UnsupportedOperationException("negation of inMap not supported");
         }
 
         return FieldSpec.fromList(constraint.legalValues);
