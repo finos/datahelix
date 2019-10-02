@@ -30,7 +30,7 @@ public class FieldRelationsFactory {
 
        switch (constraint.getUnderlyingConstraint()) {
            case IS_EQUAL_TO_CONSTANT:
-               return constructEqualToDate(constraint);
+               return constructEqualToDate((DelayedDateAtomicConstraint)constraint);
            case IS_BEFORE_CONSTANT_DATE_TIME:
                return constructBeforeDate(constraint, false);
            case IS_BEFORE_OR_EQUAL_TO_CONSTANT_DATE_TIME:
@@ -59,7 +59,7 @@ public class FieldRelationsFactory {
            inclusive);
    }
 
-   private FieldSpecRelations constructEqualToDate(DelayedAtomicConstraint constraint) {
+   private FieldSpecRelations constructEqualToDate(DelayedDateAtomicConstraint constraint) {
        if (constraint.getOffsetUnit() != null) {
            return new EqualToOffsetDateRelation(
                constraint.getField(),

@@ -21,7 +21,7 @@ import com.scottlogic.deg.common.profile.Field;
 
 import java.util.Objects;
 
-public class DynamicNotConstraint extends DelayedAtomicConstraint {
+public class DynamicNotConstraint extends DelayedDateAtomicConstraint {
 
     private final DelayedAtomicConstraint negatedConstraint;
 
