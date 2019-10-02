@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.inputs.profileviolation;
+package com.scottlogic.deg.orchestrator.violate.violator;
 
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.Rule;

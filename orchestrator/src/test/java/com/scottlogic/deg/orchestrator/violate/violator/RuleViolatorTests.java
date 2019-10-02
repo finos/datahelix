@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.inputs.profileviolation;
+package com.scottlogic.deg.orchestrator.violate.violator;
 
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
-import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraintdetail.UnviolatableConstraintException;
@@ -38,7 +37,7 @@ import org.mockito.MockitoAnnotations;
 import java.math.BigDecimal;
 import java.util.*;
 
-import static com.scottlogic.deg.generator.inputs.profileviolation.TypeEqualityHelper.assertRuleTypeEquality;
+import static com.scottlogic.deg.orchestrator.violate.violator.TypeEqualityHelper.assertRuleTypeEquality;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -47,11 +46,11 @@ import static org.mockito.Mockito.when;
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 /**
- * Tests the behaviour of the IndividualConstraintRuleViolator class.
+ * Tests the behaviour of the RuleViolator class.
  */
-public class IndividualConstraintRuleViolatorTests {
+public class RuleViolatorTests {
 
-    private IndividualConstraintRuleViolator target;
+    private RuleViolator target;
 
     private AtomicConstraint atomicConstraint1;
     private AtomicConstraint atomicConstraint2;
@@ -69,7 +68,7 @@ public class IndividualConstraintRuleViolatorTests {
         List<ViolationFilter> inputFilters = Collections.singletonList(mockFilter);
         when(mockFilter.canViolate(any(Constraint.class))).thenReturn(true);
 
-        target = new IndividualConstraintRuleViolator(inputFilters);
+        target = new RuleViolator(inputFilters);
 
         atomicConstraint1 = new IsLessThanConstantConstraint(createField("foo"), BigDecimal.valueOf(10));
         atomicConstraint2 = new IsLessThanConstantConstraint(createField("bar"), BigDecimal.valueOf(20));
@@ -397,7 +396,7 @@ public class IndividualConstraintRuleViolatorTests {
     @Test
     public void violateRule_withEmptyViolationFilter_doesNotThrow() {
         //Arrange
-        target = new IndividualConstraintRuleViolator(new ArrayList<>());
+        target = new RuleViolator(new ArrayList<>());
 
         inputConstraints.add(atomicConstraint1);
         Rule inputRule = new Rule(ruleInformation, inputConstraints);
