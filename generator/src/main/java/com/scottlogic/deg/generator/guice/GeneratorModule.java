@@ -19,6 +19,7 @@ package com.scottlogic.deg.generator.guice;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.name.Names;
+import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.generator.generation.*;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
@@ -54,6 +55,7 @@ public class GeneratorModule extends AbstractModule {
 
         // bind config directly
         bind(DataGenerationType.class).toInstance(generationConfigSource.getGenerationType());
+        bind(CombinationStrategyType.class).toInstance(generationConfigSource.getCombinationStrategyType());
 
         bind(long.class)
             .annotatedWith(Names.named("config:maxRows"))
