@@ -18,33 +18,33 @@ package com.scottlogic.deg.common.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
 
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class IsInSetConstraint implements AtomicConstraint {
     public final Field field;
-    public final DistributedSet<Object> legalValues;
+    public final DistributedList<Object> legalValues;
 
-    public IsInSetConstraint(Field field, DistributedSet<Object> legalValues) {
+    public IsInSetConstraint(Field field, DistributedList<Object> legalValues) {
         this.field = field;
         this.legalValues = legalValues;
 
-        if (legalValues.distributedSet().isEmpty()) {
+        if (legalValues.distributedList().isEmpty()) {
             throw new IllegalArgumentException("Cannot create an IsInSetConstraint for field '" +
                 field.name + "' with an empty set.");
         }
 
-        if (legalValues.set().contains(null)) {
+        if (legalValues.list().contains(null)) {
             throw new IllegalArgumentException("Cannot create an IsInSetConstraint for field '" +
                 field.name + "' with a set containing null.");
         }
     }
 
-    public Set<Object> legalValuesWithoutFrequency() {
-        return legalValues.set();
+    public List<Object> legalValuesWithoutFrequency() {
+        return legalValues.list();
     }
 
     @Override
@@ -53,12 +53,12 @@ public class IsInSetConstraint implements AtomicConstraint {
     }
 
     public String toString(){
-        boolean overLimit = legalValues.set().size() > 3;
+        boolean overLimit = legalValues.list().size() > 3;
         return String.format("%s in [%s%s](%d values)",
             field.name,
             legalValues.stream().limit(3).map(Object::toString).collect(Collectors.joining(", ")),
             overLimit ? ", ..." : "",
-            legalValues.set().size());
+            legalValues.list().size());
     }
 
     @Override

@@ -16,9 +16,8 @@
 
 package com.scottlogic.deg.generator.generation;
 
-import com.google.common.collect.Iterators;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.NullAppendingValueSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.NullOnlySource;
@@ -32,7 +31,6 @@ import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.scottlogic.deg.common.profile.Types.*;
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createNumericRestrictions;
@@ -55,7 +53,7 @@ public class FieldValueSourceEvaluatorTests {
     @Test
     public void returnsNullSourceOnlyWithSetRestrictionWithEmptyWhitelist() {
         FieldValueSourceEvaluator evaluator = new FieldValueSourceEvaluator();
-        FieldSpec fieldSpecMustBeNull = FieldSpec.fromSet((new DistributedSet<>(Collections.emptySet())));
+        FieldSpec fieldSpecMustBeNull = FieldSpec.fromList((new DistributedList<>(Collections.emptyList())));
 
         FieldValueSource sources = evaluator.getFieldValueSources(STRING, fieldSpecMustBeNull);
 
@@ -75,7 +73,7 @@ public class FieldValueSourceEvaluatorTests {
     @Test
     public void shouldReturnNullSourceLastWithInSetRestrictionsAndNullNotDisallowed() {
         FieldValueSourceEvaluator evaluator = new FieldValueSourceEvaluator();
-        FieldSpec fieldSpecInSetAndNullNotDisallowed = FieldSpec.fromSet(DistributedSet.uniform(new HashSet<>(Arrays.asList(15, 25))));
+        FieldSpec fieldSpecInSetAndNullNotDisallowed = FieldSpec.fromList(DistributedList.uniform(new HashSet<>(Arrays.asList(15, 25))));
 
         FieldValueSource sources = evaluator.getFieldValueSources(NUMERIC, fieldSpecInSetAndNullNotDisallowed);
 

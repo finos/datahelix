@@ -6,7 +6,7 @@ import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.util.NumberUtils;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.profile.reader.RemoveFromTree;
 
@@ -21,7 +21,7 @@ public class AtomicConstraintFactory {
             case IS_EQUAL_TO_CONSTANT:
                 return new EqualToConstraint(field, value);
             case IS_IN_SET:
-                return new IsInSetConstraint(field, (DistributedSet<Object>)value);
+                return new IsInSetConstraint(field, (DistributedList<Object>)value);
             case IS_NULL:
                 return new IsNullConstraint(field);
 

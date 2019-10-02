@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.profile.reader.file;
 
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -35,11 +35,11 @@ public final class CsvInputStreamReader {
         throw new UnsupportedOperationException("No instantiation of static class");
     }
 
-    public static DistributedSet<String> retrieveLines(InputStream stream) {
+    public static DistributedList<String> retrieveLines(InputStream stream) {
         List<CSVRecord> records = parse(stream);
-        return new DistributedSet<>(records.stream()
+        return new DistributedList<>(records.stream()
             .map(CsvInputStreamReader::createWeightedElement)
-            .collect(Collectors.toSet()));
+            .collect(Collectors.toList()));
     }
 
     private static WeightedElement<String> createWeightedElement(CSVRecord record) {
