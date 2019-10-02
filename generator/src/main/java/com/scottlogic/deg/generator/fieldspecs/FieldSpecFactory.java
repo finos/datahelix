@@ -17,8 +17,8 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
+import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.restrictions.linear.*;
 
@@ -28,7 +28,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.regex.Pattern;
 
-import static com.scottlogic.deg.common.profile.constraints.atomic.StandardConstraintTypes.RIC;
+import static com.scottlogic.deg.generator.profile.constraints.atomic.StandardConstraintTypes.RIC;
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDateTimeRestrictions;
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createNumericRestrictions;
 import static com.scottlogic.deg.generator.utils.Defaults.*;

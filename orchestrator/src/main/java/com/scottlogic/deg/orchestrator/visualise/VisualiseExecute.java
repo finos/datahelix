@@ -17,7 +17,7 @@
 package com.scottlogic.deg.orchestrator.visualise;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.common.profile.Profile;
+import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.visualisation.DecisionTreeVisualisationWriter;

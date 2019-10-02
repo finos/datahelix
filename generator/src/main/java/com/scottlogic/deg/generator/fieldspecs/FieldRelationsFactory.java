@@ -17,8 +17,9 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.common.profile.constraints.delayed.*;
 import com.scottlogic.deg.generator.fieldspecs.relations.*;
+import com.scottlogic.deg.generator.profile.constraints.delayed.DelayedAtomicConstraint;
+import com.scottlogic.deg.generator.profile.constraints.delayed.DelayedDateAtomicConstraint;
 
 public class FieldRelationsFactory {
 
