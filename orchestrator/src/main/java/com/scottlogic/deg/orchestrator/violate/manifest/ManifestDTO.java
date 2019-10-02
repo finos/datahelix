@@ -14,13 +14,25 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.output.manifest;
+package com.scottlogic.deg.orchestrator.violate.manifest;
 
-import com.scottlogic.deg.common.profile.ViolatedProfile;
+import java.util.Collection;
 
-import java.io.IOException;
-import java.util.List;
+public class ManifestDTO {
+    public final Collection<TestCaseDTO> cases;
 
-public interface ManifestWriter {
-    void writeManifest(List<ViolatedProfile> result) throws IOException;
+    public ManifestDTO(Collection<TestCaseDTO> cases) {
+        this.cases = cases;
+    }
+
+    public static class TestCaseDTO {
+        public final String filePath;
+        public final Collection<String> violatedRules;
+
+        public TestCaseDTO(String filePath, Collection<String> violatedRules) {
+            this.filePath = filePath;
+            this.violatedRules = violatedRules;
+        }
+    }
 }
+
