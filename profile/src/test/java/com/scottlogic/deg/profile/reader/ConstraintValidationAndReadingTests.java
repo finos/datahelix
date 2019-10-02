@@ -59,13 +59,6 @@ public class ConstraintValidationAndReadingTests {
         profileFields = new ProfileFields(fields);
     }
 
-    private static Object createDateObject(String dateStr) {
-        Map<String, String> date = new HashMap<>();
-        date.put("date", dateStr);
-
-        return date;
-    }
-
     private static Stream<Arguments> testProvider() {
         ConstraintDTO stringValueDto = new ConstraintDTO();
         stringValueDto.field = "test";
@@ -79,7 +72,7 @@ public class ConstraintValidationAndReadingTests {
         ConstraintDTO dateValueDto = new ConstraintDTO();
         dateValueDto.field = "test";
 
-        dateValueDto.value = createDateObject("2020-01-01T01:02:03.456");
+        dateValueDto.value = "2020-01-01T01:02:03.456";
 
         ConstraintDTO multipleValuesDto = new ConstraintDTO();
         multipleValuesDto.field = "test";
@@ -325,7 +318,7 @@ public class ConstraintValidationAndReadingTests {
     }
 
     private void assertSuccessfulDateParse(String dateString, OffsetDateTime expectedDateTime) {
-        OffsetDateTime actualDateTime = tryParseConstraintDateTimeValue(createDateObject(dateString));
+        OffsetDateTime actualDateTime = tryParseConstraintDateTimeValue(dateString);
 
         Assert.assertThat(actualDateTime, equalTo(expectedDateTime));
     }
@@ -333,7 +326,7 @@ public class ConstraintValidationAndReadingTests {
     private void assertRejectedDateTimeParse(String dateString) {
         Assertions.assertThrows(
             InvalidProfileException.class,
-            () -> tryParseConstraintDateTimeValue(createDateObject(dateString)));
+            () -> tryParseConstraintDateTimeValue(dateString));
     }
 
     private OffsetDateTime tryParseConstraintDateTimeValue(Object value) {

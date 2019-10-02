@@ -58,12 +58,14 @@ public class AtomicConstraintValueReader {
     }
 
     private Object getValue(Object value, Types type) {
+        if(value == null) return null;
         switch (type) {
             case NUMERIC:
                 return getBigDecimal(value);
             case STRING:
                 return value;
             case DATETIME:
+                if(value.equals("datetime")) return value;
                 return ConstraintReaderHelpers.parseDate((String) value);
             default:
                 throw new IllegalStateException("Unexpected value: " + type);

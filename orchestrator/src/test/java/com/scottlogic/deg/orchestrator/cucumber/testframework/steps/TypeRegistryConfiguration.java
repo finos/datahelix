@@ -66,8 +66,8 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
         tr.defineParameterType(new ParameterType<>(
             "date",
             DateValueStep.DATE_REGEX,
-            DateObject.class,
-            DateObject::new));
+            String.class,
+            this::extractConstraint));
     }
 
     private void defineOperationParameterType(TypeRegistry tr){
