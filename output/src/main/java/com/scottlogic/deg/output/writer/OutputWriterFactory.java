@@ -17,7 +17,6 @@
 package com.scottlogic.deg.output.writer;
 
 import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.output.writer.DataSetWriter;
 
 import java.io.IOException;
 import java.io.OutputStream;

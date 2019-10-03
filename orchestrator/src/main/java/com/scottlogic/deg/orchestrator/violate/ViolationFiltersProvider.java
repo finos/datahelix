@@ -19,7 +19,6 @@ package com.scottlogic.deg.orchestrator.violate;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
-import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.violations.filters.ConstraintTypeViolationFilter;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 

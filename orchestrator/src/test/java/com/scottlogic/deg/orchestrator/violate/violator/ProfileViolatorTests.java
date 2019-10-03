@@ -16,14 +16,10 @@
 
 package com.scottlogic.deg.orchestrator.violate.violator;
 
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.common.profile.Rule;
+import com.scottlogic.deg.common.profile.*;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsGreaterThanConstantConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsLessThanConstantConstraint;
-import com.scottlogic.deg.common.profile.RuleInformation;
 import com.scottlogic.deg.orchestrator.violate.ViolatedProfile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,11 +32,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 import static com.scottlogic.deg.orchestrator.violate.violator.TypeEqualityHelper.assertListProfileTypeEquality;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
-import static org.mockito.Mockito.*;
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static org.mockito.Mockito.when;
 
 public class ProfileViolatorTests {
 

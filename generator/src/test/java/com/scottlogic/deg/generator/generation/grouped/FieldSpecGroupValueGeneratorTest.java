@@ -15,12 +15,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 class FieldSpecGroupValueGeneratorTest {
 

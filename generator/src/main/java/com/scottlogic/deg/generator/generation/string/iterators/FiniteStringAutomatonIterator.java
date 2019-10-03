@@ -19,7 +19,10 @@ package com.scottlogic.deg.generator.generation.string.iterators;
 import dk.brics.automaton.Automaton;
 import dk.brics.automaton.State;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class FiniteStringAutomatonIterator implements Iterator<String> {
     private StringBuilder stringBuilder;

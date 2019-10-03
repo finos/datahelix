@@ -20,7 +20,9 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * A complete set of information needed to generate a row satisfying a set of constraints.

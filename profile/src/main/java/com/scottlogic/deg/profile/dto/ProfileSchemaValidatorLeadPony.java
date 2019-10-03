@@ -23,8 +23,11 @@ import org.leadpony.justify.api.Problem;
 import org.leadpony.justify.api.ProblemHandler;
 
 import javax.json.stream.JsonParser;
-import java.io.*;
-import java.util.*;
+import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.TreeMap;
 
 /**
  * Used to validate a DataHelix Profile JSON file.

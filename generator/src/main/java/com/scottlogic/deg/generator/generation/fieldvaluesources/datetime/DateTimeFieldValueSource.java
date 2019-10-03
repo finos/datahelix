@@ -16,22 +16,16 @@
 
 package com.scottlogic.deg.generator.generation.fieldvaluesources.datetime;
 
-import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.LinearIterator;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
-import java.math.BigDecimal;
-import java.time.*;
-import java.util.ArrayList;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
-import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
 import static com.scottlogic.deg.generator.utils.SetUtils.stream;
 
 public class DateTimeFieldValueSource implements FieldValueSource<OffsetDateTime> {

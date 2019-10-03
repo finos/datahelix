@@ -22,7 +22,6 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
 import com.scottlogic.deg.generator.generation.FieldPair;
-import com.scottlogic.deg.generator.generation.grouped.FieldGroup;
 import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.util.*;

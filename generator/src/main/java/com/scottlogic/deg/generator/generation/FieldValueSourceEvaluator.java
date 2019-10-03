@@ -22,12 +22,13 @@ import com.scottlogic.deg.generator.generation.fieldvaluesources.*;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.DateTimeFieldValueSource;
 import com.scottlogic.deg.generator.generation.string.generators.RegexStringGenerator;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
-import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.restrictions.StringRestrictions;
+import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.Optional;
 
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDateTimeRestrictions;
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createNumericRestrictions;

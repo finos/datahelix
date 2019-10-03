@@ -16,12 +16,10 @@
 
 package com.scottlogic.deg.common.profile.constraints.atomic;
 
-import com.scottlogic.deg.common.profile.constraintdetail.ParsedDateGranularity;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.RuleInformation;
+import com.scottlogic.deg.common.profile.constraintdetail.ParsedDateGranularity;
 
 import java.util.Objects;
-import java.util.Set;
 
 public class IsGranularToDateConstraint implements AtomicConstraint {
     public final Field field;

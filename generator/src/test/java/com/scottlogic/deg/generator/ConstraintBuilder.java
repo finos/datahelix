@@ -16,15 +16,17 @@
 
 package com.scottlogic.deg.generator;
 
+import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsNullConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
-import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ConstraintBuilder {

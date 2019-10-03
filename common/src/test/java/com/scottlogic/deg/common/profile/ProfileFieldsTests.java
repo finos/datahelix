@@ -16,12 +16,12 @@
 
 package com.scottlogic.deg.common.profile;
 
-import static org.junit.Assert.*;
-
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static org.junit.Assert.*;
 
 class ProfileFieldsTests {
     @Test

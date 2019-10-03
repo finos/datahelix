@@ -16,9 +16,6 @@
 
 package com.scottlogic.deg.profile.dto;
 
-import java.io.File;
-import java.net.URL;
-
 /**
  * Used to validate a DataHelix Profile JSON file.
  * <p>

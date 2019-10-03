@@ -19,8 +19,10 @@ package com.scottlogic.deg.generator.fieldspecs;
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
-import com.scottlogic.deg.generator.restrictions.*;
-import com.scottlogic.deg.generator.restrictions.linear.*;
+import com.scottlogic.deg.generator.restrictions.MatchesStandardStringRestrictions;
+import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
+import com.scottlogic.deg.generator.restrictions.linear.Limit;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;

@@ -16,7 +16,9 @@
 
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.generator.config.detail.*;
+import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
+import com.scottlogic.deg.generator.config.detail.DataGenerationType;
+import com.scottlogic.deg.generator.config.detail.MonitorType;
 
 public interface GenerationConfigSource  {
     DataGenerationType getGenerationType();

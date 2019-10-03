@@ -16,8 +16,10 @@
 
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.restrictions.linear.*;
-
+import com.scottlogic.deg.generator.restrictions.linear.Limit;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 

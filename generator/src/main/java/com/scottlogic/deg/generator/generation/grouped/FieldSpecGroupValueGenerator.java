@@ -25,16 +25,14 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
-import com.scottlogic.deg.generator.generation.databags.*;
+import com.scottlogic.deg.generator.generation.databags.DataBag;
+import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
-import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.time.OffsetDateTime;
 import java.util.*;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

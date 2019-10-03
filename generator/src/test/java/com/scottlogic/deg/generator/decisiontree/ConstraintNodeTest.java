@@ -19,9 +19,10 @@ package com.scottlogic.deg.generator.decisiontree;
 import com.scottlogic.deg.common.profile.Field;
 import org.junit.jupiter.api.Test;
 
-import static com.scottlogic.deg.generator.builders.TestConstraintNodeBuilder.constraintNode;
-import static org.junit.jupiter.api.Assertions.*;
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.deg.generator.builders.TestConstraintNodeBuilder.constraintNode;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 
 class ConstraintNodeTest {

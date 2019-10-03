@@ -5,7 +5,6 @@ import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.function.Function;
 
 import static com.scottlogic.deg.common.util.Defaults.*;
 

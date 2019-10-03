@@ -19,15 +19,14 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.profile.guice.ProfileConfigSource;
-import com.scottlogic.deg.profile.reader.validation.ConfigValidator;
 import com.scottlogic.deg.profile.dto.ProfileSchemaLoader;
 import com.scottlogic.deg.profile.dto.SchemaVersionValidator;
+import com.scottlogic.deg.profile.guice.ProfileConfigSource;
+import com.scottlogic.deg.profile.reader.validation.ConfigValidator;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ValidatingProfileReader {

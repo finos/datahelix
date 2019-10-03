@@ -16,11 +16,6 @@
 
 package com.scottlogic.deg.profile.dto;
 
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.TestFactory;
-
-import java.util.Collection;
-
 class ProfileSchemaValidatorMedeiaTests extends ProfileSchemaValidatorTests {
 
     private ProfileSchemaValidator profileValidator = new ProfileSchemaValidatorMedeia();

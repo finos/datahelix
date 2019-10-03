@@ -22,14 +22,15 @@ import com.scottlogic.deg.common.profile.*;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
-import com.scottlogic.deg.profile.serialisation.ProfileDeserialiser;
 import com.scottlogic.deg.profile.dto.ProfileDTO;
+import com.scottlogic.deg.profile.serialisation.ProfileDeserialiser;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

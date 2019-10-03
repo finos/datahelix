@@ -16,14 +16,17 @@
 
 package com.scottlogic.deg.orchestrator.violate.violator;
 
-import com.scottlogic.deg.common.profile.*;
-import com.scottlogic.deg.common.profile.constraints.atomic.*;
+import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.Profile;
+import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Rule;
+import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
+import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.builders.*;
-import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.generator.violations.filters.ConstraintTypeViolationFilter;
@@ -40,13 +43,16 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.scottlogic.deg.orchestrator.violate.violator.TypeEqualityHelper.assertProfileListsAreEquivalent;
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.deg.orchestrator.violate.violator.TypeEqualityHelper.assertProfileListsAreEquivalent;
 
 /**
  * Defines tests for all business logic involved in Profile Violation.

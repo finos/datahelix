@@ -18,11 +18,13 @@ package com.scottlogic.deg.generator.decisiontree.treepartitioning;
 
 import com.scottlogic.deg.common.profile.FieldBuilder;
 import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.decisiontree.*;
+import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
+import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
+import com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder;
+import com.scottlogic.deg.generator.decisiontree.DecisionNode;
+import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.testutils.*;
-import com.scottlogic.deg.generator.decisiontree.testutils.EqualityComparer;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import org.junit.Assert;
@@ -32,6 +34,7 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 class TreePartitionerTests {

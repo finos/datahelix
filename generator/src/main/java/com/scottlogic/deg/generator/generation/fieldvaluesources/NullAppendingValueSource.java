@@ -18,7 +18,10 @@ package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Stream;
 
 public class NullAppendingValueSource<T> implements FieldValueSource<T> {

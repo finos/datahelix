@@ -18,11 +18,14 @@ package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
-import com.scottlogic.deg.generator.generation.fieldvaluesources.NullAppendingValueSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
+import com.scottlogic.deg.generator.generation.fieldvaluesources.NullAppendingValueSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.NullOnlySource;
-import com.scottlogic.deg.generator.restrictions.*;
-import com.scottlogic.deg.generator.restrictions.linear.*;
+import com.scottlogic.deg.generator.restrictions.StringRestrictions;
+import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
+import com.scottlogic.deg.generator.restrictions.linear.Limit;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -36,7 +39,6 @@ import static com.scottlogic.deg.common.profile.Types.*;
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createNumericRestrictions;
 import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MAX_LIMIT;
 import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MIN_LIMIT;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 
 public class FieldValueSourceEvaluatorTests {
 

@@ -20,7 +20,6 @@ import com.scottlogic.deg.common.profile.constraints.atomic.StandardConstraintTy
 import com.scottlogic.deg.generator.generation.string.generators.RegexStringGenerator;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import org.junit.Assert;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -28,7 +27,7 @@ import java.util.Iterator;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
-import static com.scottlogic.deg.generator.helpers.StringGeneratorHelper.*;
+import static com.scottlogic.deg.generator.helpers.StringGeneratorHelper.assertGeneratorCanGenerateAtLeastOneStringWithinLengthBounds;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.jupiter.api.Assertions.assertTrue;

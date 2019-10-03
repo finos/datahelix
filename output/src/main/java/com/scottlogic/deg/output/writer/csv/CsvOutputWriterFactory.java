@@ -21,8 +21,8 @@ import com.scottlogic.deg.output.writer.DataSetWriter;
 import com.scottlogic.deg.output.writer.OutputWriterFactory;
 
 import java.io.IOException;
-    import java.io.OutputStream;
-    import java.util.Optional;
+import java.io.OutputStream;
+import java.util.Optional;
 
 public class CsvOutputWriterFactory implements OutputWriterFactory {
     @Override

@@ -23,6 +23,7 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 public class IsGranularToNumericConstraintTests {

@@ -16,13 +16,12 @@
 
 package com.scottlogic.deg.generator.generation.fieldvaluesources.datetime;
 
-import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
-import java.math.BigDecimal;
-import java.time.*;
-import java.util.Iterator;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 class RandomDateGenerator {
 

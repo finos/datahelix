@@ -4,10 +4,7 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
-import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.time.OffsetDateTime;
@@ -16,7 +13,6 @@ import java.time.ZoneOffset;
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 import static com.scottlogic.deg.common.util.Defaults.ISO_MAX_DATE;
 import static com.scottlogic.deg.common.util.Defaults.ISO_MIN_DATE;
-import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDateTimeRestrictions;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 

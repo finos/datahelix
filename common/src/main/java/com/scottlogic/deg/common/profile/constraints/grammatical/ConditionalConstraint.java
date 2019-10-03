@@ -17,12 +17,6 @@
 package com.scottlogic.deg.common.profile.constraints.grammatical;
 
 import com.scottlogic.deg.common.profile.constraints.Constraint;
-import com.scottlogic.deg.common.profile.RuleInformation;
-
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ConditionalConstraint implements GrammaticalConstraint
 {

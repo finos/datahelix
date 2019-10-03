@@ -18,7 +18,10 @@ package com.scottlogic.deg.profile.guice;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.scottlogic.deg.profile.dto.*;
+import com.scottlogic.deg.profile.dto.NoopProfileSchemaLoader;
+import com.scottlogic.deg.profile.dto.ProfileSchemaFileLoader;
+import com.scottlogic.deg.profile.dto.ProfileSchemaLoader;
+import com.scottlogic.deg.profile.dto.ProfileSchemaValidator;
 
 public class ProfileSchemaLoaderProvider implements Provider<ProfileSchemaLoader> {
 

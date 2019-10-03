@@ -25,7 +25,7 @@ import com.worldturner.medeia.api.ValidationFailedException;
 import com.worldturner.medeia.api.jackson.MedeiaJacksonApi;
 import com.worldturner.medeia.schema.validation.SchemaValidator;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

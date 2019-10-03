@@ -19,7 +19,6 @@ package com.scottlogic.deg.common.profile.constraints.atomic;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 

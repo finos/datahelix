@@ -18,8 +18,11 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
-import com.scottlogic.deg.generator.restrictions.*;
-import com.scottlogic.deg.generator.restrictions.linear.*;
+import com.scottlogic.deg.generator.restrictions.StringRestrictions;
+import com.scottlogic.deg.generator.restrictions.TypedRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.Limit;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -33,7 +36,6 @@ import static com.scottlogic.deg.generator.utils.Defaults.*;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertFalse;
-import static org.mockito.Mockito.mock;
 
 class FieldSpecTests {
 

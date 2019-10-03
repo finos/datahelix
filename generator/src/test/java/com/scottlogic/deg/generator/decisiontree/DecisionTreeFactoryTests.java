@@ -16,21 +16,17 @@
 
 package com.scottlogic.deg.generator.decisiontree;
 
+import com.scottlogic.deg.common.profile.*;
+import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsGreaterThanConstantConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.MatchesRegexConstraint;
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.common.profile.Rule;
-import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.NegatedGrammaticalConstraint;
 import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.decisiontree.testutils.*;
-import com.scottlogic.deg.common.profile.RuleInformation;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import org.hamcrest.core.Is;
@@ -40,14 +36,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Pattern;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.Matchers.empty;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.empty;
 
 class DecisionTreeFactoryTests {
     private final Field fieldA = createField("A");

@@ -16,11 +16,11 @@
 
 package com.scottlogic.deg.profile;
 
-import com.scottlogic.deg.profile.serialisation.ProfileSerialiser;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 import com.scottlogic.deg.profile.dto.FieldDTO;
-import com.scottlogic.deg.profile.dto.RuleDTO;
 import com.scottlogic.deg.profile.dto.ProfileDTO;
+import com.scottlogic.deg.profile.dto.RuleDTO;
+import com.scottlogic.deg.profile.serialisation.ProfileSerialiser;
 import org.hamcrest.core.Is;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;

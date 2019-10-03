@@ -16,16 +16,16 @@
 
 package com.scottlogic.deg.orchestrator.violate.violator;
 
-import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
-import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
-import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.common.profile.Rule;
-import com.scottlogic.deg.common.profile.constraints.Constraint;
+import com.scottlogic.deg.common.profile.RuleInformation;
 import com.scottlogic.deg.common.profile.constraintdetail.UnviolatableConstraintException;
+import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsLessThanConstantConstraint;
 import com.scottlogic.deg.common.profile.constraints.atomic.ViolatedAtomicConstraint;
-import com.scottlogic.deg.common.profile.RuleInformation;
+import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,13 +37,13 @@ import org.mockito.MockitoAnnotations;
 import java.math.BigDecimal;
 import java.util.*;
 
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 import static com.scottlogic.deg.orchestrator.violate.violator.TypeEqualityHelper.assertRuleTypeEquality;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 /**
  * Tests the behaviour of the RuleViolator class.

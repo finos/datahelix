@@ -19,9 +19,9 @@ package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.steps.DateObject;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.steps.DateValueStep;
+import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import org.junit.Assert;
 
 import java.io.IOException;

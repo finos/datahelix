@@ -16,12 +16,15 @@
 
 package com.scottlogic.deg.generator.generation.string;
 
-import dk.brics.automaton.*;
+import dk.brics.automaton.Automaton;
+import dk.brics.automaton.BasicOperations;
+import dk.brics.automaton.RegExp;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class AutomatonUtils {
 

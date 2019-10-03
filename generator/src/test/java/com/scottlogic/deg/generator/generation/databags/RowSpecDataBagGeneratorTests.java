@@ -21,7 +21,6 @@ import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.builders.DataBagBuilder;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
-import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 import com.scottlogic.deg.generator.generation.combinationstrategies.ExhaustiveCombinationStrategy;
 import com.scottlogic.deg.generator.generation.grouped.FieldSpecGroupValueGenerator;
@@ -31,10 +30,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.mockito.Mockito.*;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static org.mockito.Mockito.*;
 
 class RowSpecDataBagGeneratorTests {
 

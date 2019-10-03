@@ -9,8 +9,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RowSpecMergerTest {
     RowSpecMerger rowSpecMerger = new RowSpecMerger(new FieldSpecMerger());

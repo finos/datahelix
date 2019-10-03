@@ -21,6 +21,7 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsNullConstraint;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
+
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 public class AndConstraintTests {

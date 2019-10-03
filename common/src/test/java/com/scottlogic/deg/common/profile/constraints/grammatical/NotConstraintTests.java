@@ -24,6 +24,7 @@ import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
+
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 public class NotConstraintTests {

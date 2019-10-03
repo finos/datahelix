@@ -16,7 +16,6 @@
 
 package com.scottlogic.deg.generator.generation.combinationstrategies;
 
-import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.builders.DataBagBuilder;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import org.hamcrest.collection.IsArrayContainingInAnyOrder;
@@ -24,6 +23,7 @@ import org.junit.Assert;
 
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 class CombinationStrategyTester {

@@ -18,13 +18,10 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
 import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class RowSpecMerger {
     private final FieldSpecMerger fieldSpecMerger;

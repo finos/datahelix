@@ -29,18 +29,20 @@ import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import com.scottlogic.deg.generator.validators.ContradictionDecisionTreeValidator;
 import com.scottlogic.deg.generator.walker.pruner.Merged;
 import com.scottlogic.deg.generator.walker.pruner.TreePruner;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.*;
 
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 import static com.scottlogic.deg.generator.builders.TestConstraintNodeBuilder.constraintNode;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.contains;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 class UpfrontTreePrunerTests {
     private String partialContradictionSubstring = "partially contradictory"; // Implementation Detail

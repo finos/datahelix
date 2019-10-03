@@ -16,18 +16,13 @@
 
 package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
-import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.common.util.NumberUtils;
-import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
-import com.scottlogic.deg.generator.utils.*;
+import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;

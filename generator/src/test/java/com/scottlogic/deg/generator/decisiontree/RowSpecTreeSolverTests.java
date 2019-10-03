@@ -16,16 +16,15 @@
 
 package com.scottlogic.deg.generator.decisiontree;
 
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.common.profile.Rule;
-import com.scottlogic.deg.common.profile.RuleInformation;
-import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.common.profile.*;
 import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
-import com.scottlogic.deg.generator.fieldspecs.*;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
+import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecHelper;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
+import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagGenerator;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
@@ -36,15 +35,18 @@ import com.scottlogic.deg.generator.walker.pruner.TreePruner;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 class RowSpecTreeSolverTests {
     private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();

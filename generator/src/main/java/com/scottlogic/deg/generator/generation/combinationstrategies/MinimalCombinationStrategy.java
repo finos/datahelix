@@ -16,11 +16,17 @@
 
 package com.scottlogic.deg.generator.generation.combinationstrategies;
 
-import com.scottlogic.deg.generator.generation.databags.*;
+import com.scottlogic.deg.generator.generation.databags.DataBag;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
-import java.util.stream.*;
+import java.util.stream.BaseStream;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class MinimalCombinationStrategy implements CombinationStrategy {
 

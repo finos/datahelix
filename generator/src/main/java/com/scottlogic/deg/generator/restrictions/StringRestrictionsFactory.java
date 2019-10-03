@@ -19,7 +19,7 @@ package com.scottlogic.deg.generator.restrictions;
 import java.util.Collections;
 import java.util.regex.Pattern;
 
-import static com.scottlogic.deg.common.util.Defaults.*;
+import static com.scottlogic.deg.common.util.Defaults.MAX_STRING_LENGTH;
 
 public class StringRestrictionsFactory {
     public StringRestrictions forStringMatching(Pattern pattern, boolean negate) {

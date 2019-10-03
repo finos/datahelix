@@ -17,9 +17,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
-import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.shazam.shazamcrest.MatcherAssert.assertThat;
+import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 
 class RowSpecTreeSolverTests {
     private Field fieldA = createField("A");

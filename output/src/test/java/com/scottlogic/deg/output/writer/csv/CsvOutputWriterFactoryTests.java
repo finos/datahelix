@@ -16,9 +16,9 @@
 
 package com.scottlogic.deg.output.writer.csv;
 
+import com.scottlogic.deg.common.output.GeneratedObject;
 import com.scottlogic.deg.common.profile.FieldBuilder;
 import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.common.output.GeneratedObject;
 import com.scottlogic.deg.output.writer.DataSetWriter;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;

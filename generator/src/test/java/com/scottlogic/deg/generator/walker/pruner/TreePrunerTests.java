@@ -21,23 +21,29 @@ import com.scottlogic.deg.common.profile.constraints.atomic.IsStringLongerThanCo
 import com.scottlogic.deg.common.profile.constraints.atomic.IsStringShorterThanConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder;
-import com.scottlogic.deg.generator.fieldspecs.*;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecHelper;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
-import static com.scottlogic.deg.generator.builders.TestConstraintNodeBuilder.*;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.deg.generator.builders.TestConstraintNodeBuilder.constraintNode;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 class TreePrunerTests {
 

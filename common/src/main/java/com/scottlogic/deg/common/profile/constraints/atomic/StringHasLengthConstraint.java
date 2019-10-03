@@ -17,10 +17,8 @@
 package com.scottlogic.deg.common.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.RuleInformation;
 
 import java.util.Objects;
-import java.util.Set;
 
 public class StringHasLengthConstraint implements AtomicConstraint {
     public final Field field;

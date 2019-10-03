@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.generation.combinationstrategies;
 
-import com.scottlogic.deg.generator.generation.databags.*;
+import com.scottlogic.deg.generator.generation.databags.DataBag;
 
 import java.util.Collections;
 import java.util.Iterator;

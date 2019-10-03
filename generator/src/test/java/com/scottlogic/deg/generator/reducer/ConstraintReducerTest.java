@@ -16,9 +16,9 @@
 
 package com.scottlogic.deg.generator.reducer;
 
-import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.constraints.atomic.*;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
@@ -37,15 +37,19 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.scottlogic.deg.common.profile.Types.*;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.deg.common.profile.Types.DATETIME;
+import static com.scottlogic.deg.common.profile.Types.NUMERIC;
 import static com.scottlogic.deg.common.util.Defaults.*;
 import static org.hamcrest.Matchers.*;
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 class ConstraintReducerTest {
 

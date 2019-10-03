@@ -16,13 +16,13 @@
 
 package com.scottlogic.deg.profile;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import com.scottlogic.deg.profile.serialisation.ProfileDeserialiser;
 import com.scottlogic.deg.profile.dto.ProfileDTO;
+import com.scottlogic.deg.profile.serialisation.ProfileDeserialiser;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ProfileDeserialiserTests {
     @Test

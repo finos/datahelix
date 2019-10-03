@@ -17,13 +17,13 @@
 package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 
 import com.google.inject.Inject;
+import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.generator.config.detail.MonitorType;
 import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
 import com.scottlogic.deg.orchestrator.violate.ViolateConfigSource;
 import com.scottlogic.deg.output.guice.OutputFormat;
-import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 
 import java.io.File;
 import java.nio.file.Path;

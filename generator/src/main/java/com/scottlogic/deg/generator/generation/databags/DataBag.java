@@ -16,9 +16,9 @@
 
 package com.scottlogic.deg.generator.generation.databags;
 
+import com.scottlogic.deg.common.output.GeneratedObject;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.util.FlatMappingSpliterator;
-import com.scottlogic.deg.common.output.GeneratedObject;
 
 import java.util.*;
 

@@ -17,8 +17,8 @@
 package com.scottlogic.deg.orchestrator.cucumber.testframework;
 
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.GeneratorCucumber;
-import org.junit.runner.RunWith;
 import cucumber.api.CucumberOptions;
+import org.junit.runner.RunWith;
 
 @RunWith(GeneratorCucumber.class)
 @CucumberOptions(

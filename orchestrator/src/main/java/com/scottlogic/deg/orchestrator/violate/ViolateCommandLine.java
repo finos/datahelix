@@ -19,8 +19,8 @@ package com.scottlogic.deg.orchestrator.violate;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.scottlogic.deg.orchestrator.generate.GenerateCommandLine;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
+import com.scottlogic.deg.orchestrator.generate.GenerateCommandLine;
 import picocli.CommandLine;
 
 import java.io.IOException;

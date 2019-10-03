@@ -16,8 +16,10 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.common.profile.Types;
-import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.restrictions.RestrictionsMerger;
+import com.scottlogic.deg.generator.restrictions.StringRestrictions;
+import com.scottlogic.deg.generator.restrictions.StringRestrictionsMerger;
+import com.scottlogic.deg.generator.restrictions.TypedRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
 
 import java.util.Optional;

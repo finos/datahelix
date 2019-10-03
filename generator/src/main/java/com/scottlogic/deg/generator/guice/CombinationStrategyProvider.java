@@ -20,7 +20,10 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
-import com.scottlogic.deg.generator.generation.combinationstrategies.*;
+import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
+import com.scottlogic.deg.generator.generation.combinationstrategies.ExhaustiveCombinationStrategy;
+import com.scottlogic.deg.generator.generation.combinationstrategies.MinimalCombinationStrategy;
+import com.scottlogic.deg.generator.generation.combinationstrategies.PinningCombinationStrategy;
 
 public class CombinationStrategyProvider  implements Provider<CombinationStrategy> {
     private final GenerationConfigSource config;

@@ -19,7 +19,6 @@ package com.scottlogic.deg.generator.decisiontree;
 import com.scottlogic.deg.common.util.FlatMappingSpliterator;
 
 import java.util.*;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

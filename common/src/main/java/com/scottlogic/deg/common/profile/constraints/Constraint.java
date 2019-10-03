@@ -19,9 +19,6 @@ package com.scottlogic.deg.common.profile.constraints;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.scottlogic.deg.common.profile.constraints.atomic.*;
-import com.scottlogic.deg.common.profile.RuleInformation;
-
-import java.util.Set;
 /*
  * The following JsonTypeInfo is needed for the utility program GenTreeJson.java
  * (invoked via the mode of `genTreeJson`), which produces a JSON for the decision

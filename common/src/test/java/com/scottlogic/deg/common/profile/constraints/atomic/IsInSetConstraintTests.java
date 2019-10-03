@@ -20,6 +20,7 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 public class IsInSetConstraintTests {
