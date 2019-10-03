@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.8",
+  "schemaVersion": "0.9",
   "fields": [
     {
       "name": "tradeId",
@@ -101,15 +101,15 @@
       "rule": "tradeDatetime",
       "constraints": [
         { "field": "tradeDatetime", "is": "granularTo", "value": "millis" },
-        { "field": "tradeDatetime", "is": "after", "value": { "date": "2019-09-02T09:30:00.000" } },
-        { "field": "tradeDatetime", "is": "before", "value": { "date": "2019-09-02T16:30:00.000" } }
+        { "field": "tradeDatetime", "is": "after", "value":"2019-09-02T09:30:00.000" },
+        { "field": "tradeDatetime", "is": "before", "value": "2019-09-02T16:30:00.000" }
       ]
     },
     {
       "rule": "tradeDate",
       "constraints": [
         { "field": "tradeDate", "is": "granularTo", "value": "days" },
-        { "field": "tradeDate", "is": "equalTo", "value": { "date": "2019-09-02T00:00:00.000" } }
+        { "field": "tradeDate", "is": "equalTo", "value": "2019-09-02T00:00:00.000" }
       ]
     },
     {

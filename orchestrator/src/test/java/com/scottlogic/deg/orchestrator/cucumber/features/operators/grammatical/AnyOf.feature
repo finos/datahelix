@@ -123,8 +123,8 @@ Feature: Values can be specified by using any of to set multiple constraints
     Given there is a constraint:
       """
       { "anyOf": [
-        { "field": "foo", "is": "after", "value": { "date": "2018-10-01T00:00:00.000" } },
-        { "field": "foo", "is": "afterOrAt", "value": { "date": "2018-10-02T00:00:00.000" } }
+        { "field": "foo", "is": "after", "value": "2018-10-01T00:00:00.000" },
+        { "field": "foo", "is": "afterOrAt", "value": "2018-10-02T00:00:00.000" }
       ]}
       """
     And foo has type "datetime"
@@ -147,15 +147,15 @@ Feature: Values can be specified by using any of to set multiple constraints
     Given there is a constraint:
       """
       { "anyOf": [
-        { "field": "foo", "is": "after", "value": { "date": "2018-10-01T00:00:00.000" } },
-        { "field": "foo", "is": "afterOrAt", "value": { "date": "2018-10-02T00:00:00.000" } }
+        { "field": "foo", "is": "after", "value": "2018-10-01T00:00:00.000" },
+        { "field": "foo", "is": "afterOrAt", "value": "2018-10-02T00:00:00.000" }
       ]}
       """
     And there is a constraint:
       """
       { "anyOf": [
-        { "field": "foo", "is": "after", "value": { "date": "2018-10-03T00:00:00.000" } },
-        { "field": "foo", "is": "afterOrAt", "value": { "date": "2018-10-04T00:00:00.000" } }
+        { "field": "foo", "is": "after", "value": "2018-10-03T00:00:00.000" },
+        { "field": "foo", "is": "afterOrAt", "value": "2018-10-04T00:00:00.000" }
       ]}
       """
     And foo has type "datetime"

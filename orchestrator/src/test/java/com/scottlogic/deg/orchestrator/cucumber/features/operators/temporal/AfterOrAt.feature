@@ -49,11 +49,6 @@ Feature: User can specify that a datetime date is more than, or the same as, a s
     Then the profile is invalid because "Field \[foo\]: Dates must be between 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z"
     And no data is created
 
-  Scenario: Running beforeOrAt request that includes datetime field with date and time (YYYY-MM-DDTHH:MM:SS) values that has invalid format should fail
-    Given foo is after or at "2018-Jan-31stT00:00:00.000"
-    Then the profile is invalid because "Field \[foo\]: Dates should be expressed in object format e.g. \{ \"date\": \"yyyy-MM-ddTHH:mm:ss.SSS\[Z\]\" \}"
-    And no data is created
-
   Scenario: Running afterOrAt request that includes datetime field with date and time (YYYY-MM-DDTHH:MM:SS) values that has leap year
     Given foo is after or at 2019-01-01T00:00:00.000Z
     And foo is in set:

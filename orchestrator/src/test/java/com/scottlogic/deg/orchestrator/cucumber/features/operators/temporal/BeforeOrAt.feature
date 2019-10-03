@@ -52,12 +52,6 @@ Feature: User can specify that a datetime date is lower than, or the same as, a 
     Then the profile is invalid because "Field \[foo\]: Dates must be between 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z"
     And no data is created
 
-  Scenario: Running beforeOrAt request that includes datetime field with date and time (YYYY-MM-DDTHH:MM:SS) values that has invalid format should fail
-    Given foo is before or at "2018-Feb-01T00:00:00.000"
-    And the generator can generate at most 5 rows
-    Then the profile is invalid because "Field \[foo\]: Dates should be expressed in object format e.g. \{ \"date\": \"yyyy-MM-ddTHH:mm:ss.SSS\[Z\]\" \}"
-    And no data is created
-
   @ignore #594 As a user I expect values to be emitted in descending order
   Scenario: Running beforeOrAt request that includes datetime field with date and time (YYYY-MM-DDTHH:MM:SS) values that has leap year
     Given foo is before or at 2024-01-01T00:00:00.000Z

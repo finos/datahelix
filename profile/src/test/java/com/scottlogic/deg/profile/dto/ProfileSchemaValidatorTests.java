@@ -207,20 +207,12 @@ public abstract class ProfileSchemaValidatorTests {
             "  \"rules\": [" +
             "    {" +
             "      \"constraints\": [" +
-            "        { \"field\": \"first\", \"is\": \"after\", \"value\": {" +
-            "            \"date\": \"8001-02-03T04:05:06.007\" }" +
-            "        }," +
+            "        { \"field\": \"first\", \"is\": \"after\", \"value\": \"8001-02-03T04:05:06.007\" }," +
             "        { \"field\": \"second\", \"is\": \"equalTo\", \"otherField\": \"first\", \"offset\": 3, \"offsetUnit\": \"days\" }," +
-            "        { \"field\": \"firstWorking\", \"is\": \"equalTo\", \"value\": {" +
-            "            \"date\": \"2019-08-12T12:00:00.000\" }" +
-            "        }," +
+            "        { \"field\": \"firstWorking\", \"is\": \"equalTo\", \"value\": \"2019-08-12T12:00:00.000\" }," +
             "        { \"field\": \"secondWorking\", \"is\": \"equalTo\", \"otherField\": \"firstWorking\", \"offset\": 8, \"offsetUnit\": \"working days\" }," +
-            "        { \"field\": \"current\", \"is\": \"before\", \"value\": {" +
-            "            \"date\": \"now\" }" +
-            "        }," +
-            "        { \"field\": \"current\", \"is\": \"after\", \"value\": {" +
-            "            \"date\": \"2019-06-01T12:00:00.000\" }" +
-            "        } ] } ]" +
+            "        { \"field\": \"current\", \"is\": \"before\", \"value\": \"now\" }," +
+            "        { \"field\": \"current\", \"is\": \"after\", \"value\": \"2019-06-01T12:00:00.000\" } ] } ]" +
             "}";
 
         validator.validateProfile(profile, schema);
@@ -311,10 +303,10 @@ public abstract class ProfileSchemaValidatorTests {
             "        { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [\"%ggg\", \"test\"] }," +
             "        { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [3, 32] }," +
             "        { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [\"%ggg\", 32] }," +
-            "        { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [\"%ggg\", {\"date\": \"2000-01-01T09:00:00.000\"}] }," +
-            "        { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [4, {\"date\": \"2000-01-01T09:00:00.000\"}] }," +
-            "        { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [{\"date\": \"2000-01-01T09:00:00.000\"}, {\"date\": \"2000-01-01T09:00:00.000\"}] }," +
-            "        { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [\"%ggg\", {\"date\": \"2000-01-01T09:00:00.000\"}, 54] }" +
+            "        { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [\"%ggg\", \"2000-01-01T09:00:00.000\"] }," +
+            "        { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [4, \"2000-01-01T09:00:00.000\"] }," +
+            "        { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [\"2000-01-01T09:00:00.000\", \"2000-01-01T09:00:00.000\"] }," +
+            "        { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [\"%ggg\", \"2000-01-01T09:00:00.000\", 54] }" +
             "       ] } ]" +
             "}";
 
@@ -470,16 +462,16 @@ public abstract class ProfileSchemaValidatorTests {
             "    {" +
             "      \"rule\": \"rule 1\"," +
             "      \"constraints\": [" +
-            "        { \"field\": \"field1\", \"is\": \"after\", \"value\": {\"date\": \"2000-01-01T09:00:00.000\"} }," +
-            "        { \"field\": \"field1\", \"is\": \"afterOrAt\", \"value\": {\"date\": \"2000-01-01T09:00:00.000\"} }," +
-            "        { \"field\": \"field1\", \"is\": \"before\", \"value\": {\"date\": \"2000-01-01T09:00:00.000\"} }," +
-            "        { \"field\": \"field1\", \"is\": \"beforeOrAt\", \"value\": {\"date\": \"0001-01-01T09:00:00.000\"} }," +
-            "        { \"field\": \"field1\", \"is\": \"equalTo\", \"value\": {\"date\": \"0001-01-01T09:00:00.000\"} }," +
-            "        { \"not\": { \"field\": \"field1\", \"is\": \"after\", \"value\": {\"date\": \"2000-01-01T09:00:00.000\"} } }," +
-            "        { \"not\": { \"field\": \"field1\", \"is\": \"afterOrAt\", \"value\": {\"date\": \"2000-01-01T09:00:00.000\"} } }," +
-            "        { \"not\": { \"field\": \"field1\", \"is\": \"before\", \"value\": {\"date\": \"2000-01-01T09:00:00.000\"} } }," +
-            "        { \"not\": { \"field\": \"field1\", \"is\": \"beforeOrAt\", \"value\": {\"date\": \"0001-01-01T09:00:00.000\"} } }," +
-            "        { \"not\": { \"field\": \"field1\", \"is\": \"equalTo\", \"value\": {\"date\": \"0001-01-01T09:00:00.000\"} } }" +
+            "        { \"field\": \"field1\", \"is\": \"after\", \"value\": \"2000-01-01T09:00:00.000\"}," +
+            "        { \"field\": \"field1\", \"is\": \"afterOrAt\", \"value\": \"2000-01-01T09:00:00.000\"}," +
+            "        { \"field\": \"field1\", \"is\": \"before\", \"value\": \"2000-01-01T09:00:00.000\"}," +
+            "        { \"field\": \"field1\", \"is\": \"beforeOrAt\", \"value\": \"0001-01-01T09:00:00.000\"}," +
+            "        { \"field\": \"field1\", \"is\": \"equalTo\", \"value\": \"0001-01-01T09:00:00.000\"}," +
+            "        { \"not\": { \"field\": \"field1\", \"is\": \"after\", \"value\": \"2000-01-01T09:00:00.000\"} }," +
+            "        { \"not\": { \"field\": \"field1\", \"is\": \"afterOrAt\", \"value\": \"2000-01-01T09:00:00.000\"} }," +
+            "        { \"not\": { \"field\": \"field1\", \"is\": \"before\", \"value\": \"2000-01-01T09:00:00.000\"} }," +
+            "        { \"not\": { \"field\": \"field1\", \"is\": \"beforeOrAt\", \"value\": \"0001-01-01T09:00:00.000\"} }," +
+            "        { \"not\": { \"field\": \"field1\", \"is\": \"equalTo\", \"value\": \"0001-01-01T09:00:00.000\"} }" +
             "      ]" +
             "    }" +
             "  ]" +

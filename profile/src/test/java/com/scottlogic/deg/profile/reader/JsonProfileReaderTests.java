@@ -592,8 +592,8 @@ public class JsonProfileReaderTests {
                 "    \"rules\": [" +
                 "      {" +
                 "        \"constraints\": [" +
-                "        { \"field\": \"foo\", \"is\": \"afterOrAt\", \"value\": { \"date\": \"2019-01-01T00:00:00.000\" } }," +
-                "        { \"field\": \"foo\", \"is\": \"before\", \"value\": { \"date\": \"2019-01-03T00:00:00.000\" } }" +
+                "        { \"field\": \"foo\", \"is\": \"afterOrAt\", \"value\": \"2019-01-01T00:00:00.000\" }," +
+                "        { \"field\": \"foo\", \"is\": \"before\", \"value\": \"2019-01-03T00:00:00.000\" }" +
                 "        ]" +
                 "      }" +
                 "    ]" +
@@ -667,7 +667,7 @@ public class JsonProfileReaderTests {
                 "    ]" +
                 "}");
 
-        expectInvalidProfileException("Field [foo]: Dates should be expressed in object format e.g. { \"date\": \"yyyy-MM-ddTHH:mm:ss.SSS[Z]\" }");
+        expectInvalidProfileException("Field [foo]: Date string '2018-01-12' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS[Z] between (inclusive) 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z");
     }
 
     @Test
