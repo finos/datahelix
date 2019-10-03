@@ -16,6 +16,8 @@
 
 package com.scottlogic.deg.common.profile.constraintdetail;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.TemporalAmount;
@@ -103,6 +105,11 @@ public enum Timescale implements Granularity<OffsetDateTime> {
         Timescale other = (Timescale) otherGranularity;
         OffsetDateTime initial = OffsetDateTime.MIN;
         return getNext(initial).compareTo(other.getNext(initial)) <= 0 ? other : this;
+    }
+
+    @Override
+    public OffsetDateTime getNext(OffsetDateTime value, int amount) {
+        throw new NotImplementedException();
     }
 
     @Override

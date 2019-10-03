@@ -22,9 +22,15 @@ public interface Granularity<T> {
 
     Granularity<T> merge(Granularity<T> otherGranularity);
 
-    T getNext(T value);
-
-    T getPrevious(T value);
+    T getNext(T value, int amount);
 
     T trimToGranularity(T value);
+
+    default T getPrevious(T value){
+        return getNext(value, -1);
+    };
+
+    default T getNext(T value){
+        return getNext(value, 1);
+    };
 }

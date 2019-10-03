@@ -47,7 +47,4 @@ public class ParsedDateGranularity {
         ParsedDateGranularity parsedDateGranularity = (ParsedDateGranularity) o;
         return Objects.equals(granularity, parsedDateGranularity.granularity);
     }
-
-
-
 }

@@ -37,16 +37,7 @@ public class ChronoUnitGranularity implements Granularity<OffsetDateTime> {
     }
 
     @Override
-    public OffsetDateTime getNext(OffsetDateTime value) {
-        return getNext(value, 1);
-    }
-
-    @Override
-    public OffsetDateTime getPrevious(OffsetDateTime value) {
-        return getNext(value, -1);
-    }
-
-    private OffsetDateTime getNext(OffsetDateTime value, int amount){
+    public OffsetDateTime getNext(OffsetDateTime value, int amount){
         return OffsetDateTime.from(temporalAdjusterGenerator.adjuster(amount).adjustInto(value));
     }
 
