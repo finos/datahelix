@@ -20,12 +20,10 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
-import com.scottlogic.deg.generator.restrictions.linear.Limit;
-import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InMapIndexRelation implements FieldSpecRelations {
     private final Field main;
@@ -40,26 +38,15 @@ public class InMapIndexRelation implements FieldSpecRelations {
 
     @Override
     public FieldSpec reduceToRelatedFieldSpec(FieldSpec otherValue) {
-        int size = underlyingList.list().size();
+        List<Object> whiteList = new ArrayList<>();
 
-        FieldSpec controllerSpec = FieldSpec.fromRestriction(LinearRestrictionsFactory.createNumericRestrictions(
-            new Limit<>(BigDecimal.ZERO, true),
-            new Limit<>(BigDecimal.valueOf(size), false),
-            0
-        )).withNotNull();
-
-        for (int i = 0; i < size; i++) {
-            if (controllerSpec.getBlacklist().contains(BigDecimal.valueOf(i))) {
-                continue;
-            }
+        for (int i = 0; i < underlyingList.list().size(); i++) {
             Object testingElement = underlyingList.list().get(i);
-            if (!otherValue.permits(testingElement)) {
-                Set<Object> newBlackList = new HashSet<>(controllerSpec.getBlacklist());
-                newBlackList.add(BigDecimal.valueOf(i));
-                controllerSpec = controllerSpec.withBlacklist(newBlackList);
+            if (otherValue.permits(testingElement)) {
+                whiteList.add(BigDecimal.valueOf(i));
             }
         }
-        return controllerSpec;
+        return FieldSpec.fromList(DistributedList.uniform(whiteList)).withNotNull();
     }
 
     @Override
