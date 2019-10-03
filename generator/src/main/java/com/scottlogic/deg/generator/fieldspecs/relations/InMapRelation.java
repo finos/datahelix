@@ -19,6 +19,9 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
+import com.scottlogic.deg.generator.generation.databags.DataBagValue;
+
+import java.math.BigDecimal;
 
 public class InMapRelation implements FieldSpecRelations {
     private final Field main;
@@ -33,7 +36,15 @@ public class InMapRelation implements FieldSpecRelations {
 
     @Override
     public FieldSpec reduceToRelatedFieldSpec(FieldSpec otherValue) {
-        return otherValue;
+        throw new UnsupportedOperationException("ReduceToRelatedFieldSpec is unsupported in InMapRelation");
+    }
+
+    @Override
+    public FieldSpec reduceValueToFieldSpec(DataBagValue generatedValue) {
+        BigDecimal value = (BigDecimal)generatedValue.getValue();
+
+        DistributedList<Object> newList = DistributedList.singleton(underlyingList.list().get(value.intValue()));
+        return FieldSpec.fromList(newList);
     }
 
     @Override

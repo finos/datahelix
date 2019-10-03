@@ -25,15 +25,8 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
 import com.scottlogic.deg.generator.fieldspecs.relations.InMapRelation;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.databags.*;
-import com.scottlogic.deg.generator.restrictions.linear.Limit;
-import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
-import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
-
-import java.math.BigDecimal;
-import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -112,12 +105,7 @@ public class FieldSpecGroupValueGenerator {
     }
 
     private Stream<DataBag> generateRemainingData(Field generatedField, DataBag dataBag, FieldSpecGroup group, boolean isInMap) {
-        FieldSpecGroup newGroup;
-        if (isInMap) {
-            newGroup = adjustInMap(generatedField, dataBag.getDataBagValue(generatedField), group);
-        } else {
-            newGroup = updateRelatedFieldSpecs(generatedField, dataBag.getDataBagValue(generatedField), group);
-        }
+        FieldSpecGroup newGroup = updateRelatedFieldSpecs(generatedField, dataBag.getDataBagValue(generatedField), group);
 
         Stream<DataBag> dataBagStream = generate(newGroup)
             .map(otherData -> DataBag.merge(dataBag, otherData));
@@ -126,52 +114,6 @@ public class FieldSpecGroupValueGenerator {
     }
 
     private FieldSpecGroup updateRelatedFieldSpecs(Field generatedField, DataBagValue generatedValue, FieldSpecGroup group) {
-        if (generatedValue.getValue() instanceof OffsetDateTime) {
-
-            Limit<OffsetDateTime> limit = new Limit<>((OffsetDateTime)generatedValue.getValue(), true);
-            LinearRestrictions<OffsetDateTime> restrictions = LinearRestrictionsFactory.createDateTimeRestrictions(limit,limit);
-            FieldSpec newSpec = FieldSpec.fromRestriction(restrictions).withNotNull();
-
-            return adjustBoundsOfDate(generatedField, newSpec, group);
-        }
-        return group;
-    }
-
-    private FieldSpecGroup adjustInMap(Field generatedField, DataBagValue generatedValue, FieldSpecGroup group) {
-        if (generatedValue.getValue() instanceof BigDecimal) {
-            int index = ((BigDecimal) generatedValue.getValue()).intValue();
-
-            Set<FieldSpecRelations> nonUpdatedRelations = group.relations().stream()
-                .filter(relation -> !isRelatedToField(generatedField, relation))
-                .collect(Collectors.toSet());
-
-            List<FieldSpecRelations> updatableRelations = group.relations().stream()
-                .filter(relation -> isRelatedToField(generatedField, relation))
-                .collect(Collectors.toList());
-
-            Map<Field, FieldSpec> fieldUpdates = updatableRelations.stream()
-                .collect(Collectors.toMap(
-                    FieldSpecRelations::main,
-                    relation -> {
-                        InMapRelation rel = (InMapRelation) relation;
-                        DistributedList<Object> newList = DistributedList.singleton(rel.getUnderlyingList().list().get(index));
-                        FieldSpec newSpec = FieldSpec.fromList(newList);
-                        return relation.reduceToRelatedFieldSpec(newSpec);
-                    },
-                    (l, r) -> fieldSpecMerger.merge(l, r)
-                        .orElseThrow(() -> new IllegalStateException("Failed to merge field specs in related fields"))));
-
-            Map<Field, FieldSpec> newFieldSpecs = group.fieldSpecs().entrySet().stream()
-                .collect(Collectors.toMap(
-                    Map.Entry::getKey,
-                    e -> updateSpec(e.getKey(), e.getValue(), fieldUpdates)));
-
-            return new FieldSpecGroup(newFieldSpecs, nonUpdatedRelations);
-        }
-        return group;
-    }
-
-    private FieldSpecGroup adjustBoundsOfDate(Field generatedField, FieldSpec generatedValue, FieldSpecGroup group) {
         Set<FieldSpecRelations> nonUpdatedRelations = group.relations().stream()
             .filter(relation -> !isRelatedToField(generatedField, relation))
             .collect(Collectors.toSet());
@@ -183,14 +125,14 @@ public class FieldSpecGroupValueGenerator {
 
         Map<Field, FieldSpec> fieldUpdates = updatableRelations.stream()
             .collect(Collectors.toMap(
-                relation -> relation.main(),
-                relation -> relation.reduceToRelatedFieldSpec(generatedValue),
+                FieldSpecRelations::main,
+                relation -> relation.reduceValueToFieldSpec(generatedValue),
                 (l, r) -> fieldSpecMerger.merge(l, r)
                     .orElseThrow(() -> new IllegalStateException("Failed to merge field specs in related fields"))));
 
         Map<Field, FieldSpec> newFieldSpecs = group.fieldSpecs().entrySet().stream()
             .collect(Collectors.toMap(
-                e -> e.getKey(),
+                Map.Entry::getKey,
                 e -> updateSpec(e.getKey(), e.getValue(), fieldUpdates)));
 
         return new FieldSpecGroup(newFieldSpecs, nonUpdatedRelations);

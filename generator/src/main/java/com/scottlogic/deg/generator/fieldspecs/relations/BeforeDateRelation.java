@@ -18,6 +18,7 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
@@ -53,6 +54,14 @@ public class BeforeDateRelation implements FieldSpecRelations {
         }
 
         return FieldSpec.fromRestriction(new LinearRestrictions<>(ISO_MIN_DATE, max, lr.getGranularity()));
+    }
+
+    @Override
+    public FieldSpec reduceValueToFieldSpec(DataBagValue generatedValue) {
+        Limit<OffsetDateTime> limit = new Limit<>((OffsetDateTime)generatedValue.getValue(), true);
+        LinearRestrictions<OffsetDateTime> restrictions = LinearRestrictionsFactory.createDateTimeRestrictions(limit,limit);
+        FieldSpec newSpec = FieldSpec.fromRestriction(restrictions).withNotNull();
+        return reduceToRelatedFieldSpec(newSpec);
     }
 
 
