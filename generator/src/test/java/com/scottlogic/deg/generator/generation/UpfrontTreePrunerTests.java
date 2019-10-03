@@ -205,8 +205,6 @@ class UpfrontTreePrunerTests {
     class integration_tests {
         private DataGeneratorMonitor monitor = Mockito.mock(DataGeneratorMonitor.class);
         private ConstraintReducer constraintReducer = new ConstraintReducer(
-            new FieldSpecFactory(
-                new StringRestrictionsFactory()),
             new FieldSpecMerger());
         private TreePruner treePruner = new TreePruner(
             new FieldSpecMerger(),

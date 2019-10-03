@@ -90,7 +90,7 @@ public class FieldSpec {
             if (whitelist.isEmpty()) {
                 return "Null only";
             }
-            return (nullable ? "" : "Not Null") + String.format("IN %s", whitelist);
+            return (nullable ? "" : "Not Null ") + String.format("IN %s", whitelist);
         }
 
         return String.format("%s%s",

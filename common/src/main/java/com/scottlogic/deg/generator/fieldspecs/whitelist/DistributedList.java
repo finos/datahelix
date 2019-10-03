@@ -136,9 +136,7 @@ public class DistributedList<T> {
 
     @Override
     public String toString() {
-        return "DistributedSet{" +
-            "underlyingWeights=" + underlyingWeights +
-            '}';
+        return list().toString();
     }
 
     public Stream<T> stream() {

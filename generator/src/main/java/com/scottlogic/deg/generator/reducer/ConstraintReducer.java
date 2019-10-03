@@ -19,8 +19,8 @@ package com.scottlogic.deg.generator.reducer;
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.common.profile.constraints.delayed.DelayedAtomicConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.generator.profile.constraints.delayed.DelayedAtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
@@ -32,16 +32,13 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class ConstraintReducer {
-    private final FieldSpecFactory fieldSpecFactory;
     private final FieldSpecMerger fieldSpecMerger;
     private final FieldRelationsFactory fieldRelationsFactory;
 
     @Inject
     public ConstraintReducer(
-        FieldSpecFactory fieldSpecFactory,
         FieldSpecMerger fieldSpecMerger
     ) {
-        this.fieldSpecFactory = fieldSpecFactory;
         this.fieldSpecMerger = fieldSpecMerger;
         fieldRelationsFactory = new FieldRelationsFactory();
     }
@@ -94,7 +91,7 @@ public class ConstraintReducer {
         final Stream<FieldSpec> rootConstraintsStream =
             StreamSupport
                 .stream(rootConstraints.spliterator(), false)
-                .map(fieldSpecFactory::construct);
+                .map(AtomicConstraint::toFieldSpec);
 
         return rootConstraintsStream
             .map(Optional::of)
