@@ -91,6 +91,24 @@ Feature: User can specify that datetime fields are granular to a certain unit
       | foo                       |
       | 2000-01-01T00:00:01.000Z  |
 
+  @ignore #pending development of 1412 - Implement working days for datetimes and align offset with granularity
+  Scenario: The one where a user can specify after working day granularity
+    Given foo is granular to "working days"
+    And foo is after 2019-10-04T00:00:00.000Z
+    And the generator can generate at most 1 rows
+    Then the following data should be generated:
+      | foo                       |
+      | 2019-10-07T00:00:00.000Z  |
+
+  @ignore #pending development of 1412 - Implement working days for datetimes and align offset with granularity
+  Scenario: The one where a user can specify before working day granularity
+    Given foo is granular to "working days"
+    And foo is before 2019-10-07T00:00:00.000Z
+    And the generator can generate at most 1 rows
+    Then the following data should be generated:
+      | foo                       |
+      | 2019-10-04T00:00:00.000Z  |
+
 
   Scenario: Applying an invalid datetime granularTo constraint fails with an appropriate error
     Given foo is granular to "decades"
