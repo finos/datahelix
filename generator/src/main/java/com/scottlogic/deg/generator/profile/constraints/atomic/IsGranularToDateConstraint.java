@@ -17,7 +17,7 @@
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.common.profile.constraintdetail.ParsedDateGranularity;
+import com.scottlogic.deg.common.profile.constraintdetail.ChronoUnitGranularity;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 
@@ -29,9 +29,9 @@ import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
 
 public class IsGranularToDateConstraint implements AtomicConstraint {
     public final Field field;
-    public final ParsedDateGranularity granularity;
+    public final ChronoUnitGranularity granularity;
 
-    public IsGranularToDateConstraint(Field field, ParsedDateGranularity granularity) {
+    public IsGranularToDateConstraint(Field field, ChronoUnitGranularity granularity) {
         if(field == null)
             throw new IllegalArgumentException("field must not be null");
         if(granularity == null)
@@ -53,7 +53,7 @@ public class IsGranularToDateConstraint implements AtomicConstraint {
 
     @Override
     public FieldSpec toFieldSpec() {
-        return FieldSpec.fromRestriction(createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT, granularity.getGranularity()));
+        return FieldSpec.fromRestriction(createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT, granularity));
     }
 
     @Override
@@ -64,7 +64,7 @@ public class IsGranularToDateConstraint implements AtomicConstraint {
         }
         if (o == null || getClass() != o.getClass()) return false;
         IsGranularToDateConstraint constraint = (IsGranularToDateConstraint) o;
-        return (field.equals(constraint.field) && Objects.equals(granularity.getGranularity(), constraint.granularity.getGranularity()));
+        return (field.equals(constraint.field) && Objects.equals(granularity, constraint.granularity));
     }
 
     @Override
@@ -74,6 +74,6 @@ public class IsGranularToDateConstraint implements AtomicConstraint {
 
     @Override
     public String toString() {
-        return String.format("%s granular to %s", field.name, granularity.getGranularity());
+        return String.format("%s granular to %s", field.name, granularity);
     }
 }

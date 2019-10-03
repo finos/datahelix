@@ -16,8 +16,7 @@
 
 
 package com.scottlogic.deg.generator.restrictions.linear;
-
-import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
+import com.scottlogic.deg.common.profile.constraintdetail.ChronoUnitGranularity;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -26,6 +25,8 @@ import java.time.ZoneOffset;
 
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
+import static java.time.temporal.ChronoUnit.MILLIS;
+import static java.time.temporal.ChronoUnit.YEARS;
 
 class GranularityTest {
 
@@ -64,7 +65,7 @@ class GranularityTest {
 
     @Test
     public void dateTimeRestrictions_getPrevious(){
-        Timescale granularity = Timescale.YEARS;
+        ChronoUnitGranularity granularity = new ChronoUnitGranularity(YEARS);
         OffsetDateTime offsetDateTime = OffsetDateTime.of(2018, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
 
         OffsetDateTime result = granularity.getPrevious(offsetDateTime);
@@ -75,7 +76,7 @@ class GranularityTest {
 
     @Test
     public void dateTimeRestrictionsMillis_getPrevious(){
-        Timescale granularity = Timescale.MILLIS;
+        ChronoUnitGranularity granularity = new ChronoUnitGranularity(MILLIS);
         OffsetDateTime offsetDateTime = OffsetDateTime.of(2018, 1, 1, 0, 0, 0, 1_000_000, ZoneOffset.UTC);
 
         OffsetDateTime result = granularity.getPrevious(offsetDateTime);
@@ -86,7 +87,7 @@ class GranularityTest {
 
     @Test
     public void dateTimeRestrictions_getPreviousBetweenGranularity(){
-        Timescale granularity = Timescale.YEARS;
+        ChronoUnitGranularity granularity = new ChronoUnitGranularity(YEARS);
         OffsetDateTime offsetDateTime = OffsetDateTime.of(2018, 7, 1, 0, 0, 0, 0, ZoneOffset.UTC);
 
         OffsetDateTime result = granularity.getPrevious(offsetDateTime);

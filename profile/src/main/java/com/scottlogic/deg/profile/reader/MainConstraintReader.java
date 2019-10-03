@@ -32,11 +32,14 @@ import com.scottlogic.deg.profile.dto.ConstraintDTO;
 import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintValueReader;
 import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintFactory;
 import com.scottlogic.deg.profile.reader.atomic.ConstraintValueValidator;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static com.scottlogic.deg.profile.reader.atomic.ConstraintReaderHelpers.getDateTimeGranularity;
 
 public class MainConstraintReader {
 
@@ -129,11 +132,7 @@ public class MainConstraintReader {
             return null;
         }
 
-        String offsetUnitUpperCase = dto.offsetUnit.toUpperCase();
-        boolean workingDay = offsetUnitUpperCase.equals("WORKING DAYS");
-        return new ChronoUnitGranularity(
-            ChronoUnit.valueOf(ChronoUnit.class, workingDay ? "DAYS" : offsetUnitUpperCase),
-            workingDay);
+        return getDateTimeGranularity(dto.offsetUnit);
     }
 
     Set<Constraint> getSubConstraints(ProfileFields fields, Collection<ConstraintDTO> allOf) {

@@ -60,7 +60,7 @@ public class TemporalAdjusterGenerator {
             case WEEKS: return Period::ofWeeks;
             case MONTHS: return Period::ofMonths;
             case YEARS: return Period::ofYears;
-            default: throw new IllegalArgumentException("Couldn't construct offset of unit " + unit);
+            default: throw new IllegalArgumentException("was " + unit + ", Must be one of the supported datetime units (millis, seconds, minutes, hours, days, months, years)");
         }
     }
 }

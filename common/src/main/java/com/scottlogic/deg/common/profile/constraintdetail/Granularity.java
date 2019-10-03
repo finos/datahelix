@@ -26,9 +26,7 @@ public interface Granularity<T> {
 
     T trimToGranularity(T value);
 
-    default T getPrevious(T value){
-        return getNext(value, -1);
-    };
+    T getPrevious(T value);
 
     default T getNext(T value){
         return getNext(value, 1);

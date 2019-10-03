@@ -2,7 +2,7 @@ package com.scottlogic.deg.profile.reader.atomic;
 
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.constraintdetail.ParsedDateGranularity;
+import com.scottlogic.deg.common.profile.constraintdetail.ChronoUnitGranularity;
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.common.util.Defaults;
@@ -13,11 +13,13 @@ import com.scottlogic.deg.profile.reader.InvalidProfileException;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.regex.Pattern;
 
 import static com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType.IS_GRANULAR_TO;
 import static com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType.IS_NULL;
 import static com.scottlogic.deg.common.profile.Types.*;
+import static com.scottlogic.deg.profile.reader.atomic.ConstraintReaderHelpers.getDateTimeGranularity;
 
 public class ConstraintValueValidator {
 
@@ -186,12 +188,12 @@ public class ConstraintValueValidator {
 
     private static void validateGranularity(Field field, Object value) {
         if (value instanceof Number) {
-            ParsedGranularity.parse(value);
             validateTypeIs(field, IS_GRANULAR_TO, NUMERIC);
+            ParsedGranularity.parse(value);
         }
         else if (value instanceof String) {
-            ParsedDateGranularity.parse((String) value);
             validateTypeIs(field, IS_GRANULAR_TO, DATETIME);
+            getDateTimeGranularity((String) value).getNext(OffsetDateTime.MIN);
         }
         else {
             throw new ValidationException("Couldn't recognise granularity value, it must be either a negative power of ten or one of the supported datetime units.");

@@ -8,6 +8,7 @@ import java.time.Period;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAmount;
+import java.util.Objects;
 import java.util.function.IntFunction;
 
 public class ChronoUnitGranularity implements Granularity<OffsetDateTime> {
@@ -16,9 +17,10 @@ public class ChronoUnitGranularity implements Granularity<OffsetDateTime> {
     private final boolean workingDay;
     private final TemporalAdjusterGenerator temporalAdjusterGenerator;
 
-    public ChronoUnitGranularity(ChronoUnit chronoUnit){
+    public ChronoUnitGranularity(ChronoUnit chronoUnit) {
         this(chronoUnit, false);
     }
+
     public ChronoUnitGranularity(ChronoUnit chronoUnit, boolean workingDay) {
         this.chronoUnit = chronoUnit;
         this.workingDay = workingDay;
@@ -32,7 +34,7 @@ public class ChronoUnitGranularity implements Granularity<OffsetDateTime> {
 
     @Override
     public Granularity<OffsetDateTime> merge(Granularity<OffsetDateTime> otherGranularity) {
-        ChronoUnitGranularity other = (ChronoUnitGranularity) otherGranularity; //TODO deal with working days, also test
+        ChronoUnitGranularity other = (ChronoUnitGranularity) otherGranularity;
         return chronoUnit.compareTo(other.chronoUnit) <= 0 ? other : this;
     }
 
@@ -64,10 +66,32 @@ public class ChronoUnitGranularity implements Granularity<OffsetDateTime> {
         }
     }
 
+    @Override
+    public OffsetDateTime getPrevious(OffsetDateTime value) {
+        if (isCorrectScale(value)){
+            return getNext(value, -1);
+        }
+
+        return trimToGranularity(value);
+    }
+
     private static int nanoToMilli(int nano) {
         int factor = NANOS_IN_MILLIS;
         return (nano / factor) * factor;
     }
     private static final int NANOS_IN_MILLIS = 1_000_000;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChronoUnitGranularity that = (ChronoUnitGranularity) o;
+        return workingDay == that.workingDay &&
+            chronoUnit == that.chronoUnit;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(chronoUnit, workingDay);
+    }
 }

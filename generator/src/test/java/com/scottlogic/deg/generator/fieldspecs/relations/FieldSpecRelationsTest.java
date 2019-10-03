@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.Types;
-import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
+import com.scottlogic.deg.common.profile.constraintdetail.ChronoUnitGranularity;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
@@ -19,6 +19,8 @@ import static com.scottlogic.deg.common.util.Defaults.ISO_MIN_DATE;
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDateTimeRestrictions;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
+import static java.time.temporal.ChronoUnit.MILLIS;
+import static java.time.temporal.ChronoUnit.YEARS;
 
 class FieldSpecRelationsTest {
     private Field main = createField("main", Types.DATETIME);
@@ -114,20 +116,20 @@ class FieldSpecRelationsTest {
 
     private FieldSpec fromMin(int year) {
         OffsetDateTime min = OffsetDateTime.of(year, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
-        LinearRestrictions restrictions = new LinearRestrictions(min, ISO_MAX_DATE, Timescale.MILLIS);
+        LinearRestrictions restrictions = new LinearRestrictions(min, ISO_MAX_DATE, new ChronoUnitGranularity(MILLIS));
         return FieldSpec.fromRestriction(restrictions);
     }
 
     private FieldSpec fromMax(int year) {
         OffsetDateTime max = OffsetDateTime.of(year, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
-        LinearRestrictions restrictions = new LinearRestrictions(ISO_MIN_DATE, max, Timescale.MILLIS);
+        LinearRestrictions restrictions = new LinearRestrictions(ISO_MIN_DATE, max, new ChronoUnitGranularity(MILLIS));
         return FieldSpec.fromRestriction(restrictions);
     }
 
     private FieldSpec forYears(int minYear, int maxYear) {
         OffsetDateTime min = OffsetDateTime.of(minYear, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
         OffsetDateTime max = OffsetDateTime.of(maxYear, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
-        LinearRestrictions<OffsetDateTime> restrictions = new LinearRestrictions(min, max, Timescale.YEARS);
+        LinearRestrictions<OffsetDateTime> restrictions = new LinearRestrictions(min, max, new ChronoUnitGranularity(YEARS));
         return FieldSpec.fromRestriction(restrictions).withNotNull();
     }
 }
