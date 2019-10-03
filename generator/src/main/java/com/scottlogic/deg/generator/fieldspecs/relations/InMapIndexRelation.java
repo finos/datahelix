@@ -19,13 +19,19 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
+import com.scottlogic.deg.generator.restrictions.linear.Limit;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
 
-public class InMapRelation implements FieldSpecRelations {
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
+
+public class InMapIndexRelation implements FieldSpecRelations {
     private final Field main;
     private final Field other;
     private final DistributedList<String> underlyingList;
 
-    public InMapRelation(Field main, Field other, DistributedList<String> underlyingList) {
+    public InMapIndexRelation(Field main, Field other, DistributedList<String> underlyingList) {
         this.main = main;
         this.other = other;
         this.underlyingList = underlyingList;
@@ -33,12 +39,31 @@ public class InMapRelation implements FieldSpecRelations {
 
     @Override
     public FieldSpec reduceToRelatedFieldSpec(FieldSpec otherValue) {
-        return otherValue;
+        int size = underlyingList.list().size();
+
+        FieldSpec controllerSpec = FieldSpec.fromRestriction(LinearRestrictionsFactory.createNumericRestrictions(
+            new Limit<>(BigDecimal.ZERO, true),
+            new Limit<>(BigDecimal.valueOf(size), false),
+            0
+        )).withNotNull();
+
+        for (int i = 0; i < size; i++) {
+            if (controllerSpec.getBlacklist().contains(BigDecimal.valueOf(i))) {
+                continue;
+            }
+            Object testingElement = underlyingList.list().get(i);
+            if (!otherValue.permits(testingElement)) {
+                Set<Object> newBlackList = new HashSet<>(controllerSpec.getBlacklist());
+                newBlackList.add(BigDecimal.valueOf(i));
+                controllerSpec = controllerSpec.withBlacklist(newBlackList);
+            }
+        }
+        return controllerSpec;
     }
 
     @Override
     public FieldSpecRelations inverse() {
-        return new InMapIndexRelation(other, main, underlyingList);
+        return new InMapRelation(main, other, underlyingList);
     }
 
     @Override

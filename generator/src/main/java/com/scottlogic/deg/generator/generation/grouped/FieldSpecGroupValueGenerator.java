@@ -102,35 +102,12 @@ public class FieldSpecGroupValueGenerator {
     private FieldSpec createMergedSpecFromRelation(Field first,
                                                    FieldSpecRelations relation,
                                                    FieldSpecGroup group) {
-        if (relation instanceof InMapRelation) {
-            InMapRelation inMapRelation = (InMapRelation)relation;
-
-            FieldSpec controllerSpec = FieldSpec.fromRestriction(LinearRestrictionsFactory.createNumericRestrictions(
-                new Limit<>(new BigDecimal(0), true),
-                new Limit<>(new BigDecimal(inMapRelation.getUnderlyingList().list().size()), false),
-                0
-            )).withNotNull();
-            FieldSpec testing = group.fieldSpecs().get(relation.main());
-            for (int i = 0; i < inMapRelation.getUnderlyingList().list().size(); i++) {
-                if (controllerSpec.getBlacklist().contains(new BigDecimal(i))) {
-                    continue;
-                }
-                Object testingElement = inMapRelation.getUnderlyingList().distributedList().get(i).element();
-                if (!testing.permits(testingElement)) {
-                    Set<Object> newBlackList = new HashSet<>(controllerSpec.getBlacklist());
-                    newBlackList.add(new BigDecimal(i));
-                    controllerSpec = controllerSpec.withBlacklist(newBlackList);
-                }
-            }
-            return controllerSpec;
+        if (relation.main().equals(first)) {
+            FieldSpec otherFieldSpec = group.fieldSpecs().get(relation.other());
+            return relation.reduceToRelatedFieldSpec(otherFieldSpec);
         } else {
-            if (relation.main().equals(first)) {
-                FieldSpec otherFieldSpec = group.fieldSpecs().get(relation.other());
-                return relation.reduceToRelatedFieldSpec(otherFieldSpec);
-            } else {
-                FieldSpec otherFieldSpec = group.fieldSpecs().get(relation.main());
-                return relation.inverse().reduceToRelatedFieldSpec(otherFieldSpec);
-            }
+            FieldSpec otherFieldSpec = group.fieldSpecs().get(relation.main());
+            return relation.inverse().reduceToRelatedFieldSpec(otherFieldSpec);
         }
     }
 
@@ -139,7 +116,7 @@ public class FieldSpecGroupValueGenerator {
         if (isInMap) {
             newGroup = adjustInMap(generatedField, dataBag.getDataBagValue(generatedField), group);
         } else {
-            newGroup = adjustBounds(generatedField, dataBag.getDataBagValue(generatedField), group);
+            newGroup = updateRelatedFieldSpecs(generatedField, dataBag.getDataBagValue(generatedField), group);
         }
 
         Stream<DataBag> dataBagStream = generate(newGroup)
@@ -148,7 +125,7 @@ public class FieldSpecGroupValueGenerator {
         return applyCombinationStrategy(dataBagStream);
     }
 
-    private FieldSpecGroup adjustBounds(Field generatedField, DataBagValue generatedValue, FieldSpecGroup group) {
+    private FieldSpecGroup updateRelatedFieldSpecs(Field generatedField, DataBagValue generatedValue, FieldSpecGroup group) {
         if (generatedValue.getValue() instanceof OffsetDateTime) {
 
             Limit<OffsetDateTime> limit = new Limit<>((OffsetDateTime)generatedValue.getValue(), true);
