@@ -20,6 +20,7 @@ package com.scottlogic.deg.generator.profile.constraints.delayed;
 import com.scottlogic.deg.common.date.TemporalAdjusterGenerator;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
+import com.scottlogic.deg.common.profile.constraintdetail.ChronoUnitGranularity;
 
 public class DelayedDateAtomicConstraint implements DelayedAtomicConstraint {
 
@@ -27,14 +28,14 @@ public class DelayedDateAtomicConstraint implements DelayedAtomicConstraint {
     private final AtomicConstraintType underlyingConstraint;
     private final Field otherField;
 
-    private final TemporalAdjusterGenerator offsetGenerator;
-
+    private final ChronoUnitGranularity granularity;
     private final Integer offsetUnit;
-    public DelayedDateAtomicConstraint(Field field, AtomicConstraintType underlyingConstraint, Field otherField, TemporalAdjusterGenerator offsetGenerator, Integer offsetUnit) {
+
+    public DelayedDateAtomicConstraint(Field field, AtomicConstraintType underlyingConstraint, Field otherField, ChronoUnitGranularity granularity, Integer offsetUnit) {
         this.field = field;
         this.underlyingConstraint = underlyingConstraint;
         this.otherField = otherField;
-        this.offsetGenerator = offsetGenerator;
+        this.granularity = granularity;
         this.offsetUnit = offsetUnit;
     }
 
@@ -62,8 +63,8 @@ public class DelayedDateAtomicConstraint implements DelayedAtomicConstraint {
         throw new UnsupportedOperationException("negate is unsupported on a DelayedDateAtomicConstraint");
     }
 
-    public TemporalAdjusterGenerator getOffsetGenerator() {
-        return offsetGenerator;
+    public ChronoUnitGranularity getOffsetGranularity() {
+        return granularity;
     }
 
     public Integer getOffsetUnit() {
