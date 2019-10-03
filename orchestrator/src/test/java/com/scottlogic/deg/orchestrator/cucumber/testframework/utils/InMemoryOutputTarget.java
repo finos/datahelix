@@ -54,7 +54,7 @@ public class InMemoryOutputTarget implements SingleDatasetOutputTarget {
                 throw new IllegalStateException("GeneratedObject is null");
             }
 
-            List<Object> values = fields.stream()
+            List<Object> values = fields.getExternalStream()
                 .map(row::getFormattedValue)
                 .collect(Collectors.toList());
 
