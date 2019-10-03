@@ -58,10 +58,9 @@ public class FieldSpecGroupValueGenerator {
         Stream<DataBag> firstDataBagValues = underlyingGenerator.generate(first, firstSpec)
             .map(value -> toDataBag(first, value));
 
-        boolean isInMap = group.relations().stream().allMatch(fieldSpecRelations -> fieldSpecRelations instanceof InMapRelation);
         return flatMap(
             firstDataBagValues,
-            dataBag -> generateRemainingData(first, dataBag, removeSpecFromGroup(first, group), isInMap));
+            dataBag -> generateRemainingData(first, dataBag, removeSpecFromGroup(first, group)));
     }
 
     private Field getFirst(FieldSpecGroup keySet) {
@@ -104,7 +103,7 @@ public class FieldSpecGroupValueGenerator {
         }
     }
 
-    private Stream<DataBag> generateRemainingData(Field generatedField, DataBag dataBag, FieldSpecGroup group, boolean isInMap) {
+    private Stream<DataBag> generateRemainingData(Field generatedField, DataBag dataBag, FieldSpecGroup group) {
         FieldSpecGroup newGroup = updateRelatedFieldSpecs(generatedField, dataBag.getDataBagValue(generatedField), group);
 
         Stream<DataBag> dataBagStream = generate(newGroup)
