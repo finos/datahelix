@@ -20,6 +20,7 @@ package com.scottlogic.deg.generator.fieldspecs;
 import com.scottlogic.deg.generator.fieldspecs.relations.*;
 import com.scottlogic.deg.generator.profile.constraints.delayed.DelayedAtomicConstraint;
 import com.scottlogic.deg.generator.profile.constraints.delayed.DelayedDateAtomicConstraint;
+import com.scottlogic.deg.generator.profile.constraints.delayed.DelayedInMapAtomicConstraint;
 
 public class FieldRelationsFactory {
 
@@ -35,6 +36,8 @@ public class FieldRelationsFactory {
                return constructAfterDate(constraint, false);
            case IS_AFTER_OR_EQUAL_TO_CONSTANT_DATE_TIME:
                return constructAfterDate(constraint, true);
+           case IS_IN_MAP:
+               return constructInMap((DelayedInMapAtomicConstraint) constraint);
        }
 
        throw new IllegalArgumentException("Unsupported field spec relations: " + constraint.getUnderlyingConstraint());
@@ -67,5 +70,9 @@ public class FieldRelationsFactory {
                constraint.getField(),
                constraint.getOtherField());
        }
+   }
+
+   private FieldSpecRelations constructInMap(DelayedInMapAtomicConstraint constraint) {
+       return new InMapRelation(constraint.getField(), constraint.getOtherField(), constraint.getUnderlyingList());
    }
 }
