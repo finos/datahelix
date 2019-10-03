@@ -24,13 +24,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class JarExecuteTests {
-    private String errorMessageOnFailure =
-        "Jar test failed. This may have been caused by one of the following:" +
-            "1) You have not built the jar. \n Try running Gradle Build. \n" +
-            "2) System.out is being printed to (which interferes with streaming output) e.g. using 'printStackTrace'.\n" +
-            "3) There is a bug in code conditional on whether it is running inside the JAR, e.g. in SupportedVersionsGetter. \n";
 
     @Test
     void generateSuccessfullyFromJar() throws Exception {
@@ -38,7 +34,7 @@ public class JarExecuteTests {
 
         List<String> collectedOutput = collectOutputAndCloseProcess(p);
 
-        assertOnOutput(collectedOutput, "\"Generation successful\"");
+        assertOnOutputs(collectedOutput, "\"Generation successful\"", "");
     }
 
     @Test
@@ -47,12 +43,20 @@ public class JarExecuteTests {
 
         List<String> collectedOutput = collectOutputAndCloseProcess(p);
 
-        assertOnOutput(collectedOutput, "\"Generated successfully from file\"");
+        assertOnOutputs(collectedOutput,
+            "\"Generated successfully from file\"",
+            "Either load from file no longer works, or ");
     }
 
-    private void assertOnOutput(List<String> collectedOutput, String message) {
-        assertEquals("foo", collectedOutput.get(collectedOutput.size() - 2), errorMessageOnFailure);
-        assertEquals(message, collectedOutput.get(collectedOutput.size() - 1), errorMessageOnFailure);
+    private void assertOnOutputs(List<String> outputs, String expectedFinalMessage, String extraErrorMessage) {
+        String errorMessageOnFailure = "Jar test failed. This may have been caused by one of the following:" +
+            "1) You have not built the jar. \n Try running Gradle Build. \n" +
+            "2) System.out is being printed to (which interferes with streaming output) e.g. using 'printStackTrace'.\n" +
+            "3) There is a bug in code conditional on whether it is running inside the JAR, e.g. in SupportedVersionsGetter. \n";
+        String fullErrorMessage = extraErrorMessage + errorMessageOnFailure;
+        assertTrue(outputs.size() >= 2, fullErrorMessage);
+        assertEquals(outputs.get(outputs.size() - 2), "foo", fullErrorMessage);
+        assertEquals(outputs.get(outputs.size() - 1), expectedFinalMessage, fullErrorMessage);
     }
 
     private Process setupProcess(final String profile) throws IOException {

@@ -167,7 +167,7 @@ Feature: User can specify that contains a specified regex
 
   Scenario: Running a 'containingRegex' for a minimum length that is less zero should fail with an error message
     Given foo is containing regex /[a]{-1}/
-    Then the profile is invalid because "Field \[foo\]: Illegal repetition near index 2\r?\n\[a\]\{-1\}\r?\n  \^"
+    Then the profile is invalid because "Field \[foo\]: Illegal repetition near index [24]\r?\n\[a\]\{-1\}\r?\n {2,4}\^"
     And no data is created
 
   Scenario: Running a 'containingRegex' for an empty value should fail with an error message
