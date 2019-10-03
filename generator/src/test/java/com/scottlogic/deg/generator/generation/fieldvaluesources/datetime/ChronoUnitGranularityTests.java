@@ -15,29 +15,25 @@
  */
 
 package com.scottlogic.deg.generator.generation.fieldvaluesources.datetime;
-import com.scottlogic.deg.common.profile.constraintdetail.ChronoUnitGranularity;
-import org.hamcrest.CoreMatchers;
+import com.scottlogic.deg.common.profile.constraintdetail.DateTimeGranularity;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-import java.time.temporal.ChronoUnit;
-
 import static java.time.temporal.ChronoUnit.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 class ChronoUnitGranularityTests {
     @Test
     public void mostCoarseTest() {
-        Assert.assertEquals(new ChronoUnitGranularity(DAYS), new ChronoUnitGranularity(MILLIS).merge(new ChronoUnitGranularity(DAYS)));
+        Assert.assertEquals(new DateTimeGranularity(DAYS), new DateTimeGranularity(MILLIS).merge(new DateTimeGranularity(DAYS)));
     }
 
     @Test
     public void mostCoarseTestYear() {
-        Assert.assertEquals(new ChronoUnitGranularity(YEARS), new ChronoUnitGranularity(MINUTES).merge(new ChronoUnitGranularity(YEARS)));
+        Assert.assertEquals(new DateTimeGranularity(YEARS), new DateTimeGranularity(MINUTES).merge(new DateTimeGranularity(YEARS)));
     }
 
     @Test
     public void mostCoarseTestSame() {
-        Assert.assertEquals(new ChronoUnitGranularity(MONTHS), new ChronoUnitGranularity(MONTHS).merge(new ChronoUnitGranularity(MONTHS)));
+        Assert.assertEquals(new DateTimeGranularity(MONTHS), new DateTimeGranularity(MONTHS).merge(new DateTimeGranularity(MONTHS)));
     }
 }

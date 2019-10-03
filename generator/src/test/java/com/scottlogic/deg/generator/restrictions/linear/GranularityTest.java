@@ -16,7 +16,7 @@
 
 
 package com.scottlogic.deg.generator.restrictions.linear;
-import com.scottlogic.deg.common.profile.constraintdetail.ChronoUnitGranularity;
+import com.scottlogic.deg.common.profile.constraintdetail.DateTimeGranularity;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -65,7 +65,7 @@ class GranularityTest {
 
     @Test
     public void dateTimeRestrictions_getPrevious(){
-        ChronoUnitGranularity granularity = new ChronoUnitGranularity(YEARS);
+        DateTimeGranularity granularity = new DateTimeGranularity(YEARS);
         OffsetDateTime offsetDateTime = OffsetDateTime.of(2018, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
 
         OffsetDateTime result = granularity.getPrevious(offsetDateTime);
@@ -76,7 +76,7 @@ class GranularityTest {
 
     @Test
     public void dateTimeRestrictionsMillis_getPrevious(){
-        ChronoUnitGranularity granularity = new ChronoUnitGranularity(MILLIS);
+        DateTimeGranularity granularity = new DateTimeGranularity(MILLIS);
         OffsetDateTime offsetDateTime = OffsetDateTime.of(2018, 1, 1, 0, 0, 0, 1_000_000, ZoneOffset.UTC);
 
         OffsetDateTime result = granularity.getPrevious(offsetDateTime);
@@ -87,7 +87,7 @@ class GranularityTest {
 
     @Test
     public void dateTimeRestrictions_getPreviousBetweenGranularity(){
-        ChronoUnitGranularity granularity = new ChronoUnitGranularity(YEARS);
+        DateTimeGranularity granularity = new DateTimeGranularity(YEARS);
         OffsetDateTime offsetDateTime = OffsetDateTime.of(2018, 7, 1, 0, 0, 0, 0, ZoneOffset.UTC);
 
         OffsetDateTime result = granularity.getPrevious(offsetDateTime);

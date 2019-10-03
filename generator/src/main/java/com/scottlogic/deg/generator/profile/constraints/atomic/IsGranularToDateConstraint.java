@@ -17,7 +17,7 @@
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.common.profile.constraintdetail.ChronoUnitGranularity;
+import com.scottlogic.deg.common.profile.constraintdetail.DateTimeGranularity;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 
@@ -29,9 +29,9 @@ import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
 
 public class IsGranularToDateConstraint implements AtomicConstraint {
     public final Field field;
-    public final ChronoUnitGranularity granularity;
+    public final DateTimeGranularity granularity;
 
-    public IsGranularToDateConstraint(Field field, ChronoUnitGranularity granularity) {
+    public IsGranularToDateConstraint(Field field, DateTimeGranularity granularity) {
         if(field == null)
             throw new IllegalArgumentException("field must not be null");
         if(granularity == null)

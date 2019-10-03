@@ -17,7 +17,7 @@
 package com.scottlogic.deg.profile.reader.atomic;
 
 import com.scottlogic.deg.common.profile.Types;
-import com.scottlogic.deg.common.profile.constraintdetail.ChronoUnitGranularity;
+import com.scottlogic.deg.common.profile.constraintdetail.DateTimeGranularity;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 
 import java.time.LocalDateTime;
@@ -86,10 +86,10 @@ public class ConstraintReaderHelpers {
 
     }
 
-    public static ChronoUnitGranularity getDateTimeGranularity(String granularity) {
+    public static DateTimeGranularity getDateTimeGranularity(String granularity) {
         String offsetUnitUpperCase = granularity.toUpperCase();
         boolean workingDay = offsetUnitUpperCase.equals("WORKING DAYS");
-        return new ChronoUnitGranularity(
+        return new DateTimeGranularity(
             ChronoUnit.valueOf(ChronoUnit.class, workingDay ? "DAYS" : offsetUnitUpperCase),
             workingDay);
     }

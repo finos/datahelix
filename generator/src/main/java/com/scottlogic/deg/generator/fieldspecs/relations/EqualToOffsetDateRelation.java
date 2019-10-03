@@ -16,25 +16,22 @@
 
 package com.scottlogic.deg.generator.fieldspecs.relations;
 
-import com.scottlogic.deg.common.date.TemporalAdjusterGenerator;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.constraintdetail.ChronoUnitGranularity;
+import com.scottlogic.deg.common.profile.constraintdetail.DateTimeGranularity;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
-import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
 
 import java.time.OffsetDateTime;
 
 public class EqualToOffsetDateRelation implements FieldSpecRelations {
     private final Field main;
     private final Field other;
-    private final ChronoUnitGranularity offsetGranularity;
+    private final DateTimeGranularity offsetGranularity;
     private final int offset;
 
     public EqualToOffsetDateRelation(Field main,
                                      Field other,
-                                     ChronoUnitGranularity offsetGranularity,
+                                     DateTimeGranularity offsetGranularity,
                                      int offset) {
         this.main = main;
         this.other = other;

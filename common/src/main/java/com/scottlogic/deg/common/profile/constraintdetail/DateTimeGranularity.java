@@ -2,26 +2,22 @@ package com.scottlogic.deg.common.profile.constraintdetail;
 
 import com.scottlogic.deg.common.date.TemporalAdjusterGenerator;
 
-import java.time.Duration;
 import java.time.OffsetDateTime;
-import java.time.Period;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAmount;
 import java.util.Objects;
-import java.util.function.IntFunction;
 
-public class ChronoUnitGranularity implements Granularity<OffsetDateTime> {
+public class DateTimeGranularity implements Granularity<OffsetDateTime> {
 
     private final ChronoUnit chronoUnit;
     private final boolean workingDay;
     private final TemporalAdjusterGenerator temporalAdjusterGenerator;
 
-    public ChronoUnitGranularity(ChronoUnit chronoUnit) {
+    public DateTimeGranularity(ChronoUnit chronoUnit) {
         this(chronoUnit, false);
     }
 
-    public ChronoUnitGranularity(ChronoUnit chronoUnit, boolean workingDay) {
+    public DateTimeGranularity(ChronoUnit chronoUnit, boolean workingDay) {
         this.chronoUnit = chronoUnit;
         this.workingDay = workingDay;
         this.temporalAdjusterGenerator = new TemporalAdjusterGenerator(chronoUnit, workingDay);
@@ -34,7 +30,7 @@ public class ChronoUnitGranularity implements Granularity<OffsetDateTime> {
 
     @Override
     public Granularity<OffsetDateTime> merge(Granularity<OffsetDateTime> otherGranularity) {
-        ChronoUnitGranularity other = (ChronoUnitGranularity) otherGranularity;
+        DateTimeGranularity other = (DateTimeGranularity) otherGranularity;
         return chronoUnit.compareTo(other.chronoUnit) <= 0 ? other : this;
     }
 
@@ -85,7 +81,7 @@ public class ChronoUnitGranularity implements Granularity<OffsetDateTime> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ChronoUnitGranularity that = (ChronoUnitGranularity) o;
+        DateTimeGranularity that = (DateTimeGranularity) o;
         return workingDay == that.workingDay &&
             chronoUnit == that.chronoUnit;
     }
