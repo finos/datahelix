@@ -149,7 +149,7 @@ public class DecisionTreeVisualisationWriter {
             "%s[fontcolor=\"%s\"][label=\"%s\"][fontsize=\"10\"][shape=box][style=\"dotted\"]",
             infoNodeId,
             fontColour,
-            String.format("Counts:\nDecisions: %d\nAtomic constraints: %d\nConstraints: %d\nExpected RowSpecs: %s",
+            String.format("Counts:%nDecisions: %d%nAtomic constraints: %d%nConstraints: %d%nExpected RowSpecs: %s",
                 info.decisions,
                 info.atomicConstraints,
                 info.constraintNodes,
@@ -188,7 +188,7 @@ public class DecisionTreeVisualisationWriter {
 
 class NodeVisualiser {
 
-    private final int MAX_LENGTH_FOR_LABEL = 16816;
+    private static final int MAX_LENGTH_FOR_LABEL = 16816;
 
     String renderNode(String id, DecisionNode node){
         return "  " + id + determineNodeColour(node) + "[bgcolor=\"white\"][label=\"\"][shape=invtriangle]";

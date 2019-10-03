@@ -90,10 +90,10 @@ public class ConstraintReducer {
     public Optional<FieldSpec> reduceConstraintsToFieldSpec(Field field, Iterable<AtomicConstraint> constraints) {
         return constraints == null
             ? Optional.of(FieldSpec.empty())
-            : getRootFieldSpec(field, constraints);
+            : getRootFieldSpec(constraints);
     }
 
-    private Optional<FieldSpec> getRootFieldSpec(Field field, Iterable<AtomicConstraint> rootConstraints) {
+    private Optional<FieldSpec> getRootFieldSpec(Iterable<AtomicConstraint> rootConstraints) {
         final Stream<FieldSpec> rootConstraintsStream =
             StreamSupport
                 .stream(rootConstraints.spliterator(), false)

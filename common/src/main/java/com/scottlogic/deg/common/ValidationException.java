@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ValidationException extends RuntimeException {
-    public final List<String> errorMessages;
+    public final transient List<String> errorMessages;
 
     public ValidationException(String msg) {
         super(msg);

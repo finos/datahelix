@@ -23,6 +23,5 @@ public class NoopProfileSchemaLoader implements ProfileSchemaLoader {
 
     @Override
     public void validateProfile(File profileFile, URL schema) {
-        return;
     }
 }

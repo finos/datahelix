@@ -34,10 +34,7 @@ public class ConstraintReaderHelpers {
     private static final OffsetDateTime NOW = OffsetDateTime.now();
 
     public static OffsetDateTime parseDate(String value) {
-        if (value.toUpperCase().equals("NOW")) {
-            return NOW;
-        }
-
+        if (value.equalsIgnoreCase("NOW")) return NOW;
         DateTimeFormatter formatter = new DateTimeFormatterBuilder()
             .append(DateTimeFormatter.ofPattern("u-MM-dd'T'HH:mm:ss'.'SSS"))
             .optionalStart()
@@ -65,7 +62,6 @@ public class ConstraintReaderHelpers {
             case "decimal":
             case "integer":
                 return Types.NUMERIC;
-
             case "string":
             case "ISIN":
             case "SEDOL":
@@ -75,13 +71,10 @@ public class ConstraintReaderHelpers {
             case "lastname":
             case "fullname":
                 return Types.STRING;
-
             case "datetime":
                 return Types.DATETIME;
+            default:
+                throw new InvalidProfileException("Profile is invalid: no type known for " + type);
         }
-
-        throw new InvalidProfileException("Profile is invalid: no type known for " + type);
-
     }
-
 }

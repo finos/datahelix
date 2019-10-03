@@ -52,8 +52,6 @@ public final class NameRetriever {
                 .collect(Collectors.toList()));
     }
 
-    ;
-
     private static DistributedList<String> generateNamesFromSingleFile(String source) {
         InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(source);
         DistributedList<String> result = CsvInputStreamReader.retrieveLines(stream);

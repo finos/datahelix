@@ -30,13 +30,8 @@ public class ConstraintValueValidator {
     }
 
     private static void validateConstraintValue(Field field, AtomicConstraintType type, Object value){
-        if (type == IS_NULL){
-            validateNull(value);
-            return;
-        }
-
+        if (type == IS_NULL) return;
         validateNotNull(value);
-
         switch (type) {
             case IS_EQUAL_TO_CONSTANT:
                 validateAny(field, type, value);
@@ -47,20 +42,17 @@ public class ConstraintValueValidator {
             case IS_OF_TYPE:
                 validateOfTypes(field, value);
                 break;
-
             case MATCHES_REGEX:
             case CONTAINS_REGEX:
                 validatePattern(value);
                 validateTypeIs(field, type, STRING);
                 break;
-
             case HAS_LENGTH:
             case IS_STRING_SHORTER_THAN:
             case IS_STRING_LONGER_THAN:
                 validateStringLengthInt(type, value);
                 validateTypeIs(field, type, STRING);
                 break;
-
             case IS_GREATER_THAN_CONSTANT:
             case IS_GREATER_THAN_OR_EQUAL_TO_CONSTANT:
             case IS_LESS_THAN_CONSTANT:
@@ -68,7 +60,6 @@ public class ConstraintValueValidator {
                 validateNumber(type, value);
                 validateTypeIs(field, type, NUMERIC);
                 break;
-
             case IS_AFTER_CONSTANT_DATE_TIME:
             case IS_AFTER_OR_EQUAL_TO_CONSTANT_DATE_TIME:
             case IS_BEFORE_CONSTANT_DATE_TIME:
@@ -76,13 +67,11 @@ public class ConstraintValueValidator {
                 validateDateTime(value);
                 validateTypeIs(field, type, DATETIME);
                 break;
-
             case IS_GRANULAR_TO:
                 validateGranularity(field, value);
                 break;
-
             default:
-                //throw new ValidationException("Contraint type not recognised, was " + type);
+                throw new ValidationException("Contraint type not recognised, was " + type);
         }
     }
 
@@ -93,9 +82,6 @@ public class ConstraintValueValidator {
         if (field.type != s){
             throw new ValidationException("is type " + field.type + " , but you are trying to apply a " + type + " constraint which requires " + s);
         }
-    }
-
-    private static void validateNull(Object value) {
     }
 
     private static void validateNotNull(Object value) {
@@ -175,11 +161,10 @@ public class ConstraintValueValidator {
 
     private static void validateDateTime(Object value) {
         if (!(value instanceof OffsetDateTime)){
-            throw new ValidationException(String.format("Dates should be expressed in object format e.g. { \"date\": \"yyyy-MM-ddTHH:mm:ss.SSS[Z]\" }", value));
+            throw new ValidationException("Dates should be expressed in object format e.g. { \"date\": \"yyyy-MM-ddTHH:mm:ss.SSS[Z]\" }");
         }
         OffsetDateTime offsetDateTime = (OffsetDateTime) value;
-
-        if (offsetDateTime != null && (offsetDateTime.getYear() > 9999 || offsetDateTime.getYear() < 1)) {
+        if (offsetDateTime.getYear() > 9999 || offsetDateTime.getYear() < 1) {
             throw new ValidationException("Dates must be between 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z");
         }
     }

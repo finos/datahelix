@@ -104,15 +104,8 @@ public class FieldSpec {
      * Create a predicate that returns TRUE for all (and only) values permitted by this FieldSpec
      */
     public boolean permits(Object value) {
-        if (blacklist.contains(value)){
-            return false;
-        }
+        return !blacklist.contains(value) && (restrictions == null || restrictions.match(value));
 
-        if (restrictions != null && !restrictions.match(value)) {
-            return false;
-        }
-
-        return true;
     }
 
     public int hashCode() {

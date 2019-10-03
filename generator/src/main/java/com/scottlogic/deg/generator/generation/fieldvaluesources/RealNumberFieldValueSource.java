@@ -86,7 +86,4 @@ public class RealNumberFieldValueSource implements FieldValueSource<BigDecimal> 
         return Objects.hash(restrictions, blacklist);
     }
 
-    private Stream<Object> streamOf(Iterable<Object> iterable){
-        return StreamSupport.stream(iterable.spliterator(), false);
-    }
 }

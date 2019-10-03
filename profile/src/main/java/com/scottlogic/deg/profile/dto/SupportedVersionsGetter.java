@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SupportedVersionsGetter {
-    private final static String RESOURCES_PATH = "profileschema/datahelix.schema.json";
+    private static final String RESOURCES_PATH = "profileschema/datahelix.schema.json";
     /**
      * @return all valid schema versions
      **/

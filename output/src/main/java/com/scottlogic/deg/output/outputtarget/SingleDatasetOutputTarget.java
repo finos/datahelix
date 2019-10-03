@@ -23,5 +23,5 @@ import java.io.IOException;
 
 public interface SingleDatasetOutputTarget {
     DataSetWriter openWriter(ProfileFields fields) throws IOException;
-    default void validate() throws OutputTargetValidationException, IOException {}
+    default void validate() throws IOException {}
 }

@@ -270,7 +270,7 @@ public enum IsinCountryCode {
     ZM,
     ZW;
 
-    String GENERIC_NSIN_REGEX = "[A-Z0-9]{9}";
+    final static String GENERIC_NSIN_REGEX = "[A-Z0-9]{9}";
     private final StringGenerator checksumlessStringGenerator;
 
     IsinCountryCode(){

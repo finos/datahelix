@@ -36,10 +36,10 @@ public final class FieldSpecGroup {
 
     public Map<Field, FieldSpec> fieldSpecs() {
         return fieldSpecs;
-    };
+    }
 
     public Collection<FieldSpecRelations> relations() {
         return relations;
-    };
+    }
 
 }

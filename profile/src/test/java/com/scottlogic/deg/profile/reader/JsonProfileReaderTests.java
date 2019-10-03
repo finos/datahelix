@@ -175,7 +175,7 @@ public class JsonProfileReaderTests {
         expectFields(
             field -> {
                 Assert.assertThat(field.name, equalTo("foo"));
-                Assert.assertEquals(field.getType(), Types.STRING);
+                Assert.assertEquals(Types.STRING, field.getType());
             });
     }
 
@@ -252,7 +252,7 @@ public class JsonProfileReaderTests {
         expectFields(
             field -> {
                 Assert.assertThat(field.name, equalTo("foo"));
-                Assert.assertEquals(field.getType(), Types.STRING);
+                Assert.assertEquals(Types.STRING, field.getType());
             });
     }
 
@@ -909,12 +909,8 @@ public class JsonProfileReaderTests {
                 typedConstraint(
                     NotConstraint.class,
                     c -> {
-                        Assert.assertThat(
-                            c.negatedConstraint,
-                            instanceOf(IsNullConstraint.class));
-                        Assert.assertEquals(
-                            c.negatedConstraint.getField().name,
-                            "foo");
+                        Assert.assertThat(c.negatedConstraint, instanceOf(IsNullConstraint.class));
+                        Assert.assertEquals("foo", c.negatedConstraint.getField().name);
                     }
                 )
             ),
@@ -975,23 +971,15 @@ public class JsonProfileReaderTests {
                 typedConstraint(
                     NotConstraint.class,
                     c -> {
-                        Assert.assertThat(
-                            c.negatedConstraint,
-                            instanceOf(IsNullConstraint.class));
-                        Assert.assertEquals(
-                            c.negatedConstraint.getField().name,
-                            "foo");
+                        Assert.assertThat( c.negatedConstraint, instanceOf(IsNullConstraint.class));
+                        Assert.assertEquals("foo", c.negatedConstraint.getField().name);
                     }
                 ),
                 typedConstraint(
                     NotConstraint.class,
                     c -> {
-                        Assert.assertThat(
-                            c.negatedConstraint,
-                            instanceOf(IsNullConstraint.class));
-                        Assert.assertEquals(
-                            c.negatedConstraint.getField().name,
-                            "bar");
+                        Assert.assertThat(c.negatedConstraint, instanceOf(IsNullConstraint.class));
+                        Assert.assertEquals("bar", c.negatedConstraint.getField().name);
                     }
                 )
             ),
@@ -1021,12 +1009,8 @@ public class JsonProfileReaderTests {
                 typedConstraint(
                     NotConstraint.class,
                     c -> {
-                        Assert.assertThat(
-                            c.negatedConstraint,
-                            instanceOf(IsNullConstraint.class));
-                        Assert.assertEquals(
-                            c.negatedConstraint.getField().name,
-                            "bar");
+                        Assert.assertThat(c.negatedConstraint, instanceOf(IsNullConstraint.class));
+                        Assert.assertEquals("bar", c.negatedConstraint.getField().name);
                     }
                 )
             ),

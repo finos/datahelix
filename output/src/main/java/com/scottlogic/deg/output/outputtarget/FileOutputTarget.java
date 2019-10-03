@@ -61,7 +61,7 @@ public class FileOutputTarget implements SingleDatasetOutputTarget {
     }
 
     @Override
-    public void validate() throws OutputTargetValidationException, IOException {
+    public void validate() throws IOException {
         if (fileUtils.isDirectory(filePath)) {
             throw new OutputTargetValidationException(
                 "target is a directory; please use a different output filename"

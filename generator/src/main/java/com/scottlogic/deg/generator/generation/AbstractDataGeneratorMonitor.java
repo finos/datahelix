@@ -32,6 +32,7 @@ public abstract class AbstractDataGeneratorMonitor implements DataGeneratorMonit
         this.writer = writer;
     }
 
+    @Override
     public void endGeneration() {
         linesToPrintAtEndOfGeneration.forEach(writer::println);
     }

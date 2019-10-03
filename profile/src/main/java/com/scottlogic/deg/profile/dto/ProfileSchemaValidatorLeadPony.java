@@ -55,7 +55,7 @@ public class ProfileSchemaValidatorLeadPony implements ProfileSchemaValidator {
         // We have to step over the profile otherwise it is not checked against the schema.
         try (JsonParser parser = service.createParser(new ByteArrayInputStream(profile.getBytes()), jsonSchema, handler)) {
             while (parser.hasNext()) {
-                JsonParser.Event event = parser.next();
+                parser.next();
                 // Do something useful here
             }
         }

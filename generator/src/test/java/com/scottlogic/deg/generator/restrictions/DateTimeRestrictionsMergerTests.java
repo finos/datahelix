@@ -149,7 +149,7 @@ class DateTimeRestrictionsMergerTests {
 
 
         Assert.assertNotEquals(restrictions.getMin(), nullValue());
-        Assert.assertEquals(restrictions.getMax(), REFERENCE_TIME);
+        Assert.assertEquals(REFERENCE_TIME, restrictions.getMax());
 
     }
 

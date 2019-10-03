@@ -35,10 +35,9 @@ public class FieldRelationsFactory {
                return constructAfterDate(constraint, false);
            case IS_AFTER_OR_EQUAL_TO_CONSTANT_DATE_TIME:
                return constructAfterDate(constraint, true);
+           default:
+               throw new IllegalStateException("Unexpected value: " + constraint.getUnderlyingConstraint());
        }
-
-       throw new IllegalArgumentException("Unsupported field spec relations: " + constraint.getUnderlyingConstraint());
-
    }
 
    private FieldSpecRelations constructBeforeDate(DelayedAtomicConstraint constraint, boolean inclusive) {

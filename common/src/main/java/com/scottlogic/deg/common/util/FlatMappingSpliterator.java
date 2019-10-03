@@ -66,7 +66,8 @@ public class FlatMappingSpliterator<E,S> extends Spliterators.AbstractSpliterato
     }
 
     public void accept(S s) {
-        curr=sp(currStream=f.apply(s));
+        currStream = f.apply(s);
+        curr = sp(currStream);
     }
 
     @Override

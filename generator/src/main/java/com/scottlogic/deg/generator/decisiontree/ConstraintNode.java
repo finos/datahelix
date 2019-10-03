@@ -29,7 +29,7 @@ public class ConstraintNode implements Node {
     private final Collection<DecisionNode> decisions;
     private final Set<NodeMarking> nodeMarkings;
 
-    private Optional<RowSpec> adaptedRowSpec = null;
+    private Optional<RowSpec> adaptedRowSpec = Optional.empty();
 
     public ConstraintNode(Collection<AtomicConstraint> atomicConstraints,
                           Collection<DelayedAtomicConstraint> delayedAtomicConstraints,
@@ -54,10 +54,7 @@ public class ConstraintNode implements Node {
     }
 
     public Optional<RowSpec> getOrCreateRowSpec(Supplier<Optional<RowSpec>> createRowSpecFunc) {
-        if (adaptedRowSpec != null) {
-            return adaptedRowSpec;
-        }
-
+        if (adaptedRowSpec.isPresent())  return adaptedRowSpec;
         adaptedRowSpec = createRowSpecFunc.get();
         return adaptedRowSpec;
     }

@@ -16,6 +16,8 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 public class AtomicConstraintFactory {
+    private AtomicConstraintFactory(){}
+
     public static Constraint create(AtomicConstraintType type, Field field, Object value){
         switch (type) {
             case IS_EQUAL_TO_CONSTANT:

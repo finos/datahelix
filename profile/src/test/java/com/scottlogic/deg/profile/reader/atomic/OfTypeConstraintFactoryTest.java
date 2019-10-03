@@ -51,7 +51,7 @@ class OfTypeConstraintFactoryTest {
     void returnsStandardRICConstraintWhenPassedUpperCaseRIC() {
         Optional<Constraint> constraint = OfTypeConstraintFactory.create(field,"RIC");
         assertTrue(constraint.isPresent());
-        assertEquals(((MatchesStandardConstraint) constraint.get()).standard, StandardConstraintTypes.RIC);
+        assertEquals(StandardConstraintTypes.RIC, ((MatchesStandardConstraint) constraint.get()).standard);
     }
 
     @Test

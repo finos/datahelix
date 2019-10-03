@@ -40,7 +40,7 @@ public class ViolateOutputValidator {
         this.fileUtils = fileUtils;
     }
 
-    public void validate(Profile profile) throws OutputTargetValidationException, IOException {
+    public void validate(Profile profile) throws IOException {
         if (!fileUtils.exists(directoryPath)) {
             fileUtils.createDirectories(directoryPath);
         } else if (!fileUtils.isDirectory(directoryPath)) {

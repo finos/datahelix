@@ -24,6 +24,7 @@ import com.scottlogic.deg.orchestrator.violate.ViolatedProfile;
 import com.scottlogic.deg.output.OutputPath;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.DecimalFormat;
@@ -63,6 +64,6 @@ public class ManifestWriter {
 
         String manifestAsJson = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(manifest);
 
-        Files.write(filepath, manifestAsJson.getBytes(Charsets.UTF_8));
+        Files.write(filepath, manifestAsJson.getBytes(StandardCharsets.UTF_8));
     }
 }

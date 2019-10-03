@@ -47,29 +47,24 @@ public class TreePartitioner {
         final Map<RootLevelConstraint, Set<Field>> mapping = fieldMapper.mapConstraintsToFields(decisionTree);
 
         // each set of fields iterated here are constrained by a single root-level constraint/decision
-        for (RootLevelConstraint constraint : mapping.keySet()) {
+        // find which existing partitions this constraint/decision affects (if any)
+        // then, add new partition for this new constraint
+        // if there are any intersecting partitions, merge them with the new one
+        mapping.keySet().forEach(constraint -> {
             Set<Field> fields = mapping.get(constraint);
-
-            // find which existing partitions this constraint/decision affects (if any)
             final Set<Integer> existingIntersectingPartitions = fields
                 .stream()
                 .map(partitions::getPartitionId)
                 .distinct()
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
-
-            // then, add new partition for this new constraint
             final Integer partitionId = partitions.addPartition(fields, new HashSet<>(Collections.singletonList(constraint)));
-
-            // if there are any intersecting partitions, merge them with the new one
-            if (existingIntersectingPartitions.size() > 0) {
-                final Set<Integer> partitionsToMerge = new HashSet<>();
-                partitionsToMerge.add(partitionId);
-                partitionsToMerge.addAll(existingIntersectingPartitions);
-
-                partitions.mergePartitions(partitionsToMerge);
-            }
-        }
+            if (existingIntersectingPartitions.isEmpty()) return;
+            final Set<Integer> partitionsToMerge = new HashSet<>();
+            partitionsToMerge.add(partitionId);
+            partitionsToMerge.addAll(existingIntersectingPartitions);
+            partitions.mergePartitions(partitionsToMerge);
+        });
 
         // any leftover fields must be grouped into their own partition
         final Stream<Field> unpartitionedFields = decisionTree
@@ -139,16 +134,9 @@ public class TreePartitioner {
         private final Map<Field, Partition> fieldsToPartition = new HashMap<>();
 
         Integer addPartition(Set<Field> fields, Set<RootLevelConstraint> constraints) {
-            final Partition newPartition = new Partition(
-                partitionIndex++,
-                fields,
-                constraints);
-
+            final Partition newPartition = new Partition(partitionIndex++, fields, constraints);
             idToPartition.put(newPartition.id, newPartition);
-
-            for (Field field : fields)
-                fieldsToPartition.put(field, newPartition);
-
+            for (Field field : fields) fieldsToPartition.put(field, newPartition);
             return newPartition.id;
         }
 
@@ -161,10 +149,7 @@ public class TreePartitioner {
             final Set<Field> fields = getFromAllPartitions(partitions, partition -> partition.fields);
             final Set<RootLevelConstraint> constraints = getFromAllPartitions(partitions, partition -> partition.constraints);
 
-            final Partition newPartition = new Partition(
-                partitionIndex++,
-                fields,
-                constraints);
+            final Partition newPartition = new Partition(partitionIndex++, fields, constraints);
             idToPartition.put(newPartition.id, newPartition);
             fields.forEach(field -> fieldsToPartition.put(field, newPartition));
 

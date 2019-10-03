@@ -20,6 +20,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -62,11 +63,11 @@ public enum Timescale implements Granularity<OffsetDateTime> {
 
     private final String name;
 
-    private final Function<OffsetDateTime, OffsetDateTime> next;
+    private final UnaryOperator<OffsetDateTime> next;
 
-    private final Function<OffsetDateTime, OffsetDateTime> granularityFunction;
+    private final UnaryOperator<OffsetDateTime> granularityFunction;
 
-    Timescale(final String name, final Function<OffsetDateTime, OffsetDateTime> next, final Function<OffsetDateTime, OffsetDateTime> granularityFunction) {
+    Timescale(final String name, final UnaryOperator<OffsetDateTime> next, final UnaryOperator<OffsetDateTime> granularityFunction) {
         this.name = name;
         this.next = next;
         this.granularityFunction = granularityFunction;

@@ -40,6 +40,7 @@ import static com.scottlogic.deg.common.util.FlatMappingSpliterator.flatMap;
 
 public class FieldSpecGroupValueGenerator {
 
+    private static final String FAILED_TO_MERGE_FIELD_SPECS_IN_RELATED_FIELDS = "Failed to merge field specs in related fields";
     private final CombinationStrategyType combinationStrategy;
     private final FieldSpecValueGenerator underlyingGenerator;
     private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
@@ -79,17 +80,18 @@ public class FieldSpecGroupValueGenerator {
     private FieldSpec updateFirstSpecFromRelations(Field first, FieldSpecGroup group) {
         FieldSpec firstFieldSpec = group.fieldSpecs().get(first);
 
+
         return group.relations().stream()
             .filter(relation -> isRelatedToField(first, relation))
             .map(relation -> createMergedSpecFromRelation(first, relation, group))
             .map(Optional::of)
             .reduce(Optional.of(firstFieldSpec), this::mergeOptionalFieldspecs)
-            .orElseThrow(() -> new IllegalStateException("Failed to merge field specs in related fields"));
+            .orElseThrow(() -> new IllegalStateException(FAILED_TO_MERGE_FIELD_SPECS_IN_RELATED_FIELDS));
     }
 
     private Optional<FieldSpec> mergeOptionalFieldspecs(Optional<FieldSpec> left, Optional<FieldSpec> right) {
         return left.flatMap(
-            (leftFieldSpec) -> fieldSpecMerger.merge(leftFieldSpec, right.get()));
+            leftFieldSpec -> fieldSpecMerger.merge(leftFieldSpec, right.get()));
     }
 
     private boolean isRelatedToField(Field field, FieldSpecRelations relation) {
@@ -145,7 +147,7 @@ public class FieldSpecGroupValueGenerator {
                 relation -> relation.main(),
                 relation -> relation.reduceToRelatedFieldSpec(generatedValue),
                 (l, r) -> fieldSpecMerger.merge(l, r)
-                    .orElseThrow(() -> new IllegalStateException("Failed to merge field specs in related fields"))));
+                    .orElseThrow(() -> new IllegalStateException(FAILED_TO_MERGE_FIELD_SPECS_IN_RELATED_FIELDS))));
 
         Map<Field, FieldSpec> newFieldSpecs = group.fieldSpecs().entrySet().stream()
             .collect(Collectors.toMap(
@@ -162,7 +164,7 @@ public class FieldSpecGroupValueGenerator {
 
         return fieldSpecMerger.merge(previous, fieldUpdates.get(key))
             .orElseThrow(() ->
-                new IllegalStateException("Failed to merge field specs in related fields"));
+                new IllegalStateException(FAILED_TO_MERGE_FIELD_SPECS_IN_RELATED_FIELDS));
     }
 
     private Stream<DataBag> applyCombinationStrategy(Stream<DataBag> dataBagStream) {

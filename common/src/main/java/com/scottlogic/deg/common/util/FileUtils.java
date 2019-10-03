@@ -24,6 +24,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
 public class FileUtils {
     /**
@@ -51,11 +52,11 @@ public class FileUtils {
     }
 
     public boolean exists(Path path) {
-        return Files.exists(path);
+        return path.toFile().exists();
     }
 
     public boolean isDirectory(Path path) {
-        return Files.isDirectory(path);
+        return path.toFile().isDirectory();
     }
 
     /**
@@ -67,25 +68,16 @@ public class FileUtils {
      * @return true if any of the files exist, false only if none of the files exist in the directory.
      */
     public boolean isDirectoryEmpty(Path filepath, int fileCount) {
-        if (directoryContainsManifestJsonFile(filepath) ||
-            directoryContainsFilesWithExt(filepath, "csv", fileCount)) {
-            return false;
-        }
-        return true;
+        return !directoryContainsManifestJsonFile(filepath) && !directoryContainsFilesWithExt(filepath, "csv", fileCount);
     }
 
     private boolean directoryContainsManifestJsonFile(Path filePath) {
-        return Files.exists(Paths.get(filePath.toString(), "manifest.json"));
+        return Paths.get(filePath.toString(), "manifest.json").toFile().exists();
     }
 
     private boolean directoryContainsFilesWithExt(Path filePath, String ext, int fileCount) {
         DecimalFormat intFormatter = FileUtils.getDecimalFormat(fileCount);
-        for (int x = 1; x <= fileCount; x++) {
-            if (Files.exists(Paths.get(filePath.toString(), intFormatter.format(x) + "." + ext))) {
-                return true;
-            }
-        }
-        return false;
+        return IntStream.rangeClosed(1, fileCount).anyMatch(x -> Paths.get(filePath.toString(), intFormatter.format(x) + "." + ext).toFile().exists());
     }
     /**
      * we wrap Files.createDirectories() so that we can mock it out in unit tests.
@@ -106,7 +98,7 @@ public class FileUtils {
     }
 
     private void checkValidDirectoryPath(Path dir) throws FileAlreadyExistsException {
-        if (Files.exists(dir) && !Files.isDirectory(dir)) {
+        if (dir.toFile().exists() && !dir.toFile().isDirectory()) {
             throw new FileAlreadyExistsException("Directory name exists as file");
         }
         Path prntDir = dir.getParent();

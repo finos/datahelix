@@ -113,18 +113,18 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     @CommandLine.Option(
         names = {"--quiet"},
         description = "Turns OFF default monitoring")
-    private Boolean quiet = false;
+    private boolean quiet = false;
 
     @CommandLine.Option(
         names = {"--verbose"},
         description = "Turns ON system out monitoring")
-    private Boolean verbose = false;
+    private boolean verbose = false;
 
     @CommandLine.Option(
         names = {"--visualise-reductions"},
         description = "Visualise each tree reduction",
         hidden = true)
-    private Boolean visualiseReductions = false;
+    private boolean visualiseReductions = false;
 
     @CommandLine.Option(
         names = {"--output-format"},

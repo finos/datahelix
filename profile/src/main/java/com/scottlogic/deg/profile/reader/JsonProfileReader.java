@@ -100,7 +100,7 @@ public class JsonProfileReader implements ProfileReader {
             .map(fieldDTO -> create(AtomicConstraintType.IS_NULL, profileFields.getByName(fieldDTO.name), null).negate())
             .collect(Collectors.toList());
 
-        if (nullableRules.size() > 0) {
+        if (!nullableRules.isEmpty()) {
             rules.add(new Rule(new RuleInformation("nullable-rules"), nullableRules));
         }
 
@@ -111,7 +111,7 @@ public class JsonProfileReader implements ProfileReader {
             .filter(constraint -> !(constraint instanceof RemoveFromTree))
             .collect(Collectors.toList());
 
-        if (typeRules.size() > 0) {
+        if (!typeRules.isEmpty()) {
             rules.add(new Rule(new RuleInformation("type-rules"), typeRules));
         }
 

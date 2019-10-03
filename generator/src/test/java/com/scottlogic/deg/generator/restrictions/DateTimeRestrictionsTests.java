@@ -217,7 +217,7 @@ class DateTimeRestrictionsTests {
        Limit<OffsetDateTime>limit = new Limit<>(OffsetDateTime.MAX,true);
         LinearRestrictions<OffsetDateTime> restrictions = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, limit,  Timescale.YEARS);
 
-        Assert.assertEquals(restrictions.getMax(), ISO_MAX_DATE);
+        Assert.assertEquals(ISO_MAX_DATE, restrictions.getMax());
 
     }
 
@@ -226,7 +226,7 @@ class DateTimeRestrictionsTests {
        Limit<OffsetDateTime>limit = new Limit<>(OffsetDateTime.MIN,true);
         LinearRestrictions<OffsetDateTime> restrictions = LinearRestrictionsFactory.createDateTimeRestrictions(limit, DATETIME_MAX_LIMIT,  Timescale.YEARS);
 
-        Assert.assertEquals(restrictions.getMin(), ISO_MIN_DATE);
+        Assert.assertEquals(ISO_MIN_DATE, restrictions.getMin());
     }
 
     private LinearRestrictions<OffsetDateTime> restrictions(MockDateTimeLimit min, MockDateTimeLimit max){

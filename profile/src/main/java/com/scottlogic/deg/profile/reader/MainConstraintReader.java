@@ -131,7 +131,7 @@ public class MainConstraintReader {
         String offsetUnitUpperCase = dto.offsetUnit.toUpperCase();
         boolean workingDay = offsetUnitUpperCase.equals("WORKING DAYS");
         return new TemporalAdjusterGenerator(
-            ChronoUnit.valueOf(ChronoUnit.class, workingDay ? "DAYS" : offsetUnitUpperCase),
+            Enum.valueOf(ChronoUnit.class, workingDay ? "DAYS" : offsetUnitUpperCase),
             workingDay);
     }
 

@@ -73,18 +73,6 @@ public class DateTimeFieldValueSource implements FieldValueSource<OffsetDateTime
             blacklist.equals(otherSource.blacklist);
     }
 
-    private static boolean equals(OffsetDateTime x, OffsetDateTime y) {
-        if (x == null && y == null) {
-            return true;
-        }
-
-        if (x == null || y == null) {
-            return false; //either x OR y is null, but not both (XOR)
-        }
-
-        return x.equals(y);
-    }
-
     @Override
     public int hashCode() {
         return Objects.hash(restrictions, blacklist);

@@ -40,14 +40,9 @@ public class ParsedDateGranularity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         ParsedDateGranularity parsedDateGranularity = (ParsedDateGranularity) o;
         return Objects.equals(granularity, parsedDateGranularity.granularity);
     }
-
-
-
 }

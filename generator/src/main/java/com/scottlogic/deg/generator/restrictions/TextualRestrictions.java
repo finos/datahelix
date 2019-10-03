@@ -153,22 +153,27 @@ public class TextualRestrictions implements StringRestrictions {
         //detect contradictions
         if (maxLength != null && (minLength > maxLength
             || allLengthsAreExcluded(minLength, maxLength, excludedLengths))) {
-            return generator = new NoStringsStringGenerator("Lengths are contradictory");
+            generator = new NoStringsStringGenerator("Lengths are contradictory");
+            return generator;
         }
 
-        //produce a regex, and a generator for it, that can produce ANY string within the given bounds
-        //emits /.{&lt;shortest&gt;,&lt;longest&gt;}/
-        //can also emit /.{&lt;0&gt;,&lt;5&gt;}|.{&lt;7&gt;,&lt;255&gt;}/ if 6 is an excluded length
+        /*
+        produce a regex, and a generator for it, that can produce ANY string within the given bounds
+        emits /.{&lt;shortest&gt;,&lt;longest&gt;}/
+        can also emit /.{&lt;0&gt;,&lt;5&gt;}|.{&lt;7&gt;,&lt;255&gt;}/ if 6 is an excluded length
+        */
         StringGenerator lengthConstrainingGenerator = minLength == 0 && maxLength == null && excludedLengths.isEmpty()
             ? null
             : new RegexStringGenerator(
                 createStringLengthRestrictionRegex(minLength, maxLength),
                 true);
 
-        //combine (merge/intersect) each non-length related constraint to produce a single string generator
-        //e.g. would combine /[a-z]{0,9}/ with /.{0,255}/ (lengthConstrainingGenerator) to produce a single generator
-        //that looks like /[a-z]{0,9} ∩ .{0,255}/, which is equivalent to /[a-z]{0,9}/
-        return generator = getPatternConstraints()
+        /*
+        combine (merge/intersect) each non-length related constraint to produce a single string generator
+        e.g. would combine /[a-z]{0,9}/ with /.{0,255}/ (lengthConstrainingGenerator) to produce a single generator
+        that looks like /[a-z]{0,9} ∩ .{0,255}/, which is equivalent to /[a-z]{0,9}/
+        */
+        generator = getPatternConstraints()
             .reduce(
                 lengthConstrainingGenerator,
                 (prev, current) -> {
@@ -183,6 +188,7 @@ public class TextualRestrictions implements StringRestrictions {
                     return prev.intersect(current);
                 },
                 (a, b) -> null);
+        return generator;
     }
 
     /**
