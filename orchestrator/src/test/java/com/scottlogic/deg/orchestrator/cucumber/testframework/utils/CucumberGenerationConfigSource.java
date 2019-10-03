@@ -88,6 +88,11 @@ public class CucumberGenerationConfigSource implements AllConfigSource, ViolateC
     }
 
     @Override
+    public boolean useNdJson() {
+        return false;
+    }
+
+    @Override
     public OutputFormat getOutputFormat() {
         return null;
     }

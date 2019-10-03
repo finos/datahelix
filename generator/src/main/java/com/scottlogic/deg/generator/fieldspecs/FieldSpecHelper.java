@@ -18,7 +18,7 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 
-import static com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet.singleton;
+import static com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList.singleton;
 
 public class FieldSpecHelper {
     public FieldSpec getFieldSpecForValue(DataBagValue fieldValue) {
@@ -26,7 +26,7 @@ public class FieldSpecHelper {
             return FieldSpec.nullOnly();
         }
 
-        return FieldSpec.fromSet(singleton(fieldValue.getValue()))
+        return FieldSpec.fromList(singleton(fieldValue.getValue()))
             .withNotNull();
     }
 }

@@ -17,35 +17,42 @@
 package com.scottlogic.deg.generator.fieldspecs.relations;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
 
 import java.time.OffsetDateTime;
 
+import static com.scottlogic.deg.common.util.Defaults.ISO_MAX_DATE;
+import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
 import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
 
 
-public class AfterDateRelation extends AbstractDateInequalityRelation {
+public class AfterDateRelation implements FieldSpecRelations {
+    private final Field main;
+    private final Field other;
     private final boolean inclusive;
 
     public AfterDateRelation(Field main, Field other, boolean inclusive) {
-        super(main, other);
+        this.main = main;
+        this.other = other;
         this.inclusive = inclusive;
     }
 
     @Override
-    protected Limit<OffsetDateTime> dateTimeLimitExtractingFunction(LinearRestrictions<OffsetDateTime> restrictions) {
-        if (restrictions != null) {
-            return restrictions.getMax();
-        } else {
-            return null;
+    public FieldSpec reduceToRelatedFieldSpec(FieldSpec otherValue) {
+        LinearRestrictions<OffsetDateTime> lr = (LinearRestrictions) otherValue.getRestrictions();
+        if (lr == null){
+            return FieldSpec.empty();
         }
-    }
 
-    @Override
-    protected LinearRestrictions<OffsetDateTime> appendValueToRestrictions(OffsetDateTime value) {
-        return LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, new Limit<>(value, inclusive));
+        OffsetDateTime min = lr.getMin();
+        if (!inclusive){
+            min = lr.getGranularity().getNext(min);
+        }
+
+        return FieldSpec.fromRestriction(new LinearRestrictions<>(min, ISO_MAX_DATE, lr.getGranularity()));
     }
 
     @Override
@@ -53,4 +60,18 @@ public class AfterDateRelation extends AbstractDateInequalityRelation {
         return new BeforeDateRelation(other(), main(), inclusive);
     }
 
+    @Override
+    public Field main() {
+        return main;
+    }
+
+    @Override
+    public Field other() {
+        return other;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s is after %s%s", main(), inclusive ? "or equal to " : "", other());
+    }
 }

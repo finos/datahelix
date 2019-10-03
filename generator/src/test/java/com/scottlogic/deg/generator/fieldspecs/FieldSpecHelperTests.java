@@ -18,7 +18,7 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.FieldBuilder;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import org.junit.jupiter.api.Test;
 
@@ -35,7 +35,7 @@ class FieldSpecHelperTests {
 
         FieldSpec actual = fieldSpecHelper.getFieldSpecForValue(input);
 
-        FieldSpec expected = FieldSpec.fromSet(DistributedSet.singleton("value"))
+        FieldSpec expected = FieldSpec.fromList(DistributedList.singleton("value"))
             .withNotNull();
 
         assertEquals(actual, expected);

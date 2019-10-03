@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.violations.filters;
 
-import com.scottlogic.deg.common.profile.constraints.Constraint;
+import com.scottlogic.deg.generator.profile.constraints.Constraint;
 
 /**
  * Violation filter which filters on teh type of the constraint.

@@ -16,8 +16,7 @@
 
 package com.scottlogic.deg.generator.decisiontree;
 
-import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.common.profile.constraints.atomic.NotConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
 
 import java.util.*;
 import java.util.function.Function;
@@ -113,10 +112,6 @@ public class DecisionTreeOptimiser {
         return newNode.builder().addDecision(new DecisionNode(optionsToAdd)).build();
     }
 
-    private int disfavourNotConstraints(Map.Entry<AtomicConstraint, List<AtomicConstraint>> entry){
-        return entry.getKey() instanceof NotConstraint ? 1 : 0;
-    }
-
     private AtomicConstraint getMostProlificAtomicConstraint(Collection<DecisionNode> decisions) {
         Map<AtomicConstraint, List<AtomicConstraint>> decisionConstraints =
                 decisions.stream()
@@ -127,7 +122,6 @@ public class DecisionTreeOptimiser {
         Comparator<Map.Entry<AtomicConstraint, List<AtomicConstraint>>> comparator = Comparator
             .comparing(entry -> entry.getValue().size());
         comparator = comparator.reversed()
-            .thenComparing(this::disfavourNotConstraints)
             .thenComparing(entry -> entry.getKey().toString());
 
         return decisionConstraints.entrySet()

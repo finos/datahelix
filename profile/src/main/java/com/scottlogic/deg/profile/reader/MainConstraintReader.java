@@ -19,12 +19,13 @@ package com.scottlogic.deg.profile.reader;
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.date.TemporalAdjusterGenerator;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.constraints.Constraint;
+import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.common.profile.constraints.delayed.DelayedAtomicConstraint;
-import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
-import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
-import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
+import com.scottlogic.deg.generator.profile.constraints.delayed.DelayedAtomicConstraint;
+import com.scottlogic.deg.generator.profile.constraints.delayed.DelayedDateAtomicConstraint;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintValueReader;
@@ -60,7 +61,7 @@ public class MainConstraintReader {
         if (dto.is != ConstraintDTO.undefined) {
 
             if (dto.otherField != null){
-                return createDelayedAtomicConstraint(dto, fields);
+                return createDelayedDateAtomicConstraint(dto, fields);
             }
 
             AtomicConstraintType atomicConstraintType = AtomicConstraintType.fromText((String) dto.is);
@@ -113,8 +114,8 @@ public class MainConstraintReader {
         throw new InvalidProfileException("Couldn't interpret constraint");
     }
 
-    private DelayedAtomicConstraint createDelayedAtomicConstraint(ConstraintDTO dto, ProfileFields fields) {
-        return new DelayedAtomicConstraint(
+    private DelayedAtomicConstraint createDelayedDateAtomicConstraint(ConstraintDTO dto, ProfileFields fields) {
+        return new DelayedDateAtomicConstraint(
             fields.getByName(dto.field),
             AtomicConstraintType.fromText((String) dto.is),
             fields.getByName(dto.otherField),

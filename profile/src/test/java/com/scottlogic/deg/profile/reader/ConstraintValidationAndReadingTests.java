@@ -20,9 +20,9 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
-import com.scottlogic.deg.common.profile.constraints.Constraint;
-import com.scottlogic.deg.common.profile.constraints.atomic.*;
+import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.common.util.Defaults;
+import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintFactory;
 import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintValueReader;
@@ -203,7 +203,7 @@ public class ConstraintValidationAndReadingTests {
         try {
             Object value = new AtomicConstraintValueReader(null).getValue(dto, types);
 
-            ConstraintValueValidator.validate(new Field(dto.field, types, false, null), type, value);
+            ConstraintValueValidator.validate(createField(dto.field, types), type, value);
 
             Constraint constraint = AtomicConstraintFactory.create(type, createField(dto.field), value);
 
@@ -235,7 +235,7 @@ public class ConstraintValidationAndReadingTests {
     @MethodSource("numericOutOfBoundsOperandProvider")
     public void testAtomicConstraintReaderWithOutOfBoundValues(AtomicConstraintType type, ConstraintDTO dto) {
         Assertions.assertThrows(InvalidProfileException.class, () ->
-            ConstraintValueValidator.validate(new Field(dto.field, NUMERIC, false, null), type, dto.value));
+            ConstraintValueValidator.validate(createField(dto.field, NUMERIC), type, dto.value));
     }
 
     @DisplayName("Should pass when string lengths have an integer operand")
@@ -335,7 +335,7 @@ public class ConstraintValidationAndReadingTests {
         dateDto.value = value;
 
         Object val = new AtomicConstraintValueReader(null).getValue(dateDto, DATETIME);
-        ConstraintValueValidator.validate(new Field("test", DATETIME, false, null), IS_AFTER_CONSTANT_DATE_TIME, val);
+        ConstraintValueValidator.validate(createField("test", DATETIME), IS_AFTER_CONSTANT_DATE_TIME, val);
 
         return (OffsetDateTime)val;
     }

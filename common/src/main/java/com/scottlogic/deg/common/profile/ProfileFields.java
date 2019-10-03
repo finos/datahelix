@@ -49,6 +49,10 @@ public class ProfileFields implements Iterable<Field> {
         return this.fields.stream();
     }
 
+    public Stream<Field> getExternalStream() {
+        return this.stream().filter(f -> !f.isInternal());
+    }
+
     public List<Field> asList() {
         return fields;
     }

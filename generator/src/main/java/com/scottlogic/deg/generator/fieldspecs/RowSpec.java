@@ -29,9 +29,10 @@ import java.util.*;
  */
 public class RowSpec {
     private final ProfileFields fields;
-    private final Map<Field, FieldSpec> fieldToFieldSpec;
-    private final List<FieldSpecRelations> relations;
 
+    private final Map<Field, FieldSpec> fieldToFieldSpec;
+
+    private final List<FieldSpecRelations> relations;
     public RowSpec(ProfileFields fields,
                    Map<Field, FieldSpec> fieldToFieldSpec,
                    List<FieldSpecRelations> relations) {
@@ -57,6 +58,10 @@ public class RowSpec {
 
     public List<FieldSpecRelations> getRelations() {
         return relations;
+    }
+
+    public Map<Field, FieldSpec> getFieldToFieldSpec() {
+        return fieldToFieldSpec;
     }
 
     @Override

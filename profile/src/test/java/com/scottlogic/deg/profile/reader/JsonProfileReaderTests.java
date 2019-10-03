@@ -18,14 +18,14 @@ package com.scottlogic.deg.profile.reader;
 
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.common.profile.Rule;
-import com.scottlogic.deg.common.profile.constraints.Constraint;
-import com.scottlogic.deg.common.profile.constraints.atomic.*;
+import com.scottlogic.deg.generator.profile.Profile;
+import com.scottlogic.deg.generator.profile.Rule;
+import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.Types;
-import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
-import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
-import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintValueReader;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
@@ -364,11 +364,11 @@ public class JsonProfileReaderTests {
         expectRules(
                 ruleWithConstraints(
                         typedConstraint(
-                                NotConstraint.class,
+                                NotEqualToConstraint.class,
                                 c -> {
                                     Assert.assertThat(
-                                            c.negatedConstraint,
-                                            instanceOf(EqualToConstraint.class));
+                                            c.value,
+                                            equalTo("string"));
                                 })));
     }
 
@@ -906,13 +906,10 @@ public class JsonProfileReaderTests {
         expectRules(
             ruleWithConstraints(
                 typedConstraint(
-                    NotConstraint.class,
+                    NotNullConstraint.class,
                     c -> {
-                        Assert.assertThat(
-                            c.negatedConstraint,
-                            instanceOf(IsNullConstraint.class));
                         Assert.assertEquals(
-                            c.negatedConstraint.getField().name,
+                            c.getField().name,
                             "foo");
                     }
                 )
@@ -972,24 +969,18 @@ public class JsonProfileReaderTests {
         expectRules(
             ruleWithConstraints(
                 typedConstraint(
-                    NotConstraint.class,
+                    NotNullConstraint.class,
                     c -> {
-                        Assert.assertThat(
-                            c.negatedConstraint,
-                            instanceOf(IsNullConstraint.class));
                         Assert.assertEquals(
-                            c.negatedConstraint.getField().name,
+                            c.getField().name,
                             "foo");
                     }
                 ),
                 typedConstraint(
-                    NotConstraint.class,
+                    NotNullConstraint.class,
                     c -> {
-                        Assert.assertThat(
-                            c.negatedConstraint,
-                            instanceOf(IsNullConstraint.class));
                         Assert.assertEquals(
-                            c.negatedConstraint.getField().name,
+                            c.getField().name,
                             "bar");
                     }
                 )
@@ -1018,13 +1009,10 @@ public class JsonProfileReaderTests {
         expectRules(
             ruleWithConstraints(
                 typedConstraint(
-                    NotConstraint.class,
+                    NotNullConstraint.class,
                     c -> {
-                        Assert.assertThat(
-                            c.negatedConstraint,
-                            instanceOf(IsNullConstraint.class));
                         Assert.assertEquals(
-                            c.negatedConstraint.getField().name,
+                            c.getField().name,
                             "bar");
                     }
                 )

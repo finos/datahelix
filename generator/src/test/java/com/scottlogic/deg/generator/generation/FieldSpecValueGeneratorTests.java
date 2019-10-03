@@ -19,7 +19,7 @@ package com.scottlogic.deg.generator.generation;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
@@ -46,7 +46,7 @@ class FieldSpecValueGeneratorTests {
 
     @Test
     void generate_fieldSpecMustContainRestrictionNullAndSetRestrictionsHasValues_returnsDataBagsWithValuesInSetRestrictions() {
-        FieldSpec fieldSpec = FieldSpec.fromSet(DistributedSet.uniform(Arrays.asList(10, 20, 30)))
+        FieldSpec fieldSpec = FieldSpec.fromList(DistributedList.uniform(Arrays.asList(10, 20, 30)))
             .withNotNull();
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
             INTERESTING,
@@ -55,7 +55,7 @@ class FieldSpecValueGeneratorTests {
 
         final Set<DataBagValue> result = fieldSpecFulfiller.generate(createField(null), fieldSpec).collect(Collectors.toSet());
 
-        Set<DataBagValue> expectedDataBags = fieldSpec.getWhitelist().set()
+        Set<DataBagValue> expectedDataBags = fieldSpec.getWhitelist().list()
             .stream()
             .map(DataBagValue::new)
             .collect(Collectors.toSet());
@@ -121,7 +121,7 @@ class FieldSpecValueGeneratorTests {
                 randomNumberGenerator
             );
 
-            fieldSpecFulfiller.generate(new Field(null, Types.STRING, true, null), fieldSpec).collect(Collectors.toSet());
+            fieldSpecFulfiller.generate(new Field(null, Types.STRING, true, null, false), fieldSpec).collect(Collectors.toSet());
 
             verify(fieldValueSource, times(1)).generateAllValues();
             verify(fieldValueSource, times(0)).generateInterestingValues();
@@ -155,7 +155,7 @@ class FieldSpecValueGeneratorTests {
                 randomNumberGenerator
             );
 
-            fieldSpecFulfiller.generate(new Field(null, STRING, true, null), fieldSpec).collect(Collectors.toSet());
+            fieldSpecFulfiller.generate(new Field(null, STRING, true, null, false), fieldSpec).collect(Collectors.toSet());
 
             verify(fieldValueSource, times(1)).generateAllValues();
             verify(fieldValueSource, times(0)).generateInterestingValues();

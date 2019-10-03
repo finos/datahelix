@@ -20,7 +20,10 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.scottlogic.deg.common.profile.*;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
-import com.scottlogic.deg.common.profile.constraints.Constraint;
+import com.scottlogic.deg.generator.profile.constraints.Constraint;
+import com.scottlogic.deg.generator.profile.Profile;
+import com.scottlogic.deg.generator.profile.Rule;
+import com.scottlogic.deg.generator.profile.RuleInformation;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 import com.scottlogic.deg.profile.serialisation.ProfileDeserialiser;
 import com.scottlogic.deg.profile.dto.ProfileDTO;
@@ -78,7 +81,8 @@ public class JsonProfileReader implements ProfileReader {
                         fDto.name,
                         getFieldType(fieldTypes.getOrDefault(fDto.name, fDto.type)),
                         fDto.unique,
-                        fDto.formatting)
+                        fDto.formatting,
+                        false)
                 )
                 .collect(Collectors.toList()));
 

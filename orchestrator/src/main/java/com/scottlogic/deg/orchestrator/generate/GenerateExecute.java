@@ -18,7 +18,7 @@ package com.scottlogic.deg.orchestrator.generate;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.output.GeneratedObject;
-import com.scottlogic.deg.common.profile.Profile;
+import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.DataGeneratorMonitor;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;

@@ -26,6 +26,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
 
+import static com.scottlogic.deg.common.util.Defaults.ISO_MAX_DATE;
 import static com.scottlogic.deg.generator.utils.Defaults.*;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
@@ -43,10 +44,10 @@ class DateTimeRestrictionsMergerTests {
     @Test
     void merge_leftHasMinAndRightHasMax_returnsDateTimeRestrictionsWithMergedMinAndMax() {
         Limit<OffsetDateTime> minDateTimeLimit = new Limit<>(
-            REFERENCE_TIME.minusDays(7), false
+            REFERENCE_TIME.minusDays(7), true
         );
         Limit <OffsetDateTime>maxDateTimeLimit = new Limit<>(
-            REFERENCE_TIME, false
+            REFERENCE_TIME, true
         );
         LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
         LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
@@ -55,17 +56,17 @@ class DateTimeRestrictionsMergerTests {
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.isPresent(), is(true));
-        Assert.assertThat(result.get().getMin(), equalTo(minDateTimeLimit));
-        Assert.assertThat(result.get().getMax(), equalTo(maxDateTimeLimit));
+        Assert.assertThat(result.get().getMin(), equalTo(REFERENCE_TIME.minusDays(7)));
+        Assert.assertThat(result.get().getMax(), equalTo(REFERENCE_TIME));
     }
 
     @Test
     void merge_leftHasMaxAndRightHasMin_returnsDateTimeRestrictionsWithMergedMinAndMax() {
         Limit <OffsetDateTime>minDateTimeLimit = new Limit<>(
-            REFERENCE_TIME.minusDays(7), false
+            REFERENCE_TIME.minusDays(7), true
         );
         Limit <OffsetDateTime>maxDateTimeLimit = new Limit<>(
-            REFERENCE_TIME, false
+            REFERENCE_TIME, true
         );
         LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
         LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
@@ -74,8 +75,8 @@ class DateTimeRestrictionsMergerTests {
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.isPresent(), is(true));
-        Assert.assertThat(result.get().getMin(), equalTo(minDateTimeLimit));
-        Assert.assertThat(result.get().getMax(), equalTo(maxDateTimeLimit));
+        Assert.assertThat(result.get().getMin(), equalTo(REFERENCE_TIME.minusDays(7)));
+        Assert.assertThat(result.get().getMax(), equalTo(REFERENCE_TIME));
     }
 
     @Test
@@ -115,7 +116,7 @@ class DateTimeRestrictionsMergerTests {
     @Test
     void merge_rightAndLeftHaveNoMax_shouldNotReturnNull() {
         Limit <OffsetDateTime>minDateTimeLimit = new Limit<>(
-            REFERENCE_TIME, false
+            REFERENCE_TIME, true
         );
 
         LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
@@ -125,14 +126,14 @@ class DateTimeRestrictionsMergerTests {
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.isPresent(), is(true));
-        Assert.assertThat(result.get().getMin(), equalTo(minDateTimeLimit));
-        Assert.assertThat(result.get().getMax(), is(DATETIME_MAX_LIMIT));
+        Assert.assertThat(result.get().getMin(), equalTo(REFERENCE_TIME));
+        Assert.assertThat(result.get().getMax(), equalTo(ISO_MAX_DATE));
     }
 
     @Test
     void merge_rightAndLeftHaveNoMin_shouldNotReturnNull() {
         Limit <OffsetDateTime>maxDateTimeLimit = new Limit<>(
-            REFERENCE_TIME, false
+            REFERENCE_TIME, true
         );
 
         LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
@@ -147,7 +148,7 @@ class DateTimeRestrictionsMergerTests {
 
 
         Assert.assertNotEquals(restrictions.getMin(), nullValue());
-        Assert.assertEquals(restrictions.getMax(), maxDateTimeLimit);
+        Assert.assertEquals(restrictions.getMax(), REFERENCE_TIME);
 
     }
 
@@ -233,7 +234,7 @@ class DateTimeRestrictionsMergerTests {
 
         Assert.assertThat(restrictions, not(nullValue()));
 
-        Assert.assertEquals(restrictions.getMin(), new Limit<>(REFERENCE_TIME.plusHours(1), true));
+        Assert.assertEquals(restrictions.getMin(), REFERENCE_TIME.plusHours(1));
     }
 
 
@@ -262,83 +263,6 @@ class DateTimeRestrictionsMergerTests {
         Assert.assertNotNull(restrictions);
 
         // assert that we return an inclusive restriction for this edge case.
-        Assert.assertEquals(restrictions.getMin(), new Limit<>(REFERENCE_TIME.plusHours(1), true));
-    }
-
-    @Test
-    void merge_inclusiveOnLeftIsPassedIn_shouldReturnInclusive() {
-        // ARRANGE
-        LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(
-            new Limit<>(REFERENCE_TIME, true),
-            DATETIME_MAX_LIMIT, Timescale.HOURS
-        );
-        LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(
-            new Limit<>(REFERENCE_TIME.plusSeconds(1), false),
-            DATETIME_MAX_LIMIT, Timescale.SECONDS
-        );
-
-        // ACT
-        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
-
-        // ASSERT
-        LinearRestrictions<OffsetDateTime> expecteddt = LinearRestrictionsFactory.createDateTimeRestrictions(
-            new Limit<>(REFERENCE_TIME.plusHours(1), true),
-            DATETIME_MAX_LIMIT,
-            Timescale.HOURS);
-        Optional<LinearRestrictions> expected = Optional.of(expecteddt);
-
-        assertThat(result, sameBeanAs(expected));
-    }
-
-    @Test
-    void merge_inclusiveOnRightIsPassedIn_shouldReturnInclusive() {
-        // ARRANGE
-        LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(new Limit<>(REFERENCE_TIME, false),
-            DATETIME_MAX_LIMIT,
-            Timescale.HOURS
-        );
-
-        LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(
-            new Limit<>(REFERENCE_TIME.plusSeconds(1), true),
-            DATETIME_MAX_LIMIT,
-            Timescale.MILLIS);
-
-        // ACT
-        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
-
-        // ASSERT
-        LinearRestrictions<OffsetDateTime> expecteddt = LinearRestrictionsFactory.createDateTimeRestrictions(new Limit<>(
-            REFERENCE_TIME.plusHours(1), true),
-            DATETIME_MAX_LIMIT,
-            Timescale.HOURS);
-        Optional<LinearRestrictions> expected = Optional.of(expecteddt);
-
-        assertThat(result, sameBeanAs(expected));
-    }
-
-    @Test
-    void merge_notInclusivePassedIn_shouldReturnNotInclusive() {
-        // ARRANGE
-        LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(
-            new Limit<>(REFERENCE_TIME, false),
-            DATETIME_MAX_LIMIT,
-            Timescale.HOURS);
-
-        LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(
-            new Limit<>(REFERENCE_TIME.plusHours(1), false),
-            DATETIME_MAX_LIMIT,
-            Timescale.MILLIS);
-
-        // ACT
-        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
-
-        // ASSERT
-        LinearRestrictions<OffsetDateTime> expecteddt = LinearRestrictionsFactory.createDateTimeRestrictions(
-            new Limit<>(REFERENCE_TIME.plusHours(1), false),
-            DATETIME_MAX_LIMIT,
-            Timescale.HOURS);
-        Optional<LinearRestrictions> expected = Optional.of(expecteddt);
-
-        assertThat(result, sameBeanAs(expected));
+        Assert.assertEquals(restrictions.getMin(), REFERENCE_TIME.plusHours(1));
     }
 }

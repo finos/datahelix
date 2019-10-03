@@ -1,6 +1,7 @@
 package com.scottlogic.deg.generator.generation.grouped;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
@@ -35,7 +36,7 @@ class FieldSpecGroupValueGeneratorTest {
         DataBagValue firstValue = new DataBagValue(result);
         when(underlyingGenerator.generate(any(Field.class), eq(firstSpec))).thenReturn(Stream.of(firstValue));
 
-        FieldSpecGroupValueGenerator generator = new FieldSpecGroupValueGenerator(underlyingGenerator);
+        FieldSpecGroupValueGenerator generator = new FieldSpecGroupValueGenerator(underlyingGenerator, CombinationStrategyType.MINIMAL);
 
         FieldSpecGroup group = new FieldSpecGroup(specMap, Collections.emptyList());
 

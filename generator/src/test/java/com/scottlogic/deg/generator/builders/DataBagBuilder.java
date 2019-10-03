@@ -46,4 +46,8 @@ public class DataBagBuilder {
     public DataBag build() {
         return new DataBag(fieldToValue);
     }
+
+    public static DataBag of(Field field, Object value){
+        return new DataBagBuilder().set(field, value).build();
+    }
 }

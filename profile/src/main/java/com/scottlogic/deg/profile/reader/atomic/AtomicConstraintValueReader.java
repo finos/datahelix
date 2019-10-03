@@ -6,7 +6,7 @@ import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
 import com.scottlogic.deg.common.util.NumberUtils;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 
@@ -36,7 +36,7 @@ public class AtomicConstraintValueReader {
         }
     }
 
-    public Object tryGetValue(ConstraintDTO dto, Types type){
+    private Object tryGetValue(ConstraintDTO dto, Types type){
         if (dto.values != null){
             return getSet(dto.values, type);
         }
@@ -46,17 +46,18 @@ public class AtomicConstraintValueReader {
         }
 
         if (dto.file != null && dto.is.equals(AtomicConstraintType.IS_IN_MAP.getText())){
-            throw new UnsupportedOperationException("inMap is unsupported");
+            return fromFileReader.listFromMapFile(dto.file, dto.key);
         }
 
         return getValue(dto.value, type);
     }
 
-    private DistributedSet getSet(Collection<Object> values, Types type) {
+    private DistributedList getSet(Collection<Object> values, Types type) {
         List collect = values.stream()
             .map(val -> getValue(val, type))
+            .distinct()
             .collect(Collectors.toList());
-        return DistributedSet.uniform(collect);
+        return DistributedList.uniform(collect);
     }
 
     private Object getValue(Object value, Types type) {

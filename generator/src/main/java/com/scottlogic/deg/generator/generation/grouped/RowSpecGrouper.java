@@ -17,7 +17,10 @@
 package com.scottlogic.deg.generator.generation.grouped;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
+import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
 import com.scottlogic.deg.generator.generation.FieldPair;
 import com.scottlogic.deg.generator.generation.grouped.FieldGroup;
 import com.scottlogic.deg.generator.utils.SetUtils;
@@ -26,13 +29,14 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class RowSpecGrouper {
-
-    public static Set<FieldGroup> createGroups(RowSpec rowSpec) {
+    public static Set<FieldSpecGroup> createGroups(RowSpec rowSpec) {
         List<FieldPair> pairs = rowSpec.getRelations().stream()
             .map(relation -> new FieldPair(relation.main(), relation.other()))
             .collect(Collectors.toList());
 
-        return findGroups(rowSpec.getFields().asList(), pairs);
+        return findGroups(rowSpec.getFields().asList(), pairs)
+            .stream().map(fs->createFieldSpecGroups(fs.fields(), rowSpec))
+            .collect(Collectors.toSet());
     }
 
     private static Set<FieldGroup> findGroups(List<Field> fields, List<FieldPair> pairs) {
@@ -52,6 +56,7 @@ public class RowSpecGrouper {
     }
 
     // This method is recursive
+
     private static Set<FieldGroup> findGroupsFromMap(Map<Field, List<Field>> map) {
         if (map.isEmpty()) {
             return new HashSet<>();
@@ -99,6 +104,17 @@ public class RowSpecGrouper {
             .forEach(field -> addToBoth(field, newFound, toProcessCopy));
 
         return findGroupRecursive(toProcessCopy, newFound, map);
+    }
+
+    private static FieldSpecGroup createFieldSpecGroups(List<Field> fields, RowSpec rowSpec){
+        List<FieldSpecRelations> relations = rowSpec.getRelations().stream()
+            .filter(relation -> fields.contains(relation.main()) || fields.contains(relation.other()))
+            .collect(Collectors.toList());
+
+        Map<Field, FieldSpec> fieldSpecMap = fields.stream()
+            .collect(Collectors.toMap(field -> field, rowSpec::getSpecForField));
+
+        return new FieldSpecGroup(fieldSpecMap, relations);
     }
 
     private static <T> void addToBoth(T element, Collection<T> first, Collection<T> second) {

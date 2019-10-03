@@ -17,15 +17,15 @@
 package com.scottlogic.deg.generator.decisiontree;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.Profile;
+import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.common.profile.Rule;
-import com.scottlogic.deg.common.profile.RuleInformation;
-import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
-import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
+import com.scottlogic.deg.generator.profile.Rule;
+import com.scottlogic.deg.generator.profile.RuleInformation;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagGenerator;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
@@ -49,7 +49,7 @@ import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 class RowSpecTreeSolverTests {
     private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
     private RowSpecDataBagGenerator dataBagSourceFactory = mock(RowSpecDataBagGenerator.class);
-    ConstraintReducer constraintReducer = new ConstraintReducer(new FieldSpecFactory(new StringRestrictionsFactory()), fieldSpecMerger);
+    ConstraintReducer constraintReducer = new ConstraintReducer(fieldSpecMerger);
     private final RowSpecTreeSolver dTreeWalker = new RowSpecTreeSolver(
         constraintReducer,
         new TreePruner(new FieldSpecMerger(), constraintReducer, new FieldSpecHelper()),
@@ -95,11 +95,11 @@ class RowSpecTreeSolverTests {
                     new ConditionalConstraint(
                         new IsInSetConstraint(
                             country,
-                            new DistributedSet<>(Collections.singleton(new WeightedElement<>("US", 1.0F)))
+                            new DistributedList<>(Collections.singletonList(new WeightedElement<>("US", 1.0F)))
                         ),
                         new IsInSetConstraint(
                             city,
-                            new DistributedSet<>(new HashSet<>(Arrays.asList(
+                            new DistributedList<>(new ArrayList<>(Arrays.asList(
                                 new WeightedElement<>("New York", 1.0F),
                                 new WeightedElement<>("Washington DC", 1.0F)))
                         ))))),
@@ -109,11 +109,11 @@ class RowSpecTreeSolverTests {
                     new ConditionalConstraint(
                         new IsInSetConstraint(
                             country,
-                            new DistributedSet<>(Collections.singleton(new WeightedElement<>("GB", 1.0F)))
+                            new DistributedList<>(Collections.singletonList(new WeightedElement<>("GB", 1.0F)))
                         ),
                         new IsInSetConstraint(
                             city,
-                            new DistributedSet<>(new HashSet<>(Arrays.asList(
+                            new DistributedList<>(new ArrayList<>(Arrays.asList(
                                 new WeightedElement<>("Bristol", 1.0F),
                                 new WeightedElement<>("London", 1.0F)))
                         ))))),
@@ -123,11 +123,11 @@ class RowSpecTreeSolverTests {
                     new ConditionalConstraint(
                         new IsInSetConstraint(
                             country,
-                            new DistributedSet<>(Collections.singleton(new WeightedElement<>("US", 1.0F)))
+                            new DistributedList<>(Collections.singletonList(new WeightedElement<>("US", 1.0F)))
                         ),
                         new IsInSetConstraint(
                             currency,
-                            new DistributedSet<>(Collections.singleton(new WeightedElement<>("USD", 1.0F)))
+                            new DistributedList<>(Collections.singletonList(new WeightedElement<>("USD", 1.0F)))
                         )))),
             new Rule(
                 rule("GB country constrains currency"),
@@ -135,11 +135,11 @@ class RowSpecTreeSolverTests {
                     new ConditionalConstraint(
                         new IsInSetConstraint(
                             country,
-                            new DistributedSet<>(Collections.singleton(new WeightedElement<>("GB", 1.0F)))
+                            new DistributedList<>(Collections.singletonList(new WeightedElement<>("GB", 1.0F)))
                         ),
                         new IsInSetConstraint(
                             currency,
-                            new DistributedSet<>(Collections.singleton(new WeightedElement<>("GBP", 1.0F)))
+                            new DistributedList<>(Collections.singletonList(new WeightedElement<>("GBP", 1.0F)))
                         )))));
 
         Profile profile = new Profile(fields, dummyRules);

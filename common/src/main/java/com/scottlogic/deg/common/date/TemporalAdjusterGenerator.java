@@ -44,7 +44,7 @@ public class TemporalAdjusterGenerator {
     }
 
     public TemporalAdjuster adjuster(int value) {
-        int adjustedValue = negated ? value : -value;
+        int adjustedValue = negated ? -value : value;
         return workingDay ? getWorkingDayAdjusterFunction(adjustedValue) : getAdjusterFunction(chronoUnit, adjustedValue);
     }
 

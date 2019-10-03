@@ -17,16 +17,14 @@
 package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 
 import com.google.inject.AbstractModule;
-import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.AbstractDataGeneratorMonitor;
-import com.scottlogic.deg.generator.inputs.validation.MultipleProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.inputs.validation.UniquenessValidator;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
-import com.scottlogic.deg.output.manifest.ManifestWriter;
+import com.scottlogic.deg.orchestrator.violate.manifest.ManifestWriter;
 import com.scottlogic.deg.output.outputtarget.OutputTargetFactory;
 import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
 import com.scottlogic.deg.profile.reader.ProfileReader;
@@ -34,8 +32,6 @@ import com.scottlogic.deg.profile.reader.validation.ConfigValidator;
 import com.scottlogic.deg.profile.dto.NoopVersionChecker;
 import com.scottlogic.deg.profile.dto.SchemaVersionValidator;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.stream.Stream;
 
 import static org.mockito.Matchers.any;
