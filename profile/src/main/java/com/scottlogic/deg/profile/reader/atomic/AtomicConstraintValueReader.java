@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
+import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
 import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedSet;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
@@ -15,6 +16,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class AtomicConstraintValueReader {
 
@@ -58,18 +60,24 @@ public class AtomicConstraintValueReader {
     }
 
     private Object getValue(Object value, Types type) {
-        if (type != null) {
-            switch (type) {
-                case NUMERIC:
-                    return getBigDecimal(value);
-                case DATETIME:
-                    if (!(value instanceof String) || value.equals("datetime") || value.equals("years") || value.equals("months")
-                        || value.equals("days") || value.equals("hours") || value.equals("minutes")
-                        || value.equals("seconds") || value.equals("millis")) return value;
-                    return ConstraintReaderHelpers.parseDate((String) value);
-            }
+        if (type == null) {
+            return value;
         }
-        return value;
+        switch (type) {
+            case NUMERIC:
+                return getBigDecimal(value);
+            case DATETIME:
+                if (!(value instanceof String) || value.equals("datetime") || isTimeScale((String)value)) {
+                    return value;
+                }
+                return ConstraintReaderHelpers.parseDate((String) value);
+            default:
+                return value;
+        }
+    }
+
+    private static boolean isTimeScale(String value) {
+        return Stream.of(Timescale.values()).map(Timescale::toString).anyMatch(value::equals);
     }
 
     private Object getBigDecimal(Object value) {
