@@ -65,59 +65,10 @@ public class FieldSpecGroupValueGenerator {
         Stream<DataBag> firstDataBagValues = underlyingGenerator.generate(first, firstSpec)
             .map(value -> toDataBag(first, value));
 
-        if (group.relations().stream().allMatch(fieldSpecRelations -> fieldSpecRelations instanceof InMapRelation)) {
-            return flatMap(
-                firstDataBagValues,
-                dataBag -> generateRemainingInMapData(first, dataBag, removeSpecFromGroup(first, group)));
-        } else {
-            return flatMap(
-                firstDataBagValues,
-                dataBag -> generateRemainingData(first, dataBag, removeSpecFromGroup(first, group)));
-        }
-    }
-
-    private Stream<DataBag> generateRemainingInMapData(Field generatedField, DataBag dataBag, FieldSpecGroup group) {
-        FieldSpecGroup newGroup = adjustInMap(generatedField, dataBag.getDataBagValue(generatedField), group);
-
-        Stream<DataBag> dataBagStream = generate(newGroup)
-            .map(otherData -> DataBag.merge(dataBag, otherData));
-
-        return applyCombinationStrategy(dataBagStream);
-    }
-
-    private FieldSpecGroup adjustInMap(Field generatedField, DataBagValue generatedValue, FieldSpecGroup group) {
-        if (generatedValue.getValue() instanceof BigDecimal) {
-            int index = ((BigDecimal) generatedValue.getValue()).intValue();
-
-            Set<FieldSpecRelations> nonUpdatedRelations = group.relations().stream()
-                .filter(relation -> !isRelatedToField(generatedField, relation))
-                .collect(Collectors.toSet());
-
-            List<FieldSpecRelations> updatableRelations = group.relations().stream()
-                .filter(relation -> isRelatedToField(generatedField, relation))
-                .collect(Collectors.toList());
-
-            Map<Field, FieldSpec> fieldUpdates = updatableRelations.stream()
-                .collect(Collectors.toMap(
-                    relation -> relation.main(),
-                    relation -> {
-                        InMapRelation rel = (InMapRelation) relation;
-                        DistributedList newList;
-                        newList = DistributedList.singleton(rel.getUnderlyingList().list().get(index));
-                        FieldSpec newSpec = FieldSpec.fromList(newList);
-                        return relation.reduceToRelatedFieldSpec(newSpec);
-                    },
-                    (l, r) -> fieldSpecMerger.merge(l, r)
-                        .orElseThrow(() -> new IllegalStateException("Failed to merge field specs in related fields"))));
-
-            Map<Field, FieldSpec> newFieldSpecs = group.fieldSpecs().entrySet().stream()
-                .collect(Collectors.toMap(
-                    e -> e.getKey(),
-                    e -> updateSpec(e.getKey(), e.getValue(), fieldUpdates)));
-
-            return new FieldSpecGroup(newFieldSpecs, nonUpdatedRelations);
-        }
-        return group;
+        boolean isInMap = group.relations().stream().allMatch(fieldSpecRelations -> fieldSpecRelations instanceof InMapRelation);
+        return flatMap(
+            firstDataBagValues,
+            dataBag -> generateRemainingData(first, dataBag, removeSpecFromGroup(first, group), isInMap));
     }
 
     private Field getFirst(FieldSpecGroup keySet) {
@@ -164,7 +115,7 @@ public class FieldSpecGroupValueGenerator {
                 if (controllerSpec.getBlacklist().contains(new BigDecimal(i))) {
                     continue;
                 }
-                String testingElement = inMapRelation.getUnderlyingList().distributedList().get(i).element();
+                Object testingElement = inMapRelation.getUnderlyingList().distributedList().get(i).element();
                 if (!testing.permits(testingElement)) {
                     Set<Object> newBlackList = new HashSet<>(controllerSpec.getBlacklist());
                     newBlackList.add(new BigDecimal(i));
@@ -183,8 +134,13 @@ public class FieldSpecGroupValueGenerator {
         }
     }
 
-    private Stream<DataBag> generateRemainingData(Field generatedField, DataBag dataBag, FieldSpecGroup group) {
-        FieldSpecGroup newGroup = adjustBounds(generatedField, dataBag.getDataBagValue(generatedField), group);
+    private Stream<DataBag> generateRemainingData(Field generatedField, DataBag dataBag, FieldSpecGroup group, boolean isInMap) {
+        FieldSpecGroup newGroup;
+        if (isInMap) {
+            newGroup = adjustInMap(generatedField, dataBag.getDataBagValue(generatedField), group);
+        } else {
+            newGroup = adjustBounds(generatedField, dataBag.getDataBagValue(generatedField), group);
+        }
 
         Stream<DataBag> dataBagStream = generate(newGroup)
             .map(otherData -> DataBag.merge(dataBag, otherData));
@@ -200,6 +156,40 @@ public class FieldSpecGroupValueGenerator {
             FieldSpec newSpec = FieldSpec.fromRestriction(restrictions).withNotNull();
 
             return adjustBoundsOfDate(generatedField, newSpec, group);
+        }
+        return group;
+    }
+
+    private FieldSpecGroup adjustInMap(Field generatedField, DataBagValue generatedValue, FieldSpecGroup group) {
+        if (generatedValue.getValue() instanceof BigDecimal) {
+            int index = ((BigDecimal) generatedValue.getValue()).intValue();
+
+            Set<FieldSpecRelations> nonUpdatedRelations = group.relations().stream()
+                .filter(relation -> !isRelatedToField(generatedField, relation))
+                .collect(Collectors.toSet());
+
+            List<FieldSpecRelations> updatableRelations = group.relations().stream()
+                .filter(relation -> isRelatedToField(generatedField, relation))
+                .collect(Collectors.toList());
+
+            Map<Field, FieldSpec> fieldUpdates = updatableRelations.stream()
+                .collect(Collectors.toMap(
+                    FieldSpecRelations::main,
+                    relation -> {
+                        InMapRelation rel = (InMapRelation) relation;
+                        DistributedList<Object> newList = DistributedList.singleton(rel.getUnderlyingList().list().get(index));
+                        FieldSpec newSpec = FieldSpec.fromList(newList);
+                        return relation.reduceToRelatedFieldSpec(newSpec);
+                    },
+                    (l, r) -> fieldSpecMerger.merge(l, r)
+                        .orElseThrow(() -> new IllegalStateException("Failed to merge field specs in related fields"))));
+
+            Map<Field, FieldSpec> newFieldSpecs = group.fieldSpecs().entrySet().stream()
+                .collect(Collectors.toMap(
+                    Map.Entry::getKey,
+                    e -> updateSpec(e.getKey(), e.getValue(), fieldUpdates)));
+
+            return new FieldSpecGroup(newFieldSpecs, nonUpdatedRelations);
         }
         return group;
     }
