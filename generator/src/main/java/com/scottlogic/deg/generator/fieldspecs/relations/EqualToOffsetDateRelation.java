@@ -55,7 +55,7 @@ public class EqualToOffsetDateRelation implements FieldSpecRelations {
 
     @Override
     public FieldSpecRelations inverse() {
-        return new EqualToOffsetDateRelation(other, main, adjuster.negate(), offset);
+        return new EqualToOffsetDateRelation(other, main, adjuster, -offset);
     }
 
     @Override
