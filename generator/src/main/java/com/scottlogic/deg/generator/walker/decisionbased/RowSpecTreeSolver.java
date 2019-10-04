@@ -43,6 +43,9 @@ public class RowSpecTreeSolver {
         return constraintReducer.reduceConstraintsToRowSpec(fields, rootNode).get();
     }
 
+    /**
+     * a row node is a constraint node with no further decisions
+     */
     private Stream<ConstraintNode> reduceToRowNodes(ConstraintNode rootNode) {
         if (rootNode.getDecisions().isEmpty()) {
             return Stream.of(rootNode);

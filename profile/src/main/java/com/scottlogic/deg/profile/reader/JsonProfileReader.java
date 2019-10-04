@@ -74,17 +74,31 @@ public class JsonProfileReader implements ProfileReader {
         //This is the types of the field that have not been set by the field def
         Map<String, String> fieldTypes = getTypesFromConstraints(profileDto);
 
-        ProfileFields profileFields = new ProfileFields(
-            profileDto.fields.stream()
-                .map(fDto ->
-                    new Field(
-                        fDto.name,
-                        getFieldType(fieldTypes.getOrDefault(fDto.name, fDto.type)),
-                        fDto.unique,
-                        fDto.formatting,
-                        false)
-                )
-                .collect(Collectors.toList()));
+        List<Field> inMapFields = getInMapConstraints(profileDto).stream()
+            .map(file ->
+                new Field(
+                    file,
+                    getFieldType("integer"),
+                    false,
+                    null,
+                    true)
+            ).collect(Collectors.toList());
+
+
+        List<Field> fields = profileDto.fields.stream()
+            .map(fDto ->
+                new Field(
+                    fDto.name,
+                    getFieldType(fieldTypes.getOrDefault(fDto.name, fDto.type)),
+                    fDto.unique,
+                    fDto.formatting,
+                    false)
+            )
+            .collect(Collectors.toList());
+
+        fields.addAll(inMapFields);
+
+        ProfileFields profileFields = new ProfileFields(fields);
 
         Collection<Rule> rules = profileDto.rules.stream().map(
             r -> {
@@ -126,6 +140,12 @@ public class JsonProfileReader implements ProfileReader {
                 constraintDTO -> (String)constraintDTO.value,
                 (a, b) -> a
             ));
+    }
+
+    private Set<String> getInMapConstraints(ProfileDTO profileDto) {
+        return getTopLevelConstraintsOfType(profileDto, AtomicConstraintType.IS_IN_MAP.getText())
+            .map(constraintDTO -> constraintDTO.file)
+            .collect(Collectors.toSet());
     }
 
     private Stream<ConstraintDTO> getTopLevelConstraintsOfType(ProfileDTO profileDto, String constraint) {
