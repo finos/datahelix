@@ -63,9 +63,10 @@ public class ConstraintNodeBuilder {
     }
 
     public ConstraintNodeBuilder addDelayedAtomicConstraints(Collection<DelayedAtomicConstraint> delayedAtomicConstraints) {
-        return setDelayedAtomicConstraints(delayedAtomicConstraints
-            .stream()
-            .filter(constraint -> !constraint.equals(delayedAtomicConstraints))
+        return setDelayedAtomicConstraints(
+            concat(
+                this.delayedAtomicConstraints.stream(),
+                delayedAtomicConstraints.stream())
             .collect(Collectors.toList())
         );
     }
