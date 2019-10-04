@@ -42,14 +42,21 @@ public class AtomicConstraintValueReader {
         }
 
         if (dto.file != null && dto.is.equals(AtomicConstraintType.IS_IN_SET.getText())){
-            return fromFileReader.setFromFile(dto.file);
+            return getSet(fromFileReader.setFromFile(dto.file).list(), type);
         }
 
         if (dto.file != null && dto.is.equals(AtomicConstraintType.IS_IN_MAP.getText())){
-            return fromFileReader.listFromMapFile(dto.file, dto.key);
+            return getList(fromFileReader.listFromMapFile(dto.file, dto.key).list(), type);
         }
 
         return getValue(dto.value, type);
+    }
+
+    private DistributedList getList(Collection<Object> values, Types type) {
+        List collect = values.stream()
+            .map(val -> getValue(val, type))
+            .collect(Collectors.toList());
+        return DistributedList.uniform(collect);
     }
 
     private DistributedList getSet(Collection<Object> values, Types type) {

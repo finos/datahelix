@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createInternalField;
 
 /**
  * Class to represent the state during cucumber test running and execution
@@ -58,6 +59,7 @@ public class CucumberTestState {
     List<Field> profileFields;
     List<ConstraintDTO> constraints;
     List<Exception> testExceptions;
+    Map<String, List<List<String>>> inMapFiles;
 
     private final List<AtomicConstraintType> contstraintsToNotViolate = new ArrayList<>();
 
@@ -70,6 +72,7 @@ public class CucumberTestState {
         constraints = new ArrayList<>();
         testExceptions = new ArrayList<>();
         generatedObjects = new ArrayList<>();
+        inMapFiles = new HashMap<>();
         contstraintsToNotViolate.clear();
         generationHasAlreadyOccured = false;
         shouldSkipGeneration = false;
@@ -81,6 +84,17 @@ public class CucumberTestState {
             addConstraint(fieldName, constraintName, (Object)value);
         else
             addConstraint(fieldName, constraintName, getSetValues(value));
+    }
+
+    public void addInMapConstraint(String fieldName, String key, String file) {
+
+        ConstraintDTO dto = new ConstraintDTO();
+        dto.field = fieldName;
+        dto.is = "inMap";
+        dto.key = key;
+        dto.file = file;
+        dto.values = getValuesFromMap(file, key);
+        this.addConstraintToList(dto);
     }
 
     public void addNotConstraint(String fieldName, String constraintName, List<Object> value) {
@@ -104,6 +118,22 @@ public class CucumberTestState {
     public void addConstraintsFromJson(String constraintProfile) throws IOException {
         ConstraintHolder holder = this.deserialise(constraintProfile);
         this.constraints.addAll(holder.constraints);
+    }
+
+    public void addMapFile(String name, List<List<String>> map) {
+        this.inMapFiles.put(name, map);
+        this.profileFields.add(createInternalField(name, Types.NUMERIC));
+    }
+
+    private List<Object> getValuesFromMap(String name, String key) {
+        List<List<String>> map = this.inMapFiles.get(name);
+        int index = map.get(0).indexOf(key);
+        List<Object> rtnList = new ArrayList<>();
+
+        for (int i = 1; i < map.size() ; i++) {
+            rtnList.add(map.get(i).get(index));
+        }
+        return rtnList;
     }
 
     private Collection<Object> getSetValues(List<Object> values) {

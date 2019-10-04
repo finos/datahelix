@@ -18,37 +18,38 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
-import com.scottlogic.deg.generator.restrictions.linear.Limit;
-import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
-import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
 
-import java.time.OffsetDateTime;
+import java.math.BigDecimal;
 
-public class EqualToDateRelation implements FieldSpecRelations {
+public class InMapRelation implements FieldSpecRelations {
     private final Field main;
     private final Field other;
+    private final DistributedList<String> underlyingList;
 
-    public EqualToDateRelation(Field main, Field other) {
+    public InMapRelation(Field main, Field other, DistributedList<String> underlyingList) {
         this.main = main;
         this.other = other;
+        this.underlyingList = underlyingList;
     }
 
     @Override
     public FieldSpec reduceToRelatedFieldSpec(FieldSpec otherValue) {
-        return otherValue;
+        throw new UnsupportedOperationException("ReduceToRelatedFieldSpec is unsupported in InMapRelation");
     }
 
     @Override
     public FieldSpec reduceValueToFieldSpec(DataBagValue generatedValue) {
-        Limit<OffsetDateTime> limit = new Limit<>((OffsetDateTime)generatedValue.getValue(), true);
-        LinearRestrictions<OffsetDateTime> restrictions = LinearRestrictionsFactory.createDateTimeRestrictions(limit,limit);
-        return FieldSpec.fromRestriction(restrictions).withNotNull();
+        BigDecimal value = (BigDecimal)generatedValue.getValue();
+
+        DistributedList<Object> newList = DistributedList.singleton(underlyingList.list().get(value.intValue()));
+        return FieldSpec.fromList(newList);
     }
 
     @Override
     public FieldSpecRelations inverse() {
-        return new EqualToDateRelation(other, main);
+        return new InMapIndexRelation(other, main, underlyingList);
     }
 
     @Override
@@ -59,5 +60,9 @@ public class EqualToDateRelation implements FieldSpecRelations {
     @Override
     public Field other() {
         return other;
+    }
+
+    public DistributedList<String> getUnderlyingList() {
+        return this.underlyingList;
     }
 }
