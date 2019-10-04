@@ -44,3 +44,40 @@ Feature: User can specify that a field value belongs to a set of predetermined o
     Then the following data should be generated:
       |Home Nation         |Capital      |
       |"Scotland"          |"Edinburgh"  |
+
+
+  @ignore #This looks like an issue with relationship running in FULL_SEQUENTIAL
+  Scenario: Running an 'inMap' multiple maps
+    Given the following fields exist:
+      |Home Nation |
+      |Capital     |
+      |Foo         |
+      |Bar         |
+    And the file "testFile" contains the following data:
+      |Country           |Capital    |
+      |England           |London     |
+      |Northern Ireland  |Belfast    |
+      |Scotland          |Edinburgh  |
+      |Wales             |Cardiff    |
+    And the file "testFile2" contains the following data:
+      |Foo   |Bar  |
+      |1     |one  |
+      |2     |two  |
+    And Home Nation has type "string"
+    And Capital has type "string"
+    And Foo has type "decimal"
+    And Bar has type "string"
+    And Home Nation is from Country in testFile
+    And Capital is from Capital in testFile
+    And Foo is from Foo in testFile2
+    And Bar is from Bar in testFile2
+    Then the following data should be generated:
+      |Country             |Capital      |Foo  |Bar    |
+      |"England"           |"London"     |1    |"one"  |
+      |"England"           |"London"     |2    |"two"  |
+      |"Northern Ireland"  |"Belfast"    |1    |"one"  |
+      |"Northern Ireland"  |"Belfast"    |2    |"two"  |
+      |"Scotland"          |"Edinburgh"  |1    |"one"  |
+      |"Scotland"          |"Edinburgh"  |2    |"two"  |
+      |"Wales"             |"Cardiff"    |1    |"one"  |
+      |"Wales"             |"Cardiff"    |2    |"two"  |
