@@ -46,13 +46,17 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       |"Scotland"          |"Edinburgh"  |
 
 
-  @ignore #This looks like an issue with relationship running in FULL_SEQUENTIAL
   Scenario: Running an 'inMap' multiple maps
     Given the following fields exist:
       |Home Nation |
       |Capital     |
       |Foo         |
       |Bar         |
+    And the combination strategy is exhaustive
+    And Home Nation is anything but null
+    And Capital is anything but null
+    And Foo is anything but null
+    And Bar is anything but null
     And the file "testFile" contains the following data:
       |Country           |Capital    |
       |England           |London     |
