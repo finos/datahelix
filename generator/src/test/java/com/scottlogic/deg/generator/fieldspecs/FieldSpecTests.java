@@ -33,6 +33,7 @@ import static com.scottlogic.deg.generator.utils.Defaults.*;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 class FieldSpecTests {
@@ -227,6 +228,20 @@ class FieldSpecTests {
         FieldSpec spec = FieldSpec.fromRestriction(string);
 
         assertFalse(spec.permits("Anything"));
+    }
+
+    @Test
+    void permits_whenNotInWhiteList_returnsFalse() {
+        FieldSpec spec = FieldSpec.fromList(DistributedList.singleton(10));
+
+        assertFalse(spec.permits(11));
+    }
+
+    @Test
+    void permits_whenInWhiteList_returnsTrue() {
+        FieldSpec spec = FieldSpec.fromList(DistributedList.singleton(10));
+
+        assertTrue(spec.permits(10));
     }
 
     private class MockedRestrictions implements TypedRestrictions {

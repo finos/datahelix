@@ -23,10 +23,12 @@ import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.profile.constraints.delayed.DelayedAtomicConstraint;
 import com.scottlogic.deg.generator.profile.constraints.delayed.DelayedDateAtomicConstraint;
+import com.scottlogic.deg.generator.profile.constraints.delayed.DelayedInMapAtomicConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintValueReader;
 import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintFactory;
@@ -66,11 +68,16 @@ public class MainConstraintReader {
             }
 
             AtomicConstraintType atomicConstraintType = AtomicConstraintType.fromText((String) dto.is);
+
             Field field = fields.getByName(dto.field);
 
             Object value = atomicConstraintValueReader.getValue(dto, field.type);
 
             ConstraintValueValidator.validate(field, atomicConstraintType, value);
+
+            if (atomicConstraintType == AtomicConstraintType.IS_IN_MAP){
+                return createInMapAtomicConstraint(field, fields.getByName(dto.file), (DistributedList<String>) value);
+            }
 
             return AtomicConstraintFactory.create(atomicConstraintType, field, value);
 
@@ -113,6 +120,14 @@ public class MainConstraintReader {
         }
 
         throw new InvalidProfileException("Couldn't interpret constraint");
+    }
+
+    private DelayedAtomicConstraint createInMapAtomicConstraint(Field field, Field other, DistributedList<String> list) {
+        return new DelayedInMapAtomicConstraint(
+            field,
+            AtomicConstraintType.IS_IN_MAP,
+            other,
+            list);
     }
 
     private DelayedAtomicConstraint createDelayedDateAtomicConstraint(ConstraintDTO dto, ProfileFields fields) {

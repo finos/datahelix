@@ -42,6 +42,7 @@ public class ConstraintValueValidator {
                 validateAny(field, type, value);
                 break;
             case IS_IN_SET:
+            case IS_IN_MAP:
                 validateSet(field, type, value);
                 break;
             case IS_OF_TYPE:

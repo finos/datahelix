@@ -18,6 +18,7 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 
 public interface FieldSpecRelations {
 
@@ -30,6 +31,8 @@ public interface FieldSpecRelations {
      * @return
      */
     FieldSpec reduceToRelatedFieldSpec(FieldSpec otherValue);
+
+    FieldSpec reduceValueToFieldSpec(DataBagValue generatedValue);
 
     FieldSpecRelations inverse();
 

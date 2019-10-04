@@ -23,8 +23,6 @@ public class AtomicConstraintFactory {
                 return new EqualToConstraint(field, value);
             case IS_IN_SET:
                 return new IsInSetConstraint(field, (DistributedList<Object>)value);
-            case IS_IN_MAP:
-                return new IsInMapConstraint(field, (DistributedList<Object>)value);
             case IS_NULL:
                 return new IsNullConstraint(field);
 

@@ -110,6 +110,10 @@ public class FieldSpec {
             return false;
         }
 
+        if (whitelist != null && !whitelist.list().contains(value)) {
+            return false;
+        }
+
         return true;
     }
 
