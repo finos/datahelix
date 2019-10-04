@@ -16,7 +16,12 @@
 
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.generator.config.detail.*;
+import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
+import com.scottlogic.deg.generator.config.detail.DataGenerationType;
+import com.scottlogic.deg.generator.config.detail.MonitorType;
+import com.scottlogic.deg.generator.config.detail.VisualiserLevel;
+
+import java.nio.file.Path;
 
 public interface GenerationConfigSource  {
     DataGenerationType getGenerationType();
@@ -24,4 +29,7 @@ public interface GenerationConfigSource  {
     long getMaxRows();
 
     MonitorType getMonitorType();
+
+    VisualiserLevel getVisualiserLevel();
+    Path getVisualiserOutputFolder();
 }

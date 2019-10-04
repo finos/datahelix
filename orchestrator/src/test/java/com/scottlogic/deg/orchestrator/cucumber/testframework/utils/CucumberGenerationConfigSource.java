@@ -20,6 +20,7 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.generator.config.detail.MonitorType;
+import com.scottlogic.deg.generator.config.detail.VisualiserLevel;
 import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
 import com.scottlogic.deg.orchestrator.violate.ViolateConfigSource;
 import com.scottlogic.deg.output.guice.OutputFormat;
@@ -99,4 +100,14 @@ public class CucumberGenerationConfigSource implements AllConfigSource, ViolateC
 
     @Override
     public String fromFilePath() { return ""; }
+
+    @Override
+    public VisualiserLevel getVisualiserLevel() {
+        return VisualiserLevel.OFF;
+    }
+
+    @Override
+    public Path getVisualiserOutputFolder() {
+        return new File("mockFolderPath").toPath();
+    }
 }

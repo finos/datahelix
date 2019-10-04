@@ -25,20 +25,25 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.treepartitioning.TreePartitioner;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
+import com.scottlogic.deg.generator.generation.visualiser.Visualiser;
+import com.scottlogic.deg.generator.generation.visualiser.VisualiserFactory;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.io.IOException;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
-public class DecisionTreeDataGeneratorTests {
+class DecisionTreeDataGeneratorTests {
     private DecisionTreeDataGenerator generator;
     private DecisionTreeFactory factory;
     private DataGeneratorMonitor monitor;
@@ -47,8 +52,9 @@ public class DecisionTreeDataGeneratorTests {
     private DecisionTreeOptimiser optimiser;
     private DecisionTreeWalker treeWalker;
     private UpfrontTreePruner upfrontTreePruner;
+    private VisualiserFactory visualiserFactory;
     @BeforeEach
-    public void setup() {
+    void setup() {
         factory = Mockito.mock(DecisionTreeFactory.class);
         treeWalker = Mockito.mock(DecisionTreeWalker.class);
         treePartitioner = Mockito.mock(TreePartitioner.class);
@@ -56,6 +62,7 @@ public class DecisionTreeDataGeneratorTests {
         monitor = Mockito.mock(DataGeneratorMonitor.class);
         combinationStrategy = Mockito.mock(CombinationStrategy.class);
         upfrontTreePruner = Mockito.mock(UpfrontTreePruner.class);
+        visualiserFactory = Mockito.mock(VisualiserFactory.class);
         long maxRows = 10;
         generator = new DecisionTreeDataGenerator(
             factory,
@@ -65,20 +72,23 @@ public class DecisionTreeDataGeneratorTests {
             monitor,
             combinationStrategy,
             upfrontTreePruner,
+            visualiserFactory,
             maxRows
         );
     }
 
     @Nested
-    public class upfrontContradictionChecking {
+    class upfrontContradictionChecking {
         private DecisionTree tree;
         private ConstraintNode rootNode;
         private Profile profile;
+        private Visualiser visualiser;
         @BeforeEach
-        public void setup() {
+        void setup() throws IOException {
             tree = Mockito.mock(DecisionTree.class);
             rootNode = Mockito.mock(ConstraintNode.class);
             profile = Mockito.mock(Profile.class);
+            visualiser = Mockito.mock(Visualiser.class);
             DataBag value = Mockito.mock(DataBag.class);
 
             Mockito.when(tree.getRootNode()).thenReturn(rootNode);
@@ -86,10 +96,11 @@ public class DecisionTreeDataGeneratorTests {
             Mockito.when(combinationStrategy.permute(any())).thenReturn(Stream.of(value));
             Mockito.when(treePartitioner.splitTreeIntoPartitions(any())).thenReturn(Stream.of(tree));
             Mockito.when(optimiser.optimiseTree(any())).thenReturn(tree);
+            Mockito.when(visualiserFactory.create(any(), any())).thenReturn(visualiser);
         }
 
         @Test
-        public void generateData_withWhollyContradictingProfile_returnsEmptyStream() {
+        void generateData_withWhollyContradictingProfile_returnsEmptyStream() {
             //Arrange
             DecisionTree outputTree = Mockito.mock(DecisionTree.class);
             Mockito.when(outputTree.getRootNode()).thenReturn(null);
@@ -100,10 +111,13 @@ public class DecisionTreeDataGeneratorTests {
 
             //Assert
             assertEquals(0, actual.count());
+
+            // Verify
+            verify(visualiser, times(2)).printTree(any(), any());
         }
 
         @Test
-        public void generateData_withNotWhollyContradictoryProfile_canReturnData() {
+        void generateData_withNotWhollyContradictoryProfile_canReturnData() {
             //Arrange
             DecisionTree outputTree = Mockito.mock(DecisionTree.class);
             Mockito.when(outputTree.getRootNode()).thenReturn(rootNode);
@@ -114,6 +128,9 @@ public class DecisionTreeDataGeneratorTests {
 
             //Assert
             assertNotEquals(0, actual.count());
+
+            // Verify
+            verify(visualiser, times(2)).printTree(any(), any());
         }
     }
 }

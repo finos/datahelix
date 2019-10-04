@@ -20,18 +20,23 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.scottlogic.deg.common.output.GeneratedObject;
 import com.scottlogic.deg.generator.profile.Profile;
+import com.scottlogic.deg.generator.config.detail.VisualiserLevel;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeFactory;
 import com.scottlogic.deg.generator.decisiontree.DecisionTreeOptimiser;
 import com.scottlogic.deg.generator.decisiontree.treepartitioning.TreePartitioner;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
+import com.scottlogic.deg.generator.generation.visualiser.Visualiser;
+import com.scottlogic.deg.generator.generation.visualiser.VisualiserFactory;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class DecisionTreeDataGenerator implements DataGenerator {
+    private static final String INITIAL_TREE_VISUALISER_TITLE = "01_Initial_Tree";
+    private static final String PRUNED_TREE_VISUALISER_TITLE = "02_Pruned_Tree";
     private final DecisionTreeWalker treeWalker;
     private final DataGeneratorMonitor monitor;
     private final DecisionTreeFactory decisionTreeGenerator;
@@ -39,6 +44,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
     private final DecisionTreeOptimiser treeOptimiser;
     private final CombinationStrategy partitionCombiner;
     private final UpfrontTreePruner upfrontTreePruner;
+    private final VisualiserFactory visualiserFactory;
     private final long maxRows;
 
     @Inject
@@ -50,6 +56,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         DataGeneratorMonitor monitor,
         CombinationStrategy combinationStrategy,
         UpfrontTreePruner upfrontTreePruner,
+        VisualiserFactory visualiserFactory,
         @Named("config:maxRows") long maxRows) {
         this.decisionTreeGenerator = decisionTreeGenerator;
         this.treePartitioner = treePartitioner;
@@ -58,15 +65,19 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         this.monitor = monitor;
         this.partitionCombiner = combinationStrategy;
         this.upfrontTreePruner = upfrontTreePruner;
+        this.visualiserFactory = visualiserFactory;
         this.maxRows = maxRows;
     }
 
     @Override
     public Stream<GeneratedObject> generateData(Profile profile) {
         monitor.generationStarting();
+
         DecisionTree decisionTree = decisionTreeGenerator.analyse(profile);
+        visualiseTree(decisionTree,  INITIAL_TREE_VISUALISER_TITLE);
 
         decisionTree = upfrontTreePruner.runUpfrontPrune(decisionTree, monitor);
+        visualiseTree(decisionTree, PRUNED_TREE_VISUALISER_TITLE);
         if (decisionTree.getRootNode() == null) {
             return Stream.empty();
         }
@@ -80,5 +91,13 @@ public class DecisionTreeDataGenerator implements DataGenerator {
             .map(d->(GeneratedObject)d)
             .limit(maxRows)
             .peek(monitor::rowEmitted);
+    }
+
+    private void visualiseTree(DecisionTree decisionTree, String title) {
+        try (Visualiser visualiser = visualiserFactory.create(VisualiserLevel.STANDARD, title)) {
+            visualiser.printTree(title, decisionTree);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
