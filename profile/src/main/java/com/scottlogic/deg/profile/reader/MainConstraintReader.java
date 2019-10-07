@@ -17,8 +17,8 @@
 package com.scottlogic.deg.profile.reader;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.common.date.TemporalAdjusterGenerator;
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.constraintdetail.DateTimeGranularity;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.profile.constraints.delayed.DelayedAtomicConstraint;
@@ -34,10 +34,11 @@ import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintValueReader;
 import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintFactory;
 import com.scottlogic.deg.profile.reader.atomic.ConstraintValueValidator;
 
-import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static com.scottlogic.deg.profile.reader.atomic.ConstraintReaderHelpers.getDateTimeGranularity;
 
 public class MainConstraintReader {
 
@@ -138,16 +139,12 @@ public class MainConstraintReader {
             dto.offset);
     }
 
-    private TemporalAdjusterGenerator getOffsetUnit(ConstraintDTO dto) {
+    private DateTimeGranularity getOffsetUnit(ConstraintDTO dto) {
         if (dto.offsetUnit == null) {
             return null;
         }
 
-        String offsetUnitUpperCase = dto.offsetUnit.toUpperCase();
-        boolean workingDay = offsetUnitUpperCase.equals("WORKING DAYS");
-        return new TemporalAdjusterGenerator(
-            ChronoUnit.valueOf(ChronoUnit.class, workingDay ? "DAYS" : offsetUnitUpperCase),
-            workingDay);
+        return getDateTimeGranularity(dto.offsetUnit);
     }
 
     Set<Constraint> getSubConstraints(ProfileFields fields, Collection<ConstraintDTO> allOf) {

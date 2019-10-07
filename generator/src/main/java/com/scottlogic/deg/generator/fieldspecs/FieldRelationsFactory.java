@@ -63,7 +63,7 @@ public class FieldRelationsFactory {
            return new EqualToOffsetDateRelation(
                constraint.getField(),
                constraint.getOtherField(),
-               constraint.getOffsetGenerator(),
+               constraint.getOffsetGranularity(),
                constraint.getOffsetUnit());
        } else {
            return new EqualToDateRelation(
