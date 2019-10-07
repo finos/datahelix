@@ -25,6 +25,7 @@ import com.scottlogic.deg.generator.decisiontree.testutils.*;
 import com.scottlogic.deg.generator.decisiontree.testutils.EqualityComparer;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
+import com.scottlogic.deg.generator.utils.SetUtils;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -262,7 +263,7 @@ class TreePartitionerTests {
     private ConstraintNode constraint(String[] fieldNames, DecisionNode... decisions) {
         return new ConstraintNodeBuilder().addAtomicConstraints(Stream.of(fieldNames)
             .map(this::atomicConstraint)
-            .collect(Collectors.toList())).setDecisions(Arrays.asList(decisions)).build();
+            .collect(Collectors.toSet())).setDecisions(SetUtils.setOf(decisions)).build();
     }
 
     private AtomicConstraint atomicConstraint(String fieldName) {

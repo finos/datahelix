@@ -82,10 +82,10 @@ class RowSpecTreeSolverTests {
         DecisionTree tree = new DecisionTree(root, profileFields);
 
         //Act
-        List<RowSpec> rowSpecs = rowSpecTreeSolver.createRowSpecs(tree).collect(Collectors.toList());
+        Set<RowSpec> rowSpecs = rowSpecTreeSolver.createRowSpecs(tree).collect(Collectors.toSet());
 
         //Assert
-        List<RowSpec> expectedRowSpecs = new ArrayList<>();
+        Set<RowSpec> expectedRowSpecs = new HashSet<>();
         Map<Field, FieldSpec> option0 = new HashMap<>();
         option0.put(fieldA, FieldSpec.empty());
         option0.put(fieldB, FieldSpec.nullOnly());

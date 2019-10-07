@@ -23,14 +23,13 @@ import static com.scottlogic.deg.generator.builders.TestConstraintNodeBuilder.co
 import static org.junit.jupiter.api.Assertions.*;
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
-
 class ConstraintNodeTest {
 
-    Field A = createField("A");
-    Field B = createField("B");
+    private static final Field A = createField("A");
+    private static final Field B = createField("B");
 
     @Test
-    public void equals_identicalConstraintNodesDifferentReferences_isTrue(){
+    public void equals_identicalConstraintNodesDifferentReferences_isTrue() {
         ConstraintNode constraintNode1 = constraintNode()
             .where(A).isInSet("a1", "a2")
             .where(B).isInSet("b1", "b2")
@@ -65,7 +64,7 @@ class ConstraintNodeTest {
     }
 
     @Test
-    public void hashCode_identicalConstraintNodesDifferentReferences_areEqual(){
+    public void hashCode_identicalConstraintNodesDifferentReferences_areEqual() {
         ConstraintNode constraintNode1 = constraintNode()
             .where(A).isInSet("a1", "a2")
             .where(B).isInSet("b1", "b2")
@@ -100,7 +99,7 @@ class ConstraintNodeTest {
     }
 
     @Test
-    public void equals_differentConstraintNodesDifferentReferences_isFalse(){
+    public void equals_differentConstraintNodesDifferentReferences_isFalse() {
         ConstraintNode constraintNode1 = constraintNode()
             .where(A).isInSet("a1", "a2")
             .where(B).isInSet("b1", "b2")
@@ -135,7 +134,7 @@ class ConstraintNodeTest {
     }
 
     @Test
-    public void hashCode_differentConstraintNodesDifferentReferences_areNotEqual(){
+    public void hashCode_differentConstraintNodesDifferentReferences_areNotEqual() {
         ConstraintNode constraintNode1 = constraintNode()
             .where(A).isInSet("a1", "a2")
             .where(B).isInSet("b1", "b2")

@@ -26,6 +26,7 @@ import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
+import com.scottlogic.deg.generator.utils.SetUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
@@ -90,7 +91,7 @@ class ConstraintToFieldMapperTests {
         final AtomicConstraint constraintF = new IsInSetConstraint(createField("F"), whitelistOf("test-value"));
 
         final DecisionNode decisionABC = new DecisionNode(
-            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptyList()).setDecisions(Arrays.asList(
+            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(SetUtils.setOf(
                 new DecisionNode(new ConstraintNodeBuilder().addAtomicConstraints(constraintA).build()),
                 new DecisionNode(new ConstraintNodeBuilder().addAtomicConstraints(constraintB).build()),
                 new DecisionNode(new ConstraintNodeBuilder().addAtomicConstraints(constraintC).build())
@@ -98,7 +99,7 @@ class ConstraintToFieldMapperTests {
         );
 
         final DecisionNode decisionDEF = new DecisionNode(
-            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptyList()).setDecisions(Collections.singletonList(
+            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Collections.singleton(
                 new DecisionNode(
                     new ConstraintNodeBuilder().addAtomicConstraints(constraintD).build(),
                     new ConstraintNodeBuilder().addAtomicConstraints(constraintE).build(),
@@ -114,23 +115,23 @@ class ConstraintToFieldMapperTests {
 
     @BeforeEach
     void beforeEach() {
-        constraintsList = new ArrayList<>();
-        decisionsList = new ArrayList<>();
+        constraintsSet = new HashSet<>();
+        decisionsSet = new HashSet<>();
         fields = new ProfileFields(Collections.emptyList());
         mappings = null;
     }
 
-    private List<AtomicConstraint> constraintsList;
-    private List<DecisionNode> decisionsList;
+    private Set<AtomicConstraint> constraintsSet;
+    private Set<DecisionNode> decisionsSet;
     private ProfileFields fields;
     private Map<RootLevelConstraint, Set<Field>> mappings;
 
     private void givenConstraints(AtomicConstraint... constraints) {
-        constraintsList = Arrays.asList(constraints);
+        constraintsSet = SetUtils.setOf(constraints);
     }
 
     private void givenDecisions(DecisionNode... decisions) {
-        decisionsList = Arrays.asList(decisions);
+        decisionsSet = SetUtils.setOf(decisions);
     }
 
     private void givenFields(String... fieldNames) {
@@ -143,7 +144,7 @@ class ConstraintToFieldMapperTests {
     private void getMappings() {
         mappings = new ConstraintToFieldMapper()
             .mapConstraintsToFields(new DecisionTree(
-                new ConstraintNodeBuilder().addAtomicConstraints(constraintsList).setDecisions(decisionsList).build(),
+                new ConstraintNodeBuilder().addAtomicConstraints(constraintsSet).setDecisions(decisionsSet).build(),
                 fields
             ));
     }
