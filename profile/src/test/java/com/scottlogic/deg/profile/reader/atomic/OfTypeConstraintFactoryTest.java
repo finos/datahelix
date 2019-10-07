@@ -22,6 +22,7 @@ import com.scottlogic.deg.common.profile.FieldBuilder;
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
+import com.scottlogic.deg.generator.restrictions.linear.NumericGranularity;
 import com.scottlogic.deg.profile.reader.file.names.NameRetriever;
 import org.junit.jupiter.api.Test;
 
@@ -44,7 +45,7 @@ class OfTypeConstraintFactoryTest {
     void returnsGranularToOneWhenPassedInteger() {
         Optional<Constraint> constraint = OfTypeConstraintFactory.create(field,"integer");
         assertTrue(constraint.isPresent());
-        assertEquals(((IsGranularToNumericConstraint) constraint.get()).granularity, new ParsedGranularity(BigDecimal.ONE));
+        assertEquals(((IsGranularToNumericConstraint) constraint.get()).granularity, new NumericGranularity(0));
     }
 
     @Test

@@ -27,6 +27,7 @@ import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstrain
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
+import com.scottlogic.deg.generator.restrictions.linear.NumericGranularity;
 import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintValueReader;
 import com.scottlogic.deg.profile.reader.atomic.FromFileReader;
 import org.junit.Assert;
@@ -292,14 +293,15 @@ public class JsonProfileReaderTests {
                 "    \"rules\": []" +
                 "}");
 
+
         expectRules(
             ruleWithConstraints(
                 typedConstraint(
                     IsGranularToNumericConstraint.class,
                     c -> {
                         Assert.assertThat(
-                            c.granularity.getNumericGranularity(),
-                            equalTo(new BigDecimal(1)));
+                            c.granularity,
+                            equalTo(new NumericGranularity(0)));
                     })));
     }
 
@@ -554,8 +556,8 @@ public class JsonProfileReaderTests {
                     IsGranularToNumericConstraint.class,
                     c -> {
                         Assert.assertThat(
-                            c.granularity.getNumericGranularity(),
-                            equalTo(new BigDecimal(1)));
+                            c.granularity,
+                            equalTo(new NumericGranularity(0)));
                     })));
     }
 
@@ -580,8 +582,8 @@ public class JsonProfileReaderTests {
                     IsGranularToNumericConstraint.class,
                     c -> {
                         Assert.assertThat(
-                            c.granularity.getNumericGranularity(),
-                            equalTo(BigDecimal.valueOf(0.1)));
+                            c.granularity,
+                            equalTo(new NumericGranularity(1)));
                     })));
     }
 
@@ -606,8 +608,8 @@ public class JsonProfileReaderTests {
                     IsGranularToNumericConstraint.class,
                     c -> {
                         Assert.assertThat(
-                            c.granularity.getNumericGranularity(),
-                            equalTo(BigDecimal.valueOf(0.1)));
+                            c.granularity,
+                            equalTo(new NumericGranularity(1)));
                     })));
     }
 
