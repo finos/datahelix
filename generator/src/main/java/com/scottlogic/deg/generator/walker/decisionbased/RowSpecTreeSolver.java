@@ -68,7 +68,7 @@ public class RowSpecTreeSolver {
         ConstraintNode constraintNode = rootNode.builder()
             .addDecisions(option.getDecisions())
             .addAtomicConstraints(option.getAtomicConstraints())
-            .addDelayedAtomicConstraints(option.getDelayedAtomicConstraints())
+            .addRelations(option.getRelations())
             .build();
 
         return treePruner.pruneConstraintNode(constraintNode, getFields(option));

@@ -15,40 +15,25 @@
  */
 
 package com.scottlogic.deg.generator.generation.fieldvaluesources.datetime;
-
-import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
-import org.hamcrest.CoreMatchers;
+import com.scottlogic.deg.common.profile.constraintdetail.DateTimeGranularity;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static java.time.temporal.ChronoUnit.*;
 
-class TimescaleTests {
+class ChronoUnitGranularityTests {
     @Test
     public void mostCoarseTest() {
-        Assert.assertEquals(Timescale.DAYS, Timescale.MILLIS.merge(Timescale.DAYS));
+        Assert.assertEquals(new DateTimeGranularity(DAYS), new DateTimeGranularity(MILLIS).merge(new DateTimeGranularity(DAYS)));
     }
 
     @Test
     public void mostCoarseTestYear() {
-        Assert.assertEquals(Timescale.YEARS, Timescale.MINUTES.merge(Timescale.YEARS));
+        Assert.assertEquals(new DateTimeGranularity(YEARS), new DateTimeGranularity(MINUTES).merge(new DateTimeGranularity(YEARS)));
     }
 
     @Test
     public void mostCoarseTestSame() {
-        Assert.assertEquals(Timescale.MONTHS, Timescale.MONTHS.merge(Timescale.MONTHS));
+        Assert.assertEquals(new DateTimeGranularity(MONTHS), new DateTimeGranularity(MONTHS).merge(new DateTimeGranularity(MONTHS)));
     }
-
-    @Test
-    public void testGetByNameThrowsExceptionWithUsefulMessage(){
-
-        // arrange
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->{
-            // act
-            Timescale.getByName("ShouldNotWork");
-        });
-        // assert
-        Assert.assertThat(exception.getMessage(), CoreMatchers.containsString("Must be one of the supported datetime units"));
-    }
-
 }

@@ -15,11 +15,9 @@
  */
 
 package com.scottlogic.deg.generator.restrictions;
-
-import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
+import com.scottlogic.deg.common.profile.constraintdetail.DateTimeGranularity;
 import com.scottlogic.deg.generator.restrictions.linear.*;
 import org.junit.Assert;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.time.OffsetDateTime;
@@ -29,7 +27,7 @@ import java.util.Optional;
 import static com.scottlogic.deg.common.util.Defaults.ISO_MAX_DATE;
 import static com.scottlogic.deg.generator.utils.Defaults.*;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
-import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
+import static java.time.temporal.ChronoUnit.*;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
@@ -223,8 +221,8 @@ class DateTimeRestrictionsMergerTests {
             laterTime, false
         );
         
-        LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(lowerDateTimeLimit, DATETIME_MAX_LIMIT, Timescale.HOURS);
-        LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(upperDateTimeLimit, DATETIME_MAX_LIMIT, Timescale.MILLIS);
+        LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(lowerDateTimeLimit, DATETIME_MAX_LIMIT, new DateTimeGranularity(HOURS));
+        LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(upperDateTimeLimit, DATETIME_MAX_LIMIT, new DateTimeGranularity(MILLIS));
 
         Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
         LinearRestrictions<OffsetDateTime> restrictions = result.get();
@@ -253,8 +251,8 @@ class DateTimeRestrictionsMergerTests {
         Limit <OffsetDateTime>lowerDateTimeLimit = new Limit<>(earlyTime, false);
         Limit <OffsetDateTime>upperDateTimeLimit = new Limit<>(laterTime, false);
 
-        LinearRestrictions<OffsetDateTime> early = LinearRestrictionsFactory.createDateTimeRestrictions(lowerDateTimeLimit, DATETIME_MAX_LIMIT, Timescale.HOURS);
-        LinearRestrictions<OffsetDateTime> later = LinearRestrictionsFactory.createDateTimeRestrictions(upperDateTimeLimit, DATETIME_MAX_LIMIT, Timescale.SECONDS);
+        LinearRestrictions<OffsetDateTime> early = LinearRestrictionsFactory.createDateTimeRestrictions(lowerDateTimeLimit, DATETIME_MAX_LIMIT, new DateTimeGranularity(HOURS));
+        LinearRestrictions<OffsetDateTime> later = LinearRestrictionsFactory.createDateTimeRestrictions(upperDateTimeLimit, DATETIME_MAX_LIMIT, new DateTimeGranularity(SECONDS));
 
         Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(early, later);
         LinearRestrictions<OffsetDateTime> restrictions = result.get();

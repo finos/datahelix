@@ -19,6 +19,7 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
+import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
@@ -82,5 +83,10 @@ public class AfterDateRelation implements FieldSpecRelations {
     @Override
     public String toString() {
         return String.format("%s is after %s%s", main(), inclusive ? "or equal to " : "", other());
+    }
+
+    @Override
+    public Constraint negate() {
+        return new BeforeDateRelation(main, other, !inclusive);
     }
 }

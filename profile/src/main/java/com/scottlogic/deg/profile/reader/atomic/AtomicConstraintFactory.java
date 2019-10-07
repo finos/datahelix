@@ -1,7 +1,6 @@
 package com.scottlogic.deg.profile.reader.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.constraintdetail.ParsedDateGranularity;
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.common.util.NumberUtils;
@@ -14,6 +13,8 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.regex.Pattern;
+
+import static com.scottlogic.deg.profile.reader.atomic.ConstraintReaderHelpers.getDateTimeGranularity;
 
 public class AtomicConstraintFactory {
     public static Constraint create(AtomicConstraintType type, Field field, Object value){
@@ -59,7 +60,7 @@ public class AtomicConstraintFactory {
                 if (value instanceof Number)
                     return new IsGranularToNumericConstraint(field, ParsedGranularity.parse(value));
                 else
-                    return new IsGranularToDateConstraint(field, ParsedDateGranularity.parse((String)value));
+                    return new IsGranularToDateConstraint(field, getDateTimeGranularity((String)value));
 
             case IS_UNIQUE:
             case FORMATTED_AS:

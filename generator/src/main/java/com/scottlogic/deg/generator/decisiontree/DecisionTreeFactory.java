@@ -16,11 +16,11 @@
 
 package com.scottlogic.deg.generator.decisiontree;
 
+import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.profile.constraints.delayed.DelayedAtomicConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.NegatedGrammaticalConstraint;
@@ -59,9 +59,9 @@ public class DecisionTreeFactory {
             return convertOrConstraint((OrConstraint) constraintToConvert);
         } else if (constraintToConvert instanceof ConditionalConstraint) {
             return convertConditionalConstraint((ConditionalConstraint) constraintToConvert);
-        } else if (constraintToConvert instanceof DelayedAtomicConstraint) {
-            DelayedAtomicConstraint delayedAtomicConstraint = (DelayedAtomicConstraint) constraintToConvert;
-            return asConstraintNode(delayedAtomicConstraint);
+        } else if (constraintToConvert instanceof FieldSpecRelations) {
+            FieldSpecRelations relation = (FieldSpecRelations) constraintToConvert;
+            return asConstraintNode(relation);
         } else {
             AtomicConstraint atomicConstraint = (AtomicConstraint) constraintToConvert;
             return asConstraintNode(atomicConstraint);
@@ -106,8 +106,8 @@ public class DecisionTreeFactory {
         }
         // if we got this far, it must be an atomic constraint
         else {
-            if (constraintToConvert instanceof DelayedAtomicConstraint) {
-                return asConstraintNode((DelayedAtomicConstraint) constraintToConvert);
+            if (constraintToConvert instanceof FieldSpecRelations) {
+                return asConstraintNode((FieldSpecRelations) constraintToConvert);
             }
             AtomicConstraint atomicConstraint = (AtomicConstraint) constraintToConvert;
             return asConstraintNode(atomicConstraint);
@@ -167,9 +167,9 @@ public class DecisionTreeFactory {
             .build();
     }
 
-    private static ConstraintNode asConstraintNode(DelayedAtomicConstraint constraint) {
+    private static ConstraintNode asConstraintNode(FieldSpecRelations relation) {
         return new ConstraintNodeBuilder()
-            .addDelayedAtomicConstraints(constraint)
+            .addRelations(relation)
             .setDecisions(Collections.emptyList())
             .build();
     }
