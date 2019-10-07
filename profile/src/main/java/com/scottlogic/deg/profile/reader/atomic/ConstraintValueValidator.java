@@ -2,7 +2,7 @@ package com.scottlogic.deg.profile.reader.atomic;
 
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
+import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularityFactory;
 import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.common.util.NumberUtils;
@@ -188,7 +188,7 @@ public class ConstraintValueValidator {
     private static void validateGranularity(Field field, Object value) {
         if (value instanceof Number) {
             validateTypeIs(field, IS_GRANULAR_TO, NUMERIC);
-            ParsedGranularity.parse(value);
+            NumericGranularityFactory.create(value);
         }
         else if (value instanceof String) {
             validateTypeIs(field, IS_GRANULAR_TO, DATETIME);

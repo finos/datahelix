@@ -4,7 +4,6 @@ import com.scottlogic.deg.common.profile.constraintdetail.Granularity;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.function.Function;
 
 import static com.scottlogic.deg.common.util.Defaults.*;
 
@@ -21,11 +20,10 @@ public class LinearRestrictionsFactory {
     }
 
     public static LinearRestrictions<BigDecimal> createNumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max) {
-        return createNumericRestrictions(min, max, DEFAULT_NUMERIC_SCALE);
+        return createNumericRestrictions(min, max, DEFAULT_NUMERIC_GRANULARITY);
     }
 
-    public static LinearRestrictions<BigDecimal> createNumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max, int numericScale) {
-        NumericGranularity granularity = new NumericGranularity(numericScale);
+    public static LinearRestrictions<BigDecimal> createNumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max, Granularity<BigDecimal> granularity) {
         BigDecimal inclusiveMin = getInclusiveMin(min, granularity, NUMERIC_MIN);
         BigDecimal inclusiveMax = getInclusiveMax(max, granularity, NUMERIC_MAX);
         return new LinearRestrictions<>(inclusiveMin, inclusiveMax, granularity);

@@ -6,9 +6,8 @@ import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.common.profile.constraintdetail.Granularity;
-import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
+import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularityFactory;
 import com.scottlogic.deg.generator.fieldspecs.relations.*;
-import com.scottlogic.deg.generator.restrictions.linear.NumericGranularity;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 
 import static com.scottlogic.deg.profile.reader.atomic.ConstraintReaderHelpers.getDateTimeGranularity;
@@ -51,7 +50,7 @@ public class RelationsFactory {
 
         switch (type) {
             case NUMERIC:
-                return new NumericGranularity(ParsedGranularity.parse(offsetUnit).getNumericGranularity().scale());
+                return NumericGranularityFactory.create(offsetUnit);
             case DATETIME:
                 return getDateTimeGranularity(offsetUnit);
             default:

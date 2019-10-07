@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.restrictions.linear;
-
-import com.scottlogic.deg.common.profile.constraintdetail.Granularity;
+package com.scottlogic.deg.common.profile.constraintdetail;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

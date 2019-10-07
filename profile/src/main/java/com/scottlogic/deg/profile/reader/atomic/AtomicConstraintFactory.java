@@ -1,7 +1,7 @@
 package com.scottlogic.deg.profile.reader.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
+import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularityFactory;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
@@ -58,7 +58,7 @@ public class AtomicConstraintFactory {
 
             case IS_GRANULAR_TO:
                 if (value instanceof Number)
-                    return new IsGranularToNumericConstraint(field, ParsedGranularity.parse(value));
+                    return new IsGranularToNumericConstraint(field, NumericGranularityFactory.create(value));
                 else
                     return new IsGranularToDateConstraint(field, getDateTimeGranularity((String)value));
 

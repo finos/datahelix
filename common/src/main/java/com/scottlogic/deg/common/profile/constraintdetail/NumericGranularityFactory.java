@@ -25,14 +25,8 @@ import java.util.Objects;
  * Granularity expressions could be interpreted differently depending on other constraints on a field (eg, type constraints),
  * so we store all possible parsings in this class, ready to make a GranularityRestrictions object
  * */
-public class ParsedGranularity {
-    private final BigDecimal numericGranularity;
-
-    public ParsedGranularity(BigDecimal numericGranularity) {
-        this.numericGranularity = numericGranularity;
-    }
-
-    public static ParsedGranularity parse(Object granularityExpression) {
+public class NumericGranularityFactory {
+    public static NumericGranularity create(Object granularityExpression) {
         BigDecimal asNumber = NumberUtils.coerceToBigDecimal(granularityExpression);
         if (asNumber == null){
             throw new IllegalArgumentException("Can't interpret granularity expression: " + granularityExpression);
@@ -46,24 +40,6 @@ public class ParsedGranularity {
             throw new IllegalArgumentException("Numeric granularity must be fractional power of ten");
         }
 
-        return new ParsedGranularity(asNumber);
+        return new NumericGranularity(asNumber.scale());
     }
-
-    public BigDecimal getNumericGranularity() {
-        return this.numericGranularity;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ParsedGranularity that = (ParsedGranularity) o;
-        return Objects.equals(numericGranularity, that.numericGranularity);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(numericGranularity);
-    }
-
 }

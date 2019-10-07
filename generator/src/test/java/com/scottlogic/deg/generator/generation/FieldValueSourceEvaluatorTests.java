@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.generator.generation;
 
+import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularity;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.NullAppendingValueSource;
@@ -167,7 +168,7 @@ public class FieldValueSourceEvaluatorTests {
         LinearRestrictions<BigDecimal> restrictions = createNumericRestrictions(
             new Limit<>(new BigDecimal("15"), false),
             new Limit<>(new BigDecimal("16"), false),
-            2);
+            new NumericGranularity(2));
         FieldSpec fieldSpec = FieldSpec.fromRestriction(restrictions).withNotNull();
         FieldValueSourceEvaluator evaluator = new FieldValueSourceEvaluator();
 

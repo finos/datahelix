@@ -17,11 +17,11 @@
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
+import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularityFactory;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
-import com.scottlogic.deg.generator.restrictions.linear.NumericGranularity;
+import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularity;
 
 import java.util.Objects;
 
@@ -32,13 +32,13 @@ public class IsGranularToNumericConstraint implements AtomicConstraint {
     public final Field field;
     public final NumericGranularity granularity;
 
-    public IsGranularToNumericConstraint(Field field, ParsedGranularity granularity) {
+    public IsGranularToNumericConstraint(Field field, NumericGranularity granularity) {
         if(field == null)
             throw new IllegalArgumentException("field must not be null");
         if(granularity == null)
             throw new IllegalArgumentException("granularity must not be null");
 
-        this.granularity = new NumericGranularity(granularity.getNumericGranularity().scale());
+        this.granularity = granularity;
         this.field = field;
     }
 
