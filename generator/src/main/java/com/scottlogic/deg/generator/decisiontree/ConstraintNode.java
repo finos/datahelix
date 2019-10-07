@@ -16,8 +16,8 @@
 
 package com.scottlogic.deg.generator.decisiontree;
 
+import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.profile.constraints.delayed.DelayedAtomicConstraint;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 
 import java.util.*;
@@ -25,18 +25,18 @@ import java.util.function.Supplier;
 
 public class ConstraintNode implements Node {
     private final Collection<AtomicConstraint> atomicConstraints;
-    private final Collection<DelayedAtomicConstraint> delayedAtomicConstraints;
+    private final Collection<FieldSpecRelations> relations;
     private final Collection<DecisionNode> decisions;
     private final Set<NodeMarking> nodeMarkings;
 
     private Optional<RowSpec> adaptedRowSpec = null;
 
     public ConstraintNode(Collection<AtomicConstraint> atomicConstraints,
-                          Collection<DelayedAtomicConstraint> delayedAtomicConstraints,
+                          Collection<FieldSpecRelations> relations,
                           Collection<DecisionNode> decisions,
                           Set<NodeMarking> nodeMarkings) {
         this.atomicConstraints = Collections.unmodifiableCollection(atomicConstraints);
-        this.delayedAtomicConstraints = Collections.unmodifiableCollection(delayedAtomicConstraints);
+        this.relations = Collections.unmodifiableCollection(relations);
         this.decisions = Collections.unmodifiableCollection(decisions);
         this.nodeMarkings = Collections.unmodifiableSet(nodeMarkings);
     }
@@ -45,8 +45,8 @@ public class ConstraintNode implements Node {
         return new HashSet<>(atomicConstraints);
     }
 
-    public Collection<DelayedAtomicConstraint> getDelayedAtomicConstraints() {
-        return new HashSet<>(delayedAtomicConstraints);
+    public Collection<FieldSpecRelations> getRelations() {
+        return new HashSet<>(relations);
     }
 
     public Collection<DecisionNode> getDecisions() {
@@ -84,7 +84,7 @@ public class ConstraintNode implements Node {
     }
 
     public ConstraintNodeBuilder builder() {
-        return new ConstraintNodeBuilder(atomicConstraints, delayedAtomicConstraints, decisions, nodeMarkings);
+        return new ConstraintNodeBuilder(atomicConstraints, relations, decisions, nodeMarkings);
     }
 
     @Override
@@ -100,8 +100,8 @@ public class ConstraintNode implements Node {
 
         boolean atomicConstraintsEqual = atomicConstraints.containsAll(that.atomicConstraints) &&
                 that.atomicConstraints.containsAll(atomicConstraints);
-        boolean delayedAtomicConstraintsEqual = delayedAtomicConstraints.containsAll(that.delayedAtomicConstraints) &&
-            that.delayedAtomicConstraints.containsAll(delayedAtomicConstraints);
+        boolean delayedAtomicConstraintsEqual = relations.containsAll(that.relations) &&
+            that.relations.containsAll(relations);
         boolean decisionsEqual = decisions.containsAll(that.decisions) &&
             that.decisions.containsAll(decisions);
 
@@ -113,7 +113,7 @@ public class ConstraintNode implements Node {
     @Override
     public int hashCode() {
         List<AtomicConstraint> atomicConstraintsList = new ArrayList<>(atomicConstraints);
-        List<DelayedAtomicConstraint> delayedAtomicConstraintsList = new ArrayList<>(delayedAtomicConstraints);
+        List<FieldSpecRelations> delayedAtomicConstraintsList = new ArrayList<>(relations);
         List<DecisionNode> decisionsList = new ArrayList<>(decisions);
 
         return Objects.hash(atomicConstraintsList, delayedAtomicConstraintsList, decisionsList);
@@ -121,7 +121,7 @@ public class ConstraintNode implements Node {
 
     static ConstraintNode merge(Iterator<ConstraintNode> constraintNodeIterator) {
         Collection<AtomicConstraint> atomicConstraints = new ArrayList<>();
-        Collection<DelayedAtomicConstraint> delayedAtomicConstraints = new ArrayList<>();
+        Collection<FieldSpecRelations> delayedAtomicConstraints = new ArrayList<>();
         Collection<DecisionNode> decisions = new ArrayList<>();
         Set<NodeMarking> markings = new HashSet<>();
 
@@ -129,14 +129,14 @@ public class ConstraintNode implements Node {
             ConstraintNode constraintNode = constraintNodeIterator.next();
 
             atomicConstraints.addAll(constraintNode.getAtomicConstraints());
-            delayedAtomicConstraints.addAll(constraintNode.getDelayedAtomicConstraints());
+            delayedAtomicConstraints.addAll(constraintNode.getRelations());
             decisions.addAll(constraintNode.getDecisions());
             markings.addAll(constraintNode.nodeMarkings);
         }
 
         return new ConstraintNodeBuilder()
             .addAtomicConstraints(atomicConstraints)
-            .addDelayedAtomicConstraints(delayedAtomicConstraints)
+            .addRelations(delayedAtomicConstraints)
             .setDecisions(decisions)
             .setNodeMarkings(markings)
             .build();
