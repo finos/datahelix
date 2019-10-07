@@ -27,7 +27,7 @@ import java.util.Set;
 
 public class TestConstraintNodeBuilder {
     protected Set<AtomicConstraint> constraints = new HashSet<>();
-    private List<DecisionNode> decisionNodes = new ArrayList<>();
+    private Set<DecisionNode> decisionNodes = new HashSet<>();
     private Set<NodeMarking> markings = new HashSet<>();
 
     protected TestConstraintNodeBuilder() {
@@ -46,7 +46,7 @@ public class TestConstraintNodeBuilder {
     }
 
     public TestConstraintNodeBuilder withDecision(TestConstraintNodeBuilder... constraintNodes) {
-        List<ConstraintNode> nodes = new ArrayList<>();
+        Set<ConstraintNode> nodes = new HashSet<>();
         for (TestConstraintNodeBuilder constraintNode : constraintNodes) {
             nodes.add(constraintNode.build());
         }

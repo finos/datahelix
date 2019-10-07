@@ -26,7 +26,7 @@ import java.util.function.Supplier;
 public class ConstraintNode implements Node {
     private final Set<AtomicConstraint> atomicConstraints;
     private final Set<FieldSpecRelations> relations;
-    private final Collection<DecisionNode> decisions;
+    private final Set<DecisionNode> decisions;
     private final Set<NodeMarking> nodeMarkings;
 
     private Optional<RowSpec> adaptedRowSpec = null;
@@ -34,11 +34,11 @@ public class ConstraintNode implements Node {
 
     public ConstraintNode(Set<AtomicConstraint> atomicConstraints,
                           Set<FieldSpecRelations> relations,
-                          Collection<DecisionNode> decisions,
+                          Set<DecisionNode> decisions,
                           Set<NodeMarking> nodeMarkings) {
         this.atomicConstraints = Collections.unmodifiableSet(atomicConstraints);
         this.relations = Collections.unmodifiableSet(relations);
-        this.decisions = Collections.unmodifiableCollection(decisions);
+        this.decisions = Collections.unmodifiableSet(decisions);
         this.nodeMarkings = Collections.unmodifiableSet(nodeMarkings);
     }
 
@@ -100,31 +100,21 @@ public class ConstraintNode implements Node {
         if (o == null || getClass() != o.getClass()) return false;
         ConstraintNode that = (ConstraintNode) o;
 
-        boolean atomicConstraintsEqual = atomicConstraints.containsAll(that.atomicConstraints) &&
-                that.atomicConstraints.containsAll(atomicConstraints);
-        boolean delayedAtomicConstraintsEqual = relations.containsAll(that.relations) &&
-            that.relations.containsAll(relations);
-        boolean decisionsEqual = decisions.containsAll(that.decisions) &&
-            that.decisions.containsAll(decisions);
-
-        return atomicConstraintsEqual &&
-            delayedAtomicConstraintsEqual &&
-            decisionsEqual;
+        return Objects.equals(atomicConstraints, that.atomicConstraints) &&
+            Objects.equals(relations, that.relations) &&
+            Objects.equals(decisions, that.decisions) &&
+            Objects.equals(nodeMarkings, that.nodeMarkings);
     }
 
     @Override
     public int hashCode() {
-        List<AtomicConstraint> atomicConstraintsList = new ArrayList<>(atomicConstraints);
-        List<FieldSpecRelations> delayedAtomicConstraintsList = new ArrayList<>(relations);
-        List<DecisionNode> decisionsList = new ArrayList<>(decisions);
-
-        return Objects.hash(atomicConstraintsList, delayedAtomicConstraintsList, decisionsList);
+        return Objects.hash(atomicConstraints, relations, decisions, nodeMarkings);
     }
 
     static ConstraintNode merge(Iterator<ConstraintNode> constraintNodeIterator) {
         Set<AtomicConstraint> atomicConstraints = new HashSet<>();
         Set<FieldSpecRelations> delayedAtomicConstraints = new HashSet<>();
-        Collection<DecisionNode> decisions = new ArrayList<>();
+        Set<DecisionNode> decisions = new HashSet<>();
         Set<NodeMarking> markings = new HashSet<>();
 
         while (constraintNodeIterator.hasNext()) {

@@ -47,12 +47,12 @@ class DecisionTreeSimplifierTests {
             new ConstraintNodeBuilder().addAtomicConstraints(SetUtils.setOf(
                 new IsInSetConstraint(createField("Field 1"), setOf(1, 2)),
                 new IsNullConstraint(createField("Field 1")).negate()
-            )).setDecisions(Collections.singletonList(
+            )).setDecisions(Collections.singleton(
                 new DecisionNode(
-                    Collections.singletonList(
+                    Collections.singleton(
                         new ConstraintNodeBuilder().addAtomicConstraints(Collections.singleton(
                             new IsInSetConstraint(createField("Field 1"), setOf(1, 2))
-                        )).setDecisions(Collections.emptyList()).build()
+                        )).setDecisions(Collections.emptySet()).build()
                     )
                 )
             )).build(),
@@ -74,12 +74,12 @@ class DecisionTreeSimplifierTests {
             new ConstraintNodeBuilder().addAtomicConstraints(SetUtils.setOf(
                 new IsInSetConstraint(createField("Field 1"), setOf(1, 2)),
                 new IsNullConstraint(createField("Field 1")).negate()
-            )).setDecisions(Collections.singletonList(
+            )).setDecisions(Collections.singleton(
                 new DecisionNode(
-                    Collections.singletonList(
+                    Collections.singleton(
                         new ConstraintNodeBuilder().addAtomicConstraints(Collections.singleton(
                             new IsInSetConstraint(createField("Field 2"), setOf("A", "B"))
-                        )).setDecisions(Collections.emptyList()).build()
+                        )).setDecisions(Collections.emptySet()).build()
                     )
                 )
             )).build(),

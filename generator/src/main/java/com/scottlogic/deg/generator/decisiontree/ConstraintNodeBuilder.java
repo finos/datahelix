@@ -17,12 +17,12 @@ import static java.util.stream.Stream.concat;
 public class ConstraintNodeBuilder {
     private final Set<AtomicConstraint> atomicConstraints;
     private final Set<FieldSpecRelations> relations;
-    private final Collection<DecisionNode> decisions;
+    private final Set<DecisionNode> decisions;
     private final Set<NodeMarking> nodeMarkings;
 
     public ConstraintNodeBuilder(Set<AtomicConstraint> atomicConstraints,
                                  Set<FieldSpecRelations> relations,
-                                 Collection<DecisionNode> decisions,
+                                 Set<DecisionNode> decisions,
                                  Set<NodeMarking> nodeMarkings) {
         this.atomicConstraints = atomicConstraints;
         this.relations = relations;
@@ -31,7 +31,7 @@ public class ConstraintNodeBuilder {
     }
 
     public ConstraintNodeBuilder() {
-        this(Collections.emptySet(), Collections.emptySet(), Collections.emptyList(), Collections.emptySet());
+        this(Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet());
     }
 
     public ConstraintNodeBuilder setAtomicConstraints(Set<AtomicConstraint> newAtomicConstraints) {
@@ -76,7 +76,7 @@ public class ConstraintNodeBuilder {
         return addRelations(SetUtils.setOf(constraints));
     }
 
-    public ConstraintNodeBuilder setDecisions(Collection<DecisionNode> newDecisions) {
+    public ConstraintNodeBuilder setDecisions(Set<DecisionNode> newDecisions) {
         return new ConstraintNodeBuilder(atomicConstraints, relations, newDecisions, nodeMarkings);
     }
 
@@ -100,7 +100,7 @@ public class ConstraintNodeBuilder {
             concat(
                 this.decisions.stream(),
                 decisions.stream()
-            ).collect(Collectors.toList()));
+            ).collect(Collectors.toSet()));
     }
 
 

@@ -44,12 +44,12 @@ public class ConstraintReducer {
         Set<AtomicConstraint> constraints = node.getAtomicConstraints();
         Set<FieldSpecRelations> relations = node.getRelations();
 
-        final Map<Field, List<AtomicConstraint>> fieldToConstraints = constraints.stream()
+        final Map<Field, Set<AtomicConstraint>> fieldToConstraints = constraints.stream()
             .collect(
                 Collectors.groupingBy(
                     AtomicConstraint::getField,
                     Collectors.mapping(Function.identity(),
-                        Collectors.toList())));
+                        Collectors.toSet())));
 
         final Map<Field, Optional<FieldSpec>> fieldToFieldSpec = fields.stream()
             .collect(

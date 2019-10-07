@@ -89,7 +89,7 @@ public class DecisionTreeOptimiser {
                     optimiseLevelOfTree(factorisingConstraintNode),
                     optimiseLevelOfTree(negatedFactorisingConstraintNode)),
                 otherOptions.stream())
-            .collect(Collectors.toList()));
+            .collect(Collectors.toSet()));
 
         return rootNode.builder()
             .removeDecisions(decisionsToRemove)
@@ -104,7 +104,7 @@ public class DecisionTreeOptimiser {
 
     private ConstraintNode addOptionsAsDecisionUnderConstraintNode(
         ConstraintNode newNode,
-        Collection<ConstraintNode> optionsToAdd) {
+        Set<ConstraintNode> optionsToAdd) {
         if (optionsToAdd.isEmpty()) {
             return newNode;
         }
@@ -212,7 +212,7 @@ public class DecisionTreeOptimiser {
         private void markOptionForFactorisation(
             AtomicConstraint factorisingConstraint,
             ConstraintNode node,
-            List<ConstraintNode> options,
+            Set<ConstraintNode> options,
             Set<AtomicConstraint> constraints) {
             ConstraintNode newOption = node.builder().removeAtomicConstraint(factorisingConstraint).build();
             if (!newOption.getAtomicConstraints().isEmpty()) {
@@ -223,8 +223,8 @@ public class DecisionTreeOptimiser {
     }
 
     static class DecisionAnalysisResult {
-        List<ConstraintNode> optionsToFactorise = new ArrayList<>();
-        List<ConstraintNode> negatedOptionsToFactorise = new ArrayList<>();
-        List<ConstraintNode> adjacentOptions = new ArrayList<>();
+        Set<ConstraintNode> optionsToFactorise = new HashSet<>();
+        Set<ConstraintNode> negatedOptionsToFactorise = new HashSet<>();
+        Set<ConstraintNode> adjacentOptions = new HashSet<>();
     }
 }

@@ -277,7 +277,7 @@ class DecisionTreeFactoryTests {
 
         Assert.assertThat("analyse() output is not null", outputRule, Is.is(IsNull.notNullValue()));
         Assert.assertTrue(isEquivalentTo(
-            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Arrays.asList(
+            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(SetUtils.setOf(
                 new DecisionNode(
                     new ConstraintNodeBuilder().addAtomicConstraints(constraintA).build(),
                     new ConstraintNodeBuilder().addAtomicConstraints(constraintB).build()
@@ -315,7 +315,7 @@ class DecisionTreeFactoryTests {
 
         Assert.assertThat("analyse() output is not null", outputRule, Is.is(IsNull.notNullValue()));
         Assert.assertTrue(isEquivalentTo(
-            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Arrays.asList(
+            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(SetUtils.setOf(
                 new DecisionNode(
                     new ConstraintNodeBuilder().addAtomicConstraints(constraintA).build(),
                     new ConstraintNodeBuilder().addAtomicConstraints(constraintC, constraintB).build()
@@ -345,7 +345,7 @@ class DecisionTreeFactoryTests {
 
         Assert.assertThat("analyse() output is not null", outputRule, Is.is(IsNull.notNullValue()));
         Assert.assertTrue(isEquivalentTo(
-            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Collections.singletonList(
+            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Collections.singleton(
                 new DecisionNode(
                     new ConstraintNodeBuilder().addAtomicConstraints(SetUtils.setOf(
                         constraintA,
@@ -376,7 +376,7 @@ class DecisionTreeFactoryTests {
 
         Assert.assertTrue(
             isEquivalentTo(
-                getResultingRootOption(), new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Collections.singletonList(
+                getResultingRootOption(), new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Collections.singleton(
                     new DecisionNode(
                         /* OPTION 1: AND(C, OR(A, B))  */
                         new ConstraintNodeBuilder().addAtomicConstraints(Collections.singleton(bGreaterThan20)).setDecisions(Collections.singleton(
@@ -408,7 +408,7 @@ class DecisionTreeFactoryTests {
 
         Assert.assertThat("analyse() output is not null", outputRule, Is.is(IsNull.notNullValue()));
         Assert.assertTrue(isEquivalentTo(
-            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Collections.singletonList(
+            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Collections.singleton(
                 new DecisionNode(
                     new ConstraintNodeBuilder().addAtomicConstraints(SetUtils.setOf(
                         constraintA,
@@ -486,7 +486,7 @@ class DecisionTreeFactoryTests {
         Assert.assertThat("analyse() output is not null", outputRule, Is.is(IsNull.notNullValue()));
         // Result should be (NOT A) OR (NOT B)
         Assert.assertTrue(isEquivalentTo(
-            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Collections.singletonList(
+            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Collections.singleton(
                 new DecisionNode(
                     new ConstraintNodeBuilder().addAtomicConstraints(Collections.singleton(constraintA.negate())).setDecisions(Collections.emptySet()).build(),
                     new ConstraintNodeBuilder().addAtomicConstraints(Collections.singleton(constraintB.negate())).setDecisions(Collections.emptySet()).build()
@@ -511,7 +511,7 @@ class DecisionTreeFactoryTests {
         Assert.assertTrue(
             isEquivalentTo(
                 getResultingRootOption(),
-                new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Collections.singletonList(
+                new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Collections.singleton(
                     new DecisionNode(
                         new ConstraintNodeBuilder().addAtomicConstraints(constraintA).build(),
                         new ConstraintNodeBuilder().addAtomicConstraints(constraintB).build(),

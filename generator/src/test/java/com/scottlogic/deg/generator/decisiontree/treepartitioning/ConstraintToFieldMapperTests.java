@@ -91,7 +91,7 @@ class ConstraintToFieldMapperTests {
         final AtomicConstraint constraintF = new IsInSetConstraint(createField("F"), whitelistOf("test-value"));
 
         final DecisionNode decisionABC = new DecisionNode(
-            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Arrays.asList(
+            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(SetUtils.setOf(
                 new DecisionNode(new ConstraintNodeBuilder().addAtomicConstraints(constraintA).build()),
                 new DecisionNode(new ConstraintNodeBuilder().addAtomicConstraints(constraintB).build()),
                 new DecisionNode(new ConstraintNodeBuilder().addAtomicConstraints(constraintC).build())
@@ -99,7 +99,7 @@ class ConstraintToFieldMapperTests {
         );
 
         final DecisionNode decisionDEF = new DecisionNode(
-            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Collections.singletonList(
+            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Collections.singleton(
                 new DecisionNode(
                     new ConstraintNodeBuilder().addAtomicConstraints(constraintD).build(),
                     new ConstraintNodeBuilder().addAtomicConstraints(constraintE).build(),

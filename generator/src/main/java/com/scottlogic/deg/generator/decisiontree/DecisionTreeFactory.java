@@ -26,10 +26,7 @@ import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalC
 import com.scottlogic.deg.generator.profile.constraints.grammatical.NegatedGrammaticalConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class DecisionTreeFactory {
@@ -128,9 +125,9 @@ public class DecisionTreeFactory {
         // OR(X, Y, Z) becomes a decision node
         Collection<Constraint> subConstraints = constraintToConvert.subConstraints;
 
-        List<ConstraintNode> options = subConstraints.stream()
+        Set<ConstraintNode> options = subConstraints.stream()
             .map(this::convertConstraint)
-            .collect(Collectors.toList());
+            .collect(Collectors.toSet());
 
         return asConstraintNode(new DecisionNode(options));
     }
@@ -156,7 +153,7 @@ public class DecisionTreeFactory {
     private static ConstraintNode asConstraintNode(AtomicConstraint constraint) {
         return new ConstraintNodeBuilder()
             .addAtomicConstraints(Collections.singleton(constraint))
-            .setDecisions(Collections.emptyList())
+            .setDecisions(Collections.emptySet())
             .build();
     }
 
@@ -170,7 +167,7 @@ public class DecisionTreeFactory {
     private static ConstraintNode asConstraintNode(FieldSpecRelations relation) {
         return new ConstraintNodeBuilder()
             .addRelations(relation)
-            .setDecisions(Collections.emptyList())
+            .setDecisions(Collections.emptySet())
             .build();
     }
 }

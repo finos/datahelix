@@ -29,8 +29,13 @@ import java.util.*;
 class PrunedConstraintState {
 
     private final Set<AtomicConstraint> newAtomicConstraints;
+<<<<<<< HEAD
     private final Set<FieldSpecRelations> newRelations;
     private final Collection<DecisionNode> newDecisionNodes = new ArrayList<>();
+=======
+    private final Set<DelayedAtomicConstraint> newDelayedAtomicConstraints;
+    private final Set<DecisionNode> newDecisionNodes = new HashSet<>();
+>>>>>>> Decisions are now in a set instead of a list
     private final Set<AtomicConstraint> pulledUpAtomicConstraints = new HashSet<>();
     private final Set<FieldSpecRelations> pulledUpRelations = new HashSet<>();
 
