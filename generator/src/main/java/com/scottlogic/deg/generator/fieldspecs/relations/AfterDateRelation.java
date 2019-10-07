@@ -17,6 +17,7 @@
 package com.scottlogic.deg.generator.fieldspecs.relations;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.constraintdetail.Granularity;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
@@ -26,6 +27,7 @@ import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactor
 
 import java.time.OffsetDateTime;
 
+import static com.scottlogic.deg.common.util.Defaults.DEFAULT_DATETIME_GRANULARITY;
 import static com.scottlogic.deg.common.util.Defaults.ISO_MAX_DATE;
 import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
 import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
@@ -35,6 +37,8 @@ public class AfterDateRelation implements FieldSpecRelations {
     private final Field main;
     private final Field other;
     private final boolean inclusive;
+    private final Granularity<OffsetDateTime> defaultGranularity = DEFAULT_DATETIME_GRANULARITY;
+    private final OffsetDateTime defaultMax = ISO_MAX_DATE;
 
     public AfterDateRelation(Field main, Field other, boolean inclusive) {
         this.main = main;
@@ -49,29 +53,25 @@ public class AfterDateRelation implements FieldSpecRelations {
             return FieldSpec.empty();
         }
 
-        OffsetDateTime min = lr.getMin();
-        if (!inclusive){
-            min = lr.getGranularity().getNext(min);
-        }
-
-        return FieldSpec.fromRestriction(new LinearRestrictions<>(min, ISO_MAX_DATE, lr.getGranularity()));
+        return createFieldSpec(lr.getMin(), lr.getGranularity());
     }
 
     @Override
     public FieldSpec reduceValueToFieldSpec(DataBagValue generatedValue) {
-        OffsetDateTime value = (OffsetDateTime) generatedValue.getValue();
-        if (value == null) {
-            return FieldSpec.empty();
+        return createFieldSpec((OffsetDateTime) generatedValue.getValue(), defaultGranularity);
+    }
+
+    private FieldSpec createFieldSpec(OffsetDateTime min, Granularity<OffsetDateTime> granularity) {
+        if (!inclusive){
+            min = granularity.getNext(min);
         }
-        Limit<OffsetDateTime> limit = new Limit<>(value, true);
-        LinearRestrictions<OffsetDateTime> restrictions = LinearRestrictionsFactory.createDateTimeRestrictions(limit,limit);
-        FieldSpec newSpec = FieldSpec.fromRestriction(restrictions);
-        return reduceToRelatedFieldSpec(newSpec);
+
+        return FieldSpec.fromRestriction(new LinearRestrictions<>(min, defaultMax, granularity));
     }
 
     @Override
     public FieldSpecRelations inverse() {
-        return new BeforeDateRelation(other(), main(), inclusive);
+        return new BeforeDateRelation(other, main, inclusive);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class AfterDateRelation implements FieldSpecRelations {
 
     @Override
     public String toString() {
-        return String.format("%s is after %s%s", main(), inclusive ? "or equal to " : "", other());
+        return String.format("%s is after %s%s", main, inclusive ? "or equal to " : "", other);
     }
 
     @Override

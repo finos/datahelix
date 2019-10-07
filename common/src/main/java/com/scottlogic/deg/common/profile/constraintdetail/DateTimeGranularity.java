@@ -93,10 +93,6 @@ public class DateTimeGranularity implements Granularity<OffsetDateTime> {
 
     @Override
     public String toString() {
-        return "DateTimeGranularity{" +
-            "chronoUnit=" + chronoUnit +
-            ", workingDay=" + workingDay +
-            ", temporalAdjusterGenerator=" + temporalAdjusterGenerator +
-            '}';
+        return workingDay ? "working days" : chronoUnit.toString();
     }
 }
