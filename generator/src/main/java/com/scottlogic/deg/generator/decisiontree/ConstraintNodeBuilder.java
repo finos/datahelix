@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.decisiontree;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.common.util.FlatMappingSpliterator;
+import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -14,13 +15,13 @@ import java.util.stream.Stream;
 import static java.util.stream.Stream.concat;
 
 public class ConstraintNodeBuilder {
-    private final Collection<AtomicConstraint> atomicConstraints;
-    private final Collection<FieldSpecRelations> relations;
+    private final Set<AtomicConstraint> atomicConstraints;
+    private final Set<FieldSpecRelations> relations;
     private final Collection<DecisionNode> decisions;
     private final Set<NodeMarking> nodeMarkings;
 
-    public ConstraintNodeBuilder(Collection<AtomicConstraint> atomicConstraints,
-                                 Collection<FieldSpecRelations> relations,
+    public ConstraintNodeBuilder(Set<AtomicConstraint> atomicConstraints,
+                                 Set<FieldSpecRelations> relations,
                                  Collection<DecisionNode> decisions,
                                  Set<NodeMarking> nodeMarkings) {
         this.atomicConstraints = atomicConstraints;
@@ -30,14 +31,14 @@ public class ConstraintNodeBuilder {
     }
 
     public ConstraintNodeBuilder() {
-        this(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), Collections.emptySet());
+        this(Collections.emptySet(), Collections.emptySet(), Collections.emptyList(), Collections.emptySet());
     }
 
-    public ConstraintNodeBuilder setAtomicConstraints(Collection<AtomicConstraint> newAtomicConstraints) {
+    public ConstraintNodeBuilder setAtomicConstraints(Set<AtomicConstraint> newAtomicConstraints) {
         return new ConstraintNodeBuilder(newAtomicConstraints, relations, decisions, nodeMarkings);
     }
 
-    public ConstraintNodeBuilder setRelations(Collection<FieldSpecRelations> newConstraints) {
+    public ConstraintNodeBuilder setRelations(Set<FieldSpecRelations> newConstraints) {
         return new ConstraintNodeBuilder(atomicConstraints, newConstraints, decisions, nodeMarkings);
     }
 
@@ -45,34 +46,34 @@ public class ConstraintNodeBuilder {
         return setAtomicConstraints(atomicConstraints
             .stream()
             .filter(constraint -> !constraint.equals(atomicConstraint))
-            .collect(Collectors.toList())
+            .collect(Collectors.toSet())
         );
     }
 
-    public ConstraintNodeBuilder addAtomicConstraints(Collection<AtomicConstraint> atomicConstraints) {
+    public ConstraintNodeBuilder addAtomicConstraints(Set<AtomicConstraint> atomicConstraints) {
         return setAtomicConstraints(
             concat(
                 this.atomicConstraints.stream(),
                 atomicConstraints.stream()
-            ).collect(Collectors.toList())
+            ).collect(Collectors.toSet())
         );
     }
 
     public ConstraintNodeBuilder addAtomicConstraints(AtomicConstraint... constraints) {
-        return addAtomicConstraints(Arrays.asList(constraints));
+        return addAtomicConstraints(Arrays.stream(constraints).collect(Collectors.toSet()));
     }
 
-    public ConstraintNodeBuilder addRelations(Collection<FieldSpecRelations> relations) {
+    public ConstraintNodeBuilder addRelations(Set<FieldSpecRelations> relations) {
         return setRelations(
             concat(
                 this.relations.stream(),
                 relations.stream())
-            .collect(Collectors.toList())
+            .collect(Collectors.toSet())
         );
     }
 
     public ConstraintNodeBuilder addRelations(FieldSpecRelations... constraints) {
-        return addRelations(Arrays.asList(constraints));
+        return addRelations(SetUtils.setOf(constraints));
     }
 
     public ConstraintNodeBuilder setDecisions(Collection<DecisionNode> newDecisions) {
@@ -80,26 +81,18 @@ public class ConstraintNodeBuilder {
     }
 
     public ConstraintNodeBuilder removeDecision(DecisionNode decisionNode) {
-        return setDecisions(
-            decisions.stream()
-                .filter(decision -> !decision.equals(decisionNode))
-                .collect(Collectors.toSet()));
+        return removeDecisions(Collections.singleton(decisionNode));
     }
 
     public ConstraintNodeBuilder removeDecisions(Collection<DecisionNode> decisionNodes) {
-        ConstraintNodeBuilder constraintNodeBuilder = this;
-        for (DecisionNode decisionNode : decisionNodes) {
-            constraintNodeBuilder = constraintNodeBuilder.removeDecision(decisionNode);
-        }
-        return constraintNodeBuilder;
+        return setDecisions(
+            decisions.stream()
+                .filter(decision -> !decisionNodes.contains(decision))
+                .collect(Collectors.toSet()));
     }
 
     public ConstraintNodeBuilder addDecision(DecisionNode decisionNode) {
-        return setDecisions(
-            concat(
-                decisions.stream(),
-                Stream.of(decisionNode)
-            ).collect(Collectors.toList()));
+        return addDecisions(Collections.singleton(decisionNode));
     }
 
     public ConstraintNodeBuilder addDecisions(Collection<DecisionNode> decisions) {

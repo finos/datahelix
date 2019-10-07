@@ -41,8 +41,8 @@ public class ConstraintReducer {
     }
 
     public Optional<RowSpec> reduceConstraintsToRowSpec(ProfileFields fields, ConstraintNode node) {
-        Collection<AtomicConstraint> constraints = node.getAtomicConstraints();
-        Collection<FieldSpecRelations> relations = node.getRelations();
+        Set<AtomicConstraint> constraints = node.getAtomicConstraints();
+        Set<FieldSpecRelations> relations = node.getRelations();
 
         final Map<Field, List<AtomicConstraint>> fieldToConstraints = constraints.stream()
             .collect(

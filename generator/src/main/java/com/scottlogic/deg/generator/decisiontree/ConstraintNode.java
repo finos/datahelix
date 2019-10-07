@@ -24,29 +24,31 @@ import java.util.*;
 import java.util.function.Supplier;
 
 public class ConstraintNode implements Node {
-    private final Collection<AtomicConstraint> atomicConstraints;
-    private final Collection<FieldSpecRelations> relations;
+    private final Set<AtomicConstraint> atomicConstraints;
+    private final Set<FieldSpecRelations> relations;
     private final Collection<DecisionNode> decisions;
     private final Set<NodeMarking> nodeMarkings;
 
     private Optional<RowSpec> adaptedRowSpec = null;
 
-    public ConstraintNode(Collection<AtomicConstraint> atomicConstraints,
-                          Collection<FieldSpecRelations> relations,
+
+    public ConstraintNode(Set<AtomicConstraint> atomicConstraints,
+                          Set<FieldSpecRelations> relations,
                           Collection<DecisionNode> decisions,
                           Set<NodeMarking> nodeMarkings) {
-        this.atomicConstraints = Collections.unmodifiableCollection(atomicConstraints);
-        this.relations = Collections.unmodifiableCollection(relations);
+        this.atomicConstraints = Collections.unmodifiableSet(atomicConstraints);
+        this.relations = Collections.unmodifiableSet(relations);
         this.decisions = Collections.unmodifiableCollection(decisions);
         this.nodeMarkings = Collections.unmodifiableSet(nodeMarkings);
     }
 
-    public Collection<AtomicConstraint> getAtomicConstraints() {
-        return new HashSet<>(atomicConstraints);
+    public Set<AtomicConstraint> getAtomicConstraints() {
+        return atomicConstraints;
     }
 
-    public Collection<FieldSpecRelations> getRelations() {
-        return new HashSet<>(relations);
+
+    public Set<FieldSpecRelations> getRelations() {
+        return relations;
     }
 
     public Collection<DecisionNode> getDecisions() {
@@ -120,8 +122,8 @@ public class ConstraintNode implements Node {
     }
 
     static ConstraintNode merge(Iterator<ConstraintNode> constraintNodeIterator) {
-        Collection<AtomicConstraint> atomicConstraints = new ArrayList<>();
-        Collection<FieldSpecRelations> delayedAtomicConstraints = new ArrayList<>();
+        Set<AtomicConstraint> atomicConstraints = new HashSet<>();
+        Set<FieldSpecRelations> delayedAtomicConstraints = new HashSet<>();
         Collection<DecisionNode> decisions = new ArrayList<>();
         Set<NodeMarking> markings = new HashSet<>();
 

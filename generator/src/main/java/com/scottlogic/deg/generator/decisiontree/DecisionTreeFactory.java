@@ -162,7 +162,7 @@ public class DecisionTreeFactory {
 
     private static ConstraintNode asConstraintNode(DecisionNode decision) {
         return new ConstraintNodeBuilder()
-            .addAtomicConstraints(Collections.emptyList())
+            .addAtomicConstraints(Collections.emptySet())
             .setDecisions(Collections.singleton(decision))
             .build();
     }

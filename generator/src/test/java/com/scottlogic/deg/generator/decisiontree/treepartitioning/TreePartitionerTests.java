@@ -262,7 +262,7 @@ class TreePartitionerTests {
     private ConstraintNode constraint(String[] fieldNames, DecisionNode... decisions) {
         return new ConstraintNodeBuilder().addAtomicConstraints(Stream.of(fieldNames)
             .map(this::atomicConstraint)
-            .collect(Collectors.toList())).setDecisions(Arrays.asList(decisions)).build();
+            .collect(Collectors.toSet())).setDecisions(Arrays.asList(decisions)).build();
     }
 
     private AtomicConstraint atomicConstraint(String fieldName) {

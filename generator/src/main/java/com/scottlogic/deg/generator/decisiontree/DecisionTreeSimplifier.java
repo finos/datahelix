@@ -87,12 +87,12 @@ public class DecisionTreeSimplifier {
                             Stream.concat(
                                 node1.getAtomicConstraints().stream(),
                                 node2.getAtomicConstraints().stream())
-                                .collect(Collectors.toList()))
+                                .collect(Collectors.toSet()))
                         .addRelations(
                             Stream.concat(
                                 node1.getRelations().stream(),
                                 node2.getRelations().stream())
-                                .collect(Collectors.toList()))
+                                .collect(Collectors.toSet()))
                         .setDecisions(Stream
                             .concat(
                                 node1.getDecisions().stream(),
