@@ -20,7 +20,6 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.profile.constraints.delayed.DelayedAtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
@@ -33,19 +32,17 @@ import java.util.stream.StreamSupport;
 
 public class ConstraintReducer {
     private final FieldSpecMerger fieldSpecMerger;
-    private final FieldRelationsFactory fieldRelationsFactory;
 
     @Inject
     public ConstraintReducer(
         FieldSpecMerger fieldSpecMerger
     ) {
         this.fieldSpecMerger = fieldSpecMerger;
-        fieldRelationsFactory = new FieldRelationsFactory();
     }
 
     public Optional<RowSpec> reduceConstraintsToRowSpec(ProfileFields fields, ConstraintNode node) {
         Collection<AtomicConstraint> constraints = node.getAtomicConstraints();
-        Collection<DelayedAtomicConstraint> delayedConstraints = node.getDelayedAtomicConstraints();
+        Collection<FieldSpecRelations> relations = node.getRelations();
 
         final Map<Field, List<AtomicConstraint>> fieldToConstraints = constraints.stream()
             .collect(
@@ -70,15 +67,11 @@ public class ConstraintReducer {
                         Map.Entry::getKey,
                         entry -> entry.getValue().get())));
 
-        final List<FieldSpecRelations> relations = delayedConstraints.stream()
-            .map(fieldRelationsFactory::construct)
-            .collect(Collectors.toList());
-
         return optionalMap.map(
             map -> new RowSpec(
                 fields,
                 map,
-                relations));
+                new ArrayList<>(relations)));
     }
 
     public Optional<FieldSpec> reduceConstraintsToFieldSpec(Field field, Iterable<AtomicConstraint> constraints) {

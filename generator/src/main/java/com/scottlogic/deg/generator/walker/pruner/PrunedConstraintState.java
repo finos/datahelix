@@ -17,8 +17,8 @@
 package com.scottlogic.deg.generator.walker.pruner;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.profile.constraints.delayed.DelayedAtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
@@ -32,14 +32,14 @@ import java.util.Map;
 class PrunedConstraintState {
 
     private final Collection<AtomicConstraint> newAtomicConstraints;
-    private final Collection<DelayedAtomicConstraint> newDelayedAtomicConstraints;
+    private final Collection<FieldSpecRelations> newRelations;
     private final Collection<DecisionNode> newDecisionNodes = new ArrayList<>();
     private final Collection<AtomicConstraint> pulledUpAtomicConstraints = new ArrayList<>();
-    private final Collection<DelayedAtomicConstraint> pulledUpDelayedAtomicConstraints = new ArrayList<>();
+    private final Collection<FieldSpecRelations> pulledUpRelations = new ArrayList<>();
 
     PrunedConstraintState(ConstraintNode constraintNode){
         newAtomicConstraints = new ArrayList<>(constraintNode.getAtomicConstraints());
-        newDelayedAtomicConstraints = new ArrayList<>(constraintNode.getDelayedAtomicConstraints());
+        newRelations = new ArrayList<>(constraintNode.getRelations());
     }
 
     void addPrunedDecision(DecisionNode prunedDecisionNode) {
@@ -50,9 +50,9 @@ class PrunedConstraintState {
         
         ConstraintNode remainingConstraintNode = getOnlyRemainingOption(prunedDecisionNode);
         pulledUpAtomicConstraints.addAll(remainingConstraintNode.getAtomicConstraints());
-        pulledUpDelayedAtomicConstraints.addAll(remainingConstraintNode.getDelayedAtomicConstraints());
+        pulledUpRelations.addAll(remainingConstraintNode.getRelations());
         newAtomicConstraints.addAll(remainingConstraintNode.getAtomicConstraints());
-        newDelayedAtomicConstraints.addAll(remainingConstraintNode.getDelayedAtomicConstraints());
+        newRelations.addAll(remainingConstraintNode.getRelations());
         newDecisionNodes.addAll(remainingConstraintNode.getDecisions());
     }
 
@@ -63,7 +63,7 @@ class PrunedConstraintState {
     ConstraintNode getNewConstraintNode() {
         return new ConstraintNodeBuilder()
             .addAtomicConstraints(newAtomicConstraints)
-            .addDelayedAtomicConstraints(newDelayedAtomicConstraints)
+            .addRelations(newRelations)
             .setDecisions(newDecisionNodes)
             .build();
     }

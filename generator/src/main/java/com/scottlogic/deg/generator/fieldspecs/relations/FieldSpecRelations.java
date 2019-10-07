@@ -19,8 +19,9 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
+import com.scottlogic.deg.generator.profile.constraints.Constraint;
 
-public interface FieldSpecRelations {
+public interface FieldSpecRelations extends Constraint {
 
     /**
      * Creates a field spec from the current state of the passed in FieldSpec.

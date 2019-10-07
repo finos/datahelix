@@ -19,6 +19,7 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
+import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
@@ -59,5 +60,10 @@ public class EqualToDateRelation implements FieldSpecRelations {
     @Override
     public Field other() {
         return other;
+    }
+
+    @Override
+    public Constraint negate() {
+        throw new UnsupportedOperationException("equalTo relations cannot currently be negated");
     }
 }
