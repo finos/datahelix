@@ -61,6 +61,6 @@ public class EqualToRelation implements FieldSpecRelations {
 
     @Override
     public Constraint negate() {
-        throw new UnsupportedOperationException("equalTo relations cannot currently be negated");
+        return new NotEqualToRelation(main, other);
     }
 }
