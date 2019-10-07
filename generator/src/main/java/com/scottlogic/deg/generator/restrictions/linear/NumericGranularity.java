@@ -42,6 +42,13 @@ public class NumericGranularity implements Granularity<BigDecimal> {
     }
 
     @Override
+    public BigDecimal getNext(BigDecimal value, int amount) {
+        BigDecimal addAmount = BigDecimal.ONE.scaleByPowerOfTen(decimalPlaces * -1)
+            .multiply(BigDecimal.valueOf(amount));
+        return value.add(addAmount);
+    }
+
+    @Override
     public BigDecimal getNext(BigDecimal value) {
         return value.add(BigDecimal.ONE.scaleByPowerOfTen(decimalPlaces * -1));
     }

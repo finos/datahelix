@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
-import com.scottlogic.deg.common.profile.constraintdetail.Timescale;
 import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
@@ -12,6 +11,7 @@ import com.scottlogic.deg.profile.reader.InvalidProfileException;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -75,7 +75,7 @@ public class AtomicConstraintValueReader {
             case NUMERIC:
                 return getBigDecimal(value);
             case DATETIME:
-                if (!(value instanceof String) || value.equals("datetime") || isTimeScale((String)value)) {
+                if (!(value instanceof String) || value.equals("datetime") || value.equals("working days") || isTimeScale((String)value)) {
                     return value;
                 }
                 return ConstraintReaderHelpers.parseDate((String) value);
@@ -85,7 +85,7 @@ public class AtomicConstraintValueReader {
     }
 
     private static boolean isTimeScale(String value) {
-        return Stream.of(Timescale.values()).map(Timescale::toString).anyMatch(value::equals);
+        return Stream.of(ChronoUnit.values()).map(ChronoUnit::name).map(String::toLowerCase).anyMatch(value::equals);
     }
 
     private Object getBigDecimal(Object value) {

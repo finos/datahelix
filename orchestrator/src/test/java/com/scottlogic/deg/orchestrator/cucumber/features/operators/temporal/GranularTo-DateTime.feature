@@ -90,3 +90,25 @@ Feature: User can specify that datetime fields are granular to a certain unit
     Then the following data should be generated:
       | foo                       |
       | 2000-01-01T00:00:01.000Z  |
+
+  Scenario: The one where a user can specify after working day granularity
+    Given foo is granular to "working days"
+    And foo is after 2019-10-04T00:00:00.000Z
+    And the generator can generate at most 1 rows
+    Then the following data should be generated:
+      | foo                       |
+      | 2019-10-07T00:00:00.000Z  |
+
+  Scenario: The one where a user can specify before working day granularity
+    Given foo is granular to "working days"
+    And foo is after 2019-10-03T00:00:00.000Z
+    And foo is before 2019-10-07T00:00:00.000Z
+    Then the following data should be generated:
+      | foo                       |
+      | 2019-10-04T00:00:00.000Z  |
+
+
+  Scenario: Applying an invalid datetime granularTo constraint fails with an appropriate error
+    Given foo is granular to "decades"
+    Then the profile is invalid because "Field \[foo\]: was Decades, Must be one of the supported datetime units \(millis, seconds, minutes, hours, days, months, years\)"
+    And no data is created

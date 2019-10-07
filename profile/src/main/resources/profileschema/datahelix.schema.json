@@ -51,7 +51,7 @@
   "definitions": {
     "schemaVersion": {
       "title": "The version of the DataHelix profile schema",
-      "const": "0.9"
+      "const": "0.10"
     },
     "dataType": {
       "anyOf": [
@@ -84,6 +84,41 @@
       "minimum": -1e20,
       "maximum": 1e20,
       "default": 0
+    },
+    "granularity": {
+        "value": {
+          "enum": [
+            1,
+            1e-1,
+            1e-2,
+            1e-3,
+            1e-4,
+            1e-5,
+            1e-6,
+            1e-7,
+            1e-8,
+            1e-9,
+            1e-10,
+            1e-11,
+            1e-12,
+            1e-13,
+            1e-14,
+            1e-15,
+            1e-16,
+            1e-17,
+            1e-18,
+            1e-19,
+            1e-20,
+            "millis",
+            "seconds",
+            "minutes",
+            "hours",
+            "days",
+            "months",
+            "years",
+            "working days"
+          ]
+        }
     },
     "integer": {
       "$ref": "#/definitions/numeric",
@@ -352,40 +387,7 @@
             }
           },
           "then": {
-            "properties": {
-              "value": {
-                "enum": [
-                  1,
-                  1e-1,
-                  1e-2,
-                  1e-3,
-                  1e-4,
-                  1e-5,
-                  1e-6,
-                  1e-7,
-                  1e-8,
-                  1e-9,
-                  1e-10,
-                  1e-11,
-                  1e-12,
-                  1e-13,
-                  1e-14,
-                  1e-15,
-                  1e-16,
-                  1e-17,
-                  1e-18,
-                  1e-19,
-                  1e-20,
-                  "millis",
-                  "seconds",
-                  "minutes",
-                  "hours",
-                  "days",
-                  "months",
-                  "years"
-                ]
-              }
-            }
+            "$ref": "#/definitions/granularity"
           }
         },
         {
@@ -435,7 +437,7 @@
           "$ref": "#/definitions/integer"
         },
         "offsetUnit": {
-          "type": "string"
+          "$ref": "#/definitions/granularity"
         }
       }
     },
