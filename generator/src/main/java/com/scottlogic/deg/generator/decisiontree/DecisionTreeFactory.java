@@ -144,7 +144,7 @@ public class DecisionTreeFactory {
         return convertOrConstraint(convertedConstraint);
     }
 
-    private static Collection<Constraint> negateEach(Collection<Constraint> constraints) {
+    private static List<Constraint> negateEach(Collection<Constraint> constraints) {
         return constraints.stream()
             .map(Constraint::negate)
             .collect(Collectors.toList());

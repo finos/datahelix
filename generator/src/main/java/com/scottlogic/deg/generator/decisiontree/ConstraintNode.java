@@ -47,7 +47,7 @@ public class ConstraintNode implements Node {
         return relations;
     }
 
-    public Collection<DecisionNode> getDecisions() {
+    public Set<DecisionNode> getDecisions() {
         return decisions;
     }
 

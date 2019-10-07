@@ -41,7 +41,7 @@ public final class DecisionNode implements Node {
         this.nodeMarkings = Collections.unmodifiableSet(nodeMarkings);
     }
 
-    public Collection<ConstraintNode> getOptions() {
+    public Set<ConstraintNode> getOptions() {
         return options;
     }
 
