@@ -18,6 +18,7 @@ package com.scottlogic.deg.profile.reader;
 
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
@@ -27,6 +28,7 @@ import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalC
 import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintValueReader;
+import com.scottlogic.deg.profile.reader.atomic.FromFileReader;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -41,13 +43,39 @@ import java.util.function.Consumer;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.core.IsNull.nullValue;
 
+
+
+
 public class JsonProfileReaderTests {
+
+    private DistributedList<Object> fromFileReaderReturnValue = DistributedList.singleton("test");
+
+    private class MockFromFileReader extends FromFileReader {
+
+        MockFromFileReader() {
+            super("");
+        }
+
+        @Override
+        public DistributedList<Object> setFromFile(String file) {
+            return fromFileReaderReturnValue;
+        }
+
+        @Override
+        public DistributedList<Object> listFromMapFile(String file, String Key) {
+            return fromFileReaderReturnValue;
+        }
+
+    }
+
     private final String schemaVersion = "\"0.7\"";
     private String json;
+
     private JsonProfileReader jsonProfileReader = new JsonProfileReader(
         null,
         new MainConstraintReader(
-            new AtomicConstraintValueReader(null)));
+            new AtomicConstraintValueReader(new MockFromFileReader())));
+
 
 
     private void givenJson(String json) {
@@ -1138,6 +1166,100 @@ public class JsonProfileReaderTests {
             },
             field -> {
                 Assert.assertThat(field.type, equalTo(Types.STRING));
+            }
+        );
+    }
+
+    @Test
+    void parser_createsInternalField_whenProfileHasAnInMapConstraint() throws IOException {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": " + schemaVersion + "," +
+                "    \"fields\": [ { " +
+                "       \"name\": \"foo\" ," +
+                "       \"type\": \"string\"" +
+                "    }, { " +
+                "       \"name\": \"bar\" ," +
+                "       \"type\": \"string\"" +
+                "    }]," +
+                "    \"rules\": [" +
+                "       {" +
+                "        \"rule\": \"fooRule\"," +
+                "        \"constraints\": [" +
+                "           { \"field\": \"foo\", \"is\": \"inMap\", \"key\": \"Foo\", \"file\": \"foobar.csv\" }," +
+                "           { \"field\": \"bar\", \"is\": \"inMap\", \"key\": \"Bar\", \"file\": \"foobar.csv\" }" +
+                "          ]" +
+                "       }" +
+                "    ]" +
+                "}");
+
+        expectFields(
+            field -> {
+                Assert.assertEquals("foo", field.name);
+                Assert.assertFalse(field.isInternal());
+            },
+            field -> {
+                Assert.assertEquals("bar", field.name);
+                Assert.assertFalse(field.isInternal());
+            },
+            field -> {
+                Assert.assertEquals("foobar.csv", field.name);
+                Assert.assertTrue(field.isInternal());
+            }
+        );
+    }
+
+    @Test
+    void parser_createsInternalField_whenProfileHasANestedInMapConstraint() throws IOException {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": " + schemaVersion + "," +
+                "    \"fields\": [ { " +
+                "       \"name\": \"foo\" ," +
+                "       \"type\": \"string\"" +
+                "    }, { " +
+                "       \"name\": \"bar\" ," +
+                "       \"type\": \"string\"" +
+                "    }, { " +
+                "       \"name\": \"other\" ," +
+                "       \"type\": \"string\"" +
+                "    }]," +
+                "    \"rules\": [" +
+                "       {" +
+                "        \"rule\": \"fooRule\"," +
+                "        \"constraints\": [" +
+                "                {" +
+                "                    \"if\":   { \"field\": \"other\", \"is\": \"matchingRegex\", \"value\": \"^[O].*\" }," +
+                "                    \"then\": {" +
+                "                        \"if\":   { \"field\": \"other\", \"is\": \"matchingRegex\", \"value\": \"^[O].*\" }," +
+                "                        \"then\": { \"allOf\": [" +
+                "                            { \"field\": \"foo\", \"is\": \"inMap\", \"key\": \"Foo\", \"file\": \"foobar.csv\" }," +
+                "                            { \"field\": \"bar\", \"is\": \"inMap\", \"key\": \"Bar\", \"file\": \"foobar.csv\" }" +
+                "                        ]}" +
+                "                    }" +
+                "                }" +
+                "          ]" +
+                "       }" +
+                "    ]" +
+                "}");
+
+        expectFields(
+            field -> {
+                Assert.assertEquals("foo", field.name);
+                Assert.assertFalse(field.isInternal());
+            },
+            field -> {
+                Assert.assertEquals("bar", field.name);
+                Assert.assertFalse(field.isInternal());
+            },
+            field -> {
+                Assert.assertEquals("other", field.name);
+                Assert.assertFalse(field.isInternal());
+            },
+            field -> {
+                Assert.assertEquals("foobar.csv", field.name);
+                Assert.assertTrue(field.isInternal());
+                Assert.assertEquals(Types.NUMERIC, field.type);
             }
         );
     }

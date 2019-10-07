@@ -143,7 +143,11 @@ public class JsonProfileReader implements ProfileReader {
     }
 
     private Set<String> getInMapConstraints(ProfileDTO profileDto) {
-        return getTopLevelConstraintsOfType(profileDto, AtomicConstraintType.IS_IN_MAP.getText())
+        return profileDto.rules.stream()
+            .flatMap(ruleDTO -> ruleDTO.constraints.stream())
+            .flatMap(constraint -> getAllAtomicConstraints(Stream.of(constraint)))
+            .filter(constraintDTO -> constraintDTO.is != null)
+            .filter(constraintDTO -> constraintDTO.is.equals(AtomicConstraintType.IS_IN_MAP.getText()))
             .map(constraintDTO -> constraintDTO.file)
             .collect(Collectors.toSet());
     }
@@ -156,11 +160,31 @@ public class JsonProfileReader implements ProfileReader {
             .filter(constraintDTO -> constraintDTO.is.equals(constraint));
     }
 
+    private Stream<ConstraintDTO> getAllAtomicConstraints(Stream<ConstraintDTO> constraints) {
+        return constraints.flatMap(this::getUnpackedConstraintsToStream);
+
+    }
+
     private Stream<ConstraintDTO> getConstraintOrAllOfConstraints(ConstraintDTO constraintDTO) {
         if (constraintDTO.allOf != null){
             return constraintDTO.allOf.stream();
         }
 
+        return Stream.of(constraintDTO);
+    }
+
+    private Stream<ConstraintDTO> getUnpackedConstraintsToStream(ConstraintDTO constraintDTO) {
+        if (constraintDTO.then != null) {
+            return getAllAtomicConstraints(constraintDTO.else_ == null ?
+                Stream.of(constraintDTO.then) :
+                Stream.of(constraintDTO.then, constraintDTO.else_));
+        }
+        if (constraintDTO.allOf != null){
+            return getAllAtomicConstraints(constraintDTO.allOf.stream());
+        }
+        if (constraintDTO.anyOf != null){
+            return getAllAtomicConstraints(constraintDTO.anyOf.stream());
+        }
         return Stream.of(constraintDTO);
     }
 }
