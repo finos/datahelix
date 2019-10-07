@@ -48,10 +48,10 @@ public class ContradictionDecisionTreeValidator {
     }
 
     private ConstraintNode markContradictions(ConstraintNode node, RowSpec accumulatedSpec, ProfileFields profileFields){
-        final Optional<RowSpec> nominalRowSpec = node.getOrCreateRowSpec(() -> constraintReducer.reduceConstraintsToRowSpec(
+        final Optional<RowSpec> nominalRowSpec = constraintReducer.reduceConstraintsToRowSpec(
             profileFields,
             node
-        ));
+        );
 
         if (!nominalRowSpec.isPresent()) {
             return node.builder().markNode(NodeMarking.CONTRADICTORY).build();

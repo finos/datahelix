@@ -21,16 +21,12 @@ import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 
 import java.util.*;
-import java.util.function.Supplier;
 
 public class ConstraintNode implements Node {
     private final Set<AtomicConstraint> atomicConstraints;
     private final Set<FieldSpecRelations> relations;
     private final Set<DecisionNode> decisions;
     private final Set<NodeMarking> nodeMarkings;
-
-    private Optional<RowSpec> adaptedRowSpec = null;
-
 
     public ConstraintNode(Set<AtomicConstraint> atomicConstraints,
                           Set<FieldSpecRelations> relations,
@@ -53,15 +49,6 @@ public class ConstraintNode implements Node {
 
     public Collection<DecisionNode> getDecisions() {
         return decisions;
-    }
-
-    public Optional<RowSpec> getOrCreateRowSpec(Supplier<Optional<RowSpec>> createRowSpecFunc) {
-        if (adaptedRowSpec != null) {
-            return adaptedRowSpec;
-        }
-
-        adaptedRowSpec = createRowSpecFunc.get();
-        return adaptedRowSpec;
     }
 
     public String toString() {
