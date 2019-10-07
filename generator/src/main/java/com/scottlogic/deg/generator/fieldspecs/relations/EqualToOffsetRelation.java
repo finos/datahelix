@@ -17,8 +17,9 @@
 package com.scottlogic.deg.generator.fieldspecs.relations;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.constraintdetail.DateTimeGranularity;
+import com.scottlogic.deg.common.profile.constraintdetail.Granularity;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
@@ -27,16 +28,16 @@ import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactor
 
 import java.time.OffsetDateTime;
 
-public class EqualToOffsetDateRelation implements FieldSpecRelations {
+public class EqualToOffsetRelation<T extends Comparable> implements FieldSpecRelations {
     private final Field main;
     private final Field other;
-    private final DateTimeGranularity offsetGranularity;
+    private final Granularity<T> offsetGranularity;
     private final int offset;
 
-    public EqualToOffsetDateRelation(Field main,
-                                     Field other,
-                                     DateTimeGranularity offsetGranularity,
-                                     int offset) {
+    public EqualToOffsetRelation(Field main,
+                                 Field other,
+                                 Granularity<T> offsetGranularity,
+                                 int offset) {
         this.main = main;
         this.other = other;
         this.offsetGranularity = offsetGranularity;
@@ -45,27 +46,28 @@ public class EqualToOffsetDateRelation implements FieldSpecRelations {
 
     @Override
     public FieldSpec reduceToRelatedFieldSpec(FieldSpec otherValue) {
-        if (otherValue.getRestrictions() != null) {
-            OffsetDateTime time = ((LinearRestrictions<OffsetDateTime>) otherValue.getRestrictions()).getMin();
-            OffsetDateTime newTime = offsetGranularity.getNext(time, offset);
-            LinearRestrictions<OffsetDateTime> newRestrictions = new LinearRestrictions<>(newTime, newTime, ((LinearRestrictions<OffsetDateTime>) otherValue.getRestrictions()).getGranularity());
-            return FieldSpec.fromRestriction(newRestrictions);
-        } else {
+        if (otherValue.getRestrictions() == null) {
             return FieldSpec.empty();
         }
+
+        LinearRestrictions otherRestrictions = (LinearRestrictions) otherValue.getRestrictions();
+        T min = (T) otherRestrictions.getMin();
+        T offsetMin = offsetGranularity.getNext(min, offset);
+        T max = (T) otherRestrictions.getMax();
+        T offsetMax = offsetGranularity.getNext(max, offset);
+
+        return FieldSpec.fromRestriction(new LinearRestrictions(offsetMin, offsetMax, otherRestrictions.getGranularity()));
     }
 
     @Override
     public FieldSpec reduceValueToFieldSpec(DataBagValue generatedValue) {
-        Limit<OffsetDateTime> limit = new Limit<>((OffsetDateTime)generatedValue.getValue(), true);
-        LinearRestrictions<OffsetDateTime> restrictions = LinearRestrictionsFactory.createDateTimeRestrictions(limit,limit);
-        FieldSpec newSpec = FieldSpec.fromRestriction(restrictions).withNotNull();
-        return reduceToRelatedFieldSpec(newSpec);
+        T offsetValue = offsetGranularity.getNext((T) generatedValue.getValue(), offset);
+        return FieldSpec.fromList(DistributedList.singleton(offsetValue));
     }
 
     @Override
     public FieldSpecRelations inverse() {
-        return new EqualToOffsetDateRelation(other, main, offsetGranularity, -offset);
+        return new EqualToOffsetRelation(other, main, offsetGranularity, -offset);
     }
 
     @Override

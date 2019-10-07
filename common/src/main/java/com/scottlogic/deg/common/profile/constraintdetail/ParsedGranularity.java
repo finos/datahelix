@@ -33,25 +33,20 @@ public class ParsedGranularity {
     }
 
     public static ParsedGranularity parse(Object granularityExpression) {
-        if (granularityExpression instanceof Number) {
-            BigDecimal asNumber = NumberUtils.coerceToBigDecimal(granularityExpression);
-
-            if (asNumber == null){
-                throw new IllegalArgumentException("Numeric granularity input type is not supported");
-            }
-
-            if (asNumber.compareTo(BigDecimal.ONE) > 0) {
-                throw new IllegalArgumentException("Numeric granularity must be <= 1");
-            }
-
-            if (!asNumber.equals(BigDecimal.ONE.scaleByPowerOfTen(-asNumber.scale()))) {
-                throw new IllegalArgumentException("Numeric granularity must be fractional power of ten");
-            }
-
-            return new ParsedGranularity(asNumber);
+        BigDecimal asNumber = NumberUtils.coerceToBigDecimal(granularityExpression);
+        if (asNumber == null){
+            throw new IllegalArgumentException("Can't interpret granularity expression: " + granularityExpression);
         }
 
-        throw new IllegalArgumentException("Can't interpret granularity expression: " + granularityExpression);
+        if (asNumber.compareTo(BigDecimal.ONE) > 0) {
+            throw new IllegalArgumentException("Numeric granularity must be <= 1");
+        }
+
+        if (!asNumber.equals(BigDecimal.ONE.scaleByPowerOfTen(-asNumber.scale()))) {
+            throw new IllegalArgumentException("Numeric granularity must be fractional power of ten");
+        }
+
+        return new ParsedGranularity(asNumber);
     }
 
     public BigDecimal getNumericGranularity() {

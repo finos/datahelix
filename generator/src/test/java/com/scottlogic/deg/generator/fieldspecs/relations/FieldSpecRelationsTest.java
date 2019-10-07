@@ -26,7 +26,7 @@ class FieldSpecRelationsTest {
     @Test
     public void equalTo_exactValue_returnsSame(){
         FieldSpec fieldSpec = forYears(2018, 2018);
-        EqualToDateRelation relation = new EqualToDateRelation(main, other);
+        EqualToRelation relation = new EqualToRelation(main, other);
 
         FieldSpec actual = relation.reduceToRelatedFieldSpec(fieldSpec);
         FieldSpec expected = fieldSpec;
@@ -37,7 +37,7 @@ class FieldSpecRelationsTest {
     @Test
     public void equalTo_range_returnsSame(){
         FieldSpec fieldSpec = forYears(2018, 2020);
-        EqualToDateRelation relation = new EqualToDateRelation(main, other);
+        EqualToRelation relation = new EqualToRelation(main, other);
 
         FieldSpec actual = relation.reduceToRelatedFieldSpec(fieldSpec);
         FieldSpec expected = fieldSpec;

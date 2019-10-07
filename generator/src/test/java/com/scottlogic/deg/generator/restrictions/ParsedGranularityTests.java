@@ -89,7 +89,7 @@ class ParsedGranularityTests {
     public void shouldThrowIfGivenSomethingOtherThanANumber(){
         Assertions.assertThrows(
             IllegalArgumentException.class,
-            () -> ParsedGranularity.parse("0.1"));
+            () -> ParsedGranularity.parse("hello"));
     }
 
     @Test
