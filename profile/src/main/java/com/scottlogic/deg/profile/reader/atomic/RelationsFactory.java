@@ -7,6 +7,7 @@ import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.common.profile.constraintdetail.Granularity;
 import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularityFactory;
+import com.scottlogic.deg.common.util.defaults.DateTimeDefaults;
 import com.scottlogic.deg.generator.fieldspecs.relations.*;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 
@@ -31,13 +32,13 @@ public class RelationsFactory {
                 return new EqualToRelation(main, other);
 
             case IS_AFTER_CONSTANT_DATE_TIME:
-                return new AfterDateRelation(main, other, false);
+                return new AfterDateRelation(main, other, false, DateTimeDefaults.get());
             case IS_AFTER_OR_EQUAL_TO_CONSTANT_DATE_TIME:
-                return new AfterDateRelation(main, other, true);
+                return new AfterDateRelation(main, other, true, DateTimeDefaults.get());
             case IS_BEFORE_CONSTANT_DATE_TIME:
-                return new BeforeDateRelation(main, other, false);
+                return new BeforeDateRelation(main, other, false, DateTimeDefaults.get());
             case IS_BEFORE_OR_EQUAL_TO_CONSTANT_DATE_TIME:
-                return new BeforeDateRelation(main, other, true);
+                return new BeforeDateRelation(main, other, true, DateTimeDefaults.get());
         }
 
         throw new ValidationException(dto.is + "cannot be used with OtherValue)");

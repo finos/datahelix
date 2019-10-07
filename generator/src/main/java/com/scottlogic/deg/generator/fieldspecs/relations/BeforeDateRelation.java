@@ -18,6 +18,7 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraintdetail.Granularity;
+import com.scottlogic.deg.common.util.defaults.LinearDefaults;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
@@ -31,13 +32,13 @@ public class BeforeDateRelation implements FieldSpecRelations {
     private final Field main;
     private final Field other;
     private final boolean inclusive;
-    private final Granularity<OffsetDateTime> defaultGranularity = DEFAULT_DATETIME_GRANULARITY;
-    private final OffsetDateTime defaultMin = ISO_MIN_DATE;
+    private final LinearDefaults<OffsetDateTime> defaults;
 
-    public BeforeDateRelation(Field main, Field other, boolean inclusive) {
+    public BeforeDateRelation(Field main, Field other, boolean inclusive, LinearDefaults<OffsetDateTime> defaults) {
         this.main = main;
         this.other = other;
         this.inclusive = inclusive;
+        this.defaults = defaults;
     }
 
     @Override
@@ -52,7 +53,7 @@ public class BeforeDateRelation implements FieldSpecRelations {
 
     @Override
     public FieldSpec reduceValueToFieldSpec(DataBagValue generatedValue) {
-        return createFromMax((OffsetDateTime) generatedValue.getValue(), defaultGranularity);
+        return createFromMax((OffsetDateTime) generatedValue.getValue(), defaults.granularity());
     }
 
     private FieldSpec createFromMax(OffsetDateTime max, Granularity<OffsetDateTime> granularity) {
@@ -60,7 +61,7 @@ public class BeforeDateRelation implements FieldSpecRelations {
             max = granularity.getPrevious(max);
         }
 
-        return FieldSpec.fromRestriction(new LinearRestrictions<>(defaultMin, max, granularity));
+        return FieldSpec.fromRestriction(new LinearRestrictions<>(defaults.min(), max, granularity));
     }
 
 
@@ -76,7 +77,7 @@ public class BeforeDateRelation implements FieldSpecRelations {
 
     @Override
     public FieldSpecRelations inverse() {
-        return new AfterDateRelation(other, main, inclusive);
+        return new AfterDateRelation(other, main, inclusive, defaults);
     }
 
     @Override
@@ -86,6 +87,6 @@ public class BeforeDateRelation implements FieldSpecRelations {
 
     @Override
     public Constraint negate() {
-        return new AfterDateRelation(main, other, !inclusive);
+        return new AfterDateRelation(main, other, !inclusive, defaults);
     }
 }
