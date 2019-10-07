@@ -1,26 +1,13 @@
 package com.scottlogic.deg.generator.config.detail;
 
 public enum VisualiserLevel  {
-    OFF {
-        @Override
-        public boolean sameOrHigherThan(VisualiserLevel level) {
-            return level == this;
-        }
-    },
-    STANDARD {
-        @Override
-        public boolean sameOrHigherThan(VisualiserLevel level) {
-            return OFF.sameOrHigherThan(level) || level == this;
-        }
-    },
-    DETAILED {
-        @Override
-        public boolean sameOrHigherThan(VisualiserLevel level) {
-            return true;
-        }
-    };
+    OFF,
+    STANDARD,
+    DETAILED;
 
-    public abstract boolean sameOrHigherThan(VisualiserLevel level);
+    public boolean sameOrMoreVerboseThan(VisualiserLevel level) {
+        return level == OFF || level == STANDARD && this != OFF || level == this;
+    }
 
 
 }

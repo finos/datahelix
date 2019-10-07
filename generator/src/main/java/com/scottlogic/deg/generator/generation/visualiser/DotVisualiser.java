@@ -24,7 +24,11 @@ public class DotVisualiser implements Visualiser {
     }
 
     @Override
-    public void close() throws IOException {
-        decisionTreeVisualisationWriter.close();
+    public void close() {
+        try {
+            decisionTreeVisualisationWriter.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -96,8 +96,6 @@ public class DecisionTreeDataGenerator implements DataGenerator {
     private void visualiseTree(DecisionTree decisionTree, String title) {
         try (Visualiser visualiser = visualiserFactory.create(VisualiserLevel.STANDARD, title)) {
             visualiser.printTree(title, decisionTree);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 }

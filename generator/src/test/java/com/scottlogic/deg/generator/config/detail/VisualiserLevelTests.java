@@ -9,16 +9,16 @@ class VisualiserLevelTests {
     void sameOrHigherThan() {
         assertEquals(3, VisualiserLevel.values().length); // done so know to update test if more added
 
-        assertTrue(VisualiserLevel.OFF.sameOrHigherThan(VisualiserLevel.OFF));
-        assertFalse(VisualiserLevel.OFF.sameOrHigherThan(VisualiserLevel.STANDARD));
-        assertFalse(VisualiserLevel.OFF.sameOrHigherThan(VisualiserLevel.DETAILED));
+        assertTrue(VisualiserLevel.OFF.sameOrMoreVerboseThan(VisualiserLevel.OFF));
+        assertFalse(VisualiserLevel.OFF.sameOrMoreVerboseThan(VisualiserLevel.STANDARD));
+        assertFalse(VisualiserLevel.OFF.sameOrMoreVerboseThan(VisualiserLevel.DETAILED));
 
-        assertTrue(VisualiserLevel.STANDARD.sameOrHigherThan(VisualiserLevel.OFF));
-        assertTrue(VisualiserLevel.STANDARD.sameOrHigherThan(VisualiserLevel.STANDARD));
-        assertFalse(VisualiserLevel.STANDARD.sameOrHigherThan(VisualiserLevel.DETAILED));
+        assertTrue(VisualiserLevel.STANDARD.sameOrMoreVerboseThan(VisualiserLevel.OFF));
+        assertTrue(VisualiserLevel.STANDARD.sameOrMoreVerboseThan(VisualiserLevel.STANDARD));
+        assertFalse(VisualiserLevel.STANDARD.sameOrMoreVerboseThan(VisualiserLevel.DETAILED));
 
-        assertTrue(VisualiserLevel.DETAILED.sameOrHigherThan(VisualiserLevel.OFF));
-        assertTrue(VisualiserLevel.DETAILED.sameOrHigherThan(VisualiserLevel.STANDARD));
-        assertTrue(VisualiserLevel.DETAILED.sameOrHigherThan(VisualiserLevel.DETAILED));
+        assertTrue(VisualiserLevel.DETAILED.sameOrMoreVerboseThan(VisualiserLevel.OFF));
+        assertTrue(VisualiserLevel.DETAILED.sameOrMoreVerboseThan(VisualiserLevel.STANDARD));
+        assertTrue(VisualiserLevel.DETAILED.sameOrMoreVerboseThan(VisualiserLevel.DETAILED));
     }
 }
