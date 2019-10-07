@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Set;
 
 public class TestConstraintNodeBuilder {
-    protected List<AtomicConstraint> constraints = new ArrayList<>();
+    protected Set<AtomicConstraint> constraints = new HashSet<>();
     private List<DecisionNode> decisionNodes = new ArrayList<>();
     private Set<NodeMarking> markings = new HashSet<>();
 

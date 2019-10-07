@@ -23,6 +23,7 @@ import com.scottlogic.deg.generator.profile.constraints.atomic.IsInSetConstraint
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsNullConstraint;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
+import com.scottlogic.deg.generator.utils.SetUtils;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -43,13 +44,13 @@ class DecisionTreeSimplifierTests {
     @Test
     void simplify_decisionContainsSingleOptiontWithMatchingConstraintOnRootNode_doesNotSimplifyTree() {
         DecisionTree tree = new DecisionTree(
-            new ConstraintNodeBuilder().addAtomicConstraints(Arrays.asList(
+            new ConstraintNodeBuilder().addAtomicConstraints(SetUtils.setOf(
                 new IsInSetConstraint(createField("Field 1"), setOf(1, 2)),
                 new IsNullConstraint(createField("Field 1")).negate()
             )).setDecisions(Collections.singletonList(
                 new DecisionNode(
                     Collections.singletonList(
-                        new ConstraintNodeBuilder().addAtomicConstraints(Collections.singletonList(
+                        new ConstraintNodeBuilder().addAtomicConstraints(Collections.singleton(
                             new IsInSetConstraint(createField("Field 1"), setOf(1, 2))
                         )).setDecisions(Collections.emptyList()).build()
                     )
@@ -70,13 +71,13 @@ class DecisionTreeSimplifierTests {
     @Test
     void simplify_decisionContainsSingleOptionWithDifferingConstraintOnRootNode_simplifiesDecision() {
         DecisionTree tree = new DecisionTree(
-            new ConstraintNodeBuilder().addAtomicConstraints(Arrays.asList(
+            new ConstraintNodeBuilder().addAtomicConstraints(SetUtils.setOf(
                 new IsInSetConstraint(createField("Field 1"), setOf(1, 2)),
                 new IsNullConstraint(createField("Field 1")).negate()
             )).setDecisions(Collections.singletonList(
                 new DecisionNode(
                     Collections.singletonList(
-                        new ConstraintNodeBuilder().addAtomicConstraints(Collections.singletonList(
+                        new ConstraintNodeBuilder().addAtomicConstraints(Collections.singleton(
                             new IsInSetConstraint(createField("Field 2"), setOf("A", "B"))
                         )).setDecisions(Collections.emptyList()).build()
                     )

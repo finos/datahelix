@@ -14,13 +14,13 @@ import java.util.stream.Stream;
 import static java.util.stream.Stream.concat;
 
 public class ConstraintNodeBuilder {
-    private final Collection<AtomicConstraint> atomicConstraints;
-    private final Collection<DelayedAtomicConstraint> delayedAtomicConstraints;
+    private final Set<AtomicConstraint> atomicConstraints;
+    private final Set<DelayedAtomicConstraint> delayedAtomicConstraints;
     private final Collection<DecisionNode> decisions;
     private final Set<NodeMarking> nodeMarkings;
 
-    public ConstraintNodeBuilder(Collection<AtomicConstraint> atomicConstraints,
-                                 Collection<DelayedAtomicConstraint> delayedAtomicConstraints,
+    public ConstraintNodeBuilder(Set<AtomicConstraint> atomicConstraints,
+                                 Set<DelayedAtomicConstraint> delayedAtomicConstraints,
                                  Collection<DecisionNode> decisions,
                                  Set<NodeMarking> nodeMarkings) {
         this.atomicConstraints = atomicConstraints;
@@ -30,14 +30,14 @@ public class ConstraintNodeBuilder {
     }
 
     public ConstraintNodeBuilder() {
-        this(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), Collections.emptySet());
+        this(Collections.emptySet(), Collections.emptySet(), Collections.emptyList(), Collections.emptySet());
     }
 
-    public ConstraintNodeBuilder setAtomicConstraints(Collection<AtomicConstraint> newAtomicConstraints) {
+    public ConstraintNodeBuilder setAtomicConstraints(Set<AtomicConstraint> newAtomicConstraints) {
         return new ConstraintNodeBuilder(newAtomicConstraints, delayedAtomicConstraints, decisions, nodeMarkings);
     }
 
-    public ConstraintNodeBuilder setDelayedAtomicConstraints(Collection<DelayedAtomicConstraint> newConstraints) {
+    public ConstraintNodeBuilder setDelayedAtomicConstraints(Set<DelayedAtomicConstraint> newConstraints) {
         return new ConstraintNodeBuilder(atomicConstraints, newConstraints, decisions, nodeMarkings);
     }
 
@@ -45,34 +45,34 @@ public class ConstraintNodeBuilder {
         return setAtomicConstraints(atomicConstraints
             .stream()
             .filter(constraint -> !constraint.equals(atomicConstraint))
-            .collect(Collectors.toList())
+            .collect(Collectors.toSet())
         );
     }
 
-    public ConstraintNodeBuilder addAtomicConstraints(Collection<AtomicConstraint> atomicConstraints) {
+    public ConstraintNodeBuilder addAtomicConstraints(Set<AtomicConstraint> atomicConstraints) {
         return setAtomicConstraints(
             concat(
                 this.atomicConstraints.stream(),
                 atomicConstraints.stream()
-            ).collect(Collectors.toList())
+            ).collect(Collectors.toSet())
         );
     }
 
     public ConstraintNodeBuilder addAtomicConstraints(AtomicConstraint... constraints) {
-        return addAtomicConstraints(Arrays.asList(constraints));
+        return addAtomicConstraints(Arrays.stream(constraints).collect(Collectors.toSet()));
     }
 
-    public ConstraintNodeBuilder addDelayedAtomicConstraints(Collection<DelayedAtomicConstraint> delayedAtomicConstraints) {
+    public ConstraintNodeBuilder addDelayedAtomicConstraints(Set<DelayedAtomicConstraint> delayedAtomicConstraints) {
         return setDelayedAtomicConstraints(
             concat(
                 this.delayedAtomicConstraints.stream(),
                 delayedAtomicConstraints.stream())
-            .collect(Collectors.toList())
+            .collect(Collectors.toSet())
         );
     }
 
     public ConstraintNodeBuilder addDelayedAtomicConstraints(DelayedAtomicConstraint... constraints) {
-        return addDelayedAtomicConstraints(Arrays.asList(constraints));
+        return addDelayedAtomicConstraints(Arrays.stream(constraints).collect(Collectors.toSet()));
     }
 
     public ConstraintNodeBuilder setDecisions(Collection<DecisionNode> newDecisions) {
@@ -80,26 +80,18 @@ public class ConstraintNodeBuilder {
     }
 
     public ConstraintNodeBuilder removeDecision(DecisionNode decisionNode) {
-        return setDecisions(
-            decisions.stream()
-                .filter(decision -> !decision.equals(decisionNode))
-                .collect(Collectors.toSet()));
+        return removeDecisions(Collections.singleton(decisionNode));
     }
 
     public ConstraintNodeBuilder removeDecisions(Collection<DecisionNode> decisionNodes) {
-        ConstraintNodeBuilder constraintNodeBuilder = this;
-        for (DecisionNode decisionNode : decisionNodes) {
-            constraintNodeBuilder = constraintNodeBuilder.removeDecision(decisionNode);
-        }
-        return constraintNodeBuilder;
+        return setDecisions(
+            decisions.stream()
+                .filter(decision -> !decisionNodes.contains(decision))
+                .collect(Collectors.toSet()));
     }
 
     public ConstraintNodeBuilder addDecision(DecisionNode decisionNode) {
-        return setDecisions(
-            concat(
-                decisions.stream(),
-                Stream.of(decisionNode)
-            ).collect(Collectors.toList()));
+        return addDecisions(Collections.singleton(decisionNode));
     }
 
     public ConstraintNodeBuilder addDecisions(Collection<DecisionNode> decisions) {

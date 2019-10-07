@@ -44,8 +44,8 @@ public class ConstraintReducer {
     }
 
     public Optional<RowSpec> reduceConstraintsToRowSpec(ProfileFields fields, ConstraintNode node) {
-        Collection<AtomicConstraint> constraints = node.getAtomicConstraints();
-        Collection<DelayedAtomicConstraint> delayedConstraints = node.getDelayedAtomicConstraints();
+        Set<AtomicConstraint> constraints = node.getAtomicConstraints();
+        Set<DelayedAtomicConstraint> delayedConstraints = node.getDelayedAtomicConstraints();
 
         final Map<Field, List<AtomicConstraint>> fieldToConstraints = constraints.stream()
             .collect(

@@ -87,12 +87,12 @@ public class DecisionTreeSimplifier {
                             Stream.concat(
                                 node1.getAtomicConstraints().stream(),
                                 node2.getAtomicConstraints().stream())
-                                .collect(Collectors.toList()))
+                                .collect(Collectors.toSet()))
                         .addDelayedAtomicConstraints(
                             Stream.concat(
                                 node1.getDelayedAtomicConstraints().stream(),
                                 node2.getDelayedAtomicConstraints().stream())
-                                .collect(Collectors.toList()))
+                                .collect(Collectors.toSet()))
                         .setDecisions(Stream
                             .concat(
                                 node1.getDecisions().stream(),
