@@ -1,5 +1,3 @@
-# (1075) ignoring these tests as only allowing latin character set for now but we will turn them back on when allow them
-@ignore
 Feature: Whilst including non-latin characters, user can create data across multiple fields for all combinations available.
 
   Background:

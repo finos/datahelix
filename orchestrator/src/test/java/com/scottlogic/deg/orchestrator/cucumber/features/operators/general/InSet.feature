@@ -1068,17 +1068,6 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | foo  |
       | null |
 
-  @ignore #769 Violation of numeric and temporal granularity
-  Scenario: 'InSet' with a contradicting not 'granularTo' emits null
-    Given there is a field foo
-    And foo has type "decimal"
-    And foo is in set:
-      | 1 |
-    And foo is anything but granular to 1
-    Then the following data should be generated:
-      | foo  |
-      | null |
-
 ### after ###
 
   Scenario: 'InSet' with a non contradicting 'after' is successful

@@ -2361,37 +2361,6 @@ Feature: Values can be specified by using if, then and else constraints
       | foo | bar |
       | 10  | 1   |
 
-  @ignore #769 Violation of numeric and temporal granularity
-  Scenario: Running an if request that contains a non contradictory granularTo constraint within its if statement should be successful
-    Given foo is in set:
-      | 1     |
-      | 1.1   |
-      | 1.11  |
-      | 1.111 |
-    And foo is anything but null
-    And bar is in set:
-      | 1     |
-      | 2.2   |
-      | 3.33  |
-      | 4.444 |
-    And bar is anything but null
-    And foo has type "decimal"
-    And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "granularTo", "value": 1 },
-        "then": { "field": "bar", "is": "equalTo", "value": 1 },
-        "else": { "field": "bar", "is": "equalTo", "value": 2.2 }
-      }
-      """
-    Then the following data should be generated:
-      | foo   | bar |
-      | 1     | 1   |
-      | 1.1   | 2.2 |
-      | 1.11  | 2.2 |
-      | 1.111 | 2.2 |
-
   Scenario: Running an if request that contains a non contradictory granularTo constraint within its else statement should be successful
     Given foo is in set:
       | 1     |

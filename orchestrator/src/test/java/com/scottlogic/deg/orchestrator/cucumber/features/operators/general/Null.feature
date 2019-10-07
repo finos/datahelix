@@ -329,17 +329,6 @@ Feature: User can specify that a field is null or absent
 
 ### lessThan ###
 
-  @ignore #Relates to issue #594 - Reverse order of value generation when only upper-bound operators are provided. Counts up from minimum possible double
-  Scenario: Not 'null' with a non contradicting 'lessThan' should be successful
-    Given foo is anything but null
-    And foo is less than 1
-    And foo has type "integer"
-    And the generator can generate at most 2 rows
-    Then the following data should be generated:
-      | foo |
-      | 0   |
-      | -1  |
-
   Scenario: 'Null' with a contradicting 'lessThan' should only generate null
     Given foo is null
     And foo has type "decimal"
@@ -357,17 +346,6 @@ Feature: User can specify that a field is null or absent
       | null |
 
 ### lessThanOrEqualTo ###
-
-  @ignore #Relates to issue #594 - Reverse order of value generation when only upper-bound operators are provided. Counts up from minimum possible double
-  Scenario: Not 'null' with a non contradicting 'lessThanOrEqualTo' should be successful
-    Given foo is anything but null
-    And foo has type "integer"
-    And foo is less than or equal to 1
-    And the generator can generate at most 2 rows
-    Then the following data should be generated:
-      | foo |
-      | 1   |
-      | 0   |
 
   Scenario: 'Null' with a contradicting 'lessThanOrEqualTo' should only generate null
     Given foo is null

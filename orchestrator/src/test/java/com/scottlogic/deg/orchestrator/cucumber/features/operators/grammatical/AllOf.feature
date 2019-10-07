@@ -24,26 +24,6 @@ Feature: User can specify that data must be created to conform to each of multip
       | "ba" |
       | null |
 
-  @ignore  #91 Reduce duplication where (eg) decisions have overlapping options
-  Scenario: Running an 'allOf' request that contains a valid nested anyOf request should be successful
-    Given there is a field foo
-    And foo has type "string"
-    And there is a constraint:
-      """
-      { "allOf": [
-        { "anyOf": [
-          { "field": "foo", "is": "ofLength", "value": 1 },
-          { "field": "foo", "is": "ofLength", "value": 2 }
-        ]},
-        { "field": "foo", "is": "matchingRegex", "value": "[1]{1,2}" }
-      ]}
-      """
-    Then the following data should be generated:
-      | foo  |
-      | "1"  |
-      | "11" |
-      | null |
-
   Scenario: Running an 'allOf' request that contains an invalid nested allOf request should generate null
     Given there is a field foo
     And foo has type "string"
