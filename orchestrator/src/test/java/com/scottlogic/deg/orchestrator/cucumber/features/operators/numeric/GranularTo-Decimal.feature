@@ -81,3 +81,27 @@ Feature: User can specify that decimal fields are granular to a certain number o
       | 3   |
       | 4   |
       | 5   |
+
+          ### related field
+
+  Scenario: The one where a user can specify that one decimal number should be greater than another decimal number
+    Given foo is granular to 0.1
+    And foo is greater than or equal to 1
+    And there is a field bar
+    And bar has type "decimal"
+    And bar is granular to 0.1
+    And bar is less than 1.4
+    And bar is greater than or equal to 1
+    And there is a constraint:
+      """
+        {
+          "field": "bar",
+          "is": "greaterThan",
+          "otherField": "foo"
+        }
+      """
+    Then the following data should be generated:
+      | foo | bar |
+      | 1   | 1.1 |
+      | 1.1 | 1.2 |
+      | 1.2 | 1.3 |

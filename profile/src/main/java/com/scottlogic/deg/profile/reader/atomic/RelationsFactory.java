@@ -8,6 +8,7 @@ import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.common.profile.constraintdetail.Granularity;
 import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularityFactory;
 import com.scottlogic.deg.common.util.defaults.DateTimeDefaults;
+import com.scottlogic.deg.common.util.defaults.NumericDefaults;
 import com.scottlogic.deg.generator.fieldspecs.relations.*;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 
@@ -32,13 +33,22 @@ public class RelationsFactory {
                 return new EqualToRelation(main, other);
 
             case IS_AFTER_CONSTANT_DATE_TIME:
-                return new AfterDateRelation(main, other, false, DateTimeDefaults.get());
+                return new AfterRelation(main, other, false, DateTimeDefaults.get());
             case IS_AFTER_OR_EQUAL_TO_CONSTANT_DATE_TIME:
-                return new AfterDateRelation(main, other, true, DateTimeDefaults.get());
+                return new AfterRelation(main, other, true, DateTimeDefaults.get());
             case IS_BEFORE_CONSTANT_DATE_TIME:
-                return new BeforeDateRelation(main, other, false, DateTimeDefaults.get());
+                return new BeforeRelation(main, other, false, DateTimeDefaults.get());
             case IS_BEFORE_OR_EQUAL_TO_CONSTANT_DATE_TIME:
-                return new BeforeDateRelation(main, other, true, DateTimeDefaults.get());
+                return new BeforeRelation(main, other, true, DateTimeDefaults.get());
+
+            case IS_GREATER_THAN_CONSTANT:
+                return new AfterRelation(main, other, false, NumericDefaults.get());
+            case IS_GREATER_THAN_OR_EQUAL_TO_CONSTANT:
+                return new AfterRelation(main, other, true, NumericDefaults.get());
+            case IS_LESS_THAN_CONSTANT:
+                return new BeforeRelation(main, other, false, NumericDefaults.get());
+            case IS_LESS_THAN_OR_EQUAL_TO_CONSTANT:
+                return new BeforeRelation(main, other, true, NumericDefaults.get());
         }
 
         throw new ValidationException(dto.is + "cannot be used with OtherValue)");

@@ -15,7 +15,6 @@ Feature:As a  User
 
 
 ###Integer
-  @ignore #pending development of #1235 - Allow a Numeric Field to Depend On Another Numeric Field
   Scenario: The one where a user can specify that one number should be greater than another number
     Given bar is greater than 0
     And the generator can generate at most 3 rows
@@ -33,7 +32,6 @@ Feature:As a  User
       | 2  | 3  |
       | 3  | 4  |
 
-  @ignore #pending development of #1235 - Allow a Numeric Field to Depend On Another Numeric Field
   Scenario: The one where a user can specify that one number should be greater than or equal to another number
     Given bar is greater than 0
     And the generator can generate at most 3 rows
@@ -51,9 +49,9 @@ Feature:As a  User
       | 2  | 2  |
       | 3  | 3  |
 
-  @ignore #pending development of #1235 - Allow a Numeric Field to Depend On Another Numeric Field
   Scenario: The one where a user can specify that one number should be less than another number
-    Given bar is greater than 0
+    Given foo is less than 3
+    And bar is greater than 0
     And the generator can generate at most 3 rows
     And there is a constraint:
       """
@@ -65,14 +63,12 @@ Feature:As a  User
       """
     Then the following data should be generated:
       | foo| bar|
-      | 1  | 0  |
       | 2  | 1  |
-      | 3  | 2  |
 
-  @ignore #pending development of #1235 - Allow a Numeric Field to Depend On Another Numeric Field
   Scenario: The one where a user can specify that one number should be less than or equal to another number
-    Given bar is greater than 0
-    And the generator can generate at most 3 rows
+    Given the combination strategy is exhaustive
+    And foo is less than 3
+    And bar is greater than 0
     And there is a constraint:
       """
         {
@@ -84,6 +80,7 @@ Feature:As a  User
     Then the following data should be generated:
       | foo| bar|
       | 1  | 1  |
+      | 2  | 1  |
       | 2  | 2  |
 
   Scenario: The one where a user can specify that one number should be equal to another number
@@ -179,34 +176,8 @@ Feature:As a  User
       | 2  | -1 |
       | 3  | 0  |
 
-      ###Decimal
-
-  @ignore #pending development of #1235 - Allow a Numeric Field to Depend On Another Numeric Field
-  Scenario: The one where a user can specify that one decimal number should be greater than another decimal number
-    Given foo has type "decimal"
-    And foo is granular to 0.1
-    And foo is greater than 0
-    And bar has type "decimal"
-    And bar is granular to 0.1
-    And bar is greater than 0
-    And the generator can generate at most 3 rows
-    And there is a constraint:
-      """
-        {
-          "field": "bar",
-          "is": "greaterThan",
-          "otherField": "foo"
-        }
-      """
-    Then the following data should be generated:
-      | foo | bar |
-      | 1.0 | 1.1 |
-      | 1.1 | 1.2 |
-      | 1.2 | 1.3 |
-
      ###Exhaustive
 
-  @ignore #pending development of #1235 - Allow a Numeric Field to Depend On Another Numeric Field
   Scenario: The one where a user can specify that one number should be greater than another number - exhaustive
     Given the combination strategy is exhaustive
     And bar is greater than 0

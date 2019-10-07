@@ -49,7 +49,7 @@ class FieldSpecRelationsTest {
     @Test
     public void afterOrAt_exactValue_returnsBetween(){
         FieldSpec fieldSpec = forYears(2018, 2018);
-        AfterDateRelation relation = new AfterDateRelation(main, other, true, DateTimeDefaults.get());
+        AfterRelation relation = new AfterRelation(main, other, true, DateTimeDefaults.get());
 
         FieldSpec actual = relation.reduceToRelatedFieldSpec(fieldSpec);
         FieldSpec expected = fromMin(2018);
@@ -60,7 +60,7 @@ class FieldSpecRelationsTest {
     @Test
     public void afterOrAt_range_returnsFromMin(){
         FieldSpec fieldSpec = forYears(2018, 2020);
-        AfterDateRelation relation = new AfterDateRelation(main, other, true, DateTimeDefaults.get());
+        AfterRelation relation = new AfterRelation(main, other, true, DateTimeDefaults.get());
 
         FieldSpec actual = relation.reduceToRelatedFieldSpec(fieldSpec);
         FieldSpec expected = fromMin(2018);
@@ -71,7 +71,7 @@ class FieldSpecRelationsTest {
     @Test
     public void after_range_returnsFromMin(){
         FieldSpec fieldSpec = forYears(2018, 2021);
-        AfterDateRelation relation = new AfterDateRelation(main, other, false, DateTimeDefaults.get());
+        AfterRelation relation = new AfterRelation(main, other, false, DateTimeDefaults.get());
 
         FieldSpec actual = relation.reduceToRelatedFieldSpec(fieldSpec);
         FieldSpec expected = fromMin(2019);
@@ -82,7 +82,7 @@ class FieldSpecRelationsTest {
     @Test
     public void beforeOrAt_exactValue_returnsBetween(){
         FieldSpec fieldSpec = forYears(2018, 2018);
-        BeforeDateRelation relation = new BeforeDateRelation(main, other, true, DateTimeDefaults.get());
+        BeforeRelation relation = new BeforeRelation(main, other, true, DateTimeDefaults.get());
 
         FieldSpec actual = relation.reduceToRelatedFieldSpec(fieldSpec);
         FieldSpec expected = fromMax(2018);
@@ -93,7 +93,7 @@ class FieldSpecRelationsTest {
     @Test
     public void beforeOrAt_range_returnsFromMin(){
         FieldSpec fieldSpec = forYears(2018, 2020);
-        BeforeDateRelation relation = new BeforeDateRelation(main, other, true, DateTimeDefaults.get());
+        BeforeRelation relation = new BeforeRelation(main, other, true, DateTimeDefaults.get());
 
         FieldSpec actual = relation.reduceToRelatedFieldSpec(fieldSpec);
         FieldSpec expected = fromMax(2020);
@@ -104,7 +104,7 @@ class FieldSpecRelationsTest {
     @Test
     public void before_range_returnsFromMin(){
         FieldSpec fieldSpec = forYears(2017, 2020);
-        BeforeDateRelation relation = new BeforeDateRelation(main, other, false, DateTimeDefaults.get());
+        BeforeRelation relation = new BeforeRelation(main, other, false, DateTimeDefaults.get());
 
         FieldSpec actual = relation.reduceToRelatedFieldSpec(fieldSpec);
         FieldSpec expected = fromMax(2019);
