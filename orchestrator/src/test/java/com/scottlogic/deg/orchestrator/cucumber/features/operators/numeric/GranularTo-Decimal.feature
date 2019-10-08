@@ -81,16 +81,3 @@ Feature: User can specify that decimal fields are granular to a certain number o
       | 3   |
       | 4   |
       | 5   |
-
-  Scenario: Running granularTo run against a non contradicting not granularTo should be successful
-    Given foo is granular to 1
-    And foo is anything but granular to 0.1
-    And foo is greater than 0
-    And the generator can generate at most 5 rows
-    Then the following data should be generated:
-      | foo |
-      | 1   |
-      | 2   |
-      | 3   |
-      | 4   |
-      | 5   |
