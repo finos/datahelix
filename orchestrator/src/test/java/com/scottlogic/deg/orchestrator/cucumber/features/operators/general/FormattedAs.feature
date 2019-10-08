@@ -4,7 +4,7 @@ Feature: User can specify that a value is so formatted
     Given the generation strategy is full
     And there is a field foo
 
-    @ignore #does not work with bigdecimal values
+    #commented out tests not working with big decimal values
   Scenario Outline: Running a valid 'formattedAs' request on numbers should be successful
     Given foo is in set:
       | <input> |
@@ -19,19 +19,19 @@ Feature: User can specify that a value is so formatted
 #      | 1.0                      | "%a"         | "0x1.0p0"                      | no way to specify float over double
 #      | 1.5                      | "%a"         | "0x1.8p0"                      | no way to specify float over double
       | 1                        | "%b"        | "true"                           |
-      | 32                       | "%c"        | " "                         |
-      | 0                        | "%d"        | "0"                          |
-      | 1                        | "%d"        | "1"                          |
-      | 1                        | "%20d"      | "                   1"       |
-      | 1                        | "%-20d"     | "1                   "       |
-      | 1                        | "%020d"     | "00000000000000000001"       |
-      | 1                        | "\|%+20d\|" | "\|                  +1\|"   |
-      | -1                       | "\|%+20d\|" | "\|                  -1\|"   |
-      | 1                        | "% d"       | " 1"                         |
-      | 1                        | "%,d"       | "1"                          |
-      | 1111111111111111111      | "%,d"       | "1,111,111,111,111,111,111"  |
-      | 1                        | "%(d"       | "1"                          |
-      | -1                       | "%(d"       | "(1)"                        |
+#      | 32                       | "%c"        | " "                         |
+#      | 0                        | "%d"        | "0"                          |
+ #     | 1                        | "%d"        | "1"                          |
+#      | 1                        | "%20d"      | "                   1"       |
+#      | 1                        | "%-20d"     | "1                   "       |
+#      | 1                        | "%020d"     | "00000000000000000001"       |
+ #     | 1                        | "\|%+20d\|" | "\|                  +1\|"   |
+ #     | -1                       | "\|%+20d\|" | "\|                  -1\|"   |
+ #     | 1                        | "% d"       | " 1"                         |
+ #     | 1                        | "%,d"       | "1"                          |
+ #     | 1111111111111111111      | "%,d"       | "1,111,111,111,111,111,111"  |
+  #    | 1                        | "%(d"       | "1"                          |
+   #   | -1                       | "%(d"       | "(1)"                        |
       | 1.0                      | "%e"        | "1.000000e+00"               |
       | 123456789.123456789      | "%e"        | "1.234568e+08"               |
       | 1.0                      | "%f"        | "1.000000"                   |
@@ -39,16 +39,16 @@ Feature: User can specify that a value is so formatted
       | 123456789.123456789      | "%f"        | "123456789.123457"           |
       | 1.0                      | "%g"        | "1.00000"                    |
       | 123456789.123456789      | "%g"        | "1.23457e+08"                |
-      | 0                        | "%o"        | "0"                          |
-      | 123456789                | "%o"        | "726746425"                  |
-      | -123456789               | "%o"        | "37051031353"                |
+#      | 0                        | "%o"        | "0"                          |
+ #     | 123456789                | "%o"        | "726746425"                  |
+ #     | -123456789               | "%o"        | "37051031353"                |
       | 1                        | "%s"        | "1"                          |
       | 1                        | "%10s"      | "         1"                 |
       | 1                        | "%-10s"     | "1         "                 |
-      | 0                        | "%x"        | "0"                          |
-      | 1                        | "%x"        | "1"                          |
-      | 123456789                | "%x"        | "75bcd15"                    |
-      | -123456789               | "%x"        | "f8a432eb"                   |
+#      | 0                        | "%x"        | "0"                          |
+ #     | 1                        | "%x"        | "1"                          |
+#      | 123456789                | "%x"        | "75bcd15"                    |
+#      | -123456789               | "%x"        | "f8a432eb"                   |
       | 11111111111              | "%-10s"     | "11111111111"                |
       | 1                        | "%.5s"      | "1"                          |
       | 11111111111              | "%.5s"      | "11111"                      |
@@ -141,93 +141,4 @@ Feature: User can specify that a value is so formatted
 #      | 2018-02-01T16:17:08.199Z  | "%tZ"        | "08"                           | requires timezone information
 #      | 2018-02-01T16:17:08.199Z  | "%tz"        | "08"                           | requires timezone information
 
-  @ignore #857: Format exceptions do not throw an InvalidProfile exception therefore cannot be caught and asserted against
-  Scenario Outline: Running an invalid 'formattedAs' request should fail with an error message
-    Given foo is in set:
-      | <input> |
-    And foo has formatting <format>
-    And foo is anything but null
-    Then the profile is invalid because "Unable to format value `.+` with format expression `.+`: .*"
-    And no data is created
-    Examples:
-      | input                    | format      |
-      | "1"                      | "%20d"      |
-      | 2018-02-01T16:17:18.199Z | "%20d"      |
-      | "1"                      | "%-20d"     |
-      | 2018-02-01T16:17:18.199Z | "%-20d"     |
-      | "1"                      | "%020d"     |
-      | 2018-02-01T16:17:18.199Z | "%020d"     |
-      | "1"                      | "\|%020d\|" |
-      | 2018-02-01T16:17:18.199Z | "\|%020d\|" |
-      | "1"                      | "% d"       |
-      | 2018-02-01T16:17:18.199Z | "% d"       |
-      | "1"                      | "%,d"       |
-      | 2018-02-01T16:17:18.199Z | "%,d"       |
-      | "1"                      | "%(d"       |
-      | 2018-02-01T16:17:18.199Z | "%(d"       |
-      | "1"                      | "%o"        |
-      | 2018-02-01T16:17:18.199Z | "%o"        |
-      | "1"                      | "%x"        |
-      | 2018-02-01T16:17:18.199Z | "%x"        |
-      | "1"                      | "%t"        |
-      | 1                        | "%t"        |
-      | "1"                      | "%tA"       |
-      | 1                        | "%tA"       |
-      | "1"                      | "%ta"       |
-      | 1                        | "%ta"       |
-      | "1"                      | "%tB"       |
-      | 1                        | "%tB"       |
-      | "1"                      | "%tb"       |
-      | 1                        | "%tb"       |
-      | "1"                      | "%tC"       |
-      | 1                        | "%tC"       |
-      | "1"                      | "%tc"       |
-      | 1                        | "%tc"       |
-      | "1"                      | "%tD"       |
-      | 1                        | "%tD"       |
-      | "1"                      | "%td"       |
-      | 1                        | "%td"       |
-      | "1"                      | "%te"       |
-      | 1                        | "%te"       |
-      | "1"                      | "%tF"       |
-      | 1                        | "%tF"       |
-      | "1"                      | "%tH"       |
-      | 1                        | "%tH"       |
-      | "1"                      | "%th"       |
-      | 1                        | "%th"       |
-      | "1"                      | "%tI"       |
-      | 1                        | "%tI"       |
-      | "1"                      | "%tj"       |
-      | 1                        | "%tj"       |
-      | "1"                      | "%tk"       |
-      | 1                        | "%tk"       |
-      | "1"                      | "%tl"       |
-      | 1                        | "%tl"       |
-      | "1"                      | "%tM"       |
-      | 1                        | "%tM"       |
-      | "1"                      | "%tm"       |
-      | 1                        | "%tm"       |
-      | "1"                      | "%tN"       |
-      | 1                        | "%tN"       |
-      | "1"                      | "%tp"       |
-      | 1                        | "%tp"       |
-      | "1"                      | "%tQ"       |
-      | 1                        | "%tQ"       |
-      | "1"                      | "%tR"       |
-      | 1                        | "%tR"       |
-      | "1"                      | "%tr"       |
-      | 1                        | "%tr"       |
-      | "1"                      | "%tS"       |
-      | 1                        | "%tS"       |
-      | "1"                      | "%ts"       |
-      | 1                        | "%ts"       |
-      | "1"                      | "%tT"       |
-      | 1                        | "%tT"       |
-      | "1"                      | "%tY"       |
-      | 1                        | "%tY"       |
-      | "1"                      | "%ty"       |
-      | 1                        | "%ty"       |
-      | "1"                      | "%tZ"       |
-      | 1                        | "%tZ"       |
-      | "1"                      | "%tz"       |
-      | 1                        | "%tz"       |
+
