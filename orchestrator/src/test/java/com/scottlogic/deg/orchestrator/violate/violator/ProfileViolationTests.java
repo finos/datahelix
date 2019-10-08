@@ -17,15 +17,17 @@
 package com.scottlogic.deg.orchestrator.violate.violator;
 
 import com.scottlogic.deg.common.profile.*;
-import com.scottlogic.deg.common.profile.constraints.atomic.*;
-import com.scottlogic.deg.common.profile.constraints.Constraint;
-import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
-import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
-import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
+import com.scottlogic.deg.generator.profile.constraints.Constraint;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.builders.*;
 import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
+import com.scottlogic.deg.generator.profile.Profile;
+import com.scottlogic.deg.generator.profile.Rule;
+import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.generator.violations.filters.ConstraintTypeViolationFilter;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import com.scottlogic.deg.orchestrator.violate.ViolatedProfile;
@@ -92,7 +94,6 @@ public class ProfileViolationTests {
             Arguments.of(IsBeforeConstantDateTimeConstraint.class, sampleDate.minusDays(1)),
             Arguments.of(IsBeforeOrEqualToConstantDateTimeConstraint.class, sampleDate.plusDays(2)),
 
-            Arguments.of(IsGranularToNumericConstraint.class, new ParsedGranularity(BigDecimal.ONE)),
             Arguments.of(IsGreaterThanConstantConstraint.class, BigDecimal.valueOf(100)),
             Arguments.of(IsGreaterThanOrEqualToConstantConstraint.class, BigDecimal.valueOf(200)),
             Arguments.of(IsLessThanConstantConstraint.class, BigDecimal.valueOf(300)),

@@ -70,6 +70,8 @@ DataHelix uses [gradle](https://gradle.org/) to automate the build and test proc
 
 ## Testing
 
+To run the tests for DataHelix run `gradle test` from the root folder of the project.
+
 Our strategy is to ensure all aspects of the generator are tested through some form of automation testing as we strive to ensure correctness, quality and prevent against regression issues.
 
 * For all new classes and methods that are developed, unit or component tests should be added to the code base
@@ -80,7 +82,7 @@ Our strategy is to ensure all aspects of the generator are tested through some f
 
 [JUnit (Jupiter)](https://junit.org/junit5/docs/current/user-guide/) is used for unit and integration tests. An outline of how unit tests should be written within DataHelix can be found [here](./developer/JUnitCookbook.md).
 
-[Cucumber](https://cucumber.io/) is used for behaviour driven development and testing, with [gherkin](https://docs.cucumber.io/gherkin/)-based tests. To run the tests for DataHelix run `gradle test` from the root folder of the project.
+[Cucumber](https://cucumber.io/) is used for behaviour driven development and testing, with [gherkin](https://docs.cucumber.io/gherkin/)-based tests.
 
 Below is an example of a Cucumber test:
 

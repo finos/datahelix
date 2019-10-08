@@ -18,6 +18,13 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.generation.databags.DataBagValue;
+import com.scottlogic.deg.generator.profile.constraints.Constraint;
+import com.scottlogic.deg.generator.restrictions.linear.Limit;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
+
+import java.time.OffsetDateTime;
 
 public class EqualToDateRelation implements FieldSpecRelations {
     private final Field main;
@@ -34,6 +41,13 @@ public class EqualToDateRelation implements FieldSpecRelations {
     }
 
     @Override
+    public FieldSpec reduceValueToFieldSpec(DataBagValue generatedValue) {
+        Limit<OffsetDateTime> limit = new Limit<>((OffsetDateTime)generatedValue.getValue(), true);
+        LinearRestrictions<OffsetDateTime> restrictions = LinearRestrictionsFactory.createDateTimeRestrictions(limit,limit);
+        return FieldSpec.fromRestriction(restrictions).withNotNull();
+    }
+
+    @Override
     public FieldSpecRelations inverse() {
         return new EqualToDateRelation(other, main);
     }
@@ -46,5 +60,10 @@ public class EqualToDateRelation implements FieldSpecRelations {
     @Override
     public Field other() {
         return other;
+    }
+
+    @Override
+    public Constraint negate() {
+        throw new UnsupportedOperationException("equalTo relations cannot currently be negated");
     }
 }

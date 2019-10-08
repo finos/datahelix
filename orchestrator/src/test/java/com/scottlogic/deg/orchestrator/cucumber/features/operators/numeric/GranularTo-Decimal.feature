@@ -94,3 +94,4 @@ Feature: User can specify that decimal fields are granular to a certain number o
       | 3   |
       | 4   |
       | 5   |
+

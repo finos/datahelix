@@ -11,10 +11,12 @@ import com.scottlogic.deg.profile.reader.InvalidProfileException;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class AtomicConstraintValueReader {
 
@@ -40,14 +42,21 @@ public class AtomicConstraintValueReader {
         }
 
         if (dto.file != null && dto.is.equals(AtomicConstraintType.IS_IN_SET.getText())){
-            return fromFileReader.setFromFile(dto.file);
+            return getSet(fromFileReader.setFromFile(dto.file).list(), type);
         }
 
         if (dto.file != null && dto.is.equals(AtomicConstraintType.IS_IN_MAP.getText())){
-            return fromFileReader.listFromMapFile(dto.file, dto.key);
+            return getList(fromFileReader.listFromMapFile(dto.file, dto.key).list(), type);
         }
 
         return getValue(dto.value, type);
+    }
+
+    private DistributedList getList(Collection<Object> values, Types type) {
+        List collect = values.stream()
+            .map(val -> getValue(val, type))
+            .collect(Collectors.toList());
+        return DistributedList.uniform(collect);
     }
 
     private DistributedList getSet(Collection<Object> values, Types type) {
@@ -59,14 +68,24 @@ public class AtomicConstraintValueReader {
     }
 
     private Object getValue(Object value, Types type) {
-        if (value instanceof Map){
-            return getDate((Map) value);
+        if (type == null) {
+            return value;
         }
-        if (type == Types.NUMERIC){
-            return getBigDecimal(value);
+        switch (type) {
+            case NUMERIC:
+                return getBigDecimal(value);
+            case DATETIME:
+                if (!(value instanceof String) || value.equals("datetime") || value.equals("working days") || isTimeScale((String)value)) {
+                    return value;
+                }
+                return ConstraintReaderHelpers.parseDate((String) value);
+            default:
+                return value;
         }
+    }
 
-        return value;
+    private static boolean isTimeScale(String value) {
+        return Stream.of(ChronoUnit.values()).map(ChronoUnit::name).map(String::toLowerCase).anyMatch(value::equals);
     }
 
     private Object getBigDecimal(Object value) {
@@ -77,10 +96,5 @@ public class AtomicConstraintValueReader {
         }
 
         return bigDecimal;
-    }
-
-
-    private OffsetDateTime getDate(Map value) {
-        return ConstraintReaderHelpers.parseDate((String) (value).get("date"));
     }
 }

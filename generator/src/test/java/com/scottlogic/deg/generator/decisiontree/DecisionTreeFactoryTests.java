@@ -16,23 +16,24 @@
 
 package com.scottlogic.deg.generator.decisiontree;
 
-import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.common.profile.constraints.atomic.IsGreaterThanConstantConstraint;
-import com.scottlogic.deg.common.profile.constraints.atomic.IsInSetConstraint;
-import com.scottlogic.deg.common.profile.constraints.atomic.MatchesRegexConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.IsGreaterThanConstantConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.IsInSetConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.MatchesRegexConstraint;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.Profile;
+import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.common.profile.Rule;
-import com.scottlogic.deg.common.profile.constraints.Constraint;
-import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
-import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
-import com.scottlogic.deg.common.profile.constraints.grammatical.NegatedGrammaticalConstraint;
-import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
+import com.scottlogic.deg.generator.profile.Rule;
+import com.scottlogic.deg.generator.profile.constraints.Constraint;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.NegatedGrammaticalConstraint;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.decisiontree.testutils.*;
-import com.scottlogic.deg.common.profile.RuleInformation;
+import com.scottlogic.deg.generator.profile.RuleInformation;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
+import com.scottlogic.deg.generator.utils.SetUtils;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.Assert;
@@ -276,7 +277,7 @@ class DecisionTreeFactoryTests {
 
         Assert.assertThat("analyse() output is not null", outputRule, Is.is(IsNull.notNullValue()));
         Assert.assertTrue(isEquivalentTo(
-            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Arrays.asList(
+            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(SetUtils.setOf(
                 new DecisionNode(
                     new ConstraintNodeBuilder().addAtomicConstraints(constraintA).build(),
                     new ConstraintNodeBuilder().addAtomicConstraints(constraintB).build()
@@ -314,7 +315,7 @@ class DecisionTreeFactoryTests {
 
         Assert.assertThat("analyse() output is not null", outputRule, Is.is(IsNull.notNullValue()));
         Assert.assertTrue(isEquivalentTo(
-            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Arrays.asList(
+            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(SetUtils.setOf(
                 new DecisionNode(
                     new ConstraintNodeBuilder().addAtomicConstraints(constraintA).build(),
                     new ConstraintNodeBuilder().addAtomicConstraints(constraintC, constraintB).build()
@@ -344,12 +345,12 @@ class DecisionTreeFactoryTests {
 
         Assert.assertThat("analyse() output is not null", outputRule, Is.is(IsNull.notNullValue()));
         Assert.assertTrue(isEquivalentTo(
-            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Collections.singletonList(
+            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Collections.singleton(
                 new DecisionNode(
-                    new ConstraintNodeBuilder().addAtomicConstraints(Arrays.asList(
+                    new ConstraintNodeBuilder().addAtomicConstraints(SetUtils.setOf(
                         constraintA,
                         constraintB)).setDecisions(Collections.emptySet()).build(),
-                    new ConstraintNodeBuilder().addAtomicConstraints(Arrays.asList(
+                    new ConstraintNodeBuilder().addAtomicConstraints(SetUtils.setOf(
                         constraintA.negate(),
                         constraintC
                     )).setDecisions(Collections.emptySet()).build()
@@ -375,10 +376,10 @@ class DecisionTreeFactoryTests {
 
         Assert.assertTrue(
             isEquivalentTo(
-                getResultingRootOption(), new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptyList()).setDecisions(Collections.singletonList(
+                getResultingRootOption(), new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Collections.singleton(
                     new DecisionNode(
                         /* OPTION 1: AND(C, OR(A, B))  */
-                        new ConstraintNodeBuilder().addAtomicConstraints(Collections.singletonList(bGreaterThan20)).setDecisions(Collections.singleton(
+                        new ConstraintNodeBuilder().addAtomicConstraints(Collections.singleton(bGreaterThan20)).setDecisions(Collections.singleton(
                             new DecisionNode(
                                 new ConstraintNodeBuilder().addAtomicConstraints(aEquals10).build(),
                                 new ConstraintNodeBuilder().addAtomicConstraints(aGreaterThan10).build()))).build(),
@@ -407,13 +408,13 @@ class DecisionTreeFactoryTests {
 
         Assert.assertThat("analyse() output is not null", outputRule, Is.is(IsNull.notNullValue()));
         Assert.assertTrue(isEquivalentTo(
-            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Collections.singletonList(
+            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Collections.singleton(
                 new DecisionNode(
-                    new ConstraintNodeBuilder().addAtomicConstraints(Arrays.asList(
+                    new ConstraintNodeBuilder().addAtomicConstraints(SetUtils.setOf(
                         constraintA,
                         constraintB.negate()
                     )).setDecisions(Collections.emptySet()).build(),
-                    new ConstraintNodeBuilder().addAtomicConstraints(Arrays.asList(
+                    new ConstraintNodeBuilder().addAtomicConstraints(SetUtils.setOf(
                         constraintA.negate(),
                         constraintC.negate()
                     )).setDecisions(Collections.emptySet()).build()
@@ -485,10 +486,10 @@ class DecisionTreeFactoryTests {
         Assert.assertThat("analyse() output is not null", outputRule, Is.is(IsNull.notNullValue()));
         // Result should be (NOT A) OR (NOT B)
         Assert.assertTrue(isEquivalentTo(
-            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Collections.singletonList(
+            new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Collections.singleton(
                 new DecisionNode(
-                    new ConstraintNodeBuilder().addAtomicConstraints(Collections.singletonList(constraintA.negate())).setDecisions(Collections.emptySet()).build(),
-                    new ConstraintNodeBuilder().addAtomicConstraints(Collections.singletonList(constraintB.negate())).setDecisions(Collections.emptySet()).build()
+                    new ConstraintNodeBuilder().addAtomicConstraints(Collections.singleton(constraintA.negate())).setDecisions(Collections.emptySet()).build(),
+                    new ConstraintNodeBuilder().addAtomicConstraints(Collections.singleton(constraintB.negate())).setDecisions(Collections.emptySet()).build()
                 )
             )).build(),
             outputRule.getRootNode())
@@ -510,7 +511,7 @@ class DecisionTreeFactoryTests {
         Assert.assertTrue(
             isEquivalentTo(
                 getResultingRootOption(),
-                new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptyList()).setDecisions(Collections.singletonList(
+                new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(Collections.singleton(
                     new DecisionNode(
                         new ConstraintNodeBuilder().addAtomicConstraints(constraintA).build(),
                         new ConstraintNodeBuilder().addAtomicConstraints(constraintB).build(),

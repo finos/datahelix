@@ -16,8 +16,7 @@
 
 package com.scottlogic.deg.generator.decisiontree;
 
-import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.common.profile.constraints.atomic.NotConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
 
 import java.util.*;
 import java.util.function.Function;
@@ -90,7 +89,7 @@ public class DecisionTreeOptimiser {
                     optimiseLevelOfTree(factorisingConstraintNode),
                     optimiseLevelOfTree(negatedFactorisingConstraintNode)),
                 otherOptions.stream())
-            .collect(Collectors.toList()));
+            .collect(Collectors.toSet()));
 
         return rootNode.builder()
             .removeDecisions(decisionsToRemove)
@@ -105,16 +104,12 @@ public class DecisionTreeOptimiser {
 
     private ConstraintNode addOptionsAsDecisionUnderConstraintNode(
         ConstraintNode newNode,
-        Collection<ConstraintNode> optionsToAdd) {
+        Set<ConstraintNode> optionsToAdd) {
         if (optionsToAdd.isEmpty()) {
             return newNode;
         }
 
         return newNode.builder().addDecision(new DecisionNode(optionsToAdd)).build();
-    }
-
-    private int disfavourNotConstraints(Map.Entry<AtomicConstraint, List<AtomicConstraint>> entry){
-        return entry.getKey() instanceof NotConstraint ? 1 : 0;
     }
 
     private AtomicConstraint getMostProlificAtomicConstraint(Collection<DecisionNode> decisions) {
@@ -127,7 +122,6 @@ public class DecisionTreeOptimiser {
         Comparator<Map.Entry<AtomicConstraint, List<AtomicConstraint>>> comparator = Comparator
             .comparing(entry -> entry.getValue().size());
         comparator = comparator.reversed()
-            .thenComparing(this::disfavourNotConstraints)
             .thenComparing(entry -> entry.getKey().toString());
 
         return decisionConstraints.entrySet()
@@ -218,7 +212,7 @@ public class DecisionTreeOptimiser {
         private void markOptionForFactorisation(
             AtomicConstraint factorisingConstraint,
             ConstraintNode node,
-            List<ConstraintNode> options,
+            Set<ConstraintNode> options,
             Set<AtomicConstraint> constraints) {
             ConstraintNode newOption = node.builder().removeAtomicConstraint(factorisingConstraint).build();
             if (!newOption.getAtomicConstraints().isEmpty()) {
@@ -229,8 +223,8 @@ public class DecisionTreeOptimiser {
     }
 
     static class DecisionAnalysisResult {
-        List<ConstraintNode> optionsToFactorise = new ArrayList<>();
-        List<ConstraintNode> negatedOptionsToFactorise = new ArrayList<>();
-        List<ConstraintNode> adjacentOptions = new ArrayList<>();
+        Set<ConstraintNode> optionsToFactorise = new HashSet<>();
+        Set<ConstraintNode> negatedOptionsToFactorise = new HashSet<>();
+        Set<ConstraintNode> adjacentOptions = new HashSet<>();
     }
 }

@@ -17,8 +17,8 @@
 package com.scottlogic.deg.generator.walker.pruner;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.constraints.atomic.IsStringLongerThanConstraint;
-import com.scottlogic.deg.common.profile.constraints.atomic.IsStringShorterThanConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.IsStringLongerThanConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.IsStringShorterThanConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder;
 import com.scottlogic.deg.generator.fieldspecs.*;
@@ -49,7 +49,6 @@ class TreePrunerTests {
     private TreePruner treePruner = new TreePruner(
         new FieldSpecMerger(),
         new ConstraintReducer(
-            new FieldSpecFactory(new StringRestrictionsFactory()),
             new FieldSpecMerger()),
         fieldSpecHelper);
 

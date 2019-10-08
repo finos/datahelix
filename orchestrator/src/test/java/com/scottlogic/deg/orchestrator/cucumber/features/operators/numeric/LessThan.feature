@@ -119,7 +119,6 @@ Feature: User can specify that a numeric value is lower than, but not equal to, 
       | foo  |
       | null |
 
-
   Scenario: not lessThan run against a non contradicting granularTo should be successful (not lessThan 4 AND granularTo 1)
     Given foo is anything but less than 4
     And foo is granular to 1
@@ -133,3 +132,4 @@ Feature: User can specify that a numeric value is lower than, but not equal to, 
       | 6   |
       | 7   |
       | 8   |
+

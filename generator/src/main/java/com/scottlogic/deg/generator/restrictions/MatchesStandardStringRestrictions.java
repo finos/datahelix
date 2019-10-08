@@ -17,7 +17,7 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.common.profile.constraints.atomic.StandardConstraintTypes;
+import com.scottlogic.deg.generator.profile.constraints.atomic.StandardConstraintTypes;
 import com.scottlogic.deg.generator.generation.string.generators.NoStringsStringGenerator;
 import com.scottlogic.deg.generator.generation.string.generators.RegexStringGenerator;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;

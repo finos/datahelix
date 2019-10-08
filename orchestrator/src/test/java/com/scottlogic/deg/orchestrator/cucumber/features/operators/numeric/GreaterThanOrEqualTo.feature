@@ -248,3 +248,4 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
       | 7   |
       | 6   |
       | 5   |
+

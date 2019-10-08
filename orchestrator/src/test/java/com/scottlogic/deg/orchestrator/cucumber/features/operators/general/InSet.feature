@@ -1019,17 +1019,6 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
       | 10   |
 
-  Scenario: 'InSet' with a non contradicting not 'granularTo' is successful
-    Given there is a field foo
-    And foo has type "decimal"
-    And foo is in set:
-      | 1.1 |
-    And foo is anything but granular to 1
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | 1.1  |
-
   Scenario: Integer within an inSet and a non contradicting 'granularTo' is successful
     Given there is a field foo
     And foo has type "decimal"

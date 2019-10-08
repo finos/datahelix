@@ -62,7 +62,7 @@
 					"then": {
 						"allOf": [
 							{ "field": "tariff", "is": "null" },
-							{ "field": "time", "is": "after", "value": { "date": "2014-01-01" } }
+							{ "field": "time", "is": "after", "value": "2014-01-01" }
 						]
 					},
 					"else": { "not": { "field": "tariff", "is": "null" } }

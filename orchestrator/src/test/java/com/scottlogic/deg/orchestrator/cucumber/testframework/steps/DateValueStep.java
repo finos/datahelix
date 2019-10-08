@@ -37,12 +37,12 @@ public class DateValueStep {
     }
 
     @When("{fieldVar} is {operator} {date}")
-    public void whenFieldIsConstrainedByDateValue(String fieldName, String constraintName, DateObject value) {
+    public void whenFieldIsConstrainedByDateValue(String fieldName, String constraintName, String value) {
         state.addConstraint(fieldName, constraintName, value);
     }
 
     @When("{fieldVar} is anything but {operator} {date}")
-    public void whenFieldIsNotConstrainedByDateValue(String fieldName, String constraintName, DateObject value) {
+    public void whenFieldIsNotConstrainedByDateValue(String fieldName, String constraintName, String value) {
         state.addNotConstraint(fieldName, constraintName, value);
     }
 
@@ -62,7 +62,7 @@ public class DateValueStep {
     }
 
     @Then("{fieldVar} contains datetimes between {date} and {date} inclusively")
-    public void producedDataShouldContainDateTimeValuesInRangeForField(String fieldName, DateObject minInclusive, DateObject maxInclusive){
+    public void producedDataShouldContainDateTimeValuesInRangeForField(String fieldName,  String minInclusive, String maxInclusive){
         helper.assertFieldContainsNullOrMatching(
             fieldName,
             OffsetDateTime.class,
@@ -70,7 +70,7 @@ public class DateValueStep {
     }
 
     @Then("{fieldVar} contains datetimes outside {date} and {date}")
-    public void producedDataShouldContainDateTimeValuesOutOfRangeForField(String fieldName, DateObject min, DateObject max){
+    public void producedDataShouldContainDateTimeValuesOutOfRangeForField(String fieldName, String min, String max){
         helper.assertFieldContainsNullOrMatching(
             fieldName,
             OffsetDateTime.class,
@@ -78,7 +78,7 @@ public class DateValueStep {
     }
 
     @Then("{fieldVar} contains datetimes before or at {date}")
-    public void producedDataShouldContainDateTimeValuesBeforeForField(String fieldName, DateObject beforeInclusive){
+    public void producedDataShouldContainDateTimeValuesBeforeForField(String fieldName, String beforeInclusive){
         helper.assertFieldContainsNullOrMatching(
             fieldName,
             OffsetDateTime.class,
@@ -86,30 +86,28 @@ public class DateValueStep {
     }
 
     @Then("{fieldVar} contains datetimes after or at {date}")
-    public void producedDataShouldContainDateTimeValuesAfterForField(String fieldName, DateObject afterInclusive){
+    public void producedDataShouldContainDateTimeValuesAfterForField(String fieldName, String afterInclusive){
         helper.assertFieldContainsNullOrMatching(
             fieldName,
             OffsetDateTime.class,
             value -> isAfterOrAt(value, afterInclusive));
     }
 
-    private Function<OffsetDateTime, Boolean> isBetweenInclusively(DateObject minInclusive, DateObject maxInclusive){
+    private Function<OffsetDateTime, Boolean> isBetweenInclusively(String minInclusive, String maxInclusive){
         return value -> isAfterOrAt(value, minInclusive) && isBeforeOrAt(value, maxInclusive);
     }
 
-    private OffsetDateTime getDateTime(DateObject dateObject){
-        String dateString = (String)dateObject.get("date");
-        return GeneratorTestUtilities.getOffsetDateTime(dateString);
-    }
-
-    private boolean isAfterOrAt(OffsetDateTime date, DateObject minInclusiveObject){
-        OffsetDateTime minInclusive = getDateTime(minInclusiveObject);
+    private boolean isAfterOrAt(OffsetDateTime date, String minInclusiveString){
+        OffsetDateTime minInclusive = getDateTime(minInclusiveString);
         return date.equals(minInclusive) || date.isAfter(minInclusive);
     }
 
-    private boolean isBeforeOrAt(OffsetDateTime date, DateObject maxInclusiveObject){
-        OffsetDateTime maxInclusive = getDateTime(maxInclusiveObject);
+    private boolean isBeforeOrAt(OffsetDateTime date, String maxInclusiveString){
+        OffsetDateTime maxInclusive = getDateTime(maxInclusiveString);
         return date.equals(maxInclusive) || date.isBefore(maxInclusive);
+    }
+    private OffsetDateTime getDateTime(String date){
+        return GeneratorTestUtilities.getOffsetDateTime(date);
     }
 }
 

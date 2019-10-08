@@ -81,5 +81,3 @@ Feature: User can specify that a numeric value is lower than, or equal to, a spe
       | 6   |
       | 7   |
       | 8   |
-
-
