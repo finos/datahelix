@@ -36,7 +36,6 @@ public class AfterDateRelationTest {
 
     private final Field a = new Field("a", Types.DATETIME, false, "", false);
     private final Field b = new Field("b", Types.DATETIME, false, "", false);
-    private final FieldSpecRelations afterDateRelations = new AfterDateRelation(a, b, true);
 
     @Test
     public void testReduceToFieldSpec_withNotNull_reducesToSpec() {
