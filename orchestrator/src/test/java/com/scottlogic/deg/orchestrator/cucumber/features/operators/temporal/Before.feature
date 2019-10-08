@@ -6,41 +6,6 @@ Feature: User can specify that a datetime date is lower than, but not equal to, 
     And foo has type "datetime"
 
 #Alone
-  @ignore #594 "Reverse order of value generation when only upper-bound operators are provided" related to this scenario
-  Scenario: Running a 'before' request over a year threshold should be successful
-    Given foo is before 2019-01-01T00:00:00.000Z
-    And the generator can generate at most 5 rows
-    Then the following data should be generated:
-      | foo                      |
-      | 2018-12-31T23:59:59.999Z |
-      | 2018-12-31T23:59:59.998Z |
-      | 2018-12-31T23:59:59.997Z |
-      | 2018-12-31T23:59:59.996Z |
-      | 2018-12-31T23:59:59.995Z |
-
-  @ignore #594 "Reverse order of value generation when only upper-bound operators are provided" related to this scenario
-  Scenario: Running a 'before' request over a leap year date should be successful
-    Given foo is before 2016-03-01T00:00:00.000Z
-    And the generator can generate at most 5 rows
-    Then the following data should be generated:
-      | foo                      |
-      | null                     |
-      | 2016-02-29T23:59:59.999Z |
-      | 2016-02-29T23:59:59.998Z |
-      | 2016-02-29T23:59:59.997Z |
-      | 2016-02-29T23:59:59.996Z |
-
-  @ignore #594 "Reverse order of value generation when only upper-bound operators are provided" related to this scenario
-  Scenario: Running a 'before' request that specifies the maximum valid system date should be successful
-    Given foo is before 9999-12-31T23:59:59.999Z
-    And the generator can generate at most 5 rows
-    Then the following data should be generated:
-      | foo                      |
-      | null                     |
-      | 9999-12-31T23:59:59.998Z |
-      | 9999-12-31T23:59:59.997Z |
-      | 9999-12-31T23:59:59.996Z |
-      | 9999-12-31T23:59:59.995Z |
 
   Scenario: Running a 'before' request that specifies the lowest valid system date should only generate null data
     Given foo is before 0001-01-01T00:00:00.000Z
@@ -64,32 +29,6 @@ Feature: User can specify that a datetime date is lower than, but not equal to, 
     And no data is created
 
 #before
-  @ignore #594 generation should be descending when upper-bound only is provided
-  Scenario: 'before' run against a non contradicting 'before' should be successful
-    Given foo is before 2019-01-01T00:00:00.000Z
-    And foo is before 2018-01-01T00:00:00.000Z
-    And the generator can generate at most 5 rows
-    Then the following data should be generated:
-      | foo                      |
-      | 2017-12-31T23:59:59.999Z |
-      | 2017-12-31T23:59:59.998Z |
-      | 2017-12-31T23:59:59.997Z |
-      | 2017-12-31T23:59:59.996Z |
-      | 2017-12-31T23:59:59.995Z |
-
-  @ignore #594 "Reverse order of value generation when only upper-bound operators are provided" related to this scenario
-  Scenario: 'before' run against a non contradicting not 'before' should be successful
-    Given foo is before 2019-01-02T00:00:00.000Z
-    And foo is anything but before 2019-01-01T00:00:00.000Z
-    And the generator can generate at most 5 rows
-    Then the following data should be generated:
-      | foo                      |
-      | null                     |
-      | 2019-01-01T23:59:59.999Z |
-      | 2019-01-01T23:59:59.998Z |
-      | 2019-01-01T23:59:59.997Z |
-      | 2019-01-01T23:59:59.996Z |
-
   Scenario: not 'before' run against a non contradicting not 'before' should be successful
     Given foo is anything but before 2019-01-01T00:00:00.000Z
     And foo is anything but before 2018-01-01T00:00:00.000Z
@@ -111,19 +50,6 @@ Feature: User can specify that a datetime date is lower than, but not equal to, 
       | null |
 
 #beforeOrAt
-  @ignore #594 generation should be descending when upper-bound only is provided
-  Scenario: 'before' run against a non contradicting 'beforeOrAt' should be successful
-    Given foo is before 2019-01-01T00:00:00.000Z
-    And foo is before or at 2018-01-01T00:00:00.000Z
-    And the generator can generate at most 5 rows
-    Then the following data should be generated:
-      | foo                      |
-      | 2018-01-01T00:00:00.000Z |
-      | 2017-12-31T23:59:59.999Z |
-      | 2017-12-31T23:59:59.998Z |
-      | 2017-12-31T23:59:59.997Z |
-      | 2017-12-31T23:59:59.996Z |
-
   Scenario: 'before' run against a non contradicting not 'beforeOrAt' should be successful
     Given foo is before 2019-01-01T00:00:00.000Z
     And foo is anything but before or at 2018-12-31T23:59:59.996Z

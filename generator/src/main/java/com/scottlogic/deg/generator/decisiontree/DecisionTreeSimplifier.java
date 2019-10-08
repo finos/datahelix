@@ -32,14 +32,14 @@ public class DecisionTreeSimplifier {
             return node;
 
         ConstraintNode transformedNode = this.simplifySingleOptionDecisions(node);
-        Collection<DecisionNode> simplifiedDecisions = transformedNode.getDecisions().stream()
+        Set<DecisionNode> simplifiedDecisions = transformedNode.getDecisions().stream()
             .map(this::simplify)
-            .collect(Collectors.toList());
+            .collect(Collectors.toSet());
         return transformedNode.builder().setDecisions(simplifiedDecisions).build();
     }
 
     private DecisionNode simplify(DecisionNode decision) {
-        List<ConstraintNode> newNodes = new ArrayList<>();
+        Set<ConstraintNode> newNodes = new HashSet<>();
 
         for (ConstraintNode existingOption : decision.getOptions()) {
             ConstraintNode simplifiedNode = simplify(existingOption);
@@ -87,17 +87,17 @@ public class DecisionTreeSimplifier {
                             Stream.concat(
                                 node1.getAtomicConstraints().stream(),
                                 node2.getAtomicConstraints().stream())
-                                .collect(Collectors.toList()))
+                                .collect(Collectors.toSet()))
                         .addRelations(
                             Stream.concat(
                                 node1.getRelations().stream(),
                                 node2.getRelations().stream())
-                                .collect(Collectors.toList()))
+                                .collect(Collectors.toSet()))
                         .setDecisions(Stream
                             .concat(
                                 node1.getDecisions().stream(),
                                 node2.getDecisions().stream())
-                            .collect(Collectors.toList()))
+                            .collect(Collectors.toSet()))
                         .build());
     }
 }

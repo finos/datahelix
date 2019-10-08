@@ -48,10 +48,10 @@ public class ContradictionDecisionTreeValidator {
     }
 
     private ConstraintNode markContradictions(ConstraintNode node, RowSpec accumulatedSpec, ProfileFields profileFields){
-        final Optional<RowSpec> nominalRowSpec = node.getOrCreateRowSpec(() -> constraintReducer.reduceConstraintsToRowSpec(
+        final Optional<RowSpec> nominalRowSpec = constraintReducer.reduceConstraintsToRowSpec(
             profileFields,
             node
-        ));
+        );
 
         if (!nominalRowSpec.isPresent()) {
             return node.builder().markNode(NodeMarking.CONTRADICTORY).build();
@@ -68,10 +68,10 @@ public class ContradictionDecisionTreeValidator {
         if (node.getDecisions().isEmpty()) {
             return node;
         } else {
-            Collection<DecisionNode> decisions = node.getDecisions()
+            Set<DecisionNode> decisions = node.getDecisions()
                 .stream()
                 .map(d -> markContradictions(d, mergedRowSpecOpt.get(), profileFields))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
             boolean nodeIsContradictory = decisions.stream().allMatch(this::isNodeContradictory);
             ConstraintNode transformed = node.builder().setDecisions(decisions).build();
             return nodeIsContradictory ? transformed.builder().markNode(NodeMarking.CONTRADICTORY).build() : transformed;
@@ -82,9 +82,9 @@ public class ContradictionDecisionTreeValidator {
         if (node.getOptions().isEmpty()){
             return node;
         }
-        Collection<ConstraintNode> options = node.getOptions().stream()
+        Set<ConstraintNode> options = node.getOptions().stream()
             .map(c -> markContradictions(c, accumulatedSpec, profileFields))
-            .collect(Collectors.toList());
+            .collect(Collectors.toSet());
 
         boolean decisionIsContradictory = options.stream().allMatch(this::isNodeContradictory);
         DecisionNode transformed = node.setOptions(options);

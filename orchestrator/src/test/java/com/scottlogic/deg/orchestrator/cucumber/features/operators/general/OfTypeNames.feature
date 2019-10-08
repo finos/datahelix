@@ -18,7 +18,6 @@ Feature: User can specify that a field must be a type of name
     Then 10 rows of data are generated
     And foo contains strings longer than or equal to 1
 
-  @ignore # Full name generation is too slow to run on CI
   Scenario: Generating with an of type fullname constraint generates valid fullnames
     Given foo has type "fullname"
     And the generator can generate at most 5 rows

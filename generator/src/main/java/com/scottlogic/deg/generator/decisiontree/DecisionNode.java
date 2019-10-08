@@ -17,6 +17,7 @@
 package com.scottlogic.deg.generator.decisiontree;
 
 import com.scottlogic.deg.common.util.FlatMappingSpliterator;
+import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.util.*;
 import java.util.Objects;
@@ -24,27 +25,27 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class DecisionNode implements Node {
-    private final Collection<ConstraintNode> options;
+    private final Set<ConstraintNode> options;
     private final Set<NodeMarking> nodeMarkings;
 
     public DecisionNode(ConstraintNode... options) {
-        this(Collections.unmodifiableCollection(Arrays.asList(options)));
+        this(Collections.unmodifiableSet(SetUtils.setOf(options)));
     }
 
-    public DecisionNode(Collection<ConstraintNode> options) {
+    public DecisionNode(Set<ConstraintNode> options) {
         this(options, Collections.emptySet());
     }
 
-    public DecisionNode(Collection<ConstraintNode> options, Set<NodeMarking> nodeMarkings) {
-        this.options = Collections.unmodifiableCollection(options);
+    public DecisionNode(Set<ConstraintNode> options, Set<NodeMarking> nodeMarkings) {
+        this.options = Collections.unmodifiableSet(options);
         this.nodeMarkings = Collections.unmodifiableSet(nodeMarkings);
     }
 
-    public Collection<ConstraintNode> getOptions() {
+    public Set<ConstraintNode> getOptions() {
         return options;
     }
 
-    public DecisionNode setOptions(Collection<ConstraintNode> options){
+    public DecisionNode setOptions(Set<ConstraintNode> options){
         return new DecisionNode(options);
     }
 
@@ -67,9 +68,7 @@ public final class DecisionNode implements Node {
             ? String.format("Options: %d", this.options.size())
             : String.format("Options [%d]: %s",
                 this.options.size(),
-                String.join(
-                    " OR ",
-                    this.options.stream().map(o -> o.toString()).collect(Collectors.toList())));
+            this.options.stream().map(ConstraintNode::toString).collect(Collectors.joining(" OR ")));
     }
 
     @Override

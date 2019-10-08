@@ -24,22 +24,19 @@ import com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 class PrunedConstraintState {
 
-    private final Collection<AtomicConstraint> newAtomicConstraints;
-    private final Collection<FieldSpecRelations> newRelations;
-    private final Collection<DecisionNode> newDecisionNodes = new ArrayList<>();
-    private final Collection<AtomicConstraint> pulledUpAtomicConstraints = new ArrayList<>();
-    private final Collection<FieldSpecRelations> pulledUpRelations = new ArrayList<>();
+    private final Set<AtomicConstraint> newAtomicConstraints;
+    private final Set<FieldSpecRelations> newRelations;
+    private final Set<DecisionNode> newDecisionNodes = new HashSet<>();
+    private final Set<AtomicConstraint> pulledUpAtomicConstraints = new HashSet<>();
+    private final Set<FieldSpecRelations> pulledUpRelations = new HashSet<>();
 
     PrunedConstraintState(ConstraintNode constraintNode){
-        newAtomicConstraints = new ArrayList<>(constraintNode.getAtomicConstraints());
-        newRelations = new ArrayList<>(constraintNode.getRelations());
+        newAtomicConstraints = new HashSet<>(constraintNode.getAtomicConstraints());
+        newRelations = new HashSet<>(constraintNode.getRelations());
     }
 
     void addPrunedDecision(DecisionNode prunedDecisionNode) {
@@ -57,7 +54,7 @@ class PrunedConstraintState {
     }
 
     boolean hasPulledUpDecisions() {
-        return !pulledUpAtomicConstraints.isEmpty();
+        return !(pulledUpAtomicConstraints.isEmpty() || pulledUpRelations.isEmpty());
     }
 
     ConstraintNode getNewConstraintNode() {
