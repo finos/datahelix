@@ -90,4 +90,13 @@ public class DateTimeGranularity implements Granularity<OffsetDateTime> {
     public int hashCode() {
         return Objects.hash(chronoUnit, workingDay);
     }
+
+    @Override
+    public String toString() {
+        return "DateTimeGranularity{" +
+            "chronoUnit=" + chronoUnit +
+            ", workingDay=" + workingDay +
+            ", temporalAdjusterGenerator=" + temporalAdjusterGenerator +
+            '}';
+    }
 }

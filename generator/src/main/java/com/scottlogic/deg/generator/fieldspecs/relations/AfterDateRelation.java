@@ -59,9 +59,13 @@ public class AfterDateRelation implements FieldSpecRelations {
 
     @Override
     public FieldSpec reduceValueToFieldSpec(DataBagValue generatedValue) {
-        Limit<OffsetDateTime> limit = new Limit<>((OffsetDateTime)generatedValue.getValue(), true);
+        OffsetDateTime value = (OffsetDateTime) generatedValue.getValue();
+        if (value == null) {
+            return FieldSpec.empty();
+        }
+        Limit<OffsetDateTime> limit = new Limit<>(value, true);
         LinearRestrictions<OffsetDateTime> restrictions = LinearRestrictionsFactory.createDateTimeRestrictions(limit,limit);
-        FieldSpec newSpec = FieldSpec.fromRestriction(restrictions).withNotNull();
+        FieldSpec newSpec = FieldSpec.fromRestriction(restrictions);
         return reduceToRelatedFieldSpec(newSpec);
     }
 
