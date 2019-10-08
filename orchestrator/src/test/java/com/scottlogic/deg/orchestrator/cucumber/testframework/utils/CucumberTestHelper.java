@@ -26,6 +26,7 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.orchestrator.generate.GenerateExecute;
 import com.scottlogic.deg.orchestrator.violate.ViolateExecute;
 import com.scottlogic.deg.orchestrator.violate.ViolateModule;
+import com.scottlogic.deg.profile.dto.FieldDTO;
 import org.junit.Assert;
 
 import java.io.IOException;
@@ -200,7 +201,7 @@ public class CucumberTestHelper {
 
     private Optional<Integer> getIndexOfField(String fieldName) {
         for (int index = 0; index < testState.profileFields.size(); index++) {
-            Field field = testState.profileFields.get(index);
+            FieldDTO field = testState.profileFields.get(index);
             if (field.name.equals(fieldName)) {
                 return Optional.of(index);
             }

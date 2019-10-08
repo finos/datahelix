@@ -18,6 +18,7 @@ package com.scottlogic.deg.profile.serialisation;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.scottlogic.deg.profile.dto.ProfileDTO;
 
 import java.io.IOException;
@@ -25,9 +26,6 @@ import java.io.IOException;
 public class ProfileSerialiser {
     public String serialise(ProfileDTO profile) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
 
         return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(profile);
     }

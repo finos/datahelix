@@ -169,20 +169,6 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldDeserialiseInvalidProfileAsEmptyRule() throws IOException {
-        givenJson(
-            "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
-                "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\" } ]," +
-                "    \"rules\": [" +
-                "       { \"field\": \"foo\", \"is\": \"null\" } " +
-                "    ]" +
-                "}");
-
-        expectInvalidProfileException("Profile is invalid: unable to find 'constraints' for rule: null");
-    }
-
-    @Test
     public void shouldGiveDefaultNameToUnnamedRules() throws IOException {
         givenJson(
                 "{" +

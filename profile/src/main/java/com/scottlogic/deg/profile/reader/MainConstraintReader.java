@@ -57,11 +57,7 @@ public class MainConstraintReader {
             throw new InvalidProfileException("Constraint is null");
         }
 
-        if (dto.is == null) {
-            throw new InvalidProfileException("Couldn't recognise 'is' property, it must be set to a value");
-        }
-
-        if (dto.is != ConstraintDTO.undefined) {
+        if (dto.is != null) {
 
             if (dto.otherField != null){
                 return RelationsFactory.create(dto, fields);
@@ -119,7 +115,7 @@ public class MainConstraintReader {
                     : null);
         }
 
-        throw new InvalidProfileException("Couldn't interpret constraint");
+        throw new InvalidProfileException("Couldn't recognise 'is' property, it must be set to a value");
     }
 
     private InMapRelation createInMapRelation(Field field, Field other, DistributedList<String> list) {
