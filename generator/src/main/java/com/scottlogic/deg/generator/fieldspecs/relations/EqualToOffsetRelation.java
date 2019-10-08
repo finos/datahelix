@@ -28,7 +28,7 @@ import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactor
 
 import java.time.OffsetDateTime;
 
-public class EqualToOffsetRelation<T extends Comparable> implements FieldSpecRelations {
+public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpecRelations {
     private final Field main;
     private final Field other;
     private final Granularity<T> offsetGranularity;
@@ -50,10 +50,10 @@ public class EqualToOffsetRelation<T extends Comparable> implements FieldSpecRel
             return FieldSpec.empty();
         }
 
-        LinearRestrictions otherRestrictions = (LinearRestrictions) otherValue.getRestrictions();
-        T min = (T) otherRestrictions.getMin();
+        LinearRestrictions<T> otherRestrictions = (LinearRestrictions) otherValue.getRestrictions();
+        T min = otherRestrictions.getMin();
         T offsetMin = offsetGranularity.getNext(min, offset);
-        T max = (T) otherRestrictions.getMax();
+        T max = otherRestrictions.getMax();
         T offsetMax = offsetGranularity.getNext(max, offset);
 
         return FieldSpec.fromRestriction(new LinearRestrictions(offsetMin, offsetMax, otherRestrictions.getGranularity()));

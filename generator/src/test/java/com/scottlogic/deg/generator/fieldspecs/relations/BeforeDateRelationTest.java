@@ -20,6 +20,7 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.common.profile.constraintdetail.DateTimeGranularity;
 import com.scottlogic.deg.common.profile.constraintdetail.Granularity;
+import com.scottlogic.deg.common.util.defaults.DateTimeDefaults;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
@@ -39,7 +40,7 @@ public class BeforeDateRelationTest {
 
     @Test
     public void testReduceToFieldSpec_withNotNull_reducesToSpec() {
-        FieldSpecRelations beforeDateRelations = new BeforeDateRelation(a, b, true);
+        FieldSpecRelations beforeDateRelations = new BeforeRelation(a, b, true, DateTimeDefaults.get());
         OffsetDateTime value = OffsetDateTime.of(2000,
             1,
             1,
@@ -58,7 +59,7 @@ public class BeforeDateRelationTest {
 
     @Test
     public void testReduceToFieldSpec_withNotNullExclusive_reducesToSpec() {
-        FieldSpecRelations beforeDateRelations = new BeforeDateRelation(a, b, false);
+        FieldSpecRelations beforeDateRelations = new BeforeRelation(a, b, false, DateTimeDefaults.get());
         OffsetDateTime value = OffsetDateTime.of(2000,
             1,
             1,
@@ -78,7 +79,7 @@ public class BeforeDateRelationTest {
 
     @Test
     public void testReduceToFieldSpec_withNull_reducesToSpec() {
-        FieldSpecRelations beforeDateRelations = new BeforeDateRelation(a, b, true);
+        FieldSpecRelations beforeDateRelations = new BeforeRelation(a, b, true, DateTimeDefaults.get());
         OffsetDateTime value = null;
         DataBagValue generatedValue = new DataBagValue(value);
 

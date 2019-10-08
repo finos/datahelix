@@ -26,7 +26,7 @@ import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 
 import java.time.OffsetDateTime;
 
-public class BeforeRelation<T extends Comparable> implements FieldSpecRelations {
+public class BeforeRelation<T extends Comparable<T>> implements FieldSpecRelations {
     private final Field main;
     private final Field other;
     private final boolean inclusive;
@@ -41,16 +41,17 @@ public class BeforeRelation<T extends Comparable> implements FieldSpecRelations 
 
     @Override
     public FieldSpec reduceToRelatedFieldSpec(FieldSpec otherValue) {
-        LinearRestrictions lr = (LinearRestrictions) otherValue.getRestrictions();
+        LinearRestrictions<T> lr = (LinearRestrictions) otherValue.getRestrictions();
         if (lr == null){
             return FieldSpec.empty();
         }
 
-        return createFromMax((T) lr.getMax(), lr.getGranularity());
+        return createFromMax(lr.getMax(), lr.getGranularity());
     }
 
     @Override
     public FieldSpec reduceValueToFieldSpec(DataBagValue generatedValue) {
+        if (generatedValue.getValue() == null) return FieldSpec.empty();
         return createFromMax((T) generatedValue.getValue(), defaults.granularity());
     }
 
