@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.8",
+  "schemaVersion": "0.10",
   "rules": [
     {
       "rule": "rule 1",

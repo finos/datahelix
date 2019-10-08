@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.8",
+  "schemaVersion": "0.10",
   "fields": [
     {
       "name": "first",
@@ -43,9 +43,7 @@
         {
           "field": "first",
           "is": "after",
-          "value": {
-            "date": "8001-02-03T04:05:06.007"
-          }
+          "value": "8001-02-03T04:05:06.007"
         },
         {
           "field": "second",
@@ -64,9 +62,7 @@
         {
           "field": "firstWorking",
           "is": "equalTo",
-          "value": {
-            "date": "2019-08-12T12:00:00.000"
-          }
+          "value": "2019-08-12T12:00:00.000"
         },
         {
           "field": "secondWorking",
@@ -78,16 +74,12 @@
         {
           "field": "current",
           "is": "before",
-          "value": {
-            "date": "now"
-          }
+          "value": "now"
         },
         {
           "field": "current",
           "is": "after",
-          "value": {
-            "date": "2019-06-01T12:00:00.000"
-          }
+          "value": "2019-06-01T12:00:00.000"
         }
       ]
     }

@@ -23,6 +23,7 @@
     2. [General constraints](#General-constraints)
         1. [equalTo](#predicate-equalto)
         2. [inSet](#predicate-inset)
+        2. [inMap](#predicate-inmap)
         3. [null](#predicate-null)
     3. [Textual constraints](#Textual-constraints)
         1. [matchingRegex](#predicate-matchingregex)
@@ -252,10 +253,10 @@ Strings are sequences of unicode characters with a maximum length of 1000 charac
 
 ## DateTime
 
-DateTimes represent specific moments in time, and are specified in profiles through specialised objects:
+DateTimes represent specific moments in time, and are specified in profiles through specialised strings:
 
 ```javascript
-{ "date": "2000-01-01T09:00:00.000" }
+"2000-01-01T09:00:00.000"
 ```
 
 The format is a subset of [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601); the date and time must be fully specified as above,
@@ -317,7 +318,7 @@ The [grammatical `not` constraint](#Grammatical-Constraints) inverts a constrain
 OR
 { "field": "type", "is": "equalTo", "value": 23 }
 OR
-{ "field": "type", "is": "equalTo", "value": { "date": "2001-02-03T04:05:06.007" } }
+{ "field": "type", "is": "equalTo", "value": "2001-02-03T04:05:06.007" }
 ```
 
 Is satisfied if `field`'s value is equal to `value`
@@ -327,7 +328,7 @@ Is satisfied if `field`'s value is equal to `value`
 ### `inSet` _(field, values)_
 
 ```javascript
-{ "field": "type", "is": "inSet", "values": [ "X_092", 123, null, { "date": "2001-02-03T04:05:06.007" } ] }
+{ "field": "type", "is": "inSet", "values": [ "X_092", 123, null, "2001-02-03T04:05:06.007" ] }
 ```
 
 Is satisfied if `field`'s value is in the set `values`
@@ -363,6 +364,38 @@ Scotland, 3
 ```
 
 After loading the set from the file, this constraint behaves identically to the [inSet](#predicate-inset) constraint. This includes its behaviour when negated or violated.
+
+<div id="predicate-inmap"></div>
+
+### `inMap` _(field, file, key)_
+
+```javascript
+{ 
+    "field": "country",
+    "is": "inMap",
+    "file": "countries.csv",
+    "key": "Country"
+}
+```
+
+Is satisfied if `field`'s value is in the map with the key `Country`.
+
+For each field using the same map when one value is picked from the map all fields will use the same row. 
+
+It populates the map from a new-line delimited file (with suffix `.csv`), where each line represents a value to load. A header is required in the file to identify which column is related to a key.
+
+The file should be location in the same directory as the jar, or in the directory explicitly specified using the command line argument `--set-from-file-directory`, and the name should match the `value` with `.csv` appended.
+Alternatively an absolute path can be used which does not have any relation to the jar location.
+In the above example, this would be `countries.csv`.
+
+Example `countries.csv` excerpt:
+```javascript
+Country, Capital
+England, London
+Wales, Cardiff
+Scotland, Edinburgh
+...
+```
 
 <div id="predicate-null"></div>
 
@@ -487,16 +520,16 @@ Is satisfied if `field` is a number less than or equal to `value`.
 Is satisfied if `field` has at least the [granularity](#Numeric-granularity) specified in `value`.
 
 ## DateTime constraints
-All dates must be in format `yyyy-MM-ddTHH:mm:ss.SSS` and embedded in a _date-object_. The Z suffix can be included, but is not required. All datetimes are treated as UTC whether the Z suffix is included or not.
+All dates must be in format `yyyy-MM-ddTHH:mm:ss.SSS` and the Z suffix can be included, but is not required. All datetimes are treated as UTC whether the Z suffix is included or not.
 
-Example: `{ "date": "2001-02-03T04:05:06.007" }`
+Example: `2001-02-03T04:05:06.007`
 
 <div id="predicate-after"></div>
 
 ### `after` _(field, value)_
 
 ```javascript
-{ "field": "date", "is": "after", "value": { "date": "2018-09-01T00:00:00.000" } }
+{ "field": "date", "is": "after", "value": "2018-09-01T00:00:00.000" }
 ```
 
 Is satisfied if `field` is a datetime occurring after `value`.
@@ -506,7 +539,7 @@ Is satisfied if `field` is a datetime occurring after `value`.
 ### `afterOrAt` _(field, value)_
 
 ```javascript
-{ "field": "date", "is": "afterOrAt", "value": { "date": "2018-09-01T00:00:00.000" } }
+{ "field": "date", "is": "afterOrAt", "value": "2018-09-01T00:00:00.000" }
 ```
 
 Is satisfied if `field` is a datetime occurring after or simultaneously with `value`.
@@ -516,7 +549,7 @@ Is satisfied if `field` is a datetime occurring after or simultaneously with `va
 ### `before` _(field, value)_
 
 ```javascript
-{ "field": "date", "is": "before", "value": { "date": "2018-09-01T00:00:00.000" } }
+{ "field": "date", "is": "before", "value": "2018-09-01T00:00:00.000" }
 ```
 
 Is satisfied if `field` is a datetime occurring before `value`.
@@ -526,7 +559,7 @@ Is satisfied if `field` is a datetime occurring before `value`.
 ### `beforeOrAt` _(field, value)_
 
 ```javascript
-{ "field": "date", "is": "beforeOrAt", "value": { "date": "2018-09-01T00:00:00.000" } }
+{ "field": "date", "is": "beforeOrAt", "value": "2018-09-01T00:00:00.000" }
 ```
 
 Is satisfied if `field` is a datetime occurring before or simultaneously with `value`.

@@ -16,13 +16,12 @@
 
 package com.scottlogic.deg.orchestrator.violate.violator;
 
-import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.common.profile.Rule;
-import com.scottlogic.deg.common.profile.constraints.Constraint;
-import com.scottlogic.deg.common.profile.constraints.atomic.NotConstraint;
-import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
-import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
-import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
+import com.scottlogic.deg.generator.profile.Profile;
+import com.scottlogic.deg.generator.profile.Rule;
+import com.scottlogic.deg.generator.profile.constraints.Constraint;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
 import org.junit.Assert;
 
 import java.util.ArrayList;
@@ -133,12 +132,7 @@ public class TypeEqualityHelper {
                 + expectedConstraint.getClass() + " but was: " + actualConstraint.getClass(),
             expectedConstraint.getClass(),
             actualConstraint.getClass());
-        if (expectedConstraint instanceof NotConstraint){
-            assertConstraintTypeEquality(
-                ((NotConstraint)expectedConstraint).negatedConstraint,
-                ((NotConstraint)actualConstraint).negatedConstraint);
-        }
-        else if (expectedConstraint instanceof AndConstraint) {
+        if (expectedConstraint instanceof AndConstraint) {
             ArrayList<Constraint> expectedConstraints = new ArrayList<>(((AndConstraint) expectedConstraint).getSubConstraints());
             ArrayList<Constraint> actualConstraints = new ArrayList<>(((AndConstraint) actualConstraint).getSubConstraints());
             assertConstraintListTypeEquality(expectedConstraints, actualConstraints);

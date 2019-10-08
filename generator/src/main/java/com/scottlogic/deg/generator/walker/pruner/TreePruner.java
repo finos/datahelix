@@ -18,7 +18,7 @@ package com.scottlogic.deg.generator.walker.pruner;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecHelper;
@@ -80,7 +80,7 @@ public class TreePruner {
     }
 
     private Merged<DecisionNode> pruneDecisionNode(DecisionNode decisionNode,  Map<Field, FieldSpec> fieldSpecs) {
-        Collection<ConstraintNode> newConstraintNodes = new ArrayList<>();
+        Set<ConstraintNode> newConstraintNodes = new HashSet<>();
 
         for (ConstraintNode constraintNode : decisionNode.getOptions()) {
             pruneConstraintNode(constraintNode, fieldSpecs).ifPresent(newConstraintNodes::add);

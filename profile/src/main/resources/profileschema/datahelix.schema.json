@@ -51,10 +51,10 @@
   "definitions": {
     "schemaVersion": {
       "title": "The version of the DataHelix profile schema",
-      "const": "0.8"
+      "const": "0.10"
     },
     "dataType": {
-      "oneOf": [
+      "anyOf": [
         {
           "$ref": "#/definitions/datetime"
         },
@@ -67,33 +67,58 @@
       ]
     },
     "datetime": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["date"],
-      "default": {
-        "date": "2000-01-01T09:00:00.000"
-      },
-      "properties": {
-        "additionalProperties": false,
-        "date": {
-          "title": "an ISO 8610 compatible string denoting a date and time",
-          "type": "string",
-          "default": "2000-01-01T09:00:00.000",
-          "oneOf": [
+      "title": "an ISO 8610 compatible string denoting a date and time",
+      "type": "string",
+      "default": "2000-01-01T09:00:00.000",
+      "oneOf": [
             {
               "pattern": "^(?!0000)[0-9]{4}-([0][0-9]|[1][0-2])-([0-2][0-9]|3[01])T([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9][.][0-9]{3}Z?$"
             },
             {
               "enum": ["now"]
             }]
-        }
-      }
+
     },
     "numeric": {
       "type": "number",
       "minimum": -1e20,
       "maximum": 1e20,
       "default": 0
+    },
+    "granularity": {
+        "value": {
+          "enum": [
+            1,
+            1e-1,
+            1e-2,
+            1e-3,
+            1e-4,
+            1e-5,
+            1e-6,
+            1e-7,
+            1e-8,
+            1e-9,
+            1e-10,
+            1e-11,
+            1e-12,
+            1e-13,
+            1e-14,
+            1e-15,
+            1e-16,
+            1e-17,
+            1e-18,
+            1e-19,
+            1e-20,
+            "millis",
+            "seconds",
+            "minutes",
+            "hours",
+            "days",
+            "months",
+            "years",
+            "working days"
+          ]
+        }
     },
     "integer": {
       "$ref": "#/definitions/numeric",
@@ -102,7 +127,14 @@
     "string": {
       "type": "string",
       "maxLength": 1000,
-      "default": "string"
+      "default": "string",
+      "noneOf": [
+        {
+          "pattern": "^(?!0000)[0-9]{4}-([0][0-9]|[1][0-2])-([0-2][0-9]|3[01])T([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9][.][0-9]{3}Z?$"
+        },
+        {
+          "enum": ["now"]
+        }]
     },
     "fieldDefinition": {
       "title": "The field definitions of a field to generate data for",
@@ -213,7 +245,7 @@
           ]
         },
         "value": {
-          "oneOf": [
+          "anyOf": [
             {
               "$ref": "#/definitions/datetime"
             },
@@ -355,40 +387,7 @@
             }
           },
           "then": {
-            "properties": {
-              "value": {
-                "enum": [
-                  1,
-                  1e-1,
-                  1e-2,
-                  1e-3,
-                  1e-4,
-                  1e-5,
-                  1e-6,
-                  1e-7,
-                  1e-8,
-                  1e-9,
-                  1e-10,
-                  1e-11,
-                  1e-12,
-                  1e-13,
-                  1e-14,
-                  1e-15,
-                  1e-16,
-                  1e-17,
-                  1e-18,
-                  1e-19,
-                  1e-20,
-                  "millis",
-                  "seconds",
-                  "minutes",
-                  "hours",
-                  "days",
-                  "months",
-                  "years"
-                ]
-              }
-            }
+            "$ref": "#/definitions/granularity"
           }
         },
         {
@@ -438,7 +437,7 @@
           "$ref": "#/definitions/integer"
         },
         "offsetUnit": {
-          "type": "string"
+          "$ref": "#/definitions/granularity"
         }
       }
     },
@@ -552,7 +551,7 @@
         "values": {
           "type": "array",
           "items": {
-            "oneOf": [
+            "anyOf": [
               {
                 "$ref": "#/definitions/datetime"
               },

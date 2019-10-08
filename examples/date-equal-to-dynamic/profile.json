@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.8",
+  "schemaVersion": "0.10",
   "fields": [
     {
       "name": "first",
@@ -17,9 +17,7 @@
         {
           "field": "first",
           "is": "after",
-          "value": {
-            "date": "8001-02-03T04:05:06.007"
-          }
+          "value": "8001-02-03T04:05:06.007"
         },
         {
           "field": "second",

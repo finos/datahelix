@@ -17,25 +17,28 @@
 package com.scottlogic.deg.profile.reader;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.common.date.TemporalAdjusterGenerator;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.constraints.Constraint;
+import com.scottlogic.deg.common.profile.constraintdetail.DateTimeGranularity;
+import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
+import com.scottlogic.deg.generator.fieldspecs.relations.InMapRelation;
+import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.common.profile.constraints.delayed.DelayedAtomicConstraint;
-import com.scottlogic.deg.common.profile.constraints.delayed.DelayedDateAtomicConstraint;
-import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
-import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
-import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintValueReader;
 import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintFactory;
 import com.scottlogic.deg.profile.reader.atomic.ConstraintValueValidator;
+import com.scottlogic.deg.profile.reader.atomic.RelationsFactory;
 
-import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static com.scottlogic.deg.profile.reader.atomic.ConstraintReaderHelpers.getDateTimeGranularity;
 
 public class MainConstraintReader {
 
@@ -61,15 +64,20 @@ public class MainConstraintReader {
         if (dto.is != ConstraintDTO.undefined) {
 
             if (dto.otherField != null){
-                return createDelayedDateAtomicConstraint(dto, fields);
+                return RelationsFactory.create(dto, fields);
             }
 
             AtomicConstraintType atomicConstraintType = AtomicConstraintType.fromText((String) dto.is);
+
             Field field = fields.getByName(dto.field);
 
             Object value = atomicConstraintValueReader.getValue(dto, field.type);
 
             ConstraintValueValidator.validate(field, atomicConstraintType, value);
+
+            if (atomicConstraintType == AtomicConstraintType.IS_IN_MAP){
+                return createInMapRelation(field, fields.getByName(dto.file), (DistributedList<String>) value);
+            }
 
             return AtomicConstraintFactory.create(atomicConstraintType, field, value);
 
@@ -114,26 +122,10 @@ public class MainConstraintReader {
         throw new InvalidProfileException("Couldn't interpret constraint");
     }
 
-    private DelayedAtomicConstraint createDelayedDateAtomicConstraint(ConstraintDTO dto, ProfileFields fields) {
-        return new DelayedDateAtomicConstraint(
-            fields.getByName(dto.field),
-            AtomicConstraintType.fromText((String) dto.is),
-            fields.getByName(dto.otherField),
-            getOffsetUnit(dto),
-            dto.offset);
+    private InMapRelation createInMapRelation(Field field, Field other, DistributedList<String> list) {
+        return new InMapRelation(field, other, list);
     }
 
-    private TemporalAdjusterGenerator getOffsetUnit(ConstraintDTO dto) {
-        if (dto.offsetUnit == null) {
-            return null;
-        }
-
-        String offsetUnitUpperCase = dto.offsetUnit.toUpperCase();
-        boolean workingDay = offsetUnitUpperCase.equals("WORKING DAYS");
-        return new TemporalAdjusterGenerator(
-            ChronoUnit.valueOf(ChronoUnit.class, workingDay ? "DAYS" : offsetUnitUpperCase),
-            workingDay);
-    }
 
     Set<Constraint> getSubConstraints(ProfileFields fields, Collection<ConstraintDTO> allOf) {
         return allOf.stream()

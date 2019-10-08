@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.8",
+  "schemaVersion": "0.10",
   "fields": [
     {
       "name": "tradeId",
@@ -71,8 +71,8 @@
     {
       "rule": "tradeDatetime",
       "constraints": [
-        { "field": "tradeDatetime", "is": "after", "value": { "date": "2019-09-02T09:30:00.000" } },
-        { "field": "tradeDatetime", "is": "before", "value": { "date": "2019-09-02T16:30:00.000" } }
+        { "field": "tradeDatetime", "is": "after", "value": "2019-09-02T09:30:00.000" },
+        { "field": "tradeDatetime", "is": "before", "value": "2019-09-02T16:30:00.000" }
       ]
     }
   ]

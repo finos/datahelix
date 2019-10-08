@@ -17,8 +17,8 @@
 package com.scottlogic.deg.orchestrator.violate.violator;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.common.profile.Rule;
+import com.scottlogic.deg.generator.profile.Profile;
+import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.orchestrator.violate.ViolatedProfile;
 
 import java.io.IOException;

@@ -18,15 +18,17 @@ package com.scottlogic.deg.profile.reader;
 
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.common.profile.Rule;
-import com.scottlogic.deg.common.profile.constraints.Constraint;
-import com.scottlogic.deg.common.profile.constraints.atomic.*;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
+import com.scottlogic.deg.generator.profile.Profile;
+import com.scottlogic.deg.generator.profile.Rule;
+import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.Types;
-import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
-import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
-import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintValueReader;
+import com.scottlogic.deg.profile.reader.atomic.FromFileReader;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -41,13 +43,39 @@ import java.util.function.Consumer;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.core.IsNull.nullValue;
 
+
+
+
 public class JsonProfileReaderTests {
+
+    private DistributedList<Object> fromFileReaderReturnValue = DistributedList.singleton("test");
+
+    private class MockFromFileReader extends FromFileReader {
+
+        MockFromFileReader() {
+            super("");
+        }
+
+        @Override
+        public DistributedList<Object> setFromFile(String file) {
+            return fromFileReaderReturnValue;
+        }
+
+        @Override
+        public DistributedList<Object> listFromMapFile(String file, String Key) {
+            return fromFileReaderReturnValue;
+        }
+
+    }
+
     private final String schemaVersion = "\"0.7\"";
     private String json;
+
     private JsonProfileReader jsonProfileReader = new JsonProfileReader(
         null,
         new MainConstraintReader(
-            new AtomicConstraintValueReader(null)));
+            new AtomicConstraintValueReader(new MockFromFileReader())));
+
 
 
     private void givenJson(String json) {
@@ -364,11 +392,11 @@ public class JsonProfileReaderTests {
         expectRules(
                 ruleWithConstraints(
                         typedConstraint(
-                                NotConstraint.class,
+                                NotEqualToConstraint.class,
                                 c -> {
                                     Assert.assertThat(
-                                            c.negatedConstraint,
-                                            instanceOf(EqualToConstraint.class));
+                                            c.value,
+                                            equalTo("string"));
                                 })));
     }
 
@@ -592,8 +620,8 @@ public class JsonProfileReaderTests {
                 "    \"rules\": [" +
                 "      {" +
                 "        \"constraints\": [" +
-                "        { \"field\": \"foo\", \"is\": \"afterOrAt\", \"value\": { \"date\": \"2019-01-01T00:00:00.000\" } }," +
-                "        { \"field\": \"foo\", \"is\": \"before\", \"value\": { \"date\": \"2019-01-03T00:00:00.000\" } }" +
+                "        { \"field\": \"foo\", \"is\": \"afterOrAt\", \"value\": \"2019-01-01T00:00:00.000\" }," +
+                "        { \"field\": \"foo\", \"is\": \"before\", \"value\": \"2019-01-03T00:00:00.000\" }" +
                 "        ]" +
                 "      }" +
                 "    ]" +
@@ -667,7 +695,7 @@ public class JsonProfileReaderTests {
                 "    ]" +
                 "}");
 
-        expectInvalidProfileException("Field [foo]: Dates should be expressed in object format e.g. { \"date\": \"yyyy-MM-ddTHH:mm:ss.SSS[Z]\" }");
+        expectInvalidProfileException("Field [foo]: Date string '2018-01-12' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS[Z] between (inclusive) 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z");
     }
 
     @Test
@@ -906,13 +934,10 @@ public class JsonProfileReaderTests {
         expectRules(
             ruleWithConstraints(
                 typedConstraint(
-                    NotConstraint.class,
+                    NotNullConstraint.class,
                     c -> {
-                        Assert.assertThat(
-                            c.negatedConstraint,
-                            instanceOf(IsNullConstraint.class));
                         Assert.assertEquals(
-                            c.negatedConstraint.getField().name,
+                            c.getField().name,
                             "foo");
                     }
                 )
@@ -972,24 +997,18 @@ public class JsonProfileReaderTests {
         expectRules(
             ruleWithConstraints(
                 typedConstraint(
-                    NotConstraint.class,
+                    NotNullConstraint.class,
                     c -> {
-                        Assert.assertThat(
-                            c.negatedConstraint,
-                            instanceOf(IsNullConstraint.class));
                         Assert.assertEquals(
-                            c.negatedConstraint.getField().name,
+                            c.getField().name,
                             "foo");
                     }
                 ),
                 typedConstraint(
-                    NotConstraint.class,
+                    NotNullConstraint.class,
                     c -> {
-                        Assert.assertThat(
-                            c.negatedConstraint,
-                            instanceOf(IsNullConstraint.class));
                         Assert.assertEquals(
-                            c.negatedConstraint.getField().name,
+                            c.getField().name,
                             "bar");
                     }
                 )
@@ -1018,13 +1037,10 @@ public class JsonProfileReaderTests {
         expectRules(
             ruleWithConstraints(
                 typedConstraint(
-                    NotConstraint.class,
+                    NotNullConstraint.class,
                     c -> {
-                        Assert.assertThat(
-                            c.negatedConstraint,
-                            instanceOf(IsNullConstraint.class));
                         Assert.assertEquals(
-                            c.negatedConstraint.getField().name,
+                            c.getField().name,
                             "bar");
                     }
                 )
@@ -1150,6 +1166,100 @@ public class JsonProfileReaderTests {
             },
             field -> {
                 Assert.assertThat(field.type, equalTo(Types.STRING));
+            }
+        );
+    }
+
+    @Test
+    void parser_createsInternalField_whenProfileHasAnInMapConstraint() throws IOException {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": " + schemaVersion + "," +
+                "    \"fields\": [ { " +
+                "       \"name\": \"foo\" ," +
+                "       \"type\": \"string\"" +
+                "    }, { " +
+                "       \"name\": \"bar\" ," +
+                "       \"type\": \"string\"" +
+                "    }]," +
+                "    \"rules\": [" +
+                "       {" +
+                "        \"rule\": \"fooRule\"," +
+                "        \"constraints\": [" +
+                "           { \"field\": \"foo\", \"is\": \"inMap\", \"key\": \"Foo\", \"file\": \"foobar.csv\" }," +
+                "           { \"field\": \"bar\", \"is\": \"inMap\", \"key\": \"Bar\", \"file\": \"foobar.csv\" }" +
+                "          ]" +
+                "       }" +
+                "    ]" +
+                "}");
+
+        expectFields(
+            field -> {
+                Assert.assertEquals("foo", field.name);
+                Assert.assertFalse(field.isInternal());
+            },
+            field -> {
+                Assert.assertEquals("bar", field.name);
+                Assert.assertFalse(field.isInternal());
+            },
+            field -> {
+                Assert.assertEquals("foobar.csv", field.name);
+                Assert.assertTrue(field.isInternal());
+            }
+        );
+    }
+
+    @Test
+    void parser_createsInternalField_whenProfileHasANestedInMapConstraint() throws IOException {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": " + schemaVersion + "," +
+                "    \"fields\": [ { " +
+                "       \"name\": \"foo\" ," +
+                "       \"type\": \"string\"" +
+                "    }, { " +
+                "       \"name\": \"bar\" ," +
+                "       \"type\": \"string\"" +
+                "    }, { " +
+                "       \"name\": \"other\" ," +
+                "       \"type\": \"string\"" +
+                "    }]," +
+                "    \"rules\": [" +
+                "       {" +
+                "        \"rule\": \"fooRule\"," +
+                "        \"constraints\": [" +
+                "                {" +
+                "                    \"if\":   { \"field\": \"other\", \"is\": \"matchingRegex\", \"value\": \"^[O].*\" }," +
+                "                    \"then\": {" +
+                "                        \"if\":   { \"field\": \"other\", \"is\": \"matchingRegex\", \"value\": \"^[O].*\" }," +
+                "                        \"then\": { \"allOf\": [" +
+                "                            { \"field\": \"foo\", \"is\": \"inMap\", \"key\": \"Foo\", \"file\": \"foobar.csv\" }," +
+                "                            { \"field\": \"bar\", \"is\": \"inMap\", \"key\": \"Bar\", \"file\": \"foobar.csv\" }" +
+                "                        ]}" +
+                "                    }" +
+                "                }" +
+                "          ]" +
+                "       }" +
+                "    ]" +
+                "}");
+
+        expectFields(
+            field -> {
+                Assert.assertEquals("foo", field.name);
+                Assert.assertFalse(field.isInternal());
+            },
+            field -> {
+                Assert.assertEquals("bar", field.name);
+                Assert.assertFalse(field.isInternal());
+            },
+            field -> {
+                Assert.assertEquals("other", field.name);
+                Assert.assertFalse(field.isInternal());
+            },
+            field -> {
+                Assert.assertEquals("foobar.csv", field.name);
+                Assert.assertTrue(field.isInternal());
+                Assert.assertEquals(Types.NUMERIC, field.type);
             }
         );
     }

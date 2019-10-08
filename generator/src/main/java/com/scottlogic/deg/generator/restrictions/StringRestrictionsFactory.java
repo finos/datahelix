@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 import static com.scottlogic.deg.common.util.Defaults.*;
 
 public class StringRestrictionsFactory {
-    public StringRestrictions forStringMatching(Pattern pattern, boolean negate) {
+    public static StringRestrictions forStringMatching(Pattern pattern, boolean negate) {
         return new TextualRestrictions(
             0,
             MAX_STRING_LENGTH,
@@ -38,7 +38,7 @@ public class StringRestrictionsFactory {
         );
     }
 
-    public StringRestrictions forStringContaining(Pattern pattern, boolean negate) {
+    public static StringRestrictions forStringContaining(Pattern pattern, boolean negate) {
         return new TextualRestrictions(
             0,
             MAX_STRING_LENGTH,
@@ -54,7 +54,7 @@ public class StringRestrictionsFactory {
         );
     }
 
-    public StringRestrictions forLength(int length, boolean negate) {
+    public static StringRestrictions forLength(int length, boolean negate) {
         return new TextualRestrictions(
             negate ? 0 : length,
             negate ? MAX_STRING_LENGTH : length,
@@ -68,7 +68,7 @@ public class StringRestrictionsFactory {
         );
     }
 
-    public StringRestrictions forMinLength(int length){
+    public static StringRestrictions forMinLength(int length){
         return new TextualRestrictions(
             length,
             MAX_STRING_LENGTH,
@@ -80,7 +80,7 @@ public class StringRestrictionsFactory {
         );
     }
 
-    public StringRestrictions forMaxLength(int length){
+    public static StringRestrictions forMaxLength(int length){
         return new TextualRestrictions(
             0,
             length,

@@ -63,10 +63,10 @@ class ConstraintToFieldMapper {
     }
 
     private Stream<ConstraintToFields> mapDelayedConstraintsToFields(ConstraintNode node) {
-        return node.getDelayedAtomicConstraints().stream()
-            .map(constraint -> new ConstraintToFields(
-                new RootLevelConstraint(constraint),
-                SetUtils.setOf(constraint.getField(), constraint.getOtherField())));
+        return node.getRelations().stream()
+            .map(relations -> new ConstraintToFields(
+                new RootLevelConstraint(relations),
+                SetUtils.setOf(relations.main(), relations.other())));
     }
 
     private Stream<ConstraintToFields> mapDecisionsToFields(ConstraintNode node) {

@@ -25,18 +25,11 @@ class RowSpecTreeSolverTests {
     private Field fieldA = createField("A");
     private Field fieldB = createField("B");
     private ProfileFields profileFields = new ProfileFields(Arrays.asList(fieldA, fieldB));
-    private ConstraintReducer constraintReducer;
-    private TreePruner pruner;
-    private OptionPicker optionPicker;
-    private RowSpecTreeSolver rowSpecTreeSolver;
-
-    @BeforeEach
-    void setup() {
-        constraintReducer = new ConstraintReducer(new FieldSpecFactory(new StringRestrictionsFactory()), new FieldSpecMerger());
-        pruner = new TreePruner(new FieldSpecMerger(), constraintReducer, new FieldSpecHelper());
-        optionPicker = new SequentialOptionPicker();
-        rowSpecTreeSolver = new RowSpecTreeSolver(constraintReducer, pruner, optionPicker);
-    }
+    private FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
+    private ConstraintReducer constraintReducer = new ConstraintReducer(fieldSpecMerger);
+    private TreePruner pruner = new TreePruner(fieldSpecMerger, constraintReducer, new FieldSpecHelper());
+    private OptionPicker optionPicker = new SequentialOptionPicker();
+    private RowSpecTreeSolver rowSpecTreeSolver = new RowSpecTreeSolver(constraintReducer, pruner, optionPicker);
 
     @Test
     void createRowSpecs_whenRootNodeHasNoDecisions_returnsRowSpecOfRoot() {
@@ -89,10 +82,10 @@ class RowSpecTreeSolverTests {
         DecisionTree tree = new DecisionTree(root, profileFields);
 
         //Act
-        List<RowSpec> rowSpecs = rowSpecTreeSolver.createRowSpecs(tree).collect(Collectors.toList());
+        Set<RowSpec> rowSpecs = rowSpecTreeSolver.createRowSpecs(tree).collect(Collectors.toSet());
 
         //Assert
-        List<RowSpec> expectedRowSpecs = new ArrayList<>();
+        Set<RowSpec> expectedRowSpecs = new HashSet<>();
         Map<Field, FieldSpec> option0 = new HashMap<>();
         option0.put(fieldA, FieldSpec.empty());
         option0.put(fieldB, FieldSpec.nullOnly());
