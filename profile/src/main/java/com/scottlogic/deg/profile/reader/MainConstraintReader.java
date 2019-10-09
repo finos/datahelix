@@ -18,8 +18,6 @@ package com.scottlogic.deg.profile.reader;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.constraintdetail.DateTimeGranularity;
-import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
 import com.scottlogic.deg.generator.fieldspecs.relations.InMapRelation;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.ProfileFields;
@@ -37,8 +35,6 @@ import com.scottlogic.deg.profile.reader.atomic.RelationsFactory;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import static com.scottlogic.deg.profile.reader.atomic.ConstraintReaderHelpers.getDateTimeGranularity;
 
 public class MainConstraintReader {
 
@@ -67,7 +63,7 @@ public class MainConstraintReader {
 
             Field field = fields.getByName(dto.field);
 
-            Object value = atomicConstraintValueReader.getValue(dto, field.type);
+            Object value = atomicConstraintValueReader.getValue(dto, field.getType());
 
             ConstraintValueValidator.validate(field, atomicConstraintType, value);
 
