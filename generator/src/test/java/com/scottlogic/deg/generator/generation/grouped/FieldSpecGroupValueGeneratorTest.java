@@ -27,9 +27,9 @@ class FieldSpecGroupValueGeneratorTest {
     @Test
     public void generate_withGroupOfSingleField_returnsCorrectStream() {
         Map<Field, FieldSpec> specMap = new HashMap<>();
-        FieldSpec firstSpec = FieldSpec.empty();
         Field firstField = createField("first");
-        specMap.put(firstField, FieldSpec.empty());
+        FieldSpec firstSpec = FieldSpec.fromType(firstField.getType());
+        specMap.put(firstField, FieldSpec.fromType(firstField.getType()));
 
         FieldSpecValueGenerator underlyingGenerator = mock(FieldSpecValueGenerator.class);
         String result = "result";

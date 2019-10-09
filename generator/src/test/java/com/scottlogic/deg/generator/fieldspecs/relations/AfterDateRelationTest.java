@@ -85,7 +85,7 @@ public class AfterDateRelationTest {
 
         FieldSpec result = afterDateRelations.reduceValueToFieldSpec(generatedValue);
 
-        FieldSpec expected = FieldSpec.empty();
+        FieldSpec expected = FieldSpec.fromType(Types.DATETIME);
         assertEquals(expected, result);
     }
 

@@ -29,7 +29,7 @@ public class NotNullConstraint implements AtomicConstraint {
 
     @Override
     public FieldSpec toFieldSpec() {
-        return FieldSpec.empty().withNotNull();
+        return FieldSpec.fromType(field.getType()).withNotNull();
     }
 
     @Override

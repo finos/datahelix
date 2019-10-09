@@ -83,7 +83,7 @@ public class RowSpecTreeSolver {
             .distinct()
             .collect(Collectors.toMap(
                 Function.identity(),
-                field -> FieldSpec.empty()));
+                field -> FieldSpec.fromType(field.getType())));
     }
 
 }

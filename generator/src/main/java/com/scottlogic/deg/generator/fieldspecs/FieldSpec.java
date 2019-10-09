@@ -16,10 +16,15 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
+import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.restrictions.*;
 
 import java.util.*;
+
+import static com.scottlogic.deg.generator.utils.Defaults.*;
+import static com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory.forMaxLength;
+import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.*;
 
 /**
  * Details a column's atomic constraints
@@ -37,8 +42,20 @@ public class FieldSpec {
     public static FieldSpec fromRestriction(TypedRestrictions restrictions) {
         return new FieldSpec(null, restrictions, true, Collections.emptySet());
     }
-    public static FieldSpec empty() {
-        return new FieldSpec(null, null, true, Collections.emptySet());
+    public static FieldSpec fromType(Types type) {
+        TypedRestrictions defaultRestriction;
+        switch (type) {
+            case NUMERIC:
+                defaultRestriction = createDefaultNumericRestrictions(); break;
+            case DATETIME:
+                defaultRestriction = createDefaultDateTimeRestrictions(); break;
+            case STRING:
+                defaultRestriction = forMaxLength(1000); break;
+            default:
+                throw new IllegalArgumentException("Unable to create FieldSpec from type " + type.name());
+        }
+
+        return new FieldSpec(null, defaultRestriction, true, Collections.emptySet());
     }
     public static FieldSpec nullOnly() {
         return new FieldSpec(NO_VALUES, null, true, Collections.emptySet());
