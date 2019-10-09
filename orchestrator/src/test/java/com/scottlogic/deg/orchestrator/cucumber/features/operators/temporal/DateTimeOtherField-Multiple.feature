@@ -10,7 +10,6 @@ Feature: running datetimes related to otherfield datetimes for multiple fields
     And bar has type "datetime"
     And the combination strategy is exhaustive
 
-  @ignore # this hangs #1439 has been raised to resolve this
   Scenario: Running a "before" and "after" constraint
     Given the generator can generate at most 1 rows
     And foo is anything but null
@@ -99,7 +98,6 @@ Feature: running datetimes related to otherfield datetimes for multiple fields
       | foobar                   | foo                      | bar                      |
       | 0001-01-01T00:00:00.002Z | 0001-01-01T00:00:00.000Z | 0001-01-01T00:00:00.001Z |
 
-    @ignore # this hangs #1439 has been raised to resolve this
   Scenario: Running linked "before" constraint
     Given the generator can generate at most 1 rows
     And foo is anything but null
