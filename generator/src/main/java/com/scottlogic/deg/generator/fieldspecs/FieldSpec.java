@@ -27,33 +27,42 @@ import java.util.*;
  * if a fieldSpec can not be a type, it will not have any restrictions for that type
  * This is enforced during merging.
  */
-public class FieldSpec {
+public class FieldSpec<T> {
 
-    private static final DistributedList<Object> NO_VALUES = DistributedList.empty();
+    private static final DistributedList<?> NO_VALUES = DistributedList.empty();
 
-    public static FieldSpec fromList(DistributedList<Object> whitelist) {
-        return new FieldSpec(whitelist, null, true, Collections.emptySet());
+    private static final FieldSpec<?> EMPTY = new FieldSpec<>(null, null, true, Collections.emptySet());
+
+    private static final FieldSpec<?> NULL_ONLY = new FieldSpec<>(NO_VALUES, null, true, Collections.emptySet());
+
+    public static <T> FieldSpec<T> fromList(DistributedList<T> whitelist) {
+        return new FieldSpec<>(whitelist, null, true, Collections.emptySet());
     }
-    public static FieldSpec fromRestriction(TypedRestrictions restrictions) {
-        return new FieldSpec(null, restrictions, true, Collections.emptySet());
+    public static <T> FieldSpec<T> fromRestriction(TypedRestrictions<T> restrictions) {
+        return new FieldSpec<>(null, restrictions, true, Collections.emptySet());
     }
-    public static FieldSpec empty() {
-        return new FieldSpec(null, null, true, Collections.emptySet());
+
+    public static <T> FieldSpec<T> empty() {
+        @SuppressWarnings("unchecked")
+        FieldSpec<T> spec = (FieldSpec<T>) EMPTY;
+        return spec;
     }
-    public static FieldSpec nullOnly() {
-        return new FieldSpec(NO_VALUES, null, true, Collections.emptySet());
+    public static <T> FieldSpec nullOnly() {
+        @SuppressWarnings("unchecked")
+        FieldSpec<T> spec = (FieldSpec<T>) NULL_ONLY;
+        return spec;
     }
 
     private final boolean nullable;
-    private final DistributedList<Object> whitelist;
-    private final Set<Object> blacklist;
-    private final TypedRestrictions restrictions;
+    private final DistributedList<T> whitelist;
+    private final Set<T> blacklist;
+    private final TypedRestrictions<T> restrictions;
 
     private FieldSpec(
-        DistributedList<Object> whitelist,
-        TypedRestrictions restrictions,
+        DistributedList<T> whitelist,
+        TypedRestrictions<T> restrictions,
         boolean nullable,
-        Set<Object> blacklist) {
+        Set<T> blacklist) {
         this.whitelist = whitelist;
         this.restrictions = restrictions;
         this.nullable = nullable;
@@ -64,11 +73,11 @@ public class FieldSpec {
         return nullable;
     }
 
-    public DistributedList<Object> getWhitelist() {
+    public DistributedList<T> getWhitelist() {
         return whitelist;
     }
 
-    public Set<Object> getBlacklist() {
+    public Set<T> getBlacklist() {
         return blacklist;
     }
 
@@ -76,12 +85,12 @@ public class FieldSpec {
         return restrictions;
     }
 
-    public FieldSpec withBlacklist(Set<Object> blacklist) {
-        return new FieldSpec(whitelist, restrictions, nullable, blacklist);
+    public FieldSpec<T> withBlacklist(Set<T> blacklist) {
+        return new FieldSpec<>(whitelist, restrictions, nullable, blacklist);
     }
 
-    public FieldSpec withNotNull() {
-        return new FieldSpec(whitelist, restrictions, false, blacklist);
+    public FieldSpec<T> withNotNull() {
+        return new FieldSpec<>(whitelist, restrictions, false, blacklist);
     }
 
     @Override
@@ -101,7 +110,7 @@ public class FieldSpec {
     /**
      * Create a predicate that returns TRUE for all (and only) values permitted by this FieldSpec
      */
-    public boolean permits(Object value) {
+    public boolean permits(T value) {
         if (blacklist.contains(value)){
             return false;
         }

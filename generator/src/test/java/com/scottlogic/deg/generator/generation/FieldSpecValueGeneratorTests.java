@@ -46,7 +46,7 @@ class FieldSpecValueGeneratorTests {
 
     @Test
     void generate_fieldSpecMustContainRestrictionNullAndSetRestrictionsHasValues_returnsDataBagsWithValuesInSetRestrictions() {
-        FieldSpec fieldSpec = FieldSpec.fromList(DistributedList.uniform(Arrays.asList(10, 20, 30)))
+        FieldSpec<Integer> fieldSpec = FieldSpec.fromList(DistributedList.uniform(Arrays.asList(10, 20, 30)))
             .withNotNull();
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
             INTERESTING,
