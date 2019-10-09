@@ -652,3 +652,113 @@ Is satisfied if either:
 - The `if` constraint is not satisfied, and the `else` constraint is
 
 While it's not prohibited, wrapping conditional constraints in any other kind of constraint (eg, a `not`) may cause unintuitive results.
+
+
+#Running a Profile
+
+Profiles can be run against a jar using the command line.
+
+##Command line arguments
+
+Currently the only mode fully supported by the data helix is generate mode.
+
+### Generate command line arguments
+Option switches are case-sensitive, arguments are case-insensitive
+
+* `--profile-file=<path>` (or `-p <path>`)
+    * Path to the input profile file.
+* `--output-path=<path>` (or `-o <path>`)
+    * Path to the output file.  If not specified, output will be to standard output.
+* `--replace`
+    * Overwrite/replace existing output files.
+* `-n <rows>` or `--max-rows <rows>`
+   * Emit at most `<rows>` rows to the output file, if not specified will limit to 10,000,000 rows.
+   * Mandatory in `RANDOM` mode.
+* `-o <output-format>`
+   * Output the data in the given format, either CSV (default) or JSON.
+   * Note that JSON format requires that all data is held in-memory until all data is known, at which point data will be flushed to disk, this could have an impact on memory and/or IO requirements
+* `--generation-type`
+    * Determines the type of (data generation)[Link] performed. Supported options are `FULL_SEQUENTIAL` and `RANDOM`.
+* `--combination-strategy`
+    * Determines the type of combination strategy used in full sequential mode. Supported options are `EXHAUSTIVE`,
+    `PINNING`, `MINIMAL`.
+* `--output-formats`
+    * Determines the output format. Supported options are `CSV` and `JSON`.
+
+By default the generator will report how much data has been generated over time, the other options are below:
+* `--verbose`
+    * Will report in-depth detail of data generation
+* `--quiet`
+    * Will disable velocity reporting
+
+`--quiet` will be ignored if `--verbose` is supplied.
+
+##Generation Modes
+The generation mode can be specified by the `--generation-type` flag.
+
+The generator supports the following data generation types
+
+* Random (_default_)
+* Full Sequential
+
+### Random
+Generate some random data that abides by the given set of constraints.
+
+Examples:
+
+| Constraint | Emitted valid data |Emitted violating data |
+| ---- | ---- | ---- |
+| `Field 1 > 10 AND Field 1 < 20` | _(any values > 10 & < 20)_ | _(any values <= 10 or >= 20 ())_ |
+| `Field 1 in set [A, B, C]` | _(A, B or C in any order, repeated as needed)_ | _(any values except A, B or C)_ |
+
+Notes:
+- Random generation of data is infinite and is limited to 1000 by default, use `--max-rows` to enable generation of more data.
+
+#### Full Sequential
+Generate all data that can be generated in order from lowest to highest.
+
+Examples:
+
+| Constraint | Emitted valid data |Emitted violating data |
+| ---- | ---- | ---- |
+| `Field 1 > 0 AND Field 1 < 5` | _(null, 1, 2, 3, 4)_ | _(any values <= 10 or >= 20)_ |
+| `Field 1 in set [A, B, C]` | _(null, A, B, C)_ | _(any values except A, B or C)_ |
+
+
+####Combination strategies
+There are a few different combination strategies which can be used in full sequential mode with minimal being the default.
+
+
+##### Exhaustive
+
+The exhaustive strategy outputs all possible combinations. Given the fields as defined above, possible outputs would be:
+
+* X, 1
+* X, 2
+* X, 4
+* Y, 1
+* Y, 2
+* Y, 4
+
+
+##### Minimal
+
+The minimal strategy outputs the minimum data required to exemplify each value at least once. Per the example, possible outputs would be:
+
+* X, 1
+* Y, 2
+* Y, 4
+
+##### Pinning
+
+The pinning strategy establishes a baseline for each field (generally by picking the first available value for that field) and then creates outputs such that either:
+
+* All values equal the baseline for the respective field
+* All values except one equal the baseline for the respective field
+
+To generate these outputs, we first output the first case (all values from baseline) and then iterate through each field, F, fixing all other fields at their baseline and generating the full range of values for F. For the example, possible outputs would be:
+
+* X, 1  *(all baselines)*
+* Y, 1  *(looping through values for first field)*
+* X, 2  *(looping through values for second field)*
+* X, 4  *(looping through values for second field)*
