@@ -93,13 +93,9 @@ public class CucumberTestHelper {
     }
 
     public List<List<Object>> generateAndGetData() {
-        if (testState.shouldSkipGeneration()) {
+        if (testState.shouldSkipGeneration) {
             throw new RuntimeException(
                 "Gherkin error: Don't use profile validity steps in conjunction with data checking steps");
-        }
-
-        if (testState.dataGenerationType == null) {
-            throw new RuntimeException("Gherkin error: Please specify the data strategy");
         }
 
         if (!generatorHasRun() && testState.testExceptions.isEmpty()) {
@@ -112,7 +108,7 @@ public class CucumberTestHelper {
     }
 
     public void runChecksWithoutGeneratingData() {
-        testState.disableGeneration();
+        testState.shouldSkipGeneration = true;
         runGenerationProcess();
     }
 

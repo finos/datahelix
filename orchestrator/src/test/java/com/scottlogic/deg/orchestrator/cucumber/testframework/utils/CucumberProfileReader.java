@@ -51,7 +51,7 @@ public class CucumberProfileReader extends JsonProfileReader {
 
     @Override
     public Profile read() throws IOException {
-        return read(createJson());
+        return super.read(createJson());
     }
 
     private String createJson() throws IOException{

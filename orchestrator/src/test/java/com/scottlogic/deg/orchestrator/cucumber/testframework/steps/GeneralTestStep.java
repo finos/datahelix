@@ -46,7 +46,6 @@ public class GeneralTestStep {
 
     @Before
     public void BeforeEach() {
-        this.state.initialise();
         this.cucumberTestHelper = new CucumberTestHelper(state);
     }
 

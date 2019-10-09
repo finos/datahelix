@@ -39,53 +39,19 @@ public class CucumberTestState {
     public DataGenerationType dataGenerationType = DataGenerationType.FULL_SEQUENTIAL;
     public CombinationStrategyType combinationStrategyType = CombinationStrategyType.PINNING;
 
-    /**
-     * Boolean to represent if the generation mode is validating or violating.
-     * If true, generation is in violate mode.
-     */
-    public Boolean shouldViolate;
+    public boolean shouldViolate;
     public boolean expectExceptions;
-
-    /** If true, we inject a no-op generation engine during the test (e.g. because we're just testing profile validation) */
-    private Boolean shouldSkipGeneration;
-
-    Boolean shouldSkipGeneration() { return shouldSkipGeneration; }
-    void disableGeneration() { shouldSkipGeneration = true; }
-
+    public boolean shouldSkipGeneration;
+    boolean generationHasAlreadyOccured;
     public long maxRows = 200;
 
-    Boolean generationHasAlreadyOccured;
-
-    List<List<Object>> generatedObjects;
-    List<FieldDTO> profileFields;
-    List<ConstraintDTO> constraints;
-    List<Exception> testExceptions;
-    Map<String, List<List<String>>> inMapFiles;
+    List<List<Object>> generatedObjects = new ArrayList<>();
+    List<FieldDTO> profileFields = new ArrayList<>();;
+    List<ConstraintDTO> constraints = new ArrayList<>();
+    List<Exception> testExceptions = new ArrayList<>();
+    Map<String, List<List<String>>> inMapFiles = new HashMap<>();
 
     private final List<AtomicConstraintType> contstraintsToNotViolate = new ArrayList<>();
-
-    public CucumberTestState() {
-        this.initialise();
-    }
-
-    public void initialise(){//TODO PAUL cleanup
-        profileFields = new ArrayList<>();
-        constraints = new ArrayList<>();
-        testExceptions = new ArrayList<>();
-        generatedObjects = new ArrayList<>();
-        inMapFiles = new HashMap<>();
-        contstraintsToNotViolate.clear();
-        generationHasAlreadyOccured = false;
-        shouldSkipGeneration = false;
-        shouldViolate = false;
-    }
-
-    public void addConstraint(String fieldName, String constraintName, List<Object> value) {
-        if (value == null)
-            addConstraint(fieldName, constraintName, (Object)value);
-        else
-            addConstraint(fieldName, constraintName, getSetValues(value));
-    }
 
     public void addInMapConstraint(String fieldName, String key, String file) {
 
@@ -96,13 +62,6 @@ public class CucumberTestState {
         dto.file = file;
         dto.values = getValuesFromMap(file, key);
         this.addConstraintToList(dto);
-    }
-
-    public void addNotConstraint(String fieldName, String constraintName, List<Object> value) {
-        if (value == null)
-            addNotConstraint(fieldName, constraintName, (Object)value);
-        else
-            addNotConstraint(fieldName, constraintName, getSetValues(value));
     }
 
     public void addConstraint(String fieldName, String constraintName, Object value) {
@@ -123,7 +82,6 @@ public class CucumberTestState {
 
     public void addMapFile(String name, List<List<String>> map) {
         this.inMapFiles.put(name, map);
-       // this.profileFields.add(createInternalField(name, Types.NUMERIC)); //TODO paul
     }
 
     private List<Object> getValuesFromMap(String name, String key) {
@@ -137,20 +95,6 @@ public class CucumberTestState {
         return rtnList;
     }
 
-    private Collection<Object> getSetValues(List<Object> values) {
-        if (values == null){
-            throw new IllegalArgumentException("Values cannot be null");
-        }
-
-        values.stream()//TODO PAUL what is this????
-            .filter(value -> value instanceof Exception)
-            .map(value -> (Exception)value)
-            .forEach(this::addException);
-
-        return values.stream()
-            .filter(value -> !(value instanceof Exception))
-            .collect(Collectors.toSet());
-    }
 
     public void addField(String fieldName) {
         FieldDTO fieldDTO = new FieldDTO();
