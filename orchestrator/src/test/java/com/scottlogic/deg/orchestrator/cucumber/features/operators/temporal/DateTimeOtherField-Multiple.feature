@@ -30,7 +30,7 @@ Feature: running datetimes related to otherfield datetimes for multiple fields
     And foobar is before field bar
     And foobar is equal to field foo
     Then the following data should be generated:
-      | foobar                   | for                      | bar                      |
+      | foobar                   | foo                      | bar                      |
       | 0001-01-01T00:00:00.000Z | 0001-01-01T00:00:00.000Z | 0001-01-01T00:00:00.001Z |
 
   Scenario: Running an "after" and "equalTo" constraint
@@ -41,7 +41,7 @@ Feature: running datetimes related to otherfield datetimes for multiple fields
     And foobar is after field bar
     And foobar is equal to field foo
     Then the following data should be generated:
-      | foobar                   | for                      | bar                      |
+      | foobar                   | foo                      | bar                      |
       | 0001-01-01T00:00:00.001Z | 0001-01-01T00:00:00.001Z | 0001-01-01T00:00:00.000Z |
 
   Scenario: Running two "after" constraints
@@ -52,7 +52,7 @@ Feature: running datetimes related to otherfield datetimes for multiple fields
     And foobar is after field bar
     And foobar is after field foo
     Then the following data should be generated:
-      | foobar                   | for                      | bar                      |
+      | foobar                   | foo                      | bar                      |
       | 0001-01-01T00:00:00.001Z | 0001-01-01T00:00:00.000Z | 0001-01-01T00:00:00.000Z |
 
   Scenario: Running two "before" constraints switched other field constraints
@@ -63,7 +63,7 @@ Feature: running datetimes related to otherfield datetimes for multiple fields
     And bar is before field foobar
     And foo is before field foobar
     Then the following data should be generated:
-      | foobar                   | for                      | bar                      |
+      | foobar                   | foo                      | bar                      |
       | 0001-01-01T00:00:00.001Z | 0001-01-01T00:00:00.000Z | 0001-01-01T00:00:00.000Z |
 
   Scenario: Running two "before" constraints
@@ -96,7 +96,7 @@ Feature: running datetimes related to otherfield datetimes for multiple fields
     And foobar is after field bar
     And bar is after field foo
     Then the following data should be generated:
-      | foobar                   | for                      | bar                      |
+      | foobar                   | foo                      | bar                      |
       | 0001-01-01T00:00:00.002Z | 0001-01-01T00:00:00.000Z | 0001-01-01T00:00:00.001Z |
 
     @ignore # this hangs #1439 has been raised to resolve this
@@ -108,7 +108,7 @@ Feature: running datetimes related to otherfield datetimes for multiple fields
     And foobar is before field bar
     And bar is before field foo
     Then the following data should be generated:
-      | foobar                   | for                      | bar                      |
+      | foobar                   | foo                      | bar                      |
       | 0001-01-01T00:00:00.000Z | 0001-01-01T00:00:00.002Z | 0001-01-01T00:00:00.001Z |
 
   Scenario: Running linked "before" constraint with lower limit
@@ -120,7 +120,7 @@ Feature: running datetimes related to otherfield datetimes for multiple fields
     And foobar is before field bar
     And bar is before field foo
     Then the following data should be generated:
-      | foobar                   | for                      | bar                      |
+      | foobar                   | foo                      | bar                      |
       | 0001-01-01T00:00:00.000Z | 0001-01-01T00:00:00.002Z | 0001-01-01T00:00:00.001Z |
 
   Scenario: Running linked "equalTo" constraint
@@ -131,5 +131,5 @@ Feature: running datetimes related to otherfield datetimes for multiple fields
     And foobar is equal to field bar
     And bar is equal to field foo
     Then the following data should be generated:
-      | foobar                   | for                      | bar                      |
+      | foobar                   | foo                      | bar                      |
       | 0001-01-01T00:00:00.000Z | 0001-01-01T00:00:00.000Z | 0001-01-01T00:00:00.000Z |
