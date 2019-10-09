@@ -86,22 +86,22 @@ Feature: User can specify that decimal fields are granular to a certain number o
 
   Scenario: The one where a user can specify that one decimal number should be greater than another decimal number
     Given foo is granular to 0.1
+    And the combination strategy is exhaustive
     And foo is greater than or equal to 1
+    And foo is anything but null
+    And bar is anything but null
     And there is a field bar
     And bar has type "decimal"
     And bar is granular to 0.1
     And bar is less than 1.4
     And bar is greater than or equal to 1
-    And there is a constraint:
-      """
-        {
-          "field": "bar",
-          "is": "greaterThan",
-          "otherField": "foo"
-        }
-      """
+    And foo is less than 1.4
+    And bar is greater than field foo
     Then the following data should be generated:
       | foo | bar |
       | 1   | 1.1 |
+      | 1   | 1.2 |
+      | 1   | 1.3 |
       | 1.1 | 1.2 |
+      | 1.1 | 1.3 |
       | 1.2 | 1.3 |
