@@ -182,7 +182,6 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | foo  |
       | null |
       | 0    |
-      | 0.0  |
 
   Scenario: Running an 'inSet' request that includes a date value should be successful
     Given there is a field foo
@@ -1031,7 +1030,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | foo  |
       | null |
       | 1    |
-      | 2.0  |
+      | 2    |
 
   Scenario: Not 'inSet' with a non contradicting 'granularTo' is successful
     Given there is a field foo

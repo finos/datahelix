@@ -46,7 +46,6 @@ public class GeneralTestStep {
 
     @Before
     public void BeforeEach() {
-        this.state.initialise();
         this.cucumberTestHelper = new CucumberTestHelper(state);
     }
 
@@ -260,10 +259,8 @@ public class GeneralTestStep {
 
     @And("^(.+) has type \"(.+)\"$")
     public void fooHasType(String fieldName, String type) {
-        state.setFieldType(fieldName, getFieldType(type));
-        state.addConstraint(fieldName, "ofType", type);
+        state.setFieldType(fieldName, type);
     }
-
 
     class GeneratedTestData {
         List <List<Object>> expectedData;

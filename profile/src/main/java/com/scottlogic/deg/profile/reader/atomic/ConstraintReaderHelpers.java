@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.profile.reader.atomic;
 
+import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.common.profile.constraintdetail.DateTimeGranularity;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
@@ -63,6 +64,10 @@ public class ConstraintReaderHelpers {
     }
 
     public static Types getFieldType(String type) {
+        if (type == null) {
+            return null;
+        }
+
         switch (type) {
             case "decimal":
             case "integer":

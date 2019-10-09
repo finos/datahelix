@@ -102,9 +102,6 @@ public class JsonProfileReader implements ProfileReader {
 
         Collection<Rule> rules = profileDto.rules.stream().map(
             r -> {
-                if (r.constraints.isEmpty()) {
-                    throw new InvalidProfileException("Profile is invalid: unable to find 'constraints' for rule: " + r.rule);
-                }
                 RuleInformation constraintRule = new RuleInformation(r.rule);
                 return new Rule(constraintRule, mainConstraintReader.getSubConstraints(profileFields, r.constraints));
             }).collect(Collectors.toList());

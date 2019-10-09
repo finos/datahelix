@@ -26,6 +26,7 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.orchestrator.generate.GenerateExecute;
 import com.scottlogic.deg.orchestrator.violate.ViolateExecute;
 import com.scottlogic.deg.orchestrator.violate.ViolateModule;
+import com.scottlogic.deg.profile.dto.FieldDTO;
 import org.junit.Assert;
 
 import java.io.IOException;
@@ -92,13 +93,9 @@ public class CucumberTestHelper {
     }
 
     public List<List<Object>> generateAndGetData() {
-        if (testState.shouldSkipGeneration()) {
+        if (testState.shouldSkipGeneration) {
             throw new RuntimeException(
                 "Gherkin error: Don't use profile validity steps in conjunction with data checking steps");
-        }
-
-        if (testState.dataGenerationType == null) {
-            throw new RuntimeException("Gherkin error: Please specify the data strategy");
         }
 
         if (!generatorHasRun() && testState.testExceptions.isEmpty()) {
@@ -111,7 +108,7 @@ public class CucumberTestHelper {
     }
 
     public void runChecksWithoutGeneratingData() {
-        testState.disableGeneration();
+        testState.shouldSkipGeneration = true;
         runGenerationProcess();
     }
 
@@ -200,7 +197,7 @@ public class CucumberTestHelper {
 
     private Optional<Integer> getIndexOfField(String fieldName) {
         for (int index = 0; index < testState.profileFields.size(); index++) {
-            Field field = testState.profileFields.get(index);
+            FieldDTO field = testState.profileFields.get(index);
             if (field.name.equals(fieldName)) {
                 return Optional.of(index);
             }

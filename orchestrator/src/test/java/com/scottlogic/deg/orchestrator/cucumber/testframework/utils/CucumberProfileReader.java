@@ -18,68 +18,53 @@ package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 
 import com.google.gson.JsonParseException;
 import com.google.inject.Inject;
+import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
+import com.scottlogic.deg.profile.dto.FieldDTO;
+import com.scottlogic.deg.profile.dto.ProfileDTO;
+import com.scottlogic.deg.profile.dto.RuleDTO;
 import com.scottlogic.deg.profile.reader.*;
 import com.scottlogic.deg.generator.profile.RuleInformation;
 import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintValueReader;
 import com.scottlogic.deg.profile.reader.atomic.FromFileReader;
+import com.scottlogic.deg.profile.serialisation.ProfileSerialiser;
 
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
-public class CucumberProfileReader implements ProfileReader {
+public class CucumberProfileReader extends JsonProfileReader {
 
     private final CucumberTestState state;
 
     @Inject
-    public CucumberProfileReader(CucumberTestState state) {
+    public CucumberProfileReader(CucumberTestState state, MainConstraintReader mainConstraintReader) {
+        super(null, mainConstraintReader);
         this.state = state;
     }
 
     @Override
-    public Profile read() {
-        return this.getProfile();
+    public Profile read() throws IOException {
+        return super.read(createJson());
     }
 
-    private Profile getProfile() {
-        try {
-            MainConstraintReader constraintReader = new MainConstraintReader(new AtomicConstraintValueReader(new FromFileReader("")));
-            ProfileFields profileFields = new ProfileFields(state.profileFields);
-            AtomicBoolean exceptionInMapping = new AtomicBoolean();
+    private String createJson() throws IOException{
+        ProfileDTO profileDTO = new ProfileDTO();
+        profileDTO.schemaVersion = "0.10";
+        profileDTO.fields = state.profileFields;
 
-            List<Constraint> mappedConstraints = state.constraints.stream().map(dto -> {
-                try {
-                    return constraintReader.apply(dto, profileFields);
-                } catch (InvalidProfileException e) {
-                    state.addException(e);
-                    exceptionInMapping.set(true);
-                    return null;
-                }
-            }).filter(x->!(x instanceof RemoveFromTree))
-                .collect(Collectors.toList());
+        RuleDTO ruleDTO = new RuleDTO();
+        ruleDTO.constraints = state.constraints;
+        profileDTO.rules = Arrays.asList(ruleDTO);
 
-            if (exceptionInMapping.get()){
-                Exception firstException = state.testExceptions.get(0);
-                if (firstException instanceof InvalidProfileException){
-                    throw (InvalidProfileException)firstException;
-                }
-
-                if (firstException instanceof JsonParseException){
-                    throw (JsonParseException)firstException;
-                }
-
-                throw new RuntimeException(firstException);
-            }
-
-            return new Profile(profileFields, Collections.singletonList(new Rule(new RuleInformation(), mappedConstraints)));
-        } catch (JsonParseException e) {
-            state.addException(e);
-            throw e;
-        }
+        return new ProfileSerialiser().serialise(profileDTO);
     }
+
+
 }
