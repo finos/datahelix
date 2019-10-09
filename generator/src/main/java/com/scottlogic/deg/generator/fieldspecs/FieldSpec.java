@@ -42,19 +42,16 @@ public class FieldSpec {
         return new FieldSpec(null, restrictions, true, Collections.emptySet());
     }
     public static FieldSpec fromType(Types type) {
-        TypedRestrictions defaultRestriction;
         switch (type) {
             case NUMERIC:
-                defaultRestriction = createDefaultNumericRestrictions(); break;
+                return new FieldSpec(null, createDefaultNumericRestrictions(), true, Collections.emptySet());
             case DATETIME:
-                defaultRestriction = createDefaultDateTimeRestrictions(); break;
+                return new FieldSpec(null, createDefaultDateTimeRestrictions(), true, Collections.emptySet());
             case STRING:
-                defaultRestriction = forMaxLength(1000); break;
+                return new FieldSpec(null, forMaxLength(1000), true, Collections.emptySet());
             default:
                 throw new IllegalArgumentException("Unable to create FieldSpec from type " + type.name());
         }
-
-        return new FieldSpec(null, defaultRestriction, true, Collections.emptySet());
     }
     public static FieldSpec nullOnly() {
         return new FieldSpec(NO_VALUES, null, true, Collections.emptySet());
