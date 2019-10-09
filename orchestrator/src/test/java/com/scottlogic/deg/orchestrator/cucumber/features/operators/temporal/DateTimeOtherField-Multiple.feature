@@ -10,6 +10,7 @@ Feature: running datetimes related to otherfield datetimes for multiple fields
     And bar has type "datetime"
     And the combination strategy is exhaustive
 
+  @ignore # this hangs #1439 has been raised to resolve this
   Scenario: Running a "before" and "after" constraint
     Given the generator can generate at most 1 rows
     And foo is anything but null

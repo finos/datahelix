@@ -48,12 +48,12 @@ public class DateValueStep {
         state.addNotConstraint(fieldName, constraintName, value);
     }
 
-    @And("^(.+) is after field (.+)$")
+    @And("^(.+) is after field ([A-z0-9]+)$")
     public void dateAfter(String field, String otherField){
         state.addRelationConstraint(field, AtomicConstraintType.IS_AFTER_CONSTANT_DATE_TIME.getText(), otherField);
     }
 
-    @And("^(.+) is before field (.+)$")
+    @And("^(.+) is before field ([A-z0-9]+)$")
     public void dateBefore(String field, String otherField){
         state.addRelationConstraint(field, AtomicConstraintType.IS_BEFORE_CONSTANT_DATE_TIME.getText(), otherField);
     }
