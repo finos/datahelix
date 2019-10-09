@@ -359,11 +359,15 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is equal to "b"
     And bar is equal to "c"
     Then the following data should be generated:
-      | foo  | bar |
-      | null | "b" |
-      | 2    | "c" |
-      | 3    | "c" |
-      | 4    | "c" |
+      | foo  | bar  |
+      | null | "b"  |
+      | null | null |
+      | 2    | "c"  |
+      | 3    | "c"  |
+      | 4    | "c"  |
+      | 2    | null |
+      | 3    | null |
+      | 4    | null |
 
   Scenario: Running an if request that contains a non contradictory null constraint within its then statement should be successful
     Given foo is in set:
@@ -382,9 +386,13 @@ Feature: Values can be specified by using if, then and else constraints
     Then the following data should be generated:
       | foo  | bar  |
       | null | "c"  |
+      | null | null |
       | 2    | null |
       | 3    | "c"  |
       | 4    | "c"  |
+      | 3    | null |
+      | 4    | null |
+      | null | null |
 
   Scenario: Running an if request that contains a non contradictory null constraint within its else statement should be successful
     Given foo is in set:
@@ -403,9 +411,12 @@ Feature: Values can be specified by using if, then and else constraints
     Then the following data should be generated:
       | foo  | bar  |
       | null | null |
+      | null | "b"  |
       | 2    | "b"  |
+      | 2    | null |
       | 3    | null |
       | 4    | null |
+      | null | null |
 
   Scenario: Running an if request that contains a contradictory null constraint within its if statement should be successful
     Given foo is in set:

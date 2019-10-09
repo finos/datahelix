@@ -35,6 +35,7 @@ Feature: User can specify that data must be created to conform to each of multip
     And All Of the next 2 constraints
     And foo is equal to "Test01"
     And foo is equal to "Test01"
+    And foo is anything but null
     Then the following data should be generated:
       | foo      |
       | "Test01" |
@@ -45,4 +46,5 @@ Feature: User can specify that data must be created to conform to each of multip
     And All Of the next 2 constraints
     And foo is equal to "Test01"
     And foo is equal to "5"
+    And foo is anything but null
     Then no data is created
