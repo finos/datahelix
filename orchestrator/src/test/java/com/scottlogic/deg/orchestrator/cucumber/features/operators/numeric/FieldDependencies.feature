@@ -4,7 +4,7 @@ Feature:As a  User
 
   Background:
     Given the generation strategy is full
-    And the combination strategy is minimal
+    And the combination strategy is exhaustive
     And there is a field foo
     And foo has type "integer"
     And foo is greater than 0
@@ -17,50 +17,33 @@ Feature:As a  User
 ###Integer
   Scenario: The one where a user can specify that one number should be greater than another number
     Given bar is greater than 0
-    And the generator can generate at most 3 rows
-    And there is a constraint:
-      """
-        {
-          "field": "bar",
-          "is": "greaterThan",
-          "otherField": "foo"
-        }
-      """
+    And bar is less than 4
+    And the generator can generate at most 5 rows
+    And bar is greater than field foo
     Then the following data should be generated:
       | foo| bar|
       | 1  | 2  |
+      | 1  | 3  |
       | 2  | 3  |
-      | 3  | 4  |
 
   Scenario: The one where a user can specify that one number should be greater than or equal to another number
     Given bar is greater than 0
-    And the generator can generate at most 3 rows
-    And there is a constraint:
-      """
-        {
-          "field": "bar",
-          "is": "greaterThanOrEqualTo",
-          "otherField": "foo"
-        }
-      """
+    And bar is less than 4
+    And the generator can generate at most 5 rows
+    And bar is greater than or equal to field foo
     Then the following data should be generated:
       | foo| bar|
       | 1  | 1  |
+      | 1  | 2  |
+      | 1  | 3  |
       | 2  | 2  |
-      | 3  | 3  |
+      | 2  | 3  |
 
   Scenario: The one where a user can specify that one number should be less than another number
     Given foo is less than 3
     And bar is greater than 0
     And the generator can generate at most 3 rows
-    And there is a constraint:
-      """
-        {
-          "field": "bar",
-          "is": "lessThan",
-          "otherField": "foo"
-        }
-      """
+    And bar is less than field foo
     Then the following data should be generated:
       | foo| bar|
       | 2  | 1  |
@@ -69,14 +52,7 @@ Feature:As a  User
     Given the combination strategy is exhaustive
     And foo is less than 3
     And bar is greater than 0
-    And there is a constraint:
-      """
-        {
-          "field": "bar",
-          "is": "lessThanOrEqualTo",
-          "otherField": "foo"
-        }
-      """
+    And bar is less than or equal to field foo
     Then the following data should be generated:
       | foo| bar|
       | 1  | 1  |
@@ -86,14 +62,7 @@ Feature:As a  User
   Scenario: The one where a user can specify that one number should be equal to another number
     Given bar is greater than 0
     And the generator can generate at most 3 rows
-    And there is a constraint:
-      """
-        {
-          "field": "bar",
-          "is": "equalTo",
-          "otherField": "foo"
-        }
-      """
+    And bar is equal to field foo
     Then the following data should be generated:
       | foo| bar|
       | 1  | 1  |
@@ -183,14 +152,7 @@ Feature:As a  User
     And bar is greater than 0
     And bar is less than 5
     And the generator can generate at most 6 rows
-    And there is a constraint:
-      """
-        {
-          "field": "bar",
-          "is": "greaterThan",
-          "otherField": "foo"
-        }
-      """
+    And bar is greater than field foo
     Then the following data should be generated:
       | foo| bar|
       | 1  | 2  |
