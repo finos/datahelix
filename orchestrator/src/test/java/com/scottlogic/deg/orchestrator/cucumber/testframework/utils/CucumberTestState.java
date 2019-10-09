@@ -64,6 +64,14 @@ public class CucumberTestState {
         this.addConstraintToList(dto);
     }
 
+    public void addRelationConstraint(String field, String relationType, String other) {
+        ConstraintDTO dto = new ConstraintDTO();
+        dto.field = field;
+        dto.is = relationType;
+        dto.otherField = other;
+        this.addConstraintToList(dto);
+    }
+
     public void addConstraint(String fieldName, String constraintName, Object value) {
         ConstraintDTO dto = this.createConstraint(fieldName, constraintName, value);
         this.addConstraintToList(dto);

@@ -27,6 +27,8 @@ import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
 import com.scottlogic.deg.generator.fieldspecs.relations.InMapRelation;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.databags.*;
+import com.scottlogic.deg.generator.utils.SetUtils;
+
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -48,7 +50,7 @@ public class FieldSpecGroupValueGenerator {
     public Stream<DataBag> generate(FieldSpecGroup group) {
         Field first = getFirst(group);
 
-        if (group.fieldSpecs().size() == 1){
+        if (group.fieldSpecs().size() == 1) {
             return underlyingGenerator.generate(first, group.fieldSpecs().get(first))
                 .map(val -> toDataBag(first, val));
         }
@@ -64,11 +66,16 @@ public class FieldSpecGroupValueGenerator {
     }
 
     private Field getFirst(FieldSpecGroup keySet) {
-        Map<Field, Integer> otherCount = keySet.relations().stream().collect(Collectors.toMap(
-            FieldSpecRelations::other,
-            r -> 1, Integer::sum));
-        return otherCount.keySet().stream().reduce((l,r)->otherCount.get(l)>otherCount.get(r)?l:r)
-            .orElse(keySet.fieldSpecs().keySet().iterator().next());
+        Stream<FieldSpecRelations> relations = Stream.concat(
+            keySet.relations().stream(),
+            keySet.relations().stream().map(FieldSpecRelations::inverse)
+        );
+        List<Map.Entry<Field, Integer>> list = new ArrayList<>(relations
+            .collect(Collectors.toMap(
+                FieldSpecRelations::other,
+                r -> 1, Integer::sum)).entrySet());
+        list.sort(Comparator.comparing(Map.Entry::getValue, Comparator.reverseOrder()));
+        return list.isEmpty() ? SetUtils.firstIteratorElement(keySet.fieldSpecs().keySet()) : list.get(0).getKey();
     }
 
     private FieldSpec updateFirstSpecFromRelations(Field first, FieldSpecGroup group) {

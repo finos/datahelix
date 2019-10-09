@@ -103,6 +103,11 @@ public class GeneralTestStep {
         this.state.setFieldUnique(fieldName);
     }
 
+    @And("^(.+) is equal to field (.+)$")
+    public void fieldEqualTo(String field, String otherField){
+        state.addRelationConstraint(field, AtomicConstraintType.IS_EQUAL_TO_CONSTANT.getText(), otherField);
+    }
+
 
 
     @Then("^the profile should be considered valid$")
