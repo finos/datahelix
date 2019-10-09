@@ -22,7 +22,6 @@ import com.scottlogic.deg.generator.restrictions.*;
 
 import java.util.*;
 
-import static com.scottlogic.deg.generator.utils.Defaults.*;
 import static com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory.forMaxLength;
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.*;
 
