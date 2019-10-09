@@ -1,7 +1,7 @@
 package com.scottlogic.deg.profile.reader.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
+import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularityFactory;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
@@ -21,7 +21,7 @@ public class OfTypeConstraintFactory {
 
             case "integer":
                 return Optional.of(new IsGranularToNumericConstraint(field,
-                    new ParsedGranularity(BigDecimal.ONE))
+                    NumericGranularityFactory.create(BigDecimal.ONE))
                 );
 
             case "ISIN":

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.10",
+  "schemaVersion": "0.11",
   "fields": [
     {
       "name": "decimal",

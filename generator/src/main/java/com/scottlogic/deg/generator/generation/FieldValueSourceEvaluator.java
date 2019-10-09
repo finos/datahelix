@@ -24,11 +24,13 @@ import com.scottlogic.deg.generator.generation.string.generators.RegexStringGene
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
+import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularity;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.*;
 
+import static com.scottlogic.deg.common.util.Defaults.*;
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDateTimeRestrictions;
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createNumericRestrictions;
 import static com.scottlogic.deg.generator.utils.Defaults.*;
@@ -80,7 +82,7 @@ public class FieldValueSourceEvaluator {
     private FieldValueSource getNumericSource(FieldSpec fieldSpec) {
         LinearRestrictions<BigDecimal> restrictions =
             fieldSpec.getRestrictions() == null
-                ? createNumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT)
+                ? new LinearRestrictions<>(NUMERIC_MIN, NUMERIC_MAX, DEFAULT_NUMERIC_GRANULARITY)
                 : (LinearRestrictions<BigDecimal>) fieldSpec.getRestrictions();
 
         return new RealNumberFieldValueSource(restrictions, fieldSpec.getBlacklist());

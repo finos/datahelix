@@ -166,34 +166,34 @@ public class GeneralTestStep {
     public void theFollowingDataShouldBeGenerated(List<Map<String, String>> expectedResultsTable) {
         GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
 
-        assertOutputData(null, data.generatedData, new RowsMatchAnyOrderMatcher(data.expectedData));
+        assertOutputData(data.generatedData, new RowsMatchAnyOrderMatcher(data.expectedData));
     }
 
     @Then("^the following data should be generated in order:$")
     public void theFollowingDataShouldBeGeneratedInOrder(List<Map<String, String>> expectedResultsTable) {
         GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
 
-        assertOutputData(null, data.generatedData, equalTo(data.expectedData));
+        assertOutputData(data.generatedData, equalTo(data.expectedData));
     }
 
     @Then("^the following data should be included in what is generated:$")
     public void theFollowingDataShouldBeContainedInActual(List<Map<String, String>> expectedResultsTable) {
         GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
 
-        assertOutputData(null, data.generatedData, new RowsPresentMatcher(data.expectedData));
+        assertOutputData(data.generatedData, new RowsPresentMatcher(data.expectedData));
     }
 
     @Then("^the following data should not be included in what is generated:$")
     public void theFollowingDataShouldNotBeContainedInActual(List<Map<String, String>> expectedResultsTable) {
         GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
 
-        assertOutputData(null, data.generatedData, new RowsAbsentMatcher(data.expectedData));
+        assertOutputData(data.generatedData, new RowsAbsentMatcher(data.expectedData));
     }
 
-    private void assertOutputData(String message, List<List<Object>> data, Matcher<List<List<Object>>> matcher){
+    private void assertOutputData(List<List<Object>> data, Matcher<List<List<Object>>> matcher){
         assertNoGenerationErrors();
 
-        Assert.assertThat(message, data, matcher);
+        Assert.assertThat(data, matcher);
     }
 
     private void assertNoGenerationErrors() {

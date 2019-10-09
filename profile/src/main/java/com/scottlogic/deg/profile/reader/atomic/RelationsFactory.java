@@ -3,8 +3,12 @@ package com.scottlogic.deg.profile.reader.atomic;
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
-import com.scottlogic.deg.common.profile.constraintdetail.DateTimeGranularity;
+import com.scottlogic.deg.common.profile.constraintdetail.Granularity;
+import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularityFactory;
+import com.scottlogic.deg.common.util.defaults.DateTimeDefaults;
+import com.scottlogic.deg.common.util.defaults.NumericDefaults;
 import com.scottlogic.deg.generator.fieldspecs.relations.*;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 
@@ -19,33 +23,49 @@ public class RelationsFactory {
             throw new ValidationException("Field " + main.name + " cannot be related to other field " + other.name);
         }
 
-        DateTimeGranularity offsetGranularity = getOffsetUnit(dto);
+        Granularity offsetGranularity = getOffsetUnit(main.type, dto.offsetUnit);
 
         switch (AtomicConstraintType.fromText((String) dto.is)) {
             case IS_EQUAL_TO_CONSTANT:
                 if (offsetGranularity != null){
-                    return new EqualToOffsetDateRelation(main, other, offsetGranularity, dto.offset);
+                    return new EqualToOffsetRelation(main, other, offsetGranularity, dto.offset);
                 }
-                return new EqualToDateRelation(main, other);
+                return new EqualToRelation(main, other);
 
             case IS_AFTER_CONSTANT_DATE_TIME:
-                return new AfterDateRelation(main, other, false);
+                return new AfterRelation(main, other, false, DateTimeDefaults.get());
             case IS_AFTER_OR_EQUAL_TO_CONSTANT_DATE_TIME:
-                return new AfterDateRelation(main, other, true);
+                return new AfterRelation(main, other, true, DateTimeDefaults.get());
             case IS_BEFORE_CONSTANT_DATE_TIME:
-                return new BeforeDateRelation(main, other, false);
+                return new BeforeRelation(main, other, false, DateTimeDefaults.get());
             case IS_BEFORE_OR_EQUAL_TO_CONSTANT_DATE_TIME:
-                return new BeforeDateRelation(main, other, true);
+                return new BeforeRelation(main, other, true, DateTimeDefaults.get());
+
+            case IS_GREATER_THAN_CONSTANT:
+                return new AfterRelation(main, other, false, NumericDefaults.get());
+            case IS_GREATER_THAN_OR_EQUAL_TO_CONSTANT:
+                return new AfterRelation(main, other, true, NumericDefaults.get());
+            case IS_LESS_THAN_CONSTANT:
+                return new BeforeRelation(main, other, false, NumericDefaults.get());
+            case IS_LESS_THAN_OR_EQUAL_TO_CONSTANT:
+                return new BeforeRelation(main, other, true, NumericDefaults.get());
         }
 
         throw new ValidationException(dto.is + "cannot be used with OtherValue)");
     }
 
-    private static DateTimeGranularity getOffsetUnit(ConstraintDTO dto) {
-        if (dto.offsetUnit == null) {
+    private static Granularity getOffsetUnit(Types type, String offsetUnit) {
+        if (offsetUnit == null) {
             return null;
         }
 
-        return getDateTimeGranularity(dto.offsetUnit);
+        switch (type) {
+            case NUMERIC:
+                return NumericGranularityFactory.create(offsetUnit);
+            case DATETIME:
+                return getDateTimeGranularity(offsetUnit);
+            default:
+                return null;
+        }
     }
 }

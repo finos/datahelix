@@ -51,7 +51,7 @@
   "definitions": {
     "schemaVersion": {
       "title": "The version of the DataHelix profile schema",
-      "const": "0.10"
+      "const": "0.11"
     },
     "dataType": {
       "anyOf": [
@@ -427,6 +427,10 @@
             "afterOrAt",
             "before",
             "beforeOrAt",
+            "greaterThan",
+            "lessThan",
+            "greaterThanOrEqualTo",
+            "lessThanOrEqualTo",
             "equalTo"
           ]
         },

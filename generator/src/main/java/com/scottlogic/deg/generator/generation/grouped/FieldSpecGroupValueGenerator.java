@@ -94,13 +94,12 @@ public class FieldSpecGroupValueGenerator {
     private FieldSpec createMergedSpecFromRelation(Field first,
                                                    FieldSpecRelations relation,
                                                    FieldSpecGroup group) {
-        if (relation.main().equals(first)) {
-            FieldSpec otherFieldSpec = group.fieldSpecs().get(relation.other());
-            return relation.reduceToRelatedFieldSpec(otherFieldSpec);
-        } else {
-            FieldSpec otherFieldSpec = group.fieldSpecs().get(relation.main());
-            return relation.inverse().reduceToRelatedFieldSpec(otherFieldSpec);
+        if (!relation.main().equals(first)){
+            relation = relation.inverse();
         }
+
+        FieldSpec otherFieldSpec = group.fieldSpecs().get(relation.other());
+        return relation.reduceToRelatedFieldSpec(otherFieldSpec);
     }
 
     private Stream<DataBag> generateRemainingData(Field generatedField, DataBag dataBag, FieldSpecGroup group) {

@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
+import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularityFactory;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
@@ -25,6 +25,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
+import static com.scottlogic.deg.common.util.Defaults.DEFAULT_NUMERIC_GRANULARITY;
 import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MAX_LIMIT;
 import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MIN_LIMIT;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -257,7 +258,7 @@ public class NumericRestrictionsTests {
     @Test
     public void limitsShouldBeCappedAtTheMaximumValueAllowedForBigDecimal() {
         Limit<BigDecimal> limit = new Limit<>(new BigDecimal("1e21"),true);
-        LinearRestrictions<BigDecimal> restrictions = LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, limit,  1);
+        LinearRestrictions<BigDecimal> restrictions = LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, limit);
 
         Assert.assertFalse(restrictions.getMax().compareTo(NUMERIC_MAX_LIMIT.getValue()) > 0);
 
@@ -266,7 +267,7 @@ public class NumericRestrictionsTests {
     @Test
     public void limitsShouldBeCappedAtTheMinimumValueAllowedForBigDecimal() {
         Limit<BigDecimal> limit = new Limit<>(new BigDecimal("-1e21"),true);
-        LinearRestrictions<BigDecimal> restrictions = LinearRestrictionsFactory.createNumericRestrictions(limit, NUMERIC_MAX_LIMIT,  1);
+        LinearRestrictions<BigDecimal> restrictions = LinearRestrictionsFactory.createNumericRestrictions(limit, NUMERIC_MAX_LIMIT);
 
         Assert.assertFalse(restrictions.getMin().compareTo(NUMERIC_MIN_LIMIT.getValue()) < 0);
 
@@ -275,7 +276,7 @@ public class NumericRestrictionsTests {
     private static LinearRestrictions<BigDecimal> restrictions(double numericScale){
         LinearRestrictions<BigDecimal> restrictions = LinearRestrictionsFactory.createNumericRestrictions(
             NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT,
-            ParsedGranularity.parse(BigDecimal.valueOf(numericScale)).getNumericGranularity().scale()
+            NumericGranularityFactory.create(BigDecimal.valueOf(numericScale))
         );
 
         return restrictions;
