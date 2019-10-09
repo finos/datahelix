@@ -45,7 +45,7 @@ public class UpfrontTreePruner {
             .collect(
                 Collectors.toMap(
                     Function.identity(),
-                    f -> FieldSpec.empty()));
+                    f -> FieldSpec.fromType(f.getType())));
 
         Merged<ConstraintNode> prunedNode = treePruner.pruneConstraintNode(tree.getRootNode(), fieldSpecs);
         DecisionTree markedTree = validator.markContradictions(tree);

@@ -182,6 +182,6 @@ class RowSpecGrouperTest {
     }
 
     private static Map<Field, FieldSpec> fieldSpecMapOf(Field... fields) {
-        return Arrays.stream(fields).collect(Collectors.toMap(Function.identity(), x -> FieldSpec.empty()));
+        return Arrays.stream(fields).collect(Collectors.toMap(Function.identity(), x -> FieldSpec.fromType(x.getType())));
     }
 }
