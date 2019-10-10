@@ -18,8 +18,6 @@ package com.scottlogic.deg.orchestrator.violate;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
-import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.violations.filters.ConstraintTypeViolationFilter;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 
@@ -44,7 +42,6 @@ public class ViolationFiltersProvider implements Provider<List<ViolationFilter>>
         }
 
         return commandLine.getConstraintsToNotViolate().stream()
-            .filter(atomicConstraint -> !atomicConstraint.equals(AtomicConstraintType.IS_OF_TYPE))
             .map(mapper::toConstraintClass)
             .map(ConstraintTypeViolationFilter::new)
             .collect(Collectors.toList());
