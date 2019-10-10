@@ -24,12 +24,8 @@ public enum AtomicConstraintType {
     IS_IN_SET("inSet"),
     IS_IN_MAP("inMap"),
     IS_NULL("null"),
-    IS_UNIQUE("unique"),
-    IS_OF_TYPE("ofType"),
-
     MATCHES_REGEX("matchingRegex"),
     CONTAINS_REGEX("containingRegex"),
-    FORMATTED_AS("formattedAs"),
 
     // String
     HAS_LENGTH("ofLength"),

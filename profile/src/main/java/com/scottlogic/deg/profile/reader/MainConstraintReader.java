@@ -122,7 +122,6 @@ public class MainConstraintReader {
     Set<Constraint> getSubConstraints(ProfileFields fields, Collection<ConstraintDTO> allOf) {
         return allOf.stream()
             .map(subConstraintDto -> apply(subConstraintDto, fields))
-            .filter(constraint -> !(constraint instanceof RemoveFromTree))
             .collect(Collectors.toSet());
     }
 }
