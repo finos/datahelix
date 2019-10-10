@@ -133,14 +133,6 @@ public class ConstraintValidationAndReadingTests {
             Arguments.of(IS_STRING_SHORTER_THAN, nullValueDto));
     }
 
-    private static Stream<Arguments> ofTypeInvalidValueProvider() {
-        ConstraintDTO numericTypeValueDto = new ConstraintDTO();
-        numericTypeValueDto.field = "test";
-        numericTypeValueDto.value = "numeric";
-
-        return Stream.of(Arguments.of(AtomicConstraintType.IS_OF_TYPE, numericTypeValueDto));
-    }
-
     private static Stream<Arguments> numericOutOfBoundsOperandProvider() {
         ConstraintDTO maxValueDtoPlusOne = new ConstraintDTO();
         maxValueDtoPlusOne.field = "test";
@@ -218,16 +210,9 @@ public class ConstraintValidationAndReadingTests {
 
     @DisplayName("Should fail when operators have an invalid operand")
     @ParameterizedTest(name = "{0} should be invalid")
-    @MethodSource({"stringLengthInvalidOperandProvider", "ofTypeInvalidValueProvider"})
+    @MethodSource({"stringLengthInvalidOperandProvider"})
     public void testAtomicConstraintReaderWithInvalidOperands(AtomicConstraintType type, ConstraintDTO dto) {
         Assertions.assertThrows(InvalidProfileException.class, () -> ConstraintValueValidator.validate(createField(dto.field), type, dto.value));
-    }
-
-    @Test
-    public void testBaseConstraintReaderMapWithUnmappedOperands() {
-        Assertions.assertThrows(
-            InvalidProfileException.class,
-            () -> ConstraintValueValidator.validate(createField("test"), IS_OF_TYPE, "garbage"));
     }
 
     @DisplayName("Should fail when value property is numeric and out of bounds")

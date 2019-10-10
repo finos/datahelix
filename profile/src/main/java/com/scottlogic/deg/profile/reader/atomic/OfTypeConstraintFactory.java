@@ -18,12 +18,10 @@ public class OfTypeConstraintFactory {
             case "string":
             case "datetime":
                 return Optional.empty();
-
             case "integer":
                 return Optional.of(new IsGranularToNumericConstraint(field,
                     NumericGranularityFactory.create(BigDecimal.ONE))
                 );
-
             case "ISIN":
             case "SEDOL":
             case "CUSIP":
@@ -32,7 +30,6 @@ public class OfTypeConstraintFactory {
                     field,
                     StandardConstraintTypes.valueOf(value.toUpperCase()))
                 );
-
             case "firstname":
             case "lastname":
             case "fullname":
