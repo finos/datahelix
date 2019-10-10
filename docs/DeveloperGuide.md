@@ -34,7 +34,7 @@
 
 # Introduction
 
-This guide outlines how to contribute to the project as well as the key concepts and structure of the DataHelix. 
+This guide outlines how to contribute to the project as well as the key concepts and structure of the DataHelix.
 
 * For information on how to get started with DataHelix see our [Getting Started guide](GettingStarted.md)
 
@@ -147,7 +147,7 @@ Then change the below (in the new file)...
   "const": "0.1"
 },
 ...
-``` 
+```
 ...to this:
 ```
 ...
@@ -160,7 +160,7 @@ Then change the below (in the new file)...
 
 You will need to update the test in _ProfileSchemaImmutabilityTests_ to contain the new schema version generated. Old versions should **not** be modified. This is reflected by the test failing if any existing schemas are modified.
 
-If you experience any issues with this test not updating the schema in IntelliJ, it is recommended to invalidate the cache and restart, or to delete the _profile/out_ directory and rebuild. 
+If you experience any issues with this test not updating the schema in IntelliJ, it is recommended to invalidate the cache and restart, or to delete the _profile/out_ directory and rebuild.
 
 # Algorithms and Data Structures
 
@@ -194,7 +194,7 @@ One process involved in this is **constraint normalisation**, which transforms a
 | `¬OR(X, Y, ...)`   | `¬X, ¬Y, ...`                 |
 | `¬AND(X, Y, ...)`  | `OR(¬X, ¬Y, ...)`             |
 | `¬IF(X, Y)`        | `X, ¬Y`                       |
-| `¬IFELSE(X, Y, Z)` | `OR(AND(X, ¬Y), AND(¬X, ¬Z))` | 
+| `¬IFELSE(X, Y, Z)` | `OR(AND(X, ¬Y), AND(¬X, ¬Z))` |
 
 We can convert a set of constraints to a Constraint Node as follows:
 
@@ -292,7 +292,7 @@ could collapse to
 }
 ```
 
-*(note: this is a conceptual example and not a reflection of actual object structure)* 
+*(note: this is a conceptual example and not a reflection of actual object structure)*
 
 See [Set restriction and generation](user/SetRestrictionAndGeneration.md) for a more in depth explanation of how the constraints are merged and data generated.
 
@@ -327,7 +327,7 @@ CSV and JSON formats are currently supported.
 
 ## String Generation
 
-We use a Java library called [dk.brics.automaton](http://www.brics.dk/automaton/) to analyse regexes and generate valid (and invalid for [violation](user/alphaFeatures/DeliberateViolation.md)) strings based on them. It works by representing the regex as a finite state machine. It might be worth reading about state machines for those who aren't familiar: [https://en.wikipedia.org/wiki/Finite-state_machine](https://en.wikipedia.org/wiki/Finite-state_machine). Consider the following regex: `ABC[a-z]?(A|B)`. It would be represented by the following state machine:
+We use a Java library called [dk.brics.automaton](http://www.brics.dk/automaton/) to analyse regexes and generate valid strings based on them. It works by representing the regex as a finite state machine. It might be worth reading about state machines for those who aren't familiar: [https://en.wikipedia.org/wiki/Finite-state_machine](https://en.wikipedia.org/wiki/Finite-state_machine). Consider the following regex: `ABC[a-z]?(A|B)`. It would be represented by the following state machine:
 
 ![](user/images/finite-state-machine.svg)
 
@@ -339,7 +339,7 @@ Other than the fact that we can use the state machine to generate strings, the m
 * Finding the intersection of two regexes, used when there are multiple regex constraints on the same field.
 * Finding the complement of a regex, which we use for generating invalid regexes for violation.
 
-Due to the way that the generator computes textual data internally the generation of strings is not deterministic and may output valid values in a different order with each generation run. 
+Due to the way that the generator computes textual data internally the generation of strings is not deterministic and may output valid values in a different order with each generation run.
 
 ### Anchors
 
@@ -358,7 +358,7 @@ A transition holds the following properties and are represented as lines in the 
 
 In the above `A` looks like:
 
-| property | initial | \[a-z\] | 
+| property | initial | \[a-z\] |
 | ---- | ---- | ---- |
 | min | A | a |
 | max | A | z |
@@ -466,7 +466,7 @@ Therefore the null operator can:
 When a field is serialised or otherwise written to a medium, as the output of the generator, it may choose to represent the absence of a value by using the formats' `null` representation, or some other form such as omitting the property and so on.
 
 #### For illustration
-CSV files do not have any standard for representing the absence of a value differently to an empty string (unless all strings are always wrapped in quotes ([#441](https://github.com/ScottLogic/data-engineering-generator/pull/441)). 
+CSV files do not have any standard for representing the absence of a value differently to an empty string (unless all strings are always wrapped in quotes ([#441](https://github.com/ScottLogic/data-engineering-generator/pull/441)).
 
 JSON files could be presented with `null` as the value for a property or excluding the property from the serialised result. This is the responsibility of the serialiser, and depends on the use cases.
 
@@ -642,4 +642,3 @@ Field is greater than number X:
 |Null                  |✔ |
 |Strings               |✔ |
 |Date-times            |✔ |
-
