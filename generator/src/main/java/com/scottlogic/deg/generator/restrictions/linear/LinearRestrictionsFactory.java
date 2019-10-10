@@ -1,6 +1,5 @@
 package com.scottlogic.deg.generator.restrictions.linear;
 
-import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.common.profile.constraintdetail.Granularity;
 
 import java.math.BigDecimal;
