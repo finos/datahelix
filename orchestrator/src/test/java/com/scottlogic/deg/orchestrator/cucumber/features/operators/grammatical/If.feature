@@ -18,13 +18,9 @@ Feature: Values can be specified by using if, then and else constraints
       | 20 |
     And bar is anything but null
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "a" },
-        "then": { "field": "bar", "is": "equalTo", "value": 10 }
-      }
-      """
+    And If and Then are described below
+    And foo is equal to "a"
+    And bar is equal to 10
     Then the following data should be generated:
       | foo | bar |
       | "a" | 10  |
@@ -39,14 +35,10 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "string"
     And bar is anything but null
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "a" },
-        "then": { "field": "bar", "is": "equalTo", "value": 3 },
-        "else": { "field": "bar", "is": "equalTo", "value": 5 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to "a"
+    And bar is equal to 3
+    And bar is equal to 5
     Then the following data should be generated:
       | foo | bar |
       | "a" | 3   |
@@ -65,18 +57,12 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "decimal"
     And bar has type "string"
     And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if":
-          { "anyOf": [
-            { "field": "foo", "is": "equalTo", "value": 1 },
-            { "field": "foo", "is": "equalTo", "value": 2 }
-          ]},
-        "then": { "field": "bar", "is": "equalTo", "value": "a" },
-        "else": { "field": "bar", "is": "equalTo", "value": "b" }
-      }
-      """
+    When If Then and Else are described below
+    And Any Of the next 2 constraints
+    And foo is equal to 1
+    And foo is equal to 2
+    And bar is equal to "a"
+    And bar is equal to "b"
     Then the following data should be generated:
       | foo | bar |
       | 1   | "a" |
@@ -97,18 +83,12 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "decimal"
     And bar has type "string"
     And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": {
-          "allOf": [
-            { "field": "foo", "is": "greaterThan", "value": 1 },
-            { "field": "foo", "is": "lessThan", "value": 4 }
-          ]},
-        "then": { "field": "bar", "is": "equalTo", "value": "a" },
-        "else": { "field": "bar", "is": "equalTo", "value": "b" }
-      }
-      """
+    When If Then and Else are described below
+    And All Of the next 2 constraints
+    And foo is greater than 1
+    And foo is less than 4
+    And bar is equal to "a"
+    And bar is equal to "b"
     Then the following data should be generated:
       | foo | bar |
       | 1   | "b" |
@@ -129,14 +109,10 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "decimal"
     And bar has type "string"
     And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": { "not": { "field": "foo", "is": "equalTo", "value": 1 } },
-        "then": { "field": "bar", "is": "equalTo", "value": "a" },
-        "else": { "field": "bar", "is": "equalTo", "value": "b" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is anything but equal to 1
+    And bar is equal to "a"
+    And bar is equal to "b"
     Then the following data should be generated:
       | foo | bar |
       | 1   | "b" |
@@ -158,18 +134,13 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "decimal"
     And bar has type "string"
     And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "greaterThan", "value": 1 },
-        "then": {
-          "if": { "field": "foo", "is": "greaterThan", "value": 3 },
-          "then": { "field": "bar", "is": "equalTo", "value": "a" },
-          "else": { "field": "bar", "is": "equalTo", "value": "b" }
-        },
-        "else": { "field": "bar", "is": "equalTo", "value": "c" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is greater than 1
+    When If Then and Else are described below
+    And foo is greater than 3
+    And bar is equal to "a"
+    And bar is equal to "b"
+    And bar is equal to "c"
     Then the following data should be generated:
       | foo | bar |
       | 1   | "c" |
@@ -215,14 +186,10 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "decimal"
     And bar has type "string"
     And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 5 },
-        "then": { "field": "bar", "is": "equalTo", "value": "a" },
-        "else": { "field": "bar", "is": "equalTo", "value": "b" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 5
+    And bar is equal to "a"
+    And bar is equal to "b"
     Then the following data should be generated:
       | foo | bar |
       | 1   | "b" |
@@ -244,14 +211,10 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "decimal"
     And bar has type "string"
     And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 1 },
-        "then": { "field": "bar", "is": "equalTo", "value": "X" },
-        "else": { "field": "bar", "is": "equalTo", "value": "b" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 1
+    And bar is equal to "X"
+    And bar is equal to "b"
     Then the following data should be generated:
       | foo | bar |
       | 2   | "b" |
@@ -272,14 +235,10 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "decimal"
     And bar has type "string"
     And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 1 },
-        "then": { "field": "bar", "is": "equalTo", "value": "a" },
-        "else": { "field": "bar", "is": "equalTo", "value": "X" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 1
+    And bar is equal to "a"
+    And bar is equal to "X"
     Then the following data should be generated:
       | foo | bar |
       | 1   | "a" |
@@ -298,14 +257,12 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "decimal"
     And bar has type "string"
     And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "inSet", "values": [1, 2] },
-        "then": { "field": "bar", "is": "equalTo", "value": "a" },
-        "else": { "field": "bar", "is": "equalTo", "value": "b" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is in set:
+      | 1 |
+      | 2 |
+    And bar is equal to "a"
+    And bar is equal to "b"
     Then the following data should be generated:
       | foo | bar |
       | 1   | "a" |
@@ -756,7 +713,7 @@ Feature: Values can be specified by using if, then and else constraints
       """
       {
         "if": { "field": "foo", "is": "equalTo", "value": "a" },
-        "then": { "field": "bar", "is": "matchingRegex", "value": "[😁-😡]{1}"},
+        "then": { "field": "bar", "is": "matchingRegex", "value": "C"},
         "else": { "field": "bar", "is": "equalTo", "value": "10" }
       }
       """
