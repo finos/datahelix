@@ -16,8 +16,7 @@
 
 package com.scottlogic.deg.profile.reader.atomic;
 
-import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.common.profile.Types;
+import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.common.profile.constraintdetail.DateTimeGranularity;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 
@@ -63,7 +62,7 @@ public class ConstraintReaderHelpers {
         }
     }
 
-    public static Types getFieldType(String type) {
+    public static FieldType getFieldType(String type) {
         if (type == null) {
             return null;
         }
@@ -71,7 +70,7 @@ public class ConstraintReaderHelpers {
         switch (type) {
             case "decimal":
             case "integer":
-                return Types.NUMERIC;
+                return FieldType.NUMERIC;
 
             case "string":
             case "ISIN":
@@ -81,10 +80,10 @@ public class ConstraintReaderHelpers {
             case "firstname":
             case "lastname":
             case "fullname":
-                return Types.STRING;
+                return FieldType.STRING;
 
             case "datetime":
-                return Types.DATETIME;
+                return FieldType.DATETIME;
         }
 
         throw new InvalidProfileException("Profile is invalid: no type known for " + type);

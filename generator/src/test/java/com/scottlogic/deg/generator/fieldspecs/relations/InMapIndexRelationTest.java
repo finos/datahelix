@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.fieldspecs.relations;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.Types;
+import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
@@ -31,7 +31,7 @@ class InMapIndexRelationTest {
 
     @Test
     void reduceToRelatedFieldSpec_whenAllValid_returnCompleteWhiteList() {
-        FieldSpec parameter = FieldSpec.fromType(Types.STRING);
+        FieldSpec parameter = FieldSpec.fromType(FieldType.STRING);
 
         FieldSpec expected = FieldSpec.fromList(DistributedList.uniform(Arrays.asList(0, 1))).withNotNull();
         FieldSpec actual = testInstance.reduceToRelatedFieldSpec(parameter);

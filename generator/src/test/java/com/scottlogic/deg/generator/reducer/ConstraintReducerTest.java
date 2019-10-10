@@ -26,7 +26,6 @@ import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
-import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import com.scottlogic.deg.generator.utils.SetUtils;
 import org.hamcrest.core.Is;
@@ -42,7 +41,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.scottlogic.deg.common.profile.Types.*;
+import static com.scottlogic.deg.common.profile.FieldType.*;
 import static com.scottlogic.deg.common.util.Defaults.*;
 import static org.hamcrest.Matchers.*;
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;

@@ -2,8 +2,8 @@ package com.scottlogic.deg.profile.reader.atomic;
 
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.common.profile.constraintdetail.Granularity;
 import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularityFactory;
@@ -54,7 +54,7 @@ public class RelationsFactory {
         throw new ValidationException(dto.is + "cannot be used with OtherValue)");
     }
 
-    private static Granularity getOffsetUnit(Types type, String offsetUnit) {
+    private static Granularity getOffsetUnit(FieldType type, String offsetUnit) {
         if (offsetUnit == null) {
             return null;
         }

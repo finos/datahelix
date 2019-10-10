@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.fieldspecs.relations;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.Types;
+import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.common.profile.constraintdetail.DateTimeGranularity;
 import com.scottlogic.deg.common.util.defaults.DateTimeDefaults;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
@@ -21,8 +21,8 @@ import static java.time.temporal.ChronoUnit.MILLIS;
 import static java.time.temporal.ChronoUnit.YEARS;
 
 class FieldSpecRelationsTest {
-    private Field main = createField("main", Types.DATETIME);
-    private Field other = createField("other", Types.DATETIME);
+    private Field main = createField("main", FieldType.DATETIME);
+    private Field other = createField("other", FieldType.DATETIME);
 
     @Test
     public void equalTo_exactValue_returnsSame(){
