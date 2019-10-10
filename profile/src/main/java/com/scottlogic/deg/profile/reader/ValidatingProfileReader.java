@@ -21,8 +21,8 @@ import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.profile.guice.ProfileConfigSource;
 import com.scottlogic.deg.profile.reader.validation.ConfigValidator;
-import com.scottlogic.deg.profile.dto.ProfileSchemaLoader;
-import com.scottlogic.deg.profile.dto.SchemaVersionValidator;
+import com.scottlogic.deg.profile.dtos.ProfileSchemaLoader;
+import com.scottlogic.deg.profile.dtos.SchemaVersionValidator;
 
 import java.io.IOException;
 import java.net.URL;

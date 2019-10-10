@@ -29,8 +29,8 @@ import com.scottlogic.deg.output.outputtarget.OutputTargetFactory;
 import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
 import com.scottlogic.deg.profile.reader.ProfileReader;
 import com.scottlogic.deg.profile.reader.validation.ConfigValidator;
-import com.scottlogic.deg.profile.dto.NoopVersionChecker;
-import com.scottlogic.deg.profile.dto.SchemaVersionValidator;
+import com.scottlogic.deg.profile.dtos.NoopVersionChecker;
+import com.scottlogic.deg.profile.dtos.SchemaVersionValidator;
 
 import java.util.stream.Stream;
 

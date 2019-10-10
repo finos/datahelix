@@ -22,8 +22,24 @@ import com.scottlogic.deg.common.profile.SpecificFieldType;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
-import com.scottlogic.deg.profile.dto.ConstraintDTO;
-import com.scottlogic.deg.profile.dto.FieldDTO;
+import com.scottlogic.deg.profile.dtos.FieldDTO;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.AtomicConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.chronological.AfterConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.chronological.AfterOrAtConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.chronological.BeforeConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.chronological.BeforeOrAtConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.general.EqualToConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.general.GranularToConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.general.InMapConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.general.InSetConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.numerical.GreaterThanConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.numerical.GreaterThanOrEqualToConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.numerical.LessThanConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.numerical.LessThanOrEqualToConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.texual.*;
+import com.scottlogic.deg.profile.dtos.constraints.grammatical.*;
 
 import java.io.IOException;
 import java.util.*;
@@ -119,31 +135,125 @@ public class CucumberTestState {
         return contstraintsToNotViolate;
     }
 
-    private ConstraintDTO createConstraint(String fieldName, String constraintName, Object value) {
-        ConstraintDTO dto = new ConstraintDTO();
-        dto.field = fieldName;
-        dto.is = constraintName;
-        if (value != null){
-            if (value instanceof String) {
-                dto.value = value;
-            }
-            else if (value instanceof Collection){
-                dto.values = (Collection<Object>) value;
-            } else {
-                dto.value = value;
-            }
+    private ConstraintDTO createConstraint(String fieldName, String constraintName, Object _value)
+    {
+        switch (ConstraintType.fromPropertyName(constraintName))
+        {
+            case EQUAL_TO:
+                return new EqualToConstraintDTO()
+                {{
+                    field = fieldName;
+                    value = _value;
+                }};
+            case IN_SET:
+                return new InSetConstraintDTO()
+                {{
+                    field = fieldName;
+                    values = (Collection<Object>) _value;
+                }};
+            case NULL:
+                return new NullConstraintDTO()
+                {{
+                    field = fieldName;
+                }};
+            case GRANULAR_TO:
+                return new GranularToConstraintDTO()
+                {{
+                    field = fieldName;
+                    value = _value;
+                }};
+            case MATCHES_REGEX:
+                return new MatchesRegexConstraintDTO()
+                {{
+                    field = fieldName;
+                    value = (String) _value;
+                }};
+            case CONTAINS_REGEX:
+                return new ContainsRegexConstraintDTO()
+                {{
+                    field = fieldName;
+                    value = (String) _value;
+                }};
+            case OF_LENGTH:
+                return new OfLengthConstraintDTO()
+                {{
+                    field = fieldName;
+                    value = (int) _value;
+                }};
+            case LONGER_THAN:
+                return new LongerThanConstraintDTO()
+                {{
+                    field = fieldName;
+                    value = (int) _value;
+                }};
+            case SHORTER_THAN:
+                return new ShorterThanConstraintDTO()
+                {{
+                    field = fieldName;
+                    value = (int) _value;
+                }};
+            case GREATER_THAN:
+                return new GreaterThanConstraintDTO()
+                {{
+                    field = fieldName;
+                    value = (Number) _value;
+                }};
+            case GREATER_THAN_OR_EQUAL_TO:
+                return new GreaterThanOrEqualToConstraintDTO()
+                {{
+                    field = fieldName;
+                    value = (Number) _value;
+                }};
+            case LESS_THAN:
+                return new LessThanConstraintDTO()
+                {{
+                    field = fieldName;
+                    value = (Number) _value;
+                }};
+            case LESS_THAN_OR_EQUAL_TO:
+                return new LessThanOrEqualToConstraintDTO()
+                {{
+                    field = fieldName;
+                    value = (Number) _value;
+                }};
+            case AFTER:
+                return new AfterConstraintDTO()
+                {{
+                    field = fieldName;
+                    value = (String) _value;
+                }};
+            case AFTER_OR_AT:
+                return new AfterOrAtConstraintDTO()
+                {{
+                    field = fieldName;
+                    value = (String) _value;
+                }};
+            case BEFORE:
+                return new BeforeConstraintDTO()
+                {{
+                    field = fieldName;
+                    value = (String) _value;
+                }};
+            case BEFORE_OR_AT:
+                return new BeforeOrAtConstraintDTO()
+                {{
+                    field = fieldName;
+                    value = (String) _value;
+                }};
+            default:
+                return null;
         }
-        return dto;
     }
 
+
     private ConstraintDTO createNotConstraint(String fieldName, String constraintName, Object value) {
-        ConstraintDTO notDto = new ConstraintDTO();
-        notDto.not = this.createConstraint(fieldName, constraintName, value);
+        NotConstraintDTO notDto = new NotConstraintDTO();
+        notDto.constraint = this.createConstraint(fieldName, constraintName, value);
         return notDto;
     }
 
     private ConstraintDTO createRelationConstraint(String field, String relationType, String other) {
-        ConstraintDTO dto = new ConstraintDTO();
+        RelatableConstraint dto = new ConstraintDTO();
         dto.field = field;
         dto.is = relationType;
         dto.otherField = other;
@@ -151,44 +261,42 @@ public class CucumberTestState {
     }
 
     private ConstraintDTO createInMapConstraint(String fieldName, String key, String file) {
-        ConstraintDTO dto = new ConstraintDTO();
+        InMapConstraintDTO dto = new InMapConstraintDTO();
         dto.field = fieldName;
-        dto.is = "inMap";
         dto.key = key;
         dto.file = file;
-        dto.values = getValuesFromMap(file, key);
         return dto;
     }
 
     private void createIfConstraint(int total) {
-        ConstraintDTO dto = new ConstraintDTO();
+        IfConstraintDTO dto = new IfConstraintDTO();
         if (total == 3) {
-            dto.else_ = constraints.remove(constraints.size() - 1);
+            dto.elseConstraint = constraints.remove(constraints.size() - 1);
             total--;
         }
         if (total == 2) {
-            dto.then = constraints.remove(constraints.size() - 1);
-            dto.if_ = constraints.remove(constraints.size() - 1);
+            dto.thenConstraint = constraints.remove(constraints.size() - 1);
+            dto.ifConstraint = constraints.remove(constraints.size() - 1);
         }
         this.addConstraintToList(dto);
     }
 
     private void createAllOfConstraint(int total) {
-        ConstraintDTO dto = new ConstraintDTO();
-        dto.allOf = new ArrayList<>();
+        AllOfConstraintDTO dto = new AllOfConstraintDTO();
+        dto.constraints = new ArrayList<>();
 
         for (int i = 0; i < total; i++) {
-            dto.allOf.add(constraints.remove(constraints.size() - 1));
+            dto.constraints.add(constraints.remove(constraints.size() - 1));
         }
         this.addConstraintToList(dto);
     }
 
     private void createAnyOfConstraint(int total) {
-        ConstraintDTO dto = new ConstraintDTO();
-        dto.anyOf = new ArrayList<>();
+        AnyOfConstraintDTO dto = new AnyOfConstraintDTO();
+        dto.constraints = new ArrayList<>();
 
         for (int i = 0; i < total; i++) {
-            dto.anyOf.add(constraints.remove(constraints.size() - 1));
+            dto.constraints.add(constraints.remove(constraints.size() - 1));
         }
         this.addConstraintToList(dto);
     }

@@ -19,17 +19,15 @@ package com.scottlogic.deg.profile.reader;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.FieldType;
+import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularity;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
-import com.scottlogic.deg.generator.profile.constraints.atomic.*;
-import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularity;
-import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintValueReader;
-import com.scottlogic.deg.profile.reader.atomic.FromFileReader;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -40,7 +38,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.Consumer;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.core.IsNull.nullValue;
 
 
@@ -48,21 +47,21 @@ import static org.hamcrest.core.IsNull.nullValue;
 
 public class JsonProfileReaderTests {
 
-    private DistributedList<Object> fromFileReaderReturnValue = DistributedList.singleton("test");
+    private DistributedList<String> fromFileReaderReturnValue = DistributedList.singleton("test");
 
-    private class MockFromFileReader extends FromFileReader {
+    private class MockFromFileReader extends FileReader {
 
         MockFromFileReader() {
             super("");
         }
 
         @Override
-        public DistributedList<Object> setFromFile(String file) {
+        public DistributedList<String> setFromFile(String file) {
             return fromFileReaderReturnValue;
         }
 
         @Override
-        public DistributedList<Object> listFromMapFile(String file, String Key) {
+        public DistributedList<String> listFromMapFile(String file, String Key) {
             return fromFileReaderReturnValue;
         }
 
@@ -71,10 +70,7 @@ public class JsonProfileReaderTests {
     private final String schemaVersion = "\"0.7\"";
     private String json;
 
-    private JsonProfileReader jsonProfileReader = new JsonProfileReader(
-        null,
-        new MainConstraintReader(
-            new AtomicConstraintValueReader(new MockFromFileReader())));
+    private JsonProfileReader jsonProfileReader = new JsonProfileReader(null, new ConstraintReader(new MockFromFileReader()));
 
 
 

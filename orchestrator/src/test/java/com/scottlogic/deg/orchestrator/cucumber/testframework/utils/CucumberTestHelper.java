@@ -22,11 +22,10 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
 import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.orchestrator.generate.GenerateExecute;
 import com.scottlogic.deg.orchestrator.violate.ViolateExecute;
 import com.scottlogic.deg.orchestrator.violate.ViolateModule;
-import com.scottlogic.deg.profile.dto.FieldDTO;
+import com.scottlogic.deg.profile.dtos.FieldDTO;
 import org.junit.Assert;
 
 import java.io.IOException;
