@@ -26,6 +26,7 @@ import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.generator.profile.RuleInformation;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 import com.scottlogic.deg.profile.reader.atomic.ConstraintReaderHelpers;
+import com.scottlogic.deg.profile.reader.atomic.OfTypeConstraintFactory;
 import com.scottlogic.deg.profile.serialisation.ProfileDeserialiser;
 import com.scottlogic.deg.profile.dto.ProfileDTO;
 
@@ -108,6 +109,17 @@ public class JsonProfileReader implements ProfileReader {
             rules.add(new Rule(new RuleInformation("nullable-rules"), nullableRules));
         }
 
+        // add types
+        Collection<Constraint> typeRules = profileDto.fields.stream()
+                .filter(fieldDTO -> fieldDTO.type != null )
+                .map(fieldDTO -> OfTypeConstraintFactory.create(profileFields.getByName(fieldDTO.name), fieldDTO.type))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+
+        if (typeRules.size() > 0) {
+            rules.add(new Rule(new RuleInformation("type-rules"), typeRules));
+        }
         return new Profile(profileFields, rules, profileDto.description);
     }
 
