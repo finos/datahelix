@@ -7,7 +7,7 @@
 	"description": "A dataset about financial products",
 	"fields":
 	[
-		{ 
+		{
 			"name": "id",
 			"type": "string",
 			"nullable": false
@@ -43,7 +43,7 @@
 				{ "field": "low_price", "is": "greaterThanOrEqualTo", "value": 0 }
 			]
 		},
-		{ 
+		{
 			"rule": "allowed countries",
 			"constraints": [
 				{ "field": "country", "is": "inSet", "values": [ "USA", "GB", "FRANCE" ] }
@@ -100,9 +100,8 @@ A named collection of constraints. Test case generation revolves around rules, i
 
 One of:
 
-- a [predicate constraint](UserGuide.md#Predicate-constraints)
-- a [grammatical constraint](UserGuide.md#Grammatical-constraints)
-- a [presentational constraint](UserGuide.md#Presentational-constraints)
+- a [predicate constraint](https://github.com/finos/datahelix/blob/master/docs/UserGuide.md#Predicate-constraints)
+- a [grammatical constraint](https://github.com/finos/datahelix/blob/master/docs/UserGuide.md#Grammatical-constraints)
 
 
-The Profile schema format is formally documented in the [User Guide](UserGuide.md).
+The Profile schema format is formally documented in the [User Guide](https://github.com/finos/datahelix/blob/master/docs/UserGuide.md).
