@@ -69,7 +69,7 @@ public class CucumberTestModule extends AbstractModule {
         when(mockOutputTargetFactory.create(any())).thenReturn(new InMemoryOutputTarget(testState));
         bind(OutputTargetFactory.class).toInstance(mockOutputTargetFactory);
 
-        if (testState.shouldSkipGeneration()) {
+        if (testState.shouldSkipGeneration) {
             DataGenerator mockDataGenerator = mock(DataGenerator.class);
             when(mockDataGenerator.generateData(any())).thenReturn(Stream.empty());
             bind(DataGenerator.class).toInstance(mockDataGenerator);

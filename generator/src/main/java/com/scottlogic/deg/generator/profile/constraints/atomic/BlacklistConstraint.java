@@ -6,7 +6,6 @@ import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 
 import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class BlacklistConstraint implements AtomicConstraint {
@@ -40,7 +39,7 @@ public class BlacklistConstraint implements AtomicConstraint {
 
     @Override
     public FieldSpec toFieldSpec() {
-        return FieldSpec.empty().withBlacklist(new HashSet<>(legalValues.list()));
+        return FieldSpec.fromType(field.getType()).withBlacklist(new HashSet<>(legalValues.list()));
     }
 
     public String toString(){

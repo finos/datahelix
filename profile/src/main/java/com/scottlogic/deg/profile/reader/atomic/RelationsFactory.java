@@ -19,11 +19,11 @@ public class RelationsFactory {
         Field main = fields.getByName(dto.field);
         Field other = fields.getByName(dto.otherField);
 
-        if (main.type != other.type){
+        if (main.getType() != other.getType()){
             throw new ValidationException("Field " + main.name + " cannot be related to other field " + other.name);
         }
 
-        Granularity offsetGranularity = getOffsetUnit(main.type, dto.offsetUnit);
+        Granularity offsetGranularity = getOffsetUnit(main.getType(), dto.offsetUnit);
 
         switch (AtomicConstraintType.fromText((String) dto.is)) {
             case IS_EQUAL_TO_CONSTANT:

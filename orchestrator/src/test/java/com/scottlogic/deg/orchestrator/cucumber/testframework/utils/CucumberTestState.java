@@ -24,6 +24,7 @@ import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
+import com.scottlogic.deg.profile.dto.FieldDTO;
 
 import java.io.IOException;
 import java.util.*;
@@ -38,53 +39,19 @@ public class CucumberTestState {
     public DataGenerationType dataGenerationType = DataGenerationType.FULL_SEQUENTIAL;
     public CombinationStrategyType combinationStrategyType = CombinationStrategyType.PINNING;
 
-    /**
-     * Boolean to represent if the generation mode is validating or violating.
-     * If true, generation is in violate mode.
-     */
-    public Boolean shouldViolate;
+    public boolean shouldViolate;
     public boolean expectExceptions;
-
-    /** If true, we inject a no-op generation engine during the test (e.g. because we're just testing profile validation) */
-    private Boolean shouldSkipGeneration;
-
-    Boolean shouldSkipGeneration() { return shouldSkipGeneration; }
-    void disableGeneration() { shouldSkipGeneration = true; }
-
+    public boolean shouldSkipGeneration;
+    boolean generationHasAlreadyOccured;
     public long maxRows = 200;
 
-    Boolean generationHasAlreadyOccured;
-
-    List<List<Object>> generatedObjects;
-    List<Field> profileFields;
-    List<ConstraintDTO> constraints;
-    List<Exception> testExceptions;
-    Map<String, List<List<String>>> inMapFiles;
+    List<List<Object>> generatedObjects = new ArrayList<>();
+    List<FieldDTO> profileFields = new ArrayList<>();;
+    List<ConstraintDTO> constraints = new ArrayList<>();
+    List<Exception> testExceptions = new ArrayList<>();
+    Map<String, List<List<String>>> inMapFiles = new HashMap<>();
 
     private final List<AtomicConstraintType> contstraintsToNotViolate = new ArrayList<>();
-
-    public CucumberTestState() {
-        this.initialise();
-    }
-
-    public void initialise(){
-        profileFields = new ArrayList<>();
-        constraints = new ArrayList<>();
-        testExceptions = new ArrayList<>();
-        generatedObjects = new ArrayList<>();
-        inMapFiles = new HashMap<>();
-        contstraintsToNotViolate.clear();
-        generationHasAlreadyOccured = false;
-        shouldSkipGeneration = false;
-        shouldViolate = false;
-    }
-
-    public void addConstraint(String fieldName, String constraintName, List<Object> value) {
-        if (value == null)
-            addConstraint(fieldName, constraintName, (Object)value);
-        else
-            addConstraint(fieldName, constraintName, getSetValues(value));
-    }
 
     public void addInMapConstraint(String fieldName, String key, String file) {
 
@@ -97,11 +64,12 @@ public class CucumberTestState {
         this.addConstraintToList(dto);
     }
 
-    public void addNotConstraint(String fieldName, String constraintName, List<Object> value) {
-        if (value == null)
-            addNotConstraint(fieldName, constraintName, (Object)value);
-        else
-            addNotConstraint(fieldName, constraintName, getSetValues(value));
+    public void addRelationConstraint(String field, String relationType, String other) {
+        ConstraintDTO dto = new ConstraintDTO();
+        dto.field = field;
+        dto.is = relationType;
+        dto.otherField = other;
+        this.addConstraintToList(dto);
     }
 
     public void addConstraint(String fieldName, String constraintName, Object value) {
@@ -122,7 +90,6 @@ public class CucumberTestState {
 
     public void addMapFile(String name, List<List<String>> map) {
         this.inMapFiles.put(name, map);
-        this.profileFields.add(createInternalField(name, Types.NUMERIC));
     }
 
     private List<Object> getValuesFromMap(String name, String key) {
@@ -136,23 +103,11 @@ public class CucumberTestState {
         return rtnList;
     }
 
-    private Collection<Object> getSetValues(List<Object> values) {
-        if (values == null){
-            throw new IllegalArgumentException("Values cannot be null");
-        }
-
-        values.stream()
-            .filter(value -> value instanceof Exception)
-            .map(value -> (Exception)value)
-            .forEach(this::addException);
-
-        return values.stream()
-            .filter(value -> !(value instanceof Exception))
-            .collect(Collectors.toSet());
-    }
 
     public void addField(String fieldName) {
-        this.profileFields.add(createField(fieldName, null));
+        FieldDTO fieldDTO = new FieldDTO();
+        fieldDTO.name = fieldName;
+        this.profileFields.add(fieldDTO);
     }
 
     public void addException(Exception e){
@@ -172,7 +127,10 @@ public class CucumberTestState {
         dto.field = fieldName;
         dto.is = this.extractConstraint(constraintName);
         if (value != null){
-            if (value instanceof Collection){
+            if (value instanceof String) {
+                dto.value = value;
+            }
+            else if (value instanceof Collection){
                 dto.values = (Collection<Object>) value;
             } else {
                 dto.value = value;
@@ -201,39 +159,33 @@ public class CucumberTestState {
     }
 
     public void setFieldUnique(String fieldName) {
-        Field oldField = profileFields.stream()
-            .filter(f -> f.name.equals(fieldName))
-            .findFirst()
-            .orElseThrow(UnsupportedOperationException::new);
-
-        Field newField = new Field(oldField.name, oldField.type, true, oldField.getFormatting(), oldField.isInternal());
-
-        profileFields.remove(oldField);
-        profileFields.add(newField);
+        profileFields = profileFields.stream()
+            .map(fieldDTO -> {
+                if (fieldDTO.name.equals(fieldName)) {
+                    fieldDTO.unique = true;
+                }
+                return fieldDTO;
+            }).collect(Collectors.toList());
     }
 
-    public void setFieldType(String fieldName, Types types) {
-        Field oldField = profileFields.stream()
-            .filter(f -> f.name.equals(fieldName))
-            .findFirst()
-            .orElseThrow(UnsupportedOperationException::new);
-
-        Field newField = new Field(oldField.name, types, oldField.isUnique(), oldField.getFormatting(), oldField.isInternal());
-
-        profileFields.remove(oldField);
-        profileFields.add(newField);
+    public void setFieldType(String fieldName, String types) {
+        profileFields = profileFields.stream()
+            .map(fieldDTO -> {
+                if (fieldDTO.name.equals(fieldName)) {
+                    fieldDTO.type = types;
+                }
+                return fieldDTO;
+            }).collect(Collectors.toList());
     }
 
     public void setFieldFormatting(String fieldName, String formatting) {
-        Field oldField = profileFields.stream()
-            .filter(f -> f.name.equals(fieldName))
-            .findFirst()
-            .orElseThrow(UnsupportedOperationException::new);
-
-        Field newField = new Field(oldField.name, oldField.type, oldField.isUnique(), formatting, oldField.isInternal());
-
-        profileFields.remove(oldField);
-        profileFields.add(newField);
+        profileFields = profileFields.stream()
+            .map(fieldDTO -> {
+                if (fieldDTO.name.equals(fieldName)) {
+                    fieldDTO.formatting = formatting;
+                }
+                return fieldDTO;
+            }).collect(Collectors.toList());
     }
 }
 

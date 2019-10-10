@@ -20,7 +20,7 @@ import java.util.Objects;
 
 public class Field {
     public final String name;
-    public final Types type;
+    private final Types type;
     private final boolean unique;
     private final String formatting;
     private final boolean internal;

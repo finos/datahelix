@@ -46,7 +46,6 @@ public class GeneralTestStep {
 
     @Before
     public void BeforeEach() {
-        this.state.initialise();
         this.cucumberTestHelper = new CucumberTestHelper(state);
     }
 
@@ -102,6 +101,11 @@ public class GeneralTestStep {
     @And("^(.+) is unique$")
     public void uniquefieldIsUnique(String fieldName) {
         this.state.setFieldUnique(fieldName);
+    }
+
+    @And("^(.+) is equal to field (.+)$")
+    public void fieldEqualTo(String field, String otherField){
+        state.addRelationConstraint(field, AtomicConstraintType.IS_EQUAL_TO_CONSTANT.getText(), otherField);
     }
 
 
@@ -260,10 +264,8 @@ public class GeneralTestStep {
 
     @And("^(.+) has type \"(.+)\"$")
     public void fooHasType(String fieldName, String type) {
-        state.setFieldType(fieldName, getFieldType(type));
-        state.addConstraint(fieldName, "ofType", type);
+        state.setFieldType(fieldName, type);
     }
-
 
     class GeneratedTestData {
         List <List<Object>> expectedData;

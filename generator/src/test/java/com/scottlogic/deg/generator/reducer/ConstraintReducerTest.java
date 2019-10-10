@@ -109,8 +109,8 @@ class ConstraintReducerTest {
         FieldSpec cityFieldSpec = reducedConstraints.getSpecForField(cityField);
         Assert.assertThat("City fieldspec has no set restrictions", cityFieldSpec.getWhitelist(),
             Is.is(IsNull.nullValue()));
-        Assert.assertThat("City fieldspec has no string restrictions", cityFieldSpec.getRestrictions(),
-            Is.is(IsNull.nullValue()));
+        Assert.assertThat("City fieldspec has the default string restrictions", cityFieldSpec.getRestrictions(),
+            Is.is(FieldSpec.fromType(STRING).getRestrictions()));
         Assert.assertThat("City fieldspec has no null restrictions", cityFieldSpec.isNullable(),
             Is.is(true));
     }

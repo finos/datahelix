@@ -16,8 +16,10 @@
 
 package com.scottlogic.deg.orchestrator.cucumber.testframework.steps;
 
+import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestHelper;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestState;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
@@ -44,6 +46,26 @@ public class NumericValueStep {
     @When("{fieldVar} is anything but {operator} {number}")
     public void whenFieldIsNotConstrainedByNumericValue(String fieldName, String constraintName, Number value) {
         state.addNotConstraint(fieldName, constraintName, value);
+    }
+
+    @And("^(.+) is greater than field ([A-z0-9]+)$")
+    public void numericGreater(String field, String otherField){
+        state.addRelationConstraint(field, AtomicConstraintType.IS_GREATER_THAN_CONSTANT.getText(), otherField);
+    }
+
+    @And("^(.+) is less than field ([A-z0-9]+)$")
+    public void numericLess(String field, String otherField){
+        state.addRelationConstraint(field, AtomicConstraintType.IS_LESS_THAN_CONSTANT.getText(), otherField);
+    }
+
+    @And("^(.+) is greater than or equal to field ([A-z0-9]+)$")
+    public void numericGreaterEqual(String field, String otherField){
+        state.addRelationConstraint(field, AtomicConstraintType.IS_GREATER_THAN_OR_EQUAL_TO_CONSTANT.getText(), otherField);
+    }
+
+    @And("^(.+) is less than or equal to field ([A-z0-9]+)$")
+    public void numericLessEqual(String field, String otherField){
+        state.addRelationConstraint(field, AtomicConstraintType.IS_LESS_THAN_OR_EQUAL_TO_CONSTANT.getText(), otherField);
     }
 
     @Then("{fieldVar} contains numeric data")

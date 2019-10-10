@@ -169,20 +169,6 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldDeserialiseInvalidProfileAsEmptyRule() throws IOException {
-        givenJson(
-            "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
-                "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\" } ]," +
-                "    \"rules\": [" +
-                "       { \"field\": \"foo\", \"is\": \"null\" } " +
-                "    ]" +
-                "}");
-
-        expectInvalidProfileException("Profile is invalid: unable to find 'constraints' for rule: null");
-    }
-
-    @Test
     public void shouldGiveDefaultNameToUnnamedRules() throws IOException {
         givenJson(
                 "{" +
@@ -1067,10 +1053,10 @@ public class JsonProfileReaderTests {
 
         expectFields(
             field -> {
-                Assert.assertThat(field.type, equalTo(Types.NUMERIC));
+                Assert.assertThat(field.getType(), equalTo(Types.NUMERIC));
             },
             field -> {
-                Assert.assertThat(field.type, equalTo(Types.STRING));
+                Assert.assertThat(field.getType(), equalTo(Types.STRING));
             }
         );
         expectRules();
@@ -1097,10 +1083,10 @@ public class JsonProfileReaderTests {
 
         expectFields(
             field -> {
-                Assert.assertThat(field.type, equalTo(Types.NUMERIC));
+                Assert.assertThat(field.getType(), equalTo(Types.NUMERIC));
             },
             field -> {
-                Assert.assertThat(field.type, equalTo(Types.STRING));
+                Assert.assertThat(field.getType(), equalTo(Types.STRING));
             }
         );
     }
@@ -1131,10 +1117,10 @@ public class JsonProfileReaderTests {
 
         expectFields(
             field -> {
-                Assert.assertThat(field.type, equalTo(Types.NUMERIC));
+                Assert.assertThat(field.getType(), equalTo(Types.NUMERIC));
             },
             field -> {
-                Assert.assertThat(field.type, equalTo(Types.STRING));
+                Assert.assertThat(field.getType(), equalTo(Types.STRING));
             }
         );
     }
@@ -1163,10 +1149,10 @@ public class JsonProfileReaderTests {
 
         expectFields(
             field -> {
-                Assert.assertThat(field.type, equalTo(Types.NUMERIC));
+                Assert.assertThat(field.getType(), equalTo(Types.NUMERIC));
             },
             field -> {
-                Assert.assertThat(field.type, equalTo(Types.STRING));
+                Assert.assertThat(field.getType(), equalTo(Types.STRING));
             }
         );
     }
@@ -1260,7 +1246,7 @@ public class JsonProfileReaderTests {
             field -> {
                 Assert.assertEquals("foobar.csv", field.name);
                 Assert.assertTrue(field.isInternal());
-                Assert.assertEquals(Types.NUMERIC, field.type);
+                Assert.assertEquals(Types.NUMERIC, field.getType());
             }
         );
     }

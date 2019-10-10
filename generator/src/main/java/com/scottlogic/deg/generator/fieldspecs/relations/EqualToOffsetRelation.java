@@ -22,11 +22,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
-import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
-import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
-
-import java.time.OffsetDateTime;
 
 public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpecRelations {
     private final Field main;
@@ -47,7 +43,7 @@ public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpec
     @Override
     public FieldSpec reduceToRelatedFieldSpec(FieldSpec otherValue) {
         if (otherValue.getRestrictions() == null) {
-            return FieldSpec.empty();
+            return FieldSpec.fromType(main.getType());
         }
 
         LinearRestrictions<T> otherRestrictions = (LinearRestrictions) otherValue.getRestrictions();

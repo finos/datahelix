@@ -37,7 +37,6 @@ import static com.scottlogic.deg.common.profile.Types.*;
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createNumericRestrictions;
 import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MAX_LIMIT;
 import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MIN_LIMIT;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 
 public class FieldValueSourceEvaluatorTests {
 
@@ -64,7 +63,7 @@ public class FieldValueSourceEvaluatorTests {
     @Test
     public void shouldReturnNullSourceLastWithNoRestrictions() {
         FieldValueSourceEvaluator evaluator = new FieldValueSourceEvaluator();
-        FieldSpec fieldSpecWithNoRestrictions = FieldSpec.empty();
+        FieldSpec fieldSpecWithNoRestrictions = FieldSpec.fromType(STRING);
 
         FieldValueSource sources = evaluator.getFieldValueSources(STRING, fieldSpecWithNoRestrictions);
 

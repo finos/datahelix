@@ -16,9 +16,11 @@
 
 package com.scottlogic.deg.orchestrator.cucumber.testframework.steps;
 
+import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestHelper;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestState;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.GeneratorTestUtilities;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
@@ -44,6 +46,16 @@ public class DateValueStep {
     @When("{fieldVar} is anything but {operator} {date}")
     public void whenFieldIsNotConstrainedByDateValue(String fieldName, String constraintName, String value) {
         state.addNotConstraint(fieldName, constraintName, value);
+    }
+
+    @And("^(.+) is after field ([A-z0-9]+)$")
+    public void dateAfter(String field, String otherField){
+        state.addRelationConstraint(field, AtomicConstraintType.IS_AFTER_CONSTANT_DATE_TIME.getText(), otherField);
+    }
+
+    @And("^(.+) is before field ([A-z0-9]+)$")
+    public void dateBefore(String field, String otherField){
+        state.addRelationConstraint(field, AtomicConstraintType.IS_BEFORE_CONSTANT_DATE_TIME.getText(), otherField);
     }
 
     @Then("{fieldVar} contains only datetime data")

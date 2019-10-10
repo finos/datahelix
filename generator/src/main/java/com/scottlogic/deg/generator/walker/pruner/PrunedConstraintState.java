@@ -68,7 +68,7 @@ class PrunedConstraintState {
     Map<Field, FieldSpec> addPulledUpFieldsToMap(Map<Field, FieldSpec> previousFieldSpecs) {
         Map<Field, FieldSpec> mapWithPulledUpFields = new HashMap<>(previousFieldSpecs);
         for (AtomicConstraint c : pulledUpAtomicConstraints) {
-            mapWithPulledUpFields.putIfAbsent(c.getField(), FieldSpec.empty());
+            mapWithPulledUpFields.putIfAbsent(c.getField(), FieldSpec.fromType(c.getField().getType()));
         }
         return mapWithPulledUpFields;
     }

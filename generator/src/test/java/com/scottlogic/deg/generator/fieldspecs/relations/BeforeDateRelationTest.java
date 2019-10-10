@@ -85,7 +85,7 @@ public class BeforeDateRelationTest {
 
         FieldSpec result = beforeDateRelations.reduceValueToFieldSpec(generatedValue);
 
-        FieldSpec expected = FieldSpec.empty();
+        FieldSpec expected = FieldSpec.fromType(Types.DATETIME);
         assertEquals(expected, result);
     }
 
