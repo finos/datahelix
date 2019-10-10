@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.common.profile.Types;
+import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.restrictions.*;
 
@@ -41,7 +41,7 @@ public class FieldSpec {
     public static FieldSpec fromRestriction(TypedRestrictions restrictions) {
         return new FieldSpec(null, restrictions, true, Collections.emptySet());
     }
-    public static FieldSpec fromType(Types type) {
+    public static FieldSpec fromType(FieldType type) {
         switch (type) {
             case NUMERIC:
                 return new FieldSpec(null, createDefaultNumericRestrictions(), true, Collections.emptySet());

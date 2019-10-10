@@ -18,11 +18,11 @@ package com.scottlogic.deg.profile.reader;
 
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
-import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
@@ -188,7 +188,7 @@ public class JsonProfileReaderTests {
         expectFields(
             field -> {
                 Assert.assertThat(field.name, equalTo("foo"));
-                Assert.assertEquals(field.getType(), Types.STRING);
+                Assert.assertEquals(field.getType(), FieldType.STRING);
             });
     }
 
@@ -265,7 +265,7 @@ public class JsonProfileReaderTests {
         expectFields(
             field -> {
                 Assert.assertThat(field.name, equalTo("foo"));
-                Assert.assertEquals(field.getType(), Types.STRING);
+                Assert.assertEquals(field.getType(), FieldType.STRING);
             });
     }
 
@@ -1053,10 +1053,10 @@ public class JsonProfileReaderTests {
 
         expectFields(
             field -> {
-                Assert.assertThat(field.getType(), equalTo(Types.NUMERIC));
+                Assert.assertThat(field.getType(), equalTo(FieldType.NUMERIC));
             },
             field -> {
-                Assert.assertThat(field.getType(), equalTo(Types.STRING));
+                Assert.assertThat(field.getType(), equalTo(FieldType.STRING));
             }
         );
         expectRules();
@@ -1151,7 +1151,7 @@ public class JsonProfileReaderTests {
             field -> {
                 Assert.assertEquals("foobar.csv", field.name);
                 Assert.assertTrue(field.isInternal());
-                Assert.assertEquals(Types.NUMERIC, field.getType());
+                Assert.assertEquals(FieldType.NUMERIC, field.getType());
             }
         );
     }
