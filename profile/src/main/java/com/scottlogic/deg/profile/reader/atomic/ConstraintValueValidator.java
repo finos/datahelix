@@ -45,16 +45,11 @@ public class ConstraintValueValidator {
             case IS_IN_MAP:
                 validateSet(field, type, value);
                 break;
-            case IS_OF_TYPE:
-                validateOfTypes(field, value);
-                break;
-
             case MATCHES_REGEX:
             case CONTAINS_REGEX:
                 validatePattern(value);
                 validateTypeIs(field, type, STRING);
                 break;
-
             case HAS_LENGTH:
             case IS_STRING_SHORTER_THAN:
             case IS_STRING_LONGER_THAN:
@@ -132,10 +127,6 @@ public class ConstraintValueValidator {
         distributedList.stream()
             .peek(val->{if (val == null) throw new ValidationException("Set must not contain null");})
             .forEach(val->validateAny(field, type, val));
-    }
-
-    private static void validateOfTypes(Field field, Object value) {
-        OfTypeConstraintFactory.create(field, (String)value);
     }
 
     private static void validatePattern(Object value) {
