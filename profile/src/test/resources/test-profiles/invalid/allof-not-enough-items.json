@@ -7,8 +7,7 @@
           "allOf": [
             {
               "field": "field1",
-              "is": "equalTo",
-              "value": "%ggg"
+              "equalTo": "%ggg"
             }
           ]
         }

@@ -24,10 +24,7 @@ import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.dtos.FieldDTO;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.relatable.*;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.unrelatable.*;
-import com.scottlogic.deg.profile.dtos.constraints.grammatical.*;
+import com.scottlogic.deg.profile.dtos.constraints.*;
 
 import java.io.IOException;
 import java.util.*;
@@ -247,42 +244,41 @@ public class CucumberTestState {
     }
 
     private ConstraintDTO createRelationConstraint(String field, ConstraintType type, String other) {
-        RelatableConstraintDTO relatableConstraintDTO;
+        RelationalConstraintDTO relationalConstraintDTO;
         switch (type)
         {
             case EQUAL_TO:
-                relatableConstraintDTO = new EqualToConstraintDTO();
+                relationalConstraintDTO = new EqualToFieldConstraintDTO(){{field = other;}};
                 break;
             case GREATER_THAN:
-                relatableConstraintDTO = new GreaterThanConstraintDTO();
+                relationalConstraintDTO = new GreaterThanFieldConstraintDTO(){{field = other;}};
                 break;
             case GREATER_THAN_OR_EQUAL_TO:
-                relatableConstraintDTO = new GreaterThanOrEqualToConstraintDTO();
+                relationalConstraintDTO = new GreaterThanOrEqualToFieldConstraintDTO(){{field = other;}};
                 break;
             case LESS_THAN:
-                relatableConstraintDTO = new LessThanConstraintDTO();
+                relationalConstraintDTO = new LessThanFieldConstraintDTO(){{field = other;}};
                 break;
             case LESS_THAN_OR_EQUAL_TO:
-                relatableConstraintDTO = new LessThanOrEqualToConstraintDTO();
+                relationalConstraintDTO = new LessThanOrEqualToFieldConstraintDTO(){{field = other;}};
                 break;
             case AFTER:
-                relatableConstraintDTO = new AfterConstraintDTO();
+                relationalConstraintDTO = new AfterFieldConstraintDTO(){{field = other;}};
                 break;
             case AFTER_OR_AT:
-                relatableConstraintDTO = new AfterOrAtConstraintDTO();
+                relationalConstraintDTO = new AfterOrAtFieldConstraintDTO(){{field = other;}};
                 break;
             case BEFORE:
-                relatableConstraintDTO = new BeforeConstraintDTO();
+                relationalConstraintDTO = new BeforeFieldConstraintDTO(){{field = other;}};
                 break;
             case BEFORE_OR_AT:
-                relatableConstraintDTO = new BeforeOrAtConstraintDTO();
+                relationalConstraintDTO = new BeforeOrAtFieldConstraintDTO(){{field = other;}};
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + type);
         }
-        relatableConstraintDTO.field = field;
-        relatableConstraintDTO.otherField = other;
-        return relatableConstraintDTO;
+        relationalConstraintDTO.field = field;
+        return relationalConstraintDTO;
     }
 
     private ConstraintDTO createInMapConstraint(String fieldName, String key, String file) {

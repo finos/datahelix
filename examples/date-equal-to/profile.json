@@ -12,8 +12,7 @@
       "constraints": [
         {
           "field": "date",
-          "is": "equalTo",
-          "value": "2001-02-03T04:05:06.007"
+          "equalTo": "2001-02-03T04:05:06.007"
         }
       ]
     }

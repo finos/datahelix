@@ -8,13 +8,11 @@
           "anyOf": [
             {
               "field": "field1",
-              "is": "equalTo",
-              "value": "foo"
+              "equalTo": "foo"
             },
             {
               "field": "field1",
-              "is": "equalTo",
-              "value": "bar"
+              "equalTo": "bar"
             }
           ]
         }

@@ -7,8 +7,7 @@
           "nallOf": [
             {
               "field": "field1",
-              "is": "equalTo",
-              "value": "%ggg"
+              "equalTo": "%ggg"
             },
             {
               "field": "field1",

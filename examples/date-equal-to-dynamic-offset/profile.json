@@ -61,8 +61,7 @@
         },
         {
           "field": "firstWorking",
-          "is": "equalTo",
-          "value": "2019-08-12T12:00:00.000"
+          "equalTo": "2019-08-12T12:00:00.000"
         },
         {
           "field": "secondWorking",

@@ -18,8 +18,7 @@
                   "allOf": [
                     {
                       "field": "Column 1",
-                      "is": "equalTo",
-                      "value": "I am a string!"
+                      "equalTo": "I am a string!"
                     },
                     {
                       "not": {
@@ -35,8 +34,7 @@
                     "allOf": [
                       {
                         "field": "Column 1",
-                        "is": "equalTo",
-                        "value": "I am a string!"
+                        "equalTo": "I am a string!"
                       },
                       {
                         "not": {
@@ -51,8 +49,7 @@
             },
             {
               "field": "Column 1",
-              "is": "equalTo",
-              "value": "The one option that can produce data."
+              "equalTo": "The one option that can produce data."
             }
           ]
         }

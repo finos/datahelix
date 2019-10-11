@@ -17,8 +17,7 @@
       "constraints": [
         {
           "field": "a",
-          "is": "inSet",
-          "values": [
+          "inSet": [
             "X",
             "Y",
             "Z"
@@ -26,8 +25,7 @@
         },
         {
           "field": "b",
-          "is": "inSet",
-          "values": [
+          "inSet": [
             "1",
             "2"
           ]

@@ -23,8 +23,7 @@
         {
           "not": {
             "field": "an_integer",
-            "is": "equalTo",
-            "value": 1
+            "equalTo": 1
           }
         }
       ]

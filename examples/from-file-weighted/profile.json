@@ -13,8 +13,7 @@
       "constraints": [
         {
           "field": "name",
-          "is": "inSet",
-          "file": "greek.csv"
+          "inSet": "greek.csv"
         }
       ]
     }

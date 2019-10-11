@@ -46,7 +46,7 @@
 		{
 			"rule": "allowed countries",
 			"constraints": [
-				{ "field": "country", "is": "inSet", "values": [ "USA", "GB", "FRANCE" ] }
+				{ "field": "country", "inSet": [ "USA", "GB", "FRANCE" ] }
 			]
 		},
 		{

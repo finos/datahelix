@@ -25,9 +25,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.relatable.*;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.unrelatable.*;
-import com.scottlogic.deg.profile.dtos.constraints.grammatical.*;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 
 import java.io.IOException;
@@ -38,13 +35,10 @@ public abstract class ConstraintDTO
 {
     private final ConstraintType type;
 
-    protected ConstraintDTO(ConstraintType type)
+    ConstraintDTO(ConstraintType type)
     {
         this.type = type;
     }
-
-    @JsonIgnore
-    public abstract boolean isAtomic();
 
     @JsonIgnore
     public ConstraintType getType()

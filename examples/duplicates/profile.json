@@ -14,13 +14,11 @@
           "anyOf": [
             {
               "field": "a",
-              "is": "equalTo",
-              "value": "foo"
+              "equalTo": "foo"
             },
             {
               "field": "a",
-              "is": "equalTo",
-              "value": "foo"
+              "equalTo": "foo"
             }
           ]
         }

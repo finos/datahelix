@@ -114,8 +114,7 @@ Here is a list of two rules comprised of one constraint each:
           "constraints": [
             {
               "field": "Column 1",
-              "is": "equalTo",
-              "value": "foo"
+              "equalTo": "foo"
             }
           ]
         },
@@ -124,8 +123,7 @@ Here is a list of two rules comprised of one constraint each:
           "constraints": [
             {
               "field": "Column 2",
-              "is": "equalTo",
-              "value": "bar"
+              "equalTo": "bar"
             }
           ]
         }
@@ -155,8 +153,7 @@ These three sections are combined to form the [complete profile](#Example-Profil
         "constraints": [
             {
             "field": "Column 1",
-            "is": "equalTo",
-            "value": "foo"
+            "equalTo": "foo"
             }
         ]
         }
@@ -341,7 +338,7 @@ Is satisfied if `field`'s value is equal to `value`
 ### `inSet` _(field, values)_
 
 ```javascript
-{ "field": "type", "is": "inSet", "values": [ "X_092", 123, null, "2001-02-03T04:05:06.007" ] }
+{ "field": "type", "inSet": [ "X_092", 123, null, "2001-02-03T04:05:06.007" ] }
 ```
 
 Is satisfied if `field`'s value is in the set `values`
@@ -349,7 +346,7 @@ Is satisfied if `field`'s value is in the set `values`
 Alternatively, sets can be populated from files.
 
 ```javascript
-{ "field": "country", "is": "inSet", "file": "countries.csv" }
+{ "field": "country", "inSet": "countries.csv" }
 ```
 
 Populates a set from the new-line delimited file (with suffix `.csv`), where each line represents a string value to load.
@@ -385,8 +382,7 @@ After loading the set from the file, this constraint behaves identically to the 
 ```javascript
 {
     "field": "country",
-    "is": "inMap",
-    "file": "countries.csv",
+    "inMap": "countries.csv",
     "key": "Country"
 }
 ```

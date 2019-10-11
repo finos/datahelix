@@ -54,13 +54,13 @@
     {
       "rule": "stock",
       "constraints": [
-        { "field": "stock", "is": "inSet", "file": "examples/demo-trades/stockCodes.csv" }
+        { "field": "stock", "inSet": "examples/demo-trades/stockCodes.csv" }
       ]
     },
     {
       "rule": "side",
       "constraints": [
-        { "field": "side", "is": "inSet", "values": [ "BUY", "SELL" ] }
+        { "field": "side", "inSet": [ "BUY", "SELL" ] }
       ]
     },
     {

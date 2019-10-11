@@ -28,12 +28,12 @@ import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.profile.dtos.ProfileDTO;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
 import com.scottlogic.deg.profile.common.ConstraintType;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.unrelatable.InMapConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.grammatical.AllOfConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.grammatical.AnyOfConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.grammatical.IfConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.grammatical.NullConstraintDTO;
-import com.scottlogic.deg.profile.reader.atomic.SpecificFieldTypeConstraintFactory;
+import com.scottlogic.deg.profile.dtos.constraints.InMapConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.AllOfConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.AnyOfConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.IfConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.NullConstraintDTO;
+import com.scottlogic.deg.profile.reader.atomic.FieldReader;
 import com.scottlogic.deg.profile.serialisation.ProfileSerialiser;
 
 import java.io.File;
@@ -82,7 +82,7 @@ public class JsonProfileReader implements ProfileReader
         List<Field> inMapFields = profileDTO.rules.stream()
                 .flatMap(ruleDTO -> ruleDTO.constraints.stream())
                 .flatMap(constraintDTO -> getInMapConstraints(profileDTO).stream())
-                .map(file-> new Field(file, FieldType.NUMERIC,false, null,true)
+                .map(file -> new Field(file, FieldType.NUMERIC, false, null, true)
                 ).collect(Collectors.toList());
 
         fields.addAll(inMapFields);
@@ -98,7 +98,7 @@ public class JsonProfileReader implements ProfileReader
                 .collect(Collectors.toList());
 
         Collection<Constraint> typeConstraints = profileDTO.fields.stream()
-                .map(fieldDto -> SpecificFieldTypeConstraintFactory.create(profileFields.getByName(fieldDto.name), fieldDto.type))
+                .map(fieldDto -> FieldReader.read(profileFields.getByName(fieldDto.name), fieldDto.type))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
@@ -114,16 +114,18 @@ public class JsonProfileReader implements ProfileReader
         return new Profile(profileFields, rules, profileDTO.description);
     }
 
-    private List<String> getInMapConstraints(ProfileDTO profileDto) {
+    private List<String> getInMapConstraints(ProfileDTO profileDto)
+    {
         return profileDto.rules.stream()
                 .flatMap(ruleDTO -> ruleDTO.constraints.stream())
                 .flatMap(constraint -> getAllAtomicConstraints(Stream.of(constraint)))
                 .filter(constraintDTO -> constraintDTO.getType() == ConstraintType.IN_MAP)
-                .map(constraintDTO -> ((InMapConstraintDTO)constraintDTO).file)
+                .map(constraintDTO -> ((InMapConstraintDTO) constraintDTO).file)
                 .collect(Collectors.toList());
     }
 
-    private Stream<ConstraintDTO> getAllAtomicConstraints(Stream<ConstraintDTO> constraints) {
+    private Stream<ConstraintDTO> getAllAtomicConstraints(Stream<ConstraintDTO> constraints)
+    {
         return constraints.flatMap(this::getUnpackedConstraintsToStream);
     }
 

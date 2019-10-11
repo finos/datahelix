@@ -31,7 +31,7 @@ Note that negation of type integer is not fully defined yet as we do not have a 
 ## Does an inSet constraint imply anything about nullability?
 
 ```javascript
-{ "field": "product_type", "is": "inSet", "values": [ "a", "b" ] }
+{ "field": "product_type", "inSet": [ "a", "b" ] }
 ```
 
 Given the above, should we expect nulls? If null is considered a _value_ then no would be a reasonable answer, but it can equally be considered the absence of a value. 

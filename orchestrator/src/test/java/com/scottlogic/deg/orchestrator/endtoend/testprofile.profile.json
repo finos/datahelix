@@ -14,8 +14,7 @@
             "constraints": [
                 {
                     "field": "foo",
-                    "is": "equalTo",
-                    "value": "Generation successful"
+                    "equalTo": "Generation successful"
                 }
             ]
         }

@@ -34,23 +34,19 @@
       "constraints": [
         {
           "field": "decimal",
-          "is": "equalTo",
-          "value": 14.1
+          "equalTo": 14.1
         },
         {
           "field": "date1",
-          "is": "equalTo",
-          "value": "2001-02-03T04:05:06.007"
+          "equalTo": "2001-02-03T04:05:06.007"
         },
         {
           "field": "date2",
-          "is": "equalTo",
-          "value":  "2001-02-03T04:05:06.007"
+          "equalTo":  "2001-02-03T04:05:06.007"
         },
         {
           "field": "an_integer",
-          "is": "equalTo",
-          "value": 1234567890
+          "equalTo": 1234567890
         }
       ]
     }

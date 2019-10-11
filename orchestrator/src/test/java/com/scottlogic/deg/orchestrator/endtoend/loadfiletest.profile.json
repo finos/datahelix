@@ -13,8 +13,7 @@
       "constraints": [
         {
           "field": "foo",
-          "is": "inSet",
-          "file": "src/test/java/com/scottlogic/deg/orchestrator/endtoend/testfile.csv"
+          "inSet": "src/test/java/com/scottlogic/deg/orchestrator/endtoend/testfile.csv"
         }
       ]
     }

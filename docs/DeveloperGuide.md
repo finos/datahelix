@@ -480,15 +480,13 @@ Consider the following if constraint:
     "if": {
         {
             "field": "field1",
-            "is": "equalTo",
-            "value": 5
+            "equalTo": 5
         }
     },
     "then": {
         {
             "field": "field2",
-            "is": "equalTo",
-            "value": "a"
+            "equalTo": "a"
         }
     }
 }
@@ -501,23 +499,20 @@ The generator will expand the `if` constraint as follows, to ensure the constrai
     "if": {
         {
             "field": "field1",
-            "is": "equalTo",
-            "value": 5
+            "equalTo": 5
         }
     },
     "then": {
         {
             "field": "field2",
-            "is": "equalTo",
-            "value": "a"
+            "equalTo": "a"
         }
     },
     "else": {
         {
             "not": {
                 "field": "field1",
-                "is": "equalTo",
-                "value": 5
+                "equalTo": 5
             }
         }
     }
@@ -534,8 +529,7 @@ The solution to this is to express the `if` constraint as follows. This is not '
         "allOf": [
             {
                 "field": "field1",
-                "is": "equalTo",
-                "value": 5
+                "equalTo": 5
             },
             {
                 "not": {
@@ -548,8 +542,7 @@ The solution to this is to express the `if` constraint as follows. This is not '
     "then": {
         {
             "field": "field2",
-            "is": "equalTo",
-            "value": "a"
+            "equalTo": "a"
         }
     }
 }
@@ -563,8 +556,7 @@ The generator will expand the `if` constraint as follows, to ensure the constrai
         "allOf": [
             {
                 "field": "field1",
-                "is": "equalTo",
-                "value": 5
+                "equalTo": 5
             },
             {
                 "not": {
@@ -577,8 +569,7 @@ The generator will expand the `if` constraint as follows, to ensure the constrai
     "then": {
         {
             "field": "field2",
-            "is": "equalTo",
-            "value": "a"
+            "equalTo": "a"
         }
     },
     "else": {
@@ -586,8 +577,7 @@ The generator will expand the `if` constraint as follows, to ensure the constrai
             {
                 "not": {
                     "field": "field1",
-                    "is": "equalTo",
-                    "value": 5
+                    "equalTo": 5
                 }
             },
             {

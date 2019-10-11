@@ -23,8 +23,7 @@
         {
           "not": {
             "field": "first_name",
-            "is": "equalTo",
-            "value": "Mary"
+            "equalTo": "Mary"
           }
         }
       ]
