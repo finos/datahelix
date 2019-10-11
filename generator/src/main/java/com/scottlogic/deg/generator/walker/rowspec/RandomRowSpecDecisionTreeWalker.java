@@ -1,3 +1,19 @@
+/*
+ * Copyright 2019 Scott Logic Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.scottlogic.deg.generator.walker.rowspec;
 
 import com.google.inject.Inject;
@@ -5,12 +21,12 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagGenerator;
+import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.decisionbased.RowSpecTreeSolver;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -18,16 +34,17 @@ public class RandomRowSpecDecisionTreeWalker implements DecisionTreeWalker {
     private final RowSpecTreeSolver rowSpecTreeSolver;
     private final RowSpecDataBagGenerator rowSpecDataBagGenerator;
     private PotentialRowSpecCount potentialRowSpecCount;
-    private final Random random;
+    private final JavaUtilRandomNumberGenerator random;
 
     @Inject
     public RandomRowSpecDecisionTreeWalker(RowSpecTreeSolver rowSpecTreeSolver,
                                            RowSpecDataBagGenerator rowSpecDataBagGenerator,
-                                           PotentialRowSpecCount potentialRowSpecCount) {
+                                           PotentialRowSpecCount potentialRowSpecCount,
+                                           JavaUtilRandomNumberGenerator random) {
         this.rowSpecTreeSolver = rowSpecTreeSolver;
         this.rowSpecDataBagGenerator = rowSpecDataBagGenerator;
         this.potentialRowSpecCount = potentialRowSpecCount;
-        this.random = new Random();
+        this.random = random;
     }
 
     @Override
@@ -35,15 +52,14 @@ public class RandomRowSpecDecisionTreeWalker implements DecisionTreeWalker {
         if (tree.rootNode.getDecisions().isEmpty()) {
             return generateWithoutRestarting(tree);
         }
-
-        Stream<RowSpec> rowSpecStream = potentialRowSpecCount.lessThanMax(tree) ? getFromCachedRowSpecs(tree): getRowSpecAndRestart(tree);
+        boolean useCache = potentialRowSpecCount.lessThanMax(tree);
+        Stream<RowSpec> rowSpecStream = useCache  ? getFromCachedRowSpecs(tree): getRowSpecAndRestart(tree);
 
         return rowSpecStream.map(this::createDataBag);
     }
 
     private Stream<RowSpec> getFromCachedRowSpecs(DecisionTree tree) {
         List<RowSpec> rowSpecCache = rowSpecTreeSolver.createRowSpecs(tree).collect(Collectors.toList());
-
         return Stream.generate(() -> getRandomRowSpec(rowSpecCache));
     }
 
