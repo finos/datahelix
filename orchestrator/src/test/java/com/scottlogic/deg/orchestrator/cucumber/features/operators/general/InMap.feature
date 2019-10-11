@@ -6,7 +6,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 ### inMap alone ###
   Scenario: Running an 'inMap'
     Given the following fields exist:
-      |Home Nation |
+      |HomeNation  |
       |Capital     |
     And the file "testFile" contains the following data:
       |Country           |Capital    |
@@ -14,12 +14,12 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       |Northern Ireland  |Belfast    |
       |Scotland          |Edinburgh  |
       |Wales             |Cardiff    |
-    And Home Nation has type "string"
+    And HomeNation has type "string"
     And Capital has type "string"
-    And Home Nation is from Country in testFile
+    And HomeNation is from Country in testFile
     And Capital is from Capital in testFile
     Then the following data should be generated:
-      |Home Nation         |Capital      |
+      |HomeNation          |Capital      |
       |"England"           |"London"     |
       |"Northern Ireland"  |"Belfast"    |
       |"Scotland"          |"Edinburgh"  |
@@ -27,7 +27,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 
   Scenario: Running an 'inMap' with text a restriction
     Given the following fields exist:
-      |Home Nation |
+      |HomeNation  |
       |Capital     |
     And the file "testFile" contains the following data:
       |Country           |Capital    |
@@ -35,25 +35,25 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       |Northern Ireland  |Belfast    |
       |Scotland          |Edinburgh  |
       |Wales             |Cardiff    |
-    And Home Nation has type "string"
+    And HomeNation has type "string"
     And Capital has type "string"
-    And Home Nation is from Country in testFile
+    And HomeNation is from Country in testFile
     And Capital is from Capital in testFile
     When Capital is matching regex /^[BE].*/
-    When Home Nation is matching regex /^[S].*/
+    When HomeNation is matching regex /^[S].*/
     Then the following data should be generated:
-      |Home Nation         |Capital      |
+      |HomeNation         |Capital      |
       |"Scotland"          |"Edinburgh"  |
 
 
   Scenario: Running an 'inMap' multiple maps
     Given the following fields exist:
-      |Home Nation |
+      |HomeNation  |
       |Capital     |
       |Foo         |
       |Bar         |
     And the combination strategy is exhaustive
-    And Home Nation is anything but null
+    And HomeNation is anything but null
     And Capital is anything but null
     And Foo is anything but null
     And Bar is anything but null
@@ -67,11 +67,11 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       |Foo   |Bar  |
       |1     |one  |
       |2     |two  |
-    And Home Nation has type "string"
+    And HomeNation has type "string"
     And Capital has type "string"
     And Foo has type "decimal"
     And Bar has type "string"
-    And Home Nation is from Country in testFile
+    And HomeNation is from Country in testFile
     And Capital is from Capital in testFile
     And Foo is from Foo in testFile2
     And Bar is from Bar in testFile2

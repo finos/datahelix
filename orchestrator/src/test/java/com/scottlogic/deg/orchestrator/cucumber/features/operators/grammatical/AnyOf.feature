@@ -13,7 +13,7 @@ Feature: Values can be specified by using any of to set multiple constraints
       | "Test3" |
       | "Test4" |
       | "Test5" |
-    And foo is matching regex "[a-b]{4}"
+    And foo is matching regex /[a-b]{4}/
     And foo has type "string"
     And foo is anything but null
     Then the following data should be generated:
@@ -50,7 +50,7 @@ Feature: Values can be specified by using any of to set multiple constraints
         | "Test3" |
         | "Test4" |
         | "Test5" |
-      And foo is matching regex "[a-b]{4}"
+      And foo is matching regex /[a-b]{4}/
     And Any Of the next 2 constraints
     And foo is equal to "Test6"
     And foo is in set:

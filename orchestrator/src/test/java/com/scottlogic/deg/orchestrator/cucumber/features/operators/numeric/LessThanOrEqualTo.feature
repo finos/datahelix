@@ -4,24 +4,6 @@ Feature: User can specify that a numeric value is lower than, or equal to, a spe
     Given the generation strategy is full
     And there is a field foo
 
-  Scenario: Running a 'lessThanOrEqualTo' request that includes a string should fail
-    Given foo is less than or equal to "Zero"
-    And foo has type "integer"
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be an Number but was a String with value `Zero`"
-    And no data is created
-
-  Scenario: Running a 'lessThanOrEqualTo' request that includes an empty string should fail
-    Given foo is less than or equal to ""
-    And foo has type "integer"
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be an Number but was a String with value ``"
-    And no data is created
-
-  Scenario: Running a 'lessThanOrEqualTo' request that specifies null should be unsuccessful
-    Given foo is less than or equal to null
-    And foo has type "integer"
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be set to a value"
-    And no data is created
-
   Scenario: lessThanOrEqualTo run against a non contradicting not lessThanOrEqualToOrEqualTo should be successful
     Given foo is less than or equal to 5
     And foo is anything but less than or equal to 3

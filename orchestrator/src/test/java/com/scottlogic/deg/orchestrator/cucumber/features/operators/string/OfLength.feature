@@ -68,35 +68,6 @@ Feature: User can specify the length of generated string data using 'ofLength'
       | 1.000000001 |
       | 1.9         |
 
-  Scenario Outline: Running an 'ofLength' request that includes a value that is not a valid number should fail with an error
-    Given foo is of length <length>
-    And foo is in set:
-      | "a" |
-    Then the profile is invalid because "(Field \[foo\]: Couldn't recognise 'value' property, it must be an Integer but was a String with value `.*`)|(Field \[foo\]: Cannot create an StringHasLengthConstraint for field 'foo' with a a negative length.)|(Field \[foo\]: ofLength constraint must have an operand/value >= 0, currently is -?\d+)"
-    And no data is created
-    Examples:
-      | length                    |
-      | -1                        |
-      | "1"                       |
-      | "1.1"                     |
-      | "1,000"                   |
-      | "100,00"                  |
-      | "010"                     |
-      | "£1.00"                   |
-      | "-1"                      |
-      | "+1"                      |
-      | "Infinity"                |
-      | "NaN"                     |
-      | "nil"                     |
-      | "$1.00"                   |
-      | "1E+02"                   |
-      | "001 000"                 |
-      | "2010-01-01T00:00:00.000" |
-      | "2010-01-01T00:00"        |
-      | "1st Jan 2010"            |
-      | "a"                       |
-      | ""                        |
-
 # COMBINATION OF CONSTRAINTS #
 
   Scenario: ofLength run against a non contradicting ofLength should be successful

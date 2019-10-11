@@ -93,11 +93,6 @@ Feature: User can specify that a datetime date is lower than, but not equal to, 
       | foo  |
       | null |
 
-  Scenario: Running a 'before' request that specifies null should be unsuccessful
-    Given foo is before null
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be set to a value"
-    And no data is created
-
   Scenario: Running a 'before' request that specifies the highest valid system date should be unsuccessful
     Given foo is before 0000-01-01T00:00:00.000Z
     Then the profile is invalid because "Field \[foo\]: Dates must be between 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z"

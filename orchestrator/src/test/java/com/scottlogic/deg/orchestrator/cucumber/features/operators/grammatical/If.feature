@@ -529,7 +529,7 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "string"
     And bar has type "string"
     When If Then and Else are described below
-    And foo is matching regex "[a-z]{1}"
+    And foo is matching regex /[a-z]{1}/
     And bar is equal to "AA"
     And bar is equal to "10"
     Then the following data should be generated:
@@ -556,7 +556,7 @@ Feature: Values can be specified by using if, then and else constraints
     And bar has type "string"
     When If Then and Else are described below
     And foo is equal to "1"
-    And bar is matching regex "[A-Z]{2}"
+    And bar is matching regex /[A-Z]{2}/
     And bar is equal to "10"
     Then the following data should be generated:
       | foo | bar  |
@@ -584,7 +584,7 @@ Feature: Values can be specified by using if, then and else constraints
     When If Then and Else are described below
     And foo is equal to "1"
     And bar is equal to "AA"
-    And bar is matching regex "[0-9]{2}"
+    And bar is matching regex /[0-9]{2}/
     Then the following data should be generated:
       | foo | bar  |
       | "1" | "AA" |
@@ -611,7 +611,7 @@ Feature: Values can be specified by using if, then and else constraints
       | "BB" |
     And bar is anything but null
     When If Then and Else are described below
-    And foo is matching regex "[0-9]{2}"
+    And foo is matching regex /[0-9]{2}/
     And bar is equal to "AA"
     And bar is equal to "10"
     Then the following data should be generated:
@@ -638,7 +638,7 @@ Feature: Values can be specified by using if, then and else constraints
     And bar has type "string"
     When If Then and Else are described below
     And foo is equal to "a"
-    And bar is matching regex "C"
+    And bar is matching regex /C/
     And bar is equal to "10"
     Then the following data should be generated:
       | foo | bar  |
@@ -664,7 +664,7 @@ Feature: Values can be specified by using if, then and else constraints
     When If Then and Else are described below
     And foo is equal to "a"
     And bar is equal to "BB"
-    And bar is matching regex "WRONG"
+    And bar is matching regex /WRONG/
     Then the following data should be generated:
       | foo | bar  |
       | "a" | "BB" |
@@ -685,7 +685,7 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "string"
     And bar has type "string"
     When If Then and Else are described below
-    And foo is containing regex "[1]{1}"
+    And foo is containing regex /[1]{1}/
     And bar is equal to "AA"
     And bar is equal to "10"
     Then the following data should be generated:
@@ -712,7 +712,7 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     When If Then and Else are described below
     And foo is equal to "1"
-    And bar is containing regex "[0]{1}"
+    And bar is containing regex /[0]{1}/
     And bar is equal to "AA"
     Then the following data should be generated:
       | foo  | bar  |
@@ -740,7 +740,7 @@ Feature: Values can be specified by using if, then and else constraints
     When If Then and Else are described below
     And foo is equal to "1"
     And bar is equal to "BB"
-    And bar is containing regex "[0]{1}"
+    And bar is containing regex /[0]{1}/
     Then the following data should be generated:
       | foo  | bar  |
       | "1"  | "BB" |
@@ -767,7 +767,7 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "string"
     And bar has type "string"
     When If Then and Else are described below
-    And foo is containing regex "[🚫]{1}"
+    And foo is containing regex /[🚫]{1}/
     And bar is equal to "AA"
     And bar is equal to "10"
     Then the following data should be generated:
@@ -794,7 +794,7 @@ Feature: Values can be specified by using if, then and else constraints
     And bar has type "string"
     When If Then and Else are described below
     And foo is equal to "1"
-    And bar is containing regex "[🚫]{1}"
+    And bar is containing regex /[🚫]{1}/
     And bar is equal to "10"
     Then the following data should be generated:
       | foo  | bar  |
@@ -820,7 +820,7 @@ Feature: Values can be specified by using if, then and else constraints
     When If Then and Else are described below
     And foo is equal to "1"
     And bar is equal to "10"
-    And bar is containing regex "[🚫]{1}"
+    And bar is containing regex /[🚫]{1}/
     Then the following data should be generated:
       | foo | bar  |
       | "1" | "10" |
@@ -1815,9 +1815,9 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "datetime"
     And bar has type "datetime"
     When If Then and Else are described below
-    And foo is after "2018-01-02T00:00:00.000Z"
-    And bar is equal to "2010-01-01T00:00:00.000Z"
-    And bar is equal to "2010-01-05T00:00:00.000Z"
+    And foo is after 2018-01-02T00:00:00.000Z
+    And bar is equal to 2010-01-01T00:00:00.000Z
+    And bar is equal to 2010-01-05T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
@@ -1846,9 +1846,9 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "datetime"
     And bar has type "datetime"
     When If Then and Else are described below
-    And foo is equal to "2018-02-01T00:00:00.000Z"
-    And bar is after "2010-01-04T00:00:00.000Z"
-    And bar is equal to "2010-01-01T00:00:00.000Z"
+    And foo is equal to 2018-02-01T00:00:00.000Z
+    And bar is after 2010-01-04T00:00:00.000Z
+    And bar is equal to 2010-01-01T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
@@ -1877,9 +1877,9 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "datetime"
     And bar has type "datetime"
     When If Then and Else are described below
-    And foo is equal to "2018-01-01T00:00:00.000Z"
-    And bar is equal to "2010-01-01T00:00:00.000Z"
-    And bar is after "2010-01-04T00:00:00.000Z"
+    And foo is equal to 2018-01-01T00:00:00.000Z
+    And bar is equal to 2010-01-01T00:00:00.000Z
+    And bar is after 2010-01-04T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
@@ -1908,9 +1908,9 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "datetime"
     And bar has type "datetime"
     When If Then and Else are described below
-    And foo is equal to "2018-01-01T00:00:00.000Z"
-    And bar is after "2020-01-01T00:00:00.000Z"
-    And bar is equal to "2010-01-04T00:00:00.000Z"
+    And foo is equal to 2018-01-01T00:00:00.000Z
+    And bar is after 2020-01-01T00:00:00.000Z
+    And bar is equal to 2010-01-04T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-02-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
@@ -1938,9 +1938,9 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "datetime"
     And bar has type "datetime"
     When If Then and Else are described below
-    And foo is equal to "2018-01-01T00:00:00.000Z"
-    And bar is equal to "2010-01-01T00:00:00.000Z"
-    And bar is after "2020-01-01T00:00:00.000Z"
+    And foo is equal to 2018-01-01T00:00:00.000Z
+    And bar is equal to 2010-01-01T00:00:00.000Z
+    And bar is after 2020-01-01T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
@@ -1964,9 +1964,9 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "datetime"
     And bar has type "datetime"
     When If Then and Else are described below
-    And foo is after or at "2018-05-01T00:00:00.000Z"
-    And bar is equal to "2010-01-05T00:00:00.000Z"
-    And bar is equal to "2010-01-01T00:00:00.000Z"
+    And foo is after or at 2018-05-01T00:00:00.000Z
+    And bar is equal to 2010-01-05T00:00:00.000Z
+    And bar is equal to 2010-01-01T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
@@ -1995,9 +1995,9 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "datetime"
     And bar has type "datetime"
     When If Then and Else are described below
-    And foo is equal to "2018-05-01T00:00:00.000Z"
-    And bar is after or at "2010-01-04T00:00:00.000Z"
-    And bar is equal to "2010-01-01T00:00:00.000Z"
+    And foo is equal to 2018-05-01T00:00:00.000Z
+    And bar is after or at 2010-01-04T00:00:00.000Z
+    And bar is equal to 2010-01-01T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
@@ -2027,9 +2027,9 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "datetime"
     And bar has type "datetime"
     When If Then and Else are described below
-    And foo is equal to "2018-06-01T00:00:00.000Z"
-    And bar is equal to "2010-01-01T00:00:00.000Z"
-    And bar is after or at "2010-01-04T00:00:00.000Z"
+    And foo is equal to 2018-06-01T00:00:00.000Z
+    And bar is equal to 2010-01-01T00:00:00.000Z
+    And bar is after or at 2010-01-04T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
@@ -2063,9 +2063,9 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "datetime"
     And bar has type "datetime"
     When If Then and Else are described below
-    And foo is equal to "2018-01-01T00:00:00.000Z"
-    And bar is after or at "2020-01-01T00:00:00.000Z"
-    And bar is equal to "2010-01-05T00:00:00.000Z"
+    And foo is equal to 2018-01-01T00:00:00.000Z
+    And bar is after or at 2020-01-01T00:00:00.000Z
+    And bar is equal to 2010-01-05T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-02-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
@@ -2093,9 +2093,9 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "datetime"
     And bar has type "datetime"
     When If Then and Else are described below
-    And foo is equal to "2018-01-01T00:00:00.000Z"
-    And bar is equal to "2010-01-01T00:00:00.000Z"
-    And bar is after or at "2020-01-05T00:00:00.000Z"
+    And foo is equal to 2018-01-01T00:00:00.000Z
+    And bar is equal to 2010-01-01T00:00:00.000Z
+    And bar is after or at 2020-01-05T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
@@ -2119,9 +2119,9 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "datetime"
     And bar has type "datetime"
     When If Then and Else are described below
-    And foo is before "2018-02-01T00:00:00.000Z"
-    And bar is equal to "2010-01-01T00:00:00.000Z"
-    And bar is equal to "2010-01-05T00:00:00.000Z"
+    And foo is before 2018-02-01T00:00:00.000Z
+    And bar is equal to 2010-01-01T00:00:00.000Z
+    And bar is equal to 2010-01-05T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
@@ -2150,9 +2150,9 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "datetime"
     And bar has type "datetime"
     When If Then and Else are described below
-    And foo is equal to "2018-01-01T00:00:00.000Z"
-    And bar is before "2010-01-03T00:00:00.000Z"
-    And bar is equal to "2010-01-05T00:00:00.000Z"
+    And foo is equal to 2018-01-01T00:00:00.000Z
+    And bar is before 2010-01-03T00:00:00.000Z
+    And bar is equal to 2010-01-05T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
@@ -2182,9 +2182,9 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "datetime"
     And bar has type "datetime"
     When If Then and Else are described below
-    And foo is equal to "2018-01-01T00:00:00.000Z"
-    And bar is equal to "2010-01-05T00:00:00.000Z"
-    And bar is before "2010-01-03T00:00:00.000Z"
+    And foo is equal to 2018-01-01T00:00:00.000Z
+    And bar is equal to 2010-01-05T00:00:00.000Z
+    And bar is before 2010-01-03T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
@@ -2218,9 +2218,9 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "datetime"
     And bar has type "datetime"
     When If Then and Else are described below
-    And foo is equal to "2018-01-01T00:00:00.000Z"
-    And bar is before "2010-01-01T00:00:00.000Z"
-    And bar is equal to "2010-01-03T00:00:00.000Z"
+    And foo is equal to 2018-01-01T00:00:00.000Z
+    And bar is before 2010-01-01T00:00:00.000Z
+    And bar is equal to 2010-01-03T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-02-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
@@ -2248,9 +2248,9 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "datetime"
     And bar has type "datetime"
     When If Then and Else are described below
-    And foo is equal to "2018-01-01T00:00:00.000Z"
-    And bar is equal to "2010-01-01T00:00:00.000Z"
-    And bar is before "2010-01-01T00:00:00.000Z"
+    And foo is equal to 2018-01-01T00:00:00.000Z
+    And bar is equal to 2010-01-01T00:00:00.000Z
+    And bar is before 2010-01-01T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
@@ -2274,9 +2274,9 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "datetime"
     And bar has type "datetime"
     When If Then and Else are described below
-    And foo is before or at "2018-02-01T00:00:00.000Z"
-    And bar is equal to "2010-01-01T00:00:00.000Z"
-    And bar is equal to "2010-01-05T00:00:00.000Z"
+    And foo is before or at 2018-02-01T00:00:00.000Z
+    And bar is equal to 2010-01-01T00:00:00.000Z
+    And bar is equal to 2010-01-05T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
@@ -2305,9 +2305,9 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "datetime"
     And bar has type "datetime"
     When If Then and Else are described below
-    And foo is equal to "2018-01-01T00:00:00.000Z"
-    And bar is before or at "2010-01-03T00:00:00.000Z"
-    And bar is equal to "2010-01-05T00:00:00.000Z"
+    And foo is equal to 2018-01-01T00:00:00.000Z
+    And bar is before or at 2010-01-03T00:00:00.000Z
+    And bar is equal to 2010-01-05T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
@@ -2338,9 +2338,9 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "datetime"
     And bar has type "datetime"
     When If Then and Else are described below
-    And foo is equal to "2018-01-01T00:00:00.000Z"
-    And bar is equal to "2010-01-05T00:00:00.000Z"
-    And bar is before or at "2010-01-03T00:00:00.000Z"
+    And foo is equal to 2018-01-01T00:00:00.000Z
+    And bar is equal to 2010-01-05T00:00:00.000Z
+    And bar is before or at 2010-01-03T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
@@ -2379,9 +2379,9 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "datetime"
     And bar has type "datetime"
     When If Then and Else are described below
-    And foo is equal to "2018-01-01T00:00:00.000Z"
-    And bar is before or at "2009-01-01T00:00:00.000Z"
-    And bar is equal to "2010-01-03T00:00:00.000Z"
+    And foo is equal to 2018-01-01T00:00:00.000Z
+    And bar is before or at 2009-01-01T00:00:00.000Z
+    And bar is equal to 2010-01-03T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-02-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
@@ -2409,9 +2409,9 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "datetime"
     And bar has type "datetime"
     When If Then and Else are described below
-    And foo is equal to "2018-01-01T00:00:00.000Z"
-    And bar is equal to "2010-01-01T00:00:00.000Z"
-    And bar is before or at "2009-01-01T00:00:00.000Z"
+    And foo is equal to 2018-01-01T00:00:00.000Z
+    And bar is equal to 2010-01-01T00:00:00.000Z
+    And bar is before or at 2009-01-01T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
