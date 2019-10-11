@@ -118,7 +118,7 @@ Here is a list of two rules comprised of one constraint each:
         }
       ]
 
-```
+``'
 
 These three sections are combined to form the [complete profile](#Example-Profile).
 
