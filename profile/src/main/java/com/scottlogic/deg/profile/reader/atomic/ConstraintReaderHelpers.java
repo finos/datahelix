@@ -89,7 +89,7 @@ public class ConstraintReaderHelpers {
         throw new InvalidProfileException("Profile is invalid: no type known for " + type);
 
     }
-
+  
     public static DateTimeGranularity getDateTimeGranularity(String granularity) {
         String offsetUnitUpperCase = granularity.toUpperCase();
         boolean workingDay = offsetUnitUpperCase.equals("WORKING DAYS");

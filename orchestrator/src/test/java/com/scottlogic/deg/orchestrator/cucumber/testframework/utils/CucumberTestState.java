@@ -18,17 +18,16 @@ package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.scottlogic.deg.common.profile.SpecificFieldType;
+import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
-import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 import com.scottlogic.deg.profile.dto.FieldDTO;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
-import static com.scottlogic.deg.common.profile.FieldBuilder.createInternalField;
 
 /**
  * Class to represent the state during cucumber test running and execution
@@ -247,11 +246,11 @@ public class CucumberTestState {
             }).collect(Collectors.toList());
     }
 
-    public void setFieldType(String fieldName, String types) {
+    public void setFieldType(String fieldName, String type) {
         profileFields = profileFields.stream()
             .map(fieldDTO -> {
                 if (fieldDTO.name.equals(fieldName)) {
-                    fieldDTO.type = types;
+                    fieldDTO.type = SpecificFieldType.from(type);
                 }
                 return fieldDTO;
             }).collect(Collectors.toList());
