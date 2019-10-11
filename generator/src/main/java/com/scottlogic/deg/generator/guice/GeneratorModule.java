@@ -68,5 +68,8 @@ public class GeneratorModule extends AbstractModule {
 
         bind(JavaUtilRandomNumberGenerator.class)
             .toInstance(new JavaUtilRandomNumberGenerator(OffsetDateTime.now().getNano()));
+        bind(int.class)
+            .annotatedWith(Names.named("config:internalRandomRowSpecStorage"))
+            .toInstance(256);
     }
 }

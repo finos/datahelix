@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.profile.reader.atomic;
 
+import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.common.profile.constraintdetail.DateTimeGranularity;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 
@@ -61,6 +62,34 @@ public class ConstraintReaderHelpers {
         }
     }
 
+    public static FieldType getFieldType(String type) {
+        if (type == null) {
+            return null;
+        }
+
+        switch (type) {
+            case "decimal":
+            case "integer":
+                return FieldType.NUMERIC;
+
+            case "string":
+            case "ISIN":
+            case "SEDOL":
+            case "CUSIP":
+            case "RIC":
+            case "firstname":
+            case "lastname":
+            case "fullname":
+                return FieldType.STRING;
+
+            case "datetime":
+                return FieldType.DATETIME;
+        }
+
+        throw new InvalidProfileException("Profile is invalid: no type known for " + type);
+
+    }
+  
     public static DateTimeGranularity getDateTimeGranularity(String granularity) {
         String offsetUnitUpperCase = granularity.toUpperCase();
         boolean workingDay = offsetUnitUpperCase.equals("WORKING DAYS");

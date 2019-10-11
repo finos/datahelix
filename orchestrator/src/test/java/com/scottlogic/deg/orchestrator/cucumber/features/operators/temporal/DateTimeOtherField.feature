@@ -13,14 +13,7 @@ Feature: running datetimes related to otherfield datetimes
   Scenario: Running an "afterField" constraint allows one date to be always later than another
     Given foo is after 2018-09-01T00:00:00.000Z
     And bar is before 2018-09-01T00:00:00.004Z
-    And there is a constraint:
-    """
-        {
-          "field": "bar",
-          "is": "after",
-          "otherField": "foo"
-        }
-    """
+    And bar is after field foo
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-09-01T00:00:00.001Z | 2018-09-01T00:00:00.002Z |
@@ -31,14 +24,7 @@ Feature: running datetimes related to otherfield datetimes
   Scenario: Running an "afterOrAtField" constraint allows one date to be always later than or equal to another
     Given foo is after 2018-09-01T00:00:00.000Z
     And bar is before 2018-09-01T00:00:00.004Z
-    And there is a constraint:
-      """
-        {
-          "field": "bar",
-          "is": "afterOrAt",
-          "otherField": "foo"
-        }
-      """
+    And bar is after or at field foo
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-09-01T00:00:00.001Z | 2018-09-01T00:00:00.001Z |
@@ -52,14 +38,7 @@ Feature: running datetimes related to otherfield datetimes
   Scenario: Running a "beforeField" constraint allows one date to be always earlier than another
     Given the generator can generate at most 3 rows
     And bar is before 0001-01-01T00:00:00.003Z
-    And there is a constraint:
-      """
-        {
-          "field": "foo",
-          "is": "before",
-          "otherField": "bar"
-        }
-      """
+    And foo is before field bar
     Then the following data should be generated:
       | foo                      | bar                      |
       | 0001-01-01T00:00:00.000Z | 0001-01-01T00:00:00.001Z |
@@ -69,14 +48,7 @@ Feature: running datetimes related to otherfield datetimes
 
   Scenario: Running a "beforeOrAtField" constraint allows one date to be always earlier than or equal to another
     And bar is before 0001-01-01T00:00:00.003Z
-    And there is a constraint:
-      """
-        {
-          "field": "foo",
-          "is": "beforeOrAt",
-          "otherField": "bar"
-        }
-      """
+    And foo is before or at field bar
     Then the following data should be generated:
       | foo                      | bar                      |
       | 0001-01-01T00:00:00.000Z | 0001-01-01T00:00:00.000Z |
@@ -90,14 +62,7 @@ Feature: running datetimes related to otherfield datetimes
   Scenario: Running an "equalToField" constraint allows one date to be always equal to another
     Given foo is equal to 2018-09-01T00:00:00.000Z
     And the generator can generate at most 1 rows
-    And there is a constraint:
-      """
-        {
-          "field": "foo",
-          "is": "equalTo",
-          "otherField": "bar"
-        }
-      """
+    And foo is equal to field bar
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-09-01T00:00:00.000Z | 2018-09-01T00:00:00.000Z |
