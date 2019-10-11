@@ -14,26 +14,21 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.dtos.constraints.atomic.general;
+package com.scottlogic.deg.profile.dtos.constraints.atomic.relatable;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
+import com.scottlogic.deg.profile.common.ConstraintType;
+import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 
-import java.util.Collection;
-
-@JsonDeserialize(as = InSetConstraintDTO.class)
-public class InSetConstraintDTO extends GeneralConstraintDTO
+@JsonDeserialize(as = AfterOrAtConstraintDTO.class)
+public class AfterOrAtConstraintDTO extends RelatableConstraintDTO
 {
-    public static final String PROPERTY_NAME = "inSet";
+    @JsonProperty(ConstraintTypeJsonProperty.AFTER_OR_AT)
+    public String value;
 
-    @JsonProperty(PROPERTY_NAME)
-    public Collection<Object> values;
-    public String file;
-
-    @Override
-    public ConstraintType getType()
+    public AfterOrAtConstraintDTO()
     {
-        return ConstraintType.IN_SET;
+        super(ConstraintType.AFTER_OR_AT);
     }
 }

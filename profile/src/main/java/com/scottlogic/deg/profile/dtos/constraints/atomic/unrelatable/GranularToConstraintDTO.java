@@ -14,23 +14,21 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.dtos.constraints.atomic.general;
+package com.scottlogic.deg.profile.dtos.constraints.atomic.unrelatable;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
+import com.scottlogic.deg.profile.common.ConstraintType;
+import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 
 @JsonDeserialize(as = GranularToConstraintDTO.class)
-public class GranularToConstraintDTO extends GeneralConstraintDTO
+public class GranularToConstraintDTO extends UnrelatableConstraintDTO
 {
-    public static final String PROPERTY_NAME = "beforeOrAt";
-
-    @JsonProperty(PROPERTY_NAME)
+    @JsonProperty(ConstraintTypeJsonProperty.GRANULAR_TO)
     public Object value;
 
-    @Override
-    public ConstraintType getType()
+    public GranularToConstraintDTO()
     {
-        return ConstraintType.GRANULAR_TO;
+        super(ConstraintType.GRANULAR_TO);
     }
 }

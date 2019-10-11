@@ -14,23 +14,21 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.dtos.constraints.atomic.chronological;
+package com.scottlogic.deg.profile.dtos.constraints.atomic.relatable;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
+import com.scottlogic.deg.profile.common.ConstraintType;
+import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 
-@JsonDeserialize(as = BeforeConstraintDTO.class)
-public class BeforeConstraintDTO extends ChronologicalConstraintDTO
+@JsonDeserialize(as = EqualToConstraintDTO.class)
+public class EqualToConstraintDTO extends RelatableConstraintDTO
 {
-    public static final String PROPERTY_NAME = "before";
+    @JsonProperty(ConstraintTypeJsonProperty.EQUAL_TO)
+    public Object value;
 
-    @JsonProperty(PROPERTY_NAME)
-    public String value;
-
-    @Override
-    public ConstraintType getType()
+    public EqualToConstraintDTO()
     {
-        return ConstraintType.BEFORE;
+        super(ConstraintType.EQUAL_TO);
     }
 }

@@ -14,23 +14,21 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.dtos.constraints.atomic.texual;
+package com.scottlogic.deg.profile.dtos.constraints.atomic.relatable;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
+import com.scottlogic.deg.profile.common.ConstraintType;
+import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 
-@JsonDeserialize(as = ShorterThanConstraintDTO.class)
-public class ShorterThanConstraintDTO extends TextualConstraintDTO
+@JsonDeserialize(as = BeforeConstraintDTO.class)
+public class BeforeConstraintDTO extends RelatableConstraintDTO
 {
-    public static final String PROPERTY_NAME = "shorterThan";
+    @JsonProperty(ConstraintTypeJsonProperty.BEFORE)
+    public String value;
 
-    @JsonProperty(PROPERTY_NAME)
-    public int value;
-
-    @Override
-    public ConstraintType getType()
+    public BeforeConstraintDTO()
     {
-        return ConstraintType.SHORTER_THAN;
+        super(ConstraintType.BEFORE);
     }
 }

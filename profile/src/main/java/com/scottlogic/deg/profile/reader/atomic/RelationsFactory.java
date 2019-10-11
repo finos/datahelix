@@ -8,27 +8,24 @@ import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularityFact
 import com.scottlogic.deg.common.util.defaults.DateTimeDefaults;
 import com.scottlogic.deg.common.util.defaults.NumericDefaults;
 import com.scottlogic.deg.generator.fieldspecs.relations.*;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.AtomicConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.general.EqualToConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.relatable.RelatableConstraintDTO;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 
 import static com.scottlogic.deg.profile.reader.atomic.ConstraintReaderHelpers.getDateTimeGranularity;
 
 public class RelationsFactory
 {
-    public static FieldSpecRelations create(AtomicConstraintDTO dto, ProfileFields fields)
+    public static FieldSpecRelations create(RelatableConstraintDTO dto, ProfileFields fields)
     {
         Field main = fields.getByName(dto.field);
-        Field other = fields.getByName(dto.getDependency());
+        Field other = fields.getByName(dto.otherField);
         switch (dto.getType())
         {
             case EQUAL_TO:
-                Granularity offsetGranularity = getOffsetUnit(main.getType(), ((EqualToConstraintDTO) dto).offsetUnit);
-                if (offsetGranularity != null)
-                {
-                    return new EqualToOffsetRelation(main, other, offsetGranularity, ((EqualToConstraintDTO) dto).offset);
-                }
-                return new EqualToRelation(main, other);
+                Granularity offsetGranularity = getOffsetUnit(main.getType(), dto.offsetUnit);
+                return offsetGranularity != null
+                        ? new EqualToOffsetRelation(main, other, offsetGranularity, dto.offset)
+                        : new EqualToRelation(main, other);
             case AFTER:
                 return new AfterRelation(main, other, false, DateTimeDefaults.get());
             case AFTER_OR_AT:

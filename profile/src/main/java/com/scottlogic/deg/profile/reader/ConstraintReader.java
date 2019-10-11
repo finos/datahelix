@@ -31,19 +31,8 @@ import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalC
 import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.AtomicConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.chronological.AfterConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.chronological.AfterOrAtConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.chronological.BeforeConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.chronological.BeforeOrAtConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.general.EqualToConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.general.GranularToConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.general.InMapConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.general.InSetConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.numerical.GreaterThanConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.numerical.GreaterThanOrEqualToConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.numerical.LessThanConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.numerical.LessThanOrEqualToConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.texual.*;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.relatable.*;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.unrelatable.*;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.*;
 import com.scottlogic.deg.profile.reader.atomic.RelationsFactory;
 
@@ -85,13 +74,13 @@ public class ConstraintReader
         if (dto == null) throw new InvalidProfileException("Constraint is null");
         if (dto instanceof AtomicConstraintDTO)
         {
-            AtomicConstraintDTO AtomicConstraintDTO = (AtomicConstraintDTO) dto;
-            Field field = profileFields.getByName(AtomicConstraintDTO.field);
-            if (AtomicConstraintDTO.getDependency() != null) return RelationsFactory.create(AtomicConstraintDTO, profileFields);
-            switch (AtomicConstraintDTO.getType())
+            AtomicConstraintDTO atomicConstraintDTO = (AtomicConstraintDTO) dto;
+            Field field = profileFields.getByName(atomicConstraintDTO.field);
+            if (atomicConstraintDTO.hasRelation()) return RelationsFactory.create((RelatableConstraintDTO)atomicConstraintDTO, profileFields);
+            switch (atomicConstraintDTO.getType())
             {
                 case EQUAL_TO:
-                    EqualToConstraintDTO equalToConstraintDTO = (EqualToConstraintDTO) AtomicConstraintDTO;
+                    EqualToConstraintDTO equalToConstraintDTO = (EqualToConstraintDTO) atomicConstraintDTO;
                     switch (field.getType())
                     {
                         case DATETIME:
@@ -102,10 +91,10 @@ public class ConstraintReader
                             return new EqualToConstraint(field, equalToConstraintDTO.value);
                     }
                 case IN_SET:
-                    InSetConstraintDTO inSetConstraintDTO = (InSetConstraintDTO) AtomicConstraintDTO;
-                    return new IsInSetConstraint(field, inSetConstraintDTO.file != null
-                            ? fileReader.setFromFile(inSetConstraintDTO.file)
-                            : DistributedList.uniform(inSetConstraintDTO.values.stream().distinct()
+                    InSetConstraintDTO inSetConstraintDTO = (InSetConstraintDTO) atomicConstraintDTO;
+                    return new IsInSetConstraint(field, inSetConstraintDTO.isFromFile()
+                            ? fileReader.setFromFile(((InSetFromFileConstraintDTO)inSetConstraintDTO).file)
+                            : DistributedList.uniform(((InSetOfValuesConstraintDTO)inSetConstraintDTO).values.stream().distinct()
                             .map(value ->
                             {
                                 switch (field.getType())
@@ -120,43 +109,43 @@ public class ConstraintReader
                             })
                             .collect(Collectors.toList())));
                 case IN_MAP:
-                    InMapConstraintDTO inMapConstraintDTO = (InMapConstraintDTO) AtomicConstraintDTO;
+                    InMapConstraintDTO inMapConstraintDTO = (InMapConstraintDTO) atomicConstraintDTO;
                     return new InMapRelation(field, profileFields.getByName(inMapConstraintDTO.file), fileReader.listFromMapFile(inMapConstraintDTO.file, inMapConstraintDTO.key));
                 case NULL:
-                    return new IsNullConstraint(profileFields.getByName(AtomicConstraintDTO.field));
+                    return new IsNullConstraint(profileFields.getByName(atomicConstraintDTO.field));
                 case MATCHES_REGEX:
-                    return new MatchesRegexConstraint(profileFields.getByName(AtomicConstraintDTO.field), pattern(((MatchesRegexConstraintDTO) AtomicConstraintDTO).value));
+                    return new MatchesRegexConstraint(profileFields.getByName(atomicConstraintDTO.field), pattern(((MatchesRegexConstraintDTO) atomicConstraintDTO).value));
                 case CONTAINS_REGEX:
-                    return new ContainsRegexConstraint(profileFields.getByName(AtomicConstraintDTO.field), pattern(((ContainsRegexConstraintDTO) AtomicConstraintDTO).value));
+                    return new ContainsRegexConstraint(profileFields.getByName(atomicConstraintDTO.field), pattern(((ContainsRegexConstraintDTO) atomicConstraintDTO).value));
                 case OF_LENGTH:
-                    return new StringHasLengthConstraint(profileFields.getByName(AtomicConstraintDTO.field), integer(((OfLengthConstraintDTO) AtomicConstraintDTO).value));
+                    return new StringHasLengthConstraint(profileFields.getByName(atomicConstraintDTO.field), integer(((OfLengthConstraintDTO) atomicConstraintDTO).value));
                 case SHORTER_THAN:
-                    return new IsStringShorterThanConstraint(profileFields.getByName(AtomicConstraintDTO.field), integer(((ShorterThanConstraintDTO) AtomicConstraintDTO).value));
+                    return new IsStringShorterThanConstraint(profileFields.getByName(atomicConstraintDTO.field), integer(((ShorterThanConstraintDTO) atomicConstraintDTO).value));
                 case LONGER_THAN:
-                    return new IsStringLongerThanConstraint(profileFields.getByName(AtomicConstraintDTO.field), integer(((LongerThanConstraintDTO) AtomicConstraintDTO).value));
+                    return new IsStringLongerThanConstraint(profileFields.getByName(atomicConstraintDTO.field), integer(((LongerThanConstraintDTO) atomicConstraintDTO).value));
                 case GREATER_THAN:
-                    return new IsGreaterThanConstantConstraint(profileFields.getByName(AtomicConstraintDTO.field), NumberUtils.coerceToBigDecimal(((GreaterThanConstraintDTO) AtomicConstraintDTO).value));
+                    return new IsGreaterThanConstantConstraint(profileFields.getByName(atomicConstraintDTO.field), NumberUtils.coerceToBigDecimal(((GreaterThanConstraintDTO) atomicConstraintDTO).value));
                 case GREATER_THAN_OR_EQUAL_TO:
-                    return new IsGreaterThanOrEqualToConstantConstraint(profileFields.getByName(AtomicConstraintDTO.field), NumberUtils.coerceToBigDecimal(((GreaterThanOrEqualToConstraintDTO) AtomicConstraintDTO).value));
+                    return new IsGreaterThanOrEqualToConstantConstraint(profileFields.getByName(atomicConstraintDTO.field), NumberUtils.coerceToBigDecimal(((GreaterThanOrEqualToConstraintDTO) atomicConstraintDTO).value));
                 case LESS_THAN:
-                    return new IsLessThanConstantConstraint(profileFields.getByName(AtomicConstraintDTO.field), NumberUtils.coerceToBigDecimal(((LessThanConstraintDTO) AtomicConstraintDTO).value));
+                    return new IsLessThanConstantConstraint(profileFields.getByName(atomicConstraintDTO.field), NumberUtils.coerceToBigDecimal(((LessThanConstraintDTO) atomicConstraintDTO).value));
                 case LESS_THAN_OR_EQUAL_TO:
-                    return new IsLessThanOrEqualToConstantConstraint(profileFields.getByName(AtomicConstraintDTO.field), NumberUtils.coerceToBigDecimal(((LessThanOrEqualToConstraintDTO) AtomicConstraintDTO).value));
+                    return new IsLessThanOrEqualToConstantConstraint(profileFields.getByName(atomicConstraintDTO.field), NumberUtils.coerceToBigDecimal(((LessThanOrEqualToConstraintDTO) atomicConstraintDTO).value));
                 case AFTER:
-                    return new IsAfterConstantDateTimeConstraint(profileFields.getByName(AtomicConstraintDTO.field), parseDate(((AfterConstraintDTO) AtomicConstraintDTO).value));
+                    return new IsAfterConstantDateTimeConstraint(profileFields.getByName(atomicConstraintDTO.field), parseDate(((AfterConstraintDTO) atomicConstraintDTO).value));
                 case AFTER_OR_AT:
-                    return new IsAfterOrEqualToConstantDateTimeConstraint(profileFields.getByName(AtomicConstraintDTO.field), parseDate(((AfterOrAtConstraintDTO) AtomicConstraintDTO).value));
+                    return new IsAfterOrEqualToConstantDateTimeConstraint(profileFields.getByName(atomicConstraintDTO.field), parseDate(((AfterOrAtConstraintDTO) atomicConstraintDTO).value));
                 case BEFORE:
-                    return new IsBeforeConstantDateTimeConstraint(profileFields.getByName(AtomicConstraintDTO.field), parseDate(((BeforeConstraintDTO) AtomicConstraintDTO).value));
+                    return new IsBeforeConstantDateTimeConstraint(profileFields.getByName(atomicConstraintDTO.field), parseDate(((BeforeConstraintDTO) atomicConstraintDTO).value));
                 case BEFORE_OR_AT:
-                    return new IsBeforeOrEqualToConstantDateTimeConstraint(profileFields.getByName(AtomicConstraintDTO.field), parseDate(((BeforeOrAtConstraintDTO) AtomicConstraintDTO).value));
+                    return new IsBeforeOrEqualToConstantDateTimeConstraint(profileFields.getByName(atomicConstraintDTO.field), parseDate(((BeforeOrAtConstraintDTO) atomicConstraintDTO).value));
                 case GRANULAR_TO:
-                    GranularToConstraintDTO granularToConstraintDTO = (GranularToConstraintDTO) AtomicConstraintDTO;
+                    GranularToConstraintDTO granularToConstraintDTO = (GranularToConstraintDTO) atomicConstraintDTO;
                     return granularToConstraintDTO.value instanceof Number
-                            ? new IsGranularToNumericConstraint(profileFields.getByName(AtomicConstraintDTO.field), NumericGranularityFactory.create(granularToConstraintDTO.value))
-                            : new IsGranularToDateConstraint(profileFields.getByName(AtomicConstraintDTO.field), getDateTimeGranularity((String) granularToConstraintDTO.value));
+                            ? new IsGranularToNumericConstraint(profileFields.getByName(atomicConstraintDTO.field), NumericGranularityFactory.create(granularToConstraintDTO.value))
+                            : new IsGranularToDateConstraint(profileFields.getByName(atomicConstraintDTO.field), getDateTimeGranularity((String) granularToConstraintDTO.value));
                 default:
-                    throw new InvalidProfileException("Atomic constraint type not found: " + AtomicConstraintDTO);
+                    throw new InvalidProfileException("Atomic constraint type not found: " + atomicConstraintDTO);
             }
         }
         if (dto instanceof GrammaticalConstraintDTO)
@@ -186,7 +175,7 @@ public class ConstraintReader
     private DateTimeGranularity getDateTimeGranularity(String granularity) {
         String offsetUnitUpperCase = granularity.toUpperCase();
         boolean workingDay = offsetUnitUpperCase.equals("WORKING DAYS");
-        return new DateTimeGranularity(ChronoUnit.valueOf(ChronoUnit.class, workingDay ? "DAYS" : offsetUnitUpperCase), workingDay);
+        return new DateTimeGranularity(Enum.valueOf(ChronoUnit.class, workingDay ? "DAYS" : offsetUnitUpperCase), workingDay);
     }
 
     private static OffsetDateTime parseDate(String value)

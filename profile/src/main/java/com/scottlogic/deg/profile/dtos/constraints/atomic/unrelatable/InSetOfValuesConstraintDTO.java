@@ -14,19 +14,23 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.dtos.constraints.atomic.chronological;
+package com.scottlogic.deg.profile.dtos.constraints.atomic.unrelatable;
 
-import com.scottlogic.deg.profile.dtos.constraints.atomic.AtomicConstraintDTO;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 
-public abstract class ChronologicalConstraintDTO extends AtomicConstraintDTO
+import java.util.Collection;
+
+@JsonDeserialize(as = InSetOfValuesConstraintDTO.class)
+public class InSetOfValuesConstraintDTO extends InSetConstraintDTO
 {
-    public String otherField;
-    public int offset;
-    public String offsetUnit;
+    @JsonProperty(ConstraintTypeJsonProperty.IN_SET)
+    public Collection<Object> values;
 
     @Override
-    public String getDependency()
+    public boolean isFromFile()
     {
-        return otherField;
+        return false;
     }
 }

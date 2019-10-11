@@ -16,9 +16,9 @@
 
 package com.scottlogic.deg.orchestrator.cucumber.testframework.steps;
 
-import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestHelper;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestState;
+import com.scottlogic.deg.profile.common.ConstraintType;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 
@@ -99,23 +99,23 @@ public class NumericValueStep {
     }
 
     @And("^(.+) is greater than field ([A-z0-9]+)$")
-    public void numericGreater(String field, String otherField) {
-        state.addRelationConstraint(field, AtomicConstraintType.IS_GREATER_THAN_CONSTANT.getText(), otherField);
+    public void numericGreater(String field, String otherField){
+        state.addRelationConstraint(field, ConstraintType.GREATER_THAN, otherField);
     }
 
     @And("^(.+) is less than field ([A-z0-9]+)$")
-    public void numericLess(String field, String otherField) {
-        state.addRelationConstraint(field, AtomicConstraintType.IS_LESS_THAN_CONSTANT.getText(), otherField);
+    public void numericLess(String field, String otherField){
+        state.addRelationConstraint(field, ConstraintType.LESS_THAN, otherField);
     }
 
     @And("^(.+) is greater than or equal to field ([A-z0-9]+)$")
     public void numericGreaterEqual(String field, String otherField){
-        state.addRelationConstraint(field, AtomicConstraintType.IS_GREATER_THAN_OR_EQUAL_TO_CONSTANT.getText(), otherField);
+        state.addRelationConstraint(field, ConstraintType.GREATER_THAN_OR_EQUAL_TO, otherField);
     }
 
     @And("^(.+) is less than or equal to field ([A-z0-9]+)$")
-    public void numericLessEqual(String field, String otherField) {
-        state.addRelationConstraint(field, AtomicConstraintType.IS_LESS_THAN_OR_EQUAL_TO_CONSTANT.getText(), otherField);
+    public void numericLessEqual(String field, String otherField){
+        state.addRelationConstraint(field, ConstraintType.LESS_THAN_OR_EQUAL_TO, otherField);
     }
 
     @Then("{fieldVar} contains numeric data")

@@ -21,6 +21,7 @@ import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestHelper;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestState;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.GeneratorTestUtilities;
+import com.scottlogic.deg.profile.common.ConstraintType;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -101,7 +102,7 @@ public class DateValueStep {
 
     @And("^(.+) is after field ([A-z0-9]+)$")
     public void dateAfter(String field, String otherField){
-        state.addRelationConstraint(field, AtomicConstraintType.IS_AFTER_CONSTANT_DATE_TIME.getText(), otherField);
+        state.addRelationConstraint(field, ConstraintType.AFTER, otherField);
     }
 
     @And("^(.+) is after or at field ([A-z0-9]+)$")
@@ -111,7 +112,7 @@ public class DateValueStep {
 
     @And("^(.+) is before field ([A-z0-9]+)$")
     public void dateBefore(String field, String otherField){
-        state.addRelationConstraint(field, AtomicConstraintType.IS_BEFORE_CONSTANT_DATE_TIME.getText(), otherField);
+        state.addRelationConstraint(field, ConstraintType.BEFORE, otherField);
     }
 
     @And("^(.+) is before or at field ([A-z0-9]+)$")

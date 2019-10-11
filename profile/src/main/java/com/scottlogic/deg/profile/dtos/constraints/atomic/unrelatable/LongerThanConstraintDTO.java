@@ -14,22 +14,21 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.dtos.constraints.atomic.general;
+package com.scottlogic.deg.profile.dtos.constraints.atomic.unrelatable;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
+import com.scottlogic.deg.profile.common.ConstraintType;
+import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 
-@JsonDeserialize(as = InMapConstraintDTO.class)
-public class InMapConstraintDTO extends GeneralConstraintDTO
+@JsonDeserialize(as = LongerThanConstraintDTO.class)
+public class LongerThanConstraintDTO  extends UnrelatableConstraintDTO
 {
-    public static final String PROPERTY_NAME = "inMap";
+    @JsonProperty(ConstraintTypeJsonProperty.LONGER_THAN)
+    public int value;
 
-    public String file;
-    public String key;
-
-    @Override
-    public ConstraintType getType()
+    public LongerThanConstraintDTO()
     {
-        return ConstraintType.GRANULAR_TO;
+        super(ConstraintType.LONGER_THAN);
     }
 }

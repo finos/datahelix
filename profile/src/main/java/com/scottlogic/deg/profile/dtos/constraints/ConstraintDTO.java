@@ -22,49 +22,54 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.chronological.AfterConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.chronological.AfterOrAtConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.chronological.BeforeConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.chronological.BeforeOrAtConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.general.EqualToConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.general.GranularToConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.general.InMapConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.general.InSetConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.numerical.GreaterThanConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.numerical.GreaterThanOrEqualToConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.numerical.LessThanConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.numerical.LessThanOrEqualToConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.texual.*;
+import com.scottlogic.deg.profile.common.ConstraintType;
+import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.relatable.*;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.unrelatable.*;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.*;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
+
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Optional;
 
 @JsonDeserialize(using = ConstraintDTO.ConstraintDeserializer.class)
-public interface ConstraintDTO
+public abstract class ConstraintDTO
 {
-    ConstraintType getType();
+    private final ConstraintType type;
 
-    class ConstraintDeserializer extends JsonDeserializer<ConstraintDTO>
+    protected ConstraintDTO(ConstraintType type)
+    {
+        this.type = type;
+    }
+
+    public abstract boolean isAtomic();
+
+    public ConstraintType getType()
+    {
+        return type;
+    }
+
+    static class ConstraintDeserializer extends JsonDeserializer<ConstraintDTO>
     {
         @Override
         public ConstraintDTO deserialize(JsonParser p, DeserializationContext context) throws IOException
         {
             ObjectMapper mapper = (ObjectMapper) p.getCodec();
             ObjectNode node = mapper.readTree(p);
-            Optional<ConstraintType> type = Arrays.stream(ConstraintType.values())
+            ConstraintType type = Arrays.stream(ConstraintType.values())
                     .filter(constraintType -> node.has(constraintType.propertyName))
-                    .findFirst();
+                    .findFirst().orElse(null);
 
-            if (type.isPresent())
+            if (type != null)
             {
-                switch (type.get())
+                switch (type)
                 {
                     case EQUAL_TO:
                         return mapper.treeToValue(node, EqualToConstraintDTO.class);
                     case IN_SET:
-                        return mapper.treeToValue(node, InSetConstraintDTO.class);
+                        return node.get(ConstraintTypeJsonProperty.IN_SET).isArray()
+                                ? mapper.treeToValue(node, InSetOfValuesConstraintDTO.class)
+                                : mapper.treeToValue(node, InSetFromFileConstraintDTO.class);
                     case IN_MAP:
                         return mapper.treeToValue(node, InMapConstraintDTO.class);
                     case NULL:

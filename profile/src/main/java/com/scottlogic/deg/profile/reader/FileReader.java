@@ -27,7 +27,7 @@ public class FileReader
 
         return new DistributedList<>(
             names.distributedList().stream()
-                .map(holder -> new WeightedElement<>((Object) holder.element(), holder.weight()))
+                .map(holder -> new WeightedElement<>((Object)holder.element(), holder.weight()))
                 .distinct()
                 .collect(Collectors.toList()));
     }

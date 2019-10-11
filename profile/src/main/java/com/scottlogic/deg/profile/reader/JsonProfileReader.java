@@ -27,8 +27,8 @@ import com.scottlogic.deg.generator.profile.RuleInformation;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.profile.dtos.ProfileDTO;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.general.InMapConstraintDTO;
+import com.scottlogic.deg.profile.common.ConstraintType;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.unrelatable.InMapConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.AllOfConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.AnyOfConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.IfConstraintDTO;
@@ -98,7 +98,7 @@ public class JsonProfileReader implements ProfileReader
                 .collect(Collectors.toList());
 
         Collection<Constraint> typeConstraints = profileDTO.fields.stream()
-                .map(fieldDto -> SpecificFieldTypeConstraintFactory.create(fieldDto, profileFields))
+                .map(fieldDto -> SpecificFieldTypeConstraintFactory.create(profileFields.getByName(fieldDto.name), fieldDto.type))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());

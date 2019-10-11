@@ -14,23 +14,21 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.dtos.constraints.atomic.numerical;
+package com.scottlogic.deg.profile.dtos.constraints.atomic.relatable;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
+import com.scottlogic.deg.profile.common.ConstraintType;
+import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 
 @JsonDeserialize(as = GreaterThanConstraintDTO.class)
-public class GreaterThanConstraintDTO extends NumericalConstraintDTO
+public class GreaterThanConstraintDTO extends RelatableConstraintDTO
 {
-    public static final String PROPERTY_NAME = "greaterThan";
-
-    @JsonProperty(PROPERTY_NAME)
+    @JsonProperty(ConstraintTypeJsonProperty.GREATER_THAN)
     public Number value;
 
-    @Override
-    public ConstraintType getType()
+    public GreaterThanConstraintDTO()
     {
-        return ConstraintType.GREATER_THAN;
+        super(ConstraintType.GREATER_THAN);
     }
 }

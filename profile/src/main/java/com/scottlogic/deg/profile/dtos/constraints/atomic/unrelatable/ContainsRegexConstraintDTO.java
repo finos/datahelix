@@ -14,23 +14,21 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.dtos.constraints.atomic.chronological;
+package com.scottlogic.deg.profile.dtos.constraints.atomic.unrelatable;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
+import com.scottlogic.deg.profile.common.ConstraintType;
+import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 
-@JsonDeserialize(as = BeforeOrAtConstraintDTO.class)
-public class BeforeOrAtConstraintDTO extends ChronologicalConstraintDTO
+@JsonDeserialize(as = ContainsRegexConstraintDTO.class)
+public class ContainsRegexConstraintDTO extends UnrelatableConstraintDTO
 {
-    public static final String PROPERTY_NAME = "beforeOrAt";
-
-    @JsonProperty(PROPERTY_NAME)
+    @JsonProperty(ConstraintTypeJsonProperty.CONTAINS_REGEX)
     public String value;
 
-    @Override
-    public ConstraintType getType()
+    public ContainsRegexConstraintDTO()
     {
-        return ConstraintType.BEFORE_OR_AT;
+        super(ConstraintType.CONTAINS_REGEX);
     }
 }

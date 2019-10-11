@@ -18,22 +18,20 @@ package com.scottlogic.deg.profile.dtos.constraints.grammatical;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
+import com.scottlogic.deg.profile.common.ConstraintType;
+import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
 
 import java.util.Collection;
 
 @JsonDeserialize(as = AllOfConstraintDTO.class)
-public class AllOfConstraintDTO implements GrammaticalConstraintDTO
+public class AllOfConstraintDTO extends GrammaticalConstraintDTO
 {
-    public static final String PROPERTY_NAME = "allOf";
-
-    @JsonProperty(PROPERTY_NAME)
+    @JsonProperty(ConstraintTypeJsonProperty.ALL_OF)
     public Collection<ConstraintDTO> constraints;
 
-    @Override
-    public ConstraintType getType()
+    public AllOfConstraintDTO()
     {
-        return ConstraintType.ALL_OF;
+        super(ConstraintType.ALL_OF);
     }
 }

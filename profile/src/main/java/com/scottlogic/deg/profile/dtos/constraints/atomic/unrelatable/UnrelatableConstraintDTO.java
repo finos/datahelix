@@ -14,15 +14,21 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.dtos.constraints.atomic.general;
+package com.scottlogic.deg.profile.dtos.constraints.atomic.unrelatable;
 
+import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.AtomicConstraintDTO;
 
-public abstract class GeneralConstraintDTO extends AtomicConstraintDTO
+public abstract class UnrelatableConstraintDTO extends AtomicConstraintDTO
 {
-    @Override
-    public String getDependency()
+    UnrelatableConstraintDTO(ConstraintType type)
     {
-        return null;
+        super(type);
+    }
+
+    @Override
+    public boolean hasRelation()
+    {
+        return false;
     }
 }

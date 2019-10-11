@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.*;
+import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import cucumber.api.java.Before;
@@ -103,7 +104,7 @@ public class GeneralTestStep {
 
     @And("^(.+) is equal to field (.+)$")
     public void fieldEqualTo(String field, String otherField){
-        state.addRelationConstraint(field, AtomicConstraintType.IS_EQUAL_TO_CONSTANT.getText(), otherField);
+        state.addRelationConstraint(field, ConstraintType.EQUAL_TO, otherField);
     }
 
     @When("^If and Then are described below$")

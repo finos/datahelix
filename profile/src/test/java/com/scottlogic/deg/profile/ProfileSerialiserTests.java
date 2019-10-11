@@ -16,15 +16,16 @@
 
 package com.scottlogic.deg.profile;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import com.scottlogic.deg.profile.serialisation.ProfileDeserialiser;
 import com.scottlogic.deg.profile.dtos.ProfileDTO;
+import com.scottlogic.deg.profile.serialisation.ProfileSerialiser;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-public class ProfileDeserialiserTests {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class ProfileSerialiserTests
+{
     @Test
     public void shouldDeserialisev0_1ProfileWithoutException() throws IOException {
         // Arrange
@@ -68,7 +69,7 @@ public class ProfileDeserialiserTests {
             "}";
 
         // Act
-        final ProfileDTO profile = new ProfileDeserialiser().deserialise(json);
+        final ProfileDTO profile = new ProfileSerialiser().deserialise(json);
 
         // Assert
         assertEquals("0.1", profile.schemaVersion);
@@ -117,7 +118,7 @@ public class ProfileDeserialiserTests {
             "}";
 
         // Act
-        final ProfileDTO profile = new ProfileDeserialiser().deserialise(json);
+        final ProfileDTO profile = new ProfileSerialiser().deserialise(json);
 
         // Assert
         assertEquals("0.2", profile.schemaVersion);

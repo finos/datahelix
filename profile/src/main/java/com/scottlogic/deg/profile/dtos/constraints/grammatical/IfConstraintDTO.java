@@ -18,24 +18,22 @@ package com.scottlogic.deg.profile.dtos.constraints.grammatical;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
+import com.scottlogic.deg.profile.common.ConstraintType;
+import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
 
 @JsonDeserialize(as = IfConstraintDTO.class)
-public class IfConstraintDTO implements GrammaticalConstraintDTO
+public class IfConstraintDTO extends GrammaticalConstraintDTO
 {
-    public static final String PROPERTY_NAME = "if";
-
-    @JsonProperty(PROPERTY_NAME)
+    @JsonProperty(ConstraintTypeJsonProperty.IF)
     public ConstraintDTO ifConstraint;
-    @JsonProperty("then")
+    @JsonProperty(ConstraintTypeJsonProperty.THEN)
     public ConstraintDTO thenConstraint;
-    @JsonProperty("else")
+    @JsonProperty(ConstraintTypeJsonProperty.ELSE)
     public ConstraintDTO elseConstraint;
 
-    @Override
-    public ConstraintType getType()
+    public IfConstraintDTO()
     {
-        return ConstraintType.IF;
+        super(ConstraintType.IF);
     }
 }

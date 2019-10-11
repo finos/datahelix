@@ -18,20 +18,18 @@ package com.scottlogic.deg.profile.dtos.constraints.grammatical;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
+import com.scottlogic.deg.profile.common.ConstraintType;
+import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
 
 @JsonDeserialize(as = NotConstraintDTO.class)
-public class NotConstraintDTO implements GrammaticalConstraintDTO
+public class NotConstraintDTO extends GrammaticalConstraintDTO
 {
-    public static final String PROPERTY_NAME = "not";
-
-    @JsonProperty(PROPERTY_NAME)
+    @JsonProperty(ConstraintTypeJsonProperty.NOT)
     public ConstraintDTO constraint;
 
-    @Override
-    public ConstraintType getType()
+    public NotConstraintDTO()
     {
-        return ConstraintType.NULL;
+        super(ConstraintType.NOT);
     }
 }

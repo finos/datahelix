@@ -14,23 +14,25 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.dtos.constraints.atomic.texual;
+package com.scottlogic.deg.profile.dtos.constraints.atomic.relatable;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
+import com.scottlogic.deg.profile.common.ConstraintType;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.AtomicConstraintDTO;
 
-@JsonDeserialize(as = MatchesRegexConstraintDTO.class)
-public class MatchesRegexConstraintDTO extends TextualConstraintDTO
+public abstract class RelatableConstraintDTO extends AtomicConstraintDTO
 {
-    public static final String PROPERTY_NAME = "matchesRegex";
+    public String otherField;
+    public int offset;
+    public String offsetUnit;
 
-    @JsonProperty(PROPERTY_NAME)
-    public String value;
+    RelatableConstraintDTO(ConstraintType type)
+    {
+        super(type);
+    }
 
     @Override
-    public ConstraintType getType()
+    public boolean hasRelation()
     {
-        return ConstraintType.MATCHES_REGEX;
+        return otherField != null;
     }
 }

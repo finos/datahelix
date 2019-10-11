@@ -22,23 +22,11 @@ import com.scottlogic.deg.common.profile.SpecificFieldType;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
+import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.dtos.FieldDTO;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.AtomicConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.chronological.AfterConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.chronological.AfterOrAtConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.chronological.BeforeConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.chronological.BeforeOrAtConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.general.EqualToConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.general.GranularToConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.general.InMapConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.general.InSetConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.numerical.GreaterThanConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.numerical.GreaterThanOrEqualToConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.numerical.LessThanConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.numerical.LessThanOrEqualToConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.texual.*;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.relatable.*;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.unrelatable.*;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.*;
 
 import java.io.IOException;
@@ -84,7 +72,7 @@ public class CucumberTestState {
         this.addConstraintToList(createInMapConstraint(fieldName, key, file));
     }
 
-    public void addRelationConstraint(String field, String relationType, String other) {
+    public void addRelationConstraint(String field, ConstraintType relationType, String other) {
         this.addConstraintToList(createRelationConstraint(field, relationType, other));
     }
 
@@ -146,10 +134,16 @@ public class CucumberTestState {
                     value = _value;
                 }};
             case IN_SET:
-                return new InSetConstraintDTO()
+                return _value instanceof String
+                        ? new InSetFromFileConstraintDTO()
                 {{
                     field = fieldName;
-                    values = (Collection<Object>) _value;
+                    file = (String)_value;
+                }}
+                        : new InSetOfValuesConstraintDTO()
+                {{
+                    field = fieldName;
+                    values = (Collection<Object>)_value;
                 }};
             case NULL:
                 return new NullConstraintDTO()
@@ -252,12 +246,43 @@ public class CucumberTestState {
         return notDto;
     }
 
-    private ConstraintDTO createRelationConstraint(String field, String relationType, String other) {
-        RelatableConstraint dto = new ConstraintDTO();
-        dto.field = field;
-        dto.is = relationType;
-        dto.otherField = other;
-        return dto;
+    private ConstraintDTO createRelationConstraint(String field, ConstraintType type, String other) {
+        RelatableConstraintDTO relatableConstraintDTO;
+        switch (type)
+        {
+            case EQUAL_TO:
+                relatableConstraintDTO = new EqualToConstraintDTO();
+                break;
+            case GREATER_THAN:
+                relatableConstraintDTO = new GreaterThanConstraintDTO();
+                break;
+            case GREATER_THAN_OR_EQUAL_TO:
+                relatableConstraintDTO = new GreaterThanOrEqualToConstraintDTO();
+                break;
+            case LESS_THAN:
+                relatableConstraintDTO = new LessThanConstraintDTO();
+                break;
+            case LESS_THAN_OR_EQUAL_TO:
+                relatableConstraintDTO = new LessThanOrEqualToConstraintDTO();
+                break;
+            case AFTER:
+                relatableConstraintDTO = new AfterConstraintDTO();
+                break;
+            case AFTER_OR_AT:
+                relatableConstraintDTO = new AfterOrAtConstraintDTO();
+                break;
+            case BEFORE:
+                relatableConstraintDTO = new BeforeConstraintDTO();
+                break;
+            case BEFORE_OR_AT:
+                relatableConstraintDTO = new BeforeOrAtConstraintDTO();
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + type);
+        }
+        relatableConstraintDTO.field = field;
+        relatableConstraintDTO.otherField = other;
+        return relatableConstraintDTO;
     }
 
     private ConstraintDTO createInMapConstraint(String fieldName, String key, String file) {

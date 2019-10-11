@@ -16,8 +16,19 @@
 
 package com.scottlogic.deg.profile.dtos.constraints.grammatical;
 
+import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
 
-public interface GrammaticalConstraintDTO extends ConstraintDTO
+public abstract class GrammaticalConstraintDTO extends ConstraintDTO
 {
+    protected GrammaticalConstraintDTO(ConstraintType type)
+    {
+        super(type);
+    }
+
+    @Override
+    public boolean isAtomic()
+    {
+        return false;
+    }
 }

@@ -47,6 +47,7 @@ import static org.hamcrest.core.IsNull.nullValue;
 
 public class JsonProfileReaderTests {
 
+    private DistributedList<Object> inSetReaderReturnValue = DistributedList.singleton("test");
     private DistributedList<String> fromFileReaderReturnValue = DistributedList.singleton("test");
 
     private class MockFromFileReader extends FileReader {
@@ -56,12 +57,14 @@ public class JsonProfileReaderTests {
         }
 
         @Override
-        public DistributedList<String> setFromFile(String file) {
-            return fromFileReaderReturnValue;
+        public DistributedList<Object> setFromFile(String file)
+        {
+            return inSetReaderReturnValue;
         }
 
         @Override
-        public DistributedList<String> listFromMapFile(String file, String Key) {
+        public DistributedList<String> listFromMapFile(String file, String Key)
+        {
             return fromFileReaderReturnValue;
         }
 

@@ -16,11 +16,23 @@
 
 package com.scottlogic.deg.profile.dtos.constraints.atomic;
 
+import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
 
-public abstract class AtomicConstraintDTO implements ConstraintDTO
+public abstract class AtomicConstraintDTO extends ConstraintDTO
 {
     public String field;
 
-    public abstract String getDependency();
+    protected AtomicConstraintDTO(ConstraintType type)
+    {
+        super(type);
+    }
+
+    @Override
+    public boolean isAtomic()
+    {
+        return true;
+    }
+
+    public abstract boolean hasRelation();
 }

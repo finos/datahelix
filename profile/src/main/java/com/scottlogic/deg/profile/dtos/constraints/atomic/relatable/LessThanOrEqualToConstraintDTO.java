@@ -14,23 +14,21 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.dtos.constraints.atomic.chronological;
+package com.scottlogic.deg.profile.dtos.constraints.atomic.relatable;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
+import com.scottlogic.deg.profile.common.ConstraintType;
+import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 
-@JsonDeserialize(as = AfterOrAtConstraintDTO.class)
-public class AfterOrAtConstraintDTO extends ChronologicalConstraintDTO
+@JsonDeserialize(as = LessThanOrEqualToConstraintDTO.class)
+public class LessThanOrEqualToConstraintDTO extends RelatableConstraintDTO
 {
-    public static final String PROPERTY_NAME = "afterOrAt";
+    @JsonProperty(ConstraintTypeJsonProperty.LESS_THAN_OR_EQUAL_TO)
+    public Number value;
 
-    @JsonProperty(PROPERTY_NAME)
-    public String value;
-
-    @Override
-    public ConstraintType getType()
+    public LessThanOrEqualToConstraintDTO()
     {
-        return ConstraintType.AFTER_OR_AT;
+        super(ConstraintType.LESS_THAN_OR_EQUAL_TO);
     }
 }

@@ -14,32 +14,21 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.dtos.constraints.atomic.general;
+package com.scottlogic.deg.profile.dtos.constraints.atomic.unrelatable;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
+import com.scottlogic.deg.profile.common.ConstraintType;
+import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 
-@JsonDeserialize(as = EqualToConstraintDTO.class)
-public class EqualToConstraintDTO extends GeneralConstraintDTO
+@JsonDeserialize(as = ShorterThanConstraintDTO.class)
+public class ShorterThanConstraintDTO extends UnrelatableConstraintDTO
 {
-    public static final String PROPERTY_NAME = "equalTo";
+    @JsonProperty(ConstraintTypeJsonProperty.SHORTER_THAN)
+    public int value;
 
-    @JsonProperty(PROPERTY_NAME)
-    public Object value;
-    public String otherField;
-    public int offset;
-    public String offsetUnit;
-
-    @Override
-    public ConstraintType getType()
+    public ShorterThanConstraintDTO()
     {
-        return ConstraintType.EQUAL_TO;
-    }
-
-    @Override
-    public String getDependency()
-    {
-        return  otherField;
+        super(ConstraintType.SHORTER_THAN);
     }
 }

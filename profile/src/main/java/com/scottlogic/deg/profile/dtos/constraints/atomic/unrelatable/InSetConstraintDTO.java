@@ -14,23 +14,16 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.dtos.constraints.atomic.chronological;
+package com.scottlogic.deg.profile.dtos.constraints.atomic.unrelatable;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
+import com.scottlogic.deg.profile.common.ConstraintType;
 
-@JsonDeserialize(as = AfterConstraintDTO.class)
-public class AfterConstraintDTO extends ChronologicalConstraintDTO
+public abstract class InSetConstraintDTO extends UnrelatableConstraintDTO
 {
-    public static final String PROPERTY_NAME = "after";
-
-    @JsonProperty(PROPERTY_NAME)
-    public String value;
-
-    @Override
-    public ConstraintType getType()
+    protected InSetConstraintDTO()
     {
-        return ConstraintType.AFTER;
+        super(ConstraintType.IN_SET);
     }
+
+    public abstract boolean isFromFile();
 }
