@@ -148,7 +148,7 @@ __Cucumber Steps__
 
 #### Nesting Behaviour
 
-The grammatical constraints can be nested with the processing behaving like polish notation, an example can be seen below:
+The grammatical constraints can be nested with the processing behaving like Polish notation, an example can be seen below:
 
 __Json Constraint__
 

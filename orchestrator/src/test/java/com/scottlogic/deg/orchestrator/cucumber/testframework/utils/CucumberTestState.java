@@ -49,7 +49,7 @@ public class CucumberTestState {
     List<Exception> testExceptions = new ArrayList<>();
     Map<String, List<List<String>>> inMapFiles = new HashMap<>();
 
-    Stack<NestedConstraint> nestedConstraints = new Stack<>();
+    Deque<NestedConstraint> nestedConstraints = new ArrayDeque<>();
 
     private final List<AtomicConstraintType> contstraintsToNotViolate = new ArrayList<>();
 
@@ -137,7 +137,7 @@ public class CucumberTestState {
         return dto;
     }
 
-    public ConstraintDTO createNotConstraint(String fieldName, String constraintName, Object value) {
+    private ConstraintDTO createNotConstraint(String fieldName, String constraintName, Object value) {
         ConstraintDTO notDto = new ConstraintDTO();
         notDto.not = this.createConstraint(fieldName, constraintName, value);
         return notDto;
@@ -195,8 +195,11 @@ public class CucumberTestState {
     }
 
     private void createNestedConstraint() {
-        nestedConstraints.peek().reduceRemaining();
-        if (nestedConstraints.peek().isCompleted()) {
+        NestedConstraint peek = nestedConstraints.peek();
+
+        assert peek != null;
+        peek.reduceRemaining();
+        if (peek.isCompleted()) {
             NestedConstraint pop = nestedConstraints.pop();
             switch (pop.constraintType) {
                 case "if":
@@ -223,7 +226,7 @@ public class CucumberTestState {
 
     private void addConstraintToList(ConstraintDTO constraintDTO) {
         this.constraints.add(constraintDTO);
-        if (!nestedConstraints.empty()) {
+        if (!nestedConstraints.isEmpty()) {
             createNestedConstraint();
         }
     }
@@ -276,7 +279,7 @@ public class CucumberTestState {
         }
 
         boolean isCompleted() {
-            return remaining == 0;
+            return remaining <= 0;
         }
 
         void reduceRemaining() {
