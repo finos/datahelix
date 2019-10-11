@@ -7,34 +7,34 @@
         {
           "if": {"field": "foo", "is": "ofType", "value": "integer"},
           "then": {"field": "foo", "is": "greaterThan", "value": 0},
-          "else": {"field": "foo", "is": "equalTo", "value": "N/A"},
-          "else": {"field": "foo", "is": "equalTo", "value": "A/N"}
+          "else": {"field": "foo", "equalTo": "N/A"},
+          "else": {"field": "foo", "equalTo": "A/N"}
         },
         {
           "gif": {"field": "foo", "is": "ofType", "value": "integer"},
           "then": {"field": "foo", "is": "greaterThan", "value": 0},
-          "else": {"field": "foo", "is": "equalTo", "value": "N/A"}
+          "else": {"field": "foo", "equalTo": "N/A"}
         },
         {
           "if": {"field": "foo", "is": "ofType", "value": "integer"},
           "then": {"field": "foo", "is": "greaterThan", "value": 0},
-          "gelse": {"field": "foo", "is": "equalTo", "value": "N/A"}
+          "gelse": {"field": "foo", "equalTo": "N/A"}
         },
         {
           "if": {"field": "foo", "is": "ofType", "value": "integer"},
           "then": {"field": "foo", "is": "greaterThan", "value": 0},
-          "else": {"field": "foo", "is": "equalTo", "value": "N/A"},
+          "else": {"field": "foo", "equalTo": "N/A"},
           "nothing": 432
         },
         {
           "if": "integer",
           "then": {"field": "foo", "is": "greaterThan", "value": 0},
-          "else": {"field": "foo", "is": "equalTo", "value": "N/A"}
+          "else": {"field": "foo", "equalTo": "N/A"}
         },
         {
           "if": {"field": "foo", "is": "ofType", "value": "integer"},
           "then": 0,
-          "else": {"field": "foo", "is": "equalTo", "value": "N/A"}
+          "else": {"field": "foo", "equalTo": "N/A"}
         },
         {
           "if": {"field": "foo", "is": "ofType", "value": "integer"},

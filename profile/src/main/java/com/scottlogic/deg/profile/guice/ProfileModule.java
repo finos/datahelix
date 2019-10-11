@@ -47,7 +47,7 @@ public class ProfileModule extends AbstractModule {
             .annotatedWith(Names.named("config:profileFile"))
             .toInstance(profileConfigSource.getProfileFile());
         bind(String.class)
-            .annotatedWith(Names.named("config:fromFilePath"))
+            .annotatedWith(Names.named("config:filePath"))
             .toInstance(profileConfigSource.fromFilePath());
     }
 }

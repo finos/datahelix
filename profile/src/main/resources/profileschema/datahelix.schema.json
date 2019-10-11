@@ -4,7 +4,11 @@
   "title": "The Scott Logic DataHelix Profile Schema",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "fields", "rules"],
+  "required": [
+    "schemaVersion",
+    "fields",
+    "rules"
+  ],
   "properties": {
     "additionalProperties": false,
     "schemaVersion": {
@@ -32,7 +36,9 @@
         "title": "A set of Rule objects.",
         "type": "object",
         "additionalProperties": false,
-        "required": ["constraints"],
+        "required": [
+          "constraints"
+        ],
         "properties": {
           "rule": {
             "title": "A collection of constraints. Test case generation revolves around rules, in that the generator will output a separate dataset for each rule, wherein each row violates the rule in a different way.",
@@ -71,13 +77,15 @@
       "type": "string",
       "default": "2000-01-01T09:00:00.000",
       "oneOf": [
-            {
-              "pattern": "^(?!0000)[0-9]{4}-([0][0-9]|[1][0-2])-([0-2][0-9]|3[01])T([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9][.][0-9]{3}Z?$"
-            },
-            {
-              "enum": ["now"]
-            }]
-
+        {
+          "pattern": "^(?!0000)[0-9]{4}-([0][0-9]|[1][0-2])-([0-2][0-9]|3[01])T([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9][.][0-9]{3}Z?$"
+        },
+        {
+          "enum": [
+            "now"
+          ]
+        }
+      ]
     },
     "numeric": {
       "type": "number",
@@ -86,39 +94,39 @@
       "default": 0
     },
     "granularity": {
-        "value": {
-          "enum": [
-            1,
-            1e-1,
-            1e-2,
-            1e-3,
-            1e-4,
-            1e-5,
-            1e-6,
-            1e-7,
-            1e-8,
-            1e-9,
-            1e-10,
-            1e-11,
-            1e-12,
-            1e-13,
-            1e-14,
-            1e-15,
-            1e-16,
-            1e-17,
-            1e-18,
-            1e-19,
-            1e-20,
-            "millis",
-            "seconds",
-            "minutes",
-            "hours",
-            "days",
-            "months",
-            "years",
-            "working days"
-          ]
-        }
+      "value": {
+        "enum": [
+          1,
+          1e-1,
+          1e-2,
+          1e-3,
+          1e-4,
+          1e-5,
+          1e-6,
+          1e-7,
+          1e-8,
+          1e-9,
+          1e-10,
+          1e-11,
+          1e-12,
+          1e-13,
+          1e-14,
+          1e-15,
+          1e-16,
+          1e-17,
+          1e-18,
+          1e-19,
+          1e-20,
+          "millis",
+          "seconds",
+          "minutes",
+          "hours",
+          "days",
+          "months",
+          "years",
+          "working days"
+        ]
+      }
     },
     "integer": {
       "$ref": "#/definitions/numeric",
@@ -133,14 +141,19 @@
           "pattern": "^(?!0000)[0-9]{4}-([0][0-9]|[1][0-2])-([0-2][0-9]|3[01])T([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9][.][0-9]{3}Z?$"
         },
         {
-          "enum": ["now"]
-        }]
+          "enum": [
+            "now"
+          ]
+        }
+      ]
     },
     "fieldDefinition": {
       "title": "The field definitions of a field to generate data for",
       "type": "object",
       "additionalProperties": false,
-      "required": ["name"],
+      "required": [
+        "name"
+      ],
       "default": {
         "name": "fieldName",
         "type": "string",
@@ -182,19 +195,58 @@
     "constraint": {
       "oneOf": [
         {
+          "$ref": "#/definitions/equalToConstraint"
+        },
+        {
+          "$ref": "#/definitions/matchingRegexConstraint"
+        },
+        {
+          "$ref": "#/definitions/containingRegexConstraint"
+        },
+        {
+          "$ref": "#/definitions/ofLengthConstraint"
+        },
+        {
+          "$ref": "#/definitions/longerThanConstraint"
+        },
+        {
+          "$ref": "#/definitions/shorterThanConstraint"
+        },
+        {
+          "$ref": "#/definitions/greaterThanConstraint"
+        },
+        {
+          "$ref": "#/definitions/greaterThanOrEqualToConstraint"
+        },
+        {
+          "$ref": "#/definitions/lessThanConstraint"
+        },
+        {
+          "$ref": "#/definitions/lessThanOrEqualToConstraint"
+        },
+        {
+          "$ref": "#/definitions/granularToConstraint"
+        },
+        {
+          "$ref": "#/definitions/afterConstraint"
+        },
+        {
+          "$ref": "#/definitions/afterOrAtConstraint"
+        },
+        {
+          "$ref": "#/definitions/beforeConstraint"
+        },
+        {
+          "$ref": "#/definitions/beforeOrAtConstraint"
+        },
+        {
           "$ref": "#/definitions/anyOfConstraint"
         },
         {
           "$ref": "#/definitions/allOfConstraint"
         },
         {
-          "$ref": "#/definitions/dataConstraint"
-        },
-        {
           "$ref": "#/definitions/nullConstraint"
-        },
-        {
-          "$ref": "#/definitions/extendedDataConstraint"
         },
         {
           "$ref": "#/definitions/inSetConstraint"
@@ -203,239 +255,333 @@
           "$ref": "#/definitions/inMapConstraint"
         },
         {
-          "$ref": "#/definitions/fromFileConstraint"
-        },
-        {
           "$ref": "#/definitions/notConstraint"
         },
         {
-          "$ref": "#/definitions/ifThenConstraint"
-        },
-        {
-          "$ref": "#/definitions/ifThenElseConstraint"
+          "$ref": "#/definitions/ifConstraint"
         }
       ]
     },
-    "dataConstraint": {
+    "equalToConstraint": {
       "type": "object",
-      "required": ["field", "is", "value"],
+      "additionalProperties": false,
+      "required": [
+        "field",
+        "equalTo"
+      ],
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "equalTo": {
+          "$ref": "#/definitions/dataType"
+        },
+        "otherField": {
+          "type": "string"
+        },
+        "offset": {
+          "$ref": "#/definitions/integer"
+        },
+        "offsetUnit": {
+          "$ref": "#/definitions/granularity"
+        }
+      }
+    },
+    "matchingRegexConstraint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "field",
+        "matchingRegex"
+      ],
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "matchingRegex": {
+          "type": "string",
+          "default": ".*"
+        }
+      }
+    },
+    "containingRegexConstraint": {
+      "type": "object",
+      "required": [
+        "field",
+        "containingRegex"
+      ],
       "additionalProperties": false,
       "properties": {
         "field": {
           "type": "string"
         },
-        "is": {
-          "enum": [
-            "ofType",
-            "equalTo",
-            "matchingRegex",
-            "containingRegex",
-            "ofLength",
-            "longerThan",
-            "shorterThan",
-            "greaterThan",
-            "lessThan",
-            "greaterThanOrEqualTo",
-            "lessThanOrEqualTo",
-            "granularTo",
-            "after",
-            "afterOrAt",
-            "before",
-            "beforeOrAt"
-          ]
-        },
-        "value": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/datetime"
-            },
-            {
-              "$ref": "#/definitions/numeric"
-            },
-            {
-              "$ref": "#/definitions/string"
-            }
-          ]
+        "containingRegex": {
+          "type": "string",
+          "default": ".*"
         }
-      },
-      "allOf": [
-        {
-          "if": {
-            "properties": {
-              "is": {
-                "enum": ["after", "afterOrAt", "before", "beforeOrAt"]
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "value": {
-                "$ref": "#/definitions/datetime"
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "is": {
-                "const": "equalTo"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "value": {
-                "$ref": "#/definitions/dataType"
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "is": {
-                "const": "ofType"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "value": {
-                "enum": ["decimal", "integer", "string", "datetime","ISIN","SEDOL","CUSIP","RIC","firstname","lastname","fullname"]
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "is": {
-                "enum": ["matchingRegex", "containingRegex"]
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "value": {
-                "type": "string",
-                "default": ".*"
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "is": {
-                "const": "shorterThan"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "value": {
-                "$ref": "#/definitions/integer",
-                "minimum": 1,
-                "maximum": 1001
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "is": {
-                "const": "ofLength"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "value": {
-                "$ref": "#/definitions/integer",
-                "minimum": 0,
-                "maximum": 1000
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "is": {
-                "const": "longerThan"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "value": {
-                "$ref": "#/definitions/integer",
-                "minimum": -1,
-                "maximum": 999
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "is": {
-                "const": "granularTo"
-              }
-            }
-          },
-          "then": {
-            "$ref": "#/definitions/granularity"
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "is": {
-                "enum": [
-                  "greaterThan",
-                  "lessThan",
-                  "greaterThanOrEqualTo",
-                  "lessThanOrEqualTo"
-                ]
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "value": {
-                "$ref": "#/definitions/numeric"
-              }
-            }
-          }
-        }
-      ]
+      }
     },
-    "extendedDataConstraint": {
+    "ofLengthConstraint": {
       "type": "object",
-      "required": ["field", "is", "otherField"],
-      "additionalProperties": true,
+      "required": [
+        "field",
+        "ofLength"
+      ],
+      "additionalProperties": false,
       "properties": {
         "field": {
           "type": "string"
         },
-        "is": {
-          "enum": [
-            "after",
-            "afterOrAt",
-            "before",
-            "beforeOrAt",
-            "greaterThan",
-            "lessThan",
-            "greaterThanOrEqualTo",
-            "lessThanOrEqualTo",
-            "equalTo"
-          ]
+        "ofLength": {
+          "$ref": "#/definitions/integer",
+          "minimum": 0,
+          "maximum": 1000
+        }
+      }
+    },
+    "longerThanConstraint": {
+      "type": "object",
+      "required": [
+        "field",
+        "longerThan"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "longerThan": {
+          "$ref": "#/definitions/integer",
+          "minimum": -1,
+          "maximum": 999
+        }
+      }
+    },
+    "shorterThanConstraint": {
+      "type": "object",
+      "required": [
+        "field",
+        "shorterThan"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "shorterThan": {
+          "$ref": "#/definitions/integer",
+          "minimum": 1,
+          "maximum": 1001
+        }
+      }
+    },
+    "greaterThanConstraint": {
+      "type": "object",
+      "required": [
+        "field",
+        "greaterThan"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "greaterThan": {
+          "$ref": "#/definitions/numeric"
         },
         "otherField": {
-          "$ref": "#/definitions/string"
+          "type": "string"
+        },
+        "offset": {
+          "$ref": "#/definitions/integer"
+        },
+        "offsetUnit": {
+          "$ref": "#/definitions/granularity"
+        }
+      }
+    },
+    "greaterThanOrEqualToConstraint": {
+      "type": "object",
+      "required": [
+        "field",
+        "greaterThanOrEqualTo"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "greaterThanOrEqualTo": {
+          "$ref": "#/definitions/numeric"
+        },
+        "otherField": {
+          "type": "string"
+        },
+        "offset": {
+          "$ref": "#/definitions/integer"
+        },
+        "offsetUnit": {
+          "$ref": "#/definitions/granularity"
+        }
+      }
+    },
+    "lessThanConstraint": {
+      "type": "object",
+      "required": [
+        "field",
+        "lessThan"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "lessThan": {
+          "$ref": "#/definitions/numeric"
+        },
+        "otherField": {
+          "type": "string"
+        },
+        "offset": {
+          "$ref": "#/definitions/integer"
+        },
+        "offsetUnit": {
+          "$ref": "#/definitions/granularity"
+        }
+      }
+    },
+    "lessThanOrEqualToConstraint": {
+      "type": "object",
+      "required": [
+        "field",
+        "lessThanOrEqualTo"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "lessThanOrEqualTo": {
+          "$ref": "#/definitions/numeric"
+        },
+        "otherField": {
+          "type": "string"
+        },
+        "offset": {
+          "$ref": "#/definitions/integer"
+        },
+        "offsetUnit": {
+          "$ref": "#/definitions/granularity"
+        }
+      }
+    },
+    "granularToConstraint": {
+      "type": "object",
+      "required": [
+        "field",
+        "granularTo"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "granularTo": {
+          "$ref": "#/definitions/granularity"
+        }
+      }
+    },
+    "afterConstraint": {
+      "type": "object",
+      "required": [
+        "field",
+        "after"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "after": {
+          "$ref": "#/definitions/datetime"
+        },
+        "otherField": {
+          "type": "string"
+        },
+        "offset": {
+          "$ref": "#/definitions/integer"
+        },
+        "offsetUnit": {
+          "$ref": "#/definitions/granularity"
+        }
+      }
+    },
+    "afterOrAtConstraint": {
+      "type": "object",
+      "required": [
+        "field",
+        "afterOrAt"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "afterOrAt": {
+          "$ref": "#/definitions/datetime"
+        },
+        "otherField": {
+          "type": "string"
+        },
+        "offset": {
+          "$ref": "#/definitions/integer"
+        },
+        "offsetUnit": {
+          "$ref": "#/definitions/granularity"
+        }
+      }
+    },
+    "beforeConstraint": {
+      "type": "object",
+      "required": [
+        "field",
+        "before"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "before": {
+          "$ref": "#/definitions/datetime"
+        },
+        "otherField": {
+          "type": "string"
+        },
+        "offset": {
+          "$ref": "#/definitions/integer"
+        },
+        "offsetUnit": {
+          "$ref": "#/definitions/granularity"
+        }
+      }
+    },
+    "beforeOrAtConstraint": {
+      "type": "object",
+      "required": [
+        "field",
+        "beforeOrAt"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "beforeOrAt": {
+          "$ref": "#/definitions/datetime"
+        },
+        "otherField": {
+          "type": "string"
         },
         "offset": {
           "$ref": "#/definitions/integer"
@@ -448,7 +594,9 @@
     "notConstraint": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["not"],
+      "required": [
+        "not"
+      ],
       "properties": {
         "not": {
           "$ref": "#/definitions/constraint"
@@ -458,7 +606,9 @@
     "anyOfConstraint": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["anyOf"],
+      "required": [
+        "anyOf"
+      ],
       "properties": {
         "anyOf": {
           "type": "array",
@@ -472,7 +622,9 @@
     "allOfConstraint": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["allOf"],
+      "required": [
+        "allOf"
+      ],
       "properties": {
         "allOf": {
           "type": "array",
@@ -483,22 +635,12 @@
         }
       }
     },
-    "ifThenConstraint": {
+    "ifConstraint": {
       "type": "object",
-      "required": ["if", "then"],
-      "additionalProperties": false,
-      "properties": {
-        "if": {
-          "$ref": "#/definitions/constraint"
-        },
-        "then": {
-          "$ref": "#/definitions/constraint"
-        }
-      }
-    },
-    "ifThenElseConstraint": {
-      "type": "object",
-      "required": ["if", "then", "else"],
+      "required": [
+        "if",
+        "then"
+      ],
       "additionalProperties": false,
       "properties": {
         "if": {
@@ -514,72 +656,63 @@
     },
     "nullConstraint": {
       "type": "object",
-      "required": ["field", "is"],
+      "required": [
+        "null"
+      ],
       "additionalProperties": false,
       "properties": {
-        "field": {
-          "type": "string"
-        },
-        "is": {
-          "const": "null"
-        }
-      }
-    },
-    "fromFileConstraint": {
-      "type": "object",
-      "required": ["field", "is", "file"],
-      "additionalProperties": false,
-      "properties": {
-        "field": {
-          "type": "string"
-        },
-        "is": {
-          "const": "inSet"
-        },
-        "file": {
+        "null": {
           "type": "string"
         }
       }
     },
     "inSetConstraint": {
       "type": "object",
-      "required": ["field", "is", "values"],
+      "required": [
+        "field",
+        "inSet"
+      ],
       "additionalProperties": false,
       "properties": {
         "field": {
           "type": "string"
         },
-        "is": {
-          "const": "inSet"
-        },
-        "values": {
-          "type": "array",
-          "items": {
-            "anyOf": [
-              {
-                "$ref": "#/definitions/datetime"
-              },
-              {
-                "$ref": "#/definitions/numeric"
-              },
-              {
-                "$ref": "#/definitions/string"
+        "inSet": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/datetime"
+                  },
+                  {
+                    "$ref": "#/definitions/numeric"
+                  },
+                  {
+                    "$ref": "#/definitions/string"
+                  }
+                ]
               }
-            ]
-          }
+            }
+          ]
         }
       }
     },
     "inMapConstraint": {
       "type": "object",
-      "required": ["field", "is", "file", "key"],
+      "required": [
+        "field",
+        "file",
+        "key"
+      ],
       "additionalProperties": false,
       "properties": {
         "field": {
           "type": "string"
-        },
-        "is": {
-          "const": "inMap"
         },
         "file": {
           "type": "string"
@@ -591,3 +724,4 @@
     }
   }
 }
+

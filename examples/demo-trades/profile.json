@@ -68,21 +68,21 @@
       "constraints": [
         { "field": "tradePrice", "is": "granularTo", "value": 0.1 },
         {
-          "if": { "field": "stock", "is": "equalTo", "value": "LLOY" },
+          "if": { "field": "stock", "equalTo": "LLOY" },
           "then": { "allOf": [
             { "field": "tradePrice", "is": "greaterThan", "value": 49.3 },
             { "field": "tradePrice", "is": "lessThan", "value": 50.0 }
           ]}
         },
         {
-          "if": { "field": "stock", "is": "equalTo", "value": "BARC" },
+          "if": { "field": "stock", "equalTo": "BARC" },
           "then": { "allOf": [
             { "field": "tradePrice", "is": "greaterThan", "value": 136.1 },
             { "field": "tradePrice", "is": "lessThan", "value": 137.0 }
           ]}
         },
         {
-          "if": { "field": "stock", "is": "equalTo", "value": "BP" },
+          "if": { "field": "stock", "equalTo": "BP" },
           "then": { "allOf": [
             { "field": "tradePrice", "is": "greaterThan", "value": 490.0 },
             { "field": "tradePrice", "is": "lessThan", "value": 500.0 }
@@ -109,7 +109,7 @@
       "rule": "tradeDate",
       "constraints": [
         { "field": "tradeDate", "is": "granularTo", "value": "days" },
-        { "field": "tradeDate", "is": "equalTo", "value": "2019-09-02T00:00:00.000" }
+        { "field": "tradeDate", "equalTo": "2019-09-02T00:00:00.000" }
       ]
     },
     {

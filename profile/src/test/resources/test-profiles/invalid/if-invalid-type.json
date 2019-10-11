@@ -7,7 +7,7 @@
         {
           "if": "integer",
           "then": {"field": "foo", "is": "greaterThan", "value": 0},
-          "else": {"field": "foo", "is": "equalTo", "value": "N/A"}
+          "else": {"field": "foo", "equalTo": "N/A"}
         }
       ]
     }

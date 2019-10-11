@@ -7,7 +7,7 @@
         {
           "if": {"field": "foo", "is": "ofType", "value": "integer"},
           "then": {"field": "foo", "is": "greaterThan", "value": 0},
-          "gelse": {"field": "foo", "is": "equalTo", "value": "N/A"}
+          "gelse": {"field": "foo", "equalTo": "N/A"}
         }
       ]
     }

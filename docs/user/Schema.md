@@ -55,7 +55,7 @@
 				{
 					"if": {
 						"anyOf": [
-							{ "field": "country", "is": "equalTo", "value": "USA" },
+							{ "field": "country", "equalTo": "USA" },
 							{ "field": "country", "is": "null" }
 						]
 					},

@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.profile.dtos.constraints.atomic;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
 
@@ -34,5 +35,6 @@ public abstract class AtomicConstraintDTO extends ConstraintDTO
         return true;
     }
 
+    @JsonIgnore
     public abstract boolean hasRelation();
 }

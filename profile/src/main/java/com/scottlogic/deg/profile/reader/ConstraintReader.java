@@ -111,8 +111,6 @@ public class ConstraintReader
                 case IN_MAP:
                     InMapConstraintDTO inMapConstraintDTO = (InMapConstraintDTO) atomicConstraintDTO;
                     return new InMapRelation(field, profileFields.getByName(inMapConstraintDTO.file), fileReader.listFromMapFile(inMapConstraintDTO.file, inMapConstraintDTO.key));
-                case NULL:
-                    return new IsNullConstraint(profileFields.getByName(atomicConstraintDTO.field));
                 case MATCHES_REGEX:
                     return new MatchesRegexConstraint(profileFields.getByName(atomicConstraintDTO.field), pattern(((MatchesRegexConstraintDTO) atomicConstraintDTO).value));
                 case CONTAINS_REGEX:
@@ -153,6 +151,8 @@ public class ConstraintReader
             GrammaticalConstraintDTO grammaticalConstraintDTO = (GrammaticalConstraintDTO) dto;
             switch (grammaticalConstraintDTO.getType())
             {
+                case NULL:
+                return new IsNullConstraint(profileFields.getByName(((NullConstraintDTO)dto).field));
                 case ALL_OF:
                     return new AndConstraint(read(((AllOfConstraintDTO) grammaticalConstraintDTO).constraints, profileFields));
                 case ANY_OF:

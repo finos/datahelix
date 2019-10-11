@@ -327,11 +327,11 @@ The [grammatical `not` constraint](#Grammatical-Constraints) inverts a constrain
 ### `equalTo` _(field, value)_  
 
 ```javascript
-{ "field": "type", "is": "equalTo", "value": "X_092" }
+{ "field": "type", "equalTo": "X_092" }
 OR
-{ "field": "type", "is": "equalTo", "value": 23 }
+{ "field": "type", "equalTo": 23 }
 OR
-{ "field": "type", "is": "equalTo", "value": "2001-02-03T04:05:06.007" }
+{ "field": "type", "equalTo": "2001-02-03T04:05:06.007" }
 ```
 
 Is satisfied if `field`'s value is equal to `value`
@@ -632,7 +632,7 @@ Wraps a constraint. Is satisfied if, and only if, its inner constraint is _not_ 
 ```javascript
 { "anyOf": [
     { "field": "foo", "is": "null" },
-    { "field": "foo", "is": "equalTo", "value": 0 }
+    { "field": "foo", "equalTo": 0 }
 ]}
 ```
 
@@ -655,7 +655,7 @@ Contains a number of sub-constraints. Is satisfied if all of the inner constrain
 {
     "if":   { "field": "foo", "is": "lessThan", "value": 100 },
     "then": { "field": "bar", "is": "greaterThan", "value": 0 },
-    "else": { "field": "bar", "is": "equalTo", "value": "N/A" }
+    "else": { "field": "bar", "equalTo": "N/A" }
 }
 ```
 

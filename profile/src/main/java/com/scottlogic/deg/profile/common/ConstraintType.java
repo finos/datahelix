@@ -41,7 +41,7 @@ public enum ConstraintType
 
     public static ConstraintType fromPropertyName(String propertyName)
     {
-        return Arrays.stream(values()).collect(Collectors.toMap(o -> propertyName, Function.identity())).get(propertyName);
+        return Arrays.stream(values()).collect(Collectors.toMap(o -> o.propertyName, Function.identity())).get(propertyName);
     }
 }
 

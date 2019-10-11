@@ -7,12 +7,12 @@
 		{ "name": "y" }
     ],
     "rules": [
-		{ "if": { "field": "type", "is": "equalTo", "value": "a" },
-		  "then": { "field": "x", "is": "equalTo", "value": "0.9" },
+		{ "if": { "field": "type", "equalTo": "a" },
+		  "then": { "field": "x", "equalTo": "0.9" },
 		  "else": { "field": "x", "is": "null" }},
 		  
-		{ "if": { "field": "type", "is": "equalTo", "value": "a" },
-		  "then": { "field": "y", "is": "equalTo", "value": "12" },
+		{ "if": { "field": "type", "equalTo": "a" },
+		  "then": { "field": "y", "equalTo": "12" },
 		  "else": { "field": "y", "is": "null" }}
 	]
 }

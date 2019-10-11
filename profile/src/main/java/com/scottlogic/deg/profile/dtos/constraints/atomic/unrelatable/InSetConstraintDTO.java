@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.profile.dtos.constraints.atomic.unrelatable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.scottlogic.deg.profile.common.ConstraintType;
 
 public abstract class InSetConstraintDTO extends UnrelatableConstraintDTO
@@ -25,5 +26,6 @@ public abstract class InSetConstraintDTO extends UnrelatableConstraintDTO
         super(ConstraintType.IN_SET);
     }
 
+    @JsonIgnore
     public abstract boolean isFromFile();
 }

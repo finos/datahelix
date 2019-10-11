@@ -165,8 +165,8 @@ Feature: Values can be specified by using if, then and else constraints
     And there is a constraint:
       """
       {
-        "if": { "field": "foo", "is": "equalTo", "value": 1 },
-        "else": { "field": "bar", "is": "equalTo", "value": "a" }
+        "if": { "field": "foo", "equalTo": 1 },
+        "else": { "field": "bar", "equalTo": "a" }
       }
       """
     Then the profile is invalid because "Constraint is null"

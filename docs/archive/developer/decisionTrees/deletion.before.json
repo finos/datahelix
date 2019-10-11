@@ -6,11 +6,11 @@
 		{ "name": "y" }
     ],
     "rules": [
-		{ "field": "x", "is": "equalTo", "value": 3 },
+		{ "field": "x", "equalTo": 3 },
 		
 		{
 			"if": { "field": "x", "is": "greaterThan", "value": 12 },
-			"then": { "field": "y", "is": "equalTo", "value": 5 }
+			"then": { "field": "y", "equalTo": 5 }
 		}
 	]
 }

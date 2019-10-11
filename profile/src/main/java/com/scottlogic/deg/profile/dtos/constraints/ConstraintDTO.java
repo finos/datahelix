@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.profile.dtos.constraints;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
@@ -42,8 +43,10 @@ public abstract class ConstraintDTO
         this.type = type;
     }
 
+    @JsonIgnore
     public abstract boolean isAtomic();
 
+    @JsonIgnore
     public ConstraintType getType()
     {
         return type;

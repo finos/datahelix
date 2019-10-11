@@ -80,8 +80,8 @@ In addition the following shows how the _there is a constraint_ step can be used
 And there is a constraint:
   """
     {
-      "if": { "field": "foo", "is": "equalTo", "value": "dddd" },
-      "then": { "field": "bar", "is": "equalTo", "value": "4444" },
+      "if": { "field": "foo", "equalTo": "dddd" },
+      "then": { "field": "bar", "equalTo": "4444" },
       "else": { "field": "bar", "is": "shorterThan", "value": 1 }
     }
   """
