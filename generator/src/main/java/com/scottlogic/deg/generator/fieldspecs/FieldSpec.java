@@ -16,10 +16,14 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
+import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.restrictions.*;
 
 import java.util.*;
+
+import static com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory.forMaxLength;
+import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.*;
 
 /**
  * Details a column's atomic constraints
@@ -37,8 +41,17 @@ public class FieldSpec {
     public static FieldSpec fromRestriction(TypedRestrictions restrictions) {
         return new FieldSpec(null, restrictions, true, Collections.emptySet());
     }
-    public static FieldSpec empty() {
-        return new FieldSpec(null, null, true, Collections.emptySet());
+    public static FieldSpec fromType(FieldType type) {
+        switch (type) {
+            case NUMERIC:
+                return new FieldSpec(null, createDefaultNumericRestrictions(), true, Collections.emptySet());
+            case DATETIME:
+                return new FieldSpec(null, createDefaultDateTimeRestrictions(), true, Collections.emptySet());
+            case STRING:
+                return new FieldSpec(null, forMaxLength(1000), true, Collections.emptySet());
+            default:
+                throw new IllegalArgumentException("Unable to create FieldSpec from type " + type.name());
+        }
     }
     public static FieldSpec nullOnly() {
         return new FieldSpec(NO_VALUES, null, true, Collections.emptySet());
@@ -90,7 +103,7 @@ public class FieldSpec {
             if (whitelist.isEmpty()) {
                 return "Null only";
             }
-            return (nullable ? "" : "Not Null") + String.format("IN %s", whitelist);
+            return (nullable ? "" : "Not Null ") + String.format("IN %s", whitelist);
         }
 
         return String.format("%s%s",
@@ -107,6 +120,10 @@ public class FieldSpec {
         }
 
         if (restrictions != null && !restrictions.match(value)) {
+            return false;
+        }
+
+        if (whitelist != null && !whitelist.list().contains(value)) {
             return false;
         }
 

@@ -49,12 +49,12 @@ class RestrictionsMergeOperationTest {
 
     @BeforeAll
     static void beforeAll() {
-        leftNumeric = FieldSpec.empty().fromRestriction(
+        leftNumeric = FieldSpec.fromRestriction(
             createNumericRestrictions(
                 new Limit<>(new BigDecimal("-1e10"), true),
                 NUMERIC_MAX_LIMIT)
         );
-        rightNumeric = FieldSpec.empty().fromRestriction(
+        rightNumeric = FieldSpec.fromRestriction(
             createNumericRestrictions(
                 new Limit<>(new BigDecimal("-1e15"), true),
                 NUMERIC_MAX_LIMIT)
@@ -76,7 +76,7 @@ class RestrictionsMergeOperationTest {
 
     @Test
     void applyMergeOperation_withLeftNull_shouldNotCallMerge(){
-        FieldSpec result = operation.applyMergeOperation(FieldSpec.empty(), rightNumeric);
+        FieldSpec result = operation.applyMergeOperation(FieldSpec.fromRestriction(null), rightNumeric);
 
         Assert.assertEquals(rightNumeric.getRestrictions(), result.getRestrictions());
         verify(linearMerger, times(0)).merge(any(), any());
@@ -85,7 +85,7 @@ class RestrictionsMergeOperationTest {
 
     @Test
     void applyMergeOperation_withRightNull_shouldNotCallMerge(){
-        FieldSpec result = operation.applyMergeOperation(leftNumeric, FieldSpec.empty());
+        FieldSpec result = operation.applyMergeOperation(leftNumeric, FieldSpec.fromRestriction(null));
 
         Assert.assertEquals(leftNumeric.getRestrictions(), result.getRestrictions());
         verify(linearMerger, times(0)).merge(any(), any());
@@ -94,7 +94,7 @@ class RestrictionsMergeOperationTest {
 
     @Test
     void applyMergeOperation_withBothNull_shouldNotCallMerge(){
-        FieldSpec result = operation.applyMergeOperation(FieldSpec.empty(), FieldSpec.empty());
+        FieldSpec result = operation.applyMergeOperation(FieldSpec.fromRestriction(null), FieldSpec.fromRestriction(null));
 
         Assert.assertEquals(null, result.getRestrictions());
         verify(linearMerger, times(0)).merge(any(), any());
@@ -128,9 +128,9 @@ class RestrictionsMergeOperationTest {
 
     @Test
     void applyMergeOperation_withNoRestrictions_shouldNotApplyAnyRestriction(){
-        FieldSpec merging = FieldSpec.empty();
+        FieldSpec merging = FieldSpec.fromRestriction(null);
 
-        FieldSpec result = operation.applyMergeOperation(FieldSpec.empty(), merging);
+        FieldSpec result = operation.applyMergeOperation(FieldSpec.fromRestriction(null), merging);
 
         Assert.assertEquals(result, merging);
         verify(linearMerger, times(0)).merge(any(), any());

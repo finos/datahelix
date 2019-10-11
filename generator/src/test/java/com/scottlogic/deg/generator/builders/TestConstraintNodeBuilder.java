@@ -17,7 +17,7 @@
 package com.scottlogic.deg.generator.builders;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
 
 import java.util.ArrayList;
@@ -26,8 +26,8 @@ import java.util.List;
 import java.util.Set;
 
 public class TestConstraintNodeBuilder {
-    protected List<AtomicConstraint> constraints = new ArrayList<>();
-    private List<DecisionNode> decisionNodes = new ArrayList<>();
+    protected Set<AtomicConstraint> constraints = new HashSet<>();
+    private Set<DecisionNode> decisionNodes = new HashSet<>();
     private Set<NodeMarking> markings = new HashSet<>();
 
     protected TestConstraintNodeBuilder() {
@@ -46,7 +46,7 @@ public class TestConstraintNodeBuilder {
     }
 
     public TestConstraintNodeBuilder withDecision(TestConstraintNodeBuilder... constraintNodes) {
-        List<ConstraintNode> nodes = new ArrayList<>();
+        Set<ConstraintNode> nodes = new HashSet<>();
         for (TestConstraintNodeBuilder constraintNode : constraintNodes) {
             nodes.add(constraintNode.build());
         }

@@ -12,7 +12,7 @@
           "not": {
             "field": "field1",
             "is": "containingRegex",
-            "value": {"date": "0001-01-01T09:00:00.000"}
+            "value": "0001-01-01T09:00:00.000"
           }
         }
       ]

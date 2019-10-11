@@ -182,7 +182,6 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | foo  |
       | null |
       | 0    |
-      | 0.0  |
 
   Scenario: Running an 'inSet' request that includes a date value should be successful
     Given there is a field foo
@@ -1019,17 +1018,6 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
       | 10   |
 
-  Scenario: 'InSet' with a non contradicting not 'granularTo' is successful
-    Given there is a field foo
-    And foo has type "decimal"
-    And foo is in set:
-      | 1.1 |
-    And foo is anything but granular to 1
-    Then the following data should be generated:
-      | foo  |
-      | null |
-      | 1.1  |
-
   Scenario: Integer within an inSet and a non contradicting 'granularTo' is successful
     Given there is a field foo
     And foo has type "decimal"
@@ -1042,7 +1030,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | foo  |
       | null |
       | 1    |
-      | 2.0  |
+      | 2    |
 
   Scenario: Not 'inSet' with a non contradicting 'granularTo' is successful
     Given there is a field foo
@@ -1064,17 +1052,6 @@ Feature: User can specify that a field value belongs to a set of predetermined o
     And foo is in set:
       | 1.1 |
     And foo is granular to 1
-    Then the following data should be generated:
-      | foo  |
-      | null |
-
-  @ignore #769 Violation of numeric and temporal granularity
-  Scenario: 'InSet' with a contradicting not 'granularTo' emits null
-    Given there is a field foo
-    And foo has type "decimal"
-    And foo is in set:
-      | 1 |
-    And foo is anything but granular to 1
     Then the following data should be generated:
       | foo  |
       | null |
@@ -1477,13 +1454,13 @@ Feature: User can specify that a field value belongs to a set of predetermined o
     Given there is a field foo
     And foo has type "string"
     And foo is anything but null
-    And there is a constraint:
-      """
-      { "anyOf": [
-        { "field": "foo", "is": "inSet", "values": [ "Test 1", "Test 2" ] },
-        { "field": "foo", "is": "inSet", "values": [ "Test 3", "Test 4" ] }
-      ]}
-      """
+    And Any Of the next 2 constraints
+    And foo is in set:
+      | "Test 1"  |
+      | "Test 2"  |
+    And foo is in set:
+      | "Test 3"  |
+      | "Test 4"  |
     Then the following data should be generated:
       | foo      |
       | "Test 1" |
@@ -1494,13 +1471,13 @@ Feature: User can specify that a field value belongs to a set of predetermined o
   Scenario: Running a 'inSet' request as part of a non-contradicting allOf constraint should be successful
     Given there is a field foo
     And foo has type "string"
-    And there is a constraint:
-      """
-      { "allOf": [
-        { "field": "foo", "is": "inSet", "values": [ "Test1", "Test2" ] },
-        { "field": "foo", "is": "inSet", "values": [ "Test1", "Test2" ] }
-      ]}
-      """
+    And All Of the next 2 constraints
+    And foo is in set:
+      | "Test1"  |
+      | "Test2"  |
+    And foo is in set:
+      | "Test1"  |
+      | "Test2"  |
     Then the following data should be generated:
       | foo     |
       | null    |
@@ -1510,13 +1487,13 @@ Feature: User can specify that a field value belongs to a set of predetermined o
   Scenario: Running a 'inSet' request as part of a contradicting allOf constraint should produce null
     Given there is a field foo
     And foo has type "string"
-    And there is a constraint:
-      """
-      { "allOf": [
-        { "field": "foo", "is": "inSet", "values": [ "Test1", "Test2" ] },
-        { "field": "foo", "is": "inSet", "values": [ "Test3", "Test4" ] }
-      ]}
-      """
+    And All Of the next 2 constraints
+    And foo is in set:
+      | "Test 1"  |
+      | "Test 2"  |
+    And foo is in set:
+      | "Test 3"  |
+      | "Test 4"  |
     Then the following data should be generated:
       | foo  |
       | null |
@@ -1533,14 +1510,12 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "Test2" |
       | "Test3" |
       | "Test4" |
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "inSet", "values": [ "Test1", "Test2" ] },
-        "then": { "field": "price", "is": "equalTo", "value": 1 },
-        "else": { "field": "price", "is": "equalTo", "value": 2 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is in set:
+      | "Test1"  |
+      | "Test2"  |
+    And price is equal to 1
+    And price is equal to 2
     And foo is anything but null
     And price is anything but null
     Then the following data should be generated:

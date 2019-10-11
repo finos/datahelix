@@ -2,9 +2,8 @@ package com.scottlogic.deg.profile.reader.atomic;
 
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.constraintdetail.ParsedDateGranularity;
-import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
-import com.scottlogic.deg.common.profile.Types;
+import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularityFactory;
+import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
@@ -17,7 +16,8 @@ import java.util.regex.Pattern;
 
 import static com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType.IS_GRANULAR_TO;
 import static com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType.IS_NULL;
-import static com.scottlogic.deg.common.profile.Types.*;
+import static com.scottlogic.deg.common.profile.FieldType.*;
+import static com.scottlogic.deg.profile.reader.atomic.ConstraintReaderHelpers.getDateTimeGranularity;
 
 public class ConstraintValueValidator {
 
@@ -42,18 +42,14 @@ public class ConstraintValueValidator {
                 validateAny(field, type, value);
                 break;
             case IS_IN_SET:
+            case IS_IN_MAP:
                 validateSet(field, type, value);
                 break;
-            case IS_OF_TYPE:
-                validateOfTypes(field, value);
-                break;
-
             case MATCHES_REGEX:
             case CONTAINS_REGEX:
                 validatePattern(value);
                 validateTypeIs(field, type, STRING);
                 break;
-
             case HAS_LENGTH:
             case IS_STRING_SHORTER_THAN:
             case IS_STRING_LONGER_THAN:
@@ -86,12 +82,12 @@ public class ConstraintValueValidator {
         }
     }
 
-    private static void validateTypeIs(Field field, AtomicConstraintType type, Types s) {
-        if (field.type == null){
+    private static void validateTypeIs(Field field, AtomicConstraintType type, FieldType s) {
+        if (field.getType() == null){
             throw new ValidationException("is not typed; add its type to the field definition");
         }
-        if (field.type != s){
-            throw new ValidationException("is type " + field.type + " , but you are trying to apply a " + type + " constraint which requires " + s);
+        if (field.getType() != s){
+            throw new ValidationException("is type " + field.getType() + " , but you are trying to apply a " + type + " constraint which requires " + s);
         }
     }
 
@@ -131,10 +127,6 @@ public class ConstraintValueValidator {
         distributedList.stream()
             .peek(val->{if (val == null) throw new ValidationException("Set must not contain null");})
             .forEach(val->validateAny(field, type, val));
-    }
-
-    private static void validateOfTypes(Field field, Object value) {
-        OfTypeConstraintFactory.create(field, (String)value);
     }
 
     private static void validatePattern(Object value) {
@@ -186,12 +178,12 @@ public class ConstraintValueValidator {
 
     private static void validateGranularity(Field field, Object value) {
         if (value instanceof Number) {
-            ParsedGranularity.parse(value);
             validateTypeIs(field, IS_GRANULAR_TO, NUMERIC);
+            NumericGranularityFactory.create(value);
         }
         else if (value instanceof String) {
-            ParsedDateGranularity.parse((String) value);
             validateTypeIs(field, IS_GRANULAR_TO, DATETIME);
+            getDateTimeGranularity((String) value).getNext(OffsetDateTime.MIN);
         }
         else {
             throw new ValidationException("Couldn't recognise granularity value, it must be either a negative power of ten or one of the supported datetime units.");

@@ -16,7 +16,8 @@
 
 package com.scottlogic.deg.profile.reader.atomic;
 
-import com.scottlogic.deg.common.profile.Types;
+import com.scottlogic.deg.common.profile.FieldType;
+import com.scottlogic.deg.common.profile.constraintdetail.DateTimeGranularity;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 
 import java.time.LocalDateTime;
@@ -27,6 +28,7 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAccessor;
 
 public class ConstraintReaderHelpers {
@@ -60,11 +62,15 @@ public class ConstraintReaderHelpers {
         }
     }
 
-    public static Types getFieldType(String type) {
+    public static FieldType getFieldType(String type) {
+        if (type == null) {
+            return null;
+        }
+
         switch (type) {
             case "decimal":
             case "integer":
-                return Types.NUMERIC;
+                return FieldType.NUMERIC;
 
             case "string":
             case "ISIN":
@@ -74,14 +80,22 @@ public class ConstraintReaderHelpers {
             case "firstname":
             case "lastname":
             case "fullname":
-                return Types.STRING;
+                return FieldType.STRING;
 
             case "datetime":
-                return Types.DATETIME;
+                return FieldType.DATETIME;
         }
 
         throw new InvalidProfileException("Profile is invalid: no type known for " + type);
 
+    }
+
+    public static DateTimeGranularity getDateTimeGranularity(String granularity) {
+        String offsetUnitUpperCase = granularity.toUpperCase();
+        boolean workingDay = offsetUnitUpperCase.equals("WORKING DAYS");
+        return new DateTimeGranularity(
+            ChronoUnit.valueOf(ChronoUnit.class, workingDay ? "DAYS" : offsetUnitUpperCase),
+            workingDay);
     }
 
 }

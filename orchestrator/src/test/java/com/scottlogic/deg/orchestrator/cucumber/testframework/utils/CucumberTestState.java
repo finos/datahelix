@@ -18,17 +18,17 @@ package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
+import com.scottlogic.deg.profile.dto.FieldDTO;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.deg.common.profile.FieldBuilder.createInternalField;
 
 /**
  * Class to represent the state during cucumber test running and execution
@@ -37,68 +37,48 @@ public class CucumberTestState {
     public DataGenerationType dataGenerationType = DataGenerationType.FULL_SEQUENTIAL;
     public CombinationStrategyType combinationStrategyType = CombinationStrategyType.PINNING;
 
-    /**
-     * Boolean to represent if the generation mode is validating or violating.
-     * If true, generation is in violate mode.
-     */
-    public Boolean shouldViolate;
+    public boolean shouldViolate;
     public boolean expectExceptions;
-
-    /** If true, we inject a no-op generation engine during the test (e.g. because we're just testing profile validation) */
-    private Boolean shouldSkipGeneration;
-
-    Boolean shouldSkipGeneration() { return shouldSkipGeneration; }
-    void disableGeneration() { shouldSkipGeneration = true; }
-
+    public boolean shouldSkipGeneration;
+    boolean generationHasAlreadyOccured;
     public long maxRows = 200;
 
-    Boolean generationHasAlreadyOccured;
+    List<List<Object>> generatedObjects = new ArrayList<>();
+    List<FieldDTO> profileFields = new ArrayList<>();;
+    List<ConstraintDTO> constraints = new ArrayList<>();
+    List<Exception> testExceptions = new ArrayList<>();
+    Map<String, List<List<String>>> inMapFiles = new HashMap<>();
 
-    List<List<Object>> generatedObjects;
-    List<Field> profileFields;
-    List<ConstraintDTO> constraints;
-    List<Exception> testExceptions;
+    Deque<NestedConstraint> nestedConstraints = new ArrayDeque<>();
 
     private final List<AtomicConstraintType> contstraintsToNotViolate = new ArrayList<>();
 
-    public CucumberTestState() {
-        this.initialise();
+    public void startCreatingIfConstraint(int total) {
+        nestedConstraints.push(new NestedConstraint("if", total));
     }
 
-    public void initialise(){
-        profileFields = new ArrayList<>();
-        constraints = new ArrayList<>();
-        testExceptions = new ArrayList<>();
-        generatedObjects = new ArrayList<>();
-        contstraintsToNotViolate.clear();
-        generationHasAlreadyOccured = false;
-        shouldSkipGeneration = false;
-        shouldViolate = false;
+    public void startCreatingAllOfConstraint(int total) {
+        nestedConstraints.push(new NestedConstraint("allOf", total));
     }
 
-    public void addConstraint(String fieldName, String constraintName, List<Object> value) {
-        if (value == null)
-            addConstraint(fieldName, constraintName, (Object)value);
-        else
-            addConstraint(fieldName, constraintName, getSetValues(value));
+    public void startCreatingAnyOfConstraint(int total) {
+        nestedConstraints.push(new NestedConstraint("anyOf", total));
     }
 
-    public void addNotConstraint(String fieldName, String constraintName, List<Object> value) {
-        if (value == null)
-            addNotConstraint(fieldName, constraintName, (Object)value);
-        else
-            addNotConstraint(fieldName, constraintName, getSetValues(value));
+    public void addInMapConstraint(String fieldName, String key, String file) {
+        this.addConstraintToList(createInMapConstraint(fieldName, key, file));
+    }
+
+    public void addRelationConstraint(String field, String relationType, String other) {
+        this.addConstraintToList(createRelationConstraint(field, relationType, other));
     }
 
     public void addConstraint(String fieldName, String constraintName, Object value) {
-        ConstraintDTO dto = this.createConstraint(fieldName, constraintName, value);
-        this.addConstraintToList(dto);
+        this.addConstraintToList(createConstraint(fieldName, constraintName, value));
     }
 
     public void addNotConstraint(String fieldName, String constraintName, Object value) {
-        ConstraintDTO notDto = new ConstraintDTO();
-        notDto.not = this.createConstraint(fieldName, constraintName, value);
-        this.addConstraintToList(notDto);
+        this.addConstraintToList(createNotConstraint(fieldName, constraintName, value));
     }
 
     public void addConstraintsFromJson(String constraintProfile) throws IOException {
@@ -106,23 +86,26 @@ public class CucumberTestState {
         this.constraints.addAll(holder.constraints);
     }
 
-    private Collection<Object> getSetValues(List<Object> values) {
-        if (values == null){
-            throw new IllegalArgumentException("Values cannot be null");
-        }
-
-        values.stream()
-            .filter(value -> value instanceof Exception)
-            .map(value -> (Exception)value)
-            .forEach(this::addException);
-
-        return values.stream()
-            .filter(value -> !(value instanceof Exception))
-            .collect(Collectors.toSet());
+    public void addMapFile(String name, List<List<String>> map) {
+        this.inMapFiles.put(name, map);
     }
 
+    private List<Object> getValuesFromMap(String name, String key) {
+        List<List<String>> map = this.inMapFiles.get(name);
+        int index = map.get(0).indexOf(key);
+        List<Object> rtnList = new ArrayList<>();
+
+        for (int i = 1; i < map.size() ; i++) {
+            rtnList.add(map.get(i).get(index));
+        }
+        return rtnList;
+    }
+
+
     public void addField(String fieldName) {
-        this.profileFields.add(createField(fieldName, null));
+        FieldDTO fieldDTO = new FieldDTO();
+        fieldDTO.name = fieldName;
+        this.profileFields.add(fieldDTO);
     }
 
     public void addException(Exception e){
@@ -142,13 +125,94 @@ public class CucumberTestState {
         dto.field = fieldName;
         dto.is = this.extractConstraint(constraintName);
         if (value != null){
-            if (value instanceof Collection){
+            if (value instanceof String) {
+                dto.value = value;
+            }
+            else if (value instanceof Collection){
                 dto.values = (Collection<Object>) value;
             } else {
                 dto.value = value;
             }
         }
         return dto;
+    }
+
+    private ConstraintDTO createNotConstraint(String fieldName, String constraintName, Object value) {
+        ConstraintDTO notDto = new ConstraintDTO();
+        notDto.not = this.createConstraint(fieldName, constraintName, value);
+        return notDto;
+    }
+
+    private ConstraintDTO createRelationConstraint(String field, String relationType, String other) {
+        ConstraintDTO dto = new ConstraintDTO();
+        dto.field = field;
+        dto.is = relationType;
+        dto.otherField = other;
+        return dto;
+    }
+
+    private ConstraintDTO createInMapConstraint(String fieldName, String key, String file) {
+        ConstraintDTO dto = new ConstraintDTO();
+        dto.field = fieldName;
+        dto.is = "inMap";
+        dto.key = key;
+        dto.file = file;
+        dto.values = getValuesFromMap(file, key);
+        return dto;
+    }
+
+    private void createIfConstraint(int total) {
+        ConstraintDTO dto = new ConstraintDTO();
+        if (total == 3) {
+            dto.else_ = constraints.remove(constraints.size() - 1);
+            total--;
+        }
+        if (total == 2) {
+            dto.then = constraints.remove(constraints.size() - 1);
+            dto.if_ = constraints.remove(constraints.size() - 1);
+        }
+        this.addConstraintToList(dto);
+    }
+
+    private void createAllOfConstraint(int total) {
+        ConstraintDTO dto = new ConstraintDTO();
+        dto.allOf = new ArrayList<>();
+
+        for (int i = 0; i < total; i++) {
+            dto.allOf.add(constraints.remove(constraints.size() - 1));
+        }
+        this.addConstraintToList(dto);
+    }
+
+    private void createAnyOfConstraint(int total) {
+        ConstraintDTO dto = new ConstraintDTO();
+        dto.anyOf = new ArrayList<>();
+
+        for (int i = 0; i < total; i++) {
+            dto.anyOf.add(constraints.remove(constraints.size() - 1));
+        }
+        this.addConstraintToList(dto);
+    }
+
+    private void createNestedConstraint() {
+        NestedConstraint peek = nestedConstraints.peek();
+
+        assert peek != null;
+        peek.reduceRemaining();
+        if (peek.isCompleted()) {
+            NestedConstraint pop = nestedConstraints.pop();
+            switch (pop.constraintType) {
+                case "if":
+                    createIfConstraint(pop.total);
+                    break;
+                case "anyOf":
+                    createAnyOfConstraint(pop.total);
+                    break;
+                case "allOf":
+                    createAllOfConstraint(pop.total);
+                    break;
+            }
+        }
     }
 
     private String extractConstraint(String gherkinConstraint) {
@@ -162,6 +226,9 @@ public class CucumberTestState {
 
     private void addConstraintToList(ConstraintDTO constraintDTO) {
         this.constraints.add(constraintDTO);
+        if (!nestedConstraints.isEmpty()) {
+            createNestedConstraint();
+        }
     }
 
     private ConstraintHolder deserialise(String json) throws IOException {
@@ -171,39 +238,53 @@ public class CucumberTestState {
     }
 
     public void setFieldUnique(String fieldName) {
-        Field oldField = profileFields.stream()
-            .filter(f -> f.name.equals(fieldName))
-            .findFirst()
-            .orElseThrow(UnsupportedOperationException::new);
-
-        Field newField = new Field(oldField.name, oldField.type, true, oldField.getFormatting(), oldField.isInternal());
-
-        profileFields.remove(oldField);
-        profileFields.add(newField);
+        profileFields = profileFields.stream()
+            .map(fieldDTO -> {
+                if (fieldDTO.name.equals(fieldName)) {
+                    fieldDTO.unique = true;
+                }
+                return fieldDTO;
+            }).collect(Collectors.toList());
     }
 
-    public void setFieldType(String fieldName, Types types) {
-        Field oldField = profileFields.stream()
-            .filter(f -> f.name.equals(fieldName))
-            .findFirst()
-            .orElseThrow(UnsupportedOperationException::new);
-
-        Field newField = new Field(oldField.name, types, oldField.isUnique(), oldField.getFormatting(), oldField.isInternal());
-
-        profileFields.remove(oldField);
-        profileFields.add(newField);
+    public void setFieldType(String fieldName, String types) {
+        profileFields = profileFields.stream()
+            .map(fieldDTO -> {
+                if (fieldDTO.name.equals(fieldName)) {
+                    fieldDTO.type = types;
+                }
+                return fieldDTO;
+            }).collect(Collectors.toList());
     }
 
     public void setFieldFormatting(String fieldName, String formatting) {
-        Field oldField = profileFields.stream()
-            .filter(f -> f.name.equals(fieldName))
-            .findFirst()
-            .orElseThrow(UnsupportedOperationException::new);
+        profileFields = profileFields.stream()
+            .map(fieldDTO -> {
+                if (fieldDTO.name.equals(fieldName)) {
+                    fieldDTO.formatting = formatting;
+                }
+                return fieldDTO;
+            }).collect(Collectors.toList());
+    }
 
-        Field newField = new Field(oldField.name, oldField.type, oldField.isUnique(), formatting, oldField.isInternal());
+    private static class NestedConstraint {
+        String constraintType;
+        int total;
+        int remaining;
 
-        profileFields.remove(oldField);
-        profileFields.add(newField);
+        NestedConstraint(String constraintType, int total) {
+            this.constraintType = constraintType;
+            this.total = total;
+            this.remaining = total;
+        }
+
+        boolean isCompleted() {
+            return remaining <= 0;
+        }
+
+        void reduceRemaining() {
+            remaining = remaining - 1;
+        }
     }
 }
 

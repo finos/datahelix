@@ -17,12 +17,12 @@
 package com.scottlogic.deg.profile.reader;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
-import com.scottlogic.deg.common.profile.constraints.Constraint;
-import com.scottlogic.deg.common.profile.constraints.atomic.*;
+import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.common.util.Defaults;
+import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
 import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintFactory;
 import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintValueReader;
@@ -40,7 +40,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
-import static com.scottlogic.deg.common.profile.Types.*;
+import static com.scottlogic.deg.common.profile.FieldType.*;
 import static com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType.*;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -59,13 +59,6 @@ public class ConstraintValidationAndReadingTests {
         profileFields = new ProfileFields(fields);
     }
 
-    private static Object createDateObject(String dateStr) {
-        Map<String, String> date = new HashMap<>();
-        date.put("date", dateStr);
-
-        return date;
-    }
-
     private static Stream<Arguments> testProvider() {
         ConstraintDTO stringValueDto = new ConstraintDTO();
         stringValueDto.field = "test";
@@ -79,7 +72,7 @@ public class ConstraintValidationAndReadingTests {
         ConstraintDTO dateValueDto = new ConstraintDTO();
         dateValueDto.field = "test";
 
-        dateValueDto.value = createDateObject("2020-01-01T01:02:03.456");
+        dateValueDto.value = "2020-01-01T01:02:03.456";
 
         ConstraintDTO multipleValuesDto = new ConstraintDTO();
         multipleValuesDto.field = "test";
@@ -140,14 +133,6 @@ public class ConstraintValidationAndReadingTests {
             Arguments.of(IS_STRING_SHORTER_THAN, nullValueDto));
     }
 
-    private static Stream<Arguments> ofTypeInvalidValueProvider() {
-        ConstraintDTO numericTypeValueDto = new ConstraintDTO();
-        numericTypeValueDto.field = "test";
-        numericTypeValueDto.value = "numeric";
-
-        return Stream.of(Arguments.of(AtomicConstraintType.IS_OF_TYPE, numericTypeValueDto));
-    }
-
     private static Stream<Arguments> numericOutOfBoundsOperandProvider() {
         ConstraintDTO maxValueDtoPlusOne = new ConstraintDTO();
         maxValueDtoPlusOne.field = "test";
@@ -205,12 +190,12 @@ public class ConstraintValidationAndReadingTests {
     @DisplayName("Should return correct constraint type")
     @ParameterizedTest(name = "{0} should return {1}")
     @MethodSource("testProvider")
-    public void testAtomicConstraintReader(AtomicConstraintType type, ConstraintDTO dto, Class<?> constraintType, Types types) {
+    public void testAtomicConstraintReader(AtomicConstraintType type, ConstraintDTO dto, Class<?> constraintType, FieldType fieldType) {
 
         try {
-            Object value = new AtomicConstraintValueReader(null).getValue(dto, types);
+            Object value = new AtomicConstraintValueReader(null).getValue(dto, fieldType);
 
-            ConstraintValueValidator.validate(createField(dto.field, types), type, value);
+            ConstraintValueValidator.validate(createField(dto.field, fieldType), type, value);
 
             Constraint constraint = AtomicConstraintFactory.create(type, createField(dto.field), value);
 
@@ -225,16 +210,9 @@ public class ConstraintValidationAndReadingTests {
 
     @DisplayName("Should fail when operators have an invalid operand")
     @ParameterizedTest(name = "{0} should be invalid")
-    @MethodSource({"stringLengthInvalidOperandProvider", "ofTypeInvalidValueProvider"})
+    @MethodSource({"stringLengthInvalidOperandProvider"})
     public void testAtomicConstraintReaderWithInvalidOperands(AtomicConstraintType type, ConstraintDTO dto) {
         Assertions.assertThrows(InvalidProfileException.class, () -> ConstraintValueValidator.validate(createField(dto.field), type, dto.value));
-    }
-
-    @Test
-    public void testBaseConstraintReaderMapWithUnmappedOperands() {
-        Assertions.assertThrows(
-            InvalidProfileException.class,
-            () -> ConstraintValueValidator.validate(createField("test"), IS_OF_TYPE, "garbage"));
     }
 
     @DisplayName("Should fail when value property is numeric and out of bounds")
@@ -325,7 +303,7 @@ public class ConstraintValidationAndReadingTests {
     }
 
     private void assertSuccessfulDateParse(String dateString, OffsetDateTime expectedDateTime) {
-        OffsetDateTime actualDateTime = tryParseConstraintDateTimeValue(createDateObject(dateString));
+        OffsetDateTime actualDateTime = tryParseConstraintDateTimeValue(dateString);
 
         Assert.assertThat(actualDateTime, equalTo(expectedDateTime));
     }
@@ -333,7 +311,7 @@ public class ConstraintValidationAndReadingTests {
     private void assertRejectedDateTimeParse(String dateString) {
         Assertions.assertThrows(
             InvalidProfileException.class,
-            () -> tryParseConstraintDateTimeValue(createDateObject(dateString)));
+            () -> tryParseConstraintDateTimeValue(dateString));
     }
 
     private OffsetDateTime tryParseConstraintDateTimeValue(Object value) {

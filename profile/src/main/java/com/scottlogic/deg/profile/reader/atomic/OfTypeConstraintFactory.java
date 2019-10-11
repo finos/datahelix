@@ -1,9 +1,9 @@
 package com.scottlogic.deg.profile.reader.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.constraintdetail.ParsedGranularity;
-import com.scottlogic.deg.common.profile.constraints.Constraint;
-import com.scottlogic.deg.common.profile.constraints.atomic.*;
+import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularityFactory;
+import com.scottlogic.deg.generator.profile.constraints.Constraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import com.scottlogic.deg.profile.reader.file.names.NameRetriever;
 
@@ -18,12 +18,10 @@ public class OfTypeConstraintFactory {
             case "string":
             case "datetime":
                 return Optional.empty();
-
             case "integer":
                 return Optional.of(new IsGranularToNumericConstraint(field,
-                    new ParsedGranularity(BigDecimal.ONE))
+                    NumericGranularityFactory.create(BigDecimal.ONE))
                 );
-
             case "ISIN":
             case "SEDOL":
             case "CUSIP":
@@ -32,7 +30,6 @@ public class OfTypeConstraintFactory {
                     field,
                     StandardConstraintTypes.valueOf(value.toUpperCase()))
                 );
-
             case "firstname":
             case "lastname":
             case "fullname":

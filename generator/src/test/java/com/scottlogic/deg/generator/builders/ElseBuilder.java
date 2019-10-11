@@ -16,8 +16,8 @@
 
 package com.scottlogic.deg.generator.builders;
 
-import com.scottlogic.deg.common.profile.constraints.Constraint;
-import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.generator.profile.constraints.Constraint;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
 
 public class ElseBuilder extends BaseConstraintBuilder<ConditionalConstraint> {
     private final Constraint ifCondition;

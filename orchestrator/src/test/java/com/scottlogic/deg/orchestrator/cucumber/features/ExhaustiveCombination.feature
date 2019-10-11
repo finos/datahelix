@@ -27,27 +27,6 @@ Feature: User can create data across multiple fields for all combinations availa
       | "a" | "d" |
       | "b" | "d" |
 
-  Scenario: Running an exhaustive combination strategy with upper case roman alphabet character (A-Z) strings should be successful
-    Given the following fields exist:
-      | foo |
-      | bar |
-    And foo has type "string"
-    And foo is anything but null
-    And bar has type "string"
-    And bar is anything but null
-    And foo is in set:
-      | "A" |
-      | "B" |
-    And bar is in set:
-      | "C" |
-      | "D" |
-    Then the following data should be generated:
-      | foo | bar |
-      | "A" | "C" |
-      | "B" | "C" |
-      | "A" | "D" |
-      | "B" | "D" |
-
   Scenario: Running an exhaustive combination strategy with roman numeric character (0-9) strings should be successful
     Given the following fields exist:
       | foo |
@@ -132,40 +111,6 @@ Feature: User can create data across multiple fields for all combinations availa
       | 999 | 0     |
       | -12 | 0     |
 
-  Scenario: Running an exhaustive combination strategy with invalid integer values should fail with an appropriate error message
-    Given the following fields exist:
-      | foo |
-      | bar |
-    And foo has type "integer"
-    And foo is anything but null
-    And bar has type "integer"
-    And bar is anything but null
-    And foo is in set:
-      | 999 |
-      | +12 |
-    And bar is in set:
-      | 12 |
-      | 0  |
-    Then the profile is invalid because "Unexpected character \('1' \(code 49\)\) in numeric value: expected digit \(0-9\) to follow minus sign, for valid numeric value\n at \[Source: \(String\)\"\+12\"; line: 1, column: 3\]"
-    And no data is created
-
-  Scenario: Running an exhaustive combination strategy with invalid decimal values should fail with an appropriate error message
-    Given the following fields exist:
-      | foo |
-      | bar |
-    And foo has type "decimal"
-    And foo is anything but null
-    And bar has type "decimal"
-    And bar is anything but null
-    And foo is in set:
-      | 999 |
-      | +12 |
-    And bar is in set:
-      | 12.01 |
-      | 0     |
-    Then the profile is invalid because "Unexpected character \('1' \(code 49\)\) in numeric value: expected digit \(0-9\) to follow minus sign, for valid numeric value\n at \[Source: \(String\)\"\+12\"; line: 1, column: 3\]"
-    And no data is created
-
   Scenario: Running an exhaustive combination strategy with valid date values should be successful
     Given the following fields exist:
       | foo |
@@ -202,23 +147,6 @@ Feature: User can create data across multiple fields for all combinations availa
       | 2010-01-01T00:00:00.000Z |
       | 2010-12-31T23:59:00.000Z |
     Then the profile is invalid because "Field \[foo\]: Date string '\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:00.000Z' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS\[Z\] between \(inclusive\) 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z"
-    And no data is created
-
-  Scenario: Running an exhaustive combination strategy with invalid date formats should fail with an appropriate error message
-    Given the following fields exist:
-      | foo |
-      | bar |
-    And foo has type "datetime"
-    And foo is anything but null
-    And bar has type "datetime"
-    And bar is anything but null
-    And foo is in set:
-      | 2018-12-01T14:00:00.000Z |
-      | 2018-12-05T14:00:00.000Z |
-    And bar is in set:
-      | 01-01-2010T00:00:00.000Z |
-      | 2010-12-31T23:59:00.000Z |
-    Then the profile is invalid because "Unable to determine correct type for `01-01-2010T00:00:00.000Z`.\nEnsure strings are wrapped in double-quotes."
     And no data is created
 
   Scenario: Running an exhaustive combination strategy with null values (null) should be successful
@@ -737,22 +665,16 @@ Feature: User can create data across multiple fields for all combinations availa
       | "test100"   |
       | "other"     |
       | "Not in If" |
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo2", "is": "equalTo", "value": 1 },
-        "then": { "field": "foo3", "is": "equalTo", "value": "test1" },
-        "else": {
-          "if": { "field": "foo2", "is": "equalTo", "value": 10 },
-          "then": { "field": "foo3", "is": "equalTo", "value": "test10" },
-          "else": {
-            "if": { "field": "foo2", "is": "equalTo", "value": 100 },
-            "then": { "field": "foo3", "is": "equalTo", "value": "test100" },
-            "else": { "field": "foo3", "is": "equalTo", "value": "other" }
-          }
-        }
-      }
-      """
+    When If Then and Else are described below
+    And foo2 is equal to 1
+    And foo3 is equal to "test1"
+    And If Then and Else are described below
+      And foo2 is equal to 10
+      And foo3 is equal to "test10"
+      And If Then and Else are described below
+        And foo2 is equal to 100
+        And foo3 is equal to "test100"
+        And foo3 is equal to "other"
     Then the following data should be generated:
       | foo1    | foo2 | foo3      |
       | "alpha" | 1    | "test1"   |

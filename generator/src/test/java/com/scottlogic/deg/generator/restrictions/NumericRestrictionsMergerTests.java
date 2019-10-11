@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.generator.restrictions;
 
+import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularity;
 import com.scottlogic.deg.generator.restrictions.linear.*;
 
 import org.junit.Assert;
@@ -90,7 +91,7 @@ class NumericRestrictionsMergerTests {
         LinearRestrictions<BigDecimal> left = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(BigDecimal.ZERO, true),
             new Limit<>(BigDecimal.ONE, true));
-        LinearRestrictions<BigDecimal> right = LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT, 0);
+        LinearRestrictions<BigDecimal> right = LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT, new NumericGranularity(0));
 
         Optional<LinearRestrictions<BigDecimal>> result = merger.merge(left, right);
 
@@ -105,7 +106,7 @@ class NumericRestrictionsMergerTests {
             new Limit<>(BigDecimal.ZERO, true),
             new Limit<>(BigDecimal.ONE, false));
 
-        LinearRestrictions<BigDecimal> right = LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT, 0);
+        LinearRestrictions<BigDecimal> right = LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT, new NumericGranularity(0));
 
         Optional<LinearRestrictions<BigDecimal>> result = merger.merge(left, right);
 
@@ -119,7 +120,7 @@ class NumericRestrictionsMergerTests {
         LinearRestrictions<BigDecimal> left = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(BigDecimal.ZERO, false),
             new Limit<>(BigDecimal.ONE, true));
-        LinearRestrictions<BigDecimal> right = LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT, 0);
+        LinearRestrictions<BigDecimal> right = LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT, new NumericGranularity(0));
 
         Optional<LinearRestrictions<BigDecimal>> result = merger.merge(left, right);
 
@@ -133,7 +134,7 @@ class NumericRestrictionsMergerTests {
         LinearRestrictions<BigDecimal> left = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(BigDecimal.ZERO, false),
             new Limit<>(BigDecimal.ONE, false));
-        LinearRestrictions<BigDecimal> right = LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT, 0);
+        LinearRestrictions<BigDecimal> right = LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT, new NumericGranularity(0));
 
         Optional<LinearRestrictions<BigDecimal>> result = merger.merge(left, right);
 
@@ -147,7 +148,7 @@ class NumericRestrictionsMergerTests {
         LinearRestrictions<BigDecimal> left = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(BigDecimal.ZERO, false),
             new Limit<>(BigDecimal.ONE, false));
-        LinearRestrictions<BigDecimal> right = LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT, 1);
+        LinearRestrictions<BigDecimal> right = LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT, new NumericGranularity(1));
 
         Optional<LinearRestrictions<BigDecimal>> result = merger.merge(left, right);
 

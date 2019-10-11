@@ -63,19 +63,6 @@ Feature: User can specify that a datetime date is after, but not equal to, a spe
       | 2019-01-01T00:00:00.004Z |
       | 2019-01-01T00:00:00.005Z |
 
-  @ignore #594 generation should be descending when upper-bound only is provided
-  Scenario: 'Not After' with a non-contradicting 'Not After' is successful
-    Given foo is anything but after 2019-01-01T00:00:00.000Z
-    And foo is anything but after 2020-01-01T00:00:00.000Z
-    And the generator can generate at most 5 rows
-    Then the following data should be generated:
-      | foo                      |
-      | 2019-01-01T00:00:00.000Z |
-      | 2018-12-31T23:59:59.999Z |
-      | 2018-12-31T23:59:59.998Z |
-      | 2018-12-31T23:59:59.997Z |
-      | 2018-12-31T23:59:59.996Z |
-
   Scenario: 'After' with a contradicting 'Not After' generates null
     Given foo is after 2019-01-01T00:00:00.000Z
     And foo is anything but after 2019-01-01T00:00:00.000Z
@@ -121,19 +108,6 @@ Feature: User can specify that a datetime date is after, but not equal to, a spe
       | 2019-01-01T00:00:00.003Z |
       | 2019-01-01T00:00:00.004Z |
 
-  @ignore #594 generation should be descending when upper-bound only is provided
-  Scenario: 'Not After' with a non-contradicting 'Not After Or At' is successful
-    Given foo is anything but after 2019-01-01T00:00:00.000Z
-    And  foo is anything but after or at 2020-01-01T00:00:00.000Z
-    And the generator can generate at most 5 rows
-    Then the following data should be generated:
-      | foo                      |
-      | 2019-01-01T00:00:00.000Z |
-      | 2018-12-31T23:59:59.999Z |
-      | 2018-12-31T23:59:59.998Z |
-      | 2018-12-31T23:59:59.997Z |
-      | 2018-12-31T23:59:59.996Z |
-
   Scenario: 'After' with a contradicting 'Not After Or At' only generates null
     Given foo is after 2019-01-01T00:00:00.000Z
     And foo is anything but after or at 2019-01-01T00:00:00.000Z
@@ -167,19 +141,6 @@ Feature: User can specify that a datetime date is after, but not equal to, a spe
       | 2019-01-01T00:00:00.003Z |
       | 2019-01-01T00:00:00.004Z |
       | 2019-01-01T00:00:00.005Z |
-
-  @ignore #594 generation should be descending when upper-bound only is provided
-  Scenario: 'Not After' with a non-contradicting 'Before' is successful
-    Given foo is anything but after 2019-01-01T00:00:00.000Z
-    And foo is before 2019-01-01T00:00:00.000Z
-    And the generator can generate at most 5 rows
-    Then the following data should be generated:
-      | foo                      |
-      | 2018-12-31T23:59:59.999Z |
-      | 2018-12-31T23:59:59.998Z |
-      | 2018-12-31T23:59:59.997Z |
-      | 2018-12-31T23:59:59.996Z |
-      | 2018-12-31T23:59:59.995Z |
 
   Scenario: 'Not After' with a non-contradicting 'Not Before' is successful
     Given foo is anything but after 2019-01-01T00:00:00.000Z
@@ -232,19 +193,6 @@ Feature: User can specify that a datetime date is after, but not equal to, a spe
       | 2019-01-02T00:00:00.003Z |
       | 2019-01-02T00:00:00.004Z |
       | 2019-01-02T00:00:00.005Z |
-
-  @ignore #594 generation should be descending when upper-bound only is provided
-  Scenario: 'Not After' with a non-contradicting 'Before Or At' is successful
-    Given foo is anything but after 2019-01-02T00:00:00.000Z
-    And  foo is before or at 2019-01-01T00:00:00.000Z
-    And the generator can generate at most 5 rows
-    Then the following data should be generated:
-      | foo                      |
-      | 2019-01-01T00:00:00.000Z |
-      | 2018-12-31T23:59:59.999Z |
-      | 2018-12-31T23:59:59.998Z |
-      | 2018-12-31T23:59:59.997Z |
-      | 2018-12-31T23:59:59.996Z |
 
   Scenario: 'Not After' with a non-contradicting 'Not Before Or At' is successful
     Given foo is anything but after 2019-01-01T00:00:00.000Z

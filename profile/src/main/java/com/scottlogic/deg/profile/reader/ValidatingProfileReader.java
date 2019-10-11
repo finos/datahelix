@@ -17,7 +17,7 @@ package com.scottlogic.deg.profile.reader;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.Profile;
+import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.profile.guice.ProfileConfigSource;
 import com.scottlogic.deg.profile.reader.validation.ConfigValidator;
@@ -27,7 +27,6 @@ import com.scottlogic.deg.profile.dto.SchemaVersionValidator;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ValidatingProfileReader {
@@ -63,7 +62,7 @@ public class ValidatingProfileReader {
     }
 
     private void validateFieldsAreTyped(ProfileFields fields) {
-        List<Field> untyped = fields.stream().filter(field -> field.type == null).collect(Collectors.toList());
+        List<Field> untyped = fields.stream().filter(field -> field.getType() == null).collect(Collectors.toList());
         if (untyped.size() == 1) {
             throw new InvalidProfileException("Field [" + untyped.get(0).name + "]: is not typed; add its type to the field definition");
         }

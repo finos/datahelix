@@ -16,9 +16,11 @@
 
 package com.scottlogic.deg.orchestrator.cucumber.testframework.steps;
 
+import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestHelper;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestState;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.GeneratorTestUtilities;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
@@ -37,13 +39,33 @@ public class DateValueStep {
     }
 
     @When("{fieldVar} is {operator} {date}")
-    public void whenFieldIsConstrainedByDateValue(String fieldName, String constraintName, DateObject value) {
+    public void whenFieldIsConstrainedByDateValue(String fieldName, String constraintName, String value) {
         state.addConstraint(fieldName, constraintName, value);
     }
 
     @When("{fieldVar} is anything but {operator} {date}")
-    public void whenFieldIsNotConstrainedByDateValue(String fieldName, String constraintName, DateObject value) {
+    public void whenFieldIsNotConstrainedByDateValue(String fieldName, String constraintName, String value) {
         state.addNotConstraint(fieldName, constraintName, value);
+    }
+
+    @And("^(.+) is after field ([A-z0-9]+)$")
+    public void dateAfter(String field, String otherField){
+        state.addRelationConstraint(field, AtomicConstraintType.IS_AFTER_CONSTANT_DATE_TIME.getText(), otherField);
+    }
+
+    @And("^(.+) is after or at field ([A-z0-9]+)$")
+    public void dateAfterOrAt(String field, String otherField){
+        state.addRelationConstraint(field, AtomicConstraintType.IS_AFTER_OR_EQUAL_TO_CONSTANT_DATE_TIME.getText(), otherField);
+    }
+
+    @And("^(.+) is before field ([A-z0-9]+)$")
+    public void dateBefore(String field, String otherField){
+        state.addRelationConstraint(field, AtomicConstraintType.IS_BEFORE_CONSTANT_DATE_TIME.getText(), otherField);
+    }
+
+    @And("^(.+) is before or at field ([A-z0-9]+)$")
+    public void dateBeforeOrAt(String field, String otherField){
+        state.addRelationConstraint(field, AtomicConstraintType.IS_BEFORE_OR_EQUAL_TO_CONSTANT_DATE_TIME.getText(), otherField);
     }
 
     @Then("{fieldVar} contains only datetime data")
@@ -62,7 +84,7 @@ public class DateValueStep {
     }
 
     @Then("{fieldVar} contains datetimes between {date} and {date} inclusively")
-    public void producedDataShouldContainDateTimeValuesInRangeForField(String fieldName, DateObject minInclusive, DateObject maxInclusive){
+    public void producedDataShouldContainDateTimeValuesInRangeForField(String fieldName,  String minInclusive, String maxInclusive){
         helper.assertFieldContainsNullOrMatching(
             fieldName,
             OffsetDateTime.class,
@@ -70,7 +92,7 @@ public class DateValueStep {
     }
 
     @Then("{fieldVar} contains datetimes outside {date} and {date}")
-    public void producedDataShouldContainDateTimeValuesOutOfRangeForField(String fieldName, DateObject min, DateObject max){
+    public void producedDataShouldContainDateTimeValuesOutOfRangeForField(String fieldName, String min, String max){
         helper.assertFieldContainsNullOrMatching(
             fieldName,
             OffsetDateTime.class,
@@ -78,7 +100,7 @@ public class DateValueStep {
     }
 
     @Then("{fieldVar} contains datetimes before or at {date}")
-    public void producedDataShouldContainDateTimeValuesBeforeForField(String fieldName, DateObject beforeInclusive){
+    public void producedDataShouldContainDateTimeValuesBeforeForField(String fieldName, String beforeInclusive){
         helper.assertFieldContainsNullOrMatching(
             fieldName,
             OffsetDateTime.class,
@@ -86,30 +108,28 @@ public class DateValueStep {
     }
 
     @Then("{fieldVar} contains datetimes after or at {date}")
-    public void producedDataShouldContainDateTimeValuesAfterForField(String fieldName, DateObject afterInclusive){
+    public void producedDataShouldContainDateTimeValuesAfterForField(String fieldName, String afterInclusive){
         helper.assertFieldContainsNullOrMatching(
             fieldName,
             OffsetDateTime.class,
             value -> isAfterOrAt(value, afterInclusive));
     }
 
-    private Function<OffsetDateTime, Boolean> isBetweenInclusively(DateObject minInclusive, DateObject maxInclusive){
+    private Function<OffsetDateTime, Boolean> isBetweenInclusively(String minInclusive, String maxInclusive){
         return value -> isAfterOrAt(value, minInclusive) && isBeforeOrAt(value, maxInclusive);
     }
 
-    private OffsetDateTime getDateTime(DateObject dateObject){
-        String dateString = (String)dateObject.get("date");
-        return GeneratorTestUtilities.getOffsetDateTime(dateString);
-    }
-
-    private boolean isAfterOrAt(OffsetDateTime date, DateObject minInclusiveObject){
-        OffsetDateTime minInclusive = getDateTime(minInclusiveObject);
+    private boolean isAfterOrAt(OffsetDateTime date, String minInclusiveString){
+        OffsetDateTime minInclusive = getDateTime(minInclusiveString);
         return date.equals(minInclusive) || date.isAfter(minInclusive);
     }
 
-    private boolean isBeforeOrAt(OffsetDateTime date, DateObject maxInclusiveObject){
-        OffsetDateTime maxInclusive = getDateTime(maxInclusiveObject);
+    private boolean isBeforeOrAt(OffsetDateTime date, String maxInclusiveString){
+        OffsetDateTime maxInclusive = getDateTime(maxInclusiveString);
         return date.equals(maxInclusive) || date.isBefore(maxInclusive);
+    }
+    private OffsetDateTime getDateTime(String date){
+        return GeneratorTestUtilities.getOffsetDateTime(date);
     }
 }
 

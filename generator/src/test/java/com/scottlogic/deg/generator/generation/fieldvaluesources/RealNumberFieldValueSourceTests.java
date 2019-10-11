@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
+import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularity;
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.generator.restrictions.linear.*;
@@ -462,7 +463,7 @@ class RealNumberFieldValueSourceTests {
         return createNumericRestrictions(
             min == null ? null : new Limit<>(BigDecimal.valueOf(min), true),
             max == null ? null : new Limit<>(BigDecimal.valueOf(max), true),
-            scale);
+            new NumericGranularity(scale));
     }
 
     private Limit<BigDecimal> upperLimit = NUMERIC_MAX_LIMIT;
@@ -518,7 +519,7 @@ class RealNumberFieldValueSourceTests {
 
     private FieldValueSource getObjectUnderTest() {
         if (objectUnderTest == null) {
-            LinearRestrictions<BigDecimal> restrictions = createNumericRestrictions(lowerLimit, upperLimit, scale);
+            LinearRestrictions<BigDecimal> restrictions = createNumericRestrictions(lowerLimit, upperLimit, new NumericGranularity(scale));
             restrictions = (LinearRestrictions<BigDecimal>) new LinearRestrictionsMerger().merge(restrictions, createNumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT)).get();
             objectUnderTest = new RealNumberFieldValueSource(restrictions, blacklist);
         }

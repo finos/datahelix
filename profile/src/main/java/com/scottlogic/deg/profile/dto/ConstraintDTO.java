@@ -18,6 +18,7 @@ package com.scottlogic.deg.profile.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Collection;
 
@@ -26,14 +27,13 @@ public class ConstraintDTO {
     // the DTO is very permissive, because validation isn't its job.
     // validation rules should be expressed in JSON schemas and DTO -> Model converters
 
-    public static final Object undefined = new UndefinedValue();
-
-    public Object is = undefined;
+    public Object is;
 
     /** the ID of the field this constraint constrains, if relevant */
     public String field;
 
     /** a constant value - eg, used in isEqualTo or isGreaterThan */
+    @JsonSerialize()
     public Object value;
 
     public String otherField;

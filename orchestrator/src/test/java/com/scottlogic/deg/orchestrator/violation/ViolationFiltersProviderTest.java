@@ -16,8 +16,8 @@
 
 package com.scottlogic.deg.orchestrator.violation;
 
-import com.scottlogic.deg.common.profile.constraints.atomic.IsStringShorterThanConstraint;
-import com.scottlogic.deg.common.profile.constraints.atomic.StringHasLengthConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.IsStringShorterThanConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.StringHasLengthConstraint;
 import com.scottlogic.deg.orchestrator.violate.AtomicConstraintTypeMapper;
 import com.scottlogic.deg.generator.violations.filters.ConstraintTypeViolationFilter;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;

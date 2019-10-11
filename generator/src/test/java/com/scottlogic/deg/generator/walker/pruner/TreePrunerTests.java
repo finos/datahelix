@@ -17,15 +17,14 @@
 package com.scottlogic.deg.generator.walker.pruner;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.constraints.atomic.IsStringLongerThanConstraint;
-import com.scottlogic.deg.common.profile.constraints.atomic.IsStringShorterThanConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.IsStringLongerThanConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.IsStringShorterThanConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder;
 import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -42,14 +41,13 @@ import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 class TreePrunerTests {
 
     private Field field = createField("foo");
-    private final FieldSpec notNull = FieldSpec.empty()
+    private final FieldSpec notNull = FieldSpec.fromType(field.getType())
         .withNotNull();
     private Field unrelatedField = createField("unrelated");
     private FieldSpecHelper fieldSpecHelper = mock(FieldSpecHelper.class);
     private TreePruner treePruner = new TreePruner(
         new FieldSpecMerger(),
         new ConstraintReducer(
-            new FieldSpecFactory(new StringRestrictionsFactory()),
             new FieldSpecMerger()),
         fieldSpecHelper);
 

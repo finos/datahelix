@@ -16,16 +16,16 @@
 
 package com.scottlogic.deg.orchestrator.violate.violator;
 
-import com.scottlogic.deg.common.profile.constraints.grammatical.AndConstraint;
-import com.scottlogic.deg.common.profile.constraints.grammatical.ConditionalConstraint;
-import com.scottlogic.deg.common.profile.constraints.grammatical.OrConstraint;
-import com.scottlogic.deg.common.profile.Rule;
-import com.scottlogic.deg.common.profile.constraints.Constraint;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
+import com.scottlogic.deg.generator.profile.Rule;
+import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.constraintdetail.UnviolatableConstraintException;
-import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.common.profile.constraints.atomic.IsLessThanConstantConstraint;
-import com.scottlogic.deg.common.profile.constraints.atomic.ViolatedAtomicConstraint;
-import com.scottlogic.deg.common.profile.RuleInformation;
+import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.IsLessThanConstantConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.ViolatedAtomicConstraint;
+import com.scottlogic.deg.generator.profile.RuleInformation;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;

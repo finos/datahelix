@@ -16,8 +16,8 @@
 
 package com.scottlogic.deg.generator.decisiontree.treepartitioning;
 
-import com.scottlogic.deg.common.profile.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.common.profile.constraints.delayed.DelayedAtomicConstraint;
+import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
+import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 
 import java.util.Objects;
@@ -33,8 +33,8 @@ class RootLevelConstraint {
         constraint = atomicConstraint;
     }
 
-    RootLevelConstraint(DelayedAtomicConstraint delayedAtomicConstraint) {
-        constraint = delayedAtomicConstraint;
+    RootLevelConstraint(FieldSpecRelations fieldSpecRelations) {
+        constraint = fieldSpecRelations;
     }
 
     DecisionNode getDecisionNode() {
@@ -49,9 +49,9 @@ class RootLevelConstraint {
             : null;
     }
 
-    DelayedAtomicConstraint getDelayedAtomicConstraint() {
-        return constraint instanceof DelayedAtomicConstraint
-            ? (DelayedAtomicConstraint) constraint
+    FieldSpecRelations getRelations() {
+        return constraint instanceof FieldSpecRelations
+            ? (FieldSpecRelations) constraint
             : null;
     }
 

@@ -32,14 +32,14 @@ public class DecisionTreeSimplifier {
             return node;
 
         ConstraintNode transformedNode = this.simplifySingleOptionDecisions(node);
-        Collection<DecisionNode> simplifiedDecisions = transformedNode.getDecisions().stream()
+        Set<DecisionNode> simplifiedDecisions = transformedNode.getDecisions().stream()
             .map(this::simplify)
-            .collect(Collectors.toList());
+            .collect(Collectors.toSet());
         return transformedNode.builder().setDecisions(simplifiedDecisions).build();
     }
 
     private DecisionNode simplify(DecisionNode decision) {
-        List<ConstraintNode> newNodes = new ArrayList<>();
+        Set<ConstraintNode> newNodes = new HashSet<>();
 
         for (ConstraintNode existingOption : decision.getOptions()) {
             ConstraintNode simplifiedNode = simplify(existingOption);
@@ -47,7 +47,7 @@ public class DecisionTreeSimplifier {
             // if an option contains no constraints and only one decision, then it can be replaced by the set of options within that decision.
             // this helps simplify the sorts of trees that come from eg A OR (B OR C)
             if (simplifiedNode.getAtomicConstraints().isEmpty() &&
-                simplifiedNode.getDelayedAtomicConstraints().isEmpty() &&
+                simplifiedNode.getRelations().isEmpty() &&
                 simplifiedNode.getDecisions().size() == 1) {
                 newNodes.addAll(
                     simplifiedNode.getDecisions()
@@ -70,12 +70,12 @@ public class DecisionTreeSimplifier {
                 (parentConstraint, decisionNode) -> {
                     ConstraintNode firstOption = decisionNode.getOptions().iterator().next();
                     if (parentConstraint.getAtomicConstraints().stream().anyMatch(firstOption.getAtomicConstraints()::contains)
-                    || parentConstraint.getDelayedAtomicConstraints().stream().anyMatch(firstOption.getDelayedAtomicConstraints()::contains)) {
+                    || parentConstraint.getRelations().stream().anyMatch(firstOption.getRelations()::contains)) {
                         return parentConstraint.builder().removeDecision(decisionNode).build();
                     } else {
                         return parentConstraint.builder()
                             .addAtomicConstraints(firstOption.getAtomicConstraints())
-                            .addDelayedAtomicConstraints(firstOption.getDelayedAtomicConstraints())
+                            .addRelations(firstOption.getRelations())
                             .addDecisions(firstOption.getDecisions())
                             .removeDecision(decisionNode)
                             .build();
@@ -87,17 +87,17 @@ public class DecisionTreeSimplifier {
                             Stream.concat(
                                 node1.getAtomicConstraints().stream(),
                                 node2.getAtomicConstraints().stream())
-                                .collect(Collectors.toList()))
-                        .addDelayedAtomicConstraints(
+                                .collect(Collectors.toSet()))
+                        .addRelations(
                             Stream.concat(
-                                node1.getDelayedAtomicConstraints().stream(),
-                                node2.getDelayedAtomicConstraints().stream())
-                                .collect(Collectors.toList()))
+                                node1.getRelations().stream(),
+                                node2.getRelations().stream())
+                                .collect(Collectors.toSet()))
                         .setDecisions(Stream
                             .concat(
                                 node1.getDecisions().stream(),
                                 node2.getDecisions().stream())
-                            .collect(Collectors.toList()))
+                            .collect(Collectors.toSet()))
                         .build());
     }
 }

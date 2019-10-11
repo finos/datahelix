@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
+import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
@@ -29,17 +30,19 @@ import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Optional;
 
+import static com.scottlogic.deg.common.profile.FieldType.*;
+import static com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory.forMaxLength;
 import static com.scottlogic.deg.generator.utils.Defaults.*;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertFalse;
-import static org.mockito.Mockito.mock;
+import static org.junit.Assert.assertTrue;
 
 class FieldSpecTests {
 
     @Test
     void equals_objTypeIsNotFieldSpec_returnsFalse() {
-        FieldSpec fieldSpec = FieldSpec.empty();
+        FieldSpec fieldSpec = FieldSpec.fromType(FieldType.STRING);
 
         boolean result = fieldSpec.equals("Test");
 
@@ -53,7 +56,7 @@ class FieldSpecTests {
     void equals_fieldSpecHasSetRestrictionsAndOtherObjectSetRestrictionsNull_returnsFalse() {
         FieldSpec fieldSpec = FieldSpec.fromList(DistributedList.singleton("whitelist"));
 
-        boolean result = fieldSpec.equals(FieldSpec.empty());
+        boolean result = fieldSpec.equals(FieldSpec.fromType(FieldType.STRING));
 
         assertFalse(
             "Expected that when the field spec has set restrictions and the other object set restrictions are null a false value should be returned but was true",
@@ -63,7 +66,7 @@ class FieldSpecTests {
 
     @Test
     void equals_fieldSpecSetRestrictionsNullAndOtherObjectHasSetRestrictions_returnsFalse() {
-        FieldSpec fieldSpec = FieldSpec.empty();
+        FieldSpec fieldSpec = FieldSpec.fromType(FieldType.STRING);
 
         boolean result = fieldSpec.equals(
             FieldSpec.fromList(DistributedList.singleton("whitelist")));
@@ -109,7 +112,7 @@ class FieldSpecTests {
 
     @Test
     public void shouldCreateNewInstanceWithNullRestrictions() {
-        FieldSpec original = FieldSpec.empty();
+        FieldSpec original = FieldSpec.fromType(FieldType.STRING);
         FieldSpec augmentedFieldSpec = original.withNotNull();
 
         Assert.assertNotSame(original, augmentedFieldSpec);
@@ -117,8 +120,8 @@ class FieldSpecTests {
 
     @Test
     public void emptyFieldSpecsShouldBeEqualAndHaveSameHashCode() {
-        FieldSpec first = FieldSpec.empty();
-        FieldSpec second = FieldSpec.empty();
+        FieldSpec first = FieldSpec.fromType(FieldType.STRING);
+        FieldSpec second = FieldSpec.fromType(FieldType.STRING);
 
         Assert.assertThat(first, equalTo(second));
         Assert.assertThat(first.hashCode(), equalTo(second.hashCode()));
@@ -164,8 +167,8 @@ class FieldSpecTests {
 
     @Test
     public void fieldSpecsWithEqualTypeRestrictionsShouldBeEqual() {
-        FieldSpec a = FieldSpec.empty();
-        FieldSpec b = FieldSpec.empty();
+        FieldSpec a = FieldSpec.fromType(FieldType.STRING);
+        FieldSpec b = FieldSpec.fromType(FieldType.STRING);
 
         Assert.assertThat(a, equalTo(b));
         Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
@@ -173,8 +176,8 @@ class FieldSpecTests {
 
     @Test
     public void fieldSpecsWithEqualNullRestrictionsShouldBeEqual() {
-        FieldSpec a = FieldSpec.empty().withNotNull();
-        FieldSpec b = FieldSpec.empty().withNotNull();
+        FieldSpec a = FieldSpec.fromType(FieldType.STRING).withNotNull();
+        FieldSpec b = FieldSpec.fromType(FieldType.STRING).withNotNull();
 
         Assert.assertThat(a, equalTo(b));
         Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
@@ -182,7 +185,7 @@ class FieldSpecTests {
 
     @Test
     public void fieldSpecsWithUnequalNullRestrictionsShouldBeUnequal() {
-        FieldSpec a = FieldSpec.empty().withNotNull();
+        FieldSpec a = FieldSpec.fromType(FieldType.STRING).withNotNull();
         FieldSpec b = FieldSpec.nullOnly();
 
         Assert.assertThat(a, not(equalTo(b)));
@@ -198,12 +201,36 @@ class FieldSpecTests {
 
     @Test
     void permitsRejectsInvalidDateTime() {
-        LinearRestrictions<OffsetDateTime> dateTime = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT);
+        LinearRestrictions<OffsetDateTime> dateTime = LinearRestrictionsFactory.createDefaultDateTimeRestrictions();
         FieldSpec spec = FieldSpec.fromRestriction(dateTime);
 
         OffsetDateTime time = OffsetDateTime.of(100, 1, 1, 1, 1, 1, 1, ZoneOffset.UTC);
 
         assertFalse(spec.permits(time.plusNanos(1_000_000)));
+    }
+
+    @Test
+    void fromType_whenDateTime_createDefaultDateTimeRestriction() {
+        FieldSpec actual = FieldSpec.fromType(DATETIME);
+        LinearRestrictions<OffsetDateTime> expected = LinearRestrictionsFactory.createDefaultDateTimeRestrictions();
+
+        Assert.assertEquals(expected, actual.getRestrictions());
+    }
+
+    @Test
+    void fromType_whenNumeric_createDefaultNumericRestriction() {
+        FieldSpec actual = FieldSpec.fromType(NUMERIC);
+        LinearRestrictions<BigDecimal> expected = LinearRestrictionsFactory.createDefaultNumericRestrictions();
+
+        Assert.assertEquals(expected, actual.getRestrictions());
+    }
+
+    @Test
+    void fromType_whenString_createDefaultStringRestriction() {
+        FieldSpec actual = FieldSpec.fromType(STRING);
+        StringRestrictions expected = forMaxLength(1000);
+
+        Assert.assertEquals(expected, actual.getRestrictions());
     }
 
     @Test
@@ -227,6 +254,20 @@ class FieldSpecTests {
         FieldSpec spec = FieldSpec.fromRestriction(string);
 
         assertFalse(spec.permits("Anything"));
+    }
+
+    @Test
+    void permits_whenNotInWhiteList_returnsFalse() {
+        FieldSpec spec = FieldSpec.fromList(DistributedList.singleton(10));
+
+        assertFalse(spec.permits(11));
+    }
+
+    @Test
+    void permits_whenInWhiteList_returnsTrue() {
+        FieldSpec spec = FieldSpec.fromList(DistributedList.singleton(10));
+
+        assertTrue(spec.permits(10));
     }
 
     private class MockedRestrictions implements TypedRestrictions {
