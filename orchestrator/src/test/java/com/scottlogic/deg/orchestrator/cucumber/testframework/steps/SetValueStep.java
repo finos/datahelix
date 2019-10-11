@@ -29,12 +29,12 @@ public class SetValueStep {
         this.state = state;
     }
 
-    @When("{fieldVar} is in set:")
+    @When("^([A-z0-9]+) is in set:")
     public void whenFieldIsConstrainedBySetValue(String fieldName, List<Object> values) {
         this.state.addConstraint(fieldName, "in set", values);
     }
 
-    @When("{fieldVar} is anything but in set:")
+    @When("^([A-z0-9]+) is anything but in set:")
     public void whenFieldIsNotConstrainedBySetValue(String fieldName, List<Object> values) {
         this.state.addNotConstraint(fieldName, "in set", values);
     }

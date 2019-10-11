@@ -17,6 +17,7 @@
 package com.scottlogic.deg.orchestrator.cucumber.testframework.steps;
 
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
+import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestHelper;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestState;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.GeneratorTestUtilities;
@@ -38,14 +39,64 @@ public class DateValueStep {
         this.helper = helper;
     }
 
-    @When("{fieldVar} is {operator} {date}")
-    public void whenFieldIsConstrainedByDateValue(String fieldName, String constraintName, String value) {
-        state.addConstraint(fieldName, constraintName, value);
+    @When("^([A-z0-9]+) is equal to ([0-9]{4,5}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z?)$")
+    public void equalToDateValue(String fieldName, String value) {
+        state.addConstraint(fieldName, AtomicConstraintType.IS_EQUAL_TO_CONSTANT.getText(), value);
     }
 
-    @When("{fieldVar} is anything but {operator} {date}")
-    public void whenFieldIsNotConstrainedByDateValue(String fieldName, String constraintName, String value) {
-        state.addNotConstraint(fieldName, constraintName, value);
+    @When("^([A-z0-9]+) is after ([0-9]{4,5}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z?)$")
+    public void afterDateValue(String fieldName, String value) {
+        state.addConstraint(fieldName, AtomicConstraintType.IS_AFTER_CONSTANT_DATE_TIME.getText(), value);
+    }
+
+    @When("^([A-z0-9]+) is after or at ([0-9]{4,5}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z?)$")
+    public void afterOrAtDateValue(String fieldName, String value) {
+        state.addConstraint(fieldName, AtomicConstraintType.IS_AFTER_OR_EQUAL_TO_CONSTANT_DATE_TIME.getText(), value);
+    }
+
+    @When("^([A-z0-9]+) is before ([0-9]{4,5}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z?)$")
+    public void beforeDateValue(String fieldName, String value) {
+        state.addConstraint(fieldName, AtomicConstraintType.IS_BEFORE_CONSTANT_DATE_TIME.getText(), value);
+    }
+
+    @When("^([A-z0-9]+) is before or at ([0-9]{4,5}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z?)$")
+    public void beforeOrAtDateValue(String fieldName, String value) {
+        state.addConstraint(fieldName, AtomicConstraintType.IS_BEFORE_OR_EQUAL_TO_CONSTANT_DATE_TIME.getText(), value);
+    }
+
+    @When("^([A-z0-9]+) is granular to \"(.*)\"$")
+    public void granularToDateValue(String fieldName, String value) {
+        state.addConstraint(fieldName, AtomicConstraintType.IS_GRANULAR_TO.getText(), value);
+    }
+
+    @When("^([A-z0-9]+) is anything but equal to ([0-9]{4,5}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z?)$")
+    public void notEqualToDateValue(String fieldName, String value) {
+        state.addNotConstraint(fieldName, AtomicConstraintType.IS_EQUAL_TO_CONSTANT.getText(), value);
+    }
+
+    @When("^([A-z0-9]+) is anything but after ([0-9]{4,5}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z?)$")
+    public void notAfterDateValue(String fieldName, String value) {
+        state.addNotConstraint(fieldName, AtomicConstraintType.IS_AFTER_CONSTANT_DATE_TIME.getText(), value);
+    }
+
+    @When("^([A-z0-9]+) is anything but after or at ([0-9]{4,5}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z?)$")
+    public void notAfterOrAtDateValue(String fieldName, String value) {
+        state.addNotConstraint(fieldName, AtomicConstraintType.IS_AFTER_OR_EQUAL_TO_CONSTANT_DATE_TIME.getText(), value);
+    }
+
+    @When("^([A-z0-9]+) is anything but before ([0-9]{4,5}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z?)$")
+    public void notBeforeDateValue(String fieldName, String value) {
+        state.addNotConstraint(fieldName, AtomicConstraintType.IS_BEFORE_CONSTANT_DATE_TIME.getText(), value);
+    }
+
+    @When("^([A-z0-9]+) is anything but before or at ([0-9]{4,5}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z?)$")
+    public void notBeforeOrAtDateValue(String fieldName, String value) {
+        state.addNotConstraint(fieldName, AtomicConstraintType.IS_BEFORE_OR_EQUAL_TO_CONSTANT_DATE_TIME.getText(), value);
+    }
+
+    @When("^([A-z0-9]+) is anything but granular to \"(.*)\"$")
+    public void notGranularToDateValue(String fieldName, String value) {
+        state.addNotConstraint(fieldName, AtomicConstraintType.IS_GRANULAR_TO.getText(), value);
     }
 
     @And("^(.+) is after field ([A-z0-9]+)$")

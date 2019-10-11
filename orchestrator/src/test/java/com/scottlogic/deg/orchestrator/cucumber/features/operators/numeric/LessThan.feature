@@ -5,21 +5,6 @@ Feature: User can specify that a numeric value is lower than, but not equal to, 
     And there is a field foo
     And foo has type "decimal"
 
-  Scenario: Running a 'lessThan' request that specifies a string should be unsuccessful
-    Given foo is less than "bar"
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be an Number but was a String with value `bar`"
-    And no data is created
-
-  Scenario: Running a 'lessThan' request that specifies an empty string should be unsuccessful
-    Given foo is less than ""
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be an Number but was a String with value ``"
-    And no data is created
-
-  Scenario: Running a 'lessThan' request that specifies null should be unsuccessful
-    Given foo is less than null
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be set to a value"
-    And no data is created
-
   Scenario: lessThan run against a non contradicting not lessThan should be successful (lessThan 5 AND not lessThan 1)
     Given foo is less than 5
     And foo is anything but less than 1
