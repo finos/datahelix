@@ -122,7 +122,7 @@ public class CucumberTestState {
     private ConstraintDTO createConstraint(String fieldName, String constraintName, Object value) {
         ConstraintDTO dto = new ConstraintDTO();
         dto.field = fieldName;
-        dto.is = this.extractConstraint(constraintName);
+        dto.is = constraintName;
         if (value != null){
             if (value instanceof String) {
                 dto.value = value;
@@ -212,15 +212,6 @@ public class CucumberTestState {
                     break;
             }
         }
-    }
-
-    private String extractConstraint(String gherkinConstraint) {
-        List<String> allConstraints = Arrays.asList(gherkinConstraint.split(" "));
-        return allConstraints.get(0) + allConstraints
-            .stream()
-            .skip(1)
-            .map(value -> value.substring(0, 1).toUpperCase() + value.substring(1))
-            .collect(Collectors.joining());
     }
 
     private void addConstraintToList(ConstraintDTO constraintDTO) {
