@@ -18,10 +18,9 @@ package com.scottlogic.deg.generator.guice;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
-import com.scottlogic.deg.generator.walker.*;
+import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.rowspec.RandomRowSpecDecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.rowspec.RowSpecDecisionTreeWalker;
 
