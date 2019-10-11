@@ -10,41 +10,20 @@ Feature: Generator can produce correct data for complex profiles.
     And foo is anything but null
     And bar has type "integer"
     And bar is anything but null
-    And there is a constraint:
-      """
-        {
-          "anyOf": [
-            {
-              "allOf": [
-                {
-                  "anyOf": [
-                    { "field": "bar", "is": "equalTo", "value": 1 },
-                    { "field": "bar", "is": "equalTo", "value": 2 }
-                  ]
-                },
-                {
-                  "anyOf": [
-                    { "field": "foo", "is": "equalTo", "value": 1 },
-                    { "field": "bar", "is": "equalTo", "value": 3 }
-                  ]
-                },
-                {
-                  "anyOf": [
-                    { "field": "foo", "is": "equalTo", "value": 2 },
-                    { "field": "bar", "is": "equalTo", "value": 4 }
-                  ]
-                }
-              ]
-            },
-            {
-              "allOf": [
-                { "field": "foo", "is": "equalTo", "value": 10 },
-                { "field": "bar", "is": "equalTo", "value": 10 }
-              ]
-            }
-          ]
-        }
-      """
+    And Any Of the next 2 constraints
+    And All Of the next 3 constraints
+      And Any Of the next 2 constraints
+        And bar is equal to 1
+        And bar is equal to 2
+      And Any Of the next 2 constraints
+        And foo is equal to 1
+        And bar is equal to 3
+      And Any Of the next 2 constraints
+        And foo is equal to 2
+        And bar is equal to 4
+    And All Of the next 2 constraints
+      And foo is equal to 10
+      And bar is equal to 10
     Then the following data should be generated:
       | foo | bar |
       | 10  | 10  |

@@ -28,6 +28,7 @@ Operators are converted to English language equivalents for use in cucumber, so 
 * _there is a constraint:_, adds the given JSON block as a constraint as if it was read from the profile file itself. It should only be used where the constraint cannot otherwise be expressed, e.g. for `anyOf`, `allOf` and `if`.
 * _the maximum string length is {length}_, sets the maximum length for strings to the _max_ for the given scenario. The default is _200_ (for performance reasons), however in production the limit is _1000_.
 
+
 #### Operands
 When specifying the operator/s for a field, ensure to format the value as in the table below:
 
@@ -63,6 +64,118 @@ And there is a constraint:
       "else": { "field": "bar", "is": "shorterThan", "value": 1 }
     }
   """
+```
+
+### Grammatical Constraints
+
+Grammatical constraints (`anyOf`, `allOf`, and `if`) are supported within the cucumber hooks for more complex behaviour. These hooks expect constraints to follow the step and these constraints are grouped into the grammatical constraint. All of these hooks can be nested.
+
+### if
+
+* _If and Then are described below_, adds an if constraint to the profile. This expects 2 contraints to follow the step with the first constraint being mapped to the if statement and the second constraint to the then block.
+* _If Then and Else are described below_, adds an if constraint to the profile. This expects 3 contraints to follow the step with the first constraint being mapped to the if statement, the second constraint to the then block, and the third constraint to the else block.
+
+Below shows how the conversion from a JSON profile to the steps should appear:
+
+__Json Constraint__
+
+```json
+{
+  "if": { "field": "foo", "is": "equalTo", "value": "dddd" },
+  "then": { "field": "bar", "is": "equalTo", "value": "4444" },
+  "else": { "field": "bar", "is": "shorterThan", "value": 1 }
+}
+```
+
+__Cucumber Steps__
+
+```json
+When If Then and Else are described below
+And foo is equal to "dddd"
+And bar is equal to "4444"
+And bar is shorter than 1
+```
+
+#### anyOf
+
+* _Any Of the next {number} constraints_, adds an anyOf constraint to the profile. The next x number of constraints will be added to the constraint where x is the provided number
+
+Below shows how the conversion from a JSON profile to the steps should appear:
+
+__Json Constraint__
+
+```json
+{
+  "anyOf": [
+    { "field": "foo", "is": "equalTo", "value": "Test0" },
+    { "field": "foo", "is": "matchingRegex", "value": "[a-b]{4}" }
+  ]
+}
+```
+
+__Cucumber Steps__
+
+```json
+    And Any Of the next 2 constraints
+    And foo is equal to "Test0"
+    And foo is matching regex "[a-b]{4}"
+```
+
+#### allOf
+
+* _All Of the next {number} constraints_, adds an allOf constraint to the profile. The next x number of constraints will be added to the constraint where x is the provided number
+
+Below shows how the conversion from a JSON profile to the steps should appear:
+
+__Json Constraint__
+
+```json
+{
+  "allOf": [
+    { "field": "foo", "is": "equalTo", "value": "Test0" },
+    { "field": "foo", "is": "matchingRegex", "value": "[a-b]{4}" }
+  ]
+}
+```
+
+__Cucumber Steps__
+
+```json
+    And All Of the next 2 constraints
+    And foo is equal to "Test0"
+    And foo is matching regex "[a-b]{4}"
+```
+
+#### Nesting Behaviour
+
+The grammatical constraints can be nested with the processing behaving like Polish notation, an example can be seen below:
+
+__Json Constraint__
+
+```json
+{
+  "allOf": [
+    {
+      "anyOf": [
+        { "field": "foo", "is": "equalTo", "value": "Test0" },
+        { "field": "foo", "is": "equalTo", "value": "Test2" },
+        { "field": "foo", "is": "equalTo", "value": "Test4" }
+      ]
+    },
+    { "field": "foo", "is": "matchingRegex", "value": "[a-b]{4}" }
+  ]
+}
+```
+
+__Cucumber Steps__
+
+```json
+    And All Of the next 2 constraints
+    And Any Of the next 3 constraints
+      And foo is equal to "Test0"
+      And foo is equal to "Test2"
+      And foo is equal to "Test4"
+    And foo is matching regex "[a-b]{4}"
 ```
 
 ### Describing the outcome

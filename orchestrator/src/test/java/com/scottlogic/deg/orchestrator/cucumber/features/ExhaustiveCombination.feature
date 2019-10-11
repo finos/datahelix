@@ -665,22 +665,16 @@ Feature: User can create data across multiple fields for all combinations availa
       | "test100"   |
       | "other"     |
       | "Not in If" |
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo2", "is": "equalTo", "value": 1 },
-        "then": { "field": "foo3", "is": "equalTo", "value": "test1" },
-        "else": {
-          "if": { "field": "foo2", "is": "equalTo", "value": 10 },
-          "then": { "field": "foo3", "is": "equalTo", "value": "test10" },
-          "else": {
-            "if": { "field": "foo2", "is": "equalTo", "value": 100 },
-            "then": { "field": "foo3", "is": "equalTo", "value": "test100" },
-            "else": { "field": "foo3", "is": "equalTo", "value": "other" }
-          }
-        }
-      }
-      """
+    When If Then and Else are described below
+    And foo2 is equal to 1
+    And foo3 is equal to "test1"
+    And If Then and Else are described below
+      And foo2 is equal to 10
+      And foo3 is equal to "test10"
+      And If Then and Else are described below
+        And foo2 is equal to 100
+        And foo3 is equal to "test100"
+        And foo3 is equal to "other"
     Then the following data should be generated:
       | foo1    | foo2 | foo3      |
       | "alpha" | 1    | "test1"   |

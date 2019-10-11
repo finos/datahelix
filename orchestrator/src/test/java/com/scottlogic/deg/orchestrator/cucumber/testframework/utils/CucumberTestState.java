@@ -49,36 +49,36 @@ public class CucumberTestState {
     List<Exception> testExceptions = new ArrayList<>();
     Map<String, List<List<String>>> inMapFiles = new HashMap<>();
 
+    Deque<NestedConstraint> nestedConstraints = new ArrayDeque<>();
+
     private final List<AtomicConstraintType> contstraintsToNotViolate = new ArrayList<>();
 
-    public void addInMapConstraint(String fieldName, String key, String file) {
+    public void startCreatingIfConstraint(int total) {
+        nestedConstraints.push(new NestedConstraint("if", total));
+    }
 
-        ConstraintDTO dto = new ConstraintDTO();
-        dto.field = fieldName;
-        dto.is = "inMap";
-        dto.key = key;
-        dto.file = file;
-        dto.values = getValuesFromMap(file, key);
-        this.addConstraintToList(dto);
+    public void startCreatingAllOfConstraint(int total) {
+        nestedConstraints.push(new NestedConstraint("allOf", total));
+    }
+
+    public void startCreatingAnyOfConstraint(int total) {
+        nestedConstraints.push(new NestedConstraint("anyOf", total));
+    }
+
+    public void addInMapConstraint(String fieldName, String key, String file) {
+        this.addConstraintToList(createInMapConstraint(fieldName, key, file));
     }
 
     public void addRelationConstraint(String field, String relationType, String other) {
-        ConstraintDTO dto = new ConstraintDTO();
-        dto.field = field;
-        dto.is = relationType;
-        dto.otherField = other;
-        this.addConstraintToList(dto);
+        this.addConstraintToList(createRelationConstraint(field, relationType, other));
     }
 
     public void addConstraint(String fieldName, String constraintName, Object value) {
-        ConstraintDTO dto = this.createConstraint(fieldName, constraintName, value);
-        this.addConstraintToList(dto);
+        this.addConstraintToList(createConstraint(fieldName, constraintName, value));
     }
 
     public void addNotConstraint(String fieldName, String constraintName, Object value) {
-        ConstraintDTO notDto = new ConstraintDTO();
-        notDto.not = this.createConstraint(fieldName, constraintName, value);
-        this.addConstraintToList(notDto);
+        this.addConstraintToList(createNotConstraint(fieldName, constraintName, value));
     }
 
     public void addConstraintsFromJson(String constraintProfile) throws IOException {
@@ -137,6 +137,84 @@ public class CucumberTestState {
         return dto;
     }
 
+    private ConstraintDTO createNotConstraint(String fieldName, String constraintName, Object value) {
+        ConstraintDTO notDto = new ConstraintDTO();
+        notDto.not = this.createConstraint(fieldName, constraintName, value);
+        return notDto;
+    }
+
+    private ConstraintDTO createRelationConstraint(String field, String relationType, String other) {
+        ConstraintDTO dto = new ConstraintDTO();
+        dto.field = field;
+        dto.is = relationType;
+        dto.otherField = other;
+        return dto;
+    }
+
+    private ConstraintDTO createInMapConstraint(String fieldName, String key, String file) {
+        ConstraintDTO dto = new ConstraintDTO();
+        dto.field = fieldName;
+        dto.is = "inMap";
+        dto.key = key;
+        dto.file = file;
+        dto.values = getValuesFromMap(file, key);
+        return dto;
+    }
+
+    private void createIfConstraint(int total) {
+        ConstraintDTO dto = new ConstraintDTO();
+        if (total == 3) {
+            dto.else_ = constraints.remove(constraints.size() - 1);
+            total--;
+        }
+        if (total == 2) {
+            dto.then = constraints.remove(constraints.size() - 1);
+            dto.if_ = constraints.remove(constraints.size() - 1);
+        }
+        this.addConstraintToList(dto);
+    }
+
+    private void createAllOfConstraint(int total) {
+        ConstraintDTO dto = new ConstraintDTO();
+        dto.allOf = new ArrayList<>();
+
+        for (int i = 0; i < total; i++) {
+            dto.allOf.add(constraints.remove(constraints.size() - 1));
+        }
+        this.addConstraintToList(dto);
+    }
+
+    private void createAnyOfConstraint(int total) {
+        ConstraintDTO dto = new ConstraintDTO();
+        dto.anyOf = new ArrayList<>();
+
+        for (int i = 0; i < total; i++) {
+            dto.anyOf.add(constraints.remove(constraints.size() - 1));
+        }
+        this.addConstraintToList(dto);
+    }
+
+    private void createNestedConstraint() {
+        NestedConstraint peek = nestedConstraints.peek();
+
+        assert peek != null;
+        peek.reduceRemaining();
+        if (peek.isCompleted()) {
+            NestedConstraint pop = nestedConstraints.pop();
+            switch (pop.constraintType) {
+                case "if":
+                    createIfConstraint(pop.total);
+                    break;
+                case "anyOf":
+                    createAnyOfConstraint(pop.total);
+                    break;
+                case "allOf":
+                    createAllOfConstraint(pop.total);
+                    break;
+            }
+        }
+    }
+
     private String extractConstraint(String gherkinConstraint) {
         List<String> allConstraints = Arrays.asList(gherkinConstraint.split(" "));
         return allConstraints.get(0) + allConstraints
@@ -148,6 +226,9 @@ public class CucumberTestState {
 
     private void addConstraintToList(ConstraintDTO constraintDTO) {
         this.constraints.add(constraintDTO);
+        if (!nestedConstraints.isEmpty()) {
+            createNestedConstraint();
+        }
     }
 
     private ConstraintHolder deserialise(String json) throws IOException {
@@ -184,6 +265,26 @@ public class CucumberTestState {
                 }
                 return fieldDTO;
             }).collect(Collectors.toList());
+    }
+
+    private static class NestedConstraint {
+        String constraintType;
+        int total;
+        int remaining;
+
+        NestedConstraint(String constraintType, int total) {
+            this.constraintType = constraintType;
+            this.total = total;
+            this.remaining = total;
+        }
+
+        boolean isCompleted() {
+            return remaining <= 0;
+        }
+
+        void reduceRemaining() {
+            remaining = remaining - 1;
+        }
     }
 }
 
