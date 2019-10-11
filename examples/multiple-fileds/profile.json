@@ -1,0 +1,31 @@
+{
+    "schemaVersion": "0.11",
+    "fields": [
+        {
+            "name": "field1",
+            "type": "string",
+            "nullable": false
+        },
+        {
+            "name": "field2",
+            "type": "integer",
+            "nullable": false
+        }
+    ],
+    "rules": [
+        {
+            "constraints": [
+                {
+                    "field": "field1",
+                    "is": "inSet",
+                    "values": ["A", "B"]
+                },
+                {
+                    "field": "field2",
+                    "is": "inSet",
+                    "values": ["1", "2", "3"]
+                }
+            ]
+        }
+    ]
+}
