@@ -22,6 +22,7 @@ import com.scottlogic.deg.common.profile.constraintdetail.DateTimeGranularity;
 import com.scottlogic.deg.common.profile.constraintdetail.Granularity;
 import com.scottlogic.deg.common.util.defaults.DateTimeDefaults;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import org.junit.jupiter.api.Test;
@@ -53,7 +54,7 @@ public class BeforeDateRelationTest {
 
         FieldSpec result = beforeDateRelations.reduceValueToFieldSpec(generatedValue);
 
-        FieldSpec expected = FieldSpec.fromRestriction(new LinearRestrictions<>(ISO_MIN_DATE, value, new DateTimeGranularity(ChronoUnit.MILLIS)));
+        FieldSpec expected = FieldSpecFactory.fromRestriction(new LinearRestrictions<>(ISO_MIN_DATE, value, new DateTimeGranularity(ChronoUnit.MILLIS)));
         assertEquals(expected, result);
     }
 
@@ -73,7 +74,7 @@ public class BeforeDateRelationTest {
         FieldSpec result = beforeDateRelations.reduceValueToFieldSpec(generatedValue);
 
         Granularity<OffsetDateTime> granularity = new DateTimeGranularity(ChronoUnit.MILLIS);
-        FieldSpec expected = FieldSpec.fromRestriction(new LinearRestrictions<>(ISO_MIN_DATE, granularity.getPrevious(value), new DateTimeGranularity(ChronoUnit.MILLIS)));
+        FieldSpec expected = FieldSpecFactory.fromRestriction(new LinearRestrictions<>(ISO_MIN_DATE, granularity.getPrevious(value), new DateTimeGranularity(ChronoUnit.MILLIS)));
         assertEquals(expected, result);
     }
 
@@ -85,7 +86,7 @@ public class BeforeDateRelationTest {
 
         FieldSpec result = beforeDateRelations.reduceValueToFieldSpec(generatedValue);
 
-        FieldSpec expected = FieldSpec.fromType(FieldType.DATETIME);
+        FieldSpec expected = FieldSpecFactory.fromType(FieldType.DATETIME);
         assertEquals(expected, result);
     }
 

@@ -33,36 +33,12 @@ import static com.scottlogic.deg.generator.restrictions.linear.LinearRestriction
  */
 public class FieldSpec {
 
-    private static final DistributedList<Object> NO_VALUES = DistributedList.empty();
-
-    public static FieldSpec fromList(DistributedList<Object> whitelist) {
-        return new FieldSpec(whitelist, null, true, Collections.emptySet());
-    }
-    public static FieldSpec fromRestriction(TypedRestrictions restrictions) {
-        return new FieldSpec(null, restrictions, true, Collections.emptySet());
-    }
-    public static FieldSpec fromType(FieldType type) {
-        switch (type) {
-            case NUMERIC:
-                return new FieldSpec(null, createDefaultNumericRestrictions(), true, Collections.emptySet());
-            case DATETIME:
-                return new FieldSpec(null, createDefaultDateTimeRestrictions(), true, Collections.emptySet());
-            case STRING:
-                return new FieldSpec(null, forMaxLength(1000), true, Collections.emptySet());
-            default:
-                throw new IllegalArgumentException("Unable to create FieldSpec from type " + type.name());
-        }
-    }
-    public static FieldSpec nullOnly() {
-        return new FieldSpec(NO_VALUES, null, true, Collections.emptySet());
-    }
-
     private final boolean nullable;
     private final DistributedList<Object> whitelist;
     private final Set<Object> blacklist;
     private final TypedRestrictions restrictions;
 
-    private FieldSpec(
+    FieldSpec(
         DistributedList<Object> whitelist,
         TypedRestrictions restrictions,
         boolean nullable,

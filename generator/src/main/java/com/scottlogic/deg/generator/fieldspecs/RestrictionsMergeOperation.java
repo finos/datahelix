@@ -35,10 +35,10 @@ public class RestrictionsMergeOperation {
             .merge(left.getRestrictions(), right.getRestrictions());
 
         if (!mergeResult.isPresent()){
-            return FieldSpec.nullOnly();
+            return FieldSpecFactory.nullOnly();
         }
 
-        return FieldSpec.fromRestriction(mergeResult.get());
+        return FieldSpecFactory.fromRestriction(mergeResult.get());
     }
 
     private RestrictionsMerger getMerger(TypedRestrictions restrictions) {

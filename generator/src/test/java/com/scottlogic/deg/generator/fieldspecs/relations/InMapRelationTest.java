@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import org.junit.Assert;
@@ -29,7 +30,7 @@ class InMapRelationTest {
 
     @Test
     void reduceValueToFieldSpec_whenValidIndex_returnFieldSpec() {
-        FieldSpec expected = FieldSpec.fromList(DistributedList.singleton("bar"));
+        FieldSpec expected = FieldSpecFactory.fromList(DistributedList.singleton("bar"));
         FieldSpec actual = testInstance.reduceValueToFieldSpec(new DataBagValue(BigDecimal.valueOf(1)));
 
         Assert.assertEquals(expected, actual);

@@ -63,7 +63,7 @@ public class FieldSpecMerger {
             .distinct()
             .collect(Collectors.toList()));
 
-        return addNullable(left, right, FieldSpec.fromList(set));
+        return addNullable(left, right, FieldSpecFactory.fromList(set));
     }
 
     private static <T> boolean elementsEqual(WeightedElement<T> left, WeightedElement<T> right) {
@@ -77,7 +77,7 @@ public class FieldSpecMerger {
                 .distinct()
                 .collect(Collectors.toList()));
 
-        return addNullable(set, restrictions, FieldSpec.fromList(newSet));
+        return addNullable(set, restrictions, FieldSpecFactory.fromList(newSet));
     }
 
     private Optional<FieldSpec> addNullable(FieldSpec left, FieldSpec right, FieldSpec newFieldSpec) {

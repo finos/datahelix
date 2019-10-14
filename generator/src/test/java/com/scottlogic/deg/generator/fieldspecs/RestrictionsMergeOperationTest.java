@@ -49,22 +49,22 @@ class RestrictionsMergeOperationTest {
 
     @BeforeAll
     static void beforeAll() {
-        leftNumeric = FieldSpec.fromRestriction(
+        leftNumeric = FieldSpecFactory.fromRestriction(
             createNumericRestrictions(
                 new Limit<>(new BigDecimal("-1e10"), true),
                 NUMERIC_MAX_LIMIT)
         );
-        rightNumeric = FieldSpec.fromRestriction(
+        rightNumeric = FieldSpecFactory.fromRestriction(
             createNumericRestrictions(
                 new Limit<>(new BigDecimal("-1e15"), true),
                 NUMERIC_MAX_LIMIT)
         );
 
-        leftString = FieldSpec.fromRestriction(new StringRestrictionsFactory().forMaxLength(10));
-        rightString = FieldSpec.fromRestriction(new StringRestrictionsFactory().forMaxLength(12));
+        leftString = FieldSpecFactory.fromRestriction(new StringRestrictionsFactory().forMaxLength(10));
+        rightString = FieldSpecFactory.fromRestriction(new StringRestrictionsFactory().forMaxLength(12));
 
-        leftDateTime = FieldSpec.fromRestriction(createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT));
-        rightDateTime = FieldSpec.fromRestriction(createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT));
+        leftDateTime = FieldSpecFactory.fromRestriction(createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT));
+        rightDateTime = FieldSpecFactory.fromRestriction(createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT));
     }
 
     @BeforeEach
@@ -88,7 +88,7 @@ class RestrictionsMergeOperationTest {
 
     @Test
     void applyMergeOperation_withContradictoryNumericRestrictions_shouldPreventAnyValues(){
-        FieldSpec merging = FieldSpec.nullOnly();
+        FieldSpec merging = FieldSpecFactory.nullOnly();
         when(linearMerger.merge(leftNumeric.getRestrictions(), rightNumeric.getRestrictions()))
             .thenReturn(Optional.empty());
 
@@ -113,7 +113,7 @@ class RestrictionsMergeOperationTest {
 
     @Test
     void applyMergeOperation_withContradictoryStringRestrictions_shouldPreventAnyValues(){
-        FieldSpec merging = FieldSpec.nullOnly();
+        FieldSpec merging = FieldSpecFactory.nullOnly();
         when(StringMerger.merge((StringRestrictions)leftString.getRestrictions(), (StringRestrictions)rightString.getRestrictions()))
             .thenReturn(Optional.empty());
 
@@ -138,7 +138,7 @@ class RestrictionsMergeOperationTest {
 
     @Test
     void applyMergeOperation_withContradictoryDateTimeRestrictions_shouldPreventAnyValues(){
-        FieldSpec merging = FieldSpec.nullOnly();
+        FieldSpec merging = FieldSpecFactory.nullOnly();
         when(linearMerger.merge(leftDateTime.getRestrictions(), rightDateTime.getRestrictions()))
             .thenReturn(Optional.empty());
 

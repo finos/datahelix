@@ -21,6 +21,7 @@ import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
@@ -109,7 +110,7 @@ class ConstraintReducerTest {
         Assert.assertThat("City fieldspec has no set restrictions", cityFieldSpec.getWhitelist(),
             Is.is(IsNull.nullValue()));
         Assert.assertThat("City fieldspec has the default string restrictions", cityFieldSpec.getRestrictions(),
-            Is.is(FieldSpec.fromType(STRING).getRestrictions()));
+            Is.is(FieldSpecFactory.fromType(STRING).getRestrictions()));
         Assert.assertThat("City fieldspec has no null restrictions", cityFieldSpec.isNullable(),
             Is.is(true));
     }

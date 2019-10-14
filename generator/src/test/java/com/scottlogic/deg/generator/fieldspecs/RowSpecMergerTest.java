@@ -16,8 +16,8 @@ import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 class RowSpecMergerTest {
     RowSpecMerger rowSpecMerger = new RowSpecMerger(new FieldSpecMerger());
 
-    FieldSpec isNull = FieldSpec.nullOnly();
-    FieldSpec notNull = FieldSpec.fromType(FieldType.STRING).withNotNull();
+    FieldSpec isNull = FieldSpecFactory.nullOnly();
+    FieldSpec notNull = FieldSpecFactory.fromType(FieldType.STRING).withNotNull();
     Field A = createField("A");
     Field B = createField("B");
     ProfileFields fields = new ProfileFields(Arrays.asList(A, B));

@@ -19,6 +19,7 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraintdetail.Granularity;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
@@ -43,7 +44,7 @@ public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpec
     @Override
     public FieldSpec reduceToRelatedFieldSpec(FieldSpec otherValue) {
         if (otherValue.getRestrictions() == null) {
-            return FieldSpec.fromType(main.getType());
+            return FieldSpecFactory.fromType(main.getType());
         }
 
         LinearRestrictions<T> otherRestrictions = (LinearRestrictions) otherValue.getRestrictions();
@@ -52,13 +53,13 @@ public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpec
         T max = otherRestrictions.getMax();
         T offsetMax = offsetGranularity.getNext(max, offset);
 
-        return FieldSpec.fromRestriction(new LinearRestrictions(offsetMin, offsetMax, otherRestrictions.getGranularity()));
+        return FieldSpecFactory.fromRestriction(new LinearRestrictions(offsetMin, offsetMax, otherRestrictions.getGranularity()));
     }
 
     @Override
     public FieldSpec reduceValueToFieldSpec(DataBagValue generatedValue) {
         T offsetValue = offsetGranularity.getNext((T) generatedValue.getValue(), offset);
-        return FieldSpec.fromList(DistributedList.singleton(offsetValue));
+        return FieldSpecFactory.fromList(DistributedList.singleton(offsetValue));
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.generation.grouped;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
@@ -28,8 +29,8 @@ class FieldSpecGroupValueGeneratorTest {
     public void generate_withGroupOfSingleField_returnsCorrectStream() {
         Map<Field, FieldSpec> specMap = new HashMap<>();
         Field firstField = createField("first");
-        FieldSpec firstSpec = FieldSpec.fromType(firstField.getType());
-        specMap.put(firstField, FieldSpec.fromType(firstField.getType()));
+        FieldSpec firstSpec = FieldSpecFactory.fromType(firstField.getType());
+        specMap.put(firstField, FieldSpecFactory.fromType(firstField.getType()));
 
         FieldSpecValueGenerator underlyingGenerator = mock(FieldSpecValueGenerator.class);
         String result = "result";

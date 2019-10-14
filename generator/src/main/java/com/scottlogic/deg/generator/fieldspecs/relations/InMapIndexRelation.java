@@ -18,6 +18,7 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
@@ -47,7 +48,7 @@ public class InMapIndexRelation implements FieldSpecRelations {
                 whiteList.add(BigDecimal.valueOf(i));
             }
         }
-        return FieldSpec.fromList(DistributedList.uniform(whiteList)).withNotNull();
+        return FieldSpecFactory.fromList(DistributedList.uniform(whiteList)).withNotNull();
     }
 
     @Override

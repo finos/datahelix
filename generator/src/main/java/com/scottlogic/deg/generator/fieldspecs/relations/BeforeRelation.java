@@ -20,6 +20,7 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.constraintdetail.Granularity;
 import com.scottlogic.deg.common.util.defaults.LinearDefaults;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
@@ -41,7 +42,7 @@ public class BeforeRelation<T extends Comparable<T>> implements FieldSpecRelatio
     public FieldSpec reduceToRelatedFieldSpec(FieldSpec otherValue) {
         LinearRestrictions<T> lr = (LinearRestrictions) otherValue.getRestrictions();
         if (lr == null){
-            return FieldSpec.fromType(main.getType());
+            return FieldSpecFactory.fromType(main.getType());
         }
 
         return createFromMax(lr.getMax(), lr.getGranularity());
@@ -49,7 +50,7 @@ public class BeforeRelation<T extends Comparable<T>> implements FieldSpecRelatio
 
     @Override
     public FieldSpec reduceValueToFieldSpec(DataBagValue generatedValue) {
-        if (generatedValue.getValue() == null) return FieldSpec.fromType(main.getType());
+        if (generatedValue.getValue() == null) return FieldSpecFactory.fromType(main.getType());
         return createFromMax((T) generatedValue.getValue(), defaults.granularity());
     }
 
@@ -58,7 +59,7 @@ public class BeforeRelation<T extends Comparable<T>> implements FieldSpecRelatio
             max = granularity.getPrevious(max);
         }
 
-        return FieldSpec.fromRestriction(new LinearRestrictions<>(defaults.min(), max, granularity));
+        return FieldSpecFactory.fromRestriction(new LinearRestrictions<>(defaults.min(), max, granularity));
     }
 
 

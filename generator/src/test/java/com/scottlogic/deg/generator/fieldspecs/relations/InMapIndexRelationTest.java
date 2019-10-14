@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import org.junit.jupiter.api.BeforeAll;
@@ -31,9 +32,9 @@ class InMapIndexRelationTest {
 
     @Test
     void reduceToRelatedFieldSpec_whenAllValid_returnCompleteWhiteList() {
-        FieldSpec parameter = FieldSpec.fromType(FieldType.STRING);
+        FieldSpec parameter = FieldSpecFactory.fromType(FieldType.STRING);
 
-        FieldSpec expected = FieldSpec.fromList(DistributedList.uniform(Arrays.asList(0, 1))).withNotNull();
+        FieldSpec expected = FieldSpecFactory.fromList(DistributedList.uniform(Arrays.asList(0, 1))).withNotNull();
         FieldSpec actual = testInstance.reduceToRelatedFieldSpec(parameter);
 
         assertThat(actual, sameBeanAs(expected));
@@ -41,9 +42,9 @@ class InMapIndexRelationTest {
 
     @Test
     void reduceToRelatedFieldSpec_whenSomeValid_returnReducedWhiteList() {
-        FieldSpec parameter = FieldSpec.fromRestriction(StringRestrictionsFactory.forStringContaining(Pattern.compile("^f.*"), false));
+        FieldSpec parameter = FieldSpecFactory.fromRestriction(StringRestrictionsFactory.forStringContaining(Pattern.compile("^f.*"), false));
 
-        FieldSpec expected = FieldSpec.fromList(DistributedList.uniform(Collections.singletonList(0))).withNotNull();
+        FieldSpec expected = FieldSpecFactory.fromList(DistributedList.uniform(Collections.singletonList(0))).withNotNull();
         FieldSpec actual = testInstance.reduceToRelatedFieldSpec(parameter);
 
         assertThat(actual, sameBeanAs(expected));

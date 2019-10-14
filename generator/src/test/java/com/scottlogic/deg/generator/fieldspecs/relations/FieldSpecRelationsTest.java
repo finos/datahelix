@@ -5,6 +5,7 @@ import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.common.profile.constraintdetail.DateTimeGranularity;
 import com.scottlogic.deg.common.util.defaults.DateTimeDefaults;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import org.junit.jupiter.api.Test;
 
@@ -115,19 +116,19 @@ class FieldSpecRelationsTest {
     private FieldSpec fromMin(int year) {
         OffsetDateTime min = OffsetDateTime.of(year, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
         LinearRestrictions restrictions = new LinearRestrictions(min, ISO_MAX_DATE, new DateTimeGranularity(MILLIS));
-        return FieldSpec.fromRestriction(restrictions);
+        return FieldSpecFactory.fromRestriction(restrictions);
     }
 
     private FieldSpec fromMax(int year) {
         OffsetDateTime max = OffsetDateTime.of(year, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
         LinearRestrictions restrictions = new LinearRestrictions(ISO_MIN_DATE, max, new DateTimeGranularity(MILLIS));
-        return FieldSpec.fromRestriction(restrictions);
+        return FieldSpecFactory.fromRestriction(restrictions);
     }
 
     private FieldSpec forYears(int minYear, int maxYear) {
         OffsetDateTime min = OffsetDateTime.of(minYear, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
         OffsetDateTime max = OffsetDateTime.of(maxYear, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
         LinearRestrictions<OffsetDateTime> restrictions = new LinearRestrictions(min, max, new DateTimeGranularity(YEARS));
-        return FieldSpec.fromRestriction(restrictions).withNotNull();
+        return FieldSpecFactory.fromRestriction(restrictions).withNotNull();
     }
 }
