@@ -247,7 +247,7 @@ Feature: User can specify that a string length is longer than, a specified numbe
   Scenario: longerThan with value larger than maximum permitted should fail with an error message
     Given foo is longer than 1001
     And foo has type "string"
-    Then the profile is invalid because "longerThan constraint must have an operand/value <= 1000, currently is 1001"
+    Then the profile is invalid because "String length must have a value <= 1000, currently is 1001"
 
   Scenario: Running a 'longerThan' request with a value less than default max (1000) should generate data of length between value and 1000
     Given foo has type "string"

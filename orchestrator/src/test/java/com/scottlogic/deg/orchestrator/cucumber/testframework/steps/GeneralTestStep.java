@@ -17,12 +17,12 @@
 package com.scottlogic.deg.orchestrator.cucumber.testframework.steps;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.scottlogic.deg.common.profile.AtomicConstraintType;
 import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.*;
 import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
-import com.scottlogic.deg.common.profile.AtomicConstraintType;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.*;
 import org.hamcrest.Matcher;
@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 import static org.hamcrest.Matchers.*;
 
 public class GeneralTestStep {
@@ -186,7 +187,6 @@ public class GeneralTestStep {
     @Then("^the following data should be generated:$")
     public void theFollowingDataShouldBeGenerated(List<Map<String, String>> expectedResultsTable) {
         GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
-
         assertOutputData(data.generatedData, new RowsMatchAnyOrderMatcher(data.expectedData));
     }
 

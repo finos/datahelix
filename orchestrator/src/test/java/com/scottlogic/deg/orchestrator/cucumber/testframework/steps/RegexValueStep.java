@@ -39,6 +39,11 @@ public class RegexValueStep {
         state.addConstraint(fieldName, ConstraintType.MATCHES_REGEX, value);
     }
 
+    @When("^([A-z0-9]+) is matching regex null")
+    public void matchingRegexString(String fieldName) {
+        state.addConstraint(fieldName, ConstraintType.MATCHES_REGEX, null);
+    }
+
     @When("^([A-z0-9]+) is anything but matching regex /(.+)/$")
     public void notMatchingRegexString(String fieldName, String value) {
         state.addNotConstraint(fieldName, ConstraintType.MATCHES_REGEX, value);

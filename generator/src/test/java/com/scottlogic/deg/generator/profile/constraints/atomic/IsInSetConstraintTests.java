@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
+import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import org.junit.jupiter.api.Assertions;
@@ -29,7 +30,7 @@ public class IsInSetConstraintTests {
         Field field1 = createField("TestField");
 
         Assertions.assertThrows(
-            IllegalArgumentException.class,
+            ValidationException.class,
             () -> new IsInSetConstraint(field1, DistributedList.empty()));
     }
 
@@ -38,7 +39,7 @@ public class IsInSetConstraintTests {
         Field field1 = createField("TestField");
 
         Assertions.assertThrows(
-            IllegalArgumentException.class,
+            ValidationException.class,
             () -> new IsInSetConstraint(field1, DistributedList.singleton(null)));
     }
 

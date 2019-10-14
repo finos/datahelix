@@ -33,6 +33,7 @@ public class ProfileSerialiser implements ISerialiser<ProfileDTO>
     public ProfileDTO deserialise(String json) throws IOException
     {
         ObjectMapper mapper = new ObjectMapper();
+        mapper.disable(DeserializationFeature.WRAP_EXCEPTIONS);
         mapper.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
         return mapper.readerFor(ProfileDTO.class).readValue(json);
     }

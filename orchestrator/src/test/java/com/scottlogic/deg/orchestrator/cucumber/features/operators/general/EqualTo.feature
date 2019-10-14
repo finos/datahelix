@@ -42,7 +42,7 @@ Feature: User can specify that a value is equalTo a required value
       Given there is a field foo
       And foo has type "string"
       And foo is equal to null
-      Then the profile is invalid because "Couldn't recognise 'value' property, it must be set to a value"
+      Then the profile is invalid because "The equalTo constraint has null value for field foo"
 
   Scenario: Running an 'equalTo' of an invalid date value should fail with an error message
     Given there is a field foo

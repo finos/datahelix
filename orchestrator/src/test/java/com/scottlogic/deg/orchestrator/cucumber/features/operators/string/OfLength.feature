@@ -240,4 +240,4 @@ Feature: User can specify the length of generated string data using 'ofLength'
 
   Scenario: ofLength with value larger than maximum permitted should fail with an error message
     Given foo is of length 1001
-    Then the profile is invalid because "ofLength constraint must have an operand/value <= 1000, currently is 1001"
+    Then the profile is invalid because "String length must have a value <= 1000, currently is 1001"

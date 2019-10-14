@@ -90,10 +90,10 @@ public class CucumberTestState {
         this.inMapFiles.put(name, map);
     }
 
-    private List<Object> getValuesFromMap(String name, String key) {
+    public List<String> getValuesFromMap(String name, String key) {
         List<List<String>> map = this.inMapFiles.get(name);
         int index = map.get(0).indexOf(key);
-        List<Object> rtnList = new ArrayList<>();
+        List<String> rtnList = new ArrayList<>();
 
         for (int i = 1; i < map.size() ; i++) {
             rtnList.add(map.get(i).get(index));
@@ -236,7 +236,6 @@ public class CucumberTestState {
         }
     }
 
-
     private ConstraintDTO createNotConstraint(String fieldName, ConstraintType type, Object value) {
         NotConstraintDTO notDto = new NotConstraintDTO();
         notDto.constraint = this.createConstraint(fieldName, type, value);
@@ -352,6 +351,7 @@ public class CucumberTestState {
 
     private ConstraintHolder deserialise(String json) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
+        mapper.disable(DeserializationFeature.WRAP_EXCEPTIONS);
         mapper.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
         return mapper.readerFor(ConstraintHolder.class).readValue(json);
     }
