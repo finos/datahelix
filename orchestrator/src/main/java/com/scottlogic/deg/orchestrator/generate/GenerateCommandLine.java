@@ -22,6 +22,7 @@ import com.google.inject.Module;
 import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.generator.config.detail.MonitorType;
+import com.scottlogic.deg.generator.config.detail.VisualiserLevel;
 import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
 import com.scottlogic.deg.orchestrator.guice.AllModule;
 import com.scottlogic.deg.output.guice.OutputFormat;
@@ -68,33 +69,36 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
         names = {"-p", "--profile-file"},
         required = true,
         description = "The path of the profile json file.")
-    File profileFile;
+    private File profileFile;
 
     @CommandLine.Option(
         names = {"-o", "--output-path"}, order = 0,
         description = "The path to write the generated data file to.")
     private Path outputPath;
 
+    @SuppressWarnings("unused")
     @CommandLine.Option(
         names = "--help",
         usageHelp = true,
         description = "Display these available command line options")
-    boolean help;
+    private boolean help;
 
+    @SuppressWarnings("FieldCanBeLocal")
     @CommandLine.Option(
         names = {"--replace"},
         description = "Defines whether to overwrite/replace existing output files")
-    boolean overwriteOutputFiles = false;
+    private boolean overwriteOutputFiles = false;
 
     @CommandLine.Option(
         names = {"--ndjson"},
         description =  "Defines whether JSON output is in NDJ (newline-delimited JSON) format- defaults true for stdOut")
     private Boolean ndjson;
 
+    @SuppressWarnings("FieldCanBeLocal")
     @CommandLine.Option(
         names = { "--disable-schema-validation" },
         description = "Disables schema validation")
-    boolean disableSchemaValidation = false;
+    private boolean disableSchemaValidation = false;
 
     @CommandLine.Option(names = {"-t", "--generation-type"},
         description = "Determines the type of data generation performed (${COMPLETION-CANDIDATES})",
@@ -105,51 +109,59 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
         description = "Determines the type of combination strategy used (${COMPLETION-CANDIDATES})")
     private CombinationStrategyType combinationType = MINIMAL;
 
+    @SuppressWarnings("FieldCanBeLocal")
     @CommandLine.Option(
         names = {"-n", "--max-rows"},
         description = "Defines the maximum number of rows that should be generated")
     private long maxRows = DEFAULT_MAX_ROWS;
 
+    @SuppressWarnings("FieldCanBeLocal")
     @CommandLine.Option(
         names = {"--quiet"},
         description = "Turns OFF default monitoring")
     private Boolean quiet = false;
 
+    @SuppressWarnings("FieldCanBeLocal")
     @CommandLine.Option(
         names = {"--verbose"},
         description = "Turns ON system out monitoring")
     private Boolean verbose = false;
 
     @CommandLine.Option(
-        names = {"--visualise-reductions"},
-        description = "Visualise each tree reduction",
-        hidden = true)
-    private Boolean visualiseReductions = false;
-
-    @CommandLine.Option(
         names = {"--output-format"},
         description = "Output format (${COMPLETION-CANDIDATES})")
     private OutputFormat outputFormat = CSV;
 
+    @SuppressWarnings("FieldCanBeLocal")
     @CommandLine.Option(
         names = {"--set-from-file-directory"},
         description = "Custom root for loading sets from file."
     )
     private String fromFilePath = "";
 
+    @CommandLine.Option(
+        names = {"--visualiser-level"},
+        description = "Visualiser level (${COMPLETION-CANDIDATES})")
+    private VisualiserLevel visualiserLevel = VisualiserLevel.OFF;
+
+    @CommandLine.Option(
+        names = {"--visualiser-output-folder"},
+        description = "The path to the folder to write the generated visualiser files to (only used if visualiser-level != OFF).")
+    private Path visualiserOutputFolder = new File(".").toPath();
+
     @Override
     public File getProfileFile() {
-        return this.profileFile;
+        return profileFile;
     }
 
     @Override
     public boolean isSchemaValidationDisabled() {
-        return this.disableSchemaValidation;
+        return disableSchemaValidation;
     }
 
     @Override
     public boolean overwriteOutputFiles() {
-        return this.overwriteOutputFiles;
+        return overwriteOutputFiles;
     }
 
     @Override
@@ -159,7 +171,7 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
 
     @Override
     public boolean useNdJson() {
-        return ndjson == null ? this.useStdOut() : ndjson;
+        return ndjson == null ? useStdOut() : ndjson;
     }
 
     @Override
@@ -169,12 +181,12 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
 
     @Override
     public DataGenerationType getGenerationType() {
-        return this.generationType;
+        return generationType;
     }
 
     @Override
     public CombinationStrategyType getCombinationStrategyType() {
-        return this.combinationType;
+        return combinationType;
     }
 
     @Override
@@ -200,6 +212,16 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     @Override
     public String fromFilePath() {
         return fromFilePath;
+    }
+
+    @Override
+    public VisualiserLevel getVisualiserLevel() {
+        return visualiserLevel;
+    }
+
+    @Override
+    public Path getVisualiserOutputFolder() {
+        return visualiserOutputFolder;
     }
 
     protected static void printAlphaFeatureWarning(String feature) {

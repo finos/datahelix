@@ -34,7 +34,7 @@ The process will address negated (_NOT_) atomic constraints if they are the most
 `ConstraintNodes` can be __cloned, excluding a given atomic constraint__, when this happens all other properties are copied across to the new instance, therefore all of the decisions on the constraint are preserved.
 
 [comment 3]
-The optimiser is used when generating data and when visualising the tree. It makes no attempt to maintain the order of the tree when optimising it as it isn't important for the process of data generation.
+The optimiser is used when generating data. It makes no attempt to maintain the order of the tree when optimising it as it isn't important for the process of data generation.
 
 ## Processing
 
