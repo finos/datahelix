@@ -22,8 +22,7 @@
                     },
                     {
                       "not": {
-                        "field": "Column 1",
-                        "is": "null"
+                        "null": "Column 1"
                       }
                     }
                   ]
@@ -38,8 +37,7 @@
                       },
                       {
                         "not": {
-                          "field": "Column 1",
-                          "is": "null"
+                          "null": "Column 1"
                         }
                       }
                     ]

@@ -24,18 +24,15 @@
       "constraints": [
         {
           "field": "field1",
-          "is": "after",
-          "value": "8001-02-03T04:05:06.007"
+          "after": "8001-02-03T04:05:06.007"
         },
         {
           "field": "field2",
-          "is": "after",
-          "otherField": "field1"
+          "afterField": "field1"
         },
         {
           "field": "field3",
-          "is": "beforeOrAt",
-          "otherField": "field4"
+          "beforeOrAtField": "field4"
         }
       ]
     }

@@ -483,7 +483,7 @@ Is satisfied if `field` is a string with length less than `value`, must be a who
 ### `greaterThan` _(field, value)_
 
 ```javascript
-{ "field": "price", "is": "greaterThan", "value": 0 }
+{ "field": "price", "greaterThan": 0 }
 ```
 
 Is satisfied if `field` is a number greater than `value`.
@@ -493,7 +493,7 @@ Is satisfied if `field` is a number greater than `value`.
 ### `greaterThanOrEqualTo` _(field, value)_
 
 ```javascript
-{ "field": "price", "is": "greaterThanOrEqualTo", "value": 0 }
+{ "field": "price", "greaterThanOrEqualTo": 0 }
 ```
 
 Is satisfied if `field` is a number greater than or equal to `value`.
@@ -503,7 +503,7 @@ Is satisfied if `field` is a number greater than or equal to `value`.
 ### `lessThan` _(field, value)_
 
 ```javascript
-{ "field": "price", "is": "lessThan", "value": 0 }
+{ "field": "price", "lessThan": 0 }
 ```
 
 Is satisfied if `field` is a number less than `value`.
@@ -513,7 +513,7 @@ Is satisfied if `field` is a number less than `value`.
 ### `lessThanOrEqualTo` _(field, value)_
 
 ```javascript
-{ "field": "price", "is": "lessThanOrEqualTo", "value": 0 }
+{ "field": "price", "lessThanOrEqualTo": 0 }
 ```
 
 Is satisfied if `field` is a number less than or equal to `value`.
@@ -523,7 +523,7 @@ Is satisfied if `field` is a number less than or equal to `value`.
 ### `granularTo` _(field, value)_
 
 ```javascript
-{ "field": "price", "is": "granularTo", "value": 0.1 }
+{ "field": "price", "granularTo": 0.1 }
 ```
 
 Is satisfied if `field` has at least the [granularity](#Numeric-granularity) specified in `value`.
@@ -538,7 +538,7 @@ Example: `2001-02-03T04:05:06.007`
 ### `after` _(field, value)_
 
 ```javascript
-{ "field": "date", "is": "after", "value": "2018-09-01T00:00:00.000" }
+{ "field": "date", "after": "2018-09-01T00:00:00.000" }
 ```
 
 Is satisfied if `field` is a datetime occurring after `value`.
@@ -558,7 +558,7 @@ Is satisfied if `field` is a datetime occurring after or simultaneously with `va
 ### `before` _(field, value)_
 
 ```javascript
-{ "field": "date", "is": "before", "value": "2018-09-01T00:00:00.000" }
+{ "field": "date", "before": "2018-09-01T00:00:00.000" }
 ```
 
 Is satisfied if `field` is a datetime occurring before `value`.
@@ -578,7 +578,7 @@ Is satisfied if `field` is a datetime occurring before or simultaneously with `v
 ### `granularTo` _(field, value)_
 
 ```javascript
-{ "field": "date", "is": "granularTo", "value": "days" }
+{ "field": "date", "granularTo": "days" }
 ```
 
 Is satisfied if `field` has at least the [granularity](#DateTime-granularity) specified in `value`.
@@ -605,7 +605,7 @@ supported operators are currently
 Allows a dependant date to always be a certain offset away from another date
 
 ```javascript
-{ "field": "threeDaysAfterField", "is": "equalTo", "otherField": "previousDateField", "offset": 3, "offsetUnit": "days" }
+{ "field": "threeDaysAfterField","equalToField": "previousDateField", "offset": 3, "offsetUnit": "days" }
 ```
 
 # Grammatical constraints
@@ -638,8 +638,8 @@ Contains a number of sub-constraints. Is satisfied if any of the inner constrain
 
 ```javascript
 { "allOf": [
-    { "field": "foo", "is": "greaterThan", "value": 15 },
-    { "field": "foo", "is": "lessThan", "value": 100 }
+    { "field": "foo", "greaterThan": 15 },
+    { "field": "foo", "lessThan": 100 }
 ]}
 ```
 
@@ -649,8 +649,8 @@ Contains a number of sub-constraints. Is satisfied if all of the inner constrain
 
 ```javascript
 {
-    "if":   { "field": "foo", "is": "lessThan", "value": 100 },
-    "then": { "field": "bar", "is": "greaterThan", "value": 0 },
+    "if":   { "field": "foo", "lessThan": 100 },
+    "then": { "field": "bar", "greaterThan": 0 },
     "else": { "field": "bar", "equalTo": "N/A" }
 }
 ```

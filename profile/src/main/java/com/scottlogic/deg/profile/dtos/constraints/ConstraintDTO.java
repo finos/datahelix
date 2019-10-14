@@ -56,13 +56,14 @@ public abstract class ConstraintDTO
             ConstraintType type = Arrays.stream(ConstraintType.values())
                     .filter(constraintType -> node.has(constraintType.propertyName))
                     .findFirst().orElse(null);
-
             if (type != null)
             {
                 switch (type)
                 {
                     case EQUAL_TO:
                         return mapper.treeToValue(node, EqualToConstraintDTO.class);
+                    case EQUAL_TO_FIELD:
+                        return mapper.treeToValue(node, EqualToFieldConstraintDTO.class);
                     case IN_SET:
                         return node.get(ConstraintTypeJsonProperty.IN_SET).isArray()
                                 ? mapper.treeToValue(node, InSetOfValuesConstraintDTO.class)
@@ -85,20 +86,36 @@ public abstract class ConstraintDTO
                         return mapper.treeToValue(node, ShorterThanConstraintDTO.class);
                     case GREATER_THAN:
                         return mapper.treeToValue(node, GreaterThanConstraintDTO.class);
+                    case GREATER_THAN_FIELD:
+                        return mapper.treeToValue(node, GreaterThanFieldConstraintDTO.class);
                     case GREATER_THAN_OR_EQUAL_TO:
                         return mapper.treeToValue(node, GreaterThanOrEqualToConstraintDTO.class);
+                    case GREATER_THAN_OR_EQUAL_TO_FIELD:
+                        return mapper.treeToValue(node, GreaterThanOrEqualToFieldConstraintDTO.class);
                     case LESS_THAN:
                         return mapper.treeToValue(node, LessThanConstraintDTO.class);
+                    case LESS_THAN_FIELD:
+                        return mapper.treeToValue(node, LessThanFieldConstraintDTO.class);
                     case LESS_THAN_OR_EQUAL_TO:
                         return mapper.treeToValue(node, LessThanOrEqualToConstraintDTO.class);
+                    case LESS_THAN_OR_EQUAL_TO_FIELD:
+                        return mapper.treeToValue(node, LessThanOrEqualToFieldConstraintDTO.class);
                     case AFTER:
                         return mapper.treeToValue(node, AfterConstraintDTO.class);
+                    case AFTER_FIELD:
+                        return mapper.treeToValue(node, AfterFieldConstraintDTO.class);
                     case AFTER_OR_AT:
                         return mapper.treeToValue(node, AfterOrAtConstraintDTO.class);
+                    case AFTER_OR_AT_FIELD:
+                        return mapper.treeToValue(node, AfterOrAtFieldConstraintDTO.class);
                     case BEFORE:
                         return mapper.treeToValue(node, BeforeConstraintDTO.class);
+                    case BEFORE_FIELD:
+                        return mapper.treeToValue(node, BeforeFieldConstraintDTO.class);
                     case BEFORE_OR_AT:
                         return mapper.treeToValue(node, BeforeOrAtConstraintDTO.class);
+                    case BEFORE_OR_AT_FIELD:
+                        return mapper.treeToValue(node, BeforeOrAtFieldConstraintDTO.class);
                     case NOT:
                         return mapper.treeToValue(node, NotConstraintDTO.class);
                     case ANY_OF:

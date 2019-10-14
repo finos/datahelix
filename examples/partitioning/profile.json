@@ -54,8 +54,7 @@
             "equalTo": "p1-null"
           },
           "then": {
-            "field": "p1f2",
-            "is": "null"
+            "null": "p1f2"
           },
           "else": {
             "field": "p1f2",
@@ -71,8 +70,7 @@
             "equalTo": "p1-null"
           },
           "then": {
-            "field": "p1f3",
-            "is": "null"
+            "null": "p1f3"
           },
           "else": {
             "anyOf": [
@@ -105,8 +103,7 @@
             "equalTo": "p2-null"
           },
           "then": {
-            "field": "p2f2",
-            "is": "null"
+            "null": "p2f2"
           },
           "else": {
             "field": "p2f2",
@@ -122,8 +119,7 @@
             "equalTo": "p2-null"
           },
           "then": {
-            "field": "p2f3",
-            "is": "null"
+            "null": "p2f3"
           },
           "else": {
             "anyOf": [
@@ -156,8 +152,7 @@
             "equalTo": "p3-null"
           },
           "then": {
-            "field": "p3f2",
-            "is": "null"
+            "null": "p3f2"
           },
           "else": {
             "field": "p3f2",
@@ -173,8 +168,7 @@
             "equalTo": "p3-null"
           },
           "then": {
-            "field": "p3f3",
-            "is": "null"
+            "null": "p3f3"
           },
           "else": {
             "anyOf": [

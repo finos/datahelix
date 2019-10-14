@@ -5,7 +5,7 @@
 The below constraints are superficially similar:
 
 ```javascript
-{ "field": "price", "is": "granularTo", "value": 0.01 }
+{ "field": "price", "granularTo": 0.01 }
 { "field": "price", "is": "formattedAs", "value": "%.2f" }
 ```
 
@@ -14,10 +14,10 @@ The difference is that `granularTo` affects which numbers are generated, while `
 Consider this example:
 
 ```javascript
-{ "field": "price", "is": "granularTo", "value": 0.01 },
+{ "field": "price", "granularTo": 0.01 },
 { "not": { "field": "price", "is": "null" } },
-{ "field": "price", "is": "greaterThanOrEqualTo", "value": 0 },
-{ "field": "price", "is": "lessThanOrEqualTo", "value": 1 },
+{ "field": "price", "greaterThanOrEqualTo": 0 },
+{ "field": "price", "lessThanOrEqualTo": 1 },
 ```
 
 This combination of constraints will generate values `[ 0, 0.01, 0.02, 0.03, ..., 1 ]`. If outputted to a CSV file, they would be printed exactly as in that list. If this presentational constraint were added:

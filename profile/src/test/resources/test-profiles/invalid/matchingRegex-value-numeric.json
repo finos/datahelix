@@ -10,8 +10,7 @@
       "constraints": [
         {
           "field": "field1",
-          "is": "matchingRegex",
-          "value": 4
+          "matchingRegex": 4
         }
       ]
     }

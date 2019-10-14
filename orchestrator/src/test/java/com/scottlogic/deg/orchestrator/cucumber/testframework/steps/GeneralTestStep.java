@@ -104,7 +104,7 @@ public class GeneralTestStep {
 
     @And("^(.+) is equal to field (.+)$")
     public void fieldEqualTo(String field, String otherField){
-        state.addRelationConstraint(field, ConstraintType.EQUAL_TO, otherField);
+        state.addRelationConstraint(field, ConstraintType.EQUAL_TO_FIELD, otherField);
     }
 
     @When("^If and Then are described below$")

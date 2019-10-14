@@ -6,7 +6,7 @@
       "constraints": [
         {
           "if": {"field": "foo", "is": "ofType", "value": "integer"},
-          "gthen": {"field": "foo", "is": "greaterThan", "value": 0},
+          "gthen": {"field": "foo", "greaterThan": 0},
           "else": {"field": "foo", "equalTo": "N/A"}
         }
       ]

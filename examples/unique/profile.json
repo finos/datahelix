@@ -19,8 +19,7 @@
       "constraints": [
         {
           "field": "id",
-          "is": "greaterThanOrEqualTo",
-          "value": 0
+          "greaterThanOrEqualTo": 0
         }
       ]
     }

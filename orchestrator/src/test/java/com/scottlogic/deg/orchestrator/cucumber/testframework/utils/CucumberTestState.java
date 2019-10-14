@@ -247,33 +247,33 @@ public class CucumberTestState {
         RelationalConstraintDTO relationalConstraintDTO;
         switch (type)
         {
-            case EQUAL_TO:
-                relationalConstraintDTO = new EqualToFieldConstraintDTO(){{field = other;}};
+            case EQUAL_TO_FIELD:
+                relationalConstraintDTO = new EqualToFieldConstraintDTO(){{otherField = other;}};
                 break;
-            case GREATER_THAN:
-                relationalConstraintDTO = new GreaterThanFieldConstraintDTO(){{field = other;}};
+            case GREATER_THAN_FIELD:
+                relationalConstraintDTO = new GreaterThanFieldConstraintDTO(){{otherField = other;}};
                 break;
-            case GREATER_THAN_OR_EQUAL_TO:
-                relationalConstraintDTO = new GreaterThanOrEqualToFieldConstraintDTO(){{field = other;}};
+            case GREATER_THAN_OR_EQUAL_TO_FIELD:
+                relationalConstraintDTO = new GreaterThanOrEqualToFieldConstraintDTO(){{otherField = other;}};
                 break;
-            case LESS_THAN:
-                relationalConstraintDTO = new LessThanFieldConstraintDTO(){{field = other;}};
+            case LESS_THAN_FIELD:
+                relationalConstraintDTO = new LessThanFieldConstraintDTO(){{otherField = other;}};
                 break;
-            case LESS_THAN_OR_EQUAL_TO:
-                relationalConstraintDTO = new LessThanOrEqualToFieldConstraintDTO(){{field = other;}};
+            case LESS_THAN_OR_EQUAL_TO_FIELD:
+                relationalConstraintDTO = new LessThanOrEqualToFieldConstraintDTO(){{otherField = other;}};
                 break;
-            case AFTER:
-                relationalConstraintDTO = new AfterFieldConstraintDTO(){{field = other;}};
+            case AFTER_FIELD:
+                relationalConstraintDTO = new AfterFieldConstraintDTO(){{otherField = other;}};
                 break;
-            case AFTER_OR_AT:
-                relationalConstraintDTO = new AfterOrAtFieldConstraintDTO(){{field = other;}};
+            case AFTER_OR_AT_FIELD:
+                relationalConstraintDTO = new AfterOrAtFieldConstraintDTO(){{otherField = other;}};
                 break;
-            case BEFORE:
-                relationalConstraintDTO = new BeforeFieldConstraintDTO(){{field = other;}};
+            case BEFORE_FIELD:
+                relationalConstraintDTO = new BeforeFieldConstraintDTO(){{otherField = other;}};
                 break;
-            case BEFORE_OR_AT:
-                relationalConstraintDTO = new BeforeOrAtFieldConstraintDTO(){{field = other;}};
-                break;
+            case BEFORE_OR_AT_FIELD:
+                relationalConstraintDTO = new BeforeOrAtFieldConstraintDTO(){{otherField = other;}};
+            break;
             default:
                 throw new IllegalStateException("Unexpected value: " + type);
         }

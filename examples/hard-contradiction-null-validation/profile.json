@@ -11,8 +11,7 @@
       "rule": "Column 1 is null",
       "constraints": [
         {
-          "field": "Column 1",
-          "is": "null"
+          "null": "Column 1"
         }
       ]
     },
@@ -21,8 +20,7 @@
       "constraints": [
         {
           "not": {
-            "field": "Column 1",
-            "is": "null"
+            "null": "Column 1"
           }
         }
       ]

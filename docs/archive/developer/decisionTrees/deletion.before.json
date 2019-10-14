@@ -9,7 +9,7 @@
 		{ "field": "x", "equalTo": 3 },
 		
 		{
-			"if": { "field": "x", "is": "greaterThan", "value": 12 },
+			"if": { "field": "x", "greaterThan": 12 },
 			"then": { "field": "y", "equalTo": 5 }
 		}
 	]

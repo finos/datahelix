@@ -12,8 +12,7 @@
       "constraints": [
         {
           "field": "first_name",
-          "is": "containingRegex",
-          "value": "^(Joh?n|Mar[yk])$"
+          "containingRegex": "^(Joh?n|Mar[yk])$"
         }
       ]
     }

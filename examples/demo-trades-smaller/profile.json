@@ -37,8 +37,8 @@
     {
       "rule": "tradeId",
       "constraints": [
-        { "field": "tradeId", "is": "greaterThanOrEqualTo", "value": 10000 },
-        { "field": "tradeId", "is": "lessThanOrEqualTo", "value": 99999 }
+        { "field": "tradeId", "greaterThanOrEqualTo": 10000 },
+        { "field": "tradeId", "lessThanOrEqualTo": 99999 }
       ]
     },
     {
@@ -56,23 +56,23 @@
     {
       "rule": "tradePrice",
       "constraints": [
-        { "field": "tradePrice", "is": "granularTo", "value": 0.01 },
-        { "field": "tradePrice", "is": "greaterThan", "value": 140.0 },
-        { "field": "tradePrice", "is": "lessThan", "value": 150.0 }
+        { "field": "tradePrice", "granularTo": 0.01 },
+        { "field": "tradePrice", "greaterThan": 140.0 },
+        { "field": "tradePrice", "lessThan": 150.0 }
       ]
     },
     {
       "rule": "volume",
       "constraints": [
-        { "field": "volume", "is": "greaterThanOrEqualTo", "value": 1 },
-        { "field": "volume", "is": "lessThanOrEqualTo", "value": 200 }
+        { "field": "volume", "greaterThanOrEqualTo": 1 },
+        { "field": "volume", "lessThanOrEqualTo": 200 }
       ]
     },
     {
       "rule": "tradeDatetime",
       "constraints": [
-        { "field": "tradeDatetime", "is": "after", "value": "2019-09-02T09:30:00.000" },
-        { "field": "tradeDatetime", "is": "before", "value": "2019-09-02T16:30:00.000" }
+        { "field": "tradeDatetime", "after": "2019-09-02T09:30:00.000" },
+        { "field": "tradeDatetime", "before": "2019-09-02T16:30:00.000" }
       ]
     }
   ]

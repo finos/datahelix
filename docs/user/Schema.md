@@ -40,7 +40,7 @@
 		{
 			"rule": "low_price is a positive integer",
 			"constraints": [
-				{ "field": "low_price", "is": "greaterThanOrEqualTo", "value": 0 }
+				{ "field": "low_price", "greaterThanOrEqualTo": 0 }
 			]
 		},
 		{
@@ -62,7 +62,7 @@
 					"then": {
 						"allOf": [
 							{ "field": "tariff", "is": "null" },
-							{ "field": "time", "is": "after", "value": "2014-01-01" }
+							{ "field": "time", "after": "2014-01-01" }
 						]
 					},
 					"else": { "not": { "field": "tariff", "is": "null" } }

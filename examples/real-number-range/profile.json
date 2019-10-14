@@ -12,18 +12,15 @@
       "constraints": [
         {
           "field": "a_number",
-          "is": "granularTo",
-          "value": 0.01
+          "granularTo": 0.01
         },
         {
           "field": "a_number",
-          "is": "greaterThanOrEqualTo",
-          "value": 1
+          "greaterThanOrEqualTo": 1
         },
         {
           "field": "a_number",
-          "is": "lessThanOrEqualTo",
-          "value": 4
+          "lessThanOrEqualTo": 4
         }
       ]
     }

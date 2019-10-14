@@ -16,13 +16,11 @@
       "constraints": [
         {
           "field": "first",
-          "is": "after",
-          "value": "8001-02-03T04:05:06.007"
+          "after": "8001-02-03T04:05:06.007"
         },
         {
           "field": "second",
-          "is": "equalTo",
-          "otherField": "first"
+          "equalToField": "first"
         }
       ]
     }

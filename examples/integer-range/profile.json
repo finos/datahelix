@@ -12,13 +12,11 @@
       "constraints": [
         {
           "field": "an_integer",
-          "is": "greaterThanOrEqualTo",
-          "value": 1
+          "greaterThanOrEqualTo": 1
         },
         {
           "field": "an_integer",
-          "is": "lessThanOrEqualTo",
-          "value": 4
+          "lessThanOrEqualTo": 4
         }
       ]
     }

@@ -198,6 +198,12 @@
           "$ref": "#/definitions/equalToConstraint"
         },
         {
+          "$ref": "#/definitions/equalToFieldConstraint"
+        },
+        {
+          "$ref": "#/definitions/granularToConstraint"
+        },
+        {
           "$ref": "#/definitions/matchingRegexConstraint"
         },
         {
@@ -216,28 +222,49 @@
           "$ref": "#/definitions/greaterThanConstraint"
         },
         {
+          "$ref": "#/definitions/greaterThanFieldConstraint"
+        },
+        {
           "$ref": "#/definitions/greaterThanOrEqualToConstraint"
+        },
+        {
+          "$ref": "#/definitions/greaterThanOrEqualToFieldConstraint"
         },
         {
           "$ref": "#/definitions/lessThanConstraint"
         },
         {
+          "$ref": "#/definitions/lessThanFieldConstraint"
+        },
+        {
           "$ref": "#/definitions/lessThanOrEqualToConstraint"
         },
         {
-          "$ref": "#/definitions/granularToConstraint"
+          "$ref": "#/definitions/lessThanOrEqualToFieldConstraint"
         },
         {
           "$ref": "#/definitions/afterConstraint"
         },
         {
+          "$ref": "#/definitions/afterFieldConstraint"
+        },
+        {
           "$ref": "#/definitions/afterOrAtConstraint"
+        },
+        {
+          "$ref": "#/definitions/afterOrAtFieldConstraint"
         },
         {
           "$ref": "#/definitions/beforeConstraint"
         },
         {
+          "$ref": "#/definitions/beforeFieldConstraint"
+        },
+        {
           "$ref": "#/definitions/beforeOrAtConstraint"
+        },
+        {
+          "$ref": "#/definitions/beforeOrAtFieldConstraint"
         },
         {
           "$ref": "#/definitions/anyOfConstraint"
@@ -275,14 +302,43 @@
         },
         "equalTo": {
           "$ref": "#/definitions/dataType"
+        }
+      }
+    },
+    "equalToFieldConstraint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "field",
+        "equalToField"
+      ],
+      "properties": {
+        "field": {
+          "type": "string"
         },
-        "otherField": {
+        "equalToField": {
           "type": "string"
         },
         "offset": {
           "$ref": "#/definitions/integer"
         },
         "offsetUnit": {
+          "$ref": "#/definitions/granularity"
+        }
+      }
+    },
+    "granularToConstraint": {
+      "type": "object",
+      "required": [
+        "field",
+        "granularTo"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "granularTo": {
           "$ref": "#/definitions/granularity"
         }
       }
@@ -388,8 +444,21 @@
         },
         "greaterThan": {
           "$ref": "#/definitions/numeric"
+        }
+      }
+    },
+    "greaterThanFieldConstraint": {
+      "type": "object",
+      "required": [
+        "field",
+        "greaterThanField"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string"
         },
-        "otherField": {
+        "greaterThanField": {
           "type": "string"
         },
         "offset": {
@@ -413,8 +482,21 @@
         },
         "greaterThanOrEqualTo": {
           "$ref": "#/definitions/numeric"
+        }
+      }
+    },
+    "greaterThanOrEqualToFieldConstraint": {
+      "type": "object",
+      "required": [
+        "field",
+        "greaterThanOrEqualFieldTo"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string"
         },
-        "otherField": {
+        "greaterThanOrEqualFieldTo": {
           "type": "string"
         },
         "offset": {
@@ -438,8 +520,21 @@
         },
         "lessThan": {
           "$ref": "#/definitions/numeric"
+        }
+      }
+    },
+    "lessThanFieldConstraint": {
+      "type": "object",
+      "required": [
+        "field",
+        "lessThanField"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string"
         },
-        "otherField": {
+        "lessThanField": {
           "type": "string"
         },
         "offset": {
@@ -463,30 +558,27 @@
         },
         "lessThanOrEqualTo": {
           "$ref": "#/definitions/numeric"
-        },
-        "otherField": {
-          "type": "string"
-        },
-        "offset": {
-          "$ref": "#/definitions/integer"
-        },
-        "offsetUnit": {
-          "$ref": "#/definitions/granularity"
         }
       }
     },
-    "granularToConstraint": {
+    "lessThanOrEqualToFieldConstraint": {
       "type": "object",
       "required": [
         "field",
-        "granularTo"
+        "lessThanOrEqualToField"
       ],
       "additionalProperties": false,
       "properties": {
         "field": {
           "type": "string"
         },
-        "granularTo": {
+        "lessThanOrEqualToField": {
+          "type": "string"
+        },
+        "offset": {
+          "$ref": "#/definitions/integer"
+        },
+        "offsetUnit": {
           "$ref": "#/definitions/granularity"
         }
       }
@@ -504,8 +596,21 @@
         },
         "after": {
           "$ref": "#/definitions/datetime"
+        }
+      }
+    },
+    "afterFieldConstraint": {
+      "type": "object",
+      "required": [
+        "field",
+        "afterField"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string"
         },
-        "otherField": {
+        "afterField": {
           "type": "string"
         },
         "offset": {
@@ -529,8 +634,21 @@
         },
         "afterOrAt": {
           "$ref": "#/definitions/datetime"
+        }
+      }
+    },
+    "afterOrAtFieldConstraint": {
+      "type": "object",
+      "required": [
+        "field",
+        "afterOrAtField"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string"
         },
-        "otherField": {
+        "afterOrAtField": {
           "type": "string"
         },
         "offset": {
@@ -554,8 +672,21 @@
         },
         "before": {
           "$ref": "#/definitions/datetime"
+        }
+      }
+    },
+    "beforeFieldConstraint": {
+      "type": "object",
+      "required": [
+        "field",
+        "beforeField"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string"
         },
-        "otherField": {
+        "beforeField": {
           "type": "string"
         },
         "offset": {
@@ -579,8 +710,21 @@
         },
         "beforeOrAt": {
           "$ref": "#/definitions/datetime"
+        }
+      }
+    },
+    "beforeOrAtFieldConstraint": {
+      "type": "object",
+      "required": [
+        "field",
+        "beforeOrAtField"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string"
         },
-        "otherField": {
+        "beforeOrAtField": {
           "type": "string"
         },
         "offset": {

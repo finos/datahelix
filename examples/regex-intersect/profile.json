@@ -12,13 +12,11 @@
       "constraints": [
         {
           "field": "first_name",
-          "is": "matchingRegex",
-          "value": "(Joh?n|Mar[yk])"
+          "matchingRegex": "(Joh?n|Mar[yk])"
         },
         {
           "field": "first_name",
-          "is": "matchingRegex",
-          "value": "M.*"
+          "matchingRegex": "M.*"
         }
       ]
     }

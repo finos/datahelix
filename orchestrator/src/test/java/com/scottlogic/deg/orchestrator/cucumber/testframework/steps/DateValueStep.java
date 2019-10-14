@@ -102,22 +102,22 @@ public class DateValueStep {
 
     @And("^(.+) is after field ([A-z0-9]+)$")
     public void dateAfter(String field, String otherField){
-        state.addRelationConstraint(field, ConstraintType.AFTER, otherField);
+        state.addRelationConstraint(field, ConstraintType.AFTER_FIELD, otherField);
     }
 
     @And("^(.+) is after or at field ([A-z0-9]+)$")
     public void dateAfterOrAt(String field, String otherField){
-        state.addRelationConstraint(field, ConstraintType.AFTER_OR_AT, otherField);
+        state.addRelationConstraint(field, ConstraintType.AFTER_OR_AT_FIELD, otherField);
     }
 
     @And("^(.+) is before field ([A-z0-9]+)$")
     public void dateBefore(String field, String otherField){
-        state.addRelationConstraint(field, ConstraintType.BEFORE, otherField);
+        state.addRelationConstraint(field, ConstraintType.BEFORE_FIELD, otherField);
     }
 
     @And("^(.+) is before or at field ([A-z0-9]+)$")
     public void dateBeforeOrAt(String field, String otherField){
-        state.addRelationConstraint(field, ConstraintType.BEFORE_OR_AT, otherField);
+        state.addRelationConstraint(field, ConstraintType.BEFORE_OR_AT_FIELD, otherField);
     }
 
     @Then("{fieldVar} contains only datetime data")

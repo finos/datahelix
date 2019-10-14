@@ -72,7 +72,7 @@ public class ConstraintReader
     public Constraint read(ConstraintDTO dto, ProfileFields profileFields)
     {
         if (dto == null) throw new InvalidProfileException("Constraint is null");
-        if (dto instanceof RelationalConstraintDTO) readRelationalConstraintDto((RelationalConstraintDTO)dto, profileFields);
+        if (dto instanceof RelationalConstraintDTO) return readRelationalConstraintDto((RelationalConstraintDTO)dto, profileFields);
         return dto instanceof AtomicConstraintDTO
                 ? readAtomicConstraintDto((AtomicConstraintDTO) dto, profileFields)
                 : readGrammaticalConstraintDto(dto, profileFields);
@@ -84,26 +84,26 @@ public class ConstraintReader
         Field other = fields.getByName(dto.getOtherField());
         switch (dto.getType())
         {
-            case EQUAL_TO:
+            case EQUAL_TO_FIELD:
                 Granularity offsetGranularity = getOffsetUnit(main.getType(), dto.offsetUnit);
                 return offsetGranularity != null
                         ? new EqualToOffsetRelation(main, other, offsetGranularity, dto.offset)
                         : new EqualToRelation(main, other);
-            case AFTER:
+            case AFTER_FIELD:
                 return new AfterRelation(main, other, false, DateTimeDefaults.get());
-            case AFTER_OR_AT:
+            case AFTER_OR_AT_FIELD:
                 return new AfterRelation(main, other, true, DateTimeDefaults.get());
-            case BEFORE:
+            case BEFORE_FIELD:
                 return new BeforeRelation(main, other, false, DateTimeDefaults.get());
-            case BEFORE_OR_AT:
+            case BEFORE_OR_AT_FIELD:
                 return new BeforeRelation(main, other, true, DateTimeDefaults.get());
-            case GREATER_THAN:
+            case GREATER_THAN_FIELD:
                 return new AfterRelation(main, other, false, NumericDefaults.get());
-            case GREATER_THAN_OR_EQUAL_TO:
+            case GREATER_THAN_OR_EQUAL_TO_FIELD:
                 return new AfterRelation(main, other, true, NumericDefaults.get());
-            case LESS_THAN:
+            case LESS_THAN_FIELD:
                 return new BeforeRelation(main, other, false, NumericDefaults.get());
-            case LESS_THAN_OR_EQUAL_TO:
+            case LESS_THAN_OR_EQUAL_TO_FIELD:
                 return new BeforeRelation(main, other, true, NumericDefaults.get());
             default:
                 throw new InvalidProfileException("Unexpected relation data type " + dto.getType());
