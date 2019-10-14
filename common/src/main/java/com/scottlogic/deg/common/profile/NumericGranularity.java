@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.common.profile.constraintdetail;
+package com.scottlogic.deg.common.profile;
+
+import com.scottlogic.deg.common.util.NumberUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -26,6 +28,24 @@ public class NumericGranularity implements Granularity<BigDecimal> {
 
     public NumericGranularity(int decimalPlaces) {
         this.decimalPlaces = decimalPlaces;
+    }
+
+    public static NumericGranularity create(Object granularity)
+    {
+        BigDecimal asNumber = NumberUtils.coerceToBigDecimal(granularity);
+        if (asNumber == null)
+        {
+            throw new IllegalArgumentException("Can't interpret granularity expression: " + granularity);
+        }
+        if (asNumber.compareTo(BigDecimal.ONE) > 0)
+        {
+            throw new IllegalArgumentException("Numeric granularity must be <= 1");
+        }
+        if (!asNumber.equals(BigDecimal.ONE.scaleByPowerOfTen(-asNumber.scale())))
+        {
+            throw new IllegalArgumentException("Numeric granularity must be fractional power of ten");
+        }
+        return new NumericGranularity(asNumber.scale());
     }
 
     @Override

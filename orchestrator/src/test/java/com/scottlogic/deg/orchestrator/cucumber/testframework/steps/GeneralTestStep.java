@@ -22,7 +22,7 @@ import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.*;
 import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
-import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
+import com.scottlogic.deg.common.profile.AtomicConstraintType;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.*;
 import org.hamcrest.Matcher;

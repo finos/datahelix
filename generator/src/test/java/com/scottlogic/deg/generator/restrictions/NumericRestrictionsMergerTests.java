@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularity;
+import com.scottlogic.deg.common.profile.NumericGranularity;
 import com.scottlogic.deg.generator.restrictions.linear.*;
 
 import org.junit.Assert;

@@ -19,7 +19,7 @@ package com.scottlogic.deg.profile.reader;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.FieldType;
-import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularity;
+import com.scottlogic.deg.common.profile.NumericGranularity;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.profile.Rule;
@@ -356,7 +356,7 @@ public class JsonProfileReaderTests {
             ruleWithConstraints(
                 typedConstraint(
                     StringHasLengthConstraint.class,
-                    c -> Assert.assertThat(c.referenceValue, equalTo(5)))));
+                    c -> Assert.assertThat(c.referenceValue.getValue(), equalTo(5)))));
     }
 
     @Test

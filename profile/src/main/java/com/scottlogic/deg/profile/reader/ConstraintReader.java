@@ -17,12 +17,7 @@
 package com.scottlogic.deg.profile.reader;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.FieldType;
-import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.common.profile.constraintdetail.DateTimeGranularity;
-import com.scottlogic.deg.common.profile.constraintdetail.Granularity;
-import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularityFactory;
+import com.scottlogic.deg.common.profile.*;
 import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.common.util.defaults.DateTimeDefaults;
 import com.scottlogic.deg.common.util.defaults.NumericDefaults;
@@ -34,17 +29,8 @@ import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstrain
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.profile.dtos.constraints.*;
+import org.jetbrains.annotations.Nullable;
 
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.format.DateTimeParseException;
-import java.time.format.ResolverStyle;
-import java.time.temporal.ChronoField;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAccessor;
 import java.util.Collection;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -52,7 +38,6 @@ import java.util.stream.Collectors;
 
 public class ConstraintReader
 {
-    private static final OffsetDateTime NOW = OffsetDateTime.now();
 
     private final FileReader fileReader;
 
@@ -85,7 +70,7 @@ public class ConstraintReader
         switch (dto.getType())
         {
             case EQUAL_TO_FIELD:
-                Granularity offsetGranularity = getOffsetUnit(main.getType(), dto.offsetUnit);
+                Granularity offsetGranularity = readGranularity(main.getType(), dto.offsetUnit);
                 return offsetGranularity != null
                         ? new EqualToOffsetRelation(main, other, offsetGranularity, dto.offset)
                         : new EqualToRelation(main, other);
@@ -116,72 +101,55 @@ public class ConstraintReader
         switch (dto.getType())
         {
             case EQUAL_TO:
-                EqualToConstraintDTO equalToConstraintDTO = (EqualToConstraintDTO) dto;
-                switch (field.getType())
-                {
-                    case DATETIME:
-                        return new EqualToConstraint(field, parseDate((String) equalToConstraintDTO.value));
-                    case NUMERIC:
-                        return new EqualToConstraint(field, NumberUtils.coerceToBigDecimal(equalToConstraintDTO.value));
-                    default:
-                        return new EqualToConstraint(field, equalToConstraintDTO.value);
-                }
+                return new EqualToConstraint(field, readAnyType(field, ((EqualToConstraintDTO)dto).value));
             case IN_SET:
                 InSetConstraintDTO inSetConstraintDTO = (InSetConstraintDTO) dto;
-                return new IsInSetConstraint(field, inSetConstraintDTO instanceof InSetFromFileConstraintDTO
+                DistributedList<Object> values = (inSetConstraintDTO instanceof InSetFromFileConstraintDTO
                         ? fileReader.setFromFile(((InSetFromFileConstraintDTO) inSetConstraintDTO).file)
-                        : DistributedList.uniform(((InSetOfValuesConstraintDTO) inSetConstraintDTO).values.stream().distinct()
-                        .map(value ->
-                        {
-                            switch (field.getType())
-                            {
-                                case DATETIME:
-                                    return parseDate((String) value);
-                                case NUMERIC:
-                                    return NumberUtils.coerceToBigDecimal(value);
-                                default:
-                                    return value;
-                            }
-                        })
+                        : DistributedList.uniform(((InSetOfValuesConstraintDTO) inSetConstraintDTO).values.stream()
+                        .distinct()
+                        .map(o -> readAnyType(field, o))
                         .collect(Collectors.toList())));
+                return new IsInSetConstraint(field, values);
             case IN_MAP:
                 InMapConstraintDTO inMapConstraintDTO = (InMapConstraintDTO) dto;
                 return new InMapRelation(field, profileFields.getByName(inMapConstraintDTO.file), fileReader.listFromMapFile(inMapConstraintDTO.file, inMapConstraintDTO.key));
             case MATCHES_REGEX:
-                return new MatchesRegexConstraint(profileFields.getByName(dto.field), pattern(((MatchesRegexConstraintDTO) dto).value));
+                return new MatchesRegexConstraint(profileFields.getByName(dto.field), readPattern(((MatchesRegexConstraintDTO) dto).value));
             case CONTAINS_REGEX:
-                return new ContainsRegexConstraint(profileFields.getByName(dto.field), pattern(((ContainsRegexConstraintDTO) dto).value));
+                return new ContainsRegexConstraint(profileFields.getByName(dto.field), readPattern(((ContainsRegexConstraintDTO) dto).value));
             case OF_LENGTH:
-                return new StringHasLengthConstraint(profileFields.getByName(dto.field), integer(((OfLengthConstraintDTO) dto).value));
+                return new StringHasLengthConstraint(profileFields.getByName(dto.field), HelixStringLength.create(((OfLengthConstraintDTO) dto).value));
             case SHORTER_THAN:
-                return new IsStringShorterThanConstraint(profileFields.getByName(dto.field), integer(((ShorterThanConstraintDTO) dto).value));
+                return new IsStringShorterThanConstraint(profileFields.getByName(dto.field), HelixStringLength.create(((ShorterThanConstraintDTO) dto).value));
             case LONGER_THAN:
-                return new IsStringLongerThanConstraint(profileFields.getByName(dto.field), integer(((LongerThanConstraintDTO) dto).value));
+                return new IsStringLongerThanConstraint(profileFields.getByName(dto.field), HelixStringLength.create(((LongerThanConstraintDTO) dto).value));
             case GREATER_THAN:
-                return new IsGreaterThanConstantConstraint(profileFields.getByName(dto.field), NumberUtils.coerceToBigDecimal(((GreaterThanConstraintDTO) dto).value));
+                return new IsGreaterThanConstantConstraint(profileFields.getByName(dto.field), HelixNumber.create(((GreaterThanConstraintDTO) dto).value));
             case GREATER_THAN_OR_EQUAL_TO:
-                return new IsGreaterThanOrEqualToConstantConstraint(profileFields.getByName(dto.field), NumberUtils.coerceToBigDecimal(((GreaterThanOrEqualToConstraintDTO) dto).value));
+                return new IsGreaterThanOrEqualToConstantConstraint(profileFields.getByName(dto.field), HelixNumber.create(((GreaterThanOrEqualToConstraintDTO) dto).value));
             case LESS_THAN:
-                return new IsLessThanConstantConstraint(profileFields.getByName(dto.field), NumberUtils.coerceToBigDecimal(((LessThanConstraintDTO) dto).value));
+                return new IsLessThanConstantConstraint(profileFields.getByName(dto.field), HelixNumber.create(((LessThanConstraintDTO) dto).value));
             case LESS_THAN_OR_EQUAL_TO:
-                return new IsLessThanOrEqualToConstantConstraint(profileFields.getByName(dto.field), NumberUtils.coerceToBigDecimal(((LessThanOrEqualToConstraintDTO) dto).value));
+                return new IsLessThanOrEqualToConstantConstraint(profileFields.getByName(dto.field), HelixNumber.create(((LessThanOrEqualToConstraintDTO) dto).value));
             case AFTER:
-                return new IsAfterConstantDateTimeConstraint(profileFields.getByName(dto.field), parseDate(((AfterConstraintDTO) dto).value));
+                return new IsAfterConstantDateTimeConstraint(profileFields.getByName(dto.field), HelixDateTime.create(((AfterConstraintDTO) dto).value));
             case AFTER_OR_AT:
-                return new IsAfterOrEqualToConstantDateTimeConstraint(profileFields.getByName(dto.field), parseDate(((AfterOrAtConstraintDTO) dto).value));
+                return new IsAfterOrEqualToConstantDateTimeConstraint(profileFields.getByName(dto.field), HelixDateTime.create(((AfterOrAtConstraintDTO) dto).value));
             case BEFORE:
-                return new IsBeforeConstantDateTimeConstraint(profileFields.getByName(dto.field), parseDate(((BeforeConstraintDTO) dto).value));
+                return new IsBeforeConstantDateTimeConstraint(profileFields.getByName(dto.field), HelixDateTime.create(((BeforeConstraintDTO) dto).value));
             case BEFORE_OR_AT:
-                return new IsBeforeOrEqualToConstantDateTimeConstraint(profileFields.getByName(dto.field), parseDate(((BeforeOrAtConstraintDTO) dto).value));
+                return new IsBeforeOrEqualToConstantDateTimeConstraint(profileFields.getByName(dto.field), HelixDateTime.create(((BeforeOrAtConstraintDTO) dto).value));
             case GRANULAR_TO:
                 GranularToConstraintDTO granularToConstraintDTO = (GranularToConstraintDTO) dto;
                 return granularToConstraintDTO.value instanceof Number
-                        ? new IsGranularToNumericConstraint(profileFields.getByName(dto.field), NumericGranularityFactory.create(granularToConstraintDTO.value))
-                        : new IsGranularToDateConstraint(profileFields.getByName(dto.field), getDateTimeGranularity((String) granularToConstraintDTO.value));
+                        ? new IsGranularToNumericConstraint(profileFields.getByName(dto.field), NumericGranularity.create(granularToConstraintDTO.value))
+                        : new IsGranularToDateConstraint(profileFields.getByName(dto.field), DateTimeGranularity.create((String) granularToConstraintDTO.value));
             default:
                 throw new InvalidProfileException("Atomic constraint type not found: " + dto);
         }
     }
+
 
     private Constraint readGrammaticalConstraintDto(ConstraintDTO dto, ProfileFields profileFields)
     {
@@ -207,58 +175,43 @@ public class ConstraintReader
         }
     }
 
-    private int integer(Object value)
+    @Nullable
+    private Object readAnyType(Field field, Object value)
     {
-        return NumberUtils.coerceToBigDecimal(value).intValueExact();
+        switch (field.getType())
+        {
+            case DATETIME:
+                return HelixDateTime.create((String) value).getValue();
+            case NUMERIC:
+                return NumberUtils.coerceToBigDecimal(value);
+            default:
+                return value;
+        }
     }
 
-    private Pattern pattern(Object value)
+    private Pattern readPattern(Object value)
     {
-        return value instanceof Pattern ? (Pattern) value : Pattern.compile((String) value);
-    }
-
-    private OffsetDateTime parseDate(String value) {
-        if (value.toUpperCase().equals("NOW")) return NOW;
-        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
-                .append(DateTimeFormatter.ofPattern("u-MM-dd'T'HH:mm:ss'.'SSS"))
-                .optionalStart()
-                .appendOffset("+HH", "Z")
-                .toFormatter()
-                .withResolverStyle(ResolverStyle.STRICT);
+        if (value instanceof Pattern) return (Pattern) value;
         try
         {
-            TemporalAccessor temporalAccessor = formatter.parse(value);
-
-            return temporalAccessor.isSupported(ChronoField.OFFSET_SECONDS)
-                    ? OffsetDateTime.from(temporalAccessor)
-                    : LocalDateTime.from(temporalAccessor).atOffset(ZoneOffset.UTC);
+            return Pattern.compile((String) value);
         }
-        catch (DateTimeParseException dtpe)
+        catch (IllegalArgumentException e)
         {
-            throw new InvalidProfileException(String.format(
-                    "Date string '%s' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS[Z] between (inclusive) " +
-                            "0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z",
-                    value
-            ));
+            throw new InvalidProfileException(e.getMessage());
         }
     }
 
-    private Granularity getOffsetUnit(FieldType type, String offsetUnit) {
+    private Granularity readGranularity(FieldType type, String offsetUnit) {
         if (offsetUnit == null) return null;
         switch (type) {
             case NUMERIC:
-                return NumericGranularityFactory.create(offsetUnit);
+                return NumericGranularity.create(offsetUnit);
             case DATETIME:
-                return getDateTimeGranularity(offsetUnit);
+                return DateTimeGranularity.create(offsetUnit);
             default:
                 return null;
         }
     }
 
-    private DateTimeGranularity getDateTimeGranularity(String granularity)
-    {
-        String offsetUnitUpperCase = granularity.toUpperCase();
-        boolean workingDay = offsetUnitUpperCase.equals("WORKING DAYS");
-        return new DateTimeGranularity(Enum.valueOf(ChronoUnit.class, workingDay ? "DAYS" : offsetUnitUpperCase), workingDay);
-    }
 }

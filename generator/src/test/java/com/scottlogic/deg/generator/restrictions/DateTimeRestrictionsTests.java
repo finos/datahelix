@@ -15,7 +15,7 @@
  */
 
 package com.scottlogic.deg.generator.restrictions;
-import com.scottlogic.deg.common.profile.constraintdetail.DateTimeGranularity;
+import com.scottlogic.deg.common.profile.DateTimeGranularity;
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;

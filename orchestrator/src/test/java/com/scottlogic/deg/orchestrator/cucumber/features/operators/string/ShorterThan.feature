@@ -19,12 +19,12 @@ Feature: User can specify that a string length is lower than, a specified number
 
   Scenario: Running a 'shorterThan' request using a number (zero) to specify a the length of a generated string should fail with an error message
     Given foo is shorter than -1
-    Then the profile is invalid because "Field \[foo\]: shorterThan constraint must have an operand/value >= 0, currently is -1"
+    Then the profile is invalid because "String length must have a value >= 0, currently is -1"
     And no data is created
 
   Scenario: Running a 'shorterThan' request using a number (negative number) to specify a the length of a generated string should fail with an error message
     Given foo is shorter than -1
-    Then the profile is invalid because "Field \[foo\]: shorterThan constraint must have an operand/value >= 0, currently is -1"
+    Then the profile is invalid because "String length must have a value >= 0, currently is -1"
     And no data is created
 
   Scenario: shorterThan run against a non contradicting shorterThan should be successful
@@ -75,7 +75,7 @@ Feature: User can specify that a string length is lower than, a specified number
 
   Scenario: shorterThan with value larger than maximum permitted should fail with an error message
     Given foo is shorter than 1002
-    Then the profile is invalid because "Field \[foo\]: shorterThan constraint must have an operand/value <= 1000, currently is 1002"
+    Then the profile is invalid because "shorterThan constraint must have an operand/value <= 1000, currently is 1002"
 
   Scenario: Running a 'shorterThan' request with a value less than implicit max (255) should generate data of length between 0 and value
     Given foo has type "string"

@@ -114,7 +114,7 @@ Feature: Values can be specified by using any of to set multiple constraints
       And foo is of length -1
     And foo has type "string"
     And foo is anything but null
-    Then the profile is invalid because "Field \[foo\]: ofLength constraint must have an operand/value >= 0, currently is -1"
+    Then the profile is invalid because "String length must have a value >= 0, currently is -1"
     And no data is created
 
   Scenario: Running an 'anyOf' request that contains an invalid nested allOf request should fail with an error message
@@ -124,7 +124,7 @@ Feature: Values can be specified by using any of to set multiple constraints
       And foo is of length -1
     And foo has type "string"
     And foo is anything but null
-    Then the profile is invalid because "Field \[foo\]: ofLength constraint must have an operand/value >= 0, currently is -1"
+    Then the profile is invalid because "String length must have a value >= 0, currently is -1"
     And no data is created
 
   Scenario: Running an 'anyOf' request that contains an valid nested allOf request should generate data

@@ -16,8 +16,7 @@
 
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularity;
-import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularityFactory;
+import com.scottlogic.deg.common.profile.NumericGranularity;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -31,42 +30,42 @@ import static org.hamcrest.core.IsEqual.equalTo;
 class ParsedGranularityTests {
     @Test
     public void shouldBeAbleToParseBigDecimalGranularity(){
-        NumericGranularity parsed = NumericGranularityFactory.create(BigDecimal.valueOf(0.1));
+        NumericGranularity parsed = NumericGranularity.create(BigDecimal.valueOf(0.1));
 
         Assert.assertThat(parsed, equalTo(new NumericGranularity(1)));
     }
 
     @Test
     public void shouldPermitAGranularityOf1(){
-        NumericGranularity parsed = NumericGranularityFactory.create(BigDecimal.valueOf(1));
+        NumericGranularity parsed = NumericGranularity.create(BigDecimal.valueOf(1));
 
         Assert.assertThat(parsed, equalTo(new NumericGranularity(0)));
     }
 
     @Test
     public void shouldBeAbleToParseBigIntegerGranularity(){
-        NumericGranularity parsed = NumericGranularityFactory.create(BigInteger.ONE);
+        NumericGranularity parsed = NumericGranularity.create(BigInteger.ONE);
 
         Assert.assertThat(parsed, equalTo(new NumericGranularity(0)));
     }
 
     @Test
     public void shouldBeAbleToParseIntegerGranularity(){
-        NumericGranularity parsed = NumericGranularityFactory.create(1);
+        NumericGranularity parsed = NumericGranularity.create(1);
 
         Assert.assertThat(parsed, equalTo(new NumericGranularity(0)));
     }
 
     @Test
     public void shouldBeAbleToParseLongGranularity(){
-        NumericGranularity parsed = NumericGranularityFactory.create(1L);
+        NumericGranularity parsed = NumericGranularity.create(1L);
 
         Assert.assertThat(parsed, equalTo(new NumericGranularity(0)));
     }
 
     @Test
     public void shouldBeAbleToParseDoubleGranularity(){
-        NumericGranularity parsed = NumericGranularityFactory.create(0.1d);
+        NumericGranularity parsed = NumericGranularity.create(0.1d);
 
         Assert.assertThat(parsed, equalTo(new NumericGranularity(1)));
     }
@@ -75,34 +74,34 @@ class ParsedGranularityTests {
     public void shouldThrowIfGivenNumberThatIsNotSupported(){
         Assertions.assertThrows(
             IllegalArgumentException.class,
-            () -> NumericGranularityFactory.create(new AtomicInteger()));
+            () -> NumericGranularity.create(new AtomicInteger()));
     }
 
     @Test
     public void shouldThrowIfGivenNull(){
         Assertions.assertThrows(
             IllegalArgumentException.class,
-            () -> NumericGranularityFactory.create(null));
+            () -> NumericGranularity.create(null));
     }
 
     @Test
     public void shouldThrowIfGivenSomethingOtherThanANumber(){
         Assertions.assertThrows(
             IllegalArgumentException.class,
-            () -> NumericGranularityFactory.create("hello"));
+            () -> NumericGranularity.create("hello"));
     }
 
     @Test
     public void shouldThrowIfGivenNumberGreaterThan1(){
         Assertions.assertThrows(
             IllegalArgumentException.class,
-            () -> NumericGranularityFactory.create(BigDecimal.valueOf(2)));
+            () -> NumericGranularity.create(BigDecimal.valueOf(2)));
     }
 
     @Test
     public void shouldThrowIfGivenNumberThatIsNotAFractionalPowerOfTen(){
         Assertions.assertThrows(
             IllegalArgumentException.class,
-            () -> NumericGranularityFactory.create(BigDecimal.valueOf(0.2)));
+            () -> NumericGranularity.create(BigDecimal.valueOf(0.2)));
     }
 }

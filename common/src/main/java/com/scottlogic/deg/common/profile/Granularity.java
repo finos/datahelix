@@ -14,13 +14,21 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.common.profile.constraintdetail;
+package com.scottlogic.deg.common.profile;
 
-/**
- * Exception to signify that the specified constraint type cannot be violated.
- */
-public class UnviolatableConstraintException extends RuntimeException {
-    public UnviolatableConstraintException(String message) {
-        super(message);
-    }
+public interface Granularity<T> {
+
+    boolean isCorrectScale(T value);
+
+    Granularity<T> merge(Granularity<T> otherGranularity);
+
+    T getNext(T value, int amount);
+
+    T trimToGranularity(T value);
+
+    T getPrevious(T value);
+
+    default T getNext(T value){
+        return getNext(value, 1);
+    };
 }

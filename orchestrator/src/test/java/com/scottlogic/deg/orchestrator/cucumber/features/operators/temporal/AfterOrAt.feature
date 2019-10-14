@@ -36,17 +36,17 @@ Feature: User can specify that a datetime date is more than, or the same as, a s
 
   Scenario: Running afterOrAt request that includes datetime field with date (YYYY-MM-DD) values that has invalid date should fail
     Given foo is after or at 2019-15-32T00:00:00.000Z
-    Then the profile is invalid because "Field \[foo\]: Date string '2019-15-32T00:00:00.000Z' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS\[Z\] between \(inclusive\) 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z"
+    Then the profile is invalid because "Date string '2019-15-32T00:00:00.000Z' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS\[Z\] between \(inclusive\) 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z"
     And no data is created
 
   Scenario: Running afterOrAt request that includes datetime field with date and time (YYYY-MM-DDTHH:MM:SS) values that has invalid time should fail
     Given foo is after or at 2018-10-01T25:25:05.000Z
-    Then the profile is invalid because "Field \[foo\]: Date string '2018-10-01T25:25:05.000Z' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS\[Z\] between \(inclusive\) 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z"
+    Then the profile is invalid because "Date string '2018-10-01T25:25:05.000Z' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS\[Z\] between \(inclusive\) 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z"
     And no data is created
 
   Scenario: Running afterOrAt request that includes datetime field with date and time (YYYY-MM-DDTHH:MM:SS) values that has invalid year should fail
     Given foo is after or at 0000-01-10T00:00:00.000Z
-    Then the profile is invalid because "Field \[foo\]: Dates must be between 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z"
+    Then the profile is invalid because "Dates must be between 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z"
     And no data is created
 
   Scenario: Running afterOrAt request that includes datetime field with date and time (YYYY-MM-DDTHH:MM:SS) values that has leap year

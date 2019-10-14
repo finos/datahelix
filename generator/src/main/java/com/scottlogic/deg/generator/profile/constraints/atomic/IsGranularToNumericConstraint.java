@@ -17,11 +17,10 @@
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularityFactory;
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.NumericGranularity;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
-import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularity;
 
 import java.util.Objects;
 

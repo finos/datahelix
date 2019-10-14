@@ -1,4 +1,4 @@
-package com.scottlogic.deg.common.profile.constraintdetail;
+package com.scottlogic.deg.common.profile;
 
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.date.TemporalAdjusterGenerator;
@@ -22,6 +22,12 @@ public class DateTimeGranularity implements Granularity<OffsetDateTime> {
         this.chronoUnit = chronoUnit;
         this.workingDay = workingDay;
         this.temporalAdjusterGenerator = new TemporalAdjusterGenerator(chronoUnit, workingDay);
+    }
+
+    public static DateTimeGranularity create(String granularity){
+        String offsetUnitUpperCase = granularity.toUpperCase();
+        boolean workingDay = offsetUnitUpperCase.equals("WORKING DAYS");
+        return new DateTimeGranularity(Enum.valueOf(ChronoUnit.class, workingDay ? "DAYS" : offsetUnitUpperCase), workingDay);
     }
 
     @Override

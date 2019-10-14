@@ -22,7 +22,7 @@ import com.scottlogic.deg.common.profile.FieldBuilder;
 import com.scottlogic.deg.common.profile.SpecificFieldType;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
-import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularity;
+import com.scottlogic.deg.common.profile.NumericGranularity;
 import com.scottlogic.deg.profile.reader.file.names.NameRetriever;
 import org.junit.jupiter.api.Test;
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.common.profile.constraintdetail;
+package com.scottlogic.deg.common.profile;
 
 import java.util.Arrays;
 

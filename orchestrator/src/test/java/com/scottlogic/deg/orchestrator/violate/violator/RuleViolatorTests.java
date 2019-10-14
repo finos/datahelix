@@ -16,16 +16,17 @@
 
 package com.scottlogic.deg.orchestrator.violate.violator;
 
-import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
-import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
-import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
+import com.scottlogic.deg.common.profile.HelixNumber;
+import com.scottlogic.deg.common.profile.UnviolatableConstraintException;
 import com.scottlogic.deg.generator.profile.Rule;
+import com.scottlogic.deg.generator.profile.RuleInformation;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
-import com.scottlogic.deg.common.profile.constraintdetail.UnviolatableConstraintException;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsLessThanConstantConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.ViolatedAtomicConstraint;
-import com.scottlogic.deg.generator.profile.RuleInformation;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,16 +35,15 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import java.math.BigDecimal;
 import java.util.*;
 
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 import static com.scottlogic.deg.orchestrator.violate.violator.TypeEqualityHelper.assertRuleTypeEquality;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
 /**
  * Tests the behaviour of the RuleViolator class.
@@ -70,9 +70,9 @@ public class RuleViolatorTests {
 
         target = new RuleViolator(inputFilters);
 
-        atomicConstraint1 = new IsLessThanConstantConstraint(createField("foo"), BigDecimal.valueOf(10));
-        atomicConstraint2 = new IsLessThanConstantConstraint(createField("bar"), BigDecimal.valueOf(20));
-        atomicConstraint3 = new IsLessThanConstantConstraint(createField("foobar"), BigDecimal.valueOf(30));
+        atomicConstraint1 = new IsLessThanConstantConstraint(createField("foo"), HelixNumber.create(10));
+        atomicConstraint2 = new IsLessThanConstantConstraint(createField("bar"), HelixNumber.create(20));
+        atomicConstraint3 = new IsLessThanConstantConstraint(createField("foobar"), HelixNumber.create(30));
         ruleInformation = new RuleInformation();
     }
 

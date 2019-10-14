@@ -1,8 +1,8 @@
 package com.scottlogic.deg.profile.reader.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.NumericGranularity;
 import com.scottlogic.deg.common.profile.SpecificFieldType;
-import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularityFactory;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.profile.reader.file.names.NameRetriever;
@@ -16,7 +16,7 @@ public class FieldReader
     {
         switch (type) {
             case INTEGER:
-                return Optional.of(new IsGranularToNumericConstraint(field, NumericGranularityFactory.create(BigDecimal.ONE)));
+                return Optional.of(new IsGranularToNumericConstraint(field, NumericGranularity.create(BigDecimal.ONE)));
             case ISIN:
                 return Optional.of(new MatchesStandardConstraint(field, StandardConstraintTypes.ISIN));
             case SEDOL:
