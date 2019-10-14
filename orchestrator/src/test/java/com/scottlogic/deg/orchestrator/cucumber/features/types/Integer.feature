@@ -33,6 +33,7 @@ Feature: User can specify that a number has type integer and does not have any d
 #594 - Change this to descending order?
   Scenario: Less than or equal to constraint with integer type produces valid integers
     Given foo is less than or equal to 10
+    And foo has type "integer"
     And the generator can generate at most 5 rows
     Then the following data should be generated:
       | foo                    |

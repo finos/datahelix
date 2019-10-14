@@ -1,5 +1,6 @@
 package com.scottlogic.deg.common.profile.constraintdetail;
 
+import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.date.TemporalAdjusterGenerator;
 
 import java.time.OffsetDateTime;
@@ -58,7 +59,7 @@ public class DateTimeGranularity implements Granularity<OffsetDateTime> {
             case YEARS:
                 return OffsetDateTime.of(d.getYear(), 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
             default:
-                throw new UnsupportedOperationException(chronoUnit + "not yet supported as a granularity");
+                throw new ValidationException(chronoUnit + " not yet supported as a granularity");
         }
     }
 

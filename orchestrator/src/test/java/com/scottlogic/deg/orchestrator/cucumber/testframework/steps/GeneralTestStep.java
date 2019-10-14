@@ -89,12 +89,12 @@ public class GeneralTestStep {
 
     @And("^(.+) is null$")
     public void fieldIsNull(String fieldName) throws Exception{
-        this.state.addConstraint(fieldName, "null", null);
+        this.state.addConstraint(fieldName, ConstraintType.NULL, null);
     }
 
     @And("^(.+) is anything but null$")
     public void fieldIsNotNull(String fieldName) throws Exception{
-        this.state.addNotConstraint(fieldName, "null", null);
+        this.state.addNotConstraint(fieldName, ConstraintType.NULL, null);
     }
 
     @And("^(.+) is unique$")

@@ -73,12 +73,12 @@ public class CucumberTestState {
         this.addConstraintToList(createRelationConstraint(field, relationType, other));
     }
 
-    public void addConstraint(String fieldName, String constraintName, Object value) {
-        this.addConstraintToList(createConstraint(fieldName, constraintName, value));
+    public void addConstraint(String fieldName, ConstraintType type, Object value) {
+        this.addConstraintToList(createConstraint(fieldName, type, value));
     }
 
-    public void addNotConstraint(String fieldName, String constraintName, Object value) {
-        this.addConstraintToList(createNotConstraint(fieldName, constraintName, value));
+    public void addNotConstraint(String fieldName, ConstraintType type, Object value) {
+        this.addConstraintToList(createNotConstraint(fieldName, type, value));
     }
 
     public void addConstraintsFromJson(String constraintProfile) throws IOException {
@@ -120,9 +120,9 @@ public class CucumberTestState {
         return contstraintsToNotViolate;
     }
 
-    private ConstraintDTO createConstraint(String fieldName, String constraintName, Object _value)
+    private ConstraintDTO createConstraint(String fieldName, ConstraintType type, Object _value)
     {
-        switch (ConstraintType.fromPropertyName(constraintName))
+        switch (type)
         {
             case EQUAL_TO:
                 return new EqualToConstraintDTO()
@@ -169,7 +169,7 @@ public class CucumberTestState {
                 return new OfLengthConstraintDTO()
                 {{
                     field = fieldName;
-                    value = (int) _value;
+                    value = (int)_value;
                 }};
             case LONGER_THAN:
                 return new LongerThanConstraintDTO()
@@ -237,9 +237,9 @@ public class CucumberTestState {
     }
 
 
-    private ConstraintDTO createNotConstraint(String fieldName, String constraintName, Object value) {
+    private ConstraintDTO createNotConstraint(String fieldName, ConstraintType type, Object value) {
         NotConstraintDTO notDto = new NotConstraintDTO();
-        notDto.constraint = this.createConstraint(fieldName, constraintName, value);
+        notDto.constraint = this.createConstraint(fieldName, type, value);
         return notDto;
     }
 

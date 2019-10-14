@@ -40,62 +40,62 @@ public class NumericValueStep {
 
     @And("^([A-z0-9]+) is equal to (-?[0-9\\.]+)$")
     public void equalToNumber(String field, String value){
-        state.addConstraint(field, AtomicConstraintType.IS_EQUAL_TO_CONSTANT.getText(), tryParse(value));
+        state.addConstraint(field, ConstraintType.EQUAL_TO, tryParse(value));
     }
 
     @And("^([A-z0-9]+) is greater than (-?[0-9\\.]+)$")
     public void greaterThanNumber(String field, String value){
-        state.addConstraint(field, AtomicConstraintType.IS_GREATER_THAN_CONSTANT.getText(), tryParse(value));
+        state.addConstraint(field, ConstraintType.GREATER_THAN, tryParse(value));
     }
 
     @And("^([A-z0-9]+) is greater than or equal to (-?[0-9\\.]+)$")
     public void greaterThanOrEqualNumber(String field, String value){
-        state.addConstraint(field, AtomicConstraintType.IS_GREATER_THAN_OR_EQUAL_TO_CONSTANT.getText(), tryParse(value));
+        state.addConstraint(field, ConstraintType.GREATER_THAN_OR_EQUAL_TO, tryParse(value));
     }
 
     @And("^([A-z0-9]+) is less than (-?[0-9\\.]+)$")
     public void lessThanNumber(String field, String value){
-        state.addConstraint(field, AtomicConstraintType.IS_LESS_THAN_CONSTANT.getText(), tryParse(value));
+        state.addConstraint(field, ConstraintType.LESS_THAN, tryParse(value));
     }
 
     @And("^([A-z0-9]+) is less than or equal to (-?[0-9\\.]+)$")
     public void lessThanOrEqualNumber(String field, String value){
-        state.addConstraint(field, AtomicConstraintType.IS_LESS_THAN_OR_EQUAL_TO_CONSTANT.getText(), tryParse(value));
+        state.addConstraint(field, ConstraintType.LESS_THAN_OR_EQUAL_TO, tryParse(value));
     }
 
     @And("^([A-z0-9]+) is granular to ([0-9\\.]+)$")
     public void granularToNumber(String field, String value){
-        state.addConstraint(field, AtomicConstraintType.IS_GRANULAR_TO.getText(), tryParse(value));
+        state.addConstraint(field, ConstraintType.GRANULAR_TO, tryParse(value));
     }
 
     @And("^([A-z0-9]+) is anything but equal to (-?[0-9\\.]+)$")
     public void notEqualToNumber(String field, String value){
-        state.addNotConstraint(field, AtomicConstraintType.IS_EQUAL_TO_CONSTANT.getText(), tryParse(value));
+        state.addNotConstraint(field, ConstraintType.EQUAL_TO, tryParse(value));
     }
 
     @And("^([A-z0-9]+) is anything but greater than (-?[0-9\\.]+)$")
     public void notGreaterThanNumber(String field, String value){
-        state.addNotConstraint(field, AtomicConstraintType.IS_GREATER_THAN_CONSTANT.getText(), tryParse(value));
+        state.addNotConstraint(field, ConstraintType.GREATER_THAN, tryParse(value));
     }
 
     @And("^([A-z0-9]+) is anything but greater than or equal to (-?[0-9\\.]+)$")
     public void notGreaterThanOrEqualNumber(String field, String value){
-        state.addNotConstraint(field, AtomicConstraintType.IS_GREATER_THAN_OR_EQUAL_TO_CONSTANT.getText(), tryParse(value));
+        state.addNotConstraint(field, ConstraintType.GREATER_THAN_OR_EQUAL_TO, tryParse(value));
     }
 
     @And("^([A-z0-9]+) is anything but less than (-?[0-9\\.]+)$")
     public void notLessThanNumber(String field, String value){
-        state.addNotConstraint(field, AtomicConstraintType.IS_LESS_THAN_CONSTANT.getText(), tryParse(value));
+        state.addNotConstraint(field, ConstraintType.LESS_THAN, tryParse(value));
     }
 
     @And("^([A-z0-9]+) is anything but less than or equal to (-?[0-9\\.]+)$")
     public void notLessThanOrEqualNumber(String field, String value){
-        state.addNotConstraint(field, AtomicConstraintType.IS_LESS_THAN_OR_EQUAL_TO_CONSTANT.getText(), tryParse(value));
+        state.addNotConstraint(field, ConstraintType.LESS_THAN_OR_EQUAL_TO, tryParse(value));
     }
 
     @And("^([A-z0-9]+) is anything but granular to ([0-9\\.]+)$")
     public void notGranularToNumber(String field, String value){
-        state.addNotConstraint(field, AtomicConstraintType.IS_GRANULAR_TO.getText(), tryParse(value));
+        state.addNotConstraint(field, ConstraintType.GRANULAR_TO, tryParse(value));
     }
 
     @And("^(.+) is greater than field ([A-z0-9]+)$")

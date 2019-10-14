@@ -17,13 +17,11 @@
             "constraints": [
                 {
                     "field": "field1",
-                    "is": "inSet",
-                    "values": ["A", "B"]
+                    "inSet": ["A", "B"]
                 },
                 {
                     "field": "field2",
-                    "is": "inSet",
-                    "values": ["1", "2", "3"]
+                    "inSet": ["1", "2", "3"]
                 }
             ]
         }

@@ -18,7 +18,6 @@ Feature: User can specify the length of generated string data using 'ofLength'
       | length | expected |
       | 1      | "a"      |
       | 2      | "aa"     |
-      | 1.0    | "a"      |
 
   Scenario Outline: Running an 'ofLength' request that includes a negation of a valid numeric length should be successful
     Given foo is anything but of length <length>

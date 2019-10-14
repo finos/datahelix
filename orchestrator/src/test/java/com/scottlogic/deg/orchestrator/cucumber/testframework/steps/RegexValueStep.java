@@ -16,9 +16,9 @@
 
 package com.scottlogic.deg.orchestrator.cucumber.testframework.steps;
 
-import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestHelper;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestState;
+import com.scottlogic.deg.profile.common.ConstraintType;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
@@ -36,22 +36,22 @@ public class RegexValueStep {
 
     @When("^([A-z0-9]+) is matching regex /(.+)/$")
     public void matchingRegexString(String fieldName, String value) {
-        state.addConstraint(fieldName, AtomicConstraintType.MATCHES_REGEX.getText(), Pattern.compile(value));
+        state.addConstraint(fieldName, ConstraintType.MATCHES_REGEX, value);
     }
 
     @When("^([A-z0-9]+) is anything but matching regex /(.+)/$")
     public void notMatchingRegexString(String fieldName, String value) {
-        state.addNotConstraint(fieldName, AtomicConstraintType.MATCHES_REGEX.getText(), Pattern.compile(value));
+        state.addNotConstraint(fieldName, ConstraintType.MATCHES_REGEX, value);
     }
 
     @When("^([A-z0-9]+) is containing regex /(.+)/$")
     public void containingRegexString(String fieldName, String value) {
-        state.addConstraint(fieldName, AtomicConstraintType.CONTAINS_REGEX.getText(), Pattern.compile(value));
+        state.addConstraint(fieldName, ConstraintType.CONTAINS_REGEX, value);
     }
 
     @When("^([A-z0-9]+) is anything but containing regex /(.+)/$")
     public void notContainingRegexString(String fieldName, String value) {
-        state.addNotConstraint(fieldName, AtomicConstraintType.CONTAINS_REGEX.getText(), Pattern.compile(value));
+        state.addNotConstraint(fieldName, ConstraintType.CONTAINS_REGEX, value);
     }
 
     @Then("{fieldVar} contains strings matching {regex}")

@@ -16,7 +16,6 @@
 
 package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -121,7 +120,6 @@ public class CucumberTestHelper {
 
     public Stream<String> getProfileValidationErrors() {
         return testState.testExceptions.stream()
-            .filter(e -> e instanceof ValidationException || e instanceof JsonParseException)
             .map(Throwable::getMessage);
     }
 

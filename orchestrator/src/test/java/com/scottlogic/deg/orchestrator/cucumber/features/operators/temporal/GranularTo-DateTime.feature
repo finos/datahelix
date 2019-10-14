@@ -128,5 +128,5 @@ Feature: User can specify that datetime fields are granular to a certain unit
 
   Scenario: Applying an invalid datetime granularTo constraint fails with an appropriate error
     Given foo is granular to "decades"
-    Then the profile is invalid because "Field \[foo\]: was Decades, Must be one of the supported datetime units \(millis, seconds, minutes, hours, days, months, years\)"
+    Then the profile is invalid because "Decades not yet supported as a granularity"
     And no data is created
