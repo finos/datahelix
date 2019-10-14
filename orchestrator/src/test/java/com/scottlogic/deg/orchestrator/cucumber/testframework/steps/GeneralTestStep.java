@@ -31,8 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static com.scottlogic.deg.profile.reader.atomic.ConstraintReaderHelpers.getFieldType;
 import static org.hamcrest.Matchers.*;
 
 public class GeneralTestStep {
@@ -46,7 +44,6 @@ public class GeneralTestStep {
 
     @Before
     public void BeforeEach() {
-        this.state.initialise();
         this.cucumberTestHelper = new CucumberTestHelper(state);
     }
 
@@ -104,7 +101,30 @@ public class GeneralTestStep {
         this.state.setFieldUnique(fieldName);
     }
 
+    @And("^(.+) is equal to field (.+)$")
+    public void fieldEqualTo(String field, String otherField){
+        state.addRelationConstraint(field, AtomicConstraintType.IS_EQUAL_TO_CONSTANT.getText(), otherField);
+    }
 
+    @When("^If and Then are described below$")
+    public void ifStartThen(){
+        state.startCreatingIfConstraint(2);
+    }
+
+    @When("^If Then and Else are described below$")
+    public void ifStartThenElse(){
+        state.startCreatingIfConstraint(3);
+    }
+
+    @And("All Of the next {number} constraints")
+    public void allOf(int count){
+        state.startCreatingAllOfConstraint(count);
+    }
+
+    @And("Any Of the next {number} constraints")
+    public void anyOf(int count){
+        state.startCreatingAnyOfConstraint(count);
+    }
 
     @Then("^the profile should be considered valid$")
     public void theProfileIsValid() {
@@ -166,34 +186,34 @@ public class GeneralTestStep {
     public void theFollowingDataShouldBeGenerated(List<Map<String, String>> expectedResultsTable) {
         GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
 
-        assertOutputData(null, data.generatedData, new RowsMatchAnyOrderMatcher(data.expectedData));
+        assertOutputData(data.generatedData, new RowsMatchAnyOrderMatcher(data.expectedData));
     }
 
     @Then("^the following data should be generated in order:$")
     public void theFollowingDataShouldBeGeneratedInOrder(List<Map<String, String>> expectedResultsTable) {
         GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
 
-        assertOutputData(null, data.generatedData, equalTo(data.expectedData));
+        assertOutputData(data.generatedData, equalTo(data.expectedData));
     }
 
     @Then("^the following data should be included in what is generated:$")
     public void theFollowingDataShouldBeContainedInActual(List<Map<String, String>> expectedResultsTable) {
         GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
 
-        assertOutputData(null, data.generatedData, new RowsPresentMatcher(data.expectedData));
+        assertOutputData(data.generatedData, new RowsPresentMatcher(data.expectedData));
     }
 
     @Then("^the following data should not be included in what is generated:$")
     public void theFollowingDataShouldNotBeContainedInActual(List<Map<String, String>> expectedResultsTable) {
         GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
 
-        assertOutputData(null, data.generatedData, new RowsAbsentMatcher(data.expectedData));
+        assertOutputData(data.generatedData, new RowsAbsentMatcher(data.expectedData));
     }
 
-    private void assertOutputData(String message, List<List<Object>> data, Matcher<List<List<Object>>> matcher){
+    private void assertOutputData(List<List<Object>> data, Matcher<List<List<Object>>> matcher){
         assertNoGenerationErrors();
 
-        Assert.assertThat(message, data, matcher);
+        Assert.assertThat(data, matcher);
     }
 
     private void assertNoGenerationErrors() {
@@ -260,10 +280,8 @@ public class GeneralTestStep {
 
     @And("^(.+) has type \"(.+)\"$")
     public void fooHasType(String fieldName, String type) {
-        state.setFieldType(fieldName, getFieldType(type));
-        state.addConstraint(fieldName, "ofType", type);
+        state.setFieldType(fieldName, type);
     }
-
 
     class GeneratedTestData {
         List <List<Object>> expectedData;

@@ -28,7 +28,7 @@ public class NotEqualToConstraint implements AtomicConstraint {
 
     @Override
     public FieldSpec toFieldSpec() {
-        return FieldSpec.empty().withBlacklist(Collections.singleton(value));
+        return FieldSpec.fromType(field.getType()).withBlacklist(Collections.singleton(value));
     }
 
     @Override

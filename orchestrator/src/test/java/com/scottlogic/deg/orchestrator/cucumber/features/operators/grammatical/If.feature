@@ -18,13 +18,9 @@ Feature: Values can be specified by using if, then and else constraints
       | 20 |
     And bar is anything but null
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "a" },
-        "then": { "field": "bar", "is": "equalTo", "value": 10 }
-      }
-      """
+    And If and Then are described below
+    And foo is equal to "a"
+    And bar is equal to 10
     Then the following data should be generated:
       | foo | bar |
       | "a" | 10  |
@@ -39,14 +35,10 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "string"
     And bar is anything but null
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "a" },
-        "then": { "field": "bar", "is": "equalTo", "value": 3 },
-        "else": { "field": "bar", "is": "equalTo", "value": 5 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to "a"
+    And bar is equal to 3
+    And bar is equal to 5
     Then the following data should be generated:
       | foo | bar |
       | "a" | 3   |
@@ -65,18 +57,12 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "decimal"
     And bar has type "string"
     And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if":
-          { "anyOf": [
-            { "field": "foo", "is": "equalTo", "value": 1 },
-            { "field": "foo", "is": "equalTo", "value": 2 }
-          ]},
-        "then": { "field": "bar", "is": "equalTo", "value": "a" },
-        "else": { "field": "bar", "is": "equalTo", "value": "b" }
-      }
-      """
+    When If Then and Else are described below
+    And Any Of the next 2 constraints
+      And foo is equal to 1
+      And foo is equal to 2
+    And bar is equal to "a"
+    And bar is equal to "b"
     Then the following data should be generated:
       | foo | bar |
       | 1   | "a" |
@@ -97,18 +83,12 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "decimal"
     And bar has type "string"
     And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": {
-          "allOf": [
-            { "field": "foo", "is": "greaterThan", "value": 1 },
-            { "field": "foo", "is": "lessThan", "value": 4 }
-          ]},
-        "then": { "field": "bar", "is": "equalTo", "value": "a" },
-        "else": { "field": "bar", "is": "equalTo", "value": "b" }
-      }
-      """
+    When If Then and Else are described below
+    And All Of the next 2 constraints
+      And foo is greater than 1
+      And foo is less than 4
+    And bar is equal to "a"
+    And bar is equal to "b"
     Then the following data should be generated:
       | foo | bar |
       | 1   | "b" |
@@ -129,14 +109,10 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "decimal"
     And bar has type "string"
     And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": { "not": { "field": "foo", "is": "equalTo", "value": 1 } },
-        "then": { "field": "bar", "is": "equalTo", "value": "a" },
-        "else": { "field": "bar", "is": "equalTo", "value": "b" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is anything but equal to 1
+    And bar is equal to "a"
+    And bar is equal to "b"
     Then the following data should be generated:
       | foo | bar |
       | 1   | "b" |
@@ -158,18 +134,13 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "decimal"
     And bar has type "string"
     And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "greaterThan", "value": 1 },
-        "then": {
-          "if": { "field": "foo", "is": "greaterThan", "value": 3 },
-          "then": { "field": "bar", "is": "equalTo", "value": "a" },
-          "else": { "field": "bar", "is": "equalTo", "value": "b" }
-        },
-        "else": { "field": "bar", "is": "equalTo", "value": "c" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is greater than 1
+      When If Then and Else are described below
+      And foo is greater than 3
+      And bar is equal to "a"
+      And bar is equal to "b"
+    And bar is equal to "c"
     Then the following data should be generated:
       | foo | bar |
       | 1   | "c" |
@@ -215,14 +186,10 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "decimal"
     And bar has type "string"
     And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 5 },
-        "then": { "field": "bar", "is": "equalTo", "value": "a" },
-        "else": { "field": "bar", "is": "equalTo", "value": "b" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 5
+    And bar is equal to "a"
+    And bar is equal to "b"
     Then the following data should be generated:
       | foo | bar |
       | 1   | "b" |
@@ -244,14 +211,10 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "decimal"
     And bar has type "string"
     And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 1 },
-        "then": { "field": "bar", "is": "equalTo", "value": "X" },
-        "else": { "field": "bar", "is": "equalTo", "value": "b" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 1
+    And bar is equal to "X"
+    And bar is equal to "b"
     Then the following data should be generated:
       | foo | bar |
       | 2   | "b" |
@@ -272,14 +235,10 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "decimal"
     And bar has type "string"
     And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 1 },
-        "then": { "field": "bar", "is": "equalTo", "value": "a" },
-        "else": { "field": "bar", "is": "equalTo", "value": "X" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 1
+    And bar is equal to "a"
+    And bar is equal to "X"
     Then the following data should be generated:
       | foo | bar |
       | 1   | "a" |
@@ -298,14 +257,12 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "decimal"
     And bar has type "string"
     And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "inSet", "values": [1, 2] },
-        "then": { "field": "bar", "is": "equalTo", "value": "a" },
-        "else": { "field": "bar", "is": "equalTo", "value": "b" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is in set:
+      | 1 |
+      | 2 |
+    And bar is equal to "a"
+    And bar is equal to "b"
     Then the following data should be generated:
       | foo | bar |
       | 1   | "a" |
@@ -327,14 +284,12 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "decimal"
     And bar has type "string"
     And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 1 },
-        "then": { "field": "bar", "is": "inSet", "values": [ "a", "b" ] },
-        "else": { "field": "bar", "is": "equalTo", "value": "c" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 1
+    And bar is in set:
+      | "a" |
+      | "b" |
+    And bar is equal to "c"
     Then the following data should be generated:
       | foo | bar |
       | 1   | "a" |
@@ -357,14 +312,12 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "decimal"
     And bar has type "string"
     And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 1 },
-        "then": { "field": "bar", "is": "equalTo", "value": "b" },
-        "else": { "field": "bar", "is": "inSet", "values": [ "a", "c" ] }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 1
+    And bar is equal to "b"
+    And bar is in set:
+      | "a" |
+      | "c" |
     Then the following data should be generated:
       | foo | bar |
       | 1   | "b" |
@@ -389,45 +342,18 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "decimal"
     And bar has type "string"
     And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "inSet", "values": [ 8, 9 ] },
-        "then": { "field": "bar", "is": "equalTo", "value": "a" },
-        "else": { "field": "bar", "is": "equalTo", "value": "b" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is in set:
+      | 8 |
+      | 9 |
+    And bar is equal to "a"
+    And bar is equal to "b"
     Then the following data should be generated:
       | foo | bar |
       | 1   | "b" |
       | 2   | "b" |
       | 3   | "b" |
       | 4   | "b" |
-
-  Scenario: Running an if request that contains a contradictory inSet constraint within its then statement should be successful
-    Given foo is in set:
-      | 1 |
-      | 2 |
-      | 3 |
-      | 4 |
-    And foo is anything but null
-    And bar is in set:
-      | "a" |
-      | "b" |
-      | "c" |
-    And foo has type "decimal"
-    And bar has type "string"
-    And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 1 },
-        "then": { "field": "bar", "is": "inSet", "value": [ "X", "Y" ] },
-        "else": { "field": "bar", "is": "equalTo", "value": "c" }
-      }
-      """
-    Then the profile is invalid because "Field \[bar\]: Couldn't recognise 'values' property, it must not contain 'null'"
-    And no data is created
 
   Scenario: Running an if request that contains a contradictory inSet constraint within its else statement should be successful
     Given foo is in set:
@@ -443,14 +369,12 @@ Feature: Values can be specified by using if, then and else constraints
     And foo has type "decimal"
     And bar has type "string"
     And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 1 },
-        "then": { "field": "bar", "is": "equalTo", "value": "a" },
-        "else": { "field": "bar", "is": "inSet", "values": [ "X", "Y" ] }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 1
+    And bar is equal to "a"
+    And bar is in set:
+      | "X" |
+      | "Y" |
     Then the following data should be generated:
       | foo | bar |
       | 1   | "a" |
@@ -465,14 +389,10 @@ Feature: Values can be specified by using if, then and else constraints
       | "c" |
     And foo has type "decimal"
     And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "null" },
-        "then": { "field": "bar", "is": "equalTo", "value": "b" },
-        "else": { "field": "bar", "is": "equalTo", "value": "c" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is null
+    And bar is equal to "b"
+    And bar is equal to "c"
     Then the following data should be generated:
       | foo  | bar  |
       | null | "b"  |
@@ -490,14 +410,10 @@ Feature: Values can be specified by using if, then and else constraints
       | "c" |
     And foo has type "decimal"
     And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 2 },
-        "then": { "field": "bar", "is": "null" },
-        "else": { "field": "bar", "is": "equalTo", "value": "c" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 2
+    And bar is null
+    And bar is equal to "c"
     Then the following data should be generated:
       | foo  | bar  |
       | null | "c"  |
@@ -515,14 +431,10 @@ Feature: Values can be specified by using if, then and else constraints
       | "c" |
     And foo has type "decimal"
     And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 2 },
-        "then": { "field": "bar", "is": "equalTo", "value": "b" },
-        "else": { "field": "bar", "is": "null" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 2
+    And bar is equal to "b"
+    And bar is null
     Then the following data should be generated:
       | foo  | bar  |
       | null | null |
@@ -544,14 +456,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "decimal"
     And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "null" },
-        "then": { "field": "bar", "is": "equalTo", "value": "a" },
-        "else": { "field": "bar", "is": "equalTo", "value": "b" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is null
+    And bar is equal to "a"
+    And bar is equal to "b"
     Then the following data should be generated:
       | foo | bar |
       | 1   | "b" |
@@ -573,14 +481,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "decimal"
     And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 1},
-        "then": { "field": "bar", "is": "null" },
-        "else": { "field": "bar", "is": "equalTo", "value": "a" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 1
+    And bar is null
+    And bar is equal to "a"
     Then the following data should be generated:
       | foo | bar |
       | 2   | "a" |
@@ -601,14 +505,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "decimal"
     And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 1},
-        "then": { "field": "bar", "is": "equalTo", "value": "a" },
-        "else": { "field": "bar", "is": "null" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 1
+    And bar is equal to "a"
+    And bar is null
     Then the following data should be generated:
       | foo | bar |
       | 1   | "a" |
@@ -628,14 +528,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "matchingRegex", "value": "[a-z]{1}" },
-        "then": { "field": "bar", "is": "equalTo", "value": "AA" },
-        "else": { "field": "bar", "is": "equalTo", "value": "10" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is matching regex /[a-z]{1}/
+    And bar is equal to "AA"
+    And bar is equal to "10"
     Then the following data should be generated:
       | foo | bar  |
       | "1" | "10" |
@@ -658,14 +554,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "1" },
-        "then": { "field": "bar", "is": "matchingRegex", "value": "[A-Z]{2}" },
-        "else": { "field": "bar", "is": "equalTo", "value": "10" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to "1"
+    And bar is matching regex /[A-Z]{2}/
+    And bar is equal to "10"
     Then the following data should be generated:
       | foo | bar  |
       | "1" | "AA" |
@@ -689,14 +581,10 @@ Feature: Values can be specified by using if, then and else constraints
       | "AA" |
       | "BB" |
     And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "1" },
-        "then": { "field": "bar", "is": "equalTo", "value": "AA" },
-        "else": { "field": "bar", "is": "matchingRegex", "value": "[0-9]{2}" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to "1"
+    And bar is equal to "AA"
+    And bar is matching regex /[0-9]{2}/
     Then the following data should be generated:
       | foo | bar  |
       | "1" | "AA" |
@@ -722,14 +610,10 @@ Feature: Values can be specified by using if, then and else constraints
       | "AA" |
       | "BB" |
     And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "matchingRegex", "value": "[0-9]{10}" },
-        "then": { "field": "bar", "is": "equalTo", "value": "AA" },
-        "else": { "field": "bar", "is": "equalTo", "value": "10" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is matching regex /[0-9]{2}/
+    And bar is equal to "AA"
+    And bar is equal to "10"
     Then the following data should be generated:
       | foo | bar  |
       | "1" | "10" |
@@ -752,14 +636,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "a" },
-        "then": { "field": "bar", "is": "matchingRegex", "value": "[😁-😡]{1}"},
-        "else": { "field": "bar", "is": "equalTo", "value": "10" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to "a"
+    And bar is matching regex /C/
+    And bar is equal to "10"
     Then the following data should be generated:
       | foo | bar  |
       | "1" | "10" |
@@ -781,14 +661,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "a" },
-        "then": { "field": "bar", "is": "equalTo", "value": "BB"},
-        "else": { "field": "bar", "is": "matchingRegex", "value": "[😁-😡]{1}"}
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to "a"
+    And bar is equal to "BB"
+    And bar is matching regex /WRONG/
     Then the following data should be generated:
       | foo | bar  |
       | "a" | "BB" |
@@ -808,14 +684,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "containingRegex", "value": "[1]{1}" },
-        "then": { "field": "bar", "is": "equalTo", "value": "AA" },
-        "else": { "field": "bar", "is": "equalTo", "value": "10" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is containing regex /[1]{1}/
+    And bar is equal to "AA"
+    And bar is equal to "10"
     Then the following data should be generated:
       | foo  | bar  |
       | "1"  | "AA" |
@@ -838,14 +710,10 @@ Feature: Values can be specified by using if, then and else constraints
       | "AA" |
       | "BB" |
     And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "1" },
-        "then": { "field": "bar", "is": "containingRegex", "value": "[0]{1}" },
-        "else": { "field": "bar", "is": "equalTo", "value": "AA" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to "1"
+    And bar is containing regex /[0]{1}/
+    And bar is equal to "AA"
     Then the following data should be generated:
       | foo  | bar  |
       | "1"  | "10" |
@@ -869,14 +737,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "1" },
-        "then": { "field": "bar", "is": "equalTo", "value": "BB" },
-        "else": { "field": "bar", "is": "containingRegex", "value": "[0]{1}" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to "1"
+    And bar is equal to "BB"
+    And bar is containing regex /[0]{1}/
     Then the following data should be generated:
       | foo  | bar  |
       | "1"  | "BB" |
@@ -902,14 +766,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "containingRegex", "value": "[🚫]{1}" },
-        "then": { "field": "bar", "is": "equalTo", "value": "AA" },
-        "else": { "field": "bar", "is": "equalTo", "value": "10" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is containing regex /[🚫]{1}/
+    And bar is equal to "AA"
+    And bar is equal to "10"
     Then the following data should be generated:
       | foo  | bar  |
       | "1"  | "10" |
@@ -932,14 +792,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "1" },
-        "then": { "field": "bar", "is": "containingRegex", "value": "[🚫]{1}" },
-        "else": { "field": "bar", "is": "equalTo", "value": "10" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to "1"
+    And bar is containing regex /[🚫]{1}/
+    And bar is equal to "10"
     Then the following data should be generated:
       | foo  | bar  |
       | "2"  | "10" |
@@ -961,14 +817,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "1" },
-        "then": { "field": "bar", "is": "equalTo", "value": "10" },
-        "else": { "field": "bar", "is": "containingRegex", "value": "[🚫]{1}" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to "1"
+    And bar is equal to "10"
+    And bar is containing regex /[🚫]{1}/
     Then the following data should be generated:
       | foo | bar  |
       | "1" | "10" |
@@ -988,14 +840,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "ofLength", "value": 2 },
-        "then": { "field": "bar", "is": "equalTo", "value": "1" },
-        "else": { "field": "bar", "is": "equalTo", "value": "4444" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is of length 2
+    And bar is equal to "1"
+    And bar is equal to "4444"
     Then the following data should be generated:
       | foo    | bar    |
       | "a"    | "4444" |
@@ -1018,14 +866,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "bb" },
-        "then": { "field": "bar", "is": "ofLength", "value": 3 },
-        "else": { "field": "bar", "is": "equalTo", "value": "1" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to "bb"
+    And bar is of length 3
+    And bar is equal to "1"
     Then the following data should be generated:
       | foo    | bar   |
       | "a"    | "1"   |
@@ -1048,14 +892,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "a" },
-        "then": { "field": "bar", "is": "equalTo", "value": "1" },
-        "else": { "field": "bar", "is": "ofLength", "value": 4 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to "a"
+    And bar is equal to "1"
+    And bar is of length 4
     Then the following data should be generated:
       | foo    | bar    |
       | "a"    | "1"    |
@@ -1078,14 +918,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "ofLength", "value": 7 },
-        "then": { "field": "bar", "is": "equalTo", "value": "1" },
-        "else": { "field": "bar", "is": "equalTo", "value": "4444" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is of length 7
+    And bar is equal to "1"
+    And bar is equal to "4444"
     Then the following data should be generated:
       | foo    | bar    |
       | "a"    | "4444" |
@@ -1108,14 +944,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "a" },
-        "then": { "field": "bar", "is": "ofLength", "value": 10 },
-        "else": { "field": "bar", "is": "equalTo", "value": "4444" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to "a"
+    And bar is of length 10
+    And bar is equal to "4444"
     Then the following data should be generated:
       | foo    | bar    |
       | "bb"   | "4444" |
@@ -1137,14 +969,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "a" },
-        "then": { "field": "bar", "is": "equalTo", "value": "1" },
-        "else": { "field": "bar", "is": "ofLength", "value": 10 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to "a"
+    And bar is equal to "1"
+    And bar is of length 10
     Then the following data should be generated:
       | foo | bar |
       | "a" | "1" |
@@ -1164,14 +992,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "longerThan", "value": 2 },
-        "then": { "field": "bar", "is": "equalTo", "value": "1" },
-        "else": { "field": "bar", "is": "equalTo", "value": "4444" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is longer than 2
+    And bar is equal to "1"
+    And bar is equal to "4444"
     Then the following data should be generated:
       | foo    | bar    |
       | "a"    | "4444" |
@@ -1194,14 +1018,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "bb" },
-        "then": { "field": "bar", "is": "longerThan", "value": 2 },
-        "else": { "field": "bar", "is": "equalTo", "value": "1" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to "bb"
+    And bar is longer than 2
+    And bar is equal to "1"
     Then the following data should be generated:
       | foo    | bar    |
       | "a"    | "1"    |
@@ -1225,14 +1045,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "dddd" },
-        "then": { "field": "bar", "is": "equalTo", "value": "1" },
-        "else": { "field": "bar", "is": "longerThan", "value": 2  }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to "dddd"
+    And bar is equal to "1"
+    And bar is longer than 2
     Then the following data should be generated:
       | foo    | bar    |
       | "a"    | "333"  |
@@ -1242,92 +1058,6 @@ Feature: Values can be specified by using if, then and else constraints
       | "ccc"  | "333"  |
       | "ccc"  | "4444" |
       | "dddd" | "1"    |
-
-  Scenario: Running an if request that contains a contradictory longerThan constraint within its if statement should be successful
-    Given foo is in set:
-      | "a"    |
-      | "bb"   |
-      | "ccc"  |
-      | "dddd" |
-    And foo is anything but null
-    And bar is in set:
-      | "1"    |
-      | "22"   |
-      | "333"  |
-      | "4444" |
-    And bar is anything but null
-    And foo has type "string"
-    And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "longerThan", "value": 25 },
-        "then": { "field": "bar", "is": "equalTo", "value": "1" },
-        "else": { "field": "bar", "is": "equalTo", "value": "4444" }
-      }
-      """
-    Then the following data should be generated:
-      | foo    | bar    |
-      | "a"    | "4444" |
-      | "bb"   | "4444" |
-      | "ccc"  | "4444" |
-      | "dddd" | "4444" |
-
-  Scenario: Running an if request that contains a contradictory longerThan constraint within its then statement should be successful
-    Given foo is in set:
-      | "a"    |
-      | "bb"   |
-      | "ccc"  |
-      | "dddd" |
-    And foo is anything but null
-    And bar is in set:
-      | "1"    |
-      | "22"   |
-      | "333"  |
-      | "4444" |
-    And bar is anything but null
-    And foo has type "string"
-    And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "a" },
-        "then": { "field": "bar", "is": "longerThan", "value": 100 },
-        "else": { "field": "bar", "is": "equalTo", "value": "4444" }
-      }
-      """
-    Then the following data should be generated:
-      | foo    | bar    |
-      | "bb"   | "4444" |
-      | "ccc"  | "4444" |
-      | "dddd" | "4444" |
-
-  Scenario: Running an if request that contains a contradictory longerThan constraint within its else statement should be successful
-    Given foo is in set:
-      | "a"    |
-      | "bb"   |
-      | "ccc"  |
-      | "dddd" |
-    And foo is anything but null
-    And bar is in set:
-      | "1"    |
-      | "22"   |
-      | "333"  |
-      | "4444" |
-    And bar is anything but null
-    And foo has type "string"
-    And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "a" },
-        "then": { "field": "bar", "is": "equalTo", "value": "1" },
-        "else": { "field": "bar", "is": "longerThan", "value": 100 }
-      }
-      """
-    Then the following data should be generated:
-      | foo | bar |
-      | "a" | "1" |
 
   Scenario: Running an if request that contains a non contradictory shorterThan constraint within its if statement should be successful
     Given foo is in set:
@@ -1344,14 +1074,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "shorterThan", "value": 3 },
-        "then": { "field": "bar", "is": "equalTo", "value": "1" },
-        "else": { "field": "bar", "is": "equalTo", "value": "4444" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is shorter than 3
+    And bar is equal to "1"
+    And bar is equal to "4444"
     Then the following data should be generated:
       | foo    | bar    |
       | "a"    | "1"    |
@@ -1374,14 +1100,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "ccc" },
-        "then": { "field": "bar", "is": "shorterThan", "value": 3 },
-        "else": { "field": "bar", "is": "equalTo", "value": "333" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to "ccc"
+    And bar is shorter than 3
+    And bar is equal to "333"
     Then the following data should be generated:
       | foo    | bar   |
       | "a"    | "333" |
@@ -1405,14 +1127,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "dddd" },
-        "then": { "field": "bar", "is": "equalTo", "value": "4444" },
-        "else": { "field": "bar", "is": "shorterThan", "value": 4 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to "dddd"
+    And bar is equal to "4444"
+    And bar is shorter than 4
     Then the following data should be generated:
       | foo    | bar    |
       | "a"    | "1"    |
@@ -1424,36 +1142,6 @@ Feature: Values can be specified by using if, then and else constraints
       | "ccc"  | "1"    |
       | "ccc"  | "22"   |
       | "ccc"  | "333"  |
-      | "dddd" | "4444" |
-
-  Scenario: Running an if request that contains a contradictory shorterThan constraint within its if statement should be successful
-    Given foo is in set:
-      | "a"    |
-      | "bb"   |
-      | "ccc"  |
-      | "dddd" |
-    And foo is anything but null
-    And bar is in set:
-      | "1"    |
-      | "22"   |
-      | "333"  |
-      | "4444" |
-    And bar is anything but null
-    And foo has type "string"
-    And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "shorterThan", "value": 1 },
-        "then": { "field": "bar", "is": "equalTo", "value": "1" },
-        "else": { "field": "bar", "is": "equalTo", "value": "4444" }
-      }
-      """
-    Then the following data should be generated:
-      | foo    | bar    |
-      | "a"    | "4444" |
-      | "bb"   | "4444" |
-      | "ccc"  | "4444" |
       | "dddd" | "4444" |
 
   Scenario: Running an if request that contains a contradictory shorterThan constraint within its then statement should be successful
@@ -1471,14 +1159,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "dddd" },
-        "then": { "field": "bar", "is": "shorterThan", "value": 1 },
-        "else": { "field": "bar", "is": "equalTo", "value": "4444" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to "dddd"
+    And bar is shorter than 1
+    And bar is equal to "4444"
     Then the following data should be generated:
       | foo   | bar    |
       | "a"   | "4444" |
@@ -1500,133 +1184,13 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "dddd" },
-        "then": { "field": "bar", "is": "equalTo", "value": "4444" },
-        "else": { "field": "bar", "is": "shorterThan", "value": 1 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to "dddd"
+    And bar is equal to "4444"
+    And bar is shorter than 1
     Then the following data should be generated:
       | foo    | bar    |
       | "dddd" | "4444" |
-
-  Scenario: An if constraint that contains an ISIN constraint in the then clause generates valid ISINs when the if clause applies
-    Given foo is in set:
-      | "GB0002634946" |
-      | "bb"           |
-      | "ccc"          |
-      | "dddd"         |
-    And foo is anything but null
-    And bar is in set:
-      | "GB0002634946" |
-      | "22"           |
-      | "333"          |
-      | "4444"         |
-    And bar is anything but null
-    And foo has type "string"
-    And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "bb" },
-        "then": { "field": "bar", "is": "ofType", "value": "ISIN" },
-        "else": { "field": "bar", "is": "equalTo", "value": "333" }
-      }
-      """
-    Then the following data should be generated:
-      | foo            | bar            |
-      | "GB0002634946" | "333"          |
-      | "bb"           | "GB0002634946" |
-      | "ccc"          | "333"          |
-      | "dddd"         | "333"          |
-
-  Scenario: An if constraint that contains an ISIN constraint in the else clause generates valid ISINs when the if clause does not apply
-    Given foo is in set:
-      | "GB0002634946" |
-      | "bb"           |
-      | "ccc"          |
-      | "dddd"         |
-    And foo is anything but null
-    And bar is in set:
-      | "GB0002634946" |
-      | "22"           |
-      | "333"          |
-      | "4444"         |
-    And bar is anything but null
-    And foo has type "string"
-    And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "bb" },
-        "then": { "field": "bar", "is": "equalTo", "value": "22" },
-        "else": { "field": "bar", "is": "ofType", "value": "ISIN" }
-      }
-      """
-    Then the following data should be generated:
-      | foo            | bar            |
-      | "GB0002634946" | "GB0002634946" |
-      | "bb"           | "22"           |
-      | "ccc"          | "GB0002634946" |
-      | "dddd"         | "GB0002634946" |
-
-  Scenario: An if constraint that contains an ISIN constraint in the then clause combined with an in set constraint that does not contain any valid ISINs only generates data that matches the else clause
-    Given foo is in set:
-      | "aa"   |
-      | "bb"   |
-      | "ccc"  |
-      | "dddd" |
-    And foo is anything but null
-    And bar is in set:
-      | "11"   |
-      | "22"   |
-      | "333"  |
-      | "4444" |
-    And bar is anything but null
-    And foo has type "string"
-    And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "ccc" },
-        "then": { "field": "bar", "is": "ofType", "value": "ISIN" },
-        "else": { "field": "bar", "is": "equalTo", "value": "333" }
-      }
-      """
-    Then the following data should be generated:
-      | foo    | bar   |
-      | "aa"   | "333" |
-      | "bb"   | "333" |
-      | "dddd" | "333" |
-
-  Scenario: An if constraint with an else clause containing an ISIN constraint which contradicts an in set constraint generates data that only matches the then clause
-    Given foo is in set:
-      | "aa"   |
-      | "bb"   |
-      | "ccc"  |
-      | "dddd" |
-    And foo is anything but null
-    And bar is in set:
-      | "11"   |
-      | "22"   |
-      | "333"  |
-      | "4444" |
-    And bar is anything but null
-    And foo has type "string"
-    And bar has type "string"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "ccc" },
-        "then": { "field": "bar", "is": "equalTo", "value": "333" },
-        "else": { "field": "bar", "is": "ofType", "value": "ISIN" }
-      }
-      """
-    Then the following data should be generated:
-      | foo   | bar   |
-      | "ccc" | "333" |
 
   Scenario: Running an if request that contains a non contradictory greaterThan constraint within its if statement should be successful
     Given foo is in set:
@@ -1643,14 +1207,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "decimal"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "greaterThan", "value": 29 },
-        "then": { "field": "bar", "is": "equalTo", "value": 22 },
-        "else": { "field": "bar", "is": "equalTo", "value": 1 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is greater than 29
+    And bar is equal to 22
+    And bar is equal to 1
     Then the following data should be generated:
       | foo | bar |
       | 10  | 1   |
@@ -1673,14 +1233,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "decimal"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 40 },
-        "then": { "field": "bar", "is": "greaterThan", "value": 20 },
-        "else": { "field": "bar", "is": "equalTo", "value": 1 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 40
+    And bar is greater than 20
+    And bar is equal to 1
     Then the following data should be generated:
       | foo | bar  |
       | 10  | 1    |
@@ -1705,14 +1261,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "decimal"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 40 },
-        "then": { "field": "bar", "is": "equalTo", "value": 1 },
-        "else": { "field": "bar", "is": "greaterThan", "value": 300 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 40
+    And bar is equal to 1
+    And bar is greater than 300
     Then the following data should be generated:
       | foo | bar  |
       | 10  | 333  |
@@ -1722,36 +1274,6 @@ Feature: Values can be specified by using if, then and else constraints
       | 30  | 333  |
       | 30  | 4444 |
       | 40  | 1    |
-
-  Scenario: Running an if request that contains a contradictory greaterThan constraint within its if statement should be successful
-    Given foo is in set:
-      | 10 |
-      | 20 |
-      | 30 |
-      | 40 |
-    And foo is anything but null
-    And bar is in set:
-      | 1    |
-      | 22   |
-      | 333  |
-      | 4444 |
-    And bar is anything but null
-    And foo has type "decimal"
-    And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "greaterThan", "value": 8000 },
-        "then": { "field": "bar", "is": "equalTo", "value": 22 },
-        "else": { "field": "bar", "is": "equalTo", "value": 1 }
-      }
-      """
-    Then the following data should be generated:
-      | foo | bar |
-      | 10  | 1   |
-      | 20  | 1   |
-      | 30  | 1   |
-      | 40  | 1   |
 
   Scenario: Running an if request that contains a contradictory greaterThan constraint within its then statement should be successful
     Given foo is in set:
@@ -1768,14 +1290,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "decimal"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 40 },
-        "then": { "field": "bar", "is": "greaterThan", "value": 8000 },
-        "else": { "field": "bar", "is": "equalTo", "value": 1 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 40
+    And bar is greater than 8000
+    And bar is equal to 1
     Then the following data should be generated:
       | foo | bar |
       | 10  | 1   |
@@ -1797,14 +1315,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "decimal"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 40 },
-        "then": { "field": "bar", "is": "equalTo", "value": 1 },
-        "else": { "field": "bar", "is": "greaterThan", "value": 8000 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 40
+    And bar is equal to 1
+    And bar is greater than 8000
     Then the following data should be generated:
       | foo | bar |
       | 40  | 1   |
@@ -1824,14 +1338,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "decimal"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "greaterThanOrEqualTo", "value": 20 },
-        "then": { "field": "bar", "is": "equalTo", "value": 22 },
-        "else": { "field": "bar", "is": "equalTo", "value": 1 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is greater than or equal to 20
+    And bar is equal to 22
+    And bar is equal to 1
     Then the following data should be generated:
       | foo | bar |
       | 10  | 1   |
@@ -1854,14 +1364,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "decimal"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 20 },
-        "then": { "field": "bar", "is": "greaterThanOrEqualTo", "value": 22 },
-        "else": { "field": "bar", "is": "equalTo", "value": 1 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 20
+    And bar is greater than or equal to 22
+    And bar is equal to 1
     Then the following data should be generated:
       | foo | bar  |
       | 10  | 1    |
@@ -1886,14 +1392,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "decimal"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 20 },
-        "then": { "field": "bar", "is": "equalTo", "value": 1 },
-        "else": { "field": "bar", "is": "greaterThanOrEqualTo", "value": 22 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 20
+    And bar is equal to 1
+    And bar is greater than or equal to 22
     Then the following data should be generated:
       | foo | bar  |
       | 10  | 22   |
@@ -1906,36 +1408,6 @@ Feature: Values can be specified by using if, then and else constraints
       | 40  | 22   |
       | 40  | 333  |
       | 40  | 4444 |
-
-  Scenario: Running an if request that contains a contradictory greaterThanOrEqualTo constraint within its if statement should be successful
-    Given foo is in set:
-      | 10 |
-      | 20 |
-      | 30 |
-      | 40 |
-    And foo is anything but null
-    And bar is in set:
-      | 1    |
-      | 22   |
-      | 333  |
-      | 4444 |
-    And bar is anything but null
-    And foo has type "decimal"
-    And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "greaterThanOrEqualTo", "value": 8000 },
-        "then": { "field": "bar", "is": "equalTo", "value": 22 },
-        "else": { "field": "bar", "is": "equalTo", "value": 1 }
-      }
-      """
-    Then the following data should be generated:
-      | foo | bar |
-      | 10  | 1   |
-      | 20  | 1   |
-      | 30  | 1   |
-      | 40  | 1   |
 
   Scenario: Running an if request that contains a contradictory greaterThanOrEqualTo constraint within its then statement should be successful
     Given foo is in set:
@@ -1952,14 +1424,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "decimal"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 10 },
-        "then": { "field": "bar", "is": "greaterThanOrEqualTo", "value": 8000 },
-        "else": { "field": "bar", "is": "equalTo", "value": 333 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 10
+    And bar is greater than or equal to 8000
+    And bar is equal to 333
     Then the following data should be generated:
       | foo | bar |
       | 20  | 333 |
@@ -1981,14 +1449,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "decimal"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 10 },
-        "then": { "field": "bar", "is": "equalTo", "value": 4444 },
-        "else": { "field": "bar", "is": "greaterThanOrEqualTo", "value": 8000 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 10
+    And bar is equal to 4444
+    And bar is greater than or equal to 8000
     Then the following data should be generated:
       | foo | bar  |
       | 10  | 4444 |
@@ -2008,14 +1472,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "decimal"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "lessThan", "value": 20 },
-        "then": { "field": "bar", "is": "equalTo", "value": 4444 },
-        "else": { "field": "bar", "is": "equalTo", "value": 1 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is less than 20
+    And bar is equal to 4444
+    And bar is equal to 1
     Then the following data should be generated:
       | foo | bar  |
       | 10  | 4444 |
@@ -2038,14 +1498,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "decimal"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 40 },
-        "then": { "field": "bar", "is": "lessThan", "value": 4400 },
-        "else": { "field": "bar", "is": "equalTo", "value": 1 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 40
+    And bar is less than 4400
+    And bar is equal to 1
     Then the following data should be generated:
       | foo | bar |
       | 10  | 1   |
@@ -2070,14 +1526,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "decimal"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 40 },
-        "then": { "field": "bar", "is": "equalTo", "value": 333 },
-        "else": { "field": "bar", "is": "lessThan", "value": 300 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 40
+    And bar is equal to 333
+    And bar is less than 300
     Then the following data should be generated:
       | foo | bar |
       | 10  | 1   |
@@ -2087,36 +1539,6 @@ Feature: Values can be specified by using if, then and else constraints
       | 30  | 1   |
       | 30  | 22  |
       | 40  | 333 |
-
-  Scenario: Running an if request that contains a contradictory lessThan constraint within its if statement should be successful
-    Given foo is in set:
-      | 10 |
-      | 20 |
-      | 30 |
-      | 40 |
-    And foo is anything but null
-    And bar is in set:
-      | 1    |
-      | 22   |
-      | 333  |
-      | 4444 |
-    And bar is anything but null
-    And foo has type "decimal"
-    And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "lessThan", "value": 1 },
-        "then": { "field": "bar", "is": "equalTo", "value": 333 },
-        "else": { "field": "bar", "is": "equalTo", "value": 22 }
-      }
-      """
-    Then the following data should be generated:
-      | foo | bar |
-      | 10  | 22  |
-      | 20  | 22  |
-      | 30  | 22  |
-      | 40  | 22  |
 
   Scenario: Running an if request that contains a contradictory lessThan constraint within its then statement should be successful
     Given foo is in set:
@@ -2133,14 +1555,10 @@ Feature: Values can be specified by using if, then and else constraints
       | 333  |
       | 4444 |
     And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 10 },
-        "then": { "field": "bar", "is": "lessThan", "value": 1 },
-        "else": { "field": "bar", "is": "equalTo", "value": 333 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 10
+    And bar is less than 1
+    And bar is equal to 333
     Then the following data should be generated:
       | foo | bar |
       | 20  | 333 |
@@ -2162,14 +1580,10 @@ Feature: Values can be specified by using if, then and else constraints
       | 333  |
       | 4444 |
     And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 30 },
-        "then": { "field": "bar", "is": "equalTo", "value": 1 },
-        "else": { "field": "bar", "is": "lessThan", "value": 1 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 30
+    And bar is equal to 1
+    And bar is less than 1
     Then the following data should be generated:
       | foo | bar |
       | 30  | 1   |
@@ -2189,14 +1603,10 @@ Feature: Values can be specified by using if, then and else constraints
       | 333  |
       | 4444 |
     And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "lessThanOrEqualTo", "value": 20 },
-        "then": { "field": "bar", "is": "equalTo", "value": 1 },
-        "else": { "field": "bar", "is": "equalTo", "value": 4444 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is less than or equal to 20
+    And bar is equal to 1
+    And bar is equal to 4444
     Then the following data should be generated:
       | foo | bar  |
       | 10  | 1    |
@@ -2219,14 +1629,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "decimal"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 20 },
-        "then": { "field": "bar", "is": "lessThanOrEqualTo", "value": 333 },
-        "else": { "field": "bar", "is": "equalTo", "value": 4444 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 20
+    And bar is less than or equal to 333
+    And bar is equal to 4444
     Then the following data should be generated:
       | foo | bar  |
       | 10  | 4444 |
@@ -2251,14 +1657,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "decimal"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 20 },
-        "then": { "field": "bar", "is": "equalTo", "value": 333 },
-        "else": { "field": "bar", "is": "lessThanOrEqualTo", "value": 4444 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 20
+    And bar is equal to 333
+    And bar is less than or equal to 4444
     Then the following data should be generated:
       | foo | bar  |
       | 10  | 1    |
@@ -2273,36 +1675,6 @@ Feature: Values can be specified by using if, then and else constraints
       | 40  | 1    |
       | 40  | 22   |
       | 40  | 333  |
-      | 40  | 4444 |
-
-  Scenario: Running an if request that contains a contradictory lessThanOrEqualTo constraint within its if statement should be successful
-    Given foo is in set:
-      | 10 |
-      | 20 |
-      | 30 |
-      | 40 |
-    And foo is anything but null
-    And bar is in set:
-      | 1    |
-      | 22   |
-      | 333  |
-      | 4444 |
-    And bar is anything but null
-    And foo has type "decimal"
-    And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "lessThanOrEqualTo", "value": 1 },
-        "then": { "field": "bar", "is": "equalTo", "value": 333 },
-        "else": { "field": "bar", "is": "equalTo", "value": 4444 }
-      }
-      """
-    Then the following data should be generated:
-      | foo | bar  |
-      | 10  | 4444 |
-      | 20  | 4444 |
-      | 30  | 4444 |
       | 40  | 4444 |
 
   Scenario: Running an if request that contains a contradictory lessThanOrEqualTo constraint within its then statement should be successful
@@ -2320,14 +1692,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "decimal"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 10 },
-        "then": { "field": "bar", "is": "lessThanOrEqualTo", "value": 0 },
-        "else": { "field": "bar", "is": "equalTo", "value": 4444 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 10
+    And bar is less than or equal to 0
+    And bar is equal to 4444
     Then the following data should be generated:
       | foo | bar  |
       | 20  | 4444 |
@@ -2349,48 +1717,13 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "decimal"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 10 },
-        "then": { "field": "bar", "is": "equalTo", "value": 1 },
-        "else": { "field": "bar", "is": "lessThanOrEqualTo", "value": 0 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 10
+    And bar is equal to 1
+    And bar is less than or equal to 0
     Then the following data should be generated:
       | foo | bar |
       | 10  | 1   |
-
-  @ignore #769 Violation of numeric and temporal granularity
-  Scenario: Running an if request that contains a non contradictory granularTo constraint within its if statement should be successful
-    Given foo is in set:
-      | 1     |
-      | 1.1   |
-      | 1.11  |
-      | 1.111 |
-    And foo is anything but null
-    And bar is in set:
-      | 1     |
-      | 2.2   |
-      | 3.33  |
-      | 4.444 |
-    And bar is anything but null
-    And foo has type "decimal"
-    And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "granularTo", "value": 1 },
-        "then": { "field": "bar", "is": "equalTo", "value": 1 },
-        "else": { "field": "bar", "is": "equalTo", "value": 2.2 }
-      }
-      """
-    Then the following data should be generated:
-      | foo   | bar |
-      | 1     | 1   |
-      | 1.1   | 2.2 |
-      | 1.11  | 2.2 |
-      | 1.111 | 2.2 |
 
   Scenario: Running an if request that contains a non contradictory granularTo constraint within its else statement should be successful
     Given foo is in set:
@@ -2406,14 +1739,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "decimal"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 1 },
-        "then": { "field": "bar", "is": "equalTo", "value": 3.33 },
-        "else": { "field": "bar", "is": "granularTo", "value": 0.1 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 1
+    And bar is equal to 3.33
+    And bar is granular to 0.1
     Then the following data should be generated:
       | foo   | bar  |
       | 1     | 3.33 |
@@ -2435,14 +1764,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "decimal"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 1 },
-        "then": { "field": "bar", "is": "granularTo", "value": 1 },
-        "else": { "field": "bar", "is": "equalTo", "value": 2.2 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 1
+    And bar is granular to 1
+    And bar is equal to 2.2
     Then the following data should be generated:
       | foo   | bar |
       | 1.1   | 2.2 |
@@ -2463,14 +1788,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "decimal"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 1 },
-        "then": { "field": "bar", "is": "equalTo", "value": 3.33 },
-        "else": { "field": "bar", "is": "granularTo", "value": 1 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 1
+    And bar is equal to 3.33
+    And bar is granular to 1
     Then the following data should be generated:
       | foo | bar  |
       | 1   | 3.33 |
@@ -2493,14 +1814,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "datetime"
     And bar has type "datetime"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "after", "value": "2018-01-02T00:00:00.000Z" },
-        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-01T00:00:00.000Z" },
-        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-05T00:00:00.000Z" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is after 2018-01-02T00:00:00.000Z
+    And bar is equal to 2010-01-01T00:00:00.000Z
+    And bar is equal to 2010-01-05T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
@@ -2528,14 +1845,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "datetime"
     And bar has type "datetime"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "2018-02-01T00:00:00.000Z" },
-        "then": { "field": "bar", "is": "after", "value": "2010-01-04T00:00:00.000Z" },
-        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-01T00:00:00.000Z" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 2018-02-01T00:00:00.000Z
+    And bar is after 2010-01-04T00:00:00.000Z
+    And bar is equal to 2010-01-01T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
@@ -2563,14 +1876,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "datetime"
     And bar has type "datetime"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "2018-01-01T00:00:00.000Z" },
-        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-01T00:00:00.000Z" },
-        "else": { "field": "bar", "is": "after", "value": "2010-01-04T00:00:00.000Z" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 2018-01-01T00:00:00.000Z
+    And bar is equal to 2010-01-01T00:00:00.000Z
+    And bar is after 2010-01-04T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
@@ -2579,41 +1888,6 @@ Feature: Values can be specified by using if, then and else constraints
       | 2018-04-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
       | 2018-05-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
       | 2018-06-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-
-  Scenario: Running an if request that contains a contradictory after constraint within its if statement should be successful
-    Given foo is in set:
-      | 2018-01-01T00:00:00.000Z |
-      | 2018-02-01T00:00:00.000Z |
-      | 2018-03-01T00:00:00.000Z |
-      | 2018-04-01T00:00:00.000Z |
-      | 2018-05-01T00:00:00.000Z |
-      | 2018-06-01T00:00:00.000Z |
-    And foo is anything but null
-    And bar is in set:
-      | 2010-01-01T00:00:00.000Z |
-      | 2010-01-02T00:00:00.000Z |
-      | 2010-01-03T00:00:00.000Z |
-      | 2010-01-04T00:00:00.000Z |
-      | 2010-01-05T00:00:00.000Z |
-    And bar is anything but null
-    And foo has type "datetime"
-    And bar has type "datetime"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "after", "value": "2020-01-01T00:00:00.000Z" },
-        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-01T00:00:00.000Z" },
-        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-04T00:00:00.000Z" }
-      }
-      """
-    Then the following data should be generated:
-      | foo                      | bar                      |
-      | 2018-01-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
-      | 2018-02-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
-      | 2018-03-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
-      | 2018-04-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
-      | 2018-05-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
-      | 2018-06-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
 
   Scenario: Running an if request that contains a contradictory after constraint within its then statement should be successful
     Given foo is in set:
@@ -2633,14 +1907,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "datetime"
     And bar has type "datetime"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "2018-01-01T00:00:00.000Z" },
-        "then": { "field": "bar", "is": "after", "value": "2020-01-01T00:00:00.000Z" },
-        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-04T00:00:00.000Z" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 2018-01-01T00:00:00.000Z
+    And bar is after 2020-01-01T00:00:00.000Z
+    And bar is equal to 2010-01-04T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-02-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
@@ -2667,14 +1937,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "datetime"
     And bar has type "datetime"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "2018-01-01T00:00:00.000Z" },
-        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-01T00:00:00.000Z" },
-        "else": { "field": "bar", "is": "after", "value": "2020-01-01T00:00:00.000Z" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 2018-01-01T00:00:00.000Z
+    And bar is equal to 2010-01-01T00:00:00.000Z
+    And bar is after 2020-01-01T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
@@ -2697,14 +1963,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "datetime"
     And bar has type "datetime"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "afterOrAt", "value": "2018-05-01T00:00:00.000Z" },
-        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-05T00:00:00.000Z" },
-        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-01T00:00:00.000Z" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is after or at 2018-05-01T00:00:00.000Z
+    And bar is equal to 2010-01-05T00:00:00.000Z
+    And bar is equal to 2010-01-01T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
@@ -2732,14 +1994,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "datetime"
     And bar has type "datetime"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "2018-05-01T00:00:00.000Z" },
-        "then": { "field": "bar", "is": "afterOrAt", "value": "2010-01-04T00:00:00.000Z" },
-        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-01T00:00:00.000Z" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 2018-05-01T00:00:00.000Z
+    And bar is after or at 2010-01-04T00:00:00.000Z
+    And bar is equal to 2010-01-01T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
@@ -2768,14 +2026,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "datetime"
     And bar has type "datetime"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "2018-06-01T00:00:00.000Z" },
-        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-01T00:00:00.000Z" },
-        "else": { "field": "bar", "is": "afterOrAt", "value": "2010-01-04T00:00:00.000Z" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 2018-06-01T00:00:00.000Z
+    And bar is equal to 2010-01-01T00:00:00.000Z
+    And bar is after or at 2010-01-04T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
@@ -2789,41 +2043,6 @@ Feature: Values can be specified by using if, then and else constraints
       | 2018-05-01T00:00:00.000Z | 2010-01-04T00:00:00.000Z |
       | 2018-05-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
       | 2018-06-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
-
-  Scenario: Running an if request that contains a contradictory afterOrAt constraint within its if statement should be successful
-    Given foo is in set:
-      | 2018-01-01T00:00:00.000Z |
-      | 2018-02-01T00:00:00.000Z |
-      | 2018-03-01T00:00:00.000Z |
-      | 2018-04-01T00:00:00.000Z |
-      | 2018-05-01T00:00:00.000Z |
-      | 2018-06-01T00:00:00.000Z |
-    And foo is anything but null
-    And bar is in set:
-      | 2010-01-01T00:00:00.000Z |
-      | 2010-01-02T00:00:00.000Z |
-      | 2010-01-03T00:00:00.000Z |
-      | 2010-01-04T00:00:00.000Z |
-      | 2010-01-05T00:00:00.000Z |
-    And bar is anything but null
-    And foo has type "datetime"
-    And bar has type "datetime"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "afterOrAt", "value": "2020-01-01T00:00:00.000Z" },
-        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-01T00:00:00.000Z" },
-        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-05T00:00:00.000Z" }
-      }
-      """
-    Then the following data should be generated:
-      | foo                      | bar                      |
-      | 2018-01-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-      | 2018-02-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-      | 2018-03-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-      | 2018-04-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-      | 2018-05-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
-      | 2018-06-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
 
   Scenario: Running an if request that contains a contradictory afterOrAt constraint within its then statement should be successful
     Given foo is in set:
@@ -2843,14 +2062,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "datetime"
     And bar has type "datetime"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "2018-01-01T00:00:00.000Z" },
-        "then": { "field": "bar", "is": "afterOrAt", "value": "2020-01-01T00:00:00.000Z" },
-        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-05T00:00:00.000Z" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 2018-01-01T00:00:00.000Z
+    And bar is after or at 2020-01-01T00:00:00.000Z
+    And bar is equal to 2010-01-05T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-02-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
@@ -2877,14 +2092,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "datetime"
     And bar has type "datetime"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "2018-01-01T00:00:00.000Z" },
-        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-01T00:00:00.000Z" },
-        "else": { "field": "bar", "is": "afterOrAt", "value": "2020-01-05T00:00:00.000Z" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 2018-01-01T00:00:00.000Z
+    And bar is equal to 2010-01-01T00:00:00.000Z
+    And bar is after or at 2020-01-05T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
@@ -2907,14 +2118,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "datetime"
     And bar has type "datetime"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "before", "value": "2018-02-01T00:00:00.000Z" },
-        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-01T00:00:00.000Z" },
-        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-05T00:00:00.000Z" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is before 2018-02-01T00:00:00.000Z
+    And bar is equal to 2010-01-01T00:00:00.000Z
+    And bar is equal to 2010-01-05T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
@@ -2942,14 +2149,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "datetime"
     And bar has type "datetime"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "2018-01-01T00:00:00.000Z" },
-        "then": { "field": "bar", "is": "before", "value": "2010-01-03T00:00:00.000Z" },
-        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-05T00:00:00.000Z" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 2018-01-01T00:00:00.000Z
+    And bar is before 2010-01-03T00:00:00.000Z
+    And bar is equal to 2010-01-05T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
@@ -2978,14 +2181,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "datetime"
     And bar has type "datetime"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "2018-01-01T00:00:00.000Z" },
-        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-05T00:00:00.000Z" },
-        "else": { "field": "bar", "is": "before", "value": "2010-01-03T00:00:00.000Z" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 2018-01-01T00:00:00.000Z
+    And bar is equal to 2010-01-05T00:00:00.000Z
+    And bar is before 2010-01-03T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
@@ -2999,41 +2198,6 @@ Feature: Values can be specified by using if, then and else constraints
       | 2018-05-01T00:00:00.000Z | 2010-01-02T00:00:00.000Z |
       | 2018-06-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
       | 2018-06-01T00:00:00.000Z | 2010-01-02T00:00:00.000Z |
-
-  Scenario: Running an if request that contains a contradictory before constraint within its if statement should be successful
-    Given foo is in set:
-      | 2018-01-01T00:00:00.000Z |
-      | 2018-02-01T00:00:00.000Z |
-      | 2018-03-01T00:00:00.000Z |
-      | 2018-04-01T00:00:00.000Z |
-      | 2018-05-01T00:00:00.000Z |
-      | 2018-06-01T00:00:00.000Z |
-    And foo is anything but null
-    And bar is in set:
-      | 2010-01-01T00:00:00.000Z |
-      | 2010-01-02T00:00:00.000Z |
-      | 2010-01-03T00:00:00.000Z |
-      | 2010-01-04T00:00:00.000Z |
-      | 2010-01-05T00:00:00.000Z |
-    And bar is anything but null
-    And foo has type "datetime"
-    And bar has type "datetime"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "before", "value": "2010-01-01T00:00:00.000Z" },
-        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-05T00:00:00.000Z" },
-        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-03T00:00:00.000Z" }
-      }
-      """
-    Then the following data should be generated:
-      | foo                      | bar                      |
-      | 2018-01-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-      | 2018-02-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-      | 2018-03-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-      | 2018-04-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-      | 2018-05-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-      | 2018-06-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
 
   Scenario: Running an if request that contains a contradictory before constraint within its then statement should be successful
     Given foo is in set:
@@ -3053,14 +2217,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "datetime"
     And bar has type "datetime"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "2018-01-01T00:00:00.000Z" },
-        "then": { "field": "bar", "is": "before", "value": "2010-01-01T00:00:00.000Z" },
-        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-03T00:00:00.000Z" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 2018-01-01T00:00:00.000Z
+    And bar is before 2010-01-01T00:00:00.000Z
+    And bar is equal to 2010-01-03T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-02-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
@@ -3087,14 +2247,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "datetime"
     And bar has type "datetime"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "2018-01-01T00:00:00.000Z" },
-        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-01T00:00:00.000Z" },
-        "else": { "field": "bar", "is": "before", "value": "2010-01-01T00:00:00.000Z" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 2018-01-01T00:00:00.000Z
+    And bar is equal to 2010-01-01T00:00:00.000Z
+    And bar is before 2010-01-01T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
@@ -3117,14 +2273,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "datetime"
     And bar has type "datetime"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "beforeOrAt", "value": "2018-02-01T00:00:00.000Z" },
-        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-01T00:00:00.000Z" },
-        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-05T00:00:00.000Z" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is before or at 2018-02-01T00:00:00.000Z
+    And bar is equal to 2010-01-01T00:00:00.000Z
+    And bar is equal to 2010-01-05T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
@@ -3152,14 +2304,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "datetime"
     And bar has type "datetime"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "2018-01-01T00:00:00.000Z" },
-        "then": { "field": "bar", "is": "beforeOrAt", "value": "2010-01-03T00:00:00.000Z" },
-        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-05T00:00:00.000Z" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 2018-01-01T00:00:00.000Z
+    And bar is before or at 2010-01-03T00:00:00.000Z
+    And bar is equal to 2010-01-05T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
@@ -3189,14 +2337,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "datetime"
     And bar has type "datetime"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "2018-01-01T00:00:00.000Z" },
-        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-05T00:00:00.000Z" },
-        "else": { "field": "bar", "is": "beforeOrAt", "value": "2010-01-03T00:00:00.000Z" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 2018-01-01T00:00:00.000Z
+    And bar is equal to 2010-01-05T00:00:00.000Z
+    And bar is before or at 2010-01-03T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-05T00:00:00.000Z |
@@ -3214,41 +2358,6 @@ Feature: Values can be specified by using if, then and else constraints
       | 2018-05-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
       | 2018-06-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
       | 2018-06-01T00:00:00.000Z | 2010-01-02T00:00:00.000Z |
-      | 2018-06-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-
-  Scenario: Running an if request that contains a contradictory beforeOrAt constraint within its if statement should be successful
-    Given foo is in set:
-      | 2018-01-01T00:00:00.000Z |
-      | 2018-02-01T00:00:00.000Z |
-      | 2018-03-01T00:00:00.000Z |
-      | 2018-04-01T00:00:00.000Z |
-      | 2018-05-01T00:00:00.000Z |
-      | 2018-06-01T00:00:00.000Z |
-    And foo is anything but null
-    And bar is in set:
-      | 2010-01-01T00:00:00.000Z |
-      | 2010-01-02T00:00:00.000Z |
-      | 2010-01-03T00:00:00.000Z |
-      | 2010-01-04T00:00:00.000Z |
-      | 2010-01-05T00:00:00.000Z |
-    And bar is anything but null
-    And foo has type "datetime"
-    And bar has type "datetime"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "beforeOrAt", "value": "2009-01-01T00:00:00.000Z" },
-        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-05T00:00:00.000Z" },
-        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-03T00:00:00.000Z" }
-      }
-      """
-    Then the following data should be generated:
-      | foo                      | bar                      |
-      | 2018-01-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-      | 2018-02-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-      | 2018-03-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-      | 2018-04-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
-      | 2018-05-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
       | 2018-06-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
 
   Scenario: Running an if request that contains a contradictory beforeOrAt constraint within its then statement should be successful
@@ -3269,14 +2378,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "datetime"
     And bar has type "datetime"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "2018-01-01T00:00:00.000Z" },
-        "then": { "field": "bar", "is": "beforeOrAt", "value": "2009-01-01T00:00:00.000Z" },
-        "else": { "field": "bar", "is": "equalTo", "value": "2010-01-03T00:00:00.000Z" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 2018-01-01T00:00:00.000Z
+    And bar is before or at 2009-01-01T00:00:00.000Z
+    And bar is equal to 2010-01-03T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-02-01T00:00:00.000Z | 2010-01-03T00:00:00.000Z |
@@ -3303,14 +2408,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "datetime"
     And bar has type "datetime"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "2018-01-01T00:00:00.000Z" },
-        "then": { "field": "bar", "is": "equalTo", "value": "2010-01-01T00:00:00.000Z" },
-        "else": { "field": "bar", "is": "beforeOrAt", "value": "2009-01-01T00:00:00.000Z" }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to 2018-01-01T00:00:00.000Z
+    And bar is equal to 2010-01-01T00:00:00.000Z
+    And bar is before or at 2009-01-01T00:00:00.000Z
     Then the following data should be generated:
       | foo                      | bar                      |
       | 2018-01-01T00:00:00.000Z | 2010-01-01T00:00:00.000Z |
@@ -3327,13 +2428,9 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "not": { "field": "foo", "is": "equalTo", "value": "a" } },
-        "then": { "field": "bar", "is": "equalTo", "value": 10 }
-      }
-      """
+    When If and Then are described below
+    And foo is anything but equal to "a"
+    And bar is equal to 10
     Then the following data should be generated:
       | foo | bar |
       | "a" | 10  |
@@ -3353,14 +2450,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "a" },
-        "then": { "not": { "field": "bar", "is": "equalTo", "value": 10 } },
-        "else": { "field": "bar", "is": "equalTo", "value": 10 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to "a"
+    And bar is anything but equal to 10
+    And bar is equal to 10
     Then the following data should be generated:
       | foo | bar |
       | "a" | 20  |
@@ -3379,42 +2472,15 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "a" },
-        "then": { "field": "bar", "is": "equalTo", "value": 10 },
-        "else": { "not": { "field": "bar", "is": "equalTo", "value": 10 } }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to "a"
+    And bar is equal to 10
+    And bar is anything but equal to 10
     Then the following data should be generated:
       | foo | bar |
       | "a" | 10  |
       | "b" | 20  |
       | "b" | 30  |
-
-  Scenario: Running an if request that contains a contradictory not constraint within its if statement should be successful
-    Given foo is in set:
-      | "a" |
-    And foo is anything but null
-    And bar is in set:
-      | 10 |
-      | 20 |
-      | 30 |
-    And bar is anything but null
-    And foo has type "string"
-    And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "not": { "field": "foo", "is": "equalTo", "value": "a" } },
-        "then": { "field": "bar", "is": "equalTo", "value": 10 },
-        "else": { "field": "bar", "is": "equalTo", "value": 30 }
-      }
-      """
-    Then the following data should be generated:
-      | foo | bar |
-      | "a" | 30  |
 
   Scenario: Running an if request that contains a contradictory not constraint within its then statement should be successful
     Given foo is in set:
@@ -3426,13 +2492,9 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "a" },
-        "then": { "not": { "field": "bar", "is": "equalTo", "value": 10 } }
-      }
-      """
+    When If and Then are described below
+    And foo is equal to "a"
+    And bar is anything but equal to 10
     Then the following data should be generated:
       | foo | bar |
       | "b" | 10  |
@@ -3447,14 +2509,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": "a" },
-        "then": { "field": "bar", "is": "equalTo", "value": 10 },
-        "else": { "not": { "field": "bar", "is": "equalTo", "value": 10 } }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to "a"
+    And bar is equal to 10
+    And bar is anything but equal to 10
     Then the following data should be generated:
       | foo | bar |
       | "a" | 10  |
@@ -3476,18 +2534,12 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if":
-          { "anyOf": [
-            { "field": "foo", "is": "equalTo", "value": "a" },
-            { "field": "foo", "is": "equalTo", "value": "e" }
-          ]},
-        "then": { "field": "bar", "is": "equalTo", "value": 10 },
-        "else": { "field": "bar", "is": "equalTo", "value": 50 }
-      }
-      """
+    When If Then and Else are described below
+    And Any Of the next 2 constraints
+      And foo is equal to "a"
+      And foo is equal to "e"
+    And bar is equal to 10
+    And bar is equal to 50
     Then the following data should be generated:
       | foo | bar |
       | "a" | 10  |
@@ -3513,18 +2565,12 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if":  { "field": "foo", "is": "equalTo", "value": "a" },
-        "then":
-          { "anyOf": [
-            { "field": "bar", "is": "equalTo", "value": 20 },
-            { "field": "bar", "is": "equalTo", "value": 40 }
-          ]},
-        "else": { "field": "bar", "is": "equalTo", "value": 50 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to "a"
+    And Any Of the next 2 constraints
+      And bar is equal to 20
+      And bar is equal to 40
+    And bar is equal to 50
     Then the following data should be generated:
       | foo | bar |
       | "a" | 20  |
@@ -3551,18 +2597,12 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if":  { "field": "foo", "is": "equalTo", "value": "a" },
-        "then": { "field": "bar", "is": "equalTo", "value": 10 },
-        "else":
-          { "anyOf": [
-            { "field": "bar", "is": "equalTo", "value": 20 },
-            { "field": "bar", "is": "equalTo", "value": 40 }
-          ]}
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to "a"
+    And bar is equal to 10
+    And Any Of the next 2 constraints
+      And bar is equal to 20
+      And bar is equal to 40
     Then the following data should be generated:
       | foo | bar |
       | "a" | 10  |
@@ -3574,44 +2614,6 @@ Feature: Values can be specified by using if, then and else constraints
       | "d" | 40  |
       | "e" | 20  |
       | "e" | 40  |
-
-  Scenario: Running an if request that contains a contradictory anyOf constraint within its if statement should be successful
-    Given foo is in set:
-      | "a" |
-      | "b" |
-      | "c" |
-      | "d" |
-      | "e" |
-    And foo is anything but null
-    And bar is in set:
-      | 10 |
-      | 20 |
-      | 30 |
-      | 40 |
-      | 50 |
-    And bar is anything but null
-    And foo has type "string"
-    And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if":
-          { "anyOf": [
-            { "field": "foo", "is": "equalTo", "value": "Test1" },
-            { "field": "foo", "is": "equalTo", "value": "Test2" }
-          ]},
-        "then": { "field": "bar", "is": "equalTo", "value": 10 },
-        "else": { "field": "bar", "is": "equalTo", "value": 50 }
-      }
-      """
-    Then the following data should be generated:
-      | foo | bar |
-      | "a" | 50  |
-      | "b" | 50  |
-      | "c" | 50  |
-      | "d" | 50  |
-      | "e" | 50  |
-
 
   Scenario: Running an if request that contains a contradictory anyOf constraint within its then statement should be successful
     Given foo is in set:
@@ -3630,18 +2632,12 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if":  { "field": "foo", "is": "equalTo", "value": "a" },
-        "then":
-          { "anyOf": [
-            { "field": "bar", "is": "equalTo", "value": 1 },
-            { "field": "bar", "is": "equalTo", "value": 2 }
-          ]},
-        "else": { "field": "bar", "is": "equalTo", "value": 50 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to "a"
+    And Any Of the next 2 constraints
+      And bar is equal to 1
+      And bar is equal to 2
+    And bar is equal to 50
     Then the following data should be generated:
       | foo | bar |
       | "b" | 50  |
@@ -3666,18 +2662,12 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if":  { "field": "foo", "is": "equalTo", "value": "a" },
-        "then": { "field": "bar", "is": "equalTo", "value": 10 },
-        "else": {
-          "anyOf": [
-            { "field": "bar", "is": "equalTo", "value": 1 },
-            { "field": "bar", "is": "equalTo", "value": 2 }
-          ]}
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to "a"
+    And bar is equal to 10
+    And Any Of the next 2 constraints
+      And bar is equal to 1
+      And bar is equal to 2
     Then the following data should be generated:
       | foo | bar |
       | "a" | 10  |
@@ -3699,18 +2689,12 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if":
-          { "allOf": [
-            { "field": "foo", "is": "longerThan", "value": 0 },
-            { "field": "foo", "is": "shorterThan", "value": 2 }
-          ]},
-        "then": { "field": "bar", "is": "equalTo", "value": 1 },
-        "else": { "field": "bar", "is": "equalTo", "value": 55555 }
-      }
-      """
+    When If Then and Else are described below
+    And All Of the next 2 constraints
+      And foo is longer than 0
+      And foo is shorter than 2
+    And bar is equal to 1
+    And bar is equal to 55555
     Then the following data should be generated:
       | foo     | bar   |
       | "a"     | 1     |
@@ -3736,18 +2720,12 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if":  { "field": "foo", "is": "equalTo", "value": "a" },
-        "then":
-          { "allOf": [
-            { "field": "bar", "is": "greaterThan", "value": 20 },
-            { "field": "bar", "is": "lessThan", "value": 30 }
-          ]},
-        "else": { "field": "bar", "is": "equalTo", "value": 55555 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to "a"
+    And All Of the next 2 constraints
+      And bar is greater than 20
+      And bar is less than 30
+    And bar is equal to 55555
     Then the following data should be generated:
       | foo     | bar   |
       | "a"     | 22    |
@@ -3773,18 +2751,12 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if":  { "field": "foo", "is": "equalTo", "value": "a" },
-        "then": { "field": "bar", "is": "equalTo", "value": 1 },
-        "else":
-          { "allOf": [
-            { "field": "bar", "is": "greaterThan", "value": 20 },
-            { "field": "bar", "is": "lessThan", "value": 30 }
-          ]}
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to "a"
+    And bar is equal to 1
+    And All Of the next 2 constraints
+      And bar is greater than 20
+      And bar is less than 30
     Then the following data should be generated:
       | foo     | bar |
       | "a"     | 1   |
@@ -3792,43 +2764,6 @@ Feature: Values can be specified by using if, then and else constraints
       | "ccc"   | 22  |
       | "dddd"  | 22  |
       | "eeeee" | 22  |
-
-  Scenario: Running an if request that contains a contradictory allOf constraint within its if statement should be successful
-    Given foo is in set:
-      | "a"     |
-      | "bb"    |
-      | "ccc"   |
-      | "dddd"  |
-      | "eeeee" |
-    And foo is anything but null
-    And bar is in set:
-      | 1     |
-      | 22    |
-      | 333   |
-      | 4444  |
-      | 55555 |
-    And bar is anything but null
-    And foo has type "string"
-    And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if":
-          { "allOf": [
-            { "field": "foo", "is": "longerThan", "value": 88 },
-            { "field": "foo", "is": "shorterThan", "value": 90 }
-          ]},
-        "then": { "field": "bar", "is": "equalTo", "value": 1 },
-        "else": { "field": "bar", "is": "equalTo", "value": 55555 }
-      }
-      """
-    Then the following data should be generated:
-      | foo     | bar   |
-      | "a"     | 55555 |
-      | "bb"    | 55555 |
-      | "ccc"   | 55555 |
-      | "dddd"  | 55555 |
-      | "eeeee" | 55555 |
 
   Scenario: Running an if request that contains a non contradictory allOf constraint within its then statement should be successful
     Given foo is in set:
@@ -3847,18 +2782,12 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if":  { "field": "foo", "is": "equalTo", "value": "a" },
-        "then":
-          { "allOf": [
-            { "field": "bar", "is": "greaterThan", "value": 200 },
-            { "field": "bar", "is": "lessThan", "value": 300 }
-          ]},
-        "else": { "field": "bar", "is": "equalTo", "value": 55555 }
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to "a"
+    And All Of the next 2 constraints
+      And bar is greater than 200
+      And bar is less than 300
+    And bar is equal to 55555
     Then the following data should be generated:
       | foo     | bar   |
       | "bb"    | 55555 |
@@ -3884,18 +2813,12 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is anything but null
     And foo has type "string"
     And bar has type "decimal"
-    And there is a constraint:
-      """
-      {
-        "if":  { "field": "foo", "is": "equalTo", "value": "a" },
-        "then": { "field": "bar", "is": "equalTo", "value": 1 },
-        "else":
-          { "allOf": [
-            { "field": "bar", "is": "greaterThan", "value": 200 },
-            { "field": "bar", "is": "lessThan", "value": 300 }
-          ]}
-      }
-      """
+    When If Then and Else are described below
+    And foo is equal to "a"
+    And bar is equal to 1
+    And All Of the next 2 constraints
+      And bar is greater than 200
+      And bar is less than 300
     Then the following data should be generated:
       | foo | bar |
       | "a" | 1   |

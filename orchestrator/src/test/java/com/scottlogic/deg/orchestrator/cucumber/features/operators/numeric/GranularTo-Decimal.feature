@@ -24,35 +24,6 @@ Feature: User can specify that decimal fields are granular to a certain number o
       | 0.9 |
       | 1.0 |
 
-  @ignore #867 GranularTo implies decimal place formatting
-  Scenario: User requires to create a numeric field with data values that include a decimal value to two decimal points
-    Given foo is granular to 0.01
-    And foo is greater than or equal to 0
-    And foo is less than or equal to 0.2
-    Then the following data should be generated:
-      | foo  |
-      | 0    |
-      | 0.01 |
-      | 0.02 |
-      | 0.03 |
-      | 0.04 |
-      | 0.05 |
-      | 0.06 |
-      | 0.07 |
-      | 0.08 |
-      | 0.09 |
-      | 0.1  |
-      | 0.11 |
-      | 0.12 |
-      | 0.13 |
-      | 0.14 |
-      | 0.15 |
-      | 0.16 |
-      | 0.17 |
-      | 0.18 |
-      | 0.19 |
-      | 0.2  |
-
   Scenario: User requires to create a numeric field with negative data values that include a decimal value to one decimal point
     Given foo is granular to 0.1
     And foo is less than or equal to 0
@@ -70,20 +41,6 @@ Feature: User can specify that decimal fields are granular to a certain number o
       | -0.8 |
       | -0.9 |
       | -1   |
-
-  Scenario: User attempts to create a numeric field with data value that include a decimal value to one decimal point incorrectly using a string to set the granularity
-    Given foo is granular to "0.1"
-    And foo is greater than 0
-    And foo is less than 0.2
-    Then the following data should be generated:
-      | foo  |
-      | 0.1  |
-
-  Scenario: Running a 'granularTo' request that specifies null should be unsuccessful
-    Given foo is granular to null
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be set to a value"
-    And no data is created
-
 
   Scenario: Running granularTo against a non contradicting granularTo should be successful
     Given foo is granular to 1
@@ -110,3 +67,27 @@ Feature: User can specify that decimal fields are granular to a certain number o
       | 3   |
       | 4   |
       | 5   |
+
+          ### related field
+
+  Scenario: The one where a user can specify that one decimal number should be greater than another decimal number
+    Given foo is granular to 0.1
+    And the combination strategy is exhaustive
+    And foo is greater than or equal to 1
+    And foo is anything but null
+    And bar is anything but null
+    And there is a field bar
+    And bar has type "decimal"
+    And bar is granular to 0.1
+    And bar is less than 1.4
+    And bar is greater than or equal to 1
+    And foo is less than 1.4
+    And bar is greater than field foo
+    Then the following data should be generated:
+      | foo | bar |
+      | 1   | 1.1 |
+      | 1   | 1.2 |
+      | 1   | 1.3 |
+      | 1.1 | 1.2 |
+      | 1.1 | 1.3 |
+      | 1.2 | 1.3 |

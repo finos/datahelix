@@ -18,15 +18,16 @@ package com.scottlogic.deg.profile.reader;
 
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
-import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
+import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularity;
 import com.scottlogic.deg.profile.reader.atomic.AtomicConstraintValueReader;
 import com.scottlogic.deg.profile.reader.atomic.FromFileReader;
 import org.junit.Assert;
@@ -34,7 +35,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -169,20 +169,6 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldDeserialiseInvalidProfileAsEmptyRule() throws IOException {
-        givenJson(
-            "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
-                "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\" } ]," +
-                "    \"rules\": [" +
-                "       { \"field\": \"foo\", \"is\": \"null\" } " +
-                "    ]" +
-                "}");
-
-        expectInvalidProfileException("Profile is invalid: unable to find 'constraints' for rule: null");
-    }
-
-    @Test
     public void shouldGiveDefaultNameToUnnamedRules() throws IOException {
         givenJson(
                 "{" +
@@ -202,7 +188,7 @@ public class JsonProfileReaderTests {
         expectFields(
             field -> {
                 Assert.assertThat(field.name, equalTo("foo"));
-                Assert.assertEquals(field.getType(), Types.STRING);
+                Assert.assertEquals(field.getType(), FieldType.STRING);
             });
     }
 
@@ -279,7 +265,7 @@ public class JsonProfileReaderTests {
         expectFields(
             field -> {
                 Assert.assertThat(field.name, equalTo("foo"));
-                Assert.assertEquals(field.getType(), Types.STRING);
+                Assert.assertEquals(field.getType(), FieldType.STRING);
             });
     }
 
@@ -292,14 +278,15 @@ public class JsonProfileReaderTests {
                 "    \"rules\": []" +
                 "}");
 
+
         expectRules(
             ruleWithConstraints(
                 typedConstraint(
                     IsGranularToNumericConstraint.class,
                     c -> {
                         Assert.assertThat(
-                            c.granularity.getNumericGranularity(),
-                            equalTo(new BigDecimal(1)));
+                            c.granularity,
+                            equalTo(new NumericGranularity(0)));
                     })));
     }
 
@@ -554,8 +541,8 @@ public class JsonProfileReaderTests {
                     IsGranularToNumericConstraint.class,
                     c -> {
                         Assert.assertThat(
-                            c.granularity.getNumericGranularity(),
-                            equalTo(new BigDecimal(1)));
+                            c.granularity,
+                            equalTo(new NumericGranularity(0)));
                     })));
     }
 
@@ -580,8 +567,8 @@ public class JsonProfileReaderTests {
                     IsGranularToNumericConstraint.class,
                     c -> {
                         Assert.assertThat(
-                            c.granularity.getNumericGranularity(),
-                            equalTo(BigDecimal.valueOf(0.1)));
+                            c.granularity,
+                            equalTo(new NumericGranularity(1)));
                     })));
     }
 
@@ -606,8 +593,8 @@ public class JsonProfileReaderTests {
                     IsGranularToNumericConstraint.class,
                     c -> {
                         Assert.assertThat(
-                            c.granularity.getNumericGranularity(),
-                            equalTo(BigDecimal.valueOf(0.1)));
+                            c.granularity,
+                            equalTo(new NumericGranularity(1)));
                     })));
     }
 
@@ -1066,108 +1053,13 @@ public class JsonProfileReaderTests {
 
         expectFields(
             field -> {
-                Assert.assertThat(field.type, equalTo(Types.NUMERIC));
+                Assert.assertThat(field.getType(), equalTo(FieldType.NUMERIC));
             },
             field -> {
-                Assert.assertThat(field.type, equalTo(Types.STRING));
+                Assert.assertThat(field.getType(), equalTo(FieldType.STRING));
             }
         );
         expectRules();
-    }
-
-    @Test
-    public void type_setsFieldTypeProperty_whenSetInConstraintDefinition() throws IOException  {
-        givenJson(
-            "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
-                "    \"fields\": [ { " +
-                "       \"name\": \"foo\"" +
-                "    }, { " +
-                "       \"name\": \"bar\" ," +
-                "       \"type\": \"string\"" +
-                "    }]," +
-                "    \"rules\": [" +
-                "       {" +
-                "        \"rule\": \"fooRule\"," +
-                "        \"constraints\": [{ \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"decimal\" }]" +
-                "       }" +
-                "    ]" +
-                "}");
-
-        expectFields(
-            field -> {
-                Assert.assertThat(field.type, equalTo(Types.NUMERIC));
-            },
-            field -> {
-                Assert.assertThat(field.type, equalTo(Types.STRING));
-            }
-        );
-    }
-
-    @Test
-    public void type_setsFieldTypeProperty_whenSetInNestedConstraintDefinition() throws IOException {
-        givenJson(
-            "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
-                "    \"fields\": [ { " +
-                "       \"name\": \"foo\"" +
-                "    }, { " +
-                "       \"name\": \"bar\" ," +
-                "       \"type\": \"string\"" +
-                "    }]," +
-                "    \"rules\": [" +
-                "       {" +
-                "        \"rule\": \"fooRule\"," +
-                "        \"constraints\": [" +
-                "           { \"allOf\": [" +
-                "             { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"decimal\" }," +
-                "             { \"not\": { \"field\": \"foo\", \"is\": \"null\" } }" +
-                "            ] }" +
-                "          ]" +
-                "       }" +
-                "    ]" +
-                "}");
-
-        expectFields(
-            field -> {
-                Assert.assertThat(field.type, equalTo(Types.NUMERIC));
-            },
-            field -> {
-                Assert.assertThat(field.type, equalTo(Types.STRING));
-            }
-        );
-    }
-
-    @Test
-    public void type_setsFieldTypeProperty_whenSetInMultipleConstraintDefinitions() throws IOException {
-        givenJson(
-            "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
-                "    \"fields\": [ { " +
-                "       \"name\": \"foo\"" +
-                "    }, { " +
-                "       \"name\": \"bar\" ," +
-                "       \"type\": \"string\"" +
-                "    }]," +
-                "    \"rules\": [" +
-                "       {" +
-                "        \"rule\": \"fooRule\"," +
-                "        \"constraints\": [" +
-                "           { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"decimal\" }," +
-                "           { \"field\": \"foo\", \"is\": \"ofType\", \"value\": \"datetime\" }" +
-                "          ]" +
-                "       }" +
-                "    ]" +
-                "}");
-
-        expectFields(
-            field -> {
-                Assert.assertThat(field.type, equalTo(Types.NUMERIC));
-            },
-            field -> {
-                Assert.assertThat(field.type, equalTo(Types.STRING));
-            }
-        );
     }
 
     @Test
@@ -1259,7 +1151,7 @@ public class JsonProfileReaderTests {
             field -> {
                 Assert.assertEquals("foobar.csv", field.name);
                 Assert.assertTrue(field.isInternal());
-                Assert.assertEquals(Types.NUMERIC, field.type);
+                Assert.assertEquals(FieldType.NUMERIC, field.getType());
             }
         );
     }

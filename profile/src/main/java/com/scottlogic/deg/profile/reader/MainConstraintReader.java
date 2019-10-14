@@ -18,8 +18,6 @@ package com.scottlogic.deg.profile.reader;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.constraintdetail.DateTimeGranularity;
-import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
 import com.scottlogic.deg.generator.fieldspecs.relations.InMapRelation;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.ProfileFields;
@@ -38,8 +36,6 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.scottlogic.deg.profile.reader.atomic.ConstraintReaderHelpers.getDateTimeGranularity;
-
 public class MainConstraintReader {
 
     private final AtomicConstraintValueReader atomicConstraintValueReader;
@@ -57,11 +53,7 @@ public class MainConstraintReader {
             throw new InvalidProfileException("Constraint is null");
         }
 
-        if (dto.is == null) {
-            throw new InvalidProfileException("Couldn't recognise 'is' property, it must be set to a value");
-        }
-
-        if (dto.is != ConstraintDTO.undefined) {
+        if (dto.is != null) {
 
             if (dto.otherField != null){
                 return RelationsFactory.create(dto, fields);
@@ -71,7 +63,7 @@ public class MainConstraintReader {
 
             Field field = fields.getByName(dto.field);
 
-            Object value = atomicConstraintValueReader.getValue(dto, field.type);
+            Object value = atomicConstraintValueReader.getValue(dto, field.getType());
 
             ConstraintValueValidator.validate(field, atomicConstraintType, value);
 
@@ -119,7 +111,7 @@ public class MainConstraintReader {
                     : null);
         }
 
-        throw new InvalidProfileException("Couldn't interpret constraint");
+        throw new InvalidProfileException("Couldn't recognise 'is' property, it must be set to a value");
     }
 
     private InMapRelation createInMapRelation(Field field, Field other, DistributedList<String> list) {
@@ -130,7 +122,6 @@ public class MainConstraintReader {
     Set<Constraint> getSubConstraints(ProfileFields fields, Collection<ConstraintDTO> allOf) {
         return allOf.stream()
             .map(subConstraintDto -> apply(subConstraintDto, fields))
-            .filter(constraint -> !(constraint instanceof RemoveFromTree))
             .collect(Collectors.toSet());
     }
 }

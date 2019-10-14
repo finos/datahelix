@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.common.util.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
@@ -15,9 +14,12 @@ import com.scottlogic.deg.generator.walker.pruner.Merged;
 import com.scottlogic.deg.generator.walker.pruner.TreePruner;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static com.scottlogic.deg.common.util.FlatMappingSpliterator.flatMap;
 
 public class RowSpecTreeSolver {
 
@@ -35,12 +37,13 @@ public class RowSpecTreeSolver {
     }
 
     public Stream<RowSpec> createRowSpecs(DecisionTree tree) {
-        return reduceToRowNodes(tree.rootNode)
-            .map(rootNode -> toRowspec(tree.fields, rootNode));
+        return flatMap(reduceToRowNodes(tree.rootNode),
+            rootNode -> toRowspec(tree.fields, rootNode));
     }
 
-    private RowSpec toRowspec(ProfileFields fields, ConstraintNode rootNode) {
-        return constraintReducer.reduceConstraintsToRowSpec(fields, rootNode).get();
+    private Stream<RowSpec> toRowspec(ProfileFields fields, ConstraintNode rootNode) {
+        Optional<RowSpec> result = constraintReducer.reduceConstraintsToRowSpec(fields, rootNode);
+        return result.map(Stream::of).orElseGet(Stream::empty);
     }
 
     /**
@@ -59,7 +62,7 @@ public class RowSpecTreeSolver {
             .filter(newNode -> !newNode.isContradictory())
             .map(Merged::get);
 
-        return FlatMappingSpliterator.flatMap(
+        return flatMap(
             rootOnlyConstraintNodes,
             this::reduceToRowNodes);
     }
@@ -80,7 +83,7 @@ public class RowSpecTreeSolver {
             .distinct()
             .collect(Collectors.toMap(
                 Function.identity(),
-                field -> FieldSpec.empty()));
+                field -> FieldSpec.fromType(field.getType())));
     }
 
 }

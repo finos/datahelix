@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.orchestrator.cucumber.testframework.steps;
 
+import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestHelper;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestState;
 import cucumber.api.java.en.Then;
@@ -33,14 +34,24 @@ public class RegexValueStep {
         this.helper = helper;
     }
 
-    @When("{fieldVar} is {operator} {regex}")
-    public void whenFieldIsConstrainedByRegex(String fieldName, String constraintName, String value) throws Exception {
-        this.state.addConstraint(fieldName, constraintName, value);
+    @When("^([A-z0-9]+) is matching regex /(.+)/$")
+    public void matchingRegexString(String fieldName, String value) {
+        state.addConstraint(fieldName, AtomicConstraintType.MATCHES_REGEX.getText(), Pattern.compile(value));
     }
 
-    @When("{fieldVar} is anything but {operator} {regex}")
-    public void whenFieldIsNotConstrainedByRegex(String fieldName, String constraintName, String value) throws Exception {
-        this.state.addNotConstraint(fieldName, constraintName, value);
+    @When("^([A-z0-9]+) is anything but matching regex /(.+)/$")
+    public void notMatchingRegexString(String fieldName, String value) {
+        state.addNotConstraint(fieldName, AtomicConstraintType.MATCHES_REGEX.getText(), Pattern.compile(value));
+    }
+
+    @When("^([A-z0-9]+) is containing regex /(.+)/$")
+    public void containingRegexString(String fieldName, String value) {
+        state.addConstraint(fieldName, AtomicConstraintType.CONTAINS_REGEX.getText(), Pattern.compile(value));
+    }
+
+    @When("^([A-z0-9]+) is anything but containing regex /(.+)/$")
+    public void notContainingRegexString(String fieldName, String value) {
+        state.addNotConstraint(fieldName, AtomicConstraintType.CONTAINS_REGEX.getText(), Pattern.compile(value));
     }
 
     @Then("{fieldVar} contains strings matching {regex}")

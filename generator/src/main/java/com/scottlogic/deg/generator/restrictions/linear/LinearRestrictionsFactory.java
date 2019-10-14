@@ -4,11 +4,15 @@ import com.scottlogic.deg.common.profile.constraintdetail.Granularity;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.function.Function;
 
 import static com.scottlogic.deg.common.util.Defaults.*;
+import static com.scottlogic.deg.generator.utils.Defaults.*;
 
 public class LinearRestrictionsFactory {
+
+    public static LinearRestrictions<OffsetDateTime> createDefaultDateTimeRestrictions() {
+        return createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT);
+    }
 
     public static LinearRestrictions<OffsetDateTime> createDateTimeRestrictions(Limit<OffsetDateTime> min, Limit<OffsetDateTime> max) {
         return createDateTimeRestrictions(min, max, DEFAULT_DATETIME_GRANULARITY);
@@ -20,12 +24,15 @@ public class LinearRestrictionsFactory {
         return new LinearRestrictions<>(inclusiveMin, inclusiveMax, granularity);
     }
 
-    public static LinearRestrictions<BigDecimal> createNumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max) {
-        return createNumericRestrictions(min, max, DEFAULT_NUMERIC_SCALE);
+    public static LinearRestrictions<BigDecimal> createDefaultNumericRestrictions() {
+        return createNumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT);
     }
 
-    public static LinearRestrictions<BigDecimal> createNumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max, int numericScale) {
-        NumericGranularity granularity = new NumericGranularity(numericScale);
+    public static LinearRestrictions<BigDecimal> createNumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max) {
+        return createNumericRestrictions(min, max, DEFAULT_NUMERIC_GRANULARITY);
+    }
+
+    public static LinearRestrictions<BigDecimal> createNumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max, Granularity<BigDecimal> granularity) {
         BigDecimal inclusiveMin = getInclusiveMin(min, granularity, NUMERIC_MIN);
         BigDecimal inclusiveMax = getInclusiveMax(max, granularity, NUMERIC_MAX);
         return new LinearRestrictions<>(inclusiveMin, inclusiveMax, granularity);

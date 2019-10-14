@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.common.profile.Types;
+import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.*;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.DateTimeFieldValueSource;
@@ -31,12 +31,11 @@ import java.util.*;
 
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDateTimeRestrictions;
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createNumericRestrictions;
-import static com.scottlogic.deg.generator.utils.Defaults.*;
 
 public class FieldValueSourceEvaluator {
     private static final FieldValueSource NULL_ONLY_SOURCE = new NullOnlySource();
 
-    public FieldValueSource getFieldValueSources(Types type, FieldSpec fieldSpec){
+    public FieldValueSource getFieldValueSources(FieldType type, FieldSpec fieldSpec){
 
         Optional<FieldValueSource> source = getSource(type, fieldSpec);
 
@@ -52,7 +51,7 @@ public class FieldValueSourceEvaluator {
         return new NullAppendingValueSource(source.get());
     }
 
-    private Optional<FieldValueSource> getSource(Types type, FieldSpec fieldSpec) {
+    private Optional<FieldValueSource> getSource(FieldType type, FieldSpec fieldSpec) {
         if (fieldSpec.getWhitelist() != null){
             if (fieldSpec.getWhitelist().isEmpty()){
                 return Optional.empty();
@@ -64,7 +63,7 @@ public class FieldValueSourceEvaluator {
         return Optional.of(getRestrictionSource(type, fieldSpec));
     }
 
-    private FieldValueSource getRestrictionSource(Types type, FieldSpec fieldSpec) {
+    private FieldValueSource getRestrictionSource(FieldType type, FieldSpec fieldSpec) {
         switch (type) {
             case DATETIME:
                 return getDateTimeSource(fieldSpec);
@@ -78,19 +77,13 @@ public class FieldValueSourceEvaluator {
     }
 
     private FieldValueSource getNumericSource(FieldSpec fieldSpec) {
-        LinearRestrictions<BigDecimal> restrictions =
-            fieldSpec.getRestrictions() == null
-                ? createNumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT)
-                : (LinearRestrictions<BigDecimal>) fieldSpec.getRestrictions();
+        LinearRestrictions<BigDecimal> restrictions = (LinearRestrictions<BigDecimal>) fieldSpec.getRestrictions();
 
         return new RealNumberFieldValueSource(restrictions, fieldSpec.getBlacklist());
     }
 
     private FieldValueSource getStringSource(FieldSpec fieldSpec) {
-        StringRestrictions stringRestrictions =
-            fieldSpec.getRestrictions() == null
-                ? new StringRestrictionsFactory().forMaxLength(1000)
-                : (StringRestrictions) fieldSpec.getRestrictions();
+        StringRestrictions stringRestrictions = (StringRestrictions) fieldSpec.getRestrictions();
 
         StringGenerator generator = stringRestrictions.createGenerator();
         if (!fieldSpec.getBlacklist().isEmpty()) {
@@ -102,10 +95,7 @@ public class FieldValueSourceEvaluator {
     }
 
     private FieldValueSource getDateTimeSource(FieldSpec fieldSpec) {
-        LinearRestrictions<OffsetDateTime> restrictions =
-            fieldSpec.getRestrictions() == null
-                ? createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT)
-                : (LinearRestrictions<OffsetDateTime>) fieldSpec.getRestrictions();
+        LinearRestrictions<OffsetDateTime> restrictions = (LinearRestrictions<OffsetDateTime>) fieldSpec.getRestrictions();
 
         return new DateTimeFieldValueSource(restrictions, fieldSpec.getBlacklist());
     }

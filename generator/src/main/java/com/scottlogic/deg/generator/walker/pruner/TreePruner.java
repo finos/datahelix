@@ -80,7 +80,7 @@ public class TreePruner {
     }
 
     private Merged<DecisionNode> pruneDecisionNode(DecisionNode decisionNode,  Map<Field, FieldSpec> fieldSpecs) {
-        Collection<ConstraintNode> newConstraintNodes = new ArrayList<>();
+        Set<ConstraintNode> newConstraintNodes = new HashSet<>();
 
         for (ConstraintNode constraintNode : decisionNode.getOptions()) {
             pruneConstraintNode(constraintNode, fieldSpecs).ifPresent(newConstraintNodes::add);

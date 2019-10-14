@@ -107,6 +107,24 @@ Feature: User can specify that datetime fields are granular to a certain unit
       | foo                       |
       | 2019-10-04T00:00:00.000Z  |
 
+   @ignore #pending development of #1426 - Make datetime friendly to use in the profile
+  Scenario Outline: The one where the datetime format is relaxed
+    Given foo is granular to <unit>
+    And foo is equal to <constraintDate>
+    And the generator can generate at most 1 rows
+    Then the following data should be generated:
+      | foo       |
+      | <output>  |
+
+    Examples:
+      | unit      | constraintDate            | output                   |
+      | "millis"  | 2000-01-01T00:00:00.000Z  | 2000-01-01T00:00:00.000Z |
+      | "seconds" | 2000-01-01T00:00:00       | 2000-01-01T00:00:00      |
+      | "minutes" | 2000-01-01T00:00          | 2000-01-01T00:00         |
+      | "hours"   | 2000-01-01T00             | 2000-01-01T00            |
+      | "days"    | 2000-01-01T               | 2000-01-01T              |
+      | "months"  | 2000-01                   | 2000-01                  |
+      | "years"   | 2000                      | 2000                     |
 
   Scenario: Applying an invalid datetime granularTo constraint fails with an appropriate error
     Given foo is granular to "decades"

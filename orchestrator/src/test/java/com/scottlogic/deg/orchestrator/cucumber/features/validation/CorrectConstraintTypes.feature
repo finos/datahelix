@@ -40,8 +40,8 @@ Feature: Correct Constraint Types, validation exceptions should be raised if the
 
       | decimal | granularTo            | DATETIME  | granular to "seconds"             | NUMERIC   |
 
-      | decimal | matchingRegex         | STRING    | matching regex "ab"               | NUMERIC   |
-      | decimal | containingRegex       | STRING    | containing regex "ab"             | NUMERIC   |
+      | decimal | matchingRegex         | STRING    | matching regex /ab/               | NUMERIC   |
+      | decimal | containingRegex       | STRING    | containing regex /ab/             | NUMERIC   |
       | decimal | ofLength              | STRING    | of length 3                       | NUMERIC   |
       | decimal | shorterThan           | STRING    | shorter than 3                    | NUMERIC   |
       | decimal | longerThan            | STRING    | longer than 3                     | NUMERIC   |

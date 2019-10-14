@@ -38,7 +38,6 @@ Feature: User can specify that a value is equalTo a required value
       | foo  |
       | ""   |
 
-    @ignore
   Scenario: Running an 'equalTo' of null should fail with an error message
       Given there is a field foo
       And foo has type "string"

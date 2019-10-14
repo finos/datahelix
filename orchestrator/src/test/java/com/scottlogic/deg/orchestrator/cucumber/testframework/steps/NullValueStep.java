@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.orchestrator.cucumber.testframework.steps;
 
+import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestHelper;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestState;
 import cucumber.api.java.en.Then;
@@ -33,9 +34,9 @@ public class NullValueStep {
         this.helper = helper;
     }
 
-    @When("{fieldVar} is {operator} null")
-    public void whenFieldIsConstrainedByTextValue(String fieldName, String constraintName) {
-        state.addConstraint(fieldName, constraintName, null);
+    @When("{fieldVar} is equal to null")
+    public void whenFieldIsConstrainedByTextValue(String fieldName) {
+        state.addConstraint(fieldName, AtomicConstraintType.IS_EQUAL_TO_CONSTANT.getText(), null);
     }
 
     @When("{fieldVar} is anything but {operator} null")

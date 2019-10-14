@@ -62,7 +62,7 @@ public class ValidatingProfileReader {
     }
 
     private void validateFieldsAreTyped(ProfileFields fields) {
-        List<Field> untyped = fields.stream().filter(field -> field.type == null).collect(Collectors.toList());
+        List<Field> untyped = fields.stream().filter(field -> field.getType() == null).collect(Collectors.toList());
         if (untyped.size() == 1) {
             throw new InvalidProfileException("Field [" + untyped.get(0).name + "]: is not typed; add its type to the field definition");
         }

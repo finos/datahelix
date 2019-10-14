@@ -17,6 +17,7 @@
 
 package com.scottlogic.deg.generator.restrictions.linear;
 import com.scottlogic.deg.common.profile.constraintdetail.DateTimeGranularity;
+import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularity;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;

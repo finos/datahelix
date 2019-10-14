@@ -155,31 +155,6 @@ Feature: User can specify that contains a specified regex
       | null |
       | "a"  |
 
-  Scenario: Running a 'containingRegex' for a maximum length smaller than the minimum length should fail with an error
-    Given foo is containing regex /[a]{1,0}/
-    Then the profile is invalid because "Field \[foo\]: Illegal repetition range near index 7\r?\n\[a\]\{1,0\}\r?\n       \^"
-    And no data is created
-
-  Scenario: Running a 'containingRegex' for a minimum length of a decimal value should fail with an error
-    Given foo is containing regex /[a]{1.1}/
-    Then the profile is invalid because "Field \[foo\]: Unclosed counted closure near index 5\r?\n\[a\]\{1.1\}\r?\n     \^"
-    And no data is created
-
-  Scenario: Running a 'containingRegex' for a minimum length that is less zero should fail with an error message
-    Given foo is containing regex /[a]{-1}/
-    Then the profile is invalid because "Field \[foo\]: Illegal repetition near index [24]\r?\n\[a\]\{-1\}\r?\n {2,4}\^"
-    And no data is created
-
-  Scenario: Running a 'containingRegex' for an empty value should fail with an error message
-    Given foo is containing regex /[]{}/
-    Then the profile is invalid because "Field \[foo\]: Unclosed character class near index 3\r?\n\[\]\{\}\r?\n   \^"
-    And no data is created
-
-  Scenario: Running a 'containingRegex' request with the value property set to a null entry (null) should throw an error
-    Given foo is containing regex null
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be set to a value"
-    And no data is created
-
   Scenario: containingRegex run against a non contradicting containingRegex should be successful
     Given foo is containing regex /[b]{2}/
     And foo is containing regex /[a-z]{1,3}/
