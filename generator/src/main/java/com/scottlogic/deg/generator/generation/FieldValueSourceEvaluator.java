@@ -87,7 +87,8 @@ public class FieldValueSourceEvaluator {
 
         StringGenerator generator = stringRestrictions.createGenerator();
         if (!fieldSpec.getBlacklist().isEmpty()) {
-            RegexStringGenerator blacklistGenerator = RegexStringGenerator.createFromBlacklist(fieldSpec.getBlacklist());
+            Set<String> blacklist = fieldSpec.getBlacklist().stream().map(d -> (String) d).collect(Collectors.toSet());
+            RegexStringGenerator blacklistGenerator = RegexStringGenerator.createFromBlacklist(blacklist);
             return generator.intersect(blacklistGenerator);
         }
 

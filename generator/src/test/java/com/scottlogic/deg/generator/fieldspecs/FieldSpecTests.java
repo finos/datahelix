@@ -18,6 +18,7 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
+import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.restrictions.linear.*;
@@ -29,6 +30,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.Set;
 
 import static com.scottlogic.deg.common.profile.FieldType.*;
 import static com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory.forMaxLength;
@@ -290,6 +292,11 @@ class FieldSpecTests {
         @Override
         public boolean match(Object o) {
             return false;
+        }
+
+        @Override
+        public FieldValueSource createFieldValueSource(Set blacklist) {
+            return null;
         }
     }
 }

@@ -16,14 +16,28 @@
 
 package com.scottlogic.deg.generator.restrictions;
 
+import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
+import com.scottlogic.deg.generator.generation.string.generators.RegexStringGenerator;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 
+import java.util.Collection;
 import java.util.Optional;
+import java.util.Set;
 
 public interface StringRestrictions extends TypedRestrictions<String> {
     Optional<StringRestrictions> intersect(StringRestrictions other);
 
     StringGenerator createGenerator();
+
+    @Override
+    default FieldValueSource<String> createFieldValueSource(Set<String> blacklist) {
+        if (blacklist.isEmpty()) {
+            return createGenerator();
+        }
+
+        RegexStringGenerator blacklistGenerator = RegexStringGenerator.createFromBlacklist(blacklist);
+        return createGenerator().intersect(blacklistGenerator);
+    }
 }
 
 

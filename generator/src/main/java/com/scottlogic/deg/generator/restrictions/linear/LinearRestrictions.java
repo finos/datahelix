@@ -17,9 +17,12 @@
 package com.scottlogic.deg.generator.restrictions.linear;
 
 import com.scottlogic.deg.common.profile.constraintdetail.Granularity;
+import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
+import com.scottlogic.deg.generator.generation.fieldvaluesources.LinearFieldValueSource;
 import com.scottlogic.deg.generator.restrictions.TypedRestrictions;
 
 import java.util.Objects;
+import java.util.Set;
 
 public class LinearRestrictions<T extends Comparable<T>> implements TypedRestrictions<T> {
     private final T min;
@@ -43,6 +46,11 @@ public class LinearRestrictions<T extends Comparable<T>> implements TypedRestric
         }
 
         return granularity.isCorrectScale(o);
+    }
+
+    @Override
+    public FieldValueSource<T> createFieldValueSource(Set<T> blacklist) {
+        return new LinearFieldValueSource<>(this, blacklist);
     }
 
     public T getMax() {
