@@ -37,36 +37,41 @@ import static com.scottlogic.deg.generator.utils.SetUtils.stream;
 public class DateTimeFieldValueSource implements FieldValueSource<OffsetDateTime> {
 
     private final LinearRestrictions<OffsetDateTime> restrictions;
-    private final Set<Object> blacklist;
+    private final Set<OffsetDateTime> blacklist;
 
     private final RandomDateGenerator randomDateGenerator;
 
     public DateTimeFieldValueSource(
         LinearRestrictions<OffsetDateTime> restrictions,
-        Set<Object> blacklist) {
+        Set<OffsetDateTime> blacklist) {
         this.restrictions = restrictions;
         this.blacklist = blacklist;
-
         this.randomDateGenerator = new RandomDateGenerator(restrictions);
     }
 
     @Override
     public Stream<OffsetDateTime> generateAllValues() {
         return stream(new LinearIterator<>(restrictions))
-            .filter(i -> !blacklist.contains(i));
+            .filter(this::notInBlacklist);
     }
 
     @Override
     public Stream<OffsetDateTime> generateInterestingValues() {
         return Stream.of(restrictions.getMin(), restrictions.getMax())
             .distinct()
-            .filter(i -> !blacklist.contains(i));
+            .filter(this::notInBlacklist);
     }
 
     @Override
     public Stream<OffsetDateTime> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
-        return Stream.generate(() -> randomDateGenerator.next(randomNumberGenerator))
-            .filter(i -> !blacklist.contains(i));
+        return Stream.generate(() -> restrictions.getGranularity()
+            .getRandom(restrictions.getMin(), restrictions.getMax(), randomNumberGenerator))
+            .filter(this::notInBlacklist);
+    }
+
+
+    private boolean notInBlacklist(OffsetDateTime t) {
+        return blacklist.stream().noneMatch(x->x.compareTo(t)==0);
     }
 
     @Override
@@ -77,18 +82,6 @@ public class DateTimeFieldValueSource implements FieldValueSource<OffsetDateTime
         DateTimeFieldValueSource otherSource = (DateTimeFieldValueSource) obj;
         return restrictions.equals(otherSource.restrictions) &&
             blacklist.equals(otherSource.blacklist);
-    }
-
-    private static boolean equals(OffsetDateTime x, OffsetDateTime y) {
-        if (x == null && y == null) {
-            return true;
-        }
-
-        if (x == null || y == null) {
-            return false; //either x OR y is null, but not both (XOR)
-        }
-
-        return x.equals(y);
     }
 
     @Override
