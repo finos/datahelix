@@ -75,33 +75,6 @@ class RestrictionsMergeOperationTest {
     }
 
     @Test
-    void applyMergeOperation_withLeftNull_shouldNotCallMerge(){
-        FieldSpec result = operation.applyMergeOperation(FieldSpec.fromRestriction(null), rightNumeric);
-
-        Assert.assertEquals(rightNumeric.getRestrictions(), result.getRestrictions());
-        verify(linearMerger, times(0)).merge(any(), any());
-        verify(StringMerger, times(0)).merge(any(), any());
-    }
-
-    @Test
-    void applyMergeOperation_withRightNull_shouldNotCallMerge(){
-        FieldSpec result = operation.applyMergeOperation(leftNumeric, FieldSpec.fromRestriction(null));
-
-        Assert.assertEquals(leftNumeric.getRestrictions(), result.getRestrictions());
-        verify(linearMerger, times(0)).merge(any(), any());
-        verify(StringMerger, times(0)).merge(any(), any());
-    }
-
-    @Test
-    void applyMergeOperation_withBothNull_shouldNotCallMerge(){
-        FieldSpec result = operation.applyMergeOperation(FieldSpec.fromRestriction(null), FieldSpec.fromRestriction(null));
-
-        Assert.assertEquals(null, result.getRestrictions());
-        verify(linearMerger, times(0)).merge(any(), any());
-        verify(StringMerger, times(0)).merge(any(), any());
-    }
-
-    @Test
     void applyMergeOperation_withNumericRestrictions_shouldApplyRestriction(){
         when(linearMerger.merge(leftNumeric.getRestrictions(), rightNumeric.getRestrictions()))
             .thenReturn(Optional.of(rightNumeric.getRestrictions()));
@@ -123,17 +96,6 @@ class RestrictionsMergeOperationTest {
 
         Assert.assertEquals(result, merging);
         verify(linearMerger, times(1)).merge(any(), any());
-        verify(StringMerger, times(0)).merge(any(), any());
-    }
-
-    @Test
-    void applyMergeOperation_withNoRestrictions_shouldNotApplyAnyRestriction(){
-        FieldSpec merging = FieldSpec.fromRestriction(null);
-
-        FieldSpec result = operation.applyMergeOperation(FieldSpec.fromRestriction(null), merging);
-
-        Assert.assertEquals(result, merging);
-        verify(linearMerger, times(0)).merge(any(), any());
         verify(StringMerger, times(0)).merge(any(), any());
     }
 
