@@ -28,6 +28,7 @@ import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDateTimeRestrictions;
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createNumericRestrictions;
@@ -96,7 +97,7 @@ public class FieldValueSourceEvaluator {
 
     private FieldValueSource getDateTimeSource(FieldSpec fieldSpec) {
         LinearRestrictions<OffsetDateTime> restrictions = (LinearRestrictions<OffsetDateTime>) fieldSpec.getRestrictions();
-
-        return new DateTimeFieldValueSource(restrictions, fieldSpec.getBlacklist());
+        Set<OffsetDateTime> blacklist = fieldSpec.getBlacklist().stream().map(d -> (OffsetDateTime) d).collect(Collectors.toSet());
+        return new DateTimeFieldValueSource(restrictions, blacklist);
     }
 }

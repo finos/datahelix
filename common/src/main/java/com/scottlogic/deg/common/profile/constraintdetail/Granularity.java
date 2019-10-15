@@ -16,6 +16,8 @@
 
 package com.scottlogic.deg.common.profile.constraintdetail;
 
+import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
+
 public interface Granularity<T> {
 
     boolean isCorrectScale(T value);
@@ -31,4 +33,6 @@ public interface Granularity<T> {
     default T getNext(T value){
         return getNext(value, 1);
     };
+
+    T getRandom(T min, T max, RandomNumberGenerator randomNumberGenerator);
 }

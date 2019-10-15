@@ -1,7 +1,9 @@
 package com.scottlogic.deg.common.profile.constraintdetail;
 
 import com.scottlogic.deg.common.date.TemporalAdjusterGenerator;
+import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
@@ -69,6 +71,19 @@ public class DateTimeGranularity implements Granularity<OffsetDateTime> {
         }
 
         return trimToGranularity(value);
+    }
+
+    @Override
+    public OffsetDateTime getRandom(OffsetDateTime min, OffsetDateTime max, RandomNumberGenerator randomNumberGenerator) {
+        long generatedLong = (long) randomNumberGenerator.nextDouble(getMilli(min), getMilli(max));
+
+        OffsetDateTime generatedDate = Instant.ofEpochMilli(generatedLong).atZone(ZoneOffset.UTC).toOffsetDateTime();
+
+        return trimToGranularity(generatedDate);
+    }
+
+    private long getMilli(OffsetDateTime date) {
+        return date.toInstant().toEpochMilli();
     }
 
     private static int nanoToMilli(int nano) {
