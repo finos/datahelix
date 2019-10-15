@@ -18,7 +18,9 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
+import com.scottlogic.deg.generator.generation.fieldvaluesources.NullOnlySource;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsMerger;
+import com.scottlogic.deg.generator.restrictions.TypedRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
 import com.scottlogic.deg.generator.utils.SetUtils;
 
@@ -38,16 +40,19 @@ public class FieldSpecMerger {
      * Returning an empty Optional conveys that the fields were unmergeable.
      */
     public Optional<FieldSpec> merge(FieldSpec left, FieldSpec right) {
+        if (nullOnly(left) || nullOnly(right)){
+            return nullOnlyOrEmpty(isNullable(left, right));
+        }
         if (hasSet(left) && hasSet(right)) {
-            return mergeSets(left, right);
+            return mergeSets((WhitelistFieldSpec) left, (WhitelistFieldSpec)right);
         }
         if (hasSet(left)) {
-            return combineSetWithRestrictions(left, right);
+            return combineSetWithRestrictions((WhitelistFieldSpec)left, right);
         }
         if (hasSet(right)) {
-            return combineSetWithRestrictions(right, left);
+            return combineSetWithRestrictions((WhitelistFieldSpec)right, left);
         }
-        return combineRestrictions(left, right);
+        return combineRestrictions((RestrictionsFieldSpec)left, (RestrictionsFieldSpec)right);
     }
 
     private static WeightedElement<Object> mergeElements(WeightedElement<Object> left,
@@ -55,7 +60,8 @@ public class FieldSpecMerger {
         return new WeightedElement<>(left.element(), left.weight() + right.weight());
     }
 
-    private Optional<FieldSpec> mergeSets(FieldSpec left, FieldSpec right) {
+    //TODO try a performance test with this replaced with combineSetWithRestrictions()
+    private Optional<FieldSpec> mergeSets(WhitelistFieldSpec left, WhitelistFieldSpec right) {
         DistributedList<Object> set = new DistributedList<>(left.getWhitelist().distributedList().stream()
             .flatMap(leftHolder -> right.getWhitelist().distributedList().stream()
                 .filter(rightHolder -> elementsEqual(leftHolder, rightHolder))
@@ -63,21 +69,23 @@ public class FieldSpecMerger {
             .distinct()
             .collect(Collectors.toList()));
 
-        return addNullable(left, right, FieldSpecFactory.fromList(set));
+        FieldSpec newFieldSpec = set.isEmpty() ? FieldSpecFactory.nullOnly() : FieldSpecFactory.fromList(set);
+        return addNullable(left, right, newFieldSpec);
     }
 
     private static <T> boolean elementsEqual(WeightedElement<T> left, WeightedElement<T> right) {
         return left.element().equals(right.element());
     }
 
-    private Optional<FieldSpec> combineSetWithRestrictions(FieldSpec set, FieldSpec restrictions) {
+    private Optional<FieldSpec> combineSetWithRestrictions(WhitelistFieldSpec set, FieldSpec restrictions) {
         DistributedList<Object> newSet = new DistributedList<>(
             set.getWhitelist().distributedList().stream()
                 .filter(holder -> restrictions.permits(holder.element()))
                 .distinct()
                 .collect(Collectors.toList()));
 
-        return addNullable(set, restrictions, FieldSpecFactory.fromList(newSet));
+        FieldSpec newSpec = newSet.isEmpty() ? FieldSpecFactory.nullOnly() : FieldSpecFactory.fromList(newSet);
+        return addNullable(set, restrictions, newSpec);
     }
 
     private Optional<FieldSpec> addNullable(FieldSpec left, FieldSpec right, FieldSpec newFieldSpec) {
@@ -85,30 +93,39 @@ public class FieldSpecMerger {
             return Optional.of(newFieldSpec);
         }
 
-        if (noAllowedValues(newFieldSpec)) {
+        if (nullOnly(newFieldSpec)) {
             return Optional.empty();
         }
 
         return Optional.of(newFieldSpec.withNotNull());
     }
 
-    private boolean noAllowedValues(FieldSpec fieldSpec) {
-        return (fieldSpec.getWhitelist() != null && fieldSpec.getWhitelist().isEmpty());
+    private boolean nullOnly(FieldSpec fieldSpec) {
+        return (fieldSpec instanceof NullOnlyFieldSpec);
     }
 
     private boolean hasSet(FieldSpec fieldSpec) {
-        return fieldSpec.getWhitelist() != null;
+        return fieldSpec instanceof WhitelistFieldSpec;
     }
 
     private boolean isNullable(FieldSpec left, FieldSpec right) {
         return left.isNullable() && right.isNullable();
     }
 
-    private Optional<FieldSpec> combineRestrictions(FieldSpec left, FieldSpec right) {
-        FieldSpec merged = restrictionMergeOperation.applyMergeOperation(left, right);
+    private Optional<FieldSpec> combineRestrictions(RestrictionsFieldSpec left, RestrictionsFieldSpec right) {
+        Optional<TypedRestrictions> restrictions = restrictionMergeOperation.applyMergeOperation(left.getRestrictions(), right.getRestrictions());
 
+        if (!restrictions.isPresent()){
+            return nullOnlyOrEmpty(isNullable(left, right));
+        }
+
+        RestrictionsFieldSpec merged = FieldSpecFactory.fromRestriction(restrictions.get());
         merged = merged.withBlacklist(SetUtils.union(left.getBlacklist(), right.getBlacklist()));
 
         return addNullable(left, right, merged);
+    }
+
+    private Optional<FieldSpec> nullOnlyOrEmpty(boolean nullable) {
+        return nullable ? Optional.of(FieldSpecFactory.nullOnly()) : Optional.empty();
     }
 }

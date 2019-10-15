@@ -19,6 +19,7 @@ package com.scottlogic.deg.generator.generation;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
+import com.scottlogic.deg.generator.fieldspecs.WhitelistFieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
@@ -46,7 +47,7 @@ class FieldSpecValueGeneratorTests {
 
     @Test
     void generate_fieldSpecMustContainRestrictionNullAndSetRestrictionsHasValues_returnsDataBagsWithValuesInSetRestrictions() {
-        FieldSpec fieldSpec = FieldSpecFactory.fromList(DistributedList.uniform(Arrays.asList(10, 20, 30)))
+        WhitelistFieldSpec fieldSpec = FieldSpecFactory.fromList(DistributedList.uniform(Arrays.asList(10, 20, 30)))
             .withNotNull();
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
             INTERESTING,
@@ -82,7 +83,6 @@ class FieldSpecValueGeneratorTests {
                 new DataBagValue(
                     new BigDecimal("10.00000000000000000001")
                 ),
-
                 new DataBagValue(
                     new BigDecimal("29.99999999999999999999")
                 ),
@@ -105,7 +105,7 @@ class FieldSpecValueGeneratorTests {
             fieldValueSource = mock(FieldValueSource.class);
 
             randomNumberGenerator = mock(JavaUtilRandomNumberGenerator.class);
-            when(fieldValueSourceEvaluator.getFieldValueSources(any(), any())).thenReturn(fieldValueSource);
+            when(fieldValueSourceEvaluator.getFieldValueSources(any())).thenReturn(fieldValueSource);
             when(fieldValueSource.generateAllValues()).thenReturn(Stream.empty());
             when(fieldValueSource.generateInterestingValues()).thenReturn(Stream.empty());
             when(fieldValueSource.generateRandomValues(randomNumberGenerator)).thenReturn(Stream.empty());

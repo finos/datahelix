@@ -213,7 +213,7 @@ class FieldSpecTests {
 
     @Test
     void fromType_whenDateTime_createDefaultDateTimeRestriction() {
-        FieldSpec actual = FieldSpecFactory.fromType(DATETIME);
+        RestrictionsFieldSpec actual = FieldSpecFactory.fromType(DATETIME);
         LinearRestrictions<OffsetDateTime> expected = LinearRestrictionsFactory.createDefaultDateTimeRestrictions();
 
         Assert.assertEquals(expected, actual.getRestrictions());
@@ -221,7 +221,7 @@ class FieldSpecTests {
 
     @Test
     void fromType_whenNumeric_createDefaultNumericRestriction() {
-        FieldSpec actual = FieldSpecFactory.fromType(NUMERIC);
+        RestrictionsFieldSpec actual = FieldSpecFactory.fromType(NUMERIC);
         LinearRestrictions<BigDecimal> expected = LinearRestrictionsFactory.createDefaultNumericRestrictions();
 
         Assert.assertEquals(expected, actual.getRestrictions());
@@ -229,7 +229,7 @@ class FieldSpecTests {
 
     @Test
     void fromType_whenString_createDefaultStringRestriction() {
-        FieldSpec actual = FieldSpecFactory.fromType(STRING);
+        RestrictionsFieldSpec actual = FieldSpecFactory.fromType(STRING);
         StringRestrictions expected = forMaxLength(1000);
 
         Assert.assertEquals(expected, actual.getRestrictions());

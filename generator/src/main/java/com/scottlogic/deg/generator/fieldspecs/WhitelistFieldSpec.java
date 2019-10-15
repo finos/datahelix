@@ -11,8 +11,11 @@ public class WhitelistFieldSpec extends BaseFieldSpec {
 
     private final DistributedList<Object> whitelist;
 
-    public WhitelistFieldSpec(DistributedList<Object> whitelist, boolean nullable) {
+    WhitelistFieldSpec(DistributedList<Object> whitelist, boolean nullable) {
         super(nullable);
+        if (whitelist.isEmpty()){
+            throw new UnsupportedOperationException("cannot create with empty whitelist");
+        }
         this.whitelist = whitelist;
     }
 
@@ -28,6 +31,15 @@ public class WhitelistFieldSpec extends BaseFieldSpec {
     @Override
     public FieldValueSource getFieldValueSource() {
         return appendNullSource(new CannedValuesFieldValueSource(whitelist));
+    }
+
+    @Override
+    public WhitelistFieldSpec withNotNull() {
+        return new WhitelistFieldSpec(whitelist, false);
+    }
+
+    public DistributedList<Object> getWhitelist() {
+        return whitelist;
     }
 
     @Override

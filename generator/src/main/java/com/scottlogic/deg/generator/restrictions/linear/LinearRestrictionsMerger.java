@@ -25,7 +25,7 @@ import java.util.Optional;
 public class LinearRestrictionsMerger<T extends Comparable<T>> implements RestrictionsMerger {
 
     @Override
-    public Optional merge(TypedRestrictions left, TypedRestrictions right){
+    public Optional<LinearRestrictions> merge(TypedRestrictions left, TypedRestrictions right){
         LinearRestrictions<T> leftCast = (LinearRestrictions<T>) left;
         LinearRestrictions<T> rightCast = (LinearRestrictions<T>) right;
 

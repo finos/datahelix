@@ -4,10 +4,7 @@ import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSourc
 import com.scottlogic.deg.generator.generation.fieldvaluesources.NullAppendingValueSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.NullOnlySource;
 
-import java.util.Set;
-
-public class BaseFieldSpec implements IFieldSpec {
-
+public abstract class BaseFieldSpec implements FieldSpec {
     protected final boolean nullable;
 
     public BaseFieldSpec(boolean nullable) {
@@ -15,13 +12,8 @@ public class BaseFieldSpec implements IFieldSpec {
     }
 
     @Override
-    public boolean permits(Object value) {
-        return false;
-    }
-
-    @Override
-    public FieldValueSource getFieldValueSource() {
-        return new NullOnlySource();
+    public boolean isNullable(){
+        return nullable;
     }
 
     protected FieldValueSource appendNullSource(FieldValueSource source){
@@ -30,4 +22,5 @@ public class BaseFieldSpec implements IFieldSpec {
         }
         return new NullAppendingValueSource(source);
     }
+
 }

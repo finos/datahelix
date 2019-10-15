@@ -46,27 +46,18 @@ public class FieldValueSourceEvaluatorTests {
         FieldValueSourceEvaluator evaluator = new FieldValueSourceEvaluator();
         FieldSpec fieldSpecMustBeNull = FieldSpecFactory.nullOnly();
 
-        FieldValueSource sources = evaluator.getFieldValueSources(STRING, fieldSpecMustBeNull);
+        FieldValueSource sources = evaluator.getFieldValueSources(fieldSpecMustBeNull);
 
         AssertLastSourceIsNullOnlySource(sources);
     }
 
-    @Test
-    public void returnsNullSourceOnlyWithSetRestrictionWithEmptyWhitelist() {
-        FieldValueSourceEvaluator evaluator = new FieldValueSourceEvaluator();
-        FieldSpec fieldSpecMustBeNull = FieldSpecFactory.fromList((new DistributedList<>(Collections.emptyList())));
-
-        FieldValueSource sources = evaluator.getFieldValueSources(STRING, fieldSpecMustBeNull);
-
-        AssertLastSourceIsNullOnlySource(sources);
-    }
 
     @Test
     public void shouldReturnNullSourceLastWithNoRestrictions() {
         FieldValueSourceEvaluator evaluator = new FieldValueSourceEvaluator();
         FieldSpec fieldSpecWithNoRestrictions = FieldSpecFactory.fromType(STRING);
 
-        FieldValueSource sources = evaluator.getFieldValueSources(STRING, fieldSpecWithNoRestrictions);
+        FieldValueSource sources = evaluator.getFieldValueSources(fieldSpecWithNoRestrictions);
 
         AssertLastSourceIsNullOnlySource(sources);
     }
@@ -76,7 +67,7 @@ public class FieldValueSourceEvaluatorTests {
         FieldValueSourceEvaluator evaluator = new FieldValueSourceEvaluator();
         FieldSpec fieldSpecInSetAndNullNotDisallowed = FieldSpecFactory.fromList(DistributedList.uniform(new HashSet<>(Arrays.asList(15, 25))));
 
-        FieldValueSource sources = evaluator.getFieldValueSources(NUMERIC, fieldSpecInSetAndNullNotDisallowed);
+        FieldValueSource sources = evaluator.getFieldValueSources(fieldSpecInSetAndNullNotDisallowed);
 
         AssertLastSourceIsNullOnlySource(sources);
     }
@@ -89,7 +80,7 @@ public class FieldValueSourceEvaluatorTests {
             new Limit<>(new BigDecimal(30), false));
         FieldSpec fieldSpecWithTypedNumericRestrictionsAndNullNotDisallowed = FieldSpecFactory.fromRestriction(numericRestrictions);
 
-        FieldValueSource sources = evaluator.getFieldValueSources(NUMERIC, fieldSpecWithTypedNumericRestrictionsAndNullNotDisallowed);
+        FieldValueSource sources = evaluator.getFieldValueSources(fieldSpecWithTypedNumericRestrictionsAndNullNotDisallowed);
 
         AssertLastSourceIsNullOnlySource(sources);
     }
@@ -103,7 +94,7 @@ public class FieldValueSourceEvaluatorTests {
         );
         FieldSpec fieldSpecInSetWithTypedDateTimeRestrictionsAndNullNotDisallowed = FieldSpecFactory.fromRestriction(dateTimeRestrictions);
 
-        FieldValueSource sources = evaluator.getFieldValueSources(DATETIME, fieldSpecInSetWithTypedDateTimeRestrictionsAndNullNotDisallowed);
+        FieldValueSource sources = evaluator.getFieldValueSources(fieldSpecInSetWithTypedDateTimeRestrictionsAndNullNotDisallowed);
 
         AssertLastSourceIsNullOnlySource(sources);
     }
@@ -118,7 +109,7 @@ public class FieldValueSourceEvaluatorTests {
         );
         FieldValueSourceEvaluator evaluator = new FieldValueSourceEvaluator();
 
-        final FieldValueSource result = evaluator.getFieldValueSources(NUMERIC, fieldSpec);
+        final FieldValueSource result = evaluator.getFieldValueSources(fieldSpec);
 
         Iterator interestingValuesIterator = result.generateInterestingValues().iterator();
         List<BigDecimal> valuesFromResult = new ArrayList<>();
@@ -142,7 +133,7 @@ public class FieldValueSourceEvaluatorTests {
         ).withNotNull();
         FieldValueSourceEvaluator evaluator = new FieldValueSourceEvaluator();
 
-        final FieldValueSource result = evaluator.getFieldValueSources(NUMERIC, fieldSpec);
+        final FieldValueSource result = evaluator.getFieldValueSources(fieldSpec);
 
         Iterator allValuesIterator = result.generateAllValues().iterator();
         List<BigDecimal> valuesFromResult = new ArrayList<>();
@@ -172,7 +163,7 @@ public class FieldValueSourceEvaluatorTests {
         FieldSpec fieldSpec = FieldSpecFactory.fromRestriction(restrictions).withNotNull();
         FieldValueSourceEvaluator evaluator = new FieldValueSourceEvaluator();
 
-        final FieldValueSource result = evaluator.getFieldValueSources(NUMERIC, fieldSpec);
+        final FieldValueSource result = evaluator.getFieldValueSources(fieldSpec);
 
         Iterator interestingValuesIterator = result.generateInterestingValues().iterator();
         List<BigDecimal> valuesFromResult = new ArrayList<>();
@@ -194,7 +185,7 @@ public class FieldValueSourceEvaluatorTests {
         ).withNotNull();
         FieldValueSourceEvaluator evaluator = new FieldValueSourceEvaluator();
 
-        final FieldValueSource result = evaluator.getFieldValueSources(NUMERIC, fieldSpec);
+        final FieldValueSource result = evaluator.getFieldValueSources(fieldSpec);
 
         Iterator interestingValuesIterator = result.generateInterestingValues().iterator();
         List<BigDecimal> valuesFromResult = new ArrayList<>();
@@ -216,7 +207,7 @@ public class FieldValueSourceEvaluatorTests {
         ).withNotNull();
         FieldValueSourceEvaluator evaluator = new FieldValueSourceEvaluator();
 
-        final FieldValueSource result = evaluator.getFieldValueSources(NUMERIC, fieldSpec);
+        final FieldValueSource result = evaluator.getFieldValueSources(fieldSpec);
 
         Iterator interestingValuesIterator = result.generateInterestingValues().iterator();
         List<BigDecimal> valuesFromResult = new ArrayList<>();
@@ -237,7 +228,7 @@ public class FieldValueSourceEvaluatorTests {
         ).withNotNull();
         FieldValueSourceEvaluator evaluator = new FieldValueSourceEvaluator();
 
-        final FieldValueSource result = evaluator.getFieldValueSources(NUMERIC, fieldSpec);
+        final FieldValueSource result = evaluator.getFieldValueSources(fieldSpec);
 
         Iterator allValuesIterator = result.generateAllValues().iterator();
         List<BigDecimal> valuesFromResult = new ArrayList<>();
