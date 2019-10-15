@@ -82,6 +82,7 @@ public class JsonProfileReader implements ProfileReader
         List<Field> inMapFields = profileDTO.rules.stream()
                 .flatMap(ruleDTO -> ruleDTO.constraints.stream())
                 .flatMap(constraintDTO -> getInMapConstraints(profileDTO).stream())
+                .distinct()
                 .map(file -> new Field(file, FieldType.NUMERIC, false, null, true)
                 ).collect(Collectors.toList());
 
@@ -94,7 +95,7 @@ public class JsonProfileReader implements ProfileReader
 
         Collection<Constraint> nullableConstraints = profileDTO.fields.stream()
                 .filter(fieldDTO -> !fieldDTO.nullable)
-                .map(fieldDTO -> constraintReader.read(new NullConstraintDTO(), profileFields).negate())
+                .map(fieldDTO -> constraintReader.read(new NullConstraintDTO(){{field = fieldDTO.name;}}, profileFields).negate())
                 .collect(Collectors.toList());
 
         Collection<Constraint> typeConstraints = profileDTO.fields.stream()

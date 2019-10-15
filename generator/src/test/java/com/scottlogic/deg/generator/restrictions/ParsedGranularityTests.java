@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.generator.restrictions;
 
+import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.NumericGranularity;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
@@ -73,35 +74,35 @@ class ParsedGranularityTests {
     @Test
     public void shouldThrowIfGivenNumberThatIsNotSupported(){
         Assertions.assertThrows(
-            IllegalArgumentException.class,
+            ValidationException.class,
             () -> NumericGranularity.create(new AtomicInteger()));
     }
 
     @Test
     public void shouldThrowIfGivenNull(){
         Assertions.assertThrows(
-            IllegalArgumentException.class,
+            ValidationException.class,
             () -> NumericGranularity.create(null));
     }
 
     @Test
     public void shouldThrowIfGivenSomethingOtherThanANumber(){
         Assertions.assertThrows(
-            IllegalArgumentException.class,
+            ValidationException.class,
             () -> NumericGranularity.create("hello"));
     }
 
     @Test
     public void shouldThrowIfGivenNumberGreaterThan1(){
         Assertions.assertThrows(
-            IllegalArgumentException.class,
+            ValidationException.class,
             () -> NumericGranularity.create(BigDecimal.valueOf(2)));
     }
 
     @Test
     public void shouldThrowIfGivenNumberThatIsNotAFractionalPowerOfTen(){
         Assertions.assertThrows(
-            IllegalArgumentException.class,
+            ValidationException.class,
             () -> NumericGranularity.create(BigDecimal.valueOf(0.2)));
     }
 }

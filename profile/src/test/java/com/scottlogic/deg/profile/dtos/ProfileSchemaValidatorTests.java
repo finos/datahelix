@@ -77,8 +77,7 @@ public abstract class ProfileSchemaValidatorTests {
             "      \"constraints\": [" +
             "        {" +
             "          \"field\": \"field1\"," +
-            "          \"is\": \"greaterThan\"," +
-            "          \"value\": 1E20 " +
+            "          \"greaterThan\": 1E20 " +
             "        }" +
             "      ]" +
             "    }" +
@@ -99,8 +98,7 @@ public abstract class ProfileSchemaValidatorTests {
             "      \"constraints\": [" +
             "        {" +
             "          \"field\": \"field1\"," +
-            "          \"is\": \"greaterThanOrEqualTo\"," +
-            "          \"value\": 1E20 " +
+            "          \"greaterThanOrEqualTo\": 1E20 " +
             "        }" +
             "      ]" +
             "    }" +
@@ -121,8 +119,7 @@ public abstract class ProfileSchemaValidatorTests {
             "      \"constraints\": [" +
             "        {" +
             "          \"field\": \"field1\"," +
-            "          \"is\": \"lessThan\"," +
-            "          \"value\": -1E20 " +
+            "          \"lessThan\": -1E20 " +
             "        }" +
             "      ]" +
             "    }" +
@@ -143,8 +140,7 @@ public abstract class ProfileSchemaValidatorTests {
             "      \"constraints\": [" +
             "        {" +
             "          \"field\": \"field1\"," +
-            "          \"is\": \"lessThanOrEqualTo\"," +
-            "          \"value\": -1E20 " +
+            "          \"lessThanOrEqualTo\": -1E20 " +
             "        }" +
             "      ]" +
             "    }" +
@@ -165,8 +161,8 @@ public abstract class ProfileSchemaValidatorTests {
             "      \"constraints\": [" +
             "        {" +
             "          \"allOf\": [" +
-            "            { \"field\": \"field1\", \"is\": \"equalTo\", \"value\": \"foobar\" }," +
-            "            { \"field\": \"field2\", \"is\": \"greaterThan\", \"value\": 43 } ] } ] } ]," +
+            "            { \"field\": \"field1\",  \"equalTo\": \"foobar\" }," +
+            "            { \"field\": \"field2\",  \"greaterThan\": 43 } ] } ] } ]," +
             "  \"fields\": [" +
             "    { \"name\": \"field1\", \"type\": \"string\" }," +
             "    { \"name\": \"field2\", \"type\": \"integer\" } ]" +
@@ -185,8 +181,8 @@ public abstract class ProfileSchemaValidatorTests {
             "      \"constraints\": [" +
             "        {" +
             "          \"anyOf\":[" +
-            "            { \"field\": \"field1\", \"is\": \"longerThan\", \"value\": 5 }," +
-            "            { \"field\": \"field1\", \"is\": \"shorterThan\", \"value\": 19 } ] } ] } ]," +
+            "            { \"field\": \"field1\",  \"longerThan\": 5 }," +
+            "            { \"field\": \"field1\",  \"shorterThan\": 19 } ] } ] } ]," +
             "  \"fields\": [ { \"name\": \"field1\", \"type\": \"integer\", \"formatting\": \"%ggg\" } ]" +
             "}";
 
@@ -207,12 +203,12 @@ public abstract class ProfileSchemaValidatorTests {
             "  \"rules\": [" +
             "    {" +
             "      \"constraints\": [" +
-            "        { \"field\": \"first\", \"is\": \"after\", \"value\": \"8001-02-03T04:05:06.007\" }," +
-            "        { \"field\": \"second\", \"is\": \"equalTo\", \"otherField\": \"first\", \"offset\": 3, \"offsetUnit\": \"days\" }," +
-            "        { \"field\": \"firstWorking\", \"is\": \"equalTo\", \"value\": \"2019-08-12T12:00:00.000\" }," +
-            "        { \"field\": \"secondWorking\", \"is\": \"equalTo\", \"otherField\": \"firstWorking\", \"offset\": 8, \"offsetUnit\": \"working days\" }," +
-            "        { \"field\": \"current\", \"is\": \"before\", \"value\": \"now\" }," +
-            "        { \"field\": \"current\", \"is\": \"after\", \"value\": \"2019-06-01T12:00:00.000\" } ] } ]" +
+            "        { \"field\": \"first\",  \"after\": \"8001-02-03T04:05:06.007\" }," +
+            "        { \"field\": \"second\", \"equalToField\": \"first\", \"offset\": 3, \"offsetUnit\": \"days\" }," +
+            "        { \"field\": \"firstWorking\",  \"equalTo\": \"2019-08-12T12:00:00.000\" }," +
+            "        { \"field\": \"secondWorking\", \"equalToField\": \"firstWorking\", \"offset\": 8, \"offsetUnit\": \"working days\" }," +
+            "        { \"field\": \"current\",  \"before\": \"now\" }," +
+            "        { \"field\": \"current\",  \"after\": \"2019-06-01T12:00:00.000\" } ] } ]" +
             "}";
 
         validator.validateProfile(profile, schema);
@@ -246,13 +242,13 @@ public abstract class ProfileSchemaValidatorTests {
             "      \"constraints\": [" +
             "        {" +
             "          \"anyOf\": [" +
-            "            { \"field\": \"field1\", \"is\": \"shorterThan\", \"value\": 19 }," +
-            "            { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [\"1\", 2] } ]" +
+            "            { \"field\": \"field1\",  \"shorterThan\": 19 }," +
+            "            { \"field\": \"field1\",  \"inSet\": [\"1\", 2] } ]" +
             "        }," +
             "        {" +
             "          \"allOf\": [" +
-            "            { \"field\": \"field2\", \"is\": \"null\" }," +
-            "            { \"not\": { \"field\": \"field1\", \"is\": \"null\" } }" +
+            "            { \"null\": \"field2\" }," +
+            "            { \"not\": { \"null\": \"field1\" } }" +
             "          ]" +
             "        } ] } ]" +
             "}";
@@ -273,13 +269,13 @@ public abstract class ProfileSchemaValidatorTests {
             "      \"rule\": \"rule 1\"," +
             "      \"constraints\": [" +
             "        {" +
-            "          \"if\": {\"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"integer\"}," +
-            "          \"then\": {\"field\": \"foo\", \"is\": \"greaterThan\", \"value\": 0}," +
-            "          \"else\": {\"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"N/A\"}" +
+            "          \"if\": {\"field\": \"foo\",  \"equalTo\": \"integer\"}," +
+            "          \"then\": {\"field\": \"foo\",  \"greaterThan\": 0}," +
+            "          \"else\": {\"field\": \"foo\",  \"equalTo\": \"N/A\"}" +
             "        }," +
             "        {" +
-            "          \"if\": {\"field\": \"foo\", \"is\": \"equalTo\", \"value\": \"integer\"}," +
-            "          \"then\": {\"field\": \"foo\", \"is\": \"greaterThan\", \"value\": 0}" +
+            "          \"if\": {\"field\": \"foo\",  \"equalTo\": \"integer\"}," +
+            "          \"then\": {\"field\": \"foo\",  \"greaterThan\": 0}" +
             "        }" +
             "      ]" +
             "    }" +
@@ -300,13 +296,13 @@ public abstract class ProfileSchemaValidatorTests {
             "    {" +
             "      \"rule\": \"rule 1\"," +
             "      \"constraints\": [" +
-            "        { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [\"%ggg\", \"test\"] }," +
-            "        { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [3, 32] }," +
-            "        { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [\"%ggg\", 32] }," +
-            "        { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [\"%ggg\", \"2000-01-01T09:00:00.000\"] }," +
-            "        { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [4, \"2000-01-01T09:00:00.000\"] }," +
-            "        { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [\"2000-01-01T09:00:00.000\", \"2000-01-01T09:00:00.000\"] }," +
-            "        { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [\"%ggg\", \"2000-01-01T09:00:00.000\", 54] }" +
+            "        { \"field\": \"field1\",  \"inSet\": [\"%ggg\", \"test\"] }," +
+            "        { \"field\": \"field1\",  \"inSet\": [3, 32] }," +
+            "        { \"field\": \"field1\",  \"inSet\": [\"%ggg\", 32] }," +
+            "        { \"field\": \"field1\",  \"inSet\": [\"%ggg\", \"2000-01-01T09:00:00.000\"] }," +
+            "        { \"field\": \"field1\",  \"inSet\": [4, \"2000-01-01T09:00:00.000\"] }," +
+            "        { \"field\": \"field1\",  \"inSet\": [\"2000-01-01T09:00:00.000\", \"2000-01-01T09:00:00.000\"] }," +
+            "        { \"field\": \"field1\",  \"inSet\": [\"%ggg\", \"2000-01-01T09:00:00.000\", 54] }" +
             "       ] } ]" +
             "}";
 
@@ -324,10 +320,10 @@ public abstract class ProfileSchemaValidatorTests {
             "    {" +
             "      \"rule\": \"rule 1\"," +
             "      \"constraints\": [" +
-            "        { \"field\": \"field1\", \"is\": \"matchingRegex\", \"value\": \"2000-01-01T09:00:00.000\" }," +
-            "        { \"field\": \"field1\", \"is\": \"containingRegex\", \"value\": \"2000-01-01T09:00:00.000\" }," +
-            "        { \"not\": { \"field\": \"field1\", \"is\": \"matchingRegex\", \"value\": \"^simpleregex$\" } }," +
-            "        { \"not\": { \"field\": \"field1\", \"is\": \"containingRegex\", \"value\": \"^.*$\" } }" +
+            "        { \"field\": \"field1\", \"matchingRegex\": \"2000-01-01T09:00:00.000\" }," +
+            "        { \"field\": \"field1\", \"containingRegex\": \"2000-01-01T09:00:00.000\" }," +
+            "        { \"not\": { \"field\": \"field1\", \"matchingRegex\": \"^simpleregex$\" } }," +
+            "        { \"not\": { \"field\": \"field1\", \"containingRegex\": \"^.*$\" } }" +
             "      ] } ]" +
             "}";
 
@@ -345,16 +341,16 @@ public abstract class ProfileSchemaValidatorTests {
             "    {" +
             "      \"rule\": \"rule 1\"," +
             "      \"constraints\": [" +
-            "        { \"not\": { \"field\": \"field1\", \"is\": \"shorterThan\", \"value\": 19 } }," +
-            "        { \"not\": { \"field\": \"field1\", \"is\": \"longerThan\", \"value\": 6 } }," +
-            "        { \"not\": { \"field\": \"field1\", \"is\": \"null\" } }," +
-            "        { \"not\": { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [\"1\", 2] } }," +
-            "        { \"not\": { \"field\": \"field2\", \"is\": \"greaterThan\", \"value\": 43 } }," +
-            "        { \"not\": { \"field\": \"field1\", \"is\": \"lessThan\", \"value\": 78 } }," +
-            "        { \"not\": { \"field\": \"field1\", \"is\": \"greaterThanOrEqualTo\", \"value\": 44 } }," +
-            "        { \"not\": { \"field\": \"field1\", \"is\": \"lessThanOrEqualTo\", \"value\": 77 } }," +
-            "        { \"not\": { \"field\": \"field1\", \"is\": \"granularTo\", \"value\": 0.1 } }," +
-            "        { \"not\": { \"field\": \"field1\", \"is\": \"equalTo\", \"value\": 0.004003 } }" +
+            "        { \"not\": { \"field\": \"field1\",  \"shorterThan\": 19 } }," +
+            "        { \"not\": { \"field\": \"field1\",  \"longerThan\": 6 } }," +
+            "        { \"not\": { \"null\": \"field1\" } }," +
+            "        { \"not\": { \"field\": \"field1\",  \"inSet\": [\"1\", 2] } }," +
+            "        { \"not\": { \"field\": \"field2\",  \"greaterThan\": 43 } }," +
+            "        { \"not\": { \"field\": \"field1\",  \"lessThan\": 78 } }," +
+            "        { \"not\": { \"field\": \"field1\",  \"greaterThanOrEqualTo\": 44 } }," +
+            "        { \"not\": { \"field\": \"field1\",  \"lessThanOrEqualTo\": 77 } }," +
+            "        { \"not\": { \"field\": \"field1\",  \"granularTo\": 0.1 } }," +
+            "        { \"not\": { \"field\": \"field1\",  \"equalTo\": 0.004003 } }" +
             "      ]" +
             "    }" +
             "  ]" +
@@ -374,16 +370,16 @@ public abstract class ProfileSchemaValidatorTests {
             "    {" +
             "      \"rule\": \"rule 1\"," +
             "      \"constraints\": [" +
-            "        { \"field\": \"field1\", \"is\": \"shorterThan\", \"value\": 19 }," +
-            "        { \"field\": \"field1\", \"is\": \"longerThan\", \"value\": 6 }," +
-            "        { \"field\": \"field1\", \"is\": \"null\" }," +
-            "        { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [\"1\", 2] }," +
-            "        { \"field\": \"field2\", \"is\": \"greaterThan\", \"value\": 43 }," +
-            "        { \"field\": \"field1\", \"is\": \"lessThan\", \"value\": 78 }," +
-            "        { \"field\": \"field1\", \"is\": \"greaterThanOrEqualTo\", \"value\": 44 }," +
-            "        { \"field\": \"field1\", \"is\": \"lessThanOrEqualTo\", \"value\": 77 }," +
-            "        { \"field\": \"field1\", \"is\": \"granularTo\", \"value\": 0.1 }," +
-            "        { \"field\": \"field1\", \"is\": \"equalTo\", \"value\": 0.004003 }" +
+            "        { \"field\": \"field1\",  \"shorterThan\": 19 }," +
+            "        { \"field\": \"field1\",  \"longerThan\": 6 }," +
+            "        { \"null\": \"field1\" }," +
+            "        { \"field\": \"field1\",  \"inSet\": [\"1\", 2] }," +
+            "        { \"field\": \"field2\",  \"greaterThan\": 43 }," +
+            "        { \"field\": \"field1\",  \"lessThan\": 78 }," +
+            "        { \"field\": \"field1\",  \"greaterThanOrEqualTo\": 44 }," +
+            "        { \"field\": \"field1\",  \"lessThanOrEqualTo\": 77 }," +
+            "        { \"field\": \"field1\",  \"granularTo\": 0.1 }," +
+            "        { \"field\": \"field1\",  \"equalTo\": 0.004003 }" +
             "      ]" +
             "    }" +
             "  ]" +
@@ -404,43 +400,43 @@ public abstract class ProfileSchemaValidatorTests {
             "      \"rule\": \"rule 1\"," +
             "      \"constraints\": [" +
             "        { \"allOf\": [" +
-            "            { \"field\": \"field1\", \"is\": \"shorterThan\", \"value\": 19 }," +
-            "            { \"field\": \"field1\", \"is\": \"longerThan\", \"value\": 6 }," +
-            "            { \"field\": \"field1\", \"is\": \"null\" }," +
-            "            { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [\"1\", 2] }," +
-            "            { \"field\": \"field2\", \"is\": \"greaterThan\", \"value\": 43 }," +
-            "            { \"field\": \"field1\", \"is\": \"lessThan\", \"value\": 78 }," +
-            "            { \"field\": \"field1\", \"is\": \"greaterThanOrEqualTo\", \"value\": 44 }," +
-            "            { \"field\": \"field1\", \"is\": \"lessThanOrEqualTo\", \"value\": 77 }," +
-            "            { \"field\": \"field1\", \"is\": \"granularTo\", \"value\": 0.1 }," +
-            "            { \"field\": \"field1\", \"is\": \"equalTo\", \"value\": 0.004003 }," +
+            "            { \"field\": \"field1\",  \"shorterThan\": 19 }," +
+            "            { \"field\": \"field1\",  \"longerThan\": 6 }," +
+            "            { \"null\": \"field1\" }," +
+            "            { \"field\": \"field1\",  \"inSet\": [\"1\", 2] }," +
+            "            { \"field\": \"field2\",  \"greaterThan\": 43 }," +
+            "            { \"field\": \"field1\",  \"lessThan\": 78 }," +
+            "            { \"field\": \"field1\",  \"greaterThanOrEqualTo\": 44 }," +
+            "            { \"field\": \"field1\",  \"lessThanOrEqualTo\": 77 }," +
+            "            { \"field\": \"field1\",  \"granularTo\": 0.1 }," +
+            "            { \"field\": \"field1\",  \"equalTo\": 0.004003 }," +
             "            { \"allOf\": [" +
-            "              { \"field\": \"field1\", \"is\": \"shorterThan\", \"value\": 19 }," +
-            "              { \"field\": \"field1\", \"is\": \"longerThan\", \"value\": 6 }" +
+            "              { \"field\": \"field1\",  \"shorterThan\": 19 }," +
+            "              { \"field\": \"field1\",  \"longerThan\": 6 }" +
             "             ] }," +
             "            { \"anyOf\": [" +
-            "              { \"field\": \"field1\", \"is\": \"shorterThan\", \"value\": 19 }," +
-            "              { \"field\": \"field1\", \"is\": \"longerThan\", \"value\": 6 }" +
+            "              { \"field\": \"field1\",  \"shorterThan\": 19 }," +
+            "              { \"field\": \"field1\",  \"longerThan\": 6 }" +
             "             ] }" +
             "           ] }," +
             "        { \"anyOf\": [" +
-            "            { \"field\": \"field1\", \"is\": \"shorterThan\", \"value\": 19 }," +
-            "            { \"field\": \"field1\", \"is\": \"longerThan\", \"value\": 6 }," +
-            "            { \"field\": \"field1\", \"is\": \"null\" }," +
-            "            { \"field\": \"field1\", \"is\": \"inSet\", \"values\": [\"1\", 2] }," +
-            "            { \"field\": \"field2\", \"is\": \"greaterThan\", \"value\": 43 }," +
-            "            { \"field\": \"field1\", \"is\": \"lessThan\", \"value\": 78 }," +
-            "            { \"field\": \"field1\", \"is\": \"greaterThanOrEqualTo\", \"value\": 44 }," +
-            "            { \"field\": \"field1\", \"is\": \"lessThanOrEqualTo\", \"value\": 77 }," +
-            "            { \"field\": \"field1\", \"is\": \"granularTo\", \"value\": 0.1 }," +
-            "            { \"field\": \"field1\", \"is\": \"equalTo\", \"value\": 0.004003 }," +
+            "            { \"field\": \"field1\",  \"shorterThan\": 19 }," +
+            "            { \"field\": \"field1\",  \"longerThan\": 6 }," +
+            "            { \"null\": \"field1\" }," +
+            "            { \"field\": \"field1\",  \"inSet\": [\"1\", 2] }," +
+            "            { \"field\": \"field2\",  \"greaterThan\": 43 }," +
+            "            { \"field\": \"field1\",  \"lessThan\": 78 }," +
+            "            { \"field\": \"field1\",  \"greaterThanOrEqualTo\": 44 }," +
+            "            { \"field\": \"field1\",  \"lessThanOrEqualTo\": 77 }," +
+            "            { \"field\": \"field1\",  \"granularTo\": 0.1 }," +
+            "            { \"field\": \"field1\",  \"equalTo\": 0.004003 }," +
             "            { \"allOf\": [" +
-            "              { \"field\": \"field1\", \"is\": \"shorterThan\", \"value\": 19 }," +
-            "              { \"field\": \"field1\", \"is\": \"longerThan\", \"value\": 6 }" +
+            "              { \"field\": \"field1\",  \"shorterThan\": 19 }," +
+            "              { \"field\": \"field1\",  \"longerThan\": 6 }" +
             "             ] }," +
             "            { \"anyOf\": [" +
-            "              { \"field\": \"field1\", \"is\": \"shorterThan\", \"value\": 19 }," +
-            "              { \"field\": \"field1\", \"is\": \"longerThan\", \"value\": 6 }" +
+            "              { \"field\": \"field1\",  \"shorterThan\": 19 }," +
+            "              { \"field\": \"field1\",  \"longerThan\": 6 }" +
             "             ] }" +
             "           ] }" +
             "      ]" +
@@ -462,16 +458,16 @@ public abstract class ProfileSchemaValidatorTests {
             "    {" +
             "      \"rule\": \"rule 1\"," +
             "      \"constraints\": [" +
-            "        { \"field\": \"field1\", \"is\": \"after\", \"value\": \"2000-01-01T09:00:00.000\"}," +
-            "        { \"field\": \"field1\", \"is\": \"afterOrAt\", \"value\": \"2000-01-01T09:00:00.000\"}," +
-            "        { \"field\": \"field1\", \"is\": \"before\", \"value\": \"2000-01-01T09:00:00.000\"}," +
-            "        { \"field\": \"field1\", \"is\": \"beforeOrAt\", \"value\": \"0001-01-01T09:00:00.000\"}," +
-            "        { \"field\": \"field1\", \"is\": \"equalTo\", \"value\": \"0001-01-01T09:00:00.000\"}," +
-            "        { \"not\": { \"field\": \"field1\", \"is\": \"after\", \"value\": \"2000-01-01T09:00:00.000\"} }," +
-            "        { \"not\": { \"field\": \"field1\", \"is\": \"afterOrAt\", \"value\": \"2000-01-01T09:00:00.000\"} }," +
-            "        { \"not\": { \"field\": \"field1\", \"is\": \"before\", \"value\": \"2000-01-01T09:00:00.000\"} }," +
-            "        { \"not\": { \"field\": \"field1\", \"is\": \"beforeOrAt\", \"value\": \"0001-01-01T09:00:00.000\"} }," +
-            "        { \"not\": { \"field\": \"field1\", \"is\": \"equalTo\", \"value\": \"0001-01-01T09:00:00.000\"} }" +
+            "        { \"field\": \"field1\",  \"after\": \"2000-01-01T09:00:00.000\"}," +
+            "        { \"field\": \"field1\",  \"afterOrAt\": \"2000-01-01T09:00:00.000\"}," +
+            "        { \"field\": \"field1\",  \"before\": \"2000-01-01T09:00:00.000\"}," +
+            "        { \"field\": \"field1\",  \"beforeOrAt\": \"0001-01-01T09:00:00.000\"}," +
+            "        { \"field\": \"field1\",  \"equalTo\": \"0001-01-01T09:00:00.000\"}," +
+            "        { \"not\": { \"field\": \"field1\",  \"after\": \"2000-01-01T09:00:00.000\"} }," +
+            "        { \"not\": { \"field\": \"field1\",  \"afterOrAt\": \"2000-01-01T09:00:00.000\"} }," +
+            "        { \"not\": { \"field\": \"field1\",  \"before\": \"2000-01-01T09:00:00.000\"} }," +
+            "        { \"not\": { \"field\": \"field1\",  \"beforeOrAt\": \"0001-01-01T09:00:00.000\"} }," +
+            "        { \"not\": { \"field\": \"field1\",  \"equalTo\": \"0001-01-01T09:00:00.000\"} }" +
             "      ]" +
             "    }" +
             "  ]" +
@@ -491,22 +487,22 @@ public abstract class ProfileSchemaValidatorTests {
             "    {" +
             "      \"rule\": \"shorterThan constraint inside bounds\"," +
             "      \"constraints\": [" +
-            "        { \"field\": \"field1\", \"is\": \"shorterThan\", \"value\": 1 }," +
-            "        { \"field\": \"field1\", \"is\": \"shorterThan\", \"value\": 1001 }" +
+            "        { \"field\": \"field1\",  \"shorterThan\": 1 }," +
+            "        { \"field\": \"field1\",  \"shorterThan\": 1001 }" +
             "      ]" +
             "    }," +
             "    {" +
             "      \"rule\": \"longerThan constraint inside bounds\"," +
             "      \"constraints\": [" +
-            "        { \"field\": \"field1\", \"is\": \"longerThan\", \"value\": -1 }," +
-            "        { \"field\": \"field1\", \"is\": \"longerThan\", \"value\": 999 }" +
+            "        { \"field\": \"field1\",  \"longerThan\": -1 }," +
+            "        { \"field\": \"field1\",  \"longerThan\": 999 }" +
             "      ]" +
             "    }," +
             "    {" +
             "      \"rule\": \"ofLength constraint inside bounds\"," +
             "      \"constraints\": [" +
-            "        { \"field\": \"field1\", \"is\": \"ofLength\", \"value\": 0 }," +
-            "        { \"field\": \"field1\", \"is\": \"ofLength\", \"value\": 1000 }" +
+            "        { \"field\": \"field1\",  \"ofLength\": 0 }," +
+            "        { \"field\": \"field1\",  \"ofLength\": 1000 }" +
             "      ]" +
             "    }" +
             "  ]" +
@@ -528,8 +524,8 @@ public abstract class ProfileSchemaValidatorTests {
             "      \"rule\": \"rule 1\"," +
             "      \"constraints\": [" +
             "        { \"nallOf\": [" +
-            "            { \"field\": \"field1\", \"is\": \"shorterThan\", \"value\": 19 }," +
-            "            { \"field\": \"field1\", \"is\": \"longerThan\", \"value\": 6 }" +
+            "            { \"field\": \"field1\",  \"shorterThan\": 19 }," +
+            "            { \"field\": \"field1\",  \"longerThan\": 6 }" +
             "           ] }" +
             "      ]" +
             "    }" +

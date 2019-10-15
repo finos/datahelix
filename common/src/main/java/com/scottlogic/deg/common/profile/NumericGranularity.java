@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.common.profile;
 
+import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.util.NumberUtils;
 
 import java.math.BigDecimal;
@@ -35,15 +36,15 @@ public class NumericGranularity implements Granularity<BigDecimal> {
         BigDecimal asNumber = NumberUtils.coerceToBigDecimal(granularity);
         if (asNumber == null)
         {
-            throw new IllegalArgumentException("Can't interpret granularity expression: " + granularity);
+            throw new ValidationException("Can't interpret granularity expression: " + granularity);
         }
         if (asNumber.compareTo(BigDecimal.ONE) > 0)
         {
-            throw new IllegalArgumentException("Numeric granularity must be <= 1");
+            throw new ValidationException("Numeric granularity must be <= 1");
         }
         if (!asNumber.equals(BigDecimal.ONE.scaleByPowerOfTen(-asNumber.scale())))
         {
-            throw new IllegalArgumentException("Numeric granularity must be fractional power of ten");
+            throw new ValidationException("Numeric granularity must be fractional power of ten");
         }
         return new NumericGranularity(asNumber.scale());
     }

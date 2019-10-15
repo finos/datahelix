@@ -51,14 +51,14 @@ public class ProfileSerialiserTests
             "    {" +
             "      \"rule\": \"Some rule\"," +
             "      \"constraints\": [" +
-            "        { \"field\": \"country\", \"is\": \"inSet\", \"values\": [ \"USA\", \"GB\", \"FRANCE\" ] }" +
+            "        { \"field\": \"country\",  \"inSet\": [ \"USA\", \"GB\", \"FRANCE\" ] }" +
             "      ]" +
             "    }," +
 
             "    {" +
             "      \"if\": {" +
             "        \"anyOf\": [" +
-            "          { \"field\": \"type\", \"is\": \"equalTo\", \"value\": \"USA\" }," +
+            "          { \"field\": \"type\",  \"equalTo\": \"USA\" }," +
             "          { \"field\": \"type\", \"is\": \"null\" }" +
             "        ]" +
             "      }," +
@@ -100,14 +100,14 @@ public class ProfileSerialiserTests
             "    {" +
             "      \"rule\": \"Some rule\"," +
             "      \"constraints\": [" +
-            "        { \"field\": \"country\", \"is\": \"inSet\", \"values\": [ \"USA\", \"GB\", \"FRANCE\" ] }" +
+            "        { \"field\": \"country\",  \"inSet\": [ \"USA\", \"GB\", \"FRANCE\" ] }" +
             "      ]" +
             "    }," +
 
             "    {" +
             "      \"if\": {" +
             "        \"anyOf\": [" +
-            "          { \"field\": \"type\", \"is\": \"equalTo\", \"value\": \"USA\" }," +
+            "          { \"field\": \"type\",  \"equalTo\": \"USA\" }," +
             "          { \"field\": \"type\", \"is\": \"null\" }" +
             "        ]" +
             "      }," +

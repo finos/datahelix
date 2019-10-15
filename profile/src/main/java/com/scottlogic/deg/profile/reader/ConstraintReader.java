@@ -113,7 +113,10 @@ public class ConstraintReader
                 return new IsInSetConstraint(field, values);
             case IN_MAP:
                 InMapConstraintDTO inMapConstraintDTO = (InMapConstraintDTO) dto;
-                return new InMapRelation(field, profileFields.getByName(inMapConstraintDTO.file), fileReader.listFromMapFile(inMapConstraintDTO.file, inMapConstraintDTO.key));
+                return new InMapRelation(field, profileFields.getByName(inMapConstraintDTO.file),
+                        DistributedList.uniform(fileReader.listFromMapFile(inMapConstraintDTO.file, inMapConstraintDTO.key).stream()
+                                .map(value -> readAnyType(field, value))
+                                .collect(Collectors.toList())));
             case MATCHES_REGEX:
                 return new MatchesRegexConstraint(profileFields.getByName(dto.field), readPattern(((MatchesRegexConstraintDTO) dto).value));
             case CONTAINS_REGEX:

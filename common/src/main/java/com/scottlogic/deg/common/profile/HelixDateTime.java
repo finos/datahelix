@@ -30,6 +30,7 @@ public class HelixDateTime
 
     public static HelixDateTime create(String dateTime)
     {
+        if(dateTime == null) throw  new ValidationException("HelixDateTime cannot be null");
         if (dateTime.equalsIgnoreCase("NOW")) return NOW;
         OffsetDateTime offsetDateTime = fromString(dateTime);
         validateDateRange(offsetDateTime);
