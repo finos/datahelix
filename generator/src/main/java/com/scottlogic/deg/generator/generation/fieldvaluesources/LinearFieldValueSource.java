@@ -14,63 +14,51 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.generation.fieldvaluesources.datetime;
+package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
-import com.scottlogic.deg.common.util.Defaults;
-import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
-import com.scottlogic.deg.generator.generation.fieldvaluesources.LinearIterator;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
-import java.math.BigDecimal;
-import java.time.*;
-import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
-import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
 import static com.scottlogic.deg.generator.utils.SetUtils.stream;
 
-public class DateTimeFieldValueSource implements FieldValueSource<OffsetDateTime> {
+public class LinearFieldValueSource<T extends Comparable<T>> implements FieldValueSource {
 
-    private final LinearRestrictions<OffsetDateTime> restrictions;
-    private final Set<OffsetDateTime> blacklist;
+    private final LinearRestrictions<T> restrictions;
+    private final Set<T> blacklist;
 
-    private final RandomDateGenerator randomDateGenerator;
-
-    public DateTimeFieldValueSource(
-        LinearRestrictions<OffsetDateTime> restrictions,
-        Set<OffsetDateTime> blacklist) {
+    public LinearFieldValueSource(
+        LinearRestrictions<T> restrictions,
+        Set<T> blacklist) {
         this.restrictions = restrictions;
         this.blacklist = blacklist;
-        this.randomDateGenerator = new RandomDateGenerator(restrictions);
     }
 
     @Override
-    public Stream<OffsetDateTime> generateAllValues() {
+    public Stream<T> generateAllValues() {
         return stream(new LinearIterator<>(restrictions))
             .filter(this::notInBlacklist);
     }
 
     @Override
-    public Stream<OffsetDateTime> generateInterestingValues() {
+    public Stream<T> generateInterestingValues() {
         return Stream.of(restrictions.getMin(), restrictions.getMax())
             .distinct()
             .filter(this::notInBlacklist);
     }
 
     @Override
-    public Stream<OffsetDateTime> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
+    public Stream<T> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
         return Stream.generate(() -> restrictions.getGranularity()
-            .getRandom(restrictions.getMin(), restrictions.getMax(), randomNumberGenerator))
+                .getRandom(restrictions.getMin(), restrictions.getMax(), randomNumberGenerator))
             .filter(this::notInBlacklist);
     }
 
 
-    private boolean notInBlacklist(OffsetDateTime t) {
+    private boolean notInBlacklist(T t) {
         return blacklist.stream().noneMatch(x->x.compareTo(t)==0);
     }
 
@@ -79,7 +67,7 @@ public class DateTimeFieldValueSource implements FieldValueSource<OffsetDateTime
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
 
-        DateTimeFieldValueSource otherSource = (DateTimeFieldValueSource) obj;
+        LinearFieldValueSource otherSource = (LinearFieldValueSource) obj;
         return restrictions.equals(otherSource.restrictions) &&
             blacklist.equals(otherSource.blacklist);
     }
