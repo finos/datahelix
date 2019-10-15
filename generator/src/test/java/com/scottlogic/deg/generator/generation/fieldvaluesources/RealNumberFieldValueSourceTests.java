@@ -104,16 +104,6 @@ class RealNumberFieldValueSourceTests {
     }
 
     @Test
-    void whenBlacklistContainsNonIntegralValues() {
-        givenLowerBound(3, true);
-        givenUpperBound(6, true);
-
-        givenBlacklist("hello", 4, new BigDecimal(5));
-
-        expectAllValues(3, 6);
-    }
-
-    @Test
     void whenBlacklistContainsAllValuesInRange() {
         givenLowerBound(3, true);
         givenUpperBound(5, true);
@@ -151,7 +141,7 @@ class RealNumberFieldValueSourceTests {
         givenUpperBound(10, true);
         givenScale(1);
 
-        expectInterestingValues("-10", "0", "10");
+        expectInterestingValues("-10", "10");
     }
 
     @Test
@@ -244,15 +234,13 @@ class RealNumberFieldValueSourceTests {
         givenUpperBound(4, true);
 
         expectInterestingValues(
-            Defaults.NUMERIC_MIN,
-            0, 4);
+            Defaults.NUMERIC_MIN, 4);
     }
 
     @Test
     void shouldSupplyToBoundary() {
         expectInterestingValues(
             Defaults.NUMERIC_MIN,
-            0,
             Defaults.NUMERIC_MAX
         );
     }
@@ -283,12 +271,12 @@ class RealNumberFieldValueSourceTests {
 
     @Test
     public void shouldBeEqualWhenAllPropertiesMatch(){
-        RealNumberFieldValueSource a = new RealNumberFieldValueSource(
+        LinearFieldValueSource<BigDecimal> a = new LinearFieldValueSource<BigDecimal>(
             numericRestrictions(1, 10, 1),
-            new HashSet<>(Arrays.asList(1, 2)));
-        RealNumberFieldValueSource b = new RealNumberFieldValueSource(
+            toBlacklist(Arrays.asList(1, 2)));
+        LinearFieldValueSource<BigDecimal> b = new LinearFieldValueSource<BigDecimal>(
             numericRestrictions(1, 10, 1),
-            new HashSet<>(Arrays.asList(1, 2)));
+            toBlacklist(Arrays.asList(1, 2)));
 
         Assert.assertThat(a, equalTo(b));
         Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
@@ -296,12 +284,12 @@ class RealNumberFieldValueSourceTests {
 
     @Test
     public void shouldBeEqualWhenAllPropertiesMatchBlacklistInDifferentOrder(){
-        RealNumberFieldValueSource a = new RealNumberFieldValueSource(
+        LinearFieldValueSource<BigDecimal> a = new LinearFieldValueSource<BigDecimal>(
             numericRestrictions(1, 10, 1),
-            new HashSet<>(Arrays.asList(1, 2)));
-        RealNumberFieldValueSource b = new RealNumberFieldValueSource(
+            toBlacklist(Arrays.asList(1, 2)));
+        LinearFieldValueSource<BigDecimal> b = new LinearFieldValueSource<BigDecimal>(
             numericRestrictions(1, 10, 1),
-            new HashSet<>(Arrays.asList(2, 1)));
+            toBlacklist(Arrays.asList(2, 1)));
 
         Assert.assertThat(a, equalTo(b));
         Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
@@ -309,10 +297,10 @@ class RealNumberFieldValueSourceTests {
 
     @Test
     public void shouldBeEqualWhenAllPropertiesMatchBlacklistEmpty(){
-        RealNumberFieldValueSource a = new RealNumberFieldValueSource(
+        LinearFieldValueSource<BigDecimal> a = new LinearFieldValueSource<BigDecimal>(
             numericRestrictions(1, 10, 1),
             Collections.emptySet());
-        RealNumberFieldValueSource b = new RealNumberFieldValueSource(
+        LinearFieldValueSource<BigDecimal> b = new LinearFieldValueSource<BigDecimal>(
             numericRestrictions(1, 10, 1),
             Collections.emptySet());
 
@@ -322,72 +310,76 @@ class RealNumberFieldValueSourceTests {
 
     @Test
     public void shouldBeEqualWhenAllPropertiesExceptMinMatch(){
-        RealNumberFieldValueSource a = new RealNumberFieldValueSource(
+        LinearFieldValueSource<BigDecimal> a = new LinearFieldValueSource<BigDecimal>(
             numericRestrictions(5, 10, 1),
-            new HashSet<>(Arrays.asList(1, 2)));
-        RealNumberFieldValueSource b = new RealNumberFieldValueSource(
+            toBlacklist(Arrays.asList(1, 2)));
+        LinearFieldValueSource<BigDecimal> b = new LinearFieldValueSource<BigDecimal>(
             numericRestrictions(1, 10, 1),
-            new HashSet<>(Arrays.asList(1, 2)));
+            toBlacklist(Arrays.asList(1, 2)));
 
         Assert.assertThat(a, not(equalTo(b)));
     }
 
+    private Set<BigDecimal> toBlacklist(Collection<Object> asList) {
+        return asList.stream().map(NumberUtils::coerceToBigDecimal).collect(Collectors.toSet());
+    }
+
     @Test
     public void shouldBeEqualWhenAllPropertiesExceptMaxMatch(){
-        RealNumberFieldValueSource a = new RealNumberFieldValueSource(
+        LinearFieldValueSource<BigDecimal> a = new LinearFieldValueSource<BigDecimal>(
             numericRestrictions(1, 20, 1),
-            new HashSet<>(Arrays.asList(1, 2)));
-        RealNumberFieldValueSource b = new RealNumberFieldValueSource(
+            toBlacklist(Arrays.asList(1, 2)));
+        LinearFieldValueSource<BigDecimal> b = new LinearFieldValueSource<BigDecimal>(
             numericRestrictions(1, 10, 1),
-            new HashSet<>(Arrays.asList(1, 2)));
+            toBlacklist(Arrays.asList(1, 2)));
 
         Assert.assertThat(a, not(equalTo(b)));
     }
 
     @Test
     public void shouldBeEqualWhenAllPropertiesExceptBlacklistMatch(){
-        RealNumberFieldValueSource a = new RealNumberFieldValueSource(
+        LinearFieldValueSource<BigDecimal> a = new LinearFieldValueSource<BigDecimal>(
             numericRestrictions(1, 10, 1),
-            new HashSet<>(Arrays.asList(1, 2)));
-        RealNumberFieldValueSource b = new RealNumberFieldValueSource(
+            toBlacklist(Arrays.asList(1, 2)));
+        LinearFieldValueSource<BigDecimal> b = new LinearFieldValueSource<BigDecimal>(
             numericRestrictions(1, 10, 1),
-            new HashSet<>(Arrays.asList(3, 4)));
+            toBlacklist(Arrays.asList(3, 4)));
 
         Assert.assertThat(a, not(equalTo(b)));
     }
 
     @Test
     public void shouldBeEqualWhenAllPropertiesExceptScaleMatch(){
-        RealNumberFieldValueSource a = new RealNumberFieldValueSource(
+        LinearFieldValueSource<BigDecimal> a = new LinearFieldValueSource<BigDecimal>(
             numericRestrictions(1, 10, 1),
-            new HashSet<>(Arrays.asList(1, 2)));
-        RealNumberFieldValueSource b = new RealNumberFieldValueSource(
+            toBlacklist(Arrays.asList(1, 2)));
+        LinearFieldValueSource<BigDecimal> b = new LinearFieldValueSource<BigDecimal>(
             numericRestrictions(1, 10, 2),
-            new HashSet<>(Arrays.asList(1, 2)));
+            toBlacklist(Arrays.asList(1, 2)));
 
         Assert.assertThat(a, not(equalTo(b)));
     }
 
     @Test
     public void shouldBeEqualWhenAllPropertiesExceptMinAndMaxMatch(){
-        RealNumberFieldValueSource a = new RealNumberFieldValueSource(
+        LinearFieldValueSource<BigDecimal> a = new LinearFieldValueSource<BigDecimal>(
             numericRestrictions(5, 20, 1),
-            new HashSet<>(Arrays.asList(1, 2)));
-        RealNumberFieldValueSource b = new RealNumberFieldValueSource(
+            toBlacklist(Arrays.asList(1, 2)));
+        LinearFieldValueSource<BigDecimal> b = new LinearFieldValueSource<BigDecimal>(
             numericRestrictions(1, 10, 1),
-            new HashSet<>(Arrays.asList(1, 2)));
+            toBlacklist(Arrays.asList(1, 2)));
 
         Assert.assertThat(a, not(equalTo(b)));
     }
 
     @Test
     public void shouldBeEqualWhenAllPropertiesDontMatch(){
-        RealNumberFieldValueSource a = new RealNumberFieldValueSource(
+        LinearFieldValueSource<BigDecimal> a = new LinearFieldValueSource<BigDecimal>(
             numericRestrictions(5, 20, 1),
-            new HashSet<>(Arrays.asList(1, 2)));
-        RealNumberFieldValueSource b = new RealNumberFieldValueSource(
+            toBlacklist(Arrays.asList(1, 2)));
+        LinearFieldValueSource<BigDecimal> b = new LinearFieldValueSource<BigDecimal>(
             numericRestrictions(1, 10, 2),
-            new HashSet<>(Arrays.asList(3, 4)));
+            toBlacklist(Arrays.asList(3, 4)));
 
         Assert.assertThat(a, not(equalTo(b)));
     }
@@ -398,7 +390,7 @@ class RealNumberFieldValueSourceTests {
         givenUpperBound(1e30, true);
         givenScale(0);
 
-        expectInterestingValues(new BigDecimal("1e20"), "0", "-10");
+        expectInterestingValues(new BigDecimal("1e20"), "-10");
     }
 
     @Test
@@ -417,7 +409,7 @@ class RealNumberFieldValueSourceTests {
         givenUpperBound(1e30, false);
         givenScale(0);
 
-        expectInterestingValues("100000000000000000000", "0", "-9");
+        expectInterestingValues("100000000000000000000", "-9");
     }
 
     @Test
@@ -436,7 +428,7 @@ class RealNumberFieldValueSourceTests {
         givenUpperBound(10, true);
         givenScale(0);
 
-        expectInterestingValues(new BigDecimal("-1e20"), "0", "10");
+        expectInterestingValues(new BigDecimal("-1e20"), "10");
     }
 
     @Test
@@ -470,7 +462,7 @@ class RealNumberFieldValueSourceTests {
     private Limit<BigDecimal> lowerLimit = NUMERIC_MIN_LIMIT;
     private int scale;
     private Set<Object> blacklist = new HashSet<>();
-    private RealNumberFieldValueSource objectUnderTest;
+    private LinearFieldValueSource<BigDecimal> objectUnderTest;
 
     private void givenLowerBound(Object limit, boolean isInclusive) {
         givenLowerBound(NumberUtils.coerceToBigDecimal(limit), isInclusive);
@@ -521,7 +513,7 @@ class RealNumberFieldValueSourceTests {
         if (objectUnderTest == null) {
             LinearRestrictions<BigDecimal> restrictions = createNumericRestrictions(lowerLimit, upperLimit, new NumericGranularity(scale));
             restrictions = (LinearRestrictions<BigDecimal>) new LinearRestrictionsMerger().merge(restrictions, createNumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT)).get();
-            objectUnderTest = new RealNumberFieldValueSource(restrictions, blacklist);
+            objectUnderTest = new LinearFieldValueSource<BigDecimal>(restrictions, toBlacklist(blacklist));
         }
 
         return objectUnderTest;

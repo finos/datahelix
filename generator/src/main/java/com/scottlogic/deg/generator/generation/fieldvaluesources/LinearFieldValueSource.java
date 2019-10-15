@@ -21,6 +21,7 @@ import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.scottlogic.deg.generator.utils.SetUtils.stream;
@@ -30,11 +31,11 @@ public class LinearFieldValueSource<T extends Comparable<T>> implements FieldVal
     private final LinearRestrictions<T> restrictions;
     private final Set<T> blacklist;
 
-    public LinearFieldValueSource(
-        LinearRestrictions<T> restrictions,
-        Set<T> blacklist) {
+    public LinearFieldValueSource(LinearRestrictions<T> restrictions, Set<T> blacklist) {
         this.restrictions = restrictions;
-        this.blacklist = blacklist;
+        this.blacklist = blacklist.stream()
+            .map(i -> restrictions.getGranularity().trimToGranularity(i))
+            .collect(Collectors.toSet());
     }
 
     @Override

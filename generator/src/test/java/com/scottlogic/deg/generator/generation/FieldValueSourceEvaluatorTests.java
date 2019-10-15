@@ -203,7 +203,6 @@ public class FieldValueSourceEvaluatorTests {
 
         final List<BigDecimal> expectedValues = Arrays.asList(
             new BigDecimal("-1E+20"),
-            new BigDecimal("0"),
             new BigDecimal("1E+20")
         );
         Assert.assertEquals(expectedValues, valuesFromResult);

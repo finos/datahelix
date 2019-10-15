@@ -66,21 +66,20 @@ public class FieldValueSourceEvaluator {
 
     private FieldValueSource getRestrictionSource(FieldType type, FieldSpec fieldSpec) {
         switch (type) {
-            case DATETIME:
-                return getDateTimeSource(fieldSpec);
             case STRING:
                 return getStringSource(fieldSpec);
+            case DATETIME:
             case NUMERIC:
-                return getNumericSource(fieldSpec);
+                return getLinearSource(fieldSpec);
                 default:
                     throw new UnsupportedOperationException("unexpected type");
         }
     }
 
-    private FieldValueSource getNumericSource(FieldSpec fieldSpec) {
-        LinearRestrictions<BigDecimal> restrictions = (LinearRestrictions<BigDecimal>) fieldSpec.getRestrictions();
-
-        return new RealNumberFieldValueSource(restrictions, fieldSpec.getBlacklist());
+    private <T extends Comparable<T>> FieldValueSource getLinearSource(FieldSpec fieldSpec) {
+        LinearRestrictions<T> restrictions = (LinearRestrictions) fieldSpec.getRestrictions();
+        Set<T> blacklist = fieldSpec.getBlacklist().stream().map(d -> (T) d).collect(Collectors.toSet());
+        return new LinearFieldValueSource(restrictions, blacklist);
     }
 
     private FieldValueSource getStringSource(FieldSpec fieldSpec) {
@@ -93,11 +92,5 @@ public class FieldValueSourceEvaluator {
         }
 
         return generator;
-    }
-
-    private FieldValueSource getDateTimeSource(FieldSpec fieldSpec) {
-        LinearRestrictions<OffsetDateTime> restrictions = (LinearRestrictions<OffsetDateTime>) fieldSpec.getRestrictions();
-        Set<OffsetDateTime> blacklist = fieldSpec.getBlacklist().stream().map(d -> (OffsetDateTime) d).collect(Collectors.toSet());
-        return new LinearFieldValueSource(restrictions, blacklist);
     }
 }
