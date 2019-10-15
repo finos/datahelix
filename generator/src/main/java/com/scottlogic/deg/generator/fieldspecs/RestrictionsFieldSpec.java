@@ -1,17 +1,13 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
-import com.scottlogic.deg.generator.generation.fieldvaluesources.LinearFieldValueSource;
-import com.scottlogic.deg.generator.restrictions.StringRestrictions;
 import com.scottlogic.deg.generator.restrictions.TypedRestrictions;
-import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 
-import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
 
-public class RestrictionsFieldSpec extends BaseFieldSpec {
+public class RestrictionsFieldSpec extends FieldSpec {
     private final TypedRestrictions restrictions;
     private final Set<Object> blacklist;
 
@@ -36,7 +32,6 @@ public class RestrictionsFieldSpec extends BaseFieldSpec {
     public FieldSpec withNotNull() {
         return new RestrictionsFieldSpec(restrictions, false, blacklist);
     }
-
 
     public TypedRestrictions getRestrictions() {
         return restrictions;

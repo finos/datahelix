@@ -5,9 +5,8 @@ import com.scottlogic.deg.generator.generation.fieldvaluesources.CannedValuesFie
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 
 import java.util.Objects;
-import java.util.Set;
 
-public class WhitelistFieldSpec extends BaseFieldSpec {
+public class WhitelistFieldSpec extends FieldSpec {
 
     private final DistributedList<Object> whitelist;
 

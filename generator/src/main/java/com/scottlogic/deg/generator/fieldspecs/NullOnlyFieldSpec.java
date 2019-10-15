@@ -1,11 +1,9 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.generator.fieldspecs.BaseFieldSpec;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.NullOnlySource;
 
-public class NullOnlyFieldSpec extends BaseFieldSpec {
+public class NullOnlyFieldSpec extends FieldSpec {
     NullOnlyFieldSpec() {
         super(true);
     }
