@@ -19,7 +19,7 @@ package com.scottlogic.deg.generator.generation;
 import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.*;
-import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.DateTimeFieldValueSource;
+import com.scottlogic.deg.generator.generation.fieldvaluesources.LinearFieldValueSource;
 import com.scottlogic.deg.generator.generation.string.generators.RegexStringGenerator;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
@@ -98,6 +98,6 @@ public class FieldValueSourceEvaluator {
     private FieldValueSource getDateTimeSource(FieldSpec fieldSpec) {
         LinearRestrictions<OffsetDateTime> restrictions = (LinearRestrictions<OffsetDateTime>) fieldSpec.getRestrictions();
         Set<OffsetDateTime> blacklist = fieldSpec.getBlacklist().stream().map(d -> (OffsetDateTime) d).collect(Collectors.toSet());
-        return new DateTimeFieldValueSource(restrictions, blacklist);
+        return new LinearFieldValueSource(restrictions, blacklist);
     }
 }
