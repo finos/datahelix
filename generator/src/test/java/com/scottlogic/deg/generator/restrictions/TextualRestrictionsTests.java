@@ -16,7 +16,6 @@
 
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.generator.profile.constraints.atomic.StandardConstraintTypes;
 import com.scottlogic.deg.generator.generation.string.generators.RegexStringGenerator;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import org.junit.Assert;
@@ -542,7 +541,7 @@ class TextualRestrictionsTests {
     }
 
     private static StringRestrictions ofLength(int length, boolean negate){
-        return new TextualRestrictions(
+        return new StringRestrictions(
             negate ? null : length,
             negate ? null : length,
             Collections.emptySet(),
@@ -561,7 +560,7 @@ class TextualRestrictionsTests {
     }
 
     private static StringRestrictions setLength(Integer min, Integer max){
-        return new TextualRestrictions(
+        return new StringRestrictions(
             min,
             max,
             Collections.emptySet(),
@@ -574,7 +573,7 @@ class TextualRestrictionsTests {
     private static StringRestrictions matchingRegex(String regex, @SuppressWarnings("SameParameterValue") boolean negate){
         Pattern pattern = Pattern.compile(regex);
 
-        return new TextualRestrictions(
+        return new StringRestrictions(
             null,
             null,
             negate ? Collections.emptySet() : Collections.singleton(pattern),
@@ -587,7 +586,7 @@ class TextualRestrictionsTests {
     private static StringRestrictions containsRegex(String regex, @SuppressWarnings("SameParameterValue") boolean negate){
         Pattern pattern = Pattern.compile(regex);
 
-        return new TextualRestrictions(
+        return new StringRestrictions(
             null,
             null,
             Collections.emptySet(),
