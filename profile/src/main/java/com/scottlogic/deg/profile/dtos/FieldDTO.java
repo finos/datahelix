@@ -23,5 +23,5 @@ public class FieldDTO {
     public SpecificFieldType type;
     public String formatting;
     public boolean unique;
-    public boolean nullable = true;
+    public boolean nullable = false;
 }
