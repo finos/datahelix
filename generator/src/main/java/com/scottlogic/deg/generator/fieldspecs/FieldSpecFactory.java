@@ -18,9 +18,11 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
+import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.restrictions.TypedRestrictions;
 
 import java.util.Collections;
+import java.util.function.Function;
 
 import static com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory.forMaxLength;
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDefaultDateTimeRestrictions;
@@ -52,5 +54,13 @@ public class FieldSpecFactory {
 
     public static NullOnlyFieldSpec nullOnly() {
         return NULL_ONLY_FIELD_SPEC;
+    }
+
+    public static GeneratorFieldSpec fromGeneratorNoSetSupport(FieldValueSource fieldValueSource) {
+        return fromGeneratorSupportingSets(fieldValueSource, setValue->false);
+    }
+
+    public static GeneratorFieldSpec fromGeneratorSupportingSets(FieldValueSource fieldValueSource, Function<Object, Boolean> setValueAcceptFunction){
+        return new GeneratorFieldSpec(fieldValueSource, setValueAcceptFunction, true);
     }
 }

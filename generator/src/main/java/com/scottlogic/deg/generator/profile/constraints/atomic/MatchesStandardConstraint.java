@@ -19,12 +19,13 @@ package com.scottlogic.deg.generator.profile.constraints.atomic;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
-import com.scottlogic.deg.generator.restrictions.MatchesStandardStringRestrictions;
+import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 
 import java.util.Objects;
 import java.util.regex.Pattern;
 
+import static com.scottlogic.deg.generator.generation.string.generators.ChecksumStringGeneratorFactory.*;
 import static com.scottlogic.deg.generator.profile.constraints.atomic.StandardConstraintTypes.RIC;
 
 public class MatchesStandardConstraint implements AtomicConstraint {
@@ -53,11 +54,21 @@ public class MatchesStandardConstraint implements AtomicConstraint {
 
     @Override
     public FieldSpec toFieldSpec() {
-        if (standard.equals(RIC)) {
-            return FieldSpecFactory.fromRestriction(StringRestrictionsFactory.forStringMatching(Pattern.compile(RIC.getRegex()), false));
+        switch (standard) {
+            case RIC:
+                return FieldSpecFactory.fromRestriction(StringRestrictionsFactory.forStringMatching(Pattern.compile(RIC.getRegex()), false));
+            case ISIN:
+                StringGenerator isinGenerator = createIsinGenerator();
+                return FieldSpecFactory.fromGeneratorSupportingSets(isinGenerator, val -> isinGenerator.matches((String) val));
+            case CUSIP:
+                StringGenerator cusipGenerator = createCusipGenerator();
+                return FieldSpecFactory.fromGeneratorSupportingSets(cusipGenerator, val -> cusipGenerator.matches((String) val));
+            case SEDOL:
+                StringGenerator sedolGenerator = createSedolGenerator();
+                return FieldSpecFactory.fromGeneratorSupportingSets(sedolGenerator, val -> sedolGenerator.matches((String) val));
+            default:
+                throw new UnsupportedOperationException(standard + " not recognised");
         }
-
-        return FieldSpecFactory.fromRestriction(new MatchesStandardStringRestrictions(standard));
     }
 
     @Override

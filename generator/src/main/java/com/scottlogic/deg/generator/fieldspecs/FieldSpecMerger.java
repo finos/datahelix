@@ -43,6 +43,7 @@ public class FieldSpecMerger {
         if (nullOnly(left) || nullOnly(right)){
             return nullOnlyOrEmpty(isNullable(left, right));
         }
+
         if (hasSet(left) && hasSet(right)) {
             return mergeSets((WhitelistFieldSpec) left, (WhitelistFieldSpec)right);
         }
@@ -52,6 +53,17 @@ public class FieldSpecMerger {
         if (hasSet(right)) {
             return combineSetWithRestrictions((WhitelistFieldSpec)right, left);
         }
+
+        if (isGenerator(left)) {
+            if (isGenerator(right)){
+                throw new UnsupportedOperationException("generators cannot be combined");
+            }
+            return Optional.of(left);
+        }
+        if (isGenerator(right)){
+            return Optional.of(right);
+        }
+
         return combineRestrictions((RestrictionsFieldSpec)left, (RestrictionsFieldSpec)right);
     }
 
@@ -61,6 +73,7 @@ public class FieldSpecMerger {
     }
 
     //TODO try a performance test with this replaced with combineSetWithRestrictions()
+
     private Optional<FieldSpec> mergeSets(WhitelistFieldSpec left, WhitelistFieldSpec right) {
         DistributedList<Object> set = new DistributedList<>(left.getWhitelist().distributedList().stream()
             .flatMap(leftHolder -> right.getWhitelist().distributedList().stream()
@@ -72,7 +85,6 @@ public class FieldSpecMerger {
         FieldSpec newFieldSpec = set.isEmpty() ? FieldSpecFactory.nullOnly() : FieldSpecFactory.fromList(set);
         return addNullable(left, right, newFieldSpec);
     }
-
     private static <T> boolean elementsEqual(WeightedElement<T> left, WeightedElement<T> right) {
         return left.element().equals(right.element());
     }
@@ -102,6 +114,10 @@ public class FieldSpecMerger {
 
     private boolean nullOnly(FieldSpec fieldSpec) {
         return (fieldSpec instanceof NullOnlyFieldSpec);
+    }
+
+    private boolean isGenerator(FieldSpec fieldSpec) {
+        return fieldSpec instanceof GeneratorFieldSpec;
     }
 
     private boolean hasSet(FieldSpec fieldSpec) {
