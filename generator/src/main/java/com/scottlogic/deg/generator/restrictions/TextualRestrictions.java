@@ -64,10 +64,6 @@ public class TextualRestrictions implements StringRestrictions {
             throw new IllegalArgumentException("Other StringRestrictions must not be null");
         }
 
-        if (other instanceof MatchesStandardStringRestrictions){
-            return other.intersect(this);
-        }
-
         if (!(other instanceof TextualRestrictions)){
             throw new UnsupportedOperationException("Unable to produce intersection of TextualRestrictions and " + other.getClass().getName());
         }

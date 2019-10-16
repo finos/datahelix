@@ -391,63 +391,6 @@ class TextualRestrictionsTests {
     }
 
     @Test
-    void createGenerator_withOnlyAMatchingStandardConstraint_shouldCreateSomeStrings() {
-        StringRestrictions restrictions = aValid(StandardConstraintTypes.ISIN);
-
-        StringGenerator generator = restrictions.createGenerator();
-
-        assertTrue(generator.generateAllValues().limit(1).count() > 0);
-    }
-
-    @Test
-    void createGenerator_withMinLengthAndMatchingStandardConstraint_shouldCreateSomeStrings() {
-        Optional<StringRestrictions> result = aValid(StandardConstraintTypes.ISIN)
-            .intersect(minLength(1));
-
-        StringGenerator generator = ((StringRestrictions)result.get()).createGenerator();
-
-        assertTrue(generator.generateAllValues().limit(1).count() > 0);
-    }
-
-    @Test
-    void createGenerator_withMaxLengthShorterThanCodeLengthAndMatchingStandardConstraint_shouldCreateNoStrings() {
-        Optional<StringRestrictions> intersect = aValid(StandardConstraintTypes.ISIN)
-            .intersect(maxLength(10));
-
-        Assert.assertFalse(intersect.isPresent());
-    }
-
-    @Test
-    void createGenerator_withMaxLengthAtLengthOfCodeLengthAndMatchingStandardConstraint_shouldCreateSomeStrings() {
-        Optional<StringRestrictions> result = aValid(StandardConstraintTypes.ISIN)
-            .intersect(maxLength(12));
-
-        StringGenerator generator = ((StringRestrictions)result.get()).createGenerator();
-
-        assertTrue(generator.generateAllValues().limit(1).count() > 0);
-    }
-
-    @Test
-    void createGenerator_withMaxLengthLongerThanCodeLengthAndMatchingStandardConstraint_shouldCreateSomeStrings() {
-        Optional<StringRestrictions> result = aValid(StandardConstraintTypes.ISIN)
-            .intersect(maxLength(100));
-
-        StringGenerator generator = ((StringRestrictions)result.get()).createGenerator();
-
-        assertTrue(generator.generateAllValues().limit(1).count() > 0);
-    }
-
-    @Test
-    void createGenerator_withOfLengthAndMatchingStandardConstraint_shouldCreateSomeStrings() {
-        Optional<StringRestrictions> result = aValid(StandardConstraintTypes.ISIN)
-            .intersect(ofLength(12, false));
-
-        StringGenerator generator = ((StringRestrictions)result.get()).createGenerator();
-
-        assertTrue(generator.generateAllValues().limit(1).count() > 0);
-    }
-
-    @Test
     void createGenerator_withNegatedMaxLengthConstraint_shouldCreateStringsFromLength() {
         StringRestrictions restrictions = minLength(10);
 
@@ -654,9 +597,6 @@ class TextualRestrictionsTests {
             negate ? Collections.singleton(pattern) : Collections.emptySet());
     }
 
-    private static StringRestrictions aValid(StandardConstraintTypes type){
-        return new MatchesStandardStringRestrictions(type);
-    }
 
     private static void assertGeneratorCannotGenerateAnyStrings(StringGenerator generator) {
         Iterator<String> stringValueIterator = generator.generateAllValues().iterator();

@@ -39,6 +39,9 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class FieldSpecTests {
 
@@ -237,23 +240,10 @@ class FieldSpecTests {
 
     @Test
     void permitsRejectsInvalidString() {
-        StringRestrictions string = new StringRestrictions() {
-            @Override
-            public Optional<StringRestrictions> intersect(StringRestrictions other) {
-                return null;
-            }
+        TypedRestrictions mockTypedRestrictions = mock(TypedRestrictions.class);
+        when(mockTypedRestrictions.match(any())).thenReturn(false);
 
-            @Override
-            public boolean match(String x) {
-                return false;
-            }
-
-            @Override
-            public StringGenerator createGenerator() {
-                return null;
-            }
-        };
-        FieldSpec spec = FieldSpecFactory.fromRestriction(string);
+        FieldSpec spec = FieldSpecFactory.fromRestriction(mockTypedRestrictions);
 
         assertFalse(spec.permits("Anything"));
     }
