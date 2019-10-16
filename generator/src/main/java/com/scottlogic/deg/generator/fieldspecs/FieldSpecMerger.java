@@ -58,10 +58,10 @@ public class FieldSpecMerger {
             if (isGenerator(right)){
                 throw new UnsupportedOperationException("generators cannot be combined");
             }
-            return Optional.of(left);
+            return addNullable(left, right, left);
         }
         if (isGenerator(right)){
-            return Optional.of(right);
+            return addNullable(right, left, right);
         }
 
         return combineRestrictions((RestrictionsFieldSpec)left, (RestrictionsFieldSpec)right);
