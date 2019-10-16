@@ -14,7 +14,7 @@ public class NotNullConstraint implements AtomicConstraint {
 
     @Override
     public String toString() {
-        return String.format("%s is null", field.name);
+        return String.format("%s is not null", field.name);
     }
 
     @Override
