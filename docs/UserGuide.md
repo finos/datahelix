@@ -101,8 +101,7 @@ Here is a list of two rules comprised of one constraint each:
           "constraints": [
             {
               "field": "Column 1",
-              "is": "equalTo",
-              "value": "foo"
+              "equalTo": "foo"
             }
           ]
         },
@@ -111,8 +110,7 @@ Here is a list of two rules comprised of one constraint each:
           "constraints": [
             {
               "field": "Column 2",
-              "is": "equalTo",
-              "value": "bar"
+              "equalTo": "bar"
             }
           ]
         }
@@ -142,8 +140,7 @@ These three sections are combined to form the [complete profile](#Example-Profil
         "constraints": [
             {
             "field": "Column 1",
-            "is": "equalTo",
-            "value": "foo"
+            "equalTo": "foo"
             }
         ]
         }
@@ -328,7 +325,7 @@ Is satisfied if `field`'s value is equal to `value`
 ### `inSet` _(field, values)_
 
 ```javascript
-{ "field": "type", "inSet": [ "X_092", 123, null, "2001-02-03T04:05:06.007" ] }
+{ "field": "type", "inSet": [ "X_092", "2001-02-03T04:05:06.007" ] }
 ```
 
 Is satisfied if `field`'s value is in the set `values`
@@ -402,7 +399,7 @@ Scotland, Edinburgh
 ### `null` _(field)_
 
 ```javascript
-{ "field": "price", "null" }
+{ "field": "price", "isNull": "true"}
 ```
 
 Is satisfied if `field` is null or absent.
@@ -609,7 +606,7 @@ See [set restriction and generation](user/SetRestrictionAndGeneration.md) for an
 ## `not`
 
 ```javascript
-{ "not": { "field": "foo", "null" } }
+{ "not": { "field": "foo", "isNull": "true"} }
 ```
 
 Wraps a constraint. Is satisfied if, and only if, its inner constraint is _not_ satisfied.
@@ -619,7 +616,7 @@ Wraps a constraint. Is satisfied if, and only if, its inner constraint is _not_ 
 ```javascript
 { "anyOf": [
     { "field": "foo", "equalTo": 0 },
-    { "field": "foo", "null" }
+    { "field": "foo", "isNull": "true"} }
 ]}
 ```
 
