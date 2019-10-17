@@ -43,7 +43,7 @@ public class DateTimeFieldValueSourceTests {
     private Limit<OffsetDateTime> lowerLimit = DATETIME_MIN_LIMIT;
     private Limit<OffsetDateTime> upperLimit = DATETIME_MAX_LIMIT;
     private Set<Object> blackList = new HashSet<>();
-    private LinearFieldValueSource fieldSource;
+    private LinearFieldValueSource<OffsetDateTime> fieldSource;
 
     @Test
     public void whenGeneratingUnboundSet() {

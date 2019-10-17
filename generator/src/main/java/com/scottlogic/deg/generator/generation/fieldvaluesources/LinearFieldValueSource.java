@@ -58,7 +58,7 @@ public class LinearFieldValueSource<T extends Comparable<T>> implements FieldVal
             .filter(this::notInBlacklist);
     }
 
-
+    // we call this instead of .contains because .contains doesn't treat 2 and 2.0 as equal
     private boolean notInBlacklist(T t) {
         return blacklist.stream().noneMatch(x->x.compareTo(t)==0);
     }
