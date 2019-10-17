@@ -41,6 +41,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.Consumer;
 
+import static com.scottlogic.deg.common.util.Defaults.DEFAULT_DATE_FORMATTING;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.core.IsNull.nullValue;
@@ -1124,7 +1125,7 @@ public class JsonProfileReaderTests {
                 "}");
 
         expectFields(
-            field -> Assert.assertEquals("%tF",field.getFormatting())
+            field -> Assert.assertEquals(DEFAULT_DATE_FORMATTING,field.getFormatting())
         );
     }
 

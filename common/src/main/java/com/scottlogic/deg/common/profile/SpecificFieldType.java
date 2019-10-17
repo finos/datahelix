@@ -2,6 +2,8 @@ package com.scottlogic.deg.common.profile;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import static com.scottlogic.deg.common.util.Defaults.DEFAULT_DATE_FORMATTING;
+
 public enum SpecificFieldType
 {
     DECIMAL("decimal", FieldType.NUMERIC),
@@ -58,7 +60,7 @@ public enum SpecificFieldType
 
     public String getDefaultFormatting() {
         switch (type) {
-            case "date": return "%tF"; //yyyy-mm-dd see https://docs.oracle.com/javase/8/docs/api/java/util/Formatter.html
+            case "date": return DEFAULT_DATE_FORMATTING;
             default:
                 return null;
         }
