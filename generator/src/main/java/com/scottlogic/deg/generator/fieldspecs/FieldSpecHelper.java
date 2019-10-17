@@ -23,10 +23,10 @@ import static com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList.
 public class FieldSpecHelper {
     public FieldSpec getFieldSpecForValue(DataBagValue fieldValue) {
         if (fieldValue.getValue() == null) {
-            return FieldSpec.nullOnly();
+            return FieldSpecFactory.nullOnly();
         }
 
-        return FieldSpec.fromList(singleton(fieldValue.getValue()))
+        return FieldSpecFactory.fromList(singleton(fieldValue.getValue()))
             .withNotNull();
     }
 }

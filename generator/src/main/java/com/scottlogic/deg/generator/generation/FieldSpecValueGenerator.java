@@ -45,7 +45,7 @@ public class FieldSpecValueGenerator {
     }
 
     public Stream<DataBagValue> generate(Field field, FieldSpec spec) {
-        FieldValueSource fieldValueSource = sourceFactory.getFieldValueSources(field.getType(), spec);
+        FieldValueSource fieldValueSource = sourceFactory.getFieldValueSources(spec);
 
         return getDataValues(fieldValueSource, field.isUnique())
             .map(DataBagValue::new);

@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 
@@ -18,12 +19,12 @@ public class NotEqualToRelation implements FieldSpecRelations {
 
     @Override
     public FieldSpec reduceToRelatedFieldSpec(FieldSpec otherValue) {
-        return FieldSpec.fromType(main.getType());
+        return FieldSpecFactory.fromType(main.getType());
     }
 
     @Override
     public FieldSpec reduceValueToFieldSpec(DataBagValue generatedValue) {
-        return FieldSpec.fromType(main.getType()).withBlacklist(Collections.singleton(generatedValue.getValue()));
+        return FieldSpecFactory.fromType(main.getType()).withBlacklist(Collections.singleton(generatedValue.getValue()));
     }
 
     @Override

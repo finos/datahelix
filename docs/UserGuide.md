@@ -25,7 +25,7 @@
         2. [inSet](#predicate-inset)
         2. [inMap](#predicate-inmap)
         3. [null](#predicate-null)
-    3. [Textual constraints](#Textual-constraints)
+    3. [String constraints](#String-constraints)
         1. [matchingRegex](#predicate-matchingregex)
         2. [containingRegex](#predicate-containingregex)
         3. [ofLength](#predicate-oflength)
@@ -416,7 +416,7 @@ Scotland, Edinburgh
 
 Is satisfied if `field` is null or absent.
 
-## Textual constraints
+## String constraints
 
 <div id="predicate-matchingregex"></div>
 

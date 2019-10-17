@@ -19,10 +19,13 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.Granularity;
 import com.scottlogic.deg.common.util.defaults.LinearDefaults;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
+
+import static com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory.fromType;
+import static com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory.nullOnly;
 
 public class AfterRelation<T extends Comparable<T>> implements FieldSpecRelations {
     private final Field main;
@@ -39,17 +42,21 @@ public class AfterRelation<T extends Comparable<T>> implements FieldSpecRelation
 
     @Override
     public FieldSpec reduceToRelatedFieldSpec(FieldSpec otherValue) {
-        LinearRestrictions<T> lr = (LinearRestrictions) otherValue.getRestrictions();
-        if (lr == null){
-            return FieldSpec.fromType(main.getType());
+        if (otherValue instanceof NullOnlyFieldSpec){
+            return nullOnly();
+        }
+        if (otherValue instanceof WhitelistFieldSpec) {
+            //todo
+            return fromType(main.getType());
         }
 
+        LinearRestrictions<T> lr = (LinearRestrictions)((RestrictionsFieldSpec)otherValue).getRestrictions();
         return createFieldSpec(lr.getMin(), lr.getGranularity());
     }
 
     @Override
     public FieldSpec reduceValueToFieldSpec(DataBagValue generatedValue) {
-        if (generatedValue.getValue() == null) return FieldSpec.fromType(main.getType());
+        if (generatedValue.getValue() == null) return FieldSpecFactory.fromType(main.getType());
         return createFieldSpec((T)generatedValue.getValue(), defaults.granularity());
     }
 
@@ -58,7 +65,7 @@ public class AfterRelation<T extends Comparable<T>> implements FieldSpecRelation
             min = granularity.getNext(min);
         }
 
-        return FieldSpec.fromRestriction(new LinearRestrictions<>(min, defaults.max(), granularity));
+        return FieldSpecFactory.fromRestriction(new LinearRestrictions<>(min, defaults.max(), granularity));
     }
 
     @Override

@@ -26,7 +26,5 @@ public interface FieldValueSource<T> {
     Stream<T> generateAllValues();
 
     Stream<T> generateRandomValues(RandomNumberGenerator randomNumberGenerator);
-
-
 }
 

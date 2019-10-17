@@ -14,15 +14,28 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.restrictions;
+package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
+import com.scottlogic.deg.generator.generation.fieldvaluesources.NullOnlySource;
 
-import java.util.Set;
+public class NullOnlyFieldSpec extends FieldSpec {
+    NullOnlyFieldSpec() {
+        super(true);
+    }
 
-public interface TypedRestrictions<T> {
+    @Override
+    public boolean permits(Object value) {
+        return false;
+    }
 
-    boolean match(T o);
+    @Override
+    public FieldValueSource getFieldValueSource() {
+        return new NullOnlySource();
+    }
 
-    FieldValueSource<T> createFieldValueSource(Set<T> blacklist);
+    @Override
+    public FieldSpec withNotNull() {
+        throw new UnsupportedOperationException("not null on null only not allowed");
+    }
 }

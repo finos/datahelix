@@ -18,6 +18,7 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
@@ -39,9 +40,9 @@ public class EqualToRelation implements FieldSpecRelations {
     @Override
     public FieldSpec reduceValueToFieldSpec(DataBagValue generatedValue) {
         if (generatedValue.getValue() == null){
-            return FieldSpec.nullOnly();
+            return FieldSpecFactory.nullOnly();
         }
-        return FieldSpec.fromList(DistributedList.singleton(generatedValue.getValue()));
+        return FieldSpecFactory.fromList(DistributedList.singleton(generatedValue.getValue()));
     }
 
     @Override

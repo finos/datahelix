@@ -41,8 +41,8 @@ class RowSpecTreeSolverTests {
         //Assert
         List<RowSpec> expectedRowSpecs = new ArrayList<>();
         Map<Field, FieldSpec> fieldToFieldSpec = new HashMap<>();
-        fieldToFieldSpec.put(fieldA, FieldSpec.fromType(fieldA.getType()));
-        fieldToFieldSpec.put(fieldB, FieldSpec.fromType(fieldB.getType()));
+        fieldToFieldSpec.put(fieldA, FieldSpecFactory.fromType(fieldA.getType()));
+        fieldToFieldSpec.put(fieldB, FieldSpecFactory.fromType(fieldB.getType()));
         expectedRowSpecs.add(new RowSpec(profileFields, fieldToFieldSpec, Collections.emptyList()));
 
         assertThat(expectedRowSpecs, sameBeanAs(rowSpecs.collect(Collectors.toList())));
@@ -60,8 +60,8 @@ class RowSpecTreeSolverTests {
         //Assert
         List<RowSpec> expectedRowSpecs = new ArrayList<>();
         Map<Field, FieldSpec> fieldToFieldSpec = new HashMap<>();
-        fieldToFieldSpec.put(fieldA, FieldSpec.fromList(DistributedList.uniform(Arrays.asList("1", "2", "3"))));
-        fieldToFieldSpec.put(fieldB, FieldSpec.fromType(fieldB.getType()));
+        fieldToFieldSpec.put(fieldA, FieldSpecFactory.fromList(DistributedList.uniform(Arrays.asList("1", "2", "3"))));
+        fieldToFieldSpec.put(fieldB, FieldSpecFactory.fromType(fieldB.getType()));
         expectedRowSpecs.add(new RowSpec(profileFields, fieldToFieldSpec, Collections.emptyList()));
 
         assertThat(rowSpecs.collect(Collectors.toList()), sameBeanAs(expectedRowSpecs));
@@ -85,12 +85,12 @@ class RowSpecTreeSolverTests {
         //Assert
         Set<RowSpec> expectedRowSpecs = new HashSet<>();
         Map<Field, FieldSpec> option0 = new HashMap<>();
-        option0.put(fieldA, FieldSpec.fromType(fieldA.getType()));
-        option0.put(fieldB, FieldSpec.nullOnly());
+        option0.put(fieldA, FieldSpecFactory.fromType(fieldA.getType()));
+        option0.put(fieldB, FieldSpecFactory.nullOnly());
         expectedRowSpecs.add(new RowSpec(profileFields, option0, Collections.emptyList()));
         Map<Field, FieldSpec> option1 = new HashMap<>();
-        option1.put(fieldA, FieldSpec.fromType(fieldA.getType()));
-        option1.put(fieldB, FieldSpec.fromList(DistributedList.uniform(Arrays.asList("1","2","3"))));
+        option1.put(fieldA, FieldSpecFactory.fromType(fieldA.getType()));
+        option1.put(fieldB, FieldSpecFactory.fromList(DistributedList.uniform(Arrays.asList("1","2","3"))));
         expectedRowSpecs.add(new RowSpec(profileFields, option1, Collections.emptyList()));
 
         assertThat(rowSpecs, sameBeanAs(expectedRowSpecs));

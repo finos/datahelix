@@ -23,6 +23,7 @@ import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.decisiontree.NodeMarking;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.validators.ContradictionDecisionTreeValidator;
 import com.scottlogic.deg.generator.walker.pruner.Merged;
 import com.scottlogic.deg.generator.walker.pruner.TreePruner;
@@ -45,7 +46,7 @@ public class UpfrontTreePruner {
             .collect(
                 Collectors.toMap(
                     Function.identity(),
-                    f -> FieldSpec.fromType(f.getType())));
+                    f -> FieldSpecFactory.fromType(f.getType())));
 
         Merged<ConstraintNode> prunedNode = treePruner.pruneConstraintNode(tree.getRootNode(), fieldSpecs);
         DecisionTree markedTree = validator.markContradictions(tree);

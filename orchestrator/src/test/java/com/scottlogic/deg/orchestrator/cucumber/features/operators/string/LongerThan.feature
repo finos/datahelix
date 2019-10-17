@@ -164,12 +164,13 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "GB00YG2XYC52" |
       | "US0378331005" |
 
-  Scenario: A longer than constraint combined with an ISIN constraint only generates null if the operand of the longer than constraint is greater than the length of a valid ISIN
+  Scenario: ISIN constraints are generators and ignore string constraints
     Given foo is longer than 20
+    And the generator can generate at most 1 rows
     And foo has type "ISIN"
     Then the following data should be generated:
       | foo  |
-      | null |
+      | "AD0000000003" |
 
   Scenario: A longer than constraint combined with a SEDOL constraint generates valid SEDOLs if the operand of the longer than constraint is less than the length of a valid SEDOL
     Given foo is longer than 6
@@ -197,12 +198,13 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "0263494" |
       | "3091357" |
 
-  Scenario: A longer than constraint combined with a SEDOL constraint only generates null if the operand of the longer than constraint is larger than the length of a valid SEDOL
+  Scenario: SEDOL constraints are generators and ignore string constraints
     Given foo is longer than 20
     And foo has type "SEDOL"
+    And the generator can generate at most 1 rows
     Then the following data should be generated:
       | foo  |
-      | null |
+      | "0000000" |
 
   Scenario: A longer than constraint combined with a CUSIP constraint generates valid CUSIPs if the operand of the longer than constraint is less than the length of a valid CUSIP
     Given foo is longer than 8
@@ -230,12 +232,13 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "38259P508" |
       | "594918104" |
 
-  Scenario: A longer than constraint combined with a CUSIP constraint only generates null if the operand of the longer than constraint is at least as large as the length of a valid CUSIP
+  Scenario: CUSIP constraints are generators and ignore string constraints
     Given foo is longer than 10
     And foo has type "CUSIP"
+    And the generator can generate at most 1 rows
     Then the following data should be generated:
-      | foo  |
-      | null |
+      | foo       |
+      | "000000000" |
 
   Scenario: longerThan with maximum permitted value should be successful
     Given foo is longer than 999
