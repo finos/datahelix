@@ -21,8 +21,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 
 @JsonDeserialize(as = InSetFromFileConstraintDTO.class)
-public class InSetFromFileConstraintDTO extends InSetConstraintDTO
-{
+public class InSetFromFileConstraintDTO extends InSetConstraintDTO {
     @JsonProperty(ConstraintTypeJsonProperty.IN_SET)
     public String file;
 }

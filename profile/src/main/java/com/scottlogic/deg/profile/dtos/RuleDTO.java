@@ -28,9 +28,10 @@ public class RuleDTO {
     public String rule;
     public Collection<ConstraintDTO> constraints;
 
-    public RuleDTO() {}
+    public RuleDTO() {
+    }
 
-    public RuleDTO(String rule, Collection<ConstraintDTO> constraints){
+    public RuleDTO(String rule, Collection<ConstraintDTO> constraints) {
         this.rule = rule;
         this.constraints = constraints;
     }

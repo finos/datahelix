@@ -22,13 +22,11 @@ import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 
 @JsonDeserialize(as = OfLengthConstraintDTO.class)
-public class OfLengthConstraintDTO extends AtomicConstraintDTO
-{
+public class OfLengthConstraintDTO extends AtomicConstraintDTO {
     @JsonProperty(ConstraintTypeJsonProperty.OF_LENGTH)
     public int value;
 
-    public OfLengthConstraintDTO()
-    {
+    public OfLengthConstraintDTO() {
         super(ConstraintType.OF_LENGTH);
     }
 }

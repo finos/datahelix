@@ -22,18 +22,15 @@ import com.scottlogic.deg.profile.ConstraintDeserializer;
 import com.scottlogic.deg.profile.common.ConstraintType;
 
 @JsonDeserialize(using = ConstraintDeserializer.class)
-public abstract class ConstraintDTO
-{
+public abstract class ConstraintDTO {
     private final ConstraintType type;
 
-    ConstraintDTO(ConstraintType type)
-    {
+    ConstraintDTO(ConstraintType type) {
         this.type = type;
     }
 
     @JsonIgnore
-    public ConstraintType getType()
-    {
+    public ConstraintType getType() {
         return type;
     }
 

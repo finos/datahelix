@@ -22,14 +22,12 @@ import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 
 @JsonDeserialize(as = InMapConstraintDTO.class)
-public class InMapConstraintDTO extends AtomicConstraintDTO
-{
+public class InMapConstraintDTO extends AtomicConstraintDTO {
     @JsonProperty(ConstraintTypeJsonProperty.IN_MAP)
     public String file;
     public String key;
 
-    public InMapConstraintDTO()
-    {
+    public InMapConstraintDTO() {
         super(ConstraintType.IN_MAP);
     }
 }

@@ -22,8 +22,7 @@ import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 
 @JsonDeserialize(as = IfConstraintDTO.class)
-public class IfConstraintDTO extends ConstraintDTO
-{
+public class IfConstraintDTO extends ConstraintDTO {
     @JsonProperty(ConstraintTypeJsonProperty.IF)
     public ConstraintDTO ifConstraint;
     @JsonProperty(ConstraintTypeJsonProperty.THEN)
@@ -31,8 +30,7 @@ public class IfConstraintDTO extends ConstraintDTO
     @JsonProperty(ConstraintTypeJsonProperty.ELSE)
     public ConstraintDTO elseConstraint;
 
-    public IfConstraintDTO()
-    {
+    public IfConstraintDTO() {
         super(ConstraintType.IF);
     }
 }

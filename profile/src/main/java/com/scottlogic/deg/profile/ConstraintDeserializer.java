@@ -13,33 +13,29 @@ import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import java.io.IOException;
 import java.util.Arrays;
 
-public class ConstraintDeserializer extends JsonDeserializer<ConstraintDTO>
-{
+public class ConstraintDeserializer extends JsonDeserializer<ConstraintDTO> {
     @Override
-    public ConstraintDTO deserialize(JsonParser jsonParser, DeserializationContext context) throws IOException
-    {
+    public ConstraintDTO deserialize(JsonParser jsonParser, DeserializationContext context) throws IOException {
         ObjectMapper mapper = (ObjectMapper) jsonParser.getCodec();
         ObjectNode node = mapper.readTree(jsonParser);
         String fieldName = node.hasNonNull("field") ? " for field " + node.get("field").asText() : "";
         ConstraintType type = Arrays.stream(ConstraintType.values())
-                .filter(constraintType -> node.has(constraintType.propertyName))
-                .findFirst()
-                .orElseThrow(() -> new InvalidProfileException("The constraint json object node" + fieldName +
-                        " doesn't contain any of the expected keywords as " + "properties: " + node));
-        if (!node.hasNonNull(type.propertyName))
-        {
+            .filter(constraintType -> node.has(constraintType.propertyName))
+            .findFirst()
+            .orElseThrow(() -> new InvalidProfileException("The constraint json object node" + fieldName +
+                " doesn't contain any of the expected keywords as " + "properties: " + node));
+        if (!node.hasNonNull(type.propertyName)) {
             throw new InvalidProfileException("The " + type.propertyName + " constraint has null value" + fieldName);
         }
-        switch (type)
-        {
+        switch (type) {
             case EQUAL_TO:
                 return mapper.treeToValue(node, EqualToConstraintDTO.class);
             case EQUAL_TO_FIELD:
                 return mapper.treeToValue(node, EqualToFieldConstraintDTO.class);
             case IN_SET:
                 return node.get(ConstraintTypeJsonProperty.IN_SET).isArray()
-                        ? mapper.treeToValue(node, InSetOfValuesConstraintDTO.class)
-                        : mapper.treeToValue(node, InSetFromFileConstraintDTO.class);
+                    ? mapper.treeToValue(node, InSetOfValuesConstraintDTO.class)
+                    : mapper.treeToValue(node, InSetFromFileConstraintDTO.class);
             case IN_MAP:
                 return mapper.treeToValue(node, InMapConstraintDTO.class);
             case NULL:
@@ -95,8 +91,7 @@ public class ConstraintDeserializer extends JsonDeserializer<ConstraintDTO>
             case ALL_OF:
                 return mapper.treeToValue(node, AllOfConstraintDTO.class);
             case IF:
-                if(node.hasNonNull(ConstraintTypeJsonProperty.THEN))
-                {
+                if (node.hasNonNull(ConstraintTypeJsonProperty.THEN)) {
                     return mapper.treeToValue(node, IfConstraintDTO.class);
                 }
                 throw new InvalidProfileException("If constraint types require a then property: " + node);

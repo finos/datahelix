@@ -24,13 +24,11 @@ import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 import java.util.Collection;
 
 @JsonDeserialize(as = AnyOfConstraintDTO.class)
-public class AnyOfConstraintDTO extends ConstraintDTO
-{
+public class AnyOfConstraintDTO extends ConstraintDTO {
     @JsonProperty(ConstraintTypeJsonProperty.ANY_OF)
     public Collection<ConstraintDTO> constraints;
 
-    public AnyOfConstraintDTO()
-    {
+    public AnyOfConstraintDTO() {
         super(ConstraintType.ANY_OF);
     }
 }

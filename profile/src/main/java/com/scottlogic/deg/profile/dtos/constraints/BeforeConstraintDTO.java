@@ -22,13 +22,11 @@ import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 
 @JsonDeserialize(as = BeforeConstraintDTO.class)
-public class BeforeConstraintDTO extends AtomicConstraintDTO
-{
+public class BeforeConstraintDTO extends AtomicConstraintDTO {
     @JsonProperty(ConstraintTypeJsonProperty.BEFORE)
     public String value;
 
-    public BeforeConstraintDTO()
-    {
+    public BeforeConstraintDTO() {
         super(ConstraintType.BEFORE);
     }
 }

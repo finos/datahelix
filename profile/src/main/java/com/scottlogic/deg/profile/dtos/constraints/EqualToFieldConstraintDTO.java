@@ -22,19 +22,16 @@ import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 
 @JsonDeserialize(as = EqualToFieldConstraintDTO.class)
-public class EqualToFieldConstraintDTO extends RelationalConstraintDTO
-{
+public class EqualToFieldConstraintDTO extends RelationalConstraintDTO {
     @JsonProperty(ConstraintTypeJsonProperty.EQUAL_TO_FIELD)
     public String otherField;
 
-    public EqualToFieldConstraintDTO()
-    {
+    public EqualToFieldConstraintDTO() {
         super(ConstraintType.EQUAL_TO_FIELD);
     }
 
     @Override
-    public String getOtherField()
-    {
+    public String getOtherField() {
         return otherField;
     }
 }

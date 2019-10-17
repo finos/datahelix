@@ -29,7 +29,7 @@ public interface ProfileSchemaValidator {
      * Validates a json file against the DataHelix Profile JSON Schema.
      *
      * @param profile the profile to validate against the schema
-     * @param schema the schema to check validate against
+     * @param schema  the schema to check validate against
      * @return the result of validating the provided profile
      */
     void validateProfile(String profile, String schema);
