@@ -1,26 +1,10 @@
 package com.scottlogic.deg.generator.generation.customgenerators;
 
-import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
 import java.util.stream.Stream;
 
 public interface CustomGenerator<T> {
-
-    /***
-     * REQUIRED! used in profile reading
-     * @return the name of the custom generator
-     */
-    String generatorName();
-
-    /**
-     * STRING for String's
-     * NUMERIC for BigDecimal's
-     * DATETIME for OffsetDateTime's
-     * @return accepted field type
-     */
-    FieldType fieldType();
-
     /**
      * the part of the generator to be used during random generation
      *
