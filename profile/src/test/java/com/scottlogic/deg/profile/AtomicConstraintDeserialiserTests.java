@@ -16,74 +16,117 @@
 
 package com.scottlogic.deg.profile;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.scottlogic.deg.common.ValidationException;
+import com.scottlogic.deg.generator.profile.constraints.Constraint;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO.ConstraintDeserializer;
+import com.scottlogic.deg.profile.dtos.constraints.EqualToConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.InSetConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.InSetOfValuesConstraintDTO;
+import com.scottlogic.deg.profile.reader.InvalidProfileException;
+import org.junit.Assert;
+import org.junit.Rule;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.rules.ExpectedException;
+
+import static com.shazam.shazamcrest.MatcherAssert.assertThat;
+import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 
 import java.io.IOException;
+import java.util.Arrays;
 
-public class GeneralConstraintDeserialiserTests {
+public class AtomicConstraintDeserialiserTests {
+
+    @Rule
+    public ExpectedException expectValidationException = ExpectedException.none();
+
     @Test
     public void shouldDeserialiseEqualToWithoutException() throws IOException {
         // Arrange
-        final String json =
-            "   { \"field\": \"type\", \"equalTo\": \"X_092\" }";
+        final String json = "   { \"field\": \"type\", \"equalTo\": \"X_092\" }";
 
         // Act
-        //ToDo final ProfileDTO profile = new ProfileDeserialiser().deserialise(json);
+        ConstraintDTO actual = deserialiseJsonString(json);
 
         // Assert
-       //ToDo  assertEquals("0.1", profile.schemaVersion);
+        EqualToConstraintDTO expected = new EqualToConstraintDTO();
+        expected.field = "type";
+        expected.value = "X_092";
+
+        assertThat(actual, sameBeanAs(expected));
     }
 
     @Test
     public void shouldDeserialiseEqualToAndThrowInvalidFieldException() throws IOException {
         // Arrange
-        final String json =
-            "    { \"field\": \"\", \"equalTo\": \"X_092\" }";
+        final String json = "    { \"field\": \"\", \"equalTo\": \"X_092\" }";
 
         // Act
-        //ToDo final ProfileDTO profile = new ProfileDeserialiser().deserialise(json);
+        ConstraintDTO actual = deserialiseJsonString(json);
 
         // Assert
-        //ToDo  assertEquals("0.1", profile.schemaVersion);
+        EqualToConstraintDTO expected = new EqualToConstraintDTO();
+        expected.field = "";
+        expected.value = "X_092";
+
+        assertThat(actual, sameBeanAs(expected));
+
+        //TODO consider where this should be validated, and make a test for that area instead (maybe whole profile deserialisation)
+
+//        assertThrows(
+//            ValidationException.class,
+//            () -> deserialiseJsonString(json),
+//            "invalid field");
     }
 
     @Test
-    public void shouldDeserialiseEqualToAndThrowInvalidConstraintException() throws IOException {
+    public void shouldDeserialiseEqualToAndThrowInvalidConstraintException() throws RuntimeException, IOException {
         // Arrange
-        final String json =
-            "    { \"field\": \"type\", \"equilTo\": \"X_092\" },";
+        final String json = "    { \"field\": \"type\", \"equilTo\": \"X_092\" },";
 
-        // Act
-        //ToDo final ProfileDTO profile = new ProfileDeserialiser().deserialise(json);
-
-        // Assert
-        //ToDo  assertEquals("0.1", profile.schemaVersion);
+        try {
+            deserialiseJsonString(json);
+            Assert.fail("should have thrown an exception");
+        }
+        catch (InvalidProfileException e){
+            String expectedMessage = "The constraint json object node for field type doesn't contain any of the expected keywords as properties: {\"field\":\"type\",\"equilTo\":\"X_092\"}";
+            assertThat(e.getMessage(), sameBeanAs(expectedMessage));
+        }
     }
 
+    @Disabled("#1471 throws a valid json parse exception instead of a validation exception")
     @Test
     public void shouldDeserialiseEqualToAndThrowInvalidConstraintValueException() throws IOException {
         // Arrange
-        final String json =
-            "    { \"field\": \"type\", \"equalTo\": \"\" }";
+        final String json = "    { \"field\": \"type\", \"equalTo\": }";
 
-        // Act
-        //ToDo final ProfileDTO profile = new ProfileDeserialiser().deserialise(json);
-
-        // Assert
-        //ToDo  assertEquals("0.1", profile.schemaVersion);
+        try {
+            deserialiseJsonString(json);
+            Assert.fail("should have thrown an exception");
+        }
+        catch (InvalidProfileException e){
+            String expectedMessage = "The constraint json object node for field type doesn't contain any of the expected keywords as properties: {\"field\":\"type\",\"equilTo\":\"X_092\"}";
+            assertThat(e.getMessage(), sameBeanAs(expectedMessage));
+        }
     }
 
     @Test
     public void shouldDeserialiseInSetWithoutException() throws IOException {
         // Arrange
-        final String json =
-            "    { \"field\": \"type\", \"inSet\": [ \"X_092\",\"2001-02-03T04:05:06.007\" ]}";
+        final String json = "{ \"field\": \"type\", \"inSet\": [ \"X_092\",\"normal string\" ]}";
+
 
         // Act
-        //ToDo final ProfileDTO profile = new ProfileDeserialiser().deserialise(json);
+        ConstraintDTO actual = deserialiseJsonString(json);
 
         // Assert
-        //ToDo  assertEquals("0.1", profile.schemaVersion);
+        InSetOfValuesConstraintDTO expected = new InSetOfValuesConstraintDTO();
+        expected.field = "type";
+        expected.values = Arrays.asList("X_092", "normal string");
+
+        assertThat(actual, sameBeanAs(expected));
     }
 
     @Test
@@ -125,8 +168,8 @@ public class GeneralConstraintDeserialiserTests {
         //ToDo  assertEquals("0.1", profile.schemaVersion);
     }
 
-    //string
 
+    //string
     @Test
     public void shouldDeserialiseMatchingRegexWithoutException() throws IOException {
         // Arrange
@@ -192,8 +235,8 @@ public class GeneralConstraintDeserialiserTests {
         //ToDo  assertEquals("0.1", profile.schemaVersion);
     }
 
-    //Numeric
 
+    //Numeric
     @Test
     public void shouldDeserialiseGreaterThanWithoutException() throws IOException {
         // Arrange
@@ -260,6 +303,7 @@ public class GeneralConstraintDeserialiserTests {
     }
 
     //Datetime
+
     @Test
     public void shouldDeserialiseAfterWithoutException() throws IOException {
         // Arrange
@@ -272,7 +316,6 @@ public class GeneralConstraintDeserialiserTests {
         // Assert
         //ToDo  assertEquals("0.1", profile.schemaVersion);
     }
-
     @Test
     public void shouldDeserialiseAfterOrAtWithoutException() throws IOException {
         // Arrange
@@ -326,6 +369,7 @@ public class GeneralConstraintDeserialiserTests {
     }
 
     //Dependant fields
+
     @Test
     public void shouldDeserialiseOtherFieldWithoutException() throws IOException {
         // Arrange
@@ -340,7 +384,6 @@ public class GeneralConstraintDeserialiserTests {
         // Assert
         //ToDo  assertEquals("0.1", profile.schemaVersion);
     }
-
     @Test
     public void shouldDeserialiseOffsetWithoutException() throws IOException {
         // Arrange
@@ -356,5 +399,7 @@ public class GeneralConstraintDeserialiserTests {
         //ToDo  assertEquals("0.1", profile.schemaVersion);
     }
 
-
+    private ConstraintDTO deserialiseJsonString(String json) throws IOException {
+        return new ObjectMapper().readerFor(ConstraintDTO.class).readValue(json);
+    }
 }

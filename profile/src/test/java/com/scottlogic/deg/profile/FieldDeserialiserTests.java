@@ -16,9 +16,6 @@
 
 package com.scottlogic.deg.profile;
 
-import com.scottlogic.deg.profile.dto.ProfileDTO;
-import com.scottlogic.deg.profile.serialisation.ProfileDeserialiser;
-import com.sun.tools.javac.comp.Todo;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

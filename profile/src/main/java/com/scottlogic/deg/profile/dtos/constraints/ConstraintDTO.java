@@ -46,7 +46,7 @@ public abstract class ConstraintDTO
         return type;
     }
 
-    static class ConstraintDeserializer extends JsonDeserializer<ConstraintDTO>
+    public static class ConstraintDeserializer extends JsonDeserializer<ConstraintDTO>
     {
         @Override
         public ConstraintDTO deserialize(JsonParser p, DeserializationContext context) throws IOException
