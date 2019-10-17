@@ -55,8 +55,6 @@ public class NumberUtils {
         }
     }
 
-
-
     public static BigDecimal tryParse(String value) {
         return (BigDecimal) bigDecimalFormatter.parse(value, new ParsePosition(0));
     }

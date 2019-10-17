@@ -22,7 +22,7 @@ import com.scottlogic.deg.profile.dtos.ProfileDTO;
 
 import java.io.IOException;
 
-public class ProfileSerialiser implements ISerialiser<ProfileDTO>
+public class ProfileSerialiser implements Serialiser<ProfileDTO>
 {
     public String serialise(ProfileDTO profile) throws IOException
     {

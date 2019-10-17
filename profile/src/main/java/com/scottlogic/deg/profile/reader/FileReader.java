@@ -16,7 +16,9 @@ public class FileReader
 
     @Inject
     public FileReader(@Named("config:filePath") String filePath) {
-        this.filePath = filePath.endsWith(File.separator) || filePath.isEmpty() ? filePath : filePath + File.separator;
+        this.filePath = filePath.endsWith(File.separator) || filePath.isEmpty()
+                ? filePath
+                : filePath + File.separator;
     }
 
     public DistributedList<Object> setFromFile(String file) {

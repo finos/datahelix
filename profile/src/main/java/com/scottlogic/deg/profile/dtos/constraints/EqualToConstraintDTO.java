@@ -18,11 +18,9 @@ package com.scottlogic.deg.profile.dtos.constraints;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 
-@JsonSerialize(as = EqualToConstraintDTO.class)
 @JsonDeserialize(as = EqualToConstraintDTO.class)
 public class EqualToConstraintDTO extends AtomicConstraintDTO
 {

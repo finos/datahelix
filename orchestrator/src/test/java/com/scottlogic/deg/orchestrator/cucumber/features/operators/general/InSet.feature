@@ -1524,3 +1524,12 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "Test2" | 1     |
       | "Test3" | 2     |
       | "Test4" | 2     |
+
+#TODO  Scenario: Running a 'inSet' request alongside a contradicting ofType = string should produce null
+#    Given there is a field foo
+#    And foo has type "string"
+#    And foo is in set:
+#      | 1 |
+#      | 2 |
+#      | 3 |
+#    Then the profile is invalid because "Field \[foo\]: is type STRING , but you are trying to apply a inSet constraint which requires NUMERIC"
