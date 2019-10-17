@@ -73,8 +73,7 @@ Feature: running datetimes related to otherfield datetimes
       """
         {
           "field": "bar",
-          "is": "equalTo",
-          "otherField": "foo",
+          "equalToField": "foo",
           "offset": 3,
           "offsetUnit": "days"
         }
@@ -90,8 +89,7 @@ Feature: running datetimes related to otherfield datetimes
       """
         {
           "field": "foo",
-          "is": "equalTo",
-          "otherField": "bar",
+          "equalToField": "bar",
           "offset": -3,
           "offsetUnit": "days"
         }
@@ -107,8 +105,7 @@ Feature: running datetimes related to otherfield datetimes
       """
         {
           "field": "bar",
-          "is": "equalTo",
-          "otherField": "foo",
+          "equalToField": "foo",
           "offset": 5,
           "offsetUnit": "working days"
         }
@@ -125,8 +122,7 @@ Feature: running datetimes related to otherfield datetimes
       """
         {
           "field": "foo",
-          "is": "equalTo",
-          "otherField": "bar",
+          "equalToField": "bar",
           "offset": -5,
           "offsetUnit": "working days"
         }

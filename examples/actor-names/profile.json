@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.11",
+  "schemaVersion": "0.12",
   "fields": [
     {
       "name": "forename",
@@ -19,31 +19,26 @@
           "anyOf": [
             {
               "field": "forename",
-              "is": "equalTo",
-              "value": "Matt"
+              "equalTo": "Matt"
             },
             {
               "field": "forename",
-              "is": "equalTo",
-              "value": "Ryan"
+              "equalTo": "Ryan"
             }
           ]
         },
         {
           "if": {
             "field": "forename",
-            "is": "equalTo",
-            "value": "Matt"
+            "equalTo": "Matt"
           },
           "then": {
             "field": "surname",
-            "is": "equalTo",
-            "value": "Damon"
+            "equalTo": "Damon"
           },
           "else": {
             "field": "surname",
-            "is": "inSet",
-            "values": [
+            "inSet": [
               "Reynolds",
               "Gosling"
             ]

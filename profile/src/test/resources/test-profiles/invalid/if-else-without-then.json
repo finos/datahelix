@@ -6,7 +6,7 @@
       "constraints": [
         {
           "if": {"field": "foo", "is": "ofType", "value": "integer"},
-          "else": {"field": "foo", "is": "greaterThan", "value": 0}
+          "else": {"field": "foo", "greaterThan": 0}
         }
       ]
     }

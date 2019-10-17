@@ -16,15 +16,14 @@
 
 package com.scottlogic.deg.orchestrator.cucumber.testframework.steps;
 
-import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestHelper;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestState;
+import com.scottlogic.deg.profile.common.ConstraintType;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 import java.util.function.Function;
 
-import static com.scottlogic.deg.common.util.NumberUtils.tryParse;
 import static java.lang.Integer.parseInt;
 
 public class StringValueStep {
@@ -39,42 +38,42 @@ public class StringValueStep {
 
     @When("^([A-z0-9]+) is equal to \"(.*)\"$")
     public void equalToString(String fieldName, String value) {
-        state.addConstraint(fieldName, AtomicConstraintType.IS_EQUAL_TO_CONSTANT.getText(), value);
+        state.addConstraint(fieldName, ConstraintType.EQUAL_TO, value);
     }
 
     @When("^([A-z0-9]+) is anything but equal to \"(.*)\"$")
     public void notEqualToString(String fieldName, String value) {
-        state.addNotConstraint(fieldName, AtomicConstraintType.IS_EQUAL_TO_CONSTANT.getText(), value);
+        state.addNotConstraint(fieldName, ConstraintType.EQUAL_TO, value);
     }
 
     @When("^([A-z0-9]+) is shorter than (-?[0-9\\.]+)$")
     public void shorterThanString(String fieldName, String value) {
-        state.addConstraint(fieldName, AtomicConstraintType.IS_STRING_SHORTER_THAN.getText(), parseInt(value));
+        state.addConstraint(fieldName, ConstraintType.SHORTER_THAN, parseInt(value));
     }
 
     @When("^([A-z0-9]+) is anything but shorter than (-?[0-9\\.]+)$")
     public void notShorterThanString(String fieldName, String value) {
-        state.addNotConstraint(fieldName, AtomicConstraintType.IS_STRING_SHORTER_THAN.getText(), parseInt(value));
+        state.addNotConstraint(fieldName, ConstraintType.SHORTER_THAN, parseInt(value));
     }
 
     @When("^([A-z0-9]+) is longer than (-?[0-9\\.]+)$")
     public void longerThanString(String fieldName, String value) {
-        state.addConstraint(fieldName, AtomicConstraintType.IS_STRING_LONGER_THAN.getText(), parseInt(value));
+        state.addConstraint(fieldName, ConstraintType.LONGER_THAN, parseInt(value));
     }
 
     @When("^([A-z0-9]+) is anything but longer than (-?[0-9\\.]+)$")
     public void notLongerThanString(String fieldName, String value) {
-        state.addNotConstraint(fieldName, AtomicConstraintType.IS_STRING_LONGER_THAN.getText(), tryParse(value));
+        state.addNotConstraint(fieldName, ConstraintType.LONGER_THAN, parseInt(value));
     }
 
     @When("^([A-z0-9]+) is of length (-?[0-9\\.]+)$")
     public void ofLengthString(String fieldName, String value) {
-        state.addConstraint(fieldName, AtomicConstraintType.HAS_LENGTH.getText(), tryParse(value));
+        state.addConstraint(fieldName, ConstraintType.OF_LENGTH, parseInt(value));
     }
 
     @When("^([A-z0-9]+) is anything but of length (-?[0-9\\.]+)$")
     public void notOfLengthString(String fieldName, String value) {
-        state.addNotConstraint(fieldName, AtomicConstraintType.HAS_LENGTH.getText(), tryParse(value));
+        state.addNotConstraint(fieldName, ConstraintType.OF_LENGTH, parseInt(value));
     }
 
     @Then("{fieldVar} contains only string data")

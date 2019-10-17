@@ -6,8 +6,7 @@
       "constraints": [
         {
           "field": "field1",
-          "is": "before",
-          "value": "2000-01-01T09:00:00.000"
+          "before": "2000-01-01T09:00:00.000"
         }
       ]
     }

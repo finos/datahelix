@@ -5,7 +5,7 @@
 For instance, what is generated for the price field in this example?
 
 ```javascript
-{ "field": "price", "is": "greaterThan", "value": 4 }
+{ "field": "price", "greaterThan": 4 }
 ```
 
 This constraint means :
@@ -31,7 +31,7 @@ Note that negation of type integer is not fully defined yet as we do not have a 
 ## Does an inSet constraint imply anything about nullability?
 
 ```javascript
-{ "field": "product_type", "is": "inSet", "values": [ "a", "b" ] }
+{ "field": "product_type", "inSet": [ "a", "b" ] }
 ```
 
 Given the above, should we expect nulls? If null is considered a _value_ then no would be a reasonable answer, but it can equally be considered the absence of a value. 
@@ -39,7 +39,7 @@ Given the above, should we expect nulls? If null is considered a _value_ then no
 ## What do datetime constraints mean when datetimes are partially specified?
 
 ```javascript
-{ "field": "creationDate", "is": "after", "value": "2015-01-01" }
+{ "field": "creationDate", "after": "2015-01-01" }
 ```
 
 Should I be able to express the above, and if so what does it mean? Intuitive, we might say that it cannot be satisfied with, eg, `2015-01-01 12:00:00`, but it depends on how we interpret underspecified datetimes:

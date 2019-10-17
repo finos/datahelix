@@ -18,12 +18,12 @@ public class BlacklistConstraint implements AtomicConstraint {
 
         if (legalValues.isEmpty()) {
             throw new IllegalArgumentException("Cannot create an IsInSetConstraint for field '" +
-                field.name + "' with an empty set.");
+                field.name + "' with an empty set");
         }
 
         if (legalValues.list().contains(null)) {
             throw new IllegalArgumentException("Cannot create an IsInSetConstraint for field '" +
-                field.name + "' with a set containing null.");
+                field.name + "' with a set containing null");
         }
     }
 

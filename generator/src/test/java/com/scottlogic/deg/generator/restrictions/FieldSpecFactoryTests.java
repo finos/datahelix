@@ -17,6 +17,7 @@
 package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.HelixStringLength;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsStringLongerThanConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsStringShorterThanConstraint;
@@ -24,8 +25,8 @@ import com.scottlogic.deg.generator.profile.constraints.atomic.StringHasLengthCo
 import com.scottlogic.deg.generator.profile.constraints.atomic.ViolatedAtomicConstraint;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static org.junit.Assert.assertEquals;
 
 class FieldSpecFactoryTests {
     private static final StringRestrictionsFactory stringRestrictionsFactory = new StringRestrictionsFactory();
@@ -34,10 +35,7 @@ class FieldSpecFactoryTests {
 
     @Test
     void construct_stringHasLengthConstraintRetrievedTwice_returnsTheSameGeneratorInstance() {
-        StringHasLengthConstraint constraint = new StringHasLengthConstraint(
-            testField,
-            10
-        );
+        StringHasLengthConstraint constraint = new StringHasLengthConstraint(testField, HelixStringLength.create(10));
 
         final FieldSpec firstInstance = constraint.toFieldSpec();
         final FieldSpec secondInstance = constraint.toFieldSpec();
@@ -47,12 +45,7 @@ class FieldSpecFactoryTests {
 
     @Test
     void construct_stringHasLengthConstraintViolatedTwice_returnsTheSameGeneratorInstance() {
-        ViolatedAtomicConstraint constraint = new ViolatedAtomicConstraint(
-            new StringHasLengthConstraint(
-                testField,
-                10
-            )
-        );
+        ViolatedAtomicConstraint constraint = new ViolatedAtomicConstraint(new StringHasLengthConstraint(testField,HelixStringLength.create(10)));
 
         final FieldSpec firstInstance = constraint.toFieldSpec();
         final FieldSpec secondInstance = constraint.toFieldSpec();
@@ -62,14 +55,8 @@ class FieldSpecFactoryTests {
 
     @Test
     void construct_twoInstancesOfStringHasLengthConstraintCalledWithEqualValues_returnsTheSameGeneratorInstance() {
-        StringHasLengthConstraint firstConstraint = new StringHasLengthConstraint(
-            testField,
-            20
-        );
-        StringHasLengthConstraint secondConstraint = new StringHasLengthConstraint(
-            testField,
-            20
-        );
+        StringHasLengthConstraint firstConstraint = new StringHasLengthConstraint(testField,HelixStringLength.create(20));
+        StringHasLengthConstraint secondConstraint = new StringHasLengthConstraint( testField, HelixStringLength.create(20));
 
         final FieldSpec firstInstance = firstConstraint.toFieldSpec();
         final FieldSpec secondInstance = secondConstraint.toFieldSpec();
@@ -79,10 +66,7 @@ class FieldSpecFactoryTests {
 
     @Test
     void construct_isStringLongerThanConstraintRetrievedTwice_returnsTheSameGeneratorInstance() {
-        IsStringLongerThanConstraint constraint = new IsStringLongerThanConstraint(
-            testField,
-            15
-        );
+        IsStringLongerThanConstraint constraint = new IsStringLongerThanConstraint(testField, HelixStringLength.create(15));
 
         final FieldSpec firstInstance = constraint.toFieldSpec();
         final FieldSpec secondInstance = constraint.toFieldSpec();
@@ -93,10 +77,7 @@ class FieldSpecFactoryTests {
     @Test
     void construct_isStringLongerThanConstraintViolatedTwice_returnsTheSameGeneratorInstance() {
         ViolatedAtomicConstraint constraint = new ViolatedAtomicConstraint(
-            new IsStringLongerThanConstraint(
-                testField,
-                10
-            )
+            new IsStringLongerThanConstraint( testField,HelixStringLength.create(10))
         );
 
         final FieldSpec firstInstance = constraint.toFieldSpec();
@@ -107,14 +88,8 @@ class FieldSpecFactoryTests {
 
     @Test
     void construct_twoInstancesOfIsStringLongerThanConstraintCalledWithEqualValues_returnsTheSameGeneratorInstance() {
-        IsStringLongerThanConstraint firstConstraint = new IsStringLongerThanConstraint(
-            testField,
-            20
-        );
-        IsStringLongerThanConstraint secondConstraint = new IsStringLongerThanConstraint(
-            testField,
-            20
-        );
+        IsStringLongerThanConstraint firstConstraint = new IsStringLongerThanConstraint(testField, HelixStringLength.create(20));
+        IsStringLongerThanConstraint secondConstraint = new IsStringLongerThanConstraint(testField, HelixStringLength.create(20));
 
         final FieldSpec firstInstance = firstConstraint.toFieldSpec();
         final FieldSpec secondInstance = secondConstraint.toFieldSpec();
@@ -124,10 +99,7 @@ class FieldSpecFactoryTests {
 
     @Test
     void construct_isStringShorterThanConstraintRetrievedTwice_returnsTheSameGeneratorInstance() {
-        IsStringShorterThanConstraint constraint = new IsStringShorterThanConstraint(
-            testField,
-            25
-        );
+        IsStringShorterThanConstraint constraint = new IsStringShorterThanConstraint(testField, HelixStringLength.create(25));
 
         final FieldSpec firstInstance = constraint.toFieldSpec();
         final FieldSpec secondInstance = constraint.toFieldSpec();
@@ -138,10 +110,7 @@ class FieldSpecFactoryTests {
     @Test
     void construct_isStringShorterThanConstraintViolatedTwice_returnsTheSameGeneratorInstance() {
         ViolatedAtomicConstraint constraint = new ViolatedAtomicConstraint(
-            new IsStringShorterThanConstraint(
-                testField,
-                10
-            )
+            new IsStringShorterThanConstraint(testField, HelixStringLength.create(10))
         );
 
         final FieldSpec firstInstance = constraint.toFieldSpec();
@@ -152,14 +121,8 @@ class FieldSpecFactoryTests {
 
     @Test
     void construct_twoInstancesOfIsStringShorterThanConstraintCalledWithEqualValues_returnsTheSameGeneratorInstance() {
-        IsStringShorterThanConstraint firstConstraint = new IsStringShorterThanConstraint(
-            testField,
-            20
-        );
-        IsStringShorterThanConstraint secondConstraint = new IsStringShorterThanConstraint(
-            testField,
-            20
-        );
+        IsStringShorterThanConstraint firstConstraint = new IsStringShorterThanConstraint(testField, HelixStringLength.create(20));
+        IsStringShorterThanConstraint secondConstraint = new IsStringShorterThanConstraint(testField, HelixStringLength.create(20));
 
         final FieldSpec firstInstance = firstConstraint.toFieldSpec();
         final FieldSpec secondInstance = secondConstraint.toFieldSpec();

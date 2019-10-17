@@ -119,8 +119,7 @@ Update the JSON profile as follows:
             "constraints": [
                 {
                     "field": "firstName",
-                    "is": "matchingRegex",
-                    "value": "[a-z]{1,10}"
+                    "matchingRegex": "[a-z]{1,10}"
                 }
             ]
         }
@@ -202,15 +201,14 @@ We'll expand the example profile to add a new `age` field, a not-null integer in
                 { "not": { "field": "firstName", "is": "null" } },
                 {
                     "field": "firstName",
-                    "is": "matchingRegex",
-                    "value": "(Joh?n|Mar[yk])"
+                    "matchingRegex": "(Joh?n|Mar[yk])"
                 }
             ]
         },
         {
             "constraints": [
-                { "field": "age", "is": "greaterThan", "value": 0 },
-                { "field": "age", "is": "lessThan", "value": 100 },
+                { "field": "age", "greaterThan": 0 },
+                { "field": "age", "lessThan": 100 },
                 { "not": { "field": "age", "is": "null" } }
             ]
         }
@@ -252,16 +250,15 @@ Finally, we'll add a field for National Insurance number. In this case, the cons
                 { "not": { "field": "firstName", "is": "null" } },
                 {
                     "field": "firstName",
-                    "is": "matchingRegex",
-                    "value": "(Joh?n|Mar[yk])"
+                    "matchingRegex": "(Joh?n|Mar[yk])"
                 }
             ]
         },
         {
             "rule": "age",
             "constraints": [
-                { "field": "age", "is": "greaterThan", "value": 0 },
-                { "field": "age", "is": "lessThan", "value": 100 },
+                { "field": "age", "greaterThan": 0 },
+                { "field": "age", "lessThan": 100 },
                 { "not": { "field": "age", "is": "null" } }
             ]
         },
@@ -271,15 +268,13 @@ Finally, we'll add a field for National Insurance number. In this case, the cons
                 {
                     "if": {
                         "field": "age",
-                        "is": "greaterThanOrEqualTo",
-                        "value": 16
+                        "greaterThanOrEqualTo": 16
                     },
                     "then": {
                         "allOf": [
                             {
                                 "field": "nationalInsurance",
-                                "is": "matchingRegex",
-                                "value": "[A-CEGHJ-PR-TW-Z]{1}[A-CEGHJ-NPR-TW-Z]{1}[0-9]{6}[A-DFM]{0,1}"
+                                "matchingRegex": "[A-CEGHJ-PR-TW-Z]{1}[A-CEGHJ-NPR-TW-Z]{1}[0-9]{6}[A-DFM]{0,1}"
                             },
                             {
                                 "not": {

@@ -7,12 +7,12 @@
     ],
     "rules": [
 		{ "anyOf": [
-			{ "field": "x", "is": "equalTo", "value": "a" },
-			{ "field": "x", "is": "equalTo", "value": "b" }
+			{ "field": "x", "equalTo": "a" },
+			{ "field": "x", "equalTo": "b" }
 		] },
 		{ "anyOf": [
-			{ "field": "y", "is": "equalTo", "value": 1 },
-			{ "field": "y", "is": "equalTo", "value": 2 }
+			{ "field": "y", "equalTo": 1 },
+			{ "field": "y", "equalTo": 2 }
 		] }
 	]
 }

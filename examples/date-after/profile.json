@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.11",
+  "schemaVersion": "0.12",
   "fields": [
     {
       "name": "date",
@@ -12,8 +12,7 @@
       "constraints": [
         {
           "field": "date",
-          "is": "after",
-          "value": "8001-02-03T04:05:06.007"
+          "after": "8001-02-03T04:05:06.007"
         }
       ]
     }

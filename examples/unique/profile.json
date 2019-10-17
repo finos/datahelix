@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.11",
+  "schemaVersion": "0.12",
   "fields": [
     {
       "name": "id",
@@ -19,8 +19,7 @@
       "constraints": [
         {
           "field": "id",
-          "is": "greaterThanOrEqualTo",
-          "value": 0
+          "greaterThanOrEqualTo": 0
         }
       ]
     }

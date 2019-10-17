@@ -16,25 +16,26 @@
 
 package com.scottlogic.deg.orchestrator.violation;
 
+import com.scottlogic.deg.common.profile.AtomicConstraintType;
+import com.scottlogic.deg.common.profile.HelixStringLength;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsStringShorterThanConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.StringHasLengthConstraint;
-import com.scottlogic.deg.orchestrator.violate.AtomicConstraintTypeMapper;
 import com.scottlogic.deg.generator.violations.filters.ConstraintTypeViolationFilter;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
+import com.scottlogic.deg.orchestrator.violate.AtomicConstraintTypeMapper;
 import com.scottlogic.deg.orchestrator.violate.ViolateConfigSource;
 import com.scottlogic.deg.orchestrator.violate.ViolationFiltersProvider;
-import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
 
 class ViolationFiltersProviderTest {
 
@@ -71,11 +72,11 @@ class ViolationFiltersProviderTest {
 
 
         assertThat(filter.canViolate(
-            new StringHasLengthConstraint(null, 2)),
+            new StringHasLengthConstraint(null, HelixStringLength.create(2))),
             is(false));
 
         assertThat(filter.canViolate(
-            new IsStringShorterThanConstraint(null, 5)),
+            new IsStringShorterThanConstraint(null, HelixStringLength.create(5))),
             is(true));
     }
 

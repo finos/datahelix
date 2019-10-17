@@ -16,9 +16,8 @@
 
 package com.scottlogic.deg.orchestrator.cucumber.testframework.steps;
 
-import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
-import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestState;
+import com.scottlogic.deg.profile.common.ConstraintType;
 import cucumber.api.java.en.When;
 
 public class BooleanValueStep {
@@ -29,12 +28,11 @@ public class BooleanValueStep {
 
     @When("{fieldVar} is equal to {boolean}")
     public void whenFieldIsConstrainedByNumericValue(String fieldName, Boolean value) {
-        this.state.addConstraint(fieldName, AtomicConstraintType.IS_EQUAL_TO_CONSTANT.getText(), value);
+        this.state.addConstraint(fieldName, ConstraintType.EQUAL_TO, value);
     }
-
 
     @When("{fieldVar} is anything but {operator} {boolean}")
     public void whenFieldIsNotConstrainedByNumericValue(String fieldName, String constraintName, Boolean value) {
-        this.state.addNotConstraint(fieldName, constraintName, value);
+        this.state.addNotConstraint(fieldName, ConstraintType.fromPropertyName(constraintName), value);
     }
 }

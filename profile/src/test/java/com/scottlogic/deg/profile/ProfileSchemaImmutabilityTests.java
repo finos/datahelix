@@ -16,12 +16,9 @@
 
 package com.scottlogic.deg.profile;
 
-import com.scottlogic.deg.profile.dto.SupportedVersionsGetter;
+import com.scottlogic.deg.profile.dtos.SupportedVersionsGetter;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.*;
 import org.leadpony.justify.api.JsonSchema;
 import org.leadpony.justify.api.JsonValidationService;
 
@@ -33,7 +30,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -94,6 +90,9 @@ public class ProfileSchemaImmutabilityTests {
         versionToHash.add(new VersionHash(
             "0.11",
             "eed1d1faaf4c8bb50144f3e72c2f14d56295c7d5da09a0dd6ed6266daee4a559"));
+        versionToHash.add(new VersionHash(
+                "0.12",
+                "d876b4f874296404f5015f533baed6bb266442469886ea2060d721dc5d497d62"));
         return versionToHash;
     }
 

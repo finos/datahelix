@@ -16,18 +16,26 @@
 
 package com.scottlogic.deg.profile.serialisation;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.scottlogic.deg.profile.dto.ProfileDTO;
+import com.scottlogic.deg.profile.dtos.ProfileDTO;
 
 import java.io.IOException;
 
-public class ProfileSerialiser {
-    public String serialise(ProfileDTO profile) throws IOException {
+public class ProfileSerialiser implements ISerialiser<ProfileDTO>
+{
+    public String serialise(ProfileDTO profile) throws IOException
+    {
         ObjectMapper mapper = new ObjectMapper();
-
         return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(profile);
+    }
+
+    public ProfileDTO deserialise(String json) throws IOException
+    {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.disable(DeserializationFeature.WRAP_EXCEPTIONS);
+        mapper.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
+        return mapper.readerFor(ProfileDTO.class).readValue(json);
     }
 }
 

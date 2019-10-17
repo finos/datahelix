@@ -6,8 +6,7 @@
       "constraints": [
         {
           "field": "field1",
-          "is": "greaterThan",
-          "value": 1E21 
+          "greaterThan": 1E21
         }
       ]
     }

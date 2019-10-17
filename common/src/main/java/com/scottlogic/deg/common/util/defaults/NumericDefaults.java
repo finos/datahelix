@@ -1,6 +1,6 @@
 package com.scottlogic.deg.common.util.defaults;
 
-import com.scottlogic.deg.common.profile.constraintdetail.Granularity;
+import com.scottlogic.deg.common.profile.Granularity;
 
 import java.math.BigDecimal;
 

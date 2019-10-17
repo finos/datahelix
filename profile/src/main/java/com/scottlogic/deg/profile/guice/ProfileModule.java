@@ -18,7 +18,7 @@ package com.scottlogic.deg.profile.guice;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
-import com.scottlogic.deg.profile.dto.*;
+import com.scottlogic.deg.profile.dtos.*;
 import com.scottlogic.deg.profile.reader.JsonProfileReader;
 import com.scottlogic.deg.profile.reader.ProfileReader;
 
@@ -47,7 +47,7 @@ public class ProfileModule extends AbstractModule {
             .annotatedWith(Names.named("config:profileFile"))
             .toInstance(profileConfigSource.getProfileFile());
         bind(String.class)
-            .annotatedWith(Names.named("config:fromFilePath"))
+            .annotatedWith(Names.named("config:filePath"))
             .toInstance(profileConfigSource.fromFilePath());
     }
 }

@@ -29,9 +29,9 @@ import java.util.List;
 public class InMapIndexRelation implements FieldSpecRelations {
     private final Field main;
     private final Field other;
-    private final DistributedList<String> underlyingList;
+    private final DistributedList<Object> underlyingList;
 
-    public InMapIndexRelation(Field main, Field other, DistributedList<String> underlyingList) {
+    public InMapIndexRelation(Field main, Field other, DistributedList<Object> underlyingList) {
         this.main = main;
         this.other = other;
         this.underlyingList = underlyingList;
@@ -70,7 +70,7 @@ public class InMapIndexRelation implements FieldSpecRelations {
         return other;
     }
 
-    public DistributedList<String> getUnderlyingList() {
+    public DistributedList<Object> getUnderlyingList() {
         return this.underlyingList;
     }
 

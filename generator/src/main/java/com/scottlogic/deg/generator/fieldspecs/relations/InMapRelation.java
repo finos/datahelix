@@ -27,9 +27,9 @@ import java.math.BigDecimal;
 public class InMapRelation implements FieldSpecRelations {
     private final Field main;
     private final Field other;
-    private final DistributedList<String> underlyingList;
+    private final DistributedList<Object> underlyingList;
 
-    public InMapRelation(Field main, Field other, DistributedList<String> underlyingList) {
+    public InMapRelation(Field main, Field other, DistributedList<Object> underlyingList) {
         this.main = main;
         this.other = other;
         this.underlyingList = underlyingList;
@@ -63,7 +63,7 @@ public class InMapRelation implements FieldSpecRelations {
         return other;
     }
 
-    public DistributedList<String> getUnderlyingList() {
+    public DistributedList<Object> getUnderlyingList() {
         return this.underlyingList;
     }
 

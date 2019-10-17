@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.11",
+  "schemaVersion": "0.12",
   "fields": [
     {
       "name": "first_name",
@@ -12,8 +12,7 @@
       "constraints": [
         {
           "field": "first_name",
-          "is": "containingRegex",
-          "value": "^(Joh?n|Mar[yk])$"
+          "containingRegex": "^(Joh?n|Mar[yk])$"
         }
       ]
     }

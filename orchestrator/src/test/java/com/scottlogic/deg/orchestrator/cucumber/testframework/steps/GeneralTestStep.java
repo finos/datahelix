@@ -17,11 +17,12 @@
 package com.scottlogic.deg.orchestrator.cucumber.testframework.steps;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.scottlogic.deg.common.profile.AtomicConstraintType;
 import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.*;
+import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
-import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.*;
 import org.hamcrest.Matcher;
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 import static org.hamcrest.Matchers.*;
 
 public class GeneralTestStep {
@@ -88,12 +90,12 @@ public class GeneralTestStep {
 
     @And("^(.+) is null$")
     public void fieldIsNull(String fieldName) throws Exception{
-        this.state.addConstraint(fieldName, "null", null);
+        this.state.addConstraint(fieldName, ConstraintType.NULL, null);
     }
 
     @And("^(.+) is anything but null$")
     public void fieldIsNotNull(String fieldName) throws Exception{
-        this.state.addNotConstraint(fieldName, "null", null);
+        this.state.addNotConstraint(fieldName, ConstraintType.NULL, null);
     }
 
     @And("^(.+) is unique$")
@@ -103,7 +105,7 @@ public class GeneralTestStep {
 
     @And("^(.+) is equal to field (.+)$")
     public void fieldEqualTo(String field, String otherField){
-        state.addRelationConstraint(field, AtomicConstraintType.IS_EQUAL_TO_CONSTANT.getText(), otherField);
+        state.addRelationConstraint(field, ConstraintType.EQUAL_TO_FIELD, otherField);
     }
 
     @When("^If and Then are described below$")
@@ -185,7 +187,6 @@ public class GeneralTestStep {
     @Then("^the following data should be generated:$")
     public void theFollowingDataShouldBeGenerated(List<Map<String, String>> expectedResultsTable) {
         GeneratedTestData data = getExpectedAndGeneratedData(expectedResultsTable);
-
         assertOutputData(data.generatedData, new RowsMatchAnyOrderMatcher(data.expectedData));
     }
 

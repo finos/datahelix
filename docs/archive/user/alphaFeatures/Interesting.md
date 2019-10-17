@@ -21,8 +21,7 @@ The _interesting generation mode_ exists to provide a means of generating smalle
 				},
 				{
 					"field": "field1",
-					"is": "shorterThan",
-					"value": 5
+					"shorterThan": 5
 				},
 				{
 					"not": {

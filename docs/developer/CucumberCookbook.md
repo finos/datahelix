@@ -59,8 +59,8 @@ In addition the following shows how the _there is a constraint_ step can be used
 And there is a constraint:
   """
     {
-      "if": { "field": "foo", "is": "equalTo", "value": "dddd" },
-      "then": { "field": "bar", "is": "equalTo", "value": "4444" },
+      "if": { "field": "foo", "equalTo": "dddd" },
+      "then": { "field": "bar", "equalTo": "4444" },
       "else": { "field": "bar", "is": "shorterThan", "value": 1 }
     }
   """
@@ -81,8 +81,8 @@ __Json Constraint__
 
 ```json
 {
-  "if": { "field": "foo", "is": "equalTo", "value": "dddd" },
-  "then": { "field": "bar", "is": "equalTo", "value": "4444" },
+  "if": { "field": "foo", "equalTo": "dddd" },
+  "then": { "field": "bar", "equalTo": "4444" },
   "else": { "field": "bar", "is": "shorterThan", "value": 1 }
 }
 ```
@@ -107,7 +107,7 @@ __Json Constraint__
 ```json
 {
   "anyOf": [
-    { "field": "foo", "is": "equalTo", "value": "Test0" },
+    { "field": "foo", "equalTo": "Test0" },
     { "field": "foo", "is": "matchingRegex", "value": "[a-b]{4}" }
   ]
 }
@@ -132,7 +132,7 @@ __Json Constraint__
 ```json
 {
   "allOf": [
-    { "field": "foo", "is": "equalTo", "value": "Test0" },
+    { "field": "foo", "equalTo": "Test0" },
     { "field": "foo", "is": "matchingRegex", "value": "[a-b]{4}" }
   ]
 }
@@ -157,9 +157,9 @@ __Json Constraint__
   "allOf": [
     {
       "anyOf": [
-        { "field": "foo", "is": "equalTo", "value": "Test0" },
-        { "field": "foo", "is": "equalTo", "value": "Test2" },
-        { "field": "foo", "is": "equalTo", "value": "Test4" }
+        { "field": "foo", "equalTo": "Test0" },
+        { "field": "foo", "equalTo": "Test2" },
+        { "field": "foo", "equalTo": "Test4" }
       ]
     },
     { "field": "foo", "is": "matchingRegex", "value": "[a-b]{4}" }

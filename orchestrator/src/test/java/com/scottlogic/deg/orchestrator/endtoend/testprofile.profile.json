@@ -1,5 +1,5 @@
 {
-    "schemaVersion": "0.11",
+    "schemaVersion": "0.12",
     "description": "Testing Profile",
     "fields": [
         {
@@ -14,8 +14,7 @@
             "constraints": [
                 {
                     "field": "foo",
-                    "is": "equalTo",
-                    "value": "Generation successful"
+                    "equalTo": "Generation successful"
                 }
             ]
         }

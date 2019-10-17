@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.11",
+  "schemaVersion": "0.12",
   "fields": [
     {
       "name": "Column 1",
@@ -13,8 +13,7 @@
       "constraints": [
         {
           "field": "Column 1",
-          "is": "greaterThan",
-          "value": 0
+          "greaterThan": 0
         }
       ]
     },
@@ -23,8 +22,7 @@
       "constraints": [
         {
           "field": "Column 1",
-          "is": "lessThan",
-          "value": 1
+          "lessThan": 1
         }
       ]
     },
@@ -33,8 +31,7 @@
       "constraints": [
         {
           "field": "Column 1",
-          "is": "granularTo",
-          "value": 1
+          "granularTo": 1
         }
       ]
     }

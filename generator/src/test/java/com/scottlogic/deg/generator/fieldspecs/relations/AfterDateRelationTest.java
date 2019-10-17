@@ -18,8 +18,8 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.FieldType;
-import com.scottlogic.deg.common.profile.constraintdetail.DateTimeGranularity;
-import com.scottlogic.deg.common.profile.constraintdetail.Granularity;
+import com.scottlogic.deg.common.profile.DateTimeGranularity;
+import com.scottlogic.deg.common.profile.Granularity;
 import com.scottlogic.deg.common.util.defaults.DateTimeDefaults;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
