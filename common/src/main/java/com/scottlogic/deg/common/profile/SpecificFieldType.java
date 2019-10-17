@@ -55,4 +55,12 @@ public enum SpecificFieldType
                 throw new IllegalStateException("No data types with type " + type);
         }
     }
+
+    public String getDefaultFormatting() {
+        switch (type) {
+            case "date": return "%tF"; //yyyy-mm-dd see https://docs.oracle.com/javase/8/docs/api/java/util/Formatter.html
+            default:
+                return null;
+        }
+    }
 }
