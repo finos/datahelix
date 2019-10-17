@@ -14,7 +14,8 @@ public enum SpecificFieldType
     LAST_NAME("lastname", FieldType.STRING),
     FULL_NAME("fullname", FieldType.STRING),
     STRING("string", FieldType.STRING),
-    DATETIME("datetime", FieldType.DATETIME);
+    DATETIME("datetime", FieldType.DATETIME),
+    DATE("date",FieldType.DATETIME);
 
     @JsonValue
     private final String type;
@@ -49,6 +50,7 @@ public enum SpecificFieldType
             case "fullname": return FULL_NAME;
             case "string": return STRING;
             case "datetime": return DATETIME;
+            case "date": return DATE;
             default:
                 throw new IllegalStateException("No data types with type " + type);
         }
