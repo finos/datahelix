@@ -96,7 +96,6 @@ Feature: User can specify that a field is of a specific type (string, integer, d
     Then the profile is invalid because "Date string '2010-01-01T75:00:00.000Z' must be in ISO-8601 format: Either yyyy-MM-ddTHH:mm:ss.SSS\[Z\] between 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z or yyyy-mm-dd between 0001-01-01 and 9999-12-31"
     And no data is created
 
-    @ignore #pending development of 1381 - Add date time and fields
   Scenario: Running an 'ofType' = date request should be successful
     Given there is a field foo
     And foo is equal to 2010-01-01
