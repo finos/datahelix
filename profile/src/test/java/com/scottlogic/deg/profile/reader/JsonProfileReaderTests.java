@@ -18,6 +18,7 @@ package com.scottlogic.deg.profile.reader;
 
 
 import com.scottlogic.deg.common.ValidationException;
+import com.scottlogic.deg.common.profile.DateTimeGranularity;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.common.profile.NumericGranularity;
@@ -35,6 +36,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.Consumer;
@@ -1084,6 +1086,63 @@ public class JsonProfileReaderTests {
                 Assert.assertTrue(field.isInternal());
                 Assert.assertEquals(FieldType.NUMERIC, field.getType());
             }
+        );
+    }
+
+    @Test
+    public void formatting_withDateType_shouldSetCorrectGranularity() throws IOException  {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": " + schemaVersion + "," +
+                "    \"fields\": [ { " +
+                "       \"name\": \"foo\" ," +
+                "       \"type\": \"date\"" +
+                "    }]," +
+                "    \"rules\": []" +
+                "}");
+
+        expectRules(
+            ruleWithConstraints(
+                typedConstraint(
+                    IsGranularToDateConstraint.class,
+                    c -> Assert.assertThat(c.granularity, equalTo(new DateTimeGranularity(ChronoUnit.DAYS)))
+                )
+            )
+        );
+    }
+
+    @Test
+    public void formatting_withDateType_shouldSetCorrectFormatting() throws IOException  {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": " + schemaVersion + "," +
+                "    \"fields\": [ { " +
+                "       \"name\": \"foo\" ," +
+                "       \"type\": \"date\"" +
+                "    }]," +
+                "    \"rules\": []" +
+                "}");
+
+        expectFields(
+            field -> Assert.assertEquals("%tF",field.getFormatting())
+        );
+    }
+
+    @Test
+    public void formatting_withDateTypeAndFormatting_shouldSetCorrectFormatting() throws IOException  {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": " + schemaVersion + "," +
+                "    \"fields\": [ { " +
+                "       \"name\": \"foo\" ," +
+                "       \"type\": \"date\"," +
+                "       \"formatting\": \"%tD\"" +
+                "    }]," +
+                "    \"rules\": []" +
+                "}");
+
+        expectFields(
+            field -> Assert.assertEquals("%tD",field.getFormatting())
         );
     }
 }
