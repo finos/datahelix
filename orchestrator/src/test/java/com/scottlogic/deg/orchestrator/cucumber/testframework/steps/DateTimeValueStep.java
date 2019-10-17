@@ -27,13 +27,13 @@ import cucumber.api.java.en.When;
 import java.time.OffsetDateTime;
 import java.util.function.Function;
 
-public class DateValueStep {
+public class DateTimeValueStep {
 
-    public static final String DATE_REGEX = "(-?(\\d{4,19})-(\\d{2})-(\\d{2}T(\\d{2}:\\d{2}:\\d{2}\\.\\d{3}))Z?)";
+    public static final String DATETIME_REGEX = "(-?(\\d{4,19})-(\\d{2})-(\\d{2}T(\\d{2}:\\d{2}:\\d{2}\\.\\d{3}))Z?)";
     private final CucumberTestState state;
     private final CucumberTestHelper helper;
 
-    public DateValueStep(CucumberTestState state, CucumberTestHelper helper){
+    public DateTimeValueStep(CucumberTestState state, CucumberTestHelper helper){
         this.state = state;
         this.helper = helper;
     }
