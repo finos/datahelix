@@ -114,8 +114,7 @@ Here is a list of two rules comprised of one constraint each:
           "constraints": [
             {
               "field": "Column 1",
-              "is": "equalTo",
-              "value": "foo"
+              "equalTo": "foo"
             }
           ]
         },
@@ -124,14 +123,13 @@ Here is a list of two rules comprised of one constraint each:
           "constraints": [
             {
               "field": "Column 2",
-              "is": "equalTo",
-              "value": "bar"
+              "equalTo": "bar"
             }
           ]
         }
       ]
 
-```
+``'
 
 These three sections are combined to form the [complete profile](#Example-Profile).
 
@@ -155,8 +153,7 @@ These three sections are combined to form the [complete profile](#Example-Profil
         "constraints": [
             {
             "field": "Column 1",
-            "is": "equalTo",
-            "value": "foo"
+            "equalTo": "foo"
             }
         ]
         }
@@ -327,11 +324,11 @@ The [grammatical `not` constraint](#Grammatical-Constraints) inverts a constrain
 ### `equalTo` _(field, value)_  
 
 ```javascript
-{ "field": "type", "is": "equalTo", "value": "X_092" }
+{ "field": "type", "equalTo": "X_092" }
 OR
-{ "field": "type", "is": "equalTo", "value": 23 }
+{ "field": "type", "equalTo": 23 }
 OR
-{ "field": "type", "is": "equalTo", "value": "2001-02-03T04:05:06.007" }
+{ "field": "type", "equalTo": "2001-02-03T04:05:06.007" }
 ```
 
 Is satisfied if `field`'s value is equal to `value`
@@ -341,7 +338,7 @@ Is satisfied if `field`'s value is equal to `value`
 ### `inSet` _(field, values)_
 
 ```javascript
-{ "field": "type", "is": "inSet", "values": [ "X_092", 123, null, "2001-02-03T04:05:06.007" ] }
+{ "field": "type", "inSet": [ "X_092", "2001-02-03T04:05:06.007" ] }
 ```
 
 Is satisfied if `field`'s value is in the set `values`
@@ -349,7 +346,7 @@ Is satisfied if `field`'s value is in the set `values`
 Alternatively, sets can be populated from files.
 
 ```javascript
-{ "field": "country", "is": "inSet", "file": "countries.csv" }
+{ "field": "country", "inSet": "countries.csv" }
 ```
 
 Populates a set from the new-line delimited file (with suffix `.csv`), where each line represents a string value to load.
@@ -415,7 +412,7 @@ Scotland, Edinburgh
 ### `null` _(field)_
 
 ```javascript
-{ "field": "price", "is": "null" }
+{ "field": "price", "isNull": "true"}
 ```
 
 Is satisfied if `field` is null or absent.
@@ -427,7 +424,7 @@ Is satisfied if `field` is null or absent.
 ### `matchingRegex` _(field, value)_
 
 ```javascript
-{ "field": "name", "is": "matchingRegex", "value": "[a-z]{0, 10}" }
+{ "field": "name", "matchingRegex": "[a-z]{0, 10}" }
 ```
 
 Is satisfied if `field` is a string matching the regular expression expressed in `value`. The regular expression must match the entire string in `field`, start and end anchors `^` & `$` are ignored.
@@ -441,7 +438,7 @@ The following non-capturing groups are unsupported:
 ### `containingRegex` _(field, value)_
 
 ```javascript
-{ "field": "name", "is": "containingRegex", "value": "[a-z]{0, 10}" }
+{ "field": "name", "containingRegex": "[a-z]{0, 10}" }
 ```
 
 Is satisfied if `field` is a string containing the regular expression expressed in `value`. Using both start and end anchors `^` & `$` make the constraint behave like `matchingRegex`.
@@ -455,7 +452,7 @@ The following non-capturing groups are unsupported:
 ### `ofLength` _(field, value)_
 
 ```javascript
-{ "field": "name", "is": "ofLength", "value": 5 }
+{ "field": "name", "ofLength": 5 }
 ```
 
 Is satisfied if `field` is a string whose length exactly matches `value`, must be a whole number between `0` and `1000`.
@@ -465,7 +462,7 @@ Is satisfied if `field` is a string whose length exactly matches `value`, must b
 ### `longerThan` _(field, value)_
 
 ```javascript
-{ "field": "name", "is": "longerThan", "value": 3 }
+{ "field": "name", "longerThan": 3 }
 ```
 
 Is satisfied if `field` is a string with length greater than `value`, must be a whole number between `-1` and `999`.
@@ -475,7 +472,7 @@ Is satisfied if `field` is a string with length greater than `value`, must be a 
 ### `shorterThan` _(field, value)_
 
 ```javascript
-{ "field": "name", "is": "shorterThan", "value": 3 }
+{ "field": "name", "shorterThan": 3 }
 ```
 
 Is satisfied if `field` is a string with length less than `value`, must be a whole number between `1` and `1001`.   
@@ -487,7 +484,7 @@ Is satisfied if `field` is a string with length less than `value`, must be a who
 ### `greaterThan` _(field, value)_
 
 ```javascript
-{ "field": "price", "is": "greaterThan", "value": 0 }
+{ "field": "price", "greaterThan": 0 }
 ```
 
 Is satisfied if `field` is a number greater than `value`.
@@ -497,7 +494,7 @@ Is satisfied if `field` is a number greater than `value`.
 ### `greaterThanOrEqualTo` _(field, value)_
 
 ```javascript
-{ "field": "price", "is": "greaterThanOrEqualTo", "value": 0 }
+{ "field": "price", "greaterThanOrEqualTo": 0 }
 ```
 
 Is satisfied if `field` is a number greater than or equal to `value`.
@@ -507,7 +504,7 @@ Is satisfied if `field` is a number greater than or equal to `value`.
 ### `lessThan` _(field, value)_
 
 ```javascript
-{ "field": "price", "is": "lessThan", "value": 0 }
+{ "field": "price", "lessThan": 0 }
 ```
 
 Is satisfied if `field` is a number less than `value`.
@@ -517,7 +514,7 @@ Is satisfied if `field` is a number less than `value`.
 ### `lessThanOrEqualTo` _(field, value)_
 
 ```javascript
-{ "field": "price", "is": "lessThanOrEqualTo", "value": 0 }
+{ "field": "price", "lessThanOrEqualTo": 0 }
 ```
 
 Is satisfied if `field` is a number less than or equal to `value`.
@@ -527,7 +524,7 @@ Is satisfied if `field` is a number less than or equal to `value`.
 ### `granularTo` _(field, value)_
 
 ```javascript
-{ "field": "price", "is": "granularTo", "value": 0.1 }
+{ "field": "price", "granularTo": 0.1 }
 ```
 
 Is satisfied if `field` has at least the [granularity](#Numeric-granularity) specified in `value`.
@@ -542,7 +539,7 @@ Example: `2001-02-03T04:05:06.007`
 ### `after` _(field, value)_
 
 ```javascript
-{ "field": "date", "is": "after", "value": "2018-09-01T00:00:00.000" }
+{ "field": "date", "after": "2018-09-01T00:00:00.000" }
 ```
 
 Is satisfied if `field` is a datetime occurring after `value`.
@@ -552,7 +549,7 @@ Is satisfied if `field` is a datetime occurring after `value`.
 ### `afterOrAt` _(field, value)_
 
 ```javascript
-{ "field": "date", "is": "afterOrAt", "value": "2018-09-01T00:00:00.000" }
+{ "field": "date", "afterOrAt": "2018-09-01T00:00:00.000" }
 ```
 
 Is satisfied if `field` is a datetime occurring after or simultaneously with `value`.
@@ -562,7 +559,7 @@ Is satisfied if `field` is a datetime occurring after or simultaneously with `va
 ### `before` _(field, value)_
 
 ```javascript
-{ "field": "date", "is": "before", "value": "2018-09-01T00:00:00.000" }
+{ "field": "date", "before": "2018-09-01T00:00:00.000" }
 ```
 
 Is satisfied if `field` is a datetime occurring before `value`.
@@ -572,7 +569,7 @@ Is satisfied if `field` is a datetime occurring before `value`.
 ### `beforeOrAt` _(field, value)_
 
 ```javascript
-{ "field": "date", "is": "beforeOrAt", "value": "2018-09-01T00:00:00.000" }
+{ "field": "date", "beforeOrAt": "2018-09-01T00:00:00.000" }
 ```
 
 Is satisfied if `field` is a datetime occurring before or simultaneously with `value`.
@@ -582,7 +579,7 @@ Is satisfied if `field` is a datetime occurring before or simultaneously with `v
 ### `granularTo` _(field, value)_
 
 ```javascript
-{ "field": "date", "is": "granularTo", "value": "days" }
+{ "field": "date", "granularTo": "days" }
 ```
 
 Is satisfied if `field` has at least the [granularity](#DateTime-granularity) specified in `value`.
@@ -597,7 +594,7 @@ Is satisfied if `field` has at least the [granularity](#DateTime-granularity) sp
 allows a date field to be dependant on the output of another date field
 
 ```javascript
-{ "field": "laterDateField", "is": "after", "otherField": "previousDateField" }
+{ "field": "laterDateField","after": "previousDateField" }
 ```
 
 supported operators are currently
@@ -609,7 +606,7 @@ supported operators are currently
 Allows a dependant date to always be a certain offset away from another date
 
 ```javascript
-{ "field": "threeDaysAfterField", "is": "equalTo", "otherField": "previousDateField", "offset": 3, "offsetUnit": "days" }
+{ "field": "threeDaysAfterField", "equalTo": "previousDateField", "offset": 3, "offsetUnit": "days" }
 ```
 
 # Grammatical constraints
@@ -622,7 +619,7 @@ See [set restriction and generation](user/SetRestrictionAndGeneration.md) for an
 ## `not`
 
 ```javascript
-{ "not": { "field": "foo", "is": "null" } }
+{ "not": { "field": "foo", "isNull": "true"} }
 ```
 
 Wraps a constraint. Is satisfied if, and only if, its inner constraint is _not_ satisfied.
@@ -631,8 +628,8 @@ Wraps a constraint. Is satisfied if, and only if, its inner constraint is _not_ 
 
 ```javascript
 { "anyOf": [
-    { "field": "foo", "is": "null" },
-    { "field": "foo", "is": "equalTo", "value": 0 }
+    { "field": "foo", "equalTo": 0 },
+    { "field": "foo", "isNull": "true"} }
 ]}
 ```
 
@@ -642,8 +639,8 @@ Contains a number of sub-constraints. Is satisfied if any of the inner constrain
 
 ```javascript
 { "allOf": [
-    { "field": "foo", "is": "greaterThan", "value": 15 },
-    { "field": "foo", "is": "lessThan", "value": 100 }
+    { "field": "foo", "greaterThan": 15 },
+    { "field": "foo", "lessThan": 100 }
 ]}
 ```
 
@@ -653,9 +650,9 @@ Contains a number of sub-constraints. Is satisfied if all of the inner constrain
 
 ```javascript
 {
-    "if":   { "field": "foo", "is": "lessThan", "value": 100 },
-    "then": { "field": "bar", "is": "greaterThan", "value": 0 },
-    "else": { "field": "bar", "is": "equalTo", "value": "N/A" }
+    "if":   { "field": "foo", "lessThan": 100 },
+    "then": { "field": "bar", "greaterThan": 0 },
+    "else": { "field": "bar", "equalTo": "N/A" }
 }
 ```
 
