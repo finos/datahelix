@@ -129,7 +129,7 @@ Here is a list of two rules comprised of one constraint each:
         }
       ]
 
-```
+``'
 
 These three sections are combined to form the [complete profile](#Example-Profile).
 
@@ -338,7 +338,7 @@ Is satisfied if `field`'s value is equal to `value`
 ### `inSet` _(field, values)_
 
 ```javascript
-{ "field": "type", "inSet": [ "X_092", 123, null, "2001-02-03T04:05:06.007" ] }
+{ "field": "type", "inSet": [ "X_092", "2001-02-03T04:05:06.007" ] }
 ```
 
 Is satisfied if `field`'s value is in the set `values`
@@ -423,7 +423,7 @@ Is satisfied if `field` is null or absent.
 ### `matchingRegex` _(field, value)_
 
 ```javascript
-{ "field": "name", "is": "matchingRegex", "value": "[a-z]{0, 10}" }
+{ "field": "name", "matchingRegex": "[a-z]{0, 10}" }
 ```
 
 Is satisfied if `field` is a string matching the regular expression expressed in `value`. The regular expression must match the entire string in `field`, start and end anchors `^` & `$` are ignored.
@@ -437,7 +437,7 @@ The following non-capturing groups are unsupported:
 ### `containingRegex` _(field, value)_
 
 ```javascript
-{ "field": "name", "is": "containingRegex", "value": "[a-z]{0, 10}" }
+{ "field": "name", "containingRegex": "[a-z]{0, 10}" }
 ```
 
 Is satisfied if `field` is a string containing the regular expression expressed in `value`. Using both start and end anchors `^` & `$` make the constraint behave like `matchingRegex`.
@@ -451,7 +451,7 @@ The following non-capturing groups are unsupported:
 ### `ofLength` _(field, value)_
 
 ```javascript
-{ "field": "name", "is": "ofLength", "value": 5 }
+{ "field": "name", "ofLength": 5 }
 ```
 
 Is satisfied if `field` is a string whose length exactly matches `value`, must be a whole number between `0` and `1000`.
@@ -461,7 +461,7 @@ Is satisfied if `field` is a string whose length exactly matches `value`, must b
 ### `longerThan` _(field, value)_
 
 ```javascript
-{ "field": "name", "is": "longerThan", "value": 3 }
+{ "field": "name", "longerThan": 3 }
 ```
 
 Is satisfied if `field` is a string with length greater than `value`, must be a whole number between `-1` and `999`.
@@ -471,7 +471,7 @@ Is satisfied if `field` is a string with length greater than `value`, must be a 
 ### `shorterThan` _(field, value)_
 
 ```javascript
-{ "field": "name", "is": "shorterThan", "value": 3 }
+{ "field": "name", "shorterThan": 3 }
 ```
 
 Is satisfied if `field` is a string with length less than `value`, must be a whole number between `1` and `1001`.   
@@ -548,7 +548,7 @@ Is satisfied if `field` is a datetime occurring after `value`.
 ### `afterOrAt` _(field, value)_
 
 ```javascript
-{ "field": "date", "is": "afterOrAt", "value": "2018-09-01T00:00:00.000" }
+{ "field": "date", "afterOrAt": "2018-09-01T00:00:00.000" }
 ```
 
 Is satisfied if `field` is a datetime occurring after or simultaneously with `value`.
@@ -568,7 +568,7 @@ Is satisfied if `field` is a datetime occurring before `value`.
 ### `beforeOrAt` _(field, value)_
 
 ```javascript
-{ "field": "date", "is": "beforeOrAt", "value": "2018-09-01T00:00:00.000" }
+{ "field": "date", "beforeOrAt": "2018-09-01T00:00:00.000" }
 ```
 
 Is satisfied if `field` is a datetime occurring before or simultaneously with `value`.
@@ -593,7 +593,7 @@ Is satisfied if `field` has at least the [granularity](#DateTime-granularity) sp
 allows a date field to be dependant on the output of another date field
 
 ```javascript
-{ "field": "laterDateField", "is": "after", "otherField": "previousDateField" }
+{ "field": "laterDateField","after": "previousDateField" }
 ```
 
 supported operators are currently
