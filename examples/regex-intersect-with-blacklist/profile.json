@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.11",
+  "schemaVersion": "0.12",
   "fields": [
     {
       "name": "first_name",
@@ -12,19 +12,16 @@
       "constraints": [
         {
           "field": "first_name",
-          "is": "matchingRegex",
-          "value": "(Joh?n|Mar[yk])"
+          "matchingRegex": "(Joh?n|Mar[yk])"
         },
         {
           "field": "first_name",
-          "is": "matchingRegex",
-          "value": "M.*"
+          "matchingRegex": "M.*"
         },
         {
           "not": {
             "field": "first_name",
-            "is": "equalTo",
-            "value": "Mary"
+            "equalTo": "Mary"
           }
         }
       ]

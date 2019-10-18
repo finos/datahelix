@@ -17,19 +17,22 @@
 package com.scottlogic.deg.generator.builders;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.HelixDateTime;
+import com.scottlogic.deg.common.profile.HelixNumber;
+import com.scottlogic.deg.common.profile.HelixStringLength;
+import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
-import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -94,11 +97,11 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
     }
 
     public ConstraintChainBuilder<T> withLessThanConstraint(Field field, int referenceValue) {
-        return saveAndSet(new IsLessThanConstantConstraint(field, BigDecimal.valueOf(referenceValue)));
+        return saveAndSet(new IsLessThanConstantConstraint(field, HelixNumber.create(referenceValue)));
     }
 
     public ConstraintChainBuilder<T> withGreaterThanConstraint(Field field, int referenceValue) {
-        return saveAndSet(new IsGreaterThanConstantConstraint(field, BigDecimal.valueOf(referenceValue)));
+        return saveAndSet(new IsGreaterThanConstantConstraint(field, HelixNumber.create(referenceValue)));
     }
 
     public ConstraintChainBuilder<T> withEqualToConstraint(Field barField, Object referenceValue) {
@@ -127,15 +130,15 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
     }
 
     public ConstraintChainBuilder<T> withOfLengthConstraint(Field fooField, int length) {
-        return saveAndSet(new StringHasLengthConstraint(fooField, length));
+        return saveAndSet(new StringHasLengthConstraint(fooField, HelixStringLength.create(length)));
     }
 
     public ConstraintChainBuilder<T> withAfterConstraint(Field field, OffsetDateTime dateTime) {
-        return saveAndSet(new IsAfterConstantDateTimeConstraint(field, dateTime));
+        return saveAndSet(new IsAfterConstantDateTimeConstraint(field, HelixDateTime.create(dateTime)));
     }
 
     public ConstraintChainBuilder<T> withBeforeConstraint(Field field, OffsetDateTime dateTime) {
-        return saveAndSet(new IsBeforeConstantDateTimeConstraint(field, dateTime));
+        return saveAndSet(new IsBeforeConstantDateTimeConstraint(field, HelixDateTime.create(dateTime)));
     }
 
     public ConstraintChainBuilder<T> withMatchesRegexConstraint(Field field, Pattern pattern) {

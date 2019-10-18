@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.11",
+  "schemaVersion": "0.12",
   "fields": [
     {
       "name": "Column 1",
@@ -18,13 +18,11 @@
                   "allOf": [
                     {
                       "field": "Column 1",
-                      "is": "equalTo",
-                      "value": "I am a string!"
+                      "equalTo": "I am a string!"
                     },
                     {
                       "not": {
-                        "field": "Column 1",
-                        "is": "null"
+                        "null": "Column 1"
                       }
                     }
                   ]
@@ -35,13 +33,11 @@
                     "allOf": [
                       {
                         "field": "Column 1",
-                        "is": "equalTo",
-                        "value": "I am a string!"
+                        "equalTo": "I am a string!"
                       },
                       {
                         "not": {
-                          "field": "Column 1",
-                          "is": "null"
+                          "null": "Column 1"
                         }
                       }
                     ]
@@ -51,8 +47,7 @@
             },
             {
               "field": "Column 1",
-              "is": "equalTo",
-              "value": "The one option that can produce data."
+              "equalTo": "The one option that can produce data."
             }
           ]
         }

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.11",
+  "schemaVersion": "0.12",
   "fields": [
     {
       "name": "user_id",
@@ -25,13 +25,11 @@
           "anyOf": [
             {
               "field": "user_id",
-              "is": "matchingRegex",
-              "value": "^[A-Za-z0-9]{3,10}$"
+              "matchingRegex": "^[A-Za-z0-9]{3,10}$"
             },
             {
               "field": "user_id",
-              "is": "matchingRegex",
-              "value": "^[a-z0-9]+\\@[a-z0-9]+\\.co(m|\\.uk)$"
+              "matchingRegex": "^[a-z0-9]+\\@[a-z0-9]+\\.co(m|\\.uk)$"
             }
           ]
         }
@@ -43,25 +41,21 @@
         {
           "if": {
             "field": "user_id",
-            "is": "containingRegex",
-            "value": "\\@"
+            "containingRegex": "\\@"
           },
           "then": {
-            "field": "email_address",
-            "is": "null"
+            "null": "email_address"
           },
           "else": {
             "allOf": [
               {
                 "not": {
-                  "field": "email_address",
-                  "is": "null"
+                  "null": "email_address"
                 }
               },
               {
                 "field": "email_address",
-                "is": "matchingRegex",
-                "value": "^[a-z0-9]+\\@[a-z0-9]+\\.co(m|\\.uk)$"
+                "matchingRegex": "^[a-z0-9]+\\@[a-z0-9]+\\.co(m|\\.uk)$"
               }
             ]
           }
@@ -73,13 +67,11 @@
       "constraints": [
         {
           "field": "creation_date",
-          "is": "afterOrAt",
-          "value": "2003-01-01T00:00:00.000"
+          "afterOrAt": "2003-01-01T00:00:00.000"
         },
         {
           "field": "creation_date",
-          "is": "beforeOrAt",
-          "value": "2020-01-01T00:00:00.000"
+          "beforeOrAt": "2020-01-01T00:00:00.000"
         }
       ]
     }

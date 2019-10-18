@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.11",
+  "schemaVersion": "0.12",
   "fields": [
     {
       "name": "foo",
@@ -17,8 +17,7 @@
       "constraints": [
         {
           "field": "bar",
-          "is": "equalTo",
-          "otherField": "foo",
+          "equalToField": "foo",
           "offset": -3,
           "offsetUnit": "working days"
         }

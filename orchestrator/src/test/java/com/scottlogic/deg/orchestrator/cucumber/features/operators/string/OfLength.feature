@@ -18,7 +18,6 @@ Feature: User can specify the length of generated string data using 'ofLength'
       | length | expected |
       | 1      | "a"      |
       | 2      | "aa"     |
-      | 1.0    | "a"      |
 
   Scenario Outline: Running an 'ofLength' request that includes a negation of a valid numeric length should be successful
     Given foo is anything but of length <length>
@@ -54,19 +53,15 @@ Feature: User can specify the length of generated string data using 'ofLength'
       | null |
       | ""   |
 
-  Scenario Outline: Running an 'ofLength' request that includes a decimal number containing non zero digits should fail with an error message
+  Scenario Outline: Running an 'ofLength' request that includes a invalid value should fail with an error
     Given foo is of length <length>
     And foo is in set:
-      | "1" |
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be an integer but was a decimal with value `.+`"
+      | "a" |
+    Then the profile is invalid because "(Couldn't recognise 'value' property, it must be an Integer but was a String with value `.*`)|(Cannot create an StringHasLengthConstraint for field 'foo' with a a negative length.)|(String length must have a value >= 0, currently is -?\d+)"
+    And no data is created
     Examples:
-      | length      |
-      | 1.1         |
-      | 1.01        |
-      | 1.10        |
-      | 1.010       |
-      | 1.000000001 |
-      | 1.9         |
+      | length                    |
+      | -1                        |
 
 # COMBINATION OF CONSTRAINTS #
 
@@ -245,4 +240,4 @@ Feature: User can specify the length of generated string data using 'ofLength'
 
   Scenario: ofLength with value larger than maximum permitted should fail with an error message
     Given foo is of length 1001
-    Then the profile is invalid because "Field \[foo\]: ofLength constraint must have an operand/value <= 1000, currently is 1001"
+    Then the profile is invalid because "String length must have a value <= 1000, currently is 1001"

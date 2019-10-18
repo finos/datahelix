@@ -17,6 +17,7 @@
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.HelixStringLength;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 
@@ -24,14 +25,9 @@ import java.util.Objects;
 
 public class StringHasLengthConstraint implements AtomicConstraint {
     public final Field field;
-    public final int referenceValue;
+    public final HelixStringLength referenceValue;
 
-    public StringHasLengthConstraint(Field field, int referenceValue) {
-        if (referenceValue < 0){
-            throw new IllegalArgumentException("Cannot create an StringHasLengthConstraint for field '" +
-                field.name + "' with a a negative length.");
-        }
-
+    public StringHasLengthConstraint(Field field, HelixStringLength referenceValue) {
         this.referenceValue = referenceValue;
         this.field = field;
     }
@@ -48,7 +44,7 @@ public class StringHasLengthConstraint implements AtomicConstraint {
 
     @Override
     public FieldSpec toFieldSpec() {
-        return FieldSpec.fromRestriction(StringRestrictionsFactory.forLength(referenceValue, false));
+        return FieldSpec.fromRestriction(StringRestrictionsFactory.forLength(referenceValue.getValue(), false));
     }
 
     @Override
@@ -59,14 +55,14 @@ public class StringHasLengthConstraint implements AtomicConstraint {
         }
         if (o == null || getClass() != o.getClass()) return false;
         StringHasLengthConstraint constraint = (StringHasLengthConstraint) o;
-        return Objects.equals(field, constraint.field) && Objects.equals(referenceValue, constraint.referenceValue);
+        return Objects.equals(field, constraint.field) && Objects.equals(referenceValue.getValue(), constraint.referenceValue.getValue());
     }
 
     @Override
     public int hashCode(){
-        return Objects.hash(field, referenceValue);
+        return Objects.hash(field, referenceValue.getValue());
     }
 
     @Override
-    public String toString() { return String.format("`%s` length = %s", field.name, referenceValue); }
+    public String toString() { return String.format("`%s` length = %s", field.name, referenceValue.getValue()); }
 }

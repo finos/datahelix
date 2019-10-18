@@ -6,6 +6,6 @@
 		{ "name": "y" }
     ],
     "rules": [
-		{ "field": "x", "is": "equalTo", "value": 3 }
+		{ "field": "x", "equalTo": 3 }
 	]
 }

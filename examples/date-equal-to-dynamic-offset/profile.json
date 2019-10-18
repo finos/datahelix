@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.11",
+  "schemaVersion": "0.12",
   "fields": [
     {
       "name": "first",
@@ -42,44 +42,37 @@
       "constraints": [
         {
           "field": "first",
-          "is": "after",
-          "value": "8001-02-03T04:05:06.007"
+          "after": "8001-02-03T04:05:06.007"
         },
         {
           "field": "second",
-          "is": "equalTo",
-          "otherField": "first",
+          "equalToField": "first",
           "offset": 3,
           "offsetUnit": "days"
         },
         {
           "field": "third",
-          "is": "equalTo",
-          "otherField": "fourth",
+          "equalToField": "fourth",
           "offset": -3,
           "offsetUnit": "days"
         },
         {
           "field": "firstWorking",
-          "is": "equalTo",
-          "value": "2019-08-12T12:00:00.000"
+          "equalTo": "2019-08-12T12:00:00.000"
         },
         {
           "field": "secondWorking",
-          "is": "equalTo",
-          "otherField": "firstWorking",
+          "equalToField": "firstWorking",
           "offset": -8,
           "offsetUnit": "working days"
         },
         {
           "field": "current",
-          "is": "before",
-          "value": "now"
+          "before": "now"
         },
         {
           "field": "current",
-          "is": "after",
-          "value": "2019-06-01T12:00:00.000"
+          "after": "2019-06-01T12:00:00.000"
         }
       ]
     }

@@ -15,7 +15,7 @@
  */
 
 package com.scottlogic.deg.generator.generation.fieldvaluesources.datetime;
-import com.scottlogic.deg.common.profile.constraintdetail.DateTimeGranularity;
+import com.scottlogic.deg.common.profile.DateTimeGranularity;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 

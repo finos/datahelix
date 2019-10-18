@@ -6,8 +6,8 @@
       "constraints": [
         {
           "if": {"field": "foo", "is": "ofType", "value": "integer"},
-          "then": {"field": "foo", "is": "greaterThan", "value": 0},
-          "else": {"field": "foo", "is": "equalTo", "value": "N/A"},
+          "then": {"field": "foo", "greaterThan": 0},
+          "else": {"field": "foo", "equalTo": "N/A"},
           "nothing": 432
         }
       ]

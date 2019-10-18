@@ -17,6 +17,7 @@
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.HelixStringLength;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 
@@ -24,14 +25,9 @@ import java.util.Objects;
 
 public class IsStringLongerThanConstraint implements AtomicConstraint {
     public final Field field;
-    public final int referenceValue;
+    public final HelixStringLength referenceValue;
 
-    public IsStringLongerThanConstraint(Field field, int referenceValue) {
-        if (referenceValue < 0){
-            throw new IllegalArgumentException("Cannot create an IsStringLongerThanConstraint for field '" +
-                field.name + "' with a a negative length.");
-        }
-
+    public IsStringLongerThanConstraint(Field field, HelixStringLength referenceValue) {
         this.referenceValue = referenceValue;
         this.field = field;
     }
@@ -42,13 +38,15 @@ public class IsStringLongerThanConstraint implements AtomicConstraint {
     }
 
     @Override
-    public AtomicConstraint negate() {
-        return new IsStringShorterThanConstraint(field, referenceValue + 1);
+    public AtomicConstraint negate()
+    {
+        return new IsStringShorterThanConstraint(field, HelixStringLength.create(referenceValue.getValue() + 1));
     }
 
     @Override
-    public FieldSpec toFieldSpec() {
-        return FieldSpec.fromRestriction(StringRestrictionsFactory.forMinLength(referenceValue + 1));
+    public FieldSpec toFieldSpec()
+    {
+        return FieldSpec.fromRestriction(StringRestrictionsFactory.forMinLength(referenceValue.getValue() + 1));
     }
 
     @Override

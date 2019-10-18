@@ -184,6 +184,33 @@ Feature: User can specify that a value either matches or contains a specified re
       | ""   |
       | "a"  |
 
+  Scenario: Running a 'matchingRegex' for a maximum length smaller than the minimum length should fail with an error
+    Given foo is matching regex /[a]{1,0}/
+    Then the profile is invalid because "Illegal repetition range near index 7\r?\n\[a\]\{1,0\}\r?\n       \^"
+    And no data is created
+
+  Scenario: Running a 'matchingRegex' for a minimum length of a decimal value should fail with an error
+    Given foo is matching regex /[a]{1.1}/
+    Then the profile is invalid because "Unclosed counted closure near index 5\r?\n\[a\]\{1.1\}\r?\n     \^"
+    And no data is created
+
+  Scenario: Running a 'matchingRegex' for a minimum length that is less zero should fail with an error message
+    Given foo is matching regex /[a]{-1}/
+    Then the profile is invalid because "Illegal repetition near index [24]\r?\n\[a\]\{-1\}\r?\n {2,4}\^"
+    And no data is created
+
+  Scenario: Running a 'matchingRegex' with an empty regex should fail with an error message
+    Given foo is matching regex /[]{}/
+    Then the profile is invalid because "Unclosed character class near index 3\r?\n\[\]\{\}\r?\n   \^"
+    And no data is created
+
+  Scenario: Running a 'matchingRegex' request with the value property set to a null entry (null) should throw an error
+    Given there is a field foo
+    And foo has type "string"
+    And foo is matching regex null
+    Then the profile is invalid because "The matchingRegex constraint has null value for field foo"
+    And no data is created
+
   Scenario: User using matchingRegex operator to provide an exact set of values
     Given foo is matching regex /[a]{1,3}/
     And foo is anything but null

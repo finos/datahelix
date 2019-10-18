@@ -6,44 +6,44 @@
       "constraints": [
         {
           "if": {"field": "foo", "is": "ofType", "value": "integer"},
-          "then": {"field": "foo", "is": "greaterThan", "value": 0},
-          "else": {"field": "foo", "is": "equalTo", "value": "N/A"},
-          "else": {"field": "foo", "is": "equalTo", "value": "A/N"}
+          "then": {"field": "foo", "greaterThan": 0},
+          "else": {"field": "foo", "equalTo": "N/A"},
+          "else": {"field": "foo", "equalTo": "A/N"}
         },
         {
           "gif": {"field": "foo", "is": "ofType", "value": "integer"},
-          "then": {"field": "foo", "is": "greaterThan", "value": 0},
-          "else": {"field": "foo", "is": "equalTo", "value": "N/A"}
+          "then": {"field": "foo", "greaterThan": 0},
+          "else": {"field": "foo", "equalTo": "N/A"}
         },
         {
           "if": {"field": "foo", "is": "ofType", "value": "integer"},
-          "then": {"field": "foo", "is": "greaterThan", "value": 0},
-          "gelse": {"field": "foo", "is": "equalTo", "value": "N/A"}
+          "then": {"field": "foo", "greaterThan": 0},
+          "gelse": {"field": "foo", "equalTo": "N/A"}
         },
         {
           "if": {"field": "foo", "is": "ofType", "value": "integer"},
-          "then": {"field": "foo", "is": "greaterThan", "value": 0},
-          "else": {"field": "foo", "is": "equalTo", "value": "N/A"},
+          "then": {"field": "foo", "greaterThan": 0},
+          "else": {"field": "foo", "equalTo": "N/A"},
           "nothing": 432
         },
         {
           "if": "integer",
-          "then": {"field": "foo", "is": "greaterThan", "value": 0},
-          "else": {"field": "foo", "is": "equalTo", "value": "N/A"}
+          "then": {"field": "foo", "greaterThan": 0},
+          "else": {"field": "foo", "equalTo": "N/A"}
         },
         {
           "if": {"field": "foo", "is": "ofType", "value": "integer"},
           "then": 0,
-          "else": {"field": "foo", "is": "equalTo", "value": "N/A"}
+          "else": {"field": "foo", "equalTo": "N/A"}
         },
         {
           "if": {"field": "foo", "is": "ofType", "value": "integer"},
-          "then": {"field": "foo", "is": "greaterThan", "value": 0},
+          "then": {"field": "foo", "greaterThan": 0},
           "else": "N/A"
         },
         {
           "if": {"field": "foo", "is": "ofType", "value": "integer"},
-          "else": {"field": "foo", "is": "greaterThan", "value": 0}
+          "else": {"field": "foo", "greaterThan": 0}
         }
       ]
     }

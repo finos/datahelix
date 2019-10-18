@@ -19,11 +19,11 @@ Nulls can always be produced for a field, except when a field is explicitly not 
 For the profile snippet:
 ```
 { "if":
-    { "field": "A", "is": "equalTo", "value": 1 },
+    { "field": "A", "equalTo": 1 },
   "then":
-    { "field": "B", "is": "equalTo", "value": 2 }
+    { "field": "B", "equalTo": 2 }
 },
-{ "field": "A", "is": "equalTo", "value": 1 }
+{ "field": "A", "equalTo": 1 }
 ```
 
 |Allowed value of A|Allowed value of B|

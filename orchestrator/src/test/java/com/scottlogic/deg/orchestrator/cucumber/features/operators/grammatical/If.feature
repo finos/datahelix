@@ -148,30 +148,6 @@ Feature: Values can be specified by using if, then and else constraints
       | 3   | "b" |
       | 4   | "a" |
 
-  Scenario: Running an 'if' request that is invalidly formatted (missing a then statement) should be successful
-    Given foo is in set:
-      | 1 |
-      | 2 |
-      | 3 |
-      | 4 |
-    And foo is anything but null
-    And bar is in set:
-      | "a" |
-      | "b" |
-      | "c" |
-    And foo has type "decimal"
-    And bar has type "string"
-    And bar is anything but null
-    And there is a constraint:
-      """
-      {
-        "if": { "field": "foo", "is": "equalTo", "value": 1 },
-        "else": { "field": "bar", "is": "equalTo", "value": "a" }
-      }
-      """
-    Then the profile is invalid because "Constraint is null"
-    And no data is created
-
   Scenario: Running a 'if' request that includes an invalid if value (not in field set) should be successful
     Given foo is in set:
       | 1 |

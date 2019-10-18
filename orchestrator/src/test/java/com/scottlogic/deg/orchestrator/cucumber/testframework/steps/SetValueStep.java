@@ -16,8 +16,8 @@
 
 package com.scottlogic.deg.orchestrator.cucumber.testframework.steps;
 
-import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestState;
+import com.scottlogic.deg.profile.common.ConstraintType;
 import cucumber.api.java.en.When;
 
 import java.util.List;
@@ -32,11 +32,11 @@ public class SetValueStep {
 
     @When("^([A-z0-9]+) is in set:")
     public void whenFieldIsConstrainedBySetValue(String fieldName, List<Object> values) {
-        this.state.addConstraint(fieldName, AtomicConstraintType.IS_IN_SET.getText(), values);
+        this.state.addConstraint(fieldName, ConstraintType.IN_SET, values);
     }
 
     @When("^([A-z0-9]+) is anything but in set:")
     public void whenFieldIsNotConstrainedBySetValue(String fieldName, List<Object> values) {
-        this.state.addNotConstraint(fieldName, AtomicConstraintType.IS_IN_SET.getText(), values);
+        this.state.addNotConstraint(fieldName, ConstraintType.IN_SET, values);
     }
 }

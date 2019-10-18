@@ -22,7 +22,7 @@ class InMapRelationTest {
     static void before() {
         Field f1 = createField("field1");
         Field f2 = createField("field1");
-        List<String> values = Arrays.asList("foo", "bar");
+        List<Object> values = Arrays.asList("foo", "bar");
 
         testInstance = new InMapRelation(f1, f2, DistributedList.uniform(values));
     }

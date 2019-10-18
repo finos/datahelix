@@ -229,7 +229,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
     And foo is in set:
       | 2010-13-40T00:00:00.000Z |
       | 2017-12-31T23:59:59.999Z |
-    Then the profile is invalid because "Field \[foo\]: Date string '2010-13-40T00:00:00.000Z' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS\[Z\] between \(inclusive\) 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z"
+    Then the profile is invalid because "Date string '2010-13-40T00:00:00.000Z' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS\[Z\] between \(inclusive\) 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z"
     And no data is created
 
   Scenario: Running an 'inSet' request that includes an invalid time value should fail with an error message
@@ -238,7 +238,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
     And foo is in set:
       | 2017-12-31T40:59:59.999Z |
       | 2017-12-31T23:59:59.999Z |
-    Then the profile is invalid because "Field \[foo\]: Date string '2017-12-31T40:59:59.999Z' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS\[Z\] between \(inclusive\) 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z"
+    Then the profile is invalid because "Date string '2017-12-31T40:59:59.999Z' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS\[Z\] between \(inclusive\) 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z"
     And no data is created
 
   Scenario: Running an 'inSet' request that includes an empty string ("") characters should be successful
@@ -257,7 +257,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
     And foo is in set:
       | null |
       | 1    |
-    Then the profile is invalid because "Field \[foo\]: Set must not contain null"
+    Then the profile is invalid because "Cannot create an IsInSetConstraint for field 'foo' with a set containing null"
     And no data is created
 
   Scenario: Running an 'inSet' request that includes multiples of the same entry should be successful.
@@ -1524,3 +1524,12 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "Test2" | 1     |
       | "Test3" | 2     |
       | "Test4" | 2     |
+
+#TODO  Scenario: Running a 'inSet' request alongside a contradicting ofType = string should produce null
+#    Given there is a field foo
+#    And foo has type "string"
+#    And foo is in set:
+#      | 1 |
+#      | 2 |
+#      | 3 |
+#    Then the profile is invalid because "Field \[foo\]: is type STRING , but you are trying to apply a inSet constraint which requires NUMERIC"

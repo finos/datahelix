@@ -382,8 +382,7 @@ After loading the set from the file, this constraint behaves identically to the 
 ```javascript
 {
     "field": "country",
-    "is": "inMap",
-    "file": "countries.csv",
+    "inMap": "countries.csv",
     "key": "Country"
 }
 ```
@@ -412,7 +411,7 @@ Scotland, Edinburgh
 ### `null` _(field)_
 
 ```javascript
-{ "field": "price", "isNull": "true"}
+{ "null": "price" }
 ```
 
 Is satisfied if `field` is null or absent.
@@ -606,7 +605,7 @@ supported operators are currently
 Allows a dependant date to always be a certain offset away from another date
 
 ```javascript
-{ "field": "threeDaysAfterField", "equalTo": "previousDateField", "offset": 3, "offsetUnit": "days" }
+{ "field": "threeDaysAfterField","equalToField": "previousDateField", "offset": 3, "offsetUnit": "days" }
 ```
 
 # Grammatical constraints
@@ -619,7 +618,7 @@ See [set restriction and generation](user/SetRestrictionAndGeneration.md) for an
 ## `not`
 
 ```javascript
-{ "not": { "field": "foo", "isNull": "true"} }
+{ "not": { "null": "foo" } }
 ```
 
 Wraps a constraint. Is satisfied if, and only if, its inner constraint is _not_ satisfied.
@@ -628,8 +627,8 @@ Wraps a constraint. Is satisfied if, and only if, its inner constraint is _not_ 
 
 ```javascript
 { "anyOf": [
-    { "field": "foo", "equalTo": 0 },
-    { "field": "foo", "isNull": "true"} }
+    { "null": "foo" },
+    { "field": "foo", "equalTo": 0 }
 ]}
 ```
 

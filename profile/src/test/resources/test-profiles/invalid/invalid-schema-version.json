@@ -5,8 +5,7 @@
       "constraints": [
         {
           "field": "field1",
-          "is": "equalTo",
-          "value": "hello"
+          "equalTo": "hello"
         }
       ]
     }

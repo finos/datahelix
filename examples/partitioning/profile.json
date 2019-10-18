@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.11",
+  "schemaVersion": "0.12",
   "fields": [
     {
       "name": "p1f1",
@@ -43,8 +43,7 @@
       "constraints": [
         {
           "field": "p1f1",
-          "is": "inSet",
-          "values": [
+          "inSet": [
             "p1-null",
             "p1-string"
           ]
@@ -52,17 +51,14 @@
         {
           "if": {
             "field": "p1f1",
-            "is": "equalTo",
-            "value": "p1-null"
+            "equalTo": "p1-null"
           },
           "then": {
-            "field": "p1f2",
-            "is": "null"
+            "null": "p1f2"
           },
           "else": {
             "field": "p1f2",
-            "is": "inSet",
-            "values": [
+            "inSet": [
               "hello",
               "goodbye"
             ]
@@ -71,24 +67,20 @@
         {
           "if": {
             "field": "p1f1",
-            "is": "equalTo",
-            "value": "p1-null"
+            "equalTo": "p1-null"
           },
           "then": {
-            "field": "p1f3",
-            "is": "null"
+            "null": "p1f3"
           },
           "else": {
             "anyOf": [
               {
                 "field": "p1f3",
-                "is": "equalTo",
-                "value": "string-1"
+                "equalTo": "string-1"
               },
               {
                 "field": "p1f3",
-                "is": "equalTo",
-                "value": "string-2"
+                "equalTo": "string-2"
               }
             ]
           }
@@ -100,8 +92,7 @@
       "constraints": [
         {
           "field": "p2f1",
-          "is": "inSet",
-          "values": [
+          "inSet": [
             "p2-null",
             "p2-string"
           ]
@@ -109,17 +100,14 @@
         {
           "if": {
             "field": "p2f1",
-            "is": "equalTo",
-            "value": "p2-null"
+            "equalTo": "p2-null"
           },
           "then": {
-            "field": "p2f2",
-            "is": "null"
+            "null": "p2f2"
           },
           "else": {
             "field": "p2f2",
-            "is": "inSet",
-            "values": [
+            "inSet": [
               "hello",
               "goodbye"
             ]
@@ -128,24 +116,20 @@
         {
           "if": {
             "field": "p2f1",
-            "is": "equalTo",
-            "value": "p2-null"
+            "equalTo": "p2-null"
           },
           "then": {
-            "field": "p2f3",
-            "is": "null"
+            "null": "p2f3"
           },
           "else": {
             "anyOf": [
               {
                 "field": "p2f3",
-                "is": "equalTo",
-                "value": "string-1"
+                "equalTo": "string-1"
               },
               {
                 "field": "p2f3",
-                "is": "equalTo",
-                "value": "string-2"
+                "equalTo": "string-2"
               }
             ]
           }
@@ -157,8 +141,7 @@
       "constraints": [
         {
           "field": "p3f1",
-          "is": "inSet",
-          "values": [
+          "inSet": [
             "p3-null",
             "p3-string"
           ]
@@ -166,17 +149,14 @@
         {
           "if": {
             "field": "p3f1",
-            "is": "equalTo",
-            "value": "p3-null"
+            "equalTo": "p3-null"
           },
           "then": {
-            "field": "p3f2",
-            "is": "null"
+            "null": "p3f2"
           },
           "else": {
             "field": "p3f2",
-            "is": "inSet",
-            "values": [
+            "inSet": [
               "hello",
               "goodbye"
             ]
@@ -185,24 +165,20 @@
         {
           "if": {
             "field": "p3f1",
-            "is": "equalTo",
-            "value": "p3-null"
+            "equalTo": "p3-null"
           },
           "then": {
-            "field": "p3f3",
-            "is": "null"
+            "null": "p3f3"
           },
           "else": {
             "anyOf": [
               {
                 "field": "p3f3",
-                "is": "equalTo",
-                "value": "string-1"
+                "equalTo": "string-1"
               },
               {
                 "field": "p3f3",
-                "is": "equalTo",
-                "value": "string-2"
+                "equalTo": "string-2"
               }
             ]
           }

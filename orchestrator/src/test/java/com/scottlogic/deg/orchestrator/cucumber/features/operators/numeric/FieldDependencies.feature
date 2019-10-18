@@ -76,8 +76,7 @@ Feature:As a  User
       """
         {
           "field": "bar",
-          "is": "equalTo",
-          "otherField": "foo",
+          "equalToField": "foo",
           "offset": 3,
           "offsetUnit": 1
         }
@@ -94,8 +93,7 @@ Feature:As a  User
       """
         {
           "field": "bar",
-          "is": "equalTo",
-          "otherField": "foo",
+          "equalToField": "foo",
           "offset": -3,
           "offsetUnit": 1
         }

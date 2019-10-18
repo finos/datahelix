@@ -16,8 +16,8 @@
 
 package com.scottlogic.deg.common.util;
 
-import com.scottlogic.deg.common.profile.constraintdetail.DateTimeGranularity;
-import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularity;
+import com.scottlogic.deg.common.profile.DateTimeGranularity;
+import com.scottlogic.deg.common.profile.NumericGranularity;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;

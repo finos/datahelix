@@ -8,10 +8,10 @@
     ],
     "rules": [
 		{
-			"if": { "field": "type", "is": "equalTo", "value": "a" },
+			"if": { "field": "type", "equalTo": "a" },
 			"then": { "allOf": [
-				{ "field": "x", "is": "equalTo", "value": "0.9" },
-				{ "field": "y", "is": "equalTo", "value": "12" }
+				{ "field": "x", "equalTo": "0.9" },
+				{ "field": "y", "equalTo": "12" }
 			]},
 			"else": { "allOf": [
 				{ "field": "x", "is": "null" },

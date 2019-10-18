@@ -17,13 +17,14 @@
 package com.scottlogic.deg.orchestrator.violate.violator;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.generator.profile.Profile;
+import com.scottlogic.deg.common.profile.HelixNumber;
 import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.profile.Rule;
+import com.scottlogic.deg.generator.profile.RuleInformation;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsGreaterThanConstantConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsLessThanConstantConstraint;
-import com.scottlogic.deg.generator.profile.RuleInformation;
 import com.scottlogic.deg.orchestrator.violate.ViolatedProfile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,16 +32,15 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 import static com.scottlogic.deg.orchestrator.violate.violator.TypeEqualityHelper.assertListProfileTypeEquality;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
-import static org.mockito.Mockito.*;
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static org.mockito.Mockito.when;
 
 public class ProfileViolatorTests {
 
@@ -152,22 +152,22 @@ public class ProfileViolatorTests {
         barField = createField("bar");
         Constraint constraint1 = new IsGreaterThanConstantConstraint(
             fooField,
-            BigDecimal.valueOf(100)
+            HelixNumber.create(100)
         );
         Constraint constraint2 = new IsGreaterThanConstantConstraint(
             barField,
-            BigDecimal.valueOf(50)
+            HelixNumber.create(50)
         );
         rule1 = new Rule(ruleInformation1, Arrays.asList(constraint1, constraint2));
 
         //Violated Rule 1 consists of two constraints, "foo is less than to 101" and "bar is less than 51"
         Constraint constraint3 = new IsLessThanConstantConstraint(
             fooField,
-            BigDecimal.valueOf(101)
+            HelixNumber.create(101)
         );
         Constraint constraint4 = new IsLessThanConstantConstraint(
             barField,
-            BigDecimal.valueOf(51)
+            HelixNumber.create(51)
         );
         violatedRule1 = new Rule(ruleInformation1, Arrays.asList(constraint3, constraint4));
 

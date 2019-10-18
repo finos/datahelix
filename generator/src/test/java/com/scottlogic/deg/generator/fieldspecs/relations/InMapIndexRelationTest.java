@@ -8,14 +8,14 @@ import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static com.shazam.shazamcrest.MatcherAssert.assertThat;
-import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.shazam.shazamcrest.MatcherAssert.assertThat;
+import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 
 class InMapIndexRelationTest {
     private static InMapIndexRelation testInstance;
@@ -24,7 +24,7 @@ class InMapIndexRelationTest {
     static void before() {
         Field f1 = createField("field1");
         Field f2 = createField("field1");
-        List<String> values = Arrays.asList("foo", "bar");
+        List<Object> values = Arrays.asList("foo", "bar");
 
         testInstance = new InMapIndexRelation(f1, f2, DistributedList.uniform(values));
     }

@@ -16,9 +16,9 @@
 
 package com.scottlogic.deg.orchestrator.cucumber.testframework.steps;
 
-import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestHelper;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestState;
+import com.scottlogic.deg.profile.common.ConstraintType;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 
@@ -40,82 +40,82 @@ public class NumericValueStep {
 
     @And("^([A-z0-9]+) is equal to (-?[0-9\\.]+)$")
     public void equalToNumber(String field, String value){
-        state.addConstraint(field, AtomicConstraintType.IS_EQUAL_TO_CONSTANT.getText(), tryParse(value));
+        state.addConstraint(field, ConstraintType.EQUAL_TO, tryParse(value));
     }
 
     @And("^([A-z0-9]+) is greater than (-?[0-9\\.]+)$")
     public void greaterThanNumber(String field, String value){
-        state.addConstraint(field, AtomicConstraintType.IS_GREATER_THAN_CONSTANT.getText(), tryParse(value));
+        state.addConstraint(field, ConstraintType.GREATER_THAN, tryParse(value));
     }
 
     @And("^([A-z0-9]+) is greater than or equal to (-?[0-9\\.]+)$")
     public void greaterThanOrEqualNumber(String field, String value){
-        state.addConstraint(field, AtomicConstraintType.IS_GREATER_THAN_OR_EQUAL_TO_CONSTANT.getText(), tryParse(value));
+        state.addConstraint(field, ConstraintType.GREATER_THAN_OR_EQUAL_TO, tryParse(value));
     }
 
     @And("^([A-z0-9]+) is less than (-?[0-9\\.]+)$")
     public void lessThanNumber(String field, String value){
-        state.addConstraint(field, AtomicConstraintType.IS_LESS_THAN_CONSTANT.getText(), tryParse(value));
+        state.addConstraint(field, ConstraintType.LESS_THAN, tryParse(value));
     }
 
     @And("^([A-z0-9]+) is less than or equal to (-?[0-9\\.]+)$")
     public void lessThanOrEqualNumber(String field, String value){
-        state.addConstraint(field, AtomicConstraintType.IS_LESS_THAN_OR_EQUAL_TO_CONSTANT.getText(), tryParse(value));
+        state.addConstraint(field, ConstraintType.LESS_THAN_OR_EQUAL_TO, tryParse(value));
     }
 
     @And("^([A-z0-9]+) is granular to ([0-9\\.]+)$")
     public void granularToNumber(String field, String value){
-        state.addConstraint(field, AtomicConstraintType.IS_GRANULAR_TO.getText(), tryParse(value));
+        state.addConstraint(field, ConstraintType.GRANULAR_TO, tryParse(value));
     }
 
     @And("^([A-z0-9]+) is anything but equal to (-?[0-9\\.]+)$")
     public void notEqualToNumber(String field, String value){
-        state.addNotConstraint(field, AtomicConstraintType.IS_EQUAL_TO_CONSTANT.getText(), tryParse(value));
+        state.addNotConstraint(field, ConstraintType.EQUAL_TO, tryParse(value));
     }
 
     @And("^([A-z0-9]+) is anything but greater than (-?[0-9\\.]+)$")
     public void notGreaterThanNumber(String field, String value){
-        state.addNotConstraint(field, AtomicConstraintType.IS_GREATER_THAN_CONSTANT.getText(), tryParse(value));
+        state.addNotConstraint(field, ConstraintType.GREATER_THAN, tryParse(value));
     }
 
     @And("^([A-z0-9]+) is anything but greater than or equal to (-?[0-9\\.]+)$")
     public void notGreaterThanOrEqualNumber(String field, String value){
-        state.addNotConstraint(field, AtomicConstraintType.IS_GREATER_THAN_OR_EQUAL_TO_CONSTANT.getText(), tryParse(value));
+        state.addNotConstraint(field, ConstraintType.GREATER_THAN_OR_EQUAL_TO, tryParse(value));
     }
 
     @And("^([A-z0-9]+) is anything but less than (-?[0-9\\.]+)$")
     public void notLessThanNumber(String field, String value){
-        state.addNotConstraint(field, AtomicConstraintType.IS_LESS_THAN_CONSTANT.getText(), tryParse(value));
+        state.addNotConstraint(field, ConstraintType.LESS_THAN, tryParse(value));
     }
 
     @And("^([A-z0-9]+) is anything but less than or equal to (-?[0-9\\.]+)$")
     public void notLessThanOrEqualNumber(String field, String value){
-        state.addNotConstraint(field, AtomicConstraintType.IS_LESS_THAN_OR_EQUAL_TO_CONSTANT.getText(), tryParse(value));
+        state.addNotConstraint(field, ConstraintType.LESS_THAN_OR_EQUAL_TO, tryParse(value));
     }
 
     @And("^([A-z0-9]+) is anything but granular to ([0-9\\.]+)$")
     public void notGranularToNumber(String field, String value){
-        state.addNotConstraint(field, AtomicConstraintType.IS_GRANULAR_TO.getText(), tryParse(value));
+        state.addNotConstraint(field, ConstraintType.GRANULAR_TO, tryParse(value));
     }
 
     @And("^(.+) is greater than field ([A-z0-9]+)$")
-    public void numericGreater(String field, String otherField) {
-        state.addRelationConstraint(field, AtomicConstraintType.IS_GREATER_THAN_CONSTANT.getText(), otherField);
+    public void numericGreater(String field, String otherField){
+        state.addRelationConstraint(field, ConstraintType.GREATER_THAN_FIELD, otherField);
     }
 
     @And("^(.+) is less than field ([A-z0-9]+)$")
-    public void numericLess(String field, String otherField) {
-        state.addRelationConstraint(field, AtomicConstraintType.IS_LESS_THAN_CONSTANT.getText(), otherField);
+    public void numericLess(String field, String otherField){
+        state.addRelationConstraint(field, ConstraintType.LESS_THAN_FIELD, otherField);
     }
 
     @And("^(.+) is greater than or equal to field ([A-z0-9]+)$")
     public void numericGreaterEqual(String field, String otherField){
-        state.addRelationConstraint(field, AtomicConstraintType.IS_GREATER_THAN_OR_EQUAL_TO_CONSTANT.getText(), otherField);
+        state.addRelationConstraint(field, ConstraintType.GREATER_THAN_OR_EQUAL_TO_FIELD, otherField);
     }
 
     @And("^(.+) is less than or equal to field ([A-z0-9]+)$")
-    public void numericLessEqual(String field, String otherField) {
-        state.addRelationConstraint(field, AtomicConstraintType.IS_LESS_THAN_OR_EQUAL_TO_CONSTANT.getText(), otherField);
+    public void numericLessEqual(String field, String otherField){
+        state.addRelationConstraint(field, ConstraintType.LESS_THAN_OR_EQUAL_TO_FIELD, otherField);
     }
 
     @Then("{fieldVar} contains numeric data")

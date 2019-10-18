@@ -17,16 +17,16 @@
 package com.scottlogic.deg.orchestrator.violate.violator;
 
 import com.scottlogic.deg.common.profile.*;
-import com.scottlogic.deg.generator.profile.constraints.Constraint;
-import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
-import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
-import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.builders.*;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.profile.Rule;
+import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.generator.violations.filters.ConstraintTypeViolationFilter;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import com.scottlogic.deg.orchestrator.violate.ViolatedProfile;
@@ -38,16 +38,18 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.scottlogic.deg.orchestrator.violate.violator.TypeEqualityHelper.assertProfileListsAreEquivalent;
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.deg.orchestrator.violate.violator.TypeEqualityHelper.assertProfileListsAreEquivalent;
 
 /**
  * Defines tests for all business logic involved in Profile Violation.
@@ -84,19 +86,19 @@ public class ProfileViolationTests {
 
             Arguments.of(ContainsRegexConstraint.class, Pattern.compile("\\w+")),
             Arguments.of(MatchesRegexConstraint.class, Pattern.compile("\\d+")),
-            Arguments.of(IsStringLongerThanConstraint.class, 10),
-            Arguments.of(IsStringShorterThanConstraint.class, 20),
-            Arguments.of(StringHasLengthConstraint.class, 15),
+            Arguments.of(IsStringLongerThanConstraint.class, HelixStringLength.create(10)),
+            Arguments.of(IsStringShorterThanConstraint.class, HelixStringLength.create(20)),
+            Arguments.of(StringHasLengthConstraint.class, HelixStringLength.create(15)),
 
-            Arguments.of(IsAfterConstantDateTimeConstraint.class, sampleDate),
-            Arguments.of(IsAfterOrEqualToConstantDateTimeConstraint.class, sampleDate.plusDays(1)),
-            Arguments.of(IsBeforeConstantDateTimeConstraint.class, sampleDate.minusDays(1)),
-            Arguments.of(IsBeforeOrEqualToConstantDateTimeConstraint.class, sampleDate.plusDays(2)),
+            Arguments.of(IsAfterConstantDateTimeConstraint.class, HelixDateTime.create(sampleDate)),
+            Arguments.of(IsAfterOrEqualToConstantDateTimeConstraint.class, HelixDateTime.create(sampleDate.plusDays(1))),
+            Arguments.of(IsBeforeConstantDateTimeConstraint.class, HelixDateTime.create(sampleDate.minusDays(1))),
+            Arguments.of(IsBeforeOrEqualToConstantDateTimeConstraint.class, HelixDateTime.create(sampleDate.plusDays(2))),
 
-            Arguments.of(IsGreaterThanConstantConstraint.class, BigDecimal.valueOf(100)),
-            Arguments.of(IsGreaterThanOrEqualToConstantConstraint.class, BigDecimal.valueOf(200)),
-            Arguments.of(IsLessThanConstantConstraint.class, BigDecimal.valueOf(300)),
-            Arguments.of(IsLessThanOrEqualToConstantConstraint.class, BigDecimal.valueOf(400))
+            Arguments.of(IsGreaterThanConstantConstraint.class, HelixNumber.create(100)),
+            Arguments.of(IsGreaterThanOrEqualToConstantConstraint.class, HelixNumber.create(200)),
+            Arguments.of(IsLessThanConstantConstraint.class, HelixNumber.create(300)),
+            Arguments.of(IsLessThanOrEqualToConstantConstraint.class, HelixNumber.create(400))
         );
     }
 

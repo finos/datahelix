@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.11",
+  "schemaVersion": "0.12",
   "fields": [
     {
       "name": "tradeId",
@@ -47,45 +47,45 @@
     {
       "rule": "tradeId",
       "constraints": [
-        { "field": "tradeId", "is": "greaterThanOrEqualTo", "value": 10000 },
-        { "field": "tradeId", "is": "lessThanOrEqualTo", "value": 99999 }
+        { "field": "tradeId", "greaterThanOrEqualTo": 10000 },
+        { "field": "tradeId", "lessThanOrEqualTo": 99999 }
       ]
     },
     {
       "rule": "stock",
       "constraints": [
-        { "field": "stock", "is": "inSet", "file": "examples/demo-trades/stockCodes.csv" }
+        { "field": "stock", "inSet": "examples/demo-trades/stockCodes.csv" }
       ]
     },
     {
       "rule": "side",
       "constraints": [
-        { "field": "side", "is": "inSet", "values": [ "BUY", "SELL" ] }
+        { "field": "side", "inSet": [ "BUY", "SELL" ] }
       ]
     },
     {
       "rule": "tradePrice",
       "constraints": [
-        { "field": "tradePrice", "is": "granularTo", "value": 0.1 },
+        { "field": "tradePrice", "granularTo": 0.1 },
         {
-          "if": { "field": "stock", "is": "equalTo", "value": "LLOY" },
+          "if": { "field": "stock", "equalTo": "LLOY" },
           "then": { "allOf": [
-            { "field": "tradePrice", "is": "greaterThan", "value": 49.3 },
-            { "field": "tradePrice", "is": "lessThan", "value": 50.0 }
+            { "field": "tradePrice", "greaterThan": 49.3 },
+            { "field": "tradePrice", "lessThan": 50.0 }
           ]}
         },
         {
-          "if": { "field": "stock", "is": "equalTo", "value": "BARC" },
+          "if": { "field": "stock", "equalTo": "BARC" },
           "then": { "allOf": [
-            { "field": "tradePrice", "is": "greaterThan", "value": 136.1 },
-            { "field": "tradePrice", "is": "lessThan", "value": 137.0 }
+            { "field": "tradePrice", "greaterThan": 136.1 },
+            { "field": "tradePrice", "lessThan": 137.0 }
           ]}
         },
         {
-          "if": { "field": "stock", "is": "equalTo", "value": "BP" },
+          "if": { "field": "stock", "equalTo": "BP" },
           "then": { "allOf": [
-            { "field": "tradePrice", "is": "greaterThan", "value": 490.0 },
-            { "field": "tradePrice", "is": "lessThan", "value": 500.0 }
+            { "field": "tradePrice", "greaterThan": 490.0 },
+            { "field": "tradePrice", "lessThan": 500.0 }
           ]}
         }
       ]
@@ -93,29 +93,29 @@
     {
       "rule": "volume",
       "constraints": [
-        { "field": "volume", "is": "greaterThanOrEqualTo", "value": 1 },
-        { "field": "volume", "is": "lessThanOrEqualTo", "value": 20 }
+        { "field": "volume", "greaterThanOrEqualTo": 1 },
+        { "field": "volume", "lessThanOrEqualTo": 20 }
       ]
     },
     {
       "rule": "tradeDatetime",
       "constraints": [
-        { "field": "tradeDatetime", "is": "granularTo", "value": "millis" },
-        { "field": "tradeDatetime", "is": "after", "value":"2019-09-02T09:30:00.000" },
-        { "field": "tradeDatetime", "is": "before", "value": "2019-09-02T16:30:00.000" }
+        { "field": "tradeDatetime", "granularTo": "millis" },
+        { "field": "tradeDatetime", "after":"2019-09-02T09:30:00.000" },
+        { "field": "tradeDatetime", "before": "2019-09-02T16:30:00.000" }
       ]
     },
     {
       "rule": "tradeDate",
       "constraints": [
-        { "field": "tradeDate", "is": "granularTo", "value": "days" },
-        { "field": "tradeDate", "is": "equalTo", "value": "2019-09-02T00:00:00.000" }
+        { "field": "tradeDate", "granularTo": "days" },
+        { "field": "tradeDate", "equalTo": "2019-09-02T00:00:00.000" }
       ]
     },
     {
       "rule": "settlementDate",
       "constraints": [
-        { "field": "settlementDate", "is": "equalTo", "otherField": "tradeDate", "offset": 5, "offsetUnit": "working days" }
+        { "field": "settlementDate","equalToField": "tradeDate", "offset": 5, "offsetUnit": "working days" }
       ]
     }
   ]

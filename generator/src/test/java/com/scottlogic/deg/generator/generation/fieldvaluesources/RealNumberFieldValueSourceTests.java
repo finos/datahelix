@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
-import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularity;
+import com.scottlogic.deg.common.profile.NumericGranularity;
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.generator.restrictions.linear.*;

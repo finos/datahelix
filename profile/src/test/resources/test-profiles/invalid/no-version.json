@@ -10,8 +10,7 @@
         },
         {
           "field": "field1",
-          "is": "shorterThan",
-          "value": 19
+          "shorterThan": 19
         }
       ]
     }

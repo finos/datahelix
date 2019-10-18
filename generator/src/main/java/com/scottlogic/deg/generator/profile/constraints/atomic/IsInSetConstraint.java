@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
+import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Field;
 
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
@@ -34,13 +35,13 @@ public class IsInSetConstraint implements AtomicConstraint {
         this.legalValues = legalValues;
 
         if (legalValues.distributedList().isEmpty()) {
-            throw new IllegalArgumentException("Cannot create an IsInSetConstraint for field '" +
-                field.name + "' with an empty set.");
+            throw new ValidationException("Cannot create an IsInSetConstraint for field '" +
+                field.name + "' with an empty set");
         }
 
         if (legalValues.list().contains(null)) {
-            throw new IllegalArgumentException("Cannot create an IsInSetConstraint for field '" +
-                field.name + "' with a set containing null.");
+            throw new ValidationException("Cannot create an IsInSetConstraint for field '" +
+                field.name + "' with a set containing null");
         }
     }
 

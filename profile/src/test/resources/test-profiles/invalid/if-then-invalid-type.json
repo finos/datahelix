@@ -7,7 +7,7 @@
         {
           "if": {"field": "foo", "is": "ofType", "value": "integer"},
           "then": 0,
-          "else": {"field": "foo", "is": "equalTo", "value": "N/A"}
+          "else": {"field": "foo", "equalTo": "N/A"}
         }
       ]
     }
