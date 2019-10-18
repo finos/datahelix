@@ -119,6 +119,14 @@ public class JsonProfileReader implements ProfileReader {
         return new Profile(profileFields, rules, profileDTO.description);
     }
 
+    private String getFormatting(FieldDTO fDto) {
+        if (fDto.formatting != null) {
+            return fDto.formatting;
+        } else  {
+            return fDto.type.getDefaultFormatting();
+        }
+    }
+
     private List<String> getInMapConstraints(ProfileDTO profileDto)
     {
         return profileDto.rules.stream()
