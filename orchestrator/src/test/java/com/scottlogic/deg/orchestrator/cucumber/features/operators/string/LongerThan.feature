@@ -31,31 +31,6 @@ Feature: User can specify that a string length is longer than, a specified numbe
     Then the profile is invalid because "Field \[foo\]: longerThan constraint must have an operand/value >= 0, currently is -5"
     And no data is created
 
-  Scenario: 'longerThan' a decimal number with an non-zero mantissa should fail with an error message
-    Given foo is longer than 1.1
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be an integer but was a decimal with value `1.1`"
-    And no data is created
-
-  Scenario: 'longerThan' a string should fail with an error message
-    Given foo is longer than "Test"
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be an Integer but was a String with value `Test`"
-    And no data is created
-
-  Scenario: 'longerThan' an empty string should fail with an error message
-    Given foo is longer than ""
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be an Integer but was a String with value ``"
-    And no data is created
-
-  Scenario: 'longerThan' whitespace should fail with an error message
-    Given foo is longer than " "
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be an Integer but was a String with value ` `"
-    And no data is created
-
-  Scenario: 'longerThan' null should fail with an error message
-    Given foo is longer than null
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be set to a value"
-    And no data is created
-
   Scenario: Multiple non-contradictory 'longerThan' requests should be successful
     Given foo is longer than 2
     And foo is longer than 1

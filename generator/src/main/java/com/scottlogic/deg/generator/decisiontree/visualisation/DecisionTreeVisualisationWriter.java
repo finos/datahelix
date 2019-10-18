@@ -30,7 +30,7 @@ import java.util.Comparator;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-public class DecisionTreeVisualisationWriter {
+public class DecisionTreeVisualisationWriter implements AutoCloseable {
     private final Writer outputStringWriter;
     private final boolean shouldWriteRootInfo;
     private final boolean shouldWriteOptionInfo;
@@ -74,6 +74,12 @@ public class DecisionTreeVisualisationWriter {
         }
 
         writeLine("}");
+        outputStringWriter.flush();
+    }
+
+    @Override
+    public void close() throws IOException {
+        outputStringWriter.close();
     }
 
     private TreeInfo visit(ConstraintNode constraintNode, String parentNodeId) throws IOException {

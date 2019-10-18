@@ -42,20 +42,6 @@ Feature: User can specify that decimal fields are granular to a certain number o
       | -0.9 |
       | -1   |
 
-  Scenario: User attempts to create a numeric field with data value that include a decimal value to one decimal point incorrectly using a string to set the granularity
-    Given foo is granular to "0.1"
-    And foo is greater than 0
-    And foo is less than 0.2
-    Then the following data should be generated:
-      | foo  |
-      | 0.1  |
-
-  Scenario: Running a 'granularTo' request that specifies null should be unsuccessful
-    Given foo is granular to null
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be set to a value"
-    And no data is created
-
-
   Scenario: Running granularTo against a non contradicting granularTo should be successful
     Given foo is granular to 1
     And foo is granular to 1

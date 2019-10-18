@@ -16,9 +16,11 @@
 
 package com.scottlogic.deg.profile.dto;
 
+import com.scottlogic.deg.common.profile.SpecificFieldType;
+
 public class FieldDTO {
     public String name;
-    public String type;
+    public SpecificFieldType type;
     public String formatting;
     public boolean unique;
     public boolean nullable = true;

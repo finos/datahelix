@@ -2,7 +2,7 @@ package com.scottlogic.deg.profile.reader.atomic;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.common.profile.Types;
+import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
@@ -10,11 +10,9 @@ import com.scottlogic.deg.profile.dto.ConstraintDTO;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -28,7 +26,7 @@ public class AtomicConstraintValueReader {
     }
 
 
-    public Object getValue(ConstraintDTO dto, Types type){
+    public Object getValue(ConstraintDTO dto, FieldType type){
         try {
             return tryGetValue(dto, type);
         } catch (IllegalArgumentException | ValidationException e){
@@ -36,7 +34,7 @@ public class AtomicConstraintValueReader {
         }
     }
 
-    private Object tryGetValue(ConstraintDTO dto, Types type){
+    private Object tryGetValue(ConstraintDTO dto, FieldType type){
         if (dto.values != null){
             return getSet(dto.values, type);
         }
@@ -52,14 +50,14 @@ public class AtomicConstraintValueReader {
         return getValue(dto.value, type);
     }
 
-    private DistributedList getList(Collection<Object> values, Types type) {
+    private DistributedList getList(Collection<Object> values, FieldType type) {
         List collect = values.stream()
             .map(val -> getValue(val, type))
             .collect(Collectors.toList());
         return DistributedList.uniform(collect);
     }
 
-    private DistributedList getSet(Collection<Object> values, Types type) {
+    private DistributedList getSet(Collection<Object> values, FieldType type) {
         List collect = values.stream()
             .map(val -> getValue(val, type))
             .distinct()
@@ -67,7 +65,7 @@ public class AtomicConstraintValueReader {
         return DistributedList.uniform(collect);
     }
 
-    private Object getValue(Object value, Types type) {
+    private Object getValue(Object value, FieldType type) {
         if (type == null) {
             return value;
         }

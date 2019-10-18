@@ -31,8 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static com.scottlogic.deg.profile.reader.atomic.ConstraintReaderHelpers.getFieldType;
 import static org.hamcrest.Matchers.*;
 
 public class GeneralTestStep {
@@ -108,7 +106,25 @@ public class GeneralTestStep {
         state.addRelationConstraint(field, AtomicConstraintType.IS_EQUAL_TO_CONSTANT.getText(), otherField);
     }
 
+    @When("^If and Then are described below$")
+    public void ifStartThen(){
+        state.startCreatingIfConstraint(2);
+    }
 
+    @When("^If Then and Else are described below$")
+    public void ifStartThenElse(){
+        state.startCreatingIfConstraint(3);
+    }
+
+    @And("All Of the next {number} constraints")
+    public void allOf(int count){
+        state.startCreatingAllOfConstraint(count);
+    }
+
+    @And("Any Of the next {number} constraints")
+    public void anyOf(int count){
+        state.startCreatingAnyOfConstraint(count);
+    }
 
     @Then("^the profile should be considered valid$")
     public void theProfileIsValid() {

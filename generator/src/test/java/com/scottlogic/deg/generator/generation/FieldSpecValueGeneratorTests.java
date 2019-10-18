@@ -34,8 +34,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
-import static com.scottlogic.deg.common.profile.Types.NUMERIC;
-import static com.scottlogic.deg.common.profile.Types.STRING;
+import static com.scottlogic.deg.common.profile.FieldType.NUMERIC;
+import static com.scottlogic.deg.common.profile.FieldType.STRING;
 import static com.scottlogic.deg.generator.config.detail.DataGenerationType.*;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;

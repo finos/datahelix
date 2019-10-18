@@ -58,21 +58,6 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
       | 100.00000000000000000004 |
       | 100.00000000000000000005 |
 
-  Scenario: Running a 'greaterThan' request that specifies a string should be unsuccessful
-    Given foo is greater than "bar"
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be an Number but was a String with value `bar`"
-    And no data is created
-
-  Scenario: Running a 'greaterThan' request that specifies an empty string should be unsuccessful
-    Given foo is greater than ""
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be an Number but was a String with value ``"
-    And no data is created
-
-  Scenario: Running a 'greaterThan' request that specifies null should be unsuccessful
-    Given foo is greater than null
-    Then the profile is invalid because "Field \[foo\]: Couldn't recognise 'value' property, it must be set to a value"
-    And no data is created
-
   Scenario: Running a 'greaterThan' request that specifies a negative should be successful for type integer
     Given foo is greater than -100
     And foo has type "integer"

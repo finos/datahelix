@@ -52,6 +52,19 @@
     2. [anyOf](#anyOf)
     3. [allOf](#allOf)
     4. [if](#if)
+    
+7. [Running a Profile](#Running-a-Profile)
+    1. [Command Line Arguments](#Command-Line-Arguments)
+        1. [Command Line Arguments for Generate Mode](#Command-Line-Arguments-for-Generate-Mode)
+    2. [Generation Strategies](#Generation-strategies)
+        1. [Random Mode](#Random-Mode)
+        2. [Full Sequential Mode](#Full-Sequential-Mode)
+            1. [Combination Strategies](#Combination-Strategies)
+                1. [Minimal](#Minimal)
+                2. [Exhaustive](#Exhaustive)
+                3. [Pinning](#Pinning)
+
+8. [Visualising Decision Trees](#Visualising-Decision-Trees)
 
 # Introduction
 
@@ -367,7 +380,7 @@ After loading the set from the file, this constraint behaves identically to the 
 ### `inMap` _(field, file, key)_
 
 ```javascript
-{ 
+{
     "field": "country",
     "is": "inMap",
     "file": "countries.csv",
@@ -377,7 +390,7 @@ After loading the set from the file, this constraint behaves identically to the 
 
 Is satisfied if `field`'s value is in the map with the key `Country`.
 
-For each field using the same map when one value is picked from the map all fields will use the same row. 
+For each field using the same map when one value is picked from the map all fields will use the same row.
 
 It populates the map from a new-line delimited file (with suffix `.csv`), where each line represents a value to load. A header is required in the file to identify which column is related to a key.
 
@@ -649,3 +662,162 @@ Is satisfied if either:
 - The `if` constraint is not satisfied, and the `else` constraint is
 
 While it's not prohibited, wrapping conditional constraints in any other kind of constraint (eg, a `not`) may cause unintuitive results.
+
+
+# Running a Profile
+<div id="Running-a-Profile"></div>
+
+Profiles can be run against a jar using the command line.
+
+## Command Line Arguments
+<div id="Command-Line-Arguments"></div>
+
+Currently the only mode fully supported by the data helix is generate mode. An example command would be something like
+
+`java -jar generator.jar generate --max-rows=100 --replace --profile-file=profile.json --output-path=output.csv`
+
+### Command Line Arguments for Generate Mode
+<div id="Command-Line-Arguments-for-Generate-Mode"></div>
+Option switches are case-sensitive, arguments are case-insensitive
+
+* `--profile-file=<path>` (or `-p <path>`)
+    * Path to the input profile file.
+* `--output-path=<path>` (or `-o <path>`)
+    * Path to the output file.  If not specified, output will be to standard output.
+* `--replace`
+    * Overwrite/replace existing output files. Defaults to false.
+* `-n <rows>` or `--max-rows <rows>`
+   * Emit at most `<rows>` rows to the output file, if not specified will limit to 10,000,000 rows.
+   * Mandatory in `RANDOM` mode.
+* `--generation-type`
+    * Determines the type of (data generation)[Link] performed. Supported options are `FULL_SEQUENTIAL` and `RANDOM`(default).
+* `--combination-strategy`
+    * Determines the type of combination strategy used in full sequential mode. Supported options are `MINIMAL`(default), `EXHAUSTIVE` and `PINNING`.
+* `--output-format`
+    * Determines the output format. Supported options are `csv`(default) and `json`.
+* `--ndjson`
+    * When combined with the `--output-format=json` flag sets the output format to [ndjson](http://ndjson.org/). Defaults to true if the `--output-flag` is not set and to false if it is set.
+* `--visualiser-level`
+    * Determines level of visualisation using.  Supported options are `OFF` (default), `STANDARD` and `DETAILED`
+* `--visualiser-output-folder`
+    * The path to the folder to write the generated visualiser files to (defaults to current directory (`.`).  Its only used if `visualiser-level` != `OFF`.
+
+By default the generator will report how much data has been generated over time, the other options are below:
+* `--verbose`
+    * Will report in-depth detail of data generation
+* `--quiet`
+    * Will disable velocity reporting
+
+`--quiet` will be ignored if `--verbose` is supplied.
+
+## Generation Strategies
+<div id="Generation Strategies"></div>
+The generation mode can be specified by the `--generation-type` flag.
+
+The generator supports the following data generation types
+
+* Random (_default_)
+* Full Sequential
+
+### Random Mode
+<div id="Random Mode"></div>
+Generate some random data that abides by the given set of constraints.
+
+Examples:
+
+| Constraint | Emitted valid data |
+| ---- | ---- | ---- |
+| `Field 1 > 10 AND Field 1 < 20` | _(any values > 10 & < 20)_ |
+| `Field 1 in set [A, B, C]` | _(A, B or C in any order, repeated as needed)_ |
+
+Notes:
+- Random generation of data is infinite and is limited to 1000 by default, use `--max-rows` to enable generation of more data.
+
+### Full Sequential Mode
+<div id="Full-Sequential-Mode"></div>
+Generate all data that can be generated in order from lowest to highest.
+
+Examples:
+
+| Constraint | Emitted valid data |
+| ---- | ---- | ---- |
+| `Field 1 > 0 AND Field 1 < 5` | _(null, 1, 2, 3, 4)_ |
+| `Field 1 in set [A, B, C]` | _(null, A, B, C)_ |
+
+* Note that null will only be produced depending on the [properties](https://github.com/finos/datahelix/blob/master/docs/UserGuide.md#Fields) of Field 1.
+
+#### Combination Strategies
+<div id="Combination-Strategies"></div>
+There are a few different combination strategies which can be used in **full sequential mode** with minimal being the default. In modes other than full sequential, combination strategy will have no effect.
+
+It is simplest to see how the different combination strategies work by look at the effect on a simple example profile. The following [profile](https://github.com/finos/datahelix/tree/master/examples/multiple-fields/profile.json) contains two fields:
+  * field1 - has values in set [ "A", "B" ]
+  * field2 - has values in set [ 1, 2, 3 ]  
+
+##### Minimal
+<div id="Minimal"></div>
+
+The minimal strategy outputs the minimum data required to exemplify each value at least once. Per the example, the output would be:
+
+* "A",1
+* "B",2
+* "B",3
+
+Note that minimal is the default combination strategy.
+
+##### Exhaustive
+<div id="Exhaustive"></div>
+
+The exhaustive strategy outputs all possible combinations. Given the fields as defined above, possible outputs would be:
+
+* "A",1
+* "B",1
+* "A",2
+* "B",2
+* "A",3
+* "B",3
+
+
+##### Pinning
+<div id="Pinning"></div>
+
+The pinning strategy establishes a baseline for each field (generally by picking the first available value for that field) and then creates outputs such that either:
+
+* All values equal the baseline for the respective field
+* All values except one equal the baseline for the respective field
+
+To generate these outputs, we first output the first case (all values from baseline) and then iterate through each field, F, fixing all other fields at their baseline and generating the full range of values for F. For the example, the output would be:
+
+* "A",1
+* "A",2
+* "A",3
+* "B",1
+
+# Visualising Decision Trees
+<div id="Visualising-Decision-Trees"></div>
+
+_This is an alpha feature. Please do not rely on it. If you find issues with it, please [report them](https://github.com/finos/datahelix/issues)._ 
+
+This feature generates a <a href=https://en.wikipedia.org/wiki/DOT_(graph_description_language)>DOT</a> compliant representation of the decision tree, 
+for manual inspection, in the form of a DOT formatted file.
+
+If use the `--visualiser-level` and `--visualiser-output-folder` command line options when generating data then 
+you can get visualisations of the decision tree outputted as graphs in DOT files. 
+
+* See [Developer Guide](DeveloperGuide.md) for more information on the decision tree structure.
+* See [Command Line Arguments for Generate Mode](#Command-Line-Arguments-for-Generate-Mode) for more information on the command line arguments.
+
+The visualiser levels can have the following values:
+* OFF - the default and it means no graphs outputted 
+* STANDARD - it means graphs of the decision tree outputted after each pre-walking stage is done
+* DETAILED - it means the standard decision trees and the various decision trees created during walking stage are outputted
+
+## How to Read the DOT Files produced
+
+* You may read a DOT file with any text editor
+* You can also use this representation with a visualiser such as [Graphviz](https://www.graphviz.org/).
+
+    There may be other visualisers that are suitable to use. The requirements for a visualiser are known (currently) as:
+    - DOT files are encoded with UTF-8, visualisers must support this encoding.
+    - DOT files can include HTML encoded entities, visualisers should support this feature.
+

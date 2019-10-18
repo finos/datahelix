@@ -17,8 +17,8 @@
 package com.scottlogic.deg.profile.reader;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.common.profile.Types;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.common.util.Defaults;
@@ -40,7 +40,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
-import static com.scottlogic.deg.common.profile.Types.*;
+import static com.scottlogic.deg.common.profile.FieldType.*;
 import static com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType.*;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -190,12 +190,12 @@ public class ConstraintValidationAndReadingTests {
     @DisplayName("Should return correct constraint type")
     @ParameterizedTest(name = "{0} should return {1}")
     @MethodSource("testProvider")
-    public void testAtomicConstraintReader(AtomicConstraintType type, ConstraintDTO dto, Class<?> constraintType, Types types) {
+    public void testAtomicConstraintReader(AtomicConstraintType type, ConstraintDTO dto, Class<?> constraintType, FieldType fieldType) {
 
         try {
-            Object value = new AtomicConstraintValueReader(null).getValue(dto, types);
+            Object value = new AtomicConstraintValueReader(null).getValue(dto, fieldType);
 
-            ConstraintValueValidator.validate(createField(dto.field, types), type, value);
+            ConstraintValueValidator.validate(createField(dto.field, fieldType), type, value);
 
             Constraint constraint = AtomicConstraintFactory.create(type, createField(dto.field), value);
 

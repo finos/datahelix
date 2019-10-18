@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.common.profile.Types;
+import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.*;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.datetime.DateTimeFieldValueSource;
@@ -24,21 +24,18 @@ import com.scottlogic.deg.generator.generation.string.generators.RegexStringGene
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
-import com.scottlogic.deg.common.profile.constraintdetail.NumericGranularity;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.*;
 
-import static com.scottlogic.deg.common.util.Defaults.*;
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDateTimeRestrictions;
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createNumericRestrictions;
-import static com.scottlogic.deg.generator.utils.Defaults.*;
 
 public class FieldValueSourceEvaluator {
     private static final FieldValueSource NULL_ONLY_SOURCE = new NullOnlySource();
 
-    public FieldValueSource getFieldValueSources(Types type, FieldSpec fieldSpec){
+    public FieldValueSource getFieldValueSources(FieldType type, FieldSpec fieldSpec){
 
         Optional<FieldValueSource> source = getSource(type, fieldSpec);
 
@@ -54,7 +51,7 @@ public class FieldValueSourceEvaluator {
         return new NullAppendingValueSource(source.get());
     }
 
-    private Optional<FieldValueSource> getSource(Types type, FieldSpec fieldSpec) {
+    private Optional<FieldValueSource> getSource(FieldType type, FieldSpec fieldSpec) {
         if (fieldSpec.getWhitelist() != null){
             if (fieldSpec.getWhitelist().isEmpty()){
                 return Optional.empty();
@@ -66,7 +63,7 @@ public class FieldValueSourceEvaluator {
         return Optional.of(getRestrictionSource(type, fieldSpec));
     }
 
-    private FieldValueSource getRestrictionSource(Types type, FieldSpec fieldSpec) {
+    private FieldValueSource getRestrictionSource(FieldType type, FieldSpec fieldSpec) {
         switch (type) {
             case DATETIME:
                 return getDateTimeSource(fieldSpec);

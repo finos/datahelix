@@ -18,28 +18,31 @@ package com.scottlogic.deg.profile.reader;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.scottlogic.deg.common.profile.*;
+import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.SpecificFieldType;
 import com.scottlogic.deg.common.profile.constraintdetail.AtomicConstraintType;
-import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.generator.profile.RuleInformation;
+import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.profile.dto.ConstraintDTO;
-import com.scottlogic.deg.profile.reader.atomic.ConstraintReaderHelpers;
+import com.scottlogic.deg.profile.dto.ProfileDTO;
 import com.scottlogic.deg.profile.reader.atomic.OfTypeConstraintFactory;
 import com.scottlogic.deg.profile.serialisation.ProfileDeserialiser;
-import com.scottlogic.deg.profile.dto.ProfileDTO;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.scottlogic.deg.profile.reader.atomic.AtomicConstraintFactory.create;
-import static com.scottlogic.deg.profile.reader.atomic.ConstraintReaderHelpers.getFieldType;
 
 /**
  * JsonProfileReader is responsible for reading and validating a profile from a path to a profile JSON file.
@@ -74,18 +77,12 @@ public class JsonProfileReader implements ProfileReader {
         }
 
         List<Field> inMapFields = getInMapConstraints(profileDto).stream()
-            .map(file ->
-                new Field(
-                    file,
-                    getFieldType("integer"),
-                    false,
-                    null,
-                    true)
+            .map(file -> new Field(file, SpecificFieldType.from("integer").getFieldType(),false,null, true)
             ).collect(Collectors.toList());
 
 
         List<Field> fields = profileDto.fields.stream()
-            .map(fDto -> new Field(fDto.name, ConstraintReaderHelpers.getFieldType(fDto.type), fDto.unique, fDto.formatting,false))
+            .map(fDto -> new Field(fDto.name, fDto.type.getFieldType(), fDto.unique, fDto.formatting,false))
             .collect(Collectors.toList());
 
         fields.addAll(inMapFields);
