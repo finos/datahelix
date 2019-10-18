@@ -1,4 +1,4 @@
-A profile that generates two dates which are equal with an offset.
+A profile that generates two datetimes which are equal with an offset.
 
 The first pair of dates have a positive offset.
 The second pair of dates have a negative offset.

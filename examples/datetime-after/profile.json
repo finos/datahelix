@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "0.13",
+  "fields": [
+    {
+      "name": "date",
+      "type": "datetime",
+      "nullable": false
+    }
+  ],
+  "rules": [
+    {
+      "constraints": [
+        {
+          "field": "date",
+          "after": "8001-02-03T04:05:06.007"
+        }
+      ]
+    }
+  ]
+}
