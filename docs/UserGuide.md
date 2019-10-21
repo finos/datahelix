@@ -411,7 +411,7 @@ Scotland, Edinburgh
 ### `null` _(field)_
 
 ```javascript
-{ "null": "price" }
+{ "field": "price", "isNull" : true }
 ```
 
 Is satisfied if `field` is null or absent.
@@ -618,7 +618,7 @@ See [set restriction and generation](user/SetRestrictionAndGeneration.md) for an
 ## `not`
 
 ```javascript
-{ "not": { "null": "foo" } }
+{ "not": { "field": "foo", "equalTo": "bar" } }
 ```
 
 Wraps a constraint. Is satisfied if, and only if, its inner constraint is _not_ satisfied.
@@ -627,7 +627,7 @@ Wraps a constraint. Is satisfied if, and only if, its inner constraint is _not_ 
 
 ```javascript
 { "anyOf": [
-    { "null": "foo" },
+    { "field": "foo", "isNull": true },
     { "field": "foo", "equalTo": 0 }
 ]}
 ```

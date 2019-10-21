@@ -95,7 +95,8 @@ public class JsonProfileReader implements ProfileReader {
             .filter(fieldDTO -> !fieldDTO.nullable)
             .map(fieldDTO -> constraintReader.read(new NullConstraintDTO() {{
                 field = fieldDTO.name;
-            }}, profileFields).negate())
+                isNull = false;
+            }}, profileFields))
             .collect(Collectors.toList());
 
         Collection<Constraint> typeConstraints = profileDTO.fields.stream()

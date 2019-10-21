@@ -38,7 +38,7 @@ public class ConstraintDeserializer extends JsonDeserializer<ConstraintDTO> {
                     : mapper.treeToValue(node, InSetFromFileConstraintDTO.class);
             case IN_MAP:
                 return mapper.treeToValue(node, InMapConstraintDTO.class);
-            case NULL:
+            case IS_NULL:
                 return mapper.treeToValue(node, NullConstraintDTO.class);
             case GRANULAR_TO:
                 return mapper.treeToValue(node, GranularToConstraintDTO.class);

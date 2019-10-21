@@ -177,7 +177,7 @@ public class JsonProfileReaderTests {
                         "    \"rules\": [" +
                         "      {" +
                         "        \"constraints\": [" +
-                        "            { \"null\": \"foo\" } " +
+                        "            { \"field\": \"foo\", \"isNull\": true } " +
                         "        ]" +
                         "      }" +
                         "    ]" +
@@ -202,7 +202,7 @@ public class JsonProfileReaderTests {
                         "        {" +
                         "           \"rule\": \"Too rule for school\"," +
                         "           \"constraints\": [" +
-                        "               { \"null\": \"foo\" }" +
+                        "               { \"field\": \"foo\", \"isNull\": true }" +
                         "           ]" +
                         "        }" +
                         "    ]" +
@@ -222,7 +222,7 @@ public class JsonProfileReaderTests {
                 "        {" +
                 "           \"rule\": \"Too rule for school\"," +
                 "           \"constraints\": [" +
-                "               { \"null\": \"foo\" }" +
+                "               { \"field\": \"foo\", \"isNull\": true }" +
                 "           ]" +
                 "        }" +
                 "    ]" +
@@ -242,7 +242,7 @@ public class JsonProfileReaderTests {
                 "        {" +
                 "           \"rule\": \"Too rule for school\"," +
                 "           \"constraints\": [" +
-                    "               { \"null\": \"foo\" }" +
+                    "               { \"field\": \"foo\", \"isNull\": true }" +
                 "           ]" +
                 "        }" +
                 "    ]" +
@@ -399,7 +399,7 @@ public class JsonProfileReaderTests {
                         "          {" +
                         "            \"anyOf\": [" +
                         "              { \"field\": \"foo\",  \"equalTo\": 1 }," +
-                        "              { \"null\": \"foo\" }" +
+                        "              { \"field\": \"foo\", \"isNull\": true }" +
                         "            ]" +
                         "          }" +
                         "        ]" +
@@ -428,7 +428,7 @@ public class JsonProfileReaderTests {
                         "          {" +
                         "           \"allOf\": [" +
                         "             { \"field\": \"foo\",  \"equalTo\": 1 }," +
-                        "             { \"null\": \"foo\" }" +
+                        "             { \"field\": \"foo\", \"isNull\": true }" +
                         "            ]" +
                         "          }" +
                         "        ]" +

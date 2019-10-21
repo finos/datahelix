@@ -11,7 +11,7 @@ public enum ConstraintType {
     EQUAL_TO_FIELD(ConstraintTypeJsonProperty.EQUAL_TO_FIELD),
     IN_SET(ConstraintTypeJsonProperty.IN_SET),
     IN_MAP(ConstraintTypeJsonProperty.IN_MAP),
-    NULL(ConstraintTypeJsonProperty.NULL),
+    IS_NULL(ConstraintTypeJsonProperty.IS_NULL),
     GRANULAR_TO(ConstraintTypeJsonProperty.GRANULAR_TO),
     MATCHES_REGEX(ConstraintTypeJsonProperty.MATCHES_REGEX),
     CONTAINS_REGEX(ConstraintTypeJsonProperty.CONTAINS_REGEX),

@@ -138,9 +138,14 @@ public class ConstraintReader {
                 return new IsBeforeOrEqualToConstantDateTimeConstraint(profileFields.getByName(dto.field), HelixDateTime.create(((BeforeOrAtConstraintDTO) dto).value));
             case GRANULAR_TO:
                 GranularToConstraintDTO granularToConstraintDTO = (GranularToConstraintDTO) dto;
-                return granularToConstraintDTO.value instanceof Number
+            return granularToConstraintDTO.value instanceof Number
                     ? new IsGranularToNumericConstraint(profileFields.getByName(dto.field), NumericGranularity.create(granularToConstraintDTO.value))
                     : new IsGranularToDateConstraint(profileFields.getByName(dto.field), DateTimeGranularity.create((String) granularToConstraintDTO.value));
+            case IS_NULL:
+                IsNullConstraint isNullConstraint = new IsNullConstraint(profileFields.getByName(((NullConstraintDTO) dto).field));
+                return ((NullConstraintDTO)dto).isNull
+                    ? isNullConstraint
+                    : isNullConstraint.negate();
             default:
                 throw new InvalidProfileException("Atomic constraint type not found: " + dto);
         }
@@ -162,8 +167,6 @@ public class ConstraintReader {
                 return new ConditionalConstraint(ifConstraint, thenConstraint, elseConstraint);
             case NOT:
                 return read(((NotConstraintDTO) dto).constraint, profileFields).negate();
-            case NULL:
-                return new IsNullConstraint(profileFields.getByName(((NullConstraintDTO) dto).field));
             default:
                 throw new InvalidProfileException("Grammatical constraint type not found: " + dto);
         }

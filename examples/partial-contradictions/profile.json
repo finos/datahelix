@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.12",
+  "schemaVersion": "0.13",
   "fields": [
     {
       "name": "Column 1",
@@ -21,9 +21,8 @@
                       "equalTo": "I am a string!"
                     },
                     {
-                      "not": {
-                        "null": "Column 1"
-                      }
+                      "field": "Column 1",
+                      "isNull": false
                     }
                   ]
                 },
@@ -36,9 +35,8 @@
                         "equalTo": "I am a string!"
                       },
                       {
-                        "not": {
-                          "null": "Column 1"
-                        }
+                        "field": "Column 1",
+                        "isNull": false
                       }
                     ]
                   }
