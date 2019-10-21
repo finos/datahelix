@@ -25,14 +25,9 @@ import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.generator.profile.RuleInformation;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
-import com.scottlogic.deg.profile.dtos.ProfileDTO;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
 import com.scottlogic.deg.profile.common.ConstraintType;
-import com.scottlogic.deg.profile.dtos.constraints.InMapConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.AllOfConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.AnyOfConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.IfConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.NullConstraintDTO;
+import com.scottlogic.deg.profile.dtos.ProfileDTO;
+import com.scottlogic.deg.profile.dtos.constraints.*;
 import com.scottlogic.deg.profile.reader.atomic.FieldReader;
 import com.scottlogic.deg.profile.serialisation.ProfileSerialiser;
 
@@ -43,6 +38,7 @@ import java.nio.file.Files;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -72,6 +68,9 @@ public class JsonProfileReader implements ProfileReader {
             throw new InvalidProfileException("Profile is invalid: 'fields' have not been defined.");
         if (profileDTO.rules == null)
             throw new InvalidProfileException("Profile is invalid: 'rules' have not been defined.");
+
+        validateUniqueFields(profileDTO);
+
 
         List<Field> fields = profileDTO.fields.stream()
             .map(fieldDTO -> new Field(fieldDTO.name, fieldDTO.type.getFieldType(), fieldDTO.unique, fieldDTO.formatting, false))
@@ -111,6 +110,28 @@ public class JsonProfileReader implements ProfileReader {
             rules.add(new Rule(new RuleInformation("type-rules"), typeConstraints));
         }
         return new Profile(profileFields, rules, profileDTO.description);
+    }
+
+    private void validateUniqueFields(ProfileDTO profileDto) {
+        List<String> uniqueFields = profileDto.fields.stream()
+            .filter(fieldDTO -> fieldDTO.unique)
+            .map(fieldDTO -> fieldDTO.name)
+            .collect(Collectors.toList());
+
+        Stream<ConstraintDTO> ifConstraints = profileDto.rules.stream()
+            .flatMap(ruleDTO -> ruleDTO.constraints.stream())
+            .filter(constraintDTO -> constraintDTO instanceof IfConstraintDTO)
+            .map(constraintDTO -> ((IfConstraintDTO) constraintDTO).ifConstraint);
+
+        Set<String> ifConstraintFields = getAllAtomicConstraints(ifConstraints)
+            .map(constraintDTO -> ((AtomicConstraintDTO) constraintDTO).field)
+            .collect(Collectors.toSet());
+
+        for(String field: uniqueFields) {
+            if(ifConstraintFields.contains(field)) {
+                throw new InvalidProfileException("Unique field: \"" + field + "\" referenced in IF statement. Unique fields cannot be referenced in IFs");
+            }
+        }
     }
 
     private List<String> getInMapConstraints(ProfileDTO profileDto) {
