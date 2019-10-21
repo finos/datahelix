@@ -1,4 +1,7 @@
-package com.scottlogic.deg.custom;
+package com.scottlogic.deg.custom.builder;
+
+import com.scottlogic.deg.custom.CustomGenerator;
+import com.scottlogic.deg.custom.CustomGeneratorFieldType;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
