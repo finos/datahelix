@@ -22,13 +22,11 @@ import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 
 @JsonDeserialize(as = NullConstraintDTO.class)
-public class NullConstraintDTO extends ConstraintDTO
-{
+public class NullConstraintDTO extends ConstraintDTO {
     @JsonProperty(ConstraintTypeJsonProperty.NULL)
     public String field;
 
-    public NullConstraintDTO()
-    {
+    public NullConstraintDTO() {
         super(ConstraintType.NULL);
     }
 }

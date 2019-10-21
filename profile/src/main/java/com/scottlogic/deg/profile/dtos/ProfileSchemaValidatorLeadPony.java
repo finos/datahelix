@@ -58,13 +58,13 @@ public class ProfileSchemaValidatorLeadPony implements ProfileSchemaValidator {
         }
 
         //Add all of the problems as error messages
-        if(!problems.isEmpty()) {
+        if (!problems.isEmpty()) {
             TreeMap<Integer, String> problemDictionary = new TreeMap<>();
             extractProblems(problems, problemDictionary);
             errorMessages.addAll(formatProblems(problemDictionary));
         }
 
-        if(!errorMessages.isEmpty()) {
+        if (!errorMessages.isEmpty()) {
             errorMessages.add(0,
                 "Error(s) occurred during schema validation." +
                     "\nFor full details try opening the profile in a json schema-enabled IDE." +
@@ -82,7 +82,7 @@ public class ProfileSchemaValidatorLeadPony implements ProfileSchemaValidator {
 
     private void extractProblem(Problem problem, TreeMap<Integer, String> problemDictionary) {
         if (!problem.hasBranches()) {
-            int lineNumber = (int)problem.getLocation().getLineNumber();
+            int lineNumber = (int) problem.getLocation().getLineNumber();
             String formattedMessage = "- " + problem.getMessage() + "\n";
             problemDictionary.merge(lineNumber, formattedMessage, String::concat);
 

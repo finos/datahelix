@@ -70,7 +70,7 @@ public class ProfileSchemaFileLoader implements ProfileSchemaLoader {
         List<String> lines = new ArrayList<>();
 
         String line;
-        while ((line = bufferedReader.readLine()) != null){
+        while ((line = bufferedReader.readLine()) != null) {
             lines.add(line);
         }
 

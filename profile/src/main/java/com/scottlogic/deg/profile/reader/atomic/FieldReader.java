@@ -10,10 +10,8 @@ import com.scottlogic.deg.profile.reader.file.names.NameRetriever;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-public class FieldReader
-{
-    public static Optional<Constraint> read(Field field, SpecificFieldType type)
-    {
+public class FieldReader {
+    public static Optional<Constraint> read(Field field, SpecificFieldType type) {
         switch (type) {
             case INTEGER:
                 return Optional.of(new IsGranularToNumericConstraint(field, NumericGranularity.create(BigDecimal.ONE)));

@@ -10,13 +10,14 @@ import com.scottlogic.deg.profile.reader.file.CsvInputStreamReader;
 import java.io.*;
 import java.util.stream.Collectors;
 
-public class FileReader
-{
+public class FileReader {
     private final String filePath;
 
     @Inject
     public FileReader(@Named("config:filePath") String filePath) {
-        this.filePath = filePath.endsWith(File.separator) || filePath.isEmpty() ? filePath : filePath + File.separator;
+        this.filePath = filePath.endsWith(File.separator) || filePath.isEmpty()
+            ? filePath
+            : filePath + File.separator;
     }
 
     public DistributedList<Object> setFromFile(String file) {
@@ -27,7 +28,7 @@ public class FileReader
 
         return new DistributedList<>(
             names.distributedList().stream()
-                .map(holder -> new WeightedElement<>((Object)holder.element(), holder.weight()))
+                .map(holder -> new WeightedElement<>((Object) holder.element(), holder.weight()))
                 .distinct()
                 .collect(Collectors.toList()));
     }

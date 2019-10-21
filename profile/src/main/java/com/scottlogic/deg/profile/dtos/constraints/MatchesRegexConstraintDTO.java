@@ -22,13 +22,11 @@ import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 
 @JsonDeserialize(as = MatchesRegexConstraintDTO.class)
-public class MatchesRegexConstraintDTO extends AtomicConstraintDTO
-{
+public class MatchesRegexConstraintDTO extends AtomicConstraintDTO {
     @JsonProperty(ConstraintTypeJsonProperty.MATCHES_REGEX)
     public String value;
 
-    public MatchesRegexConstraintDTO()
-    {
+    public MatchesRegexConstraintDTO() {
         super(ConstraintType.MATCHES_REGEX);
     }
 }

@@ -1,7 +1,6 @@
 package com.scottlogic.deg.profile.common;
 
-public class ConstraintTypeJsonProperty
-{
+public class ConstraintTypeJsonProperty {
     public static final String EQUAL_TO = "equalTo";
     public static final String EQUAL_TO_FIELD = "equalToField";
     public static final String IN_SET = "inSet";

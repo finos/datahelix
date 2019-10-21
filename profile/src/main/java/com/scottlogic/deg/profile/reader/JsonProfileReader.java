@@ -50,95 +50,89 @@ import java.util.stream.Stream;
  * JsonProfileReader is responsible for reading and validating a profile from a path to a profile JSON file.
  * It returns a Profile object for consumption by a generator
  */
-public class JsonProfileReader implements ProfileReader
-{
+public class JsonProfileReader implements ProfileReader {
     private final File profileFile;
     private final ConstraintReader constraintReader;
 
     @Inject
-    public JsonProfileReader(@Named("config:profileFile") File profileFile, ConstraintReader constraintReader)
-    {
+    public JsonProfileReader(@Named("config:profileFile") File profileFile, ConstraintReader constraintReader) {
         this.profileFile = profileFile;
         this.constraintReader = constraintReader;
     }
 
-    public Profile read() throws IOException
-    {
+    public Profile read() throws IOException {
         byte[] encoded = Files.readAllBytes(profileFile.toPath());
         String profileJson = new String(encoded, StandardCharsets.UTF_8);
         return read(profileJson);
     }
 
-    public Profile read(String profileJson) throws IOException
-    {
+    public Profile read(String profileJson) throws IOException {
         ProfileDTO profileDTO = new ProfileSerialiser().deserialise(profileJson);
-        if (profileDTO.fields == null) throw new InvalidProfileException("Profile is invalid: 'fields' have not been defined.");
-        if (profileDTO.rules == null) throw new InvalidProfileException("Profile is invalid: 'rules' have not been defined.");
+        if (profileDTO.fields == null)
+            throw new InvalidProfileException("Profile is invalid: 'fields' have not been defined.");
+        if (profileDTO.rules == null)
+            throw new InvalidProfileException("Profile is invalid: 'rules' have not been defined.");
 
         List<Field> fields = profileDTO.fields.stream()
-                .map(fieldDTO -> new Field(fieldDTO.name, fieldDTO.type.getFieldType(), fieldDTO.unique, fieldDTO.formatting, false))
-                .collect(Collectors.toList());
+            .map(fieldDTO -> new Field(fieldDTO.name, fieldDTO.type.getFieldType(), fieldDTO.unique, fieldDTO.formatting, false))
+            .collect(Collectors.toList());
 
         List<Field> inMapFields = profileDTO.rules.stream()
-                .flatMap(ruleDTO -> ruleDTO.constraints.stream())
-                .flatMap(constraintDTO -> getInMapConstraints(profileDTO).stream())
-                .distinct()
-                .map(file -> new Field(file, FieldType.NUMERIC, false, null, true)
-                ).collect(Collectors.toList());
+            .flatMap(ruleDTO -> ruleDTO.constraints.stream())
+            .flatMap(constraintDTO -> getInMapConstraints(profileDTO).stream())
+            .distinct()
+            .map(file -> new Field(file, FieldType.NUMERIC, false, null, true)
+            ).collect(Collectors.toList());
 
         fields.addAll(inMapFields);
         ProfileFields profileFields = new ProfileFields(fields);
 
         Collection<Rule> rules = profileDTO.rules.stream()
-                .map(r -> new Rule(new RuleInformation(r.rule), constraintReader.read(r.constraints, profileFields)))
-                .collect(Collectors.toList());
+            .map(r -> new Rule(new RuleInformation(r.rule), constraintReader.read(r.constraints, profileFields)))
+            .collect(Collectors.toList());
 
         Collection<Constraint> nullableConstraints = profileDTO.fields.stream()
-                .filter(fieldDTO -> !fieldDTO.nullable)
-                .map(fieldDTO -> constraintReader.read(new NullConstraintDTO(){{field = fieldDTO.name;}}, profileFields).negate())
-                .collect(Collectors.toList());
+            .filter(fieldDTO -> !fieldDTO.nullable)
+            .map(fieldDTO -> constraintReader.read(new NullConstraintDTO() {{
+                field = fieldDTO.name;
+            }}, profileFields).negate())
+            .collect(Collectors.toList());
 
         Collection<Constraint> typeConstraints = profileDTO.fields.stream()
-                .map(fieldDto -> FieldReader.read(profileFields.getByName(fieldDto.name), fieldDto.type))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toList());
+            .map(fieldDto -> FieldReader.read(profileFields.getByName(fieldDto.name), fieldDto.type))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .collect(Collectors.toList());
 
-        if (!nullableConstraints.isEmpty())
-        {
+        if (!nullableConstraints.isEmpty()) {
             rules.add(new Rule(new RuleInformation("nullable-rules"), nullableConstraints));
         }
-        if (!typeConstraints.isEmpty())
-        {
+        if (!typeConstraints.isEmpty()) {
             rules.add(new Rule(new RuleInformation("type-rules"), typeConstraints));
         }
         return new Profile(profileFields, rules, profileDTO.description);
     }
 
-    private List<String> getInMapConstraints(ProfileDTO profileDto)
-    {
+    private List<String> getInMapConstraints(ProfileDTO profileDto) {
         return profileDto.rules.stream()
-                .flatMap(ruleDTO -> ruleDTO.constraints.stream())
-                .flatMap(constraint -> getAllAtomicConstraints(Stream.of(constraint)))
-                .filter(constraintDTO -> constraintDTO.getType() == ConstraintType.IN_MAP)
-                .map(constraintDTO -> ((InMapConstraintDTO) constraintDTO).file)
-                .collect(Collectors.toList());
+            .flatMap(ruleDTO -> ruleDTO.constraints.stream())
+            .flatMap(constraint -> getAllAtomicConstraints(Stream.of(constraint)))
+            .filter(constraintDTO -> constraintDTO.getType() == ConstraintType.IN_MAP)
+            .map(constraintDTO -> ((InMapConstraintDTO) constraintDTO).file)
+            .collect(Collectors.toList());
     }
 
-    private Stream<ConstraintDTO> getAllAtomicConstraints(Stream<ConstraintDTO> constraints)
-    {
+    private Stream<ConstraintDTO> getAllAtomicConstraints(Stream<ConstraintDTO> constraints) {
         return constraints.flatMap(this::getUnpackedConstraintsToStream);
     }
 
-    private Stream<ConstraintDTO> getUnpackedConstraintsToStream(ConstraintDTO constraintDTO)
-    {
-        switch (constraintDTO.getType())
-        {
+    private Stream<ConstraintDTO> getUnpackedConstraintsToStream(ConstraintDTO constraintDTO) {
+        switch (constraintDTO.getType()) {
             case IF:
                 IfConstraintDTO conditionalConstraintDTO = (IfConstraintDTO) constraintDTO;
                 return getAllAtomicConstraints(conditionalConstraintDTO.elseConstraint == null
-                        ? Stream.of(((IfConstraintDTO) constraintDTO).thenConstraint)
-                        : Stream.of(((IfConstraintDTO) constraintDTO).thenConstraint, ((IfConstraintDTO) constraintDTO).elseConstraint));
+                    ? Stream.of(((IfConstraintDTO) constraintDTO).thenConstraint)
+                    : Stream.of(((IfConstraintDTO) constraintDTO).thenConstraint, ((IfConstraintDTO) constraintDTO).elseConstraint));
             case ALL_OF:
                 return getAllAtomicConstraints(((AllOfConstraintDTO) constraintDTO).constraints.stream());
             case ANY_OF:

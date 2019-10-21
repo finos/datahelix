@@ -18,13 +18,11 @@ package com.scottlogic.deg.profile.dtos.constraints;
 
 import com.scottlogic.deg.profile.common.ConstraintType;
 
-public abstract class RelationalConstraintDTO extends AtomicConstraintDTO
-{
+public abstract class RelationalConstraintDTO extends AtomicConstraintDTO {
     public int offset;
     public String offsetUnit;
 
-    RelationalConstraintDTO(ConstraintType type)
-    {
+    RelationalConstraintDTO(ConstraintType type) {
         super(type);
     }
 

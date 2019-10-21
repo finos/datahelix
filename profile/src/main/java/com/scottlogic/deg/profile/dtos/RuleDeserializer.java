@@ -60,8 +60,7 @@ public class RuleDeserializer extends JsonDeserializer<RuleDTO> {
 
         Iterator<JsonNode> constraintNodeIterator = node.elements();
 
-        while (constraintNodeIterator.hasNext())
-        {
+        while (constraintNodeIterator.hasNext()) {
             JsonNode constraintNode = constraintNodeIterator.next();
 
             constraints.add(

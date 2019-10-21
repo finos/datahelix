@@ -22,13 +22,11 @@ import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 
 @JsonDeserialize(as = LessThanConstraintDTO.class)
-public class LessThanConstraintDTO extends AtomicConstraintDTO
-{
+public class LessThanConstraintDTO extends AtomicConstraintDTO {
     @JsonProperty(ConstraintTypeJsonProperty.LESS_THAN)
     public Number value;
 
-    public LessThanConstraintDTO()
-    {
+    public LessThanConstraintDTO() {
         super(ConstraintType.LESS_THAN);
     }
 }
