@@ -108,36 +108,36 @@ public class ConstraintReader {
                         .map(value -> readAnyType(field, value))
                         .collect(Collectors.toList())));
             case MATCHES_REGEX:
-                return new MatchesRegexConstraint(profileFields.getByName(dto.field), readPattern(((MatchesRegexConstraintDTO) dto).value));
+                return new MatchesRegexConstraint(field, readPattern(((MatchesRegexConstraintDTO) dto).value));
             case CONTAINS_REGEX:
-                return new ContainsRegexConstraint(profileFields.getByName(dto.field), readPattern(((ContainsRegexConstraintDTO) dto).value));
+                return new ContainsRegexConstraint(field, readPattern(((ContainsRegexConstraintDTO) dto).value));
             case OF_LENGTH:
-                return new StringHasLengthConstraint(profileFields.getByName(dto.field), HelixStringLength.create(((OfLengthConstraintDTO) dto).value));
+                return new StringHasLengthConstraint(field, HelixStringLength.create(((OfLengthConstraintDTO) dto).value));
             case SHORTER_THAN:
-                return new IsStringShorterThanConstraint(profileFields.getByName(dto.field), HelixStringLength.create(((ShorterThanConstraintDTO) dto).value));
+                return new IsStringShorterThanConstraint(field, HelixStringLength.create(((ShorterThanConstraintDTO) dto).value));
             case LONGER_THAN:
-                return new IsStringLongerThanConstraint(profileFields.getByName(dto.field), HelixStringLength.create(((LongerThanConstraintDTO) dto).value));
+                return new IsStringLongerThanConstraint(field, HelixStringLength.create(((LongerThanConstraintDTO) dto).value));
             case GREATER_THAN:
-                return new IsGreaterThanConstantConstraint(profileFields.getByName(dto.field), HelixNumber.create(((GreaterThanConstraintDTO) dto).value));
+                return new IsGreaterThanConstantConstraint(field, HelixNumber.create(((GreaterThanConstraintDTO) dto).value));
             case GREATER_THAN_OR_EQUAL_TO:
-                return new IsGreaterThanOrEqualToConstantConstraint(profileFields.getByName(dto.field), HelixNumber.create(((GreaterThanOrEqualToConstraintDTO) dto).value));
+                return new IsGreaterThanOrEqualToConstantConstraint(field, HelixNumber.create(((GreaterThanOrEqualToConstraintDTO) dto).value));
             case LESS_THAN:
-                return new IsLessThanConstantConstraint(profileFields.getByName(dto.field), HelixNumber.create(((LessThanConstraintDTO) dto).value));
+                return new IsLessThanConstantConstraint(field, HelixNumber.create(((LessThanConstraintDTO) dto).value));
             case LESS_THAN_OR_EQUAL_TO:
-                return new IsLessThanOrEqualToConstantConstraint(profileFields.getByName(dto.field), HelixNumber.create(((LessThanOrEqualToConstraintDTO) dto).value));
+                return new IsLessThanOrEqualToConstantConstraint(field, HelixNumber.create(((LessThanOrEqualToConstraintDTO) dto).value));
             case AFTER:
-                return new IsAfterConstantDateTimeConstraint(profileFields.getByName(dto.field), HelixDateTime.create(((AfterConstraintDTO) dto).value));
+                return new IsAfterConstantDateTimeConstraint(field, HelixDateTime.create(((AfterConstraintDTO) dto).value));
             case AFTER_OR_AT:
-                return new IsAfterOrEqualToConstantDateTimeConstraint(profileFields.getByName(dto.field), HelixDateTime.create(((AfterOrAtConstraintDTO) dto).value));
+                return new IsAfterOrEqualToConstantDateTimeConstraint(field, HelixDateTime.create(((AfterOrAtConstraintDTO) dto).value));
             case BEFORE:
-                return new IsBeforeConstantDateTimeConstraint(profileFields.getByName(dto.field), HelixDateTime.create(((BeforeConstraintDTO) dto).value));
+                return new IsBeforeConstantDateTimeConstraint(field, HelixDateTime.create(((BeforeConstraintDTO) dto).value));
             case BEFORE_OR_AT:
-                return new IsBeforeOrEqualToConstantDateTimeConstraint(profileFields.getByName(dto.field), HelixDateTime.create(((BeforeOrAtConstraintDTO) dto).value));
+                return new IsBeforeOrEqualToConstantDateTimeConstraint(field, HelixDateTime.create(((BeforeOrAtConstraintDTO) dto).value));
             case GRANULAR_TO:
                 GranularToConstraintDTO granularToConstraintDTO = (GranularToConstraintDTO) dto;
                 return granularToConstraintDTO.value instanceof Number
-                    ? new IsGranularToNumericConstraint(profileFields.getByName(dto.field), NumericGranularity.create(granularToConstraintDTO.value))
-                    : new IsGranularToDateConstraint(profileFields.getByName(dto.field), DateTimeGranularity.create((String) granularToConstraintDTO.value));
+                    ? new IsGranularToNumericConstraint(field, NumericGranularity.create(granularToConstraintDTO.value))
+                    : new IsGranularToDateConstraint(field, DateTimeGranularity.create((String) granularToConstraintDTO.value));
             default:
                 throw new InvalidProfileException("Atomic constraint type not found: " + dto);
         }
