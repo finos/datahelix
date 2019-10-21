@@ -52,12 +52,15 @@ public class ConstraintReader {
     }
 
     public Constraint read(ConstraintDTO dto, ProfileFields profileFields) {
-        if (dto == null) throw new InvalidProfileException("Constraint is null");
-        if (dto instanceof RelationalConstraintDTO)
+        if (dto == null) {
+            throw new InvalidProfileException("Constraint is null");
+        } else if (dto instanceof RelationalConstraintDTO) {
             return readRelationalConstraintDto((RelationalConstraintDTO) dto, profileFields);
-        return dto instanceof AtomicConstraintDTO
-            ? readAtomicConstraintDto((AtomicConstraintDTO) dto, profileFields)
-            : readGrammaticalConstraintDto(dto, profileFields);
+        } else if (dto instanceof AtomicConstraintDTO)
+            return readAtomicConstraintDto((AtomicConstraintDTO) dto, profileFields);
+        else {
+            return readGrammaticalConstraintDto(dto, profileFields);
+        }
     }
 
     private Constraint readRelationalConstraintDto(RelationalConstraintDTO dto, ProfileFields fields) {
