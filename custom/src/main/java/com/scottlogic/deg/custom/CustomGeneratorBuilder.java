@@ -1,8 +1,4 @@
-package com.scottlogic.deg.generator.generation.customgenerators;
-
-import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.common.profile.FieldType;
-import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
+package com.scottlogic.deg.custom;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -12,36 +8,36 @@ import java.util.stream.Stream;
 
 public class CustomGeneratorBuilder<T> {
 
-    private FieldType fieldType;
+    private CustomGeneratorFieldType fieldType;
     private String name;
 
     private Function<T, Boolean> matchingFunction;
 
-    private Function<RandomNumberGenerator, Stream<T>> randomGenerator;
-    private Function<RandomNumberGenerator, Stream<T>> negatedRandomGenerator;
+    private Supplier<Stream<T>> randomGenerator;
+    private Supplier<Stream<T>> negatedRandomGenerator;
     private Supplier<Stream<T>> sequentialGenerator;
     private Supplier<Stream<T>> negatedSequentialGenerator;
 
-    private CustomGeneratorBuilder(FieldType fieldType, String name) {
+    private CustomGeneratorBuilder(CustomGeneratorFieldType fieldType, String name) {
         this.fieldType = fieldType;
         this.name = name;
-        matchingFunction = (value) -> { throw new ValidationException(name + " custom generator does not support being used with inSet or equalsTo constraints"); };
-        randomGenerator = (rng) -> { throw new ValidationException(name + " custom generator does not support random mode"); };
-        negatedRandomGenerator = (rng) -> { throw new ValidationException(name + " custom generator does not support being negated in random mode"); };
-        sequentialGenerator = () -> { throw new ValidationException(name + " custom generator does not support sequential mode"); };
-        negatedSequentialGenerator = () -> { throw new ValidationException(name + " custom generator does not support being negated in sequential mode"); };
+        matchingFunction = (value) -> { throw new CustomGeneratorNotImplementedException(name + " custom generator does not support being used with inSet or equalsTo constraints"); };
+        randomGenerator = () -> { throw new CustomGeneratorNotImplementedException(name + " custom generator does not support random mode"); };
+        negatedRandomGenerator = () -> { throw new CustomGeneratorNotImplementedException(name + " custom generator does not support being negated in random mode"); };
+        sequentialGenerator = () -> { throw new CustomGeneratorNotImplementedException(name + " custom generator does not support sequential mode"); };
+        negatedSequentialGenerator = () -> { throw new CustomGeneratorNotImplementedException(name + " custom generator does not support being negated in sequential mode"); };
     }
 
     public static CustomGeneratorBuilder<String> stringGeneratorNamed(String name){
-        return new CustomGeneratorBuilder<String>(FieldType.STRING, name);
+        return new CustomGeneratorBuilder<String>(CustomGeneratorFieldType.STRING, name);
     }
 
     public static CustomGeneratorBuilder<BigDecimal> numberGeneratorNamed(String name){
-        return new CustomGeneratorBuilder<BigDecimal>(FieldType.NUMERIC, name);
+        return new CustomGeneratorBuilder<BigDecimal>(CustomGeneratorFieldType.NUMERIC, name);
     }
 
     public static CustomGeneratorBuilder<OffsetDateTime> dateTimeGeneratorNamed(String name){
-        return new CustomGeneratorBuilder<OffsetDateTime>(FieldType.DATETIME, name);
+        return new CustomGeneratorBuilder<OffsetDateTime>(CustomGeneratorFieldType.DATETIME, name);
     }
 
     /**
@@ -52,7 +48,7 @@ public class CustomGeneratorBuilder<T> {
      * @return
      */
     public CustomGeneratorBuilder<T> withRandomGenerator(Supplier<T> supplier){
-        this.randomGenerator = (rng) -> Stream.generate(supplier);
+        this.randomGenerator = () -> Stream.generate(supplier);
         return this;
     }
 
@@ -66,7 +62,7 @@ public class CustomGeneratorBuilder<T> {
      * @return
      */
     public CustomGeneratorBuilder<T> withNegatedRandomGenerator(Supplier<T> supplier){
-        this.negatedRandomGenerator = (rng) -> Stream.generate(supplier);
+        this.negatedRandomGenerator = () -> Stream.generate(supplier);
         return this;
     }
 
@@ -77,7 +73,7 @@ public class CustomGeneratorBuilder<T> {
      * @param function function for a random stream of values
      * @return
      */
-    public CustomGeneratorBuilder<T> withRandomStream(Function<RandomNumberGenerator, Stream<T>> function){
+    public CustomGeneratorBuilder<T> withRandomStream(Supplier<Stream<T>> function){
         this.randomGenerator = function;
         return this;
     }
@@ -91,7 +87,7 @@ public class CustomGeneratorBuilder<T> {
      * @param function function for a random stream of values that would not be produced by the non negated generator
      * @return
      */
-    public CustomGeneratorBuilder<T> withNegatedRandomStream(Function<RandomNumberGenerator, Stream<T>> function){
+    public CustomGeneratorBuilder<T> withNegatedRandomStream(Supplier<Stream<T>> function){
         this.negatedRandomGenerator = function;
         return this;
     }

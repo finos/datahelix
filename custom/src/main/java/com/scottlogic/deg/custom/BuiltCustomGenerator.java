@@ -1,7 +1,4 @@
-package com.scottlogic.deg.generator.generation.customgenerators;
-
-import com.scottlogic.deg.common.profile.FieldType;
-import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
+package com.scottlogic.deg.custom;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -9,19 +6,19 @@ import java.util.stream.Stream;
 
 public class BuiltCustomGenerator<T> implements CustomGenerator<T> {
 
-    private final FieldType fieldType;
+    private final CustomGeneratorFieldType fieldType;
     private final String name;
     private final Function<T, Boolean> matchingFunction;
-    private final Function<RandomNumberGenerator, Stream<T>> randomGenerator;
-    private final Function<RandomNumberGenerator, Stream<T>>  negatedRandomGenerator;
+    private final Supplier<Stream<T>> randomGenerator;
+    private final Supplier<Stream<T>>  negatedRandomGenerator;
     private final Supplier<Stream<T>> sequentialGenerator;
     private final Supplier<Stream<T>> negatedSequentialGenerator;
 
-    public BuiltCustomGenerator(FieldType fieldType,
+    public BuiltCustomGenerator(CustomGeneratorFieldType fieldType,
                                 String name,
                                 Function<T, Boolean> matchingFunction,
-                                Function<RandomNumberGenerator, Stream<T>> randomGenerator,
-                                Function<RandomNumberGenerator, Stream<T>>  negatedRandomGenerator,
+                                Supplier<Stream<T>> randomGenerator,
+                                Supplier<Stream<T>>  negatedRandomGenerator,
                                 Supplier<Stream<T>> sequentialGenerator,
                                 Supplier<Stream<T>> negatedSequentialGenerator) {
         this.fieldType = fieldType;
@@ -39,18 +36,18 @@ public class BuiltCustomGenerator<T> implements CustomGenerator<T> {
     }
 
     @Override
-    public FieldType fieldType() {
+    public CustomGeneratorFieldType fieldType() {
         return fieldType;
     }
 
     @Override
-    public Stream<T> generateRandom(RandomNumberGenerator randomNumberGenerator) {
-        return randomGenerator.apply(randomNumberGenerator);
+    public Stream<T> generateRandom() {
+        return randomGenerator.get();
     }
 
     @Override
-    public Stream<T> generateNegatedRandom(RandomNumberGenerator randomNumberGenerator) {
-        return negatedRandomGenerator.apply(randomNumberGenerator);
+    public Stream<T> generateNegatedRandom() {
+        return negatedRandomGenerator.get();
     }
 
     @Override
