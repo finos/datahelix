@@ -59,8 +59,13 @@ public class GeneralTestStep {
         this.state.addNonNullableField(fieldName);
     }
 
-    @Given("^the following fields exist:$")
-    public void thereAreFields(List<String> fields) {
+    @Given("^the following nullable fields exist:$")
+    public void thereAreNullableFields(List<String> fields) {
+        fields.forEach(this::thereIsANullableField);
+    }
+
+    @Given("^the following non nullable fields exist:$")
+    public void thereAreNonNullableFields(List<String> fields) {
         fields.forEach(this::thereIsANonNullableField);
     }
 

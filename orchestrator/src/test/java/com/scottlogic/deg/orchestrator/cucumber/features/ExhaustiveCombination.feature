@@ -7,7 +7,7 @@ Feature: User can create data across multiple fields for all combinations availa
   Scenario: Running an exhaustive combination strategy with roman alphabet character (a-z) strings should be successful
     Given the generation strategy is full
     And the combination strategy is exhaustive
-    And the following fields exist:
+    And the following non nullable fields exist:
       | foo |
       | bar |
     And foo has type "string"
@@ -28,7 +28,7 @@ Feature: User can create data across multiple fields for all combinations availa
       | "b" | "d" |
 
   Scenario: Running an exhaustive combination strategy with roman numeric character (0-9) strings should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo |
       | bar |
     And foo has type "string"
@@ -49,7 +49,7 @@ Feature: User can create data across multiple fields for all combinations availa
       | "1" | "7" |
 
   Scenario: Running an exhaustive combination strategy with plain white spaces should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo |
       | bar |
     And foo has type "string"
@@ -70,7 +70,7 @@ Feature: User can create data across multiple fields for all combinations availa
       | "x" | "y" |
 
   Scenario: Running an exhaustive combination strategy with valid integer values should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo |
       | bar |
     And foo has type "integer"
@@ -91,7 +91,7 @@ Feature: User can create data across multiple fields for all combinations availa
       | -12 | 0   |
 
   Scenario: Running an exhaustive combination strategy with valid decimal values should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo |
       | bar |
     And foo has type "decimal"
@@ -112,7 +112,7 @@ Feature: User can create data across multiple fields for all combinations availa
       | -12 | 0     |
 
   Scenario: Running an exhaustive combination strategy with valid date values should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo |
       | bar |
     And foo has type "datetime"
@@ -133,7 +133,7 @@ Feature: User can create data across multiple fields for all combinations availa
       | 2018-12-05T14:00:00.000Z | 2010-12-31T23:59:00.000Z |
 
   Scenario: Running an exhaustive combination strategy with invalid date values should fail with an appropriate error message
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo |
       | bar |
     And foo has type "datetime"
@@ -150,7 +150,7 @@ Feature: User can create data across multiple fields for all combinations availa
     And no data is created
 
   Scenario: Running an exhaustive combination strategy with null values (null) should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo |
       | bar |
     And foo has type "integer"
@@ -166,7 +166,7 @@ Feature: User can create data across multiple fields for all combinations availa
     Then the profile is invalid because "Cannot create an IsInSetConstraint for field 'bar' with a set containing null"
 
   Scenario: Running an exhaustive combination strategy should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo |
       | bar |
     And foo has type "integer"
@@ -187,7 +187,7 @@ Feature: User can create data across multiple fields for all combinations availa
       | 1   | 1   |
 
   Scenario: Running an exhaustive combination strategy with a string and an integer field should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo |
       | bar |
     And foo has type "string"
@@ -208,7 +208,7 @@ Feature: User can create data across multiple fields for all combinations availa
       | "y" | 1   |
 
   Scenario: Running an exhaustive combination strategy with a string and a decimal field should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo |
       | bar |
     And foo has type "string"
@@ -229,7 +229,7 @@ Feature: User can create data across multiple fields for all combinations availa
       | "y" | 1   |
 
   Scenario: Running an exhaustive combination strategy with a string and a datetime field should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo |
       | bar |
     And foo has type "string"
@@ -250,7 +250,7 @@ Feature: User can create data across multiple fields for all combinations availa
       | "y" | 2010-12-31T23:59:00.000Z |
 
   Scenario: Running an exhaustive combination strategy with an integer and a datetime field should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo |
       | bar |
     And foo has type "integer"
@@ -271,7 +271,7 @@ Feature: User can create data across multiple fields for all combinations availa
       | 1   | 2010-12-31T23:59:00.000Z |
 
   Scenario: Running an exhaustive combination strategy with a decimal and a datetime field should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo |
       | bar |
     And foo has type "decimal"
@@ -292,7 +292,7 @@ Feature: User can create data across multiple fields for all combinations availa
       | 1.1 | 2010-12-31T23:59:00.000Z |
 
   Scenario: Running an exhaustive combination strategy across five fields should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo1 |
       | foo2 |
       | foo3 |
@@ -360,7 +360,7 @@ Feature: User can create data across multiple fields for all combinations availa
 
 
   Scenario: Running an exhaustive combination strategy across three fields with five data options each should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo1 |
       | foo2 |
       | foo3 |
@@ -518,7 +518,7 @@ Feature: User can create data across multiple fields for all combinations availa
 
 
   Scenario: Running an exhaustive combination strategy across fields with an uneven distribution of data options should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo1 |
       | foo2 |
       | foo3 |
@@ -559,7 +559,7 @@ Feature: User can create data across multiple fields for all combinations availa
       | 1    | 22   | 14   |
 
   Scenario: Running an exhaustive combination strategy across fields with a duplicate integer data option in a field should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo1 |
       | foo2 |
       | foo3 |
@@ -590,7 +590,7 @@ Feature: User can create data across multiple fields for all combinations availa
       | 1    | 20   | 14   |
 
   Scenario: Running an exhaustive combination strategy across fields with non ordered data options should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo1 |
       | foo2 |
       | foo3 |
@@ -642,7 +642,7 @@ Feature: User can create data across multiple fields for all combinations availa
   Scenario: Running an exhaustive combination strategy that includes an "if" statement should be successful
     Given the generation strategy is full
     And the combination strategy is exhaustive
-    And the following fields exist:
+    And the following non nullable fields exist:
       | foo1 |
       | foo2 |
       | foo3 |

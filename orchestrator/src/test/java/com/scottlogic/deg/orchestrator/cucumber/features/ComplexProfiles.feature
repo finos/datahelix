@@ -3,7 +3,7 @@ Feature: Generator can produce correct data for complex profiles.
   Scenario: Running a random strategy on a profile where there are hard to detect contradictions within or statements does not crash
     Given the generation strategy is Random
     And the generator can generate at most 5 rows
-    And the following fields exist:
+    And the following non nullable fields exist:
       | foo |
       | bar |
     And foo has type "integer"

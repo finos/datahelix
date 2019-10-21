@@ -5,7 +5,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 
 ### inMap alone ###
   Scenario: Running an 'inMap'
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       |HomeNation  |
       |Capital     |
     And the file "testFile" contains the following data:
@@ -26,7 +26,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       |"Wales"             |"Cardiff"    |
 
   Scenario: Running an 'inMap' with text a restriction
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       |HomeNation  |
       |Capital     |
     And the file "testFile" contains the following data:
@@ -47,7 +47,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 
 
   Scenario: Running an 'inMap' multiple maps
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       |HomeNation  |
       |Capital     |
       |Foo         |

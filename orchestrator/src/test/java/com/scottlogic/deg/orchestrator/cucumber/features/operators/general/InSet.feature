@@ -1427,7 +1427,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 
 
   Scenario: Running a 'inSet' request as part of an if constraint should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo   |
       | price |
     And foo has type "string"
