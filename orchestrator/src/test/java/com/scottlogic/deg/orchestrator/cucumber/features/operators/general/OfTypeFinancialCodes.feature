@@ -10,7 +10,6 @@ Feature: User can specify that a field must be a financial code type
       | "GB0002634946" |
     Then the following data should be generated:
       | foo            |
-      | null           |
       | "GB0002634946" |
 
   Scenario: Sequential isins are generated uniquely
@@ -30,7 +29,6 @@ Feature: User can specify that a field must be a financial code type
       | "0263494" |
     Then the following data should be generated:
       | foo       |
-      | null      |
       | "0263494" |
 
   Scenario: An ofType constraint with the value "CUSIP" generates valid CUSIPs
@@ -39,7 +37,6 @@ Feature: User can specify that a field must be a financial code type
       | "38259P508" |
     Then the following data should be generated:
       | foo         |
-      | null        |
       | "38259P508" |
 
   Scenario: Two ISIN constraints combined generate valid ISINs
@@ -49,7 +46,6 @@ Feature: User can specify that a field must be a financial code type
       | "GB0002634946" |
     Then the following data should be generated:
       | foo            |
-      | null           |
       | "GB0002634946" |
 
   Scenario: A SEDOL constraint combined with another SEDOL constraint generates valid SEDOLs
@@ -59,7 +55,6 @@ Feature: User can specify that a field must be a financial code type
       | "0263494" |
     Then the following data should be generated:
       | foo       |
-      | null      |
       | "0263494" |
 
   Scenario: A CUSIP constraint combined with a second CUSIP constraint generates valid CUSIPs
@@ -69,7 +64,6 @@ Feature: User can specify that a field must be a financial code type
       | "38259P508" |
     Then the following data should be generated:
       | foo         |
-      | null        |
       | "38259P508" |
 
   Scenario: A RIC constraint combined with a not null constraint generates valid RICs

@@ -17,7 +17,6 @@ Feature: User can specify that data must be created to conform to each of multip
       | "ab" |
       | "bb" |
       | "ba" |
-      | null |
 
   Scenario: Running an 'allOf' request that contains an invalid nested allOf request should generate null
     Given there is a non nullable field foo
@@ -29,7 +28,6 @@ Feature: User can specify that data must be created to conform to each of multip
     And foo is longer than 4
     Then the following data should be generated:
       | foo  |
-      | null |
 
   Scenario: Running a 'allOf' request that includes multiple values within the same statement should be successful
     Given there is a non nullable field foo

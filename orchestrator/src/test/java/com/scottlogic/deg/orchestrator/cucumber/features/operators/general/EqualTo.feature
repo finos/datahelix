@@ -59,7 +59,7 @@ Feature: User can specify that a value is equalTo a required value
     And no data is created
 
   Scenario: Running a not 'equalTo' should allow null
-    Given there is a non nullable field foo
+    Given there is a nullable field foo
     And foo has type "string"
     And foo is anything but equal to "not"
     And foo is null
@@ -227,7 +227,6 @@ Feature: User can specify that a value is equalTo a required value
       | "0263497" |
     Then the following data should be generated:
       | foo       |
-      | null      |
       | "0263494" |
 
   Scenario: Equal to something that is not a valid SEDOL because its check digit is wrong combined with a SEDOL constraint should generate no data
@@ -255,7 +254,6 @@ Feature: User can specify that a value is equalTo a required value
       | "38259P502" |
     Then the following data should be generated:
       | foo         |
-      | null        |
       | "38259P508" |
 
   Scenario: Equal to something that is not a valid CUSIP because its check digit is wrong combined with a CUSIP constraint should generate no data

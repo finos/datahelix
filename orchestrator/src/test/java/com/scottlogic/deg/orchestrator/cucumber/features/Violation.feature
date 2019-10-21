@@ -1,7 +1,7 @@
 Feature: The violations mode of the Data Helix app can be run in violations mode to create data
 
   Background:
-    Given there is a non nullable field foo
+    Given there is a nullable field foo
     And the data requested is violating
     And the generator can generate at most 5 rows
 
