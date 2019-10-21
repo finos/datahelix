@@ -19,7 +19,7 @@ foo is greaterThan 5
 
 Operators are converted to English language equivalents for use in cucumber, so 'greaterThan' is expressed as 'greater than'.
 
-* _there is a field `{field}`_, adds a field called `field` to the profile
+* _there is a non nullable field `{field}`_, adds a field called `field` to the profile
 * _the following fields exist:_, adds a set of fields to the profile (is followed by a single column set of strings, each represents a field name)
 * _`{field}` is null_, adds a null constraint to the profile for the field `field`
 * _`{field}` is anything but null_, adds a not(is null) constraint to the profile for field `field`

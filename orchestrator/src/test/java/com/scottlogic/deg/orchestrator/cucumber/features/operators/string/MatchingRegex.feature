@@ -2,7 +2,7 @@ Feature: User can specify that a value either matches or contains a specified re
 
   Background:
     Given the generation strategy is full
-    And there is a field foo
+    And there is a non nullable field foo
     And foo has type "string"
 
   Scenario: Running a 'matchingRegex' request that includes roman alphabet lowercase chars (a-z) only should be successful
@@ -205,7 +205,7 @@ Feature: User can specify that a value either matches or contains a specified re
     And no data is created
 
   Scenario: Running a 'matchingRegex' request with the value property set to a null entry (null) should throw an error
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is matching regex null
     Then the profile is invalid because "The matchingRegex constraint has null value for field foo"
@@ -426,13 +426,13 @@ Feature: User can specify that a value either matches or contains a specified re
       | null |
 
   Scenario: Running a 'matchingRegex' and 'inSet' and 'integer' request nulls are generated last
-    Given there is a field bar
+    Given there is a non nullable field bar
     And bar has type "string"
     And the combination strategy is exhaustive
     And foo is matching regex /[a]{1}/
     And bar is in set:
       | "AA" |
-    And there is a field lee
+    And there is a non nullable field lee
     And lee has type "integer"
     And lee is granular to 1
     And lee is less than 2

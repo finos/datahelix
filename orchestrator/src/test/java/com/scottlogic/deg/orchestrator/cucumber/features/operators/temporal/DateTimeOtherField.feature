@@ -2,10 +2,10 @@ Feature: running datetimes related to otherfield datetimes
 
   Background:
     Given the generation strategy is full
-    And there is a field foo
+    And there is a non nullable field foo
     And foo has type "datetime"
     And foo is anything but null
-    And there is a field bar
+    And there is a non nullable field bar
     And bar has type "datetime"
     And bar is anything but null
     And the combination strategy is exhaustive

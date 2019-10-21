@@ -5,11 +5,11 @@ Feature:As a  User
   Background:
     Given the generation strategy is full
     And the combination strategy is exhaustive
-    And there is a field foo
+    And there is a non nullable field foo
     And foo has type "integer"
     And foo is greater than 0
     And foo is anything but null
-    And there is a field bar
+    And there is a non nullable field bar
     And bar has type "integer"
     And bar is anything but null
 

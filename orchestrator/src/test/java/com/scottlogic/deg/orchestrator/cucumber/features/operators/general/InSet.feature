@@ -5,7 +5,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 
 ### inSet alone ###
   Scenario: Running an 'inSet' request that includes strings with roman alphabet lowercase chars (a-z) only should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "aaa" |
@@ -17,7 +17,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "aab" |
 
   Scenario: Running an 'inSet' request that includes strings with roman alphabet uppercase chars (A-Z) only should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "CCC" |
@@ -29,7 +29,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "DDD" |
 
   Scenario: Running an 'inSet' request that includes strings with roman numeric chars (0-9) only should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "012" |
@@ -41,7 +41,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "345" |
 
   Scenario: Running an 'inSet' request that includes roman character strings that include profanity should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "Dick Van Dyke"       |
@@ -54,7 +54,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 
 
   Scenario: Running an 'inSet' request that includes roman character strings that include in-use values should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "true"      |
@@ -76,7 +76,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "infinity"  |
 
   Scenario: Running an 'inSet' request that includes roman numeric strings that include decimal numbers should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "0.1"         |
@@ -92,7 +92,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "0000000.345" |
 
   Scenario: Running an 'inSet' request that includes roman numeric strings that include comma separated numbers should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "55,5"         |
@@ -107,7 +107,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 
 
   Scenario: Running an 'inSet' request that includes roman character strings that include valid date values should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "2010-01-01T00:00:00.000" |
@@ -121,7 +121,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "2011-01-01T00:00:00.000" |
 
   Scenario: 'InSet' value of an empty string "" is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "" |
@@ -131,7 +131,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | ""   |
 
   Scenario: Running an 'inSet' request that includes a number value (not a string) should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is in set:
       | 1     |
@@ -145,7 +145,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 99999 |
 
   Scenario: Running an 'inSet' request that includes a decimal number value should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is in set:
       | 0.1       |
@@ -159,7 +159,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 9.0000009 |
 
   Scenario: Running an 'inSet' request that includes a negative number value should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is in set:
       | -10         |
@@ -173,7 +173,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | -9999999999 |
 
   Scenario: Running an 'inSet' request that includes the number zero should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is in set:
       | 0   |
@@ -184,7 +184,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 0    |
 
   Scenario: Running an 'inSet' request that includes a date value should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "datetime"
     And foo is in set:
       | 2010-01-01T00:00:00.000Z |
@@ -198,7 +198,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 2011-01-01T00:00:00.000Z |
 
   Scenario: Running an 'inSet' request that includes a date value (leap year) should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "datetime"
     And foo is in set:
       | 2020-02-29T00:00:00.000Z |
@@ -212,7 +212,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 2012-02-29T00:00:00.000Z |
 
   Scenario: Running an 'inSet' request that includes a date value (system epoch dates) should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "datetime"
     And foo is in set:
       | 0001-01-01T00:00:01.000Z |
@@ -224,7 +224,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 9999-12-31T23:59:59.999Z |
 
   Scenario: Running an 'inSet' request that includes an invalid date value should fail with an error message
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "datetime"
     And foo is in set:
       | 2010-13-40T00:00:00.000Z |
@@ -233,7 +233,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
     And no data is created
 
   Scenario: Running an 'inSet' request that includes an invalid time value should fail with an error message
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "datetime"
     And foo is in set:
       | 2017-12-31T40:59:59.999Z |
@@ -242,7 +242,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
     And no data is created
 
   Scenario: Running an 'inSet' request that includes an empty string ("") characters should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "" |
@@ -252,7 +252,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | ""   |
 
   Scenario: Running an 'inSet' request that includes a null entry (null) characters should throw an error
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is in set:
       | null |
@@ -261,7 +261,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
     And no data is created
 
   Scenario: Running an 'inSet' request that includes multiples of the same entry should be successful.
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is in set:
       | 1 |
@@ -276,7 +276,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 ### inSet ###
 
   Scenario: Running a 'inSet' request alongside a non-contradicting inSet constraint should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "Test 1" |
@@ -292,7 +292,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "Test 3" |
 
   Scenario: 'InSet' with a non-contradictory not 'inSet' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "a" |
@@ -304,7 +304,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "a"  |
 
   Scenario: Running a 'inSet' request alongside a contradicting inSet constraint should produce null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "Test 1" |
@@ -319,7 +319,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
 
   Scenario: 'InSet' with a contradicting not 'inSet' emits null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "a" |
@@ -332,7 +332,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 ### null ###
 
   Scenario: 'InSet' with not null is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is in set:
       | 1 |
@@ -342,7 +342,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 1   |
 
   Scenario: Running a 'inSet' request alongside a null constraint should produce null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "Test 1" |
@@ -356,7 +356,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 ### ofType ###
 
   Scenario: 'InSet' with non-contradicting 'ofType' string should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo is in set:
       | "Test 1" |
       | "Test 2" |
@@ -370,7 +370,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "Test 3" |
 
   Scenario: 'InSet' with non-contradicting 'ofType' integer should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo is in set:
       | 1 |
     And foo has type "integer"
@@ -380,7 +380,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 1    |
 
   Scenario: 'InSet' with non-contradicting 'ofType' decimal should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo is in set:
       | 1 |
     And foo has type "decimal"
@@ -390,7 +390,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 1    |
 
   Scenario: 'InSet' with non-contradicting 'ofType' datetime should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo is in set:
       | 2019-01-01T00:00:00.000Z |
     And foo has type "datetime"
@@ -402,7 +402,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 ### matchingRegex ###
 
   Scenario: Running a 'inSet' request alongside a non-contradicting 'matchingRegex' constraint should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "Test"  |
@@ -416,7 +416,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "test" |
 
   Scenario: 'InSet' string value with a not 'matchingRegex' of contradictory value is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "a" |
@@ -427,7 +427,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "a"  |
 
   Scenario: Not 'inSet' string value with a 'matchingRegex' of contradictory value is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is anything but in set:
       | "a" |
@@ -438,7 +438,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "b"  |
 
   Scenario: 'InSet' alongside a contradicting 'matchingRegex' constraint should produce null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "a" |
@@ -448,7 +448,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
 
   Scenario: 'InSet' alongside a 'matchingRegex' constraint of contradictory length should produce null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "a" |
@@ -458,7 +458,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
 
   Scenario: Not 'inSet' alongside a matching 'matchingRegex' emits null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is anything but in set:
       | "a" |
@@ -470,7 +470,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 ### containingRegex ###
 
   Scenario: Running a 'inSet' request alongside a non-contradicting 'containingRegex' constraint should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "aa" |
@@ -482,7 +482,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "aa" |
 
   Scenario: 'InSet' string value with a not 'containingRegex' of contradictory value is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "a"  |
@@ -495,7 +495,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "a"  |
 
   Scenario: 'InSet' alongside a contradicting 'containingRegex' constraint should produce null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "a" |
@@ -505,7 +505,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
 
   Scenario: 'InSet' alongside a 'containingRegex' constraint of contradictory length should produce null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "a" |
@@ -515,7 +515,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
 
   Scenario: 'InSet' alongside a contradicting not 'containingRegex' emits null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "a" |
@@ -527,7 +527,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 ### ofLength ###
 
   Scenario: 'InSet' with a non contradicting 'ofLength' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "a" |
@@ -538,7 +538,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "a"  |
 
   Scenario: 'InSet' with a non contradicting not 'ofLength' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "a" |
@@ -549,7 +549,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "a"  |
 
   Scenario: Not 'inSet' with a non contradicting 'ofLength' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is anything but in set:
       | "a" |
@@ -563,7 +563,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "b"  |
 
   Scenario: 'InSet' with a contradicting 'ofLength' emits null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "a" |
@@ -573,7 +573,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
 
   Scenario: 'InSet' with a contradicting not 'ofLength' emits null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "a" |
@@ -585,7 +585,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 ### longerThan ###
 
   Scenario: 'InSet' with a non contradicting 'longerThan' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "aa" |
@@ -596,7 +596,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "aa" |
 
   Scenario: 'InSet' with a non contradicting not 'longerThan' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "a" |
@@ -607,7 +607,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "a"  |
 
   Scenario: Not 'inSet' with a non contradicting 'longerThan' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is anything but in set:
       | "aa" |
@@ -621,7 +621,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "ba" |
 
   Scenario: 'InSet' with a contradicting 'longerThan' emits null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "a" |
@@ -631,7 +631,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
 
   Scenario: 'InSet' with a contradicting not 'longerThan' emits null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "aa" |
@@ -643,7 +643,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 ### shorterThan ###
 
   Scenario: 'InSet' with a non contradicting 'shorterThan' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "a" |
@@ -654,7 +654,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "a"  |
 
   Scenario: 'InSet' with a non contradicting not 'shorterThan' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "a" |
@@ -665,7 +665,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "a"  |
 
   Scenario: Not 'inSet' with a non contradicting 'shorterThan' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is anything but in set:
       | "a" |
@@ -679,7 +679,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "b"  |
 
   Scenario: 'InSet' with a contradicting 'shorterThan' emits null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "a" |
@@ -689,7 +689,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
 
   Scenario: 'InSet' with a contradicting not 'shorterThan' emits null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "a" |
@@ -701,7 +701,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 ### Financial data types ###
 
   Scenario: Not in set of things that are not valid ISINs combined with an ISIN constraint generates valid ISINs
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is anything but in set:
       | "a" |
@@ -715,7 +715,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "GB00YG2XYC52" |
 
   Scenario: In set of things that are not valid ISINs combined with an ISIN constraint only generates nulls
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "a" |
@@ -725,7 +725,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
 
   Scenario: Not in set of things that are not valid SEDOLs combined with a SEDOL constraint generates valid SEDOLs
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is anything but in set:
       | "a" |
@@ -739,7 +739,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "0263494" |
 
   Scenario: In set of things that are not valid SEDOLs combined with a SEDOL constraint only generates null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "a" |
@@ -749,7 +749,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
 
   Scenario: Not in set of things that are not valid CUSIPs combined with a CUSIP constraint generates valid CUSIPs
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is anything but in set:
       | "a" |
@@ -763,7 +763,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "38259P508" |
 
   Scenario: In set of things that are not valid CUSIPs combined with a CUSIP constraint only generates null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "a" |
@@ -775,7 +775,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 ### greaterThan ###
 
   Scenario: 'InSet' with a non contradicting 'greaterThan' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is in set:
       | 2 |
@@ -786,7 +786,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 2    |
 
   Scenario: 'InSet' with a non contradicting not 'greaterThan' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is in set:
       | 1 |
@@ -797,7 +797,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 1    |
 
   Scenario: Not 'inSet' with a non contradicting 'greaterThan' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is anything but in set:
       | 1 |
@@ -811,7 +811,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 2    |
 
   Scenario: 'InSet' with a contradicting 'greaterThan' emits null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is in set:
       | 1 |
@@ -821,7 +821,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
 
   Scenario: 'InSet' with a contradicting not 'greaterThan' emits null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is in set:
       | 1.1 |
@@ -833,7 +833,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 ### greaterThanOrEqualTo ###
 
   Scenario: 'InSet' with a non contradicting 'greaterThanOrEqualTo' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is in set:
       | 1 |
@@ -844,7 +844,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 1    |
 
   Scenario: 'InSet' with a non contradicting not 'greaterThanOrEqualTo' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is in set:
       | 1 |
@@ -855,7 +855,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 1    |
 
   Scenario: Not 'inSet' with a non contradicting 'greaterThanOrEqualTo' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is anything but in set:
       | 1 |
@@ -869,7 +869,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 2    |
 
   Scenario: 'InSet' with a contradicting 'greaterThanOrEqualTo' emits null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is in set:
       | 1 |
@@ -879,7 +879,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
 
   Scenario: 'InSet' with a contradicting not 'greaterThanOrEqualTo' emits null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is in set:
       | 1 |
@@ -891,7 +891,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 ### lessThan ###
 
   Scenario: 'InSet' with a non contradicting 'lessThan' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is in set:
       | 1 |
@@ -902,7 +902,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 1    |
 
   Scenario: 'InSet' with a non contradicting not 'lessThan' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is in set:
       | 1 |
@@ -913,7 +913,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 1    |
 
   Scenario: Not 'inSet' with a non contradicting 'lessThan' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is anything but in set:
       | 1 |
@@ -928,7 +928,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 2    |
 
   Scenario: 'InSet' with a contradicting 'lessThan' emits null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is in set:
       | 1 |
@@ -938,7 +938,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
 
   Scenario: 'InSet' with a contradicting not 'lessThan' emits null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is in set:
       | 1 |
@@ -950,7 +950,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 ### lessThanOrEqualTo ###
 
   Scenario: 'InSet' with a non contradicting 'lessThanOrEqualTo' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is in set:
       | 1 |
@@ -961,7 +961,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 1    |
 
   Scenario: 'InSet' with a non contradicting not 'lessThanOrEqualTo' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is in set:
       | 2 |
@@ -972,7 +972,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 2    |
 
   Scenario: Not 'inSet' with a non contradicting 'lessThanOrEqualTo' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is anything but in set:
       | 1 |
@@ -986,7 +986,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 2    |
 
   Scenario: 'InSet' with a contradicting 'lessThanOrEqualTo' emits null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is in set:
       | 2 |
@@ -996,7 +996,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
 
   Scenario: 'InSet' with a contradicting not 'lessThanOrEqualTo' emits null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is in set:
       | 1 |
@@ -1008,7 +1008,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 ### granularTo ###
 
   Scenario: 'InSet' with a non contradicting 'granularTo' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is in set:
       | 10 |
@@ -1019,7 +1019,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 10   |
 
   Scenario: Integer within an inSet and a non contradicting 'granularTo' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is granular to 1
     And foo is in set:
@@ -1033,7 +1033,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 2    |
 
   Scenario: Not 'inSet' with a non contradicting 'granularTo' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is anything but in set:
       | 1.1 |
@@ -1047,7 +1047,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 1    |
 
   Scenario: 'InSet' with a contradicting 'granularTo' emits null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is in set:
       | 1.1 |
@@ -1059,7 +1059,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 ### after ###
 
   Scenario: 'InSet' with a non contradicting 'after' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "datetime"
     And foo is in set:
       | 2019-01-01T00:00:00.001Z |
@@ -1070,7 +1070,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 2019-01-01T00:00:00.001Z |
 
   Scenario: 'InSet' with a non contradicting not 'after' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "datetime"
     And foo is in set:
       | 2019-01-01T00:00:00.000Z |
@@ -1081,7 +1081,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 2019-01-01T00:00:00.000Z |
 
   Scenario: Not 'inSet' with a non contradicting 'after' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "datetime"
     And foo is anything but in set:
       | 2019-01-01T00:00:00.001Z |
@@ -1096,7 +1096,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 2019-01-01T00:00:00.002Z |
 
   Scenario: 'InSet' with a contradicting 'after' emits null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "datetime"
     And foo is in set:
       | 2019-01-01T00:00:00.000Z |
@@ -1106,7 +1106,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
 
   Scenario: 'InSet' with a contradicting not 'after' emits null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "datetime"
     And foo is in set:
       | 2019-01-01T00:00:00.001Z |
@@ -1118,7 +1118,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 ### afterOrAt ###
 
   Scenario: 'InSet' with a non contradicting 'afterOrAt' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "datetime"
     And foo is in set:
       | 2019-01-01T00:00:00.000Z |
@@ -1129,7 +1129,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 2019-01-01T00:00:00.000Z |
 
   Scenario: 'InSet' with a non contradicting not 'afterOrAt' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "datetime"
     And foo is in set:
       | 2019-01-01T00:00:00.000Z |
@@ -1140,7 +1140,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 2019-01-01T00:00:00.000Z |
 
   Scenario: Not 'inSet' with a non contradicting 'afterOrAt' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "datetime"
     And foo is anything but in set:
       | 2019-01-01T00:00:00.000Z |
@@ -1155,7 +1155,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 
 
   Scenario: 'InSet' with a contradicting 'afterOrAt' emits null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "datetime"
     And foo is in set:
       | 2019-01-01T00:00:00.000Z |
@@ -1165,7 +1165,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
 
   Scenario: 'InSet' with a contradicting not 'afterOrAt' emits null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "datetime"
     And foo is in set:
       | 2019-01-01T00:00:00.000Z |
@@ -1177,7 +1177,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 ### before ###
 
   Scenario: 'InSet' with a non contradicting 'before' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "datetime"
     And foo is in set:
       | 2019-01-01T00:00:00.000Z |
@@ -1188,7 +1188,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 2019-01-01T00:00:00.000Z |
 
   Scenario: 'InSet' with a non contradicting not 'before' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "datetime"
     And foo is in set:
       | 2019-01-01T00:00:00.000Z |
@@ -1199,7 +1199,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 2019-01-01T00:00:00.000Z |
 
   Scenario: Not 'inSet' with a non contradicting 'before' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "datetime"
     And foo is anything but in set:
       | 2019-01-01T00:00:00.001Z |
@@ -1214,7 +1214,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 2019-01-01T00:00:00.000Z |
 
   Scenario: 'InSet' with a contradicting 'before' emits null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "datetime"
     And foo is in set:
       | 2019-01-01T00:00:00.000Z |
@@ -1224,7 +1224,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
 
   Scenario: 'InSet' with a contradicting not 'before' emits null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "datetime"
     And foo is in set:
       | 2019-01-01T00:00:00.000Z |
@@ -1236,7 +1236,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 ### beforeOrAt ###
 
   Scenario: 'InSet' with a non contradicting 'beforeOrAt' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "datetime"
     And foo is in set:
       | 2019-01-01T00:00:00.000Z |
@@ -1247,7 +1247,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 2019-01-01T00:00:00.000Z |
 
   Scenario: 'InSet' with a non contradicting not 'beforeOrAt' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "datetime"
     And foo is in set:
       | 2019-01-01T00:00:00.001Z |
@@ -1258,7 +1258,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 2019-01-01T00:00:00.001Z |
 
   Scenario: Not 'inSet' with a non contradicting 'beforeOrAt' is successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "datetime"
     And foo is anything but in set:
       | 2019-01-01T00:00:00.001Z |
@@ -1274,7 +1274,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 2019-01-01T00:00:00.002Z |
 
   Scenario: 'InSet' with a contradicting 'beforeOrAt' emits null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "datetime"
     And foo is in set:
       | 2019-01-01T00:00:00.001Z |
@@ -1284,7 +1284,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
 
   Scenario: 'InSet' with a contradicting not 'beforeOrAt' emits null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "datetime"
     And foo is in set:
       | 2019-01-01T00:00:00.000Z |
@@ -1294,7 +1294,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
 
   Scenario: Running a 'inSet' request alongside an ofType = string should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "Test 1" |
@@ -1310,7 +1310,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 
 
   Scenario: Running a 'inSet' request alongside an ofType = integer should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "integer"
     And foo is in set:
       | 1 |
@@ -1325,7 +1325,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 3    |
 
   Scenario: Running a 'inSet' request alongside an ofType = decimal should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is in set:
       | 1 |
@@ -1340,7 +1340,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 3    |
 
   Scenario: Running a 'inSet' request alongside an ofType = datetime should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "datetime"
     And foo is in set:
       | 2010-01-01T00:00:00.000Z |
@@ -1355,7 +1355,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | 2011-01-01T00:00:00.000Z |
 
   Scenario: Running a 'inSet' request alongside a non-contradicting matchingRegex constraint should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "Test"  |
@@ -1369,7 +1369,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "test" |
 
   Scenario: Running a 'inSet' request alongside a contradicting matchingRegex constraint should produce null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "Test"  |
@@ -1382,7 +1382,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
 
 
   Scenario: Running a 'inSet' request alongside a non-contradicting containingRegex constraint should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "Test"  |
@@ -1397,7 +1397,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "Testt" |
 
   Scenario: Running a 'inSet' request alongside a contradicting containingRegex constraint should generate null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "Test"  |
@@ -1410,7 +1410,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
 
   Scenario: Running a 'inSet' request alongside a non-contradicting ofLength constraint should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "Test"  |
@@ -1425,7 +1425,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "test" |
 
   Scenario: Running a 'inSet' request alongside a contradicting ofLength (too short) constraint should produce null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "Test"  |
@@ -1438,7 +1438,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
 
   Scenario: Running a 'inSet' request alongside a contradicting ofLength (too long) constraint should produce null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is in set:
       | "Test"  |
@@ -1451,7 +1451,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
 
   Scenario: Running a 'inSet' request as part of a non-contradicting anyOf constraint should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And foo is anything but null
     And Any Of the next 2 constraints
@@ -1469,7 +1469,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "Test 4" |
 
   Scenario: Running a 'inSet' request as part of a non-contradicting allOf constraint should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And All Of the next 2 constraints
     And foo is in set:
@@ -1485,7 +1485,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "Test2" |
 
   Scenario: Running a 'inSet' request as part of a contradicting allOf constraint should produce null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And All Of the next 2 constraints
     And foo is in set:
@@ -1526,7 +1526,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "Test4" | 2     |
 
 #TODO  Scenario: Running a 'inSet' request alongside a contradicting ofType = string should produce null
-#    Given there is a field foo
+#    Given there is a non nullable field foo
 #    And foo has type "string"
 #    And foo is in set:
 #      | 1 |

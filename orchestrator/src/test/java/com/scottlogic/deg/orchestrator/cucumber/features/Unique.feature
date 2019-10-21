@@ -3,7 +3,7 @@ Feature: As a user
         So that I can avoid duplication issues for certain fields
 
   Background:
-    Given there is a field unique
+    Given there is a non nullable field unique
     And unique is unique
     And unique has type "integer"
     And unique is greater than 0
@@ -12,12 +12,12 @@ Feature: As a user
     And the generator can generate at most 5 rows
 
     Scenario: The one where there are 2 unique fields and 1 non unique field
-      Given there is a field foo
+      Given there is a non nullable field foo
       And foo is unique
       And foo has type "integer"
       And foo is greater than 0
       And foo is anything but null
-      And there is a field bar
+      And there is a non nullable field bar
       And bar has type "string"
       And bar is equal to "not unique"
       And the generation strategy is random
@@ -31,7 +31,7 @@ Feature: As a user
 
     Scenario: The one where the range is exceeded
       Given unique is less than 3
-      And there is a field foo
+      And there is a non nullable field foo
       And foo has type "integer"
       And foo is greater than 0
       And foo is anything but null
@@ -41,12 +41,12 @@ Feature: As a user
         | 2     | 2   |
 
     Scenario: The one where combination strategy is minimal
-      And there is a field foo
+      And there is a non nullable field foo
       And foo has type "integer"
       And foo is greater than 0
       And foo is less than 4
       And foo is anything but null
-      And there is a field bar
+      And there is a non nullable field bar
       And bar has type "integer"
       And bar is greater than 0
       And bar is less than 4
@@ -61,12 +61,12 @@ Feature: As a user
 
   Scenario: The one where combination strategy is exhaustive
     Given the combination strategy is exhaustive
-    And there is a field foo
+    And there is a non nullable field foo
     And foo has type "integer"
     And foo is greater than 0
     And foo is less than 4
     And foo is anything but null
-    And there is a field bar
+    And there is a non nullable field bar
     And bar has type "integer"
     And bar is greater than 0
     And bar is less than 4

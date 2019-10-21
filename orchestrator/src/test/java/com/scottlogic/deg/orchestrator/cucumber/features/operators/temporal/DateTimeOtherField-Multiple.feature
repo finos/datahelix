@@ -2,11 +2,11 @@ Feature: running datetimes related to otherfield datetimes for multiple fields
 
   Background:
     Given the generation strategy is full
-    And there is a field foobar
+    And there is a non nullable field foobar
     And foobar has type "datetime"
-    And there is a field foo
+    And there is a non nullable field foo
     And foo has type "datetime"
-    And there is a field bar
+    And there is a non nullable field bar
     And bar has type "datetime"
     And the combination strategy is exhaustive
 

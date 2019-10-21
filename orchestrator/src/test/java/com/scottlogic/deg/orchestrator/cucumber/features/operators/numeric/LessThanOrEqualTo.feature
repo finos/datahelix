@@ -2,7 +2,7 @@ Feature: User can specify that a numeric value is lower than, or equal to, a spe
 
   Background:
     Given the generation strategy is full
-    And there is a field foo
+    And there is a non nullable field foo
 
   Scenario: lessThanOrEqualTo run against a non contradicting not lessThanOrEqualToOrEqualTo should be successful
     Given foo is less than or equal to 5

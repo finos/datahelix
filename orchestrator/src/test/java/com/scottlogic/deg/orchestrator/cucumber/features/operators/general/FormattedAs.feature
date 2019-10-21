@@ -2,7 +2,7 @@ Feature: User can specify that a value is so formatted
 
   Background:
     Given the generation strategy is full
-    And there is a field foo
+    And there is a non nullable field foo
 
     #commented out tests not working with big decimal values
   Scenario Outline: Running a valid 'formattedAs' request on numbers should be successful

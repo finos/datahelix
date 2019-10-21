@@ -2,7 +2,7 @@ Feature: User can generate valid data for all types (string, integer, decimal, o
 
   Background:
     Given the generation strategy is random
-    And there is a field foo
+    And there is a non nullable field foo
 
   Scenario: The generator produces valid 'DateTime' data in random mode
     Given foo has type "datetime"

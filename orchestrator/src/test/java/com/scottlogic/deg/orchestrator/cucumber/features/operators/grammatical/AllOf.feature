@@ -4,7 +4,7 @@ Feature: User can specify that data must be created to conform to each of multip
     Given the generation strategy is full
 
   Scenario: Running an 'allOf' request that contains a valid nested allOf request should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And All Of the next 2 constraints
     And All Of the next 2 constraints
       And foo is matching regex /[a-b]{2}/
@@ -20,7 +20,7 @@ Feature: User can specify that data must be created to conform to each of multip
       | null |
 
   Scenario: Running an 'allOf' request that contains an invalid nested allOf request should generate null
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And All Of the next 2 constraints
     And All Of the next 2 constraints
@@ -32,7 +32,7 @@ Feature: User can specify that data must be created to conform to each of multip
       | null |
 
   Scenario: Running a 'allOf' request that includes multiple values within the same statement should be successful
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And All Of the next 2 constraints
     And foo is equal to "Test01"
@@ -42,7 +42,7 @@ Feature: User can specify that data must be created to conform to each of multip
       | "Test01" |
 
   Scenario: User attempts to combine two constraints that only intersect at the empty set within an allOf operator should not generate data
-    Given there is a field foo
+    Given there is a non nullable field foo
     And foo has type "string"
     And All Of the next 2 constraints
     And foo is equal to "Test01"

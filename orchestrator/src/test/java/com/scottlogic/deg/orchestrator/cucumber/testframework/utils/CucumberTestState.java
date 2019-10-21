@@ -102,9 +102,16 @@ public class CucumberTestState {
     }
 
 
-    public void addField(String fieldName) {
+    public void addNonNullableField(String fieldName) {
         FieldDTO fieldDTO = new FieldDTO();
         fieldDTO.name = fieldName;
+        this.profileFields.add(fieldDTO);
+    }
+
+    public void addNullableField(String fieldName) {
+        FieldDTO fieldDTO = new FieldDTO();
+        fieldDTO.name = fieldName;
+        fieldDTO.nullable = true;
         this.profileFields.add(fieldDTO);
     }
 

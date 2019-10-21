@@ -2,7 +2,7 @@ Feature: User can specify that a field must be a type of name
 
   Background:
     Given the generation strategy is random
-    And there is a field foo
+    And there is a non nullable field foo
     And foo has type "string"
     And foo is anything but null
 

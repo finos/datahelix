@@ -2,7 +2,7 @@ Feature: User can specify that decimal fields are granular to a certain number o
 
   Background:
     Given the generation strategy is full
-    And there is a field foo
+    And there is a non nullable field foo
     And foo is anything but null
     And foo has type "decimal"
 
@@ -76,7 +76,7 @@ Feature: User can specify that decimal fields are granular to a certain number o
     And foo is greater than or equal to 1
     And foo is anything but null
     And bar is anything but null
-    And there is a field bar
+    And there is a non nullable field bar
     And bar has type "decimal"
     And bar is granular to 0.1
     And bar is less than 1.4

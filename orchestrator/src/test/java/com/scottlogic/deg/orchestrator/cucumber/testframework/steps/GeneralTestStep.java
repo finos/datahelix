@@ -49,14 +49,19 @@ public class GeneralTestStep {
         this.cucumberTestHelper = new CucumberTestHelper(state);
     }
 
-    @Given("there is a field (.+)$")
-    public void thereIsAField(String fieldName) {
-        this.state.addField(fieldName);
+    @Given("there is a nullable field (.+)$")
+    public void thereIsANullableField(String fieldName) {
+        this.state.addNullableField(fieldName);
+    }
+
+    @Given("there is a non nullable field (.+)$")
+    public void thereIsANonNullableField(String fieldName) {
+        this.state.addNonNullableField(fieldName);
     }
 
     @Given("^the following fields exist:$")
     public void thereAreFields(List<String> fields) {
-        fields.forEach(this::thereIsAField);
+        fields.forEach(this::thereIsANonNullableField);
     }
 
     @When("the generation strategy is {generationStrategy}")

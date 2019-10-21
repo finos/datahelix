@@ -2,7 +2,7 @@ Feature: Strings will be generated using characters from only latin characters
 
   Background:
     Given the generation strategy is full
-    And there is a field foo
+    And there is a non nullable field foo
     And foo has type "string"
 
   Scenario: Running a 'matchingRegex' request that includes roman alphabet lowercase chars (a-z) only should be successful

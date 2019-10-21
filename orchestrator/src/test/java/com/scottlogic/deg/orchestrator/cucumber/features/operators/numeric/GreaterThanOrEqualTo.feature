@@ -2,7 +2,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
 
   Background:
     Given the generation strategy is full
-    And there is a field foo
+    And there is a non nullable field foo
 
   Scenario: Running a 'greaterThanOrEqualTo' request that includes a positive integer should be successful
     Given foo is greater than or equal to 0

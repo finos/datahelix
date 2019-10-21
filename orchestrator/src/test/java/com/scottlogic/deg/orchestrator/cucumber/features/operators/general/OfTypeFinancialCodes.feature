@@ -2,7 +2,7 @@ Feature: User can specify that a field must be a financial code type
 
   Background:
     Given the generation strategy is full
-    And there is a field foo
+    And there is a non nullable field foo
 
   Scenario: An ofType constraint with the value "ISIN" generates valid ISINs
     Given foo has type "ISIN"

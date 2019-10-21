@@ -2,7 +2,7 @@ Feature: Values can be specified by using any of to set multiple constraints
 
   Background:
     Given the generation strategy is full
-    And there is a field foo
+    And there is a non nullable field foo
 
   Scenario: User requires to create a field with strings that conform to one or many constraints
     Given Any Of the next 3 constraints

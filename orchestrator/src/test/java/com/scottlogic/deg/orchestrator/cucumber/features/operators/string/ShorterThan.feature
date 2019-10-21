@@ -2,7 +2,7 @@ Feature: User can specify that a string length is lower than, a specified number
 
   Background:
     Given the generation strategy is full
-    And there is a field foo
+    And there is a non nullable field foo
     And foo has type "string"
 
   Scenario: Running a 'shorterThan' request using a number to specify a the length of a generated string should be successful
