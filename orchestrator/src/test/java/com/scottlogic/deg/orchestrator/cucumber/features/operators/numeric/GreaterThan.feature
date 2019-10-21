@@ -2,7 +2,7 @@ Feature: User can specify that a numeric value is higher than, but not equal to,
 
   Background:
     Given the generation strategy is full
-    And there is a non nullable field foo
+    And there is a nullable field foo
 
 ###Integer
 

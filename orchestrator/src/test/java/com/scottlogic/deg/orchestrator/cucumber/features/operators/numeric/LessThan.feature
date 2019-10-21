@@ -2,7 +2,7 @@ Feature: User can specify that a numeric value is lower than, but not equal to, 
 
   Background:
     Given the generation strategy is full
-    And there is a non nullable field foo
+    And there is a nullable field foo
     And foo has type "decimal"
 
   Scenario: lessThan run against a non contradicting not lessThan should be successful (lessThan 5 AND not lessThan 1)

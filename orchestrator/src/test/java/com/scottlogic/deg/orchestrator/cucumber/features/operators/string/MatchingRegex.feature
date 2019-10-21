@@ -9,7 +9,6 @@ Feature: User can specify that a value either matches or contains a specified re
     Given foo is matching regex /[a-z]{1}/
     Then the following data should be generated:
       | foo  |
-      | null |
       | "a"  |
       | "b"  |
       | "c"  |
@@ -41,7 +40,6 @@ Feature: User can specify that a value either matches or contains a specified re
     Given foo is matching regex /[A-Z]{1}/
     Then the following data should be generated:
       | foo  |
-      | null |
       | "A"  |
       | "B"  |
       | "C"  |
@@ -73,7 +71,6 @@ Feature: User can specify that a value either matches or contains a specified re
     Given foo is matching regex /[0-9]{1}/
     Then the following data should be generated:
       | foo  |
-      | null |
       | "0"  |
       | "1"  |
       | "2"  |
@@ -89,7 +86,6 @@ Feature: User can specify that a value either matches or contains a specified re
     Given foo is matching regex /[!-.]{1}/
     Then the following data should be generated:
       | foo  |
-      | null |
       | "!"  |
       | """  |
       | "#"  |
@@ -107,21 +103,16 @@ Feature: User can specify that a value either matches or contains a specified re
 
   Scenario: Running a 'matchingRegex' request that includes special characters (non roman character maps: Hiragana) should be successful
     Given foo is matching regex /[あ-げ]{1}/
-    Then the following data should be generated:
-      | foo  |
-      | null |
+    Then no data is created
 
   Scenario: Running a 'matchingRegex' request that includes special characters (emoji) only should be successful
     Given foo is matching regex /[😁-😘]{1}/
-    Then the following data should be generated:
-      | foo  |
-      | null |
+    Then no data is created
 
   Scenario: Running a 'matchingRegex' request that includes anchors ^ and $ should be successful
     Given foo is matching regex /^[a-c]{2}$/
     Then the following data should be generated:
       | foo  |
-      | null |
       | "aa" |
       | "ab" |
       | "ac" |
@@ -136,7 +127,6 @@ Feature: User can specify that a value either matches or contains a specified re
     Given foo is matching regex /^[a-c]{2}/
     Then the following data should be generated:
       | foo  |
-      | null |
       | "aa" |
       | "ab" |
       | "ac" |
@@ -151,7 +141,6 @@ Feature: User can specify that a value either matches or contains a specified re
     Given foo is matching regex /[a-c]{2}$/
     Then the following data should be generated:
       | foo  |
-      | null |
       | "aa" |
       | "ab" |
       | "ac" |
@@ -166,21 +155,18 @@ Feature: User can specify that a value either matches or contains a specified re
     Given foo is matching regex /[a]{1}/
     Then the following data should be generated:
       | foo  |
-      | null |
       | "a"  |
 
   Scenario: Running a 'matchingRegex' request for a range over a single character ([a-a]) should be successful
     Given foo is matching regex /[a-a]{1}/
     Then the following data should be generated:
       | foo  |
-      | null |
       | "a"  |
 
   Scenario: Running a 'matchingRegex' for a minimum length of 0 should be successful
     Given foo is matching regex /[a]{0,1}/
     Then the following data should be generated:
       | foo  |
-      | null |
       | ""   |
       | "a"  |
 
@@ -215,7 +201,7 @@ Feature: User can specify that a value either matches or contains a specified re
     Given foo is matching regex /[a]{1,3}/
     And foo is anything but null
     Then the following data should be generated:
-      | foo   |
+      | bar   |
       | "a"   |
       | "aa"  |
       | "aaa" |
@@ -225,7 +211,6 @@ Feature: User can specify that a value either matches or contains a specified re
     And foo is matching regex /[b]{2}/
     Then the following data should be generated:
       | foo  |
-      | null |
       | "bb" |
 
   Scenario: matchingRegex run against a non contradicting not matchingRegex should be successful
@@ -233,36 +218,28 @@ Feature: User can specify that a value either matches or contains a specified re
     And foo is anything but matching regex /[b]{2}/
     Then the following data should be generated:
       | foo  |
-      | null |
       | "a"  |
 
   Scenario: Running a 'matchingRegex' request alongside a contradicting matchingRegex constraint should generate null
     Given foo is matching regex /[a]{1}/
     And foo is matching regex /[b]{1}/
-    Then the following data should be generated:
-      | foo  |
-      | null |
+    Then no data is created
 
   Scenario: matchingRegex run against a contradicting matchingRegex length should only generate null
     Given foo is matching regex /[a]{1}/
     And foo is matching regex /[a]{2}/
-    Then the following data should be generated:
-      | foo  |
-      | null |
+    Then no data is created
 
   Scenario: Running a 'matchingRegex' request alongside a contradicting matchingRegex constraint should generate null
     Given foo is matching regex /[a]{1}/
     And foo is anything but matching regex /[a]{1}/
-    Then the following data should be generated:
-      | foo  |
-      | null |
+    Then no data is created
 
   Scenario: Running a 'matchingRegex' request alongside a non-contradicting containingRegex constraint should be successful
     Given foo is matching regex /[b]{2}/
     And foo is containing regex /[a-z]{1,3}/
     Then the following data should be generated:
       | foo  |
-      | null |
       | "bb" |
 
   Scenario: matchingRegex run against a non contradicting not containingRegex should be successful
@@ -270,7 +247,6 @@ Feature: User can specify that a value either matches or contains a specified re
     And foo is anything but containing regex /[7]{1}/
     Then the following data should be generated:
       | foo  |
-      | null |
       | "a"  |
 
   Scenario: matchingRegex run against a non contradicting not containingRegex should be successful
@@ -279,36 +255,28 @@ Feature: User can specify that a value either matches or contains a specified re
     And foo is of length 1
     Then the following data should be generated:
       | foo  |
-      | null |
       | "7"  |
 
   Scenario: Running a 'matchingRegex' request alongside a contradicting containingRegex constraint should generate null
     Given foo is matching regex /[b]{3}/
     And foo is containing regex /[a]{1,2}/
-    Then the following data should be generated:
-      | foo  |
-      | null |
+    Then no data is created
 
   Scenario: matchingRegex run against a contradicting containingRegex length should only generate null
     Given foo is matching regex /[b]{3}/
     And foo is containing regex /[b]{7}/
-    Then the following data should be generated:
-      | foo  |
-      | null |
+    Then no data is created
 
   Scenario: matchingRegex run against a contradicting not containingRegex should only generate null
     Given foo is matching regex /[a]{1}/
     And foo is anything but containing regex /[a]{1}/
-    Then the following data should be generated:
-      | foo  |
-      | null |
+    Then no data is created
 
   Scenario: matchingRegex run against a non contradicting ofLength should be successful
     Given foo is matching regex /[b]{2}/
     And foo is of length 2
     Then the following data should be generated:
       | foo  |
-      | null |
       | "bb" |
 
   Scenario: matchingRegex run against a non contradicting not ofLength should be successful
@@ -316,7 +284,6 @@ Feature: User can specify that a value either matches or contains a specified re
     And foo is anything but of length 5
     Then the following data should be generated:
       | foo  |
-      | null |
       | "a"  |
 
   Scenario: not matchingRegex run against a non contradicting ofLength should be successful
@@ -334,23 +301,18 @@ Feature: User can specify that a value either matches or contains a specified re
   Scenario: matchingRegex run against a contradicting ofLength should only generate null
     Given foo is matching regex /[b]{2}/
     And foo is of length 1
-    Then the following data should be generated:
-      | foo  |
-      | null |
+    Then no data is created
 
   Scenario: matchingRegex run against a contradicting not ofLength should only generate null
     Given foo is matching regex /[b]{2}/
     And foo is anything but of length 2
-    Then the following data should be generated:
-      | foo  |
-      | null |
+    Then no data is created
 
   Scenario: matchingRegex run against a non contradicting longerThan should be successful
     Given foo is matching regex /[b]{2}/
     And foo is longer than 1
     Then the following data should be generated:
       | foo  |
-      | null |
       | "bb" |
 
   Scenario: matchingRegex run against a non contradicting not longerThan should be successful
@@ -358,7 +320,6 @@ Feature: User can specify that a value either matches or contains a specified re
     And foo is anything but longer than 3
     Then the following data should be generated:
       | foo  |
-      | null |
       | "bb" |
 
   Scenario: not matchingRegex run against a non contradicting longerThan should be successful
@@ -366,29 +327,23 @@ Feature: User can specify that a value either matches or contains a specified re
     And foo is anything but longer than 3
     Then the following data should be generated:
       | foo  |
-      | null |
       | "bb" |
 
   Scenario: matchingRegex run against a contradicting longerThan should only generate null
     Given foo is matching regex /[b]{2}/
     And foo is longer than 2
-    Then the following data should be generated:
-      | foo  |
-      | null |
+    Then no data is created
 
   Scenario: matchingRegex run against a contradicting not longerThan should only generate null
     Given foo is matching regex /[b]{2}/
     And foo is anything but longer than 1
-    Then the following data should be generated:
-      | foo  |
-      | null |
+    Then no data is created
 
   Scenario: matchingRegex run against a non contradicting shorterThan should be successful
     Given foo is matching regex /[b]{1}/
     And foo is shorter than 2
     Then the following data should be generated:
       | foo  |
-      | null |
       | "b"  |
 
   Scenario: matchingRegex run against a non contradicting not shorterThan should be successful
@@ -396,7 +351,6 @@ Feature: User can specify that a value either matches or contains a specified re
     And foo is anything but shorter than 1
     Then the following data should be generated:
       | foo  |
-      | null |
       | "bb" |
 
   Scenario: not matchingRegex run against a non contradicting shorterThan should be successful
@@ -414,25 +368,21 @@ Feature: User can specify that a value either matches or contains a specified re
   Scenario: matchingRegex run against a contradicting shorterThan should only generate null
     Given foo is matching regex /[b]{2}/
     And foo is shorter than 2
-    Then the following data should be generated:
-      | foo  |
-      | null |
+    Then no data is created
 
   Scenario: matchingRegex run against a contradicting not shorterThan should only generate null
     Given foo is matching regex /[b]{1}/
     And foo is anything but shorter than 2
-    Then the following data should be generated:
-      | foo  |
-      | null |
+    Then no data is created
 
   Scenario: Running a 'matchingRegex' and 'inSet' and 'integer' request nulls are generated last
-    Given there is a non nullable field bar
+    Given there is a nullable field bar
     And bar has type "string"
     And the combination strategy is exhaustive
     And foo is matching regex /[a]{1}/
     And bar is in set:
       | "AA" |
-    And there is a non nullable field lee
+    And there is a nullable field lee
     And lee has type "integer"
     And lee is granular to 1
     And lee is less than 2
@@ -443,7 +393,3 @@ Feature: User can specify that a value either matches or contains a specified re
       | "a"  | "AA" | null |
       | "a"  | null | 1    |
       | "a"  | null | null |
-      | null | "AA" | 1    |
-      | null | "AA" | null |
-      | null | null | 1    |
-      | null | null | null |

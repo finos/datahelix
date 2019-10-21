@@ -2,7 +2,7 @@ Feature: User can specify that a string length is longer than, a specified numbe
 
   Background:
     Given the generation strategy is full
-    And there is a non nullable field foo
+    And there is a nullable field foo
     And foo has type "string"
 
   Scenario: Running a 'longerThan' request that includes positive value should be successful

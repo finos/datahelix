@@ -9,7 +9,6 @@ Feature: Strings will be generated using characters from only latin characters
     Given foo is matching regex /./
     Then the following data should be generated:
       | foo  |
-      | null |
       | " "  |
       | "!"  |
       | """  |

@@ -10,5 +10,4 @@ Feature: Whilst including non-latin characters, user can specify that a value ei
     Given foo is matching regex /[😁-😘]{1}/
     Then the following data should be generated:
       | foo  |
-      | null |
 

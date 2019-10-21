@@ -2,7 +2,7 @@ Feature: User can specify that a datetime date is lower than, but not equal to, 
 
   Background:
     Given the generation strategy is full
-    And there is a non nullable field foo
+    And there is a nullable field foo
     And foo has type "datetime"
 
 #Alone
