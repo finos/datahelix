@@ -1,15 +1,12 @@
-package com.scottlogic.deg.orchestrator.guice.custom;
+package com.scottlogic.deg.profile.custom;
 
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.custom.CustomGenerator;
-import com.scottlogic.deg.custom.CustomGeneratorFieldType;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
-import com.sun.org.apache.regexp.internal.RE;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class CustomConstraint implements AtomicConstraint {
     private final Field field;

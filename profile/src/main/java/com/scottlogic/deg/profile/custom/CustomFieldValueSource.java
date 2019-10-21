@@ -1,4 +1,4 @@
-package com.scottlogic.deg.orchestrator.guice.custom;
+package com.scottlogic.deg.profile.custom;
 
 import com.scottlogic.deg.custom.CustomGenerator;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;

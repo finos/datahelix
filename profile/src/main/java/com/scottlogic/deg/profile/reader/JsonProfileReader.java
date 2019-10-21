@@ -25,6 +25,8 @@ import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.generator.profile.RuleInformation;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.profile.custom.CustomConstraintFactory;
 import com.scottlogic.deg.profile.dtos.ProfileDTO;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
 import com.scottlogic.deg.profile.common.ConstraintType;
@@ -53,11 +55,13 @@ import java.util.stream.Stream;
 public class JsonProfileReader implements ProfileReader {
     private final File profileFile;
     private final ConstraintReader constraintReader;
+    private final CustomConstraintFactory customConstraintFactory;
 
     @Inject
-    public JsonProfileReader(@Named("config:profileFile") File profileFile, ConstraintReader constraintReader) {
+    public JsonProfileReader(@Named("config:profileFile") File profileFile, ConstraintReader constraintReader, CustomConstraintFactory customConstraintFactory) {
         this.profileFile = profileFile;
         this.constraintReader = constraintReader;
+        this.customConstraintFactory = customConstraintFactory;
     }
 
     public Profile read() throws IOException {
@@ -104,11 +108,19 @@ public class JsonProfileReader implements ProfileReader {
             .map(Optional::get)
             .collect(Collectors.toList());
 
+        Collection<Constraint> customConstraints = profileDTO.fields.stream()
+            .filter(fieldDTO -> fieldDTO.generator != null)
+            .map(fieldDTO -> customConstraintFactory.create(profileFields.getByName(fieldDTO.name), fieldDTO.generator))
+            .collect(Collectors.toList());
+
         if (!nullableConstraints.isEmpty()) {
             rules.add(new Rule(new RuleInformation("nullable-rules"), nullableConstraints));
         }
         if (!typeConstraints.isEmpty()) {
             rules.add(new Rule(new RuleInformation("type-rules"), typeConstraints));
+        }
+        if (!customConstraints.isEmpty()) {
+            rules.add(new Rule(new RuleInformation("generators"), customConstraints));
         }
         return new Profile(profileFields, rules, profileDTO.description);
     }

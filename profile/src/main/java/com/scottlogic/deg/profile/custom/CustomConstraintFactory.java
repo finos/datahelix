@@ -1,4 +1,4 @@
-package com.scottlogic.deg.orchestrator.guice.custom;
+package com.scottlogic.deg.profile.custom;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.ValidationException;

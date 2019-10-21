@@ -21,6 +21,7 @@ import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.common.profile.NumericGranularity;
+import com.scottlogic.deg.custom.CustomGeneratorList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.profile.Rule;
@@ -29,6 +30,8 @@ import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
+import com.scottlogic.deg.profile.custom.CustomConstraint;
+import com.scottlogic.deg.profile.custom.CustomConstraintFactory;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -74,9 +77,8 @@ public class JsonProfileReaderTests {
     private final String schemaVersion = "\"0.7\"";
     private String json;
 
-    private JsonProfileReader jsonProfileReader = new JsonProfileReader(null, new ConstraintReader(new MockFromFileReader()));
-
-
+    private JsonProfileReader jsonProfileReader = new JsonProfileReader(null, new ConstraintReader(new MockFromFileReader()),
+        new CustomConstraintFactory(new CustomGeneratorList()));
 
     private void givenJson(String json) {
         this.json = json;
@@ -1086,4 +1088,51 @@ public class JsonProfileReaderTests {
             }
         );
     }
+
+    @Test
+    public void addsConstraintForGenerator() throws IOException  {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": " + schemaVersion + "," +
+                "    \"fields\": [ { " +
+                "       \"name\": \"foo\" ," +
+                "       \"type\": \"string\"," +
+                "       \"generator\": \"lorem ipsum\"," +
+                "       \"nullable\": true" +
+                "    }]," +
+                "    \"rules\": []" +
+                "}");
+
+        expectRules(
+            ruleWithConstraints(
+                typedConstraint(
+                    CustomConstraint.class,
+                    c -> {
+                        Assert.assertEquals(
+                            c.getField().name,
+                            "foo");
+                    }
+                )
+            )
+        );
+    }
+
+
+    @Test
+    public void exceptionWhenGeneratorDoesNotExist() throws IOException  {
+        givenJson(
+            "{" +
+                "    \"schemaVersion\": " + schemaVersion + "," +
+                "    \"fields\": [ { " +
+                "       \"name\": \"foo\" ," +
+                "       \"type\": \"string\"," +
+                "       \"generator\": \"INCORRECT\"," +
+                "       \"nullable\": true" +
+                "    }]," +
+                "    \"rules\": []" +
+                "}");
+
+        expectValidationException("Custom generator INCORRECT does not exist it needs to be created and added to the CustomGeneratorList class");
+    }
+
 }
