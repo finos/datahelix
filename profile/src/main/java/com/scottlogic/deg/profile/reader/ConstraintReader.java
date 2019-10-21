@@ -100,13 +100,7 @@ public class ConstraintReader {
                 return new EqualToConstraint(field, readAnyType(field, ((EqualToConstraintDTO) dto).value));
             case IN_SET:
                 InSetConstraintDTO inSetConstraintDTO = (InSetConstraintDTO) dto;
-                DistributedList<Object> values = (inSetConstraintDTO instanceof InSetFromFileConstraintDTO
-                    ? fileReader.setFromFile(((InSetFromFileConstraintDTO) inSetConstraintDTO).file)
-                    : DistributedList.uniform(((InSetOfValuesConstraintDTO) inSetConstraintDTO).values.stream()
-                    .distinct()
-                    .map(o -> readAnyType(field, o))
-                    .collect(Collectors.toList())));
-                return new IsInSetConstraint(field, values);
+                return new IsInSetConstraint(field, prepareValuesForSet(inSetConstraintDTO, field));
             case IN_MAP:
                 InMapConstraintDTO inMapConstraintDTO = (InMapConstraintDTO) dto;
                 return new InMapRelation(field, profileFields.getByName(inMapConstraintDTO.file),
@@ -147,6 +141,15 @@ public class ConstraintReader {
             default:
                 throw new InvalidProfileException("Atomic constraint type not found: " + dto);
         }
+    }
+
+    private DistributedList<Object> prepareValuesForSet(InSetConstraintDTO inSetConstraintDTO, Field field) {
+        return (inSetConstraintDTO instanceof InSetFromFileConstraintDTO
+            ? fileReader.setFromFile(((InSetFromFileConstraintDTO) inSetConstraintDTO).file)
+            : DistributedList.uniform(((InSetOfValuesConstraintDTO) inSetConstraintDTO).values.stream()
+            .distinct()
+            .map(o -> readAnyType(field, o))
+            .collect(Collectors.toList())));
     }
 
 
