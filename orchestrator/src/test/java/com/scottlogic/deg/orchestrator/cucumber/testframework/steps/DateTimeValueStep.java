@@ -39,82 +39,82 @@ public class DateTimeValueStep {
     }
 
     @When("^([A-z0-9]+) is equal to ([0-9]{4,5}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z?)$")
-    public void equalToDateValue(String fieldName, String value) {
+    public void equalToDateTimeValue(String fieldName, String value) {
         state.addConstraint(fieldName, ConstraintType.EQUAL_TO, value);
     }
 
     @When("^([A-z0-9]+) is after ([0-9]{4,5}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z?)$")
-    public void afterDateValue(String fieldName, String value) {
+    public void afterDateTimeValue(String fieldName, String value) {
         state.addConstraint(fieldName, ConstraintType.AFTER, value);
     }
 
     @When("^([A-z0-9]+) is after or at ([0-9]{4,5}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z?)$")
-    public void afterOrAtDateValue(String fieldName, String value) {
+    public void afterOrAtDateTimeValue(String fieldName, String value) {
         state.addConstraint(fieldName, ConstraintType.AFTER_OR_AT, value);
     }
 
     @When("^([A-z0-9]+) is before ([0-9]{4,5}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z?)$")
-    public void beforeDateValue(String fieldName, String value) {
+    public void beforeDateTimeValue(String fieldName, String value) {
         state.addConstraint(fieldName, ConstraintType.BEFORE, value);
     }
 
     @When("^([A-z0-9]+) is before or at ([0-9]{4,5}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z?)$")
-    public void beforeOrAtDateValue(String fieldName, String value) {
+    public void beforeOrAtDateTimeValue(String fieldName, String value) {
         state.addConstraint(fieldName, ConstraintType.BEFORE_OR_AT, value);
     }
 
     @When("^([A-z0-9]+) is granular to \"(.*)\"$")
-    public void granularToDateValue(String fieldName, String value) {
+    public void granularToDateTimeValue(String fieldName, String value) {
         state.addConstraint(fieldName, ConstraintType.GRANULAR_TO, value);
     }
 
     @When("^([A-z0-9]+) is anything but equal to ([0-9]{4,5}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z?)$")
-    public void notEqualToDateValue(String fieldName, String value) {
+    public void notEqualToDateTimeValue(String fieldName, String value) {
         state.addNotConstraint(fieldName, ConstraintType.EQUAL_TO, value);
     }
 
     @When("^([A-z0-9]+) is anything but after ([0-9]{4,5}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z?)$")
-    public void notAfterDateValue(String fieldName, String value) {
+    public void notAfterDateTimeValue(String fieldName, String value) {
         state.addNotConstraint(fieldName, ConstraintType.AFTER, value);
     }
 
     @When("^([A-z0-9]+) is anything but after or at ([0-9]{4,5}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z?)$")
-    public void notAfterOrAtDateValue(String fieldName, String value) {
+    public void notAfterOrAtDateTimeValue(String fieldName, String value) {
         state.addNotConstraint(fieldName, ConstraintType.AFTER_OR_AT, value);
     }
 
     @When("^([A-z0-9]+) is anything but before ([0-9]{4,5}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z?)$")
-    public void notBeforeDateValue(String fieldName, String value) {
+    public void notBeforeDateTimeValue(String fieldName, String value) {
         state.addNotConstraint(fieldName, ConstraintType.BEFORE, value);
     }
 
     @When("^([A-z0-9]+) is anything but before or at ([0-9]{4,5}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z?)$")
-    public void notBeforeOrAtDateValue(String fieldName, String value) {
+    public void notBeforeOrAtDateTimeValue(String fieldName, String value) {
         state.addNotConstraint(fieldName, ConstraintType.BEFORE_OR_AT, value);
     }
 
     @When("^([A-z0-9]+) is anything but granular to \"(.*)\"$")
-    public void notGranularToDateValue(String fieldName, String value) {
+    public void notGranularToDateTimeValue(String fieldName, String value) {
         state.addNotConstraint(fieldName, ConstraintType.GRANULAR_TO, value);
     }
 
     @And("^(.+) is after field ([A-z0-9]+)$")
-    public void dateAfter(String field, String otherField){
+    public void dateTimeAfter(String field, String otherField){
         state.addRelationConstraint(field, ConstraintType.AFTER_FIELD, otherField);
     }
 
     @And("^(.+) is after or at field ([A-z0-9]+)$")
-    public void dateAfterOrAt(String field, String otherField){
+    public void dateTimeAfterOrAt(String field, String otherField){
         state.addRelationConstraint(field, ConstraintType.AFTER_OR_AT_FIELD, otherField);
     }
 
     @And("^(.+) is before field ([A-z0-9]+)$")
-    public void dateBefore(String field, String otherField){
+    public void dateTimeBefore(String field, String otherField){
         state.addRelationConstraint(field, ConstraintType.BEFORE_FIELD, otherField);
     }
 
     @And("^(.+) is before or at field ([A-z0-9]+)$")
-    public void dateBeforeOrAt(String field, String otherField){
+    public void dateTimeBeforeOrAt(String field, String otherField){
         state.addRelationConstraint(field, ConstraintType.BEFORE_OR_AT_FIELD, otherField);
     }
 
