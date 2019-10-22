@@ -21,18 +21,27 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scottlogic.deg.profile.dtos.ProfileDTO;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 
 public class ProfileSerialiser implements Serialiser<ProfileDTO> {
-    public String serialise(ProfileDTO profile) throws IOException {
+    public String serialise(ProfileDTO profile) {
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(profile);
+        try {
+            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(profile);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
-    public ProfileDTO deserialise(String json) throws IOException {
+    public ProfileDTO deserialise(String json) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.disable(DeserializationFeature.WRAP_EXCEPTIONS);
         mapper.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
-        return mapper.readerFor(ProfileDTO.class).readValue(json);
+        try {
+            return mapper.readerFor(ProfileDTO.class).readValue(json);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 }
 

@@ -3,7 +3,7 @@
   "fields": [
     {
       "name": "date",
-      "type": "date",
+      "type": "datetime",
       "nullable": false
     }
   ],
@@ -12,7 +12,7 @@
       "constraints": [
         {
           "field": "date",
-          "after": "2001-02-03"
+          "after": "8001-02-03T04:05:06.007"
         }
       ]
     }

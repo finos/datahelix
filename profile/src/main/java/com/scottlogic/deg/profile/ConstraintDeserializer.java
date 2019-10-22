@@ -24,7 +24,7 @@ public class ConstraintDeserializer extends JsonDeserializer<ConstraintDTO> {
             .findFirst()
             .orElseThrow(() -> new InvalidProfileException("The constraint json object node" + fieldName +
                 " doesn't contain any of the expected keywords as " + "properties: " + node));
-        if (!node.hasNonNull(type.propertyName)) {
+        if (hasNull(node, type)) {
             throw new InvalidProfileException("The " + type.propertyName + " constraint has null value" + fieldName);
         }
         switch (type) {
@@ -98,5 +98,9 @@ public class ConstraintDeserializer extends JsonDeserializer<ConstraintDTO> {
             default:
                 throw new IllegalStateException("Unexpected value: " + type);
         }
+    }
+
+    private boolean hasNull(ObjectNode node, ConstraintType constraintType) {
+        return !node.hasNonNull(constraintType.propertyName);
     }
 }
