@@ -35,7 +35,7 @@ public class WhitelistFieldSpec extends FieldSpec {
     }
 
     @Override
-    public boolean permits(Object value) {
+    public boolean canCombineWithWhitelistValue(Object value) {
         if (!whitelist.list().contains(value)) {
             return false;
         }

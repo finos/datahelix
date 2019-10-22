@@ -44,7 +44,7 @@ public class InMapIndexRelation implements FieldSpecRelations {
 
         for (int i = 0; i < underlyingList.list().size(); i++) {
             Object testingElement = underlyingList.list().get(i);
-            if (otherValue.permits(testingElement)) {
+            if (otherValue.canCombineWithWhitelistValue(testingElement)) {
                 whiteList.add(BigDecimal.valueOf(i));
             }
         }

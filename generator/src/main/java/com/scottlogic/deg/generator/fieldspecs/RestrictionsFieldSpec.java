@@ -34,7 +34,7 @@ public class RestrictionsFieldSpec extends FieldSpec {
     }
 
     @Override
-    public boolean permits(Object value) {
+    public boolean canCombineWithWhitelistValue(Object value) {
         return !blacklist.contains(value) && restrictions.match(value);
     }
 

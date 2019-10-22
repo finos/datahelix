@@ -57,7 +57,11 @@ public class FieldSpecFactory {
     }
 
     public static GeneratorFieldSpec fromGeneratorNoSetSupport(FieldValueSource fieldValueSource) {
-        return fromGeneratorSupportingSets(fieldValueSource, setValue->false);
+        return fromGeneratorSupportingSets(fieldValueSource, rejectWhitelistValues());
+    }
+
+    private static Function<Object, Boolean> rejectWhitelistValues() {
+        return setValue->false;
     }
 
     public static GeneratorFieldSpec fromGeneratorSupportingSets(FieldValueSource fieldValueSource, Function<Object, Boolean> setValueAcceptFunction){

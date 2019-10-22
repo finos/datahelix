@@ -19,7 +19,6 @@ package com.scottlogic.deg.generator.fieldspecs;
 import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
-import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.restrictions.linear.*;
 import org.junit.Assert;
@@ -29,7 +28,6 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.Set;
 
 import static com.scottlogic.deg.common.profile.FieldType.*;
@@ -201,7 +199,7 @@ class FieldSpecTests {
         LinearRestrictions<BigDecimal> numeric = LinearRestrictionsFactory.createNumericRestrictions(new Limit<>(BigDecimal.TEN, true), NUMERIC_MAX_LIMIT);
         FieldSpec spec = FieldSpecFactory.fromRestriction(numeric);
 
-        assertFalse(spec.permits(BigDecimal.ONE));
+        assertFalse(spec.canCombineWithWhitelistValue(BigDecimal.ONE));
     }
 
     @Test
@@ -211,7 +209,7 @@ class FieldSpecTests {
 
         OffsetDateTime time = OffsetDateTime.of(100, 1, 1, 1, 1, 1, 1, ZoneOffset.UTC);
 
-        assertFalse(spec.permits(time.plusNanos(1_000_000)));
+        assertFalse(spec.canCombineWithWhitelistValue(time.plusNanos(1_000_000)));
     }
 
     @Test
@@ -245,21 +243,21 @@ class FieldSpecTests {
 
         FieldSpec spec = FieldSpecFactory.fromRestriction(mockTypedRestrictions);
 
-        assertFalse(spec.permits("Anything"));
+        assertFalse(spec.canCombineWithWhitelistValue("Anything"));
     }
 
     @Test
     void permits_whenNotInWhiteList_returnsFalse() {
         FieldSpec spec = FieldSpecFactory.fromList(DistributedList.singleton(10));
 
-        assertFalse(spec.permits(11));
+        assertFalse(spec.canCombineWithWhitelistValue(11));
     }
 
     @Test
     void permits_whenInWhiteList_returnsTrue() {
         FieldSpec spec = FieldSpecFactory.fromList(DistributedList.singleton(10));
 
-        assertTrue(spec.permits(10));
+        assertTrue(spec.canCombineWithWhitelistValue(10));
     }
 
     private class MockedRestrictions implements TypedRestrictions {

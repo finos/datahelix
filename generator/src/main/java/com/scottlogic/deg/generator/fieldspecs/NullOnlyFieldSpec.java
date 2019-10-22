@@ -25,7 +25,7 @@ public class NullOnlyFieldSpec extends FieldSpec {
     }
 
     @Override
-    public boolean permits(Object value) {
+    public boolean canCombineWithWhitelistValue(Object value) {
         return false;
     }
 

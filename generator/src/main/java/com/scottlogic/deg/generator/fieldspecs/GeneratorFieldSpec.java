@@ -5,17 +5,17 @@ import java.util.function.Function;
 
 public class GeneratorFieldSpec extends FieldSpec {
     private final FieldValueSource fieldValueSource;
-    private final Function<Object, Boolean> permit;
+    private final Function<Object, Boolean> acceptWhitelistValueFunction;
 
-    public GeneratorFieldSpec(FieldValueSource fieldValueSource, Function<Object, Boolean> permit,  boolean nullable) {
+    public GeneratorFieldSpec(FieldValueSource fieldValueSource, Function<Object, Boolean> acceptWhitelistValueFunction,  boolean nullable) {
         super(nullable);
         this.fieldValueSource = fieldValueSource;
-        this.permit = permit;
+        this.acceptWhitelistValueFunction = acceptWhitelistValueFunction;
     }
 
     @Override
-    public boolean permits(Object value) {
-        return permit.apply(value);
+    public boolean canCombineWithWhitelistValue(Object value) {
+        return acceptWhitelistValueFunction.apply(value);
     }
 
     @Override
@@ -25,6 +25,6 @@ public class GeneratorFieldSpec extends FieldSpec {
 
     @Override
     public FieldSpec withNotNull() {
-        return new GeneratorFieldSpec(fieldValueSource, permit, false);
+        return new GeneratorFieldSpec(fieldValueSource, acceptWhitelistValueFunction, false);
     }
 }
