@@ -83,6 +83,11 @@ public class AtomicConstraintReader {
                 return granularToConstraintDTO.value instanceof Number
                     ? new IsGranularToNumericConstraint(field, NumericGranularity.create(granularToConstraintDTO.value))
                     : new IsGranularToDateConstraint(field, DateTimeGranularity.create((String) granularToConstraintDTO.value));
+            case IS_NULL:
+                IsNullConstraint isNullConstraint = new IsNullConstraint(profileFields.getByName(((NullConstraintDTO) dto).field));
+                return ((NullConstraintDTO)dto).isNull
+                    ? isNullConstraint
+                    : isNullConstraint.negate();
             default:
                 throw new InvalidProfileException("Atomic constraint type not found: " + dto);
         }

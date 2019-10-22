@@ -104,8 +104,6 @@ public class ConstraintReader {
                 return new ConditionalConstraint(ifConstraint, thenConstraint, elseConstraint);
             case NOT:
                 return read(((NotConstraintDTO) dto).constraint, profileFields).negate();
-            case NULL:
-                return new IsNullConstraint(profileFields.getByName(((NullConstraintDTO) dto).field));
             default:
                 throw new InvalidProfileException("Grammatical constraint type not found: " + dto);
         }

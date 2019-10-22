@@ -142,10 +142,11 @@ public class CucumberTestState {
                     field = fieldName;
                     values = (Collection<Object>)_value;
                 }};
-            case NULL:
+            case IS_NULL:
                 return new NullConstraintDTO()
                 {{
                     field = fieldName;
+                    isNull = (boolean)_value;
                 }};
             case GRANULAR_TO:
                 return new GranularToConstraintDTO()
