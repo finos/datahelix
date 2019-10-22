@@ -2,8 +2,8 @@
   "schemaVersion": "0.14",
   "fields": [
     {
-      "name": "first_name",
-      "type": "string",
+      "name": "date",
+      "type": "datetime",
       "nullable": false
     }
   ],
@@ -11,8 +11,8 @@
     {
       "constraints": [
         {
-          "field": "first_name",
-          "containingRegex": "^(Joh?n|Mar[yk])$"
+          "field": "date",
+          "after": "8001-02-03T04:05:06.007"
         }
       ]
     }

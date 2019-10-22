@@ -18,31 +18,27 @@ package com.scottlogic.deg.profile.reader;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.*;
-import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.common.util.defaults.DateTimeDefaults;
 import com.scottlogic.deg.common.util.defaults.NumericDefaults;
 import com.scottlogic.deg.generator.fieldspecs.relations.*;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.profile.dtos.constraints.*;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Set;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class ConstraintReader {
 
-    private final FileReader fileReader;
+    private final AtomicConstraintReader atomicConstraintReader;
 
     @Inject
-    public ConstraintReader(FileReader fileReader) {
-        this.fileReader = fileReader;
+    public ConstraintReader(AtomicConstraintReader atomicConstraintReader) {
+        this.atomicConstraintReader = atomicConstraintReader;
     }
 
     public Set<Constraint> read(Collection<ConstraintDTO> constraints, ProfileFields fields) {
@@ -52,12 +48,15 @@ public class ConstraintReader {
     }
 
     public Constraint read(ConstraintDTO dto, ProfileFields profileFields) {
-        if (dto == null) throw new InvalidProfileException("Constraint is null");
-        if (dto instanceof RelationalConstraintDTO)
+        if (dto == null) {
+            throw new InvalidProfileException("Constraint is null");
+        } else if (dto instanceof RelationalConstraintDTO) {
             return readRelationalConstraintDto((RelationalConstraintDTO) dto, profileFields);
-        return dto instanceof AtomicConstraintDTO
-            ? readAtomicConstraintDto((AtomicConstraintDTO) dto, profileFields)
-            : readGrammaticalConstraintDto(dto, profileFields);
+        } else if (dto instanceof AtomicConstraintDTO)
+            return atomicConstraintReader.readAtomicConstraintDto((AtomicConstraintDTO) dto, profileFields);
+        else {
+            return readGrammaticalConstraintDto(dto, profileFields);
+        }
     }
 
     private Constraint readRelationalConstraintDto(RelationalConstraintDTO dto, ProfileFields fields) {
@@ -90,63 +89,6 @@ public class ConstraintReader {
         }
     }
 
-    private Constraint readAtomicConstraintDto(AtomicConstraintDTO dto, ProfileFields profileFields) {
-        Field field = profileFields.getByName(dto.field);
-        switch (dto.getType()) {
-            case EQUAL_TO:
-                return new EqualToConstraint(field, readAnyType(field, ((EqualToConstraintDTO) dto).value));
-            case IN_SET:
-                InSetConstraintDTO inSetConstraintDTO = (InSetConstraintDTO) dto;
-                DistributedList<Object> values = (inSetConstraintDTO instanceof InSetFromFileConstraintDTO
-                    ? fileReader.setFromFile(((InSetFromFileConstraintDTO) inSetConstraintDTO).file)
-                    : DistributedList.uniform(((InSetOfValuesConstraintDTO) inSetConstraintDTO).values.stream()
-                    .distinct()
-                    .map(o -> readAnyType(field, o))
-                    .collect(Collectors.toList())));
-                return new IsInSetConstraint(field, values);
-            case IN_MAP:
-                InMapConstraintDTO inMapConstraintDTO = (InMapConstraintDTO) dto;
-                return new InMapRelation(field, profileFields.getByName(inMapConstraintDTO.file),
-                    DistributedList.uniform(fileReader.listFromMapFile(inMapConstraintDTO.file, inMapConstraintDTO.key).stream()
-                        .map(value -> readAnyType(field, value))
-                        .collect(Collectors.toList())));
-            case MATCHES_REGEX:
-                return new MatchesRegexConstraint(profileFields.getByName(dto.field), readPattern(((MatchesRegexConstraintDTO) dto).value));
-            case CONTAINS_REGEX:
-                return new ContainsRegexConstraint(profileFields.getByName(dto.field), readPattern(((ContainsRegexConstraintDTO) dto).value));
-            case OF_LENGTH:
-                return new StringHasLengthConstraint(profileFields.getByName(dto.field), HelixStringLength.create(((OfLengthConstraintDTO) dto).value));
-            case SHORTER_THAN:
-                return new IsStringShorterThanConstraint(profileFields.getByName(dto.field), HelixStringLength.create(((ShorterThanConstraintDTO) dto).value));
-            case LONGER_THAN:
-                return new IsStringLongerThanConstraint(profileFields.getByName(dto.field), HelixStringLength.create(((LongerThanConstraintDTO) dto).value));
-            case GREATER_THAN:
-                return new IsGreaterThanConstantConstraint(profileFields.getByName(dto.field), HelixNumber.create(((GreaterThanConstraintDTO) dto).value));
-            case GREATER_THAN_OR_EQUAL_TO:
-                return new IsGreaterThanOrEqualToConstantConstraint(profileFields.getByName(dto.field), HelixNumber.create(((GreaterThanOrEqualToConstraintDTO) dto).value));
-            case LESS_THAN:
-                return new IsLessThanConstantConstraint(profileFields.getByName(dto.field), HelixNumber.create(((LessThanConstraintDTO) dto).value));
-            case LESS_THAN_OR_EQUAL_TO:
-                return new IsLessThanOrEqualToConstantConstraint(profileFields.getByName(dto.field), HelixNumber.create(((LessThanOrEqualToConstraintDTO) dto).value));
-            case AFTER:
-                return new IsAfterConstantDateTimeConstraint(profileFields.getByName(dto.field), HelixDateTime.create(((AfterConstraintDTO) dto).value));
-            case AFTER_OR_AT:
-                return new IsAfterOrEqualToConstantDateTimeConstraint(profileFields.getByName(dto.field), HelixDateTime.create(((AfterOrAtConstraintDTO) dto).value));
-            case BEFORE:
-                return new IsBeforeConstantDateTimeConstraint(profileFields.getByName(dto.field), HelixDateTime.create(((BeforeConstraintDTO) dto).value));
-            case BEFORE_OR_AT:
-                return new IsBeforeOrEqualToConstantDateTimeConstraint(profileFields.getByName(dto.field), HelixDateTime.create(((BeforeOrAtConstraintDTO) dto).value));
-            case GRANULAR_TO:
-                GranularToConstraintDTO granularToConstraintDTO = (GranularToConstraintDTO) dto;
-                return granularToConstraintDTO.value instanceof Number
-                    ? new IsGranularToNumericConstraint(profileFields.getByName(dto.field), NumericGranularity.create(granularToConstraintDTO.value))
-                    : new IsGranularToDateConstraint(profileFields.getByName(dto.field), DateTimeGranularity.create((String) granularToConstraintDTO.value));
-            default:
-                throw new InvalidProfileException("Atomic constraint type not found: " + dto);
-        }
-    }
-
-
     private Constraint readGrammaticalConstraintDto(ConstraintDTO dto, ProfileFields profileFields) {
         switch (dto.getType()) {
             case ALL_OF:
@@ -162,31 +104,8 @@ public class ConstraintReader {
                 return new ConditionalConstraint(ifConstraint, thenConstraint, elseConstraint);
             case NOT:
                 return read(((NotConstraintDTO) dto).constraint, profileFields).negate();
-            case NULL:
-                return new IsNullConstraint(profileFields.getByName(((NullConstraintDTO) dto).field));
             default:
                 throw new InvalidProfileException("Grammatical constraint type not found: " + dto);
-        }
-    }
-
-    @Nullable
-    private Object readAnyType(Field field, Object value) {
-        switch (field.getType()) {
-            case DATETIME:
-                return HelixDateTime.create((String) value).getValue();
-            case NUMERIC:
-                return NumberUtils.coerceToBigDecimal(value);
-            default:
-                return value;
-        }
-    }
-
-    private Pattern readPattern(Object value) {
-        if (value instanceof Pattern) return (Pattern) value;
-        try {
-            return Pattern.compile((String) value);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidProfileException(e.getMessage());
         }
     }
 

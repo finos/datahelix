@@ -25,6 +25,7 @@ import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.generator.profile.RuleInformation;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
+import com.scottlogic.deg.profile.dtos.FieldDTO;
 import com.scottlogic.deg.profile.dtos.ProfileDTO;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
 import com.scottlogic.deg.profile.common.ConstraintType;
@@ -66,7 +67,7 @@ public class JsonProfileReader implements ProfileReader {
         return read(profileJson);
     }
 
-    public Profile read(String profileJson) throws IOException {
+    public Profile read(String profileJson) {
         ProfileDTO profileDTO = new ProfileSerialiser().deserialise(profileJson);
         if (profileDTO.fields == null)
             throw new InvalidProfileException("Profile is invalid: 'fields' have not been defined.");
@@ -74,8 +75,13 @@ public class JsonProfileReader implements ProfileReader {
             throw new InvalidProfileException("Profile is invalid: 'rules' have not been defined.");
 
         List<Field> fields = profileDTO.fields.stream()
-            .map(fieldDTO -> new Field(fieldDTO.name, fieldDTO.type.getFieldType(), fieldDTO.unique, fieldDTO.formatting, false))
-            .collect(Collectors.toList());
+                .map(fieldDTO -> new Field(
+                    fieldDTO.name,
+                    fieldDTO.type.getFieldType(),
+                    fieldDTO.unique,
+                    getFormatting(fieldDTO),
+                    false))
+                .collect(Collectors.toList());
 
         List<Field> inMapFields = profileDTO.rules.stream()
             .flatMap(ruleDTO -> ruleDTO.constraints.stream())
@@ -91,11 +97,12 @@ public class JsonProfileReader implements ProfileReader {
             .map(r -> new Rule(new RuleInformation(r.rule), constraintReader.read(r.constraints, profileFields)))
             .collect(Collectors.toList());
 
-        Collection<Constraint> nullableConstraints = profileDTO.fields.stream()
+        Collection<Constraint> nonNullableConstraints = profileDTO.fields.stream()
             .filter(fieldDTO -> !fieldDTO.nullable)
             .map(fieldDTO -> constraintReader.read(new NullConstraintDTO() {{
                 field = fieldDTO.name;
-            }}, profileFields).negate())
+                isNull = false;
+            }}, profileFields))
             .collect(Collectors.toList());
 
         Collection<Constraint> typeConstraints = profileDTO.fields.stream()
@@ -104,13 +111,27 @@ public class JsonProfileReader implements ProfileReader {
             .map(Optional::get)
             .collect(Collectors.toList());
 
-        if (!nullableConstraints.isEmpty()) {
-            rules.add(new Rule(new RuleInformation("nullable-rules"), nullableConstraints));
+        if (!nonNullableConstraints.isEmpty()) {
+            rules.add(new Rule(new RuleInformation("nullable-rules"), nonNullableConstraints));
         }
         if (!typeConstraints.isEmpty()) {
             rules.add(new Rule(new RuleInformation("type-rules"), typeConstraints));
         }
         return new Profile(profileFields, rules, profileDTO.description);
+    }
+    
+    private String getFormatting(FieldDTO fDto) {
+        if (fDto.formatting != null) {
+            return fDto.formatting;
+        } else  {
+            return fDto.type.getDefaultFormatting();
+        }
+    }
+
+    private NullConstraintDTO nullDtoOf(FieldDTO fieldDTO) {
+        NullConstraintDTO nullConstraint = new NullConstraintDTO();
+        nullConstraint.field = fieldDTO.name;
+        return nullConstraint;
     }
 
     private List<String> getInMapConstraints(ProfileDTO profileDto) {

@@ -146,7 +146,7 @@ Feature: User can create data across multiple fields for all combinations availa
     And bar is in set:
       | 2010-01-01T00:00:00.000Z |
       | 2010-12-31T23:59:00.000Z |
-    Then the profile is invalid because "Date string '\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:00.000Z' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS\[Z\] between \(inclusive\) 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z"
+    Then the profile is invalid because "Date string '2018-12-99T14:00:00.000Z' must be in ISO-8601 format: Either yyyy-MM-ddTHH:mm:ss.SSS\[Z\] between 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z or yyyy-mm-dd between 0001-01-01 and 9999-12-31"
     And no data is created
 
   Scenario: Running an exhaustive combination strategy with null values (null) should be successful
