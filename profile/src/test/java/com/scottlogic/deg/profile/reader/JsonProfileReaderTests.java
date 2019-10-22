@@ -721,7 +721,7 @@ public class JsonProfileReaderTests {
                 "    ]" +
                 "}");
 
-        expectValidationException("HelixDateTime cannot be null");
+        expectValidationException("Field foo is a datetime but you are trying to assign non datetime value");
     }
 
     @Test
