@@ -25,6 +25,7 @@ import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.generator.profile.RuleInformation;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
+import com.scottlogic.deg.profile.dtos.FieldDTO;
 import com.scottlogic.deg.profile.dtos.ProfileDTO;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
 import com.scottlogic.deg.profile.common.ConstraintType;
@@ -74,8 +75,13 @@ public class JsonProfileReader implements ProfileReader {
             throw new InvalidProfileException("Profile is invalid: 'rules' have not been defined.");
 
         List<Field> fields = profileDTO.fields.stream()
-            .map(fieldDTO -> new Field(fieldDTO.name, fieldDTO.type.getFieldType(), fieldDTO.unique, fieldDTO.formatting, false))
-            .collect(Collectors.toList());
+                .map(fieldDTO -> new Field(
+                    fieldDTO.name,
+                    fieldDTO.type.getFieldType(),
+                    fieldDTO.unique,
+                    getFormatting(fieldDTO),
+                    false))
+                .collect(Collectors.toList());
 
         List<Field> inMapFields = profileDTO.rules.stream()
             .flatMap(ruleDTO -> ruleDTO.constraints.stream())
@@ -113,7 +119,16 @@ public class JsonProfileReader implements ProfileReader {
         return new Profile(profileFields, rules, profileDTO.description);
     }
 
-    private List<String> getInMapConstraints(ProfileDTO profileDto) {
+    private String getFormatting(FieldDTO fDto) {
+        if (fDto.formatting != null) {
+            return fDto.formatting;
+        } else  {
+            return fDto.type.getDefaultFormatting();
+        }
+    }
+
+    private List<String> getInMapConstraints(ProfileDTO profileDto)
+    {
         return profileDto.rules.stream()
             .flatMap(ruleDTO -> ruleDTO.constraints.stream())
             .flatMap(constraint -> getAllAtomicConstraints(Stream.of(constraint)))

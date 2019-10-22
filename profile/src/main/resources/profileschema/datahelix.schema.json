@@ -57,7 +57,7 @@
   "definitions": {
     "schemaVersion": {
       "title": "The version of the DataHelix profile schema",
-      "const": "0.12"
+      "const": "0.13"
     },
     "dataType": {
       "oneOf": [
@@ -73,12 +73,15 @@
       ]
     },
     "datetime": {
-      "title": "an ISO 8610 compatible string denoting a date and time",
+      "title": "an ISO 8610 compatible string denoting a datetime or date",
       "type": "string",
       "default": "2000-01-01T09:00:00.000",
-      "oneOf": [
+      "anyOf": [
         {
           "pattern": "^(?!0000)[0-9]{4}-([0][0-9]|[1][0-2])-([0-2][0-9]|3[01])T([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9][.][0-9]{3}Z?$"
+        },
+        {
+          "pattern": "^(?!0000)[0-9]{4}-([0][0-9]|[1][0-2])-([0-2][0-9]|3[01])"
         },
         {
           "enum": [
@@ -166,6 +169,7 @@
             "integer",
             "string",
             "datetime",
+            "date",
             "ISIN",
             "SEDOL",
             "CUSIP",

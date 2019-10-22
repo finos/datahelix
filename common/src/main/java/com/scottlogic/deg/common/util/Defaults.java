@@ -35,4 +35,6 @@ public class Defaults {
     public static final OffsetDateTime ISO_MIN_DATE = OffsetDateTime.of(1, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
     public static final DateTimeGranularity DEFAULT_DATETIME_GRANULARITY = new DateTimeGranularity(ChronoUnit.MILLIS, false);
     public static final NumericGranularity DEFAULT_NUMERIC_GRANULARITY = new NumericGranularity(20);
+
+    public static final String DEFAULT_DATE_FORMATTING = "%tF";  //yyyy-mm-dd see https://docs.oracle.com/javase/8/docs/api/java/util/Formatter.html
 }
