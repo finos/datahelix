@@ -246,8 +246,6 @@ Sets the field as unique. Unique fields can not be used within [grammatical cons
 
 # Data Types
 
-DataHelix currently recognises three core data types: _string_, _datetime_, _integer_ and _decimal_. It also recognises more complex data types which are extensions of these core types.
-
 ## Integer/Decimal
 
 Within a profile, users can specify two numeric data types: integer and decimal. Under the hood both of these data types are considered numeric from a point of generation but the integer type enforces a granularity of 1, see below for more information on granularity.
