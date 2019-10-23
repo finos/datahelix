@@ -51,7 +51,6 @@ class FieldSpecValueGeneratorTests {
             .withNotNull();
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
             INTERESTING,
-            new FieldValueSourceEvaluator(),
             new JavaUtilRandomNumberGenerator());
 
         final Set<DataBagValue> result = fieldSpecFulfiller.generate(createField(null), fieldSpec).collect(Collectors.toSet());
@@ -72,7 +71,6 @@ class FieldSpecValueGeneratorTests {
                     new Limit<>(new BigDecimal(30), false)));
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
             INTERESTING,
-            new FieldValueSourceEvaluator(),
             new JavaUtilRandomNumberGenerator());
 
         final Set<DataBagValue> result =
@@ -95,17 +93,17 @@ class FieldSpecValueGeneratorTests {
 
     @Nested
     class GetDataValuesTests {
-        FieldValueSourceEvaluator fieldValueSourceEvaluator;
+        FieldSpec fieldSpec;
         FieldValueSource fieldValueSource;
         JavaUtilRandomNumberGenerator randomNumberGenerator;
 
         @BeforeEach
         void beforeEach() {
-            fieldValueSourceEvaluator = mock(FieldValueSourceEvaluator.class);
             fieldValueSource = mock(FieldValueSource.class);
+            fieldSpec = mock(FieldSpec.class);
 
             randomNumberGenerator = mock(JavaUtilRandomNumberGenerator.class);
-            when(fieldValueSourceEvaluator.getFieldValueSources(any())).thenReturn(fieldValueSource);
+            when(fieldSpec.getFieldValueSource()).thenReturn(fieldValueSource);
             when(fieldValueSource.generateAllValues()).thenReturn(Stream.empty());
             when(fieldValueSource.generateInterestingValues()).thenReturn(Stream.empty());
             when(fieldValueSource.generateRandomValues(randomNumberGenerator)).thenReturn(Stream.empty());
@@ -113,11 +111,8 @@ class FieldSpecValueGeneratorTests {
 
         @Test
         void generateRandom_uniqueFieldSpec_returnsAllValues() {
-            FieldSpec fieldSpec = FieldSpecFactory.fromType(STRING).withNotNull();
-
             FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
                 RANDOM,
-                fieldValueSourceEvaluator,
                 randomNumberGenerator
             );
 
@@ -130,11 +125,8 @@ class FieldSpecValueGeneratorTests {
 
         @Test
         void generateRandom_notUniqueFieldSpec_returnsRandomValues() {
-            FieldSpec fieldSpec = FieldSpecFactory.fromType(STRING).withNotNull();
-
             FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
                 RANDOM,
-                fieldValueSourceEvaluator,
                 randomNumberGenerator
             );
 
@@ -147,11 +139,8 @@ class FieldSpecValueGeneratorTests {
 
         @Test
         void generateInteresting_uniqueFieldSpec_returnsAllValues() {
-            FieldSpec fieldSpec = FieldSpecFactory.fromType(STRING).withNotNull();
-
             FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
                 INTERESTING,
-                fieldValueSourceEvaluator,
                 randomNumberGenerator
             );
 
@@ -164,11 +153,8 @@ class FieldSpecValueGeneratorTests {
 
         @Test
         void generateInteresting_notUniqueFieldSpec_returnsInterestingValues() {
-            FieldSpec fieldSpec = FieldSpecFactory.fromType(STRING).withNotNull();
-
             FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
                 INTERESTING,
-                fieldValueSourceEvaluator,
                 randomNumberGenerator
             );
 
@@ -181,11 +167,8 @@ class FieldSpecValueGeneratorTests {
 
         @Test
         void generateSequential_uniqueFieldSpec_returnsAllValues() {
-            FieldSpec fieldSpec = FieldSpecFactory.fromType(STRING).withNotNull();
-
             FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
                 FULL_SEQUENTIAL,
-                fieldValueSourceEvaluator,
                 randomNumberGenerator
             );
 
@@ -198,11 +181,8 @@ class FieldSpecValueGeneratorTests {
 
         @Test
         void generateSequential_notUniqueFieldSpec_returnsAllValues() {
-            FieldSpec fieldSpec = FieldSpecFactory.fromType(STRING).withNotNull();
-
             FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
                 FULL_SEQUENTIAL,
-                fieldValueSourceEvaluator,
                 randomNumberGenerator
             );
 

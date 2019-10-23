@@ -59,13 +59,13 @@ public class MatchesStandardConstraint implements AtomicConstraint {
                 return FieldSpecFactory.fromRestriction(StringRestrictionsFactory.forStringMatching(Pattern.compile(RIC.getRegex()), false));
             case ISIN:
                 StringGenerator isinGenerator = createIsinGenerator();
-                return FieldSpecFactory.fromGeneratorSupportingSets(isinGenerator, val -> isinGenerator.matches((String) val));
+                return FieldSpecFactory.fromGenerator(isinGenerator, val -> isinGenerator.matches((String) val));
             case CUSIP:
                 StringGenerator cusipGenerator = createCusipGenerator();
-                return FieldSpecFactory.fromGeneratorSupportingSets(cusipGenerator, val -> cusipGenerator.matches((String) val));
+                return FieldSpecFactory.fromGenerator(cusipGenerator, val -> cusipGenerator.matches((String) val));
             case SEDOL:
                 StringGenerator sedolGenerator = createSedolGenerator();
-                return FieldSpecFactory.fromGeneratorSupportingSets(sedolGenerator, val -> sedolGenerator.matches((String) val));
+                return FieldSpecFactory.fromGenerator(sedolGenerator, val -> sedolGenerator.matches((String) val));
             default:
                 throw new UnsupportedOperationException(standard + " not recognised");
         }

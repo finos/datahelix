@@ -5,7 +5,7 @@ public class ConstraintTypeJsonProperty {
     public static final String EQUAL_TO_FIELD = "equalToField";
     public static final String IN_SET = "inSet";
     public static final String IN_MAP = "inMap";
-    public static final String NULL = "null";
+    public static final String IS_NULL = "isNull";
     public static final String GRANULAR_TO = "granularTo";
     public static final String MATCHES_REGEX = "matchingRegex";
     public static final String CONTAINS_REGEX = "containingRegex";

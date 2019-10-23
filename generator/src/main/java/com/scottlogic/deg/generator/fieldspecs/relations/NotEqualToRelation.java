@@ -18,13 +18,13 @@ public class NotEqualToRelation implements FieldSpecRelations {
     }
 
     @Override
-    public FieldSpec reduceToRelatedFieldSpec(FieldSpec otherValue) {
+    public FieldSpec createModifierFromOtherFieldSpec(FieldSpec otherFieldSpec) {
         return FieldSpecFactory.fromType(main.getType());
     }
 
     @Override
-    public FieldSpec reduceValueToFieldSpec(DataBagValue generatedValue) {
-        return FieldSpecFactory.fromType(main.getType()).withBlacklist(Collections.singleton(generatedValue.getValue()));
+    public FieldSpec createModifierFromOtherValue(DataBagValue otherFieldGeneratedValue) {
+        return FieldSpecFactory.fromType(main.getType()).withBlacklist(Collections.singleton(otherFieldGeneratedValue.getValue()));
     }
 
     @Override

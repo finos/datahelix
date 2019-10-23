@@ -24,7 +24,6 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
-import com.scottlogic.deg.generator.fieldspecs.relations.InMapRelation;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.databags.*;
 import com.scottlogic.deg.generator.utils.SetUtils;
@@ -83,7 +82,7 @@ public class FieldSpecGroupValueGenerator {
 
         return group.relations().stream()
             .filter(relation -> isRelatedToField(first, relation))
-            .map(relation -> createMergedSpecFromRelation(first, relation, group))
+            .map(relation -> createModifierForField(first, relation, group))
             .map(Optional::of)
             .reduce(Optional.of(firstFieldSpec), this::mergeOptionalFieldspecs)
             .orElseThrow(() -> new IllegalStateException("Failed to merge field specs in related fields"));
@@ -98,15 +97,15 @@ public class FieldSpecGroupValueGenerator {
         return relation.main().equals(field) || relation.other().equals(field);
     }
 
-    private FieldSpec createMergedSpecFromRelation(Field first,
-                                                   FieldSpecRelations relation,
-                                                   FieldSpecGroup group) {
+    private FieldSpec createModifierForField(Field first,
+                                             FieldSpecRelations relation,
+                                             FieldSpecGroup group) {
         if (!relation.main().equals(first)){
             relation = relation.inverse();
         }
 
         FieldSpec otherFieldSpec = group.fieldSpecs().get(relation.other());
-        return relation.reduceToRelatedFieldSpec(otherFieldSpec);
+        return relation.createModifierFromOtherFieldSpec(otherFieldSpec);
     }
 
     private Stream<DataBag> generateRemainingData(Field generatedField, DataBag dataBag, FieldSpecGroup group) {
@@ -131,7 +130,7 @@ public class FieldSpecGroupValueGenerator {
         Map<Field, FieldSpec> fieldUpdates = updatableRelations.stream()
             .collect(Collectors.toMap(
                 FieldSpecRelations::main,
-                relation -> relation.reduceValueToFieldSpec(generatedValue),
+                relation -> relation.createModifierFromOtherValue(generatedValue),
                 (l, r) -> fieldSpecMerger.merge(l, r)
                     .orElseThrow(() -> new IllegalStateException("Failed to merge field specs in related fields"))));
 

@@ -31,18 +31,18 @@ class InMapRelationTest {
     @Test
     void reduceValueToFieldSpec_whenValidIndex_returnFieldSpec() {
         FieldSpec expected = FieldSpecFactory.fromList(DistributedList.singleton("bar"));
-        FieldSpec actual = testInstance.reduceValueToFieldSpec(new DataBagValue(BigDecimal.valueOf(1)));
+        FieldSpec actual = testInstance.createModifierFromOtherValue(new DataBagValue(BigDecimal.valueOf(1)));
 
         Assert.assertEquals(expected, actual);
     }
 
     @Test
     void reduceValueToFieldSpec_whenInvalidIndex_throws() {
-        assertThrows(IndexOutOfBoundsException.class, () -> testInstance.reduceValueToFieldSpec(new DataBagValue(BigDecimal.valueOf(3))));
+        assertThrows(IndexOutOfBoundsException.class, () -> testInstance.createModifierFromOtherValue(new DataBagValue(BigDecimal.valueOf(3))));
     }
 
     @Test
     void reduceValueToFieldSpec_whenInvalidIndexType_throws() {
-        assertThrows(ClassCastException.class, () -> testInstance.reduceValueToFieldSpec(new DataBagValue("bar")));
+        assertThrows(ClassCastException.class, () -> testInstance.createModifierFromOtherValue(new DataBagValue("bar")));
     }
 }

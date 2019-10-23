@@ -37,13 +37,13 @@ public class InMapRelation implements FieldSpecRelations {
     }
 
     @Override
-    public FieldSpec reduceToRelatedFieldSpec(FieldSpec otherValue) {
+    public FieldSpec createModifierFromOtherFieldSpec(FieldSpec otherFieldSpec) {
         throw new UnsupportedOperationException("ReduceToRelatedFieldSpec is unsupported in InMapRelation");
     }
 
     @Override
-    public FieldSpec reduceValueToFieldSpec(DataBagValue generatedValue) {
-        BigDecimal value = (BigDecimal)generatedValue.getValue();
+    public FieldSpec createModifierFromOtherValue(DataBagValue otherFieldGeneratedValue) {
+        BigDecimal value = (BigDecimal) otherFieldGeneratedValue.getValue();
 
         DistributedList<Object> newList = DistributedList.singleton(underlyingList.list().get(value.intValue()));
         return FieldSpecFactory.fromList(newList);

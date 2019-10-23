@@ -76,7 +76,7 @@ public class NumericGranularity implements Granularity<BigDecimal> {
 
     @Override
     public BigDecimal getRandom(BigDecimal min, BigDecimal max, RandomNumberGenerator randomNumberGenerator) {
-        BigDecimal value = randomNumberGenerator.nextBigDecimal(max, max);
+        BigDecimal value = randomNumberGenerator.nextBigDecimal(min, max);
         return trimToGranularity(value);
     }
 

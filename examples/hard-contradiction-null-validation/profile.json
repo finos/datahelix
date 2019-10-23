@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.14",
+  "schemaVersion": "0.15",
   "fields": [
     {
       "name": "Column 1",
@@ -11,7 +11,8 @@
       "rule": "Column 1 is null",
       "constraints": [
         {
-          "null": "Column 1"
+          "field": "Column 1",
+          "isNull": true
         }
       ]
     },
@@ -19,9 +20,8 @@
       "rule": "Column 1 is not null",
       "constraints": [
         {
-          "not": {
-            "null": "Column 1"
-          }
+          "field": "Column 1",
+          "isNull": false
         }
       ]
     }

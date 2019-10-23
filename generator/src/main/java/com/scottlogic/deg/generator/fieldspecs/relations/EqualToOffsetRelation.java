@@ -24,9 +24,6 @@ import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 
-import static com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory.fromType;
-import static com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory.nullOnly;
-
 public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpecRelations {
     private final Field main;
     private final Field other;
@@ -44,16 +41,15 @@ public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpec
     }
 
     @Override
-    public FieldSpec reduceToRelatedFieldSpec(FieldSpec otherValue) {
-        if (otherValue instanceof NullOnlyFieldSpec){
-            return nullOnly();
+    public FieldSpec createModifierFromOtherFieldSpec(FieldSpec otherFieldSpec) {
+        if (otherFieldSpec instanceof NullOnlyFieldSpec){
+            return FieldSpecFactory.nullOnly();
         }
-        if (otherValue instanceof WhitelistFieldSpec) {
-            //todo
-            return fromType(main.getType());
+        if (otherFieldSpec instanceof WhitelistFieldSpec) {
+            throw new UnsupportedOperationException("cannot combine sets with equal to offset relation, Issue #1489");
         }
 
-        LinearRestrictions<T> otherRestrictions = (LinearRestrictions)((RestrictionsFieldSpec)otherValue).getRestrictions();
+        LinearRestrictions<T> otherRestrictions = (LinearRestrictions)((RestrictionsFieldSpec) otherFieldSpec).getRestrictions();
         T min = otherRestrictions.getMin();
         T offsetMin = offsetGranularity.getNext(min, offset);
         T max = otherRestrictions.getMax();
@@ -63,8 +59,8 @@ public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpec
     }
 
     @Override
-    public FieldSpec reduceValueToFieldSpec(DataBagValue generatedValue) {
-        T offsetValue = offsetGranularity.getNext((T) generatedValue.getValue(), offset);
+    public FieldSpec createModifierFromOtherValue(DataBagValue otherFieldGeneratedValue) {
+        T offsetValue = offsetGranularity.getNext((T) otherFieldGeneratedValue.getValue(), offset);
         return FieldSpecFactory.fromList(DistributedList.singleton(offsetValue));
     }
 

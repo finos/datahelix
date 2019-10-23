@@ -32,7 +32,7 @@ class EqualToDateRelationTest {
             ZoneOffset.UTC);
         DataBagValue generatedValue = new DataBagValue(value);
 
-        FieldSpec result = equalToDateRelations.reduceValueToFieldSpec(generatedValue);
+        FieldSpec result = equalToDateRelations.createModifierFromOtherValue(generatedValue);
 
         FieldSpec expected = FieldSpecFactory.fromList(DistributedList.singleton(value));
         assertThat(result, sameBeanAs(expected));
@@ -43,7 +43,7 @@ class EqualToDateRelationTest {
         OffsetDateTime value = null;
         DataBagValue generatedValue = new DataBagValue(value);
 
-        FieldSpec result = equalToDateRelations.reduceValueToFieldSpec(generatedValue);
+        FieldSpec result = equalToDateRelations.createModifierFromOtherValue(generatedValue);
 
         FieldSpec expected = FieldSpecFactory.nullOnly();
         assertThat(result, sameBeanAs(expected));

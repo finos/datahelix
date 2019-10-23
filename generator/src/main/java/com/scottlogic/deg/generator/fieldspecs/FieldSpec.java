@@ -22,7 +22,7 @@ import com.scottlogic.deg.generator.generation.fieldvaluesources.NullOnlySource;
 
 public abstract class FieldSpec {
 
-    public abstract boolean permits(Object value);
+    public abstract boolean canCombineWithWhitelistValue(Object value);
     public abstract FieldValueSource getFieldValueSource();
     public abstract FieldSpec withNotNull();
 

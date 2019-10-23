@@ -17,15 +17,13 @@
 
 package com.scottlogic.deg.profile.reader.atomic;
 
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.FieldBuilder;
-import com.scottlogic.deg.common.profile.SpecificFieldType;
+import com.scottlogic.deg.common.profile.*;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
-import com.scottlogic.deg.common.profile.NumericGranularity;
 import com.scottlogic.deg.profile.reader.file.names.NameRetriever;
 import org.junit.jupiter.api.Test;
 
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -65,5 +63,17 @@ class FieldReaderTest
 
         assertTrue(constraint.isPresent());
         assertEquals((constraint.get()), isInSetConstraint);
+    }
+
+    @Test
+    void returnsGranularToDateConstraintWhenPassedDate() {
+        Optional<Constraint> constraint = FieldReader.read(field,SpecificFieldType.DATE);
+        IsGranularToDateConstraint isGranularToDateConstraint = new IsGranularToDateConstraint(
+            field,
+            new DateTimeGranularity(ChronoUnit.DAYS)
+        );
+
+        assertTrue(constraint.isPresent());
+        assertEquals((constraint.get()), isGranularToDateConstraint);
     }
 }

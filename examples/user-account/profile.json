@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.14",
+  "schemaVersion": "0.15",
   "fields": [
     {
       "name": "user_id",
@@ -44,14 +44,14 @@
             "containingRegex": "\\@"
           },
           "then": {
-            "null": "email_address"
+            "field": "email_address",
+            "isNull": true
           },
           "else": {
             "allOf": [
               {
-                "not": {
-                  "null": "email_address"
-                }
+                "field": "email_address",
+                "isNull": false
               },
               {
                 "field": "email_address",

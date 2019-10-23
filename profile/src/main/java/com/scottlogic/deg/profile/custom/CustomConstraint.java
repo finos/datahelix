@@ -41,7 +41,7 @@ public class CustomConstraint implements AtomicConstraint {
     @Override
     public FieldSpec toFieldSpec() {
         return FieldSpecFactory
-            .fromGeneratorSupportingSets(
+            .fromGenerator(
                 new CustomFieldValueSource(customGenerator, negated),
                 customGenerator::setMatchingFunction);
     }
