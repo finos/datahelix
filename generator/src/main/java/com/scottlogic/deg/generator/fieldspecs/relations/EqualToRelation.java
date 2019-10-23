@@ -33,16 +33,16 @@ public class EqualToRelation implements FieldSpecRelations {
     }
 
     @Override
-    public FieldSpec reduceToRelatedFieldSpec(FieldSpec otherValue) {
-        return otherValue;
+    public FieldSpec createModifierFromOtherFieldSpec(FieldSpec otherFieldSpec) {
+        return otherFieldSpec;
     }
 
     @Override
-    public FieldSpec reduceValueToFieldSpec(DataBagValue generatedValue) {
-        if (generatedValue.getValue() == null){
+    public FieldSpec createModifierFromOtherValue(DataBagValue otherFieldGeneratedValue) {
+        if (otherFieldGeneratedValue.getValue() == null){
             return FieldSpecFactory.nullOnly();
         }
-        return FieldSpecFactory.fromList(DistributedList.singleton(generatedValue.getValue()));
+        return FieldSpecFactory.fromList(DistributedList.singleton(otherFieldGeneratedValue.getValue()));
     }
 
     @Override

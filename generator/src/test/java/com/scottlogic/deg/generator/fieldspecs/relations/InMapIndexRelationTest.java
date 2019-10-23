@@ -35,7 +35,7 @@ class InMapIndexRelationTest {
         FieldSpec parameter = FieldSpecFactory.fromType(FieldType.STRING);
 
         FieldSpec expected = FieldSpecFactory.fromList(DistributedList.uniform(Arrays.asList(0, 1))).withNotNull();
-        FieldSpec actual = testInstance.reduceToRelatedFieldSpec(parameter);
+        FieldSpec actual = testInstance.createModifierFromOtherFieldSpec(parameter);
 
         assertThat(actual, sameBeanAs(expected));
     }
@@ -45,7 +45,7 @@ class InMapIndexRelationTest {
         FieldSpec parameter = FieldSpecFactory.fromRestriction(StringRestrictionsFactory.forStringContaining(Pattern.compile("^f.*"), false));
 
         FieldSpec expected = FieldSpecFactory.fromList(DistributedList.uniform(Collections.singletonList(0))).withNotNull();
-        FieldSpec actual = testInstance.reduceToRelatedFieldSpec(parameter);
+        FieldSpec actual = testInstance.createModifierFromOtherFieldSpec(parameter);
 
         assertThat(actual, sameBeanAs(expected));
     }

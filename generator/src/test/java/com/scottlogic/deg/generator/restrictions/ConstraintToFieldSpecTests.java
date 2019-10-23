@@ -29,10 +29,8 @@ import org.junit.jupiter.api.Test;
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 import static org.junit.Assert.assertEquals;
 
-class FieldSpecFactoryTests {
-    private static final StringRestrictionsFactory stringRestrictionsFactory = new StringRestrictionsFactory();
+class ConstraintToFieldSpecTests {
     private Field testField = createField("Test");
-
 
     @Test
     void construct_stringHasLengthConstraintRetrievedTwice_returnsTheSameGeneratorInstance() {

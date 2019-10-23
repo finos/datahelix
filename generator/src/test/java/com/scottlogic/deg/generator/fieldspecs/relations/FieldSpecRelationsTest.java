@@ -30,7 +30,7 @@ class FieldSpecRelationsTest {
         FieldSpec fieldSpec = forYears(2018, 2018);
         EqualToRelation relation = new EqualToRelation(main, other);
 
-        FieldSpec actual = relation.reduceToRelatedFieldSpec(fieldSpec);
+        FieldSpec actual = relation.createModifierFromOtherFieldSpec(fieldSpec);
         FieldSpec expected = fieldSpec;
 
         assertThat(actual, sameBeanAs(expected));
@@ -41,7 +41,7 @@ class FieldSpecRelationsTest {
         FieldSpec fieldSpec = forYears(2018, 2020);
         EqualToRelation relation = new EqualToRelation(main, other);
 
-        FieldSpec actual = relation.reduceToRelatedFieldSpec(fieldSpec);
+        FieldSpec actual = relation.createModifierFromOtherFieldSpec(fieldSpec);
         FieldSpec expected = fieldSpec;
 
         assertThat(actual, sameBeanAs(expected));
@@ -52,7 +52,7 @@ class FieldSpecRelationsTest {
         FieldSpec fieldSpec = forYears(2018, 2018);
         AfterRelation relation = new AfterRelation(main, other, true, DateTimeDefaults.get());
 
-        FieldSpec actual = relation.reduceToRelatedFieldSpec(fieldSpec);
+        FieldSpec actual = relation.createModifierFromOtherFieldSpec(fieldSpec);
         FieldSpec expected = fromMin(2018);
 
         assertThat(actual, sameBeanAs(expected));
@@ -63,7 +63,7 @@ class FieldSpecRelationsTest {
         FieldSpec fieldSpec = forYears(2018, 2020);
         AfterRelation relation = new AfterRelation(main, other, true, DateTimeDefaults.get());
 
-        FieldSpec actual = relation.reduceToRelatedFieldSpec(fieldSpec);
+        FieldSpec actual = relation.createModifierFromOtherFieldSpec(fieldSpec);
         FieldSpec expected = fromMin(2018);
 
         assertThat(actual, sameBeanAs(expected));
@@ -74,7 +74,7 @@ class FieldSpecRelationsTest {
         FieldSpec fieldSpec = forYears(2018, 2021);
         AfterRelation relation = new AfterRelation(main, other, false, DateTimeDefaults.get());
 
-        FieldSpec actual = relation.reduceToRelatedFieldSpec(fieldSpec);
+        FieldSpec actual = relation.createModifierFromOtherFieldSpec(fieldSpec);
         FieldSpec expected = fromMin(2019);
 
         assertThat(actual, sameBeanAs(expected));
@@ -85,7 +85,7 @@ class FieldSpecRelationsTest {
         FieldSpec fieldSpec = forYears(2018, 2018);
         BeforeRelation relation = new BeforeRelation(main, other, true, DateTimeDefaults.get());
 
-        FieldSpec actual = relation.reduceToRelatedFieldSpec(fieldSpec);
+        FieldSpec actual = relation.createModifierFromOtherFieldSpec(fieldSpec);
         FieldSpec expected = fromMax(2018);
 
         assertThat(actual, sameBeanAs(expected));
@@ -96,7 +96,7 @@ class FieldSpecRelationsTest {
         FieldSpec fieldSpec = forYears(2018, 2020);
         BeforeRelation relation = new BeforeRelation(main, other, true, DateTimeDefaults.get());
 
-        FieldSpec actual = relation.reduceToRelatedFieldSpec(fieldSpec);
+        FieldSpec actual = relation.createModifierFromOtherFieldSpec(fieldSpec);
         FieldSpec expected = fromMax(2020);
 
         assertThat(actual, sameBeanAs(expected));
@@ -107,7 +107,7 @@ class FieldSpecRelationsTest {
         FieldSpec fieldSpec = forYears(2017, 2020);
         BeforeRelation relation = new BeforeRelation(main, other, false, DateTimeDefaults.get());
 
-        FieldSpec actual = relation.reduceToRelatedFieldSpec(fieldSpec);
+        FieldSpec actual = relation.createModifierFromOtherFieldSpec(fieldSpec);
         FieldSpec expected = fromMax(2019);
 
         assertThat(actual, sameBeanAs(expected));

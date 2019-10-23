@@ -40,7 +40,7 @@ public class FieldSpecMerger {
      */
     public Optional<FieldSpec> merge(FieldSpec left, FieldSpec right) {
         if (nullOnly(left) || nullOnly(right)){
-            return nullOnlyOrEmpty(isNullable(left, right));
+            return nullOnlyOrEmpty(bothAreNullable(left, right));
         }
 
         if (hasSet(left) && hasSet(right)) {
@@ -123,7 +123,7 @@ public class FieldSpecMerger {
         return fieldSpec instanceof WhitelistFieldSpec;
     }
 
-    private boolean isNullable(FieldSpec left, FieldSpec right) {
+    private boolean bothAreNullable(FieldSpec left, FieldSpec right) {
         return left.isNullable() && right.isNullable();
     }
 
@@ -131,7 +131,7 @@ public class FieldSpecMerger {
         Optional<TypedRestrictions> restrictions = restrictionMergeOperation.applyMergeOperation(left.getRestrictions(), right.getRestrictions());
 
         if (!restrictions.isPresent()){
-            return nullOnlyOrEmpty(isNullable(left, right));
+            return nullOnlyOrEmpty(bothAreNullable(left, right));
         }
 
         RestrictionsFieldSpec merged = FieldSpecFactory.fromRestriction(restrictions.get());

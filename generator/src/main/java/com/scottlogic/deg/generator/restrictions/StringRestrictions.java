@@ -30,13 +30,13 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class StringRestrictions implements TypedRestrictions<String> {
-    final Integer minLength;
-    final Integer maxLength;
-    final Set<Integer> excludedLengths;
-    final Set<Pattern> matchingRegex;
-    final Set<Pattern> containingRegex;
-    final Set<Pattern> notMatchingRegex;
-    final Set<Pattern> notContainingRegex;
+    private final Integer minLength;
+    private final Integer maxLength;
+    private final Set<Integer> excludedLengths;
+    private final Set<Pattern> matchingRegex;
+    private final Set<Pattern> containingRegex;
+    private final Set<Pattern> notMatchingRegex;
+    private final Set<Pattern> notContainingRegex;
     private StringGenerator generator;
 
     StringRestrictions(

@@ -36,6 +36,6 @@ public class NullOnlyFieldSpec extends FieldSpec {
 
     @Override
     public FieldSpec withNotNull() {
-        throw new UnsupportedOperationException("not null on null only not allowed");
+        throw new UnsupportedOperationException("not null on NullOnlyFieldSpec not allowed");
     }
 }

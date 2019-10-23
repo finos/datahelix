@@ -24,9 +24,6 @@ import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 
-import static com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory.fromType;
-import static com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory.nullOnly;
-
 public class AfterRelation<T extends Comparable<T>> implements FieldSpecRelations {
     private final Field main;
     private final Field other;
@@ -41,23 +38,22 @@ public class AfterRelation<T extends Comparable<T>> implements FieldSpecRelation
     }
 
     @Override
-    public FieldSpec reduceToRelatedFieldSpec(FieldSpec otherValue) {
-        if (otherValue instanceof NullOnlyFieldSpec){
-            return nullOnly();
+    public FieldSpec createModifierFromOtherFieldSpec(FieldSpec otherFieldSpec) {
+        if (otherFieldSpec instanceof NullOnlyFieldSpec){
+            return FieldSpecFactory.nullOnly();
         }
-        if (otherValue instanceof WhitelistFieldSpec) {
-            //todo
-            return fromType(main.getType());
+        if (otherFieldSpec instanceof WhitelistFieldSpec) {
+            throw new UnsupportedOperationException("cannot combine sets with after relation, Issue #1489");
         }
 
-        LinearRestrictions<T> lr = (LinearRestrictions)((RestrictionsFieldSpec)otherValue).getRestrictions();
+        LinearRestrictions<T> lr = (LinearRestrictions)((RestrictionsFieldSpec) otherFieldSpec).getRestrictions();
         return createFieldSpec(lr.getMin(), lr.getGranularity());
     }
 
     @Override
-    public FieldSpec reduceValueToFieldSpec(DataBagValue generatedValue) {
-        if (generatedValue.getValue() == null) return FieldSpecFactory.fromType(main.getType());
-        return createFieldSpec((T)generatedValue.getValue(), defaults.granularity());
+    public FieldSpec createModifierFromOtherValue(DataBagValue otherFieldGeneratedValue) {
+        if (otherFieldGeneratedValue.getValue() == null) return FieldSpecFactory.fromType(main.getType());
+        return createFieldSpec((T) otherFieldGeneratedValue.getValue(), defaults.granularity());
     }
 
     private FieldSpec createFieldSpec(T min, Granularity<T> granularity) {

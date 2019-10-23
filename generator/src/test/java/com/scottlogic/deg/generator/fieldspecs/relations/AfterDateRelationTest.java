@@ -52,7 +52,7 @@ public class AfterDateRelationTest {
             ZoneOffset.UTC);
         DataBagValue generatedValue = new DataBagValue(value);
 
-        FieldSpec result = afterDateRelations.reduceValueToFieldSpec(generatedValue);
+        FieldSpec result = afterDateRelations.createModifierFromOtherValue(generatedValue);
 
         FieldSpec expected = FieldSpecFactory.fromRestriction(new LinearRestrictions<>(value, ISO_MAX_DATE, new DateTimeGranularity(ChronoUnit.MILLIS)));
         assertEquals(expected, result);
@@ -71,7 +71,7 @@ public class AfterDateRelationTest {
             ZoneOffset.UTC);
         DataBagValue generatedValue = new DataBagValue(value);
 
-        FieldSpec result = afterDateRelations.reduceValueToFieldSpec(generatedValue);
+        FieldSpec result = afterDateRelations.createModifierFromOtherValue(generatedValue);
 
         Granularity<OffsetDateTime> granularity = new DateTimeGranularity(ChronoUnit.MILLIS);
         FieldSpec expected = FieldSpecFactory.fromRestriction(new LinearRestrictions<>(granularity.getNext(value), ISO_MAX_DATE, new DateTimeGranularity(ChronoUnit.MILLIS)));
@@ -84,7 +84,7 @@ public class AfterDateRelationTest {
         OffsetDateTime value = null;
         DataBagValue generatedValue = new DataBagValue(value);
 
-        FieldSpec result = afterDateRelations.reduceValueToFieldSpec(generatedValue);
+        FieldSpec result = afterDateRelations.createModifierFromOtherValue(generatedValue);
 
         FieldSpec expected = FieldSpecFactory.fromType(FieldType.DATETIME);
         assertEquals(expected, result);

@@ -29,7 +29,7 @@ import static com.scottlogic.deg.generator.restrictions.linear.LinearRestriction
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDefaultNumericRestrictions;
 
 public class FieldSpecFactory {
-    public static final NullOnlyFieldSpec NULL_ONLY_FIELD_SPEC = new NullOnlyFieldSpec();
+    private static final NullOnlyFieldSpec NULL_ONLY_FIELD_SPEC = new NullOnlyFieldSpec();
 
     public static WhitelistFieldSpec fromList(DistributedList<Object> whitelist) {
         return new WhitelistFieldSpec(whitelist, true);
@@ -56,15 +56,7 @@ public class FieldSpecFactory {
         return NULL_ONLY_FIELD_SPEC;
     }
 
-    public static GeneratorFieldSpec fromGeneratorNoSetSupport(FieldValueSource fieldValueSource) {
-        return fromGeneratorSupportingSets(fieldValueSource, rejectWhitelistValues());
-    }
-
-    private static Function<Object, Boolean> rejectWhitelistValues() {
-        return setValue->false;
-    }
-
-    public static GeneratorFieldSpec fromGeneratorSupportingSets(FieldValueSource fieldValueSource, Function<Object, Boolean> setValueAcceptFunction){
+    public static GeneratorFieldSpec fromGenerator(FieldValueSource fieldValueSource, Function<Object, Boolean> setValueAcceptFunction){
         return new GeneratorFieldSpec(fieldValueSource, setValueAcceptFunction, true);
     }
 }
