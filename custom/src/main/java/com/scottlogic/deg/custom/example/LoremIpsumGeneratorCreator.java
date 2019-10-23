@@ -11,7 +11,7 @@ public class LoremIpsumGeneratorCreator {
         RandomLoremIpsum randomLoremIpsum = new RandomLoremIpsum();
 
         return CustomGeneratorBuilder
-            .stringGeneratorNamed("lorem ipsum")
+            .createStringGenerator("lorem ipsum")
             .withRandomGenerator(() -> randomLoremIpsum.generateString())
             .withSequentialGenerator(() -> Stream.generate(() -> loremIpsumText))
             .build();

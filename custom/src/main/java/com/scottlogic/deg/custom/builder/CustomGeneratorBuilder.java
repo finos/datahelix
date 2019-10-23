@@ -31,15 +31,15 @@ public class CustomGeneratorBuilder<T> {
         negatedSequentialGenerator = () -> { throw new CustomGeneratorNotImplementedException(name + " custom generator does not support being negated in sequential mode"); };
     }
 
-    public static CustomGeneratorBuilder<String> stringGeneratorNamed(String name){
+    public static CustomGeneratorBuilder<String> createStringGenerator(String name){
         return new CustomGeneratorBuilder<String>(CustomGeneratorFieldType.STRING, name);
     }
 
-    public static CustomGeneratorBuilder<BigDecimal> numberGeneratorNamed(String name){
+    public static CustomGeneratorBuilder<BigDecimal> createNumericGenerator(String name){
         return new CustomGeneratorBuilder<BigDecimal>(CustomGeneratorFieldType.NUMERIC, name);
     }
 
-    public static CustomGeneratorBuilder<OffsetDateTime> dateTimeGeneratorNamed(String name){
+    public static CustomGeneratorBuilder<OffsetDateTime> createDateTimeGenerator(String name){
         return new CustomGeneratorBuilder<OffsetDateTime>(CustomGeneratorFieldType.DATETIME, name);
     }
 
@@ -66,32 +66,6 @@ public class CustomGeneratorBuilder<T> {
      */
     public CustomGeneratorBuilder<T> withNegatedRandomGenerator(Supplier<T> supplier){
         this.negatedRandomGenerator = () -> Stream.generate(supplier);
-        return this;
-    }
-
-    /**
-     * the part of the generator to be used during random generation
-     *
-     * Required if you want your custom generator to support random generation
-     * @param function function for a random stream of values
-     * @return
-     */
-    public CustomGeneratorBuilder<T> withRandomStream(Supplier<Stream<T>> function){
-        this.randomGenerator = function;
-        return this;
-    }
-
-    /**
-     * the part of the generator to be used when the generator constraint is negated during random generation
-     *  - this should be implemented as the values that your regular generator should not be outputting
-     *
-     * Required if you want your custom generator to support being negated in random mode
-     * Required if you want your custom generator to support used in the IF part of IF THEN constraints
-     * @param function function for a random stream of values that would not be produced by the non negated generator
-     * @return
-     */
-    public CustomGeneratorBuilder<T> withNegatedRandomStream(Supplier<Stream<T>> function){
-        this.negatedRandomGenerator = function;
         return this;
     }
 
