@@ -18,6 +18,7 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
@@ -38,20 +39,20 @@ public class InMapIndexRelation implements FieldSpecRelations {
     }
 
     @Override
-    public FieldSpec reduceToRelatedFieldSpec(FieldSpec otherValue) {
+    public FieldSpec createModifierFromOtherFieldSpec(FieldSpec otherFieldSpec) {
         List<Object> whiteList = new ArrayList<>();
 
         for (int i = 0; i < underlyingList.list().size(); i++) {
             Object testingElement = underlyingList.list().get(i);
-            if (otherValue.permits(testingElement)) {
+            if (otherFieldSpec.canCombineWithWhitelistValue(testingElement)) {
                 whiteList.add(BigDecimal.valueOf(i));
             }
         }
-        return FieldSpec.fromList(DistributedList.uniform(whiteList)).withNotNull();
+        return FieldSpecFactory.fromList(DistributedList.uniform(whiteList)).withNotNull();
     }
 
     @Override
-    public FieldSpec reduceValueToFieldSpec(DataBagValue generatedValue) {
+    public FieldSpec createModifierFromOtherValue(DataBagValue otherFieldGeneratedValue) {
         throw new UnsupportedOperationException("reduceToFieldSpec is unsuported in InMapIndexRelation");
     }
 

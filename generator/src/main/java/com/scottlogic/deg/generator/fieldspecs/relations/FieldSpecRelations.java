@@ -28,12 +28,12 @@ public interface FieldSpecRelations extends Constraint {
      *
      * The implementation of this interface should define what the reduced FieldSpec looks like.
      *
-     * @param otherValue
+     * @param otherFieldSpec
      * @return
      */
-    FieldSpec reduceToRelatedFieldSpec(FieldSpec otherValue);
+    FieldSpec createModifierFromOtherFieldSpec(FieldSpec otherFieldSpec);
 
-    FieldSpec reduceValueToFieldSpec(DataBagValue generatedValue);
+    FieldSpec createModifierFromOtherValue(DataBagValue otherFieldGeneratedValue);
 
     FieldSpecRelations inverse();
 

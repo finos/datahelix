@@ -75,8 +75,8 @@ public class RegexStringGenerator implements StringGenerator {
         return "<UNKNOWN>";
     }
 
-    public static RegexStringGenerator createFromBlacklist(Set<Object> blacklist) {
-        String[] blacklistStrings = blacklist.stream().map(Object::toString).toArray(String[]::new);
+    public static RegexStringGenerator createFromBlacklist(Set<String> blacklist) {
+        String[] blacklistStrings = blacklist.stream().toArray(String[]::new);
         Automaton automaton = Automaton.makeStringUnion(blacklistStrings).complement();
 
         return new RegexStringGenerator(automaton, String.format("NOT-IN %s", Objects.toString(blacklist)));

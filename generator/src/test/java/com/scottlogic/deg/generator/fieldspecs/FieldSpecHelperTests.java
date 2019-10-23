@@ -35,7 +35,7 @@ class FieldSpecHelperTests {
 
         FieldSpec actual = fieldSpecHelper.getFieldSpecForValue(input);
 
-        FieldSpec expected = FieldSpec.fromList(DistributedList.singleton("value"))
+        FieldSpec expected = FieldSpecFactory.fromList(DistributedList.singleton("value"))
             .withNotNull();
 
         assertEquals(actual, expected);
@@ -47,7 +47,7 @@ class FieldSpecHelperTests {
 
         FieldSpec actual = fieldSpecHelper.getFieldSpecForValue(input);
 
-        FieldSpec expected = FieldSpec.nullOnly();
+        FieldSpec expected = FieldSpecFactory.nullOnly();
 
         assertEquals(actual, expected);
     }

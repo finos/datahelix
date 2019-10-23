@@ -60,7 +60,7 @@ class UpfrontTreePrunerTests {
             List<Field> fields = Collections.singletonList(fieldA);
             ConstraintNode prunedRoot = Mockito.mock(ConstraintNode.class);
             Map<Field, FieldSpec> fieldSpecs = new HashMap<>();
-            fieldSpecs.put(fieldA, FieldSpec.fromType(fieldA.getType()));
+            fieldSpecs.put(fieldA, FieldSpecFactory.fromType(fieldA.getType()));
 
             ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
             DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
@@ -84,8 +84,8 @@ class UpfrontTreePrunerTests {
             List<Field> fields = Arrays.asList(fieldA, fieldB);
             ConstraintNode prunedRoot = Mockito.mock(ConstraintNode.class);
             Map<Field, FieldSpec> fieldSpecs = new HashMap<>();
-            fieldSpecs.put(fieldA, FieldSpec.fromType(fieldA.getType()));
-            fieldSpecs.put(fieldB, FieldSpec.fromType(fieldB.getType()));
+            fieldSpecs.put(fieldA, FieldSpecFactory.fromType(fieldA.getType()));
+            fieldSpecs.put(fieldB, FieldSpecFactory.fromType(fieldB.getType()));
 
             ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
             DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
@@ -109,7 +109,7 @@ class UpfrontTreePrunerTests {
             //Arrange
             List<Field> fields = Collections.singletonList(fieldA);
             Map<Field, FieldSpec> fieldSpecs = new HashMap<>();
-            fieldSpecs.put(fieldA, FieldSpec.fromType(fieldA.getType()));
+            fieldSpecs.put(fieldA, FieldSpecFactory.fromType(fieldA.getType()));
 
             ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
             DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
@@ -128,7 +128,7 @@ class UpfrontTreePrunerTests {
             //Arrange
             List<Field> fields = Collections.singletonList(fieldA);
             Map<Field, FieldSpec> fieldSpecs = new HashMap<>();
-            fieldSpecs.put(fieldA, FieldSpec.fromType(fieldA.getType()));
+            fieldSpecs.put(fieldA, FieldSpecFactory.fromType(fieldA.getType()));
 
             ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
             DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
@@ -151,7 +151,7 @@ class UpfrontTreePrunerTests {
             //Arrange
             List<Field> fields = Collections.singletonList(fieldA);
             Map<Field, FieldSpec> fieldSpecs = new HashMap<>();
-            fieldSpecs.put(fieldA, FieldSpec.fromType(fieldA.getType()));
+            fieldSpecs.put(fieldA, FieldSpecFactory.fromType(fieldA.getType()));
 
             ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
             DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
@@ -179,7 +179,7 @@ class UpfrontTreePrunerTests {
             //Arrange
             List<Field> fields = Collections.singletonList(fieldA);
             Map<Field, FieldSpec> fieldSpecs = new HashMap<>();
-            fieldSpecs.put(fieldA, FieldSpec.fromType(fieldA.getType()));
+            fieldSpecs.put(fieldA, FieldSpecFactory.fromType(fieldA.getType()));
 
             ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
             DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
