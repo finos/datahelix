@@ -28,15 +28,12 @@ import java.util.stream.Stream;
 
 public class FieldSpecValueGenerator {
     private final DataGenerationType dataType;
-    private final FieldValueSourceEvaluator sourceFactory;
     private final JavaUtilRandomNumberGenerator randomNumberGenerator;
 
     @Inject
     public FieldSpecValueGenerator(DataGenerationType dataGenerationType,
-                                   FieldValueSourceEvaluator sourceEvaluator,
                                    JavaUtilRandomNumberGenerator randomNumberGenerator) {
         this.dataType = dataGenerationType;
-        this.sourceFactory = sourceEvaluator;
         this.randomNumberGenerator = randomNumberGenerator;
     }
 
@@ -45,7 +42,7 @@ public class FieldSpecValueGenerator {
     }
 
     public Stream<DataBagValue> generate(Field field, FieldSpec spec) {
-        FieldValueSource fieldValueSource = sourceFactory.getFieldValueSources(spec);
+        FieldValueSource fieldValueSource = spec.getFieldValueSource();
 
         return getDataValues(fieldValueSource, field.isUnique())
             .map(DataBagValue::new);
