@@ -17,11 +17,7 @@
 package com.scottlogic.deg.profile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.generator.profile.constraints.Constraint;
-import com.scottlogic.deg.generator.profile.constraints.atomic.IsGranularToDateConstraint;
 import com.scottlogic.deg.profile.dtos.constraints.*;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO.ConstraintDeserializer;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -160,7 +156,7 @@ public class AtomicConstraintDeserialiserTests {
     @Test
     public void shouldDeserialiseNullWithoutException() throws IOException {
         // Arrange
-        final String json = "{\"null\": \"country\"}";
+        final String json = "{\"field\": \"country\",\"isNull\": \"true\"}";
 
         // Act
         ConstraintDTO actual = deserialiseJsonString(json);
@@ -168,6 +164,7 @@ public class AtomicConstraintDeserialiserTests {
         // Assert
         NullConstraintDTO expected = new NullConstraintDTO();
         expected.field = "country";
+        expected.isNull = true;
 
         assertThat(actual, sameBeanAs(expected));
     }

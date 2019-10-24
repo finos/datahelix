@@ -38,7 +38,7 @@ public class GrammaticalConstraintDeserialiserTests {
         final String json =
             "{ \"anyOf\": [" +
             "    { \"field\": \"foo\", \"equalTo\": \"0\" }," +
-            "    { \"null\": \"foo\" }" +
+            "    { \"field\": \"foo\", \"isNull\": \"true\" }" +
             "  ]" +
             "}";
 
@@ -51,6 +51,7 @@ public class GrammaticalConstraintDeserialiserTests {
         expectedEqualsTo.value = "0";
         NullConstraintDTO expectedNull = new NullConstraintDTO();
         expectedNull.field = "foo";
+        expectedNull.isNull = true;
 
         AnyOfConstraintDTO expected = new AnyOfConstraintDTO();
         expected.constraints = Arrays.asList(expectedEqualsTo, expectedNull);
@@ -64,7 +65,7 @@ public class GrammaticalConstraintDeserialiserTests {
         final String json =
             "{ \"anyOf\": [" +
             "    { \"fild\": \"foo\", \"equalTo\": \"0\" }," +
-            "    {\"null\": \"foo\"}" +
+            "    { \"field\": \"foo\", \"isNull\": \"true\" }" +
             "  ]" +
             "}";
 
@@ -83,7 +84,7 @@ public class GrammaticalConstraintDeserialiserTests {
         final String json =
             "{ \"ayOf\": [" +
             "    { \"field\": \"foo\", \"equalTo\": \"0\" }," +
-            "    {\"null\": \"foo\"}" +
+            "    { \"field\": \"foo\", \"isNull\": \"true\" }" +
             "  ]" +
             "}";
 
@@ -91,7 +92,7 @@ public class GrammaticalConstraintDeserialiserTests {
             deserialiseJsonString(json);
             Assert.fail("should have thrown an exception");
         } catch (InvalidProfileException e) {
-            String expectedMessage = "The constraint json object node doesn't contain any of the expected keywords as properties: {\"ayOf\":[{\"field\":\"foo\",\"equalTo\":\"0\"},{\"null\":\"foo\"}]}";
+            String expectedMessage = "The constraint json object node doesn't contain any of the expected keywords as properties: {\"ayOf\":[{\"field\":\"foo\",\"equalTo\":\"0\"},{\"field\":\"foo\",\"isNull\":\"true\"}]}";
             assertThat(e.getMessage(), sameBeanAs(expectedMessage));
         }
     }
@@ -102,7 +103,7 @@ public class GrammaticalConstraintDeserialiserTests {
         final String json =
             "{ \"anyOf\": [" +
             "    { \"field\": \"foo\", \"equalTo\": \"0\" }," +
-            "    {\"nll\": \"foo\"}" +
+            "    { \"field\": \"foo\", \"isNll\": \"true\" }" +
             "  ]" +
             "}";
 
@@ -110,7 +111,7 @@ public class GrammaticalConstraintDeserialiserTests {
             deserialiseJsonString(json);
             Assert.fail("should have thrown an exception");
         } catch (JsonMappingException e) {
-            String expectedMessage = "The constraint json object node doesn't contain any of the expected keywords as properties: {\"nll\":\"foo\"} (through reference chain: com.scottlogic.deg.profile.dtos.constraints.AnyOfConstraintDTO[\"anyOf\"]->java.util.ArrayList[1])";
+            String expectedMessage = "The constraint json object node for field foo doesn't contain any of the expected keywords as properties: {\"field\":\"foo\",\"isNll\":\"true\"} (through reference chain: com.scottlogic.deg.profile.dtos.constraints.AnyOfConstraintDTO[\"anyOf\"]->java.util.ArrayList[1])";
             assertThat(e.getMessage(), sameBeanAs(expectedMessage));
         }
     }
@@ -145,7 +146,7 @@ public class GrammaticalConstraintDeserialiserTests {
     @Test
     public void shouldDeserialiseNotWithoutException() throws IOException {
         // Arrange
-        final String json = "{ \"not\": { \"null\": \"foo\" } }";
+        final String json = "{ \"not\": { \"field\": \"foo\", \"isNull\": \"true\" } }";
 
         // Act
        ConstraintDTO actual = deserialiseJsonString(json);
@@ -153,6 +154,7 @@ public class GrammaticalConstraintDeserialiserTests {
         // Assert
         NullConstraintDTO expectedNull = new NullConstraintDTO();
         expectedNull.field = "foo";
+        expectedNull.isNull = true;
 
         NotConstraintDTO expected = new NotConstraintDTO();
         expected.constraint = expectedNull;
