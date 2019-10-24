@@ -61,15 +61,15 @@ public class RowsPresentMatcher extends BaseMatcher<List<List<Object>>> {
                 .collect(Collectors.joining(", ")));
 
         description.appendText("\n");
-        description.appendList(" missing: ",", ", "", missingRowMatchers);
+        description.appendList(" missing: ", ", ", "", missingRowMatchers);
     }
 
     private Collection<RowMatcher> getMissingRowMatchers(List<List<Object>> actualRows) {
         Collection<RowMatcher> expectedMatchers = getExpectedMatchers();
         ArrayList<RowMatcher> missingRowMatchers = new ArrayList<>();
 
-        for (RowMatcher expectedMatcher : expectedMatchers){
-            if (actualRows.stream().noneMatch(expectedMatcher::matches)){
+        for (RowMatcher expectedMatcher : expectedMatchers) {
+            if (actualRows.stream().noneMatch(expectedMatcher::matches)) {
                 missingRowMatchers.add(expectedMatcher);
             }
         }

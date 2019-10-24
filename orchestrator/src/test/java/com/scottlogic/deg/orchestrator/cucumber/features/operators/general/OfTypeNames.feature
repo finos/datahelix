@@ -5,7 +5,6 @@ Feature: User can specify that a field must be a type of name
     And there is a non nullable field foo
     And foo has type "string"
 
-
   Scenario: Generating with an of type firstname constraint generates valid firstnames
     Given foo has type "firstname"
     And the generator can generate at most 10 rows

@@ -8,15 +8,16 @@ Feature: User can specify that a field is of a specific type (string, integer, d
     And foo is equal to 1
     And foo has type "integer"
     Then the following data should be generated:
-      | foo  |
-      | 1    |
+      | foo |
+      | 1   |
+
   Scenario: Running an 'ofType' = integer request that includes a number value (as a string) should be successful
     Given there is a non nullable field foo
     And foo is equal to "1"
     And foo has type "integer"
     Then the following data should be generated:
-      | foo  |
-      | 1    |
+      | foo |
+      | 1   |
 
   Scenario: Running an 'ofType' = decimal request that includes a decimal number value should be successful
     Given there is a non nullable field foo
@@ -39,24 +40,24 @@ Feature: User can specify that a field is of a specific type (string, integer, d
     And foo is equal to -99
     And foo has type "integer"
     Then the following data should be generated:
-      | foo  |
-      | -99  |
+      | foo |
+      | -99 |
 
   Scenario: Running an 'ofType' = integer request that includes the number zero should be successful
     Given there is a non nullable field foo
     And foo is equal to 0
     And foo has type "integer"
     Then the following data should be generated:
-      | foo  |
-      | 0    |
+      | foo |
+      | 0   |
 
   Scenario: Running an 'ofType' = decimal request that includes the number zero should be successful
     Given there is a non nullable field foo
     And foo is equal to 0
     And foo has type "decimal"
     Then the following data should be generated:
-      | foo  |
-      | 0    |
+      | foo |
+      | 0   |
 
   Scenario: Running an 'ofType' = datetime request that includes a date value (not a string) should be successful
     Given there is a non nullable field foo
@@ -104,7 +105,7 @@ Feature: User can specify that a field is of a specific type (string, integer, d
       | foo        |
       | 2010-01-01 |
 
-   @ignore #pending development of 1381 - Add date time and fields
+  @ignore #pending development of 1381 - Add date time and fields
   Scenario: Running an 'ofType' = time request should be successful
     Given there is a non nullable field foo
     And foo is equal to T09:15:00.000Z

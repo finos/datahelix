@@ -101,6 +101,6 @@ Feature: Strings will be generated using characters from only latin characters
       | "y"  |
       | "z"  |
       | "{"  |
-      | "\|"  |
+      | "\|" |
       | "}"  |
       | "~"  |

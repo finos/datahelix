@@ -1066,7 +1066,8 @@ public class JsonProfileReaderTests {
                 "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { " +
                 "       \"name\": \"foo\" ," +
-                "       \"type\": \"date\"" +
+                "       \"type\": \"date\"," +
+                "       \"nullable\": \"true\"" +
                 "    }]," +
                 "    \"rules\": []" +
                 "}");

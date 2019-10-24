@@ -45,7 +45,6 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | "aaa" |
       | "aab" |
 
-
   Scenario: Valid 'longerThan' and not 'longerThan' requests should be successful
     Given foo is longer than 1
     And foo is anything but longer than 3
@@ -244,7 +243,6 @@ Feature: User can specify that a string length is longer than, a specified numbe
     Given foo is longer than 999
     And the generation strategy is random
     And the generator can generate at most 1 rows
-
     Then foo contains strings of length between 1000 and 1000 inclusively
 
   Scenario: longerThan with value larger than maximum permitted should fail with an error message

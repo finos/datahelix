@@ -11,9 +11,7 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo |
       | bar |
     And foo has type "string"
-
     And bar has type "string"
-
     And foo is in set:
       | "a" |
       | "b" |
@@ -32,9 +30,7 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo |
       | bar |
     And foo has type "string"
-
     And bar has type "string"
-
     And foo is in set:
       | "0" |
       | "1" |
@@ -53,9 +49,7 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo |
       | bar |
     And foo has type "string"
-
     And bar has type "string"
-
     And foo is in set:
       | " " |
       | "x" |
@@ -74,9 +68,7 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo |
       | bar |
     And foo has type "integer"
-
     And bar has type "integer"
-
     And foo is in set:
       | 999 |
       | -12 |
@@ -95,9 +87,7 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo |
       | bar |
     And foo has type "decimal"
-
     And bar has type "decimal"
-
     And foo is in set:
       | 999 |
       | -12 |
@@ -116,9 +106,7 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo |
       | bar |
     And foo has type "datetime"
-
     And bar has type "datetime"
-
     And foo is in set:
       | 2018-12-04T14:00:00.000Z |
       | 2018-12-05T14:00:00.000Z |
@@ -137,9 +125,7 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo |
       | bar |
     And foo has type "datetime"
-
     And bar has type "datetime"
-
     And foo is in set:
       | 2018-12-99T14:00:00.000Z |
       | 2018-12-05T14:00:00.000Z |
@@ -154,9 +140,7 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo |
       | bar |
     And foo has type "integer"
-
     And bar has type "integer"
-
     And foo is in set:
       | 0 |
       | 1 |
@@ -170,9 +154,7 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo |
       | bar |
     And foo has type "integer"
-
     And bar has type "integer"
-
     And foo is in set:
       | 0 |
       | 1 |
@@ -191,9 +173,7 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo |
       | bar |
     And foo has type "string"
-
     And bar has type "integer"
-
     And foo is in set:
       | "x" |
       | "y" |
@@ -212,9 +192,7 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo |
       | bar |
     And foo has type "string"
-
     And bar has type "decimal"
-
     And foo is in set:
       | "x" |
       | "y" |
@@ -233,9 +211,7 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo |
       | bar |
     And foo has type "string"
-
     And bar has type "datetime"
-
     And foo is in set:
       | "x" |
       | "y" |
@@ -254,9 +230,7 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo |
       | bar |
     And foo has type "integer"
-
     And bar has type "datetime"
-
     And foo is in set:
       | 500 |
       | 1   |
@@ -275,9 +249,7 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo |
       | bar |
     And foo has type "decimal"
-
     And bar has type "datetime"
-
     And foo is in set:
       | 500 |
       | 1.1 |
@@ -299,15 +271,10 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo4 |
       | foo5 |
     And foo1 has type "integer"
-
     And foo2 has type "integer"
-
     And foo3 has type "integer"
-
     And foo4 has type "integer"
-
     And foo5 has type "integer"
-
     And foo1 is in set:
       | 1 |
       | 2 |
@@ -358,18 +325,14 @@ Feature: User can create data across multiple fields for all combinations availa
       | 2    | 4    | 6    | 8    | 9    |
       | 2    | 4    | 6    | 8    | 0    |
 
-
   Scenario: Running an exhaustive combination strategy across three fields with five data options each should be successful
     Given the following non nullable fields exist:
       | foo1 |
       | foo2 |
       | foo3 |
     And foo1 has type "integer"
-
     And foo2 has type "integer"
-
     And foo3 has type "integer"
-
     And foo1 is in set:
       | 1 |
       | 2 |
@@ -516,18 +479,14 @@ Feature: User can create data across multiple fields for all combinations availa
       | 5    | 0    | 13   |
       | 5    | 0    | 14   |
 
-
   Scenario: Running an exhaustive combination strategy across fields with an uneven distribution of data options should be successful
     Given the following non nullable fields exist:
       | foo1 |
       | foo2 |
       | foo3 |
     And foo1 has type "integer"
-
     And foo2 has type "integer"
-
     And foo3 has type "integer"
-
     And foo1 is in set:
       | 1 |
     And foo2 is in set:
@@ -564,11 +523,8 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo2 |
       | foo3 |
     And foo1 has type "integer"
-
     And foo2 has type "integer"
-
     And foo3 has type "integer"
-
     And foo1 is in set:
       | 1 |
     And foo2 is in set:
@@ -595,11 +551,8 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo2 |
       | foo3 |
     And foo1 has type "integer"
-
     And foo2 has type "string"
-
     And foo3 has type "string"
-
     And foo1 is in set:
       | 1 |
       | 0 |
@@ -647,11 +600,8 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo2 |
       | foo3 |
     And foo1 has type "string"
-
     And foo2 has type "integer"
-
     And foo3 has type "string"
-
     And foo1 is in set:
       | "alpha" |
     And foo2 is in set:
@@ -669,12 +619,12 @@ Feature: User can create data across multiple fields for all combinations availa
     And foo2 is equal to 1
     And foo3 is equal to "test1"
     And If Then and Else are described below
-      And foo2 is equal to 10
-      And foo3 is equal to "test10"
-      And If Then and Else are described below
-        And foo2 is equal to 100
-        And foo3 is equal to "test100"
-        And foo3 is equal to "other"
+    And foo2 is equal to 10
+    And foo3 is equal to "test10"
+    And If Then and Else are described below
+    And foo2 is equal to 100
+    And foo3 is equal to "test100"
+    And foo3 is equal to "other"
     Then the following data should be generated:
       | foo1    | foo2 | foo3      |
       | "alpha" | 1    | "test1"   |

@@ -60,11 +60,9 @@ Feature: User can specify the length of generated string data using 'ofLength'
     Then the profile is invalid because "(Couldn't recognise 'value' property, it must be an Integer but was a String with value `.*`)|(Cannot create an StringHasLengthConstraint for field 'foo' with a a negative length.)|(String length must have a value >= 0, currently is -?\d+)"
     And no data is created
     Examples:
-      | length                    |
-      | -1                        |
-
+      | length |
+      | -1     |
 # COMBINATION OF CONSTRAINTS #
-
   Scenario: ofLength run against a non contradicting ofLength should be successful
     Given foo is of length 1
     And foo is of length 1
@@ -235,7 +233,6 @@ Feature: User can specify the length of generated string data using 'ofLength'
     Given foo is of length 1000
     And the generator can generate at most 1 rows
     And the generation strategy is random
-
     Then foo contains strings of length between 1000 and 1000 inclusively
 
   Scenario: ofLength with value larger than maximum permitted should fail with an error message

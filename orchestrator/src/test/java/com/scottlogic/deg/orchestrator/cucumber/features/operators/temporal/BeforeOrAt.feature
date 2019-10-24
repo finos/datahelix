@@ -5,7 +5,6 @@ Feature: User can specify that a datetime date is lower than, or the same as, a 
     And there is a non nullable field foo
     And foo has type "datetime"
 
-
   Scenario: Running beforeOrAt request that includes datetime field with date (YYYY-MM-DD) values that has invalid date should fail
     Given foo is before or at 2019-15-32T00:00:00.000Z
     And the generator can generate at most 5 rows

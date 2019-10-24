@@ -57,8 +57,8 @@ Feature: Values can be specified by using if, then and else constraints
     And bar has type "string"
     When If Then and Else are described below
     And Any Of the next 2 constraints
-      And foo is equal to 1
-      And foo is equal to 2
+    And foo is equal to 1
+    And foo is equal to 2
     And bar is equal to "a"
     And bar is equal to "b"
     Then the following data should be generated:
@@ -80,11 +80,10 @@ Feature: Values can be specified by using if, then and else constraints
       | "b" |
     And foo has type "decimal"
     And bar has type "string"
-
     When If Then and Else are described below
     And All Of the next 2 constraints
-      And foo is greater than 1
-      And foo is less than 4
+    And foo is greater than 1
+    And foo is less than 4
     And bar is equal to "a"
     And bar is equal to "b"
     Then the following data should be generated:
@@ -106,7 +105,6 @@ Feature: Values can be specified by using if, then and else constraints
       | "b" |
     And foo has type "decimal"
     And bar has type "string"
-
     When If Then and Else are described below
     And foo is anything but equal to 1
     And bar is equal to "a"
@@ -131,13 +129,12 @@ Feature: Values can be specified by using if, then and else constraints
       | "c" |
     And foo has type "decimal"
     And bar has type "string"
-
     When If Then and Else are described below
     And foo is greater than 1
-      When If Then and Else are described below
-      And foo is greater than 3
-      And bar is equal to "a"
-      And bar is equal to "b"
+    When If Then and Else are described below
+    And foo is greater than 3
+    And bar is equal to "a"
+    And bar is equal to "b"
     And bar is equal to "c"
     Then the following data should be generated:
       | foo | bar |
@@ -159,7 +156,6 @@ Feature: Values can be specified by using if, then and else constraints
       | "c" |
     And foo has type "decimal"
     And bar has type "string"
-
     When If Then and Else are described below
     And foo is equal to 5
     And bar is equal to "a"
@@ -184,7 +180,6 @@ Feature: Values can be specified by using if, then and else constraints
       | "c" |
     And foo has type "decimal"
     And bar has type "string"
-
     When If Then and Else are described below
     And foo is equal to 1
     And bar is equal to "X"
@@ -201,14 +196,12 @@ Feature: Values can be specified by using if, then and else constraints
       | 2 |
       | 3 |
       | 4 |
-
     And bar is in set:
       | "a" |
       | "b" |
       | "c" |
     And foo has type "decimal"
     And bar has type "string"
-
     When If Then and Else are described below
     And foo is equal to 1
     And bar is equal to "a"
@@ -230,7 +223,6 @@ Feature: Values can be specified by using if, then and else constraints
       | "c" |
     And foo has type "decimal"
     And bar has type "string"
-
     When If Then and Else are described below
     And foo is in set:
       | 1 |
@@ -315,7 +307,6 @@ Feature: Values can be specified by using if, then and else constraints
       | "c" |
     And foo has type "decimal"
     And bar has type "string"
-
     When If Then and Else are described below
     And foo is in set:
       | 8 |
@@ -368,11 +359,11 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is equal to "b"
     And bar is equal to "c"
     Then the following data should be generated:
-      | foo  | bar  |
-      | null | "b"  |
-      | 2    | "c"  |
-      | 3    | "c"  |
-      | 4    | "c"  |
+      | foo  | bar |
+      | null | "b" |
+      | 2    | "c" |
+      | 3    | "c" |
+      | 4    | "c" |
 
   Scenario: Running an if request that contains a non contradictory null constraint within its then statement should be successful
     Given foo is in set:
@@ -427,7 +418,6 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
       | "c" |
-
     And foo has type "decimal"
     And bar has type "string"
     When If Then and Else are described below
@@ -499,7 +489,6 @@ Feature: Values can be specified by using if, then and else constraints
       | "20" |
       | "AA" |
       | "BB" |
-
     And foo has type "string"
     And bar has type "string"
     When If Then and Else are described below
@@ -583,7 +572,6 @@ Feature: Values can be specified by using if, then and else constraints
       | "20" |
       | "AA" |
       | "BB" |
-
     When If Then and Else are described below
     And foo is matching regex /[0-9]{2}/
     And bar is equal to "AA"
@@ -655,7 +643,6 @@ Feature: Values can be specified by using if, then and else constraints
       | "20" |
       | "AA" |
       | "BB" |
-
     And foo has type "string"
     And bar has type "string"
     When If Then and Else are described below
@@ -737,7 +724,6 @@ Feature: Values can be specified by using if, then and else constraints
       | "20" |
       | "AA" |
       | "BB" |
-
     And foo has type "string"
     And bar has type "string"
     When If Then and Else are described below
@@ -786,7 +772,6 @@ Feature: Values can be specified by using if, then and else constraints
       | "22"   |
       | "333"  |
       | "4444" |
-
     And foo has type "string"
     And bar has type "string"
     When If Then and Else are described below
@@ -864,7 +849,6 @@ Feature: Values can be specified by using if, then and else constraints
       | "22"   |
       | "333"  |
       | "4444" |
-
     And foo has type "string"
     And bar has type "string"
     When If Then and Else are described below
@@ -938,7 +922,6 @@ Feature: Values can be specified by using if, then and else constraints
       | "22"   |
       | "333"  |
       | "4444" |
-
     And foo has type "string"
     And bar has type "string"
     When If Then and Else are described below
@@ -1020,7 +1003,6 @@ Feature: Values can be specified by using if, then and else constraints
       | "22"   |
       | "333"  |
       | "4444" |
-
     And foo has type "string"
     And bar has type "string"
     When If Then and Else are described below
@@ -1153,7 +1135,6 @@ Feature: Values can be specified by using if, then and else constraints
       | 22   |
       | 333  |
       | 4444 |
-
     And foo has type "decimal"
     And bar has type "decimal"
     When If Then and Else are described below
@@ -1284,7 +1265,6 @@ Feature: Values can be specified by using if, then and else constraints
       | 22   |
       | 333  |
       | 4444 |
-
     And foo has type "decimal"
     And bar has type "decimal"
     When If Then and Else are described below
@@ -1418,7 +1398,6 @@ Feature: Values can be specified by using if, then and else constraints
       | 22   |
       | 333  |
       | 4444 |
-
     And foo has type "decimal"
     And bar has type "decimal"
     When If Then and Else are described below
@@ -1551,7 +1530,6 @@ Feature: Values can be specified by using if, then and else constraints
       | 22   |
       | 333  |
       | 4444 |
-
     When If Then and Else are described below
     And foo is less than or equal to 20
     And bar is equal to 1
@@ -1760,7 +1738,6 @@ Feature: Values can be specified by using if, then and else constraints
       | 2010-01-03T00:00:00.000Z |
       | 2010-01-04T00:00:00.000Z |
       | 2010-01-05T00:00:00.000Z |
-
     And foo has type "datetime"
     And bar has type "datetime"
     When If Then and Else are described below
@@ -1909,7 +1886,6 @@ Feature: Values can be specified by using if, then and else constraints
       | 2010-01-03T00:00:00.000Z |
       | 2010-01-04T00:00:00.000Z |
       | 2010-01-05T00:00:00.000Z |
-
     And foo has type "datetime"
     And bar has type "datetime"
     When If Then and Else are described below
@@ -2219,7 +2195,6 @@ Feature: Values can be specified by using if, then and else constraints
       | 2010-01-03T00:00:00.000Z |
       | 2010-01-04T00:00:00.000Z |
       | 2010-01-05T00:00:00.000Z |
-
     And foo has type "datetime"
     And bar has type "datetime"
     When If Then and Else are described below
@@ -2480,13 +2455,12 @@ Feature: Values can be specified by using if, then and else constraints
       | 30 |
       | 40 |
       | 50 |
-
     And foo has type "string"
     And bar has type "decimal"
     When If Then and Else are described below
     And Any Of the next 2 constraints
-      And foo is equal to "a"
-      And foo is equal to "e"
+    And foo is equal to "a"
+    And foo is equal to "e"
     And bar is equal to 10
     And bar is equal to 50
     Then the following data should be generated:
@@ -2511,15 +2485,14 @@ Feature: Values can be specified by using if, then and else constraints
       | 30 |
       | 40 |
       | 50 |
-
     And foo has type "string"
     And bar has type "decimal"
     When If Then and Else are described below
     And foo is equal to "a"
     And bar is equal to 10
     And Any Of the next 2 constraints
-      And bar is equal to 20
-      And bar is equal to 40
+    And bar is equal to 20
+    And bar is equal to 40
     Then the following data should be generated:
       | foo | bar |
       | "a" | 10  |
@@ -2546,14 +2519,13 @@ Feature: Values can be specified by using if, then and else constraints
       | 30 |
       | 40 |
       | 50 |
-
     And foo has type "string"
     And bar has type "decimal"
     When If Then and Else are described below
     And foo is equal to "a"
     And Any Of the next 2 constraints
-      And bar is equal to 1
-      And bar is equal to 2
+    And bar is equal to 1
+    And bar is equal to 2
     And bar is equal to 50
     Then the following data should be generated:
       | foo | bar |
@@ -2569,22 +2541,20 @@ Feature: Values can be specified by using if, then and else constraints
       | "c" |
       | "d" |
       | "e" |
-
     And bar is in set:
       | 10 |
       | 20 |
       | 30 |
       | 40 |
       | 50 |
-
     And foo has type "string"
     And bar has type "decimal"
     When If Then and Else are described below
     And foo is equal to "a"
     And bar is equal to 10
     And Any Of the next 2 constraints
-      And bar is equal to 1
-      And bar is equal to 2
+    And bar is equal to 1
+    And bar is equal to 2
     Then the following data should be generated:
       | foo | bar |
       | "a" | 10  |
@@ -2603,13 +2573,12 @@ Feature: Values can be specified by using if, then and else constraints
       | 333   |
       | 4444  |
       | 55555 |
-
     And foo has type "string"
     And bar has type "decimal"
     When If Then and Else are described below
     And All Of the next 2 constraints
-      And foo is longer than 0
-      And foo is shorter than 2
+    And foo is longer than 0
+    And foo is shorter than 2
     And bar is equal to 1
     And bar is equal to 55555
     Then the following data should be generated:
@@ -2640,8 +2609,8 @@ Feature: Values can be specified by using if, then and else constraints
     When If Then and Else are described below
     And foo is equal to "a"
     And All Of the next 2 constraints
-      And bar is greater than 200
-      And bar is less than 300
+    And bar is greater than 200
+    And bar is less than 300
     And bar is equal to 55555
     Then the following data should be generated:
       | foo     | bar   |
@@ -2672,8 +2641,8 @@ Feature: Values can be specified by using if, then and else constraints
     And foo is equal to "a"
     And bar is equal to 1
     And All Of the next 2 constraints
-      And bar is greater than 200
-      And bar is less than 300
+    And bar is greater than 200
+    And bar is less than 300
     Then the following data should be generated:
       | foo | bar |
       | "a" | 1   |

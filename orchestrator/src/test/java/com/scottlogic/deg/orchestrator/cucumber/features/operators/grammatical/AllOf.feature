@@ -7,8 +7,8 @@ Feature: User can specify that data must be created to conform to each of multip
     Given there is a non nullable field foo
     And All Of the next 2 constraints
     And All Of the next 2 constraints
-      And foo is matching regex /[a-b]{2}/
-      And foo is of length 2
+    And foo is matching regex /[a-b]{2}/
+    And foo is of length 2
     And foo is shorter than 3
     And foo has type "string"
     Then the following data should be generated:
@@ -23,11 +23,11 @@ Feature: User can specify that data must be created to conform to each of multip
     And foo has type "string"
     And All Of the next 2 constraints
     And All Of the next 2 constraints
-      And foo is matching regex /[a-k]{3}/
-      And foo is matching regex /[1-5]{3}/
+    And foo is matching regex /[a-k]{3}/
+    And foo is matching regex /[1-5]{3}/
     And foo is longer than 4
     Then the following data should be generated:
-      | foo  |
+      | foo |
 
   Scenario: Running a 'allOf' request that includes multiple values within the same statement should be successful
     Given there is a non nullable field foo

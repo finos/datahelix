@@ -47,10 +47,10 @@ public class ListPredicateMatcher extends BaseMatcher<List<Object>> {
         List<Object> values = (List<Object>) o;
         checkedRows = values.size();
 
-        for (int index = 0; index < values.size(); index++){
+        for (int index = 0; index < values.size(); index++) {
             Object value = values.get(index);
 
-            if (!predicate.apply(value)){
+            if (!predicate.apply(value)) {
                 rowsThatDoNotMatch.put(index, value);
             }
         }

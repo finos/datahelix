@@ -7,23 +7,21 @@ Feature: Generator can produce correct data for complex profiles.
       | foo |
       | bar |
     And foo has type "integer"
-
     And bar has type "integer"
-
     And Any Of the next 2 constraints
     And All Of the next 3 constraints
-      And Any Of the next 2 constraints
-        And bar is equal to 1
-        And bar is equal to 2
-      And Any Of the next 2 constraints
-        And foo is equal to 1
-        And bar is equal to 3
-      And Any Of the next 2 constraints
-        And foo is equal to 2
-        And bar is equal to 4
+    And Any Of the next 2 constraints
+    And bar is equal to 1
+    And bar is equal to 2
+    And Any Of the next 2 constraints
+    And foo is equal to 1
+    And bar is equal to 3
+    And Any Of the next 2 constraints
+    And foo is equal to 2
+    And bar is equal to 4
     And All Of the next 2 constraints
-      And foo is equal to 10
-      And bar is equal to 10
+    And foo is equal to 10
+    And bar is equal to 10
     Then the following data should be generated:
       | foo | bar |
       | 10  | 10  |

@@ -14,7 +14,6 @@ Feature: User can specify that a field must be a financial code type
 
   Scenario: Sequential isins are generated uniquely
     Given foo has type "ISIN"
-
     And the generator can generate at most 4 rows
     Then the following data should be generated:
       | foo            |
@@ -68,30 +67,26 @@ Feature: User can specify that a field must be a financial code type
 
   Scenario: A RIC constraint combined with a not null constraint generates valid RICs
     Given foo has type "RIC"
-
     And foo is in set:
-      | "AB.PQ"    |
+      | "AB.PQ" |
     Then the following data should be generated:
-      | foo         |
-      | "AB.PQ"    |
+      | foo     |
+      | "AB.PQ" |
 
   Scenario: A RIC constraint combined with a not null constraint and an in set constraint that does not contain any valid RICs generates no data
     Given foo has type "RIC"
-
     And foo is in set:
-      | "NOPE"    |
+      | "NOPE" |
     Then the following data should be generated:
-      | foo         |
+      | foo |
 
   Scenario: A RIC constraint combined with an of length constraint returns valid RICs of the specified length
     Given foo has type "RIC"
-
     And foo is of length 6
     And foo is in set:
-      | "AB.PQ"    |
-      | "ABC.PQ"    |
-      | "ABCD.PQ"    |
+      | "AB.PQ"   |
+      | "ABC.PQ"  |
+      | "ABCD.PQ" |
     Then the following data should be generated:
-      | foo         |
-      | "ABC.PQ"    |
-
+      | foo      |
+      | "ABC.PQ" |

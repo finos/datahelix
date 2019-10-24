@@ -24,7 +24,7 @@ import cucumber.api.CucumberOptions;
 @CucumberOptions(
     plugin = {"null_summary"},
     features = {"src/test/java/com/scottlogic/deg/orchestrator/cucumber/features"},
-    glue={"com.scottlogic.deg.orchestrator.cucumber.testframework.steps"},
+    glue = {"com.scottlogic.deg.orchestrator.cucumber.testframework.steps"},
     monochrome = true,
     tags = "not @ignore"
 )

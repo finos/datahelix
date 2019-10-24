@@ -65,12 +65,11 @@ Feature: User can specify that a string length is lower than, a specified number
       | foo  |
       | null |
 
-    @ignore #1361 shorter than 1001 not accepted
+  @ignore #1361 shorter than 1001 not accepted
   Scenario: shorterThan with maximum permitted value should be successful
     Given foo is shorter than 1001
     And the generation strategy is random
     And the generator can generate at most 1 rows
-
     Then foo contains strings of length between 0 and 1000 inclusively
 
   Scenario: shorterThan with value larger than maximum permitted should fail with an error message

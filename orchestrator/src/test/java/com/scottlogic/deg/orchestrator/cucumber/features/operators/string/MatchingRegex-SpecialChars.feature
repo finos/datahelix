@@ -1,4 +1,3 @@
-
 Feature: Whilst including non-latin characters, user can specify that a value either matches or contains a specified regex
 
   Background:
@@ -9,5 +8,5 @@ Feature: Whilst including non-latin characters, user can specify that a value ei
   Scenario: Running a 'matchingRegex' request that includes special characters (emoji) only should be successful
     Given foo is matching regex /[😁-😘]{1}/
     Then the following data should be generated:
-      | foo  |
+      | foo |
 

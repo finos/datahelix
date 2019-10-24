@@ -22,7 +22,8 @@ import cucumber.api.java.en.When;
 
 public class BooleanValueStep {
     private final CucumberTestState state;
-    public BooleanValueStep(CucumberTestState state){
+
+    public BooleanValueStep(CucumberTestState state) {
         this.state = state;
     }
 

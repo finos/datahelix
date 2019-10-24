@@ -15,7 +15,6 @@ Feature: Values can be specified by using any of to set multiple constraints
       | "Test5" |
     And foo is matching regex /[a-b]{4}/
     And foo has type "string"
-
     Then the following data should be generated:
       | foo     |
       | "Test0" |
@@ -43,14 +42,14 @@ Feature: Values can be specified by using any of to set multiple constraints
 
   Scenario: When user requires creation of a field with strings that contain multiple contradictory sets of one or many constraints no data should be generated
     Given Any Of the next 3 constraints
-      And foo is equal to "Test0"
-      And foo is in set:
-        | "Test1" |
-        | "Test2" |
-        | "Test3" |
-        | "Test4" |
-        | "Test5" |
-      And foo is matching regex /[a-b]{4}/
+    And foo is equal to "Test0"
+    And foo is in set:
+      | "Test1" |
+      | "Test2" |
+      | "Test3" |
+      | "Test4" |
+      | "Test5" |
+    And foo is matching regex /[a-b]{4}/
     And Any Of the next 2 constraints
     And foo is equal to "Test6"
     And foo is in set:
@@ -58,15 +57,14 @@ Feature: Values can be specified by using any of to set multiple constraints
       | "Test8" |
       | "Test9" |
     And foo has type "string"
-
     Then no data is created
 
   Scenario: Running an 'anyOf' request that contains a valid nested anyOf request should be successful
     Given Any Of the next 2 constraints
     And foo is of length 1
     And Any Of the next 2 constraints
-      And foo is of length 3
-      And foo is of length 5
+    And foo is of length 3
+    And foo is of length 5
     And foo is in set:
       | "1"     |
       | "22"    |
@@ -74,7 +72,6 @@ Feature: Values can be specified by using any of to set multiple constraints
       | "4444"  |
       | "55555" |
     And foo has type "string"
-
     Then the following data should be generated:
       | foo     |
       | "1"     |
@@ -87,9 +84,9 @@ Feature: Values can be specified by using any of to set multiple constraints
   Scenario: Running an 'anyOf' request that contains a valid nested allOf request should be successful
     Given Any Of the next 2 constraints
     And foo is of length 1
-      And All Of the next 2 constraints
-      And foo is longer than 3
-      And foo is shorter than 5
+    And All Of the next 2 constraints
+    And foo is longer than 3
+    And foo is shorter than 5
     And foo is in set:
       | "1"     |
       | "22"    |
@@ -97,7 +94,6 @@ Feature: Values can be specified by using any of to set multiple constraints
       | "4444"  |
       | "55555" |
     And foo has type "string"
-
     Then the following data should be generated:
       | foo    |
       | "1"    |
@@ -111,9 +107,8 @@ Feature: Values can be specified by using any of to set multiple constraints
     Given Any Of the next 2 constraints
     And foo is of length 1
     And Any Of the next 1 constraints
-      And foo is of length -1
+    And foo is of length -1
     And foo has type "string"
-
     Then the profile is invalid because "String length must have a value >= 0, currently is -1"
     And no data is created
 
@@ -121,9 +116,8 @@ Feature: Values can be specified by using any of to set multiple constraints
     Given Any Of the next 2 constraints
     And foo is of length 1
     And All Of the next 1 constraints
-      And foo is of length -1
+    And foo is of length -1
     And foo has type "string"
-
     Then the profile is invalid because "String length must have a value >= 0, currently is -1"
     And no data is created
 
@@ -131,8 +125,8 @@ Feature: Values can be specified by using any of to set multiple constraints
     Given Any Of the next 2 constraints
     And foo is of length 1
     And All Of the next 2 constraints
-      And foo is longer than 3
-      And foo is shorter than 2
+    And foo is longer than 3
+    And foo is shorter than 2
     And foo has type "string"
     And foo is in set:
       | "a"  |
@@ -140,7 +134,6 @@ Feature: Values can be specified by using any of to set multiple constraints
       | "9"  |
       | "a1" |
       | "B"  |
-
     Then the following data should be generated:
       | foo |
       | "a" |

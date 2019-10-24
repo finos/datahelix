@@ -3,7 +3,6 @@ Feature: User can specify that decimal fields are granular to a certain number o
   Background:
     Given the generation strategy is full
     And there is a non nullable field foo
-
     And foo has type "decimal"
 
   Scenario: User requires to create a numeric field with data values that include a decimal value to one decimal point
@@ -30,7 +29,7 @@ Feature: User can specify that decimal fields are granular to a certain number o
     And foo is greater than or equal to -1
     Then the following data should be generated:
       | foo  |
-      |  0   |
+      | 0    |
       | -0.1 |
       | -0.2 |
       | -0.3 |
@@ -67,15 +66,11 @@ Feature: User can specify that decimal fields are granular to a certain number o
       | 3   |
       | 4   |
       | 5   |
-
           ### related field
-
   Scenario: The one where a user can specify that one decimal number should be greater than another decimal number
     Given foo is granular to 0.1
     And the combination strategy is exhaustive
     And foo is greater than or equal to 1
-
-
     And there is a non nullable field bar
     And bar has type "decimal"
     And bar is granular to 0.1

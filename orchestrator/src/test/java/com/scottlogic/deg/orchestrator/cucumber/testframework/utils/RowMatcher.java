@@ -51,7 +51,7 @@ public class RowMatcher extends BaseMatcher<List<Object>> {
         Iterator<Object> actualRowIterator = actualRow.iterator();
         Iterator<Object> expectedRowIterator = expectedRow.iterator();
 
-        while (actualRowIterator.hasNext()){
+        while (actualRowIterator.hasNext()) {
             Object actualColumnValue = actualRowIterator.next();
 
             if (!expectedRowIterator.hasNext())
@@ -73,7 +73,7 @@ public class RowMatcher extends BaseMatcher<List<Object>> {
         if (actual == null || expected == null)
             return false;
 
-        if (actual instanceof Number && expected instanceof Number && actual.getClass() != expected.getClass()){
+        if (actual instanceof Number && expected instanceof Number && actual.getClass() != expected.getClass()) {
             return numbersEqual((Number) actual, (Number) expected);
         }
 
@@ -82,7 +82,8 @@ public class RowMatcher extends BaseMatcher<List<Object>> {
 
     /**
      * Compares two numbers by casting up to the widest supported number type, BigDecimal.
-     * @param actual Actual number of any Number type
+     *
+     * @param actual   Actual number of any Number type
      * @param expected Expected number of any Number type
      * @return True if numbers are mathematically equal, i.e. have the same value
      */
@@ -105,8 +106,8 @@ public class RowMatcher extends BaseMatcher<List<Object>> {
         return row.stream().map(RowMatcher::formatDate).collect(Collectors.toList());
     }
 
-    private static Object formatDate(Object value){
-        if (value instanceof OffsetDateTime){
+    private static Object formatDate(Object value) {
+        if (value instanceof OffsetDateTime) {
             return ((OffsetDateTime) value).format(dateTimeFormat);
         }
 

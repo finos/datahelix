@@ -8,98 +8,98 @@ Feature: User can specify that a value either matches or contains a specified re
   Scenario: Running a 'matchingRegex' request that includes roman alphabet lowercase chars (a-z) only should be successful
     Given foo is matching regex /[a-z]{1}/
     Then the following data should be generated:
-      | foo  |
-      | "a"  |
-      | "b"  |
-      | "c"  |
-      | "d"  |
-      | "e"  |
-      | "f"  |
-      | "g"  |
-      | "h"  |
-      | "i"  |
-      | "j"  |
-      | "k"  |
-      | "l"  |
-      | "m"  |
-      | "n"  |
-      | "o"  |
-      | "p"  |
-      | "q"  |
-      | "r"  |
-      | "s"  |
-      | "t"  |
-      | "u"  |
-      | "v"  |
-      | "w"  |
-      | "x"  |
-      | "y"  |
-      | "z"  |
+      | foo |
+      | "a" |
+      | "b" |
+      | "c" |
+      | "d" |
+      | "e" |
+      | "f" |
+      | "g" |
+      | "h" |
+      | "i" |
+      | "j" |
+      | "k" |
+      | "l" |
+      | "m" |
+      | "n" |
+      | "o" |
+      | "p" |
+      | "q" |
+      | "r" |
+      | "s" |
+      | "t" |
+      | "u" |
+      | "v" |
+      | "w" |
+      | "x" |
+      | "y" |
+      | "z" |
 
   Scenario: Running a 'matchingRegex' request that includes roman alphabet uppercase chars (A-Z) only should be successful
     Given foo is matching regex /[A-Z]{1}/
     Then the following data should be generated:
-      | foo  |
-      | "A"  |
-      | "B"  |
-      | "C"  |
-      | "D"  |
-      | "E"  |
-      | "F"  |
-      | "G"  |
-      | "H"  |
-      | "I"  |
-      | "J"  |
-      | "K"  |
-      | "L"  |
-      | "M"  |
-      | "N"  |
-      | "O"  |
-      | "P"  |
-      | "Q"  |
-      | "R"  |
-      | "S"  |
-      | "T"  |
-      | "U"  |
-      | "V"  |
-      | "W"  |
-      | "X"  |
-      | "Y"  |
-      | "Z"  |
+      | foo |
+      | "A" |
+      | "B" |
+      | "C" |
+      | "D" |
+      | "E" |
+      | "F" |
+      | "G" |
+      | "H" |
+      | "I" |
+      | "J" |
+      | "K" |
+      | "L" |
+      | "M" |
+      | "N" |
+      | "O" |
+      | "P" |
+      | "Q" |
+      | "R" |
+      | "S" |
+      | "T" |
+      | "U" |
+      | "V" |
+      | "W" |
+      | "X" |
+      | "Y" |
+      | "Z" |
 
   Scenario: Running a 'matchingRegex' request that includes roman numeric chars (0-9) only should be successful
     Given foo is matching regex /[0-9]{1}/
     Then the following data should be generated:
-      | foo  |
-      | "0"  |
-      | "1"  |
-      | "2"  |
-      | "3"  |
-      | "4"  |
-      | "5"  |
-      | "6"  |
-      | "7"  |
-      | "8"  |
-      | "9"  |
+      | foo |
+      | "0" |
+      | "1" |
+      | "2" |
+      | "3" |
+      | "4" |
+      | "5" |
+      | "6" |
+      | "7" |
+      | "8" |
+      | "9" |
 
   Scenario: Running a 'matchingRegex' request that includes basic punctuation characters (!-.) only should be successful
     Given foo is matching regex /[!-.]{1}/
     Then the following data should be generated:
-      | foo  |
-      | "!"  |
-      | """  |
-      | "#"  |
-      | "$"  |
-      | "%"  |
-      | "&"  |
-      | "'"  |
-      | "("  |
-      | ")"  |
-      | "*"  |
-      | "+"  |
-      | ","  |
-      | "-"  |
-      | "."  |
+      | foo |
+      | "!" |
+      | """ |
+      | "#" |
+      | "$" |
+      | "%" |
+      | "&" |
+      | "'" |
+      | "(" |
+      | ")" |
+      | "*" |
+      | "+" |
+      | "," |
+      | "-" |
+      | "." |
 
   Scenario: Running a 'matchingRegex' request that includes special characters (non roman character maps: Hiragana) should be successful
     Given foo is matching regex /[あ-げ]{1}/
@@ -154,21 +154,21 @@ Feature: User can specify that a value either matches or contains a specified re
   Scenario: Running a 'matchingRegex' request for a single character (a) should be successful
     Given foo is matching regex /[a]{1}/
     Then the following data should be generated:
-      | foo  |
-      | "a"  |
+      | foo |
+      | "a" |
 
   Scenario: Running a 'matchingRegex' request for a range over a single character ([a-a]) should be successful
     Given foo is matching regex /[a-a]{1}/
     Then the following data should be generated:
-      | foo  |
-      | "a"  |
+      | foo |
+      | "a" |
 
   Scenario: Running a 'matchingRegex' for a minimum length of 0 should be successful
     Given foo is matching regex /[a]{0,1}/
     Then the following data should be generated:
-      | foo  |
-      | ""   |
-      | "a"  |
+      | foo |
+      | ""  |
+      | "a" |
 
   Scenario: Running a 'matchingRegex' for a maximum length smaller than the minimum length should fail with an error
     Given foo is matching regex /[a]{1,0}/
@@ -199,7 +199,6 @@ Feature: User can specify that a value either matches or contains a specified re
 
   Scenario: User using matchingRegex operator to provide an exact set of values
     Given foo is matching regex /[a]{1,3}/
-
     Then the following data should be generated:
       | foo   |
       | "a"   |
@@ -217,8 +216,8 @@ Feature: User can specify that a value either matches or contains a specified re
     Given foo is matching regex /[a]{1}/
     And foo is anything but matching regex /[b]{2}/
     Then the following data should be generated:
-      | foo  |
-      | "a"  |
+      | foo |
+      | "a" |
 
   Scenario: Running a 'matchingRegex' request alongside a contradicting matchingRegex constraint should generate null
     Given foo is matching regex /[a]{1}/
@@ -246,16 +245,16 @@ Feature: User can specify that a value either matches or contains a specified re
     Given foo is matching regex /[a]{1}/
     And foo is anything but containing regex /[7]{1}/
     Then the following data should be generated:
-      | foo  |
-      | "a"  |
+      | foo |
+      | "a" |
 
   Scenario: matchingRegex run against a non contradicting not containingRegex should be successful
     Given foo is anything but matching regex /[a]{1}/
     And foo is containing regex /[7]{1}/
     And foo is of length 1
     Then the following data should be generated:
-      | foo  |
-      | "7"  |
+      | foo |
+      | "7" |
 
   Scenario: Running a 'matchingRegex' request alongside a contradicting containingRegex constraint should generate null
     Given foo is matching regex /[b]{3}/
@@ -283,8 +282,8 @@ Feature: User can specify that a value either matches or contains a specified re
     Given foo is matching regex /[a]{1}/
     And foo is anything but of length 5
     Then the following data should be generated:
-      | foo  |
-      | "a"  |
+      | foo |
+      | "a" |
 
   Scenario: not matchingRegex run against a non contradicting ofLength should be successful
     Given foo is matching regex /[a-z]{1}/
@@ -292,11 +291,11 @@ Feature: User can specify that a value either matches or contains a specified re
     And foo is of length 1
     And the generator can generate at most 4 rows
     Then the following data should be generated:
-      | foo  |
-      | "b"  |
-      | "c"  |
-      | "d"  |
-      | "e"  |
+      | foo |
+      | "b" |
+      | "c" |
+      | "d" |
+      | "e" |
 
   Scenario: matchingRegex run against a contradicting ofLength should only generate null
     Given foo is matching regex /[b]{2}/
@@ -343,8 +342,8 @@ Feature: User can specify that a value either matches or contains a specified re
     Given foo is matching regex /[b]{1}/
     And foo is shorter than 2
     Then the following data should be generated:
-      | foo  |
-      | "b"  |
+      | foo |
+      | "b" |
 
   Scenario: matchingRegex run against a non contradicting not shorterThan should be successful
     Given foo is matching regex /[b]{2}/
@@ -359,11 +358,11 @@ Feature: User can specify that a value either matches or contains a specified re
     And foo is shorter than 2
     And the generator can generate at most 4 rows
     Then the following data should be generated:
-      | foo  |
-      | "a"  |
-      | "c"  |
-      | "d"  |
-      | "e"  |
+      | foo |
+      | "a" |
+      | "c" |
+      | "d" |
+      | "e" |
 
   Scenario: matchingRegex run against a contradicting shorterThan should only generate null
     Given foo is matching regex /[b]{2}/
@@ -388,8 +387,8 @@ Feature: User can specify that a value either matches or contains a specified re
     And lee is less than 2
     And lee is greater than 0
     Then the following data should be generated:
-      | foo  | bar  | lee  |
-      | "a"  | "AA" | 1    |
-      | "a"  | "AA" | null |
-      | "a"  | null | 1    |
-      | "a"  | null | null |
+      | foo | bar  | lee  |
+      | "a" | "AA" | 1    |
+      | "a" | "AA" | null |
+      | "a" | null | 1    |
+      | "a" | null | null |
