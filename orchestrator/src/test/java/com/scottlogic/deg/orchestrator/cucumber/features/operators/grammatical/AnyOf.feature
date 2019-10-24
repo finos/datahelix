@@ -15,7 +15,7 @@ Feature: Values can be specified by using any of to set multiple constraints
       | "Test5" |
     And foo is matching regex /[a-b]{4}/
     And foo has type "string"
-    And foo is anything but null
+
     Then the following data should be generated:
       | foo     |
       | "Test0" |
@@ -58,7 +58,7 @@ Feature: Values can be specified by using any of to set multiple constraints
       | "Test8" |
       | "Test9" |
     And foo has type "string"
-    And foo is anything but null
+
     Then no data is created
 
   Scenario: Running an 'anyOf' request that contains a valid nested anyOf request should be successful
@@ -74,7 +74,7 @@ Feature: Values can be specified by using any of to set multiple constraints
       | "4444"  |
       | "55555" |
     And foo has type "string"
-    And foo is anything but null
+
     Then the following data should be generated:
       | foo     |
       | "1"     |
@@ -97,7 +97,7 @@ Feature: Values can be specified by using any of to set multiple constraints
       | "4444"  |
       | "55555" |
     And foo has type "string"
-    And foo is anything but null
+
     Then the following data should be generated:
       | foo    |
       | "1"    |
@@ -113,7 +113,7 @@ Feature: Values can be specified by using any of to set multiple constraints
     And Any Of the next 1 constraints
       And foo is of length -1
     And foo has type "string"
-    And foo is anything but null
+
     Then the profile is invalid because "String length must have a value >= 0, currently is -1"
     And no data is created
 
@@ -123,7 +123,7 @@ Feature: Values can be specified by using any of to set multiple constraints
     And All Of the next 1 constraints
       And foo is of length -1
     And foo has type "string"
-    And foo is anything but null
+
     Then the profile is invalid because "String length must have a value >= 0, currently is -1"
     And no data is created
 
@@ -140,7 +140,7 @@ Feature: Values can be specified by using any of to set multiple constraints
       | "9"  |
       | "a1" |
       | "B"  |
-    And foo is anything but null
+
     Then the following data should be generated:
       | foo |
       | "a" |

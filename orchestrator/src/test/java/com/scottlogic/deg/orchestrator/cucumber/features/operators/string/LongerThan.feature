@@ -244,7 +244,7 @@ Feature: User can specify that a string length is longer than, a specified numbe
     Given foo is longer than 999
     And the generation strategy is random
     And the generator can generate at most 1 rows
-    And foo is anything but null
+
     Then foo contains strings of length between 1000 and 1000 inclusively
 
   Scenario: longerThan with value larger than maximum permitted should fail with an error message

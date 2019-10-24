@@ -11,9 +11,9 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo |
       | bar |
     And foo has type "string"
-    And foo is anything but null
+
     And bar has type "string"
-    And bar is anything but null
+
     And foo is in set:
       | "a" |
       | "b" |
@@ -32,9 +32,9 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo |
       | bar |
     And foo has type "string"
-    And foo is anything but null
+
     And bar has type "string"
-    And bar is anything but null
+
     And foo is in set:
       | "0" |
       | "1" |
@@ -53,9 +53,9 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo |
       | bar |
     And foo has type "string"
-    And foo is anything but null
+
     And bar has type "string"
-    And bar is anything but null
+
     And foo is in set:
       | " " |
       | "x" |
@@ -74,9 +74,9 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo |
       | bar |
     And foo has type "integer"
-    And foo is anything but null
+
     And bar has type "integer"
-    And bar is anything but null
+
     And foo is in set:
       | 999 |
       | -12 |
@@ -95,9 +95,9 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo |
       | bar |
     And foo has type "decimal"
-    And foo is anything but null
+
     And bar has type "decimal"
-    And bar is anything but null
+
     And foo is in set:
       | 999 |
       | -12 |
@@ -116,9 +116,9 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo |
       | bar |
     And foo has type "datetime"
-    And foo is anything but null
+
     And bar has type "datetime"
-    And bar is anything but null
+
     And foo is in set:
       | 2018-12-04T14:00:00.000Z |
       | 2018-12-05T14:00:00.000Z |
@@ -137,9 +137,9 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo |
       | bar |
     And foo has type "datetime"
-    And foo is anything but null
+
     And bar has type "datetime"
-    And bar is anything but null
+
     And foo is in set:
       | 2018-12-99T14:00:00.000Z |
       | 2018-12-05T14:00:00.000Z |
@@ -154,9 +154,9 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo |
       | bar |
     And foo has type "integer"
-    And foo is anything but null
+
     And bar has type "integer"
-    And bar is anything but null
+
     And foo is in set:
       | 0 |
       | 1 |
@@ -170,9 +170,9 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo |
       | bar |
     And foo has type "integer"
-    And foo is anything but null
+
     And bar has type "integer"
-    And bar is anything but null
+
     And foo is in set:
       | 0 |
       | 1 |
@@ -191,9 +191,9 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo |
       | bar |
     And foo has type "string"
-    And foo is anything but null
+
     And bar has type "integer"
-    And bar is anything but null
+
     And foo is in set:
       | "x" |
       | "y" |
@@ -212,9 +212,9 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo |
       | bar |
     And foo has type "string"
-    And foo is anything but null
+
     And bar has type "decimal"
-    And bar is anything but null
+
     And foo is in set:
       | "x" |
       | "y" |
@@ -233,9 +233,9 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo |
       | bar |
     And foo has type "string"
-    And foo is anything but null
+
     And bar has type "datetime"
-    And bar is anything but null
+
     And foo is in set:
       | "x" |
       | "y" |
@@ -254,9 +254,9 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo |
       | bar |
     And foo has type "integer"
-    And foo is anything but null
+
     And bar has type "datetime"
-    And bar is anything but null
+
     And foo is in set:
       | 500 |
       | 1   |
@@ -275,9 +275,9 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo |
       | bar |
     And foo has type "decimal"
-    And foo is anything but null
+
     And bar has type "datetime"
-    And bar is anything but null
+
     And foo is in set:
       | 500 |
       | 1.1 |
@@ -299,15 +299,15 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo4 |
       | foo5 |
     And foo1 has type "integer"
-    And foo1 is anything but null
+
     And foo2 has type "integer"
-    And foo2 is anything but null
+
     And foo3 has type "integer"
-    And foo3 is anything but null
+
     And foo4 has type "integer"
-    And foo4 is anything but null
+
     And foo5 has type "integer"
-    And foo5 is anything but null
+
     And foo1 is in set:
       | 1 |
       | 2 |
@@ -365,11 +365,11 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo2 |
       | foo3 |
     And foo1 has type "integer"
-    And foo1 is anything but null
+
     And foo2 has type "integer"
-    And foo2 is anything but null
+
     And foo3 has type "integer"
-    And foo3 is anything but null
+
     And foo1 is in set:
       | 1 |
       | 2 |
@@ -523,11 +523,11 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo2 |
       | foo3 |
     And foo1 has type "integer"
-    And foo1 is anything but null
+
     And foo2 has type "integer"
-    And foo2 is anything but null
+
     And foo3 has type "integer"
-    And foo3 is anything but null
+
     And foo1 is in set:
       | 1 |
     And foo2 is in set:
@@ -564,11 +564,11 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo2 |
       | foo3 |
     And foo1 has type "integer"
-    And foo1 is anything but null
+
     And foo2 has type "integer"
-    And foo2 is anything but null
+
     And foo3 has type "integer"
-    And foo3 is anything but null
+
     And foo1 is in set:
       | 1 |
     And foo2 is in set:
@@ -595,11 +595,11 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo2 |
       | foo3 |
     And foo1 has type "integer"
-    And foo1 is anything but null
+
     And foo2 has type "string"
-    And foo2 is anything but null
+
     And foo3 has type "string"
-    And foo3 is anything but null
+
     And foo1 is in set:
       | 1 |
       | 0 |
@@ -647,11 +647,11 @@ Feature: User can create data across multiple fields for all combinations availa
       | foo2 |
       | foo3 |
     And foo1 has type "string"
-    And foo1 is anything but null
+
     And foo2 has type "integer"
-    And foo2 is anything but null
+
     And foo3 has type "string"
-    And foo3 is anything but null
+
     And foo1 is in set:
       | "alpha" |
     And foo2 is in set:

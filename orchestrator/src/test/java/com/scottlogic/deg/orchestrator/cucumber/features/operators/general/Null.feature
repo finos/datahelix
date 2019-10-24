@@ -40,7 +40,6 @@ Feature: User can specify that a field is null or absent
 
   Scenario: Not 'null' with  not 'null' is successful
     Given foo is anything but null
-    And foo is anything but null
     And foo has type "string"
     And foo is equal to "a"
     Then the following data should be generated:

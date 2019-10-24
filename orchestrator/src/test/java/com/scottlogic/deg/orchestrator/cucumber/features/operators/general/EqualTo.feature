@@ -124,7 +124,7 @@ Feature: User can specify that a value is equalTo a required value
     Given there is a non nullable field foo
     And foo has type "decimal"
     And foo is equal to 15
-    And foo is anything but null
+
     Then the following data should be generated:
       | foo |
       | 15  |

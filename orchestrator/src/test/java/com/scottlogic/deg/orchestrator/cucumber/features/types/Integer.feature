@@ -4,7 +4,7 @@ Feature: User can specify that a number has type integer and does not have any d
     Given the generation strategy is full
     And there is a non nullable field foo
     And foo has type "integer"
-    And foo is anything but null
+
 
 ### Numeric Constraints
 

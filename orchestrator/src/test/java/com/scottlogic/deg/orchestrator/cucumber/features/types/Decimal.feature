@@ -4,7 +4,7 @@ Feature: User can specify that a number has type decimal and can have varying nu
     Given the generation strategy is full
     And there is a non nullable field foo
     And foo has type "decimal"
-    And foo is anything but null
+
 
 ### Numeric Constraints
 

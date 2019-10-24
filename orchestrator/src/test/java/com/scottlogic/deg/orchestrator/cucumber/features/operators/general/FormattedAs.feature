@@ -10,7 +10,7 @@ Feature: User can specify that a value is so formatted
       | <input> |
     And foo has type "decimal"
     And foo has formatting <format>
-    And foo is anything but null
+
     Then the following data should be generated:
       | foo        |
       | <expected> |
@@ -61,7 +61,7 @@ Feature: User can specify that a value is so formatted
       | <input> |
     And foo has type "string"
     And foo has formatting <format>
-    And foo is anything but null
+
     Then the following data should be generated:
       | foo        |
       | <expected> |
@@ -79,7 +79,7 @@ Feature: User can specify that a value is so formatted
       | <input> |
     And foo has type "datetime"
     And foo has formatting <format>
-    And foo is anything but null
+
     Then the following data should be generated:
       | foo        |
       | <expected> |

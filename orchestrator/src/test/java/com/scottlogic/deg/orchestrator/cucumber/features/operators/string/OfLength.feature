@@ -235,7 +235,7 @@ Feature: User can specify the length of generated string data using 'ofLength'
     Given foo is of length 1000
     And the generator can generate at most 1 rows
     And the generation strategy is random
-    And foo is anything but null
+
     Then foo contains strings of length between 1000 and 1000 inclusively
 
   Scenario: ofLength with value larger than maximum permitted should fail with an error message

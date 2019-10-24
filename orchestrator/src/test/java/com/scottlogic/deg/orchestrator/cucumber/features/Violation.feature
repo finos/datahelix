@@ -46,7 +46,7 @@ Feature: The violations mode of the Data Helix app can be run in violations mode
   Scenario: The generator produces violating (not type) 'DateTime' data in random mode
     Given foo has type "datetime"
     And the generation strategy is random
-    And foo is anything but null
+
     And foo is before 2019-01-01T00:00:00.000Z
     And the data requested is violating
     Then 5 rows of data are generated
@@ -55,7 +55,7 @@ Feature: The violations mode of the Data Helix app can be run in violations mode
 
   Scenario: The generator produces violating (not type) 'Decimal' data in random mode
     Given foo has type "decimal"
-    And foo is anything but null
+
     And the generation strategy is random
     And foo is less than 10
     And the data requested is violating
@@ -66,7 +66,7 @@ Feature: The violations mode of the Data Helix app can be run in violations mode
   Scenario: The generator produces violating (not type) 'String' data in random mode
     Given foo has type "string"
     And the generation strategy is random
-    And foo is anything but null
+
     And foo is shorter than 10
     And the data requested is violating
     Then 5 rows of data are generated
@@ -76,7 +76,7 @@ Feature: The violations mode of the Data Helix app can be run in violations mode
   Scenario: The generator produces violating (not type) RegEx restricted 'String' data in random mode
     Given foo has type "string"
     And the generation strategy is random
-    And foo is anything but null
+
     And foo is matching regex /[a-z]{0,9}/
     And the data requested is violating
     Then 5 rows of data are generated
@@ -85,7 +85,7 @@ Feature: The violations mode of the Data Helix app can be run in violations mode
 
   Scenario: The generator produces violating (not type) inverted RegEx restricted 'String' data in random mode
     Given foo has type "string"
-    And foo is anything but null
+
     And the generation strategy is random
     And foo is anything but matching regex /[a-z]{0,9}/
     And the data requested is violating

@@ -7,9 +7,9 @@ Feature: Generator can produce correct data for complex profiles.
       | foo |
       | bar |
     And foo has type "integer"
-    And foo is anything but null
+
     And bar has type "integer"
-    And bar is anything but null
+
     And Any Of the next 2 constraints
     And All Of the next 3 constraints
       And Any Of the next 2 constraints

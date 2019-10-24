@@ -7,7 +7,6 @@ Feature: As a user
     And unique is unique
     And unique has type "integer"
     And unique is greater than 0
-    And unique is anything but null
     And the combination strategy is minimal
     And the generator can generate at most 5 rows
 
@@ -16,7 +15,7 @@ Feature: As a user
       And foo is unique
       And foo has type "integer"
       And foo is greater than 0
-      And foo is anything but null
+
       And there is a non nullable field bar
       And bar has type "string"
       And bar is equal to "not unique"
@@ -34,7 +33,7 @@ Feature: As a user
       And there is a non nullable field foo
       And foo has type "integer"
       And foo is greater than 0
-      And foo is anything but null
+
       Then the following data should be generated:
         |unique | foo |
         | 1     | 1   |
@@ -45,12 +44,12 @@ Feature: As a user
       And foo has type "integer"
       And foo is greater than 0
       And foo is less than 4
-      And foo is anything but null
+
       And there is a non nullable field bar
       And bar has type "integer"
       And bar is greater than 0
       And bar is less than 4
-      And bar is anything but null
+
       Then the following data should be generated:
         |unique | foo | bar|
         | 1     | 1   | 1  |
@@ -65,11 +64,11 @@ Feature: As a user
     And foo has type "integer"
     And foo is greater than 0
     And foo is less than 4
-    And foo is anything but null
+
     And there is a non nullable field bar
     And bar has type "integer"
     And bar is greater than 0
     And bar is less than 4
-    And bar is anything but null
+
     Then the profile is invalid because "Unique fields do not work when not using Minimal combination strategy"
     And no data is created

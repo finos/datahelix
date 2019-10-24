@@ -1443,8 +1443,6 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "Test2"  |
     And price is equal to 1
     And price is equal to 2
-    And foo is anything but null
-    And price is anything but null
     Then the following data should be generated:
       | foo     | price |
       | "Test1" | 1     |

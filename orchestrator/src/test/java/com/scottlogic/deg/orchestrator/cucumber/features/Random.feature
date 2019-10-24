@@ -61,21 +61,21 @@ Feature: User can generate valid data for all types (string, integer, decimal, o
 
   Scenario: The generator produces valid ISIN data in random mode (general format is checked here, not the checksum)
     Given foo has type "ISIN"
-    And foo is anything but null
+
     And the generator can generate at most 5 rows
     Then 5 rows of data are generated
     And foo contains strings matching /[A-Z]{2}[A-Z0-9]{9}[0-9]{1}/
 
   Scenario: The generator produces valid SEDOL data in random mode (general format is checked here, not the checksum)
     Given foo has type "SEDOL"
-    And foo is anything but null
+
     And the generator can generate at most 5 rows
     Then 5 rows of data are generated
     And foo contains strings matching /[B-DF-HJ-NP-TV-Z0-9]{6}[0-9]/
 
   Scenario: The generator produces valid CUSIP data in random mode (general format is checked here, not the checksum)
     Given foo has type "CUSIP"
-    And foo is anything but null
+
     And the generator can generate at most 5 rows
     Then 5 rows of data are generated
     And foo contains strings matching /[0-9]{3}[A-Z0-9]{5}[0-9]/

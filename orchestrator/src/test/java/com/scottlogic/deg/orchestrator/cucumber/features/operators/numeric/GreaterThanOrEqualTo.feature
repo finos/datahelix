@@ -7,7 +7,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
   Scenario: Running a 'greaterThanOrEqualTo' request that includes a positive integer should be successful
     Given foo is greater than or equal to 0
     And the generator can generate at most 5 rows
-    And foo is anything but null
+
     And foo has type "integer"
     Then the following data should be generated:
       | foo |
@@ -20,7 +20,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
   Scenario: Running a 'greaterThanOrEqualTo' request that includes positive decimal should be successful
     Given foo is greater than or equal to 0.0
     And the generator can generate at most 5 rows
-    And foo is anything but null
+
     And foo has type "decimal"
     Then the following data should be generated:
       | foo                    |
@@ -34,7 +34,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
   Scenario: Running a 'greaterThanOrEqualTo' request that includes a negative integer should be successful
     Given foo is greater than or equal to -10
     And the generator can generate at most 5 rows
-    And foo is anything but null
+
     And foo has type "integer"
     Then the following data should be generated:
       | foo |
@@ -47,7 +47,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
   Scenario: Running a 'greaterThanOrEqualTo' request that includes 0 should be successful
     Given foo is greater than or equal to 0
     And the generator can generate at most 5 rows
-    And foo is anything but null
+
     And foo has type "integer"
     Then the following data should be generated:
       | foo |
@@ -61,7 +61,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
     Given foo is greater than or equal to 5
     And foo is greater than or equal to 5
     And the generator can generate at most 5 rows
-    And foo is anything but null
+
     And foo has type "integer"
     Then the following data should be generated:
       | foo |
@@ -110,7 +110,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
     Given foo is greater than or equal to 5
     And foo is anything but less than 10
     And the generator can generate at most 5 rows
-    And foo is anything but null
+
     And foo has type "integer"
     Then the following data should be generated:
       | foo |
@@ -167,7 +167,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
     Given foo is greater than or equal to 5
     And foo is anything but less than or equal to 5
     And the generator can generate at most 5 rows
-    And foo is anything but null
+
     And foo has type "integer"
     Then the following data should be generated:
       | foo |
@@ -211,7 +211,7 @@ Feature: User can specify that a numeric value is higher than, or equal to, a sp
     And foo is granular to 1
     And foo has type "integer"
     And the generator can generate at most 5 rows
-    And foo is anything but null
+
     Then the following data should be generated:
       | foo |
       | 9   |

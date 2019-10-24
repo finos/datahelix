@@ -55,8 +55,8 @@ Feature: User can specify that a field value belongs to a set of predetermined o
     And the combination strategy is exhaustive
     And HomeNation is anything but null
     And Capital is anything but null
-    And Foo is anything but null
-    And Bar is anything but null
+
+
     And the file "testFile" contains the following data:
       |Country           |Capital    |
       |England           |London     |

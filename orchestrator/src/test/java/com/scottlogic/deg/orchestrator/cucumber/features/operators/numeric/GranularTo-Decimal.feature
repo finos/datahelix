@@ -3,7 +3,7 @@ Feature: User can specify that decimal fields are granular to a certain number o
   Background:
     Given the generation strategy is full
     And there is a non nullable field foo
-    And foo is anything but null
+
     And foo has type "decimal"
 
   Scenario: User requires to create a numeric field with data values that include a decimal value to one decimal point
@@ -74,8 +74,8 @@ Feature: User can specify that decimal fields are granular to a certain number o
     Given foo is granular to 0.1
     And the combination strategy is exhaustive
     And foo is greater than or equal to 1
-    And foo is anything but null
-    And bar is anything but null
+
+
     And there is a non nullable field bar
     And bar has type "decimal"
     And bar is granular to 0.1

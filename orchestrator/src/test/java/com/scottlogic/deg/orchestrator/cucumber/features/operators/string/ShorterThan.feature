@@ -70,7 +70,7 @@ Feature: User can specify that a string length is lower than, a specified number
     Given foo is shorter than 1001
     And the generation strategy is random
     And the generator can generate at most 1 rows
-    And foo is anything but null
+
     Then foo contains strings of length between 0 and 1000 inclusively
 
   Scenario: shorterThan with value larger than maximum permitted should fail with an error message

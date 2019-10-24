@@ -8,10 +8,10 @@ Feature:As a  User
     And there is a non nullable field foo
     And foo has type "integer"
     And foo is greater than 0
-    And foo is anything but null
+
     And there is a non nullable field bar
     And bar has type "integer"
-    And bar is anything but null
+
 
 
 ###Integer

@@ -3,7 +3,7 @@ Feature: User can specify that datetime fields are granular to a certain unit
   Background:
     Given the generation strategy is full
     And there is a non nullable field foo
-    And foo is anything but null
+
     And foo has type "datetime"
 
 
