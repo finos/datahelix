@@ -19,8 +19,9 @@ package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.steps.DateValueStep;
+import com.scottlogic.deg.profile.reader.InvalidProfileException;
+import com.scottlogic.deg.orchestrator.cucumber.testframework.steps.DateTimeValueStep;
 import org.junit.Assert;
 
 import java.io.IOException;
@@ -39,7 +40,7 @@ public class GeneratorTestUtilities {
     public static Object parseInput(String input) throws JsonParseException {
         if (input.startsWith("\"") && input.endsWith("\"")) {
             return input.substring(1, input.length() - 1);
-        } else if (input.matches(DateValueStep.DATE_REGEX)) {
+        } else if (input.matches(DateTimeValueStep.DATETIME_REGEX) || input.matches(DateValueStep.DATE_REGEX)) {
             return input;
         } else if (input.equals("null")) {
             return null;
@@ -66,7 +67,7 @@ public class GeneratorTestUtilities {
     }
 
     public static Object parseExpected(String input) throws JsonParseException {
-        if (input.matches(DateValueStep.DATE_REGEX)) {
+        if (input.matches(DateTimeValueStep.DATETIME_REGEX)) {
             return getOffsetDateTime(input);
         }
         return parseInput(input);

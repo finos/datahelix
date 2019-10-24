@@ -23,8 +23,7 @@ import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 import java.util.Collection;
 
 @JsonDeserialize(as = InSetOfValuesConstraintDTO.class)
-public class InSetOfValuesConstraintDTO extends InSetConstraintDTO
-{
+public class InSetOfValuesConstraintDTO extends InSetConstraintDTO {
     @JsonProperty(ConstraintTypeJsonProperty.IN_SET)
     public Collection<Object> values;
 }

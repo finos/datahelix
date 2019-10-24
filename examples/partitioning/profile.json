@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.12",
+  "schemaVersion": "0.14",
   "fields": [
     {
       "name": "p1f1",
@@ -54,7 +54,8 @@
             "equalTo": "p1-null"
           },
           "then": {
-            "null": "p1f2"
+            "field": "p1f2",
+            "isNull": true
           },
           "else": {
             "field": "p1f2",
@@ -70,7 +71,8 @@
             "equalTo": "p1-null"
           },
           "then": {
-            "null": "p1f3"
+            "field": "p1f3",
+            "isNull": true
           },
           "else": {
             "anyOf": [
@@ -103,7 +105,8 @@
             "equalTo": "p2-null"
           },
           "then": {
-            "null": "p2f2"
+            "field": "p2f2",
+            "isNull": true
           },
           "else": {
             "field": "p2f2",
@@ -119,7 +122,8 @@
             "equalTo": "p2-null"
           },
           "then": {
-            "null": "p2f3"
+            "field": "p2f3",
+            "isNull": true
           },
           "else": {
             "anyOf": [
@@ -152,7 +156,8 @@
             "equalTo": "p3-null"
           },
           "then": {
-            "null": "p3f2"
+            "field": "p3f2",
+            "isNull": true
           },
           "else": {
             "field": "p3f2",
@@ -168,7 +173,8 @@
             "equalTo": "p3-null"
           },
           "then": {
-            "null": "p3f3"
+            "field": "p3f3",
+            "isNull": true
           },
           "else": {
             "anyOf": [

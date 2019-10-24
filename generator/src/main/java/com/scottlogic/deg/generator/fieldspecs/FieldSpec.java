@@ -16,135 +16,31 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.common.profile.FieldType;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
-import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
+import com.scottlogic.deg.generator.generation.fieldvaluesources.NullAppendingValueSource;
+import com.scottlogic.deg.generator.generation.fieldvaluesources.NullOnlySource;
 
-import java.util.*;
+public abstract class FieldSpec {
 
-import static com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory.forMaxLength;
-import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.*;
+    public abstract boolean canCombineWithWhitelistValue(Object value);
+    public abstract FieldValueSource getFieldValueSource();
+    public abstract FieldSpec withNotNull();
 
-/**
- * Details a column's atomic constraints
- * A fieldSpec can either be a whitelist of allowed values, or a set of restrictions.
- * if a fieldSpec can not be a type, it will not have any restrictions for that type
- * This is enforced during merging.
- */
-public class FieldSpec {
+    protected final boolean nullable;
 
-    private static final DistributedList<Object> NO_VALUES = DistributedList.empty();
-
-    public static FieldSpec fromList(DistributedList<Object> whitelist) {
-        return new FieldSpec(whitelist, null, true, Collections.emptySet());
-    }
-    public static FieldSpec fromRestriction(TypedRestrictions restrictions) {
-        return new FieldSpec(null, restrictions, true, Collections.emptySet());
-    }
-    public static FieldSpec fromType(FieldType type) {
-        switch (type) {
-            case NUMERIC:
-                return new FieldSpec(null, createDefaultNumericRestrictions(), true, Collections.emptySet());
-            case DATETIME:
-                return new FieldSpec(null, createDefaultDateTimeRestrictions(), true, Collections.emptySet());
-            case STRING:
-                return new FieldSpec(null, forMaxLength(1000), true, Collections.emptySet());
-            default:
-                throw new IllegalArgumentException("Unable to create FieldSpec from type " + type.name());
-        }
-    }
-    public static FieldSpec nullOnly() {
-        return new FieldSpec(NO_VALUES, null, true, Collections.emptySet());
-    }
-
-    private final boolean nullable;
-    private final DistributedList<Object> whitelist;
-    private final Set<Object> blacklist;
-    private final TypedRestrictions restrictions;
-
-    private FieldSpec(
-        DistributedList<Object> whitelist,
-        TypedRestrictions restrictions,
-        boolean nullable,
-        Set<Object> blacklist) {
-        this.whitelist = whitelist;
-        this.restrictions = restrictions;
+    public FieldSpec(boolean nullable) {
         this.nullable = nullable;
-        this.blacklist = blacklist;
     }
 
-    public boolean isNullable() {
+    public boolean isNullable(){
         return nullable;
     }
 
-    public DistributedList<Object> getWhitelist() {
-        return whitelist;
-    }
-
-    public Set<Object> getBlacklist() {
-        return blacklist;
-    }
-
-    public TypedRestrictions getRestrictions() {
-        return restrictions;
-    }
-
-    public FieldSpec withBlacklist(Set<Object> blacklist) {
-        return new FieldSpec(whitelist, restrictions, nullable, blacklist);
-    }
-
-    public FieldSpec withNotNull() {
-        return new FieldSpec(whitelist, restrictions, false, blacklist);
-    }
-
-    @Override
-    public String toString() {
-        if (whitelist != null) {
-            if (whitelist.isEmpty()) {
-                return "Null only";
-            }
-            return (nullable ? "" : "Not Null ") + String.format("IN %s", whitelist);
+    protected FieldValueSource appendNullSource(FieldValueSource source){
+        if (!nullable){
+            return source;
         }
-
-        return String.format("%s%s",
-            nullable ? " " : " Not Null ",
-            restrictions == null ? "" : restrictions);
+        return new NullAppendingValueSource(source);
     }
 
-    /**
-     * Create a predicate that returns TRUE for all (and only) values permitted by this FieldSpec
-     */
-    public boolean permits(Object value) {
-        if (blacklist.contains(value)){
-            return false;
-        }
-
-        if (restrictions != null && !restrictions.match(value)) {
-            return false;
-        }
-
-        if (whitelist != null && !whitelist.list().contains(value)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public int hashCode() {
-        return Objects.hash(nullable, whitelist, restrictions, blacklist);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || obj.getClass() != this.getClass()) {
-            return false;
-        }
-
-        FieldSpec other = (FieldSpec) obj;
-        return Objects.equals(nullable, other.nullable)
-            && Objects.equals(whitelist, other.whitelist)
-            && Objects.equals(restrictions, other.restrictions)
-            && Objects.equals(blacklist, other.blacklist);
-    }
 }

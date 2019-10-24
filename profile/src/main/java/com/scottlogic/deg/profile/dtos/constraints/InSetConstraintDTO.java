@@ -18,10 +18,8 @@ package com.scottlogic.deg.profile.dtos.constraints;
 
 import com.scottlogic.deg.profile.common.ConstraintType;
 
-public abstract class InSetConstraintDTO extends AtomicConstraintDTO
-{
-    InSetConstraintDTO()
-    {
+public abstract class InSetConstraintDTO extends AtomicConstraintDTO {
+    InSetConstraintDTO() {
         super(ConstraintType.IN_SET);
     }
 }

@@ -21,6 +21,7 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpecMerger;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
@@ -96,7 +97,7 @@ public class ContradictionDecisionTreeValidator {
 
     private RowSpec getIdentityRowSpec(ProfileFields profileFields) {
         final Map<Field, FieldSpec> fieldToFieldSpec = profileFields.stream()
-            .collect(Collectors.toMap(Function.identity(), field -> FieldSpec.fromType(field.getType())));
+            .collect(Collectors.toMap(Function.identity(), field -> FieldSpecFactory.fromType(field.getType())));
 
         return new RowSpec(profileFields, fieldToFieldSpec, Collections.emptyList());
     }

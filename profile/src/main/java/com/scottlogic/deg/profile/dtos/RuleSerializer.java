@@ -35,8 +35,7 @@ public class RuleSerializer extends JsonSerializer<RuleDTO> {
         jsonGenerator.writeFieldName("rule");
         jsonGenerator.writeString(rule.rule);
         jsonGenerator.writeArrayFieldStart("constraints");
-        for (ConstraintDTO constraint : rule.constraints)
-        {
+        for (ConstraintDTO constraint : rule.constraints) {
             jsonGenerator.writeObject(constraint);
         }
         jsonGenerator.writeEndArray();

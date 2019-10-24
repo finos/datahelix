@@ -68,7 +68,7 @@ public class ValidatingProfileReader {
         }
         if (!untyped.isEmpty()) {
             throw new InvalidProfileException("Fields "
-                + untyped.stream().map(f->f.name).reduce((s, z) -> s + ", " + z).get()
+                + untyped.stream().map(f -> f.name).reduce((s, z) -> s + ", " + z).get()
                 + " are not typed; add their type to the field definition");
         }
     }

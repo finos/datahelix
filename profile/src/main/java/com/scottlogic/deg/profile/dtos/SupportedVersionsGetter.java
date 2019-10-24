@@ -24,6 +24,7 @@ import java.util.List;
 
 public class SupportedVersionsGetter {
     private final static String RESOURCES_PATH = "profileschema/datahelix.schema.json";
+
     /**
      * @return all valid schema versions
      **/

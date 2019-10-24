@@ -44,15 +44,12 @@ public class ConfigValidator {
             throw new ValidationException("Profile file path " + profileFile +
                 " contains one or more invalid characters ? : %% \" | > < "
             );
-        }
-        else if (!profileFile.exists()) {
+        } else if (!profileFile.exists()) {
             throw new ValidationException("Profile file " + profileFile + " does not exist");
-        }
-        else if (profileFile.isDirectory()) {
+        } else if (profileFile.isDirectory()) {
             throw new ValidationException("Profile file path " + profileFile +
                 " provided is to a directory");
-        }
-        else if (fileUtils.isFileEmpty(profileFile)) {
+        } else if (fileUtils.isFileEmpty(profileFile)) {
             throw new ValidationException("Profile file " + profileFile + " has no content");
         }
     }

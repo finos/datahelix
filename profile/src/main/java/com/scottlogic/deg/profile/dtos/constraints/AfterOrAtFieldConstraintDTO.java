@@ -22,19 +22,16 @@ import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 
 @JsonDeserialize(as = AfterOrAtFieldConstraintDTO.class)
-public class AfterOrAtFieldConstraintDTO extends RelationalConstraintDTO
-{
+public class AfterOrAtFieldConstraintDTO extends RelationalConstraintDTO {
     @JsonProperty(ConstraintTypeJsonProperty.AFTER_OR_AT_FIELD)
     public String otherField;
 
-    public AfterOrAtFieldConstraintDTO()
-    {
+    public AfterOrAtFieldConstraintDTO() {
         super(ConstraintType.AFTER_OR_AT_FIELD);
     }
 
     @Override
-    public String getOtherField()
-    {
+    public String getOtherField() {
         return otherField;
     }
 }

@@ -6,13 +6,12 @@ import java.util.Arrays;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public enum ConstraintType
-{
+public enum ConstraintType {
     EQUAL_TO(ConstraintTypeJsonProperty.EQUAL_TO),
     EQUAL_TO_FIELD(ConstraintTypeJsonProperty.EQUAL_TO_FIELD),
     IN_SET(ConstraintTypeJsonProperty.IN_SET),
     IN_MAP(ConstraintTypeJsonProperty.IN_MAP),
-    NULL(ConstraintTypeJsonProperty.NULL),
+    IS_NULL(ConstraintTypeJsonProperty.IS_NULL),
     GRANULAR_TO(ConstraintTypeJsonProperty.GRANULAR_TO),
     MATCHES_REGEX(ConstraintTypeJsonProperty.MATCHES_REGEX),
     CONTAINS_REGEX(ConstraintTypeJsonProperty.CONTAINS_REGEX),
@@ -43,13 +42,11 @@ public enum ConstraintType
     @JsonValue
     public final String propertyName;
 
-    ConstraintType(String propertyName)
-    {
+    ConstraintType(String propertyName) {
         this.propertyName = propertyName;
     }
 
-    public static ConstraintType fromPropertyName(String propertyName)
-    {
+    public static ConstraintType fromPropertyName(String propertyName) {
         return Arrays.stream(values()).collect(Collectors.toMap(o -> o.propertyName, Function.identity())).get(propertyName);
     }
 }

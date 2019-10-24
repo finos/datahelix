@@ -17,6 +17,7 @@
 package com.scottlogic.deg.generator.walker.pruner;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
@@ -68,7 +69,7 @@ class PrunedConstraintState {
     Map<Field, FieldSpec> addPulledUpFieldsToMap(Map<Field, FieldSpec> previousFieldSpecs) {
         Map<Field, FieldSpec> mapWithPulledUpFields = new HashMap<>(previousFieldSpecs);
         for (AtomicConstraint c : pulledUpAtomicConstraints) {
-            mapWithPulledUpFields.putIfAbsent(c.getField(), FieldSpec.fromType(c.getField().getType()));
+            mapWithPulledUpFields.putIfAbsent(c.getField(), FieldSpecFactory.fromType(c.getField().getType()));
         }
         return mapWithPulledUpFields;
     }

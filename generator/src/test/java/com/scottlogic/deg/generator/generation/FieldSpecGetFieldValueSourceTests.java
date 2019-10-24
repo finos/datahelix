@@ -18,6 +18,7 @@ package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.common.profile.NumericGranularity;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.NullAppendingValueSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
@@ -38,86 +39,71 @@ import static com.scottlogic.deg.generator.restrictions.linear.LinearRestriction
 import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MAX_LIMIT;
 import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MIN_LIMIT;
 
-public class FieldValueSourceEvaluatorTests {
+public class FieldSpecGetFieldValueSourceTests {
 
     @Test
     public void shouldReturnNullSourceOnlyWithMustBeNullRestrictions() {
-        FieldValueSourceEvaluator evaluator = new FieldValueSourceEvaluator();
-        FieldSpec fieldSpecMustBeNull = FieldSpec.nullOnly();
+        FieldSpec fieldSpecMustBeNull = FieldSpecFactory.nullOnly();
 
-        FieldValueSource sources = evaluator.getFieldValueSources(STRING, fieldSpecMustBeNull);
-
-        AssertLastSourceIsNullOnlySource(sources);
-    }
-
-    @Test
-    public void returnsNullSourceOnlyWithSetRestrictionWithEmptyWhitelist() {
-        FieldValueSourceEvaluator evaluator = new FieldValueSourceEvaluator();
-        FieldSpec fieldSpecMustBeNull = FieldSpec.fromList((new DistributedList<>(Collections.emptyList())));
-
-        FieldValueSource sources = evaluator.getFieldValueSources(STRING, fieldSpecMustBeNull);
+        FieldValueSource sources = fieldSpecMustBeNull.getFieldValueSource();
 
         AssertLastSourceIsNullOnlySource(sources);
     }
+
 
     @Test
     public void shouldReturnNullSourceLastWithNoRestrictions() {
-        FieldValueSourceEvaluator evaluator = new FieldValueSourceEvaluator();
-        FieldSpec fieldSpecWithNoRestrictions = FieldSpec.fromType(STRING);
+        FieldSpec fieldSpecWithNoRestrictions = FieldSpecFactory.fromType(STRING);
 
-        FieldValueSource sources = evaluator.getFieldValueSources(STRING, fieldSpecWithNoRestrictions);
+        FieldValueSource sources = fieldSpecWithNoRestrictions.getFieldValueSource();
 
         AssertLastSourceIsNullOnlySource(sources);
     }
 
     @Test
     public void shouldReturnNullSourceLastWithInSetRestrictionsAndNullNotDisallowed() {
-        FieldValueSourceEvaluator evaluator = new FieldValueSourceEvaluator();
-        FieldSpec fieldSpecInSetAndNullNotDisallowed = FieldSpec.fromList(DistributedList.uniform(new HashSet<>(Arrays.asList(15, 25))));
+        FieldSpec fieldSpecInSetAndNullNotDisallowed = FieldSpecFactory.fromList(DistributedList.uniform(new HashSet<>(Arrays.asList(15, 25))));
 
-        FieldValueSource sources = evaluator.getFieldValueSources(NUMERIC, fieldSpecInSetAndNullNotDisallowed);
+        FieldValueSource sources = fieldSpecInSetAndNullNotDisallowed.getFieldValueSource();
 
         AssertLastSourceIsNullOnlySource(sources);
     }
 
     @Test
     public void shouldReturnNullSourceLastWithTypedNumericRestrictionsAndNullNotDisallowed() {
-        FieldValueSourceEvaluator evaluator = new FieldValueSourceEvaluator();
         LinearRestrictions<BigDecimal> numericRestrictions = createNumericRestrictions(
             new Limit<>(new BigDecimal(10), false),
             new Limit<>(new BigDecimal(30), false));
-        FieldSpec fieldSpecWithTypedNumericRestrictionsAndNullNotDisallowed = FieldSpec.fromRestriction(numericRestrictions);
+        FieldSpec fieldSpecWithTypedNumericRestrictionsAndNullNotDisallowed = FieldSpecFactory.fromRestriction(numericRestrictions);
 
-        FieldValueSource sources = evaluator.getFieldValueSources(NUMERIC, fieldSpecWithTypedNumericRestrictionsAndNullNotDisallowed);
+        FieldValueSource sources = fieldSpecWithTypedNumericRestrictionsAndNullNotDisallowed.getFieldValueSource();
 
         AssertLastSourceIsNullOnlySource(sources);
     }
 
     @Test
     public void shouldReturnNullSourceLastWithTypedDateTimeRestrictionsAndNullNotDisallowed() {
-        FieldValueSourceEvaluator evaluator = new FieldValueSourceEvaluator();
         LinearRestrictions<OffsetDateTime> dateTimeRestrictions = LinearRestrictionsFactory.createDateTimeRestrictions(
             new Limit<>(OffsetDateTime.MIN, false),
             new Limit<>(OffsetDateTime.MAX, false)
         );
-        FieldSpec fieldSpecInSetWithTypedDateTimeRestrictionsAndNullNotDisallowed = FieldSpec.fromRestriction(dateTimeRestrictions);
+        FieldSpec fieldSpecInSetWithTypedDateTimeRestrictionsAndNullNotDisallowed = FieldSpecFactory.fromRestriction(dateTimeRestrictions);
 
-        FieldValueSource sources = evaluator.getFieldValueSources(DATETIME, fieldSpecInSetWithTypedDateTimeRestrictionsAndNullNotDisallowed);
+        FieldValueSource sources = fieldSpecInSetWithTypedDateTimeRestrictionsAndNullNotDisallowed.getFieldValueSource();
 
         AssertLastSourceIsNullOnlySource(sources);
     }
 
     @Test
     void getFieldValueSources_fieldSpecContainsNumericRestrictionsWithValueTooLargeForInteger_generatesExpectedValues() {
-        FieldSpec fieldSpec = FieldSpec.fromRestriction(
+        FieldSpec fieldSpec = FieldSpecFactory.fromRestriction(
             createNumericRestrictions(new Limit<>(new BigDecimal(0), false),
                 new Limit<>(new BigDecimal("1E+18"), false))
         ).withNotNull(
 
         );
-        FieldValueSourceEvaluator evaluator = new FieldValueSourceEvaluator();
 
-        final FieldValueSource result = evaluator.getFieldValueSources(NUMERIC, fieldSpec);
+        final FieldValueSource result = fieldSpec.getFieldValueSource();
 
         Iterator interestingValuesIterator = result.generateInterestingValues().iterator();
         List<BigDecimal> valuesFromResult = new ArrayList<>();
@@ -134,14 +120,13 @@ public class FieldValueSourceEvaluatorTests {
 
     @Test
     void getFieldValueSources_fieldSpecContainsNumericRestrictionsWithDecimalValues_generatesDecimalValues() {
-        FieldSpec fieldSpec = FieldSpec.fromRestriction(
+        FieldSpec fieldSpec = FieldSpecFactory.fromRestriction(
             createNumericRestrictions(
                 new Limit<>(new BigDecimal("15.00000000000000000001"), false),
                 new Limit<>(new BigDecimal("15.00000000000000000010"), false))
         ).withNotNull();
-        FieldValueSourceEvaluator evaluator = new FieldValueSourceEvaluator();
 
-        final FieldValueSource result = evaluator.getFieldValueSources(NUMERIC, fieldSpec);
+        final FieldValueSource result = fieldSpec.getFieldValueSource();
 
         Iterator allValuesIterator = result.generateAllValues().iterator();
         List<BigDecimal> valuesFromResult = new ArrayList<>();
@@ -168,10 +153,9 @@ public class FieldValueSourceEvaluatorTests {
             new Limit<>(new BigDecimal("15"), false),
             new Limit<>(new BigDecimal("16"), false),
             new NumericGranularity(2));
-        FieldSpec fieldSpec = FieldSpec.fromRestriction(restrictions).withNotNull();
-        FieldValueSourceEvaluator evaluator = new FieldValueSourceEvaluator();
+        FieldSpec fieldSpec = FieldSpecFactory.fromRestriction(restrictions).withNotNull();
 
-        final FieldValueSource result = evaluator.getFieldValueSources(NUMERIC, fieldSpec);
+        final FieldValueSource result = fieldSpec.getFieldValueSource();
 
         Iterator interestingValuesIterator = result.generateInterestingValues().iterator();
         List<BigDecimal> valuesFromResult = new ArrayList<>();
@@ -188,12 +172,11 @@ public class FieldValueSourceEvaluatorTests {
 
     @Test
     void getFieldValueSources_fieldSpecContainsNumericRestrictionsWithMinAndMaxNull_generatesBoundaryValues() {
-        FieldSpec fieldSpec = FieldSpec.fromRestriction(
+        FieldSpec fieldSpec = FieldSpecFactory.fromRestriction(
             LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT)
         ).withNotNull();
-        FieldValueSourceEvaluator evaluator = new FieldValueSourceEvaluator();
 
-        final FieldValueSource result = evaluator.getFieldValueSources(NUMERIC, fieldSpec);
+        final FieldValueSource result = fieldSpec.getFieldValueSource();
 
         Iterator interestingValuesIterator = result.generateInterestingValues().iterator();
         List<BigDecimal> valuesFromResult = new ArrayList<>();
@@ -203,7 +186,6 @@ public class FieldValueSourceEvaluatorTests {
 
         final List<BigDecimal> expectedValues = Arrays.asList(
             new BigDecimal("-1E+20"),
-            new BigDecimal("0"),
             new BigDecimal("1E+20")
         );
         Assert.assertEquals(expectedValues, valuesFromResult);
@@ -211,12 +193,11 @@ public class FieldValueSourceEvaluatorTests {
 
     @Test
     void getFieldValueSources_fieldSpecContainsNumericRestrictionWithNullMinAndMaxIsDecimal_generatesDecimalValues() {
-        FieldSpec fieldSpec = FieldSpec.fromRestriction(
+        FieldSpec fieldSpec = FieldSpecFactory.fromRestriction(
             createNumericRestrictions(NUMERIC_MIN_LIMIT, new Limit<>(new BigDecimal("150.5"), false))
         ).withNotNull();
-        FieldValueSourceEvaluator evaluator = new FieldValueSourceEvaluator();
 
-        final FieldValueSource result = evaluator.getFieldValueSources(NUMERIC, fieldSpec);
+        final FieldValueSource result = fieldSpec.getFieldValueSource();
 
         Iterator interestingValuesIterator = result.generateInterestingValues().iterator();
         List<BigDecimal> valuesFromResult = new ArrayList<>();
@@ -230,14 +211,13 @@ public class FieldValueSourceEvaluatorTests {
 
     @Test
     void getFieldValueSources_fieldSpecContainsNegativeMinAndPositiveMax_generatesExpectedNegativeToPositiveValues() {
-        FieldSpec fieldSpec = FieldSpec.fromRestriction(
+        FieldSpec fieldSpec = FieldSpecFactory.fromRestriction(
             createNumericRestrictions(
                 new Limit<>(new BigDecimal("-3E-20"), false),
                 new Limit<>(new BigDecimal("3E-20"), false))
         ).withNotNull();
-        FieldValueSourceEvaluator evaluator = new FieldValueSourceEvaluator();
 
-        final FieldValueSource result = evaluator.getFieldValueSources(NUMERIC, fieldSpec);
+        final FieldValueSource result = fieldSpec.getFieldValueSource();
 
         Iterator allValuesIterator = result.generateAllValues().iterator();
         List<BigDecimal> valuesFromResult = new ArrayList<>();

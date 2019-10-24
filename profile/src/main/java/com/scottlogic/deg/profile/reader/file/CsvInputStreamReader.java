@@ -70,7 +70,7 @@ public final class CsvInputStreamReader {
 
     private static WeightedElement<String> createWeightedElementFromRecord(CSVRecord record) {
         return createWeightedElement(record.get(0),
-            record.size() == 1 ? Optional.empty() :  Optional.of(Double.parseDouble(record.get(1))));
+            record.size() == 1 ? Optional.empty() : Optional.of(Double.parseDouble(record.get(1))));
     }
 
 

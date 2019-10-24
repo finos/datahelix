@@ -18,6 +18,8 @@ package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
+import com.scottlogic.deg.generator.fieldspecs.WhitelistFieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
@@ -45,11 +47,10 @@ class FieldSpecValueGeneratorTests {
 
     @Test
     void generate_fieldSpecMustContainRestrictionNullAndSetRestrictionsHasValues_returnsDataBagsWithValuesInSetRestrictions() {
-        FieldSpec fieldSpec = FieldSpec.fromList(DistributedList.uniform(Arrays.asList(10, 20, 30)))
+        WhitelistFieldSpec fieldSpec = FieldSpecFactory.fromList(DistributedList.uniform(Arrays.asList(10, 20, 30)))
             .withNotNull();
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
             INTERESTING,
-            new FieldValueSourceEvaluator(),
             new JavaUtilRandomNumberGenerator());
 
         final Set<DataBagValue> result = fieldSpecFulfiller.generate(createField(null), fieldSpec).collect(Collectors.toSet());
@@ -64,13 +65,12 @@ class FieldSpecValueGeneratorTests {
 
     @Test
     void generate_fieldSpecMustContainRestrictionNullAndNumericRestrictionApplied_returnsExpectedDataBagsForNumericRestriction() {
-        FieldSpec fieldSpec = FieldSpec.fromRestriction(
+        FieldSpec fieldSpec = FieldSpecFactory.fromRestriction(
                 LinearRestrictionsFactory.createNumericRestrictions(
                     new Limit<>(new BigDecimal(10), false),
                     new Limit<>(new BigDecimal(30), false)));
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
             INTERESTING,
-            new FieldValueSourceEvaluator(),
             new JavaUtilRandomNumberGenerator());
 
         final Set<DataBagValue> result =
@@ -81,7 +81,6 @@ class FieldSpecValueGeneratorTests {
                 new DataBagValue(
                     new BigDecimal("10.00000000000000000001")
                 ),
-
                 new DataBagValue(
                     new BigDecimal("29.99999999999999999999")
                 ),
@@ -94,17 +93,17 @@ class FieldSpecValueGeneratorTests {
 
     @Nested
     class GetDataValuesTests {
-        FieldValueSourceEvaluator fieldValueSourceEvaluator;
+        FieldSpec fieldSpec;
         FieldValueSource fieldValueSource;
         JavaUtilRandomNumberGenerator randomNumberGenerator;
 
         @BeforeEach
         void beforeEach() {
-            fieldValueSourceEvaluator = mock(FieldValueSourceEvaluator.class);
             fieldValueSource = mock(FieldValueSource.class);
+            fieldSpec = mock(FieldSpec.class);
 
             randomNumberGenerator = mock(JavaUtilRandomNumberGenerator.class);
-            when(fieldValueSourceEvaluator.getFieldValueSources(any(), any())).thenReturn(fieldValueSource);
+            when(fieldSpec.getFieldValueSource()).thenReturn(fieldValueSource);
             when(fieldValueSource.generateAllValues()).thenReturn(Stream.empty());
             when(fieldValueSource.generateInterestingValues()).thenReturn(Stream.empty());
             when(fieldValueSource.generateRandomValues(randomNumberGenerator)).thenReturn(Stream.empty());
@@ -112,11 +111,8 @@ class FieldSpecValueGeneratorTests {
 
         @Test
         void generateRandom_uniqueFieldSpec_returnsAllValues() {
-            FieldSpec fieldSpec = FieldSpec.fromType(STRING).withNotNull();
-
             FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
                 RANDOM,
-                fieldValueSourceEvaluator,
                 randomNumberGenerator
             );
 
@@ -129,11 +125,8 @@ class FieldSpecValueGeneratorTests {
 
         @Test
         void generateRandom_notUniqueFieldSpec_returnsRandomValues() {
-            FieldSpec fieldSpec = FieldSpec.fromType(STRING).withNotNull();
-
             FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
                 RANDOM,
-                fieldValueSourceEvaluator,
                 randomNumberGenerator
             );
 
@@ -146,11 +139,8 @@ class FieldSpecValueGeneratorTests {
 
         @Test
         void generateInteresting_uniqueFieldSpec_returnsAllValues() {
-            FieldSpec fieldSpec = FieldSpec.fromType(STRING).withNotNull();
-
             FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
                 INTERESTING,
-                fieldValueSourceEvaluator,
                 randomNumberGenerator
             );
 
@@ -163,11 +153,8 @@ class FieldSpecValueGeneratorTests {
 
         @Test
         void generateInteresting_notUniqueFieldSpec_returnsInterestingValues() {
-            FieldSpec fieldSpec = FieldSpec.fromType(STRING).withNotNull();
-
             FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
                 INTERESTING,
-                fieldValueSourceEvaluator,
                 randomNumberGenerator
             );
 
@@ -180,11 +167,8 @@ class FieldSpecValueGeneratorTests {
 
         @Test
         void generateSequential_uniqueFieldSpec_returnsAllValues() {
-            FieldSpec fieldSpec = FieldSpec.fromType(STRING).withNotNull();
-
             FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
                 FULL_SEQUENTIAL,
-                fieldValueSourceEvaluator,
                 randomNumberGenerator
             );
 
@@ -197,11 +181,8 @@ class FieldSpecValueGeneratorTests {
 
         @Test
         void generateSequential_notUniqueFieldSpec_returnsAllValues() {
-            FieldSpec fieldSpec = FieldSpec.fromType(STRING).withNotNull();
-
             FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
                 FULL_SEQUENTIAL,
-                fieldValueSourceEvaluator,
                 randomNumberGenerator
             );
 

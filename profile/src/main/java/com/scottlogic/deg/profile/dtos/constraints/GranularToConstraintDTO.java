@@ -22,13 +22,11 @@ import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 
 @JsonDeserialize(as = GranularToConstraintDTO.class)
-public class GranularToConstraintDTO extends AtomicConstraintDTO
-{
+public class GranularToConstraintDTO extends AtomicConstraintDTO {
     @JsonProperty(ConstraintTypeJsonProperty.GRANULAR_TO)
     public Object value;
 
-    public GranularToConstraintDTO()
-    {
+    public GranularToConstraintDTO() {
         super(ConstraintType.GRANULAR_TO);
     }
 }

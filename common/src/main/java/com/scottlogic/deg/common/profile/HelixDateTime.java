@@ -14,13 +14,7 @@ import java.time.temporal.TemporalAccessor;
 public class HelixDateTime
 {
     private static final HelixDateTime NOW = new HelixDateTime(OffsetDateTime.now());
-    private static final DateTimeFormatter FORMATTER = new DateTimeFormatterBuilder()
-            .append(DateTimeFormatter.ofPattern("u-MM-dd'T'HH:mm:ss'.'SSS"))
-            .optionalStart()
-            .appendOffset("+HH", "Z")
-            .toFormatter()
-            .withResolverStyle(ResolverStyle.STRICT);
-
+    private static final DateTimeFormatter FORMATTER = getDateTimeFormatter();
     private final OffsetDateTime value;
 
     private HelixDateTime(OffsetDateTime value)
@@ -59,8 +53,8 @@ public class HelixDateTime
         }
         catch (DateTimeParseException exception)
         {
-            throw new ValidationException(String.format("Date string '%s' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS[Z] between (inclusive) " +
-                    "0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z", dateTime));
+            throw new ValidationException(String.format("Date string '%s' must be in ISO-8601 format: Either yyyy-MM-ddTHH:mm:ss.SSS[Z] between " +
+                    "0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z or yyyy-mm-dd between 0001-01-01 and 9999-12-31", dateTime));
         }
     }
 
@@ -68,5 +62,24 @@ public class HelixDateTime
     {
         if (dateTime != null && dateTime.getYear() <= 9999 && dateTime.getYear() >= 1) return;
         throw new ValidationException("Dates must be between 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z");
+    }
+
+    private static DateTimeFormatter getDateTimeFormatter() {
+        DateTimeFormatter dateFormat = new DateTimeFormatterBuilder()
+            .appendPattern("u-MM-dd")
+            .parseDefaulting(ChronoField.SECOND_OF_DAY,0)
+            .toFormatter();
+
+        DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder()
+            .append(DateTimeFormatter.ofPattern("u-MM-dd'T'HH:mm:ss'.'SSS"))
+            .optionalStart()
+            .appendOffset("+HH", "Z")
+            .toFormatter();
+
+        return new DateTimeFormatterBuilder()
+            .appendOptional(dateTimeFormatter)
+            .appendOptional(dateFormat)
+            .toFormatter()
+            .withResolverStyle(ResolverStyle.STRICT);
     }
 }

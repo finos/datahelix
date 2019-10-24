@@ -22,13 +22,11 @@ import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 
 @JsonDeserialize(as = NotConstraintDTO.class)
-public class NotConstraintDTO extends ConstraintDTO
-{
+public class NotConstraintDTO extends ConstraintDTO {
     @JsonProperty(ConstraintTypeJsonProperty.NOT)
     public ConstraintDTO constraint;
 
-    public NotConstraintDTO()
-    {
+    public NotConstraintDTO() {
         super(ConstraintType.NOT);
     }
 }

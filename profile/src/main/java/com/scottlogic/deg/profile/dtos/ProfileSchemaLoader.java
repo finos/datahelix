@@ -32,7 +32,7 @@ public interface ProfileSchemaLoader {
      * Validates a json file against the DataHelix Profile JSON Schema.
      *
      * @param profileFile an File object that is the profile to validate
-     * @param schema the schema to check validate against
+     * @param schema      the schema to check validate against
      * @return the result of validating the provided profile
      */
     void validateProfile(File profileFile, URL schema);
