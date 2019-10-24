@@ -25,7 +25,7 @@ import com.scottlogic.deg.generator.restrictions.bool.BooleanRestrictions;
 import java.util.Collections;
 import java.util.function.Function;
 
-import static com.scottlogic.deg.generator.restrictions.string.StringRestrictionsFactory.forMaxLength;
+import static com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory.forMaxLength;
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDefaultDateTimeRestrictions;
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDefaultNumericRestrictions;
 
@@ -46,6 +46,8 @@ public class FieldSpecFactory {
                 return new RestrictionsFieldSpec(createDefaultNumericRestrictions(), true, Collections.emptySet());
             case DATETIME:
                 return new RestrictionsFieldSpec(createDefaultDateTimeRestrictions(), true, Collections.emptySet());
+            case TIME:
+                return new RestrictionsFieldSpec(createDefaultTimeRestrictions(), true, Collections.emptySet());
             case STRING:
                 return new RestrictionsFieldSpec(forMaxLength(1000), true, Collections.emptySet());
             case BOOLEAN:
