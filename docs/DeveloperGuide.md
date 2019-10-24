@@ -91,7 +91,7 @@ Feature: the name of my feature
 
   Background:
     Given the generation strategy is interesting
-    And there is a field foo
+    And there is a non nullable field foo
 
   Scenario: Running the generator should emit the correct data
     Given foo is equal to 8

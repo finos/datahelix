@@ -26,7 +26,7 @@ public class SetValueStep {
 
     private final CucumberTestState state;
 
-    public SetValueStep(CucumberTestState state){
+    public SetValueStep(CucumberTestState state) {
         this.state = state;
     }
 

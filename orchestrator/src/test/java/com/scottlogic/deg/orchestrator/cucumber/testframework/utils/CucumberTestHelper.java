@@ -48,10 +48,9 @@ public class CucumberTestHelper {
     }
 
     public void runGenerationProcess() {
-        if (testState.expectExceptions){
+        if (testState.expectExceptions) {
             generateAndExpectExceptions();
-        }
-        else {
+        } else {
             try {
                 doGeneration();
             } catch (IOException e) {
@@ -65,7 +64,7 @@ public class CucumberTestHelper {
             doGeneration();
         } catch (IOException e) {
             testState.addException(e);
-        } catch (ValidationException e){
+        } catch (ValidationException e) {
             testState.testExceptions.addAll(e.errorMessages.stream().map(ValidationException::new).collect(Collectors.toList()));
         }
     }
@@ -131,7 +130,7 @@ public class CucumberTestHelper {
         String fieldName,
         Class<T> clazz,
         Function<T, Boolean> predicate
-    ){
+    ) {
         assertFieldContainsOnly(fieldName, objectValue -> {
             if (objectValue == null) {
                 return true;
@@ -152,11 +151,7 @@ public class CucumberTestHelper {
                 return true;
             }
 
-            if (clazz.isInstance(objectValue)) {
-                return false; //matches, but shouldn't match the type
-            }
-
-            return true;
+            return !clazz.isInstance(objectValue); //matches, but shouldn't match the type
         });
     }
 
@@ -205,11 +200,7 @@ public class CucumberTestHelper {
 
     public <T> void assertFieldContainsSomeOf(String fieldName, Class<T> clazz) {
         assertFieldContains(fieldName, objectValue -> {
-            if (clazz.isInstance(objectValue)) {
-                return true;
-            }
-
-            return false; //doesn't match the type when it should.
+            return clazz.isInstance(objectValue);//doesn't match the type when it should.
         });
     }
 }

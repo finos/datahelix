@@ -62,6 +62,7 @@ public class InMemoryOutputTarget implements SingleDatasetOutputTarget {
         }
 
         @Override
-        public void close() {}
+        public void close() {
+        }
     }
 }

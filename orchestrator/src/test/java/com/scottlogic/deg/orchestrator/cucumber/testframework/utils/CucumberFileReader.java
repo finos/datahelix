@@ -5,8 +5,7 @@ import com.scottlogic.deg.profile.reader.FileReader;
 
 import javax.inject.Inject;
 
-public class CucumberFileReader extends FileReader
-{
+public class CucumberFileReader extends FileReader {
     private final CucumberTestState testState;
 
     @Inject
@@ -16,8 +15,7 @@ public class CucumberFileReader extends FileReader
     }
 
     @Override
-    public DistributedList<String> listFromMapFile(String file, String key)
-    {
+    public DistributedList<String> listFromMapFile(String file, String key) {
         return DistributedList.uniform(testState.getValuesFromMap(file, key));
     }
 

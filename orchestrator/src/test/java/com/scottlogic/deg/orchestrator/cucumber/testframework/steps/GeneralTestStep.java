@@ -40,7 +40,7 @@ public class GeneralTestStep {
     private final CucumberTestState state;
     private CucumberTestHelper cucumberTestHelper;
 
-    public GeneralTestStep(CucumberTestState state){
+    public GeneralTestStep(CucumberTestState state) {
         this.state = state;
     }
 
@@ -49,14 +49,24 @@ public class GeneralTestStep {
         this.cucumberTestHelper = new CucumberTestHelper(state);
     }
 
-    @Given("there is a field (.+)$")
-    public void thereIsAField(String fieldName) {
-        this.state.addField(fieldName);
+    @Given("there is a nullable field (.+)$")
+    public void thereIsANullableField(String fieldName) {
+        this.state.addNullableField(fieldName);
     }
 
-    @Given("^the following fields exist:$")
-    public void thereAreFields(List<String> fields) {
-        fields.forEach(this::thereIsAField);
+    @Given("there is a non nullable field (.+)$")
+    public void thereIsANonNullableField(String fieldName) {
+        this.state.addNonNullableField(fieldName);
+    }
+
+    @Given("^the following nullable fields exist:$")
+    public void thereAreNullableFields(List<String> fields) {
+        fields.forEach(this::thereIsANullableField);
+    }
+
+    @Given("^the following non nullable fields exist:$")
+    public void thereAreNonNullableFields(List<String> fields) {
+        fields.forEach(this::thereIsANonNullableField);
     }
 
     @When("the generation strategy is {generationStrategy}")
@@ -70,7 +80,7 @@ public class GeneralTestStep {
     }
 
     @When("we do not violate any {operator} constraints")
-    public void constraintTypeIsNotViolated(String operator){
+    public void constraintTypeIsNotViolated(String operator) {
         this.state.addConstraintToNotViolate(AtomicConstraintType.fromText(operator));
     }
 
@@ -89,12 +99,12 @@ public class GeneralTestStep {
     }
 
     @And("^(.+) is null$")
-    public void fieldIsNull(String fieldName) throws Exception{
+    public void fieldIsNull(String fieldName) throws Exception {
         this.state.addConstraint(fieldName, ConstraintType.IS_NULL, true);
     }
 
     @And("^(.+) is anything but null$")
-    public void fieldIsNotNull(String fieldName) throws Exception{
+    public void fieldIsNotNull(String fieldName) throws Exception {
         this.state.addNotConstraint(fieldName, ConstraintType.IS_NULL, true);
     }
 
@@ -104,27 +114,27 @@ public class GeneralTestStep {
     }
 
     @And("^(.+) is equal to field (.+)$")
-    public void fieldEqualTo(String field, String otherField){
+    public void fieldEqualTo(String field, String otherField) {
         state.addRelationConstraint(field, ConstraintType.EQUAL_TO_FIELD, otherField);
     }
 
     @When("^If and Then are described below$")
-    public void ifStartThen(){
+    public void ifStartThen() {
         state.startCreatingIfConstraint(2);
     }
 
     @When("^If Then and Else are described below$")
-    public void ifStartThenElse(){
+    public void ifStartThenElse() {
         state.startCreatingIfConstraint(3);
     }
 
     @And("All Of the next {number} constraints")
-    public void allOf(int count){
+    public void allOf(int count) {
         state.startCreatingAllOfConstraint(count);
     }
 
     @And("Any Of the next {number} constraints")
-    public void anyOf(int count){
+    public void anyOf(int count) {
         state.startCreatingAnyOfConstraint(count);
     }
 
@@ -211,7 +221,7 @@ public class GeneralTestStep {
         assertOutputData(data.generatedData, new RowsAbsentMatcher(data.expectedData));
     }
 
-    private void assertOutputData(List<List<Object>> data, Matcher<List<List<Object>>> matcher){
+    private void assertOutputData(List<List<Object>> data, Matcher<List<List<Object>>> matcher) {
         assertNoGenerationErrors();
 
         Assert.assertThat(data, matcher);
@@ -229,7 +239,7 @@ public class GeneralTestStep {
             empty());
     }
 
-    private List <List<Object>> getComparableExpectedResults(List<Map<String, String>> expectedResultsTable) {
+    private List<List<Object>> getComparableExpectedResults(List<Map<String, String>> expectedResultsTable) {
         return expectedResultsTable
             .stream()
             .map(row -> new ArrayList<>(row.values()))
@@ -244,15 +254,15 @@ public class GeneralTestStep {
             .collect(Collectors.toList());
     }
 
-    private GeneratedTestData getExpectedAndGeneratedData(List<Map<String, String>> expectedResultsTable){
-        List <List<Object>> expectedRowsOfResults = getComparableExpectedResults(expectedResultsTable);
-        List <List<Object>> data = cucumberTestHelper.generateAndGetData();
+    private GeneratedTestData getExpectedAndGeneratedData(List<Map<String, String>> expectedResultsTable) {
+        List<List<Object>> expectedRowsOfResults = getComparableExpectedResults(expectedResultsTable);
+        List<List<Object>> data = cucumberTestHelper.generateAndGetData();
         return new GeneratedTestData(expectedRowsOfResults, data);
     }
 
     @Then("some data should be generated")
     public void someDataShouldBeGenerated() {
-        List <List<Object>> data = cucumberTestHelper.generateAndGetData();
+        List<List<Object>> data = cucumberTestHelper.generateAndGetData();
 
         assertNoGenerationErrors();
         Assert.assertThat("No data was generated but some was expected", data, not(empty()));
@@ -260,12 +270,12 @@ public class GeneralTestStep {
 
     @Then("{long} row(s) of data is/are generated")
     public void theExpectedNumberOfRowsAreGenerated(long expectedNumberOfRows) {
-        List <List<Object>> data = cucumberTestHelper.generateAndGetData();
+        List<List<Object>> data = cucumberTestHelper.generateAndGetData();
 
         assertNoGenerationErrors();
         Assert.assertThat(
             "Unexpected number of rows returned",
-            (long)data.size(),
+            (long) data.size(),
             equalTo(expectedNumberOfRows));
     }
 
@@ -285,10 +295,10 @@ public class GeneralTestStep {
     }
 
     class GeneratedTestData {
-        List <List<Object>> expectedData;
-        List <List<Object>> generatedData;
+        List<List<Object>> expectedData;
+        List<List<Object>> generatedData;
 
-        GeneratedTestData(List <List<Object>> expectedData, List <List<Object>> generatedData){
+        GeneratedTestData(List<List<Object>> expectedData, List<List<Object>> generatedData) {
             this.expectedData = expectedData;
             this.generatedData = generatedData;
         }

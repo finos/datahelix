@@ -2,7 +2,7 @@ Feature: User can specify that a string length is longer than, a specified numbe
 
   Background:
     Given the generation strategy is full
-    And there is a field foo
+    And there is a nullable field foo
     And foo has type "string"
 
   Scenario: Running a 'longerThan' request that includes positive value should be successful
@@ -44,7 +44,6 @@ Feature: User can specify that a string length is longer than, a specified numbe
       | null  |
       | "aaa" |
       | "aab" |
-
 
   Scenario: Valid 'longerThan' and not 'longerThan' requests should be successful
     Given foo is longer than 1
@@ -244,7 +243,6 @@ Feature: User can specify that a string length is longer than, a specified numbe
     Given foo is longer than 999
     And the generation strategy is random
     And the generator can generate at most 1 rows
-    And foo is anything but null
     Then foo contains strings of length between 1000 and 1000 inclusively
 
   Scenario: longerThan with value larger than maximum permitted should fail with an error message
