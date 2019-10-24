@@ -37,7 +37,7 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
     private final Set<AtomicConstraintType> allOperators = new HashSet<>(Arrays.asList(AtomicConstraintType.values()));
 
     @Override
-    public Locale locale(){
+    public Locale locale() {
         return Locale.ENGLISH;
     }
 
@@ -47,8 +47,8 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
         this.defineCombinationStrategyType(tr);
         this.defineOperationParameterType(tr);
         this.defineGenerationMode(tr);
-        this.defineParameterType(tr,"fieldVar", "^(.+)");
-        this.defineParameterType(tr,"regex", "/(.+)/$");
+        this.defineParameterType(tr, "fieldVar", "^(.+)");
+        this.defineParameterType(tr, "regex", "/(.+)/$");
         tr.setDefaultDataTableCellTransformer(new DataTableCellTransformer());
 
         tr.defineParameterType(new ParameterType<>(
@@ -70,7 +70,7 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
             this::extractConstraint));
     }
 
-    private void defineOperationParameterType(TypeRegistry tr){
+    private void defineOperationParameterType(TypeRegistry tr) {
         tr.defineParameterType(new ParameterType<>(
             "operator",
             this.getHumanReadableOperationRegex(allOperators),
@@ -84,14 +84,14 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
             name,
             regex,
             String.class,
-            (Transformer<String>)fieldName -> fieldName));
+            (Transformer<String>) fieldName -> fieldName));
     }
 
-    private void defineDataGenerationStrategyType(TypeRegistry tr){
+    private void defineDataGenerationStrategyType(TypeRegistry tr) {
         Transformer<DataGenerationType> transformer = strategyString ->
             Arrays.stream(DataGenerationType.values())
-            .filter(val -> val.toString().equalsIgnoreCase(strategyString))
-            .findFirst().orElse(DataGenerationType.FULL_SEQUENTIAL);
+                .filter(val -> val.toString().equalsIgnoreCase(strategyString))
+                .findFirst().orElse(DataGenerationType.FULL_SEQUENTIAL);
 
         tr.defineParameterType(new ParameterType<>(
             "generationStrategy",
@@ -100,7 +100,7 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
             transformer));
     }
 
-    private void defineCombinationStrategyType(TypeRegistry tr){
+    private void defineCombinationStrategyType(TypeRegistry tr) {
         Transformer<CombinationStrategyType> transformer = strategyString ->
             Arrays.stream(CombinationStrategyType.values())
                 .filter(val -> val.toString().equalsIgnoreCase(strategyString))
@@ -135,11 +135,11 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
             .collect(Collectors.joining());
     }
 
-    private String getHumanReadableOperationRegex(Set<AtomicConstraintType> types){
+    private String getHumanReadableOperationRegex(Set<AtomicConstraintType> types) {
         return
             types.stream()
-            .map(act -> act.toString().replaceAll("([a-z])([A-Z]+)", "$1 $2").toLowerCase())
-            .collect(Collectors.joining("|", "(", ")"));
+                .map(act -> act.toString().replaceAll("([a-z])([A-Z]+)", "$1 $2").toLowerCase())
+                .collect(Collectors.joining("|", "(", ")"));
     }
 
     private class DataTableCellTransformer implements TableCellByTypeTransformer {
@@ -148,7 +148,7 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
             try {
                 return aClass.cast(GeneratorTestUtilities.parseInput(value.trim()));
             } catch (JsonParseException | InvalidProfileException e) {
-                return (T)e;
+                return (T) e;
             }
         }
     }

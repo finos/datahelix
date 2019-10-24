@@ -176,7 +176,7 @@ public class JsonProfileReaderTests {
         givenJson(
                 "{" +
                         "    \"schemaVersion\": " + schemaVersion + "," +
-                        "    \"fields\": [ { \"name\": \"foo\" , \"type\": \"string\"} ]," +
+                        "    \"fields\": [ { \"name\": \"foo\" , \"type\": \"string\", \"nullable\": true} ]," +
                         "    \"rules\": [" +
                         "      {" +
                         "        \"constraints\": [" +
@@ -200,7 +200,7 @@ public class JsonProfileReaderTests {
         givenJson(
                 "{" +
                         "    \"schemaVersion\": " + schemaVersion + "," +
-                        "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\" } ]," +
+                        "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\", \"nullable\": true } ]," +
                         "    \"rules\": [" +
                         "        {" +
                         "           \"rule\": \"Too rule for school\"," +
@@ -260,7 +260,7 @@ public class JsonProfileReaderTests {
         givenJson(
             "{" +
                 "    \"schemaVersion\": " + schemaVersion + "," +
-                "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\" } ]," +
+                "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\", \"nullable\": true } ]," +
                 "    \"rules\": []" +
                 "}");
 
@@ -277,7 +277,7 @@ public class JsonProfileReaderTests {
         givenJson(
             "{" +
                 "    \"schemaVersion\": " + schemaVersion + "," +
-                "    \"fields\": [ { \"name\": \"foo\", \"type\": \"integer\" } ]," +
+                "    \"fields\": [ { \"name\": \"foo\", \"type\": \"integer\", \"nullable\": true } ]," +
                 "    \"rules\": []" +
                 "}");
 
@@ -298,7 +298,7 @@ public class JsonProfileReaderTests {
         givenJson(
             "{" +
                 "    \"schemaVersion\": " + schemaVersion + "," +
-                "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\" } ]," +
+                "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\", \"nullable\": true } ]," +
                 "    \"rules\": [" +
                 "      {" +
                 "        \"constraints\": [" +
@@ -346,7 +346,7 @@ public class JsonProfileReaderTests {
         givenJson(
                 "{" +
                         "    \"schemaVersion\": " + schemaVersion + "," +
-                        "    \"fields\": [ { \"name\": \"id\", \"type\": \"string\" } ]," +
+                        "    \"fields\": [ { \"name\": \"id\", \"type\": \"string\" , \"nullable\": true} ]," +
                         "    \"rules\": [" +
                         "      {" +
                         "        \"constraints\": [" +
@@ -369,7 +369,7 @@ public class JsonProfileReaderTests {
         givenJson(
                 "{" +
                         "    \"schemaVersion\": " + schemaVersion + "," +
-                        "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\" } ]," +
+                        "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\", \"nullable\": true } ]," +
                         "    \"rules\": [" +
                         "      {" +
                         "        \"constraints\": [" +
@@ -395,7 +395,7 @@ public class JsonProfileReaderTests {
         givenJson(
                 "{" +
                         "    \"schemaVersion\": " + schemaVersion + "," +
-                        "    \"fields\": [ { \"name\": \"foo\", \"type\": \"decimal\" } ]," +
+                        "    \"fields\": [ { \"name\": \"foo\", \"type\": \"decimal\", \"nullable\": true } ]," +
                         "    \"rules\": [" +
                         "      {" +
                         "        \"constraints\": [" +
@@ -424,7 +424,7 @@ public class JsonProfileReaderTests {
         givenJson(
                 "{" +
                         "    \"schemaVersion\": " + schemaVersion + "," +
-                        "    \"fields\": [ { \"name\": \"foo\", \"type\": \"decimal\" } ]," +
+                        "    \"fields\": [ { \"name\": \"foo\", \"type\": \"decimal\", \"nullable\": true } ]," +
                         "    \"rules\": [" +
                         "      {" +
                         "        \"constraints\": [" +
@@ -453,7 +453,7 @@ public class JsonProfileReaderTests {
         givenJson(
                 "{" +
                         "    \"schemaVersion\": " + schemaVersion + "," +
-                        "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\" } ]," +
+                        "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\", \"nullable\": true } ]," +
                         "    \"rules\": [" +
                         "      {" +
                         "        \"constraints\": [" +
@@ -491,7 +491,7 @@ public class JsonProfileReaderTests {
         givenJson(
                 "{" +
                         "    \"schemaVersion\": " + schemaVersion + "," +
-                        "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\" } ]," +
+                        "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\", \"nullable\": true } ]," +
                         "    \"rules\": [" +
                         "      {" +
                         "        \"constraints\": [" +
@@ -528,7 +528,7 @@ public class JsonProfileReaderTests {
         givenJson(
             "{" +
             "    \"schemaVersion\": " + schemaVersion + "," +
-            "    \"fields\": [ { \"name\": \"foo\", \"type\": \"decimal\" } ]," +
+            "    \"fields\": [ { \"name\": \"foo\", \"type\": \"decimal\", \"nullable\": true } ]," +
             "    \"rules\": [" +
             "      {" +
             "        \"constraints\": [" +
@@ -554,7 +554,7 @@ public class JsonProfileReaderTests {
         givenJson(
             "{" +
                 "    \"schemaVersion\": " + schemaVersion + "," +
-                "    \"fields\": [ { \"name\": \"foo\", \"type\": \"decimal\" } ]," +
+                "    \"fields\": [ { \"name\": \"foo\", \"type\": \"decimal\", \"nullable\": true } ]," +
                 "    \"rules\": [" +
                 "      {" +
                 "        \"constraints\": [" +
@@ -580,7 +580,7 @@ public class JsonProfileReaderTests {
         givenJson(
             "{" +
                 "    \"schemaVersion\": " + schemaVersion + "," +
-                "    \"fields\": [ { \"name\": \"foo\", \"type\": \"decimal\" } ]," +
+                "    \"fields\": [ { \"name\": \"foo\", \"type\": \"decimal\", \"nullable\": true } ]," +
                 "    \"rules\": [" +
                 "      {" +
                 "        \"constraints\": [" +
@@ -606,7 +606,7 @@ public class JsonProfileReaderTests {
         givenJson(
             "{" +
                 "    \"schemaVersion\": " + schemaVersion + "," +
-                "    \"fields\": [ { \"name\": \"foo\", \"type\": \"datetime\" } ]," +
+                "    \"fields\": [ { \"name\": \"foo\", \"type\": \"datetime\", \"nullable\": true } ]," +
                 "    \"rules\": [" +
                 "      {" +
                 "        \"constraints\": [" +
@@ -866,21 +866,6 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void nullable_DoesNotAddConstraintForField_whenNotSet() throws IOException  {
-        givenJson(
-            "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
-                "    \"fields\": [ { " +
-                "       \"name\": \"foo\"," +
-                "       \"type\": \"integer\"" +
-                "    } ]," +
-                "    \"rules\": []" +
-                "}");
-
-        expectRules(ruleWithDescription("type-rules"));
-    }
-
-    @Test
     public void nullable_addsConstraintForFields_whenSetToFalse() throws IOException  {
         givenJson(
             "{" +
@@ -959,10 +944,12 @@ public class JsonProfileReaderTests {
                 "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { " +
                 "       \"name\": \"foo\" ," +
-                "       \"type\": \"decimal\"" +
+                "       \"type\": \"decimal\" ," +
+                "       \"nullable\": \"true\"" +
                 "    }, { " +
                 "       \"name\": \"bar\" ," +
-                "       \"type\": \"string\"" +
+                "       \"type\": \"string\" ," +
+                "       \"nullable\": \"true\"" +
                 "    }]," +
                 "    \"rules\": []" +
                 "}");
@@ -1079,7 +1066,8 @@ public class JsonProfileReaderTests {
                 "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { " +
                 "       \"name\": \"foo\" ," +
-                "       \"type\": \"date\"" +
+                "       \"type\": \"date\"," +
+                "       \"nullable\": \"true\"" +
                 "    }]," +
                 "    \"rules\": []" +
                 "}");

@@ -2,9 +2,8 @@ Feature: User can specify that a datetime date is more than, or the same as, a s
 
   Background:
     Given the generation strategy is full
-    And there is a field foo
+    And there is a non nullable field foo
     And foo has type "datetime"
-    And foo is anything but null
 
   Scenario: User requires to create a datetime field with values that are after or at a specified date
     Given foo is after or at 2018-01-01T00:00:00.000Z

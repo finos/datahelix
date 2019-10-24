@@ -26,7 +26,7 @@ public class MapValueStep {
 
     private final CucumberTestState state;
 
-    public MapValueStep(CucumberTestState state){
+    public MapValueStep(CucumberTestState state) {
         this.state = state;
     }
 
