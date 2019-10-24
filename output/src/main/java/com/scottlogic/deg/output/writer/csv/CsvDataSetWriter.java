@@ -35,7 +35,6 @@ import java.util.stream.Collectors;
 class CsvDataSetWriter implements DataSetWriter {
     private static final DateTimeFormatter standardDateFormat = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
     private static final CSVFormat writerFormat = CSVFormat.RFC4180;
-    private static final CSVFormat csvStringFormatter = writerFormat.withQuoteMode(QuoteMode.ALL);
 
     private final CSVPrinter csvPrinter;
     private final ProfileFields fieldOrder;
