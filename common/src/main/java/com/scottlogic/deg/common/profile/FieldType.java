@@ -21,5 +21,6 @@ public enum FieldType
     NUMERIC,
     STRING,
     DATETIME,
-    BOOLEAN
+    BOOLEAN,
+    TIME
 }
