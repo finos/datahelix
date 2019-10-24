@@ -18,6 +18,7 @@ package com.scottlogic.deg.common.util;
 
 import com.scottlogic.deg.common.profile.DateTimeGranularity;
 import com.scottlogic.deg.common.profile.NumericGranularity;
+import com.scottlogic.deg.common.profile.TimeGranularity;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -35,6 +36,7 @@ public class Defaults {
     public static final OffsetDateTime ISO_MIN_DATE = OffsetDateTime.of(1, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
     public static final DateTimeGranularity DEFAULT_DATETIME_GRANULARITY = new DateTimeGranularity(ChronoUnit.MILLIS, false);
     public static final NumericGranularity DEFAULT_NUMERIC_GRANULARITY = new NumericGranularity(20);
+    public static final TimeGranularity DEFAULT_TIME_GRANULARITY = new TimeGranularity(ChronoUnit.MILLIS);
 
     public static final String DEFAULT_DATE_FORMATTING = "%tF";  //yyyy-mm-dd see https://docs.oracle.com/javase/8/docs/api/java/util/Formatter.html
 }
