@@ -21,16 +21,12 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.scottlogic.deg.common.profile.SpecificFieldType;
 import com.scottlogic.deg.profile.dtos.FieldDTO;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.NullConstraintDTO;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
-
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class FieldDeserialiserTests {
     @Test

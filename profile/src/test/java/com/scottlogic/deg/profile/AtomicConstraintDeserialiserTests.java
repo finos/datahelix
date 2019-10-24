@@ -16,12 +16,12 @@
 
 package com.scottlogic.deg.profile;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scottlogic.deg.profile.dtos.constraints.*;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import org.junit.Assert;
 import org.junit.Rule;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.rules.ExpectedException;
 
@@ -53,29 +53,6 @@ public class AtomicConstraintDeserialiserTests {
     }
 
     @Test
-    public void shouldDeserialiseEqualToAndThrowInvalidFieldException() throws IOException {
-        // Arrange
-        final String json = "{\"field\": \"\", \"equalTo\": \"X_092\" }";
-
-        // Act
-        ConstraintDTO actual = deserialiseJsonString(json);
-
-        // Assert
-        EqualToConstraintDTO expected = new EqualToConstraintDTO();
-        expected.field = "";
-        expected.value = "X_092";
-
-        assertThat(actual, sameBeanAs(expected));
-
-        //TODO consider where this should be validated, and make a test for that area instead (maybe whole profile deserialisation)
-
-//        assertThrows(
-//            ValidationException.class,
-//            () -> deserialiseJsonString(json),
-//            "invalid field");
-    }
-
-    @Test
     public void shouldDeserialiseEqualToAndThrowInvalidConstraintException() throws RuntimeException, IOException {
         // Arrange
         final String json = "{\"field\": \"type\", \"equilTo\": \"X_092\" },";
@@ -89,7 +66,6 @@ public class AtomicConstraintDeserialiserTests {
         }
     }
 
-    @Disabled("#1471 throws a valid json parse exception instead of a validation exception")
     @Test
     public void shouldDeserialiseEqualToAndThrowInvalidConstraintValueException() throws IOException {
         // Arrange
@@ -98,8 +74,8 @@ public class AtomicConstraintDeserialiserTests {
         try {
             deserialiseJsonString(json);
             Assert.fail("should have thrown an exception");
-        } catch (InvalidProfileException e) {
-            String expectedMessage = "The constraint json object node for field type doesn't contain any of the expected keywords as properties: {\"field\":\"type\",\"equilTo\":\"X_092\"}";
+        } catch (JsonParseException e) {
+            String expectedMessage = "Unexpected character ('}' (code 125)): expected a valid value (number, String, array, object, 'true', 'false' or 'null')\n at [Source: (String)\"{\"field\": \"type\", \"equalTo\": }\"; line: 1, column: 31]";
             assertThat(e.getMessage(), sameBeanAs(expectedMessage));
         }
     }
