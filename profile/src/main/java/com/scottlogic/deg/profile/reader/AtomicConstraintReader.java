@@ -23,6 +23,7 @@ import com.scottlogic.deg.generator.fieldspecs.relations.InMapRelation;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
+import com.scottlogic.deg.profile.custom.CustomConstraintFactory;
 import com.scottlogic.deg.profile.dtos.constraints.*;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,10 +33,12 @@ import java.util.stream.Collectors;
 public class AtomicConstraintReader {
 
     private final FileReader fileReader;
+    private final CustomConstraintFactory customConstraintFactory;
 
     @Inject
-    public AtomicConstraintReader(FileReader fileReader) {
+    public AtomicConstraintReader(FileReader fileReader, CustomConstraintFactory customConstraintFactory) {
         this.fileReader = fileReader;
+        this.customConstraintFactory = customConstraintFactory;
     }
 
     public Constraint readAtomicConstraintDto(AtomicConstraintDTO dto, ProfileFields profileFields) {
@@ -88,6 +91,8 @@ public class AtomicConstraintReader {
                 return ((NullConstraintDTO)dto).isNull
                     ? isNullConstraint
                     : isNullConstraint.negate();
+            case GENERATOR:
+                return customConstraintFactory.create(field, ((GeneratorConstraintDto)dto).generator);
             default:
                 throw new InvalidProfileException("Atomic constraint type not found: " + dto);
         }

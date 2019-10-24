@@ -28,6 +28,7 @@ public class ConstraintTypeJsonProperty {
     public static final String BEFORE_FIELD = "beforeField";
     public static final String BEFORE_OR_AT = "beforeOrAt";
     public static final String BEFORE_OR_AT_FIELD = "beforeOrAtField";
+    public static final String GENERATOR = "generator";
     public static final String NOT = "not";
     public static final String ANY_OF = "anyOf";
     public static final String ALL_OF = "allOf";

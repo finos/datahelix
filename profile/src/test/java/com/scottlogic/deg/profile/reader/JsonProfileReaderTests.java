@@ -48,8 +48,7 @@ import static com.scottlogic.deg.common.util.Defaults.DEFAULT_DATE_FORMATTING;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.core.IsNull.nullValue;
-
-
+import static org.mockito.Mockito.mock;
 
 
 public class JsonProfileReaderTests {
@@ -82,7 +81,7 @@ public class JsonProfileReaderTests {
 
     private JsonProfileReader jsonProfileReader = new JsonProfileReader(
         null,
-        new ConstraintReader(new AtomicConstraintReader(new MockFromFileReader())),
+        new ConstraintReader(new AtomicConstraintReader(new MockFromFileReader(), mock(CustomConstraintFactory.class))),
         new CustomConstraintFactory(new CustomGeneratorList()));
 
     private void givenJson(String json) {

@@ -34,6 +34,7 @@ public enum ConstraintType {
     BEFORE_FIELD(ConstraintTypeJsonProperty.BEFORE_FIELD),
     BEFORE_OR_AT(ConstraintTypeJsonProperty.BEFORE_OR_AT),
     BEFORE_OR_AT_FIELD(ConstraintTypeJsonProperty.BEFORE_OR_AT_FIELD),
+    GENERATOR(ConstraintTypeJsonProperty.GENERATOR),
     NOT(ConstraintTypeJsonProperty.NOT),
     ANY_OF(ConstraintTypeJsonProperty.ANY_OF),
     ALL_OF(ConstraintTypeJsonProperty.ALL_OF),

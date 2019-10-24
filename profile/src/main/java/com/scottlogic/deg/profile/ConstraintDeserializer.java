@@ -84,6 +84,8 @@ public class ConstraintDeserializer extends JsonDeserializer<ConstraintDTO> {
                 return mapper.treeToValue(node, BeforeOrAtConstraintDTO.class);
             case BEFORE_OR_AT_FIELD:
                 return mapper.treeToValue(node, BeforeOrAtFieldConstraintDTO.class);
+            case GENERATOR:
+                return mapper.treeToValue(node, GeneratorConstraintDto.class);
             case NOT:
                 return mapper.treeToValue(node, NotConstraintDTO.class);
             case ANY_OF:

@@ -56,6 +56,7 @@
 7. [Custom Generators](#custom-generator)
     1. [adding](#adding-custom-generator)
     2. [using](#using-custom-generator)
+    3. [using as constraint](#using-custom-generator-as-constraint)
     
 8. [Running a Profile](#Running-a-Profile)
     1. [Command Line Arguments](#Command-Line-Arguments)
@@ -87,9 +88,9 @@ This section will walk you through creating basic profiles with which you can ge
 Profiles are JSON documents consisting of three sections, the schema version, the list of fields and the rules.
 
 - **Schema Version** - Dictates the method of serialisation of the profile in order for the generator to
-interpret the profile fields and rules. The latest version is 0.7.
+interpret the profile fields and rules. The latest version is 
 ```
-    "schemaVersion": "0.7",
+    "schemaVersion": "0.16",
 ```
 - **List of Fields** - An array of column headings is defined with unique "name" keys.
 ```
@@ -140,7 +141,7 @@ These three sections are combined to form the [complete profile](#Example-Profil
 ## Example Profile
 
     {
-    "schemaVersion": "0.7",
+    "schemaVersion": "0.16",
     "fields": [
         {
             "name": "Column 1",
@@ -668,7 +669,6 @@ While it's not prohibited, wrapping conditional constraints in any other kind of
 
 
 
-
 # Custom Generators
 <div id="custom-generator"></div>
 
@@ -703,6 +703,22 @@ To use your custom generator you add it to the field definition in your profile 
 This will use the "lorem ipsum" example custom generator.
 
 To use your own, put the name of your generator instead of "lorem ipsum"
+
+## using Custom Generators as Constraint
+<div id="using-custom-generator-as-constraint"></div>
+
+You can also use custom generators as constraints 
+
+
+```javascript
+{ "field": "field1", "generator": "lorem ipsum" }
+```
+
+Custom generators can be used in "anyOf" grammatical constraints, as well as in the "then" and "else" parts of conditional constraints
+
+To combine generators with sets and equalTo, you will need to create a 'matchingFunction' when building the custom generator. Which should be a function that returns true if a value is one the custom generator could produce. 
+
+To be able negate the custom generator, or use in the 'if' section of an if then statement, you must define the 'negated Generator' when building the custom generator. Which should return values that the custom generator should not produce. 
 
 # Running a Profile
 <div id="Running-a-Profile"></div>
