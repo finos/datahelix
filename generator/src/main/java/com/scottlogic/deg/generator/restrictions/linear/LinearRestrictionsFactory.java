@@ -18,6 +18,7 @@ package com.scottlogic.deg.generator.restrictions.linear;
 import com.scottlogic.deg.common.profile.Granularity;
 
 import java.math.BigDecimal;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
 
 import static com.scottlogic.deg.common.util.Defaults.*;
@@ -37,6 +38,14 @@ public class LinearRestrictionsFactory {
         OffsetDateTime inclusiveMin = getInclusiveMin(min, granularity, ISO_MIN_DATE);
         OffsetDateTime inclusiveMax = getInclusiveMax(max, granularity, ISO_MAX_DATE);
         return new LinearRestrictions<>(inclusiveMin, inclusiveMax, granularity);
+    }
+
+    public static LinearRestrictions<LocalTime> createDefaultTimeRestrictions() {
+        return createTimeRestrictions(DEFAULT_TIME_GRANULARITY);
+    }
+
+    public static LinearRestrictions<LocalTime> createTimeRestrictions(Granularity<LocalTime> granularity) {
+        return new LinearRestrictions<>(LocalTime.MIN, LocalTime.MAX, granularity);
     }
 
     public static LinearRestrictions<BigDecimal> createDefaultNumericRestrictions() {
