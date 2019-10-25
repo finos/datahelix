@@ -18,7 +18,7 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
-import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
+import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.restrictions.linear.*;
 import org.junit.Assert;
@@ -28,7 +28,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Arrays;
-import java.util.Optional;
+import java.util.Set;
 
 import static com.scottlogic.deg.common.profile.FieldType.*;
 import static com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory.forMaxLength;
@@ -37,12 +37,15 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class FieldSpecTests {
 
     @Test
     void equals_objTypeIsNotFieldSpec_returnsFalse() {
-        FieldSpec fieldSpec = FieldSpec.fromType(FieldType.STRING);
+        FieldSpec fieldSpec = FieldSpecFactory.fromType(FieldType.STRING);
 
         boolean result = fieldSpec.equals("Test");
 
@@ -54,9 +57,9 @@ class FieldSpecTests {
 
     @Test
     void equals_fieldSpecHasSetRestrictionsAndOtherObjectSetRestrictionsNull_returnsFalse() {
-        FieldSpec fieldSpec = FieldSpec.fromList(DistributedList.singleton("whitelist"));
+        FieldSpec fieldSpec = FieldSpecFactory.fromList(DistributedList.singleton("whitelist"));
 
-        boolean result = fieldSpec.equals(FieldSpec.fromType(FieldType.STRING));
+        boolean result = fieldSpec.equals(FieldSpecFactory.fromType(FieldType.STRING));
 
         assertFalse(
             "Expected that when the field spec has set restrictions and the other object set restrictions are null a false value should be returned but was true",
@@ -66,10 +69,10 @@ class FieldSpecTests {
 
     @Test
     void equals_fieldSpecSetRestrictionsNullAndOtherObjectHasSetRestrictions_returnsFalse() {
-        FieldSpec fieldSpec = FieldSpec.fromType(FieldType.STRING);
+        FieldSpec fieldSpec = FieldSpecFactory.fromType(FieldType.STRING);
 
         boolean result = fieldSpec.equals(
-            FieldSpec.fromList(DistributedList.singleton("whitelist")));
+            FieldSpecFactory.fromList(DistributedList.singleton("whitelist")));
 
         assertFalse(
             "Expected that when the field spec does not have set restrictions and the other object has set restrictions a false value is returned but was true",
@@ -79,10 +82,10 @@ class FieldSpecTests {
 
     @Test
     void equals_fieldSpecSetRestrictionsNotNullAndOtherObjectSetRestrictionsNotNullAndSetRestrictionsAreNotEqual_returnsFalse() {
-        FieldSpec fieldSpec = FieldSpec.fromList(DistributedList.uniform(Arrays.asList(1, 2, 3)));
+        FieldSpec fieldSpec = FieldSpecFactory.fromList(DistributedList.uniform(Arrays.asList(1, 2, 3)));
 
         boolean result = fieldSpec.equals(
-            FieldSpec.fromList(DistributedList.uniform(Arrays.asList(1, 2, 3, 4))));
+            FieldSpecFactory.fromList(DistributedList.uniform(Arrays.asList(1, 2, 3, 4))));
 
         assertFalse(
             "Expected that when the items in the set restrictions are not equal a false value is returned but was true",
@@ -95,13 +98,13 @@ class FieldSpecTests {
         LinearRestrictions<BigDecimal> firstFieldSpecRestrictions = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(1), true),
             new Limit<>(new BigDecimal(20), true));
-        FieldSpec fieldSpec = FieldSpec.fromRestriction(firstFieldSpecRestrictions);
+        FieldSpec fieldSpec = FieldSpecFactory.fromRestriction(firstFieldSpecRestrictions);
 
         LinearRestrictions<BigDecimal> secondFieldSpecRestrictions = LinearRestrictionsFactory.createNumericRestrictions(
             new Limit<>(new BigDecimal(5), true) ,
             new Limit<>(new BigDecimal(20), true));
         boolean result = fieldSpec.equals(
-            FieldSpec.fromRestriction(secondFieldSpecRestrictions)
+            FieldSpecFactory.fromRestriction(secondFieldSpecRestrictions)
         );
 
         assertFalse(
@@ -112,7 +115,7 @@ class FieldSpecTests {
 
     @Test
     public void shouldCreateNewInstanceWithNullRestrictions() {
-        FieldSpec original = FieldSpec.fromType(FieldType.STRING);
+        FieldSpec original = FieldSpecFactory.fromType(FieldType.STRING);
         FieldSpec augmentedFieldSpec = original.withNotNull();
 
         Assert.assertNotSame(original, augmentedFieldSpec);
@@ -120,8 +123,8 @@ class FieldSpecTests {
 
     @Test
     public void emptyFieldSpecsShouldBeEqualAndHaveSameHashCode() {
-        FieldSpec first = FieldSpec.fromType(FieldType.STRING);
-        FieldSpec second = FieldSpec.fromType(FieldType.STRING);
+        FieldSpec first = FieldSpecFactory.fromType(FieldType.STRING);
+        FieldSpec second = FieldSpecFactory.fromType(FieldType.STRING);
 
         Assert.assertThat(first, equalTo(second));
         Assert.assertThat(first.hashCode(), equalTo(second.hashCode()));
@@ -129,8 +132,8 @@ class FieldSpecTests {
 
     @Test
     public void fieldSpecsWithEqualSetRestrictionsShouldBeEqual() {
-        FieldSpec a = FieldSpec.fromList(DistributedList.singleton("same"));
-        FieldSpec b = FieldSpec.fromList(DistributedList.singleton("same"));
+        FieldSpec a = FieldSpecFactory.fromList(DistributedList.singleton("same"));
+        FieldSpec b = FieldSpecFactory.fromList(DistributedList.singleton("same"));
 
         Assert.assertThat(a, equalTo(b));
         Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
@@ -138,8 +141,8 @@ class FieldSpecTests {
 
     @Test
     public void fieldSpecsWithUnequalSetRestrictionsShouldBeUnequal() {
-        FieldSpec a = FieldSpec.fromList(DistributedList.singleton("not same"));
-        FieldSpec b = FieldSpec.fromList(DistributedList.singleton("different"));
+        FieldSpec a = FieldSpecFactory.fromList(DistributedList.singleton("not same"));
+        FieldSpec b = FieldSpecFactory.fromList(DistributedList.singleton("different"));
 
         Assert.assertThat(a, not(equalTo(b)));
     }
@@ -148,8 +151,8 @@ class FieldSpecTests {
     public void fieldSpecsWithEqualRestrictionsShouldBeEqual() {
         TypedRestrictions aRestrictions = new MockedRestrictions(true);
         TypedRestrictions bRestrictions = new MockedRestrictions(true);
-        FieldSpec a = FieldSpec.fromRestriction(aRestrictions);
-        FieldSpec b = FieldSpec.fromRestriction(bRestrictions);
+        FieldSpec a = FieldSpecFactory.fromRestriction(aRestrictions);
+        FieldSpec b = FieldSpecFactory.fromRestriction(bRestrictions);
 
         Assert.assertThat(a, equalTo(b));
         Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
@@ -159,16 +162,16 @@ class FieldSpecTests {
     public void fieldSpecsWithUnequalRestrictionsShouldBeUnequal() {
         TypedRestrictions aRestrictions = new MockedRestrictions(false);
         TypedRestrictions bRestrictions = new MockedRestrictions(false);
-        FieldSpec a = FieldSpec.fromRestriction(aRestrictions);
-        FieldSpec b = FieldSpec.fromRestriction(bRestrictions);
+        FieldSpec a = FieldSpecFactory.fromRestriction(aRestrictions);
+        FieldSpec b = FieldSpecFactory.fromRestriction(bRestrictions);
 
         Assert.assertThat(a, not(equalTo(b)));
     }
 
     @Test
     public void fieldSpecsWithEqualTypeRestrictionsShouldBeEqual() {
-        FieldSpec a = FieldSpec.fromType(FieldType.STRING);
-        FieldSpec b = FieldSpec.fromType(FieldType.STRING);
+        FieldSpec a = FieldSpecFactory.fromType(FieldType.STRING);
+        FieldSpec b = FieldSpecFactory.fromType(FieldType.STRING);
 
         Assert.assertThat(a, equalTo(b));
         Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
@@ -176,8 +179,8 @@ class FieldSpecTests {
 
     @Test
     public void fieldSpecsWithEqualNullRestrictionsShouldBeEqual() {
-        FieldSpec a = FieldSpec.fromType(FieldType.STRING).withNotNull();
-        FieldSpec b = FieldSpec.fromType(FieldType.STRING).withNotNull();
+        FieldSpec a = FieldSpecFactory.fromType(FieldType.STRING).withNotNull();
+        FieldSpec b = FieldSpecFactory.fromType(FieldType.STRING).withNotNull();
 
         Assert.assertThat(a, equalTo(b));
         Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
@@ -185,8 +188,8 @@ class FieldSpecTests {
 
     @Test
     public void fieldSpecsWithUnequalNullRestrictionsShouldBeUnequal() {
-        FieldSpec a = FieldSpec.fromType(FieldType.STRING).withNotNull();
-        FieldSpec b = FieldSpec.nullOnly();
+        FieldSpec a = FieldSpecFactory.fromType(FieldType.STRING).withNotNull();
+        FieldSpec b = FieldSpecFactory.nullOnly();
 
         Assert.assertThat(a, not(equalTo(b)));
     }
@@ -194,24 +197,24 @@ class FieldSpecTests {
     @Test
     void permitsRejectsInvalidNumeric() {
         LinearRestrictions<BigDecimal> numeric = LinearRestrictionsFactory.createNumericRestrictions(new Limit<>(BigDecimal.TEN, true), NUMERIC_MAX_LIMIT);
-        FieldSpec spec = FieldSpec.fromRestriction(numeric);
+        FieldSpec spec = FieldSpecFactory.fromRestriction(numeric);
 
-        assertFalse(spec.permits(BigDecimal.ONE));
+        assertFalse(spec.canCombineWithWhitelistValue(BigDecimal.ONE));
     }
 
     @Test
     void permitsRejectsInvalidDateTime() {
         LinearRestrictions<OffsetDateTime> dateTime = LinearRestrictionsFactory.createDefaultDateTimeRestrictions();
-        FieldSpec spec = FieldSpec.fromRestriction(dateTime);
+        FieldSpec spec = FieldSpecFactory.fromRestriction(dateTime);
 
         OffsetDateTime time = OffsetDateTime.of(100, 1, 1, 1, 1, 1, 1, ZoneOffset.UTC);
 
-        assertFalse(spec.permits(time.plusNanos(1_000_000)));
+        assertFalse(spec.canCombineWithWhitelistValue(time.plusNanos(1_000_000)));
     }
 
     @Test
     void fromType_whenDateTime_createDefaultDateTimeRestriction() {
-        FieldSpec actual = FieldSpec.fromType(DATETIME);
+        RestrictionsFieldSpec actual = FieldSpecFactory.fromType(DATETIME);
         LinearRestrictions<OffsetDateTime> expected = LinearRestrictionsFactory.createDefaultDateTimeRestrictions();
 
         Assert.assertEquals(expected, actual.getRestrictions());
@@ -219,7 +222,7 @@ class FieldSpecTests {
 
     @Test
     void fromType_whenNumeric_createDefaultNumericRestriction() {
-        FieldSpec actual = FieldSpec.fromType(NUMERIC);
+        RestrictionsFieldSpec actual = FieldSpecFactory.fromType(NUMERIC);
         LinearRestrictions<BigDecimal> expected = LinearRestrictionsFactory.createDefaultNumericRestrictions();
 
         Assert.assertEquals(expected, actual.getRestrictions());
@@ -227,7 +230,7 @@ class FieldSpecTests {
 
     @Test
     void fromType_whenString_createDefaultStringRestriction() {
-        FieldSpec actual = FieldSpec.fromType(STRING);
+        RestrictionsFieldSpec actual = FieldSpecFactory.fromType(STRING);
         StringRestrictions expected = forMaxLength(1000);
 
         Assert.assertEquals(expected, actual.getRestrictions());
@@ -235,39 +238,26 @@ class FieldSpecTests {
 
     @Test
     void permitsRejectsInvalidString() {
-        StringRestrictions string = new StringRestrictions() {
-            @Override
-            public Optional<StringRestrictions> intersect(StringRestrictions other) {
-                return null;
-            }
+        TypedRestrictions mockTypedRestrictions = mock(TypedRestrictions.class);
+        when(mockTypedRestrictions.match(any())).thenReturn(false);
 
-            @Override
-            public boolean match(String x) {
-                return false;
-            }
+        FieldSpec spec = FieldSpecFactory.fromRestriction(mockTypedRestrictions);
 
-            @Override
-            public StringGenerator createGenerator() {
-                return null;
-            }
-        };
-        FieldSpec spec = FieldSpec.fromRestriction(string);
-
-        assertFalse(spec.permits("Anything"));
+        assertFalse(spec.canCombineWithWhitelistValue("Anything"));
     }
 
     @Test
     void permits_whenNotInWhiteList_returnsFalse() {
-        FieldSpec spec = FieldSpec.fromList(DistributedList.singleton(10));
+        FieldSpec spec = FieldSpecFactory.fromList(DistributedList.singleton(10));
 
-        assertFalse(spec.permits(11));
+        assertFalse(spec.canCombineWithWhitelistValue(11));
     }
 
     @Test
     void permits_whenInWhiteList_returnsTrue() {
-        FieldSpec spec = FieldSpec.fromList(DistributedList.singleton(10));
+        FieldSpec spec = FieldSpecFactory.fromList(DistributedList.singleton(10));
 
-        assertTrue(spec.permits(10));
+        assertTrue(spec.canCombineWithWhitelistValue(10));
     }
 
     private class MockedRestrictions implements TypedRestrictions {
@@ -290,6 +280,11 @@ class FieldSpecTests {
         @Override
         public boolean match(Object o) {
             return false;
+        }
+
+        @Override
+        public FieldValueSource createFieldValueSource(Set blacklist) {
+            return null;
         }
     }
 }

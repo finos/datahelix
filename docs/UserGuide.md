@@ -25,7 +25,7 @@
         2. [inSet](#predicate-inset)
         2. [inMap](#predicate-inmap)
         3. [null](#predicate-null)
-    3. [Textual constraints](#Textual-constraints)
+    3. [String constraints](#String-constraints)
         1. [matchingRegex](#predicate-matchingregex)
         2. [containingRegex](#predicate-containingregex)
         3. [ofLength](#predicate-oflength)
@@ -52,7 +52,7 @@
     2. [anyOf](#anyOf)
     3. [allOf](#allOf)
     4. [if](#if)
-    
+
 7. [Running a Profile](#Running-a-Profile)
     1. [Command Line Arguments](#Command-Line-Arguments)
         1. [Command Line Arguments for Generate Mode](#Command-Line-Arguments-for-Generate-Mode)
@@ -192,7 +192,19 @@ This is a required property.
 
 ## `type`
 
-The data type of the field. See [Data types](#Data-Types) for more on how types work within DataHelix. Valid options are `decimal`, `integer`, `string`, `datetime`, `ISIN`, `SEDOL`, `CUSIP`, `RIC`, `firstname`, `lastname` or `fullname`.
+The data type of the field. See [Data types](#Data-Types) for more on how types work within DataHelix. Valid options are
+* `decimal`
+*  `integer`
+*  `string`
+*  `date`
+*  `datetime`
+*  `ISIN`
+*  `SEDOL`
+*  `CUSIP`
+*  `RIC`
+*  `firstname`
+*  `lastname`
+*  `fullname`
 
  This is a required property.
 
@@ -233,8 +245,6 @@ Sets the field as unique. Unique fields can not be used within [grammatical cons
 
 
 # Data Types
-
-DataHelix currently recognises four core data types: _string_, _datetime_, _integer_ and _decimal_.  It also recognises more complex data types which are extensions of these core types.  At present, all such data types are extensions of the _string_ type.
 
 ## Integer/Decimal
 
@@ -280,7 +290,6 @@ that is **_`midnight on the 1st January 0001`_** to **_`1 millisecond to midnigh
 The granularity of a DateTime field is a measure of how small the distinctions in that field can be; it is the smallest positive unit of which every valid value is a multiple. For instance:
 
 - if a DateTime field has a granularity of years, it can only be satisfied by dates that are complete years (e.g. `2018-01-01T00:00:00.000Z`)
-- if a decimal field has a granularity of days, it can be satisfied by (for example) `2018-02-02T00:00:00.000Z` or `2018-02-03T00:00:00.000Z`, but not `2018-02-02T01:00:00.000Z` or `2018-02-02T00:00:00.001Z`
 
 Granularities must be one of the units: millis, seconds, minutes, hours, days, months, years.
 
@@ -288,21 +297,12 @@ DateTime fields currently default to the most precise granularity of millisecond
 
 Note that granularity concerns which values are valid, not how they're presented. All values will be output with the full format defined by [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601), so that a value granular to years will still be output as (e.g.) `0001-01-01T00:00:00.000Z`, rather than `0001` or `0001-01-01`.
 
-## Custom Data Types
+## Date
+The date type can be used as a shorthand to create a [datetime](#DateTime) with a granularity and formatting of days. Dates should be specified in profiles as:
 
-Data Helix currently recognises and can generate a number of types of financial code:
-
-- ISIN
-- SEDOL
-- CUSIP
-- RIC
-
-Data Helix can generate data containing typical real names by defining a field as being of the types:
-
-- firstname
-- lastname
-- fullname
-
+```javascript
+"2001-01-01"
+```
 # Predicate constraints
 
 ## Theory
@@ -411,12 +411,12 @@ Scotland, Edinburgh
 ### `null` _(field)_
 
 ```javascript
-{ "null": "price" }
+{ "field": "price", "isNull" : true }
 ```
 
 Is satisfied if `field` is null or absent.
 
-## Textual constraints
+## String constraints
 
 <div id="predicate-matchingregex"></div>
 
@@ -618,7 +618,7 @@ See [set restriction and generation](user/SetRestrictionAndGeneration.md) for an
 ## `not`
 
 ```javascript
-{ "not": { "null": "foo" } }
+{ "not": { "field": "foo", "equalTo": "bar" } }
 ```
 
 Wraps a constraint. Is satisfied if, and only if, its inner constraint is _not_ satisfied.
@@ -627,7 +627,7 @@ Wraps a constraint. Is satisfied if, and only if, its inner constraint is _not_ 
 
 ```javascript
 { "anyOf": [
-    { "null": "foo" },
+    { "field": "foo", "isNull": true },
     { "field": "foo", "equalTo": 0 }
 ]}
 ```

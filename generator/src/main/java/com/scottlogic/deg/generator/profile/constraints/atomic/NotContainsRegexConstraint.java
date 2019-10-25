@@ -2,6 +2,7 @@ package com.scottlogic.deg.generator.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 
 import java.util.Objects;
@@ -28,7 +29,7 @@ public class NotContainsRegexConstraint implements AtomicConstraint {
 
     @Override
     public FieldSpec toFieldSpec() {
-        return FieldSpec.fromRestriction(StringRestrictionsFactory.forStringContaining(regex, true));
+        return FieldSpecFactory.fromRestriction(StringRestrictionsFactory.forStringContaining(regex, true));
     }
 
     @Override

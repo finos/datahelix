@@ -60,15 +60,15 @@ public class RowsAbsentMatcher extends BaseMatcher<List<List<Object>>> {
                 .collect(Collectors.joining(", ")));
 
         description.appendText("\n");
-        description.appendList("   found: ",", ", "", foundRowMatchers);
+        description.appendList("   found: ", ", ", "", foundRowMatchers);
     }
 
     private Collection<RowMatcher> getFoundRowMatchers(List<List<Object>> actualRows) {
         Collection<RowMatcher> expectedMatchers = getExpectedMatchers();
         ArrayList<RowMatcher> missingRowMatchers = new ArrayList<>();
 
-        for (RowMatcher expectedMatcher : expectedMatchers){
-            if (actualRows.stream().anyMatch(expectedMatcher::matches)){
+        for (RowMatcher expectedMatcher : expectedMatchers) {
+            if (actualRows.stream().anyMatch(expectedMatcher::matches)) {
                 missingRowMatchers.add(expectedMatcher);
             }
         }

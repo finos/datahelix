@@ -20,6 +20,7 @@ package com.scottlogic.deg.generator.generation.grouped;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
@@ -182,6 +183,6 @@ class RowSpecGrouperTest {
     }
 
     private static Map<Field, FieldSpec> fieldSpecMapOf(Field... fields) {
-        return Arrays.stream(fields).collect(Collectors.toMap(Function.identity(), x -> FieldSpec.fromType(x.getType())));
+        return Arrays.stream(fields).collect(Collectors.toMap(Function.identity(), x -> FieldSpecFactory.fromType(x.getType())));
     }
 }

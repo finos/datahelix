@@ -34,7 +34,7 @@ public class CucumberErrorReporter extends ErrorReporter {
     }
 
     @Override
-    public void displayValidation(ValidationException e){
+    public void displayValidation(ValidationException e) {
         state.testExceptions.addAll(e.errorMessages.stream().map(ValidationException::new).collect(Collectors.toList()));
     }
 

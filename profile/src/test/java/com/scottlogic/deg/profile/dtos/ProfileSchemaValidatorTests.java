@@ -247,8 +247,8 @@ public abstract class ProfileSchemaValidatorTests {
             "        }," +
             "        {" +
             "          \"allOf\": [" +
-            "            { \"null\": \"field2\" }," +
-            "            { \"not\": { \"null\": \"field1\" } }" +
+            "            { \"field\": \"field2\", \"isNull\": true }," +
+            "            { \"not\": { \"field\": \"field1\", \"isNull\": true } }" +
             "          ]" +
             "        } ] } ]" +
             "}";
@@ -343,7 +343,7 @@ public abstract class ProfileSchemaValidatorTests {
             "      \"constraints\": [" +
             "        { \"not\": { \"field\": \"field1\",  \"shorterThan\": 19 } }," +
             "        { \"not\": { \"field\": \"field1\",  \"longerThan\": 6 } }," +
-            "        { \"not\": { \"null\": \"field1\" } }," +
+            "        { \"not\": { \"field\": \"field1\", \"isNull\": true } }," +
             "        { \"not\": { \"field\": \"field1\",  \"inSet\": [\"1\", 2] } }," +
             "        { \"not\": { \"field\": \"field2\",  \"greaterThan\": 43 } }," +
             "        { \"not\": { \"field\": \"field1\",  \"lessThan\": 78 } }," +
@@ -372,7 +372,7 @@ public abstract class ProfileSchemaValidatorTests {
             "      \"constraints\": [" +
             "        { \"field\": \"field1\",  \"shorterThan\": 19 }," +
             "        { \"field\": \"field1\",  \"longerThan\": 6 }," +
-            "        { \"null\": \"field1\" }," +
+            "        { \"field\": \"field1\", \"isNull\": true }," +
             "        { \"field\": \"field1\",  \"inSet\": [\"1\", 2] }," +
             "        { \"field\": \"field2\",  \"greaterThan\": 43 }," +
             "        { \"field\": \"field1\",  \"lessThan\": 78 }," +
@@ -402,7 +402,7 @@ public abstract class ProfileSchemaValidatorTests {
             "        { \"allOf\": [" +
             "            { \"field\": \"field1\",  \"shorterThan\": 19 }," +
             "            { \"field\": \"field1\",  \"longerThan\": 6 }," +
-            "            { \"null\": \"field1\" }," +
+            "            { \"field\": \"field1\", \"isNull\": true }," +
             "            { \"field\": \"field1\",  \"inSet\": [\"1\", 2] }," +
             "            { \"field\": \"field2\",  \"greaterThan\": 43 }," +
             "            { \"field\": \"field1\",  \"lessThan\": 78 }," +
@@ -422,7 +422,7 @@ public abstract class ProfileSchemaValidatorTests {
             "        { \"anyOf\": [" +
             "            { \"field\": \"field1\",  \"shorterThan\": 19 }," +
             "            { \"field\": \"field1\",  \"longerThan\": 6 }," +
-            "            { \"null\": \"field1\" }," +
+            "            { \"field\": \"field1\", \"isNull\": true }," +
             "            { \"field\": \"field1\",  \"inSet\": [\"1\", 2] }," +
             "            { \"field\": \"field2\",  \"greaterThan\": 43 }," +
             "            { \"field\": \"field1\",  \"lessThan\": 78 }," +

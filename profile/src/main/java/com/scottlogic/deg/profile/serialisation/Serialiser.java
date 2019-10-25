@@ -16,11 +16,9 @@
 
 package com.scottlogic.deg.profile.serialisation;
 
-import java.io.IOException;
+public interface Serialiser<T> {
+    String serialise(T dto);
 
-public interface Serialiser<TDto> {
-    String serialise(TDto dto) throws IOException;
-
-    TDto deserialise(String json) throws IOException;
+    T deserialise(String json);
 }
 

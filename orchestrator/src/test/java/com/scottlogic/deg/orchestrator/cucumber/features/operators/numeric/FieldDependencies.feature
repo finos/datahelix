@@ -1,19 +1,15 @@
 Feature:As a  User
-        I can specify that a numeric value is greater than, less than or equal to a numeric value in a different field
-        So that I can setup the test data to meet my requirements
+  I can specify that a numeric value is greater than, less than or equal to a numeric value in a different field
+  So that I can setup the test data to meet my requirements
 
   Background:
     Given the generation strategy is full
     And the combination strategy is exhaustive
-    And there is a field foo
+    And there is a non nullable field foo
     And foo has type "integer"
     And foo is greater than 0
-    And foo is anything but null
-    And there is a field bar
+    And there is a non nullable field bar
     And bar has type "integer"
-    And bar is anything but null
-
-
 ###Integer
   Scenario: The one where a user can specify that one number should be greater than another number
     Given bar is greater than 0
@@ -21,10 +17,10 @@ Feature:As a  User
     And the generator can generate at most 5 rows
     And bar is greater than field foo
     Then the following data should be generated:
-      | foo| bar|
-      | 1  | 2  |
-      | 1  | 3  |
-      | 2  | 3  |
+      | foo | bar |
+      | 1   | 2   |
+      | 1   | 3   |
+      | 2   | 3   |
 
   Scenario: The one where a user can specify that one number should be greater than or equal to another number
     Given bar is greater than 0
@@ -32,12 +28,12 @@ Feature:As a  User
     And the generator can generate at most 5 rows
     And bar is greater than or equal to field foo
     Then the following data should be generated:
-      | foo| bar|
-      | 1  | 1  |
-      | 1  | 2  |
-      | 1  | 3  |
-      | 2  | 2  |
-      | 2  | 3  |
+      | foo | bar |
+      | 1   | 1   |
+      | 1   | 2   |
+      | 1   | 3   |
+      | 2   | 2   |
+      | 2   | 3   |
 
   Scenario: The one where a user can specify that one number should be less than another number
     Given foo is less than 3
@@ -45,8 +41,8 @@ Feature:As a  User
     And the generator can generate at most 3 rows
     And bar is less than field foo
     Then the following data should be generated:
-      | foo| bar|
-      | 2  | 1  |
+      | foo | bar |
+      | 2   | 1   |
 
   Scenario: The one where a user can specify that one number should be less than or equal to another number
     Given the combination strategy is exhaustive
@@ -54,20 +50,20 @@ Feature:As a  User
     And bar is greater than 0
     And bar is less than or equal to field foo
     Then the following data should be generated:
-      | foo| bar|
-      | 1  | 1  |
-      | 2  | 1  |
-      | 2  | 2  |
+      | foo | bar |
+      | 1   | 1   |
+      | 2   | 1   |
+      | 2   | 2   |
 
   Scenario: The one where a user can specify that one number should be equal to another number
     Given bar is greater than 0
     And the generator can generate at most 3 rows
     And bar is equal to field foo
     Then the following data should be generated:
-      | foo| bar|
-      | 1  | 1  |
-      | 2  | 2  |
-      | 3  | 3  |
+      | foo | bar |
+      | 1   | 1   |
+      | 2   | 2   |
+      | 3   | 3   |
 
   Scenario: The one where a user can specify that one number should be equal to another number with a positive offset
     Given bar is greater than 0
@@ -82,10 +78,10 @@ Feature:As a  User
         }
       """
     Then the following data should be generated:
-      | foo| bar|
-      | 1  | 4  |
-      | 2  | 5  |
-      | 3  | 6  |
+      | foo | bar |
+      | 1   | 4   |
+      | 2   | 5   |
+      | 3   | 6   |
 
   Scenario: The one where a user can specify that one number should be equal to another number with a negative offset
     Given the generator can generate at most 3 rows
@@ -99,10 +95,10 @@ Feature:As a  User
         }
       """
     Then the following data should be generated:
-      | foo| bar|
-      | 1  | -2 |
-      | 2  | -1 |
-      | 3  | 0  |
+      | foo | bar |
+      | 1   | -2  |
+      | 2   | -1  |
+      | 3   | 0   |
 
   @ignore #pending development of #1235 - Allow a Numeric Field to Depend On Another Numeric Field
   Scenario: The one where a user can specify that one number should be greater than another number with a positive offset
@@ -119,10 +115,10 @@ Feature:As a  User
         }
       """
     Then the following data should be generated:
-      | foo| bar|
-      | 1  | 4  |
-      | 2  | 5  |
-      | 3  | 6  |
+      | foo | bar |
+      | 1   | 4   |
+      | 2   | 5   |
+      | 3   | 6   |
 
   @ignore #pending development of #1235 - Allow a Numeric Field to Depend On Another Numeric Field
   Scenario: The one where a user can specify that one number should be less than another number with a negative offset
@@ -138,13 +134,11 @@ Feature:As a  User
         }
       """
     Then the following data should be generated:
-      | foo| bar|
-      | 1  | -2 |
-      | 2  | -1 |
-      | 3  | 0  |
-
+      | foo | bar |
+      | 1   | -2  |
+      | 2   | -1  |
+      | 3   | 0   |
      ###Exhaustive
-
   Scenario: The one where a user can specify that one number should be greater than another number - exhaustive
     Given the combination strategy is exhaustive
     And bar is greater than 0
@@ -152,11 +146,10 @@ Feature:As a  User
     And the generator can generate at most 6 rows
     And bar is greater than field foo
     Then the following data should be generated:
-      | foo| bar|
-      | 1  | 2  |
-      | 1  | 3  |
-      | 1  | 4  |
-      | 2  | 3  |
-      | 2  | 4  |
-      | 3  | 4  |
-
+      | foo | bar |
+      | 1   | 2   |
+      | 1   | 3   |
+      | 1   | 4   |
+      | 2   | 3   |
+      | 2   | 4   |
+      | 3   | 4   |

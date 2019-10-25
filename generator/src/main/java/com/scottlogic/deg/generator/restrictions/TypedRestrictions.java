@@ -16,7 +16,13 @@
 
 package com.scottlogic.deg.generator.restrictions;
 
+import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
+
+import java.util.Set;
+
 public interface TypedRestrictions<T> {
 
     boolean match(T o);
+
+    FieldValueSource<T> createFieldValueSource(Set<T> blacklist);
 }

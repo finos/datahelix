@@ -7,13 +7,11 @@ Feature: User can create data across multiple fields for all combinations availa
   Scenario: Running an exhaustive combination strategy with roman alphabet character (a-z) strings should be successful
     Given the generation strategy is full
     And the combination strategy is exhaustive
-    And the following fields exist:
+    And the following non nullable fields exist:
       | foo |
       | bar |
     And foo has type "string"
-    And foo is anything but null
     And bar has type "string"
-    And bar is anything but null
     And foo is in set:
       | "a" |
       | "b" |
@@ -28,13 +26,11 @@ Feature: User can create data across multiple fields for all combinations availa
       | "b" | "d" |
 
   Scenario: Running an exhaustive combination strategy with roman numeric character (0-9) strings should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo |
       | bar |
     And foo has type "string"
-    And foo is anything but null
     And bar has type "string"
-    And bar is anything but null
     And foo is in set:
       | "0" |
       | "1" |
@@ -49,13 +45,11 @@ Feature: User can create data across multiple fields for all combinations availa
       | "1" | "7" |
 
   Scenario: Running an exhaustive combination strategy with plain white spaces should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo |
       | bar |
     And foo has type "string"
-    And foo is anything but null
     And bar has type "string"
-    And bar is anything but null
     And foo is in set:
       | " " |
       | "x" |
@@ -70,13 +64,11 @@ Feature: User can create data across multiple fields for all combinations availa
       | "x" | "y" |
 
   Scenario: Running an exhaustive combination strategy with valid integer values should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo |
       | bar |
     And foo has type "integer"
-    And foo is anything but null
     And bar has type "integer"
-    And bar is anything but null
     And foo is in set:
       | 999 |
       | -12 |
@@ -91,13 +83,11 @@ Feature: User can create data across multiple fields for all combinations availa
       | -12 | 0   |
 
   Scenario: Running an exhaustive combination strategy with valid decimal values should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo |
       | bar |
     And foo has type "decimal"
-    And foo is anything but null
     And bar has type "decimal"
-    And bar is anything but null
     And foo is in set:
       | 999 |
       | -12 |
@@ -112,13 +102,11 @@ Feature: User can create data across multiple fields for all combinations availa
       | -12 | 0     |
 
   Scenario: Running an exhaustive combination strategy with valid date values should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo |
       | bar |
     And foo has type "datetime"
-    And foo is anything but null
     And bar has type "datetime"
-    And bar is anything but null
     And foo is in set:
       | 2018-12-04T14:00:00.000Z |
       | 2018-12-05T14:00:00.000Z |
@@ -133,30 +121,26 @@ Feature: User can create data across multiple fields for all combinations availa
       | 2018-12-05T14:00:00.000Z | 2010-12-31T23:59:00.000Z |
 
   Scenario: Running an exhaustive combination strategy with invalid date values should fail with an appropriate error message
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo |
       | bar |
     And foo has type "datetime"
-    And foo is anything but null
     And bar has type "datetime"
-    And bar is anything but null
     And foo is in set:
       | 2018-12-99T14:00:00.000Z |
       | 2018-12-05T14:00:00.000Z |
     And bar is in set:
       | 2010-01-01T00:00:00.000Z |
       | 2010-12-31T23:59:00.000Z |
-    Then the profile is invalid because "Date string '\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:00.000Z' must be in ISO-8601 format: yyyy-MM-ddTHH:mm:ss.SSS\[Z\] between \(inclusive\) 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z"
+    Then the profile is invalid because "Date string '2018-12-99T14:00:00.000Z' must be in ISO-8601 format: Either yyyy-MM-ddTHH:mm:ss.SSS\[Z\] between 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z or yyyy-mm-dd between 0001-01-01 and 9999-12-31"
     And no data is created
 
   Scenario: Running an exhaustive combination strategy with null values (null) should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo |
       | bar |
     And foo has type "integer"
-    And foo is anything but null
     And bar has type "integer"
-    And bar is anything but null
     And foo is in set:
       | 0 |
       | 1 |
@@ -166,13 +150,11 @@ Feature: User can create data across multiple fields for all combinations availa
     Then the profile is invalid because "Cannot create an IsInSetConstraint for field 'bar' with a set containing null"
 
   Scenario: Running an exhaustive combination strategy should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo |
       | bar |
     And foo has type "integer"
-    And foo is anything but null
     And bar has type "integer"
-    And bar is anything but null
     And foo is in set:
       | 0 |
       | 1 |
@@ -187,13 +169,11 @@ Feature: User can create data across multiple fields for all combinations availa
       | 1   | 1   |
 
   Scenario: Running an exhaustive combination strategy with a string and an integer field should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo |
       | bar |
     And foo has type "string"
-    And foo is anything but null
     And bar has type "integer"
-    And bar is anything but null
     And foo is in set:
       | "x" |
       | "y" |
@@ -208,13 +188,11 @@ Feature: User can create data across multiple fields for all combinations availa
       | "y" | 1   |
 
   Scenario: Running an exhaustive combination strategy with a string and a decimal field should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo |
       | bar |
     And foo has type "string"
-    And foo is anything but null
     And bar has type "decimal"
-    And bar is anything but null
     And foo is in set:
       | "x" |
       | "y" |
@@ -229,13 +207,11 @@ Feature: User can create data across multiple fields for all combinations availa
       | "y" | 1   |
 
   Scenario: Running an exhaustive combination strategy with a string and a datetime field should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo |
       | bar |
     And foo has type "string"
-    And foo is anything but null
     And bar has type "datetime"
-    And bar is anything but null
     And foo is in set:
       | "x" |
       | "y" |
@@ -250,13 +226,11 @@ Feature: User can create data across multiple fields for all combinations availa
       | "y" | 2010-12-31T23:59:00.000Z |
 
   Scenario: Running an exhaustive combination strategy with an integer and a datetime field should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo |
       | bar |
     And foo has type "integer"
-    And foo is anything but null
     And bar has type "datetime"
-    And bar is anything but null
     And foo is in set:
       | 500 |
       | 1   |
@@ -271,13 +245,11 @@ Feature: User can create data across multiple fields for all combinations availa
       | 1   | 2010-12-31T23:59:00.000Z |
 
   Scenario: Running an exhaustive combination strategy with a decimal and a datetime field should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo |
       | bar |
     And foo has type "decimal"
-    And foo is anything but null
     And bar has type "datetime"
-    And bar is anything but null
     And foo is in set:
       | 500 |
       | 1.1 |
@@ -292,22 +264,17 @@ Feature: User can create data across multiple fields for all combinations availa
       | 1.1 | 2010-12-31T23:59:00.000Z |
 
   Scenario: Running an exhaustive combination strategy across five fields should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo1 |
       | foo2 |
       | foo3 |
       | foo4 |
       | foo5 |
     And foo1 has type "integer"
-    And foo1 is anything but null
     And foo2 has type "integer"
-    And foo2 is anything but null
     And foo3 has type "integer"
-    And foo3 is anything but null
     And foo4 has type "integer"
-    And foo4 is anything but null
     And foo5 has type "integer"
-    And foo5 is anything but null
     And foo1 is in set:
       | 1 |
       | 2 |
@@ -358,18 +325,14 @@ Feature: User can create data across multiple fields for all combinations availa
       | 2    | 4    | 6    | 8    | 9    |
       | 2    | 4    | 6    | 8    | 0    |
 
-
   Scenario: Running an exhaustive combination strategy across three fields with five data options each should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo1 |
       | foo2 |
       | foo3 |
     And foo1 has type "integer"
-    And foo1 is anything but null
     And foo2 has type "integer"
-    And foo2 is anything but null
     And foo3 has type "integer"
-    And foo3 is anything but null
     And foo1 is in set:
       | 1 |
       | 2 |
@@ -516,18 +479,14 @@ Feature: User can create data across multiple fields for all combinations availa
       | 5    | 0    | 13   |
       | 5    | 0    | 14   |
 
-
   Scenario: Running an exhaustive combination strategy across fields with an uneven distribution of data options should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo1 |
       | foo2 |
       | foo3 |
     And foo1 has type "integer"
-    And foo1 is anything but null
     And foo2 has type "integer"
-    And foo2 is anything but null
     And foo3 has type "integer"
-    And foo3 is anything but null
     And foo1 is in set:
       | 1 |
     And foo2 is in set:
@@ -559,16 +518,13 @@ Feature: User can create data across multiple fields for all combinations availa
       | 1    | 22   | 14   |
 
   Scenario: Running an exhaustive combination strategy across fields with a duplicate integer data option in a field should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo1 |
       | foo2 |
       | foo3 |
     And foo1 has type "integer"
-    And foo1 is anything but null
     And foo2 has type "integer"
-    And foo2 is anything but null
     And foo3 has type "integer"
-    And foo3 is anything but null
     And foo1 is in set:
       | 1 |
     And foo2 is in set:
@@ -590,16 +546,13 @@ Feature: User can create data across multiple fields for all combinations availa
       | 1    | 20   | 14   |
 
   Scenario: Running an exhaustive combination strategy across fields with non ordered data options should be successful
-    Given the following fields exist:
+    Given the following non nullable fields exist:
       | foo1 |
       | foo2 |
       | foo3 |
     And foo1 has type "integer"
-    And foo1 is anything but null
     And foo2 has type "string"
-    And foo2 is anything but null
     And foo3 has type "string"
-    And foo3 is anything but null
     And foo1 is in set:
       | 1 |
       | 0 |
@@ -642,16 +595,13 @@ Feature: User can create data across multiple fields for all combinations availa
   Scenario: Running an exhaustive combination strategy that includes an "if" statement should be successful
     Given the generation strategy is full
     And the combination strategy is exhaustive
-    And the following fields exist:
+    And the following non nullable fields exist:
       | foo1 |
       | foo2 |
       | foo3 |
     And foo1 has type "string"
-    And foo1 is anything but null
     And foo2 has type "integer"
-    And foo2 is anything but null
     And foo3 has type "string"
-    And foo3 is anything but null
     And foo1 is in set:
       | "alpha" |
     And foo2 is in set:
@@ -669,12 +619,12 @@ Feature: User can create data across multiple fields for all combinations availa
     And foo2 is equal to 1
     And foo3 is equal to "test1"
     And If Then and Else are described below
-      And foo2 is equal to 10
-      And foo3 is equal to "test10"
-      And If Then and Else are described below
-        And foo2 is equal to 100
-        And foo3 is equal to "test100"
-        And foo3 is equal to "other"
+    And foo2 is equal to 10
+    And foo3 is equal to "test10"
+    And If Then and Else are described below
+    And foo2 is equal to 100
+    And foo3 is equal to "test100"
+    And foo3 is equal to "other"
     Then the following data should be generated:
       | foo1    | foo2 | foo3      |
       | "alpha" | 1    | "test1"   |
