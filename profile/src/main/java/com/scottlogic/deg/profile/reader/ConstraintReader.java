@@ -24,7 +24,7 @@ import com.scottlogic.deg.common.profile.fields.Fields;
 import com.scottlogic.deg.common.util.defaults.DateTimeDefaults;
 import com.scottlogic.deg.common.util.defaults.NumericDefaults;
 import com.scottlogic.deg.generator.fieldspecs.relations.*;
-import com.scottlogic.deg.generator.profile.constraints.Constraint;
+import com.scottlogic.deg.common.profile.rules.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;

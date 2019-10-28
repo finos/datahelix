@@ -3,7 +3,7 @@ package com.scottlogic.deg.profile.reader;
 import com.scottlogic.deg.common.profile.DateTimeGranularity;
 import com.scottlogic.deg.common.profile.NumericGranularity;
 import com.scottlogic.deg.common.profile.fields.Field;
-import com.scottlogic.deg.generator.profile.constraints.Constraint;
+import com.scottlogic.deg.common.profile.rules.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.profile.reader.file.names.NameRetriever;
 

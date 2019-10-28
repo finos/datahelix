@@ -17,7 +17,7 @@
 package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.profile.Profile;
+import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.profile.dtos.ProfileDTO;
 import com.scottlogic.deg.profile.dtos.RuleDTO;
 import com.scottlogic.deg.profile.reader.*;

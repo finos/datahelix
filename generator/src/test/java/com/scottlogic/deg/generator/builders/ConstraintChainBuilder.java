@@ -21,7 +21,7 @@ import com.scottlogic.deg.common.profile.HelixDateTime;
 import com.scottlogic.deg.common.profile.HelixNumber;
 import com.scottlogic.deg.common.profile.HelixStringLength;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
-import com.scottlogic.deg.generator.profile.constraints.Constraint;
+import com.scottlogic.deg.common.profile.rules.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;

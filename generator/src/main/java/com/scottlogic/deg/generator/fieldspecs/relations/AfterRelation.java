@@ -21,7 +21,7 @@ import com.scottlogic.deg.common.profile.Granularity;
 import com.scottlogic.deg.common.util.defaults.LinearDefaults;
 import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
-import com.scottlogic.deg.generator.profile.constraints.Constraint;
+import com.scottlogic.deg.common.profile.rules.constraints.Constraint;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 
 public class AfterRelation<T extends Comparable<T>> implements FieldSpecRelations {

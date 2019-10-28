@@ -16,9 +16,9 @@
 
 package com.scottlogic.deg.generator.builders;
 
-import com.scottlogic.deg.generator.profile.Rule;
-import com.scottlogic.deg.generator.profile.constraints.Constraint;
-import com.scottlogic.deg.generator.profile.RuleInformation;
+import com.scottlogic.deg.common.profile.rules.Rule;
+import com.scottlogic.deg.common.profile.rules.constraints.Constraint;
+import com.scottlogic.deg.common.profile.rules.RuleInformation;
 
 import java.util.List;
 

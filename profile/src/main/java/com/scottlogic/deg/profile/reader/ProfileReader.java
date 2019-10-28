@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.profile.reader;
 
-import com.scottlogic.deg.generator.profile.Profile;
+import com.scottlogic.deg.common.profile.Profile;
 
 import java.io.IOException;
 

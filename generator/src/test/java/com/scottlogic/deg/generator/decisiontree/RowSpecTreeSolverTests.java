@@ -17,10 +17,10 @@
 package com.scottlogic.deg.generator.decisiontree;
 
 import com.scottlogic.deg.common.profile.fields.Field;
-import com.scottlogic.deg.generator.profile.Profile;
+import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.fields.Fields;
-import com.scottlogic.deg.generator.profile.Rule;
-import com.scottlogic.deg.generator.profile.RuleInformation;
+import com.scottlogic.deg.common.profile.rules.Rule;
+import com.scottlogic.deg.common.profile.rules.RuleInformation;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.generator.fieldspecs.*;

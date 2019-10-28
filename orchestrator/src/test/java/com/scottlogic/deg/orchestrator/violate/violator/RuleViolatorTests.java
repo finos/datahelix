@@ -18,9 +18,9 @@ package com.scottlogic.deg.orchestrator.violate.violator;
 
 import com.scottlogic.deg.common.profile.HelixNumber;
 import com.scottlogic.deg.common.profile.UnviolatableConstraintException;
-import com.scottlogic.deg.generator.profile.Rule;
-import com.scottlogic.deg.generator.profile.RuleInformation;
-import com.scottlogic.deg.generator.profile.constraints.Constraint;
+import com.scottlogic.deg.common.profile.rules.Rule;
+import com.scottlogic.deg.common.profile.rules.RuleInformation;
+import com.scottlogic.deg.common.profile.rules.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsLessThanConstantConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.ViolatedAtomicConstraint;

@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.inputs.validation;
 
-import com.scottlogic.deg.generator.profile.Profile;
+import com.scottlogic.deg.common.profile.Profile;
 
 import java.util.Collection;
 

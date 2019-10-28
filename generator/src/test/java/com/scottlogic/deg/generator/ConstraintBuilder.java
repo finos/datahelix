@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator;
 
-import com.scottlogic.deg.generator.profile.constraints.Constraint;
+import com.scottlogic.deg.common.profile.rules.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsNullConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;

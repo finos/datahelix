@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.profile.constraints.grammatical;
 
-import com.scottlogic.deg.generator.profile.constraints.Constraint;
+import com.scottlogic.deg.common.profile.rules.constraints.Constraint;
 
 public class ConditionalConstraint implements GrammaticalConstraint
 {

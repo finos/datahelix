@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.profile;
+package com.scottlogic.deg.common.profile.rules;
 
 import java.util.Objects;
 
