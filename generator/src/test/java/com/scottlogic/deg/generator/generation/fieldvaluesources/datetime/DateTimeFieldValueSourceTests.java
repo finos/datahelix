@@ -21,12 +21,14 @@ import com.scottlogic.deg.generator.generation.fieldvaluesources.LinearFieldValu
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
-import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
+import com.scottlogic.deg.testUtils.TestRandomNumberGenerator;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
-import java.time.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -395,39 +397,5 @@ public class DateTimeFieldValueSourceTests {
 
     private OffsetDateTime createDate(int year, int month, int day) {
         return OffsetDateTime.of(year, month, day, 0, 0, 0, 0, ZoneOffset.UTC);
-    }
-
-    private class TestRandomNumberGenerator implements RandomNumberGenerator {
-
-        private double nextDoubleValue = 0;
-
-        public void setNextDouble(double value) {
-            nextDoubleValue = value;
-        }
-
-        @Override
-        public int nextInt() {
-            return 0;
-        }
-
-        @Override
-        public int nextInt(int bound) {
-            return 0;
-        }
-
-        @Override
-        public int nextInt(int lowerInclusive, int upperExclusive) {
-            return 0;
-        }
-
-        @Override
-        public double nextDouble(double lower, double upper) {
-            return nextDoubleValue * (upper - lower) + lower;
-        }
-
-        @Override
-        public BigDecimal nextBigDecimal(BigDecimal lowerInclusive, BigDecimal upperExclusive) {
-            return new BigDecimal(nextDouble(lowerInclusive.doubleValue(), upperExclusive.doubleValue()));
-        }
     }
 }
