@@ -140,7 +140,7 @@ class RowSpecTreeSolverTests {
                             new DistributedList<>(Collections.singletonList(new WeightedElement<>("GBP", 1.0F)))
                         )))));
 
-        Profile profile = new Profile(fields, dummyRules);
+        Profile profile = Profile.create(fields, dummyRules);
 
         final DecisionTree merged = this.dTreeGenerator.analyse(profile);
 

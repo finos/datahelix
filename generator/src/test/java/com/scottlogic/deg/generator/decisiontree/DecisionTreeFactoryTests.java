@@ -73,7 +73,7 @@ class DecisionTreeFactoryTests {
 
     private DecisionTree getActualOutput() {
         if (this.actualOutput == null) {
-            Profile testInput = new Profile(
+            Profile testInput = Profile.create(
                 Fields.create(
                     Arrays.asList(this.fieldA, this.fieldB, this.fieldC)),
                 this.rules);
@@ -92,7 +92,7 @@ class DecisionTreeFactoryTests {
 
     @Test
     void shouldReturnAnalysedProfileWithNoAnalysedRules_IfProfileHasNoRules() {
-        Profile testInput = new Profile(FieldBuilder.createValidFields(), new ArrayList<>());
+        Profile testInput = Profile.create(FieldBuilder.createValidFields(), new ArrayList<>());
         DecisionTreeFactory testObject = new DecisionTreeFactory();
 
         DecisionTree testOutput = testObject.analyse(testInput);
@@ -107,7 +107,7 @@ class DecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedProfileWithCorrectFields() {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
-        Profile testInput = new Profile(inputFieldList, new ArrayList<>());
+        Profile testInput = Profile.create(Fields.create(inputFieldList), new ArrayList<>());
         DecisionTreeFactory testObject = new DecisionTreeFactory();
 
         DecisionTree testOutput = testObject.analyse(testInput);
@@ -126,7 +126,7 @@ class DecisionTreeFactoryTests {
         IsGreaterThanConstantConstraint constraint1 = new IsGreaterThanConstantConstraint(inputFieldList.get(0), HelixNumber.create(0));
         MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
         Rule testRule = Rule.create("test", Arrays.asList(constraint0, constraint1, constraint2));
-        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
+        Profile testInput = Profile.create(Fields.create(inputFieldList), Collections.singletonList(testRule));
 
         DecisionTreeFactory testObject = new DecisionTreeFactory();
 
@@ -149,7 +149,7 @@ class DecisionTreeFactoryTests {
         MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
         List<Constraint> inputConstraints = Arrays.asList(constraint0, constraint1, constraint2);
         Rule testRule = Rule.create("test", inputConstraints);
-        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
+        Profile testInput = Profile.create(Fields.create(inputFieldList), Collections.singletonList(testRule));
         DecisionTreeFactory testObject = new DecisionTreeFactory();
 
         DecisionTree outputRule = testObject.analyse(testInput);
@@ -172,7 +172,7 @@ class DecisionTreeFactoryTests {
         AndConstraint andConstraint0 = new AndConstraint(Arrays.asList(constraint0, constraint1));
         MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
         Rule testRule = Rule.create("test", Arrays.asList(andConstraint0, constraint2));
-        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
+        Profile testInput = Profile.create(Fields.create(inputFieldList), Collections.singletonList(testRule));
         DecisionTreeFactory testObject = new DecisionTreeFactory();
 
         DecisionTree outputRule = testObject.analyse(testInput);
@@ -192,7 +192,7 @@ class DecisionTreeFactoryTests {
         AndConstraint andConstraint0 = new AndConstraint(Arrays.asList(constraint0, constraint1));
         MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
         Rule testRule = Rule.create("test", Arrays.asList(andConstraint0, constraint2));
-        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
+        Profile testInput = Profile.create(Fields.create(inputFieldList), Collections.singletonList(testRule));
 
         DecisionTreeFactory testObject = new DecisionTreeFactory();
 
@@ -223,7 +223,7 @@ class DecisionTreeFactoryTests {
             new DistributedList<>(Collections.singletonList(new WeightedElement<>("diesel", 1.0F))));
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraint2, constraint3));
         Rule testRule = Rule.create("test", Arrays.asList(orConstraint0, orConstraint1));
-        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
+        Profile testInput = Profile.create(Fields.create(inputFieldList), Collections.singletonList(testRule));
         DecisionTreeFactory testObject = new DecisionTreeFactory();
 
         DecisionTree outputRule = testObject.analyse(testInput);
@@ -248,7 +248,7 @@ class DecisionTreeFactoryTests {
             new DistributedList<>(Collections.singletonList(new WeightedElement<>("diesel", 1.0F))));
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraintC, constraintD));
         Rule testRule = Rule.create("test", Arrays.asList(orConstraint0, orConstraint1));
-        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
+        Profile testInput = Profile.create(Fields.create(inputFieldList), Collections.singletonList(testRule));
         DecisionTreeFactory testObject = new DecisionTreeFactory();
 
         DecisionTree outputRule = testObject.analyse(testInput);
@@ -273,7 +273,7 @@ class DecisionTreeFactoryTests {
             new DistributedList<>(Collections.singletonList(new WeightedElement<>("diesel", 1.0F))));
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraintC, constraintD));
         Rule testRule = Rule.create("test", Arrays.asList(orConstraint0, orConstraint1));
-        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
+        Profile testInput = Profile.create(Fields.create(inputFieldList), Collections.singletonList(testRule));
         DecisionTreeFactory testObject = new DecisionTreeFactory();
 
         DecisionTree outputRule = testObject.analyse(testInput);
@@ -311,7 +311,7 @@ class DecisionTreeFactoryTests {
             new DistributedList<>(Collections.singletonList(new WeightedElement<>("diesel", 1.0F))));
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraintD, constraintE));
         Rule testRule = Rule.create("test", Arrays.asList(orConstraint0, orConstraint1));
-        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
+        Profile testInput = Profile.create(Fields.create(inputFieldList), Collections.singletonList(testRule));
         DecisionTreeFactory testObject = new DecisionTreeFactory();
 
         DecisionTree outputRule = testObject.analyse(testInput);
@@ -341,7 +341,7 @@ class DecisionTreeFactoryTests {
         IsGreaterThanConstantConstraint constraintC = new IsGreaterThanConstantConstraint(inputFieldList.get(1), HelixNumber.create(20));
         ConditionalConstraint conditionalConstraint = new ConditionalConstraint(constraintA, constraintB, constraintC);
         Rule testRule = Rule.create("test", Collections.singletonList(conditionalConstraint));
-        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
+        Profile testInput = Profile.create(Fields.create(inputFieldList), Collections.singletonList(testRule));
         DecisionTreeFactory testObject = new DecisionTreeFactory();
 
         DecisionTree outputRule = testObject.analyse(testInput);
@@ -404,7 +404,7 @@ class DecisionTreeFactoryTests {
         ConditionalConstraint conditionalConstraint = new ConditionalConstraint(constraintA, constraintB, constraintC);
         Constraint notConstraint = conditionalConstraint.negate();
         Rule testRule = Rule.create("test", Collections.singletonList(notConstraint));
-        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
+        Profile testInput = Profile.create(Fields.create(inputFieldList), Collections.singletonList(testRule));
         DecisionTreeFactory testObject = new DecisionTreeFactory();
 
         DecisionTree outputRule = testObject.analyse(testInput);
@@ -458,7 +458,7 @@ class DecisionTreeFactoryTests {
         Constraint notConstraint0 = constraintA.negate();
         Constraint notConstraint1 = notConstraint0.negate();
         Rule testRule = Rule.create("test", Collections.singletonList(notConstraint1));
-        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
+        Profile testInput = Profile.create(Fields.create(inputFieldList), Collections.singletonList(testRule));
         DecisionTreeFactory testObject = new DecisionTreeFactory();
 
         DecisionTree outputRule = testObject.analyse(testInput);
@@ -481,7 +481,7 @@ class DecisionTreeFactoryTests {
         IsGreaterThanConstantConstraint constraintB = new IsGreaterThanConstantConstraint(inputFieldList.get(1), HelixNumber.create(5));
         NegatedGrammaticalConstraint notConstraint = (NegatedGrammaticalConstraint) new AndConstraint(Arrays.asList(constraintA, constraintB)).negate();
         Rule testRule = Rule.create("test", Collections.singletonList(notConstraint));
-        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
+        Profile testInput = Profile.create(Fields.create(inputFieldList), Collections.singletonList(testRule));
         DecisionTreeFactory testObject = new DecisionTreeFactory();
 
         DecisionTree outputRule = testObject.analyse(testInput);

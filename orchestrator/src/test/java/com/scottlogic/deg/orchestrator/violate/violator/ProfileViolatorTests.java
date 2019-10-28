@@ -16,12 +16,12 @@
 
 package com.scottlogic.deg.orchestrator.violate.violator;
 
-import com.scottlogic.deg.common.profile.fields.Field;
 import com.scottlogic.deg.common.profile.HelixNumber;
-import com.scottlogic.deg.common.profile.fields.Fields;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.common.profile.constraints.Constraint;
+import com.scottlogic.deg.common.profile.fields.Field;
+import com.scottlogic.deg.common.profile.fields.Fields;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsGreaterThanConstantConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsLessThanConstantConstraint;
 import com.scottlogic.deg.orchestrator.violate.ViolatedProfile;
@@ -34,6 +34,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.scottlogic.deg.common.profile.fields.FieldBuilder.createField;
 import static com.scottlogic.deg.orchestrator.violate.violator.TypeEqualityHelper.assertListProfileTypeEquality;
@@ -71,27 +73,27 @@ public class ProfileViolatorTests {
     @Test
     public void violate_withSingleRuleProfile_returnsSingleViolatedProfile() throws IOException {
         //Arrange
-        Profile inputProfile = new Profile(
-            Arrays.asList(fooField, barField),
-            Collections.singletonList(rule1),
-            "Input profile description"
+        Profile inputProfile = Profile.create(
+            "Input profile description",
+            Fields.create(Arrays.asList(fooField, barField)),
+            Collections.singletonList(rule1)
         );
 
         when(mockRuleViolator.violateRule(rule1)).thenReturn(violatedRule1);
 
         //Act
-        List<Profile> outputProfileList = (List<Profile>)(List<?>) target.violate(inputProfile);
+        List<Profile> outputProfileList = target.violate(inputProfile).stream().map(p -> p.profile).collect(Collectors.toList());
 
         //Assert
         List<Profile> expectedProfileList =
-            Collections.singletonList(
+            Stream.of(
                 new ViolatedProfile(
                     rule1,
                     Fields.create(Arrays.asList(fooField, barField)),
                     Collections.singletonList(violatedRule1),
                     "Input profile description -- Violating: Rule 1 description"
                 )
-            );
+            ).map(p -> p.profile).collect(Collectors.toList());;
 
         assertThat(
             "The violate method should have returned the correct shaped profile",
@@ -107,21 +109,21 @@ public class ProfileViolatorTests {
     @Test
     public void violate_withMultipleRuleProfile_returnsMultipleViolatedProfile() throws IOException {
         //Arrange
-        Profile inputProfile = new Profile(
-            Arrays.asList(fooField, barField),
-            Arrays.asList(rule1, rule2),
-            "Input profile description"
+        Profile inputProfile = Profile.create(
+            "Input profile description",
+            Fields.create(Arrays.asList(fooField, barField)),
+            Arrays.asList(rule1, rule2)
         );
 
         when(mockRuleViolator.violateRule(rule1)).thenReturn(violatedRule1);
         when(mockRuleViolator.violateRule(rule2)).thenReturn(violatedRule2);
 
         //Act
-        List<Profile> outputProfileList = (List<Profile>)(List<?>) target.violate(inputProfile);
+        List<Profile> outputProfileList = target.violate(inputProfile).stream().map(p -> p.profile).collect(Collectors.toList());
 
         //Assert
         List<Profile> expectedProfileList =
-            Arrays.asList(
+            Stream.of(
                 new ViolatedProfile(
                     rule1,
                     Fields.create(Arrays.asList(fooField, barField)),
@@ -134,7 +136,7 @@ public class ProfileViolatorTests {
                     Arrays.asList(rule1, violatedRule2),
                     "Input profile description -- Violating: Rule 2 description"
                 )
-            );
+            ).map(p -> p.profile).collect(Collectors.toList());;
 
         assertThat(
             "The violate method should have returned the correct shaped profile",

@@ -85,7 +85,7 @@ public class JsonProfileReader implements ProfileReader {
         if (!typeConstraints.isEmpty()) {
             rules.add(Rule.create("type-rules", typeConstraints));
         }
-        return new Profile(fields, rules, profileDTO.description);
+        return Profile.create(profileDTO.description, fields, rules);
     }
     
     private String getFormatting(FieldDTO fDto) {

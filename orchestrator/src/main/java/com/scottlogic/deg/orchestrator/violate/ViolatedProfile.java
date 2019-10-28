@@ -22,11 +22,12 @@ import com.scottlogic.deg.common.profile.Rule;
 
 import java.util.Collection;
 
-public class ViolatedProfile extends Profile {
+public class ViolatedProfile {
     /**
      * Original (un-violated) form of the rule that has been violated in this profile.
      */
     public final Rule violatedRule;
+    public final Profile profile;
 
     /**
      * Constructs a new violated profile using the base profile constructor.
@@ -37,7 +38,7 @@ public class ViolatedProfile extends Profile {
      * @param description Description of profile.
      */
     public ViolatedProfile(Rule violatedRule, Fields fields, Collection<Rule> rules, String description){
-        super(fields, rules, description);
+        this.profile = Profile.create(description, fields, rules);
         this.violatedRule = violatedRule;
     }
 

@@ -207,7 +207,7 @@ public class ProfileViolationTests {
         );
 
         //Act
-        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile).stream().map(p -> p.profile).collect(Collectors.toList());
 
         //Assert
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
@@ -229,7 +229,7 @@ public class ProfileViolationTests {
         );
 
         //Act
-        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile).stream().map(p -> p.profile).collect(Collectors.toList());
 
         //Assert
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
@@ -267,7 +267,7 @@ public class ProfileViolationTests {
         );
 
         //Act
-        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile).stream().map(p -> p.profile).collect(Collectors.toList());
 
         //Assert
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
@@ -305,7 +305,7 @@ public class ProfileViolationTests {
         );
 
         //Act
-        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile).stream().map(p -> p.profile).collect(Collectors.toList());
 
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
     }
@@ -362,7 +362,7 @@ public class ProfileViolationTests {
         );
 
         //Act
-        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile).stream().map(p -> p.profile).collect(Collectors.toList());
 
         //Assert
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
@@ -407,7 +407,7 @@ public class ProfileViolationTests {
         );
 
         //Act
-        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile).stream().map(p -> p.profile).collect(Collectors.toList());
 
         //Assert
 
@@ -475,7 +475,7 @@ public class ProfileViolationTests {
         );
 
         //Act
-        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile).stream().map(p -> p.profile).collect(Collectors.toList());
 
         //Assert
 
@@ -539,7 +539,7 @@ public class ProfileViolationTests {
         );
 
         //Act
-        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile).stream().map(p -> p.profile).collect(Collectors.toList());
 
         //Assert
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
@@ -601,7 +601,7 @@ public class ProfileViolationTests {
         );
 
         // Act
-        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile).stream().map(p -> p.profile).collect(Collectors.toList());
 
         // Assert
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
@@ -640,7 +640,7 @@ public class ProfileViolationTests {
         );
 
         // Act
-        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile).stream().map(p -> p.profile).collect(Collectors.toList());
 
         // Assert
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
@@ -677,7 +677,7 @@ public class ProfileViolationTests {
         );
 
         // Act
-        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile).stream().map(p -> p.profile).collect(Collectors.toList());
 
         // Assert
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
@@ -725,7 +725,7 @@ public class ProfileViolationTests {
         );
 
         // Act
-        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile).stream().map(p -> p.profile).collect(Collectors.toList());
 
         // Assert
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
@@ -767,7 +767,7 @@ public class ProfileViolationTests {
         );
 
         // Act
-        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile).stream().map(p -> p.profile).collect(Collectors.toList());
 
         // Assert
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
@@ -809,7 +809,7 @@ public class ProfileViolationTests {
         );
 
         // Act
-        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile).stream().map(p -> p.profile).collect(Collectors.toList());
 
         // Assert
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
@@ -851,7 +851,7 @@ public class ProfileViolationTests {
         );
 
         // Act
-        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile).stream().map(p -> p.profile).collect(Collectors.toList());
 
         // Assert
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
@@ -900,7 +900,7 @@ public class ProfileViolationTests {
         );
 
         // Act
-        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile).stream().map(p -> p.profile).collect(Collectors.toList());
 
         // Assert
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
@@ -949,7 +949,7 @@ public class ProfileViolationTests {
         );
 
         // Act
-        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile).stream().map(p -> p.profile).collect(Collectors.toList());
 
         // Assert
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
@@ -998,20 +998,20 @@ public class ProfileViolationTests {
         );
 
         // Act
-        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
+        List<Profile> violatedProfiles = profileViolator.violate(testProfiles.inputProfile).stream().map(p -> p.profile).collect(Collectors.toList());
 
         // Assert
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
     }
 
     private TestProfiles createTestProfiles(String description, List<Field> fields, List<RuleViolatedRulePair> ruleViolationHolders) {
-        Profile inputProfile = new Profile(fields, getRulesFromPair(ruleViolationHolders), description);
-        List<Profile> violatedProfiles = createViolatedProfiles(description, fields, ruleViolationHolders);
+        Profile inputProfile = Profile.create(description, Fields.create(fields), getRulesFromPair(ruleViolationHolders));
+        List<ViolatedProfile> violatedProfiles = createViolatedProfiles(description, fields, ruleViolationHolders);
 
         return new TestProfiles(inputProfile, violatedProfiles);
     }
 
-    private List<Profile> createViolatedProfiles(String description,
+    private List<ViolatedProfile> createViolatedProfiles(String description,
                                                  List<Field> fields,
                                                  List<RuleViolatedRulePair> ruleViolationHolders) {
         return ruleViolationHolders
@@ -1020,7 +1020,7 @@ public class ProfileViolationTests {
             .collect(Collectors.toList());
     }
 
-    private Profile createViolatedProfile(String description,
+    private ViolatedProfile createViolatedProfile(String description,
                                           List<Field> fields,
                                           List<RuleViolatedRulePair> ruleViolationHolders,
                                           Rule rule) {
@@ -1065,9 +1065,9 @@ public class ProfileViolationTests {
         final Profile inputProfile;
         final List<Profile> expectedViolatedProfiles;
 
-        TestProfiles(Profile inputProfile, List<Profile> expectedViolatedProfiles) {
+        TestProfiles(Profile inputProfile, List<ViolatedProfile> expectedViolatedProfiles) {
             this.inputProfile = inputProfile;
-            this.expectedViolatedProfiles = expectedViolatedProfiles;
+            this.expectedViolatedProfiles = expectedViolatedProfiles.stream().map(p -> p.profile).collect(Collectors.toList());
         }
     }
 }

@@ -19,11 +19,11 @@ package com.scottlogic.deg.orchestrator.violate;
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.output.GeneratedObject;
 import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.generator.generation.DataGenerator;
-import com.scottlogic.deg.orchestrator.violate.violator.ProfileViolator;
-import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.common.util.FileUtils;
+import com.scottlogic.deg.generator.generation.DataGenerator;
+import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.orchestrator.violate.manifest.ManifestWriter;
+import com.scottlogic.deg.orchestrator.violate.violator.ProfileViolator;
 import com.scottlogic.deg.output.outputtarget.OutputTargetFactory;
 import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
 import com.scottlogic.deg.output.writer.DataSetWriter;
@@ -32,6 +32,7 @@ import com.scottlogic.deg.profile.reader.ValidatingProfileReader;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ViolateExecute {
@@ -80,9 +81,8 @@ public class ViolateExecute {
         DecimalFormat intFormatter = FileUtils.getDecimalFormat(violatedProfiles.size());
 
         int filename = 1;
-        for (Profile violatedProfile : violatedProfiles) {
-            SingleDatasetOutputTarget outputTarget =
-                outputTargetFactory.create(intFormatter.format(filename++));
+        for (Profile violatedProfile : violatedProfiles.stream().map(o -> o.profile).collect(Collectors.toList())) {
+            SingleDatasetOutputTarget outputTarget = outputTargetFactory.create(intFormatter.format(filename++));
             Stream<GeneratedObject> generatedObjectStream = dataGenerator.generateData(violatedProfile);
             outputData(profile, generatedObjectStream, outputTarget);
         }
