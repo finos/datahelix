@@ -6,8 +6,7 @@
   "additionalProperties": false,
   "required": [
     "schemaVersion",
-    "fields",
-    "rules"
+    "fields"
   ],
   "properties": {
     "additionalProperties": false,
