@@ -33,5 +33,4 @@ public abstract class ConstraintDTO {
     public ConstraintType getType() {
         return type;
     }
-
 }
