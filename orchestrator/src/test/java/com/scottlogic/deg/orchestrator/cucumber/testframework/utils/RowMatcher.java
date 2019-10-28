@@ -22,25 +22,24 @@ import org.hamcrest.Description;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Iterator;
-import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.scottlogic.deg.common.util.NumberUtils.coerceToBigDecimal;
 
-public class RowMatcher extends BaseMatcher<List<Object>> {
+public class RowMatcher extends BaseMatcher<Map<String, Object>> {
     private static final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 
-    private final List<Object> expectedRow;
+    private final Map<String, Object> expectedRow;
 
-    RowMatcher(List<Object> expectedRow) {
+    RowMatcher(Map<String, Object> expectedRow) {
         this.expectedRow = expectedRow;
     }
 
     @Override
     public boolean matches(Object o) {
-        List<Object> actualRow = (List<Object>) o;
+        Map<String, Object> actualRow = (Map<String, Object>) o;
 
         if (actualRow == null && expectedRow == null)
             return true;
@@ -48,22 +47,10 @@ public class RowMatcher extends BaseMatcher<List<Object>> {
         if (actualRow == null || expectedRow == null)
             return false;
 
-        Iterator<Object> actualRowIterator = actualRow.iterator();
-        Iterator<Object> expectedRowIterator = expectedRow.iterator();
-
-        while (actualRowIterator.hasNext()) {
-            Object actualColumnValue = actualRowIterator.next();
-
-            if (!expectedRowIterator.hasNext())
-                return false; //different lengths
-
-            Object expectedColumnValue = expectedRowIterator.next();
-
-            if (!objectsEquals(actualColumnValue, expectedColumnValue))
-                return false;
+        if(actualRow.size() != expectedRow.size()){
+            return false;
         }
-
-        return true;
+        return actualRow.keySet().stream().allMatch(key -> expectedRow.containsKey(key) && objectsEquals(actualRow.get(key),expectedRow.get(key)));
     }
 
     private boolean objectsEquals(Object actual, Object expected) {
@@ -73,7 +60,7 @@ public class RowMatcher extends BaseMatcher<List<Object>> {
         if (actual == null || expected == null)
             return false;
 
-        if (actual instanceof Number && expected instanceof Number && actual.getClass() != expected.getClass()) {
+        if (actual instanceof Number && expected instanceof Number && actual.getClass() != expected.getClass()){
             return numbersEqual((Number) actual, (Number) expected);
         }
 
@@ -82,8 +69,7 @@ public class RowMatcher extends BaseMatcher<List<Object>> {
 
     /**
      * Compares two numbers by casting up to the widest supported number type, BigDecimal.
-     *
-     * @param actual   Actual number of any Number type
+     * @param actual Actual number of any Number type
      * @param expected Expected number of any Number type
      * @return True if numbers are mathematically equal, i.e. have the same value
      */
@@ -96,18 +82,18 @@ public class RowMatcher extends BaseMatcher<List<Object>> {
     @Override
     public void describeTo(Description description) {
         description.appendText(Objects.toString(
-            this.expectedRow
+            this.expectedRow.values()
                 .stream()
                 .map(RowMatcher::formatDate)
                 .collect(Collectors.toList())));
     }
 
-    static List<Object> formatDatesInRow(List<Object> row) {
-        return row.stream().map(RowMatcher::formatDate).collect(Collectors.toList());
+    static Map<String, Object> formatDatesInRow(Map<String, Object> row) {
+        return row.keySet().stream().collect(Collectors.toMap(key -> key, key -> formatDate(row.get(key))));
     }
 
-    private static Object formatDate(Object value) {
-        if (value instanceof OffsetDateTime) {
+    private static Object formatDate(Object value){
+        if (value instanceof OffsetDateTime){
             return ((OffsetDateTime) value).format(dateTimeFormat);
         }
 
