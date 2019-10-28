@@ -81,6 +81,6 @@ public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpec
 
     @Override
     public Constraint negate() {
-        throw new UnsupportedOperationException("equalTo relations cannot currently be negated");
+        throw new UnsupportedOperationException("Negating relations with an offset is not supported");
     }
 }
