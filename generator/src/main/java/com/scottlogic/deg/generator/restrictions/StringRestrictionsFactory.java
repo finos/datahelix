@@ -23,7 +23,7 @@ import static com.scottlogic.deg.common.util.Defaults.*;
 
 public class StringRestrictionsFactory {
     public static StringRestrictions forStringMatching(Pattern pattern, boolean negate) {
-        return new TextualRestrictions(
+        return new StringRestrictions(
             0,
             MAX_STRING_LENGTH,
             negate
@@ -39,7 +39,7 @@ public class StringRestrictionsFactory {
     }
 
     public static StringRestrictions forStringContaining(Pattern pattern, boolean negate) {
-        return new TextualRestrictions(
+        return new StringRestrictions(
             0,
             MAX_STRING_LENGTH,
             Collections.emptySet(),
@@ -55,7 +55,7 @@ public class StringRestrictionsFactory {
     }
 
     public static StringRestrictions forLength(int length, boolean negate) {
-        return new TextualRestrictions(
+        return new StringRestrictions(
             negate ? 0 : length,
             negate ? MAX_STRING_LENGTH : length,
             Collections.emptySet(),
@@ -69,7 +69,7 @@ public class StringRestrictionsFactory {
     }
 
     public static StringRestrictions forMinLength(int length){
-        return new TextualRestrictions(
+        return new StringRestrictions(
             length,
             MAX_STRING_LENGTH,
             Collections.emptySet(),
@@ -81,7 +81,7 @@ public class StringRestrictionsFactory {
     }
 
     public static StringRestrictions forMaxLength(int length){
-        return new TextualRestrictions(
+        return new StringRestrictions(
             0,
             length,
             Collections.emptySet(),

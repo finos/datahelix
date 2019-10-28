@@ -26,7 +26,7 @@ public class JSONTestStep {
 
     private final CucumberTestState state;
 
-    public JSONTestStep(CucumberTestState state){
+    public JSONTestStep(CucumberTestState state) {
         this.state = state;
     }
 

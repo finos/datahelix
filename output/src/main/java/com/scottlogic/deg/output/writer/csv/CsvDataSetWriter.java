@@ -35,7 +35,6 @@ import java.util.stream.Collectors;
 class CsvDataSetWriter implements DataSetWriter {
     private static final DateTimeFormatter standardDateFormat = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
     private static final CSVFormat writerFormat = CSVFormat.RFC4180;
-    private static final CSVFormat csvStringFormatter = writerFormat.withQuoteMode(QuoteMode.ALL);
 
     private final CSVPrinter csvPrinter;
     private final ProfileFields fieldOrder;
@@ -49,8 +48,7 @@ class CsvDataSetWriter implements DataSetWriter {
         final Appendable outputStreamAsAppendable = new OutputStreamWriter(stream, StandardCharsets.UTF_8);
 
         CSVPrinter csvPrinter = writerFormat
-            .withEscape('\0') //Dont escape any character, we're formatting strings ourselves
-            .withQuoteMode(QuoteMode.NONE)
+            .withQuoteMode(QuoteMode.MINIMAL)
             .withHeader(fields.getExternalStream()
                 .map(f -> f.name)
                 .toArray(String[]::new))
@@ -63,7 +61,7 @@ class CsvDataSetWriter implements DataSetWriter {
     public void writeRow(GeneratedObject row) throws IOException {
         csvPrinter.printRecord(fieldOrder.getExternalStream()
                 .map(row::getFormattedValue)
-                .map(CsvDataSetWriter::wrapInQuotesIfString)
+                .map(CsvDataSetWriter::applyTypeSpecificFormatting)
                 .collect(Collectors.toList()));
 
         csvPrinter.flush();
@@ -74,7 +72,7 @@ class CsvDataSetWriter implements DataSetWriter {
         csvPrinter.close();
     }
 
-    private static Object wrapInQuotesIfString(Object value) {
+    private static Object applyTypeSpecificFormatting(Object value) {
         if (value == null) {
             return null;
         }
@@ -85,10 +83,6 @@ class CsvDataSetWriter implements DataSetWriter {
 
         if (value instanceof OffsetDateTime) {
             return standardDateFormat.format((OffsetDateTime) value);
-        }
-
-        if (value instanceof String) {
-            return csvStringFormatter.format(value);
         }
 
         return value;

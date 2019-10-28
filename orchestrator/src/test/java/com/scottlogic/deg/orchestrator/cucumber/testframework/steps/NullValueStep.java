@@ -29,7 +29,7 @@ public class NullValueStep {
     private final CucumberTestState state;
     private final CucumberTestHelper helper;
 
-    public NullValueStep(CucumberTestState state, CucumberTestHelper helper){
+    public NullValueStep(CucumberTestState state, CucumberTestHelper helper) {
         this.state = state;
         this.helper = helper;
     }

@@ -2,7 +2,7 @@ Feature: User can specify that a datetime date is after, but not equal to, a spe
 
   Background:
     Given the generation strategy is full
-    And there is a field foo
+    And there is a nullable field foo
     And foo has type "datetime"
 
   Scenario: 'After' valid date is successful for a single row
