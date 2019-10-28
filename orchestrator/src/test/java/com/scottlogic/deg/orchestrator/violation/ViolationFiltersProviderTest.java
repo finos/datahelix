@@ -16,15 +16,15 @@
 
 package com.scottlogic.deg.orchestrator.violation;
 
-import com.scottlogic.deg.common.profile.AtomicConstraintType;
 import com.scottlogic.deg.common.profile.HelixStringLength;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsStringShorterThanConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.StringHasLengthConstraint;
 import com.scottlogic.deg.generator.violations.filters.ConstraintTypeViolationFilter;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
-import com.scottlogic.deg.orchestrator.violate.AtomicConstraintTypeMapper;
+import com.scottlogic.deg.orchestrator.violate.ConstraintTypeMapper;
 import com.scottlogic.deg.orchestrator.violate.ViolateConfigSource;
 import com.scottlogic.deg.orchestrator.violate.ViolationFiltersProvider;
+import com.scottlogic.deg.profile.common.ConstraintType;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -43,7 +43,7 @@ class ViolationFiltersProviderTest {
     void whenNullConstraintsToViolate_ReturnEmptyListOfViolationFilters() {
         ViolateConfigSource configSource = mock(ViolateConfigSource.class);
         when(configSource.getConstraintsToNotViolate()).thenReturn(null);
-        ViolationFiltersProvider provider = new ViolationFiltersProvider(configSource, new AtomicConstraintTypeMapper());
+        ViolationFiltersProvider provider = new ViolationFiltersProvider(configSource, new ConstraintTypeMapper());
 
         assertThat(provider.get(), is(empty()));
     }
@@ -52,7 +52,7 @@ class ViolationFiltersProviderTest {
     void whenEmptyConstraintsToViolate_ReturnEmptyListOfViolationFilters() {
         ViolateConfigSource configSource = mock(ViolateConfigSource.class);
         when(configSource.getConstraintsToNotViolate()).thenReturn(Collections.emptyList());
-        ViolationFiltersProvider provider = new ViolationFiltersProvider(configSource, new AtomicConstraintTypeMapper());
+        ViolationFiltersProvider provider = new ViolationFiltersProvider(configSource, new ConstraintTypeMapper());
 
         assertThat(provider.get(), is(empty()));
     }
@@ -61,9 +61,9 @@ class ViolationFiltersProviderTest {
     void hasLengthConstraintsToViolate_ReturnsOneFilter_ThatDoesNotAcceptHasLengthConstraints() {
         ViolateConfigSource configSource = mock(ViolateConfigSource.class);
         when(configSource.getConstraintsToNotViolate())
-            .thenReturn(Arrays.asList(AtomicConstraintType.HAS_LENGTH));
+            .thenReturn(Arrays.asList(ConstraintType.OF_LENGTH));
         ViolationFiltersProvider provider =
-            new ViolationFiltersProvider(configSource, new AtomicConstraintTypeMapper());
+            new ViolationFiltersProvider(configSource, new ConstraintTypeMapper());
 
         List<ViolationFilter> filters = provider.get();
         assertThat(filters, hasSize(1));
@@ -84,9 +84,9 @@ class ViolationFiltersProviderTest {
     void twoConstraintsToViolate_ReturnListWithTwoFilter() {
         ViolateConfigSource configSource = mock(ViolateConfigSource.class);
         when(configSource.getConstraintsToNotViolate())
-            .thenReturn(Arrays.asList(AtomicConstraintType.HAS_LENGTH, AtomicConstraintType.IS_IN_SET));
+            .thenReturn(Arrays.asList(ConstraintType.OF_LENGTH, ConstraintType.IN_SET));
         ViolationFiltersProvider provider =
-            new ViolationFiltersProvider(configSource, new AtomicConstraintTypeMapper());
+            new ViolationFiltersProvider(configSource, new ConstraintTypeMapper());
 
         assertThat(provider.get(), hasSize(2));
     }

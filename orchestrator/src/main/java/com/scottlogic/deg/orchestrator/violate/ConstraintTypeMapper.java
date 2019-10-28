@@ -16,11 +16,12 @@
 
 package com.scottlogic.deg.orchestrator.violate;
 
-import com.scottlogic.deg.common.profile.AtomicConstraintType;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
+import com.scottlogic.deg.profile.common.ConstraintType;
 
-public class AtomicConstraintTypeMapper {
-    public Class toConstraintClass(AtomicConstraintType type) {
+public class ConstraintTypeMapper
+{
+    public Class toConstraintClass(ConstraintType type) {
         switch (type) {
             case IS_NULL:
                 return IsNullConstraint.class;
@@ -28,33 +29,33 @@ public class AtomicConstraintTypeMapper {
                 return MatchesRegexConstraint.class;
             case CONTAINS_REGEX:
                 return ContainsRegexConstraint.class;
-            case HAS_LENGTH:
+            case OF_LENGTH:
                 return StringHasLengthConstraint.class;
-            case IS_STRING_LONGER_THAN:
+            case LONGER_THAN:
                 return IsStringLongerThanConstraint.class;
-            case IS_STRING_SHORTER_THAN:
+            case SHORTER_THAN:
                 return IsStringShorterThanConstraint.class;
-            case IS_GREATER_THAN_CONSTANT:
+            case GREATER_THAN:
                 return IsGreaterThanConstantConstraint.class;
-            case IS_GREATER_THAN_OR_EQUAL_TO_CONSTANT:
+            case GREATER_THAN_OR_EQUAL_TO:
                 return IsGreaterThanOrEqualToConstantConstraint.class;
-            case IS_LESS_THAN_CONSTANT:
+            case LESS_THAN:
                 return IsLessThanConstantConstraint.class;
-            case IS_LESS_THAN_OR_EQUAL_TO_CONSTANT:
+            case LESS_THAN_OR_EQUAL_TO:
                 return IsLessThanOrEqualToConstantConstraint.class;
-            case IS_AFTER_CONSTANT_DATE_TIME:
+            case AFTER:
                 return IsAfterConstantDateTimeConstraint.class;
-            case IS_AFTER_OR_EQUAL_TO_CONSTANT_DATE_TIME:
+            case AFTER_OR_AT:
                 return IsAfterOrEqualToConstantDateTimeConstraint.class;
-            case IS_BEFORE_CONSTANT_DATE_TIME:
+            case BEFORE:
                 return IsBeforeConstantDateTimeConstraint.class;
-            case IS_BEFORE_OR_EQUAL_TO_CONSTANT_DATE_TIME:
+            case BEFORE_OR_AT:
                 return IsBeforeOrEqualToConstantDateTimeConstraint.class;
-            case IS_GRANULAR_TO:
+            case GRANULAR_TO:
                 return IsGranularToNumericConstraint.class;
-            case IS_EQUAL_TO_CONSTANT:
+            case EQUAL_TO:
                 return EqualToConstraint.class;
-            case IS_IN_SET:
+            case IN_SET:
                 return IsInSetConstraint.class;
             default:
                 throw new UnsupportedOperationException();

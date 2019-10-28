@@ -9,7 +9,7 @@ Feature: The violations mode of the Data Helix app can be run in violations mode
     Given foo is anything but equal to 8
     And foo has type "decimal"
     And foo is granular to 1
-    And we do not violate any granular to constraints
+    And we do not violate any granularTo constraints
     And the generation strategy is full
     Then the following data should be generated:
       | foo |
@@ -19,7 +19,7 @@ Feature: The violations mode of the Data Helix app can be run in violations mode
     Given foo is equal to 8
     And foo has type "decimal"
     And the generation strategy is full
-    And we do not violate any equal to constraints
+    And we do not violate any equalTo constraints
     Then the following data should be generated:
       | foo |
       | 8   |

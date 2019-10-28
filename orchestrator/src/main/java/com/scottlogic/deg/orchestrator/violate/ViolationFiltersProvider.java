@@ -27,10 +27,10 @@ import java.util.stream.Collectors;
 
 public class ViolationFiltersProvider implements Provider<List<ViolationFilter>> {
     private final ViolateConfigSource commandLine;
-    private final AtomicConstraintTypeMapper mapper;
+    private final ConstraintTypeMapper mapper;
 
     @Inject
-    public ViolationFiltersProvider(ViolateConfigSource commandLine, AtomicConstraintTypeMapper mapper) {
+    public ViolationFiltersProvider(ViolateConfigSource commandLine, ConstraintTypeMapper mapper) {
         this.commandLine = commandLine;
         this.mapper = mapper;
     }

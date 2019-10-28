@@ -17,7 +17,6 @@
 package com.scottlogic.deg.orchestrator.cucumber.testframework.steps;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.scottlogic.deg.common.profile.AtomicConstraintType;
 import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.*;
@@ -79,9 +78,14 @@ public class GeneralTestStep {
         this.state.combinationStrategyType = strategy;
     }
 
-    @When("we do not violate any {operator} constraints")
-    public void constraintTypeIsNotViolated(String operator) {
-        this.state.addConstraintToNotViolate(AtomicConstraintType.fromText(operator));
+    @When("we do not violate any equalTo constraints")
+    public void equalToConstraintTypeIsNotViolated() {
+        this.state.addConstraintToNotViolate(ConstraintType.EQUAL_TO);
+    }
+
+    @When("we do not violate any granularTo constraints")
+    public void granularToConstraintTypeIsNotViolated() {
+        this.state.addConstraintToNotViolate(ConstraintType.GRANULAR_TO);
     }
 
     @Given("the data requested is {generationMode}")

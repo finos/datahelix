@@ -16,26 +16,26 @@
 
 package com.scottlogic.deg.profile.dtos;
 
-import com.scottlogic.deg.common.profile.AtomicConstraintType;
+import com.scottlogic.deg.profile.common.ConstraintType;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 
-class AtomicConstraintTypeTest {
+class ConstraintTypeTest {
 
     @Test
     void fromText() {
-        String greaterThanString = AtomicConstraintType.IS_GREATER_THAN_OR_EQUAL_TO_CONSTANT.getText();
-        AtomicConstraintType greaterThanOrEqualTo = AtomicConstraintType.fromText(greaterThanString);
+        String greaterThanString = ConstraintType.GREATER_THAN_OR_EQUAL_TO.propertyName;
+        ConstraintType greaterThanOrEqualTo = ConstraintType.fromPropertyName(greaterThanString);
 
-        Assert.assertThat(greaterThanOrEqualTo, is(AtomicConstraintType.IS_GREATER_THAN_OR_EQUAL_TO_CONSTANT));
+        Assert.assertThat(greaterThanOrEqualTo, is(ConstraintType.GREATER_THAN_OR_EQUAL_TO));
     }
 
     @Test
     void fromTextLowerCase() {
-        AtomicConstraintType greaterThanOrEqualTo = AtomicConstraintType.fromText("shorterthan");
+        ConstraintType greaterThanOrEqualTo = ConstraintType.fromPropertyName("shorterthan");
 
-        Assert.assertThat(greaterThanOrEqualTo, is(AtomicConstraintType.IS_STRING_SHORTER_THAN));
+        Assert.assertThat(greaterThanOrEqualTo, is(ConstraintType.SHORTER_THAN));
     }
 }
