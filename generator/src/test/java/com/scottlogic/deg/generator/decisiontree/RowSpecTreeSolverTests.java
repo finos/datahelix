@@ -19,8 +19,7 @@ package com.scottlogic.deg.generator.decisiontree;
 import com.scottlogic.deg.common.profile.fields.Field;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.fields.Fields;
-import com.scottlogic.deg.common.profile.rules.Rule;
-import com.scottlogic.deg.common.profile.rules.RuleInformation;
+import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.generator.fieldspecs.*;
@@ -88,8 +87,8 @@ class RowSpecTreeSolverTests {
         Fields fields = Fields.create(Arrays.asList(country, currency, city));
 
         List<Rule> dummyRules = Arrays.asList(
-            new Rule(
-                rule("US country constrains city"),
+            Rule.create(
+                "US country constrains city",
                 Collections.singletonList(
                     new ConditionalConstraint(
                         new IsInSetConstraint(
@@ -102,8 +101,8 @@ class RowSpecTreeSolverTests {
                                 new WeightedElement<>("New York", 1.0F),
                                 new WeightedElement<>("Washington DC", 1.0F)))
                         ))))),
-            new Rule(
-                rule("GB country constrains city"),
+            Rule.create(
+                "GB country constrains city",
                 Collections.singletonList(
                     new ConditionalConstraint(
                         new IsInSetConstraint(
@@ -116,8 +115,8 @@ class RowSpecTreeSolverTests {
                                 new WeightedElement<>("Bristol", 1.0F),
                                 new WeightedElement<>("London", 1.0F)))
                         ))))),
-            new Rule(
-                rule("US country constrains currency"),
+            Rule.create(
+                "US country constrains currency",
                 Collections.singletonList(
                     new ConditionalConstraint(
                         new IsInSetConstraint(
@@ -128,8 +127,8 @@ class RowSpecTreeSolverTests {
                             currency,
                             new DistributedList<>(Collections.singletonList(new WeightedElement<>("USD", 1.0F)))
                         )))),
-            new Rule(
-                rule("GB country constrains currency"),
+            Rule.create(
+                "GB country constrains currency",
                 Collections.singletonList(
                     new ConditionalConstraint(
                         new IsInSetConstraint(
@@ -150,9 +149,5 @@ class RowSpecTreeSolverTests {
             .collect(Collectors.toList());
 
         Assert.assertThat(rowSpecs, notNullValue());
-    }
-
-    private static RuleInformation rule(String description){
-        return new RuleInformation(description);
     }
 }

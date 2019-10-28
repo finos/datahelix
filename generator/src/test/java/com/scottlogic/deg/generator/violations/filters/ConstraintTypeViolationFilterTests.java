@@ -19,7 +19,7 @@ package com.scottlogic.deg.generator.violations.filters;
 import com.scottlogic.deg.common.profile.HelixNumber;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
-import com.scottlogic.deg.common.profile.rules.constraints.Constraint;
+import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsGreaterThanConstantConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsInSetConstraint;
 import org.junit.Assert;

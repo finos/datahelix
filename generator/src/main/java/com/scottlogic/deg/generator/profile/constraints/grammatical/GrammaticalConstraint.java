@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.profile.constraints.grammatical;
 
-import com.scottlogic.deg.common.profile.rules.constraints.Constraint;
+import com.scottlogic.deg.common.profile.constraints.Constraint;
 
 public interface GrammaticalConstraint extends Constraint {
     default Constraint negate()

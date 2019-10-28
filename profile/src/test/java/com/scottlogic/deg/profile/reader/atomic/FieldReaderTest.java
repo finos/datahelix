@@ -21,7 +21,7 @@ import com.scottlogic.deg.common.profile.*;
 import com.scottlogic.deg.common.profile.fields.Field;
 import com.scottlogic.deg.common.profile.fields.FieldBuilder;
 import com.scottlogic.deg.common.profile.fields.SpecificFieldType;
-import com.scottlogic.deg.common.profile.rules.constraints.Constraint;
+import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.profile.reader.FieldReader;
 import com.scottlogic.deg.profile.reader.file.names.NameRetriever;

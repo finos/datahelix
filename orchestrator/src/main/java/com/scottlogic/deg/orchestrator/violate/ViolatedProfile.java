@@ -18,7 +18,7 @@ package com.scottlogic.deg.orchestrator.violate;
 
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.common.profile.fields.Fields;
-import com.scottlogic.deg.common.profile.rules.Rule;
+import com.scottlogic.deg.common.profile.Rule;
 
 import java.util.Collection;
 

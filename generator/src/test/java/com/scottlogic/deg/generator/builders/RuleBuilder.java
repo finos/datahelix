@@ -16,9 +16,8 @@
 
 package com.scottlogic.deg.generator.builders;
 
-import com.scottlogic.deg.common.profile.rules.Rule;
-import com.scottlogic.deg.common.profile.rules.constraints.Constraint;
-import com.scottlogic.deg.common.profile.rules.RuleInformation;
+import com.scottlogic.deg.common.profile.Rule;
+import com.scottlogic.deg.common.profile.constraints.Constraint;
 
 import java.util.List;
 
@@ -26,23 +25,23 @@ import java.util.List;
  * Defines a builder for a Rule object
  */
 public class RuleBuilder extends ConstraintChainBuilder<Rule> {
-    private final RuleInformation ruleInformation;
+    private final String rule;
 
-    public RuleBuilder(String ruleName) {
-        this.ruleInformation = new RuleInformation(ruleName);
+    public RuleBuilder(String rule) {
+        this.rule = rule;
     }
 
-    private RuleBuilder(Constraint headConstraint, List<Constraint> tailConstraints, RuleInformation ruleInformation) {
+    private RuleBuilder(Constraint headConstraint, List<Constraint> tailConstraints, String rule) {
         super(headConstraint, tailConstraints);
-        this.ruleInformation = ruleInformation;
+        this.rule = rule;
     }
 
     public Rule buildInner() {
-        return new Rule(ruleInformation, tailConstraints);
+        return Rule.create(rule, tailConstraints);
     }
 
     @Override
     ConstraintChainBuilder<Rule> create(Constraint headConstraint, List<Constraint> tailConstraints) {
-        return new RuleBuilder(headConstraint, tailConstraints, ruleInformation);
+        return new RuleBuilder(headConstraint, tailConstraints, rule);
     }
 }

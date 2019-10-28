@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.common.profile.rules.constraints;
+package com.scottlogic.deg.common.profile.constraints;
 public interface Constraint
 {
     Constraint negate();

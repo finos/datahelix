@@ -17,7 +17,7 @@
 package com.scottlogic.deg.orchestrator.violate;
 
 import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.common.profile.rules.Rule;
+import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.common.util.FileUtils;
 import com.scottlogic.deg.output.OutputPath;
 import com.scottlogic.deg.output.outputtarget.OutputTargetValidationException;

@@ -18,9 +18,8 @@ package com.scottlogic.deg.orchestrator.violate.violator;
 
 import com.scottlogic.deg.common.profile.HelixNumber;
 import com.scottlogic.deg.common.profile.UnviolatableConstraintException;
-import com.scottlogic.deg.common.profile.rules.Rule;
-import com.scottlogic.deg.common.profile.rules.RuleInformation;
-import com.scottlogic.deg.common.profile.rules.constraints.Constraint;
+import com.scottlogic.deg.common.profile.Rule;
+import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsLessThanConstantConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.ViolatedAtomicConstraint;
@@ -55,7 +54,7 @@ public class RuleViolatorTests {
     private AtomicConstraint atomicConstraint1;
     private AtomicConstraint atomicConstraint2;
     private AtomicConstraint atomicConstraint3;
-    private RuleInformation ruleInformation;
+    private String ruleInformation;
 
     @Mock private ViolationFilter mockFilter;
 
@@ -73,7 +72,7 @@ public class RuleViolatorTests {
         atomicConstraint1 = new IsLessThanConstantConstraint(createField("foo"), HelixNumber.create(10));
         atomicConstraint2 = new IsLessThanConstantConstraint(createField("bar"), HelixNumber.create(20));
         atomicConstraint3 = new IsLessThanConstantConstraint(createField("foobar"), HelixNumber.create(30));
-        ruleInformation = new RuleInformation();
+        ruleInformation = null;
     }
 
     /**
@@ -89,13 +88,13 @@ public class RuleViolatorTests {
         AndConstraint andConstraint = new AndConstraint(atomicConstraint1, atomicConstraint2);
         inputConstraints.add(andConstraint);
 
-        Rule inputRule = new Rule(ruleInformation, inputConstraints);
+        Rule inputRule = Rule.create(ruleInformation, inputConstraints);
 
         //Act
         Rule outputRule = target.violateRule(inputRule);
 
         //Assert
-        Rule expectedRule = new Rule(
+        Rule expectedRule = Rule.create(
             ruleInformation,
             Collections.singleton(
                 new OrConstraint(
@@ -118,13 +117,13 @@ public class RuleViolatorTests {
         AndConstraint andConstraint = new AndConstraint(atomicConstraint1, atomicConstraint2);
         inputConstraints.add(andConstraint.negate());
 
-        Rule inputRule = new Rule(ruleInformation, inputConstraints);
+        Rule inputRule = Rule.create(ruleInformation, inputConstraints);
 
         //Act
         Rule outputRule = target.violateRule(inputRule);
 
         //Assert
-        Rule expectedRule = new Rule(
+        Rule expectedRule = Rule.create(
             ruleInformation,
             Collections.singleton(andConstraint)
         );
@@ -143,13 +142,13 @@ public class RuleViolatorTests {
         OrConstraint orConstraint = new OrConstraint(atomicConstraint1, atomicConstraint2);
         inputConstraints.add(orConstraint);
 
-        Rule inputRule = new Rule(ruleInformation, inputConstraints);
+        Rule inputRule = Rule.create(ruleInformation, inputConstraints);
 
         //Act
         Rule outputRule = target.violateRule(inputRule);
 
         //Assert
-        Rule expectedRule = new Rule(
+        Rule expectedRule = Rule.create(
             ruleInformation,
             Collections.singleton(
                 new AndConstraint(
@@ -172,13 +171,13 @@ public class RuleViolatorTests {
         OrConstraint orConstraint = new OrConstraint(atomicConstraint1, atomicConstraint2);
         inputConstraints.add(orConstraint.negate());
 
-        Rule inputRule = new Rule(ruleInformation, inputConstraints);
+        Rule inputRule = Rule.create(ruleInformation, inputConstraints);
 
         //Act
         Rule outputRule = target.violateRule(inputRule);
 
         //Assert
-        Rule expectedRule = new Rule(
+        Rule expectedRule = Rule.create(
             ruleInformation,
             Collections.singleton(orConstraint)
         );
@@ -197,13 +196,13 @@ public class RuleViolatorTests {
         ConditionalConstraint ifThenConstraint = new ConditionalConstraint(atomicConstraint1, atomicConstraint2);
         inputConstraints.add(ifThenConstraint);
 
-        Rule inputRule = new Rule(ruleInformation, inputConstraints);
+        Rule inputRule = Rule.create(ruleInformation, inputConstraints);
 
         //Act
         Rule outputRule = target.violateRule(inputRule);
 
         //Assert
-        Rule expectedRule = new Rule(
+        Rule expectedRule = Rule.create(
             ruleInformation,
             Collections.singleton(
                 new AndConstraint(
@@ -226,13 +225,13 @@ public class RuleViolatorTests {
         ConditionalConstraint ifThenConstraint = new ConditionalConstraint(atomicConstraint1, atomicConstraint2);
         inputConstraints.add(ifThenConstraint.negate());
 
-        Rule inputRule = new Rule(ruleInformation, inputConstraints);
+        Rule inputRule = Rule.create(ruleInformation, inputConstraints);
 
         //Act
         Rule outputRule = target.violateRule(inputRule);
 
         //Assert
-        Rule expectedRule = new Rule(
+        Rule expectedRule = Rule.create(
             ruleInformation,
             Collections.singleton(ifThenConstraint)
         );
@@ -252,13 +251,13 @@ public class RuleViolatorTests {
         ConditionalConstraint ifThenElseConstraint = new ConditionalConstraint(atomicConstraint1, atomicConstraint2, atomicConstraint3);
         inputConstraints.add(ifThenElseConstraint);
 
-        Rule inputRule = new Rule(ruleInformation, inputConstraints);
+        Rule inputRule = Rule.create(ruleInformation, inputConstraints);
 
         //Act
         Rule outputRule = target.violateRule(inputRule);
 
         //Assert
-        Rule expectedRule = new Rule(
+        Rule expectedRule = Rule.create(
             ruleInformation,
             Collections.singleton(
                 new OrConstraint(
@@ -285,13 +284,13 @@ public class RuleViolatorTests {
         ConditionalConstraint ifThenElseConstraint = new ConditionalConstraint(atomicConstraint1, atomicConstraint2, atomicConstraint3);
         inputConstraints.add(ifThenElseConstraint.negate());
 
-        Rule inputRule = new Rule(ruleInformation, inputConstraints);
+        Rule inputRule = Rule.create(ruleInformation, inputConstraints);
 
         //Act
         Rule outputRule = target.violateRule(inputRule);
 
         //Assert
-        Rule expectedRule = new Rule(
+        Rule expectedRule = Rule.create(
             ruleInformation,
             Collections.singleton(ifThenElseConstraint)
         );
@@ -309,13 +308,13 @@ public class RuleViolatorTests {
         //Arrange
         inputConstraints.add(atomicConstraint1);
 
-        Rule inputRule = new Rule(ruleInformation, inputConstraints);
+        Rule inputRule = Rule.create(ruleInformation, inputConstraints);
 
         //Act
         Rule outputRule = target.violateRule(inputRule);
 
         //Assert
-        Rule expectedRule = new Rule(
+        Rule expectedRule = Rule.create(
             ruleInformation,
             Collections.singleton(
                 new ViolatedAtomicConstraint(atomicConstraint1.negate())
@@ -338,13 +337,13 @@ public class RuleViolatorTests {
         inputConstraints.add(atomicConstraint2);
         inputConstraints.add(atomicConstraint3);
 
-        Rule inputRule = new Rule(ruleInformation, inputConstraints);
+        Rule inputRule = Rule.create(ruleInformation, inputConstraints);
 
         //Act
         Rule outputRule = target.violateRule(inputRule);
 
         //Assert
-        Rule expectedRule = new Rule(
+        Rule expectedRule = Rule.create(
             ruleInformation,
             Arrays.asList(
                 new OrConstraint(
@@ -380,7 +379,7 @@ public class RuleViolatorTests {
         Constraint mockConstraint = Mockito.mock(Constraint.class);
         inputConstraints.add(mockConstraint);
 
-        Rule inputRule = new Rule(ruleInformation, inputConstraints);
+        Rule inputRule = Rule.create(ruleInformation, inputConstraints);
 
         //Act/Assert
         assertThrows(
@@ -399,7 +398,7 @@ public class RuleViolatorTests {
         target = new RuleViolator(new ArrayList<>());
 
         inputConstraints.add(atomicConstraint1);
-        Rule inputRule = new Rule(ruleInformation, inputConstraints);
+        Rule inputRule = Rule.create(ruleInformation, inputConstraints);
 
         //Act
         Rule outputRule = target.violateRule(inputRule);
@@ -422,13 +421,13 @@ public class RuleViolatorTests {
         when(mockFilter.canViolate(atomicConstraint1)).thenReturn(false);
         when(mockFilter.canViolate(atomicConstraint2)).thenReturn(false);
 
-        Rule inputRule = new Rule(ruleInformation, inputConstraints);
+        Rule inputRule = Rule.create(ruleInformation, inputConstraints);
 
         //Act
         Rule outputRule = target.violateRule(inputRule);
 
         //Assert
-        Rule expectedRule = new Rule(
+        Rule expectedRule = Rule.create(
             ruleInformation,
             Arrays.asList(
                 atomicConstraint1,
@@ -457,13 +456,13 @@ public class RuleViolatorTests {
         when(mockFilter.canViolate(atomicConstraint2)).thenReturn(true);
         when(mockFilter.canViolate(atomicConstraint3)).thenReturn(true);
 
-        Rule inputRule = new Rule(ruleInformation, inputConstraints);
+        Rule inputRule = Rule.create(ruleInformation, inputConstraints);
 
         //Act
         Rule outputRule = target.violateRule(inputRule);
 
         //Assert
-        Rule expectedRule = new Rule(
+        Rule expectedRule = Rule.create(
             ruleInformation,
             Arrays.asList(
                 atomicConstraint1,
@@ -501,13 +500,13 @@ public class RuleViolatorTests {
         when(mockFilter.canViolate(atomicConstraint2)).thenReturn(true);
         when(mockFilter.canViolate(atomicConstraint3)).thenReturn(false);
 
-        Rule inputRule = new Rule(ruleInformation, inputConstraints);
+        Rule inputRule = Rule.create(ruleInformation, inputConstraints);
 
         //Act
         Rule outputRule = target.violateRule(inputRule);
 
         //Assert
-        Rule expectedRule = new Rule(
+        Rule expectedRule = Rule.create(
             ruleInformation,
             Arrays.asList(
                 atomicConstraint3,

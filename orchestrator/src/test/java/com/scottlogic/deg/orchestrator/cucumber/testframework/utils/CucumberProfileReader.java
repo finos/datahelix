@@ -20,11 +20,13 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Profile;
 import com.scottlogic.deg.profile.dtos.ProfileDTO;
 import com.scottlogic.deg.profile.dtos.RuleDTO;
-import com.scottlogic.deg.profile.reader.*;
+import com.scottlogic.deg.profile.reader.ConstraintReader;
+import com.scottlogic.deg.profile.reader.JsonProfileReader;
 import com.scottlogic.deg.profile.serialisation.ProfileSerialiser;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class CucumberProfileReader extends JsonProfileReader {
 
@@ -48,7 +50,7 @@ public class CucumberProfileReader extends JsonProfileReader {
 
         RuleDTO ruleDTO = new RuleDTO();
         ruleDTO.constraints = state.constraints;
-        profileDTO.rules = Arrays.asList(ruleDTO);
+        profileDTO.rules = ruleDTO.constraints.isEmpty() ? new ArrayList<>() : Collections.singletonList(ruleDTO);
 
         return new ProfileSerialiser().serialise(profileDTO);
     }

@@ -21,8 +21,8 @@ import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstrain
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.NegatedGrammaticalConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
-import com.scottlogic.deg.common.profile.rules.Rule;
-import com.scottlogic.deg.common.profile.rules.constraints.Constraint;
+import com.scottlogic.deg.common.profile.Rule;
+import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.common.profile.UnviolatableConstraintException;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.ViolatedAtomicConstraint;
@@ -64,7 +64,7 @@ public class RuleViolator {
                     : new AndConstraint(violate)
                 ));
         }
-        return new Rule(rule.getRuleInformation(), newConstraints);
+        return Rule.create(rule.getDescription(), newConstraints);
     }
 
     /**

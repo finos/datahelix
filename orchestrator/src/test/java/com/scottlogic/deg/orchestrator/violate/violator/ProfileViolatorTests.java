@@ -20,9 +20,8 @@ import com.scottlogic.deg.common.profile.fields.Field;
 import com.scottlogic.deg.common.profile.HelixNumber;
 import com.scottlogic.deg.common.profile.fields.Fields;
 import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.common.profile.rules.Rule;
-import com.scottlogic.deg.common.profile.rules.RuleInformation;
-import com.scottlogic.deg.common.profile.rules.constraints.Constraint;
+import com.scottlogic.deg.common.profile.Rule;
+import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsGreaterThanConstantConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsLessThanConstantConstraint;
 import com.scottlogic.deg.orchestrator.violate.ViolatedProfile;
@@ -147,7 +146,7 @@ public class ProfileViolatorTests {
 
     private void initRules() {
         //Rule 1 consists of 2 constraints, "foo is greater than 100" and "bar is greater than 50"
-        RuleInformation ruleInformation1 = new RuleInformation("Rule 1 description");
+        String ruleInformation1 = "Rule 1 description";
         fooField = createField("foo");
         barField = createField("bar");
         Constraint constraint1 = new IsGreaterThanConstantConstraint(
@@ -158,7 +157,7 @@ public class ProfileViolatorTests {
             barField,
             HelixNumber.create(50)
         );
-        rule1 = new Rule(ruleInformation1, Arrays.asList(constraint1, constraint2));
+        rule1 = Rule.create(ruleInformation1, Arrays.asList(constraint1, constraint2));
 
         //Violated Rule 1 consists of two constraints, "foo is less than to 101" and "bar is less than 51"
         Constraint constraint3 = new IsLessThanConstantConstraint(
@@ -169,10 +168,10 @@ public class ProfileViolatorTests {
             barField,
             HelixNumber.create(51)
         );
-        violatedRule1 = new Rule(ruleInformation1, Arrays.asList(constraint3, constraint4));
+        violatedRule1 = Rule.create(ruleInformation1, Arrays.asList(constraint3, constraint4));
 
-        RuleInformation ruleInformation2 = new RuleInformation("Rule 2 description");
-        rule2 = new Rule(ruleInformation2, Arrays.asList(constraint1,constraint4));
-        violatedRule2 = new Rule(ruleInformation2, Arrays.asList(constraint2,constraint3));
+        String ruleInformation2 = "Rule 2 description";
+        rule2 = Rule.create(ruleInformation2, Arrays.asList(constraint1,constraint4));
+        violatedRule2 = Rule.create(ruleInformation2, Arrays.asList(constraint2,constraint3));
     }
 }

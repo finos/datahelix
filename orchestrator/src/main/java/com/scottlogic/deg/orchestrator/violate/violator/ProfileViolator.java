@@ -18,7 +18,7 @@ package com.scottlogic.deg.orchestrator.violate.violator;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.common.profile.rules.Rule;
+import com.scottlogic.deg.common.profile.Rule;
 import com.scottlogic.deg.orchestrator.violate.ViolatedProfile;
 
 import java.io.IOException;
@@ -81,6 +81,6 @@ public class ProfileViolator {
             violatedRule,
             profile.getFields(),
             newRules,
-            String.format("%s -- Violating: %s", profile.getDescription(), violatedRule.getRuleInformation().getDescription()));
+            String.format("%s -- Violating: %s", profile.getDescription(), violatedRule.getDescription()));
     }
 }

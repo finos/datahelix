@@ -23,8 +23,8 @@ import com.scottlogic.deg.generator.builders.*;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.common.profile.Profile;
-import com.scottlogic.deg.common.profile.rules.Rule;
-import com.scottlogic.deg.common.profile.rules.constraints.Constraint;
+import com.scottlogic.deg.common.profile.Rule;
+import com.scottlogic.deg.common.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
@@ -184,25 +184,6 @@ public class ProfileViolationTests {
         C = new SingleConstraintBuilder().withOfLengthConstraint(field3, 10);
         D = new SingleConstraintBuilder().withGreaterThanConstraint(field4, 100);
         E = new SingleConstraintBuilder().withLessThanConstraint(field5, 200);
-    }
-
-    @Test
-    public void violate_withNoConstraints_producesViolatedEmptyProfile() throws IOException {
-        //Arrange
-        Rule rule = new RuleBuilder("Empty rule")
-            .build();
-
-        TestProfiles testProfiles = createTestProfiles(
-            "Empty rule profile",
-            Collections.singletonList(field1),
-            Collections.singletonList(new RuleViolatedRulePair(rule, rule))
-        );
-
-        //Act
-        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
-
-        //Assert
-        assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
     }
 
     @ParameterizedTest
@@ -1048,7 +1029,7 @@ public class ProfileViolationTests {
             .map(h -> h.getRule().equals(rule) ? h.getViolatedRule() : h.getRule())
             .collect(Collectors.toList());
 
-        String processedDescription = description + " -- Violating: " + rule.getRuleInformation().getDescription();
+        String processedDescription = description + " -- Violating: " + rule.getDescription();
 
         return new ViolatedProfile(rule, Fields.create(fields), newRuleList, processedDescription);
     }

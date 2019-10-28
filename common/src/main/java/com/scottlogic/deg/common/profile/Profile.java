@@ -18,7 +18,6 @@ package com.scottlogic.deg.common.profile;
 
 import com.scottlogic.deg.common.profile.fields.Field;
 import com.scottlogic.deg.common.profile.fields.Fields;
-import com.scottlogic.deg.common.profile.rules.Rule;
 
 import java.util.Collection;
 import java.util.List;
