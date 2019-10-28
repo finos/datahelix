@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.profile.constraints.grammatical;
 
-import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.fields.Field;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsNullConstraint;
@@ -24,7 +24,7 @@ import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.deg.common.profile.fields.FieldBuilder.createField;
 
 public class NotConstraintTests {
 

@@ -7,7 +7,7 @@ public class FixedFieldTests {
     @Test
     public void getFieldSpecForCurrentValue_fieldSpecNullAndCurrentValueNull_returnsFieldSpecWithSetRestrictionsAndNotNullRestrictions() {
         FixedField fixedField = new FixedField(
-            new Field("Test"),
+            Field.create("Test"),
             Stream.of(new ArrayList<Object>() {{ add(null); }}),
             FieldSpec.Empty,
             mock(ReductiveDataGeneratorMonitor.class)

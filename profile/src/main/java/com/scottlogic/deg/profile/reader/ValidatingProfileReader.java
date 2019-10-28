@@ -16,9 +16,9 @@
 package com.scottlogic.deg.profile.reader;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.fields.Field;
 import com.scottlogic.deg.generator.profile.Profile;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.fields.Fields;
 import com.scottlogic.deg.profile.guice.ProfileConfigSource;
 import com.scottlogic.deg.profile.reader.validation.ConfigValidator;
 import com.scottlogic.deg.profile.dtos.ProfileSchemaLoader;
@@ -61,14 +61,14 @@ public class ValidatingProfileReader {
         return profile;
     }
 
-    private void validateFieldsAreTyped(ProfileFields fields) {
+    private void validateFieldsAreTyped(Fields fields) {
         List<Field> untyped = fields.stream().filter(field -> field.getType() == null).collect(Collectors.toList());
         if (untyped.size() == 1) {
-            throw new InvalidProfileException("Field [" + untyped.get(0).name + "]: is not typed; add its type to the field definition");
+            throw new InvalidProfileException("Field [" + untyped.get(0).getName() + "]: is not typed; add its type to the field definition");
         }
         if (!untyped.isEmpty()) {
             throw new InvalidProfileException("Fields "
-                + untyped.stream().map(f -> f.name).reduce((s, z) -> s + ", " + z).get()
+                + untyped.stream().map(f -> f.getName()).reduce((s, z) -> s + ", " + z).get()
                 + " are not typed; add their type to the field definition");
         }
     }

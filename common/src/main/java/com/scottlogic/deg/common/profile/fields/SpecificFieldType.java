@@ -1,4 +1,4 @@
-package com.scottlogic.deg.common.profile;
+package com.scottlogic.deg.common.profile.fields;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
@@ -59,10 +59,6 @@ public enum SpecificFieldType
     }
 
     public String getDefaultFormatting() {
-        switch (type) {
-            case "date": return DEFAULT_DATE_FORMATTING;
-            default:
-                return null;
-        }
+        return "date".equals(type) ? DEFAULT_DATE_FORMATTING : null;
     }
 }

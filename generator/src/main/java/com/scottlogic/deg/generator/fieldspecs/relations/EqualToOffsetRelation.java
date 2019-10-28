@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.fieldspecs.relations;
 
-import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.fields.Field;
 import com.scottlogic.deg.common.profile.Granularity;
 import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;

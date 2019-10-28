@@ -16,13 +16,13 @@
 
 package com.scottlogic.deg.generator.decisiontree;
 
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.fields.Field;
+import com.scottlogic.deg.common.profile.fields.Fields;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.deg.common.profile.fields.FieldBuilder.createField;
 import static com.scottlogic.deg.generator.builders.TestConstraintNodeBuilder.constraintNode;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
@@ -55,7 +55,7 @@ class DecisionTreeOptimiserTest {
                     .where(B).isNotNull())
             .build();
 
-        ConstraintNode actual = optimiser.optimiseTree(new DecisionTree(original, new ProfileFields(Collections.EMPTY_LIST)))
+        ConstraintNode actual = optimiser.optimiseTree(new DecisionTree(original,Fields.create(Collections.singletonList(createField("test")))))
             .getRootNode();
 
         assertThat(actual, sameBeanAs(original));
@@ -88,7 +88,7 @@ class DecisionTreeOptimiserTest {
                     .where(A).isNotInSet("a1"))
             .build();
 
-        ConstraintNode actual = optimiser.optimiseTree(new DecisionTree(original, new ProfileFields(Collections.EMPTY_LIST)))
+        ConstraintNode actual = optimiser.optimiseTree(new DecisionTree(original, Fields.create(Collections.singletonList(createField("test")))))
             .getRootNode();
 
         assertThat(actual, sameBeanAs(original));

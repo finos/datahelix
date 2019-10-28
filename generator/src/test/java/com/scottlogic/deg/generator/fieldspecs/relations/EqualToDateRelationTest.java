@@ -1,7 +1,7 @@
 package com.scottlogic.deg.generator.fieldspecs.relations;
 
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.FieldType;
+import com.scottlogic.deg.common.profile.fields.Field;
+import com.scottlogic.deg.common.profile.fields.SpecificFieldType;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
@@ -16,8 +16,8 @@ import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 
 class EqualToDateRelationTest {
 
-    private final Field a = new Field("a", FieldType.DATETIME, false ,"", false);
-    private final Field b = new Field("b", FieldType.DATETIME, false, "", false);
+    private final Field a = Field.create("a", SpecificFieldType.DATETIME, false ,"", false, false);
+    private final Field b = Field.create("b", SpecificFieldType.DATETIME, false, "", false, false);
     private final FieldSpecRelations equalToDateRelations = new EqualToRelation(a, b);
 
     @Test

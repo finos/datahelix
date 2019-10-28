@@ -18,7 +18,7 @@
 package com.scottlogic.deg.generator.generation.grouped;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.fields.Field;
 import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;

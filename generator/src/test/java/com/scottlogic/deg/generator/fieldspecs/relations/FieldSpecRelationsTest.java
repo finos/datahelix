@@ -1,8 +1,8 @@
 package com.scottlogic.deg.generator.fieldspecs.relations;
 
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.common.profile.DateTimeGranularity;
+import com.scottlogic.deg.common.profile.fields.Field;
+import com.scottlogic.deg.common.profile.fields.SpecificFieldType;
 import com.scottlogic.deg.common.util.defaults.DateTimeDefaults;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
@@ -12,18 +12,17 @@ import org.junit.jupiter.api.Test;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.deg.common.profile.fields.FieldBuilder.createField;
 import static com.scottlogic.deg.common.util.Defaults.ISO_MAX_DATE;
 import static com.scottlogic.deg.common.util.Defaults.ISO_MIN_DATE;
-import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDateTimeRestrictions;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static java.time.temporal.ChronoUnit.MILLIS;
 import static java.time.temporal.ChronoUnit.YEARS;
 
 class FieldSpecRelationsTest {
-    private Field main = createField("main", FieldType.DATETIME);
-    private Field other = createField("other", FieldType.DATETIME);
+    private Field main = createField("main", SpecificFieldType.DATETIME);
+    private Field other = createField("other", SpecificFieldType.DATETIME);
 
     @Test
     public void equalTo_exactValue_returnsSame(){

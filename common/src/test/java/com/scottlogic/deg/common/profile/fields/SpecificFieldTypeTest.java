@@ -1,9 +1,10 @@
-package com.scottlogic.deg.common.profile;
+package com.scottlogic.deg.common.profile.fields;
 
 import org.junit.jupiter.api.Test;
 
 import static com.scottlogic.deg.common.util.Defaults.DEFAULT_DATE_FORMATTING;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class SpecificFieldTypeTest {
 

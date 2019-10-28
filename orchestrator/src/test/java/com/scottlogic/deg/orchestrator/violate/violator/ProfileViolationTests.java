@@ -17,6 +17,8 @@
 package com.scottlogic.deg.orchestrator.violate.violator;
 
 import com.scottlogic.deg.common.profile.*;
+import com.scottlogic.deg.common.profile.fields.Field;
+import com.scottlogic.deg.common.profile.fields.Fields;
 import com.scottlogic.deg.generator.builders.*;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
@@ -48,7 +50,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.deg.common.profile.fields.FieldBuilder.createField;
 import static com.scottlogic.deg.orchestrator.violate.violator.TypeEqualityHelper.assertProfileListsAreEquivalent;
 
 /**
@@ -1048,7 +1050,7 @@ public class ProfileViolationTests {
 
         String processedDescription = description + " -- Violating: " + rule.getRuleInformation().getDescription();
 
-        return new ViolatedProfile(rule, new ProfileFields(fields), newRuleList, processedDescription);
+        return new ViolatedProfile(rule, Fields.create(fields), newRuleList, processedDescription);
     }
 
     private List<Rule> getRulesFromPair(List<RuleViolatedRulePair> pair) {

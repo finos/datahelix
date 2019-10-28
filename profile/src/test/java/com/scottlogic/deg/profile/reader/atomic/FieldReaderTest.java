@@ -18,12 +18,15 @@
 package com.scottlogic.deg.profile.reader.atomic;
 
 import com.scottlogic.deg.common.profile.*;
+import com.scottlogic.deg.common.profile.fields.Field;
+import com.scottlogic.deg.common.profile.fields.FieldBuilder;
+import com.scottlogic.deg.common.profile.fields.SpecificFieldType;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
+import com.scottlogic.deg.profile.reader.FieldReader;
 import com.scottlogic.deg.profile.reader.file.names.NameRetriever;
 import org.junit.jupiter.api.Test;
 
-import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,49 +34,40 @@ import static org.junit.jupiter.api.Assertions.*;
 class FieldReaderTest
 {
 
-    private Field field = FieldBuilder.createField("test");
+    private Field decimalField = FieldBuilder.createField("test", SpecificFieldType.DECIMAL);
+    private Field integerField = FieldBuilder.createField("test", SpecificFieldType.INTEGER);
+    private Field ricField = FieldBuilder.createField("test", SpecificFieldType.RIC);
+    private Field fullNameField = FieldBuilder.createField("test", SpecificFieldType.FULL_NAME);
 
     @Test
     void returnsNullWhenPassedDecimalLowerCase() {
-        Optional<Constraint> constraint = FieldReader.read(field, SpecificFieldType.DECIMAL);
+        Optional<Constraint> constraint = FieldReader.read(decimalField);
         assertFalse(constraint.isPresent());
     }
 
     @Test
     void returnsGranularToOneWhenPassedInteger() {
-        Optional<Constraint> constraint = FieldReader.read(field,SpecificFieldType.INTEGER);
+        Optional<Constraint> constraint = FieldReader.read(integerField);
         assertTrue(constraint.isPresent());
         assertEquals(((IsGranularToNumericConstraint) constraint.get()).granularity, new NumericGranularity(0));
     }
 
     @Test
     void returnsStandardRICConstraintWhenPassedUpperCaseRIC() {
-        Optional<Constraint> constraint = FieldReader.read(field,SpecificFieldType.RIC);
+        Optional<Constraint> constraint = FieldReader.read(ricField);
         assertTrue(constraint.isPresent());
         assertEquals(((MatchesStandardConstraint) constraint.get()).standard, StandardConstraintTypes.RIC);
     }
 
     @Test
     void returnsInSetConstraintWhenPassedLowerCaseFullName() {
-        Optional<Constraint> constraint = FieldReader.read(field,SpecificFieldType.FULL_NAME);
+        Optional<Constraint> constraint = FieldReader.read(fullNameField);
         IsInSetConstraint isInSetConstraint = new IsInSetConstraint(
-            field,
+            fullNameField,
             NameRetriever.loadNamesFromFile(NameConstraintTypes.lookupProfileText("fullname"))
         );
 
         assertTrue(constraint.isPresent());
         assertEquals((constraint.get()), isInSetConstraint);
-    }
-
-    @Test
-    void returnsGranularToDateConstraintWhenPassedDate() {
-        Optional<Constraint> constraint = FieldReader.read(field,SpecificFieldType.DATE);
-        IsGranularToDateConstraint isGranularToDateConstraint = new IsGranularToDateConstraint(
-            field,
-            new DateTimeGranularity(ChronoUnit.DAYS)
-        );
-
-        assertTrue(constraint.isPresent());
-        assertEquals((constraint.get()), isGranularToDateConstraint);
     }
 }

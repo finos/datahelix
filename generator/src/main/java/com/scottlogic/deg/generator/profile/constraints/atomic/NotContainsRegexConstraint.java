@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
-import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.fields.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
@@ -50,7 +50,7 @@ public class NotContainsRegexConstraint implements AtomicConstraint {
 
     @Override
     public String toString() {
-        return String.format("`%s` doesn't contain /%s/", field.name, regex);
+        return String.format("`%s` doesn't contain /%s/", field.getName(), regex);
     }
 
 }

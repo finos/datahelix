@@ -16,12 +16,12 @@
 
 package com.scottlogic.deg.generator.decisiontree;
 
-import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.fields.Field;
 import org.junit.jupiter.api.Test;
 
 import static com.scottlogic.deg.generator.builders.TestConstraintNodeBuilder.constraintNode;
 import static org.junit.jupiter.api.Assertions.*;
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.deg.common.profile.fields.FieldBuilder.createField;
 
 class ConstraintNodeTest {
 

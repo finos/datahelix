@@ -16,9 +16,9 @@
 
 package com.scottlogic.deg.generator.decisiontree.treepartitioning;
 
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.FieldBuilder;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.fields.Field;
+import com.scottlogic.deg.common.profile.fields.FieldBuilder;
+import com.scottlogic.deg.common.profile.fields.Fields;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder;
@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.deg.common.profile.fields.FieldBuilder.createField;
 
 class ConstraintToFieldMapperTests {
 
@@ -117,13 +117,13 @@ class ConstraintToFieldMapperTests {
     void beforeEach() {
         constraintsSet = new HashSet<>();
         decisionsSet = new HashSet<>();
-        fields = new ProfileFields(Collections.emptyList());
+        fields = FieldBuilder.createValidFields();
         mappings = null;
     }
 
     private Set<AtomicConstraint> constraintsSet;
     private Set<DecisionNode> decisionsSet;
-    private ProfileFields fields;
+    private Fields fields;
     private Map<RootLevelConstraint, Set<Field>> mappings;
 
     private void givenConstraints(AtomicConstraint... constraints) {
@@ -135,7 +135,7 @@ class ConstraintToFieldMapperTests {
     }
 
     private void givenFields(String... fieldNames) {
-        fields = new ProfileFields(
+        fields = Fields.create(
             Arrays.stream(fieldNames)
                 .map(FieldBuilder::createField)
                 .collect(Collectors.toList()));

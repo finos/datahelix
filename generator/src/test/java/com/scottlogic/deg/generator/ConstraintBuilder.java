@@ -21,7 +21,7 @@ import com.scottlogic.deg.generator.profile.constraints.atomic.IsInSetConstraint
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsNullConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
-import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.fields.Field;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 
 import java.util.*;
@@ -32,7 +32,7 @@ public class ConstraintBuilder {
     private final Map<String, Field> fields;
 
     public ConstraintBuilder(List<Field> fields) {
-        this.fields = fields.stream().collect(Collectors.toMap(f -> f.name, f -> f));
+        this.fields = fields.stream().collect(Collectors.toMap(f -> f.getName(), f -> f));
     }
 
     public List<Constraint> build() {

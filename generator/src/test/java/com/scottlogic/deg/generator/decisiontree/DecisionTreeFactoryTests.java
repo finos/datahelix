@@ -16,9 +16,10 @@
 
 package com.scottlogic.deg.generator.decisiontree;
 
-import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.fields.FieldBuilder;
+import com.scottlogic.deg.common.profile.fields.Field;
 import com.scottlogic.deg.common.profile.HelixNumber;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.fields.Fields;
 import com.scottlogic.deg.generator.decisiontree.testutils.*;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
@@ -47,7 +48,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.deg.common.profile.fields.FieldBuilder.createField;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.hamcrest.CoreMatchers.*;
@@ -74,7 +75,7 @@ class DecisionTreeFactoryTests {
     private DecisionTree getActualOutput() {
         if (this.actualOutput == null) {
             Profile testInput = new Profile(
-                new ProfileFields(
+                Fields.create(
                     Arrays.asList(this.fieldA, this.fieldB, this.fieldC)),
                 this.rules);
 
@@ -92,13 +93,13 @@ class DecisionTreeFactoryTests {
 
     @Test
     void shouldReturnAnalysedProfileWithNoAnalysedRules_IfProfileHasNoRules() {
-        Profile testInput = new Profile(new ArrayList<>(), new ArrayList<>());
+        Profile testInput = new Profile(FieldBuilder.createValidFields(), new ArrayList<>());
         DecisionTreeFactory testObject = new DecisionTreeFactory();
 
         DecisionTree testOutput = testObject.analyse(testInput);
 
         Assert.assertThat(testOutput, not(is(nullValue())));
-        Assert.assertThat(testOutput.getFields().size(), is(0));
+        Assert.assertThat(testOutput.getFields().size(), is(1));
         Assert.assertThat(testOutput.getRootNode(), not(is(nullValue())));
         Assert.assertThat(testOutput.getRootNode().getAtomicConstraints(), is(empty()));
         Assert.assertThat(testOutput.getRootNode().getDecisions(), is(empty()));
@@ -111,9 +112,9 @@ class DecisionTreeFactoryTests {
         DecisionTreeFactory testObject = new DecisionTreeFactory();
 
         DecisionTree testOutput = testObject.analyse(testInput);
-        ProfileFields actualFields = testOutput.getFields();
+        Fields actualFields = testOutput.getFields();
 
-        ProfileFields expected = new ProfileFields(inputFieldList);
+        Fields expected = Fields.create(inputFieldList);
         assertThat(actualFields, sameBeanAs(expected));
     }
 

@@ -19,8 +19,8 @@ package com.scottlogic.deg.profile.reader;
 
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.DateTimeGranularity;
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.FieldType;
+import com.scottlogic.deg.common.profile.fields.Field;
+import com.scottlogic.deg.common.profile.fields.FieldType;
 import com.scottlogic.deg.common.profile.NumericGranularity;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.profile.Profile;
@@ -115,7 +115,7 @@ public class JsonProfileReaderTests {
     }
 
     private Consumer<Field> fieldWithName(String expectedName) {
-        return field -> Assert.assertThat(field.name, equalTo(expectedName));
+        return field -> Assert.assertThat(field.getName(), equalTo(expectedName));
     }
 
     private void expectFields(Consumer<Field>... fieldAssertions) throws IOException {
@@ -190,7 +190,7 @@ public class JsonProfileReaderTests {
             ruleWithDescription("Unnamed rule"));
         expectFields(
             field -> {
-                Assert.assertThat(field.name, equalTo("foo"));
+                Assert.assertThat(field.getName(), equalTo("foo"));
                 Assert.assertEquals(field.getType(), FieldType.STRING);
             });
     }
@@ -267,7 +267,7 @@ public class JsonProfileReaderTests {
         expectRules();
         expectFields(
             field -> {
-                Assert.assertThat(field.name, equalTo("foo"));
+                Assert.assertThat(field.getName(), equalTo("foo"));
                 Assert.assertEquals(field.getType(), FieldType.STRING);
             });
     }
@@ -335,7 +335,7 @@ public class JsonProfileReaderTests {
 
         expectFields(
             field -> {
-                Assert.assertThat(field.name, equalTo("foo"));
+                Assert.assertThat(field.getName(), equalTo("foo"));
                 Assert.assertThat(field.getFormatting(), equalTo("%.5s"));
             }
         );
@@ -775,7 +775,7 @@ public class JsonProfileReaderTests {
 
         expectFields(
             field -> {
-                Assert.assertThat(field.name, equalTo("foo"));
+                Assert.assertThat(field.getName(), equalTo("foo"));
                 Assert.assertTrue(field.isUnique());
             }
         );
@@ -794,7 +794,7 @@ public class JsonProfileReaderTests {
                 "}");
         expectFields(
             field -> {
-                Assert.assertThat(field.name, equalTo("foo"));
+                Assert.assertThat(field.getName(), equalTo("foo"));
                 Assert.assertFalse(field.isUnique());
             }
         );
@@ -815,7 +815,7 @@ public class JsonProfileReaderTests {
 
         expectFields(
             field -> {
-                Assert.assertThat(field.name, equalTo("foo"));
+                Assert.assertThat(field.getName(), equalTo("foo"));
                 Assert.assertFalse(field.isUnique());
             }
         );
@@ -840,7 +840,7 @@ public class JsonProfileReaderTests {
                     NotNullConstraint.class,
                     c -> {
                         Assert.assertEquals(
-                            c.getField().name,
+                            c.getField().getName(),
                             "foo");
                     }
                 )
@@ -888,16 +888,16 @@ public class JsonProfileReaderTests {
                     NotNullConstraint.class,
                     c -> {
                         Assert.assertEquals(
-                            c.getField().name,
-                            "foo");
+                            c.getField().getName(),
+                            "bar");
                     }
                 ),
                 typedConstraint(
                     NotNullConstraint.class,
                     c -> {
                         Assert.assertEquals(
-                            c.getField().name,
-                            "bar");
+                            c.getField().getName(),
+                            "foo");
                     }
                 )
             ),
@@ -928,7 +928,7 @@ public class JsonProfileReaderTests {
                     NotNullConstraint.class,
                     c -> {
                         Assert.assertEquals(
-                            c.getField().name,
+                            c.getField().getName(),
                             "bar");
                     }
                 )
@@ -956,10 +956,10 @@ public class JsonProfileReaderTests {
 
         expectFields(
             field -> {
-                Assert.assertThat(field.getType(), equalTo(FieldType.NUMERIC));
+                Assert.assertThat(field.getType(), equalTo(FieldType.STRING));
             },
             field -> {
-                Assert.assertThat(field.getType(), equalTo(FieldType.STRING));
+                Assert.assertThat(field.getType(), equalTo(FieldType.NUMERIC));
             }
         );
         expectRules();
@@ -989,17 +989,17 @@ public class JsonProfileReaderTests {
                 "}");
 
          expectFields(
+             field -> {
+                 Assert.assertEquals("foobar.csv", field.getName());
+                 Assert.assertTrue(field.isInternal());
+             },
+             field -> {
+                 Assert.assertEquals("bar", field.getName());
+                 Assert.assertFalse(field.isInternal());
+             },
             field -> {
-                Assert.assertEquals("foo", field.name);
+                Assert.assertEquals("foo", field.getName());
                 Assert.assertFalse(field.isInternal());
-            },
-            field -> {
-                Assert.assertEquals("bar", field.name);
-                Assert.assertFalse(field.isInternal());
-            },
-            field -> {
-                Assert.assertEquals("foobar.csv", field.name);
-                Assert.assertTrue(field.isInternal());
             }
         );
     }
@@ -1040,21 +1040,21 @@ public class JsonProfileReaderTests {
 
         expectFields(
             field -> {
-                Assert.assertEquals("foo", field.name);
-                Assert.assertFalse(field.isInternal());
-            },
-            field -> {
-                Assert.assertEquals("bar", field.name);
-                Assert.assertFalse(field.isInternal());
-            },
-            field -> {
-                Assert.assertEquals("other", field.name);
-                Assert.assertFalse(field.isInternal());
-            },
-            field -> {
-                Assert.assertEquals("foobar.csv", field.name);
+                Assert.assertEquals("foobar.csv", field.getName());
                 Assert.assertTrue(field.isInternal());
                 Assert.assertEquals(FieldType.NUMERIC, field.getType());
+            },
+            field -> {
+                Assert.assertEquals("other", field.getName());
+                Assert.assertFalse(field.isInternal());
+            },
+            field -> {
+                Assert.assertEquals("bar", field.getName());
+                Assert.assertFalse(field.isInternal());
+            },
+            field -> {
+                Assert.assertEquals("foo", field.getName());
+                Assert.assertFalse(field.isInternal());
             }
         );
     }

@@ -17,11 +17,11 @@
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.fields.Field;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.deg.common.profile.fields.FieldBuilder.createField;
 
 public class IsInSetConstraintTests {
 

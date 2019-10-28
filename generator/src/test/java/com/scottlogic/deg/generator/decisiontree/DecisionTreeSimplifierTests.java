@@ -16,8 +16,8 @@
 
 package com.scottlogic.deg.generator.decisiontree;
 
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.fields.Field;
+import com.scottlogic.deg.common.profile.fields.Fields;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsNullConstraint;
@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.deg.common.profile.fields.FieldBuilder.createField;
 
 class DecisionTreeSimplifierTests {
     // TODO: Simplifier tests needs fleshing out
@@ -56,7 +56,7 @@ class DecisionTreeSimplifierTests {
                     )
                 )
             )).build(),
-            new ProfileFields(
+            Fields.create(
                 new ArrayList<Field>() {{ add(createField("Field 1")); }}
             )
         );
@@ -83,7 +83,7 @@ class DecisionTreeSimplifierTests {
                     )
                 )
             )).build(),
-            new ProfileFields(
+            Fields.create(
                 new ArrayList<Field>() {{ add(createField("Field 1")); }}
             )
         );

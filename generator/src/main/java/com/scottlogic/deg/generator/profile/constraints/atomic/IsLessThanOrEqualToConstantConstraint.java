@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
-import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.fields.Field;
 import com.scottlogic.deg.common.profile.HelixNumber;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
@@ -72,7 +72,7 @@ public class IsLessThanOrEqualToConstantConstraint  implements AtomicConstraint 
 
     @Override
     public String toString() {
-        return String.format("`%s` <= %s", field.name, referenceValue);
+        return String.format("`%s` <= %s", field.getName(), referenceValue);
     }
 
 }

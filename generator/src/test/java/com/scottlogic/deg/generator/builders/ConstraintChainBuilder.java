@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.builders;
 
-import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.fields.Field;
 import com.scottlogic.deg.common.profile.HelixDateTime;
 import com.scottlogic.deg.common.profile.HelixNumber;
 import com.scottlogic.deg.common.profile.HelixStringLength;

@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
-import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.fields.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
@@ -19,12 +19,12 @@ public class BlacklistConstraint implements AtomicConstraint {
 
         if (legalValues.isEmpty()) {
             throw new IllegalArgumentException("Cannot create an IsInSetConstraint for field '" +
-                field.name + "' with an empty set");
+                field.getName() + "' with an empty set");
         }
 
         if (legalValues.list().contains(null)) {
             throw new IllegalArgumentException("Cannot create an IsInSetConstraint for field '" +
-                field.name + "' with a set containing null");
+                field.getName() + "' with a set containing null");
         }
     }
 
@@ -46,7 +46,7 @@ public class BlacklistConstraint implements AtomicConstraint {
     public String toString(){
         boolean overLimit = legalValues.list().size() > 3;
         return String.format("%s in [%s%s](%d values)",
-            field.name,
+            field.getName(),
             legalValues.stream().limit(3).map(Object::toString).collect(Collectors.joining(", ")),
             overLimit ? ", ..." : "",
             legalValues.list().size());

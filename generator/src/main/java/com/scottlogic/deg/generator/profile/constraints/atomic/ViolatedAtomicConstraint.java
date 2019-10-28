@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
-import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.fields.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 
 public class ViolatedAtomicConstraint implements AtomicConstraint {

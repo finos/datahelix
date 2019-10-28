@@ -16,9 +16,9 @@
 
 package com.scottlogic.deg.orchestrator.violate.violator;
 
-import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.fields.Field;
 import com.scottlogic.deg.common.profile.HelixNumber;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.fields.Fields;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.generator.profile.RuleInformation;
@@ -36,7 +36,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.deg.common.profile.fields.FieldBuilder.createField;
 import static com.scottlogic.deg.orchestrator.violate.violator.TypeEqualityHelper.assertListProfileTypeEquality;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
@@ -88,7 +88,7 @@ public class ProfileViolatorTests {
             Collections.singletonList(
                 new ViolatedProfile(
                     rule1,
-                    new ProfileFields(Arrays.asList(fooField, barField)),
+                    Fields.create(Arrays.asList(fooField, barField)),
                     Collections.singletonList(violatedRule1),
                     "Input profile description -- Violating: Rule 1 description"
                 )
@@ -125,13 +125,13 @@ public class ProfileViolatorTests {
             Arrays.asList(
                 new ViolatedProfile(
                     rule1,
-                    new ProfileFields(Arrays.asList(fooField, barField)),
+                    Fields.create(Arrays.asList(fooField, barField)),
                     Arrays.asList(violatedRule1, rule2),
                     "Input profile description -- Violating: Rule 1 description"
                 ),
                 new ViolatedProfile(
                     rule2,
-                    new ProfileFields(Arrays.asList(fooField, barField)),
+                    Fields.create(Arrays.asList(fooField, barField)),
                     Arrays.asList(rule1, violatedRule2),
                     "Input profile description -- Violating: Rule 2 description"
                 )

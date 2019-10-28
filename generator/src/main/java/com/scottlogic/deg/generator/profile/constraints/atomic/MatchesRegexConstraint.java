@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
-import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.fields.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
@@ -65,5 +65,5 @@ public class MatchesRegexConstraint implements AtomicConstraint {
     }
 
     @Override
-    public String toString(){ return String.format("`%s` matches /%s/", field.name, regex); }
+    public String toString(){ return String.format("`%s` matches /%s/", field.getName(), regex); }
 }

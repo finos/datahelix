@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.inputs.validation;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.fields.Field;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 
