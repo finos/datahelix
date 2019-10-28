@@ -43,7 +43,7 @@ public class CucumberTestState {
     boolean generationHasAlreadyOccured;
     public long maxRows = 200;
 
-    List<List<Object>> generatedObjects = new ArrayList<>();
+    List<Map<String, Object>> generatedObjects = new ArrayList<>();
     List<FieldDTO> profileFields = new ArrayList<>();
     List<ConstraintDTO> constraints = new ArrayList<>();
     List<Exception> testExceptions = new ArrayList<>();

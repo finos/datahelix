@@ -22,12 +22,13 @@ import org.hamcrest.Description;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-public class RowsPresentMatcher extends BaseMatcher<List<List<Object>>> {
-    final List<List<Object>> expectedRows;
+public class RowsPresentMatcher extends BaseMatcher<List<Map<String, Object>>> {
+    final List<Map<String, Object>> expectedRows;
 
-    public RowsPresentMatcher(List<List<Object>> expectedRows) {
+    public RowsPresentMatcher(List<Map<String, Object>> expectedRows) {
         if (expectedRows == null)
             expectedRows = new ArrayList<>();
         this.expectedRows = expectedRows;
@@ -35,7 +36,7 @@ public class RowsPresentMatcher extends BaseMatcher<List<List<Object>>> {
 
     @Override
     public boolean matches(Object o) {
-        List<List<Object>> actualRows = (List<List<Object>>) o;
+        List<Map<String, Object>> actualRows = (List<Map<String, Object>>) o;
         return getMissingRowMatchers(actualRows).isEmpty();
     }
 
@@ -50,7 +51,7 @@ public class RowsPresentMatcher extends BaseMatcher<List<List<Object>>> {
 
     @Override
     public void describeMismatch(Object item, Description description) {
-        List<List<Object>> actualRows = (List<List<Object>>) item;
+        List<Map<String, Object>> actualRows = (List<Map<String, Object>>) item;
         Collection<RowMatcher> missingRowMatchers = getMissingRowMatchers(actualRows);
 
         description.appendText(
@@ -61,15 +62,15 @@ public class RowsPresentMatcher extends BaseMatcher<List<List<Object>>> {
                 .collect(Collectors.joining(", ")));
 
         description.appendText("\n");
-        description.appendList(" missing: ", ", ", "", missingRowMatchers);
+        description.appendList(" missing: ",", ", "", missingRowMatchers);
     }
 
-    private Collection<RowMatcher> getMissingRowMatchers(List<List<Object>> actualRows) {
+    private Collection<RowMatcher> getMissingRowMatchers(List<Map<String, Object>> actualRows) {
         Collection<RowMatcher> expectedMatchers = getExpectedMatchers();
         ArrayList<RowMatcher> missingRowMatchers = new ArrayList<>();
 
-        for (RowMatcher expectedMatcher : expectedMatchers) {
-            if (actualRows.stream().noneMatch(expectedMatcher::matches)) {
+        for (RowMatcher expectedMatcher : expectedMatchers){
+            if (actualRows.stream().noneMatch(expectedMatcher::matches)){
                 missingRowMatchers.add(expectedMatcher);
             }
         }

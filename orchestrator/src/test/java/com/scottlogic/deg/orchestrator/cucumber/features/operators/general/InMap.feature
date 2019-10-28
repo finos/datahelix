@@ -72,7 +72,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
     And Foo is from Foo in testFile2
     And Bar is from Bar in testFile2
     Then the following data should be generated:
-      | Country            | Capital     | Foo | Bar   |
+      | HomeNation            | Capital     | Foo | Bar   |
       | "England"          | "London"    | 1   | "one" |
       | "England"          | "London"    | 2   | "two" |
       | "Northern Ireland" | "Belfast"   | 1   | "one" |

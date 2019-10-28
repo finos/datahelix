@@ -28,7 +28,7 @@ import cucumber.api.java.en.*;
 import org.hamcrest.Matcher;
 import org.junit.Assert;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -173,20 +173,16 @@ public class GeneralTestStep {
 
     @And("^no data is created$")
     public void noDataIsCreated() {
-        List<List<Object>> data = cucumberTestHelper.generateAndGetData();
+        List<Map<String,Object>> data = cucumberTestHelper.generateAndGetData();
 
-        String serialisedData = String.join(
-            "\n",
-            data
-                .stream()
-                .map(row ->
-                    String.join(
-                        ",",
-                        row
-                            .stream()
-                            .map(cell -> cell == null ? "<null>" : cell.toString())
-                            .collect(Collectors.toList())))
-                .collect(Collectors.toList()));
+        String serialisedData = data
+            .stream()
+            .map(row ->
+                row.values()
+                    .stream()
+                    .map(cell -> cell == null ? "<null>" : cell.toString())
+                    .collect(Collectors.joining(",")))
+            .collect(Collectors.joining("\n"));
 
         Assert.assertThat(
             "Some data was generated when none was expected:\n" + serialisedData,
@@ -221,7 +217,7 @@ public class GeneralTestStep {
         assertOutputData(data.generatedData, new RowsAbsentMatcher(data.expectedData));
     }
 
-    private void assertOutputData(List<List<Object>> data, Matcher<List<List<Object>>> matcher) {
+    private void assertOutputData(List<Map<String, Object>> data, Matcher<List<Map<String, Object>>> matcher) {
         assertNoGenerationErrors();
 
         Assert.assertThat(data, matcher);
@@ -239,30 +235,37 @@ public class GeneralTestStep {
             empty());
     }
 
-    private List<List<Object>> getComparableExpectedResults(List<Map<String, String>> expectedResultsTable) {
+    private List<Map<String, Object>> getComparableExpectedResults(List<Map<String, String>> expectedResultsTable) {
         return expectedResultsTable
             .stream()
-            .map(row -> new ArrayList<>(row.values()))
-            .map(row -> row.stream().map(cell -> {
-                try {
-                    return GeneratorTestUtilities.parseExpected(cell);
-                } catch (JsonParseException | InvalidProfileException e) {
-                    state.addException(e);
-                    return "<exception thrown: " + e.getMessage() + ">";
-                }
-            }).collect(Collectors.toList()))
+            .map(row ->
+            {
+                Map<String, Object> rowMap = new HashMap<>();
+                row.keySet().forEach(key ->
+                {
+                    try
+                    {
+                        rowMap.put(key, GeneratorTestUtilities.parseExpected(row.get(key)));
+                    } catch (JsonParseException | InvalidProfileException e)
+                    {
+                        state.addException(e);
+                        rowMap.put(key, "<exception thrown: " + e.getMessage() + ">");
+                    }
+                });
+                return rowMap;
+            })
             .collect(Collectors.toList());
     }
 
     private GeneratedTestData getExpectedAndGeneratedData(List<Map<String, String>> expectedResultsTable) {
-        List<List<Object>> expectedRowsOfResults = getComparableExpectedResults(expectedResultsTable);
-        List<List<Object>> data = cucumberTestHelper.generateAndGetData();
+        List<Map<String, Object>> expectedRowsOfResults = getComparableExpectedResults(expectedResultsTable);
+        List<Map<String, Object>> data = cucumberTestHelper.generateAndGetData();
         return new GeneratedTestData(expectedRowsOfResults, data);
     }
 
     @Then("some data should be generated")
     public void someDataShouldBeGenerated() {
-        List<List<Object>> data = cucumberTestHelper.generateAndGetData();
+        List<Map<String, Object>> data = cucumberTestHelper.generateAndGetData();
 
         assertNoGenerationErrors();
         Assert.assertThat("No data was generated but some was expected", data, not(empty()));
@@ -270,7 +273,7 @@ public class GeneralTestStep {
 
     @Then("{long} row(s) of data is/are generated")
     public void theExpectedNumberOfRowsAreGenerated(long expectedNumberOfRows) {
-        List<List<Object>> data = cucumberTestHelper.generateAndGetData();
+        List<Map<String, Object>> data = cucumberTestHelper.generateAndGetData();
 
         assertNoGenerationErrors();
         Assert.assertThat(
@@ -294,11 +297,11 @@ public class GeneralTestStep {
         state.setFieldType(fieldName, type);
     }
 
-    class GeneratedTestData {
-        List<List<Object>> expectedData;
-        List<List<Object>> generatedData;
+    static class GeneratedTestData {
+        List<Map<String, Object>> expectedData;
+        List<Map<String, Object>> generatedData;
 
-        GeneratedTestData(List<List<Object>> expectedData, List<List<Object>> generatedData) {
+        GeneratedTestData(List<Map<String, Object>> expectedData, List<Map<String, Object>> generatedData) {
             this.expectedData = expectedData;
             this.generatedData = generatedData;
         }
