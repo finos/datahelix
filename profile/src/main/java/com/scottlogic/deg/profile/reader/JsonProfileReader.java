@@ -71,8 +71,6 @@ public class JsonProfileReader implements ProfileReader {
         ProfileDTO profileDTO = new ProfileSerialiser().deserialise(profileJson);
         if (profileDTO.fields == null)
             throw new InvalidProfileException("Profile is invalid: 'fields' have not been defined.");
-        if (profileDTO.rules == null)
-            throw new InvalidProfileException("Profile is invalid: 'rules' have not been defined.");
 
         List<Field> fields = profileDTO.fields.stream()
                 .map(fieldDTO -> new Field(
