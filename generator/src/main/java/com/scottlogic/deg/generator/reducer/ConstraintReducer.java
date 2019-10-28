@@ -76,7 +76,7 @@ public class ConstraintReducer {
 
     public Optional<FieldSpec> reduceConstraintsToFieldSpec(Field field, Iterable<AtomicConstraint> constraints) {
         return constraints == null
-            ? Optional.of(FieldSpec.fromType(field.getType()))
+            ? Optional.of(FieldSpecFactory.fromType(field.getType()))
             : getRootFieldSpec(field, constraints);
     }
 
@@ -89,7 +89,7 @@ public class ConstraintReducer {
         return rootConstraintsStream
             .map(Optional::of)
             .reduce(
-                Optional.of(FieldSpec.fromType(field.getType())),
+                Optional.of(FieldSpecFactory.fromType(field.getType())),
                 (optSpec1, optSpec2) -> optSpec1.flatMap(
                     spec1 -> optSpec2.flatMap(
                         spec2 -> fieldSpecMerger.merge(spec1, spec2))));

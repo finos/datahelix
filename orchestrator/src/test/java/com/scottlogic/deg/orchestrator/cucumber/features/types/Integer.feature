@@ -2,12 +2,9 @@ Feature: User can specify that a number has type integer and does not have any d
 
   Background:
     Given the generation strategy is full
-    And there is a field foo
+    And there is a non nullable field foo
     And foo has type "integer"
-    And foo is anything but null
-
 ### Numeric Constraints
-
   Scenario: Greater than constraint with integer type produces valid integers
     Given foo is greater than 10
     And the generator can generate at most 5 rows
@@ -29,7 +26,6 @@ Feature: User can specify that a number has type integer and does not have any d
       | 12  |
       | 13  |
       | 14  |
-
 #594 - Change this to descending order?
   Scenario: Less than or equal to constraint with integer type produces valid integers
     Given foo is less than or equal to 10
@@ -42,7 +38,6 @@ Feature: User can specify that a number has type integer and does not have any d
       | -99999999999999999998  |
       | -99999999999999999997  |
       | -99999999999999999996  |
-
 #594 - Change this to descending order?
   Scenario: Less than constraint with integer type produces valid integers
     Given foo is less than 10

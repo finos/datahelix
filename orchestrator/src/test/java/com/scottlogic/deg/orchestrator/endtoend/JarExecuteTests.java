@@ -34,7 +34,7 @@ public class JarExecuteTests {
 
         List<String> collectedOutput = collectOutputAndCloseProcess(p);
 
-        assertOnOutputs(collectedOutput, "\"Generation successful\"", "");
+        assertOnOutputs(collectedOutput, "Generation successful", "");
     }
 
     @Test
@@ -44,7 +44,7 @@ public class JarExecuteTests {
         List<String> collectedOutput = collectOutputAndCloseProcess(p);
 
         assertOnOutputs(collectedOutput,
-            "\"Generated successfully from file\"",
+            "Generated successfully from file",
             "Either load from file no longer works, or ");
     }
 

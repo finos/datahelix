@@ -22,6 +22,7 @@ import com.scottlogic.deg.common.profile.DateTimeGranularity;
 import com.scottlogic.deg.common.profile.Granularity;
 import com.scottlogic.deg.common.util.defaults.DateTimeDefaults;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import org.junit.jupiter.api.Test;
@@ -51,9 +52,9 @@ public class BeforeDateRelationTest {
             ZoneOffset.UTC);
         DataBagValue generatedValue = new DataBagValue(value);
 
-        FieldSpec result = beforeDateRelations.reduceValueToFieldSpec(generatedValue);
+        FieldSpec result = beforeDateRelations.createModifierFromOtherValue(generatedValue);
 
-        FieldSpec expected = FieldSpec.fromRestriction(new LinearRestrictions<>(ISO_MIN_DATE, value, new DateTimeGranularity(ChronoUnit.MILLIS)));
+        FieldSpec expected = FieldSpecFactory.fromRestriction(new LinearRestrictions<>(ISO_MIN_DATE, value, new DateTimeGranularity(ChronoUnit.MILLIS)));
         assertEquals(expected, result);
     }
 
@@ -70,10 +71,10 @@ public class BeforeDateRelationTest {
             ZoneOffset.UTC);
         DataBagValue generatedValue = new DataBagValue(value);
 
-        FieldSpec result = beforeDateRelations.reduceValueToFieldSpec(generatedValue);
+        FieldSpec result = beforeDateRelations.createModifierFromOtherValue(generatedValue);
 
         Granularity<OffsetDateTime> granularity = new DateTimeGranularity(ChronoUnit.MILLIS);
-        FieldSpec expected = FieldSpec.fromRestriction(new LinearRestrictions<>(ISO_MIN_DATE, granularity.getPrevious(value), new DateTimeGranularity(ChronoUnit.MILLIS)));
+        FieldSpec expected = FieldSpecFactory.fromRestriction(new LinearRestrictions<>(ISO_MIN_DATE, granularity.getPrevious(value), new DateTimeGranularity(ChronoUnit.MILLIS)));
         assertEquals(expected, result);
     }
 
@@ -83,9 +84,9 @@ public class BeforeDateRelationTest {
         OffsetDateTime value = null;
         DataBagValue generatedValue = new DataBagValue(value);
 
-        FieldSpec result = beforeDateRelations.reduceValueToFieldSpec(generatedValue);
+        FieldSpec result = beforeDateRelations.createModifierFromOtherValue(generatedValue);
 
-        FieldSpec expected = FieldSpec.fromType(FieldType.DATETIME);
+        FieldSpec expected = FieldSpecFactory.fromType(FieldType.DATETIME);
         assertEquals(expected, result);
     }
 

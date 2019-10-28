@@ -41,7 +41,7 @@ public class CucumberProfileReader extends JsonProfileReader {
         return super.read(createJson());
     }
 
-    private String createJson() throws IOException{
+    private String createJson() throws IOException {
         ProfileDTO profileDTO = new ProfileDTO();
         profileDTO.schemaVersion = "0.10";
         profileDTO.fields = state.profileFields;

@@ -2,7 +2,7 @@ Feature: User can specify that a numeric value is lower than, or equal to, a spe
 
   Background:
     Given the generation strategy is full
-    And there is a field foo
+    And there is a nullable field foo
 
   Scenario: lessThanOrEqualTo run against a non contradicting not lessThanOrEqualToOrEqualTo should be successful
     Given foo is less than or equal to 5
@@ -19,7 +19,6 @@ Feature: User can specify that a numeric value is lower than, or equal to, a spe
     And foo is anything but less than or equal to 3
     And foo has type "integer"
     And the generator can generate at most 5 rows
-    And foo is anything but null
     Then the following data should be generated:
       | foo |
       | 4   |
@@ -41,7 +40,6 @@ Feature: User can specify that a numeric value is lower than, or equal to, a spe
     And the generator can generate at most 5 rows
     And foo has type "decimal"
     And foo is granular to 1
-    And foo is anything but null
     Then the following data should be generated:
       | foo |
       | 4   |
@@ -49,4 +47,3 @@ Feature: User can specify that a numeric value is lower than, or equal to, a spe
       | 6   |
       | 7   |
       | 8   |
-

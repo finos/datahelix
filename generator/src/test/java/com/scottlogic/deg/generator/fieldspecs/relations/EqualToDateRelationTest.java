@@ -3,6 +3,7 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import org.junit.jupiter.api.Test;
@@ -31,9 +32,9 @@ class EqualToDateRelationTest {
             ZoneOffset.UTC);
         DataBagValue generatedValue = new DataBagValue(value);
 
-        FieldSpec result = equalToDateRelations.reduceValueToFieldSpec(generatedValue);
+        FieldSpec result = equalToDateRelations.createModifierFromOtherValue(generatedValue);
 
-        FieldSpec expected = FieldSpec.fromList(DistributedList.singleton(value));
+        FieldSpec expected = FieldSpecFactory.fromList(DistributedList.singleton(value));
         assertThat(result, sameBeanAs(expected));
     }
 
@@ -42,9 +43,9 @@ class EqualToDateRelationTest {
         OffsetDateTime value = null;
         DataBagValue generatedValue = new DataBagValue(value);
 
-        FieldSpec result = equalToDateRelations.reduceValueToFieldSpec(generatedValue);
+        FieldSpec result = equalToDateRelations.createModifierFromOtherValue(generatedValue);
 
-        FieldSpec expected = FieldSpec.nullOnly();
+        FieldSpec expected = FieldSpecFactory.nullOnly();
         assertThat(result, sameBeanAs(expected));
     }
 
