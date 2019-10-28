@@ -19,15 +19,16 @@ package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 import org.hamcrest.Description;
 
 import java.util.List;
+import java.util.Map;
 
 public class RowsMatchAnyOrderMatcher extends RowsPresentMatcher {
-    public RowsMatchAnyOrderMatcher(List<List<Object>> expectedRows) {
+    public RowsMatchAnyOrderMatcher(List<Map<String, Object>> expectedRows) {
         super(expectedRows);
     }
 
     @Override
     public boolean matches(Object o) {
-        List<List<Object>> actualRows = (List<List<Object>>) o;
+        List<Map<String, Object>> actualRows = (List<Map<String, Object>>) o;
 
         if (expectedRows.size() != actualRows.size())
             return false;
@@ -37,7 +38,7 @@ public class RowsMatchAnyOrderMatcher extends RowsPresentMatcher {
 
     @Override
     public void describeMismatch(Object item, Description description) {
-        List<List<Object>> actualRows = (List<List<Object>>) item;
+        List<Map<String, Object>> actualRows = (List<Map<String, Object>>) item;
 
         super.describeMismatch(item, description);
 
