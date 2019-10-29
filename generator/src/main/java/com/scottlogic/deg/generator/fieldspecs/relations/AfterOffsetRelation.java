@@ -36,7 +36,8 @@ public class AfterOffsetRelation<T extends Comparable<T>> implements FieldSpecRe
 
         LinearRestrictions<T> otherRestrictions = (LinearRestrictions) ((RestrictionsFieldSpec) otherFieldSpec).getRestrictions();
         T min = otherRestrictions.getMin();
-        T offsetMin = offsetGranularity.getNext(min, offset);
+        Granularity<T> granularity = offsetGranularity != null ? offsetGranularity : otherRestrictions.getGranularity();
+        T offsetMin = granularity.getNext(min, offset);
 
         return createFromMin(offsetMin, otherRestrictions.getGranularity());
     }
@@ -45,7 +46,9 @@ public class AfterOffsetRelation<T extends Comparable<T>> implements FieldSpecRe
     public FieldSpec createModifierFromOtherValue(DataBagValue otherFieldGeneratedValue) {
         if (otherFieldGeneratedValue.getValue() == null) return FieldSpecFactory.fromType(main.getType());
 
-        T offsetValue = offsetGranularity.getNext((T) otherFieldGeneratedValue.getValue(), offset);
+        T offsetValue = offset > 0
+            ? offsetGranularity.getNext((T) otherFieldGeneratedValue.getValue(), offset)
+            : (T) otherFieldGeneratedValue.getValue();
         return createFromMin(offsetValue, defaults.granularity());
     }
 

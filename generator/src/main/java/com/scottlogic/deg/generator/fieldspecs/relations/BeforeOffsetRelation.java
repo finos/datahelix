@@ -36,7 +36,8 @@ public class BeforeOffsetRelation <T extends Comparable<T>> implements FieldSpec
 
         LinearRestrictions<T> otherRestrictions = (LinearRestrictions)((RestrictionsFieldSpec) otherFieldSpec).getRestrictions();
         T max = otherRestrictions.getMax();
-        T offsetMax = offsetGranularity.getPrevious(max, offset);
+        Granularity<T> granularity = offsetGranularity != null ? offsetGranularity : otherRestrictions.getGranularity();
+        T offsetMax = granularity.getPrevious(max, offset);
 
         return createFromMax(offsetMax, otherRestrictions.getGranularity());
     }
@@ -45,7 +46,10 @@ public class BeforeOffsetRelation <T extends Comparable<T>> implements FieldSpec
     public FieldSpec createModifierFromOtherValue(DataBagValue otherFieldGeneratedValue) {
         if (otherFieldGeneratedValue.getValue() == null) return FieldSpecFactory.fromType(main.getType());
 
-        T offsetValue = offsetGranularity.getPrevious((T) otherFieldGeneratedValue.getValue(), offset);
+        T offsetValue = offset > 0
+            ? offsetGranularity.getPrevious((T) otherFieldGeneratedValue.getValue(), offset)
+            : (T) otherFieldGeneratedValue.getValue();
+
         return  createFromMax(offsetValue, defaults.granularity());
     }
 
