@@ -74,6 +74,7 @@ class FieldSpecRelationTest
     }
 
     @Test
+
     public void after_range_returnsFromMin() {
         int minYear = 2018;
         FieldSpec fieldSpec = forYears(minYear, minYear + 4);

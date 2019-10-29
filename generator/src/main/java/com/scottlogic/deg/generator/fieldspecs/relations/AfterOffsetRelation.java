@@ -8,6 +8,8 @@ import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 
+import static com.scottlogic.deg.common.util.GranularityUtils.readGranularity;
+
 public class AfterOffsetRelation<T extends Comparable<T>> implements FieldSpecRelations {
     private final Field main;
     private final Field other;
@@ -21,7 +23,7 @@ public class AfterOffsetRelation<T extends Comparable<T>> implements FieldSpecRe
         this.other = other;
         this.inclusive = inclusive;
         this.defaults = defaults;
-        this.offsetGranularity = offsetGranularity;
+        this.offsetGranularity = offsetGranularity != null ? offsetGranularity : readGranularity(main.getType(), null);
         this.offset = offset;
     }
 
@@ -36,10 +38,9 @@ public class AfterOffsetRelation<T extends Comparable<T>> implements FieldSpecRe
 
         LinearRestrictions<T> otherRestrictions = (LinearRestrictions) ((RestrictionsFieldSpec) otherFieldSpec).getRestrictions();
         T min = otherRestrictions.getMin();
-        Granularity<T> granularity = offsetGranularity != null ? offsetGranularity : otherRestrictions.getGranularity();
-        T offsetMin = granularity.getNext(min, offset);
+        T offsetMin = offsetGranularity.getNext(min, offset);
 
-        return createFromMin(offsetMin, otherRestrictions.getGranularity());
+        return createFromMin(offsetMin, offsetGranularity);
     }
 
     @Override
