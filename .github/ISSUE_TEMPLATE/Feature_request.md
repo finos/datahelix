@@ -6,28 +6,16 @@ about: I have a suggestion (and may want to implement it 🙂)!
 
 ## Feature Request
 
-### Description of Problem - *As a DataHelix user, I want..., so that...*
+#### Description of Problem
 
-### Potential Solutions
+#### Acceptance Criteria
+  - Will any cucumber tests be required?
+  - Will this require a documentation change?
 
-## Before bringing the story into 'Ready' please consider the following:
+#### Tasks
 
-### Acceptance Criteria - *Given, When, Then*
+#### Estimate - *Fibonacci number sequence 1,2,3,5,8,13 etc*
 
-### Estimate - *Fibonacci number sequence 1,2,3,5,8,13 etc*
-
-### Tasks
-
-### Dependencies
-
-### Testing - *Can any tests be written up front?*
-
-### Risks - *Likelihood of a bug and impact*
-
-### Documentation - *Does it need updating?*
-
-### Demo - *Should we demo this change? To who?*
-
-## Is this feature done?
+#### (Optional) Potential approaches to solution
 
 Please run through the [Definition of Done checklist](https://github.com/finos/datahelix/blob/master/docs/developer/DefinitionOfDone.md)
