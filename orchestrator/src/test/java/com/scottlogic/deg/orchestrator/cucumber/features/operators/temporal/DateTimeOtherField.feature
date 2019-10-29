@@ -31,6 +31,22 @@ Feature: running datetimes related to otherfield datetimes
       | 2018-09-01T00:00:00.002Z | 2018-09-01T00:00:00.003Z |
       | 2018-09-01T00:00:00.003Z | 2018-09-01T00:00:00.003Z |
 
+  Scenario: Running an "afterField" constraint allows one date to be always later than another with a positive offset
+    Given the generator can generate at most 1 rows
+    And foo is after 2000-01-01T00:00:00.000Z
+    And there is a constraint:
+      """
+        {
+          "field": "bar",
+          "afterField": "foo",
+          "offset": 3,
+          "offsetUnit": "days"
+        }
+      """
+    Then the following data should be generated:
+      | foo                      | bar                      |
+      | 2000-01-01T00:00:00.001Z | 2000-01-04T00:00:00.002Z |
+
   Scenario: Running a "beforeField" constraint allows one date to be always earlier than another
     Given the generator can generate at most 3 rows
     And bar is before 0001-01-01T00:00:00.003Z
