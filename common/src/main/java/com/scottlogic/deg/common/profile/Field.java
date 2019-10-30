@@ -24,22 +24,38 @@ public class Field {
     private final boolean unique;
     private final String formatting;
     private final boolean internal;
+    private final boolean nullable;
 
-    public Field(String name, FieldType type, boolean unique, String formatting, boolean internal) {
+    public Field(String name, FieldType type, boolean unique, String formatting, boolean internal, boolean nullable) {
         this.name = name;
         this.type = type;
         this.unique = unique;
         this.formatting = formatting;
         this.internal = internal;
+        this.nullable = nullable;
+    }
+
+    public FieldType getType() {
+        return type;
+    }
+
+    public boolean isUnique() {
+        return unique;
+    }
+
+    public String getFormatting() {
+        return formatting;
     }
 
     public boolean isInternal() {
         return internal;
     }
 
-    public boolean isUnique() {
-        return unique;
+    public boolean isNullable()
+    {
+        return nullable;
     }
+
 
     @Override
     public String toString() {
@@ -60,14 +76,6 @@ public class Field {
     @Override
     public int hashCode() {
         return Objects.hash(name, unique, formatting, type);
-    }
-
-    public String getFormatting() {
-        return formatting;
-    }
-
-    public FieldType getType() {
-        return type;
     }
 
 }

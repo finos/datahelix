@@ -18,7 +18,7 @@ package com.scottlogic.deg.generator.decisiontree;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.profile.Profile;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.generator.profile.RuleInformation;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
@@ -29,7 +29,6 @@ import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagGenerator;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import com.scottlogic.deg.generator.walker.decisionbased.RowSpecTreeSolver;
 import com.scottlogic.deg.generator.walker.decisionbased.SequentialOptionPicker;
 import com.scottlogic.deg.generator.walker.pruner.TreePruner;
@@ -86,7 +85,7 @@ class RowSpecTreeSolverTests {
         final Field currency = createField("currency");
         final Field city = createField("city");
 
-        ProfileFields fields = new ProfileFields(Arrays.asList(country, currency, city));
+        Fields fields = new Fields(Arrays.asList(country, currency, city));
 
         List<Rule> dummyRules = Arrays.asList(
             new Rule(

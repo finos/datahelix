@@ -5,14 +5,18 @@ import com.scottlogic.deg.common.commands.CommandResult;
 import com.scottlogic.deg.common.validators.Validator;
 import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.profile.commands.CreateNonNullableRule;
+import com.scottlogic.deg.profile.reader.ConstraintReader;
 
 import java.util.Optional;
 
 public class CreateNonNullableRuleHandler extends CommandHandler<CreateNonNullableRule, Optional<Rule>>
 {
-    public CreateNonNullableRuleHandler(Validator<CreateNonNullableRule> validator)
+    private final ConstraintReader constraintReader;
+
+    public CreateNonNullableRuleHandler(ConstraintReader constraintReader, Validator<CreateNonNullableRule> validator)
     {
         super(validator);
+        this.constraintReader = constraintReader;
     }
 
     @Override

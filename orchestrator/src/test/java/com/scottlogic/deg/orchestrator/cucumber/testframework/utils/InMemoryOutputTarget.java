@@ -17,7 +17,7 @@
 package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 
 import com.scottlogic.deg.common.output.GeneratedObject;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
 import com.scottlogic.deg.output.writer.DataSetWriter;
 
@@ -36,15 +36,15 @@ public class InMemoryOutputTarget implements SingleDatasetOutputTarget {
     }
 
     @Override
-    public DataSetWriter openWriter(ProfileFields fields) {
+    public DataSetWriter openWriter(Fields fields) {
         return new DummyWriter(fields, testState.generatedObjects);
     }
 
     private class DummyWriter implements DataSetWriter {
-        private final ProfileFields fields;
+        private final Fields fields;
         private final List<Map<String, Object>> listToAppendTo;
 
-        DummyWriter(ProfileFields fields, List<Map<String, Object>> listToAppendTo) {
+        DummyWriter(Fields fields, List<Map<String, Object>> listToAppendTo) {
             this.fields = fields;
             this.listToAppendTo = listToAppendTo;
         }

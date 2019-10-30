@@ -116,7 +116,7 @@ class FieldSpecValueGeneratorTests {
                 randomNumberGenerator
             );
 
-            fieldSpecFulfiller.generate(new Field(null, STRING, true, null, false), fieldSpec).collect(Collectors.toSet());
+            fieldSpecFulfiller.generate(new Field(null, STRING, true, null, false, false), fieldSpec).collect(Collectors.toSet());
 
             verify(fieldValueSource, times(1)).generateAllValues();
             verify(fieldValueSource, times(0)).generateInterestingValues();
@@ -144,7 +144,7 @@ class FieldSpecValueGeneratorTests {
                 randomNumberGenerator
             );
 
-            fieldSpecFulfiller.generate(new Field(null, STRING, true, null, false), fieldSpec).collect(Collectors.toSet());
+            fieldSpecFulfiller.generate(new Field(null, STRING, true, null, false, false), fieldSpec).collect(Collectors.toSet());
 
             verify(fieldValueSource, times(1)).generateAllValues();
             verify(fieldValueSource, times(0)).generateInterestingValues();

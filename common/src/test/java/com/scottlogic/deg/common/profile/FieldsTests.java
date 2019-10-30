@@ -23,10 +23,11 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
-class ProfileFieldsTests {
+class FieldsTests
+{
     @Test
     void equals_objIsNull_returnsFalse() {
-        ProfileFields fields = new ProfileFields(
+        Fields fields = new Fields(
             Arrays.asList(
                 createField("Test")
             )
@@ -42,7 +43,7 @@ class ProfileFieldsTests {
 
     @Test
     void equals_objTypeIsNotProfileFields_returnsFalse() {
-        ProfileFields fields = new ProfileFields(
+        Fields fields = new Fields(
             Arrays.asList(
                 createField("Test")
             )
@@ -58,7 +59,7 @@ class ProfileFieldsTests {
 
     @Test
     void equals_rowSpecFieldsLengthNotEqualToOtherObjectFieldsLength_returnsFalse() {
-        ProfileFields fields = new ProfileFields(
+        Fields fields = new Fields(
             Arrays.asList(
                 createField("First Field"),
                 createField("Second Field")
@@ -66,7 +67,7 @@ class ProfileFieldsTests {
         );
 
         boolean result = fields.equals(
-            new ProfileFields(
+            new Fields(
                 Arrays.asList(
                     createField("First Field")
                 )
@@ -81,7 +82,7 @@ class ProfileFieldsTests {
 
     @Test
     void equals_rowSpecFieldsLengthEqualToOterObjectFieldsLengthButValuesDiffer_returnsFalse() {
-        ProfileFields fields = new ProfileFields(
+        Fields fields = new Fields(
             Arrays.asList(
                 createField("First Field"),
                 createField("Second Field")
@@ -89,7 +90,7 @@ class ProfileFieldsTests {
         );
 
         boolean result = fields.equals(
-            new ProfileFields(
+            new Fields(
                 Arrays.asList(
                     createField("First Field"),
                     createField("Third Field")
@@ -105,7 +106,7 @@ class ProfileFieldsTests {
 
     @Test
     void equals_rowSpecFieldsAreEqualToTheFieldsOfTheOtherObject_returnsTrue() {
-        ProfileFields fields = new ProfileFields(
+        Fields fields = new Fields(
             Arrays.asList(
                 createField("First Field"),
                 createField("Second Field")
@@ -113,7 +114,7 @@ class ProfileFieldsTests {
         );
 
         boolean result = fields.equals(
-            new ProfileFields(
+            new Fields(
                 Arrays.asList(
                     createField("First Field"),
                     createField("Second Field")
@@ -129,13 +130,13 @@ class ProfileFieldsTests {
 
     @Test
     void hashCode_valuesinFieldsDifferInSize_returnsDifferentHashCodes() {
-        ProfileFields firstProfileFields = new ProfileFields(
+        Fields firstFields = new Fields(
             Arrays.asList(
                 createField("First Field"),
                 createField("Second Field")
             )
         );
-        ProfileFields secondProfileFields = new ProfileFields(
+        Fields secondFields = new Fields(
             Arrays.asList(
                 createField("First Field"),
                 createField("Second Field"),
@@ -143,8 +144,8 @@ class ProfileFieldsTests {
             )
         );
 
-        int firstHashCode = firstProfileFields.hashCode();
-        int secondHashCode = secondProfileFields.hashCode();
+        int firstHashCode = firstFields.hashCode();
+        int secondHashCode = secondFields.hashCode();
 
         assertNotEquals(
             "Expected that when the profile fields length differ the hash codes should not be the same but were equal",
@@ -155,21 +156,21 @@ class ProfileFieldsTests {
 
     @Test
     void hashCode_valuesInFieldsAreEqualSizeButValuesDiffer_returnsDifferentHashCodes() {
-        ProfileFields firstProfileFields = new ProfileFields(
+        Fields firstFields = new Fields(
             Arrays.asList(
                 createField("First Field"),
                 createField("Second Field")
             )
         );
-        ProfileFields secondProfileFields = new ProfileFields(
+        Fields secondFields = new Fields(
             Arrays.asList(
                 createField("First Field"),
                 createField("Third Field")
             )
         );
 
-        int firstHashCode = firstProfileFields.hashCode();
-        int secondHashCode = secondProfileFields.hashCode();
+        int firstHashCode = firstFields.hashCode();
+        int secondHashCode = secondFields.hashCode();
 
         assertNotEquals(
             "Expected when the fields length are equal but their values differ unique hash codes are returned but were equal",
@@ -180,21 +181,21 @@ class ProfileFieldsTests {
 
     @Test
     void hashCode_valuesInFieldsAreEqual_identicalHashCodesAreReturned() {
-        ProfileFields firstProfileFields = new ProfileFields(
+        Fields firstFields = new Fields(
             Arrays.asList(
                 createField("First Field"),
                 createField("Second Field")
             )
         );
-        ProfileFields secondProfileFields = new ProfileFields(
+        Fields secondFields = new Fields(
             Arrays.asList(
                 createField("First Field"),
                 createField("Second Field")
             )
         );
 
-        int firstHashCode = firstProfileFields.hashCode();
-        int secondHashCode = secondProfileFields.hashCode();
+        int firstHashCode = firstFields.hashCode();
+        int secondHashCode = secondFields.hashCode();
 
         assertEquals(
             "Expected that when the profile fields are equal an equivalent hash code should be returned for both but were different",

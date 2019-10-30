@@ -3,7 +3,7 @@ package com.scottlogic.deg.profile.handlers;
 import an.awesome.pipelinr.Pipeline;
 import com.scottlogic.deg.common.commands.CommandHandler;
 import com.scottlogic.deg.common.commands.CommandResult;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.common.validators.Validator;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.profile.Rule;
@@ -29,7 +29,7 @@ public class CreateProfileHandler extends CommandHandler<CreateProfile, Profile>
     protected CommandResult<Profile> handleCommand(CreateProfile command)
     {
         CreateFields createFields = new CreateFields(command.dto.fields, command.dto.rules);
-        CommandResult<ProfileFields> createFieldsResult = pipeline.send(createFields);
+        CommandResult<Fields> createFieldsResult = pipeline.send(createFields);
         CommandResult<List<Rule>> createRulesResult = createRules(command.dto.rules);
 
         if(createFieldsResult.hasValue || !createRulesResult.hasValue)
@@ -37,7 +37,7 @@ public class CreateProfileHandler extends CommandHandler<CreateProfile, Profile>
             return CommandResult.failure(createFieldsResult.errors, createRulesResult.errors);
         }
 
-        ProfileFields fields = createFieldsResult.value;
+        Fields fields = createFieldsResult.value;
         List<Rule> rules = createRulesResult.value;
 
         CommandResult<Optional<Rule>> createNonNullableRuleResult = pipeline.send(new CreateNonNullableRule(fields));
@@ -56,10 +56,6 @@ public class CreateProfileHandler extends CommandHandler<CreateProfile, Profile>
 
     private CommandResult<List<Rule>> createRules(Collection<RuleDTO> ruleDTOs)
     {
-        List<CommandResult<Rule>> createRuleResults = ruleDTOs.stream()
-            .map(dto -> pipeline.send(new CreateRule(dto)))
-            .collect(Collectors.toList());
-
-        return CommandResult.combine(createRuleResults);
+        return CommandResult.combine(ruleDTOs.stream().map(dto -> pipeline.send(new CreateRule(dto))).collect(Collectors.toList()));
     }
 }

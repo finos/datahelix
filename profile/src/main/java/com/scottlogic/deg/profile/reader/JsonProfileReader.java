@@ -20,7 +20,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.FieldType;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.generator.profile.RuleInformation;
@@ -78,18 +78,19 @@ public class JsonProfileReader implements ProfileReader {
                     fieldDTO.type.getFieldType(),
                     fieldDTO.unique,
                     getFormatting(fieldDTO),
-                    false))
+                    false,
+                    fieldDTO.nullable))
                 .collect(Collectors.toList());
 
         List<Field> inMapFields = profileDTO.rules.stream()
             .flatMap(ruleDTO -> ruleDTO.constraints.stream())
             .flatMap(constraintDTO -> getInMapConstraints(profileDTO).stream())
             .distinct()
-            .map(file -> new Field(file, FieldType.NUMERIC, false, null, true)
+            .map(file -> new Field(file, FieldType.NUMERIC, false, null, true, false)
             ).collect(Collectors.toList());
 
         fields.addAll(inMapFields);
-        ProfileFields profileFields = new ProfileFields(fields);
+        Fields profileFields = new Fields(fields);
 
         Collection<Rule> rules = profileDTO.rules.stream()
             .map(r -> new Rule(new RuleInformation(r.rule), constraintReader.read(r.constraints, profileFields)))

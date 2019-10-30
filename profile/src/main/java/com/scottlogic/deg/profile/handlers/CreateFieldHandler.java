@@ -21,6 +21,7 @@ public class CreateFieldHandler extends CommandHandler<CreateField, Field>
             command.dto.type.getFieldType(),
             command.dto.unique,
             command.dto.formatting != null ? command.dto.formatting : command.dto.type.getDefaultFormatting(),
-            false));
+            false,
+            command.dto.nullable));
     }
 }

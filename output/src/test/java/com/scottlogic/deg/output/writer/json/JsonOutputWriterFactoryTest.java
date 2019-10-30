@@ -2,7 +2,7 @@ package com.scottlogic.deg.output.writer.json;
 
 import com.scottlogic.deg.common.output.GeneratedObject;
 import com.scottlogic.deg.common.profile.FieldBuilder;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.output.writer.DataSetWriter;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
@@ -25,7 +25,7 @@ class JsonOutputWriterFactoryTest {
 
     @Test
     void writer_withNDJSONTrue__shouldOutputNewLineDelimiterRows() throws IOException {
-        ProfileFields fields = new ProfileFields(Collections.singletonList(FieldBuilder.createField("my_field")));
+        Fields fields = new Fields(Collections.singletonList(FieldBuilder.createField("my_field")));
 
         expectJson(
             fields,
@@ -35,7 +35,7 @@ class JsonOutputWriterFactoryTest {
 
     @Test
     void writer_withNDJSONFalse__shouldOutputRowsWrappedInAnArray() throws IOException {
-        ProfileFields fields = new ProfileFields(Collections.singletonList(FieldBuilder.createField("my_field")));
+        Fields fields = new Fields(Collections.singletonList(FieldBuilder.createField("my_field")));
 
         expectJson(
             fields,
@@ -45,7 +45,7 @@ class JsonOutputWriterFactoryTest {
 
     @Test
     void writeRow_withInternalFields_shouldNotWriteInternalFields() throws IOException {
-        ProfileFields fields = new ProfileFields(
+        Fields fields = new Fields(
             Arrays.asList(
                 createField("External"),
                 createInternalField("Internal")
@@ -58,7 +58,7 @@ class JsonOutputWriterFactoryTest {
         );
     }
 
-    private static void expectJson(ProfileFields fields, boolean useNdJson, Matcher<String> matcher) throws IOException {
+    private static void expectJson(Fields fields, boolean useNdJson, Matcher<String> matcher) throws IOException {
         // Act
         GeneratedObject mockGeneratedObject = mock(GeneratedObject.class);
         when(mockGeneratedObject.getFormattedValue(eq(fields.iterator().next()))).thenReturn("my_value");
@@ -68,7 +68,7 @@ class JsonOutputWriterFactoryTest {
         Assert.assertThat(generateJson, matcher);
     }
 
-    private static String generateJson(ProfileFields fields, GeneratedObject generatedObject, boolean useNdJson) throws IOException {
+    private static String generateJson(Fields fields, GeneratedObject generatedObject, boolean useNdJson) throws IOException {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
         try (DataSetWriter writer = new JsonOutputWriterFactory(useNdJson).createWriter(stream, fields)) {

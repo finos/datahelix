@@ -20,7 +20,7 @@ package com.scottlogic.deg.output.writer.csv;
 import com.scottlogic.deg.common.output.GeneratedObject;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.FieldType;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.output.writer.DataSetWriter;
 import org.junit.Assert;
 import org.junit.Test;
@@ -42,10 +42,10 @@ public class CsvDataSetWriterTest {
 
     private ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-    private Field fieldOne = new Field("one", FieldType.STRING,false,null,false);
-    private Field fieldTwo = new Field("two", FieldType.STRING,false,null,false);
+    private Field fieldOne = new Field("one", FieldType.STRING,false,null,false, false);
+    private Field fieldTwo = new Field("two", FieldType.STRING,false,null,false, false);
 
-    private ProfileFields profileFields = new ProfileFields(new ArrayList<>(Arrays.asList(
+    private Fields fields = new Fields(new ArrayList<>(Arrays.asList(
         fieldOne, fieldTwo
     )));
 
@@ -58,7 +58,7 @@ public class CsvDataSetWriterTest {
         Mockito.when(row.getFormattedValue(fieldOne)).thenReturn(",,");
         Mockito.when(row.getFormattedValue(fieldTwo)).thenReturn(",\"");
         try {
-            dataSetWriter = CsvDataSetWriter.open(outputStream, profileFields);
+            dataSetWriter = CsvDataSetWriter.open(outputStream, fields);
             dataSetWriter.writeRow(row);
             String output = outputStream.toString(StandardCharsets.UTF_8.toString());
             Assert.assertEquals(

@@ -1048,7 +1048,7 @@ public class ProfileViolationTests {
 
         String processedDescription = description + " -- Violating: " + rule.getRuleInformation().getDescription();
 
-        return new ViolatedProfile(rule, new ProfileFields(fields), newRuleList, processedDescription);
+        return new ViolatedProfile(rule, new Fields(fields), newRuleList, processedDescription);
     }
 
     private List<Rule> getRulesFromPair(List<RuleViolatedRulePair> pair) {

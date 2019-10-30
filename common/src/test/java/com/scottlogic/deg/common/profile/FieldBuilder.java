@@ -24,9 +24,9 @@ public class FieldBuilder {
         return createInternalField(name, FieldType.STRING);
     }
     public static Field createField(String name, FieldType type) {
-        return new Field(name, type, false, null, false);
+        return new Field(name, type, false, null, false, false);
     }
     public static Field createInternalField(String name, FieldType type) {
-        return new Field(name, type, false, null, true);
+        return new Field(name, type, false, null, true, false);
     }
 }

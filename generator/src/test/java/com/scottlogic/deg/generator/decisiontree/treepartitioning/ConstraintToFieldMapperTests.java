@@ -18,7 +18,7 @@ package com.scottlogic.deg.generator.decisiontree.treepartitioning;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.FieldBuilder;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder;
@@ -117,13 +117,13 @@ class ConstraintToFieldMapperTests {
     void beforeEach() {
         constraintsSet = new HashSet<>();
         decisionsSet = new HashSet<>();
-        fields = new ProfileFields(Collections.emptyList());
+        fields = new Fields(Collections.emptyList());
         mappings = null;
     }
 
     private Set<AtomicConstraint> constraintsSet;
     private Set<DecisionNode> decisionsSet;
-    private ProfileFields fields;
+    private Fields fields;
     private Map<RootLevelConstraint, Set<Field>> mappings;
 
     private void givenConstraints(AtomicConstraint... constraints) {
@@ -135,7 +135,7 @@ class ConstraintToFieldMapperTests {
     }
 
     private void givenFields(String... fieldNames) {
-        fields = new ProfileFields(
+        fields = new Fields(
             Arrays.stream(fieldNames)
                 .map(FieldBuilder::createField)
                 .collect(Collectors.toList()));

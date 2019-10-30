@@ -22,10 +22,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class ProfileFields implements Iterable<Field> {
+public class Fields implements Iterable<Field> {
     private final List<Field> fields;
 
-    public ProfileFields(List<Field> fields) {
+    public Fields(List<Field> fields) {
         this.fields = fields;
     }
 
@@ -66,8 +66,8 @@ public class ProfileFields implements Iterable<Field> {
             return false;
         }
 
-        ProfileFields profileFields = (ProfileFields) obj;
-        return fields.equals(profileFields.fields);
+        Fields fields = (Fields) obj;
+        return this.fields.equals(fields.fields);
     }
 
     @Override

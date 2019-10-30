@@ -17,7 +17,7 @@
 package com.scottlogic.deg.output.writer.csv;
 
 import com.scottlogic.deg.common.output.GeneratedObject;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.output.writer.DataSetWriter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -37,14 +37,14 @@ class CsvDataSetWriter implements DataSetWriter {
     private static final CSVFormat writerFormat = CSVFormat.RFC4180;
 
     private final CSVPrinter csvPrinter;
-    private final ProfileFields fieldOrder;
+    private final Fields fieldOrder;
 
-    private CsvDataSetWriter(CSVPrinter csvPrinter, ProfileFields fieldOrder) {
+    private CsvDataSetWriter(CSVPrinter csvPrinter, Fields fieldOrder) {
         this.csvPrinter = csvPrinter;
         this.fieldOrder = fieldOrder;
     }
 
-    static DataSetWriter open(OutputStream stream, ProfileFields fields) throws IOException {
+    static DataSetWriter open(OutputStream stream, Fields fields) throws IOException {
         final Appendable outputStreamAsAppendable = new OutputStreamWriter(stream, StandardCharsets.UTF_8);
 
         CSVPrinter csvPrinter = writerFormat

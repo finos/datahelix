@@ -41,25 +41,25 @@ public class ConstraintReader {
         this.atomicConstraintReader = atomicConstraintReader;
     }
 
-    public Set<Constraint> read(Collection<ConstraintDTO> constraints, ProfileFields fields) {
+    public Set<Constraint> read(Collection<ConstraintDTO> constraints, Fields fields) {
         return constraints.stream()
             .map(subConstraintDto -> read(subConstraintDto, fields))
             .collect(Collectors.toSet());
     }
 
-    public Constraint read(ConstraintDTO dto, ProfileFields profileFields) {
+    public Constraint read(ConstraintDTO dto, Fields fields) {
         if (dto == null) {
             throw new InvalidProfileException("Constraint is null");
         } else if (dto instanceof RelationalConstraintDTO) {
-            return readRelationalConstraintDto((RelationalConstraintDTO) dto, profileFields);
+            return readRelationalConstraintDto((RelationalConstraintDTO) dto, fields);
         } else if (dto instanceof AtomicConstraintDTO)
-            return atomicConstraintReader.readAtomicConstraintDto((AtomicConstraintDTO) dto, profileFields);
+            return atomicConstraintReader.readAtomicConstraintDto((AtomicConstraintDTO) dto, fields);
         else {
-            return readGrammaticalConstraintDto(dto, profileFields);
+            return readGrammaticalConstraintDto(dto, fields);
         }
     }
 
-    private Constraint readRelationalConstraintDto(RelationalConstraintDTO dto, ProfileFields fields) {
+    private Constraint readRelationalConstraintDto(RelationalConstraintDTO dto, Fields fields) {
         Field main = fields.getByName(dto.field);
         Field other = fields.getByName(dto.getOtherField());
         switch (dto.getType()) {
@@ -89,21 +89,21 @@ public class ConstraintReader {
         }
     }
 
-    private Constraint readGrammaticalConstraintDto(ConstraintDTO dto, ProfileFields profileFields) {
+    private Constraint readGrammaticalConstraintDto(ConstraintDTO dto, Fields fields) {
         switch (dto.getType()) {
             case ALL_OF:
-                return new AndConstraint(read(((AllOfConstraintDTO) dto).constraints, profileFields));
+                return new AndConstraint(read(((AllOfConstraintDTO) dto).constraints, fields));
             case ANY_OF:
-                return new OrConstraint(read(((AnyOfConstraintDTO) dto).constraints, profileFields));
+                return new OrConstraint(read(((AnyOfConstraintDTO) dto).constraints, fields));
             case IF:
                 IfConstraintDTO conditionalConstraintDTO = (IfConstraintDTO) dto;
-                Constraint ifConstraint = read(conditionalConstraintDTO.ifConstraint, profileFields);
-                Constraint thenConstraint = read(conditionalConstraintDTO.thenConstraint, profileFields);
+                Constraint ifConstraint = read(conditionalConstraintDTO.ifConstraint, fields);
+                Constraint thenConstraint = read(conditionalConstraintDTO.thenConstraint, fields);
                 Constraint elseConstraint = conditionalConstraintDTO.elseConstraint == null ? null
-                    : read(conditionalConstraintDTO.elseConstraint, profileFields);
+                    : read(conditionalConstraintDTO.elseConstraint, fields);
                 return new ConditionalConstraint(ifConstraint, thenConstraint, elseConstraint);
             case NOT:
-                return read(((NotConstraintDTO) dto).constraint, profileFields).negate();
+                return read(((NotConstraintDTO) dto).constraint, fields).negate();
             default:
                 throw new InvalidProfileException("Grammatical constraint type not found: " + dto);
         }

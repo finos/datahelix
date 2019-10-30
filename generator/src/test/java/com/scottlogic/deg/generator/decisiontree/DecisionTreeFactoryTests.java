@@ -18,7 +18,7 @@ package com.scottlogic.deg.generator.decisiontree;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.HelixNumber;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.generator.decisiontree.testutils.*;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
@@ -74,7 +74,7 @@ class DecisionTreeFactoryTests {
     private DecisionTree getActualOutput() {
         if (this.actualOutput == null) {
             Profile testInput = new Profile(
-                new ProfileFields(
+                new Fields(
                     Arrays.asList(this.fieldA, this.fieldB, this.fieldC)),
                 this.rules);
 
@@ -111,9 +111,9 @@ class DecisionTreeFactoryTests {
         DecisionTreeFactory testObject = new DecisionTreeFactory();
 
         DecisionTree testOutput = testObject.analyse(testInput);
-        ProfileFields actualFields = testOutput.getFields();
+        Fields actualFields = testOutput.getFields();
 
-        ProfileFields expected = new ProfileFields(inputFieldList);
+        Fields expected = new Fields(inputFieldList);
         assertThat(actualFields, sameBeanAs(expected));
     }
 
