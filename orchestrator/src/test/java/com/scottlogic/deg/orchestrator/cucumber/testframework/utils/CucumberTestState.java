@@ -19,7 +19,6 @@ package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scottlogic.deg.common.profile.SpecificFieldType;
-import com.scottlogic.deg.common.profile.AtomicConstraintType;
 import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.profile.common.ConstraintType;
@@ -51,7 +50,7 @@ public class CucumberTestState {
 
     Deque<NestedConstraint> nestedConstraints = new ArrayDeque<>();
 
-    private final List<AtomicConstraintType> contstraintsToNotViolate = new ArrayList<>();
+    private final List<ConstraintType> contstraintsToNotViolate = new ArrayList<>();
 
     public void startCreatingIfConstraint(int total) {
         nestedConstraints.push(new NestedConstraint("if", total));
@@ -119,11 +118,11 @@ public class CucumberTestState {
         this.testExceptions.add(e);
     }
 
-    public void addConstraintToNotViolate(AtomicConstraintType atomicConstraintType) {
-        contstraintsToNotViolate.add(atomicConstraintType);
+    public void addConstraintToNotViolate(ConstraintType constraintType) {
+        contstraintsToNotViolate.add(constraintType);
     }
 
-    public List<AtomicConstraintType> getConstraintsToNotViolate() {
+    public List<ConstraintType> getConstraintsToNotViolate() {
         return contstraintsToNotViolate;
     }
 

@@ -21,8 +21,8 @@ import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberGenerationMode;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.GeneratorTestUtilities;
+import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
-import com.scottlogic.deg.common.profile.AtomicConstraintType;
 import cucumber.api.TypeRegistry;
 import cucumber.api.TypeRegistryConfigurer;
 import io.cucumber.cucumberexpressions.ParameterType;
@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 
 public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
 
-    private final Set<AtomicConstraintType> allOperators = new HashSet<>(Arrays.asList(AtomicConstraintType.values()));
+    private final Set<ConstraintType> allOperators = new HashSet<>(Arrays.asList(ConstraintType.values()));
 
     @Override
     public Locale locale() {
@@ -135,10 +135,10 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
             .collect(Collectors.joining());
     }
 
-    private String getHumanReadableOperationRegex(Set<AtomicConstraintType> types) {
+    private String getHumanReadableOperationRegex(Set<ConstraintType> types) {
         return
             types.stream()
-                .map(act -> act.toString().replaceAll("([a-z])([A-Z]+)", "$1 $2").toLowerCase())
+                .map(act -> act.propertyName.replaceAll("([a-z])([A-Z]+)", "$1 $2").toLowerCase())
                 .collect(Collectors.joining("|", "(", ")"));
     }
 
