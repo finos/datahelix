@@ -27,6 +27,7 @@ subprojects {
     apply plugin: 'maven-publish'
 
     repositories {
+        jcenter()
         mavenLocal()
         maven {
             url = 'http://repo.maven.apache.org/maven2'

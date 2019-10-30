@@ -6,7 +6,9 @@ import com.scottlogic.deg.common.validators.Validator;
 import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.profile.commands.CreateNonNullableRule;
 
-public class CreateNonNullableRuleHandler extends CommandHandler<CreateNonNullableRule, Rule>
+import java.util.Optional;
+
+public class CreateNonNullableRuleHandler extends CommandHandler<CreateNonNullableRule, Optional<Rule>>
 {
     public CreateNonNullableRuleHandler(Validator<CreateNonNullableRule> validator)
     {
@@ -14,7 +16,7 @@ public class CreateNonNullableRuleHandler extends CommandHandler<CreateNonNullab
     }
 
     @Override
-    protected CommandResult<Rule> handleCommand(CreateNonNullableRule command)
+    protected CommandResult<Optional<Rule>> handleCommand(CreateNonNullableRule command)
     {
         return null;
     }

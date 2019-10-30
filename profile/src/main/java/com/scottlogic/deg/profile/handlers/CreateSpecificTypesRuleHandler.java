@@ -6,7 +6,9 @@ import com.scottlogic.deg.common.validators.Validator;
 import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.profile.commands.CreateSpecificTypesRule;
 
-public class CreateSpecificTypesRuleHandler extends CommandHandler<CreateSpecificTypesRule, Rule>
+import java.util.Optional;
+
+public class CreateSpecificTypesRuleHandler extends CommandHandler<CreateSpecificTypesRule, Optional<Rule>>
 {
     public CreateSpecificTypesRuleHandler(Validator<CreateSpecificTypesRule> validator)
     {
@@ -14,8 +16,8 @@ public class CreateSpecificTypesRuleHandler extends CommandHandler<CreateSpecifi
     }
 
     @Override
-    protected CommandResult<Rule> handleCommand(CreateSpecificTypesRule command)
+    protected CommandResult<Optional<Rule>> handleCommand(CreateSpecificTypesRule command)
     {
-        return null;
+     return null;
     }
 }
