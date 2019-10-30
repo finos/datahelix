@@ -30,7 +30,7 @@ import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
-import com.scottlogic.deg.profile.reader.AtomicConstraintFactory.AtomicConstraintReader;
+import com.scottlogic.deg.profile.ProfileCommandBus;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -78,7 +78,8 @@ public class JsonProfileReaderTests {
     private final String schemaVersion = "\"0.7\"";
     private String json;
 
-    private JsonProfileReader jsonProfileReader = new JsonProfileReader(null, new ConstraintReader(new AtomicConstraintReader(new MockFromFileReader())));
+    private JsonProfileReader jsonProfileReader = new JsonProfileReader(null,
+        new ProfileCommandBus(new ConstraintReader(new AtomicConstraintReader(new MockFromFileReader()))));
 
 
 
@@ -846,7 +847,7 @@ public class JsonProfileReaderTests {
                     }
                 )
             ),
-            ruleWithDescription("type-rules")
+            ruleWithDescription("specific-types")
         );
     }
 
@@ -863,7 +864,7 @@ public class JsonProfileReaderTests {
                 "    \"rules\": []" +
                 "}");
 
-        expectRules(ruleWithDescription("type-rules"));
+        expectRules(ruleWithDescription("specific-types"));
     }
 
     @Test
@@ -902,7 +903,7 @@ public class JsonProfileReaderTests {
                     }
                 )
             ),
-            ruleWithDescription("type-rules")
+            ruleWithDescription("specific-types")
         );
     }
 
@@ -934,7 +935,7 @@ public class JsonProfileReaderTests {
                     }
                 )
             ),
-            ruleWithDescription("type-rules")
+            ruleWithDescription("specific-types")
         );
     }
 

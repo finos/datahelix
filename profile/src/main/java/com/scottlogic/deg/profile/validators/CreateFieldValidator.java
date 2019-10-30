@@ -9,6 +9,6 @@ public class CreateFieldValidator implements Validator<CreateField>
     @Override
     public ValidationResult validate(CreateField createField)
     {
-        return null;
+        return ValidationResult.success();
     }
 }

@@ -9,6 +9,6 @@ public class CreateProfileValidator implements Validator<CreateProfile>
     @Override
     public ValidationResult validate(CreateProfile createProfile)
     {
-        return null;
+        return ValidationResult.success();
     }
 }

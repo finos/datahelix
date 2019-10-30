@@ -9,6 +9,6 @@ public class CreateRuleValidator implements Validator<CreateRule>
     @Override
     public ValidationResult validate(CreateRule createRule)
     {
-        return null;
+        return ValidationResult.success();
     }
 }

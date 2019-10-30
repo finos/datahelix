@@ -1,6 +1,6 @@
 package com.scottlogic.deg.profile.handlers;
 
-import an.awesome.pipelinr.Pipeline;
+import com.scottlogic.deg.common.commands.CommandBus;
 import com.scottlogic.deg.common.commands.CommandHandler;
 import com.scottlogic.deg.common.commands.CommandResult;
 import com.scottlogic.deg.common.profile.Field;
@@ -20,31 +20,29 @@ import java.util.stream.Stream;
 
 public class CreateFieldsHandler extends CommandHandler<CreateFields, Fields>
 {
-    private final Pipeline pipeline;
+    private final CommandBus commandBus;
 
-    public CreateFieldsHandler(Pipeline pipeline, Validator<CreateFields> validator)
+    public CreateFieldsHandler(CommandBus commandBus, Validator<CreateFields> validator)
     {
         super(validator);
-        this.pipeline = pipeline;
+        this.commandBus = commandBus;
     }
 
     @Override
     protected CommandResult<Fields> handleCommand(CreateFields command)
     {
         CommandResult<List<Field>> createFieldsResult = createFields(command.fieldDTOs);
-        if(!createFieldsResult.hasValue)
-        {
-            return CommandResult.failure(createFieldsResult.errors);
-        }
+        if(!createFieldsResult.hasValue) return CommandResult.failure(createFieldsResult.errors);
         List<Field> fields = createFieldsResult.value;
-        inMapFiles(command.ruleDTOs).stream().map(this::createInMapField).forEach(fields::add);
+
+        getInMapFiles(command.ruleDTOs).stream().map(this::createInMapField).forEach(fields::add);
 
         return CommandResult.success(new Fields(fields));
     }
 
     private CommandResult<List<Field>> createFields(List<FieldDTO> fieldDTOs)
     {
-        return CommandResult.combine(fieldDTOs.stream().map(dto -> pipeline.send(new CreateField(dto))).collect(Collectors.toList()));
+        return CommandResult.combine(fieldDTOs.stream().map(dto -> commandBus.send(new CreateField(dto))).collect(Collectors.toList()));
     }
 
     private Field createInMapField(String file)
@@ -52,14 +50,14 @@ public class CreateFieldsHandler extends CommandHandler<CreateFields, Fields>
         return new Field(file, SpecificFieldType.INTEGER, false, null, true, false);
     }
 
-
-    private List<String> inMapFiles(List<RuleDTO> rules)
+    private List<String> getInMapFiles(List<RuleDTO> rules)
     {
         return rules.stream()
             .flatMap(ruleDTO -> ruleDTO.constraints.stream())
             .flatMap(constraint -> getAllAtomicConstraints(Stream.of(constraint)))
             .filter(constraintDTO -> constraintDTO.getType() == ConstraintType.IN_MAP)
             .map(constraintDTO -> ((InMapConstraintDTO) constraintDTO).file)
+            .distinct()
             .collect(Collectors.toList());
     }
 
