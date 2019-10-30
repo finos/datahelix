@@ -66,5 +66,5 @@ public class IsStringLongerThanConstraint implements AtomicConstraint {
     }
 
     @Override
-    public String toString() { return String.format("`%s` length > %d", field.name, referenceValue); }
+    public String toString() { return String.format("`%s` length > %d", field.getName(), referenceValue); }
 }

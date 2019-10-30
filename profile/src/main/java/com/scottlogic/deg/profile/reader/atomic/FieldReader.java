@@ -3,7 +3,6 @@ package com.scottlogic.deg.profile.reader.atomic;
 import com.scottlogic.deg.common.profile.DateTimeGranularity;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.NumericGranularity;
-import com.scottlogic.deg.common.profile.SpecificFieldType;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.profile.reader.file.names.NameRetriever;
@@ -13,8 +12,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 public class FieldReader {
-    public static Optional<Constraint> read(Field field, SpecificFieldType type) {
-        switch (type) {
+    public static Optional<Constraint> read(Field field) {
+        switch (field.getSpecificType()) {
             case DATE:
                 return Optional.of(new IsGranularToDateConstraint(field, new DateTimeGranularity(ChronoUnit.DAYS)));
             case INTEGER:

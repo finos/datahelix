@@ -37,12 +37,12 @@ public class IsInSetConstraint implements AtomicConstraint {
 
         if (legalValues.distributedList().isEmpty()) {
             throw new ValidationException("Cannot create an IsInSetConstraint for field '" +
-                field.name + "' with an empty set");
+                field.getName() + "' with an empty set");
         }
 
         if (legalValues.list().contains(null)) {
             throw new ValidationException("Cannot create an IsInSetConstraint for field '" +
-                field.name + "' with a set containing null");
+                field.getName() + "' with a set containing null");
         }
     }
 
@@ -68,7 +68,7 @@ public class IsInSetConstraint implements AtomicConstraint {
     public String toString(){
         boolean overLimit = legalValues.list().size() > 3;
         return String.format("%s in [%s%s](%d values)",
-            field.name,
+            field.getName(),
             legalValues.stream().limit(3).map(Object::toString).collect(Collectors.joining(", ")),
             overLimit ? ", ..." : "",
             legalValues.list().size());

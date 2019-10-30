@@ -19,7 +19,7 @@ package com.scottlogic.deg.common.profile;
 import java.util.Objects;
 
 public class Field {
-    public final String name;
+    private final String name;
     private final SpecificFieldType type;
     private final boolean unique;
     private final String formatting;
@@ -63,7 +63,7 @@ public class Field {
 
     @Override
     public String toString() {
-        return this.name;
+        return this.getName();
     }
 
     @Override
@@ -71,7 +71,7 @@ public class Field {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Field field = (Field) o;
-        return Objects.equals(name, field.name)
+        return Objects.equals(getName(), field.getName())
             && Objects.equals(unique, field.unique)
             && Objects.equals(type, field.type)
             && Objects.equals(formatting, field.formatting);
@@ -79,7 +79,11 @@ public class Field {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, unique, formatting, type);
+        return Objects.hash(getName(), unique, formatting, type);
     }
 
+    public String getName()
+    {
+        return name;
+    }
 }

@@ -31,7 +31,7 @@ public class Fields implements Iterable<Field> {
 
     public Field getByName(String fieldName) {
         return this.fields.stream()
-            .filter(f -> f.name.equals(fieldName))
+            .filter(f -> f.getName().equals(fieldName))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException("Profile fields do not contain " + fieldName));
     }

@@ -75,6 +75,6 @@ public class IsGranularToDateConstraint implements AtomicConstraint {
 
     @Override
     public String toString() {
-        return String.format("%s granular to %s", field.name, granularity);
+        return String.format("%s granular to %s", field.getName(), granularity);
     }
 }

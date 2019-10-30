@@ -49,5 +49,5 @@ public class NotStringLengthConstraint implements AtomicConstraint {
     }
 
     @Override
-    public String toString() { return String.format("`%s` length = %s", field.name, referenceValue); }
+    public String toString() { return String.format("`%s` length = %s", field.getName(), referenceValue); }
 }

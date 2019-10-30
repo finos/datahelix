@@ -65,5 +65,5 @@ public class StringHasLengthConstraint implements AtomicConstraint {
     }
 
     @Override
-    public String toString() { return String.format("`%s` length = %s", field.name, referenceValue.getValue()); }
+    public String toString() { return String.format("`%s` length = %s", field.getName(), referenceValue.getValue()); }
 }

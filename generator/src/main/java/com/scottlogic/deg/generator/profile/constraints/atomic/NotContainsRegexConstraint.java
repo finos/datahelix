@@ -50,7 +50,7 @@ public class NotContainsRegexConstraint implements AtomicConstraint {
 
     @Override
     public String toString() {
-        return String.format("`%s` doesn't contain /%s/", field.name, regex);
+        return String.format("`%s` doesn't contain /%s/", field.getName(), regex);
     }
 
 }

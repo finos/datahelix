@@ -50,7 +50,7 @@ class CsvDataSetWriter implements DataSetWriter {
         CSVPrinter csvPrinter = writerFormat
             .withQuoteMode(QuoteMode.MINIMAL)
             .withHeader(fields.getExternalStream()
-                .map(f -> f.name)
+                .map(f -> f.getName())
                 .toArray(String[]::new))
             .print(outputStreamAsAppendable);
 

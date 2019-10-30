@@ -32,7 +32,7 @@ public class CreateSpecificTypesRuleHandler extends CommandHandler<CreateSpecifi
     {
 
         List<Constraint> constraints = command.fields.stream()
-            .map(field -> FieldReader.read(field, field.getSpecificType()))
+            .map(FieldReader::read)
             .filter(Optional::isPresent)
             .map(Optional::get)
             .collect(Collectors.toList());
@@ -44,7 +44,7 @@ public class CreateSpecificTypesRuleHandler extends CommandHandler<CreateSpecifi
     private Constraint createNullConstraint(Field field, Fields fields)
     {
         NullConstraintDTO nullConstraintDTO = new NullConstraintDTO();
-        nullConstraintDTO.field = field.name;
+        nullConstraintDTO.field = field.getName();
         return constraintReader.read(nullConstraintDTO, fields);
     }
 }

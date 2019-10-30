@@ -91,13 +91,13 @@ public class JsonProfileReader implements ProfileReader {
             .map(r -> new Rule(new RuleInformation(r.rule), constraintReader.read(r.constraints, profileFields)))
             .collect(Collectors.toList());
 
-        Collection<Constraint> nonNullableConstraints = profileDTO.fields.stream()
-            .filter(fieldDTO -> !fieldDTO.nullable)
-            .map(fieldDTO -> constraintReader.read(nullDtoOf(fieldDTO), profileFields))
+        Collection<Constraint> nonNullableConstraints = profileFields.stream()
+            .filter(field -> !field.isNullable())
+            .map(field-> constraintReader.read(nullDtoOf(field), profileFields))
             .collect(Collectors.toList());
 
-        Collection<Constraint> typeConstraints = profileDTO.fields.stream()
-            .map(fieldDto -> FieldReader.read(profileFields.getByName(fieldDto.name), fieldDto.type))
+        Collection<Constraint> typeConstraints = profileFields.stream()
+            .map(FieldReader::read)
             .filter(Optional::isPresent)
             .map(Optional::get)
             .collect(Collectors.toList());
@@ -119,9 +119,9 @@ public class JsonProfileReader implements ProfileReader {
         }
     }
 
-    private NullConstraintDTO nullDtoOf(FieldDTO fieldDTO) {
+    private NullConstraintDTO nullDtoOf(Field field) {
         NullConstraintDTO nullConstraint = new NullConstraintDTO();
-        nullConstraint.field = fieldDTO.name;
+        nullConstraint.field = field.getName();
         return nullConstraint;
     }
 

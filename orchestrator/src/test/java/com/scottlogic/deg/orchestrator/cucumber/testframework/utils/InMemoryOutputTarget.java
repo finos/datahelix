@@ -56,7 +56,7 @@ public class InMemoryOutputTarget implements SingleDatasetOutputTarget {
             }
 
             Map<String, Object> values = new HashMap<>();
-            fields.getExternalStream().forEach(field -> values.put(field.name, row.getFormattedValue(field)));
+            fields.getExternalStream().forEach(field -> values.put(field.getName(), row.getFormattedValue(field)));
             listToAppendTo.add(values);
         }
 

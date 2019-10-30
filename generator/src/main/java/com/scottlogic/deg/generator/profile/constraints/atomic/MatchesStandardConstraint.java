@@ -39,7 +39,7 @@ public class MatchesStandardConstraint implements AtomicConstraint {
 
     @Override
     public String toString(){
-        return String.format("%s is a %s", field.name, standard.getClass().getName());
+        return String.format("%s is a %s", field.getName(), standard.getClass().getName());
     }
 
     @Override

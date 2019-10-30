@@ -31,31 +31,33 @@ import static org.junit.jupiter.api.Assertions.*;
 class FieldReaderTest
 {
 
-    private Field field = FieldBuilder.createField("test");
-
     @Test
     void returnsNullWhenPassedDecimalLowerCase() {
-        Optional<Constraint> constraint = FieldReader.read(field, SpecificFieldType.DECIMAL);
+        Field field = FieldBuilder.createField("test", SpecificFieldType.DECIMAL);
+        Optional<Constraint> constraint = FieldReader.read(field);
         assertFalse(constraint.isPresent());
     }
 
     @Test
     void returnsGranularToOneWhenPassedInteger() {
-        Optional<Constraint> constraint = FieldReader.read(field,SpecificFieldType.INTEGER);
+        Field field = FieldBuilder.createField("test", SpecificFieldType.INTEGER);
+        Optional<Constraint> constraint = FieldReader.read(field);
         assertTrue(constraint.isPresent());
         assertEquals(((IsGranularToNumericConstraint) constraint.get()).granularity, new NumericGranularity(0));
     }
 
     @Test
     void returnsStandardRICConstraintWhenPassedUpperCaseRIC() {
-        Optional<Constraint> constraint = FieldReader.read(field,SpecificFieldType.RIC);
+        Field field = FieldBuilder.createField("test", SpecificFieldType.RIC);
+        Optional<Constraint> constraint = FieldReader.read(field);
         assertTrue(constraint.isPresent());
         assertEquals(((MatchesStandardConstraint) constraint.get()).standard, StandardConstraintTypes.RIC);
     }
 
     @Test
     void returnsInSetConstraintWhenPassedLowerCaseFullName() {
-        Optional<Constraint> constraint = FieldReader.read(field,SpecificFieldType.FULL_NAME);
+        Field field = FieldBuilder.createField("test", SpecificFieldType.FULL_NAME);
+        Optional<Constraint> constraint = FieldReader.read(field);
         IsInSetConstraint isInSetConstraint = new IsInSetConstraint(
             field,
             NameRetriever.loadNamesFromFile(NameConstraintTypes.lookupProfileText("fullname"))
@@ -67,7 +69,8 @@ class FieldReaderTest
 
     @Test
     void returnsGranularToDateConstraintWhenPassedDate() {
-        Optional<Constraint> constraint = FieldReader.read(field,SpecificFieldType.DATE);
+        Field field = FieldBuilder.createField("test", SpecificFieldType.DATE);
+        Optional<Constraint> constraint = FieldReader.read(field);
         IsGranularToDateConstraint isGranularToDateConstraint = new IsGranularToDateConstraint(
             field,
             new DateTimeGranularity(ChronoUnit.DAYS)

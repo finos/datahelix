@@ -32,7 +32,7 @@ public class ConstraintBuilder {
     private final Map<String, Field> fields;
 
     public ConstraintBuilder(List<Field> fields) {
-        this.fields = fields.stream().collect(Collectors.toMap(f -> f.name, f -> f));
+        this.fields = fields.stream().collect(Collectors.toMap(f -> f.getName(), f -> f));
     }
 
     public List<Constraint> build() {

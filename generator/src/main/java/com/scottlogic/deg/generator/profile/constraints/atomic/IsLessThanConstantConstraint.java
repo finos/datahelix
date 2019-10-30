@@ -71,5 +71,5 @@ public class IsLessThanConstantConstraint implements AtomicConstraint {
     }
 
     @Override
-    public String toString() { return String.format("`%s` < %s", field.name, referenceValue); }
+    public String toString() { return String.format("`%s` < %s", field.getName(), referenceValue); }
 }

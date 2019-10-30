@@ -42,7 +42,7 @@ public class CreateNonNullableRuleHandler extends CommandHandler<CreateNonNullab
     private Constraint createNullConstraint(Field field, Fields fields)
     {
         NullConstraintDTO nullConstraintDTO = new NullConstraintDTO();
-        nullConstraintDTO.field = field.name;
+        nullConstraintDTO.field = field.getName();
         return constraintReader.read(nullConstraintDTO, fields);
     }
 }

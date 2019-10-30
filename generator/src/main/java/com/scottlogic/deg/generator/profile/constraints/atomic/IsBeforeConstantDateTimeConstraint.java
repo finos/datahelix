@@ -72,6 +72,6 @@ public class IsBeforeConstantDateTimeConstraint implements AtomicConstraint {
 
     @Override
     public String toString() {
-        return String.format("`%s` < %s", field.name, referenceValue);
+        return String.format("`%s` < %s", field.getName(), referenceValue);
     }
 }
