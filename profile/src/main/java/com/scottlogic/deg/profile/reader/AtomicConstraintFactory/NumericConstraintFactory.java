@@ -34,31 +34,26 @@ class NumericConstraintFactory extends AtomicConstraintFactory {
         super(fileReader);
     }
 
-    @NotNull
     @Override
     Constraint getGranularToConstraint(GranularToConstraintDTO dto, Field field) {
         return new IsGranularToNumericConstraint(field, NumericGranularity.create(dto.value));
     }
 
-    @NotNull
     @Override
     Constraint getLessThanOrEqualToConstraint(LessThanOrEqualToConstraintDTO dto, Field field) {
         return new IsLessThanOrEqualToConstantConstraint(field, HelixNumber.create(dto.value));
     }
 
-    @NotNull
     @Override
     Constraint getIsLessThanConstraint(LessThanConstraintDTO dto, Field field) {
         return new IsLessThanConstantConstraint(field, HelixNumber.create(dto.value));
     }
 
-    @NotNull
     @Override
     Constraint getIsGreaterThanOrEqualToConstraint(GreaterThanOrEqualToConstraintDTO dto, Field field) {
         return new IsGreaterThanOrEqualToConstantConstraint(field, HelixNumber.create(dto.value));
     }
 
-    @NotNull
     @Override
     Constraint getIsGreaterThanConstraint(GreaterThanConstraintDTO dto, Field field) {
         return new IsGreaterThanConstantConstraint(field, HelixNumber.create(dto.value));

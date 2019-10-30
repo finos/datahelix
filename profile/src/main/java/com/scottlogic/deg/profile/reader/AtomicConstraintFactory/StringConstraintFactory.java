@@ -37,31 +37,26 @@ class StringConstraintFactory extends AtomicConstraintFactory {
     }
 
     @Override
-    @NotNull
     Constraint getIsLongerThanConstraint(LongerThanConstraintDTO dto, Field field) {
         return new IsStringLongerThanConstraint(field, HelixStringLength.create(dto.value));
     }
 
     @Override
-    @NotNull
     Constraint getShorterThanConstraint(ShorterThanConstraintDTO dto, Field field) {
         return new IsStringShorterThanConstraint(field, HelixStringLength.create(dto.value));
     }
 
     @Override
-    @NotNull
     Constraint getOfLengthConstraint(OfLengthConstraintDTO dto, Field field) {
         return new StringHasLengthConstraint(field, HelixStringLength.create(dto.value));
     }
 
     @Override
-    @NotNull
     Constraint getContainsRegexConstraint(ContainsRegexConstraintDTO dto, Field field) {
         return new ContainsRegexConstraint(field, readPattern(dto.value));
     }
 
     @Override
-    @NotNull
     Constraint getMatchesRegexConstraint(MatchesRegexConstraintDTO dto, Field field) {
         return new MatchesRegexConstraint(field, readPattern(dto.value));
     }

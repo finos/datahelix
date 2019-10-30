@@ -34,31 +34,26 @@ class DateTimeConstraintFactory extends AtomicConstraintFactory {
         super(fileReader);
     }
 
-    @NotNull
     @Override
     Constraint getAfterOrAtConstraint(AfterOrAtConstraintDTO dto, Field field) {
         return new IsAfterOrEqualToConstantDateTimeConstraint(field, HelixDateTime.create(dto.value));
     }
 
-    @NotNull
     @Override
     Constraint getAfterConstraint(AfterConstraintDTO dto, Field field) {
         return new IsAfterConstantDateTimeConstraint(field, HelixDateTime.create(dto.value));
     }
 
-    @NotNull
     @Override
     Constraint getBeforeOrAtConstraint(BeforeOrAtConstraintDTO dto, Field field) {
         return new IsBeforeOrEqualToConstantDateTimeConstraint(field, HelixDateTime.create(dto.value));
     }
 
-    @NotNull
     @Override
     Constraint getBeforeConstraint(BeforeConstraintDTO dto, Field field) {
         return new IsBeforeConstantDateTimeConstraint(field, HelixDateTime.create(dto.value));
     }
 
-    @NotNull
     @Override
     Constraint getGranularToConstraint(GranularToConstraintDTO dto, Field field) {
         return new IsGranularToDateConstraint(field, DateTimeGranularity.create((String) dto.value));
