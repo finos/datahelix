@@ -23,7 +23,6 @@ import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.common.profile.SpecificFieldType;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.profile.Rule;
-import com.scottlogic.deg.generator.profile.RuleInformation;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.dtos.FieldDTO;
@@ -88,7 +87,7 @@ public class JsonProfileReader implements ProfileReader {
         Fields profileFields = new Fields(fields);
 
         Collection<Rule> rules = profileDTO.rules.stream()
-            .map(r -> new Rule(new RuleInformation(r.rule), constraintReader.read(r.constraints, profileFields)))
+            .map(r -> new Rule(r.description, constraintReader.read(r.constraints, profileFields)))
             .collect(Collectors.toList());
 
         Collection<Constraint> nonNullableConstraints = profileFields.stream()
@@ -103,10 +102,10 @@ public class JsonProfileReader implements ProfileReader {
             .collect(Collectors.toList());
 
         if (!nonNullableConstraints.isEmpty()) {
-            rules.add(new Rule(new RuleInformation("nullable-rules"), nonNullableConstraints));
+            rules.add(new Rule("nullable-rules", nonNullableConstraints));
         }
         if (!typeConstraints.isEmpty()) {
-            rules.add(new Rule(new RuleInformation("type-rules"), typeConstraints));
+            rules.add(new Rule("type-rules", typeConstraints));
         }
         return new Profile(profileFields, rules, profileDTO.description);
     }

@@ -40,7 +40,7 @@ public class RuleDeserializer extends JsonDeserializer<RuleDTO> {
         JsonNode node = mapper.readTree(jsonParser);
 
         RuleDTO dto = new RuleDTO();
-        dto.rule = node.has("rule")
+        dto.description = node.has("rule")
             ? node.get("rule").asText()
             : null;
 

@@ -100,7 +100,7 @@ public class JsonProfileReaderTests {
     }
 
     private Consumer<Rule> ruleWithDescription(String expectedDescription) {
-        return rule -> Assert.assertThat(rule.getRuleInformation().getDescription(), equalTo(expectedDescription));
+        return rule -> Assert.assertThat(rule.getDescription(), equalTo(expectedDescription));
     }
 
     private Consumer<Rule> ruleWithConstraints(Consumer<Constraint>... constraintAsserters) {

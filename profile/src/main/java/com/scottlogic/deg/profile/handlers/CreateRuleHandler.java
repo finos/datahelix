@@ -5,7 +5,6 @@ import com.scottlogic.deg.common.commands.CommandHandler;
 import com.scottlogic.deg.common.commands.CommandResult;
 import com.scottlogic.deg.common.validators.Validator;
 import com.scottlogic.deg.generator.profile.Rule;
-import com.scottlogic.deg.generator.profile.RuleInformation;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.profile.commands.CreateConstraint;
 import com.scottlogic.deg.profile.commands.CreateRule;
@@ -33,7 +32,7 @@ public class CreateRuleHandler extends CommandHandler<CreateRule, Rule>
         CommandResult<List<Constraint>> createConstraintsCombinedResult = CommandResult.combine(createConstraintResults);
 
         return createConstraintsCombinedResult.hasValue
-            ? CommandResult.success(new Rule(new RuleInformation(command.dto.rule), createConstraintsCombinedResult.value))
+            ? CommandResult.success(new Rule(command.dto.description, createConstraintsCombinedResult.value))
             : CommandResult.failure(createConstraintsCombinedResult.errors);
     }
 }

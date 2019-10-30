@@ -20,7 +20,6 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.generator.profile.Rule;
-import com.scottlogic.deg.generator.profile.RuleInformation;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsInSetConstraint;
 import com.scottlogic.deg.generator.fieldspecs.*;
@@ -89,7 +88,7 @@ class RowSpecTreeSolverTests {
 
         List<Rule> dummyRules = Arrays.asList(
             new Rule(
-                rule("US country constrains city"),
+                "US country constrains city",
                 Collections.singletonList(
                     new ConditionalConstraint(
                         new IsInSetConstraint(
@@ -103,7 +102,7 @@ class RowSpecTreeSolverTests {
                                 new WeightedElement<>("Washington DC", 1.0F)))
                         ))))),
             new Rule(
-                rule("GB country constrains city"),
+                "GB country constrains city",
                 Collections.singletonList(
                     new ConditionalConstraint(
                         new IsInSetConstraint(
@@ -117,7 +116,7 @@ class RowSpecTreeSolverTests {
                                 new WeightedElement<>("London", 1.0F)))
                         ))))),
             new Rule(
-                rule("US country constrains currency"),
+                "US country constrains currency",
                 Collections.singletonList(
                     new ConditionalConstraint(
                         new IsInSetConstraint(
@@ -129,7 +128,7 @@ class RowSpecTreeSolverTests {
                             new DistributedList<>(Collections.singletonList(new WeightedElement<>("USD", 1.0F)))
                         )))),
             new Rule(
-                rule("GB country constrains currency"),
+                "GB country constrains currency",
                 Collections.singletonList(
                     new ConditionalConstraint(
                         new IsInSetConstraint(
@@ -152,7 +151,4 @@ class RowSpecTreeSolverTests {
         Assert.assertThat(rowSpecs, notNullValue());
     }
 
-    private static RuleInformation rule(String description){
-        return new RuleInformation(description);
-    }
 }

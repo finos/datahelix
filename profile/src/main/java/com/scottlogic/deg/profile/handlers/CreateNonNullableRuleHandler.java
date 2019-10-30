@@ -6,7 +6,6 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.common.validators.Validator;
 import com.scottlogic.deg.generator.profile.Rule;
-import com.scottlogic.deg.generator.profile.RuleInformation;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.profile.commands.CreateNonNullableRule;
 import com.scottlogic.deg.profile.dtos.constraints.NullConstraintDTO;
@@ -36,7 +35,7 @@ public class CreateNonNullableRuleHandler extends CommandHandler<CreateNonNullab
 
         return constraints.isEmpty()
             ? CommandResult.success(Optional.empty())
-            : CommandResult.success(Optional.of(new Rule(new RuleInformation("non-nullable"), constraints)));
+            : CommandResult.success(Optional.of(new Rule("non-nullable", constraints)));
     }
 
     private Constraint createNullConstraint(Field field, Fields fields)

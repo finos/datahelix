@@ -21,7 +21,6 @@ import com.scottlogic.deg.common.profile.HelixNumber;
 import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.profile.Rule;
-import com.scottlogic.deg.generator.profile.RuleInformation;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsGreaterThanConstantConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsLessThanConstantConstraint;
@@ -147,7 +146,7 @@ public class ProfileViolatorTests {
 
     private void initRules() {
         //Rule 1 consists of 2 constraints, "foo is greater than 100" and "bar is greater than 50"
-        RuleInformation ruleInformation1 = new RuleInformation("Rule 1 description");
+        String ruleInformation1 = "Rule 1 description";
         fooField = createField("foo");
         barField = createField("bar");
         Constraint constraint1 = new IsGreaterThanConstantConstraint(
@@ -171,7 +170,7 @@ public class ProfileViolatorTests {
         );
         violatedRule1 = new Rule(ruleInformation1, Arrays.asList(constraint3, constraint4));
 
-        RuleInformation ruleInformation2 = new RuleInformation("Rule 2 description");
+        String ruleInformation2 = "Rule 2 description";
         rule2 = new Rule(ruleInformation2, Arrays.asList(constraint1,constraint4));
         violatedRule2 = new Rule(ruleInformation2, Arrays.asList(constraint2,constraint3));
     }

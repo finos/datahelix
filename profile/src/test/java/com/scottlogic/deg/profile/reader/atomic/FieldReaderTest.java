@@ -30,7 +30,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class FieldReaderTest
 {
-
     @Test
     void returnsNullWhenPassedDecimalLowerCase() {
         Field field = FieldBuilder.createField("test", SpecificFieldType.DECIMAL);
