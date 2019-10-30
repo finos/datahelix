@@ -20,13 +20,13 @@ import java.util.Objects;
 
 public class Field {
     public final String name;
-    private final FieldType type;
+    private final SpecificFieldType type;
     private final boolean unique;
     private final String formatting;
     private final boolean internal;
     private final boolean nullable;
 
-    public Field(String name, FieldType type, boolean unique, String formatting, boolean internal, boolean nullable) {
+    public Field(String name, SpecificFieldType type, boolean unique, String formatting, boolean internal, boolean nullable) {
         this.name = name;
         this.type = type;
         this.unique = unique;
@@ -36,6 +36,10 @@ public class Field {
     }
 
     public FieldType getType() {
+        return type.getFieldType();
+    }
+
+    public SpecificFieldType getSpecificType() {
         return type;
     }
 

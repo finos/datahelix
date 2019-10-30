@@ -18,15 +18,15 @@ package com.scottlogic.deg.common.profile;
 
 public class FieldBuilder {
     public static Field createField(String name) {
-        return createField(name, FieldType.STRING);
+        return createField(name, SpecificFieldType.STRING);
     }
     public static Field createInternalField(String name) {
-        return createInternalField(name, FieldType.STRING);
+        return createInternalField(name, SpecificFieldType.STRING);
     }
-    public static Field createField(String name, FieldType type) {
+    public static Field createField(String name, SpecificFieldType type) {
         return new Field(name, type, false, null, false, false);
     }
-    public static Field createInternalField(String name, FieldType type) {
+    public static Field createInternalField(String name, SpecificFieldType type) {
         return new Field(name, type, false, null, true, false);
     }
 }

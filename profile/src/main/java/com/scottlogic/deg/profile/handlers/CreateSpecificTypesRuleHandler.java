@@ -10,6 +10,7 @@ import com.scottlogic.deg.generator.profile.RuleInformation;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.profile.commands.CreateSpecificTypesRule;
 import com.scottlogic.deg.profile.dtos.constraints.NullConstraintDTO;
+import com.scottlogic.deg.profile.reader.ConstraintReader;
 import com.scottlogic.deg.profile.reader.atomic.FieldReader;
 
 import java.util.List;
@@ -18,9 +19,12 @@ import java.util.stream.Collectors;
 
 public class CreateSpecificTypesRuleHandler extends CommandHandler<CreateSpecificTypesRule, Optional<Rule>>
 {
-    public CreateSpecificTypesRuleHandler(Validator<CreateSpecificTypesRule> validator)
+    private final ConstraintReader constraintReader;
+
+    public CreateSpecificTypesRuleHandler(ConstraintReader constraintReader, Validator<CreateSpecificTypesRule> validator)
     {
         super(validator);
+        this.constraintReader = constraintReader;
     }
 
     @Override
@@ -28,7 +32,7 @@ public class CreateSpecificTypesRuleHandler extends CommandHandler<CreateSpecifi
     {
 
         List<Constraint> constraints = command.fields.stream()
-            .map(field -> FieldReader.read(field, field.type))
+            .map(field -> FieldReader.read(field, field.getSpecificType()))
             .filter(Optional::isPresent)
             .map(Optional::get)
             .collect(Collectors.toList());

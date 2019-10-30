@@ -18,7 +18,7 @@ public class CreateFieldHandler extends CommandHandler<CreateField, Field>
     {
         return CommandResult.success(new Field(
             command.dto.name,
-            command.dto.type.getFieldType(),
+            command.dto.type,
             command.dto.unique,
             command.dto.formatting != null ? command.dto.formatting : command.dto.type.getDefaultFormatting(),
             false,

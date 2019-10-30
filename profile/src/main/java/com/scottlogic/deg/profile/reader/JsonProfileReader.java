@@ -19,21 +19,16 @@ package com.scottlogic.deg.profile.reader;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.common.profile.Fields;
+import com.scottlogic.deg.common.profile.SpecificFieldType;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.generator.profile.RuleInformation;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
+import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.dtos.FieldDTO;
 import com.scottlogic.deg.profile.dtos.ProfileDTO;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
-import com.scottlogic.deg.profile.common.ConstraintType;
-import com.scottlogic.deg.profile.dtos.constraints.InMapConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.AllOfConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.AnyOfConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.IfConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.NullConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.*;
 import com.scottlogic.deg.profile.reader.atomic.FieldReader;
 import com.scottlogic.deg.profile.serialisation.ProfileSerialiser;
 
@@ -75,7 +70,7 @@ public class JsonProfileReader implements ProfileReader {
         List<Field> fields = profileDTO.fields.stream()
                 .map(fieldDTO -> new Field(
                     fieldDTO.name,
-                    fieldDTO.type.getFieldType(),
+                    fieldDTO.type,
                     fieldDTO.unique,
                     getFormatting(fieldDTO),
                     false,
@@ -86,7 +81,7 @@ public class JsonProfileReader implements ProfileReader {
             .flatMap(ruleDTO -> ruleDTO.constraints.stream())
             .flatMap(constraintDTO -> getInMapConstraints(profileDTO).stream())
             .distinct()
-            .map(file -> new Field(file, FieldType.NUMERIC, false, null, true, false)
+            .map(file -> new Field(file, SpecificFieldType.INTEGER, false, null, true, false)
             ).collect(Collectors.toList());
 
         fields.addAll(inMapFields);

@@ -4,8 +4,8 @@ import an.awesome.pipelinr.Pipeline;
 import com.scottlogic.deg.common.commands.CommandHandler;
 import com.scottlogic.deg.common.commands.CommandResult;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.common.profile.Fields;
+import com.scottlogic.deg.common.profile.SpecificFieldType;
 import com.scottlogic.deg.common.validators.Validator;
 import com.scottlogic.deg.profile.commands.CreateField;
 import com.scottlogic.deg.profile.commands.CreateFields;
@@ -49,7 +49,7 @@ public class CreateFieldsHandler extends CommandHandler<CreateFields, Fields>
 
     private Field createInMapField(String file)
     {
-        return new Field(file, FieldType.NUMERIC, false, null, true, false);
+        return new Field(file, SpecificFieldType.INTEGER, false, null, true, false);
     }
 
 

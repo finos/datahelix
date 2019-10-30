@@ -19,8 +19,8 @@ package com.scottlogic.deg.output.writer.csv;
 
 import com.scottlogic.deg.common.output.GeneratedObject;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.common.profile.Fields;
+import com.scottlogic.deg.common.profile.SpecificFieldType;
 import com.scottlogic.deg.output.writer.DataSetWriter;
 import org.junit.Assert;
 import org.junit.Test;
@@ -42,8 +42,8 @@ public class CsvDataSetWriterTest {
 
     private ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-    private Field fieldOne = new Field("one", FieldType.STRING,false,null,false, false);
-    private Field fieldTwo = new Field("two", FieldType.STRING,false,null,false, false);
+    private Field fieldOne = new Field("one", SpecificFieldType.STRING,false,null,false, false);
+    private Field fieldTwo = new Field("two", SpecificFieldType.STRING,false,null,false, false);
 
     private Fields fields = new Fields(new ArrayList<>(Arrays.asList(
         fieldOne, fieldTwo
