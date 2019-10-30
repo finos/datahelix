@@ -19,6 +19,8 @@ package com.scottlogic.deg.profile.dtos;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
+import com.scottlogic.deg.profile.serialisation.RuleDeserializer;
+import com.scottlogic.deg.profile.serialisation.RuleSerializer;
 
 import java.util.Collection;
 

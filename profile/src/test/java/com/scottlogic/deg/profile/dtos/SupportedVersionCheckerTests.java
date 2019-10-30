@@ -17,8 +17,10 @@
 package com.scottlogic.deg.profile.dtos;
 
 import com.scottlogic.deg.common.ValidationException;
+import com.scottlogic.deg.profile.SupportedVersionChecker;
+import com.scottlogic.deg.profile.SupportedVersionsGetter;
 import com.scottlogic.deg.profile.guice.ProfileConfigSource;
-import com.scottlogic.deg.profile.serialisation.SchemaVersionGetter;
+import com.scottlogic.deg.profile.SchemaVersionGetter;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;

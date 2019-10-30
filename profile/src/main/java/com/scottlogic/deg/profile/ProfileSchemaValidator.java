@@ -13,11 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.scottlogic.deg.profile.serialisation;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+package com.scottlogic.deg.profile;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class SchemaDto {
-    public String schemaVersion;
+/**
+ * Used to validate a DataHelix Profile JSON file.
+ * <p>
+ * Checks that the profile JSON file is valid against the
+ * DataHelix Profile Schema (datahelix.schema.json)
+ * </p>
+ */
+public interface ProfileSchemaValidator {
+
+    /**
+     * Validates a json file against the DataHelix Profile JSON Schema.
+     *
+     * @param profile the profile to validate against the schema
+     * @param schema  the schema to check validate against
+     * @return the result of validating the provided profile
+     */
+    void validateProfile(String profile, String schema);
 }

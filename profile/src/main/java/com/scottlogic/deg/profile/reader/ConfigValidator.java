@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.reader.validation;
+package com.scottlogic.deg.profile.reader;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;

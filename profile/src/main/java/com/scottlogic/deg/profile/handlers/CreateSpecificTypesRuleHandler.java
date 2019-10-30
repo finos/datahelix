@@ -6,7 +6,7 @@ import com.scottlogic.deg.common.validators.Validator;
 import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.profile.commands.CreateSpecificTypesRule;
-import com.scottlogic.deg.profile.reader.atomic.FieldReader;
+import com.scottlogic.deg.profile.reader.FieldReader;
 
 import java.util.List;
 import java.util.Optional;

@@ -28,7 +28,6 @@ import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.dtos.FieldDTO;
 import com.scottlogic.deg.profile.dtos.ProfileDTO;
 import com.scottlogic.deg.profile.dtos.constraints.*;
-import com.scottlogic.deg.profile.reader.atomic.FieldReader;
 import com.scottlogic.deg.profile.serialisation.ProfileSerialiser;
 
 import java.io.File;

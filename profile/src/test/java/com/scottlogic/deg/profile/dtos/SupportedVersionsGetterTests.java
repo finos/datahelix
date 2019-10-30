@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.profile.dtos;
 
+import com.scottlogic.deg.profile.SupportedVersionsGetter;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

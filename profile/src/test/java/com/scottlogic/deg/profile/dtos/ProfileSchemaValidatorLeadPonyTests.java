@@ -16,6 +16,9 @@
 
 package com.scottlogic.deg.profile.dtos;
 
+import com.scottlogic.deg.profile.ProfileSchemaValidator;
+import com.scottlogic.deg.profile.ProfileSchemaValidatorLeadPony;
+
 class ProfileSchemaValidatorLeadPonyTests extends ProfileSchemaValidatorTests {
 
     private ProfileSchemaValidator profileValidator = new ProfileSchemaValidatorLeadPony();

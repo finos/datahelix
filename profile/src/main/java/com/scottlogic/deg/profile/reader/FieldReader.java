@@ -1,11 +1,10 @@
-package com.scottlogic.deg.profile.reader.atomic;
+package com.scottlogic.deg.profile.reader;
 
 import com.scottlogic.deg.common.profile.DateTimeGranularity;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.NumericGranularity;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
-import com.scottlogic.deg.profile.reader.file.names.NameRetriever;
 
 import java.math.BigDecimal;
 import java.time.temporal.ChronoUnit;

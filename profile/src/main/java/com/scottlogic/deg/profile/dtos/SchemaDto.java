@@ -15,13 +15,9 @@
  */
 package com.scottlogic.deg.profile.dtos;
 
-import java.io.IOException;
-import java.net.URL;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-public class NoopVersionChecker implements SchemaVersionValidator {
-
-    @Override
-    public URL getSchemaFile() throws IOException {
-        return null;
-    }
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class SchemaDto {
+    public String schemaVersion;
 }

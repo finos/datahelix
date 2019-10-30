@@ -20,7 +20,8 @@ package com.scottlogic.deg.profile.reader.atomic;
 import com.scottlogic.deg.common.profile.*;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
-import com.scottlogic.deg.profile.reader.file.names.NameRetriever;
+import com.scottlogic.deg.profile.reader.FieldReader;
+import com.scottlogic.deg.profile.reader.NameRetriever;
 import org.junit.jupiter.api.Test;
 
 import java.time.temporal.ChronoUnit;

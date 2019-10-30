@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.dtos;
+package com.scottlogic.deg.profile.serialisation;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.scottlogic.deg.profile.dtos.RuleDTO;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
 
 import java.io.IOException;

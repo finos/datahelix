@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.reader.file;
+package com.scottlogic.deg.profile.reader;
 
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;

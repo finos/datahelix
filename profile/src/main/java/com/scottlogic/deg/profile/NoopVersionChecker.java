@@ -13,24 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.scottlogic.deg.profile;
 
-package com.scottlogic.deg.profile.dtos;
+import java.io.IOException;
+import java.net.URL;
 
-/**
- * Used to validate a DataHelix Profile JSON file.
- * <p>
- * Checks that the profile JSON file is valid against the
- * DataHelix Profile Schema (datahelix.schema.json)
- * </p>
- */
-public interface ProfileSchemaValidator {
+public class NoopVersionChecker implements SchemaVersionValidator {
 
-    /**
-     * Validates a json file against the DataHelix Profile JSON Schema.
-     *
-     * @param profile the profile to validate against the schema
-     * @param schema  the schema to check validate against
-     * @return the result of validating the provided profile
-     */
-    void validateProfile(String profile, String schema);
+    @Override
+    public URL getSchemaFile() throws IOException {
+        return null;
+    }
 }

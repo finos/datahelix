@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.scottlogic.deg.profile.dtos;
+package com.scottlogic.deg.profile;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.profile.guice.ProfileConfigSource;
-import com.scottlogic.deg.profile.serialisation.SchemaVersionGetter;
 
 import java.io.IOException;
 import java.net.URL;

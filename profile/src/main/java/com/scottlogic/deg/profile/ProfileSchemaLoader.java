@@ -14,15 +14,26 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.dtos;
+package com.scottlogic.deg.profile;
 
 import java.io.File;
 import java.net.URL;
 
-public class NoopProfileSchemaLoader implements ProfileSchemaLoader {
+/**
+ * Used to validate a DataHelix Profile JSON file.
+ * <p>
+ * Checks that the profile JSON file is valid against the
+ * DataHelix Profile Schema (datahelix.schema.json)
+ * </p>
+ */
+public interface ProfileSchemaLoader {
 
-    @Override
-    public void validateProfile(File profileFile, URL schema) {
-        return;
-    }
+    /**
+     * Validates a json file against the DataHelix Profile JSON Schema.
+     *
+     * @param profileFile an File object that is the profile to validate
+     * @param schema      the schema to check validate against
+     * @return the result of validating the provided profile
+     */
+    void validateProfile(File profileFile, URL schema);
 }

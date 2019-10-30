@@ -17,6 +17,7 @@
 package com.scottlogic.deg.profile.dtos;
 
 import com.scottlogic.deg.common.ValidationException;
+import com.scottlogic.deg.profile.ProfileSchemaValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.leadpony.justify.api.JsonSchema;

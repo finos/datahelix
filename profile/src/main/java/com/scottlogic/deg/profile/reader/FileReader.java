@@ -5,7 +5,6 @@ import com.google.inject.name.Named;
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
-import com.scottlogic.deg.profile.reader.file.CsvInputStreamReader;
 
 import java.io.*;
 import java.util.stream.Collectors;

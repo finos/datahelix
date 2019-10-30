@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.reader.file.names;
+package com.scottlogic.deg.profile.reader;
 
 import com.scottlogic.deg.generator.profile.constraints.atomic.NameConstraintTypes;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
-import com.scottlogic.deg.profile.reader.file.CsvInputStreamReader;
 
 import java.io.IOException;
 import java.io.InputStream;

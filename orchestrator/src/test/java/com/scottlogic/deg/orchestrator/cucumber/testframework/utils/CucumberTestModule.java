@@ -27,11 +27,11 @@ import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.orchestrator.violate.manifest.ManifestWriter;
 import com.scottlogic.deg.output.outputtarget.OutputTargetFactory;
 import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
-import com.scottlogic.deg.profile.dtos.NoopVersionChecker;
-import com.scottlogic.deg.profile.dtos.SchemaVersionValidator;
+import com.scottlogic.deg.profile.NoopVersionChecker;
+import com.scottlogic.deg.profile.SchemaVersionValidator;
 import com.scottlogic.deg.profile.reader.FileReader;
 import com.scottlogic.deg.profile.reader.ProfileReader;
-import com.scottlogic.deg.profile.reader.validation.ConfigValidator;
+import com.scottlogic.deg.profile.reader.ConfigValidator;
 
 import java.util.stream.Stream;
 
