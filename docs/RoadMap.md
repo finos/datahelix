@@ -7,7 +7,7 @@ Q4 - 2019
   - add ability to configure a weighted distribution for user defined types
   - add ability for fields to depend on data in other fields, starting with date columns.  Eg DATE 1 = DATE 2 + N DAYS
   - add ability to call at least one 3rd party generator tool's data generators within data helix
-  - provide ability for users of dat ahelic to integrate their own custom generators and refernce them in the profile file.
+  - provide ability for users of data helix to integrate their own custom generators and reference them in the profile file.
   - add ability to define unique combinations of fields within data helix via a multi-column csv file.
 
 Q1 - 2020
