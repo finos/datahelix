@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.dtos.constraints;
+package com.scottlogic.deg.profile.dtos.constraints.atomic;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.scottlogic.deg.profile.serialisation.ConstraintDeserializer;
 import com.scottlogic.deg.profile.common.ConstraintType;
+import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 
-@JsonDeserialize(using = ConstraintDeserializer.class)
-public abstract class ConstraintDTO {
-    private final ConstraintType type;
+@JsonDeserialize(as = OfLengthConstraintDTO.class)
+public class OfLengthConstraintDTO extends AtomicConstraintDTO {
+    @JsonProperty(ConstraintTypeJsonProperty.OF_LENGTH)
+    public int value;
 
-    protected ConstraintDTO(ConstraintType type) {
-        this.type = type;
-    }
-
-    @JsonIgnore
-    public ConstraintType getType() {
-        return type;
+    public OfLengthConstraintDTO() {
+        super(ConstraintType.OF_LENGTH);
     }
 }

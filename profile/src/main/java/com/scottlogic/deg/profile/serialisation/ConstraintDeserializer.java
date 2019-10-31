@@ -8,6 +8,11 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 import com.scottlogic.deg.profile.dtos.constraints.*;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.*;
+import com.scottlogic.deg.profile.dtos.constraints.grammatical.AllOfConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.grammatical.AnyOfConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.relations.*;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 
 import java.io.IOException;
@@ -92,7 +97,7 @@ public class ConstraintDeserializer extends JsonDeserializer<ConstraintDTO> {
                 return mapper.treeToValue(node, AllOfConstraintDTO.class);
             case IF:
                 if (node.hasNonNull(ConstraintTypeJsonProperty.THEN)) {
-                    return mapper.treeToValue(node, IfConstraintDTO.class);
+                    return mapper.treeToValue(node, ConditionalConstraintDTO.class);
                 }
                 throw new InvalidProfileException("If constraint types require a then property: " + node);
             default:

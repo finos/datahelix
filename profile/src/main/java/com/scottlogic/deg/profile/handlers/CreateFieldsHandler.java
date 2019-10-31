@@ -11,6 +11,10 @@ import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.dtos.FieldDTO;
 import com.scottlogic.deg.profile.dtos.RuleDTO;
 import com.scottlogic.deg.profile.dtos.constraints.*;
+import com.scottlogic.deg.profile.dtos.constraints.InMapConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.grammatical.AllOfConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.grammatical.AnyOfConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -68,10 +72,10 @@ public class CreateFieldsHandler extends CommandHandler<CreateFields, Fields>
         switch (constraintDTO.getType())
         {
             case IF:
-                IfConstraintDTO conditionalConstraintDTO = (IfConstraintDTO) constraintDTO;
+                ConditionalConstraintDTO conditionalConstraintDTO = (ConditionalConstraintDTO) constraintDTO;
                 return getAllAtomicConstraints(conditionalConstraintDTO.elseConstraint == null
-                    ? Stream.of(((IfConstraintDTO) constraintDTO).thenConstraint)
-                    : Stream.of(((IfConstraintDTO) constraintDTO).thenConstraint, ((IfConstraintDTO) constraintDTO).elseConstraint));
+                    ? Stream.of(((ConditionalConstraintDTO) constraintDTO).thenConstraint)
+                    : Stream.of(((ConditionalConstraintDTO) constraintDTO).thenConstraint, ((ConditionalConstraintDTO) constraintDTO).elseConstraint));
             case ALL_OF:
                 return getAllAtomicConstraints(((AllOfConstraintDTO) constraintDTO).constraints.stream());
             case ANY_OF:

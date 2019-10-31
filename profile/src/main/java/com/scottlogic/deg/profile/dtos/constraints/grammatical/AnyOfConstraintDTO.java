@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.dtos.constraints;
+package com.scottlogic.deg.profile.dtos.constraints.grammatical;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.scottlogic.deg.profile.serialisation.ConstraintDeserializer;
 import com.scottlogic.deg.profile.common.ConstraintType;
+import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
 
-@JsonDeserialize(using = ConstraintDeserializer.class)
-public abstract class ConstraintDTO {
-    private final ConstraintType type;
+import java.util.List;
 
-    protected ConstraintDTO(ConstraintType type) {
-        this.type = type;
-    }
+@JsonDeserialize(as = AnyOfConstraintDTO.class)
+public class AnyOfConstraintDTO extends GrammaticalConstraintDTO
+{
+    @JsonProperty(ConstraintTypeJsonProperty.ANY_OF)
+    public List<ConstraintDTO> constraints;
 
-    @JsonIgnore
-    public ConstraintType getType() {
-        return type;
+    public AnyOfConstraintDTO() {
+        super(ConstraintType.ANY_OF);
     }
 }

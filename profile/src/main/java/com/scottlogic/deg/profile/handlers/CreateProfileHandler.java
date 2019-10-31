@@ -23,6 +23,11 @@ import com.scottlogic.deg.profile.commands.CreateProfile;
 import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.dtos.RuleDTO;
 import com.scottlogic.deg.profile.dtos.constraints.*;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.*;
+import com.scottlogic.deg.profile.dtos.constraints.grammatical.AllOfConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.grammatical.AnyOfConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.relations.RelationalConstraintDTO;
 import com.scottlogic.deg.profile.reader.FileReader;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import com.scottlogic.deg.profile.reader.NameRetriever;
@@ -105,7 +110,7 @@ public class CreateProfileHandler extends CommandHandler<CreateProfile, Profile>
         } else if (dto instanceof AtomicConstraintDTO)
             return CommandResult.success(readAtomicConstraintDto((AtomicConstraintDTO) dto, fields));
         else {
-            return readGrammaticalConstraintDto(dto, fields).map(c -> c);
+            return createGrammaticalConstraint(dto, fields).map(c -> c);
         }
     }
 
@@ -229,20 +234,20 @@ public class CreateProfileHandler extends CommandHandler<CreateProfile, Profile>
         }
     }
 
-    private CommandResult<GrammaticalConstraint> readGrammaticalConstraintDto(ConstraintDTO dto, Fields fields) {
+    private CommandResult<GrammaticalConstraint> createGrammaticalConstraint(ConstraintDTO dto, Fields fields) {
         switch (dto.getType()) {
             case ALL_OF:
                 return createConstraints(((AllOfConstraintDTO) dto).constraints, fields).map(AndConstraint::new);
             case ANY_OF:
                 return createConstraints(((AnyOfConstraintDTO) dto).constraints, fields).map(OrConstraint::new);
             case IF:
-                return createConditionalConstraint((IfConstraintDTO)dto, fields).map(c -> c);
+                return createConditionalConstraint((ConditionalConstraintDTO)dto, fields).map(c -> c);
             default:
                 return CommandResult.failure(Collections.singletonList("Grammatical constraint type not found: " + dto));
         }
     }
 
-    private CommandResult<ConditionalConstraint> createConditionalConstraint(IfConstraintDTO dto, Fields fields)
+    private CommandResult<ConditionalConstraint> createConditionalConstraint(ConditionalConstraintDTO dto, Fields fields)
     {
         CommandResult<Constraint> ifConstraint = createConstraint(dto.ifConstraint, fields);
         CommandResult<Constraint> thenConstraint = createConstraint(dto.thenConstraint, fields);
