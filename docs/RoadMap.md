@@ -10,15 +10,12 @@ Q4 - 2019
   - provide ability for users of dat ahelic to integrate their own custom generators and refernce them in the profile file.
   - add ability to define unique combinations of fields within data helix via a multi-column csv file.
 
-- Goal 2 - Prove product with 6 key users
-  - This will involve implementing new features that enable this which will get from feedback from new users
-
 Q1 - 2020
-- Goal 3 - Scale out users wise
+- Goal 2 - Scale out users wise
   - This will involve implementing new features that enable this which will get from feedback from new users
 
 Q2 - 2020
-- Goal 4 - Enhance to satisfy Foreign Keys In Db Tables Use Case
-- Goal 5 - Enhance to satisfy component streaming Use Case (Kafka, Kinesis, heading for the future)
+- Goal 3 - Enhance to satisfy Foreign Keys In Db Tables Use Case
+- Goal 4 - Enhance to satisfy component streaming Use Case (Kafka, Kinesis, heading for the future)
 
 
