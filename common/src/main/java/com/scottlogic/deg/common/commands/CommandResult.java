@@ -4,30 +4,36 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class CommandResult<T>
 {
     public final T value;
-    public final boolean hasValue;
+    public final boolean isSuccess;
     public final List<String> errors;
 
-    private CommandResult(T value, List<String> errors)
+    private CommandResult(T value, boolean isSuccess, List<String> errors)
     {
         this.value = value;
-        this.hasValue = value != null;
+        this.isSuccess = isSuccess;
         this.errors = errors;
     }
 
     public static <T> CommandResult<T> success(T value)
     {
-        return new CommandResult<>(value, new ArrayList<>());
+        return new CommandResult<>(value, true, new ArrayList<>());
     }
 
     @SafeVarargs
     public static <T> CommandResult<T> failure(List<String>... errors)
     {
-        return new CommandResult<>(null, Arrays.stream(errors).flatMap(Collection::stream).collect(Collectors.toList()));
+        return new CommandResult<>(null, false, Arrays.stream(errors).flatMap(Collection::stream).collect(Collectors.toList()));
+    }
+
+    public <TResult> CommandResult<TResult> map(Function<T, TResult> mapping)
+    {
+        return isSuccess ? success(mapping.apply(value)) : failure(errors);
     }
 
 
@@ -37,7 +43,7 @@ public class CommandResult<T>
         List<String> errors = new ArrayList<>();
         results.forEach(result ->
         {
-            if(result.hasValue) values.add(result.value);
+            if(result.isSuccess) values.add(result.value);
             else errors.addAll(result.errors);
         });
 

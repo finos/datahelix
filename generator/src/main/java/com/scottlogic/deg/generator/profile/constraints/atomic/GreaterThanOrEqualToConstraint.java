@@ -27,13 +27,13 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createNumericRestrictions;
-import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MIN_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MAX_LIMIT;
 
-public class IsLessThanConstantConstraint implements AtomicConstraint {
+public class GreaterThanOrEqualToConstraint implements AtomicConstraint {
     public final Field field;
     public final HelixNumber referenceValue;
 
-    public IsLessThanConstantConstraint(Field field, HelixNumber referenceValue) {
+    public GreaterThanOrEqualToConstraint(Field field, HelixNumber referenceValue) {
         this.referenceValue = referenceValue;
         this.field = field;
     }
@@ -45,12 +45,12 @@ public class IsLessThanConstantConstraint implements AtomicConstraint {
 
     @Override
     public AtomicConstraint negate() {
-        return new IsGreaterThanOrEqualToConstantConstraint(field, referenceValue);
+        return new LessThanConstraint(field, referenceValue);
     }
 
     @Override
     public FieldSpec toFieldSpec() {
-        final LinearRestrictions<BigDecimal> numericRestrictions = createNumericRestrictions(NUMERIC_MIN_LIMIT, new Limit<>(referenceValue.getValue(), false));
+        LinearRestrictions<BigDecimal> numericRestrictions = createNumericRestrictions(new Limit<>(referenceValue.getValue(), true), NUMERIC_MAX_LIMIT);
         return FieldSpecFactory.fromRestriction(numericRestrictions);
     }
 
@@ -61,7 +61,7 @@ public class IsLessThanConstantConstraint implements AtomicConstraint {
             return o.equals(this);
         }
         if (o == null || getClass() != o.getClass()) return false;
-        IsLessThanConstantConstraint constraint = (IsLessThanConstantConstraint) o;
+        GreaterThanOrEqualToConstraint constraint = (GreaterThanOrEqualToConstraint) o;
         return Objects.equals(field, constraint.field) && Objects.equals(referenceValue, constraint.referenceValue);
     }
 
@@ -71,5 +71,7 @@ public class IsLessThanConstantConstraint implements AtomicConstraint {
     }
 
     @Override
-    public String toString() { return String.format("`%s` < %s", field.getName(), referenceValue); }
+    public String toString() {
+        return String.format("`%s` >= %s", field.getName(), referenceValue);
+    }
 }

@@ -6,10 +6,10 @@ import com.scottlogic.deg.profile.dtos.ProfileDTO;
 
 public class CreateProfile extends CommandBase<Profile>
 {
-    public final ProfileDTO dto;
+    public final ProfileDTO profileDTO;
 
-    public CreateProfile(ProfileDTO dto)
+    public CreateProfile(ProfileDTO profileDTO)
     {
-        this.dto = dto;
+        this.profileDTO = profileDTO;
     }
 }

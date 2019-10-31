@@ -23,7 +23,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
 
-public class IsInSetConstraintTests {
+public class InSetConstraintTests
+{
 
     @Test
     public void testConstraintThrowsIfGivenEmptySet(){
@@ -31,7 +32,7 @@ public class IsInSetConstraintTests {
 
         Assertions.assertThrows(
             ValidationException.class,
-            () -> new IsInSetConstraint(field1, DistributedList.empty()));
+            () -> new InSetConstraint(field1, DistributedList.empty()));
     }
 
     @Test
@@ -40,14 +41,14 @@ public class IsInSetConstraintTests {
 
         Assertions.assertThrows(
             ValidationException.class,
-            () -> new IsInSetConstraint(field1, DistributedList.singleton(null)));
+            () -> new InSetConstraint(field1, DistributedList.singleton(null)));
     }
 
     @Test
     public void testConstraintThrowsNothingIfGivenAValidSet(){
         Field field1 = createField("TestField");
         Assertions.assertDoesNotThrow(
-            () -> new IsInSetConstraint(field1, DistributedList.singleton("foo")));
+            () -> new InSetConstraint(field1, DistributedList.singleton("foo")));
     }
 
 }

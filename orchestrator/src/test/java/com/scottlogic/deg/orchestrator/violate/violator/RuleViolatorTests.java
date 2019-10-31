@@ -21,7 +21,7 @@ import com.scottlogic.deg.common.profile.UnviolatableConstraintException;
 import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.profile.constraints.atomic.IsLessThanConstantConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.LessThanConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.ViolatedAtomicConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
@@ -69,9 +69,9 @@ public class RuleViolatorTests {
 
         target = new RuleViolator(inputFilters);
 
-        atomicConstraint1 = new IsLessThanConstantConstraint(createField("foo"), HelixNumber.create(10));
-        atomicConstraint2 = new IsLessThanConstantConstraint(createField("bar"), HelixNumber.create(20));
-        atomicConstraint3 = new IsLessThanConstantConstraint(createField("foobar"), HelixNumber.create(30));
+        atomicConstraint1 = new LessThanConstraint(createField("foo"), HelixNumber.create(10));
+        atomicConstraint2 = new LessThanConstraint(createField("bar"), HelixNumber.create(20));
+        atomicConstraint3 = new LessThanConstraint(createField("foobar"), HelixNumber.create(30));
     }
 
     /**

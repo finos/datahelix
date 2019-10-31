@@ -29,11 +29,11 @@ import java.util.Objects;
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDateTimeRestrictions;
 import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
 
-public class IsBeforeConstantDateTimeConstraint implements AtomicConstraint {
+public class BeforeConstraint implements AtomicConstraint {
     public final Field field;
     public final HelixDateTime referenceValue;
 
-    public IsBeforeConstantDateTimeConstraint(Field field, HelixDateTime referenceValue) {
+    public BeforeConstraint(Field field, HelixDateTime referenceValue) {
         this.field = field;
         this.referenceValue = referenceValue;
     }
@@ -45,7 +45,7 @@ public class IsBeforeConstantDateTimeConstraint implements AtomicConstraint {
 
     @Override
     public AtomicConstraint negate() {
-        return new IsAfterOrEqualToConstantDateTimeConstraint(field, referenceValue);
+        return new AfterOrAtConstraint(field, referenceValue);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class IsBeforeConstantDateTimeConstraint implements AtomicConstraint {
             return o.equals(this);
         }
         if (o == null || getClass() != o.getClass()) return false;
-        IsBeforeConstantDateTimeConstraint constraint = (IsBeforeConstantDateTimeConstraint) o;
+        BeforeConstraint constraint = (BeforeConstraint) o;
         return Objects.equals(field, constraint.field) && Objects.equals(referenceValue, constraint.referenceValue);
     }
 

@@ -27,11 +27,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class IsInSetConstraint implements AtomicConstraint {
+public class InSetConstraint implements AtomicConstraint {
     public final Field field;
     public final DistributedList<Object> legalValues;
 
-    public IsInSetConstraint(Field field, DistributedList<Object> legalValues) {
+    public InSetConstraint(Field field, DistributedList<Object> legalValues) {
         this.field = field;
         this.legalValues = legalValues;
 
@@ -81,7 +81,7 @@ public class IsInSetConstraint implements AtomicConstraint {
             return o.equals(this);
         }
         if (o == null || getClass() != o.getClass()) return false;
-        IsInSetConstraint constraint = (IsInSetConstraint) o;
+        InSetConstraint constraint = (InSetConstraint) o;
         return Objects.equals(field, constraint.field) && Objects.equals(legalValues, constraint.legalValues);
     }
 

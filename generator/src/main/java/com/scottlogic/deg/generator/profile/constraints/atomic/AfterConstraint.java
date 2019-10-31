@@ -16,30 +16,26 @@
 
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
-import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.NumericGranularity;
+import com.scottlogic.deg.common.profile.HelixDateTime;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
+import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 
+import java.time.OffsetDateTime;
 import java.util.Objects;
 
-import static com.scottlogic.deg.common.util.Defaults.NUMERIC_MAX;
-import static com.scottlogic.deg.common.util.Defaults.NUMERIC_MIN;
+import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDateTimeRestrictions;
+import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
 
-public class IsGranularToNumericConstraint implements AtomicConstraint {
+public class AfterConstraint implements AtomicConstraint {
     public final Field field;
-    public final NumericGranularity granularity;
+    public final HelixDateTime referenceValue;
 
-    public IsGranularToNumericConstraint(Field field, NumericGranularity granularity) {
-        if(field == null)
-            throw new IllegalArgumentException("field must not be null");
-        if(granularity == null)
-            throw new IllegalArgumentException("granularity must not be null");
-
-        this.granularity = granularity;
+    public AfterConstraint(Field field, HelixDateTime referenceValue) {
         this.field = field;
+        this.referenceValue = referenceValue;
     }
 
     @Override
@@ -49,12 +45,13 @@ public class IsGranularToNumericConstraint implements AtomicConstraint {
 
     @Override
     public AtomicConstraint negate() {
-        throw new ValidationException("Numeric Granularity cannot be negated or used in if statements");
+        return new BeforeOrAtConstraint(field, referenceValue);
     }
 
     @Override
     public FieldSpec toFieldSpec() {
-        return FieldSpecFactory.fromRestriction(new LinearRestrictions(NUMERIC_MIN, NUMERIC_MAX, granularity));
+        final LinearRestrictions<OffsetDateTime> dateTimeRestrictions = createDateTimeRestrictions(new Limit<>(referenceValue.getValue(), false), DATETIME_MAX_LIMIT);
+        return FieldSpecFactory.fromRestriction(dateTimeRestrictions);
     }
 
     @Override
@@ -64,17 +61,17 @@ public class IsGranularToNumericConstraint implements AtomicConstraint {
             return o.equals(this);
         }
         if (o == null || getClass() != o.getClass()) return false;
-        IsGranularToNumericConstraint constraint = (IsGranularToNumericConstraint) o;
-        return Objects.equals(field, constraint.field) && Objects.equals(granularity, constraint.granularity);
+        AfterConstraint constraint = (AfterConstraint) o;
+        return Objects.equals(field, constraint.field) && Objects.equals(referenceValue, constraint.referenceValue);
     }
 
     @Override
     public int hashCode(){
-        return Objects.hash(field, granularity);
+        return Objects.hash(field, referenceValue);
     }
 
     @Override
-    public String toString() {
-        return String.format("%s granular to %s", field.getName(), granularity);
+    public String toString(){
+        return String.format("`%s` > %s", field.getName(), referenceValue);
     }
 }

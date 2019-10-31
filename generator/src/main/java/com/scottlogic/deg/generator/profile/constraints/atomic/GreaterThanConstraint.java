@@ -17,25 +17,25 @@
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.HelixDateTime;
+import com.scottlogic.deg.common.profile.HelixNumber;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 
-import java.time.OffsetDateTime;
+import java.math.BigDecimal;
 import java.util.Objects;
 
-import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDateTimeRestrictions;
-import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
+import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createNumericRestrictions;
+import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MAX_LIMIT;
 
-public class IsBeforeOrEqualToConstantDateTimeConstraint implements AtomicConstraint {
+public class GreaterThanConstraint implements AtomicConstraint {
     public final Field field;
-    public final HelixDateTime referenceValue;
+    public final HelixNumber referenceValue;
 
-    public IsBeforeOrEqualToConstantDateTimeConstraint(Field field, HelixDateTime referenceValue) {
-        this.field = field;
+    public GreaterThanConstraint(Field field, HelixNumber referenceValue) {
         this.referenceValue = referenceValue;
+        this.field = field;
     }
 
     @Override
@@ -45,13 +45,13 @@ public class IsBeforeOrEqualToConstantDateTimeConstraint implements AtomicConstr
 
     @Override
     public AtomicConstraint negate() {
-        return new IsAfterConstantDateTimeConstraint(field, referenceValue);
+        return new IsLessThanOrEqualToConstantConstraint(field, referenceValue);
     }
 
     @Override
     public FieldSpec toFieldSpec() {
-        final LinearRestrictions<OffsetDateTime> dateTimeRestrictions = createDateTimeRestrictions(DATETIME_MIN_LIMIT, new Limit<>(referenceValue.getValue(), true));
-        return FieldSpecFactory.fromRestriction(dateTimeRestrictions);
+        LinearRestrictions<BigDecimal> numericRestrictions = createNumericRestrictions(new Limit<>(referenceValue.getValue(), false), NUMERIC_MAX_LIMIT);
+        return FieldSpecFactory.fromRestriction(numericRestrictions);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class IsBeforeOrEqualToConstantDateTimeConstraint implements AtomicConstr
             return o.equals(this);
         }
         if (o == null || getClass() != o.getClass()) return false;
-        IsBeforeOrEqualToConstantDateTimeConstraint constraint = (IsBeforeOrEqualToConstantDateTimeConstraint) o;
+        GreaterThanConstraint constraint = (GreaterThanConstraint) o;
         return Objects.equals(field, constraint.field) && Objects.equals(referenceValue, constraint.referenceValue);
     }
 
@@ -72,6 +72,6 @@ public class IsBeforeOrEqualToConstantDateTimeConstraint implements AtomicConstr
 
     @Override
     public String toString() {
-        return String.format("`%s` <= %s", field.getName(), referenceValue);
+        return String.format("`%s` > %s", field.getName(), referenceValue);
     }
 }

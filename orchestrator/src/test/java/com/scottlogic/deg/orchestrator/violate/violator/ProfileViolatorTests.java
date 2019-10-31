@@ -22,8 +22,8 @@ import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
-import com.scottlogic.deg.generator.profile.constraints.atomic.IsGreaterThanConstantConstraint;
-import com.scottlogic.deg.generator.profile.constraints.atomic.IsLessThanConstantConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.GreaterThanConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.LessThanConstraint;
 import com.scottlogic.deg.orchestrator.violate.ViolatedProfile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -149,22 +149,22 @@ public class ProfileViolatorTests {
         String ruleInformation1 = "Rule 1 description";
         fooField = createField("foo");
         barField = createField("bar");
-        Constraint constraint1 = new IsGreaterThanConstantConstraint(
+        Constraint constraint1 = new GreaterThanConstraint(
             fooField,
             HelixNumber.create(100)
         );
-        Constraint constraint2 = new IsGreaterThanConstantConstraint(
+        Constraint constraint2 = new GreaterThanConstraint(
             barField,
             HelixNumber.create(50)
         );
         rule1 = new Rule(ruleInformation1, Arrays.asList(constraint1, constraint2));
 
         //Violated Rule 1 consists of two constraints, "foo is less than to 101" and "bar is less than 51"
-        Constraint constraint3 = new IsLessThanConstantConstraint(
+        Constraint constraint3 = new LessThanConstraint(
             fooField,
             HelixNumber.create(101)
         );
-        Constraint constraint4 = new IsLessThanConstantConstraint(
+        Constraint constraint4 = new LessThanConstraint(
             barField,
             HelixNumber.create(51)
         );

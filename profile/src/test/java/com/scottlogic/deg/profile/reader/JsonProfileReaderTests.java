@@ -79,7 +79,7 @@ public class JsonProfileReaderTests {
     private String json;
 
     private JsonProfileReader jsonProfileReader = new JsonProfileReader(null,
-        new ProfileCommandBus(new ConstraintReader(new AtomicConstraintReader(new MockFromFileReader()))));
+        new ProfileCommandBus(new MockFromFileReader()));
 
 
 
@@ -287,7 +287,7 @@ public class JsonProfileReaderTests {
         expectRules(
             ruleWithConstraints(
                 typedConstraint(
-                    IsGranularToNumericConstraint.class,
+                    GranularToNumericConstraint.class,
                     c -> {
                         Assert.assertThat(
                             c.granularity,
@@ -480,7 +480,7 @@ public class JsonProfileReaderTests {
 
                                     Assert.assertThat(
                                             c.whenConditionIsTrue,
-                                            instanceOf(IsInSetConstraint.class));
+                                            instanceOf(InSetConstraint.class));
 
                                     Assert.assertThat(
                                             c.whenConditionIsFalse,
@@ -543,7 +543,7 @@ public class JsonProfileReaderTests {
         expectRules(
             ruleWithConstraints(
                 typedConstraint(
-                    IsGranularToNumericConstraint.class,
+                    GranularToNumericConstraint.class,
                     c -> {
                         Assert.assertThat(
                             c.granularity,
@@ -569,7 +569,7 @@ public class JsonProfileReaderTests {
         expectRules(
             ruleWithConstraints(
                 typedConstraint(
-                    IsGranularToNumericConstraint.class,
+                    GranularToNumericConstraint.class,
                     c -> {
                         Assert.assertThat(
                             c.granularity,
@@ -595,7 +595,7 @@ public class JsonProfileReaderTests {
         expectRules(
             ruleWithConstraints(
                 typedConstraint(
-                    IsGranularToNumericConstraint.class,
+                    GranularToNumericConstraint.class,
                     c -> {
                         Assert.assertThat(
                             c.granularity,
@@ -622,12 +622,12 @@ public class JsonProfileReaderTests {
         expectRules(
             rule -> {
                 // This is different because the ordering would switch depending on if the whole file was run or just this test
-                IsAfterOrEqualToConstantDateTimeConstraint isAfter = (IsAfterOrEqualToConstantDateTimeConstraint) rule.getConstraints().stream()
-                    .filter(f -> f.getClass() == IsAfterOrEqualToConstantDateTimeConstraint.class)
+                AfterOrAtConstraint isAfter = (AfterOrAtConstraint) rule.getConstraints().stream()
+                    .filter(f -> f.getClass() == AfterOrAtConstraint.class)
                     .findFirst()
                     .get();
-                IsBeforeConstantDateTimeConstraint isBefore = (IsBeforeConstantDateTimeConstraint) rule.getConstraints().stream()
-                    .filter(f -> f.getClass() == IsBeforeConstantDateTimeConstraint.class)
+                BeforeConstraint isBefore = (BeforeConstraint) rule.getConstraints().stream()
+                    .filter(f -> f.getClass() == BeforeConstraint.class)
                     .findFirst()
                     .get();
                 Assert.assertEquals(OffsetDateTime.parse("2019-01-01T00:00:00.000Z"), isAfter.referenceValue.getValue());
@@ -1077,7 +1077,7 @@ public class JsonProfileReaderTests {
         expectRules(
             ruleWithConstraints(
                 typedConstraint(
-                    IsGranularToDateConstraint.class,
+                    GranularToDateConstraint.class,
                     c -> Assert.assertThat(c.granularity, equalTo(new DateTimeGranularity(ChronoUnit.DAYS)))
                 )
             )

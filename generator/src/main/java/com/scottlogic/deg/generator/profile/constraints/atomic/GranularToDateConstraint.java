@@ -16,25 +16,29 @@
 
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
+import com.scottlogic.deg.common.ValidationException;
+import com.scottlogic.deg.common.profile.DateTimeGranularity;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.HelixNumber;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
-import com.scottlogic.deg.generator.restrictions.linear.Limit;
-import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 
-import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createNumericRestrictions;
-import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MAX_LIMIT;
+import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDateTimeRestrictions;
+import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
 
-public class IsGreaterThanConstantConstraint implements AtomicConstraint {
+public class GranularToDateConstraint implements AtomicConstraint {
     public final Field field;
-    public final HelixNumber referenceValue;
+    public final DateTimeGranularity granularity;
 
-    public IsGreaterThanConstantConstraint(Field field, HelixNumber referenceValue) {
-        this.referenceValue = referenceValue;
+    public GranularToDateConstraint(Field field, DateTimeGranularity granularity) {
+        if(field == null)
+            throw new IllegalArgumentException("field must not be null");
+        if(granularity == null)
+            throw new IllegalArgumentException("granularity must not be null");
+
+        this.granularity = granularity;
         this.field = field;
     }
 
@@ -45,13 +49,12 @@ public class IsGreaterThanConstantConstraint implements AtomicConstraint {
 
     @Override
     public AtomicConstraint negate() {
-        return new IsLessThanOrEqualToConstantConstraint(field, referenceValue);
+        throw new ValidationException("DateTime Granularity cannot be negated or used in if statements");
     }
 
     @Override
     public FieldSpec toFieldSpec() {
-        LinearRestrictions<BigDecimal> numericRestrictions = createNumericRestrictions(new Limit<>(referenceValue.getValue(), false), NUMERIC_MAX_LIMIT);
-        return FieldSpecFactory.fromRestriction(numericRestrictions);
+        return FieldSpecFactory.fromRestriction(createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT, granularity));
     }
 
     @Override
@@ -61,17 +64,17 @@ public class IsGreaterThanConstantConstraint implements AtomicConstraint {
             return o.equals(this);
         }
         if (o == null || getClass() != o.getClass()) return false;
-        IsGreaterThanConstantConstraint constraint = (IsGreaterThanConstantConstraint) o;
-        return Objects.equals(field, constraint.field) && Objects.equals(referenceValue, constraint.referenceValue);
+        GranularToDateConstraint constraint = (GranularToDateConstraint) o;
+        return (field.equals(constraint.field) && Objects.equals(granularity, constraint.granularity));
     }
 
     @Override
     public int hashCode(){
-        return Objects.hash(field, referenceValue);
+        return Objects.hash(field, granularity);
     }
 
     @Override
     public String toString() {
-        return String.format("`%s` > %s", field.getName(), referenceValue);
+        return String.format("%s granular to %s", field.getName(), granularity);
     }
 }

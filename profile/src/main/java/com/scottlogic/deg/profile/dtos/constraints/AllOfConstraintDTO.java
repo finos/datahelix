@@ -21,12 +21,12 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 
-import java.util.Collection;
+import java.util.List;
 
 @JsonDeserialize(as = AllOfConstraintDTO.class)
 public class AllOfConstraintDTO extends ConstraintDTO {
     @JsonProperty(ConstraintTypeJsonProperty.ALL_OF)
-    public Collection<ConstraintDTO> constraints;
+    public List<ConstraintDTO> constraints;
 
     public AllOfConstraintDTO() {
         super(ConstraintType.ALL_OF);

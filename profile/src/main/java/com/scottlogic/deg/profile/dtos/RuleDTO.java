@@ -19,11 +19,11 @@ package com.scottlogic.deg.profile.dtos;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
 
-import java.util.Collection;
+import java.util.List;
 
 public class RuleDTO
 {
     @JsonProperty("rule")
     public String description;
-    public Collection<ConstraintDTO> constraints;
+    public List<ConstraintDTO> constraints;
 }

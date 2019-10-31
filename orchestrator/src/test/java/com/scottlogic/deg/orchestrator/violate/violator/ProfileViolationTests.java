@@ -80,7 +80,7 @@ public class ProfileViolationTests {
                 .collect(Collectors.toList()));
 
         return Stream.of(
-            Arguments.of(IsInSetConstraint.class, sampleSet),
+            Arguments.of(InSetConstraint.class, sampleSet),
             Arguments.of(IsNullConstraint.class, null),
             Arguments.of(MatchesStandardConstraint.class, StandardConstraintTypes.ISIN),
 
@@ -90,14 +90,14 @@ public class ProfileViolationTests {
             Arguments.of(IsStringShorterThanConstraint.class, HelixStringLength.create(20)),
             Arguments.of(StringHasLengthConstraint.class, HelixStringLength.create(15)),
 
-            Arguments.of(IsAfterConstantDateTimeConstraint.class, HelixDateTime.create(sampleDate)),
-            Arguments.of(IsAfterOrEqualToConstantDateTimeConstraint.class, HelixDateTime.create(sampleDate.plusDays(1))),
-            Arguments.of(IsBeforeConstantDateTimeConstraint.class, HelixDateTime.create(sampleDate.minusDays(1))),
-            Arguments.of(IsBeforeOrEqualToConstantDateTimeConstraint.class, HelixDateTime.create(sampleDate.plusDays(2))),
+            Arguments.of(AfterConstraint.class, HelixDateTime.create(sampleDate)),
+            Arguments.of(AfterOrAtConstraint.class, HelixDateTime.create(sampleDate.plusDays(1))),
+            Arguments.of(BeforeConstraint.class, HelixDateTime.create(sampleDate.minusDays(1))),
+            Arguments.of(BeforeOrAtConstraint.class, HelixDateTime.create(sampleDate.plusDays(2))),
 
-            Arguments.of(IsGreaterThanConstantConstraint.class, HelixNumber.create(100)),
-            Arguments.of(IsGreaterThanOrEqualToConstantConstraint.class, HelixNumber.create(200)),
-            Arguments.of(IsLessThanConstantConstraint.class, HelixNumber.create(300)),
+            Arguments.of(GreaterThanConstraint.class, HelixNumber.create(100)),
+            Arguments.of(GreaterThanOrEqualToConstraint.class, HelixNumber.create(200)),
+            Arguments.of(LessThanConstraint.class, HelixNumber.create(300)),
             Arguments.of(IsLessThanOrEqualToConstantConstraint.class, HelixNumber.create(400))
         );
     }
@@ -237,7 +237,7 @@ public class ProfileViolationTests {
             .withGreaterThanConstraint(field1, 100)
             .build();
 
-        constraintsToNotViolate.add(new ConstraintTypeViolationFilter(IsGreaterThanConstantConstraint.class));
+        constraintsToNotViolate.add(new ConstraintTypeViolationFilter(GreaterThanConstraint.class));
 
         TestProfiles testProfiles = createTestProfiles(
             "Input Profile",

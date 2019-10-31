@@ -27,13 +27,13 @@ import java.time.OffsetDateTime;
 import java.util.Objects;
 
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDateTimeRestrictions;
-import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
+import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
 
-public class IsAfterConstantDateTimeConstraint implements AtomicConstraint {
+public class BeforeOrAtConstraint implements AtomicConstraint {
     public final Field field;
     public final HelixDateTime referenceValue;
 
-    public IsAfterConstantDateTimeConstraint(Field field, HelixDateTime referenceValue) {
+    public BeforeOrAtConstraint(Field field, HelixDateTime referenceValue) {
         this.field = field;
         this.referenceValue = referenceValue;
     }
@@ -45,12 +45,12 @@ public class IsAfterConstantDateTimeConstraint implements AtomicConstraint {
 
     @Override
     public AtomicConstraint negate() {
-        return new IsBeforeOrEqualToConstantDateTimeConstraint(field, referenceValue);
+        return new AfterConstraint(field, referenceValue);
     }
 
     @Override
     public FieldSpec toFieldSpec() {
-        final LinearRestrictions<OffsetDateTime> dateTimeRestrictions = createDateTimeRestrictions(new Limit<>(referenceValue.getValue(), false), DATETIME_MAX_LIMIT);
+        final LinearRestrictions<OffsetDateTime> dateTimeRestrictions = createDateTimeRestrictions(DATETIME_MIN_LIMIT, new Limit<>(referenceValue.getValue(), true));
         return FieldSpecFactory.fromRestriction(dateTimeRestrictions);
     }
 
@@ -61,7 +61,7 @@ public class IsAfterConstantDateTimeConstraint implements AtomicConstraint {
             return o.equals(this);
         }
         if (o == null || getClass() != o.getClass()) return false;
-        IsAfterConstantDateTimeConstraint constraint = (IsAfterConstantDateTimeConstraint) o;
+        BeforeOrAtConstraint constraint = (BeforeOrAtConstraint) o;
         return Objects.equals(field, constraint.field) && Objects.equals(referenceValue, constraint.referenceValue);
     }
 
@@ -71,7 +71,7 @@ public class IsAfterConstantDateTimeConstraint implements AtomicConstraint {
     }
 
     @Override
-    public String toString(){
-        return String.format("`%s` > %s", field.getName(), referenceValue);
+    public String toString() {
+        return String.format("`%s` <= %s", field.getName(), referenceValue);
     }
 }
