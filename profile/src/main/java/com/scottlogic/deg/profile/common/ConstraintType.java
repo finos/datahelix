@@ -3,8 +3,6 @@ package com.scottlogic.deg.profile.common;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.util.Arrays;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public enum ConstraintType {
     EQUAL_TO(ConstraintTypeJsonProperty.EQUAL_TO),
@@ -47,7 +45,9 @@ public enum ConstraintType {
     }
 
     public static ConstraintType fromPropertyName(String propertyName) {
-        return Arrays.stream(values()).collect(Collectors.toMap(o -> o.propertyName, Function.identity())).get(propertyName);
+        return Arrays.stream(values())
+            .filter(x->x.propertyName.equalsIgnoreCase(propertyName))
+            .findFirst().orElse(null);
     }
 }
 
