@@ -1,10 +1,9 @@
 package com.scottlogic.deg.common.commands;
 
-import an.awesome.pipelinr.Command;
 import com.scottlogic.deg.common.validators.ValidationResult;
 import com.scottlogic.deg.common.validators.Validator;
 
-public abstract class CommandHandler<TCommand extends Command<CommandResult<TResponse>>, TResponse> implements Command.Handler<TCommand, CommandResult<TResponse>>
+public abstract class CommandHandler<TCommand extends CommandBase<TResponse>, TResponse>
 {
     private final Validator<TCommand> validator;
 
@@ -13,7 +12,6 @@ public abstract class CommandHandler<TCommand extends Command<CommandResult<TRes
         this.validator = validator;
     }
 
-    @Override
     public CommandResult<TResponse> handle(TCommand command)
     {
         ValidationResult validationResult = validator.validate(command);
@@ -21,6 +19,6 @@ public abstract class CommandHandler<TCommand extends Command<CommandResult<TRes
         return CommandResult.failure(validationResult.errors);
     }
 
-    protected abstract CommandResult<TResponse> handleCommand(TCommand command);
+    public abstract CommandResult<TResponse> handleCommand(TCommand command);
 }
 

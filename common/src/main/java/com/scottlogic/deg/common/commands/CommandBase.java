@@ -1,8 +1,6 @@
 package com.scottlogic.deg.common.commands;
 
-import an.awesome.pipelinr.Command;
-
-public abstract class CommandBase<TResponse> implements Command<CommandResult<TResponse>>
+public abstract class CommandBase<TResponse>
 {
     public String commandName;
 

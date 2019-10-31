@@ -31,7 +31,6 @@ dependencies {
     compile "com.fasterxml.jackson.core:jackson-core:${JACKSON_VERSION}"
     compile "com.fasterxml.jackson.core:jackson-annotations:${JACKSON_VERSION}"
     compile "com.fasterxml.jackson.core:jackson-databind:${JACKSON_VERSION}"
-    compile 'an.awesome:pipelinr:0.3'
     compile group: "com.google.inject", name: "guice", version: "${GUICE_VERSION}"
 
     implementation "org.threeten:threeten-extra:${THREE_TEN_VERSION}"

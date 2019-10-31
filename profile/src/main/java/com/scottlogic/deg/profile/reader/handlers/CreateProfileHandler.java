@@ -35,7 +35,7 @@ public class CreateProfileHandler extends CommandHandler<CreateProfile, Profile>
     }
 
     @Override
-    protected CommandResult<Profile> handleCommand(CreateProfile command)
+    public CommandResult<Profile> handleCommand(CreateProfile command)
     {
         CommandResult<Fields> createFieldsResult = bus.send(new CreateFields(command.profileDTO.fields, command.profileDTO.rules));
         if (!createFieldsResult.isSuccess) return CommandResult.failure(createFieldsResult.errors);

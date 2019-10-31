@@ -45,7 +45,7 @@ public class CreateConstraintsHandler extends CommandHandler<CreateConstraints, 
     }
 
     @Override
-    protected CommandResult<List<Constraint>> handleCommand(CreateConstraints command)
+    public CommandResult<List<Constraint>> handleCommand(CreateConstraints command)
     {
         try
         {

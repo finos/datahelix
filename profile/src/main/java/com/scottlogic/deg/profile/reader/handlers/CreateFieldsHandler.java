@@ -28,7 +28,7 @@ public class CreateFieldsHandler extends CommandHandler<CreateFields, Fields>
     }
 
     @Override
-    protected CommandResult<Fields> handleCommand(CreateFields command)
+    public CommandResult<Fields> handleCommand(CreateFields command)
     {
         List<Field> fields = createFields(command.fieldDTOs);
         getInMapFiles(command.ruleDTOs).stream().map(this::createField).forEach(fields::add);
