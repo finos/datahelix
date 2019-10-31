@@ -32,15 +32,21 @@ public class ValidationResult
 
     public static ValidationResult combine(List<ValidationResult> validationResults)
     {
-        boolean isValid = validationResults.stream().allMatch(validationResult -> validationResult.isValid);
-        List<String> errors = validationResults.stream().flatMap(validationResult -> validationResult.errors.stream()).collect(Collectors.toList());
+        boolean isValid = validationResults.stream()
+            .allMatch(validationResult -> validationResult.isValid);
+        List<String> errors = validationResults.stream()
+            .flatMap(validationResult -> validationResult.errors.stream())
+            .collect(Collectors.toList());
         return new ValidationResult(isValid, errors);
     }
 
     public static ValidationResult combine(ValidationResult... validationResults)
     {
-        boolean isValid = Arrays.stream(validationResults).allMatch(validationResult -> validationResult.isValid);
-        List<String> errors = Arrays.stream(validationResults).flatMap(validationResult -> validationResult.errors.stream()).collect(Collectors.toList());
+        boolean isValid = Arrays.stream(validationResults)
+            .allMatch(validationResult -> validationResult.isValid);
+        List<String> errors = Arrays.stream(validationResults)
+            .flatMap(validationResult -> validationResult.errors.stream())
+            .collect(Collectors.toList());
         return new ValidationResult(isValid, errors);
     }
 }

@@ -3,7 +3,7 @@ package com.scottlogic.deg.common.commands;
 import com.scottlogic.deg.common.validators.ValidationResult;
 import com.scottlogic.deg.common.validators.Validator;
 
-public abstract class CommandHandler<TCommand extends CommandBase<TResponse>, TResponse>
+public abstract class CommandHandler<TCommand extends Command<TResponse>, TResponse>
 {
     private final Validator<TCommand> validator;
 

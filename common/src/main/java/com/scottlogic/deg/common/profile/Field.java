@@ -71,15 +71,16 @@ public class Field {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Field field = (Field) o;
-        return Objects.equals(getName(), field.getName())
+        return Objects.equals(name, field.name)
             && Objects.equals(unique, field.unique)
             && Objects.equals(type, field.type)
-            && Objects.equals(formatting, field.formatting);
+            && Objects.equals(formatting, field.formatting)
+            && Objects.equals(nullable, field.nullable);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), unique, formatting, type);
+        return Objects.hash(name, unique, formatting, type, nullable);
     }
 
     public String getName()
