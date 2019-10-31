@@ -1,4 +1,4 @@
-package com.scottlogic.deg.profile.commands;
+package com.scottlogic.deg.profile.reader.commands;
 
 import com.scottlogic.deg.common.commands.CommandBase;
 import com.scottlogic.deg.generator.profile.Profile;

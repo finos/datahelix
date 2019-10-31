@@ -18,10 +18,11 @@ package com.scottlogic.deg.profile.reader;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.commands.CommandBus;
 import com.scottlogic.deg.common.commands.CommandResult;
 import com.scottlogic.deg.generator.profile.Profile;
-import com.scottlogic.deg.profile.commands.CreateProfile;
+import com.scottlogic.deg.profile.reader.commands.CreateProfile;
 import com.scottlogic.deg.profile.dtos.ProfileDTO;
 import com.scottlogic.deg.profile.serialisation.ProfileSerialiser;
 
@@ -52,10 +53,8 @@ public class JsonProfileReader implements ProfileReader {
 
     public Profile read(String profileJson) {
         ProfileDTO profileDTO = new ProfileSerialiser().deserialise(profileJson);
-        if (profileDTO.fields == null)
-            throw new InvalidProfileException("Profile is invalid: 'fields' have not been defined.");
-
         CommandResult<Profile> createProfileResult = commandBus.send(new CreateProfile(profileDTO));
+        if(!createProfileResult.isSuccess) throw new ValidationException(createProfileResult.errors);
         return createProfileResult.value;
     }
 }

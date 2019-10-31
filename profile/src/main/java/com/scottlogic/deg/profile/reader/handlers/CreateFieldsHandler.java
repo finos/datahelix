@@ -1,4 +1,4 @@
-package com.scottlogic.deg.profile.handlers;
+package com.scottlogic.deg.profile.reader.handlers;
 
 import com.scottlogic.deg.common.commands.CommandHandler;
 import com.scottlogic.deg.common.commands.CommandResult;
@@ -6,7 +6,7 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.common.profile.SpecificFieldType;
 import com.scottlogic.deg.common.validators.Validator;
-import com.scottlogic.deg.profile.commands.CreateFields;
+import com.scottlogic.deg.profile.reader.commands.CreateFields;
 import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.dtos.FieldDTO;
 import com.scottlogic.deg.profile.dtos.RuleDTO;

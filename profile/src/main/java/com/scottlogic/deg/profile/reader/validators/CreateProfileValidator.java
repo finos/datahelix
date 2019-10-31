@@ -1,8 +1,8 @@
-package com.scottlogic.deg.profile.validators;
+package com.scottlogic.deg.profile.reader.validators;
 
 import com.scottlogic.deg.common.validators.ValidationResult;
 import com.scottlogic.deg.common.validators.Validator;
-import com.scottlogic.deg.profile.commands.CreateProfile;
+import com.scottlogic.deg.profile.reader.commands.CreateProfile;
 
 public class CreateProfileValidator implements Validator<CreateProfile>
 {

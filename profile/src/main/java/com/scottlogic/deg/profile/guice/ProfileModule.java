@@ -23,12 +23,12 @@ import com.google.inject.name.Names;
 import com.scottlogic.deg.common.commands.CommandBus;
 import com.scottlogic.deg.common.validators.Validator;
 import com.scottlogic.deg.profile.*;
-import com.scottlogic.deg.profile.commands.CreateFields;
-import com.scottlogic.deg.profile.commands.CreateProfile;
+import com.scottlogic.deg.profile.reader.commands.CreateFields;
+import com.scottlogic.deg.profile.reader.commands.CreateProfile;
 import com.scottlogic.deg.profile.reader.JsonProfileReader;
 import com.scottlogic.deg.profile.reader.ProfileReader;
-import com.scottlogic.deg.profile.validators.CreateFieldsValidator;
-import com.scottlogic.deg.profile.validators.CreateProfileValidator;
+import com.scottlogic.deg.profile.reader.validators.CreateFieldsValidator;
+import com.scottlogic.deg.profile.reader.validators.CreateProfileValidator;
 
 import java.io.File;
 
