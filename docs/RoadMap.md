@@ -9,6 +9,7 @@ Q4 - 2019
   - add ability to call at least one 3rd party generator tool's data generators within data helix
   - provide ability for users of dat ahelic to integrate their own custom generators and refernce them in the profile file.
   - add ability to define unique combinations of fields within data helix via a multi-column csv file.
+
 - Goal 2 - Prove product with 6 key users
   - This will involve implementing new features that enable this which will get from feedback from new users
 
