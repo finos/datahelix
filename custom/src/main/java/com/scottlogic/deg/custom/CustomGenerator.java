@@ -11,9 +11,9 @@ public interface CustomGenerator<T> {
     String generatorName();
 
     /**
-     * STRING for String's
-     * NUMERIC for BigDecimal's
-     * DATETIME for OffsetDateTime's
+     * STRING for Strings
+     * NUMERIC for BigDecimals
+     * DATETIME for OffsetDateTimes
      * @return accepted field type
      */
     CustomGeneratorFieldType fieldType();
