@@ -8,17 +8,14 @@ import java.util.List;
 
 public class InMapConstraintValidator extends ConstraintValidator<InMapConstraintDTO>
 {
-    public InMapConstraintValidator(List<FieldDTO> fields, String rule)
+    public InMapConstraintValidator(String rule, List<FieldDTO> fields)
     {
-        super(fields, rule);
+        super(rule, fields);
     }
 
     @Override
     public ValidationResult validate(InMapConstraintDTO inMapConstraint)
     {
-        ValidationResult baseValidationResult = super.validate(inMapConstraint);
-        if (!baseValidationResult.isValid) return baseValidationResult;
-
         return ValidationResult.combine
             (
                 fileMustBeSpecified(inMapConstraint),
@@ -32,11 +29,11 @@ public class InMapConstraintValidator extends ConstraintValidator<InMapConstrain
         String field = inMapConstraint.field;
         if (field == null || field.isEmpty())
         {
-            return ValidationResult.failure("Atomic constraint's referenced field must be specified");
+            return ValidationResult.failure("Field must be specified" + getErrorInfo(inMapConstraint));
         }
         if (fields.stream().noneMatch(f -> f.name.equals(inMapConstraint.field)))
         {
-            return ValidationResult.failure("Atomic constraint's referenced field "+ field + " must be defined in fields | Rule: " + rule);
+            return ValidationResult.failure("Field "+ field + " must be defined in fields" + getErrorInfo(inMapConstraint));
         }
         return ValidationResult.success();
     }
@@ -45,13 +42,13 @@ public class InMapConstraintValidator extends ConstraintValidator<InMapConstrain
     {
         return inMapConstraint.file != null && !inMapConstraint.key.isEmpty()
             ? ValidationResult.success()
-            : ValidationResult.failure("File must be specified | Rule: " + rule + " | Constraint: " + inMapConstraint.getName());
+            : ValidationResult.failure("File must be specified" + getErrorInfo(inMapConstraint));
     }
 
     private ValidationResult keyMustBeSpecified(InMapConstraintDTO inMapConstraint)
     {
         return inMapConstraint.key != null && !inMapConstraint.key.isEmpty()
             ? ValidationResult.success()
-            : ValidationResult.failure("Key must be specified | Rule: " + rule + " | Constraint: " + inMapConstraint.getName());
+            : ValidationResult.failure("Key must be specified" + getErrorInfo(inMapConstraint));
     }
 }

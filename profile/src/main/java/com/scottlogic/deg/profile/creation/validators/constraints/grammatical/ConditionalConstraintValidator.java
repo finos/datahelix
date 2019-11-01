@@ -9,9 +9,10 @@ import java.util.List;
 
 public class ConditionalConstraintValidator  extends ConstraintValidator<ConditionalConstraintDTO>
 {
-    public ConditionalConstraintValidator(List<FieldDTO> fields, String rule)
+
+    public ConditionalConstraintValidator(String rule, List<FieldDTO> fields)
     {
-        super(fields, rule);
+        super(rule, fields);
     }
 
     @Override

@@ -15,7 +15,7 @@ public abstract class ConstraintValidator<TConstraintDTO extends ConstraintDTO> 
     protected final String rule;
     protected final List<FieldDTO> fields;
 
-    protected ConstraintValidator(String rule, List<FieldDTO> fields)
+    public ConstraintValidator(String rule, List<FieldDTO> fields)
     {
         this.rule = rule;
         this.fields = fields;
@@ -36,7 +36,7 @@ public abstract class ConstraintValidator<TConstraintDTO extends ConstraintDTO> 
             case IN_SET:
                 break;
             case IN_MAP:
-                constraintValidator = new InMapConstraintValidator(fields, rule);
+                constraintValidator = new InMapConstraintValidator(rule, fields);
                 break;
             case IS_NULL:
                 break;
@@ -88,13 +88,13 @@ public abstract class ConstraintValidator<TConstraintDTO extends ConstraintDTO> 
                 constraintValidator = new NotConstraintValidator(rule, fields);
                 break;
             case ANY_OF:
-                constraintValidator = new AnyOfConstraintValidator(fields, rule);
+                constraintValidator = new AnyOfConstraintValidator(rule, fields);
                 break;
             case ALL_OF:
-                constraintValidator = new AllOfConstraintValidator(fields, rule);
+                constraintValidator = new AllOfConstraintValidator(rule, fields);
                 break;
             case IF:
-                constraintValidator = new ConditionalConstraintValidator(fields, rule);
+                constraintValidator = new ConditionalConstraintValidator(rule, fields);
                 break;
         }
         return constraintValidator.validate(constraint);
@@ -111,5 +111,10 @@ public abstract class ConstraintValidator<TConstraintDTO extends ConstraintDTO> 
             ValidationResult.failure("Constraint type must not be null | Rule: " + rule);
         }
         return ValidationResult.success();
+    }
+
+    protected String getErrorInfo(ConstraintDTO constraint)
+    {
+         return " | Constraint: " + constraint.getName() + " | Rule: " + rule;
     }
 }

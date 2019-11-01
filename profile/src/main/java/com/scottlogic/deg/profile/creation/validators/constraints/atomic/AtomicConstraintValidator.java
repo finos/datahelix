@@ -9,29 +9,28 @@ import java.util.List;
 
 public abstract class AtomicConstraintValidator<TAtomicConstraintDTO extends AtomicConstraintDTO> extends ConstraintValidator<TAtomicConstraintDTO>
 {
-    protected AtomicConstraintValidator(List<FieldDTO> fields, String rule)
+    protected AtomicConstraintValidator(String rule, List<FieldDTO> fields)
     {
-        super(fields, rule);
+        super(rule, fields);
     }
 
     @Override
     public ValidationResult validate(TAtomicConstraintDTO atomicConstraint)
     {
-        ValidationResult baseValidationResult = super.validate(atomicConstraint);
-        if(!baseValidationResult.isValid) return baseValidationResult;
         return fieldMustBeValid(atomicConstraint);
     }
 
+
     private ValidationResult fieldMustBeValid(TAtomicConstraintDTO atomicConstraint)
     {
-        if(atomicConstraint.field == null || atomicConstraint.field.isEmpty())
+        String field = atomicConstraint.field;
+        if (field == null || field.isEmpty())
         {
-            return ValidationResult.failure("Atomic constraint's referenced field must be specified");
+            return ValidationResult.failure("Field must be specified" + getErrorInfo(atomicConstraint));
         }
-        if(fields.stream().noneMatch(field -> field.name.equals(atomicConstraint.field)))
+        if (fields.stream().noneMatch(f -> f.name.equals(atomicConstraint.field)))
         {
-            return ValidationResult.failure("Atomic constraint's referenced field "
-                +atomicConstraint.field+" must be defined in fields | Rule: " + rule);
+            return ValidationResult.failure("Field "+ field + " must be defined in fields" + getErrorInfo(atomicConstraint));
         }
         return ValidationResult.success();
     }

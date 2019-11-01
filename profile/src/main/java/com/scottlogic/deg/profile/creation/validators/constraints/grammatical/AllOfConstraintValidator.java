@@ -9,9 +9,10 @@ import java.util.List;
 
 public class AllOfConstraintValidator extends ConstraintValidator<AllOfConstraintDTO>
 {
-    public AllOfConstraintValidator(List<FieldDTO> fields, String rule)
+
+    public AllOfConstraintValidator(String rule, List<FieldDTO> fields)
     {
-        super(fields, rule);
+        super(rule, fields);
     }
 
     @Override
