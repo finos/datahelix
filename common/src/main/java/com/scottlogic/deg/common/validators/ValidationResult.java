@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ValidationResult
 {
@@ -48,6 +49,18 @@ public class ValidationResult
             .flatMap(validationResult -> validationResult.errors.stream())
             .collect(Collectors.toList());
         return new ValidationResult(isValid, errors);
+    }
+
+    public static ValidationResult combine(Stream<ValidationResult> validationResults)
+    {
+        List<Boolean> isValid = new ArrayList<>();
+        List<String> errors = new ArrayList<>();
+        validationResults.forEach(validationResult ->
+        {
+            errors.addAll(validationResult.errors);
+            isValid.add(validationResult.isValid);
+        });
+        return new ValidationResult(isValid.stream().allMatch(o -> o), errors);
     }
 }
 
