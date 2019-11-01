@@ -29,11 +29,11 @@ public class AtomicConstraintTypeMapper {
             case CONTAINS_REGEX:
                 return ContainsRegexConstraint.class;
             case OF_LENGTH:
-                return StringHasLengthConstraint.class;
+                return OfLengthConstraint.class;
             case LONGER_THAN:
-                return IsStringLongerThanConstraint.class;
+                return LongerThanConstraint.class;
             case SHORTER_THAN:
-                return IsStringShorterThanConstraint.class;
+                return ShorterThanConstraint.class;
             case GREATER_THAN:
                 return GreaterThanConstraint.class;
             case GREATER_THAN_OR_EQUAL_TO:
@@ -41,7 +41,7 @@ public class AtomicConstraintTypeMapper {
             case LESS_THAN:
                 return LessThanConstraint.class;
             case LESS_THAN_OR_EQUAL_TO:
-                return IsLessThanOrEqualToConstantConstraint.class;
+                return LessThanOrEqualToConstraint.class;
             case AFTER:
                 return AfterConstraint.class;
             case AFTER_OR_AT:

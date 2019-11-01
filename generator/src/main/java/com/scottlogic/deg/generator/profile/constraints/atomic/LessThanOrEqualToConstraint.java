@@ -17,18 +17,23 @@
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.HelixStringLength;
+import com.scottlogic.deg.common.profile.HelixNumber;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
-import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
+import com.scottlogic.deg.generator.restrictions.linear.Limit;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
-public class StringHasLengthConstraint implements AtomicConstraint {
-    public final Field field;
-    public final HelixStringLength referenceValue;
+import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createNumericRestrictions;
+import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MIN_LIMIT;
 
-    public StringHasLengthConstraint(Field field, HelixStringLength referenceValue) {
+public class LessThanOrEqualToConstraint implements AtomicConstraint {
+    public final Field field;
+    public final HelixNumber referenceValue;
+
+    public LessThanOrEqualToConstraint(Field field, HelixNumber referenceValue) {
         this.referenceValue = referenceValue;
         this.field = field;
     }
@@ -40,12 +45,13 @@ public class StringHasLengthConstraint implements AtomicConstraint {
 
     @Override
     public AtomicConstraint negate() {
-        return new NotStringLengthConstraint(field, referenceValue);
+        return new GreaterThanConstraint(field, referenceValue);
     }
 
     @Override
     public FieldSpec toFieldSpec() {
-        return FieldSpecFactory.fromRestriction(StringRestrictionsFactory.forLength(referenceValue.getValue(), false));
+        final LinearRestrictions<BigDecimal> numericRestrictions = createNumericRestrictions(NUMERIC_MIN_LIMIT, new Limit<>(referenceValue.getValue(), true));
+        return FieldSpecFactory.fromRestriction(numericRestrictions);
     }
 
     @Override
@@ -55,15 +61,18 @@ public class StringHasLengthConstraint implements AtomicConstraint {
             return o.equals(this);
         }
         if (o == null || getClass() != o.getClass()) return false;
-        StringHasLengthConstraint constraint = (StringHasLengthConstraint) o;
-        return Objects.equals(field, constraint.field) && Objects.equals(referenceValue.getValue(), constraint.referenceValue.getValue());
+        LessThanOrEqualToConstraint constraint = (LessThanOrEqualToConstraint) o;
+        return Objects.equals(field, constraint.field) && Objects.equals(referenceValue, constraint.referenceValue);
     }
 
     @Override
     public int hashCode(){
-        return Objects.hash(field, referenceValue.getValue());
+        return Objects.hash(field, referenceValue);
     }
 
     @Override
-    public String toString() { return String.format("`%s` length = %s", field.getName(), referenceValue.getValue()); }
+    public String toString() {
+        return String.format("`%s` <= %s", field.getName(), referenceValue);
+    }
+
 }

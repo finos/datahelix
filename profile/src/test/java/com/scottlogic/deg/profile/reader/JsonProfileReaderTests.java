@@ -361,7 +361,7 @@ public class JsonProfileReaderTests {
         expectRules(
             ruleWithConstraints(
                 typedConstraint(
-                    StringHasLengthConstraint.class,
+                    OfLengthConstraint.class,
                     c -> Assert.assertThat(c.referenceValue.getValue(), equalTo(5)))));
     }
 
@@ -484,7 +484,7 @@ public class JsonProfileReaderTests {
 
                                     Assert.assertThat(
                                             c.whenConditionIsFalse,
-                                            instanceOf(IsStringLongerThanConstraint.class));
+                                            instanceOf(LongerThanConstraint.class));
                                 })));
     }
 

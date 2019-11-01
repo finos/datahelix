@@ -149,7 +149,7 @@ public class CucumberTestState {
                     values = (Collection<Object>) _value;
                 }};
             case IS_NULL:
-                return new NullConstraintDTO() {{
+                return new IsNullConstraintDTO() {{
                     field = fieldName;
                     isNull = (boolean) _value;
                 }};

@@ -17,8 +17,8 @@
 package com.scottlogic.deg.orchestrator.violation;
 
 import com.scottlogic.deg.common.profile.HelixStringLength;
-import com.scottlogic.deg.generator.profile.constraints.atomic.IsStringShorterThanConstraint;
-import com.scottlogic.deg.generator.profile.constraints.atomic.StringHasLengthConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.ShorterThanConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.OfLengthConstraint;
 import com.scottlogic.deg.generator.violations.filters.ConstraintTypeViolationFilter;
 import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
 import com.scottlogic.deg.orchestrator.violate.AtomicConstraintTypeMapper;
@@ -72,11 +72,11 @@ class ViolationFiltersProviderTest {
 
 
         assertThat(filter.canViolate(
-            new StringHasLengthConstraint(null, HelixStringLength.create(2))),
+            new OfLengthConstraint(null, HelixStringLength.create(2))),
             is(false));
 
         assertThat(filter.canViolate(
-            new IsStringShorterThanConstraint(null, HelixStringLength.create(5))),
+            new ShorterThanConstraint(null, HelixStringLength.create(5))),
             is(true));
     }
 

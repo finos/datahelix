@@ -130,7 +130,7 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
     }
 
     public ConstraintChainBuilder<T> withOfLengthConstraint(Field fooField, int length) {
-        return saveAndSet(new StringHasLengthConstraint(fooField, HelixStringLength.create(length)));
+        return saveAndSet(new OfLengthConstraint(fooField, HelixStringLength.create(length)));
     }
 
     public ConstraintChainBuilder<T> withAfterConstraint(Field field, OffsetDateTime dateTime) {

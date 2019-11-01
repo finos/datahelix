@@ -24,11 +24,11 @@ import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 
 import java.util.Objects;
 
-public class IsStringShorterThanConstraint implements AtomicConstraint {
+public class LongerThanConstraint implements AtomicConstraint {
     public final Field field;
     public final HelixStringLength referenceValue;
 
-    public IsStringShorterThanConstraint(Field field, HelixStringLength referenceValue) {
+    public LongerThanConstraint(Field field, HelixStringLength referenceValue) {
         this.referenceValue = referenceValue;
         this.field = field;
     }
@@ -39,13 +39,14 @@ public class IsStringShorterThanConstraint implements AtomicConstraint {
     }
 
     @Override
-    public AtomicConstraint negate() {
-        return new IsStringLongerThanConstraint(field, HelixStringLength.create(referenceValue.getValue() - 1));
+    public AtomicConstraint negate()
+    {
+        return new ShorterThanConstraint(field, HelixStringLength.create(referenceValue.getValue() + 1));
     }
 
     @Override
     public FieldSpec toFieldSpec() {
-        return FieldSpecFactory.fromRestriction(StringRestrictionsFactory.forMaxLength(referenceValue.getValue() - 1));
+        return FieldSpecFactory.fromRestriction(StringRestrictionsFactory.forMinLength(referenceValue.getValue() + 1));
     }
 
     @Override
@@ -55,7 +56,7 @@ public class IsStringShorterThanConstraint implements AtomicConstraint {
             return o.equals(this);
         }
         if (o == null || getClass() != o.getClass()) return false;
-        IsStringShorterThanConstraint constraint = (IsStringShorterThanConstraint) o;
+        LongerThanConstraint constraint = (LongerThanConstraint) o;
         return Objects.equals(field, constraint.field) && Objects.equals(referenceValue, constraint.referenceValue);
     }
 
@@ -65,5 +66,5 @@ public class IsStringShorterThanConstraint implements AtomicConstraint {
     }
 
     @Override
-    public String toString() { return String.format("`%s` length < %d", field.getName(), referenceValue); }
+    public String toString() { return String.format("`%s` length > %d", field.getName(), referenceValue); }
 }

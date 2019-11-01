@@ -140,7 +140,7 @@ public class AtomicConstraintDeserialiserTests {
         ConstraintDTO actual = deserialiseJsonString(json);
 
         // Assert
-        NullConstraintDTO expected = new NullConstraintDTO();
+        IsNullConstraintDTO expected = new IsNullConstraintDTO();
         expected.field = "country";
         expected.isNull = true;
 

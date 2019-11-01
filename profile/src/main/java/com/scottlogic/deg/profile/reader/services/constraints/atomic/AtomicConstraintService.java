@@ -14,40 +14,28 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.reader.AtomicConstraintFactory;
+package com.scottlogic.deg.profile.reader.services.constraints.atomic;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.common.profile.*;
-import com.scottlogic.deg.common.util.NumberUtils;
-import com.scottlogic.deg.generator.fieldspecs.relations.InMapRelation;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
-import com.scottlogic.deg.generator.profile.constraints.Constraint;
-import com.scottlogic.deg.generator.profile.constraints.atomic.*;
-import com.scottlogic.deg.profile.dtos.constraints.*;
-import com.scottlogic.deg.profile.reader.AtomicConstraintFactory.AtomicConstraintFactory;
-import com.scottlogic.deg.profile.reader.AtomicConstraintFactory.StringConstraintFactory;
+import com.scottlogic.deg.common.profile.FieldType;
+import com.scottlogic.deg.common.profile.Fields;
+import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.AtomicConstraintDTO;
 import com.scottlogic.deg.profile.reader.FileReader;
-import com.scottlogic.deg.profile.reader.InvalidProfileException;
-import org.jetbrains.annotations.Nullable;
 
-import javax.activation.UnsupportedDataTypeException;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
-public class AtomicConstraintReader {
-
+public class AtomicConstraintService
+{
     private final FileReader fileReader;
 
     @Inject
-    public AtomicConstraintReader(FileReader fileReader) {
+    public AtomicConstraintService(FileReader fileReader) {
         this.fileReader = fileReader;
     }
 
-    public Constraint readAtomicConstraintDto(AtomicConstraintDTO dto, ProfileFields profileFields) {
-
+    public AtomicConstraint create(AtomicConstraintDTO dto, Fields fields)
+    {
         AtomicConstraintFactory constraintFactory;
-
-        FieldType fieldType = profileFields.getByName(dto.field).getType();
+        FieldType fieldType = fields.getByName(dto.field).getType();
         switch(fieldType) {
             case STRING:
                 constraintFactory = new StringConstraintFactory(fileReader);
@@ -61,6 +49,6 @@ public class AtomicConstraintReader {
             default:
                 throw new UnsupportedOperationException("No constraint factory for type " + fieldType);
         }
-        return constraintFactory.readAtomicConstraintDto(dto, profileFields);
+        return constraintFactory.createAtomicConstraint(dto, fields);
     }
 }

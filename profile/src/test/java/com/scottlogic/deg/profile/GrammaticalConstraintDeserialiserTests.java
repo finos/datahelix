@@ -24,7 +24,7 @@ import com.scottlogic.deg.profile.dtos.constraints.*;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.EqualToConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.GreaterThanConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.LessThanConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.NullConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.IsNullConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.AllOfConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.AnyOfConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
@@ -56,7 +56,7 @@ public class GrammaticalConstraintDeserialiserTests {
         EqualToConstraintDTO expectedEqualsTo = new EqualToConstraintDTO();
         expectedEqualsTo.field = "foo";
         expectedEqualsTo.value = "0";
-        NullConstraintDTO expectedNull = new NullConstraintDTO();
+        IsNullConstraintDTO expectedNull = new IsNullConstraintDTO();
         expectedNull.field = "foo";
         expectedNull.isNull = true;
 
@@ -159,7 +159,7 @@ public class GrammaticalConstraintDeserialiserTests {
        ConstraintDTO actual = deserialiseJsonString(json);
 
         // Assert
-        NullConstraintDTO expectedNull = new NullConstraintDTO();
+        IsNullConstraintDTO expectedNull = new IsNullConstraintDTO();
         expectedNull.field = "foo";
         expectedNull.isNull = true;
 

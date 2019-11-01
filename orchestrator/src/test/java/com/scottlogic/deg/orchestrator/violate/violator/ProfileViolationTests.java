@@ -86,9 +86,9 @@ public class ProfileViolationTests {
 
             Arguments.of(ContainsRegexConstraint.class, Pattern.compile("\\w+")),
             Arguments.of(MatchesRegexConstraint.class, Pattern.compile("\\d+")),
-            Arguments.of(IsStringLongerThanConstraint.class, HelixStringLength.create(10)),
-            Arguments.of(IsStringShorterThanConstraint.class, HelixStringLength.create(20)),
-            Arguments.of(StringHasLengthConstraint.class, HelixStringLength.create(15)),
+            Arguments.of(LongerThanConstraint.class, HelixStringLength.create(10)),
+            Arguments.of(ShorterThanConstraint.class, HelixStringLength.create(20)),
+            Arguments.of(OfLengthConstraint.class, HelixStringLength.create(15)),
 
             Arguments.of(AfterConstraint.class, HelixDateTime.create(sampleDate)),
             Arguments.of(AfterOrAtConstraint.class, HelixDateTime.create(sampleDate.plusDays(1))),
@@ -98,7 +98,7 @@ public class ProfileViolationTests {
             Arguments.of(GreaterThanConstraint.class, HelixNumber.create(100)),
             Arguments.of(GreaterThanOrEqualToConstraint.class, HelixNumber.create(200)),
             Arguments.of(LessThanConstraint.class, HelixNumber.create(300)),
-            Arguments.of(IsLessThanOrEqualToConstantConstraint.class, HelixNumber.create(400))
+            Arguments.of(LessThanOrEqualToConstraint.class, HelixNumber.create(400))
         );
     }
 

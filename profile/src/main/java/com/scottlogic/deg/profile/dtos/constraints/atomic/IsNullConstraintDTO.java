@@ -21,12 +21,12 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 
-@JsonDeserialize(as = NullConstraintDTO.class)
-public class NullConstraintDTO extends AtomicConstraintDTO {
+@JsonDeserialize(as = IsNullConstraintDTO.class)
+public class IsNullConstraintDTO extends AtomicConstraintDTO {
     @JsonProperty(ConstraintTypeJsonProperty.IS_NULL)
     public boolean isNull;
 
-    public NullConstraintDTO() {
+    public IsNullConstraintDTO() {
         super(ConstraintType.IS_NULL);
     }
 }
