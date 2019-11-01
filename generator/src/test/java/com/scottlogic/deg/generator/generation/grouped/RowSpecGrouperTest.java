@@ -23,7 +23,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
-import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
+import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelation;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -45,8 +45,8 @@ class RowSpecGrouperTest {
 
         Map<Field, FieldSpec> fieldSpecMap = fieldSpecMapOf(first, second);
 
-        FieldSpecRelations relation = link(first, second);
-        List<FieldSpecRelations> relations = Collections.singletonList(relation);
+        FieldSpecRelation relation = link(first, second);
+        List<FieldSpecRelation> relations = Collections.singletonList(relation);
 
         RowSpec spec = new RowSpec(fields, fieldSpecMap, relations);
 
@@ -64,8 +64,8 @@ class RowSpecGrouperTest {
 
         Map<Field, FieldSpec> fieldSpecMap = fieldSpecMapOf(first, second, third);
 
-        FieldSpecRelations relation = link(first, second);
-        List<FieldSpecRelations> relations = Collections.singletonList(relation);
+        FieldSpecRelation relation = link(first, second);
+        List<FieldSpecRelation> relations = Collections.singletonList(relation);
 
         RowSpec spec = new RowSpec(fields, fieldSpecMap, relations);
 
@@ -83,7 +83,7 @@ class RowSpecGrouperTest {
 
         Map<Field, FieldSpec> fieldSpecMap = fieldSpecMapOf(first, second, third);
 
-        List<FieldSpecRelations> relations = Collections.emptyList();
+        List<FieldSpecRelation> relations = Collections.emptyList();
 
         RowSpec spec = new RowSpec(fields, fieldSpecMap, relations);
 
@@ -101,7 +101,7 @@ class RowSpecGrouperTest {
 
         Map<Field, FieldSpec> fieldSpecMap = fieldSpecMapOf(first, second, third);
 
-        List<FieldSpecRelations> relations = Arrays.asList(link(first, second), link(second, third));
+        List<FieldSpecRelation> relations = Arrays.asList(link(first, second), link(second, third));
 
         RowSpec spec = new RowSpec(fields, fieldSpecMap, relations);
 
@@ -119,7 +119,7 @@ class RowSpecGrouperTest {
 
         Map<Field, FieldSpec> fieldSpecMap = fieldSpecMapOf(first, second, third);
 
-        List<FieldSpecRelations> relations = Arrays.asList(
+        List<FieldSpecRelation> relations = Arrays.asList(
             link(first, second),
             link(second, third),
             link(first, third));
@@ -143,7 +143,7 @@ class RowSpecGrouperTest {
 
         Map<Field, FieldSpec> fieldSpecMap = fieldSpecMapOf(first, second, third, fourth, fifth);
 
-        List<FieldSpecRelations> relations = Arrays.asList(
+        List<FieldSpecRelation> relations = Arrays.asList(
             link(first, second),
             link(first, third),
             link(second, fifth));
@@ -164,7 +164,7 @@ class RowSpecGrouperTest {
 
         Map<Field, FieldSpec> fieldSpecMap = fieldSpecMapOf(first, second);
 
-        List<FieldSpecRelations> relations = Arrays.asList(
+        List<FieldSpecRelation> relations = Arrays.asList(
             link(first, second),
             link(first, second));
 
@@ -175,8 +175,8 @@ class RowSpecGrouperTest {
         assertEquals(1, groups.size());
     }
 
-    private static FieldSpecRelations link(Field main, Field other) {
-        FieldSpecRelations relation = mock(FieldSpecRelations.class);
+    private static FieldSpecRelation link(Field main, Field other) {
+        FieldSpecRelation relation = mock(FieldSpecRelation.class);
         when(relation.main()).thenReturn(main);
         when(relation.other()).thenReturn(other);
         return relation;

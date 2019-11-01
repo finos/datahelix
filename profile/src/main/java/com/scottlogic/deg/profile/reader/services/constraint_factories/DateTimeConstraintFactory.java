@@ -15,30 +15,27 @@
  */
 
 
-package com.scottlogic.deg.profile.reader.services.constraints.atomic;
+package com.scottlogic.deg.profile.reader.services.constraint_factories;
 
 import com.google.inject.Inject;
+import com.scottlogic.deg.common.profile.DateTimeGranularity;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.HelixNumber;
-import com.scottlogic.deg.common.profile.NumericGranularity;
-import com.scottlogic.deg.common.util.NumberUtils;
+import com.scottlogic.deg.common.profile.HelixDateTime;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.*;
 import com.scottlogic.deg.profile.reader.FileReader;
 
-class NumericConstraintFactory extends AtomicConstraintFactory
-{
+public class DateTimeConstraintFactory extends AtomicConstraintFactory {
 
     @Inject
-    NumericConstraintFactory(FileReader fileReader)
-    {
+    public DateTimeConstraintFactory(FileReader fileReader) {
         super(fileReader);
     }
 
     @Override
     Object parseValue(Object value)
     {
-        return NumberUtils.coerceToBigDecimal(value);
+        return HelixDateTime.create((String) value).getValue();
     }
 
     @Override
@@ -74,54 +71,50 @@ class NumericConstraintFactory extends AtomicConstraintFactory
     @Override
     GreaterThanConstraint createGreaterThanConstraint(GreaterThanConstraintDTO dto, Field field)
     {
-        return new GreaterThanConstraint(field, HelixNumber.create(dto.value));
+        return null;
     }
 
     @Override
     GreaterThanOrEqualToConstraint createGreaterThanOrEqualToConstraint(GreaterThanOrEqualToConstraintDTO dto, Field field)
     {
-        return new GreaterThanOrEqualToConstraint(field, HelixNumber.create(dto.value));
+        return null;
     }
 
     @Override
     LessThanConstraint createLessThanConstraint(LessThanConstraintDTO dto, Field field)
     {
-        return new LessThanConstraint(field, HelixNumber.create(dto.value));
+        return null;
     }
 
     @Override
     LessThanOrEqualToConstraint createLessThanOrEqualToConstraint(LessThanOrEqualToConstraintDTO dto, Field field)
     {
-        return new LessThanOrEqualToConstraint(field, HelixNumber.create(dto.value));
-    }
-
-    @Override
-    AfterConstraint createAfterConstraint(AfterConstraintDTO dto, Field field)
-    {
         return null;
     }
 
     @Override
-    AfterOrAtConstraint createAfterOrAtConstraint(AfterOrAtConstraintDTO dto, Field field)
-    {
-        return null;
+    AfterOrAtConstraint createAfterOrAtConstraint(AfterOrAtConstraintDTO dto, Field field) {
+        return new AfterOrAtConstraint(field, HelixDateTime.create(dto.value));
     }
 
     @Override
-    BeforeConstraint createBeforeConstraint(BeforeConstraintDTO dto, Field field)
-    {
-        return null;
+    AfterConstraint createAfterConstraint(AfterConstraintDTO dto, Field field) {
+        return new AfterConstraint(field, HelixDateTime.create(dto.value));
     }
 
     @Override
-    BeforeOrAtConstraint createBeforeOrAtConstraint(BeforeOrAtConstraintDTO dto, Field field)
-    {
-        return null;
+    BeforeOrAtConstraint createBeforeOrAtConstraint(BeforeOrAtConstraintDTO dto, Field field) {
+        return new BeforeOrAtConstraint(field, HelixDateTime.create(dto.value));
     }
 
     @Override
-    AtomicConstraint createGranularToConstraint(GranularToConstraintDTO dto, Field field)
-    {
-        return new GranularToNumericConstraint(field, NumericGranularity.create(dto.value));
+    BeforeConstraint createBeforeConstraint(BeforeConstraintDTO dto, Field field) {
+        return new BeforeConstraint(field, HelixDateTime.create(dto.value));
     }
+
+    @Override
+    AtomicConstraint createGranularToConstraint(GranularToConstraintDTO dto, Field field) {
+        return new GranularToDateConstraint(field, DateTimeGranularity.create((String) dto.value));
+    }
+
 }

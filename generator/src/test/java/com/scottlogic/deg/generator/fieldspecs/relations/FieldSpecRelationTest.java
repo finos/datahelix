@@ -22,7 +22,8 @@ import static java.time.temporal.ChronoUnit.MILLIS;
 import static java.time.temporal.ChronoUnit.YEARS;
 import static org.junit.Assert.assertEquals;
 
-class FieldSpecRelationsTest {
+class FieldSpecRelationTest
+{
     private Field main = createField("main", SpecificFieldType.DATETIME);
     private Field other = createField("other", SpecificFieldType.DATETIME);
 

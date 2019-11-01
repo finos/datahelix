@@ -1,24 +1,27 @@
-package com.scottlogic.deg.profile.reader.services.constraints.atomic;
+package com.scottlogic.deg.profile.reader.services.constraint_factories;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.Fields;
+import com.scottlogic.deg.generator.fieldspecs.relations.InMapRelation;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
+import com.scottlogic.deg.profile.dtos.constraints.InMapConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.*;
 import com.scottlogic.deg.profile.reader.FileReader;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
-abstract class AtomicConstraintFactory {
+public abstract class AtomicConstraintFactory {
 
     private final FileReader fileReader;
 
-    AtomicConstraintFactory(FileReader fileReader) {
+    protected AtomicConstraintFactory(FileReader fileReader) {
         this.fileReader = fileReader;
     }
 
-    AtomicConstraint createAtomicConstraint(AtomicConstraintDTO dto, Fields fields) {
+    public AtomicConstraint createAtomicConstraint(AtomicConstraintDTO dto, Fields fields) {
         Field field = fields.getByName(dto.field);
         switch (dto.getType()) {
             case EQUAL_TO:
@@ -58,6 +61,16 @@ abstract class AtomicConstraintFactory {
             default:
                 throw new InvalidProfileException("Atomic constraint type not found: " + dto);
         }
+    }
+
+    public InMapRelation createInMapRelation(InMapConstraintDTO dto, Fields fields)
+    {
+        Field main = fields.getByName(dto.field);
+        Field other = fields.getByName(dto.file);
+        List<Object> values = fileReader.listFromMapFile(dto.file, dto.key).stream()
+            .map(this::parseValue)
+            .collect(Collectors.toList());
+        return new InMapRelation(main, other, DistributedList.uniform(values));
     }
 
     abstract Object parseValue(Object value);

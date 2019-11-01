@@ -21,7 +21,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 
-public interface FieldSpecRelations extends Constraint {
+public interface FieldSpecRelation extends Constraint {
 
     /**
      * Creates a field spec from the current state of the passed in FieldSpec.
@@ -35,7 +35,7 @@ public interface FieldSpecRelations extends Constraint {
 
     FieldSpec createModifierFromOtherValue(DataBagValue otherFieldGeneratedValue);
 
-    FieldSpecRelations inverse();
+    FieldSpecRelation inverse();
 
     Field main();
 

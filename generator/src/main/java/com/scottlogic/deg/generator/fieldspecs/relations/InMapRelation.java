@@ -25,7 +25,8 @@ import com.scottlogic.deg.generator.profile.constraints.Constraint;
 
 import java.math.BigDecimal;
 
-public class InMapRelation implements FieldSpecRelations {
+public class InMapRelation implements FieldSpecRelation
+{
     private final Field main;
     private final Field other;
     private final DistributedList<Object> underlyingList;
@@ -50,7 +51,7 @@ public class InMapRelation implements FieldSpecRelations {
     }
 
     @Override
-    public FieldSpecRelations inverse() {
+    public FieldSpecRelation inverse() {
         return new InMapIndexRelation(other, main, underlyingList);
     }
 

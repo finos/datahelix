@@ -12,11 +12,12 @@ import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
-import com.scottlogic.deg.profile.reader.commands.CreateConstraints;
+import com.scottlogic.deg.profile.dtos.RuleDTO;
+import com.scottlogic.deg.profile.reader.FileReader;
+import com.scottlogic.deg.profile.reader.NameRetriever;
 import com.scottlogic.deg.profile.reader.commands.CreateFields;
 import com.scottlogic.deg.profile.reader.commands.CreateProfile;
-import com.scottlogic.deg.profile.dtos.RuleDTO;
-import com.scottlogic.deg.profile.reader.NameRetriever;
+import com.scottlogic.deg.profile.reader.services.ConstraintService;
 
 import java.math.BigDecimal;
 import java.time.temporal.ChronoUnit;
@@ -27,11 +28,13 @@ import java.util.stream.Collectors;
 public class CreateProfileHandler extends CommandHandler<CreateProfile, Profile>
 {
     private final CommandBus bus;
+    private final ConstraintService constraintService;
 
-    public CreateProfileHandler(CommandBus bus, Validator<CreateProfile> validator)
+    public CreateProfileHandler(FileReader fileReader, CommandBus bus, Validator<CreateProfile> validator)
     {
         super(validator);
         this.bus = bus;
+        constraintService = new ConstraintService(fileReader);
     }
 
     @Override
@@ -41,27 +44,18 @@ public class CreateProfileHandler extends CommandHandler<CreateProfile, Profile>
         if (!createFieldsResult.isSuccess) return CommandResult.failure(createFieldsResult.errors);
         Fields fields = createFieldsResult.value;
 
-        CommandResult<List<Rule>> createRulesResult = createRules(command.profileDTO.rules, fields);
-        if (!createRulesResult.isSuccess) return CommandResult.failure(createRulesResult.errors);
-        List<Rule> rules = createRulesResult.value;
-
+        List<Rule> rules = createRules(command.profileDTO.rules, fields);
         createNotNullableRule(fields).ifPresent(rules::add);
         createSpecificTypeRule(fields).ifPresent(rules::add);
 
         return CommandResult.success(new Profile(fields, rules, command.profileDTO.description));
     }
 
-    private CommandResult<List<Rule>> createRules(List<RuleDTO> ruleDTOs, Fields fields)
+    private List<Rule> createRules(List<RuleDTO> dtos, Fields fields)
     {
-        return CommandResult.combine(ruleDTOs.stream()
-            .map(ruleDTO -> createRule(ruleDTO, fields))
-            .collect(Collectors.toList()));
-    }
-
-    private CommandResult<Rule> createRule(RuleDTO ruleDTO, Fields fields)
-    {
-        return bus.send(new CreateConstraints(ruleDTO.constraints, fields))
-            .map(constraints -> new Rule(ruleDTO.description, constraints));
+        return dtos.stream()
+            .map(dto -> new Rule(dto.description, constraintService.createConstraints(dto.constraints, fields)))
+            .collect(Collectors.toList());
     }
 
     private Optional<Rule> createNotNullableRule(Fields fields)

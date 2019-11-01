@@ -15,7 +15,7 @@
  */
 
 
-package com.scottlogic.deg.profile.reader.services.constraints.atomic;
+package com.scottlogic.deg.profile.reader.services.constraint_factories;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Field;
@@ -26,10 +26,11 @@ import com.scottlogic.deg.profile.reader.FileReader;
 
 import java.util.regex.Pattern;
 
-class StringConstraintFactory extends AtomicConstraintFactory {
+public class StringConstraintFactory extends AtomicConstraintFactory
+{
 
     @Inject
-    StringConstraintFactory(FileReader fileReader) {
+    public StringConstraintFactory(FileReader fileReader) {
         super(fileReader);
     }
 

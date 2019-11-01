@@ -18,7 +18,7 @@ class EqualToDateRelationTest {
 
     private final Field a = new Field("a", SpecificFieldType.DATETIME, false ,"", false, false);
     private final Field b = new Field("b", SpecificFieldType.DATETIME, false, "", false, false);
-    private final FieldSpecRelations equalToDateRelations = new EqualToRelation(a, b);
+    private final FieldSpecRelation equalToDateRelations = new EqualToRelation(a, b);
 
     @Test
     public void testReduceToFieldSpec_withNotNull_reducesToSpec() {

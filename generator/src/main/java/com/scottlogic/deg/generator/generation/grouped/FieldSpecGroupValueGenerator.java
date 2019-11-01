@@ -23,7 +23,7 @@ import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
-import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
+import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelation;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.databags.*;
 import com.scottlogic.deg.generator.utils.SetUtils;
@@ -65,13 +65,13 @@ public class FieldSpecGroupValueGenerator {
     }
 
     private Field getFirst(FieldSpecGroup keySet) {
-        Stream<FieldSpecRelations> relations = Stream.concat(
+        Stream<FieldSpecRelation> relations = Stream.concat(
             keySet.relations().stream(),
-            keySet.relations().stream().map(FieldSpecRelations::inverse)
+            keySet.relations().stream().map(FieldSpecRelation::inverse)
         );
         List<Map.Entry<Field, Integer>> list = new ArrayList<>(relations
             .collect(Collectors.toMap(
-                FieldSpecRelations::other,
+                FieldSpecRelation::other,
                 r -> 1, Integer::sum)).entrySet());
         list.sort(Comparator.comparing(Map.Entry::getValue, Comparator.reverseOrder()));
         return list.isEmpty() ? SetUtils.firstIteratorElement(keySet.fieldSpecs().keySet()) : list.get(0).getKey();
@@ -95,12 +95,12 @@ public class FieldSpecGroupValueGenerator {
             (leftFieldSpec) -> fieldSpecMerger.merge(leftFieldSpec, right.get(), true));
     }
 
-    private boolean isRelatedToField(Field field, FieldSpecRelations relation) {
+    private boolean isRelatedToField(Field field, FieldSpecRelation relation) {
         return relation.main().equals(field) || relation.other().equals(field);
     }
 
     private FieldSpec createModifierForField(Field first,
-                                             FieldSpecRelations relation,
+                                             FieldSpecRelation relation,
                                              FieldSpecGroup group) {
         if (!relation.main().equals(first)){
             relation = relation.inverse();
@@ -120,18 +120,18 @@ public class FieldSpecGroupValueGenerator {
     }
 
     private FieldSpecGroup updateRelatedFieldSpecs(Field generatedField, DataBagValue generatedValue, FieldSpecGroup group) {
-        Set<FieldSpecRelations> nonUpdatedRelations = group.relations().stream()
+        Set<FieldSpecRelation> nonUpdatedRelations = group.relations().stream()
             .filter(relation -> !isRelatedToField(generatedField, relation))
             .collect(Collectors.toSet());
 
-        List<FieldSpecRelations> updatableRelations = group.relations().stream()
+        List<FieldSpecRelation> updatableRelations = group.relations().stream()
             .filter(relation -> isRelatedToField(generatedField, relation))
             .map(relations -> relations.other().equals(generatedField) ? relations : relations.inverse())
             .collect(Collectors.toList());
 
         Map<Field, FieldSpec> fieldUpdates = updatableRelations.stream()
             .collect(Collectors.toMap(
-                FieldSpecRelations::main,
+                FieldSpecRelation::main,
                 relation -> relation.createModifierFromOtherValue(generatedValue),
                 (l, r) -> fieldSpecMerger.merge(l, r, true)
                     .orElseThrow(() -> new IllegalStateException("Failed to merge field specs in related fields"))));

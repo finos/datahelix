@@ -60,6 +60,5 @@ public class ProfileModule extends AbstractModule {
         bind(Key.get(new TypeLiteral<Validator<CreateFields>>(){})).to(CreateFieldsValidator.class);
         bind(Key.get(new TypeLiteral<Validator<CreateProfile>>(){})).to(CreateProfileValidator.class);
         bind(CommandBus.class).to(ProfileCommandBus.class);
-
     }
 }
