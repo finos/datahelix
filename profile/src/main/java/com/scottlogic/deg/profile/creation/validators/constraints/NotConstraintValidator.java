@@ -8,14 +8,14 @@ import java.util.List;
 
 public class NotConstraintValidator extends ConstraintValidator<NotConstraintDTO>
 {
-    public NotConstraintValidator(List<FieldDTO> fields, String rule)
+    public NotConstraintValidator(String rule, List<FieldDTO> fields)
     {
-        super(fields, rule);
+        super(rule, fields);
     }
 
     @Override
     public ValidationResult validate(NotConstraintDTO notConstraint)
     {
-        return null;
+        return ConstraintValidator.validateConstraint(notConstraint.constraint, rule, fields);
     }
 }

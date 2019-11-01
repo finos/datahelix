@@ -33,4 +33,9 @@ public abstract class ConstraintDTO {
     public ConstraintType getType() {
         return type;
     }
+
+    @JsonIgnore
+    public String getName() {
+        return type.propertyName;
+    }
 }
