@@ -1,8 +1,9 @@
 package com.scottlogic.deg.profile.reader.services;
 
-import com.scottlogic.deg.common.profile.FieldType;
-import com.scottlogic.deg.common.profile.Fields;
+import com.google.inject.Inject;
+import com.scottlogic.deg.common.profile.*;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.GrammaticalConstraint;
@@ -18,15 +19,22 @@ import com.scottlogic.deg.profile.dtos.constraints.grammatical.ConditionalConstr
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.GrammaticalConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.relations.RelationalConstraintDTO;
 import com.scottlogic.deg.profile.reader.FileReader;
-import com.scottlogic.deg.profile.reader.services.constraint_factories.*;
+import com.scottlogic.deg.profile.reader.NameRetriever;
+import com.scottlogic.deg.profile.reader.services.constraint_factories.AtomicConstraintFactory;
+import com.scottlogic.deg.profile.reader.services.constraint_factories.DateTimeConstraintFactory;
+import com.scottlogic.deg.profile.reader.services.constraint_factories.NumericConstraintFactory;
+import com.scottlogic.deg.profile.reader.services.constraint_factories.StringConstraintFactory;
 import com.scottlogic.deg.profile.reader.services.relation_factories.DateTimeRelationFactory;
 import com.scottlogic.deg.profile.reader.services.relation_factories.FieldSpecRelationFactory;
 import com.scottlogic.deg.profile.reader.services.relation_factories.NumericRelationFactory;
 import com.scottlogic.deg.profile.reader.services.relation_factories.StringRelationFactory;
 
+import java.math.BigDecimal;
+import java.time.temporal.ChronoUnit;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ConstraintService
@@ -34,6 +42,7 @@ public class ConstraintService
     private final Map<FieldType, AtomicConstraintFactory> atomicConstraintFactoryMap;
     private final Map<FieldType, FieldSpecRelationFactory> relationFactoryMap;
 
+    @Inject
     public ConstraintService(FileReader fileReader)
     {
         atomicConstraintFactoryMap = new EnumMap<>(FieldType.class);
@@ -47,7 +56,33 @@ public class ConstraintService
         relationFactoryMap.put(FieldType.STRING, new StringRelationFactory());
     }
 
-    public List<Constraint> createConstraints(List<ConstraintDTO> constraintDTOs, Fields fields)
+    Optional<Constraint> createSpecificTypeConstraint(Field field)
+    {
+        switch (field.getSpecificType()) {
+            case DATE:
+                return Optional.of(new GranularToDateConstraint(field, new DateTimeGranularity(ChronoUnit.DAYS)));
+            case INTEGER:
+                return Optional.of(new GranularToNumericConstraint(field, NumericGranularity.create(BigDecimal.ONE)));
+            case ISIN:
+                return Optional.of(new MatchesStandardConstraint(field, StandardConstraintTypes.ISIN));
+            case SEDOL:
+                return Optional.of(new MatchesStandardConstraint(field, StandardConstraintTypes.SEDOL));
+            case CUSIP:
+                return Optional.of(new MatchesStandardConstraint(field, StandardConstraintTypes.CUSIP));
+            case RIC:
+                return Optional.of(new MatchesStandardConstraint(field, StandardConstraintTypes.RIC));
+            case FIRST_NAME:
+                return Optional.of(new InSetConstraint(field, NameRetriever.loadNamesFromFile(NameConstraintTypes.FIRST)));
+            case LAST_NAME:
+                return Optional.of(new InSetConstraint(field, NameRetriever.loadNamesFromFile(NameConstraintTypes.LAST)));
+            case FULL_NAME:
+                return Optional.of(new InSetConstraint(field, NameRetriever.loadNamesFromFile(NameConstraintTypes.FULL)));
+            default:
+                return Optional.empty();
+        }
+    }
+
+    List<Constraint> createConstraints(List<ConstraintDTO> constraintDTOs, Fields fields)
     {
         return constraintDTOs.stream().map(dto -> createConstraint(dto, fields)).collect(Collectors.toList());
     }
@@ -79,7 +114,6 @@ public class ConstraintService
         }
         throw new IllegalStateException("Unexpected constraint type: " + dto.getType());
     }
-
 
     private GrammaticalConstraint createGrammaticalConstraint(GrammaticalConstraintDTO dto, Fields fields)
     {

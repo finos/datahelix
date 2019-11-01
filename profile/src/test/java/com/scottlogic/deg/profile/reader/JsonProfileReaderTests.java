@@ -31,6 +31,10 @@ import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstrain
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.profile.ProfileCommandBus;
+import com.scottlogic.deg.profile.reader.services.ConstraintService;
+import com.scottlogic.deg.profile.reader.services.FieldService;
+import com.scottlogic.deg.profile.reader.services.RuleService;
+import com.scottlogic.deg.profile.reader.validators.CreateProfileValidator;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -79,8 +83,7 @@ public class JsonProfileReaderTests {
     private String json;
 
     private JsonProfileReader jsonProfileReader = new JsonProfileReader(null,
-        new ProfileCommandBus(new MockFromFileReader()));
-
+        new ProfileCommandBus(new FieldService(), new RuleService(new ConstraintService(new MockFromFileReader())), new CreateProfileValidator()));
 
 
     private void givenJson(String json) {

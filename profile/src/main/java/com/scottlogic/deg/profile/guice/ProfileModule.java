@@ -23,11 +23,9 @@ import com.google.inject.name.Names;
 import com.scottlogic.deg.common.commands.CommandBus;
 import com.scottlogic.deg.common.validators.Validator;
 import com.scottlogic.deg.profile.*;
-import com.scottlogic.deg.profile.reader.commands.CreateFields;
 import com.scottlogic.deg.profile.reader.commands.CreateProfile;
 import com.scottlogic.deg.profile.reader.JsonProfileReader;
 import com.scottlogic.deg.profile.reader.ProfileReader;
-import com.scottlogic.deg.profile.reader.validators.CreateFieldsValidator;
 import com.scottlogic.deg.profile.reader.validators.CreateProfileValidator;
 
 import java.io.File;
@@ -57,7 +55,6 @@ public class ProfileModule extends AbstractModule {
             .annotatedWith(Names.named("config:filePath"))
             .toInstance(profileConfigSource.fromFilePath());
 
-        bind(Key.get(new TypeLiteral<Validator<CreateFields>>(){})).to(CreateFieldsValidator.class);
         bind(Key.get(new TypeLiteral<Validator<CreateProfile>>(){})).to(CreateProfileValidator.class);
         bind(CommandBus.class).to(ProfileCommandBus.class);
     }

@@ -1,15 +1,13 @@
-package com.scottlogic.deg.profile.reader.handlers;
+package com.scottlogic.deg.profile.reader.services;
 
-import com.scottlogic.deg.common.commands.CommandHandler;
-import com.scottlogic.deg.common.commands.CommandResult;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.common.profile.SpecificFieldType;
-import com.scottlogic.deg.common.validators.Validator;
-import com.scottlogic.deg.profile.reader.commands.CreateFields;
 import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.dtos.FieldDTO;
 import com.scottlogic.deg.profile.dtos.RuleDTO;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.InMapConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.*;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.AllOfConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.AnyOfConstraintDTO;
@@ -19,33 +17,22 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class CreateFieldsHandler extends CommandHandler<CreateFields, Fields>
+public class FieldService
 {
-    public CreateFieldsHandler(Validator<CreateFields> validator)
+    public Fields createFields(List<FieldDTO> fieldDTOs, List<RuleDTO> ruleDTOs)
     {
-        super(validator);
+        List<Field> fields = fieldDTOs.stream().map(this::createRegularField).collect(Collectors.toList());
+        getInMapFiles(ruleDTOs).stream().map(this::createInMapField).forEach(fields::add);
+        return new Fields(fields);
     }
 
-    @Override
-    public CommandResult<Fields> handleCommand(CreateFields command)
-    {
-        List<Field> fields = createFields(command.fieldDTOs);
-        getInMapFiles(command.ruleDTOs).stream().map(this::createField).forEach(fields::add);
-        return CommandResult.success(new Fields(fields));
-    }
-
-    private List<Field> createFields(List<FieldDTO> fieldDTOs)
-    {
-        return fieldDTOs.stream().map(this::createField).collect(Collectors.toList());
-    }
-
-    private Field createField(FieldDTO fieldDTO)
+    private Field createRegularField(FieldDTO fieldDTO)
     {
         String formatting = fieldDTO.formatting != null ? fieldDTO.formatting : fieldDTO.type.getDefaultFormatting();
         return new Field(fieldDTO.name, fieldDTO.type, fieldDTO.unique,formatting, false, fieldDTO.nullable);
     }
 
-    private Field createField(String inMapFile)
+    private Field createInMapField(String inMapFile)
     {
         return new Field(inMapFile, SpecificFieldType.INTEGER, false, null, true, false);
     }
@@ -63,10 +50,10 @@ public class CreateFieldsHandler extends CommandHandler<CreateFields, Fields>
 
     private Stream<ConstraintDTO> getAllAtomicConstraints(Stream<ConstraintDTO> constraintDTOs)
     {
-        return constraintDTOs.flatMap(this::getUnpackedConstraintsToStream);
+        return constraintDTOs.flatMap(this::getAllAtomicSubConstraints);
     }
 
-    private Stream<ConstraintDTO> getUnpackedConstraintsToStream(ConstraintDTO constraintDTO)
+    private Stream<ConstraintDTO> getAllAtomicSubConstraints(ConstraintDTO constraintDTO)
     {
         switch (constraintDTO.getType())
         {
