@@ -1,6 +1,7 @@
 package com.scottlogic.deg.common.commands;
 
-import javafx.util.Pair;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +12,7 @@ public abstract class CommandBus
 
     protected <TCommand extends Command<TResponse>, TResponse> void register(Class<TCommand> commandClass, CommandHandler handler)
     {
-        map.put(commandClass, new Pair<>(handler.getClass(), handler));
+        map.put(commandClass, new ImmutablePair<>(handler.getClass(), handler));
     }
 
     public <TCommand extends Command<TResponse>, TResponse> CommandResult<TResponse> send(TCommand command)
