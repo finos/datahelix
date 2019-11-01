@@ -20,16 +20,16 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
-import com.scottlogic.deg.profile.dtos.constraints.*;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.EqualToConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.GreaterThanConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.LessThanConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.IsNullConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.grammatical.AllOfConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.grammatical.AnyOfConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
-
 import com.scottlogic.deg.common.ValidationException;
+import com.scottlogic.deg.profile.creation.dtos.constraints.ConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.NotConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.EqualToConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.GreaterThanConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.IsNullConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.LessThanConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.grammatical.AllOfConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.grammatical.AnyOfConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.grammatical.ConditionalConstraintDTO;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -80,8 +80,9 @@ public class GrammaticalConstraintDeserialiserTests {
         try {
             deserialiseJsonString(json);
             Assert.fail("should have thrown an exception");
-        } catch (UnrecognizedPropertyException e) {
-            String expectedMessage = "Unrecognized field \"fild\" (class com.scottlogic.deg.profile.dtos.constraints.atomic.EqualToConstraintDTO), not marked as ignorable (2 known properties: \"field\", \"equalTo\"])\n at [Source: UNKNOWN; line: -1, column: -1] (through reference chain: com.scottlogic.deg.profile.dtos.constraints.grammatical.AnyOfConstraintDTO[\"anyOf\"]->java.util.ArrayList[0]->com.scottlogic.deg.profile.dtos.constraints.atomic.EqualToConstraintDTO[\"fild\"])";
+        } catch (UnrecognizedPropertyException e)
+        {
+            String expectedMessage = "Unrecognized field \"fild\" (class com.scottlogic.deg.profile.creation.dtos.constraints.atomic.EqualToConstraintDTO), not marked as ignorable (2 known properties: \"field\", \"equalTo\"])\n at [Source: UNKNOWN; line: -1, column: -1] (through reference chain: com.scottlogic.deg.profile.creation.dtos.constraints.grammatical.AnyOfConstraintDTO[\"anyOf\"]->java.util.ArrayList[0]->com.scottlogic.deg.profile.creation.dtos.constraints.atomic.EqualToConstraintDTO[\"fild\"])";
             assertThat(e.getMessage(), sameBeanAs(expectedMessage));
         }
     }
@@ -119,7 +120,7 @@ public class GrammaticalConstraintDeserialiserTests {
             deserialiseJsonString(json);
             Assert.fail("should have thrown an exception");
         } catch (JsonMappingException e) {
-            String expectedMessage = "The constraint json object node for field foo doesn't contain any of the expected keywords as properties: {\"field\":\"foo\",\"isNll\":\"true\"} (through reference chain: com.scottlogic.deg.profile.dtos.constraints.grammatical.AnyOfConstraintDTO[\"anyOf\"]->java.util.ArrayList[1])";
+            String expectedMessage = "The constraint json object node for field foo doesn't contain any of the expected keywords as properties: {\"field\":\"foo\",\"isNll\":\"true\"} (through reference chain: com.scottlogic.deg.profile.creation.dtos.constraints.grammatical.AnyOfConstraintDTO[\"anyOf\"]->java.util.ArrayList[1])";
             assertThat(e.getMessage(), sameBeanAs(expectedMessage));
         }
     }

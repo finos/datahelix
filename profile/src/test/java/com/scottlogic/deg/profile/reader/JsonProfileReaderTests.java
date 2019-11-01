@@ -30,11 +30,10 @@ import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
-import com.scottlogic.deg.profile.ProfileCommandBus;
-import com.scottlogic.deg.profile.reader.services.ConstraintService;
-import com.scottlogic.deg.profile.reader.services.FieldService;
-import com.scottlogic.deg.profile.reader.services.RuleService;
-import com.scottlogic.deg.profile.reader.validators.CreateProfileValidator;
+import com.scottlogic.deg.profile.creation.services.ConstraintService;
+import com.scottlogic.deg.profile.creation.services.FieldService;
+import com.scottlogic.deg.profile.creation.services.RuleService;
+import com.scottlogic.deg.profile.creation.validators.CreateProfileValidator;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -59,7 +58,8 @@ public class JsonProfileReaderTests {
     private DistributedList<Object> inSetReaderReturnValue = DistributedList.singleton("test");
     private DistributedList<String> fromFileReaderReturnValue = DistributedList.singleton("test");
 
-    private class MockFromFileReader extends FileReader {
+    private class MockFromFileReader extends FileReader
+    {
 
         MockFromFileReader() {
             super("");

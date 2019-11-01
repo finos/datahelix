@@ -22,9 +22,9 @@ import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.commands.CommandBus;
 import com.scottlogic.deg.common.commands.CommandResult;
 import com.scottlogic.deg.generator.profile.Profile;
-import com.scottlogic.deg.profile.reader.commands.CreateProfile;
-import com.scottlogic.deg.profile.dtos.ProfileDTO;
-import com.scottlogic.deg.profile.serialisation.ProfileSerialiser;
+import com.scottlogic.deg.profile.creation.dtos.ProfileDTO;
+import com.scottlogic.deg.profile.creation.commands.CreateProfile;
+import com.scottlogic.deg.profile.creation.serialisation.ProfileDeserialiser;
 
 import java.io.File;
 import java.io.IOException;
@@ -52,7 +52,7 @@ public class JsonProfileReader implements ProfileReader {
     }
 
     public Profile read(String profileJson) {
-        ProfileDTO profileDTO = new ProfileSerialiser().deserialise(profileJson);
+        ProfileDTO profileDTO = new ProfileDeserialiser().deserialise(profileJson);
         CommandResult<Profile> createProfileResult = commandBus.send(new CreateProfile(profileDTO));
         if(!createProfileResult.isSuccess) throw new ValidationException(createProfileResult.errors);
         return createProfileResult.value;

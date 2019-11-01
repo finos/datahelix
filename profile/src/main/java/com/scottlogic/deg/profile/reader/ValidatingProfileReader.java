@@ -17,8 +17,6 @@ package com.scottlogic.deg.profile.reader;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.profile.Profile;
-import com.scottlogic.deg.profile.ProfileSchemaLoader;
-import com.scottlogic.deg.profile.SchemaVersionValidator;
 import com.scottlogic.deg.profile.guice.ProfileConfigSource;
 
 import java.io.IOException;

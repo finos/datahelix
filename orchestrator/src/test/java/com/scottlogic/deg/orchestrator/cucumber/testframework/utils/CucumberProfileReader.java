@@ -19,10 +19,10 @@ package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.commands.CommandBus;
 import com.scottlogic.deg.generator.profile.Profile;
-import com.scottlogic.deg.profile.dtos.ProfileDTO;
-import com.scottlogic.deg.profile.dtos.RuleDTO;
+import com.scottlogic.deg.profile.creation.dtos.ProfileDTO;
+import com.scottlogic.deg.profile.creation.dtos.RuleDTO;
 import com.scottlogic.deg.profile.reader.*;
-import com.scottlogic.deg.profile.serialisation.ProfileSerialiser;
+import com.scottlogic.deg.profile.creation.serialisation.ProfileSerialiser;
 
 import java.io.IOException;
 import java.util.Arrays;

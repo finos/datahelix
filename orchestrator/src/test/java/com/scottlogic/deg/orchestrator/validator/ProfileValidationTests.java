@@ -16,8 +16,8 @@
 
 package com.scottlogic.deg.orchestrator.validator;
 
-import com.scottlogic.deg.profile.ProfileSchemaFileLoader;
-import com.scottlogic.deg.profile.ProfileSchemaValidatorLeadPony;
+import com.scottlogic.deg.profile.reader.ProfileSchemaFileLoader;
+import com.scottlogic.deg.profile.reader.ProfileSchemaValidatorLeadPony;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
