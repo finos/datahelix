@@ -24,6 +24,11 @@ import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.dtos.FieldDTO;
 import com.scottlogic.deg.profile.dtos.constraints.*;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.*;
+import com.scottlogic.deg.profile.dtos.constraints.grammatical.AllOfConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.grammatical.AnyOfConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.relations.*;
 
 import java.io.IOException;
 import java.util.*;
@@ -144,7 +149,7 @@ public class CucumberTestState {
                     values = (Collection<Object>) _value;
                 }};
             case IS_NULL:
-                return new NullConstraintDTO() {{
+                return new IsNullConstraintDTO() {{
                     field = fieldName;
                     isNull = (boolean) _value;
                 }};
@@ -293,7 +298,7 @@ public class CucumberTestState {
     }
 
     private void createIfConstraint(int total) {
-        IfConstraintDTO dto = new IfConstraintDTO();
+        ConditionalConstraintDTO dto = new ConditionalConstraintDTO();
         if (total == 3) {
             dto.elseConstraint = constraints.remove(constraints.size() - 1);
             total--;

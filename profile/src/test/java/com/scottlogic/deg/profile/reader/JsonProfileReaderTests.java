@@ -30,7 +30,7 @@ import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
-import com.scottlogic.deg.profile.reader.AtomicConstraintFactory.AtomicConstraintReader;
+import com.scottlogic.deg.profile.ProfileCommandBus;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -78,7 +78,8 @@ public class JsonProfileReaderTests {
     private final String schemaVersion = "\"0.7\"";
     private String json;
 
-    private JsonProfileReader jsonProfileReader = new JsonProfileReader(null, new ConstraintReader(new AtomicConstraintReader(new MockFromFileReader())));
+    private JsonProfileReader jsonProfileReader = new JsonProfileReader(null,
+        new ProfileCommandBus(new MockFromFileReader()));
 
 
 
@@ -100,7 +101,7 @@ public class JsonProfileReaderTests {
     }
 
     private Consumer<Rule> ruleWithDescription(String expectedDescription) {
-        return rule -> Assert.assertThat(rule.getRuleInformation().getDescription(), equalTo(expectedDescription));
+        return rule -> Assert.assertThat(rule.getDescription(), equalTo(expectedDescription));
     }
 
     private Consumer<Rule> ruleWithConstraints(Consumer<Constraint>... constraintAsserters) {
@@ -116,7 +117,7 @@ public class JsonProfileReaderTests {
     }
 
     private Consumer<Field> fieldWithName(String expectedName) {
-        return field -> Assert.assertThat(field.name, equalTo(expectedName));
+        return field -> Assert.assertThat(field.getName(), equalTo(expectedName));
     }
 
     private void expectFields(Consumer<Field>... fieldAssertions) throws IOException {
@@ -191,7 +192,7 @@ public class JsonProfileReaderTests {
             ruleWithDescription("Unnamed rule"));
         expectFields(
             field -> {
-                Assert.assertThat(field.name, equalTo("foo"));
+                Assert.assertThat(field.getName(), equalTo("foo"));
                 Assert.assertEquals(field.getType(), FieldType.STRING);
             });
     }
@@ -268,7 +269,7 @@ public class JsonProfileReaderTests {
         expectRules();
         expectFields(
             field -> {
-                Assert.assertThat(field.name, equalTo("foo"));
+                Assert.assertThat(field.getName(), equalTo("foo"));
                 Assert.assertEquals(field.getType(), FieldType.STRING);
             });
     }
@@ -286,7 +287,7 @@ public class JsonProfileReaderTests {
         expectRules(
             ruleWithConstraints(
                 typedConstraint(
-                    IsGranularToNumericConstraint.class,
+                    GranularToNumericConstraint.class,
                     c -> {
                         Assert.assertThat(
                             c.granularity,
@@ -336,7 +337,7 @@ public class JsonProfileReaderTests {
 
         expectFields(
             field -> {
-                Assert.assertThat(field.name, equalTo("foo"));
+                Assert.assertThat(field.getName(), equalTo("foo"));
                 Assert.assertThat(field.getFormatting(), equalTo("%.5s"));
             }
         );
@@ -360,7 +361,7 @@ public class JsonProfileReaderTests {
         expectRules(
             ruleWithConstraints(
                 typedConstraint(
-                    StringHasLengthConstraint.class,
+                    OfLengthConstraint.class,
                     c -> Assert.assertThat(c.referenceValue.getValue(), equalTo(5)))));
     }
 
@@ -479,11 +480,11 @@ public class JsonProfileReaderTests {
 
                                     Assert.assertThat(
                                             c.whenConditionIsTrue,
-                                            instanceOf(IsInSetConstraint.class));
+                                            instanceOf(InSetConstraint.class));
 
                                     Assert.assertThat(
                                             c.whenConditionIsFalse,
-                                            instanceOf(IsStringLongerThanConstraint.class));
+                                            instanceOf(LongerThanConstraint.class));
                                 })));
     }
 
@@ -542,7 +543,7 @@ public class JsonProfileReaderTests {
         expectRules(
             ruleWithConstraints(
                 typedConstraint(
-                    IsGranularToNumericConstraint.class,
+                    GranularToNumericConstraint.class,
                     c -> {
                         Assert.assertThat(
                             c.granularity,
@@ -568,7 +569,7 @@ public class JsonProfileReaderTests {
         expectRules(
             ruleWithConstraints(
                 typedConstraint(
-                    IsGranularToNumericConstraint.class,
+                    GranularToNumericConstraint.class,
                     c -> {
                         Assert.assertThat(
                             c.granularity,
@@ -594,7 +595,7 @@ public class JsonProfileReaderTests {
         expectRules(
             ruleWithConstraints(
                 typedConstraint(
-                    IsGranularToNumericConstraint.class,
+                    GranularToNumericConstraint.class,
                     c -> {
                         Assert.assertThat(
                             c.granularity,
@@ -621,12 +622,12 @@ public class JsonProfileReaderTests {
         expectRules(
             rule -> {
                 // This is different because the ordering would switch depending on if the whole file was run or just this test
-                IsAfterOrEqualToConstantDateTimeConstraint isAfter = (IsAfterOrEqualToConstantDateTimeConstraint) rule.getConstraints().stream()
-                    .filter(f -> f.getClass() == IsAfterOrEqualToConstantDateTimeConstraint.class)
+                AfterOrAtConstraint isAfter = (AfterOrAtConstraint) rule.getConstraints().stream()
+                    .filter(f -> f.getClass() == AfterOrAtConstraint.class)
                     .findFirst()
                     .get();
-                IsBeforeConstantDateTimeConstraint isBefore = (IsBeforeConstantDateTimeConstraint) rule.getConstraints().stream()
-                    .filter(f -> f.getClass() == IsBeforeConstantDateTimeConstraint.class)
+                BeforeConstraint isBefore = (BeforeConstraint) rule.getConstraints().stream()
+                    .filter(f -> f.getClass() == BeforeConstraint.class)
                     .findFirst()
                     .get();
                 Assert.assertEquals(OffsetDateTime.parse("2019-01-01T00:00:00.000Z"), isAfter.referenceValue.getValue());
@@ -776,7 +777,7 @@ public class JsonProfileReaderTests {
 
         expectFields(
             field -> {
-                Assert.assertThat(field.name, equalTo("foo"));
+                Assert.assertThat(field.getName(), equalTo("foo"));
                 Assert.assertTrue(field.isUnique());
             }
         );
@@ -795,7 +796,7 @@ public class JsonProfileReaderTests {
                 "}");
         expectFields(
             field -> {
-                Assert.assertThat(field.name, equalTo("foo"));
+                Assert.assertThat(field.getName(), equalTo("foo"));
                 Assert.assertFalse(field.isUnique());
             }
         );
@@ -816,7 +817,7 @@ public class JsonProfileReaderTests {
 
         expectFields(
             field -> {
-                Assert.assertThat(field.name, equalTo("foo"));
+                Assert.assertThat(field.getName(), equalTo("foo"));
                 Assert.assertFalse(field.isUnique());
             }
         );
@@ -841,12 +842,12 @@ public class JsonProfileReaderTests {
                     NotNullConstraint.class,
                     c -> {
                         Assert.assertEquals(
-                            c.getField().name,
+                            c.getField().getName(),
                             "foo");
                     }
                 )
             ),
-            ruleWithDescription("type-rules")
+            ruleWithDescription("specific-types")
         );
     }
 
@@ -863,7 +864,7 @@ public class JsonProfileReaderTests {
                 "    \"rules\": []" +
                 "}");
 
-        expectRules(ruleWithDescription("type-rules"));
+        expectRules(ruleWithDescription("specific-types"));
     }
 
     @Test
@@ -889,7 +890,7 @@ public class JsonProfileReaderTests {
                     NotNullConstraint.class,
                     c -> {
                         Assert.assertEquals(
-                            c.getField().name,
+                            c.getField().getName(),
                             "foo");
                     }
                 ),
@@ -897,12 +898,12 @@ public class JsonProfileReaderTests {
                     NotNullConstraint.class,
                     c -> {
                         Assert.assertEquals(
-                            c.getField().name,
+                            c.getField().getName(),
                             "bar");
                     }
                 )
             ),
-            ruleWithDescription("type-rules")
+            ruleWithDescription("specific-types")
         );
     }
 
@@ -929,12 +930,12 @@ public class JsonProfileReaderTests {
                     NotNullConstraint.class,
                     c -> {
                         Assert.assertEquals(
-                            c.getField().name,
+                            c.getField().getName(),
                             "bar");
                     }
                 )
             ),
-            ruleWithDescription("type-rules")
+            ruleWithDescription("specific-types")
         );
     }
 
@@ -991,15 +992,15 @@ public class JsonProfileReaderTests {
 
          expectFields(
             field -> {
-                Assert.assertEquals("foo", field.name);
+                Assert.assertEquals("foo", field.getName());
                 Assert.assertFalse(field.isInternal());
             },
             field -> {
-                Assert.assertEquals("bar", field.name);
+                Assert.assertEquals("bar", field.getName());
                 Assert.assertFalse(field.isInternal());
             },
             field -> {
-                Assert.assertEquals("foobar.csv", field.name);
+                Assert.assertEquals("foobar.csv", field.getName());
                 Assert.assertTrue(field.isInternal());
             }
         );
@@ -1041,19 +1042,19 @@ public class JsonProfileReaderTests {
 
         expectFields(
             field -> {
-                Assert.assertEquals("foo", field.name);
+                Assert.assertEquals("foo", field.getName());
                 Assert.assertFalse(field.isInternal());
             },
             field -> {
-                Assert.assertEquals("bar", field.name);
+                Assert.assertEquals("bar", field.getName());
                 Assert.assertFalse(field.isInternal());
             },
             field -> {
-                Assert.assertEquals("other", field.name);
+                Assert.assertEquals("other", field.getName());
                 Assert.assertFalse(field.isInternal());
             },
             field -> {
-                Assert.assertEquals("foobar.csv", field.name);
+                Assert.assertEquals("foobar.csv", field.getName());
                 Assert.assertTrue(field.isInternal());
                 Assert.assertEquals(FieldType.NUMERIC, field.getType());
             }
@@ -1076,7 +1077,7 @@ public class JsonProfileReaderTests {
         expectRules(
             ruleWithConstraints(
                 typedConstraint(
-                    IsGranularToDateConstraint.class,
+                    GranularToDateConstraint.class,
                     c -> Assert.assertThat(c.granularity, equalTo(new DateTimeGranularity(ChronoUnit.DAYS)))
                 )
             )

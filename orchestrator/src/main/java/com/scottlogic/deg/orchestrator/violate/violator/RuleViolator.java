@@ -64,7 +64,7 @@ public class RuleViolator {
                     : new AndConstraint(violate)
                 ));
         }
-        return new Rule(rule.getRuleInformation(), newConstraints);
+        return new Rule(rule.getDescription(), newConstraints);
     }
 
     /**

@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SequenceWriter;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.output.writer.DataSetWriter;
 import com.scottlogic.deg.output.writer.OutputWriterFactory;
 
@@ -39,12 +39,12 @@ public class JsonOutputWriterFactory implements OutputWriterFactory {
     }
 
     @Override
-    public DataSetWriter createWriter(OutputStream stream, ProfileFields profileFields) throws IOException {
+    public DataSetWriter createWriter(OutputStream stream, Fields fields) throws IOException {
         ObjectWriter objectWriter = new ObjectMapper().writer(new DefaultPrettyPrinter(NEW_LINE_DELIMITER));
         SequenceWriter writer = objectWriter.writeValues(stream);
         writer.init(!useNdJson);
 
-        return new JsonDataSetWriter(writer, profileFields);
+        return new JsonDataSetWriter(writer, fields);
     }
 
     @Override

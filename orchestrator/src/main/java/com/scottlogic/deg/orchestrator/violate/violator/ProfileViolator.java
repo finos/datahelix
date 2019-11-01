@@ -81,6 +81,6 @@ public class ProfileViolator {
             violatedRule,
             profile.getFields(),
             newRules,
-            String.format("%s -- Violating: %s", profile.getDescription(), violatedRule.getRuleInformation().getDescription()));
+            String.format("%s -- Violating: %s", profile.getDescription(), violatedRule.getDescription()));
     }
 }

@@ -65,5 +65,5 @@ public class MatchesRegexConstraint implements AtomicConstraint {
     }
 
     @Override
-    public String toString(){ return String.format("`%s` matches /%s/", field.name, regex); }
+    public String toString(){ return String.format("`%s` matches /%s/", field.getName(), regex); }
 }

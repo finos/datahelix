@@ -17,9 +17,9 @@
 package com.scottlogic.deg.generator.decisiontree;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.profile.constraints.atomic.IsInSetConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.InSetConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsNullConstraint;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
@@ -45,18 +45,18 @@ class DecisionTreeSimplifierTests {
     void simplify_decisionContainsSingleOptiontWithMatchingConstraintOnRootNode_doesNotSimplifyTree() {
         DecisionTree tree = new DecisionTree(
             new ConstraintNodeBuilder().addAtomicConstraints(SetUtils.setOf(
-                new IsInSetConstraint(createField("Field 1"), setOf(1, 2)),
+                new InSetConstraint(createField("Field 1"), setOf(1, 2)),
                 new IsNullConstraint(createField("Field 1")).negate()
             )).setDecisions(Collections.singleton(
                 new DecisionNode(
                     Collections.singleton(
                         new ConstraintNodeBuilder().addAtomicConstraints(Collections.singleton(
-                            new IsInSetConstraint(createField("Field 1"), setOf(1, 2))
+                            new InSetConstraint(createField("Field 1"), setOf(1, 2))
                         )).setDecisions(Collections.emptySet()).build()
                     )
                 )
             )).build(),
-            new ProfileFields(
+            new Fields(
                 new ArrayList<Field>() {{ add(createField("Field 1")); }}
             )
         );
@@ -72,18 +72,18 @@ class DecisionTreeSimplifierTests {
     void simplify_decisionContainsSingleOptionWithDifferingConstraintOnRootNode_simplifiesDecision() {
         DecisionTree tree = new DecisionTree(
             new ConstraintNodeBuilder().addAtomicConstraints(SetUtils.setOf(
-                new IsInSetConstraint(createField("Field 1"), setOf(1, 2)),
+                new InSetConstraint(createField("Field 1"), setOf(1, 2)),
                 new IsNullConstraint(createField("Field 1")).negate()
             )).setDecisions(Collections.singleton(
                 new DecisionNode(
                     Collections.singleton(
                         new ConstraintNodeBuilder().addAtomicConstraints(Collections.singleton(
-                            new IsInSetConstraint(createField("Field 2"), setOf("A", "B"))
+                            new InSetConstraint(createField("Field 2"), setOf("A", "B"))
                         )).setDecisions(Collections.emptySet()).build()
                     )
                 )
             )).build(),
-            new ProfileFields(
+            new Fields(
                 new ArrayList<Field>() {{ add(createField("Field 1")); }}
             )
         );
@@ -92,9 +92,9 @@ class DecisionTreeSimplifierTests {
         final DecisionTree result = simplifier.simplify(tree);
 
         final List<AtomicConstraint> expectedConstraints = Arrays.asList(
-            new IsInSetConstraint(createField("Field 1"), setOf(1, 2)),
+            new InSetConstraint(createField("Field 1"), setOf(1, 2)),
             new IsNullConstraint(createField("Field 1")).negate(),
-            new IsInSetConstraint(createField("Field 2"), setOf("A", "B"))
+            new InSetConstraint(createField("Field 2"), setOf("A", "B"))
         );
         Assert.assertTrue(result.rootNode.getAtomicConstraints().containsAll(expectedConstraints));
         Assert.assertTrue(result.rootNode.getDecisions().isEmpty());

@@ -16,7 +16,6 @@
 
 package com.scottlogic.deg.profile;
 
-import com.scottlogic.deg.profile.dtos.SupportedVersionsGetter;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 import org.leadpony.justify.api.JsonSchema;

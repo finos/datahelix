@@ -17,6 +17,7 @@
 package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 
 import com.google.inject.Inject;
+import com.scottlogic.deg.common.commands.CommandBus;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.profile.dtos.ProfileDTO;
 import com.scottlogic.deg.profile.dtos.RuleDTO;
@@ -31,8 +32,8 @@ public class CucumberProfileReader extends JsonProfileReader {
     private final CucumberTestState state;
 
     @Inject
-    public CucumberProfileReader(CucumberTestState state, ConstraintReader mainConstraintReader) {
-        super(null, mainConstraintReader);
+    public CucumberProfileReader(CucumberTestState state, CommandBus commandBus) {
+        super(null, commandBus);
         this.state = state;
     }
 

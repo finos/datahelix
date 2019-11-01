@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.walker.decisionbased;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
@@ -42,7 +42,7 @@ public class RowSpecTreeSolver {
             rootNode -> toRowspec(tree.fields, rootNode));
     }
 
-    private Stream<RowSpec> toRowspec(ProfileFields fields, ConstraintNode rootNode) {
+    private Stream<RowSpec> toRowspec(Fields fields, ConstraintNode rootNode) {
         Optional<RowSpec> result = constraintReducer.reduceConstraintsToRowSpec(fields, rootNode);
         return result.map(Stream::of).orElseGet(Stream::empty);
     }

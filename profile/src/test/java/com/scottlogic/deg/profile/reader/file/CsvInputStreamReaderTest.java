@@ -2,6 +2,7 @@ package com.scottlogic.deg.profile.reader.file;
 
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
+import com.scottlogic.deg.profile.reader.CsvInputStreamReader;
 import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;

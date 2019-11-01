@@ -17,7 +17,7 @@
 package com.scottlogic.deg.output.writer.csv;
 
 import com.scottlogic.deg.common.profile.FieldBuilder;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.common.output.GeneratedObject;
 import com.scottlogic.deg.output.writer.DataSetWriter;
 import org.hamcrest.Matcher;
@@ -98,7 +98,7 @@ class CsvOutputWriterFactoryTests {
 
     @Test
     void writeRow_withInternalFields_shouldNotWriteInternalFields() throws IOException {
-        ProfileFields fields = new ProfileFields(
+        Fields fields = new Fields(
             Arrays.asList(
                 createField("External"),
                 createInternalField("Internal")
@@ -111,14 +111,14 @@ class CsvOutputWriterFactoryTests {
         );
     }
 
-    private static ProfileFields fields(String ...names) {
-        return new ProfileFields(
+    private static Fields fields(String ...names) {
+        return new Fields(
             Arrays.stream(names)
                 .map(FieldBuilder::createField)
                 .collect(Collectors.toList()));
     }
 
-    private static void expectCsv(ProfileFields fields, Object value, Matcher<String> matcher) throws IOException {
+    private static void expectCsv(Fields fields, Object value, Matcher<String> matcher) throws IOException {
         // Act
         GeneratedObject mockGeneratedObject = mock(GeneratedObject.class);
         when(mockGeneratedObject.getFormattedValue(eq(fields.iterator().next()))).thenReturn(value);
@@ -128,7 +128,7 @@ class CsvOutputWriterFactoryTests {
         Assert.assertThat(generatedCsv, matcher);
     }
 
-    private static String generateCsv(ProfileFields fields, GeneratedObject generatedObject) throws IOException {
+    private static String generateCsv(Fields fields, GeneratedObject generatedObject) throws IOException {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
         try (DataSetWriter writer = new CsvOutputWriterFactory().createWriter(stream, fields)) {

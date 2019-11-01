@@ -52,7 +52,7 @@ public class ManifestWriter {
             .stream()
             .map(profile -> new ManifestDTO.TestCaseDTO(
                 intFormatter.format(dataSetIndex.getAndIncrement()),
-                Collections.singleton(profile.violatedRule.getRuleInformation().getDescription())))
+                Collections.singleton(profile.violatedRule.getDescription())))
             .collect(Collectors.toList());
 
         write(new ManifestDTO(testCaseDtos), outputPath.resolve("manifest.json"));

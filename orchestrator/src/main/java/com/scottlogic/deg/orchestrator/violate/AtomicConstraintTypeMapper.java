@@ -29,33 +29,33 @@ public class AtomicConstraintTypeMapper {
             case CONTAINS_REGEX:
                 return ContainsRegexConstraint.class;
             case OF_LENGTH:
-                return StringHasLengthConstraint.class;
+                return OfLengthConstraint.class;
             case LONGER_THAN:
-                return IsStringLongerThanConstraint.class;
+                return LongerThanConstraint.class;
             case SHORTER_THAN:
-                return IsStringShorterThanConstraint.class;
+                return ShorterThanConstraint.class;
             case GREATER_THAN:
-                return IsGreaterThanConstantConstraint.class;
+                return GreaterThanConstraint.class;
             case GREATER_THAN_OR_EQUAL_TO:
-                return IsGreaterThanOrEqualToConstantConstraint.class;
+                return GreaterThanOrEqualToConstraint.class;
             case LESS_THAN:
-                return IsLessThanConstantConstraint.class;
+                return LessThanConstraint.class;
             case LESS_THAN_OR_EQUAL_TO:
-                return IsLessThanOrEqualToConstantConstraint.class;
+                return LessThanOrEqualToConstraint.class;
             case AFTER:
-                return IsAfterConstantDateTimeConstraint.class;
+                return AfterConstraint.class;
             case AFTER_OR_AT:
-                return IsAfterOrEqualToConstantDateTimeConstraint.class;
+                return AfterOrAtConstraint.class;
             case BEFORE:
-                return IsBeforeConstantDateTimeConstraint.class;
+                return BeforeConstraint.class;
             case BEFORE_OR_AT:
-                return IsBeforeOrEqualToConstantDateTimeConstraint.class;
+                return BeforeOrAtConstraint.class;
             case GRANULAR_TO:
-                return IsGranularToNumericConstraint.class;
+                return GranularToNumericConstraint.class;
             case EQUAL_TO:
                 return EqualToConstraint.class;
             case IN_SET:
-                return IsInSetConstraint.class;
+                return InSetConstraint.class;
             default:
                 throw new UnsupportedOperationException();
         }

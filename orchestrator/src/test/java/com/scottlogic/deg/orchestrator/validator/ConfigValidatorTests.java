@@ -18,7 +18,7 @@ package com.scottlogic.deg.orchestrator.validator;
 
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.util.FileUtils;
-import com.scottlogic.deg.profile.reader.validation.ConfigValidator;
+import com.scottlogic.deg.profile.reader.ConfigValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;

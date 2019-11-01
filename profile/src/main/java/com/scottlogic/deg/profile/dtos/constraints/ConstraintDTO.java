@@ -18,14 +18,14 @@ package com.scottlogic.deg.profile.dtos.constraints;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.scottlogic.deg.profile.ConstraintDeserializer;
+import com.scottlogic.deg.profile.serialisation.ConstraintDeserializer;
 import com.scottlogic.deg.profile.common.ConstraintType;
 
 @JsonDeserialize(using = ConstraintDeserializer.class)
 public abstract class ConstraintDTO {
     private final ConstraintType type;
 
-    ConstraintDTO(ConstraintType type) {
+    protected ConstraintDTO(ConstraintType type) {
         this.type = type;
     }
 

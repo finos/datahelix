@@ -20,8 +20,8 @@ import com.scottlogic.deg.common.profile.HelixNumber;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
-import com.scottlogic.deg.generator.profile.constraints.atomic.IsGreaterThanConstantConstraint;
-import com.scottlogic.deg.generator.profile.constraints.atomic.IsInSetConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.GreaterThanConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.InSetConstraint;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,7 +38,7 @@ public class ConstraintTypeViolationFilterTests {
 
     @Before
     public void setup() {
-        target = new ConstraintTypeViolationFilter(IsInSetConstraint.class);
+        target = new ConstraintTypeViolationFilter(InSetConstraint.class);
     }
 
     /**
@@ -47,7 +47,7 @@ public class ConstraintTypeViolationFilterTests {
     @Test
     public void canViolate_withMatchingTypeConstraint_returnsFalse() {
         //Arrange
-        Constraint inputConstraint = new IsInSetConstraint(
+        Constraint inputConstraint = new InSetConstraint(
             null,
             new DistributedList<>(Collections.singletonList(new WeightedElement<>("", 1.0F))));
 
@@ -64,7 +64,7 @@ public class ConstraintTypeViolationFilterTests {
     @Test
     public void canViolate_withNonMatchingTypeConstraint_returnsTrue() {
         //Arrange
-        Constraint inputConstraint = new IsGreaterThanConstantConstraint(null, HelixNumber.create(100));
+        Constraint inputConstraint = new GreaterThanConstraint(null, HelixNumber.create(100));
 
         //Act
         boolean actual = target.canViolate(inputConstraint);

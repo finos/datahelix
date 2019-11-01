@@ -97,16 +97,16 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
     }
 
     public ConstraintChainBuilder<T> withLessThanConstraint(Field field, int referenceValue) {
-        return saveAndSet(new IsLessThanConstantConstraint(field, HelixNumber.create(referenceValue)));
+        return saveAndSet(new LessThanConstraint(field, HelixNumber.create(referenceValue)));
     }
 
     public ConstraintChainBuilder<T> withGreaterThanConstraint(Field field, int referenceValue) {
-        return saveAndSet(new IsGreaterThanConstantConstraint(field, HelixNumber.create(referenceValue)));
+        return saveAndSet(new GreaterThanConstraint(field, HelixNumber.create(referenceValue)));
     }
 
     public ConstraintChainBuilder<T> withEqualToConstraint(Field barField, Object referenceValue) {
         return saveAndSet(
-            new IsInSetConstraint(
+            new InSetConstraint(
                 barField,
                 DistributedList.singleton(referenceValue)));
     }
@@ -124,21 +124,21 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
     }
 
     public ConstraintChainBuilder<T> withInSetConstraint(Field field, Object[] legalArray) {
-        return saveAndSet(new IsInSetConstraint(
+        return saveAndSet(new InSetConstraint(
             field,
             DistributedList.uniform(SetUtils.setOf(legalArray))));
     }
 
     public ConstraintChainBuilder<T> withOfLengthConstraint(Field fooField, int length) {
-        return saveAndSet(new StringHasLengthConstraint(fooField, HelixStringLength.create(length)));
+        return saveAndSet(new OfLengthConstraint(fooField, HelixStringLength.create(length)));
     }
 
     public ConstraintChainBuilder<T> withAfterConstraint(Field field, OffsetDateTime dateTime) {
-        return saveAndSet(new IsAfterConstantDateTimeConstraint(field, HelixDateTime.create(dateTime)));
+        return saveAndSet(new AfterConstraint(field, HelixDateTime.create(dateTime)));
     }
 
     public ConstraintChainBuilder<T> withBeforeConstraint(Field field, OffsetDateTime dateTime) {
-        return saveAndSet(new IsBeforeConstantDateTimeConstraint(field, HelixDateTime.create(dateTime)));
+        return saveAndSet(new BeforeConstraint(field, HelixDateTime.create(dateTime)));
     }
 
     public ConstraintChainBuilder<T> withMatchesRegexConstraint(Field field, Pattern pattern) {

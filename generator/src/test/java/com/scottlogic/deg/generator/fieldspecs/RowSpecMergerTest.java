@@ -2,7 +2,7 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.google.common.collect.ImmutableMap;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.common.profile.FieldType;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +20,7 @@ class RowSpecMergerTest {
     FieldSpec notNull = FieldSpecFactory.fromType(FieldType.STRING).withNotNull();
     Field A = createField("A");
     Field B = createField("B");
-    ProfileFields fields = new ProfileFields(Arrays.asList(A, B));
+    Fields fields = new Fields(Arrays.asList(A, B));
 
     @Test
     void merge_notContradictoryForField() {

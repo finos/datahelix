@@ -17,7 +17,7 @@
 package com.scottlogic.deg.generator;
 
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
-import com.scottlogic.deg.generator.profile.constraints.atomic.IsInSetConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.InSetConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsNullConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
@@ -32,7 +32,7 @@ public class ConstraintBuilder {
     private final Map<String, Field> fields;
 
     public ConstraintBuilder(List<Field> fields) {
-        this.fields = fields.stream().collect(Collectors.toMap(f -> f.name, f -> f));
+        this.fields = fields.stream().collect(Collectors.toMap(f -> f.getName(), f -> f));
     }
 
     public List<Constraint> build() {
@@ -40,13 +40,13 @@ public class ConstraintBuilder {
     }
 
     public ConstraintBuilder addInSetConstraint(String fieldname, List<Object> values) {
-        constraints.add(new IsInSetConstraint(fields.get(fieldname),
+        constraints.add(new InSetConstraint(fields.get(fieldname),
             DistributedList.uniform(values)));
         return this;
     }
 
     public ConstraintBuilder addEqualToConstraint(String fieldname, Object value) {
-        constraints.add(new IsInSetConstraint(
+        constraints.add(new InSetConstraint(
             fields.get(fieldname),
             DistributedList.singleton(value)));
         return this;

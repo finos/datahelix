@@ -16,8 +16,7 @@
 
 package com.scottlogic.deg.output.writer;
 
-import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.output.writer.DataSetWriter;
+import com.scottlogic.deg.common.profile.Fields;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -27,7 +26,7 @@ import java.util.Optional;
 public interface OutputWriterFactory {
     DataSetWriter createWriter(
         OutputStream stream,
-        ProfileFields profileFields) throws IOException;
+        Fields fields) throws IOException;
 
     Optional<String> getFileExtensionWithoutDot();
 }

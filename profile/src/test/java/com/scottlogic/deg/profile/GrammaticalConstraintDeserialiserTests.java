@@ -21,6 +21,13 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.scottlogic.deg.profile.dtos.constraints.*;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.EqualToConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.GreaterThanConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.LessThanConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.IsNullConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.grammatical.AllOfConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.grammatical.AnyOfConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
 import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -49,7 +56,7 @@ public class GrammaticalConstraintDeserialiserTests {
         EqualToConstraintDTO expectedEqualsTo = new EqualToConstraintDTO();
         expectedEqualsTo.field = "foo";
         expectedEqualsTo.value = "0";
-        NullConstraintDTO expectedNull = new NullConstraintDTO();
+        IsNullConstraintDTO expectedNull = new IsNullConstraintDTO();
         expectedNull.field = "foo";
         expectedNull.isNull = true;
 
@@ -73,7 +80,7 @@ public class GrammaticalConstraintDeserialiserTests {
             deserialiseJsonString(json);
             Assert.fail("should have thrown an exception");
         } catch (UnrecognizedPropertyException e) {
-            String expectedMessage = "Unrecognized field \"fild\" (class com.scottlogic.deg.profile.dtos.constraints.EqualToConstraintDTO), not marked as ignorable (2 known properties: \"field\", \"equalTo\"])\n at [Source: UNKNOWN; line: -1, column: -1] (through reference chain: com.scottlogic.deg.profile.dtos.constraints.AnyOfConstraintDTO[\"anyOf\"]->java.util.ArrayList[0]->com.scottlogic.deg.profile.dtos.constraints.EqualToConstraintDTO[\"fild\"])";
+            String expectedMessage = "Unrecognized field \"fild\" (class com.scottlogic.deg.profile.dtos.constraints.atomic.EqualToConstraintDTO), not marked as ignorable (2 known properties: \"field\", \"equalTo\"])\n at [Source: UNKNOWN; line: -1, column: -1] (through reference chain: com.scottlogic.deg.profile.dtos.constraints.grammatical.AnyOfConstraintDTO[\"anyOf\"]->java.util.ArrayList[0]->com.scottlogic.deg.profile.dtos.constraints.atomic.EqualToConstraintDTO[\"fild\"])";
             assertThat(e.getMessage(), sameBeanAs(expectedMessage));
         }
     }
@@ -111,7 +118,7 @@ public class GrammaticalConstraintDeserialiserTests {
             deserialiseJsonString(json);
             Assert.fail("should have thrown an exception");
         } catch (JsonMappingException e) {
-            String expectedMessage = "The constraint json object node for field foo doesn't contain any of the expected keywords as properties: {\"field\":\"foo\",\"isNll\":\"true\"} (through reference chain: com.scottlogic.deg.profile.dtos.constraints.AnyOfConstraintDTO[\"anyOf\"]->java.util.ArrayList[1])";
+            String expectedMessage = "The constraint json object node for field foo doesn't contain any of the expected keywords as properties: {\"field\":\"foo\",\"isNll\":\"true\"} (through reference chain: com.scottlogic.deg.profile.dtos.constraints.grammatical.AnyOfConstraintDTO[\"anyOf\"]->java.util.ArrayList[1])";
             assertThat(e.getMessage(), sameBeanAs(expectedMessage));
         }
     }
@@ -152,7 +159,7 @@ public class GrammaticalConstraintDeserialiserTests {
        ConstraintDTO actual = deserialiseJsonString(json);
 
         // Assert
-        NullConstraintDTO expectedNull = new NullConstraintDTO();
+        IsNullConstraintDTO expectedNull = new IsNullConstraintDTO();
         expectedNull.field = "foo";
         expectedNull.isNull = true;
 
@@ -184,7 +191,7 @@ public class GrammaticalConstraintDeserialiserTests {
         expectedEqualTo.field = "bar";
         expectedEqualTo.value = "500";
 
-        IfConstraintDTO expected= new IfConstraintDTO();
+        ConditionalConstraintDTO expected= new ConditionalConstraintDTO();
 
         expected.ifConstraint = expectedLessThan;
         expected.thenConstraint = expectedGreaterThan;
