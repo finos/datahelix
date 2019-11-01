@@ -18,20 +18,21 @@ package com.scottlogic.deg.profile;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scottlogic.deg.profile.dtos.constraints.*;
+import com.scottlogic.deg.common.ValidationException;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.InMapConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.*;
 import com.scottlogic.deg.profile.dtos.constraints.relations.*;
-import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.jupiter.api.Test;
 import org.junit.rules.ExpectedException;
 
-import static com.shazam.shazamcrest.MatcherAssert.assertThat;
-import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
-
 import java.io.IOException;
 import java.util.Arrays;
+
+import static com.shazam.shazamcrest.MatcherAssert.assertThat;
+import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 
 public class AtomicConstraintDeserialiserTests {
 
@@ -62,7 +63,7 @@ public class AtomicConstraintDeserialiserTests {
         try {
             deserialiseJsonString(json);
             Assert.fail("should have thrown an exception");
-        } catch (InvalidProfileException e) {
+        } catch (ValidationException e) {
             String expectedMessage = "The constraint json object node for field type doesn't contain any of the expected keywords as properties: {\"field\":\"type\",\"equilTo\":\"X_092\"}";
             assertThat(e.getMessage(), sameBeanAs(expectedMessage));
         }

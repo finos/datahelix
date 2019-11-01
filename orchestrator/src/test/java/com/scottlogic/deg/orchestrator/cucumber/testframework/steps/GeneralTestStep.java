@@ -21,7 +21,8 @@ import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.*;
 import com.scottlogic.deg.profile.common.ConstraintType;
-import com.scottlogic.deg.profile.reader.InvalidProfileException;
+
+import com.scottlogic.deg.common.ValidationException;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.*;
 import org.hamcrest.Matcher;
@@ -245,7 +246,7 @@ public class GeneralTestStep {
                     try
                     {
                         rowMap.put(key, GeneratorTestUtilities.parseExpected(row.get(key)));
-                    } catch (JsonParseException | InvalidProfileException e)
+                    } catch (JsonParseException | ValidationException e)
                     {
                         state.addException(e);
                         rowMap.put(key, "<exception thrown: " + e.getMessage() + ">");

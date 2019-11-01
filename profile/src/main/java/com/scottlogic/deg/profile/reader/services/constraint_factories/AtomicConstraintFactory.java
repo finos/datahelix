@@ -1,5 +1,6 @@
 package com.scottlogic.deg.profile.reader.services.constraint_factories;
 
+import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.generator.fieldspecs.relations.InMapRelation;
@@ -8,7 +9,6 @@ import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.profile.dtos.constraints.InMapConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.*;
 import com.scottlogic.deg.profile.reader.FileReader;
-import com.scottlogic.deg.profile.reader.InvalidProfileException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -59,7 +59,7 @@ public abstract class AtomicConstraintFactory {
             case IS_NULL:
                 return createIsNullConstraint((IsNullConstraintDTO) dto, fields);
             default:
-                throw new InvalidProfileException("Atomic constraint type not found: " + dto);
+                throw new ValidationException("Atomic constraint type not found: " + dto);
         }
     }
 

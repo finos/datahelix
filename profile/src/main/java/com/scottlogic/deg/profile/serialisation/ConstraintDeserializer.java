@@ -13,7 +13,7 @@ import com.scottlogic.deg.profile.dtos.constraints.grammatical.AllOfConstraintDT
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.AnyOfConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.relations.*;
-import com.scottlogic.deg.profile.reader.InvalidProfileException;
+import com.scottlogic.deg.common.ValidationException;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -27,10 +27,10 @@ public class ConstraintDeserializer extends JsonDeserializer<ConstraintDTO> {
         ConstraintType type = Arrays.stream(ConstraintType.values())
             .filter(constraintType -> node.has(constraintType.propertyName))
             .findFirst()
-            .orElseThrow(() -> new InvalidProfileException("The constraint json object node" + fieldName +
+            .orElseThrow(() -> new ValidationException("The constraint json object node" + fieldName +
                 " doesn't contain any of the expected keywords as " + "properties: " + node));
         if (hasNull(node, type)) {
-            throw new InvalidProfileException("The " + type.propertyName + " constraint has null value" + fieldName);
+            throw new ValidationException("The " + type.propertyName + " constraint has null value" + fieldName);
         }
         switch (type) {
             case EQUAL_TO:
@@ -99,7 +99,7 @@ public class ConstraintDeserializer extends JsonDeserializer<ConstraintDTO> {
                 if (node.hasNonNull(ConstraintTypeJsonProperty.THEN)) {
                     return mapper.treeToValue(node, ConditionalConstraintDTO.class);
                 }
-                throw new InvalidProfileException("If constraint types require a then property: " + node);
+                throw new ValidationException("If constraint types require a then property: " + node);
             default:
                 throw new IllegalStateException("Unexpected value: " + type);
         }

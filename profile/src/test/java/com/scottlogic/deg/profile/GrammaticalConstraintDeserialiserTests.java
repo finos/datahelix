@@ -28,7 +28,8 @@ import com.scottlogic.deg.profile.dtos.constraints.atomic.IsNullConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.AllOfConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.AnyOfConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
-import com.scottlogic.deg.profile.reader.InvalidProfileException;
+
+import com.scottlogic.deg.common.ValidationException;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -98,7 +99,7 @@ public class GrammaticalConstraintDeserialiserTests {
         try {
             deserialiseJsonString(json);
             Assert.fail("should have thrown an exception");
-        } catch (InvalidProfileException e) {
+        } catch (ValidationException e) {
             String expectedMessage = "The constraint json object node doesn't contain any of the expected keywords as properties: {\"ayOf\":[{\"field\":\"foo\",\"equalTo\":\"0\"},{\"field\":\"foo\",\"isNull\":\"true\"}]}";
             assertThat(e.getMessage(), sameBeanAs(expectedMessage));
         }

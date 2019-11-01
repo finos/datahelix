@@ -22,7 +22,8 @@ import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberGenerationMode;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.GeneratorTestUtilities;
 import com.scottlogic.deg.profile.common.ConstraintType;
-import com.scottlogic.deg.profile.reader.InvalidProfileException;
+
+import com.scottlogic.deg.common.ValidationException;
 import cucumber.api.TypeRegistry;
 import cucumber.api.TypeRegistryConfigurer;
 import io.cucumber.cucumberexpressions.ParameterType;
@@ -147,7 +148,7 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
         public <T> T transform(String value, Class<T> aClass) throws Throwable {
             try {
                 return aClass.cast(GeneratorTestUtilities.parseInput(value.trim()));
-            } catch (JsonParseException | InvalidProfileException e) {
+            } catch (JsonParseException | ValidationException e) {
                 return (T) e;
             }
         }
