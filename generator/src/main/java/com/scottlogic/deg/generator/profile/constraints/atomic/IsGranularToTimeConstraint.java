@@ -4,6 +4,9 @@ import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.TimeGranularity;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
+import com.scottlogic.deg.generator.utils.Defaults;
 
 public class IsGranularToTimeConstraint implements AtomicConstraint {
     public final TimeGranularity timeGranularity;
@@ -21,7 +24,7 @@ public class IsGranularToTimeConstraint implements AtomicConstraint {
 
     @Override
     public Field getField() {
-        return null;
+        return field;
     }
 
     @Override
@@ -31,6 +34,10 @@ public class IsGranularToTimeConstraint implements AtomicConstraint {
 
     @Override
     public FieldSpec toFieldSpec() {
-        return null;
+        return FieldSpecFactory.fromRestriction(
+            LinearRestrictionsFactory.createTimeRestrictions(
+                Defaults.TIME_MIN_LIMIT,
+                Defaults.TIME_MAX_LIMIT,
+                timeGranularity));
     }
 }

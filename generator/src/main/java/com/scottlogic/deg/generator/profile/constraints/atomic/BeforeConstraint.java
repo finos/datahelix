@@ -49,7 +49,10 @@ public class BeforeConstraint implements AtomicConstraint {
 
     @Override
     public FieldSpec toFieldSpec() {
-        final LinearRestrictions<OffsetDateTime> dateTimeRestrictions = createDateTimeRestrictions(DATETIME_MIN_LIMIT, new Limit<>(referenceValue, false));
+        final LinearRestrictions<OffsetDateTime> dateTimeRestrictions =
+            createDateTimeRestrictions(DATETIME_MIN_LIMIT,
+                new Limit<>(referenceValue.getValue(),
+                    false));
         return FieldSpecFactory.fromRestriction(dateTimeRestrictions);
     }
 

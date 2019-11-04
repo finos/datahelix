@@ -3,6 +3,13 @@ package com.scottlogic.deg.generator.profile.constraints.atomic;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.HelixTime;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
+import com.scottlogic.deg.generator.restrictions.linear.Limit;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
+import com.scottlogic.deg.generator.utils.Defaults;
+
+import java.time.LocalTime;
 
 public class IsAfterOrEqualToConstantTimeConstraint implements AtomicConstraint{
 
@@ -16,16 +23,19 @@ public class IsAfterOrEqualToConstantTimeConstraint implements AtomicConstraint{
 
     @Override
     public Field getField() {
-        return null;
+        return field;
     }
 
     @Override
     public AtomicConstraint negate() {
-        return null;
+        return new IsBeforeConstantTimeConstraint(field,referenceValue);
     }
 
     @Override
     public FieldSpec toFieldSpec() {
-        return null;
+        final Limit<LocalTime> min = new Limit<>(referenceValue.getValue(), true);
+        final LinearRestrictions<LocalTime> timeRestrictions =
+            LinearRestrictionsFactory.createTimeRestrictions(min, Defaults.TIME_MAX_LIMIT);
+        return FieldSpecFactory.fromRestriction(timeRestrictions);
     }
 }
