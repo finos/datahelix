@@ -52,8 +52,13 @@ public class LinearRestrictionsFactory {
     }
 
     public static LinearRestrictions<LocalTime> createTimeRestrictions(Granularity<LocalTime> granularity) {
-        //Todo should this be calling createTimeRestrictions(min,max,gran)?
-        return new LinearRestrictions<>(LocalTime.MIN, LocalTime.MAX, granularity);
+        return createTimeRestrictions(TIME_MIN_LIMIT, TIME_MAX_LIMIT, granularity);
+    }
+
+    public static LinearRestrictions<LocalTime> createTimeRestrictions(
+        Limit<LocalTime> min,
+        Limit<LocalTime> max) {
+        return createTimeRestrictions(min, max, DEFAULT_TIME_GRANULARITY);
     }
 
     public static LinearRestrictions<LocalTime> createTimeRestrictions(
