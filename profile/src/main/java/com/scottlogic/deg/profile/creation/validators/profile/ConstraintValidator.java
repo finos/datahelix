@@ -18,13 +18,13 @@ import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.numeric.Numer
 import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.temporal.*;
 import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.textual.RegexConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.relations.RelationalConstraintDTO;
-import com.scottlogic.deg.profile.creation.validators.profile.constraints.relations.InMapConstraintValidator;
+import com.scottlogic.deg.profile.creation.validators.profile.constraints.InMapConstraintValidator;
 import com.scottlogic.deg.profile.creation.validators.profile.constraints.NotConstraintValidator;
 import com.scottlogic.deg.profile.creation.validators.profile.constraints.atomic.*;
 import com.scottlogic.deg.profile.creation.validators.profile.constraints.grammatical.AllOfConstraintValidator;
 import com.scottlogic.deg.profile.creation.validators.profile.constraints.grammatical.AnyOfConstraintValidator;
 import com.scottlogic.deg.profile.creation.validators.profile.constraints.grammatical.ConditionalConstraintValidator;
-import com.scottlogic.deg.profile.creation.validators.profile.constraints.relations.RelationalConstraintValidator;
+import com.scottlogic.deg.profile.creation.validators.profile.constraints.RelationalConstraintValidator;
 
 import java.util.List;
 

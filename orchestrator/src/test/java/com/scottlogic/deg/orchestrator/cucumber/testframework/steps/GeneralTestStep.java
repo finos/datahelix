@@ -170,6 +170,7 @@ public class GeneralTestStep {
                 hasItem(matchesPattern(expectedError)));
         }
     }
+
     @But("^the profile is invalid with error \"(.+)\"$")
     public void profileIsInvalidWithErrorMessage(String expectedError) {
         state.expectExceptions = true;

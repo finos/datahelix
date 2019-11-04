@@ -22,7 +22,6 @@ import java.util.List;
 
 public class InMapConstraintDTO extends RelationalConstraintDTO
 {
-    public String field;
     public String otherField;
     public List<Object> values;
 

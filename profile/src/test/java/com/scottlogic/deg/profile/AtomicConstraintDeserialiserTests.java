@@ -29,6 +29,7 @@ import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.temporal.Befo
 import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.textual.ContainsRegexConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.textual.MatchesRegexConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.relations.*;
+import com.scottlogic.deg.profile.creation.serialisation.ConstraintDeserializer;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.jupiter.api.Test;
@@ -36,6 +37,7 @@ import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
@@ -109,14 +111,14 @@ public class AtomicConstraintDeserialiserTests {
     public void shouldDeserialiseInSetCsvFileWithoutException() throws IOException {
         // Arrange
         final String json = "{\"field\": \"country\", \"inSet\": \"countries.csv\" }";
-
+        ConstraintDeserializer.fileReader = new TestFileReader();
         // Act
         ConstraintDTO actual = deserialiseJsonString(json);
 
         // Assert
-        InSetFromFileConstraintDTO expected = new InSetFromFileConstraintDTO();
+        InSetConstraintDTO expected = new InSetConstraintDTO();
         expected.field = "country";
-        expected.file = "countries.csv";
+        expected.values = Collections.singletonList("test");
 
         assertThat(actual, sameBeanAs(expected));
     }
@@ -125,15 +127,16 @@ public class AtomicConstraintDeserialiserTests {
     public void shouldDeserialiseInMapWithoutException() throws IOException {
         // Arrange
         final String json = "{\"field\": \"country\", \"inMap\": \"countries.csv\", \"key\": \"Country\" }";
+        ConstraintDeserializer.fileReader = new TestFileReader();
 
         // Act
         ConstraintDTO actual = deserialiseJsonString(json);
 
         // Assert
-        InMapFromFileConstraintDTO expected = new InMapFromFileConstraintDTO();
+        InMapConstraintDTO expected = new InMapConstraintDTO();
         expected.field = "country";
-        expected.file = "countries.csv";
-        expected.key = "Country";
+        expected.otherField = "countries.csv";
+        expected.values = Collections.singletonList("test");
 
         assertThat(actual, sameBeanAs(expected));
     }

@@ -40,7 +40,7 @@ abstract class AtomicConstraintValidator<T extends AtomicConstraintDTO> extends 
             return ValidationResult.failure("Values must be specified" + getErrorInfo(dto));
         }
         FieldType fieldType = fields.stream().filter(f -> f.name.equals(dto.field)).findFirst().get().type.getFieldType();
-        if (!(value instanceof Number) && fieldType == FieldType.NUMERIC)
+        if (!(value instanceof Number || value instanceof String && isNumber((String)value)) && fieldType == FieldType.NUMERIC)
         {
             return ValidationResult.failure("Value " + value + " must be number for field type " + fieldType + getErrorInfo(dto));
         }
@@ -50,6 +50,24 @@ abstract class AtomicConstraintValidator<T extends AtomicConstraintDTO> extends 
         }
         return ValidationResult.success();
     }
+
+    private static boolean isNumber(String s)
+    {
+        try
+        {
+            Double.parseDouble(s);
+        }
+        catch (NumberFormatException e)
+        {
+            return false;
+        }
+        catch (NullPointerException e)
+        {
+            return false;
+        }
+        return true;
+    }
+
 
     ValidationResult fieldMustBeValid(T dto)
     {

@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 
 public class ConstraintDeserializer extends JsonDeserializer<ConstraintDTO> {
 
-    static FileReader fileReader;
+    public static FileReader fileReader;
 
     @Override
     public ConstraintDTO deserialize(JsonParser jsonParser, DeserializationContext context) throws IOException {

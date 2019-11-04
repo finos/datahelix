@@ -1,4 +1,4 @@
-package com.scottlogic.deg.profile.creation.validators.profile.constraints.relations;
+package com.scottlogic.deg.profile.creation.validators.profile.constraints;
 
 import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.common.validators.ValidationResult;

@@ -728,7 +728,7 @@ public class JsonProfileReaderTests {
                 "    ]" +
                 "}");
 
-        expectValidationException("HelixDateTime cannot be null");
+        expectValidationException("Values must be specified | Field: foo | Constraint: inSet | Rule: Unnamed rule");
     }
 
     @Test
