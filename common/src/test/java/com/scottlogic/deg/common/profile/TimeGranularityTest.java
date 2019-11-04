@@ -16,9 +16,11 @@
 
 package com.scottlogic.deg.common.profile;
 
+import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import com.scottlogic.deg.testUtils.TestRandomNumberGenerator;
 import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalTime;
@@ -124,6 +126,21 @@ class TimeGranularityTest {
 
         LocalTime result = granularity.getRandom(LocalTime.MIN,LocalTime.MAX, generator);
         Assert.assertTrue(granularity.isCorrectScale(result));
+    }
+
+    @Test
+    void creatingAnInvalidTimeGranularity_throwsAnError() {
+        Assertions.assertThrows(ValidationException.class, () -> {
+            new TimeGranularity(ChronoUnit.MONTHS);
+        });
+    }
+
+    @Test
+    void create_returnsTimeGranularityFromString() {
+        TimeGranularity timeGranularity = TimeGranularity.create("millis");
+        TimeGranularity expected = new TimeGranularity(ChronoUnit.MILLIS);
+
+        Assert.assertEquals(expected,timeGranularity);
     }
 
 }

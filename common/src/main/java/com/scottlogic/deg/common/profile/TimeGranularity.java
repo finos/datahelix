@@ -16,17 +16,29 @@
 
 package com.scottlogic.deg.common.profile;
 
+import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 
 public class TimeGranularity implements Granularity<LocalTime>{
 
     private final ChronoUnit granularity;
 
-    public TimeGranularity(ChronoUnit granularity) {this.granularity = granularity;}
+    public TimeGranularity(ChronoUnit granularity) {
+        if (!granularity.isTimeBased()){
+            throw new ValidationException("Granularity for time field must be time based but was " +
+                granularity.toString());
+        }
+
+        this.granularity = granularity;}
+
+    public static TimeGranularity create(String granularity) {
+        return new TimeGranularity(ChronoUnit.valueOf(granularity.toUpperCase()));
+    }
 
     @Override
     public boolean isCorrectScale(LocalTime value) {
@@ -63,9 +75,20 @@ public class TimeGranularity implements Granularity<LocalTime>{
     public LocalTime getRandom(LocalTime min, LocalTime max, RandomNumberGenerator randomNumberGenerator) {
         long a = min.until(max, granularity);
         double b = randomNumberGenerator.nextDouble(0, (double)a);
-        LocalTime t = min.plus((long)b,granularity);
+        return min.plus((long)b,granularity);
+    }
 
-        return t;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TimeGranularity that = (TimeGranularity) o;
+        return granularity == that.granularity;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(granularity);
     }
 
     @Override
