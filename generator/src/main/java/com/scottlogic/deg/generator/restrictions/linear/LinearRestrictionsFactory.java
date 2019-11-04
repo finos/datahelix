@@ -65,7 +65,10 @@ public class LinearRestrictionsFactory {
         Limit<LocalTime> min,
         Limit<LocalTime> max,
         Granularity<LocalTime> granularity) {
-        return new LinearRestrictions<>(min.getValue(), max.getValue(), granularity);
+        LocalTime inclusiveMin = getInclusiveMin(min, granularity, TIME_MIN_LIMIT.getValue());
+        LocalTime inclusiveMax = getInclusiveMax(max, granularity, TIME_MAX_LIMIT.getValue());
+
+        return new LinearRestrictions<>(inclusiveMin, inclusiveMax, granularity);
     }
 
     public static LinearRestrictions<BigDecimal> createDefaultNumericRestrictions() {
