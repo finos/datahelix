@@ -8,11 +8,11 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
 import com.scottlogic.deg.generator.utils.Defaults;
 
-public class IsGranularToTimeConstraint implements AtomicConstraint {
+public class GranularToTimeConstraint implements AtomicConstraint {
     public final TimeGranularity timeGranularity;
     public final Field field;
 
-    public IsGranularToTimeConstraint(Field field, TimeGranularity timeGranularity) {
+    public GranularToTimeConstraint(Field field, TimeGranularity timeGranularity) {
         if(field == null)
             throw new IllegalArgumentException("field must not be null");
         if(timeGranularity == null)

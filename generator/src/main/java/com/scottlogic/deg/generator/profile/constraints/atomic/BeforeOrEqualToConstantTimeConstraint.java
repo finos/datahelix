@@ -11,12 +11,11 @@ import com.scottlogic.deg.generator.utils.Defaults;
 
 import java.time.LocalTime;
 
-public class IsBeforeConstantTimeConstraint implements AtomicConstraint {
-
+public class BeforeOrEqualToConstantTimeConstraint implements AtomicConstraint {
     public final Field field;
     public final HelixTime referenceValue;
 
-    public IsBeforeConstantTimeConstraint(Field field, HelixTime referenceValue) {
+    public BeforeOrEqualToConstantTimeConstraint(Field field, HelixTime referenceValue) {
         this.field = field;
         this.referenceValue = referenceValue;
     }
@@ -28,15 +27,15 @@ public class IsBeforeConstantTimeConstraint implements AtomicConstraint {
 
     @Override
     public AtomicConstraint negate() {
-        return new IsAfterOrEqualToConstantTimeConstraint(field, referenceValue);
+        return new AfterConstantTimeConstraint(field, referenceValue);
     }
 
     @Override
     public FieldSpec toFieldSpec() {
-
-        final Limit<LocalTime> max = new Limit<>(referenceValue.getValue(), false);
+        final Limit<LocalTime> max = new Limit<>(referenceValue.getValue(), true);
         final LinearRestrictions<LocalTime> timeRestriction =
             LinearRestrictionsFactory.createTimeRestrictions(Defaults.TIME_MIN_LIMIT, max);
+        Object o = FieldSpecFactory.fromRestriction(timeRestriction);
         return FieldSpecFactory.fromRestriction(timeRestriction);
     }
 }
