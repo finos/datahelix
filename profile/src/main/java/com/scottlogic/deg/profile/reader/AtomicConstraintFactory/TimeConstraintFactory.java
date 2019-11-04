@@ -6,9 +6,9 @@ import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.profile.dtos.constraints.*;
 import com.scottlogic.deg.profile.reader.FileReader;
 
-public class TimeConstriantFactory extends AtomicConstraintFactory {
+public class TimeConstraintFactory extends AtomicConstraintFactory {
 
-    TimeConstriantFactory(FileReader fileReader) {
+    TimeConstraintFactory(FileReader fileReader) {
         super(fileReader);
     }
 
