@@ -30,11 +30,18 @@ public class LinearRestrictionsFactory {
         return createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT);
     }
 
-    public static LinearRestrictions<OffsetDateTime> createDateTimeRestrictions(Limit<OffsetDateTime> min, Limit<OffsetDateTime> max) {
+    public static LinearRestrictions<OffsetDateTime> createDateTimeRestrictions(
+        Limit<OffsetDateTime> min,
+        Limit<OffsetDateTime> max) {
+
         return createDateTimeRestrictions(min, max, DEFAULT_DATETIME_GRANULARITY);
     }
 
-    public static LinearRestrictions<OffsetDateTime> createDateTimeRestrictions(Limit<OffsetDateTime> min, Limit<OffsetDateTime> max, Granularity<OffsetDateTime> granularity) {
+    public static LinearRestrictions<OffsetDateTime> createDateTimeRestrictions(
+        Limit<OffsetDateTime> min,
+        Limit<OffsetDateTime> max,
+        Granularity<OffsetDateTime> granularity) {
+
         OffsetDateTime inclusiveMin = getInclusiveMin(min, granularity, ISO_MIN_DATE);
         OffsetDateTime inclusiveMax = getInclusiveMax(max, granularity, ISO_MAX_DATE);
         return new LinearRestrictions<>(inclusiveMin, inclusiveMax, granularity);
@@ -45,7 +52,15 @@ public class LinearRestrictionsFactory {
     }
 
     public static LinearRestrictions<LocalTime> createTimeRestrictions(Granularity<LocalTime> granularity) {
+        //Todo should this be calling createTimeRestrictions(min,max,gran)?
         return new LinearRestrictions<>(LocalTime.MIN, LocalTime.MAX, granularity);
+    }
+
+    public static LinearRestrictions<LocalTime> createTimeRestrictions(
+        Limit<LocalTime> min,
+        Limit<LocalTime> max,
+        Granularity<LocalTime> granularity) {
+        return new LinearRestrictions<>(min.getValue(), max.getValue(), granularity);
     }
 
     public static LinearRestrictions<BigDecimal> createDefaultNumericRestrictions() {
@@ -63,7 +78,7 @@ public class LinearRestrictionsFactory {
     }
 
     private static <T extends Comparable<? super T>> T getInclusiveMin(Limit<T> min, Granularity<T> granularity, T actualMin) {
-        if (min.getValue().compareTo(actualMin) < 0){
+        if (min.getValue().compareTo(actualMin) < 0) {
             return actualMin;
         }
 
