@@ -170,6 +170,24 @@ public class GeneralTestStep {
                 hasItem(matchesPattern(expectedError)));
         }
     }
+    @But("^the profile is invalid with error \"(.+)\"$")
+    public void profileIsInvalidWithErrorMessage(String expectedError) {
+        state.expectExceptions = true;
+        cucumberTestHelper.generateAndGetData();
+
+        List<String> errors = this.cucumberTestHelper
+            .getProfileValidationErrors()
+            .collect(Collectors.toList());
+
+        if (errors.size() == 0) {
+            Assert.fail("No profile validation errors were raised");
+        } else {
+            Assert.assertThat(
+                "Expected profile validation error",
+                errors,
+                contains(expectedError));
+        }
+    }
 
     @And("^no data is created$")
     public void noDataIsCreated() {

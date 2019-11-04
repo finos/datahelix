@@ -18,7 +18,7 @@ public class GranularToConstraintValidator extends AtomicConstraintValidator<Gra
     {
         ValidationResult fieldMustBeValid = fieldMustBeValid(dto);
         if(!fieldMustBeValid.isSuccess) return fieldMustBeValid;
-        return fieldTypeMustBeValid(dto, dto.value);
+        return valueMustBeValid(dto, dto.value);
     }
 
 }

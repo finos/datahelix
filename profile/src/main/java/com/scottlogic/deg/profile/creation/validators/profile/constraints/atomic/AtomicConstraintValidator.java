@@ -16,7 +16,14 @@ abstract class AtomicConstraintValidator<T extends AtomicConstraintDTO> extends 
         super(rule, fields);
     }
 
-    ValidationResult fieldTypeMustBeValid(T dto, FieldType expectedFieldType)
+    @Override
+    protected String getErrorInfo(T atomicConstraint)
+    {
+        return " | Field: " + atomicConstraint.field + super.getErrorInfo(atomicConstraint);
+    }
+
+
+    ValidationResult valueMustBeValid(T dto, FieldType expectedFieldType)
     {
         FieldType fieldType = fields.stream().filter(f -> f.name.equals(dto.field)).findFirst().get().type.getFieldType();
         if (expectedFieldType != fieldType)
@@ -26,8 +33,12 @@ abstract class AtomicConstraintValidator<T extends AtomicConstraintDTO> extends 
         return ValidationResult.success();
     }
 
-    ValidationResult fieldTypeMustBeValid(T dto, Object value)
+    ValidationResult valueMustBeValid(T dto, Object value)
     {
+        if(value == null)
+        {
+            return ValidationResult.failure("Values must be specified" + getErrorInfo(dto));
+        }
         FieldType fieldType = fields.stream().filter(f -> f.name.equals(dto.field)).findFirst().get().type.getFieldType();
         if (!(value instanceof Number) && fieldType == FieldType.NUMERIC)
         {

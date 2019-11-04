@@ -24,7 +24,7 @@ public class TemporalConstraintValidator extends AtomicConstraintValidator<Tempo
         ValidationResult dateMustBeSpecified = dateMustBeSpecified(dto);
         if(!dateMustBeSpecified.isSuccess) return dateMustBeSpecified;
 
-        return fieldTypeMustBeValid(dto, FieldType.DATETIME);
+        return valueMustBeValid(dto, FieldType.DATETIME);
     }
 
 

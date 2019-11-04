@@ -27,7 +27,7 @@ public class NumericConstraintValidator extends AtomicConstraintValidator<Numeri
         ValidationResult numberMustBeSpecified = numberMustBeSpecified(dto);
         if(!numberMustBeSpecified.isSuccess) return numberMustBeSpecified;
 
-        return fieldTypeMustBeValid(dto, expectedFieldType);
+        return valueMustBeValid(dto, expectedFieldType);
     }
 
     private ValidationResult numberMustBeSpecified(NumericConstraintDTO dto)
