@@ -37,11 +37,13 @@ import java.nio.file.Files;
  */
 public class JsonProfileReader implements ProfileReader {
     private final File profileFile;
+    private final ProfileDeserialiser profileDeserialiser;
     private final CommandBus commandBus;
 
     @Inject
-    public JsonProfileReader(@Named("config:profileFile") File profileFile, CommandBus commandBus) {
+    public JsonProfileReader(@Named("config:profileFile") File profileFile, ProfileDeserialiser profileDeserialiser, CommandBus commandBus) {
         this.profileFile = profileFile;
+        this.profileDeserialiser = profileDeserialiser;
         this.commandBus = commandBus;
     }
 
@@ -52,7 +54,7 @@ public class JsonProfileReader implements ProfileReader {
     }
 
     public Profile read(String profileJson) {
-        ProfileDTO profileDTO = new ProfileDeserialiser().deserialise(profileJson);
+        ProfileDTO profileDTO = profileDeserialiser.deserialise(profileJson);
         CommandResult<Profile> createProfileResult = commandBus.send(new CreateProfile(profileDTO));
         if(!createProfileResult.isSuccess) throw new ValidationException(createProfileResult.errors);
         return createProfileResult.value;

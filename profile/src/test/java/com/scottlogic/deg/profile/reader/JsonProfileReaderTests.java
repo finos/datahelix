@@ -30,10 +30,12 @@ import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
+import com.scottlogic.deg.profile.creation.serialisation.ProfileDeserialiser;
 import com.scottlogic.deg.profile.creation.services.ConstraintService;
 import com.scottlogic.deg.profile.creation.services.FieldService;
 import com.scottlogic.deg.profile.creation.services.RuleService;
 import com.scottlogic.deg.profile.creation.validators.CreateProfileValidator;
+import com.scottlogic.deg.profile.creation.validators.profile.ProfileValidator;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -83,7 +85,7 @@ public class JsonProfileReaderTests {
     private String json;
 
     private JsonProfileReader jsonProfileReader = new JsonProfileReader(null,
-        new ProfileCommandBus(new FieldService(), new RuleService(new ConstraintService(new MockFromFileReader())), new CreateProfileValidator()));
+        new ProfileDeserialiser(new MockFromFileReader()), new ProfileCommandBus(new FieldService(), new RuleService(new ConstraintService()), new CreateProfileValidator(new ProfileValidator())));
 
 
     private void givenJson(String json) {

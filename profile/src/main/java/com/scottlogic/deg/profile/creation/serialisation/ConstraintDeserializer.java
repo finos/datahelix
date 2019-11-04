@@ -5,20 +5,34 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
-import com.scottlogic.deg.profile.creation.dtos.constraints.*;
+import com.scottlogic.deg.profile.creation.dtos.constraints.ConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.NotConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.*;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.numeric.*;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.temporal.AfterConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.temporal.AfterOrAtConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.temporal.BeforeConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.temporal.BeforeOrAtConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.textual.ContainsRegexConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.textual.MatchesRegexConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.grammatical.AllOfConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.grammatical.AnyOfConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.grammatical.ConditionalConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.relations.*;
-import com.scottlogic.deg.common.ValidationException;
+import com.scottlogic.deg.profile.reader.FileReader;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ConstraintDeserializer extends JsonDeserializer<ConstraintDTO> {
+
+    static FileReader fileReader;
+
     @Override
     public ConstraintDTO deserialize(JsonParser jsonParser, DeserializationContext context) throws IOException {
         ObjectMapper mapper = (ObjectMapper) jsonParser.getCodec();
@@ -39,10 +53,10 @@ public class ConstraintDeserializer extends JsonDeserializer<ConstraintDTO> {
                 return mapper.treeToValue(node, EqualToFieldConstraintDTO.class);
             case IN_SET:
                 return node.get(ConstraintTypeJsonProperty.IN_SET).isArray()
-                    ? mapper.treeToValue(node, InSetOfValuesConstraintDTO.class)
-                    : mapper.treeToValue(node, InSetFromFileConstraintDTO.class);
+                    ? mapper.treeToValue(node, InSetConstraintDTO.class)
+                    : map(mapper.treeToValue(node, InSetFromFileConstraintDTO.class));
             case IN_MAP:
-                return mapper.treeToValue(node, InMapConstraintDTO.class);
+                return map(mapper.treeToValue(node, InMapFromFileConstraintDTO.class));
             case IS_NULL:
                 return mapper.treeToValue(node, IsNullConstraintDTO.class);
             case GRANULAR_TO:
@@ -107,5 +121,24 @@ public class ConstraintDeserializer extends JsonDeserializer<ConstraintDTO> {
 
     private boolean hasNull(ObjectNode node, ConstraintType constraintType) {
         return !node.hasNonNull(constraintType.propertyName);
+    }
+
+    private InMapConstraintDTO map(InMapFromFileConstraintDTO dto)
+    {
+        List<Object> values = fileReader.listFromMapFile(dto.file, dto.key).stream().collect(Collectors.toList());
+        InMapConstraintDTO inMapConstraintDTO = new InMapConstraintDTO();
+        inMapConstraintDTO.field = dto.field;
+        inMapConstraintDTO.otherField = dto.file;
+        inMapConstraintDTO.values = values;
+        return inMapConstraintDTO;
+    }
+
+    private InSetConstraintDTO map(InSetFromFileConstraintDTO dto)
+    {
+        List<Object> values = fileReader.setFromFile(dto.file).stream().collect(Collectors.toList());
+        InSetConstraintDTO inSetConstraintDTO = new InSetConstraintDTO();
+        inSetConstraintDTO.field = dto.field;
+        inSetConstraintDTO.values = values;
+        return inSetConstraintDTO;
     }
 }

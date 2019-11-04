@@ -20,8 +20,14 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.profile.creation.dtos.constraints.ConstraintDTO;
-import com.scottlogic.deg.profile.creation.dtos.constraints.InMapConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.*;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.numeric.*;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.temporal.AfterConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.temporal.AfterOrAtConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.temporal.BeforeConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.temporal.BeforeOrAtConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.textual.ContainsRegexConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.textual.MatchesRegexConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.relations.*;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -92,7 +98,7 @@ public class AtomicConstraintDeserialiserTests {
         ConstraintDTO actual = deserialiseJsonString(json);
 
         // Assert
-        InSetOfValuesConstraintDTO expected = new InSetOfValuesConstraintDTO();
+        InSetConstraintDTO expected = new InSetConstraintDTO();
         expected.field = "type";
         expected.values = Arrays.asList("X_092", "0001-01-01T00:00:00.000Z");
 
@@ -124,7 +130,7 @@ public class AtomicConstraintDeserialiserTests {
         ConstraintDTO actual = deserialiseJsonString(json);
 
         // Assert
-        InMapConstraintDTO expected = new InMapConstraintDTO();
+        InMapFromFileConstraintDTO expected = new InMapFromFileConstraintDTO();
         expected.field = "country";
         expected.file = "countries.csv";
         expected.key = "Country";

@@ -6,20 +6,20 @@ import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.generator.fieldspecs.relations.InMapRelation;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
-import com.scottlogic.deg.profile.creation.dtos.constraints.InMapConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.*;
-import com.scottlogic.deg.profile.reader.FileReader;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.numeric.*;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.temporal.AfterConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.temporal.AfterOrAtConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.temporal.BeforeConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.temporal.BeforeOrAtConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.textual.ContainsRegexConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.textual.MatchesRegexConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.relations.InMapConstraintDTO;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class AtomicConstraintFactory {
-
-    private final FileReader fileReader;
-
-    protected AtomicConstraintFactory(FileReader fileReader) {
-        this.fileReader = fileReader;
-    }
 
     public AtomicConstraint createAtomicConstraint(AtomicConstraintDTO dto, Fields fields) {
         Field field = fields.getByName(dto.field);
@@ -66,10 +66,8 @@ public abstract class AtomicConstraintFactory {
     public InMapRelation createInMapRelation(InMapConstraintDTO dto, Fields fields)
     {
         Field main = fields.getByName(dto.field);
-        Field other = fields.getByName(dto.file);
-        List<Object> values = fileReader.listFromMapFile(dto.file, dto.key).stream()
-            .map(this::parseValue)
-            .collect(Collectors.toList());
+        Field other = fields.getByName(dto.otherField);
+        List<Object> values = dto.values.stream().map(this::parseValue).collect(Collectors.toList());
         return new InMapRelation(main, other, DistributedList.uniform(values));
     }
 
@@ -91,20 +89,11 @@ public abstract class AtomicConstraintFactory {
 
     private InSetConstraint createInSetConstraint(InSetConstraintDTO dto, Field field)
     {
-        if (dto instanceof InSetFromFileConstraintDTO)
-        {
-            return new InSetConstraint(field, fileReader.setFromFile(((InSetFromFileConstraintDTO) dto).file));
-        }
-        if (dto instanceof InSetOfValuesConstraintDTO)
-        {
-            DistributedList<Object> values = DistributedList.uniform(((InSetOfValuesConstraintDTO) dto).values.stream()
-                .distinct()
-                .map(this::parseValue)
-                .collect(Collectors.toList()));
-
-            return new InSetConstraint(field, values);
-        }
-        throw new IllegalStateException("Unexpected value: " + dto.getType());
+        DistributedList<Object> values = DistributedList.uniform(dto.values.stream()
+            .distinct()
+            .map(this::parseValue)
+            .collect(Collectors.toList()));
+        return new InSetConstraint(field, values);
     }
 
     private AtomicConstraint createIsNullConstraint(IsNullConstraintDTO dto, Fields fields)

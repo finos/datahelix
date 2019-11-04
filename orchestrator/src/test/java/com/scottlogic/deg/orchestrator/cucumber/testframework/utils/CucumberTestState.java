@@ -25,6 +25,15 @@ import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.creation.dtos.FieldDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.*;
 import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.*;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.EqualToConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.GranularToConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.numeric.*;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.temporal.AfterConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.temporal.AfterOrAtConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.temporal.BeforeConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.temporal.BeforeOrAtConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.textual.ContainsRegexConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.textual.MatchesRegexConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.grammatical.AllOfConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.grammatical.AnyOfConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.grammatical.ConditionalConstraintDTO;
@@ -144,9 +153,9 @@ public class CucumberTestState {
                     field = fieldName;
                     file = (String) _value;
                 }}
-                    : new InSetOfValuesConstraintDTO() {{
+                    : new InSetConstraintDTO() {{
                     field = fieldName;
-                    values = (Collection<Object>) _value;
+                    values = (List<Object>) _value;
                 }};
             case IS_NULL:
                 return new IsNullConstraintDTO() {{
@@ -290,7 +299,7 @@ public class CucumberTestState {
     }
 
     private ConstraintDTO createInMapConstraint(String fieldName, String key, String file) {
-        InMapConstraintDTO dto = new InMapConstraintDTO();
+        InMapFromFileConstraintDTO dto = new InMapFromFileConstraintDTO();
         dto.field = fieldName;
         dto.key = key;
         dto.file = file;

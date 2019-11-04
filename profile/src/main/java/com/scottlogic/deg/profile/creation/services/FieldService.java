@@ -15,7 +15,7 @@ import com.scottlogic.deg.profile.dtos.constraints.grammatical.ConditionalConstr
 import com.scottlogic.deg.profile.creation.dtos.FieldDTO;
 import com.scottlogic.deg.profile.creation.dtos.RuleDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.ConstraintDTO;
-import com.scottlogic.deg.profile.creation.dtos.constraints.InMapConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.relations.InMapConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.grammatical.AllOfConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.grammatical.AnyOfConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.grammatical.ConditionalConstraintDTO;
@@ -29,7 +29,7 @@ public class FieldService
     public Fields createFields(List<FieldDTO> fieldDTOs, List<RuleDTO> ruleDTOs)
     {
         List<Field> fields = fieldDTOs.stream().map(this::createRegularField).collect(Collectors.toList());
-        getInMapFiles(ruleDTOs).stream().map(this::createInMapField).forEach(fields::add);
+        getInMapFieldNames(ruleDTOs).stream().map(this::createInMapField).forEach(fields::add);
         return new Fields(fields);
     }
 
@@ -44,13 +44,13 @@ public class FieldService
         return new Field(inMapFile, SpecificFieldType.INTEGER, false, null, true, false);
     }
 
-    private List<String> getInMapFiles(List<RuleDTO> ruleDTOs)
+    private List<String> getInMapFieldNames(List<RuleDTO> ruleDTOs)
     {
         return ruleDTOs.stream()
             .flatMap(ruleDTO -> ruleDTO.constraints.stream())
             .flatMap(constraint -> getAllAtomicConstraints(Stream.of(constraint)))
             .filter(constraintDTO -> constraintDTO.getType() == ConstraintType.IN_MAP)
-            .map(constraintDTO -> ((InMapConstraintDTO) constraintDTO).file)
+            .map(constraintDTO -> ((InMapConstraintDTO) constraintDTO).otherField)
             .distinct()
             .collect(Collectors.toList());
     }

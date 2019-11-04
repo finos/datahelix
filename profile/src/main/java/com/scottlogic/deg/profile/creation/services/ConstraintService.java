@@ -10,16 +10,14 @@ import com.scottlogic.deg.generator.profile.constraints.grammatical.GrammaticalC
 import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.creation.dtos.constraints.ConstraintDTO;
-import com.scottlogic.deg.profile.creation.dtos.constraints.InMapConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.NotConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.AtomicConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.grammatical.AllOfConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.grammatical.AnyOfConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.grammatical.ConditionalConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.grammatical.GrammaticalConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.relations.InMapConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.relations.RelationalConstraintDTO;
-import com.scottlogic.deg.profile.reader.FileReader;
-import com.scottlogic.deg.profile.reader.NameRetriever;
 import com.scottlogic.deg.profile.creation.factories.constraint_factories.AtomicConstraintFactory;
 import com.scottlogic.deg.profile.creation.factories.constraint_factories.DateTimeConstraintFactory;
 import com.scottlogic.deg.profile.creation.factories.constraint_factories.NumericConstraintFactory;
@@ -28,6 +26,7 @@ import com.scottlogic.deg.profile.creation.factories.relation_factories.DateTime
 import com.scottlogic.deg.profile.creation.factories.relation_factories.FieldSpecRelationFactory;
 import com.scottlogic.deg.profile.creation.factories.relation_factories.NumericRelationFactory;
 import com.scottlogic.deg.profile.creation.factories.relation_factories.StringRelationFactory;
+import com.scottlogic.deg.profile.reader.NameRetriever;
 
 import java.math.BigDecimal;
 import java.time.temporal.ChronoUnit;
@@ -43,12 +42,12 @@ public class ConstraintService
     private final Map<FieldType, FieldSpecRelationFactory> relationFactoryMap;
 
     @Inject
-    public ConstraintService(FileReader fileReader)
+    public ConstraintService()
     {
         atomicConstraintFactoryMap = new EnumMap<>(FieldType.class);
-        atomicConstraintFactoryMap.put(FieldType.DATETIME, new DateTimeConstraintFactory(fileReader));
-        atomicConstraintFactoryMap.put(FieldType.NUMERIC, new NumericConstraintFactory(fileReader));
-        atomicConstraintFactoryMap.put(FieldType.STRING, new StringConstraintFactory(fileReader));
+        atomicConstraintFactoryMap.put(FieldType.DATETIME, new DateTimeConstraintFactory());
+        atomicConstraintFactoryMap.put(FieldType.NUMERIC, new NumericConstraintFactory());
+        atomicConstraintFactoryMap.put(FieldType.STRING, new StringConstraintFactory());
 
         relationFactoryMap = new EnumMap<>(FieldType.class);
         relationFactoryMap.put(FieldType.DATETIME, new DateTimeRelationFactory());

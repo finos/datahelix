@@ -8,12 +8,12 @@ import java.util.stream.Stream;
 
 public class ValidationResult
 {
-    public final boolean isValid;
+    public final boolean isSuccess;
     public final List<String> errors;
 
-    private ValidationResult(boolean isValid, List<String> errors)
+    private ValidationResult(boolean isSuccess, List<String> errors)
     {
-        this.isValid = isValid;
+        this.isSuccess = isSuccess;
         this.errors = errors;
     }
 
@@ -34,7 +34,7 @@ public class ValidationResult
     public static ValidationResult combine(List<ValidationResult> validationResults)
     {
         boolean isValid = validationResults.stream()
-            .allMatch(validationResult -> validationResult.isValid);
+            .allMatch(validationResult -> validationResult.isSuccess);
         List<String> errors = validationResults.stream()
             .flatMap(validationResult -> validationResult.errors.stream())
             .collect(Collectors.toList());
@@ -44,7 +44,7 @@ public class ValidationResult
     public static ValidationResult combine(ValidationResult... validationResults)
     {
         boolean isValid = Arrays.stream(validationResults)
-            .allMatch(validationResult -> validationResult.isValid);
+            .allMatch(validationResult -> validationResult.isSuccess);
         List<String> errors = Arrays.stream(validationResults)
             .flatMap(validationResult -> validationResult.errors.stream())
             .collect(Collectors.toList());
@@ -58,7 +58,7 @@ public class ValidationResult
         validationResults.forEach(validationResult ->
         {
             errors.addAll(validationResult.errors);
-            isValid.add(validationResult.isValid);
+            isValid.add(validationResult.isSuccess);
         });
         return new ValidationResult(isValid.stream().allMatch(o -> o), errors);
     }

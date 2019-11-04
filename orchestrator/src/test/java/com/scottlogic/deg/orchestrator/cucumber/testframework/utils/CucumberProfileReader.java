@@ -21,6 +21,7 @@ import com.scottlogic.deg.common.commands.CommandBus;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.profile.creation.dtos.ProfileDTO;
 import com.scottlogic.deg.profile.creation.dtos.RuleDTO;
+import com.scottlogic.deg.profile.creation.serialisation.ProfileDeserialiser;
 import com.scottlogic.deg.profile.reader.*;
 import com.scottlogic.deg.profile.creation.serialisation.ProfileSerialiser;
 
@@ -33,7 +34,7 @@ public class CucumberProfileReader extends JsonProfileReader {
 
     @Inject
     public CucumberProfileReader(CucumberTestState state, CommandBus commandBus) {
-        super(null, commandBus);
+        super(null, new ProfileDeserialiser(new FileReader("")), commandBus);
         this.state = state;
     }
 

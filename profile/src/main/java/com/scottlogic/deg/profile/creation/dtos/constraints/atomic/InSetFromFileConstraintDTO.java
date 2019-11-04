@@ -18,10 +18,16 @@ package com.scottlogic.deg.profile.creation.dtos.constraints.atomic;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.scottlogic.deg.profile.common.ConstraintType;
 import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
 
 @JsonDeserialize(as = InSetFromFileConstraintDTO.class)
-public class InSetFromFileConstraintDTO extends InSetConstraintDTO {
+public class InSetFromFileConstraintDTO extends AtomicConstraintDTO {
     @JsonProperty(ConstraintTypeJsonProperty.IN_SET)
     public String file;
+
+    public InSetFromFileConstraintDTO()
+    {
+        super(ConstraintType.IN_SET);
+    }
 }

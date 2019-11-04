@@ -18,15 +18,26 @@ package com.scottlogic.deg.profile.creation.serialisation;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.inject.Inject;
 import com.scottlogic.deg.profile.creation.dtos.ProfileDTO;
+import com.scottlogic.deg.profile.reader.FileReader;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
 
 public class ProfileDeserialiser
 {
+    public final FileReader fileReader;
+
+    @Inject
+    public ProfileDeserialiser(FileReader fileReader)
+    {
+        this.fileReader = fileReader;
+    }
+
     public ProfileDTO deserialise(String json)
     {
+        ConstraintDeserializer.fileReader = fileReader;
         ObjectMapper mapper = new ObjectMapper();
         mapper.disable(DeserializationFeature.WRAP_EXCEPTIONS);
         mapper.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);

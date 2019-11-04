@@ -17,21 +17,20 @@
 
 package com.scottlogic.deg.profile.creation.factories.constraint_factories;
 
-import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.DateTimeGranularity;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.HelixDateTime;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
-import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.*;
-import com.scottlogic.deg.profile.reader.FileReader;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.GranularToConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.numeric.*;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.temporal.AfterConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.temporal.AfterOrAtConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.temporal.BeforeConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.temporal.BeforeOrAtConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.textual.ContainsRegexConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.textual.MatchesRegexConstraintDTO;
 
 public class DateTimeConstraintFactory extends AtomicConstraintFactory {
-
-    @Inject
-    public DateTimeConstraintFactory(FileReader fileReader) {
-        super(fileReader);
-    }
-
     @Override
     Object parseValue(Object value)
     {

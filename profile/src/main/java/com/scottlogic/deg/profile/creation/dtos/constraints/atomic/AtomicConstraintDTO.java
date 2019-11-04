@@ -23,7 +23,8 @@ public abstract class AtomicConstraintDTO extends ConstraintDTO
 {
     public String field;
 
-    AtomicConstraintDTO(ConstraintType type) {
+    protected AtomicConstraintDTO(ConstraintType type) {
         super(type);
     }
+
 }
