@@ -27,17 +27,6 @@ public class ProfileValidator implements Validator<ProfileDTO>
         return ValidationResult.success();
     }
 
-    private ValidationResult fieldsMustBeValid(List<FieldDTO> fields)
-    {
-        ValidationResult fieldsMustBeSpecified = fieldsMustBeSpecified(fields);
-        if (!fieldsMustBeSpecified.isSuccess) return fieldsMustBeSpecified;
-
-        ValidationResult fieldsMustBeUnique  = fieldsMustBeUnique(fields);
-        if(!fieldsMustBeUnique.isSuccess) return fieldsMustBeUnique;
-
-        FieldValidator fieldValidator = new FieldValidator();
-        return ValidationResult.combine(fields.stream().map(fieldValidator::validate));
-    }
 
     private ValidationResult fieldsMustBeSpecified(List<FieldDTO> fields)
     {
@@ -65,13 +54,16 @@ public class ProfileValidator implements Validator<ProfileDTO>
             + String.join(", ", duplicateFieldNames));
     }
 
-    private ValidationResult rulesMustBeValid(List<RuleDTO> rules, List<FieldDTO> fields)
+    private ValidationResult fieldsMustBeValid(List<FieldDTO> fields)
     {
-        ValidationResult rulesMustBeSpecified = rulesMustBeSpecified(rules);
-        if (!rulesMustBeSpecified.isSuccess) return rulesMustBeSpecified;
+        ValidationResult fieldsMustBeSpecified = fieldsMustBeSpecified(fields);
+        if (!fieldsMustBeSpecified.isSuccess) return fieldsMustBeSpecified;
 
-        RuleValidator ruleValidator = new RuleValidator(fields);
-        return ValidationResult.combine(rules.stream().map(ruleValidator::validate));
+        ValidationResult fieldsMustBeUnique  = fieldsMustBeUnique(fields);
+        if(!fieldsMustBeUnique.isSuccess) return fieldsMustBeUnique;
+
+        FieldValidator fieldValidator = new FieldValidator();
+        return ValidationResult.combine(fields.stream().map(fieldValidator::validate));
     }
 
     private ValidationResult rulesMustBeSpecified(List<RuleDTO> rules)
@@ -79,5 +71,14 @@ public class ProfileValidator implements Validator<ProfileDTO>
         return rules != null
             ? ValidationResult.success()
             : ValidationResult.failure("Rules must be specified");
+    }
+
+    private ValidationResult rulesMustBeValid(List<RuleDTO> rules, List<FieldDTO> fields)
+    {
+        ValidationResult rulesMustBeSpecified = rulesMustBeSpecified(rules);
+        if (!rulesMustBeSpecified.isSuccess) return rulesMustBeSpecified;
+
+        RuleValidator ruleValidator = new RuleValidator(fields);
+        return ValidationResult.combine(rules.stream().map(ruleValidator::validate));
     }
 }
