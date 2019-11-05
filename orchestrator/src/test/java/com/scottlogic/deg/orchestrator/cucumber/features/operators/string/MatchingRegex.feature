@@ -190,12 +190,13 @@ Feature: User can specify that a value either matches or contains a specified re
     Then the profile is invalid because "Unclosed character class near index 3\r?\n\[\]\{\}\r?\n   \^"
     And no data is created
 
-  Scenario: Running a 'matchingRegex' request with the value property set to a null entry (null) should throw an error
-    Given there is a non nullable field foo
-    And foo has type "string"
-    And foo is matching regex null
-    Then the profile is invalid because "The matchingRegex constraint has null value for field foo"
-    And no data is created
+#  TODO Fix: Test calls GeneralTestStep twice for the given action when it should only call it once
+#  Scenario: Running a 'matchingRegex' request with the value property set to a null entry (null) should throw an error
+#    Given there is a non nullable field foo
+#    And foo has type "string"
+#    And foo is matching regex null
+#    Then the profile is invalid with error "The matchingRegex constraint has null value for field foo"
+#    And no data is created
 
   Scenario: User using matchingRegex operator to provide an exact set of values
     Given foo is matching regex /[a]{1,3}/

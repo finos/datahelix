@@ -15,8 +15,8 @@ public class NotConstraintValidator extends ConstraintValidator<NotConstraintDTO
     }
 
     @Override
-    public ValidationResult validate(NotConstraintDTO notConstraint)
+    public ValidationResult validate(NotConstraintDTO dto)
     {
-        return ConstraintValidator.validateConstraint(notConstraint.constraint, rule, fields);
+        return ConstraintValidator.validateConstraint(dto.constraint, rule, fields);
     }
 }

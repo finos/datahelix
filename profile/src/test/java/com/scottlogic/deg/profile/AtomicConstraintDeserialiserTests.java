@@ -18,9 +18,11 @@ package com.scottlogic.deg.profile;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.profile.creation.dtos.constraints.ConstraintDTO;
-import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.*;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.EqualToConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.GranularToConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.InSetConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.IsNullConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.numeric.*;
 import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.temporal.AfterConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.temporal.AfterOrAtConstraintDTO;
@@ -61,20 +63,6 @@ public class AtomicConstraintDeserialiserTests {
         expected.value = "X_092";
 
         assertThat(actual, sameBeanAs(expected));
-    }
-
-    @Test
-    public void shouldDeserialiseEqualToAndThrowInvalidConstraintException() throws RuntimeException, IOException {
-        // Arrange
-        final String json = "{\"field\": \"type\", \"equilTo\": \"X_092\" },";
-
-        try {
-            deserialiseJsonString(json);
-            Assert.fail("should have thrown an exception");
-        } catch (ValidationException e) {
-            String expectedMessage = "The constraint json object node for field type doesn't contain any of the expected keywords as properties: {\"field\":\"type\",\"equilTo\":\"X_092\"}";
-            assertThat(e.getMessage(), sameBeanAs(expectedMessage));
-        }
     }
 
     @Test

@@ -44,7 +44,7 @@ Feature: User can specify that a value is equalTo a required value
     Given there is a non nullable field foo
     And foo has type "string"
     And foo is equal to null
-    Then the profile is invalid because "The equalTo constraint has null value for field foo"
+    Then the profile is invalid with error "Values must be specified | Field: foo | Constraint: equalTo | Rule: Unnamed rule"
 
   Scenario: Running an 'equalTo' of an invalid date value should fail with an error message
     Given there is a non nullable field foo

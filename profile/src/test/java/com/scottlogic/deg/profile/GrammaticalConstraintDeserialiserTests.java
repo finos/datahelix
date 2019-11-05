@@ -17,15 +17,14 @@
 package com.scottlogic.deg.profile;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
-import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.profile.creation.dtos.constraints.ConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.InvalidConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.NotConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.EqualToConstraintDTO;
-import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.numeric.GreaterThanConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.IsNullConstraintDTO;
+import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.numeric.GreaterThanConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.numeric.LessThanConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.grammatical.AllOfConstraintDTO;
 import com.scottlogic.deg.profile.creation.dtos.constraints.grammatical.AnyOfConstraintDTO;
@@ -88,7 +87,7 @@ public class GrammaticalConstraintDeserialiserTests {
     }
 
     @Test
-    public void shouldDeserialiseAnyOfAndThrowInvalidConstraintException() throws IOException {
+    public void shouldDeserialiseAnyOfAndReturnInvalidConstraint() throws IOException {
         // Arrange
         final String json =
             "{ \"ayOf\": [" +
@@ -97,32 +96,8 @@ public class GrammaticalConstraintDeserialiserTests {
             "  ]" +
             "}";
 
-        try {
-            deserialiseJsonString(json);
-            Assert.fail("should have thrown an exception");
-        } catch (ValidationException e) {
-            String expectedMessage = "The constraint json object node doesn't contain any of the expected keywords as properties: {\"ayOf\":[{\"field\":\"foo\",\"equalTo\":\"0\"},{\"field\":\"foo\",\"isNull\":\"true\"}]}";
-            assertThat(e.getMessage(), sameBeanAs(expectedMessage));
-        }
-    }
-
-    @Test
-    public void shouldDeserialiseAnyOfAndThrowInvalidConstraintValueException() throws IOException {
-        // Arrange
-        final String json =
-            "{ \"anyOf\": [" +
-            "    { \"field\": \"foo\", \"equalTo\": \"0\" }," +
-            "    { \"field\": \"foo\", \"isNll\": \"true\" }" +
-            "  ]" +
-            "}";
-
-        try {
-            deserialiseJsonString(json);
-            Assert.fail("should have thrown an exception");
-        } catch (JsonMappingException e) {
-            String expectedMessage = "The constraint json object node for field foo doesn't contain any of the expected keywords as properties: {\"field\":\"foo\",\"isNll\":\"true\"} (through reference chain: com.scottlogic.deg.profile.creation.dtos.constraints.grammatical.AnyOfConstraintDTO[\"anyOf\"]->java.util.ArrayList[1])";
-            assertThat(e.getMessage(), sameBeanAs(expectedMessage));
-        }
+        ConstraintDTO constraintDTO = deserialiseJsonString(json);
+        Assert.assertTrue(constraintDTO instanceof InvalidConstraintDTO);
     }
 
     @Test

@@ -692,7 +692,7 @@ public class JsonProfileReaderTests {
                 "    ]" +
                 "}");
 
-        expectValidationException("The equalTo constraint has null value for field foo");
+        expectValidationException("Values must be specified | Field: foo | Constraint: equalTo | Rule: Unnamed rule");
     }
 
     @Test
@@ -710,7 +710,7 @@ public class JsonProfileReaderTests {
                 "    ]" +
                 "}");
 
-        expectValidationException("The lessThan constraint has null value for field foo");
+        expectValidationException("Number must be specified | Field: foo | Constraint: lessThan | Rule: Unnamed rule");
     }
 
     @Test
@@ -746,7 +746,7 @@ public class JsonProfileReaderTests {
                 "    ]" +
                 "}");
 
-        expectValidationException("The inSet constraint has null value for field foo");
+        expectValidationException("In set values must be specified | Field: foo | Constraint: inSet | Rule: Unnamed rule");
     }
 
     @Test
@@ -764,7 +764,7 @@ public class JsonProfileReaderTests {
                 "    ]" +
                 "}");
 
-        expectValidationException("The constraint json object node for field foo doesn't contain any of the expected keywords as properties: {\"field\":\"foo\",\"is\":null}");
+        expectValidationException("Invalid json: {\"field\":\"foo\",\"is\":null} | Rule: Unnamed rule");
     }
 
     @Test
