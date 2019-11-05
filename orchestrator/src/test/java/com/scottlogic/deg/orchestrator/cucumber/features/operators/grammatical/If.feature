@@ -32,6 +32,7 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
     And foo is anything but null
+    And bar is anything but null
     And foo has type "string"
     And bar has type "decimal"
     When If Then and Else are described below
@@ -53,6 +54,7 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is in set:
       | "a" |
       | "b" |
+    And bar is anything but null
     And foo has type "decimal"
     And bar has type "string"
     When If Then and Else are described below
@@ -78,6 +80,7 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is in set:
       | "a" |
       | "b" |
+    And bar is anything but null
     And foo has type "decimal"
     And bar has type "string"
     When If Then and Else are described below
@@ -103,6 +106,7 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is in set:
       | "a" |
       | "b" |
+    And bar is anything but null
     And foo has type "decimal"
     And bar has type "string"
     When If Then and Else are described below
@@ -127,6 +131,7 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
       | "c" |
+    And bar is anything but null
     And foo has type "decimal"
     And bar has type "string"
     When If Then and Else are described below
@@ -154,6 +159,7 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
       | "c" |
+    And bar is anything but null
     And foo has type "decimal"
     And bar has type "string"
     When If Then and Else are described below
@@ -178,6 +184,7 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
       | "c" |
+    And bar is anything but null
     And foo has type "decimal"
     And bar has type "string"
     When If Then and Else are described below
@@ -196,10 +203,12 @@ Feature: Values can be specified by using if, then and else constraints
       | 2 |
       | 3 |
       | 4 |
+    And foo is anything but null
     And bar is in set:
       | "a" |
       | "b" |
       | "c" |
+    And bar is anything but null
     And foo has type "decimal"
     And bar has type "string"
     When If Then and Else are described below
@@ -221,6 +230,7 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
       | "c" |
+    And bar is anything but null
     And foo has type "decimal"
     And bar has type "string"
     When If Then and Else are described below
@@ -247,6 +257,7 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
       | "c" |
+    And bar is anything but null
     And foo has type "decimal"
     And bar has type "string"
     And bar is anything but null
@@ -275,6 +286,7 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
       | "c" |
+    And bar is anything but null
     And foo has type "decimal"
     And bar has type "string"
     And bar is anything but null
@@ -305,6 +317,7 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
       | "c" |
+    And bar is anything but null
     And foo has type "decimal"
     And bar has type "string"
     When If Then and Else are described below
@@ -429,6 +442,7 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
       | "c" |
+    And bar is anything but null
     And foo has type "decimal"
     And bar has type "string"
     When If Then and Else are described below
@@ -500,6 +514,7 @@ Feature: Values can be specified by using if, then and else constraints
       | "20" |
       | "AA" |
       | "BB" |
+    And bar is anything but null
     And foo has type "string"
     And bar has type "string"
     When If Then and Else are described below
@@ -583,6 +598,7 @@ Feature: Values can be specified by using if, then and else constraints
       | "20" |
       | "AA" |
       | "BB" |
+    And bar is anything but null
     When If Then and Else are described below
     And foo is matching regex /[0-9]{2}/
     And bar is equal to "AA"
@@ -654,6 +670,7 @@ Feature: Values can be specified by using if, then and else constraints
       | "20" |
       | "AA" |
       | "BB" |
+    And bar is anything but null
     And foo has type "string"
     And bar has type "string"
     When If Then and Else are described below
@@ -735,6 +752,7 @@ Feature: Values can be specified by using if, then and else constraints
       | "20" |
       | "AA" |
       | "BB" |
+    And bar is anything but null
     And foo has type "string"
     And bar has type "string"
     When If Then and Else are described below
@@ -783,6 +801,7 @@ Feature: Values can be specified by using if, then and else constraints
       | "22"   |
       | "333"  |
       | "4444" |
+    And bar is anything but null
     And foo has type "string"
     And bar has type "string"
     When If Then and Else are described below
@@ -860,6 +879,7 @@ Feature: Values can be specified by using if, then and else constraints
       | "22"   |
       | "333"  |
       | "4444" |
+    And bar is anything but null
     And foo has type "string"
     And bar has type "string"
     When If Then and Else are described below
@@ -933,6 +953,7 @@ Feature: Values can be specified by using if, then and else constraints
       | "22"   |
       | "333"  |
       | "4444" |
+    And bar is anything but null
     And foo has type "string"
     And bar has type "string"
     When If Then and Else are described below
@@ -1014,6 +1035,7 @@ Feature: Values can be specified by using if, then and else constraints
       | "22"   |
       | "333"  |
       | "4444" |
+    And bar is anything but null
     And foo has type "string"
     And bar has type "string"
     When If Then and Else are described below
@@ -1146,6 +1168,7 @@ Feature: Values can be specified by using if, then and else constraints
       | 22   |
       | 333  |
       | 4444 |
+    And bar is anything but null
     And foo has type "decimal"
     And bar has type "decimal"
     When If Then and Else are described below
@@ -1276,6 +1299,7 @@ Feature: Values can be specified by using if, then and else constraints
       | 22   |
       | 333  |
       | 4444 |
+    And bar is anything but null
     And foo has type "decimal"
     And bar has type "decimal"
     When If Then and Else are described below
@@ -1409,6 +1433,7 @@ Feature: Values can be specified by using if, then and else constraints
       | 22   |
       | 333  |
       | 4444 |
+    And bar is anything but null
     And foo has type "decimal"
     And bar has type "decimal"
     When If Then and Else are described below
@@ -1541,6 +1566,7 @@ Feature: Values can be specified by using if, then and else constraints
       | 22   |
       | 333  |
       | 4444 |
+    And bar is anything but null
     When If Then and Else are described below
     And foo is less than or equal to 20
     And bar is equal to 1
@@ -1749,6 +1775,7 @@ Feature: Values can be specified by using if, then and else constraints
       | 2010-01-03T00:00:00.000Z |
       | 2010-01-04T00:00:00.000Z |
       | 2010-01-05T00:00:00.000Z |
+    And bar is anything but null
     And foo has type "datetime"
     And bar has type "datetime"
     When If Then and Else are described below
@@ -1897,6 +1924,7 @@ Feature: Values can be specified by using if, then and else constraints
       | 2010-01-03T00:00:00.000Z |
       | 2010-01-04T00:00:00.000Z |
       | 2010-01-05T00:00:00.000Z |
+    And bar is anything but null
     And foo has type "datetime"
     And bar has type "datetime"
     When If Then and Else are described below
@@ -2206,6 +2234,7 @@ Feature: Values can be specified by using if, then and else constraints
       | 2010-01-03T00:00:00.000Z |
       | 2010-01-04T00:00:00.000Z |
       | 2010-01-05T00:00:00.000Z |
+    And bar is anything but null
     And foo has type "datetime"
     And bar has type "datetime"
     When If Then and Else are described below
@@ -2466,6 +2495,7 @@ Feature: Values can be specified by using if, then and else constraints
       | 30 |
       | 40 |
       | 50 |
+    And bar is anything but null
     And foo has type "string"
     And bar has type "decimal"
     When If Then and Else are described below
@@ -2496,6 +2526,7 @@ Feature: Values can be specified by using if, then and else constraints
       | 30 |
       | 40 |
       | 50 |
+    And bar is anything but null
     And foo has type "string"
     And bar has type "decimal"
     When If Then and Else are described below
@@ -2530,6 +2561,7 @@ Feature: Values can be specified by using if, then and else constraints
       | 30 |
       | 40 |
       | 50 |
+    And bar is anything but null
     And foo has type "string"
     And bar has type "decimal"
     When If Then and Else are described below
@@ -2552,12 +2584,14 @@ Feature: Values can be specified by using if, then and else constraints
       | "c" |
       | "d" |
       | "e" |
+    And foo is anything but null
     And bar is in set:
       | 10 |
       | 20 |
       | 30 |
       | 40 |
       | 50 |
+    And bar is anything but null
     And foo has type "string"
     And bar has type "decimal"
     When If Then and Else are described below
@@ -2584,6 +2618,7 @@ Feature: Values can be specified by using if, then and else constraints
       | 333   |
       | 4444  |
       | 55555 |
+    And bar is anything but null
     And foo has type "string"
     And bar has type "decimal"
     When If Then and Else are described below

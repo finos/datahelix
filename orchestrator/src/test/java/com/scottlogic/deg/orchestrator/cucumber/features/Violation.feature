@@ -13,8 +13,9 @@ Feature: The violations mode of the Data Helix app can be run in violations mode
     And we do not violate any granular to constraints
     And the generation strategy is full
     Then the following data should be generated:
-      | foo |
-      | 8   |
+      | foo  |
+      | 8    |
+      | null |
 
   Scenario: Running the generator in violate mode where equal to is not violated is successful
     Given foo is equal to 8

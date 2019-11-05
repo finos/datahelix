@@ -133,12 +133,12 @@ Feature: User can specify that a value is equalTo a required value
       | 15  |
 
   Scenario: 'EqualTo' a value and must be null should permit a or null
-    Given there is a field foo
+    Given there is a nullable field foo
     And foo has type "string"
     And foo is equal to "a"
-    And foo is null
     Then the following data should be generated:
-      | a    |
+      | foo  |
+      | "a"  |
       | null |
 
 ### ofType ###
