@@ -171,7 +171,8 @@ public class FieldSpecGroupValueGenerator {
             .orElseThrow(() ->
                 new IllegalStateException("Failed to merge field specs in related fields"));
 
-        Map<Field, FieldSpec> updatedFieldSpecsNoGranularities = Map.of(field, updatedFieldSpec);
+        Map<Field, FieldSpec> updatedFieldSpecsNoGranularities = new HashMap<>();
+        updatedFieldSpecsNoGranularities.put(field, updatedFieldSpec);
 
         Map<Field, FieldSpec> updatedFieldSpecs = applyGranularitiesToFieldSpecs(fieldUpdates, updatedFieldSpecsNoGranularities);
 
