@@ -8,12 +8,14 @@ Feature: The violations mode of the Data Helix app can be run in violations mode
   Scenario: Running the generator in violate mode for not equal to is successful (decimal)
     Given foo is anything but equal to 8
     And foo has type "decimal"
+    And foo is anything but null
     And foo is granular to 1
     And we do not violate any granular to constraints
     And the generation strategy is full
     Then the following data should be generated:
-      | foo |
-      | 8   |
+      | foo  |
+      | 8    |
+      | null |
 
   Scenario: Running the generator in violate mode where equal to is not violated is successful
     Given foo is equal to 8
@@ -21,12 +23,14 @@ Feature: The violations mode of the Data Helix app can be run in violations mode
     And the generation strategy is full
     And we do not violate any equal to constraints
     Then the following data should be generated:
-      | foo |
-      | 8   |
+      | foo  |
+      | 8    |
+      | null |
 
   Scenario: Running the generator in violate mode for multiple constraints with strings is successful
     Given the generation strategy is interesting
     And foo has type "string"
+    And foo is anything but null
     And foo is anything but equal to "hello"
     And the generator can generate at most 10 rows
     Then the following data should be included in what is generated:

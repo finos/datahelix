@@ -29,8 +29,7 @@ public class EqualToConstraint implements AtomicConstraint {
 
     @Override
     public FieldSpec toFieldSpec() {
-        return FieldSpecFactory.fromList(DistributedList.singleton(value))
-            .withNotNull();
+        return FieldSpecFactory.fromList(DistributedList.singleton(value));
     }
 
     @Override
