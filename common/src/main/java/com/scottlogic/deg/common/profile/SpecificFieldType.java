@@ -19,6 +19,7 @@ package com.scottlogic.deg.common.profile;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import static com.scottlogic.deg.common.util.Defaults.DEFAULT_DATE_FORMATTING;
+import static com.scottlogic.deg.common.util.Defaults.DEFAULT_TIME_FORMATTING;
 
 public enum SpecificFieldType
 {
@@ -81,6 +82,7 @@ public enum SpecificFieldType
     public String getDefaultFormatting() {
         switch (type) {
             case "date": return DEFAULT_DATE_FORMATTING;
+            case "time": return DEFAULT_TIME_FORMATTING;
             default:
                 return null;
         }
