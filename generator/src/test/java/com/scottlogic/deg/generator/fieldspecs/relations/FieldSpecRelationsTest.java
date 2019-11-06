@@ -3,17 +3,13 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 import com.scottlogic.deg.common.profile.DateTimeGranularity;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.SpecificFieldType;
-import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.common.util.defaults.DateTimeDefaults;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.RestrictionsFieldSpec;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
-import org.junit.Ignore;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import javax.sound.sampled.Line;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 

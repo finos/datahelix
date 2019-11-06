@@ -28,8 +28,8 @@ public class LinearRestrictionsMerger<T extends Comparable<T>> implements Restri
         LinearRestrictions<T> rightCast = (LinearRestrictions<T>) right;
 
         /*
-         * If the restrictions are both for the same field then use the finest granularity.
-         * This is required to find the true minimum or maximum of the field.
+         * If the restrictions are related, e.g. because field1 is before field2, then use the finest granularity possible
+         * This is required to find the true minimum or maximum allowed in the restrictions.
          * Coarser granularities can be applied to the FieldSpec using the merged restriction if required.
          */
         Granularity<T> granularity = restrictionsAreRelated
