@@ -40,7 +40,7 @@ public class TimeConstraintFactory extends AtomicConstraintFactory {
 
     @Override
     Object parseValue(Object value) {
-        return null;
+        return HelixTime.create((String) value).getValue();
     }
 
     @Override
