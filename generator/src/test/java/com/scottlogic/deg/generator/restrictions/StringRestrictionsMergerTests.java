@@ -36,7 +36,7 @@ class StringRestrictionsMergerTests {
         StringRestrictionsMerger merger = new StringRestrictionsMerger();
         when(left.intersect(right)).thenReturn(Optional.of(merged));
 
-        Optional<StringRestrictions> result = merger.merge(left, right);
+        Optional<StringRestrictions> result = merger.merge(left, right, false);
 
         Assert.assertThat(result.isPresent(), is(true));
         Assert.assertThat(result.get(), is(sameInstance(merged)));
@@ -50,7 +50,7 @@ class StringRestrictionsMergerTests {
         StringRestrictionsMerger merger = new StringRestrictionsMerger();
         when(left.intersect(right)).thenReturn(merged);
 
-        Optional<StringRestrictions> result = merger.merge(left, right);
+        Optional<StringRestrictions> result = merger.merge(left, right, false);
 
         Assert.assertThat(result, is(sameInstance(merged)));
     }

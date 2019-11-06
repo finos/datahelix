@@ -3,12 +3,17 @@ package com.scottlogic.deg.generator.fieldspecs.relations;
 import com.scottlogic.deg.common.profile.DateTimeGranularity;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.SpecificFieldType;
+import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.common.util.defaults.DateTimeDefaults;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
+import com.scottlogic.deg.generator.fieldspecs.RestrictionsFieldSpec;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
+import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import javax.sound.sampled.Line;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
@@ -19,6 +24,7 @@ import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static java.time.temporal.ChronoUnit.MILLIS;
 import static java.time.temporal.ChronoUnit.YEARS;
+import static org.junit.Assert.assertEquals;
 
 class FieldSpecRelationsTest {
     private Field main = createField("main", SpecificFieldType.DATETIME);
@@ -69,14 +75,22 @@ class FieldSpecRelationsTest {
     }
 
     @Test
-    public void after_range_returnsFromMin(){
-        FieldSpec fieldSpec = forYears(2018, 2021);
+    public void after_range_returnsFromMin() {
+        int minYear = 2018;
+        FieldSpec fieldSpec = forYears(minYear, minYear + 4);
         AfterRelation relation = new AfterRelation(main, other, false, DateTimeDefaults.get());
 
-        FieldSpec actual = relation.createModifierFromOtherFieldSpec(fieldSpec);
-        FieldSpec expected = fromMin(2019);
+        RestrictionsFieldSpec actualFieldSpec = (RestrictionsFieldSpec) relation.createModifierFromOtherFieldSpec(fieldSpec);
+        LinearRestrictions actualRestrictions = (LinearRestrictions) actualFieldSpec.getRestrictions();
+        OffsetDateTime actualMin = (OffsetDateTime) actualRestrictions.getMin();
+        OffsetDateTime actualMax = (OffsetDateTime) actualRestrictions.getMax();
 
-        assertThat(actual, sameBeanAs(expected));
+        OffsetDateTime expectedMin = OffsetDateTime.of(minYear, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC)
+            .plusNanos(1000000);  // Current smallest granularity is milliseconds.
+        OffsetDateTime expectedMax =DateTimeDefaults.get().max();
+
+        assertEquals(actualMin.compareTo(expectedMin), 0);
+        assertEquals(actualMax.compareTo(expectedMax), 0);
     }
 
     @Test
@@ -103,13 +117,21 @@ class FieldSpecRelationsTest {
 
     @Test
     public void before_range_returnsFromMin(){
-        FieldSpec fieldSpec = forYears(2017, 2020);
+        int maxYear = 2020;
+        FieldSpec fieldSpec = forYears(maxYear-3, maxYear);
         BeforeRelation relation = new BeforeRelation(main, other, false, DateTimeDefaults.get());
 
-        FieldSpec actual = relation.createModifierFromOtherFieldSpec(fieldSpec);
-        FieldSpec expected = fromMax(2019);
+        RestrictionsFieldSpec actualFieldSpec = (RestrictionsFieldSpec) relation.createModifierFromOtherFieldSpec(fieldSpec);
+        LinearRestrictions actualRestrictions = (LinearRestrictions) actualFieldSpec.getRestrictions();
+        OffsetDateTime actualMin = (OffsetDateTime) actualRestrictions.getMin();
+        OffsetDateTime actualMax = (OffsetDateTime) actualRestrictions.getMax();
 
-        assertThat(actual, sameBeanAs(expected));
+        OffsetDateTime expectedMin = DateTimeDefaults.get().min();
+        OffsetDateTime expectedMax = OffsetDateTime.of(maxYear, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC)
+            .minusNanos(1000000);  // Current smallest granularity is milliseconds.
+
+        assertEquals(actualMin.compareTo(expectedMin), 0);
+        assertEquals(actualMax.compareTo(expectedMax), 0);
     }
 
     private FieldSpec fromMin(int year) {

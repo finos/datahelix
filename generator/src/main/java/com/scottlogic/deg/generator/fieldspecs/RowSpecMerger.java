@@ -39,7 +39,7 @@ public class RowSpecMerger {
         Map<Field, FieldSpec> newMap = new HashMap<>();
 
         for (Field field : left.getFields()) {
-            Optional<FieldSpec> merge = fieldSpecMerger.merge(left.getSpecForField(field), right.getSpecForField(field));
+            Optional<FieldSpec> merge = fieldSpecMerger.merge(left.getSpecForField(field), right.getSpecForField(field), false);
 
             if (!merge.isPresent()){
                 return Optional.empty();

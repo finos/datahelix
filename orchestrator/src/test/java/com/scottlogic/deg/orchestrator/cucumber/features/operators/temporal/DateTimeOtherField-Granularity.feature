@@ -31,12 +31,12 @@ Feature: running datetimes related to otherfield datetimes with granularities
         | foo                | bar                      |
         | 2000-01-01T00:01:00.000Z | 2000-01-02T00:00:00.000Z |
 
-    Scenario: Foo granular to days and bar granular to minutes then foo rounds up to midnight the next day and bar is midnight the day after
+    Scenario: Foo granular to days and bar granular to minutes then foo rounds up to midnight the next day and bar is one minute after
       Given foo is granular to "days"
       And bar is granular to "minutes"
       Then the following data should be generated:
         | foo                | bar                      |
-        | 2000-01-02T00:00:00.000Z | 2000-01-03T00:00:00.000Z |
+        | 2000-01-02T00:00:00.000Z | 2000-01-02T00:01:00.000Z |
 
     Scenario: Foo and bar both granular to days then foo rounds up to midnight the next day and bar is midnight the day after
       Given foo is granular to "days"

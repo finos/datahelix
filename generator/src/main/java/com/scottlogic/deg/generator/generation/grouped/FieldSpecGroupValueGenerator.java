@@ -80,17 +80,19 @@ public class FieldSpecGroupValueGenerator {
     private FieldSpec updateFirstSpecFromRelations(Field first, FieldSpecGroup group) {
         FieldSpec firstFieldSpec = group.fieldSpecs().get(first);
 
-        return group.relations().stream()
+        FieldSpec updatedFieldSpec = group.relations().stream()
             .filter(relation -> isRelatedToField(first, relation))
             .map(relation -> createModifierForField(first, relation, group))
             .map(Optional::of)
             .reduce(Optional.of(firstFieldSpec), this::mergeOptionalFieldspecs)
             .orElseThrow(() -> new IllegalStateException("Failed to merge field specs in related fields"));
+
+        return applyGranularityToFieldSpec(firstFieldSpec, updatedFieldSpec);
     }
 
     private Optional<FieldSpec> mergeOptionalFieldspecs(Optional<FieldSpec> left, Optional<FieldSpec> right) {
         return left.flatMap(
-            (leftFieldSpec) -> fieldSpecMerger.merge(leftFieldSpec, right.get()));
+            (leftFieldSpec) -> fieldSpecMerger.merge(leftFieldSpec, right.get(), true));
     }
 
     private boolean isRelatedToField(Field field, FieldSpecRelations relation) {
@@ -131,25 +133,49 @@ public class FieldSpecGroupValueGenerator {
             .collect(Collectors.toMap(
                 FieldSpecRelations::main,
                 relation -> relation.createModifierFromOtherValue(generatedValue),
-                (l, r) -> fieldSpecMerger.merge(l, r)
+                (l, r) -> fieldSpecMerger.merge(l, r, true)
                     .orElseThrow(() -> new IllegalStateException("Failed to merge field specs in related fields"))));
 
-        Map<Field, FieldSpec> newFieldSpecs = group.fieldSpecs().entrySet().stream()
+        Map<Field, FieldSpec> newFieldSpecsDefaultGranularities = group.fieldSpecs().entrySet().stream()
             .collect(Collectors.toMap(
                 Map.Entry::getKey,
                 e -> updateSpec(e.getKey(), e.getValue(), fieldUpdates)));
 
+        Map<Field, FieldSpec> newFieldSpecs = applyGranularitiesToFieldSpecs(group.fieldSpecs(), newFieldSpecsDefaultGranularities);
+
         return new FieldSpecGroup(newFieldSpecs, nonUpdatedRelations);
     }
 
-    private FieldSpec updateSpec(Field key, FieldSpec previous, Map<Field, FieldSpec> fieldUpdates){
-        if (!fieldUpdates.containsKey(key)){
+    private Map<Field, FieldSpec> applyGranularitiesToFieldSpecs(Map<Field, FieldSpec> original, Map<Field, FieldSpec> withoutGranularities) {
+        return withoutGranularities.entrySet()
+            .stream()
+            .map(entry -> new AbstractMap.SimpleEntry<>(entry.getKey(), applyGranularityToFieldSpec(
+                withoutGranularities.get(entry.getKey()),
+                original.get(entry.getKey()))))
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    private FieldSpec applyGranularityToFieldSpec(FieldSpec original, FieldSpec withoutGranularity) {
+        return fieldSpecMerger.merge(
+            withoutGranularity,
+            original,
+            false).get();
+    }
+
+    private FieldSpec updateSpec(Field field, FieldSpec previous, Map<Field, FieldSpec> fieldUpdates){
+        if (!fieldUpdates.containsKey(field)){
             return previous;
         }
 
-        return fieldSpecMerger.merge(previous, fieldUpdates.get(key))
+        FieldSpec updatedFieldSpec = fieldSpecMerger.merge(fieldUpdates.get(field), previous, true)
             .orElseThrow(() ->
                 new IllegalStateException("Failed to merge field specs in related fields"));
+
+        Map<Field, FieldSpec> updatedFieldSpecsNoGranularities = Map.of(field, updatedFieldSpec);
+
+        Map<Field, FieldSpec> updatedFieldSpecs = applyGranularitiesToFieldSpecs(fieldUpdates, updatedFieldSpecsNoGranularities);
+
+        return updatedFieldSpecs.get(field);
     }
 
     private Stream<DataBag> applyCombinationStrategy(Stream<DataBag> dataBagStream) {

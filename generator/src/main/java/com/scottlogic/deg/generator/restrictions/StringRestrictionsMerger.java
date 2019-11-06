@@ -25,7 +25,10 @@ import java.util.Optional;
 public class StringRestrictionsMerger implements RestrictionsMerger<StringRestrictions> {
 
     @Override
-    public Optional<StringRestrictions> merge(StringRestrictions left, StringRestrictions right) {
+    public Optional<StringRestrictions> merge(StringRestrictions left, StringRestrictions right, boolean restrictionsAreRelated) {
+        if (restrictionsAreRelated) {
+            throw new UnsupportedOperationException("Relational strings are unsupported");
+        }
 
         return left.intersect(right);
     }

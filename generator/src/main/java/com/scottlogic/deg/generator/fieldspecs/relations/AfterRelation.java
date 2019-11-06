@@ -47,7 +47,7 @@ public class AfterRelation<T extends Comparable<T>> implements FieldSpecRelation
         }
 
         LinearRestrictions<T> lr = (LinearRestrictions)((RestrictionsFieldSpec) otherFieldSpec).getRestrictions();
-        return createFieldSpec(lr.getMin(), lr.getGranularity());
+        return createFieldSpec(lr.getMin(), defaults.granularity());
     }
 
     @Override

@@ -92,6 +92,6 @@ public class ConstraintReducer {
                 Optional.of(FieldSpecFactory.fromType(field.getType())),
                 (optSpec1, optSpec2) -> optSpec1.flatMap(
                     spec1 -> optSpec2.flatMap(
-                        spec2 -> fieldSpecMerger.merge(spec1, spec2))));
+                        spec2 -> fieldSpecMerger.merge(spec1, spec2, false))));
     }
 }

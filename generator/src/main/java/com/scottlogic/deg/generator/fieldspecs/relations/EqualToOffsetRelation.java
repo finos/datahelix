@@ -55,7 +55,7 @@ public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpec
         T max = otherRestrictions.getMax();
         T offsetMax = offsetGranularity.getNext(max, offset);
 
-        return FieldSpecFactory.fromRestriction(new LinearRestrictions(offsetMin, offsetMax, otherRestrictions.getGranularity()));
+        return FieldSpecFactory.fromRestriction(new LinearRestrictions(offsetMin, offsetMax, offsetGranularity));
     }
 
     @Override

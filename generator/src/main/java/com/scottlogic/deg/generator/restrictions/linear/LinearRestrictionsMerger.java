@@ -23,18 +23,23 @@ import com.scottlogic.deg.generator.restrictions.TypedRestrictions;
 import java.util.Optional;
 
 public class LinearRestrictionsMerger<T extends Comparable<T>> implements RestrictionsMerger {
-
-    @Override
-    public Optional<LinearRestrictions> merge(TypedRestrictions left, TypedRestrictions right){
+    public Optional<LinearRestrictions> merge(TypedRestrictions left, TypedRestrictions right, boolean restrictionsAreRelated) {
         LinearRestrictions<T> leftCast = (LinearRestrictions<T>) left;
         LinearRestrictions<T> rightCast = (LinearRestrictions<T>) right;
 
-        Granularity<T> mergedGranularity = leftCast.getGranularity().merge(rightCast.getGranularity());
+        /*
+         * If the restrictions are both for the same field then use the finest granularity.
+         * This is required to find the true minimum or maximum of the field.
+         * Coarser granularities can be applied to the FieldSpec using the merged restriction if required.
+         */
+        Granularity<T> granularity = restrictionsAreRelated
+            ? leftCast.getGranularity().getFinestGranularity()
+            : leftCast.getGranularity().merge(rightCast.getGranularity());
 
-        T mergedMin = getHighest(leftCast.getMin(), rightCast.getMin(), mergedGranularity);
-        T mergedMax = getLowest(leftCast.getMax(), rightCast.getMax(), mergedGranularity);
+        T mergedMin = getHighest(leftCast.getMin(), rightCast.getMin(), granularity);
+        T mergedMax = getLowest(leftCast.getMax(), rightCast.getMax(), granularity);
 
-        LinearRestrictions<T> mergedRestriction = new LinearRestrictions<>(mergedMin, mergedMax, mergedGranularity);
+        LinearRestrictions<T> mergedRestriction = new LinearRestrictions<>(mergedMin, mergedMax, granularity);
 
         if (isContradictory(mergedRestriction)) {
             return Optional.empty();
@@ -62,19 +67,17 @@ public class LinearRestrictionsMerger<T extends Comparable<T>> implements Restri
     }
 
     private T roundUpToNextValidValue(T limit, Granularity<T> granularity) {
-        if (granularity.isCorrectScale(limit)){
+        if (granularity.isCorrectScale(limit)) {
             return limit;
-        }
-        else {
+        } else {
             return granularity.getNext(granularity.trimToGranularity(limit));
         }
     }
 
     private T roundDownToNextValidValue(T limit, Granularity<T> granularity) {
-        if (granularity.isCorrectScale(limit)){
+        if (granularity.isCorrectScale(limit)) {
             return limit;
-        }
-        else {
+        } else {
             return granularity.trimToGranularity(limit);
         }
     }

@@ -19,6 +19,7 @@ package com.scottlogic.deg.common.profile;
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.util.NumberUtils;
 
+import com.scottlogic.deg.common.util.defaults.NumericDefaults;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
 import java.math.BigDecimal;
@@ -49,6 +50,11 @@ public class NumericGranularity implements Granularity<BigDecimal> {
             throw new ValidationException("Numeric granularity must be fractional power of ten");
         }
         return new NumericGranularity(asNumber.scale());
+    }
+
+    @Override
+    public Granularity<BigDecimal> getFinestGranularity() {
+        return NumericDefaults.get().granularity();
     }
 
     @Override
