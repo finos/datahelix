@@ -458,7 +458,7 @@ Consider a field which permits the integers 1-3 inclusive which is nullable. Thi
 
 ## Null Precedence in Constraints
 
-All constraints are considered to only operate on the set of typed values, not the null portion. This is due to the orthoganal nature of nulls in the system.
+All constraints are considered to only operate on the set of typed values, not the null portion. This is due to the orthogonal nature of nulls in the system.
 
 One way to interpret this is to consider the union of null and typed values separately at all times, where constraints only operate on the respective fields' typed values. If a given field is decided to be `null`, then it is left with no possible typed values - which we call the empty set (`{ }`).
 
