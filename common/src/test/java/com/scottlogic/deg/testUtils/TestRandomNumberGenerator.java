@@ -39,8 +39,9 @@ public class TestRandomNumberGenerator implements RandomNumberGenerator {
     }
 
     @Override
-    public int nextInt(int lowerInclusive, int upperExclusive) {
-        return 0;
+    public long nextLong(long lowerInclusive, long upperExclusive) {
+        long multiplier = (long) (nextDoubleValue * (double) (upperExclusive - lowerInclusive));
+        return multiplier + lowerInclusive;
     }
 
     @Override
@@ -50,6 +51,6 @@ public class TestRandomNumberGenerator implements RandomNumberGenerator {
 
     @Override
     public BigDecimal nextBigDecimal(BigDecimal lowerInclusive, BigDecimal upperExclusive) {
-        return new BigDecimal(nextDouble(lowerInclusive.doubleValue(), upperExclusive.doubleValue()));
+        return BigDecimal.valueOf(nextDouble(lowerInclusive.doubleValue(), upperExclusive.doubleValue()));
     }
 }

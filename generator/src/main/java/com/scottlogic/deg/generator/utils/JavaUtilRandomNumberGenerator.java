@@ -41,30 +41,15 @@ public class JavaUtilRandomNumberGenerator implements RandomNumberGenerator {
     }
 
     @Override
-    public int nextInt(int lowerInclusive, int upperExclusive) {
-        // implementation copied from Random::internalNextInt
-        if (lowerInclusive < upperExclusive) {
-            int n = upperExclusive - lowerInclusive;
-            if (n > 0) {
-                return nextInt(n) + lowerInclusive;
-            }
-            else {  // range not representable as int
-                int r;
-                do {
-                    r = nextInt();
-                } while (r < lowerInclusive || r >= upperExclusive);
-                return r;
-            }
-        }
-        else {
-            return nextInt();
-        }
+    public long nextLong(long lowerInclusive, long upperExclusive) {
+        long multiplier = (long) (random.nextDouble() * (double) (upperExclusive - lowerInclusive));
+        return multiplier + lowerInclusive;
     }
 
     @Override
     public double nextDouble(double lowerInclusive, double upperExclusive) {
-        return random.nextDouble()
-            * (upperExclusive - lowerInclusive)
+        return (random.nextDouble()
+            * (upperExclusive - lowerInclusive))
             + lowerInclusive;
     }
 
