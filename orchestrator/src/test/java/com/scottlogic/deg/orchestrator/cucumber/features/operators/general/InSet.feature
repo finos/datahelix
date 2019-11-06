@@ -344,48 +344,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
     Then the following data should be generated:
       | foo  |
       | null |
-
-### ofType ###
-  Scenario: 'InSet' with non-contradicting 'ofType' string should be successful
-    Given there is a non nullable field foo
-    And foo is in set:
-      | "Test 1" |
-      | "Test 2" |
-      | "Test 3" |
-    And foo has type "string"
-    Then the following data should be generated:
-      | foo      |
-      | "Test 1" |
-      | "Test 2" |
-      | "Test 3" |
-
-  Scenario: 'InSet' with non-contradicting 'ofType' integer should be successful
-    Given there is a non nullable field foo
-    And foo is in set:
-      | 1 |
-    And foo has type "integer"
-    Then the following data should be generated:
-      | foo |
-      | 1   |
-
-  Scenario: 'InSet' with non-contradicting 'ofType' decimal should be successful
-    Given there is a non nullable field foo
-    And foo is in set:
-      | 1 |
-    And foo has type "decimal"
-    Then the following data should be generated:
-      | foo |
-      | 1   |
-
-  Scenario: 'InSet' with non-contradicting 'ofType' datetime should be successful
-    Given there is a non nullable field foo
-    And foo is in set:
-      | 2019-01-01T00:00:00.000Z |
-    And foo has type "datetime"
-    Then the following data should be generated:
-      | foo                      |
-      | 2019-01-01T00:00:00.000Z |
-
+    
 ### matchingRegex ###
   Scenario: Running a 'inSet' request alongside a non-contradicting 'matchingRegex' constraint should be successful
     Given there is a non nullable field foo
