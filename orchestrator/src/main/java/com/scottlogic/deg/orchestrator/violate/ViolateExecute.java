@@ -20,7 +20,6 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.common.output.GeneratedObject;
 import com.scottlogic.deg.common.util.FileUtils;
 import com.scottlogic.deg.generator.generation.DataGenerator;
-import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.orchestrator.violate.manifest.ManifestWriter;
 import com.scottlogic.deg.orchestrator.violate.violator.ProfileViolator;
@@ -36,7 +35,6 @@ import java.util.stream.Stream;
 
 public class ViolateExecute {
     private final OutputTargetFactory outputTargetFactory;
-    private final ProfileValidator profileValidator;
     private final ProfileViolator profileViolator;
     private final DataGenerator dataGenerator;
     private final ViolateOutputValidator violateOutputValidator;
@@ -46,14 +44,12 @@ public class ViolateExecute {
     @Inject
     ViolateExecute(
         OutputTargetFactory outputTargetFactory,
-        ProfileValidator profileValidator,
         ProfileViolator profileViolator,
         DataGenerator dataGenerator,
         ViolateOutputValidator violateOutputValidator,
         ManifestWriter manifestWriter,
         ProfileReader profileReader) {
         this.outputTargetFactory = outputTargetFactory;
-        this.profileValidator = profileValidator;
         this.profileViolator = profileViolator;
         this.dataGenerator = dataGenerator;
         this.violateOutputValidator = violateOutputValidator;
@@ -63,7 +59,6 @@ public class ViolateExecute {
 
     public void execute() throws IOException {
         Profile profile = profileReader.read();
-        profileValidator.validate(profile);
         violateOutputValidator.validate(profile);
         doGeneration(profile);
     }

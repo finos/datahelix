@@ -20,7 +20,6 @@ import com.google.inject.Inject;
 import com.scottlogic.deg.common.output.GeneratedObject;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.DataGeneratorMonitor;
-import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
 import com.scottlogic.deg.output.writer.DataSetWriter;
@@ -33,28 +32,20 @@ public class GenerateExecute {
     private final SingleDatasetOutputTarget singleDatasetOutputTarget;
     private final ProfileReader profileReader;
     private final DataGenerator dataGenerator;
-    private final ProfileValidator profileValidator;
     private final DataGeneratorMonitor monitor;
 
 
     @Inject
-    GenerateExecute(
-        DataGenerator dataGenerator,
-        SingleDatasetOutputTarget singleDatasetOutputTarget,
-        ProfileReader profileReader, ProfileValidator profileValidator,
-        DataGeneratorMonitor monitor) {
+    GenerateExecute(DataGenerator dataGenerator, SingleDatasetOutputTarget singleDatasetOutputTarget,
+                    ProfileReader profileReader,DataGeneratorMonitor monitor) {
         this.dataGenerator = dataGenerator;
         this.singleDatasetOutputTarget = singleDatasetOutputTarget;
         this.profileReader = profileReader;
-        this.profileValidator = profileValidator;
         this.monitor = monitor;
     }
 
     public void execute() throws IOException {
         Profile profile = profileReader.read();
-
-        profileValidator.validate(profile);
-
         Stream<GeneratedObject> generatedDataItems = dataGenerator.generateData(profile);
 
         outputData(profile, generatedDataItems);

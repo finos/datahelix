@@ -1,22 +1,40 @@
 package com.scottlogic.deg.profile.validators.profile;
 
+import com.google.inject.Inject;
 import com.scottlogic.deg.common.validators.ValidationResult;
 import com.scottlogic.deg.common.validators.Validator;
+import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.profile.dtos.FieldDTO;
 import com.scottlogic.deg.profile.dtos.ProfileDTO;
 import com.scottlogic.deg.profile.dtos.RuleDTO;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.AtomicConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
+import com.scottlogic.deg.profile.services.FieldService;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static com.scottlogic.deg.generator.config.detail.CombinationStrategyType.MINIMAL;
 
 public class ProfileValidator implements Validator<ProfileDTO>
 {
-    @Override
-    public ValidationResult validate(ProfileDTO profile)
+    private final GenerationConfigSource configSource;
+
+    @Inject
+    public ProfileValidator(GenerationConfigSource configSource)
     {
-        List<FieldDTO> fields = profile.fields;
-        List<RuleDTO> rules = profile.rules;
+        this.configSource = configSource;
+    }
+
+    @Override
+    public ValidationResult validate(ProfileDTO dto)
+    {
+        List<FieldDTO> fields = dto.fields;
+        List<RuleDTO> rules = dto.rules;
 
         ValidationResult fieldsMustBeValid = fieldsMustBeValid(fields);
         if (!fieldsMustBeValid.isSuccess) return fieldsMustBeValid;
@@ -24,7 +42,9 @@ public class ProfileValidator implements Validator<ProfileDTO>
         ValidationResult rulesMustBeValid = rulesMustBeValid(rules, fields);
         if (!rulesMustBeValid.isSuccess) return rulesMustBeValid;
 
-        return ValidationResult.success();
+        return ValidationResult.combine(
+            uniqueFieldsMustNotBeInIfStatements(dto),
+            uniqueFieldsMustNotBePresentUsingMinimalCombinationStrategy(dto));
     }
 
 
@@ -80,5 +100,43 @@ public class ProfileValidator implements Validator<ProfileDTO>
 
         RuleValidator ruleValidator = new RuleValidator(fields);
         return ValidationResult.combine(rules.stream().map(ruleValidator::validate));
+    }
+
+    private ValidationResult uniqueFieldsMustNotBeInIfStatements(ProfileDTO dto)
+    {
+        List<String> uniqueFields = dto.fields.stream()
+            .filter(fieldDTO -> fieldDTO.unique)
+            .map(fieldDTO -> fieldDTO.name)
+            .collect(Collectors.toList());
+
+        Stream<ConstraintDTO> ifConstraints = dto.rules.stream()
+            .flatMap(ruleDTO -> ruleDTO.constraints.stream())
+            .filter(constraintDTO -> constraintDTO instanceof ConditionalConstraintDTO)
+            .map(constraintDTO -> ((ConditionalConstraintDTO) constraintDTO).ifConstraint);
+
+        Set<String> ifConstraintFields = FieldService.getAllAtomicConstraints(ifConstraints)
+            .map(constraintDTO -> ((AtomicConstraintDTO) constraintDTO).field)
+            .collect(Collectors.toSet());
+
+        List<String> errors = uniqueFields.stream().filter(ifConstraintFields::contains)
+            .map(f -> "Unique field "+f+" cannot be referenced in IF statement")
+            .collect(Collectors.toList());
+
+        return errors.isEmpty()
+            ? ValidationResult.success()
+            : ValidationResult.failure(errors);
+    }
+
+    private ValidationResult uniqueFieldsMustNotBePresentUsingMinimalCombinationStrategy(ProfileDTO dto)
+    {
+        if(configSource == null)
+        {
+            return ValidationResult.success();
+        }
+        if (configSource.getCombinationStrategyType() != MINIMAL && dto.fields.stream().anyMatch(f -> f.unique))
+        {
+            return ValidationResult.failure("Unique fields do not work when not using Minimal combination strategy");
+        }
+        return ValidationResult.success();
     }
 }

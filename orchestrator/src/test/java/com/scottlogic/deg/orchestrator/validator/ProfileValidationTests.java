@@ -17,15 +17,15 @@
 package com.scottlogic.deg.orchestrator.validator;
 
 import com.scottlogic.deg.common.util.FileUtils;
-import com.scottlogic.deg.profile.validators.ConfigValidator;
-import com.scottlogic.deg.profile.services.ConstraintService;
-import com.scottlogic.deg.profile.services.FieldService;
-import com.scottlogic.deg.profile.services.RuleService;
-import com.scottlogic.deg.profile.validators.CreateProfileValidator;
-import com.scottlogic.deg.profile.validators.profile.ProfileValidator;
 import com.scottlogic.deg.profile.reader.FileReader;
 import com.scottlogic.deg.profile.reader.JsonProfileReader;
 import com.scottlogic.deg.profile.reader.ProfileCommandBus;
+import com.scottlogic.deg.profile.services.ConstraintService;
+import com.scottlogic.deg.profile.services.FieldService;
+import com.scottlogic.deg.profile.services.RuleService;
+import com.scottlogic.deg.profile.validators.ConfigValidator;
+import com.scottlogic.deg.profile.validators.CreateProfileValidator;
+import com.scottlogic.deg.profile.validators.profile.ProfileValidator;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -51,7 +51,7 @@ public class ProfileValidationTests {
                 dir.getName(),
                 () -> new JsonProfileReader(profileFile, new ConfigValidator(new FileUtils()),new FileReader(profileFile.getParent()),
                     new ProfileCommandBus(new FieldService(), new RuleService(new ConstraintService()),
-                        new CreateProfileValidator(new ProfileValidator()))).read());
+                        new CreateProfileValidator(new ProfileValidator(null)))).read());
             dynamicTests.add(test);
         }
         return dynamicTests;

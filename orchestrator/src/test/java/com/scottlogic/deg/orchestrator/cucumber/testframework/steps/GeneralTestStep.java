@@ -196,10 +196,23 @@ public class GeneralTestStep {
         if (errors.size() == 0) {
             Assert.fail("No profile validation errors were raised");
         } else {
-            Assert.assertThat(
-                "Expected profile validation error",
-                errors,
-                contains(expectedError));
+            Assert.assertEquals(errors.get(0), expectedError);
+        }
+    }
+
+    @But("^the profile is invalid with error containing \"(.+)\"$")
+    public void profileIsInvalidWithErrorContainingErrorMessage(String expectedError) {
+        state.expectExceptions = true;
+        cucumberTestHelper.generateAndGetData();
+
+        List<String> errors = this.cucumberTestHelper
+            .getProfileValidationErrors()
+            .collect(Collectors.toList());
+
+        if (errors.size() == 0) {
+            Assert.fail("No profile validation errors were raised");
+        } else {
+            Assert.assertTrue(errors.get(0).contains(expectedError));
         }
     }
 

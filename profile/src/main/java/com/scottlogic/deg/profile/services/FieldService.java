@@ -23,6 +23,7 @@ import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
 import com.scottlogic.deg.profile.dtos.FieldDTO;
 import com.scottlogic.deg.profile.dtos.RuleDTO;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.NotConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.relations.InMapConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.AllOfConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.AnyOfConstraintDTO;
@@ -63,12 +64,12 @@ public class FieldService
             .collect(Collectors.toList());
     }
 
-    private Stream<ConstraintDTO> getAllAtomicConstraints(Stream<ConstraintDTO> constraintDTOs)
+    public static Stream<ConstraintDTO> getAllAtomicConstraints(Stream<ConstraintDTO> constraintDTOs)
     {
-        return constraintDTOs.flatMap(this::getAllAtomicSubConstraints);
+        return constraintDTOs.flatMap(FieldService::getAllAtomicSubConstraints);
     }
 
-    private Stream<ConstraintDTO> getAllAtomicSubConstraints(ConstraintDTO constraintDTO)
+    private static Stream<ConstraintDTO> getAllAtomicSubConstraints(ConstraintDTO constraintDTO)
     {
         switch (constraintDTO.getType())
         {
@@ -81,6 +82,8 @@ public class FieldService
                 return getAllAtomicConstraints(((AllOfConstraintDTO) constraintDTO).constraints.stream());
             case ANY_OF:
                 return getAllAtomicConstraints(((AnyOfConstraintDTO) constraintDTO).constraints.stream());
+            case NOT:
+                return getAllAtomicConstraints(Stream.of(((NotConstraintDTO) constraintDTO).constraint));
             default:
                 return Stream.of(constraintDTO);
         }

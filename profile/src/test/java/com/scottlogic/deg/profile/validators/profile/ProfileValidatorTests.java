@@ -14,7 +14,7 @@ import static org.junit.Assert.assertTrue;
 
 public class ProfileValidatorTests
 {
-    private final ProfileValidator profileValidator = new ProfileValidator();
+    private final ProfileValidator profileValidator = new ProfileValidator(null);
 
     @Test
     public void validateProfile_withValidData_succeeds()

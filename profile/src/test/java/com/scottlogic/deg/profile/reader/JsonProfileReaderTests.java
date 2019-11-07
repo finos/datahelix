@@ -91,7 +91,7 @@ public class JsonProfileReaderTests {
         new MockFromFileReader(),
         new ProfileCommandBus(
             new FieldService(),
-            new RuleService(new ConstraintService()), new CreateProfileValidator(new ProfileValidator())));
+            new RuleService(new ConstraintService()), new CreateProfileValidator(new ProfileValidator(null))));
 
 
     private void givenJson(String json) {

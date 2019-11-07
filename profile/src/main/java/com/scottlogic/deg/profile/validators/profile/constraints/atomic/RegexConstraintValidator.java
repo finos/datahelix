@@ -7,6 +7,7 @@ import com.scottlogic.deg.profile.dtos.FieldDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.textual.RegexConstraintDTO;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class RegexConstraintValidator extends AtomicConstraintValidator<RegexConstraintDTO>
 {
@@ -21,10 +22,25 @@ public class RegexConstraintValidator extends AtomicConstraintValidator<RegexCon
         ValidationResult fieldMustBeValid = fieldMustBeValid(dto);
         if(!fieldMustBeValid.isSuccess) return fieldMustBeValid;
 
-        ValidationResult regexMustBeSpecified = regexMustBeSpecified(dto);
-        if(!regexMustBeSpecified.isSuccess) return regexMustBeSpecified;
+        ValidationResult regexMustBeValid = regexMustBeValid(dto);
+        if(!regexMustBeValid.isSuccess) return regexMustBeValid;
 
         return valueMustBeValid(dto, FieldType.STRING);
+    }
+
+    private ValidationResult regexMustBeValid(RegexConstraintDTO dto)
+    {
+        ValidationResult regexMustBeSpecified = regexMustBeSpecified(dto);
+        if(!regexMustBeSpecified.isSuccess) return regexMustBeSpecified;
+        try
+        {
+             Pattern.compile(dto.getRegex());
+             return ValidationResult.success();
+        }
+        catch (Exception e)
+        {
+            return ValidationResult.failure("Regex is invalid | " + e.getMessage());
+        }
     }
 
     private ValidationResult regexMustBeSpecified(RegexConstraintDTO dto)
