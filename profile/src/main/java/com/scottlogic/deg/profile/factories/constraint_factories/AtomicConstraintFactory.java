@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.scottlogic.deg.profile.factories.constraint_factories;
 
 import com.scottlogic.deg.common.ValidationException;

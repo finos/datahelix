@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.scottlogic.deg.profile.validators.profile;
 
 import com.scottlogic.deg.common.profile.FieldType;
@@ -24,7 +25,7 @@ import com.scottlogic.deg.profile.dtos.constraints.InvalidConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.NotConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.InSetConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.IsNullConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.IntegerConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.StringLengthConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.AllOfConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.AnyOfConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
@@ -93,7 +94,7 @@ public abstract class ConstraintValidator<T extends ConstraintDTO> implements Va
             case OF_LENGTH:
             case LONGER_THAN:
             case SHORTER_THAN:
-                return new IntegerConstraintValidator(rule, fields, FieldType.STRING).validate((IntegerConstraintDTO) dto);
+                return new StringLengthConstraintValidator(rule, fields, FieldType.STRING).validate((StringLengthConstraintDTO) dto);
             case GREATER_THAN:
             case GREATER_THAN_OR_EQUAL_TO:
             case LESS_THAN:

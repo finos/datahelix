@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.scottlogic.deg.profile.validators.profile.constraints.atomic;
 
 
 import com.scottlogic.deg.common.profile.FieldType;
+import com.scottlogic.deg.common.util.defaults.DateTimeDefaults;
 import com.scottlogic.deg.common.validators.ValidationResult;
 import com.scottlogic.deg.profile.dtos.FieldDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.temporal.TemporalConstraintDTO;
@@ -55,12 +57,15 @@ public class TemporalConstraintValidator extends AtomicConstraintValidator<Tempo
         try
         {
             OffsetDateTime offsetDateTime = DateTimeFactory.create(dateTime);
-            if (offsetDateTime.getYear() > 9999 || offsetDateTime.getYear() < 1)
+            OffsetDateTime max = DateTimeDefaults.get().max();
+            OffsetDateTime min = DateTimeDefaults.get().min();
+            if (offsetDateTime.compareTo(max) > 0 || offsetDateTime.compareTo(min) < 0)
             {
                 return ValidationResult.failure("Dates must be between 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z" + getErrorInfo(dto));
             }
             return ValidationResult.success();
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             return ValidationResult.failure(e.getMessage() + getErrorInfo(dto));
         }

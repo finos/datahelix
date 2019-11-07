@@ -19,8 +19,8 @@ package com.scottlogic.deg.profile.dtos.constraints.atomic.integer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.AtomicConstraintDTO;
 
-public abstract class IntegerConstraintDTO extends AtomicConstraintDTO
+public abstract class StringLengthConstraintDTO extends AtomicConstraintDTO
 {
     @JsonIgnore
-    public abstract int getInt();
+    public abstract int stringLength();
 }

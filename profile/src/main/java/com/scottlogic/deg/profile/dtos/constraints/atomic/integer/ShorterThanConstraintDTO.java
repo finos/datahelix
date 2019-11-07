@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @JsonDeserialize(as = ShorterThanConstraintDTO.class)
-public class ShorterThanConstraintDTO extends IntegerConstraintDTO
+public class ShorterThanConstraintDTO extends StringLengthConstraintDTO
 {
     public static final String NAME = "shorterThan";
 
@@ -28,7 +28,7 @@ public class ShorterThanConstraintDTO extends IntegerConstraintDTO
     public int value;
 
     @Override
-    public int getInt()
+    public int stringLength()
     {
         return value;
     }
