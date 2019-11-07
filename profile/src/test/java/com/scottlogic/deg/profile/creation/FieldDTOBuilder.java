@@ -17,7 +17,7 @@
 package com.scottlogic.deg.profile.creation;
 
 import com.scottlogic.deg.common.profile.SpecificFieldType;
-import com.scottlogic.deg.profile.creation.dtos.FieldDTO;
+import com.scottlogic.deg.profile.dtos.FieldDTO;
 
 public class FieldDTOBuilder
 {

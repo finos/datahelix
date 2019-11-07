@@ -24,7 +24,7 @@ import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.orchestrator.generate.GenerateExecute;
 import com.scottlogic.deg.orchestrator.violate.ViolateExecute;
 import com.scottlogic.deg.orchestrator.violate.ViolateModule;
-import com.scottlogic.deg.profile.creation.dtos.FieldDTO;
+import com.scottlogic.deg.profile.dtos.FieldDTO;
 import org.junit.Assert;
 
 import java.io.IOException;

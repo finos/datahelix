@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.profile.creation;
 
-import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.EqualToConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.EqualToConstraintDTO;
 
 public class ConstraintDTOBuilder
 {

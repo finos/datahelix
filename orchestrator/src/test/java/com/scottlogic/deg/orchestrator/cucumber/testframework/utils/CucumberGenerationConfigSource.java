@@ -24,7 +24,7 @@ import com.scottlogic.deg.generator.config.detail.VisualiserLevel;
 import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
 import com.scottlogic.deg.orchestrator.violate.ViolateConfigSource;
 import com.scottlogic.deg.output.guice.OutputFormat;
-import com.scottlogic.deg.profile.common.ConstraintType;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
 
 import java.io.File;
 import java.nio.file.Path;

@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.scottlogic.deg.common.profile.SpecificFieldType;
-import com.scottlogic.deg.profile.creation.dtos.FieldDTO;
+import com.scottlogic.deg.profile.dtos.FieldDTO;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import java.io.IOException;
@@ -150,7 +150,7 @@ public class FieldDeserialiserTests {
             deserialiseJsonString(json);
             Assert.fail("should have thrown an exception");
         } catch (UnrecognizedPropertyException e) {
-            String expectedMessage = "Unrecognized field \"tpe\" (class com.scottlogic.deg.profile.creation.dtos.FieldDTO), not marked as ignorable (5 known properties: \"unique\", \"type\", \"name\", \"formatting\", \"nullable\"])\n at [Source: (String)\"{ \"name\": \"id\", \"tpe\": \"integer\" }\"; line: 1, column: 25] (through reference chain: com.scottlogic.deg.profile.creation.dtos.FieldDTO[\"tpe\"])";
+            String expectedMessage = "Unrecognized field \"tpe\" (class com.scottlogic.deg.profile.dtos.FieldDTO), not marked as ignorable (5 known properties: \"unique\", \"type\", \"name\", \"formatting\", \"nullable\"])\n at [Source: (String)\"{ \"name\": \"id\", \"tpe\": \"integer\" }\"; line: 1, column: 25] (through reference chain: com.scottlogic.deg.profile.dtos.FieldDTO[\"tpe\"])";
             assertThat(e.getMessage(), sameBeanAs(expectedMessage));
         }
     }
@@ -164,7 +164,7 @@ public class FieldDeserialiserTests {
             deserialiseJsonString(json);
             Assert.fail("should have thrown an exception");
         } catch (InvalidFormatException e) {
-            String expectedMessage = "Cannot deserialize value of type `com.scottlogic.deg.common.profile.SpecificFieldType` from String \"intger\": value not one of declared Enum instance names: [string, CUSIP, fullname, datetime, RIC, date, SEDOL, decimal, firstname, integer, ISIN, lastname]\n at [Source: (String)\"{ \"name\": \"id\", \"type\": \"intger\" }\"; line: 1, column: 25] (through reference chain: com.scottlogic.deg.profile.creation.dtos.FieldDTO[\"type\"])";
+            String expectedMessage = "Cannot deserialize value of type `com.scottlogic.deg.common.profile.SpecificFieldType` from String \"intger\": value not one of declared Enum instance names: [string, CUSIP, fullname, datetime, RIC, date, SEDOL, decimal, firstname, integer, ISIN, lastname]\n at [Source: (String)\"{ \"name\": \"id\", \"type\": \"intger\" }\"; line: 1, column: 25] (through reference chain: com.scottlogic.deg.profile.dtos.FieldDTO[\"type\"])";
             assertThat(e.getMessage(), sameBeanAs(expectedMessage));
         }
     }

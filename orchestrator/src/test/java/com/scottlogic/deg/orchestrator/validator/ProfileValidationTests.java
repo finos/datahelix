@@ -16,11 +16,13 @@
 
 package com.scottlogic.deg.orchestrator.validator;
 
-import com.scottlogic.deg.profile.creation.services.ConstraintService;
-import com.scottlogic.deg.profile.creation.services.FieldService;
-import com.scottlogic.deg.profile.creation.services.RuleService;
-import com.scottlogic.deg.profile.creation.validators.CreateProfileValidator;
-import com.scottlogic.deg.profile.creation.validators.profile.ProfileValidator;
+import com.scottlogic.deg.common.util.FileUtils;
+import com.scottlogic.deg.profile.reader.ConfigValidator;
+import com.scottlogic.deg.profile.services.ConstraintService;
+import com.scottlogic.deg.profile.services.FieldService;
+import com.scottlogic.deg.profile.services.RuleService;
+import com.scottlogic.deg.profile.validators.CreateProfileValidator;
+import com.scottlogic.deg.profile.validators.profile.ProfileValidator;
 import com.scottlogic.deg.profile.reader.FileReader;
 import com.scottlogic.deg.profile.reader.JsonProfileReader;
 import com.scottlogic.deg.profile.reader.ProfileCommandBus;
@@ -47,7 +49,7 @@ public class ProfileValidationTests {
             File profileFile = Paths.get(dir.getCanonicalPath(), "profile.json").toFile();
             DynamicTest test = DynamicTest.dynamicTest(
                 dir.getName(),
-                () -> new JsonProfileReader(profileFile, new FileReader(profileFile.getParent()),
+                () -> new JsonProfileReader(profileFile, new ConfigValidator(profileFile, new FileUtils()),new FileReader(profileFile.getParent()),
                     new ProfileCommandBus(new FieldService(), new RuleService(new ConstraintService()),
                         new CreateProfileValidator(new ProfileValidator()))).read());
             dynamicTests.add(test);

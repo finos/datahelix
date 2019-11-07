@@ -19,16 +19,16 @@ package com.scottlogic.deg.profile;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
-import com.scottlogic.deg.profile.creation.dtos.constraints.ConstraintDTO;
-import com.scottlogic.deg.profile.creation.dtos.constraints.InvalidConstraintDTO;
-import com.scottlogic.deg.profile.creation.dtos.constraints.NotConstraintDTO;
-import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.EqualToConstraintDTO;
-import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.IsNullConstraintDTO;
-import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.numeric.GreaterThanConstraintDTO;
-import com.scottlogic.deg.profile.creation.dtos.constraints.atomic.numeric.LessThanConstraintDTO;
-import com.scottlogic.deg.profile.creation.dtos.constraints.grammatical.AllOfConstraintDTO;
-import com.scottlogic.deg.profile.creation.dtos.constraints.grammatical.AnyOfConstraintDTO;
-import com.scottlogic.deg.profile.creation.dtos.constraints.grammatical.ConditionalConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.InvalidConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.NotConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.EqualToConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.IsNullConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.numeric.GreaterThanConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.numeric.LessThanConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.grammatical.AllOfConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.grammatical.AnyOfConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -81,7 +81,7 @@ public class GrammaticalConstraintDeserialiserTests {
             Assert.fail("should have thrown an exception");
         } catch (UnrecognizedPropertyException e)
         {
-            String expectedMessage = "Unrecognized field \"fild\" (class com.scottlogic.deg.profile.creation.dtos.constraints.atomic.EqualToConstraintDTO), not marked as ignorable (2 known properties: \"field\", \"equalTo\"])\n at [Source: UNKNOWN; line: -1, column: -1] (through reference chain: com.scottlogic.deg.profile.creation.dtos.constraints.grammatical.AnyOfConstraintDTO[\"anyOf\"]->java.util.ArrayList[0]->com.scottlogic.deg.profile.creation.dtos.constraints.atomic.EqualToConstraintDTO[\"fild\"])";
+            String expectedMessage = "Unrecognized field \"fild\" (class com.scottlogic.deg.profile.dtos.constraints.atomic.EqualToConstraintDTO), not marked as ignorable (2 known properties: \"field\", \"equalTo\"])\n at [Source: UNKNOWN; line: -1, column: -1] (through reference chain: com.scottlogic.deg.profile.dtos.constraints.grammatical.AnyOfConstraintDTO[\"anyOf\"]->java.util.ArrayList[0]->com.scottlogic.deg.profile.dtos.constraints.atomic.EqualToConstraintDTO[\"fild\"])";
             assertThat(e.getMessage(), sameBeanAs(expectedMessage));
         }
     }

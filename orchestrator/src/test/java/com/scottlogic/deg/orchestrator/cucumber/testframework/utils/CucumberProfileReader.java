@@ -18,10 +18,12 @@ package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.commands.CommandBus;
+import com.scottlogic.deg.common.util.FileUtils;
 import com.scottlogic.deg.generator.profile.Profile;
-import com.scottlogic.deg.profile.creation.dtos.ProfileDTO;
-import com.scottlogic.deg.profile.creation.dtos.RuleDTO;
-import com.scottlogic.deg.profile.creation.serialisation.ProfileSerialiser;
+import com.scottlogic.deg.profile.dtos.ProfileDTO;
+import com.scottlogic.deg.profile.dtos.RuleDTO;
+import com.scottlogic.deg.profile.reader.ConfigValidator;
+import com.scottlogic.deg.profile.serialisation.ProfileSerialiser;
 import com.scottlogic.deg.profile.reader.JsonProfileReader;
 
 import java.io.IOException;
@@ -34,7 +36,7 @@ public class CucumberProfileReader extends JsonProfileReader {
 
     @Inject
     public CucumberProfileReader(CucumberTestState state, CommandBus commandBus) {
-        super(null, new CucumberFileReader(state), commandBus);
+        super(null, new ConfigValidator(null, new FileUtils()), new CucumberFileReader(state), commandBus);
         this.state = state;
     }
 

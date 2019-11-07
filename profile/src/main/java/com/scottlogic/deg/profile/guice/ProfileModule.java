@@ -22,10 +22,10 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
 import com.scottlogic.deg.common.commands.CommandBus;
 import com.scottlogic.deg.common.validators.Validator;
-import com.scottlogic.deg.profile.creation.commands.CreateProfile;
-import com.scottlogic.deg.profile.creation.dtos.ProfileDTO;
-import com.scottlogic.deg.profile.creation.validators.CreateProfileValidator;
-import com.scottlogic.deg.profile.creation.validators.profile.ProfileValidator;
+import com.scottlogic.deg.profile.commands.CreateProfile;
+import com.scottlogic.deg.profile.dtos.ProfileDTO;
+import com.scottlogic.deg.profile.validators.CreateProfileValidator;
+import com.scottlogic.deg.profile.validators.profile.ProfileValidator;
 import com.scottlogic.deg.profile.reader.*;
 
 import java.io.File;
