@@ -16,8 +16,6 @@
 
 package com.scottlogic.deg.generator.restrictions.linear;
 
-import java.util.Objects;
-
 public class Limit<T extends Comparable<? super T>> {
 
     private final T limit;
