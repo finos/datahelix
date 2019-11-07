@@ -36,7 +36,7 @@ public class GranularityUtils {
                     : DateTimeDefaults.get().granularity();
 
             default:
-                return null;
+                throw new UnsupportedOperationException("Attempt to find granularity for an unsupported type");
         }
     }
 }
