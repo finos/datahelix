@@ -46,6 +46,6 @@ public class InSetConstraintValidator extends AtomicConstraintValidator<InSetCon
 
     private ValidationResult fieldTypeMustBeValid(InSetConstraintDTO dto)
     {
-        return ValidationResult.combine(dto.values.stream().map(v -> valueMustBeValid(dto, v)));
+        return ValidationResult.combine(dto.values.stream().map(v -> fieldTypeMustMatchValueType(dto, v)));
     }
 }

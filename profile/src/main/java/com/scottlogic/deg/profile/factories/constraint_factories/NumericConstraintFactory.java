@@ -18,7 +18,6 @@
 package com.scottlogic.deg.profile.factories.constraint_factories;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.HelixNumber;
 import com.scottlogic.deg.common.profile.NumericGranularity;
 import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
@@ -73,25 +72,25 @@ public class NumericConstraintFactory extends AtomicConstraintFactory
     @Override
     GreaterThanConstraint createGreaterThanConstraint(GreaterThanConstraintDTO dto, Field field)
     {
-        return new GreaterThanConstraint(field, HelixNumber.create(dto.value));
+        return new GreaterThanConstraint(field, NumberUtils.coerceToBigDecimal(dto.value));
     }
 
     @Override
     GreaterThanOrEqualToConstraint createGreaterThanOrEqualToConstraint(GreaterThanOrEqualToConstraintDTO dto, Field field)
     {
-        return new GreaterThanOrEqualToConstraint(field, HelixNumber.create(dto.value));
+        return new GreaterThanOrEqualToConstraint(field, NumberUtils.coerceToBigDecimal(dto.value));
     }
 
     @Override
     LessThanConstraint createLessThanConstraint(LessThanConstraintDTO dto, Field field)
     {
-        return new LessThanConstraint(field, HelixNumber.create(dto.value));
+        return new LessThanConstraint(field, NumberUtils.coerceToBigDecimal(dto.value));
     }
 
     @Override
     LessThanOrEqualToConstraint createLessThanOrEqualToConstraint(LessThanOrEqualToConstraintDTO dto, Field field)
     {
-        return new LessThanOrEqualToConstraint(field, HelixNumber.create(dto.value));
+        return new LessThanOrEqualToConstraint(field, NumberUtils.coerceToBigDecimal(dto.value));
     }
 
     @Override

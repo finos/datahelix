@@ -40,7 +40,7 @@ public class RegexConstraintValidator extends AtomicConstraintValidator<RegexCon
         ValidationResult regexMustBeValid = regexMustBeValid(dto);
         if(!regexMustBeValid.isSuccess) return regexMustBeValid;
 
-        return valueMustBeValid(dto, FieldType.STRING);
+        return fieldTypeMustMatchValueType(dto, FieldType.STRING);
     }
 
     private ValidationResult regexMustBeValid(RegexConstraintDTO dto)

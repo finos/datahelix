@@ -17,8 +17,8 @@
 package com.scottlogic.deg.orchestrator.violate.violator;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.HelixNumber;
 import com.scottlogic.deg.common.profile.Fields;
+import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
@@ -151,22 +151,22 @@ public class ProfileViolatorTests {
         barField = createField("bar");
         Constraint constraint1 = new GreaterThanConstraint(
             fooField,
-            HelixNumber.create(100)
+            NumberUtils.coerceToBigDecimal(100)
         );
         Constraint constraint2 = new GreaterThanConstraint(
             barField,
-            HelixNumber.create(50)
+            NumberUtils.coerceToBigDecimal(50)
         );
         rule1 = new Rule(ruleInformation1, Arrays.asList(constraint1, constraint2));
 
         //Violated Rule 1 consists of two constraints, "foo is less than to 101" and "bar is less than 51"
         Constraint constraint3 = new LessThanConstraint(
             fooField,
-            HelixNumber.create(101)
+            NumberUtils.coerceToBigDecimal(101)
         );
         Constraint constraint4 = new LessThanConstraint(
             barField,
-            HelixNumber.create(51)
+            NumberUtils.coerceToBigDecimal(51)
         );
         violatedRule1 = new Rule(ruleInformation1, Arrays.asList(constraint3, constraint4));
 

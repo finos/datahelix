@@ -719,8 +719,8 @@
 //            .collect(Collectors.toList()));
 //
 //        final Set<AtomicConstraint> constraints = SetUtils.setOf(
-//            new IsGreaterThanOrEqualToConstantConstraint(quantityField, HelixNumber.create(0)),
-//            new IsGreaterThanConstantConstraint(quantityField, HelixNumber.create(5)).negate(),
+//            new IsGreaterThanOrEqualToConstantConstraint(quantityField, NumberUtils.coerceToBigDecimal(0)),
+//            new IsGreaterThanConstantConstraint(quantityField, NumberUtils.coerceToBigDecimal(5)).negate(),
 //            new IsInSetConstraint(countryField, countryAmong));
 //
 //        // ACT
@@ -767,7 +767,7 @@
 //        final Field field = createField("test0", NUMERIC);
 //        ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
 //        Set<AtomicConstraint> constraints = Collections.singleton(
-//            new IsGreaterThanOrEqualToConstantConstraint(field, HelixNumber.create(5)));
+//            new IsGreaterThanOrEqualToConstantConstraint(field, NumberUtils.coerceToBigDecimal(5)));
 //
 //        RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, nodeFromConstraints(constraints)).get();
 //
@@ -795,7 +795,7 @@
 //        final Field field = createField("test0", NUMERIC);
 //        ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
 //        Set<AtomicConstraint> constraints = Collections.singleton(
-//            new IsGreaterThanConstantConstraint(field, HelixNumber.create(5)).negate());
+//            new IsGreaterThanConstantConstraint(field, NumberUtils.coerceToBigDecimal(5)).negate());
 //
 //        RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, nodeFromConstraints(constraints)).get();
 //
@@ -821,7 +821,7 @@
 //        final Field field = createField("test0", NUMERIC);
 //        ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
 //        Set<AtomicConstraint> constraints = Collections.singleton(
-//            new IsGreaterThanOrEqualToConstantConstraint(field, HelixNumber.create(5)));
+//            new IsGreaterThanOrEqualToConstantConstraint(field, NumberUtils.coerceToBigDecimal(5)));
 //
 //        RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, nodeFromConstraints(constraints)).get();
 //
@@ -849,7 +849,7 @@
 //        final Field field = createField("test0", NUMERIC);
 //        ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
 //        Set<AtomicConstraint> constraints = Collections.singleton(
-//            new IsGreaterThanConstantConstraint(field, HelixNumber.create(5)).negate());
+//            new IsGreaterThanConstantConstraint(field, NumberUtils.coerceToBigDecimal(5)).negate());
 //
 //        RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, nodeFromConstraints(constraints)).get();
 //
@@ -875,7 +875,7 @@
 //        final Field field = createField("test0", NUMERIC);
 //        ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
 //        Set<AtomicConstraint> constraints = Collections.singleton(
-//            new IsLessThanOrEqualToConstantConstraint(field, HelixNumber.create(5)));
+//            new IsLessThanOrEqualToConstantConstraint(field, NumberUtils.coerceToBigDecimal(5)));
 //
 //        RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, nodeFromConstraints(constraints)).get();
 //
@@ -901,7 +901,7 @@
 //        final Field field = createField("test0", NUMERIC);
 //        ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
 //        Set<AtomicConstraint> constraints = Collections.singleton(
-//            new IsLessThanConstantConstraint(field, HelixNumber.create(5)).negate());
+//            new IsLessThanConstantConstraint(field, NumberUtils.coerceToBigDecimal(5)).negate());
 //
 //        RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, nodeFromConstraints(constraints)).get();
 //
@@ -927,7 +927,7 @@
 //        final Field field = createField("test0", NUMERIC);
 //        ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
 //        Set<AtomicConstraint> constraints = Collections.singleton(
-//            new IsLessThanOrEqualToConstantConstraint(field, HelixNumber.create(5)));
+//            new IsLessThanOrEqualToConstantConstraint(field, NumberUtils.coerceToBigDecimal(5)));
 //
 //        RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, nodeFromConstraints(constraints)).get();
 //
@@ -953,7 +953,7 @@
 //        final Field field = createField("test0", NUMERIC);
 //        ProfileFields profileFields = new ProfileFields(Collections.singletonList(field));
 //        Set<AtomicConstraint> constraints = Collections.singleton(
-//            new IsLessThanConstantConstraint(field, HelixNumber.create(5)).negate());
+//            new IsLessThanConstantConstraint(field, NumberUtils.coerceToBigDecimal(5)).negate());
 //
 //        RowSpec testOutput = constraintReducer.reduceConstraintsToRowSpec(profileFields, nodeFromConstraints(constraints)).get();
 //

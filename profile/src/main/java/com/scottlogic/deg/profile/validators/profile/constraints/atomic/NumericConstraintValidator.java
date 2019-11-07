@@ -17,10 +17,13 @@ package com.scottlogic.deg.profile.validators.profile.constraints.atomic;
 
 
 import com.scottlogic.deg.common.profile.FieldType;
+import com.scottlogic.deg.common.util.NumberUtils;
+import com.scottlogic.deg.common.util.defaults.NumericDefaults;
 import com.scottlogic.deg.common.validators.ValidationResult;
 import com.scottlogic.deg.profile.dtos.FieldDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.numeric.NumericConstraintDTO;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class NumericConstraintValidator extends AtomicConstraintValidator<NumericConstraintDTO>
@@ -39,16 +42,33 @@ public class NumericConstraintValidator extends AtomicConstraintValidator<Numeri
         ValidationResult fieldMustBeValid = fieldMustBeValid(dto);
         if(!fieldMustBeValid.isSuccess) return fieldMustBeValid;
 
-        ValidationResult numberMustBeSpecified = numberMustBeSpecified(dto);
-        if(!numberMustBeSpecified.isSuccess) return numberMustBeSpecified;
+        ValidationResult numberMustBeValid = numberMustBeValid(dto);
+        if(!numberMustBeValid.isSuccess) return numberMustBeValid;
 
-        return valueMustBeValid(dto, expectedFieldType);
+        return fieldTypeMustMatchValueType(dto, expectedFieldType);
     }
 
-    private ValidationResult numberMustBeSpecified(NumericConstraintDTO dto)
+    private ValidationResult numberMustBeValid(NumericConstraintDTO dto)
     {
-        return dto.getNumber() != null
-            ? ValidationResult.success()
-            : ValidationResult.failure("Number must be specified" + getErrorInfo(dto));
+        if (dto.getNumber() == null)
+        {
+            return ValidationResult.failure("Number must be specified" + getErrorInfo(dto));
+        }
+        BigDecimal number = NumberUtils.coerceToBigDecimal(dto.getNumber());
+        if(number == null)
+        {
+            return ValidationResult.failure("Number cannot be converted to big decimal" + getErrorInfo(dto));
+        }
+        BigDecimal min = NumericDefaults.get().min();
+        if (number.compareTo(min) < 0)
+        {
+            return ValidationResult.failure(String.format("Number must have a value >= %s, currently is %s", min.toPlainString(), number.toPlainString()));
+        }
+        BigDecimal max = NumericDefaults.get().max();
+        if (number.compareTo(max) > 0)
+        {
+            return ValidationResult.failure(String.format("Number must have a value <= %s, currently is %s", max.toPlainString(), number.toPlainString()));
+        }
+        return ValidationResult.success();
     }
 }

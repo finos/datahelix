@@ -33,7 +33,7 @@ public class EqualToConstraintValidator extends AtomicConstraintValidator<EqualT
     {
         ValidationResult fieldMustBeValid = fieldMustBeValid(dto);
         if(!fieldMustBeValid.isSuccess) return fieldMustBeValid;
-        return valueMustBeValid(dto, dto.value);
+        return fieldTypeMustMatchValueType(dto, dto.value);
     }
 
 }

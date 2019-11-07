@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.violations.filters;
 
-import com.scottlogic.deg.common.profile.HelixNumber;
+import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
@@ -64,7 +64,7 @@ public class ConstraintTypeViolationFilterTests {
     @Test
     public void canViolate_withNonMatchingTypeConstraint_returnsTrue() {
         //Arrange
-        Constraint inputConstraint = new GreaterThanConstraint(null, HelixNumber.create(100));
+        Constraint inputConstraint = new GreaterThanConstraint(null, NumberUtils.coerceToBigDecimal(100));
 
         //Act
         boolean actual = target.canViolate(inputConstraint);
