@@ -22,7 +22,7 @@ import com.scottlogic.deg.common.util.FileUtils;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.profile.dtos.ProfileDTO;
 import com.scottlogic.deg.profile.dtos.RuleDTO;
-import com.scottlogic.deg.profile.reader.ConfigValidator;
+import com.scottlogic.deg.profile.validators.ConfigValidator;
 import com.scottlogic.deg.profile.serialisation.ProfileSerialiser;
 import com.scottlogic.deg.profile.reader.JsonProfileReader;
 
@@ -36,7 +36,7 @@ public class CucumberProfileReader extends JsonProfileReader {
 
     @Inject
     public CucumberProfileReader(CucumberTestState state, CommandBus commandBus) {
-        super(null, new ConfigValidator(null, new FileUtils()), new CucumberFileReader(state), commandBus);
+        super(null, new ConfigValidator(new FileUtils()), new CucumberFileReader(state), commandBus);
         this.state = state;
     }
 

@@ -29,7 +29,7 @@ import com.scottlogic.deg.output.outputtarget.OutputTargetFactory;
 import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
 import com.scottlogic.deg.profile.reader.FileReader;
 import com.scottlogic.deg.profile.reader.ProfileReader;
-import com.scottlogic.deg.profile.reader.ConfigValidator;
+import com.scottlogic.deg.profile.validators.ConfigValidator;
 
 import java.util.stream.Stream;
 

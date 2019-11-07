@@ -25,6 +25,7 @@ import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.profile.dtos.ProfileDTO;
 import com.scottlogic.deg.profile.commands.CreateProfile;
 import com.scottlogic.deg.profile.serialisation.ProfileDeserialiser;
+import com.scottlogic.deg.profile.validators.ConfigValidator;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,6 +51,7 @@ public class JsonProfileReader implements ProfileReader {
     }
 
     public Profile read() throws IOException {
+        configValidator.validate(profileFile);
         byte[] encoded = Files.readAllBytes(profileFile.toPath());
         String profileJson = new String(encoded, StandardCharsets.UTF_8);
         return read(profileJson);

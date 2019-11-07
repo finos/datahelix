@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.reader;
+package com.scottlogic.deg.profile.validators;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.util.FileUtils;
 
@@ -28,18 +27,14 @@ import java.io.File;
  */
 public class ConfigValidator {
     private final FileUtils fileUtils;
-    private final File profileFile;
 
     @Inject
-    public ConfigValidator(
-        @Named("config:profileFile") File profileFile,
-        FileUtils fileUtils
-    ) {
-        this.profileFile = profileFile;
+    public ConfigValidator( FileUtils fileUtils)
+    {
         this.fileUtils = fileUtils;
     }
 
-    public void checkProfileInputFile() {
+    public void validate(File profileFile) {
         if (fileUtils.containsInvalidChars(profileFile)) {
             throw new ValidationException("Profile file path " + profileFile +
                 " contains one or more invalid characters ? : %% \" | > < "

@@ -34,6 +34,7 @@ import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint
 import com.scottlogic.deg.profile.services.ConstraintService;
 import com.scottlogic.deg.profile.services.FieldService;
 import com.scottlogic.deg.profile.services.RuleService;
+import com.scottlogic.deg.profile.validators.ConfigValidator;
 import com.scottlogic.deg.profile.validators.CreateProfileValidator;
 import com.scottlogic.deg.profile.validators.profile.ProfileValidator;
 import org.junit.Assert;
@@ -86,7 +87,7 @@ public class JsonProfileReaderTests {
 
     private JsonProfileReader jsonProfileReader = new JsonProfileReader(
         null,
-        new ConfigValidator(null, new FileUtils()),
+        new ConfigValidator(new FileUtils()),
         new MockFromFileReader(),
         new ProfileCommandBus(
             new FieldService(),

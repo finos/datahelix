@@ -18,16 +18,16 @@ package com.scottlogic.deg.orchestrator.violate;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.output.GeneratedObject;
-import com.scottlogic.deg.generator.profile.Profile;
-import com.scottlogic.deg.generator.generation.DataGenerator;
-import com.scottlogic.deg.orchestrator.violate.violator.ProfileViolator;
-import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
 import com.scottlogic.deg.common.util.FileUtils;
+import com.scottlogic.deg.generator.generation.DataGenerator;
+import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
+import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.orchestrator.violate.manifest.ManifestWriter;
+import com.scottlogic.deg.orchestrator.violate.violator.ProfileViolator;
 import com.scottlogic.deg.output.outputtarget.OutputTargetFactory;
 import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
 import com.scottlogic.deg.output.writer.DataSetWriter;
-import com.scottlogic.deg.profile.reader.ValidatingProfileReader;
+import com.scottlogic.deg.profile.reader.ProfileReader;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -41,7 +41,7 @@ public class ViolateExecute {
     private final DataGenerator dataGenerator;
     private final ViolateOutputValidator violateOutputValidator;
     private final ManifestWriter manifestWriter;
-    private final ValidatingProfileReader validatingProfileReader;
+    private final ProfileReader profileReader;
 
     @Inject
     ViolateExecute(
@@ -51,22 +51,20 @@ public class ViolateExecute {
         DataGenerator dataGenerator,
         ViolateOutputValidator violateOutputValidator,
         ManifestWriter manifestWriter,
-        ValidatingProfileReader validatingProfileReader) {
+        ProfileReader profileReader) {
         this.outputTargetFactory = outputTargetFactory;
         this.profileValidator = profileValidator;
         this.profileViolator = profileViolator;
         this.dataGenerator = dataGenerator;
         this.violateOutputValidator = violateOutputValidator;
         this.manifestWriter = manifestWriter;
-        this.validatingProfileReader = validatingProfileReader;
+        this.profileReader = profileReader;
     }
 
     public void execute() throws IOException {
-        Profile profile = validatingProfileReader.read();
-
+        Profile profile = profileReader.read();
         profileValidator.validate(profile);
         violateOutputValidator.validate(profile);
-
         doGeneration(profile);
     }
 
