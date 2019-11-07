@@ -18,7 +18,6 @@ package com.scottlogic.deg.generator.decisiontree;
 
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 
 import java.util.*;
 

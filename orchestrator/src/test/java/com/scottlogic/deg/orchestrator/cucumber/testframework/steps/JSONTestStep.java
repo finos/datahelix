@@ -17,7 +17,6 @@
 package com.scottlogic.deg.orchestrator.cucumber.testframework.steps;
 
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestState;
-import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import cucumber.api.java.en.And;
 
 import java.io.IOException;
