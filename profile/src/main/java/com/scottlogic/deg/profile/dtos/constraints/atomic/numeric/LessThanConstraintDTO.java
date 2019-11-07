@@ -16,24 +16,18 @@
 
 package com.scottlogic.deg.profile.dtos.constraints.atomic.numeric;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintTypeJsonProperty;
 
 @JsonDeserialize(as = LessThanConstraintDTO.class)
 public class LessThanConstraintDTO extends NumericConstraintDTO
 {
-    @JsonProperty(ConstraintTypeJsonProperty.LESS_THAN)
+    public static final String NAME = "lessThan";
+
+    @JsonProperty(NAME)
     public Number value;
 
-    public LessThanConstraintDTO() {
-        super(ConstraintType.LESS_THAN);
-    }
-
     @Override
-    @JsonIgnore
     public Number getNumber()
     {
         return value;

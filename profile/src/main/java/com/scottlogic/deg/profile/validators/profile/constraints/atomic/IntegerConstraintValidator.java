@@ -4,7 +4,7 @@ import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.common.validators.ValidationResult;
 import com.scottlogic.deg.profile.dtos.FieldDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.numeric.IntegerConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.IntegerConstraintDTO;
 
 import java.math.BigDecimal;
 import java.util.List;

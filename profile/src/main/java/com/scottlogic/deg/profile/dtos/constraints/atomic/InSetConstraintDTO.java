@@ -18,19 +18,14 @@ package com.scottlogic.deg.profile.dtos.constraints.atomic;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintTypeJsonProperty;
 
 import java.util.List;
 
 @JsonDeserialize(as = InSetConstraintDTO.class)
 public class InSetConstraintDTO extends AtomicConstraintDTO
 {
-    @JsonProperty(ConstraintTypeJsonProperty.IN_SET)
-    public List<Object> values;
+    public static final String NAME = "inSet";
 
-    public InSetConstraintDTO()
-    {
-        super(ConstraintType.IN_SET);
-    }
+    @JsonProperty(NAME)
+    public List<Object> values;
 }

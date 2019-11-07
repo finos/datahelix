@@ -34,6 +34,6 @@ public class BooleanValueStep {
 
     @When("{fieldVar} is anything but {operator} {boolean}")
     public void whenFieldIsNotConstrainedByNumericValue(String fieldName, String constraintName, Boolean value) {
-        this.state.addNotConstraint(fieldName, ConstraintType.fromPropertyName(constraintName), value);
+        this.state.addNotConstraint(fieldName, ConstraintType.fromName(constraintName), value);
     }
 }

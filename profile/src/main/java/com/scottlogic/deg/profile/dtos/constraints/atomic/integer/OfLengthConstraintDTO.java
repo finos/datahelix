@@ -14,19 +14,22 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.dtos.constraints.atomic.numeric;
+package com.scottlogic.deg.profile.dtos.constraints.atomic.integer;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.AtomicConstraintDTO;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-public abstract class IntegerConstraintDTO extends AtomicConstraintDTO
+@JsonDeserialize(as = OfLengthConstraintDTO.class)
+public class OfLengthConstraintDTO extends IntegerConstraintDTO
 {
-    IntegerConstraintDTO(ConstraintType type)
-    {
-        super(type);
-    }
+    public static final String NAME = "ofLength";
 
-    @JsonIgnore
-    public abstract int getInt();
+    @JsonProperty(NAME)
+    public int value;
+
+    @Override
+    public int getInt()
+    {
+        return value;
+    }
 }

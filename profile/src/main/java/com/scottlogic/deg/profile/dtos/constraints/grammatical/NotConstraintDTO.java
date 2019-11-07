@@ -14,26 +14,17 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.dtos.constraints.atomic.numeric;
+package com.scottlogic.deg.profile.dtos.constraints.grammatical;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintTypeJsonProperty;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
 
-@JsonDeserialize(as = OfLengthConstraintDTO.class)
-public class OfLengthConstraintDTO extends IntegerConstraintDTO
+@JsonDeserialize(as = NotConstraintDTO.class)
+public class NotConstraintDTO extends GrammaticalConstraintDTO
 {
-    @JsonProperty(ConstraintTypeJsonProperty.OF_LENGTH)
-    public int value;
+    public static final String NAME ="not";
 
-    public OfLengthConstraintDTO() {
-        super(ConstraintType.OF_LENGTH);
-    }
-
-    @Override
-    public int getInt()
-    {
-        return value;
-    }
+    @JsonProperty(NAME)
+    public ConstraintDTO constraint;
 }

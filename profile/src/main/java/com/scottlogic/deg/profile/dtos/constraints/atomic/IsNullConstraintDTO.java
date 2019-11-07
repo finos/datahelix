@@ -18,15 +18,12 @@ package com.scottlogic.deg.profile.dtos.constraints.atomic;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintTypeJsonProperty;
 
 @JsonDeserialize(as = IsNullConstraintDTO.class)
-public class IsNullConstraintDTO extends AtomicConstraintDTO {
-    @JsonProperty(ConstraintTypeJsonProperty.IS_NULL)
-    public boolean isNull;
+public class IsNullConstraintDTO extends AtomicConstraintDTO
+{
+    public static final String NAME = "isNull";
 
-    public IsNullConstraintDTO() {
-        super(ConstraintType.IS_NULL);
-    }
+    @JsonProperty(NAME)
+    public boolean isNull;
 }

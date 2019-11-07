@@ -17,16 +17,10 @@
 package com.scottlogic.deg.profile.dtos.constraints.atomic.textual;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.AtomicConstraintDTO;
 
 public abstract class RegexConstraintDTO extends AtomicConstraintDTO
 {
-    RegexConstraintDTO(ConstraintType type)
-    {
-        super(type);
-    }
-
     @JsonIgnore
     public abstract String getRegex();
 }

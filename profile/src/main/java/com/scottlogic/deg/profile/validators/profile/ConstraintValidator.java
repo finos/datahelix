@@ -21,10 +21,10 @@ import com.scottlogic.deg.common.validators.Validator;
 import com.scottlogic.deg.profile.dtos.FieldDTO;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.InvalidConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.NotConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.grammatical.NotConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.InSetConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.IsNullConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.numeric.IntegerConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.IntegerConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.AllOfConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.AnyOfConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
@@ -58,7 +58,7 @@ public abstract class ConstraintValidator<T extends ConstraintDTO> implements Va
 
     protected String getErrorInfo(T constraint)
     {
-        return " | Constraint: " + constraint.getName() + " | Rule: " + rule;
+        return " | Constraint: " + constraint.getType().propertyName + " | Rule: " + rule;
     }
 
     protected static ValidationResult validateConstraint(ConstraintDTO dto, String rule, List<FieldDTO> fields)
@@ -129,7 +129,7 @@ public abstract class ConstraintValidator<T extends ConstraintDTO> implements Va
         }
         if(dto.getType() == null)
         {
-            return ValidationResult.failure("Constraint type must not be null | Constraint: " + dto.getName() + " | Rule: " + rule);
+            return ValidationResult.failure("Constraint type must not be null | Constraint: " + dto.getType().propertyName + " | Rule: " + rule);
         }
         return ValidationResult.success();
     }

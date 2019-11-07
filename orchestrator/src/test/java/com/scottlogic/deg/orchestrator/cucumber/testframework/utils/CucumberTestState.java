@@ -27,6 +27,9 @@ import com.scottlogic.deg.profile.dtos.constraints.*;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.*;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.EqualToConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.GranularToConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.LongerThanConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.OfLengthConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.ShorterThanConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.numeric.*;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.temporal.AfterConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.temporal.AfterOrAtConstraintDTO;
@@ -37,6 +40,7 @@ import com.scottlogic.deg.profile.dtos.constraints.atomic.textual.MatchesRegexCo
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.AllOfConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.AnyOfConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.grammatical.NotConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.relations.*;
 
 import java.io.IOException;

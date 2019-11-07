@@ -18,18 +18,14 @@ package com.scottlogic.deg.profile.dtos.constraints.atomic.textual;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintTypeJsonProperty;
 
 @JsonDeserialize(as = ContainsRegexConstraintDTO.class)
 public class ContainsRegexConstraintDTO extends RegexConstraintDTO
 {
-    @JsonProperty(ConstraintTypeJsonProperty.CONTAINS_REGEX)
-    public String value;
+    public static final String NAME = "containingRegex";
 
-    public ContainsRegexConstraintDTO() {
-        super(ConstraintType.CONTAINS_REGEX);
-    }
+    @JsonProperty(NAME)
+    public String value;
 
     @Override
     public String getRegex()

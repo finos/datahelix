@@ -16,7 +16,6 @@
 
 package com.scottlogic.deg.profile.dtos.constraints.relations;
 
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
 
 public abstract class RelationalConstraintDTO extends ConstraintDTO
@@ -24,10 +23,6 @@ public abstract class RelationalConstraintDTO extends ConstraintDTO
     public String field;
     public int offset;
     public String offsetUnit;
-
-    RelationalConstraintDTO(ConstraintType type) {
-        super(type);
-    }
 
     public abstract String getOtherField();
 }

@@ -18,20 +18,18 @@ package com.scottlogic.deg.profile.dtos.constraints.relations;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintTypeJsonProperty;
 
 @JsonDeserialize(as = EqualToFieldConstraintDTO.class)
-public class EqualToFieldConstraintDTO extends RelationalConstraintDTO {
-    @JsonProperty(ConstraintTypeJsonProperty.EQUAL_TO_FIELD)
+public class EqualToFieldConstraintDTO extends RelationalConstraintDTO
+{
+    public static final String NAME = "equalToField";
+
+    @JsonProperty(NAME)
     public String otherField;
 
-    public EqualToFieldConstraintDTO() {
-        super(ConstraintType.EQUAL_TO_FIELD);
-    }
-
     @Override
-    public String getOtherField() {
+    public String getOtherField()
+    {
         return otherField;
     }
 }

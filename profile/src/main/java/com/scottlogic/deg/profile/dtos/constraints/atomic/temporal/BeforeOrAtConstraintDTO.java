@@ -16,24 +16,18 @@
 
 package com.scottlogic.deg.profile.dtos.constraints.atomic.temporal;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintTypeJsonProperty;
 
 @JsonDeserialize(as = BeforeOrAtConstraintDTO.class)
 public class BeforeOrAtConstraintDTO extends TemporalConstraintDTO
 {
-    @JsonProperty(ConstraintTypeJsonProperty.BEFORE_OR_AT)
+    public static final String NAME = "beforeOrAt";
+
+    @JsonProperty(NAME)
     public String value;
 
-    public BeforeOrAtConstraintDTO() {
-        super(ConstraintType.BEFORE_OR_AT);
-    }
-
     @Override
-    @JsonIgnore
     public String getDate()
     {
         return value;

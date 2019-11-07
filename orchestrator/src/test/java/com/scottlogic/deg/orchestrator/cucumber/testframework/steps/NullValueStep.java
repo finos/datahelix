@@ -41,7 +41,7 @@ public class NullValueStep {
 
     @When("{fieldVar} is anything but {operator} null")
     public void whenFieldIsNotConstrainedByTextValue(String fieldName, String constraintName) {
-        state.addNotConstraint(fieldName, ConstraintType.fromPropertyName(constraintName), null);
+        state.addNotConstraint(fieldName, ConstraintType.fromName(constraintName), null);
     }
 
     @Then("{fieldVar} contains anything but null")
