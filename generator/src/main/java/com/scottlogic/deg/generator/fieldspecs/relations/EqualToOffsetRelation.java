@@ -17,6 +17,7 @@
 package com.scottlogic.deg.generator.fieldspecs.relations;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.common.profile.Granularity;
 import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
@@ -60,7 +61,11 @@ public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpec
 
     @Override
     public FieldSpec createModifierFromOtherValue(DataBagValue otherFieldGeneratedValue) {
-        T offsetValue = offsetGranularity.getNext((T) otherFieldGeneratedValue.getValue(), offset);
+        T value = (T) otherFieldGeneratedValue.getValue();
+        if (value == null) {
+            return FieldSpecFactory.fromType(FieldType.DATETIME);
+        }
+        T offsetValue = offsetGranularity.getNext(value, offset);
         return FieldSpecFactory.fromList(DistributedList.singleton(offsetValue));
     }
 

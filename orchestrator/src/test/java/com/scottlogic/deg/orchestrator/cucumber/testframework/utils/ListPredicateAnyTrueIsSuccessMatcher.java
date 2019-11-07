@@ -19,7 +19,6 @@ package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.function.Function;
 

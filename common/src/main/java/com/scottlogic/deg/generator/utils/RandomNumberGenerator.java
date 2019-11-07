@@ -21,7 +21,7 @@ import java.math.BigDecimal;
 public interface RandomNumberGenerator {
     int nextInt();
     int nextInt(int bound);
-    int nextInt(int lowerInclusive, int upperExclusive);
+    long nextLong(long lowerInclusive, long upperInclusive);
     double nextDouble(double lowerInclusive, double upperExclusive);
     BigDecimal nextBigDecimal(BigDecimal lowerInclusive, BigDecimal upperExclusive);
 }

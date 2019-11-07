@@ -19,7 +19,6 @@ package com.scottlogic.deg.generator.fieldspecs;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
 
-import java.lang.reflect.Type;
 import java.util.Optional;
 
 public class RestrictionsMergeOperation {

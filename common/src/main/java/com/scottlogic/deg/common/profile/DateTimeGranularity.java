@@ -88,7 +88,7 @@ public class DateTimeGranularity implements Granularity<OffsetDateTime> {
 
     @Override
     public OffsetDateTime getRandom(OffsetDateTime min, OffsetDateTime max, RandomNumberGenerator randomNumberGenerator) {
-        long generatedLong = (long) randomNumberGenerator.nextDouble(getMilli(min), getMilli(max));
+        long generatedLong = randomNumberGenerator.nextLong(getMilli(min), getMilli(max));
 
         OffsetDateTime generatedDate = Instant.ofEpochMilli(generatedLong).atZone(ZoneOffset.UTC).toOffsetDateTime();
 

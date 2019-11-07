@@ -26,7 +26,6 @@ import java.util.Optional;
 
 import static com.scottlogic.deg.common.util.Defaults.ISO_MAX_DATE;
 import static com.scottlogic.deg.generator.utils.Defaults.*;
-import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static java.time.temporal.ChronoUnit.*;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;

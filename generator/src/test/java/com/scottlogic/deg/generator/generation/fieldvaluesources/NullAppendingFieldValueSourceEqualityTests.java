@@ -20,7 +20,6 @@ import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 import static org.hamcrest.core.IsEqual.equalTo;
