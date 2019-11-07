@@ -46,23 +46,21 @@ public class ConstraintDeserializer extends JsonDeserializer<ConstraintDTO> {
         ObjectNode node = mapper.readTree(jsonParser);
         ConstraintType type = Arrays.stream(ConstraintType.values())
             .filter(constraintType -> node.has(constraintType.propertyName))
-            .findFirst().orElse(null);
-        if (type != null)
+            .findFirst().orElse(ConstraintType.INVALID);
+        switch (type)
         {
-            switch (type)
-            {
-                case IN_SET:
-                    JsonNode inSetNode = node.get(InSetConstraintDTO.NAME);
-                    return (inSetNode.isNull() || inSetNode.isArray())
-                        ? mapper.treeToValue(node, InSetConstraintDTO.class)
-                        : map(mapper.treeToValue(node, InSetFromFileConstraintDTO.class));
-                case IN_MAP:
-                    return map(mapper.treeToValue(node, InMapFromFileConstraintDTO.class));
-                default:
-                    return mapper.treeToValue(node, type.clazz);
-            }
+            case INVALID:
+                return new InvalidConstraintDTO(node.toString());
+            case IN_SET:
+                JsonNode inSetNode = node.get(InSetConstraintDTO.NAME);
+                return (inSetNode.isNull() || inSetNode.isArray())
+                    ? mapper.treeToValue(node, InSetConstraintDTO.class)
+                    : map(mapper.treeToValue(node, InSetFromFileConstraintDTO.class));
+            case IN_MAP:
+                return map(mapper.treeToValue(node, InMapFromFileConstraintDTO.class));
+            default:
+                return mapper.treeToValue(node, type.clazz);
         }
-        return new InvalidConstraintDTO(node.toString());
     }
 
     private InMapConstraintDTO map(InMapFromFileConstraintDTO dto)
