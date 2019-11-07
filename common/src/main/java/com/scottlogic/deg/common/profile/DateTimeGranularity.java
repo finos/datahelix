@@ -2,6 +2,7 @@ package com.scottlogic.deg.common.profile;
 
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.date.TemporalAdjusterGenerator;
+import com.scottlogic.deg.common.util.defaults.DateTimeDefaults;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
 import java.time.Instant;
@@ -30,6 +31,11 @@ public class DateTimeGranularity implements Granularity<OffsetDateTime> {
         String offsetUnitUpperCase = granularity.toUpperCase();
         boolean workingDay = offsetUnitUpperCase.equals("WORKING DAYS");
         return new DateTimeGranularity(Enum.valueOf(ChronoUnit.class, workingDay ? "DAYS" : offsetUnitUpperCase), workingDay);
+    }
+
+    @Override
+    public Granularity<OffsetDateTime> getFinestGranularity() {
+        return DateTimeDefaults.get().granularity();
     }
 
     @Override

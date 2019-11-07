@@ -47,7 +47,7 @@ public class BeforeRelation<T extends Comparable<T>> implements FieldSpecRelatio
         }
 
         LinearRestrictions<T> lr = (LinearRestrictions)((RestrictionsFieldSpec) otherFieldSpec).getRestrictions();
-        return createFromMax(lr.getMax(), lr.getGranularity());
+        return createFromMax(lr.getMax(), defaults.granularity());
     }
 
     @Override

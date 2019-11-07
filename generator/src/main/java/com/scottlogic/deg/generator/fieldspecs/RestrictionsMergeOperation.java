@@ -30,9 +30,9 @@ public class RestrictionsMergeOperation {
         this.stringMerger = stringMerger;
     }
 
-    public Optional<TypedRestrictions> applyMergeOperation(TypedRestrictions left, TypedRestrictions right) {
+    public Optional<TypedRestrictions> applyMergeOperation(TypedRestrictions left, TypedRestrictions right, boolean useFinestGranularityAvailable) {
         return getMerger(left)
-            .merge(left, right);
+            .merge(left, right, useFinestGranularityAvailable);
     }
 
     private RestrictionsMerger getMerger(TypedRestrictions restrictions) {

@@ -20,6 +20,8 @@ import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
 public interface Granularity<T> {
 
+    Granularity<T> getFinestGranularity();
+
     boolean isCorrectScale(T value);
 
     Granularity<T> merge(Granularity<T> otherGranularity);
