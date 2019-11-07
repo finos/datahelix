@@ -1,6 +1,6 @@
 package com.scottlogic.deg.generator.decisiontree;
 
-import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
+import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelation;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.common.util.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.utils.SetUtils;
@@ -16,12 +16,12 @@ import static java.util.stream.Stream.concat;
 
 public class ConstraintNodeBuilder {
     private final Set<AtomicConstraint> atomicConstraints;
-    private final Set<FieldSpecRelations> relations;
+    private final Set<FieldSpecRelation> relations;
     private final Set<DecisionNode> decisions;
     private final Set<NodeMarking> nodeMarkings;
 
     public ConstraintNodeBuilder(Set<AtomicConstraint> atomicConstraints,
-                                 Set<FieldSpecRelations> relations,
+                                 Set<FieldSpecRelation> relations,
                                  Set<DecisionNode> decisions,
                                  Set<NodeMarking> nodeMarkings) {
         this.atomicConstraints = atomicConstraints;
@@ -38,7 +38,7 @@ public class ConstraintNodeBuilder {
         return new ConstraintNodeBuilder(newAtomicConstraints, relations, decisions, nodeMarkings);
     }
 
-    public ConstraintNodeBuilder setRelations(Set<FieldSpecRelations> newConstraints) {
+    public ConstraintNodeBuilder setRelations(Set<FieldSpecRelation> newConstraints) {
         return new ConstraintNodeBuilder(atomicConstraints, newConstraints, decisions, nodeMarkings);
     }
 
@@ -63,7 +63,7 @@ public class ConstraintNodeBuilder {
         return addAtomicConstraints(Arrays.stream(constraints).collect(Collectors.toSet()));
     }
 
-    public ConstraintNodeBuilder addRelations(Set<FieldSpecRelations> relations) {
+    public ConstraintNodeBuilder addRelations(Set<FieldSpecRelation> relations) {
         return setRelations(
             concat(
                 this.relations.stream(),
@@ -72,7 +72,7 @@ public class ConstraintNodeBuilder {
         );
     }
 
-    public ConstraintNodeBuilder addRelations(FieldSpecRelations... constraints) {
+    public ConstraintNodeBuilder addRelations(FieldSpecRelation... constraints) {
         return addRelations(SetUtils.setOf(constraints));
     }
 

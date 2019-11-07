@@ -155,11 +155,6 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     }
 
     @Override
-    public boolean isSchemaValidationDisabled() {
-        return disableSchemaValidation;
-    }
-
-    @Override
     public boolean overwriteOutputFiles() {
         return overwriteOutputFiles;
     }

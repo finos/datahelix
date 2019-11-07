@@ -38,7 +38,7 @@ public class BeforeDateRelationTest {
 
     @Test
     public void testReduceToFieldSpec_withNotNull_reducesToSpec() {
-        FieldSpecRelations beforeDateRelations = new BeforeRelation(a, b, true, DateTimeDefaults.get());
+        FieldSpecRelation beforeDateRelations = new BeforeRelation(a, b, true, DateTimeDefaults.get());
         OffsetDateTime value = OffsetDateTime.of(2000,
             1,
             1,
@@ -57,7 +57,7 @@ public class BeforeDateRelationTest {
 
     @Test
     public void testReduceToFieldSpec_withNotNullExclusive_reducesToSpec() {
-        FieldSpecRelations beforeDateRelations = new BeforeRelation(a, b, false, DateTimeDefaults.get());
+        FieldSpecRelation beforeDateRelations = new BeforeRelation(a, b, false, DateTimeDefaults.get());
         OffsetDateTime value = OffsetDateTime.of(2000,
             1,
             1,
@@ -77,7 +77,7 @@ public class BeforeDateRelationTest {
 
     @Test
     public void testReduceToFieldSpec_withNull_reducesToSpec() {
-        FieldSpecRelations beforeDateRelations = new BeforeRelation(a, b, true, DateTimeDefaults.get());
+        FieldSpecRelation beforeDateRelations = new BeforeRelation(a, b, true, DateTimeDefaults.get());
         OffsetDateTime value = null;
         DataBagValue generatedValue = new DataBagValue(value);
 

@@ -24,7 +24,8 @@ import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 
-public class AfterRelation<T extends Comparable<T>> implements FieldSpecRelations {
+public class AfterRelation<T extends Comparable<T>> implements FieldSpecRelation
+{
     private final Field main;
     private final Field other;
     private final boolean inclusive;
@@ -65,7 +66,7 @@ public class AfterRelation<T extends Comparable<T>> implements FieldSpecRelation
     }
 
     @Override
-    public FieldSpecRelations inverse() {
+    public FieldSpecRelation inverse() {
         return new BeforeRelation(other, main, inclusive, defaults);
     }
 

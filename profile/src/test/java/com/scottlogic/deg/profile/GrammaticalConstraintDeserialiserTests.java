@@ -17,18 +17,18 @@
 package com.scottlogic.deg.profile;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
-import com.scottlogic.deg.profile.dtos.constraints.*;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.InvalidConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.NotConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.EqualToConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.GreaterThanConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.LessThanConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.IsNullConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.numeric.GreaterThanConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.numeric.LessThanConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.AllOfConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.AnyOfConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
-import com.scottlogic.deg.profile.reader.InvalidProfileException;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -79,14 +79,15 @@ public class GrammaticalConstraintDeserialiserTests {
         try {
             deserialiseJsonString(json);
             Assert.fail("should have thrown an exception");
-        } catch (UnrecognizedPropertyException e) {
+        } catch (UnrecognizedPropertyException e)
+        {
             String expectedMessage = "Unrecognized field \"fild\" (class com.scottlogic.deg.profile.dtos.constraints.atomic.EqualToConstraintDTO), not marked as ignorable (2 known properties: \"field\", \"equalTo\"])\n at [Source: UNKNOWN; line: -1, column: -1] (through reference chain: com.scottlogic.deg.profile.dtos.constraints.grammatical.AnyOfConstraintDTO[\"anyOf\"]->java.util.ArrayList[0]->com.scottlogic.deg.profile.dtos.constraints.atomic.EqualToConstraintDTO[\"fild\"])";
             assertThat(e.getMessage(), sameBeanAs(expectedMessage));
         }
     }
 
     @Test
-    public void shouldDeserialiseAnyOfAndThrowInvalidConstraintException() throws IOException {
+    public void shouldDeserialiseAnyOfAndReturnInvalidConstraint() throws IOException {
         // Arrange
         final String json =
             "{ \"ayOf\": [" +
@@ -95,32 +96,8 @@ public class GrammaticalConstraintDeserialiserTests {
             "  ]" +
             "}";
 
-        try {
-            deserialiseJsonString(json);
-            Assert.fail("should have thrown an exception");
-        } catch (InvalidProfileException e) {
-            String expectedMessage = "The constraint json object node doesn't contain any of the expected keywords as properties: {\"ayOf\":[{\"field\":\"foo\",\"equalTo\":\"0\"},{\"field\":\"foo\",\"isNull\":\"true\"}]}";
-            assertThat(e.getMessage(), sameBeanAs(expectedMessage));
-        }
-    }
-
-    @Test
-    public void shouldDeserialiseAnyOfAndThrowInvalidConstraintValueException() throws IOException {
-        // Arrange
-        final String json =
-            "{ \"anyOf\": [" +
-            "    { \"field\": \"foo\", \"equalTo\": \"0\" }," +
-            "    { \"field\": \"foo\", \"isNll\": \"true\" }" +
-            "  ]" +
-            "}";
-
-        try {
-            deserialiseJsonString(json);
-            Assert.fail("should have thrown an exception");
-        } catch (JsonMappingException e) {
-            String expectedMessage = "The constraint json object node for field foo doesn't contain any of the expected keywords as properties: {\"field\":\"foo\",\"isNll\":\"true\"} (through reference chain: com.scottlogic.deg.profile.dtos.constraints.grammatical.AnyOfConstraintDTO[\"anyOf\"]->java.util.ArrayList[1])";
-            assertThat(e.getMessage(), sameBeanAs(expectedMessage));
-        }
+        ConstraintDTO constraintDTO = deserialiseJsonString(json);
+        Assert.assertTrue(constraintDTO instanceof InvalidConstraintDTO);
     }
 
     @Test

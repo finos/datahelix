@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.profile.dtos.constraints.grammatical;
 
-import com.scottlogic.deg.profile.common.ConstraintType;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
 
 public abstract class GrammaticalConstraintDTO extends ConstraintDTO

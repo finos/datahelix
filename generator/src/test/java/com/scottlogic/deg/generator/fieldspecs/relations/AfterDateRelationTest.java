@@ -38,7 +38,7 @@ public class AfterDateRelationTest {
 
     @Test
     public void testReduceToFieldSpec_withNotNull_reducesToSpec() {
-        FieldSpecRelations afterDateRelations = new AfterRelation(a, b, true, DateTimeDefaults.get());
+        FieldSpecRelation afterDateRelations = new AfterRelation(a, b, true, DateTimeDefaults.get());
         OffsetDateTime value = OffsetDateTime.of(2000,
             1,
             1,
@@ -57,7 +57,7 @@ public class AfterDateRelationTest {
 
     @Test
     public void testReduceToFieldSpec_withNotNullExclusive_reducesToSpec() {
-        FieldSpecRelations afterDateRelations = new AfterRelation(a, b, false, DateTimeDefaults.get());
+        FieldSpecRelation afterDateRelations = new AfterRelation(a, b, false, DateTimeDefaults.get());
         OffsetDateTime value = OffsetDateTime.of(2000,
             1,
             1,
@@ -77,7 +77,7 @@ public class AfterDateRelationTest {
 
     @Test
     public void testReduceToFieldSpec_withNull_reducesToSpec() {
-        FieldSpecRelations afterDateRelations = new AfterRelation(a, b, true, DateTimeDefaults.get());
+        FieldSpecRelation afterDateRelations = new AfterRelation(a, b, true, DateTimeDefaults.get());
         OffsetDateTime value = null;
         DataBagValue generatedValue = new DataBagValue(value);
 

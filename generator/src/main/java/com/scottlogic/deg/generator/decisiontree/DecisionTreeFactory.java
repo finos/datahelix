@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.decisiontree;
 
-import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
+import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelation;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
@@ -56,8 +56,8 @@ public class DecisionTreeFactory {
             return convertOrConstraint((OrConstraint) constraintToConvert);
         } else if (constraintToConvert instanceof ConditionalConstraint) {
             return convertConditionalConstraint((ConditionalConstraint) constraintToConvert);
-        } else if (constraintToConvert instanceof FieldSpecRelations) {
-            FieldSpecRelations relation = (FieldSpecRelations) constraintToConvert;
+        } else if (constraintToConvert instanceof FieldSpecRelation) {
+            FieldSpecRelation relation = (FieldSpecRelation) constraintToConvert;
             return asConstraintNode(relation);
         } else {
             AtomicConstraint atomicConstraint = (AtomicConstraint) constraintToConvert;
@@ -103,8 +103,8 @@ public class DecisionTreeFactory {
         }
         // if we got this far, it must be an atomic constraint
         else {
-            if (constraintToConvert instanceof FieldSpecRelations) {
-                return asConstraintNode((FieldSpecRelations) constraintToConvert);
+            if (constraintToConvert instanceof FieldSpecRelation) {
+                return asConstraintNode((FieldSpecRelation) constraintToConvert);
             }
             AtomicConstraint atomicConstraint = (AtomicConstraint) constraintToConvert;
             return asConstraintNode(atomicConstraint);
@@ -164,7 +164,7 @@ public class DecisionTreeFactory {
             .build();
     }
 
-    private static ConstraintNode asConstraintNode(FieldSpecRelations relation) {
+    private static ConstraintNode asConstraintNode(FieldSpecRelation relation) {
         return new ConstraintNodeBuilder()
             .addRelations(relation)
             .setDecisions(Collections.emptySet())

@@ -20,8 +20,9 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.*;
-import com.scottlogic.deg.profile.common.ConstraintType;
-import com.scottlogic.deg.profile.reader.InvalidProfileException;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
+
+import com.scottlogic.deg.common.ValidationException;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.*;
 import org.hamcrest.Matcher;
@@ -170,6 +171,51 @@ public class GeneralTestStep {
         }
     }
 
+    @But("^the profile is invalid")
+    public void profileIsInvalid()
+    {
+        state.expectExceptions = true;
+        cucumberTestHelper.generateAndGetData();
+
+        List<String> errors = this.cucumberTestHelper
+            .getProfileValidationErrors()
+            .collect(Collectors.toList());
+        Assert.assertFalse(errors.isEmpty());
+
+    }
+
+    @But("^the profile is invalid with error \"(.+)\"$")
+    public void profileIsInvalidWithErrorMessage(String expectedError) {
+        state.expectExceptions = true;
+        cucumberTestHelper.generateAndGetData();
+
+        List<String> errors = this.cucumberTestHelper
+            .getProfileValidationErrors()
+            .collect(Collectors.toList());
+
+        if (errors.size() == 0) {
+            Assert.fail("No profile validation errors were raised");
+        } else {
+            Assert.assertEquals(errors.get(0), expectedError);
+        }
+    }
+
+    @But("^the profile is invalid with error containing \"(.+)\"$")
+    public void profileIsInvalidWithErrorContainingErrorMessage(String expectedError) {
+        state.expectExceptions = true;
+        cucumberTestHelper.generateAndGetData();
+
+        List<String> errors = this.cucumberTestHelper
+            .getProfileValidationErrors()
+            .collect(Collectors.toList());
+
+        if (errors.size() == 0) {
+            Assert.fail("No profile validation errors were raised");
+        } else {
+            Assert.assertTrue(errors.get(0).contains(expectedError));
+        }
+    }
+
     @And("^no data is created$")
     public void noDataIsCreated() {
         List<Map<String,Object>> data = cucumberTestHelper.generateAndGetData();
@@ -245,7 +291,7 @@ public class GeneralTestStep {
                     try
                     {
                         rowMap.put(key, GeneratorTestUtilities.parseExpected(row.get(key)));
-                    } catch (JsonParseException | InvalidProfileException e)
+                    } catch (JsonParseException | ValidationException e)
                     {
                         state.addException(e);
                         rowMap.put(key, "<exception thrown: " + e.getMessage() + ">");

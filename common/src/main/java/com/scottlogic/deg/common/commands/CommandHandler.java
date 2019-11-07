@@ -15,7 +15,7 @@ public abstract class CommandHandler<TCommand extends Command<TResponse>, TRespo
     public CommandResult<TResponse> handle(TCommand command)
     {
         ValidationResult validationResult = validator.validate(command);
-        if(validationResult.isValid) return handleCommand(command);
+        if (validationResult.isSuccess) return handleCommand(command);
         return CommandResult.failure(validationResult.errors);
     }
 

@@ -18,7 +18,7 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.Fields;
-import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
+import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelation;
 
 import java.util.*;
 
@@ -32,10 +32,10 @@ public class RowSpec {
 
     private final Map<Field, FieldSpec> fieldToFieldSpec;
 
-    private final List<FieldSpecRelations> relations;
+    private final List<FieldSpecRelation> relations;
     public RowSpec(Fields fields,
                    Map<Field, FieldSpec> fieldToFieldSpec,
-                   List<FieldSpecRelations> relations) {
+                   List<FieldSpecRelation> relations) {
 
         this.fields = fields;
         this.fieldToFieldSpec = fieldToFieldSpec;
@@ -56,7 +56,7 @@ public class RowSpec {
         return ownFieldSpec;
     }
 
-    public List<FieldSpecRelations> getRelations() {
+    public List<FieldSpecRelation> getRelations() {
         return relations;
     }
 
