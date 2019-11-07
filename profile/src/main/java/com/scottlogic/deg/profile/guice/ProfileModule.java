@@ -43,9 +43,6 @@ public class ProfileModule extends AbstractModule {
     protected void configure() {
         // Bind command line to correct implementation
         bind(ProfileConfigSource.class).toInstance(profileConfigSource);
-        bind(ProfileSchemaValidator.class).to(ProfileSchemaValidatorLeadPony.class);
-        bind(ProfileSchemaLoader.class).toProvider(ProfileSchemaLoaderProvider.class);
-        bind(SchemaVersionValidator.class).to(SupportedVersionChecker.class);
         bind(ProfileReader.class).to(JsonProfileReader.class);
 
         bind(File.class)

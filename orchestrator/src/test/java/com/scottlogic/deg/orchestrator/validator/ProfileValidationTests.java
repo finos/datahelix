@@ -16,14 +16,19 @@
 
 package com.scottlogic.deg.orchestrator.validator;
 
-import com.scottlogic.deg.profile.reader.ProfileSchemaFileLoader;
-import com.scottlogic.deg.profile.reader.ProfileSchemaValidatorLeadPony;
+import com.scottlogic.deg.profile.creation.services.ConstraintService;
+import com.scottlogic.deg.profile.creation.services.FieldService;
+import com.scottlogic.deg.profile.creation.services.RuleService;
+import com.scottlogic.deg.profile.creation.validators.CreateProfileValidator;
+import com.scottlogic.deg.profile.creation.validators.profile.ProfileValidator;
+import com.scottlogic.deg.profile.reader.FileReader;
+import com.scottlogic.deg.profile.reader.JsonProfileReader;
+import com.scottlogic.deg.profile.reader.ProfileCommandBus;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,14 +45,11 @@ public class ProfileValidationTests {
                 .listFiles(File::isDirectory);
         for (File dir : directoriesArray) {
             File profileFile = Paths.get(dir.getCanonicalPath(), "profile.json").toFile();
-
-            String schemaVersionPath = "profileschema/datahelix.schema.json";
-            URL schemaUrl =
-                Thread.currentThread().getContextClassLoader().getResource(schemaVersionPath);
             DynamicTest test = DynamicTest.dynamicTest(
                 dir.getName(),
-                () -> new ProfileSchemaFileLoader(new ProfileSchemaValidatorLeadPony()).validateProfile(profileFile, schemaUrl));
-
+                () -> new JsonProfileReader(profileFile, new FileReader(profileFile.getParent()),
+                    new ProfileCommandBus(new FieldService(), new RuleService(new ConstraintService()),
+                        new CreateProfileValidator(new ProfileValidator()))).read());
             dynamicTests.add(test);
         }
         return dynamicTests;

@@ -18,7 +18,6 @@ package com.scottlogic.deg.profile.creation.serialisation;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.inject.Inject;
 import com.scottlogic.deg.profile.creation.dtos.ProfileDTO;
 import com.scottlogic.deg.profile.reader.FileReader;
 
@@ -27,15 +26,8 @@ import java.io.UncheckedIOException;
 
 public class ProfileDeserialiser
 {
-    public final FileReader fileReader;
 
-    @Inject
-    public ProfileDeserialiser(FileReader fileReader)
-    {
-        this.fileReader = fileReader;
-    }
-
-    public ProfileDTO deserialise(String json)
+    public static ProfileDTO deserialise(String json, FileReader fileReader)
     {
         ConstraintDeserializer.fileReader = fileReader;
         ObjectMapper mapper = new ObjectMapper();

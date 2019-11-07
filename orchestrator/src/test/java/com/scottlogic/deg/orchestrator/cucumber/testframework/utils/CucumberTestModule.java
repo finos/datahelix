@@ -27,8 +27,6 @@ import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.orchestrator.violate.manifest.ManifestWriter;
 import com.scottlogic.deg.output.outputtarget.OutputTargetFactory;
 import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
-import com.scottlogic.deg.profile.reader.NoopVersionChecker;
-import com.scottlogic.deg.profile.reader.SchemaVersionValidator;
 import com.scottlogic.deg.profile.reader.FileReader;
 import com.scottlogic.deg.profile.reader.ProfileReader;
 import com.scottlogic.deg.profile.reader.ConfigValidator;
@@ -57,7 +55,6 @@ public class CucumberTestModule extends AbstractModule {
 
         bind(CucumberTestState.class).toInstance(testState);
         bind(ProfileReader.class).to(CucumberProfileReader.class);
-        bind(SchemaVersionValidator.class).to(NoopVersionChecker.class);
         bind(FileReader.class).to(CucumberFileReader.class);
 
         bind(ProfileValidator.class).toInstance(new UniquenessValidator(new CucumberGenerationConfigSource(testState)));

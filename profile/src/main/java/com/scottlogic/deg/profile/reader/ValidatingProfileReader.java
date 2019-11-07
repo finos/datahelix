@@ -17,36 +17,23 @@ package com.scottlogic.deg.profile.reader;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.generator.profile.Profile;
-import com.scottlogic.deg.profile.guice.ProfileConfigSource;
 
 import java.io.IOException;
-import java.net.URL;
 
 public class ValidatingProfileReader {
 
-    private final ProfileConfigSource configSource;
     private final ConfigValidator configValidator;
     private final ProfileReader profileReader;
-    private final ProfileSchemaLoader profileSchemaLoader;
-    private final SchemaVersionValidator schemaVersionValidator;
 
     @Inject
-    public ValidatingProfileReader(ProfileConfigSource configSource,
-                                   ConfigValidator configValidator,
-                                   ProfileReader profileReader,
-                                   ProfileSchemaLoader profileSchemaLoader,
-                                   SchemaVersionValidator schemaVersionValidator) {
-        this.configSource = configSource;
+    public ValidatingProfileReader(ConfigValidator configValidator, ProfileReader profileReader) {
         this.configValidator = configValidator;
         this.profileReader = profileReader;
-        this.profileSchemaLoader = profileSchemaLoader;
-        this.schemaVersionValidator = schemaVersionValidator;
     }
 
-    public Profile read() throws IOException {
+    public Profile read() throws IOException
+    {
         configValidator.checkProfileInputFile();
-        URL schema = schemaVersionValidator.getSchemaFile();
-        profileSchemaLoader.validateProfile(configSource.getProfileFile(), schema);
         return profileReader.read();
     }
 }
