@@ -23,7 +23,7 @@ import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintTypeJsonProperty;
 
 @JsonDeserialize(as = LongerThanConstraintDTO.class)
-public class LongerThanConstraintDTO extends NumericConstraintDTO
+public class LongerThanConstraintDTO extends IntegerConstraintDTO
 {
     @JsonProperty(ConstraintTypeJsonProperty.LONGER_THAN)
     public int value;
@@ -34,7 +34,7 @@ public class LongerThanConstraintDTO extends NumericConstraintDTO
 
     @Override
     @JsonIgnore
-    public Number getNumber()
+    public int getInt()
     {
         return value;
     }

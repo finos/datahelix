@@ -17,7 +17,6 @@
 package com.scottlogic.deg.generator.builders;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.HelixStringLength;
 import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
@@ -129,7 +128,7 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
     }
 
     public ConstraintChainBuilder<T> withOfLengthConstraint(Field fooField, int length) {
-        return saveAndSet(new OfLengthConstraint(fooField, HelixStringLength.create(length)));
+        return saveAndSet(new OfLengthConstraint(fooField, length));
     }
 
     public ConstraintChainBuilder<T> withAfterConstraint(Field field, OffsetDateTime dateTime) {

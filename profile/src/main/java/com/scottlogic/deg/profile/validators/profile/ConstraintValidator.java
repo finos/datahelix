@@ -24,6 +24,7 @@ import com.scottlogic.deg.profile.dtos.constraints.InvalidConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.NotConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.InSetConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.IsNullConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.numeric.IntegerConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.AllOfConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.AnyOfConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
@@ -92,7 +93,7 @@ public abstract class ConstraintValidator<T extends ConstraintDTO> implements Va
             case OF_LENGTH:
             case LONGER_THAN:
             case SHORTER_THAN:
-                return new NumericConstraintValidator(rule, fields, FieldType.STRING).validate((NumericConstraintDTO) dto);
+                return new IntegerConstraintValidator(rule, fields, FieldType.STRING).validate((IntegerConstraintDTO) dto);
             case GREATER_THAN:
             case GREATER_THAN_OR_EQUAL_TO:
             case LESS_THAN:

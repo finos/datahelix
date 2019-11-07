@@ -16,24 +16,17 @@
 
 package com.scottlogic.deg.profile.dtos.constraints.atomic.numeric;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintTypeJsonProperty;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.AtomicConstraintDTO;
 
-@JsonDeserialize(as = OfLengthConstraintDTO.class)
-public class OfLengthConstraintDTO extends IntegerConstraintDTO
+public abstract class IntegerConstraintDTO extends AtomicConstraintDTO
 {
-    @JsonProperty(ConstraintTypeJsonProperty.OF_LENGTH)
-    public int value;
-
-    public OfLengthConstraintDTO() {
-        super(ConstraintType.OF_LENGTH);
-    }
-
-    @Override
-    public int getInt()
+    IntegerConstraintDTO(ConstraintType type)
     {
-        return value;
+        super(type);
     }
+
+    @JsonIgnore
+    public abstract int getInt();
 }

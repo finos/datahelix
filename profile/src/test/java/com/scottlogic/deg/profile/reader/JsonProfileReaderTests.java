@@ -373,7 +373,7 @@ public class JsonProfileReaderTests {
             ruleWithConstraints(
                 typedConstraint(
                     OfLengthConstraint.class,
-                    c -> Assert.assertThat(c.referenceValue.getValue(), equalTo(5)))));
+                    c -> Assert.assertThat(c.referenceValue, equalTo(5)))));
     }
 
     @Test
