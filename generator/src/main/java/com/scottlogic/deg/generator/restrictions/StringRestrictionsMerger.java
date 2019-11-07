@@ -25,8 +25,8 @@ import java.util.Optional;
 public class StringRestrictionsMerger implements RestrictionsMerger<StringRestrictions> {
 
     @Override
-    public Optional<StringRestrictions> merge(StringRestrictions left, StringRestrictions right, boolean restrictionsAreRelated) {
-        if (restrictionsAreRelated) {
+    public Optional<StringRestrictions> merge(StringRestrictions left, StringRestrictions right, boolean useFinestGranularityAvailable) {
+        if (useFinestGranularityAvailable) {
             throw new UnsupportedOperationException("Relational strings are unsupported");
         }
 

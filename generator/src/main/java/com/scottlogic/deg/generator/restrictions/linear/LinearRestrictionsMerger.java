@@ -23,7 +23,7 @@ import com.scottlogic.deg.generator.restrictions.TypedRestrictions;
 import java.util.Optional;
 
 public class LinearRestrictionsMerger<T extends Comparable<T>> implements RestrictionsMerger {
-    public Optional<LinearRestrictions> merge(TypedRestrictions left, TypedRestrictions right, boolean restrictionsAreRelated) {
+    public Optional<LinearRestrictions> merge(TypedRestrictions left, TypedRestrictions right, boolean useFinestGranularityAvailable) {
         LinearRestrictions<T> leftCast = (LinearRestrictions<T>) left;
         LinearRestrictions<T> rightCast = (LinearRestrictions<T>) right;
 
@@ -32,7 +32,7 @@ public class LinearRestrictionsMerger<T extends Comparable<T>> implements Restri
          * This is required to find the true minimum or maximum allowed in the restrictions.
          * Coarser granularities can be applied to the FieldSpec using the merged restriction if required.
          */
-        Granularity<T> granularity = restrictionsAreRelated
+        Granularity<T> granularity = useFinestGranularityAvailable
             ? leftCast.getGranularity().getFinestGranularity()
             : leftCast.getGranularity().merge(rightCast.getGranularity());
 

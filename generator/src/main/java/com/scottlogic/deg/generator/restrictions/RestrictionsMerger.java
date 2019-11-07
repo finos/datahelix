@@ -19,5 +19,5 @@ package com.scottlogic.deg.generator.restrictions;
 import java.util.Optional;
 
 public interface RestrictionsMerger<T extends TypedRestrictions> {
-    Optional<T> merge(T left, T right, boolean restrictionsAreRelated);
+    Optional<T> merge(T left, T right, boolean useFinestGranularityAvailable);
 }
