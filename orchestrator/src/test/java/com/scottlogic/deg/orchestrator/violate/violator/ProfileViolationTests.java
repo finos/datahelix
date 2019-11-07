@@ -18,7 +18,6 @@ package com.scottlogic.deg.orchestrator.violate.violator;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.Fields;
-import com.scottlogic.deg.common.profile.HelixDateTime;
 import com.scottlogic.deg.common.profile.HelixStringLength;
 import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.generator.builders.*;
@@ -94,10 +93,10 @@ public class ProfileViolationTests {
             Arguments.of(ShorterThanConstraint.class, HelixStringLength.create(20)),
             Arguments.of(OfLengthConstraint.class, HelixStringLength.create(15)),
 
-            Arguments.of(AfterConstraint.class, HelixDateTime.create(sampleDate)),
-            Arguments.of(AfterOrAtConstraint.class, HelixDateTime.create(sampleDate.plusDays(1))),
-            Arguments.of(BeforeConstraint.class, HelixDateTime.create(sampleDate.minusDays(1))),
-            Arguments.of(BeforeOrAtConstraint.class, HelixDateTime.create(sampleDate.plusDays(2))),
+            Arguments.of(AfterConstraint.class, sampleDate),
+            Arguments.of(AfterOrAtConstraint.class, sampleDate.plusDays(1)),
+            Arguments.of(BeforeConstraint.class, sampleDate.minusDays(1)),
+            Arguments.of(BeforeOrAtConstraint.class, sampleDate.plusDays(2)),
 
             Arguments.of(GreaterThanConstraint.class, NumberUtils.coerceToBigDecimal(100)),
             Arguments.of(GreaterThanOrEqualToConstraint.class, NumberUtils.coerceToBigDecimal(200)),

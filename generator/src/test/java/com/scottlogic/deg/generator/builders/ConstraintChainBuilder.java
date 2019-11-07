@@ -17,7 +17,6 @@
 package com.scottlogic.deg.generator.builders;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.HelixDateTime;
 import com.scottlogic.deg.common.profile.HelixStringLength;
 import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
@@ -134,11 +133,11 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
     }
 
     public ConstraintChainBuilder<T> withAfterConstraint(Field field, OffsetDateTime dateTime) {
-        return saveAndSet(new AfterConstraint(field, HelixDateTime.create(dateTime)));
+        return saveAndSet(new AfterConstraint(field, dateTime));
     }
 
     public ConstraintChainBuilder<T> withBeforeConstraint(Field field, OffsetDateTime dateTime) {
-        return saveAndSet(new BeforeConstraint(field, HelixDateTime.create(dateTime)));
+        return saveAndSet(new BeforeConstraint(field, dateTime));
     }
 
     public ConstraintChainBuilder<T> withMatchesRegexConstraint(Field field, Pattern pattern) {
