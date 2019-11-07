@@ -88,21 +88,13 @@ public class NumericGranularity implements Granularity<BigDecimal> {
 
     @Override
     public BigDecimal getPrevious(BigDecimal value, int amount) {
-        if (!isCorrectScale(value)){
-            return trimToGranularity(value);
+        if (isCorrectScale(value)){
+            return value.subtract(BigDecimal.ONE.scaleByPowerOfTen(decimalPlaces * -1)
+                .multiply(BigDecimal.valueOf(amount)));
         }
 
-        return value.subtract(BigDecimal.ONE.scaleByPowerOfTen(decimalPlaces * -1)
-        .multiply(BigDecimal.valueOf(-amount)));
-    }
+        return trimToGranularity(value);
 
-    @Override
-    public BigDecimal getPrevious(BigDecimal value) {
-        if (!isCorrectScale(value)){
-            return trimToGranularity(value);
-        }
-
-        return value.subtract(BigDecimal.ONE.scaleByPowerOfTen(decimalPlaces * -1));
     }
 
     @Override

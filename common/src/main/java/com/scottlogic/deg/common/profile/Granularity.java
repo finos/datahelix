@@ -34,9 +34,9 @@ public interface Granularity<T> {
 
     default T getNext(T value){
         return getNext(value, 1);
-    };
+    }
 
-    default T getPrevious(T value) { return getPrevious(value, 1);};
+    default T getPrevious(T value) { return getPrevious(value, 1);}
 
     T getRandom(T min, T max, RandomNumberGenerator randomNumberGenerator);
 }
