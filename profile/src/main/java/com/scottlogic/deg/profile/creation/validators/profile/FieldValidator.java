@@ -19,7 +19,6 @@ public class FieldValidator implements Validator<FieldDTO>
         return field != null
             ? ValidationResult.success()
             : ValidationResult.failure("Field must not be null");
-
     }
 
     private ValidationResult nameMustBeSpecified(FieldDTO field)
@@ -27,7 +26,6 @@ public class FieldValidator implements Validator<FieldDTO>
         return field.name != null && !field.name.isEmpty()
             ? ValidationResult.success()
             : ValidationResult.failure("Field name must be specified");
-
     }
 
     private ValidationResult typeMustBeSpecified(FieldDTO field)
@@ -37,6 +35,7 @@ public class FieldValidator implements Validator<FieldDTO>
             ? ValidationResult.success()
             : ValidationResult.failure("Field type must be specified | Field: " + fieldName);
     }
+
 
 }
 

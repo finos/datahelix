@@ -117,4 +117,20 @@ public abstract class ConstraintValidator<T extends ConstraintDTO> implements Va
         }
         return ValidationResult.success();
     }
+
+    protected ValidationResult validateGranularity(T dto, String field, Object value)
+    {
+        FieldType fieldType = fields.stream().filter(f -> f.name.equals(field)).findFirst().get().type.getFieldType();
+
+        if(fieldType == FieldType.STRING)
+        {
+            return ValidationResult.failure("Granularity "+value+" is not supported for string fields" + getErrorInfo(dto));
+        }
+        if (fieldType == FieldType.DATETIME)
+        {
+            return new DateTimeGranularityValidator(getErrorInfo(dto)).validate((String) value);
+        }
+
+        return ValidationResult.success();
+    }
 }

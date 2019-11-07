@@ -19,11 +19,6 @@ public class RelationalConstraintValidator<T extends RelationalConstraintDTO> ex
     @Override
     public ValidationResult validate(T dto)
     {
-        return fieldsMustBeValid(dto);
-    }
-
-    private ValidationResult fieldsMustBeValid(T dto)
-    {
         String fieldName = dto.field;
         String otherFieldName = dto.getOtherField();
         if (fieldName == null || fieldName.isEmpty())
@@ -49,6 +44,10 @@ public class RelationalConstraintValidator<T extends RelationalConstraintDTO> ex
         if (fieldType != otherFieldType)
         {
             return ValidationResult.failure("Field type " + fieldName + " doesn't match related field type " + otherFieldName + getErrorInfo(dto));
+        }
+        if (dto.offsetUnit != null && !dto.offsetUnit.isEmpty())
+        {
+            return validateGranularity(dto, dto.field, dto.offsetUnit);
         }
         return ValidationResult.success();
     }

@@ -171,6 +171,19 @@ public class GeneralTestStep {
         }
     }
 
+    @But("^the profile is invalid")
+    public void profileIsInvalid()
+    {
+        state.expectExceptions = true;
+        cucumberTestHelper.generateAndGetData();
+
+        List<String> errors = this.cucumberTestHelper
+            .getProfileValidationErrors()
+            .collect(Collectors.toList());
+        Assert.assertFalse(errors.isEmpty());
+
+    }
+
     @But("^the profile is invalid with error \"(.+)\"$")
     public void profileIsInvalidWithErrorMessage(String expectedError) {
         state.expectExceptions = true;
