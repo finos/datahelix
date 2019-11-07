@@ -77,8 +77,9 @@ class FieldSpecRelationTest
 
     public void after_range_returnsFromMin() {
         int minYear = 2018;
+        DateTimeGranularity offsetGranularity = DateTimeGranularity.create("MILLIS");
         FieldSpec fieldSpec = forYears(minYear, minYear + 4);
-        AfterOffsetRelation relation = new AfterRelation(main, other, false, DateTimeDefaults.get(), offsetGranularity, 0);
+        AfterOffsetRelation relation = new AfterOffsetRelation(main, other, false, DateTimeDefaults.get(), offsetGranularity, 0);
 
         RestrictionsFieldSpec actualFieldSpec = (RestrictionsFieldSpec) relation.createModifierFromOtherFieldSpec(fieldSpec);
         LinearRestrictions actualRestrictions = (LinearRestrictions) actualFieldSpec.getRestrictions();
@@ -120,8 +121,9 @@ class FieldSpecRelationTest
     @Test
     public void before_range_returnsFromMin(){
         int maxYear = 2020;
+        DateTimeGranularity offsetGranularity = DateTimeGranularity.create("MILLIS");
         FieldSpec fieldSpec = forYears(maxYear-3, maxYear);
-        BeforeRelation relation = new BeforeOffsetRelation(main, other, false, DateTimeDefaults.get(), offsetGranularity, 0));
+        BeforeOffsetRelation relation = new BeforeOffsetRelation(main, other, false, DateTimeDefaults.get(), offsetGranularity, 0);
 
         RestrictionsFieldSpec actualFieldSpec = (RestrictionsFieldSpec) relation.createModifierFromOtherFieldSpec(fieldSpec);
         LinearRestrictions actualRestrictions = (LinearRestrictions) actualFieldSpec.getRestrictions();
