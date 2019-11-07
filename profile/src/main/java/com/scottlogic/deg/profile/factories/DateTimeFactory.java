@@ -39,13 +39,11 @@ public class DateTimeFactory
             .appendPattern("u-MM-dd")
             .parseDefaulting(ChronoField.SECOND_OF_DAY,0)
             .toFormatter();
-
         DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder()
             .append(DateTimeFormatter.ofPattern("u-MM-dd'T'HH:mm:ss'.'SSS"))
             .optionalStart()
             .appendOffset("+HH", "Z")
             .toFormatter();
-
         return new DateTimeFormatterBuilder()
             .appendOptional(dateTimeFormatter)
             .appendOptional(dateFormat)
