@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.scottlogic.deg.profile.validators.profile.constraints;
 
 import com.scottlogic.deg.common.validators.ValidationResult;
 import com.scottlogic.deg.profile.dtos.FieldDTO;
-import com.scottlogic.deg.profile.dtos.constraints.NotConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.grammatical.NotConstraintDTO;
 import com.scottlogic.deg.profile.validators.profile.ConstraintValidator;
 
 import java.util.List;

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.scottlogic.deg.profile.validators.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.validators.ValidationResult;
@@ -33,7 +34,7 @@ public class EqualToConstraintValidator extends AtomicConstraintValidator<EqualT
     {
         ValidationResult fieldMustBeValid = fieldMustBeValid(dto);
         if(!fieldMustBeValid.isSuccess) return fieldMustBeValid;
-        return valueMustBeValid(dto, dto.value);
+        return fieldTypeMustMatchValueType(dto, dto.value);
     }
 
 }

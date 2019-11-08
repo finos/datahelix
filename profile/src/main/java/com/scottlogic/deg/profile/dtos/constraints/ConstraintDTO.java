@@ -21,20 +21,13 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.scottlogic.deg.profile.serialisation.ConstraintDeserializer;
 
 @JsonDeserialize(using = ConstraintDeserializer.class)
-public abstract class ConstraintDTO {
-    private final ConstraintType type;
-
-    protected ConstraintDTO(ConstraintType type) {
-        this.type = type;
-    }
+public abstract class ConstraintDTO
+{
+    private final ConstraintType type = ConstraintType.fromClass(getClass());
 
     @JsonIgnore
-    public ConstraintType getType() {
+    public final ConstraintType getType()
+    {
         return type;
-    }
-
-    @JsonIgnore
-    public String getName() {
-        return type.propertyName;
     }
 }

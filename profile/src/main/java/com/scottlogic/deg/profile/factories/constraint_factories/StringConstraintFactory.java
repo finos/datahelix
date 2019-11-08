@@ -18,9 +18,11 @@
 package com.scottlogic.deg.profile.factories.constraint_factories;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.HelixStringLength;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.GranularToConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.LongerThanConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.OfLengthConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.ShorterThanConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.numeric.*;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.temporal.AfterConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.temporal.AfterOrAtConstraintDTO;
@@ -51,17 +53,17 @@ public class StringConstraintFactory extends AtomicConstraintFactory
 
     @Override
     OfLengthConstraint createOfLengthConstraint(OfLengthConstraintDTO dto, Field field) {
-        return new OfLengthConstraint(field, HelixStringLength.create(dto.value));
+        return new OfLengthConstraint(field, dto.value);
     }
 
     @Override
     ShorterThanConstraint createShorterThanConstraint(ShorterThanConstraintDTO dto, Field field) {
-        return new ShorterThanConstraint(field, HelixStringLength.create(dto.value));
+        return new ShorterThanConstraint(field, dto.value);
     }
 
     @Override
     LongerThanConstraint createLongerThanConstraint(LongerThanConstraintDTO dto, Field field) {
-        return new LongerThanConstraint(field, HelixStringLength.create(dto.value));
+        return new LongerThanConstraint(field, dto.value);
     }
 
     @Override

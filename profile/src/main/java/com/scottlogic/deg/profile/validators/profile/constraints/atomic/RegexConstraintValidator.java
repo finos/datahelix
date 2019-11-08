@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.scottlogic.deg.profile.validators.profile.constraints.atomic;
 
 
@@ -40,7 +41,7 @@ public class RegexConstraintValidator extends AtomicConstraintValidator<RegexCon
         ValidationResult regexMustBeValid = regexMustBeValid(dto);
         if(!regexMustBeValid.isSuccess) return regexMustBeValid;
 
-        return valueMustBeValid(dto, FieldType.STRING);
+        return fieldTypeMustMatchValueType(dto, FieldType.STRING);
     }
 
     private ValidationResult regexMustBeValid(RegexConstraintDTO dto)

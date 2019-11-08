@@ -13,18 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.scottlogic.deg.profile.validators.profile.constraints.atomic;
 
 
 import com.scottlogic.deg.common.profile.FieldType;
+import com.scottlogic.deg.common.util.defaults.DateTimeDefaults;
 import com.scottlogic.deg.common.validators.ValidationResult;
 import com.scottlogic.deg.profile.dtos.FieldDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.temporal.TemporalConstraintDTO;
+import com.scottlogic.deg.profile.factories.DateTimeFactory;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 public class TemporalConstraintValidator extends AtomicConstraintValidator<TemporalConstraintDTO>
 {
+
     public TemporalConstraintValidator(String rule, List<FieldDTO> fields)
     {
         super(rule, fields);
@@ -34,20 +39,35 @@ public class TemporalConstraintValidator extends AtomicConstraintValidator<Tempo
     public final ValidationResult validate(TemporalConstraintDTO dto)
     {
         ValidationResult fieldMustBeValid = fieldMustBeValid(dto);
-        if(!fieldMustBeValid.isSuccess) return fieldMustBeValid;
+        if (!fieldMustBeValid.isSuccess) return fieldMustBeValid;
 
-        ValidationResult dateMustBeSpecified = dateMustBeSpecified(dto);
-        if(!dateMustBeSpecified.isSuccess) return dateMustBeSpecified;
+        ValidationResult dateTimeMustBeValid = dateTimeMustBeValid(dto);
+        if (!dateTimeMustBeValid.isSuccess) return dateTimeMustBeValid;
 
-        return valueMustBeValid(dto, FieldType.DATETIME);
+        return fieldTypeMustMatchValueType(dto, FieldType.DATETIME);
     }
 
-
-    private ValidationResult dateMustBeSpecified(TemporalConstraintDTO dto)
+    private ValidationResult dateTimeMustBeValid(TemporalConstraintDTO dto)
     {
-        String date = dto.getDate();
-        return date != null && !date.isEmpty()
-            ? ValidationResult.success()
-            : ValidationResult.failure("Date must be specified" + getErrorInfo(dto));
+        String dateTime = dto.getDate();
+        if (dateTime == null || dateTime.isEmpty())
+        {
+            return ValidationResult.failure("DateTime must be specified" + getErrorInfo(dto));
+        }
+        try
+        {
+            OffsetDateTime offsetDateTime = DateTimeFactory.create(dateTime);
+            OffsetDateTime max = DateTimeDefaults.get().max();
+            OffsetDateTime min = DateTimeDefaults.get().min();
+            if (offsetDateTime.compareTo(max) > 0 || offsetDateTime.compareTo(min) < 0)
+            {
+                return ValidationResult.failure("Dates must be between 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z" + getErrorInfo(dto));
+            }
+            return ValidationResult.success();
+        }
+        catch (Exception e)
+        {
+            return ValidationResult.failure(e.getMessage() + getErrorInfo(dto));
+        }
     }
 }

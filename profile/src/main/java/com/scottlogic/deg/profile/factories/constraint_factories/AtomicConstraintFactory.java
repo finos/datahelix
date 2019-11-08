@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.scottlogic.deg.profile.factories.constraint_factories;
 
 import com.scottlogic.deg.common.ValidationException;
@@ -22,6 +23,9 @@ import com.scottlogic.deg.generator.fieldspecs.relations.InMapRelation;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.*;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.LongerThanConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.OfLengthConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.ShorterThanConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.numeric.*;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.temporal.AfterConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.temporal.AfterOrAtConstraintDTO;

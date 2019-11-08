@@ -17,8 +17,8 @@
 package com.scottlogic.deg.generator.decisiontree;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.HelixNumber;
 import com.scottlogic.deg.common.profile.Fields;
+import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.generator.decisiontree.testutils.*;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
@@ -122,7 +122,7 @@ class DecisionTreeFactoryTests {
         InSetConstraint constraint0 = new InSetConstraint(
             inputFieldList.get(0),
             new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
-        GreaterThanConstraint constraint1 = new GreaterThanConstraint(inputFieldList.get(0), HelixNumber.create(0));
+        GreaterThanConstraint constraint1 = new GreaterThanConstraint(inputFieldList.get(0), NumberUtils.coerceToBigDecimal(0));
         MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
         Rule testRule = new Rule("test", Arrays.asList(constraint0, constraint1, constraint2));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
@@ -144,7 +144,7 @@ class DecisionTreeFactoryTests {
         InSetConstraint constraint0 = new InSetConstraint(
             inputFieldList.get(0),
             new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
-        GreaterThanConstraint constraint1 = new GreaterThanConstraint(inputFieldList.get(0), HelixNumber.create(0));
+        GreaterThanConstraint constraint1 = new GreaterThanConstraint(inputFieldList.get(0), NumberUtils.coerceToBigDecimal(0));
         MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
         List<Constraint> inputConstraints = Arrays.asList(constraint0, constraint1, constraint2);
         Rule testRule = new Rule("test", inputConstraints);
@@ -167,7 +167,7 @@ class DecisionTreeFactoryTests {
     void shouldReturnAnalysedRuleWithNoDecisions_IfProfileContainsOnlyAtomicConstraintsAndAndConstraints() {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
         InSetConstraint constraint0 = new InSetConstraint(inputFieldList.get(0), new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
-        GreaterThanConstraint constraint1 = new GreaterThanConstraint(inputFieldList.get(0), HelixNumber.create(0));
+        GreaterThanConstraint constraint1 = new GreaterThanConstraint(inputFieldList.get(0), NumberUtils.coerceToBigDecimal(0));
         AndConstraint andConstraint0 = new AndConstraint(Arrays.asList(constraint0, constraint1));
         MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
         Rule testRule = new Rule("test", Arrays.asList(andConstraint0, constraint2));
@@ -187,7 +187,7 @@ class DecisionTreeFactoryTests {
     void shouldReturnAnalysedRuleWithAllAtomicConstraintsInAtomicConstraintsCollection_IfProfileContainsOnlyAtomicConstraintsAndAndConstraints() {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
         InSetConstraint constraint0 = new InSetConstraint(inputFieldList.get(0), new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
-        GreaterThanConstraint constraint1 = new GreaterThanConstraint(inputFieldList.get(0), HelixNumber.create(0));
+        GreaterThanConstraint constraint1 = new GreaterThanConstraint(inputFieldList.get(0), NumberUtils.coerceToBigDecimal(0));
         AndConstraint andConstraint0 = new AndConstraint(Arrays.asList(constraint0, constraint1));
         MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
         Rule testRule = new Rule("test", Arrays.asList(andConstraint0, constraint2));
@@ -212,7 +212,7 @@ class DecisionTreeFactoryTests {
     void shouldReturnAnalysedRuleWithDecisionForEachOrConstraint() {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
         InSetConstraint constraint0 = new InSetConstraint(inputFieldList.get(0), new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
-        GreaterThanConstraint constraint1 = new GreaterThanConstraint(inputFieldList.get(0), HelixNumber.create(0));
+        GreaterThanConstraint constraint1 = new GreaterThanConstraint(inputFieldList.get(0), NumberUtils.coerceToBigDecimal(0));
         OrConstraint orConstraint0 = new OrConstraint(Arrays.asList(constraint0, constraint1));
         InSetConstraint constraint2 = new InSetConstraint(
             inputFieldList.get(1),
@@ -237,7 +237,7 @@ class DecisionTreeFactoryTests {
     void shouldReturnAnalysedRuleWithNoAtomicConstraints_IfAllAtomicConstraintsInProfileAreChildrenOfOrConstraints() {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
         InSetConstraint constraintA = new InSetConstraint(inputFieldList.get(0), new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
-        GreaterThanConstraint constraintB = new GreaterThanConstraint(inputFieldList.get(0), HelixNumber.create(0));
+        GreaterThanConstraint constraintB = new GreaterThanConstraint(inputFieldList.get(0), NumberUtils.coerceToBigDecimal(0));
         OrConstraint orConstraint0 = new OrConstraint(Arrays.asList(constraintA, constraintB));
         InSetConstraint constraintC = new InSetConstraint(
             inputFieldList.get(1),
@@ -262,7 +262,7 @@ class DecisionTreeFactoryTests {
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfAllAtomicConstraintsInProfileAreChildrenOfOrConstraints() {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
         InSetConstraint constraintA = new InSetConstraint(inputFieldList.get(0), new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
-        GreaterThanConstraint constraintB = new GreaterThanConstraint(inputFieldList.get(0), HelixNumber.create(0));
+        GreaterThanConstraint constraintB = new GreaterThanConstraint(inputFieldList.get(0), NumberUtils.coerceToBigDecimal(0));
         OrConstraint orConstraint0 = new OrConstraint(Arrays.asList(constraintA, constraintB));
         InSetConstraint constraintC = new InSetConstraint(
             inputFieldList.get(1),
@@ -298,8 +298,8 @@ class DecisionTreeFactoryTests {
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfAllAtomicConstraintsInProfileAreChildrenOfOrAndAndConstraints() {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
         InSetConstraint constraintA = new InSetConstraint(inputFieldList.get(0), new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
-        GreaterThanConstraint constraintB = new GreaterThanConstraint(inputFieldList.get(0), HelixNumber.create(0));
-        GreaterThanConstraint constraintC = new GreaterThanConstraint(inputFieldList.get(0), HelixNumber.create(5));
+        GreaterThanConstraint constraintB = new GreaterThanConstraint(inputFieldList.get(0), NumberUtils.coerceToBigDecimal(0));
+        GreaterThanConstraint constraintC = new GreaterThanConstraint(inputFieldList.get(0), NumberUtils.coerceToBigDecimal(5));
         AndConstraint andConstraint0 = new AndConstraint(Arrays.asList(constraintC, constraintB));
         OrConstraint orConstraint0 = new OrConstraint(Arrays.asList(constraintA, andConstraint0));
         InSetConstraint constraintD = new InSetConstraint(
@@ -336,8 +336,8 @@ class DecisionTreeFactoryTests {
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfConditionalConstraintIsPresent() {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
         InSetConstraint constraintA = new InSetConstraint(inputFieldList.get(0), new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
-        GreaterThanConstraint constraintB = new GreaterThanConstraint(inputFieldList.get(1), HelixNumber.create(10));
-        GreaterThanConstraint constraintC = new GreaterThanConstraint(inputFieldList.get(1), HelixNumber.create(20));
+        GreaterThanConstraint constraintB = new GreaterThanConstraint(inputFieldList.get(1), NumberUtils.coerceToBigDecimal(10));
+        GreaterThanConstraint constraintC = new GreaterThanConstraint(inputFieldList.get(1), NumberUtils.coerceToBigDecimal(20));
         ConditionalConstraint conditionalConstraint = new ConditionalConstraint(constraintA, constraintB, constraintC);
         Rule testRule = new Rule("test", Collections.singletonList(conditionalConstraint));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
@@ -366,8 +366,8 @@ class DecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfConditionalConstraintWithNestedOrIsPresent() {
         AtomicConstraint aEquals10 = new InSetConstraint(fieldA, new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
-        AtomicConstraint aGreaterThan10 = new GreaterThanConstraint(fieldA, HelixNumber.create(10));
-        AtomicConstraint bGreaterThan20 = new GreaterThanConstraint(fieldB, HelixNumber.create(20));
+        AtomicConstraint aGreaterThan10 = new GreaterThanConstraint(fieldA, NumberUtils.coerceToBigDecimal(10));
+        AtomicConstraint bGreaterThan20 = new GreaterThanConstraint(fieldB, NumberUtils.coerceToBigDecimal(20));
 
         givenRule(
             new ConditionalConstraint(
@@ -398,8 +398,8 @@ class DecisionTreeFactoryTests {
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfNegatedConditionalConstraintIsPresent() {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
         InSetConstraint constraintA = new InSetConstraint(inputFieldList.get(0), new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
-        GreaterThanConstraint constraintB = new GreaterThanConstraint(inputFieldList.get(1), HelixNumber.create(20));
-        GreaterThanConstraint constraintC = new GreaterThanConstraint(inputFieldList.get(1), HelixNumber.create(10));
+        GreaterThanConstraint constraintB = new GreaterThanConstraint(inputFieldList.get(1), NumberUtils.coerceToBigDecimal(20));
+        GreaterThanConstraint constraintC = new GreaterThanConstraint(inputFieldList.get(1), NumberUtils.coerceToBigDecimal(10));
         ConditionalConstraint conditionalConstraint = new ConditionalConstraint(constraintA, constraintB, constraintC);
         Constraint notConstraint = conditionalConstraint.negate();
         Rule testRule = new Rule("test", Collections.singletonList(notConstraint));
@@ -434,7 +434,7 @@ class DecisionTreeFactoryTests {
         // A ^ ¬B
 
         AtomicConstraint aEqualTo10 = new InSetConstraint(fieldA, new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
-        AtomicConstraint bGreaterThan20 = new GreaterThanConstraint(fieldB, HelixNumber.create(20));
+        AtomicConstraint bGreaterThan20 = new GreaterThanConstraint(fieldB, NumberUtils.coerceToBigDecimal(20));
 
         Constraint inputRule = new ConditionalConstraint(aEqualTo10, bGreaterThan20).negate();
 
@@ -477,7 +477,7 @@ class DecisionTreeFactoryTests {
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfNegatedAndIsPresent() {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
         InSetConstraint constraintA = new InSetConstraint(inputFieldList.get(0), new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
-        GreaterThanConstraint constraintB = new GreaterThanConstraint(inputFieldList.get(1), HelixNumber.create(5));
+        GreaterThanConstraint constraintB = new GreaterThanConstraint(inputFieldList.get(1), NumberUtils.coerceToBigDecimal(5));
         NegatedGrammaticalConstraint notConstraint = (NegatedGrammaticalConstraint) new AndConstraint(Arrays.asList(constraintA, constraintB)).negate();
         Rule testRule = new Rule("test", Collections.singletonList(notConstraint));
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
@@ -502,8 +502,8 @@ class DecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfNestedOrsArePresent() {
         AtomicConstraint constraintA = new InSetConstraint(fieldA, new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
-        AtomicConstraint constraintB = new GreaterThanConstraint(fieldB, HelixNumber.create(20));
-        AtomicConstraint constraintC = new GreaterThanConstraint(fieldB, HelixNumber.create(10));
+        AtomicConstraint constraintB = new GreaterThanConstraint(fieldB, NumberUtils.coerceToBigDecimal(20));
+        AtomicConstraint constraintC = new GreaterThanConstraint(fieldB, NumberUtils.coerceToBigDecimal(10));
 
         givenRule(
             new OrConstraint(

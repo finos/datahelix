@@ -17,10 +17,12 @@
 package com.scottlogic.deg.profile.dtos.constraints;
 
 public class InvalidConstraintDTO extends ConstraintDTO {
+    public static final String NAME = "invalid";
+
     public final String json;
+
     public InvalidConstraintDTO(String json)
     {
-        super(null);
         this.json = json;
     }
 }

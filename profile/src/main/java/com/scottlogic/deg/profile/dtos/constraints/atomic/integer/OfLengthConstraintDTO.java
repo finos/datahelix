@@ -14,13 +14,22 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.profile.dtos.constraints.atomic.textual;
+package com.scottlogic.deg.profile.dtos.constraints.atomic.integer;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.AtomicConstraintDTO;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-public abstract class RegexConstraintDTO extends AtomicConstraintDTO
+@JsonDeserialize(as = OfLengthConstraintDTO.class)
+public class OfLengthConstraintDTO extends StringLengthConstraintDTO
 {
-    @JsonIgnore
-    public abstract String getRegex();
+    public static final String NAME = "ofLength";
+
+    @JsonProperty(NAME)
+    public int value;
+
+    @Override
+    public int stringLength()
+    {
+        return value;
+    }
 }

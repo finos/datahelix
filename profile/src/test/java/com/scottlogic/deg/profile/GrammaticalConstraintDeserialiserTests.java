@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.InvalidConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.NotConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.grammatical.NotConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.EqualToConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.IsNullConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.numeric.GreaterThanConstraintDTO;

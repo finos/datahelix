@@ -16,25 +16,21 @@
 
 package com.scottlogic.deg.profile.dtos.constraints.atomic.numeric;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintTypeJsonProperty;
 
 @JsonDeserialize(as = GreaterThanConstraintDTO.class)
-public class GreaterThanConstraintDTO extends NumericConstraintDTO {
-    @JsonProperty(ConstraintTypeJsonProperty.GREATER_THAN)
+public class GreaterThanConstraintDTO extends NumericConstraintDTO
+{
+    public static final String NAME = "greaterThan";
+
+    @JsonProperty(NAME)
     public Number value;
 
-    public GreaterThanConstraintDTO() {
-        super(ConstraintType.GREATER_THAN);
-    }
-
     @Override
-    @JsonIgnore
     public Number getNumber()
     {
         return value;
     }
+
 }

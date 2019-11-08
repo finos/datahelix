@@ -16,18 +16,17 @@
 
 package com.scottlogic.deg.profile.dtos.constraints.relations;
 
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
 public class InMapConstraintDTO extends RelationalConstraintDTO
 {
-    public String otherField;
-    public List<Object> values;
+    public static final String NAME = "inMap";
 
-    public InMapConstraintDTO() {
-        super(ConstraintType.IN_MAP);
-    }
+    public String otherField;
+    @JsonProperty(NAME)
+    public List<Object> values;
 
     @Override
     public String getOtherField()

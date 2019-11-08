@@ -81,7 +81,7 @@ public class GeneralTestStep {
 
     @When("we do not violate any {operator} constraints")
     public void constraintTypeIsNotViolated(String operator) {
-        this.state.addConstraintToNotViolate(ConstraintType.fromPropertyName(operator));
+        this.state.addConstraintToNotViolate(ConstraintType.fromName(operator));
     }
 
     @Given("the data requested is {generationMode}")

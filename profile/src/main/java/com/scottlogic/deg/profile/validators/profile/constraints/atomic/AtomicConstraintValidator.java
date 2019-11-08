@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.scottlogic.deg.profile.validators.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.FieldType;
@@ -37,8 +38,7 @@ abstract class AtomicConstraintValidator<T extends AtomicConstraintDTO> extends 
         return " | Field: " + atomicConstraint.field + super.getErrorInfo(atomicConstraint);
     }
 
-
-    ValidationResult valueMustBeValid(T dto, FieldType expectedFieldType)
+    ValidationResult fieldTypeMustMatchValueType(T dto, FieldType expectedFieldType)
     {
         FieldType fieldType = fields.stream().filter(f -> f.name.equals(dto.field)).findFirst().get().type.getFieldType();
         if (expectedFieldType != fieldType)
@@ -48,7 +48,7 @@ abstract class AtomicConstraintValidator<T extends AtomicConstraintDTO> extends 
         return ValidationResult.success();
     }
 
-    ValidationResult valueMustBeValid(T dto, Object value)
+    ValidationResult fieldTypeMustMatchValueType(T dto, Object value)
     {
         if(value == null)
         {
@@ -71,16 +71,12 @@ abstract class AtomicConstraintValidator<T extends AtomicConstraintDTO> extends 
         try
         {
             Double.parseDouble(s);
+            return true;
         }
-        catch (NumberFormatException e)
+        catch (NumberFormatException | NullPointerException e)
         {
             return false;
         }
-        catch (NullPointerException e)
-        {
-            return false;
-        }
-        return true;
     }
 
 

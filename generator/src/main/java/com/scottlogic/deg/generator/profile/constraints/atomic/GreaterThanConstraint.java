@@ -17,7 +17,6 @@
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.HelixNumber;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
@@ -31,9 +30,9 @@ import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MAX_LIMIT;
 
 public class GreaterThanConstraint implements AtomicConstraint {
     public final Field field;
-    public final HelixNumber referenceValue;
+    public final BigDecimal referenceValue;
 
-    public GreaterThanConstraint(Field field, HelixNumber referenceValue) {
+    public GreaterThanConstraint(Field field, BigDecimal referenceValue) {
         this.referenceValue = referenceValue;
         this.field = field;
     }
@@ -50,7 +49,7 @@ public class GreaterThanConstraint implements AtomicConstraint {
 
     @Override
     public FieldSpec toFieldSpec() {
-        LinearRestrictions<BigDecimal> numericRestrictions = createNumericRestrictions(new Limit<>(referenceValue.getValue(), false), NUMERIC_MAX_LIMIT);
+        LinearRestrictions<BigDecimal> numericRestrictions = createNumericRestrictions(new Limit<>(referenceValue, false), NUMERIC_MAX_LIMIT);
         return FieldSpecFactory.fromRestriction(numericRestrictions);
     }
 

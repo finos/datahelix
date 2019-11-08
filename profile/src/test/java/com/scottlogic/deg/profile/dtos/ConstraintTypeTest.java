@@ -27,14 +27,14 @@ class ConstraintTypeTest{
     @Test
     void fromText() {
         String greaterThanString = ConstraintType.GREATER_THAN_OR_EQUAL_TO.propertyName;
-        ConstraintType greaterThanOrEqualTo = ConstraintType.fromPropertyName(greaterThanString);
+        ConstraintType greaterThanOrEqualTo = ConstraintType.fromName(greaterThanString);
 
         Assert.assertThat(greaterThanOrEqualTo, is(ConstraintType.GREATER_THAN_OR_EQUAL_TO));
     }
 
     @Test
     void fromTextLowerCase() {
-        ConstraintType greaterThanOrEqualTo = ConstraintType.fromPropertyName("shorterthan");
+        ConstraintType greaterThanOrEqualTo = ConstraintType.fromName("shorterthan");
 
         Assert.assertThat(greaterThanOrEqualTo, is(ConstraintType.SHORTER_THAN));
     }

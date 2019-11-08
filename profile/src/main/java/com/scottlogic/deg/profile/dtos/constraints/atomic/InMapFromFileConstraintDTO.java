@@ -18,17 +18,13 @@ package com.scottlogic.deg.profile.dtos.constraints.atomic;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintTypeJsonProperty;
 
 @JsonDeserialize(as = InMapFromFileConstraintDTO.class)
 public class InMapFromFileConstraintDTO extends AtomicConstraintDTO
 {
-    @JsonProperty(ConstraintTypeJsonProperty.IN_MAP)
+    public static final String NAME = "inMap";
+
+    @JsonProperty(NAME)
     public String file;
     public String key;
-
-    public InMapFromFileConstraintDTO() {
-        super(ConstraintType.IN_MAP);
-    }
 }

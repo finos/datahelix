@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.scottlogic.deg.profile.validators.profile;
 
 import com.scottlogic.deg.common.profile.FieldType;
@@ -21,9 +22,10 @@ import com.scottlogic.deg.common.validators.Validator;
 import com.scottlogic.deg.profile.dtos.FieldDTO;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.InvalidConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.NotConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.grammatical.NotConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.InSetConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.IsNullConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.StringLengthConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.AllOfConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.AnyOfConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
@@ -57,7 +59,7 @@ public abstract class ConstraintValidator<T extends ConstraintDTO> implements Va
 
     protected String getErrorInfo(T constraint)
     {
-        return " | Constraint: " + constraint.getName() + " | Rule: " + rule;
+        return " | Constraint: " + constraint.getType().propertyName + " | Rule: " + rule;
     }
 
     protected static ValidationResult validateConstraint(ConstraintDTO dto, String rule, List<FieldDTO> fields)
@@ -92,7 +94,7 @@ public abstract class ConstraintValidator<T extends ConstraintDTO> implements Va
             case OF_LENGTH:
             case LONGER_THAN:
             case SHORTER_THAN:
-                return new NumericConstraintValidator(rule, fields, FieldType.STRING).validate((NumericConstraintDTO) dto);
+                return new StringLengthConstraintValidator(rule, fields, FieldType.STRING).validate((StringLengthConstraintDTO) dto);
             case GREATER_THAN:
             case GREATER_THAN_OR_EQUAL_TO:
             case LESS_THAN:
@@ -128,7 +130,7 @@ public abstract class ConstraintValidator<T extends ConstraintDTO> implements Va
         }
         if(dto.getType() == null)
         {
-            return ValidationResult.failure("Constraint type must not be null | Constraint: " + dto.getName() + " | Rule: " + rule);
+            return ValidationResult.failure("Constraint type must not be null | Constraint: " + dto.getType().propertyName + " | Rule: " + rule);
         }
         return ValidationResult.success();
     }
@@ -148,4 +150,6 @@ public abstract class ConstraintValidator<T extends ConstraintDTO> implements Va
 
         return ValidationResult.success();
     }
+
+
 }

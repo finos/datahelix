@@ -373,7 +373,7 @@ public class JsonProfileReaderTests {
             ruleWithConstraints(
                 typedConstraint(
                     OfLengthConstraint.class,
-                    c -> Assert.assertThat(c.referenceValue.getValue(), equalTo(5)))));
+                    c -> Assert.assertThat(c.referenceValue, equalTo(5)))));
     }
 
     @Test
@@ -641,8 +641,8 @@ public class JsonProfileReaderTests {
                     .filter(f -> f.getClass() == BeforeConstraint.class)
                     .findFirst()
                     .get();
-                Assert.assertEquals(OffsetDateTime.parse("2019-01-01T00:00:00.000Z"), isAfter.referenceValue.getValue());
-                Assert.assertEquals(OffsetDateTime.parse("2019-01-03T00:00:00.000Z"), isBefore.referenceValue.getValue());
+                Assert.assertEquals(OffsetDateTime.parse("2019-01-01T00:00:00.000Z"), isAfter.referenceValue);
+                Assert.assertEquals(OffsetDateTime.parse("2019-01-03T00:00:00.000Z"), isBefore.referenceValue);
             }
         );
     }

@@ -18,20 +18,18 @@ package com.scottlogic.deg.profile.dtos.constraints.relations;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintTypeJsonProperty;
 
 @JsonDeserialize(as = BeforeFieldConstraintDTO.class)
-public class BeforeFieldConstraintDTO extends RelationalConstraintDTO {
-    @JsonProperty(ConstraintTypeJsonProperty.BEFORE_FIELD)
+public class BeforeFieldConstraintDTO extends RelationalConstraintDTO
+{
+    public static final String NAME = "beforeField";
+
+    @JsonProperty(NAME)
     public String otherField;
 
-    public BeforeFieldConstraintDTO() {
-        super(ConstraintType.BEFORE_FIELD);
-    }
-
     @Override
-    public String getOtherField() {
+    public String getOtherField()
+    {
         return otherField;
     }
 }

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.scottlogic.deg.profile.validators.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.validators.ValidationResult;
@@ -46,6 +47,6 @@ public class InSetConstraintValidator extends AtomicConstraintValidator<InSetCon
 
     private ValidationResult fieldTypeMustBeValid(InSetConstraintDTO dto)
     {
-        return ValidationResult.combine(dto.values.stream().map(v -> valueMustBeValid(dto, v)));
+        return ValidationResult.combine(dto.values.stream().map(v -> fieldTypeMustMatchValueType(dto, v)));
     }
 }

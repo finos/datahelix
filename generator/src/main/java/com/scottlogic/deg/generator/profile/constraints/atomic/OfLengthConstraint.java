@@ -17,7 +17,6 @@
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.HelixStringLength;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
@@ -26,9 +25,9 @@ import java.util.Objects;
 
 public class OfLengthConstraint implements AtomicConstraint {
     public final Field field;
-    public final HelixStringLength referenceValue;
+    public final int referenceValue;
 
-    public OfLengthConstraint(Field field, HelixStringLength referenceValue) {
+    public OfLengthConstraint(Field field, int referenceValue) {
         this.referenceValue = referenceValue;
         this.field = field;
     }
@@ -45,7 +44,7 @@ public class OfLengthConstraint implements AtomicConstraint {
 
     @Override
     public FieldSpec toFieldSpec() {
-        return FieldSpecFactory.fromRestriction(StringRestrictionsFactory.forLength(referenceValue.getValue(), false));
+        return FieldSpecFactory.fromRestriction(StringRestrictionsFactory.forLength(referenceValue, false));
     }
 
     @Override
@@ -56,14 +55,14 @@ public class OfLengthConstraint implements AtomicConstraint {
         }
         if (o == null || getClass() != o.getClass()) return false;
         OfLengthConstraint constraint = (OfLengthConstraint) o;
-        return Objects.equals(field, constraint.field) && Objects.equals(referenceValue.getValue(), constraint.referenceValue.getValue());
+        return Objects.equals(field, constraint.field) && Objects.equals(referenceValue, constraint.referenceValue);
     }
 
     @Override
     public int hashCode(){
-        return Objects.hash(field, referenceValue.getValue());
+        return Objects.hash(field, referenceValue);
     }
 
     @Override
-    public String toString() { return String.format("`%s` length = %s", field.getName(), referenceValue.getValue()); }
+    public String toString() { return String.format("`%s` length = %s", field.getName(), referenceValue); }
 }

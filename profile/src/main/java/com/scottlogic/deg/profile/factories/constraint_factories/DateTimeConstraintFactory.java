@@ -19,9 +19,11 @@ package com.scottlogic.deg.profile.factories.constraint_factories;
 
 import com.scottlogic.deg.common.profile.DateTimeGranularity;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.HelixDateTime;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.GranularToConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.LongerThanConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.OfLengthConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.ShorterThanConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.numeric.*;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.temporal.AfterConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.temporal.AfterOrAtConstraintDTO;
@@ -29,12 +31,13 @@ import com.scottlogic.deg.profile.dtos.constraints.atomic.temporal.BeforeConstra
 import com.scottlogic.deg.profile.dtos.constraints.atomic.temporal.BeforeOrAtConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.textual.ContainsRegexConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.textual.MatchesRegexConstraintDTO;
+import com.scottlogic.deg.profile.factories.DateTimeFactory;
 
 public class DateTimeConstraintFactory extends AtomicConstraintFactory {
     @Override
     Object parseValue(Object value)
     {
-        return HelixDateTime.create((String) value).getValue();
+        return DateTimeFactory.create((String) value);
     }
 
     @Override
@@ -93,22 +96,22 @@ public class DateTimeConstraintFactory extends AtomicConstraintFactory {
 
     @Override
     AfterOrAtConstraint createAfterOrAtConstraint(AfterOrAtConstraintDTO dto, Field field) {
-        return new AfterOrAtConstraint(field, HelixDateTime.create(dto.value));
+        return new AfterOrAtConstraint(field, DateTimeFactory.create(dto.value));
     }
 
     @Override
     AfterConstraint createAfterConstraint(AfterConstraintDTO dto, Field field) {
-        return new AfterConstraint(field, HelixDateTime.create(dto.value));
+        return new AfterConstraint(field, DateTimeFactory.create(dto.value));
     }
 
     @Override
     BeforeOrAtConstraint createBeforeOrAtConstraint(BeforeOrAtConstraintDTO dto, Field field) {
-        return new BeforeOrAtConstraint(field, HelixDateTime.create(dto.value));
+        return new BeforeOrAtConstraint(field, DateTimeFactory.create(dto.value));
     }
 
     @Override
     BeforeConstraint createBeforeConstraint(BeforeConstraintDTO dto, Field field) {
-        return new BeforeConstraint(field, HelixDateTime.create(dto.value));
+        return new BeforeConstraint(field, DateTimeFactory.create(dto.value));
     }
 
     @Override

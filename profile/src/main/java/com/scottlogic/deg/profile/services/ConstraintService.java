@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.scottlogic.deg.profile.services;
 
 import com.google.inject.Inject;
@@ -21,16 +22,11 @@ import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
-import com.scottlogic.deg.generator.profile.constraints.grammatical.GrammaticalConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.NotConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.AtomicConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.grammatical.AllOfConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.grammatical.AnyOfConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.grammatical.GrammaticalConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.grammatical.*;
 import com.scottlogic.deg.profile.dtos.constraints.relations.InMapConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.relations.RelationalConstraintDTO;
 import com.scottlogic.deg.profile.factories.constraint_factories.AtomicConstraintFactory;
@@ -107,10 +103,6 @@ public class ConstraintService
             FieldType type = fields.getByName(((InMapConstraintDTO)dto).field).getType();
             return atomicConstraintFactoryMap.get(type).createInMapRelation((InMapConstraintDTO) dto, fields);
         }
-        if (dto.getType() == ConstraintType.NOT)
-        {
-            return createConstraint(((NotConstraintDTO) dto).constraint, fields).negate();
-        }
         if (dto instanceof RelationalConstraintDTO)
         {
             FieldType type = fields.getByName(((RelationalConstraintDTO)dto).field).getType();
@@ -128,7 +120,7 @@ public class ConstraintService
         throw new IllegalStateException("Unexpected constraint type: " + dto.getType());
     }
 
-    private GrammaticalConstraint createGrammaticalConstraint(GrammaticalConstraintDTO dto, Fields fields)
+    private Constraint createGrammaticalConstraint(GrammaticalConstraintDTO dto, Fields fields)
     {
         switch (dto.getType())
         {
@@ -138,6 +130,8 @@ public class ConstraintService
                 return new OrConstraint(createConstraints(((AnyOfConstraintDTO) dto).constraints, fields));
             case IF:
                 return createConditionalConstraint((ConditionalConstraintDTO) dto, fields);
+            case NOT:
+                return createConstraint(((NotConstraintDTO) dto).constraint, fields).negate();
             default:
                 throw new IllegalStateException("Unexpected grammatical constraint type: " + dto.getType());
         }
