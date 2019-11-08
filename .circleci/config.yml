@@ -10,8 +10,11 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Check license headers exist on all source files
-          command: find . -type f -name '*.java' | xargs grep -L "Licensed under the Apache License"
+          name: Set header script priviledges
+          command: chmod +x license-check.sh
+      - run:
+          name: Check commit messages
+          command: ./license-check.sh
 
   check_commit_message:
     docker:
