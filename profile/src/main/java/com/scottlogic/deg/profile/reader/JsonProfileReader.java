@@ -22,9 +22,10 @@ import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.commands.CommandBus;
 import com.scottlogic.deg.common.commands.CommandResult;
 import com.scottlogic.deg.generator.profile.Profile;
-import com.scottlogic.deg.profile.reader.commands.CreateProfile;
 import com.scottlogic.deg.profile.dtos.ProfileDTO;
-import com.scottlogic.deg.profile.serialisation.ProfileSerialiser;
+import com.scottlogic.deg.profile.commands.CreateProfile;
+import com.scottlogic.deg.profile.serialisation.ProfileDeserialiser;
+import com.scottlogic.deg.profile.validators.ConfigValidator;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,22 +38,27 @@ import java.nio.file.Files;
  */
 public class JsonProfileReader implements ProfileReader {
     private final File profileFile;
+    private final ConfigValidator configValidator;
+    private final FileReader fileReader;
     private final CommandBus commandBus;
 
     @Inject
-    public JsonProfileReader(@Named("config:profileFile") File profileFile, CommandBus commandBus) {
+    public JsonProfileReader(@Named("config:profileFile") File profileFile, ConfigValidator configValidator, FileReader fileReader, CommandBus commandBus) {
         this.profileFile = profileFile;
+        this.configValidator = configValidator;
+        this.fileReader = fileReader;
         this.commandBus = commandBus;
     }
 
     public Profile read() throws IOException {
+        configValidator.validate(profileFile);
         byte[] encoded = Files.readAllBytes(profileFile.toPath());
         String profileJson = new String(encoded, StandardCharsets.UTF_8);
         return read(profileJson);
     }
 
     public Profile read(String profileJson) {
-        ProfileDTO profileDTO = new ProfileSerialiser().deserialise(profileJson);
+        ProfileDTO profileDTO = ProfileDeserialiser.deserialise(profileJson, fileReader);
         CommandResult<Profile> createProfileResult = commandBus.send(new CreateProfile(profileDTO));
         if(!createProfileResult.isSuccess) throw new ValidationException(createProfileResult.errors);
         return createProfileResult.value;

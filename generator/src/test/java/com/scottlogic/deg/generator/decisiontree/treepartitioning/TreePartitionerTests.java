@@ -22,7 +22,6 @@ import com.scottlogic.deg.generator.profile.constraints.atomic.InSetConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.decisiontree.testutils.*;
-import com.scottlogic.deg.generator.decisiontree.testutils.EqualityComparer;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.generator.utils.SetUtils;

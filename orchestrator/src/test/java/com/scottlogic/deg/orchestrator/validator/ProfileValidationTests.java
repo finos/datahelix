@@ -16,14 +16,21 @@
 
 package com.scottlogic.deg.orchestrator.validator;
 
-import com.scottlogic.deg.profile.ProfileSchemaFileLoader;
-import com.scottlogic.deg.profile.ProfileSchemaValidatorLeadPony;
+import com.scottlogic.deg.common.util.FileUtils;
+import com.scottlogic.deg.profile.reader.FileReader;
+import com.scottlogic.deg.profile.reader.JsonProfileReader;
+import com.scottlogic.deg.profile.reader.ProfileCommandBus;
+import com.scottlogic.deg.profile.services.ConstraintService;
+import com.scottlogic.deg.profile.services.FieldService;
+import com.scottlogic.deg.profile.services.RuleService;
+import com.scottlogic.deg.profile.validators.ConfigValidator;
+import com.scottlogic.deg.profile.validators.CreateProfileValidator;
+import com.scottlogic.deg.profile.validators.profile.ProfileValidator;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,14 +47,11 @@ public class ProfileValidationTests {
                 .listFiles(File::isDirectory);
         for (File dir : directoriesArray) {
             File profileFile = Paths.get(dir.getCanonicalPath(), "profile.json").toFile();
-
-            String schemaVersionPath = "profileschema/datahelix.schema.json";
-            URL schemaUrl =
-                Thread.currentThread().getContextClassLoader().getResource(schemaVersionPath);
             DynamicTest test = DynamicTest.dynamicTest(
                 dir.getName(),
-                () -> new ProfileSchemaFileLoader(new ProfileSchemaValidatorLeadPony()).validateProfile(profileFile, schemaUrl));
-
+                () -> new JsonProfileReader(profileFile, new ConfigValidator(new FileUtils()),new FileReader(profileFile.getParent()),
+                    new ProfileCommandBus(new FieldService(), new RuleService(new ConstraintService()),
+                        new CreateProfileValidator(new ProfileValidator(null)))).read());
             dynamicTests.add(test);
         }
         return dynamicTests;

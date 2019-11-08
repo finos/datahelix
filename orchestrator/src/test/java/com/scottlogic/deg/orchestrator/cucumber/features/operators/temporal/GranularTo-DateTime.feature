@@ -121,5 +121,5 @@ Feature: User can specify that datetime fields are granular to a certain unit
 
   Scenario: Applying an invalid datetime granularTo constraint fails with an appropriate error
     Given foo is granular to "decades"
-    Then the profile is invalid because "Decades not yet supported as a granularity"
+    Then the profile is invalid with error "Granularity decades is not supported | Field: foo | Constraint: granularTo | Rule: Unnamed rule"
     And no data is created

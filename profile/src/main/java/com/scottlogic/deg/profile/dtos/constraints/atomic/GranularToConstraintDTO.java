@@ -18,15 +18,17 @@ package com.scottlogic.deg.profile.dtos.constraints.atomic;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.scottlogic.deg.profile.common.ConstraintType;
-import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintTypeJsonProperty;
 
 @JsonDeserialize(as = GranularToConstraintDTO.class)
-public class GranularToConstraintDTO extends AtomicConstraintDTO {
+public class GranularToConstraintDTO extends AtomicConstraintDTO
+{
     @JsonProperty(ConstraintTypeJsonProperty.GRANULAR_TO)
     public Object value;
 
     public GranularToConstraintDTO() {
         super(ConstraintType.GRANULAR_TO);
     }
+
 }

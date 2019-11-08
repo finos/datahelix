@@ -24,7 +24,8 @@ import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 
-public class BeforeRelation<T extends Comparable<T>> implements FieldSpecRelations {
+public class BeforeRelation<T extends Comparable<T>> implements FieldSpecRelation
+{
     private final Field main;
     private final Field other;
     private final boolean inclusive;
@@ -47,7 +48,7 @@ public class BeforeRelation<T extends Comparable<T>> implements FieldSpecRelatio
         }
 
         LinearRestrictions<T> lr = (LinearRestrictions)((RestrictionsFieldSpec) otherFieldSpec).getRestrictions();
-        return createFromMax(lr.getMax(), lr.getGranularity());
+        return createFromMax(lr.getMax(), defaults.granularity());
     }
 
     @Override
@@ -76,7 +77,7 @@ public class BeforeRelation<T extends Comparable<T>> implements FieldSpecRelatio
     }
 
     @Override
-    public FieldSpecRelations inverse() {
+    public FieldSpecRelation inverse() {
         return new AfterRelation(other, main, inclusive, defaults);
     }
 

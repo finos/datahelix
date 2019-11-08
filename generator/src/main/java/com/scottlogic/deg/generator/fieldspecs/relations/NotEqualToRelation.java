@@ -23,7 +23,8 @@ import com.scottlogic.deg.generator.profile.constraints.Constraint;
 
 import java.util.Collections;
 
-public class NotEqualToRelation implements FieldSpecRelations {
+public class NotEqualToRelation implements FieldSpecRelation
+{
     private final Field main;
     private final Field other;
 
@@ -43,7 +44,7 @@ public class NotEqualToRelation implements FieldSpecRelations {
     }
 
     @Override
-    public FieldSpecRelations inverse() {
+    public FieldSpecRelation inverse() {
         return new NotEqualToRelation(other, main);
     }
 

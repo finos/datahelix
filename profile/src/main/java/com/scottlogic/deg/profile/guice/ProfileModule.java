@@ -22,13 +22,11 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
 import com.scottlogic.deg.common.commands.CommandBus;
 import com.scottlogic.deg.common.validators.Validator;
-import com.scottlogic.deg.profile.*;
-import com.scottlogic.deg.profile.reader.commands.CreateFields;
-import com.scottlogic.deg.profile.reader.commands.CreateProfile;
-import com.scottlogic.deg.profile.reader.JsonProfileReader;
-import com.scottlogic.deg.profile.reader.ProfileReader;
-import com.scottlogic.deg.profile.reader.validators.CreateFieldsValidator;
-import com.scottlogic.deg.profile.reader.validators.CreateProfileValidator;
+import com.scottlogic.deg.profile.commands.CreateProfile;
+import com.scottlogic.deg.profile.dtos.ProfileDTO;
+import com.scottlogic.deg.profile.validators.CreateProfileValidator;
+import com.scottlogic.deg.profile.validators.profile.ProfileValidator;
+import com.scottlogic.deg.profile.reader.*;
 
 import java.io.File;
 
@@ -45,9 +43,6 @@ public class ProfileModule extends AbstractModule {
     protected void configure() {
         // Bind command line to correct implementation
         bind(ProfileConfigSource.class).toInstance(profileConfigSource);
-        bind(ProfileSchemaValidator.class).to(ProfileSchemaValidatorLeadPony.class);
-        bind(ProfileSchemaLoader.class).toProvider(ProfileSchemaLoaderProvider.class);
-        bind(SchemaVersionValidator.class).to(SupportedVersionChecker.class);
         bind(ProfileReader.class).to(JsonProfileReader.class);
 
         bind(File.class)
@@ -57,9 +52,8 @@ public class ProfileModule extends AbstractModule {
             .annotatedWith(Names.named("config:filePath"))
             .toInstance(profileConfigSource.fromFilePath());
 
-        bind(Key.get(new TypeLiteral<Validator<CreateFields>>(){})).to(CreateFieldsValidator.class);
+        bind(Key.get(new TypeLiteral<Validator<ProfileDTO>>(){})).to(ProfileValidator.class);
         bind(Key.get(new TypeLiteral<Validator<CreateProfile>>(){})).to(CreateProfileValidator.class);
         bind(CommandBus.class).to(ProfileCommandBus.class);
-
     }
 }

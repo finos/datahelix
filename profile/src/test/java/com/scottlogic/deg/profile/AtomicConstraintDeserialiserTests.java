@@ -18,20 +18,31 @@ package com.scottlogic.deg.profile;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scottlogic.deg.profile.dtos.constraints.*;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.*;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.EqualToConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.GranularToConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.InSetConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.IsNullConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.numeric.*;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.temporal.AfterConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.temporal.AfterOrAtConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.temporal.BeforeConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.temporal.BeforeOrAtConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.textual.ContainsRegexConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.textual.MatchesRegexConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.relations.*;
-import com.scottlogic.deg.profile.reader.InvalidProfileException;
+import com.scottlogic.deg.profile.serialisation.ConstraintDeserializer;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.jupiter.api.Test;
 import org.junit.rules.ExpectedException;
 
-import static com.shazam.shazamcrest.MatcherAssert.assertThat;
-import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
-
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
+
+import static com.shazam.shazamcrest.MatcherAssert.assertThat;
+import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 
 public class AtomicConstraintDeserialiserTests {
 
@@ -52,20 +63,6 @@ public class AtomicConstraintDeserialiserTests {
         expected.value = "X_092";
 
         assertThat(actual, sameBeanAs(expected));
-    }
-
-    @Test
-    public void shouldDeserialiseEqualToAndThrowInvalidConstraintException() throws RuntimeException, IOException {
-        // Arrange
-        final String json = "{\"field\": \"type\", \"equilTo\": \"X_092\" },";
-
-        try {
-            deserialiseJsonString(json);
-            Assert.fail("should have thrown an exception");
-        } catch (InvalidProfileException e) {
-            String expectedMessage = "The constraint json object node for field type doesn't contain any of the expected keywords as properties: {\"field\":\"type\",\"equilTo\":\"X_092\"}";
-            assertThat(e.getMessage(), sameBeanAs(expectedMessage));
-        }
     }
 
     @Test
@@ -91,7 +88,7 @@ public class AtomicConstraintDeserialiserTests {
         ConstraintDTO actual = deserialiseJsonString(json);
 
         // Assert
-        InSetOfValuesConstraintDTO expected = new InSetOfValuesConstraintDTO();
+        InSetConstraintDTO expected = new InSetConstraintDTO();
         expected.field = "type";
         expected.values = Arrays.asList("X_092", "0001-01-01T00:00:00.000Z");
 
@@ -102,14 +99,14 @@ public class AtomicConstraintDeserialiserTests {
     public void shouldDeserialiseInSetCsvFileWithoutException() throws IOException {
         // Arrange
         final String json = "{\"field\": \"country\", \"inSet\": \"countries.csv\" }";
-
+        ConstraintDeserializer.fileReader = new TestFileReader();
         // Act
         ConstraintDTO actual = deserialiseJsonString(json);
 
         // Assert
-        InSetFromFileConstraintDTO expected = new InSetFromFileConstraintDTO();
+        InSetConstraintDTO expected = new InSetConstraintDTO();
         expected.field = "country";
-        expected.file = "countries.csv";
+        expected.values = Collections.singletonList("test");
 
         assertThat(actual, sameBeanAs(expected));
     }
@@ -118,6 +115,7 @@ public class AtomicConstraintDeserialiserTests {
     public void shouldDeserialiseInMapWithoutException() throws IOException {
         // Arrange
         final String json = "{\"field\": \"country\", \"inMap\": \"countries.csv\", \"key\": \"Country\" }";
+        ConstraintDeserializer.fileReader = new TestFileReader();
 
         // Act
         ConstraintDTO actual = deserialiseJsonString(json);
@@ -125,8 +123,8 @@ public class AtomicConstraintDeserialiserTests {
         // Assert
         InMapConstraintDTO expected = new InMapConstraintDTO();
         expected.field = "country";
-        expected.file = "countries.csv";
-        expected.key = "Country";
+        expected.otherField = "countries.csv";
+        expected.values = Collections.singletonList("test");
 
         assertThat(actual, sameBeanAs(expected));
     }

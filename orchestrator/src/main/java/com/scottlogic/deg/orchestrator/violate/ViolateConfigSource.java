@@ -17,7 +17,7 @@
 package com.scottlogic.deg.orchestrator.violate;
 
 import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
-import com.scottlogic.deg.profile.common.ConstraintType;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
 
 import java.util.List;
 

@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.profile.dtos;
 
-import com.scottlogic.deg.profile.common.ConstraintType;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 

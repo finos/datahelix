@@ -132,7 +132,7 @@ public class TreePruner {
             if (!newMap.containsKey(entry.getKey())){
                 newMap.put(entry.getKey(), entry.getValue());
             }else {
-                Optional<FieldSpec> mergedSpec = merger.merge(entry.getValue(), newMap.get(entry.getKey()));
+                Optional<FieldSpec> mergedSpec = merger.merge(entry.getValue(), newMap.get(entry.getKey()), false);
                 if (!mergedSpec.isPresent()){
                     return Merged.contradictory();
                 }

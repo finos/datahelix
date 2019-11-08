@@ -20,9 +20,7 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class TestConstraintNodeBuilder {

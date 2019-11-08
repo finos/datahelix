@@ -21,17 +21,13 @@ import com.scottlogic.deg.generator.generation.AbstractDataGeneratorMonitor;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.generation.GenerationConfigSource;
 import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
-import com.scottlogic.deg.generator.inputs.validation.ProfileValidator;
-import com.scottlogic.deg.generator.inputs.validation.UniquenessValidator;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
 import com.scottlogic.deg.orchestrator.violate.manifest.ManifestWriter;
 import com.scottlogic.deg.output.outputtarget.OutputTargetFactory;
 import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
-import com.scottlogic.deg.profile.NoopVersionChecker;
-import com.scottlogic.deg.profile.SchemaVersionValidator;
 import com.scottlogic.deg.profile.reader.FileReader;
 import com.scottlogic.deg.profile.reader.ProfileReader;
-import com.scottlogic.deg.profile.reader.ConfigValidator;
+import com.scottlogic.deg.profile.validators.ConfigValidator;
 
 import java.util.stream.Stream;
 
@@ -57,10 +53,7 @@ public class CucumberTestModule extends AbstractModule {
 
         bind(CucumberTestState.class).toInstance(testState);
         bind(ProfileReader.class).to(CucumberProfileReader.class);
-        bind(SchemaVersionValidator.class).to(NoopVersionChecker.class);
         bind(FileReader.class).to(CucumberFileReader.class);
-
-        bind(ProfileValidator.class).toInstance(new UniquenessValidator(new CucumberGenerationConfigSource(testState)));
         bind(ErrorReporter.class).toInstance(new CucumberErrorReporter(testState));
 
         bind(ConfigValidator.class).toInstance(mock(ConfigValidator.class));

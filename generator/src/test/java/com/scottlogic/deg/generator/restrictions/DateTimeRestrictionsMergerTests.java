@@ -26,7 +26,6 @@ import java.util.Optional;
 
 import static com.scottlogic.deg.common.util.Defaults.ISO_MAX_DATE;
 import static com.scottlogic.deg.generator.utils.Defaults.*;
-import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static java.time.temporal.ChronoUnit.*;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -50,7 +49,7 @@ class DateTimeRestrictionsMergerTests {
         LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
         LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
 
-        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
+        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right, false);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.isPresent(), is(true));
@@ -69,7 +68,7 @@ class DateTimeRestrictionsMergerTests {
         LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
         LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
 
-        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
+        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right, false);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.isPresent(), is(true));
@@ -88,7 +87,7 @@ class DateTimeRestrictionsMergerTests {
         LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
         LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
 
-        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
+        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right, false);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.isPresent(), is(false));
@@ -105,7 +104,7 @@ class DateTimeRestrictionsMergerTests {
         LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
         LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
 
-        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
+        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right, false);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.isPresent(), is(false));
@@ -120,7 +119,7 @@ class DateTimeRestrictionsMergerTests {
         LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
         LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
 
-        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
+        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right, false);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.isPresent(), is(true));
@@ -137,7 +136,7 @@ class DateTimeRestrictionsMergerTests {
         LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
         LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
 
-        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
+        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right, false);
 
         Assert.assertNotEquals(result, nullValue());
 
@@ -164,7 +163,7 @@ class DateTimeRestrictionsMergerTests {
         LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
         LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
 
-        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
+        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right, false);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.isPresent(), is(false));
@@ -185,7 +184,7 @@ class DateTimeRestrictionsMergerTests {
         LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
 
 
-        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
+        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right, false);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.isPresent(), is(false));
@@ -204,7 +203,7 @@ class DateTimeRestrictionsMergerTests {
         LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(DATETIME_MIN_LIMIT, maxDateTimeLimit);
         LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(minDateTimeLimit, DATETIME_MAX_LIMIT);
 
-        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
+        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right, false);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.isPresent(), is(false));
@@ -224,7 +223,7 @@ class DateTimeRestrictionsMergerTests {
         LinearRestrictions<OffsetDateTime> left = LinearRestrictionsFactory.createDateTimeRestrictions(lowerDateTimeLimit, DATETIME_MAX_LIMIT, new DateTimeGranularity(HOURS));
         LinearRestrictions<OffsetDateTime> right = LinearRestrictionsFactory.createDateTimeRestrictions(upperDateTimeLimit, DATETIME_MAX_LIMIT, new DateTimeGranularity(MILLIS));
 
-        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right);
+        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(left, right, false);
         LinearRestrictions<OffsetDateTime> restrictions = result.get();
 
         Assert.assertThat(result, not(nullValue()));
@@ -254,7 +253,7 @@ class DateTimeRestrictionsMergerTests {
         LinearRestrictions<OffsetDateTime> early = LinearRestrictionsFactory.createDateTimeRestrictions(lowerDateTimeLimit, DATETIME_MAX_LIMIT, new DateTimeGranularity(HOURS));
         LinearRestrictions<OffsetDateTime> later = LinearRestrictionsFactory.createDateTimeRestrictions(upperDateTimeLimit, DATETIME_MAX_LIMIT, new DateTimeGranularity(SECONDS));
 
-        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(early, later);
+        Optional<LinearRestrictions<OffsetDateTime>> result = merger.merge(early, later, false);
         LinearRestrictions<OffsetDateTime> restrictions = result.get();
 
         // assert that we get the correct level of granularity

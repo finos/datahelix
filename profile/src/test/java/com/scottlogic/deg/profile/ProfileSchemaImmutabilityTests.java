@@ -35,6 +35,25 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ProfileSchemaImmutabilityTests {
 
+    public static class SupportedVersionsGetter {
+        private final static String RESOURCES_PATH = "profileschema/datahelix.schema.json";
+
+        /**
+         * @return all valid schema versions
+         **/
+        List<String> getSupportedSchemaVersions() {
+            List<String> supportedSchemaVersions = new ArrayList<>();
+            InputStream schemaPath = getClass().getClassLoader().getResourceAsStream(RESOURCES_PATH);
+
+            JsonValidationService service = JsonValidationService.newInstance();
+            JsonSchema schema = service.readSchema(schemaPath);
+
+            String version = schema.getSubschemaAt("/definitions/schemaVersion").toJson().asJsonObject().get("const").toString();
+            supportedSchemaVersions.add(version.replace("\"", ""));
+            return supportedSchemaVersions;
+        }
+    }
+
     private static class VersionHash {
         private final String version;
         private final String hash;

@@ -179,7 +179,7 @@ __Cucumber Steps__
 ```
 
 ### Describing the outcome
-* _the profile is invalid because "`{reason}`"_, executes the generator and asserts that an `InvalidProfileException` or `JsonParseException` was thrown with the message `{reason}`, reason is a regular expression*.
+* _the profile is invalid because "`{reason}`"_, executes the generator and asserts that an `ValidationException` or `JsonParseException` was thrown with the message `{reason}`, reason is a regular expression*.
 * _no data is created_, executes the generator and asserts that no data was emitted
 * _the following data should be generated:_, executes the generator and asserts that no exceptions were thrown and the given data appears in the generated data, no additional data is permitted.
 * _the following data should be generated in order:_, executes the generator and asserts that no exceptions were thrown and the given data appears **in the same order** in the generated data, no additional data is permitted.

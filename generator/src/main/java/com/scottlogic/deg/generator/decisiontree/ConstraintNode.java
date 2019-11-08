@@ -16,20 +16,19 @@
 
 package com.scottlogic.deg.generator.decisiontree;
 
-import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
+import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelation;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 
 import java.util.*;
 
 public class ConstraintNode implements Node {
     private final Set<AtomicConstraint> atomicConstraints;
-    private final Set<FieldSpecRelations> relations;
+    private final Set<FieldSpecRelation> relations;
     private final Set<DecisionNode> decisions;
     private final Set<NodeMarking> nodeMarkings;
 
     public ConstraintNode(Set<AtomicConstraint> atomicConstraints,
-                          Set<FieldSpecRelations> relations,
+                          Set<FieldSpecRelation> relations,
                           Set<DecisionNode> decisions,
                           Set<NodeMarking> nodeMarkings) {
         this.atomicConstraints = Collections.unmodifiableSet(atomicConstraints);
@@ -43,7 +42,7 @@ public class ConstraintNode implements Node {
     }
 
 
-    public Set<FieldSpecRelations> getRelations() {
+    public Set<FieldSpecRelation> getRelations() {
         return relations;
     }
 
@@ -100,7 +99,7 @@ public class ConstraintNode implements Node {
 
     static ConstraintNode merge(Iterator<ConstraintNode> constraintNodeIterator) {
         Set<AtomicConstraint> atomicConstraints = new HashSet<>();
-        Set<FieldSpecRelations> delayedAtomicConstraints = new HashSet<>();
+        Set<FieldSpecRelation> delayedAtomicConstraints = new HashSet<>();
         Set<DecisionNode> decisions = new HashSet<>();
         Set<NodeMarking> markings = new HashSet<>();
 

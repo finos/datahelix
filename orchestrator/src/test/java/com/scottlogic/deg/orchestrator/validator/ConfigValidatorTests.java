@@ -18,7 +18,7 @@ package com.scottlogic.deg.orchestrator.validator;
 
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.util.FileUtils;
-import com.scottlogic.deg.profile.reader.ConfigValidator;
+import com.scottlogic.deg.profile.validators.ConfigValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -38,55 +38,55 @@ public class ConfigValidatorTests {
 
     @Test
     public void checkProfileInputFile_withValidFile_returnsNoErrorMessages() {
-        ConfigValidator configValidator = new ConfigValidator(mockProfileFile, new FileUtils());
+        ConfigValidator configValidator = new ConfigValidator(new FileUtils());
 
         when(mockProfileFile.getPath()).thenReturn("path");
         when(mockProfileFile.exists()).thenReturn(true);
         when(mockProfileFile.isDirectory()).thenReturn(false);
         when(mockProfileFile.length()).thenReturn(1L);
 
-        assertDoesNotThrow(configValidator::checkProfileInputFile,"Expected no exception, but one was thrown.");
+        assertDoesNotThrow(() -> configValidator.validate(mockProfileFile),"Expected no exception, but one was thrown.");
     }
 
     @Test
     public void checkProfileInputFile_profileFilePathContainsInvalidChars_throwsException() {
-        ConfigValidator configValidator = new ConfigValidator(mockProfileFile, new FileUtils());
+        ConfigValidator configValidator = new ConfigValidator(new FileUtils());
 
         when(mockProfileFile.getPath()).thenReturn("path?");
 
-        assertThrows(ValidationException.class, configValidator::checkProfileInputFile,"Expected ValidationException to throw, but didn't");
+        assertThrows(ValidationException.class, () -> configValidator.validate(mockProfileFile),"Expected ValidationException to throw, but didn't");
     }
 
     @Test
     public void checkProfileInputFile_profileFileDoesNotExist_throwsException() {
-        ConfigValidator configValidator = new ConfigValidator(mockProfileFile, new FileUtils());
+        ConfigValidator configValidator = new ConfigValidator(new FileUtils());
 
         when(mockProfileFile.getPath()).thenReturn("path");
         when(mockProfileFile.exists()).thenReturn(false);
 
-        assertThrows(ValidationException.class, configValidator::checkProfileInputFile,"Expected ValidationException to throw, but didn't");
+        assertThrows(ValidationException.class, () -> configValidator.validate(mockProfileFile),"Expected ValidationException to throw, but didn't");
     }
 
     @Test
     public void checkProfileInputFile_profileFileIsDir_throwsException() {
-        ConfigValidator configValidator = new ConfigValidator(mockProfileFile, new FileUtils());
+        ConfigValidator configValidator = new ConfigValidator(new FileUtils());
 
         when(mockProfileFile.getPath()).thenReturn("path");
         when(mockProfileFile.exists()).thenReturn(true);
         when(mockProfileFile.isDirectory()).thenReturn(true);
 
-        assertThrows(ValidationException.class, configValidator::checkProfileInputFile,"Expected ValidationException to throw, but didn't");
+        assertThrows(ValidationException.class, () -> configValidator.validate(mockProfileFile),"Expected ValidationException to throw, but didn't");
     }
 
     @Test
     public void checkProfileInputFile_profileFileIsEmpty_throwsException() {
-        ConfigValidator configValidator = new ConfigValidator(mockProfileFile, new FileUtils());
+        ConfigValidator configValidator = new ConfigValidator(new FileUtils());
 
         when(mockProfileFile.getPath()).thenReturn("path");
         when(mockProfileFile.exists()).thenReturn(true);
         when(mockProfileFile.isDirectory()).thenReturn(false);
         when(mockProfileFile.length()).thenReturn(0L);
 
-        assertThrows(ValidationException.class, configValidator::checkProfileInputFile,"Expected ValidationException to throw, but didn't");
+        assertThrows(ValidationException.class, () -> configValidator.validate(mockProfileFile),"Expected ValidationException to throw, but didn't");
     }
 }

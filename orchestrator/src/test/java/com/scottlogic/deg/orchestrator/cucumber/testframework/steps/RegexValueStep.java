@@ -18,7 +18,7 @@ package com.scottlogic.deg.orchestrator.cucumber.testframework.steps;
 
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestHelper;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestState;
-import com.scottlogic.deg.profile.common.ConstraintType;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 

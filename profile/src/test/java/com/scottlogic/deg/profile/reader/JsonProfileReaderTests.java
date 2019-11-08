@@ -22,6 +22,7 @@ import com.scottlogic.deg.common.profile.DateTimeGranularity;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.common.profile.NumericGranularity;
+import com.scottlogic.deg.common.util.FileUtils;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.profile.Rule;
@@ -30,7 +31,12 @@ import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
-import com.scottlogic.deg.profile.ProfileCommandBus;
+import com.scottlogic.deg.profile.services.ConstraintService;
+import com.scottlogic.deg.profile.services.FieldService;
+import com.scottlogic.deg.profile.services.RuleService;
+import com.scottlogic.deg.profile.validators.ConfigValidator;
+import com.scottlogic.deg.profile.validators.CreateProfileValidator;
+import com.scottlogic.deg.profile.validators.profile.ProfileValidator;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -55,7 +61,8 @@ public class JsonProfileReaderTests {
     private DistributedList<Object> inSetReaderReturnValue = DistributedList.singleton("test");
     private DistributedList<String> fromFileReaderReturnValue = DistributedList.singleton("test");
 
-    private class MockFromFileReader extends FileReader {
+    private class MockFromFileReader extends FileReader
+    {
 
         MockFromFileReader() {
             super("");
@@ -78,9 +85,13 @@ public class JsonProfileReaderTests {
     private final String schemaVersion = "\"0.7\"";
     private String json;
 
-    private JsonProfileReader jsonProfileReader = new JsonProfileReader(null,
-        new ProfileCommandBus(new MockFromFileReader()));
-
+    private JsonProfileReader jsonProfileReader = new JsonProfileReader(
+        null,
+        new ConfigValidator(new FileUtils()),
+        new MockFromFileReader(),
+        new ProfileCommandBus(
+            new FieldService(),
+            new RuleService(new ConstraintService()), new CreateProfileValidator(new ProfileValidator(null))));
 
 
     private void givenJson(String json) {
@@ -687,7 +698,7 @@ public class JsonProfileReaderTests {
                 "    ]" +
                 "}");
 
-        expectValidationException("The equalTo constraint has null value for field foo");
+        expectValidationException("Values must be specified | Field: foo | Constraint: equalTo | Rule: Unnamed rule");
     }
 
     @Test
@@ -705,7 +716,7 @@ public class JsonProfileReaderTests {
                 "    ]" +
                 "}");
 
-        expectValidationException("The lessThan constraint has null value for field foo");
+        expectValidationException("Number must be specified | Field: foo | Constraint: lessThan | Rule: Unnamed rule");
     }
 
     @Test
@@ -723,7 +734,7 @@ public class JsonProfileReaderTests {
                 "    ]" +
                 "}");
 
-        expectValidationException("HelixDateTime cannot be null");
+        expectValidationException("Values must be specified | Field: foo | Constraint: inSet | Rule: Unnamed rule");
     }
 
     @Test
@@ -741,7 +752,7 @@ public class JsonProfileReaderTests {
                 "    ]" +
                 "}");
 
-        expectValidationException("The inSet constraint has null value for field foo");
+        expectValidationException("In set values must be specified | Field: foo | Constraint: inSet | Rule: Unnamed rule");
     }
 
     @Test
@@ -759,7 +770,7 @@ public class JsonProfileReaderTests {
                 "    ]" +
                 "}");
 
-        expectValidationException("The constraint json object node for field foo doesn't contain any of the expected keywords as properties: {\"field\":\"foo\",\"is\":null}");
+        expectValidationException("Invalid json: {\"field\":\"foo\",\"is\":null} | Rule: Unnamed rule");
     }
 
     @Test

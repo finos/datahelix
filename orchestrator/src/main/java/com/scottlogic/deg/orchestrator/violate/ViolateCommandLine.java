@@ -20,7 +20,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.scottlogic.deg.orchestrator.generate.GenerateCommandLine;
-import com.scottlogic.deg.profile.common.ConstraintType;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
 import picocli.CommandLine;
 
 import java.io.IOException;

@@ -25,7 +25,8 @@ import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 
-public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpecRelations {
+public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpecRelation
+{
     private final Field main;
     private final Field other;
     private final Granularity<T> offsetGranularity;
@@ -56,7 +57,7 @@ public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpec
         T max = otherRestrictions.getMax();
         T offsetMax = offsetGranularity.getNext(max, offset);
 
-        return FieldSpecFactory.fromRestriction(new LinearRestrictions(offsetMin, offsetMax, otherRestrictions.getGranularity()));
+        return FieldSpecFactory.fromRestriction(new LinearRestrictions(offsetMin, offsetMax, offsetGranularity));
     }
 
     @Override
@@ -70,7 +71,7 @@ public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpec
     }
 
     @Override
-    public FieldSpecRelations inverse() {
+    public FieldSpecRelation inverse() {
         return new EqualToOffsetRelation(other, main, offsetGranularity, -offset);
     }
 
