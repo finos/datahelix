@@ -39,7 +39,7 @@ public class BeforeDateRelationTest {
     @Test
     public void testReduceToFieldSpec_withNotNull_reducesToSpec() {
         DateTimeGranularity offsetGranularity = DateTimeGranularity.create("MILLIS");
-        FieldSpecRelations beforeDateRelations = new BeforeOffsetRelation(a, b, true, DateTimeDefaults.get(), offsetGranularity, 0);
+        FieldSpecRelation beforeDateRelations = new BeforeOffsetRelation(a, b, true, DateTimeDefaults.get(), offsetGranularity, 0);
         OffsetDateTime value = OffsetDateTime.of(2000,
             1,
             1,
@@ -59,7 +59,7 @@ public class BeforeDateRelationTest {
     @Test
     public void testReduceToFieldSpec_withNotNullExclusive_reducesToSpec() {
         DateTimeGranularity offsetGranularity = DateTimeGranularity.create("MILLIS");
-        FieldSpecRelations beforeDateRelations = new BeforeOffsetRelation(a, b, false, DateTimeDefaults.get(), offsetGranularity, 0);
+        FieldSpecRelation beforeDateRelations = new BeforeOffsetRelation(a, b, false, DateTimeDefaults.get(), offsetGranularity, 0);
         OffsetDateTime value = OffsetDateTime.of(2000,
             1,
             1,
@@ -80,7 +80,7 @@ public class BeforeDateRelationTest {
     @Test
     public void testReduceToFieldSpec_withNull_reducesToSpec() {
         DateTimeGranularity offsetGranularity = DateTimeGranularity.create("MILLIS");
-        FieldSpecRelations beforeDateRelations = new BeforeOffsetRelation(a, b, true, DateTimeDefaults.get(), offsetGranularity, 0);
+        FieldSpecRelation beforeDateRelations = new BeforeOffsetRelation(a, b, true, DateTimeDefaults.get(), offsetGranularity, 0);
         OffsetDateTime value = null;
         DataBagValue generatedValue = new DataBagValue(value);
 

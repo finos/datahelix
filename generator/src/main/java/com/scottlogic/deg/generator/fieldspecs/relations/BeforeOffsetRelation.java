@@ -26,7 +26,7 @@ import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 
 import static com.scottlogic.deg.common.util.GranularityUtils.readGranularity;
 
-public class BeforeOffsetRelation <T extends Comparable<T>> implements FieldSpecRelations {
+public class BeforeOffsetRelation <T extends Comparable<T>> implements FieldSpecRelation {
     private final Field main;
     private final Field other;
     private final boolean inclusive;
@@ -89,7 +89,7 @@ public class BeforeOffsetRelation <T extends Comparable<T>> implements FieldSpec
     }
 
     @Override
-    public FieldSpecRelations inverse() {
+    public FieldSpecRelation inverse() {
          return new AfterOffsetRelation(other, main, inclusive, defaults, offsetGranularity,-1 * offset);
     }
 
