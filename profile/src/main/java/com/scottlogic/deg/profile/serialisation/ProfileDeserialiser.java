@@ -18,11 +18,9 @@ package com.scottlogic.deg.profile.serialisation;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.profile.dtos.ProfileDTO;
 import com.scottlogic.deg.profile.reader.FileReader;
-
-import java.io.IOException;
-import java.io.UncheckedIOException;
 
 public class ProfileDeserialiser
 {
@@ -35,8 +33,8 @@ public class ProfileDeserialiser
         mapper.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
         try {
             return mapper.readerFor(ProfileDTO.class).readValue(json);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
+        } catch (Exception e) {
+            throw new ValidationException("Profile json is not valid\n" + e.getMessage());
         }
     }
 }
