@@ -23,21 +23,21 @@ public abstract class FieldSpecRelationFactory
             case EQUAL_TO_FIELD:
                 return createEqualToRelation((EqualToFieldConstraintDTO) dto, fields);
             case AFTER_FIELD:
-                return new AfterOffsetRelation(main, other, dto.offset > 0, dateTimeDefaults, offsetGranularity, dto.offset);
+                return new AfterRelation(main, other, dto.offset > 0, dateTimeDefaults, offsetGranularity, dto.offset);
             case AFTER_OR_AT_FIELD:
-                return new AfterOffsetRelation(main, other, true, dateTimeDefaults, offsetGranularity, 0);
+                return new AfterRelation(main, other, true, dateTimeDefaults, offsetGranularity, 0);
             case BEFORE_FIELD:
-                return new BeforeOffsetRelation(main, other, dto.offset > 0, dateTimeDefaults, offsetGranularity, dto.offset);
+                return new BeforeRelation(main, other, dto.offset > 0, dateTimeDefaults, offsetGranularity, dto.offset);
             case BEFORE_OR_AT_FIELD:
-                return new BeforeOffsetRelation(main, other, true, dateTimeDefaults, offsetGranularity, 0);
+                return new BeforeRelation(main, other, true, dateTimeDefaults, offsetGranularity, 0);
             case GREATER_THAN_FIELD:
-                return new AfterOffsetRelation(main, other, false, numericDefaults, offsetGranularity, 0);
+                return new AfterRelation(main, other, false, numericDefaults, offsetGranularity, 0);
             case GREATER_THAN_OR_EQUAL_TO_FIELD:
-                return new AfterOffsetRelation(main, other, true, numericDefaults, offsetGranularity, 0);
+                return new AfterRelation(main, other, true, numericDefaults, offsetGranularity, 0);
             case LESS_THAN_FIELD:
-                return new BeforeOffsetRelation(main, other, false, numericDefaults, offsetGranularity, 0);
+                return new BeforeRelation(main, other, false, numericDefaults, offsetGranularity, 0);
             case LESS_THAN_OR_EQUAL_TO_FIELD:
-                return new BeforeOffsetRelation(main, other, true, numericDefaults, offsetGranularity, 0);
+                return new BeforeRelation(main, other, true, numericDefaults, offsetGranularity, 0);
             default:
                 throw new IllegalStateException("Unexpected relation type: " + dto.getType());
         }
