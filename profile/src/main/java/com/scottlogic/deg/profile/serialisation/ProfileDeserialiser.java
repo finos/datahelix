@@ -34,7 +34,7 @@ public class ProfileDeserialiser
         try {
             return mapper.readerFor(ProfileDTO.class).readValue(json);
         } catch (Exception e) {
-            throw new ValidationException("Profile json is not valid\n" + e.getLocalizedMessage());
+            throw new ValidationException("Profile json is not valid\n" + e.getMessage());
         }
     }
 }
