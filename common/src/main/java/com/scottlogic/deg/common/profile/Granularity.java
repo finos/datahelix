@@ -30,11 +30,13 @@ public interface Granularity<T> {
 
     T trimToGranularity(T value);
 
-    T getPrevious(T value);
+    T getPrevious(T value, int amount);
 
     default T getNext(T value){
         return getNext(value, 1);
-    };
+    }
+
+    default T getPrevious(T value) { return getPrevious(value, 1);}
 
     T getRandom(T min, T max, RandomNumberGenerator randomNumberGenerator);
 }
