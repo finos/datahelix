@@ -24,50 +24,57 @@ import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 
-public class AfterRelation<T extends Comparable<T>> implements FieldSpecRelation
-{
+import static com.scottlogic.deg.common.util.GranularityUtils.readGranularity;
+
+public class AfterRelation<T extends Comparable<T>> implements FieldSpecRelation {
     private final Field main;
     private final Field other;
     private final boolean inclusive;
     private final LinearDefaults<T> defaults;
+    private final Granularity<T> offsetGranularity;
+    private final int offset;
 
-    public AfterRelation(Field main, Field other, boolean inclusive, LinearDefaults<T> defaults) {
+    public AfterRelation(Field main, Field other, boolean inclusive, LinearDefaults<T> defaults, Granularity<T> offsetGranularity, int offset) {
         this.main = main;
         this.other = other;
         this.inclusive = inclusive;
         this.defaults = defaults;
+        this.offsetGranularity = offsetGranularity != null ? offsetGranularity : readGranularity(main.getType(), null);
+        this.offset = offset;
     }
 
     @Override
     public FieldSpec createModifierFromOtherFieldSpec(FieldSpec otherFieldSpec) {
-        if (otherFieldSpec instanceof NullOnlyFieldSpec){
+        if (otherFieldSpec instanceof NullOnlyFieldSpec) {
             return FieldSpecFactory.nullOnly();
         }
         if (otherFieldSpec instanceof WhitelistFieldSpec) {
             throw new UnsupportedOperationException("cannot combine sets with after relation, Issue #1489");
         }
 
-        LinearRestrictions<T> lr = (LinearRestrictions)((RestrictionsFieldSpec) otherFieldSpec).getRestrictions();
-        return createFieldSpec(lr.getMin(), defaults.granularity());
+        LinearRestrictions<T> otherRestrictions = (LinearRestrictions) ((RestrictionsFieldSpec) otherFieldSpec).getRestrictions();
+        T min = otherRestrictions.getMin();
+        T offsetMin = offsetGranularity.getNext(min, offset);
+
+        return createFromMin(offsetMin, offsetGranularity);
     }
 
     @Override
     public FieldSpec createModifierFromOtherValue(DataBagValue otherFieldGeneratedValue) {
         if (otherFieldGeneratedValue.getValue() == null) return FieldSpecFactory.fromType(main.getType());
-        return createFieldSpec((T) otherFieldGeneratedValue.getValue(), defaults.granularity());
+
+        T offsetValue = offset > 0
+            ? offsetGranularity.getNext((T) otherFieldGeneratedValue.getValue(), offset)
+            : (T) otherFieldGeneratedValue.getValue();
+        return createFromMin(offsetValue, defaults.granularity());
     }
 
-    private FieldSpec createFieldSpec(T min, Granularity<T> granularity) {
-        if (!inclusive){
+    private FieldSpec createFromMin(T min, Granularity<T> granularity) {
+        if (!inclusive) {
             min = granularity.getNext(min);
         }
 
         return FieldSpecFactory.fromRestriction(new LinearRestrictions<>(min, defaults.max(), granularity));
-    }
-
-    @Override
-    public FieldSpecRelation inverse() {
-        return new BeforeRelation(other, main, inclusive, defaults);
     }
 
     @Override
@@ -81,12 +88,17 @@ public class AfterRelation<T extends Comparable<T>> implements FieldSpecRelation
     }
 
     @Override
+    public FieldSpecRelation inverse() {
+        return new BeforeRelation(other, main, inclusive, defaults, offsetGranularity, -1 * offset);
+    }
+
+    @Override
     public String toString() {
-        return String.format("%s is after %s%s", main, inclusive ? "or equal to " : "", other);
+        return String.format("%s is after %s%s %s %s", main, inclusive ? "or equal to " : "", other, offset >= 0 ? "plus" : "minus", Math.abs(offset));
     }
 
     @Override
     public Constraint negate() {
-        return new BeforeRelation(main, other, !inclusive, defaults);
+        throw new UnsupportedOperationException("Negating relations with an offset is not supported");
     }
 }
