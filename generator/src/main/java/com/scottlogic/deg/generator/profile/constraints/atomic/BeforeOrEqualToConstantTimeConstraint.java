@@ -22,7 +22,7 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
-import com.scottlogic.deg.generator.utils.Defaults;
+import com.scottlogic.deg.generator.utils.GeneratorDefaults;
 
 import java.time.LocalTime;
 
@@ -49,7 +49,7 @@ public class BeforeOrEqualToConstantTimeConstraint implements AtomicConstraint {
     public FieldSpec toFieldSpec() {
         final Limit<LocalTime> max = new Limit<>(referenceValue.getValue(), true);
         final LinearRestrictions<LocalTime> timeRestriction =
-            LinearRestrictionsFactory.createTimeRestrictions(Defaults.TIME_MIN_LIMIT, max);
+            LinearRestrictionsFactory.createTimeRestrictions(GeneratorDefaults.TIME_MIN_LIMIT, max);
         return FieldSpecFactory.fromRestriction(timeRestriction);
     }
 }

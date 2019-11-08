@@ -16,10 +16,13 @@
 
 package com.scottlogic.deg.generator.generation.string.generators;
 
+import com.scottlogic.deg.common.profile.FieldType;
+import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.generation.string.AutomatonUtils;
 import com.scottlogic.deg.generator.generation.string.iterators.FiniteStringAutomatonIterator;
 import com.scottlogic.deg.generator.generation.string.factorys.InterestingStringFactory;
 import com.scottlogic.deg.generator.generation.string.factorys.RandomStringFactory;
+import com.scottlogic.deg.generator.restrictions.string.StringRestrictions;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import dk.brics.automaton.Automaton;
 
@@ -38,6 +41,8 @@ public class RegexStringGenerator implements StringGenerator {
      * Cache of all containing regex automatons, keyed on their regex
      */
     private static final Map<String, Automaton> containingRegexAutomatonCache = new HashMap<>();
+
+    private static final RegexStringGenerator DEFAULT = (RegexStringGenerator) ((StringRestrictions) FieldSpecFactory.fromType(FieldType.STRING).getRestrictions()).createGenerator();
 
     private Automaton automaton;
     private final String regexRepresentation;
@@ -119,7 +124,7 @@ public class RegexStringGenerator implements StringGenerator {
     @Override
     public StringGenerator complement() {
         return new RegexStringGenerator(
-            this.automaton.clone().complement(),
+            this.automaton.clone().complement().intersection(DEFAULT.automaton),
             complementaryRepresentation(this.regexRepresentation));
     }
 
@@ -150,10 +155,7 @@ public class RegexStringGenerator implements StringGenerator {
     public Stream<String> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
         return Stream.generate(
             () -> randomStringFactory.createRandomString(
-                "",
                 automaton.getInitialState(),
-                1,
-                Integer.MAX_VALUE,
                 randomNumberGenerator));
     }
 

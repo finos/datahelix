@@ -37,8 +37,8 @@ import java.util.stream.Collectors;
 
 import static com.scottlogic.deg.common.profile.FieldType.*;
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createNumericRestrictions;
-import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MAX_LIMIT;
-import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MIN_LIMIT;
+import static com.scottlogic.deg.generator.utils.GeneratorDefaults.NUMERIC_MAX_LIMIT;
+import static com.scottlogic.deg.generator.utils.GeneratorDefaults.NUMERIC_MIN_LIMIT;
 
 public class FieldSpecGetFieldValueSourceTests {
 

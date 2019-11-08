@@ -25,7 +25,7 @@ import java.time.ZoneOffset;
 import java.util.Optional;
 
 import static com.scottlogic.deg.common.util.Defaults.ISO_MAX_DATE;
-import static com.scottlogic.deg.generator.utils.Defaults.*;
+import static com.scottlogic.deg.generator.utils.GeneratorDefaults.*;
 import static java.time.temporal.ChronoUnit.*;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;

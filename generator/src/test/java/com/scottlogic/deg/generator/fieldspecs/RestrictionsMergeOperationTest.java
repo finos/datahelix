@@ -33,9 +33,9 @@ import java.util.Optional;
 
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDateTimeRestrictions;
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createNumericRestrictions;
-import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MAX_LIMIT;
-import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
-import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
+import static com.scottlogic.deg.generator.utils.GeneratorDefaults.NUMERIC_MAX_LIMIT;
+import static com.scottlogic.deg.generator.utils.GeneratorDefaults.DATETIME_MAX_LIMIT;
+import static com.scottlogic.deg.generator.utils.GeneratorDefaults.DATETIME_MIN_LIMIT;
 import static org.mockito.Mockito.*;
 
 class RestrictionsMergeOperationTest {

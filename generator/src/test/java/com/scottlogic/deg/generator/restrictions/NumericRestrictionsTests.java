@@ -25,8 +25,8 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
-import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MAX_LIMIT;
-import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MIN_LIMIT;
+import static com.scottlogic.deg.generator.utils.GeneratorDefaults.NUMERIC_MAX_LIMIT;
+import static com.scottlogic.deg.generator.utils.GeneratorDefaults.NUMERIC_MIN_LIMIT;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 
