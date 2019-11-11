@@ -29,14 +29,8 @@ import com.scottlogic.deg.profile.dtos.constraints.atomic.AtomicConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.*;
 import com.scottlogic.deg.profile.dtos.constraints.relations.InMapConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.relations.RelationalConstraintDTO;
-import com.scottlogic.deg.profile.factories.constraint_factories.AtomicConstraintFactory;
-import com.scottlogic.deg.profile.factories.constraint_factories.DateTimeConstraintFactory;
-import com.scottlogic.deg.profile.factories.constraint_factories.NumericConstraintFactory;
-import com.scottlogic.deg.profile.factories.constraint_factories.StringConstraintFactory;
-import com.scottlogic.deg.profile.factories.relation_factories.DateTimeRelationFactory;
-import com.scottlogic.deg.profile.factories.relation_factories.FieldSpecRelationFactory;
-import com.scottlogic.deg.profile.factories.relation_factories.NumericRelationFactory;
-import com.scottlogic.deg.profile.factories.relation_factories.StringRelationFactory;
+import com.scottlogic.deg.profile.factories.constraint_factories.*;
+import com.scottlogic.deg.profile.factories.relation_factories.*;
 
 import java.math.BigDecimal;
 import java.time.temporal.ChronoUnit;
@@ -58,11 +52,13 @@ public class ConstraintService
         atomicConstraintFactoryMap.put(FieldType.DATETIME, new DateTimeConstraintFactory());
         atomicConstraintFactoryMap.put(FieldType.NUMERIC, new NumericConstraintFactory());
         atomicConstraintFactoryMap.put(FieldType.STRING, new StringConstraintFactory());
+        atomicConstraintFactoryMap.put(FieldType.BOOLEAN, new BooleanConstraintFactory());
 
         relationFactoryMap = new EnumMap<>(FieldType.class);
         relationFactoryMap.put(FieldType.DATETIME, new DateTimeRelationFactory());
         relationFactoryMap.put(FieldType.NUMERIC, new NumericRelationFactory());
         relationFactoryMap.put(FieldType.STRING, new StringRelationFactory());
+        relationFactoryMap.put(FieldType.BOOLEAN, new BooleanRelationFactory());
     }
 
     Optional<Constraint> createSpecificTypeConstraint(Field field)
