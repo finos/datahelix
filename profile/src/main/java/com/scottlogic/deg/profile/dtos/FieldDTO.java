@@ -21,6 +21,7 @@ import com.scottlogic.deg.common.profile.SpecificFieldType;
 public class FieldDTO {
     public String name;
     public SpecificFieldType type;
+    public String generator;
     public String formatting;
     public boolean unique;
     public boolean nullable = false;

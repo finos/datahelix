@@ -56,7 +56,7 @@
   "definitions": {
     "schemaVersion": {
       "title": "The version of the DataHelix profile schema",
-      "const": "0.14"
+      "const": "0.15"
     },
     "dataType": {
       "oneOf": [
@@ -148,7 +148,8 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "name"
+        "name",
+        "type"
       ],
       "default": {
         "name": "fieldName",
@@ -186,6 +187,9 @@
         },
         "nullable": {
           "type": "boolean"
+        },
+        "generator": {
+          "type": "string"
         }
       }
     },

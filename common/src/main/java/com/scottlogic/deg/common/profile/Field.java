@@ -25,14 +25,16 @@ public class Field {
     private final String formatting;
     private final boolean internal;
     private final boolean nullable;
+    private final String generator;
 
-    public Field(String name, SpecificFieldType type, boolean unique, String formatting, boolean internal, boolean nullable) {
+    public Field(String name, SpecificFieldType type, boolean unique, String formatting, boolean internal, boolean nullable, String generator) {
         this.name = name;
         this.type = type;
         this.unique = unique;
         this.formatting = formatting;
         this.internal = internal;
         this.nullable = nullable;
+        this.generator = generator;
     }
 
     public FieldType getType() {
@@ -60,6 +62,9 @@ public class Field {
         return nullable;
     }
 
+    public boolean usesCustomGenerator() { return generator != null; }
+
+    public String getCustomGeneratorName() { return generator; }
 
     @Override
     public String toString() {
@@ -75,12 +80,13 @@ public class Field {
             && Objects.equals(unique, field.unique)
             && Objects.equals(type, field.type)
             && Objects.equals(formatting, field.formatting)
-            && Objects.equals(nullable, field.nullable);
+            && Objects.equals(nullable, field.nullable)
+            && Objects.equals(generator, field.generator);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, unique, formatting, type, nullable);
+        return Objects.hash(name, unique, formatting, type, nullable, generator);
     }
 
     public String getName()

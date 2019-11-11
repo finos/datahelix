@@ -21,6 +21,7 @@ import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsNullConstraint;
+import com.scottlogic.deg.profile.custom.CustomConstraintFactory;
 import com.scottlogic.deg.profile.dtos.RuleDTO;
 
 import java.util.List;
@@ -30,11 +31,15 @@ import java.util.stream.Collectors;
 public class RuleService
 {
     private final ConstraintService constraintService;
+    private final CustomConstraintFactory customConstraintFactory;
 
     @Inject
-    public RuleService(ConstraintService constraintService){
-
+    public RuleService(
+        ConstraintService constraintService,
+        CustomConstraintFactory customConstraintFactory)
+    {
         this.constraintService = constraintService;
+        this.customConstraintFactory = customConstraintFactory;
     }
 
     public List<Rule> createRules(List<RuleDTO> ruleDTOs, Fields fields)
@@ -45,6 +50,7 @@ public class RuleService
 
         createNotNullableRule(fields).ifPresent(rules::add);
         createSpecificTypeRule(fields).ifPresent(rules::add);
+        createCustomGeneratorRule(fields, customConstraintFactory).ifPresent(rules::add);
 
         return rules;
     }
@@ -72,5 +78,19 @@ public class RuleService
         return specificTypeConstraints.isEmpty()
             ? Optional.empty()
             : Optional.of(new Rule("specific-types", specificTypeConstraints));
+    }
+
+    private Optional<Rule> createCustomGeneratorRule(
+        Fields fields,
+        CustomConstraintFactory customConstraintFactory)
+    {
+        List<Constraint> customGeneratorConstraints = fields.stream()
+            .filter(f -> f.usesCustomGenerator())
+            .map(f -> customConstraintFactory.create(f, f.getCustomGeneratorName()))
+            .collect(Collectors.toList());
+
+        return customGeneratorConstraints.isEmpty()
+            ? Optional.empty()
+            : Optional.of(new Rule("generators", customGeneratorConstraints));
     }
 }

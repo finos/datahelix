@@ -42,8 +42,8 @@ public class CsvDataSetWriterTest {
 
     private ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-    private Field fieldOne = new Field("one", SpecificFieldType.STRING,false,null,false, false);
-    private Field fieldTwo = new Field("two", SpecificFieldType.STRING,false,null,false, false);
+    private Field fieldOne = new Field("one", SpecificFieldType.STRING,false,null,false, false, null);
+    private Field fieldTwo = new Field("two", SpecificFieldType.STRING,false,null,false, false, null);
 
     private Fields fields = new Fields(new ArrayList<>(Arrays.asList(
         fieldOne, fieldTwo

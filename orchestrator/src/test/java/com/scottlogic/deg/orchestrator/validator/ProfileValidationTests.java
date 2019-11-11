@@ -17,6 +17,8 @@
 package com.scottlogic.deg.orchestrator.validator;
 
 import com.scottlogic.deg.common.util.FileUtils;
+import com.scottlogic.deg.custom.CustomGeneratorList;
+import com.scottlogic.deg.profile.custom.CustomConstraintFactory;
 import com.scottlogic.deg.profile.reader.FileReader;
 import com.scottlogic.deg.profile.reader.JsonProfileReader;
 import com.scottlogic.deg.profile.reader.ProfileCommandBus;
@@ -50,7 +52,8 @@ public class ProfileValidationTests {
             DynamicTest test = DynamicTest.dynamicTest(
                 dir.getName(),
                 () -> new JsonProfileReader(profileFile, new ConfigValidator(new FileUtils()),new FileReader(profileFile.getParent()),
-                    new ProfileCommandBus(new FieldService(), new RuleService(new ConstraintService()),
+                    new ProfileCommandBus(new FieldService(), new RuleService(new ConstraintService(),
+                        new CustomConstraintFactory(new CustomGeneratorList())),
                         new CreateProfileValidator(new ProfileValidator(null)))).read());
             dynamicTests.add(test);
         }

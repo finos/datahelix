@@ -53,7 +53,11 @@
     3. [allOf](#allOf)
     4. [if](#if)
 
-7. [Running a Profile](#Running-a-Profile)
+7. [Custom Generators](#custom-generator)
+    1. [adding](#adding-custom-generator)
+    2. [using](#using-custom-generator)
+    
+8. [Running a Profile](#Running-a-Profile)
     1. [Command Line Arguments](#Command-Line-Arguments)
         1. [Command Line Arguments for Generate Mode](#Command-Line-Arguments-for-Generate-Mode)
     2. [Generation Strategies](#Generation-strategies)
@@ -64,7 +68,7 @@
                 2. [Exhaustive](#Exhaustive)
                 3. [Pinning](#Pinning)
 
-8. [Visualising Decision Trees](#Visualising-Decision-Trees)
+9. [Visualising Decision Trees](#Visualising-Decision-Trees)
 
 # Introduction
 
@@ -662,6 +666,43 @@ Is satisfied if either:
 
 While it's not prohibited, wrapping conditional constraints in any other kind of constraint (eg, a `not`) may cause unintuitive results.
 
+
+
+
+# Custom Generators
+<div id="custom-generator"></div>
+
+You can add your own custom java generators to the project with the following instructions.
+
+## Adding Custom Generators
+<div id="adding-custom-generator"></div>
+
+To add a custom generator you will need to 
+ - clone the datahelix source code
+ - go to the "custom" package
+ - either 
+   - implement the CustomGenerator.java interface
+   - use the CustomGeneratorBuilder.java to build a custom generator
+ - add your custom generator to the list in the CustomGeneratorList.java class
+ 
+There is an example folder in the "custom" package which shows an example using the CustomGeneratorBuilder to build a generator called "lorem ipsum"
+ 
+## using Custom Generators
+<div id="using-custom-generator"></div>
+
+To use your custom generator you add it to the field definition in your profile like this
+
+```javascript
+{
+    "name": "field1",
+    "type": "string",
+    "generator": "lorem ipsum"
+}
+```
+
+This will use the "lorem ipsum" example custom generator.
+
+To use your own, put the name of your generator instead of "lorem ipsum"
 
 # Running a Profile
 <div id="Running-a-Profile"></div>
