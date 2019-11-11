@@ -20,29 +20,30 @@ import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.common.validators.ValidationResult;
 import com.scottlogic.deg.profile.dtos.FieldDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.LongerThanConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.StringLengthConstraintDTO;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-public class StringLengthConstraintValidator extends AtomicConstraintValidator<StringLengthConstraintDTO>
+public class LongerThanConstraintValidator extends AtomicConstraintValidator<LongerThanConstraintDTO>
 {
     private final FieldType expectedFieldType;
 
-    public StringLengthConstraintValidator(String rule, List<FieldDTO> fields, FieldType expectedFieldType)
+    public LongerThanConstraintValidator(String rule, List<FieldDTO> fields, FieldType expectedFieldType)
     {
         super(rule, fields);
         this.expectedFieldType = expectedFieldType;
     }
 
     @Override
-    public final ValidationResult validate(StringLengthConstraintDTO dto)
+    public final ValidationResult validate(LongerThanConstraintDTO dto)
     {
         ValidationResult fieldMustBeValid = fieldMustBeValid(dto);
         if(!fieldMustBeValid.isSuccess) return fieldMustBeValid;
 
-        ValidationResult integerMustBeValid = stringLengthMustBeValid(dto);
-        if(!integerMustBeValid.isSuccess) return integerMustBeValid;
+        ValidationResult stringLengthMustBeValid = stringLengthMustBeValid(dto);
+        if(!stringLengthMustBeValid.isSuccess) return stringLengthMustBeValid;
 
         return fieldTypeMustMatchValueType(dto, expectedFieldType);
     }
@@ -51,15 +52,9 @@ public class StringLengthConstraintValidator extends AtomicConstraintValidator<S
     {
         BigDecimal integer = BigDecimal.valueOf(dto.stringLength());
         BigDecimal max = BigDecimal.valueOf(Defaults.MAX_STRING_LENGTH);
-        BigDecimal min = BigDecimal.ZERO;
-        if (integer.compareTo(min) < 0)
-        {
-            return ValidationResult.failure(String.format("String length must have a value >= %s, currently is %s", min.toPlainString(), integer.toPlainString()));
-        }
-        if (integer.compareTo(max) > 0)
-        {
-            return ValidationResult.failure(String.format("String length must have a value <= %s, currently is %s", max.toPlainString(), integer.toPlainString()));
-        }
-        return ValidationResult.success();
+        return integer.compareTo(max) <= 0
+            ? ValidationResult.success()
+            : ValidationResult.failure(String.format("String length must have a value <= %s, currently is %s"
+            , max.toPlainString(), integer.toPlainString()));
     }
 }

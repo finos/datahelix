@@ -22,27 +22,29 @@ import com.scottlogic.deg.common.validators.Validator;
 import com.scottlogic.deg.profile.dtos.FieldDTO;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.InvalidConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.grammatical.NotConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.EqualToConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.GranularToConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.InSetConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.IsNullConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.StringLengthConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.LongerThanConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.OfLengthConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.ShorterThanConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.numeric.NumericConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.temporal.TemporalConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.textual.RegexConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.AllOfConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.AnyOfConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.grammatical.NotConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.relations.InMapConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.EqualToConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.GranularToConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.numeric.NumericConstraintDTO;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.temporal.*;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.textual.RegexConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.relations.RelationalConstraintDTO;
 import com.scottlogic.deg.profile.validators.profile.constraints.InMapConstraintValidator;
 import com.scottlogic.deg.profile.validators.profile.constraints.NotConstraintValidator;
+import com.scottlogic.deg.profile.validators.profile.constraints.RelationalConstraintValidator;
 import com.scottlogic.deg.profile.validators.profile.constraints.atomic.*;
 import com.scottlogic.deg.profile.validators.profile.constraints.grammatical.AllOfConstraintValidator;
 import com.scottlogic.deg.profile.validators.profile.constraints.grammatical.AnyOfConstraintValidator;
 import com.scottlogic.deg.profile.validators.profile.constraints.grammatical.ConditionalConstraintValidator;
-import com.scottlogic.deg.profile.validators.profile.constraints.RelationalConstraintValidator;
 
 import java.util.List;
 
@@ -92,9 +94,11 @@ public abstract class ConstraintValidator<T extends ConstraintDTO> implements Va
             case BEFORE_OR_AT_FIELD:
                 return new RelationalConstraintValidator<>(rule, fields).validate((RelationalConstraintDTO) dto);
             case OF_LENGTH:
+                return new OfLengthConstraintValidator(rule, fields, FieldType.STRING).validate((OfLengthConstraintDTO) dto);
             case LONGER_THAN:
+                return new LongerThanConstraintValidator(rule, fields, FieldType.STRING).validate((LongerThanConstraintDTO) dto);
             case SHORTER_THAN:
-                return new StringLengthConstraintValidator(rule, fields, FieldType.STRING).validate((StringLengthConstraintDTO) dto);
+                return new ShorterThanConstraintValidator(rule, fields, FieldType.STRING).validate((ShorterThanConstraintDTO) dto);
             case GREATER_THAN:
             case GREATER_THAN_OR_EQUAL_TO:
             case LESS_THAN:
