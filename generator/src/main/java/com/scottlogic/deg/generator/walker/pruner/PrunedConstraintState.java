@@ -18,7 +18,7 @@ package com.scottlogic.deg.generator.walker.pruner;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
-import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
+import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelation;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder;
@@ -30,10 +30,10 @@ import java.util.*;
 class PrunedConstraintState {
 
     private final Set<AtomicConstraint> newAtomicConstraints;
-    private final Set<FieldSpecRelations> newRelations;
+    private final Set<FieldSpecRelation> newRelations;
     private final Set<DecisionNode> newDecisionNodes = new HashSet<>();
     private final Set<AtomicConstraint> pulledUpAtomicConstraints = new HashSet<>();
-    private final Set<FieldSpecRelations> pulledUpRelations = new HashSet<>();
+    private final Set<FieldSpecRelation> pulledUpRelations = new HashSet<>();
 
     PrunedConstraintState(ConstraintNode constraintNode){
         newAtomicConstraints = new HashSet<>(constraintNode.getAtomicConstraints());

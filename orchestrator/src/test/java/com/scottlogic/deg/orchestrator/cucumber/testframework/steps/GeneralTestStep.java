@@ -17,18 +17,18 @@
 package com.scottlogic.deg.orchestrator.cucumber.testframework.steps;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.scottlogic.deg.common.profile.AtomicConstraintType;
 import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.*;
-import com.scottlogic.deg.profile.common.ConstraintType;
-import com.scottlogic.deg.profile.reader.InvalidProfileException;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
+
+import com.scottlogic.deg.common.ValidationException;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.*;
 import org.hamcrest.Matcher;
 import org.junit.Assert;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -40,7 +40,7 @@ public class GeneralTestStep {
     private final CucumberTestState state;
     private CucumberTestHelper cucumberTestHelper;
 
-    public GeneralTestStep(CucumberTestState state){
+    public GeneralTestStep(CucumberTestState state) {
         this.state = state;
     }
 
@@ -49,14 +49,24 @@ public class GeneralTestStep {
         this.cucumberTestHelper = new CucumberTestHelper(state);
     }
 
-    @Given("there is a field (.+)$")
-    public void thereIsAField(String fieldName) {
-        this.state.addField(fieldName);
+    @Given("there is a nullable field (.+)$")
+    public void thereIsANullableField(String fieldName) {
+        this.state.addNullableField(fieldName);
     }
 
-    @Given("^the following fields exist:$")
-    public void thereAreFields(List<String> fields) {
-        fields.forEach(this::thereIsAField);
+    @Given("there is a non nullable field (.+)$")
+    public void thereIsANonNullableField(String fieldName) {
+        this.state.addNonNullableField(fieldName);
+    }
+
+    @Given("^the following nullable fields exist:$")
+    public void thereAreNullableFields(List<String> fields) {
+        fields.forEach(this::thereIsANullableField);
+    }
+
+    @Given("^the following non nullable fields exist:$")
+    public void thereAreNonNullableFields(List<String> fields) {
+        fields.forEach(this::thereIsANonNullableField);
     }
 
     @When("the generation strategy is {generationStrategy}")
@@ -70,8 +80,8 @@ public class GeneralTestStep {
     }
 
     @When("we do not violate any {operator} constraints")
-    public void constraintTypeIsNotViolated(String operator){
-        this.state.addConstraintToNotViolate(AtomicConstraintType.fromText(operator));
+    public void constraintTypeIsNotViolated(String operator) {
+        this.state.addConstraintToNotViolate(ConstraintType.fromName(operator));
     }
 
     @Given("the data requested is {generationMode}")
@@ -89,12 +99,12 @@ public class GeneralTestStep {
     }
 
     @And("^(.+) is null$")
-    public void fieldIsNull(String fieldName) throws Exception{
+    public void fieldIsNull(String fieldName) throws Exception {
         this.state.addConstraint(fieldName, ConstraintType.IS_NULL, true);
     }
 
     @And("^(.+) is anything but null$")
-    public void fieldIsNotNull(String fieldName) throws Exception{
+    public void fieldIsNotNull(String fieldName) throws Exception {
         this.state.addNotConstraint(fieldName, ConstraintType.IS_NULL, true);
     }
 
@@ -104,27 +114,27 @@ public class GeneralTestStep {
     }
 
     @And("^(.+) is equal to field (.+)$")
-    public void fieldEqualTo(String field, String otherField){
+    public void fieldEqualTo(String field, String otherField) {
         state.addRelationConstraint(field, ConstraintType.EQUAL_TO_FIELD, otherField);
     }
 
     @When("^If and Then are described below$")
-    public void ifStartThen(){
+    public void ifStartThen() {
         state.startCreatingIfConstraint(2);
     }
 
     @When("^If Then and Else are described below$")
-    public void ifStartThenElse(){
+    public void ifStartThenElse() {
         state.startCreatingIfConstraint(3);
     }
 
     @And("All Of the next {number} constraints")
-    public void allOf(int count){
+    public void allOf(int count) {
         state.startCreatingAllOfConstraint(count);
     }
 
     @And("Any Of the next {number} constraints")
-    public void anyOf(int count){
+    public void anyOf(int count) {
         state.startCreatingAnyOfConstraint(count);
     }
 
@@ -161,22 +171,63 @@ public class GeneralTestStep {
         }
     }
 
+    @But("^the profile is invalid")
+    public void profileIsInvalid()
+    {
+        state.expectExceptions = true;
+        cucumberTestHelper.generateAndGetData();
+
+        List<String> errors = this.cucumberTestHelper
+            .getProfileValidationErrors()
+            .collect(Collectors.toList());
+        Assert.assertFalse(errors.isEmpty());
+
+    }
+
+    @But("^the profile is invalid with error \"(.+)\"$")
+    public void profileIsInvalidWithErrorMessage(String expectedError) {
+        state.expectExceptions = true;
+        cucumberTestHelper.generateAndGetData();
+
+        List<String> errors = this.cucumberTestHelper
+            .getProfileValidationErrors()
+            .collect(Collectors.toList());
+
+        if (errors.size() == 0) {
+            Assert.fail("No profile validation errors were raised");
+        } else {
+            Assert.assertEquals(errors.get(0), expectedError);
+        }
+    }
+
+    @But("^the profile is invalid with error containing \"(.+)\"$")
+    public void profileIsInvalidWithErrorContainingErrorMessage(String expectedError) {
+        state.expectExceptions = true;
+        cucumberTestHelper.generateAndGetData();
+
+        List<String> errors = this.cucumberTestHelper
+            .getProfileValidationErrors()
+            .collect(Collectors.toList());
+
+        if (errors.size() == 0) {
+            Assert.fail("No profile validation errors were raised");
+        } else {
+            Assert.assertTrue(errors.get(0).contains(expectedError));
+        }
+    }
+
     @And("^no data is created$")
     public void noDataIsCreated() {
-        List<List<Object>> data = cucumberTestHelper.generateAndGetData();
+        List<Map<String,Object>> data = cucumberTestHelper.generateAndGetData();
 
-        String serialisedData = String.join(
-            "\n",
-            data
-                .stream()
-                .map(row ->
-                    String.join(
-                        ",",
-                        row
-                            .stream()
-                            .map(cell -> cell == null ? "<null>" : cell.toString())
-                            .collect(Collectors.toList())))
-                .collect(Collectors.toList()));
+        String serialisedData = data
+            .stream()
+            .map(row ->
+                row.values()
+                    .stream()
+                    .map(cell -> cell == null ? "<null>" : cell.toString())
+                    .collect(Collectors.joining(",")))
+            .collect(Collectors.joining("\n"));
 
         Assert.assertThat(
             "Some data was generated when none was expected:\n" + serialisedData,
@@ -211,7 +262,7 @@ public class GeneralTestStep {
         assertOutputData(data.generatedData, new RowsAbsentMatcher(data.expectedData));
     }
 
-    private void assertOutputData(List<List<Object>> data, Matcher<List<List<Object>>> matcher){
+    private void assertOutputData(List<Map<String, Object>> data, Matcher<List<Map<String, Object>>> matcher) {
         assertNoGenerationErrors();
 
         Assert.assertThat(data, matcher);
@@ -229,30 +280,37 @@ public class GeneralTestStep {
             empty());
     }
 
-    private List <List<Object>> getComparableExpectedResults(List<Map<String, String>> expectedResultsTable) {
+    private List<Map<String, Object>> getComparableExpectedResults(List<Map<String, String>> expectedResultsTable) {
         return expectedResultsTable
             .stream()
-            .map(row -> new ArrayList<>(row.values()))
-            .map(row -> row.stream().map(cell -> {
-                try {
-                    return GeneratorTestUtilities.parseExpected(cell);
-                } catch (JsonParseException | InvalidProfileException e) {
-                    state.addException(e);
-                    return "<exception thrown: " + e.getMessage() + ">";
-                }
-            }).collect(Collectors.toList()))
+            .map(row ->
+            {
+                Map<String, Object> rowMap = new HashMap<>();
+                row.keySet().forEach(key ->
+                {
+                    try
+                    {
+                        rowMap.put(key, GeneratorTestUtilities.parseExpected(row.get(key)));
+                    } catch (JsonParseException | ValidationException e)
+                    {
+                        state.addException(e);
+                        rowMap.put(key, "<exception thrown: " + e.getMessage() + ">");
+                    }
+                });
+                return rowMap;
+            })
             .collect(Collectors.toList());
     }
 
-    private GeneratedTestData getExpectedAndGeneratedData(List<Map<String, String>> expectedResultsTable){
-        List <List<Object>> expectedRowsOfResults = getComparableExpectedResults(expectedResultsTable);
-        List <List<Object>> data = cucumberTestHelper.generateAndGetData();
+    private GeneratedTestData getExpectedAndGeneratedData(List<Map<String, String>> expectedResultsTable) {
+        List<Map<String, Object>> expectedRowsOfResults = getComparableExpectedResults(expectedResultsTable);
+        List<Map<String, Object>> data = cucumberTestHelper.generateAndGetData();
         return new GeneratedTestData(expectedRowsOfResults, data);
     }
 
     @Then("some data should be generated")
     public void someDataShouldBeGenerated() {
-        List <List<Object>> data = cucumberTestHelper.generateAndGetData();
+        List<Map<String, Object>> data = cucumberTestHelper.generateAndGetData();
 
         assertNoGenerationErrors();
         Assert.assertThat("No data was generated but some was expected", data, not(empty()));
@@ -260,12 +318,12 @@ public class GeneralTestStep {
 
     @Then("{long} row(s) of data is/are generated")
     public void theExpectedNumberOfRowsAreGenerated(long expectedNumberOfRows) {
-        List <List<Object>> data = cucumberTestHelper.generateAndGetData();
+        List<Map<String, Object>> data = cucumberTestHelper.generateAndGetData();
 
         assertNoGenerationErrors();
         Assert.assertThat(
             "Unexpected number of rows returned",
-            (long)data.size(),
+            (long) data.size(),
             equalTo(expectedNumberOfRows));
     }
 
@@ -284,11 +342,11 @@ public class GeneralTestStep {
         state.setFieldType(fieldName, type);
     }
 
-    class GeneratedTestData {
-        List <List<Object>> expectedData;
-        List <List<Object>> generatedData;
+    static class GeneratedTestData {
+        List<Map<String, Object>> expectedData;
+        List<Map<String, Object>> generatedData;
 
-        GeneratedTestData(List <List<Object>> expectedData, List <List<Object>> generatedData){
+        GeneratedTestData(List<Map<String, Object>> expectedData, List<Map<String, Object>> generatedData) {
             this.expectedData = expectedData;
             this.generatedData = generatedData;
         }

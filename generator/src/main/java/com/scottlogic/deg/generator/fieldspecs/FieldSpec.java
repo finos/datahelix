@@ -18,7 +18,6 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.NullAppendingValueSource;
-import com.scottlogic.deg.generator.generation.fieldvaluesources.NullOnlySource;
 
 public abstract class FieldSpec {
 

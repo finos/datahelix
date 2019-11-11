@@ -2,16 +2,12 @@ package com.scottlogic.deg.profile.dtos.constraints;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.scottlogic.deg.profile.common.ConstraintType;
-import com.scottlogic.deg.profile.common.ConstraintTypeJsonProperty;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.AtomicConstraintDTO;
 
 @JsonDeserialize(as = GeneratorConstraintDto.class)
 public class GeneratorConstraintDto extends AtomicConstraintDTO {
+    public static final String NAME = "generator";
 
-    @JsonProperty(ConstraintTypeJsonProperty.GENERATOR)
+    @JsonProperty(NAME)
     public String generator;
-
-    public GeneratorConstraintDto() {
-        super(ConstraintType.GENERATOR);
-    }
 }

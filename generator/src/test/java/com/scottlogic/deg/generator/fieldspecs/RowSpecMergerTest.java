@@ -1,8 +1,23 @@
+/*
+ * Copyright 2019 Scott Logic Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.scottlogic.deg.generator.fieldspecs;
 
 import com.google.common.collect.ImmutableMap;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.common.profile.FieldType;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +35,7 @@ class RowSpecMergerTest {
     FieldSpec notNull = FieldSpecFactory.fromType(FieldType.STRING).withNotNull();
     Field A = createField("A");
     Field B = createField("B");
-    ProfileFields fields = new ProfileFields(Arrays.asList(A, B));
+    Fields fields = new Fields(Arrays.asList(A, B));
 
     @Test
     void merge_notContradictoryForField() {

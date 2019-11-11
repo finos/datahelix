@@ -29,10 +29,7 @@ import org.junit.Assert;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -48,10 +45,9 @@ public class CucumberTestHelper {
     }
 
     public void runGenerationProcess() {
-        if (testState.expectExceptions){
+        if (testState.expectExceptions) {
             generateAndExpectExceptions();
-        }
-        else {
+        } else {
             try {
                 doGeneration();
             } catch (IOException e) {
@@ -65,7 +61,7 @@ public class CucumberTestHelper {
             doGeneration();
         } catch (IOException e) {
             testState.addException(e);
-        } catch (ValidationException e){
+        } catch (ValidationException e) {
             testState.testExceptions.addAll(e.errorMessages.stream().map(ValidationException::new).collect(Collectors.toList()));
         }
     }
@@ -90,7 +86,7 @@ public class CucumberTestHelper {
         testState.generationHasAlreadyOccured = true;
     }
 
-    public List<List<Object>> generateAndGetData() {
+    public List<Map<String, Object>> generateAndGetData() {
         if (testState.shouldSkipGeneration) {
             throw new RuntimeException(
                 "Gherkin error: Don't use profile validity steps in conjunction with data checking steps");
@@ -131,7 +127,7 @@ public class CucumberTestHelper {
         String fieldName,
         Class<T> clazz,
         Function<T, Boolean> predicate
-    ){
+    ) {
         assertFieldContainsOnly(fieldName, objectValue -> {
             if (objectValue == null) {
                 return true;
@@ -152,11 +148,7 @@ public class CucumberTestHelper {
                 return true;
             }
 
-            if (clazz.isInstance(objectValue)) {
-                return false; //matches, but shouldn't match the type
-            }
-
-            return true;
+            return !clazz.isInstance(objectValue); //matches, but shouldn't match the type
         });
     }
 
@@ -169,9 +161,9 @@ public class CucumberTestHelper {
             ));
         }
 
-        List<List<Object>> allData = this.generateAndGetData();
+        List<Map<String,Object>> allData = this.generateAndGetData();
         List<Object> dataForField =
-            allData.stream().map(row -> row.get(fieldIndex.get())).collect(Collectors.toList());
+            allData.stream().map(row -> row.get(fieldName)).collect(Collectors.toList());
 
         Assert.assertThat(dataForField, new ListPredicateAnyTrueIsSuccessMatcher(predicate));
     }
@@ -185,9 +177,8 @@ public class CucumberTestHelper {
             ));
         }
 
-        List<List<Object>> allData = this.generateAndGetData();
-        List<Object> dataForField =
-            allData.stream().map(row -> row.get(fieldIndex.get())).collect(Collectors.toList());
+        List<Map<String,Object>> allData = this.generateAndGetData();
+        List<Object> dataForField = allData.stream().map(row -> row.get(fieldName)).collect(Collectors.toList());
 
         Assert.assertThat(dataForField, new ListPredicateMatcher(predicate));
     }
@@ -199,17 +190,11 @@ public class CucumberTestHelper {
                 return Optional.of(index);
             }
         }
-
         return Optional.empty();
     }
 
     public <T> void assertFieldContainsSomeOf(String fieldName, Class<T> clazz) {
-        assertFieldContains(fieldName, objectValue -> {
-            if (clazz.isInstance(objectValue)) {
-                return true;
-            }
-
-            return false; //doesn't match the type when it should.
-        });
+        //doesn't match the type when it should.
+        assertFieldContains(fieldName, clazz::isInstance);
     }
 }

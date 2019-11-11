@@ -17,7 +17,7 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.generator.builders.TestConstraintNodeBuilder;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder;
@@ -63,10 +63,10 @@ class UpfrontTreePrunerTests {
             fieldSpecs.put(fieldA, FieldSpecFactory.fromType(fieldA.getType()));
 
             ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
-            DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
+            DecisionTree tree = new DecisionTree(unPrunedRoot, new Fields(fields));
             DecisionTree treeMarkedWithContradictions = new DecisionTree(
                 new ConstraintNodeBuilder().build().builder().markNode(NodeMarking.CONTRADICTORY).build(),
-                new ProfileFields(fields));
+                new Fields(fields));
 
             Mockito.when(treePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.of(prunedRoot));
             Mockito.when(contradictionValidator.markContradictions(tree)).thenReturn(treeMarkedWithContradictions);
@@ -88,11 +88,11 @@ class UpfrontTreePrunerTests {
             fieldSpecs.put(fieldB, FieldSpecFactory.fromType(fieldB.getType()));
 
             ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
-            DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
+            DecisionTree tree = new DecisionTree(unPrunedRoot, new Fields(fields));
 
             DecisionTree treeMarkedWithContradictions = new DecisionTree(
                 new ConstraintNodeBuilder().build().builder().markNode(NodeMarking.CONTRADICTORY).build(),
-                new ProfileFields(fields));
+                new Fields(fields));
 
             Mockito.when(treePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.of(prunedRoot));
             Mockito.when(contradictionValidator.markContradictions(tree)).thenReturn(treeMarkedWithContradictions);
@@ -112,7 +112,7 @@ class UpfrontTreePrunerTests {
             fieldSpecs.put(fieldA, FieldSpecFactory.fromType(fieldA.getType()));
 
             ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
-            DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
+            DecisionTree tree = new DecisionTree(unPrunedRoot, new Fields(fields));
 
             //Act
             Mockito.when(treePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.contradictory());
@@ -131,10 +131,10 @@ class UpfrontTreePrunerTests {
             fieldSpecs.put(fieldA, FieldSpecFactory.fromType(fieldA.getType()));
 
             ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
-            DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
+            DecisionTree tree = new DecisionTree(unPrunedRoot, new Fields(fields));
             DecisionTree completelyUnmarkedTree = new DecisionTree(
                 new ConstraintNodeBuilder().build(),
-                new ProfileFields(fields));
+                new Fields(fields));
 
             //Act
             Mockito.when(treePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.of(unPrunedRoot));
@@ -154,13 +154,13 @@ class UpfrontTreePrunerTests {
             fieldSpecs.put(fieldA, FieldSpecFactory.fromType(fieldA.getType()));
 
             ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
-            DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
+            DecisionTree tree = new DecisionTree(unPrunedRoot, new Fields(fields));
             ConstraintNode root = constraintNode()
                 .withDecision(
                     constraintNode().markNode(NodeMarking.CONTRADICTORY)).build();
             DecisionTree treeMarkedWithContradictions = new DecisionTree(
                 root,
-                new ProfileFields(fields));
+                new Fields(fields));
 
             //Act
             Mockito.when(treePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.of(root));
@@ -182,10 +182,10 @@ class UpfrontTreePrunerTests {
             fieldSpecs.put(fieldA, FieldSpecFactory.fromType(fieldA.getType()));
 
             ConstraintNode unPrunedRoot = Mockito.mock(ConstraintNode.class);
-            DecisionTree tree = new DecisionTree(unPrunedRoot, new ProfileFields(fields));
+            DecisionTree tree = new DecisionTree(unPrunedRoot, new Fields(fields));
             DecisionTree treeMarkedWithContradictions = new DecisionTree(
                 new ConstraintNodeBuilder().build().builder().markNode(NodeMarking.CONTRADICTORY).build(),
-                new ProfileFields(fields));
+                new Fields(fields));
 
             //Act
             Mockito.when(treePruner.pruneConstraintNode(unPrunedRoot, fieldSpecs)).thenReturn(Merged.contradictory());
@@ -228,7 +228,7 @@ class UpfrontTreePrunerTests {
                 .build();
 
 
-            DecisionTree tree = new DecisionTree(root, new ProfileFields(fields));
+            DecisionTree tree = new DecisionTree(root, new Fields(fields));
 
             //Act
             upfrontPruner.runUpfrontPrune(tree, monitor);
@@ -252,7 +252,7 @@ class UpfrontTreePrunerTests {
                 .build();
 
 
-            DecisionTree tree = new DecisionTree(root, new ProfileFields(fields));
+            DecisionTree tree = new DecisionTree(root, new Fields(fields));
 
             //Act
             upfrontPruner.runUpfrontPrune(tree, monitor);
@@ -285,7 +285,7 @@ class UpfrontTreePrunerTests {
                 .build();
 
 
-            DecisionTree tree = new DecisionTree(root, new ProfileFields(fields));
+            DecisionTree tree = new DecisionTree(root, new Fields(fields));
 
             //Act
             upfrontPruner.runUpfrontPrune(tree, monitor);
@@ -322,7 +322,7 @@ class UpfrontTreePrunerTests {
                 .build();
 
 
-            DecisionTree tree = new DecisionTree(root, new ProfileFields(fields));
+            DecisionTree tree = new DecisionTree(root, new Fields(fields));
 
             //Act
             upfrontPruner.runUpfrontPrune(tree, monitor);
@@ -348,7 +348,7 @@ class UpfrontTreePrunerTests {
                 .build();
 
 
-            DecisionTree tree = new DecisionTree(root, new ProfileFields(fields));
+            DecisionTree tree = new DecisionTree(root, new Fields(fields));
 
             //Act
             upfrontPruner.runUpfrontPrune(tree, monitor);
@@ -373,7 +373,7 @@ class UpfrontTreePrunerTests {
                 .build();
 
 
-            DecisionTree tree = new DecisionTree(root, new ProfileFields(fields));
+            DecisionTree tree = new DecisionTree(root, new Fields(fields));
 
             //Act
             upfrontPruner.runUpfrontPrune(tree, monitor);
@@ -404,7 +404,7 @@ class UpfrontTreePrunerTests {
                                 .where(fieldB).isNull()))
                 .build();
 
-            DecisionTree tree = new DecisionTree(root, new ProfileFields(fields));
+            DecisionTree tree = new DecisionTree(root, new Fields(fields));
 
             //Act
             upfrontPruner.runUpfrontPrune(tree, monitor);
@@ -441,7 +441,7 @@ class UpfrontTreePrunerTests {
                                 .where(fieldB).isNull()))
                 .build();
 
-            DecisionTree tree = new DecisionTree(root, new ProfileFields(fields));
+            DecisionTree tree = new DecisionTree(root, new Fields(fields));
 
             //Act
             upfrontPruner.runUpfrontPrune(tree, monitor);
@@ -480,7 +480,7 @@ class UpfrontTreePrunerTests {
                 )
                 .build();
 
-            DecisionTree tree = new DecisionTree(root, new ProfileFields(fields));
+            DecisionTree tree = new DecisionTree(root, new Fields(fields));
 
             //Act
             upfrontPruner.runUpfrontPrune(tree, monitor);
@@ -503,7 +503,7 @@ class UpfrontTreePrunerTests {
                 .build();
 
 
-            DecisionTree tree = new DecisionTree(root, new ProfileFields(fields));
+            DecisionTree tree = new DecisionTree(root, new Fields(fields));
 
             //Act
             upfrontPruner.runUpfrontPrune(tree, monitor);
@@ -531,7 +531,7 @@ class UpfrontTreePrunerTests {
                 .build();
 
 
-            DecisionTree tree = new DecisionTree(root, new ProfileFields(fields));
+            DecisionTree tree = new DecisionTree(root, new Fields(fields));
 
             //Act
             upfrontPruner.runUpfrontPrune(tree, monitor);
@@ -561,7 +561,7 @@ class UpfrontTreePrunerTests {
                 .build();
 
 
-            DecisionTree tree = new DecisionTree(root, new ProfileFields(fields));
+            DecisionTree tree = new DecisionTree(root, new Fields(fields));
 
             //Act
             upfrontPruner.runUpfrontPrune(tree, monitor);
@@ -592,7 +592,7 @@ class UpfrontTreePrunerTests {
                                         .where(fieldA).isNotNull())))
                 .build();
 
-            DecisionTree tree = new DecisionTree(root, new ProfileFields(fields));
+            DecisionTree tree = new DecisionTree(root, new Fields(fields));
 
             //Act
             upfrontPruner.runUpfrontPrune(tree, monitor);
@@ -622,7 +622,7 @@ class UpfrontTreePrunerTests {
                 .build();
 
 
-            DecisionTree tree = new DecisionTree(root, new ProfileFields(fields));
+            DecisionTree tree = new DecisionTree(root, new Fields(fields));
 
             //Act
             upfrontPruner.runUpfrontPrune(tree, monitor);
@@ -652,7 +652,7 @@ class UpfrontTreePrunerTests {
                 .build();
 
 
-            DecisionTree tree = new DecisionTree(root, new ProfileFields(fields));
+            DecisionTree tree = new DecisionTree(root, new Fields(fields));
 
             //Act
             upfrontPruner.runUpfrontPrune(tree, monitor);

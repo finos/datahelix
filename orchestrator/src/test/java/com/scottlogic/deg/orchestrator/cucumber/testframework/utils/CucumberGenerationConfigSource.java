@@ -24,7 +24,7 @@ import com.scottlogic.deg.generator.config.detail.VisualiserLevel;
 import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
 import com.scottlogic.deg.orchestrator.violate.ViolateConfigSource;
 import com.scottlogic.deg.output.guice.OutputFormat;
-import com.scottlogic.deg.common.profile.AtomicConstraintType;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -49,7 +49,7 @@ public class CucumberGenerationConfigSource implements AllConfigSource, ViolateC
     }
 
     @Override
-    public List<AtomicConstraintType> getConstraintsToNotViolate() {
+    public List<ConstraintType> getConstraintsToNotViolate() {
         return state.getConstraintsToNotViolate();
     }
 
@@ -74,11 +74,6 @@ public class CucumberGenerationConfigSource implements AllConfigSource, ViolateC
     }
 
     @Override
-    public boolean isSchemaValidationDisabled() {
-        return true;
-    }
-
-    @Override
     public boolean overwriteOutputFiles() {
         return false;
     }
@@ -99,7 +94,9 @@ public class CucumberGenerationConfigSource implements AllConfigSource, ViolateC
     }
 
     @Override
-    public String fromFilePath() { return ""; }
+    public String fromFilePath() {
+        return "";
+    }
 
     @Override
     public VisualiserLevel getVisualiserLevel() {

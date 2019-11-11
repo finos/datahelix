@@ -17,14 +17,13 @@
 package com.scottlogic.deg.orchestrator.violate.violator;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.HelixNumber;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Fields;
+import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.profile.Rule;
-import com.scottlogic.deg.generator.profile.RuleInformation;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
-import com.scottlogic.deg.generator.profile.constraints.atomic.IsGreaterThanConstantConstraint;
-import com.scottlogic.deg.generator.profile.constraints.atomic.IsLessThanConstantConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.GreaterThanConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.LessThanConstraint;
 import com.scottlogic.deg.orchestrator.violate.ViolatedProfile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -88,7 +87,7 @@ public class ProfileViolatorTests {
             Collections.singletonList(
                 new ViolatedProfile(
                     rule1,
-                    new ProfileFields(Arrays.asList(fooField, barField)),
+                    new Fields(Arrays.asList(fooField, barField)),
                     Collections.singletonList(violatedRule1),
                     "Input profile description -- Violating: Rule 1 description"
                 )
@@ -125,13 +124,13 @@ public class ProfileViolatorTests {
             Arrays.asList(
                 new ViolatedProfile(
                     rule1,
-                    new ProfileFields(Arrays.asList(fooField, barField)),
+                    new Fields(Arrays.asList(fooField, barField)),
                     Arrays.asList(violatedRule1, rule2),
                     "Input profile description -- Violating: Rule 1 description"
                 ),
                 new ViolatedProfile(
                     rule2,
-                    new ProfileFields(Arrays.asList(fooField, barField)),
+                    new Fields(Arrays.asList(fooField, barField)),
                     Arrays.asList(rule1, violatedRule2),
                     "Input profile description -- Violating: Rule 2 description"
                 )
@@ -147,31 +146,31 @@ public class ProfileViolatorTests {
 
     private void initRules() {
         //Rule 1 consists of 2 constraints, "foo is greater than 100" and "bar is greater than 50"
-        RuleInformation ruleInformation1 = new RuleInformation("Rule 1 description");
+        String ruleInformation1 = "Rule 1 description";
         fooField = createField("foo");
         barField = createField("bar");
-        Constraint constraint1 = new IsGreaterThanConstantConstraint(
+        Constraint constraint1 = new GreaterThanConstraint(
             fooField,
-            HelixNumber.create(100)
+            NumberUtils.coerceToBigDecimal(100)
         );
-        Constraint constraint2 = new IsGreaterThanConstantConstraint(
+        Constraint constraint2 = new GreaterThanConstraint(
             barField,
-            HelixNumber.create(50)
+            NumberUtils.coerceToBigDecimal(50)
         );
         rule1 = new Rule(ruleInformation1, Arrays.asList(constraint1, constraint2));
 
         //Violated Rule 1 consists of two constraints, "foo is less than to 101" and "bar is less than 51"
-        Constraint constraint3 = new IsLessThanConstantConstraint(
+        Constraint constraint3 = new LessThanConstraint(
             fooField,
-            HelixNumber.create(101)
+            NumberUtils.coerceToBigDecimal(101)
         );
-        Constraint constraint4 = new IsLessThanConstantConstraint(
+        Constraint constraint4 = new LessThanConstraint(
             barField,
-            HelixNumber.create(51)
+            NumberUtils.coerceToBigDecimal(51)
         );
         violatedRule1 = new Rule(ruleInformation1, Arrays.asList(constraint3, constraint4));
 
-        RuleInformation ruleInformation2 = new RuleInformation("Rule 2 description");
+        String ruleInformation2 = "Rule 2 description";
         rule2 = new Rule(ruleInformation2, Arrays.asList(constraint1,constraint4));
         violatedRule2 = new Rule(ruleInformation2, Arrays.asList(constraint2,constraint3));
     }

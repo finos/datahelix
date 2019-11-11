@@ -142,15 +142,6 @@ firstName
 [...]
 ```
 
-Fields are nullable by default, however, you can add a further constraint to a field to indicate it is 'not null'. If you add the following constraint, the generator will no longer output null values:
-
-```json
-"constraints": [
-  { "field": "firstName", "is": "matchingRegex", "value": "[a-z]{1,10}" },
-  { "not": { "field": "firstName", "is": "null" } }
-]
-```
-
 The generator supports three different types of constraint. These are:
 
 -   **Predicates** - boolean-valued functions that define whether a given value is valid or invalid. In the above profile `ofType` and `matchingRegex` are examples of predicates.
@@ -311,6 +302,16 @@ firstName,age,nationalInsurance
 "Mark",55,"AE656210B"
 "Mark",68,"ER027015"
 [...]
+```
+
+Fields are non-nullable by default, however, you can indicate that a field is nullable:
+
+```json
+{
+    "name": "field1",
+    "type": "datetime",
+    "nullable": true
+}
 ```
 
 You can find out more about the various constraints the generator supports in the detailed [User Guide](UserGuide.md).

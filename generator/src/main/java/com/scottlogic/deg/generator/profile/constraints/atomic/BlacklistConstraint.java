@@ -1,3 +1,18 @@
+/*
+ * Copyright 2019 Scott Logic Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
 import com.scottlogic.deg.common.profile.Field;
@@ -19,12 +34,12 @@ public class BlacklistConstraint implements AtomicConstraint {
 
         if (legalValues.isEmpty()) {
             throw new IllegalArgumentException("Cannot create an IsInSetConstraint for field '" +
-                field.name + "' with an empty set");
+                field.getName() + "' with an empty set");
         }
 
         if (legalValues.list().contains(null)) {
             throw new IllegalArgumentException("Cannot create an IsInSetConstraint for field '" +
-                field.name + "' with a set containing null");
+                field.getName() + "' with a set containing null");
         }
     }
 
@@ -35,7 +50,7 @@ public class BlacklistConstraint implements AtomicConstraint {
 
     @Override
     public AtomicConstraint negate() {
-        return new IsInSetConstraint(field, legalValues);
+        return new InSetConstraint(field, legalValues);
     }
 
     @Override
@@ -46,7 +61,7 @@ public class BlacklistConstraint implements AtomicConstraint {
     public String toString(){
         boolean overLimit = legalValues.list().size() > 3;
         return String.format("%s in [%s%s](%d values)",
-            field.name,
+            field.getName(),
             legalValues.stream().limit(3).map(Object::toString).collect(Collectors.joining(", ")),
             overLimit ? ", ..." : "",
             legalValues.list().size());

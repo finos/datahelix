@@ -16,23 +16,14 @@
 
 package com.scottlogic.deg.profile.dtos;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
 
-import java.util.Collection;
+import java.util.List;
 
-@JsonDeserialize(using = RuleDeserializer.class)
-@JsonSerialize(using = RuleSerializer.class)
-public class RuleDTO {
-    public String rule;
-    public Collection<ConstraintDTO> constraints;
-
-    public RuleDTO() {
-    }
-
-    public RuleDTO(String rule, Collection<ConstraintDTO> constraints) {
-        this.rule = rule;
-        this.constraints = constraints;
-    }
+public class RuleDTO
+{
+    @JsonProperty("rule")
+    public String description;
+    public List<ConstraintDTO> constraints;
 }

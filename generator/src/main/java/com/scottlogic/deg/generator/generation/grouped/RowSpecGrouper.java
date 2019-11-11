@@ -20,9 +20,8 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
-import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
+import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelation;
 import com.scottlogic.deg.generator.generation.FieldPair;
-import com.scottlogic.deg.generator.generation.grouped.FieldGroup;
 import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.util.*;
@@ -107,7 +106,7 @@ public class RowSpecGrouper {
     }
 
     private static FieldSpecGroup createFieldSpecGroups(List<Field> fields, RowSpec rowSpec){
-        List<FieldSpecRelations> relations = rowSpec.getRelations().stream()
+        List<FieldSpecRelation> relations = rowSpec.getRelations().stream()
             .filter(relation -> fields.contains(relation.main()) || fields.contains(relation.other()))
             .collect(Collectors.toList());
 

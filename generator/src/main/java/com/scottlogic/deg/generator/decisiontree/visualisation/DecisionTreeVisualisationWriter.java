@@ -203,7 +203,7 @@ class NodeVisualiser {
     String renderNode(String id, ConstraintNode node){
         String label = node.getAtomicConstraints()
             .stream()
-            .sorted(Comparator.comparing(ac -> ac.getField().name))
+            .sorted(Comparator.comparing(ac -> ac.getField().getName()))
             .map(AtomicConstraint::toString)
             .collect(Collectors.joining("\r\n"));
 

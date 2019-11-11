@@ -17,11 +17,10 @@
 package com.scottlogic.deg.generator.generation.databags;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.generator.builders.DataBagBuilder;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
-import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.combinationstrategies.CombinationStrategy;
 import com.scottlogic.deg.generator.generation.combinationstrategies.ExhaustiveCombinationStrategy;
 import com.scottlogic.deg.generator.generation.grouped.FieldSpecGroupValueGenerator;
@@ -45,7 +44,7 @@ class RowSpecDataBagGeneratorTests {
     private Field field = createField("Field1");
     Field field2 = createField("field2");
     Field field3 = createField("field3");
-    private ProfileFields fields = new ProfileFields(Collections.singletonList(field));
+    private Fields fields = new Fields(Collections.singletonList(field));
     private FieldSpec fieldSpec = mock(FieldSpec.class);
     private FieldSpec fieldSpec2 = mock(FieldSpec.class);
     private FieldSpec fieldSpec3 = mock(FieldSpec.class);
@@ -82,7 +81,7 @@ class RowSpecDataBagGeneratorTests {
             put(field2, fieldSpec2);
             put(field3, fieldSpec3); }};
         RowSpec rowSpec = new RowSpec(
-            new ProfileFields(Arrays.asList(field2, field, field3)),
+            new Fields(Arrays.asList(field2, field, field3)),
             map,
             Collections.emptyList());
 

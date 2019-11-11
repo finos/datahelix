@@ -24,17 +24,23 @@ import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 
-public class BeforeRelation<T extends Comparable<T>> implements FieldSpecRelations {
+import static com.scottlogic.deg.common.util.GranularityUtils.readGranularity;
+
+public class BeforeRelation<T extends Comparable<T>> implements FieldSpecRelation {
     private final Field main;
     private final Field other;
     private final boolean inclusive;
     private final LinearDefaults<T> defaults;
+    private final Granularity<T> offsetGranularity;
+    private final int offset;
 
-    public BeforeRelation(Field main, Field other, boolean inclusive, LinearDefaults<T> defaults) {
+    public BeforeRelation(Field main, Field other, boolean inclusive, LinearDefaults<T> defaults, Granularity<T> offsetGranularity, int offset) {
         this.main = main;
         this.other = other;
         this.inclusive = inclusive;
         this.defaults = defaults;
+        this.offsetGranularity = offsetGranularity != null ? offsetGranularity : readGranularity(main.getType(), null);
+        this.offset = offset;
     }
 
     @Override
@@ -46,14 +52,22 @@ public class BeforeRelation<T extends Comparable<T>> implements FieldSpecRelatio
             throw new UnsupportedOperationException("cannot combine sets with before relation, Issue #1489");
         }
 
-        LinearRestrictions<T> lr = (LinearRestrictions)((RestrictionsFieldSpec) otherFieldSpec).getRestrictions();
-        return createFromMax(lr.getMax(), lr.getGranularity());
+        LinearRestrictions<T> otherRestrictions = (LinearRestrictions)((RestrictionsFieldSpec) otherFieldSpec).getRestrictions();
+        T max = otherRestrictions.getMax();
+        T offsetMax = offsetGranularity.getPrevious(max, offset);
+
+        return createFromMax(offsetMax, offsetGranularity);
     }
 
     @Override
     public FieldSpec createModifierFromOtherValue(DataBagValue otherFieldGeneratedValue) {
         if (otherFieldGeneratedValue.getValue() == null) return FieldSpecFactory.fromType(main.getType());
-        return createFromMax((T) otherFieldGeneratedValue.getValue(), defaults.granularity());
+
+        T offsetValue = offset > 0
+            ? offsetGranularity.getPrevious((T) otherFieldGeneratedValue.getValue(), offset)
+            : (T) otherFieldGeneratedValue.getValue();
+
+        return  createFromMax(offsetValue, defaults.granularity());
     }
 
     private FieldSpec createFromMax(T max, Granularity<T> granularity) {
@@ -63,7 +77,6 @@ public class BeforeRelation<T extends Comparable<T>> implements FieldSpecRelatio
 
         return FieldSpecFactory.fromRestriction(new LinearRestrictions<>(defaults.min(), max, granularity));
     }
-
 
     @Override
     public Field main() {
@@ -76,17 +89,17 @@ public class BeforeRelation<T extends Comparable<T>> implements FieldSpecRelatio
     }
 
     @Override
-    public FieldSpecRelations inverse() {
-        return new AfterRelation(other, main, inclusive, defaults);
+    public FieldSpecRelation inverse() {
+         return new AfterRelation(other, main, inclusive, defaults, offsetGranularity,-1 * offset);
     }
 
     @Override
     public String toString() {
-        return String.format("%s is before %s%s", main, inclusive ? "or equal to " : "", other);
+        return String.format("%s is before %s%s %s %s", main, inclusive ? "or equal to " : "", other, offset >= 0 ? "plus" : "minus", Math.abs(offset));
     }
 
     @Override
     public Constraint negate() {
-        return new AfterRelation(main, other, !inclusive, defaults);
+        throw new UnsupportedOperationException("Negating relations with an offset is not supported");
     }
 }

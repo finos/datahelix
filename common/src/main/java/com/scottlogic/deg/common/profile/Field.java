@@ -19,31 +19,56 @@ package com.scottlogic.deg.common.profile;
 import java.util.Objects;
 
 public class Field {
-    public final String name;
-    private final FieldType type;
+    private final String name;
+    private final SpecificFieldType type;
     private final boolean unique;
     private final String formatting;
     private final boolean internal;
+    private final boolean nullable;
+    private final String generator;
 
-    public Field(String name, FieldType type, boolean unique, String formatting, boolean internal) {
+    public Field(String name, SpecificFieldType type, boolean unique, String formatting, boolean internal, boolean nullable, String generator) {
         this.name = name;
         this.type = type;
         this.unique = unique;
         this.formatting = formatting;
         this.internal = internal;
+        this.nullable = nullable;
+        this.generator = generator;
     }
 
-    public boolean isInternal() {
-        return internal;
+    public FieldType getType() {
+        return type.getFieldType();
+    }
+
+    public SpecificFieldType getSpecificType() {
+        return type;
     }
 
     public boolean isUnique() {
         return unique;
     }
 
+    public String getFormatting() {
+        return formatting;
+    }
+
+    public boolean isInternal() {
+        return internal;
+    }
+
+    public boolean isNullable()
+    {
+        return nullable;
+    }
+
+    public boolean usesCustomGenerator() { return generator != null; }
+
+    public String getCustomGeneratorName() { return generator; }
+
     @Override
     public String toString() {
-        return this.name;
+        return this.getName();
     }
 
     @Override
@@ -54,20 +79,18 @@ public class Field {
         return Objects.equals(name, field.name)
             && Objects.equals(unique, field.unique)
             && Objects.equals(type, field.type)
-            && Objects.equals(formatting, field.formatting);
+            && Objects.equals(formatting, field.formatting)
+            && Objects.equals(nullable, field.nullable)
+            && Objects.equals(generator, field.generator);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, unique, formatting, type);
+        return Objects.hash(name, unique, formatting, type, nullable, generator);
     }
 
-    public String getFormatting() {
-        return formatting;
+    public String getName()
+    {
+        return name;
     }
-
-    public FieldType getType() {
-        return type;
-    }
-
 }

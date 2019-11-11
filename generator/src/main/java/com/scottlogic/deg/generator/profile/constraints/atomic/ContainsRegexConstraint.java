@@ -66,7 +66,7 @@ public class ContainsRegexConstraint implements AtomicConstraint {
 
     @Override
     public String toString() {
-        return String.format("`%s` contains /%s/", field.name, regex);
+        return String.format("`%s` contains /%s/", field.getName(), regex);
     }
 
 }

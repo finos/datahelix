@@ -17,7 +17,6 @@
 package com.scottlogic.deg.generator.walker.pruner;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.HelixStringLength;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
@@ -26,8 +25,8 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecHelper;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
-import com.scottlogic.deg.generator.profile.constraints.atomic.IsStringLongerThanConstraint;
-import com.scottlogic.deg.generator.profile.constraints.atomic.IsStringShorterThanConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.LongerThanConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.ShorterThanConstraint;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
 import org.junit.jupiter.api.Test;
 
@@ -68,7 +67,7 @@ class TreePrunerTests {
     public void pruneConstraintNode_leafNodeContradictionsWithParent_returnsContradictory() {
         //Arrange
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("a", "b"));
-        ConstraintNode tree = new ConstraintNodeBuilder().addAtomicConstraints(new IsStringLongerThanConstraint(field, HelixStringLength.create(5))).build();
+        ConstraintNode tree = new ConstraintNodeBuilder().addAtomicConstraints(new LongerThanConstraint(field, 5)).build();
         FieldSpec inputFieldSpec = FieldSpecFactory.fromList(DistributedList.uniform(inputWhitelist))
             .withNotNull();
 
@@ -87,7 +86,7 @@ class TreePrunerTests {
     public void pruneConstraintNode_leafNodeNoContradictionsWithParent_returnsLeafNode() {
         //Arrange
         Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("a", "b"));
-        ConstraintNode tree = new ConstraintNodeBuilder().addAtomicConstraints(new IsStringShorterThanConstraint(field, HelixStringLength.create(5))).build();
+        ConstraintNode tree = new ConstraintNodeBuilder().addAtomicConstraints(new ShorterThanConstraint(field, 5)).build();
         FieldSpec inputFieldSpec = FieldSpecFactory.fromList(
             (DistributedList.uniform(inputWhitelist)));
 

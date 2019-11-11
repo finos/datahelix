@@ -7,7 +7,7 @@ Feature: the name of my feature
 
   Background:
     Given the generation strategy is interesting
-    And there is a field foo
+    And there is a non nullable field foo
 
   Scenario: Running the generator should emit the correct data
     Given foo is equal to 8
@@ -37,8 +37,8 @@ foo is greaterThan 5
 
 Operators are converted to English language equivalents for use in cucumber, so 'greaterThan' is expressed as 'greater than'.
 
-* _there is a field `{field}`_, adds a field called `field` to the profile
-* _the following fields exist:_, adds a set of fields to the profile (is followed by a single column set of strings, each represents a field name)
+* _there is a non nullable field `{field}`_, adds a field called `field` to the profile
+* _the following non nullable fields exist:_, adds a set of fields to the profile (is followed by a single column set of strings, each represents a field name)
 * _`{field}` is null_, adds a null constraint to the profile for the field `field`
 * _`{field}` is anything but null_, adds a not(is null) constraint to the profile for field `field`
 * _`{field}` is `{operator}` `{operand}`_, adds an `operator` constraint to the field `field` with the data `operand`, see **operators** and **operands** sections below
@@ -88,7 +88,7 @@ And there is a constraint:
 ```
 
 ### Describing the outcome
-* _the profile is invalid because "`{reason}`"_, executes the generator and asserts that an `InvalidProfileException` or `JsonParseException` was thrown with the message `{reason}`, reason is a regular expression*.
+* _the profile is invalid because "`{reason}`"_, executes the generator and asserts that an `ValidationException` or `JsonParseException` was thrown with the message `{reason}`, reason is a regular expression*.
 * _no data is created_, executes the generator and asserts that no data was emitted
 * _the following data should be generated:_, executes the generator and asserts that no exceptions were thrown and the given data appears in the generated data, no additional data is permitted.
 * _the following data should be generated in order:_, executes the generator and asserts that no exceptions were thrown and the given data appears **in the same order** in the generated data, no additional data is permitted.

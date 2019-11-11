@@ -16,13 +16,13 @@
 
 package com.scottlogic.deg.generator.decisiontree;
 
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Fields;
 
 public class DecisionTree {
     public final ConstraintNode rootNode;
-    public final ProfileFields fields;
+    public final Fields fields;
 
-    public DecisionTree(ConstraintNode rootNode, ProfileFields fields) {
+    public DecisionTree(ConstraintNode rootNode, Fields fields) {
         this.rootNode = rootNode;
         this.fields = fields;
     }
@@ -31,7 +31,7 @@ public class DecisionTree {
         return rootNode;
     }
 
-    public ProfileFields getFields() {
+    public Fields getFields() {
         return fields;
     }
 

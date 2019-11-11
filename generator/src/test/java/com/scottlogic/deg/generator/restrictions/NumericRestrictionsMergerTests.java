@@ -45,7 +45,7 @@ class NumericRestrictionsMergerTests {
             new Limit<>(BigDecimal.ONE, false),
             new Limit<>(BigDecimal.TEN, false));
 
-        Optional<LinearRestrictions<BigDecimal>> result = merger.merge(left, right);
+        Optional<LinearRestrictions<BigDecimal>> result = merger.merge(left, right, false);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.isPresent(), is(true));
@@ -60,7 +60,7 @@ class NumericRestrictionsMergerTests {
         LinearRestrictions<BigDecimal> greaterThanOrEqual = LinearRestrictionsFactory.createNumericRestrictions(new Limit<>(BigDecimal.TEN, true), NUMERIC_MAX_LIMIT);
         LinearRestrictions<BigDecimal> lessThanOrEqual = LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, new Limit<>(BigDecimal.TEN, true));
 
-        Optional<LinearRestrictions<BigDecimal>> result = merger.merge(greaterThanOrEqual, lessThanOrEqual);
+        Optional<LinearRestrictions<BigDecimal>> result = merger.merge(greaterThanOrEqual, lessThanOrEqual, false);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.isPresent(), is(true));
@@ -79,7 +79,7 @@ class NumericRestrictionsMergerTests {
             new Limit<>(BigDecimal.TEN, false),
             new Limit<>(BigDecimal.valueOf(20), false));
 
-        Optional<LinearRestrictions<BigDecimal>> result = merger.merge(left, right);
+        Optional<LinearRestrictions<BigDecimal>> result = merger.merge(left, right, false);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.isPresent(), is(false));
@@ -93,7 +93,7 @@ class NumericRestrictionsMergerTests {
             new Limit<>(BigDecimal.ONE, true));
         LinearRestrictions<BigDecimal> right = LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT, new NumericGranularity(0));
 
-        Optional<LinearRestrictions<BigDecimal>> result = merger.merge(left, right);
+        Optional<LinearRestrictions<BigDecimal>> result = merger.merge(left, right, false);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.isPresent(), is(true));
@@ -108,7 +108,7 @@ class NumericRestrictionsMergerTests {
 
         LinearRestrictions<BigDecimal> right = LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT, new NumericGranularity(0));
 
-        Optional<LinearRestrictions<BigDecimal>> result = merger.merge(left, right);
+        Optional<LinearRestrictions<BigDecimal>> result = merger.merge(left, right, false);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.isPresent(), is(true));
@@ -122,7 +122,7 @@ class NumericRestrictionsMergerTests {
             new Limit<>(BigDecimal.ONE, true));
         LinearRestrictions<BigDecimal> right = LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT, new NumericGranularity(0));
 
-        Optional<LinearRestrictions<BigDecimal>> result = merger.merge(left, right);
+        Optional<LinearRestrictions<BigDecimal>> result = merger.merge(left, right, false);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.isPresent(), is(true));
@@ -136,7 +136,7 @@ class NumericRestrictionsMergerTests {
             new Limit<>(BigDecimal.ONE, false));
         LinearRestrictions<BigDecimal> right = LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT, new NumericGranularity(0));
 
-        Optional<LinearRestrictions<BigDecimal>> result = merger.merge(left, right);
+        Optional<LinearRestrictions<BigDecimal>> result = merger.merge(left, right, false);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.isPresent(), is(false));
@@ -150,7 +150,7 @@ class NumericRestrictionsMergerTests {
             new Limit<>(BigDecimal.ONE, false));
         LinearRestrictions<BigDecimal> right = LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT, new NumericGranularity(1));
 
-        Optional<LinearRestrictions<BigDecimal>> result = merger.merge(left, right);
+        Optional<LinearRestrictions<BigDecimal>> result = merger.merge(left, right, false);
 
         Assert.assertThat(result, not(nullValue()));
         Assert.assertThat(result.isPresent(), is(true));

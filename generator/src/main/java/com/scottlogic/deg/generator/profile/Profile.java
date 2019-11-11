@@ -17,35 +17,35 @@
 package com.scottlogic.deg.generator.profile;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Fields;
 
 import java.util.Collection;
 import java.util.List;
 
 public class Profile {
-    private final ProfileFields fields;
+    private final Fields fields;
     private final Collection<Rule> rules;
     private final String description;
 
     public Profile(List<Field> fields, Collection<Rule> rules) {
-        this(new ProfileFields(fields), rules, null);
+        this(new Fields(fields), rules, null);
     }
 
     public Profile(List<Field> fields, Collection<Rule> rules, String description) {
-        this(new ProfileFields(fields), rules, description);
+        this(new Fields(fields), rules, description);
     }
 
-    public Profile(ProfileFields fields, Collection<Rule> rules) {
+    public Profile(Fields fields, Collection<Rule> rules) {
         this(fields, rules, null);
     }
 
-    public Profile(ProfileFields fields, Collection<Rule> rules, String description) {
+    public Profile(Fields fields, Collection<Rule> rules, String description) {
         this.fields = fields;
         this.rules = rules;
         this.description = description;
     }
 
-    public ProfileFields getFields() {
+    public Fields getFields() {
         return fields;
     }
 

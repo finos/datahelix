@@ -31,6 +31,8 @@ dependencies {
     compile "com.fasterxml.jackson.core:jackson-core:${JACKSON_VERSION}"
     compile "com.fasterxml.jackson.core:jackson-annotations:${JACKSON_VERSION}"
     compile "com.fasterxml.jackson.core:jackson-databind:${JACKSON_VERSION}"
+    compile group: "com.google.inject", name: "guice", version: "${GUICE_VERSION}"
+
     implementation "org.threeten:threeten-extra:${THREE_TEN_VERSION}"
     testCompile "org.junit.jupiter:junit-jupiter-api:${JUNIT_JUPITER_VERSION}"
     testCompile "junit:junit:${JUNIT_4_VERSION}"

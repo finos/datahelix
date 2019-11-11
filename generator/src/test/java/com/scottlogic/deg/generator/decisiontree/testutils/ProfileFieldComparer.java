@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.decisiontree.testutils;
 
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Fields;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -41,12 +41,12 @@ public class ProfileFieldComparer implements EqualityComparer {
 
     @Override
     public boolean equals(Object item1, Object item2) {
-        return equals((ProfileFields)item1, (ProfileFields)item2);
+        return equals((Fields)item1, (Fields)item2);
     }
 
-    private boolean equals(ProfileFields firstProfileFields, ProfileFields secondProfileFields) {
-        Collection firstProfileFieldsCollection = firstProfileFields.stream().collect(Collectors.toList());
-        Collection secondProfileFieldsCollection = secondProfileFields.stream().collect(Collectors.toList());
+    private boolean equals(Fields firstFields, Fields secondFields) {
+        Collection firstProfileFieldsCollection = firstFields.stream().collect(Collectors.toList());
+        Collection secondProfileFieldsCollection = secondFields.stream().collect(Collectors.toList());
 
         boolean equals = profileFieldsEqualityComparer.equals(firstProfileFieldsCollection, secondProfileFieldsCollection);
         if (!equals) {

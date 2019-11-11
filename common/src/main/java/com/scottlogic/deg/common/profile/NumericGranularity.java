@@ -19,6 +19,7 @@ package com.scottlogic.deg.common.profile;
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.util.NumberUtils;
 
+import com.scottlogic.deg.common.util.defaults.NumericDefaults;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
 import java.math.BigDecimal;
@@ -52,6 +53,11 @@ public class NumericGranularity implements Granularity<BigDecimal> {
     }
 
     @Override
+    public Granularity<BigDecimal> getFinestGranularity() {
+        return NumericDefaults.get().granularity();
+    }
+
+    @Override
     public boolean isCorrectScale(BigDecimal value) {
         return value.stripTrailingZeros().scale() <= decimalPlaces;
     }
@@ -81,12 +87,14 @@ public class NumericGranularity implements Granularity<BigDecimal> {
     }
 
     @Override
-    public BigDecimal getPrevious(BigDecimal value) {
-        if (!isCorrectScale(value)){
-            return trimToGranularity(value);
+    public BigDecimal getPrevious(BigDecimal value, int amount) {
+        if (isCorrectScale(value)){
+            return value.subtract(BigDecimal.ONE.scaleByPowerOfTen(decimalPlaces * -1)
+                .multiply(BigDecimal.valueOf(amount)));
         }
 
-        return value.subtract(BigDecimal.ONE.scaleByPowerOfTen(decimalPlaces * -1));
+        return trimToGranularity(value);
+
     }
 
     @Override

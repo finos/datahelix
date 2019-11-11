@@ -24,5 +24,5 @@ public class FieldDTO {
     public String generator;
     public String formatting;
     public boolean unique;
-    public boolean nullable = true;
+    public boolean nullable = false;
 }

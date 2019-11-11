@@ -18,7 +18,7 @@ package com.scottlogic.deg.orchestrator.cucumber.testframework.steps;
 
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestHelper;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestState;
-import com.scottlogic.deg.profile.common.ConstraintType;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
@@ -29,7 +29,7 @@ public class RegexValueStep {
     private final CucumberTestState state;
     private final CucumberTestHelper helper;
 
-    public RegexValueStep(CucumberTestState state, CucumberTestHelper helper){
+    public RegexValueStep(CucumberTestState state, CucumberTestHelper helper) {
         this.state = state;
         this.helper = helper;
     }
@@ -60,7 +60,7 @@ public class RegexValueStep {
     }
 
     @Then("{fieldVar} contains strings matching {regex}")
-    public void producedDataShouldContainStringValuesMatchingRegex(String fieldName, String regex){
+    public void producedDataShouldContainStringValuesMatchingRegex(String fieldName, String regex) {
         Pattern pattern = Pattern.compile(regex);
 
         helper.assertFieldContainsNullOrMatching(
@@ -70,7 +70,7 @@ public class RegexValueStep {
     }
 
     @Then("{fieldVar} contains anything but strings matching {regex}")
-    public void producedDataShouldContainStringValuesNotMatchingRegex(String fieldName, String regex){
+    public void producedDataShouldContainStringValuesNotMatchingRegex(String fieldName, String regex) {
         Pattern pattern = Pattern.compile(regex);
 
         helper.assertFieldContainsNullOrMatching(

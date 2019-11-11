@@ -17,9 +17,7 @@
 package com.scottlogic.deg.generator.builders;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.HelixDateTime;
-import com.scottlogic.deg.common.profile.HelixNumber;
-import com.scottlogic.deg.common.profile.HelixStringLength;
+import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
@@ -97,16 +95,16 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
     }
 
     public ConstraintChainBuilder<T> withLessThanConstraint(Field field, int referenceValue) {
-        return saveAndSet(new IsLessThanConstantConstraint(field, HelixNumber.create(referenceValue)));
+        return saveAndSet(new LessThanConstraint(field, NumberUtils.coerceToBigDecimal(referenceValue)));
     }
 
     public ConstraintChainBuilder<T> withGreaterThanConstraint(Field field, int referenceValue) {
-        return saveAndSet(new IsGreaterThanConstantConstraint(field, HelixNumber.create(referenceValue)));
+        return saveAndSet(new GreaterThanConstraint(field, NumberUtils.coerceToBigDecimal(referenceValue)));
     }
 
     public ConstraintChainBuilder<T> withEqualToConstraint(Field barField, Object referenceValue) {
         return saveAndSet(
-            new IsInSetConstraint(
+            new InSetConstraint(
                 barField,
                 DistributedList.singleton(referenceValue)));
     }
@@ -124,21 +122,21 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
     }
 
     public ConstraintChainBuilder<T> withInSetConstraint(Field field, Object[] legalArray) {
-        return saveAndSet(new IsInSetConstraint(
+        return saveAndSet(new InSetConstraint(
             field,
             DistributedList.uniform(SetUtils.setOf(legalArray))));
     }
 
     public ConstraintChainBuilder<T> withOfLengthConstraint(Field fooField, int length) {
-        return saveAndSet(new StringHasLengthConstraint(fooField, HelixStringLength.create(length)));
+        return saveAndSet(new OfLengthConstraint(fooField, length));
     }
 
     public ConstraintChainBuilder<T> withAfterConstraint(Field field, OffsetDateTime dateTime) {
-        return saveAndSet(new IsAfterConstantDateTimeConstraint(field, HelixDateTime.create(dateTime)));
+        return saveAndSet(new AfterConstraint(field, dateTime));
     }
 
     public ConstraintChainBuilder<T> withBeforeConstraint(Field field, OffsetDateTime dateTime) {
-        return saveAndSet(new IsBeforeConstantDateTimeConstraint(field, HelixDateTime.create(dateTime)));
+        return saveAndSet(new BeforeConstraint(field, dateTime));
     }
 
     public ConstraintChainBuilder<T> withMatchesRegexConstraint(Field field, Pattern pattern) {

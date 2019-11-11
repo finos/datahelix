@@ -17,6 +17,7 @@
 package com.scottlogic.deg.generator.fieldspecs.relations;
 
 import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.common.profile.Granularity;
 import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
@@ -24,7 +25,8 @@ import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 
-public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpecRelations {
+public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpecRelation
+{
     private final Field main;
     private final Field other;
     private final Granularity<T> offsetGranularity;
@@ -55,17 +57,21 @@ public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpec
         T max = otherRestrictions.getMax();
         T offsetMax = offsetGranularity.getNext(max, offset);
 
-        return FieldSpecFactory.fromRestriction(new LinearRestrictions(offsetMin, offsetMax, otherRestrictions.getGranularity()));
+        return FieldSpecFactory.fromRestriction(new LinearRestrictions(offsetMin, offsetMax, offsetGranularity));
     }
 
     @Override
     public FieldSpec createModifierFromOtherValue(DataBagValue otherFieldGeneratedValue) {
-        T offsetValue = offsetGranularity.getNext((T) otherFieldGeneratedValue.getValue(), offset);
+        T value = (T) otherFieldGeneratedValue.getValue();
+        if (value == null) {
+            return FieldSpecFactory.fromType(FieldType.DATETIME);
+        }
+        T offsetValue = offsetGranularity.getNext(value, offset);
         return FieldSpecFactory.fromList(DistributedList.singleton(offsetValue));
     }
 
     @Override
-    public FieldSpecRelations inverse() {
+    public FieldSpecRelation inverse() {
         return new EqualToOffsetRelation(other, main, offsetGranularity, -offset);
     }
 
@@ -81,6 +87,6 @@ public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpec
 
     @Override
     public Constraint negate() {
-        throw new UnsupportedOperationException("equalTo relations cannot currently be negated");
+        throw new UnsupportedOperationException("Negating relations with an offset is not supported");
     }
 }

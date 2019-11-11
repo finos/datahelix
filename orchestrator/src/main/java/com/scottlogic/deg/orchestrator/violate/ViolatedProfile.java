@@ -17,7 +17,7 @@
 package com.scottlogic.deg.orchestrator.violate;
 
 import com.scottlogic.deg.generator.profile.Profile;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.generator.profile.Rule;
 
 import java.util.Collection;
@@ -36,7 +36,7 @@ public class ViolatedProfile extends Profile {
      *              violated.
      * @param description Description of profile.
      */
-    public ViolatedProfile(Rule violatedRule, ProfileFields fields, Collection<Rule> rules, String description){
+    public ViolatedProfile(Rule violatedRule, Fields fields, Collection<Rule> rules, String description){
         super(fields, rules, description);
         this.violatedRule = violatedRule;
     }

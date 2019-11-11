@@ -18,7 +18,7 @@ package com.scottlogic.deg.generator.profile.constraints.grammatical;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
-import com.scottlogic.deg.generator.profile.constraints.atomic.IsInSetConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.InSetConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsNullConstraint;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import org.hamcrest.Matchers;
@@ -68,11 +68,11 @@ public class NotConstraintTests {
     public void testConstraintIsNotEqualDueToValue() {
         Field field1 = createField("TestField");
         Field field2 = createField("TestField");
-        Constraint constraint1 = new IsInSetConstraint(
+        Constraint constraint1 = new InSetConstraint(
             field1,
             DistributedList.singleton("abc")
             ).negate();
-        Constraint constraint2 = new IsInSetConstraint(
+        Constraint constraint2 = new InSetConstraint(
             field2,
             DistributedList.singleton("abcd")
             ).negate();

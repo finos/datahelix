@@ -17,7 +17,7 @@
 package com.scottlogic.deg.orchestrator.cucumber.testframework.steps;
 
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestState;
-import com.scottlogic.deg.profile.common.ConstraintType;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
 import cucumber.api.java.en.When;
 
 import java.util.List;
@@ -26,7 +26,7 @@ public class SetValueStep {
 
     private final CucumberTestState state;
 
-    public SetValueStep(CucumberTestState state){
+    public SetValueStep(CucumberTestState state) {
         this.state = state;
     }
 

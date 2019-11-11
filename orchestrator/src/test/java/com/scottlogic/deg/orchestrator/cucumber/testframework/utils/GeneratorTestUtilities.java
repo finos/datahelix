@@ -20,7 +20,8 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.steps.DateValueStep;
-import com.scottlogic.deg.profile.reader.InvalidProfileException;
+
+import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.steps.DateTimeValueStep;
 import org.junit.Assert;
 
@@ -46,21 +47,19 @@ public class GeneratorTestUtilities {
             return null;
         } else if (input.matches("[+-]?(\\d+(\\.\\d+)?)")) {
             return parseNumber(input);
-        } else if (input.equals("true") || input.equals("false")){
+        } else if (input.equals("true") || input.equals("false")) {
             return input.equals("true");
         }
 
-        throw new InvalidProfileException(String.format("Unable to determine correct type for `%s`.\nEnsure strings are wrapped in double-quotes.", input));
+        throw new ValidationException(String.format("Unable to determine correct type for `%s`.\nEnsure strings are wrapped in double-quotes.", input));
     }
 
     public static Object parseNumber(String input) throws JsonParseException {
         try {
             return mapper.readerFor(Number.class).readValue(input);
-        }
-        catch (JsonParseException e){
+        } catch (JsonParseException e) {
             throw e;
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Assert.fail("Unexpected IO exception " + e.toString());
             return "<unexpected IO exception>";
         }

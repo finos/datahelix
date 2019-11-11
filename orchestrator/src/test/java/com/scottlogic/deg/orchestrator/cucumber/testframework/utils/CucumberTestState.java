@@ -19,12 +19,18 @@ package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scottlogic.deg.common.profile.SpecificFieldType;
-import com.scottlogic.deg.common.profile.AtomicConstraintType;
 import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.config.detail.DataGenerationType;
-import com.scottlogic.deg.profile.common.ConstraintType;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
 import com.scottlogic.deg.profile.dtos.FieldDTO;
 import com.scottlogic.deg.profile.dtos.constraints.*;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.*;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.textual.*;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.*;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.numeric.*;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.temporal.*;
+import com.scottlogic.deg.profile.dtos.constraints.grammatical.*;
+import com.scottlogic.deg.profile.dtos.constraints.relations.*;
 
 import java.io.IOException;
 import java.util.*;
@@ -43,15 +49,15 @@ public class CucumberTestState {
     boolean generationHasAlreadyOccured;
     public long maxRows = 200;
 
-    List<List<Object>> generatedObjects = new ArrayList<>();
-    List<FieldDTO> profileFields = new ArrayList<>();;
+    List<Map<String, Object>> generatedObjects = new ArrayList<>();
+    List<FieldDTO> profileFields = new ArrayList<>();
     List<ConstraintDTO> constraints = new ArrayList<>();
     List<Exception> testExceptions = new ArrayList<>();
     Map<String, List<List<String>>> inMapFiles = new HashMap<>();
 
     Deque<NestedConstraint> nestedConstraints = new ArrayDeque<>();
 
-    private final List<AtomicConstraintType> contstraintsToNotViolate = new ArrayList<>();
+    private final List<ConstraintType> contstraintsToNotViolate = new ArrayList<>();
 
     public void startCreatingIfConstraint(int total) {
         nestedConstraints.push(new NestedConstraint("if", total));
@@ -95,140 +101,127 @@ public class CucumberTestState {
         int index = map.get(0).indexOf(key);
         List<String> rtnList = new ArrayList<>();
 
-        for (int i = 1; i < map.size() ; i++) {
+        for (int i = 1; i < map.size(); i++) {
             rtnList.add(map.get(i).get(index));
         }
         return rtnList;
     }
 
 
-    public void addField(String fieldName) {
+    public void addNonNullableField(String fieldName) {
         FieldDTO fieldDTO = new FieldDTO();
         fieldDTO.name = fieldName;
         this.profileFields.add(fieldDTO);
     }
 
-    public void addException(Exception e){
+    public void addNullableField(String fieldName) {
+        FieldDTO fieldDTO = new FieldDTO();
+        fieldDTO.name = fieldName;
+        fieldDTO.nullable = true;
+        this.profileFields.add(fieldDTO);
+    }
+
+    public void addException(Exception e) {
         this.testExceptions.add(e);
     }
 
-    public void addConstraintToNotViolate(AtomicConstraintType atomicConstraintType){
-        contstraintsToNotViolate.add(atomicConstraintType);
+    public void addConstraintToNotViolate(ConstraintType constraintType) {
+        contstraintsToNotViolate.add(constraintType);
     }
 
-    public List<AtomicConstraintType> getConstraintsToNotViolate() {
+    public List<ConstraintType> getConstraintsToNotViolate() {
         return contstraintsToNotViolate;
     }
 
-    private ConstraintDTO createConstraint(String fieldName, ConstraintType type, Object _value)
-    {
-        switch (type)
-        {
+    private ConstraintDTO createConstraint(String fieldName, ConstraintType type, Object _value) {
+        switch (type) {
             case EQUAL_TO:
-                return new EqualToConstraintDTO()
-                {{
+                return new EqualToConstraintDTO() {{
                     field = fieldName;
                     value = _value;
                 }};
             case IN_SET:
                 return _value instanceof String
-                        ? new InSetFromFileConstraintDTO()
-                {{
+                    ? new InSetFromFileConstraintDTO() {{
                     field = fieldName;
-                    file = (String)_value;
+                    file = (String) _value;
                 }}
-                        : new InSetOfValuesConstraintDTO()
-                {{
+                    : new InSetConstraintDTO() {{
                     field = fieldName;
-                    values = (Collection<Object>)_value;
+                    values = (List<Object>) _value;
                 }};
             case IS_NULL:
-                return new NullConstraintDTO()
-                {{
+                return new IsNullConstraintDTO() {{
                     field = fieldName;
-                    isNull = (boolean)_value;
+                    isNull = (boolean) _value;
                 }};
             case GRANULAR_TO:
-                return new GranularToConstraintDTO()
-                {{
+                return new GranularToConstraintDTO() {{
                     field = fieldName;
                     value = _value;
                 }};
             case MATCHES_REGEX:
-                return new MatchesRegexConstraintDTO()
-                {{
+                return new MatchesRegexConstraintDTO() {{
                     field = fieldName;
                     value = (String) _value;
                 }};
             case CONTAINS_REGEX:
-                return new ContainsRegexConstraintDTO()
-                {{
+                return new ContainsRegexConstraintDTO() {{
                     field = fieldName;
                     value = (String) _value;
                 }};
             case OF_LENGTH:
-                return new OfLengthConstraintDTO()
-                {{
+                return new OfLengthConstraintDTO() {{
                     field = fieldName;
-                    value = (int)_value;
+                    value = (int) _value;
                 }};
             case LONGER_THAN:
-                return new LongerThanConstraintDTO()
-                {{
+                return new LongerThanConstraintDTO() {{
                     field = fieldName;
                     value = (int) _value;
                 }};
             case SHORTER_THAN:
-                return new ShorterThanConstraintDTO()
-                {{
+                return new ShorterThanConstraintDTO() {{
                     field = fieldName;
                     value = (int) _value;
                 }};
             case GREATER_THAN:
-                return new GreaterThanConstraintDTO()
-                {{
+                return new GreaterThanConstraintDTO() {{
                     field = fieldName;
                     value = (Number) _value;
                 }};
             case GREATER_THAN_OR_EQUAL_TO:
-                return new GreaterThanOrEqualToConstraintDTO()
-                {{
+                return new GreaterThanOrEqualToConstraintDTO() {{
                     field = fieldName;
                     value = (Number) _value;
                 }};
             case LESS_THAN:
-                return new LessThanConstraintDTO()
-                {{
+                return new LessThanConstraintDTO() {{
                     field = fieldName;
                     value = (Number) _value;
                 }};
             case LESS_THAN_OR_EQUAL_TO:
-                return new LessThanOrEqualToConstraintDTO()
-                {{
+                return new LessThanOrEqualToConstraintDTO() {{
                     field = fieldName;
                     value = (Number) _value;
                 }};
             case AFTER:
-                return new AfterConstraintDTO()
-                {{
+                return new AfterConstraintDTO() {{
                     field = fieldName;
                     value = (String) _value;
                 }};
             case AFTER_OR_AT:
-                return new AfterOrAtConstraintDTO()
-                {{
+                return new AfterOrAtConstraintDTO() {{
                     field = fieldName;
                     value = (String) _value;
                 }};
             case BEFORE:
-                return new BeforeConstraintDTO()
-                {{
+                return new BeforeConstraintDTO() {{
                     field = fieldName;
                     value = (String) _value;
                 }};
             case BEFORE_OR_AT:
-                return new BeforeOrAtConstraintDTO()
-                {{
+                return new BeforeOrAtConstraintDTO() {{
                     field = fieldName;
                     value = (String) _value;
                 }};
@@ -251,35 +244,52 @@ public class CucumberTestState {
 
     private ConstraintDTO createRelationConstraint(String field, ConstraintType type, String other) {
         RelationalConstraintDTO relationalConstraintDTO;
-        switch (type)
-        {
+        switch (type) {
             case EQUAL_TO_FIELD:
-                relationalConstraintDTO = new EqualToFieldConstraintDTO(){{otherField = other;}};
+                relationalConstraintDTO = new EqualToFieldConstraintDTO() {{
+                    otherField = other;
+                }};
                 break;
             case GREATER_THAN_FIELD:
-                relationalConstraintDTO = new GreaterThanFieldConstraintDTO(){{otherField = other;}};
+                relationalConstraintDTO = new GreaterThanFieldConstraintDTO() {{
+                    otherField = other;
+                }};
                 break;
             case GREATER_THAN_OR_EQUAL_TO_FIELD:
-                relationalConstraintDTO = new GreaterThanOrEqualToFieldConstraintDTO(){{otherField = other;}};
+                relationalConstraintDTO = new GreaterThanOrEqualToFieldConstraintDTO() {{
+                    otherField = other;
+                }};
                 break;
             case LESS_THAN_FIELD:
-                relationalConstraintDTO = new LessThanFieldConstraintDTO(){{otherField = other;}};
+                relationalConstraintDTO = new LessThanFieldConstraintDTO() {{
+                    otherField = other;
+                }};
                 break;
             case LESS_THAN_OR_EQUAL_TO_FIELD:
-                relationalConstraintDTO = new LessThanOrEqualToFieldConstraintDTO(){{otherField = other;}};
+                relationalConstraintDTO = new LessThanOrEqualToFieldConstraintDTO() {{
+                    otherField = other;
+                }};
                 break;
             case AFTER_FIELD:
-                relationalConstraintDTO = new AfterFieldConstraintDTO(){{otherField = other;}};
+                relationalConstraintDTO = new AfterFieldConstraintDTO() {{
+                    otherField = other;
+                }};
                 break;
             case AFTER_OR_AT_FIELD:
-                relationalConstraintDTO = new AfterOrAtFieldConstraintDTO(){{otherField = other;}};
+                relationalConstraintDTO = new AfterOrAtFieldConstraintDTO() {{
+                    otherField = other;
+                }};
                 break;
             case BEFORE_FIELD:
-                relationalConstraintDTO = new BeforeFieldConstraintDTO(){{otherField = other;}};
+                relationalConstraintDTO = new BeforeFieldConstraintDTO() {{
+                    otherField = other;
+                }};
                 break;
             case BEFORE_OR_AT_FIELD:
-                relationalConstraintDTO = new BeforeOrAtFieldConstraintDTO(){{otherField = other;}};
-            break;
+                relationalConstraintDTO = new BeforeOrAtFieldConstraintDTO() {{
+                    otherField = other;
+                }};
+                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + type);
         }
@@ -288,7 +298,7 @@ public class CucumberTestState {
     }
 
     private ConstraintDTO createInMapConstraint(String fieldName, String key, String file) {
-        InMapConstraintDTO dto = new InMapConstraintDTO();
+        InMapFromFileConstraintDTO dto = new InMapFromFileConstraintDTO();
         dto.field = fieldName;
         dto.key = key;
         dto.file = file;
@@ -296,7 +306,7 @@ public class CucumberTestState {
     }
 
     private void createIfConstraint(int total) {
-        IfConstraintDTO dto = new IfConstraintDTO();
+        ConditionalConstraintDTO dto = new ConditionalConstraintDTO();
         if (total == 3) {
             dto.elseConstraint = constraints.remove(constraints.size() - 1);
             total--;
@@ -416,5 +426,7 @@ public class CucumberTestState {
 
 class ConstraintHolder {
     public Collection<ConstraintDTO> constraints;
-    public ConstraintHolder(){}
+
+    public ConstraintHolder() {
+    }
 }

@@ -17,7 +17,7 @@
 package com.scottlogic.deg.output.writer.csv;
 
 import com.scottlogic.deg.common.output.GeneratedObject;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.output.writer.DataSetWriter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -35,24 +35,22 @@ import java.util.stream.Collectors;
 class CsvDataSetWriter implements DataSetWriter {
     private static final DateTimeFormatter standardDateFormat = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
     private static final CSVFormat writerFormat = CSVFormat.RFC4180;
-    private static final CSVFormat csvStringFormatter = writerFormat.withQuoteMode(QuoteMode.ALL);
 
     private final CSVPrinter csvPrinter;
-    private final ProfileFields fieldOrder;
+    private final Fields fieldOrder;
 
-    private CsvDataSetWriter(CSVPrinter csvPrinter, ProfileFields fieldOrder) {
+    private CsvDataSetWriter(CSVPrinter csvPrinter, Fields fieldOrder) {
         this.csvPrinter = csvPrinter;
         this.fieldOrder = fieldOrder;
     }
 
-    static DataSetWriter open(OutputStream stream, ProfileFields fields) throws IOException {
+    static DataSetWriter open(OutputStream stream, Fields fields) throws IOException {
         final Appendable outputStreamAsAppendable = new OutputStreamWriter(stream, StandardCharsets.UTF_8);
 
         CSVPrinter csvPrinter = writerFormat
-            .withEscape('\0') //Dont escape any character, we're formatting strings ourselves
-            .withQuoteMode(QuoteMode.NONE)
+            .withQuoteMode(QuoteMode.MINIMAL)
             .withHeader(fields.getExternalStream()
-                .map(f -> f.name)
+                .map(f -> f.getName())
                 .toArray(String[]::new))
             .print(outputStreamAsAppendable);
 
@@ -63,7 +61,7 @@ class CsvDataSetWriter implements DataSetWriter {
     public void writeRow(GeneratedObject row) throws IOException {
         csvPrinter.printRecord(fieldOrder.getExternalStream()
                 .map(row::getFormattedValue)
-                .map(CsvDataSetWriter::wrapInQuotesIfString)
+                .map(CsvDataSetWriter::applyTypeSpecificFormatting)
                 .collect(Collectors.toList()));
 
         csvPrinter.flush();
@@ -74,7 +72,7 @@ class CsvDataSetWriter implements DataSetWriter {
         csvPrinter.close();
     }
 
-    private static Object wrapInQuotesIfString(Object value) {
+    private static Object applyTypeSpecificFormatting(Object value) {
         if (value == null) {
             return null;
         }
@@ -85,10 +83,6 @@ class CsvDataSetWriter implements DataSetWriter {
 
         if (value instanceof OffsetDateTime) {
             return standardDateFormat.format((OffsetDateTime) value);
-        }
-
-        if (value instanceof String) {
-            return csvStringFormatter.format(value);
         }
 
         return value;

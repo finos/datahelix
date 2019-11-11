@@ -2,7 +2,7 @@ Feature: User can specify that a string length is lower than, a specified number
 
   Background:
     Given the generation strategy is full
-    And there is a field foo
+    And there is a nullable field foo
     And foo has type "string"
 
   Scenario: Running a 'shorterThan' request using a number to specify a the length of a generated string should be successful
@@ -65,17 +65,15 @@ Feature: User can specify that a string length is lower than, a specified number
       | foo  |
       | null |
 
-    @ignore #1361 shorter than 1001 not accepted
-  Scenario: shorterThan with maximum permitted value should be successful
+  Scenario: shorterThan with more than maximum permitted value should be successful
     Given foo is shorter than 1001
     And the generation strategy is random
     And the generator can generate at most 1 rows
-    And foo is anything but null
     Then foo contains strings of length between 0 and 1000 inclusively
 
-  Scenario: shorterThan with value larger than maximum permitted should fail with an error message
-    Given foo is shorter than 1002
-    Then the profile is invalid because "String length must have a value <= 1000, currently is 1002"
+  Scenario: shorterThan with value less than minimum permitted should fail with an error message
+    Given foo is shorter than -1
+    Then the profile is invalid because "String length must have a value >= 0, currently is -1"
 
   Scenario: Running a 'shorterThan' request with a value less than implicit max (255) should generate data of length between 0 and value
     Given foo has type "string"

@@ -16,7 +16,6 @@
 
 package com.scottlogic.deg.profile;
 
-import com.scottlogic.deg.profile.dtos.SupportedVersionsGetter;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 import org.leadpony.justify.api.JsonSchema;
@@ -35,6 +34,25 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ProfileSchemaImmutabilityTests {
+
+    public static class SupportedVersionsGetter {
+        private final static String RESOURCES_PATH = "profileschema/datahelix.schema.json";
+
+        /**
+         * @return all valid schema versions
+         **/
+        List<String> getSupportedSchemaVersions() {
+            List<String> supportedSchemaVersions = new ArrayList<>();
+            InputStream schemaPath = getClass().getClassLoader().getResourceAsStream(RESOURCES_PATH);
+
+            JsonValidationService service = JsonValidationService.newInstance();
+            JsonSchema schema = service.readSchema(schemaPath);
+
+            String version = schema.getSubschemaAt("/definitions/schemaVersion").toJson().asJsonObject().get("const").toString();
+            supportedSchemaVersions.add(version.replace("\"", ""));
+            return supportedSchemaVersions;
+        }
+    }
 
     private static class VersionHash {
         private final String version;
@@ -104,7 +122,7 @@ public class ProfileSchemaImmutabilityTests {
             "10dce72a089be2a68f1577adadabff74831d1c063b2e12028b16cbb371493062"));
         versionToHash.add(new VersionHash(
             "0.16",
-            "57f54d03ba86f5811f95e8ae5969e5b1fe62347cfc18cefe69fbf5130703522e"));
+            "8a3863c467ba1b6b6e47618bb1f7c70e74acdf9825f10200a86e9fed599d60e5"));
         return versionToHash;
     }
 

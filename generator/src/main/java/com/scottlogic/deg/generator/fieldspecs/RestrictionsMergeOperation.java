@@ -19,7 +19,6 @@ package com.scottlogic.deg.generator.fieldspecs;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
 
-import java.lang.reflect.Type;
 import java.util.Optional;
 
 public class RestrictionsMergeOperation {
@@ -31,9 +30,9 @@ public class RestrictionsMergeOperation {
         this.stringMerger = stringMerger;
     }
 
-    public Optional<TypedRestrictions> applyMergeOperation(TypedRestrictions left, TypedRestrictions right) {
+    public Optional<TypedRestrictions> applyMergeOperation(TypedRestrictions left, TypedRestrictions right, boolean useFinestGranularityAvailable) {
         return getMerger(left)
-            .merge(left, right);
+            .merge(left, right, useFinestGranularityAvailable);
     }
 
     private RestrictionsMerger getMerger(TypedRestrictions restrictions) {
