@@ -35,7 +35,6 @@ public class BeforeOrEqualToConstantTimeConstraint implements AtomicConstraint {
         final Limit<LocalTime> max = new Limit<>(referenceValue.getValue(), true);
         final LinearRestrictions<LocalTime> timeRestriction =
             LinearRestrictionsFactory.createTimeRestrictions(Defaults.TIME_MIN_LIMIT, max);
-        Object o = FieldSpecFactory.fromRestriction(timeRestriction);
         return FieldSpecFactory.fromRestriction(timeRestriction);
     }
 }
