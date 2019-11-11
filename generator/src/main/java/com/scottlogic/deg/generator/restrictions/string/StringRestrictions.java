@@ -41,7 +41,7 @@ public class StringRestrictions implements TypedRestrictions<String>
     private final Set<Pattern> notContainingRegex;
     private StringGenerator generator;
 
-    StringRestrictions(
+    public StringRestrictions(
         Integer minLength,
         Integer maxLength,
         Set<Pattern> matchingRegex,
