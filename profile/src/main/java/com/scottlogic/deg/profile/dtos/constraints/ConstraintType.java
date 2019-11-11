@@ -75,7 +75,7 @@ public enum ConstraintType {
     ALL_OF(AllOfConstraintDTO.NAME, AllOfConstraintDTO.class),
     IF(ConditionalConstraintDTO.NAME, ConditionalConstraintDTO.class),
     INVALID(InvalidConstraintDTO.NAME, InvalidConstraintDTO.class),
-    GENERATOR(GeneratorConstraintDto.NAME, GeneratorConstraintDto.class);
+    GENERATOR(GeneratorConstraintDTO.NAME, GeneratorConstraintDTO.class);
 
     public final String propertyName;
     public final Class<? extends ConstraintDTO> clazz;

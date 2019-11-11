@@ -226,7 +226,7 @@ public class CucumberTestState {
                     value = (String) _value;
                 }};
             case GENERATOR:
-                return new GeneratorConstraintDto()
+                return new GeneratorConstraintDTO()
                 {{
                     field = fieldName;
                     generator = (String) _value;
