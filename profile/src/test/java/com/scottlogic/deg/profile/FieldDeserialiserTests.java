@@ -150,7 +150,7 @@ public class FieldDeserialiserTests {
             deserialiseJsonString(json);
             Assert.fail("should have thrown an exception");
         } catch (UnrecognizedPropertyException e) {
-            String expectedMessage = "Unrecognized field \"tpe\" (class com.scottlogic.deg.profile.dtos.FieldDTO), not marked as ignorable (5 known properties: \"unique\", \"type\", \"name\", \"formatting\", \"nullable\"])\n at [Source: (String)\"{ \"name\": \"id\", \"tpe\": \"integer\" }\"; line: 1, column: 25] (through reference chain: com.scottlogic.deg.profile.dtos.FieldDTO[\"tpe\"])";
+            String expectedMessage = "Unrecognized field \"tpe\" (class com.scottlogic.deg.profile.dtos.FieldDTO), not marked as ignorable (6 known properties: \"unique\", \"generator\", \"formatting\", \"type\", \"name\", \"nullable\"])\n at [Source: (String)\"{ \"name\": \"id\", \"tpe\": \"integer\" }\"; line: 1, column: 25] (through reference chain: com.scottlogic.deg.profile.dtos.FieldDTO[\"tpe\"])";
             assertThat(e.getMessage(), sameBeanAs(expectedMessage));
         }
     }

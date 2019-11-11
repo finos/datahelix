@@ -25,4 +25,5 @@ include(':output')
 include 'common'
 include 'orchestrator'
 include 'output'
+include 'custom'
 
