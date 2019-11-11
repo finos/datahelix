@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.restrictions;
+package com.scottlogic.deg.generator.restrictions.string;
+
+import com.scottlogic.deg.generator.restrictions.RestrictionsMerger;
 
 import java.util.Optional;
 
@@ -22,7 +24,8 @@ import java.util.Optional;
  * For a given combination of choices over the decision tree
  * Details every column's atomic constraints
  */
-public class StringRestrictionsMerger implements RestrictionsMerger<StringRestrictions> {
+public class StringRestrictionsMerger implements RestrictionsMerger<StringRestrictions>
+{
 
     @Override
     public Optional<StringRestrictions> merge(StringRestrictions left, StringRestrictions right, boolean useFinestGranularityAvailable) {

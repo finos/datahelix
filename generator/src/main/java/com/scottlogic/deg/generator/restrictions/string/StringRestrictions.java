@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.restrictions;
+package com.scottlogic.deg.generator.restrictions.string;
 
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.generation.string.generators.NoStringsStringGenerator;
 import com.scottlogic.deg.generator.generation.string.generators.RegexStringGenerator;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
+import com.scottlogic.deg.generator.restrictions.TypedRestrictions;
 import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.util.*;
@@ -29,7 +30,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public class StringRestrictions implements TypedRestrictions<String> {
+public class StringRestrictions implements TypedRestrictions<String>
+{
     private final Integer minLength;
     private final Integer maxLength;
     private final Set<Integer> excludedLengths;

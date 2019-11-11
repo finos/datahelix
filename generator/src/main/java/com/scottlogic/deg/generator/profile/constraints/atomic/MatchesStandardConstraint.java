@@ -20,7 +20,7 @@ import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
-import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
+import com.scottlogic.deg.generator.restrictions.string.StringRestrictionsFactory;
 
 import java.util.Objects;
 import java.util.regex.Pattern;

@@ -18,6 +18,8 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
+import com.scottlogic.deg.generator.restrictions.string.StringRestrictions;
+import com.scottlogic.deg.generator.restrictions.string.StringRestrictionsMerger;
 
 import java.util.Optional;
 

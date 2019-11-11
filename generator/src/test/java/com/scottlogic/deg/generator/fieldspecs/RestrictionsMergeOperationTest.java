@@ -16,9 +16,9 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.generator.restrictions.StringRestrictions;
-import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
-import com.scottlogic.deg.generator.restrictions.StringRestrictionsMerger;
+import com.scottlogic.deg.generator.restrictions.string.StringRestrictions;
+import com.scottlogic.deg.generator.restrictions.string.StringRestrictionsFactory;
+import com.scottlogic.deg.generator.restrictions.string.StringRestrictionsMerger;
 import com.scottlogic.deg.generator.restrictions.TypedRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;

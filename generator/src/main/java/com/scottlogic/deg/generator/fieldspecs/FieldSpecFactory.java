@@ -24,7 +24,7 @@ import com.scottlogic.deg.generator.restrictions.TypedRestrictions;
 import java.util.Collections;
 import java.util.function.Function;
 
-import static com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory.forMaxLength;
+import static com.scottlogic.deg.generator.restrictions.string.StringRestrictionsFactory.forMaxLength;
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDefaultDateTimeRestrictions;
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDefaultNumericRestrictions;
 
