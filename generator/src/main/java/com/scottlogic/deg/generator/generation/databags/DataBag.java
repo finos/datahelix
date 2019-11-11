@@ -16,10 +16,12 @@
 
 package com.scottlogic.deg.generator.generation.databags;
 
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.util.FlatMappingSpliterator;
 import com.scottlogic.deg.common.output.GeneratedObject;
+import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.FieldType;
+import com.scottlogic.deg.common.util.FlatMappingSpliterator;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 
@@ -35,14 +37,28 @@ public class DataBag implements GeneratedObject {
     @Override
     public Object getFormattedValue(Field field) {
         Object value = getDataBagValue(field).getValue();
+        String formatting = field.getFormatting();
 
-        if (field.getFormatting() == null || value == null) {
+        if (formatting == null || value == null) {
             return value;
         }
 
-        try {
-            return String.format(field.getFormatting(), value);
-        } catch (IllegalFormatException e){
+        try
+        {
+            if (field.getType() == FieldType.NUMERIC && (formatting.contains("d") || formatting.contains("x") || formatting.contains("o")))
+            {
+                long l = ((BigDecimal) value).longValueExact();
+                return String.format(formatting, l);
+            }
+            if (field.getType() == FieldType.NUMERIC && (formatting.contains("a")))
+            {
+                double d = ((BigDecimal) value).doubleValue();
+                return String.format(formatting, d);
+            }
+            return String.format(formatting, value);
+        }
+        catch (IllegalFormatException e)
+        {
             return value;
         }
     }
