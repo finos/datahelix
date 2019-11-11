@@ -16,7 +16,9 @@
 
 package com.scottlogic.deg.orchestrator.violate.violator;
 
-import com.scottlogic.deg.common.profile.*;
+import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.deg.common.profile.Fields;
+import com.scottlogic.deg.common.util.NumberUtils;
 import com.scottlogic.deg.generator.builders.*;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
@@ -80,25 +82,25 @@ public class ProfileViolationTests {
                 .collect(Collectors.toList()));
 
         return Stream.of(
-            Arguments.of(IsInSetConstraint.class, sampleSet),
+            Arguments.of(InSetConstraint.class, sampleSet),
             Arguments.of(IsNullConstraint.class, null),
             Arguments.of(MatchesStandardConstraint.class, StandardConstraintTypes.ISIN),
 
             Arguments.of(ContainsRegexConstraint.class, Pattern.compile("\\w+")),
             Arguments.of(MatchesRegexConstraint.class, Pattern.compile("\\d+")),
-            Arguments.of(IsStringLongerThanConstraint.class, HelixStringLength.create(10)),
-            Arguments.of(IsStringShorterThanConstraint.class, HelixStringLength.create(20)),
-            Arguments.of(StringHasLengthConstraint.class, HelixStringLength.create(15)),
+            Arguments.of(LongerThanConstraint.class, 10),
+            Arguments.of(ShorterThanConstraint.class,20),
+            Arguments.of(OfLengthConstraint.class,15),
 
-            Arguments.of(IsAfterConstantDateTimeConstraint.class, HelixDateTime.create(sampleDate)),
-            Arguments.of(IsAfterOrEqualToConstantDateTimeConstraint.class, HelixDateTime.create(sampleDate.plusDays(1))),
-            Arguments.of(IsBeforeConstantDateTimeConstraint.class, HelixDateTime.create(sampleDate.minusDays(1))),
-            Arguments.of(IsBeforeOrEqualToConstantDateTimeConstraint.class, HelixDateTime.create(sampleDate.plusDays(2))),
+            Arguments.of(AfterConstraint.class, sampleDate),
+            Arguments.of(AfterOrAtConstraint.class, sampleDate.plusDays(1)),
+            Arguments.of(BeforeConstraint.class, sampleDate.minusDays(1)),
+            Arguments.of(BeforeOrAtConstraint.class, sampleDate.plusDays(2)),
 
-            Arguments.of(IsGreaterThanConstantConstraint.class, HelixNumber.create(100)),
-            Arguments.of(IsGreaterThanOrEqualToConstantConstraint.class, HelixNumber.create(200)),
-            Arguments.of(IsLessThanConstantConstraint.class, HelixNumber.create(300)),
-            Arguments.of(IsLessThanOrEqualToConstantConstraint.class, HelixNumber.create(400))
+            Arguments.of(GreaterThanConstraint.class, NumberUtils.coerceToBigDecimal(100)),
+            Arguments.of(GreaterThanOrEqualToConstraint.class, NumberUtils.coerceToBigDecimal(200)),
+            Arguments.of(LessThanConstraint.class, NumberUtils.coerceToBigDecimal(300)),
+            Arguments.of(LessThanOrEqualToConstraint.class, NumberUtils.coerceToBigDecimal(400))
         );
     }
 
@@ -237,7 +239,7 @@ public class ProfileViolationTests {
             .withGreaterThanConstraint(field1, 100)
             .build();
 
-        constraintsToNotViolate.add(new ConstraintTypeViolationFilter(IsGreaterThanConstantConstraint.class));
+        constraintsToNotViolate.add(new ConstraintTypeViolationFilter(GreaterThanConstraint.class));
 
         TestProfiles testProfiles = createTestProfiles(
             "Input Profile",
@@ -1046,9 +1048,9 @@ public class ProfileViolationTests {
             .map(h -> h.getRule().equals(rule) ? h.getViolatedRule() : h.getRule())
             .collect(Collectors.toList());
 
-        String processedDescription = description + " -- Violating: " + rule.getRuleInformation().getDescription();
+        String processedDescription = description + " -- Violating: " + rule.getDescription();
 
-        return new ViolatedProfile(rule, new ProfileFields(fields), newRuleList, processedDescription);
+        return new ViolatedProfile(rule, new Fields(fields), newRuleList, processedDescription);
     }
 
     private List<Rule> getRulesFromPair(List<RuleViolatedRulePair> pair) {

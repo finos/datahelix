@@ -18,11 +18,11 @@ package com.scottlogic.deg.generator.reducer;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.*;
-import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
+import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelation;
 
 import java.util.*;
 import java.util.function.Function;
@@ -40,9 +40,9 @@ public class ConstraintReducer {
         this.fieldSpecMerger = fieldSpecMerger;
     }
 
-    public Optional<RowSpec> reduceConstraintsToRowSpec(ProfileFields fields, ConstraintNode node) {
+    public Optional<RowSpec> reduceConstraintsToRowSpec(Fields fields, ConstraintNode node) {
         Set<AtomicConstraint> constraints = node.getAtomicConstraints();
-        Set<FieldSpecRelations> relations = node.getRelations();
+        Set<FieldSpecRelation> relations = node.getRelations();
 
         final Map<Field, Set<AtomicConstraint>> fieldToConstraints = constraints.stream()
             .collect(
@@ -92,6 +92,6 @@ public class ConstraintReducer {
                 Optional.of(FieldSpecFactory.fromType(field.getType())),
                 (optSpec1, optSpec2) -> optSpec1.flatMap(
                     spec1 -> optSpec2.flatMap(
-                        spec2 -> fieldSpecMerger.merge(spec1, spec2))));
+                        spec2 -> fieldSpecMerger.merge(spec1, spec2, false))));
     }
 }

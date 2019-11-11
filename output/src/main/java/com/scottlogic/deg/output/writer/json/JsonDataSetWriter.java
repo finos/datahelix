@@ -19,7 +19,7 @@ package com.scottlogic.deg.output.writer.json;
 import com.fasterxml.jackson.databind.SequenceWriter;
 import com.scottlogic.deg.common.output.GeneratedObject;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.output.writer.DataSetWriter;
 
 import java.io.IOException;
@@ -34,9 +34,9 @@ class JsonDataSetWriter implements DataSetWriter {
     private static final DateTimeFormatter standardDateFormat = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 
     private final SequenceWriter writer;
-    private final ProfileFields fields;
+    private final Fields fields;
 
-    JsonDataSetWriter(SequenceWriter writer, ProfileFields fields) {
+    JsonDataSetWriter(SequenceWriter writer, Fields fields) {
         this.writer = writer;
         this.fields = fields;
     }

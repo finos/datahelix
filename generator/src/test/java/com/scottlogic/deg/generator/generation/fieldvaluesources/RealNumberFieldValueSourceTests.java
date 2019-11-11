@@ -512,7 +512,7 @@ class RealNumberFieldValueSourceTests {
     private FieldValueSource getObjectUnderTest() {
         if (objectUnderTest == null) {
             LinearRestrictions<BigDecimal> restrictions = createNumericRestrictions(lowerLimit, upperLimit, new NumericGranularity(scale));
-            restrictions = (LinearRestrictions<BigDecimal>) new LinearRestrictionsMerger().merge(restrictions, createNumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT)).get();
+            restrictions = (LinearRestrictions<BigDecimal>) new LinearRestrictionsMerger().merge(restrictions, createNumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT), false).get();
             objectUnderTest = new LinearFieldValueSource<BigDecimal>(restrictions, toBlacklist(blacklist));
         }
 

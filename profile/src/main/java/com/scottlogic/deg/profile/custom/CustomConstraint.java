@@ -38,9 +38,13 @@ public class CustomConstraint implements AtomicConstraint {
         this.customGenerator = customGenerator;
         this.negated = negated;
 
-        if (!correctType()){
-            throw new ValidationException(String.format("Custom generator %s requires type %s, but field %s is typed %s",
-                customGenerator.generatorName(), customGenerator.fieldType(), field.name, field.getType()));
+        if (!correctType()) {
+            throw new ValidationException(
+                String.format("Custom generator %s requires type %s, but field %s is typed %s",
+                    customGenerator.generatorName(),
+                    customGenerator.fieldType(),
+                    field.getName(),
+                    field.getType()));
         }
     }
 

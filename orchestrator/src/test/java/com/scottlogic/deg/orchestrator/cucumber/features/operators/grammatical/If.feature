@@ -3,7 +3,7 @@ Feature: Values can be specified by using if, then and else constraints
   Background:
     Given the generation strategy is full
     And the combination strategy is exhaustive
-    And the following fields exist:
+    And the following nullable fields exist:
       | foo |
       | bar |
 
@@ -32,8 +32,8 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
     And foo is anything but null
-    And foo has type "string"
     And bar is anything but null
+    And foo has type "string"
     And bar has type "decimal"
     When If Then and Else are described below
     And foo is equal to "a"
@@ -54,13 +54,13 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is in set:
       | "a" |
       | "b" |
+    And bar is anything but null
     And foo has type "decimal"
     And bar has type "string"
-    And bar is anything but null
     When If Then and Else are described below
     And Any Of the next 2 constraints
-      And foo is equal to 1
-      And foo is equal to 2
+    And foo is equal to 1
+    And foo is equal to 2
     And bar is equal to "a"
     And bar is equal to "b"
     Then the following data should be generated:
@@ -80,13 +80,13 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is in set:
       | "a" |
       | "b" |
+    And bar is anything but null
     And foo has type "decimal"
     And bar has type "string"
-    And bar is anything but null
     When If Then and Else are described below
     And All Of the next 2 constraints
-      And foo is greater than 1
-      And foo is less than 4
+    And foo is greater than 1
+    And foo is less than 4
     And bar is equal to "a"
     And bar is equal to "b"
     Then the following data should be generated:
@@ -106,9 +106,9 @@ Feature: Values can be specified by using if, then and else constraints
     And bar is in set:
       | "a" |
       | "b" |
+    And bar is anything but null
     And foo has type "decimal"
     And bar has type "string"
-    And bar is anything but null
     When If Then and Else are described below
     And foo is anything but equal to 1
     And bar is equal to "a"
@@ -131,15 +131,15 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
       | "c" |
+    And bar is anything but null
     And foo has type "decimal"
     And bar has type "string"
-    And bar is anything but null
     When If Then and Else are described below
     And foo is greater than 1
-      When If Then and Else are described below
-      And foo is greater than 3
-      And bar is equal to "a"
-      And bar is equal to "b"
+    When If Then and Else are described below
+    And foo is greater than 3
+    And bar is equal to "a"
+    And bar is equal to "b"
     And bar is equal to "c"
     Then the following data should be generated:
       | foo | bar |
@@ -159,9 +159,9 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
       | "c" |
+    And bar is anything but null
     And foo has type "decimal"
     And bar has type "string"
-    And bar is anything but null
     When If Then and Else are described below
     And foo is equal to 5
     And bar is equal to "a"
@@ -184,9 +184,9 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
       | "c" |
+    And bar is anything but null
     And foo has type "decimal"
     And bar has type "string"
-    And bar is anything but null
     When If Then and Else are described below
     And foo is equal to 1
     And bar is equal to "X"
@@ -208,9 +208,9 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
       | "c" |
+    And bar is anything but null
     And foo has type "decimal"
     And bar has type "string"
-    And bar is anything but null
     When If Then and Else are described below
     And foo is equal to 1
     And bar is equal to "a"
@@ -230,9 +230,9 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
       | "c" |
+    And bar is anything but null
     And foo has type "decimal"
     And bar has type "string"
-    And bar is anything but null
     When If Then and Else are described below
     And foo is in set:
       | 1 |
@@ -257,6 +257,7 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
       | "c" |
+    And bar is anything but null
     And foo has type "decimal"
     And bar has type "string"
     And bar is anything but null
@@ -285,6 +286,7 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
       | "c" |
+    And bar is anything but null
     And foo has type "decimal"
     And bar has type "string"
     And bar is anything but null
@@ -315,9 +317,9 @@ Feature: Values can be specified by using if, then and else constraints
       | "a" |
       | "b" |
       | "c" |
+    And bar is anything but null
     And foo has type "decimal"
     And bar has type "string"
-    And bar is anything but null
     When If Then and Else are described below
     And foo is in set:
       | 8 |
@@ -372,9 +374,13 @@ Feature: Values can be specified by using if, then and else constraints
     Then the following data should be generated:
       | foo  | bar  |
       | null | "b"  |
+      | null | null |
       | 2    | "c"  |
       | 3    | "c"  |
       | 4    | "c"  |
+      | 2    | null |
+      | 3    | null |
+      | 4    | null |
 
   Scenario: Running an if request that contains a non contradictory null constraint within its then statement should be successful
     Given foo is in set:
@@ -393,9 +399,13 @@ Feature: Values can be specified by using if, then and else constraints
     Then the following data should be generated:
       | foo  | bar  |
       | null | "c"  |
+      | null | null |
       | 2    | null |
       | 3    | "c"  |
       | 4    | "c"  |
+      | 3    | null |
+      | 4    | null |
+      | null | null |
 
   Scenario: Running an if request that contains a non contradictory null constraint within its else statement should be successful
     Given foo is in set:
@@ -414,9 +424,12 @@ Feature: Values can be specified by using if, then and else constraints
     Then the following data should be generated:
       | foo  | bar  |
       | null | null |
+      | null | "b"  |
       | 2    | "b"  |
+      | 2    | null |
       | 3    | null |
       | 4    | null |
+      | null | null |
 
   Scenario: Running an if request that contains a contradictory null constraint within its if statement should be successful
     Given foo is in set:
@@ -749,31 +762,6 @@ Feature: Values can be specified by using if, then and else constraints
     Then the following data should be generated:
       | foo  | bar  |
       | "1"  | "10" |
-      | "2"  | "10" |
-      | "a1" | "10" |
-      | "b2" | "10" |
-
-  Scenario: Running an if request that contains a contradictory containingRegex constraint within its then statement should be successful
-    Given foo is in set:
-      | "1"  |
-      | "2"  |
-      | "a1" |
-      | "b2" |
-    And foo is anything but null
-    And bar is in set:
-      | "10" |
-      | "20" |
-      | "AA" |
-      | "BB" |
-    And bar is anything but null
-    And foo has type "string"
-    And bar has type "string"
-    When If Then and Else are described below
-    And foo is equal to "1"
-    And bar is containing regex /[🚫]{1}/
-    And bar is equal to "10"
-    Then the following data should be generated:
-      | foo  | bar  |
       | "2"  | "10" |
       | "a1" | "10" |
       | "b2" | "10" |
@@ -2512,8 +2500,8 @@ Feature: Values can be specified by using if, then and else constraints
     And bar has type "decimal"
     When If Then and Else are described below
     And Any Of the next 2 constraints
-      And foo is equal to "a"
-      And foo is equal to "e"
+    And foo is equal to "a"
+    And foo is equal to "e"
     And bar is equal to 10
     And bar is equal to 50
     Then the following data should be generated:
@@ -2543,42 +2531,10 @@ Feature: Values can be specified by using if, then and else constraints
     And bar has type "decimal"
     When If Then and Else are described below
     And foo is equal to "a"
-    And Any Of the next 2 constraints
-      And bar is equal to 20
-      And bar is equal to 40
-    And bar is equal to 50
-    Then the following data should be generated:
-      | foo | bar |
-      | "a" | 20  |
-      | "a" | 40  |
-      | "b" | 50  |
-      | "c" | 50  |
-      | "d" | 50  |
-      | "e" | 50  |
-
-  Scenario: Running an if request that contains a non contradictory anyOf constraint within its then statement should be successful
-    Given foo is in set:
-      | "a" |
-      | "b" |
-      | "c" |
-      | "d" |
-      | "e" |
-    And foo is anything but null
-    And bar is in set:
-      | 10 |
-      | 20 |
-      | 30 |
-      | 40 |
-      | 50 |
-    And bar is anything but null
-    And foo has type "string"
-    And bar has type "decimal"
-    When If Then and Else are described below
-    And foo is equal to "a"
     And bar is equal to 10
     And Any Of the next 2 constraints
-      And bar is equal to 20
-      And bar is equal to 40
+    And bar is equal to 20
+    And bar is equal to 40
     Then the following data should be generated:
       | foo | bar |
       | "a" | 10  |
@@ -2611,8 +2567,8 @@ Feature: Values can be specified by using if, then and else constraints
     When If Then and Else are described below
     And foo is equal to "a"
     And Any Of the next 2 constraints
-      And bar is equal to 1
-      And bar is equal to 2
+    And bar is equal to 1
+    And bar is equal to 2
     And bar is equal to 50
     Then the following data should be generated:
       | foo | bar |
@@ -2642,8 +2598,8 @@ Feature: Values can be specified by using if, then and else constraints
     And foo is equal to "a"
     And bar is equal to 10
     And Any Of the next 2 constraints
-      And bar is equal to 1
-      And bar is equal to 2
+    And bar is equal to 1
+    And bar is equal to 2
     Then the following data should be generated:
       | foo | bar |
       | "a" | 10  |
@@ -2667,8 +2623,8 @@ Feature: Values can be specified by using if, then and else constraints
     And bar has type "decimal"
     When If Then and Else are described below
     And All Of the next 2 constraints
-      And foo is longer than 0
-      And foo is shorter than 2
+    And foo is longer than 0
+    And foo is shorter than 2
     And bar is equal to 1
     And bar is equal to 55555
     Then the following data should be generated:
@@ -2699,70 +2655,8 @@ Feature: Values can be specified by using if, then and else constraints
     When If Then and Else are described below
     And foo is equal to "a"
     And All Of the next 2 constraints
-      And bar is greater than 20
-      And bar is less than 30
-    And bar is equal to 55555
-    Then the following data should be generated:
-      | foo     | bar   |
-      | "a"     | 22    |
-      | "bb"    | 55555 |
-      | "ccc"   | 55555 |
-      | "dddd"  | 55555 |
-      | "eeeee" | 55555 |
-
-  Scenario: Running an if request that contains a non contradictory allOf constraint within its else statement should be successful
-    Given foo is in set:
-      | "a"     |
-      | "bb"    |
-      | "ccc"   |
-      | "dddd"  |
-      | "eeeee" |
-    And foo is anything but null
-    And bar is in set:
-      | 1     |
-      | 22    |
-      | 333   |
-      | 4444  |
-      | 55555 |
-    And bar is anything but null
-    And foo has type "string"
-    And bar has type "decimal"
-    When If Then and Else are described below
-    And foo is equal to "a"
-    And bar is equal to 1
-    And All Of the next 2 constraints
-      And bar is greater than 20
-      And bar is less than 30
-    Then the following data should be generated:
-      | foo     | bar |
-      | "a"     | 1   |
-      | "bb"    | 22  |
-      | "ccc"   | 22  |
-      | "dddd"  | 22  |
-      | "eeeee" | 22  |
-
-  Scenario: Running an if request that contains a non contradictory allOf constraint within its then statement should be successful
-    Given foo is in set:
-      | "a"     |
-      | "bb"    |
-      | "ccc"   |
-      | "dddd"  |
-      | "eeeee" |
-    And foo is anything but null
-    And bar is in set:
-      | 1     |
-      | 22    |
-      | 333   |
-      | 4444  |
-      | 55555 |
-    And bar is anything but null
-    And foo has type "string"
-    And bar has type "decimal"
-    When If Then and Else are described below
-    And foo is equal to "a"
-    And All Of the next 2 constraints
-      And bar is greater than 200
-      And bar is less than 300
+    And bar is greater than 200
+    And bar is less than 300
     And bar is equal to 55555
     Then the following data should be generated:
       | foo     | bar   |
@@ -2793,8 +2687,8 @@ Feature: Values can be specified by using if, then and else constraints
     And foo is equal to "a"
     And bar is equal to 1
     And All Of the next 2 constraints
-      And bar is greater than 200
-      And bar is less than 300
+    And bar is greater than 200
+    And bar is less than 300
     Then the following data should be generated:
       | foo | bar |
       | "a" | 1   |

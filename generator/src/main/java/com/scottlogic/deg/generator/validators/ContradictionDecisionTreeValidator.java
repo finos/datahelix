@@ -18,7 +18,7 @@ package com.scottlogic.deg.generator.validators;
 
 import com.google.inject.Inject;
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
@@ -44,13 +44,13 @@ public class ContradictionDecisionTreeValidator {
         return new DecisionTree(markContradictions(tree.getRootNode(), tree.getFields()), tree.getFields());
     }
 
-    private ConstraintNode markContradictions(ConstraintNode node, ProfileFields profileFields){
-        return markContradictions(node, getIdentityRowSpec(profileFields), profileFields);
+    private ConstraintNode markContradictions(ConstraintNode node, Fields fields){
+        return markContradictions(node, getIdentityRowSpec(fields), fields);
     }
 
-    private ConstraintNode markContradictions(ConstraintNode node, RowSpec accumulatedSpec, ProfileFields profileFields){
+    private ConstraintNode markContradictions(ConstraintNode node, RowSpec accumulatedSpec, Fields fields){
         final Optional<RowSpec> nominalRowSpec = constraintReducer.reduceConstraintsToRowSpec(
-            profileFields,
+            fields,
             node
         );
 
@@ -71,7 +71,7 @@ public class ContradictionDecisionTreeValidator {
         } else {
             Set<DecisionNode> decisions = node.getDecisions()
                 .stream()
-                .map(d -> markContradictions(d, mergedRowSpecOpt.get(), profileFields))
+                .map(d -> markContradictions(d, mergedRowSpecOpt.get(), fields))
                 .collect(Collectors.toSet());
             boolean nodeIsContradictory = decisions.stream().allMatch(this::isNodeContradictory);
             ConstraintNode transformed = node.builder().setDecisions(decisions).build();
@@ -79,12 +79,12 @@ public class ContradictionDecisionTreeValidator {
         }
     }
 
-    private DecisionNode markContradictions(DecisionNode node, RowSpec accumulatedSpec, ProfileFields profileFields){
+    private DecisionNode markContradictions(DecisionNode node, RowSpec accumulatedSpec, Fields fields){
         if (node.getOptions().isEmpty()){
             return node;
         }
         Set<ConstraintNode> options = node.getOptions().stream()
-            .map(c -> markContradictions(c, accumulatedSpec, profileFields))
+            .map(c -> markContradictions(c, accumulatedSpec, fields))
             .collect(Collectors.toSet());
 
         boolean decisionIsContradictory = options.stream().allMatch(this::isNodeContradictory);
@@ -95,11 +95,11 @@ public class ContradictionDecisionTreeValidator {
         return transformed;
     }
 
-    private RowSpec getIdentityRowSpec(ProfileFields profileFields) {
-        final Map<Field, FieldSpec> fieldToFieldSpec = profileFields.stream()
+    private RowSpec getIdentityRowSpec(Fields fields) {
+        final Map<Field, FieldSpec> fieldToFieldSpec = fields.stream()
             .collect(Collectors.toMap(Function.identity(), field -> FieldSpecFactory.fromType(field.getType())));
 
-        return new RowSpec(profileFields, fieldToFieldSpec, Collections.emptyList());
+        return new RowSpec(fields, fieldToFieldSpec, Collections.emptyList());
     }
 
     private boolean isNodeContradictory(Node node){

@@ -18,7 +18,6 @@ package com.scottlogic.deg.generator.builders;
 
 import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
-import com.scottlogic.deg.generator.profile.RuleInformation;
 
 import java.util.List;
 
@@ -26,13 +25,13 @@ import java.util.List;
  * Defines a builder for a Rule object
  */
 public class RuleBuilder extends ConstraintChainBuilder<Rule> {
-    private final RuleInformation ruleInformation;
+    private final String ruleInformation;
 
     public RuleBuilder(String ruleName) {
-        this.ruleInformation = new RuleInformation(ruleName);
+        this.ruleInformation = ruleName;
     }
 
-    private RuleBuilder(Constraint headConstraint, List<Constraint> tailConstraints, RuleInformation ruleInformation) {
+    private RuleBuilder(Constraint headConstraint, List<Constraint> tailConstraints, String ruleInformation) {
         super(headConstraint, tailConstraints);
         this.ruleInformation = ruleInformation;
     }

@@ -28,7 +28,7 @@ public class ValidationException extends RuntimeException {
     }
 
     public ValidationException(List<String> errorMessages){
-        super();
+        super(String.join("\n", errorMessages));
         this.errorMessages = errorMessages;
     }
 }

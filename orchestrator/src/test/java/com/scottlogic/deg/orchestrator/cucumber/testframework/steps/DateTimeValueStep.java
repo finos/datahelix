@@ -19,7 +19,7 @@ package com.scottlogic.deg.orchestrator.cucumber.testframework.steps;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestHelper;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestState;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.GeneratorTestUtilities;
-import com.scottlogic.deg.profile.common.ConstraintType;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -38,7 +38,7 @@ public class DateTimeValueStep {
         this.helper = helper;
     }
 
-    @When("^([A-z0-9]+) is equal to ([0-9]{4,5}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}Z?)$")
+    @When("^([A-z0-9]+) is equal to (\\d{4,5}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(?::\\d{2}(?:\\.\\d+Z?)?)?)$")
     public void equalToDateTimeValue(String fieldName, String value) {
         state.addConstraint(fieldName, ConstraintType.EQUAL_TO, value);
     }

@@ -54,7 +54,7 @@
     {
       "rule": "stock",
       "constraints": [
-        { "field": "stock", "inSet": "examples/demo-trades/stockCodes.csv" }
+        { "field": "stock", "inSet": "stockCodes.csv" }
       ]
     },
     {

@@ -18,7 +18,7 @@ package com.scottlogic.deg.generator.builders;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.profile.constraints.atomic.IsInSetConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.InSetConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsNullConstraint;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.utils.SetUtils;
@@ -37,15 +37,15 @@ public class TestAtomicConstraintBuilder {
     }
 
     public TestConstraintNodeBuilder isInSet(Object... legalValues) {
-        IsInSetConstraint isInSetConstraint = new IsInSetConstraint(
+        InSetConstraint inSetConstraint = new InSetConstraint(
             field,
             whitelistOf(legalValues));
-        testConstraintNodeBuilder.constraints.add(isInSetConstraint);
+        testConstraintNodeBuilder.constraints.add(inSetConstraint);
         return testConstraintNodeBuilder;
     }
 
     public TestConstraintNodeBuilder isNotInSet(Object... legalValues) {
-        AtomicConstraint isInSetConstraint = new IsInSetConstraint(
+        AtomicConstraint isInSetConstraint = new InSetConstraint(
             field,
             whitelistOf(legalValues)
         ).negate();

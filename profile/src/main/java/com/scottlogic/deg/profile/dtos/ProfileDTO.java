@@ -16,11 +16,12 @@
 
 package com.scottlogic.deg.profile.dtos;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProfileDTO {
     public String schemaVersion;
-    public Collection<FieldDTO> fields;
-    public Collection<RuleDTO> rules;
+    public List<FieldDTO> fields;
+    public List<RuleDTO> rules = new ArrayList<>();
     public String description;
 }

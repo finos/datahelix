@@ -2,10 +2,9 @@ Feature: User can specify that a field is null or absent
 
   Background:
     Given the generation strategy is full
-    And there is a field foo
+    And there is a nullable field foo
 
 ### alone ###
-
   Scenario: Using the 'null' operator generates null values
     Given foo is null
     And foo has type "string"
@@ -29,7 +28,6 @@ Feature: User can specify that a field is null or absent
     Then no data is created
 
 ### null ###
-
   Scenario: 'Null' with 'null' is successful
     Given foo is null
     And foo is null
@@ -40,7 +38,6 @@ Feature: User can specify that a field is null or absent
 
   Scenario: Not 'null' with  not 'null' is successful
     Given foo is anything but null
-    And foo is anything but null
     And foo has type "string"
     And foo is equal to "a"
     Then the following data should be generated:
@@ -48,7 +45,6 @@ Feature: User can specify that a field is null or absent
       | "a" |
 
 ### ofType ###
-
   Scenario Outline: Not 'null' with 'ofType' is successful
     Given foo is anything but null
     And foo has type <type>
@@ -77,7 +73,6 @@ Feature: User can specify that a field is null or absent
       | "datetime" |
 
 ### matchingRegex ###
-
   Scenario: Not 'null' with a non-contradicting 'matchingRegex' is successful
     Given foo is anything but null
     And foo has type "string"
@@ -103,7 +98,6 @@ Feature: User can specify that a field is null or absent
       | null |
 
 ### containingRegex ###
-
   Scenario: Not 'null' with a non contradicting 'containingRegex' is successful
     Given foo is anything but null
     And foo has type "string"
@@ -134,7 +128,6 @@ Feature: User can specify that a field is null or absent
       | null |
 
 ### ofLength ###
-
   Scenario: Not 'null' with a non contradicting 'ofLength' should be successful
     Given foo is anything but null
     And foo has type "string"
@@ -160,7 +153,6 @@ Feature: User can specify that a field is null or absent
       | null |
 
 ### longerThan ###
-
   Scenario: Not 'null' with a non contradicting 'longerThan' should be successful
     Given foo is anything but null
     And foo has type "string"
@@ -189,7 +181,6 @@ Feature: User can specify that a field is null or absent
       | null |
 
 ### shorterThan ###
-
   Scenario: Not 'null' with a non contradicting 'shorterThan' should be successful
     Given foo is anything but null
     And foo has type "string"
@@ -216,7 +207,6 @@ Feature: User can specify that a field is null or absent
       | null |
 
 ### Financial data types ###
-
   Scenario: Not null combined with an ISIN constraint generates valid ISINs
     Given foo is anything but null
     And foo has type "string"
@@ -272,7 +262,6 @@ Feature: User can specify that a field is null or absent
       | null |
 
 ### greaterThan ###
-
   Scenario: Not 'null' with a non contradicting 'greaterThan' should be successful
     Given foo is anything but null
     And foo has type "decimal"
@@ -300,7 +289,6 @@ Feature: User can specify that a field is null or absent
       | null |
 
 ### greaterThanOrEqualTo ###
-
   Scenario: Not 'null' with a non contradicting 'greaterThanOrEqualTo' should be successful
     Given foo is anything but null
     And foo has type "decimal"
@@ -328,7 +316,6 @@ Feature: User can specify that a field is null or absent
       | null |
 
 ### lessThan ###
-
   Scenario: 'Null' with a contradicting 'lessThan' should only generate null
     Given foo is null
     And foo has type "decimal"
@@ -346,7 +333,6 @@ Feature: User can specify that a field is null or absent
       | null |
 
 ### lessThanOrEqualTo ###
-
   Scenario: 'Null' with a contradicting 'lessThanOrEqualTo' should only generate null
     Given foo is null
     And foo has type "decimal"
@@ -364,7 +350,6 @@ Feature: User can specify that a field is null or absent
       | null |
 
 ### granularTo ###
-
   Scenario: Not 'null' with a non contradicting 'granularTo' should be successful
     Given foo is anything but null
     And foo has type "decimal"
@@ -412,7 +397,6 @@ Feature: User can specify that a field is null or absent
       | null |
 
 ### afterOrAt ###
-
   Scenario: Not 'null' with a non contradicting 'afterOrAt' should be successful
     Given foo is anything but null
     And foo has type "datetime"
@@ -440,7 +424,6 @@ Feature: User can specify that a field is null or absent
       | null |
 
 ### before ###
-
   @ignore #594 - Reverse order of value generation when only upper-bound operators are provided
   Scenario: Not 'null' with a non contradicting 'before' should be successful
     Given foo is anything but null
@@ -469,7 +452,6 @@ Feature: User can specify that a field is null or absent
       | null |
 
 ### beforeOrAt ###
-
   @ignore #594 - Reverse order of value generation when only upper-bound operators are provided
   Scenario: Not 'null' with a non contradicting 'beforeOrAt' should be successful
     Given foo is anything but null

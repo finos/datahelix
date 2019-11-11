@@ -18,18 +18,16 @@ package com.scottlogic.deg.generator.decisiontree;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.profile.Profile;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.generator.profile.Rule;
-import com.scottlogic.deg.generator.profile.RuleInformation;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
-import com.scottlogic.deg.generator.profile.constraints.atomic.IsInSetConstraint;
+import com.scottlogic.deg.generator.profile.constraints.atomic.InSetConstraint;
 import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagGenerator;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
-import com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory;
 import com.scottlogic.deg.generator.walker.decisionbased.RowSpecTreeSolver;
 import com.scottlogic.deg.generator.walker.decisionbased.SequentialOptionPicker;
 import com.scottlogic.deg.generator.walker.pruner.TreePruner;
@@ -86,58 +84,58 @@ class RowSpecTreeSolverTests {
         final Field currency = createField("currency");
         final Field city = createField("city");
 
-        ProfileFields fields = new ProfileFields(Arrays.asList(country, currency, city));
+        Fields fields = new Fields(Arrays.asList(country, currency, city));
 
         List<Rule> dummyRules = Arrays.asList(
             new Rule(
-                rule("US country constrains city"),
+                "US country constrains city",
                 Collections.singletonList(
                     new ConditionalConstraint(
-                        new IsInSetConstraint(
+                        new InSetConstraint(
                             country,
                             new DistributedList<>(Collections.singletonList(new WeightedElement<>("US", 1.0F)))
                         ),
-                        new IsInSetConstraint(
+                        new InSetConstraint(
                             city,
                             new DistributedList<>(new ArrayList<>(Arrays.asList(
                                 new WeightedElement<>("New York", 1.0F),
                                 new WeightedElement<>("Washington DC", 1.0F)))
                         ))))),
             new Rule(
-                rule("GB country constrains city"),
+                "GB country constrains city",
                 Collections.singletonList(
                     new ConditionalConstraint(
-                        new IsInSetConstraint(
+                        new InSetConstraint(
                             country,
                             new DistributedList<>(Collections.singletonList(new WeightedElement<>("GB", 1.0F)))
                         ),
-                        new IsInSetConstraint(
+                        new InSetConstraint(
                             city,
                             new DistributedList<>(new ArrayList<>(Arrays.asList(
                                 new WeightedElement<>("Bristol", 1.0F),
                                 new WeightedElement<>("London", 1.0F)))
                         ))))),
             new Rule(
-                rule("US country constrains currency"),
+                "US country constrains currency",
                 Collections.singletonList(
                     new ConditionalConstraint(
-                        new IsInSetConstraint(
+                        new InSetConstraint(
                             country,
                             new DistributedList<>(Collections.singletonList(new WeightedElement<>("US", 1.0F)))
                         ),
-                        new IsInSetConstraint(
+                        new InSetConstraint(
                             currency,
                             new DistributedList<>(Collections.singletonList(new WeightedElement<>("USD", 1.0F)))
                         )))),
             new Rule(
-                rule("GB country constrains currency"),
+                "GB country constrains currency",
                 Collections.singletonList(
                     new ConditionalConstraint(
-                        new IsInSetConstraint(
+                        new InSetConstraint(
                             country,
                             new DistributedList<>(Collections.singletonList(new WeightedElement<>("GB", 1.0F)))
                         ),
-                        new IsInSetConstraint(
+                        new InSetConstraint(
                             currency,
                             new DistributedList<>(Collections.singletonList(new WeightedElement<>("GBP", 1.0F)))
                         )))));
@@ -153,7 +151,4 @@ class RowSpecTreeSolverTests {
         Assert.assertThat(rowSpecs, notNullValue());
     }
 
-    private static RuleInformation rule(String description){
-        return new RuleInformation(description);
-    }
 }

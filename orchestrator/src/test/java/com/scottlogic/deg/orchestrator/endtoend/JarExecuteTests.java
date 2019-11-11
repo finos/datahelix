@@ -20,7 +20,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,7 +33,7 @@ public class JarExecuteTests {
 
         List<String> collectedOutput = collectOutputAndCloseProcess(p);
 
-        assertOnOutputs(collectedOutput, "\"Generation successful\"", "");
+        assertOnOutputs(collectedOutput, "Generation successful", "");
     }
 
     @Test
@@ -44,7 +43,7 @@ public class JarExecuteTests {
         List<String> collectedOutput = collectOutputAndCloseProcess(p);
 
         assertOnOutputs(collectedOutput,
-            "\"Generated successfully from file\"",
+            "Generated successfully from file",
             "Either load from file no longer works, or ");
     }
 

@@ -27,7 +27,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InMapIndexRelation implements FieldSpecRelations {
+public class InMapIndexRelation implements FieldSpecRelation
+{
     private final Field main;
     private final Field other;
     private final DistributedList<Object> underlyingList;
@@ -57,7 +58,7 @@ public class InMapIndexRelation implements FieldSpecRelations {
     }
 
     @Override
-    public FieldSpecRelations inverse() {
+    public FieldSpecRelation inverse() {
         return new InMapRelation(main, other, underlyingList);
     }
 

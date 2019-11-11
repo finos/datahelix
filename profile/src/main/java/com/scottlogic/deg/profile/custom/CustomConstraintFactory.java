@@ -30,7 +30,7 @@ public class CustomConstraintFactory {
     private final List<CustomGenerator> customGenerators;
 
     @Inject
-    public CustomConstraintFactory(CustomGeneratorList customGeneratorList){
+    public CustomConstraintFactory(CustomGeneratorList customGeneratorList) {
         customGenerators = customGeneratorList.get();
     }
 

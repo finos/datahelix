@@ -18,7 +18,7 @@ package com.scottlogic.deg.output.outputtarget;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.scottlogic.deg.common.profile.ProfileFields;
+import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.common.util.FileUtils;
 import com.scottlogic.deg.output.OutputPath;
 import com.scottlogic.deg.output.writer.DataSetWriter;
@@ -47,7 +47,7 @@ public class FileOutputTarget implements SingleDatasetOutputTarget {
     }
 
     @Override
-    public DataSetWriter openWriter(ProfileFields fields) throws IOException {
+    public DataSetWriter openWriter(Fields fields) throws IOException {
         final OutputStream stream = new FileOutputStream(
             this.filePath.toFile(),
             false);

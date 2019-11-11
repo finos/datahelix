@@ -76,78 +76,78 @@ class RestrictionsMergeOperationTest {
     @Test
     void applyMergeOperation_withNumericRestrictions_shouldApplyRestriction(){
         Optional<TypedRestrictions> expected = Optional.of(rightNumeric);
-        when(linearMerger.merge(leftNumeric, rightNumeric))
+        when(linearMerger.merge(leftNumeric, rightNumeric, false))
             .thenReturn(Optional.of(rightNumeric));
 
-        Optional<TypedRestrictions> result = operation.applyMergeOperation(leftNumeric, rightNumeric);
+        Optional<TypedRestrictions> result = operation.applyMergeOperation(leftNumeric, rightNumeric, false);
 
         Assert.assertEquals(expected, result);
-        verify(linearMerger, times(1)).merge(any(), any());
-        verify(StringMerger, times(0)).merge(any(), any());
+        verify(linearMerger, times(1)).merge(any(), any(), anyBoolean());
+        verify(StringMerger, times(0)).merge(any(), any(), anyBoolean());
     }
 
     @Test
     void applyMergeOperation_withContradictoryNumericRestrictions_shouldPreventAnyValues(){
         Optional<TypedRestrictions> expected = Optional.empty();
-        when(linearMerger.merge(leftNumeric, rightNumeric))
+        when(linearMerger.merge(leftNumeric, rightNumeric, false))
             .thenReturn(Optional.empty());
 
-        Optional<TypedRestrictions> result = operation.applyMergeOperation(leftNumeric, rightNumeric);
+        Optional<TypedRestrictions> result = operation.applyMergeOperation(leftNumeric, rightNumeric, false);
 
         Assert.assertEquals(expected, result);
-        verify(linearMerger, times(1)).merge(any(), any());
-        verify(StringMerger, times(0)).merge(any(), any());
+        verify(linearMerger, times(1)).merge(any(), any(), anyBoolean());
+        verify(StringMerger, times(0)).merge(any(), any(), anyBoolean());
     }
 
     @Test
     void applyMergeOperation_withStringRestrictions_shouldApplyRestriction(){
         Optional<TypedRestrictions> expected = Optional.of(leftString);
-        when(StringMerger.merge((StringRestrictions)leftString, (StringRestrictions)rightString))
+        when(StringMerger.merge((StringRestrictions)leftString, (StringRestrictions)rightString, false))
             .thenReturn(Optional.of((StringRestrictions)leftString));
 
-        Optional<TypedRestrictions> result = operation.applyMergeOperation(leftString, rightString);
+        Optional<TypedRestrictions> result = operation.applyMergeOperation(leftString, rightString, false);
 
         Assert.assertEquals(expected, result);
-        verify(linearMerger, times(0)).merge(any(), any());
-        verify(StringMerger, times(1)).merge(any(), any());
+        verify(linearMerger, times(0)).merge(any(), any(), anyBoolean());
+        verify(StringMerger, times(1)).merge(any(), any(), anyBoolean());
     }
 
     @Test
     void applyMergeOperation_withContradictoryStringRestrictions_shouldPreventAnyValues(){
         Optional<TypedRestrictions> expected = Optional.empty();
-        when(StringMerger.merge((StringRestrictions)leftString, (StringRestrictions)rightString))
+        when(StringMerger.merge((StringRestrictions)leftString, (StringRestrictions)rightString, false))
             .thenReturn(Optional.empty());
 
-        Optional<TypedRestrictions> result = operation.applyMergeOperation(leftString, rightString);
+        Optional<TypedRestrictions> result = operation.applyMergeOperation(leftString, rightString, false);
 
         Assert.assertEquals(expected, result);
-        verify(linearMerger, times(0)).merge(any(), any());
-        verify(StringMerger, times(1)).merge(any(), any());
+        verify(linearMerger, times(0)).merge(any(), any(), anyBoolean());
+        verify(StringMerger, times(1)).merge(any(), any(), anyBoolean());
     }
 
     @Test
     void applyMergeOperation_withDateTimeRestrictions_shouldApplyRestriction(){
         Optional<TypedRestrictions> expected = Optional.of(rightDateTime);
-            when(linearMerger.merge(leftDateTime, rightDateTime))
+            when(linearMerger.merge(leftDateTime, rightDateTime, false))
             .thenReturn(Optional.of(rightDateTime));
 
-        Optional<TypedRestrictions> result = operation.applyMergeOperation(leftDateTime, rightDateTime);
+        Optional<TypedRestrictions> result = operation.applyMergeOperation(leftDateTime, rightDateTime, false);
 
         Assert.assertEquals(result, result);
-        verify(linearMerger, times(1)).merge(any(), any());
-        verify(StringMerger, times(0)).merge(any(), any());
+        verify(linearMerger, times(1)).merge(any(), any(), anyBoolean());
+        verify(StringMerger, times(0)).merge(any(), any(), anyBoolean());
     }
 
     @Test
     void applyMergeOperation_withContradictoryDateTimeRestrictions_shouldPreventAnyValues(){
         Optional<TypedRestrictions> expected = Optional.empty();
-        when(linearMerger.merge(leftDateTime, rightDateTime))
+        when(linearMerger.merge(leftDateTime, rightDateTime, false))
             .thenReturn(Optional.empty());
 
-        Optional<TypedRestrictions> result = operation.applyMergeOperation(leftDateTime, rightDateTime);
+        Optional<TypedRestrictions> result = operation.applyMergeOperation(leftDateTime, rightDateTime, false);
 
         Assert.assertEquals(expected, result);
-        verify(linearMerger, times(1)).merge(any(), any());
-        verify(StringMerger, times(0)).merge(any(), any());
+        verify(linearMerger, times(1)).merge(any(), any(), anyBoolean());
+        verify(StringMerger, times(0)).merge(any(), any(), anyBoolean());
     }
 }

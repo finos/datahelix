@@ -3,6 +3,19 @@ orbs:
   codecov: codecov/codecov@1.0.2
 jobs:
 
+  check_license_messages:
+    docker:
+      - image: circleci/openjdk:8-jdk-browsers
+    working_directory: ~/datahelix/
+    steps:
+      - checkout
+      - run:
+          name: Set header script priviledges
+          command: chmod +x license-check.sh
+      - run:
+          name: Check commit messages
+          command: ./license-check.sh
+
   check_commit_message:
     docker:
       - image: circleci/openjdk:8-jdk-browsers
@@ -11,10 +24,10 @@ jobs:
       - checkout
       - run:
           name: Set commit script priviledges
-          command: chmod +x commit_check.sh
+          command: chmod +x commit-check.sh
       - run:
           name: Check commit messages
-          command: ./commit_check.sh
+          command: ./commit-check.sh
 
   build:
     docker:
@@ -81,6 +94,11 @@ workflows:
           filters:
             branches:
               ignore: master
+      - check_license_messages:
+          filters:
+            branches:
+              ignore: master
+
   release:
     jobs:
       - release:

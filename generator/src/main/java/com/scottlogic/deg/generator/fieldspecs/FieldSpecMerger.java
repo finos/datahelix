@@ -38,7 +38,7 @@ public class FieldSpecMerger {
      * <p>
      * Returning an empty Optional conveys that the fields were unmergeable.
      */
-    public Optional<FieldSpec> merge(FieldSpec left, FieldSpec right) {
+    public Optional<FieldSpec> merge(FieldSpec left, FieldSpec right, boolean useFinestGranularityAvailable) {
         if (nullOnly(left) || nullOnly(right)){
             return nullOnlyOrEmpty(bothAreNullable(left, right));
         }
@@ -62,8 +62,7 @@ public class FieldSpecMerger {
         if (isGenerator(right)){
             return addNullability(right.isNullable(), left.isNullable(), right);
         }
-
-        return combineRestrictions((RestrictionsFieldSpec)left, (RestrictionsFieldSpec)right);
+        return combineRestrictions((RestrictionsFieldSpec)left, (RestrictionsFieldSpec)right, useFinestGranularityAvailable);
     }
 
     private static WeightedElement<Object> mergeElements(WeightedElement<Object> left,
@@ -127,8 +126,8 @@ public class FieldSpecMerger {
         return left.isNullable() && right.isNullable();
     }
 
-    private Optional<FieldSpec> combineRestrictions(RestrictionsFieldSpec left, RestrictionsFieldSpec right) {
-        Optional<TypedRestrictions> restrictions = restrictionMergeOperation.applyMergeOperation(left.getRestrictions(), right.getRestrictions());
+    private Optional<FieldSpec> combineRestrictions(RestrictionsFieldSpec left, RestrictionsFieldSpec right, boolean useFinestGranularityAvailable) {
+        Optional<TypedRestrictions> restrictions = restrictionMergeOperation.applyMergeOperation(left.getRestrictions(), right.getRestrictions(), useFinestGranularityAvailable);
 
         if (!restrictions.isPresent()){
             return nullOnlyOrEmpty(bothAreNullable(left, right));

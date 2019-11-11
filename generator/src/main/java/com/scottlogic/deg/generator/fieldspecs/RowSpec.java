@@ -17,8 +17,8 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
+import com.scottlogic.deg.common.profile.Fields;
+import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelation;
 
 import java.util.*;
 
@@ -28,21 +28,21 @@ import java.util.*;
  * Typically created by combining choices over a decision tree.
  */
 public class RowSpec {
-    private final ProfileFields fields;
+    private final Fields fields;
 
     private final Map<Field, FieldSpec> fieldToFieldSpec;
 
-    private final List<FieldSpecRelations> relations;
-    public RowSpec(ProfileFields fields,
+    private final List<FieldSpecRelation> relations;
+    public RowSpec(Fields fields,
                    Map<Field, FieldSpec> fieldToFieldSpec,
-                   List<FieldSpecRelations> relations) {
+                   List<FieldSpecRelation> relations) {
 
         this.fields = fields;
         this.fieldToFieldSpec = fieldToFieldSpec;
         this.relations = relations;
     }
 
-    public ProfileFields getFields() {
+    public Fields getFields() {
         return fields;
     }
 
@@ -56,7 +56,7 @@ public class RowSpec {
         return ownFieldSpec;
     }
 
-    public List<FieldSpecRelations> getRelations() {
+    public List<FieldSpecRelation> getRelations() {
         return relations;
     }
 

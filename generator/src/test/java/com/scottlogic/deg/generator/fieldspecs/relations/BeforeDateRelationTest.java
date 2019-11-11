@@ -16,10 +16,7 @@
 
 package com.scottlogic.deg.generator.fieldspecs.relations;
 
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.FieldType;
-import com.scottlogic.deg.common.profile.DateTimeGranularity;
-import com.scottlogic.deg.common.profile.Granularity;
+import com.scottlogic.deg.common.profile.*;
 import com.scottlogic.deg.common.util.defaults.DateTimeDefaults;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
@@ -36,12 +33,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BeforeDateRelationTest {
 
-    private final Field a = new Field("a", FieldType.DATETIME, false, "", false);
-    private final Field b = new Field("b", FieldType.DATETIME, false, "", false);
+    private final Field a = new Field("a", SpecificFieldType.DATETIME, false, "", false, false, null);
+    private final Field b = new Field("b", SpecificFieldType.DATETIME, false, "", false, false, null);
 
     @Test
     public void testReduceToFieldSpec_withNotNull_reducesToSpec() {
-        FieldSpecRelations beforeDateRelations = new BeforeRelation(a, b, true, DateTimeDefaults.get());
+        DateTimeGranularity offsetGranularity = DateTimeGranularity.create("MILLIS");
+        FieldSpecRelation beforeDateRelations = new BeforeRelation(a, b, true, DateTimeDefaults.get(), offsetGranularity, 0);
         OffsetDateTime value = OffsetDateTime.of(2000,
             1,
             1,
@@ -60,7 +58,8 @@ public class BeforeDateRelationTest {
 
     @Test
     public void testReduceToFieldSpec_withNotNullExclusive_reducesToSpec() {
-        FieldSpecRelations beforeDateRelations = new BeforeRelation(a, b, false, DateTimeDefaults.get());
+        DateTimeGranularity offsetGranularity = DateTimeGranularity.create("MILLIS");
+        FieldSpecRelation beforeDateRelations = new BeforeRelation(a, b, false, DateTimeDefaults.get(), offsetGranularity, 0);
         OffsetDateTime value = OffsetDateTime.of(2000,
             1,
             1,
@@ -80,7 +79,8 @@ public class BeforeDateRelationTest {
 
     @Test
     public void testReduceToFieldSpec_withNull_reducesToSpec() {
-        FieldSpecRelations beforeDateRelations = new BeforeRelation(a, b, true, DateTimeDefaults.get());
+        DateTimeGranularity offsetGranularity = DateTimeGranularity.create("MILLIS");
+        FieldSpecRelation beforeDateRelations = new BeforeRelation(a, b, true, DateTimeDefaults.get(), offsetGranularity, 0);
         OffsetDateTime value = null;
         DataBagValue generatedValue = new DataBagValue(value);
 

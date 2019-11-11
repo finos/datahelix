@@ -20,7 +20,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.scottlogic.deg.orchestrator.generate.GenerateCommandLine;
-import com.scottlogic.deg.common.profile.AtomicConstraintType;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
 import picocli.CommandLine;
 
 import java.io.IOException;
@@ -50,9 +50,9 @@ public class ViolateCommandLine extends GenerateCommandLine implements ViolateCo
         names = {"--dont-violate"},
         arity = "0..",
         description = "Choose types of constraint should not be violated")
-    private List<AtomicConstraintType> constraintsToNotViolate;
+    private List<ConstraintType> constraintsToNotViolate;
 
-    public List<AtomicConstraintType> getConstraintsToNotViolate() {
+    public List<ConstraintType> getConstraintsToNotViolate() {
         return constraintsToNotViolate;
     }
 

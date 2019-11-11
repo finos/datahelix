@@ -17,12 +17,13 @@
 package com.scottlogic.deg.orchestrator.cucumber.testframework.steps;
 
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestState;
-import com.scottlogic.deg.profile.common.ConstraintType;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
 import cucumber.api.java.en.When;
 
 public class BooleanValueStep {
     private final CucumberTestState state;
-    public BooleanValueStep(CucumberTestState state){
+
+    public BooleanValueStep(CucumberTestState state) {
         this.state = state;
     }
 
@@ -33,6 +34,6 @@ public class BooleanValueStep {
 
     @When("{fieldVar} is anything but {operator} {boolean}")
     public void whenFieldIsNotConstrainedByNumericValue(String fieldName, String constraintName, Boolean value) {
-        this.state.addNotConstraint(fieldName, ConstraintType.fromPropertyName(constraintName), value);
+        this.state.addNotConstraint(fieldName, ConstraintType.fromName(constraintName), value);
     }
 }

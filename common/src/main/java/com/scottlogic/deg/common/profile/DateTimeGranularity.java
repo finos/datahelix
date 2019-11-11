@@ -1,7 +1,24 @@
+/*
+ * Copyright 2019 Scott Logic Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.scottlogic.deg.common.profile;
 
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.date.TemporalAdjusterGenerator;
+import com.scottlogic.deg.common.util.defaults.DateTimeDefaults;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 
 import java.time.Instant;
@@ -30,6 +47,11 @@ public class DateTimeGranularity implements Granularity<OffsetDateTime> {
         String offsetUnitUpperCase = granularity.toUpperCase();
         boolean workingDay = offsetUnitUpperCase.equals("WORKING DAYS");
         return new DateTimeGranularity(Enum.valueOf(ChronoUnit.class, workingDay ? "DAYS" : offsetUnitUpperCase), workingDay);
+    }
+
+    @Override
+    public Granularity<OffsetDateTime> getFinestGranularity() {
+        return DateTimeDefaults.get().granularity();
     }
 
     @Override
@@ -72,9 +94,9 @@ public class DateTimeGranularity implements Granularity<OffsetDateTime> {
     }
 
     @Override
-    public OffsetDateTime getPrevious(OffsetDateTime value) {
+    public OffsetDateTime getPrevious(OffsetDateTime value, int amount) {
         if (isCorrectScale(value)){
-            return getNext(value, -1);
+            return getNext(value, -amount);
         }
 
         return trimToGranularity(value);
@@ -82,7 +104,7 @@ public class DateTimeGranularity implements Granularity<OffsetDateTime> {
 
     @Override
     public OffsetDateTime getRandom(OffsetDateTime min, OffsetDateTime max, RandomNumberGenerator randomNumberGenerator) {
-        long generatedLong = (long) randomNumberGenerator.nextDouble(getMilli(min), getMilli(max));
+        long generatedLong = randomNumberGenerator.nextLong(getMilli(min), getMilli(max));
 
         OffsetDateTime generatedDate = Instant.ofEpochMilli(generatedLong).atZone(ZoneOffset.UTC).toOffsetDateTime();
 

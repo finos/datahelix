@@ -17,8 +17,8 @@
 package com.scottlogic.deg.generator.decisiontree.treepartitioning;
 
 import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.ProfileFields;
-import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelations;
+import com.scottlogic.deg.common.profile.Fields;
+import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelation;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.common.util.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder;
@@ -88,12 +88,12 @@ public class TreePartitioner {
                         .addRelations(partition.getRelations())
                         .setDecisions(partition.getDecisionNodes())
                         .build(),
-                    new ProfileFields(new ArrayList<>(partition.fields))
+                    new Fields(new ArrayList<>(partition.fields))
                 )),
             unpartitionedFields
                 .map(field -> new DecisionTree(
                     new ConstraintNodeBuilder().build(),
-                    new ProfileFields(Collections.singletonList(field))
+                    new Fields(Collections.singletonList(field))
                 ))
             );
     }
@@ -125,7 +125,7 @@ public class TreePartitioner {
                 .collect(Collectors.toSet());
         }
 
-        Set<FieldSpecRelations> getRelations() {
+        Set<FieldSpecRelation> getRelations() {
             return constraints
                 .stream()
                 .map(RootLevelConstraint::getRelations)

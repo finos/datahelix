@@ -2,7 +2,7 @@ Feature: User can specify that a datetime date is after, but not equal to, a spe
 
   Background:
     Given the generation strategy is full
-    And there is a field foo
+    And there is a nullable field foo
     And foo has type "datetime"
 
   Scenario: 'After' valid date is successful for a single row
@@ -24,7 +24,7 @@ Feature: User can specify that a datetime date is after, but not equal to, a spe
 
   Scenario Outline: 'After' invalid datetime fails with error
     Given foo is after <dateValue>
-    Then the profile is invalid because "Date string '\d{4}-\d{2}-\d{2}T\d{2}:00:00.000Z' must be in ISO-8601 format: Either yyyy-MM-ddTHH:mm:ss.SSS\[Z\] between 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z or yyyy-mm-dd between 0001-01-01 and 9999-12-31"
+    Then the profile is invalid with error containing "must be in ISO-8601 format"
     And no data is created
     Examples:
       | dateValue                |
@@ -34,7 +34,7 @@ Feature: User can specify that a datetime date is after, but not equal to, a spe
 
   Scenario: 'After' non-existent leap year date fails with error
     Given foo is after 2019-02-29T00:00:00.000Z
-    Then the profile is invalid because "Date string '2019-02-29T00:00:00.000Z' must be in ISO-8601 format: Either yyyy-MM-ddTHH:mm:ss.SSS\[Z\] between 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z or yyyy-mm-dd between 0001-01-01 and 9999-12-31"
+    Then the profile is invalid with error containing "must be in ISO-8601 format"
     And no data is created
 
   ### after ###
@@ -228,4 +228,4 @@ Feature: User can specify that a datetime date is after, but not equal to, a spe
 
   Scenario: Running a 'after' request that specifies the highest valid system date should be unsuccessful
     Given foo is after 10000-01-01T00:00:00.000Z
-    Then the profile is invalid because "Dates must be between 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z"
+    Then the profile is invalid with error containing "Dates must be between 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z | Field: foo | Constraint: after | Rule: Unnamed rule"

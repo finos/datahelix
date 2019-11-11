@@ -29,7 +29,6 @@ import java.util.regex.Pattern;
 import static com.scottlogic.deg.generator.helpers.StringGeneratorHelper.*;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsNull.nullValue;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TextualRestrictionsTests {
     @Test

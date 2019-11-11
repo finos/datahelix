@@ -18,7 +18,6 @@ package com.scottlogic.deg.orchestrator.cucumber.testframework.steps;
 
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestState;
 import cucumber.api.java.en.And;
-import cucumber.api.java.en.Given;
 
 import java.util.List;
 
@@ -26,7 +25,7 @@ public class MapValueStep {
 
     private final CucumberTestState state;
 
-    public MapValueStep(CucumberTestState state){
+    public MapValueStep(CucumberTestState state) {
         this.state = state;
     }
 

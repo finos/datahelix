@@ -76,7 +76,7 @@ public class DataBag implements GeneratedObject {
             entrySetStream -> entrySetStream)
             .forEach(entry -> {
                 if (newFieldToValue.containsKey(entry.getKey()))
-                    throw new IllegalArgumentException("Databags can't be merged because they overlap on field " + entry.getKey().name);
+                    throw new IllegalArgumentException("Databags can't be merged because they overlap on field " + entry.getKey().getName());
 
                 newFieldToValue.put(entry.getKey(), entry.getValue());
             });

@@ -20,7 +20,6 @@ import com.scottlogic.deg.common.util.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.utils.SetUtils;
 
 import java.util.*;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

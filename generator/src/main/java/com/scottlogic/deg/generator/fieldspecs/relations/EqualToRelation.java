@@ -23,7 +23,8 @@ import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 
-public class EqualToRelation implements FieldSpecRelations {
+public class EqualToRelation implements FieldSpecRelation
+{
     private final Field main;
     private final Field other;
 
@@ -46,7 +47,7 @@ public class EqualToRelation implements FieldSpecRelations {
     }
 
     @Override
-    public FieldSpecRelations inverse() {
+    public FieldSpecRelation inverse() {
         return new EqualToRelation(other, main);
     }
 

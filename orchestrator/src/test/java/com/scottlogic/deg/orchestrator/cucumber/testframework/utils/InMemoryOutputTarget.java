@@ -16,13 +16,14 @@
 
 package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 
-import com.scottlogic.deg.common.profile.ProfileFields;
 import com.scottlogic.deg.common.output.GeneratedObject;
-import com.scottlogic.deg.output.writer.DataSetWriter;
+import com.scottlogic.deg.common.profile.Fields;
 import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
+import com.scottlogic.deg.output.writer.DataSetWriter;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 /**
  * Defines an output target which stores the output data into the test state.
@@ -35,15 +36,15 @@ public class InMemoryOutputTarget implements SingleDatasetOutputTarget {
     }
 
     @Override
-    public DataSetWriter openWriter(ProfileFields fields) {
+    public DataSetWriter openWriter(Fields fields) {
         return new DummyWriter(fields, testState.generatedObjects);
     }
 
     private class DummyWriter implements DataSetWriter {
-        private final ProfileFields fields;
-        private final List<List<Object>> listToAppendTo;
+        private final Fields fields;
+        private final List<Map<String, Object>> listToAppendTo;
 
-        DummyWriter(ProfileFields fields, List<List<Object>> listToAppendTo) {
+        DummyWriter(Fields fields, List<Map<String, Object>> listToAppendTo) {
             this.fields = fields;
             this.listToAppendTo = listToAppendTo;
         }
@@ -54,10 +55,8 @@ public class InMemoryOutputTarget implements SingleDatasetOutputTarget {
                 throw new IllegalStateException("GeneratedObject is null");
             }
 
-            List<Object> values = fields.getExternalStream()
-                .map(row::getFormattedValue)
-                .collect(Collectors.toList());
-
+            Map<String, Object> values = new HashMap<>();
+            fields.getExternalStream().forEach(field -> values.put(field.getName(), row.getFormattedValue(field)));
             listToAppendTo.add(values);
         }
 

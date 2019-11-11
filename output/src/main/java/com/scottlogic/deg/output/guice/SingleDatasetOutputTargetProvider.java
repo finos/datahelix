@@ -22,8 +22,6 @@ import com.scottlogic.deg.output.outputtarget.FileOutputTarget;
 import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
 import com.scottlogic.deg.output.outputtarget.StdoutOutputTarget;
 
-import java.nio.file.Path;
-
 public class SingleDatasetOutputTargetProvider implements Provider<SingleDatasetOutputTarget> {
     private final OutputConfigSource outputConfigSource;
     private final FileOutputTarget fileOutputTarget;

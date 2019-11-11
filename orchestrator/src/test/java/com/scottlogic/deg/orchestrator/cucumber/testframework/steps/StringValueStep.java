@@ -18,7 +18,7 @@ package com.scottlogic.deg.orchestrator.cucumber.testframework.steps;
 
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestHelper;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.CucumberTestState;
-import com.scottlogic.deg.profile.common.ConstraintType;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
@@ -31,7 +31,7 @@ public class StringValueStep {
     private final CucumberTestState state;
     private final CucumberTestHelper helper;
 
-    public StringValueStep(CucumberTestState state, CucumberTestHelper helper){
+    public StringValueStep(CucumberTestState state, CucumberTestHelper helper) {
         this.state = state;
         this.helper = helper;
     }
@@ -77,22 +77,22 @@ public class StringValueStep {
     }
 
     @Then("{fieldVar} contains only string data")
-    public void producedDataShouldContainOnlyStringValuesForField(String fieldName){
+    public void producedDataShouldContainOnlyStringValuesForField(String fieldName) {
         helper.assertFieldContainsNullOrMatching(fieldName, String.class);
     }
 
     @Then("{fieldVar} contains string data")
-    public void producedDataShouldContainStringValuesForField(String fieldName){
+    public void producedDataShouldContainStringValuesForField(String fieldName) {
         helper.assertFieldContainsSomeOf(fieldName, String.class);
     }
 
     @Then("{fieldVar} contains anything but string data")
-    public void producedDataShouldContainAnythingButStringValuesForField(String fieldName){
+    public void producedDataShouldContainAnythingButStringValuesForField(String fieldName) {
         helper.assertFieldContainsNullOrNotMatching(fieldName, String.class);
     }
 
     @Then("{fieldVar} contains strings of length between {int} and {int} inclusively")
-    public void producedDataShouldContainStringValuesInRangeForField(String fieldName, int minInclusive, int maxInclusive){
+    public void producedDataShouldContainStringValuesInRangeForField(String fieldName, int minInclusive, int maxInclusive) {
         helper.assertFieldContainsNullOrMatching(
             fieldName,
             String.class,
@@ -100,7 +100,7 @@ public class StringValueStep {
     }
 
     @Then("{fieldVar} contains strings shorter than or equal to {int}")
-    public void producedDataShouldContainStringValuesShorterThanForField(String fieldName, int shorterThanInclusive){
+    public void producedDataShouldContainStringValuesShorterThanForField(String fieldName, int shorterThanInclusive) {
         helper.assertFieldContainsNullOrMatching(
             fieldName,
             String.class,
@@ -108,7 +108,7 @@ public class StringValueStep {
     }
 
     @Then("{fieldVar} contains strings longer than or equal to {int}")
-    public void producedDataShouldContainStringValuesLongerThanForField(String fieldName, int longerThanInclusive){
+    public void producedDataShouldContainStringValuesLongerThanForField(String fieldName, int longerThanInclusive) {
         helper.assertFieldContainsNullOrMatching(
             fieldName,
             String.class,
@@ -116,14 +116,14 @@ public class StringValueStep {
     }
 
     @Then("{fieldVar} contains strings of length outside {int} and {int}")
-    public void producedDataShouldContainStringValuesOutOfRangeForField(String fieldName, int min, int max){
+    public void producedDataShouldContainStringValuesOutOfRangeForField(String fieldName, int min, int max) {
         helper.assertFieldContainsNullOrMatching(
             fieldName,
             String.class,
             value -> !isLengthBetweenInclusively(min, max).apply(value));
     }
 
-    private Function<String, Boolean> isLengthBetweenInclusively(int minInclusive, int maxInclusive){
+    private Function<String, Boolean> isLengthBetweenInclusively(int minInclusive, int maxInclusive) {
         return value -> isLongerThanOrEqual(value, minInclusive) && isShorterThanOrEqual(value, maxInclusive);
     }
 
