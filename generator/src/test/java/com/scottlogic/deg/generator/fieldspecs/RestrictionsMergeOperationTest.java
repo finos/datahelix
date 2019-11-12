@@ -16,6 +16,7 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
+import com.scottlogic.deg.generator.restrictions.bool.BooleanRestrictionsMerger;
 import com.scottlogic.deg.generator.restrictions.string.StringRestrictions;
 import com.scottlogic.deg.generator.restrictions.string.StringRestrictionsFactory;
 import com.scottlogic.deg.generator.restrictions.string.StringRestrictionsMerger;
@@ -39,7 +40,8 @@ import static org.mockito.Mockito.*;
 
 class RestrictionsMergeOperationTest {
     private LinearRestrictionsMerger linearMerger;
-    private StringRestrictionsMerger StringMerger;
+    private StringRestrictionsMerger stringMerger;
+    private BooleanRestrictionsMerger booleanMerger;
     private RestrictionsMergeOperation operation;
     private static TypedRestrictions leftNumeric;
     private static TypedRestrictions rightNumeric;
@@ -69,8 +71,9 @@ class RestrictionsMergeOperationTest {
     @BeforeEach
     void beforeEach(){
         linearMerger = mock(LinearRestrictionsMerger.class);
-        StringMerger = mock(StringRestrictionsMerger.class);
-        operation = new RestrictionsMergeOperation(linearMerger, StringMerger);
+        stringMerger = mock(StringRestrictionsMerger.class);
+        booleanMerger = mock(BooleanRestrictionsMerger.class);
+        operation = new RestrictionsMergeOperation(linearMerger, stringMerger, booleanMerger);
     }
 
     @Test
@@ -83,7 +86,7 @@ class RestrictionsMergeOperationTest {
 
         Assert.assertEquals(expected, result);
         verify(linearMerger, times(1)).merge(any(), any(), anyBoolean());
-        verify(StringMerger, times(0)).merge(any(), any(), anyBoolean());
+        verify(stringMerger, times(0)).merge(any(), any(), anyBoolean());
     }
 
     @Test
@@ -96,33 +99,33 @@ class RestrictionsMergeOperationTest {
 
         Assert.assertEquals(expected, result);
         verify(linearMerger, times(1)).merge(any(), any(), anyBoolean());
-        verify(StringMerger, times(0)).merge(any(), any(), anyBoolean());
+        verify(stringMerger, times(0)).merge(any(), any(), anyBoolean());
     }
 
     @Test
     void applyMergeOperation_withStringRestrictions_shouldApplyRestriction(){
         Optional<TypedRestrictions> expected = Optional.of(leftString);
-        when(StringMerger.merge((StringRestrictions)leftString, (StringRestrictions)rightString, false))
+        when(stringMerger.merge((StringRestrictions)leftString, (StringRestrictions)rightString, false))
             .thenReturn(Optional.of((StringRestrictions)leftString));
 
         Optional<TypedRestrictions> result = operation.applyMergeOperation(leftString, rightString, false);
 
         Assert.assertEquals(expected, result);
         verify(linearMerger, times(0)).merge(any(), any(), anyBoolean());
-        verify(StringMerger, times(1)).merge(any(), any(), anyBoolean());
+        verify(stringMerger, times(1)).merge(any(), any(), anyBoolean());
     }
 
     @Test
     void applyMergeOperation_withContradictoryStringRestrictions_shouldPreventAnyValues(){
         Optional<TypedRestrictions> expected = Optional.empty();
-        when(StringMerger.merge((StringRestrictions)leftString, (StringRestrictions)rightString, false))
+        when(stringMerger.merge((StringRestrictions)leftString, (StringRestrictions)rightString, false))
             .thenReturn(Optional.empty());
 
         Optional<TypedRestrictions> result = operation.applyMergeOperation(leftString, rightString, false);
 
         Assert.assertEquals(expected, result);
         verify(linearMerger, times(0)).merge(any(), any(), anyBoolean());
-        verify(StringMerger, times(1)).merge(any(), any(), anyBoolean());
+        verify(stringMerger, times(1)).merge(any(), any(), anyBoolean());
     }
 
     @Test
@@ -135,7 +138,7 @@ class RestrictionsMergeOperationTest {
 
         Assert.assertEquals(result, result);
         verify(linearMerger, times(1)).merge(any(), any(), anyBoolean());
-        verify(StringMerger, times(0)).merge(any(), any(), anyBoolean());
+        verify(stringMerger, times(0)).merge(any(), any(), anyBoolean());
     }
 
     @Test
@@ -148,6 +151,6 @@ class RestrictionsMergeOperationTest {
 
         Assert.assertEquals(expected, result);
         verify(linearMerger, times(1)).merge(any(), any(), anyBoolean());
-        verify(StringMerger, times(0)).merge(any(), any(), anyBoolean());
+        verify(stringMerger, times(0)).merge(any(), any(), anyBoolean());
     }
 }

@@ -18,6 +18,7 @@ package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
+import com.scottlogic.deg.generator.restrictions.bool.BooleanRestrictionsMerger;
 import com.scottlogic.deg.generator.restrictions.string.StringRestrictionsMerger;
 import com.scottlogic.deg.generator.restrictions.TypedRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
@@ -31,7 +32,7 @@ import java.util.stream.Collectors;
  */
 public class FieldSpecMerger {
     private final RestrictionsMergeOperation restrictionMergeOperation =
-        new RestrictionsMergeOperation(new LinearRestrictionsMerger(), new StringRestrictionsMerger());
+        new RestrictionsMergeOperation(new LinearRestrictionsMerger(), new StringRestrictionsMerger(), new BooleanRestrictionsMerger());
 
     /**
      * Null parameters are permitted, and are synonymous with an empty FieldSpec

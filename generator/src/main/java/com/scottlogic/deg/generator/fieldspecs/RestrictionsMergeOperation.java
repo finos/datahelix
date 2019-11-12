@@ -17,6 +17,7 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.restrictions.bool.BooleanRestrictions;
 import com.scottlogic.deg.generator.restrictions.bool.BooleanRestrictionsMerger;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
@@ -28,10 +29,12 @@ import java.util.Optional;
 public class RestrictionsMergeOperation {
     private final RestrictionsMerger linearMerger;
     private final RestrictionsMerger stringMerger;
+    private final RestrictionsMerger booleanMerger;
 
-    public RestrictionsMergeOperation(LinearRestrictionsMerger linearMerger, StringRestrictionsMerger stringMerger) {
+    public RestrictionsMergeOperation(LinearRestrictionsMerger linearMerger, StringRestrictionsMerger stringMerger, BooleanRestrictionsMerger booleanMerger) {
         this.linearMerger = linearMerger;
         this.stringMerger = stringMerger;
+        this.booleanMerger = booleanMerger;
     }
 
     public Optional<TypedRestrictions> applyMergeOperation(TypedRestrictions left, TypedRestrictions right, boolean useFinestGranularityAvailable) {
@@ -45,6 +48,9 @@ public class RestrictionsMergeOperation {
         if (restrictions instanceof LinearRestrictions) {
             return linearMerger;
         }
-        return new BooleanRestrictionsMerger();
+        if (restrictions instanceof BooleanRestrictions) {
+            return booleanMerger;
+        }
+        throw new IllegalStateException(restrictions.getClass() + " is an unsupported class");
     }
 }

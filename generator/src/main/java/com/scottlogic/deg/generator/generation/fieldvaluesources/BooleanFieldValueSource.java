@@ -41,7 +41,7 @@ public class BooleanFieldValueSource implements FieldValueSource<Boolean>
 
     @Override
     public Stream<Boolean> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
-        return Stream.generate(() -> Math.random() < 0.5).filter(this::notInBlacklist);
+        return Stream.generate(() -> randomNumberGenerator.nextInt() % 2 == 0).filter(this::notInBlacklist);
     }
 
     private boolean notInBlacklist(Boolean b) {
