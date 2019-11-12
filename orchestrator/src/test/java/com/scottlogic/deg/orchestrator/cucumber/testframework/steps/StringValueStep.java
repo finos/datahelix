@@ -123,6 +123,11 @@ public class StringValueStep {
             value -> !isLengthBetweenInclusively(min, max).apply(value));
     }
 
+    @When("^([A-z0-9]+) uses custom generator \"(.*)\"$")
+    public void customGenerator(String fieldName, String value) {
+        state.addConstraint(fieldName, ConstraintType.EQUAL_TO, value);
+    }
+
     private Function<String, Boolean> isLengthBetweenInclusively(int minInclusive, int maxInclusive) {
         return value -> isLongerThanOrEqual(value, minInclusive) && isShorterThanOrEqual(value, maxInclusive);
     }

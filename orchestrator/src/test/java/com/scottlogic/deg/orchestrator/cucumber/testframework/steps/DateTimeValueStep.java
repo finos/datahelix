@@ -38,6 +38,11 @@ public class DateTimeValueStep {
         this.helper = helper;
     }
 
+    @When("^([A-z0-9]+) is equal to boolean true")
+    public void equalToTrue(String fieldName) {
+        state.addConstraint(fieldName, ConstraintType.EQUAL_TO, true);
+    }
+
     @When("^([A-z0-9]+) is equal to (\\d{4,5}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(?::\\d{2}(?:\\.\\d+Z?)?)?)$")
     public void equalToDateTimeValue(String fieldName, String value) {
         state.addConstraint(fieldName, ConstraintType.EQUAL_TO, value);

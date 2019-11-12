@@ -20,6 +20,7 @@ import com.scottlogic.deg.common.profile.*;
 import com.scottlogic.deg.common.util.defaults.DateTimeDefaults;
 import com.scottlogic.deg.common.util.defaults.NumericDefaults;
 import com.scottlogic.deg.generator.fieldspecs.relations.*;
+import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
 import com.scottlogic.deg.profile.dtos.constraints.relations.EqualToFieldConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.relations.RelationalConstraintDTO;
 
@@ -31,13 +32,15 @@ public abstract class FieldSpecRelationFactory
     {
         Field main = fields.getByName(dto.field);
         Field other = fields.getByName(dto.getOtherField());
+        if(dto.getType() == ConstraintType.EQUAL_TO_FIELD)
+        {
+            return createEqualToRelation((EqualToFieldConstraintDTO) dto, fields);
+        }
         Granularity offsetGranularity = readGranularity(main.getType(), dto.offsetUnit);
         DateTimeDefaults dateTimeDefaults = DateTimeDefaults.get();
         NumericDefaults numericDefaults = NumericDefaults.get();
         switch (dto.getType())
         {
-            case EQUAL_TO_FIELD:
-                return createEqualToRelation((EqualToFieldConstraintDTO) dto, fields);
             case AFTER_FIELD:
                 return new AfterRelation(main, other, dto.offset > 0, dateTimeDefaults, offsetGranularity, dto.offset);
             case AFTER_OR_AT_FIELD:

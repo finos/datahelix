@@ -33,8 +33,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BeforeDateRelationTest {
 
-    private final Field a = new Field("a", SpecificFieldType.DATETIME, false, "", false, false);
-    private final Field b = new Field("b", SpecificFieldType.DATETIME, false, "", false, false);
+    private final Field a = new Field("a", SpecificFieldType.DATETIME, false, "", false, false, null);
+    private final Field b = new Field("b", SpecificFieldType.DATETIME, false, "", false, false, null);
 
     @Test
     public void testReduceToFieldSpec_withNotNull_reducesToSpec() {

@@ -33,7 +33,8 @@ public enum SpecificFieldType
     FULL_NAME("fullname", FieldType.STRING),
     STRING("string", FieldType.STRING),
     DATETIME("datetime", FieldType.DATETIME),
-    DATE("date",FieldType.DATETIME);
+    DATE("date",FieldType.DATETIME),
+    BOOLEAN("boolean", FieldType.BOOLEAN);
 
     @JsonValue
     private final String type;
@@ -69,6 +70,7 @@ public enum SpecificFieldType
             case "string": return STRING;
             case "datetime": return DATETIME;
             case "date": return DATE;
+            case "boolean": return BOOLEAN;
             default:
                 throw new IllegalStateException("No data types with type " + type);
         }

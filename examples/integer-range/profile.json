@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.14",
+  "schemaVersion": "0.16",
   "fields": [
     {
       "name": "an_integer",

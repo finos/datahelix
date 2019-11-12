@@ -44,13 +44,22 @@ public class FieldService
 
     private Field createRegularField(FieldDTO fieldDTO)
     {
-        String formatting = fieldDTO.formatting != null ? fieldDTO.formatting : fieldDTO.type.getDefaultFormatting();
-        return new Field(fieldDTO.name, fieldDTO.type, fieldDTO.unique,formatting, false, fieldDTO.nullable);
+        String formatting = fieldDTO.formatting != null
+            ? fieldDTO.formatting
+            : fieldDTO.type.getDefaultFormatting();
+        return new Field(
+            fieldDTO.name,
+            fieldDTO.type,
+            fieldDTO.unique,
+            formatting,
+            false,
+            fieldDTO.nullable,
+            fieldDTO.generator);
     }
 
     private Field createInMapField(String inMapFile)
     {
-        return new Field(inMapFile, SpecificFieldType.INTEGER, false, null, true, false);
+        return new Field(inMapFile, SpecificFieldType.INTEGER, false, null, true, false, null);
     }
 
     private List<String> getInMapFieldNames(List<RuleDTO> ruleDTOs)

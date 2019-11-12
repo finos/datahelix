@@ -53,7 +53,12 @@
     3. [allOf](#allOf)
     4. [if](#if)
 
-7. [Running a Profile](#Running-a-Profile)
+7. [Custom Generators](#custom-generator)
+    1. [adding](#adding-custom-generator)
+    2. [using](#using-custom-generator)
+    3. [using as constraint](#using-custom-generator-as-constraint)
+    
+8. [Running a Profile](#Running-a-Profile)
     1. [Command Line Arguments](#Command-Line-Arguments)
         1. [Command Line Arguments for Generate Mode](#Command-Line-Arguments-for-Generate-Mode)
     2. [Generation Strategies](#Generation-strategies)
@@ -64,7 +69,7 @@
                 2. [Exhaustive](#Exhaustive)
                 3. [Pinning](#Pinning)
 
-8. [Visualising Decision Trees](#Visualising-Decision-Trees)
+9. [Visualising Decision Trees](#Visualising-Decision-Trees)
 
 # Introduction
 
@@ -83,9 +88,9 @@ This section will walk you through creating basic profiles with which you can ge
 Profiles are JSON documents consisting of three sections, the schema version, the list of fields and the rules.
 
 - **Schema Version** - Dictates the method of serialisation of the profile in order for the generator to
-interpret the profile fields and rules. The latest version is 0.7.
+interpret the profile fields and rules. The latest version is 
 ```
-    "schemaVersion": "0.7",
+    "schemaVersion": "0.16",
 ```
 - **List of Fields** - An array of column headings is defined with unique "name" keys.
 ```
@@ -136,7 +141,7 @@ These three sections are combined to form the [complete profile](#Example-Profil
 ## Example Profile
 
     {
-    "schemaVersion": "0.7",
+    "schemaVersion": "0.16",
     "fields": [
         {
             "name": "Column 1",
@@ -205,6 +210,7 @@ The data type of the field. See [Data types](#Data-Types) for more on how types 
 *  `firstname`
 *  `lastname`
 *  `fullname`
+*  `boolean`
 
  This is a required property.
 
@@ -245,6 +251,12 @@ Sets the field as unique. Unique fields can not be used within [grammatical cons
 
 
 # Data Types
+
+## Boolean
+
+Users can specify boolean data types which will take the values `true` and `false`.
+
+Currently these types are only supported with the `equalTo` and `equalToField` constraints, for example:
 
 ## Integer/Decimal
 
@@ -329,6 +341,8 @@ OR
 { "field": "type", "equalTo": 23 }
 OR
 { "field": "type", "equalTo": "2001-02-03T04:05:06.007" }
+OR
+{ "field": "type", "equalTo": true }
 ```
 
 Is satisfied if `field`'s value is equal to `value`
@@ -662,6 +676,58 @@ Is satisfied if either:
 
 While it's not prohibited, wrapping conditional constraints in any other kind of constraint (eg, a `not`) may cause unintuitive results.
 
+
+
+# Custom Generators
+<div id="custom-generator"></div>
+
+You can add your own custom java generators to the project with the following instructions.
+
+## Adding Custom Generators
+<div id="adding-custom-generator"></div>
+
+To add a custom generator you will need to 
+ - clone the datahelix source code
+ - go to the "custom" package
+ - either 
+   - implement the CustomGenerator.java interface
+   - use the CustomGeneratorBuilder.java to build a custom generator
+ - add your custom generator to the list in the CustomGeneratorList.java class
+ 
+There is an example folder in the "custom" package which shows an example using the CustomGeneratorBuilder to build a generator called "lorem ipsum"
+ 
+## using Custom Generators
+<div id="using-custom-generator"></div>
+
+To use your custom generator you add it to the field definition in your profile like this
+
+```javascript
+{
+    "name": "field1",
+    "type": "string",
+    "generator": "lorem ipsum"
+}
+```
+
+This will use the "lorem ipsum" example custom generator.
+
+To use your own, put the name of your generator instead of "lorem ipsum"
+
+## using Custom Generators as Constraint
+<div id="using-custom-generator-as-constraint"></div>
+
+You can also use custom generators as constraints 
+
+
+```javascript
+{ "field": "field1", "generator": "lorem ipsum" }
+```
+
+Custom generators can be used in "anyOf" grammatical constraints, as well as in the "then" and "else" parts of conditional constraints
+
+To combine generators with sets and equalTo, you will need to create a 'matchingFunction' when building the custom generator. Which should be a function that returns true if a value is one the custom generator could produce. 
+
+To be able negate the custom generator, or use in the 'if' section of an if then statement, you must define the 'negated Generator' when building the custom generator. Which should return values that the custom generator should not produce. 
 
 # Running a Profile
 <div id="Running-a-Profile"></div>

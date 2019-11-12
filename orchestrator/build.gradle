@@ -32,6 +32,7 @@ dependencies {
     compile project(":generator")
     compile project(":output")
     compile project(":common")
+    compile project(":custom")
 
     compile group: "info.picocli", name: "picocli", version: "${PICOCLI_VERSION}"
     compile group: "com.google.code.gson", name: "gson", version: "${GSON_VERSION}"

@@ -31,6 +31,15 @@ Feature: User can specify that a value is equalTo a required value
       | foo                      |
       | 2010-01-01T00:03:00.000Z |
 
+  Scenario: Running an 'equalTo' of a boolean should return only that boolean
+    Given there is a non nullable field foo
+    And foo has type "boolean"
+    And foo is anything but null
+    And foo is equal to boolean true
+    Then the following data should be generated:
+      | foo  |
+      | true |
+
   Scenario: Running an 'equalTo' of an empty string should return only the empty string
     Given there is a non nullable field foo
     And foo has type "string"

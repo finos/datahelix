@@ -17,28 +17,40 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.restrictions.*;
+import com.scottlogic.deg.generator.restrictions.bool.BooleanRestrictions;
+import com.scottlogic.deg.generator.restrictions.bool.BooleanRestrictionsMerger;
+import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
+import com.scottlogic.deg.generator.restrictions.string.StringRestrictions;
+import com.scottlogic.deg.generator.restrictions.string.StringRestrictionsMerger;
 
 import java.util.Optional;
 
 public class RestrictionsMergeOperation {
     private final RestrictionsMerger linearMerger;
     private final RestrictionsMerger stringMerger;
+    private final RestrictionsMerger booleanMerger;
 
-    public RestrictionsMergeOperation(LinearRestrictionsMerger linearMerger, StringRestrictionsMerger stringMerger) {
+    public RestrictionsMergeOperation(LinearRestrictionsMerger linearMerger, StringRestrictionsMerger stringMerger, BooleanRestrictionsMerger booleanMerger) {
         this.linearMerger = linearMerger;
         this.stringMerger = stringMerger;
+        this.booleanMerger = booleanMerger;
     }
 
     public Optional<TypedRestrictions> applyMergeOperation(TypedRestrictions left, TypedRestrictions right, boolean useFinestGranularityAvailable) {
-        return getMerger(left)
-            .merge(left, right, useFinestGranularityAvailable);
+        return getMerger(left).merge(left, right, useFinestGranularityAvailable);
     }
 
     private RestrictionsMerger getMerger(TypedRestrictions restrictions) {
         if (restrictions instanceof StringRestrictions) {
             return stringMerger;
         }
-        return linearMerger;
+        if (restrictions instanceof LinearRestrictions) {
+            return linearMerger;
+        }
+        if (restrictions instanceof BooleanRestrictions) {
+            return booleanMerger;
+        }
+        throw new IllegalStateException(restrictions.getClass() + " is an unsupported class");
     }
 }
