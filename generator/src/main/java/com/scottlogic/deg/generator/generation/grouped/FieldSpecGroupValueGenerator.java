@@ -18,6 +18,7 @@
 package com.scottlogic.deg.generator.generation.grouped;
 
 import com.google.inject.Inject;
+import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
@@ -85,7 +86,7 @@ public class FieldSpecGroupValueGenerator {
             .map(relation -> createModifierForField(first, relation, group))
             .map(Optional::of)
             .reduce(Optional.of(firstFieldSpec), this::mergeOptionalFieldspecs)
-            .orElseThrow(() -> new IllegalStateException("Failed to merge field specs in related fields"));
+            .orElseThrow(() ->  new ValidationException("The provided profile is wholly contradictory!"));
 
         return applyGranularityToFieldSpec(firstFieldSpec, updatedFieldSpec);
     }
