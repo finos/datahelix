@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "0.14",
+  "fields": [
+    {
+      "name": "alwaysTrue",
+      "type": "boolean",
+      "nullable": false
+    },
+    {
+      "name": "alwaysFalseOrNull",
+      "type": "boolean",
+      "nullable": true
+    }
+  ],
+  "rules": [
+    {
+      "constraints": [
+        {
+          "field": "alwaysTrue",
+          "equalTo": true
+        },
+        {
+          "not": {
+            "field": "alwaysFalseOrNull",
+            "equalToField": "alwaysTrue"
+          }
+        }
+      ]
+    }
+  ]
+}

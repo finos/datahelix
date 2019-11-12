@@ -16,6 +16,8 @@
 
 package com.scottlogic.deg.generator.restrictions;
 
+import com.scottlogic.deg.generator.restrictions.string.StringRestrictions;
+import com.scottlogic.deg.generator.restrictions.string.StringRestrictionsMerger;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 

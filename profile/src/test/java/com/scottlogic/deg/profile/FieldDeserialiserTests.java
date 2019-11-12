@@ -164,7 +164,7 @@ public class FieldDeserialiserTests {
             deserialiseJsonString(json);
             Assert.fail("should have thrown an exception");
         } catch (InvalidFormatException e) {
-            String expectedMessage = "Cannot deserialize value of type `com.scottlogic.deg.common.profile.SpecificFieldType` from String \"intger\": value not one of declared Enum instance names: [string, CUSIP, fullname, datetime, RIC, date, SEDOL, decimal, firstname, integer, ISIN, lastname]\n at [Source: (String)\"{ \"name\": \"id\", \"type\": \"intger\" }\"; line: 1, column: 25] (through reference chain: com.scottlogic.deg.profile.dtos.FieldDTO[\"type\"])";
+            String expectedMessage = "Cannot deserialize value of type `com.scottlogic.deg.common.profile.SpecificFieldType` from String \"intger\": value not one of declared Enum instance names: [lastname, CUSIP, RIC, date, ISIN, string, fullname, firstname, integer, boolean, SEDOL, decimal, datetime]\n at [Source: (String)\"{ \"name\": \"id\", \"type\": \"intger\" }\"; line: 1, column: 25] (through reference chain: com.scottlogic.deg.profile.dtos.FieldDTO[\"type\"])";
             assertThat(e.getMessage(), sameBeanAs(expectedMessage));
         }
     }

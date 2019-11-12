@@ -14,12 +14,18 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.common.profile;
 
-public enum FieldType
+package com.scottlogic.deg.profile.factories.relation_factories;
+
+import com.scottlogic.deg.common.profile.Granularity;
+
+public class BooleanRelationFactory extends FieldSpecRelationFactory
 {
-    NUMERIC,
-    STRING,
-    DATETIME,
-    BOOLEAN
+    @Override
+    Granularity createGranularity(String offsetUnit)
+    {
+        return null;
+    }
 }
+
+

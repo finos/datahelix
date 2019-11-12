@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.restrictions;
+package com.scottlogic.deg.generator.restrictions.bool;
+
+import com.scottlogic.deg.generator.restrictions.RestrictionsMerger;
 
 import java.util.Optional;
 
@@ -22,15 +24,11 @@ import java.util.Optional;
  * For a given combination of choices over the decision tree
  * Details every column's atomic constraints
  */
-public class StringRestrictionsMerger implements RestrictionsMerger<StringRestrictions> {
-
+public class BooleanRestrictionsMerger implements RestrictionsMerger<BooleanRestrictions>
+{
     @Override
-    public Optional<StringRestrictions> merge(StringRestrictions left, StringRestrictions right, boolean useFinestGranularityAvailable) {
-        if (useFinestGranularityAvailable) {
-            throw new UnsupportedOperationException("Relational strings are unsupported");
-        }
-
-        return left.intersect(right);
+    public Optional<BooleanRestrictions> merge(BooleanRestrictions left, BooleanRestrictions right, boolean useFinestGranularityAvailable) {
+        return Optional.of(new BooleanRestrictions());
     }
 }
 

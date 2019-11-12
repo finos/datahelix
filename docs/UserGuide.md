@@ -210,6 +210,7 @@ The data type of the field. See [Data types](#Data-Types) for more on how types 
 *  `firstname`
 *  `lastname`
 *  `fullname`
+*  `boolean`
 
  This is a required property.
 
@@ -250,6 +251,12 @@ Sets the field as unique. Unique fields can not be used within [grammatical cons
 
 
 # Data Types
+
+## Boolean
+
+Users can specify boolean data types which will take the values `true` and `false`.
+
+Currently these types are only supported with the `equalTo` and `equalToField` constraints, for example:
 
 ## Integer/Decimal
 
@@ -334,6 +341,8 @@ OR
 { "field": "type", "equalTo": 23 }
 OR
 { "field": "type", "equalTo": "2001-02-03T04:05:06.007" }
+OR
+{ "field": "type", "equalTo": true }
 ```
 
 Is satisfied if `field`'s value is equal to `value`

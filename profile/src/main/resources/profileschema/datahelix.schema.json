@@ -68,6 +68,9 @@
         },
         {
           "$ref": "#/definitions/numeric"
+        },
+        {
+          "$ref": "#/definitions/boolean"
         }
       ]
     },
@@ -94,6 +97,10 @@
       "minimum": -1e20,
       "maximum": 1e20,
       "default": 0
+    },
+    "boolean": {
+      "type": "boolean",
+      "default": false
     },
     "granularity": {
       "value": {

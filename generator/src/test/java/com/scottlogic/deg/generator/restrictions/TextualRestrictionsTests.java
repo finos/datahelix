@@ -18,6 +18,7 @@ package com.scottlogic.deg.generator.restrictions;
 
 import com.scottlogic.deg.generator.generation.string.generators.RegexStringGenerator;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
+import com.scottlogic.deg.generator.restrictions.string.StringRestrictions;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
