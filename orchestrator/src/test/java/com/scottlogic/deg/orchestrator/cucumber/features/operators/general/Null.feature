@@ -472,8 +472,8 @@ Feature: User can specify that a field is null or absent
     And the generator can generate at most 2 rows
     Then the following data should be generated:
       | foo                      |
+      | 00:00:00.000 |
       | 00:00:00.001 |
-      | 00:00:00.002 |
 
   Scenario: 'Null' with a contradicting 'afterOrAt' should only generate null with time
     Given foo is null
