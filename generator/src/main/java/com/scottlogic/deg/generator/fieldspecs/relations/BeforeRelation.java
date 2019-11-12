@@ -53,6 +53,9 @@ public class BeforeRelation<T extends Comparable<T>> implements FieldSpecRelatio
         }
 
         LinearRestrictions<T> otherRestrictions = (LinearRestrictions)((RestrictionsFieldSpec) otherFieldSpec).getRestrictions();
+        if (otherRestrictions.isContradictory()){
+            return FieldSpecFactory.nullOnly();
+        }
         T max = otherRestrictions.getMax();
         T offsetMax = offsetGranularity.getPrevious(max, offset);
 
