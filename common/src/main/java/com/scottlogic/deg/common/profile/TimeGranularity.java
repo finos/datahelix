@@ -17,9 +17,11 @@
 package com.scottlogic.deg.common.profile;
 
 import com.scottlogic.deg.common.ValidationException;
+import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.time.Duration;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
@@ -33,11 +35,15 @@ public class TimeGranularity implements Granularity<LocalTime>{
             throw new ValidationException("Granularity for time field must be time based but was " +
                 granularity.toString());
         }
-
         this.granularity = granularity;}
 
     public static TimeGranularity create(String granularity) {
         return new TimeGranularity(ChronoUnit.valueOf(granularity.toUpperCase()));
+    }
+
+    @Override
+    public Granularity<LocalTime> getFinestGranularity() {
+        return Defaults.FINEST_TIME_GRANULARITY;
     }
 
     @Override
@@ -59,16 +65,29 @@ public class TimeGranularity implements Granularity<LocalTime>{
     }
 
     @Override
+    public LocalTime getNext(LocalTime value) {
+        value = value.truncatedTo(granularity);
+        Duration amountToAdd = granularity.getDuration();
+        Duration current = Duration.ofNanos(ChronoUnit.NANOS.between(LocalTime.MIN, value));
+        Duration total = amountToAdd.plus(current);
+        Duration day = Duration.ofDays(1);
+        return total.compareTo(day) < 0
+            ? value.plus(amountToAdd)
+            : LocalTime.MAX;
+
+    }
+
+    @Override
     public LocalTime trimToGranularity(LocalTime value) {
         return value.truncatedTo(granularity);
     }
 
     @Override
-    public LocalTime getPrevious(LocalTime value) {
+    public LocalTime getPrevious(LocalTime value, int amount ) {
         if (!isCorrectScale(value)) {
             return trimToGranularity(value);
         }
-        return value.minus(granularity.getDuration());
+        return value.minus(granularity.getDuration().multipliedBy(amount));
     }
 
     @Override
