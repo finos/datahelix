@@ -17,6 +17,7 @@
 package com.scottlogic.deg.common.profile;
 
 import com.scottlogic.deg.common.ValidationException;
+import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import com.scottlogic.deg.testUtils.TestRandomNumberGenerator;
 import org.junit.Assert;
@@ -77,7 +78,7 @@ class TimeGranularityTest {
     void getNext_returnsMidnight_WhenPassedTimeNearMidnight() {
         TimeGranularity granularity = new TimeGranularity(ChronoUnit.SECONDS);
         LocalTime time = LocalTime.of(23,59,59,234);
-        LocalTime expected = LocalTime.of(0,0,0);
+        LocalTime expected = Defaults.TIME_MAX;
 
         Assert.assertEquals(expected,granularity.getNext(time));
     }

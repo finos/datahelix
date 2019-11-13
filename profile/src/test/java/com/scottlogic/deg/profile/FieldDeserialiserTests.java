@@ -19,9 +19,11 @@ package com.scottlogic.deg.profile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
+import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.common.profile.SpecificFieldType;
 import com.scottlogic.deg.profile.dtos.FieldDTO;
 import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
@@ -159,14 +161,8 @@ public class FieldDeserialiserTests {
     public void shouldDeserialiseFieldAndThrowInvalidTypeValueException() throws IOException {
         // Arrange
         final String json = "{ \"name\": \"id\", \"type\": \"intger\" }";
+        Assertions.assertThrows(InvalidFormatException.class, () -> deserialiseJsonString(json));
 
-        try {
-            deserialiseJsonString(json);
-            Assert.fail("should have thrown an exception");
-        } catch (InvalidFormatException e) {
-            String expectedMessage = "Cannot deserialize value of type `com.scottlogic.deg.common.profile.SpecificFieldType` from String \"intger\": value not one of declared Enum instance names: [lastname, CUSIP, RIC, date, ISIN, string, fullname, firstname, integer, boolean, SEDOL, decimal, datetime]\n at [Source: (String)\"{ \"name\": \"id\", \"type\": \"intger\" }\"; line: 1, column: 25] (through reference chain: com.scottlogic.deg.profile.dtos.FieldDTO[\"type\"])";
-            assertThat(e.getMessage(), sameBeanAs(expectedMessage));
-        }
     }
 
     private FieldDTO deserialiseJsonString(String json) throws IOException {
