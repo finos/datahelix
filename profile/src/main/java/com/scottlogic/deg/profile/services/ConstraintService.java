@@ -52,12 +52,14 @@ public class ConstraintService
         atomicConstraintFactoryMap.put(FieldType.DATETIME, new DateTimeConstraintFactory());
         atomicConstraintFactoryMap.put(FieldType.NUMERIC, new NumericConstraintFactory());
         atomicConstraintFactoryMap.put(FieldType.STRING, new StringConstraintFactory());
+        atomicConstraintFactoryMap.put(FieldType.TIME, new TimeConstraintFactory());
         atomicConstraintFactoryMap.put(FieldType.BOOLEAN, new BooleanConstraintFactory());
 
         relationFactoryMap = new EnumMap<>(FieldType.class);
         relationFactoryMap.put(FieldType.DATETIME, new DateTimeRelationFactory());
         relationFactoryMap.put(FieldType.NUMERIC, new NumericRelationFactory());
         relationFactoryMap.put(FieldType.STRING, new StringRelationFactory());
+        relationFactoryMap.put(FieldType.TIME, new TimeRelationFactory());
         relationFactoryMap.put(FieldType.BOOLEAN, new BooleanRelationFactory());
     }
 
