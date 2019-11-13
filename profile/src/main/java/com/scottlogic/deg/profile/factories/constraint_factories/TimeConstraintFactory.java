@@ -1,17 +1,25 @@
-package com.scottlogic.deg.profile.reader.services.constraints.atomic;
+package com.scottlogic.deg.profile.factories.constraint_factories;
 
 import com.scottlogic.deg.common.profile.Field;
 import com.scottlogic.deg.common.profile.HelixTime;
 import com.scottlogic.deg.common.profile.TimeGranularity;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
-import com.scottlogic.deg.profile.dtos.constraints.atomic.*;
-import com.scottlogic.deg.profile.reader.FileReader;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.GranularToConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.LongerThanConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.OfLengthConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.ShorterThanConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.numeric.GreaterThanConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.numeric.GreaterThanOrEqualToConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.numeric.LessThanConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.numeric.LessThanOrEqualToConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.temporal.AfterConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.temporal.AfterOrAtConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.temporal.BeforeConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.temporal.BeforeOrAtConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.textual.ContainsRegexConstraintDTO;
+import com.scottlogic.deg.profile.dtos.constraints.atomic.textual.MatchesRegexConstraintDTO;
 
 public class TimeConstraintFactory extends AtomicConstraintFactory {
-
-    TimeConstraintFactory(FileReader fileReader) {
-        super(fileReader);
-    }
 
     @Override
     AtomicConstraint createAfterOrAtConstraint(AfterOrAtConstraintDTO dto, Field field) {
