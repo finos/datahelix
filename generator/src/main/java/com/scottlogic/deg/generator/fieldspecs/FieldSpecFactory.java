@@ -25,9 +25,8 @@ import com.scottlogic.deg.generator.restrictions.bool.BooleanRestrictions;
 import java.util.Collections;
 import java.util.function.Function;
 
-import static com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory.forMaxLength;
-import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDefaultDateTimeRestrictions;
-import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDefaultNumericRestrictions;
+import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.*;
+import static com.scottlogic.deg.generator.restrictions.string.StringRestrictionsFactory.forMaxLength;
 
 public class FieldSpecFactory {
     private static final NullOnlyFieldSpec NULL_ONLY_FIELD_SPEC = new NullOnlyFieldSpec();

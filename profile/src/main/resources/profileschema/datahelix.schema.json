@@ -56,7 +56,7 @@
   "definitions": {
     "schemaVersion": {
       "title": "The version of the DataHelix profile schema",
-      "const": "0.16"
+      "const": "0.17"
     },
     "dataType": {
       "oneOf": [
