@@ -56,7 +56,7 @@
   "definitions": {
     "schemaVersion": {
       "title": "The version of the DataHelix profile schema",
-      "const": "0.15"
+      "const": "0.16"
     },
     "dataType": {
       "oneOf": [
@@ -68,6 +68,9 @@
         },
         {
           "$ref": "#/definitions/numeric"
+        },
+        {
+          "$ref": "#/definitions/boolean"
         }
       ]
     },
@@ -94,6 +97,10 @@
       "minimum": -1e20,
       "maximum": 1e20,
       "default": 0
+    },
+    "boolean": {
+      "type": "boolean",
+      "default": false
     },
     "granularity": {
       "value": {
@@ -196,6 +203,9 @@
     "constraint": {
       "oneOf": [
         {
+          "$ref": "#/definitions/generatorConstraint"
+        },
+        {
           "$ref": "#/definitions/equalToConstraint"
         },
         {
@@ -289,6 +299,22 @@
           "$ref": "#/definitions/ifConstraint"
         }
       ]
+    },
+    "generatorConstraint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "field",
+        "generator"
+      ],
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "generator": {
+          "$ref": "#/definitions/string"
+        }
+      }
     },
     "equalToConstraint": {
       "type": "object",

@@ -7,6 +7,6 @@
       "name": "field2"
     }
   ],
-  "schemaVersion": "0.7",
+  "schemaVersion": "0.16",
   "rules": [{"rule": "rule 1"}]
 }

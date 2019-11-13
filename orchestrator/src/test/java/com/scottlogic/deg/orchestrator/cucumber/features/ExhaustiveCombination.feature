@@ -1,8 +1,34 @@
+# Copyright 2019 Scott Logic Ltd
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 Feature: User can create data across multiple fields for all combinations available.
 
   Background:
     Given the generation strategy is full
     And the combination strategy is exhaustive
+
+  Scenario: Running an exhaustive combination strategy with booleans should be successful
+    Given the following non nullable fields exist:
+      | foo |
+      | bar |
+    And foo has type "boolean"
+    And bar has type "boolean"
+    Then the following data should be generated:
+      | foo | bar |
+      | true | true |
+      | true | false |
+      | false | true |
+      | false | false |
 
   Scenario: Running an exhaustive combination strategy with roman alphabet character (a-z) strings should be successful
     Given the generation strategy is full

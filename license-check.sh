@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-files=`find . -type f -name '*.java' | xargs grep -L "Licensed under the Apache License"`
+files=`find . -type f -name '*.java' -o -name '*.feature' | xargs grep -L "Licensed under the Apache License"`
 
 if [[ -z ${files} ]]
 then

@@ -21,6 +21,7 @@ import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.restrictions.linear.*;
+import com.scottlogic.deg.generator.restrictions.string.StringRestrictions;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -31,7 +32,7 @@ import java.util.Arrays;
 import java.util.Set;
 
 import static com.scottlogic.deg.common.profile.FieldType.*;
-import static com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory.forMaxLength;
+import static com.scottlogic.deg.generator.restrictions.string.StringRestrictionsFactory.forMaxLength;
 import static com.scottlogic.deg.generator.utils.Defaults.*;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;

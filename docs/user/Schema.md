@@ -3,7 +3,7 @@
 ## Sample file
 ```javascript
 {
-	"schemaVersion": "0.7",
+	"schemaVersion": "0.16",
 	"description": "A dataset about financial products",
 	"fields":
 	[

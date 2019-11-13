@@ -51,7 +51,7 @@ public class FieldSpecValueGenerator {
     private Stream<Object> getDataValues(FieldValueSource source, boolean unique) {
         if (unique) {
             return source.generateAllValues();
-        }
+        } 
 
         switch (dataType) {
             case FULL_SEQUENTIAL:

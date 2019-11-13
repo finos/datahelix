@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.generator.restrictions;
+package com.scottlogic.deg.generator.restrictions.string;
 
 import java.util.Collections;
 import java.util.regex.Pattern;

@@ -20,11 +20,12 @@ import com.scottlogic.deg.common.profile.FieldType;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.restrictions.TypedRestrictions;
+import com.scottlogic.deg.generator.restrictions.bool.BooleanRestrictions;
 
 import java.util.Collections;
 import java.util.function.Function;
 
-import static com.scottlogic.deg.generator.restrictions.StringRestrictionsFactory.forMaxLength;
+import static com.scottlogic.deg.generator.restrictions.string.StringRestrictionsFactory.forMaxLength;
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDefaultDateTimeRestrictions;
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDefaultNumericRestrictions;
 
@@ -47,6 +48,8 @@ public class FieldSpecFactory {
                 return new RestrictionsFieldSpec(createDefaultDateTimeRestrictions(), true, Collections.emptySet());
             case STRING:
                 return new RestrictionsFieldSpec(forMaxLength(1000), true, Collections.emptySet());
+            case BOOLEAN:
+                return new RestrictionsFieldSpec(new BooleanRestrictions(), true, Collections.emptySet());
             default:
                 throw new IllegalArgumentException("Unable to create FieldSpec from type " + type.name());
         }

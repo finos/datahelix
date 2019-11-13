@@ -1,3 +1,16 @@
+# Copyright 2019 Scott Logic Ltd
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 Feature: User can specify that a value is equalTo a required value
 
   Background:
@@ -30,6 +43,15 @@ Feature: User can specify that a value is equalTo a required value
     Then the following data should be generated:
       | foo                      |
       | 2010-01-01T00:03:00.000Z |
+
+  Scenario: Running an 'equalTo' of a boolean should return only that boolean
+    Given there is a non nullable field foo
+    And foo has type "boolean"
+    And foo is anything but null
+    And foo is equal to boolean true
+    Then the following data should be generated:
+      | foo  |
+      | true |
 
   Scenario: Running an 'equalTo' of an empty string should return only the empty string
     Given there is a non nullable field foo
