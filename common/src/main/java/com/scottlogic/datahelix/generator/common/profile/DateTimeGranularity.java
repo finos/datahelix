@@ -19,7 +19,7 @@ package com.scottlogic.datahelix.generator.common.profile;
 import com.scottlogic.datahelix.generator.common.ValidationException;
 import com.scottlogic.datahelix.generator.common.date.TemporalAdjusterGenerator;
 import com.scottlogic.datahelix.generator.common.util.defaults.DateTimeDefaults;
-import com.scottlogic.datahelix.generator.core.utils.RandomNumberGenerator;
+import com.scottlogic.datahelix.generator.common.RandomNumberGenerator;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;

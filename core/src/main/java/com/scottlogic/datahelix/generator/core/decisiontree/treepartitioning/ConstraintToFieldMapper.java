@@ -20,7 +20,7 @@ import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.util.FlatMappingSpliterator;
 import com.scottlogic.datahelix.generator.core.decisiontree.ConstraintNode;
 import com.scottlogic.datahelix.generator.core.decisiontree.DecisionTree;
-import com.scottlogic.datahelix.generator.core.utils.SetUtils;
+import com.scottlogic.datahelix.generator.common.SetUtils;
 
 import java.util.Collections;
 import java.util.Map;

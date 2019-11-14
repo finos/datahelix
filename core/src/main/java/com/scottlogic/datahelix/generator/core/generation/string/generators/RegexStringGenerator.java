@@ -23,7 +23,7 @@ import com.scottlogic.datahelix.generator.core.generation.string.iterators.Finit
 import com.scottlogic.datahelix.generator.core.generation.string.factorys.InterestingStringFactory;
 import com.scottlogic.datahelix.generator.core.generation.string.factorys.RandomStringFactory;
 import com.scottlogic.datahelix.generator.core.restrictions.string.StringRestrictions;
-import com.scottlogic.datahelix.generator.core.utils.RandomNumberGenerator;
+import com.scottlogic.datahelix.generator.common.RandomNumberGenerator;
 import dk.brics.automaton.Automaton;
 
 import java.util.*;

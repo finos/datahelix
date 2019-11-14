@@ -27,7 +27,7 @@ import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecMerger;
 import com.scottlogic.datahelix.generator.core.fieldspecs.relations.FieldSpecRelation;
 import com.scottlogic.datahelix.generator.core.generation.FieldSpecValueGenerator;
 import com.scottlogic.datahelix.generator.core.generation.databags.*;
-import com.scottlogic.datahelix.generator.core.utils.SetUtils;
+import com.scottlogic.datahelix.generator.common.SetUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;

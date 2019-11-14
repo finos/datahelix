@@ -19,7 +19,7 @@ package com.scottlogic.datahelix.generator.core.fieldspecs;
 import com.google.inject.Inject;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.core.fieldspecs.relations.FieldSpecRelation;
-import com.scottlogic.datahelix.generator.core.utils.SetUtils;
+import com.scottlogic.datahelix.generator.common.SetUtils;
 
 import java.util.*;
 

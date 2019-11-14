@@ -16,7 +16,7 @@
 package com.scottlogic.datahelix.generator.core.generation.string.generators;
 
 import com.scottlogic.datahelix.generator.common.ValidationException;
-import com.scottlogic.datahelix.generator.core.utils.RandomNumberGenerator;
+import com.scottlogic.datahelix.generator.common.RandomNumberGenerator;
 
 import java.util.function.Function;
 import java.util.stream.Stream;

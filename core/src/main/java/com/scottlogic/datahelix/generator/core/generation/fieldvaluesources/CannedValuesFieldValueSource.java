@@ -17,7 +17,7 @@
 package com.scottlogic.datahelix.generator.core.generation.fieldvaluesources;
 
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
-import com.scottlogic.datahelix.generator.core.utils.RandomNumberGenerator;
+import com.scottlogic.datahelix.generator.common.RandomNumberGenerator;
 
 import java.util.Objects;
 import java.util.stream.Stream;

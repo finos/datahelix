@@ -17,14 +17,14 @@
 package com.scottlogic.datahelix.generator.core.generation.fieldvaluesources;
 
 import com.scottlogic.datahelix.generator.core.restrictions.linear.LinearRestrictions;
-import com.scottlogic.datahelix.generator.core.utils.RandomNumberGenerator;
+import com.scottlogic.datahelix.generator.common.RandomNumberGenerator;
 
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.scottlogic.datahelix.generator.core.utils.SetUtils.stream;
+import static com.scottlogic.datahelix.generator.common.SetUtils.stream;
 
 public class LinearFieldValueSource<T extends Comparable<T>> implements FieldValueSource {
 

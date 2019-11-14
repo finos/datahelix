@@ -16,10 +16,13 @@
 
 package com.scottlogic.datahelix.generator.core.utils;
 
+import com.scottlogic.datahelix.generator.common.RandomNumberGenerator;
+
 import java.math.BigDecimal;
 import java.util.Random;
 
-public class JavaUtilRandomNumberGenerator implements RandomNumberGenerator {
+public class JavaUtilRandomNumberGenerator implements RandomNumberGenerator
+{
     private final Random random;
 
     public JavaUtilRandomNumberGenerator(){

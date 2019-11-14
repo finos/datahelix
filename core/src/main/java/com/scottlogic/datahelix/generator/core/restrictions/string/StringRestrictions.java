@@ -21,7 +21,7 @@ import com.scottlogic.datahelix.generator.core.generation.string.generators.NoSt
 import com.scottlogic.datahelix.generator.core.generation.string.generators.RegexStringGenerator;
 import com.scottlogic.datahelix.generator.core.generation.string.generators.StringGenerator;
 import com.scottlogic.datahelix.generator.core.restrictions.TypedRestrictions;
-import com.scottlogic.datahelix.generator.core.utils.SetUtils;
+import com.scottlogic.datahelix.generator.common.SetUtils;
 
 import java.util.*;
 import java.util.function.Function;

@@ -33,7 +33,7 @@ import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.A
 import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.NegatedGrammaticalConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.OrConstraint;
-import com.scottlogic.datahelix.generator.core.utils.SetUtils;
+import com.scottlogic.datahelix.generator.common.SetUtils;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.Assert;

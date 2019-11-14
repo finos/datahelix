@@ -22,7 +22,7 @@ import com.scottlogic.datahelix.generator.core.restrictions.bool.BooleanRestrict
 import com.scottlogic.datahelix.generator.core.restrictions.string.StringRestrictionsMerger;
 import com.scottlogic.datahelix.generator.core.restrictions.TypedRestrictions;
 import com.scottlogic.datahelix.generator.core.restrictions.linear.LinearRestrictionsMerger;
-import com.scottlogic.datahelix.generator.core.utils.SetUtils;
+import com.scottlogic.datahelix.generator.common.SetUtils;
 
 import java.util.Optional;
 import java.util.stream.Collectors;

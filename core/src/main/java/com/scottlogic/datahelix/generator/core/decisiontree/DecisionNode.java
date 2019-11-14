@@ -17,7 +17,7 @@
 package com.scottlogic.datahelix.generator.core.decisiontree;
 
 import com.scottlogic.datahelix.generator.common.util.FlatMappingSpliterator;
-import com.scottlogic.datahelix.generator.core.utils.SetUtils;
+import com.scottlogic.datahelix.generator.common.SetUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;

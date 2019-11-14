@@ -16,8 +16,6 @@
 
 package com.scottlogic.datahelix.generator.common;
 
-import com.scottlogic.datahelix.generator.core.utils.RandomNumberGenerator;
-
 import java.math.BigDecimal;
 
 public class TestRandomNumberGenerator implements RandomNumberGenerator {

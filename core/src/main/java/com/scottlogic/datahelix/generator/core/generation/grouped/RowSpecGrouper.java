@@ -22,7 +22,7 @@ import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecGroup;
 import com.scottlogic.datahelix.generator.core.fieldspecs.RowSpec;
 import com.scottlogic.datahelix.generator.core.fieldspecs.relations.FieldSpecRelation;
 import com.scottlogic.datahelix.generator.core.generation.FieldPair;
-import com.scottlogic.datahelix.generator.core.utils.SetUtils;
+import com.scottlogic.datahelix.generator.common.SetUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;

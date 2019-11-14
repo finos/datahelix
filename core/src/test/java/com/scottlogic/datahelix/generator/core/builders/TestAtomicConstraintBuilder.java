@@ -21,7 +21,7 @@ import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.Atomic
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.InSetConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.IsNullConstraint;
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
-import com.scottlogic.datahelix.generator.core.utils.SetUtils;
+import com.scottlogic.datahelix.generator.common.SetUtils;
 
 public class TestAtomicConstraintBuilder {
     private TestConstraintNodeBuilder testConstraintNodeBuilder;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.datahelix.generator.core.utils;
+package com.scottlogic.datahelix.generator.common;
 
 import java.util.*;
 import java.util.stream.Collectors;

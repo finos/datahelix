@@ -23,7 +23,7 @@ import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.InSetC
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.IsNullConstraint;
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
-import com.scottlogic.datahelix.generator.core.utils.SetUtils;
+import com.scottlogic.datahelix.generator.common.SetUtils;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 

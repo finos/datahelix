@@ -27,7 +27,7 @@ import com.scottlogic.datahelix.generator.core.decisiontree.DecisionTree;
 import com.scottlogic.datahelix.generator.core.decisiontree.testutils.*;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.InSetConstraint;
-import com.scottlogic.datahelix.generator.core.utils.SetUtils;
+import com.scottlogic.datahelix.generator.common.SetUtils;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

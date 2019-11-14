@@ -18,7 +18,7 @@ package com.scottlogic.datahelix.generator.core.decisiontree;
 import com.scottlogic.datahelix.generator.core.fieldspecs.relations.FieldSpecRelation;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.datahelix.generator.common.util.FlatMappingSpliterator;
-import com.scottlogic.datahelix.generator.core.utils.SetUtils;
+import com.scottlogic.datahelix.generator.common.SetUtils;
 
 import java.util.Arrays;
 import java.util.Collection;
