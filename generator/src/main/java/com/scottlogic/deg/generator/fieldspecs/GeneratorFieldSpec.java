@@ -16,13 +16,13 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
-import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class GeneratorFieldSpec extends FieldSpec {
     private final FieldValueSource fieldValueSource;
-    private final Function<Object, Boolean> acceptWhitelistValueFunction;
+    private final Predicate<Object> acceptWhitelistValueFunction;
 
-    public GeneratorFieldSpec(FieldValueSource fieldValueSource, Function<Object, Boolean> acceptWhitelistValueFunction,  boolean nullable) {
+    public GeneratorFieldSpec(FieldValueSource fieldValueSource, Predicate<Object> acceptWhitelistValueFunction, boolean nullable) {
         super(nullable);
         this.fieldValueSource = fieldValueSource;
         this.acceptWhitelistValueFunction = acceptWhitelistValueFunction;
@@ -30,7 +30,7 @@ public class GeneratorFieldSpec extends FieldSpec {
 
     @Override
     public boolean canCombineWithWhitelistValue(Object value) {
-        return acceptWhitelistValueFunction.apply(value);
+        return acceptWhitelistValueFunction.test(value);
     }
 
     @Override
