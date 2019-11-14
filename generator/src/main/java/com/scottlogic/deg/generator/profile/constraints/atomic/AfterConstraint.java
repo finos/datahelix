@@ -26,7 +26,7 @@ import java.time.OffsetDateTime;
 import java.util.Objects;
 
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDateTimeRestrictions;
-import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
+import static com.scottlogic.deg.generator.utils.GeneratorDefaults.DATETIME_MAX_LIMIT;
 
 public class AfterConstraint implements AtomicConstraint {
     public final Field field;

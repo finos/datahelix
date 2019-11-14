@@ -26,7 +26,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createNumericRestrictions;
-import static com.scottlogic.deg.generator.utils.Defaults.NUMERIC_MIN_LIMIT;
+import static com.scottlogic.deg.generator.utils.GeneratorDefaults.NUMERIC_MIN_LIMIT;
 
 public class LessThanOrEqualToConstraint implements AtomicConstraint {
     public final Field field;

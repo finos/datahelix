@@ -21,7 +21,7 @@ import com.scottlogic.deg.common.profile.TimeGranularity;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
-import com.scottlogic.deg.generator.utils.Defaults;
+import com.scottlogic.deg.generator.utils.GeneratorDefaults;
 
 public class GranularToTimeConstraint implements AtomicConstraint {
     public final TimeGranularity timeGranularity;
@@ -51,8 +51,8 @@ public class GranularToTimeConstraint implements AtomicConstraint {
     public FieldSpec toFieldSpec() {
         return FieldSpecFactory.fromRestriction(
             LinearRestrictionsFactory.createTimeRestrictions(
-                Defaults.TIME_MIN_LIMIT,
-                Defaults.TIME_MAX_LIMIT,
+                GeneratorDefaults.TIME_MIN_LIMIT,
+                GeneratorDefaults.TIME_MAX_LIMIT,
                 timeGranularity));
     }
 }

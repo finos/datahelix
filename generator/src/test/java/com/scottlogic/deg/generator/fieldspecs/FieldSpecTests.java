@@ -33,7 +33,7 @@ import java.util.Set;
 
 import static com.scottlogic.deg.common.profile.FieldType.*;
 import static com.scottlogic.deg.generator.restrictions.string.StringRestrictionsFactory.forMaxLength;
-import static com.scottlogic.deg.generator.utils.Defaults.*;
+import static com.scottlogic.deg.generator.utils.GeneratorDefaults.*;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertFalse;

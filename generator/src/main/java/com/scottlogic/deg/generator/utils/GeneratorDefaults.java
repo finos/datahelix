@@ -24,7 +24,7 @@ import java.time.OffsetDateTime;
 
 import static com.scottlogic.deg.common.util.Defaults.*;
 
-public class Defaults {
+public class GeneratorDefaults {
 
     public static final Limit<BigDecimal> NUMERIC_MAX_LIMIT = new Limit<>(NUMERIC_MAX, true);
     public static final Limit<BigDecimal> NUMERIC_MIN_LIMIT= new Limit<>(NUMERIC_MIN, true);

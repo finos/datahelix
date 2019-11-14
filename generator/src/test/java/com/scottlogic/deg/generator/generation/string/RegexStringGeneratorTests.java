@@ -18,12 +18,14 @@ package com.scottlogic.deg.generator.generation.string;
 
 import com.scottlogic.deg.generator.generation.string.generators.RegexStringGenerator;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
+import com.scottlogic.deg.generator.restrictions.string.StringRestrictionsFactory;
 import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -155,7 +157,7 @@ class RegexStringGeneratorTests {
 
     @Test
     void shouldCorrectlySampleInfiniteResults() {
-        StringGenerator generator = new RegexStringGenerator("[a]+", false);
+        StringGenerator generator = StringRestrictionsFactory.forStringMatching(Pattern.compile("[a]+"), false).createGenerator();
 
         Stream<String> results = generator.generateRandomValues(new JavaUtilRandomNumberGenerator(0));
 
@@ -183,7 +185,8 @@ class RegexStringGeneratorTests {
 
     @Test
     void shouldProduceComplement() {
-        StringGenerator limitedRangeGenerator = new RegexStringGenerator("[a-m]", true);
+        StringGenerator limitedRangeGenerator =
+            StringRestrictionsFactory.forStringMatching(Pattern.compile("[a-m]"), false).createGenerator();
         StringGenerator complementedGenerator = limitedRangeGenerator.complement();
 
         String sampleValue = complementedGenerator

@@ -34,8 +34,8 @@ import java.util.*;
 
 import static com.scottlogic.deg.common.util.Defaults.ISO_MAX_DATE;
 import static com.scottlogic.deg.common.util.Defaults.ISO_MIN_DATE;
-import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MAX_LIMIT;
-import static com.scottlogic.deg.generator.utils.Defaults.DATETIME_MIN_LIMIT;
+import static com.scottlogic.deg.generator.utils.GeneratorDefaults.DATETIME_MAX_LIMIT;
+import static com.scottlogic.deg.generator.utils.GeneratorDefaults.DATETIME_MIN_LIMIT;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;

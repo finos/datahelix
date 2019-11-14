@@ -16,62 +16,46 @@
 
 package com.scottlogic.deg.generator.generation.string.factorys;
 
+import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.generator.generation.string.StringUtils;
 import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
 import dk.brics.automaton.State;
 import dk.brics.automaton.Transition;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class RandomStringFactory {
 
-    public String createRandomString(
-            String currentString,
-            State state,
-            int minLength,
-            int maxLength,
-            RandomNumberGenerator random) {
+    public String createRandomString(State state, RandomNumberGenerator random) {
+        List<Integer> validIndices = new LinkedList<>();
 
-        if (finishCreating(currentString, state, minLength, maxLength, random)) {
-            return currentString;
-        }
-
-        List<Transition> transitions = state.getSortedTransitions(false);
-
-        Transition randomTransition = transitions.get(random.nextInt(transitions.size()));
-
-        char randomChar = getRandomChar(random, randomTransition);
-
-        return createRandomString(
-            currentString + randomChar,
-            randomTransition.getDest(),
-            minLength,
-            maxLength,
-            random);
-    }
-
-    private boolean finishCreating(
-            String currentString,
-            State state,
-            int minLength,
-            int maxLength,
-            RandomNumberGenerator random) {
+        StringBuilder builder = new StringBuilder();
 
         if (state.isAccept()) {
-            if (currentString.length() == maxLength) {
-                return true;
-            }
-            if (currentString.length() >= minLength && randomlyStop(random)) {
-                return true;
+            validIndices.add(0);
+        }
+
+        for (int i = 1; !finishCreating(state); i++) {
+            List<Transition> transitions = state.getSortedTransitions(false);
+            Transition randomTransition = transitions.get(random.nextInt(transitions.size()));
+            builder.append(getRandomChar(random, randomTransition));
+            state = randomTransition.getDest();
+            if (state.isAccept()) {
+                validIndices.add(i);
             }
         }
 
-        return state.getTransitions().isEmpty();
+        if (validIndices.isEmpty()) {
+            throw new ValidationException("No possible states from the current regex");
+        }
+
+        int randomIndex = random.nextInt(validIndices.size());
+        return builder.toString().substring(0, validIndices.get(randomIndex));
     }
 
-
-    private boolean randomlyStop(RandomNumberGenerator random) {
-        return random.nextInt(10) < 3; // 3 in 10 chance of stopping
+    private boolean finishCreating(State state) {
+        return state.getTransitions().isEmpty();
     }
 
     /**

@@ -22,7 +22,7 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 
 import static com.scottlogic.deg.common.util.Defaults.*;
-import static com.scottlogic.deg.generator.utils.Defaults.*;
+import static com.scottlogic.deg.generator.utils.GeneratorDefaults.*;
 
 public class LinearRestrictionsFactory {
 
