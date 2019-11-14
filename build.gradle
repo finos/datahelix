@@ -19,7 +19,7 @@
  */
 
 allprojects {
-    group = 'com.scottlogic.deg'
+    group = 'com.scottlogic.datahelix.generator'
 }
 
 subprojects {
