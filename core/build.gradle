@@ -1,0 +1,41 @@
+/*
+ * Copyright 2019 Scott Logic Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+dependencies {
+    compile project(":common")
+
+    compile "com.google.inject:guice:${GUICE_VERSION}"
+    compile "dk.brics.automaton:automaton:${AUTOMATON_VERSION}"
+    compile "org.apache.commons:commons-csv:${COMMONS_CSV_VERSION}"
+
+    testCompile project(":common").sourceSets.test.output
+    testCompile "org.junit.jupiter:junit-jupiter-api:${JUNIT_JUPITER_VERSION}"
+    testCompile "junit:junit:${JUNIT_4_VERSION}"
+    testCompile "org.junit.platform:junit-platform-runner:${JUNIT_PLATFORM_RUNNER_VERSION}"
+    testCompile "org.junit.vintage:junit-vintage-engine:${JUNIT_JUPITER_VERSION}"
+    testCompile "org.hamcrest:java-hamcrest:${HAMCREST_VERSION}"
+    testCompile "org.junit.jupiter:junit-jupiter-params:${JUNIT_JUPITER_VERSION}"
+    testCompile "com.shazam:shazamcrest:${SHAZAMCREST_VERSION}"
+    testCompile "org.mockito:mockito-all:${MOCKITO_VERSION}"
+    testCompile "org.junit.jupiter:junit-jupiter-engine:${JUNIT_JUPITER_VERSION}"
+    testImplementation("org.junit.jupiter:junit-jupiter:${JUNIT_JUPITER_VERSION}")
+}
+
+group "com.scottlogic.datahelix.generator"
+
+test {
+    useJUnitPlatform()
+}

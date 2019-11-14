@@ -20,7 +20,7 @@
 dependencies {
     compile project(":common")
     compile project(":custom")
-    compile project(":generator")
+    compile project(":core")
     compile group: "org.apache.commons", name: "commons-csv", version: "${COMMONS_CSV_VERSION}"
     compile group: "commons-io", name: "commons-io", version: "${COMMONS_IO_VERSION}"
     compile group: "com.google.inject", name: "guice", version: "${GUICE_VERSION}"
@@ -48,6 +48,8 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+group "com.scottlogic.datahelix.generator"
 
 description = "DataHelix Schema Library"
 
