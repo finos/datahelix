@@ -29,7 +29,7 @@ repositories {
 
 dependencies {
     compile project(":profile")
-    compile project(":generator")
+    compile project(":core")
     compile project(":output")
     compile project(":common")
     compile project(":custom")
@@ -55,7 +55,7 @@ dependencies {
     testCompile "org.junit.jupiter:junit-jupiter-engine:${JUNIT_JUPITER_VERSION}"
     testCompile group: "junit", name: "junit", version: "${JUNIT_4_VERSION}"
     
-    testCompile project(':generator').sourceSets.test.output
+    testCompile project(':core').sourceSets.test.output
 
     testImplementation("org.junit.jupiter:junit-jupiter:${JUNIT_JUPITER_VERSION}")
 }
