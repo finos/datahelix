@@ -21,7 +21,7 @@ import com.google.common.base.Charsets;
 import com.google.inject.Inject;
 import com.scottlogic.datahelix.generator.orchestrator.violate.ViolatedProfile;
 import com.scottlogic.datahelix.generator.common.util.FileUtils;
-import com.scottlogic.deg.output.OutputPath;
+import com.scottlogic.datahelix.generator.output.OutputPath;
 
 import java.io.IOException;
 import java.nio.file.Files;

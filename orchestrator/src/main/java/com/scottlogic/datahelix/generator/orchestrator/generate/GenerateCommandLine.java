@@ -25,7 +25,7 @@ import com.scottlogic.datahelix.generator.core.config.detail.MonitorType;
 import com.scottlogic.datahelix.generator.core.config.detail.VisualiserLevel;
 import com.scottlogic.datahelix.generator.orchestrator.guice.AllConfigSource;
 import com.scottlogic.datahelix.generator.orchestrator.guice.AllModule;
-import com.scottlogic.deg.output.guice.OutputFormat;
+import com.scottlogic.datahelix.generator.output.guice.OutputFormat;
 import picocli.CommandLine;
 
 import java.io.File;
@@ -35,7 +35,7 @@ import java.util.concurrent.Callable;
 import static com.scottlogic.datahelix.generator.common.util.Defaults.DEFAULT_MAX_ROWS;
 import static com.scottlogic.datahelix.generator.core.config.detail.CombinationStrategyType.MINIMAL;
 import static com.scottlogic.datahelix.generator.core.config.detail.DataGenerationType.RANDOM;
-import static com.scottlogic.deg.output.guice.OutputFormat.CSV;
+import static com.scottlogic.datahelix.generator.output.guice.OutputFormat.CSV;
 
 /**
  * This class holds the generate specific command line options.

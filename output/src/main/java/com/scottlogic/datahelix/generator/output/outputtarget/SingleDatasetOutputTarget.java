@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package com.scottlogic.datahelix.generator.orchestrator.guice;
+package com.scottlogic.datahelix.generator.output.outputtarget;
 
-import com.scottlogic.datahelix.generator.core.generation.GenerationConfigSource;
-import com.scottlogic.datahelix.generator.output.guice.OutputConfigSource;
-import com.scottlogic.deg.profile.guice.ProfileConfigSource;
+import com.scottlogic.datahelix.generator.common.profile.Fields;
+import com.scottlogic.datahelix.generator.output.writer.DataSetWriter;
 
-public interface AllConfigSource extends GenerationConfigSource, ProfileConfigSource, OutputConfigSource {
+import java.io.IOException;
+
+public interface SingleDatasetOutputTarget {
+    DataSetWriter openWriter(Fields fields) throws IOException;
+    default void validate() throws OutputTargetValidationException, IOException {}
 }

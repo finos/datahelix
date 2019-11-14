@@ -14,11 +14,19 @@
  * limitations under the License.
  */
 
-package com.scottlogic.datahelix.generator.orchestrator.guice;
+package com.scottlogic.datahelix.generator.output.writer;
 
-import com.scottlogic.datahelix.generator.core.generation.GenerationConfigSource;
-import com.scottlogic.datahelix.generator.output.guice.OutputConfigSource;
-import com.scottlogic.deg.profile.guice.ProfileConfigSource;
+import com.scottlogic.datahelix.generator.common.profile.Fields;
 
-public interface AllConfigSource extends GenerationConfigSource, ProfileConfigSource, OutputConfigSource {
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Optional;
+
+/** Represents a file format in which data could be output - e.g. CSV, JSON. */
+public interface OutputWriterFactory {
+    DataSetWriter createWriter(
+        OutputStream stream,
+        Fields fields) throws IOException;
+
+    Optional<String> getFileExtensionWithoutDot();
 }

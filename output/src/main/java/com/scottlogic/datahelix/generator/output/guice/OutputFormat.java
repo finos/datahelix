@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-package com.scottlogic.datahelix.generator.orchestrator.guice;
+package com.scottlogic.datahelix.generator.output.guice;
 
-import com.scottlogic.datahelix.generator.core.generation.GenerationConfigSource;
-import com.scottlogic.datahelix.generator.output.guice.OutputConfigSource;
-import com.scottlogic.deg.profile.guice.ProfileConfigSource;
-
-public interface AllConfigSource extends GenerationConfigSource, ProfileConfigSource, OutputConfigSource {
+public enum OutputFormat {
+    CSV,
+    JSON
 }

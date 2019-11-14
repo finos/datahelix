@@ -23,9 +23,9 @@ import com.scottlogic.datahelix.generator.core.generation.DataGenerator;
 import com.scottlogic.datahelix.generator.core.profile.Profile;
 import com.scottlogic.datahelix.generator.orchestrator.violate.manifest.ManifestWriter;
 import com.scottlogic.datahelix.generator.orchestrator.violate.violator.ProfileViolator;
-import com.scottlogic.deg.output.outputtarget.OutputTargetFactory;
-import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
-import com.scottlogic.deg.output.writer.DataSetWriter;
+import com.scottlogic.datahelix.generator.output.outputtarget.OutputTargetFactory;
+import com.scottlogic.datahelix.generator.output.outputtarget.SingleDatasetOutputTarget;
+import com.scottlogic.datahelix.generator.output.writer.DataSetWriter;
 import com.scottlogic.deg.profile.reader.ProfileReader;
 
 import java.io.IOException;

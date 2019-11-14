@@ -14,11 +14,18 @@
  * limitations under the License.
  */
 
-package com.scottlogic.datahelix.generator.orchestrator.guice;
+package com.scottlogic.datahelix.generator.output.writer;
 
-import com.scottlogic.datahelix.generator.core.generation.GenerationConfigSource;
-import com.scottlogic.datahelix.generator.output.guice.OutputConfigSource;
-import com.scottlogic.deg.profile.guice.ProfileConfigSource;
+import com.scottlogic.datahelix.generator.common.output.GeneratedObject;
 
-public interface AllConfigSource extends GenerationConfigSource, ProfileConfigSource, OutputConfigSource {
+import java.io.Closeable;
+import java.io.IOException;
+
+/**
+ * An object that can persist generated data to some destination (whether that be memory, a filesystem, a service, etc).
+ *
+ * DataSetWriters should take ownership of any Closeables they use, and close them into their own .close() implementation
+ **/
+public interface DataSetWriter extends Closeable {
+    void writeRow(GeneratedObject row) throws IOException;
 }

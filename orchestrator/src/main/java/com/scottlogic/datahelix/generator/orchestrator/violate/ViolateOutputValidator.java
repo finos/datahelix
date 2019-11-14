@@ -19,8 +19,8 @@ package com.scottlogic.datahelix.generator.orchestrator.violate;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.scottlogic.datahelix.generator.core.profile.Profile;
-import com.scottlogic.deg.output.OutputPath;
-import com.scottlogic.deg.output.outputtarget.OutputTargetValidationException;
+import com.scottlogic.datahelix.generator.output.OutputPath;
+import com.scottlogic.datahelix.generator.output.outputtarget.OutputTargetValidationException;
 import com.scottlogic.datahelix.generator.common.util.FileUtils;
 
 import java.io.IOException;

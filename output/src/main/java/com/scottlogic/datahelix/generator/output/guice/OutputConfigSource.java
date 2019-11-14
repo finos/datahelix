@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package com.scottlogic.datahelix.generator.orchestrator.guice;
+package com.scottlogic.datahelix.generator.output.guice;
 
-import com.scottlogic.datahelix.generator.core.generation.GenerationConfigSource;
-import com.scottlogic.datahelix.generator.output.guice.OutputConfigSource;
-import com.scottlogic.deg.profile.guice.ProfileConfigSource;
+import java.nio.file.Path;
 
-public interface AllConfigSource extends GenerationConfigSource, ProfileConfigSource, OutputConfigSource {
+public interface OutputConfigSource {
+    OutputFormat getOutputFormat();
+    Path getOutputPath();
+    boolean overwriteOutputFiles();
+    boolean useStdOut();
+    boolean useNdJson();
 }

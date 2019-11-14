@@ -23,8 +23,8 @@ import com.scottlogic.datahelix.generator.core.generation.GenerationConfigSource
 import com.scottlogic.datahelix.generator.core.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.datahelix.generator.core.validators.ErrorReporter;
 import com.scottlogic.datahelix.generator.orchestrator.violate.manifest.ManifestWriter;
-import com.scottlogic.deg.output.outputtarget.OutputTargetFactory;
-import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
+import com.scottlogic.datahelix.generator.output.outputtarget.OutputTargetFactory;
+import com.scottlogic.datahelix.generator.output.outputtarget.SingleDatasetOutputTarget;
 import com.scottlogic.deg.profile.reader.FileReader;
 import com.scottlogic.deg.profile.reader.ProfileReader;
 import com.scottlogic.deg.profile.validators.ConfigValidator;

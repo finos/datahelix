@@ -19,7 +19,7 @@ package com.scottlogic.datahelix.generator.orchestrator.validator;
 import com.google.inject.Inject;
 import com.scottlogic.datahelix.generator.common.ValidationException;
 import com.scottlogic.datahelix.generator.common.util.FileUtils;
-import com.scottlogic.deg.output.guice.OutputConfigSource;
+import com.scottlogic.datahelix.generator.output.guice.OutputConfigSource;
 
 /**
  * Class used to determine whether the command line options are valid for visualisation

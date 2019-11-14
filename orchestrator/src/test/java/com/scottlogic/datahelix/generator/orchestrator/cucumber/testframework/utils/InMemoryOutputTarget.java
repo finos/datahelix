@@ -18,8 +18,8 @@ package com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.u
 
 import com.scottlogic.datahelix.generator.common.output.GeneratedObject;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
-import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
-import com.scottlogic.deg.output.writer.DataSetWriter;
+import com.scottlogic.datahelix.generator.output.outputtarget.SingleDatasetOutputTarget;
+import com.scottlogic.datahelix.generator.output.writer.DataSetWriter;
 
 import java.util.HashMap;
 import java.util.List;
