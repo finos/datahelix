@@ -19,10 +19,10 @@ package com.scottlogic.deg.orchestrator.generate;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
-import com.scottlogic.deg.generator.config.detail.DataGenerationType;
-import com.scottlogic.deg.generator.config.detail.MonitorType;
-import com.scottlogic.deg.generator.config.detail.VisualiserLevel;
+import com.scottlogic.datahelix.generator.core.config.detail.CombinationStrategyType;
+import com.scottlogic.datahelix.generator.core.config.detail.DataGenerationType;
+import com.scottlogic.datahelix.generator.core.config.detail.MonitorType;
+import com.scottlogic.datahelix.generator.core.config.detail.VisualiserLevel;
 import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
 import com.scottlogic.deg.orchestrator.guice.AllModule;
 import com.scottlogic.deg.output.guice.OutputFormat;
@@ -33,8 +33,8 @@ import java.nio.file.Path;
 import java.util.concurrent.Callable;
 
 import static com.scottlogic.datahelix.generator.common.util.Defaults.DEFAULT_MAX_ROWS;
-import static com.scottlogic.deg.generator.config.detail.CombinationStrategyType.MINIMAL;
-import static com.scottlogic.deg.generator.config.detail.DataGenerationType.RANDOM;
+import static com.scottlogic.datahelix.generator.core.config.detail.CombinationStrategyType.MINIMAL;
+import static com.scottlogic.datahelix.generator.core.config.detail.DataGenerationType.RANDOM;
 import static com.scottlogic.deg.output.guice.OutputFormat.CSV;
 
 /**

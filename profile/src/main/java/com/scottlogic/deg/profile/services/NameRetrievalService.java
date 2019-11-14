@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.profile.services;
 
-import com.scottlogic.deg.generator.profile.constraints.atomic.NameConstraintTypes;
+import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.NameConstraintTypes;
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import com.scottlogic.deg.profile.reader.CsvInputStreamReader;
@@ -26,7 +26,7 @@ import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.util.stream.Collectors;
 
-import static com.scottlogic.deg.generator.profile.constraints.atomic.NameConstraintTypes.*;
+import static com.scottlogic.datahelix.generator.core.profile.constraints.atomic.NameConstraintTypes.*;
 
 public final class NameRetrievalService
 {

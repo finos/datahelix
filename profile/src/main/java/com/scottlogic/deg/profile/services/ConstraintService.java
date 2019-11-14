@@ -18,11 +18,11 @@ package com.scottlogic.deg.profile.services;
 
 import com.google.inject.Inject;
 import com.scottlogic.datahelix.generator.common.profile.*;
-import com.scottlogic.deg.generator.profile.constraints.Constraint;
-import com.scottlogic.deg.generator.profile.constraints.atomic.*;
-import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
-import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
-import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
+import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
+import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.*;
+import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.AndConstraint;
+import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.OrConstraint;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.AtomicConstraintDTO;

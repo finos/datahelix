@@ -16,8 +16,8 @@
 
 package com.scottlogic.deg.orchestrator.violate;
 
-import com.scottlogic.deg.generator.profile.Profile;
-import com.scottlogic.deg.generator.profile.Rule;
+import com.scottlogic.datahelix.generator.core.profile.Profile;
+import com.scottlogic.datahelix.generator.core.profile.Rule;
 import com.scottlogic.datahelix.generator.common.util.FileUtils;
 import com.scottlogic.deg.output.OutputPath;
 import com.scottlogic.deg.output.outputtarget.OutputTargetValidationException;

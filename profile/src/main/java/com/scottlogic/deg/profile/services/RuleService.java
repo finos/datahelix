@@ -18,9 +18,9 @@ package com.scottlogic.deg.profile.services;
 
 import com.google.inject.Inject;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
-import com.scottlogic.deg.generator.profile.Rule;
-import com.scottlogic.deg.generator.profile.constraints.Constraint;
-import com.scottlogic.deg.generator.profile.constraints.atomic.IsNullConstraint;
+import com.scottlogic.datahelix.generator.core.profile.Rule;
+import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
+import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.IsNullConstraint;
 import com.scottlogic.deg.profile.custom.CustomConstraintFactory;
 import com.scottlogic.deg.profile.dtos.RuleDTO;
 

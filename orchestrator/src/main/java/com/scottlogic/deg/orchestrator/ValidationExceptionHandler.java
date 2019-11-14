@@ -17,7 +17,7 @@
 package com.scottlogic.deg.orchestrator;
 
 import com.scottlogic.datahelix.generator.common.ValidationException;
-import com.scottlogic.deg.generator.validators.ErrorReporter;
+import com.scottlogic.datahelix.generator.core.validators.ErrorReporter;
 import picocli.CommandLine;
 
 import java.io.IOException;

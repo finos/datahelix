@@ -21,7 +21,7 @@ import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.datahelix.generator.common.profile.Granularity;
 import com.scottlogic.datahelix.generator.common.util.defaults.DateTimeDefaults;
 import com.scottlogic.datahelix.generator.common.util.defaults.NumericDefaults;
-import com.scottlogic.deg.generator.fieldspecs.relations.*;
+import com.scottlogic.datahelix.generator.core.fieldspecs.relations.*;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
 import com.scottlogic.deg.profile.dtos.constraints.relations.EqualToFieldConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.relations.RelationalConstraintDTO;

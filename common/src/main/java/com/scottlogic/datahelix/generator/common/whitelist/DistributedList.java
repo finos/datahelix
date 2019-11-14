@@ -16,7 +16,7 @@
 
 package com.scottlogic.datahelix.generator.common.whitelist;
 
-import com.scottlogic.datahelix.generator.common.utils.RandomNumberGenerator;
+import com.scottlogic.datahelix.generator.core.utils.RandomNumberGenerator;
 
 import java.util.*;
 import java.util.stream.Collectors;

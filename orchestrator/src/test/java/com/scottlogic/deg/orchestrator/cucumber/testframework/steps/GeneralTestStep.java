@@ -17,8 +17,8 @@
 package com.scottlogic.deg.orchestrator.cucumber.testframework.steps;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
-import com.scottlogic.deg.generator.config.detail.DataGenerationType;
+import com.scottlogic.datahelix.generator.core.config.detail.CombinationStrategyType;
+import com.scottlogic.datahelix.generator.core.config.detail.DataGenerationType;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.*;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
 

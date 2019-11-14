@@ -17,10 +17,10 @@
 package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
-import com.scottlogic.deg.generator.config.detail.DataGenerationType;
-import com.scottlogic.deg.generator.config.detail.MonitorType;
-import com.scottlogic.deg.generator.config.detail.VisualiserLevel;
+import com.scottlogic.datahelix.generator.core.config.detail.CombinationStrategyType;
+import com.scottlogic.datahelix.generator.core.config.detail.DataGenerationType;
+import com.scottlogic.datahelix.generator.core.config.detail.MonitorType;
+import com.scottlogic.datahelix.generator.core.config.detail.VisualiserLevel;
 import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
 import com.scottlogic.deg.orchestrator.violate.ViolateConfigSource;
 import com.scottlogic.deg.output.guice.OutputFormat;

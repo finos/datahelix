@@ -21,7 +21,7 @@ import com.google.inject.name.Named;
 import com.scottlogic.datahelix.generator.common.ValidationException;
 import com.scottlogic.datahelix.generator.common.commands.CommandBus;
 import com.scottlogic.datahelix.generator.common.commands.CommandResult;
-import com.scottlogic.deg.generator.profile.Profile;
+import com.scottlogic.datahelix.generator.core.profile.Profile;
 import com.scottlogic.deg.profile.dtos.ProfileDTO;
 import com.scottlogic.deg.profile.commands.CreateProfile;
 import com.scottlogic.deg.profile.serialisation.ProfileDeserialiser;

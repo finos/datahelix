@@ -18,9 +18,9 @@ package com.scottlogic.deg.orchestrator.generate;
 
 import com.google.inject.Inject;
 import com.scottlogic.datahelix.generator.common.output.GeneratedObject;
-import com.scottlogic.deg.generator.generation.DataGenerator;
-import com.scottlogic.deg.generator.generation.DataGeneratorMonitor;
-import com.scottlogic.deg.generator.profile.Profile;
+import com.scottlogic.datahelix.generator.core.generation.DataGenerator;
+import com.scottlogic.datahelix.generator.core.generation.DataGeneratorMonitor;
+import com.scottlogic.datahelix.generator.core.profile.Profile;
 import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;
 import com.scottlogic.deg.output.writer.DataSetWriter;
 import com.scottlogic.deg.profile.reader.ProfileReader;

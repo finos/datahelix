@@ -17,16 +17,16 @@
 package com.scottlogic.deg.orchestrator.violate.violator;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
-import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
-import com.scottlogic.deg.generator.profile.constraints.grammatical.NegatedGrammaticalConstraint;
-import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
-import com.scottlogic.deg.generator.profile.Rule;
-import com.scottlogic.deg.generator.profile.constraints.Constraint;
+import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.AndConstraint;
+import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.ConditionalConstraint;
+import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.NegatedGrammaticalConstraint;
+import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.OrConstraint;
+import com.scottlogic.datahelix.generator.core.profile.Rule;
+import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
 import com.scottlogic.datahelix.generator.common.profile.UnviolatableConstraintException;
-import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.generator.profile.constraints.atomic.ViolatedAtomicConstraint;
-import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
+import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.AtomicConstraint;
+import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.ViolatedAtomicConstraint;
+import com.scottlogic.datahelix.generator.core.violations.filters.ViolationFilter;
 
 import java.util.ArrayList;
 import java.util.Collection;

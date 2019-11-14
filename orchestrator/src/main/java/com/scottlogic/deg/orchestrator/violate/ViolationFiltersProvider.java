@@ -18,8 +18,8 @@ package com.scottlogic.deg.orchestrator.violate;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.scottlogic.deg.generator.violations.filters.ConstraintTypeViolationFilter;
-import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
+import com.scottlogic.datahelix.generator.core.violations.filters.ConstraintTypeViolationFilter;
+import com.scottlogic.datahelix.generator.core.violations.filters.ViolationFilter;
 
 import java.util.Collections;
 import java.util.List;

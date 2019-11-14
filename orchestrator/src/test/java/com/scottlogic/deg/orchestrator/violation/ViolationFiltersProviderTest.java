@@ -16,10 +16,10 @@
 
 package com.scottlogic.deg.orchestrator.violation;
 
-import com.scottlogic.deg.generator.profile.constraints.atomic.ShorterThanConstraint;
-import com.scottlogic.deg.generator.profile.constraints.atomic.OfLengthConstraint;
-import com.scottlogic.deg.generator.violations.filters.ConstraintTypeViolationFilter;
-import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
+import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.ShorterThanConstraint;
+import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.OfLengthConstraint;
+import com.scottlogic.datahelix.generator.core.violations.filters.ConstraintTypeViolationFilter;
+import com.scottlogic.datahelix.generator.core.violations.filters.ViolationFilter;
 import com.scottlogic.deg.orchestrator.violate.AtomicConstraintTypeMapper;
 import com.scottlogic.deg.orchestrator.violate.ViolateConfigSource;
 import com.scottlogic.deg.orchestrator.violate.ViolationFiltersProvider;

@@ -19,7 +19,7 @@ package com.scottlogic.deg.orchestrator.violate;
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import com.scottlogic.deg.orchestrator.guice.AllConfigSource;
-import com.scottlogic.deg.generator.violations.filters.ViolationFilter;
+import com.scottlogic.datahelix.generator.core.violations.filters.ViolationFilter;
 import com.scottlogic.deg.orchestrator.guice.AllModule;
 
 import java.util.List;

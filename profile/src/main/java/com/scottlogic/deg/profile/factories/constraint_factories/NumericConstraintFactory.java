@@ -20,7 +20,7 @@ package com.scottlogic.deg.profile.factories.constraint_factories;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.NumericGranularity;
 import com.scottlogic.datahelix.generator.common.util.NumberUtils;
-import com.scottlogic.deg.generator.profile.constraints.atomic.*;
+import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.*;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.GranularToConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.LongerThanConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.OfLengthConstraintDTO;

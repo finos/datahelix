@@ -20,7 +20,7 @@ import com.scottlogic.datahelix.generator.common.ValidationException;
 import com.scottlogic.datahelix.generator.common.util.NumberUtils;
 
 import com.scottlogic.datahelix.generator.common.util.defaults.NumericDefaults;
-import com.scottlogic.datahelix.generator.common.utils.RandomNumberGenerator;
+import com.scottlogic.datahelix.generator.core.utils.RandomNumberGenerator;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

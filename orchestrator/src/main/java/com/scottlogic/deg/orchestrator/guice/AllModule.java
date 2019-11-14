@@ -17,7 +17,7 @@
 package com.scottlogic.deg.orchestrator.guice;
 
 import com.google.inject.AbstractModule;
-import com.scottlogic.deg.generator.guice.GeneratorModule;
+import com.scottlogic.datahelix.generator.core.guice.GeneratorModule;
 import com.scottlogic.deg.output.guice.OutputModule;
 import com.scottlogic.deg.profile.guice.ProfileModule;
 

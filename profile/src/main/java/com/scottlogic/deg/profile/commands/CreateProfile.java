@@ -17,7 +17,7 @@
 package com.scottlogic.deg.profile.commands;
 
 import com.scottlogic.datahelix.generator.common.commands.Command;
-import com.scottlogic.deg.generator.profile.Profile;
+import com.scottlogic.datahelix.generator.core.profile.Profile;
 import com.scottlogic.deg.profile.dtos.ProfileDTO;
 
 public class CreateProfile extends Command<Profile>

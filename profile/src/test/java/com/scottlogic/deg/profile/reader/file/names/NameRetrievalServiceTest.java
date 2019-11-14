@@ -17,7 +17,7 @@
 package com.scottlogic.deg.profile.reader.file.names;
 
 
-import com.scottlogic.deg.generator.profile.constraints.atomic.NameConstraintTypes;
+import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.NameConstraintTypes;
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.deg.profile.services.NameRetrievalService;
 import org.junit.jupiter.api.Test;

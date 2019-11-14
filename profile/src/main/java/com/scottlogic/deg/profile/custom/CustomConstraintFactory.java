@@ -21,7 +21,7 @@ import com.scottlogic.datahelix.generator.common.ValidationException;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.deg.custom.CustomGenerator;
 import com.scottlogic.deg.custom.CustomGeneratorList;
-import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
+import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.AtomicConstraint;
 
 import java.util.List;
 

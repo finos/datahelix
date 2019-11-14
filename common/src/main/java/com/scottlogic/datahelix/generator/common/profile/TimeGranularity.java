@@ -18,7 +18,7 @@ package com.scottlogic.datahelix.generator.common.profile;
 
 import com.scottlogic.datahelix.generator.common.ValidationException;
 import com.scottlogic.datahelix.generator.common.util.Defaults;
-import com.scottlogic.datahelix.generator.common.utils.RandomNumberGenerator;
+import com.scottlogic.datahelix.generator.core.utils.RandomNumberGenerator;
 
 import java.time.Duration;
 import java.time.LocalTime;

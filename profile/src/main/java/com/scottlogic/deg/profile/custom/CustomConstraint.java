@@ -20,9 +20,9 @@ import com.scottlogic.datahelix.generator.common.ValidationException;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.FieldType;
 import com.scottlogic.deg.custom.CustomGenerator;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
-import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
-import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
+import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
+import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
+import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.AtomicConstraint;
 
 public class CustomConstraint implements AtomicConstraint {
     private final Field field;

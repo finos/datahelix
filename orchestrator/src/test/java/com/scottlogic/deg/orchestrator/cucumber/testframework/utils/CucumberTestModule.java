@@ -17,11 +17,11 @@
 package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 
 import com.google.inject.AbstractModule;
-import com.scottlogic.deg.generator.generation.AbstractDataGeneratorMonitor;
-import com.scottlogic.deg.generator.generation.DataGenerator;
-import com.scottlogic.deg.generator.generation.GenerationConfigSource;
-import com.scottlogic.deg.generator.generation.NoopDataGeneratorMonitor;
-import com.scottlogic.deg.generator.validators.ErrorReporter;
+import com.scottlogic.datahelix.generator.core.generation.AbstractDataGeneratorMonitor;
+import com.scottlogic.datahelix.generator.core.generation.DataGenerator;
+import com.scottlogic.datahelix.generator.core.generation.GenerationConfigSource;
+import com.scottlogic.datahelix.generator.core.generation.NoopDataGeneratorMonitor;
+import com.scottlogic.datahelix.generator.core.validators.ErrorReporter;
 import com.scottlogic.deg.orchestrator.violate.manifest.ManifestWriter;
 import com.scottlogic.deg.output.outputtarget.OutputTargetFactory;
 import com.scottlogic.deg.output.outputtarget.SingleDatasetOutputTarget;

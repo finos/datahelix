@@ -19,7 +19,7 @@ package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 import com.google.inject.Inject;
 import com.scottlogic.datahelix.generator.common.commands.CommandBus;
 import com.scottlogic.datahelix.generator.common.util.FileUtils;
-import com.scottlogic.deg.generator.profile.Profile;
+import com.scottlogic.datahelix.generator.core.profile.Profile;
 import com.scottlogic.deg.profile.dtos.ProfileDTO;
 import com.scottlogic.deg.profile.dtos.RuleDTO;
 import com.scottlogic.deg.profile.validators.ConfigValidator;

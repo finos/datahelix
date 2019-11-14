@@ -19,7 +19,7 @@ package com.scottlogic.deg.profile.validators.profile;
 import com.google.inject.Inject;
 import com.scottlogic.datahelix.generator.common.validators.ValidationResult;
 import com.scottlogic.datahelix.generator.common.validators.Validator;
-import com.scottlogic.deg.generator.generation.GenerationConfigSource;
+import com.scottlogic.datahelix.generator.core.generation.GenerationConfigSource;
 import com.scottlogic.deg.profile.dtos.FieldDTO;
 import com.scottlogic.deg.profile.dtos.ProfileDTO;
 import com.scottlogic.deg.profile.dtos.RuleDTO;
@@ -34,7 +34,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.scottlogic.deg.generator.config.detail.CombinationStrategyType.MINIMAL;
+import static com.scottlogic.datahelix.generator.core.config.detail.CombinationStrategyType.MINIMAL;
 
 public class ProfileValidator implements Validator<ProfileDTO>
 {
