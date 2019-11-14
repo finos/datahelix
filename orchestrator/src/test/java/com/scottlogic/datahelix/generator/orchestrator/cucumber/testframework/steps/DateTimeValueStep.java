@@ -19,7 +19,7 @@ package com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.s
 import com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.utils.CucumberTestHelper;
 import com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.utils.CucumberTestState;
 import com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.utils.GeneratorTestUtilities;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintType;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;

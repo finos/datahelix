@@ -18,16 +18,16 @@ package com.scottlogic.datahelix.generator.orchestrator.validator;
 
 import com.scottlogic.datahelix.generator.common.util.FileUtils;
 import com.scottlogic.datahelix.generator.custom.CustomGeneratorList;
-import com.scottlogic.deg.profile.custom.CustomConstraintFactory;
-import com.scottlogic.deg.profile.reader.FileReader;
-import com.scottlogic.deg.profile.reader.JsonProfileReader;
-import com.scottlogic.deg.profile.reader.ProfileCommandBus;
-import com.scottlogic.deg.profile.services.ConstraintService;
-import com.scottlogic.deg.profile.services.FieldService;
-import com.scottlogic.deg.profile.services.RuleService;
-import com.scottlogic.deg.profile.validators.ConfigValidator;
-import com.scottlogic.deg.profile.validators.CreateProfileValidator;
-import com.scottlogic.deg.profile.validators.profile.ProfileValidator;
+import com.scottlogic.datahelix.generator.profile.custom.CustomConstraintFactory;
+import com.scottlogic.datahelix.generator.profile.reader.FileReader;
+import com.scottlogic.datahelix.generator.profile.reader.JsonProfileReader;
+import com.scottlogic.datahelix.generator.profile.reader.ProfileCommandBus;
+import com.scottlogic.datahelix.generator.profile.services.ConstraintService;
+import com.scottlogic.datahelix.generator.profile.services.FieldService;
+import com.scottlogic.datahelix.generator.profile.services.RuleService;
+import com.scottlogic.datahelix.generator.profile.validators.ConfigValidator;
+import com.scottlogic.datahelix.generator.profile.validators.CreateProfileValidator;
+import com.scottlogic.datahelix.generator.profile.validators.profile.ProfileValidator;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 

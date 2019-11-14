@@ -18,7 +18,7 @@ package com.scottlogic.datahelix.generator.orchestrator.validator;
 
 import com.scottlogic.datahelix.generator.common.ValidationException;
 import com.scottlogic.datahelix.generator.common.util.FileUtils;
-import com.scottlogic.deg.profile.validators.ConfigValidator;
+import com.scottlogic.datahelix.generator.profile.validators.ConfigValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;

@@ -17,7 +17,7 @@
 package com.scottlogic.datahelix.generator.orchestrator.violate;
 
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.*;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintType;
 
 public class AtomicConstraintTypeMapper {
     public Class toConstraintClass(ConstraintType type) {

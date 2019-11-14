@@ -24,7 +24,7 @@ import com.scottlogic.datahelix.generator.core.config.detail.VisualiserLevel;
 import com.scottlogic.datahelix.generator.orchestrator.guice.AllConfigSource;
 import com.scottlogic.datahelix.generator.orchestrator.violate.ViolateConfigSource;
 import com.scottlogic.datahelix.generator.output.guice.OutputFormat;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintType;
 
 import java.io.File;
 import java.nio.file.Path;

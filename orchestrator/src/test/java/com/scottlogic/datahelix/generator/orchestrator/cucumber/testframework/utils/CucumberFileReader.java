@@ -16,7 +16,7 @@
 package com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.utils;
 
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
-import com.scottlogic.deg.profile.reader.FileReader;
+import com.scottlogic.datahelix.generator.profile.reader.FileReader;
 
 import javax.inject.Inject;
 

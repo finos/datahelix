@@ -26,7 +26,7 @@ import com.scottlogic.datahelix.generator.orchestrator.violate.violator.ProfileV
 import com.scottlogic.datahelix.generator.output.outputtarget.OutputTargetFactory;
 import com.scottlogic.datahelix.generator.output.outputtarget.SingleDatasetOutputTarget;
 import com.scottlogic.datahelix.generator.output.writer.DataSetWriter;
-import com.scottlogic.deg.profile.reader.ProfileReader;
+import com.scottlogic.datahelix.generator.profile.reader.ProfileReader;
 
 import java.io.IOException;
 import java.text.DecimalFormat;

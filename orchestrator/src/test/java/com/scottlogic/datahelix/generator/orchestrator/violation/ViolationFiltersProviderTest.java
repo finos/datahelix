@@ -23,7 +23,7 @@ import com.scottlogic.datahelix.generator.core.violations.filters.ViolationFilte
 import com.scottlogic.datahelix.generator.orchestrator.violate.AtomicConstraintTypeMapper;
 import com.scottlogic.datahelix.generator.orchestrator.violate.ViolateConfigSource;
 import com.scottlogic.datahelix.generator.orchestrator.violate.ViolationFiltersProvider;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintType;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

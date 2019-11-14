@@ -20,11 +20,11 @@ import com.google.inject.Inject;
 import com.scottlogic.datahelix.generator.common.commands.CommandBus;
 import com.scottlogic.datahelix.generator.common.util.FileUtils;
 import com.scottlogic.datahelix.generator.core.profile.Profile;
-import com.scottlogic.deg.profile.dtos.ProfileDTO;
-import com.scottlogic.deg.profile.dtos.RuleDTO;
-import com.scottlogic.deg.profile.validators.ConfigValidator;
-import com.scottlogic.deg.profile.serialisation.ProfileSerialiser;
-import com.scottlogic.deg.profile.reader.JsonProfileReader;
+import com.scottlogic.datahelix.generator.profile.dtos.ProfileDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.RuleDTO;
+import com.scottlogic.datahelix.generator.profile.validators.ConfigValidator;
+import com.scottlogic.datahelix.generator.profile.serialisation.ProfileSerialiser;
+import com.scottlogic.datahelix.generator.profile.reader.JsonProfileReader;
 
 import java.io.IOException;
 import java.util.ArrayList;

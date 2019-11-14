@@ -24,7 +24,7 @@ import com.scottlogic.datahelix.generator.common.ValidationException;
 import com.scottlogic.datahelix.generator.orchestrator.generate.GenerateExecute;
 import com.scottlogic.datahelix.generator.orchestrator.violate.ViolateExecute;
 import com.scottlogic.datahelix.generator.orchestrator.violate.ViolateModule;
-import com.scottlogic.deg.profile.dtos.FieldDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;
 import org.junit.Assert;
 
 import java.io.IOException;

@@ -17,7 +17,7 @@
 package com.scottlogic.datahelix.generator.orchestrator.violate;
 
 import com.scottlogic.datahelix.generator.orchestrator.guice.AllConfigSource;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintType;
 
 import java.util.List;
 

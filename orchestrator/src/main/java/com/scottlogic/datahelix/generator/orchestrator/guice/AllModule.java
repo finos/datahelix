@@ -19,7 +19,7 @@ package com.scottlogic.datahelix.generator.orchestrator.guice;
 import com.google.inject.AbstractModule;
 import com.scottlogic.datahelix.generator.core.guice.GeneratorModule;
 import com.scottlogic.datahelix.generator.output.guice.OutputModule;
-import com.scottlogic.deg.profile.guice.ProfileModule;
+import com.scottlogic.datahelix.generator.profile.guice.ProfileModule;
 
 public class AllModule extends AbstractModule {
     private AllConfigSource configSource;

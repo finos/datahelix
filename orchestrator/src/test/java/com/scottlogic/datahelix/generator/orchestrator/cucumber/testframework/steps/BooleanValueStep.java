@@ -17,7 +17,7 @@
 package com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.steps;
 
 import com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.utils.CucumberTestState;
-import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintType;
 import cucumber.api.java.en.When;
 
 public class BooleanValueStep {

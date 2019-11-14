@@ -18,7 +18,7 @@ package com.scottlogic.datahelix.generator.orchestrator.guice;
 
 import com.scottlogic.datahelix.generator.core.generation.GenerationConfigSource;
 import com.scottlogic.datahelix.generator.output.guice.OutputConfigSource;
-import com.scottlogic.deg.profile.guice.ProfileConfigSource;
+import com.scottlogic.datahelix.generator.profile.guice.ProfileConfigSource;
 
 public interface AllConfigSource extends GenerationConfigSource, ProfileConfigSource, OutputConfigSource {
 }

@@ -25,9 +25,9 @@ import com.scottlogic.datahelix.generator.core.validators.ErrorReporter;
 import com.scottlogic.datahelix.generator.orchestrator.violate.manifest.ManifestWriter;
 import com.scottlogic.datahelix.generator.output.outputtarget.OutputTargetFactory;
 import com.scottlogic.datahelix.generator.output.outputtarget.SingleDatasetOutputTarget;
-import com.scottlogic.deg.profile.reader.FileReader;
-import com.scottlogic.deg.profile.reader.ProfileReader;
-import com.scottlogic.deg.profile.validators.ConfigValidator;
+import com.scottlogic.datahelix.generator.profile.reader.FileReader;
+import com.scottlogic.datahelix.generator.profile.reader.ProfileReader;
+import com.scottlogic.datahelix.generator.profile.validators.ConfigValidator;
 
 import java.util.stream.Stream;
 
