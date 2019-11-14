@@ -79,16 +79,25 @@ public class TimeGranularity implements Granularity<LocalTime> {
     }
 
     @Override
-    public LocalTime trimToGranularity(LocalTime value) {
-        return value.truncatedTo(granularity);
-    }
-
-    @Override
     public LocalTime getPrevious(LocalTime value, int amount) {
         if (!isCorrectScale(value)) {
             return trimToGranularity(value);
         }
         return value.minus(granularity.getDuration().multipliedBy(amount));
+    }
+
+    @Override
+    public LocalTime getPrevious(LocalTime value) {
+        value = value.truncatedTo(granularity);
+        if (value.equals(LocalTime.MIN)) {
+            return LocalTime.MIN;
+        }
+        return getPrevious(value, 1);
+    }
+
+    @Override
+    public LocalTime trimToGranularity(LocalTime value) {
+        return value.truncatedTo(granularity);
     }
 
     @Override
