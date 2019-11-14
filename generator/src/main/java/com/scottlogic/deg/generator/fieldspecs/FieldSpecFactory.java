@@ -17,13 +17,14 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
 import com.scottlogic.deg.common.profile.FieldType;
+import com.scottlogic.deg.common.util.Defaults;
 import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.restrictions.TypedRestrictions;
 import com.scottlogic.deg.generator.restrictions.bool.BooleanRestrictions;
 
 import java.util.Collections;
-import java.util.function.Function;
+import java.util.function.Predicate;
 
 import static com.scottlogic.deg.generator.restrictions.string.StringRestrictionsFactory.forMaxLength;
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDefaultDateTimeRestrictions;
@@ -31,6 +32,10 @@ import static com.scottlogic.deg.generator.restrictions.linear.LinearRestriction
 
 public class FieldSpecFactory {
     private static final NullOnlyFieldSpec NULL_ONLY_FIELD_SPEC = new NullOnlyFieldSpec();
+
+    private FieldSpecFactory() {
+        throw new IllegalArgumentException("Should not instantiate factory");
+    }
 
     public static WhitelistFieldSpec fromList(DistributedList<Object> whitelist) {
         return new WhitelistFieldSpec(whitelist, true);
@@ -47,7 +52,7 @@ public class FieldSpecFactory {
             case DATETIME:
                 return new RestrictionsFieldSpec(createDefaultDateTimeRestrictions(), true, Collections.emptySet());
             case STRING:
-                return new RestrictionsFieldSpec(forMaxLength(1000), true, Collections.emptySet());
+                return new RestrictionsFieldSpec(forMaxLength(Defaults.MAX_STRING_LENGTH), true, Collections.emptySet());
             case BOOLEAN:
                 return new RestrictionsFieldSpec(new BooleanRestrictions(), true, Collections.emptySet());
             default:
@@ -59,7 +64,7 @@ public class FieldSpecFactory {
         return NULL_ONLY_FIELD_SPEC;
     }
 
-    public static GeneratorFieldSpec fromGenerator(FieldValueSource fieldValueSource, Function<Object, Boolean> setValueAcceptFunction){
+    public static GeneratorFieldSpec fromGenerator(FieldValueSource fieldValueSource, Predicate<Object> setValueAcceptFunction){
         return new GeneratorFieldSpec(fieldValueSource, setValueAcceptFunction, true);
     }
 }
