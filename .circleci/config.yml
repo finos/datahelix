@@ -35,7 +35,7 @@ jobs:
     steps:
       - checkout
       # If changing build tools be sure to update BuildAndRun.md in docs
-      - run: gradle fatJar :output:test :profile:test :generator:test :common:test :orchestrator:test
+      - run: gradle fatJar :output:test :profile:test :core:test :common:test :orchestrator:test
       - run:
           name: Save test results
           command: |
