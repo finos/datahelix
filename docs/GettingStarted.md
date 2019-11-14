@@ -170,12 +170,14 @@ If the generation is taking too long, you can halt the command via <kbd>Ctrl</kb
 
 ## Data types
 
-The generator supports four different data types:
+The generator supports several different data types including:
 
 -   **integer** - any integer number between -1E20 and 1E20 inclusive
 -   **decimal** - any real number between -1E20 and 1E20 inclusive, with an optional granularity / precision (a power of ten between 1 and 1E-20) that can be defined via a `granularTo` constraint.
 -   **string** - sequences of unicode characters up to a maximum length of 1000 characters
 -   **datetime** - specific moments in time, with values in the range 0001-01-01T00:00:00.000 to 9999-12-31T23:59:59.999, with an optional granularity / precision (from a maximum of one year to a minimum of one millisecond) that can be defined via a `granularTo` constraint.
+
+A full list of the supported data types can be found in the [user guide](https://github.com/finos/datahelix/blob/master/docs/GettingStarted.md#Data-Types).
 
 We'll expand the example profile to add a new `age` field, a not-null integer in the range 1-99:
 
@@ -183,7 +185,7 @@ We'll expand the example profile to add a new `age` field, a not-null integer in
 {
     "schemaVersion": "0.17",
     "fields": [
-        { "name": "firstName", "type": "string" }, 
+        { "name": "firstName", "type": "string" },
         { "name": "age", "type": "integer"  }
     ],
     "rules": [
@@ -230,7 +232,7 @@ Finally, we'll add a field for National Insurance number. In this case, the cons
 {
     "schemaVersion": "0.17",
     "fields": [
-        { "name": "firstName", "type": "string" }, 
+        { "name": "firstName", "type": "string" },
         { "name": "age", "type": "integer"  },
         { "name": "nationalInsurance", "type": "string"  }
     ],
@@ -318,7 +320,7 @@ You can find out more about the various constraints the generator supports in th
 
 ## Generation modes
 
-The generator supports a number of different generation modes:
+The generator supports two different generation modes:
 
 -   **random** - _(default)_ generates random data that abides by the given set of constraints, with the number of generated rows limited via the `--max-rows` option.
 -   **full** - generates all the data that abides by the given set of constraints, with the number of generated rows limited via the `--max-rows` option.
@@ -327,9 +329,9 @@ The mode is specified via the `--generation-type` option.
 
 ## Next steps
 
-That's the end of our getting started guide. Hopefully it has given you a good understanding of what the DataHelix generator is capable of. 
+That's the end of our getting started guide. Hopefully it has given you a good understanding of what the DataHelix generator is capable of.
 
-* If you'd like to find out more about the various constraints the tool supports, the [User Guide](UserGuide.md) is a good next step. 
+* If you'd like to find out more about the various constraints the tool supports, the [User Guide](UserGuide.md) is a good next step.
 
 * You might also be interested in the [examples folder](https://github.com/finos/datahelix/tree/master/examples), which illustrates various features of the generator.
 
