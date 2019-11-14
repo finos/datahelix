@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.custom;
+package com.scottlogic.datahelix.generator.custom;
 
 public enum CustomGeneratorFieldType {
     NUMERIC,

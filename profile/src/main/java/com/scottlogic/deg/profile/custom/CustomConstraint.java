@@ -19,7 +19,7 @@ package com.scottlogic.deg.profile.custom;
 import com.scottlogic.datahelix.generator.common.ValidationException;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.FieldType;
-import com.scottlogic.deg.custom.CustomGenerator;
+import com.scottlogic.datahelix.generator.custom.CustomGenerator;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.AtomicConstraint;

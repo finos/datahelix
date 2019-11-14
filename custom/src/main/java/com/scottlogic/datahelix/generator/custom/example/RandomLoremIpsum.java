@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.custom.example;
+package com.scottlogic.datahelix.generator.custom.example;
 
 import java.util.Random;
 

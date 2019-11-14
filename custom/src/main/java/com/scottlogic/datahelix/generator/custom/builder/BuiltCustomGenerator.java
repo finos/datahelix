@@ -15,16 +15,17 @@
  */
 
 
-package com.scottlogic.deg.custom.builder;
+package com.scottlogic.datahelix.generator.custom.builder;
 
-import com.scottlogic.deg.custom.CustomGenerator;
-import com.scottlogic.deg.custom.CustomGeneratorFieldType;
+import com.scottlogic.datahelix.generator.custom.CustomGenerator;
+import com.scottlogic.datahelix.generator.custom.CustomGeneratorFieldType;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public class BuiltCustomGenerator<T> implements CustomGenerator<T> {
+public class BuiltCustomGenerator<T> implements CustomGenerator<T>
+{
 
     private final CustomGeneratorFieldType fieldType;
     private final String name;

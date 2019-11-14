@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.custom.builder;
+package com.scottlogic.datahelix.generator.custom.builder;
 
-import com.scottlogic.deg.custom.CustomGenerator;
-import com.scottlogic.deg.custom.CustomGeneratorFieldType;
+import com.scottlogic.datahelix.generator.custom.CustomGenerator;
+import com.scottlogic.datahelix.generator.custom.CustomGeneratorFieldType;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;

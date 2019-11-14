@@ -14,17 +14,10 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.custom;
+package com.scottlogic.datahelix.generator.custom.builder;
 
-import com.scottlogic.deg.custom.example.LoremIpsumGeneratorCreator;
-
-import java.util.Arrays;
-import java.util.List;
-
-public class CustomGeneratorList {
-    public List<CustomGenerator> get() {
-        return Arrays.asList(
-            LoremIpsumGeneratorCreator.create()
-        );
+public class CustomGeneratorNotImplementedException extends RuntimeException{
+    public CustomGeneratorNotImplementedException(String message){
+        super(message);
     }
 }

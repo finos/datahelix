@@ -22,7 +22,7 @@ import com.scottlogic.datahelix.generator.common.profile.DateTimeGranularity;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.FieldType;
 import com.scottlogic.datahelix.generator.common.profile.NumericGranularity;
-import com.scottlogic.deg.custom.CustomGeneratorList;
+import com.scottlogic.datahelix.generator.custom.CustomGeneratorList;
 import com.scottlogic.datahelix.generator.common.util.FileUtils;
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.core.profile.Profile;

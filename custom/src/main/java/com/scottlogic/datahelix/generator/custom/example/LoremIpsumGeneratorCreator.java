@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.custom.example;
+package com.scottlogic.datahelix.generator.custom.example;
 
-import com.scottlogic.deg.custom.CustomGenerator;
-import com.scottlogic.deg.custom.builder.CustomGeneratorBuilder;
+import com.scottlogic.datahelix.generator.custom.builder.CustomGeneratorBuilder;
+import com.scottlogic.datahelix.generator.custom.CustomGenerator;
 
 import java.util.stream.Stream;
 
