@@ -17,10 +17,6 @@
         {
             "constraints": [
                 {
-                    "field": "a",
-                    "afterOrAt": "00:00:00.000"
-                },
-                {
                     "if": {
                         "field": "a",
                         "after": "12:00:00"
