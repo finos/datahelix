@@ -21,8 +21,8 @@ import com.scottlogic.deg.generator.profile.constraints.atomic.InSetConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsNullConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 
 import java.util.*;
 import java.util.stream.Collectors;

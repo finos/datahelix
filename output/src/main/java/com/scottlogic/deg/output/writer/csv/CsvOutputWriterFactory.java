@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.output.writer.csv;
 
-import com.scottlogic.deg.common.profile.Fields;
+import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.deg.output.writer.DataSetWriter;
 import com.scottlogic.deg.output.writer.OutputWriterFactory;
 

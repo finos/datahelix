@@ -15,7 +15,7 @@
  */
 package com.scottlogic.deg.generator.generation.string.generators;
 
-import com.scottlogic.deg.generator.utils.FinancialCodeUtils;
+import com.scottlogic.datahelix.generator.common.utils.FinancialCodeUtils;
 
 public class ChecksumStringGeneratorFactory {
 

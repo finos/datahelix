@@ -16,12 +16,12 @@
 
 package com.scottlogic.deg.generator.decisiontree;
 
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.Fields;
-import com.scottlogic.deg.common.util.NumberUtils;
+import com.scottlogic.datahelix.generator.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.profile.Fields;
+import com.scottlogic.datahelix.generator.common.util.NumberUtils;
 import com.scottlogic.deg.generator.decisiontree.testutils.*;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
+import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
@@ -33,7 +33,7 @@ import com.scottlogic.deg.generator.profile.constraints.grammatical.AndConstrain
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.NegatedGrammaticalConstraint;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.OrConstraint;
-import com.scottlogic.deg.generator.utils.SetUtils;
+import com.scottlogic.datahelix.generator.common.utils.SetUtils;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
 import org.junit.Assert;
@@ -46,7 +46,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.hamcrest.CoreMatchers.*;

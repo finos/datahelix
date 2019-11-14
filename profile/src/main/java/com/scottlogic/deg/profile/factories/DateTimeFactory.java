@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.profile.factories;
 
-import com.scottlogic.deg.common.ValidationException;
+import com.scottlogic.datahelix.generator.common.ValidationException;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;

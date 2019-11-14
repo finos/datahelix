@@ -17,8 +17,8 @@
 package com.scottlogic.deg.generator.generation.string;
 
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
-import com.scottlogic.deg.generator.utils.FinancialCodeUtils;
-import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
+import com.scottlogic.datahelix.generator.common.utils.FinancialCodeUtils;
+import com.scottlogic.datahelix.generator.common.utils.JavaUtilRandomNumberGenerator;
 import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;

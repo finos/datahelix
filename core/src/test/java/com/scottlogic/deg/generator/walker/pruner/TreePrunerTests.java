@@ -16,14 +16,14 @@
 
 package com.scottlogic.deg.generator.walker.pruner;
 
-import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecHelper;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.profile.constraints.atomic.LongerThanConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.ShorterThanConstraint;
@@ -35,7 +35,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
 import static com.scottlogic.deg.generator.builders.TestConstraintNodeBuilder.constraintNode;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;

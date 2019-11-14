@@ -15,9 +15,9 @@
  */
 package com.scottlogic.deg.profile.factories.constraint_factories;
 
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.HelixTime;
-import com.scottlogic.deg.common.profile.TimeGranularity;
+import com.scottlogic.datahelix.generator.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.profile.HelixTime;
+import com.scottlogic.datahelix.generator.common.profile.TimeGranularity;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.GranularToConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.LongerThanConstraintDTO;

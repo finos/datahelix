@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.restrictions.linear;
 
-import com.scottlogic.deg.common.profile.Granularity;
+import com.scottlogic.datahelix.generator.common.profile.Granularity;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.LinearFieldValueSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.NullOnlySource;

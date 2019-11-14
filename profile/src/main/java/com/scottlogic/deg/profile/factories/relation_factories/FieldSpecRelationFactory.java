@@ -16,15 +16,17 @@
 
 package com.scottlogic.deg.profile.factories.relation_factories;
 
-import com.scottlogic.deg.common.profile.*;
-import com.scottlogic.deg.common.util.defaults.DateTimeDefaults;
-import com.scottlogic.deg.common.util.defaults.NumericDefaults;
+import com.scottlogic.datahelix.generator.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.profile.Fields;
+import com.scottlogic.datahelix.generator.common.profile.Granularity;
+import com.scottlogic.datahelix.generator.common.util.defaults.DateTimeDefaults;
+import com.scottlogic.datahelix.generator.common.util.defaults.NumericDefaults;
 import com.scottlogic.deg.generator.fieldspecs.relations.*;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
 import com.scottlogic.deg.profile.dtos.constraints.relations.EqualToFieldConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.relations.RelationalConstraintDTO;
 
-import static com.scottlogic.deg.common.util.GranularityUtils.readGranularity;
+import static com.scottlogic.datahelix.generator.common.util.GranularityUtils.readGranularity;
 
 public abstract class FieldSpecRelationFactory
 {

@@ -16,10 +16,11 @@
 
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.common.profile.NumericGranularity;
+import com.scottlogic.datahelix.generator.common.profile.FieldType;
+import com.scottlogic.datahelix.generator.common.profile.NumericGranularity;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.NullAppendingValueSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.NullOnlySource;
@@ -35,10 +36,9 @@ import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static com.scottlogic.deg.common.profile.FieldType.*;
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createNumericRestrictions;
-import static com.scottlogic.deg.generator.utils.GeneratorDefaults.NUMERIC_MAX_LIMIT;
-import static com.scottlogic.deg.generator.utils.GeneratorDefaults.NUMERIC_MIN_LIMIT;
+import static com.scottlogic.datahelix.generator.common.utils.GeneratorDefaults.NUMERIC_MAX_LIMIT;
+import static com.scottlogic.datahelix.generator.common.utils.GeneratorDefaults.NUMERIC_MIN_LIMIT;
 
 public class FieldSpecGetFieldValueSourceTests {
 
@@ -54,7 +54,7 @@ public class FieldSpecGetFieldValueSourceTests {
 
     @Test
     public void shouldReturnNullSourceLastWithNoRestrictions() {
-        FieldSpec fieldSpecWithNoRestrictions = FieldSpecFactory.fromType(STRING);
+        FieldSpec fieldSpecWithNoRestrictions = FieldSpecFactory.fromType(FieldType.STRING);
 
         FieldValueSource sources = fieldSpecWithNoRestrictions.getFieldValueSource();
 

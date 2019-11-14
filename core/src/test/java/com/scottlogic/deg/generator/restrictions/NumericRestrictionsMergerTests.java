@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.common.profile.NumericGranularity;
+import com.scottlogic.datahelix.generator.common.profile.NumericGranularity;
 import com.scottlogic.deg.generator.restrictions.linear.*;
 
 import org.junit.Assert;
@@ -25,8 +25,8 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-import static com.scottlogic.deg.generator.utils.GeneratorDefaults.NUMERIC_MAX_LIMIT;
-import static com.scottlogic.deg.generator.utils.GeneratorDefaults.NUMERIC_MIN_LIMIT;
+import static com.scottlogic.datahelix.generator.common.utils.GeneratorDefaults.NUMERIC_MAX_LIMIT;
+import static com.scottlogic.datahelix.generator.common.utils.GeneratorDefaults.NUMERIC_MIN_LIMIT;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.core.Is.is;

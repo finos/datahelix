@@ -15,7 +15,7 @@
  */
 
 package com.scottlogic.deg.generator.restrictions;
-import com.scottlogic.deg.common.profile.DateTimeGranularity;
+import com.scottlogic.datahelix.generator.common.profile.DateTimeGranularity;
 import com.scottlogic.deg.generator.restrictions.linear.*;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -24,8 +24,8 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
 
-import static com.scottlogic.deg.common.util.Defaults.ISO_MAX_DATE;
-import static com.scottlogic.deg.generator.utils.GeneratorDefaults.*;
+import static com.scottlogic.datahelix.generator.common.util.Defaults.ISO_MAX_DATE;
+import static com.scottlogic.datahelix.generator.common.utils.GeneratorDefaults.*;
 import static java.time.temporal.ChronoUnit.*;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;

@@ -16,9 +16,9 @@
 
 package com.scottlogic.deg.profile.validators.profile.constraints.atomic;
 
-import com.scottlogic.deg.common.profile.FieldType;
-import com.scottlogic.deg.common.util.Defaults;
-import com.scottlogic.deg.common.validators.ValidationResult;
+import com.scottlogic.datahelix.generator.common.profile.FieldType;
+import com.scottlogic.datahelix.generator.common.util.Defaults;
+import com.scottlogic.datahelix.generator.common.validators.ValidationResult;
 import com.scottlogic.deg.profile.dtos.FieldDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.LongerThanConstraintDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.StringLengthConstraintDTO;

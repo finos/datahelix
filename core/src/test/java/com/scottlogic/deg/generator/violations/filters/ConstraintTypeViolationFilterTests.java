@@ -16,9 +16,9 @@
 
 package com.scottlogic.deg.generator.violations.filters;
 
-import com.scottlogic.deg.common.util.NumberUtils;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
+import com.scottlogic.datahelix.generator.common.util.NumberUtils;
+import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.GreaterThanConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.InSetConstraint;

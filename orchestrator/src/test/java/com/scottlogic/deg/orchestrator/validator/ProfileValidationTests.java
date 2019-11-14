@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.orchestrator.validator;
 
-import com.scottlogic.deg.common.util.FileUtils;
+import com.scottlogic.datahelix.generator.common.util.FileUtils;
 import com.scottlogic.deg.custom.CustomGeneratorList;
 import com.scottlogic.deg.profile.custom.CustomConstraintFactory;
 import com.scottlogic.deg.profile.reader.FileReader;

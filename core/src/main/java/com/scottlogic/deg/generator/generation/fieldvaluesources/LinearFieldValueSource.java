@@ -17,14 +17,14 @@
 package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
-import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
+import com.scottlogic.datahelix.generator.common.utils.RandomNumberGenerator;
 
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.scottlogic.deg.generator.utils.SetUtils.stream;
+import static com.scottlogic.datahelix.generator.common.utils.SetUtils.stream;
 
 public class LinearFieldValueSource<T extends Comparable<T>> implements FieldValueSource {
 

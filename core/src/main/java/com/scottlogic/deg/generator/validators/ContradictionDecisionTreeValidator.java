@@ -17,8 +17,8 @@
 package com.scottlogic.deg.generator.validators;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.Fields;
+import com.scottlogic.datahelix.generator.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.deg.generator.decisiontree.*;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;

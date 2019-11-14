@@ -17,8 +17,8 @@
 package com.scottlogic.deg.orchestrator.violate;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.common.output.GeneratedObject;
-import com.scottlogic.deg.common.util.FileUtils;
+import com.scottlogic.datahelix.generator.common.output.GeneratedObject;
+import com.scottlogic.datahelix.generator.common.util.FileUtils;
 import com.scottlogic.deg.generator.generation.DataGenerator;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.orchestrator.violate.manifest.ManifestWriter;

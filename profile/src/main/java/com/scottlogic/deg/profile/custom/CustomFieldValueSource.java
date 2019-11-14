@@ -18,7 +18,7 @@ package com.scottlogic.deg.profile.custom;
 
 import com.scottlogic.deg.custom.CustomGenerator;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
-import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
+import com.scottlogic.datahelix.generator.common.utils.RandomNumberGenerator;
 
 import java.util.stream.Stream;
 

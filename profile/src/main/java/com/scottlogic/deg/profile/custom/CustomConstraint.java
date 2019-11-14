@@ -16,9 +16,9 @@
 
 package com.scottlogic.deg.profile.custom;
 
-import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.FieldType;
+import com.scottlogic.datahelix.generator.common.ValidationException;
+import com.scottlogic.datahelix.generator.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.profile.FieldType;
 import com.scottlogic.deg.custom.CustomGenerator;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;

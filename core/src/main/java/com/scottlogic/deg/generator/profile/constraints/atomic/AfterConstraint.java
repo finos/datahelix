@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
-import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
@@ -26,7 +26,7 @@ import java.time.OffsetDateTime;
 import java.util.Objects;
 
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createDateTimeRestrictions;
-import static com.scottlogic.deg.generator.utils.GeneratorDefaults.DATETIME_MAX_LIMIT;
+import static com.scottlogic.datahelix.generator.common.utils.GeneratorDefaults.DATETIME_MAX_LIMIT;
 
 public class AfterConstraint implements AtomicConstraint {
     public final Field field;

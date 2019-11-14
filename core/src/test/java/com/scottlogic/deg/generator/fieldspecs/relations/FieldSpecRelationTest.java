@@ -15,10 +15,10 @@
  */
 package com.scottlogic.deg.generator.fieldspecs.relations;
 
-import com.scottlogic.deg.common.profile.DateTimeGranularity;
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.SpecificFieldType;
-import com.scottlogic.deg.common.util.defaults.DateTimeDefaults;
+import com.scottlogic.datahelix.generator.common.profile.DateTimeGranularity;
+import com.scottlogic.datahelix.generator.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.profile.SpecificFieldType;
+import com.scottlogic.datahelix.generator.common.util.defaults.DateTimeDefaults;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.RestrictionsFieldSpec;
@@ -28,9 +28,9 @@ import org.junit.jupiter.api.Test;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
-import static com.scottlogic.deg.common.util.Defaults.ISO_MAX_DATE;
-import static com.scottlogic.deg.common.util.Defaults.ISO_MIN_DATE;
+import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
+import static com.scottlogic.datahelix.generator.common.util.Defaults.ISO_MAX_DATE;
+import static com.scottlogic.datahelix.generator.common.util.Defaults.ISO_MIN_DATE;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static java.time.temporal.ChronoUnit.MILLIS;

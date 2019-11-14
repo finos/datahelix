@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.common.output.GeneratedObject;
+import com.scottlogic.datahelix.generator.common.output.GeneratedObject;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;

@@ -17,8 +17,8 @@
 package com.scottlogic.deg.generator.reducer;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.Fields;
+import com.scottlogic.datahelix.generator.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.fieldspecs.*;

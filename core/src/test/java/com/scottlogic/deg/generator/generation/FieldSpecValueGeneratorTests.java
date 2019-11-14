@@ -16,17 +16,17 @@
 
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.SpecificFieldType;
+import com.scottlogic.datahelix.generator.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.profile.SpecificFieldType;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.WhitelistFieldSpec;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
-import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
+import com.scottlogic.datahelix.generator.common.utils.JavaUtilRandomNumberGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -38,7 +38,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
 import static com.scottlogic.deg.generator.config.detail.DataGenerationType.*;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;

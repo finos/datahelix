@@ -16,8 +16,8 @@
 package com.scottlogic.deg.profile.reader;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.common.commands.CommandBus;
-import com.scottlogic.deg.common.validators.Validator;
+import com.scottlogic.datahelix.generator.common.commands.CommandBus;
+import com.scottlogic.datahelix.generator.common.validators.Validator;
 import com.scottlogic.deg.profile.commands.CreateProfile;
 import com.scottlogic.deg.profile.handlers.CreateProfileHandler;
 import com.scottlogic.deg.profile.services.FieldService;

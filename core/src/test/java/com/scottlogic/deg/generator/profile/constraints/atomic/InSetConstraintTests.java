@@ -16,12 +16,12 @@
 
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
-import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.ValidationException;
+import com.scottlogic.datahelix.generator.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
 
 public class InSetConstraintTests
 {

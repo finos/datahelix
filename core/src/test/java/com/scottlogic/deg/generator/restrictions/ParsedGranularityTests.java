@@ -16,8 +16,8 @@
 
 package com.scottlogic.deg.generator.restrictions;
 
-import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.common.profile.NumericGranularity;
+import com.scottlogic.datahelix.generator.common.ValidationException;
+import com.scottlogic.datahelix.generator.common.profile.NumericGranularity;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

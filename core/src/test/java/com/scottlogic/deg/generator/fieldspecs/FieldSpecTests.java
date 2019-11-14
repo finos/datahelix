@@ -16,8 +16,8 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.common.profile.FieldType;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.profile.FieldType;
+import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.restrictions.*;
 import com.scottlogic.deg.generator.restrictions.linear.*;
@@ -31,9 +31,8 @@ import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Set;
 
-import static com.scottlogic.deg.common.profile.FieldType.*;
 import static com.scottlogic.deg.generator.restrictions.string.StringRestrictionsFactory.forMaxLength;
-import static com.scottlogic.deg.generator.utils.GeneratorDefaults.*;
+import static com.scottlogic.datahelix.generator.common.utils.GeneratorDefaults.*;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertFalse;
@@ -215,7 +214,7 @@ class FieldSpecTests {
 
     @Test
     void fromType_whenDateTime_createDefaultDateTimeRestriction() {
-        RestrictionsFieldSpec actual = FieldSpecFactory.fromType(DATETIME);
+        RestrictionsFieldSpec actual = FieldSpecFactory.fromType(FieldType.DATETIME);
         LinearRestrictions<OffsetDateTime> expected = LinearRestrictionsFactory.createDefaultDateTimeRestrictions();
 
         Assert.assertEquals(expected, actual.getRestrictions());
@@ -223,7 +222,7 @@ class FieldSpecTests {
 
     @Test
     void fromType_whenNumeric_createDefaultNumericRestriction() {
-        RestrictionsFieldSpec actual = FieldSpecFactory.fromType(NUMERIC);
+        RestrictionsFieldSpec actual = FieldSpecFactory.fromType(FieldType.NUMERIC);
         LinearRestrictions<BigDecimal> expected = LinearRestrictionsFactory.createDefaultNumericRestrictions();
 
         Assert.assertEquals(expected, actual.getRestrictions());
@@ -231,7 +230,7 @@ class FieldSpecTests {
 
     @Test
     void fromType_whenString_createDefaultStringRestriction() {
-        RestrictionsFieldSpec actual = FieldSpecFactory.fromType(STRING);
+        RestrictionsFieldSpec actual = FieldSpecFactory.fromType(FieldType.STRING);
         StringRestrictions expected = forMaxLength(1000);
 
         Assert.assertEquals(expected, actual.getRestrictions());

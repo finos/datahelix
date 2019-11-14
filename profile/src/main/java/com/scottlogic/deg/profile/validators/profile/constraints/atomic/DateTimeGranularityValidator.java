@@ -16,8 +16,8 @@
 
 package com.scottlogic.deg.profile.validators.profile.constraints.atomic;
 
-import com.scottlogic.deg.common.validators.ValidationResult;
-import com.scottlogic.deg.common.validators.Validator;
+import com.scottlogic.datahelix.generator.common.validators.ValidationResult;
+import com.scottlogic.datahelix.generator.common.validators.Validator;
 
 import java.time.temporal.ChronoUnit;
 

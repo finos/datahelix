@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.steps.DateValueStep;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.steps.TimeValueStep;
-import com.scottlogic.deg.common.ValidationException;
+import com.scottlogic.datahelix.generator.common.ValidationException;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.steps.DateTimeValueStep;
 import org.junit.Assert;
 

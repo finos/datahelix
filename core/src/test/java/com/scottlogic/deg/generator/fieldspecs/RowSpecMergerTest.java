@@ -16,9 +16,9 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
 import com.google.common.collect.ImmutableMap;
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.Fields;
-import com.scottlogic.deg.common.profile.FieldType;
+import com.scottlogic.datahelix.generator.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.profile.Fields;
+import com.scottlogic.datahelix.generator.common.profile.FieldType;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -26,7 +26,7 @@ import java.util.Collections;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
 
 class RowSpecMergerTest {
     RowSpecMerger rowSpecMerger = new RowSpecMerger(new FieldSpecMerger());

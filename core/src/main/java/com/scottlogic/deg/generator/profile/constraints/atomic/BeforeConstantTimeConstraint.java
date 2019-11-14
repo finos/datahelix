@@ -15,14 +15,14 @@
  */
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.HelixTime;
+import com.scottlogic.datahelix.generator.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.profile.HelixTime;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
-import com.scottlogic.deg.generator.utils.GeneratorDefaults;
+import com.scottlogic.datahelix.generator.common.utils.GeneratorDefaults;
 
 import java.time.LocalTime;
 

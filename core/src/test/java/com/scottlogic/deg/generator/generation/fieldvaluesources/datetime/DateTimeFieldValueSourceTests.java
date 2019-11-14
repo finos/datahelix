@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.generation.fieldvaluesources.datetime;
 
-import com.scottlogic.deg.common.util.Defaults;
+import com.scottlogic.datahelix.generator.common.util.Defaults;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.LinearFieldValueSource;
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
@@ -32,10 +32,10 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static com.scottlogic.deg.common.util.Defaults.ISO_MAX_DATE;
-import static com.scottlogic.deg.common.util.Defaults.ISO_MIN_DATE;
-import static com.scottlogic.deg.generator.utils.GeneratorDefaults.DATETIME_MAX_LIMIT;
-import static com.scottlogic.deg.generator.utils.GeneratorDefaults.DATETIME_MIN_LIMIT;
+import static com.scottlogic.datahelix.generator.common.util.Defaults.ISO_MAX_DATE;
+import static com.scottlogic.datahelix.generator.common.util.Defaults.ISO_MIN_DATE;
+import static com.scottlogic.datahelix.generator.common.utils.GeneratorDefaults.DATETIME_MAX_LIMIT;
+import static com.scottlogic.datahelix.generator.common.utils.GeneratorDefaults.DATETIME_MIN_LIMIT;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;

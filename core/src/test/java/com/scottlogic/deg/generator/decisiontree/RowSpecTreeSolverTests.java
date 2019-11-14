@@ -16,15 +16,15 @@
 
 package com.scottlogic.deg.generator.decisiontree;
 
-import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.deg.generator.profile.Profile;
-import com.scottlogic.deg.common.profile.Fields;
+import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.generator.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.InSetConstraint;
 import com.scottlogic.deg.generator.fieldspecs.*;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
+import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagGenerator;
 import com.scottlogic.deg.generator.reducer.ConstraintReducer;
@@ -42,7 +42,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
 
 class RowSpecTreeSolverTests {
     private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();

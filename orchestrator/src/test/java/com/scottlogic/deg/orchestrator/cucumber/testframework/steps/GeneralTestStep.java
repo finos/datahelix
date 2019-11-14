@@ -22,7 +22,7 @@ import com.scottlogic.deg.generator.config.detail.DataGenerationType;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.utils.*;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintType;
 
-import com.scottlogic.deg.common.ValidationException;
+import com.scottlogic.datahelix.generator.common.ValidationException;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.*;
 import org.hamcrest.Matcher;

@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.builders;
 
-import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.*;
 

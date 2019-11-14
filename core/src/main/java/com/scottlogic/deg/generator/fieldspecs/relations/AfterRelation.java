@@ -16,15 +16,15 @@
 
 package com.scottlogic.deg.generator.fieldspecs.relations;
 
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.Granularity;
-import com.scottlogic.deg.common.util.defaults.LinearDefaults;
+import com.scottlogic.datahelix.generator.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.profile.Granularity;
+import com.scottlogic.datahelix.generator.common.util.defaults.LinearDefaults;
 import com.scottlogic.deg.generator.fieldspecs.*;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 
-import static com.scottlogic.deg.common.util.GranularityUtils.readGranularity;
+import static com.scottlogic.datahelix.generator.common.util.GranularityUtils.readGranularity;
 
 public class AfterRelation<T extends Comparable<T>> implements FieldSpecRelation {
     private final Field main;

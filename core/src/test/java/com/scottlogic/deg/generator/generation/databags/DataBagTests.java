@@ -16,14 +16,14 @@
 
 package com.scottlogic.deg.generator.generation.databags;
 
-import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.deg.generator.builders.DataBagBuilder;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.Matchers.equalTo;
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
 
 class DataBagTests {
     @Test

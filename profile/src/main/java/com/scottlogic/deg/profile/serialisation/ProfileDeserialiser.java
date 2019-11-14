@@ -18,7 +18,7 @@ package com.scottlogic.deg.profile.serialisation;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scottlogic.deg.common.ValidationException;
+import com.scottlogic.datahelix.generator.common.ValidationException;
 import com.scottlogic.deg.profile.dtos.ProfileDTO;
 import com.scottlogic.deg.profile.reader.FileReader;
 

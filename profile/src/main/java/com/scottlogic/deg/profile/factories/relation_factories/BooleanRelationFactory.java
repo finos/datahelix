@@ -17,7 +17,7 @@
 
 package com.scottlogic.deg.profile.factories.relation_factories;
 
-import com.scottlogic.deg.common.profile.Granularity;
+import com.scottlogic.datahelix.generator.common.profile.Granularity;
 
 public class BooleanRelationFactory extends FieldSpecRelationFactory
 {

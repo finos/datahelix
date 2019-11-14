@@ -16,11 +16,11 @@
 
 package com.scottlogic.deg.generator.decisiontree.treepartitioning;
 
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.Fields;
+import com.scottlogic.datahelix.generator.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelation;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
-import com.scottlogic.deg.common.util.FlatMappingSpliterator;
+import com.scottlogic.datahelix.generator.common.util.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder;
 import com.scottlogic.deg.generator.decisiontree.DecisionNode;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;

@@ -16,16 +16,16 @@
 
 package com.scottlogic.deg.generator.restrictions.string;
 
+import com.scottlogic.datahelix.generator.common.util.Defaults;
+
 import java.util.Collections;
 import java.util.regex.Pattern;
-
-import static com.scottlogic.deg.common.util.Defaults.*;
 
 public class StringRestrictionsFactory {
     public static StringRestrictions forStringMatching(Pattern pattern, boolean negate) {
         return new StringRestrictions(
             0,
-            MAX_STRING_LENGTH,
+            Defaults.MAX_STRING_LENGTH,
             negate
                 ? Collections.emptySet()
                 : Collections.singleton(pattern),
@@ -41,7 +41,7 @@ public class StringRestrictionsFactory {
     public static StringRestrictions forStringContaining(Pattern pattern, boolean negate) {
         return new StringRestrictions(
             0,
-            MAX_STRING_LENGTH,
+            Defaults.MAX_STRING_LENGTH,
             Collections.emptySet(),
             negate
                 ? Collections.emptySet()
@@ -57,7 +57,7 @@ public class StringRestrictionsFactory {
     public static StringRestrictions forLength(int length, boolean negate) {
         return new StringRestrictions(
             negate ? 0 : length,
-            negate ? MAX_STRING_LENGTH : length,
+            negate ? Defaults.MAX_STRING_LENGTH : length,
             Collections.emptySet(),
             Collections.emptySet(),
             negate
@@ -71,7 +71,7 @@ public class StringRestrictionsFactory {
     public static StringRestrictions forMinLength(int length){
         return new StringRestrictions(
             length,
-            MAX_STRING_LENGTH,
+            Defaults.MAX_STRING_LENGTH,
             Collections.emptySet(),
             Collections.emptySet(),
             Collections.emptySet(),

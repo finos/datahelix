@@ -17,8 +17,8 @@
 package com.scottlogic.deg.profile.services;
 
 import com.scottlogic.deg.generator.profile.constraints.atomic.NameConstraintTypes;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
+import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import com.scottlogic.deg.profile.reader.CsvInputStreamReader;
 
 import java.io.IOException;

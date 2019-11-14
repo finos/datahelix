@@ -18,8 +18,8 @@
 package com.scottlogic.deg.generator.generation.grouped;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.ValidationException;
+import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.deg.generator.config.detail.CombinationStrategyType;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
@@ -27,13 +27,13 @@ import com.scottlogic.deg.generator.fieldspecs.FieldSpecMerger;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelation;
 import com.scottlogic.deg.generator.generation.FieldSpecValueGenerator;
 import com.scottlogic.deg.generator.generation.databags.*;
-import com.scottlogic.deg.generator.utils.SetUtils;
+import com.scottlogic.datahelix.generator.common.utils.SetUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.scottlogic.deg.common.util.FlatMappingSpliterator.flatMap;
+import static com.scottlogic.datahelix.generator.common.util.FlatMappingSpliterator.flatMap;
 
 public class FieldSpecGroupValueGenerator {
 

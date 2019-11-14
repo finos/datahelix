@@ -16,8 +16,8 @@
 
 package com.scottlogic.deg.generator.generation;
 
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.Fields;
+import com.scottlogic.datahelix.generator.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.deg.generator.builders.TestConstraintNodeBuilder;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNodeBuilder;
@@ -39,7 +39,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
 
 class UpfrontTreePrunerTests {
     private String partialContradictionSubstring = "partially contradictory"; // Implementation Detail

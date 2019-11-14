@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 
-import com.scottlogic.deg.common.ValidationException;
+import com.scottlogic.datahelix.generator.common.ValidationException;
 import com.scottlogic.deg.generator.validators.ErrorReporter;
 
 import java.util.stream.Collectors;

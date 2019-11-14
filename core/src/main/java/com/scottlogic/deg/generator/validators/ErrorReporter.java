@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.validators;
 
-import com.scottlogic.deg.common.ValidationException;
+import com.scottlogic.datahelix.generator.common.ValidationException;
 
 public class ErrorReporter {
 

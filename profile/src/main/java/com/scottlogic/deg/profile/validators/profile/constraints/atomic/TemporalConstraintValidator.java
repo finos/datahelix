@@ -17,15 +17,14 @@
 package com.scottlogic.deg.profile.validators.profile.constraints.atomic;
 
 
-import com.scottlogic.deg.common.profile.FieldType;
-import com.scottlogic.deg.common.profile.HelixTime;
-import com.scottlogic.deg.common.util.defaults.DateTimeDefaults;
-import com.scottlogic.deg.common.validators.ValidationResult;
+import com.scottlogic.datahelix.generator.common.profile.FieldType;
+import com.scottlogic.datahelix.generator.common.profile.HelixTime;
+import com.scottlogic.datahelix.generator.common.util.defaults.DateTimeDefaults;
+import com.scottlogic.datahelix.generator.common.validators.ValidationResult;
 import com.scottlogic.deg.profile.dtos.FieldDTO;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.temporal.TemporalConstraintDTO;
 import com.scottlogic.deg.profile.factories.DateTimeFactory;
 
-import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 

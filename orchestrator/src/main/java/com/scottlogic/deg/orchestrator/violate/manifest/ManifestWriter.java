@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import com.google.inject.Inject;
 import com.scottlogic.deg.orchestrator.violate.ViolatedProfile;
-import com.scottlogic.deg.common.util.FileUtils;
+import com.scottlogic.datahelix.generator.common.util.FileUtils;
 import com.scottlogic.deg.output.OutputPath;
 
 import java.io.IOException;

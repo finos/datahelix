@@ -16,8 +16,8 @@
 
 package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
-import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
+import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.utils.RandomNumberGenerator;
 
 import java.util.Objects;
 import java.util.stream.Stream;

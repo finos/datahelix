@@ -16,9 +16,9 @@
 
 package com.scottlogic.deg.profile.services;
 
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.Fields;
-import com.scottlogic.deg.common.profile.SpecificFieldType;
+import com.scottlogic.datahelix.generator.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.profile.Fields;
+import com.scottlogic.datahelix.generator.common.profile.SpecificFieldType;
 import com.scottlogic.deg.profile.dtos.FieldDTO;
 import com.scottlogic.deg.profile.dtos.RuleDTO;
 import com.scottlogic.deg.profile.dtos.constraints.ConstraintDTO;

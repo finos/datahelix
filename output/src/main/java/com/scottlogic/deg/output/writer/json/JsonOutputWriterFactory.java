@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SequenceWriter;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.scottlogic.deg.common.profile.Fields;
+import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.deg.output.writer.DataSetWriter;
 import com.scottlogic.deg.output.writer.OutputWriterFactory;
 

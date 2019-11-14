@@ -20,7 +20,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
-import com.scottlogic.deg.common.ValidationException;
+import com.scottlogic.datahelix.generator.common.ValidationException;
 import com.scottlogic.deg.orchestrator.generate.GenerateExecute;
 import com.scottlogic.deg.orchestrator.violate.ViolateExecute;
 import com.scottlogic.deg.orchestrator.violate.ViolateModule;

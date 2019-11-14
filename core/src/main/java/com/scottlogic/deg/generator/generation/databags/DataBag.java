@@ -16,10 +16,10 @@
 
 package com.scottlogic.deg.generator.generation.databags;
 
-import com.scottlogic.deg.common.output.GeneratedObject;
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.FieldType;
-import com.scottlogic.deg.common.util.FlatMappingSpliterator;
+import com.scottlogic.datahelix.generator.common.output.GeneratedObject;
+import com.scottlogic.datahelix.generator.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.profile.FieldType;
+import com.scottlogic.datahelix.generator.common.util.FlatMappingSpliterator;
 
 import java.math.BigDecimal;
 import java.util.*;

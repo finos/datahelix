@@ -16,13 +16,13 @@
 
 package com.scottlogic.deg.generator.generation.grouped;
 
-import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecGroup;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelation;
 import com.scottlogic.deg.generator.generation.FieldPair;
-import com.scottlogic.deg.generator.utils.SetUtils;
+import com.scottlogic.datahelix.generator.common.utils.SetUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;

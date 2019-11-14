@@ -16,12 +16,12 @@
 
 package com.scottlogic.deg.generator.builders;
 
-import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.InSetConstraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.IsNullConstraint;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
-import com.scottlogic.deg.generator.utils.SetUtils;
+import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.utils.SetUtils;
 
 public class TestAtomicConstraintBuilder {
     private TestConstraintNodeBuilder testConstraintNodeBuilder;

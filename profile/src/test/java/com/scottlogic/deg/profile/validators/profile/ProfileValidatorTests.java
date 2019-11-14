@@ -15,7 +15,7 @@
  */
 package com.scottlogic.deg.profile.validators.profile;
 
-import com.scottlogic.deg.common.validators.ValidationResult;
+import com.scottlogic.datahelix.generator.common.validators.ValidationResult;
 import com.scottlogic.deg.profile.creation.FieldDTOBuilder;
 import com.scottlogic.deg.profile.dtos.ProfileDTO;
 import org.junit.jupiter.api.Test;

@@ -21,7 +21,7 @@ import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.fieldspecs.RowSpec;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagGenerator;
-import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
+import com.scottlogic.datahelix.generator.common.utils.JavaUtilRandomNumberGenerator;
 import com.scottlogic.deg.generator.walker.DecisionTreeWalker;
 import com.scottlogic.deg.generator.walker.decisionbased.RowSpecTreeSolver;
 

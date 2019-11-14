@@ -16,8 +16,8 @@
 
 package com.scottlogic.deg.orchestrator.violate.violator;
 
-import com.scottlogic.deg.common.profile.UnviolatableConstraintException;
-import com.scottlogic.deg.common.util.NumberUtils;
+import com.scottlogic.datahelix.generator.common.profile.UnviolatableConstraintException;
+import com.scottlogic.datahelix.generator.common.util.NumberUtils;
 import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
@@ -36,7 +36,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.*;
 
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
 import static com.scottlogic.deg.orchestrator.violate.violator.TypeEqualityHelper.assertRuleTypeEquality;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;

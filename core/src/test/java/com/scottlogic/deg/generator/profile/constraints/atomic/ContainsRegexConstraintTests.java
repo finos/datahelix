@@ -16,14 +16,14 @@
 
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
-import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.profile.Field;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.util.regex.Pattern;
 
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
 
 public class ContainsRegexConstraintTests {
 

@@ -17,7 +17,7 @@
 package com.scottlogic.deg.generator.generation;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.common.output.GeneratedObject;
+import com.scottlogic.datahelix.generator.common.output.GeneratedObject;
 
 import java.io.PrintWriter;
 import java.math.BigDecimal;

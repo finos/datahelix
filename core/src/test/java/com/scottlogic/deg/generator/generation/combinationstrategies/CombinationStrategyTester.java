@@ -23,7 +23,7 @@ import org.junit.Assert;
 
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
+import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
 
 class CombinationStrategyTester {
     private CombinationStrategy strategy;

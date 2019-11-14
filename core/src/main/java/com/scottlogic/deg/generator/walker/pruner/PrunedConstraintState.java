@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.walker.pruner;
 
-import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelation;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;

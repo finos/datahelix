@@ -16,17 +16,17 @@
 
 package com.scottlogic.deg.generator.profile.constraints.atomic;
 
-import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.NumericGranularity;
+import com.scottlogic.datahelix.generator.common.ValidationException;
+import com.scottlogic.datahelix.generator.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.profile.NumericGranularity;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 
 import java.util.Objects;
 
-import static com.scottlogic.deg.common.util.Defaults.NUMERIC_MAX;
-import static com.scottlogic.deg.common.util.Defaults.NUMERIC_MIN;
+import static com.scottlogic.datahelix.generator.common.util.Defaults.NUMERIC_MAX;
+import static com.scottlogic.datahelix.generator.common.util.Defaults.NUMERIC_MIN;
 
 public class GranularToNumericConstraint implements AtomicConstraint {
     public final Field field;

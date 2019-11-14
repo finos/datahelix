@@ -17,8 +17,8 @@
 
 package com.scottlogic.deg.profile.factories.relation_factories;
 
-import com.scottlogic.deg.common.profile.DateTimeGranularity;
-import com.scottlogic.deg.common.profile.Granularity;
+import com.scottlogic.datahelix.generator.common.profile.DateTimeGranularity;
+import com.scottlogic.datahelix.generator.common.profile.Granularity;
 
 public class DateTimeRelationFactory extends FieldSpecRelationFactory
 {

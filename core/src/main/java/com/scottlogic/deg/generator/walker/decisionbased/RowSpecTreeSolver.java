@@ -16,8 +16,8 @@
 package com.scottlogic.deg.generator.walker.decisionbased;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.Fields;
+import com.scottlogic.datahelix.generator.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.deg.generator.decisiontree.ConstraintNode;
@@ -35,7 +35,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.scottlogic.deg.common.util.FlatMappingSpliterator.flatMap;
+import static com.scottlogic.datahelix.generator.common.util.FlatMappingSpliterator.flatMap;
 
 public class RowSpecTreeSolver {
 

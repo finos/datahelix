@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.scottlogic.deg.common.util.NumberUtils.coerceToBigDecimal;
+import static com.scottlogic.datahelix.generator.common.util.NumberUtils.coerceToBigDecimal;
 
 public class RowMatcher extends BaseMatcher<Map<String, Object>> {
     private static final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ISO_OFFSET_DATE_TIME;

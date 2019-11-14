@@ -19,7 +19,7 @@ package com.scottlogic.deg.generator.generation.string;
 import com.scottlogic.deg.generator.generation.string.generators.RegexStringGenerator;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.string.StringRestrictionsFactory;
-import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
+import com.scottlogic.datahelix.generator.common.utils.JavaUtilRandomNumberGenerator;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

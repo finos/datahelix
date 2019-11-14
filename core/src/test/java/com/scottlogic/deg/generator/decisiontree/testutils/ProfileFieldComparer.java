@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.decisiontree.testutils;
 
-import com.scottlogic.deg.common.profile.Fields;
+import com.scottlogic.datahelix.generator.common.profile.Fields;
 
 import java.util.Collection;
 import java.util.stream.Collectors;

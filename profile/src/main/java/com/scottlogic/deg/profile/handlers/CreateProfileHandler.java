@@ -17,10 +17,10 @@
 package com.scottlogic.deg.profile.handlers;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.common.commands.CommandHandler;
-import com.scottlogic.deg.common.commands.CommandResult;
-import com.scottlogic.deg.common.profile.Fields;
-import com.scottlogic.deg.common.validators.Validator;
+import com.scottlogic.datahelix.generator.common.commands.CommandHandler;
+import com.scottlogic.datahelix.generator.common.commands.CommandResult;
+import com.scottlogic.datahelix.generator.common.profile.Fields;
+import com.scottlogic.datahelix.generator.common.validators.Validator;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.profile.commands.CreateProfile;

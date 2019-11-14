@@ -21,7 +21,7 @@ import com.scottlogic.deg.generator.generation.string.generators.NoStringsString
 import com.scottlogic.deg.generator.generation.string.generators.RegexStringGenerator;
 import com.scottlogic.deg.generator.generation.string.generators.StringGenerator;
 import com.scottlogic.deg.generator.restrictions.TypedRestrictions;
-import com.scottlogic.deg.generator.utils.SetUtils;
+import com.scottlogic.datahelix.generator.common.utils.SetUtils;
 
 import java.util.*;
 import java.util.function.Function;

@@ -22,7 +22,7 @@ import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import static com.scottlogic.deg.common.util.FlatMappingSpliterator.flatMap;
+import static com.scottlogic.datahelix.generator.common.util.FlatMappingSpliterator.flatMap;
 
 public class ExhaustiveCombinationStrategy implements CombinationStrategy {
 

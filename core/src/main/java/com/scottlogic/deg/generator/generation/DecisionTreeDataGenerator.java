@@ -18,7 +18,7 @@ package com.scottlogic.deg.generator.generation;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.scottlogic.deg.common.output.GeneratedObject;
+import com.scottlogic.datahelix.generator.common.output.GeneratedObject;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.config.detail.VisualiserLevel;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;

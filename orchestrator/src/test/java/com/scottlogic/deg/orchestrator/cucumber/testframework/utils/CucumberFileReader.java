@@ -15,7 +15,7 @@
  */
 package com.scottlogic.deg.orchestrator.cucumber.testframework.utils;
 
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.deg.profile.reader.FileReader;
 
 import javax.inject.Inject;

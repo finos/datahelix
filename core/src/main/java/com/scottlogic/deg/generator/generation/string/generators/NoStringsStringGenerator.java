@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.generation.string.generators;
 
-import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
+import com.scottlogic.datahelix.generator.common.utils.RandomNumberGenerator;
 
 import java.util.stream.Stream;
 

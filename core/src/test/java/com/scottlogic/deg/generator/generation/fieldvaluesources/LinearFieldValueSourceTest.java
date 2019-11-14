@@ -15,9 +15,9 @@
  */
 package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
-import com.scottlogic.deg.common.profile.NumericGranularity;
+import com.scottlogic.datahelix.generator.common.profile.NumericGranularity;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
-import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
+import com.scottlogic.datahelix.generator.common.utils.JavaUtilRandomNumberGenerator;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;

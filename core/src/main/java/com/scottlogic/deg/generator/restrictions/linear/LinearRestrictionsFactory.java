@@ -15,14 +15,14 @@
  */
 package com.scottlogic.deg.generator.restrictions.linear;
 
-import com.scottlogic.deg.common.profile.Granularity;
+import com.scottlogic.datahelix.generator.common.profile.Granularity;
+import com.scottlogic.datahelix.generator.common.util.Defaults;
 
 import java.math.BigDecimal;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 
-import static com.scottlogic.deg.common.util.Defaults.*;
-import static com.scottlogic.deg.generator.utils.GeneratorDefaults.*;
+import static com.scottlogic.datahelix.generator.common.utils.GeneratorDefaults.*;
 
 public class LinearRestrictionsFactory {
 
@@ -34,7 +34,7 @@ public class LinearRestrictionsFactory {
         Limit<OffsetDateTime> min,
         Limit<OffsetDateTime> max) {
 
-        return createDateTimeRestrictions(min, max, DEFAULT_DATETIME_GRANULARITY);
+        return createDateTimeRestrictions(min, max, Defaults.DEFAULT_DATETIME_GRANULARITY);
     }
 
     public static LinearRestrictions<OffsetDateTime> createDateTimeRestrictions(
@@ -42,13 +42,13 @@ public class LinearRestrictionsFactory {
         Limit<OffsetDateTime> max,
         Granularity<OffsetDateTime> granularity) {
 
-        OffsetDateTime inclusiveMin = getInclusiveMin(min, granularity, ISO_MIN_DATE);
-        OffsetDateTime inclusiveMax = getInclusiveMax(max, granularity, ISO_MAX_DATE);
+        OffsetDateTime inclusiveMin = getInclusiveMin(min, granularity, Defaults.ISO_MIN_DATE);
+        OffsetDateTime inclusiveMax = getInclusiveMax(max, granularity, Defaults.ISO_MAX_DATE);
         return new LinearRestrictions<>(inclusiveMin, inclusiveMax, granularity);
     }
 
     public static LinearRestrictions<LocalTime> createDefaultTimeRestrictions() {
-        return createTimeRestrictions(DEFAULT_TIME_GRANULARITY);
+        return createTimeRestrictions(Defaults.DEFAULT_TIME_GRANULARITY);
     }
 
     public static LinearRestrictions<LocalTime> createTimeRestrictions(Granularity<LocalTime> granularity) {
@@ -58,7 +58,7 @@ public class LinearRestrictionsFactory {
     public static LinearRestrictions<LocalTime> createTimeRestrictions(
         Limit<LocalTime> min,
         Limit<LocalTime> max) {
-        return createTimeRestrictions(min, max, DEFAULT_TIME_GRANULARITY);
+        return createTimeRestrictions(min, max, Defaults.DEFAULT_TIME_GRANULARITY);
     }
 
 
@@ -78,13 +78,13 @@ public class LinearRestrictionsFactory {
         LocalTime inclusiveMax = getInclusiveMax(max, granularity, TIME_MAX_LIMIT.getValue());
 
         if (inclusiveMax.compareTo(max.getValue()) > 0
-            || inclusiveMax.equals(TIME_MIN) && !max.isInclusive()){
-            inclusiveMax = TIME_MIN;
-            inclusiveMin = TIME_MAX;
+            || inclusiveMax.equals(Defaults.TIME_MIN) && !max.isInclusive()){
+            inclusiveMax = Defaults.TIME_MIN;
+            inclusiveMin = Defaults.TIME_MAX;
         } else if (inclusiveMin.compareTo(max.getValue()) > 0
-            || inclusiveMin.equals(TIME_MAX) && !min.isInclusive()){
-            inclusiveMax = TIME_MIN;
-            inclusiveMin = TIME_MAX;
+            || inclusiveMin.equals(Defaults.TIME_MAX) && !min.isInclusive()){
+            inclusiveMax = Defaults.TIME_MIN;
+            inclusiveMin = Defaults.TIME_MAX;
         }
 
         return new LinearRestrictions<>(inclusiveMin, inclusiveMax, granularity);
@@ -95,12 +95,12 @@ public class LinearRestrictionsFactory {
     }
 
     public static LinearRestrictions<BigDecimal> createNumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max) {
-        return createNumericRestrictions(min, max, DEFAULT_NUMERIC_GRANULARITY);
+        return createNumericRestrictions(min, max, Defaults.DEFAULT_NUMERIC_GRANULARITY);
     }
 
     public static LinearRestrictions<BigDecimal> createNumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max, Granularity<BigDecimal> granularity) {
-        BigDecimal inclusiveMin = getInclusiveMin(min, granularity, NUMERIC_MIN);
-        BigDecimal inclusiveMax = getInclusiveMax(max, granularity, NUMERIC_MAX);
+        BigDecimal inclusiveMin = getInclusiveMin(min, granularity, Defaults.NUMERIC_MIN);
+        BigDecimal inclusiveMax = getInclusiveMax(max, granularity, Defaults.NUMERIC_MAX);
         return new LinearRestrictions<>(inclusiveMin, inclusiveMax, granularity);
     }
 

@@ -17,8 +17,8 @@
 package com.scottlogic.deg.orchestrator.validator;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.common.util.FileUtils;
+import com.scottlogic.datahelix.generator.common.ValidationException;
+import com.scottlogic.datahelix.generator.common.util.FileUtils;
 import com.scottlogic.deg.output.guice.OutputConfigSource;
 
 /**

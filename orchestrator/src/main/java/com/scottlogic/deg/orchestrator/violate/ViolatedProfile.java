@@ -17,7 +17,7 @@
 package com.scottlogic.deg.orchestrator.violate;
 
 import com.scottlogic.deg.generator.profile.Profile;
-import com.scottlogic.deg.common.profile.Fields;
+import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.deg.generator.profile.Rule;
 
 import java.util.Collection;

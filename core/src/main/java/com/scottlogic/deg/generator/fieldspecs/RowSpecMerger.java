@@ -17,9 +17,9 @@
 package com.scottlogic.deg.generator.fieldspecs;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.deg.generator.fieldspecs.relations.FieldSpecRelation;
-import com.scottlogic.deg.generator.utils.SetUtils;
+import com.scottlogic.datahelix.generator.common.utils.SetUtils;
 
 import java.util.*;
 

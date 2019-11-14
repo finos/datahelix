@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
-import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
+import com.scottlogic.datahelix.generator.common.utils.RandomNumberGenerator;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 

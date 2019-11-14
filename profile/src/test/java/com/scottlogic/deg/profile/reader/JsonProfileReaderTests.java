@@ -17,14 +17,14 @@
 package com.scottlogic.deg.profile.reader;
 
 
-import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.common.profile.DateTimeGranularity;
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.FieldType;
-import com.scottlogic.deg.common.profile.NumericGranularity;
+import com.scottlogic.datahelix.generator.common.ValidationException;
+import com.scottlogic.datahelix.generator.common.profile.DateTimeGranularity;
+import com.scottlogic.datahelix.generator.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.profile.FieldType;
+import com.scottlogic.datahelix.generator.common.profile.NumericGranularity;
 import com.scottlogic.deg.custom.CustomGeneratorList;
-import com.scottlogic.deg.common.util.FileUtils;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.util.FileUtils;
+import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.deg.generator.profile.Profile;
 import com.scottlogic.deg.generator.profile.Rule;
 import com.scottlogic.deg.generator.profile.constraints.Constraint;
@@ -51,7 +51,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.Consumer;
 
-import static com.scottlogic.deg.common.util.Defaults.DEFAULT_DATE_FORMATTING;
+import static com.scottlogic.datahelix.generator.common.util.Defaults.DEFAULT_DATE_FORMATTING;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.core.IsNull.nullValue;

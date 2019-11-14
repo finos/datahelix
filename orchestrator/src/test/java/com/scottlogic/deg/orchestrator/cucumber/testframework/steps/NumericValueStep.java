@@ -25,8 +25,8 @@ import cucumber.api.java.en.Then;
 import java.math.BigDecimal;
 import java.util.function.Function;
 
-import static com.scottlogic.deg.common.util.NumberUtils.coerceToBigDecimal;
-import static com.scottlogic.deg.common.util.NumberUtils.tryParse;
+import static com.scottlogic.datahelix.generator.common.util.NumberUtils.coerceToBigDecimal;
+import static com.scottlogic.datahelix.generator.common.util.NumberUtils.tryParse;
 
 public class NumericValueStep {
 

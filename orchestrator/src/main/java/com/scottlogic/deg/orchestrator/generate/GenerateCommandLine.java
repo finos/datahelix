@@ -32,7 +32,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.concurrent.Callable;
 
-import static com.scottlogic.deg.common.util.Defaults.DEFAULT_MAX_ROWS;
+import static com.scottlogic.datahelix.generator.common.util.Defaults.DEFAULT_MAX_ROWS;
 import static com.scottlogic.deg.generator.config.detail.CombinationStrategyType.MINIMAL;
 import static com.scottlogic.deg.generator.config.detail.DataGenerationType.RANDOM;
 import static com.scottlogic.deg.output.guice.OutputFormat.CSV;

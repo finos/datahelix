@@ -15,9 +15,9 @@
  */
 package com.scottlogic.deg.output.writer.json;
 
-import com.scottlogic.deg.common.output.GeneratedObject;
-import com.scottlogic.deg.common.profile.FieldBuilder;
-import com.scottlogic.deg.common.profile.Fields;
+import com.scottlogic.datahelix.generator.common.output.GeneratedObject;
+import com.scottlogic.datahelix.generator.common.profile.FieldBuilder;
+import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.deg.output.writer.DataSetWriter;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
@@ -30,8 +30,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static com.scottlogic.deg.common.profile.FieldBuilder.createField;
-import static com.scottlogic.deg.common.profile.FieldBuilder.createInternalField;
+import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
+import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createInternalField;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

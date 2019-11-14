@@ -17,9 +17,9 @@ package com.scottlogic.deg.profile.reader;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
+import com.scottlogic.datahelix.generator.common.ValidationException;
+import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 
 import java.io.*;
 import java.util.stream.Collectors;

@@ -16,7 +16,7 @@
 
 package com.scottlogic.deg.output.writer;
 
-import com.scottlogic.deg.common.output.GeneratedObject;
+import com.scottlogic.datahelix.generator.common.output.GeneratedObject;
 
 import java.io.Closeable;
 import java.io.IOException;

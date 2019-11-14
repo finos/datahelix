@@ -17,8 +17,8 @@
 
 package com.scottlogic.deg.profile.factories.relation_factories;
 
-import com.scottlogic.deg.common.profile.Granularity;
-import com.scottlogic.deg.common.profile.NumericGranularity;
+import com.scottlogic.datahelix.generator.common.profile.Granularity;
+import com.scottlogic.datahelix.generator.common.profile.NumericGranularity;
 
 public class NumericRelationFactory extends FieldSpecRelationFactory
 {

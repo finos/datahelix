@@ -15,13 +15,13 @@
  */
 package com.scottlogic.deg.generator.generation.string.generators;
 
-import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
+import com.scottlogic.datahelix.generator.common.ValidationException;
+import com.scottlogic.datahelix.generator.common.utils.RandomNumberGenerator;
 
 import java.util.Arrays;
 import java.util.stream.Stream;
 
-import static com.scottlogic.deg.common.util.FlatMappingSpliterator.flatMap;
+import static com.scottlogic.datahelix.generator.common.util.FlatMappingSpliterator.flatMap;
 
 public class ChecksumlessIsinGenerator implements StringGenerator {
 

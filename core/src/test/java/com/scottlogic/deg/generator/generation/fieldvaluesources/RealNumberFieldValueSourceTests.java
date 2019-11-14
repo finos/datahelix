@@ -16,11 +16,11 @@
 
 package com.scottlogic.deg.generator.generation.fieldvaluesources;
 
-import com.scottlogic.deg.common.profile.NumericGranularity;
-import com.scottlogic.deg.common.util.Defaults;
-import com.scottlogic.deg.common.util.NumberUtils;
+import com.scottlogic.datahelix.generator.common.profile.NumericGranularity;
+import com.scottlogic.datahelix.generator.common.util.Defaults;
+import com.scottlogic.datahelix.generator.common.util.NumberUtils;
 import com.scottlogic.deg.generator.restrictions.linear.*;
-import com.scottlogic.deg.generator.utils.JavaUtilRandomNumberGenerator;
+import com.scottlogic.datahelix.generator.common.utils.JavaUtilRandomNumberGenerator;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -35,8 +35,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory.createNumericRestrictions;
-import static com.scottlogic.deg.generator.utils.GeneratorDefaults.NUMERIC_MAX_LIMIT;
-import static com.scottlogic.deg.generator.utils.GeneratorDefaults.NUMERIC_MIN_LIMIT;
+import static com.scottlogic.datahelix.generator.common.utils.GeneratorDefaults.NUMERIC_MAX_LIMIT;
+import static com.scottlogic.datahelix.generator.common.utils.GeneratorDefaults.NUMERIC_MIN_LIMIT;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.*;
 

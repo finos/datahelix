@@ -16,8 +16,8 @@
 
 package com.scottlogic.deg.generator.fieldspecs.relations;
 
-import com.scottlogic.deg.common.profile.*;
-import com.scottlogic.deg.common.util.defaults.DateTimeDefaults;
+import com.scottlogic.datahelix.generator.common.profile.*;
+import com.scottlogic.datahelix.generator.common.util.defaults.DateTimeDefaults;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpec;
 import com.scottlogic.deg.generator.fieldspecs.FieldSpecFactory;
 import com.scottlogic.deg.generator.generation.databags.DataBagValue;
@@ -28,7 +28,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 
-import static com.scottlogic.deg.common.util.Defaults.ISO_MIN_DATE;
+import static com.scottlogic.datahelix.generator.common.util.Defaults.ISO_MIN_DATE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BeforeDateRelationTest {

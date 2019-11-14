@@ -16,13 +16,13 @@
 
 package com.scottlogic.deg.generator.fieldspecs;
 
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.WeightedElement;
+import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import com.scottlogic.deg.generator.restrictions.bool.BooleanRestrictionsMerger;
 import com.scottlogic.deg.generator.restrictions.string.StringRestrictionsMerger;
 import com.scottlogic.deg.generator.restrictions.TypedRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsMerger;
-import com.scottlogic.deg.generator.utils.SetUtils;
+import com.scottlogic.datahelix.generator.common.utils.SetUtils;
 
 import java.util.Optional;
 import java.util.stream.Collectors;

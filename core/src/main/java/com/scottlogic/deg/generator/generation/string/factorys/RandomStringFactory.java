@@ -16,9 +16,9 @@
 
 package com.scottlogic.deg.generator.generation.string.factorys;
 
-import com.scottlogic.deg.common.ValidationException;
+import com.scottlogic.datahelix.generator.common.ValidationException;
 import com.scottlogic.deg.generator.generation.string.StringUtils;
-import com.scottlogic.deg.generator.utils.RandomNumberGenerator;
+import com.scottlogic.datahelix.generator.common.utils.RandomNumberGenerator;
 import dk.brics.automaton.State;
 import dk.brics.automaton.Transition;
 

@@ -16,8 +16,8 @@
 
 package com.scottlogic.deg.output.writer.csv;
 
-import com.scottlogic.deg.common.output.GeneratedObject;
-import com.scottlogic.deg.common.profile.Fields;
+import com.scottlogic.datahelix.generator.common.output.GeneratedObject;
+import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.deg.output.writer.DataSetWriter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;

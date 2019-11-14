@@ -16,7 +16,7 @@
 package com.scottlogic.deg.generator.walker.rowspec;
 
 import com.google.inject.Inject;
-import com.scottlogic.deg.common.util.FlatMappingSpliterator;
+import com.scottlogic.datahelix.generator.common.util.FlatMappingSpliterator;
 import com.scottlogic.deg.generator.decisiontree.DecisionTree;
 import com.scottlogic.deg.generator.generation.databags.DataBag;
 import com.scottlogic.deg.generator.generation.databags.RowSpecDataBagGenerator;

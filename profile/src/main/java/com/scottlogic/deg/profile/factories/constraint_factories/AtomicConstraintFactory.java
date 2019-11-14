@@ -16,11 +16,11 @@
 
 package com.scottlogic.deg.profile.factories.constraint_factories;
 
-import com.scottlogic.deg.common.ValidationException;
-import com.scottlogic.deg.common.profile.Field;
-import com.scottlogic.deg.common.profile.Fields;
+import com.scottlogic.datahelix.generator.common.ValidationException;
+import com.scottlogic.datahelix.generator.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.deg.generator.fieldspecs.relations.InMapRelation;
-import com.scottlogic.deg.generator.fieldspecs.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.deg.generator.profile.constraints.atomic.*;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.*;
 import com.scottlogic.deg.profile.dtos.constraints.atomic.integer.LongerThanConstraintDTO;
