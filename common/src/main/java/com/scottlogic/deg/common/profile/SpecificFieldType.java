@@ -36,7 +36,7 @@ public enum SpecificFieldType
     DATETIME("datetime", FieldType.DATETIME),
     DATE("date",FieldType.DATETIME),
     BOOLEAN("boolean", FieldType.BOOLEAN),
-    TIME("time",FieldType.TIME);
+    TIME("time", FieldType.TIME);
 
     @JsonValue
     private final String type;
