@@ -4,4 +4,4 @@ Produces two fields a and b.
 
 - a can be any time in the day.
 - if a is after 12:00 then b will be set to the time 12:34:56.
-- other wise b can be any time in the day.
+- otherwise b can be any time in the day.
