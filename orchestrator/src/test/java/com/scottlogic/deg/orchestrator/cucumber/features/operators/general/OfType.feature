@@ -131,15 +131,13 @@ Feature: User can specify that a field is of a specific type (string, integer, d
       | foo        |
       | 2010-01-01 |
 
-  @ignore #pending development of 1381 - Add date time and fields
   Scenario: Running an 'ofType' = time request should be successful
     Given there is a non nullable field foo
-    And foo is equal to T09:15:00.000Z
-    And foo is anything but null
+    And foo is equal to 09:15:00.000
     And foo has type "time"
     Then the following data should be generated:
       | foo            |
-      | T09:15:00.000Z |
+      | 09:15:00.000 |
 
   Scenario: Running an 'ofType' = string request without other constraints should generate strings up to implicit maximum length
     Given there is a non nullable field foo

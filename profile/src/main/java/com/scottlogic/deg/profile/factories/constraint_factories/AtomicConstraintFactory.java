@@ -100,10 +100,10 @@ public abstract class AtomicConstraintFactory {
     abstract GreaterThanOrEqualToConstraint createGreaterThanOrEqualToConstraint(GreaterThanOrEqualToConstraintDTO dto, Field field);
     abstract LessThanConstraint createLessThanConstraint(LessThanConstraintDTO dto, Field field);
     abstract LessThanOrEqualToConstraint createLessThanOrEqualToConstraint(LessThanOrEqualToConstraintDTO dto, Field field);
-    abstract AfterConstraint createAfterConstraint(AfterConstraintDTO dto, Field field);
-    abstract AfterOrAtConstraint createAfterOrAtConstraint(AfterOrAtConstraintDTO dto, Field field);
-    abstract BeforeConstraint createBeforeConstraint(BeforeConstraintDTO dto, Field field);
-    abstract BeforeOrAtConstraint createBeforeOrAtConstraint(BeforeOrAtConstraintDTO dto, Field field);
+    abstract AtomicConstraint createAfterConstraint(AfterConstraintDTO dto, Field field);
+    abstract AtomicConstraint createAfterOrAtConstraint(AfterOrAtConstraintDTO dto, Field field);
+    abstract AtomicConstraint createBeforeConstraint(BeforeConstraintDTO dto, Field field);
+    abstract AtomicConstraint createBeforeOrAtConstraint(BeforeOrAtConstraintDTO dto, Field field);
     abstract AtomicConstraint createGranularToConstraint(GranularToConstraintDTO dto, Field field);
 
     private InSetConstraint createInSetConstraint(InSetConstraintDTO dto, Field field)

@@ -18,6 +18,7 @@ package com.scottlogic.deg.generator.restrictions.linear;
 import com.scottlogic.deg.common.profile.Granularity;
 
 import java.math.BigDecimal;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
 
 import static com.scottlogic.deg.common.util.Defaults.*;
@@ -29,13 +30,63 @@ public class LinearRestrictionsFactory {
         return createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT);
     }
 
-    public static LinearRestrictions<OffsetDateTime> createDateTimeRestrictions(Limit<OffsetDateTime> min, Limit<OffsetDateTime> max) {
+    public static LinearRestrictions<OffsetDateTime> createDateTimeRestrictions(
+        Limit<OffsetDateTime> min,
+        Limit<OffsetDateTime> max) {
+
         return createDateTimeRestrictions(min, max, DEFAULT_DATETIME_GRANULARITY);
     }
 
-    public static LinearRestrictions<OffsetDateTime> createDateTimeRestrictions(Limit<OffsetDateTime> min, Limit<OffsetDateTime> max, Granularity<OffsetDateTime> granularity) {
+    public static LinearRestrictions<OffsetDateTime> createDateTimeRestrictions(
+        Limit<OffsetDateTime> min,
+        Limit<OffsetDateTime> max,
+        Granularity<OffsetDateTime> granularity) {
+
         OffsetDateTime inclusiveMin = getInclusiveMin(min, granularity, ISO_MIN_DATE);
         OffsetDateTime inclusiveMax = getInclusiveMax(max, granularity, ISO_MAX_DATE);
+        return new LinearRestrictions<>(inclusiveMin, inclusiveMax, granularity);
+    }
+
+    public static LinearRestrictions<LocalTime> createDefaultTimeRestrictions() {
+        return createTimeRestrictions(DEFAULT_TIME_GRANULARITY);
+    }
+
+    public static LinearRestrictions<LocalTime> createTimeRestrictions(Granularity<LocalTime> granularity) {
+        return createTimeRestrictions(TIME_MIN_LIMIT, TIME_MAX_LIMIT, granularity);
+    }
+
+    public static LinearRestrictions<LocalTime> createTimeRestrictions(
+        Limit<LocalTime> min,
+        Limit<LocalTime> max) {
+        return createTimeRestrictions(min, max, DEFAULT_TIME_GRANULARITY);
+    }
+
+
+    /**
+     *This method creates a LocalTime LinearRestriction. If the upper or lower bounds are close to midnight and would
+     * result in a contradictory restrictions, the method ensures that a contradictory LinearRestriction is created.
+     * @param min
+     * @param max
+     * @param granularity
+     * @return
+     */
+    public static LinearRestrictions<LocalTime> createTimeRestrictions(
+        Limit<LocalTime> min,
+        Limit<LocalTime> max,
+        Granularity<LocalTime> granularity) {
+        LocalTime inclusiveMin = getInclusiveMin(min, granularity, TIME_MIN_LIMIT.getValue());
+        LocalTime inclusiveMax = getInclusiveMax(max, granularity, TIME_MAX_LIMIT.getValue());
+
+        if (inclusiveMax.compareTo(max.getValue()) > 0
+            || inclusiveMax.equals(TIME_MIN) && !max.isInclusive()){
+            inclusiveMax = TIME_MIN;
+            inclusiveMin = TIME_MAX;
+        } else if (inclusiveMin.compareTo(max.getValue()) > 0
+            || inclusiveMin.equals(TIME_MAX) && !min.isInclusive()){
+            inclusiveMax = TIME_MIN;
+            inclusiveMin = TIME_MAX;
+        }
+
         return new LinearRestrictions<>(inclusiveMin, inclusiveMax, granularity);
     }
 
@@ -54,7 +105,7 @@ public class LinearRestrictionsFactory {
     }
 
     private static <T extends Comparable<? super T>> T getInclusiveMin(Limit<T> min, Granularity<T> granularity, T actualMin) {
-        if (min.getValue().compareTo(actualMin) < 0){
+        if (min.getValue().compareTo(actualMin) < 0) {
             return actualMin;
         }
 

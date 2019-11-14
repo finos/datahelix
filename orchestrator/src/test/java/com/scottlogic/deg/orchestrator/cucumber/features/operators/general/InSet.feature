@@ -238,6 +238,19 @@ Feature: User can specify that a field value belongs to a set of predetermined o
     Then the profile is invalid because "Date string '2017-12-31T40:59:59.999Z' must be in ISO-8601 format: Either yyyy-MM-ddTHH:mm:ss.SSS\[Z\] between 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z or yyyy-mm-dd between 0001-01-01 and 9999-12-31"
     And no data is created
 
+  Scenario: Running an 'inSet' request that includes a time value should be successful
+    Given there is a non nullable field foo
+    And foo has type "time"
+    And foo is in set:
+      | 00:00:01.000 |
+      | 00:00:02.000 |
+      | 00:00:03.000 |
+    Then the following data should be generated:
+      | foo          |
+      | 00:00:01.000 |
+      | 00:00:02.000 |
+      | 00:00:03.000 |
+
   Scenario: Running an 'inSet' request that includes an empty string ("") characters should be successful
     Given there is a nullable field foo
     And foo has type "string"
@@ -344,48 +357,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
     Then the following data should be generated:
       | foo  |
       | null |
-
-### ofType ###
-  Scenario: 'InSet' with non-contradicting 'ofType' string should be successful
-    Given there is a non nullable field foo
-    And foo is in set:
-      | "Test 1" |
-      | "Test 2" |
-      | "Test 3" |
-    And foo has type "string"
-    Then the following data should be generated:
-      | foo      |
-      | "Test 1" |
-      | "Test 2" |
-      | "Test 3" |
-
-  Scenario: 'InSet' with non-contradicting 'ofType' integer should be successful
-    Given there is a non nullable field foo
-    And foo is in set:
-      | 1 |
-    And foo has type "integer"
-    Then the following data should be generated:
-      | foo |
-      | 1   |
-
-  Scenario: 'InSet' with non-contradicting 'ofType' decimal should be successful
-    Given there is a non nullable field foo
-    And foo is in set:
-      | 1 |
-    And foo has type "decimal"
-    Then the following data should be generated:
-      | foo |
-      | 1   |
-
-  Scenario: 'InSet' with non-contradicting 'ofType' datetime should be successful
-    Given there is a non nullable field foo
-    And foo is in set:
-      | 2019-01-01T00:00:00.000Z |
-    And foo has type "datetime"
-    Then the following data should be generated:
-      | foo                      |
-      | 2019-01-01T00:00:00.000Z |
-
+    
 ### matchingRegex ###
   Scenario: Running a 'inSet' request alongside a non-contradicting 'matchingRegex' constraint should be successful
     Given there is a non nullable field foo
@@ -1001,7 +973,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | null |
 
 ### after ###
-  Scenario: 'InSet' with a non contradicting 'after' is successful
+  Scenario: 'InSet' with a non contradicting 'after' is successful for datetime
     Given there is a non nullable field foo
     And foo has type "datetime"
     And foo is in set:
@@ -1011,7 +983,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | foo                      |
       | 2019-01-01T00:00:00.001Z |
 
-  Scenario: 'InSet' with a non contradicting not 'after' is successful
+  Scenario: 'InSet' with a non contradicting not 'after' is successful for datetime
     Given there is a non nullable field foo
     And foo has type "datetime"
     And foo is in set:
@@ -1021,7 +993,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | foo                      |
       | 2019-01-01T00:00:00.000Z |
 
-  Scenario: Not 'inSet' with a non contradicting 'after' is successful
+  Scenario: Not 'inSet' with a non contradicting 'after' is successful for datetime
     Given there is a non nullable field foo
     And foo has type "datetime"
     And foo is anything but in set:
@@ -1035,7 +1007,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | foo                      |
       | 2019-01-01T00:00:00.002Z |
 
-  Scenario: 'InSet' with a contradicting 'after' emits null
+  Scenario: 'InSet' with a contradicting 'after' emits null for datetime
     Given there is a nullable field foo
     And foo has type "datetime"
     And foo is in set:
@@ -1045,12 +1017,32 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | foo  |
       | null |
 
-  Scenario: 'InSet' with a contradicting not 'after' emits null
+  Scenario: 'InSet' with a contradicting not 'after' emits null for datetime
     Given there is a nullable field foo
     And foo has type "datetime"
     And foo is in set:
       | 2019-01-01T00:00:00.001Z |
     And foo is anything but after 2019-01-01T00:00:00.000Z
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
+  Scenario: 'InSet' with a non contradicting 'after' is successful for time
+    Given there is a non nullable field foo
+    And foo has type "time"
+    And foo is in set:
+      | 00:00:00.001 |
+    And foo is after 00:00:00.000
+    Then the following data should be generated:
+      | foo          |
+      | 00:00:00.001 |
+
+  Scenario: 'InSet' with a contradicting 'after' emits null for time
+    Given there is a nullable field foo
+    And foo has type "time"
+    And foo is in set:
+      | 00:00:00.001 |
+    And foo is after 00:00:01.920
     Then the following data should be generated:
       | foo  |
       | null |
@@ -1109,6 +1101,26 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | foo  |
       | null |
 
+  Scenario: 'InSet' with a non contradicting 'afterOrAt' is successful for time
+    Given there is a non nullable field foo
+    And foo has type "time"
+    And foo is in set:
+      | 00:00:00.000 |
+    And foo is after or at 00:00:00.000
+    Then the following data should be generated:
+      | foo          |
+      | 00:00:00.000 |
+
+  Scenario: 'InSet' with a contradicting 'afterOrAt' emits null for time
+    Given there is a nullable field foo
+    And foo has type "time"
+    And foo is in set:
+      | 00:00:00.000 |
+    And foo is after or at 00:00:00.004
+    Then the following data should be generated:
+      | foo   |
+      | null  |
+
 ### before ###
   Scenario: 'InSet' with a non contradicting 'before' is successful
     Given there is a non nullable field foo
@@ -1160,6 +1172,36 @@ Feature: User can specify that a field value belongs to a set of predetermined o
     And foo is in set:
       | 2019-01-01T00:00:00.000Z |
     And foo is anything but before 2019-01-01T00:00:00.001Z
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
+  Scenario: 'InSet' with a non contradicting 'before' is successful for time
+    Given there is a non nullable field foo
+    And foo has type "time"
+    And foo is in set:
+      | 00:00:00.000 |
+    And foo is before 00:00:00.003
+    Then the following data should be generated:
+      | foo   |
+      | 00:00:00.000  |
+
+  Scenario: 'InSet' with a contradicting 'before' emits null for time
+    Given there is a nullable field foo
+    And foo has type "time"
+    And foo is in set:
+      | 00:00:00.005 |
+    And foo is before 00:00:00.004
+    Then the following data should be generated:
+      | foo   |
+      | null  |
+
+  Scenario: 'InSet' with a contradicting not 'before' emits null for time
+    Given there is a nullable field foo
+    And foo has type "time"
+    And foo is in set:
+      | 00:00:00.000 |
+    And foo is anything but before 00:00:00.001
     Then the following data should be generated:
       | foo  |
       | null |
@@ -1216,6 +1258,36 @@ Feature: User can specify that a field value belongs to a set of predetermined o
     And foo is in set:
       | 2019-01-01T00:00:00.000Z |
     And foo is anything but before or at 2019-01-01T00:00:00.000Z
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
+  Scenario: 'InSet' with a non contradicting 'beforeOrAt' is successful for time
+    Given there is a non nullable field foo
+    And foo has type "time"
+    And foo is in set:
+      | 00:00:00.003 |
+    And foo is before or at 00:00:00.003
+    Then the following data should be generated:
+      | foo   |
+      | 00:00:00.003  |
+
+  Scenario: 'InSet' with a contradicting 'beforeOrAt' emits null for time
+    Given there is a nullable field foo
+    And foo has type "time"
+    And foo is in set:
+      | 00:00:00.005 |
+    And foo is before or at 00:00:00.004
+    Then the following data should be generated:
+      | foo   |
+      | null  |
+
+  Scenario: 'InSet' with a contradicting not 'beforeOrAt' emits null for time
+    Given there is a nullable field foo
+    And foo has type "time"
+    And foo is in set:
+      | 00:00:00.000 |
+    And foo is anything but before or at 00:00:00.001
     Then the following data should be generated:
       | foo  |
       | null |
@@ -1438,11 +1510,3 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "Test2" | 1     |
       | "Test3" | 2     |
       | "Test4" | 2     |
-#TODO  Scenario: Running a 'inSet' request alongside a contradicting ofType = string should produce null
-#    Given there is a non nullable field foo
-#    And foo has type "string"
-#    And foo is in set:
-#      | 1 |
-#      | 2 |
-#      | 3 |
-#    Then the profile is invalid because "Field \[foo\]: is type STRING , but you are trying to apply a inSet constraint which requires NUMERIC"

@@ -23,21 +23,24 @@ import java.util.Iterator;
 public class LinearIterator<T extends Comparable<T>> implements Iterator<T> {
     private final LinearRestrictions<T> linearRestrictions;
     private T next;
+    private T current;
 
     public LinearIterator(LinearRestrictions<T> linearRestrictions) {
         this.linearRestrictions = linearRestrictions;
         next = linearRestrictions.getMin();
+        current = next;
     }
 
     @Override
     public boolean hasNext() {
-        return linearRestrictions.getMax().compareTo(next) >= 0;
+        return linearRestrictions.getMax().compareTo(next) >= 0
+            && next.compareTo(current) >= 0;
     }
 
     @Override
     public T next() {
-        T copy = next;
+        current = next;
         next = linearRestrictions.getGranularity().getNext(next);
-        return copy;
+        return current;
     }
 }

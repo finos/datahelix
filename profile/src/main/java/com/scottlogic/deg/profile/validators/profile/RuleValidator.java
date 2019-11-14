@@ -29,7 +29,6 @@ public class RuleValidator implements Validator<RuleDTO>
 
     public RuleValidator(List<FieldDTO> fields)
     {
-
         this.fields = fields;
     }
 

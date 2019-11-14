@@ -20,7 +20,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.steps.DateValueStep;
-
+import com.scottlogic.deg.orchestrator.cucumber.testframework.steps.TimeValueStep;
 import com.scottlogic.deg.common.ValidationException;
 import com.scottlogic.deg.orchestrator.cucumber.testframework.steps.DateTimeValueStep;
 import org.junit.Assert;
@@ -42,6 +42,8 @@ public class GeneratorTestUtilities {
         if (input.startsWith("\"") && input.endsWith("\"")) {
             return input.substring(1, input.length() - 1);
         } else if (input.matches(DateTimeValueStep.DATETIME_REGEX) || input.matches(DateValueStep.DATE_REGEX)) {
+            return input;
+        } else if (input.matches(TimeValueStep.TIME_REGEX)) {
             return input;
         } else if (input.equals("null")) {
             return null;

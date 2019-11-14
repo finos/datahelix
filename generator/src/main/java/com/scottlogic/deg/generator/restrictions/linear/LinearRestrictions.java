@@ -19,6 +19,7 @@ package com.scottlogic.deg.generator.restrictions.linear;
 import com.scottlogic.deg.common.profile.Granularity;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.deg.generator.generation.fieldvaluesources.LinearFieldValueSource;
+import com.scottlogic.deg.generator.generation.fieldvaluesources.NullOnlySource;
 import com.scottlogic.deg.generator.restrictions.TypedRestrictions;
 
 import java.util.Objects;
@@ -28,15 +29,20 @@ public class LinearRestrictions<T extends Comparable<T>> implements TypedRestric
     private final T min;
     private final T max;
     private final Granularity<T> granularity;
+    private final boolean isContradictory;
 
     public LinearRestrictions(T inclusiveMin, T inclusiveMax, Granularity<T> granularity) {
         this.min = inclusiveMin;
         this.max = inclusiveMax;
         this.granularity = granularity;
+        this.isContradictory = inclusiveMax.compareTo(inclusiveMin) < 0;
     }
 
     @Override
     public boolean match(T o){
+        if (isContradictory) {
+            return false;
+        }
         if (min.compareTo(o) > 0) {
             return false;
         }
@@ -50,6 +56,9 @@ public class LinearRestrictions<T extends Comparable<T>> implements TypedRestric
 
     @Override
     public FieldValueSource<T> createFieldValueSource(Set<T> blacklist) {
+        if (isContradictory) {
+            return new NullOnlySource();
+        }
         return new LinearFieldValueSource<>(this, blacklist);
     }
 
@@ -65,12 +74,17 @@ public class LinearRestrictions<T extends Comparable<T>> implements TypedRestric
         return granularity;
     }
 
+    public boolean isContradictory() {
+        return isContradictory;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LinearRestrictions<?> that = (LinearRestrictions<?>) o;
-        return Objects.equals(min, that.min) &&
+        return isContradictory == that.isContradictory &&
+            Objects.equals(min, that.min) &&
             Objects.equals(max, that.max) &&
             Objects.equals(granularity, that.granularity);
     }
@@ -82,6 +96,7 @@ public class LinearRestrictions<T extends Comparable<T>> implements TypedRestric
 
     @Override
     public String toString() {
-        return "min=" + getMin() + ", max=" + getMax() + " " + getGranularity().toString();
+        return "min=" + getMin() + ", max=" + getMax() + " " + getGranularity().toString() +
+            ", isContradictory=" +isContradictory;
     }
 }

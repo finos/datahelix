@@ -27,6 +27,10 @@ public class LinearRestrictionsMerger<T extends Comparable<T>> implements Restri
         LinearRestrictions<T> leftCast = (LinearRestrictions<T>) left;
         LinearRestrictions<T> rightCast = (LinearRestrictions<T>) right;
 
+        if(leftCast.isContradictory() || rightCast.isContradictory()) {
+            return Optional.empty();
+        }
+
         /*
          * If the restrictions are related, e.g. because field1 is before field2, then use the finest granularity possible
          * This is required to find the true minimum or maximum allowed in the restrictions.
@@ -41,15 +45,11 @@ public class LinearRestrictionsMerger<T extends Comparable<T>> implements Restri
 
         LinearRestrictions<T> mergedRestriction = new LinearRestrictions<>(mergedMin, mergedMax, granularity);
 
-        if (isContradictory(mergedRestriction)) {
+        if (mergedRestriction.isContradictory()) {
             return Optional.empty();
         }
 
         return Optional.of(mergedRestriction);
-    }
-
-    private boolean isContradictory(LinearRestrictions<T> restictions) {
-        return restictions.getMax().compareTo(restictions.getMin()) < 0;
     }
 
     private T getHighest(T left, T right, Granularity<T> granularity) {

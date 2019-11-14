@@ -71,6 +71,7 @@ Feature: User can specify that a field is null or absent
       | "decimal"  | 1.1                      |
       | "integer"  | 1                        |
       | "datetime" | 2019-01-01T00:00:00.000Z |
+      | "time"     | 00:00:00.000             |
 
   Scenario Outline: 'Null' with 'ofType' emits null
     Given foo is null
@@ -84,6 +85,7 @@ Feature: User can specify that a field is null or absent
       | "integer"  |
       | "decimal"  |
       | "datetime" |
+      | "time"     |
 
 ### matchingRegex ###
   Scenario: Not 'null' with a non-contradicting 'matchingRegex' is successful
@@ -409,6 +411,32 @@ Feature: User can specify that a field is null or absent
       | foo  |
       | null |
 
+  Scenario: Not 'null' with a non contradicting 'after' should be successful with time
+    Given foo is anything but null
+    And foo has type "time"
+    And foo is after 00:00:00.000
+    And the generator can generate at most 2 rows
+    Then the following data should be generated:
+      | foo                      |
+      | 00:00:00.001 |
+      | 00:00:00.002 |
+
+  Scenario: 'Null' with a contradicting 'after' should only generate null with time
+    Given foo is null
+    And foo has type "time"
+    And foo is after 00:00:00.000
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
+  Scenario: 'Null' with a contradicting not 'after' should only generate null with time
+    Given foo is null
+    And foo has type "time"
+    And foo is after 00:00:00.000
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
 ### afterOrAt ###
   Scenario: Not 'null' with a non contradicting 'afterOrAt' should be successful
     Given foo is anything but null
@@ -432,6 +460,33 @@ Feature: User can specify that a field is null or absent
     Given foo is null
     And foo has type "datetime"
     And foo is after or at 2019-01-01T00:00:00.000Z
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
+
+  Scenario: Not 'null' with a non contradicting 'afterOrAt' should be successful with time
+    Given foo is anything but null
+    And foo has type "time"
+    And foo is after or at 00:00:00.000
+    And the generator can generate at most 2 rows
+    Then the following data should be generated:
+      | foo                      |
+      | 00:00:00.000 |
+      | 00:00:00.001 |
+
+  Scenario: 'Null' with a contradicting 'afterOrAt' should only generate null with time
+    Given foo is null
+    And foo has type "time"
+    And foo is after or at 00:00:00.000
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
+  Scenario: 'Null' with a contradicting not 'afterOrAt' should only generate null with time
+    Given foo is null
+    And foo has type "time"
+    And foo is after or at 00:00:00.000
     Then the following data should be generated:
       | foo  |
       | null |
@@ -460,6 +515,34 @@ Feature: User can specify that a field is null or absent
     Given foo is null
     And foo has type "datetime"
     And foo is before 2019-01-01T00:00:00.000Z
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
+  Scenario: Not 'null' with a non contradicting 'before' should be successful with time
+    Given foo is anything but null
+    And foo has type "time"
+    And foo is before 00:00:00.003
+    And the generator can generate at most 3 rows
+    Then the following data should be generated:
+      | foo                      |
+      | 00:00:00.000 |
+      | 00:00:00.001 |
+      | 00:00:00.002 |
+
+
+  Scenario: 'Null' with a contradicting 'before' should only generate null with time
+    Given foo is null
+    And foo has type "time"
+    And foo is before 00:00:00.000
+    Then the following data should be generated:
+      | foo  |
+      | null |
+
+  Scenario: 'Null' with a contradicting not 'before' should only generate null with time
+    Given foo is null
+    And foo has type "time"
+    And foo is before 00:00:00.000
     Then the following data should be generated:
       | foo  |
       | null |

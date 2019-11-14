@@ -52,6 +52,11 @@ public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpec
         }
 
         LinearRestrictions<T> otherRestrictions = (LinearRestrictions)((RestrictionsFieldSpec) otherFieldSpec).getRestrictions();
+
+        if (otherRestrictions.isContradictory()) {
+            return FieldSpecFactory.nullOnly();
+        }
+
         T min = otherRestrictions.getMin();
         T offsetMin = offsetGranularity.getNext(min, offset);
         T max = otherRestrictions.getMax();

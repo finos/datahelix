@@ -7,24 +7,26 @@
 
 3. [Fields](#Fields)
     1. [Name](#fields-name)
-    1. [Type](#fields-type)
-    1. [Nullable](#fields-nullable)
-    1. [Formatting](#fields-formatting)
-    1. [Unique](#fields-unique)
+    2. [Type](#fields-type)
+    3. [Nullable](#fields-nullable)
+    4. [Formatting](#fields-formatting)
+    5. [Unique](#fields-unique)
 
 4. [Data types](#Data-Types)
-    1. [Integer/Decimal](#Integer/Decimal)
+    1. [Integer/Decimal](#integerdecimal)
     2. [Strings](#Strings)
     3. [DateTime](#DateTime)
-    4. [Custom Data Types](#Custom-Data-Types)
+    4. [Time](#time)
+    5. [Boolean](#boolean)
+    6. [Custom Data Types](#Custom-Data-Types)
 
 5. [Predicate constraints](#Predicate-constraints)
     1. [Theory](#Theory)
     2. [General constraints](#General-constraints)
         1. [equalTo](#predicate-equalto)
         2. [inSet](#predicate-inset)
-        2. [inMap](#predicate-inmap)
-        3. [null](#predicate-null)
+        3. [inMap](#predicate-inmap)
+        4. [null](#predicate-null)
     3. [String constraints](#String-constraints)
         1. [matchingRegex](#predicate-matchingregex)
         2. [containingRegex](#predicate-containingregex)
@@ -37,7 +39,7 @@
         3. [lessThan](#predicate-lessthan)
         4. [lessThanOrEqualTo](#predicate-lessthanorequalto)
         5. [granularTo](#predicate-granularto)
-    5. [DateTime constraints](#DateTime-constraints)
+    5. [Time/DateTime constraints](#TimeDateTime-constraints)
         1. [after](#predicate-after)
         2. [afterOrAt](#predicate-afterorat)
         3. [before](#predicate-before)
@@ -57,7 +59,7 @@
     1. [adding](#adding-custom-generator)
     2. [using](#using-custom-generator)
     3. [using as constraint](#using-custom-generator-as-constraint)
-    
+
 8. [Running a Profile](#Running-a-Profile)
     1. [Command Line Arguments](#Command-Line-Arguments)
         1. [Command Line Arguments for Generate Mode](#Command-Line-Arguments-for-Generate-Mode)
@@ -88,9 +90,9 @@ This section will walk you through creating basic profiles with which you can ge
 Profiles are JSON documents consisting of three sections, the schema version, the list of fields and the rules.
 
 - **Schema Version** - Dictates the method of serialisation of the profile in order for the generator to
-interpret the profile fields and rules. The latest version is 
+interpret the profile fields and rules. The latest version is
 ```
-    "schemaVersion": "0.16",
+    "schemaVersion": "0.17",
 ```
 - **List of Fields** - An array of column headings is defined with unique "name" keys.
 ```
@@ -104,7 +106,7 @@ interpret the profile fields and rules. The latest version is
     ]
 ```
 - **Rules** - an array of constraints defined with a description. Constraints reduce the data in each column from the [universal set](user/SetRestrictionAndGeneration.md)
-to the desired range of values. They are formatted as JSON objects. There are three types of constraints:
+to the desired range of values. They are formatted as JSON objects. There are two types of constraints:
 
     - [Predicate Constraints](#Predicate-constraints) - predicates that define any given value as being
     _valid_ or _invalid_
@@ -134,14 +136,14 @@ Here is a list of two rules comprised of one constraint each:
         }
       ]
 
-``'
+```
 
 These three sections are combined to form the [complete profile](#Example-Profile).
 
 ## Example Profile
-
+```
     {
-    "schemaVersion": "0.16",
+    "schemaVersion": "0.17",
     "fields": [
         {
             "name": "Column 1",
@@ -164,7 +166,7 @@ These three sections are combined to form the [complete profile](#Example-Profil
         }
     ]
     }
-
+```
 * For a larger profile example see [here](user/Schema.md)
 * Further examples can be found in the Examples folder [here](https://github.com/finos/datahelix/tree/master/examples)
 
@@ -203,6 +205,7 @@ The data type of the field. See [Data types](#Data-Types) for more on how types 
 *  `string`
 *  `date`
 *  `datetime`
+*  `time`
 *  `ISIN`
 *  `SEDOL`
 *  `CUSIP`
@@ -251,12 +254,6 @@ Sets the field as unique. Unique fields can not be used within [grammatical cons
 
 
 # Data Types
-
-## Boolean
-
-Users can specify boolean data types which will take the values `true` and `false`.
-
-Currently these types are only supported with the `equalTo` and `equalToField` constraints, for example:
 
 ## Integer/Decimal
 
@@ -310,11 +307,26 @@ DateTime fields currently default to the most precise granularity of millisecond
 Note that granularity concerns which values are valid, not how they're presented. All values will be output with the full format defined by [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601), so that a value granular to years will still be output as (e.g.) `0001-01-01T00:00:00.000Z`, rather than `0001` or `0001-01-01`.
 
 ## Date
-The date type can be used as a shorthand to create a [datetime](#DateTime) with a granularity and formatting of days. Dates should be specified in profiles as:
+The date type can be used as a shorthand to create a [datetime](#DateTime) with a granularity and formatting of days. Dates should be specified in profiles as ```"YYYY-MM-DD"```. For example:
 
 ```javascript
 "2001-01-01"
 ```
+
+## Time
+Time represents a specific time in a day. Currently times down to milliseconds are supported. Similarly to datetime, time is specified by a string; either ```hh:mm:ss``` or ```hh:mm:ss.ms```.
+
+Before/after ect. constraints compare times by treating ```00:00:00``` as the starting time.
+
+Supported granularites are ```'half_days'```, ```'hours'```, ```'minutes'```, ```'seconds'``` and ```'millis'``` with the default being ```'millis'```.
+
+## Boolean
+
+Users can specify boolean data types which will take the values `true` and `false`.
+
+Currently these types are only supported with the `equalTo` and `equalToField` constraints.
+
+
 # Predicate constraints
 
 ## Theory
@@ -341,6 +353,8 @@ OR
 { "field": "type", "equalTo": 23 }
 OR
 { "field": "type", "equalTo": "2001-02-03T04:05:06.007" }
+OR
+{ "field": "type", "equalTo": "03:02:59" }
 OR
 { "field": "type", "equalTo": true }
 ```
@@ -542,10 +556,9 @@ Is satisfied if `field` is a number less than or equal to `value`.
 
 Is satisfied if `field` has at least the [granularity](#Numeric-granularity) specified in `value`.
 
-## DateTime constraints
-All dates must be in format `yyyy-MM-ddTHH:mm:ss.SSS` and the Z suffix can be included, but is not required. All datetimes are treated as UTC whether the Z suffix is included or not.
+## Time/DateTime constraints
 
-Example: `2001-02-03T04:05:06.007`
+The time and datetime are shared but must be used with the same type. For example an equal to constraint on a time field must have a value of time.
 
 <div id="predicate-after"></div>
 
@@ -555,17 +568,17 @@ Example: `2001-02-03T04:05:06.007`
 { "field": "date", "after": "2018-09-01T00:00:00.000" }
 ```
 
-Is satisfied if `field` is a datetime occurring after `value`.
+Is satisfied if `field` is a time or datetime occurring after `value`.
 
 <div id="predicate-afterorat"></div>
 
 ### `afterOrAt` _(field, value)_
 
 ```javascript
-{ "field": "date", "afterOrAt": "2018-09-01T00:00:00.000" }
+{ "field": "time", "afterOrAt": "00:00:00" }
 ```
 
-Is satisfied if `field` is a datetime occurring after or simultaneously with `value`.
+Is satisfied if `field` is a time or datetime occurring after or simultaneously with `value`.
 
 <div id="predicate-before"></div>
 
@@ -575,7 +588,7 @@ Is satisfied if `field` is a datetime occurring after or simultaneously with `va
 { "field": "date", "before": "2018-09-01T00:00:00.000" }
 ```
 
-Is satisfied if `field` is a datetime occurring before `value`.
+Is satisfied if `field` is a time or datetime occurring before `value`.
 
 <div id="predicate-beforeorat"></div>
 
@@ -585,7 +598,7 @@ Is satisfied if `field` is a datetime occurring before `value`.
 { "field": "date", "beforeOrAt": "2018-09-01T00:00:00.000" }
 ```
 
-Is satisfied if `field` is a datetime occurring before or simultaneously with `value`.
+Is satisfied if `field` is a time or datetime occurring before or simultaneously with `value`.
 
 <div id="predicate-granularto-datetime"></div>
 
@@ -604,7 +617,7 @@ Is satisfied if `field` has at least the [granularity](#DateTime-granularity) sp
 <div id="predicate-otherfield"></div>
 
 ### `otherField`
-allows a date field to be dependant on the output of another date field
+allows a time or datetime field to be dependant on the output of another field
 
 ```javascript
 { "field": "laterDateField","after": "previousDateField" }
@@ -616,7 +629,7 @@ supported operators are currently
 <div id="predicate-offset"></div>
 
 ### `offset`
-Allows a dependant date to always be a certain offset away from another date
+Allows a dependant time or datetime to always be a certain offset away from another field
 
 ```javascript
 { "field": "threeDaysAfterField","equalToField": "previousDateField", "offset": 3, "offsetUnit": "days" }
@@ -686,16 +699,16 @@ You can add your own custom java generators to the project with the following in
 ## Adding Custom Generators
 <div id="adding-custom-generator"></div>
 
-To add a custom generator you will need to 
+To add a custom generator you will need to
  - clone the datahelix source code
  - go to the "custom" package
- - either 
+ - either
    - implement the CustomGenerator.java interface
    - use the CustomGeneratorBuilder.java to build a custom generator
  - add your custom generator to the list in the CustomGeneratorList.java class
- 
+
 There is an example folder in the "custom" package which shows an example using the CustomGeneratorBuilder to build a generator called "lorem ipsum"
- 
+
 ## using Custom Generators
 <div id="using-custom-generator"></div>
 
@@ -716,7 +729,7 @@ To use your own, put the name of your generator instead of "lorem ipsum"
 ## using Custom Generators as Constraint
 <div id="using-custom-generator-as-constraint"></div>
 
-You can also use custom generators as constraints 
+You can also use custom generators as constraints
 
 
 ```javascript
@@ -725,9 +738,9 @@ You can also use custom generators as constraints
 
 Custom generators can be used in "anyOf" grammatical constraints, as well as in the "then" and "else" parts of conditional constraints
 
-To combine generators with sets and equalTo, you will need to create a 'matchingFunction' when building the custom generator. Which should be a function that returns true if a value is one the custom generator could produce. 
+To combine generators with sets and equalTo, you will need to create a 'matchingFunction' when building the custom generator. Which should be a function that returns true if a value is one the custom generator could produce.
 
-To be able negate the custom generator, or use in the 'if' section of an if then statement, you must define the 'negated Generator' when building the custom generator. Which should return values that the custom generator should not produce. 
+To be able negate the custom generator, or use in the 'if' section of an if then statement, you must define the 'negated Generator' when building the custom generator. Which should return values that the custom generator should not produce.
 
 # Running a Profile
 <div id="Running-a-Profile"></div>
@@ -861,19 +874,19 @@ To generate these outputs, we first output the first case (all values from basel
 # Visualising Decision Trees
 <div id="Visualising-Decision-Trees"></div>
 
-_This is an alpha feature. Please do not rely on it. If you find issues with it, please [report them](https://github.com/finos/datahelix/issues)._ 
+_This is an alpha feature. Please do not rely on it. If you find issues with it, please [report them](https://github.com/finos/datahelix/issues)._
 
-This feature generates a <a href=https://en.wikipedia.org/wiki/DOT_(graph_description_language)>DOT</a> compliant representation of the decision tree, 
+This feature generates a <a href=https://en.wikipedia.org/wiki/DOT_(graph_description_language)>DOT</a> compliant representation of the decision tree,
 for manual inspection, in the form of a DOT formatted file.
 
-If use the `--visualiser-level` and `--visualiser-output-folder` command line options when generating data then 
-you can get visualisations of the decision tree outputted as graphs in DOT files. 
+If use the `--visualiser-level` and `--visualiser-output-folder` command line options when generating data then
+you can get visualisations of the decision tree outputted as graphs in DOT files.
 
 * See [Developer Guide](DeveloperGuide.md) for more information on the decision tree structure.
 * See [Command Line Arguments for Generate Mode](#Command-Line-Arguments-for-Generate-Mode) for more information on the command line arguments.
 
 The visualiser levels can have the following values:
-* OFF - the default and it means no graphs outputted 
+* OFF - the default and it means no graphs outputted
 * STANDARD - it means graphs of the decision tree outputted after each pre-walking stage is done
 * DETAILED - it means the standard decision trees and the various decision trees created during walking stage are outputted
 
@@ -885,4 +898,3 @@ The visualiser levels can have the following values:
     There may be other visualisers that are suitable to use. The requirements for a visualiser are known (currently) as:
     - DOT files are encoded with UTF-8, visualisers must support this encoding.
     - DOT files can include HTML encoded entities, visualisers should support this feature.
-

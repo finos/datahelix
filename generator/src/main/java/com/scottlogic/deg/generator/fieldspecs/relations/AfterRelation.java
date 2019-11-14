@@ -53,6 +53,9 @@ public class AfterRelation<T extends Comparable<T>> implements FieldSpecRelation
         }
 
         LinearRestrictions<T> otherRestrictions = (LinearRestrictions) ((RestrictionsFieldSpec) otherFieldSpec).getRestrictions();
+        if(otherRestrictions.isContradictory()) {
+            return FieldSpecFactory.nullOnly();
+        }
         T min = otherRestrictions.getMin();
         T offsetMin = offsetGranularity.getNext(min, offset);
 

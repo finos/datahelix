@@ -19,6 +19,7 @@ package com.scottlogic.deg.common.profile;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import static com.scottlogic.deg.common.util.Defaults.DEFAULT_DATE_FORMATTING;
+import static com.scottlogic.deg.common.util.Defaults.DEFAULT_TIME_FORMATTING;
 
 public enum SpecificFieldType
 {
@@ -34,7 +35,8 @@ public enum SpecificFieldType
     STRING("string", FieldType.STRING),
     DATETIME("datetime", FieldType.DATETIME),
     DATE("date",FieldType.DATETIME),
-    BOOLEAN("boolean", FieldType.BOOLEAN);
+    BOOLEAN("boolean", FieldType.BOOLEAN),
+    TIME("time", FieldType.TIME);
 
     @JsonValue
     private final String type;
@@ -70,6 +72,7 @@ public enum SpecificFieldType
             case "string": return STRING;
             case "datetime": return DATETIME;
             case "date": return DATE;
+            case "time": return TIME;
             case "boolean": return BOOLEAN;
             default:
                 throw new IllegalStateException("No data types with type " + type);
@@ -79,6 +82,7 @@ public enum SpecificFieldType
     public String getDefaultFormatting() {
         switch (type) {
             case "date": return DEFAULT_DATE_FORMATTING;
+            case "time": return DEFAULT_TIME_FORMATTING;
             default:
                 return null;
         }

@@ -16,7 +16,7 @@ Feature: User can specify that a value is so formatted
   Background:
     Given the generation strategy is full
     And there is a non nullable field foo
-    #commented out tests not working with big decimal values
+    #commented out tests not working with big decimal values. This is addressed in issue https://github.com/finos/datahelix/issues/1432
   Scenario Outline: Running a valid 'formattedAs' request on numbers should be successful
     Given foo is in set:
       | <input> |
@@ -143,3 +143,18 @@ Feature: User can specify that a value is so formatted
       | 2018-02-01T16:17:08.199Z | "%ty"    | "18"                       |
 #      | 2018-02-01T16:17:08.199Z  | "%tZ"        | "08"                           | requires timezone information
 #      | 2018-02-01T16:17:08.199Z  | "%tz"        | "08"                           | requires timezone information
+
+
+  Scenario Outline: Running a valid 'formattedAs' request on time should be successful
+    Given foo is in set:
+      | <input> |
+    And foo has type "time"
+    And foo has formatting <format>
+    Then the following data should be generated:
+      | foo        |
+      | <expected> |
+    Examples:
+      | input        | format        | expected      |
+      | 00:00:00.000 | "%tT"         | "00:00:00"    |
+      | 00:00:00.000 | "%tR"         | "00:00"       |
+      | 01:23:45.678 | "%1$tH:%1$tS" | "01:45"       |

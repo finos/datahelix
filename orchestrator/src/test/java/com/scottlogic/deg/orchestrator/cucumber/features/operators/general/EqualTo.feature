@@ -44,6 +44,14 @@ Feature: User can specify that a value is equalTo a required value
       | foo                      |
       | 2010-01-01T00:03:00.000Z |
 
+  Scenario: Running an 'equalTo' of a time value should return only that time
+    Given there is a non nullable field foo
+    And foo has type "time"
+    And foo is equal to 03:00:00.000
+    Then the following data should be generated:
+      | foo          |
+      | "03:00:00.000" |
+
   Scenario: Running an 'equalTo' of a boolean should return only that boolean
     Given there is a non nullable field foo
     And foo has type "boolean"
@@ -75,11 +83,18 @@ Feature: User can specify that a value is equalTo a required value
     Then the profile is invalid because "Date string '2010-13-40T00:00:00.000Z' must be in ISO-8601 format: Either yyyy-MM-ddTHH:mm:ss.SSS\[Z\] between 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z or yyyy-mm-dd between 0001-01-01 and 9999-12-31"
     And no data is created
 
-  Scenario: Running an 'equalTo' request that includes an invalid time value  should fail with an error message
+  Scenario: Running an 'equalTo' request with a datetime that includes an invalid time value should fail with an error message
     Given there is a non nullable field foo
     And foo has type "datetime"
     And foo is equal to 2010-01-01T55:00:00.000Z
     Then the profile is invalid because "Date string '2010-01-01T55:00:00.000Z' must be in ISO-8601 format: Either yyyy-MM-ddTHH:mm:ss.SSS\[Z\] between 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z or yyyy-mm-dd between 0001-01-01 and 9999-12-31"
+    And no data is created
+
+  Scenario: Running an 'equalTo' request that includes an invalid time value should fail with an error message
+    Given there is a non nullable field foo
+    And foo has type "time"
+    And foo is equal to 55:00:00.000
+    Then the profile is invalid because "Time string 55:00:00.000 must be in ISO-8601 format: Either hh:mm:ss or hh:mm:ss.ms"
     And no data is created
 
   Scenario: Running a not 'equalTo' should allow null
@@ -205,6 +220,11 @@ Feature: User can specify that a value is equalTo a required value
       | after or at 2019-01-01T00:00:00.000Z  | 2019-01-01T00:00:00.000Z | "datetime" |
       | before or at 2019-01-01T00:00:00.000Z | 2019-01-01T00:00:00.000Z | "datetime" |
       | granular to "seconds"                 | 2019-01-01T00:00:01.000Z | "datetime" |
+      | after 00:00:00.000                    | 00:10:00.000             | "time"     |
+      | before 00:10:00.000                   | 00:00:00.000             | "time"     |
+      | after or at 00:00:00.000              | 00:00:00.000             | "time"     |
+      | before or at 00:00:00.000             | 00:00:00.000             | "time"     |
+      | granular to "seconds"                 | 00:00:01.000             | "time"     |
 
 ### Max String Length ###
   Scenario: 'EqualTo' request including a string of the maximum length should be successful
