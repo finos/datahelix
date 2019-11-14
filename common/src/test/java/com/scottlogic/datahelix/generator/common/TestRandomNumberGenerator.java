@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.deg.testUtils;
+package com.scottlogic.datahelix.generator.common;
 
 import com.scottlogic.datahelix.generator.common.utils.RandomNumberGenerator;
 

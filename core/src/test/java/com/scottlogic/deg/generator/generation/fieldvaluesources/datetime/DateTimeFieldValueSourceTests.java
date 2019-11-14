@@ -21,7 +21,7 @@ import com.scottlogic.deg.generator.generation.fieldvaluesources.LinearFieldValu
 import com.scottlogic.deg.generator.restrictions.linear.Limit;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictions;
 import com.scottlogic.deg.generator.restrictions.linear.LinearRestrictionsFactory;
-import com.scottlogic.deg.testUtils.TestRandomNumberGenerator;
+import com.scottlogic.datahelix.generator.common.TestRandomNumberGenerator;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 

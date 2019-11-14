@@ -19,7 +19,7 @@ package com.scottlogic.datahelix.generator.common.profile;
 import com.scottlogic.datahelix.generator.common.ValidationException;
 import com.scottlogic.datahelix.generator.common.util.Defaults;
 import com.scottlogic.datahelix.generator.common.utils.RandomNumberGenerator;
-import com.scottlogic.deg.testUtils.TestRandomNumberGenerator;
+import com.scottlogic.datahelix.generator.common.TestRandomNumberGenerator;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
