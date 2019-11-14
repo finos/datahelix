@@ -42,7 +42,7 @@ public class HelixTime {
         try {
             return LocalTime.parse(time);
         } catch (DateTimeParseException e) {
-            throw new ValidationException("Time string "+ time + " must be in ISO-8601 format: " +
+            throw new ValidationException("Time string " + time + " must be in ISO-8601 format: " +
                 "Either hh:mm:ss or hh:mm:ss.ms");
         }
     }

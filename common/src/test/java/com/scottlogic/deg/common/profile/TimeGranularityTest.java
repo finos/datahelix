@@ -34,7 +34,7 @@ class TimeGranularityTest {
     void isCorrectScale_returnsTrue_WithCorrectScale() {
         TimeGranularity granularity = new TimeGranularity(ChronoUnit.MINUTES);
 
-        LocalTime time = LocalTime.of(6,13);
+        LocalTime time = LocalTime.of(6, 13);
 
         Assert.assertTrue(granularity.isCorrectScale(time));
     }
@@ -43,7 +43,7 @@ class TimeGranularityTest {
     void isCorrectScale_returnsFalse_WithIncorrectScale() {
         TimeGranularity granularity = new TimeGranularity(ChronoUnit.MINUTES);
 
-        LocalTime time = LocalTime.of(1,39,43);
+        LocalTime time = LocalTime.of(1, 39, 43);
 
         Assert.assertFalse(granularity.isCorrectScale(time));
     }
@@ -59,37 +59,37 @@ class TimeGranularityTest {
     @Test
     void getNext_returnsNextValidValue_whenPassedValueAtGranularity() {
         TimeGranularity granularity = new TimeGranularity(ChronoUnit.HOURS);
-        LocalTime time = LocalTime.of(1,0);
-        LocalTime expected = LocalTime.of(2,0);
+        LocalTime time = LocalTime.of(1, 0);
+        LocalTime expected = LocalTime.of(2, 0);
 
-        Assert.assertEquals(expected,granularity.getNext(time));
+        Assert.assertEquals(expected, granularity.getNext(time));
     }
 
     @Test
     void getNext_returnsNextValidValue_whenPassedValueBetweenGranularity() {
         TimeGranularity granularity = new TimeGranularity(ChronoUnit.MINUTES);
-        LocalTime time = LocalTime.of(1,14,50);
-        LocalTime expected = LocalTime.of(1,15,0);
+        LocalTime time = LocalTime.of(1, 14, 50);
+        LocalTime expected = LocalTime.of(1, 15, 0);
 
-        Assert.assertEquals(expected,granularity.getNext(time));
+        Assert.assertEquals(expected, granularity.getNext(time));
     }
 
     @Test
     void getNext_returnsMidnight_WhenPassedTimeNearMidnight() {
         TimeGranularity granularity = new TimeGranularity(ChronoUnit.SECONDS);
-        LocalTime time = LocalTime.of(23,59,59,234);
+        LocalTime time = LocalTime.of(23, 59, 59, 234);
         LocalTime expected = Defaults.TIME_MAX;
 
-        Assert.assertEquals(expected,granularity.getNext(time));
+        Assert.assertEquals(expected, granularity.getNext(time));
     }
 
     @Test
     void getNextMultiple_returnsAfterMidnight_WhenPassedTimeNearMidnight() {
         TimeGranularity granularity = new TimeGranularity(ChronoUnit.SECONDS);
-        LocalTime time = LocalTime.of(23,59,59,234);
-        LocalTime expected = LocalTime.of(0,0,29);
+        LocalTime time = LocalTime.of(23, 59, 59, 234);
+        LocalTime expected = LocalTime.of(0, 0, 29);
 
-        Assert.assertEquals(expected,granularity.getNext(time, 30));
+        Assert.assertEquals(expected, granularity.getNext(time, 30));
     }
 
     @Test
@@ -105,8 +105,8 @@ class TimeGranularityTest {
     @Test
     void getPrevious_betweenGranularity_returnsTruncatedGranularity() {
         TimeGranularity granularity = new TimeGranularity(ChronoUnit.MINUTES);
-        LocalTime time = LocalTime.of(12,30,15);
-        LocalTime expected = LocalTime.of(12,30,0);
+        LocalTime time = LocalTime.of(12, 30, 15);
+        LocalTime expected = LocalTime.of(12, 30, 0);
 
         Assert.assertEquals(expected, granularity.getPrevious(time));
     }
@@ -114,8 +114,8 @@ class TimeGranularityTest {
     @Test
     void getPrevious_onGranularity_returnsPreviousTime() {
         TimeGranularity granularity = new TimeGranularity(ChronoUnit.HOURS);
-        LocalTime time = LocalTime.of(12,0,0);
-        LocalTime expected = LocalTime.of(11,0,0);
+        LocalTime time = LocalTime.of(12, 0, 0);
+        LocalTime expected = LocalTime.of(11, 0, 0);
 
         Assert.assertEquals(expected, granularity.getPrevious(time));
     }
@@ -125,7 +125,7 @@ class TimeGranularityTest {
         TimeGranularity granularity = new TimeGranularity(ChronoUnit.SECONDS);
         RandomNumberGenerator generator = new TestRandomNumberGenerator();
 
-        LocalTime result = granularity.getRandom(LocalTime.MIN,LocalTime.MAX, generator);
+        LocalTime result = granularity.getRandom(LocalTime.MIN, LocalTime.MAX, generator);
         Assert.assertTrue(granularity.isCorrectScale(result));
     }
 
@@ -141,7 +141,7 @@ class TimeGranularityTest {
         TimeGranularity timeGranularity = TimeGranularity.create("millis");
         TimeGranularity expected = new TimeGranularity(ChronoUnit.MILLIS);
 
-        Assert.assertEquals(expected,timeGranularity);
+        Assert.assertEquals(expected, timeGranularity);
     }
 
 }

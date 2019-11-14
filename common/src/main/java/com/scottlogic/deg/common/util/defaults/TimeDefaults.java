@@ -23,9 +23,11 @@ import static com.scottlogic.deg.common.util.Defaults.*;
 
 public class TimeDefaults implements LinearDefaults {
 
-
     private static TimeDefaults singleton;
-    private TimeDefaults(){ }
+
+    private TimeDefaults() {
+    }
+
     public static synchronized TimeDefaults get() {
         if (singleton == null)
             singleton = new TimeDefaults();

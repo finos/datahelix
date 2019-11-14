@@ -44,5 +44,5 @@ public class Defaults {
     public static final TimeGranularity FINEST_TIME_GRANULARITY = new TimeGranularity(ChronoUnit.MILLIS);
 
     public static final String DEFAULT_DATE_FORMATTING = "%tF";  //yyyy-mm-dd see https://docs.oracle.com/javase/8/docs/api/java/util/Formatter.html
-    public static final String DEFAULT_TIME_FORMATTING = "%1$tH:%1$tM:%1$tS.%1$tL"; //hh:mm:ss:ms
+    public static final String DEFAULT_TIME_FORMATTING = "%1$tH:%1$tM:%1$tS.%1$tL"; //hh:mm:ss.ms
 }

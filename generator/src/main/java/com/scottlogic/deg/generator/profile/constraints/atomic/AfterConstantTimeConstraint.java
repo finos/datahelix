@@ -43,7 +43,7 @@ public class AfterConstantTimeConstraint implements AtomicConstraint {
 
     @Override
     public AtomicConstraint negate() {
-        return new BeforeOrEqualToConstantTimeConstraint(field,referenceValue);
+        return new BeforeOrEqualToConstantTimeConstraint(field, referenceValue);
     }
 
     @Override

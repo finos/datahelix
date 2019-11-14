@@ -26,16 +26,17 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
-public class TimeGranularity implements Granularity<LocalTime>{
+public class TimeGranularity implements Granularity<LocalTime> {
 
     private final ChronoUnit granularity;
 
     public TimeGranularity(ChronoUnit granularity) {
-        if (!granularity.isTimeBased()){
+        if (!granularity.isTimeBased()) {
             throw new ValidationException("Granularity for time field must be time based but was " +
                 granularity.toString());
         }
-        this.granularity = granularity;}
+        this.granularity = granularity;
+    }
 
     public static TimeGranularity create(String granularity) {
         return new TimeGranularity(ChronoUnit.valueOf(granularity.toUpperCase()));
@@ -83,7 +84,7 @@ public class TimeGranularity implements Granularity<LocalTime>{
     }
 
     @Override
-    public LocalTime getPrevious(LocalTime value, int amount ) {
+    public LocalTime getPrevious(LocalTime value, int amount) {
         if (!isCorrectScale(value)) {
             return trimToGranularity(value);
         }
@@ -93,8 +94,8 @@ public class TimeGranularity implements Granularity<LocalTime>{
     @Override
     public LocalTime getRandom(LocalTime min, LocalTime max, RandomNumberGenerator randomNumberGenerator) {
         long a = min.until(max, granularity);
-        double b = randomNumberGenerator.nextDouble(0, (double)a);
-        return min.plus((long)b,granularity);
+        double b = randomNumberGenerator.nextDouble(0, (double) a);
+        return min.plus((long) b, granularity);
     }
 
     @Override
