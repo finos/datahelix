@@ -18,7 +18,7 @@ plugins {
     id "java"
 }
 
-group "com.scottlogic.deg"
+group "com.scottlogic.datahelix.generator"
 
 sourceCompatibility = 1.8
 

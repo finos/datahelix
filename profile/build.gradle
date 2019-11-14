@@ -49,6 +49,8 @@ test {
     useJUnitPlatform()
 }
 
+group "com.scottlogic.datahelix.generator"
+
 description = "DataHelix Schema Library"
 
 
