@@ -88,8 +88,8 @@ public class TimeGranularity implements Granularity<LocalTime> {
 
     @Override
     public LocalTime getPrevious(LocalTime value) {
-        value = value.truncatedTo(granularity);
-        if (value.equals(LocalTime.MIN)) {
+        LocalTime valueTruncated = value.truncatedTo(granularity);
+        if (valueTruncated.equals(LocalTime.MIN)) {
             return LocalTime.MIN;
         }
         return getPrevious(value, 1);
