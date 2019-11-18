@@ -23,8 +23,10 @@ import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.*;
 import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.OrConstraint;
+import com.scottlogic.datahelix.generator.profile.custom.CustomConstraintFactory;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintType;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.GeneratorConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.AtomicConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.*;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.relations.InMapConstraintDTO;
@@ -45,10 +47,12 @@ public class ConstraintService
     private final Map<FieldType, AtomicConstraintFactory> atomicConstraintFactoryMap;
     private final Map<FieldType, FieldSpecRelationFactory> relationFactoryMap;
     private final Map<SpecificFieldType, FieldSpecRelationFactory> specificRelationFactoryMap;
+    private final CustomConstraintFactory customConstraintFactory;
 
     @Inject
-    public ConstraintService()
+    public ConstraintService(CustomConstraintFactory customConstraintFactory)
     {
+        this.customConstraintFactory = customConstraintFactory;
         atomicConstraintFactoryMap = new EnumMap<>(FieldType.class);
         atomicConstraintFactoryMap.put(FieldType.DATETIME, new DateTimeConstraintFactory());
         atomicConstraintFactoryMap.put(FieldType.NUMERIC, new NumericConstraintFactory());
@@ -104,6 +108,12 @@ public class ConstraintService
         {
             FieldType type = fields.getByName(((InMapConstraintDTO)dto).field).getType();
             return atomicConstraintFactoryMap.get(type).createInMapRelation((InMapConstraintDTO) dto, fields);
+        }
+        if(dto.getType() == ConstraintType.GENERATOR)
+        {
+            Field field = fields.getByName(((GeneratorConstraintDTO)dto).field);
+            return customConstraintFactory.create(field, ((GeneratorConstraintDTO)dto).generator);
+
         }
         if (dto instanceof RelationalConstraintDTO)
         {
