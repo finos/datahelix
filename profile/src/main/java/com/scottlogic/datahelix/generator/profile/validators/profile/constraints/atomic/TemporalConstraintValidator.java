@@ -18,12 +18,12 @@ package com.scottlogic.datahelix.generator.profile.validators.profile.constraint
 
 
 import com.scottlogic.datahelix.generator.common.profile.FieldType;
-import com.scottlogic.datahelix.generator.common.profile.HelixTime;
 import com.scottlogic.datahelix.generator.common.util.defaults.DateTimeDefaults;
 import com.scottlogic.datahelix.generator.common.validators.ValidationResult;
 import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.temporal.TemporalConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.factories.DateTimeFactory;
+import com.scottlogic.datahelix.generator.profile.factories.TimeFactory;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -84,7 +84,7 @@ public class TemporalConstraintValidator extends AtomicConstraintValidator<Tempo
             return ValidationResult.failure("Time must be specified" + getErrorInfo(dto));
         }
         try {
-            HelixTime.create(time);
+            TimeFactory.create(time);
             return ValidationResult.success();
         } catch (Exception e) {
             return ValidationResult.failure(e.getMessage() + getErrorInfo(dto));
