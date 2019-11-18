@@ -17,16 +17,16 @@
 
 package com.scottlogic.datahelix.generator.profile.factories.relation_factories;
 
-import com.scottlogic.datahelix.generator.common.profile.DateTimeGranularity;
 import com.scottlogic.datahelix.generator.common.profile.Granularity;
+import com.scottlogic.datahelix.generator.common.profile.NumericGranularity;
 
-public class DateTimeRelationFactory extends FieldSpecRelationFactory
+public class IntegerRelationFactory extends FieldSpecRelationFactory
 {
     @Override
     Granularity createGranularity(String offsetUnit)
     {
         return offsetUnit != null
-            ? DateTimeGranularity.create(offsetUnit)
-            : DateTimeGranularity.DEFAULT;
+            ? NumericGranularity.create(offsetUnit)
+            : NumericGranularity.INTEGER_DEFAULT;
     }
 }

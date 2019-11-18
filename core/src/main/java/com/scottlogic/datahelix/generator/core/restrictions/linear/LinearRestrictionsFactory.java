@@ -15,7 +15,10 @@
  */
 package com.scottlogic.datahelix.generator.core.restrictions.linear;
 
+import com.scottlogic.datahelix.generator.common.profile.DateTimeGranularity;
 import com.scottlogic.datahelix.generator.common.profile.Granularity;
+import com.scottlogic.datahelix.generator.common.profile.NumericGranularity;
+import com.scottlogic.datahelix.generator.common.profile.TimeGranularity;
 import com.scottlogic.datahelix.generator.common.util.Defaults;
 
 import java.math.BigDecimal;
@@ -34,7 +37,7 @@ public class LinearRestrictionsFactory {
         Limit<OffsetDateTime> min,
         Limit<OffsetDateTime> max) {
 
-        return createDateTimeRestrictions(min, max, Defaults.DEFAULT_DATETIME_GRANULARITY);
+        return createDateTimeRestrictions(min, max, DateTimeGranularity.DEFAULT);
     }
 
     public static LinearRestrictions<OffsetDateTime> createDateTimeRestrictions(
@@ -48,7 +51,7 @@ public class LinearRestrictionsFactory {
     }
 
     public static LinearRestrictions<LocalTime> createDefaultTimeRestrictions() {
-        return createTimeRestrictions(Defaults.DEFAULT_TIME_GRANULARITY);
+        return createTimeRestrictions(TimeGranularity.DEFAULT);
     }
 
     public static LinearRestrictions<LocalTime> createTimeRestrictions(Granularity<LocalTime> granularity) {
@@ -58,7 +61,7 @@ public class LinearRestrictionsFactory {
     public static LinearRestrictions<LocalTime> createTimeRestrictions(
         Limit<LocalTime> min,
         Limit<LocalTime> max) {
-        return createTimeRestrictions(min, max, Defaults.DEFAULT_TIME_GRANULARITY);
+        return createTimeRestrictions(min, max, TimeGranularity.DEFAULT);
     }
 
 
@@ -95,7 +98,7 @@ public class LinearRestrictionsFactory {
     }
 
     public static LinearRestrictions<BigDecimal> createNumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max) {
-        return createNumericRestrictions(min, max, Defaults.DEFAULT_NUMERIC_GRANULARITY);
+        return createNumericRestrictions(min, max, NumericGranularity.DECIMAL_DEFAULT);
     }
 
     public static LinearRestrictions<BigDecimal> createNumericRestrictions(Limit<BigDecimal> min, Limit<BigDecimal> max, Granularity<BigDecimal> granularity) {
