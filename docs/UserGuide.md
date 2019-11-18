@@ -224,7 +224,7 @@ The data type of the field. See [Data types](#Data-Types) for more on how types 
 
 Sets the field as nullable. When set to false it is the same as a [not](#not) [null](#predicate-null) constraint for the field.
 
-This is an optional property of the field and will default to true.
+This is an optional property of the field and defaults to false.
 
 <div id="fields-formatting"></div>
 
