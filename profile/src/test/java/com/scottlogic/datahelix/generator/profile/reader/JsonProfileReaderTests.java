@@ -515,7 +515,7 @@ public class JsonProfileReaderTests {
                 "    ]" +
                 "}");
 
-        expectValidationException("Values must be specified | Field: foo | Constraint: equalTo | Rule: Unnamed rule");
+        expectValidationException("Values must be specified | Field: foo | Constraint: equalTo");
     }
 
     @Test
@@ -529,7 +529,7 @@ public class JsonProfileReaderTests {
                 "    ]" +
                 "}");
 
-        expectValidationException("Number must be specified | Field: foo | Constraint: lessThan | Rule: Unnamed rule");
+        expectValidationException("Number must be specified | Field: foo | Constraint: lessThan");
     }
 
     @Test
@@ -543,7 +543,7 @@ public class JsonProfileReaderTests {
                 "    ]" +
                 "}");
 
-        expectValidationException("Values must be specified | Field: foo | Constraint: inSet | Rule: Unnamed rule");
+        expectValidationException("Values must be specified | Field: foo | Constraint: inSet");
     }
 
     @Test
@@ -557,7 +557,7 @@ public class JsonProfileReaderTests {
                 "    ]" +
                 "}");
 
-        expectValidationException("In set values must be specified | Field: foo | Constraint: inSet | Rule: Unnamed rule");
+        expectValidationException("In set values must be specified | Field: foo | Constraint: inSet");
     }
 
     @Test
@@ -571,7 +571,7 @@ public class JsonProfileReaderTests {
                 "    ]" +
                 "}");
 
-        expectValidationException("Invalid json: {\"field\":\"foo\",\"is\":null} | Rule: Unnamed rule");
+        expectValidationException("Invalid json: {\"field\":\"foo\",\"is\":null}");
     }
 
     @Test

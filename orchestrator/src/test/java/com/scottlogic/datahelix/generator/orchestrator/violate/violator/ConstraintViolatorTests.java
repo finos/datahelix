@@ -57,12 +57,14 @@ public class ConstraintViolatorTests
     private AtomicConstraint atomicConstraint3;
     private String ruleInformation;
 
-    @Mock private ViolationFilter mockFilter;
+    @Mock
+    private ViolationFilter mockFilter;
 
     private Collection<Constraint> inputConstraints = new ArrayList<>();
 
     @BeforeEach
-    public void commonTestSetup() {
+    public void commonTestSetup()
+    {
         MockitoAnnotations.initMocks(this);
 
         List<ViolationFilter> inputFilters = Collections.singletonList(mockFilter);
@@ -78,12 +80,13 @@ public class ConstraintViolatorTests
     /**
      * Tests that the violate method with an AND constraint returns the correct OR constraint.
      * VIOLATE(AND(X, Y)) reduces to
-     *         OR(
-     *            AND(VIOLATE(X), Y),
-     *            AND(X, VIOLATE(Y)))
+     * OR(
+     * AND(VIOLATE(X), Y),
+     * AND(X, VIOLATE(Y)))
      */
     @Test
-    public void violateRule_withAndConstraint_returnsOrConstraint() {
+    public void violateRule_withAndConstraint_returnsOrConstraint()
+    {
         //Arrange
         AndConstraint inputConstraint = new AndConstraint(atomicConstraint1, atomicConstraint2);
 
@@ -91,10 +94,10 @@ public class ConstraintViolatorTests
         Constraint outputConstraint = target.violateConstraint(inputConstraint);
 
         //Assert
-        Constraint expectedConstraint= new OrConstraint(
-                    new AndConstraint(new ViolatedAtomicConstraint(atomicConstraint1.negate()), atomicConstraint2),
-                    new AndConstraint(atomicConstraint1, new ViolatedAtomicConstraint(atomicConstraint2.negate()))
-                );
+        Constraint expectedConstraint = new OrConstraint(
+            new AndConstraint(new ViolatedAtomicConstraint(atomicConstraint1.negate()), atomicConstraint2),
+            new AndConstraint(atomicConstraint1, new ViolatedAtomicConstraint(atomicConstraint2.negate()))
+        );
 
         assertThat("The violate method should have returned the correct shaped constraint", outputConstraint, sameBeanAs(expectedConstraint));
         assertConstraintTypeEquality(expectedConstraint, outputConstraint);
@@ -105,7 +108,8 @@ public class ConstraintViolatorTests
      * VIOLATE(NOT(AND(X,Y))) reduces to AND(X,Y)
      */
     @Test
-    public void violateRule_withNegatedAndConstraint_returnsAndConstraint() {
+    public void violateRule_withNegatedAndConstraint_returnsAndConstraint()
+    {
         //Arrange
         AndConstraint andConstraint = new AndConstraint(atomicConstraint1, atomicConstraint2);
         Constraint inputConstraint = andConstraint.negate();
@@ -123,7 +127,8 @@ public class ConstraintViolatorTests
      * VIOLATE(OR(X, Y)) reduces to AND(VIOLATE(X), VIOLATE(Y))
      */
     @Test
-    public void violateRule_withOrConstraint_returnsAndConstraint() {
+    public void violateRule_withOrConstraint_returnsAndConstraint()
+    {
         //Arrange
         OrConstraint inputConstraint = new OrConstraint(atomicConstraint1, atomicConstraint2);
 
@@ -131,12 +136,12 @@ public class ConstraintViolatorTests
         Constraint outputConstraint = target.violateConstraint(inputConstraint);
 
         //Assert
-        Constraint expectedConstraint =  new AndConstraint(
-                    new ViolatedAtomicConstraint(atomicConstraint1.negate()),
-                    new ViolatedAtomicConstraint(atomicConstraint2.negate())
-                );
+        Constraint expectedConstraint = new AndConstraint(
+            new ViolatedAtomicConstraint(atomicConstraint1.negate()),
+            new ViolatedAtomicConstraint(atomicConstraint2.negate())
+        );
 
-        assertThat("The violate method should have returned the correct shaped rule", outputConstraint, sameBeanAs(expectedConstraint));
+        assertThat("The violate method should have returned the correct shaped constraint", outputConstraint, sameBeanAs(expectedConstraint));
         assertConstraintTypeEquality(expectedConstraint, outputConstraint);
     }
 
@@ -145,7 +150,8 @@ public class ConstraintViolatorTests
      * VIOLATE(NOT(OR(X, Y))) reduces to OR(X,Y)
      */
     @Test
-    public void violateRule_withNegatedOrConstraint_returnsOrConstraint() {
+    public void violateRule_withNegatedOrConstraint_returnsOrConstraint()
+    {
         //Arrange
         OrConstraint orConstraint = new OrConstraint(atomicConstraint1, atomicConstraint2);
         Constraint inputConstraint = orConstraint.negate();
@@ -154,7 +160,7 @@ public class ConstraintViolatorTests
         Constraint outputConstraint = target.violateConstraint(inputConstraint);
 
         //Assert
-        assertThat("The violate method should have returned the correct shaped rule", outputConstraint, sameBeanAs(orConstraint));
+        assertThat("The violate method should have returned the correct shaped constraint", outputConstraint, sameBeanAs(orConstraint));
         assertConstraintTypeEquality(orConstraint, outputConstraint);
     }
 
@@ -163,7 +169,8 @@ public class ConstraintViolatorTests
      * constraint. VIOLATE(IF(X, then: Y)) reduces to AND(X, VIOLATE(Y))
      */
     @Test
-    public void violateRule_withIfThenConstraint_returnsAndConstraint() {
+    public void violateRule_withIfThenConstraint_returnsAndConstraint()
+    {
         //Arrange
         ConditionalConstraint inputConstraint = new ConditionalConstraint(atomicConstraint1, atomicConstraint2);
 
@@ -172,11 +179,11 @@ public class ConstraintViolatorTests
 
         //Assert
         Constraint expectedConstraint = new AndConstraint(
-                    atomicConstraint1,
-                    new ViolatedAtomicConstraint(atomicConstraint2.negate())
-                );
+            atomicConstraint1,
+            new ViolatedAtomicConstraint(atomicConstraint2.negate())
+        );
 
-        assertThat("The violate method should have returned the correct shaped rule", outputConstraint, sameBeanAs(expectedConstraint));
+        assertThat("The violate method should have returned the correct shaped constraint", outputConstraint, sameBeanAs(expectedConstraint));
         assertConstraintTypeEquality(expectedConstraint, outputConstraint);
     }
 
@@ -185,7 +192,8 @@ public class ConstraintViolatorTests
      * VIOLATE(NOT(IF(X, then: Y))) reduces to IF(X, then: Y)
      */
     @Test
-    public void violateRule_withNegatedIfThenConstraint_returnsIfThenConstraint() {
+    public void violateRule_withNegatedIfThenConstraint_returnsIfThenConstraint()
+    {
         //Arrange
         ConditionalConstraint conditionalConstraint = new ConditionalConstraint(atomicConstraint1, atomicConstraint2);
         Constraint inputConstraint = conditionalConstraint.negate();
@@ -194,7 +202,7 @@ public class ConstraintViolatorTests
         Constraint outputConstraint = target.violateConstraint(inputConstraint);
 
         //Assert
-        assertThat("The violate method should have returned the correct shaped rule", outputConstraint, sameBeanAs(conditionalConstraint));
+        assertThat("The violate method should have returned the correct shaped constraint", outputConstraint, sameBeanAs(conditionalConstraint));
         assertConstraintTypeEquality(conditionalConstraint, outputConstraint);
     }
 
@@ -204,7 +212,8 @@ public class ConstraintViolatorTests
      * VIOLATE(IF(X, then: Y, else: Z)) reduces to OR(AND(X, VIOLATE(Y)), AND(VIOLATE(X), VIOLATE(Z)))
      */
     @Test
-    public void violateRule_withIfThenElseConstraint_returnsAndConstraint() {
+    public void violateRule_withIfThenElseConstraint_returnsAndConstraint()
+    {
         //Arrange
         ConditionalConstraint inputConstraint = new ConditionalConstraint(atomicConstraint1, atomicConstraint2, atomicConstraint3);
 
@@ -213,15 +222,15 @@ public class ConstraintViolatorTests
 
         //Assert
         Constraint expectedConstraint = new OrConstraint(
-                    new AndConstraint(
-                        atomicConstraint1,
-                        new ViolatedAtomicConstraint(atomicConstraint2.negate())),
-                    new AndConstraint(
-                        new ViolatedAtomicConstraint(atomicConstraint1.negate()),
-                        new ViolatedAtomicConstraint(atomicConstraint3.negate()))
-                );
+            new AndConstraint(
+                atomicConstraint1,
+                new ViolatedAtomicConstraint(atomicConstraint2.negate())),
+            new AndConstraint(
+                new ViolatedAtomicConstraint(atomicConstraint1.negate()),
+                new ViolatedAtomicConstraint(atomicConstraint3.negate()))
+        );
 
-        assertThat("The violate method should have returned the correct shaped rule", outputConstraint, sameBeanAs(expectedConstraint));
+        assertThat("The violate method should have returned the correct shaped constraint", outputConstraint, sameBeanAs(expectedConstraint));
         assertConstraintTypeEquality(expectedConstraint, outputConstraint);
     }
 
@@ -230,7 +239,8 @@ public class ConstraintViolatorTests
      * VIOLATE(NOT(IF(X, then: Y, else: Z))) reduces to IF(X, then: Y, else: Z)
      */
     @Test
-    public void violateRule_withNegatedIfThenElseConstraint_returnsIfThenElseConstraint() {
+    public void violateRule_withNegatedIfThenElseConstraint_returnsIfThenElseConstraint()
+    {
         //Arrange
         ConditionalConstraint conditionalConstraint = new ConditionalConstraint(atomicConstraint1, atomicConstraint2, atomicConstraint3);
         Constraint inputConstraint = conditionalConstraint.negate();
@@ -239,7 +249,7 @@ public class ConstraintViolatorTests
         Constraint outputConstraint = target.violateConstraint(inputConstraint);
 
         //Assert
-        assertThat("The violate method should have returned the correct shaped rule", outputConstraint, sameBeanAs(conditionalConstraint));
+        assertThat("The violate method should have returned the correct shaped constraint", outputConstraint, sameBeanAs(conditionalConstraint));
         assertConstraintTypeEquality(conditionalConstraint, outputConstraint);
     }
 
@@ -248,14 +258,15 @@ public class ConstraintViolatorTests
      * VIOLATE(AtomicConstraint) reduces to NEGATE(AtomicConstraint)
      */
     @Test
-    public void violateRule_withAtomicConstraint_returnsNegatedViolatedAtomicConstraint() {
+    public void violateRule_withAtomicConstraint_returnsNegatedViolatedAtomicConstraint()
+    {
         //Act
         Constraint outputConstraint = target.violateConstraint(atomicConstraint1);
 
         //Assert
         Constraint expectedConstraint = new ViolatedAtomicConstraint(atomicConstraint1.negate());
 
-        assertThat("The violate method should have returned the correct shaped rule", outputConstraint, sameBeanAs(expectedConstraint));
+        assertThat("The violate method should have returned the correct shaped constraint", outputConstraint, sameBeanAs(expectedConstraint));
         assertConstraintTypeEquality(expectedConstraint, outputConstraint);
     }
 
@@ -265,45 +276,45 @@ public class ConstraintViolatorTests
      * VIOLATE(RULE(X,Y,Z)) reduces to VIOLATE(X),VIOLATE(Y),VIOLATE(Z)
      */
     @Test
-    public void violateRule_withMultipleAtomicConstraints_returnsViolatedConstraints() {
+    public void violateRule_withMultipleAtomicConstraints_returnsViolatedConstraints()
+    {
         //Arrange
         inputConstraints.add(atomicConstraint1);
         inputConstraints.add(atomicConstraint2);
         inputConstraints.add(atomicConstraint3);
 
         //Act
-        List<Constraint> outputConstraints = inputConstraints.stream().map(target::violateConstraint)
-            .collect(Collectors.toList());
+        Constraint outputConstraint = target.violateConstraint(new AndConstraint(inputConstraints));
 
         //Assert
-        List<Constraint> expectedConstraints = Collections.singletonList(
-            new OrConstraint(
-                    new AndConstraint(
-                        new ViolatedAtomicConstraint(atomicConstraint1.negate()),
-                        atomicConstraint2,
-                        atomicConstraint3
-                    ),
-                    new AndConstraint(
-                        atomicConstraint1,
-                        new ViolatedAtomicConstraint(atomicConstraint2.negate()),
-                        atomicConstraint3
-                    ),
-                    new AndConstraint(
-                        atomicConstraint1,
-                        atomicConstraint2,
-                        new ViolatedAtomicConstraint(atomicConstraint3.negate())
-                    )
-                ));
+        Constraint expectedConstraint = new OrConstraint(
+            new AndConstraint(
+                new ViolatedAtomicConstraint(atomicConstraint1.negate()),
+                atomicConstraint2,
+                atomicConstraint3
+            ),
+            new AndConstraint(
+                atomicConstraint1,
+                new ViolatedAtomicConstraint(atomicConstraint2.negate()),
+                atomicConstraint3
+            ),
+            new AndConstraint(
+                atomicConstraint1,
+                atomicConstraint2,
+                new ViolatedAtomicConstraint(atomicConstraint3.negate())
+            )
+        );
 
-        assertThat("The violate method should have returned the correct shaped rule", outputConstraints, sameBeanAs(expectedConstraints));
-        assertConstraintListTypeEquality(expectedConstraints, outputConstraints);
+        assertThat("The violate method should have returned the correct shaped constraint", outputConstraint, sameBeanAs(expectedConstraint));
+        assertConstraintTypeEquality(expectedConstraint, outputConstraint);
     }
 
     /**
      * Tests that the violate method with unsupported constraint type throws UnviolatableConstraintException exception.
      */
     @Test
-    public void violateRule_withUnsupportedConstraints_throwsRuntimeException() {
+    public void violateRule_withUnsupportedConstraints_throwsRuntimeException()
+    {
         //Arrange
         Constraint inputConstraint = Mockito.mock(Constraint.class);
 
@@ -318,7 +329,8 @@ public class ConstraintViolatorTests
      * Tests that the violate method with empty violation filter ignores missing filter.
      */
     @Test
-    public void violateRule_withEmptyViolationFilter_doesNotThrow() {
+    public void violateRule_withEmptyViolationFilter_doesNotThrow()
+    {
         //Arrange
         target = new ConstraintViolator(new ArrayList<>());
 
@@ -334,7 +346,8 @@ public class ConstraintViolatorTests
      * VIOLATE(RULE(X,Y)), ignore constraints X,Y reduces to X,Y
      */
     @Test
-    public void violateRule_withViolationFilterOnly_returnsNonViolatedConstraints() {
+    public void violateRule_withViolationFilterOnly_returnsNonViolatedConstraints()
+    {
         //Arrange
         inputConstraints.add(atomicConstraint1);
         inputConstraints.add(atomicConstraint2);
@@ -347,9 +360,9 @@ public class ConstraintViolatorTests
             .collect(Collectors.toList());
 
         //Assert
-        List<Constraint> expectedConstraints = Arrays.asList(atomicConstraint1,atomicConstraint2);
+        List<Constraint> expectedConstraints = Arrays.asList(atomicConstraint1, atomicConstraint2);
 
-        assertThat("The violate method should have returned the correct shaped rule", outputConstraints, sameBeanAs(expectedConstraints));
+        assertThat("The violate method should have returned the correct shaped constraint", outputConstraints, sameBeanAs(expectedConstraints));
         assertConstraintListTypeEquality(expectedConstraints, outputConstraints);
     }
 
@@ -359,7 +372,8 @@ public class ConstraintViolatorTests
      * VIOLATE(RULE(X,Y,Z)), ignore constraint X reduces to X,VIOLATE(Y),VIOLATE(Z)
      */
     @Test
-    public void violateRule_withViolationFilterFirst_returnsViolatedAndNonViolatedConstraints() {
+    public void violateRule_withViolationFilterFirst_returnsViolatedAndNonViolatedConstraints()
+    {
         //Arrange
         inputConstraints.add(atomicConstraint1);
         inputConstraints.add(atomicConstraint2);
@@ -371,25 +385,29 @@ public class ConstraintViolatorTests
         when(mockFilter.canViolate(atomicConstraint3)).thenReturn(true);
 
         //Act
-        List<Constraint> outputConstraints = inputConstraints.stream().map(target::violateConstraint)
-            .collect(Collectors.toList());
+        Constraint outputConstraint = target.violateConstraint(new AndConstraint(inputConstraints));
 
         //Assert
-        List<Constraint> expectedConstraints = Arrays.asList(
-                atomicConstraint1,
-                new OrConstraint(
-                    new AndConstraint(
-                        new ViolatedAtomicConstraint(atomicConstraint2.negate()),
-                        atomicConstraint3
-                    ),
-                    new AndConstraint(
-                        atomicConstraint2,
-                        new ViolatedAtomicConstraint(atomicConstraint3.negate())
-                    )
-                ));
+        Constraint expectedConstraint = new OrConstraint(
+                new AndConstraint(
+                    atomicConstraint1,
+                    atomicConstraint2,
+                    atomicConstraint3
+                ),
+                new AndConstraint(
+                    atomicConstraint1,
+                    new ViolatedAtomicConstraint(atomicConstraint2.negate()),
+                    atomicConstraint3
+                ),
+                new AndConstraint(
+                    atomicConstraint1,
+                    atomicConstraint2,
+                    new ViolatedAtomicConstraint(atomicConstraint3.negate())
+                )
+            );
 
-        assertThat("The violate method should have returned the correct shaped rule", outputConstraints, sameBeanAs(expectedConstraints));
-        assertConstraintListTypeEquality(expectedConstraints, outputConstraints);
+        assertThat("The violate method should have returned the correct shaped constraint", outputConstraint, sameBeanAs(expectedConstraint));
+        assertConstraintTypeEquality(expectedConstraint, outputConstraint);
     }
 
     /**
@@ -398,7 +416,8 @@ public class ConstraintViolatorTests
      * VIOLATE(RULE(X,Y,Z)), ignore constraint Z reduces to Z,VIOLATE(X),VIOLATE(Y)
      */
     @Test
-    public void violateRule_withViolationFilterLast_returnsViolatedAndNonViolatedConstraints() {
+    public void violateRule_withViolationFilterLast_returnsViolatedAndNonViolatedConstraints()
+    {
         //Arrange
         inputConstraints.add(atomicConstraint1);
         inputConstraints.add(atomicConstraint2);
@@ -409,27 +428,30 @@ public class ConstraintViolatorTests
         when(mockFilter.canViolate(atomicConstraint2)).thenReturn(true);
         when(mockFilter.canViolate(atomicConstraint3)).thenReturn(false);
 
+
         //Act
-        List<Constraint> outputConstraints = inputConstraints.stream().map(target::violateConstraint)
-            .collect(Collectors.toList());
+        Constraint outputConstraint = target.violateConstraint(new AndConstraint(inputConstraints));
 
         //Assert
-        List<Constraint> expectedConstraints =
-            Arrays.asList(
-                atomicConstraint3,
-                new OrConstraint(
-                    new AndConstraint(
-                        new ViolatedAtomicConstraint(atomicConstraint1.negate()),
-                        atomicConstraint2
-                    ),
-                    new AndConstraint(
-                        atomicConstraint1,
-                        new ViolatedAtomicConstraint(atomicConstraint2.negate())
-                    )
-                )
-            );
+        Constraint expectedConstraint = new OrConstraint(
+            new AndConstraint(
+                new ViolatedAtomicConstraint(atomicConstraint1.negate()),
+                atomicConstraint2,
+                atomicConstraint3
+            ),
+            new AndConstraint(
+                atomicConstraint1,
+                new ViolatedAtomicConstraint(atomicConstraint2.negate()),
+                atomicConstraint3
+            ),
+            new AndConstraint(
+                atomicConstraint1,
+                atomicConstraint2,
+                atomicConstraint3
+            )
+        );
 
-        assertThat("The violate method should have returned the correct shaped rule", outputConstraints, sameBeanAs(expectedConstraints));
-        assertConstraintListTypeEquality(expectedConstraints, outputConstraints);
+        assertThat("The violate method should have returned the correct shaped constraint", outputConstraint, sameBeanAs(expectedConstraint));
+        assertConstraintTypeEquality(expectedConstraint, outputConstraint);
     }
 }

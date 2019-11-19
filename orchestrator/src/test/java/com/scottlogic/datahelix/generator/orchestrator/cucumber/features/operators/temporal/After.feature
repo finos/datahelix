@@ -241,4 +241,4 @@ Feature: User can specify that a datetime date is after, but not equal to, a spe
 
   Scenario: Running a 'after' request that specifies the highest valid system date should be unsuccessful
     Given foo is after 10000-01-01T00:00:00.000Z
-    Then the profile is invalid with error containing "Dates must be between 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z | Field: foo | Constraint: after | Rule: Unnamed rule"
+    Then the profile is invalid with error containing "Dates must be between 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z | Field: foo | Constraint: after"

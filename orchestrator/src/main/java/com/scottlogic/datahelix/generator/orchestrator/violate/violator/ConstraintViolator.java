@@ -60,14 +60,11 @@ public class ConstraintViolator
 
             Collection<Constraint> violatedIndividually =
                 subConstraints.stream()
-                    // for each subconstraint X, make a copy of the original list but with X replaced by VIOLATE(X)
                     .map(constraintToViolate ->
                         subConstraints.stream()
-                            .map(c -> c == constraintToViolate
-                                ? violateConstraint(c)
-                                : c)
+                            .map(c -> c == constraintToViolate ? violateConstraint(c) : c)
                             .collect(Collectors.toList()))
-                    // make an AndConstraint out of each of the new lists
+
                     .map(AndConstraint::new)
                     .collect(Collectors.toList());
 

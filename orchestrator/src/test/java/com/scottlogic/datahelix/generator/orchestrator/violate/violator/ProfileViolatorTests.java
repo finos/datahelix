@@ -89,7 +89,7 @@ public class ProfileViolatorTests {
                     constraint1,
                     new Fields(Arrays.asList(fooField, barField)),
                     Collections.singletonList(violatedConstraint1),
-                    "Input profile description -- Violating: Rule 1 description"
+                    "Input profile description -- Violating: `bar` > 50 and `foo` > 100"
                 )
             );
 
@@ -126,13 +126,13 @@ public class ProfileViolatorTests {
                     constraint1,
                     new Fields(Arrays.asList(fooField, barField)),
                     Arrays.asList(violatedConstraint1, constraint2),
-                    "Input profile description -- Violating: Rule 1 description"
+                    "Input profile description -- Violating: `bar` > 50 and `foo` > 100"
                 ),
                 new ViolatedProfile(
                     constraint2,
                     new Fields(Arrays.asList(fooField, barField)),
                     Arrays.asList(constraint1, violatedConstraint2),
-                    "Input profile description -- Violating: Rule 2 description"
+                    "Input profile description -- Violating: `bar` < 51 and `foo` > 100"
                 )
             );
 
