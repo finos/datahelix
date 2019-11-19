@@ -29,6 +29,8 @@ import java.util.Objects;
 
 public class DateTimeGranularity implements Granularity<OffsetDateTime> {
 
+    public static final DateTimeGranularity DEFAULT = new DateTimeGranularity(ChronoUnit.MILLIS, false);
+
     private final ChronoUnit chronoUnit;
     private final boolean workingDay;
     private final TemporalAdjusterGenerator temporalAdjusterGenerator;

@@ -16,9 +16,7 @@
 
 package com.scottlogic.datahelix.generator.common.util;
 
-import com.scottlogic.datahelix.generator.common.profile.NumericGranularity;
 import com.scottlogic.datahelix.generator.common.profile.TimeGranularity;
-import com.scottlogic.datahelix.generator.common.profile.DateTimeGranularity;
 
 import java.math.BigDecimal;
 import java.time.LocalTime;
@@ -38,9 +36,6 @@ public class Defaults {
     public static final OffsetDateTime ISO_MIN_DATE = OffsetDateTime.of(1, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
     public static final LocalTime TIME_MIN = LocalTime.MIN;
     public static final LocalTime TIME_MAX = LocalTime.MAX;
-    public static final DateTimeGranularity DEFAULT_DATETIME_GRANULARITY = new DateTimeGranularity(ChronoUnit.MILLIS, false);
-    public static final NumericGranularity DEFAULT_NUMERIC_GRANULARITY = new NumericGranularity(20);
-    public static final TimeGranularity DEFAULT_TIME_GRANULARITY = new TimeGranularity(ChronoUnit.MILLIS);
 
     public static final TimeGranularity FINEST_TIME_GRANULARITY = new TimeGranularity(ChronoUnit.MILLIS);
 
