@@ -20,12 +20,13 @@ package com.scottlogic.datahelix.generator.profile.factories.relation_factories;
 import com.scottlogic.datahelix.generator.common.profile.Granularity;
 import com.scottlogic.datahelix.generator.common.profile.NumericGranularity;
 
-public class NumericRelationFactory extends FieldSpecRelationFactory
+public class DecimalRelationFactory extends FieldSpecRelationFactory
 {
-
     @Override
     Granularity createGranularity(String offsetUnit)
     {
-        return offsetUnit == null ? null : NumericGranularity.create(offsetUnit);
+        return offsetUnit != null
+            ? NumericGranularity.create(offsetUnit)
+            : NumericGranularity.DECIMAL_DEFAULT;
     }
 }

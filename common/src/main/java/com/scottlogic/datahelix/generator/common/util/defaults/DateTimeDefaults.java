@@ -15,6 +15,7 @@
  */
 package com.scottlogic.datahelix.generator.common.util.defaults;
 
+import com.scottlogic.datahelix.generator.common.profile.DateTimeGranularity;
 import com.scottlogic.datahelix.generator.common.profile.Granularity;
 
 import java.time.OffsetDateTime;
@@ -43,6 +44,6 @@ public class DateTimeDefaults implements LinearDefaults<OffsetDateTime> {
 
     @Override
     public Granularity<OffsetDateTime> granularity() {
-        return DEFAULT_DATETIME_GRANULARITY;
+        return DateTimeGranularity.DEFAULT;
     }
 }

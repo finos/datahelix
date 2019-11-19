@@ -44,6 +44,7 @@ public class ConstraintService
 {
     private final Map<FieldType, AtomicConstraintFactory> atomicConstraintFactoryMap;
     private final Map<FieldType, FieldSpecRelationFactory> relationFactoryMap;
+    private final Map<SpecificFieldType, FieldSpecRelationFactory> specificRelationFactoryMap;
 
     @Inject
     public ConstraintService()
@@ -57,10 +58,13 @@ public class ConstraintService
 
         relationFactoryMap = new EnumMap<>(FieldType.class);
         relationFactoryMap.put(FieldType.DATETIME, new DateTimeRelationFactory());
-        relationFactoryMap.put(FieldType.NUMERIC, new NumericRelationFactory());
         relationFactoryMap.put(FieldType.STRING, new StringRelationFactory());
         relationFactoryMap.put(FieldType.TIME, new TimeRelationFactory());
         relationFactoryMap.put(FieldType.BOOLEAN, new BooleanRelationFactory());
+
+        specificRelationFactoryMap = new EnumMap<>(SpecificFieldType.class);
+        specificRelationFactoryMap.put(SpecificFieldType.INTEGER, new IntegerRelationFactory());
+        specificRelationFactoryMap.put(SpecificFieldType.DECIMAL, new DecimalRelationFactory());
     }
 
     Optional<Constraint> createSpecificTypeConstraint(Field field)
@@ -103,8 +107,11 @@ public class ConstraintService
         }
         if (dto instanceof RelationalConstraintDTO)
         {
-            FieldType type = fields.getByName(((RelationalConstraintDTO)dto).field).getType();
-            return relationFactoryMap.get(type).createRelation((RelationalConstraintDTO) dto, fields);
+            SpecificFieldType specificFieldType = fields.getByName(((RelationalConstraintDTO)dto).field).getSpecificType();
+            FieldType type = specificFieldType.getFieldType();
+            return type == FieldType.NUMERIC
+                ? specificRelationFactoryMap.get(specificFieldType).createRelation((RelationalConstraintDTO) dto, fields)
+                : relationFactoryMap.get(type).createRelation((RelationalConstraintDTO) dto, fields);
         }
         if (dto instanceof AtomicConstraintDTO)
         {

@@ -16,6 +16,7 @@
 package com.scottlogic.datahelix.generator.common.util.defaults;
 
 import com.scottlogic.datahelix.generator.common.profile.Granularity;
+import com.scottlogic.datahelix.generator.common.profile.NumericGranularity;
 
 import java.math.BigDecimal;
 
@@ -43,6 +44,6 @@ public class NumericDefaults implements LinearDefaults<BigDecimal> {
 
     @Override
     public Granularity<BigDecimal> granularity() {
-        return DEFAULT_NUMERIC_GRANULARITY;
+        return NumericGranularity.DECIMAL_DEFAULT;
     }
 }

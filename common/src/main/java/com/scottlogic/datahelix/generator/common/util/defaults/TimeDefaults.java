@@ -16,6 +16,7 @@
 package com.scottlogic.datahelix.generator.common.util.defaults;
 
 import com.scottlogic.datahelix.generator.common.profile.Granularity;
+import com.scottlogic.datahelix.generator.common.profile.TimeGranularity;
 
 import java.time.LocalTime;
 
@@ -46,7 +47,7 @@ public class TimeDefaults implements LinearDefaults {
 
     @Override
     public Granularity<LocalTime> granularity() {
-        return DEFAULT_TIME_GRANULARITY;
+        return TimeGranularity.DEFAULT;
     }
 
 }

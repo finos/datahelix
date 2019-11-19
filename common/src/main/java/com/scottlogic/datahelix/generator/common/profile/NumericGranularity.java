@@ -27,6 +27,8 @@ import java.math.RoundingMode;
 import java.util.Objects;
 
 public class NumericGranularity implements Granularity<BigDecimal> {
+    public static final NumericGranularity DECIMAL_DEFAULT = new NumericGranularity(20);
+    public static final NumericGranularity INTEGER_DEFAULT = new NumericGranularity(0);
 
     private final int decimalPlaces;
 
