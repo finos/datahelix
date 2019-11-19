@@ -92,7 +92,7 @@ Profiles are JSON documents consisting of three sections, the schema version, th
 - **Schema Version** - Dictates the method of serialisation of the profile in order for the generator to
 interpret the profile fields and rules. The latest version is
 ```
-    "schemaVersion": "0.17",
+    "schemaVersion": "0.18",
 ```
 - **List of Fields** - An array of column headings is defined with unique "name" keys.
 ```
@@ -143,7 +143,7 @@ These three sections are combined to form the [complete profile](#Example-Profil
 ## Example Profile
 ```
     {
-    "schemaVersion": "0.17",
+    "schemaVersion": "0.18",
     "fields": [
         {
             "name": "Column 1",

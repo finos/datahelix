@@ -72,9 +72,7 @@ public class ProfileViolator {
      */
     private ViolatedProfile violateRuleOnProfile(Profile profile, Rule violatedRule) {
         Collection<Rule> newRules = profile.getConstraints().stream()
-            .map(r -> r == violatedRule
-                ? ruleViolator.violateRule(violatedRule)
-                : r)
+            .map(r -> r == violatedRule ? ruleViolator.violateRule(violatedRule): r)
             .collect(Collectors.toList());
 
         return new ViolatedProfile(

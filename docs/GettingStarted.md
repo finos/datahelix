@@ -40,7 +40,7 @@ We'll start by generating data for a trivial schema. Using your favourite text e
 
 ```json
 {
-    "schemaVersion": "0.17",
+    "schemaVersion": "0.18",
     "fields": [{ "name": "firstName", "type": "string" }],
     "rules": []
 }
@@ -111,7 +111,7 @@ Update the JSON profile as follows:
 
 ```json
 {
-    "schemaVersion": "0.17",
+    "schemaVersion": "0.18",
     "fields": [{ "name": "firstName", "type": "string" }],
     "rules": [
         {
@@ -183,7 +183,7 @@ We'll expand the example profile to add a new `age` field, a not-null integer in
 
 ```json
 {
-    "schemaVersion": "0.17",
+    "schemaVersion": "0.18",
     "fields": [
         { "name": "firstName", "type": "string" },
         { "name": "age", "type": "integer"  }
@@ -230,7 +230,7 @@ Finally, we'll add a field for National Insurance number. In this case, the cons
 
 ```json
 {
-    "schemaVersion": "0.17",
+    "schemaVersion": "0.18",
     "fields": [
         { "name": "firstName", "type": "string" },
         { "name": "age", "type": "integer"  },
