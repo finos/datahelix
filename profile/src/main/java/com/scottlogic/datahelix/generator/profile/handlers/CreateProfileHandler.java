@@ -19,34 +19,72 @@ package com.scottlogic.datahelix.generator.profile.handlers;
 import com.google.inject.Inject;
 import com.scottlogic.datahelix.generator.common.commands.CommandHandler;
 import com.scottlogic.datahelix.generator.common.commands.CommandResult;
+import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.datahelix.generator.common.validators.Validator;
 import com.scottlogic.datahelix.generator.core.profile.Profile;
-import com.scottlogic.datahelix.generator.core.profile.Rule;
+import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
+import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.IsNullConstraint;
 import com.scottlogic.datahelix.generator.profile.commands.CreateProfile;
+import com.scottlogic.datahelix.generator.profile.custom.CustomConstraintFactory;
+import com.scottlogic.datahelix.generator.profile.services.ConstraintService;
 import com.scottlogic.datahelix.generator.profile.services.FieldService;
-import com.scottlogic.datahelix.generator.profile.services.RuleService;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class CreateProfileHandler extends CommandHandler<CreateProfile, Profile>
 {
     private final FieldService fieldService;
-    private final RuleService ruleService;
+    private final ConstraintService constraintService;
+    private final CustomConstraintFactory customConstraintFactory;
 
     @Inject
-    public CreateProfileHandler(FieldService fieldService, RuleService ruleService, Validator<CreateProfile> validator)
+    public CreateProfileHandler(FieldService fieldService, ConstraintService constraintService,
+                                CustomConstraintFactory customConstraintFactory, Validator<CreateProfile> validator)
     {
         super(validator);
         this.fieldService = fieldService;
-        this.ruleService = ruleService;
+        this.constraintService = constraintService;
+        this.customConstraintFactory = customConstraintFactory;
     }
 
     @Override
     public CommandResult<Profile> handleCommand(CreateProfile command)
     {
-        Fields fields = fieldService.createFields(command.profileDTO.fields, command.profileDTO.rules);
-        List<Rule> rules = ruleService.createRules(command.profileDTO.rules, fields);
-        return CommandResult.success(new Profile(fields, rules, command.profileDTO.description));
+        Fields fields = fieldService.createFields(command.profileDTO);
+        List<Constraint> constraints = constraintService.createConstraints(command.profileDTO.constraints, fields);
+
+        constraints.addAll(createNullableConstraints(fields));
+        constraints.addAll(createSpecificTypeConstraints(fields));
+        constraints.addAll(createCustomGeneratorConstraints(fields));
+
+        return CommandResult.success(new Profile(command.profileDTO.description, fields, constraints));
+    }
+
+    private List<Constraint> createNullableConstraints(Fields fields)
+    {
+        return fields.stream()
+            .filter(field -> !field.isNullable())
+            .map(field -> new IsNullConstraint(field).negate())
+            .collect(Collectors.toList());
+    }
+
+    private List<Constraint> createSpecificTypeConstraints(Fields fields)
+    {
+        return fields.stream()
+            .map(constraintService::createSpecificTypeConstraint)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .collect(Collectors.toList());
+    }
+
+    private List<Constraint> createCustomGeneratorConstraints(Fields fields)
+    {
+        return fields.stream()
+            .filter(Field::usesCustomGenerator)
+            .map(f -> customConstraintFactory.create(f, f.getCustomGeneratorName()))
+            .collect(Collectors.toList());
     }
 }

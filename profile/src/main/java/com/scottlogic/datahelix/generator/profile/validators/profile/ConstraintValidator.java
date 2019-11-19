@@ -50,39 +50,37 @@ import java.util.List;
 
 public abstract class ConstraintValidator<T extends ConstraintDTO> implements Validator<T>
 {
-    protected final String rule;
     protected final List<FieldDTO> fields;
 
-    protected ConstraintValidator(String rule, List<FieldDTO> fields)
+    protected ConstraintValidator(List<FieldDTO> fields)
     {
-        this.rule = rule;
         this.fields = fields;
     }
 
     protected String getErrorInfo(T constraint)
     {
-        return " | Constraint: " + constraint.getType().propertyName + " | Rule: " + rule;
+        return " | Constraint: " + constraint.getType().propertyName;
     }
 
-    protected static ValidationResult validateConstraint(ConstraintDTO dto, String rule, List<FieldDTO> fields)
+    protected static ValidationResult validateConstraint(ConstraintDTO dto, List<FieldDTO> fields)
     {
-        ValidationResult constraintMustBeSpecified = constraintMustBeSpecified(dto, rule);
+        ValidationResult constraintMustBeSpecified = constraintMustBeSpecified(dto);
         if (!constraintMustBeSpecified.isSuccess) return constraintMustBeSpecified;
         switch (dto.getType())
         {
             case EQUAL_TO:
-                return new EqualToConstraintValidator(rule, fields).validate((EqualToConstraintDTO) dto);
+                return new EqualToConstraintValidator(fields).validate((EqualToConstraintDTO) dto);
             case IN_SET:
-                return new InSetConstraintValidator(rule, fields).validate((InSetConstraintDTO) dto);
+                return new InSetConstraintValidator(fields).validate((InSetConstraintDTO) dto);
             case IN_MAP:
-                return new InMapConstraintValidator(rule, fields).validate((InMapConstraintDTO) dto);
+                return new InMapConstraintValidator(fields).validate((InMapConstraintDTO) dto);
             case IS_NULL:
-                return new IsNullConstraintValidator(rule, fields).validate((IsNullConstraintDTO)dto);
+                return new IsNullConstraintValidator(fields).validate((IsNullConstraintDTO)dto);
             case GRANULAR_TO:
-                return new GranularToConstraintValidator(rule, fields).validate((GranularToConstraintDTO) dto);
+                return new GranularToConstraintValidator(fields).validate((GranularToConstraintDTO) dto);
             case MATCHES_REGEX:
             case CONTAINS_REGEX:
-                return new RegexConstraintValidator(rule, fields).validate((RegexConstraintDTO) dto);
+                return new RegexConstraintValidator(fields).validate((RegexConstraintDTO) dto);
             case EQUAL_TO_FIELD:
             case GREATER_THAN_FIELD:
             case GREATER_THAN_OR_EQUAL_TO_FIELD:
@@ -92,49 +90,49 @@ public abstract class ConstraintValidator<T extends ConstraintDTO> implements Va
             case AFTER_OR_AT_FIELD:
             case BEFORE_FIELD:
             case BEFORE_OR_AT_FIELD:
-                return new RelationalConstraintValidator<>(rule, fields).validate((RelationalConstraintDTO) dto);
+                return new RelationalConstraintValidator<>(fields).validate((RelationalConstraintDTO) dto);
             case OF_LENGTH:
-                return new OfLengthConstraintValidator(rule, fields, FieldType.STRING).validate((OfLengthConstraintDTO) dto);
+                return new OfLengthConstraintValidator(fields, FieldType.STRING).validate((OfLengthConstraintDTO) dto);
             case LONGER_THAN:
-                return new LongerThanConstraintValidator(rule, fields, FieldType.STRING).validate((LongerThanConstraintDTO) dto);
+                return new LongerThanConstraintValidator(fields, FieldType.STRING).validate((LongerThanConstraintDTO) dto);
             case SHORTER_THAN:
-                return new ShorterThanConstraintValidator(rule, fields, FieldType.STRING).validate((ShorterThanConstraintDTO) dto);
+                return new ShorterThanConstraintValidator(fields, FieldType.STRING).validate((ShorterThanConstraintDTO) dto);
             case GREATER_THAN:
             case GREATER_THAN_OR_EQUAL_TO:
             case LESS_THAN:
             case LESS_THAN_OR_EQUAL_TO:
-                return new NumericConstraintValidator(rule, fields, FieldType.NUMERIC).validate((NumericConstraintDTO) dto);
+                return new NumericConstraintValidator(fields, FieldType.NUMERIC).validate((NumericConstraintDTO) dto);
             case AFTER:
             case AFTER_OR_AT:
             case BEFORE:
             case BEFORE_OR_AT:
-                return new TemporalConstraintValidator(rule, fields).validate((TemporalConstraintDTO) dto);
+                return new TemporalConstraintValidator(fields).validate((TemporalConstraintDTO) dto);
             case NOT:
-                return new NotConstraintValidator(rule, fields).validate((NotConstraintDTO) dto);
+                return new NotConstraintValidator(fields).validate((NotConstraintDTO) dto);
             case ANY_OF:
-                return new AnyOfConstraintValidator(rule, fields).validate((AnyOfConstraintDTO) dto);
+                return new AnyOfConstraintValidator(fields).validate((AnyOfConstraintDTO) dto);
             case ALL_OF:
-                return new AllOfConstraintValidator(rule, fields).validate((AllOfConstraintDTO) dto);
+                return new AllOfConstraintValidator(fields).validate((AllOfConstraintDTO) dto);
             case IF:
-                return new ConditionalConstraintValidator(rule, fields).validate((ConditionalConstraintDTO) dto);
+                return new ConditionalConstraintValidator(fields).validate((ConditionalConstraintDTO) dto);
             default:
                 throw new IllegalStateException("Unexpected constraint type: " + dto.getType());
         }
     }
 
-    private static ValidationResult constraintMustBeSpecified(ConstraintDTO dto, String rule)
+    private static ValidationResult constraintMustBeSpecified(ConstraintDTO dto)
     {
         if(dto == null)
         {
-            return  ValidationResult.failure("Constraint must not be null | Rule: " + rule);
+            return  ValidationResult.failure("Constraint must not be null");
         }
         if(dto instanceof InvalidConstraintDTO)
         {
-            return ValidationResult.failure("Invalid json: " + ((InvalidConstraintDTO)dto).json + " | Rule: " + rule);
+            return ValidationResult.failure("Invalid json: " + ((InvalidConstraintDTO)dto).json);
         }
         if(dto.getType() == null)
         {
-            return ValidationResult.failure("Constraint type must not be null | Constraint: " + dto.getType().propertyName + " | Rule: " + rule);
+            return ValidationResult.failure("Constraint type must not be null");
         }
         return ValidationResult.success();
     }

@@ -59,7 +59,7 @@ public class ViolateOutputValidatorTests {
         rules.add(mockRule);
         when(mockFileUtils.exists(mockFilePath)).thenReturn(true);
         when(mockFileUtils.isDirectory(mockFilePath)).thenReturn(true);
-        when(mockProfile.getRules()).thenReturn(rules);
+        when(mockProfile.getConstraints()).thenReturn(rules);
         when(mockFileUtils.isDirectoryEmpty(mockFilePath, 1)).thenReturn(true);
         OutputPath outputPath = new OutputPath(mockFilePath);
         ViolateOutputValidator outputTarget = new ViolateOutputValidator(false, outputPath, mockFileUtils);

@@ -23,7 +23,6 @@ import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import com.scottlogic.datahelix.generator.core.decisiontree.testutils.*;
 import com.scottlogic.datahelix.generator.core.profile.Profile;
-import com.scottlogic.datahelix.generator.core.profile.Rule;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.GreaterThanConstraint;
@@ -45,6 +44,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
@@ -57,17 +57,17 @@ class DecisionTreeFactoryTests {
     private final Field fieldB = createField("B");
     private final Field fieldC = createField("C");
 
-    private final List<Rule> rules = new ArrayList<>();
+    private final List<Constraint> constraints = new ArrayList<>();
     private DecisionTree actualOutput = null;
 
     @BeforeEach
     void beforeEach() {
-        rules.clear();
+        constraints.clear();
         actualOutput = null;
     }
 
-    private void givenRule(Constraint... constraints) {
-        this.rules.add(new Rule("", Arrays.asList(constraints)));
+    private void givenConstraints(Constraint... constraints) {
+        this.constraints.addAll(Arrays.stream(constraints).collect(Collectors.toList()));
     }
 
     private DecisionTree getActualOutput() {
@@ -75,7 +75,7 @@ class DecisionTreeFactoryTests {
             Profile testInput = new Profile(
                 new Fields(
                     Arrays.asList(this.fieldA, this.fieldB, this.fieldC)),
-                this.rules);
+                this.constraints);
 
             DecisionTreeFactory testObject = new DecisionTreeFactory();
 
@@ -124,8 +124,7 @@ class DecisionTreeFactoryTests {
             new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
         GreaterThanConstraint constraint1 = new GreaterThanConstraint(inputFieldList.get(0), NumberUtils.coerceToBigDecimal(0));
         MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
-        Rule testRule = new Rule("test", Arrays.asList(constraint0, constraint1, constraint2));
-        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
+        Profile testInput = new Profile(inputFieldList, Arrays.asList(constraint0, constraint1, constraint2));
 
         DecisionTreeFactory testObject = new DecisionTreeFactory();
 
@@ -147,8 +146,7 @@ class DecisionTreeFactoryTests {
         GreaterThanConstraint constraint1 = new GreaterThanConstraint(inputFieldList.get(0), NumberUtils.coerceToBigDecimal(0));
         MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
         List<Constraint> inputConstraints = Arrays.asList(constraint0, constraint1, constraint2);
-        Rule testRule = new Rule("test", inputConstraints);
-        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
+        Profile testInput = new Profile(inputFieldList, inputConstraints);
         DecisionTreeFactory testObject = new DecisionTreeFactory();
 
         DecisionTree outputRule = testObject.analyse(testInput);
@@ -170,8 +168,7 @@ class DecisionTreeFactoryTests {
         GreaterThanConstraint constraint1 = new GreaterThanConstraint(inputFieldList.get(0), NumberUtils.coerceToBigDecimal(0));
         AndConstraint andConstraint0 = new AndConstraint(Arrays.asList(constraint0, constraint1));
         MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
-        Rule testRule = new Rule("test", Arrays.asList(andConstraint0, constraint2));
-        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
+        Profile testInput = new Profile(inputFieldList, Arrays.asList(andConstraint0, constraint2));
         DecisionTreeFactory testObject = new DecisionTreeFactory();
 
         DecisionTree outputRule = testObject.analyse(testInput);
@@ -190,8 +187,7 @@ class DecisionTreeFactoryTests {
         GreaterThanConstraint constraint1 = new GreaterThanConstraint(inputFieldList.get(0), NumberUtils.coerceToBigDecimal(0));
         AndConstraint andConstraint0 = new AndConstraint(Arrays.asList(constraint0, constraint1));
         MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
-        Rule testRule = new Rule("test", Arrays.asList(andConstraint0, constraint2));
-        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
+        Profile testInput = new Profile(inputFieldList, Arrays.asList(andConstraint0, constraint2));
 
         DecisionTreeFactory testObject = new DecisionTreeFactory();
 
@@ -221,8 +217,7 @@ class DecisionTreeFactoryTests {
             inputFieldList.get(1),
             new DistributedList<>(Collections.singletonList(new WeightedElement<>("diesel", 1.0F))));
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraint2, constraint3));
-        Rule testRule = new Rule("test", Arrays.asList(orConstraint0, orConstraint1));
-        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
+        Profile testInput = new Profile(inputFieldList, Arrays.asList(orConstraint0, orConstraint1));
         DecisionTreeFactory testObject = new DecisionTreeFactory();
 
         DecisionTree outputRule = testObject.analyse(testInput);
@@ -246,8 +241,7 @@ class DecisionTreeFactoryTests {
             inputFieldList.get(1),
             new DistributedList<>(Collections.singletonList(new WeightedElement<>("diesel", 1.0F))));
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraintC, constraintD));
-        Rule testRule = new Rule("test", Arrays.asList(orConstraint0, orConstraint1));
-        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
+        Profile testInput = new Profile(inputFieldList, Arrays.asList(orConstraint0, orConstraint1));
         DecisionTreeFactory testObject = new DecisionTreeFactory();
 
         DecisionTree outputRule = testObject.analyse(testInput);
@@ -271,8 +265,7 @@ class DecisionTreeFactoryTests {
             inputFieldList.get(1),
             new DistributedList<>(Collections.singletonList(new WeightedElement<>("diesel", 1.0F))));
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraintC, constraintD));
-        Rule testRule = new Rule("test", Arrays.asList(orConstraint0, orConstraint1));
-        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
+        Profile testInput = new Profile(inputFieldList, Arrays.asList(orConstraint0, orConstraint1));
         DecisionTreeFactory testObject = new DecisionTreeFactory();
 
         DecisionTree outputRule = testObject.analyse(testInput);
@@ -309,8 +302,7 @@ class DecisionTreeFactoryTests {
             inputFieldList.get(1),
             new DistributedList<>(Collections.singletonList(new WeightedElement<>("diesel", 1.0F))));
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraintD, constraintE));
-        Rule testRule = new Rule("test", Arrays.asList(orConstraint0, orConstraint1));
-        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
+        Profile testInput = new Profile(inputFieldList, Arrays.asList(orConstraint0, orConstraint1));
         DecisionTreeFactory testObject = new DecisionTreeFactory();
 
         DecisionTree outputRule = testObject.analyse(testInput);
@@ -339,8 +331,7 @@ class DecisionTreeFactoryTests {
         GreaterThanConstraint constraintB = new GreaterThanConstraint(inputFieldList.get(1), NumberUtils.coerceToBigDecimal(10));
         GreaterThanConstraint constraintC = new GreaterThanConstraint(inputFieldList.get(1), NumberUtils.coerceToBigDecimal(20));
         ConditionalConstraint conditionalConstraint = new ConditionalConstraint(constraintA, constraintB, constraintC);
-        Rule testRule = new Rule("test", Collections.singletonList(conditionalConstraint));
-        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
+        Profile testInput = new Profile(inputFieldList,  Collections.singletonList(conditionalConstraint));
         DecisionTreeFactory testObject = new DecisionTreeFactory();
 
         DecisionTree outputRule = testObject.analyse(testInput);
@@ -369,7 +360,7 @@ class DecisionTreeFactoryTests {
         AtomicConstraint aGreaterThan10 = new GreaterThanConstraint(fieldA, NumberUtils.coerceToBigDecimal(10));
         AtomicConstraint bGreaterThan20 = new GreaterThanConstraint(fieldB, NumberUtils.coerceToBigDecimal(20));
 
-        givenRule(
+        givenConstraints(
             new ConditionalConstraint(
                 new OrConstraint(
                     aEquals10,
@@ -402,8 +393,7 @@ class DecisionTreeFactoryTests {
         GreaterThanConstraint constraintC = new GreaterThanConstraint(inputFieldList.get(1), NumberUtils.coerceToBigDecimal(10));
         ConditionalConstraint conditionalConstraint = new ConditionalConstraint(constraintA, constraintB, constraintC);
         Constraint notConstraint = conditionalConstraint.negate();
-        Rule testRule = new Rule("test", Collections.singletonList(notConstraint));
-        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
+        Profile testInput = new Profile(inputFieldList, Collections.singletonList(notConstraint));
         DecisionTreeFactory testObject = new DecisionTreeFactory();
 
         DecisionTree outputRule = testObject.analyse(testInput);
@@ -440,7 +430,7 @@ class DecisionTreeFactoryTests {
 
         ConstraintNode expectedOutput = new ConstraintNodeBuilder().addAtomicConstraints(aEqualTo10, bGreaterThan20.negate()).build();
 
-        givenRule(inputRule);
+        givenConstraints(inputRule);
 
         Assert.assertTrue(
             isEquivalentTo(
@@ -456,8 +446,7 @@ class DecisionTreeFactoryTests {
         InSetConstraint constraintA = new InSetConstraint(inputFieldList.get(0), new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
         Constraint notConstraint0 = constraintA.negate();
         Constraint notConstraint1 = notConstraint0.negate();
-        Rule testRule = new Rule("test", Collections.singletonList(notConstraint1));
-        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
+        Profile testInput = new Profile(inputFieldList, Collections.singletonList(notConstraint1));
         DecisionTreeFactory testObject = new DecisionTreeFactory();
 
         DecisionTree outputRule = testObject.analyse(testInput);
@@ -479,8 +468,7 @@ class DecisionTreeFactoryTests {
         InSetConstraint constraintA = new InSetConstraint(inputFieldList.get(0), new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
         GreaterThanConstraint constraintB = new GreaterThanConstraint(inputFieldList.get(1), NumberUtils.coerceToBigDecimal(5));
         NegatedGrammaticalConstraint notConstraint = (NegatedGrammaticalConstraint) new AndConstraint(Arrays.asList(constraintA, constraintB)).negate();
-        Rule testRule = new Rule("test", Collections.singletonList(notConstraint));
-        Profile testInput = new Profile(inputFieldList, Collections.singletonList(testRule));
+        Profile testInput = new Profile(inputFieldList, Collections.singletonList(notConstraint));
         DecisionTreeFactory testObject = new DecisionTreeFactory();
 
         DecisionTree outputRule = testObject.analyse(testInput);
@@ -505,7 +493,7 @@ class DecisionTreeFactoryTests {
         AtomicConstraint constraintB = new GreaterThanConstraint(fieldB, NumberUtils.coerceToBigDecimal(20));
         AtomicConstraint constraintC = new GreaterThanConstraint(fieldB, NumberUtils.coerceToBigDecimal(10));
 
-        givenRule(
+        givenConstraints(
             new OrConstraint(
                 new OrConstraint(constraintA, constraintB),
                 constraintC));

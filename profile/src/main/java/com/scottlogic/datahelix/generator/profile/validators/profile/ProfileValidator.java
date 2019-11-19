@@ -22,7 +22,6 @@ import com.scottlogic.datahelix.generator.common.validators.Validator;
 import com.scottlogic.datahelix.generator.core.generation.GenerationConfigSource;
 import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.ProfileDTO;
-import com.scottlogic.datahelix.generator.profile.dtos.RuleDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.AtomicConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
@@ -49,17 +48,13 @@ public class ProfileValidator implements Validator<ProfileDTO>
     @Override
     public ValidationResult validate(ProfileDTO dto)
     {
-        List<FieldDTO> fields = dto.fields;
-        List<RuleDTO> rules = dto.rules;
-
-        ValidationResult fieldsMustBeValid = fieldsMustBeValid(fields);
+        ValidationResult fieldsMustBeValid = fieldsMustBeValid(dto.fields);
         if (!fieldsMustBeValid.isSuccess) return fieldsMustBeValid;
 
-        ValidationResult rulesMustBeValid = rulesMustBeValid(rules, fields);
-        if (!rulesMustBeValid.isSuccess) return rulesMustBeValid;
+        ValidationResult constraintsMustBeValid = constraintsMustBeValid(dto);
+        if (!constraintsMustBeValid.isSuccess) return constraintsMustBeValid;
 
-        return ValidationResult.combine(
-            uniqueFieldsMustNotBeInIfStatements(dto),
+        return ValidationResult.combine(uniqueFieldsMustNotBeInIfStatements(dto),
             uniqueFieldsMustNotBePresentUsingMinimalCombinationStrategy(dto));
     }
 
@@ -102,22 +97,6 @@ public class ProfileValidator implements Validator<ProfileDTO>
         return ValidationResult.combine(fields.stream().map(fieldValidator::validate));
     }
 
-    private ValidationResult rulesMustBeSpecified(List<RuleDTO> rules)
-    {
-        return rules != null
-            ? ValidationResult.success()
-            : ValidationResult.failure("Rules must be specified");
-    }
-
-    private ValidationResult rulesMustBeValid(List<RuleDTO> rules, List<FieldDTO> fields)
-    {
-        ValidationResult rulesMustBeSpecified = rulesMustBeSpecified(rules);
-        if (!rulesMustBeSpecified.isSuccess) return rulesMustBeSpecified;
-
-        RuleValidator ruleValidator = new RuleValidator(fields);
-        return ValidationResult.combine(rules.stream().map(ruleValidator::validate));
-    }
-
     private ValidationResult uniqueFieldsMustNotBeInIfStatements(ProfileDTO dto)
     {
         List<String> uniqueFields = dto.fields.stream()
@@ -125,8 +104,7 @@ public class ProfileValidator implements Validator<ProfileDTO>
             .map(fieldDTO -> fieldDTO.name)
             .collect(Collectors.toList());
 
-        Stream<ConstraintDTO> ifConstraints = dto.rules.stream()
-            .flatMap(ruleDTO -> ruleDTO.constraints.stream())
+        Stream<ConstraintDTO> ifConstraints = dto.constraints.stream()
             .filter(constraintDTO -> constraintDTO instanceof ConditionalConstraintDTO)
             .map(constraintDTO -> ((ConditionalConstraintDTO) constraintDTO).ifConstraint);
 
@@ -154,5 +132,14 @@ public class ProfileValidator implements Validator<ProfileDTO>
             return ValidationResult.failure("Unique fields do not work when not using Minimal combination strategy");
         }
         return ValidationResult.success();
+    }
+
+
+    public ValidationResult constraintsMustBeValid(ProfileDTO dto)
+    {
+        return dto.constraints == null || dto.constraints.isEmpty()
+            ? ValidationResult.failure("Constraints must be specified")
+            : ValidationResult.combine(dto.constraints.stream()
+            .map(c -> ConstraintValidator.validateConstraint(c, dto.fields)));
     }
 }

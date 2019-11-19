@@ -21,6 +21,7 @@ import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.datahelix.generator.core.profile.Rule;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class ViolatedProfile extends Profile {
     /**
@@ -37,7 +38,7 @@ public class ViolatedProfile extends Profile {
      * @param description Description of profile.
      */
     public ViolatedProfile(Rule violatedRule, Fields fields, Collection<Rule> rules, String description){
-        super(fields, rules, description);
+        super(description, fields, rules.stream().flatMap(r -> r.getConstraints().stream()).collect(Collectors.toList()));
         this.violatedRule = violatedRule;
     }
 

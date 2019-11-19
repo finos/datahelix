@@ -112,7 +112,7 @@ public class JsonProfileReaderTests {
     }
 
     private void expectRules(Consumer<Rule>... ruleAssertions) throws IOException {
-        expectMany(this.getResultingProfile().getRules(), ruleAssertions);
+        expectMany(this.getResultingProfile().getConstraints(), ruleAssertions);
     }
 
     private Consumer<Rule> ruleWithDescription(String expectedDescription) {

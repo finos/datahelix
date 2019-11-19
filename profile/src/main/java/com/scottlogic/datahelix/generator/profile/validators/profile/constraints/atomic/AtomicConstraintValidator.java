@@ -27,9 +27,9 @@ import java.util.Optional;
 
 abstract class AtomicConstraintValidator<T extends AtomicConstraintDTO> extends ConstraintValidator<T>
 {
-    AtomicConstraintValidator(String rule, List<FieldDTO> fields)
+    AtomicConstraintValidator(List<FieldDTO> fields)
     {
-        super(rule, fields);
+        super(fields);
     }
 
     @Override

@@ -25,19 +25,19 @@ import java.util.List;
 public class ConditionalConstraintValidator  extends GrammaticalConstraintValidator<ConditionalConstraintDTO>
 {
 
-    public ConditionalConstraintValidator(String rule, List<FieldDTO> fields)
+    public ConditionalConstraintValidator(List<FieldDTO> fields)
     {
-        super(rule, fields);
+        super(fields);
     }
 
     @Override
     public ValidationResult validate(ConditionalConstraintDTO conditionalConstraint)
     {
-        ValidationResult validateIfConstraint = validateConstraint(conditionalConstraint.ifConstraint, rule, fields);
-        ValidationResult validateThenConstraint = validateConstraint(conditionalConstraint.thenConstraint, rule, fields);
+        ValidationResult validateIfConstraint = validateConstraint(conditionalConstraint.ifConstraint, fields);
+        ValidationResult validateThenConstraint = validateConstraint(conditionalConstraint.thenConstraint, fields);
         ValidationResult validateElseConstraint = conditionalConstraint.elseConstraint == null
             ? ValidationResult.success()
-            :validateConstraint(conditionalConstraint.ifConstraint, rule, fields);
+            :validateConstraint(conditionalConstraint.ifConstraint, fields);
 
         return ValidationResult.combine(validateIfConstraint, validateThenConstraint, validateElseConstraint);
     }

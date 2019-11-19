@@ -18,7 +18,6 @@ package com.scottlogic.datahelix.generator.core.decisiontree;
 
 import com.scottlogic.datahelix.generator.core.fieldspecs.relations.FieldSpecRelation;
 import com.scottlogic.datahelix.generator.core.profile.Profile;
-import com.scottlogic.datahelix.generator.core.profile.Rule;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.AndConstraint;
@@ -33,16 +32,12 @@ public class DecisionTreeFactory {
     private final DecisionTreeSimplifier decisionTreeSimplifier = new DecisionTreeSimplifier();
 
     public DecisionTree analyse(Profile profile) {
-        Iterator<ConstraintNode> nodes = profile.getRules().stream()
-            .map(this::convertRule)
+        Iterator<ConstraintNode> nodes = profile.getConstraints().stream()
+            .map(this::convertConstraint)
             .map(decisionTreeSimplifier::simplify)
             .iterator();
 
         return new DecisionTree(ConstraintNode.merge(nodes), profile.getFields());
-    }
-
-    private ConstraintNode convertRule(Rule rule) {
-        return convertAndConstraint(new AndConstraint(rule.getConstraints()));
     }
 
     private ConstraintNode convertConstraint(Constraint constraintToConvert) {

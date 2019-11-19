@@ -19,15 +19,17 @@ import com.google.inject.Inject;
 import com.scottlogic.datahelix.generator.common.commands.CommandBus;
 import com.scottlogic.datahelix.generator.common.validators.Validator;
 import com.scottlogic.datahelix.generator.profile.commands.CreateProfile;
+import com.scottlogic.datahelix.generator.profile.custom.CustomConstraintFactory;
 import com.scottlogic.datahelix.generator.profile.handlers.CreateProfileHandler;
+import com.scottlogic.datahelix.generator.profile.services.ConstraintService;
 import com.scottlogic.datahelix.generator.profile.services.FieldService;
-import com.scottlogic.datahelix.generator.profile.services.RuleService;
 
 public class ProfileCommandBus extends CommandBus
 {
     @Inject
-    public ProfileCommandBus(FieldService fieldService, RuleService ruleService, Validator<CreateProfile> validator)
+    public ProfileCommandBus(FieldService fieldService, ConstraintService constraintService
+        , CustomConstraintFactory customConstraintFactory, Validator<CreateProfile> validator)
     {
-        register(CreateProfile.class, new CreateProfileHandler(fieldService, ruleService, validator));
+        register(CreateProfile.class, new CreateProfileHandler(fieldService, constraintService, customConstraintFactory, validator));
     }
 }

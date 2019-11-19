@@ -19,8 +19,8 @@ package com.scottlogic.datahelix.generator.orchestrator.violate.manifest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import com.google.inject.Inject;
-import com.scottlogic.datahelix.generator.orchestrator.violate.ViolatedProfile;
 import com.scottlogic.datahelix.generator.common.util.FileUtils;
+import com.scottlogic.datahelix.generator.orchestrator.violate.ViolatedProfile;
 import com.scottlogic.datahelix.generator.output.OutputPath;
 
 import java.io.IOException;

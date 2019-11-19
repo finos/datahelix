@@ -29,9 +29,9 @@ public class ShorterThanConstraintValidator extends AtomicConstraintValidator<Sh
 {
     private final FieldType expectedFieldType;
 
-    public ShorterThanConstraintValidator(String rule, List<FieldDTO> fields, FieldType expectedFieldType)
+    public ShorterThanConstraintValidator(List<FieldDTO> fields, FieldType expectedFieldType)
     {
-        super(rule, fields);
+        super(fields);
         this.expectedFieldType = expectedFieldType;
     }
 
