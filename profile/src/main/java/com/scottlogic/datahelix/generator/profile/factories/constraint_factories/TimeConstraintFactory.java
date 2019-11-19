@@ -16,7 +16,6 @@
 package com.scottlogic.datahelix.generator.profile.factories.constraint_factories;
 
 import com.scottlogic.datahelix.generator.common.profile.Field;
-import com.scottlogic.datahelix.generator.common.profile.HelixTime;
 import com.scottlogic.datahelix.generator.common.profile.TimeGranularity;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.*;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.GranularToConstraintDTO;
@@ -33,27 +32,28 @@ import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.tempor
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.temporal.BeforeOrAtConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.textual.ContainsRegexConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.textual.MatchesRegexConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.factories.TimeFactory;
 
 public class TimeConstraintFactory extends AtomicConstraintFactory {
 
     @Override
     AtomicConstraint createAfterOrAtConstraint(AfterOrAtConstraintDTO dto, Field field) {
-        return new AfterOrEqualToConstantTimeConstraint(field, HelixTime.create(dto.value));
+        return new AfterOrEqualToConstantTimeConstraint(field, TimeFactory.create(dto.value));
     }
 
     @Override
     AtomicConstraint createAfterConstraint(AfterConstraintDTO dto, Field field) {
-        return new AfterConstantTimeConstraint(field, HelixTime.create(dto.value));
+        return new AfterConstantTimeConstraint(field, TimeFactory.create(dto.value));
     }
 
     @Override
     AtomicConstraint createBeforeOrAtConstraint(BeforeOrAtConstraintDTO dto, Field field) {
-        return new BeforeOrEqualToConstantTimeConstraint(field, HelixTime.create(dto.value));
+        return new BeforeOrEqualToConstantTimeConstraint(field, TimeFactory.create(dto.value));
     }
 
     @Override
     AtomicConstraint createBeforeConstraint(BeforeConstraintDTO dto, Field field) {
-        return new BeforeConstantTimeConstraint(field, HelixTime.create(dto.value));
+        return new BeforeConstantTimeConstraint(field, TimeFactory.create(dto.value));
     }
 
     @Override
@@ -63,7 +63,7 @@ public class TimeConstraintFactory extends AtomicConstraintFactory {
 
     @Override
     Object parseValue(Object value) {
-        return HelixTime.create((String) value).getValue();
+        return TimeFactory.create((String) value);
     }
 
     @Override

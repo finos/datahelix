@@ -71,7 +71,7 @@ public abstract class FieldSpecRelationFactory
         Field main = fields.getByName(dto.field);
         Field other = fields.getByName(dto.getOtherField());
         Granularity granularity = createGranularity(dto.offsetUnit);
-        return granularity == null
+        return dto.offset == 0
             ? new EqualToRelation(main, other)
             : new EqualToOffsetRelation(main, other, granularity, dto.offset);
     }

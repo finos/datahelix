@@ -16,7 +16,6 @@
 package com.scottlogic.datahelix.generator.core.profile.constraints.atomic;
 
 import com.scottlogic.datahelix.generator.common.profile.Field;
-import com.scottlogic.datahelix.generator.common.profile.HelixTime;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
 import com.scottlogic.datahelix.generator.core.restrictions.linear.Limit;
@@ -28,9 +27,9 @@ import java.time.LocalTime;
 
 public class BeforeOrEqualToConstantTimeConstraint implements AtomicConstraint {
     public final Field field;
-    public final HelixTime referenceValue;
+    public final LocalTime referenceValue;
 
-    public BeforeOrEqualToConstantTimeConstraint(Field field, HelixTime referenceValue) {
+    public BeforeOrEqualToConstantTimeConstraint(Field field, LocalTime referenceValue) {
         this.field = field;
         this.referenceValue = referenceValue;
     }
@@ -47,7 +46,7 @@ public class BeforeOrEqualToConstantTimeConstraint implements AtomicConstraint {
 
     @Override
     public FieldSpec toFieldSpec() {
-        final Limit<LocalTime> max = new Limit<>(referenceValue.getValue(), true);
+        final Limit<LocalTime> max = new Limit<>(referenceValue, true);
         final LinearRestrictions<LocalTime> timeRestriction =
             LinearRestrictionsFactory.createTimeRestrictions(GeneratorDefaults.TIME_MIN_LIMIT, max);
         return FieldSpecFactory.fromRestriction(timeRestriction);

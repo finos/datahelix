@@ -13,31 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.scottlogic.datahelix.generator.common.profile;
+
+package com.scottlogic.datahelix.generator.profile.factories;
 
 import com.scottlogic.datahelix.generator.common.ValidationException;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class HelixTimeTest {
+import java.time.LocalTime;
 
+class TimeFactoryTests
+{
     @Test
     void create_withValidTime_ReturnsValue() {
-        HelixTime helixTime = HelixTime.create("20:01:05");
-        Assert.assertEquals("20:01:05", helixTime.getValue().toString());
+        LocalTime LocalTime = TimeFactory.create("20:01:05");
+        Assert.assertEquals("20:01:05", LocalTime.toString());
     }
 
     @Test
     void create_withValidTimeWithMilliseconds_ReturnsValue() {
-        HelixTime helixTime = HelixTime.create("20:01:05.551");
-        Assert.assertEquals("20:01:05.551", helixTime.getValue().toString());
+        LocalTime LocalTime = TimeFactory.create("20:01:05.551");
+        Assert.assertEquals("20:01:05.551", LocalTime.toString());
     }
 
     @Test
     void create_withInvalidTime_ThrowsError() {
-        Assertions.assertThrows(ValidationException.class, () -> {
-            HelixTime.create("22-01-05");
-        });
+        Assertions.assertThrows(ValidationException.class, () -> TimeFactory.create("22-01-05"));
     }
 }
