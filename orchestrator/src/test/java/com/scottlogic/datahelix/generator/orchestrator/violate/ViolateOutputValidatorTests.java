@@ -17,8 +17,8 @@
 package com.scottlogic.datahelix.generator.orchestrator.violate;
 
 import com.scottlogic.datahelix.generator.core.profile.Profile;
-import com.scottlogic.datahelix.generator.core.profile.Rule;
 import com.scottlogic.datahelix.generator.common.util.FileUtils;
+import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
 import com.scottlogic.datahelix.generator.output.OutputPath;
 import com.scottlogic.datahelix.generator.output.outputtarget.OutputTargetValidationException;
 import org.junit.Test;
@@ -54,12 +54,12 @@ public class ViolateOutputValidatorTests {
 
     @Test
     public void validate_generateViolationOutputFolderEmpty_doesntThrow(){
-        Set<Rule> rules = new HashSet<>();
-        Rule mockRule = mock(Rule.class);
-        rules.add(mockRule);
+        Set<Constraint> constraints = new HashSet<>();
+        Constraint mockConstraint = mock(Constraint.class);
+        constraints.add(mockConstraint);
         when(mockFileUtils.exists(mockFilePath)).thenReturn(true);
         when(mockFileUtils.isDirectory(mockFilePath)).thenReturn(true);
-        when(mockProfile.getConstraints()).thenReturn(rules);
+        when(mockProfile.getConstraints()).thenReturn(constraints);
         when(mockFileUtils.isDirectoryEmpty(mockFilePath, 1)).thenReturn(true);
         OutputPath outputPath = new OutputPath(mockFilePath);
         ViolateOutputValidator outputTarget = new ViolateOutputValidator(false, outputPath, mockFileUtils);

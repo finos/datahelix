@@ -45,7 +45,7 @@ public class ProfileViolatorTests {
 
     private ProfileViolator target;
 
-    @Mock private RuleViolator mockRuleViolator;
+    @Mock private ConstraintViolator mockConstraintViolator;
 
     private Field fooField;
     private Field barField;
@@ -59,7 +59,7 @@ public class ProfileViolatorTests {
         MockitoAnnotations.initMocks(this);
 
         target = new ProfileViolator(
-            mockRuleViolator
+            mockConstraintViolator
         );
 
         initRules();
@@ -77,7 +77,7 @@ public class ProfileViolatorTests {
             "Input profile description"
         );
 
-        when(mockRuleViolator.violateRule(rule1)).thenReturn(violatedRule1);
+        when(mockConstraintViolator.violateRule(rule1)).thenReturn(violatedRule1);
 
         //Act
         List<Profile> outputProfileList = (List<Profile>)(List<?>) target.violate(inputProfile);
@@ -113,8 +113,8 @@ public class ProfileViolatorTests {
             "Input profile description"
         );
 
-        when(mockRuleViolator.violateRule(rule1)).thenReturn(violatedRule1);
-        when(mockRuleViolator.violateRule(rule2)).thenReturn(violatedRule2);
+        when(mockConstraintViolator.violateRule(rule1)).thenReturn(violatedRule1);
+        when(mockConstraintViolator.violateRule(rule2)).thenReturn(violatedRule2);
 
         //Act
         List<Profile> outputProfileList = (List<Profile>)(List<?>) target.violate(inputProfile);

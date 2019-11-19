@@ -18,7 +18,6 @@ package com.scottlogic.datahelix.generator.orchestrator.violate.violator;
 
 import com.scottlogic.datahelix.generator.common.profile.UnviolatableConstraintException;
 import com.scottlogic.datahelix.generator.common.util.NumberUtils;
-import com.scottlogic.datahelix.generator.core.profile.Rule;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.LessThanConstraint;
@@ -35,9 +34,10 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
-import static com.scottlogic.datahelix.generator.orchestrator.violate.violator.TypeEqualityHelper.assertRuleTypeEquality;
+import static com.scottlogic.datahelix.generator.orchestrator.violate.violator.TypeEqualityHelper.*;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -47,9 +47,10 @@ import static org.mockito.Mockito.when;
 /**
  * Tests the behaviour of the RuleViolator class.
  */
-public class RuleViolatorTests {
+public class ConstraintViolatorTests
+{
 
-    private RuleViolator target;
+    private ConstraintViolator target;
 
     private AtomicConstraint atomicConstraint1;
     private AtomicConstraint atomicConstraint2;
@@ -67,7 +68,7 @@ public class RuleViolatorTests {
         List<ViolationFilter> inputFilters = Collections.singletonList(mockFilter);
         when(mockFilter.canViolate(any(Constraint.class))).thenReturn(true);
 
-        target = new RuleViolator(inputFilters);
+        target = new ConstraintViolator(inputFilters);
 
         atomicConstraint1 = new LessThanConstraint(createField("foo"), NumberUtils.coerceToBigDecimal(10));
         atomicConstraint2 = new LessThanConstraint(createField("bar"), NumberUtils.coerceToBigDecimal(20));
@@ -84,26 +85,19 @@ public class RuleViolatorTests {
     @Test
     public void violateRule_withAndConstraint_returnsOrConstraint() {
         //Arrange
-        AndConstraint andConstraint = new AndConstraint(atomicConstraint1, atomicConstraint2);
-        inputConstraints.add(andConstraint);
-
-        Rule inputRule = new Rule(ruleInformation, inputConstraints);
+        AndConstraint inputConstraint = new AndConstraint(atomicConstraint1, atomicConstraint2);
 
         //Act
-        Rule outputRule = target.violateRule(inputRule);
+        Constraint outputConstraint = target.violateConstraint(inputConstraint);
 
         //Assert
-        Rule expectedRule = new Rule(
-            ruleInformation,
-            Collections.singleton(
-                new OrConstraint(
+        Constraint expectedConstraint= new OrConstraint(
                     new AndConstraint(new ViolatedAtomicConstraint(atomicConstraint1.negate()), atomicConstraint2),
                     new AndConstraint(atomicConstraint1, new ViolatedAtomicConstraint(atomicConstraint2.negate()))
-                ))
-        );
+                );
 
-        assertThat("The violate method should have returned the correct shaped rule", outputRule, sameBeanAs(expectedRule));
-        assertRuleTypeEquality(expectedRule, outputRule);
+        assertThat("The violate method should have returned the correct shaped constraint", outputConstraint, sameBeanAs(expectedConstraint));
+        assertConstraintTypeEquality(expectedConstraint, outputConstraint);
     }
 
     /**
@@ -114,21 +108,14 @@ public class RuleViolatorTests {
     public void violateRule_withNegatedAndConstraint_returnsAndConstraint() {
         //Arrange
         AndConstraint andConstraint = new AndConstraint(atomicConstraint1, atomicConstraint2);
-        inputConstraints.add(andConstraint.negate());
-
-        Rule inputRule = new Rule(ruleInformation, inputConstraints);
+        Constraint inputConstraint = andConstraint.negate();
 
         //Act
-        Rule outputRule = target.violateRule(inputRule);
+        Constraint outputConstraint = target.violateConstraint(inputConstraint);
 
         //Assert
-        Rule expectedRule = new Rule(
-            ruleInformation,
-            Collections.singleton(andConstraint)
-        );
-
-        assertThat("The violate method should have returned the correct shaped rule", outputRule, sameBeanAs(expectedRule));
-        assertRuleTypeEquality(expectedRule, outputRule);
+        assertThat("The violate method should have returned the correct shaped constraint", outputConstraint, sameBeanAs(andConstraint));
+        assertConstraintTypeEquality(andConstraint, outputConstraint);
     }
 
     /**
@@ -138,26 +125,19 @@ public class RuleViolatorTests {
     @Test
     public void violateRule_withOrConstraint_returnsAndConstraint() {
         //Arrange
-        OrConstraint orConstraint = new OrConstraint(atomicConstraint1, atomicConstraint2);
-        inputConstraints.add(orConstraint);
-
-        Rule inputRule = new Rule(ruleInformation, inputConstraints);
+        OrConstraint inputConstraint = new OrConstraint(atomicConstraint1, atomicConstraint2);
 
         //Act
-        Rule outputRule = target.violateRule(inputRule);
+        Constraint outputConstraint = target.violateConstraint(inputConstraint);
 
         //Assert
-        Rule expectedRule = new Rule(
-            ruleInformation,
-            Collections.singleton(
-                new AndConstraint(
+        Constraint expectedConstraint =  new AndConstraint(
                     new ViolatedAtomicConstraint(atomicConstraint1.negate()),
                     new ViolatedAtomicConstraint(atomicConstraint2.negate())
-                ))
-        );
+                );
 
-        assertThat("The violate method should have returned the correct shaped rule", outputRule, sameBeanAs(expectedRule));
-        assertRuleTypeEquality(expectedRule, outputRule);
+        assertThat("The violate method should have returned the correct shaped rule", outputConstraint, sameBeanAs(expectedConstraint));
+        assertConstraintTypeEquality(expectedConstraint, outputConstraint);
     }
 
     /**
@@ -168,21 +148,14 @@ public class RuleViolatorTests {
     public void violateRule_withNegatedOrConstraint_returnsOrConstraint() {
         //Arrange
         OrConstraint orConstraint = new OrConstraint(atomicConstraint1, atomicConstraint2);
-        inputConstraints.add(orConstraint.negate());
-
-        Rule inputRule = new Rule(ruleInformation, inputConstraints);
+        Constraint inputConstraint = orConstraint.negate();
 
         //Act
-        Rule outputRule = target.violateRule(inputRule);
+        Constraint outputConstraint = target.violateConstraint(inputConstraint);
 
         //Assert
-        Rule expectedRule = new Rule(
-            ruleInformation,
-            Collections.singleton(orConstraint)
-        );
-
-        assertThat("The violate method should have returned the correct shaped rule", outputRule, sameBeanAs(expectedRule));
-        assertRuleTypeEquality(expectedRule, outputRule);
+        assertThat("The violate method should have returned the correct shaped rule", outputConstraint, sameBeanAs(orConstraint));
+        assertConstraintTypeEquality(orConstraint, outputConstraint);
     }
 
     /**
@@ -192,26 +165,19 @@ public class RuleViolatorTests {
     @Test
     public void violateRule_withIfThenConstraint_returnsAndConstraint() {
         //Arrange
-        ConditionalConstraint ifThenConstraint = new ConditionalConstraint(atomicConstraint1, atomicConstraint2);
-        inputConstraints.add(ifThenConstraint);
-
-        Rule inputRule = new Rule(ruleInformation, inputConstraints);
+        ConditionalConstraint inputConstraint = new ConditionalConstraint(atomicConstraint1, atomicConstraint2);
 
         //Act
-        Rule outputRule = target.violateRule(inputRule);
+        Constraint outputConstraint = target.violateConstraint(inputConstraint);
 
         //Assert
-        Rule expectedRule = new Rule(
-            ruleInformation,
-            Collections.singleton(
-                new AndConstraint(
+        Constraint expectedConstraint = new AndConstraint(
                     atomicConstraint1,
                     new ViolatedAtomicConstraint(atomicConstraint2.negate())
-                ))
-        );
+                );
 
-        assertThat("The violate method should have returned the correct shaped rule", outputRule, sameBeanAs(expectedRule));
-        assertRuleTypeEquality(expectedRule, outputRule);
+        assertThat("The violate method should have returned the correct shaped rule", outputConstraint, sameBeanAs(expectedConstraint));
+        assertConstraintTypeEquality(expectedConstraint, outputConstraint);
     }
 
     /**
@@ -221,22 +187,15 @@ public class RuleViolatorTests {
     @Test
     public void violateRule_withNegatedIfThenConstraint_returnsIfThenConstraint() {
         //Arrange
-        ConditionalConstraint ifThenConstraint = new ConditionalConstraint(atomicConstraint1, atomicConstraint2);
-        inputConstraints.add(ifThenConstraint.negate());
-
-        Rule inputRule = new Rule(ruleInformation, inputConstraints);
+        ConditionalConstraint conditionalConstraint = new ConditionalConstraint(atomicConstraint1, atomicConstraint2);
+        Constraint inputConstraint = conditionalConstraint.negate();
 
         //Act
-        Rule outputRule = target.violateRule(inputRule);
+        Constraint outputConstraint = target.violateConstraint(inputConstraint);
 
         //Assert
-        Rule expectedRule = new Rule(
-            ruleInformation,
-            Collections.singleton(ifThenConstraint)
-        );
-
-        assertThat("The violate method should have returned the correct shaped rule", outputRule, sameBeanAs(expectedRule));
-        assertRuleTypeEquality(expectedRule, outputRule);
+        assertThat("The violate method should have returned the correct shaped rule", outputConstraint, sameBeanAs(conditionalConstraint));
+        assertConstraintTypeEquality(conditionalConstraint, outputConstraint);
     }
 
     /**
@@ -247,30 +206,23 @@ public class RuleViolatorTests {
     @Test
     public void violateRule_withIfThenElseConstraint_returnsAndConstraint() {
         //Arrange
-        ConditionalConstraint ifThenElseConstraint = new ConditionalConstraint(atomicConstraint1, atomicConstraint2, atomicConstraint3);
-        inputConstraints.add(ifThenElseConstraint);
-
-        Rule inputRule = new Rule(ruleInformation, inputConstraints);
+        ConditionalConstraint inputConstraint = new ConditionalConstraint(atomicConstraint1, atomicConstraint2, atomicConstraint3);
 
         //Act
-        Rule outputRule = target.violateRule(inputRule);
+        Constraint outputConstraint = target.violateConstraint(inputConstraint);
 
         //Assert
-        Rule expectedRule = new Rule(
-            ruleInformation,
-            Collections.singleton(
-                new OrConstraint(
+        Constraint expectedConstraint = new OrConstraint(
                     new AndConstraint(
                         atomicConstraint1,
                         new ViolatedAtomicConstraint(atomicConstraint2.negate())),
                     new AndConstraint(
                         new ViolatedAtomicConstraint(atomicConstraint1.negate()),
                         new ViolatedAtomicConstraint(atomicConstraint3.negate()))
-                ))
-        );
+                );
 
-        assertThat("The violate method should have returned the correct shaped rule", outputRule, sameBeanAs(expectedRule));
-        assertRuleTypeEquality(expectedRule, outputRule);
+        assertThat("The violate method should have returned the correct shaped rule", outputConstraint, sameBeanAs(expectedConstraint));
+        assertConstraintTypeEquality(expectedConstraint, outputConstraint);
     }
 
     /**
@@ -280,22 +232,15 @@ public class RuleViolatorTests {
     @Test
     public void violateRule_withNegatedIfThenElseConstraint_returnsIfThenElseConstraint() {
         //Arrange
-        ConditionalConstraint ifThenElseConstraint = new ConditionalConstraint(atomicConstraint1, atomicConstraint2, atomicConstraint3);
-        inputConstraints.add(ifThenElseConstraint.negate());
-
-        Rule inputRule = new Rule(ruleInformation, inputConstraints);
+        ConditionalConstraint conditionalConstraint = new ConditionalConstraint(atomicConstraint1, atomicConstraint2, atomicConstraint3);
+        Constraint inputConstraint = conditionalConstraint.negate();
 
         //Act
-        Rule outputRule = target.violateRule(inputRule);
+        Constraint outputConstraint = target.violateConstraint(inputConstraint);
 
         //Assert
-        Rule expectedRule = new Rule(
-            ruleInformation,
-            Collections.singleton(ifThenElseConstraint)
-        );
-
-        assertThat("The violate method should have returned the correct shaped rule", outputRule, sameBeanAs(expectedRule));
-        assertRuleTypeEquality(expectedRule, outputRule);
+        assertThat("The violate method should have returned the correct shaped rule", outputConstraint, sameBeanAs(conditionalConstraint));
+        assertConstraintTypeEquality(conditionalConstraint, outputConstraint);
     }
 
     /**
@@ -304,24 +249,14 @@ public class RuleViolatorTests {
      */
     @Test
     public void violateRule_withAtomicConstraint_returnsNegatedViolatedAtomicConstraint() {
-        //Arrange
-        inputConstraints.add(atomicConstraint1);
-
-        Rule inputRule = new Rule(ruleInformation, inputConstraints);
-
         //Act
-        Rule outputRule = target.violateRule(inputRule);
+        Constraint outputConstraint = target.violateConstraint(atomicConstraint1);
 
         //Assert
-        Rule expectedRule = new Rule(
-            ruleInformation,
-            Collections.singleton(
-                new ViolatedAtomicConstraint(atomicConstraint1.negate())
-                )
-        );
+        Constraint expectedConstraint = new ViolatedAtomicConstraint(atomicConstraint1.negate());
 
-        assertThat("The violate method should have returned the correct shaped rule", outputRule, sameBeanAs(expectedRule));
-        assertRuleTypeEquality(expectedRule, outputRule);
+        assertThat("The violate method should have returned the correct shaped rule", outputConstraint, sameBeanAs(expectedConstraint));
+        assertConstraintTypeEquality(expectedConstraint, outputConstraint);
     }
 
     /**
@@ -336,16 +271,13 @@ public class RuleViolatorTests {
         inputConstraints.add(atomicConstraint2);
         inputConstraints.add(atomicConstraint3);
 
-        Rule inputRule = new Rule(ruleInformation, inputConstraints);
-
         //Act
-        Rule outputRule = target.violateRule(inputRule);
+        List<Constraint> outputConstraints = inputConstraints.stream().map(target::violateConstraint)
+            .collect(Collectors.toList());
 
         //Assert
-        Rule expectedRule = new Rule(
-            ruleInformation,
-            Arrays.asList(
-                new OrConstraint(
+        List<Constraint> expectedConstraints = Collections.singletonList(
+            new OrConstraint(
                     new AndConstraint(
                         new ViolatedAtomicConstraint(atomicConstraint1.negate()),
                         atomicConstraint2,
@@ -361,12 +293,10 @@ public class RuleViolatorTests {
                         atomicConstraint2,
                         new ViolatedAtomicConstraint(atomicConstraint3.negate())
                     )
-                )
-            )
-        );
+                ));
 
-        assertThat("The violate method should have returned the correct shaped rule", outputRule, sameBeanAs(expectedRule));
-        assertRuleTypeEquality(expectedRule, outputRule);
+        assertThat("The violate method should have returned the correct shaped rule", outputConstraints, sameBeanAs(expectedConstraints));
+        assertConstraintListTypeEquality(expectedConstraints, outputConstraints);
     }
 
     /**
@@ -375,15 +305,11 @@ public class RuleViolatorTests {
     @Test
     public void violateRule_withUnsupportedConstraints_throwsRuntimeException() {
         //Arrange
-        Constraint mockConstraint = Mockito.mock(Constraint.class);
-        inputConstraints.add(mockConstraint);
-
-        Rule inputRule = new Rule(ruleInformation, inputConstraints);
+        Constraint inputConstraint = Mockito.mock(Constraint.class);
 
         //Act/Assert
-        assertThrows(
-            UnviolatableConstraintException.class,
-            () -> target.violateRule(inputRule),
+        assertThrows(UnviolatableConstraintException.class,
+            () -> target.violateConstraint(inputConstraint),
             "Violate method should throw with a non-specific Constraint type object."
         );
     }
@@ -394,16 +320,13 @@ public class RuleViolatorTests {
     @Test
     public void violateRule_withEmptyViolationFilter_doesNotThrow() {
         //Arrange
-        target = new RuleViolator(new ArrayList<>());
-
-        inputConstraints.add(atomicConstraint1);
-        Rule inputRule = new Rule(ruleInformation, inputConstraints);
+        target = new ConstraintViolator(new ArrayList<>());
 
         //Act
-        Rule outputRule = target.violateRule(inputRule);
+        Constraint outputConstraint = target.violateConstraint(atomicConstraint1);
 
         //Assert
-        Assert.assertNotNull("Rule violation should complete successfully.", outputRule);
+        Assert.assertNotNull("Rule violation should complete successfully.", outputConstraint);
     }
 
     /**
@@ -415,27 +338,19 @@ public class RuleViolatorTests {
         //Arrange
         inputConstraints.add(atomicConstraint1);
         inputConstraints.add(atomicConstraint2);
-
         Mockito.reset(mockFilter);
         when(mockFilter.canViolate(atomicConstraint1)).thenReturn(false);
         when(mockFilter.canViolate(atomicConstraint2)).thenReturn(false);
 
-        Rule inputRule = new Rule(ruleInformation, inputConstraints);
-
         //Act
-        Rule outputRule = target.violateRule(inputRule);
+        List<Constraint> outputConstraints = inputConstraints.stream().map(target::violateConstraint)
+            .collect(Collectors.toList());
 
         //Assert
-        Rule expectedRule = new Rule(
-            ruleInformation,
-            Arrays.asList(
-                atomicConstraint1,
-                atomicConstraint2
-            )
-        );
+        List<Constraint> expectedConstraints = Arrays.asList(atomicConstraint1,atomicConstraint2);
 
-        assertThat("The violate method should have returned the correct shaped rule", outputRule, sameBeanAs(expectedRule));
-        assertRuleTypeEquality(expectedRule, outputRule);
+        assertThat("The violate method should have returned the correct shaped rule", outputConstraints, sameBeanAs(expectedConstraints));
+        assertConstraintListTypeEquality(expectedConstraints, outputConstraints);
     }
 
     /**
@@ -455,15 +370,12 @@ public class RuleViolatorTests {
         when(mockFilter.canViolate(atomicConstraint2)).thenReturn(true);
         when(mockFilter.canViolate(atomicConstraint3)).thenReturn(true);
 
-        Rule inputRule = new Rule(ruleInformation, inputConstraints);
-
         //Act
-        Rule outputRule = target.violateRule(inputRule);
+        List<Constraint> outputConstraints = inputConstraints.stream().map(target::violateConstraint)
+            .collect(Collectors.toList());
 
         //Assert
-        Rule expectedRule = new Rule(
-            ruleInformation,
-            Arrays.asList(
+        List<Constraint> expectedConstraints = Arrays.asList(
                 atomicConstraint1,
                 new OrConstraint(
                     new AndConstraint(
@@ -474,12 +386,10 @@ public class RuleViolatorTests {
                         atomicConstraint2,
                         new ViolatedAtomicConstraint(atomicConstraint3.negate())
                     )
-                )
-            )
-        );
+                ));
 
-        assertThat("The violate method should have returned the correct shaped rule", outputRule, sameBeanAs(expectedRule));
-        assertRuleTypeEquality(expectedRule, outputRule);
+        assertThat("The violate method should have returned the correct shaped rule", outputConstraints, sameBeanAs(expectedConstraints));
+        assertConstraintListTypeEquality(expectedConstraints, outputConstraints);
     }
 
     /**
@@ -499,14 +409,12 @@ public class RuleViolatorTests {
         when(mockFilter.canViolate(atomicConstraint2)).thenReturn(true);
         when(mockFilter.canViolate(atomicConstraint3)).thenReturn(false);
 
-        Rule inputRule = new Rule(ruleInformation, inputConstraints);
-
         //Act
-        Rule outputRule = target.violateRule(inputRule);
+        List<Constraint> outputConstraints = inputConstraints.stream().map(target::violateConstraint)
+            .collect(Collectors.toList());
 
         //Assert
-        Rule expectedRule = new Rule(
-            ruleInformation,
+        List<Constraint> expectedConstraints =
             Arrays.asList(
                 atomicConstraint3,
                 new OrConstraint(
@@ -519,10 +427,9 @@ public class RuleViolatorTests {
                         new ViolatedAtomicConstraint(atomicConstraint2.negate())
                     )
                 )
-            )
-        );
+            );
 
-        assertThat("The violate method should have returned the correct shaped rule", outputRule, sameBeanAs(expectedRule));
-        assertRuleTypeEquality(expectedRule, outputRule);
+        assertThat("The violate method should have returned the correct shaped rule", outputConstraints, sameBeanAs(expectedConstraints));
+        assertConstraintListTypeEquality(expectedConstraints, outputConstraints);
     }
 }
