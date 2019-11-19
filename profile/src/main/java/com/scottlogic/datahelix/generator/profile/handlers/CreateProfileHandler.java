@@ -24,7 +24,7 @@ import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.datahelix.generator.common.validators.Validator;
 import com.scottlogic.datahelix.generator.core.profile.Profile;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
-import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.IsNullConstraint;
+import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.NotNullConstraint;
 import com.scottlogic.datahelix.generator.profile.commands.CreateProfile;
 import com.scottlogic.datahelix.generator.profile.custom.CustomConstraintFactory;
 import com.scottlogic.datahelix.generator.profile.services.ConstraintService;
@@ -67,7 +67,7 @@ public class CreateProfileHandler extends CommandHandler<CreateProfile, Profile>
     {
         return fields.stream()
             .filter(field -> !field.isNullable())
-            .map(field -> new IsNullConstraint(field).negate())
+            .map(NotNullConstraint::new)
             .collect(Collectors.toList());
     }
 

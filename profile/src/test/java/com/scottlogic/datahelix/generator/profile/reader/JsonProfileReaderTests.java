@@ -156,7 +156,7 @@ public class JsonProfileReaderTests {
                 "{" +
                         "    \"schemaVersion\": " + schemaVersion + "," +
                         "    \"fields\": [ { \"name\": \"f1\", \"type\": \"string\" } ]," +
-                        "    \"rules\": []" +
+                        "    \"constraints\": []" +
                         "}");
 
         expectFields(fieldWithName("f1"));
@@ -642,24 +642,26 @@ public class JsonProfileReaderTests {
                 "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { " +
                 "       \"name\": \"foo\" ," +
-                "       \"type\": \"integer\"," +
+                "       \"type\": \"decimal\"," +
                 "       \"nullable\": false" +
                 "    } ]," +
                 "    \"constraints\": []" +
                 "}");
 
-        expectConstraints(typedConstraint(NotNullConstraint.class,
+        expectConstraints(
+            typedConstraint(NotNullConstraint.class,
                     c -> Assert.assertEquals("foo", c.getField().getName())));
     }
 
     @Test
-    public void nullable_DoesNotAddConstraintForField_whenSetToTrue() throws IOException  {
+    public void nullable_DoesNotAddConstraintForField_whenSetToTrue() throws IOException
+    {
         givenJson(
             "{" +
                 "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { " +
                 "       \"name\": \"foo\" ," +
-                "       \"type\": \"integer\"," +
+                "       \"type\": \"decimal\"," +
                 "       \"nullable\": true" +
                 "    } ]," +
                 "    \"constraints\": []" +
@@ -675,11 +677,11 @@ public class JsonProfileReaderTests {
                 "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { " +
                 "       \"name\": \"foo\" ," +
-                "       \"type\": \"integer\"," +
+                "       \"type\": \"decimal\"," +
                 "       \"nullable\": false" +
                 "    }, { " +
                 "       \"name\": \"bar\" ," +
-                "       \"type\": \"integer\"," +
+                "       \"type\": \"decimal\"," +
                 "       \"nullable\": false" +
                 "    }]," +
                 "    \"constraints\": []" +
@@ -687,9 +689,9 @@ public class JsonProfileReaderTests {
 
         expectConstraints(
             typedConstraint(NotNullConstraint.class,
-                    c ->  Assert.assertEquals("foo", c.getField().getName())),
-                typedConstraint(NotNullConstraint.class,
-                    c -> Assert.assertEquals("bar", c.getField().getName()))
+                c ->  Assert.assertEquals("foo", c.getField().getName())),
+            typedConstraint(NotNullConstraint.class,
+                c -> Assert.assertEquals("bar", c.getField().getName()))
             );
     }
 
@@ -700,17 +702,18 @@ public class JsonProfileReaderTests {
                 "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { " +
                 "       \"name\": \"foo\" ," +
-                "       \"type\": \"integer\"," +
+                "       \"type\": \"decimal\"," +
                 "       \"nullable\": true" +
                 "    }, { " +
                 "       \"name\": \"bar\" ," +
-                "       \"type\": \"integer\"," +
+                "       \"type\": \"decimal\"," +
                 "       \"nullable\": false" +
                 "    }]," +
                 "    \"constraints\": []" +
                 "}");
 
-        expectConstraints(typedConstraint( NotNullConstraint.class,
+        expectConstraints(
+            typedConstraint(NotNullConstraint.class,
                     c -> Assert.assertEquals("bar", c.getField().getName())));
     }
 

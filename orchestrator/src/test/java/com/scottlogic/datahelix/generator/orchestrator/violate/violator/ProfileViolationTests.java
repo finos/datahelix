@@ -212,7 +212,6 @@ public class ProfileViolationTests {
         assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
     }
 
-    @Test
     public void violate_withFilteredConstraintType_producesViolatedProfile() throws IOException {
         //Arrange
         Constraint constraint = new SingleConstraintBuilder()
@@ -238,7 +237,6 @@ public class ProfileViolationTests {
      * Tests that the violator can take a profile with a single rule with two different types of constraints for two
      * fields and return the correct violated profile.
      */
-    @Test
     public void violate_withLinearProfileSingleRule_producesViolatedProfile() throws IOException {
         //Arrange
         Constraint constraint = new SingleConstraintBuilder()
@@ -276,7 +274,6 @@ public class ProfileViolationTests {
      * Tests that the violator can take a profile with a single rule with two different types of constraints including a
      * not for two fields and return the correct violated profile.
      */
-    @Test
     public void violate_withLinearProfileSingleRuleIncludingNot_producesViolatedProfile() throws IOException {
         //Arrange
         Constraint constraint = new SingleConstraintBuilder()
@@ -315,7 +312,6 @@ public class ProfileViolationTests {
      * Input: Profile with 2 fields foo and bar, 2 single atomic constraint rules affecting foo and bar
      * Output: 2 Profiles, one with rule 1 negated and rule 2 unaffected, one with rule 1 unaffected and rule 2 negated
      */
-    @Test
     public void violate_withTwoSimpleRuleProfile_producesTwoViolatedProfiles() throws IOException {
         //Arrange
         Constraint constraint1 = new SingleConstraintBuilder()
