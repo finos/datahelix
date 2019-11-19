@@ -69,4 +69,9 @@ public class ChecksumStringGenerator implements StringGenerator {
     public StringGenerator intersect(StringGenerator stringGenerator) {
         throw new ValidationException("These constraints cannot be combined.");
     }
+
+    @Override
+    public boolean validate(String string) {
+        return matches(string);
+    }
 }

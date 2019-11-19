@@ -20,11 +20,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.scottlogic.datahelix.generator.common.profile.SpecificFieldType;
+import com.scottlogic.datahelix.generator.common.profile.StandardSpecificFieldType;
 import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.ProfileDTO;
+import com.scottlogic.datahelix.generator.profile.services.FieldService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
 
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
@@ -42,7 +47,7 @@ public class FieldDeserialiserTests {
         // Assert
         FieldDTO expected = new FieldDTO();
         expected.name = "id";
-        expected.type = SpecificFieldType.INTEGER;
+        expected.type = StandardSpecificFieldType.INTEGER.toSpecificFieldType().getType();
 
         assertThat(actual, sameBeanAs(expected));
     }
@@ -58,7 +63,7 @@ public class FieldDeserialiserTests {
         // Assert
         FieldDTO expected = new FieldDTO();
         expected.name = "country";
-        expected.type = SpecificFieldType.STRING;
+        expected.type = StandardSpecificFieldType.STRING.toSpecificFieldType().getType();
 
         assertThat(actual, sameBeanAs(expected));
     }
@@ -74,7 +79,7 @@ public class FieldDeserialiserTests {
         // Assert
         FieldDTO expected = new FieldDTO();
         expected.name = "tariff";
-        expected.type = SpecificFieldType.DECIMAL;
+        expected.type = StandardSpecificFieldType.DECIMAL.toSpecificFieldType().getType();
 
         assertThat(actual, sameBeanAs(expected));
     }
@@ -90,7 +95,7 @@ public class FieldDeserialiserTests {
         // Assert
         FieldDTO expected = new FieldDTO();
         expected.name = "time";
-        expected.type = SpecificFieldType.DATETIME;
+        expected.type = StandardSpecificFieldType.DATETIME.toSpecificFieldType().getType();
 
         assertThat(actual, sameBeanAs(expected));
     }
@@ -106,7 +111,7 @@ public class FieldDeserialiserTests {
         // Assert
         FieldDTO expected = new FieldDTO();
         expected.name = "first_name";
-        expected.type = SpecificFieldType.FIRST_NAME;
+        expected.type = StandardSpecificFieldType.FIRST_NAME.toSpecificFieldType().getType();
 
         assertThat(actual, sameBeanAs(expected));
     }
@@ -122,7 +127,7 @@ public class FieldDeserialiserTests {
         // Assert
         FieldDTO expected = new FieldDTO();
         expected.name = "last_name";
-        expected.type = SpecificFieldType.LAST_NAME;
+        expected.type = StandardSpecificFieldType.LAST_NAME.toSpecificFieldType().getType();
 
         assertThat(actual, sameBeanAs(expected));
     }
@@ -138,7 +143,7 @@ public class FieldDeserialiserTests {
         // Assert
         FieldDTO expected = new FieldDTO();
         expected.name = "full_name";
-        expected.type = SpecificFieldType.FULL_NAME;
+        expected.type = StandardSpecificFieldType.FULL_NAME.toSpecificFieldType().getType();
 
         assertThat(actual, sameBeanAs(expected));
     }
@@ -154,11 +159,17 @@ public class FieldDeserialiserTests {
     }
 
     @Test
-    public void shouldDeserialiseFieldAndThrowInvalidTypeValueException()
-    {
+    public void shouldDeserialiseFieldAndThrowInvalidTypeValueException() throws IOException {
         // Arrange
         final String json = "{ \"name\": \"id\", \"type\": \"intger\" }";
-        Assertions.assertThrows(InvalidFormatException.class, () -> deserialiseJsonString(json));
+        FieldDTO fieldDTO = deserialiseJsonString(json);
+
+        FieldService service = new FieldService();
+        ProfileDTO dto = new ProfileDTO();
+        dto.fields = Arrays.asList(fieldDTO);
+        dto.constraints = Collections.emptyList();
+
+        Assertions.assertThrows(IllegalStateException.class, () -> service.createFields(dto));
 
     }
 

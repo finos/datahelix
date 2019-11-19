@@ -55,8 +55,8 @@ public class RelationalConstraintValidator<T extends RelationalConstraintDTO> ex
         {
             return ValidationResult.failure(otherFieldName + " must be defined in fields" + getErrorInfo(dto));
         }
-        FieldType fieldType = field.get().type.getFieldType();
-        FieldType otherFieldType = otherField.get().type.getFieldType();
+        FieldType fieldType = getFieldType(field.get().name);
+        FieldType otherFieldType = getFieldType(otherField.get().name);
         if (fieldType != otherFieldType)
         {
             return ValidationResult.failure("Field type " + fieldName + " doesn't match related field type " + otherFieldName + getErrorInfo(dto));

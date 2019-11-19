@@ -21,6 +21,7 @@ import com.scottlogic.datahelix.generator.common.output.GeneratedObject;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.datahelix.generator.common.profile.SpecificFieldType;
+import com.scottlogic.datahelix.generator.common.profile.StandardSpecificFieldType;
 import com.scottlogic.datahelix.generator.output.writer.DataSetWriter;
 import org.junit.Assert;
 import org.junit.Test;
@@ -41,8 +42,8 @@ import static junit.framework.TestCase.fail;
 public class CsvDataSetWriterTest {
     private ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-    private Field fieldOne = new Field("one", SpecificFieldType.STRING,false,null,false, false, null);
-    private Field fieldTwo = new Field("two", SpecificFieldType.STRING,false,null,false, false, null);
+    private Field fieldOne = new Field("one", StandardSpecificFieldType.STRING.toSpecificFieldType(),false,null,false, false, null);
+    private Field fieldTwo = new Field("two", StandardSpecificFieldType.STRING.toSpecificFieldType(),false,null,false, false, null);
 
     private Fields fields = new Fields(new ArrayList<>(Arrays.asList(
         fieldOne, fieldTwo

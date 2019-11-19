@@ -17,6 +17,7 @@ package com.scottlogic.datahelix.generator.core.fieldspecs.relations;
 
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.SpecificFieldType;
+import com.scottlogic.datahelix.generator.common.profile.StandardSpecificFieldType;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
@@ -30,8 +31,9 @@ import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 
 class EqualToDateRelationTest {
-    private final Field a = new Field("a", SpecificFieldType.DATETIME, false ,"", false, false, null);
-    private final Field b = new Field("b", SpecificFieldType.DATETIME, false, "", false, false, null);
+
+    private final Field a = new Field("a", StandardSpecificFieldType.DATETIME.toSpecificFieldType(), false ,"", false, false, null);
+    private final Field b = new Field("b", StandardSpecificFieldType.DATETIME.toSpecificFieldType(), false, "", false, false, null);
     private final FieldSpecRelation equalToDateRelations = new EqualToRelation(a, b);
 
     @Test

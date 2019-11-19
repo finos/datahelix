@@ -24,13 +24,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class SpecificFieldTypeTest {
     @Test
     void getDefaultFormatting_returnsNull_WhenPassedISINConstraint() {
-        String result = SpecificFieldType.ISIN.getDefaultFormatting();
+        String result = StandardSpecificFieldType.ISIN.getDefaultFormatting();
         assertNull(result);
     }
 
     @Test
     void getDefaultFormatting_returnsCorrectFormatting_WhenPassedDateConstraint() {
-        String result = SpecificFieldType.DATE.getDefaultFormatting();
+        String result = StandardSpecificFieldType.DATE.getDefaultFormatting();
         Assertions.assertEquals(Defaults.DEFAULT_DATE_FORMATTING,result);
     }
 }

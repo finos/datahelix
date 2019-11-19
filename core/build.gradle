@@ -20,6 +20,7 @@ dependencies {
     compile "com.google.inject:guice:${GUICE_VERSION}"
     compile "dk.brics.automaton:automaton:${AUTOMATON_VERSION}"
     compile "org.apache.commons:commons-csv:${COMMONS_CSV_VERSION}"
+    implementation "com.github.javafaker:javafaker:${FAKER_VERSION}"
 
     testCompile project(":common").sourceSets.test.output
     testCompile "org.junit.jupiter:junit-jupiter-api:${JUNIT_JUPITER_VERSION}"

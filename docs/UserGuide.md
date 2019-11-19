@@ -18,7 +18,7 @@
     3. [DateTime](#DateTime)
     4. [Time](#time)
     5. [Boolean](#boolean)
-    6. [Custom Data Types](#Custom-Data-Types)
+    6. [Faker](#faker)
 
 5. [Predicate constraints](#Predicate-constraints)
     1. [Theory](#Theory)
@@ -191,6 +191,14 @@ The data type of the field. See [Data types](#Data-Types) for more on how types 
 *  `lastname`
 *  `fullname`
 *  `boolean`
+*  `faker.firstname`
+*  `faker.lastname`
+*  `faker.name`
+*  `faker.bloodgroup`
+*  `faker.username`
+*  `faker.nameprefix`
+*  `faker.phonenumber`
+*  `faker.cellnumber`
 
  This is a required property.
 
@@ -303,6 +311,19 @@ Users can specify boolean data types which will take the values `true` and `fals
 
 Currently these types are only supported with the `equalTo` and `equalToField` constraints.
 
+## Faker
+
+Users can invoke the [Faker](https://github.com/DiUS/java-faker/) custom data generators to create values.
+
+All of the types supplied on the [Faker class](https://github.com/DiUS/java-faker/blob/javafaker-1.0.1/src/main/java/com/github/javafaker/Faker.java) are accessible. Methods are invoked by entering the method signature chain. For example:
+
+```java
+faker.name().firstName()
+```
+would be used in the profile by supplying the type:
+```bash
+faker.name.firstName
+```
 
 # Predicate constraints
 

@@ -16,7 +16,9 @@
 
 package com.scottlogic.datahelix.generator.core.restrictions.string;
 
+import com.github.javafaker.Faker;
 import com.scottlogic.datahelix.generator.core.generation.fieldvaluesources.FieldValueSource;
+import com.scottlogic.datahelix.generator.core.generation.string.generators.FakerGenerator;
 import com.scottlogic.datahelix.generator.core.generation.string.generators.NoStringsStringGenerator;
 import com.scottlogic.datahelix.generator.core.generation.string.generators.RegexStringGenerator;
 import com.scottlogic.datahelix.generator.core.generation.string.generators.StringGenerator;
@@ -40,6 +42,7 @@ public class StringRestrictions implements TypedRestrictions<String>
     private final Set<Pattern> notMatchingRegex;
     private final Set<Pattern> notContainingRegex;
     private StringGenerator generator;
+    private Function<Faker, String> fakerFunction;
 
     public StringRestrictions(
         Integer minLength,
@@ -48,7 +51,8 @@ public class StringRestrictions implements TypedRestrictions<String>
         Set<Pattern> containingRegex,
         Set<Integer> excludedLengths,
         Set<Pattern> notMatchingRegex,
-        Set<Pattern> notContainingRegex) {
+        Set<Pattern> notContainingRegex,
+        Function<Faker, String> fakerFunction) {
         this.minLength = minLength;
         this.maxLength = maxLength;
         this.matchingRegex = matchingRegex;
@@ -56,6 +60,7 @@ public class StringRestrictions implements TypedRestrictions<String>
         this.excludedLengths = excludedLengths;
         this.notMatchingRegex = notMatchingRegex;
         this.notContainingRegex = notContainingRegex;
+        this.fakerFunction = fakerFunction;
     }
 
     @Override
@@ -66,6 +71,16 @@ public class StringRestrictions implements TypedRestrictions<String>
 
     @Override
     public FieldValueSource<String> createFieldValueSource(Set<String> blacklist) {
+        StringGenerator regexFieldValueSource = createRegexFieldValueSource(blacklist);
+
+        if (fakerFunction == null) {
+            return regexFieldValueSource;
+        }
+
+        return new FakerGenerator(regexFieldValueSource, fakerFunction);
+    }
+
+    private StringGenerator createRegexFieldValueSource(Set<String> blacklist) {
         if (blacklist.isEmpty()) {
             return createGenerator();
         }
@@ -83,6 +98,10 @@ public class StringRestrictions implements TypedRestrictions<String>
             throw new IllegalArgumentException("Other StringRestrictions must not be null");
         }
 
+        if (!permittedFunctions(fakerFunction, other.fakerFunction)) {
+            throw new IllegalArgumentException("Cannot combine two different faker functions");
+        }
+
         StringRestrictions merged = new StringRestrictions(
             mergeMinLengths(other.minLength),
             mergeMaxLengths(other.maxLength),
@@ -90,12 +109,32 @@ public class StringRestrictions implements TypedRestrictions<String>
             SetUtils.union(containingRegex, other.containingRegex),
             SetUtils.union(excludedLengths, other.excludedLengths),
             SetUtils.union(notMatchingRegex, other.notMatchingRegex),
-            SetUtils.union(notContainingRegex, other.notContainingRegex)
+            SetUtils.union(notContainingRegex, other.notContainingRegex),
+            combineFaker(fakerFunction, other.fakerFunction)
         );
 
         return merged.isContradictory()
             ? Optional.empty()
             : Optional.of(merged);
+    }
+
+    private <T> boolean permittedFunctions(T left, T right) {
+        if (left != null && right != null) {
+            return left.equals(right);
+        }
+        return true;
+    }
+
+    private Function<Faker, String> combineFaker(Function<Faker, String> left, Function<Faker, String> right) {
+        if (left == null) {
+            return right;
+        }
+
+        if (right == null) {
+            return left;
+        }
+
+        return left;
     }
 
     /**
@@ -172,7 +211,7 @@ public class StringRestrictions implements TypedRestrictions<String>
         //combine (merge/intersect) each non-length related constraint to produce a single string generator
         //e.g. would combine /[a-z]{0,9}/ with /.{0,255}/ (lengthConstrainingGenerator) to produce a single generator
         //that looks like /[a-z]{0,9} ∩ .{0,255}/, which is equivalent to /[a-z]{0,9}/
-        return generator = getPatternConstraints()
+        StringGenerator localGenerator = getPatternConstraints()
             .reduce(
                 lengthConstrainingGenerator,
                 (prev, current) -> {
@@ -187,6 +226,7 @@ public class StringRestrictions implements TypedRestrictions<String>
                     return prev.intersect(current);
                 },
                 (a, b) -> null);
+        return generator = localGenerator;
     }
 
     /**
@@ -324,7 +364,8 @@ public class StringRestrictions implements TypedRestrictions<String>
             matchingRegex.isEmpty() ? "" : " matching: " + patternsAsString(matchingRegex),
             containingRegex.isEmpty() ? "" : " containing: " + patternsAsString(containingRegex),
             notMatchingRegex.isEmpty() ? "" : " not matching: " + patternsAsString(notMatchingRegex),
-            notContainingRegex.isEmpty() ? "" : " not containing: " + patternsAsString(notContainingRegex));
+            notContainingRegex.isEmpty() ? "" : " not containing: " + patternsAsString(notContainingRegex),
+            fakerFunction != null ? fakerFunction.toString() : "");
     }
 
     private String patternsAsString(Set<Pattern> patterns) {
@@ -346,11 +387,12 @@ public class StringRestrictions implements TypedRestrictions<String>
             && containingRegex.equals(that.containingRegex)
             && matchingRegex.equals(that.matchingRegex)
             && notContainingRegex.equals(that.notContainingRegex)
-            && notMatchingRegex.equals(that.notMatchingRegex);
+            && notMatchingRegex.equals(that.notMatchingRegex)
+            && (fakerFunction == null && that.fakerFunction == null) || (fakerFunction != null && fakerFunction.equals(that.fakerFunction));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(excludedLengths, maxLength, minLength, containingRegex, matchingRegex, notMatchingRegex, notContainingRegex);
+        return Objects.hash(excludedLengths, maxLength, minLength, containingRegex, matchingRegex, notMatchingRegex, notContainingRegex, fakerFunction);
     }
 }

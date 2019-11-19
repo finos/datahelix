@@ -16,75 +16,54 @@
 
 package com.scottlogic.datahelix.generator.common.profile;
 
-import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.Objects;
 
-import static com.scottlogic.datahelix.generator.common.util.Defaults.DEFAULT_DATE_FORMATTING;
-import static com.scottlogic.datahelix.generator.common.util.Defaults.DEFAULT_TIME_FORMATTING;
-
-public enum SpecificFieldType
-{
-    DECIMAL("decimal", FieldType.NUMERIC),
-    INTEGER( "integer", FieldType.NUMERIC),
-    ISIN("ISIN", FieldType.STRING),
-    SEDOL("SEDOL", FieldType.STRING),
-    CUSIP("CUSIP", FieldType.STRING),
-    RIC("RIC", FieldType.STRING),
-    FIRST_NAME("firstname", FieldType.STRING),
-    LAST_NAME("lastname", FieldType.STRING),
-    FULL_NAME("fullname", FieldType.STRING),
-    STRING("string", FieldType.STRING),
-    DATETIME("datetime", FieldType.DATETIME),
-    DATE("date",FieldType.DATETIME),
-    BOOLEAN("boolean", FieldType.BOOLEAN),
-    TIME("time", FieldType.TIME);
-
-    @JsonValue
+public class SpecificFieldType {
     private final String type;
     private final FieldType fieldType;
+    private final String formatting;
+    private final String fakerMethod;
 
-    SpecificFieldType(String type, FieldType fieldType)
-    {
+    public SpecificFieldType(String type, FieldType fieldType, String formatting) {
+        this(type, fieldType, formatting, null);
+    }
+
+    public SpecificFieldType(String type, FieldType fieldType, String formatting, String fakerMethod) {
         this.type = type;
         this.fieldType = fieldType;
+        this.formatting = formatting;
+        this.fakerMethod = fakerMethod;
     }
 
     public String getType() {
         return type;
     }
 
-    public FieldType getFieldType()
-    {
+    public FieldType getFieldType() {
         return fieldType;
     }
 
-    public static SpecificFieldType from(String type){
-        switch (type)
-        {
-            case "decimal": return DECIMAL;
-            case "integer": return INTEGER;
-            case "ISIN": return ISIN;
-            case "SEDOL": return SEDOL;
-            case "CUSIP": return CUSIP;
-            case "RIC": return RIC;
-            case "firstname": return FIRST_NAME;
-            case "lastname": return LAST_NAME;
-            case "fullname": return FULL_NAME;
-            case "string": return STRING;
-            case "datetime": return DATETIME;
-            case "date": return DATE;
-            case "time": return TIME;
-            case "boolean": return BOOLEAN;
-            default:
-                throw new IllegalStateException("No data types with type " + type);
-        }
+    public String getFormatting() {
+        return formatting;
     }
 
-    public String getDefaultFormatting() {
-        switch (type) {
-            case "date": return DEFAULT_DATE_FORMATTING;
-            case "time": return DEFAULT_TIME_FORMATTING;
-            default:
-                return null;
-        }
+    public String getFakerMethod() {
+        return fakerMethod;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SpecificFieldType that = (SpecificFieldType) o;
+        return Objects.equals(type, that.type) &&
+            fieldType == that.fieldType &&
+            Objects.equals(formatting, that.formatting) &&
+            Objects.equals(fakerMethod, that.fakerMethod);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, fieldType, formatting, fakerMethod);
     }
 }

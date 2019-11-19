@@ -18,6 +18,7 @@ package com.scottlogic.datahelix.generator.core.generation;
 
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.SpecificFieldType;
+import com.scottlogic.datahelix.generator.common.profile.StandardSpecificFieldType;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
 import com.scottlogic.datahelix.generator.core.fieldspecs.WhitelistFieldSpec;
@@ -74,7 +75,7 @@ class FieldSpecValueGeneratorTests {
             new JavaUtilRandomNumberGenerator());
 
         final Set<DataBagValue> result =
-            fieldSpecFulfiller.generate(createField(null, SpecificFieldType.DECIMAL), fieldSpec).collect(Collectors.toSet());
+            fieldSpecFulfiller.generate(createField(null, StandardSpecificFieldType.DECIMAL.toSpecificFieldType()), fieldSpec).collect(Collectors.toSet());
 
         Set<DataBagValue> expectedDataBags = new HashSet<>(
             Arrays.asList(
@@ -116,7 +117,7 @@ class FieldSpecValueGeneratorTests {
                 randomNumberGenerator
             );
 
-            fieldSpecFulfiller.generate(new Field(null, SpecificFieldType.STRING, true, null, false, false, null), fieldSpec).collect(Collectors.toSet());
+            fieldSpecFulfiller.generate(new Field(null, StandardSpecificFieldType.STRING.toSpecificFieldType(), true, null, false, false, null), fieldSpec).collect(Collectors.toSet());
 
             verify(fieldValueSource, times(1)).generateAllValues();
             verify(fieldValueSource, times(0)).generateInterestingValues();
@@ -144,7 +145,7 @@ class FieldSpecValueGeneratorTests {
                 randomNumberGenerator
             );
 
-            fieldSpecFulfiller.generate(new Field(null, SpecificFieldType.STRING, true, null, false, false, null), fieldSpec).collect(Collectors.toSet());
+            fieldSpecFulfiller.generate(new Field(null, StandardSpecificFieldType.STRING.toSpecificFieldType(), true, null, false, false, null), fieldSpec).collect(Collectors.toSet());
 
             verify(fieldValueSource, times(1)).generateAllValues();
             verify(fieldValueSource, times(0)).generateInterestingValues();

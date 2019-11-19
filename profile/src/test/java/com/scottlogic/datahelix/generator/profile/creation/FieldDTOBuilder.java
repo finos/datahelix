@@ -17,6 +17,7 @@
 package com.scottlogic.datahelix.generator.profile.creation;
 
 import com.scottlogic.datahelix.generator.common.profile.SpecificFieldType;
+import com.scottlogic.datahelix.generator.common.profile.StandardSpecificFieldType;
 import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;
 
 public class FieldDTOBuilder
@@ -25,14 +26,14 @@ public class FieldDTOBuilder
     {
         FieldDTO fieldDTO = new FieldDTO();
         fieldDTO.name = name;
-        fieldDTO.type = SpecificFieldType.STRING;
+        fieldDTO.type = StandardSpecificFieldType.STRING.toSpecificFieldType().getType();
         return fieldDTO;
     }
     public static FieldDTO create(String name, SpecificFieldType type)
     {
         FieldDTO fieldDTO = new FieldDTO();
         fieldDTO.name = name;
-        fieldDTO.type = type;
+        fieldDTO.type = type == null ? null : type.getType();
         return fieldDTO;
     }
 }

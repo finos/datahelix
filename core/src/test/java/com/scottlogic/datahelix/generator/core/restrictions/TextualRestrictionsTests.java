@@ -548,7 +548,8 @@ class TextualRestrictionsTests {
             Collections.emptySet(),
             negate ? Collections.singleton(length) : Collections.emptySet(),
             Collections.emptySet(),
-            Collections.emptySet());
+            Collections.emptySet(),
+            null);
     }
 
     private static StringRestrictions maxLength(int length){
@@ -567,7 +568,8 @@ class TextualRestrictionsTests {
             Collections.emptySet(),
             Collections.emptySet(),
             Collections.emptySet(),
-            Collections.emptySet());
+            Collections.emptySet(),
+            null);
     }
 
     private static StringRestrictions matchingRegex(String regex, @SuppressWarnings("SameParameterValue") boolean negate){
@@ -580,7 +582,8 @@ class TextualRestrictionsTests {
             Collections.emptySet(),
             Collections.emptySet(),
             negate ? Collections.singleton(pattern) : Collections.emptySet(),
-            Collections.emptySet());
+            Collections.emptySet(),
+            null);
     }
 
     private static StringRestrictions containsRegex(String regex, @SuppressWarnings("SameParameterValue") boolean negate){
@@ -593,7 +596,8 @@ class TextualRestrictionsTests {
             negate ? Collections.emptySet() : Collections.singleton(pattern),
             Collections.emptySet(),
             Collections.emptySet(),
-            negate ? Collections.singleton(pattern) : Collections.emptySet());
+            negate ? Collections.singleton(pattern) : Collections.emptySet(),
+            null);
     }
 
 

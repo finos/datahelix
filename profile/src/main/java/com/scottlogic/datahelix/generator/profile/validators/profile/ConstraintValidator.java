@@ -38,6 +38,7 @@ import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.C
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.NotConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.relations.InMapConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.relations.RelationalConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.services.FieldService;
 import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.InMapConstraintValidator;
 import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.NotConstraintValidator;
 import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.RelationalConstraintValidator;
@@ -51,6 +52,7 @@ import java.util.List;
 public abstract class ConstraintValidator<T extends ConstraintDTO> implements Validator<T>
 {
     protected final List<FieldDTO> fields;
+    protected final FieldService fieldService = new FieldService();
 
     protected ConstraintValidator(List<FieldDTO> fields)
     {
@@ -139,9 +141,18 @@ public abstract class ConstraintValidator<T extends ConstraintDTO> implements Va
         return ValidationResult.success();
     }
 
+    protected FieldType getFieldType(String field) {
+        return fieldService.specificFieldTypeFromString(fields.stream()
+                .filter(f -> f.name.equals(field))
+                .findFirst()
+                .get()
+                .type,
+            null).getFieldType();
+    }
+
     protected ValidationResult validateGranularity(T dto, String field, Object value)
     {
-        FieldType fieldType = fields.stream().filter(f -> f.name.equals(field)).findFirst().get().type.getFieldType();
+        FieldType fieldType = getFieldType(field);
         switch (fieldType)
         {
             case BOOLEAN:

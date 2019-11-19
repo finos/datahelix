@@ -40,7 +40,7 @@ abstract class AtomicConstraintValidator<T extends AtomicConstraintDTO> extends 
 
     ValidationResult fieldTypeMustMatchValueType(T dto, FieldType expectedFieldType)
     {
-        FieldType fieldType = fields.stream().filter(f -> f.name.equals(dto.field)).findFirst().get().type.getFieldType();
+        FieldType fieldType = getFieldType(dto.field);
         if (expectedFieldType != fieldType)
         {
             return ValidationResult.failure("Expected field type " + expectedFieldType + " doesn't match field type " + fieldType + getErrorInfo(dto));
@@ -54,7 +54,7 @@ abstract class AtomicConstraintValidator<T extends AtomicConstraintDTO> extends 
         {
             return ValidationResult.failure("Values must be specified" + getErrorInfo(dto));
         }
-        FieldType fieldType = fields.stream().filter(f -> f.name.equals(dto.field)).findFirst().get().type.getFieldType();
+        FieldType fieldType = getFieldType(dto.field);
         if(value instanceof Boolean && fieldType != FieldType.BOOLEAN)
         {
             return ValidationResult.failure("Value " + value + " must be a boolean" + getErrorInfo(dto));

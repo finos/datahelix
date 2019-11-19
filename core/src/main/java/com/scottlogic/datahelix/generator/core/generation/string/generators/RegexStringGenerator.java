@@ -27,6 +27,7 @@ import com.scottlogic.datahelix.generator.common.RandomNumberGenerator;
 import dk.brics.automaton.Automaton;
 
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -45,6 +46,7 @@ public class RegexStringGenerator implements StringGenerator {
 
     private Automaton automaton;
     private final String regexRepresentation;
+    private Pattern regexPattern;
 
     private RandomStringFactory randomStringFactory = new RandomStringFactory();
     private InterestingStringFactory interestingStringFactory = new InterestingStringFactory();
@@ -64,6 +66,19 @@ public class RegexStringGenerator implements StringGenerator {
         String suffix = matchFullString ? "" : "*";
         this.regexRepresentation = String.format("%s/%s/%s", prefix, regexStr, suffix);
         this.automaton = generatedAutomaton;
+    }
+
+    private Pattern pattern() {
+        if (regexPattern != null) {
+            return regexPattern;
+        }
+        String firstStripped = regexRepresentation.charAt(0) == '/'
+            ? regexRepresentation.substring(1)
+            : regexRepresentation;
+        String lastStripped = firstStripped.charAt(firstStripped.length() - 1) == '/'
+            ? firstStripped.substring(0, firstStripped.length() - 1)
+            : firstStripped;
+        return regexPattern = Pattern.compile(lastStripped);
     }
 
     @Override
@@ -99,13 +114,13 @@ public class RegexStringGenerator implements StringGenerator {
         RegexStringGenerator otherRegexGenerator = (RegexStringGenerator) otherGenerator;
         Automaton b = otherRegexGenerator.automaton;
         Automaton merged = automaton.intersection(b);
-        if (merged.isEmpty()){
+        if (merged.isEmpty()) {
             return new NoStringsStringGenerator("regex combination was contradictory");
         }
 
         String mergedRepresentation = intersectRepresentation(
             this.regexRepresentation,
-            ((RegexStringGenerator)otherGenerator).regexRepresentation);
+            ((RegexStringGenerator) otherGenerator).regexRepresentation);
 
         return new RegexStringGenerator(merged, mergedRepresentation);
     }
@@ -156,6 +171,10 @@ public class RegexStringGenerator implements StringGenerator {
             () -> randomStringFactory.createRandomString(
                 automaton.getInitialState(),
                 randomNumberGenerator));
+    }
+
+    public boolean validate(String input) {
+        return pattern().asPredicate().test(input);
     }
 
     public boolean matches(String subject) {

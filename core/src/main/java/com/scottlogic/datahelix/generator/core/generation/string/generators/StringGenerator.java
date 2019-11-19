@@ -25,4 +25,6 @@ public interface StringGenerator extends FieldValueSource<String> {
     default StringGenerator complement() {
         throw new UnsupportedOperationException();
     }
+
+    boolean validate(String string);
 }
