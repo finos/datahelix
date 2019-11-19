@@ -137,7 +137,7 @@ public class ProfileValidator implements Validator<ProfileDTO>
 
     public ValidationResult constraintsMustBeValid(ProfileDTO dto)
     {
-        return dto.constraints == null || dto.constraints.isEmpty()
+        return dto.constraints == null
             ? ValidationResult.failure("Constraints must be specified")
             : ValidationResult.combine(dto.constraints.stream()
             .map(c -> ConstraintValidator.validateConstraint(c, dto.fields)));

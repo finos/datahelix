@@ -22,21 +22,19 @@ import com.scottlogic.datahelix.generator.common.profile.DateTimeGranularity;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.FieldType;
 import com.scottlogic.datahelix.generator.common.profile.NumericGranularity;
-import com.scottlogic.datahelix.generator.custom.CustomGeneratorList;
 import com.scottlogic.datahelix.generator.common.util.FileUtils;
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.core.profile.Profile;
-import com.scottlogic.datahelix.generator.core.profile.Rule;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.*;
 import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.OrConstraint;
+import com.scottlogic.datahelix.generator.custom.CustomGeneratorList;
 import com.scottlogic.datahelix.generator.profile.custom.CustomConstraint;
 import com.scottlogic.datahelix.generator.profile.custom.CustomConstraintFactory;
 import com.scottlogic.datahelix.generator.profile.services.ConstraintService;
 import com.scottlogic.datahelix.generator.profile.services.FieldService;
-import com.scottlogic.datahelix.generator.profile.services.RuleService;
 import com.scottlogic.datahelix.generator.profile.validators.ConfigValidator;
 import com.scottlogic.datahelix.generator.profile.validators.CreateProfileValidator;
 import com.scottlogic.datahelix.generator.profile.validators.profile.ProfileValidator;
@@ -55,7 +53,6 @@ import static com.scottlogic.datahelix.generator.common.util.Defaults.DEFAULT_DA
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.core.IsNull.nullValue;
-import static org.mockito.Mockito.mock;
 
 
 public class JsonProfileReaderTests {
@@ -93,9 +90,8 @@ public class JsonProfileReaderTests {
         new MockFromFileReader(),
         new ProfileCommandBus(
             new FieldService(),
-            new RuleService(
                 new ConstraintService(),
-                new CustomConstraintFactory(new CustomGeneratorList())),
+                new CustomConstraintFactory(new CustomGeneratorList()),
             new CreateProfileValidator(new ProfileValidator(null))));
 
     private void givenJson(String json) {
@@ -111,16 +107,9 @@ public class JsonProfileReaderTests {
         Assertions.assertEquals(message, exception.getMessage());
     }
 
-    private void expectRules(Consumer<Rule>... ruleAssertions) throws IOException {
-        expectMany(this.getResultingProfile().getConstraints(), ruleAssertions);
-    }
-
-    private Consumer<Rule> ruleWithDescription(String expectedDescription) {
-        return rule -> Assert.assertThat(rule.getDescription(), equalTo(expectedDescription));
-    }
-
-    private Consumer<Rule> ruleWithConstraints(Consumer<Constraint>... constraintAsserters) {
-        return rule -> expectMany(rule.getConstraints(), constraintAsserters);
+    @SafeVarargs
+    private final void expectConstraints(Consumer<Constraint>... constraintAssertions) throws IOException {
+        expectMany(this.getResultingProfile().getConstraints(), constraintAssertions);
     }
 
     private <T> Consumer<Constraint> typedConstraint(Class<T> constraintType, Consumer<T> asserter) {
@@ -135,7 +124,8 @@ public class JsonProfileReaderTests {
         return field -> Assert.assertThat(field.getName(), equalTo(expectedName));
     }
 
-    private void expectFields(Consumer<Field>... fieldAssertions) throws IOException {
+    @SafeVarargs
+    private final void expectFields(Consumer<Field>... fieldAssertions) throws IOException {
         expectMany(this.getResultingProfile().getFields(), fieldAssertions);
     }
 
@@ -143,9 +133,10 @@ public class JsonProfileReaderTests {
      * Given a set I1, I2, I3... and some consumers A1, A2, A3..., run A1(I1), A2(I2), A3(I3)...
      * This lets us make assertions about each entry in a sequence
      */
-    private <T> void expectMany(
-            Iterable<T> assertionTargets,
-            Consumer<T>... perItemAssertions) {
+    @SafeVarargs
+    private final <T> void expectMany(
+        Iterable<T> assertionTargets,
+        Consumer<T>... perItemAssertions) {
 
         Iterator<T> aIterator = assertionTargets.iterator();
         Iterator<Consumer<T>> bIterator = Arrays.asList(perItemAssertions).iterator();
@@ -168,8 +159,7 @@ public class JsonProfileReaderTests {
                         "    \"rules\": []" +
                         "}");
 
-        expectFields(
-                fieldWithName("f1"));
+        expectFields(fieldWithName("f1"));
     }
 
     @Test
@@ -180,7 +170,7 @@ public class JsonProfileReaderTests {
                         "    \"fields\": [ " +
                         "       { \"name\": \"f1\", \"type\": \"string\" }," +
                         "       { \"name\": \"f2\", \"type\": \"string\" } ]," +
-                        "    \"rules\": []" +
+                        "    \"constraints\": []" +
                         "}");
 
         expectFields(
@@ -189,67 +179,17 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldGiveDefaultNameToUnnamedRules() throws IOException {
-        givenJson(
-                "{" +
-                        "    \"schemaVersion\": " + schemaVersion + "," +
-                        "    \"fields\": [ { \"name\": \"foo\" , \"type\": \"string\", \"nullable\": true} ]," +
-                        "    \"rules\": [" +
-                        "      {" +
-                        "        \"constraints\": [" +
-                        "            { \"field\": \"foo\", \"isNull\": true } " +
-                        "        ]" +
-                        "      }" +
-                        "    ]" +
-                        "}");
-
-        expectRules(
-            ruleWithDescription("Unnamed rule"));
-        expectFields(
-            field -> {
-                Assert.assertThat(field.getName(), equalTo("foo"));
-                Assert.assertEquals(field.getType(), FieldType.STRING);
-            });
-    }
-
-    @Test
-    public void shouldReadNameOfNamedRules() throws IOException {
-        givenJson(
-                "{" +
-                        "    \"schemaVersion\": " + schemaVersion + "," +
-                        "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\", \"nullable\": true } ]," +
-                        "    \"rules\": [" +
-                        "        {" +
-                        "           \"rule\": \"Too rule for school\"," +
-                        "           \"constraints\": [" +
-                        "               { \"field\": \"foo\", \"isNull\": true }" +
-                        "           ]" +
-                        "        }" +
-                        "    ]" +
-                        "}");
-
-        expectRules(
-            ruleWithDescription("Too rule for school"));
-    }
-
-    @Test
     public void shouldNotThrowIsNullWithValueNull() {
         givenJson(
             "{" +
                 "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\" } ]," +
-                "    \"rules\": [" +
-                "        {" +
-                "           \"rule\": \"Too rule for school\"," +
-                "           \"constraints\": [" +
+                "    \"constraints\": [" +
                 "               { \"field\": \"foo\", \"isNull\": true }" +
-                "           ]" +
-                "        }" +
                 "    ]" +
                 "}");
 
-        Assertions.assertDoesNotThrow(
-            () -> getResultingProfile());
+        Assertions.assertDoesNotThrow(this::getResultingProfile);
     }
 
     @Test
@@ -258,18 +198,12 @@ public class JsonProfileReaderTests {
             "{" +
                 "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\" } ]," +
-                "    \"rules\": [" +
-                "        {" +
-                "           \"rule\": \"Too rule for school\"," +
-                "           \"constraints\": [" +
-                    "               { \"field\": \"foo\", \"isNull\": true }" +
-                "           ]" +
-                "        }" +
+                "    \"constraints\": [" +
+                "               { \"field\": \"foo\", \"isNull\": true }" +
                 "    ]" +
                 "}");
 
-        Assertions.assertDoesNotThrow(
-            () -> getResultingProfile());
+        Assertions.assertDoesNotThrow(this::getResultingProfile);
     }
 
     @Test
@@ -278,14 +212,14 @@ public class JsonProfileReaderTests {
             "{" +
                 "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\", \"nullable\": true } ]," +
-                "    \"rules\": []" +
+                "    \"constraints\": []" +
                 "}");
 
-        expectRules();
+        expectConstraints();
         expectFields(
             field -> {
                 Assert.assertThat(field.getName(), equalTo("foo"));
-                Assert.assertEquals(field.getType(), FieldType.STRING);
+                Assert.assertEquals(FieldType.STRING, field.getType());
             });
     }
 
@@ -295,19 +229,15 @@ public class JsonProfileReaderTests {
             "{" +
                 "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"integer\", \"nullable\": true } ]," +
-                "    \"rules\": []" +
+                "    \"constraints\": []" +
                 "}");
 
 
-        expectRules(
-            ruleWithConstraints(
-                typedConstraint(
-                    GranularToNumericConstraint.class,
-                    c -> {
-                        Assert.assertThat(
+        expectConstraints(typedConstraint(GranularToNumericConstraint.class,
+                    c -> Assert.assertThat(
                             c.granularity,
-                            equalTo(new NumericGranularity(0)));
-                    })));
+                            equalTo(new NumericGranularity(0)))
+                    ));
     }
 
     @Test
@@ -316,24 +246,15 @@ public class JsonProfileReaderTests {
             "{" +
                 "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\", \"nullable\": true } ]," +
-                "    \"rules\": [" +
-                "      {" +
-                "        \"constraints\": [" +
+                "    \"constraints\": [" +
                 "        { \"field\": \"foo\",  \"equalTo\": \"equal\" }" +
-                "        ]" +
-                "      }" +
                 "    ]" +
                 "}");
 
 
 
-        expectRules(
-            ruleWithConstraints(
-                typedConstraint(
-                    EqualToConstraint.class,
-                    c -> Assert.assertThat(
-                        c.value,
-                        equalTo("equal")))));
+        expectConstraints(typedConstraint(EqualToConstraint.class,
+            c -> Assert.assertThat( c.value, equalTo("equal"))));
 
     }
 
@@ -347,7 +268,7 @@ public class JsonProfileReaderTests {
                         "           \"formatting\": \"%.5s\"," +
                         "           \"type\": \"string\"" +
                         "    } ]," +
-                        "    \"rules\": []" +
+                        "    \"constraints\": []" +
                         "}");
 
         expectFields(
@@ -364,20 +285,13 @@ public class JsonProfileReaderTests {
                 "{" +
                         "    \"schemaVersion\": " + schemaVersion + "," +
                         "    \"fields\": [ { \"name\": \"id\", \"type\": \"string\" , \"nullable\": true} ]," +
-                        "    \"rules\": [" +
-                        "      {" +
-                        "        \"constraints\": [" +
+                        "    \"constraints\": [" +
                         "        { \"field\": \"id\",  \"ofLength\": 5 }" +
-                        "        ]" +
-                        "      }" +
                         "    ]" +
                         "}");
 
-        expectRules(
-            ruleWithConstraints(
-                typedConstraint(
-                    OfLengthConstraint.class,
-                    c -> Assert.assertThat(c.referenceValue, equalTo(5)))));
+        expectConstraints(typedConstraint(OfLengthConstraint.class,
+                    c -> Assert.assertThat(c.referenceValue, equalTo(5))));
     }
 
     @Test
@@ -387,24 +301,13 @@ public class JsonProfileReaderTests {
                 "{" +
                         "    \"schemaVersion\": " + schemaVersion + "," +
                         "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\", \"nullable\": true } ]," +
-                        "    \"rules\": [" +
-                        "      {" +
-                        "        \"constraints\": [" +
+                        "    \"constraints\": [" +
                         "        { \"not\": { \"field\": \"foo\",  \"equalTo\": \"string\" } }" +
-                        "        ]" +
-                        "      }" +
                         "    ]" +
                         "}");
 
-        expectRules(
-                ruleWithConstraints(
-                        typedConstraint(
-                                NotEqualToConstraint.class,
-                                c -> {
-                                    Assert.assertThat(
-                                            c.value,
-                                            equalTo("string"));
-                                })));
+        expectConstraints(typedConstraint(NotEqualToConstraint.class,
+            c ->  Assert.assertThat(c.value, equalTo("string"))));
     }
 
     @Test
@@ -413,27 +316,18 @@ public class JsonProfileReaderTests {
                 "{" +
                         "    \"schemaVersion\": " + schemaVersion + "," +
                         "    \"fields\": [ { \"name\": \"foo\", \"type\": \"decimal\", \"nullable\": true } ]," +
-                        "    \"rules\": [" +
-                        "      {" +
-                        "        \"constraints\": [" +
+                        "    \"constraints\": [" +
                         "          {" +
                         "            \"anyOf\": [" +
                         "              { \"field\": \"foo\",  \"equalTo\": 1 }," +
                         "              { \"field\": \"foo\", \"isNull\": true }" +
                         "            ]" +
                         "          }" +
-                        "        ]" +
-                        "      }" +
                         "   ]" +
                         "}");
 
-        expectRules(
-            ruleWithConstraints(
-                typedConstraint(
-                    OrConstraint.class,
-                    c -> Assert.assertThat(
-                        c.subConstraints.size(),
-                        equalTo(2)))));
+        expectConstraints(typedConstraint(OrConstraint.class,
+                    c -> Assert.assertThat(c.subConstraints.size(),equalTo(2))));
     }
 
     @Test
@@ -442,27 +336,18 @@ public class JsonProfileReaderTests {
                 "{" +
                         "    \"schemaVersion\": " + schemaVersion + "," +
                         "    \"fields\": [ { \"name\": \"foo\", \"type\": \"decimal\", \"nullable\": true } ]," +
-                        "    \"rules\": [" +
-                        "      {" +
-                        "        \"constraints\": [" +
+                        "    \"constraints\": [" +
                         "          {" +
                         "           \"allOf\": [" +
                         "             { \"field\": \"foo\",  \"equalTo\": 1 }," +
                         "             { \"field\": \"foo\", \"isNull\": true }" +
                         "            ]" +
                         "          }" +
-                        "        ]" +
-                        "      }" +
                         "    ]" +
                         "}");
 
-        expectRules(
-            ruleWithConstraints(
-                typedConstraint(
-                    AndConstraint.class,
-                    c -> Assert.assertThat(
-                        c.getSubConstraints().size(),
-                        equalTo(2)))));
+        expectConstraints(typedConstraint(AndConstraint.class,
+                    c -> Assert.assertThat(c.getSubConstraints().size(),equalTo(2))));
     }
 
     @Test
@@ -471,23 +356,16 @@ public class JsonProfileReaderTests {
                 "{" +
                         "    \"schemaVersion\": " + schemaVersion + "," +
                         "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\", \"nullable\": true } ]," +
-                        "    \"rules\": [" +
-                        "      {" +
-                        "        \"constraints\": [" +
+                        "    \"constraints\": [" +
                         "          {" +
                         "            \"if\": { \"field\": \"foo\",  \"equalTo\": \"string\" }," +
                         "            \"then\": { \"field\": \"foo\",  \"inSet\": [ \"str!\" ] }," +
                         "            \"else\": { \"field\": \"foo\",  \"longerThan\": 3 }" +
                         "          }" +
-                        "        ]" +
-                        "      }" +
                         "   ]" +
                         "}");
 
-        expectRules(
-                ruleWithConstraints(
-                        typedConstraint(
-                                ConditionalConstraint.class,
+        expectConstraints(typedConstraint( ConditionalConstraint.class,
                                 c -> {
                                     Assert.assertThat(
                                             c.condition,
@@ -500,7 +378,7 @@ public class JsonProfileReaderTests {
                                     Assert.assertThat(
                                             c.whenConditionIsFalse,
                                             instanceOf(LongerThanConstraint.class));
-                                })));
+                                }));
     }
 
     @Test
@@ -509,22 +387,15 @@ public class JsonProfileReaderTests {
                 "{" +
                         "    \"schemaVersion\": " + schemaVersion + "," +
                         "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\", \"nullable\": true } ]," +
-                        "    \"rules\": [" +
-                        "      {" +
-                        "        \"constraints\": [" +
+                        "    \"constraints\": [" +
                         "          {" +
                         "            \"if\": { \"field\": \"foo\",  \"equalTo\": \"string\" }," +
                         "            \"then\": { \"field\": \"foo\",  \"equalTo\": \"str!\" }" +
                         "          }" +
-                        "        ]" +
-                        "      }" +
                         "    ]" +
                         "}");
 
-        expectRules(
-                ruleWithConstraints(
-                        typedConstraint(
-                                ConditionalConstraint.class,
+        expectConstraints(typedConstraint(ConditionalConstraint.class,
                                 c -> {
                                     Assert.assertThat(
                                             c.condition,
@@ -537,7 +408,7 @@ public class JsonProfileReaderTests {
                                     Assert.assertThat(
                                             c.whenConditionIsFalse,
                                             nullValue());
-                                })));
+                                }));
     }
 
     @Test
@@ -546,24 +417,13 @@ public class JsonProfileReaderTests {
             "{" +
             "    \"schemaVersion\": " + schemaVersion + "," +
             "    \"fields\": [ { \"name\": \"foo\", \"type\": \"decimal\", \"nullable\": true } ]," +
-            "    \"rules\": [" +
-            "      {" +
-            "        \"constraints\": [" +
+            "    \"constraints\": [" +
             "        { \"field\": \"foo\",  \"granularTo\": 1 }" +
-            "        ]" +
-            "      }" +
             "    ]" +
             "}");
 
-        expectRules(
-            ruleWithConstraints(
-                typedConstraint(
-                    GranularToNumericConstraint.class,
-                    c -> {
-                        Assert.assertThat(
-                            c.granularity,
-                            equalTo(new NumericGranularity(0)));
-                    })));
+        expectConstraints(typedConstraint(GranularToNumericConstraint.class,
+                    c -> Assert.assertThat(c.granularity,equalTo(new NumericGranularity(0)))));
     }
 
     @Test
@@ -572,24 +432,13 @@ public class JsonProfileReaderTests {
             "{" +
                 "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"decimal\", \"nullable\": true } ]," +
-                "    \"rules\": [" +
-                "      {" +
-                "        \"constraints\": [" +
+                "    \"constraints\": [" +
                 "        { \"field\": \"foo\",  \"granularTo\": 0.1 }" +
-                "        ]" +
-                "      }" +
                 "    ]" +
                 "}");
 
-        expectRules(
-            ruleWithConstraints(
-                typedConstraint(
-                    GranularToNumericConstraint.class,
-                    c -> {
-                        Assert.assertThat(
-                            c.granularity,
-                            equalTo(new NumericGranularity(1)));
-                    })));
+        expectConstraints(typedConstraint(GranularToNumericConstraint.class,
+                    c -> Assert.assertThat(c.granularity,equalTo(new NumericGranularity(1)))));
     }
 
     @Test
@@ -598,24 +447,13 @@ public class JsonProfileReaderTests {
             "{" +
                 "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"decimal\", \"nullable\": true } ]," +
-                "    \"rules\": [" +
-                "      {" +
-                "        \"constraints\": [" +
+                "    \"constraints\": [" +
                 "        { \"field\": \"foo\",  \"granularTo\": 0.100000000 }" +
-                "        ]" +
-                "      }" +
                 "    ]" +
                 "}");
 
-        expectRules(
-            ruleWithConstraints(
-                typedConstraint(
-                    GranularToNumericConstraint.class,
-                    c -> {
-                        Assert.assertThat(
-                            c.granularity,
-                            equalTo(new NumericGranularity(1)));
-                    })));
+        expectConstraints(typedConstraint(GranularToNumericConstraint.class,
+                    c -> Assert.assertThat(c.granularity,equalTo(new NumericGranularity(1)))));
     }
 
     @Test
@@ -624,30 +462,17 @@ public class JsonProfileReaderTests {
             "{" +
                 "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"datetime\", \"nullable\": true } ]," +
-                "    \"rules\": [" +
-                "      {" +
-                "        \"constraints\": [" +
+                "    \"constraints\": [" +
                 "        { \"field\": \"foo\",  \"afterOrAt\": \"2019-01-01T00:00:00.000\" }," +
                 "        { \"field\": \"foo\",  \"before\": \"2019-01-03T00:00:00.000\" }" +
-                "        ]" +
-                "      }" +
                 "    ]" +
                 "}");
 
-        expectRules(
-            rule -> {
-                // This is different because the ordering would switch depending on if the whole file was run or just this test
-                AfterOrAtConstraint isAfter = (AfterOrAtConstraint) rule.getConstraints().stream()
-                    .filter(f -> f.getClass() == AfterOrAtConstraint.class)
-                    .findFirst()
-                    .get();
-                BeforeConstraint isBefore = (BeforeConstraint) rule.getConstraints().stream()
-                    .filter(f -> f.getClass() == BeforeConstraint.class)
-                    .findFirst()
-                    .get();
-                Assert.assertEquals(OffsetDateTime.parse("2019-01-01T00:00:00.000Z"), isAfter.referenceValue);
-                Assert.assertEquals(OffsetDateTime.parse("2019-01-03T00:00:00.000Z"), isBefore.referenceValue);
-            }
+        expectConstraints(
+            typedConstraint(AfterOrAtConstraint.class,
+                isAfter ->  Assert.assertEquals(OffsetDateTime.parse("2019-01-01T00:00:00.000Z"), isAfter.referenceValue)),
+            typedConstraint(BeforeConstraint.class,
+                isBefore -> Assert.assertEquals(OffsetDateTime.parse("2019-01-03T00:00:00.000Z"), isBefore.referenceValue))
         );
     }
 
@@ -657,12 +482,8 @@ public class JsonProfileReaderTests {
             "{" +
             "    \"schemaVersion\": " + schemaVersion + "," +
             "    \"fields\": [ { \"name\": \"foo\", \"type\": \"decimal\" } ]," +
-            "    \"rules\": [" +
-            "      {" +
-            "        \"constraints\": [" +
+            "    \"constraints\": [" +
             "        { \"field\": \"foo\",  \"granularTo\": 2 }" +
-            "        ]" +
-            "      }" +
             "    ]" +
             "}");
 
@@ -675,12 +496,8 @@ public class JsonProfileReaderTests {
             "{" +
             "    \"schemaVersion\": " + schemaVersion + "," +
             "    \"fields\": [ { \"name\": \"foo\", \"type\": \"decimal\" } ]," +
-            "    \"rules\": [" +
-            "      {" +
-            "        \"constraints\": [" +
+            "   \"constraints\": [" +
             "        { \"field\": \"foo\",  \"granularTo\": 0.15 }" +
-            "        ]" +
-            "      }" +
             "    ]" +
             "}");
 
@@ -693,12 +510,8 @@ public class JsonProfileReaderTests {
             "{" +
                 "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"datetime\" } ]," +
-                "    \"rules\": [" +
-                "      {" +
-                "        \"constraints\": [" +
+                "    \"constraints\": [" +
                 "        { \"field\": \"foo\",  \"equalTo\": null }" +
-                "        ]" +
-                "      }" +
                 "    ]" +
                 "}");
 
@@ -711,12 +524,8 @@ public class JsonProfileReaderTests {
             "{" +
                 "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"datetime\" } ]," +
-                "    \"rules\": [" +
-                "      {" +
-                "        \"constraints\": [" +
+                "    \"constraints\": [" +
                 "        { \"field\": \"foo\",  \"lessThan\": null }" +
-                "        ]" +
-                "      }" +
                 "    ]" +
                 "}");
 
@@ -729,12 +538,8 @@ public class JsonProfileReaderTests {
             "{" +
                 "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"datetime\" } ]," +
-                "    \"rules\": [" +
-                "      {" +
-                "        \"constraints\": [" +
+                "    \"constraints\": [" +
                 "        { \"field\": \"foo\",  \"inSet\": [ null ] }" +
-                "        ]" +
-                "      }" +
                 "    ]" +
                 "}");
 
@@ -747,12 +552,8 @@ public class JsonProfileReaderTests {
             "{" +
                 "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"datetime\" } ]," +
-                "    \"rules\": [" +
-                "      {" +
-                "        \"constraints\": [" +
+                "    \"constraints\": [" +
                 "        { \"field\": \"foo\",  \"inSet\": null }" +
-                "        ]" +
-                "      }" +
                 "    ]" +
                 "}");
 
@@ -765,12 +566,8 @@ public class JsonProfileReaderTests {
             "{" +
                 "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"datetime\" } ]," +
-                "    \"rules\": [" +
-                "      {" +
-                "        \"constraints\": [" +
+                "    \"constraints\": [" +
                 "        { \"not\": { \"field\": \"foo\", \"is\": null } }" +
-                "        ]" +
-                "      }" +
                 "    ]" +
                 "}");
 
@@ -787,7 +584,7 @@ public class JsonProfileReaderTests {
                 "           \"type\": \"integer\"," +
                 "           \"unique\": true" +
                 "    } ]," +
-                "    \"rules\": []" +
+                "    \"constraints\": []" +
                 "}");
 
         expectFields(
@@ -807,7 +604,7 @@ public class JsonProfileReaderTests {
                 "           \"name\": \"foo\"," +
                 "           \"type\": \"integer\"" +
                 "    } ]," +
-                "    \"rules\": []" +
+                "    \"constraints\": []" +
                 "}");
         expectFields(
             field -> {
@@ -827,7 +624,7 @@ public class JsonProfileReaderTests {
                 "           \"type\": \"integer\"," +
                 "           \"unique\": false" +
                 "    } ]," +
-                "    \"rules\": []" +
+                "    \"constraints\": []" +
                 "}");
 
         expectFields(
@@ -848,22 +645,11 @@ public class JsonProfileReaderTests {
                 "       \"type\": \"integer\"," +
                 "       \"nullable\": false" +
                 "    } ]," +
-                "    \"rules\": []" +
+                "    \"constraints\": []" +
                 "}");
 
-        expectRules(
-            ruleWithConstraints(
-                typedConstraint(
-                    NotNullConstraint.class,
-                    c -> {
-                        Assert.assertEquals(
-                            c.getField().getName(),
-                            "foo");
-                    }
-                )
-            ),
-            ruleWithDescription("specific-types")
-        );
+        expectConstraints(typedConstraint(NotNullConstraint.class,
+                    c -> Assert.assertEquals("foo", c.getField().getName())));
     }
 
     @Test
@@ -876,10 +662,10 @@ public class JsonProfileReaderTests {
                 "       \"type\": \"integer\"," +
                 "       \"nullable\": true" +
                 "    } ]," +
-                "    \"rules\": []" +
+                "    \"constraints\": []" +
                 "}");
 
-        expectRules(ruleWithDescription("specific-types"));
+        expectConstraints();
     }
 
     @Test
@@ -896,30 +682,15 @@ public class JsonProfileReaderTests {
                 "       \"type\": \"integer\"," +
                 "       \"nullable\": false" +
                 "    }]," +
-                "    \"rules\": []" +
+                "    \"constraints\": []" +
                 "}");
 
-        expectRules(
-            ruleWithConstraints(
-                typedConstraint(
-                    NotNullConstraint.class,
-                    c -> {
-                        Assert.assertEquals(
-                            c.getField().getName(),
-                            "foo");
-                    }
-                ),
-                typedConstraint(
-                    NotNullConstraint.class,
-                    c -> {
-                        Assert.assertEquals(
-                            c.getField().getName(),
-                            "bar");
-                    }
-                )
-            ),
-            ruleWithDescription("specific-types")
-        );
+        expectConstraints(
+            typedConstraint(NotNullConstraint.class,
+                    c ->  Assert.assertEquals("foo", c.getField().getName())),
+                typedConstraint(NotNullConstraint.class,
+                    c -> Assert.assertEquals("bar", c.getField().getName()))
+            );
     }
 
     @Test
@@ -936,22 +707,11 @@ public class JsonProfileReaderTests {
                 "       \"type\": \"integer\"," +
                 "       \"nullable\": false" +
                 "    }]," +
-                "    \"rules\": []" +
+                "    \"constraints\": []" +
                 "}");
 
-        expectRules(
-            ruleWithConstraints(
-                typedConstraint(
-                    NotNullConstraint.class,
-                    c -> {
-                        Assert.assertEquals(
-                            c.getField().getName(),
-                            "bar");
-                    }
-                )
-            ),
-            ruleWithDescription("specific-types")
-        );
+        expectConstraints(typedConstraint( NotNullConstraint.class,
+                    c -> Assert.assertEquals("bar", c.getField().getName())));
     }
 
     @Test
@@ -968,18 +728,14 @@ public class JsonProfileReaderTests {
                 "       \"type\": \"string\" ," +
                 "       \"nullable\": \"true\"" +
                 "    }]," +
-                "    \"rules\": []" +
+                "    \"constraints\": []" +
                 "}");
 
         expectFields(
-            field -> {
-                Assert.assertThat(field.getType(), equalTo(FieldType.NUMERIC));
-            },
-            field -> {
-                Assert.assertThat(field.getType(), equalTo(FieldType.STRING));
-            }
+            field -> Assert.assertThat(field.getType(), equalTo(FieldType.NUMERIC)),
+            field ->  Assert.assertThat(field.getType(), equalTo(FieldType.STRING))
         );
-        expectRules();
+        expectConstraints();
     }
 
     @Test
@@ -994,14 +750,9 @@ public class JsonProfileReaderTests {
                 "       \"name\": \"bar\" ," +
                 "       \"type\": \"string\"" +
                 "    }]," +
-                "    \"rules\": [" +
-                "       {" +
-                "        \"rule\": \"fooRule\"," +
-                "        \"constraints\": [" +
+                "    \"constraints\": [" +
                 "           { \"field\": \"foo\", \"inMap\": \"foobar.csv\", \"key\": \"Foo\" }," +
                 "           { \"field\": \"bar\", \"inMap\": \"foobar.csv\", \"key\": \"Bar\"}" +
-                "          ]" +
-                "       }" +
                 "    ]" +
                 "}");
 
@@ -1036,10 +787,7 @@ public class JsonProfileReaderTests {
                 "       \"name\": \"other\" ," +
                 "       \"type\": \"string\"" +
                 "    }]," +
-                "    \"rules\": [" +
-                "       {" +
-                "        \"rule\": \"fooRule\"," +
-                "        \"constraints\": [" +
+                "    \"constraints\": [" +
                 "                {" +
                 "                    \"if\":   { \"field\": \"other\", \"matchingRegex\": \"^[O].*\" }," +
                 "                    \"then\": {" +
@@ -1050,8 +798,6 @@ public class JsonProfileReaderTests {
                 "                        ]}" +
                 "                    }" +
                 "                }" +
-                "          ]" +
-                "       }" +
                 "    ]" +
                 "}");
 
@@ -1086,17 +832,11 @@ public class JsonProfileReaderTests {
                 "       \"type\": \"date\"," +
                 "       \"nullable\": \"true\"" +
                 "    }]," +
-                "    \"rules\": []" +
+                "    \"constraints\": []" +
                 "}");
 
-        expectRules(
-            ruleWithConstraints(
-                typedConstraint(
-                    GranularToDateConstraint.class,
-                    c -> Assert.assertThat(c.granularity, equalTo(new DateTimeGranularity(ChronoUnit.DAYS)))
-                )
-            )
-        );
+        expectConstraints(typedConstraint(GranularToDateConstraint.class,
+                    c -> Assert.assertThat(c.granularity, equalTo(new DateTimeGranularity(ChronoUnit.DAYS)))));
     }
 
     @Test
@@ -1108,12 +848,10 @@ public class JsonProfileReaderTests {
                 "       \"name\": \"foo\" ," +
                 "       \"type\": \"date\"" +
                 "    }]," +
-                "    \"rules\": []" +
+                "    \"constraints\": []" +
                 "}");
 
-        expectFields(
-            field -> Assert.assertEquals(DEFAULT_DATE_FORMATTING,field.getFormatting())
-        );
+        expectFields(field -> Assert.assertEquals(DEFAULT_DATE_FORMATTING,field.getFormatting()) );
     }
 
     @Test
@@ -1126,12 +864,10 @@ public class JsonProfileReaderTests {
                 "       \"type\": \"date\"," +
                 "       \"formatting\": \"%tD\"" +
                 "    }]," +
-                "    \"rules\": []" +
+                "    \"constraints\": []" +
                 "}");
 
-        expectFields(
-            field -> Assert.assertEquals("%tD",field.getFormatting())
-        );
+        expectFields(field -> Assert.assertEquals("%tD",field.getFormatting()));
     }
 
     @Test
@@ -1145,21 +881,12 @@ public class JsonProfileReaderTests {
                 "       \"generator\": \"lorem ipsum\"," +
                 "       \"nullable\": true" +
                 "    }]," +
-                "    \"rules\": []" +
+                "    \"constraints\": []" +
                 "}");
 
-        expectRules(
-            ruleWithConstraints(
-                typedConstraint(
-                    CustomConstraint.class,
-                    c -> {
-                        Assert.assertEquals(
-                            c.getField().getName(),
-                            "foo");
-                    }
-                )
-            )
-        );
+        expectConstraints(typedConstraint(CustomConstraint.class,
+                    c -> Assert.assertEquals("foo", c.getField().getName())));
+
     }
 
 
@@ -1174,7 +901,7 @@ public class JsonProfileReaderTests {
                 "       \"generator\": \"INCORRECT\"," +
                 "       \"nullable\": true" +
                 "    }]," +
-                "    \"rules\": []" +
+                "    \"constraints\": []" +
                 "}");
 
         expectValidationException("Custom generator INCORRECT does not exist it needs to be created and added to the CustomGeneratorList class");

@@ -48,7 +48,7 @@ public class ConstraintValidatorTests
         ConstraintDTO dto = ConstraintDTOBuilder.create("text", "test");
 
         // Act
-        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto, "rule", fields);
+        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto, fields);
 
         // Assert
         assertTrue(validationResult.isSuccess);
@@ -61,7 +61,7 @@ public class ConstraintValidatorTests
         ConstraintDTO dto = null;
 
         // Act
-        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto, "rule", fields);
+        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto, fields);
 
         // Assert
         assertFalse(validationResult.isSuccess);
@@ -76,7 +76,7 @@ public class ConstraintValidatorTests
         dto.value = "value";
 
         // Act
-        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto, "rule", fields);
+        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto,  fields);
 
         // Assert
         assertFalse(validationResult.isSuccess);
@@ -89,7 +89,7 @@ public class ConstraintValidatorTests
         dto.value = "value";
 
         // Act
-        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto, "rule", fields);
+        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto, fields);
 
         // Assert
         assertFalse(validationResult.isSuccess);
@@ -104,7 +104,7 @@ public class ConstraintValidatorTests
         dto.value = "value";
 
         // Act
-        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto, "rule", fields);
+        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto, fields);
 
         // Assert
         assertFalse(validationResult.isSuccess);
@@ -119,7 +119,7 @@ public class ConstraintValidatorTests
         dto.value = null;
 
         // Act
-        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto, "rule", fields);
+        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto, fields);
 
         // Assert
         assertFalse(validationResult.isSuccess);
@@ -134,7 +134,7 @@ public class ConstraintValidatorTests
         dto.value = 1;
 
         // Act
-        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto, "rule", fields);
+        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto, fields);
 
         // Assert
         assertFalse(validationResult.isSuccess);
@@ -148,7 +148,7 @@ public class ConstraintValidatorTests
         dto.constraints= null;
 
         // Act
-        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto, "rule", fields);
+        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto, fields);
 
         // Assert
         assertFalse(validationResult.isSuccess);
@@ -162,7 +162,7 @@ public class ConstraintValidatorTests
         dto.constraints = new ArrayList<>();
 
         // Act
-        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto, "rule", fields);
+        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto, fields);
 
         // Assert
         assertFalse(validationResult.isSuccess);
@@ -177,7 +177,7 @@ public class ConstraintValidatorTests
         dto.otherField = "text";
 
         // Act
-        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto, "rule", fields);
+        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto, fields);
 
         // Assert
         assertFalse(validationResult.isSuccess);
@@ -192,7 +192,7 @@ public class ConstraintValidatorTests
         dto.otherField = "text";
 
         // Act
-        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto, "rule", fields);
+        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto, fields);
 
         // Assert
         assertFalse(validationResult.isSuccess);
@@ -207,7 +207,7 @@ public class ConstraintValidatorTests
         dto.otherField = "text";
 
         // Act
-        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto, "rule", fields);
+        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto, fields);
 
         // Assert
         assertFalse(validationResult.isSuccess);
@@ -222,7 +222,7 @@ public class ConstraintValidatorTests
         dto.otherField = null;
 
         // Act
-        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto, "rule", fields);
+        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto, fields);
 
         // Assert
         assertFalse(validationResult.isSuccess);
@@ -237,7 +237,7 @@ public class ConstraintValidatorTests
         dto.otherField = "";
 
         // Act
-        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto, "rule", fields);
+        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto, fields);
 
         // Assert
         assertFalse(validationResult.isSuccess);
@@ -252,7 +252,7 @@ public class ConstraintValidatorTests
         dto.otherField = "unknown";
 
         // Act
-        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto, "rule", fields);
+        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto, fields);
 
         // Assert
         assertFalse(validationResult.isSuccess);
@@ -267,7 +267,7 @@ public class ConstraintValidatorTests
         dto.otherField = "integer";
 
         // Act
-        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto, "rule", fields);
+        ValidationResult validationResult = ConstraintValidator.validateConstraint(dto, fields);
 
         // Assert
         assertFalse(validationResult.isSuccess);

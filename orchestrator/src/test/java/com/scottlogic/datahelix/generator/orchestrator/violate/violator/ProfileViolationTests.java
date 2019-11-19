@@ -19,9 +19,9 @@ package com.scottlogic.datahelix.generator.orchestrator.violate.violator;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.datahelix.generator.common.util.NumberUtils;
-import com.scottlogic.datahelix.generator.core.builders.*;
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
+import com.scottlogic.datahelix.generator.core.builders.*;
 import com.scottlogic.datahelix.generator.core.profile.Profile;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.*;
@@ -185,43 +185,24 @@ public class ProfileViolationTests {
         E = new SingleConstraintBuilder().withLessThanConstraint(field5, 200);
     }
 
-    @Test
-    public void violate_withNoConstraints_producesViolatedEmptyProfile() throws IOException {
-        //Arrange
-        Rule rule = new RuleBuilder("Empty rule")
-            .build();
-
-        TestProfiles testProfiles = createTestProfiles(
-            "Empty rule profile",
-            Collections.singletonList(field1),
-            Collections.singletonList(new ConstraintViolatedPair(rule, rule))
-        );
-
-        //Act
-        List<Profile> violatedProfiles = (List<Profile>)(List<?>) profileViolator.violate(testProfiles.inputProfile);
-
-        //Assert
-        assertProfileListsAreEquivalent(violatedProfiles, testProfiles.expectedViolatedProfiles);
-    }
-
     @ParameterizedTest
     @MethodSource("allAtomicConstraints")
     public void violate_withLinearProfileSingleRuleSingleConstraint_producesViolatedProfile(
         Class<? extends AtomicConstraint> atomicConstraint, Object value
     ) throws IOException {
         //Arrange
-        Rule rule = new RuleBuilder("Input Rule")
+        Constraint constraint = new SingleConstraintBuilder()
             .withAtomicConstraint(field1, atomicConstraint, value)
             .build();
 
-        Rule violatedRule = new RuleBuilder("Input Rule")
+        Constraint violatedConstraint = new SingleConstraintBuilder()
             .withAtomicConstraint(field1, atomicConstraint, value).negate().wrapAtomicWithViolate()
             .build();
 
         TestProfiles testProfiles = createTestProfiles(
             "Input Profile",
             Collections.singletonList(field1),
-            Collections.singletonList(new ConstraintViolatedPair(rule, violatedRule))
+            Collections.singletonList(new ConstraintViolatedPair(constraint, violatedConstraint))
         );
 
         //Act
@@ -234,7 +215,7 @@ public class ProfileViolationTests {
     @Test
     public void violate_withFilteredConstraintType_producesViolatedProfile() throws IOException {
         //Arrange
-        Rule rule = new RuleBuilder("Input Rule")
+        Constraint constraint = new SingleConstraintBuilder()
             .withGreaterThanConstraint(field1, 100)
             .build();
 
@@ -243,7 +224,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Input Profile",
             Collections.singletonList(field1),
-            Collections.singletonList(new ConstraintViolatedPair(rule, rule))
+            Collections.singletonList(new ConstraintViolatedPair(constraint, constraint))
         );
 
         //Act
@@ -260,12 +241,12 @@ public class ProfileViolationTests {
     @Test
     public void violate_withLinearProfileSingleRule_producesViolatedProfile() throws IOException {
         //Arrange
-        Rule rule1 = new RuleBuilder("Rule 1")
+        Constraint constraint = new SingleConstraintBuilder()
             .withLessThanConstraint(field1, 100)
             .withGreaterThanConstraint(field2, 200)
             .build();
 
-        Rule violatedRule1 = new RuleBuilder("Rule 1")
+        Constraint violatedConstraint = new SingleConstraintBuilder()
             .withOrConstraint(new OrBuilder()
                 .withAndConstraint(new AndBuilder()
                     .withLessThanConstraint(field1, 100).negate().wrapAtomicWithViolate()
@@ -281,7 +262,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Profile 1",
             Arrays.asList(field1, field2),
-            Collections.singletonList(new ConstraintViolatedPair(rule1, violatedRule1))
+            Collections.singletonList(new ConstraintViolatedPair(constraint, violatedConstraint))
         );
 
         //Act
@@ -298,12 +279,12 @@ public class ProfileViolationTests {
     @Test
     public void violate_withLinearProfileSingleRuleIncludingNot_producesViolatedProfile() throws IOException {
         //Arrange
-        Rule rule = new RuleBuilder("Rule 1")
+        Constraint constraint = new SingleConstraintBuilder()
             .withLessThanConstraint(field1, 100).negate()
             .withGreaterThanConstraint(field2, 200)
             .build();
 
-        Rule violatedRule = new RuleBuilder("Rule 1")
+        Constraint violatedConstraint = new SingleConstraintBuilder()
             .withOrConstraint(new OrBuilder()
                 .withAndConstraint(new AndBuilder()
                     .withLessThanConstraint(field1, 100).wrapAtomicWithViolate()
@@ -319,7 +300,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Nested if then else profile",
             Arrays.asList(field1, field2),
-            Collections.singletonList(new ConstraintViolatedPair(rule, violatedRule))
+            Collections.singletonList(new ConstraintViolatedPair(constraint, violatedConstraint))
         );
 
         //Act
@@ -337,17 +318,17 @@ public class ProfileViolationTests {
     @Test
     public void violate_withTwoSimpleRuleProfile_producesTwoViolatedProfiles() throws IOException {
         //Arrange
-        Rule rule1 = new RuleBuilder("Rule 1")
+        Constraint constraint1 = new SingleConstraintBuilder()
             .withLessThanConstraint(field1, 100)
             .withLessThanConstraint(field1, 200)
             .build();
 
-        Rule rule2 = new RuleBuilder("Rule 2")
+        Constraint constraint2 = new SingleConstraintBuilder()
             .withGreaterThanConstraint(field1, 10)
             .withGreaterThanConstraint(field1, 15)
             .build();
 
-        Rule violatedRule1 = new RuleBuilder("Rule 1")
+        Constraint violatedConstraint1 = new SingleConstraintBuilder()
             .withOrConstraint(new OrBuilder()
                 .withAndConstraint(new AndBuilder()
                     .withLessThanConstraint(field1, 100).negate().wrapAtomicWithViolate()
@@ -360,7 +341,7 @@ public class ProfileViolationTests {
             )
             .build();
 
-        Rule violatedRule2 = new RuleBuilder("Rule 2")
+        Constraint violatedConstraint2 = new SingleConstraintBuilder()
             .withOrConstraint(new OrBuilder()
                 .withAndConstraint(new AndBuilder()
                     .withGreaterThanConstraint(field1, 10).negate().wrapAtomicWithViolate()
@@ -376,7 +357,9 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Profile 1",
             Collections.singletonList(field1),
-            Arrays.asList(new ConstraintViolatedPair(rule1, violatedRule1), new ConstraintViolatedPair(rule2, violatedRule2))
+            Arrays.asList(
+                new ConstraintViolatedPair(constraint1, violatedConstraint1),
+                new ConstraintViolatedPair(constraint2, violatedConstraint2))
         );
 
         //Act
@@ -396,9 +379,7 @@ public class ProfileViolationTests {
     @Test
     public void violate_nestedIfThenInsideIfOfIfThen_producesViolatedProfiles() throws IOException {
         //Arrange
-        String ruleName = "Nested if rule";
-
-        Rule rule = new RuleBuilder(ruleName)
+        Constraint constraint = new SingleConstraintBuilder()
             .withIfConstraint(new IfBuilder()
                 .withIf(new IfBuilder()
                     .withIf(A)
@@ -408,7 +389,7 @@ public class ProfileViolationTests {
             )
             .build();
 
-        Rule violatedRule = new RuleBuilder(ruleName)
+        Constraint violatedConstraint = new SingleConstraintBuilder()
             .withAndConstraint(new AndBuilder()
                 .withIfConstraint(new IfBuilder()
                     .withIf(A)
@@ -421,7 +402,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Nested if profile",
             Arrays.asList(field1, field2, field3),
-            Collections.singletonList(new ConstraintViolatedPair(rule, violatedRule))
+            Collections.singletonList(new ConstraintViolatedPair(constraint, violatedConstraint))
         );
 
         //Act
@@ -445,9 +426,7 @@ public class ProfileViolationTests {
     @Test
     public void violate_nestedIfThenElseInsideIf_producesViolatedProfiles() throws IOException {
         //Arrange
-        String ruleName = "Nested if rule";
-
-        Rule rule = new RuleBuilder(ruleName)
+        Constraint constraint = new SingleConstraintBuilder()
             .withIfConstraint(new IfBuilder()
                 .withIf(new IfBuilder()
                     .withIf(A)
@@ -460,7 +439,7 @@ public class ProfileViolationTests {
             .build();
 
         //((IF A THEN B ELSE C) AND VIOLATE(D)) OR (((A AND VIOLATE(B)) OR (VIOLATE(A) AND VIOLATE(C))) AND VIOLATE(E))
-        Rule violatedRule = new RuleBuilder(ruleName)
+        Constraint violatedConstraint = new SingleConstraintBuilder()
             .withOrConstraint(new OrBuilder()
                 .withAndConstraint(new AndBuilder()
                     .withIfConstraint(new IfBuilder()
@@ -489,7 +468,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Nested if then else profile",
             Arrays.asList(field1, field2, field3, field4, field5),
-            Collections.singletonList(new ConstraintViolatedPair(rule, violatedRule))
+            Collections.singletonList(new ConstraintViolatedPair(constraint, violatedConstraint))
         );
 
         //Act
@@ -515,7 +494,7 @@ public class ProfileViolationTests {
         //Arrange
         String ruleName = "Nested if rule";
 
-        Rule rule = new RuleBuilder(ruleName)
+        Constraint constraint = new SingleConstraintBuilder()
             .withIfConstraint(new IfBuilder()
                 .withIf(A)
                 .withThen(new IfBuilder()
@@ -528,7 +507,7 @@ public class ProfileViolationTests {
             .build();
 
         //(A AND ((B AND VIOLATE(C)) OR (VIOLATE(B) AND VIOLATE(D))) OR (VIOLATE(A) AND VIOLATE(E))
-        Rule violatedRule = new RuleBuilder(ruleName)
+        Constraint violatedConstraint = new SingleConstraintBuilder()
             .withOrConstraint(new OrBuilder()
                 .withAndConstraint(new AndBuilder()
                     .appendBuilder(A)
@@ -553,7 +532,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Nested if then else profile",
             Arrays.asList(field1, field2, field3, field4, field5),
-            Collections.singletonList(new ConstraintViolatedPair(rule, violatedRule))
+            Collections.singletonList(new ConstraintViolatedPair(constraint, violatedConstraint))
         );
 
         //Act
@@ -576,8 +555,7 @@ public class ProfileViolationTests {
     @Test
     public void violate_nestedIfThenElseInsideElse_producesViolatedProfiles() throws IOException {
         //Arrange
-        String ruleName = "Nested if rule";
-        Rule rule = new RuleBuilder(ruleName)
+        Constraint constraint = new SingleConstraintBuilder()
             .withIfConstraint(new IfBuilder()
                 .withIf(A)
                 .withThen(B)
@@ -590,7 +568,7 @@ public class ProfileViolationTests {
             .build();
 
         //(A AND VIOLATE(B)) OR (VIOLATE(A) AND ((C AND VIOLATE(D)) OR (VIOLATE(C) AND VIOLATE(E))))
-        Rule violatedRule = new RuleBuilder(ruleName)
+        Constraint violatedConstraint = new SingleConstraintBuilder()
             .withOrConstraint(new OrBuilder()
                 .withAndConstraint(new AndBuilder()
                     .appendBuilder(A)
@@ -615,7 +593,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Nested if then else profile",
             Arrays.asList(field1, field2, field3, field4, field5),
-            Collections.singletonList(new ConstraintViolatedPair(rule, violatedRule))
+            Collections.singletonList(new ConstraintViolatedPair(constraint, violatedConstraint))
         );
 
         // Act
@@ -633,7 +611,7 @@ public class ProfileViolationTests {
     @Test
     public void violate_nestedIfThenInsideIfOfIfNotThen_producesViolatedProfiles() throws IOException {
         // Arrange
-        Rule rule = new RuleBuilder("rule name")
+        Constraint constraint = new SingleConstraintBuilder()
             .withIfConstraint(new IfBuilder()
                 .withIf(new IfBuilder()
                     .withIf(A)
@@ -641,7 +619,7 @@ public class ProfileViolationTests {
                 .withThen(C))
             .build();
 
-        Rule violatedRule = new RuleBuilder("rule name")
+        Constraint violatedConstraint = new SingleConstraintBuilder()
             .withAndConstraint(new AndBuilder()
                 .withIfConstraint(new IfBuilder()
                     .withIf(A)
@@ -654,7 +632,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Input Profile",
             Arrays.asList(field1, field2, field3),
-            Collections.singletonList(new ConstraintViolatedPair(rule, violatedRule))
+            Collections.singletonList(new ConstraintViolatedPair(constraint, violatedConstraint))
         );
 
         // Act
@@ -680,18 +658,18 @@ public class ProfileViolationTests {
         BaseConstraintBuilder<? extends Constraint> violatedNestingConstraint
     ) throws IOException {
         //Arrange
-        Rule rule = new RuleBuilder("Nested Not Rule")
+        Constraint constraint = new SingleConstraintBuilder()
             .appendBuilder(nestingConstraint).negate()
             .build();
 
-        Rule violatedRule = new RuleBuilder("Nested Not Rule")
+        Constraint violatedConstraint = new SingleConstraintBuilder()
             .appendBuilder(nestingConstraint).wrapAtomicWithViolate()
             .build();
 
         TestProfiles testProfiles = createTestProfiles(
             "Nested Not Profile",
             Collections.singletonList(STATIC_FIELD),
-            Collections.singletonList(new ConstraintViolatedPair(rule, violatedRule))
+            Collections.singletonList(new ConstraintViolatedPair(constraint, violatedConstraint))
         );
 
         // Act
@@ -716,14 +694,14 @@ public class ProfileViolationTests {
         BaseConstraintBuilder<? extends Constraint> violatedNestingConstraint
     ) throws IOException {
         //Arrange
-        Rule rule = new RuleBuilder("Nested And Rule")
+        Constraint constraint = new SingleConstraintBuilder()
             .withAndConstraint(new AndBuilder()
                 .appendBuilder(nestingConstraint)
                 .appendBuilder(A)
             )
             .build();
 
-        Rule violatedRule = new RuleBuilder("Nested And Rule")
+        Constraint violatedConstraint = new SingleConstraintBuilder()
             .withOrConstraint(new OrBuilder()
                 .withAndConstraint(new AndBuilder()
                     .appendBuilder(violatedNestingConstraint)
@@ -739,7 +717,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Nested And Profile",
             Arrays.asList(STATIC_FIELD, field1),
-            Collections.singletonList(new ConstraintViolatedPair(rule, violatedRule))
+            Collections.singletonList(new ConstraintViolatedPair(constraint, violatedConstraint))
         );
 
         // Act
@@ -764,14 +742,14 @@ public class ProfileViolationTests {
         BaseConstraintBuilder<? extends Constraint> violatedNestingConstraint
     ) throws IOException {
         //Arrange
-        Rule rule = new RuleBuilder("Nested Or Rule")
+        Constraint constraint = new SingleConstraintBuilder()
             .withOrConstraint(new OrBuilder()
                 .appendBuilder(nestingConstraint)
                 .appendBuilder(A)
             )
             .build();
 
-        Rule violatedRule = new RuleBuilder("Nested Or Rule")
+        Constraint violatedConstraint = new SingleConstraintBuilder()
             .withAndConstraint(new AndBuilder()
                 .appendBuilder(violatedNestingConstraint)
                 .appendBuilder(A).negate().wrapAtomicWithViolate()
@@ -781,7 +759,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Nested Or Profile",
             Arrays.asList(STATIC_FIELD, field1),
-            Collections.singletonList(new ConstraintViolatedPair(rule, violatedRule))
+            Collections.singletonList(new ConstraintViolatedPair(constraint, violatedConstraint))
         );
 
         // Act
@@ -806,14 +784,14 @@ public class ProfileViolationTests {
         BaseConstraintBuilder<? extends Constraint> violatedNestingConstraint
     ) throws IOException {
         //Arrange
-        Rule rule = new RuleBuilder("Nested Inside If of If-Then Rule")
+        Constraint constraint = new SingleConstraintBuilder()
             .withIfConstraint(new IfBuilder()
                 .withIf(nestingConstraint)
                 .withThen(A)
             )
             .build();
 
-        Rule violatedRule = new RuleBuilder("Nested Inside If of If-Then Rule")
+        Constraint violatedConstraint = new SingleConstraintBuilder()
             .withAndConstraint(new AndBuilder()
                 .appendBuilder(nestingConstraint)
                 .appendBuilder(A).negate().wrapAtomicWithViolate()
@@ -823,7 +801,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Nested Inside If of If-Then Profile",
             Arrays.asList(STATIC_FIELD, field1),
-            Collections.singletonList(new ConstraintViolatedPair(rule, violatedRule))
+            Collections.singletonList(new ConstraintViolatedPair(constraint, violatedConstraint))
         );
 
         // Act
@@ -848,14 +826,14 @@ public class ProfileViolationTests {
         BaseConstraintBuilder<? extends Constraint> violatedNestingConstraint
     ) throws IOException {
         //Arrange
-        Rule rule = new RuleBuilder("Nested Inside Then of If-Then Rule")
+        Constraint constraint = new SingleConstraintBuilder()
             .withIfConstraint(new IfBuilder()
                 .withIf(A)
                 .withThen(nestingConstraint)
             )
             .build();
 
-        Rule violatedRule = new RuleBuilder("Nested Inside Then of If-Then Rule")
+        Constraint violatedConstraint = new SingleConstraintBuilder()
             .withAndConstraint(new AndBuilder()
                 .appendBuilder(A)
                 .appendBuilder(violatedNestingConstraint)
@@ -865,7 +843,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Nested Inside Then of If-Then Profile",
             Arrays.asList(STATIC_FIELD, field1),
-            Collections.singletonList(new ConstraintViolatedPair(rule, violatedRule))
+            Collections.singletonList(new ConstraintViolatedPair(constraint, violatedConstraint))
         );
 
         // Act
@@ -890,7 +868,7 @@ public class ProfileViolationTests {
         BaseConstraintBuilder<? extends Constraint> violatedNestingConstraint
     ) throws IOException {
         //Arrange
-        Rule rule = new RuleBuilder("Nested Inside If of If-Then-Else Rule")
+        Constraint constraint = new SingleConstraintBuilder()
             .withIfConstraint(new IfBuilder()
                 .withIf(nestingConstraint)
                 .withThen(A)
@@ -898,7 +876,7 @@ public class ProfileViolationTests {
             )
             .build();
 
-        Rule violatedRule = new RuleBuilder("Nested Inside If of If-Then-Else Rule")
+        Constraint violatedConstraint = new SingleConstraintBuilder()
             .withOrConstraint(new OrBuilder()
                 .withAndConstraint(new AndBuilder()
                     .appendBuilder(nestingConstraint)
@@ -914,7 +892,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Nested Inside If of If-Then-Else Profile",
             Arrays.asList(STATIC_FIELD, field1, field2),
-            Collections.singletonList(new ConstraintViolatedPair(rule, violatedRule))
+            Collections.singletonList(new ConstraintViolatedPair(constraint, violatedConstraint))
         );
 
         // Act
@@ -939,7 +917,7 @@ public class ProfileViolationTests {
         BaseConstraintBuilder<? extends Constraint> violatedNestingConstraint
     ) throws IOException {
         //Arrange
-        Rule rule = new RuleBuilder("Nested Inside Then of If-Then-Else Rule")
+        Constraint constraint = new SingleConstraintBuilder()
             .withIfConstraint(new IfBuilder()
                 .withIf(A)
                 .withThen(nestingConstraint)
@@ -947,7 +925,7 @@ public class ProfileViolationTests {
             )
             .build();
 
-        Rule violatedRule = new RuleBuilder("Nested Inside Then of If-Then-Else Rule")
+        Constraint violatedConstraint = new SingleConstraintBuilder()
             .withOrConstraint(new OrBuilder()
                 .withAndConstraint(new AndBuilder()
                     .appendBuilder(A)
@@ -963,7 +941,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Nested Inside Then of If-Then-Else Profile",
             Arrays.asList(STATIC_FIELD, field1),
-            Collections.singletonList(new ConstraintViolatedPair(rule, violatedRule))
+            Collections.singletonList(new ConstraintViolatedPair(constraint, violatedConstraint))
         );
 
         // Act
@@ -988,7 +966,7 @@ public class ProfileViolationTests {
         BaseConstraintBuilder<? extends Constraint> violatedNestingConstraint
     ) throws IOException {
         //Arrange
-        Rule rule = new RuleBuilder("Nested Inside Else of If-Then-Else Rule")
+        Constraint constraint = new SingleConstraintBuilder()
             .withIfConstraint(new IfBuilder()
                 .withIf(A)
                 .withThen(B)
@@ -996,7 +974,7 @@ public class ProfileViolationTests {
             )
             .build();
 
-        Rule violatedRule = new RuleBuilder("Nested Inside Else of If-Then-Else Rule")
+        Constraint violatedConstraint = new SingleConstraintBuilder()
             .withOrConstraint(new OrBuilder()
                 .withAndConstraint(new AndBuilder()
                     .appendBuilder(A)
@@ -1012,7 +990,7 @@ public class ProfileViolationTests {
         TestProfiles testProfiles = createTestProfiles(
             "Nested Inside Else of If-Then Profile",
             Arrays.asList(STATIC_FIELD, field1),
-            Collections.singletonList(new ConstraintViolatedPair(rule, violatedRule))
+            Collections.singletonList(new ConstraintViolatedPair(constraint, violatedConstraint))
         );
 
         // Act
@@ -1040,16 +1018,16 @@ public class ProfileViolationTests {
 
     private Profile createViolatedProfile(String description,
                                           List<Field> fields,
-                                          List<ConstraintViolatedPair> ruleViolationHolders,
-                                          Rule rule) {
-        List<Rule> newRuleList = ruleViolationHolders
+                                          List<ConstraintViolatedPair> constraintViolationHolders,
+                                          Constraint constraint) {
+        List<Constraint> newConstraintList = constraintViolationHolders
             .stream()
-            .map(h -> h.getConstraint().equals(rule) ? h.getViolatedConstraint() : h.getConstraint())
+            .map(h -> h.getConstraint().equals(constraint) ? h.getViolatedConstraint() : h.getConstraint())
             .collect(Collectors.toList());
 
-        String processedDescription = description + " -- Violating: " + rule.getDescription();
+        String processedDescription = description + " -- Violating: " + constraint.toString();
 
-        return new ViolatedProfile(rule, new Fields(fields), newRuleList, processedDescription);
+        return new ViolatedProfile(constraint, new Fields(fields), newConstraintList, processedDescription);
     }
 
     private List<Constraint> getConstraintsFromPair(List<ConstraintViolatedPair> pair) {
