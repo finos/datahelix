@@ -1,11 +1,11 @@
 {
   "schemaVersion": "0.18",
-  "rules": [],
   "fields": [
     {
       "name": "field1",
       "type": "string",
       "nullable": false
     }
-  ]
+  ],
+  "constraints": []
 }

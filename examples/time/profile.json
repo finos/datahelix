@@ -1,32 +1,28 @@
 {
-    "schemaVersion": "0.18",
-    "description": "Time Profile",
-    "fields": [
-        {
-            "name": "a",
-            "type": "time",
-            "nullable": false
-        },
-        {
-            "name": "b",
-            "type": "time",
-            "nullable": false
-        }
-    ],
-    "rules": [
-        {
-            "constraints": [
-                {
-                    "if": {
-                        "field": "a",
-                        "after": "12:00:00"
-                    },
-                    "then" : {
-                        "field": "b",
-                        "equalTo": "12:34:56"
-                    }   
-                }      
-            ]
-        }
-    ]
+  "schemaVersion": "0.18",
+  "description": "Time Profile",
+  "fields": [
+    {
+      "name": "a",
+      "type": "time",
+      "nullable": false
+    },
+    {
+      "name": "b",
+      "type": "time",
+      "nullable": false
+    }
+  ],
+  "constraints": [
+    {
+      "if": {
+        "field": "a",
+        "after": "12:00:00"
+      },
+      "then": {
+        "field": "b",
+        "equalTo": "12:34:56"
+      }
+    }
+  ]
 }

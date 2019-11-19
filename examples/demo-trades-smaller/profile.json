@@ -33,47 +33,53 @@
       "nullable": false
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "rule": "tradeId",
-      "constraints": [
-        { "field": "tradeId", "greaterThanOrEqualTo": 10000 },
-        { "field": "tradeId", "lessThanOrEqualTo": 99999 }
+      "field": "tradeId",
+      "greaterThanOrEqualTo": 10000
+    },
+    {
+      "field": "tradeId",
+      "lessThanOrEqualTo": 99999
+    },
+    {
+      "field": "stock",
+      "inSet": "stockCodes.csv"
+    },
+    {
+      "field": "side",
+      "inSet": [
+        "BUY",
+        "SELL"
       ]
     },
     {
-      "rule": "stock",
-      "constraints": [
-        { "field": "stock", "inSet": "stockCodes.csv" }
-      ]
+      "field": "tradePrice",
+      "granularTo": 0.01
     },
     {
-      "rule": "side",
-      "constraints": [
-        { "field": "side", "inSet": [ "BUY", "SELL" ] }
-      ]
+      "field": "tradePrice",
+      "greaterThan": 140.0
     },
     {
-      "rule": "tradePrice",
-      "constraints": [
-        { "field": "tradePrice", "granularTo": 0.01 },
-        { "field": "tradePrice", "greaterThan": 140.0 },
-        { "field": "tradePrice", "lessThan": 150.0 }
-      ]
+      "field": "tradePrice",
+      "lessThan": 150.0
     },
     {
-      "rule": "volume",
-      "constraints": [
-        { "field": "volume", "greaterThanOrEqualTo": 1 },
-        { "field": "volume", "lessThanOrEqualTo": 200 }
-      ]
+      "field": "volume",
+      "greaterThanOrEqualTo": 1
     },
     {
-      "rule": "tradeDatetime",
-      "constraints": [
-        { "field": "tradeDatetime", "after": "2019-09-02T09:30:00.000" },
-        { "field": "tradeDatetime", "before": "2019-09-02T16:30:00.000" }
-      ]
+      "field": "volume",
+      "lessThanOrEqualTo": 200
+    },
+    {
+      "field": "tradeDatetime",
+      "after": "2019-09-02T09:30:00.000"
+    },
+    {
+      "field": "tradeDatetime",
+      "before": "2019-09-02T16:30:00.000"
     }
   ]
 }

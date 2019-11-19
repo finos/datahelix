@@ -12,24 +12,20 @@
       "nullable": false
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "constraints": [
-        {
-          "field": "a",
-          "inSet": [
-            "X",
-            "Y",
-            "Z"
-          ]
-        },
-        {
-          "field": "b",
-          "inSet": [
-            "1",
-            "2"
-          ]
-        }
+      "field": "a",
+      "inSet": [
+        "X",
+        "Y",
+        "Z"
+      ]
+    },
+    {
+      "field": "b",
+      "inSet": [
+        "1",
+        "2"
       ]
     }
   ]

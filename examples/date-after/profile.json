@@ -7,14 +7,10 @@
       "nullable": false
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "constraints": [
-        {
-          "field": "date",
-          "after": "2001-02-03"
-        }
-      ]
+      "field": "date",
+      "after": "2001-02-03"
     }
   ]
 }

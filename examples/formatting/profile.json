@@ -29,26 +29,22 @@
       "unique": true
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "constraints": [
-        {
-          "field": "decimal",
-          "equalTo": 14.1
-        },
-        {
-          "field": "date1",
-          "equalTo": "2001-02-03T04:05:06.007"
-        },
-        {
-          "field": "date2",
-          "equalTo":  "2001-02-03T04:05:06.007"
-        },
-        {
-          "field": "an_integer",
-          "equalTo": 1234567890
-        }
-      ]
+      "field": "decimal",
+      "equalTo": 14.1
+    },
+    {
+      "field": "date1",
+      "equalTo": "2001-02-03T04:05:06.007"
+    },
+    {
+      "field": "date2",
+      "equalTo": "2001-02-03T04:05:06.007"
+    },
+    {
+      "field": "an_integer",
+      "equalTo": 1234567890
     }
   ]
 }

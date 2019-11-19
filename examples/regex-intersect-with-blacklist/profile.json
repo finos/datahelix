@@ -7,24 +7,20 @@
       "nullable": false
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "constraints": [
-        {
-          "field": "first_name",
-          "matchingRegex": "(Joh?n|Mar[yk])"
-        },
-        {
-          "field": "first_name",
-          "matchingRegex": "M.*"
-        },
-        {
-          "not": {
-            "field": "first_name",
-            "equalTo": "Mary"
-          }
-        }
-      ]
+      "field": "first_name",
+      "matchingRegex": "(Joh?n|Mar[yk])"
+    },
+    {
+      "field": "first_name",
+      "matchingRegex": "M.*"
+    },
+    {
+      "not": {
+        "field": "first_name",
+        "equalTo": "Mary"
+      }
     }
   ]
 }

@@ -1,29 +1,32 @@
 {
-    "schemaVersion": "0.18",
-    "fields": [
-        {
-            "name": "field1",
-            "type": "string",
-            "nullable": false
-        },
-        {
-            "name": "field2",
-            "type": "integer",
-            "nullable": false
-        }
-    ],
-    "rules": [
-        {
-            "constraints": [
-                {
-                    "field": "field1",
-                    "inSet": ["A", "B"]
-                },
-                {
-                    "field": "field2",
-                    "inSet": ["1", "2", "3"]
-                }
-            ]
-        }
-    ]
+  "schemaVersion": "0.18",
+  "fields": [
+    {
+      "name": "field1",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "field2",
+      "type": "integer",
+      "nullable": false
+    }
+  ],
+  "constraints": [
+    {
+      "field": "field1",
+      "inSet": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "field": "field2",
+      "inSet": [
+        "1",
+        "2",
+        "3"
+      ]
+    }
+  ]
 }

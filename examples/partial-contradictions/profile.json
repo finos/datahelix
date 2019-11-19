@@ -6,48 +6,42 @@
       "type": "string"
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "rule": "Rule 1",
-      "constraints": [
+      "anyOf": [
         {
-          "anyOf": [
+          "allOf": [
             {
               "allOf": [
                 {
-                  "allOf": [
-                    {
-                      "field": "Column 1",
-                      "equalTo": "I am a string!"
-                    },
-                    {
-                      "field": "Column 1",
-                      "isNull": false
-                    }
-                  ]
+                  "field": "Column 1",
+                  "equalTo": "I am a string!"
                 },
                 {
-                  "not":
-                  {
-                    "allOf": [
-                      {
-                        "field": "Column 1",
-                        "equalTo": "I am a string!"
-                      },
-                      {
-                        "field": "Column 1",
-                        "isNull": false
-                      }
-                    ]
-                  }
+                  "field": "Column 1",
+                  "isNull": false
                 }
               ]
             },
             {
-              "field": "Column 1",
-              "equalTo": "The one option that can produce data."
+              "not": {
+                "allOf": [
+                  {
+                    "field": "Column 1",
+                    "equalTo": "I am a string!"
+                  },
+                  {
+                    "field": "Column 1",
+                    "isNull": false
+                  }
+                ]
+              }
             }
           ]
+        },
+        {
+          "field": "Column 1",
+          "equalTo": "The one option that can produce data."
         }
       ]
     }

@@ -6,24 +6,14 @@
       "type": "string"
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "rule": "Column 1 is null",
-      "constraints": [
-        {
-          "field": "Column 1",
-          "isNull": true
-        }
-      ]
+      "field": "Column 1",
+      "isNull": true
     },
     {
-      "rule": "Column 1 is not null",
-      "constraints": [
-        {
-          "field": "Column 1",
-          "isNull": false
-        }
-      ]
+      "field": "Column 1",
+      "isNull": false
     }
   ]
 }

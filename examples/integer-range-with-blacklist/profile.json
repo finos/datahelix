@@ -7,24 +7,20 @@
       "nullable": false
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "constraints": [
-        {
-          "field": "an_integer",
-          "greaterThanOrEqualTo": 1
-        },
-        {
-          "field": "an_integer",
-          "lessThanOrEqualTo": 4
-        },
-        {
-          "not": {
-            "field": "an_integer",
-            "equalTo": 1
-          }
-        }
-      ]
+      "field": "an_integer",
+      "greaterThanOrEqualTo": 1
+    },
+    {
+      "field": "an_integer",
+      "lessThanOrEqualTo": 4
+    },
+    {
+      "not": {
+        "field": "an_integer",
+        "equalTo": 1
+      }
     }
   ]
 }

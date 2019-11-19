@@ -37,44 +37,40 @@
       "nullable": false
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "constraints": [
-        {
-          "field": "first",
-          "after": "8001-02-03T04:05:06.007"
-        },
-        {
-          "field": "second",
-          "equalToField": "first",
-          "offset": 3,
-          "offsetUnit": "days"
-        },
-        {
-          "field": "third",
-          "equalToField": "fourth",
-          "offset": -3,
-          "offsetUnit": "days"
-        },
-        {
-          "field": "firstWorking",
-          "equalTo": "2019-08-12T12:00:00.000"
-        },
-        {
-          "field": "secondWorking",
-          "equalToField": "firstWorking",
-          "offset": -8,
-          "offsetUnit": "working days"
-        },
-        {
-          "field": "current",
-          "before": "now"
-        },
-        {
-          "field": "current",
-          "after": "2019-06-01T12:00:00.000"
-        }
-      ]
+      "field": "first",
+      "after": "8001-02-03T04:05:06.007"
+    },
+    {
+      "field": "second",
+      "equalToField": "first",
+      "offset": 3,
+      "offsetUnit": "days"
+    },
+    {
+      "field": "third",
+      "equalToField": "fourth",
+      "offset": -3,
+      "offsetUnit": "days"
+    },
+    {
+      "field": "firstWorking",
+      "equalTo": "2019-08-12T12:00:00.000"
+    },
+    {
+      "field": "secondWorking",
+      "equalToField": "firstWorking",
+      "offset": -8,
+      "offsetUnit": "working days"
+    },
+    {
+      "field": "current",
+      "before": "now"
+    },
+    {
+      "field": "current",
+      "after": "2019-06-01T12:00:00.000"
     }
   ]
 }

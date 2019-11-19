@@ -7,18 +7,14 @@
       "nullable": false
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "constraints": [
-        {
-          "field": "first_name",
-          "matchingRegex": "(Joh?n|Mar[yk])"
-        },
-        {
-          "field": "first_name",
-          "matchingRegex": "M.*"
-        }
-      ]
+      "field": "first_name",
+      "matchingRegex": "(Joh?n|Mar[yk])"
+    },
+    {
+      "field": "first_name",
+      "matchingRegex": "M.*"
     }
   ]
 }

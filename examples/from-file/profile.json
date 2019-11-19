@@ -7,15 +7,10 @@
       "nullable": false
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "rule": "name",
-      "constraints": [
-        {
-          "field": "name",
-          "inSet": "greek.csv"
-        }
-      ]
+      "field": "name",
+      "inSet": "greek.csv"
     }
   ]
 }

@@ -13,15 +13,10 @@
       "nullable": false
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "rule": "rule 1",
-      "constraints": [
-        {
-          "field": "id",
-          "greaterThanOrEqualTo": 0
-        }
-      ]
+      "field": "id",
+      "greaterThanOrEqualTo": 0
     }
   ]
 }

@@ -7,14 +7,10 @@
       "nullable": false
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "constraints": [
-        {
-          "field": "first_name",
-          "containingRegex": "^(Joh?n|Mar[yk])$"
-        }
-      ]
+      "field": "first_name",
+      "containingRegex": "^(Joh?n|Mar[yk])$"
     }
   ]
 }
