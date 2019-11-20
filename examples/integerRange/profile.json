@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.17",
+  "schemaVersion": "0.18",
   "fields": [
     {
       "name": "an_integer",
@@ -7,18 +7,14 @@
       "nullable": false
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "constraints": [
-        {
-          "field": "an_integer",
-          "greaterThanOrEqualTo": 1
-        },
-        {
-          "field": "an_integer",
-          "lessThanOrEqualTo": 4
-        }
-      ]
+      "field": "an_integer",
+      "greaterThanOrEqualTo": 1
+    },
+    {
+      "field": "an_integer",
+      "lessThanOrEqualTo": 4
     }
   ]
 }

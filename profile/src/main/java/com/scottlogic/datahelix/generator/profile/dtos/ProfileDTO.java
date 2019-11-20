@@ -16,12 +16,13 @@
 
 package com.scottlogic.datahelix.generator.profile.dtos;
 
-import java.util.ArrayList;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintDTO;
+
 import java.util.List;
 
 public class ProfileDTO {
     public String schemaVersion;
-    public List<FieldDTO> fields;
-    public List<RuleDTO> rules = new ArrayList<>();
     public String description;
+    public List<FieldDTO> fields;
+    public List<ConstraintDTO> constraints;
 }

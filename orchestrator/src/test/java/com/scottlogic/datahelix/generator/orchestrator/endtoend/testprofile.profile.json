@@ -1,22 +1,17 @@
 {
-    "schemaVersion": "0.17",
-    "description": "Testing Profile",
-    "fields": [
-        {
-          "name": "foo",
-          "type": "string",
-          "nullable": false
-        }
-    ],
-    "rules": [
-        {
-            "rule": "rule1",
-            "constraints": [
-                {
-                    "field": "foo",
-                    "equalTo": "Generation successful"
-                }
-            ]
-        }
-    ]
+  "schemaVersion": "0.18",
+  "description": "Testing Profile",
+  "fields": [
+    {
+      "name": "foo",
+      "type": "string",
+      "nullable": false
+    }
+  ],
+  "constraints": [
+    {
+      "field": "foo",
+      "equalTo": "Generation successful"
+    }
+  ]
 }

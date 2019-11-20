@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.17",
+  "schemaVersion": "0.18",
   "fields": [
     {
       "name": "id",
@@ -13,15 +13,10 @@
       "nullable": false
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "rule": "rule 1",
-      "constraints": [
-        {
-          "field": "id",
-          "greaterThanOrEqualTo": 0
-        }
-      ]
+      "field": "id",
+      "greaterThanOrEqualTo": 0
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.17",
+  "schemaVersion": "0.18",
   "fields": [
     {
       "name": "user_id",
@@ -17,63 +17,48 @@
       "formatting": "%tF"
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "rule": "user_id",
-      "constraints": [
+      "anyOf": [
         {
-          "anyOf": [
-            {
-              "field": "user_id",
-              "matchingRegex": "^[A-Za-z0-9]{3,10}$"
-            },
-            {
-              "field": "user_id",
-              "matchingRegex": "^[a-z0-9]+\\@[a-z0-9]+\\.co(m|\\.uk)$"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "rule": "email_address",
-      "constraints": [
-        {
-          "if": {
-            "field": "user_id",
-            "containingRegex": "\\@"
-          },
-          "then": {
-            "field": "email_address",
-            "isNull": true
-          },
-          "else": {
-            "allOf": [
-              {
-                "field": "email_address",
-                "isNull": false
-              },
-              {
-                "field": "email_address",
-                "matchingRegex": "^[a-z0-9]+\\@[a-z0-9]+\\.co(m|\\.uk)$"
-              }
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "rule": "creation_date",
-      "constraints": [
-        {
-          "field": "creation_date",
-          "afterOrAt": "2003-01-01T00:00:00.000"
+          "field": "user_id",
+          "matchingRegex": "^[A-Za-z0-9]{3,10}$"
         },
         {
-          "field": "creation_date",
-          "beforeOrAt": "2020-01-01T00:00:00.000"
+          "field": "user_id",
+          "matchingRegex": "^[a-z0-9]+\\@[a-z0-9]+\\.co(m|\\.uk)$"
         }
       ]
+    },
+    {
+      "if": {
+        "field": "user_id",
+        "containingRegex": "\\@"
+      },
+      "then": {
+        "field": "email_address",
+        "isNull": true
+      },
+      "else": {
+        "allOf": [
+          {
+            "field": "email_address",
+            "isNull": false
+          },
+          {
+            "field": "email_address",
+            "matchingRegex": "^[a-z0-9]+\\@[a-z0-9]+\\.co(m|\\.uk)$"
+          }
+        ]
+      }
+    },
+    {
+      "field": "creation_date",
+      "afterOrAt": "2003-01-01T00:00:00.000"
+    },
+    {
+      "field": "creation_date",
+      "beforeOrAt": "2020-01-01T00:00:00.000"
     }
   ]
 }

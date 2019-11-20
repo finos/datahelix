@@ -46,7 +46,7 @@ public class ViolateOutputValidator {
         } else if (!fileUtils.isDirectory(directoryPath)) {
             throw new OutputTargetValidationException(
                 "not a directory, please enter a valid directory name");
-        } else if (!canOverwriteExistingFiles && !fileUtils.isDirectoryEmpty(directoryPath, profile.getRules().size())) {
+        } else if (!canOverwriteExistingFiles && !fileUtils.isDirectoryEmpty(directoryPath, profile.getConstraints().size())) {
             throw new OutputTargetValidationException(
                 "directory not empty, please remove any 'manifest.json' and '[0-9].csv' files or use the --replace option");
         }

@@ -1,15 +1,17 @@
 {
-  "schemaVersion": "0.17",
-  "rules": [
+  "schemaVersion": "0.18",
+  "constraints": [
     {
-      "rule": "rule 1",
-      "constraints": [
-        {
-          "if": {"field": "foo", "is": "ofType", "value": "integer"},
-          "then": {"field": "foo", "greaterThan": 0},
-          "else": "N/A"
-        }
-      ]
+      "if": {
+        "field": "foo",
+        "is": "ofType",
+        "value": "integer"
+      },
+      "then": {
+        "field": "foo",
+        "greaterThan": 0
+      },
+      "else": "N/A"
     }
   ],
   "fields": [

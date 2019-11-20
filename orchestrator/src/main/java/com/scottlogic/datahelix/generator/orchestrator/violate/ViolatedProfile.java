@@ -16,9 +16,9 @@
 
 package com.scottlogic.datahelix.generator.orchestrator.violate;
 
-import com.scottlogic.datahelix.generator.core.profile.Profile;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
-import com.scottlogic.datahelix.generator.core.profile.Rule;
+import com.scottlogic.datahelix.generator.core.profile.Profile;
+import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
 
 import java.util.Collection;
 
@@ -26,19 +26,11 @@ public class ViolatedProfile extends Profile {
     /**
      * Original (un-violated) form of the rule that has been violated in this profile.
      */
-    public final Rule violatedRule;
+    public final Constraint violatedConstraint;
 
-    /**
-     * Constructs a new violated profile using the base profile constructor.
-     * @param violatedRule Un-violated form of the rule that has been violated on this profile.
-     * @param fields Fields relating to this profile.
-     * @param rules Collection of rules on this profile, including the violated form of the one rule which has been
-     *              violated.
-     * @param description Description of profile.
-     */
-    public ViolatedProfile(Rule violatedRule, Fields fields, Collection<Rule> rules, String description){
-        super(fields, rules, description);
-        this.violatedRule = violatedRule;
+    public ViolatedProfile(Constraint violatedConstraint, Fields fields, Collection<Constraint> constraints, String description){
+        super(description, fields, constraints);
+        this.violatedConstraint = violatedConstraint;
     }
 
 }

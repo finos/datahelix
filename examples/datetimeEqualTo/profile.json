@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.17",
+  "schemaVersion": "0.18",
   "fields": [
     {
       "name": "date",
@@ -7,14 +7,10 @@
       "nullable": false
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "constraints": [
-        {
-          "field": "date",
-          "equalTo": "2001-02-03T04:05:06.007"
-        }
-      ]
+      "field": "date",
+      "equalTo": "2001-02-03T04:05:06.007"
     }
   ]
 }

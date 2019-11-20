@@ -67,7 +67,7 @@ public class ConstraintService
         specificRelationFactoryMap.put(SpecificFieldType.DECIMAL, new DecimalRelationFactory());
     }
 
-    Optional<Constraint> createSpecificTypeConstraint(Field field)
+    public Optional<Constraint> createSpecificTypeConstraint(Field field)
     {
         switch (field.getSpecificType()) {
             case DATE:
@@ -93,9 +93,9 @@ public class ConstraintService
         }
     }
 
-    List<Constraint> createConstraints(List<ConstraintDTO> constraintDTOs, Fields fields)
+    public List<Constraint> createConstraints(List<ConstraintDTO> dtos, Fields fields)
     {
-        return constraintDTOs.stream().map(dto -> createConstraint(dto, fields)).collect(Collectors.toList());
+        return dtos.stream().map(dto -> createConstraint(dto, fields)).collect(Collectors.toList());
     }
 
     private Constraint createConstraint(ConstraintDTO dto, Fields fields)

@@ -30,8 +30,8 @@ import java.util.List;
 
 public class TemporalConstraintValidator extends AtomicConstraintValidator<TemporalConstraintDTO> {
 
-    public TemporalConstraintValidator(String rule, List<FieldDTO> fields) {
-        super(rule, fields);
+    public TemporalConstraintValidator(List<FieldDTO> fields) {
+        super(fields);
     }
 
     @Override

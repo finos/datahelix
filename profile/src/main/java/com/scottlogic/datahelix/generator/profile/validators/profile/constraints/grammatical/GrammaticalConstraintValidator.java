@@ -26,9 +26,9 @@ import java.util.List;
 
 abstract class GrammaticalConstraintValidator<T extends GrammaticalConstraintDTO> extends ConstraintValidator<T>
 {
-    GrammaticalConstraintValidator(String rule, List<FieldDTO> fields)
+    GrammaticalConstraintValidator(List<FieldDTO> fields)
     {
-        super(rule, fields);
+        super(fields);
     }
 
     ValidationResult subConstraintsMustBeValid(List<ConstraintDTO> subConstraints, T grammaticalConstraint)
@@ -36,7 +36,7 @@ abstract class GrammaticalConstraintValidator<T extends GrammaticalConstraintDTO
         ValidationResult subConstraintsMustBeSpecified = subConstraintsMustBeSpecified(subConstraints, grammaticalConstraint);
         if(!subConstraintsMustBeSpecified.isSuccess) return subConstraintsMustBeSpecified;
 
-        return ValidationResult.combine(subConstraints.stream().map(c -> validateConstraint(c, rule, fields)));
+        return ValidationResult.combine(subConstraints.stream().map(c -> validateConstraint(c, fields)));
     }
 
     private ValidationResult subConstraintsMustBeSpecified(List<ConstraintDTO> constraints, T constraint)

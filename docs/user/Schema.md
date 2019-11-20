@@ -34,25 +34,10 @@
 			"type": "integer"
 		}
 	],
-	"rules":
-	[
-
-		{
-			"rule": "low_price is a positive integer",
-			"constraints": [
-				{ "field": "low_price", "greaterThanOrEqualTo": 0 }
-			]
-		},
-		{
-			"rule": "allowed countries",
-			"constraints": [
-				{ "field": "country", "inSet": [ "USA", "GB", "FRANCE" ] }
-			]
-		},
-		{
-			"rule": "country tariffs",
-			"constraints": [
-				{
+    "constraints": [
+				{ "field": "low_price", "greaterThanOrEqualTo": 0 },
+                { "field": "country", "inSet": [ "USA", "GB", "FRANCE" ] },
+                {
 					"if": {
 						"anyOf": [
 							{ "field": "country", "equalTo": "USA" },
@@ -67,8 +52,6 @@
 					},
 					"else": { "not": { "field": "tariff", "is": "null" } }
 				}
-			]
-		}
 	]
 }
 ```
@@ -78,7 +61,7 @@
 ### `Profile`
 * `"description"`: An optional description of what data the profile is modelling.
 * `"fields"`: A set of one or more `Field` objects. Each field must have a unique name.
-* `"rules"`: A set of one or more `Rule` objects which must contain one or more `Constraint` objects.
+* `"constraints"`: A set of `Constraint` objects.
 
 ### `Field`
 
@@ -89,12 +72,6 @@ A field in the data set.
 * `"formatting"`: The formatting used for the output of the field. (Optional)
 * `"unique"`: Sets if the field is unique. (Optional)
 * `"nullable"`: Sets if null is an allowed output of the field. (Optional)
-
-### `Rule`
-A named collection of constraints. Test case generation revolves around rules, in that the generator will output a separate dataset for each rule, wherein each row violates the rule in a different way.
-
-* `"rule"`: A textual description of the rule
-* `"constraints"`: A set of constraints composing this rule
 
 ### `Constraint`
 

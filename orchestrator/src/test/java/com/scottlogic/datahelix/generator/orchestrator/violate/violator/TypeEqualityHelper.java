@@ -17,7 +17,6 @@
 package com.scottlogic.datahelix.generator.orchestrator.violate.violator;
 
 import com.scottlogic.datahelix.generator.core.profile.Profile;
-import com.scottlogic.datahelix.generator.core.profile.Rule;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.ConditionalConstraint;
@@ -74,28 +73,16 @@ public class TypeEqualityHelper {
      * @param actualProfile The actual profile.
      */
     public static void assertProfileTypeEquality(Profile expectedProfile, Profile actualProfile) {
-        ArrayList<Rule> expectedRules = new ArrayList<>(expectedProfile.getRules());
-        ArrayList<Rule> actualRules = new ArrayList<>(actualProfile.getRules());
-        Assert.assertEquals("Rule list lengths do not match. Expected: " + expectedRules.size()
-                + ", Actual: " + actualRules.size(),
-            expectedRules.size(),
-            actualRules.size()
+        ArrayList<Constraint> expectedConstraints = new ArrayList<>(expectedProfile.getConstraints());
+        ArrayList<Constraint> actualConstraints = new ArrayList<>(actualProfile.getConstraints());
+        Assert.assertEquals("Constraint list lengths do not match. Expected: " + expectedConstraints.size()
+                + ", Actual: " + actualConstraints.size(),
+            expectedConstraints.size(),
+            actualConstraints.size()
         );
-        for (int i = 0; i < expectedRules.size(); i++) {
-            assertRuleTypeEquality(expectedRules.get(i), actualRules.get(i));
+        for (int i = 0; i < expectedConstraints.size(); i++) {
+            assertConstraintTypeEquality(expectedConstraints.get(i), actualConstraints.get(i));
         }
-    }
-
-    /**
-     * Asserts all constraints in two rules have the same type and all sub-constraints of these constraints have the
-     * same type.
-     * @param expectedRule The expected rule.
-     * @param actualRule The actual rule.
-     */
-    public static void assertRuleTypeEquality(Rule expectedRule, Rule actualRule) {
-        ArrayList<Constraint> expectedConstraints = new ArrayList<>(expectedRule.getConstraints());
-        ArrayList<Constraint> actualConstraints = new ArrayList<>(actualRule.getConstraints());
-        assertConstraintListTypeEquality(expectedConstraints, actualConstraints);
     }
 
     /**

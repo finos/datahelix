@@ -29,6 +29,11 @@ Feature: The violations mode of the Data Helix app can be run in violations mode
       | foo  |
       | 8    |
       | null |
+      | -100000000000000000000 |
+      | -99999999999999999999 |
+      | -99999999999999999998 |
+      | -99999999999999999997 |
+      | -99999999999999999996 |
 
   Scenario: Running the generator in violate mode where equal to is not violated is successful
     Given foo is equal to 8

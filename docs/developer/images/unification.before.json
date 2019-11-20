@@ -6,7 +6,7 @@
 		{ "name": "x" },
 		{ "name": "y" }
     ],
-    "rules": [
+    "constraints": [
 		{ "if": { "field": "type", "equalTo": "a" },
 		  "then": { "field": "x", "equalTo": "0.9" },
 		  "else": { "field": "x", "is": "null" }},

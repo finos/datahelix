@@ -37,7 +37,7 @@ public class ProfileValidatorTests
         // Arrange
         ProfileDTO dto = new ProfileDTO();
         dto.fields = Collections.singletonList(FieldDTOBuilder.create("test"));
-        dto.rules = new ArrayList<>();
+        dto.constraints = new ArrayList<>();
 
         // Act
         ValidationResult validationResult = profileValidator.validate(dto);
@@ -52,7 +52,7 @@ public class ProfileValidatorTests
         // Arrange
         ProfileDTO dto = new ProfileDTO();
         dto.fields = null;
-        dto.rules = new ArrayList<>();
+        dto.constraints = new ArrayList<>();
 
         // Act
         ValidationResult validationResult = profileValidator.validate(dto);
@@ -67,7 +67,7 @@ public class ProfileValidatorTests
         // Arrange
         ProfileDTO dto = new ProfileDTO();
         dto.fields = new ArrayList<>();
-        dto.rules = new ArrayList<>();
+        dto.constraints = new ArrayList<>();
 
         // Act
         ValidationResult validationResult = profileValidator.validate(dto);
@@ -82,7 +82,7 @@ public class ProfileValidatorTests
         // Arrange
         ProfileDTO dto = new ProfileDTO();
         dto.fields = Arrays.asList(FieldDTOBuilder.create("test"), FieldDTOBuilder.create("test"));
-        dto.rules = new ArrayList<>();
+        dto.constraints = new ArrayList<>();
 
         // Act
         ValidationResult validationResult = profileValidator.validate(dto);
@@ -92,12 +92,12 @@ public class ProfileValidatorTests
     }
 
     @Test
-    public void validateProfile_withNullRules_fails()
+    public void validateProfile_withNullConstraints_fails()
     {
         // Arrange
         ProfileDTO dto = new ProfileDTO();
         dto.fields = Collections.singletonList(FieldDTOBuilder.create("test"));
-        dto.rules = null;
+        dto.constraints = null;
 
         // Act
         ValidationResult validationResult = profileValidator.validate(dto);

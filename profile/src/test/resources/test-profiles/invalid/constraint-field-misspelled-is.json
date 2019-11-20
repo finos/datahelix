@@ -1,15 +1,10 @@
 {
-  "schemaVersion": "0.17",
-  "rules": [
+  "schemaVersion": "0.18",
+  "constraints": [
     {
-      "rule": "rule 1",
-      "constraints": [
-        {
-          "field": "field1",
-          "ais": "formattedAs",
-          "value": "%ggg"
-        }
-      ]
+      "field": "field1",
+      "ais": "formattedAs",
+      "value": "%ggg"
     }
   ],
   "fields": [

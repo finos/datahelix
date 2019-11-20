@@ -24,9 +24,9 @@ import java.util.List;
 
 public class EqualToConstraintValidator extends AtomicConstraintValidator<EqualToConstraintDTO>
 {
-    public EqualToConstraintValidator(String rule, List<FieldDTO> fields)
+    public EqualToConstraintValidator(List<FieldDTO> fields)
     {
-        super(rule, fields);
+        super(fields);
     }
 
     @Override

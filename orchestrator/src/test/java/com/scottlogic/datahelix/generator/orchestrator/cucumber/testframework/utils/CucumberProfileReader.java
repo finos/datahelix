@@ -21,14 +21,9 @@ import com.scottlogic.datahelix.generator.common.commands.CommandBus;
 import com.scottlogic.datahelix.generator.common.util.FileUtils;
 import com.scottlogic.datahelix.generator.core.profile.Profile;
 import com.scottlogic.datahelix.generator.profile.dtos.ProfileDTO;
-import com.scottlogic.datahelix.generator.profile.dtos.RuleDTO;
-import com.scottlogic.datahelix.generator.profile.validators.ConfigValidator;
-import com.scottlogic.datahelix.generator.profile.serialisation.ProfileSerialiser;
 import com.scottlogic.datahelix.generator.profile.reader.JsonProfileReader;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
+import com.scottlogic.datahelix.generator.profile.serialisation.ProfileSerialiser;
+import com.scottlogic.datahelix.generator.profile.validators.ConfigValidator;
 
 public class CucumberProfileReader extends JsonProfileReader {
 
@@ -41,19 +36,15 @@ public class CucumberProfileReader extends JsonProfileReader {
     }
 
     @Override
-    public Profile read() throws IOException {
+    public Profile read() {
         return super.read(createJson());
     }
 
-    private String createJson() throws IOException {
+    private String createJson() {
         ProfileDTO profileDTO = new ProfileDTO();
         profileDTO.schemaVersion = "0.10";
         profileDTO.fields = state.profileFields;
-
-        RuleDTO ruleDTO = new RuleDTO();
-        ruleDTO.constraints = state.constraints;
-        profileDTO.rules = state.constraints.isEmpty() ? new ArrayList<>() : Collections.singletonList(ruleDTO);
-
+        profileDTO.constraints = state.constraints;
         return new ProfileSerialiser().serialise(profileDTO);
     }
 

@@ -24,9 +24,9 @@ import java.util.List;
 
 public class GranularToConstraintValidator extends AtomicConstraintValidator<GranularToConstraintDTO>
 {
-    public GranularToConstraintValidator(String rule, List<FieldDTO> fields)
+    public GranularToConstraintValidator(List<FieldDTO> fields)
     {
-        super(rule, fields);
+        super(fields);
     }
 
     @Override

@@ -10,9 +10,6 @@ The _interesting generation mode_ exists to provide a means of generating smalle
 	"fields": [
 		{ "name": "field1" }
 	],
-	"rules": [
-		{ 
-			"rule": "field1",
 			"constraints": [
 				{
 					"field": "field1",
@@ -28,9 +25,7 @@ The _interesting generation mode_ exists to provide a means of generating smalle
 						"field": "field2",
 						"is": "null"
 					}
-				}
-			]
-		}			
+				}	
 	]
 }
 ```

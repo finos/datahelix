@@ -18,45 +18,28 @@
       "type": "string"
     },
     "fields": {
-      "title": "Defines the fields that data will be produced for. field names must begin with an alphabetic character.",
+      "title": "The fields that data will be produced for. Field names must begin with an alphabetic character.",
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
       "additionalItems": false,
       "items": {
-        "$ref": "#/definitions/fieldDefinition"
+        "$ref": "#/definitions/field"
       }
     },
-    "rules": {
-      "title": "The Rules defining the data to be output",
+    "constraints": {
+      "title": "The constraints on the data to be output",
       "type": "array",
       "additionalItems": false,
       "items": {
-        "title": "A set of Rule objects.",
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "constraints"
-        ],
-        "properties": {
-          "rule": {
-            "title": "A collection of constraints. Test case generation revolves around rules, in that the generator will output a separate dataset for each rule, wherein each row violates the rule in a different way.",
-            "type": "string"
-          },
-          "constraints": {
-            "type": "array",
-            "items": {
-              "$ref": "#/definitions/constraint"
-            }
-          }
-        }
+        "$ref": "#/definitions/constraint"
       }
     }
   },
   "definitions": {
     "schemaVersion": {
       "title": "The version of the DataHelix profile schema",
-      "const": "0.17"
+      "const": "0.18"
     },
     "dataType": {
       "oneOf": [
@@ -177,7 +160,7 @@
         ]
       }
     },
-    "fieldDefinition": {
+    "field": {
       "title": "The field definitions of a field to generate data for",
       "type": "object",
       "additionalProperties": false,

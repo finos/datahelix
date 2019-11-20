@@ -1,19 +1,15 @@
 {
-  "schemaVersion": "0.17",
-  "rules": [
+  "schemaVersion": "0.18",
+  "constraints": [
     {
-      "constraints": [
+      "nallOf": [
         {
-          "nallOf": [
-            {
-              "field": "field1",
-              "equalTo": "%ggg"
-            },
-            {
-              "field": "field1",
-              "shorterThan": 19
-            }
-          ]
+          "field": "field1",
+          "equalTo": "%ggg"
+        },
+        {
+          "field": "field1",
+          "shorterThan": 19
         }
       ]
     }

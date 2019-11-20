@@ -20,13 +20,13 @@ import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.datahelix.generator.common.profile.SpecificFieldType;
 import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;
-import com.scottlogic.datahelix.generator.profile.dtos.RuleDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.ProfileDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintType;
-import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.NotConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.AllOfConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.AnyOfConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.NotConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.relations.InMapConstraintDTO;
 
 import java.util.List;
@@ -35,10 +35,10 @@ import java.util.stream.Stream;
 
 public class FieldService
 {
-    public Fields createFields(List<FieldDTO> fieldDTOs, List<RuleDTO> ruleDTOs)
+    public Fields createFields(ProfileDTO dto)
     {
-        List<Field> fields = fieldDTOs.stream().map(this::createRegularField).collect(Collectors.toList());
-        getInMapFieldNames(ruleDTOs).stream().map(this::createInMapField).forEach(fields::add);
+        List<Field> fields = dto.fields.stream().map(this::createRegularField).collect(Collectors.toList());
+        getInMapFieldNames(dto.constraints).stream().map(this::createInMapField).forEach(fields::add);
         return new Fields(fields);
     }
 
@@ -62,10 +62,9 @@ public class FieldService
         return new Field(inMapFile, SpecificFieldType.INTEGER, false, null, true, false, null);
     }
 
-    private List<String> getInMapFieldNames(List<RuleDTO> ruleDTOs)
+    private List<String> getInMapFieldNames(List<ConstraintDTO> constraintDTOs)
     {
-        return ruleDTOs.stream()
-            .flatMap(ruleDTO -> ruleDTO.constraints.stream())
+        return constraintDTOs.stream()
             .flatMap(constraint -> getAllAtomicConstraints(Stream.of(constraint)))
             .filter(constraintDTO -> constraintDTO.getType() == ConstraintType.IN_MAP)
             .map(constraintDTO -> ((InMapConstraintDTO) constraintDTO).otherField)

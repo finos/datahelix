@@ -1,18 +1,13 @@
 {
-  "rules": [
+  "constraints": [
     {
-      "rule": "rule 1",
-      "constraints": [
-        {
-          "field": "field1",
-          "is": "formattedAs",
-          "value": "%ggg"
-        },
-        {
-          "field": "field1",
-          "shorterThan": 19
-        }
-      ]
+      "field": "field1",
+      "is": "formattedAs",
+      "value": "%ggg"
+    },
+    {
+      "field": "field1",
+      "shorterThan": 19
     }
   ],
   "schemaVersion": "0.16"
