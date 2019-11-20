@@ -34,10 +34,10 @@
 			"type": "integer"
 		}
 	],
-"constraints": [
+    "constraints": [
 				{ "field": "low_price", "greaterThanOrEqualTo": 0 },
-{ "field": "country", "inSet": [ "USA", "GB", "FRANCE" ] },
-{
+                { "field": "country", "inSet": [ "USA", "GB", "FRANCE" ] },
+                {
 					"if": {
 						"anyOf": [
 							{ "field": "country", "equalTo": "USA" },
