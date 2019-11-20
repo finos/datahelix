@@ -1,12 +1,7 @@
 {
-  "schemaVersion": "0.17",
-  "rules": [
+  "schemaVersion": "0.18",
+  "constraints": [
     {
-      "rule": "rule 1",
-      "constraints": [
-        {
-        }
-      ]
     }
   ],
   "fields": [

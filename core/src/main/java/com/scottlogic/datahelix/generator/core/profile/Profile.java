@@ -18,30 +18,31 @@ package com.scottlogic.datahelix.generator.core.profile;
 
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
+import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
 
 import java.util.Collection;
 import java.util.List;
 
 public class Profile {
     private final Fields fields;
-    private final Collection<Rule> rules;
+    private final Collection<Constraint> constraints;
     private final String description;
 
-    public Profile(List<Field> fields, Collection<Rule> rules) {
-        this(new Fields(fields), rules, null);
+    public Profile(List<Field> fields, Collection<Constraint> constraints) {
+        this(null, new Fields(fields), constraints);
     }
 
-    public Profile(List<Field> fields, Collection<Rule> rules, String description) {
-        this(new Fields(fields), rules, description);
+    public Profile(List<Field> fields, Collection<Constraint> constraints, String description) {
+        this(description, new Fields(fields), constraints);
     }
 
-    public Profile(Fields fields, Collection<Rule> rules) {
-        this(fields, rules, null);
+    public Profile(Fields fields, Collection<Constraint> constraints) {
+        this(null, fields, constraints);
     }
 
-    public Profile(Fields fields, Collection<Rule> rules, String description) {
+    public Profile(String description, Fields fields, Collection<Constraint> constraints) {
         this.fields = fields;
-        this.rules = rules;
+        this.constraints = constraints;
         this.description = description;
     }
 
@@ -49,8 +50,8 @@ public class Profile {
         return fields;
     }
 
-    public Collection<Rule> getRules() {
-        return rules;
+    public Collection<Constraint> getConstraints() {
+        return constraints;
     }
 
     public String getDescription() {

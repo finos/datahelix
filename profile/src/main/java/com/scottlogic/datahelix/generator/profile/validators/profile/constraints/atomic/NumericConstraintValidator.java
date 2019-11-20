@@ -31,9 +31,9 @@ public class NumericConstraintValidator extends AtomicConstraintValidator<Numeri
 {
     private final FieldType expectedFieldType;
 
-    public NumericConstraintValidator(String rule, List<FieldDTO> fields, FieldType expectedFieldType)
+    public NumericConstraintValidator(List<FieldDTO> fields, FieldType expectedFieldType)
     {
-        super(rule, fields);
+        super(fields);
         this.expectedFieldType = expectedFieldType;
     }
 

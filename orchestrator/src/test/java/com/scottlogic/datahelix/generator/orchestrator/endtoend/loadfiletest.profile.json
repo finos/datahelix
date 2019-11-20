@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.17",
+  "schemaVersion": "0.18",
   "fields": [
     {
       "name": "foo",
@@ -7,15 +7,10 @@
       "nullable": false
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "rule": "file",
-      "constraints": [
-        {
-          "field": "foo",
-          "inSet": "src/test/java/com/scottlogic/datahelix/generator/orchestrator/endtoend/testfile.csv"
-        }
-      ]
+      "field": "foo",
+      "inSet": "src/test/java/com/scottlogic/datahelix/generator/orchestrator/endtoend/testfile.csv"
     }
   ]
 }

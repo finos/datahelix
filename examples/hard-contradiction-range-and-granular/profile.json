@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.17",
+  "schemaVersion": "0.18",
   "fields": [
     {
       "name": "Column 1",
@@ -7,33 +7,18 @@
       "nullable": false
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "rule": "Column 1 is greaterThan 0",
-      "constraints": [
-        {
-          "field": "Column 1",
-          "greaterThan": 0
-        }
-      ]
+      "field": "Column 1",
+      "greaterThan": 0
     },
     {
-      "rule": "Column 1 is lessThan 1",
-      "constraints": [
-        {
-          "field": "Column 1",
-          "lessThan": 1
-        }
-      ]
+      "field": "Column 1",
+      "lessThan": 1
     },
     {
-      "rule": "Column 1 is granularTo 1",
-      "constraints": [
-        {
-          "field": "Column 1",
-          "granularTo": 1
-        }
-      ]
+      "field": "Column 1",
+      "granularTo": 1
     }
   ]
 }

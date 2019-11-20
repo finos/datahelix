@@ -17,18 +17,16 @@
 package com.scottlogic.datahelix.generator.orchestrator.violate.violator;
 
 import com.google.inject.Inject;
+import com.scottlogic.datahelix.generator.common.profile.UnviolatableConstraintException;
+import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
+import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.AtomicConstraint;
+import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.ViolatedAtomicConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.NegatedGrammaticalConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.OrConstraint;
-import com.scottlogic.datahelix.generator.core.profile.Rule;
-import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
-import com.scottlogic.datahelix.generator.common.profile.UnviolatableConstraintException;
-import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.AtomicConstraint;
-import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.ViolatedAtomicConstraint;
 import com.scottlogic.datahelix.generator.core.violations.filters.ViolationFilter;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,34 +35,13 @@ import java.util.stream.Collectors;
  * Rule violator which violates rules by individually violating each constraint within the rule.
  * I.E. VIOLATE(A,B,C) => VIOLATE(A),B,C OR A,VIOLATE(B),C OR A,B,VIOLATE(C)
  */
-public class RuleViolator {
+public class ConstraintViolator
+{
     private final List<ViolationFilter> constraintsToNotViolate;
 
     @Inject
-    public RuleViolator(List<ViolationFilter> constraintsToNotViolate) {
+    public ConstraintViolator(List<ViolationFilter> constraintsToNotViolate) {
         this.constraintsToNotViolate = constraintsToNotViolate;
-    }
-
-    public Rule violateRule(Rule rule) {
-        List<Constraint> newConstraints = new ArrayList<>();
-        List<Constraint> violate = new ArrayList<>();
-        for (Constraint constraint:rule.getConstraints()) {
-            if (canViolate(constraint)){
-                violate.add(constraint);
-            } else {
-                newConstraints.add(constraint);
-            }
-        }
-
-        if (!violate.isEmpty()) {
-            newConstraints.add(
-                violateConstraint(
-                    violate.size() == 1
-                    ? violate.get(0)
-                    : new AndConstraint(violate)
-                ));
-        }
-        return new Rule(rule.getDescription(), newConstraints);
     }
 
     /**
@@ -72,7 +49,7 @@ public class RuleViolator {
      * @param constraint Constraint to violate
      * @return Constraint with violated logic
      */
-    private Constraint violateConstraint(Constraint constraint) {
+    public Constraint violateConstraint(Constraint constraint) {
         // VIOLATE(AND(X, Y, Z)) reduces to
         //   OR(
         //     AND(VIOLATE(X), Y, Z),
@@ -83,14 +60,11 @@ public class RuleViolator {
 
             Collection<Constraint> violatedIndividually =
                 subConstraints.stream()
-                    // for each subconstraint X, make a copy of the original list but with X replaced by VIOLATE(X)
                     .map(constraintToViolate ->
                         subConstraints.stream()
-                            .map(c -> c == constraintToViolate
-                                ? violateConstraint(c)
-                                : c)
+                            .map(c -> c == constraintToViolate ? violateConstraint(c) : c)
                             .collect(Collectors.toList()))
-                    // make an AndConstraint out of each of the new lists
+
                     .map(AndConstraint::new)
                     .collect(Collectors.toList());
 

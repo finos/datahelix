@@ -1,18 +1,14 @@
 {
-  "schemaVersion": "0.17",
+  "schemaVersion": "0.18",
   "fields": [
     {
       "name": "field1"
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "constraints": [
-        {
-          "field": "field1",
-          "matchingRegex": 4
-        }
-      ]
+      "field": "field1",
+      "matchingRegex": 4
     }
   ]
 }

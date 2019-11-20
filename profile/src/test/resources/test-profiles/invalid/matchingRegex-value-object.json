@@ -1,20 +1,16 @@
 {
-  "schemaVersion": "0.17",
+  "schemaVersion": "0.18",
   "fields": [
     {
       "name": "field1"
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "constraints": [
-        {
-          "not": {
-            "field": "field1",
-            "matchingRegex": "0001-01-01T09:00:00.000"
-          }
-        }
-      ]
+      "not": {
+        "field": "field1",
+        "matchingRegex": "0001-01-01T09:00:00.000"
+      }
     }
   ]
 }

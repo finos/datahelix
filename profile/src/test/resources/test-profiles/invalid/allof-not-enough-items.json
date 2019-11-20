@@ -1,15 +1,11 @@
 {
-  "schemaVersion": "0.17",
-  "rules": [
+  "schemaVersion": "0.18",
+  "constraints": [
     {
-      "constraints": [
+      "allOf": [
         {
-          "allOf": [
-            {
-              "field": "field1",
-              "equalTo": "%ggg"
-            }
-          ]
+          "field": "field1",
+          "equalTo": "%ggg"
         }
       ]
     }

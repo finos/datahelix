@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.17",
+  "schemaVersion": "0.18",
   "fields": [
     {
       "name": "tradeId",
@@ -43,80 +43,117 @@
       "nullable": false
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "rule": "tradeId",
-      "constraints": [
-        { "field": "tradeId", "greaterThanOrEqualTo": 10000 },
-        { "field": "tradeId", "lessThanOrEqualTo": 99999 }
+      "field": "tradeId",
+      "greaterThanOrEqualTo": 10000
+    },
+    {
+      "field": "tradeId",
+      "lessThanOrEqualTo": 99999
+    },
+    {
+      "field": "stock",
+      "inSet": "stockCodes.csv"
+    },
+    {
+      "field": "side",
+      "inSet": [
+        "BUY",
+        "SELL"
       ]
     },
     {
-      "rule": "stock",
-      "constraints": [
-        { "field": "stock", "inSet": "stockCodes.csv" }
-      ]
+      "field": "tradePrice",
+      "granularTo": 0.1
     },
     {
-      "rule": "side",
-      "constraints": [
-        { "field": "side", "inSet": [ "BUY", "SELL" ] }
-      ]
+      "if": {
+        "field": "stock",
+        "equalTo": "LLOY"
+      },
+      "then": {
+        "allOf": [
+          {
+            "field": "tradePrice",
+            "greaterThan": 49.3
+          },
+          {
+            "field": "tradePrice",
+            "lessThan": 50.0
+          }
+        ]
+      }
     },
     {
-      "rule": "tradePrice",
-      "constraints": [
-        { "field": "tradePrice", "granularTo": 0.1 },
-        {
-          "if": { "field": "stock", "equalTo": "LLOY" },
-          "then": { "allOf": [
-            { "field": "tradePrice", "greaterThan": 49.3 },
-            { "field": "tradePrice", "lessThan": 50.0 }
-          ]}
-        },
-        {
-          "if": { "field": "stock", "equalTo": "BARC" },
-          "then": { "allOf": [
-            { "field": "tradePrice", "greaterThan": 136.1 },
-            { "field": "tradePrice", "lessThan": 137.0 }
-          ]}
-        },
-        {
-          "if": { "field": "stock", "equalTo": "BP" },
-          "then": { "allOf": [
-            { "field": "tradePrice", "greaterThan": 490.0 },
-            { "field": "tradePrice", "lessThan": 500.0 }
-          ]}
-        }
-      ]
+      "if": {
+        "field": "stock",
+        "equalTo": "BARC"
+      },
+      "then": {
+        "allOf": [
+          {
+            "field": "tradePrice",
+            "greaterThan": 136.1
+          },
+          {
+            "field": "tradePrice",
+            "lessThan": 137.0
+          }
+        ]
+      }
     },
     {
-      "rule": "volume",
-      "constraints": [
-        { "field": "volume", "greaterThanOrEqualTo": 1 },
-        { "field": "volume", "lessThanOrEqualTo": 20 }
-      ]
+      "if": {
+        "field": "stock",
+        "equalTo": "BP"
+      },
+      "then": {
+        "allOf": [
+          {
+            "field": "tradePrice",
+            "greaterThan": 490.0
+          },
+          {
+            "field": "tradePrice",
+            "lessThan": 500.0
+          }
+        ]
+      }
     },
     {
-      "rule": "tradeDatetime",
-      "constraints": [
-        { "field": "tradeDatetime", "granularTo": "millis" },
-        { "field": "tradeDatetime", "after":"2019-09-02T09:30:00.000" },
-        { "field": "tradeDatetime", "before": "2019-09-02T16:30:00.000" }
-      ]
+      "field": "volume",
+      "greaterThanOrEqualTo": 1
     },
     {
-      "rule": "tradeDate",
-      "constraints": [
-        { "field": "tradeDate", "granularTo": "days" },
-        { "field": "tradeDate", "equalTo": "2019-09-02T00:00:00.000" }
-      ]
+      "field": "volume",
+      "lessThanOrEqualTo": 20
     },
     {
-      "rule": "settlementDate",
-      "constraints": [
-        { "field": "settlementDate","equalToField": "tradeDate", "offset": 5, "offsetUnit": "working days" }
-      ]
+      "field": "tradeDatetime",
+      "granularTo": "millis"
+    },
+    {
+      "field": "tradeDatetime",
+      "after": "2019-09-02T09:30:00.000"
+    },
+    {
+      "field": "tradeDatetime",
+      "before": "2019-09-02T16:30:00.000"
+    },
+    {
+      "field": "tradeDate",
+      "granularTo": "days"
+    },
+    {
+      "field": "tradeDate",
+      "equalTo": "2019-09-02T00:00:00.000"
+    },
+    {
+      "field": "settlementDate",
+      "equalToField": "tradeDate",
+      "offset": 5,
+      "offsetUnit": "working days"
     }
   ]
 }

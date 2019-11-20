@@ -20,10 +20,10 @@ import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.datahelix.generator.common.util.NumberUtils;
 import com.scottlogic.datahelix.generator.core.profile.Profile;
-import com.scottlogic.datahelix.generator.core.profile.Rule;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.GreaterThanConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.LessThanConstraint;
+import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.datahelix.generator.orchestrator.violate.ViolatedProfile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,21 +45,21 @@ public class ProfileViolatorTests {
 
     private ProfileViolator target;
 
-    @Mock private RuleViolator mockRuleViolator;
+    @Mock private ConstraintViolator mockConstraintViolator;
 
     private Field fooField;
     private Field barField;
-    private Rule rule1;
-    private Rule rule2;
-    private Rule violatedRule1;
-    private Rule violatedRule2;
+    private Constraint constraint1;
+    private Constraint constraint2;
+    private Constraint violatedConstraint1;
+    private Constraint violatedConstraint2;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
         target = new ProfileViolator(
-            mockRuleViolator
+            mockConstraintViolator
         );
 
         initRules();
@@ -73,11 +73,11 @@ public class ProfileViolatorTests {
         //Arrange
         Profile inputProfile = new Profile(
             Arrays.asList(fooField, barField),
-            Collections.singletonList(rule1),
+            Collections.singletonList(constraint1),
             "Input profile description"
         );
 
-        when(mockRuleViolator.violateRule(rule1)).thenReturn(violatedRule1);
+        when(mockConstraintViolator.violateConstraint(constraint1)).thenReturn(violatedConstraint1);
 
         //Act
         List<Profile> outputProfileList = (List<Profile>)(List<?>) target.violate(inputProfile);
@@ -86,10 +86,10 @@ public class ProfileViolatorTests {
         List<Profile> expectedProfileList =
             Collections.singletonList(
                 new ViolatedProfile(
-                    rule1,
+                    constraint1,
                     new Fields(Arrays.asList(fooField, barField)),
-                    Collections.singletonList(violatedRule1),
-                    "Input profile description -- Violating: Rule 1 description"
+                    Collections.singletonList(violatedConstraint1),
+                    "Input profile description -- Violating: `bar` > 50 and `foo` > 100"
                 )
             );
 
@@ -109,12 +109,12 @@ public class ProfileViolatorTests {
         //Arrange
         Profile inputProfile = new Profile(
             Arrays.asList(fooField, barField),
-            Arrays.asList(rule1, rule2),
+            Arrays.asList(constraint1, constraint2),
             "Input profile description"
         );
 
-        when(mockRuleViolator.violateRule(rule1)).thenReturn(violatedRule1);
-        when(mockRuleViolator.violateRule(rule2)).thenReturn(violatedRule2);
+        when(mockConstraintViolator.violateConstraint(constraint1)).thenReturn(violatedConstraint1);
+        when(mockConstraintViolator.violateConstraint(constraint2)).thenReturn(violatedConstraint2);
 
         //Act
         List<Profile> outputProfileList = (List<Profile>)(List<?>) target.violate(inputProfile);
@@ -123,16 +123,16 @@ public class ProfileViolatorTests {
         List<Profile> expectedProfileList =
             Arrays.asList(
                 new ViolatedProfile(
-                    rule1,
+                    constraint1,
                     new Fields(Arrays.asList(fooField, barField)),
-                    Arrays.asList(violatedRule1, rule2),
-                    "Input profile description -- Violating: Rule 1 description"
+                    Arrays.asList(violatedConstraint1, constraint2),
+                    "Input profile description -- Violating: `bar` > 50 and `foo` > 100"
                 ),
                 new ViolatedProfile(
-                    rule2,
+                    constraint2,
                     new Fields(Arrays.asList(fooField, barField)),
-                    Arrays.asList(rule1, violatedRule2),
-                    "Input profile description -- Violating: Rule 2 description"
+                    Arrays.asList(constraint1, violatedConstraint2),
+                    "Input profile description -- Violating: `bar` < 51 and `foo` > 100"
                 )
             );
 
@@ -146,7 +146,6 @@ public class ProfileViolatorTests {
 
     private void initRules() {
         //Rule 1 consists of 2 constraints, "foo is greater than 100" and "bar is greater than 50"
-        String ruleInformation1 = "Rule 1 description";
         fooField = createField("foo");
         barField = createField("bar");
         Constraint constraint1 = new GreaterThanConstraint(
@@ -157,7 +156,7 @@ public class ProfileViolatorTests {
             barField,
             NumberUtils.coerceToBigDecimal(50)
         );
-        rule1 = new Rule(ruleInformation1, Arrays.asList(constraint1, constraint2));
+        this.constraint1 = new AndConstraint(constraint1, constraint2);
 
         //Violated Rule 1 consists of two constraints, "foo is less than to 101" and "bar is less than 51"
         Constraint constraint3 = new LessThanConstraint(
@@ -168,10 +167,9 @@ public class ProfileViolatorTests {
             barField,
             NumberUtils.coerceToBigDecimal(51)
         );
-        violatedRule1 = new Rule(ruleInformation1, Arrays.asList(constraint3, constraint4));
+        violatedConstraint1 = new AndConstraint(constraint3, constraint4);
 
-        String ruleInformation2 = "Rule 2 description";
-        rule2 = new Rule(ruleInformation2, Arrays.asList(constraint1,constraint4));
-        violatedRule2 = new Rule(ruleInformation2, Arrays.asList(constraint2,constraint3));
+        this.constraint2 = new AndConstraint(constraint1,constraint4);
+        violatedConstraint2 = new AndConstraint(constraint2,constraint3);
     }
 }

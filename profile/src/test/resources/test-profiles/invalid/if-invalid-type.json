@@ -1,15 +1,16 @@
 {
-  "schemaVersion": "0.17",
-  "rules": [
+  "schemaVersion": "0.18",
+  "constraints": [
     {
-      "rule": "rule 1",
-      "constraints": [
-        {
-          "if": "integer",
-          "then": {"field": "foo", "greaterThan": 0},
-          "else": {"field": "foo", "equalTo": "N/A"}
-        }
-      ]
+      "if": "integer",
+      "then": {
+        "field": "foo",
+        "greaterThan": 0
+      },
+      "else": {
+        "field": "foo",
+        "equalTo": "N/A"
+      }
     }
   ],
   "fields": [

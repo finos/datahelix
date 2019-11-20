@@ -27,9 +27,9 @@ import java.util.regex.Pattern;
 
 public class RegexConstraintValidator extends AtomicConstraintValidator<RegexConstraintDTO>
 {
-    public RegexConstraintValidator(String rule, List<FieldDTO> fields)
+    public RegexConstraintValidator(List<FieldDTO> fields)
     {
-        super(rule, fields);
+        super(fields);
     }
 
     @Override

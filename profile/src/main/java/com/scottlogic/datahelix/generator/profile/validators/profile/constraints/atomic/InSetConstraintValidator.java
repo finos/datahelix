@@ -24,9 +24,9 @@ import java.util.List;
 
 public class InSetConstraintValidator extends AtomicConstraintValidator<InSetConstraintDTO>
 {
-    public InSetConstraintValidator(String rule, List<FieldDTO> fields)
+    public InSetConstraintValidator(List<FieldDTO> fields)
     {
-        super(rule, fields);
+        super(fields);
     }
 
     @Override

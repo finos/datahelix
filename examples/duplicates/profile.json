@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.17",
+  "schemaVersion": "0.18",
   "fields": [
     {
       "name": "a",
@@ -7,20 +7,16 @@
       "nullable": false
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "constraints": [
+      "anyOf": [
         {
-          "anyOf": [
-            {
-              "field": "a",
-              "equalTo": "foo"
-            },
-            {
-              "field": "a",
-              "equalTo": "foo"
-            }
-          ]
+          "field": "a",
+          "equalTo": "foo"
+        },
+        {
+          "field": "a",
+          "equalTo": "foo"
         }
       ]
     }

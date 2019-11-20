@@ -19,7 +19,7 @@ package com.scottlogic.datahelix.generator.core.decisiontree;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.core.profile.Profile;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
-import com.scottlogic.datahelix.generator.core.profile.Rule;
+import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.InSetConstraint;
 import com.scottlogic.datahelix.generator.core.fieldspecs.*;
@@ -56,7 +56,8 @@ class RowSpecTreeSolverTests {
     private final DecisionTreeFactory dTreeGenerator = new DecisionTreeFactory();
 
     @Test
-    void test() {
+    void test()
+    {
         when(dataBagSourceFactory.createDataBags(any()))
             .thenReturn(
                 Stream.of(mock(DataBag.class)),
@@ -86,61 +87,49 @@ class RowSpecTreeSolverTests {
 
         Fields fields = new Fields(Arrays.asList(country, currency, city));
 
-        List<Rule> dummyRules = Arrays.asList(
-            new Rule(
-                "US country constrains city",
-                Collections.singletonList(
-                    new ConditionalConstraint(
-                        new InSetConstraint(
-                            country,
-                            new DistributedList<>(Collections.singletonList(new WeightedElement<>("US", 1.0F)))
-                        ),
-                        new InSetConstraint(
-                            city,
-                            new DistributedList<>(new ArrayList<>(Arrays.asList(
-                                new WeightedElement<>("New York", 1.0F),
-                                new WeightedElement<>("Washington DC", 1.0F)))
-                        ))))),
-            new Rule(
-                "GB country constrains city",
-                Collections.singletonList(
-                    new ConditionalConstraint(
-                        new InSetConstraint(
-                            country,
-                            new DistributedList<>(Collections.singletonList(new WeightedElement<>("GB", 1.0F)))
-                        ),
-                        new InSetConstraint(
-                            city,
-                            new DistributedList<>(new ArrayList<>(Arrays.asList(
-                                new WeightedElement<>("Bristol", 1.0F),
-                                new WeightedElement<>("London", 1.0F)))
-                        ))))),
-            new Rule(
-                "US country constrains currency",
-                Collections.singletonList(
-                    new ConditionalConstraint(
-                        new InSetConstraint(
-                            country,
-                            new DistributedList<>(Collections.singletonList(new WeightedElement<>("US", 1.0F)))
-                        ),
-                        new InSetConstraint(
-                            currency,
-                            new DistributedList<>(Collections.singletonList(new WeightedElement<>("USD", 1.0F)))
-                        )))),
-            new Rule(
-                "GB country constrains currency",
-                Collections.singletonList(
-                    new ConditionalConstraint(
-                        new InSetConstraint(
-                            country,
-                            new DistributedList<>(Collections.singletonList(new WeightedElement<>("GB", 1.0F)))
-                        ),
-                        new InSetConstraint(
-                            currency,
-                            new DistributedList<>(Collections.singletonList(new WeightedElement<>("GBP", 1.0F)))
-                        )))));
+        List<Constraint> constraints = Arrays.asList(
+            new ConditionalConstraint(
+                new InSetConstraint(
+                    country,
+                    new DistributedList<>(Collections.singletonList(new WeightedElement<>("US", 1.0F)))
+                ),
+                new InSetConstraint(
+                    city,
+                    new DistributedList<>(new ArrayList<>(Arrays.asList(
+                        new WeightedElement<>("New York", 1.0F),
+                        new WeightedElement<>("Washington DC", 1.0F)))
+                    ))),
+            new ConditionalConstraint(
+                new InSetConstraint(
+                    country,
+                    new DistributedList<>(Collections.singletonList(new WeightedElement<>("GB", 1.0F)))
+                ),
+                new InSetConstraint(
+                    city,
+                    new DistributedList<>(new ArrayList<>(Arrays.asList(
+                        new WeightedElement<>("Bristol", 1.0F),
+                        new WeightedElement<>("London", 1.0F)))
+                    ))),
+            new ConditionalConstraint(
+                new InSetConstraint(
+                    country,
+                    new DistributedList<>(Collections.singletonList(new WeightedElement<>("US", 1.0F)))
+                ),
+                new InSetConstraint(
+                    currency,
+                    new DistributedList<>(Collections.singletonList(new WeightedElement<>("USD", 1.0F)))
+                )),
+            new ConditionalConstraint(
+                new InSetConstraint(
+                    country,
+                    new DistributedList<>(Collections.singletonList(new WeightedElement<>("GB", 1.0F)))
+                ),
+                new InSetConstraint(
+                    currency,
+                    new DistributedList<>(Collections.singletonList(new WeightedElement<>("GBP", 1.0F)))
+                )));
 
-        Profile profile = new Profile(fields, dummyRules);
+        Profile profile = new Profile(fields, constraints);
 
         final DecisionTree merged = this.dTreeGenerator.analyse(profile);
 

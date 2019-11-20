@@ -21,7 +21,7 @@ interpret the profile fields and rules. The latest version is 0.1.
         }
     ]
 ```
-- **Rules** - an array of constraints defined with a description. Constraints reduce the data in each column from the [universal set](../SetRestrictionAndGeneration.md)
+- **Constraints** - Constraints reduce the data in each column from the [universal set](../SetRestrictionAndGeneration.md)
 to the desired range of values. They are formatted as JSON objects. There are three types of constraints: 
 
     - [Predicate Constraints](../UserGuide.md#Predicate-constraints) - predicates that define any given value as being 
@@ -30,31 +30,21 @@ to the desired range of values. They are formatted as JSON objects. There are th
     - [Presentational Constraints](../UserGuide.md#Presentational-constraints) - used by output serialisers where
      string output is required 
      
-Here is a list of two rules comprised of one constraint each:
+Here is a list of two constraints:
     
 ```
-    "rules": [
-        {
-          "rule": "Column 1 is a string",
           "constraints": [
             {
               "field": "Column 1",
               "is": "ofType",
               "value": "string"
-            }
-          ]
-        },
-        {
-          "rule": "Column 2 is a number",
-          "constraints": [
+            },
             {
               "field": "Column 2",
               "is": "ofType",
               "value": "integer"
             }
           ]
-        }
-      ]
 
 ```
 

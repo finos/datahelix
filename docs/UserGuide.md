@@ -87,12 +87,12 @@ This guide outlines how to create a profile and contains information on the synt
 
 This section will walk you through creating basic profiles with which you can generate data.
 
-Profiles are JSON documents consisting of three sections, the schema version, the list of fields and the rules.
+Profiles are JSON documents consisting of three sections, the schema version, the list of fields and the constraints.
 
 - **Schema Version** - Dictates the method of serialisation of the profile in order for the generator to
-interpret the profile fields and rules. The latest version is
+interpret the profile fields and constraints. The latest version is
 ```
-    "schemaVersion": "0.17",
+    "schemaVersion": "0.18",
 ```
 - **List of Fields** - An array of column headings is defined with unique "name" keys.
 ```
@@ -105,35 +105,23 @@ interpret the profile fields and rules. The latest version is
         }
     ]
 ```
-- **Rules** - an array of constraints defined with a description. Constraints reduce the data in each column from the [universal set](user/SetRestrictionAndGeneration.md)
+- **List of Constraints** - an array of constraints that reduce the data in each column from the [universal set](user/SetRestrictionAndGeneration.md)
 to the desired range of values. They are formatted as JSON objects. There are two types of constraints:
 
     - [Predicate Constraints](#Predicate-constraints) - predicates that define any given value as being
     _valid_ or _invalid_
     - [Grammatical Constraints](#Grammatical-constraints) - used to combine or modify other constraints
 
-Here is a list of two rules comprised of one constraint each:
-
 ```
-    "rules": [
-        {
-          "rule": "Column 1 is a string",
-          "constraints": [
+    "constraints": [
             {
               "field": "Column 1",
               "equalTo": "foo"
-            }
-          ]
-        },
-        {
-          "rule": "Column 2 is a number",
-          "constraints": [
+            },
             {
               "field": "Column 2",
               "equalTo": "bar"
             }
-          ]
-        }
       ]
 
 ```
@@ -143,7 +131,7 @@ These three sections are combined to form the [complete profile](#Example-Profil
 ## Example Profile
 ```
     {
-    "schemaVersion": "0.17",
+    "schemaVersion": "0.18",
     "fields": [
         {
             "name": "Column 1",
@@ -154,17 +142,12 @@ These three sections are combined to form the [complete profile](#Example-Profil
             "type": "integer"
         }
     ],
-    "rules": [
-        {
-        "rule": "Column 1 is foo",
-        "constraints": [
+    "constraints": [
             {
             "field": "Column 1",
             "equalTo": "foo"
             }
         ]
-        }
-    ]
     }
 ```
 * For a larger profile example see [here](user/Schema.md)

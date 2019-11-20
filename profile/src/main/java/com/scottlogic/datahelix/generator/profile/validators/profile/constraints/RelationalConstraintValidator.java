@@ -27,9 +27,9 @@ import java.util.Optional;
 
 public class RelationalConstraintValidator<T extends RelationalConstraintDTO> extends ConstraintValidator<T>
 {
-    public RelationalConstraintValidator(String rule, List<FieldDTO> fields)
+    public RelationalConstraintValidator(List<FieldDTO> fields)
     {
-        super(rule, fields);
+        super(fields);
     }
 
     @Override

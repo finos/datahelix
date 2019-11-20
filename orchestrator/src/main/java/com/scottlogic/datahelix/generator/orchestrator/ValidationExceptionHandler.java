@@ -22,7 +22,7 @@ import picocli.CommandLine;
 
 import java.io.IOException;
 
-public class ValidationExceptionHandler implements CommandLine.IExecutionExceptionHandler {
+public class  ValidationExceptionHandler implements CommandLine.IExecutionExceptionHandler {
     @Override
     public int handleExecutionException(Exception ex, CommandLine commandLine, CommandLine.ParseResult parseResult) throws Exception {
         if (ex instanceof ValidationException)

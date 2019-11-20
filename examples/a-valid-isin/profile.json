@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.17",
+  "schemaVersion": "0.18",
   "fields": [
     {
       "name": "isin",
@@ -7,5 +7,5 @@
       "nullable": false
     }
   ],
-  "rules": []
+  "constraints": []
 }

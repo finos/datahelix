@@ -1,40 +1,39 @@
 {
-  "schemaVersion": "0.17",
+  "schemaVersion": "0.18",
   "fields": [
     {
       "name": "field1",
       "type": "datetime",
       "nullable": false
-    }, {
+    },
+    {
       "name": "field2",
       "type": "datetime",
       "nullable": false
-    }, {
+    },
+    {
       "name": "field3",
       "type": "datetime",
       "nullable": false
-    }, {
+    },
+    {
       "name": "field4",
       "type": "datetime",
       "nullable": false
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "constraints": [
-        {
-          "field": "field1",
-          "after": "8001-02-03T04:05:06.007"
-        },
-        {
-          "field": "field2",
-          "afterField": "field1"
-        },
-        {
-          "field": "field3",
-          "beforeOrAtField": "field4"
-        }
-      ]
+      "field": "field1",
+      "after": "8001-02-03T04:05:06.007"
+    },
+    {
+      "field": "field2",
+      "afterField": "field1"
+    },
+    {
+      "field": "field3",
+      "beforeOrAtField": "field4"
     }
   ]
 }

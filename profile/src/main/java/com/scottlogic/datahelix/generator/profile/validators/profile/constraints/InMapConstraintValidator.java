@@ -26,9 +26,9 @@ import java.util.Optional;
 
 public class InMapConstraintValidator extends ConstraintValidator<InMapConstraintDTO>
 {
-    public InMapConstraintValidator(String rule, List<FieldDTO> fields)
+    public InMapConstraintValidator(List<FieldDTO> fields)
     {
-        super(rule, fields);
+        super(fields);
     }
 
     @Override

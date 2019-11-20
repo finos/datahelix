@@ -24,9 +24,9 @@ import java.util.List;
 
 public class IsNullConstraintValidator extends AtomicConstraintValidator<IsNullConstraintDTO>
 {
-    public IsNullConstraintValidator(String rule, List<FieldDTO> fields)
+    public IsNullConstraintValidator(List<FieldDTO> fields)
     {
-        super(rule, fields);
+        super(fields);
     }
 
     @Override

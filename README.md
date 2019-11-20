@@ -33,14 +33,14 @@ For all the above reasons, it is common to handcraft sample datasets. This appro
 
 * It costs significant time up-front, and thereafter every time the schema changes.
 * It's very easy to introduce errors, especially when updating data created by others.
-* It can be difficult to determine how exhaustively the data covers valid cases, especially when complicated multi-field rules are involved.
+* It can be difficult to determine how exhaustively the data covers valid cases, especially when complicated multi-field constraints are involved.
 
 Moreover, since the schema's complexities are only loosely documented, and not directly integrated into any systems that use or create the data, there is no guard against the documentation becoming out of date and inaccurate. It would be better if the mechanism for documenting the data were also used in its generation and validation.
 
 For data generation, partial solutions are available in services/libraries such as TSimulus, Mockaroo or GenRocket. However, these have limitations:
 
 * They are limited to relatively simple data schemas, with either no cross-field dependencies or dependencies limited to pairs of fields.
-* None of them offer a complete end-to-end solution of profiling existing data to discover trends and rules, generating from those rules, and validating against them.
+* None of them offer a complete end-to-end solution of profiling existing data to discover trends and constraints, generating from those constraints, and validating against them.
 * Where they offer complicated behaviour, it's through an *imperative* style, forcing the user to design solutions using the library's toolbox. Our approach has a *declarative* style, where the user describes their data and the system decides how to deliver it. This means users don't need to have more than surface-level understanding to write profiles, opening up the scope of who can write or maintain them.
 
 ## The Mission
@@ -54,7 +54,7 @@ We aim to solve (at least) the following user needs:
 
 ## The Product
 A suite of tools:
-- That can profile data it is pointed at, including constraints and rules, or take in a profile created via a web front end/manually, which defines a users needs.
+- That can profile data it is pointed at, including constraints, or take in a profile created via a web front end/manually, which defines a users needs.
 - That can generate data from this profile via web page, CLI or Rest API interface, configured for volume and output needs.
 - That can validate the data produced back against the profile used to create it
 

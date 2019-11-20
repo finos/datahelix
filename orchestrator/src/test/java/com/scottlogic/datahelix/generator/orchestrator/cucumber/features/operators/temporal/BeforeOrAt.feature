@@ -32,7 +32,7 @@ Feature: User can specify that a datetime date is lower than, or the same as, a 
 
   Scenario: Running beforeOrAt request that includes datetime field with date and time (YYYY-MM-DDTHH:MM:SS) values that has invalid year should fail
     Given foo is before or at 0000-01-10T00:00:00.000Z
-    Then the profile is invalid with error containing "Dates must be between 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z | Field: foo | Constraint: beforeOrAt | Rule: Unnamed rule"
+    Then the profile is invalid with error containing "Dates must be between 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z | Field: foo | Constraint: beforeOrAt"
     And no data is created
 
   Scenario: Running beforeOrAt request against a non-contradicting beforeOrAt constraint should be successful

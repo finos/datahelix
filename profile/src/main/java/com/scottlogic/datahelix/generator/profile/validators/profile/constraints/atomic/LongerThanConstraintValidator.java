@@ -30,9 +30,9 @@ public class LongerThanConstraintValidator extends AtomicConstraintValidator<Lon
 {
     private final FieldType expectedFieldType;
 
-    public LongerThanConstraintValidator(String rule, List<FieldDTO> fields, FieldType expectedFieldType)
+    public LongerThanConstraintValidator(List<FieldDTO> fields, FieldType expectedFieldType)
     {
-        super(rule, fields);
+        super(fields);
         this.expectedFieldType = expectedFieldType;
     }
 

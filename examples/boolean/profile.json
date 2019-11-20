@@ -12,20 +12,16 @@
       "nullable": true
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "constraints": [
-        {
-          "field": "alwaysTrue",
-          "equalTo": true
-        },
-        {
-          "not": {
-            "field": "alwaysFalseOrNull",
-            "equalToField": "alwaysTrue"
-          }
-        }
-      ]
+      "field": "alwaysTrue",
+      "equalTo": true
+    },
+    {
+      "not": {
+        "field": "alwaysFalseOrNull",
+        "equalToField": "alwaysTrue"
+      }
     }
   ]
 }

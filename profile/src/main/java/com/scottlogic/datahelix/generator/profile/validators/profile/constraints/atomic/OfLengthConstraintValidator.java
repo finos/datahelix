@@ -30,9 +30,9 @@ public class OfLengthConstraintValidator extends AtomicConstraintValidator<OfLen
 {
     private final FieldType expectedFieldType;
 
-    public OfLengthConstraintValidator(String rule, List<FieldDTO> fields, FieldType expectedFieldType)
+    public OfLengthConstraintValidator(List<FieldDTO> fields, FieldType expectedFieldType)
     {
-        super(rule, fields);
+        super(fields);
         this.expectedFieldType = expectedFieldType;
     }
 

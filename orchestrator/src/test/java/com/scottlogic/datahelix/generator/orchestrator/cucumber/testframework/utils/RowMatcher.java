@@ -22,6 +22,7 @@ import org.hamcrest.Description;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -88,15 +89,17 @@ public class RowMatcher extends BaseMatcher<Map<String, Object>> {
                 .collect(Collectors.toList())));
     }
 
-    static Map<String, Object> formatDatesInRow(Map<String, Object> row) {
-        return row.keySet().stream().collect(Collectors.toMap(key -> key, key -> formatDate(row.get(key))));
+    static Map<String, Object> formatDatesInRow(Map<String, Object> row)
+    {
+       Map<String, Object> formatted =  new HashMap<>();
+       row.forEach((key, value) -> formatted.put(key, formatDate(value)));
+       return formatted;
     }
 
     private static Object formatDate(Object value){
         if (value instanceof OffsetDateTime){
             return ((OffsetDateTime) value).format(dateTimeFormat);
         }
-
         return value;
     }
 }

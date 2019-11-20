@@ -24,9 +24,9 @@ import java.util.List;
 
 public class AnyOfConstraintValidator  extends GrammaticalConstraintValidator<AnyOfConstraintDTO>
 {
-    public AnyOfConstraintValidator(String rule, List<FieldDTO> fields)
+    public AnyOfConstraintValidator(List<FieldDTO> fields)
     {
-        super(rule, fields);
+        super(fields);
     }
 
     @Override

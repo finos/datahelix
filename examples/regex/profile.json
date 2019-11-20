@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.17",
+  "schemaVersion": "0.18",
   "fields": [
     {
       "name": "first_name",
@@ -7,14 +7,10 @@
       "nullable": false
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "constraints": [
-        {
-          "field": "first_name",
-          "matchingRegex": "(Joh?n|Mar[yk])"
-        }
-      ]
+      "field": "first_name",
+      "matchingRegex": "(Joh?n|Mar[yk])"
     }
   ]
 }

@@ -40,9 +40,9 @@ We'll start by generating data for a trivial schema. Using your favourite text e
 
 ```json
 {
-    "schemaVersion": "0.17",
+    "schemaVersion": "0.18",
     "fields": [{ "name": "firstName", "type": "string" }],
-    "rules": []
+    "constraints": []
 }
 ```
 ### Profile Validation
@@ -111,19 +111,9 @@ Update the JSON profile as follows:
 
 ```json
 {
-    "schemaVersion": "0.17",
+    "schemaVersion": "0.18",
     "fields": [{ "name": "firstName", "type": "string" }],
-    "rules": [
-        {
-            "rule": "first name constraints",
-            "constraints": [
-                {
-                    "field": "firstName",
-                    "matchingRegex": "[a-z]{1,10}"
-                }
-            ]
-        }
-    ]
+    "constraints": [{ "field": "firstName", "matchingRegex": "[a-z]{1,10}" }]
 }
 ```
 
@@ -183,28 +173,17 @@ We'll expand the example profile to add a new `age` field, a not-null integer in
 
 ```json
 {
-    "schemaVersion": "0.17",
+    "schemaVersion": "0.18",
     "fields": [
         { "name": "firstName", "type": "string" },
         { "name": "age", "type": "integer"  }
     ],
-    "rules": [
-        {
-            "constraints": [
+    "constraints": [
                 { "not": { "field": "firstName", "is": "null" } },
-                {
-                    "field": "firstName",
-                    "matchingRegex": "(Joh?n|Mar[yk])"
-                }
-            ]
-        },
-        {
-            "constraints": [
+                {  "field": "firstName", "matchingRegex": "(Joh?n|Mar[yk])" }
                 { "field": "age", "greaterThan": 0 },
                 { "field": "age", "lessThan": 100 },
                 { "not": { "field": "age", "is": "null" } }
-            ]
-        }
     ]
 }
 ```
@@ -230,34 +209,21 @@ Finally, we'll add a field for National Insurance number. In this case, the cons
 
 ```json
 {
-    "schemaVersion": "0.17",
+    "schemaVersion": "0.18",
     "fields": [
         { "name": "firstName", "type": "string" },
         { "name": "age", "type": "integer"  },
         { "name": "nationalInsurance", "type": "string"  }
     ],
-    "rules": [
-        {
-            "rule": "first name",
-            "constraints": [
+    "constraints": [
                 { "not": { "field": "firstName", "is": "null" } },
                 {
                     "field": "firstName",
                     "matchingRegex": "(Joh?n|Mar[yk])"
-                }
-            ]
-        },
-        {
-            "rule": "age",
-            "constraints": [
+                },
                 { "field": "age", "greaterThan": 0 },
                 { "field": "age", "lessThan": 100 },
-                { "not": { "field": "age", "is": "null" } }
-            ]
-        },
-        {
-            "rule": "national insurance",
-            "constraints": [
+                { "not": { "field": "age", "is": "null" } },
                 {
                     "if": {
                         "field": "age",
@@ -282,8 +248,6 @@ Finally, we'll add a field for National Insurance number. In this case, the cons
                         "is": "null"
                     }
                 }
-            ]
-        }
     ]
 }
 ```

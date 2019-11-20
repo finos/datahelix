@@ -8,26 +8,16 @@
       "name": "Column 2"
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "rule": "Column 1 is a string",
-      "constraints": [
-        {
-          "field": "Column 1",
-          "is": "ofType",
-          "value": "string"
-        }
-      ]
+      "field": "Column 1",
+      "is": "ofType",
+      "value": "string"
     },
     {
-      "rule": "Column 2 is a number",
-      "constraints": [
-        {
-          "field": "Column 2",
-          "is": "ofType",
-          "value": "integer"
-        }
-      ]
+      "field": "Column 2",
+      "is": "ofType",
+      "value": "integer"
     }
   ]
 }
