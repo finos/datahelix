@@ -1,15 +1,10 @@
 {
   "schemaVersion": "0.18",
-  "rules": [
+  "constraints": [
     {
-      "rule": "rule 1",
-      "constraints": [
-        {
-          "field": "field1",
-          "is": "null",
-          "value": "error"
-        }
-      ]
+      "field": "field1",
+      "is": "null",
+      "value": "error"
     }
   ],
   "fields": [

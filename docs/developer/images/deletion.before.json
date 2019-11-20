@@ -5,7 +5,7 @@
 		{ "name": "x" },
 		{ "name": "y" }
     ],
-    "rules": [
+    "constraints": [
 		{ "field": "x", "equalTo": 3 },
 		
 		{

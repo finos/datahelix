@@ -1,15 +1,20 @@
 {
   "schemaVersion": "0.18",
-  "rules": [
+  "constraints": [
     {
-      "rule": "rule 1",
-      "constraints": [
-        {
-          "if": {"field": "foo", "is": "ofType", "value": "integer"},
-          "gthen": {"field": "foo", "greaterThan": 0},
-          "else": {"field": "foo", "equalTo": "N/A"}
-        }
-      ]
+      "if": {
+        "field": "foo",
+        "is": "ofType",
+        "value": "integer"
+      },
+      "gthen": {
+        "field": "foo",
+        "greaterThan": 0
+      },
+      "else": {
+        "field": "foo",
+        "equalTo": "N/A"
+      }
     }
   ],
   "fields": [

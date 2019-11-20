@@ -1,15 +1,10 @@
 {
   "schemaVersion": "0.18",
-  "rules": [
+  "constraints": [
     {
-      "rule": "rule 1",
-      "constraints": [
-        {
-          "field": "field1",
-          "is": "notbefore",
-          "value": "2000-01-01T09:00:00.000"
-        }
-      ]
+      "field": "field1",
+      "is": "notbefore",
+      "value": "2000-01-01T09:00:00.000"
     }
   ],
   "fields": [

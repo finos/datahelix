@@ -5,16 +5,12 @@
       "name": "field1"
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "constraints": [
-        {
-          "not": {
-            "field": "field1",
-            "containingRegex": "0001-01-01T09:00:00.000"
-          }
-        }
-      ]
+      "not": {
+        "field": "field1",
+        "containingRegex": "0001-01-01T09:00:00.000"
+      }
     }
   ]
 }

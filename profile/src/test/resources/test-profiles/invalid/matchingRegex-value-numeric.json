@@ -5,14 +5,10 @@
       "name": "field1"
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "constraints": [
-        {
-          "field": "field1",
-          "matchingRegex": 4
-        }
-      ]
+      "field": "field1",
+      "matchingRegex": 4
     }
   ]
 }

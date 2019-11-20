@@ -1,14 +1,9 @@
 {
   "schemaVersion": "0.18",
-  "rules": [
+  "constraints": [
     {
-      "rule": "rule 1",
-      "constraints": [
-        {
-          "afield": "field1",
-          "shorterThan": 19
-        }
-      ]
+      "afield": "field1",
+      "shorterThan": 19
     }
   ],
   "fields": [

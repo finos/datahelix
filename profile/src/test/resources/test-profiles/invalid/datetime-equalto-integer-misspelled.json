@@ -1,15 +1,10 @@
 {
   "schemaVersion": "0.18",
-  "rules": [
+  "constraints": [
     {
-      "rule": "rule 1",
-      "constraints": [
-        {
-          "field": "field1",
-          "is": "notequalTo",
-          "value": 43
-        }
-      ]
+      "field": "field1",
+      "is": "notequalTo",
+      "value": 43
     }
   ],
   "fields": [

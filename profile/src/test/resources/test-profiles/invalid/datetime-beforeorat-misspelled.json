@@ -1,15 +1,10 @@
 {
   "schemaVersion": "0.18",
-  "rules": [
+  "constraints": [
     {
-      "rule": "rule 1",
-      "constraints": [
-        {
-          "field": "field1",
-          "is": "notbeforeOrAt",
-          "value": "0001-01-01T09:00:00.000"
-        }
-      ]
+      "field": "field1",
+      "is": "notbeforeOrAt",
+      "value": "0001-01-01T09:00:00.000"
     }
   ],
   "fields": [

@@ -1,13 +1,9 @@
 {
   "schemaVersion": "0.100",
-  "rules": [
+  "constraints": [
     {
-      "constraints": [
-        {
-          "field": "field1",
-          "equalTo": "hello"
-        }
-      ]
+      "field": "field1",
+      "equalTo": "hello"
     }
   ],
   "fields": [

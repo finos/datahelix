@@ -6,7 +6,7 @@
 		{ "name": "x" },
 		{ "name": "y" }
     ],
-    "rules": [
+    "constraints": [
 		{
 			"if": { "field": "type", "equalTo": "a" },
 			"then": { "allOf": [
