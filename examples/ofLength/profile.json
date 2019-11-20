@@ -1,20 +1,16 @@
 {
-  "schemaVersion": "0.17",
+  "schemaVersion": "0.18",
   "fields": [
     {
-        "name": "ten",
-        "type": "string",
-        "nullable": false
+      "name": "ten",
+      "type": "string",
+      "nullable": false
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "constraints": [
-        {
-          "field": "ten",
-          "ofLength": "10"
-        }
-      ]
+      "field": "ten",
+      "ofLength": "10"
     }
   ]
 }

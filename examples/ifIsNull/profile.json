@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.17",
+  "schemaVersion": "0.18",
   "fields": [
     {
       "name": "allergies_flag",
@@ -12,36 +12,32 @@
       "nullable": true
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "constraints": [
-        {
-          "if": {
-            "field": "allergies_flag",
-            "equalTo": true
-          },
-          "then": {
-            "allOf": [
-              {
-                "field": "allergies",
-                "inSet": [
-                  "dogs",
-                  "peanuts",
-                  "shellfish"
-                ]
-              },
-              {
-                "field": "allergies",
-                "isNull": false
-              }
+      "if": {
+        "field": "allergies_flag",
+        "equalTo": true
+      },
+      "then": {
+        "allOf": [
+          {
+            "field": "allergies",
+            "inSet": [
+              "dogs",
+              "peanuts",
+              "shellfish"
             ]
           },
-          "else": {
+          {
             "field": "allergies",
-            "isNull": true
+            "isNull": false
           }
-        }
-      ]
+        ]
+      },
+      "else": {
+        "field": "allergies",
+        "isNull": true
+      }
     }
   ]
 }

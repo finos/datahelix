@@ -1,21 +1,16 @@
 {
-    "schemaVersion": "0.17",
-    "fields": [
-        {
-            "name": "morning",
-            "type": "time",
-            "nullable": false
-        }
-    ],
-    "rules": [
-        {
-            "constraints": [
-                {
-                    "field": "morning",
-                    "before": "12:00:00"
-
-                }
-            ]
-        }
-    ]
+  "schemaVersion": "0.18",
+  "fields": [
+    {
+      "name": "morning",
+      "type": "time",
+      "nullable": false
+    }
+  ],
+  "constraints": [
+    {
+      "field": "morning",
+      "before": "12:00:00"
+    }
+  ]
 }

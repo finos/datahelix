@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.17",
+  "schemaVersion": "0.18",
   "fields": [
     {
       "name": "randomInteger",
@@ -12,16 +12,11 @@
       "nullable": false
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "constraints": [
-
-        {
-          "field": "oneGreater",
-          "equalToField": "randomInteger",
-          "offset": 1
-        }
-      ]
+      "field": "oneGreater",
+      "equalToField": "randomInteger",
+      "offset": 1
     }
   ]
 }

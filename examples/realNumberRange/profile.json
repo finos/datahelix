@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.17",
+  "schemaVersion": "0.18",
   "fields": [
     {
       "name": "decimal",
@@ -12,30 +12,26 @@
       "nullable": false
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "constraints": [
-        {
-          "field": "decimal",
-          "granularTo": 0.01
-        },
-        {
-          "field": "decimal",
-          "greaterThanOrEqualTo": 0.5
-        },
-        {
-          "field": "decimal",
-          "lessThan": 5
-        },
-        {
-          "field": "integer",
-          "greaterThan": 0
-        },
-        {
-          "field": "integer",
-          "lessThanOrEqualTo": 200
-        }
-      ]
+      "field": "decimal",
+      "granularTo": 0.01
+    },
+    {
+      "field": "decimal",
+      "greaterThanOrEqualTo": 0.5
+    },
+    {
+      "field": "decimal",
+      "lessThan": 5
+    },
+    {
+      "field": "integer",
+      "greaterThan": 0
+    },
+    {
+      "field": "integer",
+      "lessThanOrEqualTo": 200
     }
   ]
 }

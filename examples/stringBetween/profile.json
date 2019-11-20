@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.17",
+  "schemaVersion": "0.18",
   "fields": [
     {
       "name": "password",
@@ -7,18 +7,14 @@
       "nullable": false
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "constraints": [
-        {
-          "field": "password",
-          "shorterThan": 21
-        },
-        {
-          "field": "password",
-          "longerThan": 6
-        }
-      ]
+      "field": "password",
+      "shorterThan": 21
+    },
+    {
+      "field": "password",
+      "longerThan": 6
     }
   ]
 }

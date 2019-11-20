@@ -1,36 +1,35 @@
 {
-  "schemaVersion": "0.17",
+  "schemaVersion": "0.18",
   "fields": [
     {
       "name": "field1",
       "type": "integer",
       "nullable": false
-    }, {
+    },
+    {
       "name": "field2",
       "type": "integer",
       "nullable": false
-    }, {
+    },
+    {
       "name": "field3",
       "type": "integer",
       "nullable": false
-    }, {
+    },
+    {
       "name": "field4",
       "type": "integer",
       "nullable": false
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "constraints": [
-        {
-          "field": "field1",
-          "greaterThanOrEqualToField": "field2"
-        },
-        {
-          "field": "field3",
-          "lessThanField": "field4"
-        }
-      ]
+      "field": "field1",
+      "greaterThanOrEqualToField": "field2"
+    },
+    {
+      "field": "field3",
+      "lessThanField": "field4"
     }
   ]
 }

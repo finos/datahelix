@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.17",
+  "schemaVersion": "0.18",
   "fields": [
     {
       "name": "country",
@@ -12,20 +12,16 @@
       "nullable": false
     }
   ],
-  "rules": [
+  "constraints": [
     {
-      "constraints": [
-        {
-          "field": "country",
-          "inMap": "countries.csv",
-          "key": "Country"
-        },
-        {
-          "field": "capital",
-          "inMap": "countries.csv",
-          "key": "Capital"
-        }
-      ]
+      "field": "country",
+      "inMap": "countries.csv",
+      "key": "Country"
+    },
+    {
+      "field": "capital",
+      "inMap": "countries.csv",
+      "key": "Capital"
     }
   ]
 }
