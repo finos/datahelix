@@ -2,8 +2,13 @@
   "schemaVersion": "0.17",
   "fields": [
     {
-      "name": "a_number",
+      "name": "decimal",
       "type": "decimal",
+      "nullable": false
+    },
+    {
+      "name": "integer",
+      "type": "integer",
       "nullable": false
     }
   ],
@@ -11,16 +16,24 @@
     {
       "constraints": [
         {
-          "field": "a_number",
+          "field": "decimal",
           "granularTo": 0.01
         },
         {
-          "field": "a_number",
-          "greaterThanOrEqualTo": 1
+          "field": "decimal",
+          "greaterThanOrEqualTo": 0.5
         },
         {
-          "field": "a_number",
-          "lessThanOrEqualTo": 4
+          "field": "decimal",
+          "lessThan": 5
+        },
+        {
+          "field": "integer",
+          "greaterThan": 0
+        },
+        {
+          "field": "integer",
+          "lessThanOrEqualTo": 200
         }
       ]
     }

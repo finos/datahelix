@@ -1,5 +1,12 @@
 {
   "schemaVersion": "0.17",
+  "fields": [
+    {
+      "name": "field1",
+      "type": "string",
+      "nullable": false
+    }
+  ],
   "rules": [
     {
       "rule": "rule 1",
@@ -17,13 +24,6 @@
           ]
         }
       ]
-    }
-  ],
-  "fields": [
-    {
-      "name": "field1",
-      "type": "string",
-      "nullable": false
     }
   ]
 }

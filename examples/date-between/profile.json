@@ -12,7 +12,11 @@
       "constraints": [
         {
           "field": "date",
-          "after": "2001-02-03"
+          "afterOrAt": "2001-02-03"
+        },
+        {
+          "field": "date",
+          "beforeOrAt": "2009-01-06"
         }
       ]
     }

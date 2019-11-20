@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "0.17",
+  "fields": [
+    {
+      "name": "field1",
+      "type": "datetime",
+      "nullable": false
+    }, {
+      "name": "field2",
+      "type": "datetime",
+      "nullable": false
+    }, {
+      "name": "field3",
+      "type": "datetime",
+      "nullable": false
+    }, {
+      "name": "field4",
+      "type": "datetime",
+      "nullable": false
+    }
+  ],
+  "rules": [
+    {
+      "constraints": [
+        {
+          "field": "field1",
+          "afterField": "field2"
+        },
+        {
+          "field": "field3",
+          "beforeOrAtField": "field4"
+        }
+      ]
+    }
+  ]
+}

@@ -2,17 +2,17 @@
   "schemaVersion": "0.17",
   "fields": [
     {
-      "name": "first_name",
-      "type": "string",
-      "nullable": false
+        "name": "ten",
+        "type": "string",
+        "nullable": false
     }
   ],
   "rules": [
     {
       "constraints": [
         {
-          "field": "first_name",
-          "shorterThan": 200
+          "field": "ten",
+          "ofLength": "10"
         }
       ]
     }

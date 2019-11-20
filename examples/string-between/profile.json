@@ -2,8 +2,8 @@
   "schemaVersion": "0.17",
   "fields": [
     {
-      "name": "date",
-      "type": "datetime",
+      "name": "password",
+      "type": "string",
       "nullable": false
     }
   ],
@@ -11,12 +11,12 @@
     {
       "constraints": [
         {
-          "field": "date",
-          "after": "2808-09-04"
+          "field": "password",
+          "shorterThan": 21
         },
         {
-          "field": "date",
-          "granularTo": "days"
+          "field": "password",
+          "longerThan": 6
         }
       ]
     }

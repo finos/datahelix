@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "0.17",
+  "fields": [
+    {
+      "name": "country",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "capital",
+      "type": "string",
+      "nullable": false
+    }
+  ],
+  "rules": [
+    {
+      "constraints": [
+        {
+          "field": "country",
+          "inMap": "countries.csv",
+          "key": "Country"
+        },
+        {
+          "field": "capital",
+          "inMap": "countries.csv",
+          "key": "Capital"
+        }
+      ]
+    }
+  ]
+}
