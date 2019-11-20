@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.18",
+  "fields": [
+    {
+      "name": "decimal",
+      "type": "decimal",
+      "nullable": false
+    },
+    {
+      "name": "integer",
+      "type": "integer",
+      "nullable": false
+    }
+  ],
+  "constraints": [
+    {
+      "field": "decimal",
+      "granularTo": 0.01
+    },
+    {
+      "field": "decimal",
+      "greaterThanOrEqualTo": 0.5
+    },
+    {
+      "field": "decimal",
+      "lessThan": 5
+    },
+    {
+      "field": "integer",
+      "greaterThan": 0
+    },
+    {
+      "field": "integer",
+      "lessThanOrEqualTo": 200
+    }
+  ]
+}

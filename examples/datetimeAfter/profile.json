@@ -3,14 +3,18 @@
   "fields": [
     {
       "name": "date",
-      "type": "date",
+      "type": "datetime",
       "nullable": false
     }
   ],
   "constraints": [
     {
       "field": "date",
-      "after": "2001-02-03"
+      "after": "2808-09-04"
+    },
+    {
+      "field": "date",
+      "granularTo": "days"
     }
   ]
 }

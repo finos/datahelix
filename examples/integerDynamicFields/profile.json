@@ -3,37 +3,33 @@
   "fields": [
     {
       "name": "field1",
-      "type": "datetime",
+      "type": "integer",
       "nullable": false
     },
     {
       "name": "field2",
-      "type": "datetime",
+      "type": "integer",
       "nullable": false
     },
     {
       "name": "field3",
-      "type": "datetime",
+      "type": "integer",
       "nullable": false
     },
     {
       "name": "field4",
-      "type": "datetime",
+      "type": "integer",
       "nullable": false
     }
   ],
   "constraints": [
     {
       "field": "field1",
-      "after": "8001-02-03T04:05:06.007"
-    },
-    {
-      "field": "field2",
-      "afterField": "field1"
+      "greaterThanOrEqualToField": "field2"
     },
     {
       "field": "field3",
-      "beforeOrAtField": "field4"
+      "lessThanField": "field4"
     }
   ]
 }

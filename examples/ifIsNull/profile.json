@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "0.18",
+  "fields": [
+    {
+      "name": "allergies_flag",
+      "type": "boolean",
+      "nullable": false
+    },
+    {
+      "name": "allergies",
+      "type": "string",
+      "nullable": true
+    }
+  ],
+  "constraints": [
+    {
+      "if": {
+        "field": "allergies_flag",
+        "equalTo": true
+      },
+      "then": {
+        "allOf": [
+          {
+            "field": "allergies",
+            "inSet": [
+              "dogs",
+              "peanuts",
+              "shellfish"
+            ]
+          },
+          {
+            "field": "allergies",
+            "isNull": false
+          }
+        ]
+      },
+      "else": {
+        "field": "allergies",
+        "isNull": true
+      }
+    }
+  ]
+}

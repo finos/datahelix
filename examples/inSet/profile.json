@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "0.18",
+  "fields": [
+    {
+      "name": "weekdays",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "vegetables",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "discount",
+      "type": "decimal",
+      "nullable": true
+    }
+  ],
+  "constraints": [
+    {
+      "field": "weekdays",
+      "inSet": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday"
+      ]
+    },
+    {
+      "field": "vegetables",
+      "inSet": "vegetables.csv"
+    },
+    {
+      "field": "discount",
+      "inSet": "reductions.csv"
+    }
+  ]
+}

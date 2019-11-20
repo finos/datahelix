@@ -2,15 +2,15 @@
   "schemaVersion": "0.18",
   "fields": [
     {
-      "name": "first_name",
-      "type": "string",
+      "name": "morning",
+      "type": "time",
       "nullable": false
     }
   ],
   "constraints": [
     {
-      "field": "first_name",
-      "shorterThan": 200
+      "field": "morning",
+      "before": "12:00:00"
     }
   ]
 }

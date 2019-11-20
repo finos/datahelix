@@ -144,6 +144,6 @@ Feature: User can specify that a field is of a specific type (string, integer, d
     And foo has type "string"
     And the generation strategy is random
     And the generator can generate at most 20 rows
-    Then foo contains strings of length between 1 and 1000 inclusively
+    Then foo contains strings of length between 0 and 1000 inclusively
 
 

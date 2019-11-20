@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "0.18",
+  "fields": [
+    {
+      "name": "ten",
+      "type": "string",
+      "nullable": false
+    }
+  ],
+  "constraints": [
+    {
+      "field": "ten",
+      "ofLength": "10"
+    }
+  ]
+}

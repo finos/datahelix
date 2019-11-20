@@ -3,14 +3,18 @@
   "fields": [
     {
       "name": "date",
-      "type": "datetime",
+      "type": "date",
       "nullable": false
     }
   ],
   "constraints": [
     {
       "field": "date",
-      "after": "8001-02-03T04:05:06.007"
+      "afterOrAt": "2001-02-03"
+    },
+    {
+      "field": "date",
+      "beforeOrAt": "2009-01-06"
     }
   ]
 }

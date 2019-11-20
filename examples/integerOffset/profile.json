@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "0.18",
+  "fields": [
+    {
+      "name": "randomInteger",
+      "type": "integer",
+      "nullable": false
+    },
+    {
+      "name": "oneGreater",
+      "type": "integer",
+      "nullable": false
+    }
+  ],
+  "constraints": [
+    {
+      "field": "oneGreater",
+      "equalToField": "randomInteger",
+      "offset": 1
+    }
+  ]
+}

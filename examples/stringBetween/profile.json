@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "0.18",
+  "fields": [
+    {
+      "name": "password",
+      "type": "string",
+      "nullable": false
+    }
+  ],
+  "constraints": [
+    {
+      "field": "password",
+      "shorterThan": 21
+    },
+    {
+      "field": "password",
+      "longerThan": 6
+    }
+  ]
+}
