@@ -345,7 +345,7 @@ The [grammatical `not` constraint](#Grammatical-Constraints) inverts a constrain
 
 <div id="predicate-equalto"></div>
 
-### [`equalTo`](https://github.com/finos/datahelix/tree/master/examples/datetime-equal-to) _(field, value)_  
+### [`equalTo`](https://github.com/finos/datahelix/tree/master/examples/datetimeEqualTo) _(field, value)_  
 
 ```javascript
 { "field": "type", "equalTo": "X_092" }
@@ -435,7 +435,7 @@ Scotland, Edinburgh
 ```
 <div id="predicate-null"></div>
 
-### [`null`](https://github.com/finos/datahelix/tree/master/examples/isNull-if) _(field)_
+### [`null`](https://github.com/finos/datahelix/tree/master/examples/ifIsNull) _(field)_
 
 ```javascript
 { "field": "price", "isNull" : true }
@@ -448,7 +448,7 @@ Is satisfied if `field` is null or absent.
 
 <div id="predicate-matchingregex"></div>
 
-### [`matchingRegex`](https://github.com/finos/datahelix/tree/master/examples/user-account) _(field, value)_
+### [`matchingRegex`](https://github.com/finos/datahelix/tree/master/examples/userAccount) _(field, value)_
 
 ```javascript
 { "field": "name", "matchingRegex": "[a-z]{0, 10}" }
@@ -486,7 +486,7 @@ Is satisfied if `field` is a string whose length exactly matches `value`, must b
 
 <div id="predicate-longerthan"></div>
 
-### [`longerThan`](https://github.com/finos/datahelix/tree/master/examples/string-between) _(field, value)_
+### [`longerThan`](https://github.com/finos/datahelix/tree/master/examples/stringBetween) _(field, value)_
 
 ```javascript
 { "field": "name", "longerThan": 3 }
@@ -496,7 +496,7 @@ Is satisfied if `field` is a string with length greater than `value`, must be a 
 
 <div id="predicate-shorterthan"></div>
 
-### [`shorterThan`](https://github.com/finos/datahelix/tree/master/examples/string-between) _(field, value)_
+### [`shorterThan`](https://github.com/finos/datahelix/tree/master/examples/stringBetween) _(field, value)_
 
 ```javascript
 { "field": "name", "shorterThan": 3 }
@@ -508,7 +508,7 @@ Is satisfied if `field` is a string with length less than `value`, must be a who
 
 <div id="predicate-greaterthan"></div>
 
-### [`greaterThan`](https://github.com/finos/datahelix/tree/master/examples/real-number-range) _(field, value)_
+### [`greaterThan`](https://github.com/finos/datahelix/tree/master/examples/realNumberRange) _(field, value)_
 
 ```javascript
 { "field": "price", "greaterThan": 0 }
@@ -518,7 +518,7 @@ Is satisfied if `field` is a number greater than `value`.
 
 <div id="predicate-greaterthanorequalto"></div>
 
-### [`greaterThanOrEqualTo`](https://github.com/finos/datahelix/tree/master/examples/real-number-range) _(field, value)_
+### [`greaterThanOrEqualTo`](https://github.com/finos/datahelix/tree/master/examples/realNumberRange) _(field, value)_
 
 ```javascript
 { "field": "price", "greaterThanOrEqualTo": 0 }
@@ -528,7 +528,7 @@ Is satisfied if `field` is a number greater than or equal to `value`.
 
 <div id="predicate-lessthan"></div>
 
-### [`lessThan`](https://github.com/finos/datahelix/tree/master/examples/real-number-range) _(field, value)_
+### [`lessThan`](https://github.com/finos/datahelix/tree/master/examples/realNumberRange) _(field, value)_
 
 ```javascript
 { "field": "price", "lessThan": 0 }
@@ -538,7 +538,7 @@ Is satisfied if `field` is a number less than `value`.
 
 <div id="predicate-lessthanorequalto"></div>
 
-### [`lessThanOrEqualTo`](https://github.com/finos/datahelix/tree/master/examples/real-number-range) _(field, value)_
+### [`lessThanOrEqualTo`](https://github.com/finos/datahelix/tree/master/examples/realNumberRange) _(field, value)_
 
 ```javascript
 { "field": "price", "lessThanOrEqualTo": 0 }
@@ -548,13 +548,13 @@ Is satisfied if `field` is a number less than or equal to `value`.
 
 <div id="predicate-granularto"></div>
 
-### [`granularTo`](https://github.com/finos/datahelix/tree/master/examples/real-number-range) _(field, value)_
+### [`granularTo`](https://github.com/finos/datahelix/tree/master/examples/realNumberRange) _(field, value)_
 
 ```javascript
 { "field": "price", "granularTo": 0.1 }
 ```
 
-Is satisfied if `field` has at least the [granularity](#Numeric-granularity) specified in `value`.
+Is satisfied if `field` has at least the [granularity](#NumericGranularity) specified in `value`.
 
 ## Time/DateTime constraints
 
@@ -562,7 +562,7 @@ The time and datetime are shared but must be used with the same type. For exampl
 
 <div id="predicate-after"></div>
 
-### [`after`](https://github.com/finos/datahelix/tree/master/examples/datetime-after) _(field, value)_
+### [`after`](https://github.com/finos/datahelix/tree/master/examples/datetimeAfter) _(field, value)_
 
 ```javascript
 { "field": "date", "after": "2018-09-01T00:00:00.000" }
@@ -572,7 +572,7 @@ Is satisfied if `field` is a time or datetime occurring after `value`.
 
 <div id="predicate-afterorat"></div>
 
-### [`afterOrAt`](https://github.com/finos/datahelix/tree/master/examples/date-between) _(field, value)_
+### [`afterOrAt`](https://github.com/finos/datahelix/tree/master/examples/dateBetween) _(field, value)_
 
 ```javascript
 { "field": "time", "afterOrAt": "00:00:00" }
@@ -582,7 +582,7 @@ Is satisfied if `field` is a time or datetime occurring after or simultaneously 
 
 <div id="predicate-before"></div>
 
-### [`before`](https://github.com/finos/datahelix/tree/master/examples/time-before) _(field, value)_
+### [`before`](https://github.com/finos/datahelix/tree/master/examples/timeBefore) _(field, value)_
 
 ```javascript
 { "field": "date", "before": "2018-09-01T00:00:00.000" }
@@ -592,7 +592,7 @@ Is satisfied if `field` is a time or datetime occurring before `value`.
 
 <div id="predicate-beforeorat"></div>
 
-### [`beforeOrAt`](https://github.com/finos/datahelix/tree/master/examples/date-between) _(field, value)_
+### [`beforeOrAt`](https://github.com/finos/datahelix/tree/master/examples/dateBetween) _(field, value)_
 
 ```javascript
 { "field": "date", "beforeOrAt": "2018-09-01T00:00:00.000" }
@@ -602,7 +602,7 @@ Is satisfied if `field` is a time or datetime occurring before or simultaneously
 
 <div id="predicate-granularto-datetime"></div>
 
-### [`granularTo`](https://github.com/finos/datahelix/tree/master/examples/datetime-after) _(field, value)_
+### [`granularTo`](https://github.com/finos/datahelix/tree/master/examples/datetimeAfter) _(field, value)_
 
 ```javascript
 { "field": "date", "granularTo": "days" }
@@ -616,7 +616,7 @@ Is satisfied if `field` has at least the [granularity](#DateTime-granularity) sp
 
 <div id="predicate-otherfield"></div>
 
-### [`afterField`, `afterOrAtField`, `beforeField`, `beforeOrAtField`](https://github.com/finos/datahelix/tree/master/examples/datetime-dynamic-fields)
+### [`afterField`, `afterOrAtField`, `beforeField`, `beforeOrAtField`](https://github.com/finos/datahelix/tree/master/examples/datetimeDynamicFields)
 
 allows a time/datetime field to be dependent on the output of another time/datetime field.
 
@@ -627,14 +627,14 @@ allows a time/datetime field to be dependent on the output of another time/datet
 
 <div id="predicate-offset"></div>
 
-###[`greaterThanField`, `greaterThanOrEqualToField`, `lessThan`, `lessThanOrEqualToField`](https://github.com/finos/datahelix/tree/master/Examples/integer-dynamic-fields)
+###[`greaterThanField`, `greaterThanOrEqualToField`, `lessThan`, `lessThanOrEqualToField`](https://github.com/finos/datahelix/tree/master/Examples/integerDynamicFields)
 
 allows a numeric field to be dependent on the output of another numeric field.
 ```javascript
 { "field": "laterNumericField", "greaterThanField": "previousNumericField" }
 ```
 
-### [`offset`](https://github.com/finos/datahelix/tree/master/examples/integer-offset)
+### [`offset`](https://github.com/finos/datahelix/tree/master/examples/integerOffset)
 Allows a dependent time/datetime/numeric field to always be a certain offset away from another time/datetime/numeric field.
 
 The syntax is slightly different depending on the type.
@@ -651,7 +651,7 @@ The syntax is slightly different depending on the type.
 ```
 
 Note that offsetUnit can be any of the [granularites](#DateTime-granularity) supported by datahelix.
-Additionally in the case that the field is a datetime then the `working days` offsetUnit can be used to specify an offset of working days. A profile showing this can be found [here](https://github.com/finos/datahelix/tree/master/examples/datetime-equal-to-dynamic-offset).
+Additionally in the case that the field is a datetime then the `working days` offsetUnit can be used to specify an offset of working days. A profile showing this can be found [here](https://github.com/finos/datahelix/tree/master/examples/datetimeEqualToDynamicOffset).
 
 
 # Grammatical constraints
@@ -661,7 +661,7 @@ Additionally in the case that the field is a datetime then the `working days` of
 
 See [set restriction and generation](user/SetRestrictionAndGeneration.md) for an in depth explanation of how the constraints are merged and data generated from them.
 
-## [`not`](https://github.com/finos/datahelix/tree/master/examples/integer-range-with-blacklist)
+## [`not`](https://github.com/finos/datahelix/tree/master/examples/integerRangeWithBlacklist)
 
 ```javascript
 { "not": { "field": "foo", "equalTo": "bar" } }
@@ -680,7 +680,7 @@ Wraps a constraint. Is satisfied if, and only if, its inner constraint is _not_ 
 
 Contains a number of sub-constraints. Is satisfied if any of the inner constraints are satisfied.
 
-## [`allOf`](https://github.com/finos/datahelix/tree/master/examples/isNull-if)
+## [`allOf`](https://github.com/finos/datahelix/tree/master/examples/ifIsNull)
 
 ```javascript
 { "allOf": [
@@ -691,7 +691,7 @@ Contains a number of sub-constraints. Is satisfied if any of the inner constrain
 
 Contains a number of sub-constraints. Is satisfied if all of the inner constraints are satisfied.
 
-## [`if`](https://github.com/finos/datahelix/tree/master/examples/isNull-if)
+## [`if`](https://github.com/finos/datahelix/tree/master/examples/ifIsNull)
 
 ```javascript
 {
@@ -847,7 +847,7 @@ Examples:
 <div id="Combination-Strategies"></div>
 There are a few different combination strategies which can be used in **full sequential mode** with minimal being the default. In modes other than full sequential, combination strategy will have no effect.
 
-It is simplest to see how the different combination strategies work by look at the effect on a simple example profile. The following [profile](https://github.com/finos/datahelix/tree/master/examples/multiple-fields/profile.json) contains two fields:
+It is simplest to see how the different combination strategies work by look at the effect on a simple example profile. The following [profile](https://github.com/finos/datahelix/tree/master/examples/multipleFields/profile.json) contains two fields:
   * field1 - has values in set [ "A", "B" ]
   * field2 - has values in set [ 1, 2, 3 ]  
 
