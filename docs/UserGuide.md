@@ -610,7 +610,7 @@ allows a time/datetime field to be dependent on the output of another time/datet
 
 <div id="predicate-offset"></div>
 
-###[`greaterThanField`, `greaterThanOrEqualToField`, `lessThan`, `lessThanOrEqualToField`](https://github.com/finos/datahelix/tree/master/Examples/integerDynamicFields)
+### [`greaterThanField`, `greaterThanOrEqualToField`, `lessThan`, `lessThanOrEqualToField`](https://github.com/finos/datahelix/tree/master/examples/integerDynamicFields)
 
 allows a numeric field to be dependent on the output of another numeric field.
 ```javascript
