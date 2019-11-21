@@ -115,6 +115,8 @@ public abstract class ConstraintValidator<T extends ConstraintDTO> implements Va
                 return new AllOfConstraintValidator(fields).validate((AllOfConstraintDTO) dto);
             case IF:
                 return new ConditionalConstraintValidator(fields).validate((ConditionalConstraintDTO) dto);
+            case GENERATOR:
+                return ValidationResult.success();
             default:
                 throw new IllegalStateException("Unexpected constraint type: " + dto.getType());
         }
