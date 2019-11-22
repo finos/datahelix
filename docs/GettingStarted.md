@@ -1,3 +1,7 @@
+# Getting Started
+
+The following guide gives a 10 minute introduction to the generator via various practical examples.
+
 # Contents
 
   - [Getting Started](#Getting-started)
@@ -10,21 +14,13 @@
   - [Generation modes](#Generation-modes)
   - [Next steps](#Next-steps)
 
-# Getting Started
-
-The following guide gives a 10 minute introduction to the generator via various practical examples.
-
-* For more detailed documentation please refer to the [User Guide](UserGuide.md)
-
-* If you are interested in extending / modifying the generator itself please refer to the [Developer Guide](DeveloperGuide.md)
-
 ## Downloading the JAR file
-
-The generator has been written in Java, allowing it to work on Microsoft Windows, Apple Mac and Linux. You will need Java v1.8 installed to run the generator (you can run `java -version` to check whether you meet this requirement), it can be [downloaded here](https://www.java.com/en/download/manual.jsp).
 
 The generator is distributed as a JAR file, with the latest release always available from the [GitHub releases page](https://github.com/finos/datahelix/releases/). The project is currently in beta and under active development. You can expect breaking changes in future releases, and new features too!
 
-You are also welcome to download the source code and build the generator yourself. To do so, follow the instructions in the [Developer Guide](DeveloperGuide.md).
+ You will need Java v1.8 installed to run the generator (you can run `java -version` to check whether you meet this requirement), it can be [downloaded here](https://www.java.com/en/download/manual.jsp).
+
+You are also welcome to download the source code and build the generator yourself. To do so, follow the instructions in the [Developer Guide](DeveloperGuide.md#Building).
 
 Your feedback on the beta would be greatly appreciated. If you have any issues, feature requests, or ideas, please share them via the [GitHub issues page](https://github.com/finos/datahelix/issues).
 
@@ -33,10 +29,9 @@ Your feedback on the beta would be greatly appreciated. If you have any issues, 
 Profiles are JSON files that describe the data you want to generate. They are composed of:
 
 -   **fields** - an array of uniquely named fields (or columns).
--   **rules** - an array of constraints, with an optional description.
--   **constraints** - restrict the types and ranges of data permitted for the given column.
+-   **constraints** - an array of restrictions on the types and ranges of data permitted for the given column.
 
-We'll start by generating data for a trivial schema. Using your favourite text editor, create the following JSON profile and save it as `profile.json`:
+We'll start by generating data for a trivial schema. Using [VS Code](https://code.visualstudio.com/) or your favourite text editor, create the following JSON profile and save it as `profile.json`:
 
 ```json
 {
@@ -100,7 +95,7 @@ firstName
 [...]
 ```
 
-The generator has successfully created 100 rows of random data. However, in most cases this data will not be terribly useful. It is likely that `firstName` will only allow a subset of possible string values. If you don't provide any constraints, the generator will output random strings containing basic latin characters and punctuation.
+The generator has successfully created 100 rows of random data. However, in most cases this data will not be terribly useful. It is likely that `firstName` should only allow a subset of possible string values. If you don't provide any constraints, the generator will output random strings containing basic latin characters and punctuation.
 
 Let's assume you only want to generate characters between a to z for the `firstName` field; this can be achieved by adding a `matchingRegex` constraint for the field. With this constraint alone, the generator will only output strings valid for the regex.
 
@@ -130,11 +125,10 @@ firstName
 [...]
 ```
 
-The generator supports three different types of constraint. These are:
+The generator supports two different types of constraint:
 
--   **Predicates** - boolean-valued functions that define whether a given value is valid or invalid. In the above profile `ofType` and `matchingRegex` are examples of predicates.
--   **Grammatical** - combine or modify other constraints. They are fully recursive; any grammatical constraint is a valid input to any other grammatical constraint. In the above profile `not` is an example of a grammatical constraint.
--   **Presentational** - provide additional formatting information, we'll cover these later.
+-   [**Predicates**](GettingStarted.md#Data-Types) - boolean-valued functions that define whether a given value is valid or invalid. In the above profile `ofType` and `matchingRegex` are examples of predicates.
+-   [**Grammatical**](GettingStarted.md#Data-Types) - combine or modify other constraints including other grammatical constraints. In the above profile `not` is an example of a grammatical constraint.
 
 The current profile outputs random text strings for the `firstName` field. Depending on what you are intending to use this data for this may or may not be appropriate. For testing purposes, you are likely to want output data that has a lot of variability, however, if you are using the generator to create simulation data, you might want to use a regex that creates more realistic data, for example the regex `(Joh?n|Mar[yk])`.
 
@@ -165,7 +159,7 @@ The generator supports several different data types including:
 -   **string** - sequences of unicode characters up to a maximum length of 1000 characters
 -   **datetime** - specific moments in time, with values in the range 0001-01-01T00:00:00.000 to 9999-12-31T23:59:59.999, with an optional granularity / precision (from a maximum of one year to a minimum of one millisecond) that can be defined via a `granularTo` constraint.
 
-A full list of the supported data types can be found in the [user guide](https://github.com/finos/datahelix/blob/master/docs/GettingStarted.md#Data-Types).
+A full list of the supported data types can be found in the [user guide](UserGuide.md#Data-Types).
 
 We'll expand the example profile to add a new `age` field, a not-null integer in the range 1-99:
 
@@ -173,14 +167,12 @@ We'll expand the example profile to add a new `age` field, a not-null integer in
 {
     "fields": [
         { "name": "firstName", "type": "string" },
-        { "name": "age", "type": "integer"  }
+        { "name": "age", "type": "integer" }
     ],
     "constraints": [
-                { "not": { "field": "firstName", "is": "null" } },
-                {  "field": "firstName", "matchingRegex": "(Joh?n|Mar[yk])" }
-                { "field": "age", "greaterThan": 0 },
-                { "field": "age", "lessThan": 100 },
-                { "not": { "field": "age", "is": "null" } }
+        { "field": "firstName", "matchingRegex": "(Joh?n|Mar[yk])" },
+        { "field": "age", "greaterThan": 0 },
+        { "field": "age", "lessThan": 100 }
     ]
 }
 ```
@@ -189,16 +181,15 @@ With the change in the `firstname` regex, the output is now starting to look qui
 
 ```
 firstName,age
-"John",31
-"Mary",73
-"Jon",44
-"John",24
-"Jon",43
-"Jon",18
-"Jon",5
-"John",82
-"John",19
-"Jon",43
+John,58
+Jon,70
+John,93
+Mary,89
+Jon,65
+Jon,33
+Mark,94
+Jon,76
+John,30
 [...]
 ```
 
@@ -208,42 +199,35 @@ Finally, we'll add a field for National Insurance number. In this case, the cons
 {
     "fields": [
         { "name": "firstName", "type": "string" },
-        { "name": "age", "type": "integer"  },
-        { "name": "nationalInsurance", "type": "string"  }
+        { "name": "age", "type": "integer" },
+        { "name": "nationalInsurance", "type": "string", "nullable": true }
     ],
     "constraints": [
-                { "not": { "field": "firstName", "is": "null" } },
-                {
-                    "field": "firstName",
-                    "matchingRegex": "(Joh?n|Mar[yk])"
-                },
-                { "field": "age", "greaterThan": 0 },
-                { "field": "age", "lessThan": 100 },
-                { "not": { "field": "age", "is": "null" } },
-                {
-                    "if": {
-                        "field": "age",
-                        "greaterThanOrEqualTo": 16
-                    },
-                    "then": {
-                        "allOf": [
-                            {
-                                "field": "nationalInsurance",
-                                "matchingRegex": "[A-CEGHJ-PR-TW-Z]{1}[A-CEGHJ-NPR-TW-Z]{1}[0-9]{6}[A-DFM]{0,1}"
-                            },
-                            {
-                                "not": {
-                                    "field": "nationalInsurance",
-                                    "is": "null"
-                                }
-                            }
-                        ]
-                    },
-                    "else": {
+        { "field": "firstName", "matchingRegex": "(Joh?n|Mar[yk])" },
+        { "field": "age", "greaterThan": 0 },
+        { "field": "age", "lessThan": 100 },
+        {
+            "if": {
+                "field": "age",
+                "greaterThanOrEqualTo": 16
+            },
+            "then": {
+                "allOf": [
+                    {
                         "field": "nationalInsurance",
-                        "is": "null"
+                        "matchingRegex": "[A-CEGHJ-PR-TW-Z]{1}[A-CEGHJ-NPR-TW-Z]{1}[0-9]{6}[A-DFM]{0,1}"
+                    },
+                    {
+                        "field": "nationalInsurance",
+                        "isNull": false
                     }
-                }
+                ]
+            },
+            "else": {
+                "field": "nationalInsurance",
+                "isNull": true
+            }
+        }
     ]
 }
 ```
