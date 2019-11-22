@@ -39,37 +39,8 @@ We'll start by generating data for a trivial schema. Using [VS Code](https://cod
     "constraints": []
 }
 ```
-### Profile Validation
 
-The [JSON schema](https://json-schema.org/) for the DataHelix data profile is stored in the file `datahelix.schema.json` in the [schemas](https://github.com/finos/datahelix/tree/master/profile/src/main/resources/profileschema) directory.
-
-We recommend using Visual Studio Code to validate your profiles. To enable it to validate json files against the DataHelix profile schema a `json.schemas` section needs to be added to the `settings.json` file.
-
-To do this:
-
-1. Click on the gear icon at the bottom left of the screen and select `Settings`
-1. In the settings windows, click `Extensions` -> `JSON`
-1. You should see a section like this:
-    ```
-    Schemas
-    Associate schemas to JSON files in the current project
-    Edit in settings.json
-    ```
-1. Click on the `Edit in settings.json` link and VSCode will open the settings.json file.
-1. Add the following snippet to the end of the file (replacing `<datahelix_projectroot>` with the root directory path for the DataHelix project and replacing the `"fileMatch"` value with an appropriate value for your configuration):
-    ```
-      "json.schemas": [
-        {
-          "fileMatch": [
-            "<datahelix_projectroot>/*"
-          ],
-          "url": "file:///<datahelix_projectroot>/profile/src/main/resources/profileschema/datahelix.schema.json"
-        }
-      ]
-    ```
-    Alternatively you can configure this to any naming convention you want for profile files, for example `"*.profile.json"`.
-
-To verify that the url to the `datahelix.schema.json` is valid you can `ctrl-click` on it and the schema file will open in the editor. If the ` "json.schemas"` snippet already exists, you can add a new object to the JSON array for the DataHelix profile schema.
+When manually writing profiles, we recommend using a text editor which can validate profiles using the datahelix schema. Instructions for how to setup automatic profile validation using VS code can be found [here](user/ProfileValidation.md).
 
 ## Running the generator
 
@@ -273,10 +244,10 @@ The mode is specified via the `--generation-type` option.
 
 ## Next steps
 
-That's the end of our getting started guide. Hopefully it has given you a good understanding of what the DataHelix generator is capable of.
-
 * If you'd like to find out more about the various constraints the tool supports, the [User Guide](UserGuide.md) is a good next step.
 
-* You might also be interested in the [examples folder](https://github.com/finos/datahelix/tree/master/examples), which illustrates various features of the generator.
+* You might also be interested in the [examples folder](../examples), which illustrates various features of the generator.
+
+* Checkout some [FAQs](user/FrequentlyAskedQuestions.md) about datahelix.
 
 * For a more in-depth technical insight, see the [Developer Guide](DeveloperGuide.md).
