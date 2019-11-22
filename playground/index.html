@@ -91,25 +91,29 @@
     </template>
 
     <div id="codearea-container">
-      <textarea rows="20" class="form-control" id="profile" wrap="off">{
-          "schemaVersion": "0.17",
-          "fields": [{ "name": "firstName", "type": "string" },{ "name": "firstName2", "type": "string" }],
-          "rules": [
-              {
-                  "rule": "first name constraints",
-                  "constraints": [
-                      {
-                          "field": "firstName",
-                          "matchingRegex": "[a-z]{1,10}"
-                      },
-                      {
-                        "field": "firstName2",
-                        "matchingRegex": "[a-z]{1,10}"
-                    }
-                  ]
-              }
-          ]
-      }</textarea>
+      <textarea rows="20" class="form-control" id="profile" wrap="off">
+{
+  "schemaVersion": "0.18",
+  "fields": [
+    { "name": "name", "type": "string" },
+    { "name": "age", "type": "integer" }
+  ], 
+  "constraints": [
+    {
+      "field": "name",
+      "matchingRegex": "[a-z]{1,10}"
+    },
+    {
+      "field": "age",
+      "greaterThanOrEqualTo": 0
+    },
+    {
+      "field": "age",
+      "lessThan": 100
+    }
+  ]
+}
+        </textarea>
     </div>
   </div>
   <div id="output-panel">
