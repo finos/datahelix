@@ -53,7 +53,12 @@ const isLoading = (loading) => {
   }
 }
 
-runButton.addEventListener("click", async () => {
+// takes an array of items and creates an HTML snippet with each item 
+// hosted within the given element type.
+const mapToElements = (arr, element, fn = v => v) => 
+    arr.map(value => "<" + element + ">" + fn(value) + "</" + element + ">").join("");
+
+runButton.addEventListener("click", () => {
   generatorOutput.innerHTML = "";
   const profile = editor.getValue();
 
@@ -67,26 +72,34 @@ runButton.addEventListener("click", async () => {
   }
 
   isLoading(true);
-  const response = await fetch(generatorEndpoint, {
+  fetch(generatorEndpoint, {
     method: 'POST',
     mode: 'cors',
     headers: {
       'Content-Type': 'text/plain'
     },
     body: profile
-  });
-  isLoading(false);
-  const responseJson = await response.json();
+  })
+    .then(response => response.json())
+    .then(responseJson => {
 
-  if (responseJson.errorMessage) {
-    showAlert(responseJson.errorMessage);
-    return;
-  }
+      if (responseJson.errorMessage) {
+        showAlert(responseJson.errorMessage);
+        return;
+      }
 
-  const data = responseJson.generatedData;
-  const table = "<thead><tr>" + data[0].map(column => "<th>" + column + "</th>").join("") + "</tr></thead>" +
-    "<tbody>" + data.slice(1).map(row => "<tr>" + row.map(cell => "<td>" + cell + "</td>").join("") +
-    "</tr>").join("") + "</tbody>";
+      const data = responseJson.generatedData;
 
-  generatorOutput.innerHTML = table;
+      const columns = data[0];
+      const rows = data.slice(1);
+
+      const table = "<thead><tr>" + mapToElements(columns, "th") + "</tr></thead>" +
+        "<tbody>" + mapToElements(rows, "tr", row => mapToElements(row, "td")) + "</tbody>";
+
+      generatorOutput.innerHTML = table;
+    })
+    .catch(() => {
+      showAlert("There was a problem in reaching the DataHelix API endpoint");
+    })
+    .finally(() => isLoading(false));
 });
