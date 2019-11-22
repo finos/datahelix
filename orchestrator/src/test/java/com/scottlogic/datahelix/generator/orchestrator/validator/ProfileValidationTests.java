@@ -48,11 +48,12 @@ public class ProfileValidationTests {
                 .listFiles(File::isDirectory);
         for (File dir : directoriesArray) {
             File profileFile = Paths.get(dir.getCanonicalPath(), "profile.json").toFile();
+           CustomConstraintFactory customConstraintFactory = new CustomConstraintFactory(new CustomGeneratorList());
             DynamicTest test = DynamicTest.dynamicTest(
                 dir.getName(),
                 () -> new JsonProfileReader(profileFile, new ConfigValidator(new FileUtils()),new FileReader(profileFile.getParent()),
-                    new ProfileCommandBus(new FieldService(), new ConstraintService(),
-                        new CustomConstraintFactory(new CustomGeneratorList()),
+                    new ProfileCommandBus(new FieldService(), new ConstraintService(customConstraintFactory),
+                        customConstraintFactory,
                         new CreateProfileValidator(new ProfileValidator(null)))).read());
             dynamicTests.add(test);
         }

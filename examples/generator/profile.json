@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "0.18",
+  "fields": [
+    {
+      "name": "test",
+      "type": "string"
+    }
+  ],
+  "constraints": [
+    {
+      "field": "test",
+      "generator": "lorem ipsum"
+    }
+  ]
+}

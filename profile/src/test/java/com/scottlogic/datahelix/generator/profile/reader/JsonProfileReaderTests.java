@@ -90,7 +90,7 @@ public class JsonProfileReaderTests {
         new MockFromFileReader(),
         new ProfileCommandBus(
             new FieldService(),
-                new ConstraintService(),
+                new ConstraintService(new CustomConstraintFactory(new CustomGeneratorList())),
                 new CustomConstraintFactory(new CustomGeneratorList()),
             new CreateProfileValidator(new ProfileValidator(null))));
 
