@@ -433,7 +433,7 @@ Scotland, Edinburgh
 ```
 <div id="predicate-null"></div>
 
-### [`null`](https://github.com/finos/datahelix/tree/master/examples/ifIsNull) _(field)_
+### [`isNull`](https://github.com/finos/datahelix/tree/master/examples/ifIsNull) _(field)_
 
 ```javascript
 { "field": "price", "isNull" : true }
