@@ -22,7 +22,6 @@ import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.InitializationError;
 
 public class GeneratorCucumber extends Cucumber {
-
     private RunNotifier notifier;
 
     /**

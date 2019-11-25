@@ -26,7 +26,6 @@ import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.Atomic
 import java.util.List;
 
 public class CustomConstraintFactory {
-
     private final List<CustomGenerator> customGenerators;
 
     @Inject

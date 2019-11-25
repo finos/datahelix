@@ -17,7 +17,6 @@
 package com.scottlogic.datahelix.generator.core.restrictions.linear;
 
 public class Limit<T extends Comparable<? super T>> {
-
     private final T limit;
     private final boolean isInclusive;
 

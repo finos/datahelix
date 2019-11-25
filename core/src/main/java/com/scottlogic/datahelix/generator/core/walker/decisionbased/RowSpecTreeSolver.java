@@ -38,7 +38,6 @@ import java.util.stream.Stream;
 import static com.scottlogic.datahelix.generator.common.util.FlatMappingSpliterator.flatMap;
 
 public class RowSpecTreeSolver {
-
     private final ConstraintReducer constraintReducer;
     private final TreePruner treePruner;
     private final OptionPicker optionPicker;

@@ -19,7 +19,6 @@ package com.scottlogic.datahelix.generator.custom;
 import java.util.stream.Stream;
 
 public interface CustomGenerator<T> {
-
     /***
      * REQUIRED! used in profile reading
      * @return the name of the custom generator

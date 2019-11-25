@@ -57,8 +57,7 @@ public class DecisionComparer implements EqualityComparer {
     }
 
     static class OptionEqualityComparer implements EqualityComparer{
-
-        private final AnyOrderCollectionEqualityComparer atomicConstraintComparer =
+    private final AnyOrderCollectionEqualityComparer atomicConstraintComparer =
             new AnyOrderCollectionEqualityComparer();
 
         @Override

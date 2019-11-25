@@ -22,7 +22,6 @@ import cucumber.api.java.en.And;
 import java.io.IOException;
 
 public class JSONTestStep {
-
     private final CucumberTestState state;
 
     public JSONTestStep(CucumberTestState state) {

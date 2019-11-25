@@ -24,7 +24,6 @@ import com.scottlogic.datahelix.generator.profile.reader.FileReader;
 
 public class ProfileDeserialiser
 {
-
     public static ProfileDTO deserialise(String json, FileReader fileReader)
     {
         ConstraintDeserializer.fileReader = fileReader;

@@ -26,7 +26,6 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class CustomGeneratorBuilder<T> {
-
     private CustomGeneratorFieldType fieldType;
     private String name;
 

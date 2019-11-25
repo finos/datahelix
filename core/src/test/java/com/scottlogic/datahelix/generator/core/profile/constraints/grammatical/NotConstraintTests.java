@@ -27,7 +27,6 @@ import org.junit.jupiter.api.Test;
 import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
 
 public class NotConstraintTests {
-
     @Test
     public void testConstraintIsEqual() {
         Field field1 = createField("TestField");

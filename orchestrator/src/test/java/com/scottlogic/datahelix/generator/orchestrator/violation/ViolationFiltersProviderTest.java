@@ -37,7 +37,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class ViolationFiltersProviderTest {
-
     @Test
     void whenNullConstraintsToViolate_ReturnEmptyListOfViolationFilters() {
         ViolateConfigSource configSource = mock(ViolateConfigSource.class);

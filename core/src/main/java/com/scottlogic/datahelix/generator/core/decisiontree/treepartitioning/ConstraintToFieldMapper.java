@@ -32,7 +32,6 @@ import java.util.stream.Stream;
  * Given a decision tree, find which constraints and decisions act on which fields and return a map from them to fields
  */
 class ConstraintToFieldMapper {
-
     private class ConstraintToFields {
         public RootLevelConstraint constraint;
         public Set<Field> fields;

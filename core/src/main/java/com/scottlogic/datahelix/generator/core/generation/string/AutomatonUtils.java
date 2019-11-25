@@ -23,7 +23,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AutomatonUtils {
-
     private static final Map<String, String> PREDEFINED_CHARACTER_CLASSES = instantiatePredefinedCharacterClasses();
 
     private static final Pattern PATTERN_REQUOTED = Pattern.compile("\\\\Q(.*?)\\\\E");

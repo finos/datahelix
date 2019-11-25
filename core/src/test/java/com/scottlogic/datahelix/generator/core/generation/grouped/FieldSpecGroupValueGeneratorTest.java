@@ -39,7 +39,6 @@ import static org.mockito.Mockito.when;
 import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
 
 class FieldSpecGroupValueGeneratorTest {
-
     @Test
     public void generate_withGroupOfSingleField_returnsCorrectStream() {
         Map<Field, FieldSpec> specMap = new HashMap<>();

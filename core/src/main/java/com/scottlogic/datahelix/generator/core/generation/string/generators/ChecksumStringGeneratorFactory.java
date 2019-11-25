@@ -18,7 +18,6 @@ package com.scottlogic.datahelix.generator.core.generation.string.generators;
 import com.scottlogic.datahelix.generator.core.utils.FinancialCodeUtils;
 
 public class ChecksumStringGeneratorFactory {
-
     public static StringGenerator createSedolGenerator() {
         return new ChecksumStringGenerator(
             new RegexStringGenerator("[B-DF-HJ-NP-TV-Z0-9]{6}", true),

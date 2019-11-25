@@ -23,7 +23,6 @@ import java.time.OffsetDateTime;
 import static com.scottlogic.datahelix.generator.common.util.Defaults.*;
 
 public class DateTimeDefaults implements LinearDefaults<OffsetDateTime> {
-
     private static DateTimeDefaults singleton;
     private DateTimeDefaults(){ }
     public static synchronized DateTimeDefaults get() {

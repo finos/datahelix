@@ -33,7 +33,6 @@ import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
 
 class DateTimeRestrictionsMergerTests {
-
     private LinearRestrictionsMerger merger = new LinearRestrictionsMerger();
 
     private static final OffsetDateTime REFERENCE_TIME = OffsetDateTime.of(2000, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);

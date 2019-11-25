@@ -22,7 +22,6 @@ import com.scottlogic.datahelix.generator.common.profile.Field;
 import java.util.List;
 
 public class FieldGroup {
-
     private final List<Field> fields;
 
     public FieldGroup(List<Field> fields) {

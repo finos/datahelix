@@ -22,7 +22,6 @@ import cucumber.api.java.en.And;
 import java.util.List;
 
 public class MapValueStep {
-
     private final CucumberTestState state;
 
     public MapValueStep(CucumberTestState state) {

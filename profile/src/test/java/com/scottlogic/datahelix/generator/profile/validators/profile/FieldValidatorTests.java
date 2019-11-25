@@ -25,7 +25,6 @@ import static org.junit.Assert.assertTrue;
 
 public class FieldValidatorTests
 {
-
     private final FieldValidator fieldValidator = new FieldValidator();
 
     @Test

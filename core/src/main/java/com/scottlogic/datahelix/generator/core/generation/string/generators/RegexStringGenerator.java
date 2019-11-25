@@ -31,7 +31,6 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class RegexStringGenerator implements StringGenerator {
-
     /**
      * Cache of all matching regex automatons, keyed on their regex
      */

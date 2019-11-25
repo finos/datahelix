@@ -35,8 +35,7 @@ public class ConstraintNodeComparer implements EqualityComparer {
         EqualityComparer decisionComparer,
         CollectionEqualityComparer atomicConstraintCollectionEqualityComparer,
         CollectionEqualityComparer decisionCollectionEqualityComparer) {
-
-        this.comparisonContext = comparisonContext;
+    this.comparisonContext = comparisonContext;
         this.decisionComparer = decisionComparer;
         this.decisionAnyOrderComparer = new AnyOrderCollectionEqualityComparer(decisionComparer);
         this.atomicConstraintAnyOrderComparer = atomicConstraintAnyOrderComparer;

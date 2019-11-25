@@ -1,6 +1,5 @@
 {
-  "schemaVersion": "0.18",
-  "constraints": [
+    "constraints": [
     {
       "field": "field1",
       "is": "notafterOrAt",

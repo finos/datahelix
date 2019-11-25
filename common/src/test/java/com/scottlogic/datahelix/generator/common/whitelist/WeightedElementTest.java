@@ -21,7 +21,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class WeightedElementTest {
-
     @Test
     public void testConstructorRejectsZeroValuedWeight() {
         assertThrows(IllegalArgumentException.class, () -> new WeightedElement<String>("A string", 0.0D));

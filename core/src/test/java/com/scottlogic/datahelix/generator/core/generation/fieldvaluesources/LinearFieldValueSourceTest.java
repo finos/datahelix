@@ -27,7 +27,6 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 class LinearFieldValueSourceTest {
-
     @Test
     public void testGenerateRandomValues() {
         LinearRestrictions<BigDecimal> restrictions = new LinearRestrictions<>(

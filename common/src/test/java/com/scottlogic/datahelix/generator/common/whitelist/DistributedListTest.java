@@ -30,7 +30,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class DistributedListTest {
-
     @Test
     public void testEmptyIsEmpty() {
         DistributedList<String> empty = DistributedList.empty();

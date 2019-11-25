@@ -36,7 +36,6 @@ import java.util.stream.Collectors;
 import static org.hamcrest.Matchers.*;
 
 public class GeneralTestStep {
-
     private final CucumberTestState state;
     private CucumberTestHelper cucumberTestHelper;
 

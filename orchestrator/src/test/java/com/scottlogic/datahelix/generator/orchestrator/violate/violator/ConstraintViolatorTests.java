@@ -49,7 +49,6 @@ import static org.mockito.Mockito.when;
  */
 public class ConstraintViolatorTests
 {
-
     private ConstraintViolator target;
 
     private AtomicConstraint atomicConstraint1;

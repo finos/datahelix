@@ -6,8 +6,7 @@ The _interesting generation mode_ exists to provide a means of generating smalle
 
 ```
 {
-	"schemaVersion": "0.1",
-	"fields": [
+    "fields": [
 		{ "name": "field1" }
 	],
 			"constraints": [

@@ -29,7 +29,6 @@ import static com.scottlogic.datahelix.generator.common.util.NumberUtils.coerceT
 import static com.scottlogic.datahelix.generator.common.util.NumberUtils.tryParse;
 
 public class NumericValueStep {
-
     private final CucumberTestState state;
     private final CucumberTestHelper helper;
 

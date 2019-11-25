@@ -33,7 +33,6 @@ import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
  * Provides methods for asserting deep equality between two profile lists.
  */
 public class TypeEqualityHelper {
-
     /**
      * Asserts that the two given profile lists are equivalent in both shape (sameBeanAs) and type.
      * @param actualProfileList Actual list of profiles.

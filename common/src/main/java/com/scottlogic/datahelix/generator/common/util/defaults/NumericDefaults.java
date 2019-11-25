@@ -23,7 +23,6 @@ import java.math.BigDecimal;
 import static com.scottlogic.datahelix.generator.common.util.Defaults.*;
 
 public class NumericDefaults implements LinearDefaults<BigDecimal> {
-
     private static NumericDefaults singleton;
     private NumericDefaults(){ }
     public static synchronized NumericDefaults get() {

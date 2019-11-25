@@ -26,7 +26,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AutomatonUtilsTests {
-
     @Test
     public void createAutomaton_withValidString_shouldAcceptValidCharacters(){
         String validRegex = ".*";

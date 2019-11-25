@@ -22,7 +22,6 @@ import com.scottlogic.datahelix.generator.core.generation.databags.DataBagValue;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
 
 public interface FieldSpecRelation extends Constraint {
-
     /**
      * Creates a field spec from the current state of the passed in FieldSpec.
      *

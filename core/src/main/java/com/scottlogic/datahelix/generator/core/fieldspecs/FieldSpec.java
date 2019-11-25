@@ -20,7 +20,6 @@ import com.scottlogic.datahelix.generator.core.generation.fieldvaluesources.Fiel
 import com.scottlogic.datahelix.generator.core.generation.fieldvaluesources.NullAppendingValueSource;
 
 public abstract class FieldSpec {
-
     public abstract boolean canCombineWithWhitelistValue(Object value);
     public abstract FieldValueSource getFieldValueSource();
     public abstract FieldSpec withNotNull();

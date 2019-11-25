@@ -23,7 +23,6 @@ import com.scottlogic.datahelix.generator.core.generation.fieldvaluesources.Fiel
 import java.util.Objects;
 
 public class WhitelistFieldSpec extends FieldSpec {
-
     private final DistributedList<Object> whitelist;
 
     WhitelistFieldSpec(DistributedList<Object> whitelist, boolean nullable) {

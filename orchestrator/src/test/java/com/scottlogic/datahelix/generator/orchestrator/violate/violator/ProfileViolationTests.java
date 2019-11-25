@@ -1036,8 +1036,7 @@ public class ProfileViolationTests {
 
     private static class ConstraintViolatedPair
     {
-
-        private final Constraint constraint;
+    private final Constraint constraint;
         private final Constraint violatedConstraint;
 
         private ConstraintViolatedPair(Constraint constraint, Constraint violatedConstraint) {

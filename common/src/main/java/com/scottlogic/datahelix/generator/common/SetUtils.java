@@ -22,7 +22,6 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class SetUtils {
-
     private SetUtils() {
         throw new IllegalStateException("Do not instantiate utility class");
     }

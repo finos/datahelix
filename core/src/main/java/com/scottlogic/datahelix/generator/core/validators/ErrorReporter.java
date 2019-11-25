@@ -19,7 +19,6 @@ package com.scottlogic.datahelix.generator.core.validators;
 import com.scottlogic.datahelix.generator.common.ValidationException;
 
 public class ErrorReporter {
-
     public void displayException(Exception e) {
         e.printStackTrace(System.err);
     }

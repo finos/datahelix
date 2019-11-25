@@ -25,7 +25,6 @@ import java.util.stream.Stream;
 import static com.scottlogic.datahelix.generator.common.util.FlatMappingSpliterator.flatMap;
 
 public class ExhaustiveCombinationStrategy implements CombinationStrategy {
-
     @Override
     public Stream<DataBag> permute(Stream<Supplier<Stream<DataBag>>> dataBagSequences) {
         return flatten(dataBagSequences.iterator()).get();

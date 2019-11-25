@@ -29,7 +29,6 @@ import java.math.BigDecimal;
 import java.util.regex.Pattern;
 
 public class RestrictionTest {
-
     @Test
     public void shouldFilterNumeric() {
         LinearRestrictions<BigDecimal> restriction = LinearRestrictionsFactory.createNumericRestrictions(

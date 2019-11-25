@@ -25,7 +25,6 @@ import cucumber.api.java.en.When;
 import java.util.regex.Pattern;
 
 public class RegexValueStep {
-
     private final CucumberTestState state;
     private final CucumberTestHelper helper;
 

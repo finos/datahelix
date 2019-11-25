@@ -21,7 +21,6 @@ import com.scottlogic.datahelix.generator.profile.reader.FileReader;
 import java.util.Collections;
 
 public class TestFileReader extends FileReader {
-
     public TestFileReader() {
         super("");
     }

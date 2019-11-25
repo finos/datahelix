@@ -26,7 +26,6 @@ import com.scottlogic.datahelix.generator.core.walker.decisionbased.RowSpecTreeS
 import java.util.stream.Stream;
 
 public class RowSpecDecisionTreeWalker implements DecisionTreeWalker {
-
     private final RowSpecTreeSolver rowSpecTreeSolver;
     private final RowSpecDataBagGenerator rowSpecDataBagGenerator;
 

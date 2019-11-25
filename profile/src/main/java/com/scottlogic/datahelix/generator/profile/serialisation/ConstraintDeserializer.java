@@ -37,7 +37,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ConstraintDeserializer extends JsonDeserializer<ConstraintDTO> {
-
     public static FileReader fileReader;
 
     @Override

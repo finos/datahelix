@@ -42,7 +42,6 @@ import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.mockito.Mockito.when;
 
 public class ProfileViolatorTests {
-
     private ProfileViolator target;
 
     @Mock private ConstraintViolator mockConstraintViolator;

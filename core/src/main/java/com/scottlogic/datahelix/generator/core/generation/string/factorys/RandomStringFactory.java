@@ -26,7 +26,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class RandomStringFactory {
-
     public String createRandomString(State state, RandomNumberGenerator random) {
         List<Integer> validIndices = new LinkedList<>();
 

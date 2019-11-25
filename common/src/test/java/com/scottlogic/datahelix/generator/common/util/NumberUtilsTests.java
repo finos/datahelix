@@ -21,7 +21,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class NumberUtilsTests {
-
     private static long SQRT_MAX = Math.round(Math.sqrt(Long.MAX_VALUE) - 0.5);
     private static long HALF_MAX = Long.MAX_VALUE / 2;
 

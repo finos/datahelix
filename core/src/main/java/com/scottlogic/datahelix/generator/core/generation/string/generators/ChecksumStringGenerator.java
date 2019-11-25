@@ -22,7 +22,6 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class ChecksumStringGenerator implements StringGenerator {
-
     private final StringGenerator checksumlessGenerator;
     private final ChecksumMaker checksumMaker;
 

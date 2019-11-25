@@ -26,7 +26,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 public class TimeGranularity implements Granularity<LocalTime> {
-
     public static final TimeGranularity DEFAULT = new TimeGranularity(ChronoUnit.MILLIS);
 
     private final ChronoUnit granularity;

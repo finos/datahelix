@@ -35,7 +35,6 @@ import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.textua
 import com.scottlogic.datahelix.generator.profile.factories.TimeFactory;
 
 public class TimeConstraintFactory extends AtomicConstraintFactory {
-
     @Override
     AtomicConstraint createAfterOrAtConstraint(AfterOrAtConstraintDTO dto, Field field) {
         return new AfterOrEqualToConstantTimeConstraint(field, TimeFactory.create(dto.value));

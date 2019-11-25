@@ -28,14 +28,12 @@ import java.util.stream.StreamSupport;
 //Author: Holger: https://stackoverflow.com/users/2711488/holger
 public class FlatMappingSpliterator<E,S> extends Spliterators.AbstractSpliterator<E>
     implements Consumer<S> {
-
     static final boolean USE_ORIGINAL_IMPL
         = Boolean.getBoolean("stream.flatmap.usestandard");
 
     public static <T,R> Stream<R> flatMap(
         Stream<T> in, Function<? super T,? extends Stream<? extends R>> mapper) {
-
-        if(USE_ORIGINAL_IMPL)
+    if(USE_ORIGINAL_IMPL)
             return in.flatMap(mapper);
 
         Objects.requireNonNull(in);

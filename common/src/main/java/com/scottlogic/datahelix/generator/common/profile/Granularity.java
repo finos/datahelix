@@ -19,7 +19,6 @@ package com.scottlogic.datahelix.generator.common.profile;
 import com.scottlogic.datahelix.generator.common.RandomNumberGenerator;
 
 public interface Granularity<T> {
-
     Granularity<T> getFinestGranularity();
 
     boolean isCorrectScale(T value);

@@ -26,7 +26,6 @@ import java.util.Optional;
  */
 public class StringRestrictionsMerger implements RestrictionsMerger<StringRestrictions>
 {
-
     @Override
     public Optional<StringRestrictions> merge(StringRestrictions left, StringRestrictions right, boolean useFinestGranularityAvailable) {
         if (useFinestGranularityAvailable) {

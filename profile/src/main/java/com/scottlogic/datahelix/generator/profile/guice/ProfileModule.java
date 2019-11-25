@@ -31,7 +31,6 @@ import com.scottlogic.datahelix.generator.profile.reader.*;
 import java.io.File;
 
 public class ProfileModule extends AbstractModule {
-
     private final ProfileConfigSource profileConfigSource;
 
     public ProfileModule(ProfileConfigSource profileConfigSource)

@@ -50,7 +50,6 @@ import static com.scottlogic.datahelix.generator.output.guice.OutputFormat.CSV;
     version = { "Profile Schema Version " + ProfileConfiguration.PROFILE_SCHEMA_VERSION},
     abbreviateSynopsis = true)
 public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
-
     @Override
     public Integer call() throws Exception {
         checkForAlphaGenerationDataTypes();

@@ -24,7 +24,6 @@ import java.util.List;
 
 public class ConditionalConstraintValidator  extends GrammaticalConstraintValidator<ConditionalConstraintDTO>
 {
-
     public ConditionalConstraintValidator(List<FieldDTO> fields)
     {
         super(fields);

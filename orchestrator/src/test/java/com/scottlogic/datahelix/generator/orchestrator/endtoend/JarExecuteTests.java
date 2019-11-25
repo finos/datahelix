@@ -26,7 +26,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class JarExecuteTests {
-
     @Test
     void generateSuccessfullyFromJar() throws Exception {
         Process p = setupProcess("-p=src/test/java/com/scottlogic/datahelix/generator/orchestrator/endtoend/testprofile.profile.json");

@@ -19,7 +19,6 @@ package com.scottlogic.datahelix.generator.common;
 import java.math.BigDecimal;
 
 public class TestRandomNumberGenerator implements RandomNumberGenerator {
-
     private double nextDoubleValue = 0;
 
     public void setNextDouble(double value) {

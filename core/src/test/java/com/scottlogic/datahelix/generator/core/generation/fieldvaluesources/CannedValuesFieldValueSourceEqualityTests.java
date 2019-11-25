@@ -28,7 +28,6 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 
 class CannedValuesFieldValueSourceEqualityTests {
-
     private FieldValueSource valueSourceOf(Object... elements) {
         Set<Object> set = Arrays.stream(elements).collect(Collectors.toSet());
         DistributedList<Object> whitelist = DistributedList.uniform(set);

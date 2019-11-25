@@ -20,7 +20,6 @@ import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAdjuster;
 
 public class RepeatedTemporalAdjuster implements TemporalAdjuster {
-
     private final TemporalAdjuster underlyingAdjuster;
 
     private final int timesToRepeat;

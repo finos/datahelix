@@ -26,7 +26,6 @@ import java.time.temporal.TemporalAmount;
 import java.util.function.IntFunction;
 
 public class TemporalAdjusterGenerator {
-
     private final ChronoUnit chronoUnit;
 
     private final boolean workingDay;

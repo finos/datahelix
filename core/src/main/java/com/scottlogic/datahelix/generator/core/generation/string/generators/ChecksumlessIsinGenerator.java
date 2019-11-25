@@ -24,7 +24,6 @@ import java.util.stream.Stream;
 import static com.scottlogic.datahelix.generator.common.util.FlatMappingSpliterator.flatMap;
 
 public class ChecksumlessIsinGenerator implements StringGenerator {
-
     @Override
     public Stream<String> generateAllValues() {
         Stream<StringGenerator> isinStringGenerators =

@@ -23,7 +23,6 @@ import java.time.temporal.ChronoUnit;
 
 public class DateTimeGranularityValidator implements Validator<String>
 {
-
     private final String errorInfo;
 
     public DateTimeGranularityValidator(String errorInfo)

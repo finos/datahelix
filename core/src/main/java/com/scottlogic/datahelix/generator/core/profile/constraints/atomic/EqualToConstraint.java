@@ -23,7 +23,6 @@ import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import java.util.Objects;
 
 public class EqualToConstraint implements AtomicConstraint {
-
     private final Field field;
     public final Object value;
 

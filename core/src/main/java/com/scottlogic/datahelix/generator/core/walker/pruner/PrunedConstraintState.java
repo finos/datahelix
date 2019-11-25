@@ -28,7 +28,6 @@ import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import java.util.*;
 
 class PrunedConstraintState {
-
     private final Set<AtomicConstraint> newAtomicConstraints;
     private final Set<FieldSpecRelation> newRelations;
     private final Set<DecisionNode> newDecisionNodes = new HashSet<>();

@@ -24,7 +24,6 @@ import java.util.Collection;
 import java.util.Map;
 
 public final class FieldSpecGroup {
-
     private final Map<Field, FieldSpec> fieldSpecs;
 
     private final Collection<FieldSpecRelation> relations;

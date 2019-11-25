@@ -29,7 +29,6 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
 class InterestingStringFactoryTest {
-
     @Test
     public void getLongestExample_withFixedLengthRegex_shouldReturnCorrectString(){
         Automaton automaton = getAutomaton("[a-z]{9}");
