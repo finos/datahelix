@@ -26,6 +26,7 @@ import com.scottlogic.datahelix.generator.core.config.detail.VisualiserLevel;
 import com.scottlogic.datahelix.generator.orchestrator.guice.AllConfigSource;
 import com.scottlogic.datahelix.generator.orchestrator.guice.AllModule;
 import com.scottlogic.datahelix.generator.output.guice.OutputFormat;
+import com.scottlogic.datahelix.generator.profile.ProfileConfiguration;
 import picocli.CommandLine;
 
 import java.io.File;
@@ -46,6 +47,7 @@ import static com.scottlogic.datahelix.generator.output.guice.OutputFormat.CSV;
     descriptionHeading = "%nDescription:%n",
     parameterListHeading = "%nParameters:%n",
     optionListHeading = "%nOptions:%n",
+    version = { "Profile Schema Version " + ProfileConfiguration.PROFILE_SCHEMA_VERSION},
     abbreviateSynopsis = true)
 public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
 
@@ -64,6 +66,12 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
             printAlphaFeatureWarning("Generation Type of INTERESTING");
         }
     }
+
+    @CommandLine.Option(
+        names = { "-V", "--version" },
+        versionHelp = true,
+        description = "print version information and exit")
+    boolean versionRequested;
 
     @CommandLine.Option(
         names = {"-p", "--profile-file"},
