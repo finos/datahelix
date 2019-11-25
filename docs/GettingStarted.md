@@ -1,6 +1,8 @@
 # Getting Started
 
-The following guide gives a 10 minute introduction to the generator via various practical examples.
+The following guide give a short introduction to the datahelix via a practical example.
+
+For more comprehensive documentation please refer to the [User Guide](UserGuide.md).
 
 # Contents
 
@@ -9,16 +11,16 @@ The following guide gives a 10 minute introduction to the generator via various 
   - [Creating your first profile](#Creating-your-first-profile)
   - [Running the generator](#Running-the-generator)
   - [Adding constraints](#Adding-constraints)
-  - [Generating large datasets](#Generating-large-datasets)
   - [Data types](#Data-types)
   - [Generation modes](#Generation-modes)
+  - [Generating large datasets](#Generating-large-datasets)
   - [Next steps](#Next-steps)
 
 ## Downloading the JAR file
 
-The generator is distributed as a JAR file, with the latest release always available from the [GitHub releases page](https://github.com/finos/datahelix/releases/). The project is currently in beta and under active development. You can expect breaking changes in future releases, and new features too!
+The datahelix is distributed as a JAR file, with the latest release always available from the [GitHub releases page](https://github.com/finos/datahelix/releases/). The project is currently in beta and under active development. You can expect breaking changes in future releases, and new features too!
 
- You will need Java v1.8 installed to run the generator (you can run `java -version` to check whether you meet this requirement), it can be [downloaded here](https://www.java.com/en/download/manual.jsp).
+ You will need Java v1.8 installed to run the datahelix (you can run `java -version` to check whether you meet this requirement), it can be [downloaded here](https://www.java.com/en/download/manual.jsp).
 
 You are also welcome to download the source code and build the generator yourself. To do so, follow the instructions in the [Developer Guide](DeveloperGuide.md#Building).
 
@@ -26,12 +28,14 @@ Your feedback on the beta would be greatly appreciated. If you have any issues, 
 
 ## Creating your first profile
 
+We are going to work thro-ugh creating a profile to generate random personal data about some test users.
+
 Profiles are JSON files that describe the data you want to generate. They are composed of:
 
 -   **fields** - an array of uniquely named fields (or columns).
 -   **constraints** - an array of restrictions on the types and ranges of data permitted for the given column.
 
-We'll start by generating data for a trivial schema. Using [VS Code](https://code.visualstudio.com/) or your favourite text editor, create the following JSON profile and save it as `profile.json`:
+We'll start by creating a simple profile containing a single field `username` with no constraints. Using  your favourite text editor, create the following JSON profile and save it as `profile.json`:
 
 ```json
 {
@@ -50,7 +54,7 @@ Now place the `generator.jar` file (downloaded from the [GitHub releases page](h
 $ java -jar generator.jar generate --max-rows=100 --replace --profile-file=profile.json --output-path=output.csv
 ```
 
-The generator is a command line tool which reads a profile, and outputs data in CSV or JSON format. The `--max-rows=100` option tells the generator to create 100 rows of data, and the `--replace` option tells it to overwrite previously generated files. The compulsary `--profile-file` option specifies the name of the input profile, and the `--output-path` option specifies the location to write the output to. In `generate` mode `--output-path` is optional; the generator will default to standard output if it is not supplied. By default the generator outputs progress, in rows per second, to the standard error output. This can be useful when generating large volumes of data.
+The generator is a command line tool which reads a profile, and outputs data in CSV or JSON format. The `--max-rows=100` option tells the generator to create 100 rows of data, and the `--replace` option tells it to overwrite previously generated files. The compulsory `--profile-file` option specifies the name of the input profile, and the `--output-path` option specifies the location to write the output to. In `generate` mode `--output-path` is optional; the generator will default to standard output if it is not supplied. By default the generator outputs progress, in rows per second, to the standard error output. This can be useful when generating large volumes of data.
 
 If you open up `output.csv` you'll see something like the following:
 
@@ -65,13 +69,20 @@ niIU8r.{y'idVK(ki2D[#N8{h?dP[D;
 [...]
 ```
 
-The generator has successfully created 100 rows of random data. However, in most cases this data will not be terribly useful. It is likely that `firstName` should only allow a subset of possible string values. If you don't provide any constraints, the generator will output random strings containing basic latin characters and punctuation.
+The generator has successfully created 100 rows of random data. However, for this guide we want to create more realistic looking first names. It is likely that the `firstName` field should only allow a subset of possible string values. If you don't provide any constraints, the generator will output random strings containing basic latin characters and punctuation.
 
 Let's assume you only want to generate characters between a to z for the `firstName` field; this can be achieved by adding a `matchingRegex` constraint for the field. With this constraint alone, the generator will only output strings valid for the regex.
 
 ## Adding constraints
 
-Update the JSON profile as follows:
+The datahelix supports two different types of constraint:
+
+-   [**Predicates**](UserGuide.md#predicate-constraints) - boolean-valued functions that define whether a given value is valid or invalid.
+-   [**Grammatical**](UserGuide.md#grammatical-constraints) - combine or modify other constraints including other grammatical constraints.
+
+We are going to use the `matchingRegex` constraint to restrict the strings produced by the `firstName` field. The `matchingRegex` constraint is an example of a predicate constraint.
+
+Update the JSON profile to the following:
 
 ```json
 {
@@ -84,23 +95,131 @@ Re-running generation now creates a file containing random strings that match th
 
 ```
 firstName
-"f"
-
-"draxonsa"
-"j"
-"srsub"
-
-"f"
-
+fepky
+cf
+lku
+fvspq
+yuf
+ylbmop
 [...]
 ```
 
-The generator supports two different types of constraint:
+The current profile outputs random text strings for the `firstName` field. Depending on what you are intending to use the data for this may or may not be appropriate. For testing purposes, you are likely to want output data that has a lot of variability. However, if you are using the generator to create simulation data, then the generated data from this profile may not be good enough.
 
--   [**Predicates**](GettingStarted.md#Data-Types) - boolean-valued functions that define whether a given value is valid or invalid. In the above profile `ofType` and `matchingRegex` are examples of predicates.
--   [**Grammatical**](GettingStarted.md#Data-Types) - combine or modify other constraints including other grammatical constraints. In the above profile `not` is an example of a grammatical constraint.
+There are a few different approaches we could use to try to make the data more realistic. We could try to use a more comprehensive regex. However, the datahelix gives us a few other options which could be quite useful. We could for example make use of the [`firstname`](UserGuide.md#Data-Types) type.
 
-The current profile outputs random text strings for the `firstName` field. Depending on what you are intending to use this data for this may or may not be appropriate. For testing purposes, you are likely to want output data that has a lot of variability, however, if you are using the generator to create simulation data, you might want to use a regex that creates more realistic data, for example the regex `(Joh?n|Mar[yk])`.
+## Data types
+
+The generator supports several different data types including:
+
+-   **integer** - any integer number between -1E20 and 1E20 inclusive
+-   **decimal** - any real number between -1E20 and 1E20 inclusive, with an optional granularity / precision (a power of ten between 1 and 1E-20) that can be defined via a `granularTo` constraint.
+-   **string** - sequences of unicode characters up to a maximum length of 1000 characters
+-   **datetime** - specific moments in time, with values in the range 0001-01-01T00:00:00.000 to 9999-12-31T23:59:59.999, with an optional granularity / precision (from a maximum of one year to a minimum of one millisecond) that can be defined via a `granularTo` constraint.
+
+A full list of the supported data types can be found in the [user guide](UserGuide.md#Data-Types).
+
+We are going to use the `firstname` type to produce realistic looking first names. Change the type of the firstname field from `string` to `firstname` and remove the `matchingRegex` constraint.
+
+The profile should look something like:
+
+```JSON
+{
+    "schemaVersion": "0.18",
+    "fields": [{ "name": "firstName", "type": "firstname" }],
+    "constraints": []
+}
+```
+
+Running the profile now gives a random list of first names.
+
+```
+firstName
+Zac
+Sophie
+Millie
+Annabel
+Muhammad
+Ruaridh
+```
+
+This is looking good but now we will want to add some more fields to get some more interesting data.
+
+First we'll expand the example profile to add a new `age` field, a not-null integer in the range 1-99:
+
+```json
+{
+    "fields": [
+      { "name": "firstName", "type": "firstname" },
+      { "name": "age", "type": "integer" }
+    ],
+    "constraints": [
+        { "field": "age", "greaterThan": 0 },
+        { "field": "age", "lessThan": 100 }
+    ]
+}
+```
+
+Next, we'll add some conditional logic to give some of our users a number plate. Lets add a `numberPlate` string to the list of fields.
+
+Fields are non-nullable by default, however, you can indicate that a field is nullable.  As we only want some users to have numbers plates, we should mark the `numberPlate` field as [`nullable`](UserGuide.md#nullable).
+
+```json
+{
+    "name": "numberPlate",
+    "type": "string",
+    "nullable": true
+}
+```
+ We also want all of our drivers to be at least 17 so lets add an [if constraint](UserGuide.md#if).
+ ```json
+ { "if":    { "field": "age", "greaterThanOrEqualTo": 17 },
+   "then":  { "field": "numberPlate", "matchingRegex": "[A-Z]{2}[0-9]{2} [A-Z]{3}"},
+   "else" : { "field": "numberPlate", "isNull": true}
+ }
+  ```
+
+Putting it all together will lead to a profile looking like this:
+
+```json
+{
+    "fields": [
+      { "name": "firstName", "type": "firstname" },
+      { "name": "age", "type": "integer" },
+      { "name": "numberPlate", "type": "string" , "nullable": true}
+    ],
+    "constraints": [
+        { "field": "age", "greaterThan": 0 },
+        { "field": "age", "lessThan": 100 },
+        { "if": { "field": "age", "greaterThanOrEqualTo": 17 },
+          "then": {"field": "numberPlate", "matchingRegex": "[A-Z]{2}[0-9]{2} [A-Z]{3}"},
+          "else" : { "field": "numberPlate", "isNull": true}
+        }
+    ]
+}
+```
+
+Running the above profile will produce something like:
+
+```
+firstName,age,numberPlate
+Katie,17,
+Cameron,16,
+Angus,63,
+Douglas,10,
+Benjamin,6,
+Brodie,66,OH86 KHY
+Keir,77,VX39 KIR
+```
+
+## Generation modes
+
+For this guide we have been running datahelix in `random` mode. However, the generator supports two different generation modes:
+
+-   **random** - _(default)_ generates random data that abides by the given set of constraints, with the number of generated rows limited via the `--max-rows` option.
+-   **full** - generates all the data that abides by the given set of constraints, with the number of generated rows limited via the `--max-rows` option. Characteristics of the generated rows can be set using the [`--combination-strategy`](UserGuide.md#combination-strategies) flag.
+
+The mode is specified via the `--generation-type` option.
 
 ## Generating large datasets
 
@@ -120,128 +239,9 @@ Number of rows | Velocity (rows/sec) | Velocity trend
 
 If the generation is taking too long, you can halt the command via <kbd>Ctrl</kbd>+<kbd>C</kbd>
 
-## Data types
-
-The generator supports several different data types including:
-
--   **integer** - any integer number between -1E20 and 1E20 inclusive
--   **decimal** - any real number between -1E20 and 1E20 inclusive, with an optional granularity / precision (a power of ten between 1 and 1E-20) that can be defined via a `granularTo` constraint.
--   **string** - sequences of unicode characters up to a maximum length of 1000 characters
--   **datetime** - specific moments in time, with values in the range 0001-01-01T00:00:00.000 to 9999-12-31T23:59:59.999, with an optional granularity / precision (from a maximum of one year to a minimum of one millisecond) that can be defined via a `granularTo` constraint.
-
-A full list of the supported data types can be found in the [user guide](UserGuide.md#Data-Types).
-
-We'll expand the example profile to add a new `age` field, a not-null integer in the range 1-99:
-
-```json
-{
-    "fields": [
-        { "name": "firstName", "type": "string" },
-        { "name": "age", "type": "integer" }
-    ],
-    "constraints": [
-        { "field": "firstName", "matchingRegex": "(Joh?n|Mar[yk])" },
-        { "field": "age", "greaterThan": 0 },
-        { "field": "age", "lessThan": 100 }
-    ]
-}
-```
-
-With the change in the `firstname` regex, the output is now starting to look quite realistic:
-
-```
-firstName,age
-John,58
-Jon,70
-John,93
-Mary,89
-Jon,65
-Jon,33
-Mark,94
-Jon,76
-John,30
-[...]
-```
-
-Finally, we'll add a field for National Insurance number. In this case, the constraints applied to the field ensure that it only has a value if the age is greater than or equal to 16:
-
-```json
-{
-    "fields": [
-        { "name": "firstName", "type": "string" },
-        { "name": "age", "type": "integer" },
-        { "name": "nationalInsurance", "type": "string", "nullable": true }
-    ],
-    "constraints": [
-        { "field": "firstName", "matchingRegex": "(Joh?n|Mar[yk])" },
-        { "field": "age", "greaterThan": 0 },
-        { "field": "age", "lessThan": 100 },
-        {
-            "if": {
-                "field": "age",
-                "greaterThanOrEqualTo": 16
-            },
-            "then": {
-                "allOf": [
-                    {
-                        "field": "nationalInsurance",
-                        "matchingRegex": "[A-CEGHJ-PR-TW-Z]{1}[A-CEGHJ-NPR-TW-Z]{1}[0-9]{6}[A-DFM]{0,1}"
-                    },
-                    {
-                        "field": "nationalInsurance",
-                        "isNull": false
-                    }
-                ]
-            },
-            "else": {
-                "field": "nationalInsurance",
-                "isNull": true
-            }
-        }
-    ]
-}
-```
-
-The above profile yields the following output:
-
-```
-firstName,age,nationalInsurance
-"Mary",85,"RP139559B"
-"Jon",2,
-"Mark",10,
-"Mary",20,"NW372471"
-"Mark",47,"ZP195766"
-"Jon",41,"RW557276F"
-"Mark",16,
-"Jon",69,"OR650886"
-"John",19,"CB460473"
-"Mark",55,"AE656210B"
-"Mark",68,"ER027015"
-[...]
-```
-
-Fields are non-nullable by default, however, you can indicate that a field is nullable:
-
-```json
-{
-    "name": "field1",
-    "type": "datetime",
-    "nullable": true
-}
-```
-
-You can find out more about the various constraints the generator supports in the detailed [User Guide](UserGuide.md).
-
-## Generation modes
-
-The generator supports two different generation modes:
-
--   **random** - _(default)_ generates random data that abides by the given set of constraints, with the number of generated rows limited via the `--max-rows` option.
--   **full** - generates all the data that abides by the given set of constraints, with the number of generated rows limited via the `--max-rows` option.
-
-The mode is specified via the `--generation-type` option.
-
 ## Next steps
+
+We now have now finished creating a simple profile for the datahelix. Possible extensions could be adding more fields or using a [custom generator](UserGuide.md#custom-generators) to generate number plates.
 
 * If you'd like to find out more about the various constraints the tool supports, the [User Guide](UserGuide.md) is a good next step.
 
