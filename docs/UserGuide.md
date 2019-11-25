@@ -759,6 +759,8 @@ Currently the only mode fully supported by the data helix is generate mode. An e
 <div id="Command-Line-Arguments-for-Generate-Mode"></div>
 Option switches are case-sensitive, arguments are case-insensitive
 
+* `--version` (or `-V`)
+    * Displays generator version information.
 * `--profile-file=<path>` (or `-p <path>`)
     * Path to the input profile file.
 * `--output-path=<path>` (or `-o <path>`)
