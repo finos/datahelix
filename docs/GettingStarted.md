@@ -106,7 +106,7 @@ ylbmop
 
 The current profile outputs random text strings for the `firstName` field. Depending on what you are intending to use the data for this may or may not be appropriate. For testing purposes, you are likely to want output data that has a lot of variability. However, if you are using the generator to create simulation data, then the generated data from this profile may not be good enough.
 
-There are a few different approaches we could use to try to make the data more realistic. We could try to use a more comprehensive regex. However, the datahelix gives us a few other options which could be quite useful. We could for example make use of the [`firstname`](UserGuide.md#Data-Types) type.
+There are a few different approaches we could use to try to make the data more realistic. We could try to use a more comprehensive regex. However, the datahelix gives us a few other options which could be quite useful. For example, we could make use of the [`firstname`](UserGuide.md#Data-Types) type.
 
 ## Data types
 
