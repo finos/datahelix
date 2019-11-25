@@ -40,7 +40,7 @@ We'll start by generating data for a trivial schema. Using [VS Code](https://cod
 }
 ```
 
-When manually writing profiles, we recommend using a text editor which can validate profiles using the datahelix schema. Instructions for how to setup automatic profile validation using VS code can be found [here](user/ProfileValidation.md).
+When manually writing profiles, we recommend using a text editor which can validate profiles using the datahelix schema. Instructions for how to setup automatic profile validation using VS Code can be found [here](user/ProfileValidation.md).
 
 ## Running the generator
 
