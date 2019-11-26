@@ -77,7 +77,7 @@ public class TemporalConstraintValidator extends AtomicConstraintValidator<Tempo
     }
 
     private ValidationResult timeMustBeValid(TemporalConstraintDTO dto) {
-    String time = dto.getDate();
+        String time = dto.getDate();
         if (time == null || time.isEmpty()) {
             return ValidationResult.failure("Time must be specified" + getErrorInfo(dto));
         }

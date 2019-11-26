@@ -87,13 +87,8 @@ This guide outlines how to create a profile and contains information on the synt
 
 This section will walk you through creating basic profiles with which you can generate data.
 
-Profiles are JSON documents consisting of three sections, the schema version, the list of fields and the constraints.
+Profiles are JSON documents consisting of two sections: the list of fields and the constraints.
 
-- **Schema Version** - Dictates the method of serialisation of the profile in order for the generator to
-interpret the profile fields and constraints. The latest version is
-```
-    
-```
 - **List of Fields** - An array of column headings is defined with unique "name" keys.
 ```
     "fields": [
@@ -126,7 +121,7 @@ to the desired range of values. They are formatted as JSON objects. There are tw
 
 ```
 
-These three sections are combined to form the [complete profile](#Example-Profile).
+These sections are combined to form the [complete profile](#Example-Profile).
 
 ## Example Profile
 ```

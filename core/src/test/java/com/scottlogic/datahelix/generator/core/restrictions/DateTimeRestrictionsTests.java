@@ -124,8 +124,8 @@ class DateTimeRestrictionsTests {
     }
 
     @Test
-    public void matchShouldReturnFalseIfGivenDateIsAfterMax(){
-    OffsetDateTime limit = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
+    public void matchShouldReturnFalseIfGivenDateIsAfterMax() {
+        OffsetDateTime limit = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         LinearRestrictions<OffsetDateTime> restrictions = LinearRestrictionsFactory.createDateTimeRestrictions(
             DATETIME_MAX_LIMIT,
             new Limit<>(limit, false)
@@ -151,8 +151,8 @@ class DateTimeRestrictionsTests {
     }
 
     @Test
-    public void matchShouldReturnTrueIfGivenDateIsEqualToMinAndMaxInclusive(){
-    OffsetDateTime min = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
+    public void matchShouldReturnTrueIfGivenDateIsEqualToMinAndMaxInclusive() {
+        OffsetDateTime min = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         LinearRestrictions<OffsetDateTime> restrictions = LinearRestrictionsFactory.createDateTimeRestrictions(
             new Limit<>(min, true),
             new Limit<>(min, true)
@@ -164,8 +164,8 @@ class DateTimeRestrictionsTests {
     }
 
     @Test
-    public void matchShouldReturnFalseIfGivenDateIsEqualToMinAndMaxExclusive(){
-    OffsetDateTime min = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
+    public void matchShouldReturnFalseIfGivenDateIsEqualToMinAndMaxExclusive() {
+        OffsetDateTime min = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         LinearRestrictions<OffsetDateTime> restrictions = LinearRestrictionsFactory.createDateTimeRestrictions(
             new Limit<>(min, false),
             new Limit<>(min, false)
@@ -229,8 +229,8 @@ class DateTimeRestrictionsTests {
         return LinearRestrictionsFactory.createDateTimeRestrictions(min, max);
     }
 
-    private class MockDateTimeLimit extends Limit<OffsetDateTime>{
-    private final boolean equalToOther;
+    private class MockDateTimeLimit extends Limit<OffsetDateTime> {
+        private final boolean equalToOther;
 
         public MockDateTimeLimit(boolean equalToOther) {
             super(Defaults.ISO_MAX_DATE, true);

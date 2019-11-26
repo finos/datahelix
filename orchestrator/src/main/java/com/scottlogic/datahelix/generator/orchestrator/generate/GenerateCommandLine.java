@@ -69,7 +69,7 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     @CommandLine.Option(
         names = { "-V", "--version" },
         versionHelp = true,
-        description = "print version information and exit")
+        description = "Print version information and exit.")
     boolean versionRequested;
 
     @CommandLine.Option(
@@ -87,13 +87,13 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     @CommandLine.Option(
         names = "--help",
         usageHelp = true,
-        description = "Display these available command line options")
+        description = "Display these available command line options.")
     private boolean help;
 
     @SuppressWarnings("FieldCanBeLocal")
     @CommandLine.Option(
         names = {"--replace"},
-        description = "Defines whether to overwrite/replace existing output files")
+        description = "Defines whether to overwrite/replace existing output files.")
     private boolean overwriteOutputFiles = false;
 
     @CommandLine.Option(

@@ -34,23 +34,23 @@
 		}
 	],
     "constraints": [
-				{ "field": "low_price", "greaterThanOrEqualTo": 0 },
-                { "field": "country", "inSet": [ "USA", "GB", "FRANCE" ] },
-                {
-					"if": {
-						"anyOf": [
-							{ "field": "country", "equalTo": "USA" },
-							{ "field": "country", "is": "null" }
-						]
-					},
-					"then": {
-						"allOf": [
-							{ "field": "tariff", "is": "null" },
-							{ "field": "time", "after": "2014-01-01" }
-						]
-					},
-					"else": { "not": { "field": "tariff", "is": "null" } }
-				}
+		{ "field": "low_price", "greaterThanOrEqualTo": 0 },
+        { "field": "country", "inSet": [ "USA", "GB", "FRANCE" ] },
+        {
+	    	"if": {
+			    "anyOf": [
+				    { "field": "country", "equalTo": "USA" },
+					{ "field": "country", "is": "null" }
+				]
+			},
+			"then": {
+			    "allOf": [
+				    { "field": "tariff", "is": "null" },
+					{ "field": "time", "after": "2014-01-01" }
+				]
+			},
+			"else": { "not": { "field": "tariff", "is": "null" } }
+		}
 	]
 }
 ```

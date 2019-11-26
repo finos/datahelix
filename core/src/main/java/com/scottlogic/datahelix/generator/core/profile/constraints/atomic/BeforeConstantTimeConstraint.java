@@ -46,7 +46,7 @@ public class BeforeConstantTimeConstraint implements AtomicConstraint {
 
     @Override
     public FieldSpec toFieldSpec() {
-    final Limit<LocalTime> max = new Limit<>(referenceValue, false);
+        final Limit<LocalTime> max = new Limit<>(referenceValue, false);
         final LinearRestrictions<LocalTime> timeRestriction =
             LinearRestrictionsFactory.createTimeRestrictions(GeneratorDefaults.TIME_MIN_LIMIT, max);
         if (timeRestriction.isContradictory()) {

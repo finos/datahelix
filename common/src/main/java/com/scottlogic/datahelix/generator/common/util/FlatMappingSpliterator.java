@@ -33,7 +33,7 @@ public class FlatMappingSpliterator<E,S> extends Spliterators.AbstractSpliterato
 
     public static <T,R> Stream<R> flatMap(
         Stream<T> in, Function<? super T,? extends Stream<? extends R>> mapper) {
-    if(USE_ORIGINAL_IMPL)
+        if(USE_ORIGINAL_IMPL)
             return in.flatMap(mapper);
 
         Objects.requireNonNull(in);

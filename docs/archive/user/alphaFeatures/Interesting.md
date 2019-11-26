@@ -9,22 +9,22 @@ The _interesting generation mode_ exists to provide a means of generating smalle
     "fields": [
 		{ "name": "field1" }
 	],
-			"constraints": [
-				{
-					"field": "field1",
-					"is": "ofType",
-					"value": "string"
-				},
-				{
-					"field": "field1",
-					"shorterThan": 5
-				},
-				{
-					"not": {
-						"field": "field2",
-						"is": "null"
-					}
-				}	
+	"constraints": [
+		{
+			"field": "field1",
+			"is": "ofType",
+			"value": "string"
+		},
+		{
+			"field": "field1",
+			"shorterThan": 5
+		},
+		{
+			"not": {
+				"field": "field2",
+				"is": "null"
+			}
+		}	
 	]
 }
 ```

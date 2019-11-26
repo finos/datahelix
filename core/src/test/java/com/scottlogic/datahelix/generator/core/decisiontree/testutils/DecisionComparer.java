@@ -56,8 +56,8 @@ public class DecisionComparer implements EqualityComparer {
             && optionAnyOrderComparer.equals(decision1.getOptions(), decision2.getOptions());
     }
 
-    static class OptionEqualityComparer implements EqualityComparer{
-    private final AnyOrderCollectionEqualityComparer atomicConstraintComparer =
+    static class OptionEqualityComparer implements EqualityComparer {
+        private final AnyOrderCollectionEqualityComparer atomicConstraintComparer =
             new AnyOrderCollectionEqualityComparer();
 
         @Override

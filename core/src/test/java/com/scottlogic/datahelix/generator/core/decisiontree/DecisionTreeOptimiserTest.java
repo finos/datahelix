@@ -37,8 +37,8 @@ class DecisionTreeOptimiserTest {
     Field F = createField("F");
 
     @Test
-    public void optimise_circularDependency(){
-    ConstraintNode original = constraintNode()
+    public void optimise_circularDependency() {
+        ConstraintNode original = constraintNode()
             .withDecision(
                 constraintNode()
                     .where(A).isNull()

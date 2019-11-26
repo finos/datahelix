@@ -46,7 +46,7 @@ public class FiniteStringAutomatonIterator implements Iterator<String> {
 
     @Override
     public boolean hasNext() {
-    if (atAcceptedRootState) {
+        if (atAcceptedRootState) {
             atAcceptedRootState = false;
             nextValue = "";
         }

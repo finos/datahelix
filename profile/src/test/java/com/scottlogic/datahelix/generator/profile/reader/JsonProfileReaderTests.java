@@ -59,9 +59,8 @@ public class JsonProfileReaderTests {
     private DistributedList<Object> inSetReaderReturnValue = DistributedList.singleton("test");
     private DistributedList<String> fromFileReaderReturnValue = DistributedList.singleton("test");
 
-    private class MockFromFileReader extends FileReader
-    {
-    MockFromFileReader() {
+    private class MockFromFileReader extends FileReader {
+        MockFromFileReader() {
             super("");
         }
 
@@ -76,7 +75,6 @@ public class JsonProfileReaderTests {
         {
             return fromFileReaderReturnValue;
         }
-
     }
 
     private String json;
@@ -134,7 +132,8 @@ public class JsonProfileReaderTests {
     private final <T> void expectMany(
         Iterable<T> assertionTargets,
         Consumer<T>... perItemAssertions) {
-    Iterator<T> aIterator = assertionTargets.iterator();
+
+        Iterator<T> aIterator = assertionTargets.iterator();
         Iterator<Consumer<T>> bIterator = Arrays.asList(perItemAssertions).iterator();
 
         while (aIterator.hasNext() && bIterator.hasNext()) {
@@ -536,7 +535,6 @@ public class JsonProfileReaderTests {
     public void shouldRejectIsConstraintSetToNullForNot() {
         givenJson(
             "{" +
-
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"datetime\" } ]," +
                 "    \"constraints\": [" +
                 "        { \"not\": { \"field\": \"foo\", \"is\": null } }" +
@@ -550,7 +548,6 @@ public class JsonProfileReaderTests {
     public void unique_setsFieldPropertyToTrue_whenSetToTrue() throws IOException {
         givenJson(
             "{" +
-
                 "    \"fields\": [ { " +
                 "           \"name\": \"foo\"," +
                 "           \"type\": \"integer\"," +
@@ -571,7 +568,6 @@ public class JsonProfileReaderTests {
     public void unique_setsFieldPropertyToFalse_whenOmitted() throws IOException {
         givenJson(
             "{" +
-
                 "    \"fields\": [ { " +
                 "           \"name\": \"foo\"," +
                 "           \"type\": \"integer\"" +
@@ -590,7 +586,6 @@ public class JsonProfileReaderTests {
     public void unique_setsFieldPropertyToFalse_whenSetToFalse() throws IOException {
         givenJson(
             "{" +
-
                 "    \"fields\": [ { " +
                 "           \"name\": \"foo\"," +
                 "           \"type\": \"integer\"," +
@@ -611,7 +606,6 @@ public class JsonProfileReaderTests {
     public void nullable_addsConstraintForField_whenSetToFalse() throws IOException {
         givenJson(
             "{" +
-
                 "    \"fields\": [ { " +
                 "       \"name\": \"foo\" ," +
                 "       \"type\": \"decimal\"," +
@@ -630,7 +624,6 @@ public class JsonProfileReaderTests {
     {
         givenJson(
             "{" +
-
                 "    \"fields\": [ { " +
                 "       \"name\": \"foo\" ," +
                 "       \"type\": \"decimal\"," +
@@ -646,7 +639,6 @@ public class JsonProfileReaderTests {
     public void nullable_addsConstraintForFields_whenSetToFalse() throws IOException  {
         givenJson(
             "{" +
-
                 "    \"fields\": [ { " +
                 "       \"name\": \"foo\" ," +
                 "       \"type\": \"decimal\"," +
@@ -671,7 +663,6 @@ public class JsonProfileReaderTests {
     public void nullable_addsConstraintForFields_whenOneSetToFalse() throws IOException  {
         givenJson(
             "{" +
-
                 "    \"fields\": [ { " +
                 "       \"name\": \"foo\" ," +
                 "       \"type\": \"decimal\"," +
@@ -693,7 +684,6 @@ public class JsonProfileReaderTests {
     public void type_setsFieldTypeProperty_whenSetInFieldDefinition() throws IOException  {
         givenJson(
             "{" +
-
                 "    \"fields\": [ { " +
                 "       \"name\": \"foo\" ," +
                 "       \"type\": \"decimal\" ," +
@@ -717,7 +707,6 @@ public class JsonProfileReaderTests {
     void parser_createsInternalField_whenProfileHasAnInMapConstraint() throws IOException {
         givenJson(
             "{" +
-
                 "    \"fields\": [ { " +
                 "       \"name\": \"foo\" ," +
                 "       \"type\": \"string\"" +
@@ -751,7 +740,6 @@ public class JsonProfileReaderTests {
     void parser_createsInternalField_whenProfileHasANestedInMapConstraint() throws IOException {
         givenJson(
             "{" +
-
                 "    \"fields\": [ { " +
                 "       \"name\": \"foo\" ," +
                 "       \"type\": \"string\"" +
@@ -801,7 +789,6 @@ public class JsonProfileReaderTests {
     public void formatting_withDateType_shouldSetCorrectGranularity() throws IOException  {
         givenJson(
             "{" +
-
                 "    \"fields\": [ { " +
                 "       \"name\": \"foo\" ," +
                 "       \"type\": \"date\"," +
@@ -818,7 +805,6 @@ public class JsonProfileReaderTests {
     public void formatting_withDateType_shouldSetCorrectFormatting() throws IOException  {
         givenJson(
             "{" +
-
                 "    \"fields\": [ { " +
                 "       \"name\": \"foo\" ," +
                 "       \"type\": \"date\"" +
@@ -833,7 +819,6 @@ public class JsonProfileReaderTests {
     public void formatting_withDateTypeAndFormatting_shouldSetCorrectFormatting() throws IOException  {
         givenJson(
             "{" +
-
                 "    \"fields\": [ { " +
                 "       \"name\": \"foo\" ," +
                 "       \"type\": \"date\"," +
@@ -849,7 +834,6 @@ public class JsonProfileReaderTests {
     public void addsConstraintForGenerator() throws IOException  {
         givenJson(
             "{" +
-
                 "    \"fields\": [ { " +
                 "       \"name\": \"foo\" ," +
                 "       \"type\": \"string\"," +
@@ -869,7 +853,6 @@ public class JsonProfileReaderTests {
     public void exceptionWhenGeneratorDoesNotExist() throws IOException  {
         givenJson(
             "{" +
-
                 "    \"fields\": [ { " +
                 "       \"name\": \"foo\" ," +
                 "       \"type\": \"string\"," +
@@ -881,5 +864,4 @@ public class JsonProfileReaderTests {
 
         expectValidationException("Custom generator INCORRECT does not exist it needs to be created and added to the CustomGeneratorList class");
     }
-
 }

@@ -151,7 +151,7 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
         Field fooField,
         Class<? extends AtomicConstraint> atomicConstraint,
         Object value) {
-    if (value == null) {
+        if (value == null) {
             try {
                 final Constructor<?>[] constructors = atomicConstraint.getConstructors();
                 AtomicConstraint constraint = (AtomicConstraint) constructors[0].newInstance(fooField);
