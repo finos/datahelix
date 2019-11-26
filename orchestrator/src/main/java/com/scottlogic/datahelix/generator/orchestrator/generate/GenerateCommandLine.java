@@ -23,6 +23,7 @@ import com.scottlogic.datahelix.generator.core.config.detail.CombinationStrategy
 import com.scottlogic.datahelix.generator.core.config.detail.DataGenerationType;
 import com.scottlogic.datahelix.generator.core.config.detail.MonitorType;
 import com.scottlogic.datahelix.generator.core.config.detail.VisualiserLevel;
+import com.scottlogic.datahelix.generator.orchestrator.CommonOptionInfo;
 import com.scottlogic.datahelix.generator.orchestrator.guice.AllConfigSource;
 import com.scottlogic.datahelix.generator.orchestrator.guice.AllModule;
 import com.scottlogic.datahelix.generator.output.guice.OutputFormat;
@@ -47,7 +48,7 @@ import static com.scottlogic.datahelix.generator.output.guice.OutputFormat.CSV;
     descriptionHeading = "%nDescription:%n",
     parameterListHeading = "%nParameters:%n",
     optionListHeading = "%nOptions:%n",
-    version = { "Profile Schema Version " + ProfileConfiguration.PROFILE_SCHEMA_VERSION},
+    version = { ProfileConfiguration.PROFILE_SCHEMA_VERSION_TEXT },
     abbreviateSynopsis = true)
 public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     @Override
@@ -67,9 +68,9 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     }
 
     @CommandLine.Option(
-        names = { "-V", "--version" },
+        names = { CommonOptionInfo.VERSION_SHORT_OPTION, CommonOptionInfo.VERSION_LONG_OPTION },
         versionHelp = true,
-        description = "Print version information and exit.")
+        description = CommonOptionInfo.VERSION_DESCRIPTION)
     boolean versionRequested;
 
     @CommandLine.Option(
@@ -85,9 +86,9 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
 
     @SuppressWarnings("unused")
     @CommandLine.Option(
-        names = "--help",
+        names = { CommonOptionInfo.HELP_SHORT_OPTION, CommonOptionInfo.HELP_LONG_OPTION },
         usageHelp = true,
-        description = "Display these available command line options.")
+        description = CommonOptionInfo.HELP_DESCRIPTION)
     private boolean help;
 
     @SuppressWarnings("FieldCanBeLocal")
